@@ -82,36 +82,16 @@ class GEM_EXTERN gemmacwindow : public GemContext
   /* dispatch window events */
   virtual void dispatch(void);
 
-  /* render context (pre creation) */
-  void  bufferMess(int buf);
-  void    fsaaMess(int value);
-  int         m_fsaa;
-
-  /* window decoration (pre creation) */
-  void titleMess(t_symbol* s);
-  std::string     m_title;
-  void borderMess(bool on);
-  bool       m_border;
-
-  /* window position/dimension (pre creation) */
+   /* window decoration (pre creation) */
+   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
 
-  void    fullscreenMess(bool on);
-  bool              m_fullscreen;
-  void        offsetMess(int x, int y);
-  unsigned int      m_xoffset, m_yoffset;
-
   /* creation/destruction */
-  void        createMess(t_symbol*);
+  void        createMess(std::string);
   void       destroyMess(void);
 
   /* post creation */
   void        cursorMess(bool on);
-  bool              m_cursor;
-
-  //////////
-  // the real width/height of the window (set by createGemWindow())
-  unsigned int m_real_w, m_real_h, m_real_x, m_real_y;
 
   //////////
   // Should the window be realized
@@ -126,11 +106,6 @@ class GEM_EXTERN gemmacwindow : public GemContext
   Info*m_info;
   
   static bool     init(void);
-
-  t_clock*m_clock;
-  int m_polltime;
-  static void clockCallback(void*);
-  void clock(void);
 };
 
 #endif    // for header file

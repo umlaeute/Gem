@@ -1109,20 +1109,16 @@ struct gemmacwindow::Info {
 
 CPPEXTERN_NEW(gemmacwindow);
 gemmacwindow::gemmacwindow(void) :
-    m_fsaa(0),
-    m_title(std::string("Gem")),
-    m_border(true),
-    m_fullscreen(false),
-    m_xoffset(0), m_yoffset(50),
+
     m_cursor(true),
-    m_real_w(0), m_real_h(0), m_real_x(0), m_real_y(0),
     m_actuallyDisplay(true),
-    m_info(new gemmacwindow::Info()),
-    m_clock(NULL),
-    m_polltime(10)    
+    m_info(new gemmacwindow::Info())
 {
   if(!init())
     throw(GemException("could not initialize window infrastructure"));
+
+  if(m_yoffset==0)
+    m_yoffset=50;
 
 }
 gemmacwindow::~gemmacwindow(void) {
@@ -1332,8 +1328,6 @@ DEBUGPOST("");
     error("MAC:  no m_info->context");
     return false;
   }
-  m_real_w = m_width;
-  m_real_h = m_height;
     
   SetFrontProcess( &psn );
     
@@ -1349,8 +1343,6 @@ DEBUGPOST("");
   verbose(2,"hints: border = %d",m_border);
   verbose(2,"hints: width = %d",m_width);
   verbose(2,"hints: height = %d",m_height);
-  verbose(2,"hints: real_w = %d",m_real_w);
-  verbose(2,"hints: real_h = %d",m_real_h);
   verbose(2,"hints: x_offset = %d",m_xoffset);
   verbose(2,"hints: y_offset = %d", m_yoffset);
   verbose(2,"hints: fullscreen = %d", m_fullscreen);
@@ -1535,11 +1527,12 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
 // Messages
 //
 /////////////////////////////////////////////////////////
-void gemmacwindow :: createMess(t_symbol*s) {
+void gemmacwindow :: createMess(std::string s) {
   if(!create()) {
     destroyMess();
     return;
   }
+  cursorMess(m_cursor);
   dispatch();
 }
 void gemmacwindow :: destroyMess(void) {
@@ -1579,7 +1572,6 @@ void gemmacwindow :: dimensionsMess(unsigned int width, unsigned int height)
     error("width must be greater than 0");
     return;
   }
-    
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -1587,15 +1579,6 @@ void gemmacwindow :: dimensionsMess(unsigned int width, unsigned int height)
 
   m_width=width;
   m_height=height;
-}
-void gemmacwindow :: fullscreenMess(bool on)
-{
-  m_fullscreen = on;
-}
-void gemmacwindow :: offsetMess(int x, int y)
-{
-  m_xoffset=x;
-  m_yoffset=y;
 }
 void gemmacwindow :: cursorMess(bool state)
 {
