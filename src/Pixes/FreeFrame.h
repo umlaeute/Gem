@@ -68,9 +68,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef _WIN32
-
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
-#include <windows.h>
+# ifndef WIN32_LEAN_AND_MEAN
+#  define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+# endif
+# include <windows.h>
 
 typedef unsigned __int32 FFUInt32; 
 typedef float FFFloat32;
@@ -78,9 +79,9 @@ typedef float FFFloat32;
 
 extern "C" {
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
+# include <string.h>
+# include <stdlib.h>
+# include <stdint.h>
 
 typedef uint32_t FFUInt32;
 typedef float    FFFloat32;
