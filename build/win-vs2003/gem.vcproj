@@ -398,6 +398,12 @@
 				RelativePath="..\..\src\Base\TextBase.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\ThreadMutex.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\ThreadMutex.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\wglew.h">
 			</File>
 		</Filter>
@@ -469,6 +475,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\imageVert.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Geos\mesh_line.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Geos\mesh_line.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\mesh_square.cpp">
@@ -955,6 +967,9 @@
 				RelativePath="..\..\src\Pixes\FreeFrame.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Pixes\frei0r.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Pixes\pix_2grey.cpp">
 			</File>
 			<File
@@ -1205,6 +1220,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_freeframe.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_frei0r.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_frei0r.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Pixes\pix_gain.cpp">
@@ -1766,6 +1787,12 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Particles\partlib_actions.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Particles\partlib_base.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Particles\partlib_base.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Particles\partlib_general.h">
@@ -2380,6 +2407,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglGetFloatv.h">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglGetIntegerv.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\openGL\GEMglGetIntegerv.h">
 			</File>
 			<File
 				RelativePath="..\..\src\openGL\GEMglGetMapdv.cpp">
@@ -3601,6 +3634,21 @@
 			Filter="">
 			<File
 				RelativePath="..\..\src\Gem\any.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\Array.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\Array.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\MessageCallbacks.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\Properties.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\Properties.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\RTE.h">
