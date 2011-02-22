@@ -32,8 +32,6 @@
 # include "Base/GemException.h"
 
 # include <map>
-  static std::map<HWND, gemw32window*>s_winmap;
-
 
 static bool initGemWin(void) {
 # ifdef HAVE_QUICKTIME
@@ -66,7 +64,7 @@ public:
   HGLRC context;
 
   static HGLRC sharedContext;
-  Window(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) :
+  Window(gemw32window*parent, HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) :
     win(NULL),
     dc(NULL),
     context(NULL) {
@@ -76,15 +74,52 @@ public:
       destroy();
       throw(x);
     }
+    if(parent && win)
+        s_winmap[win]=parent;
   }
   ~Window(void) {
     destroy();
   }
+  static RECT getRealRect(int x, int y, unsigned int w, unsigned int h, 
+                          bool border, bool fullscreen, 
+                          DWORD &style, DWORD&exStyle) {
+      exStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+      style  =WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+      
+      if (fullscreen){
+        exStyle  = WS_EX_APPWINDOW;
+        style     |= WS_POPUP;
+      } else {
+        exStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+        if (border)
+          style |= WS_OVERLAPPEDWINDOW;
+        else
+          style |= WS_POPUP;
+      }
+
+      RECT newSize;
+      newSize.left = x;
+      newSize.top  = y;
+      newSize.right  = w+x;
+      newSize.bottom = h+y;
+    
+      AdjustWindowRectEx(&newSize, style, FALSE, exStyle); // no menu
+      if (newSize.left<0 && x>=0){
+        newSize.right-=newSize.left;
+        newSize.left=0;
+      }
+      if (newSize.top<0 && y>=0){
+        newSize.bottom-=newSize.top;
+        newSize.top=0;
+      }
+      return newSize;
+  }
 
 private:
+  static std::map<HWND, gemw32window*>s_winmap;
   void create(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) {
-    DWORD dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-    DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+    DWORD dwExStyle;
+    DWORD style;
     
     if (fullscreen){
         DEVMODE dmScreenSettings;								// Device Mode
@@ -115,35 +150,11 @@ private:
         }
       }
 
-    if (fullscreen){
-        dwExStyle  = WS_EX_APPWINDOW;
-        style     |= WS_POPUP;
-      } else {
-        dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-        if (border)
-          style |= WS_OVERLAPPEDWINDOW;
-        else
-          style |= WS_POPUP;
-      }
-
       // Since Windows uses some of the window for the border, etc,
       //		we have to ask how big the window should really be
-      RECT newSize;
-      newSize.left = x;
-      newSize.top  = y;
-      newSize.right  = w+x;
-      newSize.bottom = h+y;
-    
-      AdjustWindowRectEx(&newSize, style, FALSE, dwExStyle); // no menu
-      if (newSize.left<0 && x>=0){
-        newSize.right-=newSize.left;
-        newSize.left=0;
-      }
-      if (newSize.top<0 && y>=0){
-        newSize.bottom-=newSize.top;
-        newSize.top=0;
-      }
-
+      RECT newSize = getRealRect(x, y, w, h, 
+                          border, fullscreen, 
+                          style, dwExStyle);
       // Create the window
       win = CreateWindowEx (
                             dwExStyle,
@@ -184,15 +195,6 @@ private:
       // make the context the current rendering context
       if (!wglMakeCurrent(dc, context))   {
         throw(GemException("Unable to make OpenGL context current"));
-      }
-
-      static int counter=0;
-      counter++;
-      if(counter>3) {
-          std::string ex="Counter reached";
-          ex += counter;
-          counter =0;
-        throw(GemException(ex));
       }
     }
 
@@ -265,9 +267,11 @@ private:
 };
 
 HGLRC gemw32window::Window::sharedContext=NULL;
+std::map<HWND, gemw32window*>gemw32window::Window::s_winmap;
 
 CPPEXTERN_NEW(gemw32window);
 gemw32window::gemw32window(void) :
+  m_topmost(false),
   m_win(NULL)
 {
   if(!initGemWin())
@@ -321,7 +325,7 @@ bool gemw32window:: create(void)
     try {
         unsigned int w0=0, h0=0;
         int x0=0, y0=0;
-        s_sharedWindow=new Window(hInstance, 2, false, false, "GEM",
+        s_sharedWindow=new Window(NULL, hInstance, 2, false, false, "GEM",
                      x0, y0,
                      w0, h0);
         Window::sharedContext=s_sharedWindow->context;
@@ -329,34 +333,26 @@ bool gemw32window:: create(void)
       Window::sharedContext=NULL;
   }
   }
-
   m_win=NULL;
   try {
-    m_win=new Window(hInstance, m_buffer, m_fullscreen, m_border, m_title,
-                     x, y,
-                     w, h);
+    m_win=new Window(this, hInstance, m_buffer, m_fullscreen>0, m_border, m_title,
+                     x, y, w, h);
   } catch (GemException&x) {
     error("%s", x.what());
     return false;
   }
-  s_winmap[m_win->win]=this;
-
-  bool m_actuallyDisplay =true;
-  if (m_actuallyDisplay) {
-
-      // show and update main window
-    if (m_fullscreen){
-        ShowWindow(m_win->win,SW_SHOW);				// Show The Window
-        SetForegroundWindow(m_win->win);				// Slightly Higher Priority
-        SetFocus(m_win->win);
-    } else  {
-        ShowWindow(m_win->win, SW_SHOWNORMAL);
-    }
-    
-    UpdateWindow(m_win->win);
-    dimension(w, h);
-    position(x, y);
+  // show and update main window
+  if (m_fullscreen){
+    ShowWindow(m_win->win,SW_SHOW);				// Show The Window
+    SetForegroundWindow(m_win->win);				// Slightly Higher Priority
+    SetFocus(m_win->win);
+  } else  {
+    ShowWindow(m_win->win, SW_SHOWNORMAL);
   }
+    
+  UpdateWindow(m_win->win);
+  dimension(w, h);
+  position(x, y);
   return createContext();
 }
 void gemw32window:: createMess(std::string s) {
@@ -364,11 +360,11 @@ void gemw32window:: createMess(std::string s) {
         error("window already made");
         return;
     }
-
     if(!create()) {
         destroyMess();
         return;
     }
+    topmostMess(m_topmost);
 }
 
 /////////////////////////////////////////////////////////
@@ -396,17 +392,54 @@ void gemw32window::cursorMess(bool state)
     ShowCursor(state);
 }
 
+void gemw32window::fullscreenMess(int state) {
+    m_fullscreen=state;
+    if(!m_win)return;
+    unsigned int w = m_width;
+    unsigned int h = m_height;
+    int x = m_xoffset;
+    int y = m_yoffset;
+
+    HINSTANCE hInstance = GetModuleHandle(NULL);
+    if (!hInstance)  {
+        error("GEM: Unable to get module instance");
+        return;
+    }
+    Window*tmpwin=NULL;
+    try {
+        tmpwin=new Window(this, hInstance, m_buffer, m_fullscreen>0, m_border, m_title,
+            x, y,
+            w, h);
+    } catch (GemException&x) {
+        error("unable to toggle fullscreen mode: %s", x.what());
+    }
+    if(tmpwin) {
+        delete m_win;
+        m_win=tmpwin;
+        // show and update main window
+        if (m_fullscreen){
+            ShowWindow(m_win->win,SW_SHOW);				// Show The Window
+            SetForegroundWindow(m_win->win);				// Slightly Higher Priority
+            SetFocus(m_win->win);
+        } else  {
+            ShowWindow(m_win->win, SW_SHOWNORMAL);
+        }
+        UpdateWindow(m_win->win);
+        dimension(w, h);
+        position(x, y);
+    }
+}
+
 /////////////////////////////////////////////////////////
 // set topmost position on/off
 //
 /////////////////////////////////////////////////////////
 void gemw32window::topmostMess(bool state)
 {
-  static int topmost_state = 0;
-  if (state)
-    SetWindowPos(m_win->win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
-  else
-    SetWindowPos(m_win->win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+  m_topmost=state;
+
+  if(m_win)
+    SetWindowPos(m_win->win, (state?HWND_TOPMOST:HWND_NOTOPMOST), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
@@ -436,7 +469,18 @@ void gemw32window :: offsetMess(int x, int y) {
 
 void gemw32window::move(void) {
     if(m_win) {
-        MoveWindow(m_win->win, m_xoffset, m_yoffset, m_width, m_height, true);
+        DWORD style, exStyle;
+        RECT newSize = Window::getRealRect(m_xoffset, m_yoffset, m_width, m_height, 
+                          m_border, m_fullscreen>0, 
+                          style, exStyle);
+
+        //MoveWindow(m_win->win, m_xoffset, m_yoffset, m_width, m_height, true);
+        MoveWindow(m_win->win, newSize.left,
+                               newSize.top,
+                               newSize.right - newSize.left,
+                               newSize.bottom - newSize.top,
+                               true);
+
     }
 }
 
@@ -504,17 +548,19 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
       break;
       // resize event
     case WM_SIZE:
-      dimension(LOWORD(lParam), HIWORD(lParam));
-      GetClientRect(m_win->win, &rcClient);
-      break;
-    case WM_MOVE: // hmm, doesn't do anything
-      position(LOWORD(lParam), HIWORD(lParam));
+      m_width=LOWORD(lParam);
+      m_height=HIWORD(lParam);
+      dimension(m_width, m_height);
       //GetClientRect(m_win->win, &rcClient);
       break;
-
+    case WM_MOVE:
+      m_xoffset=LOWORD(lParam);
+      m_yoffset=HIWORD(lParam);
+      position(m_xoffset, m_yoffset);
+      break;
 
       // we want to override these messages
-      // and not do anything
+      // and not do anything (rather let the user react and programmatically destroy)
     case WM_DESTROY:
     case WM_CLOSE: do {
         std::vector<t_atom>al;
@@ -549,16 +595,4 @@ void gemw32window :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "topmost", topmostMess, bool);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 #endif /* WIN32 */

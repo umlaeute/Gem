@@ -90,9 +90,10 @@ class GEM_EXTERN gemw32window : public GemContext
   virtual void        cursorMess(bool);
   virtual void        topmostMess(bool);
   virtual void        titleMess(std::string);
-
+  virtual void        fullscreenMess(int);
 
  private:
+  bool m_topmost;
   class Window;
   Window*m_win;
 };
