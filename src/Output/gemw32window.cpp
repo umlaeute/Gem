@@ -440,7 +440,11 @@ void gemw32window::move(void) {
     }
 }
 
-
+void gemw32window:: titleMess(std::string s) {
+    m_title=s;
+    if(m_win)
+        SetWindowText(m_win->win, s.c_str());
+}
 
 void gemw32window::swapBuffers(void)
 {

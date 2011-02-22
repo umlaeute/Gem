@@ -87,8 +87,10 @@ class GEM_EXTERN gemw32window : public GemContext
   virtual void createMess(std::string);
   virtual void        dimensionsMess(unsigned int, unsigned int);
   virtual void        offsetMess(int, int);
-  virtual void        cursorMess(bool on);
-  virtual void        topmostMess(bool on);
+  virtual void        cursorMess(bool);
+  virtual void        topmostMess(bool);
+  virtual void        titleMess(std::string);
+
 
  private:
   class Window;
