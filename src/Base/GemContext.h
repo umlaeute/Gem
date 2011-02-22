@@ -44,6 +44,8 @@ typedef struct GLEWContextStruct GLEWContext;
 
 class GEM_EXTERN GemContext : public CPPExtern
 {
+ CPPEXTERN_HEADER(GemContext, CPPExtern);
+
  private:
   class PIMPL;
   PIMPL*m_pimpl;
