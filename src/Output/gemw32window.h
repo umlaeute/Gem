@@ -82,9 +82,11 @@ class GEM_EXTERN gemw32window : public GemContext
   virtual void dispatch(void);
 
   LONG WINAPI event(UINT uMsg, WPARAM wParam, LPARAM lParam);
+  void gemw32window::move(void);
 
   virtual void createMess(std::string);
   virtual void        dimensionsMess(unsigned int, unsigned int);
+  virtual void        offsetMess(int, int);
   virtual void        cursorMess(bool on);
   virtual void        topmostMess(bool on);
 

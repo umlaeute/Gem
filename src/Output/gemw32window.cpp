@@ -17,6 +17,8 @@
 #ifdef _WIN32
 # include "gemw32window.h"
 
+#define DEBUGLINE ::startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
+
 # include <stdlib.h>
 
 # ifdef HAVE_QUICKTIME
@@ -64,13 +66,12 @@ public:
   HGLRC context;
 
   static HGLRC sharedContext;
-
   Window(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) :
     win(NULL),
     dc(NULL),
     context(NULL) {
     try {
-      create(hInstance, buffer, fullscree, border, title, x, y, w, h);
+      create(hInstance, buffer, fullscreen, border, title, x, y, w, h);
     } catch(GemException&x) {
       destroy();
       throw(x);
@@ -89,16 +90,17 @@ private:
         DEVMODE dmScreenSettings;								// Device Mode
     
         if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
-          error("GEM: couldn't get screen capabilities!");
-        }
+            ::error("GEM: couldn't get screen capabilities!");
+        } else {
         w = dmScreenSettings.dmPelsWidth;
         h = dmScreenSettings.dmPelsHeight;
+        }
     
         x=y=0;
 
         memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
         dmScreenSettings.dmSize=sizeof(dmScreenSettings);		// Size Of The Devmode Structure
-        dmScreenSettings.dmPelsWidth	= w_width;			// Selected Screen Width
+        dmScreenSettings.dmPelsWidth	= w;			// Selected Screen Width
         dmScreenSettings.dmPelsHeight	= h;			// Selected Screen Height
         dmScreenSettings.dmBitsPerPel	= 32;					// Selected Bits Per Pixel
         dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
@@ -107,12 +109,13 @@ private:
           dmScreenSettings.dmPelsWidth	= w;
           dmScreenSettings.dmPelsHeight	= h;
           if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-            error("couldn't switch to fullscreen");
+              ::error("couldn't switch to fullscreen");
             fullscreen=false;
           }
         }
       }
-      if (fullscreen){
+
+    if (fullscreen){
         dwExStyle  = WS_EX_APPWINDOW;
         style     |= WS_POPUP;
       } else {
@@ -182,6 +185,15 @@ private:
       if (!wglMakeCurrent(dc, context))   {
         throw(GemException("Unable to make OpenGL context current"));
       }
+
+      static int counter=0;
+      counter++;
+      if(counter>3) {
+          std::string ex="Counter reached";
+          ex += counter;
+          counter =0;
+        throw(GemException(ex));
+      }
     }
 
     void destroy(void) {
@@ -227,12 +239,11 @@ private:
       int pixelformat;
       if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
         {
-          error("ChoosePixelFormat failed");
-          return(false);
+            throw(GemException("ChoosePixelFormat failed"));
         }
       if (SetPixelFormat(hdc, pixelformat, &pfd) == FALSE)
         {
-          error("SetPixelFormat failed");
+            throw(GemException("SetPixelFormat failed"));
           return(false);
         }
       return(true);
@@ -242,6 +253,7 @@ private:
   // MainWndProc
   //
   /////////////////////////////////////////////////////////
+    public:
   static LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
     gemw32window*obj=s_winmap[hWnd];
@@ -254,15 +266,6 @@ private:
 
 HGLRC gemw32window::Window::sharedContext=NULL;
 
-
-
-/////////////////////////////////////////////////////////
-// bSetupPixelFormat
-//
-/////////////////////////////////////////////////////////
-
-HGLRC gemw32window::sharedContext=NULL;
-
 CPPEXTERN_NEW(gemw32window);
 gemw32window::gemw32window(void) :
   m_win(NULL)
@@ -273,8 +276,6 @@ gemw32window::gemw32window(void) :
 gemw32window::~gemw32window(void) {
     destroyMess();
 }
-
-
 
 /////////////////////////////////////////////////////////
 // createGemWindow
@@ -298,7 +299,7 @@ bool gemw32window:: create(void)
   if (firstTime)  {
     WNDCLASS wndclass;
     wndclass.style         = 0;
-    wndclass.lpfnWndProc   = (WNDPROC)MainWndProc;
+    wndclass.lpfnWndProc   = (WNDPROC)Window::MainWndProc;
     wndclass.cbClsExtra    = 0;
     wndclass.cbWndExtra    = 0;
     wndclass.hInstance     = hInstance;
@@ -315,6 +316,20 @@ bool gemw32window:: create(void)
     firstTime = false;
   }
 
+  if (NULL==Window::sharedContext) {
+    static Window*s_sharedWindow=NULL;
+    try {
+        unsigned int w0=0, h0=0;
+        int x0=0, y0=0;
+        s_sharedWindow=new Window(hInstance, 2, false, false, "GEM",
+                     x0, y0,
+                     w0, h0);
+        Window::sharedContext=s_sharedWindow->context;
+  } catch (GemException&x) {
+      Window::sharedContext=NULL;
+  }
+  }
+
   m_win=NULL;
   try {
     m_win=new Window(hInstance, m_buffer, m_fullscreen, m_border, m_title,
@@ -322,7 +337,7 @@ bool gemw32window:: create(void)
                      w, h);
   } catch (GemException&x) {
     error("%s", x.what());
-    return;
+    return false;
   }
   s_winmap[m_win->win]=this;
 
@@ -330,7 +345,7 @@ bool gemw32window:: create(void)
   if (m_actuallyDisplay) {
 
       // show and update main window
-    if (fullscreen){
+    if (m_fullscreen){
         ShowWindow(m_win->win,SW_SHOW);				// Show The Window
         SetForegroundWindow(m_win->win);				// Slightly Higher Priority
         SetFocus(m_win->win);
@@ -345,10 +360,11 @@ bool gemw32window:: create(void)
   return createContext();
 }
 void gemw32window:: createMess(std::string s) {
-    if(m_win->win) {
+    if(m_win) {
         error("window already made");
         return;
     }
+
     if(!create()) {
         destroyMess();
         return;
@@ -410,7 +426,20 @@ void gemw32window :: dimensionsMess(unsigned int width, unsigned int height)
 
   m_width=width;
   m_height=height;
+
+  move();
 }
+void gemw32window :: offsetMess(int x, int y) {
+    GemContext::offsetMess(x, y);
+    move();
+}
+
+void gemw32window::move(void) {
+    if(m_win) {
+        MoveWindow(m_win->win, m_xoffset, m_yoffset, m_width, m_height, true);
+    }
+}
+
 
 
 void gemw32window::swapBuffers(void)
@@ -514,22 +543,7 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 /////////////////////////////////////////////////////////
 void gemw32window :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG0(classPtr, "bang", render);
-  CPPEXTERN_MSG1(classPtr, "create", createMess,std::string);
-  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
-
-
-  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
-  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
-  CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
-  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, bool);
-  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
-  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-
-  //  CPPEXTERN_MSG0(classPtr, "print", printMess);
-
+  CPPEXTERN_MSG1(classPtr, "topmost", topmostMess, bool);
 }
 
 
