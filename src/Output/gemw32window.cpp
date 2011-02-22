@@ -30,8 +30,8 @@
 # include "Base/GemException.h"
 
 # include <map>
+  static std::map<HWND, gemw32window*>s_winmap;
 
-static std::map<HWND, gemw32window*>s_winmap;
 
 static bool initGemWin(void) {
 # ifdef HAVE_QUICKTIME
@@ -57,64 +57,215 @@ static bool initGemWin(void) {
 }
 
 
+class gemw32window :: Window {
+public:
+  HWND win;
+  HDC dc;
+  HGLRC context;
+
+  static HGLRC sharedContext;
+
+  Window(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) :
+    win(NULL),
+    dc(NULL),
+    context(NULL) {
+    try {
+      create(hInstance, buffer, fullscree, border, title, x, y, w, h);
+    } catch(GemException&x) {
+      destroy();
+      throw(x);
+    }
+  }
+  ~Window(void) {
+    destroy();
+  }
+
+private:
+  void create(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) {
+    DWORD dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+    DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+    
+    if (fullscreen){
+        DEVMODE dmScreenSettings;								// Device Mode
+    
+        if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
+          error("GEM: couldn't get screen capabilities!");
+        }
+        w = dmScreenSettings.dmPelsWidth;
+        h = dmScreenSettings.dmPelsHeight;
+    
+        x=y=0;
+
+        memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
+        dmScreenSettings.dmSize=sizeof(dmScreenSettings);		// Size Of The Devmode Structure
+        dmScreenSettings.dmPelsWidth	= w_width;			// Selected Screen Width
+        dmScreenSettings.dmPelsHeight	= h;			// Selected Screen Height
+        dmScreenSettings.dmBitsPerPel	= 32;					// Selected Bits Per Pixel
+        dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
+        // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
+        if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
+          dmScreenSettings.dmPelsWidth	= w;
+          dmScreenSettings.dmPelsHeight	= h;
+          if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
+            error("couldn't switch to fullscreen");
+            fullscreen=false;
+          }
+        }
+      }
+      if (fullscreen){
+        dwExStyle  = WS_EX_APPWINDOW;
+        style     |= WS_POPUP;
+      } else {
+        dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+        if (border)
+          style |= WS_OVERLAPPEDWINDOW;
+        else
+          style |= WS_POPUP;
+      }
+
+      // Since Windows uses some of the window for the border, etc,
+      //		we have to ask how big the window should really be
+      RECT newSize;
+      newSize.left = x;
+      newSize.top  = y;
+      newSize.right  = w+x;
+      newSize.bottom = h+y;
+    
+      AdjustWindowRectEx(&newSize, style, FALSE, dwExStyle); // no menu
+      if (newSize.left<0 && x>=0){
+        newSize.right-=newSize.left;
+        newSize.left=0;
+      }
+      if (newSize.top<0 && y>=0){
+        newSize.bottom-=newSize.top;
+        newSize.top=0;
+      }
+
+      // Create the window
+      win = CreateWindowEx (
+                            dwExStyle,
+                            "GEM",
+                            title.c_str(),
+                            style,
+                            newSize.left,
+                            newSize.top,
+                            newSize.right - newSize.left,
+                            newSize.bottom - newSize.top,
+                            NULL,
+                            NULL,
+                            hInstance,
+                            NULL);
+      if (!win)  {
+        throw(GemException("Unable to create window"));
+      }
+      // create the device context
+      dc = GetDC(win);
+      if (!dc)  {
+        throw(GemException("GEM: Unable to create device context"));
+      }
+
+      // set the pixel format for the window
+      if (!bSetupPixelFormat(dc, buffer))  {
+        throw(GemException("Unable to set window pixel format"));
+      }
+
+      // create the OpenGL context
+      context = wglCreateContext(dc);
+      if (!context)  {
+        throw(GemException("Unable to create OpenGL context"));
+      }
+
+      // do we share display lists?
+      if (sharedContext) wglShareLists(sharedContext, context);
+
+      // make the context the current rendering context
+      if (!wglMakeCurrent(dc, context))   {
+        throw(GemException("Unable to make OpenGL context current"));
+      }
+    }
+
+    void destroy(void) {
+      if (context) {
+        wglDeleteContext(context);
+      }
+      if (win) {
+        if (dc) {
+          ReleaseDC(win, dc);
+        }
+
+        s_winmap.erase(win);
+        DestroyWindow(win);
+      }
+
+      dc  = NULL;
+      win = NULL;
+      context=NULL;
+    }
+
+
+    static bool bSetupPixelFormat(HDC hdc, int buffer) {
+      PIXELFORMATDESCRIPTOR pfd;
+    
+      // clean out the descriptor
+      memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+    
+      pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+      pfd.nVersion = 1;
+      pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+      if (buffer == 2)
+        pfd.dwFlags = pfd.dwFlags | PFD_DOUBLEBUFFER;
+      pfd.dwLayerMask = PFD_MAIN_PLANE;
+      pfd.iPixelType = PFD_TYPE_RGBA;
+      pfd.cColorBits = 24;
+      pfd.cRedBits = 8;
+      pfd.cBlueBits = 8;
+      pfd.cGreenBits = 8;
+      pfd.cDepthBits = 16;
+      pfd.cAccumBits = 0;
+      pfd.cStencilBits = 8;
+      
+      int pixelformat;
+      if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
+        {
+          error("ChoosePixelFormat failed");
+          return(false);
+        }
+      if (SetPixelFormat(hdc, pixelformat, &pfd) == FALSE)
+        {
+          error("SetPixelFormat failed");
+          return(false);
+        }
+      return(true);
+    }
+
+  ////////////////////////////////////////////////////////
+  // MainWndProc
+  //
+  /////////////////////////////////////////////////////////
+  static LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+  {
+    gemw32window*obj=s_winmap[hWnd];
+    if(obj)
+      return obj->event(uMsg, wParam, lParam);
+    
+    return(DefWindowProc (hWnd, uMsg, wParam, lParam));
+  }
+};
+
+HGLRC gemw32window::Window::sharedContext=NULL;
+
+
+
 /////////////////////////////////////////////////////////
 // bSetupPixelFormat
 //
 /////////////////////////////////////////////////////////
-bool gemw32window :: bSetupPixelFormat(HDC hdc)
-{
-  PIXELFORMATDESCRIPTOR pfd;
-	
-	// clean out the descriptor
-  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-    
-  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-  pfd.nVersion = 1;
-  pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
-  if (m_buffer == 2)
-    pfd.dwFlags = pfd.dwFlags | PFD_DOUBLEBUFFER;
-  pfd.dwLayerMask = PFD_MAIN_PLANE;
-  pfd.iPixelType = PFD_TYPE_RGBA;
-  pfd.cColorBits = 24;
-  pfd.cRedBits = 8;
-  pfd.cBlueBits = 8;
-  pfd.cGreenBits = 8;
-  pfd.cDepthBits = 16;
-  pfd.cAccumBits = 0;
-  pfd.cStencilBits = 8;
-
-  int pixelformat;
-  if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
-    {
-      error("ChoosePixelFormat failed");
-      return(FALSE);
-    }
-  if (SetPixelFormat(hdc, pixelformat, &pfd) == FALSE)
-    {
-      error("SetPixelFormat failed");
-      return(FALSE);
-    }
-  return(TRUE);
-}
-
-/////////////////////////////////////////////////////////
-// MainWndProc
-//
-/////////////////////////////////////////////////////////
-LONG WINAPI gemw32window::MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-gemw32window*obj=s_winmap[hWnd];
-if(obj)
-    return obj->event(uMsg, wParam, lParam);
-
-return(DefWindowProc (hWnd, uMsg, wParam, lParam));
-}
 
 HGLRC gemw32window::sharedContext=NULL;
 
 CPPEXTERN_NEW(gemw32window);
 gemw32window::gemw32window(void) :
-  m_win(NULL), m_dc(NULL), m_context(NULL)
+  m_win(NULL)
 {
   if(!initGemWin())
     throw(GemException("could not initialize window infrastructure"));
@@ -131,181 +282,70 @@ gemw32window::~gemw32window(void) {
 /////////////////////////////////////////////////////////
 bool gemw32window:: create(void)
 {
-  int w = 0;
-  int h = 0;
+  unsigned int w = m_width;
+  unsigned int h = m_height;
+  int x = m_xoffset;
+  int y = m_yoffset;
 
   static bool firstTime = true;
     
   // Register the frame class
   HINSTANCE hInstance = GetModuleHandle(NULL);
-  if (!hInstance)
-    {
-      error("GEM: Unable to get module instance");
+  if (!hInstance)  {
+    error("GEM: Unable to get module instance");
+    return false;
+  }
+  if (firstTime)  {
+    WNDCLASS wndclass;
+    wndclass.style         = 0;
+    wndclass.lpfnWndProc   = (WNDPROC)MainWndProc;
+    wndclass.cbClsExtra    = 0;
+    wndclass.cbWndExtra    = 0;
+    wndclass.hInstance     = hInstance;
+    wndclass.hCursor       = LoadCursor(NULL, IDC_CROSS);
+    wndclass.hIcon         = LoadIcon(NULL, IDI_WINLOGO);
+    wndclass.hbrBackground = NULL;
+    wndclass.lpszMenuName  = NULL;
+    wndclass.lpszClassName = "GEM";
+    
+    if (!RegisterClass(&wndclass) )  {
+      error("GEM: Unable to register window class");
       return false;
     }
-  if (firstTime)
-    {
-      WNDCLASS wndclass;
-      wndclass.style         = 0;
-      wndclass.lpfnWndProc   = (WNDPROC)MainWndProc;
-      wndclass.cbClsExtra    = 0;
-      wndclass.cbWndExtra    = 0;
-      wndclass.hInstance     = hInstance;
-      wndclass.hCursor       = LoadCursor(NULL, IDC_CROSS);
-      wndclass.hIcon         = LoadIcon(NULL, IDI_WINLOGO);
-      wndclass.hbrBackground = NULL;
-      wndclass.lpszMenuName  = NULL;
-      wndclass.lpszClassName = "GEM";
-
-      if (!RegisterClass(&wndclass) )
-        {
-          error("GEM: Unable to register window class");
-          return false;
-        }
-      firstTime = false;
-    }
-
-  DWORD dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-  DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-
-  w = m_width;
-  h = m_height;
-
-  int x = m_xoffset;
-  int y = m_yoffset;
-
-  bool fullscreen=m_fullscreen;
-  if (fullscreen){
-    DEVMODE dmScreenSettings;								// Device Mode
-    
-    if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
-      error("GEM: couldn't get screen capabilities!");
-    }
-    w = dmScreenSettings.dmPelsWidth;
-    h = dmScreenSettings.dmPelsHeight;
-    
-    x=y=0;
-
-    memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
-    dmScreenSettings.dmSize=sizeof(dmScreenSettings);		// Size Of The Devmode Structure
-    dmScreenSettings.dmPelsWidth	= m_width;			// Selected Screen Width
-    dmScreenSettings.dmPelsHeight	= m_height;			// Selected Screen Height
-    dmScreenSettings.dmBitsPerPel	= 32;					// Selected Bits Per Pixel
-    dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
-    // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
-    if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-      dmScreenSettings.dmPelsWidth	= w;
-      dmScreenSettings.dmPelsHeight	= h;
-      if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-        error("GEM: couldn't switch to fullscreen");
-        fullscreen=false;
-      }
-    }
-  }
-  if (fullscreen){
-    dwExStyle  = WS_EX_APPWINDOW;
-    style     |= WS_POPUP;
-  } else {
-    dwExStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-    if (m_border)
-      style |= WS_OVERLAPPEDWINDOW;
-    else
-      style |= WS_POPUP;
+    firstTime = false;
   }
 
-  //  m_fullscreen = fullscreen;
-
-  // Since Windows uses some of the window for the border, etc,
-  //		we have to ask how big the window should really be
-  RECT newSize;
-  newSize.left = x;
-  newSize.top  = y;
-  newSize.right  = w+x;
-  newSize.bottom = h+y;
-
-  AdjustWindowRectEx(&newSize, style, FALSE, dwExStyle); // no menu
-  if (newSize.left<0 && x>=0){
-	  newSize.right-=newSize.left;
-	  newSize.left=0;
+  m_win=NULL;
+  try {
+    m_win=new Window(hInstance, m_buffer, m_fullscreen, m_border, m_title,
+                     x, y,
+                     w, h);
+  } catch (GemException&x) {
+    error("%s", x.what());
+    return;
   }
-  if (newSize.top<0 && y>=0){
-	  newSize.bottom-=newSize.top;
-	  newSize.top=0;
-  }
+  s_winmap[m_win->win]=this;
 
-  // Create the window
-  m_win = CreateWindowEx (
-                          dwExStyle,
-                          "GEM",
-                          m_title.c_str(),
-                          style,
-                          newSize.left,
-                          newSize.top,
-                          newSize.right - newSize.left,
-                          newSize.bottom - newSize.top,
-                          NULL,
-                          NULL,
-                          hInstance,
-                          NULL);
-  if (!m_win)  {
-    error("GEM: Unable to create window");
-    return false;
-  }
-  s_winmap[m_win]=this;
-
-  // create the device context
-  m_dc = GetDC(m_win);
-  if (!m_dc)  {
-    error("GEM: Unable to create device context");
-    destroy();
-    return false;
-  }
-
-  // set the pixel format for the window
-  if (!bSetupPixelFormat(m_dc))  {
-    error("GEM: Unable to set window pixel format");
-    destroy();
-    return false;
-  }
-
-  // create the OpenGL context
-  m_context = wglCreateContext(m_dc);
-  if (!m_context)  {
-    error("GEM: Unable to create OpenGL context");
-    destroy();
-    return false;
-  }
-
-  // do we share display lists?
-  if (sharedContext) wglShareLists(sharedContext, m_context);
-
-  // make the context the current rendering context
-  if (!wglMakeCurrent(m_dc, m_context))   {
-    error("GEM: Unable to make OpenGL context current");
-    destroy();
-    return false;
-  }
-  
   bool m_actuallyDisplay =true;
   if (m_actuallyDisplay) {
 
       // show and update main window
     if (fullscreen){
-        ShowWindow(m_win,SW_SHOW);				// Show The Window
-        SetForegroundWindow(m_win);				// Slightly Higher Priority
-        SetFocus(m_win);
+        ShowWindow(m_win->win,SW_SHOW);				// Show The Window
+        SetForegroundWindow(m_win->win);				// Slightly Higher Priority
+        SetFocus(m_win->win);
     } else  {
-        ShowWindow(m_win, SW_SHOWNORMAL);
+        ShowWindow(m_win->win, SW_SHOWNORMAL);
     }
     
-    UpdateWindow(m_win);
-    post("dimenstion: %d %d", w, h);
+    UpdateWindow(m_win->win);
     dimension(w, h);
+    position(x, y);
   }
   return createContext();
 }
 void gemw32window:: createMess(std::string s) {
-    if(m_win) {
+    if(m_win->win) {
         error("window already made");
         return;
     }
@@ -324,18 +364,9 @@ void gemw32window:: destroy(void)
   if (m_fullscreen)
     ChangeDisplaySettings(NULL,0);	// Switch Back To The Desktop
 
-  if (m_win) {
-    if (m_dc) {
-      if (m_context) {
-        wglDeleteContext(m_context);
-      }
-      ReleaseDC(m_win, m_dc);
-    }
-    DestroyWindow(m_win);
-  }
-  s_winmap.erase(m_win);
-  m_dc  = NULL;
-  m_win = NULL;
+  if(m_win)
+    delete m_win;
+  m_win=NULL;
 
   destroyContext();
 }
@@ -357,9 +388,9 @@ void gemw32window::topmostMess(bool state)
 {
   static int topmost_state = 0;
   if (state)
-    SetWindowPos(m_win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+    SetWindowPos(m_win->win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
   else
-    SetWindowPos(m_win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+    SetWindowPos(m_win->win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
@@ -384,13 +415,13 @@ void gemw32window :: dimensionsMess(unsigned int width, unsigned int height)
 
 void gemw32window::swapBuffers(void)
 {
-  SwapBuffers(m_dc);
+  SwapBuffers(m_win->dc);
 }
 
 bool gemw32window::makeCurrent(void)
 {
-  if (!m_dc && !m_context)return false;
-  wglMakeCurrent(m_dc, m_context); 
+  if (!m_win)return false;
+  wglMakeCurrent(m_win->dc, m_win->context); 
   return true;
 }
 
@@ -441,11 +472,11 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
       // resize event
     case WM_SIZE:
       dimension(LOWORD(lParam), HIWORD(lParam));
-      GetClientRect(m_win, &rcClient);
+      GetClientRect(m_win->win, &rcClient);
       break;
     case WM_MOVE: // hmm, doesn't do anything
       position(LOWORD(lParam), HIWORD(lParam));
-      //GetClientRect(m_win, &rcClient);
+      //GetClientRect(m_win->win, &rcClient);
       break;
 
 
@@ -469,7 +500,7 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
       
       // pass all unhandled messages to DefWindowProc
     default:
-      lRet = DefWindowProc (m_win, uMsg, wParam, lParam);
+      lRet = DefWindowProc (m_win->win, uMsg, wParam, lParam);
       break;
     }
   return(lRet);

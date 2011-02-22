@@ -89,14 +89,8 @@ class GEM_EXTERN gemw32window : public GemContext
   virtual void        topmostMess(bool on);
 
  private:
-  HWND m_win;
-  HDC m_dc;
-  HGLRC m_context;
-
-  static HGLRC sharedContext;
-
-  bool bSetupPixelFormat(HDC);
-  static LONG WINAPI MainWndProc (HWND, UINT, WPARAM, LPARAM);
+  class Window;
+  Window*m_win;
 };
 
 #endif    // for header file
