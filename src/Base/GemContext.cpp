@@ -417,7 +417,7 @@ void GemContext::borderMess(bool on) {
   m_border=on;
 }
 
-void GemContext::   fullscreenMess(bool on) {
+void GemContext::   fullscreenMess(int on) {
   m_fullscreen=on;
 }
 void GemContext::       offsetMess(int x, int y) {

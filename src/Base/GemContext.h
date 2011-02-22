@@ -169,7 +169,7 @@ class GEM_EXTERN GemContext : public CPPExtern
   virtual void titleMess(std::string);
   virtual void borderMess(bool on);
 
-  virtual void    fullscreenMess(bool on);
+  virtual void    fullscreenMess(int on);
   virtual void        offsetMess(int x, int y);
  
   /* creation/destruction */
@@ -198,7 +198,7 @@ class GEM_EXTERN GemContext : public CPPExtern
   // however, if they do mean something to you, it would be good if you used these
   int          m_xoffset, m_yoffset;
   bool         m_border;
-  bool         m_fullscreen;
+  int          m_fullscreen;
 
   unsigned int m_buffer;
   std::string  m_title;
