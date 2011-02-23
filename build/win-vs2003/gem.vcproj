@@ -3618,12 +3618,6 @@
 		<Filter
 			Name="temp"
 			Filter="">
-			<File
-				RelativePath="..\..\src\Output\gemw32window.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Output\gemw32window.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Helpers"
@@ -3658,6 +3652,16 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\RTE.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Output"
+			Filter="">
+			<File
+				RelativePath="..\..\src\Output\gemw32window.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Output\gemw32window.h">
 			</File>
 		</Filter>
 	</Files>
