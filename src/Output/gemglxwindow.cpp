@@ -796,38 +796,12 @@ void gemglxwindow :: cursorMess(bool state)
     XUndefineCursor(m_pimpl->dpy, m_pimpl->win);
 }
 
-
-/////////////////////////////////////////////////////////
-// print info
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: print(void)
-{
-  //  GemMan::printInfo();
-}
-
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void gemglxwindow :: obj_setupCallback(t_class *classPtr)
 {
-  //  class_addbang(classPtr, reinterpret_cast<t_method>(&gemglxwindow::renderMessCallback));
-  CPPEXTERN_MSG0(classPtr, "bang", render);
-
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
-  CPPEXTERN_MSG1(classPtr, "create", createMess, std::string);
-  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
-  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
-  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, bool);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
-  CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
-  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
-  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
-
-  CPPEXTERN_MSG0(classPtr, "print", print);
-  
 }
 
 #endif /* HAVE_GL_GLX_H */
