@@ -82,8 +82,13 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
     return;
   }
 
-  if(cache && state) {
+  if(state) {
 		t_atom ap[2];
+
+    GemCache tempCache(NULL);
+    if(!cache)
+      cache=&tempCache;
+
 		ap->a_type=A_POINTER;
 		ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(cache);
 		(ap+1)->a_type=A_POINTER;
@@ -104,7 +109,6 @@ void gemlist :: trigger()
     sendCacheState(m_cache, &m_current_state);
   } else {
 	  // fill in out own state and output
-    GemCache tempCache(NULL);
     GemState state;
 
     if(m_lightState) {
@@ -121,7 +125,7 @@ void gemlist :: trigger()
     }
 
     //    GemMan::fillGemState(state);
-    sendCacheState(&tempCache, &state);
+    sendCacheState(NULL, &state);
   }
 }
 
