@@ -67,7 +67,7 @@ separator :: separator(int argc, t_atom*argv)
     m_active[GLStack::TEXTURE   ]=true;
     m_active[GLStack::PROJECTION]=true;
   }
-  m_state.set("gl.tex.coords", static_cast<TexCoord*>(NULL));
+  m_state.set(GemState::_GL_TEX_COORDS, static_cast<TexCoord*>(NULL));
 }
 
 /////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ separator :: separator(int argc, t_atom*argv)
 separator :: ~separator()
 {
   TexCoord*tc=NULL;
-  m_state.get("gl.tex.coords", tc);
+  m_state.get(GemState::_GL_TEX_COORDS, tc);
   if(tc)
     delete [] tc;
 }
@@ -93,7 +93,7 @@ void separator :: render(GemState *state)
   if(!state)return;
   using namespace gem;
   GLStack*stacks=NULL;
-  state->get("gl.stacks", stacks);
+  state->get(GemState::_GL_STACKS, stacks);
   // push the current matrix stacks
   if(stacks) {
 #define PUSHGLSTACK(type)     if(m_active[type])m_pushed[type]=stacks->push(type)
@@ -107,20 +107,20 @@ void separator :: render(GemState *state)
 # warning use GemState copy rather than manually copying each state!
 #endif
 
-  SEPARATOR_STATEASSIGN(state, &m_state, bool, "gl.lighting");
-  SEPARATOR_STATEASSIGN(state, &m_state, bool, "gl.smooth");
-  SEPARATOR_STATEASSIGN(state, &m_state, int, "gl.tex.type");
-  SEPARATOR_STATEASSIGN(state, &m_state, int, "gl.tex.numcoords");
-  SEPARATOR_STATEASSIGN(state, &m_state, pixBlock*, "pix");
+  SEPARATOR_STATEASSIGN(state, &m_state, bool, GemState::_GL_LIGHTING);
+  SEPARATOR_STATEASSIGN(state, &m_state, bool, GemState::_GL_SMOOTH);
+  SEPARATOR_STATEASSIGN(state, &m_state, int, GemState::_GL_TEX_TYPE);
+  SEPARATOR_STATEASSIGN(state, &m_state, int, GemState::_GL_TEX_NUMCOORDS);
+  SEPARATOR_STATEASSIGN(state, &m_state, pixBlock*, GemState::_PIX);
 
   TexCoord *myCoords=NULL, *coords=NULL;
   int mynum=0, num=0;
 
-  m_state.get("gl.tex.coords", myCoords);
-  state->get ("gl.tex.coords", coords);
+  m_state.get(GemState::_GL_TEX_COORDS, myCoords);
+  state->get (GemState::_GL_TEX_COORDS, coords);
 
-  m_state.get("gl.tex.numcoords", mynum);
-  state->get ("gl.tex.numcoords", num);
+  m_state.get(GemState::_GL_TEX_NUMCOORDS, mynum);
+  state->get (GemState::_GL_TEX_NUMCOORDS, num);
 
 
   if(mynum != num) {
@@ -131,15 +131,15 @@ void separator :: render(GemState *state)
   }
 
   if (myCoords && coords) {
-    state->get("gl.tex.numcoords", num);
+    state->get(GemState::_GL_TEX_NUMCOORDS, num);
     for (int i = 0; i < num; i++)  {
       myCoords[i].s = coords[i].s;
       myCoords[i].t = coords[i].t;
     }
   } 
 
-  m_state.set("gl.tex.coords", myCoords);
-  m_state.set("gl.tex.numcoords", num);
+  m_state.set(GemState::_GL_TEX_COORDS, myCoords);
+  m_state.set(GemState::_GL_TEX_NUMCOORDS, num);
 
   glMatrixMode(GL_MODELVIEW);
 }
@@ -153,7 +153,7 @@ void separator :: postrender(GemState *state)
   if(!state)return;
   using namespace gem;
   GLStack*stacks=NULL;
-  state->get("gl.stacks", stacks);
+  state->get(GemState::_GL_STACKS, stacks);
   // pop the current matrix stacks
   if(stacks) {
 #define POPGLSTACK(type)     if(m_pushed[type]){stacks->pop(type);}m_pushed[type]=false
@@ -162,10 +162,10 @@ void separator :: postrender(GemState *state)
     POPGLSTACK(GLStack::PROJECTION);
     POPGLSTACK(GLStack::MODELVIEW); 
   }
-  SEPARATOR_STATEASSIGN(&m_state, state, bool, "gl.lighting");
-  SEPARATOR_STATEASSIGN(&m_state, state, bool, "gl.smooth");
-  SEPARATOR_STATEASSIGN(&m_state, state, int, "gl.tex.type");
-  SEPARATOR_STATEASSIGN(&m_state, state, pixBlock*, "pix");
+  SEPARATOR_STATEASSIGN(&m_state, state, bool, GemState::_GL_LIGHTING);
+  SEPARATOR_STATEASSIGN(&m_state, state, bool, GemState::_GL_SMOOTH);
+  SEPARATOR_STATEASSIGN(&m_state, state, int, GemState::_GL_TEX_TYPE);
+  SEPARATOR_STATEASSIGN(&m_state, state, pixBlock*, GemState::_PIX);
 	
 //this is a partial fix for the separator memory leak
 //
@@ -176,11 +176,11 @@ void separator :: postrender(GemState *state)
   TexCoord *myCoords=NULL, *stateCoords=NULL;
   int mynum=0, num=0;
 
-  m_state.get("gl.tex.coords", myCoords);
-  state->get ("gl.tex.coords", stateCoords);
+  m_state.get(GemState::_GL_TEX_COORDS, myCoords);
+  state->get (GemState::_GL_TEX_COORDS, stateCoords);
 
-  m_state.get("gl.tex.numcoords", mynum);
-  state->get ("gl.tex.numcoords", num);
+  m_state.get(GemState::_GL_TEX_NUMCOORDS, mynum);
+  state->get (GemState::_GL_TEX_NUMCOORDS, num);
 
 
   if(mynum != num) {
@@ -200,8 +200,8 @@ void separator :: postrender(GemState *state)
     }
   } 
 
-  state->set("gl.tex.coords", stateCoords);
-  state->set("gl.tex.numcoords", num);
+  state->set(GemState::_GL_TEX_COORDS, stateCoords);
+  state->set(GemState::_GL_TEX_NUMCOORDS, num);
 }
 
 /////////////////////////////////////////////////////////

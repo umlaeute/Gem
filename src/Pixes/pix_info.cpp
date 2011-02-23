@@ -64,7 +64,7 @@ void pix_info :: render(GemState *state)
   // 0 0 0  6408  5121 1 1 0  0 9.59521e+08
   t_atom abuf[3];
   pixBlock*img=NULL;
-  if(state)state->get("pix", img);
+  if(state)state->get(GemState::_PIX, img);
   if (!state || !img){ //no pixblock (or even no image!)!
     outlet_float(m_pixblock, (t_float)-1);
     outlet_float(m_misc,     (t_float)-1);

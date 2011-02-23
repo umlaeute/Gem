@@ -287,7 +287,7 @@ void pix_share_write :: render(GemState *state)
 {
   if (!state)return;
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
   if(!img) return;
 
 #ifndef _WIN32

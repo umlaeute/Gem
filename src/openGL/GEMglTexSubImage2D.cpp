@@ -65,7 +65,7 @@ bool GEMglTexSubImage2D :: isRunnable(void) {
 //
 void GEMglTexSubImage2D :: render(GemState *state) {
   if (!state)return;
-  pixBlock*img=NULL;  state->get("pix", img);  if(!img || !&img->image)return;
+  pixBlock*img=NULL;  state->get(GemState::_PIX, img);  if(!img || !&img->image)return;
   target=GL_TEXTURE_2D;
   glTexSubImage2D (target, level, xoffset, yoffset, width, height, 
 		   img->image.format, 

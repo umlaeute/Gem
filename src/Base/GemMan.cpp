@@ -368,12 +368,12 @@ void GemMan :: fillGemState(GemState &state)
 {
   if (s_lightState) {
     // GemState['lighting'] = 1;
-    state.set(gensym("gl.lighting"), true);
-    state.set(gensym("gl.smooth"), true);   
+    state.set(GemState::_GL_LIGHTING, true);
+    state.set(GemState::_GL_SMOOTH, true);   
   }
 
   gem::GLStack*stacks=NULL;
-  state.get("gl.stacks", stacks);
+  state.get(GemState::_GL_STACKS, stacks);
   if(stacks)stacks->reset();
 }
 
@@ -520,7 +520,7 @@ void GemMan :: render(void *)
   else
     tickTime = static_cast<float>(clock_gettimesince(m_lastRenderTime));
 
-  currentState.set("timing.tick", tickTime);
+  currentState.set(GemState::_TIMING_TICK, tickTime);
 
   m_lastRenderTime = clock_getsystime();
 
@@ -588,7 +588,7 @@ void GemMan :: render(void *)
       // render right view
       fillGemState(currentState);
       tickTime=0;
-      currentState.set("timing.tick", tickTime);
+      currentState.set(GemState::_TIMING_TICK, tickTime);
       renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
@@ -697,7 +697,7 @@ void GemMan :: render(void *)
       // render right view
       fillGemState(currentState);
       tickTime=0;
-      currentState.set("timing.tick", tickTime);
+      currentState.set(GemState::_TIMING_TICK, tickTime);
       renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
@@ -760,7 +760,7 @@ void GemMan :: render(void *)
       // render right view
       fillGemState(currentState);
       tickTime=0;
-      currentState.set("timing.tick", tickTime);
+      currentState.set(GemState::_TIMING_TICK, tickTime);
       renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);

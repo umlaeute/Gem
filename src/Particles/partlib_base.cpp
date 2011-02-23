@@ -48,7 +48,7 @@ void partlib_base :: render(GemState *state)
   m_tickTime=50.;
 
   if(state)
-    state->get("timing.tick", m_tickTime);
+    state->get(GemState::_TIMING_TICK, m_tickTime);
 
   renderParticles(state);
 }

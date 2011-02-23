@@ -55,7 +55,7 @@ void GemPixObj :: render(GemState *state){
   // the data is restored in the <postrender> call,
   // so that the objects can rely on their (buffered) images
   pixBlock*image=NULL;
-  if (!state || !state->get("pix", image))return;
+  if (!state || !state->get(GemState::_PIX, image))return;
   if(!image || 
      !&image->image)  return;
   cachedPixBlock.newimage=image->newimage;
@@ -124,13 +124,13 @@ void GemPixObj :: render(GemState *state){
       }
     }
   }
-  state->set("pix", image);
+  state->set(GemState::_PIX, image);
 }
 
 //////////
 // get the original state back
 void GemPixObj :: postrender(GemState *state){
-  state->set("pix", orgPixBlock);
+  state->set(GemState::_PIX, orgPixBlock);
 }
 
 /////////////////////////////////////////////////////////

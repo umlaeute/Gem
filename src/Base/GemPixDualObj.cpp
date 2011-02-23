@@ -199,7 +199,7 @@ void GemPixDualObj :: stopRendering()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: rightRender(GemState *statePtr)
 {
-  if (!statePtr || !statePtr->get("pix", m_pixRight) || !m_pixRight) {
+  if (!statePtr || !statePtr->get(GemState::_PIX, m_pixRight) || !m_pixRight) {
     m_pixRightValid = 0;
     m_pixRight = 0;
     return;

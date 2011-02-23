@@ -100,7 +100,7 @@ void gemframebuffer :: render(GemState *state)
 {
   gem::GLStack*stacks=NULL;
   if(state) {
-    state->get("gl.stacks", stacks);
+    state->get(GemState::_GL_STACKS, stacks);
   }
 
   if(!m_width || !m_height) {
@@ -156,7 +156,7 @@ void gemframebuffer :: postrender(GemState *state)
   t_float w, h;
   gem::GLStack*stacks=NULL;
   if(state) {
-    state->get("gl.stacks", stacks);
+    state->get(GemState::_GL_STACKS, stacks);
   }
 
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);

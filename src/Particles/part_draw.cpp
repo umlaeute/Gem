@@ -47,7 +47,7 @@ part_draw :: ~part_draw()
 void part_draw :: renderParticles(GemState *state)
 {
   bool lighting=false;
-  state->get("gl.lighting", lighting);
+  state->get(GemState::_GL_LIGHTING, lighting);
 	if (lighting)
 	{
 		glDisable(GL_LIGHTING);

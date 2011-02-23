@@ -112,16 +112,16 @@ void gemlist :: trigger()
     GemState state;
 
     if(m_lightState) {
-      state.set("gl.lighting", true);
-      state.set("gl.smooth", true);
+      state.set(GemState::_GL_LIGHTING, true);
+      state.set(GemState::_GL_SMOOTH, true);
     }
     
     if(m_drawType) {
-      state.set("gl.drawtype", m_drawType);
+      state.set(GemState::_GL_DRAWTYPE, m_drawType);
     }
 
     if(m_tickTime>=0.f) {
-      state.set("timing.tick", m_tickTime);
+      state.set(GemState::_TIMING_TICK, m_tickTime);
     }
 
     //    GemMan::fillGemState(state);

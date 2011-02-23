@@ -58,6 +58,26 @@ class GemStateData;
 class GEM_EXTERN GemState
 {
  public:
+  typedef enum {
+    _DIRTY,
+    _TIMING_TICK,
+    _PIX,
+    _GL_STACKS,
+    _GL_DISPLAYLIST,
+    _GL_LIGHTING,
+    _GL_SMOOTH,
+    _GL_DRAWTYPE,
+    _GL_TEX_TYPE,
+    _GL_TEX_COORDS,
+    _GL_TEX_NUMCOORDS,
+    _GL_TEX_UNITS,
+
+
+
+
+
+    _LAST
+  } key_t;
 
   //////////
   // Has something changed since the last time?
@@ -173,11 +193,10 @@ class GEM_EXTERN GemState
    * the value of the 2nd argument is set accordingly and <code>true</code> is returned
    * if the key does not exist (or the type is wrong) the value is not touched and <code>false</code> is returned instead
    */
-  virtual bool get(const std::string key, gem::any&value);
-  virtual bool get(const t_symbol*key, gem::any&value) { return get(key->s_name, value); }
+  virtual bool get(const key_t key, gem::any&value);
 
   template<class T>
-    bool get(const std::string key, T&value) {
+    bool get(const key_t key, T&value) {
     try {
       gem::any val;
       if(!get(key,val)) {
@@ -187,22 +206,15 @@ class GEM_EXTERN GemState
       value=gem::any_cast<T>(val);
       return true;
     } catch (gem::bad_any_cast&x) {
-      ::verbose(3, "%s:%d [%s] %s :: %s", __FILE__, __LINE__, __FUNCTION__, key.c_str(), x.what().c_str());
+      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key, x.what().c_str());
       // type problem
     }
     return false;
   };
-  template<class T>
-    bool get(const t_symbol*key, T&value) {
-    return get(key->s_name, value);
-  }
-
   /* set a named property */
-  virtual bool set(const std::string key, gem::any value);
-  virtual bool set(const t_symbol*key, gem::any value) { return set(key->s_name, value); }
+  virtual bool set(const key_t key, gem::any value);
   /* remove a named property */
-  virtual bool remove(const std::string key);
-  virtual bool remove(const t_symbol*key)  { return remove(key->s_name);}
+  virtual bool remove(const key_t key);
 
   // Copy assignment
   GemState& operator=(const GemState&);

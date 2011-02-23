@@ -258,7 +258,7 @@ void pix_image :: render(GemState *state)
       m_pixBlock.newimage = 1;
       m_cache->resendImage = 0;
     }
-  state->set("pix", &m_pixBlock);
+  state->set(GemState::_PIX, &m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////
@@ -268,7 +268,7 @@ void pix_image :: render(GemState *state)
 void pix_image :: postrender(GemState *state)
 {
   m_pixBlock.newimage = 0;
-  state->set("pix", static_cast<pixBlock*>(NULL));
+  state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
 #ifdef HAVE_PTHREADS
   if(m_mutex)
     pthread_mutex_unlock(m_mutex);

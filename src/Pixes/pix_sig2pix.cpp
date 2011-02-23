@@ -82,7 +82,7 @@ void pix_sig2pix :: csMess(GLint cs) {
 /////////////////////////////////////////////////////////
 void pix_sig2pix :: render(GemState *state)
 {
-  state->set("pix",&m_pixBlock);
+  state->set(GemState::_PIX,&m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ void pix_sig2pix :: render(GemState *state)
 void pix_sig2pix :: postrender(GemState *state)
 {
   m_pixBlock.newimage = 0;
-  state->set("pix", static_cast<pixBlock*>(NULL));
+  state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
 }
 
 /////////////////////////////////////////////////////////

@@ -56,7 +56,7 @@ void pix_draw :: render(GemState *state)
 {
   int orientation=1;
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
   if ( !img || !&img->image ) return;
   glRasterPos2i(0, 0);
   // hack to center image at 0,0

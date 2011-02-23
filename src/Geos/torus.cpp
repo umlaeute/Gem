@@ -91,10 +91,10 @@ void torus :: render(GemState *state)
   bool lighting = false;
   int texNum=0;
   int texType=0;
-  state->get("gl.tex.coords", texCoords);
-  state->get("gl.tex.type", texType);
-  state->get("gl.tex.numcoords", texNum);
-  state->get("gl.lighting", lighting);
+  state->get(GemState::_GL_TEX_COORDS, texCoords);
+  state->get(GemState::_GL_TEX_TYPE, texType);
+  state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
+  state->get(GemState::_GL_LIGHTING, lighting);
 
   GLenum type = m_drawType;
   switch(m_drawType){

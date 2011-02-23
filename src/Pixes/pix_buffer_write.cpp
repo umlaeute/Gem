@@ -81,7 +81,7 @@ void pix_buffer_write :: render(GemState*state){
   if (m_frame<0)return;
   if(!state)return;
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
   if (state && img && &img->image){
     if (img->newimage || m_frame!=m_lastframe){
       if(m_bindname==NULL || m_bindname->s_name==NULL){

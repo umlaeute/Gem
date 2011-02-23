@@ -75,7 +75,7 @@ pix_set :: ~pix_set()
 /////////////////////////////////////////////////////////
 void pix_set :: render(GemState *state)
 {
-  state->set("pix",&m_pixBlock);
+  state->set(GemState::_PIX,&m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////

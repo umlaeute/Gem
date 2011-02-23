@@ -54,14 +54,14 @@ pix_coordinate :: ~pix_coordinate()
 void pix_coordinate :: render(GemState *state)
 {
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
 
-  state->get("gl.tex.coords", m_oldTexCoords);
-  state->get("gl.tex.numcoords", m_oldNumCoords);
-  state->set("gl.tex.type", m_oldTexType);
+  state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
+  state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
+  state->set(GemState::_GL_TEX_TYPE, m_oldTexType);
 
   if (m_oldTexType && m_numCoords){
-    state->set("gl.tex.numcoords", m_numCoords);
+    state->set(GemState::_GL_TEX_NUMCOORDS, m_numCoords);
 
 	if(m_oldTexType==2 && img!=NULL){ 
 	  // since we are using rectangle-textures (state->texture==2), 
@@ -74,10 +74,10 @@ void pix_coordinate :: render(GemState *state)
 	      m_rectcoords[i].s = xsize*m_coords[i].s;
 	      m_rectcoords[i].t = ysize*m_coords[i].t;
 	    }
-    state->set("gl.tex.coords", m_rectcoords);
+    state->set(GemState::_GL_TEX_COORDS, m_rectcoords);
 
 	} else
-    state->set("gl.tex.coords", m_coords);
+    state->set(GemState::_GL_TEX_COORDS, m_coords);
   }
 }
 
@@ -87,9 +87,9 @@ void pix_coordinate :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_coordinate :: postrender(GemState *state)
 {
-  state->set("gl.tex.coords", m_oldTexCoords);
-  state->set("gl.tex.numcoords", m_oldNumCoords);
-  state->set("gl.tex.type", m_oldTexType);
+  state->set(GemState::_GL_TEX_COORDS, m_oldTexCoords);
+  state->set(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
+  state->set(GemState::_GL_TEX_TYPE, m_oldTexType);
 }
 
 /////////////////////////////////////////////////////////

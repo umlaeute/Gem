@@ -158,7 +158,7 @@ void pix_buffer_read :: render(GemState*state)
   if (!m_haveImage) return;
 
   /* push the incoming state->image into a temporary memory */
-  state->get("pix", orgPixBlock);
+  state->get(GemState::_PIX, orgPixBlock);
 
   /*
     pd_findbyclass costs at least 2 if's
@@ -168,7 +168,7 @@ void pix_buffer_read :: render(GemState*state)
   */ 
   if (NULL==pd_findbyclass(m_bindname, pix_buffer_class)) return;
 
-  state->set("pix", &m_pixBlock);
+  state->set(GemState::_PIX, &m_pixBlock);
 
 }
 
@@ -187,7 +187,7 @@ void pix_buffer_read :: postrender(GemState *state)
     }
 
   /* restore the original incoming image */
-  state->set("pix", orgPixBlock);
+  state->set(GemState::_PIX, orgPixBlock);
 }
 
 /////////////////////////////////////////////////////////

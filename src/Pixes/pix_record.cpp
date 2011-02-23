@@ -253,7 +253,7 @@ void pix_record :: render(GemState *state)
   //check if state exists
   if(!state)return;
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
 
   if(!img || !img->image.data){
     return;

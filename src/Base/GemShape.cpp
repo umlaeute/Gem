@@ -63,8 +63,8 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, 
   int numCoords = 0;
   int numUnits = 0;
 
-  state->get("gl.tex.numcoords", numCoords);
-  state->get("gl.tex.units", numUnits);
+  state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
+  state->get(GemState::_GL_TEX_UNITS, numUnits);
 
 
   if (numCoords) {
@@ -90,8 +90,8 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
   int numCoords = 0;
   int numUnits = 0;
 
-  state->get("gl.tex.numcoords", numCoords);
-  state->get("gl.tex.units", numUnits);
+  state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
+  state->get(GemState::_GL_TEX_UNITS, numUnits);
 
 
 
@@ -196,10 +196,10 @@ void GemShape :: render(GemState *state)
   m_texCoords=NULL;
   m_lighting=false;
 
-  state->get("gl.tex.coords", m_texCoords);
-  state->get("gl.tex.type", m_texType);
-  state->get("gl.tex.numcoords", m_texNum);
-  state->get("gl.lighting", m_lighting);
+  state->get(GemState::_GL_TEX_COORDS, m_texCoords);
+  state->get(GemState::_GL_TEX_TYPE, m_texType);
+  state->get(GemState::_GL_TEX_NUMCOORDS, m_texNum);
+  state->get(GemState::_GL_LIGHTING, m_lighting);
 
   renderShape(state);
 

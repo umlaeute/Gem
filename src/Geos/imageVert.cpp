@@ -324,9 +324,9 @@ void imageVert :: render(GemState *state)
   int texType=0;
   bool dl = false;
 
-  state->get("pix", img);
-  state->get("gl.tex.type", texType);
-  state->get("gl.displaylist", dl);
+  state->get(GemState::_PIX, img);
+  state->get(GemState::_GL_TEX_TYPE, texType);
+  state->get(GemState::_GL_DISPLAYLIST, dl);
 
   // always want to render
   if (!img) return;

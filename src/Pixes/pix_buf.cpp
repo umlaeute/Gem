@@ -50,7 +50,7 @@ void pix_buf :: render(GemState *state)
   if(!state)return;
   bool doit=m_banged;
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
 
   cachedPixBlock.newimage = 0;
   if (!img || !&img->image) return;
@@ -79,7 +79,7 @@ void pix_buf :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_buf :: postrender(GemState *state)
 {
-  state->set("pix", orgPixBlock);
+  state->set(GemState::_PIX, orgPixBlock);
 }
 
 /////////////////////////////////////////////////////////

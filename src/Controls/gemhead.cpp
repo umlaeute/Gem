@@ -88,10 +88,10 @@ void gemhead :: renderGL(GemState *state)
   {
     state->reset();
     // set the state dirty flag
-    state->set("dirty", m_cache->dirty);
+    state->set(GemState::_DIRTY, m_cache->dirty);
     state->VertexDirty=m_cache->vertexDirty;
 
-    state->get("gl.stacks", stacks);
+    state->get(GemState::_GL_STACKS, stacks);
     if(stacks)stacks->push();
   }
 
@@ -108,7 +108,7 @@ void gemhead :: renderGL(GemState *state)
 
   m_cache->dirty = false;
   m_cache->vertexDirty=false;
-  state->get("gl.stacks", stacks);
+  state->get(GemState::_GL_STACKS, stacks);
   if(stacks)stacks->pop();
 }
 

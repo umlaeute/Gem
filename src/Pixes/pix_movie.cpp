@@ -66,13 +66,13 @@ void pix_movie :: render(GemState *state)
 #ifdef HAVE_PTHREADS
   if(m_thread_running) {
     pthread_mutex_lock(m_mutex);
-    state->set("pix", m_frame);
+    state->set(GemState::_PIX, m_frame);
   } else
 #endif /* PTHREADS */
-    state->set("pix", m_handle->getFrame());
+    state->set(GemState::_PIX, m_handle->getFrame());
 
   pixBlock*img=NULL;
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
 
   frame=static_cast<int>(m_reqFrame);
   if (img==0){
@@ -87,7 +87,7 @@ void pix_movie :: render(GemState *state)
 	 */
 	m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
       }
-      state->set("pix", m_handle->getFrame());
+      state->set(GemState::_PIX, m_handle->getFrame());
     }
   }
 
@@ -103,7 +103,7 @@ void pix_movie :: postrender(GemState *state)
   if(!m_handle)return;
   if (state) {
     pixBlock*img=NULL;
-    state->get("pix", img);
+    state->get(GemState::_PIX, img);
     if(img)img->newimage = false;
   }
 

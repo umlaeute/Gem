@@ -147,10 +147,10 @@ void teapot :: render(GemState *state)
   int texType=0;
   int texNum=0;
   bool lighting=false;
-  state->get("gl.tex.coords", texCoords);
-  state->get("gl.tex.type", texType);
-  state->get("gl.tex.numcoords", texNum);
-  state->get("gl.lighting", lighting);
+  state->get(GemState::_GL_TEX_COORDS, texCoords);
+  state->get(GemState::_GL_TEX_TYPE, texType);
+  state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
+  state->get(GemState::_GL_LIGHTING, lighting);
 
   if (texType && texNum>=4) {
     m_texCoords[0][0]=texCoords[0].s;m_texCoords[0][1]=texCoords[0].t;

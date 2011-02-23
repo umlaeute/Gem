@@ -58,9 +58,9 @@ void curve :: render(GemState *state)
   int texType=0;
   int texNum=0;
   bool lighting=false;
-  state->get("gl.tex.coords", texCoords);
-  state->get("gl.tex.type", texType);
-  state->get("gl.tex.numcoords", texNum);
+  state->get(GemState::_GL_TEX_COORDS, texCoords);
+  state->get(GemState::_GL_TEX_TYPE, texType);
+  state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
 
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
     glNormal3f(0.0f, 0.0f, 1.0f);

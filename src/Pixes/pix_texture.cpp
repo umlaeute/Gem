@@ -163,8 +163,8 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
 }
 
 static inline void tex2state(GemState*state, TexCoord*coords, int size) {
-  state->set("gl.tex.coords", coords);
-  state->set("gl.tex.numcoords", size);
+  state->set(GemState::_GL_TEX_COORDS, coords);
+  state->set(GemState::_GL_TEX_NUMCOORDS, size);
 }
 
 
@@ -198,14 +198,14 @@ bool pix_texture :: isRunnable(void) {
 }
 
 void pix_texture :: pushTexCoords(GemState*state) {
-  state->get("gl.tex.coords", m_oldTexCoords);
-  state->get("gl.tex.numcoords", m_oldNumCoords);
-  state->get("gl.tex.type", m_oldTexture);
+  state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
+  state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
+  state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
 }
 
 void pix_texture :: popTexCoords(GemState*state) {
   tex2state(state, m_oldTexCoords, m_oldNumCoords);
-  state->set("gl.tex.type", m_oldTexture);
+  state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
 }
 
 
@@ -244,7 +244,7 @@ void pix_texture :: render(GemState *state) {
   pixBlock*img=NULL;
 
 
-  state->get("pix", img);
+  state->get(GemState::_PIX, img);
   if(img)
     newfilm = img->newfilm;
 
@@ -529,16 +529,16 @@ void pix_texture :: render(GemState *state) {
   m_rebuildList = false;
   m_didTexture=true;
 
-  state->set("gl.tex.units", m_numTexUnits);
+  state->set(GemState::_GL_TEX_UNITS, m_numTexUnits);
 
   // if we are using rectangle textures, this is a way to inform the downstream objects
   // (this is important for things like [pix_coordinate]
 
   // we don't use switch/case as _ARB and _EXT might be the same...
   if(m_textureType==GL_TEXTURE_RECTANGLE_ARB || m_textureType==GL_TEXTURE_RECTANGLE_EXT) {
-    state->set("gl.tex.type", 2);
+    state->set(GemState::_GL_TEX_TYPE, 2);
   } else {
-    state->set("gl.tex.type", 1);
+    state->set(GemState::_GL_TEX_TYPE, 1);
   }
 
   sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
