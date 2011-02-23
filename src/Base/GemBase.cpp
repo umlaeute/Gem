@@ -131,7 +131,7 @@ void GemBase :: gem_startstopMess(int state)
 void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
 {
   m_cache=cache;
-  if(m_cache->m_magic!=GEMCACHE_MAGIC)
+  if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
   if(INIT==m_state) {
     if(isRunnable()) {
