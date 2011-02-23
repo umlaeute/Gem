@@ -438,6 +438,10 @@ void GemContext::       cursorMess(bool on) {
 
 
 
+void GemContext::       printMess(void) {
+  // nada
+}
+
 
 
 

@@ -179,6 +179,9 @@ class GEM_EXTERN GemContext : public CPPExtern
   /* post creation */
   virtual void        cursorMess(bool on);
 
+  /* print some info */
+  virtual void        printMess(void);
+
  public:
   static unsigned int getContextId(void);
 
