@@ -1543,29 +1543,6 @@ void gemmacwindow :: destroyMess(void) {
   }
 }
 
-void gemmacwindow :: bufferMess(int buf)
-{
-  switch(buf) {
-  case 1: case 2:
-    m_buffer=buf;
-    break;
-  default:
-    error("buffer can only be '1' (single) or '2' (double) buffered");
-    break;
-  }
-}
-void gemmacwindow :: fsaaMess(int value)
-{
-  m_fsaa=value;
-}
-void gemmacwindow :: titleMess(t_symbol* s)
-{
-  m_title=s->s_name;
-}
-void gemmacwindow :: borderMess(bool setting)
-{
-  m_border=setting;
-}
 void gemmacwindow :: dimensionsMess(unsigned int width, unsigned int height)
 {
   if (width <= 0) {
@@ -1594,23 +1571,6 @@ void gemmacwindow :: cursorMess(bool state)
 /////////////////////////////////////////////////////////
 void gemmacwindow :: obj_setupCallback(t_class *classPtr)
 {
-
-  CPPEXTERN_MSG0(classPtr, "bang", render);
-  CPPEXTERN_MSG1(classPtr, "create", createMess, t_symbol*);
-  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
-
-
-  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
-  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, t_symbol*);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
-  CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
-  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
-  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
-  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-
-  //  CPPEXTERN_MSG0(classPtr, "print", printMess);
-
 }
 
 

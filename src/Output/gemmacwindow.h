@@ -82,16 +82,15 @@ class GEM_EXTERN gemmacwindow : public GemContext
   /* dispatch window events */
   virtual void dispatch(void);
 
-   /* window decoration (pre creation) */
-   /* window position/dimension (pre creation) */
+   /* creation/destruction */
+  virtual void        createMess(std::string);
+  virtual void       destroyMess(void);
+
+  /* decoration,... */
+  virtual void        cursorMess(bool on);
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
 
-  /* creation/destruction */
-  void        createMess(std::string);
-  void       destroyMess(void);
 
-  /* post creation */
-  void        cursorMess(bool on);
 
   //////////
   // Should the window be realized
