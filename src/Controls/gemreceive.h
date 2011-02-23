@@ -49,7 +49,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
   //////////
   // Constructor
   gemreceive(t_symbol*s, t_floatarg f=50.f);
-    	
+
  protected:
     	
   //////////
@@ -58,7 +58,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
         
   //////////
   // keyboard-button
-  void            receive(t_symbol*s, int argc, t_atom*argv);
+  virtual void receive(t_symbol*s, int argc, t_atom*argv);
 
   //////////
   // the symbol we are bound to

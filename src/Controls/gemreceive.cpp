@@ -222,8 +222,8 @@ gemreceive :: ~gemreceive()
 {
   unbind(this, m_name);
 
-  inlet_free(m_fltin);
-  outlet_free(m_outlet);
+  if(m_fltin)inlet_free(m_fltin);m_fltin=NULL;
+  if(m_outlet)outlet_free(m_outlet);m_outlet=NULL;
 }
 
 
