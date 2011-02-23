@@ -340,8 +340,6 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG0(classPtr, "menu", menuMess);
   CPPEXTERN_MSG(classPtr, "addMenu", addMenuMess);
-
-  //  CPPEXTERN_MSG0(classPtr, "print", printMess);
 }
 
 #define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
