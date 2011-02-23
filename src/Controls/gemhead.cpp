@@ -164,7 +164,7 @@ void gemhead :: setMess(t_float priority)
 }
 
 void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {
-  if(gensym("gem_state")==s) {
+  if(m_renderOn && gensym("gem_state")==s) {
     if(1==argc && A_FLOAT==argv->a_type) {
       int i=atom_getint(argv);
       switch(i) {
@@ -177,8 +177,6 @@ void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {
     } else if (2==argc && A_POINTER==argv[0].a_type && A_POINTER==argv[1].a_type) {
       GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
       GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
-      if(!m_renderOn)
-        startRendering();
       renderGL(state);
     }
   } else {
