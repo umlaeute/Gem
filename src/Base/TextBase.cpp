@@ -204,7 +204,7 @@ void TextBase :: setPrecision(float prec)
 // fontNameMess
 //
 /////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const char *filename)
+void TextBase :: fontNameMess(const std::string s)
 {}
 
 /////////////////////////////////////////////////////////
