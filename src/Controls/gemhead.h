@@ -16,10 +16,10 @@ LOG
 #define INCLUDE_GEMHEAD_H_
 
 #include "Base/CPPExtern.h"
+#include "gemreceive.h"
 
 class GemState;
 class GemCache;
-class gemBaseLink;
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -33,9 +33,9 @@ DESCRIPTION
     "bang" - sends out a state list
     
 -----------------------------------------------------------------*/
-class GEM_EXTERN gemhead : public CPPExtern
+class GEM_EXTERN gemhead : public gemreceive
 {
-    	CPPEXTERN_HEADER(gemhead, CPPExtern)
+  CPPEXTERN_HEADER(gemhead, CPPExtern);
 
     public:
 
@@ -49,17 +49,18 @@ class GEM_EXTERN gemhead : public CPPExtern
     	    	
     	//////////
     	// Set up the modifying flags
-    	void	    	startRendering();
+    	virtual void	    	startRendering();
 
     	//////////
     	// Clean up the modifying flags
-    	void	    	stopRendering();
+    	virtual void	    	stopRendering();
 
 
     	//////////
     	// change the priority
-    	void	    	setMess(int priority);
+    	void	    	setMess(t_float priority);
 
+      virtual void receive(t_symbol*s, int argc, t_atom*argv);
 
     protected:
     	
@@ -73,20 +74,14 @@ class GEM_EXTERN gemhead : public CPPExtern
 
     	GemCache    	*m_cache;   	    	    // The cache information
 
-	void            outputRenderOnOff(int state);
+      void            outputRenderOnOff(int state);
     	
     	void	    	renderOnOff(int state);     // Turn rendering on and off
     	int 	    	m_renderOn;
 
-	int             m_priority;
+      t_float             m_priority;
 
     	void	    	bangMess();
-    	
-    	//////////
-    	// static member functions
-    	static void 	bangMessCallback(void *data);
-    	static void 	intMessCallback(void *data, t_floatarg n);
-    	static void 	setMessCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file

@@ -7,8 +7,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) GÃ¼nther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÃ¼r::umlÃ¤ute
+//    Copyright (c) Günther Geiger.
+//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute
 //    Copyright (c) 2002 tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -105,28 +105,6 @@ static int s_lights[NUM_LIGHTS];    // the lighting array
 static t_clock *s_clock = NULL;
 static double s_deltime = 50.;
 static int s_hit = 0;
-
-static gemheadLink *s_linkHead = NULL;
-static gemheadLink *s_linkHead_2 = NULL;
-
-
-class gemheadLink
-{
-public:
-  gemheadLink(const gemheadLink &s)
-    : base(s.base), next(s.next), priority(s.priority) {}
-  gemheadLink(gemhead *base_, float priority_)
-    : base(base_), next(NULL), priority(priority_) {}
-  gemheadLink(gemhead *base_, float priority_, gemheadLink *link)
-    : base(base_), priority(priority_)
-  { this->next = link->next; link->next = this; }
-    	
-  gemhead *base;
-  gemheadLink *next;
-  const float priority;
-private:
-  gemheadLink();
-};
 
 GEM_EXTERN void gemAbortRendering()
 {
@@ -297,81 +275,6 @@ void GemMan :: initGem()
   m_motionBlur = 0.f;
 
   initGemWin();
-}
-
-/////////////////////////////////////////////////////////
-// addObj
-//
-/////////////////////////////////////////////////////////
-void GemMan :: addObj(gemhead *obj, float priority)
-{
-  gemheadLink *linkPtr = s_linkHead;
-  if (priority<0.){
-    priority*=-1.;
-    linkPtr = s_linkHead_2;
-    if (!linkPtr) {
-      s_linkHead_2 = new gemheadLink(obj, priority);
-      return;
-    }
-    
-    // unique case if the s_linkHead has a worse priority number
-    if (linkPtr->priority > priority) {
-      s_linkHead_2 = new gemheadLink(obj, priority);
-      s_linkHead_2->next = linkPtr;
-      return;
-    }
-  } else {
-    if (!linkPtr) {
-      s_linkHead = new gemheadLink(obj, priority);
-      return;
-    }
-    // unique case if the s_linkHead has a worse priority number
-    if (linkPtr->priority > priority)  {
-      s_linkHead = new gemheadLink(obj, priority);
-      s_linkHead->next = linkPtr;
-      return;
-    }
-  }
-
-  while (linkPtr->next && linkPtr->next->priority <= priority)
-    linkPtr = linkPtr->next;
-       
-  linkPtr = new gemheadLink(obj, priority, linkPtr);
-}
-
-/////////////////////////////////////////////////////////
-// removeObj
-//
-/////////////////////////////////////////////////////////
-void GemMan :: removeObj(gemhead *obj, float priority)
-{
-  gemheadLink *linkPtr = s_linkHead;
-  if (priority<0.)linkPtr = s_linkHead_2;
-  if (!linkPtr) return;
-    
-  // unique case if the object is the s_linkHead
-  if (linkPtr->base == obj)
-    {
-      gemheadLink *nextPtr = linkPtr->next;
-      if (priority<0.){
-        delete s_linkHead_2;
-        s_linkHead_2 = nextPtr;
-      } else {
-        delete s_linkHead;
-        s_linkHead = nextPtr;
-      }
-      return;
-    }
-    
-  while (linkPtr->next && linkPtr->next->base != obj)
-    linkPtr = linkPtr->next;
-    
-  // didn't find anything
-  if ( !linkPtr->next ) return;
-    
-  gemheadLink *removePtr = linkPtr->next;
-  linkPtr->next = removePtr->next;
-  delete [] removePtr;
 }
 
 /////////////////////////////////////////////////////////
@@ -575,17 +478,29 @@ void GemMan :: resetState()
 // render
 //
 /////////////////////////////////////////////////////////
-void GemMan :: renderChain(gemheadLink *head, GemState *state){
-  while (head) {
-    head->base->renderGL(state);
-    head = head->next;
+void GemMan :: renderChain(t_symbol*s, bool start){
+  if(s->s_thing) {
+    t_atom ap[1];
+    SETFLOAT(ap, start);
+    typedmess(s->s_thing, gensym("gem_state"), 1, ap);
+  }
+}
+void GemMan :: renderChain(t_symbol*s, GemState *state){
+  if(s->s_thing) {
+    t_atom ap[2];
+    ap->a_type=A_POINTER;
+    ap->a_w.w_gpointer=NULL;  // the cache ?
+    (ap+1)->a_type=A_POINTER;
+    (ap+1)->a_w.w_gpointer=(t_gpointer *)state;
+    typedmess(s->s_thing, gensym("gem_state"), 2, ap);
   }
 }
 
 void GemMan :: render(void *)
 {
   int profiling=m_profile;
-
+  t_symbol*chain1=gensym("__gem_render");
+  t_symbol*chain2=gensym("__gem_render_osd");
   if(GemMan::pleaseDestroy)GemMan::destroyWindow();
   if (!m_windowState)return;
 
@@ -649,12 +564,12 @@ void GemMan :: render(void *)
       // render left view
       fillGemState(currentState);
 
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
 
       // setup the right viewpoint
       glViewport(xSize, 0, xSize, ySize);
@@ -674,12 +589,12 @@ void GemMan :: render(void *)
       fillGemState(currentState);
       tickTime=0;
       currentState.set("timing.tick", tickTime);
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
 
 
       if (GemMan::m_stereoLine){
@@ -747,11 +662,11 @@ void GemMan :: render(void *)
 
       // render left view
       fillGemState(currentState);
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
 
       // setup the right viewpoint
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
@@ -783,12 +698,12 @@ void GemMan :: render(void *)
       fillGemState(currentState);
       tickTime=0;
       currentState.set("timing.tick", tickTime);
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
     
       glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
     } 
@@ -818,11 +733,11 @@ void GemMan :: render(void *)
          
       // render left view
       fillGemState(currentState);
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
 
       // setup the right viewpoint
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
@@ -846,12 +761,12 @@ void GemMan :: render(void *)
       fillGemState(currentState);
       tickTime=0;
       currentState.set("timing.tick", tickTime);
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
 
       glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
     }
@@ -859,13 +774,13 @@ void GemMan :: render(void *)
   default: // normal rendering
     {
       fillGemState(currentState);
-      renderChain(s_linkHead, &currentState);
+      renderChain(chain1, &currentState);
 
       // setup the matrices
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
-      renderChain(s_linkHead_2, &currentState);
+      renderChain(chain2, &currentState);
     }
   }
   swapBuffers();
@@ -923,17 +838,8 @@ void GemMan :: startRendering()
   post("GEM: Start rendering");
     
   // set up all of the gemheads
-  gemheadLink *head = s_linkHead_2;
-  while(head) {
-    head->base->startRendering();
-    head = head->next;
-  }
-  head = s_linkHead;
-  while(head)
-    {
-      head->base->startRendering();
-      head = head->next;
-    }
+  renderChain(gensym("__gem_render"), true);
+  renderChain(gensym("__gem_render_osd"), true);
 
   m_rendering = 1;
     
@@ -958,12 +864,8 @@ void GemMan :: stopRendering()
   s_hit = 1;
 
   // clean out all of the gemheads
-  gemheadLink *head = s_linkHead;
-  while(head)
-    {
-      head->base->stopRendering();
-      head = head->next;
-    }
+  renderChain(gensym("__gem_render"), false);
+  renderChain(gensym("__gem_render_osd"), false);
 
   post("GEM: Stop rendering");
 }

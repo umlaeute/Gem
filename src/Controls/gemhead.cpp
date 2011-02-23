@@ -26,6 +26,7 @@
 #include "Base/GemBase.h"
 
 #include "Base/GLStack.h"
+#include "RTE/MessageCallbacks.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemhead, t_floatarg, A_DEFFLOAT)
 
@@ -37,17 +38,14 @@ CPPEXTERN_NEW_WITH_ONE_ARG(gemhead, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemhead :: gemhead(t_floatarg priority)
-    	 : m_cache(NULL), m_renderOn(1)
+gemhead :: gemhead(t_floatarg priority) : 
+  gemreceive(gensym("__gem_render")),
+  m_cache(new GemCache(this)), m_renderOn(1)
 {
-    // register with Gem
-    if (priority == 0.)
-      priority = 50.;
-    m_priority=priority;
-    GemMan::addObj(this, m_priority);
+    if(m_fltin)inlet_free(m_fltin);
+    m_fltin=NULL;
 
-    m_cache = new GemCache(this);
-    m_out1 = outlet_new(this->x_obj, 0);
+    setMess(priority);
 }
 
 /////////////////////////////////////////////////////////
@@ -56,11 +54,10 @@ gemhead :: gemhead(t_floatarg priority)
 /////////////////////////////////////////////////////////
 gemhead :: ~gemhead()
 {
-    GemMan::removeObj(this, m_priority);
     if (m_cache)
         stopRendering();
     if(m_cache)delete m_cache;
-    outlet_free(m_out1);
+    m_cache=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -107,7 +104,7 @@ void gemhead :: renderGL(GemState *state)
   ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(m_cache);  // the cache ?
   (ap+1)->a_type=A_POINTER;
   (ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
-  outlet_anything(this->m_out1, gensym("gem_state"), 2, ap);
+  outlet_anything(this->m_outlet, gensym("gem_state"), 2, ap);
 
   m_cache->dirty = false;
   m_cache->vertexDirty=false;
@@ -150,14 +147,44 @@ void gemhead :: renderOnOff(int state)
 // setPriority
 //
 /////////////////////////////////////////////////////////
-void gemhead :: setMess(int priority)
+void gemhead :: setMess(t_float priority)
 {
   if (priority == 0.)priority=50.;
-  GemMan::removeObj(this, m_priority);
-  GemMan::addObj(this, priority);
+  if(priority==m_priority)
+    return;
+
   m_priority=priority;
+
+  std::string rcv="__gem_render";
+  if(priority<0.f)
+    rcv="__gem_render_osd";
+
+  gemreceive::priorityMess(priority);
+  gemreceive::nameMess(gensym(rcv.c_str()));
 }
 
+void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {
+  if(gensym("gem_state")==s) {
+    if(1==argc && A_FLOAT==argv->a_type) {
+      int i=atom_getint(argv);
+      switch(i) {
+      case 0:
+        stopRendering();
+        break;
+      default:
+        startRendering();
+      }
+    } else if (2==argc && A_POINTER==argv[0].a_type && A_POINTER==argv[1].a_type) {
+      GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
+      GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
+      if(!m_renderOn)
+        startRendering();
+      renderGL(state);
+    }
+  } else {
+    // not for us...
+  }
+}
 
 
 /////////////////////////////////////////////////////////
@@ -169,7 +196,7 @@ void gemhead :: outputRenderOnOff(int state)
   // continue sending out the cache message
   t_atom ap[1];
   SETFLOAT(ap, state);
-  outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
+  outlet_anything(this->m_outlet, gensym("gem_state"), 1, ap);
 }
 
 /////////////////////////////////////////////////////////
@@ -199,20 +226,7 @@ void gemhead :: stopRendering()
 /////////////////////////////////////////////////////////
 void gemhead :: obj_setupCallback(t_class *classPtr)
 {
-    class_addbang(classPtr, reinterpret_cast<t_method>(&gemhead::bangMessCallback));
-    class_addfloat(classPtr, reinterpret_cast<t_method>(&gemhead::intMessCallback));
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&gemhead::setMessCallback),
-		    gensym("set"), A_FLOAT, A_NULL);
-}
-void gemhead :: bangMessCallback(void *data)
-{
-    GetMyClass(data)->bangMess();
-}
-void gemhead :: intMessCallback(void *data, t_floatarg n)
-{
-  GetMyClass(data)->renderOnOff(static_cast<int>(n));
-}
-void gemhead :: setMessCallback(void *data, t_floatarg n)
-{
-  GetMyClass(data)->setMess(static_cast<int>(n));
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG1(classPtr, "float", renderOnOff, int);
+  CPPEXTERN_MSG1(classPtr, "set", setMess, int);
 }

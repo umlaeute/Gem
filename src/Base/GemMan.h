@@ -27,7 +27,6 @@
 #include "Base/GemExportDef.h"
 
 class gemhead;
-class gemheadLink;
 class GemState;
 class WindowInfo;
 
@@ -80,7 +79,9 @@ class GEM_EXTERN GemMan
   //////////
   // Just send out one frame (if double buffered, will swap buffers)
   static void 	    render(void *);
-  static void	    renderChain(gemheadLink *head, GemState *state);
+
+  static void	    renderChain(t_symbol *head, bool start);
+  static void	    renderChain(t_symbol *head, GemState *state);
 
     	    	
   //////////
