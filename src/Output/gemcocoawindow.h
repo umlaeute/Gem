@@ -30,7 +30,7 @@ class GEM_EXTERN gemcocoawindow : public GemContext
 
   virtual bool create(void);
   virtual void destroy(void);
-  virtual void        createMess(void);
+  virtual void        createMess(std::string);
   virtual void       destroyMess(void);
 
   // check whether we have a window and if so, make it current

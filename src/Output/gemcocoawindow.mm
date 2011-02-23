@@ -328,10 +328,6 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
 /////////////////////////////////////////////////////////
 bool gemcocoawindow :: create(void)
 {
-  if(m_pimpl->view) {
-    error("window already made!");
-    return false;
-  }
   NSRect  screenRect = [[NSScreen mainScreen] frame];
 
   NSRect titleframe = NSMakeRect (0, 0, 100, 100);
@@ -388,7 +384,12 @@ bool gemcocoawindow :: create(void)
 
   return createContext();
 }
-void gemcocoawindow :: createMess(void) {
+void gemcocoawindow :: createMess(std::string s) {
+  if(m_pimpl->view) {
+    error("window already made!");
+    return;
+  }
+
   if (!create()) {
     destroyMess();
   }
@@ -514,18 +515,6 @@ void gemcocoawindow :: menubarMess(int state) {
 /////////////////////////////////////////////////////////
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG0(classPtr, "bang", render);
-  CPPEXTERN_MSG0(classPtr, "create", createMess);
-  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
-
-  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, t_int);
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, t_int, t_int);
-  CPPEXTERN_MSG2(classPtr, "offset", offsetMess, t_int, t_int);
-  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
-  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, t_int);
-  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, t_int);
-  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
 
   ProcessSerialNumber proc;
