@@ -85,7 +85,10 @@ void gemglutwindow :: dispatch()
   // mark the render-buffer as dirty, so the displayCb() gets called
   // other things that mark dirty are (e.g.) resizing, making (parts of) the window visible,...
   glutSetWindow(m_window);
+#if 0
+  // setting glutPostRedisplay() here will emit a render-bang for each dispatch-cycle...now what we want
   glutPostRedisplay();
+#endif
   glutMainLoopEvent();
 }
 
@@ -334,21 +337,6 @@ void gemglutwindow :: obj_setupCallback(t_class *classPtr)
     glutInit(&argc,&argv);
   }
   firsttime=false;
-
-
-  CPPEXTERN_MSG0(classPtr, "bang", render);
-  CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
-  CPPEXTERN_MSG1(classPtr, "create", createMess, std::string);
-  CPPEXTERN_MSG0(classPtr, "destroy", destroyMess);
-
-  CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
-  CPPEXTERN_MSG2(classPtr, "offset",offsetMess    , int, int);
-  CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
-  CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, bool);
-
-  CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-  CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
 
   CPPEXTERN_MSG0(classPtr, "menu", menuMess);
   CPPEXTERN_MSG(classPtr, "addMenu", addMenuMess);
