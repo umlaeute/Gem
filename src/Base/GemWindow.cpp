@@ -17,47 +17,16 @@
 #include "RTE/MessageCallbacks.h"
 
 #include "GemSettings.h"
-
-#ifdef GEM_MULTICONTEXT
-# warning multicontext rendering currently under development
-#endif /* GEM_MULTICONTEXT */
-
-static GLEWContext*s_glewcontext=NULL;
-static GemGlewXContext*s_glewxcontext=NULL;
-static unsigned int s_contextid;
-
-
-static unsigned int GemWindow_newid(void)
-{
-  unsigned int id=0;
-#ifdef GEM_MULTICONTEXT
-  /* LATER reuse freed ids */
-  static unsigned int nextid=0;
-  id=nextid;
-  nextid++;
-#endif /* GEM_MULTICONTEXT */
-  return id;
-}
-
-static void GemWindow_freeid(unsigned int id)
-{
-  if(s_contextid==id) {
-    s_contextid=0;
-  }
-
-  /* LATER reuse freed ids */
-  id=0;
-}
-
+#include "GemContext.h"
 
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
-                         context(NULL), xcontext(NULL), contextid(0),
-                         infoOut(NULL),
-                         dispatchClock(NULL),
-                         dispatchTime(10.),
-                         qClock(NULL)
+                        mycontext(NULL),
+                        infoOut(NULL),
+                        dispatchClock(NULL),
+                        dispatchTime(10.),
+                        qClock(NULL)
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
     dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
@@ -69,13 +38,7 @@ public:
   }
 
   GemWindow*parent;
-
-  GLint maxStackDepth[4];
-
-  GLEWContext    *context;
-  GemGlewXContext*xcontext;
-
-  unsigned int contextid;
+  gem::Context*mycontext;
 
   t_outlet*infoOut;
 
@@ -280,60 +243,15 @@ void GemWindow::dispatch() {
   // LATER setup a clock that calls dispatch() every so often
 }
 
-bool GemWindow::createContext(void){
-  bool ret=true;
-  static bool firsttime=true;
-  unsigned int oldcontextid=s_contextid;
-  GLEWContext*oldcontext=s_glewcontext;
-  GemGlewXContext*oldcontextx=s_glewxcontext;
+bool GemWindow::createContext(gem::Context*shared){
 
-#ifdef GEM_MULTICONTEXT
-  firsttime=true; /* always the first time with multicontexts */
-
-  m_pimpl->context = new GLEWContext;
-  m_pimpl->xcontext = new GemGlewXContext;
-#endif /* GEM_MULTICONTEXT */
-
-  s_glewcontext=m_pimpl->context;
-  s_glewxcontext=m_pimpl->xcontext;
-  
-
-  m_pimpl->contextid=GemWindow_newid();
-  s_contextid=m_pimpl->contextid;
-
-  if(firsttime) {
-    GLenum err = glewInit();
-  
-    if (GLEW_OK != err) {
-      if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
-	error("GEM: failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!");
-      } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
-        error("GEM: failed to init GLEW: your system only supports openGL-1.0");
-        ret=false;
-      } else {
-        error("GEM: failed to init GLEW");
-        ret=false;
-      }
-    }
-    post("GLEW version %s",glewGetString(GLEW_VERSION));
+  if(!shared) {
+    m_pimpl->mycontext = new gem::Context();
+    m_context=m_pimpl->mycontext;
+  } else {
+    m_context=shared;
+    m_pimpl->mycontext=NULL;
   }
-
-  /* check the stack-sizes */
-  glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    m_pimpl->maxStackDepth+GemMan::STACKMODELVIEW);
-  glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, m_pimpl->maxStackDepth+GemMan::STACKCOLOR);
-  glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      m_pimpl->maxStackDepth+GemMan::STACKTEXTURE);
-  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   m_pimpl->maxStackDepth+GemMan::STACKPROJECTION);
-
-  firsttime=false;
-
-#ifdef GEM_MULTICONTEXT
-# if 0
-  /* LATER think about whether it is a good idea to restore the original context... */
-  s_contextid=oldcontextid;
-  s_glewcontext=oldcontext;
-  oldcontextx=s_glewxcontext=oldcontextx;
-# endif
-#endif /* GEM_MULTICONTEXT */
 
   GemMan::m_windowState++;
   m_pimpl->dispatch();
@@ -343,57 +261,47 @@ bool GemWindow::createContext(void){
 
 
 void GemWindow::destroyContext(void){
-#ifdef GEM_MULTICONTEXT
-  if(m_pimpl->context) {
-    if(m_pimpl->context==s_glewcontext) {
-      s_glewcontext=NULL;
-    }
-    delete m_pimpl->context;
+#warning implement refcounter
+  if(m_pimpl->mycontext) {
+    delete m_pimpl->mycontext;
+    m_context=NULL;
   }
-  m_pimpl->context=NULL;
-#endif /* GEM_MULTICONTEXT */
-  GemWindow_freeid(m_pimpl->contextid);
-  m_pimpl->contextid=0;
+  m_pimpl->mycontext=NULL;
+
   GemMan::m_windowState--;
 
   m_pimpl->undispatch();
-
-
 }
 
-bool GemWindow::makeGemWindowCurrent(void){
-  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]= m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
-  GemMan::maxStackDepth[GemMan::STACKCOLOR]=     m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
-  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
-  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
-
-#ifdef GEM_MULTICONTEXT
-  if(!m_pimpl->context) {
+bool GemWindow::pushContext(void){
+  if(!m_context) {
     return false;
-    /* alternatively we could create a context on the fly... */
   }
-  s_glewcontext=m_pimpl->context;
-#endif /* GEM_MULTICONTEXT */
-  s_contextid=m_pimpl->contextid;
+  if(!m_context->push())
+    return false;
 
   dispatch();
   return true;
 }
-
-bool GemWindow::assertCurrentContext(void) {
-  if(!makeCurrent())
-    return false;
-  return makeGemWindowCurrent();
+bool GemWindow::popContext(void){
+  return (m_context && m_context->pop());
 }
 
 void GemWindow::render(void){
-  if(assertCurrentContext()) {
-    bang();
-    if(m_buffer==2)
-      swapBuffers();
-  } else {
+  if(!makeCurrent()) {
     error("unable to switch to current window (do you have one?), cannot render!");
+    return;
   }
+  if(!pushContext()) {
+    error("unable to switch to current context, cannot render!");
+    return;
+  }
+
+  bang();
+  if(m_buffer==2)
+    swapBuffers();
+
+  popContext();
 }
 
 void GemWindow:: bufferMess(int buf) {
@@ -441,43 +349,6 @@ void GemWindow::       cursorMess(bool on) {
 void GemWindow::       printMess(void) {
   // nada
 }
-
-
-
-
-unsigned int GemWindow::getContextId(void) {
-  return s_contextid;
-}
-
-#ifdef GEM_MULTICONTEXT
-GLEWContext*GemWindow::getGlewContext(void) {
-  if(NULL==s_glewcontext) {
-    /* we should find another glew-context asap and make that one current! */
-    return NULL;
-  } else {
-    return s_glewcontext;
-  }
-
-  return NULL;
-}
-
-GemGlewXContext*GemWindow::getGlewXContext(void) {
-  if(NULL==s_glewxcontext) {
-    /* we should find another glew-context asap and make that one current! */
-    return NULL;
-  } else {
-    return s_glewxcontext;
-  }
-
-  return NULL;
-}
-
-GLEWContext*glewGetContext(void){return  GemWindow::getGlewContext();}
-GemGlewXContext*wglewGetContext(void){return  GemWindow::getGlewXContext();}
-GemGlewXContext*glxewGetContext(void){return  GemWindow::getGlewXContext();}
-
-#endif /* GEM_MULTICONTEXT */
-
 
 void GemWindow :: obj_setupCallback(t_class *classPtr)
 {

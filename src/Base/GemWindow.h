@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    a rendering context
+    a window class to render to 
 
     Copyright (c) 2009 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -22,25 +22,14 @@ LOG
 CLASS
     GemWindow
     
-    a rendering context
+    a window
 
 DESCRIPTION
     
 -----------------------------------------------------------------*/
-
-
-
-# ifdef __APPLE__
-#  define GemGlewXContext void
-# elif defined _WIN32
-typedef struct WGLEWContextStruct WGLEWContext;
-#  define GemGlewXContext WGLEWContext
-# elif defined __linux__
-typedef struct GLXEWContextStruct GLXEWContext;
-#  define GemGlewXContext GLXEWContext
-# endif
-
-typedef struct GLEWContextStruct GLEWContext;
+namespace gem {
+  class Context;
+};
 
 class GEM_EXTERN GemWindow : public CPPExtern
 {
@@ -95,7 +84,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
    * as it will eventually establish a new glew-context
    * if <tt>false</tt> is returned, you should not continue
    */
-  bool createContext(void);
+  bool createContext(gem::Context*shared=NULL);
   /* create a new window
    * make sure that this calls the parent's createContext() method
    */
@@ -119,15 +108,14 @@ class GEM_EXTERN GemWindow : public CPPExtern
    */
   virtual bool makeCurrent(void) = 0;
 
-  /* make the object's context (window,...) the current context
-   * then switch the GemWindow;
-   * basically: { return (makeCurrent() && makeGemWindowCurrent()); }
-   */
-  virtual bool assertCurrentContext(void);
   /*
-   * make the GemWindow current (reset stacks) 
+   * make the GemWindow current (reset stacks), switch multiContext
    */
-  bool makeGemWindowCurrent(void);
+  bool pushContext(void);
+  /*
+   * make uncurrent
+   */
+  bool popContext (void);
 
   /* swap back/front buffer
    */
@@ -142,7 +130,11 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
   /* render to this window
    *  the default implementation calls:
-   *    if(makeCurrent()){ bang; if(m_buffer==2)swap(); }
+   *    if(!makeCurrent())return;
+   *    if(!pushContext())return;
+   *    bang();
+   *    if(m_buffer==2)swap();
+   *    popContext();
    * but you can override this, if you want to
    */
   virtual void render(void);
@@ -182,17 +174,6 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* print some info */
   virtual void        printMess(void);
 
- public:
-  static unsigned int getContextId(void);
-
-  /* returns the last GemWindow that called makeCurrent()
-   * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
-   */
-  static GLEWContext*getGlewContext(void);
-  static GemGlewXContext*getGlewXContext(void);
-
-
-
  protected:
   unsigned int m_width, m_height;
 
@@ -207,6 +188,8 @@ class GEM_EXTERN GemWindow : public CPPExtern
   std::string  m_title;
   bool         m_cursor;
   int          m_fsaa;
+
+  gem::Context*  m_context;
 };
 
 
