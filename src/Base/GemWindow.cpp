@@ -12,7 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "GemContext.h"
+#include "GemWindow.h"
 #include "GemMan.h"
 #include "RTE/MessageCallbacks.h"
 
@@ -27,7 +27,7 @@ static GemGlewXContext*s_glewxcontext=NULL;
 static unsigned int s_contextid;
 
 
-static unsigned int GemContext_newid(void)
+static unsigned int GemWindow_newid(void)
 {
   unsigned int id=0;
 #ifdef GEM_MULTICONTEXT
@@ -39,7 +39,7 @@ static unsigned int GemContext_newid(void)
   return id;
 }
 
-static void GemContext_freeid(unsigned int id)
+static void GemWindow_freeid(unsigned int id)
 {
   if(s_contextid==id) {
     s_contextid=0;
@@ -50,9 +50,9 @@ static void GemContext_freeid(unsigned int id)
 }
 
 
-class GemContext::PIMPL {
+class GemWindow::PIMPL {
 public:
-  PIMPL(GemContext*gc) : parent(gc),
+  PIMPL(GemWindow*gc) : parent(gc),
                          context(NULL), xcontext(NULL), contextid(0),
                          infoOut(NULL),
                          dispatchClock(NULL),
@@ -68,7 +68,7 @@ public:
     if(infoOut)outlet_free(infoOut); infoOut=NULL;
   }
 
-  GemContext*parent;
+  GemWindow*parent;
 
   GLint maxStackDepth[4];
 
@@ -155,13 +155,13 @@ public:
 
 /////////////////////////////////////////////////////////
 //
-// GemContext
+// GemWindow
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-GemContext :: GemContext()
+GemWindow :: GemWindow()
   : m_pimpl(new PIMPL(this)),
     m_width(500), m_height(500),
     m_xoffset(0), m_yoffset(0),
@@ -181,41 +181,41 @@ GemContext :: GemContext()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-GemContext :: ~GemContext()
+GemWindow :: ~GemWindow()
 {
   destroyContext();
   delete m_pimpl;
   m_pimpl=NULL;
 }
 
-void GemContext::info(std::vector<t_atom>l) {
+void GemWindow::info(std::vector<t_atom>l) {
   m_pimpl->queue(l);
 }
 
-void GemContext::info(t_symbol*s, int argc, t_atom*argv) {
+void GemWindow::info(t_symbol*s, int argc, t_atom*argv) {
   m_pimpl->queue(s, argc, argv);
 }
-void GemContext::info(std::string s) { 
+void GemWindow::info(std::string s) { 
   info(gensym(s.c_str()), 0, NULL); 
 }
-void GemContext::info(std::string s, int i) {
+void GemWindow::info(std::string s, int i) {
   info(s, (t_float)i);
 }
 
-void GemContext :: info(std::string s, t_float value)
+void GemWindow :: info(std::string s, t_float value)
 {
   t_atom atom;
   SETFLOAT(&atom, value);
   info(gensym(s.c_str()), 1, &atom); 
 }
-void GemContext :: info(std::string s, std::string value)
+void GemWindow :: info(std::string s, std::string value)
 {
   t_atom atom;
   SETSYMBOL(&atom, gensym(value.c_str()));
   info(gensym(s.c_str()), 1, &atom); 
 }
 
-void GemContext :: bang(void)
+void GemWindow :: bang(void)
 {
   outlet_bang(m_pimpl->infoOut);
 }
@@ -224,7 +224,7 @@ void GemContext :: bang(void)
 
 
 /* mouse movement */
-void GemContext::motion(int x, int y)
+void GemWindow::motion(int x, int y)
 {
   t_atom ap[3];
   SETSYMBOL(ap+0, gensym("motion"));
@@ -234,7 +234,7 @@ void GemContext::motion(int x, int y)
   info(gensym("mouse"), 3, ap);
 }
 /* mouse buttons */
-void GemContext::button(int id, int state)
+void GemWindow::button(int id, int state)
 {
   t_atom ap[3];
   SETSYMBOL(ap+0, gensym("button"));
@@ -245,7 +245,7 @@ void GemContext::button(int id, int state)
 }
 
 /* keyboard buttons */
-void GemContext::key(std::string sid, int iid, int state) {
+void GemWindow::key(std::string sid, int iid, int state) {
   t_atom ap[3];
   SETSYMBOL(ap+0, gensym("key"));
   SETFLOAT (ap+1, iid);
@@ -260,7 +260,7 @@ void GemContext::key(std::string sid, int iid, int state) {
   info(gensym("keyboard"), 3, ap);
 }
 
-void GemContext::dimension(unsigned int w, unsigned int h) {
+void GemWindow::dimension(unsigned int w, unsigned int h) {
   t_atom ap[2];
   SETFLOAT (ap+0, w);
   SETFLOAT (ap+1, h);
@@ -268,7 +268,7 @@ void GemContext::dimension(unsigned int w, unsigned int h) {
   info(gensym("dimen"), 2, ap);
 }
 
-void GemContext::position(int x, int y) {
+void GemWindow::position(int x, int y) {
   t_atom ap[2];
   SETFLOAT (ap+0, x);
   SETFLOAT (ap+1, y);
@@ -276,11 +276,11 @@ void GemContext::position(int x, int y) {
   info(gensym("offset"), 2, ap);
 }
 
-void GemContext::dispatch() {
+void GemWindow::dispatch() {
   // LATER setup a clock that calls dispatch() every so often
 }
 
-bool GemContext::createContext(void){
+bool GemWindow::createContext(void){
   bool ret=true;
   static bool firsttime=true;
   unsigned int oldcontextid=s_contextid;
@@ -298,7 +298,7 @@ bool GemContext::createContext(void){
   s_glewxcontext=m_pimpl->xcontext;
   
 
-  m_pimpl->contextid=GemContext_newid();
+  m_pimpl->contextid=GemWindow_newid();
   s_contextid=m_pimpl->contextid;
 
   if(firsttime) {
@@ -342,7 +342,7 @@ bool GemContext::createContext(void){
 }
 
 
-void GemContext::destroyContext(void){
+void GemWindow::destroyContext(void){
 #ifdef GEM_MULTICONTEXT
   if(m_pimpl->context) {
     if(m_pimpl->context==s_glewcontext) {
@@ -352,7 +352,7 @@ void GemContext::destroyContext(void){
   }
   m_pimpl->context=NULL;
 #endif /* GEM_MULTICONTEXT */
-  GemContext_freeid(m_pimpl->contextid);
+  GemWindow_freeid(m_pimpl->contextid);
   m_pimpl->contextid=0;
   GemMan::m_windowState--;
 
@@ -361,7 +361,7 @@ void GemContext::destroyContext(void){
 
 }
 
-bool GemContext::makeGemContextCurrent(void){
+bool GemWindow::makeGemWindowCurrent(void){
   GemMan::maxStackDepth[GemMan::STACKMODELVIEW]= m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
   GemMan::maxStackDepth[GemMan::STACKCOLOR]=     m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
   GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
@@ -380,13 +380,13 @@ bool GemContext::makeGemContextCurrent(void){
   return true;
 }
 
-bool GemContext::assertCurrentContext(void) {
+bool GemWindow::assertCurrentContext(void) {
   if(!makeCurrent())
     return false;
-  return makeGemContextCurrent();
+  return makeGemWindowCurrent();
 }
 
-void GemContext::render(void){
+void GemWindow::render(void){
   if(assertCurrentContext()) {
     bang();
     if(m_buffer==2)
@@ -396,7 +396,7 @@ void GemContext::render(void){
   }
 }
 
-void GemContext:: bufferMess(int buf) {
+void GemWindow:: bufferMess(int buf) {
   switch(buf) {
   case 1: case 2:
     m_buffer=buf;
@@ -406,51 +406,51 @@ void GemContext:: bufferMess(int buf) {
     break;
   }
 }
-void GemContext::   fsaaMess(int value) {
+void GemWindow::   fsaaMess(int value) {
   m_fsaa=value;
 }
 
-void GemContext::titleMess(std::string s) {
+void GemWindow::titleMess(std::string s) {
   m_title=s;
 }
-void GemContext::borderMess(bool on) {
+void GemWindow::borderMess(bool on) {
   m_border=on;
 }
 
-void GemContext::   fullscreenMess(int on) {
+void GemWindow::   fullscreenMess(int on) {
   m_fullscreen=on;
 }
-void GemContext::       offsetMess(int x, int y) {
+void GemWindow::       offsetMess(int x, int y) {
   m_xoffset=x;
   m_yoffset=y;
 }
  
-void GemContext::       createMess(std::string) {
+void GemWindow::       createMess(std::string) {
   create();
 }
-void GemContext::      destroyMess(void) {
+void GemWindow::      destroyMess(void) {
   destroy();
 }
 
-void GemContext::       cursorMess(bool on) {
+void GemWindow::       cursorMess(bool on) {
   m_cursor=on;
 }
 
 
 
-void GemContext::       printMess(void) {
+void GemWindow::       printMess(void) {
   // nada
 }
 
 
 
 
-unsigned int GemContext::getContextId(void) {
+unsigned int GemWindow::getContextId(void) {
   return s_contextid;
 }
 
 #ifdef GEM_MULTICONTEXT
-GLEWContext*GemContext::getGlewContext(void) {
+GLEWContext*GemWindow::getGlewContext(void) {
   if(NULL==s_glewcontext) {
     /* we should find another glew-context asap and make that one current! */
     return NULL;
@@ -461,7 +461,7 @@ GLEWContext*GemContext::getGlewContext(void) {
   return NULL;
 }
 
-GemGlewXContext*GemContext::getGlewXContext(void) {
+GemGlewXContext*GemWindow::getGlewXContext(void) {
   if(NULL==s_glewxcontext) {
     /* we should find another glew-context asap and make that one current! */
     return NULL;
@@ -472,14 +472,14 @@ GemGlewXContext*GemContext::getGlewXContext(void) {
   return NULL;
 }
 
-GLEWContext*glewGetContext(void){return  GemContext::getGlewContext();}
-GemGlewXContext*wglewGetContext(void){return  GemContext::getGlewXContext();}
-GemGlewXContext*glxewGetContext(void){return  GemContext::getGlewXContext();}
+GLEWContext*glewGetContext(void){return  GemWindow::getGlewContext();}
+GemGlewXContext*wglewGetContext(void){return  GemWindow::getGlewXContext();}
+GemGlewXContext*glxewGetContext(void){return  GemWindow::getGlewXContext();}
 
 #endif /* GEM_MULTICONTEXT */
 
 
-void GemContext :: obj_setupCallback(t_class *classPtr)
+void GemWindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", render);
   CPPEXTERN_MSG1(classPtr, "create", createMess, std::string);

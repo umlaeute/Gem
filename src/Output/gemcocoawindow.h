@@ -14,12 +14,12 @@
 #define INCLUDE_GEMCOCOAWINDOW_H_
 
 #import <Cocoa/Cocoa.h>
-#include "Base/GemContext.h"
+#include "Base/GemWindow.h"
 
 
-class GEM_EXTERN gemcocoawindow : public GemContext
+class GEM_EXTERN gemcocoawindow : public GemWindow
 {
-  CPPEXTERN_HEADER(gemcocoawindow, GemContext)
+  CPPEXTERN_HEADER(gemcocoawindow, GemWindow)
 
     public:
 

@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMCONTEXT_H_
-#define INCLUDE_GEMCONTEXT_H_
+#ifndef INCLUDE_GEMWINDOW_H_
+#define INCLUDE_GEMWINDOW_H_
 
 #include "Base/GemGL.h"
 #include "Base/CPPExtern.h"
@@ -20,7 +20,7 @@ LOG
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-    GemContext
+    GemWindow
     
     a rendering context
 
@@ -42,9 +42,9 @@ typedef struct GLXEWContextStruct GLXEWContext;
 
 typedef struct GLEWContextStruct GLEWContext;
 
-class GEM_EXTERN GemContext : public CPPExtern
+class GEM_EXTERN GemWindow : public CPPExtern
 {
- CPPEXTERN_HEADER(GemContext, CPPExtern);
+ CPPEXTERN_HEADER(GemWindow, CPPExtern);
 
  private:
   class PIMPL;
@@ -54,11 +54,11 @@ class GEM_EXTERN GemContext : public CPPExtern
     
   //////////
   // Constructor
-  GemContext(void);
+  GemWindow(void);
     	
   //////////
   // Destructor
-  virtual ~GemContext(void);
+  virtual ~GemWindow(void);
 
  public:
   /* OUTPUT */
@@ -120,14 +120,14 @@ class GEM_EXTERN GemContext : public CPPExtern
   virtual bool makeCurrent(void) = 0;
 
   /* make the object's context (window,...) the current context
-   * then switch the GemContext;
-   * basically: { return (makeCurrent() && makeGemContextCurrent()); }
+   * then switch the GemWindow;
+   * basically: { return (makeCurrent() && makeGemWindowCurrent()); }
    */
   virtual bool assertCurrentContext(void);
   /*
-   * make the GemContext current (reset stacks) 
+   * make the GemWindow current (reset stacks) 
    */
-  bool makeGemContextCurrent(void);
+  bool makeGemWindowCurrent(void);
 
   /* swap back/front buffer
    */
@@ -185,7 +185,7 @@ class GEM_EXTERN GemContext : public CPPExtern
  public:
   static unsigned int getContextId(void);
 
-  /* returns the last GemContext that called makeCurrent()
+  /* returns the last GemWindow that called makeCurrent()
    * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
    */
   static GLEWContext*getGlewContext(void);
@@ -196,7 +196,7 @@ class GEM_EXTERN GemContext : public CPPExtern
  protected:
   unsigned int m_width, m_height;
 
-  // common properties of GemContext's
+  // common properties of GemWindow's
   // you can safely ignore these, if they mean nothing to you
   // however, if they do mean something to you, it would be good if you used these
   int          m_xoffset, m_yoffset;

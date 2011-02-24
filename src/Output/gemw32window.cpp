@@ -463,7 +463,7 @@ void gemw32window :: dimensionsMess(unsigned int width, unsigned int height)
   move();
 }
 void gemw32window :: offsetMess(int x, int y) {
-    GemContext::offsetMess(x, y);
+    GemWindow::offsetMess(x, y);
     move();
 }
 

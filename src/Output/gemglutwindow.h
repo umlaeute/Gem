@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEMGLUTWINDOW_H_
 #define INCLUDE_GEMGLUTWINDOW_H_
 
-#include "Base/GemContext.h"
+#include "Base/GemWindow.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -51,9 +51,9 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglutwindow : public GemContext
+class GEM_EXTERN gemglutwindow : public GemWindow
 {
-  CPPEXTERN_HEADER(gemglutwindow, GemContext)
+  CPPEXTERN_HEADER(gemglutwindow, GemWindow)
 
     public:
 
