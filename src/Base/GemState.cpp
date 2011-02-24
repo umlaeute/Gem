@@ -193,7 +193,9 @@ bool GemState::get(const key_t key, any&value) {
   if(it==data->data.end()) {
     if(key==_PIX) { value=image; return true; }
     if(key==_GL_TEX_NUMCOORDS) { value=numTexCoords; return true; }
-    return false;
+
+
+    return false; // FIXXME
 
     if(key==_DIRTY) { value=dirty; return true; }
     if(key==_GL_DISPLAYLIST) { value=inDisplayList; return true; }
