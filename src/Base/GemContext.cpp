@@ -87,26 +87,36 @@ std::stack<GemGlewXContext*>Context::PIMPL::s_xcontext;
 
 
 Context::Context(void) 
-  : m_pimpl(NULL)
+  : m_pimpl(new PIMPL())
 {
+  push();
+  std::string errstring="";
+
   GLenum err = glewInit();
   
   if (GLEW_OK != err) {
     if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
-      throw(GemException("failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!"));
+      errstring="failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!";
     } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
-      throw(GemException("failed to init GLEW: your system only supports openGL-1.0"));
+      errstring="failed to init GLEW: your system only supports openGL-1.0";
     } else {
-      throw(GemException("failed to init GLEW"));
+      errstring="failed to init GLEW";
     }
   }
 
   post("GLEW version %s",glewGetString(GLEW_VERSION));
 
-  m_pimpl=new PIMPL();
   if(!m_pimpl) {
-    throw(GemException("failed to init GemContext"));
+    errstring="failed to init GemContext";
   }
+
+  pop();
+
+  if(!errstring.empty()) {
+    if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
+    throw(GemException(errstring));
+  }
+
 }
 
 Context::~Context(void) {
@@ -129,6 +139,10 @@ bool Context::pop(void) {
   if(m_pimpl->s_context.empty())
     return false;
 
+  if(m_pimpl->s_contextid.top() != m_pimpl->contextid) {
+    error("hmm, invalid pop: %d!=%d", m_pimpl->s_contextid.top() , m_pimpl->contextid);
+  }
+
   m_pimpl->s_context.pop();
   m_pimpl->s_xcontext.pop();
   m_pimpl->s_contextid.pop();
@@ -136,7 +150,7 @@ bool Context::pop(void) {
 }
 
 unsigned int Context::getContextId(void) {
-  if(PIMPL::s_context.empty())
+  if(PIMPL::s_contextid.empty())
     return 0;
 
   return PIMPL::s_contextid.top();
@@ -146,9 +160,15 @@ unsigned int Context::getContextId(void) {
  * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
  */
 GLEWContext*Context::getGlewContext(void) {
+  if(PIMPL::s_context.empty())
+    return NULL;
+
   return PIMPL::s_context.top();
 }
 GemGlewXContext*Context::getGlewXContext(void) {
+  if(PIMPL::s_xcontext.empty())
+    return NULL;
+
   return PIMPL::s_xcontext.top();
 }
 
