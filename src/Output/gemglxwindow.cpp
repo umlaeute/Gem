@@ -470,7 +470,10 @@ gemglxwindow :: gemglxwindow(void) :
 /////////////////////////////////////////////////////////
 gemglxwindow :: ~gemglxwindow()
 {
-  destroyMess();
+  if(m_pimpl->win) 
+    destroyMess();
+
+  delete m_pimpl;
 }
 
 
