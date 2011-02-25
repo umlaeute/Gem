@@ -122,10 +122,12 @@ Context::Context(void)
     if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
     throw(GemException(errstring));
   }
+  GemMan::m_windowState++;
 }
 
 Context::~Context(void) {
   if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
+  GemMan::m_windowState--;
 }
 
 bool Context::push(void) {

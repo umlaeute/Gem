@@ -30,6 +30,10 @@ class gemhead;
 class GemState;
 class WindowInfo;
 
+namespace gem {
+  class Context;
+};
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -213,7 +217,7 @@ class GEM_EXTERN GemMan
 
   // gemwin is allowed to modifying "global" window attributes
   friend class gemwin;
-  friend class GemWindow;
+  friend class gem::Context;
     	
   static GLfloat    m_clear_color[4];	// the frame buffer clear
   static GLbitfield m_clear_mask;		// the clear bitmask
