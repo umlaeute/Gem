@@ -63,7 +63,7 @@ gemhead :: gemhead(int argc, t_atom*argv) :
 
   m_basename=m_name->s_name;
   float priority=50.;
-#if 0
+#if 1
   switch(argc) {
   case 2:
     if(argv[0].a_type == A_FLOAT && argv[1].a_type == A_SYMBOL) {
