@@ -27,8 +27,25 @@
 
 #include "Base/GLStack.h"
 #include "RTE/MessageCallbacks.h"
+#include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(gemhead, t_floatarg, A_DEFFLOAT)
+#include <stdio.h>
+
+#ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+# define snprintf _snprintf
+#endif
+
+CPPEXTERN_NEW_WITH_GIMME(gemhead);
+
+
+static std::string float2str(t_float v) {
+  std::string s;
+  char buf[1000];
+  snprintf(buf, 1000, "%g", v);
+  s=buf;
+  return s;
+}
+
 
 /////////////////////////////////////////////////////////
 //
@@ -38,14 +55,51 @@ CPPEXTERN_NEW_WITH_ONE_ARG(gemhead, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemhead :: gemhead(t_floatarg priority) : 
+gemhead :: gemhead(int argc, t_atom*argv) :
   gemreceive(gensym("__gem_render")),
   m_cache(new GemCache(this)), m_renderOn(1)
 {
-    if(m_fltin)inlet_free(m_fltin);
-    m_fltin=NULL;
+  if(m_fltin)inlet_free(m_fltin);  m_fltin=NULL;
 
-    setMess(priority);
+  m_basename=m_name->s_name;
+  float priority=50.;
+#if 0
+  switch(argc) {
+  case 2:
+    if(argv[0].a_type == A_FLOAT && argv[1].a_type == A_SYMBOL) {
+      priority=atom_getfloat(argv+0);
+      m_basename+=atom_getsymbol(argv+1)->s_name;
+    } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_SYMBOL) {
+      priority=atom_getfloat(argv+1);
+      m_basename+=atom_getsymbol(argv+0)->s_name;
+    } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_FLOAT) {
+      priority=atom_getfloat(argv+0);
+      m_basename+=::float2str(atom_getfloat  (argv+1));
+    }
+    break;
+  case 1:
+    if(argv[0].a_type == A_FLOAT) {
+      priority=atom_getfloat(argv+0);
+    } else if(argv[0].a_type == A_SYMBOL) {
+      m_basename+=atom_getsymbol(argv+0)->s_name;
+    }
+    break;
+  case 0:
+    priority=50.f;
+    break;
+  default:
+    throw(GemException("invalid arguments: 'gemhead [<priority> [<basereceivename>]]'"));
+  }
+#else
+  if(argc==0) 
+    priority=50.;
+  else if(argv[0].a_type == A_FLOAT) {
+    priority=atom_getfloat(argv);
+  } else 
+    throw(GemException("invalid arguments: 'gemhead [<priority>]'"));
+#endif
+  m_priority=priority+1;
+  setMess(priority);
 }
 
 /////////////////////////////////////////////////////////
@@ -149,15 +203,16 @@ void gemhead :: renderOnOff(int state)
 /////////////////////////////////////////////////////////
 void gemhead :: setMess(t_float priority)
 {
-  if (priority == 0.)priority=50.;
+  if (0.==priority)priority=50.;
+
   if(priority==m_priority)
     return;
 
   m_priority=priority;
 
-  std::string rcv="__gem_render";
+  std::string rcv=m_basename;
   if(priority<0.f)
-    rcv="__gem_render_osd";
+    rcv=m_basename+"_osd";
 
   gemreceive::priorityMess(priority);
   gemreceive::nameMess(gensym(rcv.c_str()));
