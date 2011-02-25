@@ -138,7 +138,6 @@ static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 
 struct gemglxwindow::PIMPL {
   int         fs;                 // FullScreen
-  bool        have_constContext;  // 1 if we have a constant context
 
   Display     *dpy;               // X Display
   Window      win;                // X Window
@@ -162,7 +161,6 @@ struct gemglxwindow::PIMPL {
 
   PIMPL(void) : 
     fs(0),
-    have_constContext(false),
     dpy(NULL), 
     win(0), 
     cmap(0), 
@@ -289,7 +287,9 @@ struct gemglxwindow::PIMPL {
     // create the rendering context
     try {
       context = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
-      if(!masterContext) // FIXME: this will make troubles when deleting the 1st context
+      // this masterContext should only be initialized once by a static PIMPL
+      // see below in gemglxwindow::create()
+      if(!masterContext) 
         masterContext=context;
     } catch(void*e){
       context=NULL;
@@ -735,7 +735,7 @@ void gemglxwindow :: destroy(void)
     
     if (m_pimpl->win)
       err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
-    if (m_pimpl->have_constContext && m_pimpl->context) {
+    if (m_pimpl->context) {
       // this crashes sometimes on my laptop:
       glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
     }
