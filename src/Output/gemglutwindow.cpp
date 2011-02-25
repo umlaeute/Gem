@@ -86,7 +86,8 @@ void gemglutwindow :: dispatch()
   // other things that mark dirty are (e.g.) resizing, making (parts of) the window visible,...
   glutSetWindow(m_window);
 #if 0
-  // setting glutPostRedisplay() here will emit a render-bang for each dispatch-cycle...now what we want
+  // setting glutPostRedisplay() here will emit a render-bang for each dispatch-cycle...
+  // ...NOT what we want
   glutPostRedisplay();
 #endif
   glutMainLoopEvent();
@@ -272,13 +273,15 @@ void gemglutwindow :: destroy(void)
 void gemglutwindow :: destroyMess(void)
 {
   if(makeCurrent()) {
+    s_windowmap.erase(m_window);
+
     int window=m_window;
-    m_window=0;
+    m_window=0; // so that we no longer receive any event
     glutWMCloseFunc     (NULL);
     glutDestroyWindow(window);
     glutMainLoopEvent();
     glutMainLoopEvent();
-    s_windowmap.erase(m_window);
+
   }
   destroy();
 }
@@ -413,11 +416,7 @@ void gemglutwindow::specialupCb(int c, int x, int y) {
 }
 
 void gemglutwindow::reshapeCb(int x, int y) {
-  t_atom ap[2];
-  SETFLOAT (ap+0, x);
-  SETFLOAT (ap+1, y);
-
-  CALLBACK4WIN->info(gensym("dimen"), 2, ap);
+  CALLBACK4WIN->dimension(x, y);
 }
 void gemglutwindow::mouseCb(int button, int state, int x, int y) {
   CALLBACK4WIN->motion(x,y);
