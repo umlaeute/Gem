@@ -18,6 +18,7 @@
 
 #include "GemSettings.h"
 #include "GemContext.h"
+#include "GemException.h"
 
 class GemWindow::PIMPL {
 public:
@@ -244,13 +245,23 @@ void GemWindow::dispatch() {
 }
 
 bool GemWindow::createContext(gem::Context*shared){
-
-  if(!shared) {
+  try {
+#if 0
+    if(!shared) {
+      m_pimpl->mycontext = new gem::Context();
+      m_context=m_pimpl->mycontext;
+    } else {
+      m_context=shared;
+      m_pimpl->mycontext=NULL;
+    }
+#else
+    // for now, let's create a GlewContext for each and every GemWindow
     m_pimpl->mycontext = new gem::Context();
     m_context=m_pimpl->mycontext;
-  } else {
-    m_context=shared;
-    m_pimpl->mycontext=NULL;
+#endif
+  } catch (GemException&x) {
+    m_context=NULL;
+    error("%s", x.what());
   }
 
   GemMan::m_windowState++;
@@ -265,10 +276,10 @@ void GemWindow::destroyContext(void){
   if(m_pimpl->mycontext) {
     delete m_pimpl->mycontext;
     m_context=NULL;
+
+    GemMan::m_windowState--;
   }
   m_pimpl->mycontext=NULL;
-
-  GemMan::m_windowState--;
 
   m_pimpl->undispatch();
 }
@@ -277,6 +288,7 @@ bool GemWindow::pushContext(void){
   if(!m_context) {
     return false;
   }
+
   if(!m_context->push())
     return false;
 
@@ -296,7 +308,6 @@ void GemWindow::render(void){
     error("unable to switch to current context, cannot render!");
     return;
   }
-
   bang();
   if(m_buffer==2)
     swapBuffers();
