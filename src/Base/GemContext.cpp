@@ -40,9 +40,13 @@ public:
   {
     /* check the stack-sizes */
     glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    maxStackDepth+GemMan::STACKMODELVIEW);
-    glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+GemMan::STACKCOLOR);
     glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      maxStackDepth+GemMan::STACKTEXTURE);
     glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   maxStackDepth+GemMan::STACKPROJECTION);
+
+    if(GLEW_ARB_imaging)
+      glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+GemMan::STACKCOLOR);
+    else 
+      maxStackDepth[GemMan::STACKCOLOR]=0;
   }
   ~PIMPL(void) {
     freeID(contextid);
