@@ -17,6 +17,7 @@
 #include "GemException.h"
 
 #include <stack>
+#include <set>
 
 #ifdef GEM_MULTICONTEXT
 # warning multicontext rendering currently under development
@@ -58,33 +59,34 @@ public:
 
   unsigned int contextid;
 
-  static std::stack<unsigned int>s_contextid;
-
+  // LATER: reusing IDs prevents a memleak in GemContextData
+  // LATER: reusing IDs might make us re-use invalid GemContextData!
+  static std::set<unsigned int>s_takenIDs;
   static unsigned int makeID(void) //  GemContext_newid
   {
     unsigned int id=0;
 #ifdef GEM_MULTICONTEXT
-    /* LATER reuse freed ids */
-    static unsigned int nextid=0;
-    id=nextid;
-    nextid++;
+    while(s_takenIDs.find(id) != s_takenIDs.end())
+      id++;
 #endif /* GEM_MULTICONTEXT */
+    s_takenIDs.insert(id);
     return id;
   }
-
   static void freeID(unsigned int id)
   {
     /* LATER reuse freed ids */
     /* LATER remove this ID from the s_contextid stack and related (x)context */
+    s_takenIDs.erase(id);
   }
 
-  static std::stack<GLEWContext*>s_context;
-  static std::stack<GemGlewXContext*>s_xcontext;
+  static unsigned int s_contextid;
+  static GLEWContext*s_context;
+  static GemGlewXContext*s_xcontext;
 };
-std::stack<unsigned int>    Context::PIMPL::s_contextid;
-std::stack<GLEWContext*>    Context::PIMPL::s_context;
-std::stack<GemGlewXContext*>Context::PIMPL::s_xcontext;
-
+unsigned int    Context::PIMPL::s_contextid=0;
+GLEWContext*    Context::PIMPL::s_context=NULL;
+GemGlewXContext*Context::PIMPL::s_xcontext=NULL;
+std::set<unsigned int>      Context::PIMPL::s_takenIDs;
 
 Context::Context(void) 
   : m_pimpl(new PIMPL())
@@ -116,7 +118,6 @@ Context::Context(void)
     if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
     throw(GemException(errstring));
   }
-
 }
 
 Context::~Context(void) {
@@ -129,54 +130,31 @@ bool Context::push(void) {
   GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
   GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
 
-  m_pimpl->s_context.push(m_pimpl->context);
-  m_pimpl->s_xcontext.push(m_pimpl->xcontext);
-  m_pimpl->s_contextid.push(m_pimpl->contextid);
+  m_pimpl->s_context=m_pimpl->context;
+  m_pimpl->s_xcontext=m_pimpl->xcontext;
+  m_pimpl->s_contextid=m_pimpl->contextid;
   return true;
 }
 
 bool Context::pop(void) {
-  if(m_pimpl->s_context.empty())
-    return false;
-
-  if(m_pimpl->s_contextid.top() != m_pimpl->contextid) {
-    error("hmm, invalid pop: %d!=%d", m_pimpl->s_contextid.top() , m_pimpl->contextid);
-  }
-
-  m_pimpl->s_context.pop();
-  m_pimpl->s_xcontext.pop();
-  m_pimpl->s_contextid.pop();
   return true;
 }
 
 unsigned int Context::getContextId(void) {
-  if(PIMPL::s_contextid.empty())
-    return 0;
-
-  return PIMPL::s_contextid.top();
+  return PIMPL::s_contextid;
 }
 
 /* returns the last GemWindow that called makeCurrent()
  * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
  */
 GLEWContext*Context::getGlewContext(void) {
-  if(PIMPL::s_context.empty())
-    return NULL;
-
-  return PIMPL::s_context.top();
+  return PIMPL::s_context;
 }
 GemGlewXContext*Context::getGlewXContext(void) {
-  if(PIMPL::s_xcontext.empty())
-    return NULL;
-
-  return PIMPL::s_xcontext.top();
+  return PIMPL::s_xcontext;
 }
 
-
-#if 0
-#warning GLEWcontext fun
-#else
 GLEWContext*glewGetContext(void)     {return  gem::Context::getGlewContext();}
 GemGlewXContext*wglewGetContext(void){return  gem::Context::getGlewXContext();}
 GemGlewXContext*glxewGetContext(void){return  gem::Context::getGlewXContext();}
-#endif
+
