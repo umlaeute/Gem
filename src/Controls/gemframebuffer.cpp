@@ -425,7 +425,7 @@ void gemframebuffer :: formatMess(const char* fmt)
 
 #ifdef __APPLE__
   switch(tmp_format) {
-  case  GL_RGB_FLOAT32_ATI;
+  case  GL_RGB_FLOAT32_ATI:
   m_format = GL_BGR;
   break;
   case GL_RGBA:
