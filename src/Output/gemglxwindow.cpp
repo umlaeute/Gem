@@ -447,8 +447,10 @@ struct gemglxwindow::PIMPL {
   }
 
   static GLXContext  masterContext;// The GLXcontext to share rendering with
+  static gem::Context*masterGemContext;
 };
-GLXContext gemglxwindow::PIMPL::masterContext=NULL;
+GLXContext   gemglxwindow::PIMPL::masterContext=NULL;
+gem::Context*gemglxwindow::PIMPL::masterGemContext=NULL;
 
 /////////////////////////////////////////////////////////
 //
@@ -665,14 +667,22 @@ bool gemglxwindow :: create(void)
       success=constPimpl->create("", 2, false, false, x, y, w, h);
       constPimpl->masterContext=constPimpl->context;
     } catch (GemException&x) {
-      x.report();
-      success=false;
+      error("const context creation failed: %s", x.what());
+      verbose(0, "continuing at your own risk!");
+    }
+    if(!constPimpl->masterGemContext) {
+      try {
+	constPimpl->masterGemContext = createContext();
+      } catch (GemException&x) {
+	constPimpl->masterGemContext = NULL;
+	error("context creation failed: %s", x.what());
+      }
     }
   }
-  if(!success) {
-    error("unable to create const context...continuing at your own risk!");
-  }
 
+  if(constPimpl->masterGemContext && !m_context) {
+    m_context=constPimpl->masterGemContext;
+  }
 
   int modeNum=4;
   int bestMode=0;
