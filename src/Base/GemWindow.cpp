@@ -133,7 +133,8 @@ GemWindow :: GemWindow()
     m_buffer(2),
     m_title("Gem"), 
     m_cursor(true),
-    m_fsaa(0)
+    m_fsaa(0),
+    m_context(NULL)
 {
   int i;
 
