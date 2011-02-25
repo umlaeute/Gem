@@ -353,7 +353,7 @@ bool gemw32window:: create(void)
   UpdateWindow(m_win->win);
   dimension(w, h);
   position(x, y);
-  return createContext();
+  return createGemWindow();
 }
 void gemw32window:: createMess(std::string s) {
     if(m_win) {
@@ -380,7 +380,7 @@ void gemw32window:: destroy(void)
     delete m_win;
   m_win=NULL;
 
-  destroyContext();
+  destroyGemWindow();
 }
 
 /////////////////////////////////////////////////////////

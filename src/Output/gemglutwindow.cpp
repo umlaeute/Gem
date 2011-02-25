@@ -244,7 +244,7 @@ bool gemglutwindow :: create(void)
 
   //  glutNameFunc(&gemglutwindow::nameCb);
 
-  if(!createContext()) {
+  if(!createGemWindow()) {
     destroyMess();
     return false;
   }
@@ -265,7 +265,7 @@ void gemglutwindow :: createMess(std::string) {
 /////////////////////////////////////////////////////////
 void gemglutwindow :: destroy(void)
 {
-  destroyContext();
+  destroyGemWindow();
   m_window=0;
   info("window", "closed");
 }

@@ -148,9 +148,10 @@ GemWindow :: GemWindow()
 /////////////////////////////////////////////////////////
 GemWindow :: ~GemWindow()
 {
-  destroyContext();
-  delete m_pimpl;
-  m_pimpl=NULL;
+  if(m_pimpl) {
+    m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
+    delete m_pimpl; m_pimpl=NULL;
+  }
 }
 
 void GemWindow::info(std::vector<t_atom>l) {
@@ -245,43 +246,37 @@ void GemWindow::dispatch() {
   // LATER setup a clock that calls dispatch() every so often
 }
 
-bool GemWindow::createContext(gem::Context*shared){
-  try {
-#if 0
-    if(!shared) {
+gem::Context*GemWindow::createContext(void){
+  return new gem::Context();
+}
+gem::Context*GemWindow::destroyContext(gem::Context*ctx){
+  if(ctx)delete ctx;
+  ctx=NULL;
+  return ctx;
+}
+
+bool GemWindow::createGemWindow(void){
+  if(!m_context) {
+    try {
       m_pimpl->mycontext = new gem::Context();
-      m_context=m_pimpl->mycontext;
-    } else {
-      m_context=shared;
-      m_pimpl->mycontext=NULL;
+    } catch (GemException&x) {
+      m_context=NULL;
+      error("%s", x.what());
+      return false;
     }
-#else
-    // for now, let's create a GlewContext for each and every GemWindow
-    m_pimpl->mycontext = new gem::Context();
     m_context=m_pimpl->mycontext;
-#endif
-  } catch (GemException&x) {
-    m_context=NULL;
-    error("%s", x.what());
+  } else {
+    m_pimpl->mycontext = NULL;
   }
 
-  GemMan::m_windowState++;
   m_pimpl->dispatch();
 
   return true;
 }
 
 
-void GemWindow::destroyContext(void){
-#warning implement refcounter
-  if(m_pimpl->mycontext) {
-    delete m_pimpl->mycontext;
-    m_context=NULL;
-
-    GemMan::m_windowState--;
-  }
-  m_pimpl->mycontext=NULL;
-
+void GemWindow::destroyGemWindow(void){
+  m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
   m_pimpl->undispatch();
 }
 

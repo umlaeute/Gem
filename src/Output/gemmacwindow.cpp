@@ -1350,7 +1350,7 @@ DEBUGPOST("");
   verbose(2,"hints: shared = %d",m_info->context);//m_shared);
   verbose(2,"hints: fsaa = %d",m_fsaa);
   hGD = NULL;
-  return createContext();
+  return createGemWindow();
 }
 
 
@@ -1385,7 +1385,7 @@ void gemmacwindow::destroy(void) {
     verbose(2,"destroyGemWindow() finished");
   }else error("no m_info->pWind to destroy!!");
 
-  return destroyContext();
+  return destroyGemWindow();
 }
 void gemmacwindow::dispatch(void) {
   EventRef	theEvent;

@@ -704,7 +704,7 @@ bool gemglxwindow :: create(void)
 
   cursorMess(m_cursor);
   titleMess(m_title);
-  return createContext();
+  return createGemWindow();
 }
 void gemglxwindow :: createMess(std::string display)
 {
@@ -761,7 +761,7 @@ void gemglxwindow :: destroy(void)
   m_pimpl->context = NULL;
   if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
   
-  destroyContext();
+  destroyGemWindow();
 }
 void gemglxwindow :: destroyMess(void)
 {

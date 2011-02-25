@@ -79,21 +79,32 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
   /* INPUT */
 
-  /* create a new context
-   * this MUST be called from the derived classes
-   * as it will eventually establish a new glew-context
+  /* create a new context */
+  static gem::Context*createContext(void);
+  /* destroy a given context; 
+   * @returns  NULL
+   */
+  static gem::Context*destroyContext(gem::Context*);
+
+  /* this MUST be called from the derived classes
+   * as it will eventually establish a new GemContext (if m_context is non-NULL)
+   * if you want to share GemContext's you MUST call
+   *   GemWindow::createContext() yourself and set m_context to the result
+   *
    * if <tt>false</tt> is returned, you should not continue
    */
-  bool createContext(gem::Context*shared=NULL);
+  bool createGemWindow(void);
   /* create a new window
    * make sure that this calls the parent's createContext() method
    */
   virtual bool create(void) = 0;
 
-  /* destroy an established context */
-  void destroyContext();
+  /* destroy an established context+infrastructuure *
+   * make sure that this get's called from your destroy() implementation
+   */
+  void destroyGemWindow();
   /* create the current window
-   * make sure that this calls the parent's destroyContext() method
+   * make sure to call GemWindow::destroyGemWindow()
    */
   virtual void destroy(void) = 0;
 

@@ -382,7 +382,7 @@ bool gemcocoawindow :: create(void)
 
   titleMess(m_title);
 
-  return createContext();
+  return createGemWindow();
 }
 void gemcocoawindow :: createMess(std::string s) {
   if(m_pimpl->view) {
@@ -401,7 +401,7 @@ void gemcocoawindow :: createMess(std::string s) {
 void gemcocoawindow :: destroy(void)
 {
   m_pimpl->cleanup();
-  destroyContext();
+  destroyGemWindow();
 }
 void gemcocoawindow :: destroyMess(void)
 {
