@@ -19,7 +19,7 @@
 #include "Base/GemCache.h"
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW(gemlist)
+CPPEXTERN_NEW(gemlist);
 
 /////////////////////////////////////////////////////////
 //
@@ -30,23 +30,25 @@ CPPEXTERN_NEW(gemlist)
 //
 /////////////////////////////////////////////////////////
 gemlist :: gemlist(void) 
-  : m_valide_state(false),
-    m_inlet(NULL),
+  : m_validState(false),
     m_tickTime(-1.f),
     m_lightState(false),
-    m_drawType(0)
+    m_drawType(0),
+    m_mycache(new GemCache(NULL)),
+    m_inlet(NULL)
 {
-	// create the cold inlet
+  // create the cold inlet
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
 gemlist :: ~gemlist()
 {
-  inlet_free(m_inlet);
+  if(m_mycache)delete m_mycache; m_mycache=NULL;
+  if(m_inlet)inlet_free(m_inlet); m_inlet=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -55,10 +57,8 @@ gemlist :: ~gemlist()
 /////////////////////////////////////////////////////////
 void gemlist :: render(GemState *state)
 {
-  m_current_state=*state; //copy current state for later use
-
-
-	m_valide_state=true;
+  m_state=*state; //copy current state for later use
+  m_validState=true;
 }
 
 /////////////////////////////////////////////////////////
@@ -67,9 +67,9 @@ void gemlist :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: postrender(GemState *)
 {
-  //	m_valide_state=false;
+  //	m_validState=false;
 
-  // this is to early to reset the m_valide_state
+  // this is to early to reset the m_validState
   // when should we call this???
   // TODO : fix this.
 }
@@ -81,22 +81,20 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
     //	error("you should not bang the gemlist now"); 
     return;
   }
-
+  
   if(state) {
-		t_atom ap[2];
-
-    GemCache tempCache(NULL);
+    t_atom ap[2];
+    
     if(!cache)
-      cache=&tempCache;
-
-		ap->a_type=A_POINTER;
-		ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(cache);
-		(ap+1)->a_type=A_POINTER;
-		(ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
-		outlet_anything(m_out1, gensym("gem_state"), 2, ap);
+      cache=m_mycache;
+    
+    ap->a_type=A_POINTER;
+    ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(cache);
+    (ap+1)->a_type=A_POINTER;
+    (ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
+    outlet_anything(m_out1, gensym("gem_state"), 2, ap);
   }
 }
-
 
 /////////////////////////////////////////////////////////
 // bang
@@ -104,41 +102,28 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
 /////////////////////////////////////////////////////////
 void gemlist :: trigger()
 {
-	if(m_valide_state) {
+  if(m_validState) {
     // outlet the current state when banged
-    sendCacheState(m_cache, &m_current_state);
+    sendCacheState(m_cache, &m_state);
   } else {
-	  // fill in out own state and output
-    GemState state;
-
-    if(m_lightState) {
-      state.set(GemState::_GL_LIGHTING, true);
-      state.set(GemState::_GL_SMOOTH, true);
-    }
-    
-    if(m_drawType) {
-      state.set(GemState::_GL_DRAWTYPE, m_drawType);
-    }
-
-    if(m_tickTime>=0.f) {
-      state.set(GemState::_TIMING_TICK, m_tickTime);
-    }
-
     //    GemMan::fillGemState(state);
-    sendCacheState(NULL, &state);
+    sendCacheState(NULL, &m_mystate);
   }
 }
-
 
 ///////////////////
 // here come some messages for setting up a manual GemState
 void gemlist :: ticktimeMess(t_float ticktime)
 {
   m_tickTime=ticktime;
+  m_mystate.set(GemState::_TIMING_TICK, m_tickTime);
+
 }
 void gemlist :: lightingMess(bool light)
 {
   m_lightState=light;
+  m_mystate.set(GemState::_GL_LIGHTING, m_lightState);
+  m_mystate.set(GemState::_GL_SMOOTH, m_lightState);
 }
 void gemlist :: drawMess(t_atom arg)
 {
@@ -163,9 +148,9 @@ void gemlist :: drawMess(t_atom arg)
     }
   }
   else m_drawType=atom_getint(&arg);
+
+  m_mystate.set(GemState::_GL_DRAWTYPE, m_drawType);
 }
-
-
 
 /////////////////////////////////////////////////////////
 // rightRender
@@ -174,15 +159,13 @@ void gemlist :: drawMess(t_atom arg)
 void gemlist :: rightRender(GemCache*cache, GemState *state)
 {
   if(state) {
-    m_current_state=*state;
-    m_valide_state=true;
+    m_state=*state;
+    m_validState=true;
     // get the current state on the right inlet
   } else {
-    m_valide_state=false;
+    m_validState=false;
   }
-
   m_cache=cache;
-
 }
 
 /////////////////////////////////////////////////////////
@@ -192,7 +175,7 @@ void gemlist :: rightRender(GemCache*cache, GemState *state)
 void gemlist :: obj_setupCallback(t_class *classPtr)
 {
   class_addbang(classPtr, reinterpret_cast<t_method>(&gemlist::triggerMessCallback));
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::gem_rightMessCallback), gensym("gem_right"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::gem_rightMessCallback), gensym("gem_right"), A_GIMME, A_NULL);
 
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::ticktimeMessCallback), gensym("ticktime"), A_FLOAT, A_NULL);
@@ -205,14 +188,13 @@ void gemlist::triggerMessCallback(void *data)
   GetMyClass(data)->trigger();
 }
 
-
 void gemlist :: ticktimeMessCallback(void *data, t_floatarg time)
 {
-    GetMyClass(data)->ticktimeMess(time);
+  GetMyClass(data)->ticktimeMess(time);
 }
 void gemlist :: lightingMessCallback(void *data, t_floatarg light)
 {
-    GetMyClass(data)->lightingMess(light>0.f);
+  GetMyClass(data)->lightingMess(light>0.f);
 }
 void gemlist :: drawMessCallback(void *data, int argc, t_atom*argv)
 {

@@ -18,6 +18,8 @@
 #include "Base/GemBase.h"
 #include "Base/GemState.h"
 
+class GemCache;
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -26,15 +28,15 @@
   DESCRIPTION
     
   "gemlist" - send the curent gemlist when banged.
-	The curent gemlist can be set via the hot or cold inlet
+  The curent gemlist can be set via the hot or cold inlet
     
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemlist : public GemBase
 {
-  CPPEXTERN_HEADER(gemlist, GemBase)
+  CPPEXTERN_HEADER(gemlist, GemBase);
 
-    public:
-
+ public:
+  
   //////////
   // Constructor
   gemlist(void);
@@ -58,29 +60,28 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   void			trigger(void);
+  virtual void   	rightRender(GemCache*cache, GemState *state);
+
+  virtual void ticktimeMess(t_float ticktime);
+  virtual void lightingMess(bool state);
+  virtual void drawMess(t_atom arg);
+
 
   //////////
   // curent state
-  GemState 	m_current_state;
-
-  ////////
-  bool		m_valide_state;
-
-  //////////
-  t_inlet         *m_inlet;
-
-  virtual void   	rightRender(GemCache*cache, GemState *state);
+  GemState 	m_state;
+  bool		m_validState;
 
 
-
-  virtual void ticktimeMess(t_float ticktime);
   float m_tickTime;
-
-  virtual void lightingMess(bool state);
   bool m_lightState;
-
-  virtual void drawMess(t_atom arg);
   GLenum m_drawType;
+
+  GemState  m_mystate;
+  GemCache* m_mycache;
+
+
+  t_inlet   *m_inlet;
 
  private:
 
