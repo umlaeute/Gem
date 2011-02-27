@@ -362,16 +362,4 @@ static void obj_setupCallback(t_class *classPtr);
 # define GEM_CLASSFLAGS 0
 #endif
 
-#define _CPPEXTERN_ADDMETHOD(class, name, selector) class_addmethod(classPtr, reinterpret_cast<t_method>(&class::name##MessCallback), gensym(#selector)
-#define CPPEXTERN_ADDMETHOD(class, name, selector) _CPPEXTERN_ADDMETHOD(class, name, selector), A_NULL);
-#define CPPEXTERN_ADDMETHOD_S(class, name, selector) _CPPEXTERN_ADDMETHOD(class, name, selector), A_SYMBOL, A_NULL);
-#define CPPEXTERN_ADDMETHOD_F(class, name, selector) _CPPEXTERN_ADDMETHOD(class, name, selector), A_FLOAT, A_NULL);
-#define CPPEXTERN_ADDMETHOD_FF(class, name, selector) _CPPEXTERN_ADDMETHOD(class, name, selector), A_FLOAT, A_FLOAT, A_NULL);
-
-
-#define CPPEXTERN_CALLBACK(class, name) void class::name##MessCallback(void*data) { GetMyClass(data)->name##Mess(); }
-#define CPPEXTERN_CALLBACK_F(class, name, type) void class::name##MessCallback(void*data, t_floatarg v1) { GetMyClass(data)->name##Mess(static_cast<type>(v1)); }
-#define CPPEXTERN_CALLBACK_FF(class, name, type) void class::name##MessCallback(void*data, t_floatarg v1, t_floatarg v2) { GetMyClass(data)->name##Mess(static_cast<type>(v1), static_cast<type>(v2)); }
-
-
 #endif	// for header file
