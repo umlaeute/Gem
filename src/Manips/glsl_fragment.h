@@ -40,7 +40,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN glsl_fragment : public glsl_vertex
 {
-  CPPEXTERN_HEADER(glsl_fragment, glsl_vertex)
+  CPPEXTERN_HEADER(glsl_fragment, glsl_vertex);
     
     public:
   

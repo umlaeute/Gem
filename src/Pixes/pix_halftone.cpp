@@ -19,7 +19,7 @@
 #endif
 #include <assert.h>
 
-CPPEXTERN_NEW(pix_halftone)
+CPPEXTERN_NEW(pix_halftone);
 
 /////////////////////////////////////////////////////////
 //

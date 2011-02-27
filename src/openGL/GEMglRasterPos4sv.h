@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglRasterPos4sv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRasterPos4sv, GemGLBase)
+	CPPEXTERN_HEADER(GEMglRasterPos4sv, GemGLBase);
 
 	public:
 	  // Constructor

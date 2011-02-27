@@ -34,7 +34,7 @@ LOG
 
 class GEM_EXTERN curve3d : public GemShape
 {
-  CPPEXTERN_HEADER(curve3d, GemShape)
+  CPPEXTERN_HEADER(curve3d, GemShape);
 
     public:
 

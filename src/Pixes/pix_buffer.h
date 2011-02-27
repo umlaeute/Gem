@@ -36,7 +36,7 @@ LOG
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer : public CPPExtern
 {
-  CPPEXTERN_HEADER(pix_buffer, CPPExtern)
+  CPPEXTERN_HEADER(pix_buffer, CPPExtern);
 
     public:
 

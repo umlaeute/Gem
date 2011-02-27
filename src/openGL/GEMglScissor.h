@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglScissor : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglScissor, GemGLBase)
+	CPPEXTERN_HEADER(GEMglScissor, GemGLBase);
 
 	public:
 	  // Constructor

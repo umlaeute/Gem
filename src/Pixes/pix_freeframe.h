@@ -56,7 +56,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_freeframe : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_freeframe, GemPixObj)
+    CPPEXTERN_HEADER(pix_freeframe, GemPixObj);
 
     public:
 

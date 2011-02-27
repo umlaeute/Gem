@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN emissionRGB : public GemBase
 {
-    CPPEXTERN_HEADER(emissionRGB, GemBase)
+    CPPEXTERN_HEADER(emissionRGB, GemBase);
 
     public:
 

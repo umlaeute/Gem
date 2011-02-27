@@ -36,7 +36,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_sig2pix : public GemBase
 {
-  CPPEXTERN_HEADER(pix_sig2pix, GemBase)
+  CPPEXTERN_HEADER(pix_sig2pix, GemBase);
 
     public:
 

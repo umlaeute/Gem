@@ -25,7 +25,7 @@
 
 class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMultiTexCoord2fARB, GemGLBase)
+	CPPEXTERN_HEADER(GEMglMultiTexCoord2fARB, GemGLBase);
 
 	public:
 	  // Constructor

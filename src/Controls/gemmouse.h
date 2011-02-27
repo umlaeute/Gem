@@ -33,7 +33,7 @@ enum t_mousescale { NONE, WIDTH, HEIGHT, BOTH };
 
 class GEM_EXTERN gemmouse : public CPPExtern
 {
-    CPPEXTERN_HEADER(gemmouse, CPPExtern)
+    CPPEXTERN_HEADER(gemmouse, CPPExtern);
 
     public:
 

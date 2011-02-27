@@ -17,7 +17,7 @@
 
 #include "papi.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(part_killslow, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(part_killslow, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

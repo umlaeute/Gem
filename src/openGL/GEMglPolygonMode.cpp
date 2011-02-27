@@ -15,7 +15,7 @@
 #include "GEMglPolygonMode.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglPolygonMode)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglPolygonMode);
 
 /////////////////////////////////////////////////////////
 //

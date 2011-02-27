@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglIndexi : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglIndexi, GemGLBase)
+	CPPEXTERN_HEADER(GEMglIndexi, GemGLBase);
 
 	public:
 	  // Constructor

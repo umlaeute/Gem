@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglGetFloatv : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglGetFloatv, GemGLBase)
+  CPPEXTERN_HEADER(GEMglGetFloatv, GemGLBase);
 
     public:
   // Constructor

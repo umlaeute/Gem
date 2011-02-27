@@ -44,7 +44,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class pix_snap2tex : public GemBase
 {
-    CPPEXTERN_HEADER(pix_snap2tex, GemBase)
+    CPPEXTERN_HEADER(pix_snap2tex, GemBase);
 
     public:
 

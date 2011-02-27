@@ -37,7 +37,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN newWave : public GemShape
 {
-  CPPEXTERN_HEADER(newWave, GemShape)
+  CPPEXTERN_HEADER(newWave, GemShape);
 
     public:
 

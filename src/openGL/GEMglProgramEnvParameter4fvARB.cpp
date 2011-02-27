@@ -12,7 +12,7 @@
 
 #include "GEMglProgramEnvParameter4fvARB.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglProgramEnvParameter4fvARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglProgramEnvParameter4fvARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

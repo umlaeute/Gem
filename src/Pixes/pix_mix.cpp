@@ -17,7 +17,7 @@
 
 #include "pix_mix.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_mix)
+CPPEXTERN_NEW_WITH_GIMME(pix_mix);
 
 /////////////////////////////////////////////////////////
 //

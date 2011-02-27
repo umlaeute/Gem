@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPixelZoom : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPixelZoom, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPixelZoom, GemGLBase);
 
 	public:
 	  // Constructor

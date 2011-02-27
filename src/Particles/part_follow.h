@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_follow : public partlib_base
 {
-    CPPEXTERN_HEADER(part_follow, partlib_base)
+    CPPEXTERN_HEADER(part_follow, partlib_base);
 
     public:
 

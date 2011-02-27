@@ -38,7 +38,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN disk : public GemGluObj
 {
-    CPPEXTERN_HEADER(disk, GemGluObj)
+    CPPEXTERN_HEADER(disk, GemGluObj);
 
     public:
 

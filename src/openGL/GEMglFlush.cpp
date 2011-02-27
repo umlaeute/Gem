@@ -14,7 +14,7 @@
 
 #include "GEMglFlush.h"
 
-CPPEXTERN_NEW ( GEMglFlush )
+CPPEXTERN_NEW ( GEMglFlush );
 
 /////////////////////////////////////////////////////////
 //

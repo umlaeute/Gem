@@ -21,7 +21,7 @@
 #include "Base/GemEvent.h"
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW_WITH_GIMME(gemmouse)
+CPPEXTERN_NEW_WITH_GIMME(gemmouse);
 
 /////////////////////////////////////////////////////////
 //

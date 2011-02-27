@@ -16,7 +16,7 @@
 
 static double deg2rad=atan2(1.,1.)/45.0;
 
-CPPEXTERN_NEW(pix_kaleidoscope)
+CPPEXTERN_NEW(pix_kaleidoscope);
 
 /////////////////////////////////////////////////////////
 //

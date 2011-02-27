@@ -36,7 +36,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN accumrotate : public GemBase
 {
-    CPPEXTERN_HEADER(accumrotate, GemBase)
+    CPPEXTERN_HEADER(accumrotate, GemBase);
 
     public:
 

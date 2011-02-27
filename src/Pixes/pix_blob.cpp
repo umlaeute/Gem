@@ -27,7 +27,7 @@
 
 #include "pix_blob.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_blob)
+CPPEXTERN_NEW_WITH_GIMME(pix_blob);
 
   /////////////////////////////////////////////////////////
   //

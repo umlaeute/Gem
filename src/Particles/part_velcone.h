@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_velcone : public partlib_base
 {
-    CPPEXTERN_HEADER(part_velcone, partlib_base)
+    CPPEXTERN_HEADER(part_velcone, partlib_base);
 
     public:
 

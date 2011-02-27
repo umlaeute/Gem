@@ -14,7 +14,7 @@
 
 #include "GEMglEvalMesh1.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1 , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1 , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

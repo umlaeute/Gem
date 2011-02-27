@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN cone : public cylinder
 {
-    CPPEXTERN_HEADER(cone, cylinder)
+    CPPEXTERN_HEADER(cone, cylinder);
 
     public:
 

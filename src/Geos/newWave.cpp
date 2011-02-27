@@ -34,7 +34,7 @@ static int random2(void)
     return (foo & 0x7fffffff);
 }
 
-CPPEXTERN_NEW_WITH_GIMME(newWave)
+CPPEXTERN_NEW_WITH_GIMME(newWave);
 
 /////////////////////////////////////////////////////////
 //

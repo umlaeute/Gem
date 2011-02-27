@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglDisableClientState : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDisableClientState, GemGLBase)
+	CPPEXTERN_HEADER(GEMglDisableClientState, GemGLBase);
 
 	public:
 	  // Constructor

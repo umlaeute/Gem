@@ -28,7 +28,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_orbitpoint : public partlib_base
 {
-    CPPEXTERN_HEADER(part_orbitpoint, partlib_base)
+    CPPEXTERN_HEADER(part_orbitpoint, partlib_base);
 
     public:
 

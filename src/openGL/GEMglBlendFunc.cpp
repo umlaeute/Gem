@@ -14,7 +14,7 @@
 
 #include "GEMglBlendFunc.h"
 #include "Base/GemException.h"
-CPPEXTERN_NEW_WITH_GIMME ( GEMglBlendFunc )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglBlendFunc );
 
 /////////////////////////////////////////////////////////
 //

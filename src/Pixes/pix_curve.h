@@ -41,7 +41,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_curve : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_curve, GemPixObj)
+  CPPEXTERN_HEADER(pix_curve, GemPixObj);
 		
     public:
 	

@@ -31,7 +31,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_source : public partlib_base
 {
-  CPPEXTERN_HEADER(part_source, partlib_base)
+  CPPEXTERN_HEADER(part_source, partlib_base);
 
     public:
 

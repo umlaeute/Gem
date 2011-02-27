@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPassThrough : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPassThrough, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPassThrough, GemGLBase);
 
 	public:
 	  // Constructor

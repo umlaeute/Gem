@@ -35,7 +35,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN specularRGB : public GemBase
 {
-    CPPEXTERN_HEADER(specularRGB, GemBase)
+    CPPEXTERN_HEADER(specularRGB, GemBase);
 
     public:
 

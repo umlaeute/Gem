@@ -14,7 +14,7 @@
 
 #include "GEMglTexCoord4iv.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglTexCoord4iv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglTexCoord4iv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

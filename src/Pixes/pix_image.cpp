@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include "Base/GemCache.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

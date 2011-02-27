@@ -16,7 +16,7 @@
 
 #include "pix_threshold_bernsen.h"
 
-CPPEXTERN_NEW(pix_threshold_bernsen)
+CPPEXTERN_NEW(pix_threshold_bernsen);
 
 /////////////////////////////////////////////////////////
 //

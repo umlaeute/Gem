@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglFeedbackBuffer : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFeedbackBuffer, GemGLBase)
+	CPPEXTERN_HEADER(GEMglFeedbackBuffer, GemGLBase);
 
 	public:
 	  // Constructor

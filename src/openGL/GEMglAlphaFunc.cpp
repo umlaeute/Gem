@@ -14,7 +14,7 @@
 
 #include "GEMglAlphaFunc.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

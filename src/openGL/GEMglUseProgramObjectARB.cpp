@@ -12,7 +12,7 @@
 
 #include "GEMglUseProgramObjectARB.h"
 
-CPPEXTERN_NEW ( GEMglUseProgramObjectARB )
+CPPEXTERN_NEW ( GEMglUseProgramObjectARB );
 
 /////////////////////////////////////////////////////////
 //

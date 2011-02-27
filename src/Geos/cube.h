@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN cube : public GemShape
 {
-    CPPEXTERN_HEADER(cube, GemShape)
+    CPPEXTERN_HEADER(cube, GemShape);
 
     public:
 

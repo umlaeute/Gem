@@ -39,7 +39,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN tube : public GemShape
 {
-  CPPEXTERN_HEADER(tube, GemShape)
+  CPPEXTERN_HEADER(tube, GemShape);
 
     public:
 

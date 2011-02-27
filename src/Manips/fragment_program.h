@@ -35,7 +35,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN fragment_program : public vertex_program
 {
-  CPPEXTERN_HEADER(fragment_program, vertex_program)
+  CPPEXTERN_HEADER(fragment_program, vertex_program);
     
     public:
   

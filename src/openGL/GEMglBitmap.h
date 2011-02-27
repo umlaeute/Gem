@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglBitmap : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglBitmap, GemGLBase)
+	CPPEXTERN_HEADER(GEMglBitmap, GemGLBase);
 
 	public:
 	  // Constructor

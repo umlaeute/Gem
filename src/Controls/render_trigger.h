@@ -31,7 +31,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN render_trigger : public GemBase
 {
-    CPPEXTERN_HEADER(render_trigger, GemBase)
+    CPPEXTERN_HEADER(render_trigger, GemBase);
 
     public:
 

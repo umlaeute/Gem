@@ -35,7 +35,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN multimodel : public GemBase
 {
-  CPPEXTERN_HEADER(multimodel, GemBase)
+  CPPEXTERN_HEADER(multimodel, GemBase);
 
     public:
 

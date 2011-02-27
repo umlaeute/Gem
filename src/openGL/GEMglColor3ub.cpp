@@ -14,7 +14,7 @@
 
 #include "GEMglColor3ub.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ub , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ub , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

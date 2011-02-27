@@ -33,7 +33,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_hsv2rgb : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_hsv2rgb, GemPixObj)
+  CPPEXTERN_HEADER(pix_hsv2rgb, GemPixObj);
 
     public:
 

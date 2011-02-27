@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN rectangle : public GemShape
 {
-    CPPEXTERN_HEADER(rectangle, GemShape)
+    CPPEXTERN_HEADER(rectangle, GemShape);
 
     public:
 

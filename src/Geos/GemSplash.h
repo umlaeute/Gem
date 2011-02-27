@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemSplash : public GemBase
 {
-    CPPEXTERN_HEADER(GemSplash, GemBase)
+    CPPEXTERN_HEADER(GemSplash, GemBase);
 
     public:
 

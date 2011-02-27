@@ -14,7 +14,7 @@
 
 #include "GEMglEvalPoint1.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalPoint1 , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalPoint1 , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

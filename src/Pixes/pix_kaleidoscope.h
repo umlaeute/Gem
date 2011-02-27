@@ -51,7 +51,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_kaleidoscope, GemPixObj)
+    CPPEXTERN_HEADER(pix_kaleidoscope, GemPixObj);
 
     public:
 

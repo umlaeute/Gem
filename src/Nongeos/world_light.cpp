@@ -18,7 +18,7 @@
 
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

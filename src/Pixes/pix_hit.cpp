@@ -13,7 +13,7 @@
 #include "Base/GemPixConvert.h"
 
 
-CPPEXTERN_NEW(pix_hit)
+CPPEXTERN_NEW(pix_hit);
 
 /////////////////////////////////////////////////////////
 //

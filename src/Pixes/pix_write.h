@@ -44,7 +44,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_write : public GemBase
 {
-    CPPEXTERN_HEADER(pix_write, GemBase)
+    CPPEXTERN_HEADER(pix_write, GemBase);
 
     public:
 

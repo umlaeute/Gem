@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN text2d : public TextBase
 {
-    CPPEXTERN_HEADER(text2d, TextBase)
+    CPPEXTERN_HEADER(text2d, TextBase);
 
     public:
 

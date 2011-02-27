@@ -21,7 +21,7 @@
 
 #define T(x) (m_model->triangles[(x)])
 
-CPPEXTERN_NEW(vertex_model)
+CPPEXTERN_NEW(vertex_model);
 
 /////////////////////////////////////////////////////////
 //

@@ -17,7 +17,7 @@ LOG
 
 #include "pix_chroma_key.h"
 
-CPPEXTERN_NEW(pix_chroma_key)
+CPPEXTERN_NEW(pix_chroma_key);
 
 /////////////////////////////////////////////////////////
 //

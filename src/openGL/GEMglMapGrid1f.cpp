@@ -14,7 +14,7 @@
 
 #include "GEMglMapGrid1f.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

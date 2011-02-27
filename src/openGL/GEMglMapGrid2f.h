@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglMapGrid2f : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMapGrid2f, GemGLBase)
+	CPPEXTERN_HEADER(GEMglMapGrid2f, GemGLBase);
 
 	public:
 	  // Constructor

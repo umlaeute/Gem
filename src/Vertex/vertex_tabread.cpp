@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_GIMME(vertex_tabread)
+CPPEXTERN_NEW_WITH_GIMME(vertex_tabread);
 
 /////////////////////////////////////////////////////////
 //

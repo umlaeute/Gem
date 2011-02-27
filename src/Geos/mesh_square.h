@@ -35,7 +35,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN mesh_square : public GemShape
 {
-    CPPEXTERN_HEADER(mesh_square, GemShape)
+    CPPEXTERN_HEADER(mesh_square, GemShape);
 
     public:
 

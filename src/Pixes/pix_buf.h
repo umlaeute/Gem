@@ -37,7 +37,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buf : public GemBase
 {
-    CPPEXTERN_HEADER(pix_buf, GemBase)
+    CPPEXTERN_HEADER(pix_buf, GemBase);
 
     public:
 

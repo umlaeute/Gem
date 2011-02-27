@@ -14,7 +14,7 @@
 
 #include "pix_colorreduce.h"
 
-CPPEXTERN_NEW(pix_colorreduce)
+CPPEXTERN_NEW(pix_colorreduce);
 
 /////////////////////////////////////////////////////////
 //

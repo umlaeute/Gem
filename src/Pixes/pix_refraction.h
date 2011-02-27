@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_refraction : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_refraction, GemPixObj)
+    CPPEXTERN_HEADER(pix_refraction, GemPixObj);
 
     public:
 

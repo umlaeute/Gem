@@ -28,7 +28,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_deinterlace : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_deinterlace, GemPixObj)
+    CPPEXTERN_HEADER(pix_deinterlace, GemPixObj);
 
     public:
 

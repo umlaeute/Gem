@@ -29,7 +29,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_posterize : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_posterize, GemPixObj)
+CPPEXTERN_HEADER(pix_posterize, GemPixObj);
 
     public:
 

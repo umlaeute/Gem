@@ -14,7 +14,7 @@
 
 #include "GEMglGenTextures.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglGenTextures)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglGenTextures);
 
 /////////////////////////////////////////////////////////
 //

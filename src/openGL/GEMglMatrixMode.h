@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglMatrixMode : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMatrixMode, GemGLBase)
+	CPPEXTERN_HEADER(GEMglMatrixMode, GemGLBase);
 
 	public:
 	  // Constructor

@@ -43,7 +43,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN polygon : public GemShape
 {
-    CPPEXTERN_HEADER(polygon, GemShape)
+    CPPEXTERN_HEADER(polygon, GemShape);
 
     public:
 

@@ -59,7 +59,7 @@ using std::wstring;
   -----------------------------------------------------------------*/
 class GEM_EXTERN TextBase : public GemBase
 {
-  CPPEXTERN_HEADER(TextBase, GemBase)
+  CPPEXTERN_HEADER(TextBase, GemBase);
 
     public:
 

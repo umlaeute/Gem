@@ -14,7 +14,7 @@
 
 #include "camera.h"
 
-CPPEXTERN_NEW_WITH_GIMME(camera)
+CPPEXTERN_NEW_WITH_GIMME(camera);
 
 /////////////////////////////////////////////////////////
 //

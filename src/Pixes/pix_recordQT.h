@@ -62,7 +62,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_recordQT : public GemBase
 {
-    CPPEXTERN_HEADER(pix_recordQT, GemBase)
+    CPPEXTERN_HEADER(pix_recordQT, GemBase);
 
     public:
 

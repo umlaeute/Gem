@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN emission : public GemBase
 {
-    CPPEXTERN_HEADER(emission, GemBase)
+    CPPEXTERN_HEADER(emission, GemBase);
 
     public:
 

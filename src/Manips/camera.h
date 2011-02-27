@@ -41,8 +41,8 @@ DESCRIPTION
 class GEM_EXTERN camera : public GemBase
 //class GEM_EXTERN camera : public CPPExtern
 {
-    CPPEXTERN_HEADER(camera, GemBase)
-    //CPPEXTERN_HEADER(camera, CPPExtern)
+    CPPEXTERN_HEADER(camera, GemBase);
+    //CPPEXTERN_HEADER(camera, CPPExtern);
 
     public:
 

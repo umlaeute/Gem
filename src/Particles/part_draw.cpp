@@ -19,7 +19,7 @@
 
 #include "papi.h"
 
-CPPEXTERN_NEW(part_draw)
+CPPEXTERN_NEW(part_draw);
 
 /////////////////////////////////////////////////////////
 //

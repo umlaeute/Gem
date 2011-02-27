@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_gravity : public partlib_base
 {
-    CPPEXTERN_HEADER(part_gravity, partlib_base)
+    CPPEXTERN_HEADER(part_gravity, partlib_base);
 
     public:
 

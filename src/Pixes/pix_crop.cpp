@@ -14,7 +14,7 @@
 
 #include "pix_crop.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
 
   /////////////////////////////////////////////////////////
 //

@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN trapezoid : public GemShape
 {
-    CPPEXTERN_HEADER(trapezoid, GemShape)
+    CPPEXTERN_HEADER(trapezoid, GemShape);
 
     public:
 

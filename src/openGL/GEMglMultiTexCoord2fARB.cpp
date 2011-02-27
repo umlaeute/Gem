@@ -12,7 +12,7 @@
 
 #include "GEMglMultiTexCoord2fARB.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMultiTexCoord2fARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMultiTexCoord2fARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

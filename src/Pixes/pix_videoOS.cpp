@@ -46,7 +46,7 @@
 #include "pix_videoOS.h"
 #include "Base/GemCache.h"
 
-CPPEXTERN_NEW(pix_videoOS)
+CPPEXTERN_NEW(pix_videoOS);
 
 #define BYTESIN 3
 

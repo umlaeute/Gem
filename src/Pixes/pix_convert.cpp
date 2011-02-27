@@ -19,7 +19,7 @@
 
 #include "pix_convert.h"
 
-CPPEXTERN_NEW(pix_convert)
+CPPEXTERN_NEW(pix_convert);
 
 /////////////////////////////////////////////////////////
 //

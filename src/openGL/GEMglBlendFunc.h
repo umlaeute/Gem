@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglBlendFunc : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglBlendFunc, GemGLBase)
+	CPPEXTERN_HEADER(GEMglBlendFunc, GemGLBase);
 
 	public:
 	  // Constructor

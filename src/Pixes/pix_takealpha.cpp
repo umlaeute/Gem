@@ -17,7 +17,7 @@
 
 #include "pix_takealpha.h"
 
-CPPEXTERN_NEW(pix_takealpha)
+CPPEXTERN_NEW(pix_takealpha);
 
 /////////////////////////////////////////////////////////
 //

@@ -19,7 +19,7 @@
 
 #include "pix_grey.h"
 
-CPPEXTERN_NEW(pix_grey)
+CPPEXTERN_NEW(pix_grey);
 
 /////////////////////////////////////////////////////////
 //

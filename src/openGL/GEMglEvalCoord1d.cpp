@@ -14,7 +14,7 @@
 
 #include "GEMglEvalCoord1d.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1d , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1d , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

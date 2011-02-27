@@ -17,7 +17,7 @@
 #include "ortho.h"
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW(ortho)
+CPPEXTERN_NEW(ortho);
 
 /////////////////////////////////////////////////////////
 //

@@ -38,7 +38,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_flip : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_flip, GemPixObj)
+    CPPEXTERN_HEADER(pix_flip, GemPixObj);
 
     public:
 

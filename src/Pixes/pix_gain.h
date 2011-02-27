@@ -39,7 +39,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_gain : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_gain, GemPixObj)
+    CPPEXTERN_HEADER(pix_gain, GemPixObj);
 
     public:
 

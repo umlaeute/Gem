@@ -25,7 +25,7 @@
 
 class GEM_EXTERN GEMglMultMatrixd : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMultMatrixd, GemGLBase)
+	CPPEXTERN_HEADER(GEMglMultMatrixd, GemGLBase);
 
 	public:
 	  // Constructor

@@ -34,7 +34,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_chroma_key : public GemPixDualObj
 {
-CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj)
+CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj);
 
     public:
 

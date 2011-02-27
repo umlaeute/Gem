@@ -35,7 +35,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN rotate : public GemBase
 {
-    CPPEXTERN_HEADER(rotate, GemBase)
+    CPPEXTERN_HEADER(rotate, GemBase);
 
     public:
 

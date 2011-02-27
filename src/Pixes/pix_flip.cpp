@@ -17,7 +17,7 @@
 
 #include "pix_flip.h"
 
-CPPEXTERN_NEW(pix_flip)
+CPPEXTERN_NEW(pix_flip);
 
 /////////////////////////////////////////////////////////
 //

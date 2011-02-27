@@ -16,7 +16,7 @@
 
 #include "polygon_smooth.h"
 
-CPPEXTERN_NEW(polygon_smooth)
+CPPEXTERN_NEW(polygon_smooth);
 
 /////////////////////////////////////////////////////////
 //

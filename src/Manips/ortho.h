@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN ortho : public GemBase
 {
-    CPPEXTERN_HEADER(ortho, GemBase)
+    CPPEXTERN_HEADER(ortho, GemBase);
 
     public:
 

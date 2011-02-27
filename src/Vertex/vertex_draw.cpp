@@ -45,7 +45,7 @@
 #endif
 
 
-CPPEXTERN_NEW(vertex_draw)
+CPPEXTERN_NEW(vertex_draw);
 
 /////////////////////////////////////////////////////////
 //

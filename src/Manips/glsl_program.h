@@ -52,7 +52,7 @@ namespace gem { namespace utils { namespace glsl {
   -----------------------------------------------------------------*/
 class GEM_EXTERN glsl_program : public GemBase
 {
-  CPPEXTERN_HEADER(glsl_program, GemBase)
+  CPPEXTERN_HEADER(glsl_program, GemBase);
     
     public:
   

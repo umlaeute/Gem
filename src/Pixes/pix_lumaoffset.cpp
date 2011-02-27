@@ -14,7 +14,7 @@
 
 #include "pix_lumaoffset.h"
 	
-CPPEXTERN_NEW(pix_lumaoffset)
+CPPEXTERN_NEW(pix_lumaoffset);
 
 /////////////////////////////////////////////////////////
 //

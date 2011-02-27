@@ -12,7 +12,7 @@
 
 #include "GEMglProgramStringARB.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramStringARB )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramStringARB );
 
 /////////////////////////////////////////////////////////
 //

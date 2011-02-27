@@ -15,7 +15,7 @@
 
 #include "pix_test.h"
 
-CPPEXTERN_NEW(pix_test)
+CPPEXTERN_NEW(pix_test);
 
   /////////////////////////////////////////////////////////
 //

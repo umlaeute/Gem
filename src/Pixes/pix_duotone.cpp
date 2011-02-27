@@ -17,7 +17,7 @@
 
 #include "pix_duotone.h"
 
-CPPEXTERN_NEW(pix_duotone)
+CPPEXTERN_NEW(pix_duotone);
 
 /////////////////////////////////////////////////////////
 //

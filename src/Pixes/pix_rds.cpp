@@ -18,7 +18,7 @@
 #include "pix_rds.h"
 #include <stdlib.h>
 
-CPPEXTERN_NEW(pix_rds)
+CPPEXTERN_NEW(pix_rds);
 
 #define inline_fastrand() (fastrand_val=fastrand_val*1103515245+12345)
 

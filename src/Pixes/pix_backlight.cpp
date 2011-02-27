@@ -14,7 +14,7 @@
 
 #include "pix_backlight.h"
 
-CPPEXTERN_NEW(pix_backlight)
+CPPEXTERN_NEW(pix_backlight);
 
 /////////////////////////////////////////////////////////
 //

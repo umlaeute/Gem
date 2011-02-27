@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPolygonMode : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPolygonMode, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPolygonMode, GemGLBase);
 
 	public:
 	  // Constructor

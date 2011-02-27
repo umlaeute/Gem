@@ -44,7 +44,7 @@ typedef struct _scratch
 
 class GEM_EXTERN pix_aging : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_aging, GemPixObj)
+    CPPEXTERN_HEADER(pix_aging, GemPixObj);
 
     public:
 

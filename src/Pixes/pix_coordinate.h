@@ -37,7 +37,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_coordinate : public GemBase
 {
-    CPPEXTERN_HEADER(pix_coordinate, GemBase)
+    CPPEXTERN_HEADER(pix_coordinate, GemBase);
 
     public:
 

@@ -54,7 +54,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN rubber : public GemShape
 {
-  CPPEXTERN_HEADER(rubber, GemShape)
+  CPPEXTERN_HEADER(rubber, GemShape);
 
     public:
 

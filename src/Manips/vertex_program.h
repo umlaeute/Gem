@@ -40,7 +40,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_program : public GemBase
 {
-  CPPEXTERN_HEADER(vertex_program, GemBase)
+  CPPEXTERN_HEADER(vertex_program, GemBase);
     
     public:
   

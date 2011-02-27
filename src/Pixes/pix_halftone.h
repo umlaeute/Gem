@@ -44,7 +44,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_halftone : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_halftone, GemPixObj)
+    CPPEXTERN_HEADER(pix_halftone, GemPixObj);
 
     public:
 

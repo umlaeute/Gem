@@ -32,7 +32,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemframebuffer : public GemBase
 {
-  CPPEXTERN_HEADER(gemframebuffer, GemBase)
+  CPPEXTERN_HEADER(gemframebuffer, GemBase);
 
     public:
 

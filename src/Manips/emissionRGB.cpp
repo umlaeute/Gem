@@ -19,7 +19,7 @@
 #include "emissionRGB.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(emissionRGB)
+CPPEXTERN_NEW_WITH_GIMME(emissionRGB);
 
 /////////////////////////////////////////////////////////
 //

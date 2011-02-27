@@ -19,7 +19,7 @@
 #include "fragment_program.h"
 #include "string.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

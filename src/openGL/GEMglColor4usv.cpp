@@ -14,7 +14,7 @@
 
 #include "GEMglColor4usv.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4usv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4usv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

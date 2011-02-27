@@ -14,7 +14,7 @@
 
 class GEM_EXTERN pix_share_write : public GemBase
 {
-  CPPEXTERN_HEADER(pix_share_write, GemBase)
+  CPPEXTERN_HEADER(pix_share_write, GemBase);
 
     public:
   pix_share_write(int, t_atom*);

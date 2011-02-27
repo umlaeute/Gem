@@ -38,7 +38,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN glsl_geometry : public GemBase
 {
-  CPPEXTERN_HEADER(glsl_geometry, GemBase)
+  CPPEXTERN_HEADER(glsl_geometry, GemBase);
     
     public:
   

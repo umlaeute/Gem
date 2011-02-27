@@ -33,7 +33,7 @@
 # define debug
 #endif
 
-CPPEXTERN_NEW(pix_cubemap)
+CPPEXTERN_NEW(pix_cubemap);
 
 /////////////////////////////////////////////////////////
 //

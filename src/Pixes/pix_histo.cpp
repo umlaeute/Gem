@@ -33,7 +33,7 @@
 #include "RTE/Array.h"
 #include "Base/GemPixConvert.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_histo)
+CPPEXTERN_NEW_WITH_GIMME(pix_histo);
 
 
   /////////////////////////////////////////////////////////

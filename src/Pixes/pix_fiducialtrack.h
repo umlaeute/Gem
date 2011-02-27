@@ -45,7 +45,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_fiducialtrack : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_fiducialtrack, GemPixObj)
+    CPPEXTERN_HEADER(pix_fiducialtrack, GemPixObj);
 
     public:
 

@@ -29,7 +29,7 @@
 
 #include "Base/GemGLUtil.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

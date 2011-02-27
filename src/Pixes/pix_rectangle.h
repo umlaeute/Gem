@@ -48,7 +48,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_rectangle : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_rectangle, GemPixObj)
+    CPPEXTERN_HEADER(pix_rectangle, GemPixObj);
 
     public:
 

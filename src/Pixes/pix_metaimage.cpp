@@ -14,7 +14,7 @@
 
 #include "pix_metaimage.h"
 	
-CPPEXTERN_NEW(pix_metaimage)
+CPPEXTERN_NEW(pix_metaimage);
 
 /////////////////////////////////////////////////////////
 //

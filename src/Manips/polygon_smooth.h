@@ -31,7 +31,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN polygon_smooth : public GemBase
 {
-    CPPEXTERN_HEADER(polygon_smooth, GemBase)
+    CPPEXTERN_HEADER(polygon_smooth, GemBase);
 
     public:
 

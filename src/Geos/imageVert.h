@@ -34,7 +34,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN imageVert : public GemPixObj
 {
-    CPPEXTERN_HEADER(imageVert, GemPixObj)
+    CPPEXTERN_HEADER(imageVert, GemPixObj);
 
     public:
 

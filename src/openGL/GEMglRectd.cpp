@@ -14,7 +14,7 @@
 
 #include "GEMglRectd.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRectd , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRectd , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

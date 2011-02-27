@@ -29,7 +29,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemPathBase : public CPPExtern
 {
-    CPPEXTERN_HEADER(GemPathBase, CPPExtern)
+    CPPEXTERN_HEADER(GemPathBase, CPPExtern);
 
     public:
 

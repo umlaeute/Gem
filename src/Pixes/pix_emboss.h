@@ -32,7 +32,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_emboss : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_emboss, GemPixObj)
+  CPPEXTERN_HEADER(pix_emboss, GemPixObj);
 
     public:
 

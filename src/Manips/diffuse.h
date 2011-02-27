@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN diffuse : public GemBase
 {
-    CPPEXTERN_HEADER(diffuse, GemBase)
+    CPPEXTERN_HEADER(diffuse, GemBase);
 
     public:
 

@@ -29,7 +29,7 @@
 //
 /////////////////////////////////////////////////////////
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 // Constructor

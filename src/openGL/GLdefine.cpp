@@ -14,7 +14,7 @@
 
 #include "GLdefine.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GLdefine )
+CPPEXTERN_NEW_WITH_GIMME ( GLdefine );
 
 /////////////////////////////////////////////////////////
 //

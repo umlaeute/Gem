@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN shininess : public GemBase
 {
-    CPPEXTERN_HEADER(shininess, GemBase)
+    CPPEXTERN_HEADER(shininess, GemBase);
 
     public:
 

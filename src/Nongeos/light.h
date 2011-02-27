@@ -33,7 +33,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN light : public world_light
 {
-  CPPEXTERN_HEADER(light, world_light)
+  CPPEXTERN_HEADER(light, world_light);
 
     public:
 

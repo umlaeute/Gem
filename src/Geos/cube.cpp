@@ -17,7 +17,7 @@
 #include "cube.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(cube, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(cube, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

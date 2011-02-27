@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglRotatef : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglRotatef, GemGLBase)
+	CPPEXTERN_HEADER(GEMglRotatef, GemGLBase);
 
 	public:
 	  // Constructor

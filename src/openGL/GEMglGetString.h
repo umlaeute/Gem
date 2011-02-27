@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglGetString : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglGetString, GemGLBase)
+  CPPEXTERN_HEADER(GEMglGetString, GemGLBase);
 
     public:
   // Constructor

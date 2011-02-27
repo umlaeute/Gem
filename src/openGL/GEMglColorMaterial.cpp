@@ -15,7 +15,7 @@
 #include "GEMglColorMaterial.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglColorMaterial )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglColorMaterial );
 
 /////////////////////////////////////////////////////////
 //

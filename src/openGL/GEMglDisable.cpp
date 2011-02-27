@@ -15,7 +15,7 @@
 #include "GEMglDisable.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglDisable )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglDisable );
 
 /////////////////////////////////////////////////////////
 //

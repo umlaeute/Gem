@@ -25,7 +25,7 @@
 
 class GEM_EXTERN gemlist_matrix : public GemBase
 {
-  CPPEXTERN_HEADER(gemlist_matrix, GemBase)
+  CPPEXTERN_HEADER(gemlist_matrix, GemBase);
 
     public:
   // Constructor

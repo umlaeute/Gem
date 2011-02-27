@@ -20,7 +20,7 @@
 #include "Base/GemState.h"
 
 
-CPPEXTERN_NEW(pix_clearblock)
+CPPEXTERN_NEW(pix_clearblock);
 
 /////////////////////////////////////////////////////////
 //

@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_combine : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_combine, GemBase)
+    CPPEXTERN_HEADER(vertex_combine, GemBase);
 
     public:
 

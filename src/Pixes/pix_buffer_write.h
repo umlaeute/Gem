@@ -32,7 +32,7 @@ LOG
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer_write : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_buffer_write, GemPixObj)
+  CPPEXTERN_HEADER(pix_buffer_write, GemPixObj);
 
     public:
 

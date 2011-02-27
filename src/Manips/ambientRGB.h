@@ -35,7 +35,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN ambientRGB : public GemBase
 {
-    CPPEXTERN_HEADER(ambientRGB, GemBase)
+    CPPEXTERN_HEADER(ambientRGB, GemBase);
 
     public:
 

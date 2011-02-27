@@ -29,7 +29,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN spline_path : public GemPathBase
 {
-    CPPEXTERN_HEADER(spline_path, GemPathBase)
+    CPPEXTERN_HEADER(spline_path, GemPathBase);
 
     public:
 

@@ -12,7 +12,7 @@
 
 #include "GEMglMultMatrixd.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultMatrixd , t_floatarg, A_DEFFLOAT )
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultMatrixd , t_floatarg, A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //

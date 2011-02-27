@@ -41,7 +41,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_frei0r : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_frei0r, GemPixObj)
+    CPPEXTERN_HEADER(pix_frei0r, GemPixObj);
 
     public:
 

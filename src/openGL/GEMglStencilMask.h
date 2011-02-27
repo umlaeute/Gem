@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglStencilMask : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglStencilMask, GemGLBase)
+	CPPEXTERN_HEADER(GEMglStencilMask, GemGLBase);
 
 	public:
 	  // Constructor

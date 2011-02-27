@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglColorMaterial : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglColorMaterial, GemGLBase)
+	CPPEXTERN_HEADER(GEMglColorMaterial, GemGLBase);
 
 	public:
 	  // Constructor

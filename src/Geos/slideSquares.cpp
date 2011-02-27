@@ -41,7 +41,7 @@ static inline float ourRand( float Max )
    return( (Max * rand()) / RAND_MAX );
 }
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(slideSquares, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(slideSquares, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

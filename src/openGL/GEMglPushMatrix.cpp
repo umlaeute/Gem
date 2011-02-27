@@ -14,7 +14,7 @@
 
 #include "GEMglPushMatrix.h"
 
-CPPEXTERN_NEW ( GEMglPushMatrix )
+CPPEXTERN_NEW ( GEMglPushMatrix );
 
 /////////////////////////////////////////////////////////
 //

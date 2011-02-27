@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPointSize : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPointSize, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPointSize, GemGLBase);
 
 	public:
 	  // Constructor

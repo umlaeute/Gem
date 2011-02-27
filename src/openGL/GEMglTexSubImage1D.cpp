@@ -16,7 +16,7 @@
 #include "Base/GemPixUtil.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexSubImage1D, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT )
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexSubImage1D, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //

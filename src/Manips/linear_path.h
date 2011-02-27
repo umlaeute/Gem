@@ -29,7 +29,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN linear_path : public GemPathBase
 {
-    CPPEXTERN_HEADER(linear_path, GemPathBase)
+    CPPEXTERN_HEADER(linear_path, GemPathBase);
 
     public:
 

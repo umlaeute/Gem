@@ -68,7 +68,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemwin : public CPPExtern
 {
-  CPPEXTERN_HEADER(gemwin, CPPExtern)
+  CPPEXTERN_HEADER(gemwin, CPPExtern);
     
     public:
     

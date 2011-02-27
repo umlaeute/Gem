@@ -14,7 +14,7 @@
 
 #include "GEMglMap1f.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglMap1f )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglMap1f );
 
 /////////////////////////////////////////////////////////
 //

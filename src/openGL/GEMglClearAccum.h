@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglClearAccum : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglClearAccum, GemGLBase)
+	CPPEXTERN_HEADER(GEMglClearAccum, GemGLBase);
 
 	public:
 	  // Constructor

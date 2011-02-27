@@ -37,7 +37,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_vpaint : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_vpaint, GemPixObj)
+    CPPEXTERN_HEADER(pix_vpaint, GemPixObj);
 
     public:
 

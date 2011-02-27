@@ -40,7 +40,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_videoDarwin : public pix_videoOS
 {
-    CPPEXTERN_HEADER(pix_videoDarwin, GemBase)
+    CPPEXTERN_HEADER(pix_videoDarwin, GemBase);
 
     public:
 

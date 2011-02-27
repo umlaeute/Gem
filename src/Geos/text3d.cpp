@@ -21,7 +21,7 @@
 # include "FTGLPolygonFont.h"
 #endif
 
-CPPEXTERN_NEW_WITH_GIMME(text3d)
+CPPEXTERN_NEW_WITH_GIMME(text3d);
 
 /////////////////////////////////////////////////////////
 //

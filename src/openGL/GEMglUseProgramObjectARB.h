@@ -24,7 +24,7 @@
 
 class GEM_EXTERN GEMglUseProgramObjectARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglUseProgramObjectARB, GemGLBase)
+	CPPEXTERN_HEADER(GEMglUseProgramObjectARB, GemGLBase);
 
 	public:
 	  // Constructor

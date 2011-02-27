@@ -13,7 +13,7 @@
 
 #include "GEMglUniform1fARB.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

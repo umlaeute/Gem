@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglTexCoord2fv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTexCoord2fv, GemGLBase)
+	CPPEXTERN_HEADER(GEMglTexCoord2fv, GemGLBase);
 
 	public:
 	  // Constructor

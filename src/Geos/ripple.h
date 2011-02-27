@@ -69,7 +69,7 @@ typedef struct {
   -----------------------------------------------------------------*/
 class GEM_EXTERN ripple : public GemShape
 {
-  CPPEXTERN_HEADER(ripple, GemShape)
+  CPPEXTERN_HEADER(ripple, GemShape);
 
     public:
 

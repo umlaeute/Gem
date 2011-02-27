@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglAreTexturesResident : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglAreTexturesResident, GemGLBase)
+	CPPEXTERN_HEADER(GEMglAreTexturesResident, GemGLBase);
 
 	public:
 	  // Constructor

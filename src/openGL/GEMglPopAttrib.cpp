@@ -14,7 +14,7 @@
 
 #include "GEMglPopAttrib.h"
 
-CPPEXTERN_NEW ( GEMglPopAttrib )
+CPPEXTERN_NEW ( GEMglPopAttrib );
 
 /////////////////////////////////////////////////////////
 //

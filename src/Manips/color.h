@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN color : public GemBase
 {
-    CPPEXTERN_HEADER(color, GemBase)
+    CPPEXTERN_HEADER(color, GemBase);
 
     public:
 

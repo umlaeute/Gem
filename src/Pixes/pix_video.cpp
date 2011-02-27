@@ -22,7 +22,7 @@
 #include "Base/GemState.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW(pix_video)
+CPPEXTERN_NEW(pix_video);
 
 /////////////////////////////////////////////////////////
 //

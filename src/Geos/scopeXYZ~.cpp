@@ -24,7 +24,7 @@
 
 #define MARK startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__); post
 
-CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

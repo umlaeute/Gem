@@ -18,7 +18,7 @@
 
 #include "Base/GemFuncUtil.h"
 
-CPPEXTERN_NEW_WITH_GIMME(linear_path)
+CPPEXTERN_NEW_WITH_GIMME(linear_path);
 
 /////////////////////////////////////////////////////////
 //

@@ -15,7 +15,7 @@
 #include "GEMglBegin.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglBegin )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglBegin );
 
 /////////////////////////////////////////////////////////
 //

@@ -17,7 +17,7 @@
 
 #include "pix_normalize.h"
 
-CPPEXTERN_NEW(pix_normalize)
+CPPEXTERN_NEW(pix_normalize);
 
 /////////////////////////////////////////////////////////
 //

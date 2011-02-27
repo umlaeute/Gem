@@ -39,7 +39,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_offset : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_offset, GemPixObj)
+    CPPEXTERN_HEADER(pix_offset, GemPixObj);
 
     public:
 

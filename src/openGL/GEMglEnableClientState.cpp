@@ -15,7 +15,7 @@
 #include "GEMglEnableClientState.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglEnableClientState )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglEnableClientState );
 
 /////////////////////////////////////////////////////////
 //

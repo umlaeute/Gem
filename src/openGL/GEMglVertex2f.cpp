@@ -14,7 +14,7 @@
 
 #include "GEMglVertex2f.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

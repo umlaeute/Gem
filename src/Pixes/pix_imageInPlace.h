@@ -34,7 +34,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_imageInPlace : public pix_multiimage
 {
-    CPPEXTERN_HEADER(pix_imageInPlace, pix_multiimage)
+    CPPEXTERN_HEADER(pix_imageInPlace, pix_multiimage);
 
     public:
 

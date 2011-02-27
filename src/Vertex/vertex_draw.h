@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_draw : public GemVertex
 {
-    CPPEXTERN_HEADER(vertex_draw, GemVertex)
+    CPPEXTERN_HEADER(vertex_draw, GemVertex);
 
     public:
 

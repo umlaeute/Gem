@@ -31,7 +31,7 @@
 
 class GEM_EXTERN pix_background : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_background, GemPixObj)
+  CPPEXTERN_HEADER(pix_background, GemPixObj);
 
     public:
 

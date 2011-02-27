@@ -32,7 +32,7 @@
 
 #include "Base/GemPixConvert.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT);
 
   /////////////////////////////////////////////////////////
 //

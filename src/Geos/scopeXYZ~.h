@@ -36,7 +36,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN scopeXYZ : public GemShape
 {
-  CPPEXTERN_HEADER(scopeXYZ, GemShape)
+  CPPEXTERN_HEADER(scopeXYZ, GemShape);
 
     public:
 

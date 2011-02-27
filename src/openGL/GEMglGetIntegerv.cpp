@@ -15,7 +15,7 @@
 #include "GEMglGetIntegerv.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglGetIntegerv )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglGetIntegerv );
 
 /////////////////////////////////////////////////////////
 //

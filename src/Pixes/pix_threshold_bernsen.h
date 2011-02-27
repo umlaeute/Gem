@@ -39,7 +39,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_threshold_bernsen, GemPixObj)
+    CPPEXTERN_HEADER(pix_threshold_bernsen, GemPixObj);
 
     public:
 

@@ -23,7 +23,7 @@
 
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieOS, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieOS, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

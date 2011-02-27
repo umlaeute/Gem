@@ -36,7 +36,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN ambient : public GemBase
 {
-    CPPEXTERN_HEADER(ambient, GemBase)
+    CPPEXTERN_HEADER(ambient, GemBase);
 
     public:
 

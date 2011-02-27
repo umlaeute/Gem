@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_killslow : public partlib_base
 {
-    CPPEXTERN_HEADER(part_killslow, partlib_base)
+    CPPEXTERN_HEADER(part_killslow, partlib_base);
 
     public:
 

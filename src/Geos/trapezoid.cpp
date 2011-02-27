@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(trapezoid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(trapezoid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

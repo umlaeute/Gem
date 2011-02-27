@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_GIMME(vertex_scale)
+CPPEXTERN_NEW_WITH_GIMME(vertex_scale);
 
 /////////////////////////////////////////////////////////
 //

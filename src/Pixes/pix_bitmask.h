@@ -38,7 +38,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_bitmask : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_bitmask, GemPixObj)
+    CPPEXTERN_HEADER(pix_bitmask, GemPixObj);
 
     public:
 

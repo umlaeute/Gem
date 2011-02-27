@@ -16,7 +16,7 @@
 #include "Base/GemPixUtil.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglTexSubImage2D )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglTexSubImage2D );
 
 /////////////////////////////////////////////////////////
 //

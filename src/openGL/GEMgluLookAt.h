@@ -26,7 +26,7 @@
 
 class GEM_EXTERN GEMgluLookAt : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMgluLookAt, GemGLBase)
+	CPPEXTERN_HEADER(GEMgluLookAt, GemGLBase);
 
 	public:
 	  // Constructor

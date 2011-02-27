@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_mul : public vertex_add
 {
-    CPPEXTERN_HEADER(vertex_mul, vertex_add)
+    CPPEXTERN_HEADER(vertex_mul, vertex_add);
 
     public:
 

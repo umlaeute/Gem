@@ -42,7 +42,7 @@ typedef struct _gemreceive_proxy t_gemreceive_proxy;
 
 class GEM_EXTERN gemreceive : public CPPExtern
 {
-  CPPEXTERN_HEADER(gemreceive, CPPExtern)
+  CPPEXTERN_HEADER(gemreceive, CPPExtern);
 
     public:
 

@@ -17,7 +17,7 @@
 #include "diffuseRGB.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(diffuseRGB)
+CPPEXTERN_NEW_WITH_GIMME(diffuseRGB);
 
 /////////////////////////////////////////////////////////
 //

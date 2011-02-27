@@ -14,7 +14,7 @@
 
 #include "GEMglCopyTexImage2D.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyTexImage2D )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyTexImage2D );
 
 /////////////////////////////////////////////////////////
 //

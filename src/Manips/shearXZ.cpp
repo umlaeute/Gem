@@ -16,7 +16,7 @@
 
 #include "shearXZ.h"
 
-CPPEXTERN_NEW_WITH_GIMME(shearXZ)
+CPPEXTERN_NEW_WITH_GIMME(shearXZ);
 
 /////////////////////////////////////////////////////////
 //

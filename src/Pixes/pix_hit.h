@@ -53,7 +53,7 @@ typedef struct _hitarea
 
 class GEM_EXTERN pix_hit : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_hit, GemPixObj)
+  CPPEXTERN_HEADER(pix_hit, GemPixObj);
 
     public:
 

@@ -33,7 +33,7 @@ LOG
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_delay : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_delay, GemPixObj)
+  CPPEXTERN_HEADER(pix_delay, GemPixObj);
 
     public:
 

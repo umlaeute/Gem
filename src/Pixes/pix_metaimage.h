@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_metaimage : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_metaimage, GemPixObj)
+    CPPEXTERN_HEADER(pix_metaimage, GemPixObj);
 
     public:
 

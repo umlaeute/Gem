@@ -14,7 +14,7 @@
 
 #include "GEMglGenLists.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGenLists , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGenLists , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

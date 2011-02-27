@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglFogf : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFogf, GemGLBase)
+	CPPEXTERN_HEADER(GEMglFogf, GemGLBase);
 
 	public:
 	  // Constructor

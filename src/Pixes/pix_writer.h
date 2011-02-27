@@ -42,7 +42,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_writer : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_writer, GemBase)
+    CPPEXTERN_HEADER(pix_writer, GemBase);
 
     public:
 

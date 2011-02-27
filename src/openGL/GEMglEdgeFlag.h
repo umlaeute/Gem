@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglEdgeFlag : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEdgeFlag, GemGLBase)
+	CPPEXTERN_HEADER(GEMglEdgeFlag, GemGLBase);
 
 	public:
 	  // Constructor

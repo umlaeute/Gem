@@ -16,7 +16,7 @@
 
 #include "papi.h"
 
-CPPEXTERN_NEW(part_color)
+CPPEXTERN_NEW(part_color);
 
 /////////////////////////////////////////////////////////
 //

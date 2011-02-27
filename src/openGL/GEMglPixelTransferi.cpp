@@ -14,7 +14,7 @@
 
 #include "GEMglPixelTransferi.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferi , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferi , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

@@ -11,7 +11,7 @@
 
 #include <string.h>
 
-CPPEXTERN_NEW(pix_roll)
+CPPEXTERN_NEW(pix_roll);
 
 /////////////////////////////////////////////////////////
 //

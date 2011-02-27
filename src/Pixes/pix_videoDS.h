@@ -38,7 +38,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class pix_videoDS : public pix_videoOS
 {
-  CPPEXTERN_HEADER(pix_videoDS, pix_videoOS)
+  CPPEXTERN_HEADER(pix_videoDS, pix_videoOS);
 
     public:
 

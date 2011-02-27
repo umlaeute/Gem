@@ -33,7 +33,7 @@ class GemCache;
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_clearblock : public GemBase
 {
-  CPPEXTERN_HEADER(pix_clearblock, GemBase)
+  CPPEXTERN_HEADER(pix_clearblock, GemBase);
 
     public:
 

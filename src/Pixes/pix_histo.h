@@ -41,7 +41,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_histo : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_histo, GemPixObj)
+  CPPEXTERN_HEADER(pix_histo, GemPixObj);
 		
     public:
 	

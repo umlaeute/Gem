@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglDepthRange : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDepthRange, GemGLBase)
+	CPPEXTERN_HEADER(GEMglDepthRange, GemGLBase);
 
 	public:
 	  // Constructor

@@ -17,7 +17,7 @@
 
 #include "pix_invert.h"
 
-CPPEXTERN_NEW(pix_invert)
+CPPEXTERN_NEW(pix_invert);
 
 /////////////////////////////////////////////////////////
 //

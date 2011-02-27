@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglClipPlane : public GemGLBase
 {
-  CPPEXTERN_HEADER(GEMglClipPlane, GemGLBase)
+  CPPEXTERN_HEADER(GEMglClipPlane, GemGLBase);
 
     public:
   // Constructor

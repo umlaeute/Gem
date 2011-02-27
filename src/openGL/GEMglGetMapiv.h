@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglGetMapiv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetMapiv, GemGLBase)
+	CPPEXTERN_HEADER(GEMglGetMapiv, GemGLBase);
 
 	public:
 	  // Constructor

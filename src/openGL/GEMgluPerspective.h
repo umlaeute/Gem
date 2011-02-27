@@ -26,7 +26,7 @@
 
 class GEM_EXTERN GEMgluPerspective : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMgluPerspective, GemGLBase)
+	CPPEXTERN_HEADER(GEMgluPerspective, GemGLBase);
 
 	public:
 	  // Constructor

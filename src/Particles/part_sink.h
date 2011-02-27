@@ -31,7 +31,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_sink : public partlib_base
 {
-  CPPEXTERN_HEADER(part_sink, partlib_base)
+  CPPEXTERN_HEADER(part_sink, partlib_base);
 
     public:
 

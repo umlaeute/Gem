@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPrioritizeTextures : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPrioritizeTextures, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPrioritizeTextures, GemGLBase);
 
 	public:
 	  // Constructor

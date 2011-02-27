@@ -14,7 +14,7 @@
 
 #include "GEMglAreTexturesResident.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglAreTexturesResident )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglAreTexturesResident );
 
 /////////////////////////////////////////////////////////
 //

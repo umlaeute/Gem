@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglEnableClientState : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEnableClientState, GemGLBase)
+	CPPEXTERN_HEADER(GEMglEnableClientState, GemGLBase);
 
 	public:
 	  // Constructor

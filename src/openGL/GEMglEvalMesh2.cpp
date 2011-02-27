@@ -14,7 +14,7 @@
 
 #include "GEMglEvalMesh2.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglEvalMesh2 )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglEvalMesh2 );
 
 /////////////////////////////////////////////////////////
 //

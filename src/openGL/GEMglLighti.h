@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglLighti : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLighti, GemGLBase)
+	CPPEXTERN_HEADER(GEMglLighti, GemGLBase);
 
 	public:
 	  // Constructor

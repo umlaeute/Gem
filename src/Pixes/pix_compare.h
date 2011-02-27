@@ -37,7 +37,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_compare : public GemPixDualObj
 {
-CPPEXTERN_HEADER(pix_compare, GemPixDualObj)
+CPPEXTERN_HEADER(pix_compare, GemPixDualObj);
 
     public:
 

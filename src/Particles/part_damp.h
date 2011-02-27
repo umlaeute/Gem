@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_damp : public partlib_base
 {
-    CPPEXTERN_HEADER(part_damp, partlib_base)
+    CPPEXTERN_HEADER(part_damp, partlib_base);
 
     public:
 

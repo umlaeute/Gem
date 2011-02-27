@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglLineStipple : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLineStipple, GemGLBase)
+	CPPEXTERN_HEADER(GEMglLineStipple, GemGLBase);
 
 	public:
 	  // Constructor

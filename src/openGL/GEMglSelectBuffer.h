@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglSelectBuffer : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglSelectBuffer, GemGLBase)
+	CPPEXTERN_HEADER(GEMglSelectBuffer, GemGLBase);
 
 	public:
 	  // Constructor

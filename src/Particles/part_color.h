@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_color : public partlib_base
 {
-    CPPEXTERN_HEADER(part_color, partlib_base)
+    CPPEXTERN_HEADER(part_color, partlib_base);
 
     public:
 

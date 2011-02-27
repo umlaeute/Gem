@@ -16,7 +16,7 @@
 #include "Base/GemState.h"
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(curve, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(curve, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

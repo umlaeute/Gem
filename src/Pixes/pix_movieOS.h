@@ -44,15 +44,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifdef _WIN32
 class GEM_EXTERN pix_movieOS : public pix_filmNT
 {
-  CPPEXTERN_HEADER(pix_movieOS, pix_filmNT)
+  CPPEXTERN_HEADER(pix_movieOS, pix_filmNT);
 #elif __linux__
 class GEM_EXTERN pix_movieOS : public pix_filmLinux
 {
-  CPPEXTERN_HEADER(pix_movieOS, pix_filmLinux)
+  CPPEXTERN_HEADER(pix_movieOS, pix_filmLinux);
 #elif __APPLE__
 class GEM_EXTERN pix_movieOS : public pix_filmDarwin
 {
-    CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin)
+    CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin);
 #endif
    
     public:

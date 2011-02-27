@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglDrawBuffer : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDrawBuffer, GemGLBase)
+	CPPEXTERN_HEADER(GEMglDrawBuffer, GemGLBase);
 
 	public:
 	  // Constructor

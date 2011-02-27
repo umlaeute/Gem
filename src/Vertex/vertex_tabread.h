@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_tabread : public GemVertex
 {
-    CPPEXTERN_HEADER(vertex_tabread, GemVertex)
+    CPPEXTERN_HEADER(vertex_tabread, GemVertex);
 
     public:
 

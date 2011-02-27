@@ -44,7 +44,7 @@ CLASS
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_dump : public GemPixObj
 {
-	CPPEXTERN_HEADER(pix_dump, GemPixObj)
+	CPPEXTERN_HEADER(pix_dump, GemPixObj);
 		
 public:
 	

@@ -18,7 +18,7 @@
 #include "pix_2grey.h"
 #include "Base/GemPixConvert.h"
 
-CPPEXTERN_NEW(pix_2grey)
+CPPEXTERN_NEW(pix_2grey);
 
 /////////////////////////////////////////////////////////
 //

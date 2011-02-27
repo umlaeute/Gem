@@ -14,7 +14,7 @@
 
 #include "GEMglLoadIdentity.h"
 
-CPPEXTERN_NEW ( GEMglLoadIdentity )
+CPPEXTERN_NEW ( GEMglLoadIdentity );
 
 /////////////////////////////////////////////////////////
 //

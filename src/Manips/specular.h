@@ -36,7 +36,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN specular : public GemBase
 {
-    CPPEXTERN_HEADER(specular, GemBase)
+    CPPEXTERN_HEADER(specular, GemBase);
 
     public:
 

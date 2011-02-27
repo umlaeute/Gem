@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN diffuseRGB : public GemBase
 {
-    CPPEXTERN_HEADER(diffuseRGB, GemBase)
+    CPPEXTERN_HEADER(diffuseRGB, GemBase);
 
     public:
 

@@ -14,7 +14,7 @@
 #include "pix_delay.h"
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_delay, t_float,A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_delay, t_float,A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglEvalPoint2 : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEvalPoint2, GemGLBase)
+	CPPEXTERN_HEADER(GEMglEvalPoint2, GemGLBase);
 
 	public:
 	  // Constructor

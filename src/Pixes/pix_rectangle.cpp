@@ -28,7 +28,7 @@
 #include "pix_rectangle.h"
 #include "Base/GemPixConvert.h"
 
-CPPEXTERN_NEW(pix_rectangle)
+CPPEXTERN_NEW(pix_rectangle);
 
 /////////////////////////////////////////////////////////
 //

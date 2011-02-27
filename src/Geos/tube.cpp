@@ -41,7 +41,7 @@ const float tube::TWO_PI = 8.f * atan(1.);
 # define TUBE_NUMPTS 80
 #endif
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

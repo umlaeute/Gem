@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN curve : public polygon
 {
-    CPPEXTERN_HEADER(curve, polygon)
+    CPPEXTERN_HEADER(curve, polygon);
 
     public:
 

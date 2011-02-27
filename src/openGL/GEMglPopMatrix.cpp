@@ -14,7 +14,7 @@
 
 #include "GEMglPopMatrix.h"
 
-CPPEXTERN_NEW ( GEMglPopMatrix )
+CPPEXTERN_NEW ( GEMglPopMatrix );
 
 /////////////////////////////////////////////////////////
 //

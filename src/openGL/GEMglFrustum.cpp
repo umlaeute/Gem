@@ -14,7 +14,7 @@
 
 #include "GEMglFrustum.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglFrustum )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglFrustum );
 
 /////////////////////////////////////////////////////////
 //

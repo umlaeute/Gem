@@ -31,7 +31,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_scanline : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_scanline, GemPixObj)
+CPPEXTERN_HEADER(pix_scanline, GemPixObj);
 
     public:
 

@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglTranslated : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTranslated, GemGLBase)
+	CPPEXTERN_HEADER(GEMglTranslated, GemGLBase);
 
 	public:
 	  // Constructor

@@ -274,7 +274,7 @@ typedef int (*t_f0r_deinit)(void);
 };
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_frei0r,  t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_frei0r,  t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

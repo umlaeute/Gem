@@ -14,7 +14,7 @@
 
 #include "GEMglFogiv.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglFogiv )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglFogiv );
 
 /////////////////////////////////////////////////////////
 //

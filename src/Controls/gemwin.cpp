@@ -26,7 +26,7 @@
 #include "Base/GemMath.h"
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(gemwin, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(gemwin, t_floatarg, A_DEFFLOAT);
 
 static bool StillHaveGemWin(bool up) {
   static int ref_counter = 0;

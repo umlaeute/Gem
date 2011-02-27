@@ -18,7 +18,7 @@
 
 #include "spot_light.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(spot_light, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(spot_light, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

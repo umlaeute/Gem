@@ -35,7 +35,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN scale : public GemBase
 {
-    CPPEXTERN_HEADER(scale, GemBase)
+    CPPEXTERN_HEADER(scale, GemBase);
 
     public:
 

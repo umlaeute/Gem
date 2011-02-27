@@ -34,7 +34,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN world_light : public GemBase
 {
-  CPPEXTERN_HEADER(world_light, GemBase)
+  CPPEXTERN_HEADER(world_light, GemBase);
 
     public:
 

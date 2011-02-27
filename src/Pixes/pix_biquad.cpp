@@ -30,7 +30,7 @@
 #include <string.h>
 #include <math.h>
 
-CPPEXTERN_NEW_WITH_GIMME(pix_biquad)
+CPPEXTERN_NEW_WITH_GIMME(pix_biquad);
 
   /////////////////////////////////////////////////////////
 //

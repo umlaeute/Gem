@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglFlush : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFlush, GemGLBase)
+	CPPEXTERN_HEADER(GEMglFlush, GemGLBase);
 
 	public:
 	  // Constructor

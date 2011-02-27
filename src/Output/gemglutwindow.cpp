@@ -37,7 +37,7 @@
 #include <map>
 static std::map<int, gemglutwindow*>s_windowmap;
  
-CPPEXTERN_NEW(gemglutwindow)
+CPPEXTERN_NEW(gemglutwindow);
 
 /////////////////////////////////////////////////////////
 //

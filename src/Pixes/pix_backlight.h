@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_backlight : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_backlight, GemPixObj)
+    CPPEXTERN_HEADER(pix_backlight, GemPixObj);
 
     public:
 

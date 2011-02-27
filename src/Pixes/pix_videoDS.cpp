@@ -50,7 +50,7 @@ HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
 HRESULT SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MODE);
 void RemoveGraphFromRot(DWORD pdwRegister);
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoDS, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_videoDS, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

@@ -31,7 +31,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN alpha : public GemBase
 {
-    CPPEXTERN_HEADER(alpha, GemBase)
+    CPPEXTERN_HEADER(alpha, GemBase);
 
     public:
 

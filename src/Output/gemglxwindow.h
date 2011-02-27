@@ -53,7 +53,7 @@
 
 class GEM_EXTERN gemglxwindow : public GemWindow
 {
-  CPPEXTERN_HEADER(gemglxwindow, GemWindow)
+  CPPEXTERN_HEADER(gemglxwindow, GemWindow);
 
     public:
 

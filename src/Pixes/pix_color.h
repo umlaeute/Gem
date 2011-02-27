@@ -37,7 +37,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class pix_color : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_color, GemPixObj)
+    CPPEXTERN_HEADER(pix_color, GemPixObj);
 
     public:
 

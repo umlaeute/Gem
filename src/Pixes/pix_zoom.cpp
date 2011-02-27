@@ -16,7 +16,7 @@
 
 #include "pix_zoom.h"
 
-CPPEXTERN_NEW(pix_zoom)
+CPPEXTERN_NEW(pix_zoom);
 
 /////////////////////////////////////////////////////////
 //

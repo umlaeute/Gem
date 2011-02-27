@@ -14,7 +14,7 @@
 
 #include "GEMglIndexiv.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexiv , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexiv , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

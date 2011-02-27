@@ -19,7 +19,7 @@
 #include "shininess.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(shininess)
+CPPEXTERN_NEW_WITH_GIMME(shininess);
 
 /////////////////////////////////////////////////////////
 //

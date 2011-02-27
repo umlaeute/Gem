@@ -29,7 +29,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN gemkeyboard : public CPPExtern
 {
-    CPPEXTERN_HEADER(gemkeyboard, CPPExtern)
+    CPPEXTERN_HEADER(gemkeyboard, CPPExtern);
 
     public:
 

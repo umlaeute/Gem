@@ -10,7 +10,7 @@
 
 #include "RTE/MessageCallbacks.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_record)
+CPPEXTERN_NEW_WITH_GIMME(pix_record);
 
 struct pix_record :: PIMPL {
   PIMPL(void) {};

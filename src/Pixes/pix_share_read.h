@@ -15,7 +15,7 @@
 
 class GEM_EXTERN pix_share_read : public pix_share_write
 {
-  CPPEXTERN_HEADER(pix_share_read, pix_share_write)
+  CPPEXTERN_HEADER(pix_share_read, pix_share_write);
 
     public:
   pix_share_read(int,t_atom*);

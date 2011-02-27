@@ -8,7 +8,7 @@
  */
 
 #include "pix_scanline.h"
-CPPEXTERN_NEW(pix_scanline)
+CPPEXTERN_NEW(pix_scanline);
 
 /////////////////////////////////////////////////////////
 //

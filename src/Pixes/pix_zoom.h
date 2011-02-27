@@ -36,7 +36,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_zoom : public GemBase
 {
-    CPPEXTERN_HEADER(pix_zoom, GemBase)
+    CPPEXTERN_HEADER(pix_zoom, GemBase);
 
     public:
 

@@ -38,7 +38,7 @@
 #include "pix_rtx.h"
 #include <string.h>
 
-CPPEXTERN_NEW(pix_rtx)
+CPPEXTERN_NEW(pix_rtx);
 
 /////////////////////////////////////////////////////////
 //

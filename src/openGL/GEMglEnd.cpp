@@ -14,7 +14,7 @@
 
 #include "GEMglEnd.h"
 
-CPPEXTERN_NEW ( GEMglEnd )
+CPPEXTERN_NEW ( GEMglEnd );
 
 /////////////////////////////////////////////////////////
 //

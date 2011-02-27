@@ -31,7 +31,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_blur : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_blur, GemPixObj)
+CPPEXTERN_HEADER(pix_blur, GemPixObj);
 
     public:
 

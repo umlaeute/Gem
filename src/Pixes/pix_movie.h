@@ -34,7 +34,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_movie : public pix_film
 {
-  CPPEXTERN_HEADER(pix_movie, pix_film)
+  CPPEXTERN_HEADER(pix_movie, pix_film);
   
     public:
 

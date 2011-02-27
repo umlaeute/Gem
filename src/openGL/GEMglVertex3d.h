@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglVertex3d : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglVertex3d, GemGLBase)
+	CPPEXTERN_HEADER(GEMglVertex3d, GemGLBase);
 
 	public:
 	  // Constructor

@@ -14,7 +14,7 @@
 
 #include "GEMglClearStencil.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearStencil , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearStencil , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

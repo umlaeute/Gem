@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglEvalMesh1 : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEvalMesh1, GemGLBase)
+	CPPEXTERN_HEADER(GEMglEvalMesh1, GemGLBase);
 
 	public:
 	  // Constructor

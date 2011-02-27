@@ -20,7 +20,7 @@
 #include "Base/GemCache.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_snap)
+CPPEXTERN_NEW_WITH_GIMME(pix_snap);
 
 /////////////////////////////////////////////////////////
 //

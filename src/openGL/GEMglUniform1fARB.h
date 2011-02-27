@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglUniform1fARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglUniform1fARB, GemGLBase)
+	CPPEXTERN_HEADER(GEMglUniform1fARB, GemGLBase);
 
 	public:
 	  // Constructor

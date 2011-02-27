@@ -73,7 +73,7 @@ void Blob:: ymax(double y){
   m_ymax=y;
 }
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_multiblob,t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_multiblob,t_floatarg, A_DEFFLOAT);
   
 /*------------------------------------------------------------
   

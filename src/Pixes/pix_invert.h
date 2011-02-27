@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_invert : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_invert, GemPixObj)
+    CPPEXTERN_HEADER(pix_invert, GemPixObj);
 
     public:
 

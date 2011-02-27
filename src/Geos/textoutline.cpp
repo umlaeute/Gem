@@ -21,7 +21,7 @@
 #include "FTGLOutlineFont.h"
 #endif
 
-CPPEXTERN_NEW_WITH_GIMME(textoutline)
+CPPEXTERN_NEW_WITH_GIMME(textoutline);
 
 /////////////////////////////////////////////////////////
 //

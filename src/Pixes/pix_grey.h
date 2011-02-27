@@ -36,7 +36,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_grey : public pix_rgba
 {
-    CPPEXTERN_HEADER(pix_grey, GemPixObj)
+    CPPEXTERN_HEADER(pix_grey, GemPixObj);
 
     public:
 

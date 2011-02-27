@@ -43,7 +43,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_record : public GemBase
 {
-  CPPEXTERN_HEADER(pix_record, GemBase)
+  CPPEXTERN_HEADER(pix_record, GemBase);
 
     public:
 

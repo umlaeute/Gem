@@ -21,7 +21,7 @@
 #include "pix_mean_color.h"
 
 
-CPPEXTERN_NEW_WITH_GIMME(pix_mean_color)
+CPPEXTERN_NEW_WITH_GIMME(pix_mean_color);
 
 /* const, destructor */
 pix_mean_color::pix_mean_color(int argc, t_atom *argv)

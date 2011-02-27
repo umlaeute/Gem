@@ -18,7 +18,7 @@
 #include "pix_info.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW(pix_info)
+CPPEXTERN_NEW(pix_info);
 
 /////////////////////////////////////////////////////////
 //

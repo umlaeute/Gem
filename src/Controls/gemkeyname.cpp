@@ -18,7 +18,7 @@
 
 #include "Base/GemEvent.h"
 
-CPPEXTERN_NEW(gemkeyname)
+CPPEXTERN_NEW(gemkeyname);
 
 /////////////////////////////////////////////////////////
 //

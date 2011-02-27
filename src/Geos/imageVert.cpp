@@ -23,7 +23,7 @@
 #include "imageVert.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW(imageVert)
+CPPEXTERN_NEW(imageVert);
 
 /////////////////////////////////////////////////////////
 //

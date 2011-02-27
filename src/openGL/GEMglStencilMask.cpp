@@ -14,7 +14,7 @@
 
 #include "GEMglStencilMask.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglStencilMask , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglStencilMask , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

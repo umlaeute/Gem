@@ -19,7 +19,7 @@
 #include "specularRGB.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(specularRGB)
+CPPEXTERN_NEW_WITH_GIMME(specularRGB);
 
 /////////////////////////////////////////////////////////
 //

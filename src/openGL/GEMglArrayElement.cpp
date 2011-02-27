@@ -14,7 +14,7 @@
 
 #include "GEMglArrayElement.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglArrayElement , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglArrayElement , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

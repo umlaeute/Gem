@@ -39,7 +39,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_threshold : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_threshold, GemPixObj)
+    CPPEXTERN_HEADER(pix_threshold, GemPixObj);
 
     public:
 

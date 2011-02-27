@@ -5,7 +5,7 @@
 
 class GEM_EXTERN pix_movement2 : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_movement2, GemPixObj)
+  CPPEXTERN_HEADER(pix_movement2, GemPixObj);
 		
     public:
   

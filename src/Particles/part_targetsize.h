@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_targetsize : public partlib_base
 {
-    CPPEXTERN_HEADER(part_targetsize, partlib_base)
+    CPPEXTERN_HEADER(part_targetsize, partlib_base);
 
     public:
 

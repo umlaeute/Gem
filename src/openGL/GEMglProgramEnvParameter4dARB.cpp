@@ -12,7 +12,7 @@
 
 #include "GEMglProgramEnvParameter4dARB.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramEnvParameter4dARB )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramEnvParameter4dARB );
 
 /////////////////////////////////////////////////////////
 //

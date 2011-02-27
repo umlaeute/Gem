@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN primTri : public GemShape
 {
-    CPPEXTERN_HEADER(primTri, GemShape)
+    CPPEXTERN_HEADER(primTri, GemShape);
 
     public:
 

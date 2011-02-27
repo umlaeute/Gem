@@ -27,7 +27,7 @@
 # define snprintf _snprintf
 #endif
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

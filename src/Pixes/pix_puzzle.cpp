@@ -16,7 +16,7 @@
 #include "pix_puzzle.h"
 #include <string.h>
 
-CPPEXTERN_NEW(pix_puzzle)
+CPPEXTERN_NEW(pix_puzzle);
 
 
 unsigned int fastrand()

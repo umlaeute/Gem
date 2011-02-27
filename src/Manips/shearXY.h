@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN shearXY : public GemBase
 {
-    CPPEXTERN_HEADER(shearXY, GemBase)
+    CPPEXTERN_HEADER(shearXY, GemBase);
 
     public:
 

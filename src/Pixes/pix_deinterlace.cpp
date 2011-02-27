@@ -9,7 +9,7 @@
 
 #include "pix_deinterlace.h"
 
-CPPEXTERN_NEW(pix_deinterlace)
+CPPEXTERN_NEW(pix_deinterlace);
 
 /////////////////////////////////////////////////////////
 //

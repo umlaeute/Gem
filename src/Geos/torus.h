@@ -38,7 +38,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN torus : public GemGluObj
 {
-    CPPEXTERN_HEADER(torus, GemGluObj)
+    CPPEXTERN_HEADER(torus, GemGluObj);
 
     public:
 

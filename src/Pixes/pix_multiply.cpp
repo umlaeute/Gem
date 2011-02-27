@@ -17,7 +17,7 @@
 
 #include "pix_multiply.h"
 
-CPPEXTERN_NEW(pix_multiply)
+CPPEXTERN_NEW(pix_multiply);
 
 /////////////////////////////////////////////////////////
 //

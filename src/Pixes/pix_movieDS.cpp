@@ -13,7 +13,7 @@
 #include "pix_movieDS.h"
 #include "Base/GemMan.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDS, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDS, t_symbol *, A_DEFSYM);
 
 pix_movieDS :: pix_movieDS(t_symbol *filename) :
 	m_haveMovie(FALSE),

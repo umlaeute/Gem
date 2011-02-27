@@ -110,7 +110,7 @@
 #endif
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
 
 #ifdef HAVE_PTHREADS
 /* the "capturing"-thread */

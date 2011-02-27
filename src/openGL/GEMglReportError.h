@@ -26,7 +26,7 @@
 
 class GEM_EXTERN GEMglReportError : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglReportError, GemGLBase)
+	CPPEXTERN_HEADER(GEMglReportError, GemGLBase);
 
 	public:
 	  // Constructor

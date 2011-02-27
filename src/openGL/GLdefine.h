@@ -28,7 +28,7 @@
 
 class GEM_EXTERN GLdefine : public CPPExtern
 {
-	CPPEXTERN_HEADER(GLdefine, CPPExtern)
+	CPPEXTERN_HEADER(GLdefine, CPPExtern);
 
 	public:
 	  // Constructor

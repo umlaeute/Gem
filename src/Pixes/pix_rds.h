@@ -38,7 +38,7 @@ LOG
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_rds : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_rds, GemPixObj)
+  CPPEXTERN_HEADER(pix_rds, GemPixObj);
 
     public:
 

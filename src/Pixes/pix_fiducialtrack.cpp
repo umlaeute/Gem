@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_fiducialtrack,  t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_fiducialtrack,  t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

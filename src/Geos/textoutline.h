@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN textoutline : public TextBase
 {
-    CPPEXTERN_HEADER(textoutline, TextBase)
+    CPPEXTERN_HEADER(textoutline, TextBase);
 
     public:
 

@@ -31,7 +31,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN cuboid : public GemShape
 {
-  CPPEXTERN_HEADER(cuboid, GemShape)
+  CPPEXTERN_HEADER(cuboid, GemShape);
 
     public:
 

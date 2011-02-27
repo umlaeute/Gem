@@ -17,7 +17,7 @@
 #include "translate.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(translate)
+CPPEXTERN_NEW_WITH_GIMME(translate);
 
 /////////////////////////////////////////////////////////
 //

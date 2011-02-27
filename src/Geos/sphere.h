@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN sphere : public GemGluObj
 {
-    CPPEXTERN_HEADER(sphere, GemGluObj)
+    CPPEXTERN_HEADER(sphere, GemGluObj);
 
     public:
 

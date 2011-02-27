@@ -22,7 +22,7 @@
 #include "FTGLBitmapFont.h"
 #endif
 
-CPPEXTERN_NEW_WITH_GIMME(text2d)
+CPPEXTERN_NEW_WITH_GIMME(text2d);
 
 /////////////////////////////////////////////////////////
 //

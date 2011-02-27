@@ -19,7 +19,7 @@
 
 class GEM_EXTERN gemcocoawindow : public GemWindow
 {
-  CPPEXTERN_HEADER(gemcocoawindow, GemWindow)
+  CPPEXTERN_HEADER(gemcocoawindow, GemWindow);
 
     public:
 

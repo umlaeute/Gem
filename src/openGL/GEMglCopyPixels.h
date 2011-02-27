@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglCopyPixels : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCopyPixels, GemGLBase)
+	CPPEXTERN_HEADER(GEMglCopyPixels, GemGLBase);
 
 	public:
 	  // Constructor

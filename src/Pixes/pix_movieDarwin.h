@@ -40,7 +40,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 class GEM_EXTERN pix_movieDarwin : public GemBase
 {
 
-    CPPEXTERN_HEADER(pix_movieDarwin, GemBase)
+    CPPEXTERN_HEADER(pix_movieDarwin, GemBase);
 
    
     public:

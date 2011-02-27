@@ -19,7 +19,7 @@
 #include "Base/GemState.h"
 #include "string.h"
 #include "math.h"
-CPPEXTERN_NEW(vertex_combine)
+CPPEXTERN_NEW(vertex_combine);
  
 /////////////////////////////////////////////////////////
 //

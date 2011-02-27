@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglShadeModel : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglShadeModel, GemGLBase)
+	CPPEXTERN_HEADER(GEMglShadeModel, GemGLBase);
 
 	public:
 	  // Constructor

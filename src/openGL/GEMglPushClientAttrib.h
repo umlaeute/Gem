@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPushClientAttrib : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPushClientAttrib, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPushClientAttrib, GemGLBase);
 
 	public:
 	  // Constructor

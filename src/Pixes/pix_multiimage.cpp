@@ -21,7 +21,7 @@
 #include "Base/GemCache.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
 

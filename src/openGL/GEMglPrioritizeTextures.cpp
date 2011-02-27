@@ -14,7 +14,7 @@
 
 #include "GEMglPrioritizeTextures.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

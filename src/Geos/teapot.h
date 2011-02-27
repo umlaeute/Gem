@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN teapot : public GemGluObj
 {
-    CPPEXTERN_HEADER(teapot, GemGluObj)
+    CPPEXTERN_HEADER(teapot, GemGluObj);
 
     public:
 

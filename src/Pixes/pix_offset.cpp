@@ -17,7 +17,7 @@
  
 #include "pix_offset.h"
 
-CPPEXTERN_NEW(pix_offset)
+CPPEXTERN_NEW(pix_offset);
  
 /////////////////////////////////////////////////////////
 //

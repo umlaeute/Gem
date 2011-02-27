@@ -32,7 +32,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_velocity : public partlib_base
 {
-  CPPEXTERN_HEADER(part_velocity, partlib_base)
+  CPPEXTERN_HEADER(part_velocity, partlib_base);
 
     public:
 

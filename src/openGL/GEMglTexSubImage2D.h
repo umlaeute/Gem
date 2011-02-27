@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglTexSubImage2D : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglTexSubImage2D, GemGLBase)
+	CPPEXTERN_HEADER(GEMglTexSubImage2D, GemGLBase);
 
 	public:
 	  // Constructor

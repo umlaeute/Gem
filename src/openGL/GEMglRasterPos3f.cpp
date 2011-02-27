@@ -14,7 +14,7 @@
 
 #include "GEMglRasterPos3f.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

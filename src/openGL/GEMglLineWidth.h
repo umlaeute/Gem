@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglLineWidth : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLineWidth, GemGLBase)
+	CPPEXTERN_HEADER(GEMglLineWidth, GemGLBase);
 
 	public:
 	  // Constructor

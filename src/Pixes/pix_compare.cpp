@@ -8,7 +8,7 @@
  */
 
 #include "pix_compare.h"
-CPPEXTERN_NEW(pix_compare)
+CPPEXTERN_NEW(pix_compare);
 
 /////////////////////////////////////////////////////////
 //

@@ -42,7 +42,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_video : public GemBase
 {
-  CPPEXTERN_HEADER(pix_video, GemBase)
+  CPPEXTERN_HEADER(pix_video, GemBase);
     
     public:
 

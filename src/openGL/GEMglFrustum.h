@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglFrustum : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglFrustum, GemGLBase)
+	CPPEXTERN_HEADER(GEMglFrustum, GemGLBase);
 
 	public:
 	  // Constructor

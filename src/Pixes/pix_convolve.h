@@ -39,7 +39,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_convolve : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_convolve, GemPixObj)
+    CPPEXTERN_HEADER(pix_convolve, GemPixObj);
 
     public:
 

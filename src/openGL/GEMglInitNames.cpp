@@ -14,7 +14,7 @@
 
 #include "GEMglInitNames.h"
 
-CPPEXTERN_NEW( GEMglInitNames)
+CPPEXTERN_NEW( GEMglInitNames);
 
 /////////////////////////////////////////////////////////
 //

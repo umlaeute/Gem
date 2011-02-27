@@ -38,7 +38,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pqtorusknots : public GemShape
 {
-  CPPEXTERN_HEADER(pqtorusknots, GemShape)
+  CPPEXTERN_HEADER(pqtorusknots, GemShape);
 
     public:
 

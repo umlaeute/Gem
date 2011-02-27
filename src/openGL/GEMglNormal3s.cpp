@@ -14,7 +14,7 @@
 
 #include "GEMglNormal3s.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3s , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3s , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

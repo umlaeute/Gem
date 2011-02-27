@@ -17,7 +17,7 @@
 
 #include "papi.h"
 
-CPPEXTERN_NEW_WITH_GIMME(part_size)
+CPPEXTERN_NEW_WITH_GIMME(part_size);
 
 /////////////////////////////////////////////////////////
 //

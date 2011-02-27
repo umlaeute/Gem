@@ -16,7 +16,7 @@
 
 #include "render_trigger.h"
 
-CPPEXTERN_NEW(render_trigger)
+CPPEXTERN_NEW(render_trigger);
 
 /////////////////////////////////////////////////////////
 //

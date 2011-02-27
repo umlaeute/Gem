@@ -17,7 +17,7 @@
 #include "cylinder.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 #define normal3f glNormal3f
 

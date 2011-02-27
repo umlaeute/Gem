@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglCopyTexImage2D : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglCopyTexImage2D, GemGLBase)
+	CPPEXTERN_HEADER(GEMglCopyTexImage2D, GemGLBase);
 
 	public:
 	  // Constructor

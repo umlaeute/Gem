@@ -18,7 +18,7 @@
 
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_GIMME(vertex_offset)
+CPPEXTERN_NEW_WITH_GIMME(vertex_offset);
 
 /////////////////////////////////////////////////////////
 //

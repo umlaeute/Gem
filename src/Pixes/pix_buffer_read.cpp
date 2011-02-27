@@ -34,7 +34,7 @@ extern t_class *pix_buffer_class;
 //
 /////////////////////////////////////////////////////////
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM);
 
 
 /////////////////////////////////////////////////////////

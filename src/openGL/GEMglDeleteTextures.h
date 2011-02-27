@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglDeleteTextures : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglDeleteTextures, GemGLBase)
+	CPPEXTERN_HEADER(GEMglDeleteTextures, GemGLBase);
 
 	public:
 	  // Constructor

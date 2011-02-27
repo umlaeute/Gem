@@ -25,7 +25,7 @@
 
 class GEM_EXTERN GEMglLoadTransposeMatrixd : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLoadTransposeMatrixd, GemGLBase)
+	CPPEXTERN_HEADER(GEMglLoadTransposeMatrixd, GemGLBase);
 
 	public:
 	  // Constructor

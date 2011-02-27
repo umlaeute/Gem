@@ -19,7 +19,7 @@
 #include "Base/GemPixUtil.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW(pix_draw)
+CPPEXTERN_NEW(pix_draw);
 
 /////////////////////////////////////////////////////////
 //

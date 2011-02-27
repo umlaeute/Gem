@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN slideSquares : public GemShape
 {
-    CPPEXTERN_HEADER(slideSquares, GemShape)
+    CPPEXTERN_HEADER(slideSquares, GemShape);
 
     public:
 

@@ -96,7 +96,7 @@ namespace gem {
 };
 
 
-CPPEXTERN_NEW(glsl_program)
+CPPEXTERN_NEW(glsl_program);
 
 /////////////////////////////////////////////////////////
 //

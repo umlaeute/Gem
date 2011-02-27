@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_offset : public vertex_scale
 {
-  CPPEXTERN_HEADER(vertex_offset, vertex_scale)
+  CPPEXTERN_HEADER(vertex_offset, vertex_scale);
 
     public:
 

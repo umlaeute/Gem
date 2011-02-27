@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPixelStoref : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPixelStoref, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPixelStoref, GemGLBase);
 
 	public:
 	  // Constructor

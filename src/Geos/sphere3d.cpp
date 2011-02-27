@@ -17,7 +17,7 @@
 #include "sphere3d.h"
 #include "Base/GemState.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 #define DEG2RAD(x) ((x)*M_PI/180)
 

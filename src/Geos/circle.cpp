@@ -24,7 +24,7 @@
 GLfloat *circle::m_cos = NULL;
 GLfloat *circle::m_sin = NULL;
 
-CPPEXTERN_NEW_WITH_ONE_ARG(circle, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(circle, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

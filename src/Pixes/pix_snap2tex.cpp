@@ -20,7 +20,7 @@
 #include "Base/GemMan.h"
 #include "Base/GemFuncUtil.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex)
+CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex);
 
 /////////////////////////////////////////////////////////
 //

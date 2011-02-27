@@ -18,7 +18,7 @@
 class GEM_EXTERN pix_movieDS : public GemBase
 {
 
-	CPPEXTERN_HEADER(pix_movieDS, GemBase)
+	CPPEXTERN_HEADER(pix_movieDS, GemBase);
 
    
   public:  

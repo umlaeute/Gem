@@ -16,7 +16,7 @@
 
 #include "pix_colormatrix.h"
 
-CPPEXTERN_NEW(pix_colormatrix)
+CPPEXTERN_NEW(pix_colormatrix);
 
 /////////////////////////////////////////////////////////
 //

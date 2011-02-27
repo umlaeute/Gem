@@ -18,7 +18,7 @@
 #include "GemPathBase.h"
 #include "GemFuncUtil.h"
 
-// CPPEXTERN_NEW_WITH_GIMME(GemPathBase)
+// CPPEXTERN_NEW_WITH_GIMME(GemPathBase);
 
 /////////////////////////////////////////////////////////
 // Constructor

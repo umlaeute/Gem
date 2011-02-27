@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 
-CPPEXTERN_NEW_WITH_GIMME(pix_writer)
+CPPEXTERN_NEW_WITH_GIMME(pix_writer);
 
   /////////////////////////////////////////////////////////
 //

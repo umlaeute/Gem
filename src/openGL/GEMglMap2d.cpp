@@ -14,7 +14,7 @@
 
 #include "GEMglMap2d.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglMap2d )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglMap2d );
 
 /////////////////////////////////////////////////////////
 //

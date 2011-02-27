@@ -31,7 +31,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_motionblur : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_motionblur, GemPixObj)
+CPPEXTERN_HEADER(pix_motionblur, GemPixObj);
 
     public:
 

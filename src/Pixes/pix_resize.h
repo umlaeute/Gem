@@ -30,7 +30,7 @@ KEYWORDS
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_resize : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_resize, GemPixObj)
+    CPPEXTERN_HEADER(pix_resize, GemPixObj);
 
     public:
 

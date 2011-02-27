@@ -14,7 +14,7 @@
 
 #include "pix_refraction.h"
 	
-CPPEXTERN_NEW(pix_refraction)
+CPPEXTERN_NEW(pix_refraction);
 
 /////////////////////////////////////////////////////////
 //

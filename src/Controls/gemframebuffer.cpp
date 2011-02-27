@@ -20,7 +20,7 @@
 #include "Base/GemState.h"
 #include "Base/GLStack.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL)
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

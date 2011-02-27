@@ -31,7 +31,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_roll : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_roll, GemPixObj)
+  CPPEXTERN_HEADER(pix_roll, GemPixObj);
 
     public:
 

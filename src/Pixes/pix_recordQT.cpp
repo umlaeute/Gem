@@ -24,7 +24,7 @@
 #include "Base/GemCache.h"
 
 
-CPPEXTERN_NEW_WITH_GIMME(pix_recordQT)
+CPPEXTERN_NEW_WITH_GIMME(pix_recordQT);
  
   /////////////////////////////////////////////////////////
 //

@@ -16,7 +16,7 @@
 
 #include "pix_threshold.h"
 
-CPPEXTERN_NEW(pix_threshold)
+CPPEXTERN_NEW(pix_threshold);
 
 /////////////////////////////////////////////////////////
 //

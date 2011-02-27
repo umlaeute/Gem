@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN depth : public GemBase
 {
-    CPPEXTERN_HEADER(depth, GemBase)
+    CPPEXTERN_HEADER(depth, GemBase);
 
     public:
 

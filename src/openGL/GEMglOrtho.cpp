@@ -14,7 +14,7 @@
 
 #include "GEMglOrtho.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglOrtho )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglOrtho );
 
 /////////////////////////////////////////////////////////
 //

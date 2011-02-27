@@ -18,7 +18,7 @@
 #include "pix_mask.h"
 #include "Base/GemPixConvert.h"
 
-CPPEXTERN_NEW(pix_mask)
+CPPEXTERN_NEW(pix_mask);
 
 /////////////////////////////////////////////////////////
 //

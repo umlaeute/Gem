@@ -14,7 +14,7 @@
 
 #include "GEMglRasterPos2i.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2i , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2i , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

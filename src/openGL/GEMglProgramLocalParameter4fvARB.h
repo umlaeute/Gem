@@ -25,7 +25,7 @@
 
 class GEM_EXTERN GEMglProgramLocalParameter4fvARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglProgramLocalParameter4fvARB, GemGLBase)
+	CPPEXTERN_HEADER(GEMglProgramLocalParameter4fvARB, GemGLBase);
 
 	public:
 	  // Constructor

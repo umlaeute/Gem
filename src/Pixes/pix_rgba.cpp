@@ -19,7 +19,7 @@
 
 #include "pix_rgba.h"
 
-CPPEXTERN_NEW(pix_rgba)
+CPPEXTERN_NEW(pix_rgba);
 
 /////////////////////////////////////////////////////////
 //

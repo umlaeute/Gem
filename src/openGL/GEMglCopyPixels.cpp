@@ -14,7 +14,7 @@
 
 #include "GEMglCopyPixels.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyPixels )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyPixels );
 
 /////////////////////////////////////////////////////////
 //

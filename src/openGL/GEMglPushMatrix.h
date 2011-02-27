@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPushMatrix : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPushMatrix, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPushMatrix, GemGLBase);
 
 	public:
 	  // Constructor

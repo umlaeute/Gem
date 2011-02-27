@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglPolygonOffset : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglPolygonOffset, GemGLBase)
+	CPPEXTERN_HEADER(GEMglPolygonOffset, GemGLBase);
 
 	public:
 	  // Constructor

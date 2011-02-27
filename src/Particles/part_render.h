@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_render : public partlib_base
 {
-  CPPEXTERN_HEADER(part_render, partlib_base)
+  CPPEXTERN_HEADER(part_render, partlib_base);
 
     public:
 

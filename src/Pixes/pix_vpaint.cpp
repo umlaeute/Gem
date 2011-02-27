@@ -28,7 +28,7 @@ GLfloat sumMatrix[] = {
     0.33f, 0.33f, 0.33f, 0.0f,
     0.00f, 0.00f, 0.00f, 1.0f};
 
-CPPEXTERN_NEW(pix_vpaint)
+CPPEXTERN_NEW(pix_vpaint);
 
 /////////////////////////////////////////////////////////
 //

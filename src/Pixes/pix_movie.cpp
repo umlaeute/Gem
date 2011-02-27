@@ -23,7 +23,7 @@
 #include "Base/GemState.h"
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

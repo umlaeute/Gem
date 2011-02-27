@@ -40,7 +40,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_biquad : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_biquad, GemPixObj)
+  CPPEXTERN_HEADER(pix_biquad, GemPixObj);
 		
     public:
 	

@@ -40,7 +40,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_normalize : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_normalize, GemPixObj)
+    CPPEXTERN_HEADER(pix_normalize, GemPixObj);
 
       public:
 

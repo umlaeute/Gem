@@ -9,7 +9,7 @@
 
 #include "pix_emboss.h"
 
-CPPEXTERN_NEW(pix_emboss)
+CPPEXTERN_NEW(pix_emboss);
 
 /////////////////////////////////////////////////////////
 //

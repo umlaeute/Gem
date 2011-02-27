@@ -39,7 +39,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_duotone : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_duotone, GemPixObj)
+    CPPEXTERN_HEADER(pix_duotone, GemPixObj);
 
     public:
 

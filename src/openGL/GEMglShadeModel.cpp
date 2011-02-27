@@ -15,7 +15,7 @@
 #include "GEMglShadeModel.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglShadeModel)
+CPPEXTERN_NEW_WITH_GIMME ( GEMglShadeModel);
 
 /////////////////////////////////////////////////////////
 //

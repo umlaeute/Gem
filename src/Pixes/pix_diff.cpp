@@ -17,7 +17,7 @@
 #include "pix_diff.h"
 #include <stdlib.h>
 
-CPPEXTERN_NEW(pix_diff)
+CPPEXTERN_NEW(pix_diff);
 
 /////////////////////////////////////////////////////////
 //

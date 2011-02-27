@@ -14,7 +14,7 @@
 
 #include "GEMglDeleteTextures.h"
 
-CPPEXTERN_NEW_WITH_GIMME ( GEMglDeleteTextures )
+CPPEXTERN_NEW_WITH_GIMME ( GEMglDeleteTextures );
 
 /////////////////////////////////////////////////////////
 //

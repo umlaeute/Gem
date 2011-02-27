@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN circle : public GemShape
 {
-    CPPEXTERN_HEADER(circle, GemShape)
+    CPPEXTERN_HEADER(circle, GemShape);
 
     public:
 

@@ -16,7 +16,7 @@
 
 #include "pix_hsv2rgb.h"
 
-CPPEXTERN_NEW(pix_hsv2rgb)
+CPPEXTERN_NEW(pix_hsv2rgb);
 
   /////////////////////////////////////////////////////////
 //

@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN cylinder : public GemGluObj
 {
-    CPPEXTERN_HEADER(cylinder, GemGluObj)
+    CPPEXTERN_HEADER(cylinder, GemGluObj);
 
     public:
 

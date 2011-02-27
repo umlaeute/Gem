@@ -17,7 +17,7 @@
 
 #include "pix_composite.h"
 
-CPPEXTERN_NEW(pix_composite)
+CPPEXTERN_NEW(pix_composite);
 
 /////////////////////////////////////////////////////////
 //

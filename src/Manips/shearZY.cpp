@@ -16,7 +16,7 @@
 
 #include "shearZY.h"
 
-CPPEXTERN_NEW_WITH_GIMME(shearZY)
+CPPEXTERN_NEW_WITH_GIMME(shearZY);
 
 /////////////////////////////////////////////////////////
 //

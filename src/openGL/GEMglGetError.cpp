@@ -14,7 +14,7 @@
 
 #include "GEMglGetError.h"
 
-CPPEXTERN_NEW ( GEMglGetError )
+CPPEXTERN_NEW ( GEMglGetError );
 
 /////////////////////////////////////////////////////////
 //

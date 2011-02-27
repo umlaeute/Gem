@@ -43,7 +43,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_videoOS : public GemBase
 {
-  CPPEXTERN_HEADER(pix_videoOS, GemBase)
+  CPPEXTERN_HEADER(pix_videoOS, GemBase);
 
     public:
 

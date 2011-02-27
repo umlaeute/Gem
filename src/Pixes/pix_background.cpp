@@ -10,7 +10,7 @@
 #include "pix_background.h"
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_GIMME(pix_background)
+CPPEXTERN_NEW_WITH_GIMME(pix_background);
 
 /////////////////////////////////////////////////////////
 //

@@ -14,7 +14,7 @@
 
 #include "GEMglIsTexture.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsTexture , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsTexture , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

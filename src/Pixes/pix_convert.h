@@ -36,7 +36,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_convert : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_convert, GemPixObj)
+    CPPEXTERN_HEADER(pix_convert, GemPixObj);
 
     public:
 

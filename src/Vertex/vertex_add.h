@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_add : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_add, GemBase)
+    CPPEXTERN_HEADER(vertex_add, GemBase);
 
     public:
 

@@ -18,7 +18,7 @@
 
 #include "pix_pix2sig.h"
 
-CPPEXTERN_NEW(pix_pix2sig)
+CPPEXTERN_NEW(pix_pix2sig);
 
 /////////////////////////////////////////////////////////
 //

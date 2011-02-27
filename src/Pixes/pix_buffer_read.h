@@ -33,7 +33,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer_read : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_buffer_read, GemPixObj)
+  CPPEXTERN_HEADER(pix_buffer_read, GemPixObj);
 
     public:
 

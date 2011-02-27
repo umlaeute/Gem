@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglOrtho : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglOrtho, GemGLBase)
+	CPPEXTERN_HEADER(GEMglOrtho, GemGLBase);
 
 	public:
 	  // Constructor

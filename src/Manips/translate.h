@@ -35,7 +35,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN translate : public GemBase
 {
-    CPPEXTERN_HEADER(translate, GemBase)
+    CPPEXTERN_HEADER(translate, GemBase);
 
     public:
 

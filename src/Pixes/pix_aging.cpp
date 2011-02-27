@@ -30,7 +30,7 @@ static unsigned int fastrand()
 static int dx[8] = { 1, 1, 0,-1,-1,-1, 0, 1};
 static int dy[8] = { 0,-1,-1,-1, 0, 1, 1, 1};
 
-CPPEXTERN_NEW(pix_aging)
+CPPEXTERN_NEW(pix_aging);
 
 /////////////////////////////////////////////////////////
 //

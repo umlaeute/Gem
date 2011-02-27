@@ -14,7 +14,7 @@
 
 #include "pix_levels.h"
 
-CPPEXTERN_NEW(pix_levels)
+CPPEXTERN_NEW(pix_levels);
 
 /////////////////////////////////////////////////////////
 //

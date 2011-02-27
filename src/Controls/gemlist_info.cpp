@@ -25,7 +25,7 @@
 #define rad2deg -57.2957795132
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT )
+CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //

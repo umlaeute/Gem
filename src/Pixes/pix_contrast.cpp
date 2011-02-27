@@ -9,7 +9,7 @@
 
 #include "pix_contrast.h"
 
-CPPEXTERN_NEW(pix_contrast)
+CPPEXTERN_NEW(pix_contrast);
 
 
 pix_contrast :: pix_contrast():

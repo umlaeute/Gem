@@ -20,7 +20,7 @@
 #endif
 
 
-CPPEXTERN_NEW_WITH_GIMME(pix_share_write)
+CPPEXTERN_NEW_WITH_GIMME(pix_share_write);
 #if 0
   ;
 #endif

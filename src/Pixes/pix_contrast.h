@@ -15,7 +15,7 @@
 
 class GEM_EXTERN pix_contrast : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_contrast, GemPixObj)
+    CPPEXTERN_HEADER(pix_contrast, GemPixObj);
 
     public:
 

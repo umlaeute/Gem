@@ -19,7 +19,7 @@
 
 #include "pix_yuv.h"
 
-CPPEXTERN_NEW(pix_yuv)
+CPPEXTERN_NEW(pix_yuv);
 
 /////////////////////////////////////////////////////////
 //

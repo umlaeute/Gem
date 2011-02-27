@@ -24,7 +24,7 @@
 
 class GEM_EXTERN GEMglActiveTextureARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglActiveTextureARB, GemGLBase)
+	CPPEXTERN_HEADER(GEMglActiveTextureARB, GemGLBase);
 
 	public:
 	  // Constructor

@@ -17,7 +17,7 @@
 
 #include "pix_data.h"
 
-CPPEXTERN_NEW(pix_data)
+CPPEXTERN_NEW(pix_data);
 
 /////////////////////////////////////////////////////////
 //

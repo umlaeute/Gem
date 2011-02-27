@@ -33,7 +33,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_add : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_add, GemPixDualObj)
+    CPPEXTERN_HEADER(pix_add, GemPixDualObj);
 
     public:
       

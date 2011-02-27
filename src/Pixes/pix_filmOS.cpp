@@ -24,7 +24,7 @@
 
 #include <ctype.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmOS, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmOS, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

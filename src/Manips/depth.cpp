@@ -17,7 +17,7 @@
 #include "depth.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(depth)
+CPPEXTERN_NEW_WITH_GIMME(depth);
 
 /////////////////////////////////////////////////////////
 //

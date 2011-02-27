@@ -36,7 +36,7 @@ DESCRIPTION
 
 class GEM_EXTERN pix_crop : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_crop, GemPixObj)
+    CPPEXTERN_HEADER(pix_crop, GemPixObj);
 
     public:
 

@@ -14,7 +14,7 @@
 
 #include "GEMglScalef.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglScalef , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglScalef , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

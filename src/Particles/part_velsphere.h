@@ -32,7 +32,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_velsphere : public partlib_base
 {
-  CPPEXTERN_HEADER(part_velsphere, partlib_base)
+  CPPEXTERN_HEADER(part_velsphere, partlib_base);
 
     public:
 

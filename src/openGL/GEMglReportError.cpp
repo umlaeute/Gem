@@ -16,7 +16,7 @@
 #include "Base/GemGLUtil.h"
 
 
-CPPEXTERN_NEW( GEMglReportError)
+CPPEXTERN_NEW( GEMglReportError);
 
 /////////////////////////////////////////////////////////
 //

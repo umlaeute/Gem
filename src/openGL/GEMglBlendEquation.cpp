@@ -14,7 +14,7 @@
 
 #include "GEMglBlendEquation.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

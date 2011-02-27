@@ -29,7 +29,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN gemkeyname : public CPPExtern
 {
-    CPPEXTERN_HEADER(gemkeyname, CPPExtern)
+    CPPEXTERN_HEADER(gemkeyname, CPPExtern);
 
     public:
 

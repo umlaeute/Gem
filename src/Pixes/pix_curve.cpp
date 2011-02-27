@@ -31,7 +31,7 @@
 #include <math.h>
 #include "RTE/Array.h"
 
-CPPEXTERN_NEW_WITH_GIMME(pix_curve)
+CPPEXTERN_NEW_WITH_GIMME(pix_curve);
 
 
   /////////////////////////////////////////////////////////

@@ -70,7 +70,7 @@ class GEM_EXTERN Blob {
 
 class GEM_EXTERN pix_multiblob : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_multiblob, GemPixObj)
+  CPPEXTERN_HEADER(pix_multiblob, GemPixObj);
 		
     public:
   

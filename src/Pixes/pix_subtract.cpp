@@ -17,7 +17,7 @@
 
 #include "pix_subtract.h"
 
-CPPEXTERN_NEW(pix_subtract)
+CPPEXTERN_NEW(pix_subtract);
 
 /////////////////////////////////////////////////////////
 //

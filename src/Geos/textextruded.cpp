@@ -21,7 +21,7 @@
 #include "FTGLExtrdFont.h"
 #endif
 
-CPPEXTERN_NEW_WITH_GIMME(textextruded)
+CPPEXTERN_NEW_WITH_GIMME(textextruded);
 
 /////////////////////////////////////////////////////////
 //

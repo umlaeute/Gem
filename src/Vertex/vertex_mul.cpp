@@ -16,7 +16,7 @@
 
 #include "vertex_mul.h"
 
-CPPEXTERN_NEW_WITH_GIMME(vertex_mul)
+CPPEXTERN_NEW_WITH_GIMME(vertex_mul);
  
 /////////////////////////////////////////////////////////
 //

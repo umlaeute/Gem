@@ -29,7 +29,7 @@
 #endif
 
 
-CPPEXTERN_NEW_WITH_GIMME(pix_write)
+CPPEXTERN_NEW_WITH_GIMME(pix_write);
 
   /////////////////////////////////////////////////////////
 //

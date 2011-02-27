@@ -17,7 +17,7 @@
 #include "accumrotate.h"
 #include "Base/GemException.h"
 
-CPPEXTERN_NEW_WITH_GIMME(accumrotate)
+CPPEXTERN_NEW_WITH_GIMME(accumrotate);
 
   /////////////////////////////////////////////////////////
 //

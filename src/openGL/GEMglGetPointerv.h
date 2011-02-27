@@ -27,7 +27,7 @@
 
 class GEM_EXTERN GEMglGetPointerv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetPointerv, GemGLBase)
+	CPPEXTERN_HEADER(GEMglGetPointerv, GemGLBase);
 
 	public:
 	  // Constructor

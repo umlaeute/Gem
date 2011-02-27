@@ -36,7 +36,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN separator : public GemBase
 {
-    CPPEXTERN_HEADER(separator, GemBase)
+    CPPEXTERN_HEADER(separator, GemBase);
 
     public:
 

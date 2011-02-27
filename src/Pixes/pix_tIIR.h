@@ -41,7 +41,7 @@
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_tIIR : public GemPixObj
 {
-  CPPEXTERN_HEADER(pix_tIIR, GemPixObj)
+  CPPEXTERN_HEADER(pix_tIIR, GemPixObj);
 		
     public:
 	

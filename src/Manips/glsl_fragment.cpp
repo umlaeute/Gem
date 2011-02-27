@@ -20,7 +20,7 @@
 #include <string.h>
 #include <stdio.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol *, A_DEFSYM)
+CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //

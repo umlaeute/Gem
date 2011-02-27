@@ -12,7 +12,7 @@
 
 #include <errno.h>
 
-CPPEXTERN_NEW_WITH_GIMME(pix_share_read)
+CPPEXTERN_NEW_WITH_GIMME(pix_share_read);
   
   
   pix_share_read :: pix_share_read(int argc, t_atom*argv):pix_share_write(argc,argv)

@@ -32,7 +32,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_multitexture : public GemBase
 {
-    CPPEXTERN_HEADER(pix_multitexture, GemBase)
+    CPPEXTERN_HEADER(pix_multitexture, GemBase);
 
     public:
 
