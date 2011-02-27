@@ -319,7 +319,8 @@ static void obj_setupCallback(t_class *classPtr);
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef NO_AUTO_REGISTER_CLASS
 // if NO_AUTO_REGISTER_CLASS is defined, we will not register the class
-# define AUTO_REGISTER_CLASS(NEW_CLASS)
+# define AUTO_REGISTER_CLASS(NEW_CLASS) \
+  static int NEW_CLASS ## _dummyinstance
 #else
 // for debugging we can show the which classes are auto-registering
 # if 0
