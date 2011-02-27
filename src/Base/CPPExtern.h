@@ -74,13 +74,13 @@ DESCRIPTION
     
     The define
     
-        CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)
+        CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS);
     
     should be somewhere in your header file.
     One of the defines like
     
-    CPPEXTERN_NEW(NEW_CLASS)
-    CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, t_floatarg, A_FLOAT, t_floatarg, A_FLOAT)
+    CPPEXTERN_NEW(NEW_CLASS);
+    CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, t_floatarg, A_FLOAT, t_floatarg, A_FLOAT);
     
     should be the first thing in your implementation file.
     NEW_CLASS is the name of your class and PARENT_CLASS is the 
