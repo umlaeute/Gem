@@ -41,19 +41,19 @@
 # ifdef __linux__
 #  include <sys/time.h>
 
-#  define START_TIMING float mseconds=0.f; \
-                     timeval startTime, endTime; \
-                     gettimeofday(&startTime, 0)
-#  define STOP_TIMING(x) gettimeofday(&endTime, 0); \
-                         mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +\
-                                    (endTime.tv_usec - startTime.tv_usec) * 0.001;\
-                         post("%s frame time = %f ms", x, mseconds)
+#  define START_TIMING float mseconds=0.f;	\
+  timeval startTime, endTime;			\
+  gettimeofday(&startTime, 0)
+#  define STOP_TIMING(x) gettimeofday(&endTime, 0);	\
+  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +	\
+    (endTime.tv_usec - startTime.tv_usec) * 0.001;	\
+  post("%s frame time = %f ms", x, mseconds)
 # elif defined __APPLE__
-#  define START_TIMING float mseconds=0.f; \
-  UnsignedWide start, end;		   \
+#  define START_TIMING float mseconds=0.f;	\
+  UnsignedWide start, end;			\
   Microseconds(&start)
-#  define STOP_TIMING(x) Microseconds(&end);				\
-  mseconds = static_cast<float>((end.lo - start.lo) / 1000.f);			\
+#  define STOP_TIMING(x) Microseconds(&end);			\
+  mseconds = static_cast<float>((end.lo - start.lo) / 1000.f);	\
   post("%s frame time = %f ms", x, mseconds)
 # else
 #  define START_TIMING
@@ -80,11 +80,11 @@ imageStruct :: imageStruct()
 #ifdef __APPLE__
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
 # ifdef __BIG_ENDIAN__
-	type(GL_UNSIGNED_SHORT_8_8_REV_APPLE),
+    type(GL_UNSIGNED_SHORT_8_8_REV_APPLE),
 # else 
-	type(GL_UNSIGNED_SHORT_8_8_APPLE),
+    type(GL_UNSIGNED_SHORT_8_8_APPLE),
 # endif /* __BIG_ENDIAN__ */
-	format(GL_YCBCR_422_GEM),
+    format(GL_YCBCR_422_GEM),
 #else /* !__APPLE__ */
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif /* __APPLE__ */
@@ -92,7 +92,7 @@ imageStruct :: imageStruct()
 #ifdef __APPLE__
     upsidedown(1)
 #else /* !__APPLE__ */
-    upsidedown(0)
+  upsidedown(0)
 #endif /* __APPLE__ */
 {}
 
@@ -146,13 +146,13 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
 
 GEM_EXTERN unsigned char* imageStruct::allocate() 
 {
-	return allocate(xsize*ysize*csize);  
+  return allocate(xsize*ysize*csize);  
 }
 
 GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
 {
   if (size>datasize){
-      return allocate(size);
+    return allocate(size);
   }
   size_t alignment = (reinterpret_cast<size_t>(pdata))&(GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
@@ -161,7 +161,7 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
 }
 GEM_EXTERN unsigned char* imageStruct::reallocate() 
 {  
-	return reallocate(xsize*ysize*csize);  
+  return reallocate(xsize*ysize*csize);  
 }
  
 GEM_EXTERN void imageStruct::clear() 
@@ -176,26 +176,26 @@ GEM_EXTERN void imageStruct::clear()
 
 GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to) const
 {
-    if (!to || !this || !this->data) {
-      error("GEM: Someone sent a bogus pointer to copy2ImageStruct");
-      if (to) to->data = NULL;
-      return;
-    }
+  if (!to || !this || !this->data) {
+    error("GEM: Someone sent a bogus pointer to copy2ImageStruct");
+    if (to) to->data = NULL;
+    return;
+  }
 
-    // copy the information over
-    to->xsize 	= xsize;
-    to->ysize 	= ysize;
-    to->csize 	= csize;
-    to->format 	= format;
-    to->type 	= type;
-    to->data    = data;
-    /* from SIMD-branch: datasize refers to the private pdata
-     * thus we shouldn't set it to something else, in order to not break
-     * reallocate() and friends...
-     */
-    //to->datasize= datasize;
-    to->upsidedown=upsidedown;
-    to->notowned= true; /* but pdata is always owned by us */
+  // copy the information over
+  to->xsize 	= xsize;
+  to->ysize 	= ysize;
+  to->csize 	= csize;
+  to->format 	= format;
+  to->type 	= type;
+  to->data    = data;
+  /* from SIMD-branch: datasize refers to the private pdata
+   * thus we shouldn't set it to something else, in order to not break
+   * reallocate() and friends...
+   */
+  //to->datasize= datasize;
+  to->upsidedown=upsidedown;
+  to->notowned= true; /* but pdata is always owned by us */
 }
 GEM_EXTERN void imageStruct::info() {
   post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x) %d\n\t\t%x\t%x\t%d",
@@ -206,45 +206,45 @@ GEM_EXTERN void imageStruct::info() {
 
 GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) const
 {
-    if (!to || !this || !this->data)
+  if (!to || !this || !this->data)
     {
-        error("GEM: Someone sent a bogus pointer to copy2Image");
-        if (to)
-	  to->data = NULL;
-        return;
+      error("GEM: Someone sent a bogus pointer to copy2Image");
+      if (to)
+	to->data = NULL;
+      return;
     }
 
-    /* copy without new allocation if possible (speedup in convolve ..) */
-    to->xsize 	= xsize;
-    to->ysize 	= ysize;
-    to->csize 	= csize;
-    to->format 	= format;
-    to->type 	= type;
-    to->reallocate();
-    to->upsidedown 	= upsidedown;
+  /* copy without new allocation if possible (speedup in convolve ..) */
+  to->xsize 	= xsize;
+  to->ysize 	= ysize;
+  to->csize 	= csize;
+  to->format 	= format;
+  to->type 	= type;
+  to->reallocate();
+  to->upsidedown 	= upsidedown;
 
-    memcpy(to->data, data, xsize*ysize*csize);
+  memcpy(to->data, data, xsize*ysize*csize);
 }
 
 GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) {
-    if (!to || !data)
+  if (!to || !data)
     {
-        error("GEM: Someone sent a bogus pointer to refreshImage");
-        return;
+      error("GEM: Someone sent a bogus pointer to refreshImage");
+      return;
     }
 
-    // check if we need to reallocate memory
-    if (to->xsize != xsize ||
-        to->ysize != ysize ||
-        to->csize != csize ||
-		!to->data)
+  // check if we need to reallocate memory
+  if (to->xsize != xsize ||
+      to->ysize != ysize ||
+      to->csize != csize ||
+      !to->data)
     {
-        to->clear();
-        copy2Image(to);
+      to->clear();
+      copy2Image(to);
     }
-    else
-        // copy the data over
-        memcpy(to->data, this->data, to->xsize * to->ysize * to->csize);
+  else
+    // copy the data over
+    memcpy(to->data, this->data, to->xsize * to->ysize * to->csize);
 }
 
 
@@ -261,11 +261,11 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   default:
     format=GL_YUV422_GEM; 
     type  =
-	#ifdef __BIG_ENDIAN__
-	GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-	#else
-	GL_UNSIGNED_SHORT_8_8_APPLE;
-	#endif
+#ifdef __BIG_ENDIAN__
+      GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+#else
+    GL_UNSIGNED_SHORT_8_8_APPLE;
+#endif
     csize =2; 
     break;
 
@@ -308,7 +308,12 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   case GL_RGBA:
   default:
     format=GL_RGBA;
-    type=GL_UNSIGNED_BYTE;
+    //    type=GL_UNSIGNED_BYTE;
+#ifdef __BIG_ENDIAN__
+    type  =GL_UNSIGNED_INT_8_8_8_8_REV;
+#else
+    type  =GL_UNSIGNED_INT_8_8_8_8;
+#endif
     csize=4; 
     break;
   }
@@ -483,7 +488,7 @@ GEM_EXTERN void imageStruct::fromRGB(unsigned char *rgbdata) {
     break;
   case GL_YUV422_GEM:
 #if 0
-	RGB_to_YCbCr_altivec(rgbdata, pixelnum, pixels);
+    RGB_to_YCbCr_altivec(rgbdata, pixelnum, pixels);
 #else
     pixelnum>>=1;
     while(pixelnum--){
@@ -604,30 +609,30 @@ GEM_EXTERN void imageStruct::fromRGBA(unsigned char *rgbadata) {
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
       BGRA_to_YCbCr_altivec(rgbadata,pixelnum,pixels);
-	  break;
+      break;
 #endif
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
       RGBA_to_UYVY_SSE2(rgbadata,pixelnum,pixels);
-	  break;
+      break;
 #endif
     case GEM_SIMD_NONE: default:
-     pixelnum>>=1;
-     while(pixelnum--){
-      *pixels++=((RGB2YUV_21*rgbadata[chRed]+
-		  RGB2YUV_22*rgbadata[chGreen]+
-		  RGB2YUV_23*rgbadata[chBlue])>>8)+UV_OFFSET; // U
-      *pixels++=((RGB2YUV_11*rgbadata[chRed]+
-		  RGB2YUV_12*rgbadata[chGreen]+
-		  RGB2YUV_13*rgbadata[chBlue])>>8)+ Y_OFFSET; // Y
-      *pixels++=((RGB2YUV_31*rgbadata[chRed]+
-		  RGB2YUV_32*rgbadata[chGreen]+
-		  RGB2YUV_33*rgbadata[chBlue])>>8)+UV_OFFSET; // V
-      *pixels++=((RGB2YUV_11*rgbadata[4+chRed]+
-		  RGB2YUV_12*rgbadata[4+chGreen]+
-		  RGB2YUV_13*rgbadata[4+chBlue])>>8)+ Y_OFFSET; // Y
-      rgbadata+=8;
-     }
+      pixelnum>>=1;
+      while(pixelnum--){
+	*pixels++=((RGB2YUV_21*rgbadata[chRed]+
+		    RGB2YUV_22*rgbadata[chGreen]+
+		    RGB2YUV_23*rgbadata[chBlue])>>8)+UV_OFFSET; // U
+	*pixels++=((RGB2YUV_11*rgbadata[chRed]+
+		    RGB2YUV_12*rgbadata[chGreen]+
+		    RGB2YUV_13*rgbadata[chBlue])>>8)+ Y_OFFSET; // Y
+	*pixels++=((RGB2YUV_31*rgbadata[chRed]+
+		    RGB2YUV_32*rgbadata[chGreen]+
+		    RGB2YUV_33*rgbadata[chBlue])>>8)+UV_OFFSET; // V
+	*pixels++=((RGB2YUV_11*rgbadata[4+chRed]+
+		    RGB2YUV_12*rgbadata[4+chGreen]+
+		    RGB2YUV_13*rgbadata[4+chBlue])>>8)+ Y_OFFSET; // Y
+	rgbadata+=8;
+      }
     }
     STOP_TIMING("RGBA to UYVY");
     break;
@@ -756,7 +761,7 @@ GEM_EXTERN void imageStruct::fromBGRA(unsigned char *bgradata) {
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
       BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
-	  break;
+      break;
 #endif
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
@@ -1183,21 +1188,21 @@ GEM_EXTERN void imageStruct::fromYV12(unsigned char*Y, unsigned char*U, unsigned
       unsigned char u, v;
       /* this is only re-ordering of the data */
       while(row--){
-		int col=cols;
-		while(col--){
-			// yuv422 is U Y0 V Y1
-			u=*pu++;	  v=*pv++;
-			*pixels1++=u;
-			*pixels1++=*py1++;
-			*pixels1++=v;
-			*pixels1++=*py1++;
-			*pixels2++=u;
-			*pixels2++=*py2++;
-			*pixels2++=v;
-			*pixels2++=*py2++;	  
-		}
-		pixels1+=xsize*csize;	pixels2+=xsize*csize;
-		py1+=xsize*1;	py2+=xsize*1;
+	int col=cols;
+	while(col--){
+	  // yuv422 is U Y0 V Y1
+	  u=*pu++;	  v=*pv++;
+	  *pixels1++=u;
+	  *pixels1++=*py1++;
+	  *pixels1++=v;
+	  *pixels1++=*py1++;
+	  *pixels2++=u;
+	  *pixels2++=*py2++;
+	  *pixels2++=v;
+	  *pixels2++=*py2++;	  
+	}
+	pixels1+=xsize*csize;	pixels2+=xsize*csize;
+	py1+=xsize*1;	py2+=xsize*1;
       }
     }
     break;
@@ -1378,37 +1383,37 @@ GEM_EXTERN void imageStruct::fromYV12(short*Y, short*U, short*V) {
       switch(m_simd){
 #ifdef __VEC__
       case GEM_SIMD_ALTIVEC:
-		YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
-		break;
+	YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
+	break;
 #endif
-    case GEM_SIMD_NONE: default:
-      unsigned char *pixels1=data;
-      unsigned char *pixels2=data+xsize*csize;
-      short*py1=Y;
-      short*py2=Y+xsize; // plane_1 is luminance (csize==1)
-      short*pu=U;
-      short*pv=V;
-      int row=ysize>>1;
-      int cols=xsize>>1;
-      unsigned char u, v;
-      /* this is only re-ordering of the data */
-      while(row--){
-		int col=cols;
-		while(col--){
-			// yuv422 is U Y0 V Y1
-			u=((*pu++)>>8)+128;	  v=((*pv++)>>8)+128;
-			*pixels1++=u;
-			*pixels1++=(*py1++)>>7;
-			*pixels1++=v;
-			*pixels1++=(*py1++)>>7;
-			*pixels2++=u;
-			*pixels2++=(*py2++)>>7;
-			*pixels2++=v;
-			*pixels2++=(*py2++)>>7;	  
-		}
-		pixels1+=xsize*csize;	pixels2+=xsize*csize;
-		py1+=xsize*1;	py2+=xsize*1;
-      }
+      case GEM_SIMD_NONE: default:
+	unsigned char *pixels1=data;
+	unsigned char *pixels2=data+xsize*csize;
+	short*py1=Y;
+	short*py2=Y+xsize; // plane_1 is luminance (csize==1)
+	short*pu=U;
+	short*pv=V;
+	int row=ysize>>1;
+	int cols=xsize>>1;
+	unsigned char u, v;
+	/* this is only re-ordering of the data */
+	while(row--){
+	  int col=cols;
+	  while(col--){
+	    // yuv422 is U Y0 V Y1
+	    u=((*pu++)>>8)+128;	  v=((*pv++)>>8)+128;
+	    *pixels1++=u;
+	    *pixels1++=(*py1++)>>7;
+	    *pixels1++=v;
+	    *pixels1++=(*py1++)>>7;
+	    *pixels2++=u;
+	    *pixels2++=(*py2++)>>7;
+	    *pixels2++=v;
+	    *pixels2++=(*py2++)>>7;	  
+	  }
+	  pixels1+=xsize*csize;	pixels2+=xsize*csize;
+	  py1+=xsize*1;	py2+=xsize*1;
+	}
       }
       STOP_TIMING("YV12_to_YUV422");
     }
@@ -1443,87 +1448,87 @@ GEM_EXTERN void imageStruct::fromUYVY(unsigned char *yuvdata) {
       int y, u, v;
       int uv_r, uv_g, uv_b;
       START_TIMING;
-    switch(m_simd){
+      switch(m_simd){
 #ifdef __SSE2__
-    case GEM_SIMD_SSE2:
-      UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
-	  break;
+      case GEM_SIMD_SSE2:
+	UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
+	break;
 #endif
-    case GEM_SIMD_NONE: default:
-      pixelnum>>=1;
+      case GEM_SIMD_NONE: default:
+	pixelnum>>=1;
 
-      while(pixelnum--){
-	u=yuvdata[0]-UV_OFFSET;
-	v=yuvdata[2]-UV_OFFSET;
-	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+	while(pixelnum--){
+	  u=yuvdata[0]-UV_OFFSET;
+	  v=yuvdata[2]-UV_OFFSET;
+	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	// 1st pixel
-	y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels+=3;
-	// 2nd pixel
-	y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels+=3;
+	  // 1st pixel
+	  y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	  pixels+=3;
+	  // 2nd pixel
+	  y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	  pixels+=3;
 
-	yuvdata+=4;
+	  yuvdata+=4;
+	}
       }
-    }
-    STOP_TIMING("YUV2RGB");
+      STOP_TIMING("YUV2RGB");
     }
     break;
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       START_TIMING;
-    switch(m_simd){
+      switch(m_simd){
 #ifdef __VEC__
-    case GEM_SIMD_ALTIVEC:
-      YUV422_to_BGRA_altivec( yuvdata, pixelnum*2, data);
-	  break;
+      case GEM_SIMD_ALTIVEC:
+	YUV422_to_BGRA_altivec( yuvdata, pixelnum*2, data);
+	break;
 #endif
 #ifdef __SSE2__
-    case GEM_SIMD_SSE2:
-      UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
-	  break;
+      case GEM_SIMD_SSE2:
+	UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
+	break;
 #endif
-    case GEM_SIMD_NONE: default:
-      unsigned char *pixels=data;
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
-      pixelnum>>=1;
-      while(pixelnum--){
-	    u=yuvdata[0]-UV_OFFSET;
-		v=yuvdata[2]-UV_OFFSET;
-		uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-		uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-		uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+      case GEM_SIMD_NONE: default:
+	unsigned char *pixels=data;
+	int y, u, v;
+	int uv_r, uv_g, uv_b;
+	pixelnum>>=1;
+	while(pixelnum--){
+	  u=yuvdata[0]-UV_OFFSET;
+	  v=yuvdata[2]-UV_OFFSET;
+	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-		// 1st pixel
-		y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-		pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-		pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-		pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-		pixels[chAlpha] = 255;
-		pixels+=4;
-		// 2nd pixel
-		y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-		pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-		pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-		pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-		pixels[chAlpha] = 255;
-		pixels+=4;
+	  // 1st pixel
+	  y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	  pixels[chAlpha] = 255;
+	  pixels+=4;
+	  // 2nd pixel
+	  y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+	  pixels[chAlpha] = 255;
+	  pixels+=4;
 
-		yuvdata+=4;
+	  yuvdata+=4;
+	}
+	STOP_TIMING("UYVY_to_RGBA/BGRA");
       }
-      STOP_TIMING("UYVY_to_RGBA/BGRA");
-    }
     }
     break;
   }
