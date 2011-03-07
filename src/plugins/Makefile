@@ -1,5 +1,5 @@
 default: o_objects 
-	@echo "in order to build external plugins, run 'make plugins'"
+	@echo "in order to build external plugins, run 'make PLUGINS'"
 
 include ../Makefile.subdir
 
@@ -15,7 +15,7 @@ PLUGINS=$(FILMPLUGINS) $(VIDEOPLUGINS) $(RECORDPLUGINS)
 
 .PHONY: all default $(PLUGINS) plugins
 
-plugins: $(PLUGINS)
+PLUGINS: $(PLUGINS)
 	-echo $(PLUGINS)
 
 $(PLUGINS):

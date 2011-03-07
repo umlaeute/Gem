@@ -17,7 +17,7 @@ FORCE:
 all: Gem.$(EXT) extra PLUGINS
 
 PLUGINS:
-	${MAKE} -C plugins plugins
+	${MAKE} -C plugins $@
 
 Gem.$(EXT): version.h subdirs 
 	$(CXXLINK) $(GEM_EXTRA_LDFLAGS)  $(GEM_ARCH_LDFLAGS) $(GEM_LDFLAGS) $(OBJECTS) $(GEM_LIBS) $(X_LIBS)
