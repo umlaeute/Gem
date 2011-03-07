@@ -308,11 +308,11 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
   case GL_RGBA:
   default:
     format=GL_RGBA;
-    //    type=GL_UNSIGNED_BYTE;
 #ifdef __BIG_ENDIAN__
     type  =GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
-    type  =GL_UNSIGNED_INT_8_8_8_8;
+    type=GL_UNSIGNED_BYTE;
+    //type  =GL_UNSIGNED_INT_8_8_8_8;
 #endif
     csize=4; 
     break;
