@@ -182,6 +182,9 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 
 #endif /* HAVE_VIDEO4LINUX2 */
 
+
+  __u32 m_frameSize; // the size of a v4l2 frame
+
   }; };
 
 #endif	// for header file

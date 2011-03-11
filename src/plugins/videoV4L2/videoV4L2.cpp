@@ -214,16 +214,24 @@ void *videoV4L2::capturing_(void*you)
 void *videoV4L2 :: capturing(void)
 {
   int errorcount=0;
+
   t_v4l2_buffer*buffers=m_buffers;
+  void *currentBuffer=NULL;
+
+  const __u32 expectedSize=m_frameSize;
+  __u32 gotSize=0;
+
 
   struct v4l2_buffer buf;
-  unsigned int i;
-    
+  int nbuf=m_nbuffers;
+  
   fd_set fds;
   struct timeval tv;
   int r;
 
-  int nbuf=m_nbuffers;
+  unsigned int i;
+
+
   m_capturing=true;
 
   debugThread("V4L2: memset");
@@ -279,7 +287,8 @@ void *videoV4L2 :: capturing(void)
 
     debugThread("V4L2: grabbed %d", buf.index);
 
-    m_currentBuffer=buffers[buf.index].start;
+    gotSize=buf.bytesused;
+    currentBuffer=buffers[buf.index].start;
     //process_image (m_buffers[buf.index].start);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
@@ -289,8 +298,13 @@ void *videoV4L2 :: capturing(void)
 
     debugThread("V4L2: dequeueued");
     
-    m_frame_ready = 1;
-    m_last_frame=m_frame;
+    if(expectedSize==gotSize) {
+      m_frame_ready = 1;
+      m_last_frame=m_frame;
+      m_currentBuffer=currentBuffer;
+    } else {
+      post("oops, skipping incomplete capture %d of %d bytes", gotSize, expectedSize);
+    }
 
     if(captureerror) {
       errorcount++;
@@ -594,6 +608,8 @@ bool videoV4L2 :: startTransfer()
   if (-1 == xioctl (m_tvfd, VIDIOC_STREAMON, &type)){
     perror("v4l2: VIDIOC_STREAMON");//exit
   }
+
+  m_frameSize=fmt.fmt.pix.sizeimage;
   
   /* fill in image specifics for Gem pixel object.  Could we have
      just used RGB, I wonder? */
