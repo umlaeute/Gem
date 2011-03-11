@@ -178,7 +178,8 @@ void GemBase :: setModified()
     m_cache=NULL;
   if (m_cache) m_cache->dirty = true;
   m_modified=true;
-  m_state=MODIFIED;
+  if(DISABLED!=m_state)
+    m_state=MODIFIED;
 }
 
 /////////////////////////////////////////////////////////
