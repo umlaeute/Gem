@@ -180,10 +180,9 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
 		     gem::Properties&writeable);
   std::map<std::string, struct v4l2_queryctrl>m_readprops, m_writeprops;
 
-#endif /* HAVE_VIDEO4LINUX2 */
-
-
   __u32 m_frameSize; // the size of a v4l2 frame
+
+#endif /* HAVE_VIDEO4LINUX2 */
 
   }; };
 

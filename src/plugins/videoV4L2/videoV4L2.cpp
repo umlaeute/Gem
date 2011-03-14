@@ -83,7 +83,8 @@ videoV4L2 :: videoV4L2() : video("v4l2", 0)
                                      m_maxheight(650), m_minheight(32),
                                      m_thread_id(0), m_continue_thread(false), m_frame_ready(false),
                                      m_rendering(false),
-                                     m_stopTransfer(false)
+                                     m_stopTransfer(false),
+                                     m_frameSize(0)
 {
   if (!m_width)m_width=320;
   if (!m_height)m_height=240;
