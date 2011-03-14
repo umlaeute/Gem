@@ -25,13 +25,13 @@ using namespace gem;
 #include "Base/GemFiles.h"
 
 #ifndef HAVE_LIBV4L2
-# define v4l2_open open
-# define v4l2_close close
-# define v4l2_dup dup
-# define v4l2_ioctl ioctl
-# define v4l2_read read
-# define v4l2_mmap mmap
-# define v4l2_munmap munmap
+# define v4l2_open ::open
+# define v4l2_close ::close
+# define v4l2_dup ::dup
+# define v4l2_ioctl ::ioctl
+# define v4l2_read ::read
+# define v4l2_mmap ::mmap
+# define v4l2_munmap ::munmap
 #endif /* libv4l-2 */
 
 
