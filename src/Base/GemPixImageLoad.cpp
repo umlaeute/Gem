@@ -256,8 +256,7 @@ imageStruct *QTImage2mem(const char *filename)
 
       err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename), &spec, NULL);
       if (err) {
-         error("GemImageLoad: Unable to find file: %#s", spec.name);
-                        error("GemImageLoad: Unable to find filename:%s", filename);
+         error("GemImageLoad: Unable to find file: %s", filename);
          error("parID : %d", spec.parID); 
          return NULL;
       }

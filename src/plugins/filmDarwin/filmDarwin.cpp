@@ -93,7 +93,7 @@ bool filmDarwin :: open(char *filename, int format)
     err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
-      //error("GEM: pix_film: Unable to find file: %#s", theFSSpec.name);
+      //error("GEM: pix_film: Unable to find file: %s", filename);
       goto unsupported;
     }
   }

@@ -113,7 +113,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
 
     if (err) {
-      error("unable to find file: %#s", theFSSpec.name);
+      error("unable to find file: %s", filename);
       return;
     }
     m_haveMovie = GEM_MOVIE_MOV;
