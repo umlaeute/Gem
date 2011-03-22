@@ -58,7 +58,7 @@ class GemStateData {
 
  protected:
   // dictionary for setting values
-  std::map <key_t, any> data;
+  std::map <GemState::key_t, any> data;
 
   std::auto_ptr<GLStack>stacks;
 };
@@ -187,8 +187,8 @@ float GemState::texCoordY(int num) const {
 
 
 /* get a named property */
-bool GemState::get(const key_t key, any&value) {
-  std::map<int,any>::iterator it = 
+bool GemState::get(const GemState::key_t key, any&value) {
+  std::map<GemState::key_t,any>::iterator it = 
     data->data.find(key);
   if(it==data->data.end()) {
     if(key==_PIX) { value=image; return true; }
@@ -231,7 +231,7 @@ bool GemState::get(const key_t key, any&value) {
 }
 
 /* set a named property */
-bool GemState::set(const key_t key, any value) {
+bool GemState::set(const GemState::key_t key, any value) {
   if(value.empty()) {
     data->data.erase(key);
     return false;
@@ -261,7 +261,7 @@ bool GemState::set(const key_t key, any value) {
 }
 
 /* remove a named property */
-bool GemState::remove(const key_t key) {
+bool GemState::remove(const GemState::key_t key) {
   return (0!=data->data.erase(key));
 }
 
