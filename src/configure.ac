@@ -257,7 +257,7 @@ else
 fi
 
 # using pix_videoOS rather than pix_video
-AC_ARG_WITH([video], AS_HELP_STRING([--with-video=Darwin|DS|NT],[use OS-specific "pix_video"]))
+AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
 
 ## on OSX we still default to the olde way
 if test "x$KERN" = "xDarwin"; then
@@ -270,10 +270,14 @@ if test "x$KERN" = "xDarwin"; then
 fi
 
 if test "x$with_video" = "x"; then
- :
+ with_video="plugins"
 elif test "x$with_video" = "xyes"; then
- :
+ with_video="plugins"
 elif test "x$with_video" = "xno"; then
+# hmm, what to do here?
+ AC_MSG_RESULT([ignoring request for no video...using plugins])
+ with_video="plugins"
+elif test "x$with_video" = "xplugins"; then
  :
 else
  AC_DEFINE_UNQUOTED([GEM_VIDEOBACKEND], [GEM_VIDEOBACKEND_$with_video], [backend for deprecated video-capture objects])
@@ -281,13 +285,17 @@ else
 fi
 
 # using pix_filmOS rather than pix_film
-AC_ARG_WITH([film], AS_HELP_STRING([--with-film=Darwin],[use OS-specific "pix_film"]))
+AC_ARG_WITH([film], AS_HELP_STRING([--with-film=plugins|Darwin],[use plugins for video decoding or OS-specific "pix_film"]))
 
 if test "x$with_film" = "x"; then
- :
+ with_film="plugins"
 elif test "x$with_film" = "xyes"; then
- :
+ with_film="plugins"
 elif test "x$with_film" = "xno"; then
+# hmm, what to do here?
+ AC_MSG_RESULT([ignoring request for no film...using plugins])
+ with_film="plugins"
+elif test "x$with_film" = "xplugins"; then
  :
 else
  AC_DEFINE_UNQUOTED([GEM_FILMBACKEND], [GEM_FILMBACKEND_$with_film], [backend for deprecated film-decoding objects])
@@ -451,13 +459,13 @@ if test "x$have_libv4l1" = "xyes" || test "x$have_libv4l2" = "xyes"; then
   have_v4l="yes (libv4l)"
 fi
 
-if test "x$with_film" = "x"; then
+if test "x$with_film" = "xplugins"; then
  use_film_plugins="yes (ignore missing support below)"
 else
  use_film_plugins="no (using $with_film backend)"
 fi
 
-if test "x$with_video" = "x"; then
+if test "x$with_video" = "xplugins"; then
  use_video_plugins="yes (ignore missing support below)"
 else
  use_video_plugins="no (using $with_video backend)"
