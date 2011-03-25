@@ -505,14 +505,14 @@ Configuration:
     use ImageMagick      : ${have_ImageMagick}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
-  video-support
+  moviefile-support
     use PLUGINS		 : ${use_film_plugins}
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
-  input-support 
+  capture-support 
     use PLUGINS		 : ${use_video_plugins}
     use v4l              : ${have_v4l}
     use ieee1394         : ${have_ieee1394}
