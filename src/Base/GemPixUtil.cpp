@@ -1795,7 +1795,7 @@ GEM_EXTERN void imageStruct::swapRedBlue() {
 GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a) const
 {
   unsigned char red=0, green=0, blue=0, alpha=255;
-  int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
+  int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
   unsigned char*pixels=data+position*csize;
     
   switch(format) {
@@ -1834,7 +1834,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
     break;
   case GL_YUV422_GEM:
     {
-      position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
+      position = (((X+(upsidedown?(ysize-Y-1):Y)*xsize)>>1)<<1);
       pixels=data+position*csize;
       int y=YUV2RGB_11*(pixels[(X%2)?chY1:chY0]-Y_OFFSET);
       int u=pixels[chU] - UV_OFFSET;
@@ -1859,7 +1859,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
 GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
 {
   unsigned char grey=0;
-  int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
+  int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
   unsigned char*pixels=data+position*csize;
   switch(format) {
   case GL_LUMINANCE:
@@ -1879,7 +1879,7 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
     break;
   case GL_YUV422_GEM:
     {
-      position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
+      position = (((X+(upsidedown?(ysize-Y-1):Y)*xsize)>>1)<<1);
       pixels=data+position*csize;
       grey = CLAMP(pixels[((X%2)?chY1:chY0)]-Y_OFFSET);
     }
@@ -1892,7 +1892,7 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
 GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const
 {
   unsigned char luma=0, chromaU=128, chromaV=128;
-  int position = (X+(upsidedown?(ysize-Y):Y)*xsize);
+  int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
   unsigned char*pixels=data+position*csize;
   switch(format) {
   case GL_LUMINANCE:
@@ -1907,7 +1907,7 @@ GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y, unsigned char
     error("getYUV not implemented for RGBA");
     break;
   case GL_YUV422_GEM:
-    position = (((X+(upsidedown?(ysize-Y):Y)*xsize)>>1)<<1);
+    position = (((X+(upsidedown?(ysize-Y-1):Y)*xsize)>>1)<<1);
     pixels=data+position*csize;
     luma=pixels[((X%2)?chY1:chY0)];
     chromaU=pixels[chU];
