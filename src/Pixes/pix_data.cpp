@@ -60,10 +60,16 @@ void pix_data :: trigger()
   if (!m_pixRight || !m_pixRight->image.data)
     return;
 
-  int xPos = static_cast<int>(m_position[0] * m_pixRight->image.xsize);
-  int yPos = static_cast<int>(m_position[1] * m_pixRight->image.ysize);
+  int maxX= m_pixRight->image.xsize;
+  int maxY= m_pixRight->image.ysize;
+
+  int xPos = static_cast<int>(m_position[0] * maxX);
+  int yPos = static_cast<int>(m_position[1] * maxY);
   t_float red, green, blue, alpha, grey;
   unsigned char r, g, b, a, G;
+
+  if(xPos<0)xPos=0; if(xPos>=maxX)xPos=maxX-1;
+  if(yPos<0)yPos=0; if(yPos>=maxY)yPos=maxY-1;
 
   m_pixRight->image.getRGB(xPos, yPos, &r, &g, &b, &a);
   m_pixRight->image.getGrey(xPos, yPos, &G);
