@@ -187,7 +187,6 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
   // GRH: muss i wie in pix_image die ganzen andern Sachen a machen ????
 
   // load an image into mem
-  char buf[MAXPDSTRING];
   imageStruct *image = NULL;
 
   // some checks
@@ -196,12 +195,12 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
     error("index %d out of range (0..%d)!", pos, m_numframes);
     return;
   }
+  std::string file=findFile(filename->s_name);
 
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
-  image = image2mem(buf);
+  image = image2mem(file.c_str());
   if(!image)
   {
-    error("no valid image!");
+    error("'%s' is no valid image!", file.c_str());
     return;
   }
 
