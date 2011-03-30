@@ -157,6 +157,8 @@ void pix_movie :: obj_setupCallback(t_class *classPtr)
 		  gensym("repeat"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::modeCallback),
 		  gensym("mode"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::rectangleCallback),
+		  gensym("rectangle"), A_FLOAT, A_NULL);
 }
 
 void pix_movie :: textureMessCallback(void *data, t_floatarg quality)
@@ -169,7 +171,14 @@ void pix_movie :: repeatMessCallback(void *data, t_floatarg quality)
 }
 
 void pix_movie :: modeCallback(void *data, t_floatarg quality)
-{
-  GetMyClass(data)->modeMess(static_cast<int>(quality));
+{  
+	GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
+    GetMyClass(data)->modeMess(static_cast<int>(quality));
 }
+
+void pix_movie :: rectangleCallback(void *data, t_floatarg quality)
+{  
+    GetMyClass(data)->modeMess(static_cast<int>(quality));
+}
+
 #endif /* no OS-specific GEM_FILMBACKEND */
