@@ -18,20 +18,15 @@ GEM_CHECK_RTE
 
 AC_LANG(C++)
 
-
 GEM_ARG_WITH(v4l, [video input], [force])
 
 if test "x$with_v4l" != "xno"; then
-  AC_CHECK_HEADER(linux/videodev.h,
-                  [
-                    AC_DEFINE([HAVE_VIDEO4LINUX], [], [video capturing using v4l])
-                    have_v4l="yes"
-                  ],[have_v4l="no"])
+  AC_CHECK_HEADERS(linux/videodev.h,
+                  [have_v4l="yes"],
+		  [have_v4l="no"]
+		  )
 
-# these two are quite the same...
  GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video input])
 fi
-
-
 
 AC_OUTPUT

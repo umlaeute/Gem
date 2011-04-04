@@ -19,11 +19,16 @@
 
 #include "plugins/video.h"
 
-#if defined HAVE_LIBV4L1 && !defined HAVE_VIDEO4LINUX
+#if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
 # define HAVE_VIDEO4LINUX
 #endif
 
 #ifdef HAVE_VIDEO4LINUX
+
+# ifdef HAVE_LINUX_VIDEODEV_H
+#  include <linux/videodev.h>
+# endif /* HAVE_LINUX_VIDEODEV_H */
+
 # ifdef HAVE_LIBV4L1
 #  include <libv4l1.h> 
 # endif /* HAVE_LIBV4L1 */
@@ -40,7 +45,6 @@
 # include <sys/types.h>
 # include <sys/time.h>
 # include <linux/types.h>
-# include <linux/videodev.h>
 # include <sys/mman.h>
 //#ifdef HAVE_PTHREADS
 # include <pthread.h>
