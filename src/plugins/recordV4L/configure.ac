@@ -18,12 +18,10 @@ GEM_CHECK_RTE
 AC_LANG(C++)
 
 if test "x$with_v4l" != "xno"; then
-  AC_CHECK_HEADER(linux/videodev.h,
-                  [
-                    AC_DEFINE([HAVE_VIDEO4LINUX], [], [video recording using v4l loopback devices])
-                    have_v4l="yes"
-                  ],[have_v4l="no"])
+  AC_CHECK_HEADERS(linux/videodev.h,
+                  [have_v4l="yes"],
+		  [have_v4l="no"]
+		  )
 fi
-
 
 AC_OUTPUT

@@ -17,8 +17,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PLUGINS_RECORDV4L_H_
    
 #include "plugins/record.h"
+
+#ifdef HAVE_LINUX_VIDEODEV_H
+# define HAVE_VIDEO4LINUX
+#endif
    
-#if defined HAVE_VIDEO4LINUX
+#if defined HAVE_LINUX_VIDEODEV_H
 # include <linux/videodev.h>
 #endif
  
