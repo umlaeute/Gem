@@ -18,13 +18,18 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
    
 #include "plugins/record.h"
 
-#ifdef HAVE_LINUX_VIDEODEV_H
+#if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
 # define HAVE_VIDEO4LINUX
 #endif
    
 #if defined HAVE_LINUX_VIDEODEV_H
 # include <linux/videodev.h>
-#endif
+#endif /*  HAVE_LINUX_VIDEODEV_H */
+
+#if defined HAVE_LIBV4L1
+#  include <libv4l1.h> 
+#endif /* HAVE_LIBV4L1 */
+
  
 /*---------------------------------------------------------------
  -------------------------------------------------------------------

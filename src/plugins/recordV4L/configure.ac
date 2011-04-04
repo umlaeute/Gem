@@ -21,7 +21,8 @@ if test "x$with_v4l" != "xno"; then
   AC_CHECK_HEADERS(linux/videodev.h,
                   [have_v4l="yes"],
 		  [have_v4l="no"]
-		  )
+		  ) 
+   GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video output])
 fi
 
 AC_OUTPUT
