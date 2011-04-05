@@ -63,9 +63,9 @@ separator :: separator(int argc, t_atom*argv)
     
   } else {
     m_active[GLStack::MODELVIEW ]=true;
-    m_active[GLStack::COLOR     ]=true;
-    m_active[GLStack::TEXTURE   ]=true;
-    m_active[GLStack::PROJECTION]=true;
+    m_active[GLStack::COLOR     ]=false;
+    m_active[GLStack::TEXTURE   ]=false;
+    m_active[GLStack::PROJECTION]=false;
   }
   m_state.set(GemState::_GL_TEX_COORDS, static_cast<TexCoord*>(NULL));
 }
