@@ -320,7 +320,7 @@ $f3) \, 1);
 #X obj 88 67 + 1;
 #X obj 62 98 / 1.618;
 #X obj 82 122 / 1.618;
-#X obj 20 217 scale;
+#X obj 20 217 scale 0.05;
 #X obj 53 191 inlet;
 #X obj 20 252 outlet;
 #X text 152 215 Scale the whole scene.;
@@ -344,7 +344,7 @@ $f3) \, 1);
 #X obj 151 221 clip 0 6;
 #X text 219 182 Subpatches are used to hide the implementation details
 of each part of the patch. Further comments are inside.;
-#X obj 275 260 bng 15 250 50 0 empty empty randomize 17 7 0 10 -262144
+#X obj 275 260 bng 15 250 50 1 empty empty randomize 17 7 0 10 -262144
 -1 -1;
 #X obj 14 404 nnrepeat 5;
 #X text 220 77 Another new object is necessary for full effect: [nnrepeat]
