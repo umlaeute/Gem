@@ -312,8 +312,10 @@ if test "$fat_binary" != no; then
 
    if test "x$[]Name" != "x"; then
     tmp_arch_cflags="$CFLAGS"
+    tmp_arch_cxxflags="$CXXFLAGS"
     GEM_CHECK_CXXFLAGS($[]Name,,[]Name="")
     CFLAGS="$tmp_arch_cflags"
+    CXXFLAGS="$tmp_arch_cxxflags"
    fi
 
    if test "x$[]Name" != "x"; then
@@ -342,8 +344,11 @@ if test "x${libdir}" = "x\${exec_prefix}/lib"; then
  libdir='${exec_prefix}/lib/pd/extra/Gem'
 fi
 
+tmp_rte_cppflags="$CPPFLAGS"
 tmp_rte_cflags="$CFLAGS"
-tmp_rte_libs="$LDFLAGS"
+tmp_rte_cxxflags="$CXXFLAGS"
+tmp_rte_ldflags="$LDFLAGS"
+
 GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
 GEM_RTE="pd"
@@ -365,7 +370,9 @@ if test -d "$with_pd" ; then
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
  fi
 
+ CPPFLAGS="$CPPFLAGS ${GEM_RTE_CFLAGS}"
  CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
+ CXXFLAGS="$CXXFLAGS ${GEM_RTE_CFLAGS}"
  LIBS="$LIBS ${GEM_RTE_LIBS}"
 fi
 
@@ -433,6 +440,10 @@ fi
 GEM_RTE_EXTENSION=$EXT
 AC_SUBST(GEM_RTE_EXTENSION)
 
+CPPFLAGS="$tmp_rte_cppflags"
+CFLAGS="$tmp_rte_cflags"
+CXXFLAGS="$tmp_rte_cxxflags"
+LDFLAGS="$tmp_rte_ldflags"
 ]) # GEM_CHECK_RTE
 
 
