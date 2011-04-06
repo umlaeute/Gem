@@ -734,7 +734,11 @@ imageStruct *magickImage2mem(const char *filename){
   try {
     ::verbose(2, "reading '%s' with ImageMagick", filename);
     // Read a file into image object
-    image.read( filename );
+    try {
+      image.read( filename );
+    } catch (Magick::Warning e) {
+      verbose(1, "magick loading problem: %s", e.what());
+    }
 
     image_block->xsize=static_cast<GLint>(image.columns());
     image_block->ysize=static_cast<GLint>(image.rows());
@@ -743,11 +747,16 @@ imageStruct *magickImage2mem(const char *filename){
 
     image_block->upsidedown=true;
 
-    image.write(0,0,image_block->xsize,image_block->ysize, 
-                "RGBA",
-                Magick::CharPixel,
-		reinterpret_cast<void*>(image_block->data));
+    try {
+      image.write(0,0,image_block->xsize,image_block->ysize, 
+                  "RGBA",
+                  Magick::CharPixel,
+                  reinterpret_cast<void*>(image_block->data));
+    } catch (Magick::Warning e) {
+      verbose(1, "magick decoding problem: %s", e.what());
+    }
   }catch( Magick::Exception e )  {
+    verbose(1, "magick loading image failed with: %s", e.what());
     return NULL;
   }
   return image_block;
