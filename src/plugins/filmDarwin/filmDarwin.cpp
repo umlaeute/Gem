@@ -145,6 +145,7 @@ bool filmDarwin :: open(char *filename, int format)
 
 #if 1
   switch(m_wantedFormat) {
+  case 0: // if no other format is requested, use YUV
   case GL_YCBCR_422_APPLE:
     m_image.image.format = m_wantedFormat;
     hints |= hintsHighQuality | hintsDeinterlaceFields;
