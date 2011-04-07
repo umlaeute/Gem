@@ -218,7 +218,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
 
   post("loaded models: %s %s from %d to %d skipping %d",
        bufName, postName, baseModel, topModel, skipRate);
-  this->setModified();
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // buildList
@@ -232,7 +232,7 @@ void multimodel :: buildList()
 
   i=0;
   while(i<m_numModels){
-    glmTexture(m_loadedCache->realmodels[i], m_textype, m_currentH, m_currentW);
+    glmTexture(m_loadedCache->realmodels[i], m_textype, m_currentW, m_currentH);
     m_loadedCache->models[i]=glmList( m_loadedCache->realmodels[i], GLM_SMOOTH | GLM_TEXTURE);
 
     i++;
@@ -265,7 +265,8 @@ void multimodel :: textureMess(int state)
 void multimodel :: startRendering()
 {
   // build a display list
-  buildList();
+  //  buildList();
+  m_rebuild=true;
 }
 /////////////////////////////////////////////////////////
 // render
@@ -274,13 +275,13 @@ void multimodel :: startRendering()
 void multimodel :: render(GemState *state)
 {
   if (!m_numModels || !m_loadedCache) return;
-  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
+  if (state && (m_currentW != state->texCoordX(2) || m_currentH != state->texCoordY(2)))
     {
       m_rebuild=true;
     }
   if(m_rebuild) {
-    m_currentH = state->texCoordX(2);
-    m_currentW = state->texCoordY(2);
+    m_currentW = state->texCoordX(2);
+    m_currentH = state->texCoordY(2);
     buildList();
     m_rebuild=false;
   }
@@ -316,7 +317,7 @@ void multimodel :: changeModel(int modelNum)
       return;
     }
   m_curModel = modelNum;
-  this->setModified();
+  //  setModified();
 }
 
 /////////////////////////////////////////////////////////
