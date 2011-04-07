@@ -174,7 +174,7 @@ void gemcocoawindow :: renderMess() {
 
 void gemcocoawindow :: render() {
 #if 1
-  post("render() called...please report");
+  GemWindow::render();
 #else
   if(assertCurrentContext()) {
     [ m_pimpl->view setNeedsDisplay: YES ] ;
