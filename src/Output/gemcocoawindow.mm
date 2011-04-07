@@ -122,11 +122,13 @@ struct gemcocoawindow :: PIMPL {
     if(view) {
       [view release]; 
     }
+    view=NULL;
 #if 0
     if(delegate) {
       [window setDelegate: nil];
       [delegate release];
     }
+    delegate = NULL;
 #endif
   }
 };
@@ -386,7 +388,8 @@ bool gemcocoawindow :: create(void)
 
   titleMess(m_title);
 
-  return createGemWindow();
+  bool cgw=  createGemWindow(); 
+  return cgw;
 }
 void gemcocoawindow :: createMess(std::string s) {
   if(m_pimpl->view) {
