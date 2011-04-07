@@ -16,7 +16,7 @@
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_crop
 //
@@ -28,6 +28,10 @@ pix_crop :: pix_crop(t_floatarg x=0, t_floatarg y=0, t_floatarg w=64, t_floatarg
 {
   m_data = NULL;
   m_size = 0;
+
+  if(w<=1. && h<=1.) {
+    w=h=64.;
+  }
 
   offsetMess((int)x,(int)y);
   dimenMess((int)w,(int)h);

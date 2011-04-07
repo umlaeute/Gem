@@ -36,20 +36,20 @@ DESCRIPTION
 
 class GEM_EXTERN pix_crop : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_crop, GemPixObj);
+  CPPEXTERN_HEADER(pix_crop, GemPixObj);
 
-    public:
+ public:
 
-	    //////////
-	    // Constructor
-    	pix_crop(t_floatarg,t_floatarg,t_floatarg,t_floatarg);
+  //////////
+  // Constructor
+  pix_crop(t_floatarg,t_floatarg,t_floatarg,t_floatarg);
     	
-    protected:
-    	
-    	//////////
-    	// Destructor
-    	virtual ~pix_crop();
-
+ protected:
+  
+  //////////
+  // Destructor
+  virtual ~pix_crop();
+  
 	//////////
 	// set dimension
 	void dimenMess(int, int);
