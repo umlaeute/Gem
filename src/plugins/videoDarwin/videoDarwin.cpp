@@ -11,6 +11,14 @@
 # include "config.h"
 #endif
 
+#if defined __APPLE__  && defined __x86_64
+#warning unconditionally disabling QuickTime/Carbon on OSX/64bit
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+# undef HAVE_QUICKTIME
+# undef HAVE_CARBON
+#endif
+
 #if defined HAVE_CARBON && defined HAVE_QUICKTIME
 # define HAVE_VIDEODARWIN
 #endif
