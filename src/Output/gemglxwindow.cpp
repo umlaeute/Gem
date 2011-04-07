@@ -359,7 +359,7 @@ struct gemglxwindow::PIMPL {
 
     inputMethod = XOpenIM(dpy, NULL, NULL, NULL);
     if(inputMethod) {
-      XIMStyle style=NULL;
+      XIMStyle style=0;
       XIMStyles *stylePtr=NULL;
       const char *preedit_attname = NULL;
       XVaNestedList preedit_attlist = NULL;
