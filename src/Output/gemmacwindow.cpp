@@ -1110,7 +1110,6 @@ struct gemmacwindow::Info {
 CPPEXTERN_NEW(gemmacwindow);
 gemmacwindow::gemmacwindow(void) :
 
-    m_cursor(true),
     m_actuallyDisplay(true),
     m_info(new gemmacwindow::Info())
 {
