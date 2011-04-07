@@ -12,8 +12,13 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#if defined __APPLE__ && !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+# define HAVE_CARBONQUICKTIME
+#endif
 
-#ifdef __APPLE__
+#ifdef HAVE_CARBONQUICKTIME
 #include "Base/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
