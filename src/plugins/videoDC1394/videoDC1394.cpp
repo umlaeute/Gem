@@ -396,11 +396,284 @@ bool videoDC1394 :: setColor(int format){
 
 bool videoDC1394::enumProperties(gem::Properties&readable,
 			      gem::Properties&writeable) {
-  return false;
+  /*
+    framerate
+    mode
+    operationmode
+    isospeed
+    isochannel
+    transmission
+    oneshot
+    multishot
+  */
+
+  gem::any type;
+  std::string key;
+
+  readable.clear();
+  writeable.clear();
+
+  key="framerate"; type=0; 
+  readable .set(key, type);
+  writeable.set(key, type);
+
+
+  key="mode"; type=std::string("");
+  readable .set(key, type);
+  writeable.set(key, type);
+
+  key="operationmode"; type=std::string(""); 
+  readable .set(key, type);
+  writeable.set(key, type);
+
+  key="isospeed"; type=0; 
+  readable .set(key, type);
+  writeable.set(key, type);
+
+  key="isochannel"; type=0;
+  readable .set(key, type); 
+  writeable.set(key, type);
+
+  key="transmission"; type=0;
+  readable .set(key, type); 
+  writeable.set(key, type);
+
+  key="oneshot"; type=0; 
+  readable .set(key, type);
+  writeable.set(key, type);
+
+  key="multishot"; type=0; 
+  readable .set(key, type);
+  writeable.set(key, type);
+
+  return true;
 }
 void videoDC1394::getProperties(gem::Properties&props) {
+  std::vector<std::string>keys=props.keys();
+  double value;
+  std::string svalue;
+
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    if("framerate" == key) {
+      dc1394framerate_t framerate;
+      if(dc1394_video_get_framerate(m_dccamera, &framerate))continue;
+      switch(framerate) {
+      case DC1394_FRAMERATE_1_875: value=  1.875; break;
+      case DC1394_FRAMERATE_3_75 : value=  3.75 ; break;
+      case DC1394_FRAMERATE_7_5  : value=  7.5  ; break;
+      case DC1394_FRAMERATE_15   : value= 15    ; break;
+      case DC1394_FRAMERATE_30   : value= 30    ; break;
+      case DC1394_FRAMERATE_60   : value= 60    ; break;
+      case DC1394_FRAMERATE_120  : value=120    ; break;
+      case DC1394_FRAMERATE_240  : value=240    ; break;
+      default:
+	continue;
+      }
+      props.set(key, value);
+    } else if("mode" == key) {
+      dc1394video_mode_t mode;
+      if(dc1394_video_get_mode(m_dccamera, &mode))continue;
+      switch(mode) {
+      case DC1394_VIDEO_MODE_160x120_YUV444: svalue="160x120_YUV444"; break;
+      case DC1394_VIDEO_MODE_320x240_YUV422: svalue="320x240_YUV422"; break;
+      case DC1394_VIDEO_MODE_640x480_YUV411: svalue="640x480_YUV411"; break;
+      case DC1394_VIDEO_MODE_640x480_YUV422: svalue="640x480_YUV422"; break;
+      case DC1394_VIDEO_MODE_640x480_RGB8: svalue="640x480_RGB8"; break;
+      case DC1394_VIDEO_MODE_640x480_MONO8: svalue="640x480_MONO8"; break;
+      case DC1394_VIDEO_MODE_640x480_MONO16: svalue="640x480_MONO16"; break;
+      case DC1394_VIDEO_MODE_800x600_YUV422: svalue="800x600_YUV422"; break;
+      case DC1394_VIDEO_MODE_800x600_RGB8: svalue="800x600_RGB8"; break;
+      case DC1394_VIDEO_MODE_800x600_MONO8: svalue="800x600_MONO8"; break;
+      case DC1394_VIDEO_MODE_1024x768_YUV422: svalue="1024x768_YUV422"; break;
+      case DC1394_VIDEO_MODE_1024x768_RGB8: svalue="1024x768_RGB8"; break;
+      case DC1394_VIDEO_MODE_1024x768_MONO8: svalue="1024x768_MONO8"; break;
+      case DC1394_VIDEO_MODE_800x600_MONO16: svalue="800x600_MONO16"; break;
+      case DC1394_VIDEO_MODE_1024x768_MONO16: svalue="1024x768_MONO16"; break;
+      case DC1394_VIDEO_MODE_1280x960_YUV422: svalue="1280x960_YUV422"; break;
+      case DC1394_VIDEO_MODE_1280x960_RGB8: svalue="1280x960_RGB8"; break;
+      case DC1394_VIDEO_MODE_1280x960_MONO8: svalue="1280x960_MONO8"; break;
+      case DC1394_VIDEO_MODE_1600x1200_YUV422: svalue="1600x1200_YUV422"; break;
+      case DC1394_VIDEO_MODE_1600x1200_RGB8: svalue="1600x1200_RGB8"; break;
+      case DC1394_VIDEO_MODE_1600x1200_MONO8: svalue="1600x1200_MONO8"; break;
+      case DC1394_VIDEO_MODE_1280x960_MONO16: svalue="1280x960_MONO16"; break;
+      case DC1394_VIDEO_MODE_1600x1200_MONO16: svalue="1600x1200_MONO16"; break;
+      case DC1394_VIDEO_MODE_EXIF: svalue="EXIF"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_0: svalue="FORMAT7_0"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_1: svalue="FORMAT7_1"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_2: svalue="FORMAT7_2"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_3: svalue="FORMAT7_3"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_4: svalue="FORMAT7_4"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_5: svalue="FORMAT7_5"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_6: svalue="FORMAT7_6"; break;
+      case DC1394_VIDEO_MODE_FORMAT7_7: svalue="FORMAT7_7"; break;
+      default:continue;
+      }
+      props.set(key, svalue);
+    } else if("operationmode" == key) {
+      dc1394operation_mode_t mode;
+      if(dc1394_video_get_operation_mode(m_dccamera, &mode))continue;
+      switch(mode) {
+      case DC1394_OPERATION_MODE_LEGACY: svalue="1394a"; break;
+      case DC1394_OPERATION_MODE_1394B : svalue="1394B"; break;
+      default: continue;
+      }
+      props.set(key, svalue);
+    } else if("isospeed" == key) {
+      dc1394speed_t speed;
+      if(dc1394_video_get_iso_speed(m_dccamera, &speed))continue;
+      value=100*(1<<speed);
+      props.set(key, value);
+    } else if("isochannel" == key) {
+      uint32_t channel;
+      if(dc1394_video_get_iso_channel(m_dccamera, &channel))continue;
+      value=channel;
+      props.set(key, value);
+    } else if("transmission" == key) {
+      dc1394switch_t is_on;
+      if(dc1394_video_get_transmission(m_dccamera, &is_on))continue;
+      value=((DC1394_ON==is_on)?1:0);
+      props.set(key, value);
+    } else if("oneshot" == key) {
+      dc1394bool_t is_on;
+      if(dc1394_video_get_one_shot(m_dccamera, &is_on))continue;
+      value=((DC1394_TRUE==is_on)?1:0);
+      props.set(key, value);
+    } else if("multishot" == key) {
+      dc1394bool_t is_on;
+      uint32_t   numFrames;
+      if(dc1394_video_get_multi_shot(m_dccamera, &is_on, &numFrames))continue;
+      value=((DC1394_TRUE==is_on)?numFrames:-1);
+      props.set(key, value);
+    }
+  }
 }
 void videoDC1394::setProperties(gem::Properties&props) {
+  std::vector<std::string>keys=props.keys();
+  double value;
+  std::string svalue;
+
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+
+    if("framerate" == key) {
+      if(props.get(key, value)) {
+	double d0=value/1.875;
+	unsigned short base=d0;
+	int r=DC1394_FRAMERATE_MIN;
+	while(base>>=1)
+	  r=r+1;
+	if(r>DC1394_FRAMERATE_MAX)r=DC1394_FRAMERATE_MAX;
+	dc1394framerate_t rate=(dc1394framerate_t)r;
+	dc1394_video_set_framerate(m_dccamera, rate);
+      }
+
+    } else if("mode" == key) {
+      dc1394video_mode_t mode;
+      if(props.get(key, svalue)) {
+	if("160x120_YUV444"==svalue) { mode=DC1394_VIDEO_MODE_160x120_YUV444;
+	} else if("320x240_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_320x240_YUV422;
+	} else if("640x480_YUV411"==svalue) { mode=DC1394_VIDEO_MODE_640x480_YUV411;
+	} else if("640x480_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_640x480_YUV422;
+	} else if("640x480_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_640x480_RGB8;
+	} else if("640x480_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_640x480_MONO8;
+	} else if("640x480_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_640x480_MONO16;
+	} else if("800x600_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_800x600_YUV422;
+	} else if("800x600_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_800x600_RGB8;
+	} else if("800x600_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_800x600_MONO8;
+	} else if("1024x768_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_YUV422;
+	} else if("1024x768_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_RGB8;
+	} else if("1024x768_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_MONO8;
+	} else if("800x600_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_800x600_MONO16;
+	} else if("1024x768_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_MONO16;
+	} else if("1280x960_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_YUV422;
+	} else if("1280x960_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_RGB8;
+	} else if("1280x960_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_MONO8;
+	} else if("1600x1200_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_YUV422;
+	} else if("1600x1200_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_RGB8;
+	} else if("1600x1200_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_MONO8;
+	} else if("1280x960_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_MONO16;
+	} else if("1600x1200_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_MONO16;
+	} else if("EXIF"==svalue) { mode=DC1394_VIDEO_MODE_EXIF;
+	} else if("FORMAT7_0"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_0;
+	} else if("FORMAT7_1"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_1;
+	} else if("FORMAT7_2"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_2;
+	} else if("FORMAT7_3"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_3;
+	} else if("FORMAT7_4"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_4;
+	} else if("FORMAT7_5"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_5;
+	} else if("FORMAT7_6"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_6;
+	} else if("FORMAT7_7"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_7;
+	} else continue;
+      } else if (props.get(key, value)) {
+	int m=value;
+	if(m<DC1394_VIDEO_MODE_MIN || m>DC1394_VIDEO_MODE_MAX) continue;
+	mode=(dc1394video_mode_t)m;
+      } else continue;
+
+      dc1394_video_set_mode(m_dccamera, mode);
+
+    } else if("operationmode" == key) {
+      dc1394operation_mode_t mode;
+      if(props.get(key, svalue)) {
+	if("1394a"==svalue || "1394A"==svalue || "legacy"==svalue)
+	  mode=DC1394_OPERATION_MODE_LEGACY;
+	else if("1394b"==svalue || "1394B"==svalue)
+	  mode=DC1394_OPERATION_MODE_1394B;
+	else continue;
+      } else if (props.get(key, value)) {
+	if(value<=480)
+	  mode=DC1394_OPERATION_MODE_LEGACY;
+	else
+	  mode=DC1394_OPERATION_MODE_1394B;
+      } else continue;
+
+      dc1394_video_set_operation_mode(m_dccamera, mode);
+
+    } else if("isospeed" == key) {
+      dc1394speed_t speed=DC1394_ISO_SPEED_MIN;
+
+      if (props.get(key, value) && value>0) {
+	int s;
+	for(s=DC1394_ISO_SPEED_MIN; s<DC1394_ISO_SPEED_MAX; s++) {
+	  if(value>=(100*(1<<s)))
+	    speed=(dc1394speed_t)s;
+	}
+	dc1394_video_set_iso_speed(m_dccamera, speed);
+      }
+
+    } else if("isochannel" == key) {
+      if (props.get(key, value) && value>=0) {
+	uint32_t channel=value;
+	dc1394_video_set_iso_channel(m_dccamera, channel);
+      }
+
+    } else if("transmission" == key) {
+      if (props.get(key, value)) {
+	bool b=value;
+	dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
+	dc1394_video_set_transmission(m_dccamera, pwr);
+      }
+
+    } else if("oneshot" == key) {
+      if (props.get(key, value)) {
+	bool b=value;
+	dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
+	dc1394_video_set_one_shot(m_dccamera, pwr);
+      }
+    } else if("multishot" == key) {
+      if (props.get(key, value)) {
+	dc1394switch_t pwr=DC1394_OFF;
+	uint32_t   numFrames=0;
+	if(value>0) {
+	  pwr=DC1394_ON;
+	  numFrames=value;
+	}
+	dc1394_video_set_multi_shot(m_dccamera, numFrames, pwr);
+      }
+    }
+  }
 }
 
 
