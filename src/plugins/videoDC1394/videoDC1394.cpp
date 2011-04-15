@@ -449,6 +449,7 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   return true;
 }
 void videoDC1394::getProperties(gem::Properties&props) {
+  if(!m_dccamera)return;
   std::vector<std::string>keys=props.keys();
   double value;
   std::string svalue;
@@ -550,6 +551,8 @@ void videoDC1394::getProperties(gem::Properties&props) {
   }
 }
 void videoDC1394::setProperties(gem::Properties&props) {
+  if(!m_dccamera)return;
+
   std::vector<std::string>keys=props.keys();
   double value;
   std::string svalue;
