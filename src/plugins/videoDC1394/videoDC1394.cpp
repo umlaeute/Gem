@@ -426,12 +426,12 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   readable .set(key, type);
   writeable.set(key, type);
 
-  key="isospeed"; type=0; 
+  key="speed"; type=0;
   readable .set(key, type);
   writeable.set(key, type);
 
-  key="isochannel"; type=0;
-  readable .set(key, type); 
+  key="channel"; type=0;
+  readable .set(key, type);
   writeable.set(key, type);
 
   key="transmission"; type=0;
@@ -531,12 +531,12 @@ void videoDC1394::getProperties(gem::Properties&props) {
       default: continue;
       }
       props.set(key, svalue);
-    } else if("isospeed" == key) {
+    } else if("speed" == key) {
       dc1394speed_t speed;
       DC1394_TRYGET(iso_speed(m_dccamera, &speed));
       value=100*(1<<speed);
       props.set(key, value);
-    } else if("isochannel" == key) {
+    } else if("channel" == key) {
       uint32_t channel;
       DC1394_TRYGET(iso_channel(m_dccamera, &channel));
       value=channel;
@@ -645,7 +645,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 
       err=dc1394_video_set_operation_mode(m_dccamera, mode);
 
-    } else if("isospeed" == key) {
+    } else if("speed" == key) {
       dc1394speed_t speed=DC1394_ISO_SPEED_MIN;
 
       if (props.get(key, value) && value>0) {
@@ -657,7 +657,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	err=dc1394_video_set_iso_speed(m_dccamera, speed);
       }
 
-    } else if("isochannel" == key) {
+    } else if("channel" == key) {
       if (props.get(key, value) && value>=0) {
 	uint32_t channel=value;
 	err=dc1394_video_set_iso_channel(m_dccamera, channel);
