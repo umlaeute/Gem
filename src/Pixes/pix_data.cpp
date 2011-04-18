@@ -137,27 +137,30 @@ void pix_data :: trigger()
   outlet_list(m_colorOut, gensym("list"), 4, atom);	
 }
 
+void pix_data :: xPos(t_float f) {
+  m_position[0]=FLOAT_CLAMP(f);
+}
+void pix_data :: yPos(t_float f) {
+  m_position[1]=FLOAT_CLAMP(f);
+}
+void pix_data :: qualityMess(int q) {
+  if(q>=0)
+    m_quality=q;
+  else error("qualiy must be 0|1");
+ 
+}
+
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pix_data :: obj_setupCallback(t_class *classPtr)
 {
-    class_addbang(classPtr, reinterpret_cast<t_method>(&pix_data::triggerMessCallback));
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_data::xPosCallback),
-    	    gensym("xPos"), A_FLOAT, A_NULL); 
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_data::yPosCallback),
-    	    gensym("yPos"), A_FLOAT, A_NULL); 
-}
-void pix_data :: triggerMessCallback(void *data)
-{
-    GetMyClass(data)->trigger();
-}
-void pix_data :: xPosCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->xPos(FLOAT_CLAMP(val));
-}
-void pix_data :: yPosCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->yPos(FLOAT_CLAMP(val));
+  CPPEXTERN_MSG0(classPtr, "bang", trigger);
+  CPPEXTERN_MSG1(classPtr, "xPos", xPos, t_float);
+  CPPEXTERN_MSG1(classPtr, "yPos", yPos, t_float);
+
+  CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
 }

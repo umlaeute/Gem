@@ -64,16 +64,20 @@ class GEM_EXTERN pix_data : public GemPixDualObj
     	virtual void 	processDualImage(imageStruct &, imageStruct &)	{}
 
         //////////
-        void			trigger();
+        void			trigger(void);
 
         //////////
-        void			xPos(t_float pos)			{ m_position[0] = pos; }
+        void			xPos(t_float pos);
 
         //////////
-        void			yPos(t_float pos)			{ m_position[1] = pos; }
+        void			yPos(t_float pos);
 
         //////////
         t_float			m_position[2];
+
+        //////////
+        void			qualityMess(int q);
+        int m_quality;
 
         //////////
         // The color outlet
@@ -82,8 +86,6 @@ class GEM_EXTERN pix_data : public GemPixDualObj
         //////////
         // The grayscale outlet
         t_outlet    	*m_grayOut;
-
-        int m_quality;
 
 	private:
 
