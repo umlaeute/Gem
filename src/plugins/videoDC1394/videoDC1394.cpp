@@ -570,6 +570,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
+    dc1394error_t err=DC1394_SUCCESS;
 
     if("framerate" == key) {
       if(props.get(key, value)) {
@@ -580,7 +581,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	  r=r+1;
 	if(r>DC1394_FRAMERATE_MAX)r=DC1394_FRAMERATE_MAX;
 	dc1394framerate_t rate=(dc1394framerate_t)r;
-	dc1394_video_set_framerate(m_dccamera, rate);
+	err=dc1394_video_set_framerate(m_dccamera, rate);
       }
 
     } else if("mode" == key) {
@@ -625,7 +626,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	mode=(dc1394video_mode_t)m;
       } else continue;
 
-      dc1394_video_set_mode(m_dccamera, mode);
+      err=dc1394_video_set_mode(m_dccamera, mode);
 
     } else if("operationmode" == key) {
       dc1394operation_mode_t mode;
@@ -642,7 +643,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	  mode=DC1394_OPERATION_MODE_1394B;
       } else continue;
 
-      dc1394_video_set_operation_mode(m_dccamera, mode);
+      err=dc1394_video_set_operation_mode(m_dccamera, mode);
 
     } else if("isospeed" == key) {
       dc1394speed_t speed=DC1394_ISO_SPEED_MIN;
@@ -653,27 +654,27 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	  if(value>=(100*(1<<s)))
 	    speed=(dc1394speed_t)s;
 	}
-	dc1394_video_set_iso_speed(m_dccamera, speed);
+	err=dc1394_video_set_iso_speed(m_dccamera, speed);
       }
 
     } else if("isochannel" == key) {
       if (props.get(key, value) && value>=0) {
 	uint32_t channel=value;
-	dc1394_video_set_iso_channel(m_dccamera, channel);
+	err=dc1394_video_set_iso_channel(m_dccamera, channel);
       }
 
     } else if("transmission" == key) {
       if (props.get(key, value)) {
 	bool b=value;
 	dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
-	dc1394_video_set_transmission(m_dccamera, pwr);
+	err=dc1394_video_set_transmission(m_dccamera, pwr);
       }
 
     } else if("oneshot" == key) {
       if (props.get(key, value)) {
 	bool b=value;
 	dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
-	dc1394_video_set_one_shot(m_dccamera, pwr);
+	err=dc1394_video_set_one_shot(m_dccamera, pwr);
       }
     } else if("multishot" == key) {
       if (props.get(key, value)) {
@@ -683,8 +684,13 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	  pwr=DC1394_ON;
 	  numFrames=value;
 	}
-	dc1394_video_set_multi_shot(m_dccamera, numFrames, pwr);
+	err=dc1394_video_set_multi_shot(m_dccamera, numFrames, pwr);
       }
+    }
+    if(DC1394_SUCCESS!=err) {
+      error("videoDC1394: setting '%s' failed with '%s'",
+	    key.c_str(),
+	    dc1394_error_get_string(err));
     }
   }
 }
