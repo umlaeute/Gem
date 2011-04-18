@@ -363,4 +363,7 @@ static void obj_setupCallback(t_class *classPtr);
 # define GEM_CLASSFLAGS 0
 #endif
 
+// macros for boilerplate code to object messages
+#include "RTE/MessageCallbacks.h"
+
 #endif	// for header file
