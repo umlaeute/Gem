@@ -85,7 +85,7 @@ bool videoDC1394 :: grabFrame()
   m_frame.fromRGB(colframe->image);
 
   lock();
-  m_image.image.convertFrom(&m_frame, m_reqFormat); 
+  m_image.image.convertFrom(&m_frame, m_reqFormat);
   m_image.newimage=true;
   m_image.image.upsidedown=true;
   unlock();
@@ -110,7 +110,7 @@ static std::string guid2string(uint64_t guid, int unit=-1) {
   std::string result;
   char buf[64];
   uint32_t value[2];
-  
+
   value[0]= guid & 0xffffffff;
   value[1]= (guid >>32) & 0xffffffff;
 
@@ -132,7 +132,7 @@ static std::string guid2string(uint64_t guid, int unit=-1) {
 bool videoDC1394 :: openDevice(gem::Properties&props){
   dc1394error_t err;
   dc1394camera_list_t *list=NULL;
-  
+
   err=dc1394_camera_enumerate (m_dc, &list); /* Find cameras */
   if(DC1394_SUCCESS!=err) {
     error("videoDC1394: %s: failed to enumerate", dc1394_error_get_string(err));
@@ -166,7 +166,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
 
   if (devicenum < list->num) {
     /* Work with first camera */
-    m_dccamera = dc1394_camera_new_unit(m_dc, 
+    m_dccamera = dc1394_camera_new_unit(m_dc,
                                         list->ids[devicenum].guid,
                                         list->ids[devicenum].unit);
   } else {
@@ -321,7 +321,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     verbose(1, "DC1394: set framerate to %g", fr);
   }
 
-  err=dc1394_capture_setup(m_dccamera, 
+  err=dc1394_capture_setup(m_dccamera,
                            4,  /* 4 DMA buffers */
                            DC1394_CAPTURE_FLAGS_DEFAULT);     /* Setup capture */
   if(DC1394_SUCCESS!=err) {
@@ -349,7 +349,7 @@ void videoDC1394 :: closeDevice(void){
 bool videoDC1394 :: startTransfer()
 {
   /* Start transmission */
-  dc1394error_t err=dc1394_video_set_transmission(m_dccamera, DC1394_ON); 
+  dc1394error_t err=dc1394_video_set_transmission(m_dccamera, DC1394_ON);
   if(DC1394_SUCCESS!=err) {
     return false;
   }
@@ -364,7 +364,7 @@ bool videoDC1394 :: startTransfer()
 bool videoDC1394 :: stopTransfer()
 {
   /* Stop transmission */
-  dc1394error_t err=dc1394_video_set_transmission(m_dccamera, DC1394_OFF); 
+  dc1394error_t err=dc1394_video_set_transmission(m_dccamera, DC1394_OFF);
   if(DC1394_SUCCESS!=err) {
     error("unable to stop transmission");
   }
@@ -413,7 +413,7 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   readable.clear();
   writeable.clear();
 
-  key="framerate"; type=0; 
+  key="framerate"; type=0;
   readable .set(key, type);
   writeable.set(key, type);
 
@@ -422,7 +422,7 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   readable .set(key, type);
   writeable.set(key, type);
 
-  key="operationmode"; type=std::string(""); 
+  key="operationmode"; type=std::string("");
   readable .set(key, type);
   writeable.set(key, type);
 
@@ -435,14 +435,14 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   writeable.set(key, type);
 
   key="transmission"; type=0;
-  readable .set(key, type); 
-  writeable.set(key, type);
-
-  key="oneshot"; type=0; 
   readable .set(key, type);
   writeable.set(key, type);
 
-  key="multishot"; type=0; 
+  key="oneshot"; type=0;
+  readable .set(key, type);
+  writeable.set(key, type);
+
+  key="multishot"; type=0;
   readable .set(key, type);
   writeable.set(key, type);
 
