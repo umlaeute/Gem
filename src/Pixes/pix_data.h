@@ -67,13 +67,13 @@ class GEM_EXTERN pix_data : public GemPixDualObj
         void			trigger();
 
         //////////
-        void			xPos(float pos)			{ m_position[0] = pos; }
+        void			xPos(t_float pos)			{ m_position[0] = pos; }
 
         //////////
-        void			yPos(float pos)			{ m_position[1] = pos; }
+        void			yPos(t_float pos)			{ m_position[1] = pos; }
 
         //////////
-        float			m_position[2];
+        t_float			m_position[2];
 
         //////////
         // The color outlet
@@ -82,6 +82,8 @@ class GEM_EXTERN pix_data : public GemPixDualObj
         //////////
         // The grayscale outlet
         t_outlet    	*m_grayOut;
+
+        int m_quality;
 
 	private:
 
