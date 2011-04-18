@@ -457,9 +457,19 @@ void videoDC1394::getProperties(gem::Properties&props) {
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
+    dc1394error_t err=DC1394_SUCCESS;
+#define DC1394_TRYGET(x)					    \
+      if(DC1394_SUCCESS!=(err=dc1394_video_get_##x)) {			    \
+	error("videoDC1394: getting '%s' failed with '%s'", \
+	      key.c_str(),				    \
+	      dc1394_error_get_string(err));		    \
+	continue;					    \
+      }
+
     if("framerate" == key) {
       dc1394framerate_t framerate;
-      if(dc1394_video_get_framerate(m_dccamera, &framerate))continue;
+      //      if(dc1394_video_get_framerate(m_dccamera, &framerate))continue;
+      DC1394_TRYGET(framerate(m_dccamera, &framerate));
       switch(framerate) {
       case DC1394_FRAMERATE_1_875: value=  1.875; break;
       case DC1394_FRAMERATE_3_75 : value=  3.75 ; break;
@@ -475,7 +485,7 @@ void videoDC1394::getProperties(gem::Properties&props) {
       props.set(key, value);
     } else if("mode" == key) {
       dc1394video_mode_t mode;
-      if(dc1394_video_get_mode(m_dccamera, &mode))continue;
+      DC1394_TRYGET(mode(m_dccamera, &mode));
       switch(mode) {
       case DC1394_VIDEO_MODE_160x120_YUV444: svalue="160x120_YUV444"; break;
       case DC1394_VIDEO_MODE_320x240_YUV422: svalue="320x240_YUV422"; break;
@@ -514,7 +524,7 @@ void videoDC1394::getProperties(gem::Properties&props) {
       props.set(key, svalue);
     } else if("operationmode" == key) {
       dc1394operation_mode_t mode;
-      if(dc1394_video_get_operation_mode(m_dccamera, &mode))continue;
+      DC1394_TRYGET(operation_mode(m_dccamera, &mode));
       switch(mode) {
       case DC1394_OPERATION_MODE_LEGACY: svalue="1394a"; break;
       case DC1394_OPERATION_MODE_1394B : svalue="1394B"; break;
@@ -523,28 +533,28 @@ void videoDC1394::getProperties(gem::Properties&props) {
       props.set(key, svalue);
     } else if("isospeed" == key) {
       dc1394speed_t speed;
-      if(dc1394_video_get_iso_speed(m_dccamera, &speed))continue;
+      DC1394_TRYGET(iso_speed(m_dccamera, &speed));
       value=100*(1<<speed);
       props.set(key, value);
     } else if("isochannel" == key) {
       uint32_t channel;
-      if(dc1394_video_get_iso_channel(m_dccamera, &channel))continue;
+      DC1394_TRYGET(iso_channel(m_dccamera, &channel));
       value=channel;
       props.set(key, value);
     } else if("transmission" == key) {
       dc1394switch_t is_on;
-      if(dc1394_video_get_transmission(m_dccamera, &is_on))continue;
+      DC1394_TRYGET(transmission(m_dccamera, &is_on));
       value=((DC1394_ON==is_on)?1:0);
       props.set(key, value);
     } else if("oneshot" == key) {
       dc1394bool_t is_on;
-      if(dc1394_video_get_one_shot(m_dccamera, &is_on))continue;
+      DC1394_TRYGET(one_shot(m_dccamera, &is_on));
       value=((DC1394_TRUE==is_on)?1:0);
       props.set(key, value);
     } else if("multishot" == key) {
       dc1394bool_t is_on;
       uint32_t   numFrames;
-      if(dc1394_video_get_multi_shot(m_dccamera, &is_on, &numFrames))continue;
+      DC1394_TRYGET(multi_shot(m_dccamera, &is_on, &numFrames));
       value=((DC1394_TRUE==is_on)?numFrames:-1);
       props.set(key, value);
     }
