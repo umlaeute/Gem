@@ -33,7 +33,7 @@
 #X obj 97 402 outlet gemlist;
 #X obj 231 429 t a;
 #X obj 231 343 t a a;
-#X obj 324 428 mtx_*;
+#X obj 324 428 mtx_mul;
 #X obj 354 490 outlet numblobs;
 #X obj 324 449 t a a;
 #X obj 354 471 mtx_size;
@@ -42,7 +42,7 @@
 #X obj 61 200 mtx_distance2;
 #X obj 61 176 t a a;
 #X obj 61 244 t a a;
-#X obj 61 279 mtx_*;
+#X obj 61 279 mtx_mul;
 #X obj 61 325 outlet matched;
 #X obj 171 325 outlet matcher;
 #X obj 147 177 inlet dest;
@@ -52,7 +52,7 @@ columns (dimension in feature-space);
 #N canvas 0 0 618 479 mtx_rowpermutate 0;
 #X obj 150 214 t b a;
 #X obj 150 235 mtx;
-#X obj 150 256 mtx_*;
+#X obj 150 256 mtx_mul;
 #X obj 111 192 mtx_pivot -1;
 #X text 17 19 this unfortunately does not guarantee to give as a minimum
 trace of the result!;
