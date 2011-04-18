@@ -182,143 +182,146 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
 
   verbose(1, "videoDC1394: using camera with GUID %s", guid2string(m_dccamera->guid, m_dccamera->unit).c_str());
 
-  /* check supported video modes */
-  dc1394video_modes_t video_modes;
-  dc1394video_mode_t  video_mode;
-  dc1394color_coding_t coding;
+  setProperties(props);
 
-  err=dc1394_video_get_supported_modes(m_dccamera,&video_modes);
-  if(DC1394_SUCCESS!=err) {
-    error("can't get video modes");
-    closeDevice();
-    return false;
-  }
-  int mode=-1;
-  double d;
-  if(props.get("channel", d))
-    mode=d;
+  if(gem::Properties::UNSET==props.type("mode")){
+    /* check supported video modes */
+    dc1394video_modes_t video_modes;
+    dc1394video_mode_t  video_mode;
+    dc1394color_coding_t coding;
 
-  verbose(1, "trying mode %d", mode);
-
-  if(mode>=0) {
-    if(mode>=video_modes.num) {
-      error("requested channel %d/%d out of bounds", mode, video_modes.num);
-      mode=-1;
-    }
-  }
-
-  int i;
-  for (i=video_modes.num-1;i>=0;i--) {
-    unsigned int w=0, h=0;
-    if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_modes.modes[i], &w, &h)) {
-      verbose(1, "videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
-    } else verbose(1, "videomode %d refused dimen: %d", i, video_modes.modes[i]);
-
-    dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
-    dc1394bool_t iscolor=DC1394_FALSE;
-    if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
-      verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
-    }
-
-    if(mode<0) {  // find a mode matching the user's needs
-      if(m_width==w && m_height==h) {
-        // what about color?
-        mode=i;
-        break;
-      }
-    }
-  }
-
-  if(mode<0) {
-    // select highest res mode:
-    for (i=video_modes.num-1;i>=0;i--) {
-      if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
-        dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
-	
-        video_mode=video_modes.modes[i];
-        break;
-      }
-    }
-    if (i < 0) {
-      error("Could not get a valid mode");
+    err=dc1394_video_get_supported_modes(m_dccamera,&video_modes);
+    if(DC1394_SUCCESS!=err) {
+      error("can't get video modes");
       closeDevice();
       return false;
     }
-  } else {
-    verbose(1, "using mode %d", mode);
-    video_mode=video_modes.modes[mode];
-  }
-  
-  if(1) {
-    unsigned int w=0, h=0;
-    if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_mode, &w, &h)) {
+    int mode=-1;
+    double d;
+    if(props.get("channel", d)) // this used to be 'channel' rather than 'isochannel'
+      mode=d;
+
+    verbose(1, "trying mode %d", mode);
+
+    if(mode>=0) {
+      if(mode>=video_modes.num) {
+	error("requested channel %d/%d out of bounds", mode, video_modes.num);
+	mode=-1;
+      }
+    }
+
+    int i;
+    for (i=video_modes.num-1;i>=0;i--) {
+      unsigned int w=0, h=0;
+      if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_modes.modes[i], &w, &h)) {
+	verbose(1, "videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
+      } else verbose(1, "videomode %d refused dimen: %d", i, video_modes.modes[i]);
+
+      dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+      dc1394bool_t iscolor=DC1394_FALSE;
+      if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
+	verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
+      }
+
+      if(mode<0) {  // find a mode matching the user's needs
+	if(m_width==w && m_height==h) {
+	  // what about color?
+	  mode=i;
+	  break;
+	}
+      }
+    }
+
+    if(mode<0) {
+      // select highest res mode:
+      for (i=video_modes.num-1;i>=0;i--) {
+	if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
+	  dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+
+	  video_mode=video_modes.modes[i];
+	  break;
+	}
+      }
+      if (i < 0) {
+	error("Could not get a valid mode");
+	closeDevice();
+	return false;
+      }
+    } else {
+      verbose(1, "using mode %d", mode);
+      video_mode=video_modes.modes[mode];
+    }
+
+    if(1) {
+      unsigned int w=0, h=0;
+      if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_mode, &w, &h)) {
       verbose(1, "videomode[%d]=%dx%d", video_mode, w, h);
-    }  
-    dc1394_get_color_coding_from_video_mode(m_dccamera,video_mode, &coding);
-    dc1394bool_t iscolor=DC1394_FALSE;
-    if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
-      verbose(1, "videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
+      }
+      dc1394_get_color_coding_from_video_mode(m_dccamera,video_mode, &coding);
+      dc1394bool_t iscolor=DC1394_FALSE;
+      if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
+	verbose(1, "videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
+      }
+    }
+
+    err=dc1394_video_set_mode(m_dccamera, video_mode);
+    if(DC1394_SUCCESS!=err) {
+      error("unable to set specified mode, using default");
     }
   }
 
-  err=dc1394_video_set_mode(m_dccamera, video_mode);
-  if(DC1394_SUCCESS!=err) {
-    error("unable to set specified mode, using default");
+  if(gem::Properties::UNSET==props.type("operationmode")){
+    // try to set highest possible operation mode
+    // FIXME this should be done via properties
+    int operation_mode=DC1394_OPERATION_MODE_MAX;
+    while(operation_mode>=DC1394_OPERATION_MODE_MIN) {
+      err=dc1394_video_set_operation_mode(m_dccamera, (dc1394operation_mode_t)operation_mode);
+      if(DC1394_SUCCESS==err)
+	break;
+      verbose(1, "failed to set operation mode to %d", operation_mode);
+      operation_mode--;
+    }
+    if(DC1394_SUCCESS!=err) {
+      error("unable to set operation mode...continuing anyhow");
+    }
   }
 
-  // try to set highest possible operation mode
-  // FIXME this should be done via properties
-  int operation_mode=DC1394_OPERATION_MODE_MAX;
-  while(operation_mode>=DC1394_OPERATION_MODE_MIN) {
-    err=dc1394_video_set_operation_mode(m_dccamera, (dc1394operation_mode_t)operation_mode);
-    if(DC1394_SUCCESS==err)
-      break;
-    verbose(1, "failed to set operation mode to %d", operation_mode);
-    operation_mode--;
-  }
-  if(DC1394_SUCCESS!=err) {
-    error("unable to set operation mode...continuing anyhow");
-  }
-  
-#if 0
-  dc1394speed_t speed=DC1394_ISO_SPEED_400;
-  err=dc1394_video_set_iso_speed(m_dccamera, speed);
-  if(DC1394_SUCCESS!=err) {
-    dc1394_video_get_iso_speed(m_dccamera, &speed);
-    verbose(1, "default to ISO speed 100*2^%d", speed);
-  }
-#else
-  // FIXME this should be done via properties
-  dc1394speed_t orgspeed;
-  dc1394_video_get_iso_speed(m_dccamera, &orgspeed);
-
-  int speed=DC1394_ISO_SPEED_MAX;
-  while(speed>=DC1394_ISO_SPEED_MIN) {
-    err=dc1394_video_set_iso_speed(m_dccamera, (dc1394speed_t)mode);
-    if(DC1394_SUCCESS==err)
-      break;
-    verbose(1, "failed to set ISO speed to %d", 100*(1<<speed));
-
-    speed--;
-  }
-  if(DC1394_SUCCESS!=err) {
-    error("unable to set ISO speed...trying to set to original (%d)", 100*(1<<orgspeed));
+  if(gem::Properties::UNSET==props.type("speed")){
+    // FIXME this should be done via properties
+    dc1394speed_t orgspeed;
     dc1394_video_get_iso_speed(m_dccamera, &orgspeed);
+
+    int speed=DC1394_ISO_SPEED_MAX;
+    while(speed>=DC1394_ISO_SPEED_MIN) {
+      err=dc1394_video_set_iso_speed(m_dccamera, (dc1394speed_t)speed);
+      if(DC1394_SUCCESS==err)
+	break;
+      verbose(1, "failed to set ISO speed to %d", 100*(1<<speed));
+
+      speed--;
+    }
+    if(DC1394_SUCCESS!=err) {
+      error("unable to set ISO speed...trying to set to original (%d)", 100*(1<<orgspeed));
+      dc1394_video_get_iso_speed(m_dccamera, &orgspeed);
+    }
   }
 
-#endif
+  if(gem::Properties::UNSET==props.type("framerate")){
+    // get highest framerate
+    dc1394framerates_t framerates;
+    dc1394framerate_t framerate;
+    dc1394video_mode_t  video_mode;
 
-  // get highest framerate
-  dc1394framerates_t framerates;
-  dc1394framerate_t framerate;
+    err=dc1394_video_set_mode(m_dccamera, video_mode);
 
-  err=dc1394_video_get_supported_framerates(m_dccamera,video_mode,&framerates);
-  if(DC1394_SUCCESS==err) {
-    framerate=framerates.framerates[framerates.num-1];
-    err=dc1394_video_set_framerate(m_dccamera, framerate);
-    float fr=0;
-    dc1394_framerate_as_float(framerate, &fr);
-    verbose(1, "DC1394: set framerate to %g", fr);
+    err=dc1394_video_get_supported_framerates(m_dccamera,video_mode,&framerates);
+    if(DC1394_SUCCESS==err) {
+      framerate=framerates.framerates[framerates.num-1];
+      err=dc1394_video_set_framerate(m_dccamera, framerate);
+      float fr=0;
+      dc1394_framerate_as_float(framerate, &fr);
+      verbose(1, "DC1394: set framerate to %g", fr);
+    }
   }
 
   err=dc1394_capture_setup(m_dccamera,
