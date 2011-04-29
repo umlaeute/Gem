@@ -1,5 +1,7 @@
 EXTRANAME=pix_drum
-default: ${EXTRANAME}
+default: $(EXTRANAME)
+
+.PHONY: default $(EXTRANAME) clean install
 
 SRCDIR=../..
 
@@ -19,7 +21,7 @@ PD_OBJECTS = $(SOURCES:.cpp=.$(EXT))
 
 PD_PATCHES=$(sort $(filter %.pd, $(wildcard *.pd)))
 
-${EXTRANAME}: $(PD_OBJECTS)
+$(EXTRANAME): $(PD_OBJECTS)
 
 %.o: %.cpp
 	$(CXX) -c $(GEM_EXTRA_CXXFLAGS) $(GEM_ARCH_CXXFLAGS) $(GEM_CXXFLAGS) -I$(SRCDIR) $< -o $@
