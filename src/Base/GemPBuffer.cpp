@@ -33,7 +33,7 @@
 #include "Base/GemGL.h"
 #include "GemPBuffer.h"
 
-#ifdef __linux__
+#if (defined __linux__) || (defined __FreeBSD_kernel__)
 # include <Base/glxew.h>
 #elif defined __APPLE__
 # include <AGL/agl.h>
@@ -41,7 +41,7 @@
 
 #include "m_pd.h"
 
-#ifdef __linux__
+#if (defined __linux__) || (defined __FreeBSD_kernel__)
 struct PBuffer_data {
   Display *display;
 	

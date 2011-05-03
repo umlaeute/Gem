@@ -60,7 +60,7 @@
  * this should keep the code fairly simple
  */
 
-# ifdef __linux__
+# if defined(__linux__) || defined(__FreeBSD_kernel__)
 #  define FF_PLUGMAIN_INT(x) (x).ivalue
 #  define FF_PLUGMAIN_STR(x) (x).svalue
 #  define FF_PLUGMAIN_PIS(x) (x).PISvalue

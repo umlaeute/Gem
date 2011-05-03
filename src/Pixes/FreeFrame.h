@@ -63,7 +63,7 @@ extern "C" {
 
 # include <windows.h>
 
-#elif defined(__linux__) || defined(__APPLE__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD_kernel__)
 
 typedef unsigned int DWORD;
 typedef void *LPVOID;
@@ -213,12 +213,12 @@ __declspec(dllexport) LPVOID __stdcall plugMain(DWORD functionCode, LPVOID pPara
 
 typedef __declspec(dllimport) LPVOID (__stdcall *FF_Main_FuncPtr)(DWORD, LPVOID, DWORD);
 
-#elif __linux__
+#elif defined(__linux__) || defined(__FreeBSD_kernel__)
 
 plugMainUnion plugMain(DWORD functionCode, LPVOID pParam, DWORD reserved);
 
 
-#elif __APPLE__
+#elif defined __APPLE__
 
 typedef LPVOID (*FF_Main_FuncPtr)(DWORD, LPVOID, DWORD);
 

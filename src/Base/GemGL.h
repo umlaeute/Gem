@@ -41,7 +41,7 @@
 # include <OpenGL/OpenGL.h>
 #elif defined __WIN32__
 # include "Base/wglew.h"
-#elif defined __linux__
+#elif (defined __linux__) || (defined __FreeBSD_kernel__)
 #  include "Base/glxew.h"
 #endif /* OS */
 
@@ -50,7 +50,7 @@ GEM_EXTERN GLEWContext*glewGetContext(void);
 # ifdef __APPLE__
 # elif defined __WIN32__
 GEM_EXTERN WGLEWContext*wglewGetContext(void);
-# elif defined __linux__
+#elif (defined __linux__) || (defined __FreeBSD_kernel__)
 GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # endif
 
