@@ -236,7 +236,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   gem_check_ldflags_org="${LDFLAGS}"
   LDFLAGS="-framework [$1] ${LDFLAGS}"
 
-  AC_LINK_IFELSE(AC_LANG_PROGRAM(,), [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
   if test "x$gem_check_ldflags_success" = "xyes"; then
     AC_MSG_RESULT([yes])
@@ -261,7 +261,7 @@ AC_DEFUN([GEM_CHECK_LDFLAGS],
   gem_check_ldflags_org="${LDFLAGS}"
   LDFLAGS="$1 ${LDFLAGS}"
 
-  AC_LINK_IFELSE(AC_LANG_PROGRAM(,), [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
   if test "x$gem_check_ldflags_success" = "xyes"; then
     AC_MSG_RESULT([yes])
