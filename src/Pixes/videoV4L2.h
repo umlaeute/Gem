@@ -36,7 +36,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/ioctl.h>
-//# include <sys/types.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 //# include <sys/time.h>
 # include <asm/types.h>
 # include <linux/videodev2.h>
