@@ -11144,35 +11144,35 @@ fi
 
 
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler accepts \"-falign-loops=32 -falign-functions=32 -falign-jumps=32 -funroll-loops\"" >&5
-$as_echo_n "checking whether compiler accepts \"-falign-loops=32 -falign-functions=32 -falign-jumps=32 -funroll-loops\"... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler accepts \"-falign-loops -falign-functions -falign-jumps -funroll-loops\"" >&5
+$as_echo_n "checking whether compiler accepts \"-falign-loops -falign-functions -falign-jumps -funroll-loops\"... " >&6; }
 cat > conftest.c++ << EOF
 int main(){
   return 0;
 }
 EOF
-if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ -falign-loops=32 -falign-functions=32 -falign-jumps=32 -funroll-loops > /dev/null 2>&1
+if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ -falign-loops -falign-functions -falign-jumps -funroll-loops > /dev/null 2>&1
 then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-  CXXFLAGS="${CXXFLAGS} -falign-loops=32 -falign-functions=32 -falign-jumps=32 -funroll-loops"
+  CXXFLAGS="${CXXFLAGS} -falign-loops -falign-functions -falign-jumps -funroll-loops"
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler accepts \"-falign-loops=16 -funroll-loops\"" >&5
-$as_echo_n "checking whether compiler accepts \"-falign-loops=16 -funroll-loops\"... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether compiler accepts \"-falign-loops -funroll-loops\"" >&5
+$as_echo_n "checking whether compiler accepts \"-falign-loops -funroll-loops\"... " >&6; }
 cat > conftest.c++ << EOF
 int main(){
   return 0;
 }
 EOF
-if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ -falign-loops=16 -funroll-loops > /dev/null 2>&1
+if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ -falign-loops -funroll-loops > /dev/null 2>&1
 then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-  CXXFLAGS="${CXXFLAGS} -falign-loops=16 -funroll-loops"
+  CXXFLAGS="${CXXFLAGS} -falign-loops -funroll-loops"
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5

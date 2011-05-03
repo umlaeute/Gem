@@ -422,8 +422,8 @@ fi
 dnl this is only useful for debugging and might break things on older compilers
 dnl GEM_CHECK_CXXFLAGS([-fno-builtin])
 
-GEM_CHECK_CXXFLAGS([-falign-loops=32 -falign-functions=32 -falign-jumps=32 -funroll-loops],,
-        GEM_CHECK_CXXFLAGS([-falign-loops=16 -funroll-loops])
+GEM_CHECK_CXXFLAGS([-falign-loops -falign-functions -falign-jumps -funroll-loops],,
+        GEM_CHECK_CXXFLAGS([-falign-loops -funroll-loops])
         )
 GEM_CHECK_CXXFLAGS([-ffast-math])
 
