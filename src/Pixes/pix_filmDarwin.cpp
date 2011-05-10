@@ -101,7 +101,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
 
     if (err) {
-      error("unable to find file: %#s", theFSSpec.name);
+      error("unable to find file: %s", filename);
       return;
     }
     m_haveMovie = GEM_MOVIE_MOV;
@@ -110,7 +110,7 @@ void pix_filmDarwin :: realOpen(char *filename)
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    error("couldn't open the movie file: %s (%d)", filename, err);
     if (refnum) ::CloseMovieFile(refnum);
     return;
   }

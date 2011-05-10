@@ -101,14 +101,13 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
 
 		err = ::FSPathMakeFSSpec( (UInt8*)filename, &spec, NULL);
 		if (err) {
-			error("GemImageLoad: Unable to find file: %#s", spec.name);
                         error("GemImageLoad: Unable to find filename:%s", filename);
 			error("parID : %d", spec.parID); 
 			return NULL;
 		}
 		err = ::GetGraphicsImporterForFile(&spec, &importer);
 		if (err) {
-			error("GemImageLoad: Unable to import an image: %#s", spec.name);
+			error("GemImageLoad: Unable to import an image: %s", filename);
 			return NULL;
 		}
 	}

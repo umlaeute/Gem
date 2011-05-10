@@ -153,13 +153,13 @@ bool filmQT :: open(char*filename, int format) {
   }
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    error("GEM: pix_movie: Couldn't open the movie file: %s (%d)", filename, err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
-    error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    error("GEM: pix_movie: Couldn't open the movie file: %s (%d)", filename, err);
     if (refnum) ::CloseMovieFile(refnum);
 	m_movie=NULL;
     goto unsupported;

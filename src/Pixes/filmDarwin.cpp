@@ -77,7 +77,7 @@ bool filmDarwin :: open(char *filename, int format)
     err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
-      error("GEM: pix_film: Unable to find file: %#s", theFSSpec.name);
+      error("GEM: pix_film: Unable to find file: %s", filename);
       //goto unsupported;
     }
   }
@@ -85,7 +85,7 @@ bool filmDarwin :: open(char *filename, int format)
   short	refnum = 0;
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("GEM: pix_film: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    error("GEM: pix_film: Couldn't open the movie file: %s (%d)", filename, err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
