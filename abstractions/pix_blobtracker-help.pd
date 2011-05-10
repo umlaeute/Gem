@@ -75,7 +75,7 @@
 #X obj 553 207 / 100;
 #X msg 553 228 blobSize \$1;
 #N canvas 0 0 450 300 showblobs 0;
-#X obj 67 113 route 1 2 3 4 5 6;
+#X obj 67 113 route 0 1 2 3 4 5;
 #N canvas 0 0 451 339 showblob 0;
 #X obj 76 184 gemhead;
 #X obj 76 266 translateXYZ;
