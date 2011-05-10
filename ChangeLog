@@ -1,3 +1,97 @@
+2011-05-06 08:45  zmoelnig
+
+	* examples/10.glsl/09.GPGPU_Physical_model.pd: removed +x from
+	  pd-patches
+
+2011-05-03 09:10  zmoelnig
+
+	* src/configure, src/configure.ac: backported from debian: remove
+	  "apparently pointlessly picky options =32" for falign
+	  
+	  the falign magic breaks builds on certain platforms
+
+2011-05-03 09:08  zmoelnig
+
+	* src/Base/GemGL.h, src/Base/GemPBuffer.cpp,
+	  src/Base/configGeneric.h.in, src/Pixes/FreeFrame.h,
+	  src/Pixes/pix_freeframe.cpp, src/Pixes/pix_freeframe.h:
+	  backported from debian: kFreeBSD fixes
+
+2011-05-03 09:03  zmoelnig
+
+	* src/Pixes/videoV4L.h: backported from debian: only include
+	  linux/videodev.h if it is present
+	  
+	  (as detected by configure); this fixes FTBFS on recent systems
+
+2011-05-03 09:02  zmoelnig
+
+	* src/Pixes/videoV4L2.h: backported from debian: include headers
+	  for fstat()
+	  
+	  building fails on ubuntu/maverick due to some missing includes in
+	  Pixes/videoV4L2.h that are needed to use fstat()
+	  Author: Claude Heiland-Allen <claudiusmaximus@goto10.org>
+
+2010-08-26 10:07  zmoelnig
+
+	* src/Pixes/videoV4L2.cpp: #include "sys/stat.h"
+	  
+	  newer version of g++ are less lax
+
+2010-06-28 08:11  zmoelnig
+
+	* help, help/alpha-help.pd, help/gemframebuffer-help.pd,
+	  help/gemlist_info-help.pd, help/gemwin-help.pd,
+	  help/pix_chroma_key-help.pd, help/pix_film-help.pd,
+	  help/pix_image-help.pd, help/pix_lumaoffset-help.pd,
+	  help/pix_mask-help.pd, help/pix_movie-help.pd,
+	  help/textextruded-help.pd, help/textoutline-help.pd: merged back
+	  the help-patch fixes from trunk
+	  
+	  (mainly max neupert's changse about duplicate lines and wrong
+	  font names)
+
+2010-06-16 16:50  zmoelnig
+
+	* src/Pixes/recordQT.cpp: k32BGRAPixelFormat -> k32ARGBPixelFormat
+	  as suggested in #2980652
+	  
+	  backported from trunk; protected by __BIG_ENDIAN__ (?)
+
+2010-06-15 09:43  zmoelnig
+
+	* src/Pixes/pix_color.cpp: fixed bug where with converting the
+	  colour to YUV-space (backported from trunk)
+
+2010-05-26 16:05  zmoelnig
+
+	* src/Pixes/pix_resize.cpp: backported fix for #3007373
+	  
+	  gluScaleImage() crashed with small (25x25) greyscale images;
+	  this "fix" is based on the assumption that gluScaleImage
+	  internally uses RGBA
+
+2010-05-26 16:03  zmoelnig
+
+	* src/Pixes/pix_dump.cpp: backported fix for #3007370
+	  
+	  [pix_dump] assumed that grayscale images had pixnum%4=0
+
+2010-05-07 10:49  zmoelnig
+
+	* src/Pixes/pix_buf.cpp, src/Pixes/pix_film.cpp,
+	  src/Pixes/pix_resize.cpp: backported fixes for #2972166
+
+2010-05-06 15:14  zmoelnig
+
+	* src/Particles/part_render.cpp, src/Particles/part_render.h:
+	  backported fix for allocation bug
+
+2010-03-15 14:11  zmoelnig
+
+	* ChangeLog: updated changelog for 0.92.3
+
 2010-03-15 14:06  zmoelnig
 
 	* help/gemframebuffer-help.pd, help/pix_image-help.pd,
