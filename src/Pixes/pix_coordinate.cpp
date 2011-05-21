@@ -58,7 +58,7 @@ void pix_coordinate :: render(GemState *state)
 
   state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
-  state->set(GemState::_GL_TEX_TYPE, m_oldTexType);
+  state->get(GemState::_GL_TEX_TYPE, m_oldTexType);
 
   if (m_oldTexType && m_numCoords){
     state->set(GemState::_GL_TEX_NUMCOORDS, m_numCoords);
