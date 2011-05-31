@@ -6,7 +6,7 @@ uniform float init;
 
 void main (void)
 {
-	vec2 coord = 128.*gl_TexCoord[0].st;
+	vec2 coord = gl_TexCoord[0].st/2.;
 	vec4 pos = texture2DRect(texture_mass, coord);
 
 	gl_FragColor = pos;

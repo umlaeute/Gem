@@ -1,21 +1,17 @@
 // Cyrille Henry 2008
 #extension GL_ARB_texture_rectangle : enable
 
-uniform sampler2DRect texture_mass,texture_link;
+uniform sampler2DRect texture_mass_old,texture_link;
+varying vec2 coord;
 uniform float init;
-
 
 void main (void)
 {
-	vec2 coord = (gl_TexCoord[0]).st;
-	vec4 color = vec4(-2,-2,-2,1);
-
+	vec4 color = vec4(0.,0.,1.,1.);
 	if ( (coord.x < 92.) && (coord.y <  64.) )
 	{
-
-		vec4 pos = texture2DRect(texture_mass, coord)-vec4(0.5);
+		vec4 pos = texture2DRect(texture_mass_old, coord)-vec4(0.5);
 		vec4 force = texture2DRect(texture_link, coord)-vec4(0.5);
-
 
 		force = min(max(force,vec4(-0.5)),vec4(0.5));
 			// on vire les +inf et -inf qui peuvent poser pb en cas d'instabilités

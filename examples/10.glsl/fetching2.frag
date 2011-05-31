@@ -1,42 +1,40 @@
 // Cyrille Henry 2008
-uniform sampler2D texture;
-// varying vec4 C;
-uniform float K2;
+#extension GL_ARB_texture_rectangle : enable
 
+uniform sampler2DRect texture;
+uniform float K2, K;
 
 vec2 pos_(vec2 V, float x, float y)
 {
-	V += vec2(x/128.,y/128.);
-	return(max(min(V,vec2(91./128.,63./128.)),vec2(0.)));
+	V += vec2(x,y);
+	return(max(min(V,vec2(91.,63.)),vec2(0.)));
 }
 
 
 void main (void)
 {
-	vec2 pos = gl_TexCoord[0].st * vec2(90./128.,62./128.) ; 
+	vec2 pos = gl_TexCoord[0].st * vec2(90.,62.)/256. ; 
 
-	vec2 posBG = (floor(pos*vec2(128.,128.)))/128.; 
-
-	vec4 color1 = texture2D(texture,pos_(posBG,-1.,-1.));
-	vec4 color2 = texture2D(texture,pos_(posBG, 0.,-1.));
-	vec4 color3 = texture2D(texture,pos_(posBG, 1.,-1.));
-	vec4 color4 = texture2D(texture,pos_(posBG,-1., 0.));
-	vec4 color5 = texture2D(texture,pos_(posBG, 0., 0.));
-	vec4 color6 = texture2D(texture,pos_(posBG, 1., 0.));
-	vec4 color7 = texture2D(texture,pos_(posBG,-1., 1.));
-	vec4 color8 = texture2D(texture,pos_(posBG, 0., 1.));
-	vec4 color9 = texture2D(texture,pos_(posBG, 1., 1.));
+	vec4 color1 = texture2DRect(texture,pos_(pos,-1.,-1.));
+	vec4 color2 = texture2DRect(texture,pos_(pos, 0.,-1.));
+	vec4 color3 = texture2DRect(texture,pos_(pos, 1.,-1.));
+	vec4 color4 = texture2DRect(texture,pos_(pos,-1., 0.));
+	vec4 color5 = texture2DRect(texture,pos_(pos, 0., 0.));
+	vec4 color6 = texture2DRect(texture,pos_(pos, 1., 0.));
+	vec4 color7 = texture2DRect(texture,pos_(pos,-1., 1.));
+	vec4 color8 = texture2DRect(texture,pos_(pos, 0., 1.));
+	vec4 color9 = texture2DRect(texture,pos_(pos, 1., 1.));
 
 	vec4 colorBG = color1 + color2 + color4 + color5;
 	vec4 colorBD = color3 + color2 + color6 + color5; 
 	vec4 colorHG = color4 + color5 + color7 + color8; 
 	vec4 colorHD = color5 + color6 + color8 + color9;
 
-	pos = (pos-posBG) * 128.;
+	vec2 fract_pos = (fract(pos)); 
 
-	vec4 XB = mix(colorBG,colorBD,pos.x);
-	vec4 XH = mix(colorHG,colorHD,pos.x);
-	vec4 X = mix(XB,XH,pos.y) / 4.;
+	vec4 XB = mix(colorBG,colorBD,fract_pos.x);
+	vec4 XH = mix(colorHG,colorHD,fract_pos.x);
+ 	vec4 X = mix(XB,XH,fract_pos.y) / 4.;
 
 	X -= vec4(0.5);
 	X.xyz = normalize(X.xyz);
@@ -50,10 +48,9 @@ void main (void)
 
 	tmp = 0.1 + 0.9 * tmp;
 	vec4 color = tmp * vec4(1,0.95,0.9,1);
+	color.a = smoothstep(0.75,1.,pos.x);
+    gl_FragColor = color;
 
-	color.a = smoothstep(0.035,0.04,gl_TexCoord[0].s);
-
-	gl_FragColor = color;
 }
 
 

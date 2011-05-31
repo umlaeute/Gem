@@ -1,11 +1,14 @@
 // Cyrille Henry 2008
-uniform sampler2D MyTex;
+#extension GL_ARB_texture_rectangle : enable
+
+uniform sampler2DRect MyTex;
 uniform float K;
 
 void main()
 {
 	vec4 v = vec4(gl_Vertex);
-	vec4 color = texture2D(MyTex, gl_MultiTexCoord0.st * vec2(91./128.,63./128.));
+	vec4 color = texture2DRect(MyTex, gl_MultiTexCoord0.st * vec2(91./128.,63./128.));
+
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 
 	v.x = color.r -0.5;	
