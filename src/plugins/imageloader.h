@@ -34,7 +34,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      DESCRIPTION
 
      -----------------------------------------------------------------*/
-   namespace gem {
+   namespace gem { namespace plugins {
   class GEM_EXTERN imageloader
   {
   public:
@@ -88,7 +88,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   };
 
-}; // namespace gem
+};}; // namespace gem
 
 
 /**
@@ -107,7 +107,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  * \note call this before any externals register themselves
  */
 #define INIT_IMAGELOADERFACTORY()                                         \
-  static gem::PluginFactoryRegistrar::dummy<gem::imageloader> fac_imageloaderdummy
+  static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy
 
 
 #endif	// for header file

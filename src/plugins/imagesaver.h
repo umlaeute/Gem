@@ -34,7 +34,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      DESCRIPTION
 
      -----------------------------------------------------------------*/
-   namespace gem {
+   namespace gem { namespace plugins {
   class GEM_EXTERN imagesaver
   {
   public:
@@ -55,7 +55,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     /* read a image
      */
     /* returns TRUE if loading was successfull, FALSE otherwise */
-    virtual bool save(std::string filename, imageStruct&result) = 0;
+    virtual bool save(std::string filename, const imageStruct&result) = 0;
 
 
     /**
@@ -88,7 +88,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   };
 
-}; // namespace gem
+}; }; // namespace gem
 
 
 /**
@@ -107,7 +107,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  * \note call this before any externals register themselves
  */
 #define INIT_IMAGESAVERFACTORY()                                         \
-  static gem::PluginFactoryRegistrar::dummy<gem::imagesaver> fac_imagesaverdummy
+  static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver> fac_imagesaverdummy
 
 
 #endif	// for header file

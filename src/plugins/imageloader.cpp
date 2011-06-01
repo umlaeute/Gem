@@ -15,7 +15,7 @@
 #include "plugins/imageloader.h"
 //#include "Gem/RTE.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 /////////////////////////////////////////////////////////
 //
