@@ -178,8 +178,13 @@ void GemBase :: setModified()
     m_cache=NULL;
   if (m_cache) m_cache->dirty = true;
   m_modified=true;
-  if(DISABLED!=m_state)
+  switch(m_state) {
+  case DISABLED:
+  case INIT:
+    break;
+  default:
     m_state=MODIFIED;
+  }
 }
 
 /////////////////////////////////////////////////////////
