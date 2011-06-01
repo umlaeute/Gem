@@ -34,7 +34,9 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
-    m_rectangle(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE),
+    m_rectangle(false), 
+    m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB),
+    m_type(GL_UNSIGNED_BYTE),
     m_outTexInfo(NULL)
 {
   // create an outlet to send out texture info:
@@ -84,8 +86,18 @@ bool gemframebuffer :: isRunnable() {
     return false;
   }
 
-  if(GLEW_EXT_framebuffer_object)
+  if(GLEW_EXT_framebuffer_object) {
+    m_wantinit=true;
+
+    /* check rectangle possibilities */
+    m_canRectangle=GL_TEXTURE_2D;
+    if(GLEW_ARB_texture_rectangle)
+      m_canRectangle=GL_TEXTURE_RECTANGLE_ARB;
+    else if (GLEW_EXT_texture_rectangle)
+      m_canRectangle=GL_TEXTURE_RECTANGLE_EXT;
+
     return true;
+  }
 
   error("openGL framebuffer extension is not supported by this system");
 
@@ -203,24 +215,42 @@ void gemframebuffer :: postrender(GemState *state)
 
 void gemframebuffer :: printInfo()
 {
-  if(m_rectangle)
-    post("using rectmode 1:GL_TEXTURE_RECTANGLE");
-  else post("using rectmode 0:GL_TEXTURE_2D");
-
-  switch(m_type) {
-  case GL_UNSIGNED_BYTE: post("using type: BYTE"); break;
-  case GL_FLOAT: post("using type: FLOAT"); break;
-  default: post("using type: unknown(%d)", m_type);
-  }
-
+  std::string format, internalformat;
   switch(m_format) {
-  case GL_YUV422_GEM: post("using color: YUV"); break;
-  case GL_RGB: post("using color: RGB"); break;
-  case GL_RGBA: post("using color: RGBA"); break;
-  case GL_BGRA: post("using color: BGRA"); break;
+  case GL_YUV422_GEM: format="YUV"; break;
+  case GL_RGB: format="RGB"; break;
+  case GL_RGBA: format="RGBA"; break;
+  case GL_BGRA: format="BGRA"; break;
+  case GL_RGB_FLOAT32_ATI: format="RGB32"; break;
+  default: format="<unknown>";
+  }
+  switch(m_internalformat) {
+  case GL_YUV422_GEM: internalformat="YUV"; break;
+  case GL_RGB: internalformat="RGB"; break;
+  case GL_RGBA: internalformat="RGBA"; break;
+  case GL_BGRA: internalformat="BGRA"; break;
+  case GL_RGB_FLOAT32_ATI: internalformat="RGB32"; break;
+  default: internalformat="<unknown>";
+  }
+  std::string rectangle;
+  int rect=(m_rectangle?m_canRectangle:GL_TEXTURE_2D);
+  if(GL_TEXTURE_2D==rect)   rectangle="2D";
+  else if(GL_TEXTURE_RECTANGLE_ARB==rect)rectangle="RECTANGLE(ARB)";
+  else if(GL_TEXTURE_RECTANGLE_EXT==rect)rectangle="RECTANGLE(EXT)";
+
+
+  std::string type;
+  switch(m_type) {
+  case GL_UNSIGNED_BYTE: type="BYTE"; break;
+  case GL_FLOAT        : type="FLOAT"; break;
+  default              : type="unknown";
   }
 
-  post("using texunit: %d", m_texunit);
+  post("size: %dx%d", m_width, m_height);
+  post("rectangle: %d -> %s", m_rectangle, rectangle.c_str());
+  post("format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(), m_format, m_internalformat);
+  post("type: %s [%d]", type.c_str(), m_type);
+  post("texunit: %d", m_texunit);
 }
 
 /////////////////////////////////////////////////////////
@@ -232,11 +262,10 @@ void gemframebuffer :: initFBO()
   // clean up any existing FBO before creating a new one
   if(m_haveinit)
     destroyFBO();
-	
-  if ( !m_rectangle )
-    m_texTarget = GL_TEXTURE_2D;
-  else
-    m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
+
+  m_texTarget = (m_rectangle?m_canRectangle:GL_TEXTURE_2D);
+  /* check supported formats */
+  fixFormat(m_wantFormat);
 
   // Generate frame buffer object then bind it.
   glGenFramebuffersEXT(1, &m_frameBufferIndex);
@@ -325,7 +354,7 @@ void gemframebuffer :: destroyFBO()
 /////////////////////////////////////////////////////////
 void gemframebuffer :: bangMess()
 {
-
+  error("'bang' message not implemented");
 }
 
 ////////////////////////////////////////////////////////
@@ -345,6 +374,10 @@ void gemframebuffer :: stopRendering()
 {
   destroyFBO();
 }
+
+
+
+
 ////////////////////////////////////////////////////////
 // dimMess
 //
@@ -355,7 +388,6 @@ void gemframebuffer :: dimMess(int width, int height)
     {
       m_width = width;
       m_height = height;
-      m_wantinit=true;
       setModified();
     }
 }
@@ -402,46 +434,39 @@ void gemframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
   }
 }
 
-void gemframebuffer :: formatMess(std::string format)
+
+
+/* needs to be called with a valid context */
+void gemframebuffer :: fixFormat(GLenum wantFormat)
 {
-  GLenum tmp_format=0;
-  if("YUV"==format) {
-    tmp_format = GL_YUV422_GEM;
-  } else if ("RGB"==format) {
-    tmp_format = GL_RGB;
-  } else if ("RGBA"==format) {
-    tmp_format = GL_RGBA;
-  } else if ("RGB32"==format) {
-    if(GLEW_ATI_texture_float) {
-      tmp_format =  GL_RGB_FLOAT32_ATI;
-    }
+   m_type = GL_UNSIGNED_BYTE;
+
+  if(wantFormat == GL_RGB_FLOAT32_ATI && !GLEW_ATI_texture_float) {
+    wantFormat =  GL_RGB;
   }
 
-  m_type = GL_UNSIGNED_BYTE;
-  switch(tmp_format) {
+  switch(wantFormat) {
   default:
     post("using default format");
-    format="RGB";
   case GL_RGB:
     m_internalformat=m_format=GL_RGB;
     break;
   case  GL_RGB_FLOAT32_ATI:
-  m_internalformat = GL_RGB_FLOAT32_ATI;
-  m_format = GL_RGB;
-  format="RGB_FLOAT32_ATI";
-  break;
+    m_internalformat = GL_RGB_FLOAT32_ATI;
+    m_format = GL_RGB;
+    break;
   case GL_RGBA:
     m_internalformat = GL_RGBA;
     m_format = GL_RGBA;
     break;
-  case  GL_YUV422_GEM:
+  case GL_YUV422_GEM:
     m_format=GL_YUV422_GEM;
     m_internalformat=GL_RGB8;
     break;
   }
 
 #ifdef __APPLE__
-  switch(tmp_format) {
+  switch(wantFormat) {
   case  GL_RGB_FLOAT32_ATI:
   m_format = GL_BGR;
   break;
@@ -455,11 +480,25 @@ void gemframebuffer :: formatMess(std::string format)
     break;
   }
 #endif
+}
 
-  post("format is '%s'(%d)", format.c_str(), m_format);
 
-  // changed format, so we need to rebuild the FBO
-  m_wantinit=true;
+void gemframebuffer :: formatMess(std::string format)
+{
+  GLenum tmp_format=0;
+  if("YUV"==format) {
+    tmp_format = GL_YUV422_GEM;
+  } else if ("RGB"==format) {
+    tmp_format = GL_RGB;
+  } else if ("RGBA"==format) {
+    tmp_format = GL_RGBA;
+  } else if ("RGB32"==format) {
+      tmp_format =  GL_RGB_FLOAT32_ATI;
+  }
+
+  if(tmp_format)
+    m_wantFormat=tmp_format;
+  setModified();
 }
 
 void gemframebuffer :: typeMess(std::string type)
@@ -470,21 +509,17 @@ void gemframebuffer :: typeMess(std::string type)
     type="BYTE";
     m_type=GL_UNSIGNED_BYTE;
   }
-  post("type is '%s'(%d)", type.c_str(), m_type);
-
   // changed type, so we need to rebuild the FBO
-  m_wantinit=true;
+  setModified();
 }
 
 void gemframebuffer :: rectangleMess(bool rectangle)
 {
   m_rectangle=rectangle;
-  m_wantinit=true;
-#warning setModified
+  setModified();
 }
 void gemframebuffer :: texunitMess(int unit) {
   m_texunit=static_cast<GLuint>(unit);
-
 }
 
 
@@ -504,31 +539,7 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "rectangle", rectangleMess, bool);
   CPPEXTERN_MSG1(classPtr, "texunit",   texunitMess, int);
 
+  /* legacy */
   CPPEXTERN_MSG2(classPtr, "dim",    dimMess, int, int);
   CPPEXTERN_MSG1(classPtr, "mode",   rectangleMess, bool);
-
-#if 0
-  class_addbang(classPtr, reinterpret_cast<t_method>(&gemframebuffer::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
-                  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
-                  gensym("dim"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::formatMessCallback),
-                  gensym("format"), A_DEFSYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::typeMessCallback),
-                  gensym("type"), A_DEFSYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
-                  gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
-                  gensym("rectangle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::texunitCallback),
-                  gensym("texunit"), A_FLOAT, A_NULL);
-
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::colorMessCallback),
-                  gensym("color"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::perspectiveMessCallback),
-		  gensym("perspec"), A_GIMME, A_NULL);
-
-#endif
-
 }

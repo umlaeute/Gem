@@ -78,7 +78,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
   virtual void rectangleMess(bool mode);
   virtual void texunitMess(int mode);
 
-
+  virtual void fixFormat(GLenum wantedFormat);
   virtual void printInfo(void);
        
  private:
@@ -90,8 +90,10 @@ class GEM_EXTERN gemframebuffer : public GemBase
   GLuint      m_texunit;
   int         m_width, m_height;
   bool        m_rectangle; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
+  GLenum      m_canRectangle; // whichever rectangle formats are supported
   int         m_internalformat;
   int         m_format;
+  GLenum      m_wantFormat;
   int         m_type;
   GLint       m_vp[4];
   GLfloat     m_color[4];
@@ -100,18 +102,6 @@ class GEM_EXTERN gemframebuffer : public GemBase
   GLfloat     m_perspect[6];
     
   void        bangMess(void);
-       
-  //////////
-  // static member functions
-  static void bangMessCallback  (void *data);
-  static void modeCallback      (void *data, t_floatarg quality);
-  static void dimMessCallback   (void *data, t_floatarg width, t_floatarg height );
-  static void texTargetCallback (void *data, t_floatarg tt);
-  static void formatMessCallback(void *data, t_symbol *format);
-  static void typeMessCallback  (void *data, t_symbol *type);
-  static void colorMessCallback (void *data, t_symbol*, int, t_atom*);
-  static void texunitCallback   (void *data, t_floatarg tu);
-  static void perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv);
 };
 
 #endif   // for header file
