@@ -36,6 +36,7 @@ class GEM_EXTERN Context {
 
  public:
   Context(void);
+  Context(const Context&);
   virtual ~Context(void);
 
   // make context current
