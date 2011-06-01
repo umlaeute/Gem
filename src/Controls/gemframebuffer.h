@@ -69,11 +69,15 @@ class GEM_EXTERN gemframebuffer : public GemBase
       
   ////////// 
   // format-message
-  virtual void formatMess(const char* format);
-  virtual void typeMess(const char* type);
+  virtual void formatMess(std::string);
+  virtual void typeMess(std::string);
       
-  virtual void colorMess(float red, float green, float blue, float alpha);
-virtual void perspectiveMess( float left, float right, float bottom, float top, float near, float far);
+  virtual void colorMess(t_symbol*,int argc, t_atom*argv);
+  virtual void perspectiveMess(t_symbol*,int argc, t_atom*argv);
+
+  virtual void rectangleMess(bool mode);
+  virtual void texunitMess(int mode);
+
 
   virtual void printInfo(void);
        
@@ -85,7 +89,7 @@ virtual void perspectiveMess( float left, float right, float bottom, float top, 
   GLuint      m_texTarget;
   GLuint      m_texunit;
   int         m_width, m_height;
-  int         m_mode; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
+  bool        m_rectangle; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
   int         m_internalformat;
   int         m_format;
   int         m_type;
@@ -93,7 +97,7 @@ virtual void perspectiveMess( float left, float right, float bottom, float top, 
   GLfloat     m_color[4];
   GLfloat     m_FBOcolor[4];
   t_outlet   *m_outTexInfo;
-  GLfloat    m_perspect[6];
+  GLfloat     m_perspect[6];
     
   void        bangMess(void);
        

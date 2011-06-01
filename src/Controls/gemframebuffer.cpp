@@ -34,7 +34,7 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
-    m_mode(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE),
+    m_rectangle(0), m_internalformat(GL_RGB8), m_format(GL_RGB), m_type(GL_UNSIGNED_BYTE),
     m_outTexInfo(NULL)
 {
   // create an outlet to send out texture info:
@@ -203,7 +203,7 @@ void gemframebuffer :: postrender(GemState *state)
 
 void gemframebuffer :: printInfo()
 {
-  if(m_mode)
+  if(m_rectangle)
     post("using rectmode 1:GL_TEXTURE_RECTANGLE");
   else post("using rectmode 0:GL_TEXTURE_2D");
 
@@ -233,7 +233,7 @@ void gemframebuffer :: initFBO()
   if(m_haveinit)
     destroyFBO();
 	
-  if ( !m_mode )
+  if ( !m_rectangle )
     m_texTarget = GL_TEXTURE_2D;
   else
     m_texTarget = GL_TEXTURE_RECTANGLE_EXT;
@@ -360,8 +360,22 @@ void gemframebuffer :: dimMess(int width, int height)
     }
 }
 
-void gemframebuffer :: colorMess(float red, float green, float blue, float alpha)
+void gemframebuffer :: colorMess(t_symbol*s,int argc, t_atom*argv)
 {
+  float red=1., green=1., blue=1., alpha=1.;
+  switch(argc) {
+  case (4):
+    alpha=atom_getfloat(argv+3);
+  case (3):
+    red =atom_getfloat(argv+0);
+    green=atom_getfloat(argv+1);
+    blue =atom_getfloat(argv+2);
+    break;
+  default:
+    error("'color' message takes 3 (RGB) or 4 (RGBA) values");
+    return;
+  }
+
   m_FBOcolor[0] = red;
   m_FBOcolor[1] = green;
   m_FBOcolor[2] = blue;
@@ -370,23 +384,26 @@ void gemframebuffer :: colorMess(float red, float green, float blue, float alpha
   setModified();
 }
 
-void gemframebuffer :: perspectiveMess(float f_left, float f_right, 
-                                       float f_bottom, float f_top,
-                                       float f_near, float f_far)
+void gemframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
 {
-  m_perspect[0] = f_left;
-  m_perspect[1] = f_right;
-  m_perspect[2] = f_bottom;
-  m_perspect[3] = f_top;
-  m_perspect[4] = f_near;
-  m_perspect[5] = f_far;
-    
-  setModified();
+  switch(argc){
+  case 6:
+    m_perspect[0]=atom_getfloat(argv);
+    m_perspect[1]=atom_getfloat(argv+1);
+    m_perspect[2]=atom_getfloat(argv+2);
+    m_perspect[3]=atom_getfloat(argv+3);
+    m_perspect[4]=atom_getfloat(argv+4);
+    m_perspect[5]=atom_getfloat(argv+5);
+
+    setModified();
+    break;
+  default:
+    error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
+  }
 }
 
-void gemframebuffer :: formatMess(const char* fmt)
+void gemframebuffer :: formatMess(std::string format)
 {
-  std::string format=fmt;
   GLenum tmp_format=0;
   if("YUV"==format) {
     tmp_format = GL_YUV422_GEM;
@@ -445,9 +462,8 @@ void gemframebuffer :: formatMess(const char* fmt)
   m_wantinit=true;
 }
 
-void gemframebuffer :: typeMess(const char* typ)
+void gemframebuffer :: typeMess(std::string type)
 {
-  std::string type=typ;
   if("FLOAT"==type) {
     m_type = GL_FLOAT;
   } else {
@@ -460,17 +476,39 @@ void gemframebuffer :: typeMess(const char* typ)
   m_wantinit=true;
 }
 
+void gemframebuffer :: rectangleMess(bool rectangle)
+{
+  m_rectangle=rectangle;
+  m_wantinit=true;
+#warning setModified
+}
+void gemframebuffer :: texunitMess(int unit) {
+  m_texunit=static_cast<GLuint>(unit);
+
+}
+
+
+
 ////////////////////////////////////////////////////////
 // static member function
 //
 ////////////////////////////////////////////////////////
 void gemframebuffer :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG0(classPtr, "bang",   bangMess);
+  CPPEXTERN_MSG (classPtr, "color",  colorMess);
+  CPPEXTERN_MSG (classPtr, "perspec",  perspectiveMess);
+  CPPEXTERN_MSG2(classPtr, "dimen",  dimMess, int, int);
+  CPPEXTERN_MSG1(classPtr, "format", formatMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "type",   typeMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "rectangle", rectangleMess, bool);
+  CPPEXTERN_MSG1(classPtr, "texunit",   texunitMess, int);
+
+  CPPEXTERN_MSG2(classPtr, "dim",    dimMess, int, int);
+  CPPEXTERN_MSG1(classPtr, "mode",   rectangleMess, bool);
+
+#if 0
   class_addbang(classPtr, reinterpret_cast<t_method>(&gemframebuffer::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
-                  gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
-                  gensym("rectangle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
                   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::dimMessCallback),
@@ -479,80 +517,18 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
                   gensym("format"), A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::typeMessCallback),
                   gensym("type"), A_DEFSYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::colorMessCallback),
-                  gensym("color"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
+                  gensym("mode"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::modeCallback),
+                  gensym("rectangle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::texunitCallback),
                   gensym("texunit"), A_FLOAT, A_NULL);
+
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::colorMessCallback),
+                  gensym("color"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemframebuffer::perspectiveMessCallback),
 		  gensym("perspec"), A_GIMME, A_NULL);
-}
-void gemframebuffer :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->bangMess();
-}
-void gemframebuffer :: modeCallback(void *data, t_floatarg quality)
-{
-  GetMyClass(data)->m_mode=(static_cast<int>(quality));
-  // changed mode, so we need to rebuild the FBO
-  GetMyClass(data)->m_wantinit=true;
-}
-void gemframebuffer :: dimMessCallback(void *data, t_floatarg width, t_floatarg height)
-{
-  GetMyClass(data)->dimMess(static_cast<int>(width), static_cast<int>(height));
-}
-void gemframebuffer :: formatMessCallback (void *data, t_symbol *format)
-{
-  GetMyClass(data)->formatMess(format->s_name);
-}
-void gemframebuffer :: typeMessCallback (void *data, t_symbol *type)
-{
-  GetMyClass(data)->typeMess(type->s_name);
-}
 
-void gemframebuffer :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
-{
-  float red=1., green=1., blue=1., alpha=1.;
-  switch(argc) {
-  case (4):
-    alpha=atom_getfloat(argv+3);
-  case (3):
-    red =atom_getfloat(argv+0);
-    green=atom_getfloat(argv+1);
-    blue =atom_getfloat(argv+2);
-    break;
-  default:
-    GetMyClass(data)->error("'color' message takes 3 (RGB) or 4 (RGBA) values");
-    return;
-  }
+#endif
 
-  GetMyClass(data)->colorMess(red, green, blue, alpha);
-}
-
-void gemframebuffer :: texunitCallback(void *data, t_floatarg unit)
-{
-  GetMyClass(data)->m_texunit=static_cast<GLuint>(unit);
-}
-
-void gemframebuffer :: perspectiveMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
-{
-  t_float f_left, f_right, f_bottom, f_top, f_near, f_far;
-  switch(argc){
-  case 6:
-    f_left=  atom_getfloat(argv);
-    f_right=atom_getfloat(argv+1);
-    f_bottom= atom_getfloat(argv+2);
-    f_top=  atom_getfloat(argv+3);
-    f_near=atom_getfloat(argv+4);
-    f_far= atom_getfloat(argv+5);
-    GetMyClass(data)->perspectiveMess(
-				      static_cast<float>(f_left), 
-				      static_cast<float>(f_right), 
-				      static_cast<float>(f_bottom), 
-				      static_cast<float>(f_top), 
-				      static_cast<float>(f_near),
-				      static_cast<float>(f_far));
-    break;
-  default:
-    GetMyClass(data)->error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
-  }
 }
