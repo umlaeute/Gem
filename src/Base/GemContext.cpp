@@ -48,6 +48,22 @@ public:
     else 
       maxStackDepth[GemMan::STACKCOLOR]=0;
   }
+
+  PIMPL(const PIMPL&p) : 
+#ifdef GEM_MULTICONTEXT
+    context(new GLEWContext(*p.context)), xcontext(new GemGlewXContext(*p.xcontext)), 
+#else
+    context(NULL), xcontext(NULL), 
+#endif
+    contextid(makeID())
+  {
+    /* check the stack-sizes */
+    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    maxStackDepth+GemMan::STACKMODELVIEW);
+    glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+GemMan::STACKCOLOR);
+    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      maxStackDepth+GemMan::STACKTEXTURE);
+    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   maxStackDepth+GemMan::STACKPROJECTION);
+  }
+
   ~PIMPL(void) {
     freeID(contextid);
 #ifdef GEM_MULTICONTEXT
@@ -124,6 +140,15 @@ Context::Context(void)
   }
   GemMan::m_windowState++;
 }
+
+Context::Context(const Context&c) 
+  : m_pimpl(new PIMPL(*(c.m_pimpl)))
+{
+  push();
+  post("foo GLEW version %s",glewGetString(GLEW_VERSION));
+  pop();
+}
+
 
 Context::~Context(void) {
   if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
