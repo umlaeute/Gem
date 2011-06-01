@@ -55,7 +55,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     /* read a image
      */
     /* returns TRUE if loading was successfull, FALSE otherwise */
-    virtual bool read(std::string filename, imageStruct&result);
+    virtual bool load(std::string filename, imageStruct&result) = 0;
 
 
     /**
