@@ -98,7 +98,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  * \param id a symbolic (const char*) ID for the given class
  * \param imageloaderClass a class derived from "imageloader"
  */
-#define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::imageloader> fac_imageloader_ ## TYP (gensym(id)->s_name)
+#if 1
+#define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imageloader> fac_imageloader_ ## TYP (gensym(id)->s_name)
+#else
+#define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imageloader> fac_imageloader_ ## TYP (id)
+#endif
 
 
 /**
