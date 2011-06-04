@@ -25,7 +25,7 @@
 
 using namespace gem::plugins;
 
-REGISTER_IMAGELOADERFACTORY("magick", imageMAGICK);
+REGISTER_IMAGEFACTORY("magick", imageMAGICK);
 
 
 /////////////////////////////////////////////////////////

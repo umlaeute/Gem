@@ -30,7 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins { 
-class GEM_EXPORT imageMAGICK : public imageloader {
+class GEM_EXPORT imageMAGICK : public gem::plugins::image {
  public:
 
   //////////
