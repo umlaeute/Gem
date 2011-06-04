@@ -29,8 +29,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      DESCRIPTION
 
      -----------------------------------------------------------------*/
-   namespace gem { namespace plugins {
-     class GEM_EXTERN image : public imageloader, public imagesaver
+namespace gem { namespace plugins {
+class GEM_EXTERN image : public imageloader, public imagesaver
   {
   public:
   
@@ -84,16 +84,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  * \param id a symbolic (const char*) ID for the given class
  * \param imageClass a class derived from "image"
  */
-#define REGISTER_IMAGEFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::image> fac_image_ ## TYP (gensym(id)->s_name)
-
-
-/**
- * \fn INIT_IMAGEFACTORY()
- * initialized the factory
- * \note call this before any externals register themselves
- */
-#define INIT_IMAGEFACTORY()                                         \
-  static gem::PluginFactoryRegistrar::dummy<gem::plugins::image> fac_imagedummy
+#define REGISTER_IMAGEFACTORY(id, TYP) REGISTER_IMAGELOADERFACTORY(id, TYP); REGISTER_IMAGESAVERFACTORY(id, TYP)
 
 
 #endif	// for header file

@@ -81,6 +81,3 @@ void image :: getProperties(gem::Properties&props) {
     props.set(keys[i], unset);
   }
 }
-
-
-INIT_IMAGEFACTORY();
