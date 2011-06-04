@@ -17,6 +17,9 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_LIBMAGICKPLUSPLUS
+# include <Magick++.h>
+
 #include <string.h>
 #include "imageMAGICK.h"
 
@@ -52,10 +55,9 @@ imageMAGICK :: ~imageMAGICK()
 /////////////////////////////////////////////////////////
 bool imageMAGICK :: load(std::string filename, imageStruct&result)
 {
-#ifdef HAVE_MAGICKPLUPLUS
   Magick::Image image;
   try {
-    ::verbose(2, "reading '%s' with ImageMagick", filename);
+    ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
     // Read a file into image object
     try {
       image.read( filename );
@@ -83,11 +85,8 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result)
     return false;
   }
   return true;
-#else
-  post("imageMagick: not really implemented");
-  return false;
-#endif
 }
 bool imageMAGICK::save(std::string filename, const imageStruct&result) {
   return false;
 }
+#endif
