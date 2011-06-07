@@ -13,6 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#define HELPSYMBOL "scopeXYZ~"
 
 #include "scopeXYZ~.h"
 
