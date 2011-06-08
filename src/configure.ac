@@ -169,29 +169,6 @@ fi
 GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
-
-# this is rather experimental...and magic...uähh
-# the problem is that with older verseion of FTGL we needed to link against libftgl_pic
-# and pkg-config/ftgl-config wouldn't tell us about this
-if test "x$with_ftgl" != "xno" && \
-        test "x${PKG_FTGL_CFLAGS}x${PKG_FTGL_LIBS}x" = "xxx" && \
-        which pkg-config > /dev/null && \
-        pkg-config --exists ftgl > /dev/null
-then
- have_ftgl="no"
- PKG_FTGL_CFLAGS=$(pkg-config --cflags ftgl)
- PKG_FTGL_LIBS=$(pkg-config --libs ftgl | sed 's/-lftgl/-lftgl_pic/g')
- GEM_CHECK_LDFLAGS([${PKG_FTGL_LIBS}], [have_ftgl="yes"])
-
- if test "x$have_ftgl" = "xyes"
- then
-  ac_cv_env_PKG_FTGL_CFLAGS_set="set"
-  ac_cv_env_PKG_FTGL_CFLAGS_value=${PKG_FTGL_CFLAGS}
-  ac_cv_env_PKG_FTGL_LIBS_set="set"
-  ac_cv_env_PKG_FTGL_LIBS_value=${PKG_FTGL_LIBS}
- fi
-fi
-
 GEM_CHECK_LIB(ftgl,ftgl,main,,,[ -lfreetype], font support)
 
 # for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
