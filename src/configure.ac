@@ -15,6 +15,34 @@ AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
 AC_CONFIG_FILES([plugins/imageSGI/Makefile])
 
+AC_CONFIG_FILES([plugins/filmAVI/Makefile])
+AC_CONFIG_FILES([plugins/filmAVIPLAY/Makefile])
+AC_CONFIG_FILES([plugins/filmDS/Makefile])
+AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
+AC_CONFIG_FILES([plugins/filmGMERLIN/Makefile])
+AC_CONFIG_FILES([plugins/filmMPEG1/Makefile])
+AC_CONFIG_FILES([plugins/filmMPEG3/Makefile])
+AC_CONFIG_FILES([plugins/filmQT/Makefile])
+AC_CONFIG_FILES([plugins/filmQT4L/Makefile])
+AC_CONFIG_FILES([plugins/filmTEST/Makefile])
+
+AC_CONFIG_FILES([plugins/recordQT/Makefile])
+AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
+AC_CONFIG_FILES([plugins/recordV4L/Makefile])
+AC_CONFIG_FILES([plugins/recordV4L2/Makefile])
+
+AC_CONFIG_FILES([plugins/videoDC1394/Makefile])
+AC_CONFIG_FILES([plugins/videoDS/Makefile])
+AC_CONFIG_FILES([plugins/videoDV4L/Makefile])
+AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
+AC_CONFIG_FILES([plugins/videoSGI/Makefile])
+AC_CONFIG_FILES([plugins/videoUNICAP/Makefile])
+AC_CONFIG_FILES([plugins/videoV4L/Makefile])
+AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
+AC_CONFIG_FILES([plugins/videoVFW/Makefile])
+
+
+
 
 AC_LANG(C++)
 
@@ -118,8 +146,8 @@ AC_PATH_X
 AC_PATH_XTRA
 
 if test "x$with_x" != "xno"; then
- AC_CHECK_LIB(X11,main)
- AC_CHECK_LIB(Xext,main)
+# AC_CHECK_LIB(X11,main)
+# AC_CHECK_LIB(Xext,main)
  AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
 fi
 
@@ -172,6 +200,7 @@ GEM_CHECK_FRAMEWORK(QuickTime,
                         [have_quicktime_framework="yes"], 
                         [have_quicktime_framework="no"])
 
+AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
 
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
@@ -190,6 +219,67 @@ GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
 GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
 
 GEM_CHECK_LIB(ftgl,ftgl,main,,,[ -lfreetype], font support)
+
+
+## film en/decoders
+GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
+GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
+GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
+GEM_CHECK_LIB(libmpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
+GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
+GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
+
+# special function in libquicktime
+old_cflags=${CFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
+LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+AC_CHECK_FUNCS([lqt_seek_video])
+AC_CHECK_FUNCS([lqt_open_write])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
+
+#video
+GEM_CHECK_LIB(libdc1394-2,dc1394,main,,,,video input)
+GEM_CHECK_LIB(libdv,dv,main,,,,video input)
+GEM_CHECK_LIB(libraw1394,raw1394,main,,,,video input)
+GEM_CHECK_LIB(libiec61883,iec61883,main,,,,video input)
+AC_CHECK_HEADERS([vl/vl.h])
+
+GEM_ARG_WITH(unicap, [video input], [force])
+
+if test "x$with_unicap" != "xno"; then
+ GEM_CHECK_LIB(libunicap, unicap, unicap_check_version,,,,[video input])
+
+  AC_CHECK_HEADER([unicap/unicap.h],
+                  [
+                    AC_DEFINE([HAVE_UNICAP], [], [video capturing using UNICAP])
+                    have_unicap="yes"
+                  ],[have_unicap="no"])
+
+fi
+
+GEM_ARG_WITH(v4l, [video input], [force])
+AC_CHECK_HEADERS(linux/videodev.h)
+GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video output])
+
+GEM_ARG_WITH(v4l2, [video input], [force])
+AC_CHECK_HEADERS(linux/videodev2.h)
+GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
+# AC_DEFINE([HAVE_VIDEO4LINUX2], [], [video capturing using v4l2])
+
+# TODO use $with_v4l and $with_v4l2
+
+
+
+GEM_CHECK_LIB(vfw32,vfw32,AVIFileInit,,,,video input)
+# is this needed?
+dnl GEM_CHECK_LIB(avicap32,avicap32,main,,,,video
+
+# recording
+
+
+
 
 # for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
 AC_CHECK_HEADERS([FTGL/ftgl.h])

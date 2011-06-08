@@ -1,7 +1,11 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
-SUBDIRS = imageMAGICK imageTIFF imageJPEG imageSGI imageQT
+SUBDIRS  = imageMAGICK imageTIFF imageJPEG imageSGI imageQT
+SUBDIRS += filmAVI filmAVIPLAY filmDS filmDarwin filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
+#SUBDIRS += filmTEST
+SUBDIRS += recordQT recordQT4L recordV4L recordV4L2
+SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP videoV4L videoV4L2 videoVFW
 
 noinst_LTLIBRARIES = libplugins.la
 
