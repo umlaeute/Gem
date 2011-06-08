@@ -23,12 +23,10 @@ libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 
 # image loading
 ## LATER this should move to various plugins
-libBase_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK___CFLAGS@ \
-	@GEM_LIB_JPEG_CFLAGS@ \
-	@GEM_LIB_TIFF_CFLAGS@
-libBase_la_LIBADD   += @GEM_LIB_IMAGEMAGICK___LIBS@ \
-	@GEM_LIB_JPEG_LIBS@ \
-	@GEM_LIB_TIFF_LIBS@
+libBase_la_CXXFLAGS += \
+	@GEM_LIB_JPEG_CFLAGS@
+libBase_la_LIBADD   += \
+	@GEM_LIB_JPEG_LIBS@
 
 
 libBase_la_SOURCES=  \

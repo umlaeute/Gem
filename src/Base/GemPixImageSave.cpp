@@ -145,20 +145,6 @@ gem::PixImageSaver*gem::PixImageSaver::s_instance=NULL;
 int mem2QuickTimeImage(imageStruct* image, const char *filename, int type);
 #endif /* HAVE_CARBONQUICKTIME */
 
-
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-# include <Magick++.h>
-int mem2magickImage(imageStruct* image, const char *filename);
-#endif /* HAVE_LIBMAGICKPLUSPLUS */
-
-#ifdef HAVE_LIBTIFF
-extern "C"
-{
-# include "tiffio.h"
-}
-int mem2tiffImage(imageStruct* image, const char *filename);
-#endif /* HAVE_LIBTIFF */
-
 #ifdef HAVE_LIBJPEG
 extern "C"
 {
@@ -184,19 +170,12 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
        return (1);
      }
    }
+   return (0);
 
   switch (type) {
   case 0:
 #ifdef HAVE_CARBONQUICKTIME
     if (mem2QuickTimeImage(image, filename, 0)) return(1);else
-#endif
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-    if (mem2magickImage(image, filename)) return(1);else
-#endif
-#ifdef HAVE_LIBTIFF
-    // write to a TIFF file
-    if (mem2tiffImage(image, filename))
-      return(1);
 #endif
     break;
   default:
@@ -209,9 +188,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
        return(1);
      else
 #endif
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-    if (mem2magickImage(image, filename)) return(1);else
-#endif
      break;
   }
 
@@ -219,67 +195,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
   error("GEM: Unable to save image to '%s'", filename);
   return(0);
 }
-#ifdef HAVE_LIBTIFF
-/***************************************************************************
- *
- * Write a TIFF image.
- *
- ***************************************************************************/
-int mem2tiffImage(imageStruct *image, const char *filename)
-{
-  TIFF *tif = NULL;
-
-  if(GL_YUV422_GEM==image->format) {
-    error("don't know how to write YUV-images with libTIFF");
-    return 0;
-  }
-
-  tif=TIFFOpen(filename, "w");
-  if (tif == NULL) {
-    return(0);
-  }
-
-  image->fixUpDown();
-
-  uint32 width=image->xsize, height = image->ysize;
-  short bits=8, samps=image->csize;
-  int npixels = width * height;
-  //int planar_conf = PLANARCONFIG_CONTIG;
-  const char *gemstring = "PD/GEM";
-
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, height);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bits);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, samps);
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, 1);
-  TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-
-  TIFFSetField(tif, TIFFTAG_XRESOLUTION, 72);
-  TIFFSetField(tif, TIFFTAG_YRESOLUTION, 72);
-  TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
-
-  TIFFSetField(tif, TIFFTAG_SOFTWARE, gemstring);
-
-  int yStride = image->xsize * image->csize;
-  unsigned char *srcLine = &(image->data[npixels * image->csize]);
-  srcLine -= yStride;
-
-  for (uint32 row = 0; row < height; row++) {
-    unsigned char *buf = srcLine;
-    if (TIFFWriteScanline(tif, buf, row, 0) < 0)
-      {
-	error("GEM: could not write line %d to image %s", row, filename);
-	TIFFClose(tif);
-	delete [] buf;
-	return(0);
-      }
-      srcLine -= yStride;
-    }
-  TIFFClose(tif);
-
-  return (1);
-}
-#endif /* HAVE_LIBTIFF */
 #ifdef HAVE_LIBJPEG
 /***************************************************************************
  *
@@ -385,53 +300,6 @@ int mem2jpegImage(imageStruct *image, const char *filename, int quality)
 }
 #endif /* HAVE_LIBJPEG */
 
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-/***************************************************************************
- *
- * Write an image using ImageMagick++
- *
- ***************************************************************************/
-int mem2magickImage(imageStruct *image, const char *filename)
-{
-  char*cs=0;
-  imageStruct*newImage=NULL;
-  switch(image->format) {
-  case GL_LUMINANCE:
-    cs=gensym("K")->s_name;
-    break;
-  case GL_RGBA:
-    cs=gensym("RGBA")->s_name;
-    break;
-  default:
-    newImage=new imageStruct();
-    newImage->convertFrom(image, GL_RGB);
-    image=newImage;
-  case GL_RGB:
-    cs=gensym("RGB")->s_name;
-    break;
-  case GL_BGRA_EXT:
-    cs=gensym("BGRA")->s_name;
-    break;
-  }
-
-  try{
-    Magick::Image mimage(image->xsize, image->ysize, cs, Magick::CharPixel, image->data);
-    // since openGL is upside down
-    if(!image->upsidedown) {
-      mimage.flip();
-    }
-    // 8 bits per channel are enough!
-    // LATER make this dependent on the image->type
-    mimage.depth(8); 
-    // finally convert and export
-    mimage.write(filename);
-  } catch (Magick::Exception e){
-    error("%s", e.what());
-    return 0;
-  }
-  return 1;
-}
-#endif /*  HAVE_LIBMAGICKPLUSPLUS */
 #ifdef HAVE_CARBONQUICKTIME
 extern OSStatus FSPathMakeFSSpec(const UInt8 *path,FSSpec *spec,Boolean *isDirectory);
        

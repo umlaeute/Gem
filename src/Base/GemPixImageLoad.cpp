@@ -135,24 +135,12 @@ gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 #include <setjmp.h>
 #include <string.h>
 
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-# include <Magick++.h>
-imageStruct *magickImage2mem(const char *filename);
-#endif
-
 #ifdef HAVE_CARBONQUICKTIME
 # include <Carbon/Carbon.h>
 # include <QuickTime/QuickTime.h>
 imageStruct *QTImage2mem(const char *filename);
 #endif
 
-#ifdef HAVE_LIBTIFF
-extern "C"
-{
-# include "tiffio.h"
-}
-imageStruct *tiffImage2mem(const char *filename);
-#endif
 
 #ifdef HAVE_LIBJPEG
 extern "C"
@@ -187,6 +175,9 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
        return image_block;
      }
    }
+   return NULL;
+
+
 
    char newName[256];
 
@@ -221,14 +212,8 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    }
 
 # ifdef HAVE_CARBONQUICKTIME
-   // try to load via ImageMagick
+   // try to load via QuickTime
    if ( (image_block = QTImage2mem(newName)) )
-         return(image_block);
-# endif
-
-# ifdef HAVE_LIBMAGICKPLUSPLUS
-   // try to load via ImageMagick
-   if ( (image_block = magickImage2mem(newName)) )
          return(image_block);
 # endif
 
@@ -240,11 +225,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    // try to load in an SGI file
    if ( (image_block = sgiImage2mem(newName)) )
          return(image_block);
-#ifdef HAVE_LIBTIFF
-   // try to load in a TIFF file
-   if ( (image_block = tiffImage2mem(newName)) )
-         return(image_block);
-#endif
    // unable to load image
    return(NULL);
 }
@@ -375,184 +355,6 @@ imageStruct *QTImage2mem(const char *filename)
    else         return NULL;
 }
 #endif /* HAVE_CARBONQUICKTIME */
-#ifdef HAVE_LIBTIFF
-/***************************************************************************
- *
- * Read in a TIFF image.
- *
- ***************************************************************************/
-imageStruct *tiffImage2mem(const char *filename)
-{
-    ::verbose(2, "reading '%s' with libTIFF", filename);
-    TIFF *tif = TIFFOpen(filename, "r");
-    if (tif == NULL)
-    {
-       return(NULL);
-    }
-
-   uint32 width, height;
-   short bits, samps;
-   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
-   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
-   TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bits);
-   TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samps);
-    
-   int npixels = width * height;
-
-   imageStruct *image_block = new imageStruct;
-        
-   image_block->xsize = width;
-   image_block->ysize = height;
-   image_block->type  = GL_UNSIGNED_BYTE;
-   image_block->upsidedown = true;
-
-   int knownFormat = 0;
-   // Is it a gray8 image?
-   if (bits == 8 && samps == 1)
-   {
-      image_block->csize = samps;
-      image_block->format = GL_LUMINANCE;
-      knownFormat = 1;
-   }
-   // Is it an RGB image?
-   else if (bits == 8 && samps == 3)
-   {
-      image_block->csize = 4;
-      image_block->format = GL_RGBA;
-      knownFormat = 1;
-   }
-   // Is it an RGBA image?
-   else if (bits == 8 && samps == 4)
-   {
-      image_block->csize = 4;
-      image_block->format = GL_RGBA;
-      knownFormat = 1;
-   }
-
-   // can we handle the raw data?
-   if (knownFormat)
-   {
-       unsigned char *buf = new unsigned char [TIFFScanlineSize(tif)];
-       if (buf == NULL)
-      {
-         error("GemImageLoad(TIFF): can't allocate memory for scanline buffer: %s", filename);
-          TIFFClose(tif);
-         delete image_block;
-         return(NULL);
-      }
-    
-      image_block->allocate(npixels * image_block->csize);
-      unsigned char *dstLine = image_block->data;
-      int yStride = image_block->xsize * image_block->csize;
-      for (uint32 row = 0; row < height; row++)
-      {
-          unsigned char *pixels = dstLine;
-         if (TIFFReadScanline(tif, buf, row, 0) < 0)
-         {
-             error("GemImageLoad(TIFF): bad image data read on line: %d: %s", row, filename);
-             TIFFClose(tif);
-            delete image_block;
-            delete [] buf;
-            return(NULL);
-         }
-         unsigned char *inp = buf;
-         if (samps == 1)
-         {
-            for (uint32 i = 0; i < width; i++)
-            {
-                *pixels++ = *inp++;         // Gray8
-            }
-         }
-         else if (samps == 3)
-         {
-            for (uint32 i = 0; i < width; i++)
-            {   
-                pixels[chRed]   = inp[0];   // Red
-                pixels[chGreen] = inp[1];   // Green
-                pixels[chBlue]  = inp[2];   // Blue
-                pixels[chAlpha] = 255;      // Alpha
-                pixels += 4;
-                inp += 3;
-            }
-         }
-         else
-         {
-            for (uint32 i = 0; i < width; i++)
-            {               
-                pixels[chRed]   = inp[0];   // Red
-                pixels[chGreen] = inp[1];   // Green
-                pixels[chBlue]  = inp[2];   // Blue
-                pixels[chAlpha] = inp[3];   // Alpha
-               pixels += 4;
-               inp += 4;
-            }
-         }
-         dstLine += yStride;
-      }
-      delete [] buf;
-   }
-   // nope, so use the automatic conversion
-   else
-   {
-      char emsg[1024];
-      TIFFRGBAImage img;
-      if (TIFFRGBAImageBegin(&img, tif, 0, emsg) == 0)
-      {
-           //error("GemImageLoad(TIFF): Error reading in image file: %s : %s", filename, emsg);
-         delete image_block;
-           TIFFClose(tif);
-           return(NULL);
-      }
-
-      uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(uint32)));
-      if (raster == NULL)
-      {
-         error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename);
-         TIFFClose(tif);
-         delete image_block;
-         return(NULL);
-      }
-
-      if (TIFFRGBAImageGet(&img, raster, width, height) == 0)
-      {
-         //error("GemImageLoad(TIFF): Error getting image data in file: %s, %s", filename, emsg);
-         _TIFFfree(raster);
-         TIFFClose(tif);
-         delete image_block;
-         return(NULL);
-      }
-
-       TIFFRGBAImageEnd(&img);
-
-      image_block->csize = 4;
-      image_block->format = GL_RGBA;
-      image_block->allocate(npixels * image_block->csize);
-      unsigned char *dstLine = image_block->data;
-      int yStride = image_block->xsize * image_block->csize;
-      // transfer everything over
-        int k = 0;
-        for (uint32 i = 0; i < height; i++)
-        {
-            unsigned char *pixels = dstLine;
-            for (uint32 j = 0; j < width; j++)
-            {
-	      pixels[chRed]   = static_cast<unsigned char>(TIFFGetR(raster[k])); // Red
-	      pixels[chGreen] = static_cast<unsigned char>(TIFFGetG(raster[k])); // Green
-	      pixels[chBlue]  = static_cast<unsigned char>(TIFFGetB(raster[k])); // Blue
-	      pixels[chAlpha] = static_cast<unsigned char>(TIFFGetA(raster[k])); // Alpha
-	      k++;
-	      pixels += 4;
-            }
-            dstLine += yStride;
-      }
-        _TIFFfree(raster);
-   }
-   
-    TIFFClose(tif);
-
-    return(image_block);
-}
-#endif /* HAVE_LIBTIFF */
 #ifdef HAVE_LIBJPEG
 /***************************************************************************
  *
@@ -829,40 +631,3 @@ imageStruct *sgiImage2mem(const char *filename)
    
    return(image_block);
 }
-
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-imageStruct *magickImage2mem(const char *filename){
-  imageStruct *image_block = new imageStruct;
-  Magick::Image image;
-  try {
-    ::verbose(2, "reading '%s' with ImageMagick", filename);
-    // Read a file into image object
-    try {
-      image.read( filename );
-    } catch (Magick::Warning e) {
-      verbose(1, "magick loading problem: %s", e.what());
-    }
-
-    image_block->xsize=static_cast<GLint>(image.columns());
-    image_block->ysize=static_cast<GLint>(image.rows());
-    image_block->setCsizeByFormat(GL_RGBA);
-    image_block->reallocate();
-
-    image_block->upsidedown=true;
-
-    try {
-      image.write(0,0,image_block->xsize,image_block->ysize, 
-                  "RGBA",
-                  Magick::CharPixel,
-                  reinterpret_cast<void*>(image_block->data));
-    } catch (Magick::Warning e) {
-      verbose(1, "magick decoding problem: %s", e.what());
-    }
-  }catch( Magick::Exception e )  {
-    verbose(1, "magick loading image failed with: %s", e.what());
-    return NULL;
-  }
-  return image_block;
-}
-
-#endif /* HAVE_LIBMAGICKPLUSPLUS */
