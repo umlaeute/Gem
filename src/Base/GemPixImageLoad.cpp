@@ -142,19 +142,6 @@ imageStruct *QTImage2mem(const char *filename);
 #endif
 
 
-#ifdef HAVE_LIBJPEG
-extern "C"
-{
-# ifdef _WIN32
-#  undef FAR
-# endif
-# undef EXTERN
-
-# include "jpeglib.h"
-}
-imageStruct *jpegImage2mem(const char *filename);
-#endif /* LIBJPEG */
-
 #include "sgiimage.h"
 imageStruct *sgiImage2mem(const char *filename);
 
@@ -217,11 +204,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
          return(image_block);
 # endif
 
-#ifdef HAVE_LIBJPEG
-   // try to load in a JPEG file
-   if ( (image_block = jpegImage2mem(newName)) )
-         return(image_block);
-#endif
    // try to load in an SGI file
    if ( (image_block = sgiImage2mem(newName)) )
          return(image_block);
@@ -355,175 +337,7 @@ imageStruct *QTImage2mem(const char *filename)
    else         return NULL;
 }
 #endif /* HAVE_CARBONQUICKTIME */
-#ifdef HAVE_LIBJPEG
-/***************************************************************************
- *
- * Read in a JPEG image.
- *
- * We have to do some funky error handling to keep the jpeg library
- *      from exiting on us.
- *
- ***************************************************************************/
 
-/*****************************
- *
- *   Here is the error handler
- *
- *****************************/
-struct my_error_mgr
-{
-  struct jpeg_error_mgr pub;   // "public" fields
-  jmp_buf setjmp_buffer;      // for return to caller
-};
-
-typedef struct my_error_mgr * my_error_ptr;
-
-/*
- * Here's the routine that will replace the standard error_exit method:
- */
-METHODDEF(void) my_error_exit (j_common_ptr cinfo)
-{
-  // cinfo->err really points to a my_error_mgr struct, so coerce pointer
-  my_error_ptr myerr = reinterpret_cast<my_error_ptr> (cinfo->err);
-
-  // Always display the message.
-  // We could postpone this until after returning, if we chose.
-  // (*cinfo->err->output_message) (cinfo);
-
-  // Return control to the setjmp point
-  longjmp(myerr->setjmp_buffer, 1);
-}
-
-/*
- *   Here is the main image reader
- */
-imageStruct *jpegImage2mem(const char *filename)
-{
-   // open up the file
-   FILE * infile;
-   ::verbose(2, "reading '%s' with libJPEG", filename);
-   if ((infile = fopen(filename, "rb")) == NULL)
-   {
-       //error("GemImageLoad(JPEG): Unable to open image file: %s", filename);
-       return(NULL);
-   }
-
-   // create the jpeg structures
-   jpeg_decompress_struct cinfo;
-   my_error_mgr jerr;
-
-   // We set up the normal JPEG error routines, then override error_exit
-   cinfo.err = jpeg_std_error(&jerr.pub);
-   jerr.pub.error_exit = my_error_exit;
-
-   // Establish the setjmp return context for my_error_exit to use.
-   if ( setjmp(jerr.setjmp_buffer) )
-   {
-      // If we get here, the JPEG code has signaled an error.
-      // We need to clean up the JPEG object, close the input file, and return.
-      jpeg_destroy_decompress(&cinfo);
-      fclose(infile);
-      return(NULL);
-   }
-
-   // create the decompression structure
-   jpeg_create_decompress(&cinfo);
-
-   // associate the decompress struct with the file
-   jpeg_stdio_src(&cinfo, infile);
-
-   // read in the file info
-   jpeg_read_header(&cinfo, TRUE);
-
-   imageStruct *image_block = new imageStruct;
-   image_block->type  = GL_UNSIGNED_BYTE;
-
-   // do we have an RGB image?
-   if (cinfo.jpeg_color_space == JCS_RGB)
-   {
-      image_block->csize = 4;
-      image_block->format = GL_RGBA;
-   }
-   // do we have a gray8 image?
-   else if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
-   {
-      image_block->csize = 1;
-      image_block->format = GL_LUMINANCE;
-   }
-   // something else, so decompress as RGB
-   else
-   {
-      image_block->csize = 4;
-      image_block->format = GL_RGBA;
-      cinfo.out_color_space = JCS_RGB;
-   }
-
-   // start the decompression
-   jpeg_start_decompress(&cinfo);
-   int xSize = cinfo.output_width;
-   int ySize = cinfo.output_height;
-   int cSize = image_block->csize;
-   image_block->upsidedown = true;
-   image_block->xsize = xSize;
-   image_block->ysize = ySize;
-   image_block->allocate(xSize * ySize * cSize);
-   
-   // cycle through the scan lines
-   unsigned char *srcLine = new unsigned char[xSize * cSize];
-   unsigned char *dstLine = image_block->data;
-   int yStride = xSize * cSize;
-   int lines = ySize;
-   int pixes = xSize;
-
-   // do RGBA/RGB data
-   if (cSize == 4)
-   {
-      while (lines--)
-      {
-         unsigned char *src = srcLine;
-         unsigned char *dst = dstLine;
-         jpeg_read_scanlines(&cinfo, &src, 1);
-         pixes = xSize;
-         while (pixes--)
-         {
-            dst[chRed] = src[0];
-            dst[chGreen] = src[1];
-            dst[chBlue] = src[2];
-            dst[chAlpha] = 255;
-            dst += 4;
-            src += 3;
-         }
-         dstLine += yStride;
-      }
-   }
-   // do grayscale data
-   else
-   {
-      while (lines--)
-      {
-         unsigned char *src = srcLine;
-         unsigned char *dst = dstLine;
-         jpeg_read_scanlines(&cinfo, &src, 1);
-         pixes = xSize;
-         while (pixes--)
-         {
-            *dst++ = *src++;
-         }
-         dstLine += yStride;
-      }
-   }
-
-   // finish the decompression
-   jpeg_finish_decompress(&cinfo);
-   
-   // cleanup
-   jpeg_destroy_decompress(&cinfo);
-   fclose(infile);
-   delete [] srcLine;
-
-   return(image_block);
-}
-#endif /* HAVE_LIBJPEG */
 /***************************************************************************
  *
  * Read in an SGI image.

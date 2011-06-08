@@ -145,17 +145,6 @@ gem::PixImageSaver*gem::PixImageSaver::s_instance=NULL;
 int mem2QuickTimeImage(imageStruct* image, const char *filename, int type);
 #endif /* HAVE_CARBONQUICKTIME */
 
-#ifdef HAVE_LIBJPEG
-extern "C"
-{
-# ifdef _WIN32
-#  undef EXTERN
-#  undef FAR
-# endif
-# include "jpeglib.h"
-}
-int mem2jpegImage(imageStruct* image, const char *filenamem, int quality);
-#endif /*  HAVE_LIBJPEG */
 /***************************************************************************
  *
  * mem2image - Save an image to a file
@@ -182,12 +171,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 #ifdef HAVE_CARBONQUICKTIME
     if (mem2QuickTimeImage(image, filename, (type==1))) return(1);else
 #endif
-#ifdef HAVE_LIBJPEG
-    // write a JPEG file
-     if (mem2jpegImage(image, filename, type))
-       return(1);
-     else
-#endif
      break;
   }
 
@@ -195,110 +178,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
   error("GEM: Unable to save image to '%s'", filename);
   return(0);
 }
-#ifdef HAVE_LIBJPEG
-/***************************************************************************
- *
- * Save a JPEG image.
- *
- * We have to do some funky error handling to keep the jpeg library
- *		from exiting on us.
- *
- ***************************************************************************/
-
-/*****************************
- *
- * Here is the error handler
- *
- *****************************/
-struct my_error_mgr
-{
-  struct jpeg_error_mgr pub;	// "public" fields
-  jmp_buf setjmp_buffer;	// for return to caller
-};
-
-typedef struct my_error_mgr * my_error_ptr;
-
-/*
- * Here's the routine that will replace the standard error_exit method:
- */
-METHODDEF(void) my_error_exit (j_common_ptr cinfo)
-{
-  // cinfo->err really points to a my_error_mgr struct, so coerce pointer
-  my_error_ptr myerr = reinterpret_cast<my_error_ptr> (cinfo->err);
-
-  // Always display the message.
-  // We could postpone this until after returning, if we chose.
-  // (*cinfo->err->output_message) (cinfo);
-
-  // Return control to the setjmp point
-  longjmp(myerr->setjmp_buffer, 1);
-}
-
-/*
- *	Here is the main image saver
- */
-int mem2jpegImage(imageStruct *image, const char *filename, int quality)
-{
-  struct jpeg_compress_struct cinfo;
-  struct jpeg_error_mgr jerr;
-  /* More stuff */
-  FILE * outfile;		/* target file */
-  JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
-  JSAMPLE *image_buffer = image->data;
-  int row_stride;		/* physical row width in image buffer */
-
-  if(GL_YUV422_GEM==image->format) {
-    error("don't know how to write YUV-images with libJPEG");
-    return 0;
-  }
-
-  cinfo.err = jpeg_std_error(&jerr);
-
-  /* Now we can initialize the JPEG compression object. */
-  jpeg_create_compress(&cinfo);
-
-  if ((outfile = fopen(filename, "wb")) == NULL) {
-    error("can't open %s\n", filename);
-    return (0);
-  }
-  jpeg_stdio_dest(&cinfo, outfile);
-
-  image->fixUpDown();
-
-  cinfo.image_width = image->xsize; 	/* image width and height, in pixels */
-  cinfo.image_height = image->ysize;
-  cinfo.input_components = 3;		/* # of color components per pixel */
-  cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
-
-  jpeg_set_defaults(&cinfo);
-  jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
-  jpeg_start_compress(&cinfo, TRUE);
-
-  row_stride = image->xsize * image->csize;	/* JSAMPLEs per row in image_buffer */
-
-  while (cinfo.next_scanline < cinfo.image_height) {
-    /* jpeg_write_scanlines expects an array of pointers to scanlines.
-     * Here the array is only one element long, but you could pass
-     * more than one scanline at a time if that's more convenient.
-     */
-    int rowindex=(image->upsidedown)?(cinfo.next_scanline * row_stride):((cinfo.image_height-cinfo.next_scanline) * row_stride);
-    row_pointer[0] = & image_buffer[rowindex];
-    if(jpeg_write_scanlines(&cinfo, row_pointer, 1) < 0){
-      error("GEM: could not write line %d to image %s", cinfo.next_scanline, filename);
-      jpeg_finish_compress(&cinfo);
-      fclose(outfile);
-      jpeg_destroy_compress(&cinfo);
-      return(0);
-    }
-  }
-
-  jpeg_finish_compress(&cinfo);
-  fclose(outfile);
-  jpeg_destroy_compress(&cinfo);
-
-  return(1);
-}
-#endif /* HAVE_LIBJPEG */
 
 #ifdef HAVE_CARBONQUICKTIME
 extern OSStatus FSPathMakeFSSpec(const UInt8 *path,FSSpec *spec,Boolean *isDirectory);
