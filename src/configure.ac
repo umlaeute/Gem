@@ -28,6 +28,7 @@ AC_CONFIG_SRCDIR([Base/GemBase.h])
 #AC_CONFIG_SUBDIRS([extra])
 #AC_CONFIG_SUBDIRS([plugins])
 
+
 AC_SUBST(CXXCPP)
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
@@ -55,9 +56,10 @@ CONFIGUREFLAGS=$(echo ${ac_configure_args} | sed "s/'//g")
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_LIBTOOL
+#predeps_CXX="-lstdc++"
+
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_LIBTOOL
 
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
@@ -146,7 +148,14 @@ fi
 GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library], [no])
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
-AC_CHECK_LIB(stdc++,main)
+### "-lstdc++" really has to be added before e.g. "-lGL" in order to avoid
+### triggering the bug
+### however, libtool is way to clever and eliminates duplicate LIBS entries.
+### since "-lstdc++" is usually found in the postdeps, this  would remove the
+### entry found in LIBS; so we add it to the predeps_CXX (only)
+stdcxx_LIBS=$LIBS
+AC_CHECK_LIB(stdc++,main,[predeps_CXX="$predeps_CXX -lstdc++"])
+LIBS=$stdcxx_LIBS
 
 dnl some checks for osX
 GEM_CHECK_FRAMEWORK(Cocoa,
