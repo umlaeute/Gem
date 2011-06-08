@@ -1,18 +1,100 @@
+# this file was generated automatically from Makefile.am.template
+# rather than editing this file directly, you should instead edit the
+# original Makefile.am.template and re-generate this file
+
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LTLIBRARIES = libGeos.la
 
-LIBADD =
+libGeos_la_CXXFLAGS =
+libGeos_la_LIBADD =
 
 # RTE flags
-CXXFLAGS += @GEM_RTE_CFLAGS@
-LIBADD   += @GEM_RTE_LIBS@
+libGeos_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libGeos_la_LIBADD   += @GEM_RTE_LIBS@
 
 # FTGL
-CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
-LIBADD   += @GEM_LIB_FTGL_LIBS@
+libGeos_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
+libGeos_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 
 
-libGeos_la_SOURCES= \
-	circle.cpp colorSquare.cpp cone.cpp cube.cpp cuboid.cpp curve3d.cpp curve.cpp cylinder.cpp disk.cpp GemSplash.cpp imageVert.cpp mesh_line.cpp mesh_square.cpp model.cpp model_loader.cpp multimodel.cpp newWave.cpp polygon.cpp pqtorusknots.cpp primTri.cpp rectangle.cpp ripple.cpp rubber.cpp scopeXYZ~.cpp slideSquares.cpp sphere3d.cpp sphere.cpp square.cpp surface3d.cpp teapot.cpp text2d.cpp text3d.cpp textextruded.cpp textoutline.cpp torus.cpp trapezoid.cpp triangle.cpp tube.cpp circle.h colorSquare.h cone.h cube.h cuboid.h curve3d.h curve.h cylinder.h disk.h GemSplash.h imageVert.h mesh_line.h mesh_square.h model.h model_loader.h multimodel.h newWave.h polygon.h pqtorusknots.h primTri.h rectangle.h ripple.h rubber.h scopeXYZ~.h slideSquares.h sphere3d.h sphere.h square.h surface3d.h teapot.h TexFont.h text2d.h text3d.h textextruded.h textoutline.h torus.h trapezoid.h triangle.h tube.h 
+libGeos_la_SOURCES=  \
+    circle.cpp \
+    circle.h \
+    colorSquare.cpp \
+    colorSquare.h \
+    cone.cpp \
+    cone.h \
+    cube.cpp \
+    cube.h \
+    cuboid.cpp \
+    cuboid.h \
+    curve3d.cpp \
+    curve3d.h \
+    curve.cpp \
+    curve.h \
+    cylinder.cpp \
+    cylinder.h \
+    disk.cpp \
+    disk.h \
+    GemSplash.cpp \
+    GemSplash.h \
+    imageVert.cpp \
+    imageVert.h \
+    mesh_line.cpp \
+    mesh_line.h \
+    mesh_square.cpp \
+    mesh_square.h \
+    model.cpp \
+    model.h \
+    model_loader.cpp \
+    model_loader.h \
+    multimodel.cpp \
+    multimodel.h \
+    newWave.cpp \
+    newWave.h \
+    polygon.cpp \
+    polygon.h \
+    pqtorusknots.cpp \
+    pqtorusknots.h \
+    primTri.cpp \
+    primTri.h \
+    rectangle.cpp \
+    rectangle.h \
+    ripple.cpp \
+    ripple.h \
+    rubber.cpp \
+    rubber.h \
+    scopeXYZ~.cpp \
+    scopeXYZ~.h \
+    slideSquares.cpp \
+    slideSquares.h \
+    sphere3d.cpp \
+    sphere3d.h \
+    sphere.cpp \
+    sphere.h \
+    square.cpp \
+    square.h \
+    surface3d.cpp \
+    surface3d.h \
+    teapot.cpp \
+    teapot.h \
+    TexFont.h \
+    text2d.cpp \
+    text2d.h \
+    text3d.cpp \
+    text3d.h \
+    textextruded.cpp \
+    textextruded.h \
+    textoutline.cpp \
+    textoutline.h \
+    torus.cpp \
+    torus.h \
+    trapezoid.cpp \
+    trapezoid.h \
+    triangle.cpp \
+    triangle.h \
+    tube.cpp \
+    tube.h
+

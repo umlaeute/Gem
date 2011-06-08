@@ -1,3 +1,6 @@
+# this file was generated automatically from Makefile.am.template
+# rather than editing this file directly, you should instead edit the
+# original Makefile.am.template and re-generate this file
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
@@ -19,6 +22,7 @@ libBase_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
 libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 
 # image loading
+## LATER this should move to various plugins
 libBase_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK___CFLAGS@ \
 	@GEM_LIB_JPEG_CFLAGS@ \
 	@GEM_LIB_TIFF_CFLAGS@
@@ -27,103 +31,100 @@ libBase_la_LIBADD   += @GEM_LIB_IMAGEMAGICK___LIBS@ \
 	@GEM_LIB_TIFF_LIBS@
 
 
-
-
-
-libBase_la_SOURCES= \
-        CPPExtern.cpp \
-        GemBase.cpp \
-        GemCache.cpp \
-        GemContext.cpp \
-        GemContextData.cpp \
-        GemDylib.cpp \
-        GemEvent.cpp \
-        GemException.cpp \
-        GemFiles.cpp \
-        GemFuncUtil.cpp \
-        GemGluObj.cpp \
-        GemGLUtil.cpp \
-        GemLoaders.cpp \
-        GemLoadObj.cpp \
-        GemMan.cpp \
-        GemModelData.cpp \
-        GemPathBase.cpp \
-        GemPBuffer.cpp \
-        GemPixConvertAltivec.cpp \
-        GemPixConvertSSE2.cpp \
-        GemPixDualObj.cpp \
-        GemPixImageLoad.cpp \
-        GemPixImageSave.cpp \
-        GemPixObj.cpp \
-        GemPixUtil.cpp \
-        GemSettings.cpp \
-        GemSetup.cpp \
-        GemShape.cpp \
-        GemSIMD.cpp \
-        GemState.cpp \
-        GemVector.cpp \
-        GemVersion.cpp \
-        GemVertex.cpp \
-        GemWinCreateMac.cpp \
-        GemWinCreateNT.cpp \
-        GemWinCreateXWin.cpp \
-        GemWindow.cpp \
-        glew.cpp \
-        GLStack.cpp \
-        Matrix.cpp \
-        Properties.cpp \
-        sgiimage.cpp \
-        TextBase.cpp \
-        ThreadMutex.cpp \
-        configDarwin.h \
-        config.h \
-        configLinux.h \
-        configNT.h \
-        CPPExtern.h \
-        GemBase.h \
-        GemCache.h \
-        GemConfig.h \
-        GemContextData.h \
-        GemContext.h \
-        GemDylib.h \
-        GemEvent.h \
-        GemException.h \
-        GemExportDef.h \
-        GemFiles.h \
-        GemFuncUtil.h \
-        GemGL.h \
-        GemGluObj.h \
-        GemGLUtil_generated.h \
-        GemGLUtil.h \
-        GemLoaders.h \
-        GemLoadObj.h \
-        GemMan.h \
-        GemMath.h \
-        GemModelData.h \
-        GemPathBase.h \
-        GemPBuffer.h \
-        GemPixConvert.h \
-        GemPixDualObj.h \
-        GemPixImageLoad.h \
-        GemPixImageSave.h \
-        GemPixObj.h \
-        GemPixPete.h \
-        GemPixUtil.h \
-        GemSettings.h \
-        GemShape.h \
-        GemSIMD.h \
-        GemState.h \
-        GemVector.h \
-        GemVersion.h \
-        GemVertex.h \
-        GemWinCreate.h \
-        GemWindow.h \
-        glew.h \
-        GLStack.h \
-        glxew.h \
-        Matrix.h \
-        Properties.h \
-        sgiimage.h \
-        TextBase.h \
-        ThreadMutex.h \
-        wglew.h
+libBase_la_SOURCES=  \
+    configDarwin.h \
+    config.h \
+    configLinux.h \
+    configNT.h \
+    CPPExtern.cpp \
+    CPPExtern.h \
+    GemBase.cpp \
+    GemBase.h \
+    GemCache.cpp \
+    GemCache.h \
+    GemConfig.h \
+    GemContext.cpp \
+    GemContextData.cpp \
+    GemContextData.h \
+    GemContext.h \
+    GemDylib.cpp \
+    GemDylib.h \
+    GemEvent.cpp \
+    GemEvent.h \
+    GemException.cpp \
+    GemException.h \
+    GemExportDef.h \
+    GemFiles.cpp \
+    GemFiles.h \
+    GemFuncUtil.cpp \
+    GemFuncUtil.h \
+    GemGL.h \
+    GemGluObj.cpp \
+    GemGluObj.h \
+    GemGLUtil.cpp \
+    GemGLUtil_generated.h \
+    GemGLUtil.h \
+    GemLoaders.cpp \
+    GemLoaders.h \
+    GemLoadObj.cpp \
+    GemLoadObj.h \
+    GemMan.cpp \
+    GemMan.h \
+    GemMath.h \
+    GemModelData.cpp \
+    GemModelData.h \
+    GemPathBase.cpp \
+    GemPathBase.h \
+    GemPBuffer.cpp \
+    GemPBuffer.h \
+    GemPixConvertAltivec.cpp \
+    GemPixConvert.h \
+    GemPixConvertSSE2.cpp \
+    GemPixDualObj.cpp \
+    GemPixDualObj.h \
+    GemPixImageLoad.cpp \
+    GemPixImageLoad.h \
+    GemPixImageSave.cpp \
+    GemPixImageSave.h \
+    GemPixObj.cpp \
+    GemPixObj.h \
+    GemPixPete.h \
+    GemPixUtil.cpp \
+    GemPixUtil.h \
+    GemSettings.cpp \
+    GemSettings.h \
+    GemSetup.cpp \
+    GemShape.cpp \
+    GemShape.h \
+    GemSIMD.cpp \
+    GemSIMD.h \
+    GemState.cpp \
+    GemState.h \
+    GemVector.cpp \
+    GemVector.h \
+    GemVersion.cpp \
+    GemVersion.h \
+    GemVertex.cpp \
+    GemVertex.h \
+    GemWinCreate.h \
+    GemWinCreateMac.cpp \
+    GemWinCreateNT.cpp \
+    GemWinCreateXWin.cpp \
+    GemWindow.cpp \
+    GemWindow.h \
+    glew.cpp \
+    glew.h \
+    GLStack.cpp \
+    GLStack.h \
+    glxew.h \
+    Matrix.cpp \
+    Matrix.h \
+    Properties.cpp \
+    Properties.h \
+    sgiimage.cpp \
+    sgiimage.h \
+    TextBase.cpp \
+    TextBase.h \
+    ThreadMutex.cpp \
+    ThreadMutex.h \
+    wglew.h
