@@ -44,7 +44,7 @@ Gem_la_LIBADD += openGL/libopenGL.la
 Gem_la_LIBADD += Particles/libParticles.la
 Gem_la_LIBADD += Pixes/libPixes.la
 
-#Gem_la_LIBADD += -lstdc++
+Gem_la_LIBADD += -lstdc++
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
