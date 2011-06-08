@@ -49,3 +49,9 @@ Gem_la_LIBADD += Pixes/libPixes.la
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
+
+## uha, this is ugly
+Gem.@GEM_RTE_EXTENSION@: Gem.la
+	$(LN_S) .libs/Gem.@GEM_RTE_EXTENSION@ .
+
+all-local:: Gem.@GEM_RTE_EXTENSION@
