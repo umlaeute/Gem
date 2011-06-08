@@ -8,6 +8,9 @@
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I m4
 
+# make sure -lstdc++ is kept first
+AM_LIBTOOLFLAGS = --preserve-dup-deps
+
 SUBDIRS=Base RTE plugins 
 SUBDIRS+= Controls Geos Manips Nongeos openGL Particles Pixes
 
@@ -43,8 +46,6 @@ Gem_la_LIBADD += Nongeos/libNongeos.la
 Gem_la_LIBADD += openGL/libopenGL.la
 Gem_la_LIBADD += Particles/libParticles.la
 Gem_la_LIBADD += Pixes/libPixes.la
-
-Gem_la_LIBADD += -lstdc++
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
