@@ -6,7 +6,8 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([foreign])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile])
+#AC_CONFIG_FILES([Make.config AMakefile plugins/imageMAGICK/Makefile])
 
 AC_LANG(C++)
 
@@ -15,10 +16,10 @@ KERN=$(uname -s)
 
 AC_CONFIG_MACRO_DIR(m4)
 
-AC_CONFIG_HEADER([Base/config.h])
+AC_CONFIG_HEADERS([Base/config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
-AC_CONFIG_SUBDIRS([extra])
-AC_CONFIG_SUBDIRS([plugins])
+#AC_CONFIG_SUBDIRS([extra])
+#AC_CONFIG_SUBDIRS([plugins])
 
 AC_SUBST(CXXCPP)
 AC_SUBST(CXX)
@@ -46,6 +47,7 @@ CONFIGUREFLAGS=$(echo ${ac_configure_args} | sed "s/'//g")
 
 # Checks for programs.
 AC_PROG_CXX
+AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_LIBTOOL
