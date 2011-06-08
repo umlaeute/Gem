@@ -17,10 +17,13 @@
 # include "config.h"
 #endif
 
-#if defined HAVE_FRAMEWORK_QT && defined HAVE_FRAMEWORK_CARBON
-#include "imageQT.h"
+#if defined HAVE_GEM_FRAMEWORK_QUICKTIME && defined HAVE_GEM_FRAMEWORK_CARBON
 
-#include "Gem/RTE.h"
+# include "Gem/RTE.h"
+# include "imageQT.h"
+
+# include <Carbon/Carbon.h>
+# include <QuickTime/QuickTime.h>
 
 
 using namespace gem::plugins;
@@ -89,7 +92,7 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
 #ifdef __DEBUG__
   post("QuickTimeImage2mem() : allocate %d bytes", result.xsize*result.ysize*result.csize);
 #endif
-  if (result.data == NULL || err) {
+  if (result.data == NULL) {
     error("Can't allocate memory for an image.");
     return false;
   }
@@ -104,6 +107,10 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
                                  //useDistantHdwrMem, 
                                  result.data, 
                                  static_cast<long>(result.xsize * result.csize));
+  if (err) {
+      error("Can't create QTNewWorld");
+   }
+
   ::GraphicsImportSetGWorld(inImporter, gw, NULL);
   ::GraphicsImportDraw(inImporter);
   ::DisposeGWorld(gw);         //dispose the offscreen
@@ -151,7 +158,7 @@ bool imageQT :: load(std::string filename, imageStruct&result)
   if (filename[0] != '\0') {
     FSSpec   spec;
 
-    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename), &spec, NULL);
+    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename.c_str()), &spec, NULL);
     if (err) {
       error("GemImageLoad: Unable to find file: %s", filename.c_str());
       error("parID : %d", spec.parID); 
