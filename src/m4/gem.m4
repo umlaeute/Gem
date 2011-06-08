@@ -102,6 +102,12 @@ AC_ARG_WITH([]Name-libs,
   if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi 
   if test "x$with_ALL" = "xno"  && test "x$with_[]Name" = "x"; then with_[]Name="no"; fi
 
+tmp_gem_check_lib_cppflags="$CPPFLAGS"
+tmp_gem_check_lib_cflags="$CFLAGS"
+tmp_gem_check_lib_cxxflags="$CXXFLAGS"
+tmp_gem_check_lib_ldflags="$LDFLAGS"
+tmp_gem_check_lib_libs="$LIBS"
+
 if test x$with_[]Name = "xno"; then
   have_[]Name="no (forced)"
 else
@@ -194,6 +200,14 @@ dnl turn of further checking for this package
 
    AS_VAR_POPDEF([ac_Lib])dnl
 fi[]dnl
+
+# restore original flags
+CPPFLAGS="$tmp_gem_check_lib_cppflags"
+CFLAGS="$tmp_gem_check_lib_cflags"
+CXXFLAGS="$tmp_gem_check_lib_cxxflags"
+LDFLAGS="$tmp_gem_check_lib_ldflags"
+LIBS="$tmp_gem_check_lib_libs"
+
 
 undefine([Name])
 undefine([NAME])
