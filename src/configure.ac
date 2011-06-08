@@ -1,12 +1,12 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-
 AC_PREREQ(2.60)
 AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([foreign])
-AC_CONFIG_FILES([Make.config AMakefile])
+
+AC_CONFIG_FILES([Makefile])
 
 AC_LANG(C++)
 
@@ -48,7 +48,7 @@ CONFIGUREFLAGS=$(echo ${ac_configure_args} | sed "s/'//g")
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
-
+AC_PROG_LIBTOOL
 
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
