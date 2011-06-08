@@ -116,7 +116,6 @@ fi
 
 AC_PATH_X
 AC_PATH_XTRA
-LIBS="$LIBS $X_LIBS"
 
 if test "x$with_x" != "xno"; then
  AC_CHECK_LIB(X11,main)
