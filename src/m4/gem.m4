@@ -255,6 +255,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   if test "x$gem_check_ldflags_success" = "xyes"; then
     AC_MSG_RESULT([yes])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [framework $1])
     GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
     [$2]
   else
