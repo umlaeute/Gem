@@ -13,6 +13,7 @@ AC_CONFIG_FILES([Controls/Makefile Geos/Makefile Manips/Makefile Nongeos/Makefil
 AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
+AC_CONFIG_FILES([plugins/imageSGI/Makefile])
 
 
 AC_LANG(C++)

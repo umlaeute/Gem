@@ -1,7 +1,7 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
-SUBDIRS = imageMAGICK imageTIFF imageJPEG
+SUBDIRS = imageMAGICK imageTIFF imageJPEG imageSGI
 
 noinst_LTLIBRARIES = libplugins.la
 
