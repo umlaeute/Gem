@@ -142,10 +142,6 @@ imageStruct *QTImage2mem(const char *filename);
 #endif
 
 
-#include "sgiimage.h"
-imageStruct *sgiImage2mem(const char *filename);
-
-
 /***************************************************************************
  *
  * image2mem - Read in an image in various file formats
@@ -204,9 +200,6 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
          return(image_block);
 # endif
 
-   // try to load in an SGI file
-   if ( (image_block = sgiImage2mem(newName)) )
-         return(image_block);
    // unable to load image
    return(NULL);
 }
@@ -337,111 +330,3 @@ imageStruct *QTImage2mem(const char *filename)
    else         return NULL;
 }
 #endif /* HAVE_CARBONQUICKTIME */
-
-/***************************************************************************
- *
- * Read in an SGI image.
- *
- ***************************************************************************/
-imageStruct *sgiImage2mem(const char *filename)
-{
-   int32 xsize, ysize, csize;
-   if (!sizeofimage(filename, &xsize, &ysize, &csize) )
-      return(NULL);
-
-   ::verbose(2, "reading '%s' with SGI", filename);
-
-   imageStruct *image_block = new imageStruct;
-   image_block->type  = GL_UNSIGNED_BYTE;
-   image_block->xsize = xsize;
-   image_block->ysize = ysize;
-
-   if (csize == 4 || csize == 3)
-   {
-      image_block->csize = 4;
-      image_block->format = GL_RGBA;
-   }
-   else if (csize == 1)
-   {
-      image_block->csize = 1;
-      image_block->format = GL_LUMINANCE;
-   }
-   else
-   {
-      //error("GemImageLoad(SGI): unknown color components in SGI file: %s", filename);
-      delete image_block;
-      return(NULL);
-   }
-   
-   unsigned int32 *readData = longimagedata((char *)filename);
-   if (!readData)
-   {
-      //error("GemImageLoad: error reading SGI image file: %s", filename);
-      delete image_block;
-      return(NULL);
-   }
-
-   image_block->allocate();
-   unsigned char *src = reinterpret_cast<unsigned char*>(readData);
-   unsigned char *dst = &(image_block->data[0]);
-   const int yStride = image_block->xsize * image_block->csize;
-
-   // do RGBA data
-   if (csize == 4)
-   {
-      while (ysize--)
-      {
-            unsigned char *pixels = dst;
-         int count = xsize;
-         while(count--)
-         {
-            pixels[chRed]   = src[0];
-            pixels[chGreen] = src[1];
-            pixels[chBlue]  = src[2];
-            pixels[chAlpha] = src[3];
-            pixels += 4;
-            src += 4;
-         }
-            dst += yStride;
-      }
-   }
-   // do RGB data
-   else if (csize == 3)
-   {
-      while (ysize--)
-      {
-	unsigned char *pixels = dst;
-         int count = xsize;
-         while(count--)
-         {
-            pixels[chRed]   = src[0];
-            pixels[chGreen] = src[1];
-            pixels[chBlue]  = src[2];
-            pixels[chAlpha] = 255;;
-            pixels += 4;
-            src += 4;
-         }
-            dst += yStride;
-      }
-   }
-   // do grayscale
-   else
-   {
-      while (ysize--)
-      {
-	unsigned char *pixels = dst;
-         int count = xsize;
-         while(count--)
-         {
-            pixels[0] = src[0];
-            pixels++;
-            src += 4;
-         }
-            dst += yStride;
-      }
-   }
-
-   free(readData);
-   
-   return(image_block);
-}

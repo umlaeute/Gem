@@ -111,8 +111,6 @@ libBase_la_SOURCES=  \
     Matrix.h \
     Properties.cpp \
     Properties.h \
-    sgiimage.cpp \
-    sgiimage.h \
     TextBase.cpp \
     TextBase.h \
     ThreadMutex.cpp \
