@@ -192,8 +192,7 @@ then
  fi
 fi
 
-GEM_CHECK_LIB(ftgl,ftgl,main,
-  [INCLUDES="$INCLUDES -I/usr/include/FTGL -I/usr/include/freetype2"],,[ -lfreetype], font support)
+GEM_CHECK_LIB(ftgl,ftgl,main,,,[ -lfreetype], font support)
 
 # for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
 AC_CHECK_HEADERS([FTGL/ftgl.h])
