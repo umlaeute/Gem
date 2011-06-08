@@ -41,37 +41,50 @@ AC_DEFUN([GEM_ARG_DISABLE],
 ])# GEM_ARG_DISABLE
 
 
-AC_DEFUN([GEM_TARGET],
-[AC_ARG_ENABLE([$1],
+AC_DEFUN([GEM_TARGET], [
+define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
+                             [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
+
+AC_ARG_ENABLE([$1],
              AC_HELP_STRING([--disable-$1], [disable $1-objects]),
              [
                 if test "x$enableval" != "xno"; then
-                  GEM_TARGETS=["$GEM_TARGETS $1"]
                   AC_MSG_RESULT([building Gem with $1-objects])
+                  target_[]NAME="yes"
                 else
                    AC_MSG_RESULT([building Gem without $1-objects])
+                  target_[]NAME="no"
                 fi
              ],
              [
-                  GEM_TARGETS=["$GEM_TARGETS $1"]
                   AC_MSG_RESULT([building Gem with $1-objects])
+                  target_[]NAME="yes"
              ])
+AM_CONDITIONAL(TARGET_[]NAME, [test "x$target_[]NAME" != "xno"])
+undefine([NAME])
 ])# GEM_TARGET
 
-AC_DEFUN([GEM_TARGET_DISABLED],
-[AC_ARG_ENABLE([$1],
+AC_DEFUN([GEM_TARGET_DISABLED], [
+define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
+                             [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
+
+AC_ARG_ENABLE([$1],
              AC_HELP_STRING([--enable-$1], [enable $1-objects]),
              [
                 if test "x$enableval" != "xyes"; then
                    AC_MSG_RESULT([building Gem without $1-objects])
+                  target_[]NAME="no"
                 else
-                  GEM_TARGETS=["$GEM_TARGETS $1"]
                   AC_MSG_RESULT([building Gem with $1-objects])
+                  target_[]NAME="yes"
                 fi
              ],
              [
                    AC_MSG_RESULT([building Gem without $1-objects])
+                   target_[]NAME="no"
              ])
+AM_CONDITIONAL(TARGET_[]NAME, [test "x$target_[]NAME" != "xno"])
+undefine([NAME])
 ])# GEM_TARGET_DISABLED
 
 

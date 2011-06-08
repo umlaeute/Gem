@@ -12,8 +12,6 @@ ACLOCAL_AMFLAGS = -I m4
 AM_LIBTOOLFLAGS = --preserve-dup-deps
 
 SUBDIRS=Base RTE plugins 
-SUBDIRS+= Controls Geos Manips Nongeos openGL Particles Pixes
-
 lib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
@@ -37,13 +35,39 @@ Gem_la_LDFLAGS += @ARCH_FLAGS@
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
 Gem_la_LIBADD += Base/libBase.la RTE/libRTE.la plugins/libplugins.la
 
+if TARGET_CONTROLS
+SUBDIRS+=Controls
 Gem_la_LIBADD += Controls/libControls.la
+endif
+if TARGET_GEOS
+SUBDIRS+=Geos
 Gem_la_LIBADD += Geos/libGeos.la
+endif
+if TARGET_MANIPS
+SUBDIRS+=Manips
 Gem_la_LIBADD += Manips/libManips.la
+endif
+if TARGET_NONGEOS
+SUBDIRS+=Nongeos
 Gem_la_LIBADD += Nongeos/libNongeos.la
+endif
+if TARGET_OPENGL
+SUBDIRS+=openGL
 Gem_la_LIBADD += openGL/libopenGL.la
+endif
+if TARGET_PARTICLES
+SUBDIRS+=Particles
 Gem_la_LIBADD += Particles/libParticles.la
+endif
+if TARGET_PIXES
+SUBDIRS+=Pixes
 Gem_la_LIBADD += Pixes/libPixes.la
+endif
+if TARGET_VERTEX
+SUBDIRS+=Vertex
+Gem_la_LIBADD += Vertex/libVertex.la
+endif
+
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
