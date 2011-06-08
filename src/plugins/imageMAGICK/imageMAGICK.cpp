@@ -86,7 +86,46 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result)
   }
   return true;
 }
-bool imageMAGICK::save(std::string filename, const imageStruct&result) {
-  return false;
+bool imageMAGICK::save(std::string filename, const imageStruct&image) {
+  imageStruct*img=const_cast<imageStruct*>(&image);
+  imageStruct*pImage=img;
+  std::string cs;
+  switch(img->format) {
+  case GL_LUMINANCE:
+    cs="K";
+    break;
+  case GL_RGBA:
+    cs="RGBA";
+    break;
+  default:
+    pImage=new imageStruct();
+    pImage->convertFrom(img, GL_RGB);
+  case GL_RGB:
+    cs="RGB";
+    break;
+  case GL_BGRA_EXT:
+    cs="BGRA";
+    break;
+  }
+
+  try{
+    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel, pImage->data);
+    // since openGL is upside down
+    if(!pImage->upsidedown) {
+      mimage.flip();
+    }
+    // 8 bits per channel are enough!
+    // LATER make this dependent on the image->type
+    mimage.depth(8); 
+    // finally convert and export
+    mimage.write(filename);
+  } catch (Magick::Exception e){
+    error("%s", e.what());
+    if(pImage!=&image)delete[]pImage; pImage=NULL;
+    return false;
+  }
+  if(pImage!=&image)delete[]pImage; pImage=NULL;
+
+  return true;
 }
 #endif
