@@ -13,7 +13,6 @@
 /////////////////////////////////////////////////////////
   
 #include "plugins/imageloader.h"
-//#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
@@ -25,14 +24,14 @@ using namespace gem::plugins;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-imageloader :: imageloader() {
+imageloader :: imageloader(bool threadable) : m_threadable(threadable) {
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-imageloader :: ~imageloader()
+imageloader :: ~imageloader(void)
 {
 }
 

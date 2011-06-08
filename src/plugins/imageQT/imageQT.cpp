@@ -118,7 +118,7 @@ void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imag
 //
 /////////////////////////////////////////////////////////
 
-imageQT :: imageQT() 
+imageQT :: imageQT() : image(false)
 {
   post("imageQT");
 }

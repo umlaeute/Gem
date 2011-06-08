@@ -25,7 +25,7 @@ using namespace gem::plugins;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-imagesaver :: imagesaver() {
+imagesaver :: imagesaver(bool threadable) : m_threadable(m_threadable) {
 }
 
 /////////////////////////////////////////////////////////

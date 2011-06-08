@@ -39,7 +39,7 @@ class GEM_EXTERN image : public imageloader, public imagesaver
   
     /* initialize the imageer
      */
-    image(void);
+    image(bool threadable=true);
 
     ////////
     // Destructor

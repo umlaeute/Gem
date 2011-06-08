@@ -13,7 +13,6 @@
 /////////////////////////////////////////////////////////
   
 #include "plugins/image.h"
-//#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
@@ -25,7 +24,8 @@ using namespace gem::plugins;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-image :: image() {
+image :: image(bool threadable)
+ : imageloader(threadable), imagesaver(threadable) {
 }
 
 /////////////////////////////////////////////////////////

@@ -42,9 +42,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     //////////
     // Constructor
   
-    /* initialize the imagesaverer
+    /* initialize the imagesaver
      */
-    imagesaver(void);
+    imagesaver(bool threadable=true);
 
     ////////
     // Destructor
@@ -81,10 +81,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      */
     virtual void getProperties(gem::Properties&props);
 
+    bool isThreadable(void) { return m_threadable; }
+
   protected:
     /* used to store the "set" properties */
     gem::Properties m_properties;
     
+  private:
+    bool m_threadable;
+
 
   };
 
