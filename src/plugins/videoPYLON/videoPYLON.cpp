@@ -15,6 +15,11 @@
 # include "config.h"
 #endif
 
+#if defined HAVE_LIBPYLON
+# define HAVE_PYLON
+#endif
+
+#ifdef HAVE_PYLON
 
 #include "videoPYLON.h"
 #include <sstream>
@@ -298,7 +303,6 @@ struct videoPYLON::Converter {
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifdef HAVE_PYLON
 
 REGISTER_VIDEOFACTORY("pylon", videoPYLON);
 
@@ -782,10 +786,4 @@ void videoPYLON::getProperties(gem::Properties&props) {
   }
 }
 
-
-#else
-videoPYLON :: videoPYLON() : video("")
-{ }
-videoPYLON :: ~videoPYLON()
-{ }
 #endif /* HAVE_PYLON */

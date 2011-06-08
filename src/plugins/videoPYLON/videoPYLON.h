@@ -19,10 +19,6 @@
 
 #include "plugins/video.h"
 
-#if defined HAVE_LIBPYLON
-# define HAVE_PYLON
-#endif
-
 #ifdef Status
 /* ouch: Xlib.h defines "Status" as "int", but Pylon uses "Status" as a
  * variable name
@@ -33,11 +29,9 @@
 # undef None
 #endif
 
-#ifdef HAVE_PYLON
-# include "pylon/PylonIncludes.h"
-# include <pylon/gige/BaslerGigECamera.h>
+#include "pylon/PylonIncludes.h"
+#include <pylon/gige/BaslerGigECamera.h>
 typedef Pylon::CBaslerGigECamera Camera_t;
-#endif
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -68,7 +62,6 @@ namespace gem { class GEM_EXPORT videoPYLON : public video {
     // Destructor
     virtual ~videoPYLON();
 
-#ifdef HAVE_PYLON
     ////////
     // open the video-device
     virtual bool           openDevice(gem::Properties&writeprops);
@@ -112,8 +105,6 @@ namespace gem { class GEM_EXPORT videoPYLON : public video {
   uint32_t m_numBuffers;
   std::vector<CGrabBuffer*> m_buffers;
   std::map<std::string, Pylon::CDeviceInfo>m_id2device;
-#endif /* HAVE_PYLON */
-
 }; 
 };
 
