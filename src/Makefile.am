@@ -17,12 +17,10 @@ SUBDIRS+= Controls Geos Manips Nongeos openGL Particles Pixes
 lib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
-###  hmmm, nodist_EXTRA seems to not work...
-#nodist_EXTRA_Gem_la_SOURCES = dummy.cxx
-#EXTRA_Gem_la_SOURCES = dummy.cxx
-nodist_Gem_la_SOURCES = dummy.cxx
+Gem_la_SOURCES = 
+nodist_EXTRA_Gem_la_SOURCES = dummy.cpp
 
-
+## some default flags
 Gem_la_CXXFLAGS =
 Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 Gem_la_LIBADD   =
