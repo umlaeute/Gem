@@ -58,7 +58,7 @@ imageTIFF :: ~imageTIFF()
 /////////////////////////////////////////////////////////
 bool imageTIFF :: load(std::string filename, imageStruct&result)
 {
-  ::verbose(2, "reading '%s' with libTIFF", filename);
+  ::verbose(2, "reading '%s' with libTIFF", filename.c_str());
   TIFF *tif = TIFFOpen(filename.c_str(), "r");
   if (tif == NULL) {
       return(NULL);
@@ -102,19 +102,19 @@ bool imageTIFF :: load(std::string filename, imageStruct&result)
   if (knownFormat) {
     unsigned char *buf = new unsigned char [TIFFScanlineSize(tif)];
     if (buf == NULL) {
-      error("GemImageLoad(TIFF): can't allocate memory for scanline buffer: %s", filename);
+      error("GemImageLoad(TIFF): can't allocate memory for scanline buffer: %s", filename.c_str());
       TIFFClose(tif);
       return(false);
     }
     
     result.reallocate();
     unsigned char *dstLine = result.data;
-    int yStride = image_block->xsize * image_block->csize;
+    int yStride = result.xsize * result.csize;
     for (uint32 row = 0; row < height; row++)
       {
 	unsigned char *pixels = dstLine;
 	if (TIFFReadScanline(tif, buf, row, 0) < 0) {
-	  error("GemImageLoad(TIFF): bad image data read on line: %d: %s", row, filename);
+	  error("GemImageLoad(TIFF): bad image data read on line: %d: %s", row, filename.c_str());
 	  TIFFClose(tif);
 	  return false;
 	}
@@ -159,7 +159,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result)
 
     uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(uint32)));
     if (raster == NULL) {
-      error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename);
+      error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename.c_str());
       TIFFClose(tif);
       return(false);
     }
@@ -172,7 +172,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result)
     }
 
     TIFFRGBAImageEnd(&img);
-    result.setCSizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GL_RGBA);
     result.reallocate();
 
     unsigned char *dstLine = result.data;
@@ -197,18 +197,19 @@ bool imageTIFF :: load(std::string filename, imageStruct&result)
   TIFFClose(tif);
   return true;
 }
-bool imageTIFF::save(std::string filename, const imageStruct&image) {
+bool imageTIFF::save(std::string filename, const imageStruct&constimage) {
   TIFF *tif = NULL;
 
-  if(GL_YUV422_GEM==image.format) {
+  if(GL_YUV422_GEM==constimage.format) {
     error("don't know how to write YUV-images with libTIFF");
     return 0;
   }
 
-  tif=TIFFOpen(filename, "w");
+  tif=TIFFOpen(filename.c_str(), "w");
   if (tif == NULL) {
     return(0);
   }
+  imageStruct image=constimage;
 
   image.fixUpDown();
 
@@ -239,7 +240,7 @@ bool imageTIFF::save(std::string filename, const imageStruct&image) {
     unsigned char *buf = srcLine;
     if (TIFFWriteScanline(tif, buf, row, 0) < 0)
       {
-	error("GEM: could not write line %d to image %s", row, filename);
+	error("GEM: could not write line %d to image %s", row, filename.c_str());
 	TIFFClose(tif);
 	delete [] buf;
 	return(false);
