@@ -9,6 +9,7 @@ AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile ])
 AC_CONFIG_FILES([Controls/Makefile Geos/Makefile Manips/Makefile Nongeos/Makefile openGL/Makefile Particles/Makefile Pixes/Makefile])
 
+AC_CONFIG_FILES([plugins/imageQT/Makefile])
 AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
