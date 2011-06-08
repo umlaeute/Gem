@@ -16,15 +16,10 @@
 //
 /////////////////////////////////////////////////////////
 #include "Base/GemConfig.h"
-#include "Base/GemGL.h"
-
 #include "GemPixImageLoad.h"
 #include "GemPixUtil.h"
 
-#include "m_pd.h"
-
-
-
+#include "Gem/RTE.h"
 
 #include "plugins/imageloader.h"
 namespace gem {
@@ -110,37 +105,9 @@ namespace gem {
       }
       return s_instance;
     }
-
 }; };
 
 gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
-
-
-
-#if defined __APPLE__ && !defined __x86_64__
-// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
-// LATER make this a real check in configure
-# define HAVE_CARBONQUICKTIME
-#endif
-
-#ifdef _WIN32
-# include <io.h>
-# define close _close
-#else
-# include <unistd.h>
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <setjmp.h>
-#include <string.h>
-
-#ifdef HAVE_CARBONQUICKTIME
-# include <Carbon/Carbon.h>
-# include <QuickTime/QuickTime.h>
-imageStruct *QTImage2mem(const char *filename);
-#endif
-
 
 /***************************************************************************
  *
@@ -159,174 +126,4 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
      }
    }
    return NULL;
-
-
-
-   char newName[256];
-
-   ::verbose(2, "image2mem(%s)", filename);
-
-   // does the file even exist?
-   if (filename[0] == '/' || filename[0] == '\\')
-   {
-      strcpy(newName, filename);
-   }
-   else
-   {
-     char realName[256];
-     char *realResult;
-     
-     int fd = open_via_path(".", filename, "", realName, &realResult, 256, 1);
-     if (fd < 0)
-       {
-         error("GemImageLoad: Unable to find file: %s", filename);
-         return(NULL);
-       }
-     else
-       {
-         int res = close(fd);
-         if (res == -1)
-      {
-        verbose(1, "GemImageLoad: Unable to close file-handle %d for '%s'", fd, filename);
-      }
-       }
-     
-     sprintf(newName, "%s/%s", realName, realResult);
-   }
-
-# ifdef HAVE_CARBONQUICKTIME
-   // try to load via QuickTime
-   if ( (image_block = QTImage2mem(newName)) )
-         return(image_block);
-# endif
-
-   // unable to load image
-   return(NULL);
 }
-
-/***************************************************************************
- *
- * Read in a image utilizing QuickTime GraphicsImporterComponent
- *
- ***************************************************************************/
-#ifdef HAVE_CARBONQUICKTIME
-/*****************************************************************************/
-
-imageStruct *QuickTimeImage2mem(GraphicsImportComponent inImporter)
-{
-   Rect      r;
-   if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;   //get an image size
-   ::OffsetRect(&r, -r.left, -r.top);                           
-   if (::GraphicsImportSetBoundsRect(inImporter, &r)) return NULL;      
-   ImageDescriptionHandle imageDescH = NULL;
-   if (::GraphicsImportGetImageDescription(inImporter, &imageDescH)) return NULL;
-      
-   imageStruct *image_block = new imageStruct;
-   image_block->xsize   = (*imageDescH)->width;
-   image_block->ysize   = (*imageDescH)->height;
-
-        OSType pixelformat = 0;
-
-       /* afaik, there is no 8bit grayscale format....
-        * and even if it was, k8GrayPixelFormat would not be a define...
-        */
-#ifdef k8GrayPixelFormat
-       /* from the docs on "depth": what depth is this data (1-32) or ( 33-40 grayscale ) */
-   if ((*imageDescH)->depth <= 32) {
-       image_block->setCsizeByFormat(GL_RGBA_GEM);
-            pixelformat = k32ARGBPixelFormat;
-   } else {
-       image_block->setCsizeByFormat(GL_LUMINANCE);
-            pixelformat = k8GrayPixelFormat;
-   }
-#else
-   image_block->setCsizeByFormat(GL_RGBA_GEM);
-        pixelformat = k32ARGBPixelFormat;
-#endif
-
-	::DisposeHandle(reinterpret_cast<Handle>(imageDescH));
-   imageDescH = NULL;
-  image_block->allocate();
-
-#ifdef __DEBUG__
-   post("QuickTimeImage2mem() : allocate %d bytes", image_block->xsize*image_block->ysize*image_block->csize);
-#endif
-        GWorldPtr   gw = NULL;
-
-   OSErr err = QTNewGWorldFromPtr(&gw,
-                                 /* taken from pix_filmDarwin */
-                                 pixelformat,   // gives noErr
-                                 &r, NULL, NULL, 0,
-                                 // keepLocal,   
-                                 //useDistantHdwrMem, 
-                                 image_block->data, 
-                                 static_cast<long>(image_block->xsize * image_block->csize));
-   if (image_block->data == NULL || err) {
-      error("Can't allocate memory for an image.");
-   }
-   ::GraphicsImportSetGWorld(inImporter, gw, NULL);
-   ::GraphicsImportDraw(inImporter);
-        ::DisposeGWorld(gw);         //dispose the offscreen
-   gw = NULL;
-
-   return image_block;
-}
-
-
-OSStatus
-FSPathMakeFSSpec(
-   const UInt8 *path,
-   FSSpec *spec,
-   Boolean *isDirectory)   /* can be NULL */
-{
-   OSStatus   result;
-   FSRef      ref;
-   
-   /* check parameters */
-   require_action(NULL != spec, BadParameter, result = paramErr);
-   
-   /* convert the POSIX path to an FSRef */
-   result = FSPathMakeRef(path, &ref, isDirectory);
-   require_noerr(result, FSPathMakeRef);
-   
-   /* and then convert the FSRef to an FSSpec */
-   result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
-   require_noerr(result, FSGetCatalogInfo);
-   
-FSGetCatalogInfo:
-FSPathMakeRef:
-BadParameter:
-
-   return ( result );
-}
-
-imageStruct *QTImage2mem(const char *filename)
-{
-   OSErr            err;
-   imageStruct          *image_block = NULL;
-   GraphicsImportComponent    importer = NULL;
-
-   ::verbose(2, "reading '%s' with QuickTime", filename);
-
-   // does the file even exist?
-   if (filename[0] != '\0') {
-      FSSpec   spec;
-
-      err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename), &spec, NULL);
-      if (err) {
-         error("GemImageLoad: Unable to find file: %s", filename);
-         error("parID : %d", spec.parID); 
-         return NULL;
-      }
-      err = ::GetGraphicsImporterForFile(&spec, &importer);
-      if (err) {
-         error("GemImageLoad: Unable to import an image: %#s", spec.name);
-         return NULL;
-      }
-   }
-   image_block = QuickTimeImage2mem(importer);
-   ::CloseComponent(importer);
-   if (image_block)   return image_block;
-   else         return NULL;
-}
-#endif /* HAVE_CARBONQUICKTIME */
