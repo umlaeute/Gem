@@ -41,9 +41,6 @@ AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 
-
-
-
 AC_LANG(C++)
 
 ARCH=$(uname -m)
@@ -53,8 +50,18 @@ AC_CONFIG_MACRO_DIR(m4)
 
 AC_CONFIG_HEADERS([Base/config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
+
 #AC_CONFIG_SUBDIRS([extra])
-#AC_CONFIG_SUBDIRS([plugins])
+
+if test -d "$srcdir/plugins/videoAVT"; then
+  AC_CONFIG_SUBDIRS([plugins/videoAVT])
+fi
+if test -d "$srcdir/plugins/videoHALCON"; then
+  AC_CONFIG_SUBDIRS([plugins/videoHALCON])
+fi
+if test -d "$srcdir/plugins/videoPYLON"; then
+  AC_CONFIG_SUBDIRS([plugins/videoPYLON])
+fi
 
 
 AC_SUBST(CXXCPP)
