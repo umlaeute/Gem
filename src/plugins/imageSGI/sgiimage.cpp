@@ -22,9 +22,9 @@
 
 // FIXXME: use C++ memory allocators
 
-#include "Base/GemConfig.h"
+//#include "Base/GemConfig.h"
 #include <stdlib.h>
-#include "Base/sgiimage.h"
+#include "sgiimage.h"
 
 
 #ifndef _WIN32
@@ -34,7 +34,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "m_pd.h"
+#include "Gem/RTE.h"
+//#include "m_pd.h"
 
 /*
  *	from image.h

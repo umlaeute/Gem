@@ -20,13 +20,13 @@
 #include <string.h>
 #include "imageSGI.h"
 #include "Gem/RTE.h"
-
+#include "imageSGI.h"
 #include "sgiimage.h"
 
 
 using namespace gem::plugins;
 
-REGISTER_IMAGEFACTORY("SGI", imageSGI);
+REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
 
 
 /////////////////////////////////////////////////////////
@@ -133,4 +133,3 @@ bool imageSGI :: load(std::string filename, imageStruct&result)
 bool imageSGI::save(std::string filename, const imageStruct&constimage) {
   return false;
 }
-#endif
