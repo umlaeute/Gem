@@ -26,10 +26,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      CLASS
      imagesaver
     
-     parent class for the system- and library-dependent imagesaver-loader classes
+     parent class for the system- and library-dependent imagesaver classes
     
      KEYWORDS
-     pix load an image
+     save a pix to disk
     
      DESCRIPTION
 
@@ -43,6 +43,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     // Constructor
   
     /* initialize the imagesaver
+     * set 'threadable' to FALSE if your implementation must NOT be used within
+     * threads
      */
     imagesaver(bool threadable=true);
 
@@ -52,9 +54,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     virtual ~imagesaver();
 
 
-    /* read a image
+    /* save an image
      */
-    /* returns TRUE if loading was successfull, FALSE otherwise */
+    /* returns TRUE if saving was successfull, FALSE otherwise */
     virtual bool save(std::string filename, const imageStruct&result) = 0;
 
 

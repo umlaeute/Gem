@@ -26,7 +26,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      CLASS
      imageloader
     
-     parent class for the system- and library-dependent imageloader-loader classes
+     parent class for the system- and library-dependent imageloader classes
     
      KEYWORDS
      pix load an image
@@ -42,7 +42,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     //////////
     // Constructor
   
-    /* initialize the imageloaderer
+    /* initialize the imageloader
+     * set 'threadable' to FALSE if your implementation must NOT be used within
+     * threads
      */
     imageloader(bool threadable=true);
 

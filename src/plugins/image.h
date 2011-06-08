@@ -22,6 +22,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      image
     
      parent class for the system- and library-dependent image-loader classes
+     this class should only be used for plugin implementations
+     the plugin-host should use the imageloader/imagesaver classes resp.
     
      KEYWORDS
      pix load an image
@@ -37,7 +39,8 @@ class GEM_EXTERN image : public imageloader, public imagesaver
     //////////
     // Constructor
   
-    /* initialize the imageer
+    /* initialize the image class (set 'threadable' to FALSE if this object must
+     * NOT be used within a threaded context
      */
     image(bool threadable=true);
 
