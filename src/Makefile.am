@@ -8,7 +8,7 @@
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS=Base RTE
+SUBDIRS=Base RTE plugins Geos
 
 lib_LTLIBRARIES = Gem.la
 
@@ -27,6 +27,8 @@ Gem_la_LDFLAGS += @ARCH_FLAGS@
 # LIBADD or LDADD for convenience libraries?
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
 Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la plugins/libplugins.la
+
+Gem_la_LIBADD += Geos/libGeos.la
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck

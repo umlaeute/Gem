@@ -6,7 +6,7 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([foreign])
 
-AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile])
+AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile Geos/Makefile])
 #AC_CONFIG_FILES([Make.config AMakefile plugins/imageMAGICK/Makefile])
 
 AC_LANG(C++)
