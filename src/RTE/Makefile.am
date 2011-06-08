@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
-lib_LTLIBRARIES = libRTE.la
+noinst_LTLIBRARIES = libRTE.la
+
+libRTE_la_LIBADD =
 
 libRTE_la_SOURCES= \
         Array.cpp \

@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
-lib_LTLIBRARIES = libplugins.la
+noinst_LTLIBRARIES = libplugins.la
+
+libplugins_la_LIBADD =
 
 libplugins_la_SOURCES= \
         film.cpp \
