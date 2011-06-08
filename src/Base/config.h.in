@@ -87,9 +87,6 @@
 /* image loader */
 #undef HAVE_LIBMAGICK__
 
-/* Define to 1 if you have the `stdc++' library (-lstdc++). */
-#undef HAVE_LIBSTDC__
-
 /* image loader */
 #undef HAVE_LIBTIFF
 
