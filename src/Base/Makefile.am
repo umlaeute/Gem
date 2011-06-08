@@ -13,6 +13,10 @@ libBase_la_LIBADD   =
 libBase_la_CXXFLAGS += @GEM_RTE_CFLAGS@
 libBase_la_LIBADD   += @GEM_RTE_LIBS@
 
+# X
+libBase_la_CXXFLAGS += $(X_CFLAGS)
+libBase_la_LIBADD   += $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
+
 # GLEW
 libBase_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
 libBase_la_LIBADD   += @GEM_LIB_GLEW_LIBS@

@@ -7,7 +7,6 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile ])
-#AC_CONFIG_FILES([Make.config AMakefile plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([Controls/Makefile Geos/Makefile Manips/Makefile Nongeos/Makefile openGL/Makefile Particles/Makefile Pixes/Makefile])
 
 AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
@@ -35,12 +34,17 @@ AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
 AC_SUBST(INCLUDES)
 AC_SUBST(LIBS)
-AC_SUBST(X_LIBS)
-AC_SUBST(X_CFLAGS)
+
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(DEFS)
 AC_SUBST(DEFINES)
+
+AC_SUBST(X_CFLAGS)
+AC_SUBST(X_PRE_LIBS)
+AC_SUBST(X_LIBS)
+AC_SUBST(X_EXTRA_LIBS)
+
 AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
