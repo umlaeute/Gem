@@ -17,7 +17,7 @@
 # include "config.h"
 #endif
 
-#if defined HAVE_GEM_FRAMEWORK_QUICKTIME && defined HAVE_GEM_FRAMEWORK_CARBON
+#if !__LP64__ && defined HAVE_GEM_FRAMEWORK_QUICKTIME && defined HAVE_GEM_FRAMEWORK_CARBON
 
 # include "Gem/RTE.h"
 # include "imageQT.h"
