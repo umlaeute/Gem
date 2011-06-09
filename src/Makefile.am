@@ -74,7 +74,7 @@ libtool: $(LIBTOOL_DEPS)
 
 ## uha, this is ugly
 Gem.@GEM_RTE_EXTENSION@: Gem.la
-	rm $@
-	$(LN_S) .libs/Gem.@GEM_RTE_EXTENSION@ $@
+	rm -f $@
+	test .libs/$@ && $(LN_S) .libs/$@ $@
 
 all-local:: Gem.@GEM_RTE_EXTENSION@
