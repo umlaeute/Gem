@@ -9,8 +9,10 @@ gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared
 gem_videoPYLON_la_LIBADD   =
 
 # RTE
-gem_videoPYLON_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-gem_videoPYLON_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+gem_videoPYLON_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+gem_videoPYLON_la_LDFLAGS  += @GEM_RTE_LIBS@
+#gem_videoPYLON_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+#gem_videoPYLON_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # Dependencies
 gem_videoPYLON_la_CXXFLAGS += @GEM_PYLON_CXXFLAGS@

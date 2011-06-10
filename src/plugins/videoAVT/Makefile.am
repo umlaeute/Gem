@@ -9,8 +9,10 @@ gem_videoAVT_la_LDFLAGS  = -module -avoid-version -shared
 gem_videoAVT_la_LIBADD   =
 
 # RTE
-gem_videoAVT_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-gem_videoAVT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+gem_videoAVT_la_CXXFLAGS += @GEM_RTE_CFLAGS@ 
+gem_videoAVT_la_LDFLAGS  += @GEM_RTE_LIBS@   
+#gem_videoAVT_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+#gem_videoAVT_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # Dependencies
 gem_videoAVT_la_CXXFLAGS += @GEM_LIB_LIBPVAPI_CFLAGS@
