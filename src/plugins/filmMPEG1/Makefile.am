@@ -3,7 +3,18 @@ ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
 lib_LTLIBRARIES= gem_filmMPEG1.la
-gem_filmMPEG1_la_SOURCES= filmMPEG1.cpp filmMPEG1.h
-gem_filmMPEG1_la_CXXFLAGS = @GEM_RTE_CFLAGS@ @GEM_LIB_MPEG_CFLAGS@
-gem_filmMPEG1_la_LDFLAGS = -module -avoid-version -shared @GEM_RTE_LIBS@ @GEM_LIB_MPEG_LIBS@
+
+gem_filmMPEG1_la_CXXFLAGS =
+gem_filmMPEG1_la_LDFLAGS  = -module -avoid-version -shared
+gem_filmMPEG1_la_LIBADD   =
+
+# RTE
+gem_filmMPEG1_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
+gem_filmMPEG1_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+
+# Dependencies
+gem_filmMPEG1_la_CXXFLAGS += @GEM_LIB_MPEG_CFLAGS@
+gem_filmMPEG1_la_LIBADD   += @GEM_LIB_MPEG_LIBS@
+
+gem_filmMPEG1_la_SOURCES  = filmMPEG1.cpp filmMPEG1.h
 
