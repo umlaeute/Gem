@@ -83,9 +83,9 @@ void pix_drum :: processGrayImage(imageStruct &image)
 	totalyes = i = j = xval = yval = hor = ver = 0;
 	L_peakx = L_peaky = R_peakx = R_peaky = 0;
 	L_area = R_area = 0;	// = totalyesx = totalyesy 
-	for (n=0;n<=image.xsize;n++) 
+	for (n=0;n<image.xsize;n++) 
 		yesx[n] = 0; //clear histograms
-	for (n=0;n<=image.ysize;n++) 
+	for (n=0;n<image.ysize;n++) 
 		yesy[n] = 0;
 
 	if (mode == 0){	

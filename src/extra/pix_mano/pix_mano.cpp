@@ -59,7 +59,7 @@ pix_mano :: pix_mano()
 	pixsamp = 4;
 	pixavg = 20;
 	int i;
-	for (i=0; i<=50; i++) {
+	for (i=0; i<50; i++) {
 		tp_i[i] = i;
 		tp_x[i] = tp_y[i] = tp_m[i] = tp_a[i] = tp_s[i] = 0;
 	}
