@@ -68,6 +68,8 @@ SUBDIRS+=Vertex
 Gem_la_LIBADD += Vertex/libVertex.la
 endif
 
+SUBDIRS+=extra
+
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck

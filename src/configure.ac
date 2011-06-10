@@ -41,6 +41,9 @@ AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 
+AC_CONFIG_FILES([extra/Makefile])
+AC_CONFIG_FILES([extra/pix_drum/Makefile extra/pix_mano/Makefile])
+
 AC_LANG(C++)
 
 ARCH=$(uname -m)
