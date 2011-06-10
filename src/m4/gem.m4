@@ -310,10 +310,11 @@ AC_ARG_ENABLE(fat-binary,
                           ARCHS is a comma-delimited list of architectures for
                           which to build; if ARCHS is omitted, then the package
                           will be built for all architectures supported by the
-                          platform (e.g. "ppc,i386" for MacOS/X and Darwin; 
+                          platform (e.g. "ppc,i386" for MacOS/X and Darwin); 
                           if this option is disabled or omitted entirely, then
                           the package will be built only for the target 
-                          platform],
+                          platform; when building multiple architectures, 
+			  dependency-tracking must be disabled],
        [fat_binary=$enableval], [fat_binary=no])
 if test "$fat_binary" != no; then
     AC_MSG_CHECKING([target architectures])
@@ -333,10 +334,18 @@ if test "$fat_binary" != no; then
    define([Name],[translit([$1],[./-], [___])])
    # /usr/lib/arch_tool -archify_list $TARGET_ARCHS
    []Name=""
+   tmp_arch_count=0
    for archs in $TARGET_ARCHS 
    do
     []Name="$[]Name -arch $archs"
+    tmp_arch_count=$((tmp_arch_count+1))
    done
+
+   if test "$tmp_arch_count -gt 1"; then
+     if test "x$enable_dependency_tracking" != xno; then
+     	AC_MSG_ERROR([when building for multiple architectures, you MUST turn off dependency-tracking])
+     fi
+   fi
 
    if test "x$[]Name" != "x"; then
     tmp_arch_cflags="$CFLAGS"
