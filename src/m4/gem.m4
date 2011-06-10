@@ -341,7 +341,7 @@ if test "$fat_binary" != no; then
     tmp_arch_count=$((tmp_arch_count+1))
    done
 
-   if test "$tmp_arch_count -gt 1"; then
+   if test "$tmp_arch_count" -gt 1; then
      if test "x$enable_dependency_tracking" != xno; then
      	AC_MSG_ERROR([when building for multiple architectures, you MUST turn off dependency-tracking])
      fi
