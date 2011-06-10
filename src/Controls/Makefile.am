@@ -9,10 +9,12 @@ noinst_LTLIBRARIES = libControls.la
 
 libControls_la_CXXFLAGS =
 libControls_la_LIBADD   =
+libControls_la_LDFLAGS  =
 
 # RTE flags
-libControls_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libControls_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libControls_la_LIBADD   += @GEM_RTE_LIBS@
+libControls_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libControls_la_SOURCES=  \
     gemframebuffer.cpp \

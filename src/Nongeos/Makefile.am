@@ -9,10 +9,12 @@ noinst_LTLIBRARIES = libNongeos.la
 
 libNongeos_la_CXXFLAGS =
 libNongeos_la_LIBADD   =
+libNongeos_la_LDFLAGS  =
 
 # RTE flags
-libNongeos_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libNongeos_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libNongeos_la_LIBADD   += @GEM_RTE_LIBS@
+libNongeos_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libNongeos_la_SOURCES=  \
     light.cpp \

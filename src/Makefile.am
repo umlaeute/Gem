@@ -25,10 +25,10 @@ Gem_la_LIBADD   =
 
 
 # RTE flags
-Gem_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+Gem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 Gem_la_LIBADD   += @GEM_RTE_LIBS@
 
-Gem_la_LDFLAGS += @ARCH_FLAGS@
+Gem_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
 
 # LIBADD or LDADD for convenience libraries?

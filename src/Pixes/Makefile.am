@@ -9,10 +9,12 @@ noinst_LTLIBRARIES = libPixes.la
 
 libPixes_la_CXXFLAGS =
 libPixes_la_LIBADD   =
+libPixes_la_LDFLAGS  =
 
 # RTE flags
-libPixes_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libPixes_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libPixes_la_LIBADD   += @GEM_RTE_LIBS@
+libPixes_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libPixes_la_SOURCES=  \
     DSgrabber.cpp \

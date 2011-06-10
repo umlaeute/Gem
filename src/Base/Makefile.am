@@ -8,10 +8,12 @@ noinst_LTLIBRARIES = libBase.la
 
 libBase_la_CXXFLAGS = -DHAVE_VERSION_H
 libBase_la_LIBADD   =
+libBase_la_LDFLAGS  =
 
 # RTE flags
-libBase_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libBase_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libBase_la_LIBADD   += @GEM_RTE_LIBS@
+libBase_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # X
 libBase_la_CXXFLAGS += $(X_CFLAGS)

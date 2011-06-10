@@ -351,6 +351,7 @@ if test "$fat_binary" != no; then
     tmp_arch_cflags="$CFLAGS"
     tmp_arch_cxxflags="$CXXFLAGS"
     GEM_CHECK_CXXFLAGS($[]Name,,[]Name="")
+    []Name[]_CXXFLAGS+=$[]Name
     CFLAGS="$tmp_arch_cflags"
     CXXFLAGS="$tmp_arch_cxxflags"
    fi
@@ -358,6 +359,7 @@ if test "$fat_binary" != no; then
    if test "x$[]Name" != "x"; then
     tmp_arch_ldflags="$LDFLAGS"
     GEM_CHECK_LDFLAGS($[]Name,,[]Name="")
+    []Name[]_LDFLAGS+=$[]Name
     LDFLAGS="$tmp_arch_ldflags"
    fi
 

@@ -9,10 +9,12 @@ noinst_LTLIBRARIES = libGem.la
 
 libGem_la_CXXFLAGS =
 libGem_la_LIBADD   =
+libGem_la_LDFLAGS  =
 
 # RTE flags
-libGem_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libGem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libGem_la_LIBADD   += @GEM_RTE_LIBS@
+libGem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libGem_la_SOURCES=  \
     any.h \

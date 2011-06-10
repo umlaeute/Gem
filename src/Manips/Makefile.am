@@ -9,10 +9,12 @@ noinst_LTLIBRARIES = libManips.la
 
 libManips_la_CXXFLAGS =
 libManips_la_LIBADD   =
+libManips_la_LDFLAGS  =
 
 # RTE flags
-libManips_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+libManips_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libManips_la_LIBADD   += @GEM_RTE_LIBS@
+libManips_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libManips_la_SOURCES=  \
     accumrotate.cpp \
