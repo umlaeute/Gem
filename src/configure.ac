@@ -281,12 +281,7 @@ GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
 
 GEM_CHECK_LIB(vfw32,vfw32,AVIFileInit,,,,video input)
 # is this needed?
-dnl GEM_CHECK_LIB(avicap32,avicap32,main,,,,video
-
-# recording
-
-
-
+dnl GEM_CHECK_LIB(avicap32,avicap32,main,,,,video input)
 
 # for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
 AC_CHECK_HEADERS([FTGL/ftgl.h])
@@ -305,7 +300,6 @@ fi
 # threading
 GEM_CHECK_THREADS
 
-
 # pkg-config checks
 
 dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
@@ -322,7 +316,6 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
-
 
 AC_CHECK_SIZEOF(unsigned int)
 AC_CHECK_SIZEOF(void *)
@@ -355,14 +348,14 @@ fi
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
 
 ## on OSX we still default to the olde way
-if test "x$KERN" = "xDarwin"; then
- if test "x$with_film" = "x"; then
-   with_film="Darwin"
- fi
- if test "x$with_video" = "x"; then
-   with_video="Darwin"
- fi
-fi
+#if test "x$KERN" = "xDarwin"; then
+# if test "x$with_film" = "x"; then
+#   with_film="Darwin"
+# fi
+# if test "x$with_video" = "x"; then
+#   with_video="Darwin"
+# fi
+#fi
 
 if test "x$with_video" = "x"; then
  with_video="plugins"
