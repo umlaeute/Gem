@@ -44,6 +44,7 @@ AC_DEFUN([GEM_ARG_DISABLE],
 AC_DEFUN([GEM_TARGET], [
 define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
                              [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
+AC_CONFIG_FILES([$1/Makefile])
 
 AC_ARG_ENABLE([$1],
              AC_HELP_STRING([--disable-$1], [disable $1-objects]),
@@ -68,6 +69,7 @@ AC_DEFUN([GEM_TARGET_DISABLED], [
 define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
                              [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
 
+AC_CONFIG_FILES([$1/Makefile])
 AC_ARG_ENABLE([$1],
              AC_HELP_STRING([--enable-$1], [enable $1-objects]),
              [

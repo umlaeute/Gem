@@ -7,8 +7,8 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile ])
-AC_CONFIG_FILES([Controls/Makefile Geos/Makefile Manips/Makefile Nongeos/Makefile openGL/Makefile Particles/Makefile Pixes/Makefile])
 
+## plugins that use this autoconf instance for configuration
 AC_CONFIG_FILES([plugins/imageQT/Makefile])
 AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
@@ -41,7 +41,10 @@ AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 
+## extra holds additional objects/libraries
+# some of them have their own build system
 AC_CONFIG_FILES([extra/Makefile])
+# some do not
 AC_CONFIG_FILES([extra/pix_drum/Makefile extra/pix_mano/Makefile])
 
 AC_LANG(C++)
