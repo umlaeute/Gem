@@ -7,14 +7,14 @@ AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LTLIBRARIES = libVertex.la
 
-libNongeos_la_CXXFLAGS =
-libNongeos_la_LIBADD   =
-libNongeos_la_LDFLAGS  =
+libVertex_la_CXXFLAGS =
+libVertex_la_LIBADD   =
+libVertex_la_LDFLAGS  =
 
 # RTE flags
-libNongeos_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libNongeos_la_LIBADD   += @GEM_RTE_LIBS@
-libNongeos_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libVertex_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
+libVertex_la_LIBADD   += @GEM_RTE_LIBS@
+libVertex_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # Dependencies
 ## none
