@@ -13,12 +13,17 @@ AM_CPPFLAGS = -I$(top_srcdir)
 
 noinst_LTLIBRARIES = lib@LTLIBRARYNAME@.la
 
-lib@LTLIBRARYNAME@_la_CXXFLAGS =
-lib@LTLIBRARYNAME@_la_LIBADD   =
+libNongeos_la_CXXFLAGS =
+libNongeos_la_LIBADD   =
+libNongeos_la_LDFLAGS  =
 
 # RTE flags
-lib@LTLIBRARYNAME@_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-lib@LTLIBRARYNAME@_la_LIBADD   += @GEM_RTE_LIBS@
+libNongeos_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
+libNongeos_la_LIBADD   += @GEM_RTE_LIBS@
+libNongeos_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+
+# Dependencies
+## none
 
 lib@LTLIBRARYNAME@_la_SOURCES= @SOURCES@
 '| sed "s|@LTLIBRARYNAME@|${LIBRARYNAME}|g" > ${TEMPLATEFILE}
