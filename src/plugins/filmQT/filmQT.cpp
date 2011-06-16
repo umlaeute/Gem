@@ -266,7 +266,15 @@ pixBlock* filmQT :: getFrame()
   // set the time for the frame and give time to the movie toolbox
   SetMovieTimeValue(m_movie, m_movieTime);
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+#ifdef __GNUC__
+# warning m_wantedFormat ignored
+// m_wantedFormat is nowhere respected when setting up the decoder
+// we cannot just use it here and expect it to convert our image...
+// it's left here as i have to check how it works on w32
+#endif
+/*
   m_image.image.setCsizeByFormat(m_wantedFormat);
+*/
   m_image.newimage = 1;
   m_image.image.upsidedown=true;
 
