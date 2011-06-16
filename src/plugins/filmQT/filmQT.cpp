@@ -151,21 +151,27 @@ bool filmQT :: open(char*filename, int format) {
   // Clean up any open files:  closeMess();
 
   CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
-
   err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
-  if (err) {
-    error("GEM: pix_film: Unable to find file: %s", filename);
-    goto unsupported;
+  
+  if (err != noErr) {  
+    FSRef		ref;
+    err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
+  }
+  
+  if (err != noErr) {
+    error("filmQT: Unable [%d] to find file: %s", err, filename);
+    //goto unsupported;
   }
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    error("filmQT: Couldn't open the movie file: %.*s (%d)", theFSSpec.name[0], &theFSSpec.name[1], err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
-    error("GEM: pix_movie: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    error("filmQT: Couldn't make a movie from file: %#s (%d)", theFSSpec.name[0], &theFSSpec.name[1], err);
     if (refnum) ::CloseMovieFile(refnum);
 	m_movie=NULL;
     goto unsupported;
@@ -234,7 +240,7 @@ bool filmQT :: open(char*filename, int format) {
   return true;
 
  unsupported:
-  startpost("QuickTime failed ...");
+  startpost("filmQT: failed ...");
   return false;
 
 }
@@ -304,10 +310,10 @@ void filmQT :: LoadRam(){
     length = GetMovieDuration(m_movie);
     err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
     if (err) {
-      post("pix_film: LoadMovieIntoRam failed miserably");
+      post("filmQT: LoadMovieIntoRam failed miserably");
     }
   }else{
-    post("pix_film: no movie to load into RAM!");
+    post("filmQT: no movie to load into RAM!");
   }
 }
 #endif // LoadRAM
