@@ -158,7 +158,10 @@ void pix_filmOS :: startRendering()
 }
 void pix_filmOS :: render(GemState *state)
 {
-  m_oldImage = state->image;
+  if(!state)return;
+  //  m_oldImage = state->image;
+  m_oldImage=NULL;
+  state->get(GemState::_PIX, m_oldImage);
 
   /* get the current frame from the file */
   newImage = 0;
@@ -180,9 +183,9 @@ void pix_filmOS :: render(GemState *state)
     m_pixBlock.newfilm = 1;
     m_newFilm = 0;
   }
-  state->image = &m_pixBlock;
 
-
+  //state->image = &m_pixBlock;
+  state->set(GemState::_PIX, m_pixBlock);
 
   // whoa: the following construct seems to be a bug
   // i don't dare to "fix" it now
@@ -207,8 +210,10 @@ void pix_filmOS :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_filmOS :: postrender(GemState *state)
 {
-  state->image=m_oldImage;
-    
+  if(state) {
+    //  state->image=m_oldImage;
+    state->set(GemState::_PIX, m_oldImage);
+  }
   m_pixBlock.newimage = 0;
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
