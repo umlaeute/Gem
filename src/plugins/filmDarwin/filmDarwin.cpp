@@ -86,21 +86,21 @@ bool filmDarwin :: open(const std::string filename, int format)
   OSType pixelformat=0;
   long hints;
   
-  if (!filename[0]) {
-    //post("pix_film:  no filename passed");
+  if(filename.empty()) {
+    //post("filmDarwin: no filename passed");
     goto unsupported;
   } else { 
-    err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
+    err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
-      //error("GEM: pix_film: Unable to find file: %s", filename);
+      //error("filmDarwin: Unable to find file: %s", filename.c_str());
       goto unsupported;
     }
   }
   
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    //error("GEM: pix_film: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    //error("filmDarwin: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
@@ -110,7 +110,7 @@ bool filmDarwin :: open(const std::string filename, int format)
   
   // m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
-  post("GEM: pix_film:  m_numTracks = %d",m_numTracks);
+  post("filmDarwin:  m_numTracks = %d",m_numTracks);
 
   // Get the length of the movie
   long	movieDur, movieScale;
@@ -180,7 +180,7 @@ bool filmDarwin :: open(const std::string filename, int format)
                             m_image.image.data, 
                             m_rowBytes);
   if (err) {
-    //error("GEM: pix_film: Couldn't make QTNewGWorldFromPtr %d", err);
+    //error("filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
   m_movieTime = 0;

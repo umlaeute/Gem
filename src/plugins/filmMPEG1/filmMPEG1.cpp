@@ -74,7 +74,7 @@ void filmMPEG1 :: close(void)
 bool filmMPEG1 :: open(const std::string filename, int format)
 {
   if (format>0)m_wantedFormat=format;
-  if (!(m_streamfile = fopen (filename, "rb")))return false;
+  if (!(m_streamfile = fopen (filename.c_str(), "rb")))return false;
   int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   switch (wantedFormat){
   case GL_LUMINANCE:
@@ -114,7 +114,7 @@ bool filmMPEG1 :: open(const std::string filename, int format)
   }
   goto unsupported;
  unsupported:
-  startpost("MPEG1 failed");
+  verbose(1, "MPEG1 failed");
   close();
   return false;
 }

@@ -44,9 +44,7 @@ namespace gem { class GEM_EXPORT filmTEST : public film {
 
   //////////
   // get the next frame
-#ifdef TEST_GETFRAME
   virtual pixBlock* getFrame();
-#endif
 
   //////////
   // set the next frame to read;

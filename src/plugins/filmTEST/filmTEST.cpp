@@ -17,10 +17,10 @@
 # include "config.h"
 #endif
 
-#define TEST_GETFRAME
-
 #include <string.h>
 #include "filmTEST.h"
+
+using namespace gem;
 
 REGISTER_FILMFACTORY("test", filmTEST);
 
@@ -66,7 +66,6 @@ bool filmTEST :: open(const std::string filename, int format)
   return true;
 }
 
-#ifdef TEST_GETFRAME
 /////////////////////////////////////////////////////////
 // render
 //
@@ -74,7 +73,6 @@ bool filmTEST :: open(const std::string filename, int format)
 pixBlock* filmTEST :: getFrame(){
   return &m_image;
 }
-#endif
 
 int filmTEST :: changeImage(int imgNum, int trackNum){
   unsigned char*data=m_image.image.data;

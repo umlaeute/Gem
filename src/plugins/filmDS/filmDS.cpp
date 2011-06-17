@@ -237,15 +237,15 @@ bool filmDS :: open(const std::string filename, int format)
   BOOL			bFrameTime	= TRUE;
   GUID			Guid;
 		
-  post("Trying DirectShow");
+  verbose(1, "Trying DirectShow");
 
   // Convert c-string to Wide string.
   memset(&WideFileName, 0, MAXPDSTRING * 2);
 	
-  if (0 == MultiByteToWideChar(CP_ACP, 0, filename, strlen(filename), WideFileName, 
+  if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(), filename.length(), WideFileName, 
                                MAXPDSTRING))
     {
-      error("Unable to load %s", filename);
+      error("filmDS: Unable to load %s", filename.c_str());
 		
       return false;
     }
@@ -255,7 +255,7 @@ bool filmDS :: open(const std::string filename, int format)
 	
   if (RetVal != S_OK || NULL == VideoFilter)
     {
-      error("Unable to render %s", filename);
+      error("filmDS: Unable to render %s", filename.c_str());
 		
       return false;
     }
@@ -452,7 +452,7 @@ bool filmDS :: open(const std::string filename, int format)
 	
   else
     {
-      error("Invalid media type returned %s", filename);
+      error("Invalid media type returned %s", filename.c_str());
 
       return false;
     }
@@ -469,7 +469,7 @@ bool filmDS :: open(const std::string filename, int format)
 		
       if (NULL == m_frame)
         {
-          error("Unable to allocate memory for the video buffer %s", filename);
+          error("Unable to allocate memory for the video buffer %s", filename.c_str());
 
           return false;
         }

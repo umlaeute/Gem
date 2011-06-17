@@ -77,20 +77,21 @@ void filmMPEG3 :: close(void)
 /////////////////////////////////////////////////////////
 bool filmMPEG3 :: open(const std::string filename, int format)
 {
-  if (mpeg3_check_sig(filename)){/* ok, this is mpeg(3) */
+  char*cfilename=const_cast<char*>(filename.c_str());
+  if (mpeg3_check_sig(cfilename)){/* ok, this is mpeg(3) */
 #ifdef FILMMPEG3_OPEN17
     // new API with more sophisticated error-feedback
-    mpeg_file= mpeg3_open(filename, 0);
+    mpeg_file= mpeg3_open(cfilename, 0);
 #else
     // old API
-    mpeg_file= mpeg3_open(filename);
+    mpeg_file= mpeg3_open(cfilename);
 #endif
     if(!mpeg_file) {
-      //post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
+      //error("filmMPEG3: this file %s does not seem to hold any video data", filename.c_str());
       goto unsupported;
     }
     if (!mpeg3_has_video(mpeg_file)){
-      post("GEM: pix_film: this file %s does not seem to hold any video data", filename);
+      error("filmMPEG3: this file %s does not seem to hold any video data", filename.c_str());
       goto unsupported;
     }
     m_numTracks = mpeg3_total_vstreams(mpeg_file);
@@ -111,7 +112,7 @@ bool filmMPEG3 :: open(const std::string filename, int format)
   }
   goto unsupported;
  unsupported:
-  startpost("MPEG3 failed");
+  verbose(1, "MPEG3 failed");
   close();
   return false;
 
@@ -148,7 +149,7 @@ pixBlock* filmMPEG3 :: getFrame(){
 			 m_image.image.xsize, m_image.image.ysize,
 			 MPEG3_RGBA8888,
 			 0)) {
-      post("GEM: pix_film:: could not read frame ! %d", m_curFrame);
+      error("filmMPEG3:: could not read frame ! %d", m_curFrame);
       return 0;
     }
     // unfortunately the ALPHA is set to 0!
@@ -164,7 +165,7 @@ pixBlock* filmMPEG3 :: getFrame(){
   } else {
     // unfortunately this is upside down.
     if(mpeg3_read_yuvframe_ptr(mpeg_file,&y,&u,&v,0)){
-      post("GEM: pix_film:: could not read yuv-frame ! %d", m_curFrame);
+      error("filmMPEG3:: could not read yuv-frame ! %d", m_curFrame);
       return 0;
     }
     m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u, (unsigned char*)v);

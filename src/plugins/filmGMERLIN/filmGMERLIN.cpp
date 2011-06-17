@@ -120,7 +120,7 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
 // really open the file !
 //
 /////////////////////////////////////////////////////////
-bool filmGMERLIN :: open(const std::string filename, int format)
+bool filmGMERLIN :: open(const std::string sfilename, int format)
 {
   close();
 
@@ -130,6 +130,7 @@ bool filmGMERLIN :: open(const std::string filename, int format)
   if(!m_file) return false;
   m_opt = bgav_get_options(m_file);
   if(!m_opt) return false;
+
   /*
     bgav_options_set_connect_timeout(m_opt,   connect_timeout);
     bgav_options_set_read_timeout(m_opt,      read_timeout);
@@ -141,6 +142,8 @@ bool filmGMERLIN :: open(const std::string filename, int format)
   bgav_options_set_log_callback(m_opt,
                                 log_callback,
                                 this);
+
+  const char*filename=sfilename.c_str();
 
   if(!strncmp(filename, "vcd://", 6))
     {

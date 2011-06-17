@@ -76,7 +76,7 @@ bool filmAVIPLAY :: open(const std::string filename, int format)
 {
   if (format>0)m_wantedFormat=format;
   // how do we close the avifile ??? automagically ?
-  if (!(m_avifile = CreateIAviReadFile(filename)))goto unsupported;
+  if (!(m_avifile = CreateIAviReadFile(filename.c_str())))goto unsupported;
   while(!(*m_avifile).IsOpened()){
     struct timeval sleep;
     sleep.tv_sec=0;

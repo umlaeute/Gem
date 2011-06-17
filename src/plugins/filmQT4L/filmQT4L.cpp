@@ -82,9 +82,10 @@ bool filmQT4L :: open(const std::string filename, int format)
     break;
   }
 
-  if (quicktime_check_sig(filename)){ /* ok, this is quicktime */
-    if (!(m_quickfile = quicktime_open(filename, 1, 0))){
-//      post("GEM: pix_film: Unable to open file: %s", filename);
+  char*cfilename=const_cast<char*>(filename.c_str());
+  if (quicktime_check_sig(cfilename)){ /* ok, this is quicktime */
+    if (!(m_quickfile = quicktime_open(filename.c_str(), 1, 0))){
+//      post("GEM: pix_film: Unable to open file: %s", filename.c_str());
       return false;
     }
     m_curFrame = -1;
