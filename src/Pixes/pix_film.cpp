@@ -321,8 +321,12 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   if (format==0)format=m_format;
   if(codec>=0){
     codec=codec%m_handles.size();
-    if (m_handles[codec] && m_handles[codec]->open(buf, format ))
+    if (m_handles[codec] && m_handles[codec]->open(buf, format )) {
       m_handle = m_handles[codec];
+      verbose(1, "%s!: succeeded", m_ids[codec].c_str());
+    } else {
+      verbose(1, "%s!: failed", m_ids[codec].c_str());
+    }
   }
   debug("handle=%x of %d", m_handle, m_handles.size());
   if(!m_handle && m_handles.size()>0){
@@ -331,11 +335,12 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
     while(i<m_handles.size()){
       debug("trying handle %d: %x", i, m_handles[i]);
       if (m_handles[i] && m_handles[i]->open(buf, format ))      {
-        debug("success", i, m_handles[i]);
+	verbose(1, "%s: succeeded", m_ids[i].c_str());
         m_handle = m_handles[i];
         break;
+      } else {
+	verbose(1, "%s: failed", m_ids[i].c_str());
       }
-      post(" ... ");
       i++;
     }
   }
@@ -343,7 +348,7 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   debug("got handle = %X", m_handle);
 
   if (!m_handle){
-    post(" ... giving up!");
+    //    post(" ... giving up!");
     error("unable to open file: %s", filename->s_name);
 	return;
   }
