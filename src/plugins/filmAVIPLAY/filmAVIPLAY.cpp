@@ -72,7 +72,7 @@ void filmAVIPLAY :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVIPLAY :: open(char *filename, int format)
+bool filmAVIPLAY :: open(const std::string filename, int format)
 {
   if (format>0)m_wantedFormat=format;
   // how do we close the avifile ??? automagically ?

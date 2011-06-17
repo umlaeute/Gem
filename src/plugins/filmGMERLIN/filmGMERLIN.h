@@ -68,7 +68,7 @@ namespace gem { class GEM_EXPORT filmGMERLIN : public film {
 #ifdef HAVE_GMERLIN
   //////////
   // open a movie up
-  virtual bool open(char *filename, int format = 0);
+  virtual bool open(const std::string filename, int format = 0);
   //////////
   // close the movie file
   virtual void close(void);

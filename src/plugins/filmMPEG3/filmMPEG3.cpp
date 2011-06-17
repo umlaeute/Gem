@@ -75,7 +75,7 @@ void filmMPEG3 :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmMPEG3 :: open(char *filename, int format)
+bool filmMPEG3 :: open(const std::string filename, int format)
 {
   if (mpeg3_check_sig(filename)){/* ok, this is mpeg(3) */
 #ifdef FILMMPEG3_OPEN17

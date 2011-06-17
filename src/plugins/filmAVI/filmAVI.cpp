@@ -106,7 +106,7 @@ void filmAVI :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVI :: open(char *filename, int format)
+bool filmAVI :: open(const std::string filename, int format)
 {
   AVISTREAMINFO streaminfo;
   long lSize = 0; // in bytes

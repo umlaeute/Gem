@@ -120,7 +120,7 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
 // really open the file !
 //
 /////////////////////////////////////////////////////////
-bool filmGMERLIN :: open(char *filename, int format)
+bool filmGMERLIN :: open(const std::string filename, int format)
 {
   close();
 

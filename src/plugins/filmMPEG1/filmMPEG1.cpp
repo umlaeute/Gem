@@ -71,7 +71,7 @@ void filmMPEG1 :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmMPEG1 :: open(char *filename, int format)
+bool filmMPEG1 :: open(const std::string filename, int format)
 {
   if (format>0)m_wantedFormat=format;
   if (!(m_streamfile = fopen (filename, "rb")))return false;

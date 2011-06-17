@@ -71,7 +71,7 @@ void filmDarwin :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDarwin :: open(char *filename, int format)
+bool filmDarwin :: open(const std::string filename, int format)
 {
   if (format>0)m_wantedFormat=format;
 #ifdef HAVE_CARBONQUICKTIME

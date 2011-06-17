@@ -52,7 +52,7 @@ filmTEST :: filmTEST(int format) : film(format),
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmTEST :: open(char *filename, int format)
+bool filmTEST :: open(const std::string filename, int format)
 {
   m_numTracks=1,
 

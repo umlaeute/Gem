@@ -82,7 +82,7 @@ class GEM_EXTERN film
    * anything about the internal cs of the decoder
    */
   /* returns TRUE if loading was successfull, FALSE otherwise */
-  virtual bool open(char *filename, int format=0);
+  virtual bool open(const std::string, int format=0) = 0;
   //////////
   // close the movie fil
   /* close the file and clean up temporary things */

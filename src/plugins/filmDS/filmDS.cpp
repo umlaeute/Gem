@@ -229,7 +229,7 @@ void filmDS :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDS :: open(char *filename, int format)
+bool filmDS :: open(const std::string filename, int format)
 {
   WCHAR			WideFileName[MAXPDSTRING];
   HRESULT			RetVal;

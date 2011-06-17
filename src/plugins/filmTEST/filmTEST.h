@@ -40,7 +40,7 @@ namespace gem { class GEM_EXPORT filmTEST : public film {
 
   //////////
   // open a movie up
-  virtual bool open(char *filename, int format = 0);
+  virtual bool open(const std::string filename, int format = 0);
 
   //////////
   // get the next frame
