@@ -41,7 +41,7 @@ class GEM_EXPORT filmAVI : public gem::plugins::film {
   
   //////////
   // Constructor
-  filmAVI(int format=0);
+  filmAVI(void);
 
   //////////
   // Destructor
@@ -50,7 +50,7 @@ class GEM_EXPORT filmAVI : public gem::plugins::film {
 #ifdef _WIN32
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int format=0);
+  virtual bool open(const std::string filename, void);
   //////////
   // close the movie file
   virtual void close(void);

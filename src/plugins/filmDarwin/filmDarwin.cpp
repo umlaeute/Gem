@@ -33,10 +33,10 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 //
 /////////////////////////////////////////////////////////
 
-filmDarwin :: filmDarwin(int format) : film(format),
+filmDarwin :: filmDarwin(void) : film(false),
 #ifdef HAVE_CARBONQUICKTIME
 #endif
-                                       durationf(0.)
+				 durationf(0.)
 {
   static bool first_time=true;
   if (first_time) {

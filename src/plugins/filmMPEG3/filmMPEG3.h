@@ -40,7 +40,7 @@ class GEM_EXPORT filmMPEG3 : public gem::plugins::film {
 
   //////////
   // Constructor
-  filmMPEG3(int format=0);
+  filmMPEG3(void);
 
   //////////
   // Destructor

@@ -28,8 +28,36 @@
 
 namespace gem { namespace plugins {
 
-film :: film(GLenum format) : 
-  m_wantedFormat(format), 
+struct film :: PIMPL {
+  bool m_thread;
+  PIMPL(bool thread) :
+    m_thread(thread)
+  {
+  };
+};
+
+film :: film(bool threadable) : 
+  m_pimpl(new PIMPL(threadable)),
+#ifdef __APPLE__
+  m_wantedFormat(GL_YUV422_GEM), 
+#else
+  m_wantedFormat(GL_RGBA), 
+#endif
+  m_numFrames(0), m_numTracks(0),
+  m_curFrame(0), m_curTrack(0),
+  m_readNext(false),
+  m_auto(0.f),
+  m_fps(-1.0),
+  m_newfilm(false)
+{}
+
+film :: film(void) : 
+  m_pimpl(new PIMPL(true)),
+#ifdef __APPLE__
+  m_wantedFormat(GL_YUV422_GEM), 
+#else
+  m_wantedFormat(GL_RGBA), 
+#endif
   m_numFrames(0), m_numTracks(0),
   m_curFrame(0), m_curTrack(0),
   m_readNext(false),
@@ -45,6 +73,11 @@ film :: film(GLenum format) :
 film :: ~film()
 {
   close();
+  delete m_pimpl; m_pimpl=NULL;
+}
+
+bool film :: isThreadable(void) {
+  return m_pimpl->m_thread;
 }
 
 void film :: close(void)

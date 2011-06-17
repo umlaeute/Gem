@@ -61,7 +61,7 @@ class GEM_EXPORT filmAVIPLAY : public gem::plugins::film {
   
   //////////
   // Constructor
-  filmAVIPLAY(int format=0);
+  filmAVIPLAY(void);
 
   //////////
   // Destructor

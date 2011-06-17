@@ -37,7 +37,7 @@ class GEM_EXPORT filmTEST : public gem::plugins::film {
 
   //////////
   // Constructor
-  filmTEST(int format=0);
+  filmTEST(void);
 
   //////////
   // open a movie up

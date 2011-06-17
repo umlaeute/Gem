@@ -35,7 +35,7 @@ REGISTER_FILMFACTORY("AVIPLAY", filmAVIPLAY);
 //
 /////////////////////////////////////////////////////////
 
-filmAVIPLAY :: filmAVIPLAY(int format) : film(format) {
+filmAVIPLAY :: filmAVIPLAY(void) : film() {
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_LIBAVIPLAY

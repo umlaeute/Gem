@@ -57,7 +57,7 @@ class GEM_EXPORT filmQT : public gem::plugins::film
  public:
   //////////
   // Constructor
-  filmQT(int format=0);
+  filmQT(void);
   //////////
   // Destructor
   virtual ~filmQT();

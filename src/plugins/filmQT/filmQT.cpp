@@ -61,7 +61,6 @@ static bool filmQT_deinitQT(void) {
 }
 
 # endif /* w32 */
-#endif /* HAVE_QUICKTIME */
 
 /////////////////////////////////////////////////////////
 //
@@ -72,16 +71,14 @@ static bool filmQT_deinitQT(void) {
 //
 /////////////////////////////////////////////////////////
 
-filmQT :: filmQT(int format) : film(format)
-#ifdef HAVE_QUICKTIME
-                ,
-				m_movie(NULL),
-				m_srcGWorld(NULL),
-				m_movieTime(0),
-				m_movieTrack(0),
-				m_timeScale(1), 
-				duration(0),
-				m_bInit(false)
+filmQT :: filmQT(void) : film(false),
+			 m_movie(NULL),
+			 m_srcGWorld(NULL),
+			 m_movieTime(0),
+			 m_movieTrack(0),
+			 m_timeScale(1), 
+			 duration(0),
+			 m_bInit(false)
 {
   static bool first_time=true;
   if(!filmQT_initQT())return;
@@ -94,9 +91,6 @@ filmQT :: filmQT(int format) : film(format)
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_bInit = true;
 }
-#else /* !HAVE_QUICKTIME */
-{/* nop */}
-#endif
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -105,14 +99,10 @@ filmQT :: filmQT(int format) : film(format)
 filmQT :: ~filmQT()
 {
   close();
-
-#if defined HAVE_QUICKTIME
   /* should we check whether "m_bInit" is true? */
   filmQT_deinitQT();
-#endif // HAVE_QT
 }
 
-#ifdef HAVE_QUICKTIME
 void filmQT :: close(void)
 {
   if (!m_bInit){
@@ -171,7 +161,7 @@ bool filmQT :: open(const std::string filename, int format) {
   if (err) {
     error("filmQT: Couldn't make a movie from file: %s (%d)", filename.c_str(), err);
     if (refnum) ::CloseMovieFile(refnum);
-	m_movie=NULL;
+    m_movie=NULL;
     goto unsupported;
   }
   if (refnum) ::CloseMovieFile(refnum);
@@ -265,13 +255,13 @@ pixBlock* filmQT :: getFrame()
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 #ifdef __GNUC__
 # warning m_wantedFormat ignored
-// m_wantedFormat is nowhere respected when setting up the decoder
-// we cannot just use it here and expect it to convert our image...
-// it's left here as i have to check how it works on w32
+  // m_wantedFormat is nowhere respected when setting up the decoder
+  // we cannot just use it here and expect it to convert our image...
+  // it's left here as i have to check how it works on w32
 #endif
-/*
-  m_image.image.setCsizeByFormat(m_wantedFormat);
-*/
+  /*
+    m_image.image.setCsizeByFormat(m_wantedFormat);
+  */
   m_image.newimage = 1;
   m_image.image.upsidedown=true;
 

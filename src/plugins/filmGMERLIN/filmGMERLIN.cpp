@@ -33,7 +33,7 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 //
 /////////////////////////////////////////////////////////
 
-filmGMERLIN :: filmGMERLIN(int format) : film(format),
+filmGMERLIN :: filmGMERLIN(void) : film(),
 #ifdef HAVE_GMERLIN
                                          m_file(NULL),
                                          m_opt(NULL),

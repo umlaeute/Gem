@@ -38,23 +38,31 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 namespace gem { namespace plugins {
 class GEM_EXTERN film
 {
- public:
+ private:
+  class PIMPL;
+  PIMPL*m_pimpl;
+
   
   //////////
   // Constructor
-  
+ protected:  
   /* initialize the filmloader
    *
-   * set the default colour-space to format (like GL_RGBA)
-   * if format==0, the default is set by the filmloader
-   * (for instance: the fastest colour-space)
+   * set 'threadable' to false, if your backend is known to be not threadsafe
    */
-  film(GLenum format=0);
+  film(bool threadable);
 
+ public:
+  film(void);
   ////////
   // Destructor
   /* free what is apropriate */
-  virtual ~film();
+  virtual ~film(void);
+
+ public:
+  ////////
+  // returns true if instance can be used in thread
+  bool isThreadable(void);
 
   //////////
   // set the wanted color-space
@@ -65,7 +73,7 @@ class GEM_EXTERN film
   //////////
   // get the actual color-space
   /* what colour-space is in use ?
-   * returns 0 for non
+   * returns 0 for none
    */    
   virtual int getColor() {return 0;}
 

@@ -36,7 +36,7 @@ REGISTER_FILMFACTORY("QT4L", filmQT4L);
 //
 /////////////////////////////////////////////////////////
 
-filmQT4L :: filmQT4L(int format) : film(format) {
+filmQT4L :: filmQT4L(void) : film() {
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_LIBQUICKTIME

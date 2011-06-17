@@ -41,7 +41,7 @@ class GEM_EXPORT filmDS : public gem::plugins::film {
   
      //////////
      // Constructor
-     filmDS(int format=0);
+     filmDS(void);
 
      //////////
      // Destructor

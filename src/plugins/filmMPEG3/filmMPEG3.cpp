@@ -41,7 +41,7 @@ REGISTER_FILMFACTORY("mpeg3", filmMPEG3);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG3 :: filmMPEG3(int format) : film(format) {
+filmMPEG3 :: filmMPEG3(void) : film(false) {
   static bool first_time=true;
   if (first_time) {
 #ifdef HAVE_LIBMPEG3

@@ -41,7 +41,7 @@ class GEM_EXPORT filmMPEG1 : public gem::plugins::film {
 
   //////////
   // Constructor
-  filmMPEG1(int format=0);
+  filmMPEG1(void);
 
   //////////
   // Destructor

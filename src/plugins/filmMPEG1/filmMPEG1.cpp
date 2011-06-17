@@ -34,8 +34,8 @@ REGISTER_FILMFACTORY("mpeg1", filmMPEG1);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG1 :: filmMPEG1(int format) : film(format),
-				     m_data(NULL), m_length(0)
+filmMPEG1 :: filmMPEG1(void) : film(),
+			       m_data(NULL), m_length(0)
 {
   static bool first_time=true;
   if (first_time) {

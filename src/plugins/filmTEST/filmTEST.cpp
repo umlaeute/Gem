@@ -33,8 +33,8 @@ REGISTER_FILMFACTORY("test", filmTEST);
 //
 /////////////////////////////////////////////////////////
 
-filmTEST :: filmTEST(int format) : film(format),
-				     m_data(NULL), m_length(0)
+filmTEST :: filmTEST(void) : film(),
+			     m_data(NULL), m_length(0)
 {
   static bool first_time=true;
   if (first_time) {

@@ -44,7 +44,7 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 //
 /////////////////////////////////////////////////////////
 
-filmDS :: filmDS(int format) : film(format) {
+filmDS :: filmDS(void) : film() {
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
   static bool first_time=true;
   if (first_time) {

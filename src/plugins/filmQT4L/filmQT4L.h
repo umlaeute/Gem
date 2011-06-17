@@ -42,7 +42,7 @@ class GEM_EXPORT filmQT4L : public gem::plugins::film {
 
   //////////
   // Constructor
-  filmQT4L(int format=0);
+  filmQT4L(void);
 
   //////////
   // Destructor

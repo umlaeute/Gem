@@ -60,7 +60,7 @@ class GEM_EXPORT filmGMERLIN : public gem::plugins::film {
 
   //////////
   // Constructor
-  filmGMERLIN(int format=0);
+  filmGMERLIN(void);
 
   //////////
   // Destructor

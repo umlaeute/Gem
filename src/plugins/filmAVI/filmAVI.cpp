@@ -33,7 +33,7 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 //
 /////////////////////////////////////////////////////////
 
-filmAVI :: filmAVI(int format) : film(format) {
+filmAVI :: filmAVI(void) : film() {
   static bool first_time=true;
   if (first_time) {
 #ifdef _WIN32

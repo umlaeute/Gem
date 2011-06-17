@@ -48,7 +48,7 @@ class GEM_EXPORT filmDarwin : public gem::plugins::film {
   
   //////////
   // Constructor
-  filmDarwin(int format=0);
+  filmDarwin(void);
 
   //////////
   // Destructor
