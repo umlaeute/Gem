@@ -126,13 +126,11 @@ void filmQT :: close(void)
   //	m_srcGWorld = NULL;
 }
 
-bool filmQT :: open(char*filename, int format) {
+bool filmQT :: open(const std::string filename, int format) {
   FSSpec	theFSSpec;
   OSErr		err = noErr;
   Rect		m_srcRect;
   long		m_rowBytes;
-
-  Str255	pstrFilename;
 
   short	refnum = 0;
   long	movieDur, movieScale;
@@ -140,8 +138,7 @@ bool filmQT :: open(char*filename, int format) {
   short		flags = 0;
   int wantedFormat;
 
-
-  if (filename==NULL)return false;
+  if (filename.empty)return false;
   if (!m_bInit){
     error("filmQT: object not correctly initialized\n");
     goto unsupported;
@@ -150,28 +147,29 @@ bool filmQT :: open(char*filename, int format) {
   wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   // Clean up any open files:  closeMess();
 
-  CopyCStringToPascal(filename, pstrFilename);           // Convert to Pascal string
-  err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
-  
+  Str255	pstrFilename;
+  CopyCStringToPascal(filename.c_str(), pstrFilename);           // Convert to Pascal string
+
+  err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record  
   if (err != noErr) {  
     FSRef		ref;
-    err = ::FSPathMakeRef((const UInt8*)filename, &ref, NULL);
+    err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
   }
   
   if (err != noErr) {
-    error("filmQT: Unable [%d] to find file: %s", err, filename);
+    error("filmQT: Unable to find file: %s (%d)", filename.c_str(), err);
     //goto unsupported;
   }
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("filmQT: Couldn't open the movie file: %.*s (%d)", theFSSpec.name[0], &theFSSpec.name[1], err);
+    error("filmQT: Couldn't open the movie file: %s (%d)", filename.c_str(), err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
-    error("filmQT: Couldn't make a movie from file: %#s (%d)", theFSSpec.name[0], &theFSSpec.name[1], err);
+    error("filmQT: Couldn't make a movie from file: %s (%d)", filename.c_str(), err);
     if (refnum) ::CloseMovieFile(refnum);
 	m_movie=NULL;
     goto unsupported;
@@ -211,7 +209,7 @@ bool filmQT :: open(char*filename, int format) {
   // SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
   err = SetMovieAudioMute(m_movie, true, 0);
   if(noErr!=err) {
-    error("GEM: filmQT: unable to mute movie...");
+    error("filmQT: unable to mute movie...");
   }
 
   err = QTNewGWorldFromPtr(	&m_srcGWorld,
@@ -223,7 +221,7 @@ bool filmQT :: open(char*filename, int format) {
 				m_image.image.data,
 				m_rowBytes);
   if (err) {
-    error("GEM: filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
+    error("filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
 
