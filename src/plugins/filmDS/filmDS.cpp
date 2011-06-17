@@ -17,7 +17,7 @@
 # include "config.h"
 #endif
 #include "filmDS.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 REGISTER_FILMFACTORY("DS", filmDS);

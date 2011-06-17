@@ -35,7 +35,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem {
+namespace gem { namespace plugins {
 class GEM_EXTERN film
 {
  public:
@@ -175,7 +175,7 @@ class GEM_EXTERN film
   bool m_newfilm;
 };
 
-}; // namespace gem
+};}; // namespace gem::plugins
 
 
 /**
@@ -185,7 +185,7 @@ class GEM_EXTERN film
  * \param id a symbolic (const char*) ID for the given class
  * \param filmClass a class derived from "film"
  */
-#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::film> fac_film_ ## TYP (gensym(id)->s_name)
+#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::film> fac_film_ ## TYP (gensym(id)->s_name)
 
 
 /**
@@ -194,7 +194,7 @@ class GEM_EXTERN film
  * \note call this before any externals register themselves
  */
 #define INIT_FILMFACTORY() \
-  static gem::PluginFactoryRegistrar::dummy<gem::film> fac_filmdummy
+  static gem::PluginFactoryRegistrar::dummy<gem::plugins::film> fac_filmdummy
 
 
 #endif	// for header file

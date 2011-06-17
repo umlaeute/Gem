@@ -18,7 +18,7 @@
 #endif
 
 #include "filmMPEG3.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG3
 REGISTER_FILMFACTORY("mpeg3", filmMPEG3);

@@ -35,7 +35,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT filmAVI : public film {
+namespace gem { namespace plugins {
+class GEM_EXPORT filmAVI : public gem::plugins::film {
  public:
   
   //////////
@@ -82,6 +83,6 @@ namespace gem { class GEM_EXPORT filmAVI : public film {
   PAVISTREAM	m_streamVid;		// the stream itself
 #endif //AVI
 
-};};
+};};};
 
 #endif	// for header file

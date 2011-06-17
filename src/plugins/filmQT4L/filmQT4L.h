@@ -36,7 +36,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT filmQT4L : public film {
+namespace gem { namespace plugins {
+class GEM_EXPORT filmQT4L : public gem::plugins::film {
  public:
 
   //////////
@@ -75,6 +76,6 @@ namespace gem { class GEM_EXPORT filmQT4L : public film {
 #endif
   int m_lastFrame;
 
-};};
+};};};
 
 #endif	// for header file

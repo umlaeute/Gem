@@ -18,7 +18,7 @@
 #endif
 
 #include "filmQT.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_QUICKTIME
 REGISTER_FILMFACTORY("QT", filmQT);

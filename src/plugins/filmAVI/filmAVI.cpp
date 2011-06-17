@@ -18,7 +18,7 @@
 #endif
 
 #include "filmAVI.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef _WIN32
 REGISTER_FILMFACTORY("AVI", filmAVI);

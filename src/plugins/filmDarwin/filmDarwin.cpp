@@ -18,7 +18,7 @@
 # include "config.h"
 #endif
 #include "filmDarwin.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_CARBONQUICKTIME
 REGISTER_FILMFACTORY("Darwin", filmDarwin);

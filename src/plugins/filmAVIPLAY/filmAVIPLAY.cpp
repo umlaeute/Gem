@@ -18,7 +18,7 @@
 #endif
 
 #include "filmAVIPLAY.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_LIBAVIPLAY
 REGISTER_FILMFACTORY("AVIPLAY", filmAVIPLAY);

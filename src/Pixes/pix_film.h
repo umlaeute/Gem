@@ -110,9 +110,9 @@ class GEM_EXTERN pix_film : public GemBase
   int           m_reqTrack;
   int           m_curTrack;
 
-  std::vector<gem::film*>m_handles;
+  std::vector<gem::plugins::film*>m_handles;
   std::vector<std::string>m_ids;
-  gem::film         *m_handle;
+  gem::plugins::film         *m_handle;
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
 
   //////////

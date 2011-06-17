@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include "filmQT4L.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_LIBQUICKTIME
 # include <colormodels.h>

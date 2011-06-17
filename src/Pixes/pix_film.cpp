@@ -165,7 +165,7 @@ pix_film :: pix_film(t_symbol *filename) :
   m_thread_running(false), m_wantThread(false)
 #endif
 {
-  gem::PluginFactory<gem::film>::loadPlugins("film");
+  gem::PluginFactory<gem::plugins::film>::loadPlugins("film");
 
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -175,7 +175,7 @@ pix_film :: pix_film(t_symbol *filename) :
   
   m_handle=NULL;
 
-  std::vector<std::string>available_ids=gem::PluginFactory<gem::film>::getIDs();
+  std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::film>::getIDs();
 
   if(!addHandle(available_ids, "DS"))
     addHandle(available_ids, "AVI");
@@ -244,7 +244,7 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
     verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
-        gem::film         *handle=gem::PluginFactory<gem::film>::getInstance(key); 
+      gem::plugins::film*handle=gem::PluginFactory<gem::plugins::film>::getInstance(key); 
         if(NULL==handle)break;
         m_ids.push_back(key);
         m_handles.push_back(handle);

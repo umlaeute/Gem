@@ -20,7 +20,7 @@
 #include <string.h>
 #include "filmTEST.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("test", filmTEST);
 

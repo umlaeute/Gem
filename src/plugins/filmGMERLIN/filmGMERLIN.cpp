@@ -18,7 +18,7 @@
 #endif
 #include <string.h>
 #include "filmGMERLIN.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_GMERLIN
 REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);

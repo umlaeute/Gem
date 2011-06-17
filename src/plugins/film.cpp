@@ -26,7 +26,7 @@
 //
 /////////////////////////////////////////////////////////
 
-namespace gem {
+namespace gem { namespace plugins {
 
 film :: film(GLenum format) : 
   m_wantedFormat(format), 
@@ -86,7 +86,7 @@ int film :: changeImage(int imgNum, int trackNum){
   return FILM_ERROR_DONTKNOW;
 }
 
-}
+};}; // namespace
 
 INIT_FILMFACTORY();
 

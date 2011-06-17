@@ -51,7 +51,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT filmQT : public film
+namespace gem { namespace plugins {
+class GEM_EXPORT filmQT : public gem::plugins::film
 {
  public:
   //////////
@@ -94,6 +95,6 @@ namespace gem { class GEM_EXPORT filmQT : public film
   // managed to initialize our Quicktime-Decoder
   bool			m_bInit;
 #endif // HAVE_QT
-};};
+};};};
 
 #endif	// for header file

@@ -42,7 +42,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT filmDarwin : public film {
+namespace gem { namespace plugins {
+class GEM_EXPORT filmDarwin : public gem::plugins::film {
  public:
   
   //////////
@@ -80,6 +81,6 @@ namespace gem { class GEM_EXPORT filmDarwin : public film {
 #endif //HAVE_CARBONQUICKTIME
   double		durationf;
 
-};};
+};};};
 
 #endif	// for header file

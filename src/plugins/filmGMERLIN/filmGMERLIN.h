@@ -54,7 +54,8 @@ extern "C" {
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT filmGMERLIN : public film {
+namespace gem { namespace plugins {
+class GEM_EXPORT filmGMERLIN : public gem::plugins::film {
  public:
 
   //////////
@@ -110,6 +111,6 @@ namespace gem { class GEM_EXPORT filmGMERLIN : public film {
  private:
   // whether we need to convert to use it in Gem
   bool m_doConvert;
-};};
+};};};
 
 #endif	// for header file

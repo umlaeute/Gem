@@ -19,7 +19,7 @@
 
 #include <string.h>
 #include "filmMPEG1.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG
 REGISTER_FILMFACTORY("mpeg1", filmMPEG1);
