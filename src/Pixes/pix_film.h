@@ -131,14 +131,14 @@ class GEM_EXTERN pix_film : public GemBase
 
   pixBlock*m_frame;
 
-  int m_thread_continue;
+  bool m_thread_continue;
 #endif
   /* do we have a thread ? */
-  int m_thread_running;
+  bool m_thread_running;
 
   /* does the user request reading to be threaded */
-  int m_wantThread;
-	
+  bool m_wantThread;
+
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);

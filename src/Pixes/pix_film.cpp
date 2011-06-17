@@ -195,7 +195,6 @@ pix_film :: pix_film(t_symbol *filename) :
   if(m_handles.size()==0) {
     error("no movie decoding backends found!");
   }
-
 }
 
 /////////////////////////////////////////////////////////
@@ -368,7 +367,8 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   outlet_list(m_outNumFrames, 0, 4, ap);
 
 #ifdef HAVE_PTHREADS
-  if(m_wantThread){
+  bool canThread=m_handle->isThreadable();
+  if(canThread && m_wantThread){
     debug("creating thread");
     m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     if ( pthread_mutex_init(m_mutex, NULL) < 0 ) {
