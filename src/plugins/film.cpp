@@ -91,6 +91,7 @@ bool film :: haveFilm()
 {
   return false;
 }
+#if 0
 /////////////////////////////////////////////////////////
 // render
 //
@@ -103,7 +104,7 @@ pixBlock* film :: getFrame(){
   while(i--)*dummy++=rand()%256;
   return &m_image;
 }
-
+#endif
 ///////////////////////////////
 // get the frames-per-second
 double film :: getFPS() {

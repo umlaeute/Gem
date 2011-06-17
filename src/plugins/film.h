@@ -114,7 +114,7 @@ class GEM_EXTERN film
    * if this is a "new" frame (e.g. freshly decoded),
    * pixblock.newimage should be set to 1
    */
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame() = 0;
 
   //////////
   // get the number of frames
