@@ -85,7 +85,7 @@ bool filmQT4L :: open(const std::string filename, int format)
   char*cfilename=const_cast<char*>(filename.c_str());
   if (quicktime_check_sig(cfilename)){ /* ok, this is quicktime */
     if (!(m_quickfile = quicktime_open(filename.c_str(), 1, 0))){
-//      post("GEM: pix_film: Unable to open file: %s", filename.c_str());
+//      post("filmQT4L: Unable to open file: %s", filename.c_str());
       return false;
     }
     m_curFrame = -1;
@@ -101,7 +101,7 @@ bool filmQT4L :: open(const std::string filename, int format)
     m_image.image.ysize = quicktime_video_height(m_quickfile, m_curTrack);
     if (!quicktime_supported_video(m_quickfile, m_curTrack)){
       //    char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
-      //    post("GEM: pix_film: unsupported CODEC '%s'!", codec);
+      //    post("filmQT4L: unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
       m_quickfile=0;
       return false;
@@ -119,7 +119,6 @@ bool filmQT4L :: open(const std::string filename, int format)
   }
   goto unsupported;
  unsupported:
-  startpost("quicktime failed");
   close();
   return false;
 }
@@ -147,7 +146,7 @@ pixBlock* filmQT4L :: getFrame(){
   m_lastFrame=m_curFrame;
 
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
-    post("GEM: pix_film:: couldn't decode video !");
+    post("filmQT4L:: couldn't decode video !");
   }else {
     m_image.image.convertFrom(&m_qtimage);
     m_image.newimage=1; m_image.image.upsidedown=false;

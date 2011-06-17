@@ -111,7 +111,6 @@ bool filmAVIPLAY :: open(const std::string filename, int format)
   return true;
   goto unsupported;
  unsupported:
-  startpost("aviplay failed");
   close();
   return false;
 }

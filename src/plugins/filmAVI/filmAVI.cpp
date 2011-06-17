@@ -201,7 +201,6 @@ bool filmAVI :: open(const std::string filename, int format)
   return true;
 
  unsupported:
-  startpost("AVI failed");
   close();
   return false;
 }

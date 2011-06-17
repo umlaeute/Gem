@@ -238,7 +238,6 @@ bool filmQT :: open(const std::string filename, int format) {
   return true;
 
  unsupported:
-  startpost("filmQT: failed ...");
   return false;
 
 }

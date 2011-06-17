@@ -48,7 +48,7 @@ filmDS :: filmDS(int format) : film(format) {
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
   static bool first_time=true;
   if (first_time) {
-    post("pix_film:: directshow support");
+    post("pix_film:: DirectShow support");
     first_time = false;
   }
   HRESULT RetVal;

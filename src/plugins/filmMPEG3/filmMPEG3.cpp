@@ -112,7 +112,6 @@ bool filmMPEG3 :: open(const std::string filename, int format)
   }
   goto unsupported;
  unsupported:
-  verbose(1, "MPEG3 failed");
   close();
   return false;
 
