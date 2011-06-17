@@ -40,7 +40,7 @@ class GEM_EXPORT imageJPEG : public gem::plugins::image {
 
   //////////
   // read an image
-  virtual bool load(std::string filename, imageStruct&result);
+  virtual bool load(std::string filename, imageStruct&result, gem::Properties&props);
   //////////
   // write an image
   virtual bool save(std::string filename, const imageStruct&result);

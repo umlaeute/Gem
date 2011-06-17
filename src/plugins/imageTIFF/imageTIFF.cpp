@@ -45,18 +45,18 @@ REGISTER_IMAGEFACTORY("tiff", imageTIFF);
 
 imageTIFF :: imageTIFF() 
 {
-  post("imageTIFF");
+  //post("imageTIFF");
 }
 imageTIFF :: ~imageTIFF()
 {
-  post("~imageTIFF");
+  //post("~imageTIFF");
 }
 
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageTIFF :: load(std::string filename, imageStruct&result)
+bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
   ::verbose(2, "reading '%s' with libTIFF", filename.c_str());
   TIFF *tif = TIFFOpen(filename.c_str(), "r");

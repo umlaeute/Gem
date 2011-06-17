@@ -42,18 +42,18 @@ REGISTER_IMAGEFACTORY("magick", imageMAGICK);
 
 imageMAGICK :: imageMAGICK() 
 {
-  post("imageMAGICK");
+  //post("imageMAGICK");
 }
 imageMAGICK :: ~imageMAGICK()
 {
-  post("~imageMAGICK");
+  //post("~imageMAGICK");
 }
 
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageMAGICK :: load(std::string filename, imageStruct&result)
+bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
   Magick::Image image;
   try {

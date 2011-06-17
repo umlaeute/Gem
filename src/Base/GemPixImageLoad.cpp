@@ -90,10 +90,10 @@ namespace gem {
       }
     }
 
-    virtual bool load(std::string filename, imageStruct&result) {
+    virtual bool load(std::string filename, imageStruct&result, gem::Properties&props) {
       int i;
       for(i=0; i<m_loaders.size(); i++) {
-	if(m_loaders[i]->load(filename, result))
+	if(m_loaders[i]->load(filename, result, props))
 	  return true;
       }
       return false;
@@ -121,7 +121,8 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
    if(piximageloader) {
      std::string fname=filename;
      image_block=new imageStruct();
-     if(piximageloader->load(filename, *image_block)) {
+     gem::Properties props;
+     if(piximageloader->load(filename, *image_block, props)) {
        return image_block;
      }
    }

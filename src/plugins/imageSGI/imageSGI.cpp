@@ -39,18 +39,18 @@ REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
 /////////////////////////////////////////////////////////
 imageSGI :: imageSGI() 
 {
-  post("imageSGI");
+  //post("imageSGI");
 }
 imageSGI :: ~imageSGI()
 {
-  post("~imageSGI");
+  //post("~imageSGI");
 }
 
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageSGI :: load(std::string filename, imageStruct&result)
+bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
   int32 xsize, ysize, csize;
   if (!sizeofimage(filename.c_str(), &xsize, &ysize, &csize) )

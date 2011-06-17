@@ -88,18 +88,18 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo)
 
 imageJPEG :: imageJPEG() 
 {
-  post("imageJPEG");
+  //post("imageJPEG");
 }
 imageJPEG :: ~imageJPEG()
 {
-  post("~imageJPEG");
+  //post("~imageJPEG");
 }
 
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageJPEG :: load(std::string filename, imageStruct&result)
+bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
   // open up the file
   FILE * infile;

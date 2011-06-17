@@ -55,36 +55,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 
     /* read a image
+     *
+     * props can be filled by the loader with additional information on the image
+     * e.g. EXIF tags,...
      */
     /* returns TRUE if loading was successfull, FALSE otherwise */
-    virtual bool load(std::string filename, imageStruct&result) = 0;
+    virtual bool load(std::string filename, imageStruct&result, gem::Properties&props) = 0;
 
-
-    /**
-     * list all properties this backend supports
-     * after calling, "readable" will hold a list of all properties that can be read
-     * and "writeable" will hold a list of all properties that can be set
-     * if the enumeration fails, this returns <code>false</code>
-     */
-    virtual bool enumProperties(gem::Properties&readable,
-                                gem::Properties&writeable);
-
-    /**
-     * set a number of properties (as defined by "props")
-     * the "props" may hold properties not supported by the currently opened device,
-     *  which is legal; in this case the superfluous properties are simply ignored
-     * this function MAY modify the props; 
-     */
-    virtual void setProperties(gem::Properties&props);
-
-    /**
-     * get the current value of the given properties from the device
-     * if props holds properties that can not be read from the device, they are set to UNSET 
-     */
-    virtual void getProperties(gem::Properties&props);
-
-
-    bool isThreadable(void) { return m_threadable; }
+    virtual bool isThreadable(void) { return m_threadable; }
 
   protected:
     /* used to store the "set" properties */

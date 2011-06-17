@@ -120,11 +120,11 @@ void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imag
 
 imageQT :: imageQT() : image(false)
 {
-  post("imageQT");
+  //post("imageQT");
 }
 imageQT :: ~imageQT()
 {
-  post("~imageQT");
+  //post("~imageQT");
 }
 
 /////////////////////////////////////////////////////////
@@ -197,7 +197,7 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
   return true;
 }
 
-bool imageQT :: load(std::string filename, imageStruct&result)
+bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
   OSErr            err;
   GraphicsImportComponent    importer = NULL;
