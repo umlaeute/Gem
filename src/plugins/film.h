@@ -62,7 +62,7 @@ class GEM_EXTERN film
  public:
   ////////
   // returns true if instance can be used in thread
-  bool isThreadable(void);
+  virtual bool isThreadable(void);
 
   //////////
   // set the wanted color-space
