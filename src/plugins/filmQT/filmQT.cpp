@@ -128,10 +128,10 @@ bool filmQT :: open(const std::string filename, int format) {
   short		flags = 0;
   int wantedFormat;
 
-  if (filename.empty)return false;
+  if (filename.empty())return false;
   if (!m_bInit){
     error("filmQT: object not correctly initialized\n");
-    goto unsupported;
+    return false;
   }
   if (format>0)m_wantedFormat=format;
   wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
