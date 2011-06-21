@@ -1,21 +1,51 @@
-image/bmp bmp
+image/bmp bm bmp
 image/cis-cod cod
+image/cmu-raster ras rast
+image/fif fif
+image/florian flo turbot
+image/g3fax g3
 image/gif gif
-image/ief ief
-image/jpeg jpe jpeg jpg
-image/pipeg jfif jpeg
-image/png png
+image/ief ief iefs
+image/jpeg jfif jfif-tbnl jpe jpeg jpg
+image/jutvision jut
+image/naplps nap naplps
+image/pict pic pict
+image/pjpeg jfif jpe jpeg jpg
+image/png png x-png
 image/svg+xml svg
 image/tiff tif tiff
+image/vasa mcf
+image/vnddwg dwg dxf svf
+image/vndfpx fpx
+image/vndnet-fpx fpx
+image/vndrn-realflash rf
+image/vndrn-realpix rp
+image/vndwapwbmp wbmp
+image/vndxiff xif
+image/xbm xbm
 image/x-cmu-raster ras
 image/x-cmx cmx
+image/x-dwg dwg dxf svf
 image/x-icon ico
+image/x-jg art
+image/x-jps jps
+image/x-niff nif niff
+image/x-pcx pcx
+image/x-pict pct
+image/xpm xpm
 image/x-png png
 image/x-portable-anymap pnm
 image/x-portable-bitmap pbm
 image/x-portable-graymap pgm
+image/x-portable-greymap pgm
 image/x-portable-pixmap ppm
+image/x-quicktime qif qti qtif
 image/x-rgb rgb
+image/x-tiff tif tiff
+image/x-windows-bmp bmp
 image/x-xbitmap xbm
+image/x-xbm xbm
+image/x-xpixmap pm xpm
 image/x-xpixmap xpm
+image/x-xwd xwd
 image/x-xwindowdump xwd
