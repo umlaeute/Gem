@@ -209,8 +209,7 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
   if (tif == NULL) {
     return false;
   }
-  imageStruct image=constimage;
-
+  imageStruct image; constimage.copy2Image(&image);
   image.fixUpDown();
 
   uint32 width=image.xsize, height = image.ysize;
@@ -251,4 +250,16 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
 
   return true;
 }
+
+
+float imageTIFF::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  float result=0;
+  if(mimetype == "image/tiff" || mimetype == "image/x-tiff")
+    result += 100;
+
+  // LATER check some properties....
+
+  return result;
+}
+
 #endif
