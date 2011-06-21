@@ -134,3 +134,6 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
 bool imageSGI::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   return false;
 }
+float imageSGI::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  return 0.;
+}
