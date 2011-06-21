@@ -383,4 +383,20 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
 
   return true;
 }
+
+
+float imageQT::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  float result=0.;
+
+  // let's assume apple did a good job and implemented this mimetype
+  result += 100.;
+
+  // LATER check some properties....
+#if 0
+  if(gem::Properties::UNSET != props.type("quality"))
+    result += 1.;
+#endif
+  return result;
+}
+
 #endif
