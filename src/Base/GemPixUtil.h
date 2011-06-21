@@ -170,7 +170,7 @@ struct GEM_EXTERN imageStruct
   /* this is a sort of better copy2Image, 
    * which only copies the imageStruct-data if it is needed
    */
-  virtual void refreshImage(imageStruct *to);
+  virtual void refreshImage(imageStruct *to) const;
 
 
   /* inplace swapping Red and Blue channel */
@@ -190,35 +190,35 @@ struct GEM_EXTERN imageStruct
    *   this is maybe not really clean (the meta-data is stored in the destination, 
    *   while the source has no meta-data of its own)
    */
-  virtual void convertTo  (imageStruct*to,   GLenum dest_format=0);
-  virtual void convertFrom(imageStruct*from, GLenum dest_format=0);
+  virtual void convertTo  (imageStruct*to,   GLenum dest_format=0) const;
+  virtual void convertFrom(const imageStruct*from, GLenum dest_format=0);
 
-  virtual void fromRGB    (unsigned char* orgdata);
-  virtual void fromRGBA   (unsigned char* orgdata);
-  virtual void fromBGR    (unsigned char* orgdata);
-  virtual void fromBGRA   (unsigned char* orgdata);
-  virtual void fromRGB16  (unsigned char* orgdata);
-  virtual void fromABGR   (unsigned char* orgdata);
-  virtual void fromARGB   (unsigned char* orgdata);
-  virtual void fromGray   (unsigned char* orgdata);
+  virtual void fromRGB    (const unsigned char* orgdata);
+  virtual void fromRGBA   (const unsigned char* orgdata);
+  virtual void fromBGR    (const unsigned char* orgdata);
+  virtual void fromBGRA   (const unsigned char* orgdata);
+  virtual void fromRGB16  (const unsigned char* orgdata);
+  virtual void fromABGR   (const unsigned char* orgdata);
+  virtual void fromARGB   (const unsigned char* orgdata);
+  virtual void fromGray   (const unsigned char* orgdata);
   virtual void fromGray   (short* orgdata);
-  virtual void fromUYVY   (unsigned char* orgdata);
-  virtual void fromYUY2   (unsigned char* orgdata); // YUYV
-  virtual void fromYVYU   (unsigned char* orgdata);
+  virtual void fromUYVY   (const unsigned char* orgdata);
+  virtual void fromYUY2   (const unsigned char* orgdata); // YUYV
+  virtual void fromYVYU   (const unsigned char* orgdata);
   /* planar YUV420: this is rather generic and not really YV12 only */
-  virtual void fromYV12   (unsigned char* Y, unsigned char*U, unsigned char*V);
+  virtual void fromYV12   (const unsigned char* Y, const unsigned char*U, const unsigned char*V);
   /* assume that the planes are near each other: YVU */
-  virtual void fromYV12   (unsigned char* orgdata);
+  virtual void fromYV12   (const unsigned char* orgdata);
   /* assume that the planes are near each other: YVU */
-  virtual void fromYU12   (unsigned char* orgdata);
+  virtual void fromYU12   (const unsigned char* orgdata);
   /* overloading the above two in order to accept pdp YV12 packets */
-  virtual void fromYV12   (short* Y, short*U, short*V);
-  virtual void fromYV12   (short* orgdata);
+  virtual void fromYV12   (const short* Y, const short*U, const short*V);
+  virtual void fromYV12   (const short* orgdata);
   
   /* aliases */
-  virtual void fromYUV422 (unsigned char* orgdata){fromUYVY(orgdata);}
-  virtual void fromYUV420P(unsigned char* orgdata){fromYV12(orgdata);}
-  virtual void fromYUV420P(unsigned char*Y,unsigned char*U,unsigned char*V){fromYV12(Y,U,V);}
+  virtual void fromYUV422 (const unsigned char* orgdata){fromUYVY(orgdata);}
+  virtual void fromYUV420P(const unsigned char* orgdata){fromYV12(orgdata);}
+  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,const unsigned char*V){fromYV12(Y,U,V);}
 
   // "data" points to the image.
   // the memory could(!) be reserved by this class or someone else
