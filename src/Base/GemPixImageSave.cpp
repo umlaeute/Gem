@@ -222,6 +222,7 @@ namespace gem {
       std::multimap<float, int>priorities;
       std::multimap<float,int>::reverse_iterator rit;
       int i;
+
       for(i=0; i<m_savers.size(); i++) {
         float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);
         priorities.insert( std::multimap<float, int>::value_type(prio, i));
@@ -230,8 +231,8 @@ namespace gem {
       for(rit=priorities.rbegin(); rit != priorities.rend(); rit++) {
         float prio=rit->first;
         int index=rit->second;
-        verbose(2, "trying saver[%d]=%s @ %f", index, m_ids[index].c_str(), prio);
-        if(m_savers[i]->save(img, filename, mimetype, props))
+        verbose(2, "trying saver[%d]=%s / %f", index, m_ids[index].c_str(), prio);
+        if(m_savers[index]->save(img, filename, mimetype, props))
           return true;
       }
 
