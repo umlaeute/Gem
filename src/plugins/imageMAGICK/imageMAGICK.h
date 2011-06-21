@@ -48,6 +48,10 @@ class GEM_EXPORT imageMAGICK : public gem::plugins::image {
   // estimate, how well we could save this image
   virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
 
+  
+ private:
+  std::vector<std::string>m_mimetypes;
+
 };
 };};
 

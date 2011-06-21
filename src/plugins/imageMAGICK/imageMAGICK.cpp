@@ -43,6 +43,17 @@ REGISTER_IMAGEFACTORY("magick", imageMAGICK);
 imageMAGICK :: imageMAGICK() 
 {
   //post("imageMAGICK");
+  char**mimelist; 
+  char what;
+  unsigned long length;
+  MagickCore::ExceptionInfo exception;
+  GetExceptionInfo(&exception);
+  mimelist=MagickCore::GetMimeList("image/*", &length, &exception);
+  unsigned int i;
+  for(i=0; i<length; i++) {
+    m_mimetypes.push_back(mimelist[i]);
+  }
+
 }
 imageMAGICK :: ~imageMAGICK()
 {
@@ -89,6 +100,8 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
+
+
   std::string cs;
   switch(img->format) {
   case GL_LUMINANCE:
@@ -117,6 +130,15 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     // 8 bits per channel are enough!
     // LATER make this dependent on the image->type
     mimage.depth(8); 
+
+    double quality;
+    if(props.get("quality", quality)) {
+      mimage.quality(quality);
+    }
+
+
+
+
     // finally convert and export
     mimage.write(filename);
   } catch (Magick::Exception e){
@@ -128,4 +150,25 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
 
   return true;
 }
+
+float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  float result=0.5; // slightly preference for MAGICK
+
+  int i;
+  for(i=0; i<m_mimetypes.size(); i++) {
+    if(mimetype==m_mimetypes[i]) {
+      result+=100.;
+      break;
+    }
+  } 
+
+  if(gem::Properties::UNSET != props.type("quality"))
+    result += 1.;
+
+  return result;
+}
+
+
+
+
 #endif
