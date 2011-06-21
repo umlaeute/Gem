@@ -18,7 +18,7 @@
 
 #include "Base/GemPixConvert.h"
 
-void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size, 
+void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size, 
                           unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -129,7 +129,7 @@ void RGB_to_YCbCr_altivec(unsigned char *rgbdata, size_t RGB_size,
 
   }
 }
-void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, size_t RGBA_size, 
+void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size, 
                            unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -241,7 +241,7 @@ void RGBA_to_YCbCr_altivec(unsigned char *rgbadata, size_t RGBA_size,
   }
 }
 
-void BGR_to_YCbCr_altivec(unsigned char *bgrdata, size_t BGR_size, 
+void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size, 
                           unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -353,7 +353,7 @@ void BGR_to_YCbCr_altivec(unsigned char *bgrdata, size_t BGR_size,
   }
 }
 
-void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size, 
+void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size, 
                            unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -490,8 +490,8 @@ void BGRA_to_YCbCr_altivec(unsigned char *bgradata, size_t BGRA_size,
   }
 }
 
-void YV12_to_YUV422_altivec(short*Y, short*U, short*V, 
-							unsigned char *data, int xsize, int ysize)
+void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V, 
+			    unsigned char *data, int xsize, int ysize)
 {
   // from geowar@apple.com, 3/15/2005
   // #1. Don't use the pointers. Use vec_ld with an index that you increment (by 16) instead.
@@ -569,8 +569,8 @@ void YV12_to_YUV422_altivec(short*Y, short*U, short*V,
   }
 }
 
-void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
-							unsigned char *gem_image, int xsize, int ysize)
+void YUV422_to_YV12_altivec(const short*pY, const short*pY2, const short*pU, const short*pV,
+			    unsigned char *gem_image, int xsize, int ysize)
 {
   // UYVY UYVY UYVY UYVY
   vector unsigned char *pixels1=reinterpret_cast<vector unsigned char *>(gem_image);
@@ -656,8 +656,8 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
 #ifdef NO_VECTORINT_TO_VECTORUNSIGNEDINT
 # warning disabling AltiVec for older gcc: please fix me
 #else
-void YUV422_to_BGRA_altivec( unsigned char *yuvdata, 
-                             size_t pixelnum, unsigned char *output)
+void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, 
+			    size_t pixelnum, unsigned char *output)
 {
   vector unsigned char *UYVY_ptr=reinterpret_cast<vector unsigned char *>(yuvdata);
   vector unsigned char *BGRA_ptr=reinterpret_cast<vector unsigned char *>(output);

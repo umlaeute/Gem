@@ -1,5 +1,4 @@
 #ifdef __SSE2__
-
 /////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
@@ -66,11 +65,11 @@ static void print_int(__m128i m){
 
 
 /* convert RGBA to YUV422 */
-void RGBA_to_UYVY_SSE2(unsigned char *rgbadata, 
+void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata, 
                        size_t size, 
                        unsigned char *yuvdata)
 {
-  __m128i *rgba_p = (__m128i*)rgbadata; /*  4 RGBA pixels */
+  const __m128i *rgba_p = (const __m128i*)rgbadata; /*  4 RGBA pixels */
   __m128i *yuv_p  = (__m128i*)yuvdata;  /* 4*2 YUV pixels */
 
   const __m128i zero = _mm_setzero_si128();
@@ -200,12 +199,12 @@ void RGBA_to_UYVY_SSE2(unsigned char *rgbadata,
 }
 
 /* convert RGBA to YUV422 */
-void UYVY_to_RGBA_SSE2(unsigned char *yuvdata, 
+void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata, 
                        size_t size, 
                        unsigned char *rgbadata)
 {
   __m128i *rgba_p = (__m128i*)rgbadata; /*  4 RGBA pixels */
-  __m128i *yuv_p  = (__m128i*)yuvdata;  /* 4*2 YUV pixels */
+  const __m128i *yuv_p  = (const __m128i*)yuvdata;  /* 4*2 YUV pixels */
   
   const __m128i Y2RGB = _mm_set_epi16(YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0);
   const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12, 
@@ -296,11 +295,11 @@ void UYVY_to_RGBA_SSE2(unsigned char *yuvdata,
 
 
 /* convert RGB24 to YUV422 */
-void UYVY_to_RGB_SSE2(unsigned char *yuvdata, 
+void UYVY_to_RGB_SSE2(const unsigned char *yuvdata, 
                        size_t size, 
                        unsigned char *rgbdata)
 {
-  __m128i *yuv_p  = (__m128i*)yuvdata;  /* 4*2 YUV pixels */
+  const __m128i *yuv_p  = (const __m128i*)yuvdata;  /* 4*2 YUV pixels */
   
   const __m128i Y2RGB = _mm_set_epi16(YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0);
   const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12, 
