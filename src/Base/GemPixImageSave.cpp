@@ -31,33 +31,86 @@ namespace gem {
 
     // avoid the use of '*/x-*' mimetypes as the "x-" is actually private
     // if a file-extension matches multiple mimetypes, chose the most obvious
-    e2m["bmp"] ="image/bmp";
-    e2m["cmx"] ="image/x-cmx";
-    e2m["cod"] ="image/cis-cod";
-    e2m["gif"] ="image/gif";
-    e2m["ico"] ="image/x-icon";
-    e2m["ief"] ="image/ief";
-    e2m["jfif"]="image/pipeg";
+    /* this is generated with something like:
+       $  cat mimetypes.txt | while read mime exts; do for ext in $exts; do echo "e2m[\"${ext}\"]=\"${mime}\";"; done; done | sort 
+    */
+
+    e2m["art"]="image/x-jg";
+    e2m["bm"]="image/bmp";
+    e2m["bmp"]="image/bmp";
+    //e2m["bmp"]="image/x-windows-bmp";
+    e2m["cmx"]="image/x-cmx";
+    e2m["cod"]="image/cis-cod";
+    e2m["dwg"]="image/vnd.dwg";
+    //e2m["dwg"]="image/x-dwg";
+    e2m["dxf"]="image/vnd.dwg";
+    //e2m["dxf"]="image/x-dwg";
+    e2m["fif"]="image/fif";
+    e2m["flo"]="image/florian";
+    e2m["fpx"]="image/vnd.fpx";
+    //e2m["fpx"]="image/vnd.net-fpx";
+    e2m["g3"]="image/g3fax";
+    e2m["gif"]="image/gif";
+    e2m["ico"]="image/x-icon";
+    e2m["ief"]="image/ief";
+    e2m["iefs"]="image/ief";
+    e2m["jfif"]="image/jpeg";
+    //e2m["jfif"]="image/pjpeg";
+    e2m["jfif-tbnl"]="image/jpeg";
     e2m["jpeg"]="image/jpeg";
     //e2m["jpeg"]="image/pjpeg";
-    e2m["jpe"] ="image/jpeg";
-    e2m["jpg"] ="image/jpeg";
-    e2m["pbm"] ="image/x-portable-bitmap";
-    e2m["pgm"] ="image/x-portable-graymap";
-    e2m["png"] ="image/png";
+    e2m["jpe"]="image/jpeg";
+    //e2m["jpe"]="image/pjpeg";
+    e2m["jpg"]="image/jpeg";
+    //e2m["jpg"]="image/pjpeg";
+    e2m["jps"]="image/x-jps";
+    e2m["jut"]="image/jutvision";
+    e2m["mcf"]="image/vasa";
+    e2m["nap"]="image/naplps";
+    e2m["naplps"]="image/naplps";
+    e2m["niff"]="image/x-niff";
+    e2m["nif"]="image/x-niff";
+    e2m["pbm"]="image/x-portable-bitmap";
+    e2m["pct"]="image/x-pict";
+    e2m["pcx"]="image/x-pcx";
+    e2m["pgm"]="image/x-portable-graymap";
+    //e2m["pgm"]="image/x-portable-greymap";
+    e2m["pic"]="image/pict";
+    e2m["pict"]="image/pict";
+    e2m["pm"]="image/x-xpixmap";
+    e2m["png"]="image/png";
     //e2m["png"]="image/x-png";
-    e2m["pnm"] ="image/x-portable-anymap";
-    e2m["ppm"] ="image/x-portable-pixmap";
-    e2m["ras"] ="image/x-cmu-raster";
-    e2m["rgb"] ="image/x-rgb";
-    e2m["svg"] ="image/svg+xml";
+    e2m["pnm"]="image/x-portable-anymap";
+    e2m["ppm"]="image/x-portable-pixmap";
+    e2m["qif"]="image/x-quicktime";
+    e2m["qtif"]="image/x-quicktime";
+    e2m["qti"]="image/x-quicktime";
+    e2m["ras"]="image/cmu-raster";
+    //e2m["ras"]="image/x-cmu-raster";
+    e2m["rast"]="image/cmu-raster";
+    e2m["rf"]="image/vnd.rn-realflash";
+    e2m["rgb"]="image/x-rgb";
+    e2m["rp"]="image/vnd.rn-realpix";
+    e2m["svf"]="image/vnd.dwg";
+    //e2m["svf"]="image/x-dwg";
+    e2m["svg"]="image/svg+xml";
     e2m["tiff"]="image/tiff";
-    e2m["tif"] ="image/tiff";
-    e2m["xbm"] ="image/x-xbitmap";
-    e2m["xpm"] ="image/x-xpixmap";
-    e2m["xwd"] ="image/x-xwindowdump";
+    //e2m["tiff"]="image/x-tiff";
+    e2m["tif"]="image/tiff";
+    //e2m["tif"]="image/x-tiff";
+    e2m["turbot"]="image/florian";
+    e2m["wbmp"]="image/vnd.wap.wbmp";
+    e2m["xbm"]="image/xbm";
+    //e2m["xbm"]="image/x-xbitmap";
+    //e2m["xbm"]="image/x-xbm";
+    e2m["xif"]="image/vnd.xiff";
+    e2m["xpm"]="image/xpm";
+    //e2m["xpm"]="image/x-xpixmap";
+    //e2m["xpm"]="image/x-xpixmap";
+    e2m["x-png"]="image/png";
+    e2m["xwd"]="image/x-xwd";
+    //e2m["xwd"]="image/x-xwindowdump";
   }
-
 
   static const std::string imgName2Mime(const std::string filename) {
     std::string empty;
