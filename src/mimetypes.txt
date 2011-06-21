@@ -46,6 +46,5 @@ image/x-windows-bmp bmp
 image/x-xbitmap xbm
 image/x-xbm xbm
 image/x-xpixmap pm xpm
-image/x-xpixmap xpm
 image/x-xwd xwd
 image/x-xwindowdump xwd
