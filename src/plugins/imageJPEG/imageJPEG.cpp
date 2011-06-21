@@ -207,14 +207,16 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
   return true;
 }
 bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-#warning JPEGquality
-  int quality=100;
   struct jpeg_compress_struct cinfo;
   struct jpeg_error_mgr jerr;
   /* More stuff */
   FILE * outfile;		/* target file */
-  JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
+  JSAMPROW row_pointer;	/* pointer to JSAMPLE row[s] */
   int row_stride;		/* physical row width in image buffer */
+
+  double fquality=100;
+  props.get("quality", fquality);
+  int quality=fquality;
 
   if(GL_YUV422_GEM==constimage.format) {
     error("don't know how to write YUV-images with libJPEG");
@@ -232,8 +234,9 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   }
   jpeg_stdio_dest(&cinfo, outfile);
 
-  imageStruct image=constimage;
-  image.fixUpDown();
+  imageStruct image; 
+  constimage.convertTo(&image, GL_RGB);
+  //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;
 
   cinfo.image_width = image.xsize; 	/* image width and height, in pixels */
@@ -252,9 +255,12 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
      * Here the array is only one element long, but you could pass
      * more than one scanline at a time if that's more convenient.
      */
-    int rowindex=(image.upsidedown)?(cinfo.next_scanline * row_stride):((cinfo.image_height-cinfo.next_scanline) * row_stride);
-    row_pointer[0] = & image_buffer[rowindex];
-    if(jpeg_write_scanlines(&cinfo, row_pointer, 1) < 0){
+    int rowindex=cinfo.next_scanline;
+    if(!image.upsidedown)
+      rowindex=(cinfo.image_height-cinfo.next_scanline-1);
+    row_pointer = & image_buffer[rowindex * row_stride];
+
+    if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) < 0){
       error("GEM: could not write line %d to image %s", cinfo.next_scanline, filename.c_str());
       jpeg_finish_compress(&cinfo);
       fclose(outfile);
@@ -269,4 +275,18 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
 
   return true;
 }
+
+float imageJPEG::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  float result=0.;
+  if(mimetype == "image/jpeg")// || mimetype == "image/pjpeg")
+    result += 100.;
+
+  // LATER check some properties....
+  if(gem::Properties::UNSET != props.type("quality"))
+    result += 1.;
+
+  return result;
+}
+
+
 #endif
