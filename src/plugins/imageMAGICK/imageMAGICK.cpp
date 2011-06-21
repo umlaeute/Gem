@@ -86,7 +86,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
   }
   return true;
 }
-bool imageMAGICK::save(std::string filename, const imageStruct&image) {
+bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
   std::string cs;

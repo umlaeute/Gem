@@ -1,0 +1,21 @@
+image/bmp bmp
+image/cis-cod cod
+image/gif gif
+image/ief ief
+image/jpeg jpe jpeg jpg
+image/pipeg jfif jpeg
+image/png png
+image/svg+xml svg
+image/tiff tif tiff
+image/x-cmu-raster ras
+image/x-cmx cmx
+image/x-icon ico
+image/x-png png
+image/x-portable-anymap pnm
+image/x-portable-bitmap pbm
+image/x-portable-graymap pgm
+image/x-portable-pixmap ppm
+image/x-rgb rgb
+image/x-xbitmap xbm
+image/x-xpixmap xpm
+image/x-xwindowdump xwd

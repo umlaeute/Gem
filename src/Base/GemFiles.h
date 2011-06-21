@@ -23,8 +23,10 @@ namespace gem {
   
   namespace files {
 
-    GEM_EXTERN std::vector<std::string>getFilenameListing(const std::string pattern);
-    GEM_EXTERN std::string expandEnv(std::string, bool bashfilename=false);
+    GEM_EXTERN std::vector<std::string>getFilenameListing(const std::string&pattern);
+    GEM_EXTERN std::string expandEnv(const std::string&, bool bashfilename=false);
+
+    GEM_EXTERN std::string getExtension(const std::string&filename, bool make_lowercase=false);
 
   };
 };

@@ -130,6 +130,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
    
   return true;
 }
-bool imageSGI::save(std::string filename, const imageStruct&constimage) {
+
+bool imageSGI::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   return false;
 }

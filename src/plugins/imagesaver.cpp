@@ -36,50 +36,13 @@ imagesaver :: ~imagesaver()
 {
 }
 
-bool imagesaver :: enumProperties(gem::Properties&readable,
-			     gem::Properties&writeable) 
-{
-  readable.clear();
-  writeable.clear();
-  return false;
+float imagesaver ::estimateSave( const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  /* the default is rather bad */
+  return 0.;
 }
-
-void imagesaver :: setProperties(gem::Properties&props) {
-  // nada
-  m_properties=props;
-#if 0
-  std::vector<std::string> keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
-    enum gem::Properties::PropertyType typ=props.type(keys[i]);
-    std::cerr  << "key["<<keys[i]<<"]: "<<typ<<" :: ";
-    switch(typ) {
-    case (gem::Properties::NONE):
-      props.erase(keys[i]);
-      break;
-    case (gem::Properties::DOUBLE):
-      std::cerr << gem::any_cast<double>(props.get(keys[i]));
-      break;
-    case (gem::Properties::STRING):
-      std::cerr << "'" << gem::any_cast<std::string>(props.get(keys[i])) << "'";
-      break;
-    default:
-      std::cerr << "<unkown:" << props.get(keys[i]).get_type().name() << ">";
-      break;
-    }
-  }
-  std::cerr << std::endl;
-#endif
-}
-
-void imagesaver :: getProperties(gem::Properties&props) {
-  // nada
-  std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
-    gem::any unset;
-    props.set(keys[i], unset);
-  }
+void imagesaver ::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
 }
 
 

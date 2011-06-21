@@ -197,17 +197,17 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
   TIFFClose(tif);
   return true;
 }
-bool imageTIFF::save(std::string filename, const imageStruct&constimage) {
+bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   TIFF *tif = NULL;
 
   if(GL_YUV422_GEM==constimage.format) {
     error("don't know how to write YUV-images with libTIFF");
-    return 0;
+    return false;
   }
 
   tif=TIFFOpen(filename.c_str(), "w");
   if (tif == NULL) {
-    return(0);
+    return false;
   }
   imageStruct image=constimage;
 
@@ -240,13 +240,13 @@ bool imageTIFF::save(std::string filename, const imageStruct&constimage) {
     unsigned char *buf = srcLine;
     if (TIFFWriteScanline(tif, buf, row, 0) < 0)
       {
-	error("GEM: could not write line %d to image %s", row, filename.c_str());
-	TIFFClose(tif);
-	delete [] buf;
-	return(false);
+        error("GEM: could not write line %d to image %s", row, filename.c_str());
+        TIFFClose(tif);
+        delete [] buf;
+        return(false);
       }
-      srcLine -= yStride;
-    }
+    srcLine -= yStride;
+  }
   TIFFClose(tif);
 
   return true;

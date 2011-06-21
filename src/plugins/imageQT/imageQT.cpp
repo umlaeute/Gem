@@ -226,8 +226,7 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
 
   return ret;
 }
-bool imageQT::save(std::string filename, const imageStruct&constimage) {
-
+bool imageQT::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   OSErr			err;
   ComponentResult		cErr 	= 0;
     

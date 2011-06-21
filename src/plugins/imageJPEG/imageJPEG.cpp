@@ -206,7 +206,7 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
 
   return true;
 }
-bool imageJPEG::save(std::string filename, const imageStruct&constimage) {
+bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
 #warning JPEGquality
   int quality=100;
   struct jpeg_compress_struct cinfo;

@@ -18,7 +18,7 @@
 namespace gem {
   namespace files {
 
-    std::vector<std::string>getFilenameListing(const std::string pattern) {
+    std::vector<std::string>getFilenameListing(const std::string&pattern) {
       std::vector<std::string>result;
 #ifdef _WIN32
       WIN32_FIND_DATA findData;
@@ -82,7 +82,7 @@ namespace gem {
     }
 
 
-    std::string expandEnv(std::string value, bool bashfilename) {
+    std::string expandEnv(const std::string&value, bool bashfilename) {
       std::string ret;
       /* FIXXME: 
        *  ouch, on linux value has to include "$VARIABLENAME", check whether we need "%VARIABLENAME%" on w32
@@ -124,6 +124,28 @@ namespace gem {
       return ret;
     }
 
+
+    std::string getExtension(const std::string&fileName, const bool lower) {
+      std::string Ext;
+      std::string::size_type idx;
+      idx = fileName.rfind('.');
+    
+      if(idx != std::string::npos)
+        Ext=fileName.substr(idx + 1);
+     
+      if(lower) {
+        // lower-case: http://www.cplusplus.com/forum/general/837/
+#if 0
+        std::transform(Ext.begin(), Ext.end(), Ext.begin(), std::tolower);
+#else
+        const int length = Ext.length();
+        for(int i=0; i < length; ++i)  {
+          Ext[i] = std::tolower(Ext[i]);
+        }
+#endif
+      }
+      return Ext;
+    }
 
 
 
