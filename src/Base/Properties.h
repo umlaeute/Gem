@@ -55,13 +55,13 @@ namespace gem
     /* get the value of a property
      *  e.g.: double w=any_cast<double>prop.at("width")
      */
-    virtual gem::any get(const std::string&key);
+    virtual gem::any get(const std::string&key) const;
 
     /* check whether the given key exists
      * if the key was in the property-map, return the type of the property
      * if no key of the given value exists, return <code>PropertyType::UNSET</code>
      */
-    virtual enum PropertyType type(const std::string);
+    virtual enum PropertyType type(const std::string) const;
 
     /* set a property
      *  e.g.: double w=640; prop.set("width", w);
@@ -74,7 +74,7 @@ namespace gem
      *       is of a different (incompatible) type, "value" will not be changed
      */
     template<class Class>
-      bool get(const std::string&key, Class&value) { 
+      bool get(const std::string&key, Class&value) const { 
        try {
 	 value=gem::any_cast<Class>(get(key));
       } catch (gem::bad_any_cast e) {
@@ -85,7 +85,7 @@ namespace gem
 
     /* get all keys
      */
-    virtual std::vector<std::string>keys(void);
+    virtual std::vector<std::string>keys(void) const;
 
     /* 
      * delete a given key from the Properties

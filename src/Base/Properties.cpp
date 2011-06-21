@@ -34,7 +34,7 @@ namespace gem {
   }
 #endif
 
-  any Properties::get(const std::string&key) {
+  any Properties::get(const std::string&key) const {
     return pimpl->valuemap[key]; 
   }
 
@@ -119,7 +119,7 @@ namespace gem {
     }
   } 
 
-  std::vector<std::string>Properties::keys() {
+  std::vector<std::string>Properties::keys() const {
     std::vector<std::string>result;
     std::map<std::string,gem::any>::iterator it;
     for(it = pimpl->valuemap.begin(); it != pimpl->valuemap.end(); ++it)
@@ -127,7 +127,7 @@ namespace gem {
     return result;
   }
 
-  enum Properties::PropertyType Properties::type(std::string key) {
+  enum Properties::PropertyType Properties::type(std::string key) const {
     return pimpl->typemap[key];
   }
 
