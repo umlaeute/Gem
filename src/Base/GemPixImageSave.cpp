@@ -261,7 +261,11 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
     std::string fname=filename;
     std::string mimetype=gem::imgName2Mime(fname);
     gem::Properties props;
-    props.set("quality", (float)type);
+    if(type>0) {
+      props.set("quality", (float)type);
+    }
+    if(mimetype=="")
+      mimetype=(type>0)?"image/jpeg":"image/tiff";
 
     if(piximagesaver->save(*image, filename, mimetype, props)) {
       return (1);

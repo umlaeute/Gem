@@ -30,7 +30,8 @@ struct imageStruct;
 // 
 //   automatically allocates the memory for the user
 //
-// This can read TIFF, SGI, and JPG images
+// This can write TIFF, JPG and other images (depending on which backends are available
+// legacy: type=0 -> TIFF; type>0 -> JPEG and (quality:=type)
 //
 GEM_EXTERN extern int mem2image(imageStruct *image, const char *filename, const int type);
 
