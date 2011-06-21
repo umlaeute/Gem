@@ -15,13 +15,13 @@ image/png png x-png
 image/svg+xml svg
 image/tiff tif tiff
 image/vasa mcf
-image/vnddwg dwg dxf svf
-image/vndfpx fpx
-image/vndnet-fpx fpx
-image/vndrn-realflash rf
-image/vndrn-realpix rp
-image/vndwapwbmp wbmp
-image/vndxiff xif
+image/vnd.dwg dwg dxf svf
+image/vnd.fpx fpx
+image/vnd.net-fpx fpx
+image/vnd.rn-realflash rf
+image/vnd.rn-realpix rp
+image/vnd.wap.wbmp wbmp
+image/vnd.xiff xif
 image/xbm xbm
 image/x-cmu-raster ras
 image/x-cmx cmx
