@@ -27,7 +27,7 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
   
-  vector unsigned char	*RGB_ptr = reinterpret_cast<vector unsigned char*>( rgbdata);
+  const vector unsigned char	*RGB_ptr = reinterpret_cast<const vector unsigned char*>( rgbdata);
   vector unsigned char	*YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
   /* Permutation vector is used to extract the interleaved RGB. */
@@ -138,7 +138,7 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
   
-  vector unsigned char	*RGBA_ptr = reinterpret_cast<vector unsigned char*>( rgbadata);
+  const vector unsigned char	*RGBA_ptr = reinterpret_cast<const vector unsigned char*>( rgbadata);
   vector unsigned char	*YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
   /* Permutation vector is used to extract the interleaved RGBA. */
@@ -250,7 +250,7 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
   
-  vector unsigned char	*BGR_ptr = reinterpret_cast<vector unsigned char*>( bgrdata);
+  const vector unsigned char	*BGR_ptr = reinterpret_cast<const vector unsigned char*>( bgrdata);
   vector unsigned char	*YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
   /* Permutation vector is used to extract the interleaved RGB. */
@@ -363,7 +363,7 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
   vector signed short u1, u2, uAvg, v1, v2, vAvg, out1, out2, out3, out4, uv1, uv2;
   unsigned int i;
   
-  vector unsigned char	*BGRA_ptr = reinterpret_cast<vector unsigned char*>( bgradata);
+  const vector unsigned char	*BGRA_ptr = reinterpret_cast<const vector unsigned char*>( bgradata);
   vector unsigned char	*UYVY_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
   /* Permutation vector is used to extract the interleaved BGRA. */
@@ -414,10 +414,10 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
 
     /* Load the 4 BGRA input vectors and seperate into red,
        green and blue from the interleaved format. */
-    vector unsigned char *vec1 = BGRA_ptr++;
-    vector unsigned char *vec2 = BGRA_ptr++;
-    vector unsigned char *vec3 = BGRA_ptr++;
-    vector unsigned char *vec4 = BGRA_ptr++;
+    const vector unsigned char *vec1 = BGRA_ptr++;
+    const vector unsigned char *vec2 = BGRA_ptr++;
+    const vector unsigned char *vec3 = BGRA_ptr++;
+    const vector unsigned char *vec4 = BGRA_ptr++;
 	
     tc0 = vec_perm( *vec1, *vec2, vPerm1 ); // B0..B7  G0..G7
     tc1 = vec_perm( *vec1, *vec2, vPerm2 ); // R0..R7
@@ -497,10 +497,10 @@ void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
   // #1. Don't use the pointers. Use vec_ld with an index that you increment (by 16) instead.
   vector unsigned char *pixels1=reinterpret_cast<vector unsigned char *>(data);
   vector unsigned char *pixels2=reinterpret_cast<vector unsigned char *>(data+(xsize*2));
-  vector unsigned short *py1 = reinterpret_cast<vector unsigned short *>(Y);
-  vector unsigned short *py2 = reinterpret_cast<vector unsigned short *>(Y + xsize );
-  vector unsigned short *pu = reinterpret_cast<vector unsigned short *>(U);
-  vector unsigned short *pv = reinterpret_cast<vector unsigned short *>(V);
+  const vector unsigned short *py1 = reinterpret_cast<const vector unsigned short *>(Y);
+  const vector unsigned short *py2 = reinterpret_cast<const vector unsigned short *>(Y + xsize );
+  const vector unsigned short *pu = reinterpret_cast<const vector unsigned short *>(U);
+  const vector unsigned short *pv = reinterpret_cast<const vector unsigned short *>(V);
   vector unsigned short uvAdd = static_cast<vector unsigned short>( 128, 128, 128, 128,
                                                          128, 128, 128, 128 );
   vector unsigned short yShift = static_cast<vector unsigned short>( 7, 7, 7, 7, 7, 7, 7, 7 );
@@ -569,12 +569,12 @@ void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
   }
 }
 
-void YUV422_to_YV12_altivec(const short*pY, const short*pY2, const short*pU, const short*pV,
-			    unsigned char *gem_image, int xsize, int ysize)
+void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
+			    const unsigned char *gem_image, int xsize, int ysize)
 {
   // UYVY UYVY UYVY UYVY
-  vector unsigned char *pixels1=reinterpret_cast<vector unsigned char *>(gem_image);
-  vector unsigned char *pixels2=reinterpret_cast<vector unsigned char *>(gem_image+(xsize*2));
+  const vector unsigned char *pixels1=reinterpret_cast<const vector unsigned char *>(gem_image);
+  const vector unsigned char *pixels2=reinterpret_cast<const vector unsigned char *>(gem_image+(xsize*2));
   // PDP packet to be filled:
   // first Y plane
   vector signed short *py1 = reinterpret_cast<vector signed short *>(pY);
@@ -659,7 +659,7 @@ void YUV422_to_YV12_altivec(const short*pY, const short*pY2, const short*pU, con
 void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, 
 			    size_t pixelnum, unsigned char *output)
 {
-  vector unsigned char *UYVY_ptr=reinterpret_cast<vector unsigned char *>(yuvdata);
+  const vector unsigned char *UYVY_ptr=reinterpret_cast<const vector unsigned char *>(yuvdata);
   vector unsigned char *BGRA_ptr=reinterpret_cast<vector unsigned char *>(output);
 
   vector unsigned int vShift;
@@ -723,7 +723,7 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
   for ( unsigned int i = 0; i < (pixelnum/sizeof(vector unsigned char)); i++ ) {
 
     // Load UYUV input vector
-	vector unsigned char *vec1 = UYVY_ptr++;
+	const vector unsigned char *vec1 = UYVY_ptr++;
 
 	//expand the UInt8's to short's
 	hiImage = static_cast<vector signed short>(vec_mergeh( zero, *vec1 ));

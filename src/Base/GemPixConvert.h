@@ -147,8 +147,8 @@ LOG
   void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
                               unsigned char *data, int xsize, int ysize);
 # ifndef NO_VECTORINT_TO_VECTORUNSIGNEDINT
-  void YUV422_to_YV12_altivec(const short*pY, const short*pY2, const short*pU, const short*pV,
-                              unsigned char *gem_image, int xsize, int ysize);
+  void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
+                              const unsigned char *gem_image, int xsize, int ysize);
 # endif
 #endif /* AltiVec */
 
