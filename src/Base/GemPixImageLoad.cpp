@@ -127,10 +127,10 @@ gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 namespace gem { namespace image { namespace load {
   struct ImageLoaderWorkerThread : public gem::thread::SynchedWorkerThread {
     struct InData {
-      callback*cb;
+      callback cb;
       void*userdata;
       std::string filename;
-      InData(callback*cb_, void*data_, std::string fname) :
+      InData(callback cb_, void*data_, std::string fname) :
 	cb(cb_),
 	userdata(data_),
 	filename(fname) {
@@ -138,7 +138,7 @@ namespace gem { namespace image { namespace load {
     };
 
     struct OutData {
-      callback*cb;
+      callback cb;
       void*userdata;
       imageStruct*img;
       gem::Properties props;
@@ -179,7 +179,7 @@ namespace gem { namespace image { namespace load {
       delete out;
     };
 
-    virtual id_t queue(callback*cb, void*userdata, std::string filename) {
+    virtual id_t queue(callback cb, void*userdata, std::string filename) {
       InData *in = new InData(cb, userdata, filename);
       return SynchedWorkerThread::queue(reinterpret_cast<void*>(in));
     };
@@ -218,7 +218,7 @@ namespace gem { namespace image { namespace load {
     return false;
   }
   
-  id_t async(callback*cb,
+  id_t async(callback cb,
 	     void*userdata,
 	     const std::string filename) {
     if(NULL==cb)

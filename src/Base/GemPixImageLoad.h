@@ -93,7 +93,7 @@ namespace gem {
        * (and no callback will ever be called)
        *
        */
-      GEM_EXTERN extern id_t async(callback*cb,
+      GEM_EXTERN extern id_t async(callback cb,
 				   void*userdata,
 				   const std::string filename);
     
