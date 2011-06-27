@@ -116,8 +116,9 @@ void    pix_image:: loaded(const gem::image::load::id_t ID,
     m_loadedImage=img;
     m_loadedImage->copy2Image(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
+    verbose(0, "loaded image '%s'", m_filename.c_str());
   } else {
-    error("failed to load image %d", ID);
+    error("failed to load image '%s'", m_filename.c_str());
   }
 }
 void    pix_image:: loadCallback(void*data,
