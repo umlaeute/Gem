@@ -96,7 +96,11 @@ void pix_image :: openMess(std::string filename)
   if(gem::image::load::INVALID == m_id)
     success=false;
 
-  if(!success) {
+  if(success) {
+    if(gem::image::load::IMMEDIATE!=m_id) {
+      verbose(1, "loading image '%s' with ID:%d", m_filename.c_str(), m_id);
+    }
+  } else {
     error("loading of '%s' failed", m_filename.c_str());
   }
 }
