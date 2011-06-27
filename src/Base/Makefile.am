@@ -133,6 +133,4 @@ libBase_la_SOURCES=  \
     Properties.h \
     TextBase.cpp \
     TextBase.h \
-    ThreadMutex.cpp \
-    ThreadMutex.h \
     wglew.h

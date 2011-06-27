@@ -25,7 +25,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # define private unicap_private
 #  include <unicap.h>
 # undef private
-# include "Base/ThreadMutex.h"
+# include "Gem/ThreadMutex.h"
 #endif
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
