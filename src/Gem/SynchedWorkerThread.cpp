@@ -40,12 +40,17 @@ namespace gem { namespace thread {
       me->tick();
     }
     void tick(void) {
+      //post("tick");
       id_t ID=WorkerThread::IMMEDIATE;
       void*data=0;
       do {
-	ID=owner->dequeue(&data);
+	ID=owner->dequeue(data);
+	//post("dequeued %d", ID);
+	if(ID==WorkerThread::INVALID)
+	  break;
+
 	owner->done(ID, data);
-      } while(ID!=WorkerThread::INVALID);
+      } while(true);
 
       m_flag.lock();
       flag=false;
@@ -53,6 +58,7 @@ namespace gem { namespace thread {
     }
 
     void tack(void) {
+      //post("signal tack");
       m_flag.lock();
       bool done=flag;
       flag=true;

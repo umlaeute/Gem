@@ -21,6 +21,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include <iostream>
+
 
 namespace gem { namespace thread {
 
@@ -45,7 +47,7 @@ namespace gem { namespace thread {
 
     pthread_t p_thread;
 
-    PIMPL(WorkerThread*x) : owner(x), ID(1),
+    PIMPL(WorkerThread*x) : owner(x), ID(0),
 			    keeprunning(true), isrunning(false),
 			    cancelledID(WorkerThread::INVALID)
     {
@@ -86,8 +88,12 @@ namespace gem { namespace thread {
 	me->q_todo.pop();
 	me->m_todo.unlock();
 
+	//std::cerr << "processing data " << in.second  << " as "<<in.first<<std::endl;
+
 	out.first = in.first;
 	out.second=wt->process(in.first, in.second);
+
+	//std::cerr << "done data " << out.second  << " as "<<out.first<<std::endl;
 
 	me->m_done.lock();
 	bool newdata=me->q_todo.empty();
@@ -149,6 +155,9 @@ namespace gem { namespace thread {
 
     m_pimpl->m_todo.lock();
     id_t ID=m_pimpl->nextID();
+
+    //std::cerr << "queuing data " << data  << " as "<<ID<<std::endl;
+
     DATA.first = ID;
     m_pimpl->q_todo.push(DATA);
     m_pimpl->m_todo.unlock();
@@ -159,20 +168,22 @@ namespace gem { namespace thread {
   bool WorkerThread::cancel(WorkerThread::id_t ID) {
     return false;
   }
-  WorkerThread::id_t WorkerThread::dequeue(void**data) {
+  WorkerThread::id_t WorkerThread::dequeue(void*&data) {
     std::pair <id_t, void*> DATA;
     DATA.first=WorkerThread::INVALID;
     DATA.second=0;
 
     m_pimpl->m_done.lock();
     if(!m_pimpl->q_done.empty()) {
-      m_pimpl->q_done.front();
+      DATA=m_pimpl->q_done.front();
       m_pimpl->q_done.pop();
     }
     m_pimpl->m_done.unlock();
 
     id_t ID=DATA.first;
-    *data=DATA.second;
+    data=DATA.second;
+    //    std::cerr<<"dequeuing "<<data<<" as "<< ID<<std::endl;
+
 
     return ID;
   }

@@ -47,7 +47,7 @@ namespace gem { namespace thread {
 
       // dequeue the next datachunk from the DONE queue
       // if the queue is empty, INVALID is returned
-      virtual id_t dequeue(void**data);
+      virtual id_t dequeue(void*&data);
 
     protected:
 
