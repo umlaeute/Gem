@@ -109,6 +109,44 @@ namespace gem {
 
 gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 
+namespace gem { namespace image { namespace load {
+
+  bool sync(const std::string filename,
+	    imageStruct&result,
+	    gem::Properties&props) {
+    gem::PixImageLoader*piximageloader=gem::PixImageLoader::getInstance();
+    if(piximageloader) {
+      if(piximageloader->load(filename, result, props)) {
+	return true;
+      }
+    }
+    return false;
+  }
+  
+  id_t async(callback*cb,
+	     void*userdata,
+	     const std::string filename) {
+    if(NULL==cb)
+      return INVALID;
+
+    imageStruct*result=new imageStruct;
+    gem::Properties props;
+    if(sync(filename, *result, props)) {
+      (*cb)(userdata, IMMEDIATE, result, props);
+      return IMMEDIATE;
+    }
+    return INVALID;
+  }
+
+  bool cancel(id_t ID) {
+    return false;
+  }
+
+}; // load
+}; // image
+}; // gem
+
+
 /***************************************************************************
  *
  * image2mem - Read in an image in various file formats
@@ -116,15 +154,11 @@ gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
  ***************************************************************************/
 GEM_EXTERN imageStruct *image2mem(const char *filename)
 {
-   imageStruct *image_block = NULL;
-   gem::PixImageLoader*piximageloader=gem::PixImageLoader::getInstance();
-   if(piximageloader) {
-     std::string fname=filename;
-     image_block=new imageStruct();
-     gem::Properties props;
-     if(piximageloader->load(filename, *image_block, props)) {
-       return image_block;
-     }
-   }
-   return NULL;
+  gem::Properties props;
+  imageStruct *img = new imageStruct();
+  if(gem::image::load::sync(filename, *img, props))
+    return img;
+  
+  delete img;
+  return NULL;
 }
