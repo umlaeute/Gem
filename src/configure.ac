@@ -6,7 +6,7 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([foreign])
 
-AC_CONFIG_FILES([Makefile Base/Makefile RTE/Makefile plugins/Makefile ])
+AC_CONFIG_FILES([Makefile Gem/Makefile RTE/Makefile Base/Makefile plugins/Makefile ])
 
 ## plugins that use this autoconf instance for configuration
 AC_CONFIG_FILES([plugins/imageQT/Makefile])

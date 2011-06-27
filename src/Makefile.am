@@ -33,7 +33,7 @@ Gem_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
 # LIBADD or LDADD for convenience libraries?
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
-Gem_la_LIBADD += Base/libBase.la RTE/libRTE.la plugins/libplugins.la
+Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Base/libBase.la plugins/libplugins.la
 
 if TARGET_CONTROLS
 SUBDIRS+=Controls
