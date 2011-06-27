@@ -22,9 +22,6 @@ LOG
 #include "Base/GemPixUtil.h"
 #include "Base/GemPixImageLoad.h"
 
-#ifdef HAVE_PTHREADS
-# include <pthread.h>
-#endif
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -82,27 +79,9 @@ class GEM_EXTERN pix_image : public GemBase
 
     	//////////
     	// do we want threaded reading (default: yes);
-    	virtual void	threadMess(int onoff);
+    	virtual void	threadMess(bool onoff);
+	bool m_wantThread;
  
-
-#ifdef HAVE_PTHREADS
-        /* a thread for loading the image */
-        static void* openThread(void*);
-
-        pthread_t m_thread_id;
-        pthread_mutex_t *m_mutex;
-
-        bool m_thread_continue;
-#endif /* HAVE_PTHREADS */
-
-        //////////
-        // do we have a running thread? always FALSE when compiled without threads
-        bool m_thread_running;
-
-        //////////
-        // did a thread just finished loading an image?
-        bool m_threadloaded;
-
         //////////
         // the full filename of the image
         char            m_filename[MAXPDSTRING];
@@ -117,6 +96,10 @@ class GEM_EXTERN pix_image : public GemBase
 	//////////
 	// The current image
 	imageStruct     m_imageStruct;
+
+	void     loaded(unsigned int ID, 
+			imageStruct*img,
+			const gem::Properties&props);
     	    	
     private:
     	
@@ -124,6 +107,11 @@ class GEM_EXTERN pix_image : public GemBase
     	// static member functions
     	static void 	openMessCallback(void *data, t_symbol *filename);
     	static void 	threadMessCallback(void *data, t_floatarg f);
+
+	static void     loadCallback(void*data, 
+				     unsigned int ID, 
+				     imageStruct*img,
+				     const gem::Properties&props);
 };
 
 #endif	// for header file

@@ -33,6 +33,8 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM);
 
+
+
 /////////////////////////////////////////////////////////
 //
 // pix_image
@@ -42,26 +44,14 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM);
 //
 /////////////////////////////////////////////////////////
 pix_image :: pix_image(t_symbol *filename) :
-#ifdef HAVE_PTHREADS
-  m_thread_id(0), m_mutex(NULL), m_thread_continue(false),
-#endif
-  m_thread_running(false), m_threadloaded(false), 
+  m_wantThread(true),
   m_loadedImage(NULL)
 {
   int i=MAXPDSTRING;
   while(i--)m_filename[i]=0;
 
   m_pixBlock.image = m_imageStruct;
-#ifdef HAVE_PTHREADS
-  m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
-  if(m_mutex){
-    if ( pthread_mutex_init(m_mutex, NULL) < 0 ) {
-      free(m_mutex);
-      m_mutex=NULL;
-    } else 
-      threadMess(1);
-  }
-#endif
+
   if(filename!=&s_)openMess(filename);
 
 }
@@ -72,126 +62,19 @@ pix_image :: pix_image(t_symbol *filename) :
 /////////////////////////////////////////////////////////
 pix_image :: ~pix_image()
 {
-  threadMess(0);
   cleanImage();
 
-#ifdef HAVE_PTHREADS
-  freebytes(m_mutex ,sizeof(pthread_mutex_t));
-#endif
 }
 
-void pix_image :: threadMess(int onoff)
+void pix_image :: threadMess(bool onoff)
 {
-#ifdef HAVE_PTHREADS
-  if(m_mutex){ /* if we don't have a mutex, we don't want threads either! */
-    if(onoff){
-      /* if we don't have a thread, create one */
-      if(!m_thread_running){
-        int err=0;
-        m_thread_running=false;
-        m_thread_continue=true;
-       
-        pthread_mutex_lock(m_mutex);
-
-        if((err=pthread_create(&m_thread_id, 0, openThread, this)))
-          {
-            /* ack! thread creation failed! fall back to unthreaded loading */
-            //post("couldn't create thread! %d", err);
-          } else {
-          // wait until the thread is up and running
-          pthread_mutex_lock(m_mutex);
-          pthread_mutex_unlock(m_mutex);
-          // now m_thread_running has been set by the child thread */
-
-          //post("created thread %x", m_thread_id);
-          return;
-        }
-      }
-    } else {
-      /* if we have a thread, destroy it! */
-      if(m_thread_running){
-        int counter=0;
-        m_thread_continue=false;
-        pthread_join(m_thread_id, 0);
-        while(m_thread_running)counter++;
-      }
-      m_thread_id=0;
-    }
-  }
-#endif
+  m_wantThread=onoff;
 }
 
 /////////////////////////////////////////////////////////
 // openMess
 //
 /////////////////////////////////////////////////////////
-#ifdef HAVE_PTHREADS
-void *pix_image :: openThread(void*you)
-{
-  pix_image *me=(pix_image*)you;
-  pthread_mutex_t *mutex=me->m_mutex;
-  imageStruct     *loadedImage=me->m_loadedImage;
-  struct timeval timout;
-  int i=MAXPDSTRING;
-  char*orgfilename=new char[MAXPDSTRING];
-  while(i--)orgfilename[i]=0;
-
-  me->m_thread_running=true;
-  
-  // now that m_thread_running is set, we unlock the main-thread
-  // the lock has been set outside
-  pthread_mutex_unlock(mutex);
-
-  while(me->m_thread_continue){
-
-    if(me->m_threadloaded || (*me->m_filename==0)) {
-      
-      // nothing to do, so sleep a bit...
-      timout.tv_sec = 0;
-      timout.tv_usec=100;
-      select(0,0,0,0,&timout);
-    } else {
-      /* make a backup-copy of the filename that is stored locally
-       * before returning the data to Gem we check, whether the 
-       * main thread still wants _this_ file to be opened
-       */
-
-      pthread_mutex_lock(mutex);
-      strcpy(orgfilename, me->m_filename);
-      pthread_mutex_unlock(mutex);
-
-      //post("loading in thread %s", orgfilename);
-      
-      imageStruct*newloadedImage = image2mem(orgfilename);
-      
-      pthread_mutex_lock(mutex);
-      if(newloadedImage) {
-	if(loadedImage)delete loadedImage;
-	loadedImage=newloadedImage;
-      }
-
-      if(!strcmp(orgfilename, me->m_filename))
-        {
-          /* ok, we got what we wanted!  */
-          me->m_loadedImage=loadedImage;
-          me->m_threadloaded=true;
-        }
-      pthread_mutex_unlock(mutex);
-    }
-  }
-
-  if(me->m_loadedImage==loadedImage)
-    me->m_loadedImage=NULL;
-
-  if(loadedImage)delete loadedImage;  loadedImage=NULL;
-  if(orgfilename)delete[]orgfilename; orgfilename=NULL;
-  
-  me->m_thread_running=false;
-  return 0;
-}
-#endif
-
-
 void pix_image :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name || 0==*filename->s_name)return;
@@ -199,24 +82,46 @@ void pix_image :: openMess(t_symbol *filename)
   std::string fn = findFile(filename->s_name);
   snprintf(m_filename, MAXPDSTRING, "%s", fn.c_str());
 
-  m_threadloaded=false;
+  gem::image::load::callback cb = loadCallback;
+  void*userdata=reinterpret_cast<void*>(this);
+  std::string fname=filename->s_name;
+  gem::image::load::id_t ID = gem::image::load::INVALID;
 
-  if(m_thread_running)
-    { 
-      /* we have a thread for image-loading; delegate the hard stuff to it */
-      return;
-    }
 
-  cleanImage();
+  if(m_wantThread) {
+    ID = gem::image::load::async(cb, userdata, fname);
+  } else {
+    ID = gem::image::load::sync (cb, userdata, fname);
+  }
   
   if ( !(m_loadedImage = image2mem(m_filename)) )
     {
       return;
     }
-  m_loadedImage->copy2Image(&m_pixBlock.image);
-  m_pixBlock.newimage = 1;
-  post("loaded image: %s", m_filename);
 }
+
+
+void    pix_image:: loaded(unsigned int ID, 
+			   imageStruct*img,
+			   const gem::Properties&props) {
+
+  cleanImage();
+  if(img) {
+    m_loadedImage=img;
+    m_loadedImage->copy2Image(&m_pixBlock.image);
+    m_pixBlock.newimage = 1;
+  } else {
+    error("failed to load image %d", ID);
+  }
+}
+void    pix_image:: loadCallback(void*data,
+				 unsigned int ID, 
+				 imageStruct*img,
+				 const gem::Properties&props) {
+  pix_image*me=reinterpret_cast<pix_image*>(data);
+  me->loaded(ID, img, props);
+}
+    	    	
 
 /////////////////////////////////////////////////////////
 // render
@@ -229,28 +134,6 @@ void pix_image :: render(GemState *state)
     return;
   }
 
-#ifdef HAVE_PTHREADS
-  if(m_thread_running){
-    pthread_mutex_lock(m_mutex);
-      
-    if(m_threadloaded)
-      {
-        /* yep, the thread might have something for us */
-        if(m_loadedImage){
-          m_loadedImage->copy2Image(&m_pixBlock.image);
-          m_pixBlock.newimage = 1;
-          post("thread loaded image: %s", m_filename);
-        }
-        m_threadloaded=false;
-        *m_filename=0;
-          
-        if (m_cache&&m_cache->resendImage){
-          // we just copied it, so we don't want to resend the image...
-          m_cache->resendImage=0;
-        }
-      }
-  }
-#endif
   // do we need to reload the image?    
   if (m_cache&&m_cache->resendImage)
     {
@@ -269,10 +152,6 @@ void pix_image :: postrender(GemState *state)
 {
   m_pixBlock.newimage = 0;
   state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
-#ifdef HAVE_PTHREADS
-  if(m_mutex)
-    pthread_mutex_unlock(m_mutex);
-#endif /* HAVE_PTHREADS */
 }
 
 /////////////////////////////////////////////////////////
