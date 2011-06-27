@@ -50,7 +50,7 @@ pix_image :: pix_image(t_symbol *filename) :
 {
   m_pixBlock.image = m_imageStruct;
 
-  if(filename!=&s_)openMess(filename);
+  if(filename!=&s_)openMess(filename->s_name);
 
 }
 
@@ -74,13 +74,13 @@ void pix_image :: threadMess(bool onoff)
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_image :: openMess(t_symbol *filename)
+void pix_image :: openMess(std::string filename)
 {
-  if(NULL==filename || NULL==filename->s_name || 0==*filename->s_name)return;
+  if(filename.empty())return;
 
   gem::image::load::cancel(m_id);
  
-  m_filename = findFile(filename->s_name);
+  m_filename = findFile(filename);
 
   gem::image::load::callback cb = loadCallback;
   void*userdata=reinterpret_cast<void*>(this);
@@ -194,16 +194,6 @@ void pix_image :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_image :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_image::openMessCallback),
-                  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_image::threadMessCallback),
-                  gensym("thread"), A_FLOAT, A_NULL);
-}
-void pix_image :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-void pix_image :: threadMessCallback(void *data, t_floatarg f)
-{
-  GetMyClass(data)->threadMess(f>0);
+  CPPEXTERN_MSG1(classPtr, "open", openMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
 }

@@ -56,7 +56,7 @@ class GEM_EXTERN pix_image : public GemBase
 
     	//////////
     	// When an open is received
-    	virtual void	openMess(t_symbol *filename);
+    	virtual void	openMess(std::string filename);
     	
     	//////////
     	// Do the rendering
@@ -106,9 +106,6 @@ class GEM_EXTERN pix_image : public GemBase
     	
     	//////////
     	// static member functions
-    	static void 	openMessCallback(void *data, t_symbol *filename);
-    	static void 	threadMessCallback(void *data, t_floatarg f);
-
 	static void     loadCallback(void*data, 
 				     gem::image::load::id_t ID, 
 				     imageStruct*img,
