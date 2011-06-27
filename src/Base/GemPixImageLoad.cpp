@@ -125,7 +125,7 @@ gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 
 
 namespace gem { namespace image { namespace load {
-  struct ImageLoaderWorkerThread : public gem::thread::SynchedWorkerThread {
+  struct PixImageThreadLoader : public gem::thread::SynchedWorkerThread {
     struct InData {
       callback cb;
       void*userdata;
@@ -150,13 +150,13 @@ namespace gem { namespace image { namespace load {
     };
 
     gem::PixImageLoader*imageloader;
-    ImageLoaderWorkerThread(void) :
+    PixImageThreadLoader(void) :
       imageloader(gem::PixImageLoader::getInstance())
     { 
       if(!imageloader->isThreadable()) 
 	throw(42);
     }
-    virtual ~ImageLoaderWorkerThread(void) {
+    virtual ~PixImageThreadLoader(void) {
     }
 
     virtual void* process(id_t ID, void*data) {
@@ -169,14 +169,19 @@ namespace gem { namespace image { namespace load {
 	delete out->img;
 	out->img=0;
       }
-
-      return reinterpret_cast<void*>(out);
+      void*result=reinterpret_cast<void*>(out);
+      //post("processing[%d] %p -> %p", ID, data, result);
+      return result;
     };
 
     virtual void done(id_t ID, void*data) {
       OutData*out=reinterpret_cast<OutData*>(data);
-      (*(out->cb))(out->userdata, ID, out->img, out->props);
-      delete out;
+      if(out) {
+	(*(out->cb))(out->userdata, ID, out->img, out->props);
+	delete out;
+      } else {
+	post("did %d but no data returned!", ID);
+      }
     };
 
     virtual id_t queue(callback cb, void*userdata, std::string filename) {
@@ -184,24 +189,25 @@ namespace gem { namespace image { namespace load {
       return SynchedWorkerThread::queue(reinterpret_cast<void*>(in));
     };
 
-    static ImageLoaderWorkerThread*getInstance(void) {
-      if(instance)
-	return instance;
-
-      try {
-	instance=new ImageLoaderWorkerThread();
-      } catch(int i) {
-	static bool dunnit=false;
-	if(!dunnit) {
-	  verbose(1, "threaded ImageLoading not supported!");
+    static PixImageThreadLoader*getInstance(void) {
+      if(NULL==s_instance) {
+	try {
+	  s_instance=new PixImageThreadLoader();
+	} catch(int i) {
+	  static bool dunnit=false;
+	  if(!dunnit) {
+	    verbose(1, "threaded ImageLoading not supported!");
+	  }
+	  dunnit=true;
 	}
-	dunnit=true;
       }
-    }
+      return s_instance;
+    };
 
   private:
-    static ImageLoaderWorkerThread*instance;
+    static PixImageThreadLoader*s_instance;
   };
+  PixImageThreadLoader*PixImageThreadLoader::s_instance=NULL;
 
 
 
@@ -224,7 +230,10 @@ namespace gem { namespace image { namespace load {
     if(NULL==cb)
       return INVALID;
 
-    ImageLoaderWorkerThread*threadloader=ImageLoaderWorkerThread::getInstance();
+    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
+
+    //post("threadloader %p", threadloader);
+
     if(threadloader) {
       return threadloader->queue(cb, userdata, filename);
     }
