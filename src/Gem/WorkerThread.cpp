@@ -90,8 +90,10 @@ namespace gem { namespace thread {
 	out.second=wt->process(in.first, in.second);
 
 	me->m_done.lock();
+	bool newdata=me->q_todo.empty();
 	if(me->cancelledID != out.first) {
 	  me->q_done.push(out);
+	  if(newdata)wt->signal();
 	}
 	me->m_done.unlock();
       }
@@ -127,6 +129,8 @@ namespace gem { namespace thread {
   }
 
   WorkerThread::~WorkerThread(void) {
+    stop();
+
     delete m_pimpl;
     m_pimpl=0;
   }
