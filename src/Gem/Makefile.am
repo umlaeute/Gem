@@ -18,5 +18,10 @@ libGem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libGem_la_SOURCES=  \
     any.h \
-    RTE.h
-
+    RTE.h \
+    ThreadMutex.cpp \
+    ThreadMutex.h \
+    ThreadSemaphore.cpp \
+    ThreadSemaphore.h \
+    WorkerThread.cpp \
+    WorkerThread.h
