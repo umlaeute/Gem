@@ -84,7 +84,8 @@ class GEM_EXTERN pix_image : public GemBase
  
         //////////
         // the full filename of the image
-        char            m_filename[MAXPDSTRING];
+	std::string            m_filename;
+	gem::image::load::id_t m_id;
    
     	//////////
     	// The original image
@@ -97,7 +98,7 @@ class GEM_EXTERN pix_image : public GemBase
 	// The current image
 	imageStruct     m_imageStruct;
 
-	void     loaded(unsigned int ID, 
+	void     loaded(const gem::image::load::id_t ID, 
 			imageStruct*img,
 			const gem::Properties&props);
     	    	
@@ -109,7 +110,7 @@ class GEM_EXTERN pix_image : public GemBase
     	static void 	threadMessCallback(void *data, t_floatarg f);
 
 	static void     loadCallback(void*data, 
-				     unsigned int ID, 
+				     gem::image::load::id_t ID, 
 				     imageStruct*img,
 				     const gem::Properties&props);
 };

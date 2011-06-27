@@ -45,11 +45,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 pix_image :: pix_image(t_symbol *filename) :
   m_wantThread(true),
-  m_loadedImage(NULL)
+  m_loadedImage(NULL),
+  m_id(gem::image::load::INVALID)
 {
-  int i=MAXPDSTRING;
-  while(i--)m_filename[i]=0;
-
   m_pixBlock.image = m_imageStruct;
 
   if(filename!=&s_)openMess(filename);
@@ -63,7 +61,8 @@ pix_image :: pix_image(t_symbol *filename) :
 pix_image :: ~pix_image()
 {
   cleanImage();
-
+  gem::image::load::cancel(m_id);
+  m_id=gem::image::load::INVALID;
 }
 
 void pix_image :: threadMess(bool onoff)
@@ -78,32 +77,39 @@ void pix_image :: threadMess(bool onoff)
 void pix_image :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name || 0==*filename->s_name)return;
+
+  gem::image::load::cancel(m_id);
  
-  std::string fn = findFile(filename->s_name);
-  snprintf(m_filename, MAXPDSTRING, "%s", fn.c_str());
+  m_filename = findFile(filename->s_name);
 
   gem::image::load::callback cb = loadCallback;
   void*userdata=reinterpret_cast<void*>(this);
-  std::string fname=filename->s_name;
-  gem::image::load::id_t ID = gem::image::load::INVALID;
 
+  m_id = gem::image::load::INVALID;
 
+  bool success=false;
   if(m_wantThread) {
-    ID = gem::image::load::async(cb, userdata, fname);
+    success=gem::image::load::async(cb, userdata, m_filename, m_id);
   } else {
-    ID = gem::image::load::sync (cb, userdata, fname);
+    success=gem::image::load:: sync(cb, userdata, m_filename, m_id);
   }
-  
-  if ( !(m_loadedImage = image2mem(m_filename)) )
-    {
-      return;
-    }
+  if(gem::image::load::INVALID == m_id)
+    success=false;
+
+  if(!success) {
+    error("loading of '%s' failed", m_filename.c_str());
+  }
 }
 
 
-void    pix_image:: loaded(unsigned int ID, 
+void    pix_image:: loaded(const gem::image::load::id_t ID, 
 			   imageStruct*img,
 			   const gem::Properties&props) {
+
+  if(ID!=m_id || ID == gem::image::load::INVALID) {
+    verbose(0, "discarding image with ID %d", ID);
+    return;
+  }
 
   cleanImage();
   if(img) {
@@ -115,7 +121,7 @@ void    pix_image:: loaded(unsigned int ID,
   }
 }
 void    pix_image:: loadCallback(void*data,
-				 unsigned int ID, 
+				 gem::image::load::id_t ID, 
 				 imageStruct*img,
 				 const gem::Properties&props) {
   pix_image*me=reinterpret_cast<pix_image*>(data);
