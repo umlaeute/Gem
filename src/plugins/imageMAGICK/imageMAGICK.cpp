@@ -30,9 +30,9 @@ using namespace gem::plugins;
 
 
 namespace MagickCore {};
-namespace MagickLib  {};
-
 using namespace MagickCore;
+
+namespace MagickLib  {};
 using namespace MagickLib;
 
 REGISTER_IMAGEFACTORY("magick", imageMAGICK);
@@ -52,7 +52,12 @@ imageMAGICK :: imageMAGICK()
   //post("imageMAGICK");
   char**mimelist; 
   char what;
-  size_t length;
+#if defined MagickLibInterface && (MagickLibInterface > 3)
+  size_t
+#else
+  unsigned long
+#endif
+    length;
   ExceptionInfo exception;
   GetExceptionInfo(&exception);
   mimelist=GetMimeList("image/*", &length, &exception);
