@@ -23,5 +23,7 @@ libGem_la_SOURCES=  \
     ThreadMutex.h \
     ThreadSemaphore.cpp \
     ThreadSemaphore.h \
+    SynchedWorkerThread.cpp \
+    SynchedWorkerThread.h \
     WorkerThread.cpp \
     WorkerThread.h
