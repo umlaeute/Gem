@@ -11,9 +11,21 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#define WORKERTHREAD_DEQUEUE
+
 
 #include "WorkerThread.h"
-#include <queue>
+#ifdef WORKERTHREAD_DEQUEUE
+# include <deque>
+# define QUEUE std::deque
+# define POP pop_front
+# define PUSH push_back
+#else
+# include <queue>
+# define QUEUE std::queue
+# define POP pop
+# define PUSH push
+#endif
 
 #include "ThreadMutex.h"
 #include "ThreadSemaphore.h"
@@ -22,6 +34,7 @@
 #include <unistd.h>
 
 #include <iostream>
+
 
 
 namespace gem { namespace thread {
@@ -37,19 +50,16 @@ namespace gem { namespace thread {
     bool keeprunning;
     bool isrunning;
 
-    std::queue< std::pair<WorkerThread::id_t, void*> > q_todo;
-    std::queue< std::pair<WorkerThread::id_t, void*> > q_done;
+    QUEUE< std::pair<WorkerThread::id_t, void*> > q_todo;
+    QUEUE< std::pair<WorkerThread::id_t, void*> > q_done;
     Mutex m_todo;
     Mutex m_done;
     Semaphore s_newdata;
 
-    WorkerThread::id_t cancelledID;
-
     pthread_t p_thread;
 
     PIMPL(WorkerThread*x) : owner(x), ID(0),
-			    keeprunning(true), isrunning(false),
-			    cancelledID(WorkerThread::INVALID)
+			    keeprunning(true), isrunning(false)
     {
 
     }
@@ -76,7 +86,9 @@ namespace gem { namespace thread {
 	me->m_todo.lock();
 	if(me->q_todo.empty()) {
 	  me->m_todo.unlock();
+	  //std::cerr << "THREAD: waiting for new data...freeze"<<std::endl;
 	  me->s_newdata.freeze();
+	  //std::cerr << "THREAD: waiting for new data...thawed"<<std::endl;
 
 	  // either new data has arrived or we are told to stop
 	  if(!me->keeprunning)
@@ -85,24 +97,26 @@ namespace gem { namespace thread {
 	  me->m_todo.lock();
 	}
 	in=me->q_todo.front();
-	me->q_todo.pop();
+	me->q_todo.POP();
 	me->m_todo.unlock();
 
-	//std::cerr << "processing data " << in.second  << " as "<<in.first<<std::endl;
+	//std::cerr << "THREAD: processing data " << in.second  << " as "<<in.first<<std::endl;
 
 	out.first = in.first;
 	out.second=wt->process(in.first, in.second);
 
-	//std::cerr << "done data " << out.second  << " as "<<out.first<<std::endl;
+	//std::cerr << "THREAD: done data " << out.second  << " as "<<out.first<<std::endl;
 
 	me->m_done.lock();
-	bool newdata=me->q_todo.empty();
-	if(me->cancelledID != out.first) {
-	  me->q_done.push(out);
-	  if(newdata)wt->signal();
-	}
+	bool newdata=true;//me->q_done.empty();
+	//std::cerr<<"THREAD: processed "<< out.first <<" -> "<< newdata<<std::endl;
+	me->q_done.PUSH(out);
 	me->m_done.unlock();
+	//std::cerr << "THREAD: signaling newdata "<<newdata<<" for "<< out.first << std::endl;
+	if(newdata)wt->signal();
+	//std::cerr << "THREAD: signalled" << std::endl;
       }
+      //std::cerr << "THREAD: FINISHED" << std::endl;
       me->isrunning=false;
       return 0;
     }
@@ -163,14 +177,28 @@ namespace gem { namespace thread {
     }
 
     DATA.first = ID;
-    m_pimpl->q_todo.push(DATA);
+    m_pimpl->q_todo.PUSH(DATA);
     m_pimpl->m_todo.unlock();
 
     m_pimpl->s_newdata.thaw();
+    //std::cerr << "new data thawed" << std::endl;
     return true;
   }
   bool WorkerThread::cancel(WorkerThread::id_t ID) {
-    return false;
+    bool success=false;
+#ifdef WORKERTHREAD_DEQUEUE
+    QUEUE< std::pair<WorkerThread::id_t, void*> > :: iterator it;
+    m_pimpl->m_todo.lock();
+
+    for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
+      if(it->first == ID) {
+	m_pimpl->q_todo.erase(it);
+	break;
+      }
+    }
+    m_pimpl->m_todo.unlock();
+#endif
+    return success;
   }
   bool WorkerThread::dequeue(WorkerThread::id_t&ID, void*&data) {
     std::pair <id_t, void*> DATA;
@@ -180,7 +208,7 @@ namespace gem { namespace thread {
     m_pimpl->m_done.lock();
     if(!m_pimpl->q_done.empty()) {
       DATA=m_pimpl->q_done.front();
-      m_pimpl->q_done.pop();
+      m_pimpl->q_done.POP();
     }
     m_pimpl->m_done.unlock();
 

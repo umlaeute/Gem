@@ -40,13 +40,11 @@ namespace gem { namespace thread {
       me->tick();
     }
     void tick(void) {
-      //post("tick");
       id_t ID=WorkerThread::IMMEDIATE;
       void*data=0;
       do {
 	if(!owner->dequeue(ID, data))
 	  break;
-
 	owner->done(ID, data);
       } while(true);
 
@@ -56,15 +54,14 @@ namespace gem { namespace thread {
     }
 
     void tack(void) {
-      //post("signal tack");
       m_flag.lock();
       bool done=flag;
       flag=true;
       m_flag.unlock();
-
       // already flagged
       if(done)return;
 
+      // this will lock forever is Pd does not idle, ouch!!
       sys_lock();
       clock_delay(clock, 0);
       sys_unlock();

@@ -44,6 +44,7 @@ namespace gem { namespace thread {
       // cancel a datachunk from the TODO-queue
       // if the chunk was successfully removed, returns TRUE 
       // (FALSE is returned, if e.g. the given datachunk was not found in the queue)
+      // note that items already processed cannot be cancelled anymore
       virtual bool cancel(const id_t ID);
 
       // dequeue the next datachunk from the DONE queue
