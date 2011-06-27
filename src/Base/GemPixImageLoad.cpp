@@ -273,6 +273,10 @@ namespace gem { namespace image {
   }
 
   bool load::cancel(id_t ID) {
+    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
+    if(threadloader) {
+      return threadloader->cancel(ID);
+    }
     return false;
   }
 
