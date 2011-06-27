@@ -104,6 +104,13 @@ namespace gem {
        * there is no point in cancel()ing an IMMEDIATE or ILLEGAL id
        */
       GEM_EXTERN extern bool cancel(id_t ID);
+
+
+      GEM_EXTERN extern id_t sync(callback cb,
+				  void*userdata,
+				  const std::string filename);
+
+
 };};};
 
 GEM_EXTERN extern imageStruct *image2mem(const char *filename);

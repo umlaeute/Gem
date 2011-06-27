@@ -246,6 +246,20 @@ namespace gem { namespace image { namespace load {
     return INVALID;
   }
 
+  id_t sync(callback cb,
+	    void*userdata,
+	    const std::string filename) {
+    if(NULL==cb)
+      return INVALID;
+   imageStruct*result=new imageStruct;
+   gem::Properties props;
+   if(sync(filename, *result, props)) {
+     (*cb)(userdata, IMMEDIATE, result, props);
+     return IMMEDIATE;
+   }
+   return INVALID;
+  }
+
   bool cancel(id_t ID) {
     return false;
   }
