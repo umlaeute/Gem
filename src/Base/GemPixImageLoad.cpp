@@ -21,6 +21,8 @@
 
 #include "Gem/RTE.h"
 
+#include "Gem/SynchedWorkerThread.h"
+
 #include "plugins/imageloader.h"
 namespace gem {
   class PixImageLoader : public gem::plugins::imageloader {
@@ -119,10 +121,90 @@ namespace gem {
       return m_canThread;
     }
 }; };
-
 gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 
+
 namespace gem { namespace image { namespace load {
+  struct ImageLoaderWorkerThread : public gem::thread::SynchedWorkerThread {
+    struct InData {
+      callback*cb;
+      void*userdata;
+      std::string filename;
+      InData(callback*cb_, void*data_, std::string fname) :
+	cb(cb_),
+	userdata(data_),
+	filename(fname) {
+      };
+    };
+
+    struct OutData {
+      callback*cb;
+      void*userdata;
+      imageStruct*img;
+      gem::Properties props;
+      OutData(const InData&in) :
+	cb(in.cb),
+	userdata(in.userdata),
+	img(NULL) { 
+      };
+    };
+
+    gem::PixImageLoader*imageloader;
+    ImageLoaderWorkerThread(void) :
+      imageloader(gem::PixImageLoader::getInstance())
+    { 
+      if(!imageloader->isThreadable()) 
+	throw(42);
+    }
+    virtual ~ImageLoaderWorkerThread(void) {
+    }
+
+    virtual void* process(id_t ID, void*data) {
+      InData*in=reinterpret_cast<InData*>(data);
+      OutData*out=new OutData(*in);
+      
+      // DOIT
+      out->img=new imageStruct;
+      if(!imageloader->load(in->filename, *out->img, out->props)) {
+	delete out->img;
+	out->img=0;
+      }
+
+      return reinterpret_cast<void*>(out);
+    };
+
+    virtual void done(id_t ID, void*data) {
+      OutData*out=reinterpret_cast<OutData*>(data);
+      (*(out->cb))(out->userdata, ID, out->img, out->props);
+      delete out;
+    };
+
+    virtual id_t queue(callback*cb, void*userdata, std::string filename) {
+      InData *in = new InData(cb, userdata, filename);
+      return SynchedWorkerThread::queue(reinterpret_cast<void*>(in));
+    };
+
+    static ImageLoaderWorkerThread*getInstance(void) {
+      if(instance)
+	return instance;
+
+      try {
+	instance=new ImageLoaderWorkerThread();
+      } catch(int i) {
+	static bool dunnit=false;
+	if(!dunnit) {
+	  verbose(1, "threaded ImageLoading not supported!");
+	}
+	dunnit=true;
+      }
+    }
+
+  private:
+    static ImageLoaderWorkerThread*instance;
+  };
+
+
+
 
   bool sync(const std::string filename,
 	    imageStruct&result,
@@ -142,6 +224,10 @@ namespace gem { namespace image { namespace load {
     if(NULL==cb)
       return INVALID;
 
+    ImageLoaderWorkerThread*threadloader=ImageLoaderWorkerThread::getInstance();
+    if(threadloader) {
+      return threadloader->queue(cb, userdata, filename);
+    }
     imageStruct*result=new imageStruct;
     gem::Properties props;
     if(sync(filename, *result, props)) {
