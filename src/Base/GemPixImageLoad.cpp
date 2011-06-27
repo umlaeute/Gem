@@ -124,13 +124,13 @@ namespace gem {
 gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 
 
-namespace gem { namespace image { namespace load {
+namespace gem { namespace image {
   struct PixImageThreadLoader : public gem::thread::SynchedWorkerThread {
     struct InData {
-      callback cb;
+      load::callback cb;
       void*userdata;
       std::string filename;
-      InData(callback cb_, void*data_, std::string fname) :
+      InData(load::callback cb_, void*data_, std::string fname) :
 	cb(cb_),
 	userdata(data_),
 	filename(fname) {
@@ -138,7 +138,7 @@ namespace gem { namespace image { namespace load {
     };
 
     struct OutData {
-      callback cb;
+      load::callback cb;
       void*userdata;
       imageStruct*img;
       gem::Properties props;
@@ -184,9 +184,9 @@ namespace gem { namespace image { namespace load {
       }
     };
 
-    virtual id_t queue(callback cb, void*userdata, std::string filename) {
+    virtual bool queue(id_t&ID, load::callback cb, void*userdata, std::string filename) {
       InData *in = new InData(cb, userdata, filename);
-      return SynchedWorkerThread::queue(reinterpret_cast<void*>(in));
+      return SynchedWorkerThread::queue(ID, reinterpret_cast<void*>(in));
     };
 
     static PixImageThreadLoader*getInstance(void) {
@@ -211,10 +211,12 @@ namespace gem { namespace image { namespace load {
 
 
 
+  const id_t load::IMMEDIATE= 0;
+  const id_t load::INVALID  =~0;
 
-  bool sync(const std::string filename,
-	    imageStruct&result,
-	    gem::Properties&props) {
+  bool load::sync(const std::string filename,
+		  imageStruct&result,
+		  gem::Properties&props) {
     gem::PixImageLoader*piximageloader=gem::PixImageLoader::getInstance();
     if(piximageloader) {
       if(piximageloader->load(filename, result, props)) {
@@ -224,47 +226,56 @@ namespace gem { namespace image { namespace load {
     return false;
   }
   
-  id_t async(callback cb,
-	     void*userdata,
-	     const std::string filename) {
-    if(NULL==cb)
-      return INVALID;
+  bool load::async(load::callback cb,
+		   void*userdata,
+		   const std::string filename,
+		   id_t&ID) {
+    if(NULL==cb) {
+      ID=INVALID;
+      return false;
+    }
 
     PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
 
     //post("threadloader %p", threadloader);
-
+    
     if(threadloader) {
-      return threadloader->queue(cb, userdata, filename);
+      return threadloader->queue(ID, cb, userdata, filename);
     }
     imageStruct*result=new imageStruct;
     gem::Properties props;
     if(sync(filename, *result, props)) {
-      (*cb)(userdata, IMMEDIATE, result, props);
-      return IMMEDIATE;
+      ID=IMMEDIATE;
+      (*cb)(userdata, ID, result, props);
+      return true;
     }
-    return INVALID;
-  }
-
-  id_t sync(callback cb,
-	    void*userdata,
-	    const std::string filename) {
-    if(NULL==cb)
-      return INVALID;
-   imageStruct*result=new imageStruct;
-   gem::Properties props;
-   if(sync(filename, *result, props)) {
-     (*cb)(userdata, IMMEDIATE, result, props);
-     return IMMEDIATE;
-   }
-   return INVALID;
-  }
-
-  bool cancel(id_t ID) {
+    ID=INVALID;
     return false;
   }
 
-}; // load
+  bool load::sync(load::callback cb,
+		  void*userdata,
+		  const std::string filename,
+		  id_t&ID) {
+    if(NULL==cb) {
+      ID=INVALID;
+      return false;
+    }
+    imageStruct*result=new imageStruct;
+    gem::Properties props;
+    if(sync(filename, *result, props)) {
+      ID=IMMEDIATE;
+      (*cb)(userdata, ID, result, props);
+      return true;
+    }
+    ID=INVALID;
+    return false;
+  }
+
+  bool load::cancel(id_t ID) {
+    return false;
+  }
+
 }; // image
 }; // gem
 

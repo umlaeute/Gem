@@ -35,19 +35,20 @@ namespace gem { namespace thread {
       typedef unsigned int id_t;
       static const id_t INVALID, IMMEDIATE;
 
-      // queue a data chunk onto the TODO queue
-      // the returned ID can be used to interact with the queues
-      virtual id_t queue(void*data);
+      // queue a 'data' chunk onto the TODO queue
+      // the returned 'ID' can be used to interact with the queues
+      // if queuing failed, FALSE is returned and ID is set to INVALID
+      virtual bool queue(id_t&ID, void*data);
 
       //////
       // cancel a datachunk from the TODO-queue
       // if the chunk was successfully removed, returns TRUE 
       // (FALSE is returned, if e.g. the given datachunk was not found in the queue)
-      virtual bool cancel(id_t ID);
+      virtual bool cancel(const id_t ID);
 
       // dequeue the next datachunk from the DONE queue
-      // if the queue is empty, INVALID is returned
-      virtual id_t dequeue(void*&data);
+      // if the queue is empty, FALSE is returned and ID is set to INVALID
+      virtual bool dequeue(id_t&ID, void*&data);
 
     protected:
 

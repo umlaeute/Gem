@@ -38,7 +38,8 @@ struct imageStruct;
 namespace gem {
   struct Properties;
   namespace image {
-    namespace load {
+    GEM_EXTERN class load {
+    public:
       /**
        * loads an image (given as 'filename') synchronously
        * the function blocks until the image is loaded (in which case it returns TRUE)
@@ -47,13 +48,13 @@ namespace gem {
        * the loaded image is stored in 'img'
        * 'props' holds a list of additional image properties discovered during loading
        */
-      GEM_EXTERN extern bool sync(const std::string filename,
+      static bool sync(const std::string filename,
 				  imageStruct&img,
 				  Properties&props);
 
       typedef unsigned int id_t;
-      const id_t IMMEDIATE= 0;
-      const id_t INVALID  =~0;
+      static const id_t IMMEDIATE;
+      static const id_t INVALID;
 
 
       /* the callback used for asynchronous image loading
@@ -93,9 +94,11 @@ namespace gem {
        * (and no callback will ever be called)
        *
        */
-      GEM_EXTERN extern id_t async(callback cb,
+      static bool async(callback cb,
 				   void*userdata,
-				   const std::string filename);
+				   const std::string filename,
+				   id_t&ID
+				   );
     
       /* cancels asynchronous loading of an image
        * removes the given ID (as returned by loadAsync()) from the loader queue
@@ -103,16 +106,19 @@ namespace gem {
        *
        * there is no point in cancel()ing an IMMEDIATE or ILLEGAL id
        */
-      GEM_EXTERN extern bool cancel(id_t ID);
+      static bool cancel(id_t ID);
 
-
-      GEM_EXTERN extern id_t sync(callback cb,
+      /* load an image in a synchronous way (that is argument compatible with async())
+       */ 
+      static bool sync(callback cb,
 				  void*userdata,
-				  const std::string filename);
+				  const std::string filename,
+				  id_t&ID);
 
 
 };};};
 
+/* legacy */
 GEM_EXTERN extern imageStruct *image2mem(const char *filename);
 
 

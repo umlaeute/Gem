@@ -44,9 +44,7 @@ namespace gem { namespace thread {
       id_t ID=WorkerThread::IMMEDIATE;
       void*data=0;
       do {
-	ID=owner->dequeue(data);
-	//post("dequeued %d", ID);
-	if(ID==WorkerThread::INVALID)
+	if(!owner->dequeue(ID, data))
 	  break;
 
 	owner->done(ID, data);

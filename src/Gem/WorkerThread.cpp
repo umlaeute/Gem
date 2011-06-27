@@ -149,26 +149,30 @@ namespace gem { namespace thread {
 
 
 
-  WorkerThread::id_t WorkerThread::queue(void*data) {
+  bool WorkerThread::queue(WorkerThread::id_t&ID, void*data) {
     std::pair <id_t, void*> DATA;
     DATA.second = data;
 
     m_pimpl->m_todo.lock();
-    id_t ID=m_pimpl->nextID();
+    ID=m_pimpl->nextID();
 
     //std::cerr << "queuing data " << data  << " as "<<ID<<std::endl;
+    if(ID==INVALID) {
+      m_pimpl->m_todo.unlock();
+      return false;
+    }
 
     DATA.first = ID;
     m_pimpl->q_todo.push(DATA);
     m_pimpl->m_todo.unlock();
 
     m_pimpl->s_newdata.thaw();
-    return ID;
+    return true;
   }
   bool WorkerThread::cancel(WorkerThread::id_t ID) {
     return false;
   }
-  WorkerThread::id_t WorkerThread::dequeue(void*&data) {
+  bool WorkerThread::dequeue(WorkerThread::id_t&ID, void*&data) {
     std::pair <id_t, void*> DATA;
     DATA.first=WorkerThread::INVALID;
     DATA.second=0;
@@ -180,12 +184,11 @@ namespace gem { namespace thread {
     }
     m_pimpl->m_done.unlock();
 
-    id_t ID=DATA.first;
+    ID=DATA.first;
     data=DATA.second;
     //    std::cerr<<"dequeuing "<<data<<" as "<< ID<<std::endl;
 
-
-    return ID;
+    return (WorkerThread::INVALID != ID);
   }
 
   void WorkerThread::signal(void) {
