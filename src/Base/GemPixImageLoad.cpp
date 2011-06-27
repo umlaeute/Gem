@@ -28,8 +28,9 @@ namespace gem {
     static PixImageLoader*s_instance;
     std::vector<gem::plugins::imageloader*>m_loaders;
     std::vector<std::string>m_ids;
+    bool m_canThread;
 
-    PixImageLoader(void) {
+    PixImageLoader(void) : m_canThread(true) {
       gem::PluginFactory<gem::plugins::imageloader>::loadPlugins("image");
       std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::imageloader>::getIDs();
       if(available_ids.size()>0) {
@@ -43,6 +44,15 @@ namespace gem {
 
       addLoader(available_ids, "magick");
       addLoader(available_ids);
+
+      m_canThread=true;
+      int i;
+      for(i=0; i<m_loaders.size(); i++) {
+	if(!m_loaders[i]->isThreadable()) {
+	  m_canThread=false;
+	  break;
+	}
+      }      
     }
     bool addLoader( std::vector<std::string>available, std::string ID=std::string(""))
     {
@@ -104,6 +114,9 @@ namespace gem {
 	s_instance=new PixImageLoader();
       }
       return s_instance;
+    }
+    virtual bool isThreadable(void) {
+      return m_canThread;
     }
 }; };
 
