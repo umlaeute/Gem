@@ -52,7 +52,7 @@ imageMAGICK :: imageMAGICK()
   //post("imageMAGICK");
   char**mimelist; 
   char what;
-  unsigned long length;
+  size_t length;
   ExceptionInfo exception;
   GetExceptionInfo(&exception);
   mimelist=GetMimeList("image/*", &length, &exception);
