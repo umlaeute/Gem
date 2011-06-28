@@ -26,13 +26,30 @@ namespace gem { namespace thread {
     Mutex m_flag;
     bool flag;
 
+    Mutex m_polling;
+    bool polling;
+
     PIMPL(SynchedWorkerThread*x) : owner(x), clock(NULL), flag(false)
     {
       clock=clock_new(this, reinterpret_cast<t_method>(tickCb));
     }
     ~PIMPL(void) {
       if(clock)
-	clock_free(clock);
+        clock_free(clock);
+    }
+
+   unsigned int dequeue(void) {
+      id_t ID=WorkerThread::IMMEDIATE;
+      void*data=0;
+      unsigned int counter=0;
+      WorkerThread*wt=owner;
+      if(!owner)return 0;
+
+      while(wt->dequeue(ID, data)) {
+        owner->done(ID, data);
+        counter++;
+      };
+      return counter;
     }
 
     static void tickCb(void*you) {
@@ -40,13 +57,7 @@ namespace gem { namespace thread {
       me->tick();
     }
     void tick(void) {
-      id_t ID=WorkerThread::IMMEDIATE;
-      void*data=0;
-      do {
-	if(!owner->dequeue(ID, data))
-	  break;
-	owner->done(ID, data);
-      } while(true);
+      dequeue();
 
       m_flag.lock();
       flag=false;
@@ -54,6 +65,11 @@ namespace gem { namespace thread {
     }
 
     void tack(void) {
+      m_polling.lock();
+      bool poll=polling;
+      m_polling.unlock();
+      if(poll)return;
+
       m_flag.lock();
       bool done=flag;
       flag=true;
@@ -67,6 +83,25 @@ namespace gem { namespace thread {
       sys_unlock();
     }
 
+    bool setPolling(bool poll) {
+      m_polling.lock();
+      polling=poll;
+      m_polling.unlock();
+
+      // just in case tack() is still hanging
+      // this is really ugly! 
+      // it might only work if called from the main thread
+      if(sys_trylock()) {
+        // system was locked, so unlock and re-lock
+        sys_unlock();
+        sys_trylock();
+      } else {
+        // system wasn't locked, but is now, so unlock again
+        sys_unlock();
+      }
+
+      return polling;
+    }
   };
 
 
@@ -80,6 +115,13 @@ namespace gem { namespace thread {
     m_pimpl=0;
   }
 
+  unsigned int SynchedWorkerThread::dequeue(void) {
+    m_pimpl->dequeue();
+  }
+
+  bool SynchedWorkerThread::setPolling(bool value) {
+    return m_pimpl->setPolling(value);
+  }
 
 
   void SynchedWorkerThread::signal(void) {

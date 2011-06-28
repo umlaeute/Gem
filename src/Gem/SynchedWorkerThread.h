@@ -23,9 +23,29 @@ namespace gem { namespace thread {
       class PIMPL;
       PIMPL*m_pimpl;
       friend class PIMPL;
+
 		  public:
       SynchedWorkerThread(void);
       virtual ~SynchedWorkerThread(void);
+
+      /*
+       * turn on "polling" mode
+       * when in polling mode, the calling thread has to call 'dequeue()' in order to
+       * deqeue any DONE data
+       * when in pushing mode, the data is pushed automatically within the RTE main thread
+       *
+       * returns TRUE is now in polling mode, or FALSE if now in pushing mode
+       * (might be different from what was requested)
+       *
+       * this MUST be called from the main thread
+       */
+      virtual bool setPolling(bool value=true);
+
+      /**
+       * deqeues the entire DONE queue
+       * returns the number of elements dequeued
+       */
+      virtual unsigned int dequeue(void);
 
 		  protected:
       // this get's called from the main thread(!) with each
