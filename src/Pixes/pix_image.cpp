@@ -49,9 +49,7 @@ pix_image :: pix_image(t_symbol *filename) :
   m_id(gem::image::load::INVALID)
 {
   m_pixBlock.image = m_imageStruct;
-
   if(filename!=&s_)openMess(filename->s_name);
-
 }
 
 ////////////////////////////////////////////////////////
@@ -111,7 +109,7 @@ void    pix_image:: loaded(const gem::image::load::id_t ID,
 			   const gem::Properties&props) {
 
   if(ID!=m_id || ID == gem::image::load::INVALID) {
-    verbose(0, "discarding image with ID %d", ID);
+    verbose(1, "discarding image with ID %d", ID);
     return;
   }
 
@@ -140,6 +138,8 @@ void    pix_image:: loadCallback(void*data,
 /////////////////////////////////////////////////////////
 void pix_image :: render(GemState *state)
 {
+  gem::image::load::poll();
+
   // if we don't have an image, just return
   if (!m_loadedImage){
     return;
