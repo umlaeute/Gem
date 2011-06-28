@@ -202,7 +202,11 @@ namespace gem { namespace image {
           }
           dunnit=true;
         }
+
+        if(s_instance)
+          s_instance->setPolling(true);
       }
+
       return s_instance;
     };
 
