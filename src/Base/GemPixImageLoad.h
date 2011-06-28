@@ -52,10 +52,11 @@ namespace gem {
 				  imageStruct&img,
 				  Properties&props);
 
+
+
       typedef unsigned int id_t;
       static const id_t IMMEDIATE;
       static const id_t INVALID;
-
 
       /* the callback used for asynchronous image loading
        * userdata is is the pointer supplied when calling async();
@@ -114,6 +115,18 @@ namespace gem {
 				  void*userdata,
 				  const std::string filename,
 				  id_t&ID);
+
+      /*
+       * deliver all loaded images not delivered yet
+       */
+      static void poll(void);
+
+      /*
+       * set asynch loading to "polling" mode
+       * in "polling" mode, the caller has to call 'poll()' manually in order to get any loaded images delivered
+       * in "pushing" mode this is done automatically (but might hang with current Pd)
+       */
+      static bool setPolling(bool);
 
 
 };};};

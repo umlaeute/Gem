@@ -35,25 +35,27 @@ namespace gem {
     PixImageLoader(void) : m_canThread(true) {
       gem::PluginFactory<gem::plugins::imageloader>::loadPlugins("image");
       std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::imageloader>::getIDs();
-      if(available_ids.size()>0) {
-	startpost("Image loading support:");
-	int i;
-	for(i=0; i<available_ids.size(); i++) {
-	  startpost(" %s", available_ids[i].c_str());
-	}
-	endpost();
-      }
 
       addLoader(available_ids, "magick");
       addLoader(available_ids);
 
+      if(m_ids.size()>0) {
+        startpost("Image loading support:");
+        int i;
+        for(i=0; i<m_ids.size(); i++) {
+          startpost(" %s", m_ids[i].c_str());
+        }
+        endpost();
+      }
+
+
       m_canThread=true;
       int i;
       for(i=0; i<m_loaders.size(); i++) {
-	if(!m_loaders[i]->isThreadable()) {
-	  m_canThread=false;
-	  break;
-	}
+        if(!m_loaders[i]->isThreadable()) {
+          m_canThread=false;
+          break;
+        }
       }      
     }
     bool addLoader( std::vector<std::string>available, std::string ID=std::string(""))
@@ -63,32 +65,32 @@ namespace gem {
 
       std::vector<std::string>id;
       if(!ID.empty()) {
-	// if requested 'cid' is in 'available' add it to the list of 'id's
-	if(std::find(available.begin(), available.end(), ID)!=available.end()) {
-	  id.push_back(ID);
-	} else {
-	  // request for an unavailable ID
-	  verbose(2, "backend '%s' unavailable", ID.c_str());
-	  return false;
-	}
+        // if requested 'cid' is in 'available' add it to the list of 'id's
+        if(std::find(available.begin(), available.end(), ID)!=available.end()) {
+          id.push_back(ID);
+        } else {
+          // request for an unavailable ID
+          verbose(2, "backend '%s' unavailable", ID.c_str());
+          return false;
+        }
       } else {
-	// no 'ID' given: add all available IDs
-	id=available;
+        // no 'ID' given: add all available IDs
+        id=available;
       }
 
       for(i=0; i<id.size(); i++) {
-	std::string key=id[i];
-	verbose(2, "trying to add '%s' as backend", key.c_str());
-	if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
-	  // not yet added, do so now!
-	  gem::plugins::imageloader*loader=
-	    gem::PluginFactory<gem::plugins::imageloader>::getInstance(key); 
-	  if(NULL==loader)break;
-	  m_ids.push_back(key);
-	  m_loaders.push_back(loader);
-	  count++;
-	  verbose(2, "added backend#%d '%s' @ 0x%x", m_loaders.size()-1, key.c_str(), loader);
-	}
+        std::string key=id[i];
+        verbose(2, "trying to add '%s' as backend", key.c_str());
+        if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
+          // not yet added, do so now!
+          gem::plugins::imageloader*loader=
+            gem::PluginFactory<gem::plugins::imageloader>::getInstance(key); 
+          if(NULL==loader)break;
+          m_ids.push_back(key);
+          m_loaders.push_back(loader);
+          count++;
+          verbose(2, "added backend#%d '%s' @ 0x%x", m_loaders.size()-1, key.c_str(), loader);
+        }
       }
       return (count>0);
     }
@@ -97,30 +99,30 @@ namespace gem {
     virtual ~PixImageLoader(void) {
       int i;
       for(i=0; i<m_loaders.size(); i++) {
-	delete m_loaders[i];
-	m_loaders[i]=NULL;
+        delete m_loaders[i];
+        m_loaders[i]=NULL;
       }
     }
 
     virtual bool load(std::string filename, imageStruct&result, gem::Properties&props) {
       int i;
       for(i=0; i<m_loaders.size(); i++) {
-	if(m_loaders[i]->load(filename, result, props))
-	  return true;
+        if(m_loaders[i]->load(filename, result, props))
+          return true;
       }
       return false;
     }
 
     static PixImageLoader*getInstance(void) {
       if(NULL==s_instance) {
-	s_instance=new PixImageLoader();
+        s_instance=new PixImageLoader();
       }
       return s_instance;
     }
     virtual bool isThreadable(void) {
       return m_canThread;
     }
-}; };
+  }; };
 gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
 
 
@@ -131,9 +133,9 @@ namespace gem { namespace image {
       void*userdata;
       std::string filename;
       InData(load::callback cb_, void*data_, std::string fname) :
-	cb(cb_),
-	userdata(data_),
-	filename(fname) {
+        cb(cb_),
+        userdata(data_),
+        filename(fname) {
       };
     };
 
@@ -143,9 +145,9 @@ namespace gem { namespace image {
       imageStruct*img;
       gem::Properties props;
       OutData(const InData&in) :
-	cb(in.cb),
-	userdata(in.userdata),
-	img(NULL) { 
+        cb(in.cb),
+        userdata(in.userdata),
+        img(NULL) { 
       };
     };
 
@@ -154,7 +156,7 @@ namespace gem { namespace image {
       imageloader(gem::PixImageLoader::getInstance())
     { 
       if(!imageloader->isThreadable()) 
-	throw(42);
+        throw(42);
     }
     virtual ~PixImageThreadLoader(void) {
     }
@@ -166,8 +168,8 @@ namespace gem { namespace image {
       // DOIT
       out->img=new imageStruct;
       if(!imageloader->load(in->filename, *out->img, out->props)) {
-	delete out->img;
-	out->img=0;
+        delete out->img;
+        out->img=0;
       }
       void*result=reinterpret_cast<void*>(out);
       //post("processing[%d] %p -> %p", ID, data, result);
@@ -177,10 +179,10 @@ namespace gem { namespace image {
     virtual void done(id_t ID, void*data) {
       OutData*out=reinterpret_cast<OutData*>(data);
       if(out) {
-	(*(out->cb))(out->userdata, ID, out->img, out->props);
-	delete out;
+        (*(out->cb))(out->userdata, ID, out->img, out->props);
+        delete out;
       } else {
-	post("did %d but no data returned!", ID);
+        error("loaded image:%d with no data!", ID);
       }
     };
 
@@ -191,15 +193,15 @@ namespace gem { namespace image {
 
     static PixImageThreadLoader*getInstance(void) {
       if(NULL==s_instance) {
-	try {
-	  s_instance=new PixImageThreadLoader();
-	} catch(int i) {
-	  static bool dunnit=false;
-	  if(!dunnit) {
-	    verbose(1, "threaded ImageLoading not supported!");
-	  }
-	  dunnit=true;
-	}
+        try {
+          s_instance=new PixImageThreadLoader();
+        } catch(int i) {
+          static bool dunnit=false;
+          if(!dunnit) {
+            verbose(1, "threaded ImageLoading not supported!");
+          }
+          dunnit=true;
+        }
       }
       return s_instance;
     };
@@ -215,21 +217,21 @@ namespace gem { namespace image {
   const id_t load::INVALID  =~0;
 
   bool load::sync(const std::string filename,
-		  imageStruct&result,
-		  gem::Properties&props) {
+                  imageStruct&result,
+                  gem::Properties&props) {
     gem::PixImageLoader*piximageloader=gem::PixImageLoader::getInstance();
     if(piximageloader) {
       if(piximageloader->load(filename, result, props)) {
-	return true;
+        return true;
       }
     }
     return false;
   }
   
   bool load::async(load::callback cb,
-		   void*userdata,
-		   const std::string filename,
-		   id_t&ID) {
+                   void*userdata,
+                   const std::string filename,
+                   id_t&ID) {
     if(NULL==cb) {
       ID=INVALID;
       return false;
@@ -254,9 +256,9 @@ namespace gem { namespace image {
   }
 
   bool load::sync(load::callback cb,
-		  void*userdata,
-		  const std::string filename,
-		  id_t&ID) {
+                  void*userdata,
+                  const std::string filename,
+                  id_t&ID) {
     if(NULL==cb) {
       ID=INVALID;
       return false;
@@ -279,6 +281,21 @@ namespace gem { namespace image {
     }
     return false;
   }
+
+  bool load::setPolling(bool value) {
+    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
+    if(threadloader) {
+      return threadloader->setPolling(value);
+    }
+    return true;
+  }
+  void load::poll(void) {
+    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
+    if(threadloader) {
+      threadloader->dequeue();
+    }
+  }
+
 
 }; // image
 }; // gem
