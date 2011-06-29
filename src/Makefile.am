@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I m4
 # make sure -lstdc++ is kept first
 AM_LIBTOOLFLAGS = --preserve-dup-deps
 
-SUBDIRS=Base RTE plugins 
+SUBDIRS=Gem RTE Base plugins 
 lib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
