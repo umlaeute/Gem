@@ -1,5 +1,5 @@
 #ifdef HAVE_CONFIG_H
-# include "Base/config.h"
+# include "config.h"
 #endif
 #ifndef HAVE_LIBGLEW
 /*

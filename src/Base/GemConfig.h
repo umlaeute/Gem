@@ -31,7 +31,7 @@
 
 #ifdef HAVE_CONFIG_H
 
-# include "Base/config.h"
+# include "config.h"
 
 /* stupid hack to avoid duplicate inclusion of config.h e.g. in avifile.h */
 # undef HAVE_CONFIG_H

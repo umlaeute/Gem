@@ -54,7 +54,7 @@ KERN=$(uname -s)
 
 AC_CONFIG_MACRO_DIR(m4)
 
-AC_CONFIG_HEADERS([Base/config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([Base/GemBase.h])
 
 #AC_CONFIG_SUBDIRS([extra])
