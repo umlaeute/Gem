@@ -382,7 +382,7 @@ AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
 
 if test "x${libdir}" = "x\${exec_prefix}/lib"; then
- libdir='${exec_prefix}/lib/pd/extra/Gem'
+ libdir='${exec_prefix}/lib/pd/extra'
 fi
 
 tmp_rte_cppflags="$CPPFLAGS"

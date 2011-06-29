@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_filmDarwin.la
+pkglib_LTLIBRARIES= gem_filmDarwin.la
 
 gem_filmDarwin_la_CXXFLAGS =
 gem_filmDarwin_la_LDFLAGS  = -module -avoid-version -shared

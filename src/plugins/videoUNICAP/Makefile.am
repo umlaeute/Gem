@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_videoUNICAP.la
+pkglib_LTLIBRARIES= gem_videoUNICAP.la
 
 gem_videoUNICAP_la_CXXFLAGS =
 gem_videoUNICAP_la_LDFLAGS  = -module -avoid-version -shared

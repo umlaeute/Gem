@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_videoPYLON.la
+pkglib_LTLIBRARIES= gem_videoPYLON.la
 
 gem_videoPYLON_la_CXXFLAGS =
 gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared

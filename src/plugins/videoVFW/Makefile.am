@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_videoVFW.la
+pkglib_LTLIBRARIES= gem_videoVFW.la
 
 gem_videoVFW_la_CXXFLAGS =
 gem_videoVFW_la_LDFLAGS  = -module -avoid-version -shared

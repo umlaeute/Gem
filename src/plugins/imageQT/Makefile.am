@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_imageQT.la
+pkglib_LTLIBRARIES= gem_imageQT.la
 
 gem_imageQT_la_CXXFLAGS =
 gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared

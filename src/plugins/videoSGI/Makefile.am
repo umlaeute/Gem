@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_videoSGI.la
+pkglib_LTLIBRARIES= gem_videoSGI.la
 
 gem_videoSGI_la_CXXFLAGS =
 gem_videoSGI_la_LDFLAGS  = -module -avoid-version -shared

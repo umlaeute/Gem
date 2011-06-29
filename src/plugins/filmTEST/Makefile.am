@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_filmTEST.la
+pkglib_LTLIBRARIES= gem_filmTEST.la
 
 gem_filmTEST_la_CXXFLAGS =
 gem_filmTEST_la_LDFLAGS  = -module -avoid-version -shared

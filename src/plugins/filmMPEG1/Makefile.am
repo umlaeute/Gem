@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_filmMPEG1.la
+pkglib_LTLIBRARIES= gem_filmMPEG1.la
 
 gem_filmMPEG1_la_CXXFLAGS =
 gem_filmMPEG1_la_LDFLAGS  = -module -avoid-version -shared

@@ -12,7 +12,7 @@ ACLOCAL_AMFLAGS = -I m4
 AM_LIBTOOLFLAGS = --preserve-dup-deps
 
 SUBDIRS=Gem RTE Base plugins 
-lib_LTLIBRARIES = Gem.la
+pkglib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
 Gem_la_SOURCES = 

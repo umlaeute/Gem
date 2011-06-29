@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES= gem_filmGMERLIN.la
+pkglib_LTLIBRARIES= gem_filmGMERLIN.la
 
 gem_filmGMERLIN_la_CXXFLAGS =
 gem_filmGMERLIN_la_LDFLAGS  = -module -avoid-version -shared

@@ -2,10 +2,10 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
-lib_LTLIBRARIES=
+pkglib_LTLIBRARIES=
 
 if VIDEODARWIN
-lib_LTLIBRARIES+=gem_videoDarwin.la
+pkglib_LTLIBRARIES+=gem_videoDarwin.la
 endif
 
 gem_videoDarwin_la_CXXFLAGS =
