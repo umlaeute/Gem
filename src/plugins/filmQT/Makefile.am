@@ -18,5 +18,6 @@ gem_filmQT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_filmQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@
 gem_filmQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@
 
+### SOURCES
 gem_filmQT_la_SOURCES= filmQT.cpp filmQT.h
 

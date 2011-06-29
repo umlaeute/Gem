@@ -22,5 +22,6 @@ gem_videoAVT_la_LDFLAGS  += @GEM_RTE_LIBS@
 gem_videoAVT_la_CXXFLAGS += @GEM_LIB_LIBPVAPI_CFLAGS@
 gem_videoAVT_la_LIBADD   += @GEM_LIB_LIBPVAPI_LIBS@
 
+### SOURCES
 gem_videoAVT_la_SOURCES= videoAVT.cpp videoAVT.h
 

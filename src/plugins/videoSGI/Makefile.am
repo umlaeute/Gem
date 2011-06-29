@@ -15,5 +15,6 @@ gem_videoSGI_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 # Dependencies
 ## none
 
+### SOURCES
 gem_videoSGI_la_SOURCES= videoSGI.cpp videoSGI.h
 

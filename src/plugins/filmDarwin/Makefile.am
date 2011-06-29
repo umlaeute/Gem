@@ -16,5 +16,6 @@ gem_filmDarwin_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_filmDarwin_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@ @GEM_FRAMEWORK_CARBON@ 
 gem_filmDarwin_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@ @GEM_FRAMEWORK_CARBON@ 
 
+### SOURCES
 gem_filmDarwin_la_SOURCES= filmDarwin.cpp filmDarwin.h
 

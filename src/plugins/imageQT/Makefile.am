@@ -16,5 +16,6 @@ gem_imageQT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_imageQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@
 gem_imageQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@
 
+### SOURCES
 gem_imageQT_la_SOURCES= imageQT.cpp imageQT.h
 

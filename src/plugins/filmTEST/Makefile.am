@@ -16,5 +16,6 @@ gem_filmTEST_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_filmTEST_la_CXXFLAGS +=
 gem_filmTEST_la_LIBADD   +=
 
+### SOURCES
 gem_filmTEST_la_SOURCES= filmTEST.cpp filmTEST.h
 

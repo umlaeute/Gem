@@ -17,5 +17,6 @@ gem_recordQT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_recordQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@
 gem_recordQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@
 
+### SOURCES
 gem_recordQT_la_SOURCES= recordQT.cpp recordQT.h
 

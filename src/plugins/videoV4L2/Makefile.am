@@ -16,5 +16,6 @@ gem_videoV4L2_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_videoV4L2_la_CXXFLAGS += @GEM_LIB_LIBV4L2_CFLAGS@ 
 gem_videoV4L2_la_LIBADD   += @GEM_LIB_LIBV4L2_LIBS@
 
+### SOURCES
 gem_videoV4L2_la_SOURCES= videoV4L2.cpp videoV4L2.h
 
