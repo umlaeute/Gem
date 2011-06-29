@@ -1,8 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-gembuilddir=$(pkglibdir)/examples
-
-nobase_dist_gembuild_DATA = \
+EXTRA_DIST = \
 	osx-projectbuilder/Gem.pbproj/project.pbxproj \
 	win-nsis/gem.nsi \
 	win-nsis/buildinstaller.bat \
