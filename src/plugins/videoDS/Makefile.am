@@ -1,6 +1,7 @@
-
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
+
+EXTRA_DIST = videoDS.sln videoDS.vcproj
 
 pkglib_LTLIBRARIES= gem_videoDS.la
 

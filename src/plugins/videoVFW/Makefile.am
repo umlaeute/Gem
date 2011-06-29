@@ -1,6 +1,7 @@
-
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
+
+EXTRA_DIST=videoVFW.sln videoVFW.vcproj
 
 pkglib_LTLIBRARIES= gem_videoVFW.la
 

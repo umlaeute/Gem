@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
+EXTRA_DIST = filmAVI.sln filmAVI.vcproj
+
 pkglib_LTLIBRARIES= gem_filmAVI.la
 
 gem_filmAVI_la_CXXFLAGS =

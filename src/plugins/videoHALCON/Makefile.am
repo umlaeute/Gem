@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I../..
 
+EXTRA_DIST = halcon.m4 videoHALCON.sln videoHALCON.vcproj
+
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES= gem_videoHALCON.la

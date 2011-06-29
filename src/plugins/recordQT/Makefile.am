@@ -1,6 +1,7 @@
-
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
+
+EXTRA_DIST = recordQT.sln recordQT.vcproj
 
 pkglib_LTLIBRARIES= gem_recordQT.la
 

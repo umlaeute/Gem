@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I../..
 
+EXTRA_DIST = filmDS.sln filmDS.vcproj
+
 pkglib_LTLIBRARIES= gem_filmDS.la
 
 gem_filmDS_la_CXXFLAGS =

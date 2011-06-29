@@ -4,6 +4,8 @@ AM_CPPFLAGS = -I../..
 
 plugindir=$(libdir)/Gem
 
+EXTRA_DIST = pylon.m4 videoPYLON.sln videoPYLON.vcproj
+
 plugin_LTLIBRARIES= gem_videoPYLON.la
 
 gem_videoPYLON_la_CXXFLAGS =
@@ -20,5 +22,8 @@ gem_videoPYLON_la_LDFLAGS  += @GEM_RTE_LIBS@
 gem_videoPYLON_la_CXXFLAGS += @GEM_PYLON_CXXFLAGS@
 gem_videoPYLON_la_LIBADD   += @GEM_PYLON_LIBS@
 
-gem_videoPYLON_la_SOURCES= videoPYLON.cpp videoPYLON.h CameraProperties.cpp StreamGrabberProperties.cpp
+gem_videoPYLON_la_SOURCES= videoPYLON.cpp videoPYLON.h \
+	CameraProperties.cpp CameraProperties.h \
+	StreamGrabberProperties.cpp StreamGrabberProperties.h
+
 
