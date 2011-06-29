@@ -558,10 +558,10 @@ if test "x$have_libdc1394_2" = "xyes"; then
  have_ieee1394="$have_ieee1394 libdc1394"
 fi
 
-if "x$have_ieee1394" = "x"; then
+if test "x$have_ieee1394" = "x"; then
  have_ieee1394="no";
 else
- have_ieee1394="yes ($have_ieee1394)"
+ have_ieee1394="yes ($have_ieee1394 )"
 fi
 
 if test "x$with_film" = "xplugins"; then
