@@ -11,6 +11,11 @@ AC_CONFIG_FILES([Makefile abstractions/Makefile])
 # documentation
 AC_CONFIG_FILES([help/Makefile doc/Makefile examples/Makefile])
 
+# other stuff
+AC_CONFIG_FILES([build/Makefile])
+
+
+
 AC_CONFIG_MACRO_DIR(src/m4)
 
 #AC_CONFIG_SRCDIR([src/Base/GemBase.h])
