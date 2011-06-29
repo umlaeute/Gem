@@ -6,8 +6,8 @@ extradir=$(libdir)/pix_mano
 
 extra_LTLIBRARIES = pix_mano.la
  
-extra_DATA  = LICENSE.txt
-extra_DATA += pix_mano-help.pd
+dist_extra_DATA  = LICENSE.txt
+dist_extra_DATA += pix_mano-help.pd
 
 
 ## some default flags

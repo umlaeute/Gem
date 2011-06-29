@@ -6,8 +6,8 @@ extradir=$(libdir)/pix_drum
 
 extra_LTLIBRARIES = pix_drum.la
 
-extra_DATA  = LICENSE.txt
-extra_DATA += pix_drum-help.pd
+dist_extra_DATA  = LICENSE.txt
+dist_extra_DATA += pix_drum-help.pd
 
 ## some default flags
 pix_drum_la_CXXFLAGS =
