@@ -4,7 +4,7 @@ SUFFIXES = .pd
 
 gemhelpdir=$(pkglibdir)
 
-gemhelpdir_DATA = 
+gemhelp_DATA = \
 	accumrotate-help.pd \
 	alpha-help.pd \
 	ambient-help.pd \
