@@ -3,14 +3,14 @@
 package=Gem
 
 
-AUTORECONF=autoreconf
+#AUTORECONF=$(which autoreconf)
 
-AUTOHEADER=autoheader
-AUTOMAKE=automake
-ACLOCAL=aclocal
-LIBTOOL=libtool
-LIBTOOLIZE=libtoolize
-AUTOCONF=autoconf
+AUTOHEADER=$(which autoheader)
+AUTOMAKE=$(which automake)
+ACLOCAL=$(which aclocal)
+LIBTOOL=$(which libtool)
+LIBTOOLIZE=$(which libtoolize)
+AUTOCONF=$(which autoconf)
 
 
 KERN=$(uname -s)
@@ -25,6 +25,8 @@ case "${KERN}" in
   echo "kernel $KERN"
   ;;
 esac
+
+echo PATH: $PATH
 
 
 #check whether the system supports pushd/popd
@@ -44,14 +46,9 @@ popd () {
 fi
 
 
-
 autoconf_getsubdirs () {
  if [ -e configure.ac ]; then
  cat configure.ac | sed -e 's|#.*$||' | grep AC_CONFIG_SUBDIRS | \
-	sed -e 's|^.*AC_CONFIG_SUBDIRS(\[\(.*\)\]).*$|\1|'
- fi
- if [ -e configure.in ]; then
- cat configure.in | sed -e 's|#.*$||' | grep AC_CONFIG_SUBDIRS | \
 	sed -e 's|^.*AC_CONFIG_SUBDIRS(\[\(.*\)\]).*$|\1|'
  fi
 }
@@ -65,9 +62,7 @@ manual_autoreconf_doit () {
  echo faking autoreconf for $1
  pushd $1
 
-  SUBDIRS=$(autoconf_getsubdirs)
-
-  runit $ACLOCAL -I $BASEDIR/m4 || exit 1
+  runit $ACLOCAL -I $BASEDIR/src/m4 || exit 1
 
   runit $LIBTOOLIZE --automake -c || exit 1
 
@@ -80,12 +75,6 @@ manual_autoreconf_doit () {
   if [ -e Makefile.am ]; then
    runit $AUTOMAKE --add-missing -c || exit 1
   fi
-
-
-  for d in ${SUBDIRS}; do
-    manual_autoreconf_doit ${d}
-  done
-
  popd
 }
 
@@ -95,6 +84,10 @@ manual_autoreconf () {
  pushd $BASEDIR
  BASEDIR=$(pwd)
  popd
+
+ #SUBDIRS=autoconf_getsubdirs
+ SUBDIRS=". src/plugins/videoAVT src/plugins/videoAVT src/plugins/videoHALCON src/plugins/videoPYLON"
+
 
 # check for all the needed helpers
  DIE=0
@@ -145,11 +138,11 @@ if test "$DIE" -eq 1; then
         exit 1
 fi
 
-manual_autoreconf_doit $BASEDIR
+for s in ${SUBDIRS}; do
+ manual_autoreconf_doit ${BASEDIR}/${s}
+done
 }
 
-
-echo PATH: $PATH
 
 if test x$AUTORECONF != x; then
   echo running autoreconf
