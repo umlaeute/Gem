@@ -43,7 +43,6 @@ version.h: $(srcdir)/../version.h.in FORCE
 
 libBase_la_SOURCES=  \
     configDarwin.h \
-    config.h \
     configLinux.h \
     configNT.h \
     CPPExtern.cpp \
