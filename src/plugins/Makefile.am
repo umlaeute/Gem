@@ -11,9 +11,8 @@ SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP videoV
 
 SUBDIRS += videoAVT videoHALCON videoPYLON
 
-if FALSE
-SUBDIRS += videoQTKit
-endif
+## filmTEST is not built by default, but we want to ship it
+DIST_SUBDIRS = $(SUBDIRS) filmTEST
 
 
 noinst_LTLIBRARIES = libplugins.la
