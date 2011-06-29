@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../m4
-AM_CPPFLAGS = -I../..
+AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST = filmDS.sln filmDS.vcproj
 

@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../m4
-AM_CPPFLAGS = -I../..
+AM_CPPFLAGS = -I$(srcdir)/../..
 
 pkglib_LTLIBRARIES= gem_imageJPEG.la
 gem_imageJPEG_la_CXXFLAGS =

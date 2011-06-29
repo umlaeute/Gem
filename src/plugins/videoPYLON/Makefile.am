@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
-AM_CPPFLAGS = -I../..
+AM_CPPFLAGS = -I$(srcdir)/../..
 
 plugindir=$(libdir)/Gem
 
