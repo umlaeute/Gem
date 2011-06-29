@@ -17,7 +17,7 @@ pkgversion_cvs () {
     PKGVERSION_BUGFIX="CVS"
     PKGVERSION_CODENAME=
   else
-    return -1
+    return 1
   fi
 }
 
