@@ -80,3 +80,8 @@ Gem.@GEM_RTE_EXTENSION@: Gem.la
 	test .libs/$@ && $(LN_S) .libs/$@ $@
 
 all-local:: Gem.@GEM_RTE_EXTENSION@
+
+EXTRA_Gem_la_SOURCES = \
+	pkgversion.sh \
+	pkgversion.txt \
+	version.h.in
