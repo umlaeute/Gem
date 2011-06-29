@@ -113,11 +113,10 @@ AC_ARG_WITH([ALL],
 
 GEM_CHECK_RTE()
 
-GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
-
-if test "x$enable_PIC" != "xno"; then
- GEM_CHECK_CXXFLAGS([-fPIC])
-fi
+#GEM_ARG_ENABLE([PIC],     [PositionIndependentCode (potentially slower)])
+#if test "x$enable_PIC" != "xno"; then
+# GEM_CHECK_CXXFLAGS([-fPIC])
+#fi
 
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
@@ -507,16 +506,16 @@ fi
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 
-#linking on linux
-GEM_CHECK_LDFLAGS([-shared -Wl,--export-dynamic])
-# linking on os-X
-GEM_CHECK_LDFLAGS([-bundle -mmacosx-version-min=10.3 -undefined dynamic_lookup],
-  ,
-  GEM_CHECK_LDFLAGS([-dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup],
-    ,
-	  GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
-    )
-  )
+##linking on linux
+#GEM_CHECK_LDFLAGS([-shared -Wl,--export-dynamic])
+## linking on os-X
+#GEM_CHECK_LDFLAGS([-bundle -mmacosx-version-min=10.3 -undefined dynamic_lookup],
+#  ,
+#  GEM_CHECK_LDFLAGS([-dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup],
+#    ,
+#	  GEM_CHECK_LDFLAGS([-bundle -undefined suppress -flat_namespace])
+#    )
+#  )
 
 dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
 AC_CHECK_TOOL([STRIP], [strip], [true])
