@@ -554,13 +554,13 @@ if test "x$have_libv4l1" = "xyes" || test "x$have_libv4l2" = "xyes"; then
 fi
 
 if test "x$with_film" = "xplugins"; then
- use_film_plugins="yes (ignore missing support below)"
+ use_film_plugins="yes"
 else
  use_film_plugins="no (using $with_film backend)"
 fi
 
 if test "x$with_video" = "xplugins"; then
- use_video_plugins="yes (ignore missing support below)"
+ use_video_plugins="yes"
 else
  use_video_plugins="no (using $with_video backend)"
 fi
