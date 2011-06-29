@@ -3,7 +3,7 @@
 package=Gem
 
 
-#AUTORECONF=$(which autoreconf)
+AUTORECONF=$(which autoreconf)
 
 AUTOHEADER=$(which autoheader)
 AUTOMAKE=$(which automake)
