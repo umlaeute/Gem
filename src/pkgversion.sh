@@ -1,8 +1,8 @@
 #!/bin/sh
 
-VERSIONFILE=pkgversion.txt
+VERSIONFILE=${0%/*}/pkgversion.txt
 if test -e "${VERSIONFILE}"; then
- . ./${VERSIONFILE}
+ . ${VERSIONFILE}
 fi
 
 if test "x${PKGVERSION_MAJOR}" = "x"; then
@@ -55,16 +55,14 @@ fullversion() {
 
 substitute_file() {
  local INFILE
- local OUTFILE
- OUTFILE=$1
- INFILE=${OUTFILE}.in
+ INFILE=$1
 
  if [ -e "${INFILE}" ]; then
    sed  -e "s|@PKGVERSION_MAJOR@|${PKGVERSION_MAJOR}|g" \
 	-e "s|@PKGVERSION_MINOR@|${PKGVERSION_MINOR}|g" \
 	-e "s|@PKGVERSION_BUGFIX@|${PKGVERSION_BUGFIX}|g" \
 	-e "s|@PKGVERSION_CODENAME@|${PKGVERSION_CODENAME}|g" \
-	${INFILE} > ${OUTFILE}
+	${INFILE}
  else
   echo "${INFILE} not found!" 1>&2
  fi

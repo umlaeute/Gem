@@ -33,10 +33,10 @@ libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 
 FORCE:
 
-GemVersion.cpp: ../version.h FORCE
+GemVersion.cpp: version.h FORCE
 
-../version.h: ../version.h.in FORCE
-	$(SHELL) ../pkgversion.sh $@
+version.h: $(srcdir)/../version.h.in FORCE
+	$(SHELL) $(srcdir)/../pkgversion.sh $< > $@
 
 
 
