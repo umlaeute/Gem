@@ -2,10 +2,12 @@ AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)
 
-pkglib_LTLIBRARIES = pix_mano.la
+extradir=$(libdir)/pix_mano
+
+extra_LTLIBRARIES = pix_mano.la
  
-pkglib_DATA  = pix_mano-LICENSE.txt
-pkglib_DATA += pix_mano-help.pd
+extra_DATA  = LICENSE.txt
+extra_DATA += pix_mano-help.pd
 
 
 ## some default flags

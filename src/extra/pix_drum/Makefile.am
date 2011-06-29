@@ -2,10 +2,12 @@ AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)
 
-pkglib_LTLIBRARIES = pix_drum.la
+extradir=$(libdir)/pix_drum
 
-pkglib_DATA  = pix_drum-LICENSE.txt
-pkglib_DATA += pix_drum-help.pd
+extra_LTLIBRARIES = pix_drum.la
+
+extra_DATA  = LICENSE.txt
+extra_DATA += pix_drum-help.pd
 
 ## some default flags
 pix_drum_la_CXXFLAGS =
