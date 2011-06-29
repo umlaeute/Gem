@@ -4,7 +4,7 @@ SUFFIXES = .pd
 
 gemhelpdir=$(pkglibdir)
 
-gemhelp_DATA = \
+dist_gemhelp_DATA = \
 	gemdefaultwindow.pd \
 	gemhead.pd \
 	gemmouse.pd \
