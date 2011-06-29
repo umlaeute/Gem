@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "dummy configure... starting at top"
+cd ..
+./configure $@
