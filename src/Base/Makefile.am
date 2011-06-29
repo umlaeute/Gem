@@ -4,6 +4,8 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)
 
+DISTCLEANFILES = version.h
+
 noinst_LTLIBRARIES = libBase.la
 
 libBase_la_CXXFLAGS = -DHAVE_VERSION_H
