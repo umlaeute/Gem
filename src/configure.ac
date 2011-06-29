@@ -553,6 +553,17 @@ if test "x$have_libv4l1" = "xyes" || test "x$have_libv4l2" = "xyes"; then
   have_v4l="yes (libv4l)"
 fi
 
+have_ieee1394=""
+if test "x$have_libdc1394_2" = "xyes"; then
+ have_ieee1394="$have_ieee1394 libdc1394"
+fi
+
+if "x$have_ieee1394" = "x"; then
+ have_ieee1394="no";
+else
+ have_ieee1394="yes ($have_ieee1394)"
+fi
+
 if test "x$with_film" = "xplugins"; then
  use_film_plugins="yes"
 else
@@ -564,6 +575,7 @@ if test "x$with_video" = "xplugins"; then
 else
  use_video_plugins="no (using $with_video backend)"
 fi
+
 
 
 AC_MSG_RESULT([
