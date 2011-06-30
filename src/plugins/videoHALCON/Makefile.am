@@ -22,6 +22,10 @@ gem_videoHALCON_la_LDFLAGS  += @GEM_RTE_LIBS@
 gem_videoHALCON_la_CXXFLAGS += @GEM_HALCON_CXXFLAGS@
 gem_videoHALCON_la_LIBADD   += @GEM_HALCON_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_videoHALCON_la_SOURCES= videoHALCON.cpp videoHALCON.h
 

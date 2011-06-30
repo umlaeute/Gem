@@ -17,6 +17,10 @@ gem_filmAVI_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 # Dependencies
 ## none
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_filmAVI_la_SOURCES  = filmAVI.cpp filmAVI.h
 

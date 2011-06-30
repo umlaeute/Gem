@@ -16,6 +16,10 @@ gem_videoUNICAP_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_videoUNICAP_la_CXXFLAGS += @GEM_LIB_LIBUNICAP_CFLAGS@ 
 gem_videoUNICAP_la_LIBADD   += @GEM_LIB_LIBUNICAP_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_videoUNICAP_la_SOURCES= videoUNICAP.cpp videoUNICAP.h
 

@@ -16,6 +16,10 @@ gem_videoV4L_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_videoV4L_la_CXXFLAGS += @GEM_LIB_LIBV4L1_CFLAGS@
 gem_videoV4L_la_LIBADD   += @GEM_LIB_LIBV4L1_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_videoV4L_la_SOURCES= videoV4L.cpp videoV4L.h
 

@@ -17,6 +17,10 @@ gem_videoVFW_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_videoVFW_la_CXXFLAGS += @GEM_LIB_VFW32_CFLAGS@
 gem_videoVFW_la_LIBADD   += @GEM_LIB_VFW32_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_videoVFW_la_SOURCES= videoVFW.cpp videoVFW.h
 

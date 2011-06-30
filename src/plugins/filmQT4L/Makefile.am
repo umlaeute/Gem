@@ -16,6 +16,10 @@ gem_filmQT4L_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_filmQT4L_la_CXXFLAGS += @GEM_LIB_LIBQUICKTIME_CFLAGS@ @GEM_LIB_LQT_CFLAGS@
 gem_filmQT4L_la_LIBADD   += @GEM_LIB_LIBQUICKTIME_LIBS@   @GEM_LIB_LQT_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_filmQT4L_la_SOURCES= filmQT4L.cpp filmQT4L.h
 

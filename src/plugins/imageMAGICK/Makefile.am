@@ -16,6 +16,10 @@ gem_imageMAGICK_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK___CFLAGS@
 gem_imageMAGICK_la_LIBADD   += @GEM_LIB_IMAGEMAGICK___LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_imageMAGICK_la_SOURCES= imageMAGICK.cpp imageMAGICK.h
 

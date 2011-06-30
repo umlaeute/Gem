@@ -22,6 +22,10 @@ gem_videoPYLON_la_LDFLAGS  += @GEM_RTE_LIBS@
 gem_videoPYLON_la_CXXFLAGS += @GEM_PYLON_CXXFLAGS@
 gem_videoPYLON_la_LIBADD   += @GEM_PYLON_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_videoPYLON_la_SOURCES= videoPYLON.cpp videoPYLON.h \
 	CameraProperties.cpp CameraProperties.h \

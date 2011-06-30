@@ -16,6 +16,10 @@ gem_videoDS_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 # Dependencies
 ## none
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_videoDS_la_SOURCES= videoDS.cpp videoDS.h DSgrabber.cpp DSgrabber.h
 

@@ -16,5 +16,9 @@ gem_filmMPEG3_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 gem_filmMPEG3_la_CXXFLAGS += @GEM_LIB_LIBMPEG3_CFLAGS@
 gem_filmMPEG3_la_LIBADD   += @GEM_LIB_LIBMPEG3_LIBS@
 
+# convenience symlinks
+include $(srcdir)/../symlink_ltlib.mk
+
+
 ### SOURCES
 gem_filmMPEG3_la_SOURCES= filmMPEG3.cpp filmMPEG3.h
