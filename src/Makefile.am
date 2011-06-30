@@ -75,8 +75,10 @@ libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
 ## uha, this is ugly
-$(top_builddir)/Gem.@GEM_RTE_EXTENSION@: $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@ Gem.la
-	rm -f $@ && $(LN_S) $< $@
+$(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@: Gem.la
+
+$(top_builddir)/Gem.@GEM_RTE_EXTENSION@: $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@ 
+	rm -f $@ && test -e $< && $(LN_S) $< $@
 
 all-local:: $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
 
