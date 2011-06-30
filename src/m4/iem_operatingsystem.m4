@@ -34,6 +34,7 @@ GNU/kFreeBSD)
 *cygwin*)
 	WINDOWS=yes
 	CYGWIN=yes
+  ;;
 GNU)
 	 HURD=yes
   ;;
