@@ -2,7 +2,7 @@
 # rather than editing this file directly, you should instead edit the
 # original Makefile.am.template and re-generate this file
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)/src
 
 DISTCLEANFILES = version.h
 

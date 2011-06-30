@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)
+AM_CPPFLAGS = -I$(top_srcdir)/src
 
 SUBDIRS  = imageMAGICK imageTIFF imageJPEG imageSGI imageQT
 SUBDIRS += filmAVI filmAVIPLAY filmDS filmDarwin filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
