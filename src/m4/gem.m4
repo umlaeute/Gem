@@ -212,10 +212,11 @@ dnl turn of further checking for this package
     have_[]Name="no"
     [$5]
    ])
-
    AS_VAR_POPDEF([ac_Lib])dnl
+
 fi[]dnl
 
+AM_CONDITIONAL(HAVE_LIB_[]NAME, [test "x${have_[]Name}" = "xyes"])
 # restore original flags
 CPPFLAGS="$tmp_gem_check_lib_cppflags"
 CFLAGS="$tmp_gem_check_lib_cflags"
@@ -278,6 +279,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
     LDFLAGS="$gem_check_ldflags_org"
     [$3]
   fi
+AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
 undefine([NAME])
 ])# GEM_CHECK_FRAMEWORK
 
