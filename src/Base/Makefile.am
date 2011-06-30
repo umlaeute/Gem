@@ -21,6 +21,10 @@ libBase_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 libBase_la_CXXFLAGS += $(X_CFLAGS)
 libBase_la_LIBADD   += $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
 
+# openGL
+libBase_la_CXXFLAGS += @GLX_CFLAGS@
+libBase_la_LIBADD   += @GLX_LIBS@
+
 # GLEW
 libBase_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
 libBase_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
