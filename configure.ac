@@ -15,6 +15,7 @@ AC_CONFIG_FILES([help/Makefile doc/Makefile examples/Makefile])
 
 # src
 AC_CONFIG_FILES([src/Makefile src/Gem/Makefile src/RTE/Makefile src/Base/Makefile src/plugins/Makefile ])
+#AC_CONFIG_FILES([src/Output/Makefile ])
 
 ## plugins that use this autoconf instance for configuration
 AC_CONFIG_FILES([src/plugins/imageQT/Makefile])
@@ -179,30 +180,11 @@ if test "x$with_x" != "xno"; then
  AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
 fi
 
-have_gl="no"
-have_glu="no"
-
-GEM_CHECK_FRAMEWORK(OpenGL,
-        [have_opengl_framework="yes" have_gl="yes"],
-        [have_opengl_framework="no" have_gl="no"])
-
-# don't need libGL if we have the OpenGL framework
-if test "x$have_opengl_framework" != "xyes"; then
- AC_CHECK_LIB(GL,glInitNames)
- if test "x$ac_cv_lib_GL_glInitNames" = "xyes"; then
-   have_gl="yes"
- fi
-
- AC_CHECK_LIB(GLU,gluLookAt)
- if test "x$ac_cv_lib_GLU_gluLookAt" = "xyes"; then
-   have_glu="yes"
- fi
-fi
-
-GEM_CHECK_FRAMEWORK(AGL)
-if test "x$gem_check_ldflags_success" = "xyes"; then
-  have_glu="yes"
-fi
+IEM_CHECK_GL
+IEM_CHECK_GLU
+IEM_CHECK_GLUT
+IEM_CHECK_GLX
+IEM_CHECK_AGL
 
 ## use system's libGLEW
 GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library], [no])
@@ -413,21 +395,6 @@ fi
 
 
 
-have_gl_headers="no"
-AC_CHECK_HEADER(GL/gl.h,have_gl_headers="yes")
-AC_CHECK_HEADER(OpenGL/gl.h,have_gl_headers="yes")
-if test "x$have_gl_headers" != "xyes"; then
-  have_gl="no"
-fi
-
-have_glu_headers="no"
-AC_CHECK_HEADER(GL/glu.h,have_glu_headers="yes")
-AC_CHECK_HEADER(OpenGL/glu.h,have_glu_headers="yes")
-if test "x$have_glu_headers" != "xyes"; then
-  have_glu="no"
-fi
-
-AC_CHECK_HEADERS(GL/glx.h)
 
 
 # enabling "-freg-struct-return" (for FreeFrame)
@@ -644,11 +611,11 @@ if test "x$PD_VERSION" = "x"; then
   AC_MSG_ERROR([Pd (header) is mandatory and seems to be missing!])
 fi
 
-if test "x$have_gl" != "xyes"; then
+if test "x$no_gl" = "xyes"; then
  AC_MSG_ERROR([GL (headers) not found! you need openGL!!!])
 fi
 
-if test "x$have_glu" != "xyes"; then
+if test "x$no_glu" = "xyes" && test "x$no_agl" = "xyes"; then
  AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])
 fi
 
