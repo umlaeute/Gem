@@ -40,18 +40,93 @@
 
 
 AC_DEFUN([IEM_CHECK_GL],
-[AC_REQUIRE([AX_CHECK_GL]),
+[AC_REQUIRE([AX_CHECK_GL])
 AM_CONDITIONAL(HAVE_GL, [test "x$no_gl" != "xyes"])
 ])
 
 AC_DEFUN([IEM_CHECK_GLU],
-[AC_REQUIRE([AX_CHECK_GLU]),
+[AC_REQUIRE([AX_CHECK_GLU])
 AM_CONDITIONAL(HAVE_GLU, [test "x$no_glu" != "xyes"])
 ])
 
 
 AC_DEFUN([IEM_CHECK_GLUT],
-[AC_REQUIRE([AX_CHECK_GLUT]),
+[AC_REQUIRE([AX_CHECK_GLUT])
 AM_CONDITIONAL(HAVE_GLUT, [test "x$no_glut" != "xyes"])
 ])
 
+
+AC_DEFUN([IEM_CHECK_GLX],
+[
+AC_CHECK_HEADERS([GL/glx.h],,no_glx=yes)
+AM_CONDITIONAL(HAVE_GLX, [test "x$no_glx" != "xyes"])
+AC_SUBST([GLX_CFLAGS])
+AC_SUBST([GLX_LIBS])
+])
+
+
+
+AC_DEFUN([IEM_CHECK_AGL],
+[
+GEM_CHECK_FRAMEWORK(AGL)
+if test "x$gem_check_ldflags_success" != "xyes"; then
+   no_agl="yes"
+fi
+AGL_CFLAGS=""
+AGL_LIBS="${GEM_FRAMEWORK_AGL}"
+AC_SUBST([AGL_CFLAGS])
+AC_SUBST([AGL_LIBS])
+AM_CONDITIONAL(HAVE_AGL, [test "x$no_agl" != "xyes"])
+])
+
+
+
+AC_DEFUN([IEM_CHECK_GLEW],
+[
+GEM_CHECK_LIB(glew, GLEW, glewInit,,no_glew=yes,,[OpenGL Extension Wrangler library], [no])
+AM_CONDITIONAL(HAVE_GLEW, [test "x$no_glew" != "xyes"])
+])
+
+
+
+dnl # original code in Gem/configure.ac
+dnl have_gl="no"
+dnl have_glu="no"
+dnl 
+dnl GEM_CHECK_FRAMEWORK(OpenGL,
+dnl         [have_opengl_framework="yes" have_gl="yes"],
+dnl         [have_opengl_framework="no" have_gl="no"])
+dnl 
+dnl # don't need libGL if we have the OpenGL framework
+dnl if test "x$have_opengl_framework" != "xyes"; then
+dnl  AC_CHECK_LIB(GL,glInitNames)
+dnl  if test "x$ac_cv_lib_GL_glInitNames" = "xyes"; then
+dnl    have_gl="yes"
+dnl  fi
+dnl 
+dnl  AC_CHECK_LIB(GLU,gluLookAt)
+dnl  if test "x$ac_cv_lib_GLU_gluLookAt" = "xyes"; then
+dnl    have_glu="yes"
+dnl  fi
+dnl fi
+dnl GEM_CHECK_FRAMEWORK(AGL)
+dnl if test "x$gem_check_ldflags_success" = "xyes"; then
+dnl   have_glu="yes"
+dnl fi
+
+
+dnl have_gl_headers="no"
+dnl AC_CHECK_HEADER(GL/gl.h,have_gl_headers="yes")
+dnl AC_CHECK_HEADER(OpenGL/gl.h,have_gl_headers="yes")
+dnl if test "x$have_gl_headers" != "xyes"; then
+dnl   have_gl="no"
+dnl fi
+dnl 
+dnl have_glu_headers="no"
+dnl AC_CHECK_HEADER(GL/glu.h,have_glu_headers="yes")
+dnl AC_CHECK_HEADER(OpenGL/glu.h,have_glu_headers="yes")
+dnl if test "x$have_glu_headers" != "xyes"; then
+dnl   have_glu="no"
+dnl fi
+dnl 
+dnl AC_CHECK_HEADERS(GL/glx.h)
