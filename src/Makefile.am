@@ -27,13 +27,20 @@ Gem_la_LIBADD   =
 # RTE flags
 Gem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 Gem_la_LIBADD   += @GEM_RTE_LIBS@
+Gem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
-Gem_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
+# openGL
+Gem_la_CXXFLAGS += @GL_CFLAGS@ @GLU_CFLAGS@ @AGL_CFLAGS@
+Gem_la_LIBADD   += @GL_LIBS@   @GLU_LIBS@   @AGL_LIBS@
+Gem_la_LDFLAGS  += 
 
 
 # LIBADD or LDADD for convenience libraries?
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
 Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Base/libBase.la plugins/libplugins.la
+
+## disabled for now
+#SUBDIRS+=Output
 
 if TARGET_CONTROLS
 SUBDIRS+=Controls
