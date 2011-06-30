@@ -75,10 +75,10 @@ libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
 ## uha, this is ugly
-$(top_srcdir)/Gem.@GEM_RTE_EXTENSION@: $(abs_srcdir)/.libs/Gem.@GEM_RTE_EXTENSION@ Gem.la
+$(top_builddir)/Gem.@GEM_RTE_EXTENSION@: $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@ Gem.la
 	rm -f $@ && $(LN_S) $< $@
 
-all-local:: $(top_srcdir)/Gem.@GEM_RTE_EXTENSION@
+all-local:: $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
 
 EXTRA_Gem_la_SOURCES = \
 	pkgversion.sh \
