@@ -121,15 +121,17 @@ bool filmDarwin :: open(const std::string filename, int format)
        movieScale,
        (long)GetMovieTimeBase(m_movie));
 #if 1
-  Track movieTrack = GetMovieIndTrackType(m_movie,
+  if (true) {
+	Track movieTrack = GetMovieIndTrackType(m_movie,
                                     1,
                                     VideoMediaType,
                                     movieTrackMediaType);  //get first video track
-  Media trackMedia = GetTrackMedia(movieTrack);
-  m_numFrames= GetMediaSampleCount(trackMedia);
-  durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
+	Media trackMedia = GetTrackMedia(movieTrack);
+  	m_numFrames= GetMediaSampleCount(trackMedia);
+  	durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
+  }
 #else
-   GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
+  GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
                                fixed1, NULL, &duration);
   m_numFrames = movieDur/duration;
 #endif
