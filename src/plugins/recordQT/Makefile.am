@@ -3,7 +3,10 @@ AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST = recordQT.sln recordQT.vcproj
 
-pkglib_LTLIBRARIES= gem_recordQT.la
+pkglib_LTLIBRARIES=
+if HAVE_FRAMEWORK_QUICKTIME
+pkglib_LTLIBRARIES+= gem_recordQT.la
+endif
 
 gem_recordQT_la_CXXFLAGS =
 gem_recordQT_la_LDFLAGS  = -module -avoid-version -shared

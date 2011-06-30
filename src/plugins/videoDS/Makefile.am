@@ -3,7 +3,10 @@ AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST = videoDS.sln videoDS.vcproj
 
-pkglib_LTLIBRARIES= gem_videoDS.la
+pkglib_LTLIBRARIES=
+if WINDOWS
+pkglib_LTLIBRARIES+= gem_videoDS.la
+endif
 
 gem_videoDS_la_CXXFLAGS =
 gem_videoDS_la_LDFLAGS  = -module -avoid-version -shared

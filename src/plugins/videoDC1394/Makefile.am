@@ -2,7 +2,10 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../..
 
-pkglib_LTLIBRARIES= gem_videoDC1394.la
+pkglib_LTLIBRARIES=
+if HAVE_LIB_LIBDC1394_2
+pkglib_LTLIBRARIES+= gem_videoDC1394.la
+endif
 
 gem_videoDC1394_la_CXXFLAGS =
 gem_videoDC1394_la_LDFLAGS  = -module -avoid-version -shared

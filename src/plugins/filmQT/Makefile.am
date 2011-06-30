@@ -4,7 +4,10 @@ AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST = filmQT.sln filmQT.vcproj
 
-pkglib_LTLIBRARIES= gem_filmQT.la
+pkglib_LTLIBRARIES=
+if HAVE_FRAMEWORK_QUICKTIME
+pkglib_LTLIBRARIES+= gem_filmQT.la
+endif
 
 gem_filmQT_la_CXXFLAGS =
 gem_filmQT_la_LDFLAGS  = -module -avoid-version -shared

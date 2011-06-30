@@ -2,7 +2,10 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../..
 
-pkglib_LTLIBRARIES= gem_imageMAGICK.la
+pkglib_LTLIBRARIES=
+if HAVE_LIB_IMAGEMAGICK__
+pkglib_LTLIBRARIES+= gem_imageMAGICK.la
+endif
 
 gem_imageMAGICK_la_CXXFLAGS =
 gem_imageMAGICK_la_LDFLAGS  = -module -avoid-version -shared

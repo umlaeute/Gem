@@ -2,7 +2,12 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../..
 
-pkglib_LTLIBRARIES= gem_imageTIFF.la
+pkglib_LTLIBRARIES=
+if HAVE_LIB_TIFF
+pkglib_LTLIBRARIES+= gem_imageTIFF.la
+endif
+
+
 gem_imageTIFF_la_CXXFLAGS =
 gem_imageTIFF_la_LDFLAGS  = -module -avoid-version -shared
 gem_imageTIFF_la_LIBADD   =

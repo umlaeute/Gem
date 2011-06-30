@@ -4,7 +4,10 @@ AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST = filmDS.sln filmDS.vcproj
 
-pkglib_LTLIBRARIES= gem_filmDS.la
+pkglib_LTLIBRARIES=
+if WINDOWS
+pkglib_LTLIBRARIES+= gem_filmDS.la
+endif
 
 gem_filmDS_la_CXXFLAGS =
 gem_filmDS_la_LDFLAGS  = -module -avoid-version -shared

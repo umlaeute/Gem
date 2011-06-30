@@ -3,7 +3,10 @@ AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST=videoVFW.sln videoVFW.vcproj
 
-pkglib_LTLIBRARIES= gem_videoVFW.la
+pkglib_LTLIBRARIES=
+if WINDOWS
+pkglib_LTLIBRARIES+= gem_videoVFW.la
+endif
 
 gem_videoVFW_la_CXXFLAGS =
 gem_videoVFW_la_LDFLAGS  = -module -avoid-version -shared

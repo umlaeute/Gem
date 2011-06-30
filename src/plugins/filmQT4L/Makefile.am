@@ -2,7 +2,14 @@
 ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../..
 
-pkglib_LTLIBRARIES= gem_filmQT4L.la
+pkglib_LTLIBRARIES=
+
+if HAVE_LIB_LIBQUICKTIME
+pkglib_LTLIBRARIES+= gem_filmQT4L.la
+endif
+if HAVE_LIB_LQT
+pkglib_LTLIBRARIES+= gem_filmQT4L.la
+endif
 
 gem_filmQT4L_la_CXXFLAGS =
 gem_filmQT4L_la_LDFLAGS  = -module -avoid-version -shared

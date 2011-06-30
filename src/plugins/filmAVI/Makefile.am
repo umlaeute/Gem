@@ -4,7 +4,10 @@ AM_CPPFLAGS = -I$(srcdir)/../..
 
 EXTRA_DIST = filmAVI.sln filmAVI.vcproj
 
-pkglib_LTLIBRARIES= gem_filmAVI.la
+pkglib_LTLIBRARIES=
+if WINDOWS
+pkglib_LTLIBRARIES += gem_filmAVI.la
+endif
 
 gem_filmAVI_la_CXXFLAGS =
 gem_filmAVI_la_LDFLAGS  = -module -avoid-version -shared
