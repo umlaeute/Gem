@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
-ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
-AM_CPPFLAGS = -I$(top_srcdir)
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/src/m4
+AM_CPPFLAGS = -I$(top_srcdir)/src
 
 extradir=$(libdir)/pix_drum
 
@@ -21,13 +21,24 @@ pix_drum_la_LIBADD   += @GEM_RTE_LIBS@
 pix_drum_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
 
+# convenience symlinks
 ## uha, this is ugly
 pix_drum.@GEM_RTE_EXTENSION@: pix_drum.la
 	rm -f $@
-	test .libs/$@ && $(LN_S) .libs/$@ $@
+	test -f .libs/$@ && $(LN_S) .libs/$@ $@
+
+.PHONY: clean-conviencesymlink
+
+clean-conviencesymlink:
+	rm -f pix_drum.@GEM_RTE_EXTENSION@
+
 
 all-local:: pix_drum.@GEM_RTE_EXTENSION@
 
+clean-local:: clean-conviencesymlink
+
+
+### SOURCES
 pix_drum_la_SOURCES = \
 	pix_drum.cpp \
 	pix_drum.h
