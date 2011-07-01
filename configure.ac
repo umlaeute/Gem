@@ -258,16 +258,17 @@ AC_CHECK_HEADERS([vl/vl.h])
 
 GEM_ARG_WITH(unicap, [video input], [force])
 
-if test "x$with_unicap" != "xno"; then
  GEM_CHECK_LIB(libunicap, unicap, unicap_check_version,,,,[video input])
 
-  AC_CHECK_HEADER([unicap/unicap.h],
+if test "x$have_unicap" = "xyes"; then
+ AC_CHECK_HEADER([unicap/unicap.h],
                   [
                     AC_DEFINE([HAVE_UNICAP], [], [video capturing using UNICAP])
                     have_unicap="yes"
                   ],[have_unicap="no"])
-
 fi
+AM_CONDITIONAL(HAVE_LIB_UNICAP, [test "x${have_unicap}" = "xyes"])
+
 
 GEM_ARG_WITH(v4l, [video input], [force])
 AC_CHECK_HEADERS(linux/videodev.h)
