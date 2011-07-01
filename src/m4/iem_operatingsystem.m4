@@ -16,6 +16,7 @@ WINDOWS=no
 MINGW=no
 CYGWIN=no
 HURD=no
+IRIX=no
 
 case $host_os in
 *linux*)
@@ -50,4 +51,5 @@ AM_CONDITIONAL(WINDOWS, test x$WINDOWS = xyes)
 AM_CONDITIONAL(CYGWIN, test x$MINGW = xyes)
 AM_CONDITIONAL(MINGW, test x$MINGW = xyes)
 AM_CONDITIONAL(HURD, test x$HURD = xyes)
+AM_CONDITIONAL(IRIX, test x$IRIX = xyes)
 ]) dnl IEM_OPERATING_SYSTEM
