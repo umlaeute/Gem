@@ -356,6 +356,12 @@
 				RelativePath="..\..\src\Base\GemWinCreateNT.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\Base\GemWindow.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Base\GemWindow.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Base\glew.cpp">
 			</File>
 			<File
@@ -384,12 +390,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\PluginFactoryTimple.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Base\sgiimage.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Base\sgiimage.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\TextBase.cpp">
@@ -577,6 +577,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\square.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Geos\surface3d.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Geos\surface3d.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Geos\teapot.cpp">
@@ -1567,6 +1573,12 @@
 				RelativePath="..\..\src\Pixes\pix_tIIR.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Pixes\pix_tIIRf.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Pixes\pix_tIIRf.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Pixes\pix_video.cpp">
 			</File>
 			<File
@@ -1602,28 +1614,6 @@
 			<File
 				RelativePath="..\..\src\Pixes\pix_zoom.h">
 			</File>
-			<Filter
-				Name="filmvideo"
-				Filter="">
-				<File
-					RelativePath="..\..\src\plugins\film.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\plugins\film.h">
-				</File>
-				<File
-					RelativePath="..\..\src\plugins\record.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\plugins\record.h">
-				</File>
-				<File
-					RelativePath="..\..\src\plugins\video.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\plugins\video.h">
-				</File>
-			</Filter>
 			<Filter
 				Name="fiducialtrack"
 				Filter="">
@@ -3622,27 +3612,12 @@
 		<Filter
 			Name="Helpers"
 			Filter="">
-			<File
-				RelativePath="..\..\src\Helpers\any.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Rte\MessageCallbacks.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Helpers\RTE.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Gem"
 			Filter="">
 			<File
 				RelativePath="..\..\src\Gem\any.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Rte\Array.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Rte\Array.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Base\Properties.cpp">
@@ -3653,6 +3628,42 @@
 			<File
 				RelativePath="..\..\src\Gem\RTE.h">
 			</File>
+			<File
+				RelativePath="..\..\src\Gem\SynchedWorkerThread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\SynchedWorkerThread.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\ThreadMutex.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\ThreadMutex.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\ThreadSemaphore.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\ThreadSemaphore.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\WorkerThread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\WorkerThread.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Output"
@@ -3662,6 +3673,65 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Output\gemw32window.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="RTE"
+			Filter="">
+			<File
+				RelativePath="..\..\src\Rte\Array.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\Array.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\MessageCallbacks.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="plugins"
+			Filter="">
+			<File
+				RelativePath="..\..\src\plugins\film.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\film.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\image.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\image.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imageloader.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imageloader.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imagesaver.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imagesaver.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\record.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\record.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\video.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\video.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\videoThreaded.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\videoThreaded.h">
 			</File>
 		</Filter>
 	</Files>
