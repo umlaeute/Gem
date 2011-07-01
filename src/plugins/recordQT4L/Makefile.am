@@ -3,6 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../..
 
 pkglib_LTLIBRARIES=
+
 if HAVE_LIB_LIBQUICKTIME
 pkglib_LTLIBRARIES+= gem_recordQT4L.la
 endif
