@@ -6,7 +6,8 @@
 
 namespace gem {
 
-  struct Properties::PIMPL {
+  class Properties::PIMPL {
+  public:
     std::map<std::string, any> valuemap;
     std::map<std::string, enum Properties::PropertyType> typemap;
 

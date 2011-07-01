@@ -28,7 +28,8 @@
 
 namespace gem { namespace plugins {
 
-struct film :: PIMPL {
+class film :: PIMPL {
+public:
   bool m_thread;
   PIMPL(bool thread) :
     m_thread(thread)

@@ -16,7 +16,7 @@
 #define FTGL
 
 /* use the "new" film-objects, to allow the use of multiple APIs */
-#define GEM_VIDEOBACKEND GEM_VIDEOBACKEND_DS
+//#define GEM_VIDEOBACKEND GEM_VIDEOBACKEND_DS
 
 /* quicktime-support for film-loading */
 #define HAVE_QUICKTIME

@@ -75,7 +75,7 @@ void image :: setProperties(gem::Properties&props) {
 void image :: getProperties(gem::Properties&props) {
   // nada
   std::vector<std::string>keys=props.keys();
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
     gem::any unset;
     props.set(keys[i], unset);

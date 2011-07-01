@@ -65,7 +65,7 @@ pix_video :: ~pix_video(){
   /* clean up all video handles;
    * the video-handles have to stop the transfer themselves
    */
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<m_videoHandles.size(); i++) {
     delete m_videoHandles[i];
     m_videoHandles[i]=NULL;
@@ -277,14 +277,14 @@ void pix_video :: driverMess() {
     post("current driver: '%s'", m_videoHandle->getName().c_str());
   }
   if(m_videoHandles.size()>1) {
-    int i=0;
+    unsigned int i=0;
     post("available drivers:");
     for(i=0; i<m_videoHandles.size(); i++) {
       gem::video*handle= m_videoHandles[i];
       if(NULL==handle)continue;
       startpost("\t'%s' provides ", handle->getName().c_str());
       std::vector<std::string>backends=handle->provides();
-      int j=0;
+      unsigned int j=0;
       for(j=0; j<backends.size(); j++) {
         startpost("'%s' ", backends[j].c_str());
       }
@@ -399,7 +399,7 @@ void pix_video :: enumerateMess()
       std::string name=m_videoHandles[i]->getName();
       verbose(1, "enumerating: %s", name.c_str());
       std::vector<std::string>temp=m_videoHandles[i]->enumerate();
-      int i=0;
+      unsigned int i=0;
       for(i=0; i<temp.size(); i++) {
         backends.push_back(name);
         data.push_back(temp[i]);
@@ -525,7 +525,7 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
   if(m_videoHandle) {
     m_videoHandle->getProperties(m_readprops);
     std::vector<std::string>keys=m_readprops.keys();
-    int i=0;
+    unsigned int i=0;
     for(i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       SETSYMBOL(ap+0, gensym(key.c_str()));
@@ -576,7 +576,6 @@ void pix_video :: enumPropertyMess()
     t_atom ap[4];
     int ac=3;
 
-    int i=0;
 
     m_videoHandle->enumProperties(readable, writeable);
 
@@ -587,6 +586,7 @@ void pix_video :: enumPropertyMess()
     outlet_anything(m_infoOut, gensym("proplist"), 2, ap);
 
     SETSYMBOL(ap+0, gensym("read"));
+    unsigned int i=0;
     for(i=0; i<readkeys.size(); i++) {
       ac=3;
       std::string key=readkeys[i];
@@ -692,7 +692,7 @@ void pix_video :: clearPropertiesMess()
 
 void pix_video :: asynchronousMess(bool state)
 {
-  int i;
+  unsigned int i;
   for(i=0; i<m_videoHandles.size(); i++) {
     if(m_videoHandles[i])
       m_videoHandles[i]->grabAsynchronous(state);

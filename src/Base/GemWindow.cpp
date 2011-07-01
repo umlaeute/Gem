@@ -96,7 +96,7 @@ public:
       delete[]ap;
   }
   void dequeue(void) {
-    int i=0;
+    unsigned int i=0;
     for(i=0; i<qQueue.size(); i++) {
       sendInfo(qQueue[i]);
     }

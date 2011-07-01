@@ -12,7 +12,8 @@
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record);
 
-struct pix_record :: PIMPL {
+class pix_record :: PIMPL {
+public:
   PIMPL(void) {};
   ~PIMPL(void) {};
 

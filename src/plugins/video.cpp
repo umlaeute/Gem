@@ -523,7 +523,7 @@ void video :: setProperties(gem::Properties&props) {
   // nada
 
   std::vector<std::string> keys=props.keys();
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
     enum gem::Properties::PropertyType typ=props.type(keys[i]);
     std::cerr  << "key["<<keys[i]<<"]: "<<typ<<" :: ";
@@ -548,7 +548,7 @@ void video :: setProperties(gem::Properties&props) {
 void video :: getProperties(gem::Properties&props) {
   // nada
   std::vector<std::string>keys=props.keys();
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
     gem::any unset;
     props.set(keys[i], unset);

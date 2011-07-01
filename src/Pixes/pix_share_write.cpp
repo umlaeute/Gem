@@ -43,10 +43,10 @@ int hash_str2us(std::string s) {
   int a=63689;
   int b=378551;
 
-  int i=0;
 
   if(s.length()<1)return -1;
 
+  unsigned int i=0;
   for(i=0; i<s.length(); i++) {
     result=result*a+s[i];
     a *= b;

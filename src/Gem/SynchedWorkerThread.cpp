@@ -116,7 +116,7 @@ namespace gem { namespace thread {
   }
 
   unsigned int SynchedWorkerThread::dequeue(void) {
-    m_pimpl->dequeue();
+    return m_pimpl->dequeue();
   }
 
   bool SynchedWorkerThread::setPolling(bool value) {
