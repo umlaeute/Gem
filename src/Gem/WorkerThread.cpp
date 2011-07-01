@@ -34,7 +34,9 @@
 #if defined __linux__ || defined __APPLE__
 # include <unistd.h>
 #endif
-
+#ifdef _WIN32
+# include <winsock2.h>
+#endif
 
 #include <iostream>
 
@@ -130,8 +132,12 @@ namespace gem { namespace thread {
       keeprunning=true;
       pthread_create(&p_thread, 0, process, this);
 
-      while(!isrunning)
-	usleep(10);
+      struct timeval sleep;
+      while(!isrunning) {
+      sleep.tv_sec=0;
+      sleep.tv_usec=10;
+      select(0,0,0,0,&sleep);
+      }
 
       return true;
 
