@@ -126,6 +126,7 @@ namespace gem {
 
 
     std::string getExtension(const std::string&fileName, const bool lower) {
+      using namespace std;
       std::string Ext;
       std::string::size_type idx;
       idx = fileName.rfind('.');
@@ -140,7 +141,7 @@ namespace gem {
 #else
         const int length = Ext.length();
         for(int i=0; i < length; ++i)  {
-          Ext[i] = std::tolower(Ext[i]);
+          Ext[i] = tolower(Ext[i]);
         }
 #endif
       }
