@@ -217,8 +217,8 @@ namespace gem { namespace image {
 
 
 
-  const id_t load::IMMEDIATE= 0;
-  const id_t load::INVALID  =~0;
+  const load::id_t load::IMMEDIATE= 0;
+  const load::id_t load::INVALID  =~0;
 
   bool load::sync(const std::string filename,
                   imageStruct&result,
