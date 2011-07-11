@@ -71,7 +71,7 @@ namespace gem { namespace thread {
 
     }
     ~PIMPL(void) {
-
+	stop(true);
     }
 
     inline WorkerThread::id_t nextID(void) {
@@ -95,7 +95,7 @@ namespace gem { namespace thread {
 	  me->m_todo.unlock();
 	  //std::cerr << "THREAD: waiting for new data...freeze"<<std::endl;
 	  me->s_newdata.freeze();
-	  //std::cerr << "THREAD: waiting for new data...thawed"<<std::endl;
+	  //std::cerr << "THREAD: waiting for new data...thawed "<<me->keeprunning<<std::endl;
 
 	  // either new data has arrived or we are told to stop
 	  if(!me->keeprunning)
@@ -144,11 +144,23 @@ namespace gem { namespace thread {
       return true;
 
     }
-    bool stop(void) {
+    bool stop(bool wait=true) {
       if(!isrunning)return true;
 
       keeprunning=false;
       s_newdata.thaw();
+
+      if(!wait)
+	return (!isrunning);
+
+      struct timeval sleep;
+      while(isrunning) {
+      sleep.tv_sec=0;
+      sleep.tv_usec=10;
+      select(0,0,0,0,&sleep);
+      s_newdata.thaw();
+      }
+      return true;
     }
 
   };
@@ -160,7 +172,7 @@ namespace gem { namespace thread {
   }
 
   WorkerThread::~WorkerThread(void) {
-    stop();
+    stop(true);
 
     delete m_pimpl;
     m_pimpl=0;
@@ -168,8 +180,8 @@ namespace gem { namespace thread {
   bool WorkerThread::start(void) {
     return m_pimpl->start();
   }
-  bool WorkerThread::stop(void) {
-    return m_pimpl->stop();
+  bool WorkerThread::stop(bool wait) {
+    return m_pimpl->stop(wait);
   }
 
 

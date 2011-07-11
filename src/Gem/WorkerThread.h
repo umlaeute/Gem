@@ -30,7 +30,7 @@ namespace gem { namespace thread {
       ////
       // start/stop thread(s)
       virtual bool start(void);
-      virtual bool stop(void);
+      virtual bool stop(bool wait=true);
 
       typedef unsigned int id_t;
       static const id_t INVALID, IMMEDIATE;
