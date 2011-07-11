@@ -123,6 +123,7 @@ AC_PROG_LIBTOOL
 
 AC_PROG_INSTALL
 AC_PROG_LN_S
+AC_PROG_SED
 
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
