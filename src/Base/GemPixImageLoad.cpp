@@ -56,7 +56,7 @@ namespace gem {
           m_canThread=false;
           break;
         }
-      }      
+      }
     }
     bool addLoader( std::vector<std::string>available, std::string ID=std::string(""))
     {
@@ -153,10 +153,12 @@ namespace gem { namespace image {
 
     gem::PixImageLoader*imageloader;
     PixImageThreadLoader(void) :
+      SynchedWorkerThread(false),
       imageloader(gem::PixImageLoader::getInstance())
     { 
       if(!imageloader->isThreadable()) 
         throw(42);
+      start();
     }
     virtual ~PixImageThreadLoader(void) {
     }
@@ -248,15 +250,7 @@ namespace gem { namespace image {
     if(threadloader) {
       return threadloader->queue(ID, cb, userdata, filename);
     }
-    imageStruct*result=new imageStruct;
-    gem::Properties props;
-    if(sync(filename, *result, props)) {
-      ID=IMMEDIATE;
-      (*cb)(userdata, ID, result, props);
-      return true;
-    }
-    ID=INVALID;
-    return false;
+    return sync(cb, userdata, filename, ID);
   }
 
   bool load::sync(load::callback cb,
