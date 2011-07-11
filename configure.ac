@@ -4,7 +4,7 @@
 AC_PREREQ(2.60)
 AC_INIT([Gem],[0.93],[zmoelnig@iem.at],[Gem],[http://gem.iem.at])
 
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([1.10 foreign])
 
 
 #
