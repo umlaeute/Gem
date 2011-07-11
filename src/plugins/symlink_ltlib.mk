@@ -7,8 +7,8 @@
 
 convenience-link: $(pkglib_LTLIBRARIES)
 	  @for soname in `echo | $(EGREP) "^dlname=" $^ | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
-            echo "$$soname: creating convenience link"; \
-	    rm -f $(top_builddir)/$$soname && \
+            echo "$$soname: creating convenience link from $(abs_builddir)/.libs to $(top_builddir)"; \
+	    rm -f $(top_builddir)/$$soname ; \
 	    test -e $(abs_builddir)/.libs/$$soname && \
 	    $(LN_S) $(abs_builddir)/.libs/$$soname $(top_builddir)/$$soname; \
 	  done 
