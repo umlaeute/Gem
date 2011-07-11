@@ -177,14 +177,14 @@ pix_film :: pix_film(t_symbol *filename) :
 
   std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::film>::getIDs();
 
-  if(!addHandle(available_ids, "DS"))
+  if(!addHandle(available_ids, "DirectShow"))
     addHandle(available_ids, "AVI");
 
   addHandle(available_ids, "gmerlin");
-  addHandle(available_ids, "QT");
-  addHandle(available_ids, "QT4L");
+  addHandle(available_ids, "QuickTime");
+  addHandle(available_ids, "quicktime4linux");
   addHandle(available_ids, "MPEG3");
-  addHandle(available_ids, "AVIPLAY");
+  addHandle(available_ids, "aviplay");
   addHandle(available_ids, "MPEG1");
 
   // the rest
