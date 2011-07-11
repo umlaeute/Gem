@@ -38,13 +38,6 @@ filmDarwin :: filmDarwin(void) : film(false),
 #endif
 				 durationf(0.)
 {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef HAVE_CARBONQUICKTIME
-    post("pix_film:: Darwin support");
-#endif /*  HAVE_CARBONQUICKTIME */
-    first_time = false;
-  }
 }
 
 ////////////////////////////////////////////////////////

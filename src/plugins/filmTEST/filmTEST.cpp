@@ -36,12 +36,6 @@ REGISTER_FILMFACTORY("test", filmTEST);
 filmTEST :: filmTEST(void) : film(),
 			     m_data(NULL), m_length(0)
 {
-  static bool first_time=true;
-  if (first_time) {
-    post("pix_film:: test support");
-    first_time = false;
-  }
-
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_image.image.xsize=320;
   m_image.image.ysize=240;

@@ -21,7 +21,7 @@
 using namespace gem::plugins;
 
 #ifdef HAVE_QUICKTIME
-REGISTER_FILMFACTORY("QT", filmQT);
+REGISTER_FILMFACTORY("QuickTime", filmQT);
 # ifdef __APPLE__
 #  define FILMQT_DEFAULT_PIXELFORMAT k32ARGBPixelFormat
 
@@ -80,14 +80,6 @@ filmQT :: filmQT(void) : film(false),
 			 duration(0),
 			 m_bInit(false)
 {
-  static bool first_time=true;
-  if(!filmQT_initQT())return;
-
-  if (first_time) {
-    post("pix_film:: QuickTime support");
-    first_time = false;
-  }
-
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_bInit = true;
 }

@@ -20,7 +20,7 @@
 using namespace gem::plugins;
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
-REGISTER_FILMFACTORY("DS", filmDS);
+REGISTER_FILMFACTORY("DirectShow", filmDS);
 
 # include <atlbase.h>
 # include <atlconv.h>
@@ -46,11 +46,6 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 
 filmDS :: filmDS(void) : film() {
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
-  static bool first_time=true;
-  if (first_time) {
-    post("pix_film:: DirectShow support");
-    first_time = false;
-  }
   HRESULT RetVal;
   m_reqFrame = 1;
   m_frame = NULL;

@@ -21,7 +21,7 @@
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG3
-REGISTER_FILMFACTORY("mpeg3", filmMPEG3);
+REGISTER_FILMFACTORY("MPEG3", filmMPEG3);
 #endif
 
 /* take care of API changes */
@@ -42,14 +42,6 @@ REGISTER_FILMFACTORY("mpeg3", filmMPEG3);
 /////////////////////////////////////////////////////////
 
 filmMPEG3 :: filmMPEG3(void) : film(false) {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef HAVE_LIBMPEG3
-    post("pix_film:: libmpeg3 support");
-#endif
-    first_time = false;
-  }
-
 #ifdef HAVE_LIBMPEG3
   mpeg_file=0;
 #endif

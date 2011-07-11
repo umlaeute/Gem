@@ -21,7 +21,7 @@
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBAVIPLAY
-REGISTER_FILMFACTORY("AVIPLAY", filmAVIPLAY);
+REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 # include <unistd.h>
 # include <time.h>
 #endif
@@ -36,13 +36,6 @@ REGISTER_FILMFACTORY("AVIPLAY", filmAVIPLAY);
 /////////////////////////////////////////////////////////
 
 filmAVIPLAY :: filmAVIPLAY(void) : film() {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef HAVE_LIBAVIPLAY
-    post("pix_film:: libaviplay support");
-#endif
-    first_time = false;
-  }
 #ifdef HAVE_LIBAVIPLAY
   m_avifile=0;
   m_avistream=0;

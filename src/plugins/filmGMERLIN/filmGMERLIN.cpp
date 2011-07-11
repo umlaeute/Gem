@@ -52,17 +52,9 @@ filmGMERLIN :: filmGMERLIN(void) : film(),
                                          m_lastFrame(0),
                                          m_doConvert(false)
 {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef HAVE_GMERLIN
-    post("pix_film:: gmerlin support");
-#endif
-    first_time = false;
-  }
 #ifdef HAVE_GMERLIN
   m_gconverter=gavl_video_converter_create ();
   m_finalformat = new gavl_video_format_t[1];
-
 #endif
 }
 

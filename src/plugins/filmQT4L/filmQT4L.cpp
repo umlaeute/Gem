@@ -24,7 +24,7 @@ using namespace gem::plugins;
 #ifdef HAVE_LIBQUICKTIME
 # include <colormodels.h>
 
-REGISTER_FILMFACTORY("QT4L", filmQT4L);
+REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
 #endif
 
 /////////////////////////////////////////////////////////
@@ -37,13 +37,6 @@ REGISTER_FILMFACTORY("QT4L", filmQT4L);
 /////////////////////////////////////////////////////////
 
 filmQT4L :: filmQT4L(void) : film() {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef HAVE_LIBQUICKTIME
-    post("pix_film:: quicktime support");
-#endif
-    first_time = false;
-  }
 #ifdef HAVE_LIBQUICKTIME
   m_quickfile=0;
 #endif

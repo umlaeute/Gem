@@ -22,7 +22,7 @@
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG
-REGISTER_FILMFACTORY("mpeg1", filmMPEG1);
+REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 #endif
 
 /////////////////////////////////////////////////////////
@@ -37,14 +37,6 @@ REGISTER_FILMFACTORY("mpeg1", filmMPEG1);
 filmMPEG1 :: filmMPEG1(void) : film(),
 			       m_data(NULL), m_length(0)
 {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef HAVE_LIBMPEG
-    post("pix_film:: libmpeg support");
-#endif
-    first_time = false;
-  }
-
 #ifdef HAVE_LIBMPEG
   m_streamfile=0;
 #endif

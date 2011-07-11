@@ -34,14 +34,6 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 /////////////////////////////////////////////////////////
 
 filmAVI :: filmAVI(void) : film() {
-  static bool first_time=true;
-  if (first_time) {
-#ifdef _WIN32
-    post("pix_film:: avi support");
-#endif
-    first_time = false;
-  }
-
 #ifdef _WIN32
   m_getFrame     = NULL;
   m_streamVid    = NULL;
