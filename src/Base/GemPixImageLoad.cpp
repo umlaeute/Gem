@@ -193,7 +193,12 @@ namespace gem { namespace image {
       return SynchedWorkerThread::queue(ID, reinterpret_cast<void*>(in));
     };
 
-    static PixImageThreadLoader*getInstance(void) {
+    static PixImageThreadLoader*getInstance(bool retry=true) {
+      static bool didit=false;
+      if(!retry && didit)
+	return s_instance;
+      didit=true;
+
       if(NULL==s_instance) {
         try {
           s_instance=new PixImageThreadLoader();
@@ -273,7 +278,7 @@ namespace gem { namespace image {
   }
 
   bool load::cancel(id_t ID) {
-    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
+    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance(false);
     if(threadloader) {
       return threadloader->cancel(ID);
     }
@@ -288,7 +293,7 @@ namespace gem { namespace image {
     return true;
   }
   void load::poll(void) {
-    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
+    PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance(false);
     if(threadloader) {
       threadloader->dequeue();
     }
