@@ -38,6 +38,8 @@
 # include <winsock2.h>
 #endif
 
+#include <sys/time.h>
+
 #include <iostream>
 
 
