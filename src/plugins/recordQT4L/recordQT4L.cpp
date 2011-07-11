@@ -173,7 +173,7 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
       int v_i=0;
       float v_f=0.f;
       const char*v_s=NULL;
-#if LQT_BUILD >= LQT_MAKE_BUILD(3,1,0)
+#if defined LQT_MAKE_BUILD && LQT_BUILD >= LQT_MAKE_BUILD(3,1,0)
       const char* q_key = key.c_str();
 #else
       char* q_key=const_cast<char*>(key.c_str());
