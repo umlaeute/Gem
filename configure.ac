@@ -502,22 +502,8 @@ dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 #    )
 #  )
 
-dnl if we don't have $STRIP set, we set it to ${host}-strip or strip
-AC_CHECK_TOOL([STRIP], [strip], [true])
-AC_MSG_CHECKING([if strip is GNU strip])
-if $STRIP -V 2>&1 | grep GNU > /dev/null
-then
-    AC_SUBST(STRIP_ALL," -s")
-    AC_SUBST(STRIP_UNNEEDED, "--strip-unneeded")
-    AC_MSG_RESULT([yes])
-else
-    AC_SUBST(STRIP_ALL, "")
-    AC_SUBST(STRIP_UNNEEDED,"-x")
-    AC_MSG_RESULT([no])
-fi
-
 dnl we want dos2unix...
-AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [true])
+dnl AC_CHECK_TOOL([DOS2UNIX], [dos2unix], [true])
 
 AC_OUTPUT
 
