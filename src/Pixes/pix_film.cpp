@@ -195,6 +195,15 @@ pix_film :: pix_film(t_symbol *filename) :
   if(m_handles.size()==0) {
     error("no movie decoding backends found!");
   }
+  int i;
+  static bool firsttime=true;
+  for(i=0; i<m_ids.size(); i++) {
+    if(firsttime)
+      post("%s support", m_ids[i].c_str());
+    else
+      verbose(1, "%s support", m_ids[i].c_str());
+  }
+  firsttime=false;
 }
 
 /////////////////////////////////////////////////////////
