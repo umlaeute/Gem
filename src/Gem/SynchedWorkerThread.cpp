@@ -105,9 +105,10 @@ namespace gem { namespace thread {
   };
 
 
-  SynchedWorkerThread::SynchedWorkerThread(void) :
+  SynchedWorkerThread::SynchedWorkerThread(bool autostart) :
     m_pimpl(new PIMPL(this)) {
-    start();
+    if(autostart)
+	start();
   }
 
   SynchedWorkerThread::~SynchedWorkerThread(void) {

@@ -25,7 +25,7 @@ namespace gem { namespace thread {
       friend class PIMPL;
 
 		  public:
-      SynchedWorkerThread(void);
+      SynchedWorkerThread(bool autostart=true);
       virtual ~SynchedWorkerThread(void);
 
       /*
