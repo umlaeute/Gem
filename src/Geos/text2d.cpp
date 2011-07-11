@@ -17,9 +17,9 @@
 
 #include "text2d.h"
 
-#ifdef FTGL
-#include "FTGLPixmapFont.h"
-#include "FTGLBitmapFont.h"
+#if defined FTGL && !defined HAVE_FTGL_FTGL_H
+# include "FTGLPixmapFont.h"
+# include "FTGLBitmapFont.h"
 #endif
 
 CPPEXTERN_NEW_WITH_GIMME(text2d);

@@ -17,7 +17,7 @@
 
 #include "text3d.h"
 
-#ifdef FTGL
+#if defined FTGL && !defined HAVE_FTGL_FTGL_H
 # include "FTGLPolygonFont.h"
 #endif
 

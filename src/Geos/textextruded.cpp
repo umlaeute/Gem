@@ -17,8 +17,8 @@
 
 #include "textextruded.h"
 
-#ifdef FTGL
-#include "FTGLExtrdFont.h"
+#if defined FTGL && !defined HAVE_FTGL_FTGL_H
+# include "FTGLExtrdFont.h"
 #endif
 
 CPPEXTERN_NEW_WITH_GIMME(textextruded);
