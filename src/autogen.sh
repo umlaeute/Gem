@@ -1,4 +1,8 @@
 #!/bin/sh
+TOPDIR=..
 
-cd ../
+echo "dummy autogen.sh... starting at top: ${TOPDIR}/"
+
+
+cd ${TOPDIR}/
 ./autogen.sh $@

@@ -1,5 +1,10 @@
 #!/bin/sh
 
-echo "dummy configure... starting at top"
-cd ..
+TOPDIR=..
+
+echo "dummy configure... starting at top: ${TOPDIR}/"
+
+cd ${TOPDIR}/
+
+
 ./configure $@
