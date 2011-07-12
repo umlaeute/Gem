@@ -22,6 +22,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif
 
 #ifdef HAVE_UNICAP
+#include <map>
 # define private unicap_private
 #  include <unicap.h>
 # undef private

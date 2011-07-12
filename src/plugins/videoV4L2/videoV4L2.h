@@ -27,6 +27,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #  include <libv4l2.h> 
 # endif /* HAVE_LIBV4L2 */
 
+# include <map>
+
 # include <stdio.h>
 # include <stdlib.h>
 //# include <stdarg.h>
