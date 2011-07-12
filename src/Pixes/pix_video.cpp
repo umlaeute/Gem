@@ -21,6 +21,7 @@
 #include "pix_video.h"
 #include "Base/GemState.h"
 #include "Base/GemException.h"
+#include "plugins/PluginFactory.h"
 
 CPPEXTERN_NEW(pix_video);
 
