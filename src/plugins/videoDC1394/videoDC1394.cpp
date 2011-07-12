@@ -22,6 +22,7 @@ using namespace gem;
 
 #include "Gem/RTE.h"
 #include "Base/GemException.h"
+#include "plugins/PluginFactory.h"
 
 #ifdef HAVE_LIBDC1394
 #include <inttypes.h>

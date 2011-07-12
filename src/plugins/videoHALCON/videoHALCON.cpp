@@ -16,6 +16,8 @@
 #endif
 
 #include "videoHALCON.h"
+#include "plugins/PluginFactory.h"
+
 #include <sstream>
 using namespace gem;
 

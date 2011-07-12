@@ -18,6 +18,7 @@
 #endif
 
 #include "videoV4L2.h"
+#include "plugins/PluginFactory.h"
 
 using namespace gem;
 

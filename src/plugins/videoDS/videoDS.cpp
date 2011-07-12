@@ -20,6 +20,7 @@
 #include "videoDS.h"
 using namespace gem;
 #include "Gem/RTE.h"
+#include "plugins/PluginFactory.h"
 
 #ifdef HAVE_DIRECTSHOW
 REGISTER_VIDEOFACTORY("DS", videoDS);

@@ -44,6 +44,7 @@
 #endif
 
 #include "videoV4L.h"
+#include "plugins/PluginFactory.h"
 using namespace gem;
 
 #include "Gem/RTE.h"

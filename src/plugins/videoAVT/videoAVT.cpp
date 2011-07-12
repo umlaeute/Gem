@@ -16,6 +16,8 @@
 #endif
 
 #include "videoAVT.h"
+#include "plugins/PluginFactory.h"
+
 #include <sstream>
 
 #include <sys/types.h>

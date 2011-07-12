@@ -18,6 +18,7 @@
 #endif
 
 #include "videoVFW.h"
+#include "plugins/PluginFactory.h"
 using namespace gem;
 #include "Gem/RTE.h"
 

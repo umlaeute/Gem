@@ -24,9 +24,10 @@
 #endif
 
 #include "videoDarwin.h"
-using namespace gem;
 #include "Gem/RTE.h"
+#include "plugins/PluginFactory.h"
 
+using namespace gem;
 
 
 #ifdef HAVE_VIDEODARWIN

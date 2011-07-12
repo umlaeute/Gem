@@ -22,6 +22,8 @@
 #ifdef HAVE_PYLON
 
 #include "videoPYLON.h"
+#include "plugins/PluginFactory.h"
+
 #include <sstream>
 using namespace gem;
 
