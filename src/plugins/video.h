@@ -16,8 +16,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/GemPixUtil.h"
 
 #include <string>
-#include "plugins/PluginFactory.h"
-
 #include "Base/Properties.h"
 
 #include <vector>
@@ -123,6 +121,12 @@ namespace gem { class GEM_EXTERN video {
     virtual void releaseFrame(void);
 
 
+
+
+    /***************
+     ** THREADING
+     */
+
     /* starts the thread that will call grabFrame() (if threads are requested in the ctor) */
     bool startThread(void);
     /* stops the thread; waits at most "timeout" microseconds; if 0 waits forever; if -1 waits for time specified in ctor */
@@ -144,8 +148,16 @@ namespace gem { class GEM_EXTERN video {
      */
     void usleep(unsigned long usec);
 
+    /*
+     * THREADING
+     ************** */
+
+
     //////////////////////
     // device settings
+
+    // provide a list of devices this backend can handle */
+    virtual std::vector<std::string>enumerate(void);
 
     //////////
     // changes the device
@@ -155,12 +167,12 @@ namespace gem { class GEM_EXTERN video {
     virtual bool	    	setDevice(int d);
     virtual bool	    	setDevice(const std::string);
 
-
-    // provide a list of devices this backend can handle */
-    virtual std::vector<std::string>enumerate(void);
-
-    // get's the name of the backend (e.g. "v4l")
-    const std::string getName(void);
+    /**
+     * returns TRUE if the object can be used in a thread or FALSE otherwise
+     * if a backend implements threading itself, it should return FALSE
+     * in order to prevent double threading
+     */
+    virtual bool isThreadable(void);
 
     /** turn on/off "asynchronous"-grabbing
      * default is "true"
@@ -170,6 +182,9 @@ namespace gem { class GEM_EXTERN video {
      * returns: the old state
      */
     bool grabAsynchronous(bool);
+
+    // get's the name of the backend (e.g. "v4l")
+    const std::string getName(void);
 
   protected:
     //! indicates valid transfer (automatically set in start()/stop())
@@ -194,7 +209,7 @@ namespace gem { class GEM_EXTERN video {
 
   public:
     // for pix_video: query whether this backend provides access to this class of devices
-    // (e.g. "dv"
+    // (e.g. "dv")
     bool provides(const std::string);
     // get a list of all provided devices
     std::vector<std::string>provides(void);

@@ -16,6 +16,9 @@
 #include "Gem/RTE.h"
 using namespace gem;
 
+#include <iostream>
+#include "plugins/PluginFactory.h"
+
 #if 0
 # define debugPost post
 #else
@@ -558,6 +561,10 @@ void video :: getProperties(gem::Properties&props) {
 
 bool video :: grabAsynchronous(bool fast) {
   return m_pimpl->setAsynchronous(fast);
+}
+
+bool video :: isThreadable(void) {
+  return m_pimpl->numlocks;
 }
 
 INIT_VIDEOFACTORY();
