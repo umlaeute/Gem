@@ -12,7 +12,7 @@
 //
 /////////////////////////////////////////////////////////
   
-#include "plugins/videoThreaded.h"
+#include "plugins/videoGrabber.h"
 #include "Gem/RTE.h"
 using namespace gem;
 
@@ -39,8 +39,8 @@ using namespace gem;
  *
  */
 
-class videoThreaded :: PIMPL {
-  friend class videoThreaded;
+class videoGrabber :: PIMPL {
+  friend class videoGrabber;
 public:
   /* interfaces */
   // the list of provided device-classes
@@ -176,7 +176,7 @@ public:
   }
 
   static void*threadfun(void*you) {
-    videoThreaded*me=(videoThreaded*)you;
+    videoGrabber*me=(videoGrabber*)you;
     pixBlock*pix=NULL;
     post("starting capture thread");
     me->m_pimpl->cont=true;
@@ -208,7 +208,7 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoThreaded :: videoThreaded(const std::string name, unsigned int locks, unsigned int timeout) :
+videoGrabber :: videoGrabber(const std::string name, unsigned int locks, unsigned int timeout) :
   video(name, locks, timeout),
   m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, locks, timeout))
 {
@@ -221,7 +221,7 @@ videoThreaded :: videoThreaded(const std::string name, unsigned int locks, unsig
 // Destructor
 //
 /////////////////////////////////////////////////////////
-videoThreaded :: ~videoThreaded()
+videoGrabber :: ~videoGrabber()
 {
   if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
 
@@ -231,7 +231,7 @@ videoThreaded :: ~videoThreaded()
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoThreaded :: startTransfer()
+bool videoGrabber :: startTransfer()
 {
   return false;
 }
@@ -240,7 +240,7 @@ bool videoThreaded :: startTransfer()
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoThreaded :: stopTransfer()
+bool videoGrabber :: stopTransfer()
 {
   return false;
 }
@@ -249,7 +249,7 @@ bool videoThreaded :: stopTransfer()
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoThreaded :: restartTransfer()
+bool videoGrabber :: restartTransfer()
 {
   debugPost("restartTransfer");
   bool running=stop();
@@ -259,7 +259,7 @@ bool videoThreaded :: restartTransfer()
 }
 
 
-bool videoThreaded::startThread() {
+bool videoGrabber::startThread() {
   debugPost("startThread %d", m_pimpl->running);
   if(m_pimpl->running) {
     stopThread();
@@ -279,7 +279,7 @@ bool videoThreaded::startThread() {
   }
   return false;
 }
-bool videoThreaded::stopThread(int timeout) {
+bool videoGrabber::stopThread(int timeout) {
   int i=0;
   if(!m_pimpl->threading)return true;
   
@@ -314,13 +314,13 @@ bool videoThreaded::stopThread(int timeout) {
   m_pimpl->lock_delete();
   return true;
 }
-void videoThreaded::lock(unsigned int id) {
+void videoGrabber::lock(unsigned int id) {
   m_pimpl->lock(id);
 }
-void videoThreaded::unlock(unsigned int id) {
+void videoGrabber::unlock(unsigned int id) {
   m_pimpl->unlock(id);
 }
-void videoThreaded::usleep(unsigned long usec) {
+void videoGrabber::usleep(unsigned long usec) {
   struct timeval sleep;
   long usec_ = usec%1000000;
   long sec_=0;
@@ -330,7 +330,7 @@ void videoThreaded::usleep(unsigned long usec) {
   select(0,0,0,0,&sleep);
 }
 
-pixBlock* videoThreaded::getFrame(void) {
+pixBlock* videoGrabber::getFrame(void) {
   pixBlock*pix=&m_image;
   if(!(m_haveVideo && m_capturing))return NULL;
   if(m_pimpl->threading) {
@@ -350,13 +350,13 @@ pixBlock* videoThreaded::getFrame(void) {
 }
 
 
-void videoThreaded::releaseFrame(void) {
+void videoGrabber::releaseFrame(void) {
   m_image.newimage=false;
   unlock();
   m_pimpl->thaw();
 }
 
-bool videoThreaded :: grabAsynchronous(bool fast) {
+bool videoGrabber :: grabAsynchronous(bool fast) {
   return m_pimpl->setAsynchronous(fast);
 }
 

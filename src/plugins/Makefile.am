@@ -27,20 +27,20 @@ libplugins_la_LIBADD   += @GEM_RTE_LIBS@
 libplugins_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libplugins_la_SOURCES= \
-        film.cpp \
-        image.cpp \
-        imageloader.cpp \
-        imagesaver.cpp \
         PluginFactory.cpp \
-        record.cpp \
-        video.cpp \
-        videoThreaded.cpp \
-        film.h \
-        image.h \
-        imageloader.h \
-        imagesaver.h \
         PluginFactory.h \
         PluginFactoryTimple.h \
+        imageloader.cpp \
+        imageloader.h \
+        imagesaver.cpp \
+        imagesaver.h \
+        image.cpp \
+        image.h \
+        film.cpp \
+        film.h \
+        record.cpp \
         record.h \
+        video.cpp \
         video.h \
-        videoThreaded.h
+        videoGrabber.cpp \
+        videoGrabber.h

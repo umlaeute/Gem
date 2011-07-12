@@ -10,15 +10,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOTHREADED_H_
-#define INCLUDE_VIDEOTHREADED_H_
+#ifndef INCLUDE_VIDEOGRABBER_H_
+#define INCLUDE_VIDEOGRABBER_H_
 
 #include "video.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-	videoThreaded
+	videoGrabber
     
 	a OS-indendent parent-class for retrieving video-frames
 	(using a separate grabbing thread)
@@ -29,31 +29,31 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoThreaded : public video {
+namespace gem { class GEM_EXTERN videoGrabber : public video {
   public:
   
     //////////
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
     // 
-    videoThreaded(const std::string name, unsigned int numlocks=1, unsigned int timeout=0);
+    videoGrabber(const std::string name, unsigned int numlocks=1, unsigned int timeout=0);
   
     //////////
     // Destructor
-    virtual ~videoThreaded(void);
+    virtual ~videoGrabber(void);
 
     //! Start up the video device (called on startRendering)
     /* \return FALSE is something failed, TRUE otherwise
      */
     virtual bool	    	startTransfer(void);
 
-    //! Stop the videoThreaded device (called on stopRendering)
+    //! Stop the videoGrabber device (called on stopRendering)
     /* \return TRUE if a transfer was going on, FALSE if the transfer was already stopped
      */
     virtual bool	   	stopTransfer();
 
 
-    //! Stops the videoThreaded device and if it was running restarts it
+    //! Stops the videoGrabber device and if it was running restarts it
     /* \return the return code of startTransfer()
      */
     virtual bool	   	restartTransfer();
