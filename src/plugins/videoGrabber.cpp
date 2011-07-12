@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////
   
 #include "plugins/videoGrabber.h"
+#include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 using namespace gem;
 
