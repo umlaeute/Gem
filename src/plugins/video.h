@@ -118,7 +118,7 @@ namespace gem { class GEM_EXTERN video {
 
     //! release a frame (after use)
     /* this gets called at postRender()
-     * is you are using DMA or the like, now is the time to release the ressource
+     * if you are using DMA or the like, now is the time to release the ressource
      */
     virtual void releaseFrame(void);
 
