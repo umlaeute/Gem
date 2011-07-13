@@ -25,6 +25,27 @@
 
 #include "Gem/RTE.h"
 
+// hmm, the GetMimeList() function has changed!
+//  ImageMagick-6.6.2-0: **GetMimeList(const char *,unsigned long *,ExceptionInfo *),
+//  ImageMagick-6.6.2-1: **GetMimeList(const char *,size_t *,ExceptionInfo *),
+// theoretically, "unsigned long" and "size_t" are pretty much the same
+// but in practice the compiler will complain bitterly
+// set let's do some magick...
+
+#ifndef MagickLibInterface
+# define MagickLibInterface 0
+#endif
+#ifndef MagickLibVersion
+# define MagickLibVersion 0
+#endif
+
+// this won't catch ImageMagick>=6.6.2-1, but what can I do?
+#if (MagickLibInterface > 3) || (MagickLibVersion >= 0x663)
+# define mimelistlength_t size_t
+#else
+# define mimelistlength_t unsigned long
+#endif
+
 
 using namespace gem::plugins;
 
@@ -52,12 +73,7 @@ imageMAGICK :: imageMAGICK()
   //post("imageMAGICK");
   char**mimelist; 
   char what;
-#if defined MagickLibInterface && (MagickLibInterface > 3)
-  size_t
-#else
-  unsigned long
-#endif
-    length;
+  mimelistlength_t  length;
   ExceptionInfo exception;
   GetExceptionInfo(&exception);
   mimelist=GetMimeList("image/*", &length, &exception);
@@ -179,8 +195,6 @@ float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filen
 
   return result;
 }
-
-
 
 
 #endif
