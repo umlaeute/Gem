@@ -39,8 +39,10 @@
 # define MagickLibVersion 0
 #endif
 
-// this won't catch ImageMagick>=6.6.2-1, but what can I do?
-#if (MagickLibInterface > 3) || (MagickLibVersion >= 0x663)
+// this won't catch ImageMagick>=6.6.2-0, but what can I do?
+// ubuntu/natty ships with 6.6.2-6!
+// another workaround: compile with "-fpermissive"
+#if (MagickLibInterface > 3) || (MagickLibVersion >= 0x662)
 # define mimelistlength_t size_t
 #else
 # define mimelistlength_t unsigned long
