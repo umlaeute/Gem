@@ -398,12 +398,6 @@
 				RelativePath="..\..\src\Base\TextBase.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Base\ThreadMutex.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Base\ThreadMutex.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Base\wglew.h">
 			</File>
 		</Filter>
@@ -3726,12 +3720,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\video.h">
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\videoThreaded.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\videoThreaded.h">
 			</File>
 		</Filter>
 	</Files>
