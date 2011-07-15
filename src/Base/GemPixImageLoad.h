@@ -36,7 +36,7 @@ struct imageStruct;
 // This can read TIFF, SGI, and JPG images
 //
 namespace gem {
-  struct Properties;
+  class Properties;
   namespace image {
     GEM_EXTERN class load {
     public:

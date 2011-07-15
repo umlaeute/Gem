@@ -21,7 +21,8 @@
 #include "RTE/Array.h"
 
 
-struct gem::RTE::Array::PIMPL {
+class gem::RTE::Array::PIMPL {
+public:
   t_float f;
   t_garray*A;
   t_word*pointer;
@@ -128,11 +129,11 @@ t_float&gem::RTE::Array :: operator[](const unsigned int&index) {
 }
 
 void gem::RTE::Array :: set(const t_float f) {
-  int i;
   if(!m_pimpl->check())
     return;
 
   t_word*wp=m_pimpl->pointer;
+  unsigned int i;
   for(i=0; i<m_pimpl->length; i++) {
     wp->w_float=f;
     wp++;

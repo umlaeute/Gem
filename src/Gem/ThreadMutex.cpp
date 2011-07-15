@@ -52,6 +52,6 @@ void gem::thread::Mutex::unlock(void) {
 }
 
 bool gem::thread::Mutex::trylock(void) {
-  return (pthread_mutex_trylock(m_pimpl->mutex));
+  return (0!=pthread_mutex_trylock(m_pimpl->mutex));
 }
 

@@ -195,7 +195,7 @@ pix_film :: pix_film(t_symbol *filename) :
   if(m_handles.size()==0) {
     error("no movie decoding backends found!");
   }
-  int i;
+  unsigned int i;
   static bool firsttime=true;
   for(i=0; i<m_ids.size(); i++) {
     if(firsttime)
@@ -215,7 +215,7 @@ pix_film :: ~pix_film()
   // Clean up the movie
   closeMess();
 
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<m_handles.size(); i++) {
     delete m_handles[i];
     m_handles[i]=NULL;
@@ -228,9 +228,7 @@ pix_film :: ~pix_film()
 /////////////////////////////////////////////////////////
 bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
 {
-  int i=0;
   int count=0;
-
 
   std::vector<std::string>id;
   if(!ID.empty()) {
@@ -247,6 +245,7 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
     id=available;
   }
 
+  unsigned int i=0;
   for(i=0; i<id.size(); i++) {
     std::string key=id[i];
     verbose(2, "trying to add '%s' as backend", key.c_str());
@@ -338,7 +337,7 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   }
   debug("handle=%x of %d", m_handle, m_handles.size());
   if(!m_handle && m_handles.size()>0){
-    int i=0;
+    unsigned int i=0;
     post("opening %s with format %X", buf, format);
     while(i<m_handles.size()){
       debug("trying handle %d: %x", i, m_handles[i]);

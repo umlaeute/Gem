@@ -33,16 +33,13 @@
 #include <pthread.h>
 #if defined __linux__ || defined __APPLE__
 # include <unistd.h>
+# include <sys/time.h>
 #endif
 #ifdef _WIN32
 # include <winsock2.h>
 #endif
 
-#include <sys/time.h>
-
 #include <iostream>
-
-
 
 namespace gem { namespace thread {
 

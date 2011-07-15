@@ -41,7 +41,7 @@ namespace gem {
 
       if(m_ids.size()>0) {
         startpost("Image loading support:");
-        int i;
+        unsigned int i;
         for(i=0; i<m_ids.size(); i++) {
           startpost(" %s", m_ids[i].c_str());
         }
@@ -50,7 +50,7 @@ namespace gem {
 
 
       m_canThread=true;
-      int i;
+      unsigned int i;
       for(i=0; i<m_loaders.size(); i++) {
         if(!m_loaders[i]->isThreadable()) {
           m_canThread=false;
@@ -60,7 +60,6 @@ namespace gem {
     }
     bool addLoader( std::vector<std::string>available, std::string ID=std::string(""))
     {
-      int i=0;
       int count=0;
 
       std::vector<std::string>id;
@@ -78,6 +77,7 @@ namespace gem {
         id=available;
       }
 
+      unsigned int i=0;
       for(i=0; i<id.size(); i++) {
         std::string key=id[i];
         verbose(2, "trying to add '%s' as backend", key.c_str());
@@ -97,7 +97,7 @@ namespace gem {
 
   public:
     virtual ~PixImageLoader(void) {
-      int i;
+      unsigned int i;
       for(i=0; i<m_loaders.size(); i++) {
         delete m_loaders[i];
         m_loaders[i]=NULL;
@@ -105,7 +105,7 @@ namespace gem {
     }
 
     virtual bool load(std::string filename, imageStruct&result, gem::Properties&props) {
-      int i;
+      unsigned int i;
       for(i=0; i<m_loaders.size(); i++) {
         if(m_loaders[i]->load(filename, result, props))
           return true;
