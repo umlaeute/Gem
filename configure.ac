@@ -286,6 +286,7 @@ fi
 AM_CONDITIONAL(HAVE_V4L, [test "x${have_v4l}" != "xno"])
 
 
+have_v4l2="no"
 GEM_ARG_WITH(v4l2, [video input], [force])
 AC_CHECK_HEADERS([linux/videodev2.h])
 GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
