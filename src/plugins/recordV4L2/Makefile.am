@@ -2,7 +2,10 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../..
 
-pkglib_LTLIBRARIES= gem_recordV4L2.la
+pkglib_LTLIBRARIES =
+if HAVE_V4L2
+pkglib_LTLIBRARIES+= gem_recordV4L2.la
+endif
 
 gem_recordV4L2_la_CXXFLAGS =
 gem_recordV4L2_la_LDFLAGS  = -module -avoid-version -shared
