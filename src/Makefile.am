@@ -6,7 +6,7 @@
 
 
 AUTOMAKE_OPTIONS = foreign
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 
 # make sure -lstdc++ is kept first
 AM_LIBTOOLFLAGS = --preserve-dup-deps
