@@ -26,6 +26,8 @@
 
 #include "Gem/ExportDef.h"
 
+#include <string>
+
 class gemhead;
 class GemState;
 class WindowInfo;

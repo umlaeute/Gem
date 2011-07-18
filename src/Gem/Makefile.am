@@ -29,6 +29,8 @@ version_current.h: $(srcdir)/../version.h.in FORCE
 
 libGem_la_SOURCES=  \
 	any.h \
+	ContextData.cpp \
+	ContextData.h \
 	Dylib.cpp \
 	Dylib.h \
 	Exception.cpp \

@@ -13,14 +13,14 @@
 
 
 
-#include "GemContextData.h"
-#include "GemContext.h"
+#include "ContextData.h"
+#include "Base/GemContext.h"
 
 /* LATER, when we have multiple contexts, this should really be "-1" or such
  */
-const int GemContextDataBase::INVALID_CONTEXT=0;
+const int gem::ContextDataBase::INVALID_CONTEXT=0;
 
-int GemContextDataBase::getCurContext(void) {
+int gem::ContextDataBase::getCurContext(void) {
   /* this should get an integer-index of the current context from GemContext */
   int id=0;
   id=gem::Context::getContextId();

@@ -17,8 +17,14 @@ LOG
 #ifndef INCLUDE_GEMGLUTIL_H_
 #define INCLUDE_GEMGLUTIL_H_
 
-#include "Base/GemBase.h"
 #include "Gem/ExportDef.h"
+
+/* for t_symbol/t_atom */
+/* LATER get rid of that (std::string) */
+#include "Gem/RTE.h"
+
+/* for GLenum */
+#include "Base/GemGL.h"
 
 GEM_EXTERN extern GLenum		glReportError (void);
 GEM_EXTERN extern int           getGLdefine(const char *name);

@@ -48,8 +48,6 @@ libBase_la_SOURCES=  \
     GemCache.h \
     GemConfig.h \
     GemContext.cpp \
-    GemContextData.cpp \
-    GemContextData.h \
     GemContext.h \
     GemEvent.cpp \
     GemEvent.h \

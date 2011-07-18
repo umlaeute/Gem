@@ -19,7 +19,7 @@
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  GemContextData
+  ContextData
     
   rendering context specific data
   this is heavily inspired by VrJuggler
@@ -28,46 +28,48 @@
 
   several things in openGL like display-lists are context dependent
   if we have multiple contexts, such values most be generated for each context
-  GemContextData provides a generic (templated) datatype for this
+  ContextData provides a generic (templated) datatype for this
 
   LATER (SOONER) think about splitting the render() into a context-specific section that 
   set's up display-lists,... and a draw() function that just calls the pre-generated values
     
   -----------------------------------------------------------------*/
 
-class GEM_EXTERN GemContextDataBase {
+namespace gem {
+
+class GEM_EXTERN ContextDataBase {
  protected:
   static const int INVALID_CONTEXT;
   virtual int getCurContext(void);
 };
 
 
-template<class GemContextDataType = int>
-  class GEM_EXTERN GemContextData : GemContextDataBase
+template<class ContextDataType = int>
+  class GEM_EXTERN ContextData : ContextDataBase
   {
     private:
     public:
    
     //////////
     // Constructor
-    GemContextData(void) : m_haveDefaultValue(false) {;}
+    ContextData(void) : m_haveDefaultValue(false) {;}
 
-    GemContextData(GemContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
+    ContextData(ContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
 
-    virtual ~GemContextData() {
+    virtual ~ContextData() {
       m_ContextDataVector.clear();
     }
     	
     /**
      * returns the context-specific value
      *
-     * @usage GemContextData<GLenum>m_fun; m_fun=GL_FUNC_ADD;
+     * @usage ContextData<GLenum>m_fun; m_fun=GL_FUNC_ADD;
      *
      * @pre We are in a draw process.
      * @note Should only be called from the draw function.
      *        Results are un-defined for other functions.
      */
-    virtual operator GemContextDataType()
+    virtual operator ContextDataType()
     {
       return (*getPtrToCur());
     }
@@ -79,7 +81,7 @@ template<class GemContextDataType = int>
      * @note Should only be called from the draw function.
      *       Results are un-defined for other functions.
      */
-    virtual GemContextDataType&operator = (GemContextDataType value)
+    virtual ContextDataType&operator = (ContextDataType value)
     {
       /* simplistic approach to handle out-of-context assignments:
        *  assign the value to all context instances
@@ -93,8 +95,8 @@ template<class GemContextDataType = int>
 
     private:
     bool m_haveDefaultValue;
-    GemContextDataType m_defaultValue;
-    std::vector<GemContextDataType*>  m_ContextDataVector;
+    ContextDataType m_defaultValue;
+    std::vector<ContextDataType*>  m_ContextDataVector;
 
 
     /* Makes sure that the vector is at least requiredSize large */
@@ -106,9 +108,9 @@ template<class GemContextDataType = int>
           while(m_ContextDataVector.size() < requiredSize)    // Add any new items needed
             {
                 if(m_haveDefaultValue) {
-                    m_ContextDataVector.push_back(new GemContextDataType(m_defaultValue));
+                    m_ContextDataVector.push_back(new ContextDataType(m_defaultValue));
                 } else {
-                    m_ContextDataVector.push_back(new GemContextDataType);
+                    m_ContextDataVector.push_back(new ContextDataType);
                 }
             }
         }
@@ -121,7 +123,7 @@ template<class GemContextDataType = int>
      * @post Synchronized.
      * @note ASSERT: Same context is rendered by same thread each time.
      */
-    GemContextDataType* getPtrToCur(void)
+    ContextDataType* getPtrToCur(void)
     {
       // Get current context
       int context_id = getCurContext();
@@ -131,7 +133,7 @@ template<class GemContextDataType = int>
       return m_ContextDataVector[context_id];
     }
 
-    void doSetAll(GemContextDataType v)
+    void doSetAll(ContextDataType v)
     {
       unsigned int i=0;
       for(i=0; i< m_ContextDataVector.size(); i++) {
@@ -139,6 +141,7 @@ template<class GemContextDataType = int>
       }
     }
   };
+};
 
 
 

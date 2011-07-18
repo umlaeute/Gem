@@ -19,6 +19,8 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "GemGL.h"
+
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32
 /* disable warnings about unknown pragmas */

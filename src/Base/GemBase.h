@@ -16,7 +16,7 @@
 #define INCLUDE_GEMBASE_H_
 
 #include "Base/GemGL.h"
-#include "Base/GemContextData.h"
+#include "Gem/ContextData.h"
 
 #include "Base/CPPExtern.h"
 
@@ -127,10 +127,10 @@ class GEM_EXTERN GemBase : public CPPExtern
   /* whether the object is internally disabled or not 
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
    */
-  GemContextData<bool>m_enabled;
+  gem::ContextData<bool>m_enabled;
 
   enum RenderState {INIT, ENABLED, DISABLED, RENDERING, MODIFIED};
-  GemContextData<enum RenderState>m_state;
+  gem::ContextData<enum RenderState>m_state;
 
  protected:
   enum RenderState getState(void);

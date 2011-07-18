@@ -16,6 +16,8 @@
 #include "GemMan.h"
 #include "Gem/Exception.h"
 
+#include "Gem/RTE.h"
+
 #include <stack>
 #include <set>
 
