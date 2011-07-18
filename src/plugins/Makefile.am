@@ -41,6 +41,7 @@ libplugins_la_SOURCES= \
         record.cpp \
         record.h \
         video.cpp \
-        video.h \
-        videoGrabber.cpp \
-        videoGrabber.h
+        video.h
+#        video.h \
+#        videoGrabber.cpp \
+#        videoGrabber.h
