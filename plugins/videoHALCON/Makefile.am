@@ -2,11 +2,13 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
-EXTRA_DIST = halcon.m4 videoHALCON.sln videoHALCON.vcproj
+EXTRA_DIST = halcon.m4 videoHALCON.sln videoHALCON.vcproj LICENSE.txt README.txt
 
 plugindir=$(libdir)/Gem
 
-plugin_LTLIBRARIES= gem_videoHALCON.la
+plugin_LTLIBRARIES=
+
+plugin_LTLIBRARIES+= gem_videoHALCON.la
 
 gem_videoHALCON_la_CXXFLAGS =
 gem_videoHALCON_la_LDFLAGS  = -module -avoid-version -shared

@@ -2,11 +2,13 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
+EXTRA_DIST = pylon.m4 videoPYLON.sln videoPYLON.vcproj LICENSE.txt README.txt
+
 plugindir=$(libdir)/Gem
 
-EXTRA_DIST = pylon.m4 videoPYLON.sln videoPYLON.vcproj
+plugin_LTLIBRARIES=
 
-plugin_LTLIBRARIES= gem_videoPYLON.la
+plugin_LTLIBRARIES+= gem_videoPYLON.la
 
 gem_videoPYLON_la_CXXFLAGS =
 gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared

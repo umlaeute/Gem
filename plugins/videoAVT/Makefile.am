@@ -2,11 +2,13 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
-EXTRA_DIST = avt.m4 videoAVT.sln videoAVT.vcproj
+EXTRA_DIST = avt.m4 videoAVT.sln videoAVT.vcproj LICENSE.txt README.txt
 
 plugindir=$(libdir)/Gem
 
-plugin_LTLIBRARIES= gem_videoAVT.la
+plugin_LTLIBRARIES=
+
+plugin_LTLIBRARIES+= gem_videoAVT.la
 
 gem_videoAVT_la_CXXFLAGS =
 gem_videoAVT_la_LDFLAGS  = -module -avoid-version -shared
