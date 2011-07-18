@@ -30,7 +30,7 @@ using namespace gem;
 #define NUM_BUFFERS 8
 
 #include "Gem/RTE.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 #if 0
 # define debug ::post

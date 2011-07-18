@@ -24,8 +24,8 @@ using namespace gem;
 #include "Gem/RTE.h"
 
 
-#include "Base/GemFiles.h"
-#include "Base/GemDylib.h"
+#include "Gem/Files.h"
+#include "Gem/Dylib.h"
 
 #if 0
 # define debug ::post

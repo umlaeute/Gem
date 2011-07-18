@@ -22,7 +22,7 @@ using namespace gem;
 #include "Base/GemBase.h"
 #include "Base/GemMan.h"
 
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

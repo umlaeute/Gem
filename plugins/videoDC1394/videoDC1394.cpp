@@ -21,7 +21,7 @@
 using namespace gem;
 
 #include "Gem/RTE.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 #include "plugins/PluginFactory.h"
 
 #ifdef HAVE_LIBDC1394

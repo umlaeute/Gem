@@ -29,7 +29,7 @@
 using namespace gem;
 
 #include "Gem/RTE.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 #if 0
 # define debug ::post

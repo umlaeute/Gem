@@ -48,7 +48,7 @@
 using namespace gem;
 
 #include "Gem/RTE.h"
-#include "Base/GemFiles.h"
+#include "Gem/Files.h"
 
 #ifndef HAVE_LIBV4L1
 # define v4l1_open ::open

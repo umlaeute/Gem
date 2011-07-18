@@ -8,7 +8,7 @@
 #endif
 
 #include "recordQT.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 using namespace gem;
 

@@ -23,7 +23,7 @@
 using namespace gem;
 
 #include "Gem/RTE.h"
-#include "Base/GemFiles.h"
+#include "Gem/Files.h"
 
 #ifndef HAVE_LIBV4L2
 # define v4l2_open ::open
