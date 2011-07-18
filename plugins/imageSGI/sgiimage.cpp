@@ -22,7 +22,6 @@
 
 // FIXXME: use C++ memory allocators
 
-//#include "Base/GemConfig.h"
 #include <stdlib.h>
 #include "sgiimage.h"
 
