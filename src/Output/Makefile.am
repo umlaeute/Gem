@@ -6,7 +6,7 @@ pkglib_LTLIBRARIES =
 pkglib_DATA        = 
 
 #if HAVE_COCOA
-if FALSE
+if DISABLED
 pkglib_LTLIBRARIES += gemcocoawindow.la
 endif
 
@@ -19,7 +19,7 @@ pkglib_LTLIBRARIES += gemglxwindow.la
 endif
 
 #if HAVE_CARBON
-if FALSE
+if DISABLED
 pkglib_LTLIBRARIES += gemmacwindow.la
 endif
 
