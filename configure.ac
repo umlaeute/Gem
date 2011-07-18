@@ -64,7 +64,7 @@ AC_CONFIG_FILES([build/Makefile])
 
 ##########################
 
-AC_CONFIG_MACRO_DIR([src/m4])
+AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_SRCDIR([src/Base/GemBase.h])
