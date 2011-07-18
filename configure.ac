@@ -18,37 +18,38 @@ AC_CONFIG_FILES([src/Makefile src/Gem/Makefile src/RTE/Makefile src/Base/Makefil
 AC_CONFIG_FILES([src/Output/Makefile ])
 
 ## plugins that use this autoconf instance for configuration
-AC_CONFIG_FILES([src/plugins/imageQT/Makefile])
-AC_CONFIG_FILES([src/plugins/imageMAGICK/Makefile])
-AC_CONFIG_FILES([src/plugins/imageTIFF/Makefile])
-AC_CONFIG_FILES([src/plugins/imageJPEG/Makefile])
-AC_CONFIG_FILES([src/plugins/imageSGI/Makefile])
+AC_CONFIG_FILES([plugins/Makefile])
+AC_CONFIG_FILES([plugins/imageQT/Makefile])
+AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
+AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
+AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
+AC_CONFIG_FILES([plugins/imageSGI/Makefile])
 
-AC_CONFIG_FILES([src/plugins/filmAVI/Makefile])
-AC_CONFIG_FILES([src/plugins/filmAVIPLAY/Makefile])
-AC_CONFIG_FILES([src/plugins/filmDS/Makefile])
-AC_CONFIG_FILES([src/plugins/filmDarwin/Makefile])
-AC_CONFIG_FILES([src/plugins/filmGMERLIN/Makefile])
-AC_CONFIG_FILES([src/plugins/filmMPEG1/Makefile])
-AC_CONFIG_FILES([src/plugins/filmMPEG3/Makefile])
-AC_CONFIG_FILES([src/plugins/filmQT/Makefile])
-AC_CONFIG_FILES([src/plugins/filmQT4L/Makefile])
-AC_CONFIG_FILES([src/plugins/filmTEST/Makefile])
+AC_CONFIG_FILES([plugins/filmAVI/Makefile])
+AC_CONFIG_FILES([plugins/filmAVIPLAY/Makefile])
+AC_CONFIG_FILES([plugins/filmDS/Makefile])
+AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
+AC_CONFIG_FILES([plugins/filmGMERLIN/Makefile])
+AC_CONFIG_FILES([plugins/filmMPEG1/Makefile])
+AC_CONFIG_FILES([plugins/filmMPEG3/Makefile])
+AC_CONFIG_FILES([plugins/filmQT/Makefile])
+AC_CONFIG_FILES([plugins/filmQT4L/Makefile])
+AC_CONFIG_FILES([plugins/filmTEST/Makefile])
 
-AC_CONFIG_FILES([src/plugins/recordQT/Makefile])
-AC_CONFIG_FILES([src/plugins/recordQT4L/Makefile])
-AC_CONFIG_FILES([src/plugins/recordV4L/Makefile])
-AC_CONFIG_FILES([src/plugins/recordV4L2/Makefile])
+AC_CONFIG_FILES([plugins/recordQT/Makefile])
+AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
+AC_CONFIG_FILES([plugins/recordV4L/Makefile])
+AC_CONFIG_FILES([plugins/recordV4L2/Makefile])
 
-AC_CONFIG_FILES([src/plugins/videoDC1394/Makefile])
-AC_CONFIG_FILES([src/plugins/videoDS/Makefile])
-AC_CONFIG_FILES([src/plugins/videoDV4L/Makefile])
-AC_CONFIG_FILES([src/plugins/videoDarwin/Makefile])
-AC_CONFIG_FILES([src/plugins/videoSGI/Makefile])
-AC_CONFIG_FILES([src/plugins/videoUNICAP/Makefile])
-AC_CONFIG_FILES([src/plugins/videoV4L/Makefile])
-AC_CONFIG_FILES([src/plugins/videoV4L2/Makefile])
-AC_CONFIG_FILES([src/plugins/videoVFW/Makefile])
+AC_CONFIG_FILES([plugins/videoDC1394/Makefile])
+AC_CONFIG_FILES([plugins/videoDS/Makefile])
+AC_CONFIG_FILES([plugins/videoDV4L/Makefile])
+AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
+AC_CONFIG_FILES([plugins/videoSGI/Makefile])
+AC_CONFIG_FILES([plugins/videoUNICAP/Makefile])
+AC_CONFIG_FILES([plugins/videoV4L/Makefile])
+AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
+AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
@@ -70,14 +71,14 @@ AC_CONFIG_SRCDIR([src/Base/GemBase.h])
 
 #AC_CONFIG_SUBDIRS([src/extra])
 
-if test -d "$srcdir/src/plugins/videoAVT"; then
-  AC_CONFIG_SUBDIRS([src/plugins/videoAVT])
+if test -d "$srcdir/plugins/videoAVT"; then
+  AC_CONFIG_SUBDIRS([plugins/videoAVT])
 fi
-if test -d "$srcdir/src/plugins/videoHALCON"; then
-  AC_CONFIG_SUBDIRS([src/plugins/videoHALCON])
+if test -d "$srcdir/plugins/videoHALCON"; then
+  AC_CONFIG_SUBDIRS([plugins/videoHALCON])
 fi
-if test -d "$srcdir/src/plugins/videoPYLON"; then
-  AC_CONFIG_SUBDIRS([src/plugins/videoPYLON])
+if test -d "$srcdir/plugins/videoPYLON"; then
+  AC_CONFIG_SUBDIRS([plugins/videoPYLON])
 fi
 
 
