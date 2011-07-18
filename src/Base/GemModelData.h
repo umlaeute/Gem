@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMMODELDATA_H_
 #define INCLUDE_GEMMODELDATA_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

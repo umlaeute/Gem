@@ -14,7 +14,7 @@ LOG
 #ifndef INCLUDE_GEMVECTOR_H_
 #define INCLUDE_GEMVECTOR_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 
 

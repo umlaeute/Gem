@@ -21,7 +21,7 @@ LOG
 #include <Carbon/Carbon.h>
 #endif
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 /* this should be included for ALL platforms:
  * should we define __MMX__ for windows in there ?

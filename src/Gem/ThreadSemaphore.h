@@ -14,7 +14,7 @@ LOG
 #define INCLUDE_GEM_THREADSEMAPHORE_H_
 
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 namespace gem { 
   namespace thread {

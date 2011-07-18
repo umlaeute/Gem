@@ -13,10 +13,10 @@ LOG
 #ifndef INCLUDE_CPPEXTERN_H_
 #define INCLUDE_CPPEXTERN_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
-#include "m_pd.h"
-#include "Base/GemVersion.h"
+#include "Gem/RTE.h"
+#include "Gem/Version.h"
 
 #include <new>
 #include <string>

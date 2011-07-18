@@ -15,7 +15,7 @@
 #ifndef GEM_ANY_HPP
 #define GEM_ANY_HPP
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 #include <stdexcept>
 #include <typeinfo>

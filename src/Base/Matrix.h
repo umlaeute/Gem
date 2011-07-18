@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_MATRIX_H_
 #define INCLUDE_MATRIX_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

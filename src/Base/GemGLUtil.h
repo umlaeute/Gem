@@ -18,7 +18,7 @@ LOG
 #define INCLUDE_GEMGLUTIL_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 GEM_EXTERN extern GLenum		glReportError (void);
 GEM_EXTERN extern int           getGLdefine(const char *name);

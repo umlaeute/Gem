@@ -8,7 +8,7 @@ DISTCLEANFILES = version.h
 
 noinst_LTLIBRARIES = libBase.la
 
-libBase_la_CXXFLAGS = -DHAVE_VERSION_H
+libBase_la_CXXFLAGS =
 libBase_la_LIBADD   =
 libBase_la_LDFLAGS  =
 
@@ -32,17 +32,6 @@ libBase_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
 # FTGL
 libBase_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
 libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
-
-
-## version stuff
-.PHONY: FORCE
-
-FORCE:
-
-GemVersion.cpp: version.h FORCE
-
-version.h: $(srcdir)/../version.h.in FORCE
-	$(SHELL) $(srcdir)/../pkgversion.sh $< > $@
 
 
 
@@ -98,7 +87,6 @@ libBase_la_SOURCES=  \
     GemPixPete.h \
     GemPixUtil.cpp \
     GemPixUtil.h \
-    GemSetup.cpp \
     GemShape.cpp \
     GemShape.h \
     GemSIMD.cpp \
@@ -107,8 +95,6 @@ libBase_la_SOURCES=  \
     GemState.h \
     GemVector.cpp \
     GemVector.h \
-    GemVersion.cpp \
-    GemVersion.h \
     GemVertex.cpp \
     GemVertex.h \
     GemWinCreate.h \

@@ -13,7 +13,7 @@
 #define INCLUDE_GEM_RTE_ARRAY_H_
 
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 #include <string>
 
 namespace gem {

@@ -28,7 +28,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # error Define OS specific window creation
 #endif
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32

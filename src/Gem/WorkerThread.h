@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMWORKERTHREAD_H_
 #define INCLUDE_GEMWORKERTHREAD_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 namespace gem { namespace thread {
     GEM_EXTERN class WorkerThread {

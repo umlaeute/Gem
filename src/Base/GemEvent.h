@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMEVENT_H_
 #define INCLUDE_GEMEVENT_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 //#include "Base/CPPExtern.h"
 
 //////////////////////////////////////////////////////////////////

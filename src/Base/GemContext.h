@@ -12,7 +12,7 @@ LOG
 #ifndef INCLUDE_GEMCONTEXT_H_
 #define INCLUDE_GEMCONTEXT_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 #include "Base/GemGL.h"
 
 

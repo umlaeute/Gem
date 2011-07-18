@@ -75,7 +75,7 @@ typedef union{
 } vector128f;
 #endif
 
-#include "GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 
 /* this is a help-class to query the capabilities of the cpu

@@ -15,7 +15,7 @@
 #ifndef INCLUDE_GEMSTATE_H_
 #define INCLUDE_GEMSTATE_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 #include "Base/GemGL.h"
 
 #include "Gem/RTE.h"

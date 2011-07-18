@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMLOADOBJ_H_
 #define INCLUDE_GEMLOADOBJ_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 class GemModelData;
 

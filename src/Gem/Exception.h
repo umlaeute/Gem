@@ -31,7 +31,7 @@ DESCRIPTION
 #ifndef INCLUDE_GEMEXCEPTION_H_
 #define INCLUDE_GEMEXCEPTION_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 #include <string>
 
 typedef struct _text t_object;

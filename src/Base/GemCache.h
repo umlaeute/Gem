@@ -15,7 +15,7 @@ LOG
 #ifndef INCLUDE_GEMCACHE_H_
 #define INCLUDE_GEMCACHE_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 class gemhead;
 

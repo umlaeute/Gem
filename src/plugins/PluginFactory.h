@@ -1,7 +1,7 @@
 #ifndef INCLUDE_PLUGINFACTORY_H_
 #define INCLUDE_PLUGINFACTORY_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 
 #include <map>

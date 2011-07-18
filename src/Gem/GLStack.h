@@ -15,7 +15,7 @@
 #define INCLUDE_GLSTACK_H_
 
 #include "Base/GemGL.h"
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 #include <memory>
 

@@ -17,7 +17,7 @@ LOG
 
 #include <string>
 #include <vector>
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 namespace gem {
   

@@ -17,7 +17,7 @@ LOG
 #ifndef INCLUDE_GEMPIXIMAGELOAD_H_
 #define INCLUDE_GEMPIXIMAGELOAD_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 struct imageStruct;
 

@@ -24,7 +24,7 @@
 # include <Movies.h>
 #endif
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 class gemhead;
 class GemState;

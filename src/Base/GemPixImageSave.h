@@ -17,7 +17,7 @@ LOG
 #ifndef INCLUDE_GEMPIXIMAGESAVE_H_
 #define INCLUDE_GEMPIXIMAGESAVE_H_
 
-#include "Base/GemExportDef.h"
+#include "Gem/ExportDef.h"
 
 struct imageStruct;
 
