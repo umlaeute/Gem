@@ -15,7 +15,7 @@ extra_LTLIBRARIES += pix_artoolkit.la
 #dist_extra_DATA += LICENSE.txt
 dist_extra_DATA += README.txt
 dist_extra_DATA += pix_artoolkit-help.pd
-dist_extra_DATA += pattHiro.pdf camera_para.dat
+dist_extra_DATA += pattHiro.pdf patt.hiro camera_para.dat
 endif
 
 ## some default flags
