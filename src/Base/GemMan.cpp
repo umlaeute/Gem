@@ -21,7 +21,7 @@
 #include "Base/GemConfig.h"
 #include "Gem/Settings.h"
 
-#include "GLStack.h"
+#include "Gem/GLStack.h"
 
 #include <stdlib.h>
 

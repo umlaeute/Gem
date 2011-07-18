@@ -16,7 +16,7 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #if 0
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 using namespace gem;
 

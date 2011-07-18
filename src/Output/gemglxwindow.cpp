@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include "RTE/MessageCallbacks.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 
 #ifdef HAVE_LIBXXF86VM

@@ -15,8 +15,8 @@
 /////////////////////////////////////////////////////////
 
 #include "separator.h"
-#include "Base/GLStack.h"
-#include "Base/GemException.h"
+#include "Gem/GLStack.h"
+#include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(separator);
 

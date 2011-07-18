@@ -22,7 +22,7 @@
 
 #include "torus.h"
 #include "Base/GemState.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(torus);
 

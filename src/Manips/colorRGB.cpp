@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "colorRGB.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(colorRGB);
 

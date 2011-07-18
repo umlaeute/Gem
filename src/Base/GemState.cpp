@@ -20,7 +20,7 @@
 
 /* for GemMan::StackIDs */
 #include "GemMan.h"
-#include "GLStack.h"
+#include "Gem/GLStack.h"
 
 #include <map>
 #include <memory>

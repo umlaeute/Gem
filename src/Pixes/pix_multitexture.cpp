@@ -18,7 +18,7 @@
 
 #include "Base/GemMan.h"
 #include "Base/GemPixUtil.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 #include <stdio.h>
 #ifdef _WIN32

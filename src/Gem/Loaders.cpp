@@ -20,7 +20,7 @@
 #endif /* _MSC_VER */
 
 
-#include "GemLoaders.h"
+#include "Loaders.h"
 
 #if defined __linux__ || defined __APPLE__
 # define DL_OPEN

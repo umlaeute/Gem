@@ -21,7 +21,7 @@
 #include <AGL/agl.h>
 
 #include "gemmacwindow.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 #include "RTE/MessageCallbacks.h"
 
 #define DEBUGPOST ::startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__ ), ::post

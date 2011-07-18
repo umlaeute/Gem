@@ -17,7 +17,7 @@
 // 1307:forum::für::umläute:2000
 
 #include "shininess.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(shininess);
 

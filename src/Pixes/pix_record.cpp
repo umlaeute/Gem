@@ -6,7 +6,7 @@
 #include "pix_record.h"
 
 #include "Base/GemState.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 #include "RTE/MessageCallbacks.h"
 

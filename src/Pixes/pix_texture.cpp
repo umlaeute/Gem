@@ -17,7 +17,7 @@
 
 #include "pix_texture.h"
 
-#include "Base/GemSettings.h"
+#include "Gem/Settings.h"
 #include "Base/GemPixUtil.h"
 #include <string.h>
 

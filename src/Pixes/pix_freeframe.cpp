@@ -20,10 +20,10 @@
 #include <iostream>
 
 #include "pix_freeframe.h"
-#include "Base/GemException.h"
-#include "Base/GemLoaders.h"
+#include "Gem/Exception.h"
+#include "Gem/Loaders.h"
 
-#include "Base/Properties.h"
+#include "Gem/Properties.h"
 
 #ifndef DONT_WANT_FREEFRAME
 

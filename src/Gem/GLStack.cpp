@@ -16,7 +16,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GLStack.h"
+#include "Gem/GLStack.h"
 #include "Gem/RTE.h"
 
 /* need GLUtil for glReportError */ 

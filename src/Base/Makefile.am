@@ -73,8 +73,6 @@ libBase_la_SOURCES=  \
     GemGLUtil.cpp \
     GemGLUtil_generated.h \
     GemGLUtil.h \
-    GemLoaders.cpp \
-    GemLoaders.h \
     GemLoadObj.cpp \
     GemLoadObj.h \
     GemMan.cpp \
@@ -121,8 +119,6 @@ libBase_la_SOURCES=  \
     GemWindow.h \
     glew.cpp \
     glew.h \
-    GLStack.cpp \
-    GLStack.h \
     glxew.h \
     Matrix.cpp \
     Matrix.h \

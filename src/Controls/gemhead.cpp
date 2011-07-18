@@ -25,9 +25,9 @@
 #include "Base/GemCache.h"
 #include "Base/GemBase.h"
 
-#include "Base/GLStack.h"
+#include "Gem/GLStack.h"
 #include "RTE/MessageCallbacks.h"
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 #include <stdio.h>
 

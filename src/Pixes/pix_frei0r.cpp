@@ -15,12 +15,12 @@
 #include <iostream>
 
 #include "pix_frei0r.h"
-#include "Base/GemException.h"
-#include "Base/GemLoaders.h"
+#include "Gem/Exception.h"
+#include "Gem/Loaders.h"
 
-#include "Base/GemDylib.h"
+#include "Gem/Dylib.h"
 
-#include "Base/Properties.h"
+#include "Gem/Properties.h"
 
 #include <stdio.h>
 #ifdef _WIN32

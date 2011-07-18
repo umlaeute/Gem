@@ -24,6 +24,10 @@ libGem_la_SOURCES=  \
 	Exception.h \
 	Files.cpp \
 	Files.h \
+	GLStack.cpp \
+	GLStack.h \
+	Loaders.cpp \
+	Loaders.h \
 	Properties.cpp \
 	Properties.h \
 	RTE.h \

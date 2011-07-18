@@ -29,7 +29,7 @@
 # include "Base/GemEvent.h"
 # include "Base/GemGL.h"
 # include "RTE/MessageCallbacks.h"
-# include "Base/GemException.h"
+# include "Gem/Exception.h"
 
 # include <map>
 
