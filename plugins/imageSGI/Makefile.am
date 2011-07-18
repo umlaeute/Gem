@@ -1,5 +1,5 @@
 
-ACLOCAL_AMFLAGS = -I ../../m4
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
 pkglib_LTLIBRARIES= gem_imageSGI.la

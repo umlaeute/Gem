@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = -I ../../m4
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
 EXTRA_DIST = recordQT.sln recordQT.vcproj
