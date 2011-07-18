@@ -29,9 +29,26 @@ version_current.h: $(srcdir)/../version.h.in FORCE
 	$(SHELL) $(srcdir)/../pkgversion.sh $< > $@
 
 DISTCLEANFILES += version_current.h
+## /version stuff
 
-## /version tuff
-
+libGem_la_includedir = $(includedir)/Gem/Gem
+libGem_la_include_HEADERS = \
+	any.h \
+	ContextData.h \
+	Dylib.h \
+	Exception.h \
+	ExportDef.h \
+	Files.h \
+	GLStack.h \
+	Loaders.h \
+	Properties.h \
+	RTE.h \
+	Settings.h \
+	SynchedWorkerThread.h \
+	ThreadMutex.h \
+	ThreadSemaphore.h \
+	Version.h \
+	WorkerThread.h
 
 
 libGem_la_SOURCES=  \
