@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../m4
-AM_CPPFLAGS = -I$(srcdir)/../..
+AM_CPPFLAGS = -I$(top_srcdir)/src
 
 pkglib_LTLIBRARIES=
 if HAVE_LIB_LIBDC1394_2
