@@ -13,15 +13,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VIDEOGRABBER_H_
 #define INCLUDE_VIDEOGRABBER_H_
 
-#include "video.h"
-
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
 	videoGrabber
     
-	a OS-indendent parent-class for retrieving video-frames
-	(using a separate grabbing thread)
+	a OS-indendent class for retrieving video-frames
+	(using a separate grabbing thread if possible)
+
+  this object is a frontend for other video-plugins
+  
 	
   KEYWORDS
 	pix
@@ -29,34 +30,34 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN videoGrabber : public video {
+namespace gem { class GEM_EXTERN videoGrabber {
+  private:
+    class PIMPL;
+    PIMPL*m_pimpl;
+
   public:
   
     //////////
     // Constructor
-    // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
     // 
-    videoGrabber(const std::string name, unsigned int numlocks=1, unsigned int timeout=0);
+    videoGrabber(void);
   
     //////////
     // Destructor
     virtual ~videoGrabber(void);
 
+    virtual bool open(gem::Properties&props, std::string backend=std::string());
+    virtual bool close();
+
     //! Start up the video device (called on startRendering)
     /* \return FALSE is something failed, TRUE otherwise
      */
-    virtual bool	    	startTransfer(void);
+    virtual bool	    	start(void);
 
     //! Stop the videoGrabber device (called on stopRendering)
     /* \return TRUE if a transfer was going on, FALSE if the transfer was already stopped
      */
-    virtual bool	   	stopTransfer();
-
-
-    //! Stops the videoGrabber device and if it was running restarts it
-    /* \return the return code of startTransfer()
-     */
-    virtual bool	   	restartTransfer();
+    virtual bool	   	stop();
 
     //! get the next frame (called when rendering)
     /* grab the next frame from the device
@@ -75,30 +76,6 @@ namespace gem { class GEM_EXTERN videoGrabber : public video {
      */
     virtual void releaseFrame(void);
 
-
-    /* starts the thread that will call grabFrame() (if threads are requested in the ctor) */
-    bool startThread(void);
-    /* stops the thread; waits at most "timeout" microseconds; if 0 waits forever; if -1 waits for time specified in ctor */
-    bool stopThread(int timeout=-1);
-
-    /* locks the mutex #<id>; 
-     * if the mutex does not exist (e.g. no threading), this will simply return
-     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
-     */
-    void lock(unsigned int id=0);
-    /* unlocks the mutex #<id>; 
-     * if the mutex does not exist (e.g. no threading), this will simply return
-     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
-     */
-    void unlock(unsigned int id=0);
-
-    /* sleep a selected time in usec
-     * convenience wrapper around select()
-     */
-    void usleep(unsigned long usec);
-
-
-
     /** turn on/off "asynchronous"-grabbing
      * default is "true"
      * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
@@ -109,10 +86,6 @@ namespace gem { class GEM_EXTERN videoGrabber : public video {
     bool grabAsynchronous(bool);
 
   protected:
-
-  private:
-    class PIMPL;
-    PIMPL*m_pimpl;
   };};
 
 
