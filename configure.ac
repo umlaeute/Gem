@@ -118,6 +118,7 @@ CONFIGUREFLAGS=$(echo ${ac_configure_args} | sed "s/'//g")
 
 # Checks for programs.
 AC_PROG_CXX
+dnl AC_PROG_OBJCXX
 AC_PROG_LIBTOOL
 #predeps_CXX="-lstdc++"
 
@@ -271,17 +272,31 @@ fi
 AM_CONDITIONAL(HAVE_LIB_UNICAP, [test "x${have_unicap}" = "xyes"])
 
 
+have_v4l="no"
 GEM_ARG_WITH(v4l, [video input], [force])
-AC_CHECK_HEADERS(linux/videodev.h)
+AC_CHECK_HEADERS([linux/videodev.h], have_v4l="yes")
 GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video output])
+if test "x$have_libv4l1" = "xyes"; then
+  have_v4l="yes (libv4l)"
+fi
+if test "x$with_v4l" = "xno"; then
+  have_v4l="no"
+fi
+AM_CONDITIONAL(HAVE_V4L, [test "x${have_v4l}" != "xno"])
+
 
 GEM_ARG_WITH(v4l2, [video input], [force])
-AC_CHECK_HEADERS(linux/videodev2.h)
+AC_CHECK_HEADERS([linux/videodev2.h])
 GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
 # AC_DEFINE([HAVE_VIDEO4LINUX2], [], [video capturing using v4l2])
 
-# TODO use $with_v4l and $with_v4l2
-
+if test "x$have_libv4l2" = "xyes"; then
+  have_v4l2="yes (libv4l)"
+fi
+if test "x$with_v4l2" = "xno"; then
+  have_v4l2="no"
+fi
+AM_CONDITIONAL(HAVE_V4L2, [test "x${have_v4l2}" != "xno"])
 
 
 GEM_CHECK_LIB(vfw32,vfw32,AVIFileInit,,,,video input)
@@ -488,6 +503,12 @@ if test "x$enable_pascalstrings" != "xno"; then
 fi
 
 
+## dummy conditionals that are always "true" (ENABLED) or "false" (DISABLED)
+enabled="yes"
+AM_CONDITIONAL([ENABLED], test "x${enabled}" = "xyes")
+AM_CONDITIONAL([DISABLED], test "x${enabled}" = "xno")
+
+
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
 
@@ -518,10 +539,6 @@ fi
 
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
-fi
-
-if test "x$have_libv4l1" = "xyes" || test "x$have_libv4l2" = "xyes"; then
-  have_v4l="yes (libv4l)"
 fi
 
 have_ieee1394=""
@@ -592,6 +609,7 @@ Configuration:
   capture-support 
     use PLUGINS		 : ${use_video_plugins}
     use v4l              : ${have_v4l}
+    use v4l2             : ${have_v4l2}
     use ieee1394         : ${have_ieee1394}
 ])
 
