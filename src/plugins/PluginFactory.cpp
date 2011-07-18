@@ -1,7 +1,7 @@
 #include "PluginFactory.h"
-#include "Base/GemSettings.h"
-#include "Base/GemFiles.h"
-#include "Base/GemDylib.h"
+#include "Gem/Settings.h"
+#include "Gem/Files.h"
+#include "Gem/Dylib.h"
 #include "Gem/RTE.h"
 
 #include "sstream"

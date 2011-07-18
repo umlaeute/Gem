@@ -7,7 +7,7 @@
 # include <glob.h>
 #endif
 
-#include "Base/GemFiles.h"
+#include "Files.h"
 
 #ifdef HAVE_WORDEXP_H
 # include <wordexp.h>

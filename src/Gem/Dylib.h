@@ -13,7 +13,7 @@ LOG
 #ifndef INCLUDE_GEMDYLIB_H_
 #define INCLUDE_GEMDYLIB_H_
 
-#include "Base/GemException.h"
+#include "Gem/Exception.h"
 
 
 /* an opaque handle to the platform specific library handle */

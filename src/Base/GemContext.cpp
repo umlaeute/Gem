@@ -14,7 +14,7 @@
 /////////////////////////////////////////////////////////
 #include "GemContext.h"
 #include "GemMan.h"
-#include "GemException.h"
+#include "Gem/Exception.h"
 
 #include <stack>
 #include <set>

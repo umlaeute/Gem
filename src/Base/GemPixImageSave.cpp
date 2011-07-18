@@ -17,7 +17,7 @@
 
 #include "GemPixImageSave.h"
 #include "Gem/RTE.h"
-#include "Base/GemFiles.h"
+#include "Gem/Files.h"
 
 #include "plugins/imagesaver.h"
 

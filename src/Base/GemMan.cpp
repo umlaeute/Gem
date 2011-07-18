@@ -19,7 +19,7 @@
 #include "GemMan.h"
 
 #include "Base/GemConfig.h"
-#include "Base/GemSettings.h"
+#include "Gem/Settings.h"
 
 #include "GLStack.h"
 

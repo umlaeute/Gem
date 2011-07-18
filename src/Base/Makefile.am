@@ -62,15 +62,9 @@ libBase_la_SOURCES=  \
     GemContextData.cpp \
     GemContextData.h \
     GemContext.h \
-    GemDylib.cpp \
-    GemDylib.h \
     GemEvent.cpp \
     GemEvent.h \
-    GemException.cpp \
-    GemException.h \
     GemExportDef.h \
-    GemFiles.cpp \
-    GemFiles.h \
     GemFuncUtil.cpp \
     GemFuncUtil.h \
     GemGL.h \
@@ -106,8 +100,6 @@ libBase_la_SOURCES=  \
     GemPixPete.h \
     GemPixUtil.cpp \
     GemPixUtil.h \
-    GemSettings.cpp \
-    GemSettings.h \
     GemSetup.cpp \
     GemShape.cpp \
     GemShape.h \
@@ -134,8 +126,6 @@ libBase_la_SOURCES=  \
     glxew.h \
     Matrix.cpp \
     Matrix.h \
-    Properties.cpp \
-    Properties.h \
     TextBase.cpp \
     TextBase.h \
     wglew.h

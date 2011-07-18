@@ -17,13 +17,23 @@ libGem_la_LIBADD   += @GEM_RTE_LIBS@
 libGem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libGem_la_SOURCES=  \
-    any.h \
-    RTE.h \
-    ThreadMutex.cpp \
-    ThreadMutex.h \
-    ThreadSemaphore.cpp \
-    ThreadSemaphore.h \
-    SynchedWorkerThread.cpp \
-    SynchedWorkerThread.h \
-    WorkerThread.cpp \
-    WorkerThread.h
+	any.h \
+	Dylib.cpp \
+	Dylib.h \
+	Exception.cpp \
+	Exception.h \
+	Files.cpp \
+	Files.h \
+	Properties.cpp \
+	Properties.h \
+	RTE.h \
+	Settings.cpp \
+	Settings.h \
+	SynchedWorkerThread.cpp \
+	SynchedWorkerThread.h \
+	ThreadMutex.cpp \
+	ThreadMutex.h \
+	ThreadSemaphore.cpp \
+	ThreadSemaphore.h \
+	WorkerThread.cpp \
+	WorkerThread.h

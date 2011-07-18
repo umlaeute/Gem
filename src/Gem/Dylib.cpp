@@ -19,8 +19,8 @@
 # pragma warning( disable: 4091)
 #endif /* _MSC_VER */
 
-#include "GemDylib.h"
-#include "CPPExtern.h"
+#include "Dylib.h"
+#include "Base/CPPExtern.h"
 
 #include <string>
 #include <stdio.h>

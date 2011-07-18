@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_PLUGINS_RECORD_H_
 
 #include "Base/GemPixUtil.h"
-#include "Base/Properties.h"
+#include "Gem/Properties.h"
 #include "plugins/PluginFactory.h"
 
 #include <string>

@@ -18,8 +18,8 @@
 
 #include "m_pd.h"
 
-#include "GemSettings.h"
-#include "GemFiles.h"
+#include "Settings.h"
+#include "Files.h"
 
 #include <map>
 #include <string.h>

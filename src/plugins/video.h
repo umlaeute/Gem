@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Base/GemPixUtil.h"
 
 #include <string>
-#include "Base/Properties.h"
+#include "Gem/Properties.h"
 
 #include <vector>
 

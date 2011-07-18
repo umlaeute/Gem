@@ -16,9 +16,9 @@
 #include "GemMan.h"
 #include "RTE/MessageCallbacks.h"
 
-#include "GemSettings.h"
+#include "Gem/Settings.h"
 #include "GemContext.h"
-#include "GemException.h"
+#include "Gem/Exception.h"
 
 class GemWindow::PIMPL {
 public:

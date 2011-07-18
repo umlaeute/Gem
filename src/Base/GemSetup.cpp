@@ -18,7 +18,7 @@
 /* -------------------------- setup function ------------------------------ */
 
 #include "GemMan.h"
-#include "GemSettings.h"
+#include "Gem/Settings.h"
 #include "GemVersion.h"
 
 #include <stdio.h>

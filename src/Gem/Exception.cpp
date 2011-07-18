@@ -14,7 +14,7 @@
 // for NULL
 #include <new>
 
-#include "GemException.h"
+#include "Exception.h"
 
 // for error()
 #include "m_pd.h"

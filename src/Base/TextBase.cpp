@@ -20,7 +20,7 @@
  */
 
 #include "TextBase.h"
-#include "GemSettings.h"
+#include "Gem/Settings.h"
 
 #include <stdio.h>
 #include <stdlib.h>
