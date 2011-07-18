@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
-AM_CPPFLAGS = -I$(srcdir)/../..
+AM_CPPFLAGS = -I$(srcdir)/../../src
 
 EXTRA_DIST = halcon.m4 videoHALCON.sln videoHALCON.vcproj
 

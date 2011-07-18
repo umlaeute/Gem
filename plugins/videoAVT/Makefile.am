@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
-AM_CPPFLAGS = -I$(srcdir)/../..
+AM_CPPFLAGS = -I$(srcdir)/../../src
 
 EXTRA_DIST = avt.m4 videoAVT.sln videoAVT.vcproj
 
