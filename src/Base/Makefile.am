@@ -4,8 +4,6 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
-DISTCLEANFILES = version.h
-
 noinst_LTLIBRARIES = libBase.la
 
 libBase_la_CXXFLAGS =
@@ -49,6 +47,7 @@ libBase_la_SOURCES=  \
     GemConfig.h \
     GemContext.cpp \
     GemContext.h \
+    GemContextData.h \
     GemEvent.cpp \
     GemEvent.h \
     GemExportDef.h \
@@ -60,6 +59,7 @@ libBase_la_SOURCES=  \
     GemGLUtil.cpp \
     GemGLUtil_generated.h \
     GemGLUtil.h \
+    GemLoaders.h \
     GemLoadObj.cpp \
     GemLoadObj.h \
     GemMan.cpp \
@@ -93,6 +93,7 @@ libBase_la_SOURCES=  \
     GemState.h \
     GemVector.cpp \
     GemVector.h \
+    GemVersion.h \
     GemVertex.cpp \
     GemVertex.h \
     GemWinCreate.h \

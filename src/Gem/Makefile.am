@@ -5,6 +5,8 @@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+DISTCLEANFILES =
+
 noinst_LTLIBRARIES = libGem.la
 
 libGem_la_CXXFLAGS = -DHAVE_VERSION_H
@@ -25,6 +27,11 @@ Version.cpp: version_current.h FORCE
 
 version_current.h: $(srcdir)/../version.h.in FORCE
 	$(SHELL) $(srcdir)/../pkgversion.sh $< > $@
+
+DISTCLEANFILES += version_current.h
+
+## /version tuff
+
 
 
 libGem_la_SOURCES=  \
