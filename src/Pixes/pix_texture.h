@@ -106,7 +106,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // Do we need to rebuild the display List
-  GemContextData<GLboolean>           m_rebuildList;
+  gem::ContextData<GLboolean>           m_rebuildList;
 
   //////////
   // The size of the texture (so we can use sub image)

@@ -81,8 +81,8 @@ public:
 
   unsigned int contextid;
 
-  // LATER: reusing IDs prevents a memleak in GemContextData
-  // LATER: reusing IDs might make us re-use invalid GemContextData!
+  // LATER: reusing IDs prevents a memleak in gem::ContextData
+  // LATER: reusing IDs might make us re-use invalid gem::ContextData!
   static std::set<unsigned int>s_takenIDs;
   static unsigned int makeID(void) //  GemContext_newid
   {
