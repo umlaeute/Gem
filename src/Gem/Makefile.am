@@ -42,6 +42,7 @@ libGem_la_SOURCES=  \
 	Dylib.h \
 	Exception.cpp \
 	Exception.h \
+	ExportDef.h \
 	Files.cpp \
 	Files.h \
 	GLStack.cpp \
