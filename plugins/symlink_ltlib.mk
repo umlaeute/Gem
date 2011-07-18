@@ -11,7 +11,7 @@ convenience-link: $(pkglib_LTLIBRARIES)
 	    rm -f $(top_builddir)/$$soname ; \
 	    test -e $(abs_builddir)/.libs/$$soname && \
 	    cd $(top_builddir) && \
-	    $(LN_S) $(abs_builddir)/.libs/$$soname $$soname; \
+	    $(LN_S) $(abs_builddir)/.libs/$$soname $$soname || true;\
 	  done 
 
 clean-convenience-link:
