@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
-ACLOCAL_AMFLAGS = -I $(top_srcdir)/src/m4
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
 pkglib_LTLIBRARIES = 
