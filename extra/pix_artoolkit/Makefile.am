@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
 EXTRA_DIST =
-EXTRA_DIST += pix_artoolkit.sln  pix_artoolkit.vcproj
+EXTRA_DIST += pix_artoolkit.sln  pix_artoolkit.vcproj autogen.sh
 
 extradir=$(libdir)/pix_artoolkit
 
@@ -15,7 +15,7 @@ dist_extra_DATA  =
 #dist_extra_DATA += LICENSE.txt
 dist_extra_DATA += README.txt
 dist_extra_DATA += pix_artoolkit-help.pd
-dist_extra_DATA += pattHiro.pdf
+dist_extra_DATA += pattHiro.pdf camera_para.dat
 
 ## some default flags
 pix_artoolkit_la_CXXFLAGS =
