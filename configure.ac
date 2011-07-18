@@ -53,9 +53,9 @@ AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
-AC_CONFIG_FILES([src/extra/Makefile])
+AC_CONFIG_FILES([extra/Makefile])
 # some do not
-AC_CONFIG_FILES([src/extra/pix_drum/Makefile src/extra/pix_mano/Makefile])
+AC_CONFIG_FILES([extra/pix_drum/Makefile extra/pix_mano/Makefile])
 
 # other stuff
 AC_CONFIG_FILES([build/Makefile])
@@ -69,7 +69,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_SRCDIR([src/Base/GemBase.h])
 
-#AC_CONFIG_SUBDIRS([src/extra])
+#AC_CONFIG_SUBDIRS([extra])
 
 if test -d "$srcdir/plugins/videoAVT"; then
   AC_CONFIG_SUBDIRS([plugins/videoAVT])

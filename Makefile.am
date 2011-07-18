@@ -5,7 +5,12 @@ SUBDIRS =src abstractions
 SUBDIRS+=help doc examples
 SUBDIRS+=build
 
+## plugins
 SUBDIRS+=plugins
+
+## extra objects
+SUBDIRS+=extra
+
 
 gemdir=$(pkglibdir)
 
