@@ -39,8 +39,10 @@ Gem_la_LDFLAGS  +=
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
 Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Base/libBase.la plugins/libplugins.la
 
-## disabled for now
-#SUBDIRS+=Output
+## Output: disabled for now
+if DISABLED
+SUBDIRS+=Output
+endif
 
 if TARGET_CONTROLS
 SUBDIRS+=Controls
