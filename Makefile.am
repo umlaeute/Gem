@@ -20,3 +20,4 @@ dist_gem_DATA = \
 	GnuGPL.LICENSE.txt \
 	README.txt
 
+EXTRA_DIST = autogen.sh
