@@ -156,7 +156,11 @@ std::string CPPExtern::findFile(const std::string f, const std::string e) const 
   
   if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext, 
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
+#if PD_MINOR_VERSION < 43
     close(fd);
+#else
+    sys_close(fd);
+#endif
     result=buf2;
     result+="/";
     result+=bufptr;
