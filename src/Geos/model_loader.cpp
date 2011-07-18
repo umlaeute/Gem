@@ -2081,7 +2081,7 @@ glmReadPPM(char* filename, int* width, int* height)
   fclose(fp);
   if(count!=static_cast<size_t>(w*h*3)) {
     error("_glmReadPPM failed to read all bytes");
-    *width=*height=NULL;
+    *width=*height=0;
     free(image);
     image=NULL;
     return NULL;
