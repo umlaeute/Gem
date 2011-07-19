@@ -23,7 +23,7 @@
 # include <AvailabilityMacros.h>
 #endif // __APPLE__
 
-#include "Utils/Math.h"
+#include "Utils/GemMath.h"
 #include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemwin, t_floatarg, A_DEFFLOAT);

@@ -27,7 +27,7 @@ LOG
  * should we define __MMX__ for windows in there ?
  */
 #include "Utils/SIMD.h"
-#include "Utils/Math.h"
+#include "Utils/GemMath.h"
 
 // for rand()
 #include <stdlib.h>

@@ -8,7 +8,7 @@
 #ifndef particle_vector_h
 #define particle_vector_h
 
-#include "Utils/Math.h"
+#include "Utils/GemMath.h"
 
 class pVector
 {
