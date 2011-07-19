@@ -71,7 +71,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_SRCDIR([src/Base/GemBase.h])
 
-#AC_CONFIG_SUBDIRS([extra])
+AC_CONFIG_SUBDIRS([extra])
 
 if test -d "$srcdir/plugins/videoAVT"; then
   AC_CONFIG_SUBDIRS([plugins/videoAVT])
