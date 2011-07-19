@@ -34,8 +34,10 @@
 # include <string.h>
 # include <time.h>
 #elif defined _WIN32
-//# include <QTML.h>
-//# include <Movies.h>
+# ifdef HAVE_QUICKTIME
+#  include <QTML.h>
+#  include <Movies.h>
+# endif
 #endif
 
 #include "Utils/SIMD.h"
