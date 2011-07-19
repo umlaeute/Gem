@@ -22,12 +22,6 @@ libPixes_la_SOURCES=  \
     DSgrabber.h \
     FreeFrame.h \
     frei0r.h \
-    libfidtrack_fidtrackX.cpp \
-    libfidtrack_fidtrackX.h \
-    libfidtrack_segment.cpp \
-    libfidtrack_segment.h \
-    libfidtrack_treeidmap.cpp \
-    libfidtrack_treeidmap.h \
     pix_2grey.cpp \
     pix_2grey.h \
     pix_a_2grey.cpp \
@@ -106,8 +100,6 @@ libPixes_la_SOURCES=  \
     pix_duotone.h \
     pix_emboss.cpp \
     pix_emboss.h \
-    pix_fiducialtrack.cpp \
-    pix_fiducialtrack.h \
     pix_film.cpp \
     pix_filmDarwin.cpp \
     pix_filmDarwin.h \
