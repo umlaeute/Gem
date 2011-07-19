@@ -33,6 +33,20 @@ libBase_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
 libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 
 libBase_la_includedir = $(includedir)/Gem/Base
+libBase_la_include_HEADERS= \
+	CPPExtern.h \
+	GemBase.h \
+	GemGLBase.h \
+	GemGluObj.h \
+	GemPathBase.h \
+	GemPixObj.h \
+	GemPixDualObj.h \
+	GemShape.h \
+	TextBase.h
+
+libBase_la_include_HEADERS+= \
+	GemWindow.h \
+	GemContext.h 
 
 libBase_la_SOURCES=  \
     CPPExtern.cpp \

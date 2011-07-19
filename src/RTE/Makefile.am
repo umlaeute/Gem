@@ -13,6 +13,13 @@ libRTE_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libRTE_la_LIBADD   += @GEM_RTE_LIBS@
 libRTE_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
+libRTE_la_includedir = $(includedir)/Gem/RTE
+libRTE_la_include_HEADERS = \
+	Array.h \
+	MessageCallbacks.h
+
+
+
 libRTE_la_SOURCES= \
         Array.cpp \
         Array.h \

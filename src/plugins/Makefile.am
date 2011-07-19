@@ -32,3 +32,14 @@ libplugins_la_SOURCES= \
 #        video.h \
 #        videoGrabber.cpp \
 #        videoGrabber.h
+
+libplugins_la_includedir = $(includedir)/Gem/plugins
+libplugins_la_include_HEADERS = \
+	PluginFactory.h \
+	PluginFactoryTimple.h \
+	film.h \
+	image.h \
+	imageloader.h \
+	imagesaver.h \
+	record.h \
+	video.h

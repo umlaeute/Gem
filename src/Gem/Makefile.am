@@ -34,22 +34,39 @@ DISTCLEANFILES += version_current.h
 
 libGem_la_includedir = $(includedir)/Gem/Gem
 libGem_la_include_HEADERS = \
-	ContextData.h \
-	Dylib.h \
-	Exception.h \
 	ExportDef.h \
-	Files.h \
-	GLStack.h \
-	Loaders.h \
-	Properties.h \
+	Version.h \
 	RTE.h \
+	State.h \
+	Cache.h \
+	Exception.h \
+	Dylib.h \
+	Files.h \
+	ContextData.h \
+	Properties.h \
 	Settings.h \
+	Loaders.h \
+	Manager.h \
+	PBuffer.h \
+	Event.h
+
+libGem_la_include_HEADERS += \
+	GemGL.h \
+	glew.h \
+	glxew.h \
+	wglew.h \
+	GLStack.h
+
+libGem_la_include_HEADERS += \
+	Image.h \
+	ImageIO.h \
+	PixConvert.h
+
+libGem_la_include_HEADERS += \
+	WorkerThread.h \
 	SynchedWorkerThread.h \
 	ThreadMutex.h \
-	ThreadSemaphore.h \
-	Version.h \
-	WorkerThread.h
-
+	ThreadSemaphore.h
 
 libGem_la_SOURCES=  \
 	configDarwin.h \
