@@ -91,7 +91,7 @@ $(top_builddir)/Gem.@GEM_RTE_EXTENSION@: $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTE
 .PHONY: clean-conveniencelink
 
 clean-conveniencelink:
-	test -L $(top_builddir)/Gem.@GEM_RTE_EXTENSION@ && rm -f $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
+	test -L $(top_builddir)/Gem.@GEM_RTE_EXTENSION@ && rm -f $(top_builddir)/Gem.@GEM_RTE_EXTENSION@ || true
 
 
 all-local:: $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
