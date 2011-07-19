@@ -1,3 +1,9 @@
+#####################################################################
+# Gem/RTE: encapsulation of the underlying RealTimeEnvironment
+#          (currently only Pd)
+#          this is just a start, lots of Pd-specific code is everywhere
+#####################################################################
+
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)/src
 include ../check-sources.mk

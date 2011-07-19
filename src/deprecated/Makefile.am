@@ -1,3 +1,7 @@
+#####################################################################
+# Gem/deprecated: compat header files for pre-0.93 header layout
+#####################################################################
+
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \

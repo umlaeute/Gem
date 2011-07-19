@@ -1,3 +1,7 @@
+#####################################################################
+# Gem/Output: objectclasses to handle windows
+#####################################################################
+
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src

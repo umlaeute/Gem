@@ -1,6 +1,6 @@
-# this file was generated automatically from Makefile.am.template
-# rather than editing this file directly, you should instead edit the
-# original Makefile.am.template and re-generate this file
+#####################################################################
+# Gem/openGL: objectclasses that directly wrap openGL commands
+#####################################################################
 
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)/src
