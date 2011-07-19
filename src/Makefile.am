@@ -88,7 +88,15 @@ $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@: Gem.la
 $(top_builddir)/Gem.@GEM_RTE_EXTENSION@: $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@ 
 		rm -f $@ && test -e $< && cd $(top_builddir) && $(LN_S) $< Gem.@GEM_RTE_EXTENSION@
 
+.PHONY: clean-conveniencelink
+
+clean-conveniencelink:
+	test -L $(top_builddir)/Gem.@GEM_RTE_EXTENSION@ && rm -f $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
+
+
 all-local:: $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
+
+clean-local:: clean-conveniencelink
 
 EXTRA_Gem_la_SOURCES = \
 	pkgversion.sh \
