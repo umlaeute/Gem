@@ -23,7 +23,7 @@ libUtils_la_include_HEADERS = \
 	any.h \
 	Functions.h \
 	GLUtil.h \
-	Math.h \
+	GemMath.h \
 	Matrix.h \
 	PixPete.h \
 	SIMD.h \
@@ -37,7 +37,7 @@ libUtils_la_SOURCES=  \
 	GLUtil.cpp \
 	GLUtil_generated.h \
 	GLUtil.h \
-	Math.h \
+	GemMath.h \
 	Matrix.cpp \
 	Matrix.h \
 	PixPete.h \
