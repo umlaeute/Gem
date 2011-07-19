@@ -31,8 +31,7 @@ libBase_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
 libBase_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
 libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 
-
-
+libBase_la_includedir = $(includedir)/Gem/Base
 
 libBase_la_SOURCES=  \
     configDarwin.h \
@@ -60,13 +59,9 @@ libBase_la_SOURCES=  \
     GemGLUtil_generated.h \
     GemGLUtil.h \
     GemLoaders.h \
-    GemLoadObj.cpp \
-    GemLoadObj.h \
     GemMan.cpp \
     GemMan.h \
     GemMath.h \
-    GemModelData.cpp \
-    GemModelData.h \
     GemPathBase.cpp \
     GemPathBase.h \
     GemPBuffer.cpp \
@@ -110,3 +105,4 @@ libBase_la_SOURCES=  \
     TextBase.cpp \
     TextBase.h \
     wglew.h
+
