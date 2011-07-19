@@ -18,11 +18,11 @@
 #endif
 
 #include "recordV4L2.h"
-using namespace gem;
-#include "Base/GemBase.h"
-#include "Base/GemMan.h"
-
+#include "Gem/Manager.h"
 #include "Gem/Exception.h"
+
+using namespace gem;
+
 
 #include <sys/types.h>
 #include <sys/stat.h>

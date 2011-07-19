@@ -18,9 +18,9 @@
 #endif
 
 #include "recordV4L.h"
+#include "Gem/Manager.h"
+
 using namespace gem;
-#include "Base/GemBase.h"
-#include "Base/GemMan.h"
 
 #include "Gem/Exception.h"
 

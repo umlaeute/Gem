@@ -18,9 +18,11 @@
 #endif
 
 #include "recordQT4L.h"
+#include "Gem/RTE.h"
+#include "Gem/Manager.h"
+
+
 using namespace gem;
-#include "Base/GemBase.h"
-#include "Base/GemMan.h"
 
 #include <stdlib.h>
 
