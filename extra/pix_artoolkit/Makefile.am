@@ -7,7 +7,6 @@ EXTRA_DIST += pix_artoolkit.sln  pix_artoolkit.vcproj autogen.sh
 extradir=$(libdir)/pix_artoolkit
 dist_extra_DATA  = 
 
-
 extra_LTLIBRARIES  =
 if HAVE_LIB_ARTOOLKIT
 extra_LTLIBRARIES += pix_artoolkit.la
@@ -32,17 +31,17 @@ pix_artoolkit_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
 # convenience symlinks
 ## uha, this is ugly
-pix_artoolkit.@GEM_RTE_EXTENSION@: pix_artoolkit.la
+%.@GEM_RTE_EXTENSION@: %.la
 	rm -f $@
 	test -f .libs/$@ && $(LN_S) .libs/$@ $@ || true
 
 .PHONY: clean-conviencesymlink
 
 clean-conviencesymlink:
-	rm -f pix_artoolkit.@GEM_RTE_EXTENSION@
+	rm -f *.@GEM_RTE_EXTENSION@
 
 
-all-local:: pix_artoolkit.@GEM_RTE_EXTENSION@
+all-local:: $(extra_LTLIBRARIES:.la=.@GEM_RTE_EXTENSION@)
 
 clean-local:: clean-conviencesymlink
 
@@ -51,5 +50,3 @@ clean-local:: clean-conviencesymlink
 pix_artoolkit_la_SOURCES = \
 	pix_artoolkit.cpp \
 	pix_artoolkit.h
-
-
