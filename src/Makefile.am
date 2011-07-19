@@ -77,6 +77,8 @@ SUBDIRS+=Vertex
 Gem_la_LIBADD += Vertex/libVertex.la
 endif
 
+SUBDIRS+=deprecated
+
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
