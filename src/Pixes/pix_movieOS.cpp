@@ -34,14 +34,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieOS, t_symbol *, A_DEFSYM);
 //
 /////////////////////////////////////////////////////////
 pix_movieOS :: pix_movieOS(t_symbol *filename) :
-#ifdef _WIN32
-  pix_filmNT(filename)
-#elif __linux__
-  pix_filmLinux(filename)
-#elif __APPLE__
+#if __APPLE__
   pix_filmDarwin(filename)
 #else
-#error define pix_film for your OS
+# error define pix_film for your OS
 #endif
   , 
    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
