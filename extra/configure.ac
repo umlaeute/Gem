@@ -3,11 +3,16 @@
 
 
 AC_PREREQ(2.60)
-AC_INIT(Gem-extras,[],zmoelnig@iem.at)
+AC_INIT(Gem-extras,[0.1],zmoelnig@iem.at)
+AM_INIT_AUTOMAKE([1.10 foreign])
+
+AC_CONFIG_MACRO_DIR([../m4])
 
 AC_CONFIG_SRCDIR([README-EXTRA.txt])
+AC_CONFIG_FILES([Makefile])
 
-#AC_CONFIG_FILES([])
+AC_PROG_CXX
+AC_SUBST(CXX)
 
 ## pix_artoolkit
 if test -d "$srcdir/pix_artoolkit"; then

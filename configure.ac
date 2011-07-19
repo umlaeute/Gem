@@ -55,7 +55,7 @@ AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
-AC_CONFIG_FILES([extra/Makefile])
+#AC_CONFIG_FILES([extra/Makefile])
 # some do not
 AC_CONFIG_FILES([extra/pix_drum/Makefile extra/pix_mano/Makefile])
 
