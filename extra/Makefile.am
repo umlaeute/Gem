@@ -7,3 +7,5 @@ SUBDIRS += pix_artoolkit
 
 #DIST_SUBDIRS = $(SUBDIRS) pix_artoolkit
 
+EXTRA_DIST = \
+	README-EXTRA.txt
