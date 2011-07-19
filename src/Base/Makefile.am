@@ -34,61 +34,23 @@ libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
 libBase_la_includedir = $(includedir)/Gem/Base
 
 libBase_la_SOURCES=  \
-    configDarwin.h \
-    configLinux.h \
-    configNT.h \
     CPPExtern.cpp \
     CPPExtern.h \
     GemBase.cpp \
     GemBase.h \
-    GemCache.cpp \
-    GemCache.h \
-    GemConfig.h \
+    GemGLBase.h \
     GemContext.cpp \
     GemContext.h \
-    GemContextData.h \
-    GemEvent.cpp \
-    GemEvent.h \
-    GemExportDef.h \
-    GemFuncUtil.cpp \
-    GemFuncUtil.h \
-    GemGL.h \
     GemGluObj.cpp \
     GemGluObj.h \
-    GemGLUtil.cpp \
-    GemGLUtil_generated.h \
-    GemGLUtil.h \
-    GemLoaders.h \
-    GemMan.cpp \
-    GemMan.h \
-    GemMath.h \
     GemPathBase.cpp \
     GemPathBase.h \
-    GemPBuffer.cpp \
-    GemPBuffer.h \
-    GemPixConvertAltivec.cpp \
-    GemPixConvert.h \
-    GemPixConvertSSE2.cpp \
     GemPixDualObj.cpp \
     GemPixDualObj.h \
-    GemPixImageLoad.cpp \
-    GemPixImageLoad.h \
-    GemPixImageSave.cpp \
-    GemPixImageSave.h \
     GemPixObj.cpp \
     GemPixObj.h \
-    GemPixPete.h \
-    GemPixUtil.cpp \
-    GemPixUtil.h \
     GemShape.cpp \
     GemShape.h \
-    GemSIMD.cpp \
-    GemSIMD.h \
-    GemState.cpp \
-    GemState.h \
-    GemVector.cpp \
-    GemVector.h \
-    GemVersion.h \
     GemVertex.cpp \
     GemVertex.h \
     GemWinCreate.h \
@@ -97,12 +59,6 @@ libBase_la_SOURCES=  \
     GemWinCreateXWin.cpp \
     GemWindow.cpp \
     GemWindow.h \
-    glew.cpp \
-    glew.h \
-    glxew.h \
-    Matrix.cpp \
-    Matrix.h \
     TextBase.cpp \
-    TextBase.h \
-    wglew.h
+    TextBase.h
 

@@ -11,7 +11,7 @@
 #ifndef INCLUDE_GEM_GLMULTTRANSPOSEMATRIXF_H_
 #define INCLUDE_GEM_GLMULTTRANSPOSEMATRIXF_H_
 
-#include "GemGLBase.h"
+#include "Base/GemGLBase.h"
 
 /*
  CLASS

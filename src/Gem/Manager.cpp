@@ -15,13 +15,15 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Gem/GemConfig.h"
 
-#include "GemMan.h"
+#include "Gem/Manager.h"
 
-#include "Base/GemConfig.h"
+
 #include "Gem/Settings.h"
-
 #include "Gem/GLStack.h"
+#include "Gem/State.h"
+#include "Gem/Event.h"
 
 #include <stdlib.h>
 
@@ -31,15 +33,16 @@
 #elif defined __APPLE__
 # include <string.h>
 # include <time.h>
+#elif defined _WIN32
+//# include <QTML.h>
+//# include <Movies.h>
 #endif
 
-#include "GemState.h"
-#include "GemWinCreate.h"
-#include "GemEvent.h"
+#include "Utils/SIMD.h"
 
+#include "Base/GemWinCreate.h"
 #include "Controls/gemhead.h"
 
-#include "GemSIMD.h"
 
 #ifdef DEBUG
 # define debug_post post

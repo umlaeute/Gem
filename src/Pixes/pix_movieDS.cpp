@@ -1,4 +1,4 @@
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #if defined GEM_FILMBACKEND && GEM_FILMBACKEND == GEM_FILMBACKEND_DS
 
@@ -11,7 +11,7 @@
 #pragma comment(lib, "strmiids.lib")
 
 #include "pix_movieDS.h"
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDS, t_symbol *, A_DEFSYM);
 

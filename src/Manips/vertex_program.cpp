@@ -27,7 +27,7 @@
 # include <unistd.h>
 #endif
 
-#include "Base/GemGLUtil.h"
+#include "Utils/GLUtil.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM);
 

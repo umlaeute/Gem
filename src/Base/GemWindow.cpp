@@ -13,7 +13,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "GemWindow.h"
-#include "GemMan.h"
+#include "Gem/Manager.h"
 #include "RTE/MessageCallbacks.h"
 
 #include "Gem/Settings.h"

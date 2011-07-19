@@ -16,7 +16,7 @@
 
 #include "gemkeyboard.h"
 
-#include "Base/GemEvent.h"
+#include "Gem/Event.h"
 
 CPPEXTERN_NEW(gemkeyboard);
 

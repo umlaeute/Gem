@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_GEMPIXOBJ_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 #include "stdlib.h"
 #include "string.h"
 #include "math.h"

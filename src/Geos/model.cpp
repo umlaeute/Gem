@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "model.h"
- #include "Base/GemState.h"
+ #include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 

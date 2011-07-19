@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEM_GLCOPYTEXIMAGE1D_H_
 #define INCLUDE_GEM_GLCOPYTEXIMAGE1D_H_
 
-#include "GemGLBase.h"
+#include "Base/GemGLBase.h"
 
 /*
  CLASS

@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_color.h"
-#include "Base/GemPixConvert.h"
+#include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW(pix_color);
 

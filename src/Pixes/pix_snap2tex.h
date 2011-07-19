@@ -18,7 +18,7 @@ LOG
 #define INCLUDE_PIX_SNAP2TEX_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

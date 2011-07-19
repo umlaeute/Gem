@@ -13,10 +13,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #include "gemglutwindow.h"
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 #if defined __APPLE__
 # include "GLUT/glut.h"
 # define glutCloseFunc glutWMCloseFunc

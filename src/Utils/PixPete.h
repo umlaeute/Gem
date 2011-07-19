@@ -14,6 +14,8 @@ LOG
 #ifndef INCLUDE_GEMPIXPETE_H_
 #define INCLUDE_GEMPIXPETE_H_
 
+#include <stdlib.h>
+
 
 // utility functions from PeteHelpers.h
 typedef unsigned long U32; 

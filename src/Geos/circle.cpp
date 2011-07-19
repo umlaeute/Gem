@@ -18,7 +18,7 @@
 
 #include <math.h>
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #define NUM_PNTS 100
 GLfloat *circle::m_cos = NULL;

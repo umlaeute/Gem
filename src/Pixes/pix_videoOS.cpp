@@ -40,11 +40,11 @@
 
 */
 
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 #define NO_AUTO_REGISTER_CLASS
 
 #include "pix_videoOS.h"
-#include "Base/GemCache.h"
+#include "Gem/Cache.h"
 
 CPPEXTERN_NEW(pix_videoOS);
 

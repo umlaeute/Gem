@@ -14,7 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #if defined GEM_VIDEOBACKEND && GEM_VIDEOBACKEND == GEM_VIDEOBACKEND_DS && defined HAVE_DIRECTSHOW
 
@@ -26,7 +26,7 @@
 
 
 #include "pix_videoDS.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include <memory>
 #include <dshow.h>
 #include <qedit.h>

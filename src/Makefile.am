@@ -11,7 +11,7 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 # make sure -lstdc++ is kept first
 AM_LIBTOOLFLAGS = --preserve-dup-deps
 
-SUBDIRS=Gem RTE Base plugins 
+SUBDIRS=Gem RTE Utils Base plugins 
 pkglib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
@@ -37,7 +37,7 @@ Gem_la_LDFLAGS  +=
 
 # LIBADD or LDADD for convenience libraries?
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
-Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Base/libBase.la plugins/libplugins.la
+Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
 
 ## Output: disabled for now
 if DISABLED

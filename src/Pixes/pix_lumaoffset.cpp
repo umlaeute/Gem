@@ -12,6 +12,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/PixPete.h"
 #include "pix_lumaoffset.h"
 	
 CPPEXTERN_NEW(pix_lumaoffset);

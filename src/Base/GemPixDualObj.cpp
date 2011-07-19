@@ -18,8 +18,8 @@
 
 #include "GemPixDualObj.h"
 
-#include "GemCache.h"
-#include "GemState.h"
+#include "Gem/Cache.h"
+#include "Gem/State.h"
 
 #include <string.h>
 #include <stdio.h>

@@ -14,8 +14,8 @@ LOG
 
 -----------------------------------------------------------------*/
  
-#ifndef INCLUDE_GEMPIXIMAGELOAD_H_
-#define INCLUDE_GEMPIXIMAGELOAD_H_
+#ifndef INCLUDE_GEMPIXIMAGEIO_H_
+#define INCLUDE_GEMPIXIMAGEIO_H_
 
 #include "Gem/ExportDef.h"
 
@@ -133,6 +133,21 @@ namespace gem {
 
 /* legacy */
 GEM_EXTERN extern imageStruct *image2mem(const char *filename);
+
+
+// image2mem() reads an image file into memory
+//   and a pointer to an imageStruct
+//       NULL = failure
+// 
+//       format:
+//    	  returns either GL_LUMINANCE or GL_RGBA
+// 
+//   automatically allocates the memory for the user
+//
+// This can write TIFF, JPG and other images (depending on which backends are available
+// legacy: type=0 -> TIFF; type>0 -> JPEG and (quality:=type)
+//
+GEM_EXTERN extern int mem2image(imageStruct *image, const char *filename, const int type);
 
 
 #endif

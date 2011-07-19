@@ -17,7 +17,7 @@
 #include "triangle.h"
 #include <string.h>
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(triangle, t_floatarg, A_DEFFLOAT);
 

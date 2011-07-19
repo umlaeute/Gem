@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////
 
 #include "GEMglReportError.h"
-#include "Base/GemGLUtil.h"
+#include "Utils/GLUtil.h"
 
 
 CPPEXTERN_NEW( GEMglReportError);

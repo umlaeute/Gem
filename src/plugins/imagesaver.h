@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_IMAGESAVER_H_
 #define INCLUDE_IMAGESAVER_H_
 
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 #include <string>
 #include "plugins/PluginFactory.h"

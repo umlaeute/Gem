@@ -6,7 +6,7 @@
  *  Copyright 2005 __MyCompanyName__. All rights reserved.
  *
  */
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 //original pix_record for Mac/Windows - very well tested (at least 100,000 recorded clips)
 
 #if 0
@@ -20,8 +20,8 @@
 
 
 #include "pix_recordQT.h"
-#include "Base/GemMan.h"
-#include "Base/GemCache.h"
+#include "Gem/Manager.h"
+#include "Gem/Cache.h"
 
 
 CPPEXTERN_NEW_WITH_GIMME(pix_recordQT);

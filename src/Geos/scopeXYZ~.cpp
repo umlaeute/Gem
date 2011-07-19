@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #define MARK startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__); post
 

@@ -16,8 +16,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PIX_MOVIEOS_H_
 #define INCLUDE_PIX_MOVIEOS_H_
 
-#include "Base/GemConfig.h"
-
 #ifdef __APPLE__
 # include "pix_filmDarwin.h"
 #else

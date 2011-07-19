@@ -16,9 +16,9 @@
 
 #include "pix_snap.h"
 
-#include "Base/GemMan.h"
-#include "Base/GemCache.h"
-#include "Base/GemState.h"
+#include "Gem/Manager.h"
+#include "Gem/Cache.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_snap);
 

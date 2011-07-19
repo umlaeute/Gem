@@ -30,8 +30,8 @@
 # include <vector>
 #endif
 
-#include "Base/GemGL.h"
-#include "GemPBuffer.h"
+#include "Gem/GemGL.h"
+#include "PBuffer.h"
 
 #include "m_pd.h"
 

@@ -16,7 +16,7 @@
 
 #include "world_light.h"
 
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT);
 

@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_geometry.h"
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 
 #include <string.h>
 #include <stdlib.h>

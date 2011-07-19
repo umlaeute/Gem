@@ -14,12 +14,12 @@
 #define INCLUDE_RIPPLE_H_
 
 #include "Base/GemShape.h"
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 #include <string.h>
 #include <math.h>
 
 #ifdef __ppc__
-#include "Base/GemFuncUtil.h"
+#include "Utils/Functions.h"
 #undef sqrt
 #define sqrt fast_sqrtf
 #endif

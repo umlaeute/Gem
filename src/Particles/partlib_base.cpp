@@ -15,7 +15,7 @@
 #include "partlib_base.h"
 
 #include <string.h>
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #include "papi.h"
 

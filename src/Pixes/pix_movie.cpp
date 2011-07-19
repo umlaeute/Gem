@@ -16,11 +16,11 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 #ifndef GEM_FILMBACKEND
 
 #include "pix_movie.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYM);

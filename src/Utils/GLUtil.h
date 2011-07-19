@@ -24,7 +24,7 @@ LOG
 #include "Gem/RTE.h"
 
 /* for GLenum */
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 GEM_EXTERN extern GLenum		glReportError (void);
 GEM_EXTERN extern int           getGLdefine(const char *name);

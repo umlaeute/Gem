@@ -13,8 +13,8 @@
 ////////////////////////////////////////////////////////
 
 #include "GEMglTexImage2D.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemState.h"
+#include "Gem/Image.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_GIMME ( GEMglTexImage2D );
 

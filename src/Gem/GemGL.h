@@ -31,14 +31,14 @@
 #endif
 
 #define GLEW_STATIC
-#include "Base/glew.h"
+#include "Gem/glew.h"
 
 #ifdef __APPLE__
 # include <OpenGL/OpenGL.h>
 #elif defined _WIN32
-# include "Base/wglew.h"
+# include "Gem/wglew.h"
 #elif defined __linux__
-#  include "Base/glxew.h"
+#  include "Gem/glxew.h"
 #endif /* OS */
 
 #ifdef GEM_MULTICONTEXT

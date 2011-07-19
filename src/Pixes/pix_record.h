@@ -20,7 +20,7 @@
 #define INCLUDE_PIX_RECORD_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 #include "plugins/record.h"
 

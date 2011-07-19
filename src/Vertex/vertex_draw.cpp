@@ -16,8 +16,8 @@
 
 #include "vertex_draw.h"
 
-#include "Base/GemState.h"
-#include "Base/GemCache.h"
+#include "Gem/State.h"
+#include "Gem/Cache.h"
 
 #define __VBO
 

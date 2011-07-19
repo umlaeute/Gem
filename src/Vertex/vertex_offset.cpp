@@ -16,7 +16,7 @@
 
 #include "vertex_offset.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_GIMME(vertex_offset);
 

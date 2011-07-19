@@ -13,9 +13,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 #include "pix_image.h"
-#include "Base/GemState.h"
+
+#include "Gem/State.h"
 
 #ifdef _WIN32
 # include <io.h>
@@ -29,7 +30,7 @@
 #endif
 
 #include <stdio.h>
-#include "Base/GemCache.h"
+#include "Gem/Cache.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM);
 

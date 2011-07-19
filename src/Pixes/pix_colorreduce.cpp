@@ -12,6 +12,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/PixPete.h"
 #include "pix_colorreduce.h"
 
 CPPEXTERN_NEW(pix_colorreduce);

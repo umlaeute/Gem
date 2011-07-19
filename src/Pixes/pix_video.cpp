@@ -14,12 +14,12 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #ifndef GEM_VIDEOBACKEND
 
 #include "pix_video.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include "Gem/Exception.h"
 #include "plugins/PluginFactory.h"
 

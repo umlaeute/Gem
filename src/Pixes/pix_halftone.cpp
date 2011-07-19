@@ -12,6 +12,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/PixPete.h"
 #include "pix_halftone.h"
 
 #ifndef NDEBUG

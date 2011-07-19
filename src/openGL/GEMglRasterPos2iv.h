@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEM_GLRASTERPOS2IV_H_
 #define INCLUDE_GEM_GLRASTERPOS2IV_H_
 
-#include "GemGLBase.h"
+#include "Base/GemGLBase.h"
 
 /*
  CLASS

@@ -26,8 +26,8 @@ pix_set
 #include "Base/GemPixObj.h"
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemCache.h"
+#include "Gem/Image.h"
+#include "Gem/Cache.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

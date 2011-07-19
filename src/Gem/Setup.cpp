@@ -14,10 +14,10 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 /* -------------------------- setup function ------------------------------ */
 
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 #include "Gem/Settings.h"
 #include "Gem/Version.h"
 

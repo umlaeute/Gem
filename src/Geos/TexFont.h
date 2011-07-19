@@ -8,7 +8,7 @@
 #ifndef __TEXFONT_H__
 #define __TEXFONT_H__
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 #define TXF_FORMAT_BYTE		0
 #define TXF_FORMAT_BITMAP	1

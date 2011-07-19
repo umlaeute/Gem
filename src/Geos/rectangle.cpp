@@ -16,7 +16,7 @@
 
 #include "rectangle.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(rectangle, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);

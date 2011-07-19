@@ -21,7 +21,7 @@
 #include <assert.h>
 
 #ifdef __ppc__
-#include "Base/GemFuncUtil.h"
+#include "Utils/Functions.h"
 #undef sqrt
 #define sqrt fast_sqrtf
 #endif
@@ -30,7 +30,7 @@
 extern "C" {
 #endif
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265f

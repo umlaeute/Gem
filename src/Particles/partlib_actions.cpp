@@ -15,7 +15,7 @@
 #define SQRT2PI 2.506628274631000502415765284811045253006
 #define ONEOVERSQRT2PI (1. / SQRT2PI)
 
-#include "Base/GemMath.h"
+#include "Utils/Math.h"
 
 // To offset [0 .. 1] vectors to [-.5 .. .5]
 static pVector vHalf(0.5, 0.5, 0.5);

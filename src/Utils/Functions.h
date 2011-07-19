@@ -26,8 +26,8 @@ LOG
 /* this should be included for ALL platforms:
  * should we define __MMX__ for windows in there ?
  */
-#include "GemSIMD.h"
-#include "GemMath.h"
+#include "Utils/SIMD.h"
+#include "Utils/Math.h"
 
 // for rand()
 #include <stdlib.h>

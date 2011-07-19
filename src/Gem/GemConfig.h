@@ -39,11 +39,11 @@
 #else /* includes system-specific files */
 
 # ifdef __linux__
-#  include "Base/configLinux.h"
+#  include "Gem/configLinux.h"
 # elif defined __APPLE__
-#  include "Base/configDarwin.h"
+#  include "Gem/configDarwin.h"
 # elif defined _WIN32
-#  include "Base/configNT.h"
+#  include "Gem/configNT.h"
 # endif
 #endif
 

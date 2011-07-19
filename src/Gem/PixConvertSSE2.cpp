@@ -20,8 +20,8 @@
  */
 
 
-#include "Base/GemPixConvert.h"
-#include "Base/GemPixUtil.h"
+#include "PixConvert.h"
+#include "Gem/Image.h"
 
 
 #define RGB2YUV_14 0

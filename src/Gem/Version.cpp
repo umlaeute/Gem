@@ -6,7 +6,7 @@
  *  Copyright 2008 IEM @ KUG. All rights reserved.
  *
  */
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
  
 #define STRINGIFY2(x) #x
 #define STRINGIFY(x) STRINGIFY2(x)

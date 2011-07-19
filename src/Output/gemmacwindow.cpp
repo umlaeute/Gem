@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #ifdef __APPLE__
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <AGL/agl.h>

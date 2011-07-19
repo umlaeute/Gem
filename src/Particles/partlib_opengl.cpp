@@ -8,7 +8,7 @@
 
 #include "partlib_general.h"
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 // Emit OpenGL calls to draw the particles. These are drawn with
 // whatever primitive type the user specified(GL_POINTS, for

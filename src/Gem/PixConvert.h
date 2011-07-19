@@ -17,8 +17,8 @@ LOG
 #ifndef INCLUDE_GEMPIXCONVERT_SIMD_H_
 #define INCLUDE_GEMPIXCONVERT_SIMD_H_
 
-#include "GemPixUtil.h"
-#include "GemSIMD.h"
+#include "Gem/Image.h"
+#include "Utils/SIMD.h"
 
 // use formulae from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
 /*

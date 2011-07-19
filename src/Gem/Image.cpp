@@ -14,7 +14,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32
@@ -24,8 +24,12 @@
 #endif
 
 #include "m_pd.h"
-#include "GemPixUtil.h"
-#include "GemPixConvert.h"
+#include "Image.h"
+#include "PixConvert.h"
+
+// utility functions from PeteHelpers.h
+//#include "Utils/PixPete.h"
+
 
 #include <string.h>
 #include <ctype.h>
@@ -101,7 +105,7 @@ imageStruct :: ~imageStruct()
   clear();
 }
 
-/* align the memory to 128bit (GEM_VECTORALIGNMENT is in GemSIMD.h)
+/* align the memory to 128bit (GEM_VECTORALIGNMENT is in Utils/SIMD.h)
  * this code is taken from pd-devel (written by t.grill)
  * there used to be something in here written by g.geiger
  */

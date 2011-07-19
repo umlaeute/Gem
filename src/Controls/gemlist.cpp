@@ -16,8 +16,8 @@
 
 #include "gemlist.h"
 
-#include "Base/GemCache.h"
-#include "Base/GemMan.h"
+#include "Gem/Cache.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW(gemlist);
 

@@ -15,7 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemPixImageSave.h"
+#include "ImageIO.h"
 #include "Gem/RTE.h"
 #include "Gem/Files.h"
 

@@ -17,8 +17,8 @@ LOG
 #define INCLUDE_PIX_VPAINT_H_
 
 #include "Base/GemPixObj.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemPBuffer.h"
+#include "Gem/Image.h"
+#include "Gem/PBuffer.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

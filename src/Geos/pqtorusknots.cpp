@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pqtorusknots.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #define PI2 3.1415926535897932384626433832795f*2
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pqtorusknots, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT );

@@ -14,7 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "multimodel.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include <stdio.h>
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);

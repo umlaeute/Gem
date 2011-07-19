@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_DEFFLOAT);
 

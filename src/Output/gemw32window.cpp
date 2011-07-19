@@ -13,7 +13,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 #ifdef _WIN32
 # include "gemw32window.h"
 
@@ -26,8 +26,8 @@
 #  include <Movies.h>
 # endif /* HAVE_QUICKTIME */
 
-# include "Base/GemEvent.h"
-# include "Base/GemGL.h"
+# include "Gem/Event.h"
+# include "Gem/GemGL.h"
 # include "RTE/MessageCallbacks.h"
 # include "Gem/Exception.h"
 

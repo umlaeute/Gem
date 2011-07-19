@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_a_2grey.h"
-#include "Base/GemPixConvert.h"
+#include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_a_2grey, t_floatarg, A_DEFFLOAT);
 

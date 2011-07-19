@@ -20,9 +20,9 @@
 #include <Carbon/Carbon.h>
 #endif
 
-#include "Base/GemMan.h"
-#include "Base/GemState.h"
-#include "Base/GemCache.h"
+#include "Gem/Manager.h"
+#include "Gem/State.h"
+#include "Gem/Cache.h"
 #include "Base/GemBase.h"
 
 #include "Gem/GLStack.h"

@@ -13,7 +13,7 @@
 #ifndef INCLUDE_GEM_GLPRIORITIZETEXTURES_H_
 #define INCLUDE_GEM_GLPRIORITIZETEXTURES_H_
 
-#include "GemGLBase.h"
+#include "Base/GemGLBase.h"
 
 /*
  CLASS

@@ -17,8 +17,7 @@
 #define NO_STATIC_CLASS
 
 #include "pix_buffer.h"
-#include "Base/GemPixImageLoad.h"
-#include "Base/GemPixImageSave.h"
+#include "Gem/ImageIO.h"
 
 #include <string.h>
 #include <stdio.h>

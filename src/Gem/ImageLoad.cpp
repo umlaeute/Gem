@@ -15,12 +15,8 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
-#include "GemPixImageLoad.h"
-#include "GemPixUtil.h"
-
+#include "ImageIO.h"
 #include "Gem/RTE.h"
-
 #include "Gem/SynchedWorkerThread.h"
 
 #include "plugins/imageloader.h"

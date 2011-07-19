@@ -13,7 +13,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "GemContext.h"
-#include "GemMan.h"
+#include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
 #include "Gem/RTE.h"

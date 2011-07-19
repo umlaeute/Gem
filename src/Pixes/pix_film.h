@@ -15,8 +15,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_PIX_FILM_H_
 #define INCLUDE_PIX_FILM_H_
-#include "Base/GemConfig.h"
-
 #include "Base/GemBase.h"
 
 #ifdef HAVE_PTHREADS

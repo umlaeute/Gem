@@ -16,7 +16,7 @@
 
 #include "vertex_set.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_GIMME(vertex_set);
 

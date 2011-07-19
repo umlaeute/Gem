@@ -16,8 +16,8 @@
 
 #include "pix_draw.h"
 
-#include "Base/GemPixUtil.h"
-#include "Base/GemState.h"
+#include "Gem/Image.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW(pix_draw);
 

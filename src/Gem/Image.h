@@ -17,11 +17,13 @@ LOG
 #ifndef INCLUDE_GEMPIXUTIL_H_
 #define INCLUDE_GEMPIXUTIL_H_
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 #include <string.h>
 #include <stdlib.h>
 
+// basic helper functions, like CLAMP and powerOfTwo
+#include "Utils/Functions.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,12 +55,6 @@ const int chU           = 0;
 const int chY0          = 1;
 const int chV           = 2;
 const int chY1          = 3;
-
-// basic helper functions, like CLAMP and powerOfTwo
-#include "Base/GemFuncUtil.h"
-
-// utility functions from PeteHelpers.h
-#include "Base/GemPixPete.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

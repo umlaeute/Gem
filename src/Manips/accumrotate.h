@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_ACCUMROTATE_H_
 
 #include "Base/GemBase.h"
-#include "Base/Matrix.h"
+#include "Utils/Matrix.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

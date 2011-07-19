@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "teapot.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 /* Rim, body, lid, and bottom data must be reflected in x and
    y; handle and spout data across the y axis only.  */

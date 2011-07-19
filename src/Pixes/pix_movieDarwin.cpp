@@ -14,7 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 #if defined __APPLE__ && !defined __x86_64__
 // with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
 // LATER make this a real check in configure
@@ -31,7 +31,7 @@
 #define HELPSYMBOL "pix_movie"
 
 #include "pix_movieDarwin.h"
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDarwin, t_symbol *, A_DEFSYM);
 

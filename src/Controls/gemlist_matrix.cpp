@@ -17,7 +17,7 @@
 #include "math.h"
 
 #ifdef __ppc__
-#include "Base/GemFuncUtil.h"
+#include "Utils/Functions.h"
 #undef sqrt
 #define sqrt fast_sqrtf
 #endif

@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_PIX_BUFFER_H_
 
 #include "Base/CPPExtern.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 #define DEFAULT_NUM_FRAMES 100
 

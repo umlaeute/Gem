@@ -16,7 +16,7 @@
 
 #include "vertex_info.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include "string.h"
 CPPEXTERN_NEW(vertex_info);
 

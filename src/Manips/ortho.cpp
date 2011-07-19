@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "ortho.h"
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW(ortho);
 

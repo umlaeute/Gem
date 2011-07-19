@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_program.h"
-#include "Base/GemGLUtil.h"
+#include "Utils/GLUtil.h"
 
 #include <string.h>
 #include <stdlib.h>

@@ -16,7 +16,7 @@
 
 #include "mesh_line.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(mesh_line, t_floatarg, A_DEFFLOAT);
 

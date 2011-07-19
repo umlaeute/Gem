@@ -16,7 +16,7 @@
 
 #include "mesh_square.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(mesh_square, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

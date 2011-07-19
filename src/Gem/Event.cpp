@@ -15,7 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemEvent.h"
+#include "Event.h"
 
 #include <stdlib.h>
 #include "m_pd.h"

@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VIDEO_H_
 #define INCLUDE_VIDEO_H_
 
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 #include <string>
 #include "Gem/Properties.h"

@@ -12,12 +12,12 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemVector.h"
+#include "Vector.h"
 
 #include <math.h>
 
 #ifdef __ppc__
-# include "Base/GemFuncUtil.h"
+# include "Functions.h"
 # undef sqrt
 # define sqrt fast_sqrtf
 #endif

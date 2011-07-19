@@ -19,13 +19,13 @@
 #endif
 
 #ifdef HAVE_CARBONQUICKTIME
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include "GemWinCreate.h"
 #include "Base/GemBase.h"
-#include "GemMan.h"
-#include "GemEvent.h"
+#include "Gem/Manager.h"
+#include "Gem/Event.h"
 
 #define PIXEL_SIZE	32		// 16 or 32
 #define DEPTH_SIZE	16

@@ -13,8 +13,7 @@
 
 #if 1
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemPixImageSave.h"
+#include "Gem/Image.h"
 
 #ifdef _WIN32
 #include <io.h>

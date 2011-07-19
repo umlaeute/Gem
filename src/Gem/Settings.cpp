@@ -14,7 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #include "m_pd.h"
 

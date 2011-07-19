@@ -15,13 +15,13 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Gem/GemConfig.h"
 
-#include "Base/GemConfig.h"
 #if defined GEM_FILMBACKEND && GEM_FILMBACKEND != GEM_FILMBACKEND_Darwin
 
 #include "pix_movieOS.h"
 
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieOS, t_symbol *, A_DEFSYM);
 

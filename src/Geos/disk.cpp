@@ -21,7 +21,7 @@
 /////////////////////////////////////////////////////////
 
 #include "disk.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(disk);

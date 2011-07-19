@@ -14,13 +14,12 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #define NO_AUTO_REGISTER_CLASS
 
 #include "pix_filmOS.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #include <ctype.h>
 

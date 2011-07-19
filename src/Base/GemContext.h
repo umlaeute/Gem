@@ -13,7 +13,7 @@ LOG
 #define INCLUDE_GEMCONTEXT_H_
 
 #include "Gem/ExportDef.h"
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 
 # ifdef __APPLE__

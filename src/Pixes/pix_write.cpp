@@ -17,8 +17,9 @@
 
 #include "pix_write.h"
 
-#include "Base/GemMan.h"
-#include "Base/GemCache.h"
+#include "Gem/Manager.h"
+#include "Gem/Cache.h"
+#include "Gem/ImageIO.h"
 
 #include <stdio.h>
 #include <string.h>

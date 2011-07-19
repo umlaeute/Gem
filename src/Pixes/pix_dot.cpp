@@ -18,6 +18,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/PixPete.h"
 #include "pix_dot.h"
 #include <stdlib.h>
 

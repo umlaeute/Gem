@@ -14,7 +14,7 @@
 #define INCLUDE_NEWWAVE_H_
 
 #include "Base/GemShape.h"
-#include "Base/GemFuncUtil.h"
+#include "Utils/Functions.h"
 
 #ifdef __ppc__
 #undef sqrt

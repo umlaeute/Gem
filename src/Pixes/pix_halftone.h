@@ -12,7 +12,7 @@ LOG
 #define INCLUDE_PIX_HALFTONE_H_
 
 #include "Base/GemPixObj.h"
-#include "Base/GemMath.h"
+#include "Utils/Math.h"
 	
 enum {
     eRoundStyle,

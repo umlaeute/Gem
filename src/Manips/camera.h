@@ -14,11 +14,11 @@ LOG
 #define INCLUDE_CAMERA_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemMan.h"
+#include "Gem/Manager.h"
 #include <stdlib.h>
 #include <math.h>
 
-#include "Base/GemVector.h"
+#include "Utils/Vector.h"
 
 #define PI	3.1415926535897932384626433832795
 

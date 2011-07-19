@@ -17,8 +17,8 @@
 
 #include "pix_snap2tex.h"
 
-#include "Base/GemMan.h"
-#include "Base/GemFuncUtil.h"
+#include "Gem/Manager.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex);
 

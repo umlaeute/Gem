@@ -16,8 +16,8 @@
 
 #include "pix_coordinate.h"
 
-#include "Base/GemState.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/State.h"
+#include "Gem/Image.h"
 
 CPPEXTERN_NEW(pix_coordinate);
 

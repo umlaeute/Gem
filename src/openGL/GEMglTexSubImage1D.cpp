@@ -13,8 +13,8 @@
 ////////////////////////////////////////////////////////
 
 #include "GEMglTexSubImage1D.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemState.h"
+#include "Gem/Image.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexSubImage1D, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT );
 

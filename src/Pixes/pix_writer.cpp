@@ -22,8 +22,8 @@
 # define vsnprintf _vsnprintf
 #endif
 
-#include "Base/GemMan.h"
-#include "Base/GemPixImageSave.h"
+#include "Gem/Manager.h"
+#include "Gem/ImageIO.h"
 
 #include <stdio.h>
 

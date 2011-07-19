@@ -15,9 +15,9 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_buf.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
-#include "Base/GemCache.h"
+#include "Gem/Cache.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_buf, t_floatarg, A_DEFFLOAT);
 

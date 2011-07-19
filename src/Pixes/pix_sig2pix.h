@@ -15,7 +15,7 @@
 #define INCLUDE_PIX_SIG2PIX_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

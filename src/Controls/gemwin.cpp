@@ -16,15 +16,15 @@
 
 #include "gemwin.h"
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
  
 #ifdef __APPLE__
 # include <Carbon/Carbon.h>
 # include <AvailabilityMacros.h>
 #endif // __APPLE__
 
-#include "Base/GemMath.h"
-#include "Base/GemMan.h"
+#include "Utils/Math.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemwin, t_floatarg, A_DEFFLOAT);
 

@@ -16,7 +16,7 @@
 
 #include "vertex_combine.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include "string.h"
 #include "math.h"
 CPPEXTERN_NEW(vertex_combine);

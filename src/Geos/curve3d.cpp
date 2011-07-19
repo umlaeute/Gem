@@ -17,9 +17,9 @@
 
 #include "curve3d.h"
 
-#include "Base/GemState.h"
-#include "Base/Matrix.h"
-#include "Base/GemFuncUtil.h"
+#include "Gem/State.h"
+#include "Utils/Matrix.h"
+#include "Utils/Functions.h"
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(curve3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);

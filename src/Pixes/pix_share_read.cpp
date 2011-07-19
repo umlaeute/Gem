@@ -6,9 +6,9 @@
  *  Copyright 2005 __MyCompanyName__. All rights reserved.
  *
  */
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 #include "pix_share_read.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #include <errno.h>
 

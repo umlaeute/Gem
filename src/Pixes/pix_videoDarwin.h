@@ -11,7 +11,7 @@
 #ifndef INCLUDE_PIX_VIDEODARWIN_H_
 #define INCLUDE_PIX_VIDEODARWIN_H_
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>

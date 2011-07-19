@@ -2,10 +2,10 @@
  *  pix_record.cpp
  *
  */
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 #include "pix_record.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include "Gem/Exception.h"
 
 #include "RTE/MessageCallbacks.h"

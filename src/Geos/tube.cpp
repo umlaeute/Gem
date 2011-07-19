@@ -25,10 +25,10 @@
 
 #include "tube.h"
 
-#include "Base/Matrix.h"
+#include "Utils/Matrix.h"
 #include <math.h>
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 const float tube::TWO_PI = 8.f * atan(1.);
 

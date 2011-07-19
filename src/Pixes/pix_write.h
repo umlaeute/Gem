@@ -16,8 +16,7 @@ LOG
 #define INCLUDE_PIX_WRITE_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemPixImageSave.h"
+#include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

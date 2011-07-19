@@ -15,7 +15,7 @@
 #ifndef INCLUDE_GEMBASE_H_
 #define INCLUDE_GEMBASE_H_
 
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 #include "Gem/ContextData.h"
 
 #include "Base/CPPExtern.h"

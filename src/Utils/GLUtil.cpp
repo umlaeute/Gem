@@ -15,11 +15,11 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemGLUtil.h"
+#include "GLUtil.h"
 #include <ctype.h>
 #include <string.h>
 
-#include "GemGL.h"
+#include "Gem/GemGL.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32
@@ -127,7 +127,7 @@ GEM_EXTERN int getGLdefine(const char *fixname)
 
     switch (count){
     default: 
-#include "GemGLUtil_generated.h"
+#include "GLUtil_generated.h"
       return _GL_UNDEFINED;
 
     }

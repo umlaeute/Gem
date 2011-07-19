@@ -16,7 +16,7 @@
 
 #include "slideSquares.h"
 
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include <string.h>
 #include "math.h"
 #ifdef __APPLE__

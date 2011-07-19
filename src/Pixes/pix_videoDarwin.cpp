@@ -6,7 +6,7 @@
  *  Copyright (c) 2002-2005 James Tittle & Chris Clepper
  *
  */
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 
 #if defined __APPLE__ && !defined __x86_64__
@@ -24,8 +24,8 @@
 #define HELPSYMBOL "pix_video"
 
 #include "pix_videoDarwin.h"
-#include "Base/GemCache.h"
-#include "Base/GemState.h"
+#include "Gem/Cache.h"
+#include "Gem/State.h"
 
 #include <Carbon/Carbon.h>
 

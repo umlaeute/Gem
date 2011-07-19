@@ -16,13 +16,8 @@
 #ifndef INCLUDE_GEMMAN_H_
 #define INCLUDE_GEMMAN_H_
 
-#include "Base/GemGL.h"
-#include "Base/GemGLUtil.h"
-
-#ifdef _WIN32
-# include <QTML.h>
-# include <Movies.h>
-#endif
+#include "Gem/GemGL.h"
+#include "Utils/GLUtil.h"
 
 #include "Gem/ExportDef.h"
 

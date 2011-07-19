@@ -12,7 +12,7 @@
 #define INCLUDE_pix_chroma_key_H_ 
 
 #include "Base/GemPixDualObj.h"
-#include "Base/GemFuncUtil.h"
+#include "Utils/Functions.h"
 
 
 /*-----------------------------------------------------------------

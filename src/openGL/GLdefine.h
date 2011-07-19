@@ -14,7 +14,7 @@
 #define INCLUDE_GEM_GLBEGIN_H_
 
 #include "Base/CPPExtern.h"
-#include "Base/GemGLUtil.h"
+#include "Utils/GLUtil.h"
 
 
 /*

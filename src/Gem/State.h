@@ -16,10 +16,10 @@
 #define INCLUDE_GEMSTATE_H_
 
 #include "Gem/ExportDef.h"
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 
 #include "Gem/RTE.h"
-#include "Gem/any.h"
+#include "Utils/any.h"
 
 struct pixBlock;
 class TexCoord;

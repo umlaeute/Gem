@@ -31,7 +31,7 @@
 #include <math.h>
 
 #include "RTE/Array.h"
-#include "Base/GemPixConvert.h"
+#include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_histo);
 

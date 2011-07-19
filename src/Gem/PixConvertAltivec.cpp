@@ -16,7 +16,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "Base/GemPixConvert.h"
+#include "PixConvert.h"
 
 void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size, 
                           unsigned char *pixels)

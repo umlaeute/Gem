@@ -1,6 +1,5 @@
 #ifndef INCLUDE_PIX_MOVIEDS_H_
 #define INCLUDE_PIX_MOVIEDS_H_
-#include "Base/GemConfig.h"
 
 #ifndef HAVE_DIRECTSHOW
 # error pix_movieDS without DirectShow
@@ -13,7 +12,7 @@
 
  
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 class GEM_EXTERN pix_movieDS : public GemBase
 {

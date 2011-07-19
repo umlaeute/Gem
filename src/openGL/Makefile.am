@@ -27,7 +27,6 @@ libopenGL_la_SOURCES=  \
     GEMglAreTexturesResident.h \
     GEMglArrayElement.cpp \
     GEMglArrayElement.h \
-    GemGLBase.h \
     GEMglBegin.cpp \
     GEMglBegin.h \
     GEMglBindProgramARB.cpp \

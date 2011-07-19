@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "GemSplash.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW(GemSplash);
 

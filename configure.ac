@@ -14,7 +14,8 @@ AC_CONFIG_FILES([Makefile abstractions/Makefile])
 AC_CONFIG_FILES([help/Makefile doc/Makefile examples/Makefile])
 
 # src
-AC_CONFIG_FILES([src/Makefile src/Gem/Makefile src/RTE/Makefile src/Base/Makefile src/plugins/Makefile ])
+AC_CONFIG_FILES([src/Makefile src/Gem/Makefile src/Utils/Makefile])
+AC_CONFIG_FILES([src/RTE/Makefile src/Base/Makefile src/plugins/Makefile ])
 AC_CONFIG_FILES([src/Output/Makefile ])
 
 ## plugins that use this autoconf instance for configuration

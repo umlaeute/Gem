@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_IMAGELOADER_H_
 #define INCLUDE_IMAGELOADER_H_
 
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 #include <string>
 #include "plugins/PluginFactory.h"

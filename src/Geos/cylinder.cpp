@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "cylinder.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

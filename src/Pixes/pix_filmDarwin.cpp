@@ -12,7 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #if defined __APPLE__ && !defined __x86_64__
 // with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)

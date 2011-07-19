@@ -12,7 +12,7 @@
  */
 
 #include "rubber.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #define GRID_SIZE_X  32
 #define GRID_SIZE_Y  32

@@ -1,4 +1,4 @@
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0400

@@ -11,7 +11,7 @@
 #ifndef INCLUDE_GEM_GLBASE_H_
 #define INCLUDE_GEM_GLBASE_H_
 
-#include "Base/GemGLUtil.h"
+#include "Utils/GLUtil.h"
 #include "Base/GemBase.h"
 
 class GEM_EXTERN GemGLBase : public GemBase

@@ -14,14 +14,12 @@
 
 #ifndef INCLUDE_PIX_IMAGE_H_
 #define INCLUDE_PIX_IMAGE_H_
-#include "Base/GemConfig.h"
 
 #include <string.h>
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemPixImageLoad.h"
-
+#include "Gem/Image.h"
+#include "Gem/ImageIO.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

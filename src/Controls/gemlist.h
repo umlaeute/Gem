@@ -16,7 +16,7 @@
 #define INCLUDE_GEMLIST_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 class GemCache;
 

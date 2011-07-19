@@ -17,7 +17,7 @@
 
 #include "gemframebuffer.h"
 #include <string.h>
-#include "Base/GemState.h"
+#include "Gem/State.h"
 #include "Gem/GLStack.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL);

@@ -16,7 +16,7 @@ LOG
 #define INCLUDE_PIX_SNAP_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

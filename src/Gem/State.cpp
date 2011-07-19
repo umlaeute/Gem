@@ -15,11 +15,11 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "GemState.h"
-#include "Base/GemGL.h"
+#include "State.h"
+#include "Gem/GemGL.h"
 
 /* for GemMan::StackIDs */
-#include "GemMan.h"
+#include "Gem/Manager.h"
 #include "Gem/GLStack.h"
 
 #include <map>

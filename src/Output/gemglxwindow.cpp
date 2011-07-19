@@ -13,11 +13,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemConfig.h"
+#include "Gem/GemConfig.h"
 
 #ifdef HAVE_LIBX11
 #include "gemglxwindow.h"
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 #include <stdio.h>
 #include <stdlib.h>
 

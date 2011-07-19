@@ -20,8 +20,8 @@
 #include "Gem/RTE.h"
 
 /* need GLUtil for glReportError */ 
-#include "Base/GemGL.h"
-#include "Base/GemGLUtil.h"
+#include "Gem/GemGL.h"
+#include "Utils/GLUtil.h"
 #define GLDEBUG if(glReportError())::startpost("glError @ %s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
 
 using namespace gem;

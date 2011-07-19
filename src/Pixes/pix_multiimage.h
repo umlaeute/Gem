@@ -18,8 +18,7 @@ LOG
 #include <string.h>
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
-#include "Base/GemPixImageLoad.h"
+#include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

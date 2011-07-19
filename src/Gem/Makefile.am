@@ -33,7 +33,6 @@ DISTCLEANFILES += version_current.h
 
 libGem_la_includedir = $(includedir)/Gem/Gem
 libGem_la_include_HEADERS = \
-	any.h \
 	ContextData.h \
 	Dylib.h \
 	Exception.h \
@@ -52,11 +51,23 @@ libGem_la_include_HEADERS = \
 
 
 libGem_la_SOURCES=  \
-	any.h \
+	configDarwin.h \
+	configLinux.h \
+	configNT.h \
+	GemConfig.h \
+	GemGL.h \
+	glew.cpp \
+	glew.h \
+	glxew.h \
+	wglew.h \
+	Cache.cpp \
+	Cache.h \
 	ContextData.cpp \
 	ContextData.h \
 	Dylib.cpp \
 	Dylib.h \
+	Event.cpp \
+	Event.h \
 	Exception.cpp \
 	Exception.h \
 	ExportDef.h \
@@ -64,14 +75,28 @@ libGem_la_SOURCES=  \
 	Files.h \
 	GLStack.cpp \
 	GLStack.h \
+	Image.cpp \
+	Image.h \
+	ImageLoad.cpp \
+	ImageSave.cpp \
+	ImageIO.h \
+	PixConvert.h \
+	PixConvertAltivec.cpp \
+	PixConvertSSE2.cpp \
 	Loaders.cpp \
 	Loaders.h \
+	Manager.cpp \
+	Manager.h \
+	PBuffer.cpp \
+	PBuffer.h \
 	Properties.cpp \
 	Properties.h \
 	RTE.h \
 	Settings.cpp \
 	Settings.h \
 	Setup.cpp \
+	State.cpp \
+	State.h \
 	SynchedWorkerThread.cpp \
 	SynchedWorkerThread.h \
 	ThreadMutex.cpp \
@@ -82,3 +107,4 @@ libGem_la_SOURCES=  \
 	Version.h \
 	WorkerThread.cpp \
 	WorkerThread.h
+

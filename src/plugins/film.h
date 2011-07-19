@@ -17,7 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_FILM_H_
 
 #include "Base/GemBase.h"
-#include "Base/GemPixUtil.h"
+#include "Gem/Image.h"
 
 #include <string>
 #include "plugins/PluginFactory.h"

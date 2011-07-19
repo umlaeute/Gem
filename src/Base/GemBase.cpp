@@ -58,7 +58,7 @@
  */
 
 #include "GemBase.h"
-#include "GemCache.h"
+#include "Gem/Cache.h"
 
 /////////////////////////////////////////////////////////
 //

@@ -18,8 +18,8 @@
 
 #include "gemmouse.h"
 
-#include "Base/GemEvent.h"
-#include "Base/GemMan.h"
+#include "Gem/Event.h"
+#include "Gem/Manager.h"
 
 CPPEXTERN_NEW_WITH_GIMME(gemmouse);
 

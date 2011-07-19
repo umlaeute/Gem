@@ -16,8 +16,8 @@
 
 #include "primTri.h"
 
-#include "Base/Matrix.h"
-#include "Base/GemState.h"
+#include "Utils/Matrix.h"
+#include "Gem/State.h"
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(primTri, t_floatarg, A_DEFFLOAT);

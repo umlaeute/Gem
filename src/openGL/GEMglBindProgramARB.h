@@ -10,7 +10,7 @@
 #ifndef INCLUDE_GEM_GLBINDPROGRAMARB_H_
 #define INCLUDE_GEM_GLBINDPROGRAMARB_H_
 
-#include "GemGLBase.h"
+#include "Base/GemGLBase.h"
 
 /*
  CLASS

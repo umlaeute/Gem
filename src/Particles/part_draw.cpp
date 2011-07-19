@@ -15,7 +15,7 @@
 #include "part_draw.h"
 
 #include <string.h>
-#include "Base/GemState.h"
+#include "Gem/State.h"
 
 #include "papi.h"
 
