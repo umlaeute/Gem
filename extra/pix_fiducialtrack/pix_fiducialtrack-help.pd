@@ -80,7 +80,7 @@ the "open"-message. The default file is "all.trees";
 ;
 #X obj 451 107 pix_threshold_bernsen 16 16;
 #X msg 520 64 dimen 256 256;
-#X obj 451 222 pix_fiducialtrack ../../doc/gem/examples/data/all.trees;
+#X obj 451 222 pix_fiducialtrack all.trees;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 24 0;
