@@ -3,6 +3,7 @@
 # original Makefile.am.template and re-generate this file
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)/src
+include ../check-sources.mk
 
 noinst_LTLIBRARIES = libParticles.la
 
