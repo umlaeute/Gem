@@ -7,8 +7,6 @@
  *  Copyleft (l) 2002 tigital. All rights reserved.
  *
  */
-
-//#include <stdint.h> not present in Windows and not required for compilation? drh 
 #include "pix_posterize.h"
 
 CPPEXTERN_NEW(pix_posterize);

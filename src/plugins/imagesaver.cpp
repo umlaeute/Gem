@@ -13,7 +13,6 @@
 /////////////////////////////////////////////////////////
   
 #include "plugins/imagesaver.h"
-//#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 

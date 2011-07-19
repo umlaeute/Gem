@@ -37,8 +37,6 @@
 #if defined _WIN32
 # include <io.h>
 # include <windows.h>
-#elif defined __APPLE__
-//# include <mach-o/dyld.h> 
 #endif
 
 #include <iostream>

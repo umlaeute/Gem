@@ -16,7 +16,6 @@ LOG
 #define INCLUDE_GEMEVENT_H_
 
 #include "Gem/ExportDef.h"
-//#include "Base/CPPExtern.h"
 
 //////////////////////////////////////////////////////////////////
 //
