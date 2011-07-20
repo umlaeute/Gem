@@ -62,7 +62,7 @@ manual_autoreconf_doit () {
  echo faking autoreconf for $1
  pushd $1
 
-  runit $ACLOCAL -I $BASEDIR/src/m4 || exit 1
+  runit $ACLOCAL -I . -I $BASEDIR/m4 || exit 1
 
   runit $LIBTOOLIZE --automake -c || exit 1
 
@@ -85,8 +85,13 @@ manual_autoreconf () {
  BASEDIR=$(pwd)
  popd
 
- #SUBDIRS=autoconf_getsubdirs
- SUBDIRS=". src/plugins/videoAVT src/plugins/videoAVT src/plugins/videoHALCON src/plugins/videoPYLON"
+ if [ "x${SUBDIRS}" = "x" ]; then
+  #SUBDIRS=autoconf_getsubdirs
+
+  SUBDIRS="."
+  SUBDIRS="${SUBDIRS} plugins/videoAVT plugins/videoAVT plugins/videoHALCON plugins/videoPYLON"
+  SUBDIRS="${SUBDIRS} extra extra/pix_artoolkit"
+ fi
 
 
 # check for all the needed helpers
