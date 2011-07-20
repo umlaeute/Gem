@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEO_H_
-#define INCLUDE_VIDEO_H_
+#ifndef INCLUDE_GEM_VIDEO_H_
+#define INCLUDE_GEM_VIDEO_H_
 
 #include "Gem/Image.h"
 
@@ -25,148 +25,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
 	video
     
-	a OS-indendent parent-class for retrieving video-frames
+	a OS-indendent parent-class for grabbing video-frames
 	
   KEYWORDS
-	pix
-    
-  DESCRIPTION
-
-  "dimen" (int, int) - set the x,y dimensions
-  "zoom" (int, int) - the zoom factor (1.0 is nominal) (num / denom)
-  "bright" (int) - the brightnes
-  "contrast" (int) - the contrast
-  "hue" (int) - the hue
-  "sat" (int) - the saturation
+	pix, capture
     
   -----------------------------------------------------------------*/
 namespace gem { class GEM_EXTERN video {
   public:
-  
-    //////////
-    // Constructor
-    // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
-    // 
-    video(const std::string name, unsigned int numlocks=1, unsigned int timeout=0);
-  
-    //////////
-    // Destructor
-    virtual ~video(void);
-
-    //! open the device (calls openDevice())
-    bool open(gem::Properties&props);
-    //! close the device (calls closeDevice())
-    void close(void);
-    //! start the transmission (calls startTransfer())
-    bool start(void);
-    //! stop the transmission (calls stopTransfer())
-    bool stop(void);
-
-    //! reset the backend, possibly re-enumerating devices
-    virtual bool          reset(void);
-
-    //! open the video-device
-    /* the exact video device is either the default one or has to be set prior with setDevice()
-     * the device need not start streaming yet
-     * this comes in handy when determining the correct backend for a certain device
-     * \return TRUE when we successfully opened the device and can startTransfer immediately
-     */
-    virtual bool           openDevice(gem::Properties&props);
-
-    //! close the video device, freeing all ressources
-    /* once the device has been closed it should be useable by other applications,...
-     * this get's called when switching to another backend or when deleting the object
-     */
-    virtual void          closeDevice(void);
-
-    //! Start up the video device (called on startRendering)
-    /* \return FALSE is something failed, TRUE otherwise
-     */
-    virtual bool	    	startTransfer(void);
-
-    //! Stop the video device (called on stopRendering)
-    /* \return TRUE if a transfer was going on, FALSE if the transfer was already stopped
-     */
-    virtual bool	   	stopTransfer();
-
-
-    //! Stops the video device and if it was running restarts it
-    /* \return the return code of startTransfer()
-     */
-    virtual bool	   	restartTransfer();
-
-    //! grab a frame (work-horse)
-    /* this will be run in a separate thread (if threading is enabled)
-     * makes the data accessible in the "m_image" struct!
-     * access to m_image MUST be protected by lock() and unlock()
-     */
-    virtual bool grabFrame(void){/* lock(); m_image.image.data=NULL; unlock(); */ return false; };
-  
-
-    //! get the next frame (called when rendering)
-    /* grab the next frame from the device
-     * if no new frame is available, this should set the "newimage" flag to false
-     * this gets called from the main thread, 
-     * and will either read the frame from the grabbing thread (if there is one; locking mutex #0), 
-     * or directly call grabFrame()
-     * you shouldn't need to override this
-     * \return the new frame or NULL on error
-     */
-    virtual pixBlock *getFrame(void);
-
-    //! release a frame (after use)
-    /* this gets called at postRender()
-     * if you are using DMA or the like, now is the time to release the ressource
-     */
-    virtual void releaseFrame(void);
-
-
-
-
-    /***************
-     ** THREADING
-     */
-
-    /* starts the thread that will call grabFrame() (if threads are requested in the ctor) */
-    bool startThread(void);
-    /* stops the thread; waits at most "timeout" microseconds; if 0 waits forever; if -1 waits for time specified in ctor */
-    bool stopThread(int timeout=-1);
-
-    /* locks the mutex #<id>; 
-     * if the mutex does not exist (e.g. no threading), this will simply return
-     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
-     */
-    void lock(unsigned int id=0);
-    /* unlocks the mutex #<id>; 
-     * if the mutex does not exist (e.g. no threading), this will simply return
-     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
-     */
-    void unlock(unsigned int id=0);
-
-    /* sleep a selected time in usec
-     * convenience wrapper around select()
-     */
-    void usleep(unsigned long usec);
-
-    /*
-     * THREADING
-     ************** */
-
-
-    //////////////////////
-    // device settings
-
-    // provide a list of devices this backend can handle */
-    virtual std::vector<std::string>enumerate(void);
-
-    //////////
-    // changes the device
-    // after the device has been set, the caller has to restart 
-    // (close() the current handle, try open() with the new settings)
-    // normally you shouldn't need to override these
-    virtual bool	    	setDevice(int d);
-    virtual bool	    	setDevice(const std::string);
-
     /**
      * returns TRUE if the object can be used in a thread or FALSE otherwise
      * if a backend implements threading itself, it should return FALSE
@@ -174,56 +40,92 @@ namespace gem { class GEM_EXTERN video {
      */
     virtual bool isThreadable(void);
 
-    /** turn on/off "asynchronous"-grabbing
-     * default is "true"
-     * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
-     * non-"continous" means, that the device will only issue a new grab when a frame has read
-     *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
-     * returns: the old state
+    /**
+     * reset the backend, possibly re-enumerating devices
      */
-    bool grabAsynchronous(bool);
+    virtual bool          reset(void);
 
-    // get's the name of the backend (e.g. "v4l")
-    const std::string getName(void);
+    /**
+     * open the video-device
+     * the exact video device is either the default one or has to be set prior with setDevice()
+     * the device need not start streaming yet
+     * this comes in handy when determining the correct backend for a certain device
+     * \return TRUE when we successfully opened the device and can startTransfer immediately
+     */
+    virtual bool           openDevice(gem::Properties&props);
 
-  protected:
-    //! indicates valid transfer (automatically set in start()/stop())
-    bool m_capturing;
-    //! indicates valid device (automatically set in open()/close())
-    bool m_haveVideo;
-    //! a place to store the image with grabFrame()
-    pixBlock m_image;
-  
-    unsigned int m_width;
-    unsigned int m_height;
-    int m_channel;
-    float m_frequency;
-    int m_norm;
-    int m_reqFormat;
+    /**
+     * close the video device, freeing all ressources
+     * once the device has been closed it should be useable by other applications,...
+     * this get's called when switching to another backend or when deleting the object
+     */
+    virtual void          closeDevice(void);
 
-    /* specify either devicename XOR devicenum */  
-    std::string m_devicename;
-    int m_devicenum;
+    /**
+     * Start up the video device (called on startRendering)
+     * \return FALSE is something failed, TRUE otherwise
+     */
+    virtual bool	    	startTransfer(void);
 
-    int m_quality;
-
-  public:
-    // for pix_video: query whether this backend provides access to this class of devices
-    // (e.g. "dv")
-    bool provides(const std::string);
-    // get a list of all provided devices
-    std::vector<std::string>provides(void);
+    /**
+     * Stop the video device (called on stopRendering)
+     * \return TRUE if a transfer was going on, FALSE if the transfer was already stopped
+     */
+    virtual bool	   	stopTransfer();
 
 
-    //////////
-    // Set the video dimensions and other stuff
-    // implement what's possible
-    virtual bool	    	setColor(int);
+    /**
+     * Stops the video device and if it was running restarts it
+     * \return the return code of startTransfer()
+     */
+    virtual bool	   	restartTransfer();
 
-    // set stuff via a system dialog (highly system specific)
-    // implement if the system provides an API for this
-    virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
+    /** 
+     * get the next frame (called when rendering)
+     * grab the next frame from the device
+     * if no new frame is available, this should set the "newimage" flag to false
+     * \return the new frame or NULL on error
+     */
+    virtual pixBlock *getFrame(void);
 
+    /**
+     * release a frame (after use)
+     * this gets called once for each frame retrieved via getFrame()
+     * if you are using DMA or the like, now is the time to release the ressource
+     */
+    virtual void releaseFrame(void);
+
+
+
+    //////////////////////
+    // device settings
+
+    /**
+     * enumerate known devices
+     * \return a list of device names (if they can be enumerated)
+     */
+    virtual std::vector<std::string>enumerate(void);
+
+    /**
+     * set the device to be opened next time
+     * the ID provided should match an index in the list returned by enumerate()
+     * after the device has been set, the caller(!) has to restart 
+     * (close() the current handle, try open() with the new settings)
+     * the default implementation (which you normally shouldn't need to override)
+     * will simply set m_devicenum and clear m_devicename
+     */
+    virtual bool	    	setDevice(int ID);
+
+    /**
+     * set the device to be opened next time
+     * the list returned by enumerate() provides a set of valid names to use here
+     * depending on the backend, other names might be possible as well (e.g. IP-cameras)
+     * after the device has been set, the caller(!) has to restart 
+     * (close() the current handle, try open() with the new settings)
+     * the default implementation (which you normally shouldn't need to override)
+     * will simply set m_devicename and clear m_devicenum
+     */
+    virtual bool	    	setDevice(const std::string);
 
     /**
      * list all properties the currently opened device supports
@@ -263,9 +165,145 @@ namespace gem { class GEM_EXTERN video {
      */
     virtual void getProperties(gem::Properties&props);
 
+
+    /**
+     * call a system-specific configuration dialog
+     * if your system provides a GUI for configuring the device, here is the time to open it
+     * of several dialogs are available (for different properties), the user can specify which one
+     * they want with the string list
+     * if the list is empty, provide sane defaults (e.g. ALL dialogs)
+     * if the system does not support dialogs, return FALSE
+     * if the system does support dialogs and the user has specified which one they want, 
+     * return TRUE if at least one dialog could be handled
+     */
+    virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
+    /**
+     * enumerate list of possible dialogs (if any)
+     */
+    virtual std::vector<std::string>dialogs();
+
+    /**
+     * Set the preferred colorspace (of the frames returned by getFrame()
+     * \return FALSE if the colorspace cannot be set (e.g. while grabbing is active)
+     */
+    virtual bool	    	setColor(int);
+  
+    //////////
+    // Constructor
+    // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
+    // 
+    video(const std::string name);
+  
+    //////////
+    // Destructor
+    virtual ~video(void);
+
+    //! open the device (calls openDevice())
+    bool open(gem::Properties&props);
+    //! close the device (calls closeDevice())
+    void close(void);
+    //! start the transmission (calls startTransfer())
+    bool start(void);
+    //! stop the transmission (calls stopTransfer())
+    bool stop(void);
+
   protected:
-    // for child-implementations: remember that we provide access to this class of devices
+
+    /**
+     * in the constructor, you ought to call provide() for each generic backend your plugin is capable of
+     * e.g. the DirectShow plugin will call: provide("analog"); provide("dv");
+     * everything you add here, will be automaticalyl enumerated with the provides() methods
+     */
     void provide(const std::string);
+
+    //! grab a frame (work-horse)
+    /* this will be run in a separate thread (if threading is enabled)
+     * makes the data accessible in the "m_image" struct!
+     * access to m_image MUST be protected by lock() and unlock()
+     * this should not be used anymore!
+     */
+    virtual bool grabFrame(void){/* lock(); m_image.image.data=NULL; unlock(); */ return false; };
+
+    /***************
+     ** THREADING
+     ** these are here for legacy reasons
+     ** DO NOT USE THEM IN NEW CODE
+     */
+
+    /* starts the thread that will call grabFrame() (if threads are requested in the ctor) */
+    bool startThread(void);
+    /* stops the thread; waits at most "timeout" microseconds; if 0 waits forever; if -1 waits for time specified in ctor */
+    bool stopThread(int timeout=-1);
+
+    /* locks the mutex #<id>; 
+     * if the mutex does not exist (e.g. no threading), this will simply return
+     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
+     */
+    void lock(unsigned int id=0);
+    /* unlocks the mutex #<id>; 
+     * if the mutex does not exist (e.g. no threading), this will simply return
+     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
+     */
+    void unlock(unsigned int id=0);
+
+    /* sleep a selected time in usec
+     * convenience wrapper around select()
+     */
+    void usleep(unsigned long usec);
+
+    //////////
+    // Constructor
+    // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
+    // 
+    video(const std::string name, unsigned int numlocks);
+
+    /*
+     * THREADING
+     ************** */
+
+    /** turn on/off "asynchronous"-grabbing
+     * default is "true"
+     * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
+     * non-"continous" means, that the device will only issue a new grab when a frame has read
+     *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
+     * returns: the old state
+     */
+    virtual bool grabAsynchronous(bool);
+
+  protected:
+    //! indicates valid transfer (automatically set in start()/stop())
+    bool m_capturing;
+    //! indicates valid device (automatically set in open()/close())
+    bool m_haveVideo;
+    //! a place to store the image with grabFrame()
+    pixBlock m_image;
+  
+    unsigned int m_width;
+    unsigned int m_height;
+    int m_reqFormat;
+
+    /* specify either devicename XOR devicenum */
+    /* if !m_devicename.empty() 
+     *  then use m_devicename
+     * elif m_devicenum>=0
+     *  use m_devicenum (preferrable as index in the list returned by enumerate()
+     * else
+     *  try open a "default" device
+     */
+    std::string m_devicename;
+    int m_devicenum;
+
+  public:
+    // for pix_video: query whether this backend provides access to this class of devices
+    // (e.g. "dv")
+    bool provides(const std::string);
+    // get a list of all provided devices
+    std::vector<std::string>provides(void);
+
+    // get's the name of the backend (e.g. "v4l")
+    const std::string getName(void);
+
+
   private:
     class PIMPL;
     PIMPL*m_pimpl;

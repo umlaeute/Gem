@@ -215,13 +215,23 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-video :: video(const std::string name, unsigned int locks, unsigned int timeout) :
+video :: video(const std::string name, unsigned int locks) :
   m_capturing(false), m_haveVideo(false), 
   m_width(64), m_height(64),
-  m_channel(0), m_norm(0),
   m_reqFormat(GL_RGBA),
-  m_devicename(std::string("")), m_devicenum(0), m_quality(0),
-  m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, locks, timeout))
+  m_devicename(std::string("")), m_devicenum(0),
+  m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, locks, 0))
+{
+  if(!name.empty()) {
+    provide(name);
+  }
+}
+video :: video(const std::string name) :
+  m_capturing(false), m_haveVideo(false), 
+  m_width(64), m_height(64),
+  m_reqFormat(GL_RGBA),
+  m_devicename(std::string("")), m_devicenum(0),
+  m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, 1, 0))
 {
   if(!name.empty()) {
     provide(name);
@@ -455,7 +465,10 @@ bool video :: setColor(int d){
 bool video :: dialog(std::vector<std::string>dialognames){
   return false;
 }
-
+std::vector<std::string>video::dialogs(void) {
+  std::vector<std::string>result;
+  return result;
+}
 std::vector<std::string>video::enumerate(void) {
   std::vector<std::string>result;
   return result;
@@ -564,7 +577,7 @@ bool video :: grabAsynchronous(bool fast) {
 }
 
 bool video :: isThreadable(void) {
-  return m_pimpl->numlocks;
+  return (m_pimpl->numlocks>0);
 }
 
 INIT_VIDEOFACTORY();
