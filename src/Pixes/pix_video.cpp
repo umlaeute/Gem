@@ -36,7 +36,7 @@ CPPEXTERN_NEW(pix_video);
 pix_video :: pix_video() : 
   m_videoHandle(NULL), m_driver(-1), m_running(true), m_infoOut(NULL)
 {
-  gem::PluginFactory<gem::plugins:video>::loadPlugins("video");
+  gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
   std::vector<std::string>ids=gem::PluginFactory<gem::plugins::video>::getIDs();
 
   addHandle(ids, "v4l2");
