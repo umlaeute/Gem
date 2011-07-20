@@ -42,6 +42,7 @@ namespace gem { class GEM_EXTERN video {
 
     /**
      * reset the backend, possibly re-enumerating devices
+     * returns TRUE if reset was successfull
      */
     virtual bool          reset(void);
 
@@ -52,26 +53,26 @@ namespace gem { class GEM_EXTERN video {
      * this comes in handy when determining the correct backend for a certain device
      * \return TRUE when we successfully opened the device and can startTransfer immediately
      */
-    virtual bool           openDevice(gem::Properties&props);
+    virtual bool           openDevice(gem::Properties&props) = 0;
 
     /**
      * close the video device, freeing all ressources
      * once the device has been closed it should be useable by other applications,...
      * this get's called when switching to another backend or when deleting the object
      */
-    virtual void          closeDevice(void);
+    virtual void          closeDevice(void) = 0;
 
     /**
      * Start up the video device (called on startRendering)
      * \return FALSE is something failed, TRUE otherwise
      */
-    virtual bool	    	startTransfer(void);
+    virtual bool	    	startTransfer(void) = 0;
 
     /**
      * Stop the video device (called on stopRendering)
      * \return TRUE if a transfer was going on, FALSE if the transfer was already stopped
      */
-    virtual bool	   	stopTransfer();
+    virtual bool	   	stopTransfer() = 0;
 
 
     /**
