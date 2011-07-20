@@ -47,6 +47,7 @@ namespace gem { namespace plugins {
      */
     virtual bool          reset(void);
 
+ protected:
     /**
      * open the video-device
      * the exact video device is either the default one or has to be set prior with setDevice()
@@ -82,6 +83,7 @@ namespace gem { namespace plugins {
      */
     virtual bool	   	restartTransfer();
 
+ public:
     /** 
      * get the next frame (called when rendering)
      * grab the next frame from the device
@@ -98,6 +100,14 @@ namespace gem { namespace plugins {
     virtual void releaseFrame(void);
 
 
+    /** turn on/off "asynchronous"-grabbing
+     * default is "true"
+     * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
+     * non-"continous" means, that the device will only issue a new grab when a frame has read
+     *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
+     * returns: the old state
+     */
+    virtual bool grabAsynchronous(bool);
 
     //////////////////////
     // device settings
@@ -262,15 +272,6 @@ namespace gem { namespace plugins {
     /*
      * THREADING
      ************** */
-
-    /** turn on/off "asynchronous"-grabbing
-     * default is "true"
-     * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
-     * non-"continous" means, that the device will only issue a new grab when a frame has read
-     *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
-     * returns: the old state
-     */
-    virtual bool grabAsynchronous(bool);
 
   protected:
     //! indicates valid transfer (automatically set in start()/stop())
