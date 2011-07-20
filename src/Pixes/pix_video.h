@@ -125,9 +125,9 @@ class GEM_EXTERN pix_video : public GemBase
   // GROUP:	Video data
   //-----------------------------------
     
-  gem::video *m_videoHandle;
+  gem::plugins::video *m_videoHandle;
   std::vector<std::string>m_ids;
-  std::vector<gem::video*>m_videoHandles;
+  std::vector<gem::plugins::video*>m_videoHandles;
   
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
 

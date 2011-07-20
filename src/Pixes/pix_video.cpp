@@ -36,8 +36,8 @@ CPPEXTERN_NEW(pix_video);
 pix_video :: pix_video() : 
   m_videoHandle(NULL), m_driver(-1), m_running(true), m_infoOut(NULL)
 {
-  gem::PluginFactory<gem::video>::loadPlugins("video");
-  std::vector<std::string>ids=gem::PluginFactory<gem::video>::getIDs();
+  gem::PluginFactory<gem::plugins:video>::loadPlugins("video");
+  std::vector<std::string>ids=gem::PluginFactory<gem::plugins::video>::getIDs();
 
   addHandle(ids, "v4l2");
   addHandle(ids, "v4l");
@@ -154,10 +154,10 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
     verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
-      gem::video         *handle=NULL;
+      gem::plugins::video         *handle=NULL;
       startpost("backend #%d='%s'\t", m_videoHandles.size(), key.c_str());
       try {
-	handle=gem::PluginFactory<gem::video>::getInstance(key); 
+	handle=gem::PluginFactory<gem::plugins::video>::getInstance(key); 
       } catch (GemException ex) {
       }
       if(NULL==handle) { 
@@ -281,7 +281,7 @@ void pix_video :: driverMess() {
     unsigned int i=0;
     post("available drivers:");
     for(i=0; i<m_videoHandles.size(); i++) {
-      gem::video*handle= m_videoHandles[i];
+      gem::plugins::video*handle= m_videoHandles[i];
       if(NULL==handle)continue;
       startpost("\t'%s' provides ", handle->getName().c_str());
       std::vector<std::string>backends=handle->provides();
