@@ -47,10 +47,10 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 videoDV4L :: videoDV4L() : video("dv4l"),
                            m_raw(NULL),
                            m_decoder(NULL),
-                           m_parsed(false)
+                           m_parsed(false),
+                           m_quality(DV_QUALITY_BEST)
 {
   m_devicenum  = -1;
-  m_quality=DV_QUALITY_BEST;
 
   int i=0;
   for(i=0; i<3; i++) {
@@ -71,7 +71,7 @@ videoDV4L :: ~videoDV4L(){
   if(m_haveVideo)stopTransfer();
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
 
-  dv_cleanup();
+  dv_cleanup(); // singleton?
 }
 
 

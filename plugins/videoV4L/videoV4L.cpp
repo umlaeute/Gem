@@ -79,22 +79,23 @@ REGISTER_VIDEOFACTORY("v4l", videoV4L);
 
 
 videoV4L :: videoV4L() : video("v4l")
-		       ,
-			 tvfd(0),
-			 frame(0),
-			 videobuf(NULL), 
-			 mytopmargin(0), mybottommargin(0), 
-			 myleftmargin(0), myrightmargin(0),
-			 m_gotFormat(0),m_colorConvert(false),
-			 errorcount(0)
+                       ,
+                         tvfd(0),
+                         frame(0),
+                         videobuf(NULL), 
+                         mytopmargin(0), mybottommargin(0), 
+                         myleftmargin(0), myrightmargin(0),
+                         m_gotFormat(0),m_colorConvert(false),
+                         m_norm(VIDEO_MODE_AUTO),
+                         m_channel(V4L_COMPOSITEIN),
+                         errorcount(0)
 			 
 {
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 
   m_capturing=false;
-  m_channel=V4L_COMPOSITEIN; 
-  m_norm=VIDEO_MODE_AUTO; 
+
   m_devicenum=V4L_DEVICENO;
 
   provide("analog");
@@ -528,6 +529,7 @@ void videoV4L::setProperties(gem::Properties&props) {
 	  error("channel %d out of range [0..%d]", channel, vcap.channels-1);
 	  continue;
 	}
+  m_channel=channel;
 	vchannel.channel=channel;
 
 	do_s_chan=true;
@@ -558,6 +560,7 @@ void videoV4L::setProperties(gem::Properties&props) {
 	if(i_norm<0) {
 	  error("unknown norm '%s'", s.c_str());
 	} else {
+    m_norm=i_norm;
 	  vchannel.norm=i_norm;
 	  do_s_chan=true;
 	}

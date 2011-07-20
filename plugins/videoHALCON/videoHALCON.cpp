@@ -311,12 +311,13 @@ bool videoHALCON :: openDevice(gem::Properties&props)
     w=d;
   if(props.get("height", d))
     h=d;
-
+  if(props.get("channel", d))
+    p=d;
   const int width=(w>0) ?w:0;
   const int height=(h>0)?h:0;
+  const int port=(p>0)?p:-1;
   m_width=width;
   m_height=height;
-
 
   /* m_devicename has to provide:
    *    backendid
@@ -336,7 +337,6 @@ bool videoHALCON :: openDevice(gem::Properties&props)
    */
   std::string cameratype="default";
   std::string device="default";
-  const int port=(m_channel>0)?m_channel:-1;
 
   std::string name;
 

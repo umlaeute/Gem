@@ -120,6 +120,8 @@ namespace gem { class GEM_EXPORT videoDV4L : public video {
   bool m_parsed;
   uint8_t*m_frame[3];
   int m_pitches[3];
+
+  int m_quality;
 #endif /* HAVE_DV */
 }; };
 

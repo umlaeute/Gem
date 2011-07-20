@@ -138,6 +138,10 @@ namespace gem { class GEM_EXPORT videoV4L : public video {
   int m_gotFormat; // the format returned by the v4l-device (not an openGL-format!)
   bool m_colorConvert; // do we have to convert the colour-space manually ?
 
+  int m_norm;    // PAL, NTSC,...
+  int m_channel;
+
+
   unsigned int errorcount;
   
 #endif /* HAVE_VIDEO4LINUX */
