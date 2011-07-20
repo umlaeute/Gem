@@ -166,10 +166,6 @@ delete saved;
 saved = new unsigned int [m_blurSize];
 }
 
-#ifdef __VEC__
-processYUVAltivec(image);
-return;
-#else
      int h,w,hlength;
     long src;
 
@@ -205,7 +201,6 @@ for (h=0; h<image.ysize-1; h++){
    
     }
 }
-#endif
 }
 
 
