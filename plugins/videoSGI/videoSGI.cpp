@@ -66,14 +66,7 @@ videoSGI :: videoSGI()
 videoSGI :: ~videoSGI()
 {
   stopTransfer();
-
-  // Clean up the video
-  if (m_haveVideo)
-    {
-    	vlDestroyPath(m_svr, m_path);
-    	vlCloseVideo(m_svr);
-    	post("GEM: videoSGI: Closed video connection");
-    }
+  close();
   cleanPixBlock();
 }
 

@@ -43,6 +43,12 @@
 # include "config.h"
 #endif
 
+#if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
+# define HAVE_VIDEO4LINUX
+#endif
+
+#ifdef HAVE_VIDEO4LINUX
+
 #include "videoV4L.h"
 #include "plugins/PluginFactory.h"
 using namespace gem;
@@ -74,7 +80,6 @@ using namespace gem;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifdef HAVE_VIDEO4LINUX
 REGISTER_VIDEOFACTORY("v4l", videoV4L);
 
 
@@ -107,7 +112,7 @@ videoV4L :: videoV4L() : video("v4l")
 /////////////////////////////////////////////////////////
 videoV4L :: ~videoV4L()
 {
-  if (m_haveVideo)stopTransfer();
+  close();
 }
 
 
@@ -696,11 +701,4 @@ void videoV4L::getProperties(gem::Properties&props) {
     } /* else if key */
   } /* key loop */
 }
-
-
-#else
-videoV4L :: videoV4L() : video("")
-{ }
-videoV4L :: ~videoV4L()
-{ }
 #endif /* HAVE_VIDEO4LINUX */

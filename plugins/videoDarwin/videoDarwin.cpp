@@ -70,6 +70,7 @@ videoDarwin :: videoDarwin()
 /////////////////////////////////////////////////////////
 videoDarwin :: ~videoDarwin()
 {
+  close();
   if (m_vc) {
     if (::SGDisposeChannel(m_sg, m_vc)) {
       error ("Unable to dispose a video channel");

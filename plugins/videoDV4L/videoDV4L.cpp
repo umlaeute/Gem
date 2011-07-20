@@ -68,6 +68,7 @@ videoDV4L :: videoDV4L() : video("dv4l"),
 //
 /////////////////////////////////////////////////////////
 videoDV4L :: ~videoDV4L(){
+  close();
   if(m_haveVideo)stopTransfer();
   if(m_decoder!=NULL)dv_decoder_free(m_decoder);
 

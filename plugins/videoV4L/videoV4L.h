@@ -19,46 +19,40 @@
 
 #include "plugins/video.h"
 
-#if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
-# define HAVE_VIDEO4LINUX
-#endif
+#ifdef HAVE_LINUX_VIDEODEV_H
+# include <linux/videodev.h>
+#endif /* HAVE_LINUX_VIDEODEV_H */
 
-#ifdef HAVE_VIDEO4LINUX
+#ifdef HAVE_LIBV4L1
+# include <libv4l1.h> 
+#endif /* HAVE_LIBV4L1 */
 
-# ifdef HAVE_LINUX_VIDEODEV_H
-#  include <linux/videodev.h>
-# endif /* HAVE_LINUX_VIDEODEV_H */
-
-# ifdef HAVE_LIBV4L1
-#  include <libv4l1.h> 
-# endif /* HAVE_LIBV4L1 */
-
-# include <stdio.h>
-# include <stdlib.h>
-# include <stdarg.h>
-# include <unistd.h>
-# include <string.h>
-# include <ctype.h>
-# include <fcntl.h>
-# include <errno.h>
-# include <sys/ioctl.h>
-# include <sys/types.h>
-# include <sys/time.h>
-# include <linux/types.h>
-# include <sys/mman.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <linux/types.h>
+#include <sys/mman.h>
 //#ifdef HAVE_PTHREADS
-# include <pthread.h>
+#include <pthread.h>
 //#endif
-# define V4L_DEVICENO 0
-# define V4L_NBUF 2
-# define V4L_COMPOSITEIN 1
-#endif
+#define V4L_DEVICENO 0
+#define V4L_NBUF 2
+#define V4L_COMPOSITEIN 1
+
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	pix_video
+	videoV4L
     
-    Loads in a video
+    grab images from a v4l(1) device
     
 KEYWORDS
     pix
@@ -83,7 +77,6 @@ namespace gem { class GEM_EXPORT videoV4L : public video {
     	// Destructor
     	virtual ~videoV4L();
 
-#ifdef HAVE_VIDEO4LINUX
 	////////
 	// open the video-device
 	virtual bool           openDevice(gem::Properties&props);
@@ -144,8 +137,6 @@ namespace gem { class GEM_EXPORT videoV4L : public video {
 
   unsigned int errorcount;
   
-#endif /* HAVE_VIDEO4LINUX */
-
 }; 
 };
 
