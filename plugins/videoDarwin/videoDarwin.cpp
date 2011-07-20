@@ -91,6 +91,13 @@ videoDarwin :: ~videoDarwin()
   }
 }
 bool videoDarwin :: openDevice(gem::Properties&props) {
+  double d;
+  if(props.get("width", d))
+    m_width=d;
+
+  if(props.get("height", d))
+    m_height=d;
+
   initSeqGrabber();
   return (NULL!=m_sg);
 }
@@ -171,6 +178,11 @@ void videoDarwin :: stopRendering()
 }
 #endif
 
+
+static std::string pascal2string(const Str255 pstr) {
+  const char*cstr=static_cast<const char*>(pstr);
+  return std::string(cstr+1, cstr[0]);
+}
 void videoDarwin :: initSeqGrabber()
 {
   OSErr anErr;
@@ -212,10 +224,14 @@ void videoDarwin :: initSeqGrabber()
     deviceIndex = (*devices)->selectedIndex;
     post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
     int i;
+    m_devices.clear();
     for (i = 0; i < deviceCount; i++){
-      post("SG channnel Device List  %.*s",
+      m_devices[i]=std::string( pascal2str((*devices)->entry[i].name));
+      post("SG channnel Device List  %.*s = %s", 
            (*devices)->entry[i].name[0],
-           (*devices)->entry[i].name+1);
+           (*devices)->entry[i].name+1,
+
+           m_devices[i].c_str());
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
@@ -227,15 +243,26 @@ void videoDarwin :: initSeqGrabber()
 
     //walk through the list
     for (i = 0; i < inputIndex; i++){
-      post("SG channnel Input Device List %d %.*s",
-           i,
-           (*theSGInputList)->entry[i].name[0],
-           (*theSGInputList)->entry[i].name+1);
+      std::string input=pascal2str((*theSGInputList)->entry[i]);
+      post("SG channnel Input Device List %d %s",
+           i, input.c_str());
+    }
+  }
+
+  if(m_devicenum>=0)
+    m_inputDevice=m_devicenum;
+  else {
+    int i;
+    for(i=0; i<deviceCount; i++) {
+      if(m_devicename==m_devices[i]) {
+        m_inputDevice=i;
+        break;
+      }
     }
   }
 
   //this call sets the input device
-  if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
+  if (m_inputDevice >= 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
     post("SGSetChannelDevice trying %s", 
          (*devices)->entry[m_inputDevice].name[0],
          (*devices)->entry[m_inputDevice].name+1);
@@ -774,12 +801,75 @@ std::vector<std::string>videoDS :: dialogs(void) {
 
 bool videoDarwin::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
- return false;
+  gem::any typ;
+
+  readable.clear();
+  writeable.clear();
+
+  typ=1.;
+#define SETPROP(key, value) typ=value; readable.set(key, typ); writeable.set(key, typ)
+  SETPROP("brightness", 1);
+  SETPROP("saturation", 1);
+  SETPROP("contrast", 1);
+  SETPROP("exposure", 1);
+  SETPROP("gain", 1);
+  SETPROP("whitebalance", 1);
+
+ return true;
 }
 void videoDarwin::setProperties(gem::Properties&props) {}
-void videoDarwin::getProperties(gem::Properties&props) {}
+void videoDarwin::getProperties(gem::Properties&props)
+{
+  std::vector<std::string>keys=props.keys();
 
+  ComponentDescription    desc;
+  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
 
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    if("brightness"==key) {
+      if (vdSubtypeIIDC != desc.componentSubType){
+        unsigned short brightness = 0;
+        VDGetBrightness(m_vdig,&brightness);
+        double d=brightness/65536.;
+        props.set(key, d);
+      } else {
+        post("how to get brightness?");
+      }
+    } else if("saturation"==key) {
+      if (vdSubtypeIIDC != desc.componentSubType){
+        unsigned short saturation = 0;
+        VDGetSaturation(m_vdig,&saturation);
+        double d=saturation/65536.;
+        props.set(key, d);
+      } else {
+        post("how to get saturation?");
+      }
+    } else if("contrast"==key) {
+    if (vdSubtypeIIDC != desc.componentSubType){
+        unsigned short contrast = 0;
+        VDGetContrast(m_vdig,&contrast);
+        double d=contrast/65536.;
+        props.set(key, d);
+      } else {
+        post("how to get contrast?");
+      }
+    } else if("exposure"==key) {
+        post("how to get exposure?");
+    } else if("gain"==key) {
+        post("how to get gain?");
+    } else if("whitebalance"==key) {
+        post("how to get whitebalance?");
+    }
+  }
+}
+
+std::vector<std::string> videoDarwin::enumerate() {
+  std::vector<std::string> result;
+  result=m_devices;
+  return result;
+}
 #else
 videoDarwin ::  videoDarwin() : video("") {}
 videoDarwin :: ~videoDarwin() {}

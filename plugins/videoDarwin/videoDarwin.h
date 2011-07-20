@@ -119,6 +119,10 @@ namespace gem { namespace plugins {
 		FSSpec		theFSSpec;
 		short		nFileRefNum;
 		short		nResID;
+
+
+    virtual std::vector<std::string>enumerate(void);
+    std::vector<std::string>m_devices;
 		
 		//functions and variables for controlling the vdig		
 		virtual void		brightnessMess(float X);
