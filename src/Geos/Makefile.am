@@ -83,7 +83,6 @@ libGeos_la_SOURCES=  \
     surface3d.h \
     teapot.cpp \
     teapot.h \
-    TexFont.h \
     text2d.cpp \
     text2d.h \
     text3d.cpp \
