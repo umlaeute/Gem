@@ -123,17 +123,8 @@ namespace gem { namespace plugins {
 
     virtual std::vector<std::string>enumerate(void);
     std::vector<std::string>m_devices;
-		
-		//functions and variables for controlling the vdig		
-		virtual void		brightnessMess(float X);
-		virtual void		saturationMess(float X);
-		virtual void		contrastMess(float X);
-		
-		//IIDC functions
-		virtual void		exposureMess(float X);
-		virtual void		gainMess(float X);
-		virtual void		whiteBalanceMess(float U,float V);
-
+    
+    bool setIIDCProperty(OSType specifier, double value);
 
 #endif /*HAVE_VIDEODARWIN */
   }; 

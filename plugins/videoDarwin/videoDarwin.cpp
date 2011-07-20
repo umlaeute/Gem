@@ -57,7 +57,7 @@ videoDarwin :: videoDarwin()
 
   //set to the first input device
   m_inputDevice = 0;
-  initSeqGrabber();
+  //initSeqGrabber();
 
   provide("dv");
   provide("iidc");
@@ -94,9 +94,10 @@ bool videoDarwin :: openDevice(gem::Properties&props) {
   double d;
   if(props.get("width", d))
     m_width=d;
-
   if(props.get("height", d))
     m_height=d;
+  if(props.get("channel", d))
+    m_inputDeviceChannel=d;
 
   initSeqGrabber();
   return (NULL!=m_sg);
@@ -258,7 +259,6 @@ post("srcRect=%dx%d", m_width, m_height);
       }
     }
   }
-  post("device trying %d", m_inputDevice);
 
   //this call sets the input device
   if (m_inputDevice >= 0 && m_inputDevice < deviceCount) {//check that the device is not out of bounds
@@ -476,291 +476,6 @@ bool videoDarwin :: setColor(int format)
   }
 }
 
-void videoDarwin :: brightnessMess(float X)
-{
-
-  QTAtomContainer         atomContainer;
-  QTAtom                  featureAtom;
-  VDIIDCFeatureSettings   settings;
-  ComponentDescription    desc;
-  ComponentResult         result = paramErr;
-
-  //check if device is IIDC
-  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-  if (vdSubtypeIIDC != desc.componentSubType){
-
-    unsigned short brightness = (unsigned short)(65536. * X);
-    VDSetBrightness(m_vdig,&brightness);
-
-    VDGetBrightness(m_vdig,&brightness);
-    post("brightness is %d",brightness);
-  }
-  else
-    {
-      //IIDC stuff
-      //these things are as stubborn as they are stupid - find one that conforms to spec!
-
-      result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureBrightness, &atomContainer);
-      if (noErr != result) {
-        error("VDIIDCGetFeaturesForSpecifier returned %d",result);
-      }
-
-      featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-                                       vdIIDCAtomTypeFeature, 1, NULL);
-      if (0 == featureAtom) error("featureAtom not found");
-
-      result = QTCopyAtomDataToPtr(atomContainer,
-                                   QTFindChildByID(atomContainer, featureAtom,
-                                                   vdIIDCAtomTypeFeatureSettings,
-                                                   vdIIDCAtomIDFeatureSettings, NULL),
-                                   true, sizeof(settings), &settings, NULL);
-
-      settings.state.flags = (vdIIDCFeatureFlagOn |
-                              vdIIDCFeatureFlagManual |
-                              vdIIDCFeatureFlagRawControl);
-
-      settings.state.value = X;
-
-      result = QTSetAtomData(atomContainer,
-                             QTFindChildByID(atomContainer, featureAtom,
-                                             vdIIDCAtomTypeFeatureSettings,
-                                             vdIIDCAtomIDFeatureSettings, NULL),
-                             sizeof(settings), &settings);
-
-      result = VDIIDCSetFeatures(m_vdig, atomContainer);
-    }
-}
-
-void videoDarwin :: saturationMess(float X)
-{
-
-  QTAtomContainer         atomContainer;
-  QTAtom                  featureAtom;
-  VDIIDCFeatureSettings   settings;
-  ComponentDescription    desc;
-  ComponentResult         result = paramErr;
-
-  //check if device is IIDC
-  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-  if (vdSubtypeIIDC != desc.componentSubType){
-
-    unsigned short saturation = (unsigned short)(65536. * X);
-    VDSetSaturation(m_vdig,&saturation);
-
-    VDGetSaturation(m_vdig,&saturation);
-    post("saturation is %d",saturation);
-  }
-  else
-    {
-      //IIDC stuff
-      result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureSaturation, &atomContainer);
-      if (noErr != result) {
-        error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureSaturation returned %d",result);
-      }
-
-      featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-                                       vdIIDCAtomTypeFeature, 1, NULL);
-      if (0 == featureAtom) error("featureAtom vdIIDCFeatureSaturation not found");
-
-      result = QTCopyAtomDataToPtr(atomContainer,
-                                   QTFindChildByID(atomContainer, featureAtom,
-                                                   vdIIDCAtomTypeFeatureSettings,
-                                                   vdIIDCAtomIDFeatureSettings, NULL),
-                                   true, sizeof(settings), &settings, NULL);
-
-      settings.state.flags = (vdIIDCFeatureFlagOn |
-                              vdIIDCFeatureFlagManual |
-                              vdIIDCFeatureFlagRawControl);
-
-      settings.state.value = X;
-
-      result = QTSetAtomData(atomContainer,
-                             QTFindChildByID(atomContainer, featureAtom,
-                                             vdIIDCAtomTypeFeatureSettings,
-                                             vdIIDCAtomIDFeatureSettings, NULL),
-                             sizeof(settings), &settings);
-
-      result = VDIIDCSetFeatures(m_vdig, atomContainer);
-    }
-}
-
-void videoDarwin :: contrastMess(float X)
-{
-  unsigned short contrast = (unsigned short)(65536. * X);
-  VDSetContrast(m_vdig,&contrast);
-  
-  VDGetContrast(m_vdig,&contrast);
-  post("contrast is %d",contrast);
-}
-
-void videoDarwin :: exposureMess(float X)
-{
-
-  QTAtomContainer         atomContainer;
-  QTAtom                  featureAtom;
-  VDIIDCFeatureSettings   settings;
-  ComponentDescription    desc;
-  ComponentResult         result = paramErr;
-
-  //check if device is IIDC
-  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-  if (vdSubtypeIIDC == desc.componentSubType){
-
-    //IIDC stuff
-    //vdIIDCFeatureExposure
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureExposure, &atomContainer);
-    if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-    }
-
-    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-                                     vdIIDCAtomTypeFeature, 1, NULL);
-    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-
-    result = QTCopyAtomDataToPtr(atomContainer,
-                                 QTFindChildByID(atomContainer, featureAtom,
-                                                 vdIIDCAtomTypeFeatureSettings,
-                                                 vdIIDCAtomIDFeatureSettings, NULL),
-                                 true, sizeof(settings), &settings, NULL);
-
-    settings.state.flags = (vdIIDCFeatureFlagOn |
-                            vdIIDCFeatureFlagManual |
-                            vdIIDCFeatureFlagRawControl);
-
-    settings.state.value = X;
-
-    result = QTSetAtomData(atomContainer,
-                           QTFindChildByID(atomContainer, featureAtom,
-                                           vdIIDCAtomTypeFeatureSettings,
-                                           vdIIDCAtomIDFeatureSettings, NULL),
-                           sizeof(settings), &settings);
-
-    result = VDIIDCSetFeatures(m_vdig, atomContainer);
-  }
-}
-
-void videoDarwin :: gainMess(float X)
-{
-
-  QTAtomContainer         atomContainer;
-  QTAtom                  featureAtom;
-  VDIIDCFeatureSettings   settings;
-  ComponentDescription    desc;
-  ComponentResult         result = paramErr;
-
-  //check if device is IIDC
-  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-  if (vdSubtypeIIDC == desc.componentSubType){
-
-    //IIDC stuff
-    //vdIIDCFeatureGain
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
-    if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-    }
-
-    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-                                     vdIIDCAtomTypeFeature, 1, NULL);
-    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-
-    result = QTCopyAtomDataToPtr(atomContainer,
-                                 QTFindChildByID(atomContainer, featureAtom,
-                                                 vdIIDCAtomTypeFeatureSettings,
-                                                 vdIIDCAtomIDFeatureSettings, NULL),
-                                 true, sizeof(settings), &settings, NULL);
-
-    settings.state.flags = (vdIIDCFeatureFlagOn |
-                            vdIIDCFeatureFlagManual |
-                            vdIIDCFeatureFlagRawControl);
-
-    settings.state.value = X;
-
-    result = QTSetAtomData(atomContainer,
-                           QTFindChildByID(atomContainer, featureAtom,
-                                           vdIIDCAtomTypeFeatureSettings,
-                                           vdIIDCAtomIDFeatureSettings, NULL),
-                           sizeof(settings), &settings);
-
-    result = VDIIDCSetFeatures(m_vdig, atomContainer);
-
-  }
-}
-
-void videoDarwin :: whiteBalanceMess(float U, float V)
-{
-
-  QTAtomContainer         atomContainer;
-  QTAtom                  featureAtom;
-  VDIIDCFeatureSettings   settings;
-  ComponentDescription    desc;
-  ComponentResult         result = paramErr;
-
-  //check if device is IIDC
-  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-  if (vdSubtypeIIDC == desc.componentSubType){
-
-    //IIDC stuff
-    //vdIIDCFeatureWhiteBalanceU
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
-    if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-    }
-
-    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-                                     vdIIDCAtomTypeFeature, 1, NULL);
-    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-
-    result = QTCopyAtomDataToPtr(atomContainer,
-                                 QTFindChildByID(atomContainer, featureAtom,
-                                                 vdIIDCAtomTypeFeatureSettings,
-                                                 vdIIDCAtomIDFeatureSettings, NULL),
-                                 true, sizeof(settings), &settings, NULL);
-
-    settings.state.flags = (vdIIDCFeatureFlagOn |
-                            vdIIDCFeatureFlagManual |
-                            vdIIDCFeatureFlagRawControl);
-
-    settings.state.value = U;
-
-    result = QTSetAtomData(atomContainer,
-                           QTFindChildByID(atomContainer, featureAtom,
-                                           vdIIDCAtomTypeFeatureSettings,
-                                           vdIIDCAtomIDFeatureSettings, NULL),
-                           sizeof(settings), &settings);
-
-    result = VDIIDCSetFeatures(m_vdig, atomContainer);
-
-    //vdIIDCFeatureWhiteBalanceV
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceV, &atomContainer);
-    if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
-    }
-
-    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-                                     vdIIDCAtomTypeFeature, 1, NULL);
-    if (0 == featureAtom) error("featureAtom vdIIDCFeatureExposure not found");
-
-    result = QTCopyAtomDataToPtr(atomContainer,
-                                 QTFindChildByID(atomContainer, featureAtom,
-                                                 vdIIDCAtomTypeFeatureSettings,
-                                                 vdIIDCAtomIDFeatureSettings, NULL),
-                                 true, sizeof(settings), &settings, NULL);
-
-    settings.state.flags = (vdIIDCFeatureFlagOn |
-                            vdIIDCFeatureFlagManual |
-                            vdIIDCFeatureFlagRawControl);
-
-    settings.state.value = V;
-
-    result = QTSetAtomData(atomContainer,
-                           QTFindChildByID(atomContainer, featureAtom,
-                                           vdIIDCAtomTypeFeatureSettings,
-                                           vdIIDCAtomIDFeatureSettings, NULL),
-                           sizeof(settings), &settings);
-
-    result = VDIIDCSetFeatures(m_vdig, atomContainer);
-  }
-}
 
 /////////////////////////////////////////////////////////
 // dialog
@@ -798,72 +513,231 @@ std::vector<std::string>videoDarwin :: dialogs(void) {
 
 bool videoDarwin::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
+  bool iidc=false;
   gem::any typ;
 
   readable.clear();
   writeable.clear();
 
   typ=1.;
-#define SETPROP(key, value) typ=value; readable.set(key, typ); writeable.set(key, typ)
-  SETPROP("brightness", 1);
-  SETPROP("saturation", 1);
-  SETPROP("contrast", 1);
-  SETPROP("exposure", 1);
-  SETPROP("gain", 1);
-  SETPROP("whitebalance", 1);
+  if(m_vdig) {
+    ComponentDescription    desc;
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
 
+    iidc=vdSubtypeIIDC != desc.componentSubType;
+  }
+#define SETPROP(key, value) typ=value; readable.set(key, typ); writeable.set(key, typ)
+#define SETRPROP(key, value) typ=value; readable.set(key, typ)
+#define SETWPROP(key, value) typ=value; writeable.set(key, typ)
+  SETPROP("Brightness", 1);
+  SETPROP("Saturation", 1);
+  if(iidc) {
+   SETPROP("Contrast", 1);
+  } else {
+   SETWPROP("Exposure", 1);
+   SETWPROP("WhitebalanceU", 1);
+   SETWPROP("WhitebalanceV", 1);
+  }
  return true;
 }
-void videoDarwin::setProperties(gem::Properties&props) {}
+
+bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
+    QTAtomContainer         atomContainer;
+    QTAtom                  featureAtom;
+    VDIIDCFeatureSettings   settings;
+    ComponentDescription    desc;
+    ComponentResult         result = paramErr;
+    
+    //IIDC stuff
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, specifier, &atomContainer);
+    if (noErr != result) {
+     return false;
+    }
+    
+    featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
+                                     vdIIDCAtomTypeFeature, 1, NULL);
+    if (0 == featureAtom) return false;//error("featureAtom vdIIDCFeatureSaturation not found");
+    
+    result = QTCopyAtomDataToPtr(atomContainer,
+                                 QTFindChildByID(atomContainer, featureAtom,
+                                                 vdIIDCAtomTypeFeatureSettings,
+                                                 vdIIDCAtomIDFeatureSettings, NULL),
+                                 true, sizeof(settings), &settings, NULL);
+    
+    settings.state.flags = (vdIIDCFeatureFlagOn |
+                            vdIIDCFeatureFlagManual |
+                            vdIIDCFeatureFlagRawControl);
+    
+    settings.state.value = value;
+    
+    result = QTSetAtomData(atomContainer,
+                           QTFindChildByID(atomContainer, featureAtom,
+                                           vdIIDCAtomTypeFeatureSettings,
+                                           vdIIDCAtomIDFeatureSettings, NULL),
+                           sizeof(settings), &settings);
+    
+    result = VDIIDCSetFeatures(m_vdig, atomContainer);
+    
+    return true;
+}
+void videoDarwin::setProperties(gem::Properties&props) {
+  ComponentDescription    desc;
+  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+  double d;
+
+  std::vector<std::string>keys=props.keys();
+    int i=0;
+    bool iidc=(vdSubtypeIIDC == desc.componentSubType);
+    for(i=0; i<keys.size(); i++) {
+        std::string key=keys[i];
+        if("Contrast"==key) {
+            if(props.get(key, d)) {
+                unsigned short contrast = (unsigned short)(65536. * d);
+                post("setting contrast to %f -> %d", d, contrast);
+                VDSetContrast(m_vdig,&contrast);
+            }
+        } else if("Saturation"==key) {
+            if(props.get(key, d)) {                
+                if (!iidc){
+                    unsigned short saturation = (unsigned short)(65536. * d);
+                    post("setting saturation to %f -> %d", d, saturation); 
+                    VDSetSaturation(m_vdig,&saturation);
+                    post("set saturation to %f -> %d", d, saturation); 
+                    VDGetSaturation(m_vdig,&saturation);
+                    post("saturation is %d",saturation);
+                } else {
+                if(!setIIDCProperty(vdIIDCFeatureSaturation, d)) {
+                    error("failed setting Saturation using IIDC");
+                }
+             }
+            }
+        } else if("Brightness"==key) {
+            if(props.get(key, d)) {                
+                if (!iidc){
+                    unsigned short brightness = (unsigned short)(65536. * d);
+                    post("setting brightness to %f -> %d", d, brightness); 
+                    VDSetBrightness(m_vdig,&brightness);
+                    post("set brightness to %f -> %d", d, brightness); 
+                    VDGetBrightness(m_vdig,&brightness);
+                    post("brightness is %d",brightness);
+                } else {
+                if(!setIIDCProperty(vdIIDCFeatureBrightness, d)) {
+                    error("failed setting Brightness using IIDC");
+                }
+             }
+            }
+        } else if("Exposure"==key) {
+            if(props.get(key, d)) {                
+                if (iidc){
+                 if(!setIIDCProperty(vdIIDCFeatureExposure, d)) {
+                    error("failed setting Exposure using IIDC");
+                }
+             }
+            }
+        } else if("WhiteBalanceU"==key) {
+            if(props.get(key, d)) {                
+                if (iidc){
+                 if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceU, d)) {
+                    error("failed setting WhiteBalanceU using IIDC");
+                }
+             }
+            }
+        } else if("WhiteBalanceV"==key) {
+            if(props.get(key, d)) {                
+                if (iidc){
+                 if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceV, d)) {
+                    error("failed setting WhiteBalanceV using IIDC");
+                }
+             }
+            }
+        }
+
+    }
+
+}
 void videoDarwin::getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
 
   ComponentDescription    desc;
   GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-
+  bool iidc=(vdSubtypeIIDC == desc.componentSubType);
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    if("brightness"==key) {
-      if (vdSubtypeIIDC != desc.componentSubType){
+    if("Brightness"==key) {
+      if (!iidc){
         unsigned short brightness = 0;
         VDGetBrightness(m_vdig,&brightness);
         double d=brightness/65536.;
         props.set(key, d);
       } else {
-        post("how to get brightness?");
+        post("how to get IIDC/brightness?");
       }
-    } else if("saturation"==key) {
-      if (vdSubtypeIIDC != desc.componentSubType){
+    } else if("Saturation"==key) {
+      if (!iidc){
         unsigned short saturation = 0;
         VDGetSaturation(m_vdig,&saturation);
         double d=saturation/65536.;
         props.set(key, d);
       } else {
-        post("how to get saturation?");
+        post("how to get IIDC/saturation?");
       }
-    } else if("contrast"==key) {
-    if (vdSubtypeIIDC != desc.componentSubType){
+    } else if("Contrast"==key) {
+    if (!iidc){
         unsigned short contrast = 0;
         VDGetContrast(m_vdig,&contrast);
         double d=contrast/65536.;
         props.set(key, d);
       } else {
-        post("how to get contrast?");
+        post("how to get IIDC/contrast?");
       }
-    } else if("exposure"==key) {
-        post("how to get exposure?");
-    } else if("gain"==key) {
-        post("how to get gain?");
-    } else if("whitebalance"==key) {
-        post("how to get whitebalance?");
+#if 0
+    } else if("Exposure"==key) {
+        post("how to get IIDC/exposure?");
+    } else if("WhitebalanceU"==key) {
+        post("how to get IIDC/whitebalanceU?");
+    } else if("WhitebalanceV"==key) {
+        post("how to get IIDC/whitebalanceV?");
+#endif
     }
   }
 }
 
 std::vector<std::string> videoDarwin::enumerate() {
   std::vector<std::string> result;
+  OSErr anErr;
+  SGDeviceList    devices;
+
+  anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
+  if(anErr!=noErr){
+    error("could not get SG channnel Device List");
+  }else{
+    short deviceCount = (*devices)->count;
+    short deviceIndex = (*devices)->selectedIndex;
+    short inputIndex;
+    post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+    int i;
+    m_devices.clear();
+    for (i = 0; i < deviceCount; i++){
+      m_devices.push_back(pascal2str((*devices)->entry[i].name));
+      post("SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
+    }
+    SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
+
+    bool showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
+
+    SGDeviceInputList theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
+
+    //we should have device names in big ass undocumented structs
+    //walk through the list
+    for (i = 0; i < inputIndex; i++){
+      std::string input=pascal2str((*theSGInputList)->entry[i].name);
+      post("SG channnel Input Device List %d %s",
+           i, input.c_str());
+    }
+  }
+
   result=m_devices;
   return result;
 }
