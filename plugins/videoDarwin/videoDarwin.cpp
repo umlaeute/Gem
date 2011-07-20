@@ -52,7 +52,7 @@ videoDarwin :: videoDarwin()
   : video("darwin", 0),
     m_newFrame(false),
     m_srcGWorld(NULL),
-    m_quality(channelPlayNormal);
+    m_quality(channelPlayNormal)
 {
   m_width= DEFAULT_WIDTH;
   m_height=DEFAULT_HEIGHT;
@@ -274,12 +274,12 @@ bool videoDarwin :: initSeqGrabber()
 
   if (m_colorspace==GL_BGRA_EXT){
     m_image.image.setCsizeByFormat(GL_RGBA_GEM);
-    m_rowbytes = m_width*4;
+    m_rowBytes = m_width*4;
     pixelFormat=k32ARGBPixelFormat;
     post ("using RGB");
   } else {
     m_image.image.setCsizeByFormat(GL_YCBCR_422_APPLE);
-    m_rowbytes = m_width*2;
+    m_rowBytes = m_width*2;
     pixelFormat=k422YpCbCr8PixelFormat;
     post ("using YUV");
   }

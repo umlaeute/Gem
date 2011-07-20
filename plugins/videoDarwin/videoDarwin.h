@@ -77,7 +77,7 @@ class GEM_EXPORT videoDarwin : public video {
    virtual void getProperties(gem::Properties&props);
       
 		  protected:
-   void initSeqGrabber();
+   bool initSeqGrabber();
    void resetSeqGrabber();
    void destroySeqGrabber();
    virtual void    setupCapture();
@@ -88,7 +88,7 @@ class GEM_EXPORT videoDarwin : public video {
    SeqGrabComponent	m_sg;		// Sequence Grabber Component
    SGChannel			m_vc;			// Video Channel
    GWorldPtr			m_srcGWorld;	// Capture Destination
-   long				m_rowBytes;		// Row bytes in a row
+   unsigned long		m_rowBytes;		// Row bytes in a row
    long				m_quality;
    int				m_colorspace;
 		
