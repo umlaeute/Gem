@@ -18,8 +18,6 @@ libPixes_la_LIBADD   += @GEM_RTE_LIBS@
 libPixes_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libPixes_la_SOURCES=  \
-    DSgrabber.cpp \
-    DSgrabber.h \
     FreeFrame.h \
     frei0r.h \
     pix_2grey.cpp \
@@ -232,8 +230,6 @@ libPixes_la_SOURCES=  \
     pix_video.cpp \
     pix_videoDarwin.cpp \
     pix_videoDarwin.h \
-    pix_videoDS.cpp \
-    pix_videoDS.h \
     pix_video.h \
     pix_videoOS.cpp \
     pix_videoOS.h \
