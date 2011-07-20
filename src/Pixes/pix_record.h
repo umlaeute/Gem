@@ -112,10 +112,10 @@ class GEM_EXTERN pix_record : public GemBase
   
  private:
   bool m_recording;
-  gem::record *m_handle;
+  gem::plugins::record *m_handle;
   std::vector<std::string>m_ids;
-  std::vector<gem::record*>m_handles;
-  std::vector<gem::record*>m_allhandles;
+  std::vector<gem::plugins::record*>m_handles;
+  std::vector<gem::plugins::record*>m_allhandles;
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
   //////////
   // static member functions

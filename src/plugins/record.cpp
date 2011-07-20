@@ -15,10 +15,20 @@
 /////////////////////////////////////////////////////////
 
 #include "plugins/record.h"
-
-using namespace gem;
+#include "Gem/RTE.h"
 
 #include <stdlib.h>
+
+using namespace gem::plugins;
+
+class record :: PIMPL {
+public:
+  bool running;
+  PIMPL(void) :
+	running(false)
+  {}
+};
+
 
 /////////////////////////////////////////////////////////
 //
@@ -29,7 +39,7 @@ using namespace gem;
 //
 /////////////////////////////////////////////////////////
 
-record :: record()
+record :: record() : m_pimpl(new PIMPL())
 {}
 
 /////////////////////////////////////////////////////////
@@ -38,7 +48,11 @@ record :: record()
 /////////////////////////////////////////////////////////
 record :: ~record()
 {
-  close();
+  if(m_pimpl->running) {
+	error("record: implementation forgot to call close() - please report a bug!");
+  }
+  delete m_pimpl;
+  m_pimpl=NULL;
 }
 
 void record :: close(void)
@@ -50,29 +64,29 @@ void record :: close(void)
 /////////////////////////////////////////////////////////
 bool record :: start(const std::string filename, gem::Properties&props)
 {
-  if(m_running)close();
-  m_running=false;
+  if(m_pimpl->running)close();
+  m_pimpl->running=false;
   m_props=props;
 
-  m_running=open(filename);
+  m_pimpl->running=open(filename);
 
-  return m_running;
+  return m_pimpl->running;
 }
 void record :: stop()
 {
-  if(m_running)
+  if(m_pimpl->running)
     close();
-  m_running=false;
+  m_pimpl->running=false;
 }
 
 bool record::write(imageStruct*img) {
-  if(!m_running)
+  if(!m_pimpl->running)
     return false;
   if(!img) {
     return true;
   }
-  m_running=putFrame(img);
-  return m_running;
+  m_pimpl->running=putFrame(img);
+  return m_pimpl->running;
 }
 
 bool record :: open(const std::string filename)

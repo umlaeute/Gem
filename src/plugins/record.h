@@ -34,18 +34,63 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN record
+namespace gem { namespace plugins {
+ class GEM_EXTERN record
 {
+ protected:
+
+  //////////
+  // compress and write the next frame
+  /* this is the core-function of this class !!!!
+   * when called it returns something depending on success
+   * (what? the framenumber and -1 (0?) on failure?)
+   */
+  virtual bool putFrame(imageStruct*)=0;
+
+  //////////
+  // open a movie up
+  /* open the record "filename" (think better about URIs ?)
+   */
+  /* returns TRUE if opening was successfull, FALSE otherwise */
+  virtual bool open(const std::string filename);
+  //////////
+  // close the movie file
+  /* stop recording, close the file and clean up temporary things */
+  virtual void close(void);
+
+public:
+
+
+  //////////
+  // popup a dialog to set the codec interactively (interesting on os-x and w32)
+  virtual bool dialog();
+
+  /**
+   * get a list of supported codecs (short-form names, e.g. "mjpa")
+   */ 
+  virtual std::vector<std::string>getCodecs(void);
+  /**
+   * get a human readable description of the given codec (e.g. "Motion Jpeg A")
+   */
+  virtual const std::string getCodecDescription(const std::string codecname);
+  /**
+   * set the current codec
+   */
+  virtual bool setCodec(const std::string name);
+
+  /**
+   * list all properties the currently selected codec supports
+   * if the enumeration fails, this returns <code>false</code>
+   */
+  virtual bool enumProperties(gem::Properties&props);
+
+
  public:
   
   //////////
   // Constructor
   
   /* initialize the recordloader
-   *
-   * set the default colour-space to format (like GL_RGBA)
-   * if format==0, the default is set by the recordloader
-   * (for instance: the fastest colour-space)
    */
   record(void);
 
@@ -64,59 +109,16 @@ namespace gem { class GEM_EXTERN record
   // record a frame (wrapper around putFrame()
   bool write(imageStruct*);
 
-
-  //////////
-  // open a movie up
-  /* open the record "filename" (think better about URIs ?)
-   */
-  /* returns TRUE if opening was successfull, FALSE otherwise */
-  virtual bool open(const std::string filename);
-  //////////
-  // close the movie file
-  /* stop recording, close the file and clean up temporary things */
-  virtual void close(void);
-
-
-  //////////
-  // compress and write the next frame
-  /* this is the core-function of this class !!!!
-   * when called it returns something depending on success
-   * (what? the framenumber and -1 (0?) on failure?)
-   */
-  virtual bool putFrame(imageStruct*)=0;
-
-  //////////
-  // popup a dialog to set the codec interactively (interesting on os-x and w32)
-  virtual bool dialog();
-
-
-  /**
-   * get a list of supported codecs (short-form names, e.g. "mjpa")
-   */ 
-  virtual std::vector<std::string>getCodecs(void);
-  /**
-   * get a human readable description of the given codec (e.g. "Motion Jpeg A")
-   */
-  virtual const std::string getCodecDescription(const std::string codecname);
+ protected:
   // map codec-names to codec-descriptions
   std::map<std::string, std::string>m_codecdescriptions;
-  /**
-   * set the current codec
-   */
-  virtual bool setCodec(const std::string name);
-
-
-  /**
-   * list all properties the currently selected codec supports
-   * if the enumeration fails, this returns <code>false</code>
-   */
-  virtual bool enumProperties(gem::Properties&props);
+  // write properties
   gem::Properties m_props;
 
-
  private:
-  bool m_running;
-  
+  class PIMPL;
+  PIMPL*m_pimpl;
+ };
 }; };
 
 
@@ -127,7 +129,7 @@ namespace gem { class GEM_EXTERN record
  * \param id a symbolic (const char*) ID for the given class
  * \param recordClass a class derived from "record"
  */
-#define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::record> fac_record_ ## TYP (gensym(id)->s_name)
+#define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::record> fac_record_ ## TYP (gensym(id)->s_name)
 
 
 /**
@@ -136,7 +138,7 @@ namespace gem { class GEM_EXTERN record
  * \note call this before any externals register themselves
  */
 #define INIT_RECORDFACTORY() \
-  static gem::PluginFactoryRegistrar::dummy<gem::record> fac_recorddummy
+  static gem::PluginFactoryRegistrar::dummy<gem::plugins::record> fac_recorddummy
 
 
 

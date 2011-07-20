@@ -18,15 +18,15 @@ public:
   ~PIMPL(void) {};
 
   struct codechandle {
-    codechandle(gem::record*h, const std::string c):handle(h), codec(c) {}
+    codechandle(gem::plugins::record*h, const std::string c):handle(h), codec(c) {}
     
-    gem::record*handle;
+    gem::plugins::record*handle;
     std::string codec;
   };
   std::map<std::string, std::vector<codechandle> >m_codechandle;
   std::vector<std::string>m_codecs;
 
-  void addCodecHandle(gem::record*handle, const std::string codec) {
+  void addCodecHandle(gem::plugins::record*handle, const std::string codec) {
 #ifdef __GNUC__
 # warning better handling of duplicate codecs
 #endif
@@ -111,8 +111,8 @@ pix_record :: pix_record(int argc, t_atom *argv):
   m_outInfo      = outlet_new(this->x_obj, 0);
 
 
-  gem::PluginFactory<gem::record>::loadPlugins("record");
-  std::vector<std::string>ids=gem::PluginFactory<gem::record>::getIDs();
+  gem::PluginFactory<gem::plugins::record>::loadPlugins("record");
+  std::vector<std::string>ids=gem::PluginFactory<gem::plugins::record>::getIDs();
   addHandle(ids, "QT");
   addHandle(ids, "QT4L");
   addHandle(ids);
@@ -171,10 +171,10 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
     verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
-      gem::record         *handle=NULL;
+      gem::plugins::record         *handle=NULL;
       startpost("backend #%d='%s'\t", m_allhandles.size(), key.c_str());
       try {
-	handle=gem::PluginFactory<gem::record>::getInstance(key); 
+	handle=gem::PluginFactory<gem::plugins::record>::getInstance(key); 
       } catch (GemException ex) {
       }
       if(NULL==handle) { 
@@ -213,7 +213,7 @@ void pix_record :: startRecording()
   unsigned int i=0;
   for(i=0; i<m_handles.size(); i++) {
     // check whether the handle supports the requested codec
-    gem::record *handle=m_handles[i];
+    gem::plugins::record *handle=m_handles[i];
     if(!codec.empty() && !handle->setCodec(codec))
       continue;
     if(handle->start(m_filename, m_props)) {
@@ -386,7 +386,7 @@ void pix_record :: getCodecList()
     std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[id];
     unsigned int j=0;
     for(j=0; j<handles.size(); j++) {
-      gem::record*handle=handles[j].handle;
+      gem::plugins::record*handle=handles[j].handle;
 
       const std::string codecname=handles[j].codec;
       const std::string descr=handle->getCodecDescription(codecname);
@@ -445,7 +445,7 @@ void pix_record :: codecMess(t_atom *argv)
     m_handles.clear();
     unsigned int i=0;
     for(i=0; i<handles.size(); i++) {
-      gem::record*handle=handles[i].handle;
+      gem::plugins::record*handle=handles[i].handle;
       std::string codec=handles[i].codec;
       if(handle->setCodec(codec)) {
 	m_codec=codec;
