@@ -179,15 +179,17 @@ void videoDarwin :: stopRendering()
 #endif
 
 
-static std::string pascal2string(const Str255 pstr) {
-  const char*cstr=static_cast<const char*>(pstr);
-  return std::string(cstr+1, cstr[0]);
+static std::string pascal2str(const Str255 pstr) {
+  const unsigned char*cstr=static_cast<const unsigned char*>(pstr);
+  const char*str=(const char*)(cstr+1);
+  const size_t length=cstr[0];
+  return std::string(str, length);
 }
 void videoDarwin :: initSeqGrabber()
 {
   OSErr anErr;
   Rect m_srcRect = {0,0, m_height, m_width};
-
+post("srcRect=%dx%d", m_width, m_height);
   SGDeviceList    devices;
   short            deviceIndex,inputIndex;
   short            deviceCount = 0;
@@ -226,12 +228,8 @@ void videoDarwin :: initSeqGrabber()
     int i;
     m_devices.clear();
     for (i = 0; i < deviceCount; i++){
-      m_devices[i]=std::string( pascal2str((*devices)->entry[i].name));
-      post("SG channnel Device List  %.*s = %s", 
-           (*devices)->entry[i].name[0],
-           (*devices)->entry[i].name+1,
-
-           m_devices[i].c_str());
+      m_devices.push_back(pascal2str((*devices)->entry[i].name));
+      post("SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
@@ -243,7 +241,7 @@ void videoDarwin :: initSeqGrabber()
 
     //walk through the list
     for (i = 0; i < inputIndex; i++){
-      std::string input=pascal2str((*theSGInputList)->entry[i]);
+      std::string input=pascal2str((*theSGInputList)->entry[i].name);
       post("SG channnel Input Device List %d %s",
            i, input.c_str());
     }
@@ -260,18 +258,17 @@ void videoDarwin :: initSeqGrabber()
       }
     }
   }
+  post("device trying %d", m_inputDevice);
 
   //this call sets the input device
-  if (m_inputDevice >= 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
-    post("SGSetChannelDevice trying %s", 
-         (*devices)->entry[m_inputDevice].name[0],
-         (*devices)->entry[m_inputDevice].name+1);
+  if (m_inputDevice >= 0 && m_inputDevice < deviceCount) {//check that the device is not out of bounds
+    std::string devname=pascal2str((*devices)->entry[m_inputDevice].name);
+    post("SGSetChannelDevice trying[%d] %s", m_inputDevice, devname.c_str());
+  }
   anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
-
   if(anErr!=noErr) error("SGSetChannelDevice returned error %d",anErr);
 
   anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel);
-
   if(anErr!=noErr) error("SGSetChannelDeviceInput returned error %d",anErr);
 
   //grab the VDIG info from the SGChannel
@@ -281,7 +278,7 @@ void videoDarwin :: initSeqGrabber()
   Str255    vdigName;
   memset(vdigName,0,255);
   vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
-  post("vdigName is %s",vdigName); // pascal string?
+  post("vdigName is %s",pascal2str(vdigName).c_str());
 
   Rect vdRect;
   vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
@@ -794,7 +791,7 @@ bool videoDarwin :: dialog(std::vector<std::string>dlg)
   return true;
 }
 
-std::vector<std::string>videoDS :: dialogs(void) {
+std::vector<std::string>videoDarwin :: dialogs(void) {
     std::vector<std::string>result;
     return result;
 }
