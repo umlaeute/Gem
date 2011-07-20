@@ -207,7 +207,6 @@ nobase_dist_gemexamples_DATA = \
 	99.games/puzzle.pd \
 	data/64shade.tif \
 	data/alea.mpg \
-	data/all.trees \
 	data/anim-1.mov \
 	data/blob0.tif \
 	data/blob1.tif \

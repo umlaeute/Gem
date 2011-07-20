@@ -111,7 +111,6 @@ dist_gemhelp_DATA = \
 	pix_draw-help.pd \
 	pix_dump-help.pd \
 	pix_duotone-help.pd \
-	pix_fiducialtrack-help.pd \
 	pix_film-help.pd \
 	pix_flip-help.pd \
 	pix_freeframe-help.pd \
