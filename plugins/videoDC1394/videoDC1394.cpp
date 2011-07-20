@@ -18,7 +18,7 @@
 #endif
 
 #include "videoDC1394.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"

@@ -82,7 +82,8 @@ struct t_v4l2_buffer {
   "sat" (int) - the saturation
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoV4L2 : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoV4L2 : public video {
  public:
   //////////
   // Constructor
@@ -185,7 +186,7 @@ namespace gem { class GEM_EXPORT videoV4L2 : public video {
   __u32 m_frameSize; // the size of a v4l2 frame
 
 #endif /* HAVE_VIDEO4LINUX2 */
-
-  }; };
+  };
+};};
 
 #endif	// for header file

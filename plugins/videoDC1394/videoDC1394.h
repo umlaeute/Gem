@@ -41,7 +41,8 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoDC1394 : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoDC1394 : public video {
     public:
         //////////
         // Constructor
@@ -95,6 +96,6 @@ namespace gem { class GEM_EXPORT videoDC1394 : public video {
 
 #endif /* HAVE_LIBDC1394 */
 };
-};
+};};
 
 #endif	// for header file

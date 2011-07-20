@@ -20,7 +20,7 @@
 #include "videoV4L2.h"
 #include "plugins/PluginFactory.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 #include "Gem/RTE.h"
 #include "Gem/Files.h"

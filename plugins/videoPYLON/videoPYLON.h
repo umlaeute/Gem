@@ -52,7 +52,8 @@ DESCRIPTION
     "sat" (int) - the saturation
     
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoPYLON : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoPYLON : public video {
     public:
     //////////
     // Constructor
@@ -106,6 +107,6 @@ namespace gem { class GEM_EXPORT videoPYLON : public video {
   std::vector<CGrabBuffer*> m_buffers;
   std::map<std::string, Pylon::CDeviceInfo>m_id2device;
 }; 
-};
+};};
 
 #endif	// for header file

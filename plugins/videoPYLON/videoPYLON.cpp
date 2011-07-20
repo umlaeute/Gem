@@ -25,7 +25,7 @@
 #include "plugins/PluginFactory.h"
 
 #include <sstream>
-using namespace gem;
+using namespace gem::plugins;
 
 #define NUM_BUFFERS 8
 

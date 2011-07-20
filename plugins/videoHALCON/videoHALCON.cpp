@@ -19,7 +19,7 @@
 #include "plugins/PluginFactory.h"
 
 #include <sstream>
-using namespace gem;
+using namespace gem::plugins;
 
 #include "Gem/RTE.h"
 

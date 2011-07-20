@@ -34,7 +34,8 @@ Linux version by Miller Puckette. msp@ucsd.edu
   pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoSGI : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoSGI : public video {
   public:
     //////////
     // Constructor
@@ -77,6 +78,6 @@ namespace gem { class GEM_EXPORT videoSGI : public video {
 		VLBuffer    	m_buffer;
 #endif /*HAVE_VL_VL_H */
   }; 
-};
+};};
 
 #endif	// for header file

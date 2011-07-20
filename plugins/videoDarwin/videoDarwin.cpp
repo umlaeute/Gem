@@ -27,7 +27,7 @@
 #include "Gem/RTE.h"
 #include "plugins/PluginFactory.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 
 #ifdef HAVE_VIDEODARWIN

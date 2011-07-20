@@ -65,7 +65,8 @@ DESCRIPTION
     support for the "AVT GiGE SDK" by Prosilica
     
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoAVT : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoAVT : public video {
     public:
         //////////
         // Constructor
@@ -120,6 +121,6 @@ namespace gem { class GEM_EXPORT videoAVT : public video {
 #endif /* HAVE_AVT */
 
 }; 
-};
+};};
 
 #endif	// for header file

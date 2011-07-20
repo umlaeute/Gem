@@ -19,7 +19,7 @@
 
 #include "videoDV4L.h"
 #include "plugins/PluginFactory.h"
-using namespace gem;
+using namespace gem::plugins;
 
 #include "Gem/RTE.h"
 

@@ -39,7 +39,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
 
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoUNICAP : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoUNICAP : public video {
  public:
   //////////
   // Constructor
@@ -101,8 +102,8 @@ namespace gem { class GEM_EXPORT videoUNICAP : public video {
 			  void *usr_data);
 
 #endif /* HAVE_VIDEO4LINUX2 */
-
-  }; };
+ };
+};};
 
 #endif	// for header file
 

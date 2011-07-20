@@ -50,7 +50,8 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoHALCON : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoHALCON : public video {
     public:
         //////////
         // Constructor
@@ -101,6 +102,6 @@ namespace gem { class GEM_EXPORT videoHALCON : public video {
 #endif /* HAVE_HALCON */
 
 };
-};
+};};
 
 #endif	// for header file

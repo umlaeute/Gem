@@ -19,7 +19,7 @@
 
 #include "videoVFW.h"
 #include "plugins/PluginFactory.h"
-using namespace gem;
+using namespace gem::plugins;
 #include "Gem/RTE.h"
 
 #ifdef HAVE_VFW_H

@@ -32,7 +32,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoVFW : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoVFW : public video {
   public:
     //////////
     // Constructor
@@ -77,6 +78,6 @@ namespace gem { class GEM_EXPORT videoVFW : public video {
 
 #endif /*HAVE_VFW_H */
   }; 
-};
+};};
 
 #endif	// for header file

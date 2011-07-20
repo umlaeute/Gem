@@ -35,7 +35,8 @@ Linux version by Miller Puckette. msp@ucsd.edu
   pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT videoDarwin : public video {
+namespace gem { namespace plugins {
+ class GEM_EXPORT videoDarwin : public video {
   public:
     //////////
     // Constructor
@@ -131,6 +132,6 @@ namespace gem { class GEM_EXPORT videoDarwin : public video {
 
 #endif /*HAVE_VIDEODARWIN */
   }; 
-};
+};};
 
 #endif	// for header file
