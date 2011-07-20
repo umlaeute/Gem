@@ -30,7 +30,9 @@ version_current.h: $(srcdir)/../version.h.in FORCE
 	$(SHELL) $(srcdir)/../pkgversion.sh $< > $@
 
 DISTCLEANFILES += version_current.h
+CHECKUNUSED_IGNORE = version_current.h
 ## /version stuff
+
 
 libGem_la_includedir = $(includedir)/Gem/Gem
 libGem_la_include_HEADERS = \
