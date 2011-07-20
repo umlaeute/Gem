@@ -344,6 +344,14 @@ void videoDS :: closeDevice()
     }
 #endif
 }
+std::vector<std::string>videoDS :: dialogs(void) {
+    std::vector<std::string>result;
+    result.push_back("source");
+    result.push_back("format");
+    result.push_back("display");
+    result.push_back("crossbar");
+    return result;
+}
 
 ////////////////////////////////////////////////////////
 // enumerate message

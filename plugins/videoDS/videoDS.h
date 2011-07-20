@@ -66,6 +66,7 @@ namespace gem { namespace plugins {
     virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
     virtual bool setColor(int d);
     virtual bool dialog(std::vector<std::string>);
+    virtual std::vector<std::string>dialogs(void);
     virtual std::vector<std::string>videoDS :: enumerate(void);
     
   protected:
