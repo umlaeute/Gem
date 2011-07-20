@@ -65,8 +65,6 @@ class GEM_EXPORT videoDarwin : public video {
    virtual bool grabFrame(void);
    //////////
    // Set the video dimensions
-   virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
-   virtual bool setQuality(int d);
    virtual bool setColor(int d);
    virtual bool dialog(std::vector<std::string>dlg);
    virtual std::vector<std::string>dialogs(void);
