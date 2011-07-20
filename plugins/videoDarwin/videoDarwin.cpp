@@ -742,7 +742,7 @@ void videoDarwin :: whiteBalanceMess(float U, float V)
 // dialog
 //
 /////////////////////////////////////////////////////////
-bool videoDarwin :: dialog()
+bool videoDarwin :: dialog(std::vector<std::string>dlg)
 {
   Rect    newActiveVideoRect;
   Rect    curBounds, curVideoRect, newVideoRect;
@@ -765,6 +765,11 @@ bool videoDarwin :: dialog()
   err = SGPause (m_sg, false);
 
   return true;
+}
+
+std::vector<std::string>videoDS :: dialogs(void) {
+    std::vector<std::string>result;
+    return result;
 }
 
 bool videoDarwin::enumProperties(gem::Properties&readable,

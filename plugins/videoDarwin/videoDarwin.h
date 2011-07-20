@@ -70,9 +70,10 @@ namespace gem { namespace plugins {
     virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
     virtual bool setQuality(int d);
     virtual bool setColor(int d);
-    virtual bool dialog(void);
+    virtual bool dialog(std::vector<std::string>dlg);
+    virtual std::vector<std::string>dialogs(void);
 
-	    virtual bool enumProperties(gem::Properties&readable,
+    virtual bool enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable);
     virtual void setProperties(gem::Properties&props);
     virtual void getProperties(gem::Properties&props);
