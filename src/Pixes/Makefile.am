@@ -99,11 +99,7 @@ libPixes_la_SOURCES=  \
     pix_emboss.cpp \
     pix_emboss.h \
     pix_film.cpp \
-    pix_filmDarwin.cpp \
-    pix_filmDarwin.h \
     pix_film.h \
-    pix_filmOS.cpp \
-    pix_filmOS.h \
     pix_flip.cpp \
     pix_flip.h \
     pix_freeframe.cpp \
@@ -151,13 +147,7 @@ libPixes_la_SOURCES=  \
     pix_movement.cpp \
     pix_movement.h \
     pix_movie.cpp \
-    pix_movieDarwin.cpp \
-    pix_movieDarwin.h \
-    pix_movieDS.cpp \
-    pix_movieDS.h \
     pix_movie.h \
-    pix_movieOS.cpp \
-    pix_movieOS.h \
     pix_multiblob.cpp \
     pix_multiblob.h \
     pix_multiimage.cpp \
@@ -180,8 +170,6 @@ libPixes_la_SOURCES=  \
     pix_rds.h \
     pix_record.cpp \
     pix_record.h \
-    pix_recordQT.cpp \
-    pix_recordQT.h \
     pix_rectangle.cpp \
     pix_rectangle.h \
     pix_refraction.cpp \
@@ -228,11 +216,7 @@ libPixes_la_SOURCES=  \
     pix_tIIRf.h \
     pix_tIIR.h \
     pix_video.cpp \
-    pix_videoDarwin.cpp \
-    pix_videoDarwin.h \
     pix_video.h \
-    pix_videoOS.cpp \
-    pix_videoOS.h \
     pix_vpaint.cpp \
     pix_vpaint.h \
     pix_write.cpp \
@@ -243,4 +227,27 @@ libPixes_la_SOURCES=  \
     pix_yuv.h \
     pix_zoom.cpp \
     pix_zoom.h
+
+
+
+# deprecated stuff
+EXTRA_DIST = \
+    pix_filmOS.cpp \
+    pix_filmOS.h \
+    pix_filmDarwin.cpp \
+    pix_filmDarwin.h \
+    pix_movieOS.cpp \
+    pix_movieOS.h \
+    pix_movieDarwin.cpp \
+    pix_movieDarwin.h \
+    pix_movieDS.cpp \
+    pix_movieDS.h \
+    pix_videoDarwin.cpp \
+    pix_videoDarwin.h \
+    pix_videoOS.cpp \
+    pix_videoOS.h \
+    pix_recordQT.cpp \
+    pix_recordQT.h
+
+CHECKUNUSED_IGNORE=$(EXTRA_DIST)
 
