@@ -31,7 +31,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 	pix, capture
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXTERN video {
+namespace gem { namespace plugins {
+ class GEM_EXTERN video {
   public:
     /**
      * returns TRUE if the object can be used in a thread or FALSE otherwise
@@ -308,7 +309,8 @@ namespace gem { class GEM_EXTERN video {
   private:
     class PIMPL;
     PIMPL*m_pimpl;
-  };};
+};
+};}; // namespace
 
 /**
  * \fn REGISTER_VIDEOFACTORY(const char *id, Class videoClass)
@@ -326,7 +328,7 @@ namespace gem { class GEM_EXTERN video {
  * \note call this before any externals register themselves
  */
 #define INIT_VIDEOFACTORY()                                             \
-  static gem::PluginFactoryRegistrar::dummy<gem::video> fac_videodummy
+  static gem::PluginFactoryRegistrar::dummy<gem::plugins::video> fac_videodummy
 
 
 #endif	// for header file

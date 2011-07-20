@@ -14,7 +14,6 @@
   
 #include "plugins/video.h"
 #include "Gem/RTE.h"
-using namespace gem;
 
 #include <iostream>
 #include "plugins/PluginFactory.h"
@@ -30,6 +29,8 @@ using namespace gem;
 #ifdef _WIN32
 # include <winsock2.h>
 #endif
+
+using namespace gem::plugins;
 
 /**
  * video capturing states
