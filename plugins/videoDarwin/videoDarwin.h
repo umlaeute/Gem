@@ -101,6 +101,7 @@ class GEM_EXPORT videoDarwin : public video {
    std::vector<std::string>m_devices;
     
    bool setIIDCProperty(OSType specifier, double value);
+   bool applyProperties(gem::Properties&props);
  }; 
 };};
 

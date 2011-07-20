@@ -52,7 +52,9 @@ videoDarwin :: videoDarwin()
   : video("darwin", 0),
     m_newFrame(false),
     m_srcGWorld(NULL),
-    m_quality(channelPlayNormal)
+    m_quality(channelPlayNormal),
+    m_colorspace(GL_YCBCR_422_GEM),
+    m_inputDevice(0)   //set to the first input device
 {
   m_width= DEFAULT_WIDTH;
   m_height=DEFAULT_HEIGHT;
@@ -62,12 +64,7 @@ videoDarwin :: videoDarwin()
   m_image.image.setCsizeByFormat(GL_BGRA_EXT);
   m_image.image.allocate();
 
-  m_colorspace = GL_YCBCR_422_GEM; //default to YUV
-
-  //set to the first input device
-  m_inputDevice = 0;
   //initSeqGrabber();
-
   provide("dv");
   provide("iidc");
   provide("analog");
@@ -98,16 +95,12 @@ videoDarwin :: ~videoDarwin()
   }
 }
 bool videoDarwin :: openDevice(gem::Properties&props) {
-  double d;
-  if(props.get("width", d))
-    m_width=d;
-  if(props.get("height", d))
-    m_height=d;
-  if(props.get("channel", d))
-    m_inputDeviceChannel=d;
-
+  applyProperties(props);
   initSeqGrabber();
-  return (NULL!=m_sg);
+  bool success=(NULL!=m_sg);
+  if(success)
+    applyProperties(props);
+  return success;
 }
 void videoDarwin :: closeDevice(void) {
   destroySeqGrabber();
@@ -446,7 +439,7 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
 					       vdIIDCAtomTypeFeatureSettings,
 					       vdIIDCAtomIDFeatureSettings, NULL),
 			       true, sizeof(settings), &settings, NULL);
-    
+
   settings.state.flags = (vdIIDCFeatureFlagOn |
 			  vdIIDCFeatureFlagManual |
 			  vdIIDCFeatureFlagRawControl);
@@ -463,15 +456,19 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
     
   return true;
 }
-void videoDarwin::setProperties(gem::Properties&props) {
-  ComponentDescription    desc;
-  GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+bool videoDarwin::applyProperties(gem::Properties&props) {
   double d;
   bool restart=false;
 
+  bool iidc=false;
+  if(m_vdig) {
+    ComponentDescription    desc;
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+    iidc=(vdSubtypeIIDC == desc.componentSubType);
+  }
+
   std::vector<std::string>keys=props.keys();
   int i=0;
-  bool iidc=(vdSubtypeIIDC == desc.componentSubType);
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if("width"==key) {
@@ -487,6 +484,13 @@ void videoDarwin::setProperties(gem::Properties&props) {
 	if(m_height!=height)
 	  restart=true;
 	m_height=height;
+      }
+    } else if("channel"==key) {
+      if(props.get("channel", d)) {
+	unsigned int channel=d;
+	if(channel!=m_inputDeviceChannel)
+	  restart=true;
+	m_inputDeviceChannel=channel;
       }
     } else if("quality"==key) {
       if(props.get(key, d)) {
@@ -519,16 +523,16 @@ void videoDarwin::setProperties(gem::Properties&props) {
       if(props.get(key, d)) {
 	unsigned short contrast = (unsigned short)(65536. * d);
 	//post("setting contrast to %f -> %d", d, contrast);
-	VDSetContrast(m_vdig,&contrast);
+	if(m_vdig)VDSetContrast(m_vdig,&contrast);
       }
     } else if("Saturation"==key) {
       if(props.get(key, d)) {                
 	if (!iidc){
 	  unsigned short saturation = (unsigned short)(65536. * d);
 	  //post("setting saturation to %f -> %d", d, saturation); 
-	  VDSetSaturation(m_vdig,&saturation);
+	  if(m_vdig)VDSetSaturation(m_vdig,&saturation);
 	  //post("set saturation to %f -> %d", d, saturation); 
-	  VDGetSaturation(m_vdig,&saturation);
+	  //VDGetSaturation(m_vdig,&saturation);
 	  //post("saturation is %d",saturation);
 	} else {
 	  if(!setIIDCProperty(vdIIDCFeatureSaturation, d)) {
@@ -541,9 +545,9 @@ void videoDarwin::setProperties(gem::Properties&props) {
 	if (!iidc){
 	  unsigned short brightness = (unsigned short)(65536. * d);
 	  //post("setting brightness to %f -> %d", d, brightness); 
-	  VDSetBrightness(m_vdig,&brightness);
+	  if(m_vdig)VDSetBrightness(m_vdig,&brightness);
 	  //post("set brightness to %f -> %d", d, brightness); 
-	  VDGetBrightness(m_vdig,&brightness);
+	  //VDGetBrightness(m_vdig,&brightness);
 	  //	  post("brightness is %d",brightness);
 	} else {
 	  if(!setIIDCProperty(vdIIDCFeatureBrightness, d)) {
@@ -578,6 +582,10 @@ void videoDarwin::setProperties(gem::Properties&props) {
     }
     
   }
+  return restart;
+}
+void videoDarwin::setProperties(gem::Properties&props) {
+  bool restart=applyProperties(props);
   if(restart) {
     if(stop()) {
       resetSeqGrabber();
@@ -585,16 +593,21 @@ void videoDarwin::setProperties(gem::Properties&props) {
     }
   }
 }
+
+
 void videoDarwin::getProperties(gem::Properties&props) {
     std::vector<std::string>keys=props.keys();
-
-    ComponentDescription    desc;
-    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-    bool iidc=(vdSubtypeIIDC == desc.componentSubType);
+    bool iidc=false;
+    if(m_vdig) {
+      ComponentDescription    desc;
+      GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+      iidc=(vdSubtypeIIDC == desc.componentSubType);
+    }
     int i=0;
     for(i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       if("Brightness"==key) {
+	if(!m_vdig)continue;
 	if (!iidc){
 	  unsigned short brightness = 0;
 	  VDGetBrightness(m_vdig,&brightness);
@@ -604,6 +617,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
 	  post("how to get IIDC/brightness?");
 	}
       } else if("Saturation"==key) {
+	if(!m_vdig)continue;
 	if (!iidc){
 	  unsigned short saturation = 0;
 	  VDGetSaturation(m_vdig,&saturation);
@@ -613,6 +627,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
 	  post("how to get IIDC/saturation?");
 	}
       } else if("Contrast"==key) {
+	if(!m_vdig)continue;
 	if (!iidc){
 	  unsigned short contrast = 0;
 	  VDGetContrast(m_vdig,&contrast);
