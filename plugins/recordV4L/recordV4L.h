@@ -44,7 +44,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
   
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT recordV4L : public record {
+namespace gem { namespace plugins {
+ class GEM_EXPORT recordV4L : public record {
  public:
   
   //////////
@@ -103,6 +104,7 @@ namespace gem { class GEM_EXPORT recordV4L : public record {
   int m_palette;
 
 #endif /* V4L */
-}; };
+ };
+};};
 
 #endif	// for header file

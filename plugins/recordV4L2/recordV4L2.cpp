@@ -21,7 +21,7 @@
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 
 #include <sys/types.h>

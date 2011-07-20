@@ -45,7 +45,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
   
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT recordQT4L : public record {
+namespace gem { namespace plugins {
+ class GEM_EXPORT recordQT4L : public record {
  public:
   
   //////////
@@ -143,6 +144,7 @@ namespace gem { class GEM_EXPORT recordQT4L : public record {
 
   size_t m_curFrame;
 #endif /* QT */
-}; };
+ };
+};};
 
 #endif	// for header file

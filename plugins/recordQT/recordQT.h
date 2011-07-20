@@ -62,7 +62,8 @@
   "vert_pos" - Set the position of the pix
     
   -----------------------------------------------------------------*/
-namespace gem { class GEM_EXPORT recordQT : public record
+namespace gem { namespace plugins {
+ class GEM_EXPORT recordQT : public record
 {
  public:
 
@@ -171,5 +172,6 @@ namespace gem { class GEM_EXPORT recordQT : public record
   codecListStorage *codecContainer;
   int numCodecContainer;
 #endif /* QT */
-}; };
+ };
+};};
 #endif	// for header file

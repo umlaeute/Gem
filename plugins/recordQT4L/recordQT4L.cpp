@@ -22,7 +22,7 @@
 #include "Gem/Manager.h"
 
 
-using namespace gem;
+using namespace gem::plugins;
 
 #include <stdlib.h>
 

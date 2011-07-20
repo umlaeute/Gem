@@ -20,7 +20,7 @@
 #include "recordV4L.h"
 #include "Gem/Manager.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 #include "Gem/Exception.h"
 

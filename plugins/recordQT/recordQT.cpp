@@ -10,7 +10,7 @@
 #include "recordQT.h"
 #include "Gem/Exception.h"
 
-using namespace gem;
+using namespace gem::plugins;
 
 #ifdef __APPLE__
 # include <sys/types.h>
