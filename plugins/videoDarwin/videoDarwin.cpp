@@ -177,7 +177,6 @@ bool videoDarwin :: initSeqGrabber()
   OSErr anErr;
   Rect srcRect = {0,0, m_height, m_width};
   SGDeviceList devices;
-  short        deviceIndex=0;
   short        deviceCount = 0;
 
   m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
@@ -201,20 +200,23 @@ bool videoDarwin :: initSeqGrabber()
     error("could not make new SG channnel error %d",anErr);
     return false;
   }
+
   enumerate();
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr){
     error("could not get SG channnel Device List");
   }else{
     deviceCount = (*devices)->count;
-    deviceIndex = (*devices)->selectedIndex;
+    m_inputDevice = (*devices)->selectedIndex;
   }
 
+  /* device selection */
   if(m_devicenum>=0)
     m_inputDevice=m_devicenum;
-  else {
+  else if (!m_devicename.empty()) {
     int i;
-    for(i=0; i<deviceCount; i++) {
+    const int maxcount=(deviceCount<m_devices.size()?deviceCount:m_devices.size());
+    for(i=0; i<maxcount; i++) {
       if(m_devicename==m_devices[i]) {
         m_inputDevice=i;
         break;
@@ -281,13 +283,13 @@ bool videoDarwin :: initSeqGrabber()
   }
   m_image.image.reallocate();
   anErr = QTNewGWorldFromPtr (&m_srcGWorld,
-			      pixelFormat,
-			      &srcRect,
-			      NULL,
-			      NULL,
-			      0,
-			      m_image.image.data,
-			      m_rowBytes);
+                              pixelFormat,
+                              &srcRect,
+                              NULL,
+                              NULL,
+                              0,
+                              m_image.image.data,
+                              m_rowBytes);
 
   if (anErr!= noErr) {
     error("%d error at QTNewGWorldFromPtr", anErr);
@@ -391,7 +393,7 @@ std::vector<std::string>videoDarwin :: dialogs(void) {
 }
 
 bool videoDarwin::enumProperties(gem::Properties&readable,
-				 gem::Properties&writeable) {
+                                 gem::Properties&writeable) {
   bool iidc=false;
   gem::any typ;
 
@@ -434,33 +436,32 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
   }
     
   featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
-				   vdIIDCAtomTypeFeature, 1, NULL);
+                                   vdIIDCAtomTypeFeature, 1, NULL);
   if (0 == featureAtom) return false;//error("featureAtom vdIIDCFeatureSaturation not found");
     
   result = QTCopyAtomDataToPtr(atomContainer,
-			       QTFindChildByID(atomContainer, featureAtom,
-					       vdIIDCAtomTypeFeatureSettings,
-					       vdIIDCAtomIDFeatureSettings, NULL),
-			       true, sizeof(settings), &settings, NULL);
+                               QTFindChildByID(atomContainer, featureAtom,
+                                               vdIIDCAtomTypeFeatureSettings,
+                                               vdIIDCAtomIDFeatureSettings, NULL),
+                               true, sizeof(settings), &settings, NULL);
 
   settings.state.flags = (vdIIDCFeatureFlagOn |
-			  vdIIDCFeatureFlagManual |
-			  vdIIDCFeatureFlagRawControl);
+                          vdIIDCFeatureFlagManual |
+                          vdIIDCFeatureFlagRawControl);
     
   settings.state.value = value;
     
   result = QTSetAtomData(atomContainer,
-			 QTFindChildByID(atomContainer, featureAtom,
-					 vdIIDCAtomTypeFeatureSettings,
-					 vdIIDCAtomIDFeatureSettings, NULL),
-			 sizeof(settings), &settings);
+                         QTFindChildByID(atomContainer, featureAtom,
+                                         vdIIDCAtomTypeFeatureSettings,
+                                         vdIIDCAtomIDFeatureSettings, NULL),
+                         sizeof(settings), &settings);
     
   result = VDIIDCSetFeatures(m_vdig, atomContainer);
     
   return true;
 }
 bool videoDarwin::applyProperties(gem::Properties&props) {
-  double d;
   bool restart=false;
 
   bool iidc=false;
@@ -473,115 +474,138 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
+    double value_d=0.;
+    unsigned short value_us=0;
     std::string key=keys[i];
     if("width"==key) {
-      if(props.get(key, d)) {
-	unsigned int width=d;
-	if(m_width!=width)
-	  restart=true;
-	m_width=width;
+      if(props.get(key, value_d)) {
+        unsigned int width=value_d;
+        if(m_width!=width)
+          restart=true;
+        m_width=width;
       }
     } else if("height"==key) {
-      if(props.get(key, d)) {
-	unsigned int height=d;
-	if(m_height!=height)
-	  restart=true;
-	m_height=height;
+      if(props.get(key, value_d)) {
+        unsigned int height=value_d;
+        if(m_height!=height)
+          restart=true;
+        m_height=height;
       }
     } else if("channel"==key) {
-      if(props.get("channel", d)) {
-	unsigned int channel=d;
-	if(channel!=m_inputDeviceChannel)
-	  restart=true;
-	m_inputDeviceChannel=channel;
+      if(props.get("channel", value_d)) {
+        unsigned int channel=value_d;
+        if(channel!=m_inputDeviceChannel)
+          restart=true;
+        m_inputDeviceChannel=channel;
       }
     } else if("quality"==key) {
-      if(props.get(key, d)) {
-	unsigned int quality=d;
-	bool doit=false;
-	switch (quality){
-	case 0:
-	  m_quality=channelPlayNormal;
-	  doit=true;
-	  break;
-	case 1:
-	  m_quality=channelPlayHighQuality;
-	  doit=true;
-	  break;
-	case 2:
-	  m_quality=channelPlayFast;
-	  doit=true;
-	  break;
-	case 3:
-	  m_quality=channelPlayAllData;
-	  doit=true;
-	  break;
-	default:
-	  break;
-	}
-	if(doit&&m_vc)
-	  SGSetChannelPlayFlags(m_vc, m_quality);
+      if(props.get(key, value_d)) {
+        unsigned int quality=value_d;
+        bool doit=false;
+        switch (quality){
+        case 0:
+          m_quality=channelPlayNormal;
+          doit=true;
+          break;
+        case 1:
+          m_quality=channelPlayHighQuality;
+          doit=true;
+          break;
+        case 2:
+          m_quality=channelPlayFast;
+          doit=true;
+          break;
+        case 3:
+          m_quality=channelPlayAllData;
+          doit=true;
+          break;
+        default:
+          break;
+        }
+        if(doit&&m_vc)
+          SGSetChannelPlayFlags(m_vc, m_quality); 
       }
+#define PROPSET_IIDC_VD(NAME) \
+      } else if ("NAME" == key && props.get(key, value_d) && m_vdig) {  \
+      if(iidc){setIIDCProperty(vdIIDCFeature ## NAME, value_d);}        \
+      else {value_us = (unsigned short)(65536.*value_d);                \
+        VDSet ## NAME ## _S(m_vdig,&value_us); } value_d=0
+#define PROPSET_VD(NAME)                                                \
+        } else if ("NAME" == key && props.get(key, value_d) && m_vdig) { \
+      if(!iidc) {value_us = (unsigned short)(65536.*value_d);           \
+        VDSet ## NAME (m_vdig,&value_us)} value_d=0
+#define PROPSET_IIDC(NAME)                                              \
+        } else if ("NAME" == key && props.get(key, value_d) && iidc) {  \
+      setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
+#if 1
+        PROPSET_VD(Contrast);
+        PROPSET_IIDC_VD(Saturation);
+        PROPSET_IIDC_VD(Brightness);
+        PROPSET_IIDC(Exposure);
+        PROPSET_IIDC(WhiteBalanceU);
+        PROPSET_IIDC(WhiteBalanceV);
+#else
     } else if("Contrast"==key) {
-      if(props.get(key, d)) {
-	unsigned short contrast = (unsigned short)(65536. * d);
-	//post("setting contrast to %f -> %d", d, contrast);
-	if(m_vdig)VDSetContrast(m_vdig,&contrast);
+      if(props.get(key, value_d)) {
+        unsigned short contrast = (unsigned short)(65536. * d);
+        //post("setting contrast to %f -> %d", d, contrast);
+        if(m_vdig)VDSetContrast(m_vdig,&contrast);
       }
     } else if("Saturation"==key) {
-      if(props.get(key, d)) {                
-	if (!iidc){
-	  unsigned short saturation = (unsigned short)(65536. * d);
-	  //post("setting saturation to %f -> %d", d, saturation); 
-	  if(m_vdig)VDSetSaturation(m_vdig,&saturation);
-	  //post("set saturation to %f -> %d", d, saturation); 
-	  //VDGetSaturation(m_vdig,&saturation);
-	  //post("saturation is %d",saturation);
-	} else {
-	  if(!setIIDCProperty(vdIIDCFeatureSaturation, d)) {
-	    //error("failed setting Saturation using IIDC");
-	  }
-	}
+      if(props.get(key, value_d)) {                
+        if (!iidc){
+          unsigned short saturation = (unsigned short)(65536. * d);
+          //post("setting saturation to %f -> %d", d, saturation); 
+          if(m_vdig)VDSetSaturation(m_vdig,&saturation);
+          //post("set saturation to %f -> %d", d, saturation); 
+          //VDGetSaturation(m_vdig,&saturation);
+          //post("saturation is %d",saturation);
+        } else {
+          if(!setIIDCProperty(vdIIDCFeatureSaturation, value_d)) {
+            //error("failed setting Saturation using IIDC");
+          }
+        }
       }
     } else if("Brightness"==key) {
-      if(props.get(key, d)) {                
-	if (!iidc){
-	  unsigned short brightness = (unsigned short)(65536. * d);
-	  //post("setting brightness to %f -> %d", d, brightness); 
-	  if(m_vdig)VDSetBrightness(m_vdig,&brightness);
-	  //post("set brightness to %f -> %d", d, brightness); 
-	  //VDGetBrightness(m_vdig,&brightness);
-	  //	  post("brightness is %d",brightness);
-	} else {
-	  if(!setIIDCProperty(vdIIDCFeatureBrightness, d)) {
-	    //error("failed setting Brightness using IIDC");
-	  }
-	  }
+      if(props.get(key, value_d)) {                
+        if (!iidc){
+          unsigned short brightness = (unsigned short)(65536. * d);
+          //post("setting brightness to %f -> %d", d, brightness); 
+          if(m_vdig)VDSetBrightness(m_vdig,&brightness);
+          //post("set brightness to %f -> %d", d, brightness); 
+          //VDGetBrightness(m_vdig,&brightness);
+          //	  post("brightness is %d",brightness);
+        } else {
+          if(!setIIDCProperty(vdIIDCFeatureBrightness, value_d)) {
+            //error("failed setting Brightness using IIDC");
+          }
+        }
       }
     } else if("Exposure"==key) {
-      if(props.get(key, d)) {                
-	if (iidc){
-	  if(!setIIDCProperty(vdIIDCFeatureExposure, d)) {
-	    //error("failed setting Exposure using IIDC");
-	  }
-	}
+      if(props.get(key, value_d)) {                
+        if (iidc){
+          if(!setIIDCProperty(vdIIDCFeatureExposure, value_d)) {
+            //error("failed setting Exposure using IIDC");
+          }
+        }
       }
     } else if("WhiteBalanceU"==key) {
-      if(props.get(key, d)) {                
-	if (iidc){
-	  if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceU, d)) {
-	    //error("failed setting WhiteBalanceU using IIDC");
-	  }
-	}
+      if(props.get(key, value_d)) {                
+        if (iidc){
+          if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceU, value_d)) {
+            //error("failed setting WhiteBalanceU using IIDC");
+          }
+        }
       }
     } else if("WhiteBalanceV"==key) {
-      if(props.get(key, d)) {                
-	if (iidc){
-	  if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceV, d)) {
-	    //error("failed setting WhiteBalanceV using IIDC");
-	  }
-	}
+      if(props.get(key, value_d)) {                
+        if (iidc){
+          if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceV, value_d)) {
+            //error("failed setting WhiteBalanceV using IIDC");
+          }
+        }
       }
+#endif
     }
     
   }
@@ -599,93 +623,92 @@ void videoDarwin::setProperties(gem::Properties&props) {
 
 
 void videoDarwin::getProperties(gem::Properties&props) {
-    std::vector<std::string>keys=props.keys();
-    bool iidc=false;
-    if(m_vdig) {
-      ComponentDescription    desc;
-      GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
-      iidc=(vdSubtypeIIDC == desc.componentSubType);
-    }
-    int i=0;
-    for(i=0; i<keys.size(); i++) {
-      std::string key=keys[i];
-      if("Brightness"==key) {
-	if(!m_vdig)continue;
-	if (!iidc){
-	  unsigned short brightness = 0;
-	  VDGetBrightness(m_vdig,&brightness);
-	  double d=brightness/65536.;
-	  props.set(key, d);
-	} else {
-	  post("how to get IIDC/brightness?");
-	}
-      } else if("Saturation"==key) {
-	if(!m_vdig)continue;
-	if (!iidc){
-	  unsigned short saturation = 0;
-	  VDGetSaturation(m_vdig,&saturation);
-	  double d=saturation/65536.;
-	  props.set(key, d);
-	} else {
-	  post("how to get IIDC/saturation?");
-	}
-      } else if("Contrast"==key) {
-	if(!m_vdig)continue;
-	if (!iidc){
-	  unsigned short contrast = 0;
-	  VDGetContrast(m_vdig,&contrast);
-	  double d=contrast/65536.;
-	  props.set(key, d);
-	} else {
-	  post("how to get IIDC/contrast?");
-	}
+  std::vector<std::string>keys=props.keys();
+  bool iidc=false;
+  if(m_vdig) {
+    ComponentDescription    desc;
+    GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
+    iidc=(vdSubtypeIIDC == desc.componentSubType);
+  }
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    double value_d=0.;
+    unsigned short value_us=0;
+    if("Brightness"==key) {
+      if(!m_vdig)continue;
+      if (!iidc){
+        VDGetBrightness(m_vdig,&value_us);
+        value_d=value_us/65536.;
+        props.set(key, value_d);
+      } else {
+        post("how to get IIDC/brightness?");
+      }
+    } else if("Saturation"==key) {
+      if(!m_vdig)continue;
+      if (!iidc){
+        VDGetSaturation(m_vdig,&value_us);
+        value_d=value_us/65536.;
+        props.set(key, value_d);
+      } else {
+        post("how to get IIDC/saturation?");
+      }
+    } else if("Contrast"==key) {
+      if(!m_vdig)continue;
+      if (!iidc){
+        VDGetContrast(m_vdig,&value_us);
+        value_d=value_us/65536.;
+        props.set(key, value_d);
+      } else {
+        post("how to get IIDC/contrast?");
+      }
 #if 0
-      } else if("Exposure"==key) {
-        post("how to get IIDC/exposure?");
-      } else if("WhitebalanceU"==key) {
-        post("how to get IIDC/whitebalanceU?");
-      } else if("WhitebalanceV"==key) {
-        post("how to get IIDC/whitebalanceV?");
+    } else if("Exposure"==key) {
+      post("how to get IIDC/exposure?");
+    } else if("WhitebalanceU"==key) {
+      post("how to get IIDC/whitebalanceU?");
+    } else if("WhitebalanceV"==key) {
+      post("how to get IIDC/whitebalanceV?");
 #endif
-      }
+    }
+  }
+}
+
+std::vector<std::string> videoDarwin::enumerate() {
+  std::vector<std::string> result;
+  OSErr anErr;
+  SGDeviceList    devices;
+
+  anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
+  if(anErr!=noErr){
+    error("could not get SG channnel Device List");
+  }else{
+    short deviceCount = (*devices)->count;
+    short deviceIndex = (*devices)->selectedIndex;
+    short inputIndex;
+    post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+    int i;
+    m_devices.clear();
+    for (i = 0; i < deviceCount; i++){
+      m_devices.push_back(pascal2str((*devices)->entry[i].name));
+      post("SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
+    }
+    SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
+
+    bool showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
+
+    SGDeviceInputList theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
+
+    //we should have device names in big ass undocumented structs
+    //walk through the list
+    for (i = 0; i < inputIndex; i++){
+      std::string input=pascal2str((*theSGInputList)->entry[i].name);
+      post("SG channnel Input Device List %d %s",
+           i, input.c_str());
     }
   }
 
-  std::vector<std::string> videoDarwin::enumerate() {
-    std::vector<std::string> result;
-    OSErr anErr;
-    SGDeviceList    devices;
-
-    anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
-    if(anErr!=noErr){
-      error("could not get SG channnel Device List");
-    }else{
-      short deviceCount = (*devices)->count;
-      short deviceIndex = (*devices)->selectedIndex;
-      short inputIndex;
-      post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
-      int i;
-      m_devices.clear();
-      for (i = 0; i < deviceCount; i++){
-	m_devices.push_back(pascal2str((*devices)->entry[i].name));
-	post("SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
-      }
-      SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
-
-      bool showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
-
-      SGDeviceInputList theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
-
-      //we should have device names in big ass undocumented structs
-      //walk through the list
-      for (i = 0; i < inputIndex; i++){
-	std::string input=pascal2str((*theSGInputList)->entry[i].name);
-	post("SG channnel Input Device List %d %s",
-	     i, input.c_str());
-      }
-    }
-
-    result=m_devices;
-    return result;
-  }
+  result=m_devices;
+  return result;
+}
 #endif // HAVE_VIDEODARWIN
