@@ -405,19 +405,43 @@ bool videoDarwin::enumProperties(gem::Properties&readable,
     ComponentDescription    desc;
     GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
 
-    iidc=vdSubtypeIIDC != desc.componentSubType;
+    iidc=vdSubtypeIIDC == desc.componentSubType;
   }
 #define SETPROP(key, value) typ=value; readable.set(key, typ); writeable.set(key, typ)
 #define SETRPROP(key, value) typ=value; readable.set(key, typ)
 #define SETWPROP(key, value) typ=value; writeable.set(key, typ)
-  SETPROP("Brightness", 1);
-  SETPROP("Saturation", 1);
-  if(iidc) {
-    SETPROP("Contrast", 1);
+  SETPROP("Hue");
+  SETPROP("Sharpness");
+  SETPROP("Saturation");
+  SETPROP("Brightness");
+  if(!iidc) {
+    SETPROP("Contrast");
+    SETPROP("KeyColor");
+    SETPROP("ClipState");
+    SETPROP("ClipRng");
+    SETPROP("PLLFilterType");
+    SETPROP("MasterBlendLevel");
+    SETPROP("PlayThroughOnOff");
+    SETPROP("FieldPreference");
+    SETPROP("BlackLevelValue");
+    SETPROP("WhiteLevelValue");
+    SETPROP("Input");
+    SETPROP("InputStandard");
   } else {
-    SETWPROP("Exposure", 1);
-    SETWPROP("WhitebalanceU", 1);
-    SETWPROP("WhitebalanceV", 1);
+    SETWPROP("Gain");
+    SETWPROP("Iris");
+    SETWPROP("Shutter");
+    SETWPROP("Exposure");
+    SETWPROP("WhiteBalanceU");
+    SETWPROP("WhiteBalanceV");
+    SETWPROP("Gamma");
+    SETWPROP("Temperature");
+    SETWPROP("Zoom");
+    SETWPROP("Focus");
+    SETWPROP("Pan");
+    SETWPROP("Tilt");
+    SETWPROP("OpticalFilter");
+    SETWPROP("EdgeEnhancement");
   }
   return true;
 }
@@ -543,12 +567,36 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
         } else if (#NAME == key && props.get(key, value_d) && iidc) {  \
       setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
 
+        PROPSET_IIDC_VD(Hue);
+        PROPSET_IIDC_VD(Sharpness);
         PROPSET_VD(Contrast);
+        //PROPSET_VD(KeyColor);
+        PROPSET_VD(ClipState);
+        //PROPSET_VD(ClipRng);
+        PROPSET_VD(PLLFilterType);
+        PROPSET_VD(MasterBlendLevel);
+        PROPSET_VD(PlayThroughOnOff);
+        PROPSET_VD(FieldPreference);
+        PROPSET_VD(BlackLevelValue);
+        PROPSET_VD(WhiteLevelValue);
+        PROPSET_VD(Input);
+        PROPSET_VD(InputStandard);
         PROPSET_IIDC_VD(Saturation);
         PROPSET_IIDC_VD(Brightness);
+        PROPSET_IIDC(Gain);
+        PROPSET_IIDC(Iris);
+        PROPSET_IIDC(Shutter);
         PROPSET_IIDC(Exposure);
         PROPSET_IIDC(WhiteBalanceU);
         PROPSET_IIDC(WhiteBalanceV);
+        PROPSET_IIDC(Gamma);
+        PROPSET_IIDC(Temperature);
+        PROPSET_IIDC(Zoom);
+        PROPSET_IIDC(Focus);
+        PROPSET_IIDC(Pan);
+        PROPSET_IIDC(Tilt);
+        PROPSET_IIDC(OpticalFilter);
+        PROPSET_IIDC(EdgeEnhancement);
     }    
   }
   return restart;
