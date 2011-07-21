@@ -461,6 +461,9 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
     
   return true;
 }
+inline unsigned short d2us(double x)
+{ return (unsigned short)(65535.*((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x))); }
+
 bool videoDarwin::applyProperties(gem::Properties&props) {
   bool restart=false;
 
@@ -528,86 +531,23 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
 #define PROPSET_IIDC_VD(NAME) \
       } else if (#NAME == key && props.get(key, value_d) && m_vdig) {  \
       if(iidc){setIIDCProperty(vdIIDCFeature ## NAME, value_d);}        \
-      else {value_us = (unsigned short)(65536.*value_d);                \
+      else {value_us = d2us(value_d);                                   \
         VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_VD(NAME)                                                \
         } else if (#NAME == key && props.get(key, value_d) && m_vdig) { \
-      if(!iidc) {value_us = (unsigned short)(65536.*value_d);           \
+      if(!iidc) {value_us = d2us(value_d);                            \
         VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_IIDC(NAME)                                              \
         } else if (#NAME == key && props.get(key, value_d) && iidc) {  \
       setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
-#if 1
+
         PROPSET_VD(Contrast);
         PROPSET_IIDC_VD(Saturation);
         PROPSET_IIDC_VD(Brightness);
         PROPSET_IIDC(Exposure);
         PROPSET_IIDC(WhiteBalanceU);
         PROPSET_IIDC(WhiteBalanceV);
-#else
-    } else if("Contrast"==key) {
-      if(props.get(key, value_d)) {
-        unsigned short contrast = (unsigned short)(65536. * d);
-        //post("setting contrast to %f -> %d", d, contrast);
-        if(m_vdig)VDSetContrast(m_vdig,&contrast);
-      }
-    } else if("Saturation"==key) {
-      if(props.get(key, value_d)) {                
-        if (!iidc){
-          unsigned short saturation = (unsigned short)(65536. * d);
-          //post("setting saturation to %f -> %d", d, saturation); 
-          if(m_vdig)VDSetSaturation(m_vdig,&saturation);
-          //post("set saturation to %f -> %d", d, saturation); 
-          //VDGetSaturation(m_vdig,&saturation);
-          //post("saturation is %d",saturation);
-        } else {
-          if(!setIIDCProperty(vdIIDCFeatureSaturation, value_d)) {
-            //error("failed setting Saturation using IIDC");
-          }
-        }
-      }
-    } else if("Brightness"==key) {
-      if(props.get(key, value_d)) {                
-        if (!iidc){
-          unsigned short brightness = (unsigned short)(65536. * d);
-          //post("setting brightness to %f -> %d", d, brightness); 
-          if(m_vdig)VDSetBrightness(m_vdig,&brightness);
-          //post("set brightness to %f -> %d", d, brightness); 
-          //VDGetBrightness(m_vdig,&brightness);
-          //	  post("brightness is %d",brightness);
-        } else {
-          if(!setIIDCProperty(vdIIDCFeatureBrightness, value_d)) {
-            //error("failed setting Brightness using IIDC");
-          }
-        }
-      }
-    } else if("Exposure"==key) {
-      if(props.get(key, value_d)) {                
-        if (iidc){
-          if(!setIIDCProperty(vdIIDCFeatureExposure, value_d)) {
-            //error("failed setting Exposure using IIDC");
-          }
-        }
-      }
-    } else if("WhiteBalanceU"==key) {
-      if(props.get(key, value_d)) {                
-        if (iidc){
-          if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceU, value_d)) {
-            //error("failed setting WhiteBalanceU using IIDC");
-          }
-        }
-      }
-    } else if("WhiteBalanceV"==key) {
-      if(props.get(key, value_d)) {                
-        if (iidc){
-          if(!setIIDCProperty(vdIIDCFeatureWhiteBalanceV, value_d)) {
-            //error("failed setting WhiteBalanceV using IIDC");
-          }
-        }
-      }
-#endif
-    }
-    
+    }    
   }
   return restart;
 }
