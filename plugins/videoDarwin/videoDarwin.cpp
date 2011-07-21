@@ -463,6 +463,8 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
 }
 inline unsigned short d2us(double x)
 { return (unsigned short)(65535.*((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x))); }
+inline double us2d(unsigned short x)
+{ static double factor=1./65535.; return (x*factor); }
 
 bool videoDarwin::applyProperties(gem::Properties&props) {
   bool restart=false;
@@ -579,8 +581,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
       if(!m_vdig)continue;
       if (!iidc){
         VDGetBrightness(m_vdig,&value_us);
-        value_d=value_us/65536.;
-        props.set(key, value_d);
+        props.set(key, us2d(value_us));
       } else {
         post("how to get IIDC/brightness?");
       }
@@ -588,8 +589,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
       if(!m_vdig)continue;
       if (!iidc){
         VDGetSaturation(m_vdig,&value_us);
-        value_d=value_us/65536.;
-        props.set(key, value_d);
+        props.set(key, us2d(value_us));
       } else {
         post("how to get IIDC/saturation?");
       }
@@ -597,8 +597,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
       if(!m_vdig)continue;
       if (!iidc){
         VDGetContrast(m_vdig,&value_us);
-        value_d=value_us/65536.;
-        props.set(key, value_d);
+        props.set(key, us2d(value_us));
       } else {
         post("how to get IIDC/contrast?");
       }
