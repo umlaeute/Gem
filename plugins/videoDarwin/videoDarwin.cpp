@@ -620,12 +620,21 @@ void videoDarwin::getProperties(gem::Properties&props) {
     GetComponentInfo((Component)m_vdig, &desc, NULL, NULL, NULL);
     iidc=(vdSubtypeIIDC == desc.componentSubType);
   }
+
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     double value_d=0.;
     unsigned short value_us=0;
-    if("Brightness"==key) {
+    if(0) {
+#define PROPGET_VD(NAME)                                                \
+      } else if (#NAME == key && m_vdig && !iidc) {                              \
+      if(0==VDGet ## NAME (m_vdig,&value_us)) {props.set(key, us2d(value_us)); } value_d=0     
+ #if 1
+    PROPGET_VD(Brightness);
+    PROPGET_VD(Saturation);
+#else
+    else if("Brightness"==key) {
       if(!m_vdig)continue;
       if (!iidc){
         VDGetBrightness(m_vdig,&value_us);
@@ -656,6 +665,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
       post("how to get IIDC/whitebalanceU?");
     } else if("WhitebalanceV"==key) {
       post("how to get IIDC/whitebalanceV?");
+#endif
 #endif
     }
   }
