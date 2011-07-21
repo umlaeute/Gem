@@ -45,14 +45,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT);
 pix_movement :: pix_movement(t_floatarg f)
 { 
   buffer.xsize  = buffer.ysize = 64;
-  buffer.format = GL_LUMINANCE;
-  buffer.csize  = 1;
+  buffer.setCsizeByFormat(GL_LUMINANCE);
   buffer.reallocate();
   buffer2.xsize  = buffer2.ysize = 64;
-  buffer2.format = GL_LUMINANCE;
-  buffer2.csize  = 1;
+  buffer2.setCsizeByFormat(GL_LUMINANCE);
   buffer2.reallocate();
-
 
   if(f<=0.)f=0.5;
   if(f>1.f)f=1.0;
@@ -106,7 +103,7 @@ void pix_movement :: processYUVImage(imageStruct &image)
   buffer.xsize = image.xsize;
   buffer.ysize = image.ysize;
   buffer.reallocate();
-  if(doclear) buffer.setWhite();
+  if(doclear)buffer.setWhite();
   
   int pixsize = image.ysize * image.xsize;
 
@@ -121,22 +118,22 @@ void pix_movement :: processYUVImage(imageStruct &image)
   unsigned char *wp=buffer.data;			// write pointer to the copy
   unsigned char grey,grey1;
 
-  grey = 0;
+  grey  = 0;
   grey1 = 0;
   pixsize/=2;
   while(pixsize--) {
     grey = rp[Y0];
-    rp[Y0]=255*(abs(grey-*wp)>thresh);
+    rp[Y0]=CLAMP_Y(255*(abs(grey-*wp)>thresh));
     *wp++=grey;
 
     grey1 = rp[Y1];
-    rp[Y1]=255*(abs(grey1-*wp)>thresh);
+    rp[Y1]=CLAMP_Y(255*(abs(grey1-*wp)>thresh));
     *wp++=grey1;
-    /*
+#if 1
       // looks cool (C64), but what for ?
       rp[chU]=128;
       rp[chV]=128;
-    */
+#endif
     rp+=4;
   }
 }
@@ -192,9 +189,6 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     
     pixsize/=2;
     for (i=0; i < pixsize; i++) {
-
-
-
         #ifndef PPC970
         //setup the cache prefetch -- A MUST!!!
         UInt32			prefetchSize = GetPrefetchConstant( j, 0, j * 16 );
