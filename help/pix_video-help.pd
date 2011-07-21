@@ -1,59 +1,4 @@
-#N canvas 150 45 871 552 10;
-#X text 50 557 NOTE: not all messages might currently work on your
-operating-system.;
-#N canvas 90 123 1159 623 Linux 0;
-#X text 59 70 the udev system from kernel 2.6 allows special naming
-of devices.;
-#X text 60 105 Thus the standards in the source cannot be depended
-upon.;
-#X msg 136 173 device /dev/myname/somewhere;
-#X text 56 150 If you know the device name \, then use the message
-;
-#X text 57 205 Then use the following to turn on IEEE1394;
-#X text 52 292 If you do ls -l /dev/dv1394/0 then you will see something
-like;
-#X text 351 346 2007-08-22 18:48 /dev/dv1394/0;
-#X text 52 345 crw-rw---- 1 root video 171 \, 32;
-#X text 53 410 This should help you find the device and make it work.
-;
-#X text 55 465 Note that the major number may change in the future
-(udev allows arbitrary major numbers) so this might get harder.;
-#X text 383 536 Added 22 August 2007;
-#X text 61 31 Getting DV camera (ieee1394) working on (debian) linux
-;
-#X text 59 433 Note /dev/raw1394 is NOT a usable device here!;
-#X text 663 32 notes on messages under Linux;
-#X text 52 257 If you do not know the name of your camera device \,
-then the following might help you find it in the /dev heirarchy.;
-#X text 628 103 "driver 0" is video4linux;
-#X text 627 147 "device N" should enumerate through various cameras
-;
-#X text 621 72 "quality" message only seems to have 1 and 2 as values
-;
-#X text 632 190 "enumerate" does not work;
-#X text 635 210 "dialog" does not work;
-#X text 633 229 "dimen" might not work;
-#X msg 136 233 driver dv;
-#X text 628 117 "driver 1" is ieee1394 \, (but better use "driver dv")
-;
-#X text 743 351 Note on the new JUJU stack;
-#X text 626 392 with kernels >=2.6.30 (or so) \, a new IEEE1394 stack
-named Juju is taking over. Gem has not been ported to the new stack
-yet. If you want to use your DV camera on a new system \, either downgrade
-your kernel OR make sure that the correct stack is loaded (you will
-probably have to recompile your kernel in order to get support for
-the old stack). The best option would be to implement support for Juju
-and submit it via http://sf.net/projects/pd-gem;
-#X text 54 376 Which means that /dev/dv1394/0 is a character device
-(c at start) with major number 171 \, so it is an ieee1394 device.
-;
-#X restore 533 564 pd Linux Notes;
-#N canvas 0 0 693 278 SGI 0;
-#X text 24 61 SGI only:;
-#X text 50 84 swap 1/0 : swap upside down;
-#X text 49 101 offset x y : set the x y offset of the captured frame
-;
-#X restore 682 564 pd SGI Notes;
+#N canvas 147 88 871 639 10;
 #X text 451 6 GEM object;
 #X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -68,14 +13,14 @@ and submit it via http://sf.net/projects/pd-gem;
 #X obj 9 149 cnv 15 540 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 18 148 Arguments:;
-#X text 17 526 Outlet 1: gemlist;
+#X text 17 486 Outlet 1: gemlist;
 #X text 17 198 Inlet 1: gemlist;
 #X text 16 308 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current
 film into the specified colorspace.;
 #X text 64 159 none;
 #X text 33 184 Inlet:;
-#X text 33 512 Outlet:;
-#X obj 714 460 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 33 472 Outlet:;
+#X obj 717 460 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -95,91 +40,44 @@ film into the specified colorspace.;
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 719 499 pd gemwin;
-#X msg 719 477 create;
-#X text 715 456 Create window:;
+#X restore 722 499 pd gemwin;
+#X msg 722 477 create;
+#X text 718 456 Create window:;
 #X obj 563 86 cnv 15 230 280 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 564 526 rectangle 4 3;
-#X obj 564 502 pix_texture;
-#X text 15 436 Inlet 1: channel <number>: depending on your capture
-device \, you can switch between sources \, e.g. Tuner \, S-VHS \,
-Composite \, etc.;
-#X text 16 498 Inlet 1: mode "PAL|NTSC": switch display modes (default=PAL)
-;
-#X text 16 481 Inlet 1: freq <number>: set the frequency for the TV
-Tuner;
+#X obj 567 526 rectangle 4 3;
+#X obj 567 502 pix_texture;
 #X text 17 216 Inlet 1: device <spec>: the number or file path to the
 input device;
 #X text 16 339 Inlet 1: dimen <number> <number>: set various dimensions
 for the image (does not work on all capture devices);
-#X text 15 370 Inlet 1: quality <number>: compression quality;
-#X text 14 419 Inlet 1: enumerate: list all devices to the console
+#X text 15 371 Inlet 1: enumerate: list all devices to the console
 ;
 #X text 17 245 Inlet 1: driver <number>: switch between different drivers
 \, e.g. v4l \, ieee1394 \, etc.;
-#X text 15 388 Inlet 1: dialog: open a dialog to configure the input
-device (Mac OS X and Windows);
 #X text 16 276 Inlet 1: driver <symbol>: switch between different drivers
 \, e.g. v4l \, v4l2 \, dv...;
 #X text 13 66 [pix_video] opens a wide array of camera \, USB to FireWire
 to capture cards \, as long as the camera is supported by your operating
 system.;
-#X text 48 595 NOTE: usually you cannot use a camera more than once
-at the same time!;
-#X obj 563 376 cnv 15 230 30 empty empty empty 20 12 0 14 -24198 -66577
-0;
-#X obj 564 53 gemhead;
-#X msg 593 124 dimen 64 64;
-#X msg 583 99 dimen 256 128;
-#X msg 632 261 enumerate;
-#X msg 638 283 dialog;
-#X msg 601 153 colorspace RGBA;
-#X obj 564 426 pix_video;
-#X msg 622 235 device /dev/dv1394/0;
-#X msg 726 308 driver 1;
-#X msg 642 308 driver 0;
-#X msg 606 211 device 0;
-#N canvas 162 133 570 420 serin 0;
-#X obj 205 60 cnv 20 20 20 empty \$0-open-canvas 0 4 10 0 16 -233017
--1 0;
-#X obj 60 61 hradio 18 1 1 8 empty empty empty 0 -6 0 8 -225271 -1
--1 0;
-#X obj 60 13 inlet;
-#X msg 200 202 label \$1;
-#X obj 200 180 makefilename %d;
-#X obj 59 108 int;
-#X obj 59 337 outlet;
-#X msg 201 306 set \$1 \$2;
-#X obj 59 266 trigger bang anything;
-#X obj 201 286 list;
-#X obj 200 225 send \$0-open-canvas;
-#X msg 60 210 device \$1;
-#X connect 1 0 5 0;
-#X connect 2 0 1 0;
-#X connect 3 0 10 0;
-#X connect 4 0 3 0;
-#X connect 5 0 4 0;
-#X connect 5 0 11 0;
-#X connect 7 0 6 0;
-#X connect 8 0 6 0;
-#X connect 8 1 9 0;
-#X connect 9 0 7 0;
-#X connect 11 0 8 0;
-#X coords 0 -1 1 1 165 20 1 60 60;
-#X restore 606 187 pd serin;
-#X msg 649 334 driver dv;
-#N canvas 0 45 572 549 properties 0;
-#X obj 41 526 outlet properties;
+#X obj 567 53 gemhead;
+#X msg 596 124 dimen 64 64;
+#X msg 586 99 dimen 256 128;
+#X msg 635 261 enumerate;
+#X msg 641 283 dialog;
+#X msg 604 153 colorspace RGBA;
+#X msg 609 211 device 0;
+#X msg 642 312 driver dv;
+#N canvas 515 117 572 549 properties 0;
 #X msg 41 203 enumProps;
 #X obj 31 21 cnv 15 400 80 empty empty readProperties 20 12 0 14 -233017
 -66577 0;
-#X obj 39 47 hradio 15 1 0 11 \$0-propreadId \$0-propreadId empty 0
+#X obj 39 47 hradio 15 1 0 1 \$0-propreadId \$0-propreadId empty 0
 -8 0 10 -262144 -1 -1 0;
-#X obj 40 70 cnv 15 260 20 empty \$0-propreadName Contrast 10 9 0 14
+#X obj 40 70 cnv 15 260 20 empty \$0-propreadName <none> 10 9 0 14
 -203904 -66577 0;
-#N canvas 182 45 450 537 PropertyLogic 0;
-#N canvas 62 74 774 460 id2property 0;
+#N canvas 185 50 450 537 PropertyLogic 0;
+#N canvas 1408 84 774 460 id2property 0;
 #X obj 353 106 r \$0-info;
 #X obj 353 130 route proplist;
 #X obj 353 152 route read numread;
@@ -214,6 +112,9 @@ at the same time!;
 #X msg 552 333 number \$1;
 #X obj 432 353 s \$0-propreadId;
 #X obj 552 353 s \$0-propwriteId;
+#X obj 602 254 t f f;
+#X msg 602 232 0;
+#X obj 602 211 loadbang;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 2 0 4 0;
@@ -253,11 +154,15 @@ at the same time!;
 #X connect 29 0 24 0;
 #X connect 30 0 32 0;
 #X connect 31 0 33 0;
+#X connect 34 0 30 0;
+#X connect 34 1 31 0;
+#X connect 35 0 34 0;
+#X connect 36 0 35 0;
 #X restore 188 192 pd id2property;
 #X obj 320 407 list prepend set;
 #X obj 320 429 list trim;
 #X obj 320 451 t b a;
-#N canvas 436 144 450 300 getProp 0;
+#N canvas 437 141 450 300 getProp 0;
 #X obj 44 177 s \$0-propreadName;
 #X msg 44 156 label \$1;
 #X msg 165 156 get \$1;
@@ -284,6 +189,10 @@ at the same time!;
 #X obj 290 247 s \$0-propreadValue;
 #X obj 290 135 route float;
 #X obj 290 157 makefilename %g;
+#X obj 106 29 loadbang;
+#X obj 106 51 t b b;
+#X msg 106 73 symbol <none>;
+#X msg 196 74 symbol --;
 #X connect 1 0 0 0;
 #X connect 2 0 4 0;
 #X connect 3 0 8 0;
@@ -296,17 +205,22 @@ at the same time!;
 #X connect 9 0 10 0;
 #X connect 11 0 12 0;
 #X connect 12 0 9 0;
+#X connect 13 0 14 0;
+#X connect 14 0 15 0;
+#X connect 14 1 16 0;
+#X connect 15 0 1 0;
+#X connect 16 0 9 0;
 #X restore 320 318 pd getProp;
 #X obj 172 158 r \$0-propreadId;
 #X obj 282 158 r \$0-propwriteId;
-#N canvas 429 104 450 467 setProp 0;
+#N canvas 432 95 450 467 setProp 0;
 #X msg 44 156 label \$1;
 #X msg 165 156 get \$1;
 #X obj 44 31 inlet;
 #X obj 218 324 outlet;
 #X obj 290 57 r \$0-info;
 #X obj 290 79 route prop;
-#N canvas 3 45 450 300 sroute 0;
+#N canvas 4 50 450 300 sroute 0;
 #X obj 73 12 inlet;
 #X obj 312 9 inlet;
 #X obj 73 113 outlet;
@@ -329,6 +243,9 @@ at the same time!;
 #X obj 50 320 pack 0 s;
 #X msg 50 342 set \$2 \$1;
 #X obj 44 73 t s s s s;
+#X obj 127 27 loadbang;
+#X obj 127 49 t b b;
+#X msg 127 71 symbol <none>;
 #X connect 0 0 8 0;
 #X connect 1 0 3 0;
 #X connect 2 0 15 0;
@@ -345,6 +262,9 @@ at the same time!;
 #X connect 15 1 1 0;
 #X connect 15 2 6 1;
 #X connect 15 3 13 1;
+#X connect 16 0 17 0;
+#X connect 17 0 18 0;
+#X connect 18 0 0 0;
 #X restore 199 315 pd setProp;
 #X obj 199 404 list prepend set;
 #X obj 199 426 list trim;
@@ -354,6 +274,8 @@ at the same time!;
 #X obj 309 361 list prepend set;
 #X obj 199 477 s \$0-propset;
 #X obj 320 480 s \$0-propget;
+#X obj 54 38 inlet;
+#X obj 54 66 s \$0-ctl;
 #X connect 0 0 4 0;
 #X connect 0 1 7 0;
 #X connect 1 0 2 0;
@@ -372,19 +294,20 @@ at the same time!;
 #X connect 12 0 11 0;
 #X connect 12 1 13 0;
 #X connect 13 0 8 0;
-#X restore 151 526 pd PropertyLogic;
-#X obj 310 70 cnv 15 100 20 empty \$0-propreadValue 40 10 9 0 14 -261234
+#X connect 16 0 17 0;
+#X restore 41 526 pd PropertyLogic;
+#X obj 310 70 cnv 15 100 20 empty \$0-propreadValue -- 10 9 0 14 -261234
 -66577 0;
 #X obj 31 111 cnv 15 400 80 empty empty writeProperties 20 12 0 14
 -233017 -66577 0;
-#X obj 39 137 hradio 15 1 0 11 \$0-propwriteId \$0-propwriteId empty
+#X obj 39 137 hradio 15 1 0 1 \$0-propwriteId \$0-propwriteId empty
 0 -8 0 10 -262144 -1 -1 0;
-#X obj 40 160 cnv 15 260 20 empty \$0-propwriteName Brightness 10 9
-0 14 -203904 -66577 0;
+#X obj 40 160 cnv 15 260 20 empty \$0-propwriteName <none> 10 9 0 14
+-203904 -66577 0;
 #X obj 311 160 nbx 5 20 -1e+37 1e+37 0 0 \$0-propwriteValue \$0-propwriteValue
 empty 0 -8 0 14 -204786 -1 -1 0 256;
-#X msg 66 315 get Contrast;
-#X msg 83 392 set Brightness 10;
+#X msg 66 315 get 50_fields;
+#X msg 83 392 set quality 5;
 #X obj 66 294 r \$0-propget;
 #X obj 83 372 r \$0-propset;
 #X msg 87 340 get Hue Saturation;
@@ -407,37 +330,98 @@ might contain spaces (and other weird characters);
 #X text 247 461 add values to the property list (don't apply yet);
 #X text 247 479 add values to the property list (don't apply yet);
 #X text 247 499 apply current property list;
-#X connect 1 0 0 0;
-#X connect 11 0 0 0;
-#X connect 12 0 0 0;
+#X connect 0 0 4 0;
+#X connect 10 0 4 0;
+#X connect 11 0 4 0;
+#X connect 12 0 10 0;
 #X connect 13 0 11 0;
-#X connect 14 0 12 0;
-#X connect 15 0 0 0;
-#X connect 23 0 0 0;
-#X connect 24 0 0 0;
-#X connect 25 0 0 0;
-#X connect 26 0 0 0;
-#X restore 691 382 pd properties;
-#X obj 615 445 t a a;
-#X obj 615 466 print info;
-#X obj 652 445 s \$0-info;
-#X connect 20 0 21 0;
-#X connect 21 0 20 0;
-#X connect 25 0 24 0;
-#X connect 39 0 45 0;
-#X connect 40 0 45 0;
-#X connect 41 0 45 0;
-#X connect 42 0 45 0;
-#X connect 43 0 45 0;
-#X connect 44 0 45 0;
-#X connect 45 0 25 0;
-#X connect 45 1 53 0;
-#X connect 46 0 45 0;
-#X connect 47 0 45 0;
-#X connect 48 0 45 0;
-#X connect 49 0 45 0;
-#X connect 50 0 49 0;
-#X connect 51 0 45 0;
-#X connect 52 0 45 0;
-#X connect 53 0 54 0;
-#X connect 53 1 55 0;
+#X connect 14 0 4 0;
+#X connect 22 0 4 0;
+#X connect 23 0 4 0;
+#X connect 24 0 4 0;
+#X connect 25 0 4 0;
+#X restore 336 430 pd properties;
+#X obj 618 459 t a a;
+#X obj 618 480 print info;
+#X obj 655 459 s \$0-info;
+#X obj 586 376 t a a;
+#N canvas 166 121 570 420 device 0;
+#X obj 204 60 cnv 20 20 20 empty \$0-open-canvas 0 4 10 0 16 -233017
+-1 0;
+#X obj 60 61 hradio 18 1 0 8 empty empty empty 0 -6 0 8 -225271 -1
+-1 0;
+#X obj 60 13 inlet;
+#X msg 160 254 label \$1;
+#X obj 160 232 makefilename %d;
+#X obj 60 108 int;
+#X obj 60 337 outlet;
+#X obj 160 277 send \$0-open-canvas;
+#X msg 130 170 device \$1;
+#X obj 60 130 t b f;
+#X obj 130 192 t a a;
+#X obj 130 298 list prepend set;
+#X obj 130 320 list trim;
+#X obj 160 211 route device;
+#X obj 130 116 loadbang;
+#X msg 130 138 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 3 0 7 0;
+#X connect 4 0 3 0;
+#X connect 5 0 9 0;
+#X connect 8 0 10 0;
+#X connect 9 0 6 0;
+#X connect 9 1 8 0;
+#X connect 10 0 11 0;
+#X connect 10 1 13 0;
+#X connect 11 0 12 0;
+#X connect 12 0 6 0;
+#X connect 13 0 4 0;
+#X connect 14 0 15 0;
+#X connect 15 0 8 0;
+#X coords 0 -1 1 1 165 20 1 60 60;
+#X restore 609 187 pd device;
+#X obj 36 565 cnv 15 400 30 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X text 48 565 NOTE: usually you cannot use a camera more than once
+at the same time!;
+#X obj 563 413 cnv 15 80 30 empty empty empty 20 12 0 14 -24198 -66577
+0;
+#X obj 567 418 pix_video;
+#X obj 657 393 print videoctl;
+#X obj 647 346 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 665 345 driver \$1;
+#X text 686 286 (if available);
+#X text 16 388 Inlet 1: dialog: open a dialog to configure the input
+device (depending on driver / Operating System);
+#X text 18 501 Outlet 2: info (for enumerating devices \, querying
+properties \, ...);
+#X text 15 423 Inlet 1: enumProps \, get \, set \, clearProps \, setProps
+\, applyProps: interact with driver/device properties;
+#X obj 657 374 r \$0-ctl;
+#X text 54 600 you can use [pix_buffer] to distribute the same pix
+to different parts of your render-chain;
+#X msg 625 235 device /dev/fw1;
+#X connect 17 0 18 0;
+#X connect 18 0 17 0;
+#X connect 22 0 21 0;
+#X connect 29 0 46 0;
+#X connect 30 0 41 0;
+#X connect 31 0 41 0;
+#X connect 32 0 41 0;
+#X connect 33 0 41 0;
+#X connect 34 0 41 0;
+#X connect 35 0 41 0;
+#X connect 36 0 41 0;
+#X connect 38 0 39 0;
+#X connect 38 1 40 0;
+#X connect 41 0 46 0;
+#X connect 41 1 47 0;
+#X connect 42 0 35 0;
+#X connect 46 0 22 0;
+#X connect 46 1 38 0;
+#X connect 48 0 49 0;
+#X connect 49 0 41 0;
+#X connect 54 0 41 0;
+#X connect 56 0 41 0;
