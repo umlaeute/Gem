@@ -420,7 +420,7 @@ bool videoDarwin::enumProperties(gem::Properties&readable,
     //SETPROP("ClipState", 1);
     //SETPROP("ClipRng", 1);
     //SETPROP("PLLFilterType", 1);
-    SETPROP("MasterBlendLevel", 1);
+    SETWPROP("MasterBlendLevel", 1);
     //SETPROP("PlayThroughOnOff", 1);
     //SETPROP("FieldPreference", 1);
     SETPROP("BlackLevelValue", 1);
@@ -630,43 +630,21 @@ void videoDarwin::getProperties(gem::Properties&props) {
 #define PROPGET_VD(NAME)                                                \
       } else if (#NAME == key && m_vdig && !iidc) {                              \
       if(0==VDGet ## NAME (m_vdig,&value_us)) {props.set(key, us2d(value_us)); } value_d=0     
- #if 1
-    PROPGET_VD(Brightness);
+    PROPGET_VD(Hue);
+    PROPGET_VD(Sharpness);
     PROPGET_VD(Saturation);
-#else
-    else if("Brightness"==key) {
-      if(!m_vdig)continue;
-      if (!iidc){
-        VDGetBrightness(m_vdig,&value_us);
-        props.set(key, us2d(value_us));
-      } else {
-        post("how to get IIDC/brightness?");
-      }
-    } else if("Saturation"==key) {
-      if(!m_vdig)continue;
-      if (!iidc){
-        VDGetSaturation(m_vdig,&value_us);
-        props.set(key, us2d(value_us));
-      } else {
-        post("how to get IIDC/saturation?");
-      }
-    } else if("Contrast"==key) {
-      if(!m_vdig)continue;
-      if (!iidc){
-        VDGetContrast(m_vdig,&value_us);
-        props.set(key, us2d(value_us));
-      } else {
-        post("how to get IIDC/contrast?");
-      }
-#if 0
-    } else if("Exposure"==key) {
-      post("how to get IIDC/exposure?");
-    } else if("WhitebalanceU"==key) {
-      post("how to get IIDC/whitebalanceU?");
-    } else if("WhitebalanceV"==key) {
-      post("how to get IIDC/whitebalanceV?");
-#endif
-#endif
+    PROPGET_VD(Brightness);
+    PROPGET_VD(Contrast);
+    //PROPGET_VD(KeyColor);
+    //PROPGET_VD(ClipState);
+    //PROPGET_VD(ClipRng);
+    //PROPGET_VD(PLLFilterType);
+    //PROPGET_VD(PlayThroughOnOff);
+    //PROPGET_VD(FieldPreference);
+    PROPGET_VD(BlackLevelValue);
+    PROPGET_VD(WhiteLevelValue);
+    //PROPGET_VD(Input);
+    //PROPGET_VD(InputStandard);
     }
   }
 }
