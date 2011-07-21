@@ -526,16 +526,16 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
           SGSetChannelPlayFlags(m_vc, m_quality); 
       }
 #define PROPSET_IIDC_VD(NAME) \
-      } else if ("NAME" == key && props.get(key, value_d) && m_vdig) {  \
+      } else if (#NAME == key && props.get(key, value_d) && m_vdig) {  \
       if(iidc){setIIDCProperty(vdIIDCFeature ## NAME, value_d);}        \
       else {value_us = (unsigned short)(65536.*value_d);                \
         VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_VD(NAME)                                                \
-        } else if ("NAME" == key && props.get(key, value_d) && m_vdig) { \
+        } else if (#NAME == key && props.get(key, value_d) && m_vdig) { \
       if(!iidc) {value_us = (unsigned short)(65536.*value_d);           \
         VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_IIDC(NAME)                                              \
-        } else if ("NAME" == key && props.get(key, value_d) && iidc) {  \
+        } else if (#NAME == key && props.get(key, value_d) && iidc) {  \
       setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
 #if 1
         PROPSET_VD(Contrast);
