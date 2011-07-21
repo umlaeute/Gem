@@ -160,9 +160,16 @@ namespace gem { namespace image {
     }
 
     virtual void* process(id_t ID, void*data) {
+      if(!data){
+        //        post("========================================= oops: %d", ID);
+        return NULL;
+      }
+
       InData*in=reinterpret_cast<InData*>(data);
       OutData*out=new OutData(*in);
-      
+      if(!out) {
+        return NULL;
+      }
       // DOIT
       out->img=new imageStruct;
       if(!imageloader->load(in->filename, *out->img, out->props)) {
