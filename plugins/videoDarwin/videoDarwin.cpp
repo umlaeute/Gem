@@ -410,38 +410,38 @@ bool videoDarwin::enumProperties(gem::Properties&readable,
 #define SETPROP(key, value) typ=value; readable.set(key, typ); writeable.set(key, typ)
 #define SETRPROP(key, value) typ=value; readable.set(key, typ)
 #define SETWPROP(key, value) typ=value; writeable.set(key, typ)
-  SETPROP("Hue");
-  SETPROP("Sharpness");
-  SETPROP("Saturation");
-  SETPROP("Brightness");
+  SETPROP("Hue", 1);
+  SETPROP("Sharpness", 1);
+  SETPROP("Saturation", 1);
+  SETPROP("Brightness", 1);
   if(!iidc) {
-    SETPROP("Contrast");
-    SETPROP("KeyColor");
-    SETPROP("ClipState");
-    SETPROP("ClipRng");
-    SETPROP("PLLFilterType");
-    SETPROP("MasterBlendLevel");
-    SETPROP("PlayThroughOnOff");
-    SETPROP("FieldPreference");
-    SETPROP("BlackLevelValue");
-    SETPROP("WhiteLevelValue");
-    SETPROP("Input");
-    SETPROP("InputStandard");
+    SETPROP("Contrast", 1);
+    SETPROP("KeyColor", 1);
+    SETPROP("ClipState", 1);
+    SETPROP("ClipRng", 1);
+    SETPROP("PLLFilterType", 1);
+    SETPROP("MasterBlendLevel", 1);
+    SETPROP("PlayThroughOnOff", 1);
+    SETPROP("FieldPreference", 1);
+    SETPROP("BlackLevelValue", 1);
+    SETPROP("WhiteLevelValue", 1);
+    SETPROP("Input", 1);
+    SETPROP("InputStandard", 1);
   } else {
-    SETWPROP("Gain");
-    SETWPROP("Iris");
-    SETWPROP("Shutter");
-    SETWPROP("Exposure");
-    SETWPROP("WhiteBalanceU");
-    SETWPROP("WhiteBalanceV");
-    SETWPROP("Gamma");
-    SETWPROP("Temperature");
-    SETWPROP("Zoom");
-    SETWPROP("Focus");
-    SETWPROP("Pan");
-    SETWPROP("Tilt");
-    SETWPROP("OpticalFilter");
-    SETWPROP("EdgeEnhancement");
+    SETWPROP("Gain", 1);
+    SETWPROP("Iris", 1);
+    SETWPROP("Shutter", 1);
+    SETWPROP("Exposure", 1);
+    SETWPROP("WhiteBalanceU", 1);
+    SETWPROP("WhiteBalanceV", 1);
+    SETWPROP("Gamma", 1);
+    SETWPROP("Temperature", 1);
+    SETWPROP("Zoom", 1);
+    SETWPROP("Focus", 1);
+    SETWPROP("Pan", 1);
+    SETWPROP("Tilt", 1);
+    SETWPROP("OpticalFilter", 1);
+    SETWPROP("EdgeEnhancement", 1);
   }
   return true;
 }
