@@ -21,6 +21,8 @@
 #include "Gem/Image.h"
 #include "Gem/ImageIO.h"
 
+#include "RTE/Outlet.h"
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -99,6 +101,9 @@ class GEM_EXTERN pix_image : public GemBase
 	void     loaded(const gem::image::load::id_t ID, 
                   imageStruct*img,
                   const gem::Properties&props);
+
+
+  gem::RTE::Outlet m_infoOut;
     	    	
  private:
     	

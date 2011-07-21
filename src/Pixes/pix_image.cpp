@@ -47,10 +47,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYM);
 pix_image :: pix_image(t_symbol *filename) :
   m_wantThread(true),
   m_loadedImage(NULL),
-  m_id(gem::image::load::INVALID)
+  m_id(gem::image::load::INVALID),
+  m_infoOut(gem::RTE::Outlet(this))
 {
   m_pixBlock.image = m_imageStruct;
+
   if(filename!=&s_)openMess(filename->s_name);
+  gem::image::load::poll();
 }
 
 ////////////////////////////////////////////////////////
@@ -59,8 +62,8 @@ pix_image :: pix_image(t_symbol *filename) :
 /////////////////////////////////////////////////////////
 pix_image :: ~pix_image()
 {
-  cleanImage();
   gem::image::load::cancel(m_id);
+  cleanImage();
   m_id=gem::image::load::INVALID;
 }
 
@@ -95,22 +98,38 @@ void pix_image :: openMess(std::string filename)
   if(gem::image::load::INVALID == m_id)
     success=false;
 
+  std::vector<gem::any>atoms;
+  gem::any value;
+
   if(success) {
     if(gem::image::load::IMMEDIATE!=m_id) {
       verbose(1, "loading image '%s' with ID:%d", m_filename.c_str(), m_id);
+      atoms.push_back(value=std::string("defer"));
+      atoms.push_back(value=(int)m_id);
+    } else {
+      atoms.push_back(value=std::string("success"));
     }
   } else {
     error("loading of '%s' failed", m_filename.c_str());
+    atoms.push_back(value=std::string("fail"));
   }
+  atoms.push_back(value=m_filename);
+  m_infoOut.send("load", atoms);
 }
 
 
 void    pix_image:: loaded(const gem::image::load::id_t ID, 
 			   imageStruct*img,
 			   const gem::Properties&props) {
+  std::vector<gem::any>atoms;
+  gem::any value;
 
   if(ID!=m_id || ID == gem::image::load::INVALID) {
+    atoms.push_back(value=std::string("discard"));
+    if(ID!=gem::image::load::INVALID)
+      atoms.push_back(value=(int)ID);
     verbose(1, "discarding image with ID %d", ID);
+    m_infoOut.send("load", atoms);
     return;
   }
 
@@ -120,8 +139,14 @@ void    pix_image:: loaded(const gem::image::load::id_t ID,
     m_loadedImage->copy2Image(&m_pixBlock.image);
     m_pixBlock.newimage = 1;
     verbose(0, "loaded image '%s'", m_filename.c_str());
+    atoms.push_back(value=std::string("success"));
   } else {
     error("failed to load image '%s'", m_filename.c_str());
+    atoms.push_back(value=std::string("fail"));
+  }
+  atoms.push_back(value=(int)ID);
+  if(gem::image::load::IMMEDIATE!=m_id) {
+    m_infoOut.send("load", atoms);
   }
 }
 void    pix_image:: loadCallback(void*data,
@@ -131,6 +156,9 @@ void    pix_image:: loadCallback(void*data,
   pix_image*me=reinterpret_cast<pix_image*>(data);
   me->loaded(ID, img, props);
 }
+
+
+
     	    	
 
 /////////////////////////////////////////////////////////
