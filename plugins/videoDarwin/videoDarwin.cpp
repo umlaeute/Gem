@@ -529,11 +529,11 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
       } else if ("NAME" == key && props.get(key, value_d) && m_vdig) {  \
       if(iidc){setIIDCProperty(vdIIDCFeature ## NAME, value_d);}        \
       else {value_us = (unsigned short)(65536.*value_d);                \
-        VDSet ## NAME ## _S(m_vdig,&value_us); } value_d=0
+        VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_VD(NAME)                                                \
         } else if ("NAME" == key && props.get(key, value_d) && m_vdig) { \
       if(!iidc) {value_us = (unsigned short)(65536.*value_d);           \
-        VDSet ## NAME (m_vdig,&value_us)} value_d=0
+        VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_IIDC(NAME)                                              \
         } else if ("NAME" == key && props.get(key, value_d) && iidc) {  \
       setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
