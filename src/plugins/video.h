@@ -192,7 +192,7 @@ namespace gem { namespace plugins {
     /**
      * enumerate list of possible dialogs (if any)
      */
-    virtual std::vector<std::string>dialogs();
+    virtual std::vector<std::string>dialogs(void);
 
     /**
      * Set the preferred colorspace (of the frames returned by getFrame()
