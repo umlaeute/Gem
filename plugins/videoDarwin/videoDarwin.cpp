@@ -417,16 +417,16 @@ bool videoDarwin::enumProperties(gem::Properties&readable,
   if(!iidc) {
     SETPROP("Contrast", 1);
     SETPROP("KeyColor", 1);
-    SETPROP("ClipState", 1);
-    SETPROP("ClipRng", 1);
-    SETPROP("PLLFilterType", 1);
+    //SETPROP("ClipState", 1);
+    //SETPROP("ClipRng", 1);
+    //SETPROP("PLLFilterType", 1);
     SETPROP("MasterBlendLevel", 1);
-    SETPROP("PlayThroughOnOff", 1);
-    SETPROP("FieldPreference", 1);
+    //SETPROP("PlayThroughOnOff", 1);
+    //SETPROP("FieldPreference", 1);
     SETPROP("BlackLevelValue", 1);
     SETPROP("WhiteLevelValue", 1);
-    SETPROP("Input", 1);
-    SETPROP("InputStandard", 1);
+    //SETPROP("Input", 1);
+    //SETPROP("InputStandard", 1);
   } else {
     SETWPROP("Gain", 1);
     SETWPROP("Iris", 1);
@@ -571,16 +571,16 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
         PROPSET_IIDC_VD(Sharpness);
         PROPSET_VD(Contrast);
         //PROPSET_VD(KeyColor);
-        PROPSET_VD(ClipState);
+        //PROPSET_VD(ClipState);
         //PROPSET_VD(ClipRng);
-        PROPSET_VD(PLLFilterType);
+        //PROPSET_VD(PLLFilterType);
         PROPSET_VD(MasterBlendLevel);
-        PROPSET_VD(PlayThroughOnOff);
-        PROPSET_VD(FieldPreference);
+        //PROPSET_VD(PlayThroughOnOff);
+        //PROPSET_VD(FieldPreference);
         PROPSET_VD(BlackLevelValue);
         PROPSET_VD(WhiteLevelValue);
-        PROPSET_VD(Input);
-        PROPSET_VD(InputStandard);
+        //PROPSET_VD(Input);
+        //PROPSET_VD(InputStandard);
         PROPSET_IIDC_VD(Saturation);
         PROPSET_IIDC_VD(Brightness);
         PROPSET_IIDC(Gain);
