@@ -96,10 +96,13 @@ videoDarwin :: ~videoDarwin()
 }
 bool videoDarwin :: openDevice(gem::Properties&props) {
   applyProperties(props);
-  initSeqGrabber();
-  bool success=(NULL!=m_sg);
+  bool success=initSeqGrabber();
+  if(NULL==m_sg)success=false;
   if(success)
     applyProperties(props);
+  else
+    destroySeqGrabber();
+  
   return success;
 }
 void videoDarwin :: closeDevice(void) {
