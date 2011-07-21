@@ -29,4 +29,6 @@ libRTE_la_include_HEADERS = \
 libRTE_la_SOURCES= \
         Array.cpp \
         Array.h \
-        MessageCallbacks.h
+        MessageCallbacks.h \
+        Outlet.cpp \
+        Outlet.h
