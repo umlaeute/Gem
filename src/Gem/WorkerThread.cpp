@@ -63,18 +63,18 @@ namespace gem { namespace thread {
     pthread_t p_thread;
 
     PIMPL(WorkerThread*x) : owner(x), ID(0),
-			    keeprunning(true), isrunning(false)
+                            keeprunning(true), isrunning(false)
     {
 
     }
     ~PIMPL(void) {
-	stop(true);
+      stop(true);
     }
 
     inline WorkerThread::id_t nextID(void) {
       ID++;
       while(ID == WorkerThread::IMMEDIATE || ID == WorkerThread::INVALID)
-	ID++;
+        ID++;
       return ID;
     }
 
@@ -85,40 +85,40 @@ namespace gem { namespace thread {
       std::pair <id_t, void*> in, out;
 
       while(me->keeprunning) {
-	// wait till we are signalled new data
+        // wait till we are signalled new data
 
-	me->m_todo.lock();
-	if(me->q_todo.empty()) {
-	  me->m_todo.unlock();
-	  //std::cerr << "THREAD: waiting for new data...freeze"<<std::endl;
-	  me->s_newdata.freeze();
-	  //std::cerr << "THREAD: waiting for new data...thawed "<<me->keeprunning<<std::endl;
+        me->m_todo.lock();
+        if(me->q_todo.empty()) {
+          me->m_todo.unlock();
+          //std::cerr << "THREAD: waiting for new data...freeze"<<std::endl;
+          me->s_newdata.freeze();
+          //std::cerr << "THREAD: waiting for new data...thawed "<<me->keeprunning<<std::endl;
 
-	  // either new data has arrived or we are told to stop
-	  if(!me->keeprunning)
-	    break;
+          // either new data has arrived or we are told to stop
+          if(!me->keeprunning)
+            break;
 
-	  me->m_todo.lock();
-	}
-	in=me->q_todo.front();
-	me->q_todo.POP();
-	me->m_todo.unlock();
+          me->m_todo.lock();
+        }
+        in=me->q_todo.front();
+        me->q_todo.POP();
+        me->m_todo.unlock();
 
-	//std::cerr << "THREAD: processing data " << in.second  << " as "<<in.first<<std::endl;
+        //std::cerr << "THREAD: processing data " << in.second  << " as "<<in.first<<std::endl;
 
-	out.first = in.first;
-	out.second=wt->process(in.first, in.second);
+        out.first = in.first;
+        out.second=wt->process(in.first, in.second);
 
-	//std::cerr << "THREAD: done data " << out.second  << " as "<<out.first<<std::endl;
+        //std::cerr << "THREAD: done data " << out.second  << " as "<<out.first<<std::endl;
 
-	me->m_done.lock();
-	bool newdata=true;//me->q_done.empty();
-	//std::cerr<<"THREAD: processed "<< out.first <<" -> "<< newdata<<std::endl;
-	me->q_done.PUSH(out);
-	me->m_done.unlock();
-	//std::cerr << "THREAD: signaling newdata "<<newdata<<" for "<< out.first << std::endl;
-	if(newdata)wt->signal();
-	//std::cerr << "THREAD: signalled" << std::endl;
+        me->m_done.lock();
+        bool newdata=true;//me->q_done.empty();
+        //std::cerr<<"THREAD: processed "<< out.first <<" -> "<< newdata<<std::endl;
+        me->q_done.PUSH(out);
+        me->m_done.unlock();
+        //std::cerr << "THREAD: signaling newdata "<<newdata<<" for "<< out.first << std::endl;
+        if(newdata)wt->signal();
+        //std::cerr << "THREAD: signalled" << std::endl;
       }
       //std::cerr << "THREAD: FINISHED" << std::endl;
       me->isrunning=false;
@@ -133,9 +133,9 @@ namespace gem { namespace thread {
 
       struct timeval sleep;
       while(!isrunning) {
-      sleep.tv_sec=0;
-      sleep.tv_usec=10;
-      select(0,0,0,0,&sleep);
+        sleep.tv_sec=0;
+        sleep.tv_usec=10;
+        select(0,0,0,0,&sleep);
       }
 
       return true;
@@ -148,14 +148,14 @@ namespace gem { namespace thread {
       s_newdata.thaw();
 
       if(!wait)
-	return (!isrunning);
+        return (!isrunning);
 
       struct timeval sleep;
       while(isrunning) {
-      sleep.tv_sec=0;
-      sleep.tv_usec=10;
-      select(0,0,0,0,&sleep);
-      s_newdata.thaw();
+        sleep.tv_sec=0;
+        sleep.tv_usec=10;
+        select(0,0,0,0,&sleep);
+        s_newdata.thaw();
       }
       return true;
     }
@@ -212,8 +212,8 @@ namespace gem { namespace thread {
 
     for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
       if(it->first == ID) {
-	m_pimpl->q_todo.erase(it);
-	break;
+        m_pimpl->q_todo.erase(it);
+        break;
       }
     }
     m_pimpl->m_todo.unlock();
