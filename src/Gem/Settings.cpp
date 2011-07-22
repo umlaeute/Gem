@@ -57,7 +57,8 @@ struct _gemclass
 
 
 
-struct GemSettings::PIMPL {
+class GemSettings::PIMPL {
+public:
   // dictionary for setting values
   std::map <std::string, t_atom> data;
 

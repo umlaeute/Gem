@@ -91,7 +91,7 @@ private:
       }
       return 0;
     }
-    static inline FFUInt32 updown2orientation(bool updown) {
+    static inline FFUInt32 updown2orientation(GLboolean updown) {
       return (updown?1:2);
     }
 
@@ -821,7 +821,7 @@ void pix_freeframe :: openMess(t_symbol*s)
   m_plugin=NULL;
   try {
     m_plugin = new FFPlugin(pluginname, getCanvas());
-  } catch(GemException&x) {
+  } catch(GemException&) {
     m_plugin=NULL;
   }
 
@@ -967,7 +967,7 @@ bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
   pix_freeframe::FFPlugin*plugin=NULL;
   try {
     plugin=new FFPlugin(pluginname, canvas);
-  } catch (GemException&x) {
+  } catch (GemException&) {
     //x.report();
     plugin=NULL;
   }

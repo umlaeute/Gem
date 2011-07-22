@@ -20,6 +20,11 @@
  */
 
 
+#if defined _MSC_VER
+/* data conversion with possible loss of data */
+# pragma warning( disable : 4309 )
+#endif
+
 #include "PixConvert.h"
 #include "Gem/Image.h"
 

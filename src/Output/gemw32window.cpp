@@ -329,7 +329,7 @@ bool gemw32window:: create(void)
                      x0, y0,
                      w0, h0);
         Window::sharedContext=s_sharedWindow->context;
-  } catch (GemException&x) {
+  } catch (GemException&) {
       Window::sharedContext=NULL;
   }
   }
