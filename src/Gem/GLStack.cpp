@@ -15,6 +15,9 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifdef _MSC_VER
+# pragma NOTE("memory(484): warning C4150: Löschen eines Zeigers auf den nicht definierten Typ 'gem::GLStack::Data'. Destruktor wurde nicht aufgerufen.")
+#endif
 
 #include "Gem/GLStack.h"
 #include "Gem/RTE.h"
