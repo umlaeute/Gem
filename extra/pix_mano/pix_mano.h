@@ -47,22 +47,9 @@ class GEM_EXPORT pix_mano : public GemPixObj
 
     	//////////
     	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	
-    	//////////
-    	// Do the processing
     	virtual void 	processGrayImage(imageStruct &image);
-        	
+
         //////////
-    	// Do the processing
-    	virtual void 	processYUVImage(imageStruct &image);
-		
-#ifdef __VEC__
-	//////////
-    	// Do the processing
-    	virtual void 	processYUVAltivec(imageStruct &image);
-#endif  
-    	//////////
     	// Set the new threshold vector
     	void	    	vecBoundsMess(int argc, t_atom *argv);
     	

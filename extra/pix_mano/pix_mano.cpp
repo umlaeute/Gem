@@ -72,17 +72,6 @@ pix_mano :: pix_mano()
 pix_mano :: ~pix_mano()
 { }
 // #####################################################
-// processImage
-// #####################################################
-void pix_mano :: processRGBAImage(imageStruct &image)
-{	post("no method for RGBA, only grey");}
-void pix_mano :: processYUVImage(imageStruct &image)
-{    post("no method for YUV, only grey"); }
-#ifdef __VEC__
-void pix_mano :: processYUVAltivec(imageStruct &image)
-{    post("no method for YUV, only grey"); }
-#endif //Altivec	  
-// #####################################################
 // processGrayImage
 // #####################################################
 void pix_mano :: processGrayImage(imageStruct &image)	{
@@ -100,7 +89,9 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
 	int pix12, pix21, pix22, pix23, pix32, difx, dify;
 	int prevx, prevy, linecheck, orderx[8], ordery[8]; 
 	// entering point
-	int enterx[xsize], entery[ysize], cx, cy, t, foundhand; 
+	int cx, cy, t, foundhand; 
+    int*enterx=new int[xsize];
+    int*entery=new int[ysize];
 	// hand center, area
 	int hx, hy, xval_int, yval_int;		
 	float hand_area;
@@ -116,6 +107,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
 	int totalcycles;
 
 	int t_t[maxtips], v_t[maxtips];
+    
 	float t_i[maxtips],	t_x[maxtips], t_y[maxtips], t_m[maxtips], t_a[maxtips], t_s[maxtips]; // index, x, y, magnitude, angle, state
 	float v_i[maxtips],	v_x[maxtips], v_y[maxtips], v_m[maxtips], v_a[maxtips], v_s[maxtips]; // index, x, y, magnitude, angle, state
 	float tn_i[maxtips],	tn_x[maxtips], tn_y[maxtips], tn_m[maxtips], tn_a[maxtips], tn_s[maxtips];	
@@ -918,6 +910,8 @@ totalcycles = 0;
     else 		SETFLOAT(&ar[0], 1);
     outlet_list(outlet6, 0, 1, ar);
 	if (mode == 2) post("totalcycles=%d", totalcycles);
+
+     delete[]enterx; delete[]entery;
 } // close graymethod
 // #####################################################
 // floatHopMess
