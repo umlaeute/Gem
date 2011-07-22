@@ -206,6 +206,7 @@ namespace gem { namespace image {
         try {
           s_instance=new PixImageThreadLoader();
         } catch(int i) {
+          i=0;
           static bool dunnit=false;
           if(!dunnit) {
             verbose(1, "threaded ImageLoading not supported!");

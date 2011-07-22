@@ -71,7 +71,7 @@ class GEM_EXTERN pix_record : public GemBase
   //////////
   // Set the filename and filetype
   std::string m_filename;
-  virtual void	fileMess(int argc, t_atom *argv);
+  virtual void	fileMess(t_symbol*s,int argc, t_atom *argv);
  
   //////////
   // turn recording on/off
@@ -107,7 +107,7 @@ class GEM_EXTERN pix_record : public GemBase
   
   gem::Properties m_props;
   virtual void	enumPropertiesMess(void);
-  virtual void	setPropertiesMess(int argc, t_atom*argv);
+  virtual void	setPropertiesMess(t_symbol*,int argc, t_atom*argv);
   virtual void	clearPropertiesMess(void);	
   
  private:
@@ -119,23 +119,12 @@ class GEM_EXTERN pix_record : public GemBase
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
   //////////
   // static member functions
-  static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-  static void 	autoMessCallback(void *data, t_floatarg on);
-  static void 	bangMessCallback(void *data);
-  
-  static void 	recordMessCallback(void *data, t_floatarg on);
-  static void 	dialogMessCallback(void *data);
-  static void 	codeclistMessCallback(void *data);
+  void 	autoMess(bool on);
+  void 	bangMess();
   static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 
   static void 	minMessCallback(void *data, t_floatarg min);
   static void 	maxMessCallback(void *data, t_floatarg max);
-
-
-
-  static void enumPropertiesMessCallback(void *data);
-  static void setPropertiesMessCallback(void *data, t_symbol*,int, t_atom*);
-  static void clearPropertiesMessCallback(void *data);
 
   class PIMPL;
   PIMPL*m_pimpl;

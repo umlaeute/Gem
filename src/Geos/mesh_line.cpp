@@ -73,7 +73,7 @@ void mesh_line :: setGrid( int valueX)
 /////////////////////////////////////////////////////////
 void mesh_line :: renderShape(GemState *state)
 {
-	int i,j;
+	int i;
     GLfloat sizeX = 2. / (gridX-1.);
 
    if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;

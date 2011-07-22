@@ -60,7 +60,7 @@ scopeXYZ :: ~scopeXYZ()
   if(m_vertices)delete[]m_vertices;
 }
 
-void scopeXYZ :: doLengthMess(int L) {
+void scopeXYZ :: doLengthMess(unsigned int L) {
   // this resizes to m_requestedLength if this is set, or to L otherwise
   // actually, resizing is done to the double-size!
 
@@ -95,7 +95,6 @@ void scopeXYZ :: doLengthMess(int L) {
 
 void scopeXYZ :: lengthMess(int l)
 {
-  int i;
   if(l<=0){
     m_requestedLength=0;
     return;
@@ -289,7 +288,7 @@ void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
   dsp_add(perform, 5, data, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[1]->s_n);
 }
 
-void scopeXYZ :: perform(t_int count, t_sample*X, t_sample*Y, t_sample*Z)
+void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
 {
   int position=m_position;
 

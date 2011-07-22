@@ -192,10 +192,9 @@ static inline unsigned int getIndex(unsigned int current, int index, unsigned in
 /////////////////////////////////////////////////////////
 void pix_tIIRf :: processImage(imageStruct &image)
 {
-  t_float f;
-  int i, j;
+  int j;
   size_t imagesize = imgSize(&image);
-  unsigned char *dest, *source;
+  unsigned char *dest;
 
   if(!imgCompare(image, m_image)) {
     // LATER only reallocate if really needed

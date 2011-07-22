@@ -387,7 +387,6 @@ void TextBase :: textMess(int argc, t_atom *argv)
   for (i = 0; i < argc; ++i)
     {
       string newtext;
-      unsigned int j;
       if (A_FLOAT == argv[i].a_type) {
         char str[MAXPDSTRING];
         char*sp=str;
@@ -403,6 +402,7 @@ void TextBase :: textMess(int argc, t_atom *argv)
           std::wstring ws=toWstring(sp);
           line+=ws;
         } catch (int i) {
+            i=0;
           while(*sp) {
             unsigned char c=*sp++;
             line+=c;

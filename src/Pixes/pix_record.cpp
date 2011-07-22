@@ -329,7 +329,7 @@ void pix_record :: enumPropertiesMess()
     }
   }
 }
-void pix_record :: setPropertiesMess(int argc, t_atom*argv)
+void pix_record :: setPropertiesMess(t_symbol*s, int argc, t_atom*argv)
 {
   PIMPL::addProperties(m_props, argc, argv);
 }
@@ -436,7 +436,7 @@ void pix_record :: codecMess(t_atom *argv)
   } else if(A_FLOAT==argv->a_type){
     /* maintain a list of all codecs and resolve using that */
     int id=atom_getint(argv);
-    if((id>=0) && (id<m_pimpl->m_codecs.size())) {
+    if((id>=0) && (static_cast<unsigned int>(id)<m_pimpl->m_codecs.size())) {
       sid=m_pimpl->m_codecs[id];
     }
   }
@@ -471,7 +471,7 @@ void pix_record :: codecMess(t_atom *argv)
     enumPropertiesMess();
 }
 
-void pix_record :: fileMess(int argc, t_atom *argv)
+void pix_record :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
   /* LATER let the record()-handles chose whether they accept an open request
    * and then try other handles (if available)
@@ -488,71 +488,33 @@ void pix_record :: fileMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_record :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::fileMessCallback),
-		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::autoMessCallback),
-		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_record::bangMessCallback));
+  CPPEXTERN_MSG (classPtr, "file", fileMess);
 
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "record", recordMess, bool);
-
   CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
   CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codecMessCallback),
 		  gensym("codec"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
-  class_addmethod(classPtr, 
-		  reinterpret_cast<t_method>(&pix_record::setPropertiesMessCallback),
-		  gensym("set"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG (classPtr, "set", fileMess);
+
   CPPEXTERN_MSG0(classPtr, "clearprops", clearPropertiesMess);
 }
 
-void pix_record :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_record :: bangMess(void)
 {
-  GetMyClass(data)->fileMess(argc, argv);
+  m_banged=true;
 }
-void pix_record :: autoMessCallback(void *data, t_floatarg on)
+void pix_record :: autoMess(bool on)
 {
-  bool onb=static_cast<bool>(on);
-  GetMyClass(data)->m_automatic=onb;
-}
-void pix_record :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->m_banged=true;
-}
-
-void pix_record :: recordMessCallback(void *data, t_floatarg on)
-{
-  GetMyClass(data)->recordMess(!(!static_cast<int>(on)));
-}
-
-void pix_record :: dialogMessCallback(void *data)
-{
-  GetMyClass(data)->dialogMess();
-}
-
-void pix_record :: codeclistMessCallback(void *data)
-{
-  GetMyClass(data)->getCodecList();
+  m_automatic=on;
 }
 
 void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc)
     GetMyClass(data)->codecMess(argv);
-}
-
-
-void pix_record :: enumPropertiesMessCallback(void *data)
-{
-  GetMyClass(data)->enumPropertiesMess();
-}
-void pix_record :: setPropertiesMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
-{
-  GetMyClass(data)->setPropertiesMess(argc, argv);
-}
-void pix_record :: clearPropertiesMessCallback(void *data)
-{
-  GetMyClass(data)->clearPropertiesMess();
 }

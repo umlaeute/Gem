@@ -75,7 +75,7 @@ class GEM_EXTERN pix_video : public GemBase
   // returns true, if a new backend could be found
   virtual bool restart(void);
   
-  virtual void	deviceMess(t_symbol*dev);
+  virtual void	deviceMess(std::string);
   virtual void	deviceMess(int dev);
 
   virtual void	closeMess(void);
@@ -83,7 +83,7 @@ class GEM_EXTERN pix_video : public GemBase
 
   // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
   virtual void	driverMess(int dev);
-  virtual void	driverMess(t_symbol*s);
+  virtual void	driverMess(std::string);
   virtual void	driverMess(void);
 
   // List the available devices
@@ -105,7 +105,7 @@ class GEM_EXTERN pix_video : public GemBase
   // Set the channel of the capturing device 
   virtual void	channelMess(int channel, t_float freq=0);
   // Set the channel of the capturing device 
-  virtual void	normMess(t_symbol *s);
+  virtual void	normMess(std::string);
   // Set the color-space
 
   // Set the quality for DV decoding
