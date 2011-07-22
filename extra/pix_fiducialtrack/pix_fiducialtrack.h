@@ -43,7 +43,7 @@ DESCRIPTION
     "ft1" - Set all fiducialtracks to one value
    
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_fiducialtrack : public GemPixObj
+class GEM_EXPORT pix_fiducialtrack : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_fiducialtrack, GemPixObj);
 
