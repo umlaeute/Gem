@@ -171,9 +171,6 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
     error("recordQT:  no filename passed");
     return;
   }
-#ifdef __APPLE__
-  UInt8*filename8=reinterpret_cast<UInt8*>(m_filename);
-#endif
 
   if (!m_compressImage) {
     error("recordQT:  no image to record");
@@ -181,6 +178,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   }
 #ifdef __APPLE__
   else {
+    UInt8*filename8=reinterpret_cast<UInt8*>(m_filename);
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     if (err == fnfErr) {
       // if the file does not yet exist, then let's create the file
