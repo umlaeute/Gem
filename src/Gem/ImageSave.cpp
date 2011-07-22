@@ -161,7 +161,7 @@ namespace gem {
       std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::imagesaver>::getIDs();
       if(available_ids.size()>0) {
         startpost("Image saving support:");
-        int i;
+        unsigned int i;
         for(i=0; i<available_ids.size(); i++) {
           startpost(" %s", available_ids[i].c_str());
         }
@@ -174,7 +174,6 @@ namespace gem {
     }
     bool addSaver( std::vector<std::string>available, std::string ID=std::string(""))
     {
-      int i=0;
       int count=0;
 
       std::vector<std::string>id;
@@ -192,6 +191,7 @@ namespace gem {
         id=available;
       }
 
+      unsigned int i=0;
       for(i=0; i<id.size(); i++) {
         std::string key=id[i];
         verbose(2, "trying to add '%s' as backend", key.c_str());
@@ -211,7 +211,7 @@ namespace gem {
 
   public:
     virtual ~PixImageSaver(void) {
-      int i;
+      unsigned int i;
       for(i=0; i<m_savers.size(); i++) {
         delete m_savers[i];
         m_savers[i]=NULL;
@@ -221,7 +221,7 @@ namespace gem {
     virtual bool save(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
       std::multimap<float, int>priorities;
       std::multimap<float,int>::reverse_iterator rit;
-      int i;
+      unsigned int i;
 
       for(i=0; i<m_savers.size(); i++) {
         float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);

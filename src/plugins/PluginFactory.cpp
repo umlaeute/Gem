@@ -46,14 +46,14 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
   std::cerr << "pattern : " << pattern << std::endl;
 
   std::vector<std::string>files=gem::files::getFilenameListing(pattern);
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<files.size(); i++) {
     GemDylib*dll=NULL;
     const std::string f=files[i];
     // check whether this file has already been loaded
     // LATER make checks more sophisticated (like checking file-handles)
     bool alreadyloaded=false;
-    int j;
+    unsigned int j;
     for(j=0; j<m_pimpl->p_loaded.size(); j++)
       if(f == m_pimpl->p_loaded[j]) {
 	alreadyloaded=true;

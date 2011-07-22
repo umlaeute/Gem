@@ -418,7 +418,7 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
     error("negative parameterIDs not allowed");
     return;
   }
-  if(key>=m_plugin->m_parameterNames.size()) {
+  if(static_cast<unsigned int>(key)>=m_plugin->m_parameterNames.size()) {
     error("parameterID out of bounds");
     return;
   }

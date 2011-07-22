@@ -83,7 +83,7 @@ void scopeXYZ :: doLengthMess(int L) {
     m_vertices = new t_sample[3* length*2];
     //post("m_vertices: %d*3*2 samples at %x", length, m_vertices);
 
-    int i;
+    unsigned int i;
     for (i = 0; i < 3*length*2; i++)  {
       m_vertices[i]=0.0f;
     }
