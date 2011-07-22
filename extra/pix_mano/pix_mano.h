@@ -29,7 +29,7 @@
 
 #include "Base/GemPixObj.h"
 
-class GEM_EXTERN pix_mano : public GemPixObj
+class GEM_EXPORT pix_mano : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_mano, GemPixObj)
 
