@@ -44,17 +44,18 @@ namespace gem { namespace plugins {
 #ifdef HAVE_DIRECTSHOW
     ////////
     // open the video-device
-    virtual bool           openDevice(void);
+    virtual bool           openDevice(gem::Properties&props);
+    // and close the video-device
     virtual void          closeDevice(void);
     
     //////////
     // Start up the video device
     // [out] int - returns 0 if bad
-    bool	    	startTransfer(void);
+    virtual bool	    	startTransfer(void);
     //////////
     // Stop the video device
     // [out] int - returns 0 if bad
-    bool	   	stopTransfer(void);
+    virtual bool	   	stopTransfer(void);
 
     //////////
     // get the next frame

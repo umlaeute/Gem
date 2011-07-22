@@ -305,7 +305,7 @@ bool videoHALCON :: openDevice(gem::Properties&props)
   if(m_grabber)closeDevice();
 
   double d=0;
-  int w=0, h=0;
+  int w=0, h=0, p=0;
 
   if(props.get("width", d))
     w=d;

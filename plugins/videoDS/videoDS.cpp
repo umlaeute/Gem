@@ -60,7 +60,7 @@ void RemoveGraphFromRot(DWORD pdwRegister);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoDS :: videoDS()
+videoDS :: videoDS(void)
   : video("directshow", 0),
 m_readIdx (0), m_lastreadIdx (0),
 m_writeIdx(0), m_lastwriteIdx(0),
@@ -145,7 +145,7 @@ videoDS :: ~videoDS()
 // open message
 //
 /////////////////////////////////////////////////////////
-bool videoDS :: openDevice()
+bool videoDS :: openDevice(gem::Properties&props)
 {
     HRESULT			hr;
     AM_MEDIA_TYPE	MediaType;

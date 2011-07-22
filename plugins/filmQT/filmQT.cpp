@@ -132,12 +132,14 @@ bool filmQT :: open(const std::string filename, int format) {
   Str255	pstrFilename;
   CopyCStringToPascal(filename.c_str(), pstrFilename);           // Convert to Pascal string
 
-  err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record  
+  err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
+#ifdef __APPLE__
   if (err != noErr) {  
     FSRef		ref;
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
   }
+#endif
   
   if (err != noErr) {
     error("filmQT: Unable to find file: %s (%d)", filename.c_str(), err);

@@ -50,7 +50,7 @@ class GEM_EXPORT filmAVI : public gem::plugins::film {
 #ifdef _WIN32
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, void);
+  virtual bool open(const std::string filename, int);
   //////////
   // close the movie file
   virtual void close(void);

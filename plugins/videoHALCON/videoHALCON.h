@@ -23,6 +23,8 @@
 
 #include "plugins/video.h"
 
+#include <map>
+
 #if defined HAVE_LIBHALCON
 # define HAVE_HALCON
 #endif
