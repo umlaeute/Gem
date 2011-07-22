@@ -25,7 +25,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)..\..\..\..\GemLibs\ARToolKit\include&quot;"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)..\..\..\GemLibs\ARToolKit\include&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__;HAVE_AR_AR_H;HAVE_LIBAR"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -48,7 +48,7 @@
 				OutputFile="pix_artoolkit.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)..\..\..\..\GemLibs\ARToolKit\lib&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)..\..\..\GemLibs\ARToolKit\lib&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				SubSystem="2"/>
 			<Tool
@@ -80,72 +80,6 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory=".\."
-			IntermediateDirectory=".\Objects"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="0">
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\tiff\libtiff;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\;&quot;$(ProgramFiles)\QuickTime SDK\CIncludes&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;_DEBUG;DEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL"
-				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Objects/gem.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
-				CompileAs="0"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib libjpeg.lib libtiff.lib FTGL_static_mtD.lib freetype214mt_D.lib QTMLClient.lib vfw32.lib strmiids.lib strmbasD.lib ddraw.lib atlsD.lib winmm.lib libcpmtD.lib msvcrtD.lib msvcprtD.lib"
-				OutputFile="Gem.dll"
-				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\tiff;..\..\..\GemLibs\Jpeg;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Debug&quot;"
-				IgnoreAllDefaultLibraries="TRUE"
-				IgnoreDefaultLibraryNames=""
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\./gem.pdb"
-				SubSystem="2"
-				ImportLibrary=".\./gem.lib"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\./gem.tlb"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-		</Configuration>
-		<Configuration
 			Name="ReleaseDummy|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
@@ -158,7 +92,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..;&quot;..\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)..\..\..\GemLibs\ARToolKit\include&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
