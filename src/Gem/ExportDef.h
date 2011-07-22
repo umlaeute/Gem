@@ -17,20 +17,25 @@ LOG
 
 #if defined _MSC_VER
 /* turn of some warnings on vc-compilers */
+
+/* data conversion with possible loss of data */
 # pragma warning( disable : 4244 )
+/* identifier conversion with possible loss of data */
 # pragma warning( disable : 4305 )
+/* declspec without variable declaration */
 # pragma warning( disable : 4091 )
-// M$DN classes exporting STL members...
+/* M$DN classes exporting STL members... */
 # pragma warning( disable : 4251 )
-// "switch" without "case" (just "default")
+/* "switch" without "case" (just "default") */
 # pragma warning( disable : 4065 )
+/* Exception Specifications! */
+# pragma warning (disable : 4290)
 
 // Windows requires explicit import and exporting of functions and classes.
 // While this is a pain to do sometimes, in large software development
 //      projects, it is very usefull.
 # define GEM_EXPORT __declspec(dllexport)
 # define GEM_IMPORT __declspec(dllimport)
-
 
 # define GEM_DEPRECATED __declspec(deprecated)
 
