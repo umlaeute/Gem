@@ -72,7 +72,8 @@ void pix_drum :: processGrayImage(imageStruct &image)
     unsigned char *base = image.data;
 	int x2, y2, xcoord, ycoord, xcount, ycount;
 	int i, j, n, totalyes, totalyesx, totalyesy, xval, yval;
-	int yesx[image.xsize], yesy[image.ysize];
+    int *yesx=new int[image.xsize];
+    int *yesy=new int[image.ysize];
 	float c2f, L_area, R_area;
 	int hor, ver, L_peakx, L_peaky, R_peakx, R_peaky;
 	t_atom ap[4];
@@ -122,7 +123,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 		ver = yesx[hor];
 // find secondary peaks
 		int spL_x[100], spL_y[100], spR_x[100], spR_y[100];
-		float px[right];
+		float *px=new float[right];
 		int spL, spR;
 		
 		for (i = left; i < hor; i++) L_area += yesx[i]; 
@@ -163,7 +164,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 				if (p > min_width) {
 					spL_x[spL] = temp_highest_int;
 					spL_y[spL] = yesx[temp_highest_int];
-					dist_ctr = (int) fabs(spL_x[spL] - hor);
+					dist_ctr = abs(spL_x[spL] - hor);
 					if (dist_ctr > pix_dist_ctr) {
 						spL++;
 					}
@@ -221,7 +222,8 @@ void pix_drum :: processGrayImage(imageStruct &image)
 			SETFLOAT(&at[2], spR_y[i]);
 			outlet_list(outlet3, 0, 3, at);
 		} */
-	}
+      delete[]px;
+    }
 
 /*	
 // thresh the image and make histograms
@@ -433,7 +435,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 // MODE 2
 // #####################################################
 	else if (mode == 2) {
-		int yesx_s[ysize];
+		int*yesx_s = new int[ysize];
 // check bounds are within limits
 		if (left	< 0)		left	= 0;
 		if (right	> xsize)	right	= xsize;
@@ -473,7 +475,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 		ver = yesx[hor];
 // find secondary peaks
 		int spL_x[100], spL_y[100], spR_x[100], spR_y[100];
-		float px[right];
+		float *px=new float[right];
 		int spL, spR;
 		
 		for (i = left; i < hor; i++) L_area += yesx[i]; 
@@ -514,7 +516,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 				if (p > min_width) {
 					spL_x[spL] = temp_highest_int;
 					spL_y[spL] = yesx[temp_highest_int];
-					dist_ctr = (int) fabs(spL_x[spL] - hor);
+					dist_ctr = abs(spL_x[spL] - hor);
 					if (dist_ctr > pix_dist_ctr) {
 						spL++;
 					}
@@ -572,12 +574,15 @@ void pix_drum :: processGrayImage(imageStruct &image)
 			SETFLOAT(&at[2], spR_y[i]);
 			outlet_list(outlet3, 0, 3, at);
 		} */
+        delete[]yesx_s;
+        delete[]px;
 	}
+    delete[]yesx; delete[]yesy;
 }
 /////////////////////////////////////////////////////////
 // vecBoundsMess
 /////////////////////////////////////////////////////////
-void pix_drum :: vecBoundsMess(int argc, t_atom *argv)
+void pix_drum :: vecBoundsMess(t_symbol*s,int argc, t_atom *argv)
 {
 
 	bottom	= (int)atom_getfloat(&argv[0]);
@@ -591,7 +596,7 @@ void pix_drum :: vecBoundsMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 // floatThreshMess
 /////////////////////////////////////////////////////////
-void pix_drum :: vecThreshMess(int argc, t_atom *argv)
+void pix_drum :: vecThreshMess(t_symbol*s,int argc, t_atom *argv)
 {
     mode			= (int)		atom_getfloat(&argv[0]);
 	thresh			= (float)	atom_getfloat(&argv[1]);
@@ -608,12 +613,6 @@ void pix_drum :: vecThreshMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_drum :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, (t_method)&pix_drum::vecBoundsMessCallback,
-    	    gensym("vec_thresh"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, (t_method)&pix_drum::vecThreshMessCallback,
-    	    gensym("vec_params"), A_GIMME, A_NULL);
+    CPPEXTERN_MSG(classPtr, "vec_thresh", vecBoundsMess);
+    CPPEXTERN_MSG(classPtr, "vec_params", vecThreshMess);
 }
-void pix_drum :: vecBoundsMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{	GetMyClass(data)->vecBoundsMess(argc, argv);		}
-void pix_drum :: vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{	GetMyClass(data)->vecThreshMess(argc, argv);	}

@@ -37,7 +37,7 @@ DESCRIPTION
     "ft1" - Set all thresholds to one value
    
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_drum : public GemPixObj
+class GEM_EXPORT pix_drum : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_drum, GemPixObj)
 
@@ -62,8 +62,8 @@ class GEM_EXTERN pix_drum : public GemPixObj
     	virtual void 	processYUVAltivec(imageStruct &image);
 #endif  
 
-    	void	    	vecBoundsMess(int argc, t_atom *argv);
-    	void	    	vecThreshMess(int argc, t_atom *argv);
+    	void	    	vecBoundsMess(t_symbol*,int argc, t_atom *argv);
+    	void	    	vecThreshMess(t_symbol*,int argc, t_atom *argv);
     	
 		t_outlet *outlet1;
 		t_outlet *outlet2;
@@ -77,10 +77,6 @@ class GEM_EXTERN pix_drum : public GemPixObj
     
     private:
     
-    	//////////
-    	// Static member functions
-    	static void 	vecBoundsMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 
 #endif	// for header file
