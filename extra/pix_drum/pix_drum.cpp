@@ -54,14 +54,6 @@ pix_drum :: pix_drum()
 /////////////////////////////////////////////////////////
 pix_drum :: ~pix_drum()
 { }
-void pix_drum :: processRGBAImage(imageStruct &image)
-{   post("no method for RGBA, only grey");}
-void pix_drum :: processYUVImage(imageStruct &image)
-{    post("no method for YUV, only grey");}
-#ifdef __VEC__
-void pix_drum :: processYUVAltivec(imageStruct &image)
-{    post("no method for YUV, only grey"); }
-#endif //Altivec	  
 /////////////////////////////////////////////////////////
 // PROCESS IMAGE
 /////////////////////////////////////////////////////////

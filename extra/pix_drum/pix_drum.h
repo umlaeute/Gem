@@ -52,15 +52,7 @@ class GEM_EXPORT pix_drum : public GemPixObj
     	//////////
     	// Destructor
     	virtual ~pix_drum();
-    	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
-		
-#ifdef __VEC__
-
-    	// Do the processing
-    	virtual void 	processYUVAltivec(imageStruct &image);
-#endif  
 
     	void	    	vecBoundsMess(t_symbol*,int argc, t_atom *argv);
     	void	    	vecThreshMess(t_symbol*,int argc, t_atom *argv);
