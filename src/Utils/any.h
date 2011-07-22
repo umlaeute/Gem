@@ -17,6 +17,11 @@
 
 #include "Gem/ExportDef.h"
 
+#ifdef _MSC_VER
+# pragma warning( push )
+# pragma warning( disable: 4275 )
+#endif
+
 #include <stdexcept>
 #include <typeinfo>
 #include <algorithm>
@@ -290,5 +295,9 @@ namespace gem
     return *any_cast<T>(const_cast<any*>(&this_));
   }
 }
+
+#ifdef _MSC_VER
+# pragma warning( pop )
+#endif
 
 #endif // GEM_ANY_HPP
