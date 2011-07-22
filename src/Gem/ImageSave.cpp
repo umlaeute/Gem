@@ -146,8 +146,8 @@ namespace gem {
       if(s_extension2mime->end() != it) {
         return it->second;
       }
-      return empty;
     }
+    return empty;
   }
 
   class PixImageSaver : public gem::plugins::imagesaver {
