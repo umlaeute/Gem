@@ -3,7 +3,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gem", "gem.vcproj", "{E6CFD
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_artoolkit", "..\..\src\extra\pix_artoolkit\pix_artoolkit.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_artoolkit", "..\..\extra\pix_artoolkit\pix_artoolkit.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
@@ -24,37 +24,37 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "installer", "installer.vcpr
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmAVI", "..\..\src\plugins\filmAVI\filmAVI.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmAVI", "..\..\plugins\filmAVI\filmAVI.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\src\plugins\filmDS\filmDS.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDS\filmDS.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmQT", "..\..\src\plugins\filmQT\filmQT.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmQT", "..\..\plugins\filmQT\filmQT.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recordQT", "..\..\src\plugins\recordQT\recordQT.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recordQT", "..\..\plugins\recordQT\recordQT.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoDS", "..\..\src\plugins\videoDS\videoDS.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoDS", "..\..\plugins\videoDS\videoDS.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoVFW", "..\..\src\plugins\videoVFW\videoVFW.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoVFW", "..\..\plugins\videoVFW\videoVFW.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoHALCON", "..\..\src\plugins\videoHALCON\videoHALCON.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoHALCON", "..\..\plugins\videoHALCON\videoHALCON.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
