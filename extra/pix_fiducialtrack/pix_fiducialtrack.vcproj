@@ -150,6 +150,28 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="libfidtrack"
+			Filter="">
+			<File
+				RelativePath=".\libfidtrack_fidtrackX.cpp">
+			</File>
+			<File
+				RelativePath=".\libfidtrack_fidtrackX.h">
+			</File>
+			<File
+				RelativePath=".\libfidtrack_segment.cpp">
+			</File>
+			<File
+				RelativePath=".\libfidtrack_segment.h">
+			</File>
+			<File
+				RelativePath=".\libfidtrack_treeidmap.cpp">
+			</File>
+			<File
+				RelativePath=".\libfidtrack_treeidmap.h">
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\pix_fiducialtrack.cpp">
 		</File>
