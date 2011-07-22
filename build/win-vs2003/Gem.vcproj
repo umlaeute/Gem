@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="gem"
-	RootNamespace="gem"
+	Name="Gem"
+	RootNamespace="Gem"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -49,7 +49,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\./gem.tlb"/>
+				TypeLibraryName=".\./Gem.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -107,7 +107,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\./gem.tlb"/>
+				TypeLibraryName=".\./Gem.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
