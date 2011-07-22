@@ -13,7 +13,17 @@
 #ifndef INCLUDE_GEM_RTE_H_
 #define INCLUDE_GEM_RTE_H_
 
+#if defined _MSC_VER
+/* data conversion with possible loss of data */
+# pragma warning( push )
+# pragma warning( disable : 4091 )
+#endif
+
 #include "m_pd.h"
+
+#ifdef _MSC_VER
+# pragma warning( pop )
+#endif
 
 
 #endif /* INCLUDE_GEM_RTE_H_ */
