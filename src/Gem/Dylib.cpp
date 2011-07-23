@@ -43,14 +43,26 @@
 
 class GemDylibHandle {
 public:
+  int dummy1;
 #ifdef DL_OPEN
-  void *
-#elif defined _WIN32
-  HINSTANCE 
+  void * dlhandle;
 #endif
-    handle;
+#ifdef _WIN32
+  HINSTANCE w32handle;
+#endif
+  int dummy2;
+ 
 
-  GemDylibHandle(void) : handle(NULL) {;}
+  GemDylibHandle(void) : 
+    dummy1(0),
+#ifdef DL_OPEN
+    dlhandle(NULL),
+#endif
+#ifdef _WIN32
+    w32handle(NULL),
+#endif
+    dummy2(0)
+  {;}
 };
 
 
@@ -87,24 +99,34 @@ GemDylib::GemDylib(const std::string filename, const std::string extension) thro
 
 GemDylib::~GemDylib(void) {
 #ifdef DL_OPEN
-  dlclose(m_handle->handle);
-#elif defined _WIN32
-  FreeLibrary(m_handle->handle);
+  if(m_handle->dlhandle)
+    dlclose(m_handle->dlhandle);
+  m_handle->dlhandle=NULL;
 #endif
-  m_handle->handle=NULL;
+#ifdef _WIN32
+  if(m_handle->w32handle)
+    FreeLibrary(m_handle->handle);
+  m_handle->w32handle=NULL;
+#endif
   delete m_handle;
 }
 
-void *GemDylib::proc(const std::string procname) {
+GemDylib::dylib_function_t*GemDylib::proc(const std::string procname) {
+  dylib_function_t*result=NULL;
   //  if(NULL==procname)return NULL;
 #ifdef DL_OPEN
   dlerror();
-  return dlsym(m_handle->handle, procname.c_str());
-#elif defined _WIN32
-  return reinterpret_cast<void*>(GetProcAddress(m_handle->handle, procname.c_str()));
+  if(m_handle->dlhandle)
+    result=reinterpret_cast<dylib_function_t*>(dlsym(m_handle->dlhandle, procname.c_str()));
+  if(NULL!=result)return result;
+#endif
+#ifdef _WIN32
+  if(m_handle->w32handle)
+    result=reinterpret_cast<dylib_function_t*>(GetProcAddress(m_handle->w32handle, procname.c_str()));
+  if(NULL!=result)return result;
 #endif
 
-  return NULL;
+  return result;
 }
 
 typedef void (*t_method)(void);
@@ -119,10 +141,10 @@ bool GemDylib::run(const std::string procname) {
 }
 
 static std::string defaultExtension = 
-#ifdef DL_OPEN
-  std::string(".so")
-#elif defined _WIN32
+#ifdef _WIN32
   std::string(".dll")
+#elif defined DL_OPEN
+  std::string(".so")
 #else
   std::string("")
 #endif
@@ -176,48 +198,63 @@ GemDylibHandle* GemDylib::open(const CPPExtern*obj, const std::string filename, 
   sys_bashfilename(fullname.c_str(), buf);
   
 #ifdef DL_OPEN
-  handle->handle=dlopen(fullname.c_str(), RTLD_NOW);
-#elif defined _WIN32
+  handle->dlhandle=dlopen(fullname.c_str(), RTLD_NOW);
+  if(handle->dlhandle)
+    return handle;
+#endif
+#ifdef _WIN32
   UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
-  handle->handle=LoadLibrary(buf);
+  handle->w32handle=LoadLibrary(buf);
   errorboxflags=SetErrorMode(errorboxflags);
+  if(handle->w32handle)
+    return handle;
 #endif
 
-  if(handle->handle) {
-    return handle;
-  } else {
-    delete handle;
-    handle=NULL;
+  delete handle;
+  handle=NULL;
+
+  std::string errormsg;
 #ifdef DL_OPEN
+  errormsg=dlerror();
+  if(!errormsg.empty()) {
     std::string error="dlerror '";
-    error+=dlerror();
+    error+=errormsg;
     error+="'";
     throw(GemException(error));
-#elif defined _WIN32
-    DWORD errorNumber = GetLastError();
-    LPVOID lpErrorMessage;
-    FormatMessage(
-                            FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-                            FORMAT_MESSAGE_FROM_SYSTEM,
-                            NULL,
-                            errorNumber,
-                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                            (LPTSTR) &lpErrorMessage,
-                            0, NULL );
-    std::cerr << "GemDylib: "<<errorNumber<<std::endl;
-    std::string error = "DLLerror: ";
-    error+=(unsigned int)errorNumber;
-    throw(GemException(error));
-#endif
   }
+#endif
+#ifdef _WIN32
+  DWORD errorNumber = GetLastError();
+  LPVOID lpErrorMessage;
+  FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+		FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL,
+		errorNumber,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(LPTSTR) &lpErrorMessage,
+		0, NULL );
+  std::cerr << "GemDylib: "<<errorNumber<<std::endl;
+  std::string error = "DLLerror: ";
+  error+=(unsigned int)errorNumber;
+  throw(GemException(error));
+#endif
   
-  delete handle;
   return 0;
 }
 
 
 bool GemDylib::LoadLib(const std::string basefilename, const std::string extension, const std::string procname) {
-  
+  try {
+    GemDylib*dylib=new GemDylib(basefilename, extension);
+    if(NULL!=dylib) {
+      dylib->run(procname);
+      return true;
+    }
+  } catch (GemException&x) {
+    std::cerr << "GemDylib::LoadLib: "<<x.what()<<std::endl;
+  }
+
   return false;
 }
 
