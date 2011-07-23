@@ -2,6 +2,9 @@ AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/src/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+EXTRA_DIST =
+EXTRA_DIST +=pix_mano.sln pix_mano.vcproj
+
 extradir=$(libdir)/pix_mano
 
 extra_LTLIBRARIES = pix_mano.la

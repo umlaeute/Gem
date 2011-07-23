@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+EXTRA_DIST = imageQT.sln imageQT.vcproj
+
 pkglib_LTLIBRARIES=
 if HAVE_FRAMEWORK_QUICKTIME
 pkglib_LTLIBRARIES+= gem_imageQT.la

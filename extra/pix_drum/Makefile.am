@@ -2,6 +2,9 @@ AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/src/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+EXTRA_DIST =
+EXTRA_DIST +=pix_drum.sln pix_drum.vcproj
+
 extradir=$(libdir)/pix_drum
 
 extra_LTLIBRARIES = pix_drum.la

@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+EXTRA_DIST = imageTIFF.sln imageTIFF.vcproj
+
 pkglib_LTLIBRARIES=
 if HAVE_LIB_TIFF
 pkglib_LTLIBRARIES+= gem_imageTIFF.la

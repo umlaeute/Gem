@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+EXTRA_DIST = imageMAGICK.sln imageMAGICK.vcproj
+
 pkglib_LTLIBRARIES=
 if HAVE_LIB_IMAGEMAGICK__
 pkglib_LTLIBRARIES+= gem_imageMAGICK.la

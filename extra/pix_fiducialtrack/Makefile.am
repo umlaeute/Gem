@@ -3,6 +3,9 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/src/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 include ../convenience-link-extra.mk
 
+EXTRA_DIST =
+EXTRA_DIST +=pix_fiducialtrack.sln pix_fiducialtrack.vcproj
+
 extradir=$(libdir)/pix_fiducialtrack
 
 extra_LTLIBRARIES = pix_fiducialtrack.la
