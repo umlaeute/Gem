@@ -2,6 +2,8 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
+EXTRA_DIST = imageSGI.sln imageSGI.vcproj
+
 pkglib_LTLIBRARIES= gem_imageSGI.la
 
 gem_imageSGI_la_CXXFLAGS =
