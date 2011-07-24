@@ -111,18 +111,18 @@ GemDylib::~GemDylib(void) {
   delete m_handle;
 }
 
-GemDylib::dylib_function_t*GemDylib::proc(const std::string procname) {
-  dylib_function_t*result=NULL;
+GemDylib::function_t*GemDylib::proc(const std::string procname) {
+  function_t*result=NULL;
   //  if(NULL==procname)return NULL;
 #ifdef DL_OPEN
   dlerror();
   if(m_handle->dlhandle)
-    result=reinterpret_cast<dylib_function_t*>(dlsym(m_handle->dlhandle, procname.c_str()));
+    result=reinterpret_cast<function_t*>(dlsym(m_handle->dlhandle, procname.c_str()));
   if(NULL!=result)return result;
 #endif
 #ifdef _WIN32
   if(m_handle->w32handle)
-    result=reinterpret_cast<dylib_function_t*>(GetProcAddress(m_handle->w32handle, procname.c_str()));
+    result=reinterpret_cast<function_t*>(GetProcAddress(m_handle->w32handle, procname.c_str()));
   if(NULL!=result)return result;
 #endif
 

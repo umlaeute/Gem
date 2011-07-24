@@ -35,7 +35,7 @@ class GEM_EXTERN GemDylib {
 	   ) throw(GemException);
   ~GemDylib(void);
 
-  typedef void (*dylib_function_t)(void);
+  typedef void (*function_t)(void);
 
 
   // if void<procname>(void) exists in dylib, run it and return "true"
@@ -43,7 +43,7 @@ class GEM_EXTERN GemDylib {
   bool run(const std::string procname);
 
   // if <procname> exists in dylib, return it, else return NULL
-  dylib_function_t*proc(const std::string procname);
+  function_t*proc(const std::string procname);
 
   public:
   /**
