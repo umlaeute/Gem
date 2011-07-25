@@ -16,14 +16,14 @@ LOG
 #include "Gem/GemGL.h"
 
 
-# ifdef __APPLE__
-#  define GemGlewXContext void
-# elif defined _WIN32
+# if defined _WIN32
 typedef struct WGLEWContextStruct WGLEWContext;
 #  define GemGlewXContext WGLEWContext
-# elif defined __linux__
+# elif defined __linux__ || defined HAVE_GL_GLX_H
 typedef struct GLXEWContextStruct GLXEWContext;
 #  define GemGlewXContext GLXEWContext
+# else
+#  define GemGlewXContext void
 # endif
 
 typedef struct GLEWContextStruct GLEWContext;
