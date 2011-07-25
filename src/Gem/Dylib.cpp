@@ -129,12 +129,10 @@ GemDylib::function_t*GemDylib::proc(const std::string procname) {
   return result;
 }
 
-typedef void (*t_method)(void);
-
 bool GemDylib::run(const std::string procname) {
-  t_method runproc=reinterpret_cast<t_method>(proc(procname));
+  function_t*runproc=proc(procname);
   if(runproc) {
-    runproc();
+    (*runproc)();
     return true;
   }
   return false;
