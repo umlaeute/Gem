@@ -28,6 +28,8 @@
 # include "Gem/Event.h"
 # include "Gem/GemGL.h"
 
+#include "Gem/RTE.h"
+
 GEM_EXTERN void gemAbortRendering();
 
 /////////////////////////////////////////////////////////

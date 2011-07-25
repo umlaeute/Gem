@@ -27,6 +27,8 @@
 #include "Gem/Manager.h"
 #include "Gem/Event.h"
 
+#include "Gem/RTE.h"
+
 #define PIXEL_SIZE	32		// 16 or 32
 #define DEPTH_SIZE	16
 

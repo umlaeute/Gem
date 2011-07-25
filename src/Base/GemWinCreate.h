@@ -38,8 +38,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # pragma warning( disable : 4091 )
 #endif
 
-#include "m_pd.h"
-
 #include <string.h>
 
 /*-----------------------------------------------------------------
