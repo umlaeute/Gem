@@ -55,8 +55,8 @@ AC_REQUIRE([AC_PATH_X])dnl
 AC_REQUIRE([AX_PTHREAD])dnl
 
 AC_LANG_PUSH([C])
-AX_LANG_COMPILER_MS
-AS_IF([test X$ax_compiler_ms = Xno],
+AX_COMPILER_VENDOR
+AS_IF([test X$ax_cv_c_compiler_vendor != Xmicrosoft],
       [GL_CFLAGS="${PTHREAD_CFLAGS}"; GL_LIBS="${PTHREAD_LIBS} -lm"])
 
 #
