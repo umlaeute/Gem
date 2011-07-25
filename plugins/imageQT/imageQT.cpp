@@ -29,6 +29,8 @@
 #endif
 
 #ifdef HAVE_QUICKTIME
+# include "Gem/RTE.h"
+# include "imageQT.h"
 
 # ifdef HAVE_CARBONQUICKTIME
 #  include <Carbon/Carbon.h>
@@ -43,8 +45,6 @@
 
 #endif
 
-# include "Gem/RTE.h"
-# include "imageQT.h"
 
 #include <map>
 
@@ -188,8 +188,8 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
     s_mime2type["image/jp2"]=kQTFileTypeJPEG2000;
   }
 
-  std::map<std::string, OSType>::iterator it = s_mimetype.find(mimetype);
-  if(s_mimetype.end() != it) {
+  std::map<std::string, OSType>::iterator it = s_mime2type.find(mimetype);
+  if(s_mime2type.end() != it) {
     filetype=it->second;
     return true;
   }
@@ -457,7 +457,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     if(d<0.)d=0.;
     else if(d>100.)d=100.;
 
-    CodecQ maxQ=codecLossLessQuality;
+    CodecQ maxQ=codecLosslessQuality;
     double maxQ_d=(double)maxQ;
     double quality_d=maxQ_d * d / 100.; // 0..maxQ
 
