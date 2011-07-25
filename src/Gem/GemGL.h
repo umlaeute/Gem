@@ -37,7 +37,7 @@
 # include <OpenGL/OpenGL.h>
 #elif defined _WIN32
 # include "Gem/wglew.h"
-#elif defined __linux__
+#elif defined __linux__ || defined HAVE_GL_GLX_H
 #  include "Gem/glxew.h"
 #endif /* OS */
 
