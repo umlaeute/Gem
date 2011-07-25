@@ -15,7 +15,8 @@
 //
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
-#ifdef __unix__
+#if defined __linux__ || defined HAVE_GL_GLX_H
+
 
 #include "Gem/Event.h"
 #include "Gem/Manager.h"

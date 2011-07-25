@@ -16,14 +16,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_GEMWINCREATE_H_
 #include "Gem/GemConfig.h"
 #include "Gem/GemGL.h"
-#ifdef __unix__
+
+#if defined _WIN32
+# include <windows.h>
+#elif defined __APPLE__
+# import <AGL/agl.h>
+#elif defined __linux__ || defined HAVE_GL_GLX_H
 # ifdef HAVE_LIBXXF86VM
 #  include <X11/extensions/xf86vmode.h>
 # endif
-#elif defined __APPLE__
-# import <AGL/agl.h>
-#elif defined _WIN32
-# include <windows.h>
 #else
 # error Define OS specific window creation
 #endif
@@ -58,33 +59,20 @@ class GEM_EXTERN WindowInfo
   // Constructor
   WindowInfo() :
     fs(0), 
-#ifdef __unix__
-    dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0), have_border(false)
-#elif defined _WIN32
+#if defined _WIN32
     win(NULL), dc(NULL), context(NULL)
 #elif defined __APPLE__
     pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
     pixMap(NULL), rowBytes(0), baseAddr(NULL)
+#elif defined __linux__ || defined HAVE_GL_GLX_H
+    dpy(NULL), win(0), cmap(0), context(NULL), delete_atom(0), have_border(false)
+#else
 #endif
     {}
   int         fs;                 // FullScreen
   int         have_constContext;  // 1 if we have a constant context
   
-#ifdef __unix__
-  Display     *dpy;               // X Display
-  Window      win;                // X Window
-  int         screen;             // X Screen
-  Colormap    cmap;               // X color map
-  GLXContext  context;            // OpenGL context
-  Atom        delete_atom;
-
-  bool        have_border;
-
-#ifdef HAVE_LIBXXF86VM
-  XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
-#endif
-
-#elif defined _WIN32
+#if defined _WIN32
 
   HWND        win;                // Window handle
   HDC         dc;                 // Device context handle
@@ -102,8 +90,24 @@ class GEM_EXTERN WindowInfo
     void 		*baseAddr;	// 
     short		fontList;	// Font
 
+#elif defined __linux__ || defined HAVE_GL_GLX_H
+
+  Display     *dpy;               // X Display
+  Window      win;                // X Window
+  int         screen;             // X Screen
+  Colormap    cmap;               // X color map
+  GLXContext  context;            // OpenGL context
+  Atom        delete_atom;
+
+  bool        have_border;
+
+# ifdef HAVE_LIBXXF86VM
+  XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
+# endif
+
+
 #else
-#error Define OS specific window data
+# error Define OS specific window data
 #endif
 };
 
@@ -172,12 +176,12 @@ class GEM_EXTERN WindowHints
 
   //////////
   // The GLXcontext to share rendering with
-#ifdef __unix__
-    GLXContext  shared;
-#elif defined _WIN32
+#if defined _WIN32
     HGLRC       shared;
 #elif defined __APPLE__
     AGLContext	shared;
+#elif defined __linux__ || defined HAVE_GL_GLX_H
+    GLXContext  shared;
 #else
 #error Define OS specific OpenGL context
 #endif
