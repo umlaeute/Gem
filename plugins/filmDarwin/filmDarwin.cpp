@@ -35,8 +35,15 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 
 filmDarwin :: filmDarwin(void) : film(false),
 #ifdef HAVE_CARBONQUICKTIME
+                                 m_movie(NULL),
+                                 m_srcGWorld(NULL),
+                                 m_movieTime(0),
+                                 m_movieTrack(0),
+                                 m_movieMedia(0),
+                                 m_timeScale(0),
+                                 duration(0),
 #endif
-				 durationf(0.)
+                                 durationf(0.)
 {
 }
 
