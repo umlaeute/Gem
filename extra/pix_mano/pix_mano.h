@@ -76,8 +76,8 @@ class GEM_EXPORT pix_mano : public GemPixObj
   float tp_i[50], tp_x[50], tp_y[50], tp_m[50], tp_a[50], tp_s[50];
     
  private:
-  class tipData;
-  tipData*m_tipData;
+  class PIMPL;
+  PIMPL*m_pimpl;
 };
 
 #endif	// for header file
