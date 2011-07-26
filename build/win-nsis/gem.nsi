@@ -82,42 +82,82 @@ SectionGroup "Gem" SEC_Gem
   File "..\..\abstractions\*.pd"
  SectionEnd
 
- SectionGroup "plugins"
-  Section "DirectShow movies" SEC_filmDS
+SectionGroup "plugins"
+
+Section "DirectShow movies" SEC_plugin_filmDS
    SetOverwrite ifnewer
-#   SectionIn RO
    SetOutPath "$INSTDIR"
    File "..\win-vs2003\gem_filmDS.dll"
-  SectionEnd
-  Section "QuickTime movies" SEC_filmQT
+SectionEnd
+Section "QuickTime movies" SEC_plugin_filmQT
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR"
    File "..\win-vs2003\gem_filmQT.dll"
-  SectionEnd
-  Section /o "AVI movies" SEC_filmAVI
+SectionEnd
+Section /o "AVI movies" SEC_plugin_filmAVI
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR"
    File "..\win-vs2003\gem_filmAVI.dll"
-  SectionEnd
+SectionEnd
 
-  Section "DirectShow capturing" SEC_videoDS
+Section "ImageMagick images" SEC_plugin_imageMAGICK
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_videoDS.dll"
-  SectionEnd
-  Section /o "VFW capturing" SEC_videoVFW
+   File "..\win-vs2003\gem_imageMAGICK.dll"
+SectionEnd
+Section "QuickTime images" SEC_plugin_imageQT
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_filmAVI.dll"
-  SectionEnd
+   File "..\win-vs2003\gem_imageQT.dll"
+SectionEnd
+Section /o "SGI images" SEC_plugin_imageSGI
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_imageSGI.dll"
+SectionEnd
+Section /o "JPEG images" SEC_plugin_imageJPEG
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_imageJPEG.dll"
+SectionEnd
+Section /o "TIFF images" SEC_plugin_imageTIFF
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_imageTIFF.dll"
+SectionEnd
 
-  Section "QuickTime recording" SEC_recordQT
+Section "QuickTime recording" SEC_plugin_recordQT
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR"
    File "..\win-vs2003\gem_recordQT.dll"
-  SectionEnd
- SectionGroupEnd
- 
+SectionEnd
+
+Section "DirectShow capturing" SEC_plugin_videoDS
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_videoDS.dll"
+SectionEnd
+Section /o "VFW capturing" SEC_plugin_videoVFW
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_videoVFW.dll"
+SectionEnd
+Section /o "Allied Vision Technologies capturing" SEC_plugin_videoAVT
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_videoAVT.dll"
+SectionEnd
+Section /o "MVTec/HALCON capturing" SEC_plugin_videoHALCON
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_videoHALCON.dll"
+SectionEnd
+Section /o "Basler/PYLON capturing" SEC_plugin_videoPYLON
+   SetOverwrite ifnewer
+   SetOutPath "$INSTDIR"
+   File "..\win-vs2003\gem_videoPYLON.dll"
+SectionEnd
+
 SectionGroupEnd
 
 SectionGroup "Documentation" SEC_documentation
@@ -176,6 +216,20 @@ Section Uninstall
   Delete "$INSTDIR\*.pd"
   Delete "$INSTDIR\Gem.dll"
 
+  Delete "$INSTDIR\filmAVI.dll"
+  Delete "$INSTDIR\filmDS.dll"
+  Delete "$INSTDIR\filmQT.dll"
+  Delete "$INSTDIR\imageJPEG.dll"
+  Delete "$INSTDIR\imageMAGICK.dll"
+  Delete "$INSTDIR\imageQT.dll"
+  Delete "$INSTDIR\imageSGI.dll"
+  Delete "$INSTDIR\imageTIFF.dll"
+  Delete "$INSTDIR\recordQT.dll"
+  Delete "$INSTDIR\videoAVT.dll"
+  Delete "$INSTDIR\videoDS.dll"
+  Delete "$INSTDIR\videoHALCON.dll"
+  Delete "$INSTDIR\videoPYLON.dll"
+  Delete "$INSTDIR\videoVFW.dll"
 
   Delete "$INSTDIR\doc\manual\*.*"
   RMDir "$INSTDIR\doc\manual"
@@ -244,11 +298,32 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_doc} "Gem primer,..."
 
 #plugins
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_filmDS} "allows to read movies using DirectShow filters"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_filmQT} "allows to read movies using Apple's QuickTime library (if present)"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_videoDS} "allows to capture live video sources using DirectShow filters"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_recordQT} "allows to output Gem-pixes into QuickTime MOVie files"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmDS} "allows to read movies using DirectShow filters"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmQT} "allows to read movies using Apple's QuickTime library (if present)"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
+
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_recordQT} "allows to output Gem-pixes into QuickTime MOVie files"
+
+
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmDS} "allows to read movies using DirectShow filters"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmQT} "allows to read movies using Apple's QuickTime library (you will have to download and install QuickTime for Windows yourself in order to use this)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
+
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageMAGICK} "allows to read/write still images using ImageMagick (this can virtually read/write any image format, including but not limited to JPEG, TIFF and SGI, so it's probably the only 'image' plugin you need)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime (you will have to download and install QuickTime for Windows yourself in order to use this)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageSGI} "allows to read SGI images"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageJPEG} "allows to read/write JPEG images"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
+
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_recordQT} "allows to output Gem-pixes into QuickTime MOVie files (you will have to download and install QuickTime for Windows yourself in order to use this)"
+
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoAVT} "allows to capture live video from GigE-cameras using AVT (Allied Vision Technologies); supported cameras include the Prosilica family (http://www.alliedvisiontec.com) "
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoHALCON} "allows to capture live video from a number of devices (including GigE-cameras and industry grade frame grabbers) using MVTec's HALCON library; you will need to purchase a license from MVTec in order to be able to use this plugin (http://www.mvtec.com) "
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoPYLON} "allows to capture live video from GigE-cameras using Basler's PYLON library; mainly supports Basler cameras; you might need to download additional software in order to use this plugin (http://www.baslerweb.com)"
+
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
