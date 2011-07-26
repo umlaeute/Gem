@@ -407,12 +407,25 @@ bool videoPYLON :: openDevice(gem::Properties&props)
   if(NULL==m_factory)return false;
 
   Pylon::IPylonDevice *device = NULL;
+
   try {
-    std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(m_devicename);
-    if(it!=m_id2device.end())
-      device = m_factory->CreateDevice(it->second);
-    else
-      device = m_factory->CreateDevice(Pylon::String_t(m_devicename.c_str()));
+    if(m_devicename.empty()) {
+      if(m_id2device.empty())
+        enumerate();
+      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.begin();
+      if(m_devicenum>=0) {
+        std::advance( it, m_devicenum );
+      } 
+      if(it != m_id2device.end()) {  
+        device = m_factory->CreateDevice(it->second);
+      }
+    } else {
+      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(m_devicename);
+      if(it!=m_id2device.end())
+        device = m_factory->CreateDevice(it->second);
+      else
+        device = m_factory->CreateDevice(Pylon::String_t(m_devicename.c_str()));
+    }
   } catch (GenICam::GenericException &e) {
     std::cerr << e.GetDescription() << std::endl;
     return false;
