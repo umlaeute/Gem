@@ -9,9 +9,9 @@ EXTRA_DIST = \
 	win-vs2003/installer.vcproj \
 	win-vs2003/README_W32.txt.template \
 	win-vs2003/installer.bat \
-	win-vs2003/gem.sln \
+	win-vs2003/Gem.sln \
 	win-vs2003/release.bat \
-	win-vs2003/gem.vcproj \
+	win-vs2003/Gem.vcproj \
 	win-vs2003/libraries.txt \
 	win-vs2003/installerCVS.bat \
 	osx-xcode/Gem.xcodeproj/project.pbxproj \
