@@ -69,6 +69,7 @@ namespace gem {
     //e2m["jfif"]="image/pjpeg";
     e2m["jfif-tbnl"]="image/jpeg";
     e2m["jng"]="image/x-jng";
+    e2m["jp2"]="image/jp2"; // JPEG2000
     e2m["jpeg"]="image/jpeg";
     //e2m["jpeg"]="image/pjpeg";
     e2m["jpe"]="image/jpeg";
@@ -77,6 +78,7 @@ namespace gem {
     //e2m["jpg"]="image/pjpeg";
     e2m["jps"]="image/x-jps";
     e2m["jut"]="image/jutvision";
+    e2m["mac"]="image/mac";
     e2m["mcf"]="image/vasa";
     e2m["nap"]="image/naplps";
     e2m["naplps"]="image/naplps";
@@ -94,8 +96,10 @@ namespace gem {
     e2m["png"]="image/png";
     //e2m["png"]="image/x-png";
     e2m["pnm"]="image/x-portable-anymap";
+    e2m["pntg"]="image/mac";
     e2m["ppm"]="image/x-portable-pixmap";
     e2m["ps"]="image/ps";
+    e2m["psd"]="image/psd";
     e2m["qif"]="image/x-quicktime";
     e2m["qtif"]="image/x-quicktime";
     e2m["qti"]="image/x-quicktime";
