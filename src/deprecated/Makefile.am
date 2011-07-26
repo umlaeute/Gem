@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = \
+nobase_pkginclude_HEADERS = \
 	Base/GemCache.h \
 	Base/GemContextData.h \
 	Base/GemEvent.h \
