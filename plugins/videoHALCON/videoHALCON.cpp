@@ -80,7 +80,7 @@ static std::vector<std::string>getBackends(void) {
           s_backends.push_back(backend);
         }
       } catch (Halcon::HException &except) {
-        //error("info caught exception: '%s'", except.message);
+        //error("%s", except.message);
       }
     }
   }
@@ -284,7 +284,7 @@ static void printinfo(std::string name, std::string value) {
     printtuple(ValueList);
     std::cerr << std::endl;
   }  catch (Halcon::HException &except) {
-    error("info caught exception: '%s'", except.message);
+    error("%s", except.message);
   }
 }
 
@@ -295,7 +295,7 @@ static void getparam(Halcon::HFramegrabber*grabber, std::string name) {
     std::cerr << "got parm for "<<name<<std::endl;
     printtuple(result);
   }  catch (Halcon::HException &except) {
-    error("getparam caught exception: '%s'", except.message);
+    error("%s", except.message);
   }
 }
 
@@ -380,7 +380,7 @@ bool videoHALCON :: openDevice(gem::Properties&props)
                                           /* const HTuple &LineIn = -1 */
                                           );
   } catch (Halcon::HException &except) {
-    error("caught exception: '%s'", except.message);
+    error("%s", except.message);
     m_grabber=NULL;
     return false;
   }
@@ -397,7 +397,6 @@ bool videoHALCON :: openDevice(gem::Properties&props)
 #endif
 
   m_backendname = name;
-
   return true;
 }
 /////////////////////////////////////////////////////////
@@ -515,7 +514,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
       }
     }
   }  catch (Halcon::HException &except) {
-    error("info caught exception: '%s'", except.message);
+    error("%s", except.message);
   }
 
   try {
@@ -540,7 +539,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
       }
     }
   }  catch (Halcon::HException &except) {
-    error("info caught exception: '%s'", except.message);
+    error("%s", except.message);
   }
 
   try {
@@ -565,7 +564,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
       }
     }
   }  catch (Halcon::HException &except) {
-    error("info caught exception: '%s'", except.message);
+    error("%s", except.message);
   }
 
   return true;
