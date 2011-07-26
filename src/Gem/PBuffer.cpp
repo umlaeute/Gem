@@ -23,6 +23,8 @@
 # define debug
 #endif
 
+#include "Gem/GemGL.h"
+
 #ifdef __APPLE__
 # include <iostream>
 # include <Carbon/Carbon.h>
@@ -30,10 +32,8 @@
 # include <vector>
 #endif
 
-#include "Gem/GemGL.h"
 #include "PBuffer.h"
-
-#include "m_pd.h"
+#include "Gem/RTE.h"
 
 #ifdef __linux__
 struct PBuffer_data {
