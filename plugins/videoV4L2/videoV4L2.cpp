@@ -1033,21 +1033,21 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	}
       } else if("frequency" == key) {
       } else if("width" == key) {
-	double d;
-	int i;
-	props.get("width", d);
-	i=d;
-	if(m_width != i)
-	  setformat=true;
-	m_width = i;
+        double d=0.;
+        if(props.get("width", d)) {
+          int i=d;
+          if(m_width != i)
+            setformat=true;
+          m_width = i;
+        }
       } else if("height" == key) {
-	double d;
-	int i;
-	props.get("height", d);
-	i=d;
-	if(m_height != i)
-	  setformat=true;
-	m_height = i;
+        double d=0.;
+        if(props.get("height", d)) {
+          int i=d;
+          if(m_height != i)
+            setformat=true;
+          m_height = i;
+        }
       } else {
       }
     }

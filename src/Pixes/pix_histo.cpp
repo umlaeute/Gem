@@ -247,7 +247,7 @@ void pix_histo :: processYUVImage(imageStruct &image)
   int size=image.xsize*image.ysize;
   unsigned char *base = image.data;
   
-  int n_Y, n_U, n_V;
+  int n_Y=0, n_U=0, n_V=0;
 
   gem::RTE::Array tabY=gem::RTE::Array(name_R->s_name);
   gem::RTE::Array tabU=gem::RTE::Array(name_G->s_name);

@@ -344,7 +344,7 @@ static const uint8_t utf8d[] = {
 static std::wstring toWstring(const char*str) throw(int){
   std::wstring result;
 
-  wchar_t unic;
+  wchar_t unic = 0;
   uint8_t data, byte, stat = 9;
 
   int len=0;

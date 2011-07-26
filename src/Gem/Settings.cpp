@@ -120,7 +120,7 @@ public:
     t_atom*av=binbuf_getvec(bb);
 
     std::string s;
-    t_atom*a;
+    t_atom*a=NULL;
     int state=0; /* 0=(next is ID); 1=(next is value); 2=(next is ignored) */
 
     while(ac--) {

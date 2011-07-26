@@ -313,7 +313,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     dc1394framerate_t framerate;
     dc1394video_mode_t  video_mode;
 
-    err=dc1394_video_set_mode(m_dccamera, video_mode);
+    err=dc1394_video_get_mode(m_dccamera, &video_mode);
 
     err=dc1394_video_get_supported_framerates(m_dccamera,video_mode,&framerates);
     if(DC1394_SUCCESS==err) {

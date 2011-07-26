@@ -173,7 +173,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
   unsigned char *base = image.data;
   int screen_perimeter = xsize*2 + ysize*2;
   int xcount, ycount, xcoord, ycoord, ycoordm1, ycoordm2;
-  int i, c, j, n, nt, valley, edge, start, tempint2, tempint, temp_x, temp_y;
+  int i, c, j, n, nt, valley, edge, start=0, tempint2=0, tempint=0, temp_x, temp_y;
   int contourx[50000], contoury[50000], nindex[50000]; 
   float  partialx[10000], partialy[10000], xn, xnm1, yn, ynm1;
   double angle[10000], tempangle, xval, yval, maxangle, minangle;
@@ -181,7 +181,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
   int pix12, pix21, pix22, pix23, pix32, difx, dify;
   int prevx, prevy, linecheck, orderx[8], ordery[8]; 
   // entering point
-  int cx, cy, t, foundhand; 
+  int cx, cy, t, foundhand=0; 
   int*enterx=new int[xsize];
   int*entery=new int[ysize];
   // hand center, area
@@ -203,7 +203,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
 
   int mt = 20; // maximum number of tips
   float tip_dist, tip_dist_temp, tip_dist_i;
-  int totalcycles;
+  int totalcycles=0;
 
   //	float tip_coord_x[maxtips], tip_coord_y[maxtips], valley_coord_x[maxtips], valley_coord_y[maxtips];
 
