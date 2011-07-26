@@ -433,7 +433,6 @@ bool videoPYLON :: openDevice(gem::Properties&props)
     close();
     return false;
   }
-
   return true;
 }
 /////////////////////////////////////////////////////////

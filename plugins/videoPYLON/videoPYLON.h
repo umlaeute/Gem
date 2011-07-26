@@ -71,16 +71,16 @@ namespace gem { namespace plugins {
     
     //////////
     // Start up the video device
-    // [out] int - returns 0 if bad
-    bool	    	startTransfer();
+    // [out] bool - returns FALSE if bad
+    bool	    	startTransfer(void);
     //////////
     // Stop the video device
-    // [out] int - returns 0 if bad
-    bool	   	stopTransfer();
+    // [out] bool - returns FALSE if bad
+    bool	   	stopTransfer(void);
     
     //////////
     // get the next frame
-    bool grabFrame();
+    bool grabFrame(void);
 
     virtual std::vector<std::string>enumerate(void);
 

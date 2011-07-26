@@ -66,9 +66,9 @@ namespace gem{namespace pylon{namespace streamgrabberproperties{
     }                                                                   \
     static void setI_##T (DEVICE*device, const int i) {                 \
       if(i<0 || i>=enumap_##T.size()) {                                 \
-        std::string e="Out of range: ";                                 \
-        e+=i; e+=" must be within [0.."; e+=enumap_##T.size(); e+="]";  \
-        throw OUT_OF_RANGE_EXCEPTION(e);                                \
+        std::stringstream ss;                                           \
+        ss << "Out of range: " << i << " must be within [0.."<<enumap_##T.size()<<")"; \
+        throw OUT_OF_RANGE_EXCEPTION(ss.str());                         \
       }                                                                 \
       else {                                                            \
         const enum T##Enums v=static_cast<T##Enums>(i);                 \
