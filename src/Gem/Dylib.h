@@ -42,7 +42,7 @@ class GEM_EXTERN GemDylib {
   bool run(const std::string procname);
 
   // if <procname> exists in dylib, return it, else return NULL
-  function_t*proc(const std::string procname);
+  function_t proc(const std::string procname);
 
   public:
   /**
