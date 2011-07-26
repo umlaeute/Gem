@@ -63,19 +63,126 @@ public:
 #endif
     dummy2(0)
   {;}
+
+  static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext) {
+    std::string fullname;
+
+    char buf[MAXPDSTRING];
+    char*bufptr;
+    int fd=0;
+    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
+      close(fd);
+      fullname=buf;
+      fullname+="/";
+      fullname+=bufptr;
+    } else {
+      if(canvas) {
+        canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename), buf, MAXPDSTRING);
+        fullname=buf;
+      } else {
+        return std::string("");
+      }
+    }
+    return fullname;
+  }
+
+  static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension) {
+    GemDylibHandle*handle=new GemDylibHandle();
+    char buf[MAXPDSTRING];
+
+    std::string fullname = "";
+
+    const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
+    const char*ext=extension.c_str();
+
+    fullname=getFullfilename(canvas, filename.c_str(), ext);
+    if(fullname.empty()) {
+      fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
+    }
+
+    if(fullname.empty()) {
+      std::string error="couldn't find '";
+      error+=filename;
+      error+="'.'";
+      error+=ext;
+      error+="'";
+      throw(GemException(error));
+    }
+
+    sys_bashfilename(fullname.c_str(), buf);
+  
+#ifdef DL_OPEN
+    handle->dlhandle=dlopen(fullname.c_str(), RTLD_NOW);
+    if(handle->dlhandle)
+      return handle;
+#endif
+#ifdef _WIN32
+    UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
+    handle->w32handle=LoadLibrary(buf);
+    errorboxflags=SetErrorMode(errorboxflags);
+    if(handle->w32handle)
+      return handle;
+#endif
+
+    delete handle;
+    handle=NULL;
+
+    std::string errormsg;
+#ifdef DL_OPEN
+    errormsg=dlerror();
+    if(!errormsg.empty()) {
+      std::string error="dlerror '";
+      error+=errormsg;
+      error+="'";
+      throw(GemException(error));
+    }
+#endif
+#ifdef _WIN32
+    DWORD errorNumber = GetLastError();
+    LPVOID lpErrorMessage;
+    FormatMessage(
+                  FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+                  FORMAT_MESSAGE_FROM_SYSTEM,
+                  NULL,
+                  errorNumber,
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                  (LPTSTR) &lpErrorMessage,
+                  0, NULL );
+    std::cerr << "GemDylib: "<<errorNumber<<std::endl;
+    std::string error = "DLLerror: ";
+    error+=(unsigned int)errorNumber;
+    throw(GemException(error));
+#endif
+  
+    return NULL;
+  }
+  static const std::string defaultExtension;
+
 };
+
+const std::string GemDylibHandle::defaultExtension = 
+#ifdef _WIN32
+                               std::string(".dll")
+#elif defined DL_OPEN
+                               std::string(".so")
+#else
+                               std::string("")
+#endif
+  ;
+
+
 
 
 GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::string extension) 
   throw (GemException) : 
   m_handle(0) {
-    m_handle=open(obj, filename, extension);
+    m_handle=GemDylibHandle::open(obj, filename, extension);
     if(NULL==m_handle) {
       std::string err="unable to open '";
       err+=filename;
       if(!extension.empty()) {
-	err+=".";
-	err+=extension;
+        err+=".";
+        err+=extension;
       }
       err+="'";
       throw GemException(err);
@@ -83,7 +190,7 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::s
   }
 
 GemDylib::GemDylib(const std::string filename, const std::string extension) throw (GemException) : m_handle(0) {
-  m_handle=open(0,   filename, extension);
+  m_handle=GemDylibHandle::open(0,   filename, extension);
   if(NULL==m_handle) {
     std::string err="unable to open '";
     err+=filename;
@@ -105,7 +212,7 @@ GemDylib::~GemDylib(void) {
 #endif
 #ifdef _WIN32
   if(m_handle->w32handle)
-    FreeLibrary(m_handle->handle);
+    FreeLibrary(m_handle->w32handle);
   m_handle->w32handle=NULL;
 #endif
   delete m_handle;
@@ -138,110 +245,6 @@ bool GemDylib::run(const std::string procname) {
   return false;
 }
 
-static std::string defaultExtension = 
-#ifdef _WIN32
-  std::string(".dll")
-#elif defined DL_OPEN
-  std::string(".so")
-#else
-  std::string("")
-#endif
-  ;
-
-static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext) {
-  std::string fullname;
-
-  char buf[MAXPDSTRING];
-  char*bufptr;
-  int fd=0;
-  if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
-    close(fd);
-    fullname=buf;
-    fullname+="/";
-    fullname+=bufptr;
-  } else {
-    if(canvas) {
-      canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename), buf, MAXPDSTRING);
-      fullname=buf;
-    } else {
-      return std::string("");
-    }
-  }
-  return fullname;
-}
-
-GemDylibHandle* GemDylib::open(const CPPExtern*obj, const std::string filename, const std::string extension) {
-  GemDylibHandle*handle=new GemDylibHandle();
-  char buf[MAXPDSTRING];
-
-  std::string fullname = "";
-
-  const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
-  const char*ext=extension.c_str();
-
-  fullname=getFullfilename(canvas, filename.c_str(), ext);
-  if(fullname.empty()) {
-    fullname=getFullfilename(canvas, filename.c_str(), defaultExtension.c_str());
-  }
-
-  if(fullname.empty()) {
-    std::string error="couldn't find '";
-    error+=filename;
-    error+="'.'";
-    error+=ext;
-    error+="'";
-    throw(GemException(error));
-  }
-
-  sys_bashfilename(fullname.c_str(), buf);
-  
-#ifdef DL_OPEN
-  handle->dlhandle=dlopen(fullname.c_str(), RTLD_NOW);
-  if(handle->dlhandle)
-    return handle;
-#endif
-#ifdef _WIN32
-  UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
-  handle->w32handle=LoadLibrary(buf);
-  errorboxflags=SetErrorMode(errorboxflags);
-  if(handle->w32handle)
-    return handle;
-#endif
-
-  delete handle;
-  handle=NULL;
-
-  std::string errormsg;
-#ifdef DL_OPEN
-  errormsg=dlerror();
-  if(!errormsg.empty()) {
-    std::string error="dlerror '";
-    error+=errormsg;
-    error+="'";
-    throw(GemException(error));
-  }
-#endif
-#ifdef _WIN32
-  DWORD errorNumber = GetLastError();
-  LPVOID lpErrorMessage;
-  FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-		FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL,
-		errorNumber,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPTSTR) &lpErrorMessage,
-		0, NULL );
-  std::cerr << "GemDylib: "<<errorNumber<<std::endl;
-  std::string error = "DLLerror: ";
-  error+=(unsigned int)errorNumber;
-  throw(GemException(error));
-#endif
-  
-  return 0;
-}
-
-
 bool GemDylib::LoadLib(const std::string basefilename, const std::string extension, const std::string procname) {
   try {
     GemDylib*dylib=new GemDylib(basefilename, extension);
@@ -258,5 +261,5 @@ bool GemDylib::LoadLib(const std::string basefilename, const std::string extensi
 
 
 const std::string GemDylib::getDefaultExtension(void) {
-  return defaultExtension;
+  return GemDylibHandle::defaultExtension;
 }

@@ -23,7 +23,6 @@ class CPPExtern;
 class GEM_EXTERN GemDylib {
  private:
   GemDylibHandle*m_handle;
-  static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension);
 
  public:
   GemDylib(const CPPExtern*obj, 
