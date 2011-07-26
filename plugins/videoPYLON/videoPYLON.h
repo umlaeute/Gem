@@ -18,6 +18,7 @@
 #define INCLUDE_VIDEOPYLON_H_
 
 #include "plugins/video.h"
+#include <map>
 
 #ifdef Status
 /* ouch: Xlib.h defines "Status" as "int", but Pylon uses "Status" as a

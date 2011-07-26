@@ -5,7 +5,7 @@
 #include <pylon/gige/BaslerGigECamera.h>
 
 #include <string>
-#include "Base/Properties.h"
+#include "Gem/Properties.h"
 
 namespace gem { namespace pylon { namespace cameraproperties {
                     void init(void);

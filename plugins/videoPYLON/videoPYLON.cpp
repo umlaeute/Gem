@@ -422,7 +422,7 @@ bool videoPYLON :: openDevice(gem::Properties&props)
     return false;
 
   try {
-    m_camera=new Pylon::CBaslerGigECamera::CBaslerGigECamera (device);
+    m_camera=new Pylon::CBaslerGigECamera (device);
     m_camera->Open();
     uint32_t maxchannel=m_camera->GetNumStreamGrabberChannels();
     if(channel>maxchannel)channel=maxchannel;
