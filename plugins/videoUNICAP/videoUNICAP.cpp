@@ -47,11 +47,11 @@ using namespace gem::plugins;
 
 #define FOURCC(a,b,c,d) (unsigned int)((((unsigned int)d)<<24)+(((unsigned int)c)<<16)+(((unsigned int)b)<<8)+a) 
 /*
-#define FOURCC(a) (unsigned int) ( 
-				  ((((unsigned char*)a)[0])<<24)+  \
-				  ((((unsigned char*)a)[1])<<16)+  \
-				  ((((unsigned char*)a)[2])<< 8)+  \
-				  ((((unsigned char*)a)[3])<< 0))
+  #define FOURCC(a) (unsigned int) ( 
+  ((((unsigned char*)a)[0])<<24)+  \
+  ((((unsigned char*)a)[1])<<16)+  \
+  ((((unsigned char*)a)[2])<< 8)+  \
+  ((((unsigned char*)a)[3])<< 0))
 */
 
 #ifdef HAVE_UNICAP
@@ -59,13 +59,13 @@ using namespace gem::plugins;
 static void post_fmt(unicap_format_t*fmt) {
   if(!fmt)return;
   debugPost("format %dx%d+%d+%d '%s' -> %d (%d[%d]/%d)",
-	    fmt->size.width, fmt->size.height,
-	    fmt->size.x, fmt->size.y,
-	    fmt->identifier,
-	    fmt->buffer_size,
-	    fmt->buffer_type,
-	    fmt->system_buffer_count,
-	    fmt->buffer_types);
+            fmt->size.width, fmt->size.height,
+            fmt->size.x, fmt->size.y,
+            fmt->identifier,
+            fmt->buffer_size,
+            fmt->buffer_type,
+            fmt->system_buffer_count,
+            fmt->buffer_types);
 }
 
 /////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ static void post_fmt(unicap_format_t*fmt) {
 REGISTER_VIDEOFACTORY("unicap", videoUNICAP);
 
 videoUNICAP :: videoUNICAP() : video("unicap", 0)
-			     , m_handle(NULL)
+                             , m_handle(NULL)
 {
   m_width=0; m_height=0;
   provide("analog");
@@ -127,7 +127,7 @@ bool videoUNICAP :: openDevice(gem::Properties&props) {
     if(SUCCESS(status)) {
       status = unicap_open (&m_handle, &device);  
       if(SUCCESS(status)) {
-	continue;
+        continue;
       }
     }
   }
@@ -145,13 +145,13 @@ void videoUNICAP :: closeDevice() {
 }
 
 void videoUNICAP::newFrameCB (unicap_event_t event, 
-			      unicap_handle_t handle, 
-			      unicap_data_buffer_t * buffer, 
-			      void *usr_data)
+                              unicap_handle_t handle, 
+                              unicap_data_buffer_t * buffer, 
+                              void *usr_data)
 {
   videoUNICAP*v=(videoUNICAP*)usr_data;
   debugPost("newFrameCB");
-  if(UNICAP_EVENT_NEW_FRAME==event)
+  if(v && UNICAP_EVENT_NEW_FRAME==event)
     v->newFrame(handle, buffer);
 }
 
@@ -177,7 +177,7 @@ typedef enum {
 
 
 void videoUNICAP::newFrame (unicap_handle_t handle, 
-			    unicap_data_buffer_t * buffer) {
+                            unicap_data_buffer_t * buffer) {
   unicap_format_t*fmt=&(buffer->format);
   post_fmt(fmt);
   fourcc_t format=ILLEGAL;
@@ -261,7 +261,6 @@ bool videoUNICAP :: startTransfer()
   }
   debugPost("got format: %x", status);
   post_fmt(&format);
-
   format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM; 
   if (!SUCCESS (unicap_set_format (m_handle, &format))) {
     verbose(1, "failed to set format (sysbuf)");
@@ -270,17 +269,14 @@ bool videoUNICAP :: startTransfer()
   }
   debugPost("set format %x", status);
   status=unicap_register_callback (m_handle, 
-			   UNICAP_EVENT_NEW_FRAME, 
-			   (unicap_callback_t) newFrameCB,
-			   (void *) this);
-
+                                   UNICAP_EVENT_NEW_FRAME, 
+                                   (unicap_callback_t) newFrameCB,
+                                   (void *) this);
   debugPost("registered callback: %x", status);
   if(!SUCCESS(status))
     return false;
-
   status=unicap_start_capture (m_handle);
   debugPost("start capture: %x", status);
-
   if(!SUCCESS(status))
     return false;
   return true;
@@ -328,11 +324,11 @@ std::vector<std::string> videoUNICAP::enumerate() {
       const unsigned int cur=m_devices.size();
 #if 0
       post("ID='%s'\tmodel='%s'\tvendor='%s'\tdevice='%s'\tCPI='%s'",
-	   device.identifier,
-	   device.model_name,
-	   device.vendor_name,
-	   device.device,
-	   device.cpi_layer);
+           device.identifier,
+           device.model_name,
+           device.vendor_name,
+           device.device,
+           device.cpi_layer);
 #endif   
       m_devices.push_back(device);
 
@@ -340,7 +336,7 @@ std::vector<std::string> videoUNICAP::enumerate() {
       m_name2devices[device.model_name ].push_back(cur);
       m_name2devices[device.vendor_name].push_back(cur);
       if(device.device[0])
-	m_name2devices[device.device].push_back(cur);
+        m_name2devices[device.device].push_back(cur);
 
       /* hmm, think about this .... */
       std::string cpi=device.cpi_layer;
@@ -388,7 +384,7 @@ bool videoUNICAP :: defaultFormat() {
 
 
 bool videoUNICAP :: enumProperties(gem::Properties&readable,
-				 gem::Properties&writeable) {
+                                   gem::Properties&writeable) {
   readable.clear();
   writeable.clear();
 
@@ -405,40 +401,40 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
 
       status = unicap_enumerate_properties(m_handle, NULL, &prop, id);
       if(!SUCCESS(status))
-	continue;
+        continue;
 
       debugPost("id='%s'\tcat='%s'\tunit='%s'\tflags=%d", 
-	    prop.identifier,
-	    prop.category,
-	    prop.unit,
-	    prop.flags);
+                prop.identifier,
+                prop.category,
+                prop.unit,
+                prop.flags);
 
 
       switch(prop.type) {
       case UNICAP_PROPERTY_TYPE_RANGE: 
-	debugPost("range %f-%f", prop.range.min, prop.range.min);
-	typ=prop.range.max; 
-	break;
+        debugPost("range %f-%f", prop.range.min, prop.range.min);
+        typ=prop.range.max; 
+        break;
       case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
-	debugPost("value_list %d", prop.value_list.value_count);
-	typ=prop.value_list.value_count;
-	break;
+        debugPost("value_list %d", prop.value_list.value_count);
+        typ=prop.value_list.value_count;
+        break;
       case UNICAP_PROPERTY_TYPE_MENU: 
-	debugPost("menu '%s' of %d", prop.menu_item, prop.menu.menu_item_count);
-	typ=std::string(prop.menu_item);//prop.menu.menu_item_count;
-	break;
+        debugPost("menu '%s' of %d", prop.menu_item, prop.menu.menu_item_count);
+        typ=std::string(prop.menu_item);//prop.menu.menu_item_count;
+        break;
       case UNICAP_PROPERTY_TYPE_FLAGS: 
-	debugPost("flags");
-	break;
+        debugPost("flags");
+        break;
       default:
-	debugPost("unknown");
-	// ?
-	break;
+        debugPost("unknown");
+        // ?
+        break;
       }
 
       readable.set(prop.identifier, typ);
       if(!(prop.flags & UNICAP_FLAGS_READ_ONLY))
-	writeable.set(prop.identifier, typ);
+        writeable.set(prop.identifier, typ);
 
 #warning check UNICAP_FLAGS_ON_OFF & UNICAP_FLAGS_ONE_PUSH
     }
@@ -474,15 +470,15 @@ void videoUNICAP :: getProperties(gem::Properties&props) {
       case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
       case UNICAP_PROPERTY_TYPE_FLAGS: 
       case UNICAP_PROPERTY_TYPE_RANGE: 
-	props.set(key, prop.value);
-	break;
+        props.set(key, prop.value);
+        break;
       case UNICAP_PROPERTY_TYPE_MENU:
-	props.set(key, std::string(prop.menu_item));
-	break;
+        props.set(key, std::string(prop.menu_item));
+        break;
       default:
-	props.erase(key);
-	// ?
-	break;
+        props.erase(key);
+        // ?
+        break;
       }
     }
   }
@@ -520,21 +516,21 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
 
     if("width"==key) {
       if(props.get(key, d)) {
-	width=d;
-	if(m_width!=width) {
-	  m_width=width;
-	  restart=true;
-	}
+        width=d;
+        if(m_width!=width) {
+          m_width=width;
+          restart=true;
+        }
       }
       continue;
     }
     if ("height"==key) {
       if(props.get(key, d)) {
-	height=d;
-	if(m_height!=height) {
-	  m_height=height;
-	  restart=true;
-	}
+        height=d;
+        if(m_height!=height) {
+          m_height=height;
+          restart=true;
+        }
       }
       continue;
     }
@@ -548,35 +544,35 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
       case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
       case UNICAP_PROPERTY_TYPE_FLAGS: 
       case UNICAP_PROPERTY_TYPE_RANGE: 
-	if(props.get(key, d)) {
-	  prop.value=d;
-	  status= unicap_set_property(m_handle, &prop );
-	}
-	break;
+        if(props.get(key, d)) {
+          prop.value=d;
+          status= unicap_set_property(m_handle, &prop );
+        }
+        break;
       case UNICAP_PROPERTY_TYPE_MENU:
-	if(props.get(key, d)) {
-	  if(d>=0 && d < prop.menu.menu_item_count) {
-	    int i=d;
-	    post("directly setting menu-value to '%s' (please report if this works!)", prop.menu.menu_items[i]);
-	    prop.value=i;
-	    status= unicap_set_property(m_handle, &prop );
-	  }
-	} else if (props.get(key, s)) {
-	  post("setting menu-value to '%s' (please report if this works!)", s.c_str());
-	  strncpy(prop.menu_item, s.c_str(), 128);
-	  status= unicap_set_property(m_handle, &prop );
-	}
-	break;
+        if(props.get(key, d)) {
+          if(d>=0 && d < prop.menu.menu_item_count) {
+            int i=d;
+            post("directly setting menu-value to '%s' (please report if this works!)", prop.menu.menu_items[i]);
+            prop.value=i;
+            status= unicap_set_property(m_handle, &prop );
+          }
+        } else if (props.get(key, s)) {
+          post("setting menu-value to '%s' (please report if this works!)", s.c_str());
+          strncpy(prop.menu_item, s.c_str(), 128);
+          status= unicap_set_property(m_handle, &prop );
+        }
+        break;
       default:
-	// ?
-	break;
+        // ?
+        break;
       }
 
       if(!SUCCESS(status)) {
-	verbose(1, "could not set property '%s'", key.c_str());
+        verbose(1, "could not set property '%s'", key.c_str());
 #if 0
       } else {
-	verbose(1, "successfully set property '%s'", key.c_str());
+        verbose(1, "successfully set property '%s'", key.c_str());
 #endif
       }
 
