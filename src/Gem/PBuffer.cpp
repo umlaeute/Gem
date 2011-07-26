@@ -322,12 +322,21 @@ struct PBuffer_data {
   HGLRC old_context;
 };
 
+#ifndef wglChoosePixelFormatARB
 static PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = NULL;
+#endif
+#ifndef wglCreatePbufferARB
 static PFNWGLCREATEPBUFFERARBPROC wglCreatePbufferARB = NULL;
+#endif
+#ifndef wglGetPbufferDCARB
 static PFNWGLGETPBUFFERDCARBPROC wglGetPbufferDCARB = NULL;
+#endif
+#ifndef wglReleasePbufferDCARB
 static PFNWGLRELEASEPBUFFERDCARBPROC wglReleasePbufferDCARB = NULL;
+#endif
+#ifndef wglDestroyPbufferARB
 static PFNWGLDESTROYPBUFFERARBPROC wglDestroyPbufferARB = NULL;
-
+#endif
 /*
  * constructor (w32 specific)
  */
