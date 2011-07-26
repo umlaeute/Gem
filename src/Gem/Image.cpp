@@ -75,7 +75,7 @@ static int m_simd=GemSIMD::getCPU();
 #endif
 
 pixBlock :: pixBlock()
-  : newimage(0), newfilm(0)
+  : image(imageStruct()), newimage(0), newfilm(0)
 {}
 
 

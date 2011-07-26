@@ -25,13 +25,12 @@
 //
 /////////////////////////////////////////////////////////
 GemPixObj :: GemPixObj() : 
+  cachedPixBlock(pixBlock()),
   orgPixBlock(NULL), m_processOnOff(1),
-  m_simd(GEM_SIMD_NONE)
+  m_simd(GemSIMD::getCPU())
 {
     cachedPixBlock.newimage=0;
     cachedPixBlock.newfilm =0;
-
-    m_simd=GemSIMD::getCPU();
 }
 
 

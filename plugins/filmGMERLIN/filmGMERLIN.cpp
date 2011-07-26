@@ -35,26 +35,27 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 
 filmGMERLIN :: filmGMERLIN(void) : film(),
 #ifdef HAVE_GMERLIN
-                                         m_file(NULL),
-                                         m_opt(NULL),
-                                         m_gformat(NULL),
-                                         m_track(0),
-                                         m_stream(0),
-                                         m_gframe(NULL),
-                                         m_finalframe(NULL),
-                                         m_gconverter(NULL),
-                                         m_fps_num(1), m_fps_denum(1),
-                                         m_next_timestamp(0),
+                                   m_file(NULL),
+                                   m_opt(NULL),
+                                   m_seekable(false),
+                                   m_gformat(NULL),
+                                   m_finalformat(new gavl_video_format_t[1]),
+                                   m_track(0),
+                                   m_stream(0),
+                                   m_gframe(NULL),
+                                   m_finalframe(NULL),
+                                   m_gconverter(NULL),
+                                   m_fps_num(1), m_fps_denum(1),
+                                   m_next_timestamp(0),
 #ifdef USE_FRAMETABLE
-                                         m_frametable(NULL),
+                                   m_frametable(NULL),
 #endif
 #endif /* GMERLIN */
-                                         m_lastFrame(0),
-                                         m_doConvert(false)
+                                   m_lastFrame(0),
+                                   m_doConvert(false)
 {
 #ifdef HAVE_GMERLIN
   m_gconverter=gavl_video_converter_create ();
-  m_finalformat = new gavl_video_format_t[1];
 #endif
 }
 

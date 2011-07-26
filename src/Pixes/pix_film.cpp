@@ -155,9 +155,12 @@ void *pix_film :: grabThread(void*you)
 //
 /////////////////////////////////////////////////////////
 pix_film :: pix_film(t_symbol *filename) :
+  m_haveMovie(0),
   m_auto(0), m_format(GL_RGBA),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_reqTrack(0), m_curTrack(0),
+  m_handle(NULL),
+  m_outNumFrames(NULL), m_outEnd(NULL),
 #ifdef HAVE_PTHREADS
   m_thread_id(0), m_mutex(NULL), m_frame(NULL), m_thread_continue(false),
   m_thread_running(false), m_wantThread(true)
@@ -173,8 +176,6 @@ pix_film :: pix_film(t_symbol *filename) :
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
   
-  m_handle=NULL;
-
   std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::film>::getIDs();
 
   if(!addHandle(available_ids, "DirectShow"))

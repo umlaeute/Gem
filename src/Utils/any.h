@@ -128,7 +128,7 @@ namespace gem
     // structors
 
     template <typename T>
-    any(const T& x) {
+    any(const T& x) : table(NULL), object(NULL) {
       table = any_detail::get_table<T>::get();
       if (sizeof(T) <= sizeof(void*)) {
         new(&object) T(x);
@@ -138,17 +138,17 @@ namespace gem
       }
     }
 
-    any() {
+    any() : table(NULL), object(NULL) {
       table = any_detail::get_table<any_detail::empty>::get();
       object = NULL;
     }
 
-    any(const any& x) {
+    any(const any& x) : table(NULL), object(NULL) {
       table = any_detail::get_table<any_detail::empty>::get();
       assign(x);
     }
 
-    ~any() {
+    virtual ~any() {
       table->static_delete(&object);
     }
 

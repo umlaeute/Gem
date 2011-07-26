@@ -46,8 +46,11 @@ std::string TextBase::DEFAULT_FONT = "vera.ttf";
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 TextBase :: TextBase(int argc, t_atom *argv)
-  : m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
-    m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), m_font(NULL), m_fontname(NULL)
+  :
+  m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+  m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), 
+  m_inlet(NULL),
+  m_font(NULL), m_fontname(NULL)
 {
   // initial text
   GemSettings::get("font.face", DEFAULT_FONT);

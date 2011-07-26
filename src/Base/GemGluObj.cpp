@@ -26,11 +26,11 @@
 //
 /////////////////////////////////////////////////////////
 GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
-    	   : GemShape(size)
+  : GemShape(size),
+    m_numSlices((int)slices),m_numStacks((int)stacks),
+    m_sliceInlet(NULL)
 {
     m_drawType = (GLenum) GL_FILL;
-    m_numSlices=(int)slices;
-    m_numStacks=(int)stacks;
     if(m_numSlices<=0)m_numSlices=10;
     if(m_numStacks<=0)m_numStacks=m_numSlices;
     

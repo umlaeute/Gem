@@ -63,7 +63,9 @@ namespace gem { namespace thread {
     pthread_t p_thread;
 
     PIMPL(WorkerThread*x) : owner(x), ID(0),
-                            keeprunning(true), isrunning(false)
+                            keeprunning(true), isrunning(false),
+                            m_todo(Mutex()), m_done(Mutex()),
+                            s_newdata(Semaphore())
     {
 
     }

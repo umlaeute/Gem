@@ -41,6 +41,7 @@ class GEM_EXTERN ContextDataBase {
  protected:
   static const int INVALID_CONTEXT;
   virtual int getCurContext(void);
+  virtual ~ContextDataBase(void);
 };
 
 

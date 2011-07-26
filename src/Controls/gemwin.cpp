@@ -51,6 +51,7 @@ static bool StillHaveGemWin(bool up) {
 //
 /////////////////////////////////////////////////////////
 gemwin :: gemwin(t_floatarg framespersecond)
+  : m_FrameRate(NULL)
 {
   if(!StillHaveGemWin(true)) {
     /* this is the only [gemwin] */

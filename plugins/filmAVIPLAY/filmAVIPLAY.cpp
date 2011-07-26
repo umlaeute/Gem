@@ -35,15 +35,15 @@ REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 //
 /////////////////////////////////////////////////////////
 
-filmAVIPLAY :: filmAVIPLAY(void) : film() {
+filmAVIPLAY :: filmAVIPLAY(void) : film() ,
 #ifdef HAVE_LIBAVIPLAY
-  m_avifile=0;
-  m_avistream=0;
-  m_aviimage=0;
-
-  m_rawdata=NULL;
-  m_rawlength=0;
+  m_avifile(NULL),
+  m_avistream(NULL),
+  m_aviimage(NULL),
 #endif
+  m_rawdata(NULL),
+  m_rawlength(0)
+{
 }
 
 /////////////////////////////////////////////////////////

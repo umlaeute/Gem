@@ -32,8 +32,10 @@ public:
   
   PIMPL(void) : 
     f(0.),
+    A(NULL),
     pointer(NULL),
-    length(0)
+    length(0),
+    name(std::string())
   {
   }
   ~PIMPL(void) {

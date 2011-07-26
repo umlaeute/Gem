@@ -49,7 +49,7 @@ struct PBuffer_data {
 /*
  * constructor (linux specific)
  */
-PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height)
+PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height), data(NULL)
 {	
   Display *display = glXGetCurrentDisplay();
   int screen = DefaultScreen(display);

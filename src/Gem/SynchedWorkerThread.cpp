@@ -29,7 +29,9 @@ namespace gem { namespace thread {
     Mutex m_polling;
     bool polling;
 
-    PIMPL(SynchedWorkerThread*x) : owner(x), clock(NULL), flag(false)
+    PIMPL(SynchedWorkerThread*x) : owner(x), clock(NULL), 
+                                   m_flag(Mutex()), flag(false),
+                                   m_polling(Mutex()), polling(false)
     {
       clock=clock_new(this, reinterpret_cast<t_method>(tickCb));
     }

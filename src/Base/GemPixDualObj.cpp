@@ -33,7 +33,11 @@
 //
 /////////////////////////////////////////////////////////
 GemPixDualObj :: GemPixDualObj()
-  : m_cacheRight(NULL), m_pixRightValid(-1) //, m_pixRight(NULL) changed DH 8/5/02
+  : m_cacheRight(NULL),
+    m_pixRight(NULL),// was dsiabled by DH 8/5/02
+    m_pixRightValid(-1),
+    org_pixRightValid(-1),
+    m_inlet(NULL)
 {
     m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
     memset(&m_pixRight, 0, sizeof(m_pixRight));

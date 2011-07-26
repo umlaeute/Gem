@@ -25,7 +25,8 @@
 //
 /////////////////////////////////////////////////////////
 GemPathBase :: GemPathBase(int argc, t_atom *argv)
-  : m_numDimens(1), m_array(NULL)
+  : m_numDimens(1), m_array(NULL),
+    m_out1(NULL)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 

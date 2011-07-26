@@ -72,7 +72,7 @@ CLASS
 struct GEM_EXTERN imageStruct
 {
   imageStruct(void);
-  ~imageStruct(void);
+  virtual ~imageStruct(void);
 
   virtual void info();
   //////////
