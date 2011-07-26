@@ -61,8 +61,7 @@ AC_CONFIG_FILES([extra/pix_drum/Makefile extra/pix_mano/Makefile])
 AC_CONFIG_FILES([extra/pix_fiducialtrack/Makefile])
 
 # other stuff
-AC_CONFIG_FILES([build/Makefile])
-
+AC_CONFIG_FILES([build/Makefile Gem.pc])
 
 
 ##########################
