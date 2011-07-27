@@ -33,23 +33,21 @@ namespace gem
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
       : from(src.name()), to(dest.name())
     { }
-    virtual const std::string what() {
-      std::string result = std::string("bad cast(");
-      result += from;
-      result += "->";
-      result += to;
-      result += ")";
+    virtual ~bad_any_cast(void) throw() 
+    { }
+    virtual const std::string what(void) {
+      std::string result = std::string("bad cast(") + from + std::string("->") + to + std::string(")");
       return result;
     }
-    const char* from;
-    const char* to;
+    const std::string from;
+    const std::string to;
   };
 
   namespace any_detail {
     // function pointer table
 
     struct fxn_ptr_table {
-      const std::type_info& (*get_type)();
+      const std::type_info& (*get_type)(void);
       void (*static_delete)(void**);
       void (*clone)(void* const*, void**);
       void (*move)(void* const*,void**);
@@ -62,7 +60,7 @@ namespace gem
     {
       template<typename T>
       struct type {
-        static const std::type_info& get_type() {
+        static const std::type_info& get_type(void) {
           return typeid(T);
         }
         static void static_delete(void** x) {
@@ -85,7 +83,7 @@ namespace gem
     {
       template<typename T>
       struct type {
-        static const std::type_info& get_type() {
+        static const std::type_info& get_type(void) {
           return typeid(T);
         }
         static void static_delete(void** x) {
@@ -106,7 +104,7 @@ namespace gem
     {
       static const bool is_small = sizeof(T) <= sizeof(void*);
 
-      static fxn_ptr_table* get()
+      static fxn_ptr_table* get(void)
       {
         static fxn_ptr_table static_table = {
           fxns<is_small>::template type<T>::get_type
@@ -138,7 +136,7 @@ namespace gem
       }
     }
 
-    any() : table(NULL), object(NULL) {
+    any(void) : table(NULL), object(NULL) {
       table = any_detail::get_table<any_detail::empty>::get();
       object = NULL;
     }
@@ -148,7 +146,7 @@ namespace gem
       assign(x);
     }
 
-    virtual ~any() {
+    virtual ~any(void) {
       table->static_delete(&object);
     }
 
@@ -214,6 +212,9 @@ namespace gem
     any& operator=(T const& x) {
       return assign(x);
     }
+    any& operator=(const any& x) {
+      return assign(x);
+    }
 
     // utility functions
 
@@ -223,12 +224,12 @@ namespace gem
       return *this;
     }
 
-    const std::type_info& get_type() const {
+    const std::type_info& get_type(void) const {
       return table->get_type();
     }
 
     template<typename T>
-    const T& cast() const {
+    const T& cast(void) const {
       if (get_type() != typeid(T)) {
         throw bad_any_cast(get_type(), typeid(T));
       }
@@ -246,17 +247,17 @@ namespace gem
     // automatic casting operator
 
     template<typename T>
-    operator T() const {
+    operator T(void) const {
       return cast<T>();
     }
   #endif // implicit casting
 
 
-    bool empty() const {
+    bool empty(void) const {
       return table == any_detail::get_table<any_detail::empty>::get();
     }
 
-    void reset()
+    void reset(void)
     {
       if (empty()) return;
       table->static_delete(&object);

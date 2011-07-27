@@ -37,11 +37,11 @@ class GEM_EXTERN Matrix
         //////////
         // Constructor
 		// Sets the matrix to identity
-		Matrix();
+		Matrix(void);
 
         //////////
 		// Set the matrix to the identity
-		void identity();
+		void identity(void);
         
 		//////////
 		// Post mulitply the matrix

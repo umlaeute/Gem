@@ -89,11 +89,11 @@ typedef union{
 class GEM_EXTERN GemSIMD
 {
  public:
-   GemSIMD();
-  ~GemSIMD();
+   GemSIMD(void);
+  virtual ~GemSIMD(void);
 
   /* this gets the "cpuid" (something like GEM_SIMD_NONE) */
-  static int getCPU();
+  static int getCPU(void);
 
   /* change the cpuid returned by getCPU()
    * you can only set the cpuid to something that is actually supported

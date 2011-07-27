@@ -31,8 +31,8 @@ public:
   // the elements of a vector:
   float x, y, z; 
     
-    // A default constructor
-  CVector3();
+  // A default constructor
+  CVector3(void);
 
     // This is our constructor that allows us to initialize our data upon creating an instance
     CVector3(float X, float Y, float Z);
@@ -44,7 +44,7 @@ public:
     CVector3 operator-(CVector3 vVector) const;
 
     // Here we overload the - operator so we can negate the vector
-    CVector3 operator-() const;
+    CVector3 operator-(void) const;
 
     // Here we overload the * operator so we can multiply by scalars
     CVector3 operator*(float num) const;
@@ -60,13 +60,13 @@ public:
 
 
     // here we calculate the absolute-value of the vector
-    float abs() const;
+    float abs(void) const;
 
     // here we calculate the square of the absolute-value of the vector
-    float abs2() const;
+    float abs2(void) const;
 
     // here we normalize the vector
-    CVector3 normalize() const;
+    CVector3 normalize(void) const;
 
     // here we compare 2 vectors on approx. equality
     bool equals(CVector3 vVector, float epsilon) const;
