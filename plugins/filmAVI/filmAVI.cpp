@@ -20,6 +20,8 @@
 #include "filmAVI.h"
 using namespace gem::plugins;
 
+#include "Utils/Functions.h"
+
 #ifdef _WIN32
 REGISTER_FILMFACTORY("AVI", filmAVI);
 #endif
@@ -182,8 +184,8 @@ bool filmAVI :: open(const std::string filename, int format)
   }
   //if (!m_pbmihRaw->biSizeImage)
   //	m_pbmihRaw->biSizeImage = m_xsize * m_ysize * m_csize;
-  //m_nRawBuffSize = min(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
-  m_nRawBuffSize = max(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
+  //m_nRawBuffSize = MIN(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
+  m_nRawBuffSize = MAX(static_cast<int>(streaminfo.dwSuggestedBufferSize), static_cast<int>(m_pbmihRaw->biSizeImage));
   if(!m_nRawBuffSize)m_nRawBuffSize = m_image.image.xsize * m_image.image.ysize * 3;
   
   m_RawBuffer = new unsigned char[m_nRawBuffSize];
