@@ -40,6 +40,7 @@ namespace gem {
         static t_atomtype atomtype_id(void) { return A_NULL; }
         static T1 cast(T value) { return static_cast<T1>(value); }
         typedef T proxyType;
+        virtual ~TypeTemplateCore(void) { }
       };
     template<class T>
       struct TypeTemplate : TypeTemplateCore<T, T> {

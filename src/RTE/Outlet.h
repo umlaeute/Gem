@@ -26,6 +26,7 @@ namespace gem { namespace RTE {
 
     public:
       Outlet(CPPExtern*parent);
+      Outlet(const Outlet&);
 
       virtual ~Outlet(void);
 
@@ -33,6 +34,7 @@ namespace gem { namespace RTE {
       void send(double); // float
       void send(std::string, std::vector<gem::any>data);
 
+      Outlet& operator=(const Outlet&);
     };
   };
 };

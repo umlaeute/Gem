@@ -44,16 +44,16 @@ public:
   bool check(void) {
     pointer=NULL;
     length=0;
-
-    int size=0;
-    t_word *words;
-
     A=NULL;
 
     A = (t_garray *)pd_findbyclass(gensym(name.c_str()), garray_class);
     if(!A)return false;
+
+    int size=0;
+    t_word *words;
     if(!garray_getfloatwords(A, &size, &words))
       return false;
+
     length=size;
     pointer=words;
 
@@ -96,6 +96,11 @@ gem::RTE::Array :: Array(const std::string&name)
 gem::RTE::Array :: ~Array(void)
 {
   delete m_pimpl;
+}
+gem::RTE::Array& gem::RTE::Array :: operator=(const gem::RTE::Array&org) 
+{
+  m_pimpl->setName(org.m_pimpl->name);
+  return (*this);
 } 
 
 
