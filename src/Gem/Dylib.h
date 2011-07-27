@@ -32,10 +32,14 @@ class GEM_EXTERN GemDylib {
   GemDylib(const std::string libname, 
 	   const std::string extension=std::string("")
 	   ) throw(GemException);
-  ~GemDylib(void);
+
+  GemDylib(const GemDylib&);
+
+  virtual ~GemDylib(void);
 
   typedef void (*function_t)(void);
 
+  virtual GemDylib& operator=(const GemDylib&);
 
   // if void<procname>(void) exists in dylib, run it and return "true"
   // else return false;

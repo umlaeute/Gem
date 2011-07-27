@@ -43,7 +43,7 @@
 
 class GemDylibHandle {
 public:
-  int dummy1;
+  std::string fullname;
 #ifdef DL_OPEN
   void * dlhandle;
 #endif
@@ -54,7 +54,7 @@ public:
  
 
   GemDylibHandle(void) : 
-    dummy1(0),
+    fullname(std::string()),
 #ifdef DL_OPEN
     dlhandle(NULL),
 #endif
@@ -64,64 +64,57 @@ public:
     dummy2(0)
   {;}
 
+  ~GemDylibHandle(void) {
+    close();
+  }
+
   static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext) {
-    std::string fullname;
+    std::string fullname_;
 
     char buf[MAXPDSTRING];
     char*bufptr;
     int fd=0;
     if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
-      close(fd);
-      fullname=buf;
-      fullname+="/";
-      fullname+=bufptr;
+      ::close(fd);
+      fullname_=buf;
+      fullname_+="/";
+      fullname_+=bufptr;
     } else {
       if(canvas) {
         canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename), buf, MAXPDSTRING);
-        fullname=buf;
+        fullname_=buf;
       } else {
         return std::string("");
       }
     }
-    return fullname;
+    return fullname_;
   }
 
-  static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension) {
+  static GemDylibHandle*open(const std::string filename) {
     GemDylibHandle*handle=new GemDylibHandle();
+
     char buf[MAXPDSTRING];
-
-    std::string fullname = "";
-
-    const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
-    const char*ext=extension.c_str();
-
-    fullname=getFullfilename(canvas, filename.c_str(), ext);
-    if(fullname.empty()) {
-      fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
+    if(filename.empty()) {
+      throw(GemException(std::string("No DyLib name given!")));
     }
 
-    if(fullname.empty()) {
-      std::string error="couldn't find '";
-      error+=filename;
-      error+="'.'";
-      error+=ext;
-      error+="'";
-      throw(GemException(error));
-    }
-
-    sys_bashfilename(fullname.c_str(), buf);
+    sys_bashfilename(filename.c_str(), buf);
   
 #ifdef DL_OPEN
-    handle->dlhandle=dlopen(fullname.c_str(), RTLD_NOW);
-    if(handle->dlhandle)
+    handle->dlhandle=dlopen(filename.c_str(), RTLD_NOW);
+    if(handle->dlhandle) {
+      handle->fullname=filename;
       return handle;
+    }
 #endif
 #ifdef _WIN32
     UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
     handle->w32handle=LoadLibrary(buf);
     errorboxflags=SetErrorMode(errorboxflags);
-    if(handle->w32handle)
+    if(handle->w32handle) {
+      handle->fullname=filename;
       return handle;
+    }
 #endif
 
     delete handle;
@@ -156,7 +149,42 @@ public:
   
     return NULL;
   }
+
+  static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension) {
+    const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
+    const char*ext=extension.c_str();
+
+    std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
+    if(fullname.empty()) {
+      fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
+    }
+
+    if(fullname.empty()) {
+      std::string error="couldn't find '";
+      error+=filename;
+      error+="'.'";
+      error+=ext;
+      error+="'";
+      throw(GemException(error));
+    }
+
+    return open(fullname);
+  }
+
   static const std::string defaultExtension;
+
+  void close(void) {
+#ifdef DL_OPEN
+    if(dlhandle)
+      dlclose(dlhandle);
+    dlhandle=NULL;
+#endif
+#ifdef _WIN32
+    if(w32handle)
+      FreeLibrary(w32handle);
+    w32handle=NULL;
+#endif
+  }
 
 };
 
@@ -203,20 +231,32 @@ GemDylib::GemDylib(const std::string filename, const std::string extension) thro
   }
 }
 
+GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL) {
+  std::string filename=org.m_handle->fullname;
+  m_handle=GemDylibHandle::open(filename);
+  if(NULL==m_handle) {
+    std::string err="unable to open '";
+    err+=filename;
+    err+="'";
+    throw GemException(err);
+  }
+}
 
 GemDylib::~GemDylib(void) {
-#ifdef DL_OPEN
-  if(m_handle->dlhandle)
-    dlclose(m_handle->dlhandle);
-  m_handle->dlhandle=NULL;
-#endif
-#ifdef _WIN32
-  if(m_handle->w32handle)
-    FreeLibrary(m_handle->w32handle);
-  m_handle->w32handle=NULL;
-#endif
-  delete m_handle;
+  if(m_handle)
+    delete m_handle;
+  m_handle=NULL;
 }
+
+GemDylib& GemDylib::operator=(const GemDylib&org) {
+  if(m_handle)
+    delete m_handle;
+  m_handle=NULL;
+  if(org.m_handle) {
+    m_handle=GemDylibHandle::open(org.m_handle->fullname);
+  }
+}
+
 
 GemDylib::function_t GemDylib::proc(const std::string procname) {
   function_t result=NULL;

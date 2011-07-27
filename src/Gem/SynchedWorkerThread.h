@@ -23,6 +23,9 @@ namespace gem { namespace thread {
       class PIMPL;
       PIMPL*m_pimpl;
       friend class PIMPL;
+      /* dummy implementations */
+      SynchedWorkerThread(const SynchedWorkerThread&);
+      SynchedWorkerThread&operator=(const SynchedWorkerThread&);
 
 		  public:
       SynchedWorkerThread(bool autostart=true);

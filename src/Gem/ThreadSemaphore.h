@@ -25,9 +25,12 @@ namespace gem {
     public:
       Semaphore(void);
       virtual ~Semaphore(void);
-      
+      Semaphore(const Semaphore&);
+   
       void freeze (void);
       void thaw   (void);
+
+      virtual Semaphore&operator=(const Semaphore&);
     };
   };
 };

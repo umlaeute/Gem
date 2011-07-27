@@ -72,9 +72,10 @@ CLASS
 struct GEM_EXTERN imageStruct
 {
   imageStruct(void);
+  imageStruct(const imageStruct&);
   virtual ~imageStruct(void);
 
-  virtual void info();
+  virtual void info(void);
   //////////
   // columns
   virtual unsigned char* allocate(size_t size);
@@ -237,6 +238,7 @@ struct GEM_EXTERN imageStruct
   /* make the image orientation openGL-conformant */
   virtual void fixUpDown(void);
 
+  imageStruct& operator=(const imageStruct&);
 };
 
 /*-----------------------------------------------------------------

@@ -167,15 +167,22 @@ namespace gem { namespace thread {
 
   WorkerThread::WorkerThread(void) :
     m_pimpl(new PIMPL(this)) {
-
   }
-
   WorkerThread::~WorkerThread(void) {
     stop(true);
 
     delete m_pimpl;
     m_pimpl=0;
   }
+
+  /* _private_ dummy implementations */
+  WorkerThread&WorkerThread::operator=(const WorkerThread&org) {
+    return (*this);
+  }
+  WorkerThread::WorkerThread(const WorkerThread&org) : m_pimpl(new PIMPL(this)) {
+  }
+
+
   bool WorkerThread::start(void) {
     return m_pimpl->start();
   }

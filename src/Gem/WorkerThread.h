@@ -23,6 +23,9 @@ namespace gem { namespace thread {
       class PIMPL;
       PIMPL*m_pimpl;
       friend class PIMPL;
+      /* dummy implementations */
+      WorkerThread(const WorkerThread&);
+      WorkerThread&operator=(const WorkerThread&);
     public:
       WorkerThread(void);
       virtual ~WorkerThread(void);

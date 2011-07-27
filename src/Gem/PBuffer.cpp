@@ -468,3 +468,7 @@ void PBuffer::disable() {
 #else
 # error do Pbuffers on your OS !
 #endif /* OS */
+
+/* dummy implementations */
+PBuffer::PBuffer(const PBuffer&org) : width(org.width), height(org.height), data(NULL) {}
+PBuffer&PBuffer::operator=(const PBuffer&org) { return (*this);}

@@ -131,4 +131,11 @@ namespace gem { namespace thread {
     m_pimpl->tack();
   }
 
+  /* _private_ dummy implementations */
+  SynchedWorkerThread&SynchedWorkerThread::operator=(const SynchedWorkerThread&org) {
+    return (*this);
+  }
+  SynchedWorkerThread::SynchedWorkerThread(const SynchedWorkerThread&org) : m_pimpl(new PIMPL(this)) {
+  }
+
 };}; // } thread } gem

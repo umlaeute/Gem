@@ -37,10 +37,15 @@ class GEM_EXTERN GemCache
     	//////////
         // Constructor
     	GemCache(gemhead *parent);
+
+      GemCache(const GemCache&);
     	
-        //////////
-        // Destructor
-        ~GemCache();
+      //////////
+      // Destructor
+      virtual ~GemCache(void);
+
+
+      virtual GemCache& operator=(const GemCache&);
 
     	//////////
     	// Was a modification made which will void a display list?
@@ -58,12 +63,12 @@ class GEM_EXTERN GemCache
 		// re-set (like creation, but without instantiating
 		void reset(gemhead*parent);
 
-        //////////
-    	gemhead     	    *m_parent;
+    //////////
+    gemhead     	    *m_parent;
 
-	//////////
-	// indicates a valid cache
-	int m_magic;
+    //////////
+    // indicates a valid cache
+    int m_magic;
 };
 
 #endif	// for header file

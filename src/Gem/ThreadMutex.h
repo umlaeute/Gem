@@ -25,6 +25,9 @@ namespace gem {
     public:
       Mutex(void);
       virtual ~Mutex(void);
+
+      Mutex(const Mutex&);
+      Mutex&operator=(const Mutex&);
       
       void lock   (void);
       void unlock (void);

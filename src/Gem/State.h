@@ -174,11 +174,12 @@ class GEM_EXTERN GemState
 
   //////////
   // Constructor
-  GemState();
+  GemState(void);
+  GemState(const GemState&);
 
   //////////
   // Destructor
-  virtual ~GemState();
+  virtual ~GemState(void);
 
   float texCoordX(int num) const;
 

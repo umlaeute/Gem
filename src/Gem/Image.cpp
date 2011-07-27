@@ -100,6 +100,15 @@ imageStruct :: imageStruct()
 #endif /* __APPLE__ */
 {}
 
+imageStruct :: imageStruct(const imageStruct&org) 
+  : xsize (0),ysize(0),csize(0),
+    type(GL_UNSIGNED_BYTE), format(GL_RGBA),
+    notowned(0),data(NULL),pdata(NULL),datasize(0),
+    upsidedown(0)
+{
+  org.copy2Image(this);
+}
+
 imageStruct :: ~imageStruct()
 {
   clear();
@@ -250,6 +259,10 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) const {
   else
     // copy the data over
     memcpy(to->data, this->data, to->xsize * to->ysize * to->csize);
+}
+
+imageStruct&imageStruct::operator=(const imageStruct&org) {
+  org.copy2Image(this);
 }
 
 

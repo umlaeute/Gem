@@ -36,16 +36,19 @@ public:
 	};
 	
 	PBuffer(int width,int height,int flags = GEM_PBUFLAG_RGBA | GEM_PBUFLAG_DEPTH | GEM_PBUFLAG_STENCIL);
-	~PBuffer();
+	~PBuffer(void);
 	
-	void enable();
-	void disable();
+	void enable(void);
+	void disable(void);
 	
 	int width;
 	int height;
-	
-protected:
+
+private:
 	struct PBuffer_data *data;
+
+  PBuffer(const PBuffer&);
+  PBuffer&operator=(const PBuffer&);
 };
 
 #endif /* __PBUFFER_H__ */

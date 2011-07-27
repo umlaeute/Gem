@@ -141,6 +141,34 @@ GemState& GemState::operator=(const GemState&org) {
 }
 
 
+GemState::GemState(const GemState&org) :
+  dirty(org.dirty),
+  inDisplayList(org.inDisplayList),
+  lighting(org.lighting),
+  smooth(org.smooth),
+  texture(org.texture),
+  image(org.image),
+  texCoords(org.texCoords),
+  numTexCoords(org.numTexCoords),
+  multiTexUnits(org.multiTexUnits),
+  tickTime(org.tickTime),
+  drawType(org.drawType),
+  VertexArray(org.VertexArray),
+  VertexArraySize(org.VertexArraySize),
+  VertexArrayStride(org.VertexArrayStride),
+  ColorArray(org.ColorArray),
+  HaveColorArray(org.HaveColorArray),
+  NormalArray(org.NormalArray),
+  HaveNormalArray(org.HaveNormalArray),
+  TexCoordArray(org.TexCoordArray),
+  HaveTexCoordArray(org.HaveTexCoordArray),
+  data(NULL)
+{
+  data->copyFrom(org.data);
+}
+
+
+
 
 void GemState :: reset() {
   VertexArray = 0;
