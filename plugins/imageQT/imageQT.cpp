@@ -29,6 +29,17 @@
 #endif
 
 #ifdef HAVE_QUICKTIME
+# ifdef HAVE_CARBONQUICKTIME
+  //
+# elif defined _WIN32
+  //
+# else
+#  undef HAVE_QUICKTIME
+# endif
+#endif
+
+#ifdef HAVE_QUICKTIME
+
 # include "Gem/RTE.h"
 # include "imageQT.h"
 
@@ -39,14 +50,9 @@
 # elif defined _WIN32
 #  include <QTML.h>
 #  include <Movies.h>
-# else
-#  undef HAVE_QUICKTIME
 # endif
 
-#endif
-
-
-#include <map>
+# include <map>
 
 //# include <string.h>
 //# include <fcntl.h> 
@@ -54,7 +60,6 @@
 using namespace gem::plugins;
 
 
-#ifdef HAVE_QUICKTIME
 REGISTER_IMAGEFACTORY("QT", imageQT);
 
 
