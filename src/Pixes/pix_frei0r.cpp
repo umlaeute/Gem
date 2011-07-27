@@ -251,7 +251,7 @@ typedef int (*t_f0r_deinit)(void);
   }
   bool set(unsigned int key, std::string s) {
     if(!m_instance)return false;
-    f0r_param_string v=const_cast<f0r_param_string>(s.c_str());
+    f0r_param_string*v=const_cast<f0r_param_string*>(s.c_str());
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
