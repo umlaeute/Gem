@@ -151,6 +151,18 @@ Context::Context(const Context&c)
   pop();
 }
 
+Context&Context::operator=(const Context&c) {
+  if(&c == this || c.m_pimpl == m_pimpl)
+    return (*this);
+
+  if(m_pimpl)delete m_pimpl;
+  m_pimpl=new PIMPL(*c.m_pimpl);
+  push();
+  pop();
+
+  return(*this);
+}
+
 
 Context::~Context(void) {
   if(m_pimpl)delete m_pimpl; m_pimpl=NULL;

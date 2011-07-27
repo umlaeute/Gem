@@ -39,12 +39,13 @@ class GEM_EXTERN Context {
   Context(const Context&);
   virtual ~Context(void);
 
+  Context&operator=(const Context&);
+
   // make context current
   bool push(void);
 
   // make context uncurrent
   bool pop(void);
-
 
  public:
   static unsigned int getContextId(void);

@@ -55,6 +55,13 @@ CPPExtern :: CPPExtern()
       m_objectname=gensym("unknown Gem object");
     }
 }
+CPPExtern :: CPPExtern(const CPPExtern&org) :
+  x_obj(org.x_obj),
+  m_objectname(org.m_objectname),
+  m_canvas(org.m_canvas),
+  m_endpost(true)
+{
+}
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -62,6 +69,8 @@ CPPExtern :: CPPExtern()
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 { }
+
+
 void CPPExtern :: post(const char*fmt,...) const
 {
   char buf[MAXPDSTRING];
@@ -183,4 +192,12 @@ bool CPPExtern :: checkGemVersion(const int major, const int minor) {
         return false;
   }
   return true;
+}
+
+
+CPPExtern&CPPExtern::operator=(const CPPExtern&org) {
+  x_obj=org.x_obj;
+  m_objectname=org.m_objectname;
+  m_canvas=org.m_canvas;
+  m_endpost=true;
 }

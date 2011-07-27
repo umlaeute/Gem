@@ -146,6 +146,8 @@ class GEM_EXTERN CPPExtern
  private:
 	mutable bool m_endpost; /* internal state for startpost/post/endpost */
 	static bool checkGemVersion(const int major, const int minor);
+  CPPExtern(const CPPExtern&);
+  virtual CPPExtern&operator=(const CPPExtern&);
 };
 
 ////////////////////////////////////////
