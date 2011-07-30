@@ -30,8 +30,12 @@ Gem_la_LIBADD   += @GEM_RTE_LIBS@
 Gem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # openGL
-Gem_la_CXXFLAGS += @GL_CFLAGS@ @GLU_CFLAGS@ @AGL_CFLAGS@
+Gem_la_CXXFLAGS += @GL_CFLAGS@ @GLU_CFLAGS@ @AGL_CFLAGS@ 
 Gem_la_LIBADD   += @GL_LIBS@   @GLU_LIBS@   @AGL_LIBS@
+Gem_la_LDFLAGS  += 
+# and glew
+Gem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
+Gem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
 Gem_la_LDFLAGS  += 
 
 
