@@ -162,9 +162,9 @@ GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
 
-AC_CHECK_LIB(m,sin)
-AC_CHECK_LIB(z,main)
-AC_CHECK_LIB(dl,dlopen)
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_LIB([z],[main])
+AC_CHECK_LIB([dl],[dlopen])
 
 # Checks for libraries.
 
@@ -180,9 +180,9 @@ AC_PATH_X
 AC_PATH_XTRA
 
 if test "x$with_x" != "xno"; then
-# AC_CHECK_LIB(X11,main)
-# AC_CHECK_LIB(Xext,main)
- AC_CHECK_LIB(Xxf86vm,XF86VidModeGetAllModeLines)
+# AC_CHECK_LIB([X11],[main])
+# AC_CHECK_LIB([Xext],[main])
+ AC_CHECK_LIB([Xxf86vm],[XF86VidModeGetAllModeLines])
 fi
 
 IEM_CHECK_GL
@@ -192,7 +192,7 @@ IEM_CHECK_GLX
 IEM_CHECK_AGL
 
 ## use system's libGLEW
-GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library], [no])
+GEM_CHECK_LIB([glew], [GLEW], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
 ### "-lstdc++" really has to be added before e.g. "-lGL" in order to avoid
@@ -201,17 +201,17 @@ GEM_CHECK_LIB(glew, GLEW, glewInit,,,,[OpenGL Extension Wrangler library], [no])
 ### since "-lstdc++" is usually found in the postdeps, this  would remove the
 ### entry found in LIBS; so we add it to the predeps_CXX (only)
 stdcxx_LIBS=$LIBS
-AC_CHECK_LIB(stdc++,main,[predeps_CXX="$predeps_CXX -lstdc++"])
+AC_CHECK_LIB([stdc++],[main],[predeps_CXX="$predeps_CXX -lstdc++"])
 LIBS=$stdcxx_LIBS
 
 dnl some checks for osX
-GEM_CHECK_FRAMEWORK(Cocoa,
+GEM_CHECK_FRAMEWORK([Cocoa],
                         [have_cocoa_framework="yes"], 
                         [have_cocoa_framework="no"])
-GEM_CHECK_FRAMEWORK(Carbon, 
+GEM_CHECK_FRAMEWORK([Carbon], 
                         [have_carbon_framework="yes"], 
                         [have_carbon_framework="no"])
-GEM_CHECK_FRAMEWORK(QuickTime,
+GEM_CHECK_FRAMEWORK([QuickTime],
                         [have_quicktime_framework="yes"], 
                         [have_quicktime_framework="no"])
 
@@ -222,7 +222,7 @@ if test "x$with_ImageMagick" = "x"; then
  with_ImageMagick="$with_imagemagick"
 fi
 
-GEM_CHECK_LIB(ImageMagick++, Magick++, main,
+GEM_CHECK_LIB([ImageMagick++], [Magick++], [main],
 	AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
 	,,[image loader])
 #if test "x${have_ImageMagick}" = "xyes"
@@ -230,19 +230,19 @@ GEM_CHECK_LIB(ImageMagick++, Magick++, main,
 # with_tiff=no
 # with_jpeg=no
 #fi
-GEM_CHECK_LIB(tiff, tiff, TIFFOpen,,,,[image loader])
-GEM_CHECK_LIB(jpeg, jpeg, jpeg_read_header,,,,[image loader])
+GEM_CHECK_LIB([tiff], [tiff], [TIFFOpen],,,,[image loader])
+GEM_CHECK_LIB([jpeg], [jpeg], [jpeg_read_header],,,,[image loader])
 
-GEM_CHECK_LIB(ftgl,ftgl,main,,,[ -lfreetype], font support)
+GEM_CHECK_LIB([ftgl], [ftgl], [main],,,[-lfreetype],[font support])
 
 
 ## film en/decoders
-GEM_CHECK_LIB(avifile, aviplay, CreateIAviReadFile,,,,[movie loader])
-GEM_CHECK_LIB(gmerlin_avdec, gmerlin_avdec, gavl_start,,,,[movie loader])
-GEM_CHECK_LIB(mpeg,mpeg,OpenMPEG,,,,[movie loader])
-GEM_CHECK_LIB(libmpeg3,mpeg3,mpeg3_check_sig,,,,[movie loader])
-GEM_CHECK_LIB(libquicktime,quicktime, quicktime_init,,,,[movie loader])
-GEM_CHECK_LIB(lqt,quicktime, quicktime_init,,,,[movie loader])
+GEM_CHECK_LIB([avifile], [aviplay], [CreateIAviReadFile],,,,[movie loader])
+GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec], [gavl_start],,,,[movie loader])
+GEM_CHECK_LIB([mpeg], [mpeg], [OpenMPEG],,,,[movie loader])
+GEM_CHECK_LIB([libmpeg3], [mpeg3], [mpeg3_check_sig],,,,[movie loader])
+GEM_CHECK_LIB([libquicktime], [quicktime], [quicktime_init],,,,[movie loader])
+GEM_CHECK_LIB([lqt], [quicktime], [quicktime_init],,,,[movie loader])
 
 # special function in libquicktime
 old_cflags=${CFLAGS}
@@ -255,15 +255,15 @@ CFLAGS=${old_cflags}
 LDFLAGS=${old_ldflags}
 
 #video
-GEM_CHECK_LIB(libdc1394-2,dc1394,main,,,,video input)
-GEM_CHECK_LIB(libdv,dv,main,,,,video input)
-GEM_CHECK_LIB(libraw1394,raw1394,main,,,,video input)
-GEM_CHECK_LIB(libiec61883,iec61883,main,,,,video input)
+GEM_CHECK_LIB([libdc1394-2], [dc1394], [main],,,, [video input])
+GEM_CHECK_LIB([libdv],[dv], [main],,,, [video input])
+GEM_CHECK_LIB([libraw1394], [raw1394], [main],,,, [video input])
+GEM_CHECK_LIB([libiec61883], [iec61883], [main],,,, [video input])
 AC_CHECK_HEADERS([vl/vl.h])
 
-GEM_ARG_WITH(unicap, [video input], [force])
+GEM_ARG_WITH([unicap], [video input], [force])
 
- GEM_CHECK_LIB(libunicap, unicap, unicap_check_version,,,,[video input])
+GEM_CHECK_LIB([libunicap], [unicap], [unicap_check_version],,,, [video input])
 
 if test "x$have_unicap" = "xyes"; then
  AC_CHECK_HEADER([unicap/unicap.h],
@@ -272,26 +272,26 @@ if test "x$have_unicap" = "xyes"; then
                     have_unicap="yes"
                   ],[have_unicap="no"])
 fi
-AM_CONDITIONAL(HAVE_LIB_UNICAP, [test "x${have_unicap}" = "xyes"])
+AM_CONDITIONAL([HAVE_LIB_UNICAP], [test "x${have_unicap}" = "xyes"])
 
 
 have_v4l="no"
-GEM_ARG_WITH(v4l, [video input], [force])
+GEM_ARG_WITH([v4l], [video input], [force])
 AC_CHECK_HEADERS([linux/videodev.h], have_v4l="yes")
-GEM_CHECK_LIB(libv4l1, v4l1, v4l1_open,,,,[video output])
+GEM_CHECK_LIB([libv4l1], [v4l1], [v4l1_open],,,, [video output])
 if test "x$have_libv4l1" = "xyes"; then
   have_v4l="yes (libv4l)"
 fi
 if test "x$with_v4l" = "xno"; then
   have_v4l="no"
 fi
-AM_CONDITIONAL(HAVE_V4L, [test "x${have_v4l}" != "xno"])
+AM_CONDITIONAL([HAVE_V4L], [test "x${have_v4l}" != "xno"])
 
 
 have_v4l2="no"
-GEM_ARG_WITH(v4l2, [video input], [force])
+GEM_ARG_WITH([v4l2], [video input], [force])
 AC_CHECK_HEADERS([linux/videodev2.h])
-GEM_CHECK_LIB(libv4l2, v4l2, v4l2_open,,,,[video input])
+GEM_CHECK_LIB([libv4l2], [v4l2], [v4l2_open],,,, [video input])
 # AC_DEFINE([HAVE_VIDEO4LINUX2], [], [video capturing using v4l2])
 
 if test "x$have_libv4l2" = "xyes"; then
@@ -300,12 +300,12 @@ fi
 if test "x$with_v4l2" = "xno"; then
   have_v4l2="no"
 fi
-AM_CONDITIONAL(HAVE_V4L2, [test "x${have_v4l2}" != "xno"])
+AM_CONDITIONAL([HAVE_V4L2], [test "x${have_v4l2}" != "xno"])
 
 
-GEM_CHECK_LIB(vfw32,vfw32,AVIFileInit,,,,video input)
+GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
 # is this needed?
-dnl GEM_CHECK_LIB(avicap32,avicap32,main,,,,video input)
+dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
 
 # for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
 AC_CHECK_HEADERS([FTGL/ftgl.h])
@@ -341,8 +341,8 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
 
-AC_CHECK_SIZEOF(unsigned int)
-AC_CHECK_SIZEOF(void *)
+AC_CHECK_SIZEOF([unsigned int])
+AC_CHECK_SIZEOF([void *])
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
