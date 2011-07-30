@@ -91,7 +91,7 @@ undefine([NAME])
 
 
 
-# GEM_CHECK_LIB(NAME, LIBRARY, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT])
+# GEM_CHECK_LIB(NAME, LIBRARY, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT], [DEFAULT-WITH_VALUE])
 #
 ## this automatically adds the option "--without-NAME" to disable the checking for the library
 ## additionally it gives the options "--with-NAME-includes" and "--with-NAME-libs", 
