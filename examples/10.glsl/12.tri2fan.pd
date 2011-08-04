@@ -87,7 +87,7 @@ depend on the normal of the original primitive;
 #X obj 161 554 scaleXYZ 0.2 0.2 0.2;
 #X msg 172 129 auto 1;
 #X obj 172 108 loadbang;
-#X msg 176 195 open tri2fan.geo;
+#X msg 176 195 open tri2fan.geom;
 #X msg 177 286 open tri2fan.vert;
 #X msg 178 370 open tri2fan.frag;
 #X obj 161 724 newWave 25 25;
