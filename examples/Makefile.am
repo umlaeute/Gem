@@ -163,7 +163,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/texture_rect.frag \
 	10.glsl/texture.vert \
 	10.glsl/tri2fan.frag \
-	10.glsl/tri2fan.geo \
+	10.glsl/tri2fan.geom \
 	10.glsl/tri2fan.vert \
 	10.glsl/vague.frag \
 	10.glsl/wave.frag \
