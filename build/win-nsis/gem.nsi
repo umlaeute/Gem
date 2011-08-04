@@ -102,7 +102,7 @@ SectionGroup "Documentation" SEC_documentation
  Section "examples" SEC_examples
   SetOverwrite ifnewer
   SetOutPath "$GEM_OUTDIR\examples\"
-  File /r /x .svn "${BASE_INDIR}\examples\*.*"
+  File /r /x .svn /x "Makefile*" "${BASE_INDIR}\examples\*.*"
   ; this should only be set if there is no entry yet
   WriteRegStr HKCU "Environment" "GEM_DEFAULT_FONT" "$GEM_OUTDIR\examples\data\vera.ttf"
  SectionEnd
@@ -247,31 +247,13 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you really want to uninstall $(^Name) and all it's components?" IDYES +2
   Abort
+StrCpy $EXTRA_OUTDIR "$INSTDIR\.."
+StrCpy $GEM_OUTDIR "$INSTDIR"
 FunctionEnd
 
 ; uäh: isn't there a way to only delete the files we actually installed?
 ; that is: without having to enumerate them here
 Section Uninstall
-  Delete "$GEM_OUTDIR\uninst.exe"
-  Delete "$GEM_OUTDIR\*.pd"
-  Delete "$GEM_OUTDIR\Gem.dll"
-
-  Delete "$GEM_OUTDIR\filmAVI.dll"
-  Delete "$GEM_OUTDIR\filmDS.dll"
-  Delete "$GEM_OUTDIR\filmQT.dll"
-  Delete "$GEM_OUTDIR\imageJPEG.dll"
-  Delete "$GEM_OUTDIR\imageMAGICK.dll"
-  Delete "$GEM_OUTDIR\imageQT.dll"
-  Delete "$GEM_OUTDIR\imageSGI.dll"
-  Delete "$GEM_OUTDIR\imageTIFF.dll"
-  Delete "$GEM_OUTDIR\recordQT.dll"
-  Delete "$GEM_OUTDIR\videoAVT.dll"
-  Delete "$GEM_OUTDIR\videoDS.dll"
-  Delete "$GEM_OUTDIR\videoHALCON.dll"
-  Delete "$GEM_OUTDIR\videoPYLON.dll"
-  Delete "$GEM_OUTDIR\videoVFW.dll"
-
-
   Delete "$GEM_OUTDIR\doc\manual\*.*"
   RMDir "$GEM_OUTDIR\doc\manual"
 
@@ -280,8 +262,17 @@ Section Uninstall
 
   Delete "$GEM_OUTDIR\examples\data\*.*"
   Delete "$GEM_OUTDIR\examples\99.games\*.pd"
+  Delete "$GEM_OUTDIR\examples\13.recursion\*.pd"
+  Delete "$GEM_OUTDIR\examples\13.recursion\README"
+  Delete "$GEM_OUTDIR\examples\12.multi_screen_projection\*.pd"
+  Delete "$GEM_OUTDIR\examples\12.multi_screen_projection\*.frag"
+  Delete "$GEM_OUTDIR\examples\12.multi_screen_projection\*.vert"
+  Delete "$GEM_OUTDIR\examples\12.multi_screen_projection\config.txt"
+  Delete "$GEM_OUTDIR\examples\12.multi_screen_projection\grid.jpg"
+  Delete "$GEM_OUTDIR\examples\11.obj-exporter\*.pd"
   Delete "$GEM_OUTDIR\examples\10.glsl\*.frag"
   Delete "$GEM_OUTDIR\examples\10.glsl\*.vert"
+  Delete "$GEM_OUTDIR\examples\10.glsl\*.geom"
   Delete "$GEM_OUTDIR\examples\10.glsl\*.jpg"
   Delete "$GEM_OUTDIR\examples\10.glsl\*.pd"
   Delete "$GEM_OUTDIR\examples\09.openGL\*.pd"
@@ -297,6 +288,9 @@ Section Uninstall
   Delete "$GEM_OUTDIR\examples\01.basic\*.pd"
   RMDir "$GEM_OUTDIR\examples\data"
   RMDir "$GEM_OUTDIR\examples\99.games"
+  RMDir "$GEM_OUTDIR\examples\13.recursion"
+  RMDir "$GEM_OUTDIR\examples\12.multi_screen_projection"
+  RMDir "$GEM_OUTDIR\examples\11.obj-exporter"
   RMDir "$GEM_OUTDIR\examples\10.glsl"
   RMDir "$GEM_OUTDIR\examples\09.openGL"
   RMDir "$GEM_OUTDIR\examples\08.io"
@@ -310,7 +304,25 @@ Section Uninstall
   RMDir "$GEM_OUTDIR\examples\01.basic"
   RMDir "$GEM_OUTDIR\examples"
 
-  RMDir "$GEM_OUTDIR"
+  Delete "$GEM_OUTDIR\pix_*.pd"
+  Delete "$GEM_OUTDIR\*-help.pd"
+  Delete "$GEM_OUTDIR\*.pd"
+  Delete "$GEM_OUTDIR\gem_filmAVI.dll"
+  Delete "$GEM_OUTDIR\gem_filmDS.dll"
+  Delete "$GEM_OUTDIR\gem_filmQT.dll"
+  Delete "$GEM_OUTDIR\gem_imageJPEG.dll"
+  Delete "$GEM_OUTDIR\gem_imageMAGICK.dll"
+  Delete "$GEM_OUTDIR\gem_imageQT.dll"
+  Delete "$GEM_OUTDIR\gem_imageSGI.dll"
+  Delete "$GEM_OUTDIR\gem_imageTIFF.dll"
+  Delete "$GEM_OUTDIR\gem_recordQT.dll"
+  Delete "$GEM_OUTDIR\gem_videoAVT.dll"
+  Delete "$GEM_OUTDIR\gem_videoDS.dll"
+  Delete "$GEM_OUTDIR\gem_videoHALCON.dll"
+  Delete "$GEM_OUTDIR\gem_videoPYLON.dll"
+  Delete "$GEM_OUTDIR\gem_videoVFW.dll"
+  Delete "$GEM_OUTDIR\Gem.dll"
+  Delete "$GEM_OUTDIR\GnuGPL.LICENSE.txt"
 
   /* extra */
   Delete "$EXTRA_OUTDIR\pix_drum\pix_drum.dll"
@@ -329,10 +341,13 @@ Section Uninstall
   Delete "$EXTRA_OUTDIR\pix_artoolkit\patt.hiro"
   Delete "$EXTRA_OUTDIR\pix_artoolkit\pattHiro.pdf"
 
+  RMDir "$EXTRA_OUTDIR\pix_drum"
+  RMDir "$EXTRA_OUTDIR\pix_mano"
+  RMDir "$EXTRA_OUTDIR\pix_fiducialtrack"
+  RMDir "$EXTRA_OUTDIR\pix_artoolkit"
 
-
-
-
+  Delete "$GEM_OUTDIR\uninst.exe"
+  RMDir "$GEM_OUTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   ; try to delete   HKCU\"Environment"\"GEM_DEFAULT_FONT" if it is "$GEM_OUTDIR\examples\data\vera.ttf"
