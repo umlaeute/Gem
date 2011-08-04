@@ -83,7 +83,11 @@ StrCpy $GEM_OUTDIR "$INSTDIR"
   SectionIn RO
   SetOutPath "$GEM_OUTDIR"
   File "${BUILD_INDIR}\Gem.dll"
+
   File "${BASE_INDIR}\GnuGPL.LICENSE.txt"
+  File "${BASE_INDIR}\COPYING.txt"
+  File "${BASE_INDIR}\ChangeLog"
+  File "${BASE_INDIR}\README.txt"
  SectionEnd
  Section "Gem-abstractions" SEC_GemAbs
   SectionIn RO
@@ -108,13 +112,17 @@ SectionGroup "Documentation" SEC_documentation
  SectionEnd
  Section "manual" SEC_manual
   SetOverwrite ifnewer
-  SetOutPath "$GEM_OUTDIR\doc\manual"
+  SetOutPath "$GEM_OUTDIR\manual"
   File /r /x .svn "${BASE_INDIR}\doc\manual\*.*"
  SectionEnd
  Section "doc" SEC_doc
   SetOverwrite ifnewer
-  SetOutPath "$GEM_OUTDIR\doc"
-  File /r /x .svn "${BASE_INDIR}\doc\*.*"
+  SetOutPath "$GEM_OUTDIR"
+  File "${BASE_INDIR}\doc\cMatrix.html"
+  File "${BASE_INDIR}\doc\gem.known_bugs.txt"
+  File "${BASE_INDIR}\doc\GemPrimer.pdf"
+  File "${BASE_INDIR}\doc\gem.release_notes.txt"
+  File "${BASE_INDIR}\doc\gem.todo.txt"
  SectionEnd
 SectionGroupEnd
 
@@ -254,11 +262,14 @@ FunctionEnd
 ; uäh: isn't there a way to only delete the files we actually installed?
 ; that is: without having to enumerate them here
 Section Uninstall
-  Delete "$GEM_OUTDIR\doc\manual\*.*"
-  RMDir "$GEM_OUTDIR\doc\manual"
+  Delete "$GEM_OUTDIR\manual\*.*"
+  RMDir "$GEM_OUTDIR\manual"
 
-  Delete "$GEM_OUTDIR\doc\*.*"
-  RMDir "$GEM_OUTDIR\doc"
+  Delete "$GEM_OUTDIR\cMatrix.html"
+  Delete "$GEM_OUTDIR\gem.known_bugs.txt"
+  Delete "$GEM_OUTDIR\GemPrimer.pdf"
+  Delete "$GEM_OUTDIR\gem.release_notes.txt"
+  Delete "$GEM_OUTDIR\gem.todo.txt"
 
   Delete "$GEM_OUTDIR\examples\data\*.*"
   Delete "$GEM_OUTDIR\examples\99.games\*.pd"
@@ -323,6 +334,9 @@ Section Uninstall
   Delete "$GEM_OUTDIR\gem_videoVFW.dll"
   Delete "$GEM_OUTDIR\Gem.dll"
   Delete "$GEM_OUTDIR\GnuGPL.LICENSE.txt"
+  Delete "$GEM_OUTDIR\COPYING.txt"
+  Delete "$GEM_OUTDIR\ChangeLog"
+  Delete "$GEM_OUTDIR\README.txt"
 
   /* extra */
   Delete "$EXTRA_OUTDIR\pix_drum\pix_drum.dll"
