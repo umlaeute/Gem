@@ -29,6 +29,9 @@
 
 OutFile "gem-${PRODUCT_VERSION}${PRODUCT_ARCH}.exe"
 
+!define BASE_INDIR "..\.."
+!define BUILD_INDIR "..\win-vs2003"
+
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -65,129 +68,166 @@ InstallDir "$PROGRAMFILES\pd\extra\Gem"
 ShowInstDetails show
 ShowUnInstDetails show
 
+Var /GLOBAL GEM_OUTDIR
+Var /GLOBAL EXTRA_OUTDIR
+
 ; the sections for the library itself (binary+abstractions)
 
 SectionGroup "Gem" SEC_Gem
  Section "Gem-binary" SEC_GemBinary
+StrCpy $EXTRA_OUTDIR "$INSTDIR\.."
+StrCpy $GEM_OUTDIR "$INSTDIR"
+
+
   SetOverwrite ifnewer
   SectionIn RO
-  SetOutPath "$INSTDIR"
-  File "..\win-vs2003\Gem.dll"
-  File "..\..\GnuGPL.LICENSE.txt"
+  SetOutPath "$GEM_OUTDIR"
+  File "${BUILD_INDIR}\Gem.dll"
+  File "${BASE_INDIR}\GnuGPL.LICENSE.txt"
  SectionEnd
  Section "Gem-abstractions" SEC_GemAbs
   SectionIn RO
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR"
-  File "..\..\abstractions\*.pd"
+  SetOutPath "$GEM_OUTDIR"
+  File "${BASE_INDIR}\abstractions\*.pd"
  SectionEnd
-
-SectionGroup "plugins"
-
-Section "DirectShow movies" SEC_plugin_filmDS
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_filmDS.dll"
-SectionEnd
-Section "QuickTime movies" SEC_plugin_filmQT
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_filmQT.dll"
-SectionEnd
-Section /o "AVI movies" SEC_plugin_filmAVI
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_filmAVI.dll"
-SectionEnd
-
-Section "ImageMagick images" SEC_plugin_imageMAGICK
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_imageMAGICK.dll"
-SectionEnd
-Section "QuickTime images" SEC_plugin_imageQT
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_imageQT.dll"
-SectionEnd
-Section /o "SGI images" SEC_plugin_imageSGI
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_imageSGI.dll"
-SectionEnd
-Section /o "JPEG images" SEC_plugin_imageJPEG
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_imageJPEG.dll"
-SectionEnd
-Section /o "TIFF images" SEC_plugin_imageTIFF
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_imageTIFF.dll"
-SectionEnd
-
-Section "QuickTime recording" SEC_plugin_recordQT
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_recordQT.dll"
-SectionEnd
-
-Section "DirectShow capturing" SEC_plugin_videoDS
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_videoDS.dll"
-SectionEnd
-Section /o "VFW capturing" SEC_plugin_videoVFW
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_videoVFW.dll"
-SectionEnd
-Section /o "Allied Vision Technologies capturing" SEC_plugin_videoAVT
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_videoAVT.dll"
-SectionEnd
-Section /o "MVTec/HALCON capturing" SEC_plugin_videoHALCON
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_videoHALCON.dll"
-SectionEnd
-Section /o "Basler/PYLON capturing" SEC_plugin_videoPYLON
-   SetOverwrite ifnewer
-   SetOutPath "$INSTDIR"
-   File "..\win-vs2003\gem_videoPYLON.dll"
-SectionEnd
-
 SectionGroupEnd
 
 SectionGroup "Documentation" SEC_documentation
  Section "reference" SEC_ref
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR"
-  File /r /x .svn "..\..\help\*.pd"
+  SetOutPath "$GEM_OUTDIR"
+  File /r /x .svn "${BASE_INDIR}\help\*.pd"
  SectionEnd
-
  Section "examples" SEC_examples
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR\examples\"
-  File /r /x .svn "..\..\examples\*.*"
+  SetOutPath "$GEM_OUTDIR\examples\"
+  File /r /x .svn "${BASE_INDIR}\examples\*.*"
   ; this should only be set if there is no entry yet
-  WriteRegStr HKCU "Environment" "GEM_DEFAULT_FONT" "$INSTDIR\examples\data\vera.ttf"
+  WriteRegStr HKCU "Environment" "GEM_DEFAULT_FONT" "$GEM_OUTDIR\examples\data\vera.ttf"
  SectionEnd
-
  Section "manual" SEC_manual
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR\doc\manual"
-  File /r /x .svn "..\..\doc\manual\*.*"
+  SetOutPath "$GEM_OUTDIR\doc\manual"
+  File /r /x .svn "${BASE_INDIR}\doc\manual\*.*"
  SectionEnd
-
  Section "doc" SEC_doc
   SetOverwrite ifnewer
-  SetOutPath "$INSTDIR\doc"
-  File /r /x .svn "..\..\doc\*.*"
+  SetOutPath "$GEM_OUTDIR\doc"
+  File /r /x .svn "${BASE_INDIR}\doc\*.*"
  SectionEnd
 SectionGroupEnd
 
+SectionGroup "plugins"
+
+  Section "DirectShow movies" SEC_plugin_filmDS
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_filmDS.dll"
+  SectionEnd
+  Section "QuickTime movies" SEC_plugin_filmQT
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_filmQT.dll"
+  SectionEnd
+  Section /o "AVI movies" SEC_plugin_filmAVI
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_filmAVI.dll"
+  SectionEnd
+
+  Section "ImageMagick images" SEC_plugin_imageMAGICK
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_imageMAGICK.dll"
+  SectionEnd
+  Section "QuickTime images" SEC_plugin_imageQT
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_imageQT.dll"
+  SectionEnd
+  Section /o "SGI images" SEC_plugin_imageSGI
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_imageSGI.dll"
+  SectionEnd
+  Section /o "JPEG images" SEC_plugin_imageJPEG
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_imageJPEG.dll"
+  SectionEnd
+  Section /o "TIFF images" SEC_plugin_imageTIFF
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_imageTIFF.dll"
+  SectionEnd
+
+  Section "QuickTime recording" SEC_plugin_recordQT
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_recordQT.dll"
+  SectionEnd
+
+  Section "DirectShow capturing" SEC_plugin_videoDS
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoDS.dll"
+  SectionEnd
+  Section /o "VFW capturing" SEC_plugin_videoVFW
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoVFW.dll"
+  SectionEnd
+  Section /o "Allied Vision Technologies capturing" SEC_plugin_videoAVT
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoAVT.dll"
+  SectionEnd
+  Section /o "MVTec/HALCON capturing" SEC_plugin_videoHALCON
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoHALCON.dll"
+  SectionEnd
+  Section /o "Basler/PYLON capturing" SEC_plugin_videoPYLON
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoPYLON.dll"
+  SectionEnd
+SectionGroupEnd
+
+SectionGroup "extra" SEC_extra
+ Section "pix_drum" SEC_extra_pix_drum
+  SetOverwrite ifnewer
+  SetOutPath "$EXTRA_OUTDIR\pix_drum"
+  File "${BUILD_INDIR}\pix_drum.dll"
+  File "${BASE_INDIR}\extra\pix_drum\pix_drum-help.pd"
+  File "${BASE_INDIR}\extra\pix_drum\LICENSE.txt"
+ SectionEnd
+ Section "pix_mano" SEC_extra_pix_mano
+  SetOverwrite ifnewer
+  SetOutPath "$EXTRA_OUTDIR\pix_mano"
+  File "${BUILD_INDIR}\pix_mano.dll"
+  File "${BASE_INDIR}\extra\pix_mano\pix_mano-help.pd"
+  File "${BASE_INDIR}\extra\pix_mano\LICENSE.txt"
+ SectionEnd
+ Section "pix_fiducialtrack" SEC_extra_pix_fiducialtrack
+  SetOverwrite ifnewer
+  SetOutPath "$EXTRA_OUTDIR\pix_fiducialtrack"
+  File "${BUILD_INDIR}\pix_fiducialtrack.dll"
+  File "${BASE_INDIR}\extra\pix_fiducialtrack\pix_fiducialtrack-help.pd"
+  File "${BASE_INDIR}\extra\pix_fiducialtrack\all.trees"
+ SectionEnd
+ Section "pix_artoolkit" SEC_extra_pix_artoolkit
+  SetOverwrite ifnewer
+  SetOutPath "$EXTRA_OUTDIR\pix_artoolkit"
+  File "${BUILD_INDIR}\pix_artoolkit.dll"
+  File "${BASE_INDIR}\extra\pix_artoolkit\pix_artoolkit-help.pd"
+  File "${BASE_INDIR}\extra\pix_artoolkit\README.txt"
+  File "${BASE_INDIR}\extra\pix_artoolkit\camera_para.dat"
+  File "${BASE_INDIR}\extra\pix_artoolkit\patt.hiro"
+  File "${BASE_INDIR}\extra\pix_artoolkit\pattHiro.pdf"
+ SectionEnd
+SectionGroupEnd
 
 Function .onInit
  ; prevent multiple instances running at the same time
@@ -212,75 +252,98 @@ FunctionEnd
 ; uäh: isn't there a way to only delete the files we actually installed?
 ; that is: without having to enumerate them here
 Section Uninstall
-  Delete "$INSTDIR\uninst.exe"
-  Delete "$INSTDIR\*.pd"
-  Delete "$INSTDIR\Gem.dll"
+  Delete "$GEM_OUTDIR\uninst.exe"
+  Delete "$GEM_OUTDIR\*.pd"
+  Delete "$GEM_OUTDIR\Gem.dll"
 
-  Delete "$INSTDIR\filmAVI.dll"
-  Delete "$INSTDIR\filmDS.dll"
-  Delete "$INSTDIR\filmQT.dll"
-  Delete "$INSTDIR\imageJPEG.dll"
-  Delete "$INSTDIR\imageMAGICK.dll"
-  Delete "$INSTDIR\imageQT.dll"
-  Delete "$INSTDIR\imageSGI.dll"
-  Delete "$INSTDIR\imageTIFF.dll"
-  Delete "$INSTDIR\recordQT.dll"
-  Delete "$INSTDIR\videoAVT.dll"
-  Delete "$INSTDIR\videoDS.dll"
-  Delete "$INSTDIR\videoHALCON.dll"
-  Delete "$INSTDIR\videoPYLON.dll"
-  Delete "$INSTDIR\videoVFW.dll"
+  Delete "$GEM_OUTDIR\filmAVI.dll"
+  Delete "$GEM_OUTDIR\filmDS.dll"
+  Delete "$GEM_OUTDIR\filmQT.dll"
+  Delete "$GEM_OUTDIR\imageJPEG.dll"
+  Delete "$GEM_OUTDIR\imageMAGICK.dll"
+  Delete "$GEM_OUTDIR\imageQT.dll"
+  Delete "$GEM_OUTDIR\imageSGI.dll"
+  Delete "$GEM_OUTDIR\imageTIFF.dll"
+  Delete "$GEM_OUTDIR\recordQT.dll"
+  Delete "$GEM_OUTDIR\videoAVT.dll"
+  Delete "$GEM_OUTDIR\videoDS.dll"
+  Delete "$GEM_OUTDIR\videoHALCON.dll"
+  Delete "$GEM_OUTDIR\videoPYLON.dll"
+  Delete "$GEM_OUTDIR\videoVFW.dll"
 
-  Delete "$INSTDIR\doc\manual\*.*"
-  RMDir "$INSTDIR\doc\manual"
 
-  Delete "$INSTDIR\doc\*.*"
-  RMDir "$INSTDIR\doc"
+  Delete "$GEM_OUTDIR\doc\manual\*.*"
+  RMDir "$GEM_OUTDIR\doc\manual"
 
-  Delete "$INSTDIR\examples\data\*.*"
-  Delete "$INSTDIR\examples\99.games\*.pd"
-  Delete "$INSTDIR\examples\10.glsl\*.frag"
-  Delete "$INSTDIR\examples\10.glsl\*.vert"
-  Delete "$INSTDIR\examples\10.glsl\*.jpg"
-  Delete "$INSTDIR\examples\10.glsl\*.pd"
-  Delete "$INSTDIR\examples\09.openGL\*.pd"
-  Delete "$INSTDIR\examples\08.io\*.pd"
-  Delete "$INSTDIR\examples\07.texture\*.pd"
-  Delete "$INSTDIR\examples\06.particle\*.pd"
-  Delete "$INSTDIR\examples\05.text\*.ttf"
-  Delete "$INSTDIR\examples\05.text\*.pd"
-  Delete "$INSTDIR\examples\04.video\*.pd"
-  Delete "$INSTDIR\examples\04.pix\*.pd"
-  Delete "$INSTDIR\examples\03.lighting\*.pd"
-  Delete "$INSTDIR\examples\02.advanced\*.pd"
-  Delete "$INSTDIR\examples\01.basic\*.pd"
-  RMDir "$INSTDIR\examples\data"
-  RMDir "$INSTDIR\examples\99.games"
-  RMDir "$INSTDIR\examples\10.glsl"
-  RMDir "$INSTDIR\examples\09.openGL"
-  RMDir "$INSTDIR\examples\08.io"
-  RMDir "$INSTDIR\examples\07.texture"
-  RMDir "$INSTDIR\examples\06.particle"
-  RMDir "$INSTDIR\examples\05.text"
-  RMDir "$INSTDIR\examples\04.video"
-  RMDir "$INSTDIR\examples\04.pix"
-  RMDir "$INSTDIR\examples\03.lighting"
-  RMDir "$INSTDIR\examples\02.advanced"
-  RMDir "$INSTDIR\examples\01.basic"
-  RMDir "$INSTDIR\examples"
+  Delete "$GEM_OUTDIR\doc\*.*"
+  RMDir "$GEM_OUTDIR\doc"
 
-  RMDir "$INSTDIR"
+  Delete "$GEM_OUTDIR\examples\data\*.*"
+  Delete "$GEM_OUTDIR\examples\99.games\*.pd"
+  Delete "$GEM_OUTDIR\examples\10.glsl\*.frag"
+  Delete "$GEM_OUTDIR\examples\10.glsl\*.vert"
+  Delete "$GEM_OUTDIR\examples\10.glsl\*.jpg"
+  Delete "$GEM_OUTDIR\examples\10.glsl\*.pd"
+  Delete "$GEM_OUTDIR\examples\09.openGL\*.pd"
+  Delete "$GEM_OUTDIR\examples\08.io\*.pd"
+  Delete "$GEM_OUTDIR\examples\07.texture\*.pd"
+  Delete "$GEM_OUTDIR\examples\06.particle\*.pd"
+  Delete "$GEM_OUTDIR\examples\05.text\*.ttf"
+  Delete "$GEM_OUTDIR\examples\05.text\*.pd"
+  Delete "$GEM_OUTDIR\examples\04.video\*.pd"
+  Delete "$GEM_OUTDIR\examples\04.pix\*.pd"
+  Delete "$GEM_OUTDIR\examples\03.lighting\*.pd"
+  Delete "$GEM_OUTDIR\examples\02.advanced\*.pd"
+  Delete "$GEM_OUTDIR\examples\01.basic\*.pd"
+  RMDir "$GEM_OUTDIR\examples\data"
+  RMDir "$GEM_OUTDIR\examples\99.games"
+  RMDir "$GEM_OUTDIR\examples\10.glsl"
+  RMDir "$GEM_OUTDIR\examples\09.openGL"
+  RMDir "$GEM_OUTDIR\examples\08.io"
+  RMDir "$GEM_OUTDIR\examples\07.texture"
+  RMDir "$GEM_OUTDIR\examples\06.particle"
+  RMDir "$GEM_OUTDIR\examples\05.text"
+  RMDir "$GEM_OUTDIR\examples\04.video"
+  RMDir "$GEM_OUTDIR\examples\04.pix"
+  RMDir "$GEM_OUTDIR\examples\03.lighting"
+  RMDir "$GEM_OUTDIR\examples\02.advanced"
+  RMDir "$GEM_OUTDIR\examples\01.basic"
+  RMDir "$GEM_OUTDIR\examples"
+
+  RMDir "$GEM_OUTDIR"
+
+  /* extra */
+  Delete "$EXTRA_OUTDIR\pix_drum\pix_drum.dll"
+  Delete "$EXTRA_OUTDIR\pix_drum\pix_drum-help.pd"
+  Delete "$EXTRA_OUTDIR\pix_drum\LICENSE.txt"
+  Delete "$EXTRA_OUTDIR\pix_mano\pix_mano.dll"
+  Delete "$EXTRA_OUTDIR\pix_mano\pix_mano-help.pd"
+  Delete "$EXTRA_OUTDIR\pix_mano\LICENSE.txt"
+  Delete "$EXTRA_OUTDIR\pix_fiducialtrack\pix_fiducialtrack.dll"
+  Delete "$EXTRA_OUTDIR\pix_fiducialtrack\pix_fiducialtrack-help.pd"
+  Delete "$EXTRA_OUTDIR\pix_fiducialtrack\all.trees"
+  Delete "$EXTRA_OUTDIR\pix_artoolkit\pix_artoolkit.dll"
+  Delete "$EXTRA_OUTDIR\pix_artoolkit\pix_artoolkit-help.pd"
+  Delete "$EXTRA_OUTDIR\pix_artoolkit\README.txt"
+  Delete "$EXTRA_OUTDIR\pix_artoolkit\camera_para.dat"
+  Delete "$EXTRA_OUTDIR\pix_artoolkit\patt.hiro"
+  Delete "$EXTRA_OUTDIR\pix_artoolkit\pattHiro.pdf"
+
+
+
+
+
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
-  ; try to delete   HKCU\"Environment"\"GEM_DEFAULT_FONT" if it is "$INSTDIR\examples\data\vera.ttf"
+  ; try to delete   HKCU\"Environment"\"GEM_DEFAULT_FONT" if it is "$GEM_OUTDIR\examples\data\vera.ttf"
 
   SetAutoClose true
 SectionEnd
 
 Section -Post
-  WriteUninstaller "$INSTDIR\uninst.exe"
+  WriteUninstaller "$GEM_OUTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$GEM_OUTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
@@ -302,14 +365,7 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmQT} "allows to read movies using Apple's QuickTime library (if present)"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
 
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_recordQT} "allows to output Gem-pixes into QuickTime MOVie files"
-
-
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmDS} "allows to read movies using DirectShow filters"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmQT} "allows to read movies using Apple's QuickTime library (you will have to download and install QuickTime for Windows yourself in order to use this)"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
 
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageMAGICK} "allows to read/write still images using ImageMagick (this can virtually read/write any image format, including but not limited to JPEG, TIFF and SGI, so it's probably the only 'image' plugin you need)"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime (you will have to download and install QuickTime for Windows yourself in order to use this)"
@@ -317,13 +373,18 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageJPEG} "allows to read/write JPEG images"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
 
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_recordQT} "allows to output Gem-pixes into QuickTime MOVie files (you will have to download and install QuickTime for Windows yourself in order to use this)"
-
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoAVT} "allows to capture live video from GigE-cameras using AVT (Allied Vision Technologies); supported cameras include the Prosilica family (http://www.alliedvisiontec.com) "
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoHALCON} "allows to capture live video from a number of devices (including GigE-cameras and industry grade frame grabbers) using MVTec's HALCON library; you will need to purchase a license from MVTec in order to be able to use this plugin (http://www.mvtec.com) "
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoPYLON} "allows to capture live video from GigE-cameras using Basler's PYLON library; mainly supports Basler cameras; you might need to download additional software in order to use this plugin (http://www.baslerweb.com)"
+
+
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra} "additional objectclasses"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra_pix_drum} "Jaime Olivier's [pix_drum] object for his 'Silent Drum'"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra_pix_mano} "Jaime Olivier's [pix_mano] object"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra_pix_fiducialtrack} "a port of the reactable(tm)'s fiducial tracking algorithm"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra_pix_artoolkit} "fiducial tracking using ARToolkit markers"
 
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
