@@ -21,9 +21,12 @@
 #include <sstream>
 
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-
+#ifdef _WIN32
+# include <winsock.h>
+#else
+# include <sys/socket.h>
+# include <netdb.h>
+#endif
 #include <errno.h>
 
 using namespace gem::plugins;
