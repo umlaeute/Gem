@@ -151,7 +151,7 @@ SectionGroup "plugins"
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageMAGICK.dll"
   SectionEnd
-  Section "QuickTime images" SEC_plugin_imageQT
+  Section /o "QuickTime images" SEC_plugin_imageQT
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageQT.dll"
@@ -583,7 +583,7 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_recordQT} "allows to output Gem-pixes into QuickTime MOVie files"
 
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageMAGICK} "allows to read/write still images using ImageMagick (this can virtually read/write any image format, including but not limited to JPEG, TIFF and SGI, so it's probably the only 'image' plugin you need)"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime (you will have to download and install QuickTime for Windows yourself in order to use this)"
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime (you will have to download and install QuickTime for Windows yourself in order to use this); NOTE that this will disable threaded loading of images and might make problems is you also install imageMAGICK"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageSGI} "allows to read SGI images"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageJPEG} "allows to read/write JPEG images"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
