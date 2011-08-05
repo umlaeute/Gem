@@ -21,16 +21,6 @@
 /* quicktime-support for film-loading */
 #define HAVE_QUICKTIME
 
-/* use direct-show for video-in (e.g. for firewire,...) */
-#define HAVE_DIRECTSHOW
-
-/*
- * we want libjpeg and libtiff for reading/writing images
- */
-#define HAVE_LIBTIFF
-#define HAVE_LIBJPEG
-
-
 /* **********************************************************************
  * now do a bit of magic based on the information given above
  * probably you don't want to edit this

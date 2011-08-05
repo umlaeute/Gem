@@ -263,6 +263,7 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) const {
 
 imageStruct&imageStruct::operator=(const imageStruct&org) {
   org.copy2Image(this);
+  return *this;
 }
 
 

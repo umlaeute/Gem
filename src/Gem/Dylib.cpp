@@ -255,6 +255,7 @@ GemDylib& GemDylib::operator=(const GemDylib&org) {
   if(org.m_handle) {
     m_handle=GemDylibHandle::open(org.m_handle->fullname);
   }
+  return *this;
 }
 
 

@@ -36,7 +36,11 @@ namespace gem
     virtual ~bad_any_cast(void) throw() 
     { }
     virtual const std::string what(void) {
-      std::string result = std::string("bad cast(") + from + std::string("->") + to + std::string(")");
+      std::string result = std::string("bad cast(");
+      result+= from;
+      result+= std::string("->");
+      result+= to;
+      result+= std::string(")");
       return result;
     }
     const std::string from;

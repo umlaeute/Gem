@@ -185,8 +185,11 @@
 #ifndef INCLUDED_FREI0R_H
 #define INCLUDED_FREI0R_H
 
-#include <inttypes.h>
-
+#ifdef _MSC_VER
+ typedef unsigned long uint32_t;
+#else
+# include <inttypes.h>
+#endif
 /**
  * The frei0r API major version
  */

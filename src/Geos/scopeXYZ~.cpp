@@ -293,7 +293,7 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
   int position=m_position;
 
   t_float*vert=m_vertices+3*position;
-  int i=0;
+  unsigned int i=0;
 
   // TODO: add some protection against segfaults when bufer is very small
   if(m_length<count)

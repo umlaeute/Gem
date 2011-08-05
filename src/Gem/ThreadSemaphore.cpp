@@ -83,5 +83,6 @@ gem::thread::Semaphore&gem::thread::Semaphore::operator=(const gem::thread::Sema
     PIMPL*pimpl=new PIMPL(*org.m_pimpl);
     delete m_pimpl;
     m_pimpl=pimpl;
-  }  
+  }
+  return *this;
 }

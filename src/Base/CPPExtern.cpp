@@ -200,4 +200,5 @@ CPPExtern&CPPExtern::operator=(const CPPExtern&org) {
   m_objectname=org.m_objectname;
   m_canvas=org.m_canvas;
   m_endpost=true;
+  return *this;
 }
