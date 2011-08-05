@@ -209,28 +209,28 @@ SectionGroup "extra" SEC_extra
  Section "pix_drum" SEC_extra_pix_drum
   SetOverwrite ifnewer
   SetOutPath "$EXTRA_OUTDIR\pix_drum"
-  File "${BUILD_INDIR}\pix_drum.dll"
+  File "${BASE_INDIR}\extra\pix_drum\pix_drum.dll"
   File "${BASE_INDIR}\extra\pix_drum\pix_drum-help.pd"
   File "${BASE_INDIR}\extra\pix_drum\LICENSE.txt"
  SectionEnd
  Section "pix_mano" SEC_extra_pix_mano
   SetOverwrite ifnewer
   SetOutPath "$EXTRA_OUTDIR\pix_mano"
-  File "${BUILD_INDIR}\pix_mano.dll"
+  File "${BASE_INDIR}\extra\pix_mano\pix_mano.dll"
   File "${BASE_INDIR}\extra\pix_mano\pix_mano-help.pd"
   File "${BASE_INDIR}\extra\pix_mano\LICENSE.txt"
  SectionEnd
  Section "pix_fiducialtrack" SEC_extra_pix_fiducialtrack
   SetOverwrite ifnewer
   SetOutPath "$EXTRA_OUTDIR\pix_fiducialtrack"
-  File "${BUILD_INDIR}\pix_fiducialtrack.dll"
+  File "${BASE_INDIR}\extra\pix_fiducialtrack\pix_fiducialtrack.dll"
   File "${BASE_INDIR}\extra\pix_fiducialtrack\pix_fiducialtrack-help.pd"
   File "${BASE_INDIR}\extra\pix_fiducialtrack\all.trees"
  SectionEnd
  Section "pix_artoolkit" SEC_extra_pix_artoolkit
   SetOverwrite ifnewer
   SetOutPath "$EXTRA_OUTDIR\pix_artoolkit"
-  File "${BUILD_INDIR}\pix_artoolkit.dll"
+  File "${BASE_INDIR}\extra\pix_artoolkit\pix_artoolkit.dll"
   File "${BASE_INDIR}\extra\pix_artoolkit\pix_artoolkit-help.pd"
   File "${BASE_INDIR}\extra\pix_artoolkit\README.txt"
   File "${BASE_INDIR}\extra\pix_artoolkit\camera_para.dat"
