@@ -110,7 +110,7 @@ SectionGroup "Documentation" SEC_documentation
   SetOutPath "$GEM_OUTDIR\examples\"
   File /r /x .svn /x "Makefile*" "${BASE_INDIR}\examples\*.*"
   ; this should only be set if there is no entry yet
-  WriteRegStr HKCU "Environment" "GEM_DEFAULT_FONT" "$GEM_OUTDIR\examples\data\vera.ttf"
+  WriteRegStr SHCTX "Environment" "GEM_DEFAULT_FONT" "$GEM_OUTDIR\examples\data\vera.ttf"
  SectionEnd
  Section "manual" SEC_manual
   SetOverwrite ifnewer
@@ -330,7 +330,7 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\deprecated\Base\GemCache.h
 
 
- WriteRegStr HKCU "Environment" "GemDevDir" "$GEMDEV_OUTDIR"
+ WriteRegStr SHCTX "Environment" "GemDevDir" "$GEMDEV_OUTDIR"
 SectionEnd
 
 
@@ -549,7 +549,7 @@ Section Uninstall
   RMDir  "$GEM_OUTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
-  ; try to delete   HKCU\"Environment"\"GEM_DEFAULT_FONT" if it is "$GEM_OUTDIR\examples\data\vera.ttf"
+  ; try to delete   SHCTX \"Environment"\"GEM_DEFAULT_FONT" if it is "$GEM_OUTDIR\examples\data\vera.ttf"
 
   SetAutoClose true
 SectionEnd
