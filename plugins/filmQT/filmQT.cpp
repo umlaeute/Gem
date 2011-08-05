@@ -17,10 +17,22 @@
 # include "config.h"
 #endif
 
+#if defined __APPLE__ 
+# if !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+#  define HAVE_CARBONQUICKTIME
+# elif defined HAVE_QUICKTIME
+#  undef HAVE_QUICKTIME
+# endif
+#endif
+
+#ifdef HAVE_QUICKTIME
+
+
 #include "filmQT.h"
 using namespace gem::plugins;
 
-#ifdef HAVE_QUICKTIME
 REGISTER_FILMFACTORY("QuickTime", filmQT);
 # ifdef __APPLE__
 #  define FILMQT_DEFAULT_PIXELFORMAT k32ARGBPixelFormat
@@ -88,7 +100,7 @@ filmQT :: filmQT(void) : film(false),
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmQT :: ~filmQT()
+filmQT :: ~filmQT(void)
 {
   close();
   /* should we check whether "m_bInit" is true? */

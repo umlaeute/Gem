@@ -15,27 +15,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_FILMQT_H_
 #include "plugins/film.h"
 
-
-#if defined __APPLE__ 
-# if !defined __x86_64__
-// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
-// LATER make this a real check in configure
-#  define HAVE_CARBONQUICKTIME
-# elif defined HAVE_QUICKTIME
-#  undef HAVE_QUICKTIME
-# endif
-#endif
-
-#ifdef HAVE_QUICKTIME
-# ifdef HAVE_CARBONQUICKTIME
-#  include <Carbon/Carbon.h>
-#  include <QuickTime/QuickTime.h>
-# elif defined _WIN32
-#  include <QTML.h>
-#  include <Movies.h>
-# else
-#  undef HAVE_QUICKTIME
-# endif
+#ifdef HAVE_CARBONQUICKTIME
+# include <Carbon/Carbon.h>
+# include <QuickTime/QuickTime.h>
+#else defined _WIN32
+# include <QTML.h>
+# include <Movies.h>
 #endif
 
 /*-----------------------------------------------------------------
@@ -60,9 +45,8 @@ class GEM_EXPORT filmQT : public gem::plugins::film
   filmQT(void);
   //////////
   // Destructor
-  virtual ~filmQT();
+  virtual ~filmQT(void);
 
-#ifdef HAVE_QUICKTIME
   //////////
   // open a movie up
   virtual bool open(const std::string filename, int format = 0);
@@ -94,7 +78,6 @@ class GEM_EXPORT filmQT : public gem::plugins::film
 
   // managed to initialize our Quicktime-Decoder
   bool			m_bInit;
-#endif // HAVE_QT
 };};};
 
 #endif	// for header file
