@@ -50,6 +50,9 @@
 # elif defined _WIN32
 #  include <QTML.h>
 #  include <Movies.h>
+#  include <QuickTimeComponents.h>
+#  include "Gem/Exception.h"
+#  define OffsetRect MacOffsetRect
 # endif
 
 # include <map>
@@ -95,12 +98,11 @@ FSPathMakeFSSpec(
 static OSStatus
 FSPathMakeFSSpec(
 		 const UInt8 *path,
-		 FSSpec *spec,
-		 Boolean *isDirectory)   /* can be NULL */
+		 FSSpec *spec)
 {
   OSStatus   result;
   FSRef      ref;
-  FSMakeFSSpec (0, 0L, path, &spec);
+  OSErr err=FSMakeFSSpec (0, 0L, path, spec);
   if (err != noErr && err != -37){
     error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
     return err;
@@ -157,7 +159,7 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
     //s_mime2type["image/"]=kQTFileTypeAIFC;
     //s_mime2type["image/"]=kQTFileTypeDVC;
     //s_mime2type["image/"]=kQTFileTypeMIDI;
-    s_mime2type["image/pict"]=kQTFileTypePicture;
+    s_mime2type["image/pict"]=kQTFileTypePicture;//-
     //s_mime2type["image/"]=kQTFileTypeMovie;
     //s_mime2type["image/"]=kQTFileTypeText;
     //s_mime2type["image/"]=kQTFileTypeWave;
@@ -167,18 +169,18 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
     //s_mime2type["image/"]=kQTFileTypeSoundDesignerII;
     //s_mime2type["image/"]=kQTFileTypeAudioCDTrack;
     //s_mime2type["image/pict"]=kQTFileTypePICS;
-    s_mime2type["image/gif"]=kQTFileTypeGIF;
-    s_mime2type["image/png"]=kQTFileTypePNG;
-    s_mime2type["image/tiff"]=kQTFileTypeTIFF;
-    s_mime2type["image/psd"]=kQTFileTypePhotoShop;
-    s_mime2type["image/sgi"]=kQTFileTypeSGIImage;
-    s_mime2type["image/bmp"]=kQTFileTypeBMP;
-    s_mime2type["image/jpeg"]=kQTFileTypeJPEG;
+    s_mime2type["image/gif"]=kQTFileTypeGIF;//-
+    s_mime2type["image/png"]=kQTFileTypePNG;//-
+    s_mime2type["image/tiff"]=kQTFileTypeTIFF;//-
+    s_mime2type["image/psd"]=kQTFileTypePhotoShop;//-
+    s_mime2type["image/sgi"]=kQTFileTypeSGIImage;//-
+    s_mime2type["image/bmp"]=kQTFileTypeBMP;//-
+    s_mime2type["image/jpeg"]=kQTFileTypeJPEG;//-
     //  s_mime2type["image/"]=kQTFileTypeJFIF;
-    s_mime2type["image/mac"]=kQTFileTypeMacPaint;
-    s_mime2type["image/targa"]=kQTFileTypeTargaImage;
+    s_mime2type["image/mac"]=kQTFileTypeMacPaint;//-
+    s_mime2type["image/targa"]=kQTFileTypeTargaImage;//-
     //  s_mime2type["image/"]=kQTFileTypeQuickDrawGXPicture;
-    s_mime2type["image/x-quicktime"]=kQTFileTypeQuickTimeImage;
+    s_mime2type["image/x-quicktime"]=kQTFileTypeQuickTimeImage;//-
     //s_mime2type["image/"]=kQTFileType3DMF;
     //s_mime2type["image/"]=kQTFileTypeFLC;
     //s_mime2type["image/"]=kQTFileTypeFlash;
@@ -190,7 +192,7 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
     //s_mime2type["image/"]=kQTFileTypeSDV;
     //s_mime2type["image/"]=kQTFileType3GP2;
     //s_mime2type["image/"]=kQTFileTypeAMC;
-    s_mime2type["image/jp2"]=kQTFileTypeJPEG2000;
+    s_mime2type["image/jp2"]=kQTFileTypeJPEG2000;//-
   }
 
   std::map<std::string, OSType>::iterator it = s_mime2type.find(mimetype);
@@ -333,6 +335,7 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
 }
 
 static bool touch(std::string filename) {
+#ifdef __APPLE__
   int fd;
   fd = open(filename.c_str(), O_CREAT | O_RDWR, 0600);
   if (fd < 0)
@@ -341,6 +344,14 @@ static bool touch(std::string filename) {
   close(fd);
 
   return true;
+#elif defined _WIN32
+  FILE*outfile=fopen(filename.c_str(), "");
+  if(NULL==outfile)
+      return false;
+  fclose(outfile);
+  return true;
+#endif
+    return false;
 }
 
 bool imageQT::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
@@ -353,7 +364,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     
   FSSpec			spec;
 
-  OSType			osFileType=kQTFileTypeTIFF; 	//= kQTFileTypeJPEG; //kQTFileTypeTIFF fot Tiff kQTFileTypeSGIImage for sgi
+  OSType			osFileType=kQTFileTypeTIFF;
   mime2type(mimetype, osFileType);
 
   const UInt8*filename8=reinterpret_cast<const UInt8*>(filename.c_str());
