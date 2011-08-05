@@ -198,11 +198,11 @@ SectionGroup "plugins"
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_videoHALCON.dll"
   SectionEnd
-  Section /o "Basler/PYLON capturing" SEC_plugin_videoPYLON
-   SetOverwrite ifnewer
-   SetOutPath "$GEM_OUTDIR"
-   File "${BUILD_INDIR}\gem_videoPYLON.dll"
-  SectionEnd
+;  Section /o "Basler/PYLON capturing" SEC_plugin_videoPYLON
+;   SetOverwrite ifnewer
+;   SetOutPath "$GEM_OUTDIR"
+;   File "${BUILD_INDIR}\gem_videoPYLON.dll"
+;  SectionEnd
 SectionGroupEnd
 
 SectionGroup "extra" SEC_extra
@@ -426,10 +426,10 @@ Section Uninstall
   Delete "$GEM_OUTDIR\gem_imageSGI.dll"
   Delete "$GEM_OUTDIR\gem_imageTIFF.dll"
   Delete "$GEM_OUTDIR\gem_recordQT.dll"
-  Delete "$GEM_OUTDIR\gem_videoAVT.dll"
+;  Delete "$GEM_OUTDIR\gem_videoAVT.dll"
   Delete "$GEM_OUTDIR\gem_videoDS.dll"
   Delete "$GEM_OUTDIR\gem_videoHALCON.dll"
-  Delete "$GEM_OUTDIR\gem_videoPYLON.dll"
+;  Delete "$GEM_OUTDIR\gem_videoPYLON.dll"
   Delete "$GEM_OUTDIR\gem_videoVFW.dll"
   Delete "$GEM_OUTDIR\Gem.dll"
   Delete "$GEM_OUTDIR\GnuGPL.LICENSE.txt"
