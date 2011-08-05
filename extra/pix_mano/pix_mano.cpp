@@ -194,13 +194,13 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
   unsigned char *base = image.data;
   int screen_perimeter = xsize*2 + ysize*2;
   int xcount, ycount, xcoord, ycoord, ycoordm1, ycoordm2;
-  int i, c, j, n, nt, valley, edge, start=0, tempint2=0, tempint=0, temp_x, temp_y;
+  int i, c, j, n, valley, edge, start=0, tempint2=0, tempint=0, temp_x, temp_y;
   int contourx[50000], contoury[50000], nindex[50000]; 
   float  partialx[10000], partialy[10000], xn, xnm1, yn, ynm1;
   double angle[10000], tempangle, xval, yval, maxangle, minangle;
   t_atom ap[5], as[6], at[7], ar[5], aq[18]; // outlets
   int pix12, pix21, pix22, pix23, pix32, difx, dify;
-  int prevx, prevy, linecheck, orderx[8], ordery[8]; 
+  int prevx, prevy, linecheck; 
   // entering point
   int cx, cy, t, foundhand=0; 
   int*enterx=new int[xsize];
@@ -210,9 +210,9 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
   float hand_area;
   //fingertips
   double max_tip, min_tip;
-  int tiptest, new_tip, tip, j_tmp;
-  float tipx, tipy, valleyx, valleyy, tip_mag_ctr, tip_angle;
-  unsigned int maxtips = 100;
+  unsigned int tip, maxtips=100;
+  bool tiptest=false;
+  float tipx, tipy, tip_mag_ctr;
 
   if(m_pimpl->p_tipData->size < maxtips) {
     delete m_pimpl->p_tipData;
@@ -223,7 +223,6 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
     m_pimpl->p_tipData=new PIMPL::tipData(maxtips);
 
   int mt = 20; // maximum number of tips
-  float tip_dist, tip_dist_temp, tip_dist_i;
   int totalcycles=0;
 
   //	float tip_coord_x[maxtips], tip_coord_y[maxtips], valley_coord_x[maxtips], valley_coord_y[maxtips];
@@ -865,7 +864,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
         // ******* Determine TOTAL HAND AREA
         hand_area = (float) h / (float) tot_area;
         // ******* find HAND DIRECTION
-        double tip_angle[100], inter_angle[100], tip_magni[100], tempx, tempy, tempdouble, tot_magni, direction;
+        double tempx, tempy, tot_magni, direction;
         tot_magni = direction = tempx = tempy = 0;
         for (i = (n / 3); i < (n * 2 / 3); i++) {	
           tempx += ((double) partialx[i] - (double) hx);
@@ -908,7 +907,8 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
         SETFLOAT(&aq[16], miyy);
         outlet_list(outlet5, 0, 17, aq);	
         // ******* Find FINGER TIPS
-        max_tip = min_tip = 0;	tip = valley = tempint = tiptest = 0;
+        max_tip = min_tip = 0;	tip = valley = tempint = 0;
+        tiptest = false;
         j = 0;
         //	refang_plus = maxangle / refang_plus;
         //	post ("rap = %f", refang_plus);
@@ -917,15 +917,15 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
           if (tip > maxtips - 1) break;
           else {
             if (angle[i] > (maxangle * tip_scalar)) {
-              tiptest = 1;
+              tiptest = true;
               if (angle[i] > max_tip) {
                 max_tip = angle[i];
                 tempint = i;
               }
             }
             else {
-              if (tiptest == 1) {
-                tiptest = 0;	
+              if (tiptest) {
+                tiptest = false;
                 if	(j > pixtip || tip == 0) {		
                   t_a[tip] = max_tip;
                   max_tip = 0;
@@ -960,27 +960,28 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
         }
         //botamos todos de golpe
         ii = 0;
-        for (i = 0; i < tip; i++) {	
-          if ( ((fabs(t_x[i] - e_x1[tempint2]) > 10) && (fabs(t_y[i] - e_y1[tempint2]) > 10)) || 
-               ((fabs(t_x[i] - e_x2[tempint2]) > 10) && (fabs(t_y[i] - e_y2[tempint2]) > 10)) ){
+        unsigned int index;
+        for (index = 0; index < tip; index++) {	
+          if ( ((fabs(t_x[index] - e_x1[tempint2]) > 10) && (fabs(t_y[index] - e_y1[tempint2]) > 10)) || 
+               ((fabs(t_x[index] - e_x2[tempint2]) > 10) && (fabs(t_y[index] - e_y2[tempint2]) > 10)) ){
             SETFLOAT(&at[0], n_hand);	
             SETFLOAT(&at[1], ii);	
-            SETFLOAT(&at[2], t_x[i]);	
-            SETFLOAT(&at[3], t_y[i]);
-            SETFLOAT(&at[4], t_m[i]);	
-            SETFLOAT(&at[5], t_a[i]);
-            SETFLOAT(&at[6], t_t[i]);
+            SETFLOAT(&at[2], t_x[index]);	
+            SETFLOAT(&at[3], t_y[index]);
+            SETFLOAT(&at[4], t_m[index]);
+            SETFLOAT(&at[5], t_a[index]);
+            SETFLOAT(&at[6], t_t[index]);
             ii++;
             outlet_list(outlet3, 0, 7, at);
           }
         }
-        for (i = 0; i < n; i++) {
-          partialx_prev[i] = partialx[i];
-          partialy_prev[i] = partialy[i];
+        for (index = 0; index < n; index++) {
+          partialx_prev[index] = partialx[index];
+          partialy_prev[index] = partialy[index];
         }
-        for (i = n; i < 10000; i++) {
-          partialx_prev[i] = 0;
-          partialy_prev[i] = 0;
+        for (index = n; index < 10000; index++) {
+          partialx_prev[index] = 0;
+          partialy_prev[index] = 0;
         }
 
 		
