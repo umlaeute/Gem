@@ -188,11 +188,11 @@ SectionGroup "plugins"
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_videoVFW.dll"
   SectionEnd
-  Section /o "Allied Vision Technologies capturing" SEC_plugin_videoAVT
-   SetOverwrite ifnewer
-   SetOutPath "$GEM_OUTDIR"
-   File "${BUILD_INDIR}\gem_videoAVT.dll"
-  SectionEnd
+;  Section /o "Allied Vision Technologies capturing" SEC_plugin_videoAVT
+;   SetOverwrite ifnewer
+;   SetOutPath "$GEM_OUTDIR"
+;   File "${BUILD_INDIR}\gem_videoAVT.dll"
+;  SectionEnd
   Section /o "MVTec/HALCON capturing" SEC_plugin_videoHALCON
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
