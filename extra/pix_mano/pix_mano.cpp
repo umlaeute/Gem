@@ -102,18 +102,39 @@ CPPEXTERN_NEW(pix_mano)
         delete[]e_orient;
       }
     };
-
+    class delayXY {
+    public:
+      unsigned int size;
+      int *d_x, *d_y;
+  
+      delayXY(unsigned int size_) : 
+        size(size_),
+        d_x(new int[size_]), 
+        d_y(new int[size_])
+      { }
+      ~delayXY(void) {
+        size=0;
+        delete[]d_x;
+        delete[]d_y;
+      }
+    };
 
     tipData*p_tipData;
     enteringPoint*p_enteringPoint;
+    delayXY*p_delayXY;
 
-    PIMPL(unsigned int tips=128, unsigned int points=4096) :
+    int dummy;
+
+    PIMPL(unsigned int tips=128, unsigned int points=4096, unsigned int delays=20) :
       p_tipData(new tipData(tips)),
-      p_enteringPoint(new enteringPoint(points)) {
-    }
+      p_enteringPoint(new enteringPoint(points)),
+      p_delayXY(new delayXY(delays)),
+      dummy(0)
+      {    }
     ~PIMPL(void) {
       if(p_tipData)delete p_tipData; p_tipData=NULL;
       if(p_enteringPoint)delete p_enteringPoint; p_enteringPoint=NULL;
+      if(p_delayXY)delete p_delayXY; p_delayXY=NULL;
     }
   };
 
@@ -191,7 +212,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
   double max_tip, min_tip;
   int tiptest, new_tip, tip, j_tmp;
   float tipx, tipy, valleyx, valleyy, tip_mag_ctr, tip_angle;
-  int maxtips = 100;
+  unsigned int maxtips = 100;
 
   if(m_pimpl->p_tipData->size < maxtips) {
     delete m_pimpl->p_tipData;
@@ -553,7 +574,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
               contourx[c] = xcount; //record in contour
               contoury[c] = ycount;
               if (mode ==2)post ("found one! x=%d y=%d", xcount, ycount);
-              if ( fabs(contoury[c-1] - ycount) != 1 ) {
+              if ( AbsInt(contoury[c-1] - ycount) != 1 ) {
                 temp_x = contourx[c-1];
                 temp_y = contoury[c-1];						
                 contourx[c-1] = xcount - 1; // overwrite first point in contour (in case first point is not adjacent)
@@ -621,7 +642,7 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
               contourx[c] = xcount; //record in contour
               contoury[c] = ycount;
               if (mode ==2)post ("found one! x=%d y=%d", xcount, ycount);
-              if ( fabs(contoury[c-1] - ycount) != 1 ) {
+              if ( AbsInt(contoury[c-1] - ycount) != 1 ) {
                 temp_x = contourx[c-1];
                 temp_y = contoury[c-1];						
                 contourx[c-1] = xcount + 1; // overwrite first point in contour (in case first point is not adjacent)
@@ -768,9 +789,16 @@ void pix_mano :: processGrayImage(imageStruct &image)	{
         }
 
         // ******** take PARTIAL CONTOUR MEASURES
+        if(m_pimpl->p_delayXY->size < pixavg) { delete m_pimpl->p_delayXY; m_pimpl->p_delayXY=NULL; }  
+        if(!m_pimpl->p_delayXY)m_pimpl->p_delayXY=new PIMPL::delayXY(pixavg);
+
         int hand_perimeter;
         hand_perimeter = c;
-        int avgcontx, avgconty, ii, tx, ty, tx1, ty1, diffx, diffy, delay_x[pixavg], delay_y[pixavg], iii, ix, iy;
+        int avgcontx, avgconty, ii, tx, ty, tx1, ty1, diffx, diffy, iii, ix, iy;
+        int*delay_x=m_pimpl->p_delayXY->d_x;
+        int*delay_y=m_pimpl->p_delayXY->d_y;
+
+
         n = tempint = 0;		
         xval = yval = 0;
         int rap, ram; rap = ram = 0;
