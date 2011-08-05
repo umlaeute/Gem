@@ -522,7 +522,8 @@ Section Uninstall
   RMDir  "$GEMDEV_OUTDIR\Base"
   RMDir  "$GEMDEV_OUTDIR\plugins"
   RMDir  "$GEMDEV_OUTDIR\Base"
-
+  RMDir  "$GEMDEV_OUTDIR"
+  
   /* extra */
   Delete "$EXTRA_OUTDIR\pix_drum\pix_drum.dll"
   Delete "$EXTRA_OUTDIR\pix_drum\pix_drum-help.pd"
