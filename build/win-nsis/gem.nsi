@@ -128,8 +128,9 @@ SectionGroup "Documentation" SEC_documentation
  SectionEnd
 SectionGroupEnd
 
-SectionGroup "plugins"
+SectionGroup "plugins" SEC_plugin
 
+ SectionGroup "film" SEC_plugin_film
   Section "DirectShow movies" SEC_plugin_filmDS
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
@@ -145,7 +146,8 @@ SectionGroup "plugins"
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_filmAVI.dll"
   SectionEnd
-
+ SectionGroupEnd
+ SectionGroup "image" SEC_plugin_image
   Section "ImageMagick images" SEC_plugin_imageMAGICK
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
@@ -171,13 +173,15 @@ SectionGroup "plugins"
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageTIFF.dll"
   SectionEnd
-
+ SectionGroupEnd
+ SectionGroup "record" SEC_plugin_record
   Section "QuickTime recording" SEC_plugin_recordQT
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_recordQT.dll"
   SectionEnd
-
+ SectionGroupEnd
+ SectionGroup "video" SEC_plugin_video
   Section "DirectShow capturing" SEC_plugin_videoDS
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
@@ -203,6 +207,7 @@ SectionGroup "plugins"
 ;   SetOutPath "$GEM_OUTDIR"
 ;   File "${BUILD_INDIR}\gem_videoPYLON.dll"
 ;  SectionEnd
+ SectionGroupEnd
 SectionGroupEnd
 
 SectionGroup "extra" SEC_extra
@@ -576,18 +581,24 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_doc} "Gem primer,..."
 
 #plugins
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin} "plugins to enhance Gem's capabilities"
+
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_film} "plugins for movie loading"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmDS} "allows to read movies using DirectShow filters"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmQT} "allows to read movies using Apple's QuickTime library (if present)"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_filmAVI} "allows to read movies using Microsoft's old (and deprecated) AVI library"
 
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_record} "plugins for video output"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_recordQT} "allows to output Gem-pixes into QuickTime MOVie files"
 
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageMAGICK} "allows to read/write still images using ImageMagick (this can virtually read/write any image format, including but not limited to JPEG, TIFF and SGI, so it's probably the only 'image' plugin you need)"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime (you will have to download and install QuickTime for Windows yourself in order to use this); NOTE that this will disable threaded loading of images and might make problems is you also install imageMAGICK"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageSGI} "allows to read SGI images"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageJPEG} "allows to read/write JPEG images"
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_image} "plugins for image loading/saving"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageMAGICK} "allows to read/write still images using ImageMagick (this can virtually read/write any image format, including but not limited to JPEG, TIFF and SGI, so it's probably the only 'image' plugin you need)"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime; NOTE that this might make problems if you also install imageMAGICK and will disable threaded loading of images"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageSGI} "allows to read SGI images"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageJPEG} "allows to read/write JPEG images"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
 
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_video} "plugins for live video capturing"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoAVT} "allows to capture live video from GigE-cameras using AVT (Allied Vision Technologies); supported cameras include the Prosilica family (http://www.alliedvisiontec.com) "
