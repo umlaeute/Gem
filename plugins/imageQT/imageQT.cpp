@@ -47,14 +47,23 @@
 #  include <Carbon/Carbon.h>
 #  include <QuickTime/QuickTime.h>
 #  include <QuickTime/ImageCompression.h>
+#  define IMAGEQT_RGBA_PIXELFORMAT k32ARGBPixelFormat
 # elif defined _WIN32
 #  include <QTML.h>
 #  include <Movies.h>
 #  include <QuickTimeComponents.h>
 #  include "Gem/Exception.h"
 #  define OffsetRect MacOffsetRect
+#  define IMAGEQT_RGBA_PIXELFORMAT k32RGBAPixelFormat
 # endif
 
+#ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
+# define snprintf _snprintf
+# define vsnprintf _vsnprintf
+#endif
+
+#define QT_MAX_FILENAMELENGTH 256
+#include <stdio.h>
 # include <map>
 
 //# include <string.h>
@@ -100,15 +109,19 @@ FSPathMakeFSSpec(
 		 const UInt8 *path,
 		 FSSpec *spec)
 {
-  OSStatus   result;
-  FSRef      ref;
-  OSErr err=FSMakeFSSpec (0, 0L, path, spec);
-  if (err != noErr && err != -37){
-    error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
+    char filename[QT_MAX_FILENAMELENGTH];
+    UInt8*filename8=reinterpret_cast<UInt8*>(filename);
+    FILE*fil=NULL;
+    
+    snprintf(filename, QT_MAX_FILENAMELENGTH, "%s", path);
+    c2pstr(filename);
+    OSErr err=FSMakeFSSpec (0, 0L, filename8, spec);
+    if (err != noErr && err != -37){
+      error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
+    } else {
+        err = noErr;
+    }
     return err;
-  }
-
-  return ( result );
 }
 #endif
 
@@ -250,6 +263,7 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
       
   result.xsize   = (*imageDescH)->width;
   result.ysize   = (*imageDescH)->height;
+  result.upsidedown = true;
 
   OSType pixelformat = 0;
 
@@ -260,14 +274,14 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
   /* from the docs on "depth": what depth is this data (1-32) or ( 33-40 grayscale ) */
   if ((*imageDescH)->depth <= 32) {
     result.setCsizeByFormat(GL_RGBA_GEM);
-    pixelformat = k32ARGBPixelFormat;
+    pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
   } else {
     result.setCsizeByFormat(GL_LUMINANCE);
     pixelformat = k8GrayPixelFormat;
   }
 #else
   result.setCsizeByFormat(GL_RGBA_GEM);
-  pixelformat = k32ARGBPixelFormat;
+  pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
 #endif
   
   ::DisposeHandle(reinterpret_cast<Handle>(imageDescH));
@@ -314,7 +328,6 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
   // does the file even exist?
   if (!filename.empty()) {
     FSSpec   spec;
-
     err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename.c_str()), &spec);
     if (err) {
       error("GemImageLoad: Unable to find file: %s", filename.c_str());
@@ -323,7 +336,7 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
     }
     err = ::GetGraphicsImporterForFile(&spec, &importer);
     if (err) {
-      error("GemImageLoad: Unable to import an image: %#s", spec.name);
+      error("GemImageLoad: Unable to import image '%s'", filename.c_str());
       return false;
     }
   }
@@ -424,7 +437,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   }
     
   err = QTNewGWorldFromPtr(&img,  
-                           k32ARGBPixelFormat,			   //k32RGBAPixelFormat,
+                           IMAGEQT_RGBA_PIXELFORMAT,			   //k32RGBAPixelFormat,
                            &r, NULL, NULL, 0,
                            (data?data:constimage.data),
                            static_cast<long>(constimage.xsize * constimage.csize));
@@ -507,10 +520,9 @@ float imageQT::estimateSave(const imageStruct&img, const std::string&filename, c
     result+=100.;
 
   // LATER check some properties....
-#if 0
   if(gem::Properties::UNSET != props.type("quality"))
     result += 1.;
-#endif
+
   return result;
 }
 
