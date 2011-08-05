@@ -69,6 +69,7 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Var /GLOBAL GEM_OUTDIR
+Var /GLOBAL GEMDEV_OUTDIR
 Var /GLOBAL EXTRA_OUTDIR
 
 ; the sections for the library itself (binary+abstractions)
@@ -77,6 +78,7 @@ SectionGroup "Gem" SEC_Gem
  Section "Gem-binary" SEC_GemBinary
 StrCpy $EXTRA_OUTDIR "$INSTDIR\.."
 StrCpy $GEM_OUTDIR "$INSTDIR"
+StrCpy $GEMDEV_OUTDIR "$GEM_OUTDIR\dev"
 
 
   SetOverwrite ifnewer
@@ -237,6 +239,101 @@ SectionGroup "extra" SEC_extra
  SectionEnd
 SectionGroupEnd
 
+Section "Development" SEC_dev
+ SetOverwrite ifnewer
+
+ SetOutPath "$GEMDEV_OUTDIR"
+ File "${BUILD_INDIR}\Gem.lib"
+
+ SetOutPath "$GEMDEV_OUTDIR\RTE"
+ File ${BASE_INDIR}\src\RTE\MessageCallbacks.h
+ File ${BASE_INDIR}\src\RTE\Array.h
+ SetOutPath "$GEMDEV_OUTDIR\Gem"
+ File ${BASE_INDIR}\src\Gem\ThreadSemaphore.h
+ File ${BASE_INDIR}\src\Gem\ThreadMutex.h
+ File ${BASE_INDIR}\src\Gem\SynchedWorkerThread.h
+ File ${BASE_INDIR}\src\Gem\WorkerThread.h
+ File ${BASE_INDIR}\src\Gem\PixConvert.h
+ File ${BASE_INDIR}\src\Gem\ImageIO.h
+ File ${BASE_INDIR}\src\Gem\Image.h
+ File ${BASE_INDIR}\src\Gem\GLStack.h
+ File ${BASE_INDIR}\src\Gem\wglew.h
+ File ${BASE_INDIR}\src\Gem\glxew.h
+ File ${BASE_INDIR}\src\Gem\glew.h
+ File ${BASE_INDIR}\src\Gem\GemGL.h
+ File ${BASE_INDIR}\src\Gem\Event.h
+ File ${BASE_INDIR}\src\Gem\PBuffer.h
+ File ${BASE_INDIR}\src\Gem\Manager.h
+ File ${BASE_INDIR}\src\Gem\Loaders.h
+ File ${BASE_INDIR}\src\Gem\Settings.h
+ File ${BASE_INDIR}\src\Gem\Properties.h
+ File ${BASE_INDIR}\src\Gem\ContextData.h
+ File ${BASE_INDIR}\src\Gem\Files.h
+ File ${BASE_INDIR}\src\Gem\Dylib.h
+ File ${BASE_INDIR}\src\Gem\Exception.h
+ File ${BASE_INDIR}\src\Gem\Cache.h
+ File ${BASE_INDIR}\src\Gem\State.h
+ File ${BASE_INDIR}\src\Gem\RTE.h
+ File ${BASE_INDIR}\src\Gem\Version.h
+ File ${BASE_INDIR}\src\Gem\ExportDef.h
+ SetOutPath "$GEMDEV_OUTDIR\Utils"
+ File ${BASE_INDIR}\src\Utils\Vector.h
+ File ${BASE_INDIR}\src\Utils\SIMD.h
+ File ${BASE_INDIR}\src\Utils\PixPete.h
+ File ${BASE_INDIR}\src\Utils\Matrix.h
+ File ${BASE_INDIR}\src\Utils\GemMath.h
+ File ${BASE_INDIR}\src\Utils\GLUtil.h
+ File ${BASE_INDIR}\src\Utils\Functions.h
+ File ${BASE_INDIR}\src\Utils\any.h
+ SetOutPath "$GEMDEV_OUTDIR\Base"
+ File ${BASE_INDIR}\src\Base\GemContext.h
+ File ${BASE_INDIR}\src\Base\GemWindow.h
+ File ${BASE_INDIR}\src\Base\TextBase.h
+ File ${BASE_INDIR}\src\Base\GemShape.h
+ File ${BASE_INDIR}\src\Base\GemPixDualObj.h
+ File ${BASE_INDIR}\src\Base\GemPixObj.h
+ File ${BASE_INDIR}\src\Base\GemPathBase.h
+ File ${BASE_INDIR}\src\Base\GemGluObj.h
+ File ${BASE_INDIR}\src\Base\GemGLBase.h
+ File ${BASE_INDIR}\src\Base\GemBase.h
+ File ${BASE_INDIR}\src\Base\CPPExtern.h
+ SetOutPath "$GEMDEV_OUTDIR\plugins"
+ File ${BASE_INDIR}\src\plugins\video.h
+ File ${BASE_INDIR}\src\plugins\record.h
+ File ${BASE_INDIR}\src\plugins\imagesaver.h
+ File ${BASE_INDIR}\src\plugins\imageloader.h
+ File ${BASE_INDIR}\src\plugins\image.h
+ File ${BASE_INDIR}\src\plugins\film.h
+ File ${BASE_INDIR}\src\plugins\PluginFactoryTimple.h
+ File ${BASE_INDIR}\src\plugins\PluginFactory.h
+ SetOutPath "$GEMDEV_OUTDIR\Base"
+ File ${BASE_INDIR}\src\deprecated\Base\Matrix.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemVersion.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemVector.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemState.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemSIMD.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemPixUtil.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemPixPete.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemPixImageSave.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemPixImageLoad.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemPixConvert.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemPBuffer.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemMath.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemMan.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemLoaders.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemGLUtil.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemGL.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemFuncUtil.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemExportDef.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemEvent.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemContextData.h
+ File ${BASE_INDIR}\src\deprecated\Base\GemCache.h
+
+
+ WriteRegStr HKCU "Environment" "GemDevDir" "$GEMDEV_OUTDIR"
+SectionEnd
+
+
 Function .onInit
  ; prevent multiple instances running at the same time
  System::Call 'kernel32::CreateMutexA(i 0, i 0, t "gemInstallerMutex") i .r1 ?e'
@@ -257,13 +354,14 @@ Function un.onInit
   Abort
 StrCpy $EXTRA_OUTDIR "$INSTDIR\.."
 StrCpy $GEM_OUTDIR "$INSTDIR"
+StrCpy $GEMDEV_OUTDIR "$GEM_OUTDIR\dev"
 FunctionEnd
 
 ; uäh: isn't there a way to only delete the files we actually installed?
 ; that is: without having to enumerate them here
 Section Uninstall
   Delete "$GEM_OUTDIR\manual\*.*"
-  RMDir "$GEM_OUTDIR\manual"
+  RMDir  "$GEM_OUTDIR\manual"
 
   Delete "$GEM_OUTDIR\cMatrix.html"
   Delete "$GEM_OUTDIR\gem.known_bugs.txt"
@@ -297,27 +395,28 @@ Section Uninstall
   Delete "$GEM_OUTDIR\examples\03.lighting\*.pd"
   Delete "$GEM_OUTDIR\examples\02.advanced\*.pd"
   Delete "$GEM_OUTDIR\examples\01.basic\*.pd"
-  RMDir "$GEM_OUTDIR\examples\data"
-  RMDir "$GEM_OUTDIR\examples\99.games"
-  RMDir "$GEM_OUTDIR\examples\13.recursion"
-  RMDir "$GEM_OUTDIR\examples\12.multi_screen_projection"
-  RMDir "$GEM_OUTDIR\examples\11.obj-exporter"
-  RMDir "$GEM_OUTDIR\examples\10.glsl"
-  RMDir "$GEM_OUTDIR\examples\09.openGL"
-  RMDir "$GEM_OUTDIR\examples\08.io"
-  RMDir "$GEM_OUTDIR\examples\07.texture"
-  RMDir "$GEM_OUTDIR\examples\06.particle"
-  RMDir "$GEM_OUTDIR\examples\05.text"
-  RMDir "$GEM_OUTDIR\examples\04.video"
-  RMDir "$GEM_OUTDIR\examples\04.pix"
-  RMDir "$GEM_OUTDIR\examples\03.lighting"
-  RMDir "$GEM_OUTDIR\examples\02.advanced"
-  RMDir "$GEM_OUTDIR\examples\01.basic"
-  RMDir "$GEM_OUTDIR\examples"
+  RMDir  "$GEM_OUTDIR\examples\data"
+  RMDir  "$GEM_OUTDIR\examples\99.games"
+  RMDir  "$GEM_OUTDIR\examples\13.recursion"
+  RMDir  "$GEM_OUTDIR\examples\12.multi_screen_projection"
+  RMDir  "$GEM_OUTDIR\examples\11.obj-exporter"
+  RMDir  "$GEM_OUTDIR\examples\10.glsl"
+  RMDir  "$GEM_OUTDIR\examples\09.openGL"
+  RMDir  "$GEM_OUTDIR\examples\08.io"
+  RMDir  "$GEM_OUTDIR\examples\07.texture"
+  RMDir  "$GEM_OUTDIR\examples\06.particle"
+  RMDir  "$GEM_OUTDIR\examples\05.text"
+  RMDir  "$GEM_OUTDIR\examples\04.video"
+  RMDir  "$GEM_OUTDIR\examples\04.pix"
+  RMDir  "$GEM_OUTDIR\examples\03.lighting"
+  RMDir  "$GEM_OUTDIR\examples\02.advanced"
+  RMDir  "$GEM_OUTDIR\examples\01.basic"
+  RMDir  "$GEM_OUTDIR\examples"
 
   Delete "$GEM_OUTDIR\pix_*.pd"
   Delete "$GEM_OUTDIR\*-help.pd"
   Delete "$GEM_OUTDIR\*.pd"
+
   Delete "$GEM_OUTDIR\gem_filmAVI.dll"
   Delete "$GEM_OUTDIR\gem_filmDS.dll"
   Delete "$GEM_OUTDIR\gem_filmQT.dll"
@@ -338,6 +437,92 @@ Section Uninstall
   Delete "$GEM_OUTDIR\ChangeLog"
   Delete "$GEM_OUTDIR\README.txt"
 
+  /* Development */
+  Delete "$GEMDEV_OUTDIR\Gem.lib"
+  Delete "$GEMDEV_OUTDIR\RTE\MessageCallbacks.h"
+  Delete "$GEMDEV_OUTDIR\RTE\Array.h"
+  Delete "$GEMDEV_OUTDIR\Gem\ThreadSemaphore.h"
+  Delete "$GEMDEV_OUTDIR\Gem\ThreadMutex.h"
+  Delete "$GEMDEV_OUTDIR\Gem\SynchedWorkerThread.h"
+  Delete "$GEMDEV_OUTDIR\Gem\WorkerThread.h"
+  Delete "$GEMDEV_OUTDIR\Gem\PixConvert.h"
+  Delete "$GEMDEV_OUTDIR\Gem\ImageIO.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Image.h"
+  Delete "$GEMDEV_OUTDIR\Gem\GLStack.h"
+  Delete "$GEMDEV_OUTDIR\Gem\wglew.h"
+  Delete "$GEMDEV_OUTDIR\Gem\glxew.h"
+  Delete "$GEMDEV_OUTDIR\Gem\glew.h"
+  Delete "$GEMDEV_OUTDIR\Gem\GemGL.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Event.h"
+  Delete "$GEMDEV_OUTDIR\Gem\PBuffer.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Manager.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Loaders.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Settings.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Properties.h"
+  Delete "$GEMDEV_OUTDIR\Gem\ContextData.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Files.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Dylib.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Exception.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Cache.h"
+  Delete "$GEMDEV_OUTDIR\Gem\State.h"
+  Delete "$GEMDEV_OUTDIR\Gem\RTE.h"
+  Delete "$GEMDEV_OUTDIR\Gem\Version.h"
+  Delete "$GEMDEV_OUTDIR\Gem\ExportDef.h"
+  Delete "$GEMDEV_OUTDIR\Utils\Vector.h"
+  Delete "$GEMDEV_OUTDIR\Utils\SIMD.h"
+  Delete "$GEMDEV_OUTDIR\Utils\PixPete.h"
+  Delete "$GEMDEV_OUTDIR\Utils\Matrix.h"
+  Delete "$GEMDEV_OUTDIR\Utils\GemMath.h"
+  Delete "$GEMDEV_OUTDIR\Utils\GLUtil.h"
+  Delete "$GEMDEV_OUTDIR\Utils\Functions.h"
+  Delete "$GEMDEV_OUTDIR\Utils\any.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemContext.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemWindow.h"
+  Delete "$GEMDEV_OUTDIR\Base\TextBase.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemShape.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixDualObj.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixObj.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPathBase.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemGluObj.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemGLBase.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemBase.h"
+  Delete "$GEMDEV_OUTDIR\Base\CPPExtern.h"
+  Delete "$GEMDEV_OUTDIR\plugins\video.h"
+  Delete "$GEMDEV_OUTDIR\plugins\record.h"
+  Delete "$GEMDEV_OUTDIR\plugins\imagesaver.h"
+  Delete "$GEMDEV_OUTDIR\plugins\imageloader.h"
+  Delete "$GEMDEV_OUTDIR\plugins\image.h"
+  Delete "$GEMDEV_OUTDIR\plugins\film.h"
+  Delete "$GEMDEV_OUTDIR\plugins\PluginFactoryTimple.h"
+  Delete "$GEMDEV_OUTDIR\plugins\PluginFactory.h"
+  Delete "$GEMDEV_OUTDIR\Base\Matrix.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemVersion.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemVector.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemState.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemSIMD.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixUtil.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixPete.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixImageSave.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixImageLoad.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPixConvert.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemPBuffer.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemMath.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemMan.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemLoaders.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemGLUtil.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemGL.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemFuncUtil.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemExportDef.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemEvent.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemContextData.h"
+  Delete "$GEMDEV_OUTDIR\Base\GemCache.h"
+  RMDir  "$GEMDEV_OUTDIR\RTE"
+  RMDir  "$GEMDEV_OUTDIR\Gem"
+  RMDir  "$GEMDEV_OUTDIR\Utils"
+  RMDir  "$GEMDEV_OUTDIR\Base"
+  RMDir  "$GEMDEV_OUTDIR\plugins"
+  RMDir  "$GEMDEV_OUTDIR\Base"
+
   /* extra */
   Delete "$EXTRA_OUTDIR\pix_drum\pix_drum.dll"
   Delete "$EXTRA_OUTDIR\pix_drum\pix_drum-help.pd"
@@ -355,13 +540,13 @@ Section Uninstall
   Delete "$EXTRA_OUTDIR\pix_artoolkit\patt.hiro"
   Delete "$EXTRA_OUTDIR\pix_artoolkit\pattHiro.pdf"
 
-  RMDir "$EXTRA_OUTDIR\pix_drum"
-  RMDir "$EXTRA_OUTDIR\pix_mano"
-  RMDir "$EXTRA_OUTDIR\pix_fiducialtrack"
-  RMDir "$EXTRA_OUTDIR\pix_artoolkit"
+  RMDir  "$EXTRA_OUTDIR\pix_drum"
+  RMDir  "$EXTRA_OUTDIR\pix_mano"
+  RMDir  "$EXTRA_OUTDIR\pix_fiducialtrack"
+  RMDir  "$EXTRA_OUTDIR\pix_artoolkit"
 
   Delete "$GEM_OUTDIR\uninst.exe"
-  RMDir "$GEM_OUTDIR"
+  RMDir  "$GEM_OUTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   ; try to delete   HKCU\"Environment"\"GEM_DEFAULT_FONT" if it is "$GEM_OUTDIR\examples\data\vera.ttf"
@@ -415,5 +600,6 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra_pix_fiducialtrack} "a port of the reactable(tm)'s fiducial tracking algorithm"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_extra_pix_artoolkit} "fiducial tracking using ARToolkit markers"
 
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC_dev} "Headers and Library-Files for developing your own Gem objects"
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
