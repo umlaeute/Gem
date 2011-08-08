@@ -34,7 +34,9 @@ libplugins_la_SOURCES= \
         recordBase.cpp \
         recordBase.h \
         video.cpp \
-        video.h
+        video.h \
+        videoBase.cpp \
+        videoBase.h
 
 libplugins_la_includedir = $(includedir)/Gem/plugins
 libplugins_la_include_HEADERS = \
@@ -46,4 +48,5 @@ libplugins_la_include_HEADERS = \
 	imagesaver.h \
 	record.h \
 	recordBase.h \
-	video.h
+        video.h \
+	videoBase.h
