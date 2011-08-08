@@ -16,11 +16,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_FILM_H_
 #define INCLUDE_FILM_H_
 
-#include "Base/GemBase.h"
-#include "Gem/Image.h"
-
+#include "Gem/ExportDef.h"
+#include "Gem/GemGL.h"
 #include <string>
-#include "plugins/PluginFactory.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -35,47 +33,30 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
+class pixBlock;
+
 namespace gem { namespace plugins {
 class GEM_EXTERN film
 {
- private:
-  class PIMPL;
-  PIMPL*m_pimpl;
-
-  
-  //////////
-  // Constructor
- protected:  
-  /* initialize the filmloader
-   *
-   * set 'threadable' to false, if your backend is known to be not threadsafe
-   */
-  film(bool threadable);
-
  public:
-  film(void);
-  ////////
-  // Destructor
-  /* free what is apropriate */
-  virtual ~film(void);
+  static film*getInstance(void);
 
- public:
   ////////
   // returns true if instance can be used in thread
-  virtual bool isThreadable(void);
+  virtual bool isThreadable(void) = 0;
 
   //////////
   // set the wanted color-space
   /* could be used for switching the colourspace on the fly 
    * normally the colour-space of a film could be set when opening a movie
    */
-  virtual void requestColor(GLenum format){m_wantedFormat=format;}
+  virtual void requestColor(GLenum format) = 0;
   //////////
   // get the actual color-space
   /* what colour-space is in use ?
    * returns 0 for none
    */    
-  virtual int getColor() {return 0;}
+  virtual int getColor(void) = 0;
 
   //////////
   // open a movie up
@@ -92,15 +73,15 @@ class GEM_EXTERN film
   /* returns TRUE if loading was successfull, FALSE otherwise */
   virtual bool open(const std::string, int format=0) = 0;
   //////////
-  // close the movie fil
+  // close the movie file
   /* close the file and clean up temporary things */
-  virtual void close(void);
+  virtual void close(void) = 0;
 
   //////////
   // do we have a film loaded ?
   /* returns TRUE if it is possible to read frames without any more open()
    */
-  virtual bool haveFilm();
+  virtual bool haveFilm(void) = 0;
 
   //////////
   // get the next frame
@@ -114,30 +95,30 @@ class GEM_EXTERN film
    * if this is a "new" frame (e.g. freshly decoded),
    * pixblock.newimage should be set to 1
    */
-  virtual pixBlock* getFrame() = 0;
+  virtual pixBlock* getFrame(void) = 0;
 
   //////////
   // get the number of frames
   /* the number of frames can depend on the track
    * so this will return the framenum of the current track
    */
-  virtual int getFrameNum(){return m_numFrames;}
+  virtual int getFrameNum(void) = 0;
 
   // get the frames per seconds (or "-1" if unknown)
-  virtual double getFPS();
+  virtual double getFPS(void) = 0;
 
   // get xsize of the frame
-  virtual int getWidth() {return m_image.image.xsize;}
+  virtual int getWidth(void) = 0;
   // get ysize of the frame
-  virtual int getHeight() {return m_image.image.ysize;}
+  virtual int getHeight(void) = 0;
 
 
-  virtual void setAuto(t_float);
+  virtual void setAuto(double) = 0;
 
   /* some error codes */
-#define FILM_ERROR_SUCCESS 0 /* no error */
-#define FILM_ERROR_FAILURE 1
-#define FILM_ERROR_DONTKNOW 2
+  enum errCode { SUCCESS = 0,
+		 FAILURE = 1,
+		 DONTKNOW= 2 };
 
   //////////
   // Change which image to display
@@ -147,40 +128,7 @@ class GEM_EXTERN film
    * you could also switch between various tracks of a file (if the format supports it)
    * specifying trackNum as -1 means "same track as before"
    */
-  virtual int changeImage(int imgNum, int trackNum=-1);
-
- protected:
-  /* i guess every child-class might need (some of the) following variables  */
-
-  /* here the frame is stored
-   */
-  pixBlock m_image;
-  /* this is the colour-space the user requested (like GL_RGBA)
-   */
-  GLenum  m_wantedFormat;
-
-  /* probably a good idea to know how many frames/tracks there are in this movie
-   * the number of frames might vary between tracks, so this refers to the current track
-   */
-  int  m_numFrames, m_numTracks;
-  /* most often we will also want to know what the current frame/track is...
-   */
-  int  m_curFrame, m_curTrack;
-
-  /* if the (frame,track) is the same as the last time, 
-   * we probably don't want to decode this frame again.
-   * if so m_readNext should be FALSE
-   */
-  bool m_readNext;
-
-  // auto increment
-  t_float m_auto;
-
-  //////////////////////
-  // the frame-rate
-  double m_fps;
-
-  bool m_newfilm;
+  virtual errCode changeImage(int imgNum, int trackNum=-1) = 0;
 };
 
 };}; // namespace gem::plugins

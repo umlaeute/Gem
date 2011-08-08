@@ -29,6 +29,8 @@ libplugins_la_SOURCES= \
         image.h \
         film.cpp \
         film.h \
+        filmBase.cpp \
+        filmBase.h \
         record.cpp \
         record.h \
         recordBase.cpp \
