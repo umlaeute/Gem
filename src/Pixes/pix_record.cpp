@@ -9,6 +9,9 @@
 #include "Gem/Exception.h"
 
 #include "RTE/MessageCallbacks.h"
+#include "plugins/PluginFactory.h"
+
+#include <map>
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record);
 
