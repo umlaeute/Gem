@@ -15,6 +15,8 @@
 #include "plugins/video.h"
 #include "plugins/PluginFactory.h"
 
+gem::plugins::video :: ~video(void) {}
+
 gem::plugins::video*gem::plugins::video::getInstance(void) {
  return NULL;
 }

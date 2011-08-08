@@ -39,7 +39,73 @@ namespace gem { namespace plugins {
 class GEM_EXTERN film
 {
  public:
+
+  //////////
+  // returns an instance wrapping all plugins or NULL
+  // if NULL is returned, you might still try your luck with manually accessing the 
+  // PluginFactory
   static film*getInstance(void);
+
+  /////////
+  // dtor must be virtual
+  virtual ~film(void);
+
+  //////////
+  // open a movie up
+  /* open the film "filename" (think better about URIs ?)
+   * try to open the film in the colourspace requested by "format"
+   * discussion: should the colourspace be only a hint or should we force it
+   * (evt. by converting the actual cs by hand to the desired one)
+   * more discussion: i guess the cs should really be forced somehow by [pix_film]
+   * now i don't know, whether the cs-conversion should be done by [pix_film] itself or
+   * rather by the film*-classes. 
+   * but i guess film* makes more sense, because then, [pix_film] doesn't have to know
+   * anything about the internal cs of the decoder
+   */
+  /* returns TRUE if loading was successfull, FALSE otherwise */
+  virtual bool open(const std::string, int format=0) = 0;
+
+  /* some error codes */
+  enum errCode { SUCCESS = 0,
+		 FAILURE = 1,
+		 DONTKNOW= 2 };
+
+  //////////
+  // Change which image to display
+  /* this is the second core function of this class:
+   * most decoding-libraries can set the frame-number on a random-access basis.
+   * some cannot, then this might do nothing
+   * you could also switch between various tracks of a file (if the format supports it)
+   * specifying trackNum as -1 means "same track as before"
+   */
+  virtual errCode changeImage(int imgNum, int trackNum=-1) = 0;
+
+
+  //////////
+  // get the next frame
+  /* this is the core-function of this class !!!!
+   * when called it returns the current frame in the *pixBlock structure
+   * dev: you can use "m_image" for this (and "return &m_image;")
+   * if the image cannot be read, returns 0
+   * dev: you probably want to set the whole meta-information
+   *      (xsize,ysize,csize,format) over again
+   *      if you are smart and the colour-space is fine, just point 
+   * if this is a "new" frame (e.g. freshly decoded),
+   * pixblock.newimage should be set to 1
+   */
+  virtual pixBlock* getFrame(void) = 0;
+
+  //////////
+  // close the movie file
+  /* close the file and clean up temporary things */
+  virtual void close(void) = 0;
+
+
+  //////////
+  // do we have a film loaded ?
+  /* returns TRUE if it is possible to read frames without any more open()
+   */
+  virtual bool haveFilm(void) = 0;
 
   ////////
   // returns true if instance can be used in thread
@@ -59,45 +125,6 @@ class GEM_EXTERN film
   virtual int getColor(void) = 0;
 
   //////////
-  // open a movie up
-  /* open the film "filename" (think better about URIs ?)
-   * try to open the film in the colourspace requested by "format"
-   * discussion: should the colourspace be only a hint or should we force it
-   * (evt. by converting the actual cs by hand to the desired one)
-   * more discussion: i guess the cs should really be forced somehow by [pix_film]
-   * now i don't know, whether the cs-conversion should be done by [pix_film] itself or
-   * rather by the film*-classes. 
-   * but i guess film* makes more sense, because then, [pix_film] doesn't have to know
-   * anything about the internal cs of the decoder
-   */
-  /* returns TRUE if loading was successfull, FALSE otherwise */
-  virtual bool open(const std::string, int format=0) = 0;
-  //////////
-  // close the movie file
-  /* close the file and clean up temporary things */
-  virtual void close(void) = 0;
-
-  //////////
-  // do we have a film loaded ?
-  /* returns TRUE if it is possible to read frames without any more open()
-   */
-  virtual bool haveFilm(void) = 0;
-
-  //////////
-  // get the next frame
-  /* this is the core-function of this class !!!!
-   * when called it returns the current frame in the *pixBlock structure
-   * dev: you can use "m_image" for this (and "return &m_image;")
-   * if the image cannot be read, returns 0
-   * dev: you probably want to set the whole meta-information
-   *      (xsize,ysize,csize,format) over again
-   *      if you are smart and the colour-space is fine, just point 
-   * if this is a "new" frame (e.g. freshly decoded),
-   * pixblock.newimage should be set to 1
-   */
-  virtual pixBlock* getFrame(void) = 0;
-
-  //////////
   // get the number of frames
   /* the number of frames can depend on the track
    * so this will return the framenum of the current track
@@ -112,23 +139,7 @@ class GEM_EXTERN film
   // get ysize of the frame
   virtual int getHeight(void) = 0;
 
-
   virtual void setAuto(double) = 0;
-
-  /* some error codes */
-  enum errCode { SUCCESS = 0,
-		 FAILURE = 1,
-		 DONTKNOW= 2 };
-
-  //////////
-  // Change which image to display
-  /* this is the second core function of this class:
-   * most decoding-libraries can set the frame-number on a random-access basis.
-   * some cannot, then this might do nothing
-   * you could also switch between various tracks of a file (if the format supports it)
-   * specifying trackNum as -1 means "same track as before"
-   */
-  virtual errCode changeImage(int imgNum, int trackNum=-1) = 0;
 };
 
 };}; // namespace gem::plugins

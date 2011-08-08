@@ -36,20 +36,16 @@ namespace gem { namespace plugins {
  class GEM_EXTERN record
 {
 public:
-  //////////
-  // start recording
-  /* 
-   * returns TRUE if opening was successfull, FALSE otherwise 
-   */
-  virtual bool start(const std::string filename, gem::Properties&props) = 0;
 
   //////////
-  // stop recording
-  virtual void stop (void) = 0;
+  // returns an instance wrapping all plugins or NULL
+  // if NULL is returned, you might still try your luck with manually accessing the 
+  // PluginFactory
+  static record*getInstance(void);
 
-  //////////
-  // record a frame 
-  virtual bool write(imageStruct*) = 0;
+  /////////
+  // dtor must be virtual
+  virtual ~record(void);
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
@@ -72,14 +68,24 @@ public:
 
   //////////
   // popup a dialog to set the codec interactively (interesting on os-x and w32)
+  // just return FALSE if you don't support dialogs
   virtual bool dialog(void) = 0;
 
+  //////////
+  // start recording
+  /* 
+   * returns TRUE if opening was successfull, FALSE otherwise 
+   */
+  virtual bool start(const std::string filename, gem::Properties&props) = 0;
 
   //////////
-  // returns an instance wrapping all plugins or NULL
-  // if NULL is returned, you might still try your luck with manually accessing the 
-  // PluginFactory
-  static record*getInstance(void);
+  // record a frame 
+  virtual bool write(imageStruct*) = 0;
+
+  //////////
+  // stop recording
+  virtual void stop (void) = 0;
+
  };
 }; };
 

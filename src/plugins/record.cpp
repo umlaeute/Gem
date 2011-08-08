@@ -17,6 +17,8 @@
 #include "plugins/record.h"
 #include "plugins/PluginFactory.h"
 
+gem::plugins::record :: ~record(void) {}
+
 gem::plugins::record*gem::plugins::record::getInstance(void) {
   return NULL;
 }

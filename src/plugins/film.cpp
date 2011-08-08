@@ -17,6 +17,8 @@
 #include "film.h"
 #include "plugins/PluginFactory.h"
 
+gem::plugins::film :: ~film(void) {}
+
 gem::plugins::film*gem::plugins::film::getInstance(void) {
  return NULL;
 }

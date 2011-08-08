@@ -18,50 +18,49 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include <string>
 
-   /*-----------------------------------------------------------------
-     -------------------------------------------------------------------
-     CLASS
-     imageloader
+/*-----------------------------------------------------------------
+  -------------------------------------------------------------------
+  CLASS
+  imageloader
     
-     interface for the system- and library-dependent imageloader classes
+  interface for the system- and library-dependent imageloader classes
     
-     KEYWORDS
-     pix load an image
+  KEYWORDS
+  pix load an image
     
-     DESCRIPTION
+  DESCRIPTION
 
-     -----------------------------------------------------------------*/
-   namespace gem { namespace plugins {
-  class GEM_EXTERN imageloader
-  {
-  public:
+  -----------------------------------------------------------------*/
+namespace gem { namespace plugins {
+    class GEM_EXTERN imageloader
+    {
+    public:
 
-  //////////
-  // returns an instance wrapping all plugins or NULL
-  // if NULL is returned, you might still try your luck with manually accessing the 
-  // PluginFactory
-  static imageloader*getInstance(void);
+      //////////
+      // returns an instance wrapping all plugins or NULL
+      // if NULL is returned, you might still try your luck with manually accessing the 
+      // PluginFactory
+      static imageloader*getInstance(void);
 
-  /////////
-  // dtor must be virtual
-  virtual ~imageloader(void);
+      ////////
+      // dtor must be virtual
+      virtual ~imageloader(void);
 
-    /* read a image
-     *
-     * props can be filled by the loader with additional information on the image
-     * e.g. EXIF tags,...
-     */
-    /* returns TRUE if loading was successfull, FALSE otherwise */
-    virtual bool load(std::string filename, 
-		      imageStruct&result, 
-		      gem::Properties&props) = 0;
+      /* read a image
+       *
+       * props can be filled by the loader with additional information on the image
+       * e.g. EXIF tags,...
+       */
+      /* returns TRUE if loading was successfull, FALSE otherwise */
+      virtual bool load(std::string filename, 
+			imageStruct&result, 
+			gem::Properties&props) = 0;
 
+      /* returns TRUE if this object can be used from within a thread */
+      virtual bool isThreadable(void) = 0;
+    };
 
-    /* returns TRUE if this object can be used from within a thread */
-    virtual bool isThreadable(void) = 0;
-  };
-
-};}; // namespace gem
+  };}; // namespace gem
 
 
 /**
@@ -79,7 +78,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  * initialized the factory
  * \note call this before any externals register themselves
  */
-#define INIT_IMAGELOADERFACTORY()                                         \
+#define INIT_IMAGELOADERFACTORY()					\
   static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy
 
 
