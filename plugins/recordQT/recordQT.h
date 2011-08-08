@@ -10,7 +10,7 @@
 //this will record QT movies
 #ifndef INCLUDE_PLUGINS_RECORDQT_H_
 #define INCLUDE_PLUGINS_RECORDQT_H_
-#include "plugins/record.h"
+#include "plugins/recordBase.h"
 
 
 
@@ -63,20 +63,20 @@
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT recordQT : public record
+ class GEM_EXPORT recordQT : public recordBase
 {
  public:
 
   //////////
   // Constructor
-  recordQT();
+  recordQT(void);
 
   //////////
   // Destructor
-  virtual ~recordQT();
+  virtual ~recordQT(void);
   
 #ifdef HAVE_QUICKTIME
-  virtual void close();
+  virtual void close(void);
   virtual bool open(const std::string filename);
     	
   //////////
@@ -85,17 +85,17 @@ namespace gem { namespace plugins {
  
   ////////
   // call up compression dialog
-  virtual bool	dialog();
-  virtual int	getNumCodecs();
+  virtual bool	dialog(void);
+  virtual int	getNumCodecs(void);
   virtual const char* getCodecName(int n);
   virtual bool	setCodec(int num);
   virtual bool	setCodec(const std::string name);
 
  private:
 		
-  virtual void	setupQT();
+  virtual void	setupQT(void);
 		
-  virtual void	compressFrame();
+  virtual void	compressFrame(void);
 	
   //////
   // is recording setup and ready to go?

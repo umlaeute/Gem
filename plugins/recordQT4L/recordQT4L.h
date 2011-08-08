@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PLUGINS_RECORDQT4L_H_
 #define INCLUDE_PLUGINS_RECORDQT4L_H_
    
-#include "plugins/record.h"
+#include "plugins/recordBase.h"
    
 #if defined HAVE_LIBQUICKTIME 
 #define GEM_USE_RECORDQT4L
@@ -46,24 +46,24 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT recordQT4L : public record {
+ class GEM_EXPORT recordQT4L : public recordBase {
  public:
   
   //////////
   // Constructor
   
-  /* initialize the recordQT4Lloader
+  /* initialize the recordQT4L plugin
    *
    * set the default colour-space to format (like GL_RGBA)
    * if format==0, the default is set by the recordQT4Lloader
    * (for instance: the fastest colour-space)
    */
-  recordQT4L();
+  recordQT4L(void);
 
   ////////
   // Destructor
   /* free what is apropriate */
-  virtual ~recordQT4L();
+  virtual ~recordQT4L(void);
 
 #if defined GEM_USE_RECORDQT4L
 

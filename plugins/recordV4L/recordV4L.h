@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_PLUGINS_RECORDV4L_H_
 #define INCLUDE_PLUGINS_RECORDV4L_H_
    
-#include "plugins/record.h"
+#include "plugins/recordBase.h"
 
 #if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
 # define HAVE_VIDEO4LINUX
@@ -45,18 +45,18 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT recordV4L : public record {
+ class GEM_EXPORT recordV4L : public recordBase {
  public:
   
   //////////
   // Constructor
   
-  recordV4L();
+  recordV4L(void);
 
   ////////
   // Destructor
   /* free what is apropriate */
-  virtual ~recordV4L();
+  virtual ~recordV4L(void);
 
 #if defined HAVE_VIDEO4LINUX
 

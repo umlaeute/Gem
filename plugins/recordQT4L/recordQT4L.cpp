@@ -21,6 +21,8 @@
 #include "Gem/RTE.h"
 #include "Gem/Manager.h"
 
+#include "plugins/PluginFactory.h"
+
 
 using namespace gem::plugins;
 
@@ -43,7 +45,7 @@ REGISTER_RECORDFACTORY("QT4L", recordQT4L);
 /////////////////////////////////////////////////////////
 
 recordQT4L :: recordQT4L(): 
-  record()
+  recordBase()
 #if defined  GEM_USE_RECORDQT4L
   ,
   m_qtfile(NULL),

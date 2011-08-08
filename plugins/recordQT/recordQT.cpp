@@ -10,6 +10,8 @@
 #include "recordQT.h"
 #include "Gem/Exception.h"
 
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
 
 #ifdef __APPLE__
@@ -44,11 +46,11 @@ REGISTER_RECORDFACTORY("QT", recordQT);
 //
 /////////////////////////////////////////////////////////
 #ifndef HAVE_QUICKTIME
-recordQT :: recordQT() : record(){}
+recordQT :: recordQT() : recordBase() {}
 recordQT :: ~recordQT(){}
 #else
 recordQT :: recordQT()
-  : record(),
+  : recordBase(),
     m_recordSetup(false),
     m_recordStart(false),
     m_recordStop(false),

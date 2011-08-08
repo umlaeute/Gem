@@ -19,6 +19,7 @@
 
 #include "recordV4L.h"
 #include "Gem/Manager.h"
+#include "plugins/PluginFactory.h"
 
 using namespace gem::plugins;
 
@@ -45,7 +46,7 @@ REGISTER_RECORDFACTORY("V4L", recordV4L);
 /////////////////////////////////////////////////////////
 
 recordV4L :: recordV4L(): 
-  record(),
+  recordBase(),
   m_fd(-1)
 {
   m_image.xsize=720;

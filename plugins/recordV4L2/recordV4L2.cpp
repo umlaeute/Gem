@@ -21,6 +21,8 @@
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
 
 
@@ -45,7 +47,7 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 /////////////////////////////////////////////////////////
 
 recordV4L2 :: recordV4L2(): 
-  record(),
+  recordBase(),
   m_fd(-1)
 {
   m_image.xsize=720;
