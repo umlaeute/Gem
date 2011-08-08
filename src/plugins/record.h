@@ -48,7 +48,7 @@ public:
   virtual void stop (void) = 0;
 
   //////////
-  // record a frame (wrapper around putFrame()
+  // record a frame 
   virtual bool write(imageStruct*) = 0;
 
   /**
@@ -72,7 +72,7 @@ public:
 
   //////////
   // popup a dialog to set the codec interactively (interesting on os-x and w32)
-  virtual bool dialog() = 0;
+  virtual bool dialog(void) = 0;
 
 
   //////////
