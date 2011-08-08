@@ -12,7 +12,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VIDEODS_H_
 #define INCLUDE_VIDEODS_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #ifdef HAVE_DIRECTSHOW
 # include <dshow.h>
@@ -31,7 +31,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoDS : public video {
+ class GEM_EXPORT videoDS : public videoBase {
   public:
     //////////
     // Constructor

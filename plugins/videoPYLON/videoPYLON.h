@@ -17,7 +17,7 @@
 #ifndef INCLUDE_VIDEOPYLON_H_
 #define INCLUDE_VIDEOPYLON_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 #include <map>
 
 #ifdef Status
@@ -54,7 +54,7 @@ DESCRIPTION
     
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoPYLON : public video {
+ class GEM_EXPORT videoPYLON : public videoBase {
     public:
     //////////
     // Constructor
@@ -62,7 +62,7 @@ namespace gem { namespace plugins {
     	    	
     //////////
     // Destructor
-    virtual ~videoPYLON();
+    virtual ~videoPYLON(void);
 
     ////////
     // open the video-device

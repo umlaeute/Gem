@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VIDEOV4L2_H_
 #define INCLUDE_VIDEOV4L2_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #if defined HAVE_LIBV4L2 && !defined HAVE_VIDEO4LINUX2
 # define HAVE_VIDEO4LINUX2
@@ -83,7 +83,7 @@ struct t_v4l2_buffer {
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoV4L2 : public video {
+ class GEM_EXPORT videoV4L2 : public videoBase {
  public:
   //////////
   // Constructor
@@ -91,7 +91,7 @@ namespace gem { namespace plugins {
   
   //////////
   // Destructor
-  virtual ~videoV4L2();
+  virtual ~videoV4L2(void);
   
 #ifdef HAVE_VIDEO4LINUX2
   ////////
@@ -114,7 +114,7 @@ namespace gem { namespace plugins {
 
   //////////
   // get the next frame
-  virtual pixBlock    *getFrame();
+  virtual pixBlock    *getFrame(void);
 
 
   //////////

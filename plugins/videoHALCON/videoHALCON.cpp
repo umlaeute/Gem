@@ -97,7 +97,7 @@ static void MyHalconExceptionHandler(const Halcon::HException& except)
   throw except;	
 }
 
-videoHALCON :: videoHALCON() : video("halcon"),
+videoHALCON :: videoHALCON() : videoBase("halcon"),
                                m_grabber(NULL)
 {
   m_width=0;
@@ -686,7 +686,7 @@ void videoHALCON::getProperties(gem::Properties&props) {
   }
 }
 #else
-videoHALCON :: videoHALCON() : video("")
+videoHALCON :: videoHALCON() : videoBase("")
 { }
 videoHALCON :: ~videoHALCON()
 { }

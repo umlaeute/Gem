@@ -17,7 +17,7 @@
 #ifndef INCLUDE_VIDEOV4L_H_
 #define INCLUDE_VIDEOV4L_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #ifdef HAVE_LINUX_VIDEODEV_H
 # include <linux/videodev.h>
@@ -68,7 +68,7 @@ DESCRIPTION
     
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoV4L : public video {
+ class GEM_EXPORT videoV4L : public videoBase {
     public:
         //////////
         // Constructor
@@ -76,7 +76,7 @@ namespace gem { namespace plugins {
     	    	
     	//////////
     	// Destructor
-    	virtual ~videoV4L();
+    	virtual ~videoV4L(void);
 
 	////////
 	// open the video-device
@@ -86,15 +86,15 @@ namespace gem { namespace plugins {
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	bool	    	startTransfer();
+    	bool	    	startTransfer(void);
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer();
+    	bool	   	stopTransfer(void);
 
 	//////////
 	// get the next frame
-	bool grabFrame();
+	bool grabFrame(void);
 
 	//////////
 	// Set the video dimensions

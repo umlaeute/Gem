@@ -16,7 +16,7 @@
 
 #ifndef INCLUDE_VIDEODV4L_H_
 #define INCLUDE_VIDEODV4L_H_
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #if defined HAVE_LIBIEC61883 && defined HAVE_LIBRAW1394 && defined HAVE_LIBDV
 # define HAVE_DV
@@ -60,7 +60,7 @@ DESCRIPTION
     
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoDV4L : public video {
+ class GEM_EXPORT videoDV4L : public videoBase {
     public:
         //////////
         // Constructor
@@ -68,7 +68,7 @@ namespace gem { namespace plugins {
     	    	
     	//////////
     	// Destructor
-    	virtual ~videoDV4L();
+    	virtual ~videoDV4L(void);
 #ifdef HAVE_DV
 	////////
 	// open the video-device
@@ -78,11 +78,11 @@ namespace gem { namespace plugins {
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
-  bool	    	startTransfer();
+  bool	    	startTransfer(void);
 	//////////
   // Stop the video device
   // returns TRUE is transfer was running, FALSE is otherwise
-  bool	   	stopTransfer();
+  bool	   	stopTransfer(void);
 
 	//////////
 	// get the next frame

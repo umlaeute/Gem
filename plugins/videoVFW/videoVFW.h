@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VIDEOVFW_H_
 #define INCLUDE_VIDEOVFW_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #ifdef HAVE_VFW_H
 # include <vfw.h>
@@ -33,7 +33,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoVFW : public video {
+ class GEM_EXPORT videoVFW : public videoBase {
   public:
     //////////
     // Constructor
@@ -41,7 +41,7 @@ namespace gem { namespace plugins {
     	    	
     //////////
     // Destructor
-    virtual ~videoVFW();
+    virtual ~videoVFW(void);
 
 #ifdef HAVE_VFW_H
     ////////
@@ -52,11 +52,11 @@ namespace gem { namespace plugins {
     //////////
     // Start up the video device
     // [out] int - returns 0 if bad
-    bool startTransfer();
+    bool startTransfer(void);
     //////////
     // Stop the video device
     // [out] int - returns 0 if bad
-    bool stopTransfer();
+    bool stopTransfer(void);
 
     //////////
     // get the next frame

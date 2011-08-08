@@ -14,7 +14,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
 #ifndef INCLUDE_VIDEODARWIN_H_
 #define INCLUDE_VIDEODARWIN_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #ifdef HAVE_CARBON
 # include <Carbon/Carbon.h>
@@ -36,7 +36,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT videoDarwin : public video {
+class GEM_EXPORT videoDarwin : public videoBase {
 		  public:
    //////////
    // Constructor
@@ -44,7 +44,7 @@ class GEM_EXPORT videoDarwin : public video {
     	    	
    //////////
    // Destructor
-   virtual ~videoDarwin();
+   virtual ~videoDarwin(void);
     
    ////////
    // open the video-device
@@ -54,11 +54,11 @@ class GEM_EXPORT videoDarwin : public video {
    //////////
    // Start up the video device
    // [out] int - returns 0 if bad
-   bool	    	startTransfer();
+   bool	    	startTransfer(void);
    //////////
    // Stop the video device
    // [out] int - returns 0 if bad
-   bool	   	stopTransfer();
+   bool	   	stopTransfer(void);
 
    //////////
    // get the next frame
@@ -75,10 +75,10 @@ class GEM_EXPORT videoDarwin : public video {
    virtual void getProperties(gem::Properties&props);
       
 		  protected:
-   bool initSeqGrabber();
-   void resetSeqGrabber();
-   void destroySeqGrabber();
-   virtual void    setupCapture();
+   bool initSeqGrabber(void);
+   void resetSeqGrabber(void);
+   void destroySeqGrabber(void);
+   virtual void    setupCapture(void);
    
 
    

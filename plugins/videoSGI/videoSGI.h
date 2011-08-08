@@ -17,7 +17,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
 #ifndef INCLUDE_VIDEOSGI_H_
 #define INCLUDE_VIDEOSGI_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #ifdef HAVE_VL_VL_H
 # include <vl/vl.h>
@@ -35,7 +35,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoSGI : public video {
+ class GEM_EXPORT videoSGI : public videoBase {
   public:
     //////////
     // Constructor
@@ -43,7 +43,7 @@ namespace gem { namespace plugins {
     	    	
     //////////
     // Destructor
-    virtual ~videoSGI();
+    virtual ~videoSGI(void);
 
 #ifdef HAVE_VL_VL_H
     ////////
@@ -54,11 +54,11 @@ namespace gem { namespace plugins {
     //////////
     // Start up the video device
     // [out] int - returns 0 if bad
-    bool	    	startTransfer();
+    bool	    	startTransfer(void);
     //////////
     // Stop the video device
     // [out] int - returns 0 if bad
-    bool	   	stopTransfer();
+    bool	   	stopTransfer(void);
 
     //////////
     // get the next frame

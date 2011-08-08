@@ -15,7 +15,7 @@
 #ifndef INCLUDE_VIDEOAVT_H_
 #define INCLUDE_VIDEOAVT_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #if defined  HAVE_LIBPVAPI
 # define HAVE_AVT
@@ -66,7 +66,7 @@ DESCRIPTION
     
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoAVT : public video {
+ class GEM_EXPORT videoAVT : public videoBase {
     public:
         //////////
         // Constructor
@@ -74,7 +74,7 @@ namespace gem { namespace plugins {
     	    	
     	//////////
     	// Destructor
-    	virtual ~videoAVT();
+    	virtual ~videoAVT(void);
 
 #ifdef HAVE_AVT
 	////////
@@ -85,15 +85,15 @@ namespace gem { namespace plugins {
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	virtual bool	    	startTransfer();
+    	virtual bool	    	startTransfer(void);
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
-    	virtual bool	   	stopTransfer();
+    	virtual bool	   	stopTransfer(void);
 
 	//////////
 	// get the next frame
-	virtual bool grabFrame();
+	virtual bool grabFrame(void);
 
 	virtual std::vector<std::string>enumerate(void);
 

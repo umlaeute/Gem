@@ -44,7 +44,7 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 //
 /////////////////////////////////////////////////////////
 
-videoDV4L :: videoDV4L() : video("dv4l"),
+videoDV4L :: videoDV4L() : videoBase("dv4l"),
                            m_raw(NULL),
                            m_decoder(NULL),
                            m_parsed(false),
@@ -489,7 +489,7 @@ void videoDV4L::setProperties(gem::Properties&props) {
 //
 // videoDV4L without DV-support
 //
-videoDV4L :: videoDV4L() : video("")
+videoDV4L :: videoDV4L() : videoBase("")
 { }
 videoDV4L :: ~videoDV4L()
 { }

@@ -16,7 +16,7 @@
 
 #ifndef INCLUDE_VIDEODC1394_H_
 #define INCLUDE_VIDEODC1394_H_
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 
 #ifdef HAVE_LIBDC1394
@@ -42,7 +42,7 @@ DESCRIPTION
 
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoDC1394 : public video {
+ class GEM_EXPORT videoDC1394 : public videoBase {
     public:
         //////////
         // Constructor
@@ -50,7 +50,7 @@ namespace gem { namespace plugins {
     	    	
     	//////////
     	// Destructor
-    	virtual ~videoDC1394();
+    	virtual ~videoDC1394(void);
 #ifdef HAVE_LIBDC1394
 	////////
 	// open the video-device
@@ -68,7 +68,7 @@ namespace gem { namespace plugins {
 
 	//////////
 	// get the next frame
-	bool    grabFrame();
+	bool    grabFrame(void);
 
 	//////////
 	// Set the video dimensions

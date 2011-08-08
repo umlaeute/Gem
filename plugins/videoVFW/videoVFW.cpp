@@ -33,7 +33,7 @@ REGISTER_VIDEOFACTORY("VFW", videoVFW);
 //
 /////////////////////////////////////////////////////////
 videoVFW :: videoVFW()
-  : video("vfw", 0), 
+  : videoBase("vfw", 0), 
     m_hWndC(NULL)
 {
   provide("dv");
@@ -285,6 +285,6 @@ void videoVFW :: getProperties(gem::Properties&props) {
 }
 
 #else
-videoVFW ::  videoVFW() : video("") { }
+videoVFW ::  videoVFW() : videoBase("") { }
 videoVFW :: ~videoVFW() { }
 #endif

@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_VIDEOUNICAP_H_
 #define INCLUDE_VIDEOUNICAP_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #if defined HAVE_LIBUNICAP && !defined HAVE_UNICAP
 # define HAVE_UNICAP
@@ -40,7 +40,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoUNICAP : public video {
+ class GEM_EXPORT videoUNICAP : public videoBase {
  public:
   //////////
   // Constructor
@@ -48,7 +48,7 @@ namespace gem { namespace plugins {
   
   //////////
   // Destructor
-  virtual ~videoUNICAP();
+  virtual ~videoUNICAP(void);
   
 #ifdef HAVE_UNICAP
   ////////

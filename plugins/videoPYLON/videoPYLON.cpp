@@ -308,7 +308,7 @@ struct videoPYLON::Converter {
 
 REGISTER_VIDEOFACTORY("pylon", videoPYLON);
 
-videoPYLON :: videoPYLON() : video("pylon")
+videoPYLON :: videoPYLON() : videoBase("pylon")
                            , m_factory(NULL)
                            , m_camera(NULL)
                            , m_grabber(NULL)

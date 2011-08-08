@@ -36,7 +36,7 @@ REGISTER_VIDEOFACTORY("dc1394", videoDC1394);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoDC1394 :: videoDC1394() : video("dc1394"),
+videoDC1394 :: videoDC1394() : videoBase("dc1394"),
                                m_dccamera(NULL),
                                m_dcframe(NULL),
                                m_dc(NULL)
@@ -754,7 +754,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 
 
 #else
-videoDC1394 :: videoDC1394() : video("")
+videoDC1394 :: videoDC1394() : videoBase("")
 {}
 videoDC1394 :: ~videoDC1394()
 {}

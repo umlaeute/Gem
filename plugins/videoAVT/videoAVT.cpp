@@ -71,7 +71,7 @@ struct PvApiInitClass {
  }
 };
 
-videoAVT :: videoAVT() : video("avt"),
+videoAVT :: videoAVT() : videoBase("avt"),
                                m_grabber(NULL)
 {
   m_width=0;
@@ -561,7 +561,7 @@ void videoAVT::getProperties(gem::Properties&props) {
 
 
 #else
-videoAVT :: videoAVT() : video("")
+videoAVT :: videoAVT() : videoBase("")
 { }
 videoAVT :: ~videoAVT()
 { }

@@ -81,7 +81,7 @@ static void post_fmt(unicap_format_t*fmt) {
 
 REGISTER_VIDEOFACTORY("unicap", videoUNICAP);
 
-videoUNICAP :: videoUNICAP() : video("unicap", 0)
+videoUNICAP :: videoUNICAP() : videoBase("unicap", 0)
                              , m_handle(NULL)
 {
   m_width=0; m_height=0;
@@ -602,6 +602,6 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
 
 
 #else
-videoUNICAP ::  videoUNICAP() : video("") {}
+videoUNICAP ::  videoUNICAP() : videoBase("") {}
 videoUNICAP :: ~videoUNICAP() {}
 #endif /* HAVE_UNICAP */

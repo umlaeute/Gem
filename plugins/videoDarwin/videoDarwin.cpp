@@ -49,7 +49,7 @@ static std::string pascal2str(const Str255 pstr) {
 REGISTER_VIDEOFACTORY("Darwin", videoDarwin);
 
 videoDarwin :: videoDarwin() 
-  : video("darwin", 0),
+  : videoBase("darwin", 0),
     m_newFrame(false),
     m_srcGWorld(NULL),
     m_quality(channelPlayNormal),

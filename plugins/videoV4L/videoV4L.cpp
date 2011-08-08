@@ -83,7 +83,7 @@ using namespace gem::plugins;
 REGISTER_VIDEOFACTORY("v4l", videoV4L);
 
 
-videoV4L :: videoV4L() : video("v4l")
+videoV4L :: videoV4L() : videoBase("v4l")
                        ,
                          tvfd(0),
                          frame(0),

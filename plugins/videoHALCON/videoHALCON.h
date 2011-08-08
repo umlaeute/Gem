@@ -21,7 +21,7 @@
 #ifndef INCLUDE_VIDEOHALCON_H_
 #define INCLUDE_VIDEOHALCON_H_
 
-#include "plugins/video.h"
+#include "plugins/videoBase.h"
 
 #include <map>
 
@@ -53,7 +53,7 @@ DESCRIPTION
 
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT videoHALCON : public video {
+ class GEM_EXPORT videoHALCON : public videoBase {
     public:
         //////////
         // Constructor
@@ -61,7 +61,7 @@ namespace gem { namespace plugins {
     	    	
     	//////////
     	// Destructor
-    	virtual ~videoHALCON();
+    	virtual ~videoHALCON(void);
 
 #ifdef HAVE_HALCON
 	////////
@@ -72,15 +72,15 @@ namespace gem { namespace plugins {
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
-    	bool	    	startTransfer();
+    	bool	    	startTransfer(void);
 	//////////
     	// Stop the video device
     	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer();
+    	bool	   	stopTransfer(void);
 
 	//////////
 	// get the next frame
-	bool grabFrame();
+	bool grabFrame(void);
 
   virtual std::vector<std::string>enumerate(void);
 
