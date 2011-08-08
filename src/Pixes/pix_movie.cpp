@@ -118,7 +118,7 @@ void pix_movie :: postrender(GemState *state)
     if(m_thread_running){
       m_reqFrame+=m_auto;
     } else
-    if (m_handle->changeImage((int)(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
+      if (gem::plugins::film::FAILURE==m_handle->changeImage((int)(m_reqFrame+=m_auto))){
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }

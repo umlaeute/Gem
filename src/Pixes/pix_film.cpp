@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2001-2011 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    Copyright (c) 2002 James Tittle & Chris Clepper
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -18,9 +18,11 @@
 #ifndef GEM_FILMBACKEND
 
 #include "pix_film.h"
-#include "Gem/State.h"
+#include "Gem/Image.h"
 
+#include "Gem/State.h"
 #include "Gem/Cache.h"
+#include "plugins/PluginFactory.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -129,7 +131,7 @@ void *pix_film :: grabThread(void*you)
     if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack){
 
       pthread_mutex_lock(me->m_mutex);
-      if (me->m_handle->changeImage(reqFrame, reqTrack)!=FILM_ERROR_FAILURE){
+      if (gem::plugins::film::FAILURE!=me->m_handle->changeImage(reqFrame, reqTrack)){
         me->m_frame=me->m_handle->getFrame();
       } else me->m_frame=0;
 
@@ -470,7 +472,7 @@ void pix_film :: postrender(GemState *state)
     if(m_thread_running){
       m_reqFrame+=m_auto;
     } else
-      if (m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))==FILM_ERROR_FAILURE){
+      if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))){
         //      m_reqFrame = m_numFrames;
         outlet_bang(m_outEnd);
       }
@@ -495,7 +497,7 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 #endif
   if (m_handle){
     if(!m_thread_running){
-      if (m_handle->changeImage(imgNum, trackNum)==FILM_ERROR_FAILURE){
+      if (gem::plugins::film::FAILURE==m_handle->changeImage(imgNum, trackNum)){
         outlet_bang(m_outEnd);
       }
     }
