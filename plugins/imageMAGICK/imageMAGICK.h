@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_GEM_PLUGINS_IMAGEMAGICK_H_
 #define INCLUDE_GEM_PLUGINS_IMAGEMAGICK_H_
-#include "plugins/image.h"
+#include "plugins/imageBase.h"
 #include <stdio.h>
 
 /*-----------------------------------------------------------------
@@ -30,7 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins { 
-class GEM_EXPORT imageMAGICK : public gem::plugins::image {
+class GEM_EXPORT imageMAGICK : public gem::plugins::imageBase {
  public:
 
   //////////

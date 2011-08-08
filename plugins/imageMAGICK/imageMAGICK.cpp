@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include "imageMAGICK.h"
+#include "plugins/PluginFactory.h"
 
 #include "Gem/RTE.h"
 

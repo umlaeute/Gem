@@ -25,6 +25,7 @@ extern "C"
 
 #include <string.h>
 #include "imageTIFF.h"
+#include "plugins/PluginFactory.h"
 
 #include "Gem/RTE.h"
 

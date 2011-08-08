@@ -42,6 +42,7 @@
 
 # include "Gem/RTE.h"
 # include "imageQT.h"
+#include "plugins/PluginFactory.h"
 
 # ifdef HAVE_CARBONQUICKTIME
 #  include <Carbon/Carbon.h>
@@ -228,7 +229,7 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
 //
 /////////////////////////////////////////////////////////
 
-imageQT :: imageQT() : image(false)
+imageQT :: imageQT() : imageBase(false)
 {
   static bool firsttime=true;
   if(firsttime) {

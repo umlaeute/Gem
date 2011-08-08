@@ -23,10 +23,14 @@ libplugins_la_SOURCES= \
         PluginFactoryTimple.h \
         imageloader.cpp \
         imageloader.h \
+        imageloaderBase.cpp \
+        imageloaderBase.h \
         imagesaver.cpp \
         imagesaver.h \
-        image.cpp \
-        image.h \
+        imagesaverBase.cpp \
+        imagesaverBase.h \
+        imageBase.cpp \
+        imageBase.h \
         film.cpp \
         film.h \
         filmBase.cpp \
@@ -45,9 +49,11 @@ libplugins_la_include_HEADERS = \
 	PluginFactory.h \
 	PluginFactoryTimple.h \
 	film.h \
-	image.h \
 	imageloader.h \
 	imagesaver.h \
+	imageloaderBase.h \
+	imagesaverBase.h \
+	imageBase.h \
 	record.h \
 	recordBase.h \
         video.h \

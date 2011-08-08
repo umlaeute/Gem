@@ -20,6 +20,7 @@
 #ifdef HAVE_LIBJPEG
 #include <string.h>
 #include "imageJPEG.h"
+#include "plugins/PluginFactory.h"
 
 #include "Gem/RTE.h"
 

@@ -20,8 +20,8 @@
 #include <string.h>
 #include "imageSGI.h"
 #include "Gem/RTE.h"
-#include "imageSGI.h"
 #include "sgiimage.h"
+#include "plugins/PluginFactory.h"
 
 
 using namespace gem::plugins;

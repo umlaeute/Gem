@@ -20,6 +20,7 @@
 #include "Gem/Files.h"
 
 #include "plugins/imagesaver.h"
+#include "plugins/PluginFactory.h"
 
 namespace gem {
   static std::map<std::string, std::string>*s_extension2mime=NULL;
@@ -240,6 +241,17 @@ namespace gem {
           return true;
       }
 
+      return false;
+    }
+
+    virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+      return 1.;
+    }
+    virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+      mimetypes.clear();
+      props.clear();
+    }
+    virtual bool isThreadable(void) {
       return false;
     }
 

@@ -20,6 +20,8 @@
 #include "Gem/SynchedWorkerThread.h"
 
 #include "plugins/imageloader.h"
+#include "plugins/PluginFactory.h"
+
 namespace gem {
   class PixImageLoader : public gem::plugins::imageloader {
   private:
