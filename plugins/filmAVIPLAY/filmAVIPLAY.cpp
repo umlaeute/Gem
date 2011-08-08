@@ -18,6 +18,8 @@
 #endif
 
 #include "filmAVIPLAY.h"
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBAVIPLAY
@@ -35,7 +37,7 @@ REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 //
 /////////////////////////////////////////////////////////
 
-filmAVIPLAY :: filmAVIPLAY(void) : film() ,
+filmAVIPLAY :: filmAVIPLAY(void) : filmBase() ,
 #ifdef HAVE_LIBAVIPLAY
   m_avifile(NULL),
   m_avistream(NULL),
@@ -148,10 +150,10 @@ pixBlock* filmAVIPLAY :: getFrame(){
   return 0;
 }
 
-int filmAVIPLAY :: changeImage(int imgNum, int trackNum){
-  if (!m_avistream)return FILM_ERROR_FAILURE;
+film::errCode filmAVIPLAY :: changeImage(int imgNum, int trackNum){
+  if (!m_avistream)return film::FAILURE;
   m_avistream->Seek(imgNum);
   m_readNext=true;
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }
 #endif // AVIPLAY

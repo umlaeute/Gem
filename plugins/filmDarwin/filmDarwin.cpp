@@ -18,6 +18,8 @@
 # include "config.h"
 #endif
 #include "filmDarwin.h"
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
 
 #ifdef HAVE_CARBONQUICKTIME
@@ -33,7 +35,7 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 //
 /////////////////////////////////////////////////////////
 
-filmDarwin :: filmDarwin(void) : film(false),
+filmDarwin :: filmDarwin(void) : filmBase(false),
 #ifdef HAVE_CARBONQUICKTIME
                                  m_movie(NULL),
                                  m_srcGWorld(NULL),
@@ -272,8 +274,8 @@ pixBlock* filmDarwin :: getFrame(){
   return &m_image;
 }
 
-int filmDarwin :: changeImage(int imgNum, int trackNum){
+film::errCode filmDarwin :: changeImage(int imgNum, int trackNum){
   m_curFrame=imgNum;
   //  return 0;
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }

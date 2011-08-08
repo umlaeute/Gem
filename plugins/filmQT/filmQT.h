@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 #ifndef INCLUDE_FILMQT_H_
 #define INCLUDE_FILMQT_H_
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 
 #ifdef HAVE_CARBONQUICKTIME
 # include <Carbon/Carbon.h>
@@ -37,7 +37,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmQT : public gem::plugins::film
+class GEM_EXPORT filmQT : public filmBase
 {
  public:
   //////////
@@ -55,15 +55,15 @@ class GEM_EXPORT filmQT : public gem::plugins::film
   virtual void close(void);
 
   // get the frames per seconds (or "-1" if unknown)
-  virtual double getFPS();
+  virtual double getFPS(void);
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum = -1);
+  virtual errCode changeImage(int imgNum, int trackNum = -1);
 
  protected:
   //-----------------------------------

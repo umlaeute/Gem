@@ -22,7 +22,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # define HAVE_CARBONQUICKTIME
 #endif
 
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 
 #ifdef HAVE_CARBONQUICKTIME
 # include <Carbon/carbon.h>
@@ -43,7 +43,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmDarwin : public gem::plugins::film {
+class GEM_EXPORT filmDarwin : public filmBase {
  public:
   
   //////////
@@ -52,7 +52,7 @@ class GEM_EXPORT filmDarwin : public gem::plugins::film {
 
   //////////
   // Destructor
-  virtual ~filmDarwin();
+  virtual ~filmDarwin(void);
 
   //////////
   // open a movie up
@@ -63,11 +63,11 @@ class GEM_EXPORT filmDarwin : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum=-1);
+  virtual errCode changeImage(int imgNum, int trackNum=-1);
 
  protected:
 #ifdef HAVE_CARBONQUICKTIME

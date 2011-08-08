@@ -14,7 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 #ifndef INCLUDE_FILMGMERLIN_H_
 #define INCLUDE_FILMGMERLIN_H_
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 #include <stdio.h>
 
 #ifdef HAVE_LIBGMERLIN_AVDEC
@@ -55,7 +55,7 @@ extern "C" {
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmGMERLIN : public gem::plugins::film {
+class GEM_EXPORT filmGMERLIN : public filmBase {
  public:
 
   //////////
@@ -64,7 +64,7 @@ class GEM_EXPORT filmGMERLIN : public gem::plugins::film {
 
   //////////
   // Destructor
-  virtual ~filmGMERLIN();
+  virtual ~filmGMERLIN(void);
 
 #ifdef HAVE_GMERLIN
   //////////
@@ -76,11 +76,11 @@ class GEM_EXPORT filmGMERLIN : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum = -1);
+  virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   //-----------------------------------
   // GROUP:	Movie data

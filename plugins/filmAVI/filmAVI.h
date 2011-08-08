@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef INCLUDE_FILMAVI_H_
 #define INCLUDE_FILMAVI_H_
   
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 
 #ifdef _WIN32
 #include <vfw.h>
@@ -36,7 +36,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmAVI : public gem::plugins::film {
+class GEM_EXPORT filmAVI : public filmBase {
  public:
   
   //////////
@@ -45,7 +45,7 @@ class GEM_EXPORT filmAVI : public gem::plugins::film {
 
   //////////
   // Destructor
-  virtual ~filmAVI();
+  virtual ~filmAVI(void);
 
 #ifdef _WIN32
   //////////
@@ -57,11 +57,11 @@ class GEM_EXPORT filmAVI : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum=-1);
+  virtual errCode changeImage(int imgNum, int trackNum=-1);
 
 
   // the raw buffer for decoding...

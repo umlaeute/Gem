@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMMPEG1_H_
 #define INCLUDE_FILMMPEG1_H_
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 #include <stdio.h>
 
 #ifdef HAVE_LIBMPEG
@@ -36,7 +36,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmMPEG1 : public gem::plugins::film {
+class GEM_EXPORT filmMPEG1 : public filmBase {
  public:
 
   //////////
@@ -45,7 +45,7 @@ class GEM_EXPORT filmMPEG1 : public gem::plugins::film {
 
   //////////
   // Destructor
-  virtual ~filmMPEG1();
+  virtual ~filmMPEG1(void);
 
 #ifdef HAVE_LIBMPEG
   //////////
@@ -57,15 +57,15 @@ class GEM_EXPORT filmMPEG1 : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // get the number of frames
-  virtual int getFrameNum() {return -1;}
+  virtual int getFrameNum(void) {return -1;}
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum = -1);
+  virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   //-----------------------------------
   // GROUP:	Movie data

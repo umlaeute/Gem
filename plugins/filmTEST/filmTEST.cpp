@@ -19,6 +19,8 @@
 
 #include <string.h>
 #include "filmTEST.h"
+#include "plugins/PluginFactory.h"
+#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
@@ -33,7 +35,7 @@ REGISTER_FILMFACTORY("test", filmTEST);
 //
 /////////////////////////////////////////////////////////
 
-filmTEST :: filmTEST(void) : film(),
+filmTEST :: filmTEST(void) : filmBase(),
 			     m_data(NULL), m_length(0)
 {
   m_image.image.setCsizeByFormat(GL_RGBA);
@@ -68,7 +70,7 @@ pixBlock* filmTEST :: getFrame(){
   return &m_image;
 }
 
-int filmTEST :: changeImage(int imgNum, int trackNum){
+film::errCode filmTEST :: changeImage(int imgNum, int trackNum){
   unsigned char*data=m_image.image.data;
   unsigned int size=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
 
@@ -81,5 +83,5 @@ int filmTEST :: changeImage(int imgNum, int trackNum){
 
   m_image.newimage=true;
 
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }

@@ -31,6 +31,7 @@
 
 
 #include "filmQT.h"
+#include "plugins/PluginFactory.h"
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("QuickTime", filmQT);
@@ -83,7 +84,7 @@ static bool filmQT_deinitQT(void) {
 //
 /////////////////////////////////////////////////////////
 
-filmQT :: filmQT(void) : film(false),
+filmQT :: filmQT(void) : filmBase(false),
 			 m_movie(NULL),
 			 m_srcGWorld(NULL),
 			 m_movieTime(0),
@@ -280,12 +281,12 @@ double filmQT :: getFPS() {
   return m_fps;
 }
 
-int filmQT :: changeImage(int imgNum, int trackNum){
+film::errCode filmQT :: changeImage(int imgNum, int trackNum){
   m_readNext = false;
   if (imgNum  ==-1)  imgNum=m_curFrame;
   if (m_numFrames>1 && imgNum>=m_numFrames){
     m_movieTime=0;
-    return FILM_ERROR_FAILURE;
+    return film::FAILURE;
   }
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
   m_readNext=true;
@@ -297,7 +298,7 @@ int filmQT :: changeImage(int imgNum, int trackNum){
    */
   m_movieTime = static_cast<long>(m_curFrame * duration);
 
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }
 
 #ifdef LOADRAM

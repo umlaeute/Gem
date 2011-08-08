@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMQT4L_H_
 #define INCLUDE_FILMQT4L_H_
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 #include <stdio.h>
 
 #ifdef HAVE_LIBQUICKTIME
@@ -37,7 +37,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmQT4L : public gem::plugins::film {
+class GEM_EXPORT filmQT4L : public filmBase {
  public:
 
   //////////
@@ -46,7 +46,7 @@ class GEM_EXPORT filmQT4L : public gem::plugins::film {
 
   //////////
   // Destructor
-  virtual ~filmQT4L();
+  virtual ~filmQT4L(void);
 
 #ifdef HAVE_LIBQUICKTIME
   //////////
@@ -58,11 +58,11 @@ class GEM_EXPORT filmQT4L : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum = -1);
+  virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   //-----------------------------------
   // GROUP:	Movie data

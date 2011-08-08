@@ -17,6 +17,8 @@
 # include "config.h"
 #endif
 #include "filmDS.h"
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
@@ -44,7 +46,7 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 //
 /////////////////////////////////////////////////////////
 
-filmDS :: filmDS(void) : film() {
+filmDS :: filmDS(void) : filmBase() {
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
   HRESULT RetVal;
   m_reqFrame = 1;
@@ -689,13 +691,13 @@ pixBlock* filmDS :: getFrame(){
   return &m_image;
 }
 
-int filmDS :: changeImage(int imgNum, int trackNum){
+film::errCode filmDS :: changeImage(int imgNum, int trackNum){
 
 	m_reqFrame = imgNum;
 
-	if (m_reqFrame > m_Duration) return FILM_ERROR_FAILURE;
+	if (m_reqFrame > m_Duration) return film::FAILURE;
   
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }
 
 HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)

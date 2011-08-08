@@ -17,9 +17,11 @@
 # include "config.h"
 #endif
 
-#include <string.h>
 #include "filmMPEG1.h"
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
+
 
 #ifdef HAVE_LIBMPEG
 REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
@@ -34,7 +36,7 @@ REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG1 :: filmMPEG1(void) : film(),
+filmMPEG1 :: filmMPEG1(void) : filmBase(),
 			       m_data(NULL), m_length(0)
 {
 #ifdef HAVE_LIBMPEG
@@ -149,15 +151,15 @@ pixBlock* filmMPEG1 :: getFrame(){
   return 0;
 }
 
-int filmMPEG1 :: changeImage(int imgNum, int trackNum){
-  if (m_reachedEnd&&imgNum>0)return FILM_ERROR_FAILURE;
+film::errCode filmMPEG1 :: changeImage(int imgNum, int trackNum){
+  if (m_reachedEnd&&imgNum>0)return film::FAILURE;
 
   m_readNext = true;
   if (imgNum==0){
-    if (!RewindMPEG(m_streamfile, &m_streamVid))return FILM_ERROR_FAILURE;
+    if (!RewindMPEG(m_streamfile, &m_streamVid))return film::FAILURE;
     m_curFrame=0;
     m_reachedEnd=false;
   }
-  return FILM_ERROR_DONTKNOW;
+  return film::DONTKNOW;
 }
 #endif

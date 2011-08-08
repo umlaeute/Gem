@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMTEST_H_
 #define INCLUDE_FILMTEST_H_
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 #include <stdio.h>
 
 /*-----------------------------------------------------------------
@@ -32,7 +32,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmTEST : public gem::plugins::film {
+class GEM_EXPORT filmTEST : public filmBase {
  public:
 
   //////////
@@ -45,11 +45,11 @@ class GEM_EXPORT filmTEST : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum = -1);
+  virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   //-----------------------------------
   unsigned char*m_data;

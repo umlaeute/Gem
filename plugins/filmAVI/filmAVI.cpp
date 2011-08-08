@@ -18,7 +18,10 @@
 #endif
 
 #include "filmAVI.h"
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
+
 
 #include "Utils/Functions.h"
 
@@ -35,7 +38,7 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 //
 /////////////////////////////////////////////////////////
 
-filmAVI :: filmAVI(void) : film() {
+filmAVI :: filmAVI(void) : filmBase() {
 #ifdef _WIN32
   m_getFrame     = NULL;
   m_streamVid    = NULL;
@@ -231,18 +234,18 @@ pixBlock* filmAVI :: getFrame(){
   return &m_image;
 }
 
-int filmAVI :: changeImage(int imgNum, int trackNum){
-  if (imgNum<0)return FILM_ERROR_FAILURE;
+film::errCode filmAVI :: changeImage(int imgNum, int trackNum){
+  if (imgNum<0)return film::FAILURE;
   if (m_numFrames<0){
     m_reqFrame = imgNum;
-    return FILM_ERROR_SUCCESS;
+    return film::SUCCESS;
   }
   if (imgNum>m_numFrames){
     m_reqFrame=m_numFrames;
-    return FILM_ERROR_FAILURE;
+    return film::FAILURE;
   }
 
   m_reqFrame = imgNum;
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }
 #endif

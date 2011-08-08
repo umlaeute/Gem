@@ -15,7 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef INCLUDE_FILMAVIPLAY_H_
 #define INCLUDE_FILMAVIPLAY_H_
-#include "plugins/film.h"
+#include "plugins/filmBase.h"
 
 #if defined (_WIN32) & defined (HAVE_LIBAVIPLAY)
    // un windows there are other ways...
@@ -56,7 +56,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmAVIPLAY : public gem::plugins::film {
+class GEM_EXPORT filmAVIPLAY : public filmBase {
  public:
   
   //////////
@@ -65,7 +65,7 @@ class GEM_EXPORT filmAVIPLAY : public gem::plugins::film {
 
   //////////
   // Destructor
-  ~filmAVIPLAY();
+  ~filmAVIPLAY(void);
 
 #ifdef HAVE_LIBAVIPLAY
   //////////
@@ -77,11 +77,11 @@ class GEM_EXPORT filmAVIPLAY : public gem::plugins::film {
 
   //////////
   // get the next frame
-  virtual pixBlock* getFrame();
+  virtual pixBlock* getFrame(void);
 
   //////////
   // set the next frame to read;
-  virtual int changeImage(int imgNum, int trackNum=-1);
+  virtual errCode changeImage(int imgNum, int trackNum=-1);
 
  protected:
   IAviReadFile *m_avifile;

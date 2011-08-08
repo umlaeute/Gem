@@ -16,8 +16,9 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <string.h>
 #include "filmGMERLIN.h"
+#include "plugins/PluginFactory.h"
+
 using namespace gem::plugins;
 
 #ifdef HAVE_GMERLIN
@@ -33,7 +34,7 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 //
 /////////////////////////////////////////////////////////
 
-filmGMERLIN :: filmGMERLIN(void) : film(),
+filmGMERLIN :: filmGMERLIN(void) : filmBase(),
 #ifdef HAVE_GMERLIN
                                    m_file(NULL),
                                    m_opt(NULL),
@@ -282,13 +283,13 @@ pixBlock* filmGMERLIN :: getFrame(){
 // changeFrame
 //
 /////////////////////////////////////////////////////////
-int filmGMERLIN :: changeImage(int imgNum, int trackNum){
+film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
   if(trackNum<0) {
     /* just automatically proceed to the next frame: this might speed up things for linear decoding */
-    return FILM_ERROR_SUCCESS;
+    return film::SUCCESS;
   }
       
-  if(!m_file)return FILM_ERROR_FAILURE;
+  if(!m_file)return film::FAILURE;
 
 #if 0
   // LATER implement track-switching
@@ -314,7 +315,7 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
   }
 #endif
 
-  if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
+  if(imgNum>m_numFrames || imgNum<0)return film::FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
 
 
@@ -325,7 +326,7 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
       //  no assumptions about fixed framerate
       int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum, NULL);
       bgav_seek_video(m_file, m_track, seekpos);
-      return FILM_ERROR_SUCCESS;
+      return film::SUCCESS;
     } 
 #else
     if(0) {
@@ -349,7 +350,7 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
 #define TIMESTAMP_OFFSET_MAX 5
       if(diff<TIMESTAMP_OFFSET_MAX && diff>(TIMESTAMP_OFFSET_MAX * -1)) {
         // hey we are already there...
-        return FILM_ERROR_SUCCESS;
+        return film::SUCCESS;
       }
 #endif
 
@@ -357,12 +358,12 @@ int filmGMERLIN :: changeImage(int imgNum, int trackNum){
 
       bgav_seek_scaled(m_file, &seekpos, m_fps_num);
       if(seekposOrg == seekpos)
-        return FILM_ERROR_SUCCESS;
+        return film::SUCCESS;
       /* never mind: always return success... */
-      return FILM_ERROR_SUCCESS;
+      return film::SUCCESS;
     }
   }
 
-  return FILM_ERROR_FAILURE;
+  return film::FAILURE;
 }
 #endif // GMERLIN

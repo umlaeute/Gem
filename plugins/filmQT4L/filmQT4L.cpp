@@ -17,8 +17,8 @@
 # include "config.h"
 #endif
 
-#include <string.h>
 #include "filmQT4L.h"
+#include "plugins/PluginFactory.h"
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBQUICKTIME
@@ -36,7 +36,7 @@ REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
 //
 /////////////////////////////////////////////////////////
 
-filmQT4L :: filmQT4L(void) : film() {
+filmQT4L :: filmQT4L(void) : filmBase() {
 #ifdef HAVE_LIBQUICKTIME
   m_quickfile=0;
 #endif
@@ -151,8 +151,8 @@ pixBlock* filmQT4L :: getFrame(){
   return pimage;
 }
 
-int filmQT4L :: changeImage(int imgNum, int trackNum){
-  if(imgNum>m_numFrames || imgNum<0)return FILM_ERROR_FAILURE;
+film::errCode filmQT4L :: changeImage(int imgNum, int trackNum){
+  if(imgNum>m_numFrames || imgNum<0)return film::FAILURE;
   if  (imgNum>0)m_curFrame=imgNum;
   if(trackNum>0)m_curTrack=trackNum;
 
@@ -162,6 +162,6 @@ int filmQT4L :: changeImage(int imgNum, int trackNum){
 #else
   if ((i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack))){  }
 #endif
-  return FILM_ERROR_SUCCESS;
+  return film::SUCCESS;
 }
 #endif // QT4L

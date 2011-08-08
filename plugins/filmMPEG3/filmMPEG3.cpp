@@ -18,6 +18,7 @@
 #endif
 
 #include "filmMPEG3.h"
+#include "plugins/PluginFactory.h"
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG3
@@ -41,7 +42,7 @@ REGISTER_FILMFACTORY("MPEG3", filmMPEG3);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG3 :: filmMPEG3(void) : film(false) {
+filmMPEG3 :: filmMPEG3(void) : filmBase(false) {
 #ifdef HAVE_LIBMPEG3
   mpeg_file=0;
 #endif
@@ -167,18 +168,18 @@ pixBlock* filmMPEG3 :: getFrame(){
   return &m_image;
 }
 
-int filmMPEG3 :: changeImage(int imgNum, int trackNum){
+film::errCode filmMPEG3 :: changeImage(int imgNum, int trackNum){
   m_readNext = true;
   if (imgNum  ==-1)  imgNum=m_curFrame;
-  if (m_numFrames>1 && imgNum>=m_numFrames)return FILM_ERROR_FAILURE;
+  if (m_numFrames>1 && imgNum>=m_numFrames)return film::FAILURE;
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
   int test;
   if ((test=mpeg3_set_frame(mpeg_file, imgNum, trackNum))) {
   }
     m_curFrame=imgNum;
     m_curTrack=trackNum;
-    return FILM_ERROR_SUCCESS;
+    return film::SUCCESS;
   m_readNext=false;
-  return FILM_ERROR_FAILURE;
+  return film::FAILURE;
 }
 #endif
