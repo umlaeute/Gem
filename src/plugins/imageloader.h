@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an image and return the frame(OS independant parent-class)
+Load an image and return the frame(OS independant interface)
 
 Copyright (c) 2011 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -14,19 +14,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_IMAGELOADER_H_
 
 #include "Gem/Image.h"
-
-#include <string>
-#include "plugins/PluginFactory.h"
-
 #include "Gem/Properties.h"
 
+#include <string>
 
    /*-----------------------------------------------------------------
      -------------------------------------------------------------------
      CLASS
      imageloader
     
-     parent class for the system- and library-dependent imageloader classes
+     interface for the system- and library-dependent imageloader classes
     
      KEYWORDS
      pix load an image
@@ -38,21 +35,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   class GEM_EXTERN imageloader
   {
   public:
-  
-    //////////
-    // Constructor
-  
-    /* initialize the imageloader
-     * set 'threadable' to FALSE if your implementation must NOT be used within
-     * threads
-     */
-    imageloader(bool threadable=true);
 
-    ////////
-    // Destructor
-    /* free what is apropriate */
-    virtual ~imageloader();
+  //////////
+  // returns an instance wrapping all plugins or NULL
+  // if NULL is returned, you might still try your luck with manually accessing the 
+  // PluginFactory
+  static imageloader*getInstance(void);
 
+  /////////
+  // dtor must be virtual
+  virtual ~imageloader(void);
 
     /* read a image
      *
@@ -60,16 +52,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      * e.g. EXIF tags,...
      */
     /* returns TRUE if loading was successfull, FALSE otherwise */
-    virtual bool load(std::string filename, imageStruct&result, gem::Properties&props) = 0;
+    virtual bool load(std::string filename, 
+		      imageStruct&result, 
+		      gem::Properties&props) = 0;
 
-    virtual bool isThreadable(void) { return m_threadable; }
 
-  protected:
-    /* used to store the "set" properties */
-    gem::Properties m_properties;
-
-  private:
-    bool m_threadable;
+    /* returns TRUE if this object can be used from within a thread */
+    virtual bool isThreadable(void) = 0;
   };
 
 };}; // namespace gem

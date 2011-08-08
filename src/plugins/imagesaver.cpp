@@ -13,35 +13,12 @@
 /////////////////////////////////////////////////////////
   
 #include "plugins/imagesaver.h"
+#include "plugins/PluginFactory.h"
 
-using namespace gem::plugins;
+gem::plugins::imagesaver :: ~imagesaver(void) {}
 
-/////////////////////////////////////////////////////////
-//
-// imagesaver
-//
-/////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////
-imagesaver :: imagesaver(bool threadable) : m_threadable(m_threadable) {
-}
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-imagesaver :: ~imagesaver()
-{
-}
-
-float imagesaver ::estimateSave( const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  /* the default is rather bad */
-  return 0.;
-}
-void imagesaver ::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
-  mimetypes.clear();
-  props.clear();
+gem::plugins::imagesaver*gem::plugins::imagesaver::getInstance(void) {
+ return NULL;
 }
 
 

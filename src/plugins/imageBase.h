@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_IMAGE_H_
-#define INCLUDE_IMAGE_H_
+#ifndef INCLUDE_IMAGEBASE_H_
+#define INCLUDE_IMAGEBASE_H_
 
 #include "plugins/imageloader.h"
 #include "plugins/imagesaver.h"
@@ -19,11 +19,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
    /*-----------------------------------------------------------------
      -------------------------------------------------------------------
      CLASS
-     image
+     imageBase
     
-     parent class for the system- and library-dependent image-loader classes
+     parent class for the system- and library-dependent imageBase-loader classes
      this class should only be used for plugin implementations
-     the plugin-host should use the imageloader/imagesaver classes resp.
+     the plugin-host should use the imageBaseloader/imageBasesaver classes resp.
     
      KEYWORDS
      pix load an image
@@ -32,7 +32,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
      -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXTERN image : public imageloader, public imagesaver
+class GEM_EXTERN imageBase : public imageloader, public imagesaver
   {
   public:
   
@@ -42,12 +42,21 @@ class GEM_EXTERN image : public imageloader, public imagesaver
     /* initialize the image class (set 'threadable' to FALSE if this object must
      * NOT be used within a threaded context
      */
-    image(bool threadable=true);
+    imageBase(bool threadable=true);
 
     ////////
     // Destructor
     /* free what is apropriate */
-    virtual ~image(void);
+    virtual ~imageBase(void);
+
+
+    virtual bool isThreadable(void);
+    virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
+
+    virtual float estimateSave( const imageStruct&img, 
+				const std::string&filename, 
+				const std::string&mimetype, 
+				const gem::Properties&props);
 
     /**
      * list all properties this backend supports
@@ -75,6 +84,8 @@ class GEM_EXTERN image : public imageloader, public imagesaver
   protected:
     /* used to store the "set" properties */
     gem::Properties m_properties;
+  private:
+    bool m_threadable;
   };
 
 };}; // namespace gem

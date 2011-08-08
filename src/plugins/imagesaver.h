@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an image and return the frame(OS independant parent-class)
+Load an image and return the frame(OS independant interface)
 
 Copyright (c) 2011 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -14,11 +14,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define INCLUDE_IMAGESAVER_H_
 
 #include "Gem/Image.h"
+#include "Gem/Properties.h"
 
 #include <string>
-#include "plugins/PluginFactory.h"
-
-#include "Gem/Properties.h"
 
 
    /*-----------------------------------------------------------------
@@ -26,7 +24,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      CLASS
      imagesaver
     
-     parent class for the system- and library-dependent imagesaver classes
+     interface for the system- and library-dependent imagesaver classes
     
      KEYWORDS
      save a pix to disk
@@ -38,21 +36,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   class GEM_EXTERN imagesaver
   {
   public:
-  
-    //////////
-    // Constructor
-  
-    /* initialize the imagesaver
-     * set 'threadable' to FALSE if your implementation must NOT be used within
-     * threads
-     */
-    imagesaver(bool threadable=true);
 
-    ////////
-    // Destructor
-    /* free what is apropriate */
-    virtual ~imagesaver();
+  //////////
+  // returns an instance wrapping all plugins or NULL
+  // if NULL is returned, you might still try your luck with manually accessing the 
+  // PluginFactory
+  static imagesaver*getInstance(void);
 
+  /////////
+  // dtor must be virtual
+  virtual ~imagesaver(void);
 
     /* save the image 'img' under the filename 'filename', respecting as many 'props' as possible
      *
@@ -101,7 +94,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      *            JPG knows how to handle the 'quality' property, but not the 'mimetype', so it scores 1 point
      *            TIFF knows how to handle the 'mimetype' but not the 'quality', so it scores 100 points
      */
-    virtual float estimateSave( const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+    virtual float estimateSave( const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) = 0;
     
     /**
      * get writing capabilities of this backend (informative)
@@ -111,14 +104,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      * if only some properties/mimetypes are explicitely known (but it is likely that more are supported), 
      * it is generally better, to list the few rather than nothing
      */
-    virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
+    virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) = 0;
     
     /* returns TRUE, if it is save to use this backend from multple threads
      */
-    virtual bool isThreadable(void) { return m_threadable; }
-       
-  private:
-    bool m_threadable;
+    virtual bool isThreadable(void) = 0;
   };
 
 }; }; // namespace gem

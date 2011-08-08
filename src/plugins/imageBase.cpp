@@ -12,31 +12,30 @@
 //
 /////////////////////////////////////////////////////////
   
-#include "plugins/image.h"
+#include "plugins/imageBase.h"
 
 using namespace gem::plugins;
 
 /////////////////////////////////////////////////////////
 //
-// image
+// imageBase
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-image :: image(bool threadable)
- : imageloader(threadable), imagesaver(threadable) {
-}
+imageBase :: imageBase(bool threadable)
+  : m_threadable(threadable)
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-image :: ~image()
-{
-}
+imageBase :: ~imageBase()
+{}
 
-bool image :: enumProperties(gem::Properties&readable,
+bool imageBase :: enumProperties(gem::Properties&readable,
 			     gem::Properties&writeable) 
 {
   readable.clear();
@@ -44,7 +43,7 @@ bool image :: enumProperties(gem::Properties&readable,
   return false;
 }
 
-void image :: setProperties(gem::Properties&props) {
+void imageBase :: setProperties(gem::Properties&props) {
   // nada
   m_properties=props;
 #if 0
@@ -72,7 +71,7 @@ void image :: setProperties(gem::Properties&props) {
 #endif
 }
 
-void image :: getProperties(gem::Properties&props) {
+void imageBase :: getProperties(gem::Properties&props) {
   // nada
   std::vector<std::string>keys=props.keys();
   unsigned int i=0;
@@ -81,3 +80,16 @@ void image :: getProperties(gem::Properties&props) {
     props.set(keys[i], unset);
   }
 }
+
+
+bool imageBase :: isThreadable(void) {
+  return m_threadable;
+}
+float imageBase::estimateSave( const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+  return 0.;
+}
+void imageBase::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
+}
+
