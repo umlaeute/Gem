@@ -108,7 +108,7 @@ pixBlock *videoUNICAP :: getFrame(){
 
 void videoUNICAP::releaseFrame() {
   mutex.unlock();
-  video::releaseFrame();
+  videoBase::releaseFrame();
 }
 
 bool videoUNICAP :: openDevice(gem::Properties&props) {
