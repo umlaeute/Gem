@@ -31,6 +31,8 @@ libplugins_la_SOURCES= \
         film.h \
         record.cpp \
         record.h \
+        recordBase.cpp \
+        recordBase.h \
         video.cpp \
         video.h
 
@@ -43,4 +45,5 @@ libplugins_la_include_HEADERS = \
 	imageloader.h \
 	imagesaver.h \
 	record.h \
+	recordBase.h \
 	video.h
