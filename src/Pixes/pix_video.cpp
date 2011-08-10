@@ -757,7 +757,7 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::getPropertyMessCallback),
     	    gensym("get"), A_GIMME, A_NULL);
 
-    CPPEXTERN_MSG0(classPtr, "enumProps", applyPropertiesMess);
+    CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertyMess);
     class_addmethod(classPtr, 
 		    reinterpret_cast<t_method>(&pix_video::  setPropertiesMessCallback),
 		    gensym("setProps"), A_GIMME, A_NULL);
