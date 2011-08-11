@@ -52,6 +52,12 @@ gem::RTE::Symbol :: Symbol(const t_symbol*name)
 {
   m_pimpl->sym=name;
 }
+gem::RTE::Symbol :: Symbol(const unsigned int argc, const t_atom*argv) 
+  : m_pimpl(new PIMPL)
+{
+  setSymbol(argc, argv);
+}
+
 
 gem::RTE::Symbol :: ~Symbol(void)
 {
@@ -69,5 +75,20 @@ gem::RTE::Symbol&gem::RTE::Symbol::operator=(const t_symbol*name) {
   m_pimpl->sym=name;
 }
 gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_atom*argv) {
+  if(argc)
+    m_pimpl->sym=atom_getsymbol((t_atom*)argv);
+  else
+    m_pimpl->sym=0;
+    
   //  m_pimpl->sym=gensym(name.c_str());
+}
+
+t_symbol*gem::RTE::Symbol::getRTESymbol(void) const {
+  return (t_symbol*)(m_pimpl->sym);
+}
+std::string gem::RTE::Symbol::getString(void) const {
+  if(m_pimpl->sym)
+    return std::string(m_pimpl->sym->s_name);
+  return std::string();
+      
 }

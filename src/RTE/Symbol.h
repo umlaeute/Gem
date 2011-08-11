@@ -30,6 +30,7 @@ namespace gem {
       Symbol(const gem::RTE::Symbol&a);
       Symbol(const std::string&name);
       Symbol(const struct _symbol*name);
+      Symbol(const unsigned int, const struct _atom*);
       
       virtual ~Symbol(void);
 
@@ -37,10 +38,17 @@ namespace gem {
       virtual Symbol&operator=(const std::string&);
       virtual Symbol&operator=(const struct _symbol*);
       virtual Symbol&setSymbol(const unsigned int, const struct _atom*);
-#if 0
-      virtual std::string getString(void);
-      virtual struct _symbol*getRTESymbol(void);
-#endif
+
+      virtual std::string getString(void) const;
+      virtual struct _symbol*getRTESymbol(void) const;
+
+      virtual operator std::string(void) {
+	return getString();
+      }
+
+      virtual operator struct _symbol*(void) {
+	return getRTESymbol();
+      }
     };
   };
 };
