@@ -48,7 +48,7 @@ class GEM_EXTERN pix_video : public GemBase
 
   //////////
   // Constructor
-  pix_video();
+  pix_video(int, t_atom*);
   
  protected:
     	

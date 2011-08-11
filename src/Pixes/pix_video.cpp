@@ -22,9 +22,10 @@
 #include "Gem/State.h"
 #include "Gem/Exception.h"
 #include "plugins/PluginFactory.h"
-#include "RTE/MessageCallbacks.h"
 
-CPPEXTERN_NEW(pix_video);
+#include "RTE/Symbol.h"
+
+CPPEXTERN_NEW_WITH_GIMME(pix_video);
 
 /////////////////////////////////////////////////////////
 //
@@ -34,7 +35,7 @@ CPPEXTERN_NEW(pix_video);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_video :: pix_video() : 
+pix_video :: pix_video(int argc, t_atom*argv) : 
   m_videoHandle(NULL), m_driver(-1), m_running(UNKNOWN), m_infoOut(NULL)
 {
   gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
@@ -57,6 +58,13 @@ pix_video :: pix_video() :
   } else {
     error("no video backends found!");
   }
+
+  std::string dev=gem::RTE::Symbol(argc, argv);
+
+  if(!dev.empty())
+    deviceMess(dev);
+    
+
 }
 
 /////////////////////////////////////////////////////////
