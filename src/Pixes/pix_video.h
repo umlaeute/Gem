@@ -133,7 +133,11 @@ class GEM_EXTERN pix_video : public GemBase
 
   int    m_driver;
 
-  bool m_running;
+  enum runningState {
+    UNKNOWN=-1,
+    STOPPED=0,
+    STARTED=1};
+  runningState m_running;
   virtual void	runningMess(bool);
 
 

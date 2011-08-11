@@ -35,7 +35,7 @@ CPPEXTERN_NEW(pix_video);
 //
 /////////////////////////////////////////////////////////
 pix_video :: pix_video() : 
-  m_videoHandle(NULL), m_driver(-1), m_running(true), m_infoOut(NULL)
+  m_videoHandle(NULL), m_driver(-1), m_running(UNKNOWN), m_infoOut(NULL)
 {
   gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
   std::vector<std::string>ids=gem::PluginFactory<gem::plugins::video>::getIDs();
@@ -90,6 +90,9 @@ void pix_video :: render(GemState *state){
 //
 /////////////////////////////////////////////////////////
 void pix_video :: startRendering(){
+  if(UNKNOWN==m_running)
+    m_running=STARTED;
+
   if(m_videoHandles.size()<1) {
     error("do video for this OS");
     return;
@@ -203,7 +206,7 @@ bool pix_video::restart(void) {
 
         enumPropertyMess();
 
-        if(m_running) {
+        if(STARTED==m_running) {
           m_videoHandle->start();
         }
         return true;
@@ -215,7 +218,8 @@ bool pix_video::restart(void) {
     m_videoHandle=m_videoHandles[m_driver];
     if(m_videoHandle->open(m_writeprops)) {
       enumPropertyMess();
-      if(m_running)m_videoHandle->start();
+      if(STARTED==m_running)
+	m_videoHandle->start();
       return true;
     }
   }
@@ -264,7 +268,8 @@ void pix_video :: driverMess(int dev)
     if(m_videoHandle){
       if(m_videoHandle->open(m_writeprops)) {
         enumPropertyMess();
-        if(m_running)m_videoHandle->start();
+        if(STARTED==m_running)
+	  m_videoHandle->start();
       }
     }
   } else {
@@ -718,9 +723,9 @@ void pix_video :: qualityMess(int q) {
 //
 /////////////////////////////////////////////////////////
 void pix_video :: runningMess(bool state) {
-  m_running=state;
+  m_running=state?STARTED:STOPPED;
   if(m_videoHandle) {
-    if(m_running)
+    if(STARTED==m_running)
       m_videoHandle->start();
     else
       m_videoHandle->stop();
