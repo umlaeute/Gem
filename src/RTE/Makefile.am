@@ -31,4 +31,6 @@ libRTE_la_SOURCES= \
         Array.h \
         MessageCallbacks.h \
         Outlet.cpp \
-        Outlet.h
+        Outlet.h \
+        Symbol.cpp \
+        Symbol.h
