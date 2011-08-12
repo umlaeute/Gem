@@ -6,7 +6,7 @@ LOG
 
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) GÂžnther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂžr::umlâ°ute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂžr::umlâ?°ute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -44,7 +44,7 @@ class GEM_EXTERN vertex_tabread : public GemVertex
     	
     	//////////
     	// Destructor
-    	virtual ~vertex_tabread();
+    	virtual ~vertex_tabread(void);
 
         GLfloat	*m_VertexArray;
         GLfloat	*m_ColorArray;
@@ -59,7 +59,7 @@ class GEM_EXTERN vertex_tabread : public GemVertex
 		//////////
 		// set the dirty flag
 		bool m_doit;
-		void bangMess();
+		void bangMess(void);
 
 	//////////
 	// set the tables that hold the interleaved data (vertex, color, ...)

@@ -6,7 +6,7 @@ LOG
 
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) GÂžnther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂžr::umlâ°ute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂžr::umlâ?°ute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -44,7 +44,7 @@ class GEM_EXTERN vertex_offset : public vertex_scale
     	
   //////////
   // Destructor
-  virtual ~vertex_offset();
+  virtual ~vertex_offset(void);
 
   virtual void paramMess(int,t_atom*);
   float	m_x,m_y,m_z,m_w;

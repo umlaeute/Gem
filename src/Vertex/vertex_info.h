@@ -6,7 +6,7 @@ LOG
 
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) GÂžnther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂžr::umlâ°ute. IEM. zmoelnig@iem.kug.ac.at
+    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::fÂžr::umlâ?°ute. IEM. zmoelnig@iem.kug.ac.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -38,13 +38,13 @@ class GEM_EXTERN vertex_info : public GemBase
 
         //////////
         // Constructor
-    	vertex_info();
+    	vertex_info(void);
     	
     protected:
     	
     	//////////
     	// Destructor
-    	virtual ~vertex_info();
+    	virtual ~vertex_info(void);
         
         int 		m_previousSize;
         int		m_vertNum,m_vertCount;

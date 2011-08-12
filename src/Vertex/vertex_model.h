@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_model : public GemBase
 
         //////////
         // Constructor
-    	vertex_model();
+    	vertex_model(void);
     	
     protected:
     	
     	//////////
     	// Destructor
-    	virtual ~vertex_model();
+    	virtual ~vertex_model(void);
         
         //int	m_blend;
         float	*m_ColorArray;
