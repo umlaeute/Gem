@@ -20,6 +20,11 @@
 #include "RTE/Symbol.h"
 #include "Gem/RTE.h"
 
+// for snprintf
+#include <stdio.h>
+#ifdef _WIN32
+# define snprintf _snprintf
+#endif
 
 class gem::RTE::Symbol::PIMPL {
 public:
@@ -75,12 +80,28 @@ gem::RTE::Symbol&gem::RTE::Symbol::operator=(const t_symbol*name) {
   m_pimpl->sym=name;
 }
 gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_atom*argv) {
-  if(argc)
-    m_pimpl->sym=atom_getsymbol((t_atom*)argv);
-  else
-    m_pimpl->sym=0;
-    
-  //  m_pimpl->sym=gensym(name.c_str());
+  char buf[MAXPDSTRING];
+  std::string name;
+  bool firsttime=true;
+
+  unsigned int i;
+  for(i=0; i<argc; i++) {
+    t_atom*arg=(t_atom*)(argv+i);
+    std::string atomname;
+    if(A_FLOAT==argv[i].a_type) {
+      snprintf(buf, MAXPDSTRING, "%g", atom_getfloat(arg));
+      buf[MAXPDSTRING-1]=0;
+      atomname=buf;
+    } else {
+      atomname=std::string(atom_getsymbol(arg)->s_name);
+    }
+    if(!firsttime)
+      name+=" ";
+    firsttime=false;
+    name+=atomname; 
+  }
+
+  m_pimpl->sym=gensym(name.c_str());
 }
 
 t_symbol*gem::RTE::Symbol::getRTESymbol(void) const {
@@ -89,6 +110,5 @@ t_symbol*gem::RTE::Symbol::getRTESymbol(void) const {
 std::string gem::RTE::Symbol::getString(void) const {
   if(m_pimpl->sym)
     return std::string(m_pimpl->sym->s_name);
-  return std::string();
-      
+  return std::string();      
 }
