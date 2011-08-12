@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_COLORALPHA_H_
-#define INCLUDE_PIX_COLORALPHA_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_COLORALPHA_H_
+#define _INCLUDE__GEM_PIXES_PIX_COLORALPHA_H_
 
 #include "Base/GemPixObj.h"
 

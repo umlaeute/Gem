@@ -12,8 +12,8 @@ LOG
 -----------------------------------------------------------------*/
 
 
-#ifndef INCLUDE_GEMVERTEX_H_
-#define INCLUDE_GEMVERTEX_H_
+#ifndef _INCLUDE__GEM_BASE_GEMVERTEX_H_
+#define _INCLUDE__GEM_BASE_GEMVERTEX_H_
 
 #include "Base/GemBase.h"
 
@@ -34,4 +34,4 @@ class GEM_EXTERN GemVertex : public GemBase {
 };
 
 
-#endif /* INCLUDE_GEMVERTEX_H_ */
+#endif /* _INCLUDE__GEM_BASE_GEMVERTEX_H_ */

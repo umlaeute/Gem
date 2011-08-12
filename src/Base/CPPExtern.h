@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CPPEXTERN_H_
-#define INCLUDE_CPPEXTERN_H_
+#ifndef _INCLUDE__GEM_BASE_CPPEXTERN_H_
+#define _INCLUDE__GEM_BASE_CPPEXTERN_H_
 
 #include "Gem/ExportDef.h"
 

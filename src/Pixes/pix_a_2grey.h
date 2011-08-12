@@ -24,8 +24,8 @@ LOG
 /////////////////////////////////////////////////////////
 
 
-#ifndef INCLUDE_pix_a_2grey_H_
-#define INCLUDE_pix_a_2grey_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_A__GREY_H_
+#define _INCLUDE__GEM_PIXES_PIX_A__GREY_H_
 
 #include "Base/GemPixObj.h"
 

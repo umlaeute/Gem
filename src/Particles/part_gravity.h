@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PART_GRAVITY_H_
-#define INCLUDE_PART_GRAVITY_H_
+#ifndef _INCLUDE__GEM_PARTICLES_PART_GRAVITY_H_
+#define _INCLUDE__GEM_PARTICLES_PART_GRAVITY_H_
 
 #include "papi.h"
 

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CONE_H_
-#define INCLUDE_CONE_H_
+#ifndef _INCLUDE__GEM_GEOS_CONE_H_
+#define _INCLUDE__GEM_GEOS_CONE_H_
 
 #include "cylinder.h"
 

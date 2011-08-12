@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef INCLUDE_PIX_SHARE_H
-#define INCLUDE_PIX_SHARE_H
+#ifndef _INCLUDE__GEM_PIXES_PIX_SHARE_H_
+#define _INCLUDE__GEM_PIXES_PIX_SHARE_H_
 
 #include "Base/GemBase.h"
 #include <sys/types.h>

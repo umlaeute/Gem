@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_ACCUMROTATE_H_
-#define INCLUDE_ACCUMROTATE_H_
+#ifndef _INCLUDE__GEM_MANIPS_ACCUMROTATE_H_
+#define _INCLUDE__GEM_MANIPS_ACCUMROTATE_H_
 
 #include "Base/GemBase.h"
 #include "Utils/Matrix.h"

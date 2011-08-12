@@ -18,8 +18,8 @@ LOG
 // added the gluDisk
 /////////////////////////////////////////////////////////
 
-#ifndef INCLUDE_DISK_H_
-#define INCLUDE_DISK_H_
+#ifndef _INCLUDE__GEM_GEOS_DISK_H_
+#define _INCLUDE__GEM_GEOS_DISK_H_
 
 #include "Base/GemGluObj.h"
 

@@ -15,8 +15,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_GREY_H_
-#define INCLUDE_PIX_GREY_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_GREY_H_
+#define _INCLUDE__GEM_PIXES_PIX_GREY_H_
 
 #include "Pixes/pix_rgba.h"
 

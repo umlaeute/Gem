@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_MULTIIMAGE_H_
-#define INCLUDE_PIX_MULTIIMAGE_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_MULTIIMAGE_H_
+#define _INCLUDE__GEM_PIXES_PIX_MULTIIMAGE_H_
 
 #include <string.h>
 

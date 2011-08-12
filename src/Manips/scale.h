@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_SCALE_H_
-#define INCLUDE_SCALE_H_
+#ifndef _INCLUDE__GEM_MANIPS_SCALE_H_
+#define _INCLUDE__GEM_MANIPS_SCALE_H_
 
 #include "Base/GemBase.h"
 

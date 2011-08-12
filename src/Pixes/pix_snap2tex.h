@@ -14,8 +14,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_SNAP2TEX_H_
-#define INCLUDE_PIX_SNAP2TEX_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_SNAP_TEX_H_
+#define _INCLUDE__GEM_PIXES_PIX_SNAP_TEX_H_
 
 #include "Base/GemBase.h"
 #include "Gem/State.h"

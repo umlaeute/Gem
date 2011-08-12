@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_MULTIPLY_H_
-#define INCLUDE_PIX_MULTIPLY_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_MULTIPLY_H_
+#define _INCLUDE__GEM_PIXES_PIX_MULTIPLY_H_
 
 #include "Base/GemPixDualObj.h"
 

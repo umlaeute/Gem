@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_LINEAR_PATH_H_
-#define INCLUDE_LINEAR_PATH_H_
+#ifndef _INCLUDE__GEM_MANIPS_LINEAR_PATH_H_
+#define _INCLUDE__GEM_MANIPS_LINEAR_PATH_H_
 
 #include "Base/GemPathBase.h"
 

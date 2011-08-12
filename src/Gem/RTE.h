@@ -10,8 +10,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_RTE_H_
-#define INCLUDE_GEM_RTE_H_
+#ifndef _INCLUDE__GEM_GEM_RTE_H_
+#define _INCLUDE__GEM_GEM_RTE_H_
 
 #if defined _MSC_VER
 /* data conversion with possible loss of data */
@@ -26,4 +26,4 @@
 #endif
 
 
-#endif /* INCLUDE_GEM_RTE_H_ */
+#endif /* _INCLUDE__GEM_GEM_RTE_H_ */

@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLREPORTERROR_H_
-#define INCLUDE_GEM_GLREPORTERROR_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLREPORTERROR_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLREPORTERROR_H_
 
 #include "Base/GemGLBase.h"
 

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_H_
-#define INCLUDE_GEM_H_
+#ifndef _INCLUDE__GEM_GEOS_GEMSPLASH_H_
+#define _INCLUDE__GEM_GEOS_GEMSPLASH_H_
 
 #include "Base/GemBase.h"
 

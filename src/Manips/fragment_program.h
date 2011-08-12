@@ -15,8 +15,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_FRAGMENT_PROGRAM_H_
-#define INCLUDE_FRAGMENT_PROGRAM_H_
+#ifndef _INCLUDE__GEM_MANIPS_FRAGMENT_PROGRAM_H_
+#define _INCLUDE__GEM_MANIPS_FRAGMENT_PROGRAM_H_
 
 #include "Manips/vertex_program.h"
 

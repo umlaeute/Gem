@@ -11,8 +11,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMVECTOR_H_
-#define INCLUDE_GEMVECTOR_H_
+#ifndef _INCLUDE__GEM_UTILS_VECTOR_H_
+#define _INCLUDE__GEM_UTILS_VECTOR_H_
 
 #include "Gem/ExportDef.h"
 
@@ -74,4 +74,4 @@ public:
     
 };
 
-#endif /* INCLUDE_GEMVECTOR_H_ */
+#endif /* _INCLUDE__GEM_UTILS_VECTOR_H_ */

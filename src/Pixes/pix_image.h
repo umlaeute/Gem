@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_IMAGE_H_
-#define INCLUDE_PIX_IMAGE_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_IMAGE_H_
+#define _INCLUDE__GEM_PIXES_PIX_IMAGE_H_
 
 #include <string.h>
 

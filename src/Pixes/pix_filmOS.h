@@ -14,8 +14,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_FILMOS_H_
-#define INCLUDE_PIX_FILMOS_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_FILMOS_H_
+#define _INCLUDE__GEM_PIXES_PIX_FILMOS_H_
 
 #define GEM_MOVIE_NONE 0
 #define GEM_MOVIE_AVI  1

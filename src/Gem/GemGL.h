@@ -16,8 +16,8 @@
  */
 
 
-#ifndef INCLUDE_GEMGL_H_
-#define INCLUDE_GEMGL_H_
+#ifndef _INCLUDE__GEM_GEM_GEMGL_H_
+#define _INCLUDE__GEM_GEM_GEMGL_H_
 
 #include "Gem/ExportDef.h"
 
@@ -85,4 +85,4 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # endif
 #endif
 
-#endif /* INCLUDE_GEMGL_H_ */
+#endif /* _INCLUDE__GEM_GEM_GEMGL_H_ */

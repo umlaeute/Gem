@@ -13,8 +13,8 @@ LOG
 -----------------------------------------------------------------*/
 
 
-#ifndef INCLUDE_shearZX_H_
-#define INCLUDE_shearZX_H_
+#ifndef _INCLUDE__GEM_MANIPS_SHEARZX_H_
+#define _INCLUDE__GEM_MANIPS_SHEARZX_H_
 
 #include "Base/GemBase.h"
 

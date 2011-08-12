@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VERTEX_TABREAD_H_
-#define INCLUDE_VERTEX_TABREAD_H_
+#ifndef _INCLUDE__GEM_VERTEX_VERTEX_TABREAD_H_
+#define _INCLUDE__GEM_VERTEX_VERTEX_TABREAD_H_
 
 #include "Base/GemVertex.h"
 

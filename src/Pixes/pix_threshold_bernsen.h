@@ -13,8 +13,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_THRESHOLD_BERNSEN_H_
-#define INCLUDE_PIX_THRESHOLD_BERNSEN_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_THRESHOLD_BERNSEN_H_
+#define _INCLUDE__GEM_PIXES_PIX_THRESHOLD_BERNSEN_H_
 
 #include "Base/GemPixObj.h"
 

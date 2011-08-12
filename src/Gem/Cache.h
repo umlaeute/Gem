@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMCACHE_H_
-#define INCLUDE_GEMCACHE_H_
+#ifndef _INCLUDE__GEM_GEM_CACHE_H_
+#define _INCLUDE__GEM_GEM_CACHE_H_
 
 #include "Gem/ExportDef.h"
 

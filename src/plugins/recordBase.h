@@ -11,8 +11,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PLUGINS_RECORDBASE_H_
-#define INCLUDE_PLUGINS_RECORDBASE_H_
+#ifndef _INCLUDE__GEM_PLUGINS_RECORDBASE_H_
+#define _INCLUDE__GEM_PLUGINS_RECORDBASE_H_
 
 #include "plugins/record.h"
 #include <map>

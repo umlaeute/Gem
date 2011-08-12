@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_ORTHO_H_
-#define INCLUDE_ORTHO_H_
+#ifndef _INCLUDE__GEM_MANIPS_ORTHO_H_
+#define _INCLUDE__GEM_MANIPS_ORTHO_H_
 
 #include "Base/GemBase.h"
 

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_SPHERE3D_H_
-#define INCLUDE_SPHERE3D_H_
+#ifndef _INCLUDE__GEM_GEOS_SPHERE_D_H_
+#define _INCLUDE__GEM_GEOS_SPHERE_D_H_
 
 #include "Base/GemGluObj.h"
 

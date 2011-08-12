@@ -11,7 +11,7 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PLUGINFACTORY_H_
+#ifndef _INCLUDE__GEM_PLUGINS_PLUGINFACTORYTIMPLE_H_
 # error you must not include PluginFactory Implementation directly! include PluginFactory.h instead
 #endif
 

@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLPOINTSIZE_H_
-#define INCLUDE_GEM_GLPOINTSIZE_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLPOINTSIZE_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLPOINTSIZE_H_
 
 #include "Base/GemGLBase.h"
 

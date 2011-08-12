@@ -10,8 +10,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMCONTEXTDATA_H_
-#define INCLUDE_GEMCONTEXTDATA_H_
+#ifndef _INCLUDE__GEM_GEM_CONTEXTDATA_H_
+#define _INCLUDE__GEM_GEM_CONTEXTDATA_H_
 
 #include "Gem/ExportDef.h"
 #include <vector>

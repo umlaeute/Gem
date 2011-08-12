@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLVERTEX3I_H_
-#define INCLUDE_GEM_GLVERTEX3I_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLVERTEX_I_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLVERTEX_I_H_
 
 #include "Base/GemGLBase.h"
 

@@ -13,8 +13,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMMAN_H_
-#define INCLUDE_GEMMAN_H_
+#ifndef _INCLUDE__GEM_GEM_MANAGER_H_
+#define _INCLUDE__GEM_GEM_MANAGER_H_
 
 #include "Gem/GemGL.h"
 #include "Utils/GLUtil.h"

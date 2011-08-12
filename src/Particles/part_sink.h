@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PART_SINK_H_
-#define INCLUDE_PART_SINK_H_
+#ifndef _INCLUDE__GEM_PARTICLES_PART_SINK_H_
+#define _INCLUDE__GEM_PARTICLES_PART_SINK_H_
 
 #include "Particles/partlib_base.h"
 #include "papi.h"

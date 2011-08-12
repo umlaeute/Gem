@@ -22,8 +22,8 @@ LOG
 //
 /////////////////////////////////////////////////////////
 
-#ifndef INCLUDE_PIX_RECTANGLE_H_
-#define INCLUDE_PIX_RECTANGLE_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_RECTANGLE_H_
+#define _INCLUDE__GEM_PIXES_PIX_RECTANGLE_H_
 
 #include "Base/GemPixObj.h"
 

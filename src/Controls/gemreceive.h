@@ -10,8 +10,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMRECEIVE_H_
-#define INCLUDE_GEMRECEIVE_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMRECEIVE_H_
+#define _INCLUDE__GEM_CONTROLS_GEMRECEIVE_H_
 
 #include "Base/CPPExtern.h"
 

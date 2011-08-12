@@ -8,8 +8,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLPROGRAMENVPARAMETER4DARB_H_
-#define INCLUDE_GEM_GLPROGRAMENVPARAMETER4DARB_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLPROGRAMENVPARAMETER_DARB_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLPROGRAMENVPARAMETER_DARB_H_
 
 #include "Base/GemGLBase.h"
 

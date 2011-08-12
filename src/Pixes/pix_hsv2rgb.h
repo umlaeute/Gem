@@ -13,8 +13,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_HSV2RGB_H_
-#define INCLUDE_PIX_HSV2RGB_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_HSV_RGB_H_
+#define _INCLUDE__GEM_PIXES_PIX_HSV_RGB_H_
 
 #include "Base/GemPixObj.h"
 

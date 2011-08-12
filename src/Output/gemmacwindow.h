@@ -10,8 +10,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMMACWINDOW_H_
-#define INCLUDE_GEMMACWINDOW_H_
+#ifndef _INCLUDE__GEM_OUTPUT_GEMMACWINDOW_H_
+#define _INCLUDE__GEM_OUTPUT_GEMMACWINDOW_H_
 
 #include "Base/GemWindow.h"
 

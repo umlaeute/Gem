@@ -9,8 +9,8 @@
  * ------------------------------------------------------------------
  */
 
-#ifndef INCLUDE_GEM_GLGETPOINTERV_H_
-#define INCLUDE_GEM_GLGETPOINTERV_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMLIST_INFO_H_
+#define _INCLUDE__GEM_CONTROLS_GEMLIST_INFO_H_
 
 #include "Base/GemBase.h"
 

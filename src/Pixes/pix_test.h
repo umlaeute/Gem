@@ -17,8 +17,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_TV_TEST_H_
-#define INCLUDE_TV_TEST_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_TEST_H_
+#define _INCLUDE__GEM_PIXES_PIX_TEST_H_
 
 #include "Base/GemPixObj.h"
 

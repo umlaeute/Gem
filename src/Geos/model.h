@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_MODEL_H_
-#define INCLUDE_MODEL_H_
+#ifndef _INCLUDE__GEM_GEOS_MODEL_H_
+#define _INCLUDE__GEM_GEOS_MODEL_H_
 
 #include "Base/GemBase.h"
 #include "model_loader.h"

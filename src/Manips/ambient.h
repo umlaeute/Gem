@@ -15,8 +15,8 @@ LOG
 
 // 1307:forum::für::umläute:2000
 
-#ifndef INCLUDE_AMBIENT_H_
-#define INCLUDE_AMBIENT_H_
+#ifndef _INCLUDE__GEM_MANIPS_AMBIENT_H_
+#define _INCLUDE__GEM_MANIPS_AMBIENT_H_
 
 #include "Base/GemBase.h"
 

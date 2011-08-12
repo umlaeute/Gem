@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_LIGHT_H_
-#define INCLUDE_LIGHT_H_
+#ifndef _INCLUDE__GEM_NONGEOS_LIGHT_H_
+#define _INCLUDE__GEM_NONGEOS_LIGHT_H_
 
 #include "Nongeos/world_light.h"
 

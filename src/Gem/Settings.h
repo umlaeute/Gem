@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMSETTINGS_H_
-#define INCLUDE_GEMSETTINGS_H
+#ifndef _INCLUDE__GEM_GEM_SETTINGS_H_
+#define _INCLUDE__GEM_GEM_SETTINGS_H_
 
 #include <string>
 

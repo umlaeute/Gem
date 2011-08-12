@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PART_KILLOLD_H_
-#define INCLUDE_PART_KILLOLD_H_
+#ifndef _INCLUDE__GEM_PARTICLES_PART_KILLOLD_H_
+#define _INCLUDE__GEM_PARTICLES_PART_KILLOLD_H_
 
 #include "Particles/partlib_base.h"
 

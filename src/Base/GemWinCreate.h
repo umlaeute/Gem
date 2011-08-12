@@ -12,8 +12,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMWINCREATE_H_
-#define INCLUDE_GEMWINCREATE_H_
+#ifndef _INCLUDE__GEM_BASE_GEMWINCREATE_H_
+#define _INCLUDE__GEM_BASE_GEMWINCREATE_H_
 #include "Gem/GemConfig.h"
 #include "Gem/GemGL.h"
 

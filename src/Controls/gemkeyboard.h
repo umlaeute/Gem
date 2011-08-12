@@ -11,8 +11,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMKEYBOARD_H_
-#define INCLUDE_GEMKEYBOARD_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMKEYBOARD_H_
+#define _INCLUDE__GEM_CONTROLS_GEMKEYBOARD_H_
 
 #include "Base/CPPExtern.h"
 

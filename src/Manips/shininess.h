@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_SHININESS_H_
-#define INCLUDE_SHININESS_H_
+#ifndef _INCLUDE__GEM_MANIPS_SHININESS_H_
+#define _INCLUDE__GEM_MANIPS_SHININESS_H_
 
 #include "Base/GemBase.h"
 

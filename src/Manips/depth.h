@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_DEPTH_H_
-#define INCLUDE_DEPTH_H_
+#ifndef _INCLUDE__GEM_MANIPS_DEPTH_H_
+#define _INCLUDE__GEM_MANIPS_DEPTH_H_
 
 #include "Base/GemBase.h"
 

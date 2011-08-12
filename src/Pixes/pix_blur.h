@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef INCLUDE_pix_blur_H_ 
-#define INCLUDE_pix_blur_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_BLUR_H_ 
+#define _INCLUDE__GEM_PIXES_PIX_BLUR_H_ 
 
 #include "Base/GemPixObj.h"
 

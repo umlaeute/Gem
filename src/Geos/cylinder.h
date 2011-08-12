@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CYLINDER_H_
-#define INCLUDE_CYLINDER_H_
+#ifndef _INCLUDE__GEM_GEOS_CYLINDER_H_
+#define _INCLUDE__GEM_GEOS_CYLINDER_H_
 
 #include "Base/GemGluObj.h"
 

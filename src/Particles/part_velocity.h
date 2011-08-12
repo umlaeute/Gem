@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PART_VELOCITY_H_
-#define INCLUDE_PART_VELOCITY_H_
+#ifndef _INCLUDE__GEM_PARTICLES_PART_VELOCITY_H_
+#define _INCLUDE__GEM_PARTICLES_PART_VELOCITY_H_
 
 #include "papi.h"
 

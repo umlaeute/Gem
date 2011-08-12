@@ -13,8 +13,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_FILMBASE_H_
-#define INCLUDE_FILMBASE_H_
+#ifndef _INCLUDE__GEM_PLUGINS_FILMBASE_H_
+#define _INCLUDE__GEM_PLUGINS_FILMBASE_H_
 
 #include "plugins/film.h"
 #include "Gem/Image.h"

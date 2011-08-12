@@ -10,8 +10,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMCOCOAWINDOW_H_
-#define INCLUDE_GEMCOCOAWINDOW_H_
+#ifndef _INCLUDE__GEM_OUTPUT_GEMCOCOAWINDOW_H_
+#define _INCLUDE__GEM_OUTPUT_GEMCOCOAWINDOW_H_
 
 #import <Cocoa/Cocoa.h>
 #include "Base/GemWindow.h"

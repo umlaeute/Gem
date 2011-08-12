@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_POLYGON_H_
-#define INCLUDE_POLYGON_H_
+#ifndef _INCLUDE__GEM_GEOS_POLYGON_H_
+#define _INCLUDE__GEM_GEOS_POLYGON_H_
 
 #include "Base/GemBase.h"
 #include "Base/GemShape.h"

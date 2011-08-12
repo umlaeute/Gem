@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CAMERA_H_
-#define INCLUDE_CAMERA_H_
+#ifndef _INCLUDE__GEM_MANIPS_CAMERA_H_
+#define _INCLUDE__GEM_MANIPS_CAMERA_H_
 
 #include "Base/GemBase.h"
 #include "Gem/Manager.h"

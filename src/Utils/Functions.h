@@ -14,8 +14,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMFUNCUTIL_H_
-#define INCLUDE_GEMFUNCUTIL_H_
+#ifndef _INCLUDE__GEM_UTILS_FUNCTIONS_H_
+#define _INCLUDE__GEM_UTILS_FUNCTIONS_H_
 
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CUBE_H_
-#define INCLUDE_CUBE_H_
+#ifndef _INCLUDE__GEM_GEOS_CUBE_H_
+#define _INCLUDE__GEM_GEOS_CUBE_H_
 
 #include "Base/GemShape.h"
 #include <string.h>

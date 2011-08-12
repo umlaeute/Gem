@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef INCLUDE_PIX_SHARE_WRITE_H
-#define INCLUDE_PIX_SHARE_WRITE_H
+#ifndef _INCLUDE__GEM_PIXES_PIX_SHARE_WRITE_H_
+#define _INCLUDE__GEM_PIXES_PIX_SHARE_WRITE_H_
 
 #include "pix_share.h"
 

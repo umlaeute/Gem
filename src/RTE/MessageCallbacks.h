@@ -29,8 +29,8 @@
  *    void myclass::titleMess  (std::string s)                     {;}
  *    void myclass::tripletMess(t_float a, t_float b, t_float c)   {;}
  */
-#ifndef INCLUDE_GEM_RTE_MESSAGECALLBACKS_H_
-#define INCLUDE_GEM_RTE_MESSAGECALLBACKS_H_
+#ifndef _INCLUDE__GEM_RTE_MESSAGECALLBACKS_H_
+#define _INCLUDE__GEM_RTE_MESSAGECALLBACKS_H_
 
 namespace gem {
   namespace RteMess {
@@ -143,4 +143,4 @@ namespace gem {
 
 
 
-#endif /* INCLUDE_GEM_RTE_MESSAGECALLBACKS_H_ */
+#endif /* _INCLUDE__GEM_RTE_MESSAGECALLBACKS_H_ */

@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef INCLUDE_pix_scanline_H_ 
-#define INCLUDE_pix_scanline_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_SCANLINE_H_ 
+#define _INCLUDE__GEM_PIXES_PIX_SCANLINE_H_ 
 
 #include "Base/GemPixObj.h"
 

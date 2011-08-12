@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_IMAGELOADER_H_
-#define INCLUDE_IMAGELOADER_H_
+#ifndef _INCLUDE__GEM_PLUGINS_IMAGELOADER_H_
+#define _INCLUDE__GEM_PLUGINS_IMAGELOADER_H_
 
 #include "Gem/Image.h"
 #include "Gem/Properties.h"

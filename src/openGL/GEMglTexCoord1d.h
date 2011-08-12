@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLTEXCOORD1D_H_
-#define INCLUDE_GEM_GLTEXCOORD1D_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLTEXCOORD_D_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLTEXCOORD_D_H_
 
 #include "Base/GemGLBase.h"
 

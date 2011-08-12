@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMWORKERTHREAD_H_
-#define INCLUDE_GEMWORKERTHREAD_H_
+#ifndef _INCLUDE__GEM_GEM_WORKERTHREAD_H_
+#define _INCLUDE__GEM_GEM_WORKERTHREAD_H_
 
 #include "Gem/ExportDef.h"
 
@@ -77,4 +77,4 @@ namespace gem { namespace thread {
     };};};
 
 
-#endif /* INCLUDE_GEMWORKERTHREAD_H_ */
+#endif /* _INCLUDE__GEM_GEM_WORKERTHREAD_H_ */

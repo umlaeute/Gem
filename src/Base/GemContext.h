@@ -9,8 +9,8 @@ LOG
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
-#ifndef INCLUDE_GEMCONTEXT_H_
-#define INCLUDE_GEMCONTEXT_H_
+#ifndef _INCLUDE__GEM_BASE_GEMCONTEXT_H_
+#define _INCLUDE__GEM_BASE_GEMCONTEXT_H_
 
 #include "Gem/ExportDef.h"
 #include "Gem/GemGL.h"

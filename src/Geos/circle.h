@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CIRCLE_H_
-#define INCLUDE_CIRCLE_H_
+#ifndef _INCLUDE__GEM_GEOS_CIRCLE_H_
+#define _INCLUDE__GEM_GEOS_CIRCLE_H_
 
 #include "Base/GemShape.h"
 

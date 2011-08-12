@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_pix_compare_H_ 
-#define INCLUDE_pix_compare_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_COMPARE_H_ 
+#define _INCLUDE__GEM_PIXES_PIX_COMPARE_H_ 
 
 #include "Base/GemPixDualObj.h"
 

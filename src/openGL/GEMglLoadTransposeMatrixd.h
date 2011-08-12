@@ -8,8 +8,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLLOADTRANSPOSEMATRIXD_H_
-#define INCLUDE_GEM_GLLOADTRANSPOSEMATRIXD_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLLOADTRANSPOSEMATRIXD_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLLOADTRANSPOSEMATRIXD_H_
 
 #include "Base/GemGLBase.h"
 

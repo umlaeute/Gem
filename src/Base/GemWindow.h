@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMWINDOW_H_
-#define INCLUDE_GEMWINDOW_H_
+#ifndef _INCLUDE__GEM_BASE_GEMWINDOW_H_
+#define _INCLUDE__GEM_BASE_GEMWINDOW_H_
 
 #include "Gem/GemGL.h"
 #include "Base/CPPExtern.h"

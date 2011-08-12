@@ -11,8 +11,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 
 -----------------------------------------------------------------*/
-#ifndef INCLUDE_PIX_FILMDARWIN_H_
-#define INCLUDE_PIX_FILMDARWIN_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_FILMDARWIN_H_
+#define _INCLUDE__GEM_PIXES_PIX_FILMDARWIN_H_
 
 #include "pix_filmOS.h"
 

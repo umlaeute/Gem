@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CURVE_H_
-#define INCLUDE_CURVE_H_
+#ifndef _INCLUDE__GEM_GEOS_CURVE_H_
+#define _INCLUDE__GEM_GEOS_CURVE_H_
 
 #include "Geos/polygon.h"
 

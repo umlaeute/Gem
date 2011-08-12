@@ -13,8 +13,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_PIX2SIG_H_
-#define INCLUDE_PIX_PIX2SIG_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_PIX_SIG_H_
+#define _INCLUDE__GEM_PIXES_PIX_PIX_SIG_H_
 
 #include <string.h>
 #include "Base/GemPixObj.h"

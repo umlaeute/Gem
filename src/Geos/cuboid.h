@@ -11,8 +11,8 @@
   modified cube geos into cuboid by erich berger 2001 rat@telecoma.net
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_CUBOID_H_
-#define INCLUDE_CUBOID_H_
+#ifndef _INCLUDE__GEM_GEOS_CUBOID_H_
+#define _INCLUDE__GEM_GEOS_CUBOID_H_
 
 #include "Base/GemShape.h"
 

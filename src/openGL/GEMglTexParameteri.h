@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLTEXPARAMETERI_H_
-#define INCLUDE_GEM_GLTEXPARAMETERI_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLTEXPARAMETERI_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLTEXPARAMETERI_H_
 
 #include "Base/GemGLBase.h"
 

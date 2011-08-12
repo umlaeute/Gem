@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_EMISSIONRGB_H_
-#define INCLUDE_EMISSIONRGB_H_
+#ifndef _INCLUDE__GEM_MANIPS_DIFFUSERGB_H_
+#define _INCLUDE__GEM_MANIPS_DIFFUSERGB_H_
 
 #include "Base/GemBase.h"
 

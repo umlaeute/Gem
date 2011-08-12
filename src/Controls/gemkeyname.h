@@ -11,8 +11,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMKEYNAME_H_
-#define INCLUDE_GEMKEYNAME_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMKEYNAME_H_
+#define _INCLUDE__GEM_CONTROLS_GEMKEYNAME_H_
 
 #include "Base/CPPExtern.h"
 

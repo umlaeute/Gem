@@ -1,5 +1,5 @@
-#ifndef INCLUDE_PLUGINFACTORY_H_
-#define INCLUDE_PLUGINFACTORY_H_
+#ifndef _INCLUDE__GEM_PLUGINS_PLUGINFACTORY_H_
+#define _INCLUDE__GEM_PLUGINS_PLUGINFACTORY_H_
 
 #include "Gem/ExportDef.h"
 
@@ -105,4 +105,4 @@ namespace gem {
 }; // namespace gem
 
 
-#endif /* INCLUDE_PLUGINFACTORY_H */
+#endif /* _INCLUDE__GEM_PLUGINS_PLUGINFACTORY_H_ */

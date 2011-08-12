@@ -14,8 +14,8 @@ LOG
 
 -----------------------------------------------------------------*/
  
-#ifndef INCLUDE_GEMPIXIMAGEIO_H_
-#define INCLUDE_GEMPIXIMAGEIO_H_
+#ifndef _INCLUDE__GEM_GEM_IMAGEIO_H_
+#define _INCLUDE__GEM_GEM_IMAGEIO_H_
 
 #include "Gem/ExportDef.h"
 

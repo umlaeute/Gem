@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMSHAPE_H_
-#define INCLUDE_GEMSHAPE_H_
+#ifndef _INCLUDE__GEM_BASE_GEMSHAPE_H_
+#define _INCLUDE__GEM_BASE_GEMSHAPE_H_
 
 #include "Base/GemBase.h"
 

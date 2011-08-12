@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_RECTANGLE_H_
-#define INCLUDE_RECTANGLE_H_
+#ifndef _INCLUDE__GEM_GEOS_RECTANGLE_H_
+#define _INCLUDE__GEM_GEOS_RECTANGLE_H_
 
 #include "Base/GemShape.h"
 

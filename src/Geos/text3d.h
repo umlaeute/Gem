@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_TEXT3D_H_
-#define INCLUDE_TEXT3D_H_
+#ifndef _INCLUDE__GEM_GEOS_TEXT_D_H_
+#define _INCLUDE__GEM_GEOS_TEXT_D_H_
 
 #include "Base/TextBase.h"
 

@@ -15,8 +15,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GLSL_FRAGMENT_H_
-#define INCLUDE_GLSL_FRAGMENT_H_
+#ifndef _INCLUDE__GEM_MANIPS_GLSL_FRAGMENT_H_
+#define _INCLUDE__GEM_MANIPS_GLSL_FRAGMENT_H_
 
 #include "Manips/glsl_vertex.h"
 

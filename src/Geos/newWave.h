@@ -10,8 +10,8 @@
  *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
  *
  */
-#ifndef INCLUDE_NEWWAVE_H_
-#define INCLUDE_NEWWAVE_H_
+#ifndef _INCLUDE__GEM_GEOS_NEWWAVE_H_
+#define _INCLUDE__GEM_GEOS_NEWWAVE_H_
 
 #include "Base/GemShape.h"
 #include "Utils/Functions.h"

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VERTEX_MUL_H_
-#define INCLUDE_VERTEX_MUL_H_
+#ifndef _INCLUDE__GEM_VERTEX_VERTEX_MUL_H_
+#define _INCLUDE__GEM_VERTEX_VERTEX_MUL_H_
 
 #include "vertex_add.h"
 

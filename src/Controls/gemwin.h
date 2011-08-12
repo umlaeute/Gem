@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMWIN_H_
-#define INCLUDE_GEMWIN_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMWIN_H_
+#define _INCLUDE__GEM_CONTROLS_GEMWIN_H_
 
 #include "Base/CPPExtern.h"
 

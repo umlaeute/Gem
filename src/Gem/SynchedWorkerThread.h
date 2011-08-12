@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_SYNCHEDWORKERTHREAD_H_
-#define INCLUDE_GEM_SYNCHEDWORKERTHREAD_H_
+#ifndef _INCLUDE__GEM_GEM_SYNCHEDWORKERTHREAD_H_
+#define _INCLUDE__GEM_GEM_SYNCHEDWORKERTHREAD_H_
 
 #include "Gem/WorkerThread.h"
 
@@ -62,4 +62,4 @@ namespace gem { namespace thread {
     };};};
 
 
-#endif /* INCLUDE_GEMSYNCHEDWORKERTHREAD_H_ */
+#endif /* _INCLUDE__GEM_GEM_SYNCHEDWORKERTHREAD_H_ */

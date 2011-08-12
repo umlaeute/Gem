@@ -14,8 +14,8 @@ LOG
 
 // 1307:forum::für::umläute:2000
 
-#ifndef INCLUDE_SPECULARRGB_H_
-#define INCLUDE_SPECULARRGB_H_
+#ifndef _INCLUDE__GEM_MANIPS_SPECULARRGB_H_
+#define _INCLUDE__GEM_MANIPS_SPECULARRGB_H_
 
 #include "Base/GemBase.h"
 

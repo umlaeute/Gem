@@ -14,8 +14,8 @@ Linux version by Miller Puckette. msp@ucsd.edu
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_VIDEOOS_H_
-#define INCLUDE_PIX_VIDEOOS_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_VIDEOOS_H_
+#define _INCLUDE__GEM_PIXES_PIX_VIDEOOS_H_
 
 #include "Base/GemBase.h"
 #include "Gem/Image.h"

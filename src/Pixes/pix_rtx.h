@@ -25,8 +25,8 @@ pix_rtx
 	  
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_RTX_H_
-#define INCLUDE_PIX_RTX_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_RTX_H_
+#define _INCLUDE__GEM_PIXES_PIX_RTX_H_
 
 #include "Base/GemPixObj.h"
 

@@ -22,8 +22,8 @@
 	  
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_BIQUAD_H_
-#define INCLUDE_PIX_BIQUAD_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_BIQUAD_H_
+#define _INCLUDE__GEM_PIXES_PIX_BIQUAD_H_
 
 #include "Base/GemPixObj.h"
 

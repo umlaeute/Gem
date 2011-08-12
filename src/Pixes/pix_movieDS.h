@@ -1,5 +1,5 @@
-#ifndef INCLUDE_PIX_MOVIEDS_H_
-#define INCLUDE_PIX_MOVIEDS_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_MOVIEDS_H_
+#define _INCLUDE__GEM_PIXES_PIX_MOVIEDS_H_
 
 #ifndef HAVE_DIRECTSHOW
 # error pix_movieDS without DirectShow

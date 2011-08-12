@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_EMISSION_H_
-#define INCLUDE_EMISSION_H_
+#ifndef _INCLUDE__GEM_MANIPS_EMISSION_H_
+#define _INCLUDE__GEM_MANIPS_EMISSION_H_
 
 #include "Base/GemBase.h"
 

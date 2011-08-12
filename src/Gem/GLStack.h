@@ -11,8 +11,8 @@
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
-#ifndef INCLUDE_GLSTACK_H_
-#define INCLUDE_GLSTACK_H_
+#ifndef _INCLUDE__GEM_GEM_GLSTACK_H_
+#define _INCLUDE__GEM_GEM_GLSTACK_H_
 
 #include "Gem/ExportDef.h"
 
@@ -71,4 +71,4 @@ class GEM_EXTERN GLStack {
 } /* namespace gem */
 
 
-#endif /* INCLUDE_GEMGLSTACK_H_ */
+#endif /* _INCLUDE__GEM_GEM_GLSTACK_H_ */

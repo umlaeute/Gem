@@ -18,8 +18,8 @@ LOG
 // added the gluTorus
 /////////////////////////////////////////////////////////
 
-#ifndef INCLUDE_TORUS_H_
-#define INCLUDE_TORUS_H_
+#ifndef _INCLUDE__GEM_GEOS_TORUS_H_
+#define _INCLUDE__GEM_GEOS_TORUS_H_
 
 #include "Base/GemGluObj.h"
 

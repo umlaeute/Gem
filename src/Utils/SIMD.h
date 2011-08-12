@@ -24,8 +24,8 @@ LOG
  * vc6/vc7: (i think) you need to define __MMX__ (and friends) by hand
  */
 
-#ifndef INCLUDE_GEMSIMD_H_
-#define INCLUDE_GEMSIMD_H_
+#ifndef _INCLUDE__GEM_UTILS_SIMD_H_
+#define _INCLUDE__GEM_UTILS_SIMD_H_
 
 #define GEM_VECTORALIGNMENT 128
 
@@ -114,4 +114,4 @@ class GEM_EXTERN GemSIMD
   static int cpuid;
 };
 
-#endif /* INCLUDE_GEMSIMD_H_ */
+#endif /* _INCLUDE__GEM_UTILS_SIMD_H_ */

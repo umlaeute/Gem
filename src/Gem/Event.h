@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMEVENT_H_
-#define INCLUDE_GEMEVENT_H_
+#ifndef _INCLUDE__GEM_GEM_EVENT_H_
+#define _INCLUDE__GEM_GEM_EVENT_H_
 
 #include "Gem/ExportDef.h"
 

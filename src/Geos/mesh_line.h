@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_mesh_line_H_
-#define INCLUDE_mesh_line_H_
+#ifndef _INCLUDE__GEM_GEOS_MESH_LINE_H_
+#define _INCLUDE__GEM_GEOS_MESH_LINE_H_
 
 #include "Base/GemShape.h"
 

@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMFRAMEBUFFER_H_
-#define INCLUDE_GEMFRAMEBUFFER_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMFRAMEBUFFER_H_
+#define _INCLUDE__GEM_CONTROLS_GEMFRAMEBUFFER_H_
 
 #include "Base/GemBase.h"
 #include <iostream>

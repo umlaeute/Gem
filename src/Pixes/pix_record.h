@@ -16,8 +16,8 @@
 
 #if 1
 //this will record movies
-#ifndef INCLUDE_PIX_RECORD_H_
-#define INCLUDE_PIX_RECORD_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_RECORD_H_
+#define _INCLUDE__GEM_PIXES_PIX_RECORD_H_
 
 #include "Base/GemBase.h"
 #include "Gem/Image.h"

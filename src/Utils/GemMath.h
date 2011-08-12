@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMMATH_H_
-#define INCLUDE_GEMMATH_H_
+#ifndef _INCLUDE__GEM_UTILS_GEMMATH_H_
+#define _INCLUDE__GEM_UTILS_GEMMATH_H_
 #include <math.h>
 
 #ifndef M_PI

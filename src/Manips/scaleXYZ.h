@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_SCALEXYZ_H_
-#define INCLUDE_SCALEXYZ_H_
+#ifndef _INCLUDE__GEM_MANIPS_SCALEXYZ_H_
+#define _INCLUDE__GEM_MANIPS_SCALEXYZ_H_
 
 #include "Base/GemBase.h"
 

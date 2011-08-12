@@ -8,8 +8,8 @@
  *  this file has been generated...
  * ------------------------------------------------------------------
  */
-#ifndef INCLUDE_GEM_GLBASE_H_
-#define INCLUDE_GEM_GLBASE_H_
+#ifndef _INCLUDE__GEM_BASE_GEMGLBASE_H_
+#define _INCLUDE__GEM_BASE_GEMGLBASE_H_
 
 #include "Utils/GLUtil.h"
 #include "Base/GemBase.h"

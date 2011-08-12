@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_THREADSEMAPHORE_H_
-#define INCLUDE_GEM_THREADSEMAPHORE_H_
+#ifndef _INCLUDE__GEM_GEM_THREADSEMAPHORE_H_
+#define _INCLUDE__GEM_GEM_THREADSEMAPHORE_H_
 
 
 #include "Gem/ExportDef.h"
@@ -34,4 +34,4 @@ namespace gem {
     };
   };
 };
-#endif /* INCLUDE_GEM_THREADSEMAPHORE_H_ */
+#endif /* _INCLUDE__GEM_GEM_THREADSEMAPHORE_H_ */

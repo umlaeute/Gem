@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_vertex_model_H_
-#define INCLUDE_vertex_model_H_
+#ifndef _INCLUDE__GEM_VERTEX_VERTEX_MODEL_H_
+#define _INCLUDE__GEM_VERTEX_VERTEX_MODEL_H_
 
 #include "Base/GemVertex.h"
 #include "Geos/model_loader.h"

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_COLORRGB_H_
-#define INCLUDE_COLORRGB_H_
+#ifndef _INCLUDE__GEM_MANIPS_COLORRGB_H_
+#define _INCLUDE__GEM_MANIPS_COLORRGB_H_
 
 #include "Base/GemBase.h"
 

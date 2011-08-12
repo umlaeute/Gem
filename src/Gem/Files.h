@@ -12,8 +12,8 @@ LOG
 
 
 
-#ifndef INCLUDE_GEMFILES_H_
-#define INCLUDE_GEMFILES_H_
+#ifndef _INCLUDE__GEM_GEM_FILES_H_
+#define _INCLUDE__GEM_GEM_FILES_H_
 
 #include <string>
 #include <vector>
@@ -31,4 +31,4 @@ namespace gem {
   };
 };
 
-#endif /* INCLUDE_GEMFILES_H_ */
+#endif /* _INCLUDE__GEM_GEM_FILES_H_ */

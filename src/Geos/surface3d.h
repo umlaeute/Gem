@@ -12,8 +12,8 @@ LOG
 
     -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_surface3d_H_
-#define INCLUDE_surface3d_H_
+#ifndef _INCLUDE__GEM_GEOS_SURFACE_D_H_
+#define _INCLUDE__GEM_GEOS_SURFACE_D_H_
 
 #include "Base/GemShape.h"
 

@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_COLORSQUARE_H_
-#define INCLUDE_COLORSQUARE_H_
+#ifndef _INCLUDE__GEM_GEOS_COLORSQUARE_H_
+#define _INCLUDE__GEM_GEOS_COLORSQUARE_H_
 
 #include "Base/GemShape.h"
 

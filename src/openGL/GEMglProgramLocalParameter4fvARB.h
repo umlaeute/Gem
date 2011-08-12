@@ -8,8 +8,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLPROGRAMENVPARAMETER4FVARB_H_
-#define INCLUDE_GEM_GLPROGRAMENVPARAMETER4FVARB_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLPROGRAMLOCALPARAMETER_FVARB_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLPROGRAMLOCALPARAMETER_FVARB_H_
 
 #include "Base/GemGLBase.h"
 

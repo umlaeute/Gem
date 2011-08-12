@@ -7,8 +7,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLACTIVETEXTUREARB_H_
-#define INCLUDE_GEM_GLACTIVETEXTUREARB_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLACTIVETEXTUREARB_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLACTIVETEXTUREARB_H_
 
 #include "Base/GemGLBase.h"
 

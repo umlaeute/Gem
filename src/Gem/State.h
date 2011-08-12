@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMSTATE_H_
-#define INCLUDE_GEMSTATE_H_
+#ifndef _INCLUDE__GEM_GEM_STATE_H_
+#define _INCLUDE__GEM_GEM_STATE_H_
 
 #include "Gem/ExportDef.h"
 #include "Gem/GemGL.h"

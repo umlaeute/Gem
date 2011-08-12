@@ -14,8 +14,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMGLUTIL_H_
-#define INCLUDE_GEMGLUTIL_H_
+#ifndef _INCLUDE__GEM_UTILS_GLUTIL_H_
+#define _INCLUDE__GEM_UTILS_GLUTIL_H_
 
 #include "Gem/ExportDef.h"
 

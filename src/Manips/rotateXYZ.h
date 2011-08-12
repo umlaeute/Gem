@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_ROTATEXYZ_H_
-#define INCLUDE_ROTATEXYZ_H_
+#ifndef _INCLUDE__GEM_MANIPS_ROTATEXYZ_H_
+#define _INCLUDE__GEM_MANIPS_ROTATEXYZ_H_
 
 #include "Base/GemBase.h"
 

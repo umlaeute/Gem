@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_TRANSLATEXYZ_H_
-#define INCLUDE_TRANSLATEXYZ_H_
+#ifndef _INCLUDE__GEM_MANIPS_TRANSLATEXYZ_H_
+#define _INCLUDE__GEM_MANIPS_TRANSLATEXYZ_H_
 
 #include "Base/GemBase.h"
 

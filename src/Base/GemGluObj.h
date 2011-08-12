@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMGLUOBJ_H_
-#define INCLUDE_GEMGLUOBJ_H_
+#ifndef _INCLUDE__GEM_BASE_GEMGLUOBJ_H_
+#define _INCLUDE__GEM_BASE_GEMGLUOBJ_H_
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32

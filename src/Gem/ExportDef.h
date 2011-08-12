@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMEXPORTDEF_H_
-#define INCLUDE_GEMEXPORTDEF_H_
+#ifndef _INCLUDE__GEM_GEM_EXPORTDEF_H_
+#define _INCLUDE__GEM_GEM_EXPORTDEF_H_
 
 #if defined _MSC_VER
 /* turn of some warnings on vc-compilers */

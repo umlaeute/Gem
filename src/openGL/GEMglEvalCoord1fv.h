@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLEVALCOORD1FV_H_
-#define INCLUDE_GEM_GLEVALCOORD1FV_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLEVALCOORD_FV_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLEVALCOORD_FV_H_
 
 #include "Base/GemGLBase.h"
 

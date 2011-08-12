@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_SLIDESQUARES_H_
-#define INCLUDE_SLIDESQUARES_H_
+#ifndef _INCLUDE__GEM_GEOS_SLIDESQUARES_H_
+#define _INCLUDE__GEM_GEOS_SLIDESQUARES_H_
 
 #include "Base/GemShape.h"
 

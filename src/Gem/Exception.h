@@ -28,8 +28,8 @@ DESCRIPTION
     
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMEXCEPTION_H_
-#define INCLUDE_GEMEXCEPTION_H_
+#ifndef _INCLUDE__GEM_GEM_EXCEPTION_H_
+#define _INCLUDE__GEM_GEM_EXCEPTION_H_
 
 #include "Gem/ExportDef.h"
 #include <string>
@@ -55,4 +55,4 @@ namespace gem {
 };
 
 
-#endif /* INCLUDE_GEMEXCEPTION_H_ */
+#endif /* _INCLUDE__GEM_GEM_EXCEPTION_H_ */

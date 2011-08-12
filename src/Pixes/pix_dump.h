@@ -21,8 +21,8 @@ pix_dump
   mailto:zmoelnig@iem.kug.ac.at
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_DUMP_H_
-#define INCLUDE_PIX_DUMP_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_DUMP_H_
+#define _INCLUDE__GEM_PIXES_PIX_DUMP_H_
 
 #include "Base/GemPixObj.h"
 

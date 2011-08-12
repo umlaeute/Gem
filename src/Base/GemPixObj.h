@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMPIXOBJ_H_
-#define INCLUDE_GEMPIXOBJ_H_
+#ifndef _INCLUDE__GEM_BASE_GEMPIXOBJ_H_
+#define _INCLUDE__GEM_BASE_GEMPIXOBJ_H_
 
 #include "Base/GemBase.h"
 #include "Gem/Image.h"

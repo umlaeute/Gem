@@ -11,8 +11,8 @@ LOG
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
-#ifndef INCLUDE_GEMPIXPETE_H_
-#define INCLUDE_GEMPIXPETE_H_
+#ifndef _INCLUDE__GEM_UTILS_PIXPETE_H_
+#define _INCLUDE__GEM_UTILS_PIXPETE_H_
 
 #include <stdlib.h>
 
@@ -217,5 +217,5 @@ inline int GetLuminance(const U32 inColour) {
 	return nLuminance;
 }
 
-#endif /* INCLUDE_GEMPIXPETE_H_ */
+#endif /* _INCLUDE__GEM_UTILS_PIXPETE_H_ */
 // end of PeteHelpers.h stuff

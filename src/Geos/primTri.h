@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PRIMTRI_H_
-#define INCLUDE_PRIMTRI_H_
+#ifndef _INCLUDE__GEM_GEOS_PRIMTRI_H_
+#define _INCLUDE__GEM_GEOS_PRIMTRI_H_
 
 #include "Base/GemBase.h"
 #include "Base/GemShape.h"

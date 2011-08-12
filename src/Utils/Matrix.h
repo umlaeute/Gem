@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_MATRIX_H_
-#define INCLUDE_MATRIX_H_
+#ifndef _INCLUDE__GEM_UTILS_MATRIX_H_
+#define _INCLUDE__GEM_UTILS_MATRIX_H_
 
 #include "Gem/ExportDef.h"
 

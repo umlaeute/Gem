@@ -7,8 +7,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLUSEPROGRAMOBJECTARB_H_
-#define INCLUDE_GEM_GLUSEPROGRAMOBJECTARB_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLUSEPROGRAMOBJECTARB_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLUSEPROGRAMOBJECTARB_H_
 
 #include "Base/GemGLBase.h"
 

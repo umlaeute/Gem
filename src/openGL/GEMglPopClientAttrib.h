@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLPOPCLIENTATTRIB_H_
-#define INCLUDE_GEM_GLPOPCLIENTATTRIB_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLPOPCLIENTATTRIB_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLPOPCLIENTATTRIB_H_
 
 #include "Base/GemGLBase.h"
 

@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLBEGIN_H_
-#define INCLUDE_GEM_GLBEGIN_H_
+#ifndef _INCLUDE__GEM_OPENGL_GLDEFINE_H_
+#define _INCLUDE__GEM_OPENGL_GLDEFINE_H_
 
 #include "Base/CPPExtern.h"
 #include "Utils/GLUtil.h"

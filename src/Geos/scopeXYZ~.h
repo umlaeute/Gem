@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_SCOPEXYZ_TILDE_H_
-#define INCLUDE_SCOPEXYZ_TILDE_H_
+#ifndef _INCLUDE__GEM_GEOS_SCOPEXYZ__H_
+#define _INCLUDE__GEM_GEOS_SCOPEXYZ__H_
 
 #include "Base/GemShape.h"
 

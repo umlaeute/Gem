@@ -14,8 +14,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMPIXUTIL_H_
-#define INCLUDE_GEMPIXUTIL_H_
+#ifndef _INCLUDE__GEM_GEM_IMAGE_H_
+#define _INCLUDE__GEM_GEM_IMAGE_H_
 
 #include "Gem/GemGL.h"
 

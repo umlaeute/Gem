@@ -8,8 +8,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLLOADMATRIXF_H_
-#define INCLUDE_GEM_GLLOADMATRIXF_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLLOADMATRIXF_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLLOADMATRIXF_H_
 
 #include "Base/GemGLBase.h"
 

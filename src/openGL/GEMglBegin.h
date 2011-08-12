@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLBEGIN_H_
-#define INCLUDE_GEM_GLBEGIN_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLBEGIN_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLBEGIN_H_
 
 #include "Base/GemGLBase.h"
 

@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLRENDERMODE_H_
-#define INCLUDE_GEM_GLRENDERMODE_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLRENDERMODE_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLRENDERMODE_H_
 
 #include "Base/GemGLBase.h"
 

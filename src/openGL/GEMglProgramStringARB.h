@@ -8,8 +8,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLPROGRAMSTRINGARB_H_
-#define INCLUDE_GEM_GLPROGRAMSTRINGARB_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLPROGRAMSTRINGARB_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLPROGRAMSTRINGARB_H_
 
 #include "Base/GemGLBase.h"
 

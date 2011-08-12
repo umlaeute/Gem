@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_POLYGON_SMOOTH_H_
-#define INCLUDE_POLYGON_SMOOTH_H_
+#ifndef _INCLUDE__GEM_MANIPS_POLYGON_SMOOTH_H_
+#define _INCLUDE__GEM_MANIPS_POLYGON_SMOOTH_H_
 
 #include "Base/GemBase.h"
 

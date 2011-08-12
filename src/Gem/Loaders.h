@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMLOADERS_H_
-#define INCLUDE_GEMLOADERS_H_
+#ifndef _INCLUDE__GEM_GEM_LOADERS_H_
+#define _INCLUDE__GEM_GEM_LOADERS_H_
 
 #include "m_pd.h"
 

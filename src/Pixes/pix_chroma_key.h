@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef INCLUDE_pix_chroma_key_H_ 
-#define INCLUDE_pix_chroma_key_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_CHROMA_KEY_H_ 
+#define _INCLUDE__GEM_PIXES_PIX_CHROMA_KEY_H_ 
 
 #include "Base/GemPixDualObj.h"
 #include "Utils/Functions.h"

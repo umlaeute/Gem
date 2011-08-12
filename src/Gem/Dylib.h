@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMDYLIB_H_
-#define INCLUDE_GEMDYLIB_H_
+#ifndef _INCLUDE__GEM_GEM_DYLIB_H_
+#define _INCLUDE__GEM_GEM_DYLIB_H_
 
 #include "Gem/Exception.h"
 

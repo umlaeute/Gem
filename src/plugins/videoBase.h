@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_VIDEOBASE_H_
-#define INCLUDE_GEM_VIDEOBASE_H_
+#ifndef _INCLUDE__GEM_PLUGINS_VIDEOBASE_H_
+#define _INCLUDE__GEM_PLUGINS_VIDEOBASE_H_
 
 #include "plugins/video.h"
 #include "Gem/Image.h"

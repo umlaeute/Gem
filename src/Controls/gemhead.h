@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMHEAD_H_
-#define INCLUDE_GEMHEAD_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMHEAD_H_
+#define _INCLUDE__GEM_CONTROLS_GEMHEAD_H_
 
 #include "Base/CPPExtern.h"
 #include "gemreceive.h"

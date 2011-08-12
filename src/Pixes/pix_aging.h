@@ -16,8 +16,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_AGING_H_
-#define INCLUDE_PIX_AGING_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_AGING_H_
+#define _INCLUDE__GEM_PIXES_PIX_AGING_H_
 
 #include "Base/GemPixObj.h"
 

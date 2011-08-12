@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_IMAGESAVERBASE_H_
-#define INCLUDE_IMAGESAVERBASE_H_
+#ifndef _INCLUDE__GEM_PLUGINS_IMAGESAVERBASE_H_
+#define _INCLUDE__GEM_PLUGINS_IMAGESAVERBASE_H_
 
 
 #include "plugins/imagesaver.h"

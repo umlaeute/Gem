@@ -13,8 +13,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_TEXTBASE_H_
-#define INCLUDE_TEXTBASE_H_
+#ifndef _INCLUDE__GEM_BASE_TEXTBASE_H_
+#define _INCLUDE__GEM_BASE_TEXTBASE_H_
 
 
 #ifdef _WIN32

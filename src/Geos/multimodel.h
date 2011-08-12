@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_MULTIMODEL_H_
-#define INCLUDE_MULTIMODEL_H_
+#ifndef _INCLUDE__GEM_GEOS_MULTIMODEL_H_
+#define _INCLUDE__GEM_GEOS_MULTIMODEL_H_
 
 #include "Base/GemBase.h"
 #include <string.h>

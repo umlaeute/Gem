@@ -8,8 +8,8 @@
  */
  
  //this will record QT movies
-#ifndef INCLUDE_pix_recordQT_H_
-#define INCLUDE_pix_recordQT_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_RECORDQT_H_
+#define _INCLUDE__GEM_PIXES_PIX_RECORDQT_H_
 
 #if 1
 #include "Base/GemBase.h"

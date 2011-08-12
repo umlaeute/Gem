@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLNORMAL3B_H_
-#define INCLUDE_GEM_GLNORMAL3B_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLNORMAL_B_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLNORMAL_B_H_
 
 #include "Base/GemGLBase.h"
 

@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_pix_duotone_H_
-#define INCLUDE_pix_duotone_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_DUOTONE_H_
+#define _INCLUDE__GEM_PIXES_PIX_DUOTONE_H_
 
 #include "Base/GemPixObj.h"
 

@@ -9,8 +9,8 @@
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PQTORUSKNOTS_H_
-#define INCLUDE_PQTORUSKNOTS_H_
+#ifndef _INCLUDE__GEM_GEOS_PQTORUSKNOTS_H_
+#define _INCLUDE__GEM_GEOS_PQTORUSKNOTS_H_
 
 #include "Base/GemShape.h"
 #include <math.h>

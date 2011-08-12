@@ -14,8 +14,8 @@ LOG
 -----------------------------------------------------------------*/
 
 
-#ifndef INCLUDE_GEMPIXCONVERT_SIMD_H_
-#define INCLUDE_GEMPIXCONVERT_SIMD_H_
+#ifndef _INCLUDE__GEM_GEM_PIXCONVERT_H_
+#define _INCLUDE__GEM_GEM_PIXCONVERT_H_
 
 #include "Gem/Image.h"
 #include "Utils/SIMD.h"
@@ -170,4 +170,4 @@ void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
 
 #endif /* MMX */
 
-#endif /* INCLUDE_GEMPIXCONVERT_SIMD_H_ */
+#endif /* _INCLUDE__GEM_GEM_PIXCONVERT_H_ */

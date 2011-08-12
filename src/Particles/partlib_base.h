@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PARTLIB_BASE_H_
-#define INCLUDE_PARTLIB_BASE_H_
+#ifndef _INCLUDE__GEM_PARTICLES_PARTLIB_BASE_H_
+#define _INCLUDE__GEM_PARTICLES_PARTLIB_BASE_H_
 
 #include "Base/GemBase.h"
 

@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMLIST_H_
-#define INCLUDE_GEMLIST_H_
+#ifndef _INCLUDE__GEM_CONTROLS_GEMLIST_H_
+#define _INCLUDE__GEM_CONTROLS_GEMLIST_H_
 
 #include "Base/GemBase.h"
 #include "Gem/State.h"

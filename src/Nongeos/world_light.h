@@ -12,8 +12,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_WORLD_LIGHT_H_
-#define INCLUDE_WORLD_LIGHT_H_
+#ifndef _INCLUDE__GEM_NONGEOS_WORLD_LIGHT_H_
+#define _INCLUDE__GEM_NONGEOS_WORLD_LIGHT_H_
 
 #include "Base/GemBase.h"
 

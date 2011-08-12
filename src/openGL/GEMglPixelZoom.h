@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLPIXELZOOM_H_
-#define INCLUDE_GEM_GLPIXELZOOM_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLPIXELZOOM_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLPIXELZOOM_H_
 
 #include "Base/GemGLBase.h"
 

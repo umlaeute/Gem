@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMPATHBASE_H_
-#define INCLUDE_GEMPATHBASE_H_
+#ifndef _INCLUDE__GEM_BASE_GEMPATHBASE_H_
+#define _INCLUDE__GEM_BASE_GEMPATHBASE_H_
 
 #include "Base/CPPExtern.h"
 

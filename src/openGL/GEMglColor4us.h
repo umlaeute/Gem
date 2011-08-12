@@ -10,8 +10,8 @@
   * ------------------------------------------------------------------
   */
 
-#ifndef INCLUDE_GEM_GLCOLOR4US_H_
-#define INCLUDE_GEM_GLCOLOR4US_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLCOLOR_US_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLCOLOR_US_H_
 
 #include "Base/GemGLBase.h"
 

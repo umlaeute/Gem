@@ -1,5 +1,5 @@
-#ifndef INCLUDE_PIX_MOVEMENT2_H_
-#define INCLUDE_PIX_MOVEMENT2_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_MOVEMENT__H_
+#define _INCLUDE__GEM_PIXES_PIX_MOVEMENT__H_
 
 #include "Base/GemPixObj.h"
 

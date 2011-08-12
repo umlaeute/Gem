@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_IMAGEVERT_H_
-#define INCLUDE_IMAGEVERT_H_
+#ifndef _INCLUDE__GEM_GEOS_IMAGEVERT_H_
+#define _INCLUDE__GEM_GEOS_IMAGEVERT_H_
 
 #include "Base/GemPixObj.h"
 

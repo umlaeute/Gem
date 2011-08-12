@@ -10,8 +10,8 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMW32WINDOW_H_
-#define INCLUDE_GEMW32WINDOW_H_
+#ifndef _INCLUDE__GEM_OUTPUT_GEMW__WINDOW_H_
+#define _INCLUDE__GEM_OUTPUT_GEMW__WINDOW_H_
 
 #include "Base/GemWindow.h"
 

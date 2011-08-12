@@ -12,8 +12,8 @@
 	
   -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMBASE_H_
-#define INCLUDE_GEMBASE_H_
+#ifndef _INCLUDE__GEM_BASE_GEMBASE_H_
+#define _INCLUDE__GEM_BASE_GEMBASE_H_
 
 #include "Gem/GemGL.h"
 #include "Gem/ContextData.h"

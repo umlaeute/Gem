@@ -12,8 +12,8 @@ LOG
 
     -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_curve3d_H_
-#define INCLUDE_curve3d_H_
+#ifndef _INCLUDE__GEM_GEOS_CURVE_D_H_
+#define _INCLUDE__GEM_GEOS_CURVE_D_H_
 
 #include "Base/GemShape.h"
 

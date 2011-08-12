@@ -10,8 +10,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_PIX_REFRACTION_H_
-#define INCLUDE_PIX_REFRACTION_H_
+#ifndef _INCLUDE__GEM_PIXES_PIX_REFRACTION_H_
+#define _INCLUDE__GEM_PIXES_PIX_REFRACTION_H_
 
 #include "Base/GemPixObj.h"
 

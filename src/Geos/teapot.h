@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_TEAPOT_H_
-#define INCLUDE_TEAPOT_H_
+#ifndef _INCLUDE__GEM_GEOS_TEAPOT_H_
+#define _INCLUDE__GEM_GEOS_TEAPOT_H_
 
 #include "Base/GemGluObj.h"
 

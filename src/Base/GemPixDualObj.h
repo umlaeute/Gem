@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEMPIXDUALOBJ_H_
-#define INCLUDE_GEMPIXDUALOBJ_H_
+#ifndef _INCLUDE__GEM_BASE_GEMPIXDUALOBJ_H_
+#define _INCLUDE__GEM_BASE_GEMPIXDUALOBJ_H_
 
 #define NEW_DUAL_PIX
 

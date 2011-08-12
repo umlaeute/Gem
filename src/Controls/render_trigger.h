@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_RENDER_TRIGGER_H_
-#define INCLUDE_RENDER_TRIGGER_H_
+#ifndef _INCLUDE__GEM_CONTROLS_RENDER_TRIGGER_H_
+#define _INCLUDE__GEM_CONTROLS_RENDER_TRIGGER_H_
 
 #include "Base/GemBase.h"
 
