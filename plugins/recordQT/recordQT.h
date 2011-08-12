@@ -8,8 +8,8 @@
  */
  
 //this will record QT movies
-#ifndef INCLUDE_PLUGINS_RECORDQT_H_
-#define INCLUDE_PLUGINS_RECORDQT_H_
+#ifndef _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
+#define _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
 #include "plugins/recordBase.h"
 
 

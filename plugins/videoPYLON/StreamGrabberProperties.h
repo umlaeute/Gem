@@ -1,5 +1,5 @@
-#ifndef INCLUDE_STREAMGRABBER_PROPERTIES_H_
-#define INCLUDE_STREAMGRABBER_PROPERTIES_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOPYLON_STREAMGRABBERPROPERTIES_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOPYLON_STREAMGRABBERPROPERTIES_H_
 
 #include "pylon/PylonIncludes.h"
 # include <pylon/gige/BaslerGigECamera.h>
@@ -23,4 +23,4 @@ namespace gem { namespace pylon { namespace streamgrabberproperties {
 
                   };};};
 
-#endif /* INCLUDE_STREAMGRABBER_PROPERTIES_H_ */
+#endif /* _INCLUDE_GEMPLUGIN__VIDEOPYLON_STREAMGRABBERPROPERTIES_H_ */

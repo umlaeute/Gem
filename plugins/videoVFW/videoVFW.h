@@ -12,8 +12,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOVFW_H_
-#define INCLUDE_VIDEOVFW_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOVFW_VIDEOVFW_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOVFW_VIDEOVFW_H_
 
 #include "plugins/videoBase.h"
 

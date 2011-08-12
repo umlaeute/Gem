@@ -14,8 +14,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOV4L_H_
-#define INCLUDE_VIDEOV4L_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOV4L_VIDEOV4L_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOV4L_VIDEOV4L_H_
 
 #include "plugins/videoBase.h"
 

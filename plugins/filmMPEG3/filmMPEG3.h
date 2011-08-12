@@ -13,8 +13,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_FILMMPEG3_H_
-#define INCLUDE_FILMMPEG3_H_
+#ifndef _INCLUDE_GEMPLUGIN__FILMMPEG3_FILMMPEG3_H_
+#define _INCLUDE_GEMPLUGIN__FILMMPEG3_FILMMPEG3_H_
 #include "plugins/filmBase.h"
 #include <stdio.h>
 #ifdef HAVE_LIBMPEG3

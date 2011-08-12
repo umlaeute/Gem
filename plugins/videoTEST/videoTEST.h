@@ -1,5 +1,5 @@
-#ifndef INCLUDE_GEM_VIDEOTEST_H_
-#define INCLUDE_GEM_VIDEOTEST_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOTEST_VIDEOTEST_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOTEST_VIDEOTEST_H_
 
 #include "plugins/video.h"
 #include "Gem/Image.h"

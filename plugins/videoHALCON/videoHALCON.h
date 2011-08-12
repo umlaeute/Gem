@@ -18,8 +18,8 @@
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOHALCON_H_
-#define INCLUDE_VIDEOHALCON_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOHALCON_VIDEOHALCON_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOHALCON_VIDEOHALCON_H_
 
 #include "plugins/videoBase.h"
 

@@ -12,8 +12,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOAVT_H_
-#define INCLUDE_VIDEOAVT_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOAVT_VIDEOAVT_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOAVT_VIDEOAVT_H_
 
 #include "plugins/videoBase.h"
 

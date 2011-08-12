@@ -14,8 +14,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEODC1394_H_
-#define INCLUDE_VIDEODC1394_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEODC1394_VIDEODC1394_H_
+#define _INCLUDE_GEMPLUGIN__VIDEODC1394_VIDEODC1394_H_
 #include "plugins/videoBase.h"
 
 

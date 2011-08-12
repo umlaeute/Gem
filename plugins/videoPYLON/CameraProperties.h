@@ -1,5 +1,5 @@
-#ifndef INCLUDE_CAMERA_PROPERTIES_H_
-#define INCLUDE_CAMERA_PROPERTIES_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOPYLON_CAMERAPROPERTIES_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOPYLON_CAMERAPROPERTIES_H_
 
 #include "pylon/PylonIncludes.h"
 #include <pylon/gige/BaslerGigECamera.h>
@@ -23,4 +23,4 @@ namespace gem { namespace pylon { namespace cameraproperties {
 
                   };};};
 
-#endif /* INCLUDE_CAMERA_PROPERTIES_H_ */
+#endif /* _INCLUDE_GEMPLUGIN__VIDEOPYLON_CAMERAPROPERTIES_H_ */

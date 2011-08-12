@@ -13,8 +13,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_FILMDARWIN_H_
-#define INCLUDE_FILMDARWIN_H_
+#ifndef _INCLUDE_GEMPLUGIN__FILMDARWIN_FILMDARWIN_H_
+#define _INCLUDE_GEMPLUGIN__FILMDARWIN_FILMDARWIN_H_
 
 #if defined __APPLE__ && !defined __x86_64__
 // with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)

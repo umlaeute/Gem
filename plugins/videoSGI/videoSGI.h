@@ -14,8 +14,8 @@ Linux version by Miller Puckette. msp@ucsd.edu
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOSGI_H_
-#define INCLUDE_VIDEOSGI_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOSGI_VIDEOSGI_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOSGI_VIDEOSGI_H_
 
 #include "plugins/videoBase.h"
 

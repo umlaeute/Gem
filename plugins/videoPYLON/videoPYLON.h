@@ -14,8 +14,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOPYLON_H_
-#define INCLUDE_VIDEOPYLON_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOPYLON_VIDEOPYLON_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOPYLON_VIDEOPYLON_H_
 
 #include "plugins/videoBase.h"
 #include <map>

@@ -14,8 +14,8 @@
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEODV4L_H_
-#define INCLUDE_VIDEODV4L_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEODV4L_VIDEODV4L_H_
+#define _INCLUDE_GEMPLUGIN__VIDEODV4L_VIDEODV4L_H_
 #include "plugins/videoBase.h"
 
 #if defined HAVE_LIBIEC61883 && defined HAVE_LIBRAW1394 && defined HAVE_LIBDV

@@ -11,8 +11,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_PLUGINS_IMAGEQT_H_
-#define INCLUDE_GEM_PLUGINS_IMAGEQT_H_
+#ifndef _INCLUDE_GEMPLUGIN__IMAGEQT_IMAGEQT_H_
+#define _INCLUDE_GEMPLUGIN__IMAGEQT_IMAGEQT_H_
 #include "plugins/imageBase.h"
 #include <stdio.h>
 

@@ -13,8 +13,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_filmDS_H_
-#define INCLUDE_filmDS_H_
+#ifndef _INCLUDE_GEMPLUGIN__FILMDS_FILMDS_H_
+#define _INCLUDE_GEMPLUGIN__FILMDS_FILMDS_H_
 #include "plugins/filmBase.h"
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)

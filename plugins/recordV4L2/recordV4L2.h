@@ -13,8 +13,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
    
-#ifndef INCLUDE_PLUGINS_RECORDV4L2_H_
-#define INCLUDE_PLUGINS_RECORDV4L2_H_
+#ifndef _INCLUDE_GEMPLUGIN__RECORDV4L2_RECORDV4L2_H_
+#define _INCLUDE_GEMPLUGIN__RECORDV4L2_RECORDV4L2_H_
    
 #include "plugins/recordBase.h"
    

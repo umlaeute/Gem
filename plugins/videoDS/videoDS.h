@@ -9,8 +9,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEODS_H_
-#define INCLUDE_VIDEODS_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEODS_VIDEODS_H_
+#define _INCLUDE_GEMPLUGIN__VIDEODS_VIDEODS_H_
 
 #include "plugins/videoBase.h"
 

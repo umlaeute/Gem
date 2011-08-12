@@ -11,8 +11,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_GEM_PLUGINS_IMAGESGI_H_
-#define INCLUDE_GEM_PLUGINS_IMAGESGI_H_
+#ifndef _INCLUDE_GEMPLUGIN__IMAGESGI_IMAGESGI_H_
+#define _INCLUDE_GEMPLUGIN__IMAGESGI_IMAGESGI_H_
 #include "plugins/imageloaderBase.h"
 #include <stdio.h>
 

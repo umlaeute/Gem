@@ -12,8 +12,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 	
 -----------------------------------------------------------------*/
 
-#ifndef INCLUDE_VIDEOUNICAP_H_
-#define INCLUDE_VIDEOUNICAP_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOUNICAP_VIDEOUNICAP_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOUNICAP_VIDEOUNICAP_H_
 
 #include "plugins/videoBase.h"
 
