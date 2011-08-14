@@ -17,7 +17,7 @@ convenience-link: $(pkglib_LTLIBRARIES)
 clean-convenience-link:
 	  @for soname in `echo | $(EGREP) "^dlname=" $(pkglib_LTLIBRARIES) | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
             echo "$$soname: cleaning convenience links"; \
-            test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname; \
+            test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname || true; \
 	  done 
 	
 
