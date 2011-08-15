@@ -33,8 +33,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
+  
 class pixBlock;
-
+namespace gem {
+  class Properties;
+}
 namespace gem { namespace plugins {
 class GEM_EXTERN film
 {
@@ -53,7 +56,21 @@ class GEM_EXTERN film
   //////////
   // open a movie up
   /* open the film "filename" (think better about URIs ?)
-   * try to open the film in the colourspace requested by "format"
+   *
+   * try to open the film with the requested properties
+   *
+   * about properties:
+   *  requestprops: are properties that can change the behaviour of how the 
+   *                film is opened; examples are "colorspace" (e.g. GL_RGBA) or 
+   *                "streaming" (rather than random frame access)
+   *                the backend need not implement any of the properties
+   *
+   *  resultprops: give feedback about the opened film
+   *               if the film could not be opened, the content is undefined
+   *               if the film was successfully opened, following properties should be set
+   *         if a property can not be determined (e.g. variable fps), it should be set unset
+   *
+   *   
    * discussion: should the colourspace be only a hint or should we force it
    * (evt. by converting the actual cs by hand to the desired one)
    * more discussion: i guess the cs should really be forced somehow by [pix_film]
@@ -63,7 +80,8 @@ class GEM_EXTERN film
    * anything about the internal cs of the decoder
    */
   /* returns TRUE if loading was successfull, FALSE otherwise */
-  virtual bool open(const std::string, int format=0) = 0;
+  virtual bool open(const std::string, 
+		    const gem::Properties&requestprops) = 0;
 
   /* some error codes */
   enum errCode { SUCCESS = 0,
@@ -79,7 +97,6 @@ class GEM_EXTERN film
    * specifying trackNum as -1 means "same track as before"
    */
   virtual errCode changeImage(int imgNum, int trackNum=-1) = 0;
-
 
   //////////
   // get the next frame
@@ -101,45 +118,44 @@ class GEM_EXTERN film
   virtual void close(void) = 0;
 
 
-  //////////
-  // do we have a film loaded ?
-  /* returns TRUE if it is possible to read frames without any more open()
-   */
-  virtual bool haveFilm(void) = 0;
-
   ////////
   // returns true if instance can be used in thread
   virtual bool isThreadable(void) = 0;
 
-  //////////
-  // set the wanted color-space
-  /* could be used for switching the colourspace on the fly 
-   * normally the colour-space of a film could be set when opening a movie
+  /**
+   * list all properties the currently opened film supports
+   * if no film is opened, this returns generic backend properties 
+   * which can be different from media specific properties
+   * after calling, "readable" will hold a list of all properties that can be read
+   * and "writeable" will hold a list of all properties that can be set
+   * if the enumeration fails, this returns <code>false</code>
    */
-  virtual void requestColor(GLenum format) = 0;
-  //////////
-  // get the actual color-space
-  /* what colour-space is in use ?
-   * returns 0 for none
-   */    
-  virtual int getColor(void) = 0;
 
-  //////////
-  // get the number of frames
-  /* the number of frames can depend on the track
-   * so this will return the framenum of the current track
+  virtual bool enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) = 0;
+
+  /**
+   * set a number of properties (as defined by "props")
+   * the "props" may hold properties not supported by the currently opened media,
+   *  which is legal; in this case the superfluous properties are simply ignored
+   * this function MAY modify the props; 
+   * namely one-shot properties should be removed from the props
+   *
+   * examples: "colorspace" GL_RGBA
+   *           "auto"       1 
    */
-  virtual int getFrameNum(void) = 0;
+  virtual void setProperties(gem::Properties&props) = 0;
 
-  // get the frames per seconds (or "-1" if unknown)
-  virtual double getFPS(void) = 0;
-
-  // get xsize of the frame
-  virtual int getWidth(void) = 0;
-  // get ysize of the frame
-  virtual int getHeight(void) = 0;
-
-  virtual void setAuto(double) = 0;
+  /**
+   * get the current value of the given properties from the media
+   * if props holds properties that can not be read for the media, they are set to UNSET 
+   *
+   *               "width" (width of each frame in pixels)
+   *               "height" (height of each frame in pixels)
+   *               "fps" (frames per second)
+   *               "frames" (framecount)
+   */
+  virtual void getProperties(gem::Properties&props) = 0;
 };
 
 };}; // namespace gem::plugins
@@ -152,16 +168,6 @@ class GEM_EXTERN film
  * \param id a symbolic (const char*) ID for the given class
  * \param filmClass a class derived from "film"
  */
-#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::film> fac_film_ ## TYP (gensym(id)->s_name)
-
-
-/**
- * \fn INIT_FILMFACTORY()
- * initialized the factory
- * \note call this before any externals register themselves
- */
-#define INIT_FILMFACTORY() \
-  static gem::PluginFactoryRegistrar::dummy<gem::plugins::film> fac_filmdummy
-
+#define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::film> fac_film_ ## TYP (id)
 
 #endif	// for header file
