@@ -11,9 +11,6 @@
 #include <typeinfo>
 #include <iostream>
 
-// use RTE because REGISTER_fooFACTORY() uses gensym()
-#include "Gem/RTE.h"
-
 namespace gem {
 
   class GEM_EXTERN BasePluginFactory {

@@ -103,7 +103,7 @@ public:
  * \param id a symbolic (const char*) ID for the given class
  * \param recordClass a class derived from "record"
  */
-#define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::record> fac_record_ ## TYP (gensym(id)->s_name)
+#define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::record> fac_record_ ## TYP (id)
 
 
 /**

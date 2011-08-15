@@ -216,7 +216,7 @@ namespace gem { namespace plugins {
  * \param id a symbolic (const char*) ID for the given class
  * \param videoClass a class derived from "video"
  */
-#define REGISTER_VIDEOFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::video> fac_video_ ## TYP (gensym(id)->s_name)
+#define REGISTER_VIDEOFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::video> fac_video_ ## TYP (id)
 
 
 /**

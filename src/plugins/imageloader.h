@@ -70,7 +70,7 @@ namespace gem { namespace plugins {
  * \param id a symbolic (const char*) ID for the given class
  * \param imageloaderClass a class derived from "imageloader"
  */
-#define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imageloader> fac_imageloader_ ## TYP (gensym(id)->s_name)
+#define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imageloader> fac_imageloader_ ## TYP (id)
 
 
 /**

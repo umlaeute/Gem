@@ -121,7 +121,7 @@ namespace gem { namespace plugins {
  * \param id a symbolic (const char*) ID for the given class
  * \param imagesaverClass a class derived from "imagesaver"
  */
-#define REGISTER_IMAGESAVERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imagesaver> fac_imagesaver_ ## TYP (gensym(id)->s_name)
+#define REGISTER_IMAGESAVERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imagesaver> fac_imagesaver_ ## TYP (id)
 
 
 /**
