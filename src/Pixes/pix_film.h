@@ -86,6 +86,10 @@ class GEM_EXTERN pix_film : public GemBase
   // turn on/off threaded reading
   virtual void threadMess(int);
 
+
+  virtual void autoMess(double state);
+
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
@@ -118,7 +122,6 @@ class GEM_EXTERN pix_film : public GemBase
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
 
-
  
  protected:
  /* grab-thread */
@@ -141,7 +144,6 @@ class GEM_EXTERN pix_film : public GemBase
   // static member functions
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void autoCallback       (void *data, t_floatarg state);
   static void csCallback         (void *data, t_symbol*s);
   static void threadCallback     (void *data, t_floatarg state);
 };

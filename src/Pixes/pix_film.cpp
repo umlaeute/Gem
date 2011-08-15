@@ -22,6 +22,8 @@
 
 #include "Gem/State.h"
 #include "Gem/Cache.h"
+#include "Gem/Properties.h"
+
 #include "plugins/PluginFactory.h"
 
 #include <ctype.h>
@@ -316,6 +318,8 @@ void pix_film :: closeMess(void){
 /////////////////////////////////////////////////////////
 void pix_film :: openMess(t_symbol *filename, int format, int codec)
 {
+  gem::Properties wantProps, gotProps;
+
   //  if (filename==x_filename)return;
   closeMess();
 
@@ -329,9 +333,12 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   m_handle=0;
 
   if (format==0)format=m_format;
+  double d=(double)format;
+  wantProps.set("colorspace", format);
+
   if(codec>=0){
     codec=codec%m_handles.size();
-    if (m_handles[codec] && m_handles[codec]->open(buf, format )) {
+    if (m_handles[codec] && m_handles[codec]->open(buf, wantProps )) {
       m_handle = m_handles[codec];
       verbose(1, "%s!: succeeded", m_ids[codec].c_str());
     } else {
@@ -344,7 +351,7 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
     post("opening %s with format %X", buf, format);
     while(i<m_handles.size()){
       debug("trying handle %d: %x", i, m_handles[i]);
-      if (m_handles[i] && m_handles[i]->open(buf, format ))      {
+      if (m_handles[i] && m_handles[i]->open(buf, wantProps ))      {
 	verbose(1, "%s: succeeded", m_ids[i].c_str());
         m_handle = m_handles[i];
         break;
@@ -363,18 +370,34 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
 	return;
   }
 
+  double width=-1;
+  double height=-1;
+  double frames=-1;
+  double fps=-1;
+  gotProps.set("width", 0);
+  gotProps.set("height", 0);
+  gotProps.set("frames", 0);
+  gotProps.set("fps", 0);
+
+  m_handle->getProperties(gotProps);
+
+  gotProps.get("width", width);
+  gotProps.get("height", height);
+  gotProps.get("frames", frames);
+  gotProps.get("fps", fps);
+
   t_atom ap[4];
-  float fps=static_cast<t_float>(m_handle->getFPS());
-  SETFLOAT(ap, m_handle->getFrameNum());
-  SETFLOAT(ap+1, m_handle->getWidth());
-  SETFLOAT(ap+2, m_handle->getHeight());
+  SETFLOAT(ap, frames);
+  SETFLOAT(ap+1, width);
+  SETFLOAT(ap+2, height);
   SETFLOAT(ap+3, fps);
-  m_numFrames=m_handle->getFrameNum();
+  m_numFrames=frames;
   post("loaded file: %s with %d frames (%dx%d) at %f fps", 
        buf, 
-       m_handle->getFrameNum(), 
-       m_handle->getWidth(), 
-       m_handle->getHeight(), fps);
+       (int)frames, 
+       (int)width, 
+       (int)height, 
+       fps);
   outlet_list(m_outNumFrames, 0, 4, ap);
 
 #ifdef HAVE_PTHREADS
@@ -423,9 +446,6 @@ void pix_film :: render(GemState *state)
       img->newimage=true;
       m_cache->resendImage = 0;
     }
-
-
-  m_handle->setAuto(m_auto);
 
   frame=static_cast<int>(m_reqFrame);
   if (NULL==img){
@@ -524,7 +544,13 @@ void pix_film :: csMess(t_symbol *s, bool immediately)
   default:
     error("colorspace must be 'RGBA', 'YUV' or 'Gray'");
   }
-  if(immediately && m_handle)m_handle->requestColor(m_format);
+
+  gem::Properties props;
+  double d=(double)m_format;
+  gem::any value=d;
+  props.set("colorspace", value);
+  if(immediately && m_handle)
+    m_handle->setProperties(props);
 }
 /////////////////////////////////////////////////////////
 // threading
@@ -539,6 +565,17 @@ void pix_film :: threadMess(int state)
   post("no thread support");
 #endif
 }
+
+void pix_film :: autoMess(double speed)
+{
+  m_auto=speed;
+  gem::Properties props;
+  gem::any value=speed;
+  props.set("auto", value);
+  m_handle->setProperties(props);
+}
+
+
 
 
 /////////////////////////////////////////////////////////
@@ -560,12 +597,14 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
 		  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::changeImageCallback),
 		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::autoCallback),
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, double);
+  CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
+#if 0
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::csCallback),
 		  gensym("colorspace"), A_DEFSYM, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::threadCallback),
-		  gensym("thread"), A_FLOAT, A_NULL);
+#endif
+  CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
 }
 void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
@@ -599,15 +638,6 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 
 void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv){
     GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
-}
-
-void pix_film :: autoCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->m_auto=state;
-}
-void pix_film :: csCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->csMess(s);
 }
 
 void pix_film :: threadCallback(void *data, t_floatarg state)
