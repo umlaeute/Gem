@@ -31,7 +31,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- GEM_EXTERN class recordBase : public record
+ class GEM_EXTERN recordBase : public record
 {
  protected:
 
