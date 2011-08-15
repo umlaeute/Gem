@@ -157,8 +157,12 @@ namespace gem { namespace plugins {
 
     std::vector<imagesaver*>m_savers;
     std::vector<std::string>m_ids;
+
+    bool m_threadable;
   public:  
-    imagesaverMeta(void) {
+    imagesaverMeta(void) : 
+      m_threadable(true)
+    {
       gem::PluginFactory<imagesaver>::loadPlugins("image");
       std::vector<std::string>available_ids=gem::PluginFactory<imagesaver>::getIDs();
       if(available_ids.size()>0) {
@@ -173,6 +177,14 @@ namespace gem { namespace plugins {
       addSaver(available_ids, "QT");
       addSaver(available_ids, "magick");
       addSaver(available_ids);
+
+      unsigned int i;
+      for(i=0; i<m_savers.size(); i++) {
+	if(!m_savers[i]->isThreadable()) {
+	  m_threadable=false;
+	  break;
+	}
+      }
     }
     bool addSaver( std::vector<std::string>available, std::string ID=std::string(""))
     {
@@ -250,7 +262,7 @@ namespace gem { namespace plugins {
       props.clear();
     }
     virtual bool isThreadable(void) {
-      return false;
+      return m_threadable;
     }
   }; }; };
 
