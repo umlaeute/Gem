@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	2003-2004 ported by tigital@mac.com from "Pete's_Plugins"
+    Copyright (C) 2003-2004 ported by tigital@mac.com from "Pete's_Plugins"
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

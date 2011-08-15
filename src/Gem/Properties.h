@@ -1,5 +1,5 @@
 /*
- * (c) IOhannes m zmÃ¶lnig 2010
+ * Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
  *
  * map that stores "any"thing
  * 

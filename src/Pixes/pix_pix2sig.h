@@ -4,9 +4,9 @@
 
   Output a pixel-buffer as 4 signals
 
-  Copyright (c) 2002 IOhannes m zmölnig <zmoelnig@iem.kug.ac.at>
+  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   Copyright (c) Günther Geiger. geiger@epy.co.at
-  Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM. zmoelnig@iem.kug.ac.at
+  Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   Copyright (c) 2002 James Tittle & Chris Clepper
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.

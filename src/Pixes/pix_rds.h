@@ -9,7 +9,7 @@ LOG
 
     ported by tigital@mac.com
     
-    Copyleft  (l) 2003 James Tittle tigital@mac.com
+    Copyright (c) 2003 James Tittle tigital@mac.com
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

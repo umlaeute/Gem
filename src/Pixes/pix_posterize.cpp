@@ -4,7 +4,7 @@
  *  tigital@mac.com
  *
  *  Created by Jamie Tittle on Fri Oct 18 2002.
- *  Copyleft (l) 2002 tigital. All rights reserved.
+ *  Copyright (c) 2002 tigital. All rights reserved.
  *
  */
 #include "pix_posterize.h"

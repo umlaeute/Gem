@@ -5,8 +5,8 @@ LOG
 
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyleft  (l) 2001 IOhannes m zmölnig. zmoelnig@iem.kug.ac.at
-    Copyleft (l) 2002 James Tittle & Chris Clepper
+    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+    Copyright (c) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

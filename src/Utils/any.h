@@ -3,7 +3,7 @@
  * (C) Copyright Pablo Aguilar 2005
  * (C) Copyright Kevlin Henney 2001
  *
- * (c) IOhannes m zmölnig 2010
+ * Copyright (C) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
  *       downloaded this code from http://www.codeproject.com/KB/cpp/dynamic_typing.aspx
  *         changed namespace/defines "cdiggins" to something "gem"
  *

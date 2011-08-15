@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2011 IOhannes m zmoelnig. forum::f¸r::uml‰ute. IEM
+//    Copyright (c) 2011-2011 IOhannes m zm√∂lnig. forum::f√ºr::uml√§ute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //

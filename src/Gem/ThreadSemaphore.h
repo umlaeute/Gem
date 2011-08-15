@@ -4,7 +4,7 @@ LOG
 
 	- locks a thread (wrapper around pthread's sem_t)
 
-    Copyright (c) 2011 IOhannes m zmoelnig. forum::f¸r::um‰ute. IEM. zmoelnig@iem.at
+    Copyright (c) 2011-2011 IOhannes m zm√∂lnig. forum::f√ºr::uml√§ute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 

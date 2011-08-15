@@ -10,7 +10,7 @@
 //
 // Implementation file
 //
-//    Copyleft (l) 2003 James Tittle
+//    Copyright (c) 2003 James Tittle
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //

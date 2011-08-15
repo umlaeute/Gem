@@ -11,8 +11,8 @@
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
-//    Copyleft  (c) 2001 IOhannes m zmölnig
-//    Copyleft  (c) 2003 James Tittle
+//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2003 James Tittle
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
