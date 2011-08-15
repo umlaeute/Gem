@@ -20,109 +20,6 @@
 #include "Gem/SynchedWorkerThread.h"
 
 #include "plugins/imageloader.h"
-#include "plugins/PluginFactory.h"
-
-namespace gem {
-  class PixImageLoader : public gem::plugins::imageloader {
-  private:
-    static PixImageLoader*s_instance;
-    std::vector<gem::plugins::imageloader*>m_loaders;
-    std::vector<std::string>m_ids;
-    bool m_canThread;
-
-    PixImageLoader(void) : m_canThread(true) {
-      gem::PluginFactory<gem::plugins::imageloader>::loadPlugins("image");
-      std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::imageloader>::getIDs();
-
-      addLoader(available_ids, "magick");
-      addLoader(available_ids);
-
-      if(m_ids.size()>0) {
-        startpost("Image loading support:");
-        unsigned int i;
-        for(i=0; i<m_ids.size(); i++) {
-          startpost(" %s", m_ids[i].c_str());
-        }
-        endpost();
-      }
-
-
-      m_canThread=true;
-      unsigned int i;
-      for(i=0; i<m_loaders.size(); i++) {
-        if(!m_loaders[i]->isThreadable()) {
-          m_canThread=false;
-          break;
-        }
-      }
-    }
-    bool addLoader( std::vector<std::string>available, std::string ID=std::string(""))
-    {
-      int count=0;
-
-      std::vector<std::string>id;
-      if(!ID.empty()) {
-        // if requested 'cid' is in 'available' add it to the list of 'id's
-        if(std::find(available.begin(), available.end(), ID)!=available.end()) {
-          id.push_back(ID);
-        } else {
-          // request for an unavailable ID
-          verbose(2, "backend '%s' unavailable", ID.c_str());
-          return false;
-        }
-      } else {
-        // no 'ID' given: add all available IDs
-        id=available;
-      }
-
-      unsigned int i=0;
-      for(i=0; i<id.size(); i++) {
-        std::string key=id[i];
-        verbose(2, "trying to add '%s' as backend", key.c_str());
-        if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
-          // not yet added, do so now!
-          gem::plugins::imageloader*loader=
-            gem::PluginFactory<gem::plugins::imageloader>::getInstance(key); 
-          if(NULL==loader)break;
-          m_ids.push_back(key);
-          m_loaders.push_back(loader);
-          count++;
-          verbose(2, "added backend#%d '%s' @ 0x%x", m_loaders.size()-1, key.c_str(), loader);
-        }
-      }
-      return (count>0);
-    }
-
-  public:
-    virtual ~PixImageLoader(void) {
-      unsigned int i;
-      for(i=0; i<m_loaders.size(); i++) {
-        delete m_loaders[i];
-        m_loaders[i]=NULL;
-      }
-    }
-
-    virtual bool load(std::string filename, imageStruct&result, gem::Properties&props) {
-      unsigned int i;
-      for(i=0; i<m_loaders.size(); i++) {
-        if(m_loaders[i]->load(filename, result, props))
-          return true;
-      }
-      return false;
-    }
-
-    static PixImageLoader*getInstance(void) {
-      if(NULL==s_instance) {
-        s_instance=new PixImageLoader();
-      }
-      return s_instance;
-    }
-    virtual bool isThreadable(void) {
-      return m_canThread;
-    }
-  }; };
-gem::PixImageLoader*gem::PixImageLoader::s_instance=NULL;
-
 
 namespace gem { namespace image {
   struct PixImageThreadLoader : public gem::thread::SynchedWorkerThread {
@@ -149,12 +46,17 @@ namespace gem { namespace image {
       };
     };
 
-    gem::PixImageLoader*imageloader;
+    static gem::plugins::imageloader*s_imageloader;
     PixImageThreadLoader(void) :
-      SynchedWorkerThread(false),
-      imageloader(gem::PixImageLoader::getInstance())
+      SynchedWorkerThread(false)
     { 
-      if(!imageloader->isThreadable()) 
+      if(NULL==s_imageloader) {
+	s_imageloader=gem::plugins::imageloader::getInstance();
+      }
+      if(!s_imageloader)
+	throw(40);
+
+      if(!s_imageloader->isThreadable()) 
         throw(42);
       start();
     }
@@ -174,7 +76,7 @@ namespace gem { namespace image {
       }
       // DOIT
       out->img=new imageStruct;
-      if(!imageloader->load(in->filename, *out->img, out->props)) {
+      if(!s_imageloader->load(in->filename, *out->img, out->props)) {
         delete out->img;
         out->img=0;
       }
@@ -227,7 +129,7 @@ namespace gem { namespace image {
     static PixImageThreadLoader*s_instance;
   };
   PixImageThreadLoader*PixImageThreadLoader::s_instance=NULL;
-
+  gem::plugins::imageloader*PixImageThreadLoader::s_imageloader=NULL;
 
 
   const load::id_t load::IMMEDIATE= 0;
@@ -236,12 +138,13 @@ namespace gem { namespace image {
   bool load::sync(const std::string filename,
                   imageStruct&result,
                   gem::Properties&props) {
-    gem::PixImageLoader*piximageloader=gem::PixImageLoader::getInstance();
-    if(piximageloader) {
-      if(piximageloader->load(filename, result, props)) {
-        return true;
+    if(!PixImageThreadLoader::s_imageloader)
+      PixImageThreadLoader::s_imageloader=gem::plugins::imageloader::getInstance();
+    if((PixImageThreadLoader::s_imageloader) && 
+       (PixImageThreadLoader::s_imageloader->load(filename, result, props))) 
+      {
+	return true;
       }
-    }
     return false;
   }
   
