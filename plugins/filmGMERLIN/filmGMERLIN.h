@@ -17,11 +17,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "plugins/filmBase.h"
 #include <stdio.h>
 
-#ifdef HAVE_LIBGMERLIN_AVDEC
-# define HAVE_GMERLIN
-#endif
-
-#ifdef HAVE_GMERLIN
 # ifdef __cplusplus
 extern "C" {
 # endif
@@ -39,7 +34,6 @@ extern "C" {
 # ifdef __cplusplus
 }
 # endif
-#endif // GMERLIN
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -66,7 +60,6 @@ class GEM_EXPORT filmGMERLIN : public filmBase {
   // Destructor
   virtual ~filmGMERLIN(void);
 
-#ifdef HAVE_GMERLIN
   //////////
   // open a movie up
   virtual bool open(const std::string filename, const gem::Properties&);
@@ -104,8 +97,6 @@ class GEM_EXPORT filmGMERLIN : public filmBase {
   static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
   virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
 
-
-#endif
   int m_lastFrame;
 
  private:

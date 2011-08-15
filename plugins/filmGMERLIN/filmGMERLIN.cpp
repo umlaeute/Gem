@@ -16,15 +16,20 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#ifdef HAVE_LIBGMERLIN_AVDEC
+# define HAVE_GMERLIN
+#endif
+
+
+#ifdef HAVE_GMERLIN
 #include "filmGMERLIN.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
-#ifdef HAVE_GMERLIN
 REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
-#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -36,7 +41,6 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 /////////////////////////////////////////////////////////
 
 filmGMERLIN :: filmGMERLIN(void) : filmBase(),
-#ifdef HAVE_GMERLIN
                                    m_file(NULL),
                                    m_opt(NULL),
                                    m_seekable(false),
@@ -52,13 +56,10 @@ filmGMERLIN :: filmGMERLIN(void) : filmBase(),
 #ifdef USE_FRAMETABLE
                                    m_frametable(NULL),
 #endif
-#endif /* GMERLIN */
                                    m_lastFrame(0),
                                    m_doConvert(false)
 {
-#ifdef HAVE_GMERLIN
   m_gconverter=gavl_video_converter_create ();
-#endif
 }
 
 ////////////////////////////////////////////////////////
@@ -68,12 +69,9 @@ filmGMERLIN :: filmGMERLIN(void) : filmBase(),
 filmGMERLIN :: ~filmGMERLIN()
 {
   close();
-#ifdef HAVE_GMERLIN
   if(m_gconverter)gavl_video_converter_destroy(m_gconverter);m_gconverter=NULL;
-#endif
 }
 
-#ifdef HAVE_GMERLIN
 void filmGMERLIN :: close(void)
 {
   if(m_file)bgav_close(m_file);m_file=NULL;
