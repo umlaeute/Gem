@@ -373,6 +373,12 @@
 			<File
 				RelativePath="..\..\src\Rte\Outlet.h">
 			</File>
+			<File
+				RelativePath="..\..\src\Rte\Symbol.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\Symbol.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="plugins"
@@ -384,10 +390,19 @@
 				RelativePath="..\..\src\plugins\film.h">
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\image.cpp">
+				RelativePath="..\..\src\plugins\filmBase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\filmBase.h">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\image.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imageBase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imageBase.h">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\imageloader.cpp">
@@ -396,10 +411,22 @@
 				RelativePath="..\..\src\plugins\imageloader.h">
 			</File>
 			<File
+				RelativePath="..\..\src\plugins\imageloaderBase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imageloaderBase.h">
+			</File>
+			<File
 				RelativePath="..\..\src\plugins\imagesaver.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\imagesaver.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imagesaverBase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\imagesaverBase.h">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\PluginFactory.cpp">
@@ -417,10 +444,22 @@
 				RelativePath="..\..\src\plugins\record.h">
 			</File>
 			<File
+				RelativePath="..\..\src\plugins\recordBase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\recordBase.h">
+			</File>
+			<File
 				RelativePath="..\..\src\plugins\video.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\video.h">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\videoBase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\videoBase.h">
 			</File>
 		</Filter>
 		<Filter
