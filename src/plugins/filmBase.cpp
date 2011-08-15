@@ -15,8 +15,6 @@
 /////////////////////////////////////////////////////////
 
 #include "filmBase.h"
-#include <stdlib.h>
-
 #include "Gem/Properties.h"
 
 /////////////////////////////////////////////////////////
@@ -124,7 +122,6 @@ void filmBase::getProperties(gem::Properties&props) {
   std::vector<std::string> keys=props.keys();
   gem::any value;
   double d;
-
   unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
