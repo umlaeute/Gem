@@ -23,5 +23,5 @@ gem::plugins::film*gem::plugins::film::getInstance(void) {
  return NULL;
 }
 
-
-INIT_FILMFACTORY();
+/* initialize the film factory */
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::film> fac_filmdummy;
