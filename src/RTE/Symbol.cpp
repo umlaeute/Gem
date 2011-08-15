@@ -72,12 +72,15 @@ gem::RTE::Symbol :: ~Symbol(void)
 
 gem::RTE::Symbol&gem::RTE::Symbol::operator=(const std::string&name) {
   m_pimpl->sym=gensym(name.c_str());
+  return (*this);
 }
 gem::RTE::Symbol&gem::RTE::Symbol::operator=(const gem::RTE::Symbol&Sym) {
   m_pimpl->sym=Sym.m_pimpl->sym;
+  return (*this);
 }
 gem::RTE::Symbol&gem::RTE::Symbol::operator=(const t_symbol*name) {
   m_pimpl->sym=name;
+  return (*this);
 }
 gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_atom*argv) {
   char buf[MAXPDSTRING];
@@ -102,6 +105,7 @@ gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_at
   }
 
   m_pimpl->sym=gensym(name.c_str());
+  return (*this);
 }
 
 t_symbol*gem::RTE::Symbol::getRTESymbol(void) const {

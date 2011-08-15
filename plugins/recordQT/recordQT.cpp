@@ -7,6 +7,19 @@
 # include "config.h"
 #endif
 
+
+#if defined __APPLE__ 
+# if !defined __x86_64__
+// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
+// LATER make this a real check in configure
+#  define HAVE_CARBONQUICKTIME
+# elif defined HAVE_QUICKTIME
+#  undef HAVE_QUICKTIME
+# endif
+#endif
+
+#ifdef HAVE_QUICKTIME
+
 #include "recordQT.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/Exception.h"
@@ -43,7 +56,7 @@ REGISTER_RECORDFACTORY("QT", recordQT);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-recordQT :: recordQT()
+recordQT :: recordQT(void)
   : recordBase(),
     m_recordSetup(false),
     m_recordStart(false),
@@ -64,7 +77,7 @@ recordQT :: recordQT()
 {
   m_filename[0] = 0;
 
-# ifdef _WIN32
+#ifdef _WIN32
   // Initialize QuickTime Media Layer
   /* isn't this done in GemMan/GemWinCreateNT already? */
   OSErr		err = noErr;
@@ -79,7 +92,7 @@ recordQT :: recordQT()
     throw(GemException("unable to initialize QuickTime/Movies"));
   }
   verbose(1, "recordQT: QT init done");
-# endif // WINDOWS
+#endif // WINDOWS
 
   //get list of codecs installed  -- useful later
   CodecNameSpecListPtr codecList;
@@ -248,7 +261,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 		post("recordQT: using YUV");
   }
 	if (m_compressImage->format == GL_BGRA){
-# ifdef __BIG_ENDIAN__
+#ifdef __BIG_ENDIAN__
     colorspace = k32BGRAPixelFormat;// k32RGBAPixelFormat;
 #else
     colorspace = k32ARGBPixelFormat;

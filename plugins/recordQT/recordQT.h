@@ -12,31 +12,16 @@
 #define _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
 #include "plugins/recordBase.h"
 
-
-
-#if defined __APPLE__ 
-# if !defined __x86_64__
-// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
-// LATER make this a real check in configure
-#  define HAVE_CARBONQUICKTIME
-# elif defined HAVE_QUICKTIME
-#  undef HAVE_QUICKTIME
-# endif
-#endif
-
-
 #define QT_MAX_FILENAMELENGTH 256
 
-#if defined HAVE_QUICKTIME
-# if defined _WIN32 
-#  include <QTML.h>
-#  include <Movies.h>
-#  include <QuicktimeComponents.h>
-# endif
-# ifdef __APPLE__
-#  include <QuickTime/QuickTime.h>
-# endif // __APPLE__
+#if defined _WIN32 
+# include <QTML.h>
+# include <Movies.h>
+# include <QuicktimeComponents.h>
 #endif
+#ifdef __APPLE__
+# include <QuickTime/QuickTime.h>
+#endif // __APPLE__
 
 
 /*-----------------------------------------------------------------
@@ -74,8 +59,7 @@ namespace gem { namespace plugins {
   //////////
   // Destructor
   virtual ~recordQT(void);
-  
-#ifdef HAVE_QUICKTIME
+
   virtual void close(void);
   virtual bool open(const std::string filename);
     	
@@ -118,13 +102,13 @@ namespace gem { namespace plugins {
   imageStruct	*m_compressImage;
 
 
-# ifdef __APPLE__
+#ifdef __APPLE__
   UnsignedWide startTime, endTime;
-# endif
+#endif
 
-# ifdef _WIN32
+#ifdef _WIN32
   LARGE_INTEGER freq, startTime, endTime;
-# endif
+#endif
   float seconds;
 
   //number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
@@ -171,7 +155,6 @@ namespace gem { namespace plugins {
   
   codecListStorage *codecContainer;
   int numCodecContainer;
-#endif /* QT */
  };
 };};
 #endif	// for header file

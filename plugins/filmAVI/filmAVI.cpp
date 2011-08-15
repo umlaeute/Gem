@@ -25,9 +25,10 @@
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
 
+using namespace gem::plugins;
+
 REGISTER_FILMFACTORY("AVI", filmAVI);
 
-using namespace gem::plugins;
 
 /////////////////////////////////////////////////////////
 //
@@ -38,7 +39,7 @@ using namespace gem::plugins;
 //
 /////////////////////////////////////////////////////////
 
-filmAVI :: filmAVI(void) : filmBase()
+filmAVI :: filmAVI(void) : filmBase(),
   m_nRawBuffSize(0),
   m_RawBuffer(NULL),
   m_format(GL_BGR_EXT),

@@ -32,6 +32,7 @@
 
 #include "filmQT.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/Properties.h"
 #include "Gem/RTE.h"
 
 using namespace gem::plugins;
