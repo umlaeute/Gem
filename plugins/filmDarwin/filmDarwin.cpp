@@ -18,14 +18,15 @@
 # include "config.h"
 #endif
 #include "filmDarwin.h"
+#ifdef HAVE_CARBONQUICKTIME
+
 #include "plugins/PluginFactory.h"
+#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
-#ifdef HAVE_CARBONQUICKTIME
 REGISTER_FILMFACTORY("Darwin", filmDarwin);
-#endif
-   
+
 /////////////////////////////////////////////////////////
 //
 // filmDarwin
@@ -36,15 +37,12 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 /////////////////////////////////////////////////////////
 
 filmDarwin :: filmDarwin(void) : filmBase(false),
-#ifdef HAVE_CARBONQUICKTIME
                                  m_movie(NULL),
                                  m_srcGWorld(NULL),
                                  m_movieTime(0),
                                  m_movieTrack(0),
                                  m_movieMedia(0),
                                  m_timeScale(0),
-                                 duration(0),
-#endif
                                  durationf(0.)
 {
 }
@@ -60,23 +58,23 @@ filmDarwin :: ~filmDarwin()
 
 void filmDarwin :: close(void)
 {
-#ifdef HAVE_CARBONQUICKTIME
   if(m_srcGWorld){
     ::DisposeMovie(m_movie);
     ::DisposeGWorld(m_srcGWorld);
     m_srcGWorld = NULL;
   }
-#endif /*  HAVE_CARBONQUICKTIME */
 }
 
 /////////////////////////////////////////////////////////
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDarwin :: open(const std::string filename, int format)
+bool filmDarwin :: open(const std::string filename, const gem::Properties&wantProps)
 {
-  if (format>0)m_wantedFormat=format;
-#ifdef HAVE_CARBONQUICKTIME
+  double d;
+  if(wantProps.get("colorspace", d) && d>0) {
+    m_wantedFormat=d;
+  }
   FSSpec		theFSSpec;
   OSErr		err = noErr;
   FSRef		ref;
@@ -192,7 +190,6 @@ bool filmDarwin :: open(const std::string filename, int format)
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
   ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
   return true;
-#endif /*  HAVE_CARBONQUICKTIME */
   goto unsupported;
  unsupported:
   //post("Darwin: unsupported!");
@@ -204,7 +201,6 @@ bool filmDarwin :: open(const std::string filename, int format)
 //
 /////////////////////////////////////////////////////////
 pixBlock* filmDarwin :: getFrame(){
-#ifdef HAVE_CARBONQUICKTIME
   CGrafPtr	 	savedPort;
   GDHandle     	savedDevice;
   Rect		m_srcRect;
@@ -270,7 +266,6 @@ pixBlock* filmDarwin :: getFrame(){
 
   //  m_image.image.data = (unsigned char *)m_baseAddr;
   m_image.newimage=1;
-#endif /*  HAVE_CARBONQUICKTIME */
   return &m_image;
 }
 
@@ -279,3 +274,4 @@ film::errCode filmDarwin :: changeImage(int imgNum, int trackNum){
   //  return 0;
   return film::SUCCESS;
 }
+#endif /* CARBONQUiCKTIME */

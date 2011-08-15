@@ -8,9 +8,9 @@
 #endif
 
 #include "recordQT.h"
-#include "Gem/Exception.h"
-
 #include "plugins/PluginFactory.h"
+#include "Gem/Exception.h"
+#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
@@ -34,9 +34,7 @@ using namespace gem::plugins;
 /* for post() and error() */
 #include "m_pd.h"
 
-#ifdef HAVE_QUICKTIME
 REGISTER_RECORDFACTORY("QT", recordQT);
-#endif
 /////////////////////////////////////////////////////////
 //
 // recordQT
@@ -45,10 +43,6 @@ REGISTER_RECORDFACTORY("QT", recordQT);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifndef HAVE_QUICKTIME
-recordQT :: recordQT() : recordBase() {}
-recordQT :: ~recordQT(){}
-#else
 recordQT :: recordQT()
   : recordBase(),
     m_recordSetup(false),

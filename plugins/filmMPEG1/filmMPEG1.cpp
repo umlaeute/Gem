@@ -25,7 +25,6 @@ using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG
 REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
-#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -36,12 +35,14 @@ REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG1 :: filmMPEG1(void) : filmBase(),
-			       m_data(NULL), m_length(0)
+filmMPEG1 :: filmMPEG1(void) : 
+  filmBase(),
+  m_streamfile(NULL),
+  m_reachedEnd(false),
+  m_data(NULL), 
+  m_length(0)
 {
-#ifdef HAVE_LIBMPEG
-  m_streamfile=0;
-#endif
+  m_numFrames=-1;
 }
 
 /////////////////////////////////////////////////////////
@@ -54,7 +55,6 @@ filmMPEG1 :: ~filmMPEG1()
   if(m_data)delete[]m_data;
 }
 
-#ifdef HAVE_LIBMPEG
 void filmMPEG1 :: close(void)
 {
   if (m_streamfile)fclose(m_streamfile);

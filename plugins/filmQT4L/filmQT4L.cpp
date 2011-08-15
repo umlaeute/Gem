@@ -17,15 +17,18 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_LIBQUICKTIME
+
 #include "filmQT4L.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/Properties.h"
+#include "Gem/RTE.h"
+
 using namespace gem::plugins;
 
-#ifdef HAVE_LIBQUICKTIME
-# include <colormodels.h>
+#include <colormodels.h>
 
 REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
-#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -36,10 +39,11 @@ REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
 //
 /////////////////////////////////////////////////////////
 
-filmQT4L :: filmQT4L(void) : filmBase() {
-#ifdef HAVE_LIBQUICKTIME
-  m_quickfile=0;
-#endif
+filmQT4L :: filmQT4L(void) : filmBase(),
+			     m_quickfile(NULL),
+			     m_qtformat(0),
+			     m_lastFrame(0)
+{
 }
 
 /////////////////////////////////////////////////////////
@@ -51,7 +55,6 @@ filmQT4L :: ~filmQT4L()
   close();
 }
 
-#ifdef HAVE_LIBQUICKTIME
 void filmQT4L :: close(void)
 {
   if(m_quickfile)quicktime_close(m_quickfile);
@@ -62,9 +65,14 @@ void filmQT4L :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmQT4L :: open(const std::string filename, int format)
+bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProps)
 {
   int wantedFormat=GL_RGBA;
+  double d;
+  unsigned int format=0;
+  if(wantProps.get("format", d)) {
+    format=d;
+  }
   switch(format){
   default:
     break;

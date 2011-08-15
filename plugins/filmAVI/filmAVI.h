@@ -17,10 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE_GEMPLUGIN__FILMAVI_FILMAVI_H_
   
 #include "plugins/filmBase.h"
-
-#ifdef _WIN32
 #include <vfw.h>
-#endif
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -47,10 +44,9 @@ class GEM_EXPORT filmAVI : public filmBase {
   // Destructor
   virtual ~filmAVI(void);
 
-#ifdef _WIN32
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int);
+  virtual bool open(const std::string filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -81,8 +77,6 @@ class GEM_EXPORT filmAVI : public filmBase {
 
   PGETFRAME	m_getFrame;		// the frame information
   PAVISTREAM	m_streamVid;		// the stream itself
-#endif //AVI
-
 };};};
 
 #endif	// for header file

@@ -19,6 +19,9 @@
 
 #include "filmMPEG3.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/Properties.h"
+#include "Gem/RTE.h"
+
 using namespace gem::plugins;
 
 #ifdef HAVE_LIBMPEG3
@@ -68,7 +71,7 @@ void filmMPEG3 :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmMPEG3 :: open(const std::string filename, int format)
+bool filmMPEG3 :: open(const std::string filename, const gem::Properties&wantProps)
 {
   char*cfilename=const_cast<char*>(filename.c_str());
   if (mpeg3_check_sig(cfilename)){/* ok, this is mpeg(3) */
@@ -96,8 +99,11 @@ bool filmMPEG3 :: open(const std::string filename, int format)
     m_image.image.xsize=mpeg3_video_width(mpeg_file, m_curTrack);
     m_image.image.ysize=mpeg3_video_height(mpeg_file, m_curTrack);
     if (!m_image.image.xsize*m_image.image.ysize)goto unsupported;
-    m_wantedFormat=format;
-    m_image.image.setCsizeByFormat(format);
+    double d;
+    if(wantProps.get("colorspace", d)) {
+      m_image.image.setCsizeByFormat((int)d);
+      m_wantedFormat=m_image.image.format;
+    }
     m_image.image.reallocate();
     changeImage(0,-1);
     m_newfilm=true;

@@ -32,6 +32,8 @@
 
 #include "filmQT.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/RTE.h"
+
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("QuickTime", filmQT);
@@ -121,7 +123,7 @@ void filmQT :: close(void)
   //	m_srcGWorld = NULL;
 }
 
-bool filmQT :: open(const std::string filename, int format) {
+bool filmQT :: open(const std::string filename, const gem::Properties&wantProps) {
   FSSpec	theFSSpec;
   OSErr		err = noErr;
   Rect		m_srcRect;
@@ -132,13 +134,16 @@ bool filmQT :: open(const std::string filename, int format) {
   OSType	whichMediaType;
   short		flags = 0;
   int wantedFormat;
+  double d;
 
   if (filename.empty())return false;
   if (!m_bInit){
     error("filmQT: object not correctly initialized\n");
     return false;
   }
-  if (format>0)m_wantedFormat=format;
+  if(wantProps.get("colorspace", d))
+    m_wantedFormat=d;
+     
   wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   // Clean up any open files:  closeMess();
 
@@ -191,6 +196,7 @@ bool filmQT :: open(const std::string filename, int format) {
 			       &whichMediaType, 0,
 			       static_cast<Fixed>(1<<16), NULL, &duration);
   m_numFrames = movieDur/duration;
+  m_fps = m_numFrames;
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
@@ -273,12 +279,6 @@ pixBlock* filmQT :: getFrame()
   m_image.image.upsidedown=true;
 
   return &m_image;
-}
-
-
-double filmQT :: getFPS() {
-  m_fps = m_numFrames;
-  return m_fps;
 }
 
 film::errCode filmQT :: changeImage(int imgNum, int trackNum){

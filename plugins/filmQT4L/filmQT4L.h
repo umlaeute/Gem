@@ -18,10 +18,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "plugins/filmBase.h"
 #include <stdio.h>
 
-#ifdef HAVE_LIBQUICKTIME
 #include <quicktime.h>
 #include <colormodels.h>
-#endif // QT
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -48,10 +46,9 @@ class GEM_EXPORT filmQT4L : public filmBase {
   // Destructor
   virtual ~filmQT4L(void);
 
-#ifdef HAVE_LIBQUICKTIME
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int format = 0);
+  virtual bool open(const std::string filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -73,7 +70,6 @@ class GEM_EXPORT filmQT4L : public filmBase {
   int           m_qtformat;
 
   imageStruct   m_qtimage;
-#endif
   int m_lastFrame;
 
 };};};

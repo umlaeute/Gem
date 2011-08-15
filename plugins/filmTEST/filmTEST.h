@@ -15,8 +15,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef _INCLUDE_GEMPLUGIN__FILMTEST_FILMTEST_H_
 #define _INCLUDE_GEMPLUGIN__FILMTEST_FILMTEST_H_
-#include "plugins/filmBase.h"
-#include <stdio.h>
+#include "plugins/film.h"
+#include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -32,7 +32,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmTEST : public filmBase {
+class GEM_EXPORT filmTEST : public film {
  public:
 
   //////////
@@ -41,7 +41,9 @@ class GEM_EXPORT filmTEST : public filmBase {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int format = 0);
+  virtual bool open(const std::string filename, const gem::Properties&);
+
+  virtual void close(void);
 
   //////////
   // get the next frame
@@ -51,9 +53,17 @@ class GEM_EXPORT filmTEST : public filmBase {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
+  virtual bool enumProperties(gem::Properties&readprops, gem::Properties&writeprops);
+
+  virtual void getProperties(gem::Properties&props);
+  virtual void setProperties(gem::Properties&props);
+
+  virtual bool isThreadable(void);
+
   //-----------------------------------
-  unsigned char*m_data;
-  int           m_length;
+  pixBlock m_image;
+  double m_fps;
+  unsigned int m_numFrames;
 };};};
 
 #endif	// for header file

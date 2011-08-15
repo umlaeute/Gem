@@ -56,7 +56,7 @@ class GEM_EXPORT filmDarwin : public filmBase {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int format=0);
+  virtual bool open(const std::string filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);

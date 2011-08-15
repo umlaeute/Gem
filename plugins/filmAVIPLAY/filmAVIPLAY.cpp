@@ -17,16 +17,17 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_LIBAVIPLAY
+
 #include "filmAVIPLAY.h"
 #include "plugins/PluginFactory.h"
-
+#include "Gem/Properties.h"
 using namespace gem::plugins;
 
-#ifdef HAVE_LIBAVIPLAY
 REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
-# include <unistd.h>
-# include <time.h>
-#endif
+
+#include <unistd.h>
+#include <time.h>
 
 /////////////////////////////////////////////////////////
 //
@@ -38,11 +39,9 @@ REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 /////////////////////////////////////////////////////////
 
 filmAVIPLAY :: filmAVIPLAY(void) : filmBase() ,
-#ifdef HAVE_LIBAVIPLAY
   m_avifile(NULL),
   m_avistream(NULL),
   m_aviimage(NULL),
-#endif
   m_rawdata(NULL),
   m_rawlength(0)
 {
@@ -57,7 +56,6 @@ filmAVIPLAY :: ~filmAVIPLAY()
   close();
   if(m_rawdata)delete[]m_rawdata;
 }
-#ifdef HAVE_LIBAVIPLAY
 void filmAVIPLAY :: close(void)
 {
   if (m_avistream)(*m_avistream).StopStreaming();
@@ -67,9 +65,12 @@ void filmAVIPLAY :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVIPLAY :: open(const std::string filename, int format)
+bool filmAVIPLAY :: open(const std::string filename, const gem::Properties&wantProps)
 {
-  if (format>0)m_wantedFormat=format;
+  double d;
+  if(wantProps.get("colorspace", d) && d>0) {
+    m_wantedFormat=d;
+  }
   // how do we close the avifile ??? automagically ?
   if (!(m_avifile = CreateIAviReadFile(filename.c_str())))goto unsupported;
   while(!(*m_avifile).IsOpened()){
@@ -92,8 +93,6 @@ bool filmAVIPLAY :: open(const std::string filename, int format)
   m_numFrames = (*m_avistream).GetLength();
   m_curFrame = -1;
   if (1){
-    //int format = (*m_avistream).GetVideoFormat();
-    //m_image.image.csize = (*m_avistream).GetFrameSize()/(m_image.image.xsize*m_image.image.ysize);
     avm::StreamInfo *l_info = (*m_avistream).GetStreamInfo();
     m_image.image.xsize = (*l_info).GetVideoWidth();
     m_image.image.ysize = (*l_info).GetVideoHeight();

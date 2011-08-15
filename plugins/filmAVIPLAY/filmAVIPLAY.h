@@ -70,7 +70,7 @@ class GEM_EXPORT filmAVIPLAY : public filmBase {
 #ifdef HAVE_LIBAVIPLAY
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int format=0);
+  virtual bool open(const std::string filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);

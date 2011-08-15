@@ -17,17 +17,17 @@
 # include "config.h"
 #endif
 
+#ifdef _WIN32
+
 #include "filmAVI.h"
 #include "plugins/PluginFactory.h"
+#include "Utils/Functions.h"
+#include "Gem/Properties.h"
+#include "Gem/RTE.h"
+
+REGISTER_FILMFACTORY("AVI", filmAVI);
 
 using namespace gem::plugins;
-
-
-#include "Utils/Functions.h"
-
-#ifdef _WIN32
-REGISTER_FILMFACTORY("AVI", filmAVI);
-#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -38,18 +38,19 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 //
 /////////////////////////////////////////////////////////
 
-filmAVI :: filmAVI(void) : filmBase() {
-#ifdef _WIN32
-  m_getFrame     = NULL;
-  m_streamVid    = NULL;
-  m_pbmihRaw     = NULL;
-  m_pbmihDst     = NULL;
-  m_hic          = NULL;
-  m_RawBuffer    = NULL;
-  m_frame        = NULL;
-  m_nRawBuffSize = 0;
+filmAVI :: filmAVI(void) : filmBase()
+  m_nRawBuffSize(0),
+  m_RawBuffer(NULL),
+  m_format(GL_BGR_EXT),
+  m_reqFrame(0),
+  m_frame(NULL),
+  m_pbmihRaw(NULL),
+  m_pbmihDst(NULL),
+  m_hic(NULL),
+  m_getFrame(NULL),
+  m_streamVid(NULL)
+{
   AVIFileInit();
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -59,12 +60,9 @@ filmAVI :: filmAVI(void) : filmBase() {
 filmAVI :: ~filmAVI()
 {
   close();
-#ifdef _WIN32
   AVIFileExit();
-#endif
 }
 
-#ifdef _WIN32
 void filmAVI :: close(void)
 {
   if (m_streamVid){
@@ -103,12 +101,15 @@ void filmAVI :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVI :: open(const std::string filename, int format)
+bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps)
 {
   AVISTREAMINFO streaminfo;
   long lSize = 0; // in bytes
 
-  if (format>0)m_wantedFormat=format;
+  double d;
+  if(wantProps.get("colorspace", d) && d>0)
+    m_wantedFormat=d;
+
   if (AVIStreamOpenFromFile(&m_streamVid, filename.c_str(), streamtypeVIDEO, 0, OF_READ, NULL)) {
     //error("filmAVI: Unable to open file: %s", filename.c_str());
     goto unsupported;

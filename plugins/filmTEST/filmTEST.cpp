@@ -21,6 +21,7 @@
 #include "filmTEST.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
+#include "Gem/Properties.h"
 
 using namespace gem::plugins;
 
@@ -35,8 +36,7 @@ REGISTER_FILMFACTORY("test", filmTEST);
 //
 /////////////////////////////////////////////////////////
 
-filmTEST :: filmTEST(void) : filmBase(),
-			     m_data(NULL), m_length(0)
+filmTEST :: filmTEST(void)
 {
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_image.image.xsize=320;
@@ -48,19 +48,38 @@ filmTEST :: filmTEST(void) : filmBase(),
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmTEST :: open(const std::string filename, int format)
+bool filmTEST :: open(const std::string filename, const gem::Properties&wantProps)
 {
-  m_numTracks=1,
-
-  m_curFrame=0;
   m_numFrames=100;
   m_fps=20;
-  m_newfilm=true;
-  
+
   changeImage(0,0);
 
   return true;
 }
+
+void filmTEST::close(void) {}
+bool filmTEST::isThreadable(void) {return true;}
+
+void filmTEST::setProperties(gem::Properties&props) {
+}
+
+void filmTEST::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+#define SETPROP(k, v) } else if(k == key) { double d=(double)v; props.set(key, v)
+    if(""==key) {
+      SETPROP("fps", m_fps);
+      SETPROP("frames", m_numFrames);
+      SETPROP("width", m_image.image.xsize);
+      SETPROP("height", m_image.image.ysize);
+    }
+  }
+}
+
 
 /////////////////////////////////////////////////////////
 // render
@@ -84,4 +103,19 @@ film::errCode filmTEST :: changeImage(int imgNum, int trackNum){
   m_image.newimage=true;
 
   return film::SUCCESS;
+}
+
+
+bool filmTEST::enumProperties(gem::Properties&readprops, gem::Properties&writeprops) {
+  readprops.clear();
+  writeprops.clear();
+
+  double d=0;
+
+  readprops.set("width", d);
+  readprops.set("height", d);
+  readprops.set("fps", d);
+  readprops.set("frames", d);
+
+  return true;
 }

@@ -16,19 +16,21 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
+
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 REGISTER_FILMFACTORY("DirectShow", filmDS);
 
-# include <atlbase.h>
-# include <atlconv.h>
-# include <streams.h>
-# include <dvdmedia.h>
-# define REGISTER_FILTERGRAPH 1
+#include <atlbase.h>
+#include <atlconv.h>
+#include <streams.h>
+#include <dvdmedia.h>
+#define REGISTER_FILTERGRAPH 1
 
 #include <strsafe.h>
 
@@ -36,7 +38,6 @@ HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);
 HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond);
 HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) ;
 void filmRemoveGraphFromRot(DWORD pdwRegister);
-# endif
 /////////////////////////////////////////////////////////
 //
 // filmDS
@@ -47,7 +48,6 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 /////////////////////////////////////////////////////////
 
 filmDS :: filmDS(void) : filmBase() {
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
   HRESULT RetVal;
   m_reqFrame = 1;
   m_frame = NULL;
@@ -106,7 +106,6 @@ filmDS :: filmDS(void) : filmBase() {
 		
       return;
     }
-#endif
 }
 
 ////////////////////////////////////////////////////////
@@ -115,8 +114,6 @@ filmDS :: filmDS(void) : filmBase() {
 ////////////////////////////////////////////////////////
 filmDS :: ~filmDS()
 {
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW) 
-	
   close();
 	
   // Release IMediaControl interface
@@ -153,11 +150,9 @@ filmDS :: ~filmDS()
 	
   // Release COM
   CoUninitialize();
-#endif
 }
 
 
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 void filmDS :: close(void)
 {
   
@@ -226,7 +221,7 @@ void filmDS :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDS :: open(const std::string filename, int format)
+bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 {
   WCHAR			WideFileName[MAXPDSTRING];
   HRESULT			RetVal;

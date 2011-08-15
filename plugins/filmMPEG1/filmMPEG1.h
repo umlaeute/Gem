@@ -18,9 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "plugins/filmBase.h"
 #include <stdio.h>
 
-#ifdef HAVE_LIBMPEG
-# include <mpeg.h>
-#endif // MPEG
+#include <mpeg.h>
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -47,10 +45,9 @@ class GEM_EXPORT filmMPEG1 : public filmBase {
   // Destructor
   virtual ~filmMPEG1(void);
 
-#ifdef HAVE_LIBMPEG
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, int format = 0);
+  virtual bool open(const std::string filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -58,10 +55,6 @@ class GEM_EXPORT filmMPEG1 : public filmBase {
   //////////
   // get the next frame
   virtual pixBlock* getFrame(void);
-
-  //////////
-  // get the number of frames
-  virtual int getFrameNum(void) {return -1;}
 
   //////////
   // set the next frame to read;
@@ -75,7 +68,6 @@ class GEM_EXPORT filmMPEG1 : public filmBase {
   FILE         *m_streamfile;
   ImageDesc     m_streamVid;
   bool          m_reachedEnd;
-#endif
   unsigned char*m_data;
   int           m_length;
 };};};

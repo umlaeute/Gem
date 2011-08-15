@@ -18,6 +18,7 @@
 #endif
 #include "filmGMERLIN.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/RTE.h"
 
 using namespace gem::plugins;
 
@@ -114,7 +115,7 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
 // really open the file !
 //
 /////////////////////////////////////////////////////////
-bool filmGMERLIN :: open(const std::string sfilename, int format)
+bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&wantProps)
 {
   close();
 
@@ -183,7 +184,7 @@ bool filmGMERLIN :: open(const std::string sfilename, int format)
       for(i = 0; i < num_urls; i++) {
         filename=(char*)bgav_redirector_get_url(m_file, i);
         close();
-        if (open(filename)) {
+        if (open(filename, wantProps)) {
           return true;
         }
       }
