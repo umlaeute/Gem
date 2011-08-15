@@ -4,7 +4,7 @@
  *
  *  Created by James Tittle on Fri Jul 12 2002.
  *  Copyright (c) 2002-2005 James Tittle & Chris Clepper
- *  Copyright (c) 2010 IOhannes m zmÃ¶lnig
+ *  Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
  *
  */
 #ifdef HAVE_CONFIG_H

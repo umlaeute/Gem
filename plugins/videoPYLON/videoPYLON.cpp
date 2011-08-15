@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2010 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "LICENSE.txt"
 //
