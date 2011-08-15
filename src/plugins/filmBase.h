@@ -66,24 +66,44 @@ class GEM_EXTERN filmBase : public film
 
   void close(void);
 
+  
+  /**
+   * list all properties the currently opened film supports
+   * if no film is opened, this returns generic backend properties 
+   * which can be different from media specific properties
+   * after calling, "readable" will hold a list of all properties that can be read
+   * and "writeable" will hold a list of all properties that can be set
+   * if the enumeration fails, this returns <code>false</code>
+   */
+
+  virtual bool enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable);
+
+  /**
+   * properties implemented in here:
+   * - "auto"
+   * - "colorspace"
+   */
+  virtual void setProperties(gem::Properties&props);
+
+  /**
+   * properties implemented in here:
+   * - "width"
+   * - "height"
+   * - "frames"
+   * - "fps"
+   */
+  virtual void getProperties(gem::Properties&props);
+
+
+
+
   //////////
   // set the wanted color-space
   /* could be used for switching the colourspace on the fly 
    * normally the colour-space of a film could be set when opening a movie
    */
   virtual void requestColor(GLenum format){m_wantedFormat=format;}
-  //////////
-  // get the actual color-space
-  /* what colour-space is in use ?
-   * returns 0 for none
-   */    
-  virtual int getColor(void) {return 0;}
-
-  //////////
-  // do we have a film loaded ?
-  /* returns TRUE if it is possible to read frames without any more open()
-   */
-  virtual bool haveFilm(void);
 
   //////////
   // get the number of frames

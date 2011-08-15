@@ -17,6 +17,8 @@
 #include "filmBase.h"
 #include <stdlib.h>
 
+#include "Gem/Properties.h"
+
 /////////////////////////////////////////////////////////
 //
 // film
@@ -83,14 +85,6 @@ bool filmBase :: isThreadable(void) {
 void filmBase :: close(void)
 {}
 
-/////////////////////////////////////////////////////////
-// do we have a film loaded ?
-//
-/////////////////////////////////////////////////////////
-bool filmBase :: haveFilm()
-{
-  return false;
-}
 #if 0
 /////////////////////////////////////////////////////////
 // render
@@ -105,6 +99,56 @@ pixBlock* filmBase :: getFrame(){
   return &m_image;
 }
 #endif
+
+
+///////////////////////////////
+// Properties
+bool filmBase::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+  return false;
+}
+
+void filmBase::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("auto", d)) {
+    m_auto=d;
+  }
+  if(props.get("colorspace", d)) {
+    m_wantedFormat=(GLenum)d;
+  }
+}
+
+void filmBase::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
 ///////////////////////////////
 // get the frames-per-second
 double filmBase :: getFPS() {
