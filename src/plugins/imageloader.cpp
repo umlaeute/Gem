@@ -21,4 +21,4 @@ gem::plugins::imageloader*gem::plugins::imageloader::getInstance(void) {
  return NULL;
 }
 
-INIT_IMAGELOADERFACTORY();
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy;

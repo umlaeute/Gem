@@ -23,5 +23,4 @@ gem::plugins::record*gem::plugins::record::getInstance(void) {
   return NULL;
 }
 
-
-INIT_RECORDFACTORY();
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::record> fac_recorddummy;

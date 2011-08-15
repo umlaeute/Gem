@@ -105,15 +105,4 @@ public:
  */
 #define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::record> fac_record_ ## TYP (id)
 
-
-/**
- * \fn INIT_RECORDFACTORY()
- * initialize the factory
- * \note call this before any externals register themselves
- */
-#define INIT_RECORDFACTORY() \
-  static gem::PluginFactoryRegistrar::dummy<gem::plugins::record> fac_recorddummy
-
-
-
 #endif	// for header file

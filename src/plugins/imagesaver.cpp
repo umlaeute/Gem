@@ -22,4 +22,4 @@ gem::plugins::imagesaver*gem::plugins::imagesaver::getInstance(void) {
 }
 
 
-INIT_IMAGESAVERFACTORY();
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver> fac_imagesaverdummy;

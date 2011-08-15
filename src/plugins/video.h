@@ -218,14 +218,4 @@ namespace gem { namespace plugins {
  */
 #define REGISTER_VIDEOFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::video> fac_video_ ## TYP (id)
 
-
-/**
- * \fn INIT_VIDEOFACTORY()
- * initialized the factory
- * \note call this before any externals register themselves
- */
-#define INIT_VIDEOFACTORY()                                             \
-  static gem::PluginFactoryRegistrar::dummy<gem::plugins::video> fac_videodummy
-
-
 #endif	// for header file

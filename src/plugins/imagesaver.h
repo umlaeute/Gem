@@ -123,14 +123,4 @@ namespace gem { namespace plugins {
  */
 #define REGISTER_IMAGESAVERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imagesaver> fac_imagesaver_ ## TYP (id)
 
-
-/**
- * \fn INIT_IMAGESAVERFACTORY()
- * initialized the factory
- * \note call this before any externals register themselves
- */
-#define INIT_IMAGESAVERFACTORY()					\
-  static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver> fac_imagesaverdummy
-
-
 #endif	// for header file

@@ -72,14 +72,4 @@ namespace gem { namespace plugins {
  */
 #define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imageloader> fac_imageloader_ ## TYP (id)
 
-
-/**
- * \fn INIT_IMAGELOADERFACTORY()
- * initialized the factory
- * \note call this before any externals register themselves
- */
-#define INIT_IMAGELOADERFACTORY()					\
-  static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy
-
-
 #endif	// for header file

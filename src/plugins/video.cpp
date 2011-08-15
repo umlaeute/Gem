@@ -21,6 +21,4 @@ gem::plugins::video*gem::plugins::video::getInstance(void) {
  return NULL;
 }
 
-
-
-INIT_VIDEOFACTORY();
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::video> fac_videodummy;
