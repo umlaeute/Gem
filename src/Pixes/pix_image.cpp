@@ -50,8 +50,6 @@ pix_image :: pix_image(t_symbol *filename) :
   m_id(gem::image::load::INVALID),
   m_infoOut(gem::RTE::Outlet(this))
 {
-  m_pixBlock.image = m_imageStruct;
-
   if(filename!=&s_)openMess(filename->s_name);
   gem::image::load::poll();
 }

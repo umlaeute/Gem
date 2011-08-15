@@ -94,9 +94,6 @@ class GEM_EXTERN pix_image : public GemBase
   //////////
   // The pixBlock with the current image
   pixBlock    	m_pixBlock;
-	//////////
-	// The current image
-	imageStruct     m_imageStruct;
 
 	void     loaded(const gem::image::load::id_t ID, 
                   imageStruct*img,
