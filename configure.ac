@@ -111,18 +111,12 @@ AC_SUBST(X_EXTRA_LIBS)
 AC_SUBST(PKG_CFLAGS)
 AC_SUBST(PKG_LIBS)
 AC_SUBST(prefix)
-AC_SUBST(CONFIGUREFLAGS)
-
-## store the flags passed to us
-## is there no way to get the flags without quotes?
-#CONFIGUREFLAGS=${ac_configure_args}
-## and is this solution portable? time will show....
-CONFIGUREFLAGS=$(echo ${ac_configure_args} | sed "s/'//g")
-
 
 # Checks for programs.
 AC_PROG_CXX
 dnl AC_PROG_OBJCXX
+
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 #predeps_CXX="-lstdc++"
 
