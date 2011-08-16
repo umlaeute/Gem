@@ -71,9 +71,16 @@ pix_texture :: pix_texture()
   m_textureType = GL_TEXTURE_RECTANGLE_ARB;
 #endif
 
+  int ival=1;
+  GemSettings::get("texture.repeat", ival);
+  repeatMess(ival);
+
+  ival=1;
+  GemSettings::get("texture.quality", ival);
+  textureQuality(ival);
+
   GemSettings::get("texture.rectangle", m_rectangle);
   GemSettings::get("texture.pbo", m_numPbo);
-
 
   // create an inlet to receive external texture IDs
   m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("extTexture"));
