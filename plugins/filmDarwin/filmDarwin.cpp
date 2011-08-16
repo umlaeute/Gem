@@ -22,6 +22,7 @@
 
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
+#include "Gem/Properties.h"
 
 using namespace gem::plugins;
 
