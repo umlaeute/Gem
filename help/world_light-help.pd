@@ -44,7 +44,7 @@
 #X obj 483 84 gemhead;
 #X text 53 30 Class: non-geometric object;
 #X text 7 69 Description: adds a point-light to the scene;
-#X text 27 347 Inlet 1: message: deubg 1|0;
+#X text 27 347 Inlet 1: message: debug 1|0;
 #X text 28 362 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X msg 570 223 1 1 1;
 #X obj 497 178 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0

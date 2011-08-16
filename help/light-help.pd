@@ -49,7 +49,7 @@
 (unlike [world_light] which is at an infinite distance). Because light
 is local light \, there is more computation required. Use a world_light
 if you don't mind parallet light rays.;
-#X text 27 367 Inlet 1: message: deubg 1|0;
+#X text 27 367 Inlet 1: message: debug 1|0;
 #X text 28 382 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X obj 483 235 light;
 #X msg 570 213 1 1 1;
