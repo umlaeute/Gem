@@ -57,7 +57,7 @@ for all subsequent vertex operations;
 between 0 and 128 the shininess can be set via an initial argument.
 ;
 #X obj 451 140 shininess;
-#X text 60 191 defaults: 0;
+#X text 60 191 default: 0;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 30 0;

@@ -57,7 +57,7 @@
 #X text 29 67 Description: colouring;
 #X text 22 81 [colorRGB] sets the colour of all subsequent shape and
 vertex operations until reset by another [color]/[colorRGB] object.
-If you set the alpha-value \, you will beed an [alpha] object to enable
+If you set the alpha-value \, you will need an [alpha] object to enable
 alpha-blending;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;

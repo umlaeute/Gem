@@ -41,7 +41,7 @@
 0;
 #X obj 579 186 color 1 0 0 0.5;
 #X text 60 319 Inlet 1: float: turn alpha blending on/off;
-#X text 63 266 blending function (defaults: GL_ONE_MINUS_SRC_ALPHA)
+#X text 63 266 blending function (default: GL_ONE_MINUS_SRC_ALPHA)
 ;
 #X text 50 12 Synopsis: [alpha];
 #X text 29 77 Description: enable alpha blending;

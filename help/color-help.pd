@@ -49,7 +49,7 @@
 #X text 63 229 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X text 22 81 [color] sets the colour of all subsequent shape and vertex
 operations until reset by another [color]/[colorRGB] object. If you
-set the alpha-value \, you will beed an [alpha] object to enable alpha-blending
+set the alpha-value \, you will need an [alpha] object to enable alpha-blending
 ;
 #X text 50 12 Synopsis: [color];
 #X text 29 67 Description: colouring;
