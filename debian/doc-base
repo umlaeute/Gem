@@ -1,9 +1,0 @@
-Document: gem
-Title: Gem Manual
-Author: Mark Danks <mark@danks.org>
-Abstract: Basic theory of working 
-Section: Graphics
-
-Format: HTML
-Index: /usr/share/doc/gem/manual/index.html
-Files: /usr/share/doc/gem/manual/*.html
