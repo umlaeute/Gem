@@ -55,9 +55,6 @@ pix_movement :: pix_movement(t_floatarg f)
   if(f>1.f)f=1.0;
   threshold = (unsigned char)(255*f);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("thresh"));
-
-  index = 0;
-  averageTime = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -84,8 +81,8 @@ void pix_movement :: processRGBAImage(imageStruct &image)
 
   int pixsize = image.ysize * image.xsize;
 
-  unsigned char *rp = image.data;			// read pointer
-  unsigned char *wp=buffer.data;			// write pointer
+  unsigned char *rp = image.data; // read pointer
+  unsigned char *wp=buffer.data; // write pointer
 
   while(pixsize--) {
     //    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
@@ -114,8 +111,8 @@ void pix_movement :: processYUVImage(imageStruct &image)
   Y0 = chY0;
   thresh = threshold;
   
-  unsigned char *rp = image.data;			// read pointer
-  unsigned char *wp=buffer.data;			// write pointer to the copy
+  unsigned char *rp = image.data; // read pointer
+  unsigned char *wp=buffer.data; // write pointer to the copy
   unsigned char grey,grey1;
 
   grey  = 0;
@@ -129,11 +126,13 @@ void pix_movement :: processYUVImage(imageStruct &image)
     grey1 = rp[Y1];
     rp[Y1]=CLAMP_Y(255*(abs(grey1-*wp)>thresh));
     *wp++=grey1;
-#if 1
-      // looks cool (C64), but what for ?
+
+    // looks cool (C64), but what for ?
+
+    if(true) { // black&white
       rp[chU]=128;
       rp[chV]=128;
-#endif
+    }
     rp+=4;
   }
 }
@@ -146,102 +145,102 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
         buffer.ysize = image.ysize;
         buffer.reallocate(buffer.xsize*buffer.ysize*2);
     }
-
-    
-    union{
-        signed short 		c[8];
-        vector signed short 	v;
-    }shortBuffer;
-    
     int pixsize = image.ysize * image.xsize/8;
 
-    int i;
-    vector signed short thresh;
-    
+    union{
+        signed short  c[8];
+        vector signed short  v;
+    }shortBuffer;
 
+    union{
+        unsigned short  c[8];
+        vector unsigned short  v;
+    }ushortBuffer;
+
+    int i;
+
+    vector signed short thresh;
     shortBuffer.c[0] = threshold;
     thresh = shortBuffer.v;
     thresh = (vector signed short)vec_splat(thresh,0);
 
-    vector unsigned char *rp = (vector unsigned char *) image.data;	// read pointer
-    vector unsigned char *wp = (vector unsigned char *) buffer.data;	// write pointer to the copy
-    vector unsigned char grey,grey1;
+    vector unsigned char *rp = (vector unsigned char *) image.data; // read pointer
+    vector unsigned char *wp = (vector unsigned char *) buffer.data; // write pointer to the copy
+    vector unsigned char grey0,grey1;
     vector unsigned char one = vec_splat_u8(1);
-    vector unsigned short Y,UV,Ywp,UVwp,hiImage,loImage;
-    vector unsigned short Y1,UV1,Ywp1,UVwp1,hiImage1,loImage1;
-    vector signed short temp,temp1;
-    //vector signed int Ye, Yo;
-    //vector signed short twofivefive;
+    vector unsigned short Y0,Ywp0,hiImage0,loImage0;
+    vector unsigned short Y1,Ywp1,hiImage1,loImage1;
+    vector unsigned short UVwp0,UVwp1;
+    vector signed short temp0,temp1;
 
-   // int const1, const2, const3,j;
-    
+    ushortBuffer.c[0]=127;
+    vector unsigned short UV0= (vector unsigned short)vec_splat(ushortBuffer.v, 0);
+    vector unsigned short UV1= (vector unsigned short)vec_splat(ushortBuffer.v, 0);
 
-
-    #ifndef PPC970
+#ifndef PPC970
     //setup the cache prefetch -- A MUST!!!
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 0, 256 );
+    UInt32 prefetchSize = GetPrefetchConstant( 16, 0, 256 );
     vec_dst( rp, prefetchSize, 0 );
     vec_dst( wp, prefetchSize, 1 );
-    #endif
+#endif
 
-
-    j = 16;
+    int j = 16;
     
     pixsize/=2;
     for (i=0; i < pixsize; i++) {
-        #ifndef PPC970
+# ifndef PPC970
         //setup the cache prefetch -- A MUST!!!
-        UInt32			prefetchSize = GetPrefetchConstant( j, 0, j * 16 );
+        UInt32 prefetchSize = GetPrefetchConstant( j, 0, j * 16 );
         vec_dst( rp, prefetchSize, 0 );
         vec_dst( wp, prefetchSize, 1 );
         vec_dst( rp+16, prefetchSize, 2 );
         vec_dst( wp+16, prefetchSize, 3 );
-        #endif
+# endif
         
-        grey = rp[0];
+        grey0 = rp[0];
         grey1 = rp[1];
             
-       // rp[Y0]=255*(abs(grey-*wp)>thresh);
+//      rp[Y0]=255*(abs(grey0-*wp)>thresh);
 
-        UV = (vector unsigned short)vec_mule(rp[0],one);
-        Y = (vector unsigned short)vec_mulo(rp[0],one);
+//      UV0= (vector unsigned short)vec_mule(grey0,one);
+        Y0 = (vector unsigned short)vec_mulo(grey0,one);
 
-        UV1 = (vector unsigned short)vec_mule(grey1,one);
+//      UV1= (vector unsigned short)vec_mule(grey1,one);
         Y1 = (vector unsigned short)vec_mulo(grey1,one);
 
         //wp is actually 1/2 the size of the image because it is only Y??
         
         //here the full U Y V Y is stored
-        UVwp = (vector unsigned short)vec_mule(wp[0],one);
-        Ywp = (vector unsigned short)vec_mulo(wp[0],one);
+//      UVwp0= (vector unsigned short)vec_mule(wp[0],one);
+        Ywp0 = (vector unsigned short)vec_mulo(wp[0],one);
 
-        UVwp1 = (vector unsigned short)vec_mule(wp[1],one);
+//      UVwp1= (vector unsigned short)vec_mule(wp[1],one);
         Ywp1 = (vector unsigned short)vec_mulo(wp[1],one);
 
         //store the current pixels as the history for next time
-        wp[0]=grey;
+        wp[0]=grey0;
         wp++;
-        wp[0] = grey1;
+        wp[0]=grey1;
         wp++;
 
-        temp = vec_abs(vec_sub((vector signed short)Y,(vector signed short)Ywp));
-        Y = (vector unsigned short)vec_cmpgt(temp,thresh);
+        temp0 = vec_abs(vec_sub((vector signed short)Y0,(vector signed short)Ywp0));
+        Y0 = (vector unsigned short)vec_cmpgt(temp0,thresh);
 
         temp1 = vec_abs(vec_sub((vector signed short)Y1,(vector signed short)Ywp1));
         Y1 = (vector unsigned short)vec_cmpgt(temp1,thresh);
        
-        hiImage = vec_mergeh(UV,Y);
-        loImage = vec_mergel(UV,Y);
+        hiImage0 = vec_mergeh(UV0,Y0);
+        loImage0 = vec_mergel(UV0,Y0);
 
         hiImage1 = vec_mergeh(UV1,Y1);
         loImage1 = vec_mergel(UV1,Y1);
         
-        grey = vec_packsu(hiImage,loImage);
+        grey0 = vec_packsu(hiImage0,loImage0);
         grey1 = vec_packsu(hiImage1,loImage1);
         
-        rp[0] = grey;
+        rp[0]=grey0;
         rp++;
-        rp[0] = grey1;
+        rp[0]=grey1;
         rp++;
        // grey = rp[0];
        // rp[Y1]=255*(abs(grey-*wp)>thresh);
@@ -251,12 +250,12 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
        // rp++;
     }
     
-    #ifndef PPC970
+# ifndef PPC970
     vec_dss(0);
     vec_dss(1);
     vec_dss(2);
     vec_dss(3);
-    #endif
+# endif
 }
 #endif /* __VEC__ */
 
@@ -276,8 +275,8 @@ void pix_movement :: processGrayImage(imageStruct &image)
 
   int pixsize = image.ysize * image.xsize;
 
-  unsigned char *rp = image.data;			// read pointer
-  unsigned char *wp=buffer.data;			// write pointer to the copy
+  unsigned char *rp = image.data; // read pointer
+  unsigned char *wp=buffer.data;  // write pointer to the copy
   unsigned char *wp2=buffer2.data; // write pointer to the diff-image
 
   while(pixsize--) {
@@ -305,13 +304,13 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 
   unsigned char thresh=threshold;
 
-  __m64*rp = (__m64*)image.data;	// read pointer
-  __m64*wp = (__m64*)buffer.data;	// write pointer to the copy
+  __m64*rp = (__m64*)image.data; // read pointer
+  __m64*wp = (__m64*)buffer.data; // write pointer to the copy
   __m64*wp2= (__m64*)buffer2.data;      // write pointer to the diff-image
 
   __m64 m1, m2, grey;
   __m64 thresh8=_mm_set_pi8(thresh,thresh,thresh,thresh,
-			  thresh,thresh,thresh,thresh);
+                            thresh,thresh,thresh,thresh);
 
   // there is still one problem with the threshold: is the cmpgt only for signed ?
   while(pixsize--) {
@@ -349,9 +348,9 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
-		  gensym("threshold"), A_FLOAT, A_NULL);
+                  gensym("threshold"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
-		  gensym("thresh"), A_FLOAT, A_NULL);
+                  gensym("thresh"), A_FLOAT, A_NULL);
 }
 void pix_movement :: threshMessCallback(void *data, t_floatarg newmode)
 {

@@ -81,12 +81,9 @@ protected:
 	// the movement-mode
 	unsigned char  threshold;
 
-        int j,index, averageTime;
-	
 	//////////
 	// the methods
 	static void threshMessCallback(void *data, t_floatarg fthresh);
-	
 };
 
 #endif	// for header file
