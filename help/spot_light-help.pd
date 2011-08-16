@@ -1,17 +1,17 @@
-#N canvas 53 118 724 516 10;
+#N canvas 107 312 724 516 10;
 #X text 471 28 Example:;
 #X obj 7 64 cnv 15 450 265 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 377 cnv 15 450 110 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 377 cnv 15 450 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 382 Inlets:;
+#X text 19 374 Inlets:;
 #X obj 8 337 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 336 Arguments:;
 #X text 452 8 GEM object;
-#X text 27 394 Inlet 1: gemlist;
-#X text 12 459 Outlets:;
-#X text 24 472 Outlet 1: gemlist;
+#X text 37 386 Inlet 1: gemlist;
+#X text 22 468 Outlets:;
+#X text 34 481 Outlet 1: gemlist;
 #X obj 468 47 cnv 15 225 400 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 473 49 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
@@ -60,8 +60,8 @@
 use "debug" to display the light source as a small cone.;
 #X text 33 14 Synopsis: [spot_light];
 #X text 7 69 Description: adds a spot-light to the scene;
-#X text 27 408 Inlet 1: message: debug 1|0;
-#X text 27 438 Inlet 3: list: linear_attenuation \, cone_cutoff_angle
+#X text 37 417 Inlet 1: message: debug 1|0;
+#X text 37 447 Inlet 3: list: linear_attenuation \, cone_cutoff_angle
 \, decay_at_edges;
 #X obj 484 362 spot_light;
 #N canvas 611 263 574 368 spheres 0;
@@ -130,7 +130,7 @@ of the values of the light get set first.;
 #X obj 550 317 t b f;
 #X text 490 299 color;
 #X obj 483 150 rotateXYZ -33 0 0;
-#X text 27 423 Inlet 2: list: 3(RGB) float values;
+#X text 37 432 Inlet 2: list: 3(RGB) float values;
 #X text 17 210 The third inlet receives a list of three floats: linear_attenuation:
 only accepts positive values cone_cutoff_angle: 0-90 or 180 decay_at_edges/exponent:
 0-128;
@@ -140,6 +140,9 @@ or widened for larger illumination. The edges may appear jagged when
 lighting low polygon models: to smooth \, increase the polygon's #
 of vertices (or "slices").;
 #X obj 548 337 pack 0 90 3;
+#X obj 492 265 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
+-1 0 1;
+#X text 37 401 Inlet 1: float: turn light on(1)/off(0);
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 43 0;
@@ -160,3 +163,4 @@ of vertices (or "slices").;
 #X connect 41 1 47 1;
 #X connect 43 0 36 0;
 #X connect 47 0 32 2;
+#X connect 48 0 32 0;

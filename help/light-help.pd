@@ -1,17 +1,17 @@
-#N canvas 19 261 710 507 10;
+#N canvas 124 217 710 507 10;
 #X text 475 49 Example:;
 #X obj 7 64 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 8 336 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 341 Inlets:;
+#X text 9 339 Inlets:;
 #X obj 8 296 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 295 Arguments:;
 #X text 452 8 GEM object;
-#X text 27 353 Inlet 1: gemlist;
-#X text 9 400 Outlets:;
-#X text 21 413 Outlet 1: gemlist;
+#X text 27 351 Inlet 1: gemlist;
+#X text 9 406 Outlets:;
+#X text 21 419 Outlet 1: gemlist;
 #X obj 469 67 cnv 15 170 320 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 474 321 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
@@ -48,14 +48,14 @@
 #X text 18 86 [light] produces a light which is local to the scene
 (unlike [world_light] which is at an infinite distance). Because light
 is local light \, there is more computation required. Use a world_light
-if you don't mind parallet light rays.;
-#X text 27 367 Inlet 1: message: debug 1|0;
-#X text 28 382 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
+if you don't mind parallel light rays.;
+#X text 27 373 Inlet 1: message: debug 1|0;
+#X text 28 388 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X obj 483 235 light;
 #X msg 570 213 1 1 1;
-#X obj 497 168 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 527 163 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 497 189 debug \$1;
+#X msg 527 184 debug \$1;
 #X text 19 219 Keep in mind that the attributes have to be set before
 rendering the vertices \, so if you are trying for frame accurate rendering
 \, you will want to set the gemhead order to a low nuber so that all
@@ -78,6 +78,9 @@ sphere.;
 #X text 18 200 The second inlet sets the color of the light-source.
 ;
 #X text 63 307 light-number;
+#X obj 492 175 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
+-1 0 1;
+#X text 27 362 Inlet 1: float: turn light on(1)/off(0);
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 31 0;
@@ -92,3 +95,4 @@ sphere.;
 #X connect 35 0 12 1;
 #X connect 36 0 35 0;
 #X connect 38 0 23 1;
+#X connect 41 0 23 0;
