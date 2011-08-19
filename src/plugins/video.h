@@ -28,7 +28,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix, capture
     
   -----------------------------------------------------------------*/
-class pixBlock;
+struct pixBlock;
 namespace gem { namespace plugins {
     class GEM_EXTERN video {
     public:
