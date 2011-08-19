@@ -126,7 +126,7 @@ m_GraphRegister(0)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-videoDS :: ~videoDS()
+videoDS :: ~videoDS(void)
 {
     // Clean up the movie
     close();
@@ -317,7 +317,7 @@ bool videoDS :: openDevice(gem::Properties&props)
 // close message
 //
 /////////////////////////////////////////////////////////
-void videoDS :: closeDevice()
+void videoDS :: closeDevice(void)
 {
 #ifdef DIRECTSHOW_LOGGING
     m_pGB->SetLogFile(NULL);
@@ -357,7 +357,7 @@ std::vector<std::string>videoDS :: dialogs(void) {
 // enumerate message
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>videoDS :: enumerate()
+std::vector<std::string>videoDS :: enumerate(void)
 {
     std::vector<std::string>result;
 
@@ -432,7 +432,7 @@ std::vector<std::string>videoDS :: enumerate()
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* videoDS :: getFrame()
+pixBlock* videoDS :: getFrame(void)
 {
     // Copy the buffer from the camera buffer to the texture buffer
     copyBuffer();
@@ -443,16 +443,19 @@ pixBlock* videoDS :: getFrame()
         m_image.image.xsize=m_pixBlockBuf[m_readIdx].image.xsize;
         m_image.image.ysize=m_pixBlockBuf[m_readIdx].image.ysize;
         switch (m_pixBlockBuf[m_readIdx].image.format){
-    case GL_BGR_EXT:
-    default:
-        m_image.image.fromBGR(m_pixBlockBuf[m_readIdx].image.data);
+        case GL_BGR_EXT:
+        default:
+            m_image.image.fromBGR(m_pixBlockBuf[m_readIdx].image.data);
         }
+        m_image.newimage=true;
+
         return &m_image;
-    } else return NULL;
+    }
+    return NULL;
 }
 
 /* copies the image from DS into the current m_pixBlockBuf */
-void videoDS :: copyBuffer()
+void videoDS :: copyBuffer(void)
 {
     HRESULT	hr;
     long	SampleSize;	
@@ -510,7 +513,7 @@ void videoDS :: copyBuffer()
 // postrender
 //
 /////////////////////////////////////////////////////////
-void videoDS :: releaseFrame()
+void videoDS :: releaseFrame(void)
 {
     if (!m_haveVideo || !m_capturing)return;
 
@@ -522,7 +525,7 @@ void videoDS :: releaseFrame()
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoDS :: startTransfer()
+bool videoDS :: startTransfer(void)
 {
     HRESULT hr;
 
@@ -556,7 +559,7 @@ bool videoDS :: startTransfer()
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoDS :: stopTransfer()
+bool videoDS :: stopTransfer(void)
 {
     HRESULT hr;
     if (FAILED(hr = m_pMC->Stop())) {
@@ -659,7 +662,7 @@ bool videoDS :: dialog(std::vector<std::string>dlg)
 
 
 #ifdef USE_RECORDING
-void videoDS :: startCapture()
+void videoDS :: startCapture(void)
 {
     HRESULT	hr;
     WCHAR	WideFileName[MAXPDSTRING];
@@ -695,7 +698,7 @@ void videoDS :: startCapture()
                     m_recording	= true;
     }
 }
-void videoDS :: stopCapture()
+void videoDS :: stopCapture(void)
 {
     HRESULT	RetVal;
 
