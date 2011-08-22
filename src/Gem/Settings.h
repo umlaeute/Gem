@@ -14,6 +14,7 @@ LOG
 #define _INCLUDE__GEM_GEM_SETTINGS_H_
 
 #include <string>
+#include <vector>
 
 typedef struct _atom t_atom;
 class GemSettings {
@@ -29,8 +30,6 @@ class GemSettings {
   static void get(const std::string key, float&value);
   static void get(const std::string key, std::string&value);
 
- private:
-  class PIMPL;
-  static PIMPL*settings;
+  static std::vector<std::string> keys();
 };
 #endif

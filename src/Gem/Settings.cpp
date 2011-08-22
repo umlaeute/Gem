@@ -55,10 +55,8 @@ struct _gemclass
 # define t_gemclass struct _gemclass
 
 
-
-
-class GemSettings::PIMPL {
-public:
+namespace {
+struct PIMPL {
   // dictionary for setting values
   std::map <std::string, t_atom> data;
 
@@ -239,13 +237,13 @@ public:
     // we ignore lists and other complex things for now
   }
 };
-
+static PIMPL*settings=NULL;
+};
 
 
 
 /* GemSettings: the public API */
 
-GemSettings::PIMPL*GemSettings::settings=NULL;
 
 /* public static functions */
 void GemSettings::init() {
@@ -290,4 +288,17 @@ void GemSettings::get(const std::string key, std::string&value) {
   if(a) {
     value=atom_getsymbol(a)->s_name;
   }
+}
+
+
+std::vector<std::string>GemSettings::keys(void) {
+  std::vector<std::string>result;
+  if(NULL==settings) init();
+  if(NULL!=settings) {
+    std::map<std::string, t_atom>::iterator it=settings->data.begin();
+    while(settings->data.end() != it) {
+      result.push_back(it->first);
+    }
+  }
+  return result;
 }
