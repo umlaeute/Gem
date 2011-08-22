@@ -582,8 +582,6 @@ Configuration:
   LDFLAGS		 : ${LDFLAGS}
 			 : ${X_LIBS}
 
-  Strip			 : ${STRIP} ${STRIP_UNNEEDED}
-
   Install path           : ${prefix}
 
  pure-data:
