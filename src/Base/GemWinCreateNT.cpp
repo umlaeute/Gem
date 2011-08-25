@@ -20,11 +20,6 @@
 
 # include <stdlib.h>
 
-# ifdef HAVE_QUICKTIME
-#  include <QTML.h>
-#  include <Movies.h>
-# endif /* HAVE_QUICKTIME */
-
 # include "Gem/Event.h"
 # include "Gem/GemGL.h"
 
@@ -404,25 +399,6 @@ void gemWinMakeCurrent(WindowInfo&nfo)
 }
 
 bool initGemWin(void) {
-# ifdef HAVE_QUICKTIME
-	OSErr		err = noErr;
-
-	// Initialize QuickTime Media Layer
-	err = InitializeQTML(0);
-	if (err)
-    {
-      error("GEM Man: Could not initialize quicktime: error %d\n", err);
-      return 0;
-    }	
-	// Initialize QuickTime
-	EnterMovies();
-	if (err)
-    {
-      error("GEM Man: Could not initialize quicktime: error %d\n", err);
-      return 0;
-    }	
-	post("Gem Man: QT init OK");
-# endif /* HAVE_QUICKTIME */
   return 1;
 }
 
