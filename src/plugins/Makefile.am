@@ -51,10 +51,5 @@ libplugins_la_include_HEADERS = \
 	film.h \
 	imageloader.h \
 	imagesaver.h \
-	imageloaderBase.h \
-	imagesaverBase.h \
-	imageBase.h \
 	record.h \
-	recordBase.h \
-        video.h \
-	videoBase.h
+        video.h
