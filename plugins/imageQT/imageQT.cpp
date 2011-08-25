@@ -232,15 +232,21 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
 imageQT :: imageQT() : imageBase(false)
 {
   static bool firsttime=true;
-  if(firsttime) {
-#if defined _WIN32
-    OSErr err=InitializeQTML(0);
-    if(err!=noErr) {
-      throw(GemException("could not initialize QTML"));
+  if(firsttime) { 
+#ifdef _WIN32
+    // Initialize QuickTime Media Layer
+    OSErr		err = noErr;
+    if ((err = InitializeQTML(0))) {
+      throw(GemException("unable to initialize QuickTime"));
+    }	
+    // start QuickTime
+    if (err = EnterMovies()) {
+      throw(GemException("unable to initialize QuickTime/Movies"));
     }
-#endif
+    verbose(1, "imageQT: QT init done");
+#endif // WINDOWS
+    firsttime=false;
   }
-  firsttime=false;
   //post("imageQT");
 }
 imageQT :: ~imageQT()

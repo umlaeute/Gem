@@ -96,6 +96,9 @@ filmQT :: filmQT(void) : filmBase(false),
 			 duration(0),
 			 m_bInit(false)
 {
+  if(!filmQT_initQT()) {
+    throw(GemException("unable to initialize QuickTime"));
+  }
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_bInit = true;
 }

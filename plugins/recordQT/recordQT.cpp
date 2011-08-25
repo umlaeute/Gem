@@ -77,22 +77,22 @@ recordQT :: recordQT(void)
 {
   m_filename[0] = 0;
 
+  static bool firsttime=true;
+  if(firsttime) { 
 #ifdef _WIN32
-  // Initialize QuickTime Media Layer
-  /* isn't this done in GemMan/GemWinCreateNT already? */
-  OSErr		err = noErr;
-  if ((err = InitializeQTML(0))) {
-    //    error("recordQT: Could not initialize quicktime: error %d", err);
-    throw(GemException("unable to initialize QuickTime"));
-  }
-	
-  // Initialize QuickTime
-  if (err = EnterMovies()) {
-    //error("recordQT: Could not initialize quicktime-movies: error %d", err);
-    throw(GemException("unable to initialize QuickTime/Movies"));
-  }
-  verbose(1, "recordQT: QT init done");
+    // Initialize QuickTime Media Layer
+    OSErr		err = noErr;
+    if ((err = InitializeQTML(0))) {
+      throw(GemException("unable to initialize QuickTime"));
+    }	
+    // start QuickTime
+    if (err = EnterMovies()) {
+      throw(GemException("unable to initialize QuickTime/Movies"));
+    }
+    verbose(1, "recordQT: QT init done");
 #endif // WINDOWS
+    firsttime=false;
+  }
 
   //get list of codecs installed  -- useful later
   CodecNameSpecListPtr codecList;
