@@ -307,7 +307,6 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\plugins\record.h
  File ${BASE_INDIR}\src\plugins\imagesaver.h
  File ${BASE_INDIR}\src\plugins\imageloader.h
- File ${BASE_INDIR}\src\plugins\image.h
  File ${BASE_INDIR}\src\plugins\film.h
  File ${BASE_INDIR}\src\plugins\PluginFactoryTimple.h
  File ${BASE_INDIR}\src\plugins\PluginFactory.h
@@ -496,7 +495,6 @@ Section Uninstall
   Delete "$GEMDEV_OUTDIR\plugins\record.h"
   Delete "$GEMDEV_OUTDIR\plugins\imagesaver.h"
   Delete "$GEMDEV_OUTDIR\plugins\imageloader.h"
-  Delete "$GEMDEV_OUTDIR\plugins\image.h"
   Delete "$GEMDEV_OUTDIR\plugins\film.h"
   Delete "$GEMDEV_OUTDIR\plugins\PluginFactoryTimple.h"
   Delete "$GEMDEV_OUTDIR\plugins\PluginFactory.h"
