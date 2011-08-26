@@ -29,7 +29,7 @@ $ cd AVT\ GigE\ SDK/
 $ export AVTSDKPATH=$(pwd)
 $
 
-after installations you shuold have something like this:
+after installations you should have something like this:
 $ cd ${AVTSDKPATH}
 $ ls
 bin-pc  documents  examples  inc-pc  lib-pc  README.txt
