@@ -24,7 +24,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\;&quot;$(ProgramFiles)\QuickTime SDK\CIncludes&quot;"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -38,9 +38,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static_mt.lib freetype214mt.lib QTMLClient.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib"
+				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static_mt.lib freetype214mt.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;"
+				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs"
 				IgnoreAllDefaultLibraries="TRUE"
 				SubSystem="2"/>
 			<Tool
@@ -191,9 +191,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\Cache.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\configNT.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\ContextData.cpp">
@@ -3724,6 +3721,13 @@
 					RelativePath="..\..\src\Output\gemw32window.h">
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="config"
+			Filter="">
+			<File
+				RelativePath="..\..\src\Gem\configNT.h">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

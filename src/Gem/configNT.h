@@ -15,12 +15,6 @@
 /* use FTGL for font-rendering */
 #define FTGL
 
-/* use the "new" film-objects, to allow the use of multiple APIs */
-//#define GEM_VIDEOBACKEND GEM_VIDEOBACKEND_DS
-
-/* quicktime-support for film-loading */
-#define HAVE_QUICKTIME
-
 /* **********************************************************************
  * now do a bit of magic based on the information given above
  * probably you don't want to edit this
