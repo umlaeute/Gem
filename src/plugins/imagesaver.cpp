@@ -165,18 +165,17 @@ namespace gem { namespace plugins {
     {
       gem::PluginFactory<imagesaver>::loadPlugins("image");
       std::vector<std::string>available_ids=gem::PluginFactory<imagesaver>::getIDs();
-      if(available_ids.size()>0) {
-	startpost("Image saving support:");
-	unsigned int i;
-	for(i=0; i<available_ids.size(); i++) {
-	  startpost(" %s", available_ids[i].c_str());
-	}
-	endpost();
+      addSaver(available_ids);
+
+      if(m_ids.size()>0) {
+        startpost("Image saving support:");
+        unsigned int i;
+        for(i=0; i<m_ids.size(); i++) {
+          startpost(" %s", m_ids[i].c_str());
+        }
+        endpost();
       }
 
-      addSaver(available_ids, "QT");
-      addSaver(available_ids, "magick");
-      addSaver(available_ids);
 
       unsigned int i;
       for(i=0; i<m_savers.size(); i++) {
