@@ -132,7 +132,6 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
 
-
   std::string cs;
   switch(img->format) {
   case GL_LUMINANCE:
@@ -151,7 +150,6 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="BGRA";
     break;
   }
-
   try{
     Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel, pImage->data);
     // since openGL is upside down
@@ -161,24 +159,21 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     // 8 bits per channel are enough!
     // LATER make this dependent on the image->type
     mimage.depth(8); 
-
     double quality;
     if(props.get("quality", quality)) {
       mimage.quality(quality);
     }
-
-
-
-
     // finally convert and export
     mimage.write(filename);
   } catch (Magick::Exception e){
     error("%s", e.what());
     if(pImage!=&image)delete[]pImage; pImage=NULL;
     return false;
+  } catch (...) {
+      error("imageMAGICK:: uncaught exception!");
+      return false;
   }
   if(pImage!=&image)delete[]pImage; pImage=NULL;
-
   return true;
 }
 
