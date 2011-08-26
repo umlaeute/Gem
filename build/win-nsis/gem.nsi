@@ -591,7 +591,7 @@ SectionEnd
 
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_image} "plugins for image loading/saving"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageMAGICK} "allows to read/write still images using ImageMagick (this can virtually read/write any image format, including but not limited to JPEG, TIFF and SGI, so it's probably the only 'image' plugin you need)"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime; NOTE that this might make problems if you also install imageMAGICK and will disable threaded loading of images"
+ !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageQT} "allows to read/write still images using Apple's QuickTime; NOTE that this will disable threaded loading of images"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageSGI} "allows to read SGI images"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageJPEG} "allows to read/write JPEG images"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
