@@ -34,6 +34,7 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
+#include "Gem/Exception.h"
 
 using namespace gem::plugins;
 
