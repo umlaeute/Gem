@@ -331,11 +331,11 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
   GraphicsImportComponent    importer = NULL;
 
   ::verbose(2, "reading '%s' with QuickTime", filename.c_str());
-
+  std::string myfilename=filename;
   // does the file even exist?
   if (!filename.empty()) {
     FSSpec   spec;
-    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(filename.c_str()), &spec);
+    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(myfilename.c_str()), &spec);
     if (err) {
       error("GemImageLoad: Unable to find file: %s", filename.c_str());
       error("parID : %d", spec.parID); 
@@ -386,8 +386,9 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
 
   OSType			osFileType=kQTFileTypeTIFF;
   mime2type(mimetype, osFileType);
+  std::string myfilename=filename.c_str();
 
-  const UInt8*filename8=reinterpret_cast<const UInt8*>(filename.c_str());
+  const UInt8*filename8=reinterpret_cast<const UInt8*>(myfilename.c_str());
     
 #if defined __APPLE__
   FSRef			ref;
@@ -395,7 +396,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
 
   if (err == fnfErr) {
     // if the file does not yet exist, then let's create the file
-    if(touch(filename)) {
+    if(touch(myfilename)) {
       return false;
     }
     err = FSPathMakeRef(filename8, &ref, NULL);
@@ -414,7 +415,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   err = FSMakeFSSpec(spec.vRefNum, spec.parID, filename8, &spec);  //this always gives an error -37 ???
 
 #elif defined _WIN32
-  touch(filename);
+  touch(myfilename);
   err = FSMakeFSSpec (0, 0L, filename8, &spec);
 #endif
   if (err != noErr && err != -37){
