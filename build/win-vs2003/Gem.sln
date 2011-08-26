@@ -198,7 +198,6 @@ Global
 		{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}.ReleaseDummy.ActiveCfg = ReleaseDummy|Win32
 		{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}.ReleaseDummy.Build.0 = ReleaseDummy|Win32
 		{6965876A-4A92-470C-95EF-EB554B13B336}.Release.ActiveCfg = Release|Win32
-		{6965876A-4A92-470C-95EF-EB554B13B336}.Release.Build.0 = Release|Win32
 		{6965876A-4A92-470C-95EF-EB554B13B336}.ReleaseDummy.ActiveCfg = Release|Win32
 		{6965876A-4A92-470C-95EF-EB554B13B336}.ReleaseDummy.Build.0 = Release|Win32
 		{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}.Release.ActiveCfg = Release|Win32
