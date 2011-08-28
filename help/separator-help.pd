@@ -1,10 +1,44 @@
-#N canvas 544 73 705 726 10;
-#X text 64 393 With the separator \, both squares will by translated
-\, but they will only be rotated the correct amount.;
-#X text 64 436 separator isolates everything below it (and everything
-else in the chain) from all transformation effects.;
-#X obj 202 521 pix_separator;
-#X obj 542 400 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#N canvas 3 44 880 555 10;
+#X text 452 8 GEM object;
+#X text 71 31 Class: manipulation object;
+#X text 50 12 Synopsis: [separator];
+#X obj 8 337 cnv 15 430 60 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 39 339 Inlets:;
+#X text 63 352 Inlet 1: gemlist;
+#X text 39 368 Outlets:;
+#X text 57 381 Outlet 1: gemlist;
+#X obj 8 204 cnv 15 430 120 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X text 17 206 Arguments:;
+#X obj 8 76 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 29 77 Description: separate render chains;
+#X text 72 236 "modelview" = "model" = "m";
+#X text 72 249 "color" = "c";
+#X text 72 262 "texture" = "t";
+#X text 72 276 "projection" = "p";
+#X text 63 217 list of matrices to work on;
+#X text 63 298 default: "m c t p" (all matrices);
+#X text 42 135 for the openGL-savvy: [separator] pushes (saves) the
+modelview \, color \, texture and projection matrices to the stack
+(unless the stack is full). Once rendering below [separator] is done
+\, the matrices are popped \, thus restoring the state before [separator]
+was called.;
+#X text 42 95 [separator] isolates parallel render-chains with regard
+to transformation effects (translation \, rotation \, ...) \, so you
+don't get side-effects;
+#X obj 8 411 cnv 15 430 130 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X obj 162 448 pix_separator;
+#X text 53 420 NOTE: [separator] has no effect on pixel-operations.
+to isolate [pix_*]-chains from each other \, use:;
+#X text 55 476 NOTE: the color will not be affected by [separator].
+if you change the [color] in the subchain rendered first \, the same
+color will automatically be applied to subchains rendered later. the
+only way to work around this \, is to reset the color in the other
+subchains.;
+#X obj 602 440 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -24,80 +58,74 @@ else in the chain) from all transformation effects.;
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 547 439 pd gemwin;
-#X msg 547 420 create;
-#X text 543 399 Create window:;
-#X obj 59 199 cnv 15 210 40 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 607 479 pd gemwin;
+#X msg 607 460 create;
+#X text 603 439 Create window:;
+#X obj 439 229 cnv 15 210 40 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 404 196 cnv 15 210 40 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 658 229 cnv 15 210 40 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X text 137 14 separator;
-#X text 40 16 GEM object;
-#X obj 66 211 separator;
-#X obj 66 170 translateXYZ 2 0 0;
-#X obj 187 212 separator;
-#X obj 66 98 gemhead;
-#X obj 66 125 color 1 0 0;
-#X obj 66 79 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X obj 446 241 separator;
+#X obj 446 188 translateXYZ 2 0 0;
+#X obj 520 242 separator;
+#X obj 446 148 gemhead;
+#X obj 446 168 color 1 0 0;
+#X obj 446 119 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+1;
+#X obj 661 122 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X obj 446 55 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
 ;
-#X obj 421 171 translateXYZ 2 0 0;
-#X obj 421 287 square;
-#X obj 421 99 gemhead;
-#X obj 421 80 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
-;
-#X obj 66 243 rotateXYZ 45 0 0;
-#X obj 187 243 rotateXYZ 0 45 0;
-#X obj 547 241 rotateXYZ 0 45 0;
-#X obj 421 241 rotateXYZ 45 0 0;
-#X obj 268 25 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
-;
-#X obj 268 43 t f f;
-#X obj 297 64 == 0;
-#X floatatom 272 144 5 0 0 0 - - -;
-#X obj 268 3 loadbang;
-#X text 294 26 toggle between separated/unseparated rendering;
-#X obj 421 126 color 0 0 1;
-#X obj 547 291 square;
-#X text 454 75 blue;
-#X text 102 79 red;
-#X obj 66 289 circle;
-#X obj 187 293 square;
-#X text 69 481 however \, it has no effect on pixel-operations. to
-make separate [pix_*]-chains independent \, use:;
-#X text 65 336 If you did not use a separator in the example \, then
-one of the chains would have an extra rotation (depending on which
+#X obj 446 73 t f f;
+#X obj 661 96 == 0;
+#X floatatom 581 197 5 0 0 0 - - -;
+#X obj 446 33 loadbang;
+#X text 472 56 toggle between separated/unseparated rendering;
+#X text 694 117 blue;
+#X text 482 119 red;
+#X obj 661 188 translateXYZ 2 0 0;
+#X obj 661 148 gemhead;
+#X obj 661 168 color 0 0 1;
+#X obj 446 208 t a a;
+#X obj 661 208 t a a;
+#X text 465 326 If you did not use a [separator] in the example \,
+then one of the chains would have an extra rotation (depending on which
 subchain is rendered first).;
-#X text 79 612 NOTE: the color will not be affected by [separator].
-if you change the [color] in the subchain rendered first \, the same
-color will automatically be applied to subchains rendered later. the
-only way to work around this \, is to reset the color in the other
-subchains.;
-#X text 75 551 for the tekkies: [separator] saves the modelview \,
-texture \, color and projection matrices (and restores them after the
-subchain has been rendered) - if there is still enough space on the
-matrix stack!;
-#X connect 4 0 5 0;
-#X connect 5 0 4 0;
-#X connect 11 0 21 0;
-#X connect 12 0 11 0;
-#X connect 12 0 13 0;
-#X connect 13 0 22 0;
-#X connect 14 0 15 0;
-#X connect 15 0 12 0;
-#X connect 16 0 14 0;
-#X connect 17 0 24 0;
-#X connect 17 0 23 0;
-#X connect 19 0 31 0;
-#X connect 20 0 19 0;
-#X connect 21 0 35 0;
-#X connect 22 0 36 0;
-#X connect 23 0 32 0;
-#X connect 24 0 18 0;
+#X obj 747 273 rotateXYZ 0 45 0;
+#X obj 747 293 square;
+#X obj 520 273 rotateXYZ 0 45 0;
+#X obj 661 293 cube 0.5;
+#X obj 661 273 color 1 1 0;
+#X obj 446 271 color 0 1 1;
+#X obj 520 293 circle;
+#X obj 446 293 cone;
+#X text 464 364 With the [separator] \, both objects will by translated
+\, but the rotation in one branch will not effect the other branch.
+;
 #X connect 25 0 26 0;
-#X connect 26 0 16 0;
-#X connect 26 1 27 0;
-#X connect 27 0 20 0;
-#X connect 28 0 21 1;
-#X connect 28 0 24 1;
-#X connect 29 0 25 0;
-#X connect 31 0 17 0;
+#X connect 26 0 25 0;
+#X connect 30 0 56 0;
+#X connect 31 0 48 0;
+#X connect 32 0 53 0;
+#X connect 33 0 34 0;
+#X connect 34 0 31 0;
+#X connect 35 0 33 0;
+#X connect 36 0 46 0;
+#X connect 37 0 38 0;
+#X connect 38 0 35 0;
+#X connect 38 1 39 0;
+#X connect 39 0 36 0;
+#X connect 40 0 51 1;
+#X connect 40 0 53 1;
+#X connect 41 0 37 0;
+#X connect 45 0 49 0;
+#X connect 46 0 47 0;
+#X connect 47 0 45 0;
+#X connect 48 0 30 0;
+#X connect 48 1 32 0;
+#X connect 49 0 55 0;
+#X connect 49 1 51 0;
+#X connect 51 0 52 0;
+#X connect 53 0 57 0;
+#X connect 55 0 54 0;
+#X connect 56 0 58 0;
