@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.60)
-AC_INIT([Gem],[0.93.0],[zmoelnig@iem.at],[Gem],[http://gem.iem.at])
+AC_INIT([Gem],[0.93.1],[zmoelnig@iem.at],[Gem],[http://gem.iem.at])
 
 AM_INIT_AUTOMAKE([1.10 foreign])
 

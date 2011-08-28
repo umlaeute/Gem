@@ -1,6 +1,6 @@
 PKGVERSION_MAJOR=0
 PKGVERSION_MINOR=93
-PKGVERSION_BUGFIX=0
+PKGVERSION_BUGFIX=1
 
 ## by default, pkgversion.sh will try to find out bugfix-version and codename 
 ## based on the versioning system used.
