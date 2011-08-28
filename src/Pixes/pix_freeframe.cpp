@@ -994,7 +994,7 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr, reinterpret_cast<t_method>(&pix_freeframe::parmCallback));
-  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("open"), A_SYMBOL, A_NULL);
+  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("load"), A_SYMBOL, A_NULL);
   gem_register_loader(freeframe_loader);
 }
 
