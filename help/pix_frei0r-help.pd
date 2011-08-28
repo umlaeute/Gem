@@ -1,41 +1,29 @@
-#N canvas 167 506 676 544 10;
+#N canvas 19 44 676 544 10;
 #X text 452 8 GEM object;
-#X obj 7 356 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 376 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 11 358 Inlets:;
-#X text 11 418 Outlets:;
-#X obj 8 320 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X text 11 378 Inlets:;
+#X text 11 478 Outlets:;
+#X obj 8 340 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 322 Arguments:;
-#X obj 8 56 cnv 15 430 260 empty empty empty 20 12 0 14 -233017 -66577
+#X text 17 342 Arguments:;
+#X obj 8 56 cnv 15 430 280 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 451 58 Example:;
 #X text 71 31 Class: pix object;
-#X text 29 431 Outlet 1: gemlist;
-#X text 22 376 Inlet 1: gemlist;
-#X obj 13 462 cnv 15 410 30 empty empty empty 20 12 0 14 -260818 -66577
+#X text 29 491 Outlet 1: gemlist;
+#X text 22 392 Inlet 1: gemlist;
+#X obj 13 512 cnv 15 410 30 empty empty empty 20 12 0 14 -260818 -66577
 0;
 #X text 50 12 Synopsis: [pix_frei0r];
-#X text 63 333 <symbol>: the plugin to load;
+#X text 63 353 <symbol>: the plugin to load;
 #X text 13 72 This object allows you to load any Frei0r video-effect.
 Frei0r is a minimalistic plugin API for realtime video effects.;
-#X text 15 463 You can get more information as well as links to downloadable
+#X text 15 513 You can get more information as well as links to downloadable
 plugin-packs at http://piksel.org/frei0r;
-#X text 15 195 Most plugins have a number of parameters which you can
-use to change the behaviour of the effect while it runs. For each parameter
-exposed \, the [pix_frei0r] object will get one additional inlet \,
-which can be used to modify the given parameter. (Frei0r numeric parameters
-usually are in the range 0..1);
-#X text 22 393 Inlet 2..N: <type>: depending on the settable parameter
-;
 #X msg 455 330 gemList;
-#X text 16 279 Plugins are searched in all the paths that pd searches
+#X text 12 308 Plugins are searched in all the paths that pd searches
 for abstractions \, ...!;
-#X text 12 112 Currently \, you have to specify the plugin you want
-to load as object argument. You cannot change the loaded plugin \,
-once the object is instantiated. If the object fails to load (e.g.
-because the plugin-file is not there or invalid) \, the [pix_frei0r]
-object will fail to instantiate.;
 #X text 28 56 Description: run a Frei0r effect;
 #X obj 449 113 gemhead;
 #X obj 448 77 cnv 15 200 280 empty empty empty 20 12 0 14 -228992 -66577
@@ -96,26 +84,48 @@ object will fail to instantiate.;
 #X floatatom 567 270 5 0 0 0 - - -;
 #X obj 463 270 hsl 100 15 0 1 0 0 empty empty ySize -2 -6 0 10 -262144
 -1 -1 0 1;
-#X text 442 431 This example relies on;
+#X text 442 411 This example relies on;
 #X obj 451 180 pix_rgba;
 #X text 513 176 Frei0r plugins;
 #X text 515 190 need RGBA images!;
 #X obj 451 289 pix_frei0r pixeliz0r;
-#X text 442 446 finding the "pixeliz0r" plugin;
-#X text 445 477 plugin set) in pd's search path;
-#X text 443 461 (which is part of the official frei0r;
-#X connect 25 0 26 0;
-#X connect 26 0 25 0;
-#X connect 28 0 31 0;
-#X connect 30 0 29 0;
-#X connect 31 0 46 0;
-#X connect 31 2 32 0;
-#X connect 32 0 31 1;
-#X connect 33 0 34 0;
-#X connect 34 0 31 0;
-#X connect 41 0 49 1;
-#X connect 42 0 41 0;
-#X connect 43 0 49 2;
-#X connect 44 0 43 0;
-#X connect 46 0 49 0;
-#X connect 49 0 30 0;
+#X text 442 426 finding the "pixeliz0r" plugin;
+#X text 445 457 plugin set) in pd's search path;
+#X text 443 441 (which is part of the official frei0r;
+#X text 12 112 If you specify the plugin when creating the object (e.g
+[pix_frei0r bw0r] or [pix_bw0r] \, the plugin is fixed and you cannot
+change it (apart from deleting the object and creating a new one);
+#X text 13 163 However \, if you only create an object [pix_frei0r]
+(without specifying the pugin \, you will get a dynamic version \,
+where you can load in a plugin using the "load" message.;
+#X text 12 202 Most plugins have a number of parameters which you can
+use to change the behaviour of the effect while it runs. For each parameter
+exposed \, the [pix_frei0r] object will get one additional inlet \,
+which can be used to modify the given parameter. Alternatively (e.g.
+when using dynamic plugin instances) you can also use the parametername
+or "#<num>" (starting from 1).;
+#X text 13 284 Frei0r numerical parameters are supposed to be in the
+range 0..1.;
+#X text 21 453 Inlet 2..N (if applicable): <type>: depending on the
+settable parameter;
+#X text 22 406 Inlet 1: open <symbol>: load another plugin (if applicable)
+;
+#X text 22 419 Inlet 1: #<num> <value>: set parameter #<num> (starting
+from 1);
+#X text 22 441 Inlet 1: <name> <value>: set parameter given by <name>
+;
+#X connect 22 0 23 0;
+#X connect 23 0 22 0;
+#X connect 25 0 28 0;
+#X connect 27 0 26 0;
+#X connect 28 0 43 0;
+#X connect 28 2 29 0;
+#X connect 29 0 28 1;
+#X connect 30 0 31 0;
+#X connect 31 0 28 0;
+#X connect 38 0 46 1;
+#X connect 39 0 38 0;
+#X connect 40 0 46 2;
+#X connect 41 0 40 0;
+#X connect 43 0 46 0;
+#X connect 46 0 27 0;
