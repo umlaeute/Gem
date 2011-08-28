@@ -363,8 +363,12 @@ void pix_frei0r :: openMess(t_symbol*s)
   if(m_plugin) {
     delete m_plugin;
   }
-
-  m_plugin = new F0RPlugin(pluginname, getCanvas());
+  m_plugin=NULL;
+  try {
+    m_plugin = new F0RPlugin(pluginname, getCanvas());
+  } catch (GemException&x) {
+    error("%s", x.what());
+  }
 
   if(NULL==m_plugin) {
     error("unable to open '%s'", pluginname.c_str());
