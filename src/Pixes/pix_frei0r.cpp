@@ -291,6 +291,8 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
 {
   //  throw(GemException("Gem has been compiled without Frei0r-support!"));
   int can_rgba=0;
+  m_image.setCsizeByFormat(GL_RGBA);
+
   if(!s || s==&s_) {
     m_canopen=true;
     return;
@@ -298,7 +300,6 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   char *pluginname = s->s_name;
 
   m_plugin = new F0RPlugin(pluginname, getCanvas());
-  m_image.setCsizeByFormat(GL_RGBA);
 
   unsigned int numparams = m_plugin->m_parameterNames.size();
   char tempVt[5];
