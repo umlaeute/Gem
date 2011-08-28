@@ -538,6 +538,8 @@ private:
     m_parameter.clear();
     unsigned int count=getNumParameters_();
     unsigned int i;
+    
+    m_parameterNames.push_back(""); // dummy parameter
     for(i=0; i<count; i++) {
       std::string name=getParameterName_(i);
       FFUInt32 type = getParameterType_ (i);
@@ -760,7 +762,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   char tempVt[5];
 
   unsigned int i;
-  for(i=0; i<numparams; i++) {
+  for(i=1; i<numparams; i++) {
     snprintf(tempVt, 5, "#%d", i);
     tempVt[4]=0;
     unsigned int parmType=0;
@@ -934,7 +936,7 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
     error("no instance of plugin available");
     return;
   }
-  std::string key=m_plugin->getParameterName(param);
+  std::string key=m_plugin->getParameterName(param-1);
   parmMess(key, value);
 }
 
@@ -992,7 +994,7 @@ static int freeframe_loader(t_canvas *canvas, char *classname) {
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr, reinterpret_cast<t_method>(&pix_freeframe::parmCallback));
-  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("open"), A_SYMBOL, A_NULL);
+  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("load"), A_SYMBOL, A_NULL);
   gem_register_loader(freeframe_loader);
 }
 

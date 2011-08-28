@@ -541,7 +541,7 @@ static int frei0r_loader(t_canvas *canvas, char *classname) {
 void pix_frei0r :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr, reinterpret_cast<t_method>(&pix_frei0r::parmCallback));
-  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_frei0r::openCallback), gensym("open"), A_SYMBOL, A_NULL);
+  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_frei0r::openCallback), gensym("load"), A_SYMBOL, A_NULL);
   gem_register_loader(frei0r_loader);
 }
 

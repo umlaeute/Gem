@@ -336,6 +336,11 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   double d=(double)format;
   wantProps.set("colorspace", format);
 
+  if(m_auto!=0.f) {
+    double v=m_auto;
+    wantProps.set("auto", v);
+  }
+
   if(codec>=0){
     codec=codec%m_handles.size();
     if (m_handles[codec] && m_handles[codec]->open(buf, wantProps )) {
@@ -367,7 +372,7 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   if (!m_handle){
     //    post(" ... giving up!");
     error("unable to open file: %s", filename->s_name);
-	return;
+    return;
   }
 
   double width=-1;
@@ -416,7 +421,6 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
     }
   }
 #endif
-
 }
 
 /////////////////////////////////////////////////////////
@@ -488,14 +492,13 @@ void pix_film :: postrender(GemState *state)
 #endif /* PTHREADS */
 
   // automatic proceeding
-  if (m_auto!=0){
-    if(m_thread_running){
-      m_reqFrame+=m_auto;
-    } else
-      if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))){
-        //      m_reqFrame = m_numFrames;
-        outlet_bang(m_outEnd);
-      }
+  m_reqFrame+=m_auto;
+
+  if (m_auto!=0 && !m_thread_running){
+    if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))){
+      //      m_reqFrame = m_numFrames;
+      outlet_bang(m_outEnd);
+    }
   }
 }
 
@@ -568,11 +571,12 @@ void pix_film :: threadMess(int state)
 
 void pix_film :: autoMess(double speed)
 {
-  m_auto=speed;
+  m_auto=(t_float)speed;
   gem::Properties props;
   gem::any value=speed;
   props.set("auto", value);
-  m_handle->setProperties(props);
+  if(m_handle)
+    m_handle->setProperties(props);
 }
 
 
@@ -598,7 +602,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::changeImageCallback),
 		  gensym("img_num"), A_GIMME, A_NULL);
 
-  CPPEXTERN_MSG1(classPtr, "auto", autoMess, double);
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
 #if 0
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::csCallback),
