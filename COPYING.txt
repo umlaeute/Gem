@@ -1,7 +1,9 @@
 GEM - Graphics Environment for Multimedia
-Copyright (C) 1997-2000 Mark Danks, Günter Geiger, 
-2001-2008 IOhannes m zmölnig, 2003-2007 James Tittle II, 
-2003-2008 Chris Clepper et al.
+Copyright © 1997-2000 Mark Danks
+Copyright © Günter Geiger
+Copyright © 2001-2011 IOhannes m zmölnig, 
+Copyright © 2003-2007 James Tittle II, 
+Copyright © 2003-2008 Chris Clepper
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -13,9 +15,8 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License along
+with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 In the official GEM distribution, the GNU General Public License is
 in the file GnuGPL.LICENSE
@@ -52,14 +53,6 @@ and not by Mark Danks/Guenter Geiger/IOhannes m zmoelnig.  All copyright notices
 respective library directories, GemLibs/*, and this file.
 The "GemLibs" portion of GEM consists of 
 
-libTiff:
-    Author: Sam Leffner
-            sam[AT]engr.sgi.com
-            ftp://ftp.sgi.com/graphics/tiff/ 
-    Copyright (c) 1988-1996 Sam Leffler
-    Copyright (c) 1991-1996 Silicon Graphics, Inc.
-    see license below
-
 fstimage:
     Masayuki Matsumoto
         sgi image loader.
@@ -68,52 +61,6 @@ fstimage:
     Modified so that it doesn't exit on error.
     Added support for reading grayscale, rgb, and rgba images
             Mark Danks - 1998
-
-libjpeg:
-    Author: Independent JPEG Group
-            jpeg-info[AT]uunet.uu.net
-            ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/
-    Copyright (C) 1991-1996, Thomas G. Lane.
-
-Glut:
-	Author: Mark Kilgard
-	http://reality.sgi.com/mjk_asd/
-    Copyright 1996 by Evans & Sutherland Computer Corporation.  
-
-GLTT:
-    Author: Stephane Rehel
-            rehel[AT]worldnet.fr
-            http://home.worldnet.fr/~rehel/gltt/gltt.html
-    Copyright (C) 1991 Stephane Rehel
-	This is covered under the GNU Library General Public License, 
-        Version 2 or greater.
-
-Freetype:
-    Authors: David Turner, Robert Wilhelm, and Werner Lemberg
-            turner[AT]enst.fr
-            robert[AT]physiol.med.tu-muenchen.de
-            a7971428[AT]unet.univie.ac.at
-            http://www.physiol.med.tu-muenchen.de/~robert/freetype.html
-    Copyright 1996,1997 by David Turner, Robert Wilhelm, and Werner Lemberg
-
-libmpeg:
-    Authors: MPEG Software Simulation Group
-            mssg[AT]mpeg.org
-            http://www.mpeg.org/MSSG/
-    Copyright (c) 1996 MPEG Software Simulation Group
-
-Wintab:
-    Author: Rick Poyner, LCS/Telegraphics
-            wintab[AT]pointing.com
-    Copyright 1991-1995 by LCS/Telegraphics.
-    see license below
-
-libOrb:
-    Author: John Stone
-            j.stone[AT]acm.org
-            http://www.umr.edu/~johns/projects/liborb/
-    Copyright (c) 1997-1998 John E. Stone
-    see license below
 
 particle:
     Author: David McAllister
@@ -136,34 +83,3 @@ reacTIVision:
     Copyright (c) 2005 Martin Kaltenbrunner
 	This is covered under the GNU General Public License, 
         Version 2 or greater.
-
-----------------------------------------------------------------------------
-libTiff:
-    Author: Sam Leffner
-            sam[AT]engr.sgi.com
-            ftp://ftp.sgi.com/graphics/tiff/ 
-    Copyright (c) 1988-1996 Sam Leffler
-    Copyright (c) 1991-1996 Silicon Graphics, Inc.
-
-Copyright (c) 1988-1996 Sam Leffler
-Copyright (c) 1991-1996 Silicon Graphics, Inc.
-
-Permission to use, copy, modify, distribute, and sell this software and 
-its documentation for any purpose is hereby granted without fee, provided
-that (i) the above copyright notices and this permission notice appear in
-all copies of the software and related documentation, and (ii) the names of
-Sam Leffler and Silicon Graphics may not be used in any advertising or
-publicity relating to the software without the specific, prior written
-permission of Sam Leffler and Silicon Graphics.
-
-THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
-WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
-
-IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
-ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
-OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
-LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
-OF THIS SOFTWARE.
-
