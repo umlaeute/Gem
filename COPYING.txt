@@ -30,37 +30,15 @@ Not all of the source code provided here has entirely been written by me.
 I would like to point at the great openGL-tutorials at http://nehe.gamedev.net
 Since these are tutorials, there is no copyright notice here.
 Some of the pix_fx code is borrowed from effecTV by Kentarou Fukuchi et al.
-at http://effectv.sourceforge.net released under the Gnu GPL.
-Future releases might also incorporate the FreeJ-tool by Jaromil
-at http://freej.dyne.org/ released under the Gnu GPL.
-
+at http://effectv.sourceforge.net released under the Gnu GPL, some other pix_fx
+code has been ported from Pete Warden's fine collection of FreeFrame plugins at
+http://petewarden.com released under the Gnu GPL.
 
 ---------------------------------------------------------
 
              OTHER COPYRIGHT NOTICES
 
 ---------------------------------------------------------
-
-
-This file contains all of the licenses from the various libraries which
-are included in GEM.  If there is no license associated with a 
-library, then the author has not included one or not required that the 
-full license be included.
-
-All of the files and documentation for the various libraries in the
-"Gemlibs" portion of GEM are copyrighted by their respective authors
-and not by Mark Danks/Guenter Geiger/IOhannes m zmoelnig.  All copyright notices are included in the
-respective library directories, GemLibs/*, and this file.
-The "GemLibs" portion of GEM consists of 
-
-fstimage:
-    Masayuki Matsumoto
-        sgi image loader.
-            matumot[AT]dst.nk-exa.co.jp
-    Copyright (C) 1995 Masayuki Mastumoto
-    Modified so that it doesn't exit on error.
-    Added support for reading grayscale, rgb, and rgba images
-            Mark Danks - 1998
 
 particle:
     Author: David McAllister
