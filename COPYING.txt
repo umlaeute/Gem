@@ -1,9 +1,9 @@
 GEM - Graphics Environment for Multimedia
-Copyright © 1997-2000 Mark Danks
-Copyright © Günter Geiger
-Copyright © 2001-2011 IOhannes m zmölnig, 
-Copyright © 2003-2007 James Tittle II, 
-Copyright © 2003-2008 Chris Clepper
+Copyright Â© 1997-2000 Mark Danks
+Copyright Â© GÃ¼nter Geiger
+Copyright Â© 2001-2011 IOhannes m zmÃ¶lnig, 
+Copyright Â© 2003-2007 James Tittle II, 
+Copyright Â© 2003-2008 Chris Clepper
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

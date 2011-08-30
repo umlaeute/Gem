@@ -361,7 +361,7 @@ StrCpy $GEM_OUTDIR "$INSTDIR"
 StrCpy $GEMDEV_OUTDIR "$GEM_OUTDIR\dev"
 FunctionEnd
 
-; u‰h: isn't there a way to only delete the files we actually installed?
+; u√§h: isn't there a way to only delete the files we actually installed?
 ; that is: without having to enumerate them here
 Section Uninstall
   Delete "$GEM_OUTDIR\manual\*.*"

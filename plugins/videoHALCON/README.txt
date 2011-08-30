@@ -137,7 +137,7 @@ if you have idea's (and code) to solve this, i will be happily include them.
 
 
 fmgasdr
-IOhannes m zmölnig
+IOhannes m zmÃ¶lnig
 Graz, 23.06.2010
 
 

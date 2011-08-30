@@ -161,7 +161,7 @@ A3: make sure you have "Jumbo Frames" on both your network card and your camera
 
 
 fmgasdr
-IOhannes m zmölnig
+IOhannes m zmÃ¶lnig
 Graz, 18.11.2010
 
 

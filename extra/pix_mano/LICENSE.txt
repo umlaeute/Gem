@@ -4,8 +4,8 @@ http://www.jaimeoliver.pe/instrumentos/mano
 
 based on:
  GEM - Graphics Environment for Multimedia
- Copyright (C) 1997-2000 Mark Danks, Günter Geiger, 
- Copyright (c) 2001-2010 IOhannes m zmölnig
+ Copyright (C) 1997-2000 Mark Danks, GÃ¼nter Geiger, 
+ Copyright (c) 2001-2010 IOhannes m zmÃ¶lnig
  Copyright (c) 2003-2007 James Tittle II, 
  Copyright (c) 2003-2008 Chris Clepper et al.
 
