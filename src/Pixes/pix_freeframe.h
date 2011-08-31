@@ -30,7 +30,7 @@ LOG
 #endif
 #include "FreeFrame.h"
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__FreeBSD_kernel__)
 # define T_FFPLUGMAIN plugMainType*
 #else
 # define T_FFPLUGMAIN FF_Main_FuncPtr

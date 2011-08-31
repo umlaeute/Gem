@@ -37,8 +37,8 @@
 # include <OpenGL/OpenGL.h>
 #elif defined _WIN32
 # include "Gem/wglew.h"
-#elif defined __linux__ || defined HAVE_GL_GLX_H
-#  include "Gem/glxew.h"
+#elif defined(__linux__) || defined(__FreeBSD_kernel__)
+# include "Gem/glxew.h"
 #endif /* OS */
 
 #ifdef GEM_MULTICONTEXT
@@ -46,7 +46,7 @@ GEM_EXTERN GLEWContext*glewGetContext(void);
 # ifdef __APPLE__
 # elif defined _WIN32
 GEM_EXTERN WGLEWContext*wglewGetContext(void);
-# elif defined __linux__
+# elif defined __linux__ || defined HAVE_GL_GLX_H
 GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # endif
 

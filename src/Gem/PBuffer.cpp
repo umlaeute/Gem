@@ -35,7 +35,7 @@
 #include "PBuffer.h"
 #include "Gem/RTE.h"
 
-#ifdef __linux__
+#ifdef GLX_VERSION_1_3
 struct PBuffer_data {
   Display *display;
 	
