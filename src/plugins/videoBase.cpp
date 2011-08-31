@@ -516,7 +516,7 @@ void videoBase :: setProperties(gem::Properties&props) {
       std::cerr << "'" << gem::any_cast<std::string>(props.get(keys[i])) << "'";
       break;
     default:
-      std::cerr << "<unkown:" << props.get(keys[i]).get_type().name() << ">";
+      std::cerr << "<unknown:" << props.get(keys[i]).get_type().name() << ">";
       break;
     }
   }
