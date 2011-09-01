@@ -14,6 +14,7 @@ AC_ARG_VAR([PYLONARCH], [architecture for you PYLON-installation (e.g. 'x86-linu
 AC_ARG_WITH([pylon],
              AC_HELP_STRING([--with-pylon], [enable PYLON video capturing (overrides $PYLON_ROOT)]))
 
+have_pylon="no"
 if test "x$with_pylon" != "xno"; then
   if test -d "${with_pylon}" ; then
     PYLON_ROOT=${with_pylon}
@@ -80,7 +81,8 @@ if test "x$with_pylon" != "xno"; then
 
 fi
 
+AM_CONDITIONAL(HAVE_PYLON, test x$have_pylon = xyes)
+
 AC_SUBST(GEM_PYLON_CXXFLAGS)
 AC_SUBST(GEM_PYLON_LIBS)
-
 ])

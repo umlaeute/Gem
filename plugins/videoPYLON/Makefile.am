@@ -7,8 +7,9 @@ EXTRA_DIST = pylon.m4 videoPYLON.sln videoPYLON.vcproj LICENSE.txt README.txt
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES=
-
+if HAVE_PYLON
 plugin_LTLIBRARIES+= gem_videoPYLON.la
+endif
 
 gem_videoPYLON_la_CXXFLAGS =
 gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared
