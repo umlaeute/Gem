@@ -246,7 +246,8 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
 
 #ifdef USE_FRAMETABLE
   m_frametable=bgav_get_frame_table(m_file, m_track);
-	gavl_frame_table_num_frames (m_frametable);
+  if(m_frametable)
+    m_numFrames=gavl_frame_table_num_frames (m_frametable);
 #endif
 
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
