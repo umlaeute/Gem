@@ -7,8 +7,9 @@ EXTRA_DIST = avt.m4 videoAVT.sln videoAVT.vcproj LICENSE.txt README.txt
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES=
-
+if HAVE_LIB_LIBPVAPI
 plugin_LTLIBRARIES+= gem_videoAVT.la
+endif
 
 gem_videoAVT_la_CXXFLAGS =
 gem_videoAVT_la_LDFLAGS  = -module -avoid-version -shared
