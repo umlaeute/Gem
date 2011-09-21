@@ -48,7 +48,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(FTGL)\include&quot;;&quot;$(FREETYPE)\include&quot;"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src\FTGL&quot;;&quot;$(FTGL)\src&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -135,7 +135,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(FTGL)\include&quot;;&quot;$(FREETYPE)\include&quot;"
+				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src\FTGL&quot;;&quot;$(FTGL)\src&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;_DEBUG;DEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL"
 				RuntimeLibrary="1"
 				PrecompiledHeaderFile="$(IntDir)\$(ProjectName).pch"
