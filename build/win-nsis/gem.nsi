@@ -64,7 +64,9 @@ OutFile "gem-${PRODUCT_VERSION}${PRODUCT_ARCH}.exe"
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 
-InstallDir "$PROGRAMFILES\pd\extra\Gem"
+;InstallDir "$PROGRAMFILES\pd\extra\Gem"
+InstallDir "$%COMMONPROGRAMFILES%\Pd\Gem"
+
 ShowInstDetails show
 ShowUnInstDetails show
 
