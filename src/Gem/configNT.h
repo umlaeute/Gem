@@ -14,6 +14,7 @@
 
 /* use FTGL for font-rendering */
 #define FTGL
+#define HAVE_FTGL_FTGL_H
 
 /* **********************************************************************
  * now do a bit of magic based on the information given above
