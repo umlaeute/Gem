@@ -19,6 +19,12 @@
 #include <string.h>
 #include "model_loader.h"
 
+#ifdef _MSC_VER
+# if _MSC_VER >= 1500
+#  define strdup _strdup
+# endif
+#endif
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS

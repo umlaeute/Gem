@@ -12,8 +12,6 @@
 //
 /////////////////////////////////////////////////////////
 
-#include <iostream>
-
 #include "pix_frei0r.h"
 #include "Gem/Exception.h"
 #include "Gem/Loaders.h"
@@ -22,7 +20,9 @@
 
 #include "Gem/Properties.h"
 
+#include <iostream>
 #include <stdio.h>
+
 #ifdef _WIN32
 # include <io.h>
 # include <windows.h>

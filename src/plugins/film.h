@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -24,16 +24,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   film
-
+    
   parent class for the system- and library-dependent film-loader classes
-
+    
   KEYWORDS
   pix film movie
-
+    
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-
+  
 struct pixBlock;
 namespace gem {
   class Properties;
@@ -45,7 +45,7 @@ class GEM_EXTERN film
 
   //////////
   // returns an instance wrapping all plugins or NULL
-  // if NULL is returned, you might still try your luck with manually accessing the
+  // if NULL is returned, you might still try your luck with manually accessing the 
   // PluginFactory
   static film*getInstance(void);
 
@@ -60,8 +60,8 @@ class GEM_EXTERN film
    * try to open the film with the requested properties
    *
    * about properties:
-   *  requestprops: are properties that can change the behaviour of how the
-   *                film is opened; examples are "colorspace" (e.g. GL_RGBA) or
+   *  requestprops: are properties that can change the behaviour of how the 
+   *                film is opened; examples are "colorspace" (e.g. GL_RGBA) or 
    *                "streaming" (rather than random frame access)
    *                the backend need not implement any of the properties
    *
@@ -70,17 +70,17 @@ class GEM_EXTERN film
    *               if the film was successfully opened, following properties should be set
    *         if a property can not be determined (e.g. variable fps), it should be set unset
    *
-   *
+   *   
    * discussion: should the colourspace be only a hint or should we force it
    * (evt. by converting the actual cs by hand to the desired one)
    * more discussion: i guess the cs should really be forced somehow by [pix_film]
    * now i don't know, whether the cs-conversion should be done by [pix_film] itself or
-   * rather by the film*-classes.
+   * rather by the film*-classes. 
    * but i guess film* makes more sense, because then, [pix_film] doesn't have to know
    * anything about the internal cs of the decoder
    */
   /* returns TRUE if loading was successfull, FALSE otherwise */
-  virtual bool open(const std::string,
+  virtual bool open(const std::string, 
 		    const gem::Properties&requestprops) = 0;
 
   /* some error codes */
@@ -106,7 +106,7 @@ class GEM_EXTERN film
    * if the image cannot be read, returns 0
    * dev: you probably want to set the whole meta-information
    *      (xsize,ysize,csize,format) over again
-   *      if you are smart and the colour-space is fine, just point
+   *      if you are smart and the colour-space is fine, just point 
    * if this is a "new" frame (e.g. freshly decoded),
    * pixblock.newimage should be set to 1
    */
@@ -124,7 +124,7 @@ class GEM_EXTERN film
 
   /**
    * list all properties the currently opened film supports
-   * if no film is opened, this returns generic backend properties
+   * if no film is opened, this returns generic backend properties 
    * which can be different from media specific properties
    * after calling, "readable" will hold a list of all properties that can be read
    * and "writeable" will hold a list of all properties that can be set
@@ -138,17 +138,17 @@ class GEM_EXTERN film
    * set a number of properties (as defined by "props")
    * the "props" may hold properties not supported by the currently opened media,
    *  which is legal; in this case the superfluous properties are simply ignored
-   * this function MAY modify the props;
+   * this function MAY modify the props; 
    * namely one-shot properties should be removed from the props
    *
    * examples: "colorspace" GL_RGBA
-   *           "auto"       1
+   *           "auto"       1 
    */
   virtual void setProperties(gem::Properties&props) = 0;
 
   /**
    * get the current value of the given properties from the media
-   * if props holds properties that can not be read for the media, they are set to UNSET
+   * if props holds properties that can not be read for the media, they are set to UNSET 
    *
    *               "width" (width of each frame in pixels)
    *               "height" (height of each frame in pixels)
