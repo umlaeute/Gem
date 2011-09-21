@@ -7,8 +7,9 @@ EXTRA_DIST = halcon.m4 videoHALCON.sln videoHALCON.vcproj LICENSE.txt README.txt
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES=
-
+if HAVE_HALCON
 plugin_LTLIBRARIES+= gem_videoHALCON.la
+endif
 
 gem_videoHALCON_la_CXXFLAGS =
 gem_videoHALCON_la_LDFLAGS  = -module -avoid-version -shared

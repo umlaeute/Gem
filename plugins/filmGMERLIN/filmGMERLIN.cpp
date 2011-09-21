@@ -244,15 +244,19 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_fps_num=m_gformat->timescale;
   m_fps_denum=m_gformat->frame_duration;
 
+  m_numFrames=-1;
 #ifdef USE_FRAMETABLE
   m_frametable=bgav_get_frame_table(m_file, m_track);
-	gavl_frame_table_num_frames (m_frametable);
+  if(m_frametable)
+    m_numFrames=gavl_frame_table_num_frames (m_frametable);
 #endif
 
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
-  m_numFrames = gavl_time_to_frames(m_fps_num, 
-                                    m_fps_denum, 
-                                    dur);
+  if(m_numFrames<0)
+    if(dur!=GAVL_TIME_UNDEFINED)
+      m_numFrames = gavl_time_to_frames(m_fps_num, 
+					m_fps_denum, 
+					dur);
 
   return true;
 }

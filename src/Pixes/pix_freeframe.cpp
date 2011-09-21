@@ -908,7 +908,7 @@ void pix_freeframe :: parmMess(std::string key, t_atom *value){
     return;
   }
   if(key.empty()) {
-    error("unkown key %d", key.c_str());
+    error("unknown key %d", key.c_str());
     return;
   }
   gem::Properties props;

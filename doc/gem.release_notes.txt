@@ -65,11 +65,11 @@ this has taken a long time (2 years...)
 
 development is now done by several people:
 	chris clepper
-	günter geiger
+	gÃ¼nter geiger
 	daniel heckenberg
 	james tittle
-	IOhannes m zmölnig <zmoelnig@iem.at>
-günter has removed himself from the splash-screen, but he still contributes stuff
+	IOhannes m zmÃ¶lnig <zmoelnig@iem.at>
+gÃ¼nter has removed himself from the splash-screen, but he still contributes stuff
 
 supported platforms: windows (XP,2000,...), linux, and (tadah:) macOS-X(>10.2)
 irix-support seems to be broken, but i cannot prove it

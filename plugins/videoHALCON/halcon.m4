@@ -16,7 +16,7 @@ AC_ARG_WITH([halcon],
 AC_ARG_WITH([halconarch],
              AC_HELP_STRING([--with-halconarch], [set halcon-arch (overrides $HALCONARCH]))
 
-
+have_halcon="no"
 if test "x$with_halcon" != "xno"; then
   if test -d "${with_halcon}" ; then
     HALCONROOT=${with_halcon}
@@ -68,6 +68,8 @@ if test "x$with_halcon" != "xno"; then
   AC_MSG_RESULT([$have_halcon])
 
 fi
+
+AM_CONDITIONAL(HAVE_HALCON, test x$have_halcon = xyes)
 
 AC_SUBST(GEM_HALCON_CXXFLAGS)
 AC_SUBST(GEM_HALCON_LIBS)

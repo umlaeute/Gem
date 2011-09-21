@@ -1,8 +1,8 @@
-This is GEM 0.91
-===================
+This is GEM - Graphics Environment for Multimedia
+=================================================
 You can get the current distribution from:
 http://gem.iem.at
-ftp://iem.at/pd/Externals/GEM
+http://sourceforge.net/projects/pd-gem
 
 =============================================
 NEW:::
@@ -40,57 +40,72 @@ the GemLibs have their own version numbering, starting with 1.
 You can get the newest GemLib from the place mentioned above
 
 
-COMPILING DEPENDENCIES:
-=======================
-current version: GEM-0.91
-GemLibs	>= 1
-PD 	>= 0.34
-
 -------------------------------------
 -------------------------------------
 
 INSTALLATION:
 =============
 
+-------------------------------------
+To install GEM on linux/OSX/...:
+run
+$ ./configure
+$ make
+$ make install
+
+note that you might want to help Gem to find the Pd-headers, e.g. by doing
+$ ./configure --with-pd=/usr/include/pd
+try
+$ ./configure --help to see more options
+
+-------------------------------------
 To install GEM on W32:
-
-a) (preferred method)
+a) installer (preferred method)
   use the installer executable to install Gem into ...\pd\extra
-  to build the installer you will have to have NSIS installed
-  see build/win-nsis for details
+  (to _build_ the installer you will have to have NSIS installed
+  see build/win-nsis for details)
 
-b) do it by hand
+b) archive (do it by hand)
 
 	1) unzip the GEM package
 
-	2) put the Gem.dll-file somewhere pd can find it (e.g.: ...\pd\extra)
+	2) put the subfolders of Gem-<version>\ into the "extra" folder of your
+		Pd installation
+	   e.g. if you installed Pd as "C:\Program Files\Pd-0.43-0" you should
+		end up with:
+		"C:\Program Files\Pd-0.43-0\extra\Gem"
+		and eventually with
+		"C:\Program Files\Pd-0.43-0\extra\pix_drum"
+		"C:\Program Files\Pd-0.43-0\extra\pix_mano"
+		...
 
-	3) when using pd>=0.37, copy the entire "help"-folder into the same place where the Gem.dll lies
-	   rename the "help"-folder to "help-Gem"
-	   you should now have following structure
-	     (...)\Gem.dll
-	     (...)\help-Gem\
-	     (...)\help-Gem\accumrotate.pd
-	     
-	4) when using pd<0.37, copy the entire "help"-folder into the pd's reference path ( ...\pd\doc\5.reference)
-	   rename the newly created "help"-folder to "Gem"
-	   you should have following structure
-	   (...)\pd\extra\Gem.dll
-	   (...)\pd\doc\5.reference\Gem\
-	   (...)\pd\doc\5.reference\Gem\accumrotate.pd
+	   there is no need to copy the README.txt found in Gem-<version>\ into
+		"extra"
 
-note: in prior versions of Gem, GLUT was needed; this is obsolete
+	3) please note that the archive comes with all plugins
+		in most cases, you won't need all of them, and having plugins
+		installed that you don't need, will considerably slow down load
+		time of patches and might leed to undesired side-effects.
+		therefore, if loading is too slow (or you experience weird
+		things), it might be a good idea to disable plugins you don't
+		need.
+		disabling plugins is as simple as deleting them (or moving them
+		into a subfolder)
+
+	   plugins are files of the form: "gem_<type><NAME>.dll"
+		e.g. "gem_filmQT.dll" is a plugin for reading films using the
+		QuickTime framework.
+		in order to use videoPYLON, videoHALCON and videoAVT, you need
+		to install proprietary libraries yourself; if you haven't done
+		so or don't own a device that can interact with those libraries,
+		you can safely remove these plugins.
+		if you have no clue what this is about, these plugins are most
+		likely not for you (so remove them)
+
 
 
 -------------------------------------
-To install GEM on linux:
-chdir into <Gemdir>/src/
-read the README.<os> (like README.linux) etc...
-
 -------------------------------------
--------------------------------------
-
-
 
 RUNNING:
 ========
@@ -118,16 +133,22 @@ NOTE: please note the spelling: it is "Gem" and not "gem" nor "GEM"
 if you have problems loading any library including Gem, have a look at the pd-documentation
 if you have problems loading just Gem (but other libraries work), send me a bug-report (see below)
 
-BUG-REPORT:
-===========
+BUG-REPORTS:
+============
+please do not hesitate to report any crashes, weirdnesses or other issues, using
+the bugtracker at sourceforge:
+http://sourceforge.net/projects/pd-gem/
+or the gem-dev mailinglist (subscription at http://lists.puredata.info)
+
 if your mail only says "hey, it does not work !", it is an annoyance and no bug-report
 please specify at least the following things:
-
 	Operating-System (kernel-version,...)
 	video-card, driver
 	other hardware that is related to your problem (e.g.: camera)
 	does your system work with similar applications (e.g.: capture-software, openGL (games, "glxgears")
 	what is the output of pd when you start it with the "-verbose" flag (e.g.:"pd -verbose -lib Gem")
+
+please do not use the puredata bugtracker for reporting gem-specific bugs.
 
 ----
 have fun
