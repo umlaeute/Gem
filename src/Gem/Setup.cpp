@@ -103,20 +103,19 @@ extern "C" {
   GEM_EXTERN void Gem_setup()
   {
     // startup GEM
-
-    post("GEM: Graphics Environment for Multimedia");
-    post("GEM: ver: %s", GemVersion::versionString());
-    post("GEM: compiled: " __DATE__);
-    post("GEM: maintained by %s", GEM_MAINTAINER);
-    post("GEM: Authors :\tMark Danks (original version)");
+    verbose(-1, "GEM: Graphics Environment for Multimedia");
+    verbose(-1, "GEM: ver: %s", GemVersion::versionString());
+    verbose(-1, "GEM: compiled: " __DATE__);
+    verbose(-1, "GEM: maintained by %s", GEM_MAINTAINER);
+    verbose(-1, "GEM: Authors :\tMark Danks (original version)");
     for(unsigned int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
-      post("GEM:\t\t%s", GEM_AUTHORS[i]);
+      verbose(-1, "GEM:\t\t%s", GEM_AUTHORS[i]);
     }  
-    post("GEM: with help by %s", GEM_OTHERAUTHORS);
-    post("GEM: found a bug? miss a feature? please report it:");
-    post("GEM: \thomepage http://gem.iem.at/");
-    post("GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
-    post("GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
+    verbose(-1, "GEM: with help by %s", GEM_OTHERAUTHORS);
+    verbose(-1, "GEM: found a bug? miss a feature? please report it:");
+    verbose(-1, "GEM: \thomepage http://gem.iem.at/");
+    verbose(-1, "GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
+    verbose(-1, "GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
 
 
     GemSettings::init();

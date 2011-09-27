@@ -1,6 +1,6 @@
 #include "SIMD.h"
 #include "m_pd.h"
-
+#include <string>
 
 int GemSIMD::cpuid = GEM_SIMD_NONE;
 int GemSIMD::realcpuid = GEM_SIMD_NONE;
@@ -12,49 +12,53 @@ GemSIMD :: GemSIMD()
  int dummy=0;
  cpuid=simd_runtime_check();
 
- startpost("GEM: compiled for SIMD architecture: ");
+ char compiledbuf[MAXPDSTRING];
+ char usingbuf[MAXPDSTRING];
+ strcpy(compiledbuf, "GEM: compiled for SIMD architecture: ");
 #ifdef __SSE2__
- startpost("SSE2 ");
+ strcat(compiledbuf, "SSE2 ");
  dummy=1;
 #endif
 #ifdef __MMX__
- startpost("MMX ");
+ strcat(compiledbuf, "MMX ");
  dummy=1;
 #endif
 #ifdef __VEC__
- startpost("AltiVec ");
+ strcat(compiledbuf, "AltiVec ");
  dummy=1;
 #endif
  if(0==dummy)
-	 startpost("none");
- endpost();
+   strcat(compiledbuf, "none");
 
   if(cpuid){
-    startpost("GEM: using ");
+    strcpy(usingbuf, "GEM: using ");
     switch (cpuid){
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
-      startpost("SSE2");
+      strcat(usingbuf, "SSE2");
       break;
 #endif
 #ifdef __MMX__
     case GEM_SIMD_MMX:
-      startpost("MMX");
+      strcat(usingbuf, "MMX");
       break;
 #endif
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
-      startpost("AltiVec");
+      strcat(usingbuf, "AltiVec");
       break;
 #endif
     default:
-      startpost("no");
+      strcat(usingbuf, "no");
       break;
     case 0: /* this should never happen but is here for compilers who hate to "switch" with only one "case" */
-      startpost("invalid");
+      strcat(usingbuf, "invalid");
     }
-    post(" optimization");
+    strcat(usingbuf, " optimization");
   }
+
+  verbose(-1, compiledbuf);
+  verbose(-1, usingbuf);
 }
 
 GemSIMD :: ~GemSIMD()
