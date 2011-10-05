@@ -3,16 +3,6 @@
 package=Gem
 
 
-AUTORECONF=$(which autoreconf)
-
-AUTOHEADER=$(which autoheader)
-AUTOMAKE=$(which automake)
-ACLOCAL=$(which aclocal)
-LIBTOOL=$(which libtool)
-LIBTOOLIZE=$(which libtoolize)
-AUTOCONF=$(which autoconf)
-
-
 KERN=$(uname -s)
 case "${KERN}" in
  Darwin)
@@ -27,6 +17,16 @@ case "${KERN}" in
 esac
 
 echo PATH: $PATH
+
+
+AUTORECONF=$(which autoreconf)
+
+AUTOHEADER=$(which autoheader)
+AUTOMAKE=$(which automake)
+ACLOCAL=$(which aclocal)
+LIBTOOL=$(which libtool)
+LIBTOOLIZE=$(which libtoolize)
+AUTOCONF=$(which autoconf)
 
 
 #check whether the system supports pushd/popd
