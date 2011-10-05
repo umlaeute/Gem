@@ -21,7 +21,4 @@ EXTRA_DIST = \
 	win-vs7/gem_vc7.sln \
 	win-vs7/gem.vcproj \
 	win-vs7/README.txt \
-	autoconf/README.txt \
-	autoconf/configure.ac \
-	autoconf/autogen.sh \
-	autoconf/Makefile
+	autoconf/README.txt
