@@ -43,7 +43,7 @@ const int GEM_SIMD_ALTIVEC=3;
 
 /* include for SIMD on PC's */
 #ifdef __SSE2__
-#include <emmintrin.h>
+# include <emmintrin.h>
 // for icc this should be <dvec.h>
 typedef union{
   unsigned char c[16];
