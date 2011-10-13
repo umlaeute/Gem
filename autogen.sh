@@ -2,22 +2,16 @@
 
 package=Gem
 
-
 KERN=$(uname -s)
 case "${KERN}" in
  Darwin)
    PATH=/sw/bin:${PATH}
    ;;
- MINGW*)
-   AUTORECONF=""
-   ;;
  *)
-  echo "kernel $KERN"
   ;;
 esac
 
 echo PATH: $PATH
-
 
 AUTORECONF=$(which autoreconf)
 
@@ -28,6 +22,13 @@ LIBTOOL=$(which libtool)
 LIBTOOLIZE=$(which libtoolize)
 AUTOCONF=$(which autoconf)
 
+case "${KERN}" in
+ MINGW*)
+   AUTORECONF=""
+   ;;
+ *)
+  ;;
+esac
 
 #check whether the system supports pushd/popd
 if pushd . > /dev/null 2>&1
