@@ -218,26 +218,37 @@ GEM_EXTERN void imageStruct::info() {
        format, type, notowned);
 }
 
+static bool copy_imagestruct2imagestruct(const imageStruct*from, imageStruct*to) {
+
+  if(!from || !to) {
+    return false;
+  }
+
+  /* copy without new allocation if possible (speedup in convolve ..) */
+  to->xsize 	= from->xsize;
+  to->ysize 	= from->ysize;
+  to->csize 	= from->csize;
+  to->format 	= from->format;
+  to->type   	= from->type;
+  to->reallocate();
+  to->upsidedown = from->upsidedown;
+
+  if(!from->data)
+    return false;
+
+  memcpy(to->data, from->data, from->xsize*from->ysize*from->csize);
+  return true;
+}
+
 GEM_EXTERN void imageStruct::copy2Image(imageStruct *to) const
 {
-  if (!to || !this || !this->data)
+  if(!copy_imagestruct2imagestruct(this, to))
     {
       error("GEM: Someone sent a bogus pointer to copy2Image");
       if (to)
-	to->data = NULL;
+        to->data = NULL;
       return;
     }
-
-  /* copy without new allocation if possible (speedup in convolve ..) */
-  to->xsize 	= xsize;
-  to->ysize 	= ysize;
-  to->csize 	= csize;
-  to->format 	= format;
-  to->type 	= type;
-  to->reallocate();
-  to->upsidedown 	= upsidedown;
-
-  memcpy(to->data, data, xsize*ysize*csize);
 }
 
 GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) const {
@@ -262,7 +273,7 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) const {
 }
 
 imageStruct&imageStruct::operator=(const imageStruct&org) {
-  org.copy2Image(this);
+  copy_imagestruct2imagestruct(&org, this);
   return *this;
 }
 
