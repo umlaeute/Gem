@@ -103,7 +103,7 @@ extern "C" {
   GEM_EXTERN void Gem_setup()
   {
     // startup GEM
-    verbose(-1, "GEM: Graphics Environment for Multimedia");
+    post("GEM: Graphics Environment for Multimedia");
     verbose(-1, "GEM: ver: %s", GemVersion::versionString());
     verbose(-1, "GEM: compiled: " __DATE__);
     verbose(-1, "GEM: maintained by %s", GEM_MAINTAINER);
