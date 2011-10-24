@@ -246,11 +246,11 @@ void gemframebuffer :: printInfo()
   default              : type="unknown";
   }
 
-  post("size: %dx%d", m_width, m_height);
-  post("rectangle: %d -> %s", m_rectangle, rectangle.c_str());
-  post("format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(), m_format, m_internalformat);
-  post("type: %s [%d]", type.c_str(), m_type);
-  post("texunit: %d", m_texunit);
+  verbose(0, "size: %dx%d", m_width, m_height);
+  verbose(0, "rectangle: %d -> %s", m_rectangle, rectangle.c_str());
+  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(), m_format, m_internalformat);
+  verbose(0, "type: %s [%d]", type.c_str(), m_type);
+  verbose(0, "texunit: %d", m_texunit);
 }
 
 /////////////////////////////////////////////////////////
@@ -450,7 +450,7 @@ void gemframebuffer :: fixFormat(GLenum wantFormat)
 
   switch(wantFormat) {
   default:
-    post("using default format");
+    verbose(1,"using default format");
   case GL_RGB:
     m_internalformat=m_format=GL_RGB;
     break;
