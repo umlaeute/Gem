@@ -64,7 +64,7 @@ or the NV shader extensions in order to make use of this object.;
 #X text 10 176 Of course \, you also have to supply anything else needed
 for the shader to work (like textures \, ...);
 #X obj 451 266 teapot;
-#X msg 459 203 open ../data/random.fp;
+#X msg 459 203 open examples/data/random.fp;
 #X text 50 12 Synopsis: [fragment_program];
 #X text 12 76 Description: load and apply an ARB fragment shader;
 #X text 24 95 [fragment_program] loads and applies an ARB (or NV) fragment

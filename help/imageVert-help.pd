@@ -52,7 +52,7 @@
 #X text 156 263 [pix_buf] with auto 1 is important if we want to recalculate
 our pix-effect each frame but don't want to reload the image all the
 time.;
-#X obj 77 205 pix_image ../../doc/gem/examples/data/fractal.JPG;
+#X obj 77 205 pix_image examples/data/fractal.JPG;
 #X connect 0 0 9 0;
 #X connect 2 0 4 0;
 #X connect 3 0 9 0;

@@ -104,9 +104,9 @@ on available formats.;
 -1;
 #X obj 38 51 cnv 15 81 15 empty empty demo_movie 4 8 0 10 -262144 -1
 0;
-#X msg 29 102 open ../../doc/gem/examples/data/alea.mpg;
-#X msg 151 147 open ../../doc/gem/examples/data/homer.avi;
-#X msg 144 210 open ../../doc/gem/examples/data/anim-1.mov;
+#X msg 29 102 open examples/data/alea.mpg;
+#X msg 151 147 open examples/data/homer.avi;
+#X msg 144 210 open examples/data/anim-1.mov;
 #X connect 0 0 4 0;
 #X connect 4 0 6 0;
 #X connect 6 0 3 0;
