@@ -89,7 +89,7 @@ or Y(luma)/U(Cb)/V(Cr) in YUV-Space;
 #X obj 223 100 openpanel;
 #X obj 77 212 pix_yuv;
 #X text 133 214 we really want YUV;
-#X obj 77 174 pix_image ../../doc/gem/examples/data/dancer.JPG;
+#X obj 77 174 pix_image examples/data/dancer.JPG;
 #X connect 0 0 7 0;
 #X connect 2 0 4 0;
 #X connect 3 0 7 0;
@@ -111,7 +111,7 @@ or Y(luma)/U(Cb)/V(Cr) in YUV-Space;
 our pix-effect each frame but don't want to reload the image all the
 time.;
 #X obj 77 230 pix_yuv;
-#X obj 77 185 pix_image ../../doc/gem/examples/data/fractal.JPG;
+#X obj 77 185 pix_image examples/data/fractal.JPG;
 #X connect 0 0 10 0;
 #X connect 2 0 4 0;
 #X connect 3 0 10 0;
