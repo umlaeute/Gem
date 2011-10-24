@@ -416,7 +416,7 @@ void gemframebuffer :: colorMess(t_symbol*s,int argc, t_atom*argv)
   m_FBOcolor[2] = blue;
   m_FBOcolor[3] = alpha;
     
-  setModified();
+  //  setModified();
 }
 
 void gemframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
@@ -430,7 +430,7 @@ void gemframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
     m_perspect[4]=atom_getfloat(argv+4);
     m_perspect[5]=atom_getfloat(argv+5);
 
-    setModified();
+    //    setModified();
     break;
   default:
     error("\"perspec\" expects 6 values for frustum - left, right, bottom, top, near, far");
