@@ -75,6 +75,8 @@ class GEM_EXPORT filmGMERLIN : public filmBase {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
+  virtual bool isThreadable(void);
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------

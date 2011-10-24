@@ -109,6 +109,12 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
   ((filmGMERLIN*)(data))->log(level, log_domain, message);
 }
 
+bool filmGMERLIN :: isThreadable(void) {
+  if(m_numFrames<0) 
+    return false;
+  return filmBase::isThreadable();
+}
+
 /////////////////////////////////////////////////////////
 // really open the file !
 //
