@@ -266,9 +266,6 @@ void pix_texture :: render(GemState *state) {
       m_xRatio=m_extWidth;
       m_yRatio=m_extHeight;
       m_upsidedown=upsidedown;
-
-      glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-      glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
     } else
       /* neither do we have an image nor an external texture */
       return;
@@ -324,6 +321,11 @@ void pix_texture :: render(GemState *state) {
   }
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
+
+  if(useExternalTexture) {
+    glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+    glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+  }
 
   if ((!useExternalTexture)&&newfilm ){
     //  tigital:  shouldn't we also allow TEXTURE_2D here?
