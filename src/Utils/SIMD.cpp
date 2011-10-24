@@ -1,6 +1,7 @@
 #include "SIMD.h"
 #include "m_pd.h"
 #include <string>
+#include <string.h>
 
 int GemSIMD::cpuid = GEM_SIMD_NONE;
 int GemSIMD::realcpuid = GEM_SIMD_NONE;
