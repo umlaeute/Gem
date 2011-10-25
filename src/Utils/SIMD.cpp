@@ -1,7 +1,6 @@
 #include "SIMD.h"
 #include "m_pd.h"
 #include <string>
-#include <string.h>
 
 int GemSIMD::cpuid = GEM_SIMD_NONE;
 int GemSIMD::realcpuid = GEM_SIMD_NONE;
@@ -10,56 +9,56 @@ int GemSIMD::realcpuid = GEM_SIMD_NONE;
 
 GemSIMD :: GemSIMD()
 {
- int dummy=0;
+ int compiledarchs=0;
  cpuid=simd_runtime_check();
 
- char compiledbuf[MAXPDSTRING];
- char usingbuf[MAXPDSTRING];
- strcpy(compiledbuf, "GEM: compiled for SIMD architecture: ");
+ std::string compiled = "";
+
+#ifdef __MMX__
+ if(compiledarchs>0)compiled+="/";
+ compiled+="MMX";
+ compiledarchs++;
+#endif
 #ifdef __SSE2__
- strcat(compiledbuf, "SSE2 ");
- dummy=1;
+ if(compiledarchs>0)compiled+="/";
+ compiled+="SSE2";
+ compiledarchs++
+#endif
+
+#ifdef __VEC__
+ if(compiledarchs>0)compiled+="/";
+ compiled+="AltiVec";
+ compiledarchs++
+#endif
+ if(compiledarchs>0) {
+   verbose(-1, "GEM: compiled for %s architecture", compiled.c_str());
+ }
+ if(cpuid){
+   std::string usingstr = "";
+   switch (cpuid){
+#ifdef __SSE2__
+   case GEM_SIMD_SSE2:
+     usingstr+="SSE2";
+     break;
 #endif
 #ifdef __MMX__
- strcat(compiledbuf, "MMX ");
- dummy=1;
+   case GEM_SIMD_MMX:
+     usingstr+="MMX";
+     break;
 #endif
 #ifdef __VEC__
- strcat(compiledbuf, "AltiVec ");
- dummy=1;
+   case GEM_SIMD_ALTIVEC:
+     usingstr+="AltiVec";
+     break;
 #endif
- if(0==dummy)
-   strcat(compiledbuf, "none");
-
-  if(cpuid){
-    strcpy(usingbuf, "GEM: using ");
-    switch (cpuid){
-#ifdef __SSE2__
-    case GEM_SIMD_SSE2:
-      strcat(usingbuf, "SSE2");
-      break;
-#endif
-#ifdef __MMX__
-    case GEM_SIMD_MMX:
-      strcat(usingbuf, "MMX");
-      break;
-#endif
-#ifdef __VEC__
-    case GEM_SIMD_ALTIVEC:
-      strcat(usingbuf, "AltiVec");
-      break;
-#endif
-    default:
-      strcat(usingbuf, "no");
-      break;
-    case 0: /* this should never happen but is here for compilers who hate to "switch" with only one "case" */
-      strcat(usingbuf, "invalid");
-    }
-    strcat(usingbuf, " optimization");
-  }
-
-  verbose(-1, compiledbuf);
-  verbose(-1, usingbuf);
+   default:
+     usingstr+="no";
+     break;
+   case 0: /* this should never happen but is here for compilers who hate to "switch" with only one "case" */
+     usingstr+="invalid";
+   }
+   verbose(-1, "GEM: using %s optimization", usingstr.c_str());
+ }
 }
 
 GemSIMD :: ~GemSIMD()
