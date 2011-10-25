@@ -45,7 +45,7 @@ CPPEXTERN_NEW(pix_texture);
 /////////////////////////////////////////////////////////
 pix_texture :: pix_texture()
   : m_textureOnOff(1),
-    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT), m_doRepeat(GL_REPEAT),
     m_didTexture(false), m_rebuildList(false),
     m_textureObj(0),
     m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.), m_extType(GL_TEXTURE_2D),
@@ -107,6 +107,7 @@ pix_texture :: ~pix_texture()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
+  m_doRepeat=m_repeat;
   if (m_rectangle && m_canRectangle){
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
       {
@@ -117,11 +118,10 @@ void pix_texture :: setUpTextureState() {
         //			otherwise, weird texturing occurs (looks similar to pix_refraction)
         // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
         // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
-        m_repeat = GL_CLAMP_TO_EDGE;
+        m_doRepeat = GL_CLAMP_TO_EDGE;
         debug("using rectangle texture");
       }
   }
-
 
   if (GLEW_APPLE_client_storage){
     if(m_clientStorage){
@@ -136,8 +136,8 @@ void pix_texture :: setUpTextureState() {
 
   glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
-  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
+  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
 }
 
 ////////////////////////////////////////////////////////
@@ -692,15 +692,20 @@ void pix_texture :: repeatMess(int type)
       m_repeat = GL_CLAMP;
   }
 
+  if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
+    m_doRepeat=GL_CLAMP_TO_EDGE;
+  else
+    m_doRepeat=m_repeat;
+
   if (m_textureObj) {
     if(GLEW_VERSION_1_1) {
       glBindTexture(m_textureType, m_textureObj);
-      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
-      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
+      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
     } else {
       glBindTextureEXT(m_textureType, m_textureObj);
-      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, m_repeat);
-      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
+      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
+      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
     }
   }
   setModified();

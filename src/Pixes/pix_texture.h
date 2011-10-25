@@ -97,7 +97,7 @@ class GEM_EXTERN pix_texture : public GemBase
   // Set the texture quality
   // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
   void          repeatMess(int type);
-  GLuint        m_repeat;
+  GLuint        m_repeat, m_doRepeat;
 
   //////////
   // did we really do texturing in render() ??
