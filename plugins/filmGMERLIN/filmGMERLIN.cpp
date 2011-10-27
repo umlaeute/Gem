@@ -300,7 +300,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
     /* just automatically proceed to the next frame: this might speed up things for linear decoding */
     return film::SUCCESS;
   }
-      
+
   if(!m_file)return film::FAILURE;
 
 #if GEM_FILMGMERLIN_TRACKSWITCH
@@ -353,14 +353,12 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
       // keep in mind that m_fps_denum could be 1!
       // so it's better to calculate the difference in milliseconds and compare
       int64_t diff=m_next_timestamp-seekpos;
-#define TIMESTAMP_OFFSET_MAX 5
+# define TIMESTAMP_OFFSET_MAX 5
       if(diff<TIMESTAMP_OFFSET_MAX && diff>(TIMESTAMP_OFFSET_MAX * -1)) {
         // hey we are already there...
         return film::SUCCESS;
       }
 #endif
-
-
 
       bgav_seek_scaled(m_file, &seekpos, m_fps_num);
       if(seekposOrg == seekpos)
