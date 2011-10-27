@@ -318,10 +318,10 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
   }
 #endif
 
-  if(imgNum>m_numFrames || imgNum<0)return film::FAILURE;
-  if  (imgNum>0)m_curFrame=imgNum;
 
 
+  if(imgNum>=m_numFrames || imgNum<0)return film::FAILURE;
+  if(imgNum>0)m_curFrame=imgNum;
 
   if(bgav_can_seek(m_file)) {
 #ifdef USE_FRAMETABLE
