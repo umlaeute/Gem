@@ -25,7 +25,7 @@
 #endif
 
 #ifdef __APPLE__
-#include <Quicktime/Quicktime.h>
+#include <Quicktime/QuickTime.h>
 #include <Carbon/Carbon.h>
 
 #include <unistd.h> //needed for Unix file open() type functions
