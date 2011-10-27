@@ -25,8 +25,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "plugins/filmBase.h"
 
 #ifdef HAVE_CARBONQUICKTIME
-# include <Carbon/carbon.h>
-# include <QuickTime/quicktime.h>
+# include <Carbon/Carbon.h>
+# include <QuickTime/QuickTime.h>
 #endif /* HAVE_CARBONQUICKTIME */
 
 /*-----------------------------------------------------------------
