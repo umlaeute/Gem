@@ -331,19 +331,15 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
   if(imgNum>0)m_curFrame=imgNum;
 
   if(bgav_can_seek(m_file)) {
+    if(0) {
 #ifdef USE_FRAMETABLE
-    if(m_frametable) {
+    } else if(m_frametable) {
       //  no assumptions about fixed framerate
       int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum, NULL);
       bgav_seek_video(m_file, m_track, seekpos);
       return film::SUCCESS;
-    } 
-#else
-    if(0) {
-#warning no frametable with outdated version of gmerlin-avdecoder
-    }
 #endif
-    else {
+    } else {
       //  assuming fixed framerate
       /*
         Plaum: "Relying on a constant framerate is not good."
