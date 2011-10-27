@@ -22,17 +22,19 @@ GemSIMD :: GemSIMD()
 #ifdef __SSE2__
  if(compiledarchs>0)compiled+="/";
  compiled+="SSE2";
- compiledarchs++
+ compiledarchs++;
 #endif
 
 #ifdef __VEC__
  if(compiledarchs>0)compiled+="/";
  compiled+="AltiVec";
- compiledarchs++
+ compiledarchs++;
 #endif
+
  if(compiledarchs>0) {
    verbose(-1, "GEM: compiled for %s architecture", compiled.c_str());
  }
+
  if(cpuid){
    std::string usingstr = "";
    switch (cpuid){
