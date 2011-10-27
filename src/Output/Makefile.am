@@ -8,7 +8,6 @@ AM_CPPFLAGS = -I$(top_srcdir)/src
 include ../check-sources.mk
 
 pkglib_LTLIBRARIES = 
-pkglib_DATA        = 
 
 #if HAVE_COCOA
 if DISABLED
