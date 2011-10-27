@@ -12,52 +12,52 @@ GemSIMD :: GemSIMD()
  int compiledarchs=0;
  cpuid=simd_runtime_check();
 
- std::string compiled = "";
+ std::string compiledstr;
 
 #ifdef __MMX__
- if(compiledarchs>0)compiled+="/";
- compiled+="MMX";
+ if(compiledarchs>0)compiledstr+="/";
+ compiledstr+="MMX";
  compiledarchs++;
 #endif
 #ifdef __SSE2__
- if(compiledarchs>0)compiled+="/";
- compiled+="SSE2";
+ if(compiledarchs>0)compiledstr+="/";
+ compiledstr+="SSE2";
  compiledarchs++;
 #endif
 
 #ifdef __VEC__
- if(compiledarchs>0)compiled+="/";
- compiled+="AltiVec";
+ if(compiledarchs>0)compiledstr+="/";
+ compiledstr+="AltiVec";
  compiledarchs++;
 #endif
 
  if(compiledarchs>0) {
-   verbose(-1, "GEM: compiled for %s architecture", compiled.c_str());
+   verbose(-1, "GEM: compiled for %s architecture", compiledstr.c_str());
  }
 
  if(cpuid){
-   std::string usingstr = "";
+   std::string usingstr;
    switch (cpuid){
 #ifdef __SSE2__
    case GEM_SIMD_SSE2:
-     usingstr+="SSE2";
+     usingstr="SSE2";
      break;
 #endif
 #ifdef __MMX__
    case GEM_SIMD_MMX:
-     usingstr+="MMX";
+     usingstr="MMX";
      break;
 #endif
 #ifdef __VEC__
    case GEM_SIMD_ALTIVEC:
-     usingstr+="AltiVec";
+     usingstr="AltiVec";
      break;
 #endif
    default:
-     usingstr+="no";
+     usingstr="no";
      break;
    case 0: /* this should never happen but is here for compilers who hate to "switch" with only one "case" */
-     usingstr+="invalid";
+     usingstr="invalid";
    }
    verbose(-1, "GEM: using %s optimization", usingstr.c_str());
  }
