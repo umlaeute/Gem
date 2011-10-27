@@ -27,6 +27,9 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 
+
+//#define GEM_FILMGMERLIN_TRACKSWITCH 1
+
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
@@ -300,7 +303,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
       
   if(!m_file)return film::FAILURE;
 
-#if 0
+#if GEM_FILMGMERLIN_TRACKSWITCH
   // LATER implement track-switching
   // this really shares a lot of code with open() so it should go into a separate function
   if(trackNum) {
@@ -322,9 +325,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
       }
     }
   }
-#endif
-
-
+#endif /* GEM_FILMGMERLIN_TRACKSWITCH */
 
   if(imgNum>=m_numFrames || imgNum<0)return film::FAILURE;
   if(imgNum>0)m_curFrame=imgNum;
