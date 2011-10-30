@@ -1,4 +1,4 @@
-#N canvas 61 68 827 638 12;
+#N canvas 61 44 827 553 12;
 #X obj 90 186 gemhead;
 #X floatatom 220 155 5 0 0 0 - - -;
 #X msg 150 156 auto \$1;
@@ -46,9 +46,6 @@ very fast.;
 #X text 715 422 smoothing;
 #X obj 289 252 t f;
 #X obj 197 368 loadbang;
-#X text 178 299 transform the movie into RGBA-space (if turned off
-\, [pix_convolve] will be by-passed and therefore much speed will be
-"gained");
 #X obj 110 439 tgl 15 0 empty empty empty 20 8 0 8 -262144 -1 -1 0
 1;
 #X obj 90 500 pix_texture;
@@ -86,35 +83,39 @@ very fast.;
 #X text 358 91 linux \, os-X:;
 #X text 363 140 linux \, ??:;
 #X obj 345 181 t a;
-#X msg 55 309 thread 0;
 #X msg 410 207 open \$1;
 #X obj 410 185 symbol;
 #X obj 471 185 openpanel;
 #X obj 563 185 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
+#X obj 90 309 pix_rgba;
+#X text 178 289 transform the movie into RGBA-space (if the image is
+not RGBA \, [pix_convolve] might not be able to process the image and
+therefore will do nothing \, which will dramatically "increase" performance)
+;
 #X connect 0 0 12 0;
 #X connect 1 0 12 1;
 #X connect 2 0 12 0;
 #X connect 3 0 2 0;
 #X connect 5 0 6 2;
-#X connect 6 0 27 0;
-#X connect 12 0 6 0;
+#X connect 6 0 26 0;
+#X connect 12 0 38 0;
 #X connect 12 1 4 0;
 #X connect 12 2 23 0;
 #X connect 13 0 11 1;
-#X connect 14 0 34 0;
-#X connect 15 0 34 0;
-#X connect 16 0 34 0;
+#X connect 14 0 33 0;
+#X connect 15 0 33 0;
+#X connect 16 0 33 0;
 #X connect 21 0 6 2;
 #X connect 23 0 12 1;
 #X connect 24 0 5 0;
-#X connect 26 0 6 0;
-#X connect 27 0 11 0;
-#X connect 29 0 30 0;
-#X connect 30 0 29 0;
-#X connect 34 0 12 0;
-#X connect 35 0 12 0;
-#X connect 36 0 34 0;
+#X connect 25 0 6 0;
+#X connect 26 0 11 0;
+#X connect 28 0 29 0;
+#X connect 29 0 28 0;
+#X connect 33 0 12 0;
+#X connect 34 0 33 0;
+#X connect 35 0 34 0;
+#X connect 36 0 35 0;
 #X connect 37 0 36 0;
-#X connect 38 0 37 0;
-#X connect 39 0 38 0;
+#X connect 38 0 6 0;
