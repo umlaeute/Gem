@@ -520,6 +520,8 @@ if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
 fi
 
+if test "x$have_quicktime_framework" = "x"; then have_quicktime_framework="no"; fi
+
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
 fi
@@ -532,8 +534,16 @@ fi
 if test "x$have_ieee1394" = "x"; then
  have_ieee1394="no";
 else
- have_ieee1394="yes ($have_ieee1394 )"
+ have_ieee1394="yes (${have_ieee1394# })"
 fi
+
+if test "x${have_v4l}" = "x"; then have_v4l="no"; fi
+if test "x${have_v4l2}" = "x"; then have_v4l2="no"; fi
+if test "x${have_ieee1394}" = "x"; then have_ieee1394="no"; fi
+if test "x${have_libdv}" = "x"; then have_libdv="no"; fi
+if test "x${have_unicap}" = "x"; then have_unicap="no"; fi
+if test "x${have_vfw32}" = "x"; then have_vfw32="no"; fi
+# TODO: have_ds
 
 if test "x$with_film" = "xplugins"; then
  use_film_plugins="yes"
@@ -578,6 +588,7 @@ Configuration:
 
   image-support
     use ImageMagick      : ${have_ImageMagick}
+    use QuickTime        : ${have_quicktime_framework}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
@@ -592,6 +603,10 @@ Configuration:
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
     use ieee1394         : ${have_ieee1394}
+    use DV               : ${have_libdv}
+    use Unicap           : ${have_unicap}
+    use Video-for-WinDOS : ${have_vfw32}
+    use QuickTime        : ${have_quicktime_framework}
 ])
 
 if test "x$PD_VERSION" = "x"; then
