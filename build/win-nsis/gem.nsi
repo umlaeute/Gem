@@ -27,7 +27,7 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
-OutFile "gem-${PRODUCT_VERSION}${PRODUCT_ARCH}.exe"
+OutFile "Gem-${PRODUCT_VERSION}${PRODUCT_ARCH}.exe"
 
 !define BASE_INDIR "..\.."
 !define BUILD_INDIR "..\win-vs2003"
