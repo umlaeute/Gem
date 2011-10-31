@@ -15,13 +15,19 @@ LOG
 #define _INCLUDE__GEM_UTILS_PIXPETE_H_
 
 #include <stdlib.h>
-
+#include <stdint.h>
 
 // utility functions from PeteHelpers.h
+
+#if 1
+typedef uint32_t U32; 
+typedef uint16_t U16;
+typedef uint8_t U8;
+#else
 typedef unsigned long U32; 
 typedef unsigned short U16;
 typedef unsigned char U8;
-
+#endif
 
 /* is this only on my system ?
    i thought Gem's YUV is UYVY and not YVYU
@@ -211,7 +217,7 @@ inline int GetLuminance(const U32 inColour) {
 
 	const int nLuminance =
             ((77 * nRed)+
-             (150* nGreen)+ // used to be 50 which is plain wron
+             (150* nGreen)+ // used to be 50 which is plain wrong
              (29 * nBlue));
 
 	return nLuminance;
