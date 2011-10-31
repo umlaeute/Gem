@@ -60,7 +60,7 @@ recordV4L2 :: recordV4L2():
   case GL_YUV422_GEM: m_palette = V4L2_PIX_FMT_UYVY; break;
   case GL_LUMINANCE:  m_palette = V4L2_PIX_FMT_GREY; break;
   case GL_RGBA:       m_palette = V4L2_PIX_FMT_RGB32; break;
-  default: throw(new GemException("invalid colorspace"));
+  default: throw(GemException("invalid colorspace"));
   }
   
 

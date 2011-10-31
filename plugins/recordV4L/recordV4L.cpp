@@ -55,13 +55,11 @@ recordV4L :: recordV4L():
   m_image.setCsizeByFormat(GL_RGBA);
   m_image.reallocate();
 
-
-
   switch(m_image.format) {
   case GL_YUV422_GEM: m_palette = VIDEO_PALETTE_YUV422; break;
   case GL_LUMINANCE:  m_palette = VIDEO_PALETTE_GREY; break;
   case GL_RGBA:       m_palette = VIDEO_PALETTE_RGB32; break;
-  default: throw(new GemException("invalid colorspace"));
+  default: throw(GemException("invalid colorspace"));
   }
   
 
