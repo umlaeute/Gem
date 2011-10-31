@@ -13,7 +13,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef _INCLUDE_GEMPLUGIN__IMAGESGI_IMAGESGI_H_
 #define _INCLUDE_GEMPLUGIN__IMAGESGI_IMAGESGI_H_
-#include "plugins/imageloaderBase.h"
+#include "plugins/imageloader.h"
 #include <stdio.h>
 
 /*-----------------------------------------------------------------
@@ -30,7 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins { 
-class GEM_EXPORT imageSGI : public gem::plugins::imageloaderBase {
+class GEM_EXPORT imageSGI : public gem::plugins::imageloader {
  public:
 
   //////////
@@ -47,6 +47,11 @@ class GEM_EXPORT imageSGI : public gem::plugins::imageloaderBase {
   //////////
   // estimate, how well we could save this image
   virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+
+
+  // this is always threadable
+  virtual bool isThreadable(void) { return true; }
+
 
 };
 };};
