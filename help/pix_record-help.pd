@@ -108,7 +108,7 @@ on which frames are to be recorded.;
 #X text 17 269 The recording is finished and the file flushed to disk
 \, after a "record 0" message is received. You might not be able to
 access the file for reading before recording has finished.;
-#X text 526 140 (do somthing);
+#X text 526 140 (do something);
 #X text 515 158 (monitoring);
 #X text 22 339 NOTE: currently only quicktime MOVies can be recorded.
 This might change in the future (watch the console!);

@@ -19,14 +19,14 @@ or less) native color-space. most of the times \, this will probably
 be not RGBA but RGB or BGR (on windows machines).;
 #X text 48 153 do not worry about this. however \, most of the pix-manips
 will only work correctly on RGBA-pixes. if this is the case and you
-send it a non-RGBA pixture it will say something like "pix_object cannon
+send it a non-RGBA pixture it will say something like "pix_object cannot
 handle gray image".;
 #X text 49 226 to avoid this \, you can convert your pix-buff to RGBA
 using "pix_rgba". this will be a no-cost operation if the pix_buf already
 is in RGBA.;
 #X text 36 334 you might notice a significant performance-enhancement
 by just turning the [pix_rgba] off (via the toggle). however \, not
-[pix_rgba] is expensive but the [pix_convolve] (which appears to do
+[pix_rgba] is expensive but actually the [pix_convolve] (which appears to do
 nothing when initialized with "0 0 0 0 1 0 0 0 0". When [pix_rgba]
 is "off" \, the [pix_convolve] will be bypassed \, and therefore be
 very fast.;

@@ -39,7 +39,7 @@
 #X restore 25 123 pd gemwin;
 #X msg 25 106 create;
 #X text 21 79 Create window and render;
-#X text 135 60 blending \, using he pixel addition;
+#X text 135 60 blending \, using pixel addition;
 #X connect 0 0 8 0;
 #X connect 1 0 2 0;
 #X connect 3 0 2 1;

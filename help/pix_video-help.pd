@@ -57,7 +57,7 @@ for the image (does not work on all capture devices);
 \, e.g. v4l \, ieee1394 \, etc.;
 #X text 16 276 Inlet 1: driver <symbol>: switch between different drivers
 \, e.g. v4l \, v4l2 \, dv...;
-#X text 13 66 [pix_video] opens a wide array of camera \, USB to FireWire
+#X text 13 66 [pix_video] opens a wide array of cameras \, USB to FireWire
 to capture cards \, as long as the camera is supported by your operating
 system.;
 #X obj 567 53 gemhead;
