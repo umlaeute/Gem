@@ -17,6 +17,7 @@
 
 #include "Gem/RTE.h"
 #include "Gem/Files.h"
+#include "Gem/Exception.h"
 
 gem::plugins::imagesaver :: ~imagesaver(void) {}
 
@@ -210,9 +211,14 @@ namespace gem { namespace plugins {
 	verbose(2, "trying to add '%s' as backend", key.c_str());
 	if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
 	  // not yet added, do so now!
-	  imagesaver*saver=
-	    gem::PluginFactory<imagesaver>::getInstance(key); 
-	  if(NULL==saver)break;
+	  imagesaver*saver=NULL;
+    try {
+	    saver=gem::PluginFactory<imagesaver>::getInstance(key); 
+    } catch(GemException x) {
+      saver=NULL;
+      verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());
+    }
+	  if(NULL==saver)continue;
 	  m_ids.push_back(key);
 	  m_savers.push_back(saver);
 	  count++;
