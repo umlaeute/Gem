@@ -25,6 +25,7 @@
 #include "Gem/Properties.h"
 
 #include "plugins/PluginFactory.h"
+#include "Gem/Exception.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -256,12 +257,18 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
     verbose(2, "trying to add '%s' as backend", key.c_str());
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
-      gem::plugins::film*handle=gem::PluginFactory<gem::plugins::film>::getInstance(key); 
-        if(NULL==handle)break;
-        m_ids.push_back(key);
-        m_handles.push_back(handle);
-        count++;
-        verbose(2, "added backend#%d '%s' @ 0x%x", m_handles.size()-1, key.c_str(), handle);
+      gem::plugins::film*handle=NULL;
+      try {
+        handle=gem::PluginFactory<gem::plugins::film>::getInstance(key); 
+      } catch(GemException x) {
+        handle=NULL;
+        verbose(1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
+      }
+      if(NULL==handle)break;
+      m_ids.push_back(key);
+      m_handles.push_back(handle);
+      count++;
+      verbose(2, "added backend#%d '%s' @ 0x%x", m_handles.size()-1, key.c_str(), handle);
     }
   }
 
