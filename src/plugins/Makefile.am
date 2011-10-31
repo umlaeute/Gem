@@ -23,12 +23,8 @@ libplugins_la_SOURCES= \
         PluginFactoryTimple.h \
         imageloader.cpp \
         imageloader.h \
-        imageloaderBase.cpp \
-        imageloaderBase.h \
         imagesaver.cpp \
         imagesaver.h \
-        imagesaverBase.cpp \
-        imagesaverBase.h \
         imageBase.cpp \
         imageBase.h \
         film.cpp \
