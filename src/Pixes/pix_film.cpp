@@ -260,7 +260,7 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
       gem::plugins::film*handle=NULL;
       try {
         handle=gem::PluginFactory<gem::plugins::film>::getInstance(key); 
-      } catch(GemException x) {
+      } catch(GemException&x) {
         handle=NULL;
         verbose(1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
       }

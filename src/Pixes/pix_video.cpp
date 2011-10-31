@@ -170,7 +170,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       startpost("backend #%d='%s'\t", m_videoHandles.size(), key.c_str());
       try {
 	handle=gem::PluginFactory<gem::plugins::video>::getInstance(key); 
-      } catch (GemException ex) {
+      } catch (GemException&ex) {
       }
       if(NULL==handle) { 
 	post("<--- DISABLED");

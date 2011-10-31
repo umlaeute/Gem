@@ -502,7 +502,7 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
     CPPExtern::m_holder = NULL;
     CPPExtern::m_holdname=NULL;
     return(obj);
-  } catch (GemException e) {
+  } catch (GemException&e) {
     ::verbose(2, "frei0r_loader: failed!");
     //e.report();
     return NULL;
@@ -516,7 +516,7 @@ bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
   pix_frei0r::F0RPlugin*plugin=NULL;
   try {
     plugin=new F0RPlugin(pluginname, canvas);
-  } catch (GemException e) {
+  } catch (GemException&e) {
     ::verbose(2, "frei0r_loader: failed!!");
     // e.report();
     return false;

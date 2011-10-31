@@ -954,7 +954,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
     CPPExtern::m_holder = NULL;
     CPPExtern::m_holdname=NULL;
     return(obj);
-  } catch (GemException e) {
+  } catch (GemException&e) {
     ::verbose(2, "freeframe_loader: failed!");
     //e.report(); 
     return NULL;

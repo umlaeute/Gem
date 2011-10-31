@@ -178,7 +178,7 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
       startpost("backend #%d='%s'\t", m_allhandles.size(), key.c_str());
       try {
         handle=gem::PluginFactory<gem::plugins::record>::getInstance(key); 
-      } catch (GemException ex) {
+      } catch (GemException&ex) {
         startpost("(%s) ", ex.what());
         handle=NULL;
       }

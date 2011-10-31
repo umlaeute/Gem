@@ -67,7 +67,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
     dll=NULL;
     try {
       dll=new GemDylib(f, "");
-    } catch (GemException x) {
+    } catch (GemException&x) {
         // oops, on w32 this might simply be because getFilenameListing() stripped the path
         // so let's try again, with Path added...
         if(f.find(path) == f.npos) {
@@ -75,7 +75,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
                 std::string f1=path;
                 f1+=f;
                 dll=new GemDylib(f1, "");
-            } catch (GemException x1) {
+            } catch (GemException&x1) {
                 // giving up
                 std::cerr << "library loading returned: " << x1.what() << std::endl;
                 dll=NULL;
@@ -89,7 +89,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
         try {
             m_pimpl->p_loaded.push_back(f);
             count++;
-        } catch (GemException x) {
+        } catch (GemException&x) {
             std::cerr << "plugin loading returned: " << x.what() << std::endl;
         }
     }

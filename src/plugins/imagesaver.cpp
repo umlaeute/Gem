@@ -214,7 +214,7 @@ namespace gem { namespace plugins {
 	  imagesaver*saver=NULL;
     try {
 	    saver=gem::PluginFactory<imagesaver>::getInstance(key); 
-    } catch(GemException x) {
+    } catch(GemException&x) {
       saver=NULL;
       verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());
     }

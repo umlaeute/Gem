@@ -50,7 +50,7 @@ void GemException::report(const char*origin) const throw() {
 void gem::catchGemException(const char*name, const t_object*obj) {
   try {
     throw;
-  } catch (GemException &ex) {
+  } catch (GemException&ex) {
     if(NULL==obj) {
       ex.report(name);
     } else {
