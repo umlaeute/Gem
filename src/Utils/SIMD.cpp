@@ -7,7 +7,7 @@ int GemSIMD::realcpuid = GEM_SIMD_NONE;
 
 
 
-GemSIMD :: GemSIMD()
+GemSIMD :: GemSIMD(void)
 {
  int dummy=0;
  cpuid=simd_runtime_check();
@@ -121,69 +121,91 @@ int GemSIMD :: simd_runtime_check(void)
 				return realcpuid;
 		  }
 
-#elif defined (__GNUC__) && defined (__POWERPC__)
+#elif defined (__GNUC__) 
+
+# if defined (__POWERPC__)
     /* detecting whether a powerPC supports AltiVec or not seems to be complicated.
      * therefore we rely on the compile-time setting (preprocessor)
      * see also http://lists.debian.org/debian-powerpc/2004/01/msg00106.html
      */
-/*
-unsigned int OGPProcessorHasAltivec(void)
-{
-    static int _OGPProcessorHasAltivec = -1;
-
-    if (_OGPProcessorHasAltivec < 0) {
-        int name[] = {CTL_HW, HW_VECTORUNIT};
-        size_t size;
-
-        size = sizeof(_OGPProcessorHasAltivec);
-        if (sysctl(name, 2, &_OGPProcessorHasAltivec, &size, NULL, 0) < 0) {
-            perror("sysctl");
-            _OGPProcessorHasAltivec = 0;
-        }
-    }
-
-    return _OGPProcessorHasAltivec;
-}
-*/
-# if defined __VEC__
+#  if defined __VEC__
     realcpuid=GEM_SIMD_ALTIVEC;
     return realcpuid;
-# endif /* __VEC__ */
+#  endif /* __VEC__ */
 
-#elif defined (__GNUC__) && (defined(_X86_) || defined(__i386__) || defined(__i586__) || defined(__i686__))
+# elif (defined(_X86_) || defined(__i386__) || defined(__i586__) || defined(__i686__))
     __asm__("push %%ebx \n" /* ebx might be used as PIC register  :-(  */
             "cpuid      \n"
             "pop  %%ebx \n"
 	    : "=a"(eax),"=d"(edx) : "a" (1): "cx");
-#elif defined (__GNUC__) && defined (__x86_64__)
+# elif defined (__x86_64__)
 /* for x86_64 */
+#  if 0
     __asm__("mov  %%bx, %%si \n"
             "cpuid           \n"
             "xchg %%bx, %%si \n"
 	    : "=a"(eax),"=d"(edx)
 	    : "a" (1)
 	    : "cx", "si");
+#  else
+    // x86_64 always supports MMX and SSE2
+    edx |= (1<<23); // MMX
+    edx |= (1<<25); // SSE
+    edx |= (1<<26); // SSE2
+#  endif
 # endif
+
+
     /* AltiVec should have been handled above */
     /* now comes the parsing of the cpuid on x86 hardware
      * see http://www.sandpile.org/ia32/cpuid.htm for what which bit is
      */
-#ifdef __SSE2__
+# ifdef __SSE2__
     if(edx & 1<<26){ // SSE2
       realcpuid=GEM_SIMD_SSE2;
       return realcpuid;
     }
-#endif
-#ifdef __SSE__
+# endif
+# ifdef __SSE__
     if(edx & 1<<25){ // SSE
     }
-#endif
-#ifdef __MMX__
+# endif
+# ifdef __MMX__
     if(edx & 1<<23){ // MMX
       realcpuid=GEM_SIMD_MMX;
       return realcpuid;
     }
-#endif
+# endif
+#endif /* __GNUC__ */
     realcpuid=GEM_SIMD_NONE;
     return realcpuid;
 }
+
+
+
+// =========================================================================================================
+
+#if 0
+// a collection of CPU detection code...
+
+unsigned int OGPProcessorHasAltivec(void)
+{
+  static int _OGPProcessorHasAltivec = -1;
+
+  if (_OGPProcessorHasAltivec < 0) {
+    int name[] = {CTL_HW, HW_VECTORUNIT};
+    size_t size;
+
+    size = sizeof(_OGPProcessorHasAltivec);
+    if (sysctl(name, 2, &_OGPProcessorHasAltivec, &size, NULL, 0) < 0) {
+      perror("sysctl");
+      _OGPProcessorHasAltivec = 0;
+    }
+  }
+
+  return _OGPProcessorHasAltivec;
+}
+
+
+#endif
+
