@@ -16,6 +16,7 @@
 #include "plugins/PluginFactory.h"
 
 #include "Gem/RTE.h"
+#include "Gem/Exception.h"
 
 gem::plugins::imageloader :: ~imageloader(void) {}
 
@@ -79,9 +80,14 @@ namespace gem { namespace plugins {
         verbose(2, "trying to add '%s' as backend", key.c_str());
         if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
           // not yet added, do so now!
-          gem::plugins::imageloader*loader=
-            gem::PluginFactory<gem::plugins::imageloader>::getInstance(key); 
-          if(NULL==loader)break;
+          gem::plugins::imageloader*loader=NULL;
+          try {
+            loader=gem::PluginFactory<gem::plugins::imageloader>::getInstance(key); 
+          } catch(GemException x) {
+            loader=NULL;
+            verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());
+          }
+          if(NULL==loader)continue;
           m_ids.push_back(key);
           m_loaders.push_back(loader);
           count++;
