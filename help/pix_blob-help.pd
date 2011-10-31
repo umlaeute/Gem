@@ -21,7 +21,7 @@ the calculation by changing the <mode>. Valid modes are: 0(gray)(default)
 #X text 56 450 pE: selecting "red" (1) will weight position of each
 pixel with its red-value. Pixels with "more" red will be weighted stronger
 \, thus moving the "center of gravity" -- the blob position -- nearer
-to themself. The total amount of "red" in the image defines the size
+to themselves. The total amount of "red" in the image defines the size
 of the blob.;
 #X text 58 545 You can specify a custom combination of channels with
 <color-weights>. pE: "1 0 2" will give more weight to the blue-channel
