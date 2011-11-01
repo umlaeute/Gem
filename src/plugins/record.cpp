@@ -63,9 +63,11 @@ namespace gem { namespace plugins {
   public:
     recordMeta(void) : m_canThread(false) {
       gem::PluginFactory<gem::plugins::record>::loadPlugins("record");
-      std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::record>::getIDs();
+      std::vector<std::string>ids=gem::PluginFactory<gem::plugins::record>::getIDs();
 
-      addPlugin(available_ids);
+      addPlugin(ids, "QT");
+      addPlugin(ids, "QT4L");
+      addPlugin(ids);
       
 #warning isThreadable
 #if 0
