@@ -399,8 +399,6 @@ GEM_RTE="pd"
 
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
-AC_ARG_WITH([pdversion], 
-		AS_HELP_STRING([--with-pdversion=<ver>],[enforce a certain pd-version (e.g. 0.37)]))
 
 if test -d "$with_pd" ; then
  if test -d "${with_pd}/src" ; then
@@ -421,38 +419,6 @@ if test -d "$with_pd" ; then
 fi
 
 AC_CHECK_HEADERS(m_pd.h)
-
-if test "x$with_pdversion" != "x"; then
-  PD_VERSION="$with_pdversion"
-else
-AC_MSG_CHECKING([for Pd-version])
-cat > conftest.c << EOF
-#include <stdio.h>
-#include "m_pd.h"
-int main(){
-  printf("%d.%d\n", PD_MAJOR_VERSION, PD_MINOR_VERSION);
-  return 0;
-}
-EOF
- if $CXX $CFLAGS -o conftest.o conftest.c > /dev/null 2>&1; then
-  PD_VERSION=`./conftest.o`
- else
-  PD_VERSION=""
- fi
-fi
-
-PD_MAJORVERSION=$(( $(echo $PD_VERSION | cut -d"." -f1) ))
-PD_MINORVERSION=$(( $(echo $PD_VERSION | cut -d"." -f2) ))
-
-if test "$PD_MAJORVERSION" -gt 0 -o "$PD_MINORVERSION" -ge 37; then
-  GEM_RTE_REFERENCEPATH=extra/Gem
-else
-  GEM_RTE_REFERENCEPATH=doc/5.reference/Gem
-fi
-
-AC_MSG_RESULT([${PD_MAJORVERSION}.${PD_MINORVERSION}])
-
-AC_SUBST(GEM_RTE_REFERENCEPATH)
 
 dnl LATER check why this doesn't use the --with-pd includes
 dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
