@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef _INCLUDE_GEMPLUGIN__RECORDQT4L_RECORDQT4L_H_
 #define _INCLUDE_GEMPLUGIN__RECORDQT4L_RECORDQT4L_H_
    
-#include "plugins/recordBase.h"
+#include "plugins/record.h"
    
 #if defined HAVE_LIBQUICKTIME 
 #define GEM_USE_RECORDQT4L
@@ -31,6 +31,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <lqt.h>
 # include <colormodels.h>
 #endif
+
+#include <map>
  
 /*---------------------------------------------------------------
  -------------------------------------------------------------------
@@ -46,7 +48,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT recordQT4L : public recordBase {
+ class GEM_EXPORT recordQT4L : public record {
  public:
   
   //////////
@@ -70,13 +72,13 @@ namespace gem { namespace plugins {
   //////////
   // close the movie file
   // stop recording, close the file and clean up temporary things
-  virtual void close(void);
+  virtual void stop(void);
 
   //////////
   // open a movie up
   // open the recordQT4L "filename" (think better about URIs ?)
   // returns TRUE if opening was successfull, FALSE otherwise 
-  virtual bool open(const std::string filename);
+  virtual bool start(const std::string filename, gem::Properties&props);
 
 
   
@@ -96,7 +98,7 @@ namespace gem { namespace plugins {
    * when called it returns something depending on success
    * (what? the framenumber and -1 (0?) on failure?)
    */
-  virtual bool putFrame(imageStruct*);
+  virtual bool write(imageStruct*);
 
   virtual bool setCodec(const std::string name);
 
@@ -105,12 +107,15 @@ namespace gem { namespace plugins {
    * get a list of supported codecs (short-form names, e.g. "mjpa")
    */ 
   virtual std::vector<std::string>getCodecs(void);
+  virtual const std::string getCodecDescription(const std::string codecname);
 
   /**
    * list all properties the currently selected codec supports
    * if the enumeration fails, this returns <code>false</code>
    */
   virtual bool enumProperties(gem::Properties&props);
+
+  virtual bool dialog(void) {return false;}
 
  private:
   quicktime_t *m_qtfile;
@@ -121,6 +126,8 @@ namespace gem { namespace plugins {
   lqt_codec_info_t*m_codec;
   lqt_codec_info_t**m_codecs;
   std::string m_codecname;
+  std::map<std::string, std::string>m_codecdescriptions;
+  gem::Properties m_props;
 
 
   /* a buffer for the quicktime encoder */
