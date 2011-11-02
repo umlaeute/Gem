@@ -429,7 +429,7 @@ if test -d "$with_pd" ; then
  LIBS="$LIBS ${GEM_RTE_LIBS}"
 fi
 
-AC_CHECK_HEADERS(m_pd.h)
+AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
 
 dnl LATER check why this doesn't use the --with-pd includes
 dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include

@@ -609,7 +609,7 @@ Configuration:
     use QuickTime        : ${have_quicktime_framework}
 ])
 
-if test "x$PD_VERSION" = "x"; then
+if test "x$have_pd" = "xno"; then
   AC_MSG_ERROR([Pd (header) is mandatory and seems to be missing!])
 fi
 
