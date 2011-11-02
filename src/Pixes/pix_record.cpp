@@ -204,7 +204,8 @@ void pix_record :: startRecording()
 
   m_currentFrame = 0;
   unsigned int i=0;
-  m_handle->setCodec(codec);
+  // do not re-set the codec, if there is no need...
+  /* m_handle->setCodec(codec); */
   if(m_handle->start(m_filename, m_props)) {
     m_filename=std::string("");
     m_recording=true;
@@ -417,6 +418,7 @@ void pix_record :: codecMess(t_atom *argv)
     }
   }
   if(m_handle->setCodec(sid)) {
+    m_codec=sid;
     verbose(1, "successfully set codec '%s'", sid.c_str());
   } else {
     error("couldn't find a valid backend for codec '%s'", sid.c_str());
