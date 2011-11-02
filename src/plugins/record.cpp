@@ -116,7 +116,7 @@ namespace gem { namespace plugins {
           m_ids.push_back(key);
           m_allHandles.push_back(handle);
           count++;
-          verbose(2, "added backend#%d '%s' @ 0x%x", m_allHandles.size()-1, key.c_str(), handle);
+          verbose(2, "added backend#%d '%s'", m_allHandles.size()-1, key.c_str());
         }
       }
       return (count>0);
@@ -164,6 +164,7 @@ namespace gem { namespace plugins {
 	return true;
       }
       std::vector<codechandle>handles=m_codechandle[codecname];
+
       if(handles.size()==0)
 	return false;
 
@@ -231,8 +232,9 @@ namespace gem { namespace plugins {
     // until one of them succeeds
     virtual bool start(const std::string filename, gem::Properties&props) {
       stop();
-      if(!checkSelectedHandles())
+      if(!checkSelectedHandles()) {
 	return false; // no selected codec available
+      }
 
       unsigned int i;
       for(i=0; i<m_selectedHandles.size(); i++) {
@@ -240,6 +242,7 @@ namespace gem { namespace plugins {
 	m_handle=m_selectedHandles[i];
 	if(success)return true;
       }
+      m_handle=NULL;
       return false;
     }
 
