@@ -410,6 +410,8 @@ fi
 if test -d "$with_pd" ; then
  if test -d "${with_pd}/src" ; then
    AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/src")
+ elif test -d "${with_pd}/include/pd" ; then
+   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/include/pd")
  elif test -d "${with_pd}/include" ; then
    AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/include")
  else
