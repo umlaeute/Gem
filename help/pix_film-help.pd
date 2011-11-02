@@ -1,4 +1,4 @@
-#N canvas 76 43 724 565 10;
+#N canvas 180 169 724 565 10;
 #X text 452 8 GEM object;
 #X obj 9 272 cnv 15 430 280 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -45,13 +45,12 @@
 -1;
 #X text 505 57 open a supported;
 #X text 506 68 movie-clip;
-#X obj 476 287 unpack 0 0 0;
-#X floatatom 466 310 5 0 0 3 length - -;
-#X floatatom 515 310 5 0 0 3 width - -;
-#X floatatom 565 310 5 0 0 3 height - -;
-#X obj 520 268 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X floatatom 466 312 5 0 0 3 length - -;
+#X floatatom 514 312 5 0 0 3 width - -;
+#X floatatom 565 312 5 0 0 3 height - -;
+#X obj 512 250 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
-#X floatatom 502 233 5 0 10000 1 frame# - -;
+#X floatatom 502 233 5 0 10000 1 frameNum - -;
 #X text 71 31 Class: pix object (pix source);
 #X text 29 57 Description: load in a movie-file;
 #X obj 463 122 openpanel;
@@ -60,7 +59,6 @@
 #X text 50 12 Synopsis: [pix_film];
 #X text 15 78 [pix_film] loads in a preproducecd digital-video to be
 used aas a texture \, bitblit or something else.;
-#X obj 451 251 pix_film;
 #X text 64 249 symbol: file to load initially;
 #X text 24 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
 the movie <filename> and decodes it into the specified color-space.
@@ -89,42 +87,90 @@ you have to change the frame accordingly \, OR use the "auto" message
 \, to automatically proceed to the next frame each rendering-cycle.
 In auto-mode \, the film is NOT looped. Instead you can reset the current-frame
 to zero when the end of the film is reached.;
-#N canvas 67 224 450 432 :: 0;
+#N canvas 17 82 928 614 :: 0;
 #X text 24 16 the format [pix_film] is able to decode depends on the
 system you are running Gem.;
-#X text 30 101 Win32: [pix_film] should be able to decode AVIs (all
-installed codecs). If you are lucky and your version of Gem is compiled
-with quicktime-support and you have quicktime installed on your machine
-\, you might be able to play back quicktime MOVs.;
-#X text 31 63 macOS-X: [pix_film] should be ablte to decode quicktime
-MOVs.;
-#X text 32 175 linux: that's a bit tricky. Since there is no "native"
-video-format for linux it heavily depends on what you have installed
-on your machine and how Gem has been compiled. If your system supports
-it \, [pix_film] is able to use quicktime4linux/libquicktime to decode
-quicktime-MOVs \, libmpeg1/libmpeg3 to decode MPEG2-videos and libaviplay
-which opens a wide range of supported formats (with the possibility
-to install additional codec-plugins) \, from AVI via MPEG2 to DivX
-\, although i have found MPEG support rather unstable. libaviplay does
-not support quicktime decoding. There is also some ruddy ffmpeg support
-(apart from the one supplied by libaviplay).;
-#X text 36 351 although one wouldn't believe it \, but i have found
-that under linux i could play most formats...;
+#X text 33 52 basically Gem's decoding capabailities are handled by
+plugins. You should see \, which plugins are loaded \, when instantiating
+the first [pix_film] object: a line "[pix_film]: foo support" means
+\, that the 'foo' plugin has been loaded.;
+#X text 453 50 you can add a plugin to your system by simply copying
+the plugin-binary called "gem_filmNAME.dll" (or gem_filmNAME.so if
+you are on a unix-like system) into your Gem-directory (where you find
+the Gem-binary \, e.g. Gem.dll);
+#X text 456 103 if you want to remove a plugin (e.g. because you are
+not satisfied with the decoding quality of because it is unstable)
+\, you can simply remove the corresponding gem_filmNAME.dll file from
+your Gem-directory.;
+#X text 35 123 which media can be decoded \, depends on the installed
+plugins and onthe codecs you have installed on your system.;
+#X obj 45 248 cnv 15 200 15 empty empty empty 20 12 0 14 -203904 -66577
+0;
+#X obj 45 303 cnv 15 200 15 empty empty empty 20 12 0 14 -203904 -66577
+0;
+#X obj 445 248 cnv 15 200 15 empty empty empty 20 12 0 14 -203904 -66577
+0;
+#X text 449 249 Gmerlin (gem_filmGMERLIN);
+#X text 49 249 QuickTime (gem_filmQT);
+#X text 73 262 available on OS-X (PPC and i386 \, but not 64bit!) and
+W32;
+#X text 73 277 should be able to decode any QuickTime MOV \, and probably
+a lot more;
+#X text 49 304 DirectShow (gem_filmDS);
+#X text 73 317 available on W32;
+#X text 73 331 should be able to decode anything for which you have
+a DirectShow filter installed;
+#X text 50 365 AVI (gem_filmAVI);
+#X text 73 380 available on W32;
+#X text 73 394 this uses the old (pre-XP) W32-API for decoding movies.
+Support for newer codecs is probably limited;
+#X text 50 424 AVIPLAY (gem_filmAVIPLAY);
+#X text 73 439 available on linux;
+#X text 74 452 uses the meta-framework "avifile" to decode movies \,
+which itself has a plugin system to use ffmpeg \, vorbis \, w32-dlls
+\, ... to decode videos;
+#X text 73 507 available on linux;
+#X text 50 494 quicktime4linux (gem_filmQT4L);
+#X text 73 522 uses libquicktime/lqt for decoding;
+#X text 473 262 available on linux (probably also on OSX and W32);
+#X text 473 277 uses Gmerlin-avdecoder to decode lots of formats;
+#X text 449 304 MPEG3 (gem_filmMPEG3);
+#X text 473 317 available on linux;
+#X text 473 331 should be able to decode various MPEG-formats (e.g.
+MPEG-2-Video and MPEG-2-transportstreams);
+#X text 473 380 available on linux;
+#X text 473 394 uses an old \, buggy (and no longer developed) library
+to decode MPEG-streams;
+#X text 450 365 MPEG (gem_filmMPEG1);
+#X text 450 424 Darwin (gem_filmDarwin);
+#X text 473 439 available on OS-X;
+#X text 450 484 test (gem_TEST);
+#X text 473 497 available on ALL platforms;
+#X text 473 512 outputs test images rather than decoding real media
+files;
+#X text 270 194 available film decoding plugins;
+#X text 260 210 (recommended plugins are highlighed);
+#X text 474 452 an alternative implementation of the QuickTime plugin
+for OS-X only;
 #X restore 485 464 pd :: FORMATS;
+#X obj 473 275 unpack 0 0 0 0;
+#X floatatom 571 276 5 0 0 3 fps - -;
+#X obj 451 251 pix_film;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 34 0;
-#X connect 17 0 31 0;
-#X connect 18 0 29 0;
-#X connect 21 0 22 0;
-#X connect 21 1 23 0;
-#X connect 21 2 24 0;
-#X connect 26 0 34 1;
-#X connect 29 0 30 0;
-#X connect 30 0 34 0;
-#X connect 34 0 17 0;
-#X connect 34 1 21 0;
-#X connect 34 2 25 0;
-#X connect 41 0 34 0;
-#X connect 42 0 41 0;
-#X connect 43 0 34 0;
+#X connect 14 0 48 0;
+#X connect 17 0 30 0;
+#X connect 18 0 28 0;
+#X connect 25 0 48 1;
+#X connect 28 0 29 0;
+#X connect 29 0 48 0;
+#X connect 39 0 48 0;
+#X connect 40 0 39 0;
+#X connect 41 0 48 0;
+#X connect 46 0 21 0;
+#X connect 46 1 22 0;
+#X connect 46 2 23 0;
+#X connect 46 3 47 0;
+#X connect 48 0 17 0;
+#X connect 48 1 46 0;
+#X connect 48 2 24 0;
