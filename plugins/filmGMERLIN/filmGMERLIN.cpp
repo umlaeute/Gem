@@ -233,8 +233,12 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_finalformat->frame_duration = m_gformat->frame_duration;
   m_finalformat->timescale = m_gformat->timescale;
 
+#ifdef __APPLE__
+  m_finalformat->pixelformat=GAVL_BGR_32;
+#else
   m_finalformat->pixelformat=GAVL_RGBA_32;
-
+#endif
+	
   m_finalframe = gavl_video_frame_create_nopad(m_finalformat);
   m_doConvert= (gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat)>0);
   m_image.image.xsize=m_gformat->frame_width;
