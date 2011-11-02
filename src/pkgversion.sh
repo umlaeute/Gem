@@ -36,7 +36,7 @@ pkgversion_svn () {
 
 pkgversion_git () {
   local version
-  if version=$(git describe --always --abbrev=0 2>/dev/null); then
+  if version=$(git describe --always 2>/dev/null); then
     PKGVERSION_BUGFIX="git"
     PKGVERSION_CODENAME="${version}"
   else
