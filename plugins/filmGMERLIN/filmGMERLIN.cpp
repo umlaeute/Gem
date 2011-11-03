@@ -234,7 +234,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_finalformat->timescale = m_gformat->timescale;
 
 #ifdef __APPLE__
-  m_finalformat->pixelformat=GAVL_BGR_32;
+  m_finalformat->pixelformat=GAVL_YUY2;
 #else
   m_finalformat->pixelformat=GAVL_RGBA_32;
 #endif
@@ -243,7 +243,11 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_doConvert= (gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat)>0);
   m_image.image.xsize=m_gformat->frame_width;
   m_image.image.ysize=m_gformat->frame_height;
+#ifdef __APPLE__
+  m_image.image.setCsizeByFormat(GL_YUV422_GEM);
+#else
   m_image.image.setCsizeByFormat(GL_RGBA);
+#endif
   m_image.image.notowned=true;
   m_image.image.upsidedown=true;
   m_image.newfilm=true;
