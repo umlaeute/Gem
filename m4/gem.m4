@@ -402,8 +402,8 @@ AC_ARG_WITH([pd],
 
 if test "x$KERN" = "xDarwin"; then
   if test "x${with_pd}" = "x"; then
-    if test -d "/Applications/Pd-extended.app/Contents/Resources/"; then with_pd="/Applications/Pd-extended.app/Contents/Resources/"; fi
-    if test -d "/Applications/Pd.app/Contents/Resources/"; then with_pd="/Applications/Pd.app/Contents/Resources/"; fi
+    if test -d "/Applications/Pd-extended.app/Contents/Resources"; then with_pd="/Applications/Pd-extended.app/Contents/Resources"; fi
+    if test -d "/Applications/Pd.app/Contents/Resources"; then with_pd="/Applications/Pd.app/Contents/Resources"; fi
   fi
 fi
 
