@@ -112,7 +112,11 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
 
     m_qtimage.xsize=m_image.image.xsize;
     m_qtimage.ysize=m_image.image.ysize;
+#ifdef __APPLE__
+    m_qtimage.setCsizeByFormat(GL_BGR);
+#else
     m_qtimage.setCsizeByFormat(GL_RGB);
+#endif
     m_qtimage.reallocate();
 
     m_newfilm = true;
