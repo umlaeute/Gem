@@ -400,11 +400,18 @@ GEM_RTE="pd"
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
 
-if test "x$KERN" = "xDarwin"; then
-  if test "x${with_pd}" = "x"; then
+## some default paths
+if test "x${with_pd}" = "x"; then
+ case $host_os in
+ *darwin*)
     if test -d "/Applications/Pd-extended.app/Contents/Resources"; then with_pd="/Applications/Pd-extended.app/Contents/Resources"; fi
     if test -d "/Applications/Pd.app/Contents/Resources"; then with_pd="/Applications/Pd.app/Contents/Resources"; fi
-  fi
+ ;;
+ *mingw* | *cygwin*)
+    if test -d "${PROGRAMFILES}/Pd-extended"; then with_pd="${PROGRAMFILES}/Pd-extended"; fi
+    if test -d "${PROGRAMFILES}/pd"; then with_pd="${PROGRAMFILES}/pd"; fi
+ ;;
+ esac
 fi
 
 if test -d "$with_pd" ; then
