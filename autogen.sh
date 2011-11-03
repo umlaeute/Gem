@@ -5,7 +5,7 @@ package=Gem
 KERN=$(uname -s)
 case "${KERN}" in
  Darwin)
-   PATH=/sw/bin:${PATH}
+#   PATH=/sw/bin:${PATH}
    ;;
  *)
   ;;
