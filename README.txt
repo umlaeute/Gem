@@ -4,6 +4,16 @@ You can get the current distribution from:
 http://gem.iem.at
 http://sourceforge.net/projects/pd-gem
 
+if you want to compile the newest (bleeding edge, and possibly unstable) source
+code yourself, you can get a copy from the public git repository on sourceforge:
+
+ read-only  access: git://pd-gem.git.sourceforge.net/gitroot/pd-gem/Gem
+ read-write access: ssh://pd-gem.git.sourceforge.net/gitroot/pd-gem/Gem
+
+usually, you will only need the read-only repository, which you can get with
+
+$ git clone git://pd-gem.git.sourceforge.net/gitroot/pd-gem/Gem
+
 =============================================
 NEW:::
 ------
@@ -14,7 +24,7 @@ the IRIX version might work (but most probably will not): if you want to use Gem
 for installation instructions see below
 
 
-NEW (gem-0.87):::
+NEW (gem>=0.87):::
 -----------------
 (note: this NEWs only refer to the packaging, not to features of Gem)
 
