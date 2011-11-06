@@ -238,7 +238,7 @@ void pix_record :: stopRecording()
 /////////////////////////////////////////////////////////
 void pix_record :: render(GemState *state)
 {
-  if(!m_handle)return;
+  if(!m_handle || !m_recording)return;
 
   //check if state exists
   if(!state)return;
