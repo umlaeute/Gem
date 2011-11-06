@@ -160,7 +160,7 @@ namespace gem { namespace plugins {
   codecListStorage *codecContainer;
   int numCodecContainer;
 
-  std::map<std::string, std::string>m_codecdescriptions;
+  //std::map<std::string, std::string>m_codecdescriptions;
  };
 };};
 #endif	// for header file
