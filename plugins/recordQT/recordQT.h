@@ -10,7 +10,7 @@
 //this will record QT movies
 #ifndef _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
 #define _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
-#include "plugins/recordBase.h"
+#include "plugins/record.h"
 
 #define QT_MAX_FILENAMELENGTH 256
 
@@ -48,7 +48,7 @@
     
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT recordQT : public recordBase
+ class GEM_EXPORT recordQT : public record
 {
  public:
 
@@ -60,12 +60,12 @@ namespace gem { namespace plugins {
   // Destructor
   virtual ~recordQT(void);
 
-  virtual void close(void);
-  virtual bool open(const std::string filename);
+  virtual void stop(void);
+  virtual bool start(const std::string filename, gem::Properties&);
     	
   //////////
   // Do the rendering
-  virtual bool putFrame(imageStruct*img);
+  virtual bool write(imageStruct*img);
  
   ////////
   // call up compression dialog
@@ -75,6 +75,11 @@ namespace gem { namespace plugins {
   virtual bool	setCodec(int num);
   virtual bool	setCodec(const std::string name);
 
+
+  virtual std::vector<std::string>getCodecs(void);
+  virtual const std::string getCodecDescription(const std::string codecname);
+  virtual bool enumProperties(gem::Properties&props);
+
  private:
 		
   virtual void	setupQT(void);
@@ -83,7 +88,7 @@ namespace gem { namespace plugins {
 	
   //////
   // is recording setup and ready to go?
-  bool			m_recordSetup;
+  bool		m_recordSetup;
 
   bool		m_recordStart;
   bool		m_recordStop;
@@ -95,12 +100,11 @@ namespace gem { namespace plugins {
 
   //////////
   // (previous) dimensions to check
-  int m_width, m_height;
+  int           m_width, m_height;
   int		m_prevHeight,m_prevWidth;
 
 
   imageStruct	*m_compressImage;
-
 
 #ifdef __APPLE__
   UnsignedWide startTime, endTime;
@@ -155,6 +159,8 @@ namespace gem { namespace plugins {
   
   codecListStorage *codecContainer;
   int numCodecContainer;
+
+  std::map<std::string, std::string>m_codecdescriptions;
  };
 };};
 #endif	// for header file

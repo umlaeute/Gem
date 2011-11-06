@@ -57,8 +57,7 @@ REGISTER_RECORDFACTORY("QT", recordQT);
 //
 /////////////////////////////////////////////////////////
 recordQT :: recordQT(void)
-  : recordBase(),
-    m_recordSetup(false),
+  : m_recordSetup(false),
     m_recordStart(false),
     m_recordStop(false),
     m_width(-1), m_height(-1), 
@@ -356,7 +355,7 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
 //
 // stops recording into the QT movie
 //
-void recordQT :: close(void)
+void recordQT :: stop(void)
 {
   ComponentResult			compErr = noErr;
   OSErr					err;
@@ -474,7 +473,7 @@ void recordQT :: compressFrame(void)
 // render
 //
 /////////////////////////////////////////////////////////
-bool recordQT :: putFrame(imageStruct*img)
+bool recordQT :: write(imageStruct*img)
 {
   //check if state exists
   if(!img)return false;
@@ -510,7 +509,7 @@ bool recordQT :: putFrame(imageStruct*img)
   if (m_recordStop){
     //guard against someone not setting up QT beforehand
     if (!m_recordSetup)	return false;
-    close();
+    stop();
   }
   return true;
 }
@@ -583,6 +582,22 @@ const char*recordQT :: getCodecName(int i)
 {
   if(i<0 || i>numCodecContainer)return NULL;
   return (codecContainer[i].name);
+}
+
+std::vector<std::string>recordQT::getCodecs(void) {
+  std::vector<std::string>result;
+  int i;
+  for(i=0; i<numCodecContainer; i++) {
+    result.push_back(codecContainer[i].name);
+  }
+  return result;
+}
+const std::string recordQT::getCodecDescription(const std::string codec) {
+  return(codec);
+}
+bool recordQT::enumProperties(gem::Properties&props) {
+  props.clear();
+  return false;
 }
 
 
@@ -679,7 +694,7 @@ bool recordQT :: setCodec(const std::string codecName)
   return false;
 }
 
-bool recordQT :: open(const std::string filename)
+bool recordQT :: start(const std::string filename, gem::Properties&props)
 {
   // if recording is going, do not accept a new file name
   // on OSX changing the name while recording won't have any effect
