@@ -208,15 +208,14 @@ bool recordV4L2 :: setCodec(const std::string name)
 /////////////////////////////////////////////////////////
 std::vector<std::string>recordV4L2::getCodecs(void) {
   std::vector<std::string>result;
-
-  m_codecdescriptions.clear();
   result.push_back(s_codec_name);
-  m_codecdescriptions[s_codec_name]=s_codec_desc;
-
   return result;
 }
 const std::string recordV4L2::getCodecDescription(const std::string codec) {
-  return m_codecdescriptions[codec];
+  std::string result;
+  if(codec==s_codec_name)
+    result=s_codec_desc;
+  return result;
 }
 
 bool recordV4L2::enumProperties(gem::Properties&props) {

@@ -97,7 +97,6 @@ namespace gem { namespace plugins {
 
 
  private:
-  std::map<std::string, std::string>m_codecdescriptions;
   int m_fd;
   imageStruct m_image;
   bool m_init;
