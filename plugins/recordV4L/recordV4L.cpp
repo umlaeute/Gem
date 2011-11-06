@@ -45,9 +45,10 @@ REGISTER_RECORDFACTORY("V4L", recordV4L);
 //
 /////////////////////////////////////////////////////////
 
-recordV4L :: recordV4L(): 
-  recordBase(),
-  m_fd(-1)
+recordV4L :: recordV4L(void): 
+  m_fd(-1),
+  m_init(false),
+  m_palette(0)
 {
   m_image.xsize=720;
   m_image.xsize=576;
@@ -69,12 +70,12 @@ recordV4L :: recordV4L():
 // Destructor
 //
 /////////////////////////////////////////////////////////
-recordV4L :: ~recordV4L()
+recordV4L :: ~recordV4L(void)
 {
-  close();
+  stop();
 }
 
-void recordV4L :: close(void)
+void recordV4L :: stop(void)
 {
   if(m_fd>=0)
     ::close(m_fd);
@@ -82,9 +83,9 @@ void recordV4L :: close(void)
 
 }
 
-bool recordV4L :: open(const std::string filename)
+bool recordV4L :: start(const std::string filename, gem::Properties&props)
 {
-  close();
+  stop();
 
   m_fd=::open(filename.c_str(), O_RDWR);
   if(m_fd<0)return false;
@@ -92,18 +93,18 @@ bool recordV4L :: open(const std::string filename)
   struct video_picture vid_pic;
   if (ioctl(m_fd, VIDIOCGPICT, &vid_pic) == -1) {
     perror("VIDIOCGPICT");
-    close(); return false;
+    stop(); return false;
   }
   vid_pic.palette = m_palette;
   if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
     perror("VIDIOCSPICT");
-    close(); return false;
+    stop(); return false;
   }
 
   struct video_window vid_win;
   if (ioctl(m_fd, VIDIOCGWIN, &vid_win) == -1) {
     perror("(VIDIOCGWIN)");
-    close(); return false;
+    stop(); return false;
   }
 
   m_init=false;
@@ -122,26 +123,26 @@ bool recordV4L::init(const imageStruct* dummyImage, const int framedur) {
 
   if (ioctl(m_fd, VIDIOCGPICT, &vid_pic) == -1) {
     perror("VIDIOCGPICT");
-    close(); return false;
+    stop(); return false;
   }
 
   vid_pic.palette = m_palette;
   
   if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
     perror("VIDIOCSPICT");
-    close(); return false;
+    stop(); return false;
   }
 
   if (ioctl(m_fd, VIDIOCGWIN, &vid_win) == -1) {
     perror("ioctl (VIDIOCGWIN)");
-    close(); return false;
+    stop(); return false;
   }
   
   vid_win.width  = w;
   vid_win.height = h;
   if (ioctl(m_fd, VIDIOCSWIN, &vid_win) == -1) {
     perror("ioctl (VIDIOCSWIN)");
-    close(); return false;
+    stop(); return false;
   }
 
   m_image.xsize=w;
@@ -158,7 +159,7 @@ bool recordV4L::init(const imageStruct* dummyImage, const int framedur) {
 // do the actual encoding and writing to file
 //
 /////////////////////////////////////////////////////////
-bool recordV4L :: putFrame(imageStruct*img)
+bool recordV4L :: write(imageStruct*img)
 {
   if(!m_init){
     if(!init(img, 0))
@@ -198,20 +199,27 @@ bool recordV4L :: setCodec(const std::string name)
   return false;
 }
 
+
 /////////////////////////////////////////////////////////
 // get codecs
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>recordV4L::getCodecs() {
+std::vector<std::string>recordV4L::getCodecs(void) {
   std::vector<std::string>result;
-
-  m_codecdescriptions.clear();
   result.push_back(s_codec_name);
-  m_codecdescriptions[s_codec_name]=s_codec_desc;
-
+  return result;
+}
+const std::string recordV4L::getCodecDescription(const std::string codec) {
+  std::string result;
+  if(codec==s_codec_name)
+    result=s_codec_desc;
   return result;
 }
 
+bool recordV4L::enumProperties(gem::Properties&props) {
+  props.clear();
+  return false;
+}
 
 #if 0
 /* handler for ioctls from the client */
@@ -472,14 +480,14 @@ static void *signal_loop(void *arg)
 
 
 #else
-recordV4L :: recordV4L()
+recordV4L :: recordV4L(void)
 {
 }
 ////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-recordV4L :: ~recordV4L()
+recordV4L :: ~recordV4L(void)
 {
 }
 

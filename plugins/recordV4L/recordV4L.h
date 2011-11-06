@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef _INCLUDE_GEMPLUGIN__RECORDV4L_RECORDV4L_H_
 #define _INCLUDE_GEMPLUGIN__RECORDV4L_RECORDV4L_H_
    
-#include "plugins/recordBase.h"
+#include "plugins/record.h"
 
 #if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
 # define HAVE_VIDEO4LINUX
@@ -45,7 +45,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
- class GEM_EXPORT recordV4L : public recordBase {
+ class GEM_EXPORT recordV4L : public record {
  public:
   
   //////////
@@ -63,13 +63,13 @@ namespace gem { namespace plugins {
   //////////
   // close the movie file
   // stop recording, close the file and clean up temporary things
-  virtual void close(void);
+  virtual void stop(void);
 
   //////////
   // open a movie up
   // open the recordV4L "filename" (think better about URIs ?)
   // returns TRUE if opening was successfull, FALSE otherwise 
-  virtual bool open(const std::string filename);
+  virtual bool start(const std::string filename, gem::Properties&);
 
   
   //////////
@@ -79,7 +79,7 @@ namespace gem { namespace plugins {
   // framedur is the duration of one frame in [ms]
   //   
   // returns TRUE if init was successfull, FALSE otherwise 
-  virtual bool init(const imageStruct* dummyImage, const int framedur);
+  bool init(const imageStruct* dummyImage, const int framedur);
 
   //////////
   // compress and write the next frame
@@ -87,7 +87,7 @@ namespace gem { namespace plugins {
    * when called it returns something depending on success
    * (what? the framenumber and -1 (0?) on failure?)
    */
-  virtual bool putFrame(imageStruct*);
+  virtual bool write(imageStruct*);
 
   virtual bool setCodec(const std::string);
 
@@ -95,9 +95,12 @@ namespace gem { namespace plugins {
    * get a list of supported codecs (short-form names, e.g. "mjpa")
    */ 
   virtual std::vector<std::string>getCodecs(void);
+  virtual const std::string getCodecDescription(const std::string);
+  virtual bool enumProperties(gem::Properties&);
+
+  virtual bool dialog(void) {return false;}
 
  private:
-
   int m_fd;
   imageStruct m_image;
   bool m_init;
