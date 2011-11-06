@@ -149,7 +149,7 @@ recordQT :: recordQT(void)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-recordQT :: ~recordQT()
+recordQT :: ~recordQT(void)
 {
   ComponentResult			compErr = noErr;
   if (stdComponent != NULL){
@@ -162,7 +162,7 @@ recordQT :: ~recordQT()
 // Prepares QT for recording
 //
 /////////////////////////////////////////////////////////
-void recordQT :: setupQT() //this only needs to be done when codec info changes
+void recordQT :: setupQT(void) //this only needs to be done when codec info changes
 {
   FSSpec	theFSSpec;
   OSErr		err = noErr;
@@ -218,7 +218,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   }
 #elif defined _WIN32
   else {
-      /* just create this file, in case it isn't there already...weird hack */
+    /* just create this file, in case it isn't there already...weird hack */
     char filename[QT_MAX_FILENAMELENGTH];
     UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     FILE*fil=NULL;
@@ -238,12 +238,12 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 
   //create the movie from the file
   err = CreateMovieFile(	&theFSSpec,
-                          FOUR_CHAR_CODE('TVOD'),
-                          smSystemScript,
-                          createMovieFileDeleteCurFile |
-                          createMovieFileDontCreateResFile,
-                          &nFileRefNum,
-                          &m_movie);
+				FOUR_CHAR_CODE('TVOD'),
+				smSystemScript,
+				createMovieFileDeleteCurFile |
+				createMovieFileDontCreateResFile,
+				&nFileRefNum,
+				&m_movie);
   if (err != noErr) {
     error("recordQT: CreateMovieFile failed with error %d",err);
     return;
@@ -255,23 +255,23 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   m_srcRect.bottom = m_height;
   m_srcRect.right = m_width;
 	
-	if (m_compressImage->format == GL_YUV422_GEM){
+  if (m_compressImage->format == GL_YUV422_GEM){
     m_rowBytes = m_width * 2;
-		colorspace = k422YpCbCr8CodecType;
-		post("recordQT: using YUV");
+    colorspace = k422YpCbCr8CodecType;
+    post("recordQT: using YUV");
   }
-	if (m_compressImage->format == GL_BGRA){
+  if (m_compressImage->format == GL_BGRA){
 #ifdef __BIG_ENDIAN__
     colorspace = k32BGRAPixelFormat;// k32RGBAPixelFormat;
 #else
     colorspace = k32ARGBPixelFormat;
 #endif
-		m_rowBytes = m_width * 4;
-		post("recordQT: using BGRA");
-	}
+    m_rowBytes = m_width * 4;
+    post("recordQT: using BGRA");
+  }
 #ifdef _WIN32
-	colorspace = k32RGBAPixelFormat;
-	m_rowBytes = m_width*4;
+  colorspace = k32RGBAPixelFormat;
+  m_rowBytes = m_width*4;
 #endif
   //give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
   err = QTNewGWorldFromPtr(&m_srcGWorld,
@@ -294,18 +294,18 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   //since QT has flipped Y compared to GL it is upside down to GL but not to itself
   //so while the upsidedown flag is set for QT images sent to GL it is not correct for pix_ processing.
   //this is a hack on OSX since the native is YUV for pix_ and the only BGRA will usually be from pix_snap
-	if (m_compressImage->upsidedown && m_compressImage->format == GL_BGRA) {
-		MatrixRecord	aMatrix;
-		GetMovieMatrix(m_movie,&aMatrix);
-		verbose(2,"upside down");
-		ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
-		SetMovieMatrix(m_movie,&aMatrix);
-	}
+  if (m_compressImage->upsidedown && m_compressImage->format == GL_BGRA) {
+    MatrixRecord	aMatrix;
+    GetMovieMatrix(m_movie,&aMatrix);
+    verbose(2,"upside down");
+    ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
+    SetMovieMatrix(m_movie,&aMatrix);
+  }
 #elif defined _WIN32
-	MatrixRecord	aMatrix;
-	GetMovieMatrix(m_movie,&aMatrix);
-	ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
-	SetMovieMatrix(m_movie,&aMatrix);
+  MatrixRecord	aMatrix;
+  GetMovieMatrix(m_movie,&aMatrix);
+  ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
+  SetMovieMatrix(m_movie,&aMatrix);
 #endif
 
   track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
@@ -356,7 +356,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
 //
 // stops recording into the QT movie
 //
-void recordQT :: close()
+void recordQT :: close(void)
 {
   ComponentResult			compErr = noErr;
   OSErr					err;
@@ -367,7 +367,7 @@ void recordQT :: close()
   if (err != noErr) {
     error("recordQT: EndMediaEdits failed with error %d",err);
     return;  //no sense in crashing after this
-	}
+  }
 
   err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
   if (err != noErr) error("recordQT: InsertMediaIntoTrack failed with error %d",err);
@@ -394,7 +394,7 @@ void recordQT :: close()
   m_filename[0]=0;
 }
 
-void recordQT :: compressFrame()
+void recordQT :: compressFrame(void)
 {
   OSErr			err;
   Handle		compressedData; //data to put in QT mov
@@ -402,23 +402,23 @@ void recordQT :: compressFrame()
   short			syncFlag; //flag for keyframes
 
 #ifdef __APPLE__
-	//fakes the first run time
-	if (m_firstRun){
-	  ::Microseconds(&startTime);
-		m_firstRun = 0;	
-	}
-	::Microseconds(&endTime);
+  //fakes the first run time
+  if (m_firstRun){
+    ::Microseconds(&startTime);
+    m_firstRun = 0;	
+  }
+  ::Microseconds(&endTime);
 
-	seconds = static_cast<float>(endTime.lo - startTime.lo) / 1000000.f;
-	m_ticks = static_cast<int>(600 * seconds);
-	if (m_ticks < 20) m_ticks = 20;
+  seconds = static_cast<float>(endTime.lo - startTime.lo) / 1000000.f;
+  m_ticks = static_cast<int>(600 * seconds);
+  if (m_ticks < 20) m_ticks = 20;
 	
 #endif //timers
 	
 #ifdef _WIN32
-	static int firstTime = 1;
-	static float countFreq = 0;
-	if (m_firstRun)
+  static int firstTime = 1;
+  static float countFreq = 0;
+  if (m_firstRun)
     {
       // LARGE_INTEGER freq;
       if (!QueryPerformanceFrequency(&freq))
@@ -429,14 +429,14 @@ void recordQT :: compressFrame()
       m_ticks = 20;
       m_firstRun = 0;
     }else{
-		QueryPerformanceCounter(&endTime);
-		float fps = 1000 / (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-		seconds = (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
-		// post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,static_cast<int>startTime.QuadPart,static_cast<int>endTime.QuadPart,fps,seconds);
+    QueryPerformanceCounter(&endTime);
+    float fps = 1000 / (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
+    seconds = (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
+    // post("pix_recordQT: freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,static_cast<int>startTime.QuadPart,static_cast<int>endTime.QuadPart,fps,seconds);
 
-		m_ticks = static_cast<int>(600 * seconds);
-		if (m_ticks < 20) m_ticks = 20;
-	}
+    m_ticks = static_cast<int>(600 * seconds);
+    if (m_ticks < 20) m_ticks = 20;
+  }
 #endif
 
   //post("recordQT: compressing frame");
@@ -462,7 +462,7 @@ void recordQT :: compressFrame()
   if (err != noErr) error("recordQT: AddMediaSample failed with error %d",err);
 
 #ifdef __APPLE__
-	::Microseconds(&startTime);					
+  ::Microseconds(&startTime);					
 #endif //timer		
 
 #ifdef _WIN32
@@ -484,14 +484,14 @@ bool recordQT :: putFrame(imageStruct*img)
   //record
   if (m_recordStart) {
     //if setupQT() has not been run do that first
-      if (!m_recordSetup) {
-          setupQT();
-          if(!m_recordSetup) {
-            /* failed! */
-            m_recordStop = true;
-            return false;
-          }
+    if (!m_recordSetup) {
+      setupQT();
+      if(!m_recordSetup) {
+	/* failed! */
+	m_recordStop = true;
+	return false;
       }
+    }
 		
     //should check if the size has changed or else we will freak the compressor's trip out
     if (m_width == m_prevWidth && m_height == m_prevHeight) {
@@ -519,7 +519,7 @@ bool recordQT :: putFrame(imageStruct*img)
 // dialogMess
 //
 /////////////////////////////////////////////////////////
-bool recordQT :: dialog()
+bool recordQT :: dialog(void)
 {
   //if recording is going, do not open the dialog
   if (!m_recordStart) {
@@ -574,7 +574,7 @@ bool recordQT :: dialog()
 // spits out a list of installed codecs and stores them
 //
 /////////////////////////////////////////////////////////
-int recordQT :: getNumCodecs()
+int recordQT :: getNumCodecs(void)
 {
   //get list of codecs installed  -- useful later
   return(numCodecContainer);
@@ -600,7 +600,7 @@ bool recordQT :: setCodec(int num)
 }
 bool recordQT :: setCodec(const std::string codecName)
 {
-	int	i;
+  int	i;
   int requestedCodec=0;
   if(codecName=="pjpeg")
     requestedCodec=1;
@@ -697,13 +697,13 @@ bool recordQT :: open(const std::string filename)
 }
 
 void recordQT :: resetCodecSettings(void) {
-    m_codecType = 0;
-    m_codec = 0;
+  m_codecType = 0;
+  m_codec = 0;
 
-    m_depth = 0;
-    m_spatialQuality = codecNormalQuality;
-    m_frameRate = 0;
-    m_keyFrameRate = 0;
+  m_depth = 0;
+  m_spatialQuality = codecNormalQuality;
+  m_frameRate = 0;
+  m_keyFrameRate = 0;
 }
 
 #endif // HAVE_QUICKTIME
