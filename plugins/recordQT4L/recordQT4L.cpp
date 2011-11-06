@@ -44,10 +44,8 @@ REGISTER_RECORDFACTORY("QT4L", recordQT4L);
 //
 /////////////////////////////////////////////////////////
 
-recordQT4L :: recordQT4L(): 
-  recordBase()
+recordQT4L :: recordQT4L(void) :
 #if defined  GEM_USE_RECORDQT4L
-  ,
   m_qtfile(NULL),
   m_codec(NULL), m_codecs(NULL),
   m_codecname(std::string()), 
@@ -75,13 +73,13 @@ recordQT4L :: recordQT4L():
 // Destructor
 //
 /////////////////////////////////////////////////////////
-recordQT4L :: ~recordQT4L()
+recordQT4L :: ~recordQT4L(void)
 {
-  close();
+  stop();
 }
 
 #if defined  GEM_USE_RECORDQT4L
-void recordQT4L :: close(void)
+void recordQT4L :: stop(void)
 {
   if(m_qtfile){
     quicktime_close(m_qtfile);
@@ -138,16 +136,20 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
   return LQT_FILE_QT; /* should be save for now */
 }
 
-bool recordQT4L :: open(const std::string filename)
+bool recordQT4L :: start(const std::string filename, gem::Properties&props)
 {
-  close();
+  post("starting QT4LL %s", filename.c_str());
+  stop();
 
   lqt_file_type_t type =  guess_qtformat(filename);
 
   m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL){
+    post("starting QT4L %s failed", filename.c_str());
     return false;
   }
+
+  m_props=props;
 
   m_restart=true;
   return (true);
@@ -311,7 +313,7 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
 // do the actual encoding and writing to file
 //
 /////////////////////////////////////////////////////////
-bool recordQT4L :: putFrame(imageStruct*img)
+bool recordQT4L :: write(imageStruct*img)
 {
   if(!m_qtfile || !img){
     return false;
@@ -325,7 +327,7 @@ bool recordQT4L :: putFrame(imageStruct*img)
   if(m_restart){
     if(!init(img, framerate)) {
       /* something went wrong! */
-      close();
+      stop();
       error("unable to initialize QT4L");
       return false;
     }
@@ -379,7 +381,7 @@ bool recordQT4L :: putFrame(imageStruct*img)
 // get codecs
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>recordQT4L::getCodecs() {
+std::vector<std::string>recordQT4L::getCodecs(void) {
   std::vector<std::string>result;
   m_codecdescriptions.clear();
 
@@ -400,6 +402,10 @@ std::vector<std::string>recordQT4L::getCodecs() {
   }
 
   return result;
+}
+
+const std::string recordQT4L::getCodecDescription(const std::string codecname) {
+  return m_codecdescriptions[codecname];
 }
 
 /////////////////////////////////////////////////////////

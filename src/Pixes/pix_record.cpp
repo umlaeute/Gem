@@ -114,20 +114,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
   m_outInfo      = outlet_new(this->x_obj, 0);
 
 
-  gem::PluginFactory<gem::plugins::record>::loadPlugins("record");
-  std::vector<std::string>ids=gem::PluginFactory<gem::plugins::record>::getIDs();
-  addHandle(ids, "QT");
-  addHandle(ids, "QT4L");
-  addHandle(ids);
-
-
-  if(m_allhandles.size()>0) {
-  } else {
-    error("no video backends found!");
-  }
-
-  m_handles=m_allhandles;
-
+  m_handle=gem::plugins::record::getInstance();
   getCodecList();
 }
 
@@ -203,6 +190,8 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
 //
 void pix_record :: startRecording()
 {
+  if(!m_handle)return;
+
   if(m_filename.empty()) {
     error("start recording requested with no prior open");
     return;
@@ -210,23 +199,14 @@ void pix_record :: startRecording()
 
   // find a handle for the current settings (filename, codec, props)
   const std::string codec=m_codec;
-  if(m_handle) {
-    stopRecording();
-    m_handle=NULL;
-  }
+  stopRecording();
+
+
   m_currentFrame = 0;
   unsigned int i=0;
-  for(i=0; i<m_handles.size(); i++) {
-    // check whether the handle supports the requested codec
-    gem::plugins::record *handle=m_handles[i];
-    if(!codec.empty() && !handle->setCodec(codec))
-      continue;
-    if(handle->start(m_filename, m_props)) {
-      m_handle=handle;
-      break;
-    }
-  }
-  if(m_handle) {
+  // do not re-set the codec, if there is no need...
+  /* m_handle->setCodec(codec); */
+  if(m_handle->start(m_filename, m_props)) {
     m_filename=std::string("");
     m_recording=true;
   } else {
@@ -239,6 +219,8 @@ void pix_record :: startRecording()
 //
 void pix_record :: stopRecording()
 {
+  if(!m_handle)return;
+
   if(m_recording) {
     m_handle->stop();
     m_currentFrame = 0;
@@ -256,6 +238,8 @@ void pix_record :: stopRecording()
 /////////////////////////////////////////////////////////
 void pix_record :: render(GemState *state)
 {
+  if(!m_handle || !m_recording)return;
+
   //check if state exists
   if(!state)return;
   pixBlock*img=NULL;
@@ -264,7 +248,6 @@ void pix_record :: render(GemState *state)
   if(!img || !img->image.data){
     return;
   }
-  if(!m_handle)return;
   
   if(m_banged||m_automatic){
     //      if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
@@ -286,52 +269,52 @@ void pix_record :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_record :: enumPropertiesMess()
 {
-  if(m_handle) {
-    gem::Properties props;
-    if(!m_handle->enumProperties(props))
-      return;
+  if(!m_handle)return;
 
-    int ac=0;
-    t_atom ap[3];
-    std::vector<std::string>keys=props.keys();
+  gem::Properties props;
+  if(!m_handle->enumProperties(props))
+    return;
 
-    SETFLOAT(ap+0, keys.size());
-    outlet_anything(m_outInfo, gensym("numprops"), 1, ap);
+  int ac=0;
+  t_atom ap[3];
+  std::vector<std::string>keys=props.keys();
 
-    unsigned int i=0;
-    for(i=0; i<keys.size(); i++) {
-      ac=2;
-      std::string key=keys[i];
-      SETSYMBOL(ap+0, gensym(key.c_str()));
-      switch(props.type(key)) {
-      case gem::Properties::NONE:
-        SETSYMBOL(ap+1, gensym("Bang"));
-        break;
-      case gem::Properties::DOUBLE: {
-        double d=-1;
-        SETSYMBOL(ap+1, gensym("Float"));
-        /* LATER: get and show ranges */
-        if(props.get(key, d)) {
-          ac=3;
-          SETFLOAT(ap+2, d);
-        }
+  SETFLOAT(ap+0, keys.size());
+  outlet_anything(m_outInfo, gensym("numprops"), 1, ap);
+
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    ac=2;
+    std::string key=keys[i];
+    SETSYMBOL(ap+0, gensym(key.c_str()));
+    switch(props.type(key)) {
+    case gem::Properties::NONE:
+      SETSYMBOL(ap+1, gensym("Bang"));
+      break;
+    case gem::Properties::DOUBLE: {
+      double d=-1;
+      SETSYMBOL(ap+1, gensym("Float"));
+      /* LATER: get and show ranges */
+      if(props.get(key, d)) {
+	ac=3;
+	SETFLOAT(ap+2, d);
       }
-        break;
-      case gem::Properties::STRING: {
-        SETSYMBOL(ap+1, gensym("Symbol"));
-        std::string s;
-        if(props.get(key, s)) {
-          ac=3;
-          SETSYMBOL(ap+2, gensym(s.c_str()));
-        }
-      }
-        break;
-      default:
-        SETSYMBOL(ap+1, gensym("unknown"));
-        break;
-      }
-      outlet_anything(m_outInfo, gensym("property"), ac, ap);
     }
+      break;
+    case gem::Properties::STRING: {
+      SETSYMBOL(ap+1, gensym("Symbol"));
+      std::string s;
+      if(props.get(key, s)) {
+	ac=3;
+	SETSYMBOL(ap+2, gensym(s.c_str()));
+      }
+    }
+      break;
+    default:
+      SETSYMBOL(ap+1, gensym("unknown"));
+      break;
+    }
+    outlet_anything(m_outInfo, gensym("property"), ac, ap);
   }
 }
 void pix_record :: setPropertiesMess(t_symbol*s, int argc, t_atom*argv)
@@ -352,10 +335,10 @@ void pix_record :: clearPropertiesMess()
 /////////////////////////////////////////////////////////
 void pix_record :: dialogMess()
 {
-  if(m_handle){
-    if(!m_handle->dialog()){
-      error("unable to open settings dialog");
-    }
+  if(!m_handle)return;
+
+  if(!m_handle->dialog()){
+    error("unable to open settings dialog");
   }
 }
 /////////////////////////////////////////////////////////
@@ -377,32 +360,21 @@ void pix_record :: recordMess(bool on)
 /////////////////////////////////////////////////////////
 void pix_record :: getCodecList()
 {
-  m_pimpl->clearCodecHandle();
-  unsigned int i=0;
-  for(i=0; i<m_handles.size(); i++) {
-    std::vector<std::string>c=m_handles[i]->getCodecs();
-    unsigned int j;
-    for(j=0; j<c.size(); j++) {
-      m_pimpl->addCodecHandle(m_handles[i], c[j]);
-    }
-  }
-  for(i=0; i<m_pimpl->m_codecs.size(); i++) {
-    const std::string id=m_pimpl->m_codecs[i];
-    std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[id];
-    unsigned int j=0;
-    for(j=0; j<handles.size(); j++) {
-      gem::plugins::record*handle=handles[j].handle;
+  if(!m_handle)return;
 
-      const std::string codecname=handles[j].codec;
-      const std::string descr=handle->getCodecDescription(codecname);
-      t_atom ap[3];
+  std::vector<std::string>codecs=m_handle->getCodecs();
 
-      verbose(2, "codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
-      SETFLOAT (ap+0, static_cast<t_float>(i));
-      SETSYMBOL(ap+1, gensym(codecname.c_str()));
-      SETSYMBOL(ap+2, gensym(descr.c_str()));
-      outlet_anything(m_outInfo, gensym("codec"), 3, ap);
-    }
+  unsigned int i;
+  for(i=0; i<codecs.size(); i++) {
+    const std::string codecname=codecs[i];
+    const std::string descr=m_handle->getCodecDescription(codecname);
+    t_atom ap[3];
+
+    verbose(2, "codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
+    SETFLOAT (ap+0, static_cast<t_float>(i));
+    SETSYMBOL(ap+1, gensym(codecname.c_str()));
+    SETSYMBOL(ap+2, gensym(descr.c_str()));
+    outlet_anything(m_outInfo, gensym("codec"), 3, ap);
   }
 }
 
@@ -413,6 +385,8 @@ void pix_record :: getCodecList()
 /////////////////////////////////////////////////////////
 void pix_record :: codecMess(t_atom *argv)
 {
+  if(!m_handle)return;
+
 #ifdef __GNUC__
 #warning codecMess is a mess
 #endif
@@ -429,51 +403,28 @@ void pix_record :: codecMess(t_atom *argv)
    * if a special codec is given (e.g. none at all), all handles are valid
    */
 
-  if(m_handle){
-    m_handle->stop();
-    m_handle=NULL;
-  }
-  
   std::string sid;
 
   if (A_SYMBOL==argv->a_type) {
     sid=std::string(atom_getsymbol(argv)->s_name);
-  } else if(A_FLOAT==argv->a_type){
-    /* maintain a list of all codecs and resolve using that */
+  } else if (A_FLOAT==argv->a_type) {
     int id=atom_getint(argv);
-    if((id>=0) && (static_cast<unsigned int>(id)<m_pimpl->m_codecs.size())) {
-      sid=m_pimpl->m_codecs[id];
+    std::vector<std::string>codecs=m_handle->getCodecs();
+    if(id>0 && id<codecs.size())
+      sid=codecs[id];
+    else {
+      error("invalid codec# %d (0..%d)", id, codecs.size());
+      return;
     }
   }
-  std::vector<PIMPL::codechandle>handles=m_pimpl->m_codechandle[sid];
-  if(handles.size()>0) {
-    m_handles.clear();
-    unsigned int i=0;
-    for(i=0; i<handles.size(); i++) {
-      gem::plugins::record*handle=handles[i].handle;
-      std::string codec=handles[i].codec;
-      if(handle->setCodec(codec)) {
-	m_codec=codec;
-	m_handles.push_back(handle);
-      } 
-    }
-    if(m_handles.size()>0) {
-      m_handle=m_handles[0];
-    } else {
-      error("couldn't find a valid backend for codec '%s'", sid.c_str());
-    }
-
+  if(m_handle->setCodec(sid)) {
+    m_codec=sid;
+    verbose(1, "successfully set codec '%s'", sid.c_str());
   } else {
-    error("unknown codec '%s", sid.c_str());
+    error("couldn't find a valid backend for codec '%s'", sid.c_str());
+    return;
   }
-
-  verbose(1, "successfully set codec '%s' and got %d handles: %p", 
-	  sid.c_str(),
-	  m_handles.size(),
-	  m_handle);
-
-  if(m_handle)
-    enumPropertiesMess();
+  enumPropertiesMess();
 }
 
 void pix_record :: fileMess(t_symbol*s, int argc, t_atom *argv)

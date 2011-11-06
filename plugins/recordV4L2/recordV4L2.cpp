@@ -18,6 +18,7 @@
 #endif
 
 #include "recordV4L2.h"
+
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
@@ -34,8 +35,6 @@ using namespace gem::plugins;
 
 #include <stdlib.h>
 
-
-#ifdef  HAVE_VIDEO4LINUX2
 REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 /////////////////////////////////////////////////////////
 //
@@ -46,8 +45,7 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 //
 /////////////////////////////////////////////////////////
 
-recordV4L2 :: recordV4L2(): 
-  recordBase(),
+recordV4L2 :: recordV4L2(void): 
   m_fd(-1)
 {
   m_image.xsize=720;
@@ -70,12 +68,12 @@ recordV4L2 :: recordV4L2():
 // Destructor
 //
 /////////////////////////////////////////////////////////
-recordV4L2 :: ~recordV4L2()
+recordV4L2 :: ~recordV4L2(void)
 {
-  close();
+  stop();
 }
 
-void recordV4L2 :: close(void)
+void recordV4L2 :: stop(void)
 {
   if(m_fd>=0)
     ::close(m_fd);
@@ -83,9 +81,9 @@ void recordV4L2 :: close(void)
 
 }
 
-bool recordV4L2 :: open(const std::string filename)
+bool recordV4L2 :: start(const std::string filename, gem::Properties&props)
 {
-  close();
+  stop();
   m_fd=::open(filename.c_str(), O_RDWR);
   if(m_fd<0)
     return false;
@@ -94,12 +92,12 @@ bool recordV4L2 :: open(const std::string filename)
 
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
     perror("VIDIOC_QUERYCAP");
-    close(); 
+    stop(); 
     return false;
   }
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
     verbose(1, "device '%s' is not a video4linux2 output device");
-    close(); 
+    stop(); 
     return false;
   }
   m_init=false;
@@ -116,7 +114,7 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 	struct v4l2_capability vid_caps;
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
     perror("VIDIOC_QUERYCAP");
-    close(); return false;
+    stop(); return false;
   }
 	struct v4l2_format vid_format;
 
@@ -140,7 +138,7 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
           (char)(format>>24));
   if(ioctl(m_fd, VIDIOC_S_FMT, &vid_format) == -1) {
     perror("VIDIOC_S_FMT");
-    close(); return false;
+    stop(); return false;
   }
 
   verbose(1, "v4l2-output returned %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
@@ -168,7 +166,7 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 // do the actual encoding and writing to file
 //
 /////////////////////////////////////////////////////////
-bool recordV4L2 :: putFrame(imageStruct*img)
+bool recordV4L2 :: write(imageStruct*img)
 {
   if(!m_init){
     if(!init(img, 0))
@@ -208,26 +206,19 @@ bool recordV4L2 :: setCodec(const std::string name)
 // get codecs
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>recordV4L2::getCodecs() {
+std::vector<std::string>recordV4L2::getCodecs(void) {
   std::vector<std::string>result;
-
-  m_codecdescriptions.clear();
   result.push_back(s_codec_name);
-  m_codecdescriptions[s_codec_name]=s_codec_desc;
-
+  return result;
+}
+const std::string recordV4L2::getCodecDescription(const std::string codec) {
+  std::string result;
+  if(codec==s_codec_name)
+    result=s_codec_desc;
   return result;
 }
 
-#else
-recordV4L2 :: recordV4L2()
-{
+bool recordV4L2::enumProperties(gem::Properties&props) {
+  props.clear();
+  return false;
 }
-////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-recordV4L2 :: ~recordV4L2()
-{
-}
-
-#endif
