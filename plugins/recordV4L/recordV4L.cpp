@@ -18,6 +18,9 @@
 #endif
 
 #include "recordV4L.h"
+
+#ifdef  HAVE_VIDEO4LINUX
+
 #include "Gem/Manager.h"
 #include "plugins/PluginFactory.h"
 
@@ -34,7 +37,6 @@ using namespace gem::plugins;
 #include <stdlib.h>
 
 
-#ifdef  HAVE_VIDEO4LINUX
 REGISTER_RECORDFACTORY("V4L", recordV4L);
 /////////////////////////////////////////////////////////
 //
@@ -177,8 +179,6 @@ bool recordV4L :: write(imageStruct*img)
   return true;
 }
 
-
-
 /////////////////////////////////////////////////////////
 // get number of codecs
 //
@@ -198,7 +198,6 @@ bool recordV4L :: setCodec(const std::string name)
 
   return false;
 }
-
 
 /////////////////////////////////////////////////////////
 // get codecs
@@ -220,6 +219,8 @@ bool recordV4L::enumProperties(gem::Properties&props) {
   props.clear();
   return false;
 }
+
+#endif /* V4L */
 
 #if 0
 /* handler for ioctls from the client */
@@ -476,19 +477,4 @@ static void *signal_loop(void *arg)
 	}
 	return NULL;
 }
-#endif
-
-
-#else
-recordV4L :: recordV4L(void)
-{
-}
-////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-recordV4L :: ~recordV4L(void)
-{
-}
-
 #endif
