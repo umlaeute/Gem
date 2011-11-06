@@ -39,6 +39,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
   
   -----------------------------------------------------------------*/
+#if defined HAVE_VIDEO4LINUX2
+
 namespace gem { namespace plugins {
  class GEM_EXPORT recordV4L2 : public record {
  public:
@@ -52,8 +54,6 @@ namespace gem { namespace plugins {
   // Destructor
   /* free what is apropriate */
   virtual ~recordV4L2(void);
-
-#if defined HAVE_VIDEO4LINUX2
 
   //////////
   // close the movie file
@@ -102,9 +102,8 @@ namespace gem { namespace plugins {
   imageStruct m_image;
   bool m_init;
   int m_palette;
-
-#endif /* V4L2 */
  };
 };};
+#endif /* V4L2 */
 
 #endif	// for header file

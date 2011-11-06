@@ -18,6 +18,7 @@
 #endif
 
 #include "recordV4L2.h"
+
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
@@ -34,8 +35,6 @@ using namespace gem::plugins;
 
 #include <stdlib.h>
 
-
-#ifdef  HAVE_VIDEO4LINUX2
 REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 /////////////////////////////////////////////////////////
 //
@@ -46,7 +45,7 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 //
 /////////////////////////////////////////////////////////
 
-recordV4L2 :: recordV4L2(): 
+recordV4L2 :: recordV4L2(void): 
   m_fd(-1)
 {
   m_image.xsize=720;
@@ -69,7 +68,7 @@ recordV4L2 :: recordV4L2():
 // Destructor
 //
 /////////////////////////////////////////////////////////
-recordV4L2 :: ~recordV4L2()
+recordV4L2 :: ~recordV4L2(void)
 {
   stop();
 }
@@ -207,7 +206,7 @@ bool recordV4L2 :: setCodec(const std::string name)
 // get codecs
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>recordV4L2::getCodecs() {
+std::vector<std::string>recordV4L2::getCodecs(void) {
   std::vector<std::string>result;
 
   m_codecdescriptions.clear();
@@ -216,17 +215,11 @@ std::vector<std::string>recordV4L2::getCodecs() {
 
   return result;
 }
-
-#else
-recordV4L2 :: recordV4L2()
-{
-}
-////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-recordV4L2 :: ~recordV4L2()
-{
+const std::string recordV4L2::getCodecDescription(const std::string codec) {
+  return m_codecdescriptions[codec];
 }
 
-#endif
+bool recordV4L2::enumProperties(gem::Properties&props) {
+  props.clear();
+  return false;
+}
