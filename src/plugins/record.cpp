@@ -61,7 +61,10 @@ namespace gem { namespace plugins {
     bool m_canThread;
 
   public:
-    recordMeta(void) : m_canThread(false) {
+    recordMeta(void) : 
+      m_handle(NULL),
+      m_canThread(false) 
+    {
       gem::PluginFactory<gem::plugins::record>::loadPlugins("record");
       std::vector<std::string>ids=gem::PluginFactory<gem::plugins::record>::getIDs();
 
@@ -238,9 +241,10 @@ namespace gem { namespace plugins {
 
       unsigned int i;
       for(i=0; i<m_selectedHandles.size(); i++) {
-	bool success=m_selectedHandles[i]->start(filename, props);
-	m_handle=m_selectedHandles[i];
-	if(success)return true;
+	if(m_selectedHandles[i]->start(filename, props)) {
+	  m_handle=m_selectedHandles[i];
+	  return true;
+	}
       }
       m_handle=NULL;
       return false;
