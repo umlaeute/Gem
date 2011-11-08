@@ -169,20 +169,20 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       gem::plugins::video         *handle=NULL;
       startpost("backend #%d='%s'\t", m_videoHandles.size(), key.c_str());
       try {
-	handle=gem::PluginFactory<gem::plugins::video>::getInstance(key); 
+        handle=gem::PluginFactory<gem::plugins::video>::getInstance(key); 
       } catch (GemException&ex) {
       }
       if(NULL==handle) { 
-	post("<--- DISABLED");
+        post("<--- DISABLED");
         continue;
       }
       std::vector<std::string>devs=handle->provides();
       if(devs.size()>0) {
-	startpost(": ");
-	unsigned int i=0;
-	for(i=0; i<devs.size(); i++) {
-	  startpost("%s ", devs[i].c_str());
-	}
+        startpost(": ");
+        unsigned int i=0;
+        for(i=0; i<devs.size(); i++) {
+          startpost("%s ", devs[i].c_str());
+        }
       }
       endpost();
 
