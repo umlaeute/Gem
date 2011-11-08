@@ -6,18 +6,19 @@ KERN=$(uname -s)
 
 echo PATH: $PATH
 
-AUTORECONF=$(which autoreconf)
+IEM_AUTORECONF=$(which autoreconf)
 
-AUTOHEADER=$(which autoheader)
-AUTOMAKE=$(which automake)
-ACLOCAL=$(which aclocal)
-LIBTOOL=$(which libtool)
-LIBTOOLIZE=$(which libtoolize)
-AUTOCONF=$(which autoconf)
+IEM_AUTOHEADER=$(which autoheader)
+IEM_AUTOMAKE=$(which automake)
+IEM_ACLOCAL=$(which aclocal)
+IEM_LIBTOOL=$(which libtool)
+IEM_LIBTOOLIZE=$(which libtoolize)
+IEM_AUTOCONF=$(which autoconf)
 
 case "${KERN}" in
  MINGW*)
-   AUTORECONF=""
+## on MinGW autoreconf is (still?) known to be somewhat broken
+   IEM_AUTORECONF=""
    ;;
  *)
   ;;
@@ -56,18 +57,18 @@ manual_autoreconf_doit () {
  echo faking autoreconf for $1
  pushd $1
 
-  runit $ACLOCAL -I . -I $BASEDIR/m4 || exit 1
+  runit $IEM_ACLOCAL -I . -I $BASEDIR/m4 || exit 1
 
-  runit $LIBTOOLIZE --automake -c || exit 1
+  runit $IEM_LIBTOOLIZE --automake -c || exit 1
 
-  runit $AUTOCONF || exit 1
+  runit $IEM_AUTOCONF || exit 1
 
   if test -e configure.ac && grep AC_CONFIG_HEADER configure.ac > /dev/null 2>&1; then
-   runit $AUTOHEADER --force || exit 1
+   runit $IEM_AUTOHEADER --force || exit 1
   fi
 
   if [ -e Makefile.am ]; then
-   runit $AUTOMAKE --add-missing -c || exit 1
+   runit $IEM_AUTOMAKE --add-missing -c || exit 1
   fi
  popd
 }
@@ -90,7 +91,7 @@ manual_autoreconf () {
 
 # check for all the needed helpers
  DIE=0
-($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
+($IEM_AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
         echo
         echo "You must have autoconf installed to compile $package."
         echo "Download the appropriate package for your distribution,"
@@ -98,7 +99,7 @@ manual_autoreconf () {
         DIE=1
 }
 
-($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
+($IEM_AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
         echo
         echo "You must have automake installed to compile $package."
         echo "Download the appropriate package for your system,"
@@ -107,7 +108,7 @@ manual_autoreconf () {
         DIE=1
 }
 
-($ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
+($IEM_ACLOCAL --version) < /dev/null > /dev/null 2>&1 || {
         echo
         echo "You must have aclocal installed to compile $package."
         echo "Download the appropriate package for your system,"
@@ -116,7 +117,7 @@ manual_autoreconf () {
         DIE=1
 }
 
-($LIBTOOL --version) < /dev/null > /dev/null 2>&1 || {
+($IEM_LIBTOOL --version) < /dev/null > /dev/null 2>&1 || {
         echo
         echo "You must have libtool installed to compile $package."
         echo "Download the appropriate package for your system,"
@@ -124,7 +125,7 @@ manual_autoreconf () {
         echo "listed in http://www.gnu.org/order/ftp.html"
         DIE=1
 }
-($LIBTOOLIZE --version) < /dev/null > /dev/null 2>&1 || {
+($IEM_LIBTOOLIZE --version) < /dev/null > /dev/null 2>&1 || {
         echo
         echo "You must have libtoolize installed to compile $package."
         echo "Download the appropriate package for your system,"
@@ -143,10 +144,11 @@ done
 }
 
 
-if test x$AUTORECONF != x; then
+if test x$IEM_AUTORECONF != x; then
   echo running autoreconf
-  $AUTORECONF --force --verbose --install 
+  $IEM_AUTORECONF --force --verbose --install 
 else
-  echo not running autoreconf...
+  echo "not running autoreconf...falling back to"
+
   manual_autoreconf
 fi
