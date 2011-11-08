@@ -4,6 +4,7 @@ package=Gem
 
 KERN=$(uname -s)
 
+# debugging output to see which path is in effect
 echo PATH: $PATH
 
 IEM_AUTORECONF=$(which autoreconf)
@@ -23,6 +24,16 @@ case "${KERN}" in
  *)
   ;;
 esac
+
+## debug printout to see which build scripts we are (or might be) using
+echo "AUTORECONF: $IEM_AUTORECONF"
+echo "AUTOHEADER: $IEM_AUTOHEADER"
+echo "AUTOMAKE  : $IEM_AUTOMAKE"
+echo "ACLOCAL   : $IEM_ACLOCAL"
+echo "LIBTOOL   : $IEM_LIBTOOL"
+echo "LIBTOOLIZE: $IEM_LIBTOOLIZE"
+echo "AUTOCONF  : $IEM_AUTOCONF"
+
 
 #check whether the system supports pushd/popd
 if pushd . > /dev/null 2>&1
