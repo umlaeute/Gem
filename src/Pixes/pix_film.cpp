@@ -264,7 +264,9 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
         handle=NULL;
         verbose(1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
       }
-      if(NULL==handle)break;
+      if(NULL==handle){
+        continue;
+      }
       m_ids.push_back(key);
       m_handles.push_back(handle);
       count++;

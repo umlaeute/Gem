@@ -174,7 +174,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       }
       if(NULL==handle) { 
 	post("<--- DISABLED");
-	break;
+        continue;
       }
       std::vector<std::string>devs=handle->provides();
       if(devs.size()>0) {
