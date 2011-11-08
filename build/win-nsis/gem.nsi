@@ -148,27 +148,27 @@ SectionGroup "plugins" SEC_plugin
   SectionEnd
  SectionGroupEnd
  SectionGroup "image" SEC_plugin_image
-  Section "ImageMagick images" SEC_plugin_imageMAGICK
+  Section /o "ImageMagick images" SEC_plugin_imageMAGICK
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageMAGICK.dll"
   SectionEnd
-  Section /o "QuickTime images" SEC_plugin_imageQT
+  Section "QuickTime images" SEC_plugin_imageQT
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageQT.dll"
   SectionEnd
-  Section /o "SGI images" SEC_plugin_imageSGI
+  Section "SGI images" SEC_plugin_imageSGI
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageSGI.dll"
   SectionEnd
-  Section /o "JPEG images" SEC_plugin_imageJPEG
+  Section "JPEG images" SEC_plugin_imageJPEG
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageJPEG.dll"
   SectionEnd
-  Section /o "TIFF images" SEC_plugin_imageTIFF
+  Section "TIFF images" SEC_plugin_imageTIFF
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_imageTIFF.dll"
