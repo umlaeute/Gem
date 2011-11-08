@@ -28,6 +28,7 @@ class GemSettings {
 
   static void get(const std::string key, int&value);
   static void get(const std::string key, float&value);
+  static void get(const std::string key, double&value);
   static void get(const std::string key, std::string&value);
 
   static std::vector<std::string> keys();

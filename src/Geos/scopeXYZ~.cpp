@@ -152,8 +152,8 @@ void scopeXYZ :: renderShape(GemState *state)
 
 void scopeXYZ :: bangMess(void){
   unsigned int i;
-  t_float*vertL=m_vertices;
-  t_float*vertR=m_vertices+m_length;
+  t_sample*vertL=m_vertices;
+  t_sample*vertR=m_vertices+m_length;
 
   post("x\ty\tz\t\tx\ty\tz");
   for(i=0; i<m_length; i++) {
@@ -292,7 +292,7 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
 {
   int position=m_position;
 
-  t_float*vert=m_vertices+3*position;
+  t_sample*vert=m_vertices+3*position;
   unsigned int i=0;
 
   // TODO: add some protection against segfaults when bufer is very small

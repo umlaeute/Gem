@@ -83,7 +83,7 @@ class GEM_EXTERN scopeXYZ : public GemShape
     	
   //////////
   // The vertices
-  float  *m_vertices;
+  t_sample*m_vertices;
 
   t_inlet*m_inX, *m_inY, *m_inZ;
 

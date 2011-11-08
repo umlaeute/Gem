@@ -80,7 +80,12 @@ struct PIMPL {
     SETFLOAT(&a, i);
     set(name, &a);
   }
-  void set(std::string name, t_float f) {
+  void set(std::string name, float f) {
+    t_atom a;
+    SETFLOAT(&a, f);
+    set(name, &a);
+  }
+  void set(std::string name, double f) {
     t_atom a;
     SETFLOAT(&a, f);
     set(name, &a);
@@ -276,7 +281,13 @@ void GemSettings::get(const std::string key, int&value) {
     value=atom_getint(a);
   }
 }
-void GemSettings::get(const std::string key, t_float&value) {
+void GemSettings::get(const std::string key, float&value) {
+  t_atom*a=get(key);
+  if(a && A_FLOAT==a->a_type) {
+    value=atom_getfloat(a);
+  }
+}
+void GemSettings::get(const std::string key, double&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getfloat(a);

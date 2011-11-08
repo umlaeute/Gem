@@ -49,7 +49,7 @@ class GEM_EXTERN GemPathBase : public CPPExtern
     	
         //////////
         // When a float val is received
-        virtual void    floatMess(float val) = 0;
+        virtual void    floatMess(t_float val) = 0;
 
         //////////
         // The number of dimensions

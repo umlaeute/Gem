@@ -122,7 +122,7 @@ void TextBase :: render(GemState *)
 // setFontSize
 //
 ////////////////////////////////////////////////////////
-void TextBase :: setFontSize(t_float size){
+void TextBase :: setFontSize(float size){
   m_fontSize = size;
   if (!m_font)return;
   if (! m_font->FaceSize(static_cast<int>(m_fontSize)) ) {
@@ -194,7 +194,7 @@ TextBase :: TextBase(int argc, t_atom *argv){
 // setFontSize
 //
 /////////////////////////////////////////////////////////
-void TextBase :: setFontSize(t_float size)
+void TextBase :: setFontSize(float size)
 {}
 /////////////////////////////////////////////////////////
 // setPrecision

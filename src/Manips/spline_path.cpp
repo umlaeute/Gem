@@ -43,7 +43,7 @@ spline_path :: ~spline_path()
 // floatMess
 //
 /////////////////////////////////////////////////////////
-void spline_path :: floatMess(float val)
+void spline_path :: floatMess(t_float val)
 {
     if (!m_array)
     {
@@ -62,7 +62,7 @@ void spline_path :: floatMess(float val)
         return;
     }
 
-    float output[64];
+    t_float output[64];
     splineFunc(val, output, m_numDimens, size / m_numDimens, vec);
 
 	t_atom argv[64];

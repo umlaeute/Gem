@@ -94,7 +94,7 @@ void trapezoid :: renderShape(GemState *state)
 // toplengthMess
 //
 /////////////////////////////////////////////////////////
-void trapezoid :: toplengthMess(float top)
+void trapezoid :: toplengthMess(t_float top)
 {
   m_top = top;
   setModified();
@@ -105,7 +105,7 @@ void trapezoid :: toplengthMess(float top)
 // texscaleMess
 //
 /////////////////////////////////////////////////////////
-void trapezoid :: texscaleMess(float scale)
+void trapezoid :: texscaleMess(t_float scale)
 {
   m_scale_texcoord=scale;
   setModified();

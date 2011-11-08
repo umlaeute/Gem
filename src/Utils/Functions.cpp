@@ -108,7 +108,26 @@ GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts, float *
         pnts++;     // advance to the next dimension
     }
 }
+GEM_EXTERN void linearFunc(double x, double *ret, int numDimen, int npnts, double *pnts)
+{
+    int nspans = npnts - 1;
+    if (nspans < 1)          // illegal
+        return;
 
+    x = FLOAT_CLAMP(x) * nspans;
+    int span = static_cast<int>(x);
+
+    // find the correct 2-point span of the linear list
+    if (span >= nspans)
+            span = nspans;
+    x -= span;
+    pnts += (span * numDimen);
+    for (int i = 0; i < numDimen; i++)
+    {
+        ret[i] = pnts[0 * numDimen] * (1.f - x) + pnts[1 * numDimen] * x;
+        pnts++;     // advance to the next dimension
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Spline function
@@ -172,3 +191,43 @@ GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots, float 
     }
 }
 
+GEM_EXTERN void splineFunc(double x, double *ret, int numDimen, int nknots, double *knot)
+{
+    int nspans = nknots - 4;
+    if (nspans < 0)         // illegal case
+        return;
+
+    // find the correct 4-point span of the spline
+    x = FLOAT_CLAMP(x) * nspans;
+    int span = static_cast<int>(x);
+    x -= span;              // get decimal part of span
+    knot += (span * numDimen);
+
+    // Evalute the span cubic at x using Horner's rule
+    double c0, c1, c2, c3;
+    for (int i = 0; i < numDimen; i++)
+    {
+        c3 = CR00*knot[0 * numDimen]
+           + CR01*knot[1 * numDimen]
+           + CR02*knot[2 * numDimen]
+           + CR03*knot[3 * numDimen];
+
+        c2 = CR10*knot[0 * numDimen]
+           + CR11*knot[1 * numDimen]
+           + CR12*knot[2 * numDimen]
+           + CR13*knot[3 * numDimen];
+
+        c1 = CR20*knot[0 * numDimen]
+           + CR21*knot[1 * numDimen]
+           + CR22*knot[2 * numDimen]
+           + CR23*knot[3 * numDimen];
+
+        c0 = CR30*knot[0 * numDimen]
+           + CR31*knot[1 * numDimen]
+           + CR32*knot[2 * numDimen]
+           + CR33*knot[3 * numDimen];
+
+        ret[i] = ((c3*x + c2)*x + c1)*x + c0;
+        knot++;     // advance to the next dimension
+    }
+}

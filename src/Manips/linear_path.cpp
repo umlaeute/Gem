@@ -43,7 +43,7 @@ linear_path :: ~linear_path()
 // floatMess
 //
 /////////////////////////////////////////////////////////
-void linear_path :: floatMess(float val)
+void linear_path :: floatMess(t_float val)
 {
     if (!m_array)
     {
@@ -62,7 +62,7 @@ void linear_path :: floatMess(float val)
         return;
     }
 
-    float output[64];
+    t_float output[64];
     linearFunc(val, output, m_numDimens, size / m_numDimens, vec);
 
 	t_atom argv[64];

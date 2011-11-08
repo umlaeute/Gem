@@ -63,10 +63,12 @@ inline int powerOfTwo(int value)
 #ifndef MIN
 inline int MIN(int x, int y) {  return (x<y)?x:y; }
 inline float MIN(float x, float y) {  return (x<y)?x:y; }
+inline double MIN(double x, double y) {  return (x<y)?x:y; }
 #endif
 #ifndef MAX
 inline int MAX(int x, int y) {  return (x>y)?x:y; }
 inline float MAX(float x, float y) {  return (x>y)?x:y; }
+inline double MAX(double x, double y) {  return (x>y)?x:y; }
 #endif
 
 inline unsigned char TRI_MAX(unsigned char v1, unsigned char v2, unsigned char v3){
@@ -103,10 +105,14 @@ inline unsigned char CLAMP(int x)
 // Clamp a float to the range of an unsigned char
 inline unsigned char CLAMP(float x)
     { return((unsigned char)((x > 255.f) ? 255.f : ( (x < 0.f) ? 0.f : x))); }
+inline unsigned char CLAMP(double x)
+    { return((unsigned char)((x > 255.f) ? 255.f : ( (x < 0.f) ? 0.f : x))); }
 
 //////////
 // Clamp a float to 0. <= x <= 1.0
 inline float FLOAT_CLAMP(float x)
+    { return((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x)); }
+inline float FLOAT_CLAMP(double x)
     { return((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x)); }
 
 /////////
@@ -137,6 +143,8 @@ inline unsigned char INT_LERP(unsigned int p, unsigned int q, unsigned int a)
 // Floating point LERP
 inline float FLOAT_LERP(float p, float q, float a)
 	{ return( a * (q - p) + p); }
+inline double FLOAT_LERP(double p, double q, double a)
+	{ return( a * (q - p) + p); }
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,6 +152,8 @@ inline float FLOAT_LERP(float p, float q, float a)
 //
 ///////////////////////////////////////////////////////////////////////////////
 inline int stepFunc(float x, float a)
+    { return(x >= a); }
+inline int stepFunc(double x, double a)
     { return(x >= a); }
 inline int stepFunc(int x, int a)
     { return(x >= a); }
@@ -156,6 +166,8 @@ inline int stepFunc(unsigned char x, unsigned char a)
 ///////////////////////////////////////////////////////////////////////////////
 inline int pulseFunc(float x, float a, float b)
     { return(stepFunc(a, x) - stepFunc(b, x)); }
+inline int pulseFunc(double x, double a, double b)
+    { return(stepFunc(a, x) - stepFunc(b, x)); }
 inline int pulseFunc(int x, int a, int b)
     { return(stepFunc(a, x) - stepFunc(b, x)); }
 inline int pulseFunc(unsigned char x, unsigned char a, unsigned char b)
@@ -167,6 +179,8 @@ inline int pulseFunc(unsigned char x, unsigned char a, unsigned char b)
 //
 ///////////////////////////////////////////////////////////////////////////////
 inline float clampFunc(float x, float a, float b)
+    { return(x < a ? a : (x > b ? b : x)); }
+inline double clampFunc(double x, double a, double b)
     { return(x < a ? a : (x > b ? b : x)); }
 inline int clampFunc(int x, int a, int b)
     { return(x < a ? a : (x > b ? b : x)); }
@@ -281,6 +295,7 @@ GEM_EXTERN extern float gainFunc(float x, float a);
 //
 ///////////////////////////////////////////////////////////////////////////////
 GEM_EXTERN extern void linearFunc(float val, float *ret, int numDimen, int npnts, float *pnts);
+GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen, int npnts, double *pnts);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Spline function
@@ -297,6 +312,7 @@ GEM_EXTERN extern void linearFunc(float val, float *ret, int numDimen, int npnts
 //          David S. Ebert, Ed.
 ///////////////////////////////////////////////////////////////////////////////
 GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen, int nknots, float *knot);
+GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nknots, double *knot);
 
 
 ///////////////////////////////////////////////////////////////////////////////

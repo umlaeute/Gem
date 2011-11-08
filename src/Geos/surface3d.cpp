@@ -217,7 +217,7 @@ t_float3 surface3d :: bicubic3(t_float X, t_float Y)
 }
 
 
-void surface3d :: interpolate(t_float X,t_float Y)
+void surface3d :: interpolate(float X, float Y)
 {
 	t_float norm;
 	t_float3 interpol, dx, dy, dx2, dy2, normal;
@@ -650,12 +650,12 @@ void surface3d :: gridMessCallback(void *data, t_floatarg gridX, t_floatarg grid
 {
   GetMyClass(data)->gridMess(static_cast<int>(gridX), static_cast<int>(gridY));
 }
-void surface3d :: setMessCallback(void *data, float X, float Y, float posX, float posY, float posZ)
+void surface3d :: setMessCallback(void *data, t_floatarg X, t_floatarg Y, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
 {
   GetMyClass(data)->setMess(static_cast<int>(X), static_cast<int>(Y), 
 			    posX, posY, posZ);
 }
-void surface3d :: normalMessCallback(void *data, float normalMess)
+void surface3d :: normalMessCallback(void *data, t_floatarg normalMess)
 {
   GetMyClass(data)->normalMess(static_cast<int>(normalMess));
 }
