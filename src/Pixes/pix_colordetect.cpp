@@ -164,7 +164,7 @@ unsigned char class_green[] = {
 0,/*blue,*/
 255,/*yellow,*/
 235,/*blue-green,*/
-0,/*purple-pink-lavender,*/ssh://USERNAME@labmacambira.git.sourceforge.net/gitroot/labmacambira/NOME_REPOS
+0,/*purple-pink-lavender,*/
 0,/*purple-pink-magenta,*/
 0.5*255,/*gray,*/
 115/*none*/
