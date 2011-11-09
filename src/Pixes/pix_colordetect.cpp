@@ -44,8 +44,8 @@ typedef enum {
  GOOD_GUESS = 1,
  CERTAIN = 2} certainty;
 
-void color_classify (float red, float green, float blue, color *result, color *second_guess, certainty *sure);
-void print_color (color result, color second, certainty certainty_level);
+static void color_classify (float red, float green, float blue, color *result, color *second_guess, certainty *sure);
+static void print_color (color result, color second, certainty certainty_level);
 
 
 
@@ -164,7 +164,7 @@ unsigned char class_green[] = {
 0,/*blue,*/
 255,/*yellow,*/
 235,/*blue-green,*/
-0,/*purple-pink-lavender,*/
+0,/*purple-pink-lavender,*/ssh://USERNAME@labmacambira.git.sourceforge.net/gitroot/labmacambira/NOME_REPOS
 0,/*purple-pink-magenta,*/
 0.5*255,/*gray,*/
 115/*none*/
