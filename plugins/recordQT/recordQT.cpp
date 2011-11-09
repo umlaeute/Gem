@@ -706,8 +706,8 @@ bool recordQT :: start(const std::string filename, gem::Properties&props)
 
   snprintf(m_filename, QT_MAX_FILENAMELENGTH, "%s\0", filename.c_str());
   m_filename[QT_MAX_FILENAMELENGTH-1]=0;
-  post("recordQT: filename '%s'", m_filename);
 
+  m_recordStart=true;
   return true;
 }
 
