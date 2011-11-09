@@ -58,6 +58,8 @@ libPixes_la_SOURCES=  \
     pix_coloralpha.h \
     pix_color.cpp \
     pix_color.h \
+		pix_color_detect.cpp \
+		pix_color_detect.h \
     pix_colormatrix.cpp \
     pix_colormatrix.h \
     pix_colorreduce.cpp \
