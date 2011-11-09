@@ -362,7 +362,6 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
   m_prevHeight = m_height;
 	
   //reset frame counter for new movie file
-  post("recordQT: setup done");
 }
 
 //
@@ -541,7 +540,7 @@ bool recordQT :: dialog(void)
     if (stdComponent) compErr = CloseComponent(stdComponent);
     if (compErr != noErr) error("recordQT: CloseComponent failed with error %d",compErr);
 
-    post("recordQT: opening compression dialog");
+    //post("recordQT: opening compression dialog");
 
     //open a new component from scratch
     stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
@@ -551,7 +550,7 @@ bool recordQT :: dialog(void)
       return false;
     }
 
-    post("recordQT: opening settings Dialog");
+    //post("recordQT: opening settings Dialog");
     compErr = SCRequestSequenceSettings(stdComponent);
 
     if (compErr != noErr) error("recordQT: SCRequestSequenceSettings failed with error %d",compErr);
@@ -568,13 +567,13 @@ bool recordQT :: dialog(void)
     m_frameRate = TemporalSettings.frameRate;
     m_keyFrameRate = TemporalSettings.keyFrameRate;
 
-    post("recordQT: Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
-    post("recordQT: Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
-    post("recordQT: Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
-    post("recordQT: Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-    post("recordQT: Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-    post("recordQT: Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-    post("recordQT: Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+    //post("recordQT: Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+    //post("recordQT: Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
+    //post("recordQT: Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
+    //post("recordQT: Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
+    //post("recordQT: Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
+    //post("recordQT: Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
+    //post("recordQT: Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
     return(true);
   }else{
     error("recordQT: recording is running; refusing to show up dialog...!");
@@ -640,8 +639,6 @@ bool recordQT :: setCodec(const std::string codecName)
     requestedCodec=4;
   else if(codecName=="dvpal")
     requestedCodec=5;
-
-  post("recordQT set %s",codecName.c_str());
 
   for(i=0; i < numCodecContainer; i++)  {
     switch(requestedCodec) {
