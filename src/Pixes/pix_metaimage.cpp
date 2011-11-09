@@ -329,10 +329,10 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
       const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
       const U32 nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
-      const U32 nOutputRed=clampFunc(nSourceRed+nRedDelta,0,255);
-      const U32 nOutputGreen=clampFunc(nSourceGreen+nGreenDelta,0,255);
-      const U32 nOutputBlue=clampFunc(nSourceBlue+nBlueDelta,0,255);
-      const U32 nOutputAlpha=clampFunc(nSourceAlpha+nAlphaDelta,0,255);//0xff;
+      const U32 nOutputRed  =clampFunc(static_cast<int>(nSourceRed  +nRedDelta)  ,0,255);
+      const U32 nOutputGreen=clampFunc(static_cast<int>(nSourceGreen+nGreenDelta),0,255);
+      const U32 nOutputBlue =clampFunc(static_cast<int>(nSourceBlue +nBlueDelta) ,0,255);
+      const U32 nOutputAlpha=clampFunc(static_cast<int>(nSourceAlpha+nAlphaDelta),0,255);
 
       const U32 OutputColour=
 	((nOutputRed&0xff)<<SHIFT_RED)|
@@ -656,10 +656,10 @@ void pix_metaimage :: DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOut
       const U32 nSourceV =(SourceColour>>SHIFT_V )&0xff;
       const U32 nSourceY2=(SourceColour>>SHIFT_Y2)&0xff;
 
-      const U32 nOutputU =clampFunc(nSourceU +nUDelta ,0,255);
-      const U32 nOutputY1=clampFunc(nSourceY1+nY1Delta,0,255);
-      const U32 nOutputV =clampFunc(nSourceV +nVDelta ,0,255);
-      const U32 nOutputY2=clampFunc(nSourceY2+nY2Delta,0,255);//0xff;
+      const U32 nOutputU =clampFunc(static_cast<int>(nSourceU +nUDelta ),0,255);
+      const U32 nOutputY1=clampFunc(static_cast<int>(nSourceY1+nY1Delta),0,255);
+      const U32 nOutputV =clampFunc(static_cast<int>(nSourceV +nVDelta ),0,255);
+      const U32 nOutputY2=clampFunc(static_cast<int>(nSourceY2+nY2Delta),0,255);//0xff;
 
       const U32 OutputColour=
 	((nOutputU &0xff)<<SHIFT_U)|
