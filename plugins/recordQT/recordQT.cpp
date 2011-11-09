@@ -255,23 +255,36 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
   m_srcRect.right = m_width;
 	
   if (m_compressImage->format == GL_YUV422_GEM){
-    m_rowBytes = m_width * 2;
-    colorspace = k422YpCbCr8CodecType;
     post("recordQT: using YUV");
+    colorspace = k422YpCbCr8CodecType;
   }
   if (m_compressImage->format == GL_BGRA){
-#ifdef __BIG_ENDIAN__
-    colorspace = k32BGRAPixelFormat;// k32RGBAPixelFormat;
-#else
-    colorspace = k32ARGBPixelFormat;
-#endif
-    m_rowBytes = m_width * 4;
     post("recordQT: using BGRA");
+#ifdef __LITTLE_ENDIAN__
+    colorspace = k32BGRAPixelFormat;
+#else
+    colorspace = k32ARGBPixelFormat; 
+#endif
   }
 #ifdef _WIN32
   colorspace = k32RGBAPixelFormat;
-  m_rowBytes = m_width*4;
 #endif
+
+  switch(colorspace) {
+    case k32ARGBPixelFormat:
+    case k32BGRAPixelFormat:
+    case k32RGBAPixelFormat:
+      m_rowBytes = m_width * 4;
+      break;
+    case k422YpCbCr8CodecType:
+      m_rowBytes = m_width * 2;
+      break;
+    default:
+      error("unknown colorspace 0x%x", colorspace);
+      m_rowBytes = m_width;
+      break;
+  }
+
   //give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
   err = QTNewGWorldFromPtr(&m_srcGWorld,
                            colorspace,
