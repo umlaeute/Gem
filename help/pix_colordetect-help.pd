@@ -1,12 +1,12 @@
-#N canvas 123 159 611 372 10;
+#N canvas 121 165 850 516 10;
 #X text 452 8 GEM object;
 #X obj 8 196 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 198 Inlets:;
 #X text 39 246 Outlets:;
-#X obj 8 156 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 8 158 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 155 Arguments:;
+#X text 17 157 Arguments:;
 #X obj 8 76 cnv 15 430 75 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
@@ -55,7 +55,7 @@
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
 #X obj 451 233 pix_texture;
-#X text 63 166 <none>;
+#X text 63 168 <none>;
 #X obj 451 255 square 3;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
@@ -66,19 +66,20 @@ classifying each pixel into 6 classes: red \, green \, blue \, yellow
 \, black \, white \, or 'uncertain'. It will only detect a color if
 it is unambiguous.;
 #X obj 451 196 pix_colordetect;
-#X text 64 234;
-#X text 64 239;
-#X obj 7 327 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 8 324 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 16 326 See Also:;
-#X text 62 337 examples/04.video/08.color_detection.pd;
-#X text 63 212 Inlet 1: gemlist \, RGBA image;
-#X text 64 232 Inlet 2: whether to output unreliable guesses (todo)
+#X text 16 323 See Also:;
+#X text 62 334 examples/04.video/08.color_detection.pd;
+#X text 56 212 Inlet 1: gemlist \, RGBA image;
+#X text 57 232 Inlet 2: whether to output unreliable guesses (todo)
 ;
 #X text 57 259 Outlet 1: gemlist \, RGBA image with encoded color class
 representatives for each pixel: red [1 0 0] \, green [0 1 0] \, blue
 [0 0 1] \, yellow [1 1 0] \, black [0 0 0] \, white [1 1 1] \, unsure
 [154/255 \, 115/255 \, 86/255];
+#X text 64 239;
+#X text 64 234;
+#X text 16 357 Author: Ricardo Fabbri <rfabbri@gmail.com>;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
