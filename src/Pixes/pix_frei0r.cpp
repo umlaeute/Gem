@@ -192,10 +192,10 @@ typedef int (*t_f0r_deinit)(void);
 
   void close(void) {
     destruct();
-    int err=f0r_deinit();
-#ifdef __GNUC__
-# warning what to do with that err?
-#endif
+    if(f0r_deinit) {
+      int err=f0r_deinit();
+      if(err)::error("[%s] f0r_deinit() failed with %d", m_name.c_str(), err);
+    }
   }
 
   F0RPlugin(std::string name, const t_canvas*parent=NULL) :
