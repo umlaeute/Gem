@@ -15,10 +15,10 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "pix_color_detect.h"
+#include "pix_colordetect.h"
 #include "Gem/PixConvert.h"
 
-CPPEXTERN_NEW(pix_color_detect);
+CPPEXTERN_NEW(pix_colordetect);
 
 //---------------------------------------------------------------------------
 #include <assert.h>
@@ -52,27 +52,27 @@ void print_color (color result, color second, certainty certainty_level);
 
 /////////////////////////////////////////////////////////
 //
-// pix_color_detect
+// pix_colordetect
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_color_detect :: pix_color_detect()
+pix_colordetect :: pix_colordetect()
 { }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_color_detect :: ~pix_color_detect()
+pix_colordetect :: ~pix_colordetect()
 { }
 
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_color_detect :: processRGBAImage(imageStruct &image)
+void pix_colordetect :: processRGBAImage(imageStruct &image)
 {
   extern float class_red[], class_green[], class_blue[];
   unsigned i = image.xsize * image.ysize;
@@ -102,10 +102,10 @@ void pix_color_detect :: processRGBAImage(imageStruct &image)
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_color_detect :: obj_setupCallback(t_class *classPtr)
+void pix_colordetect :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_color_detect), 
-		   gensym("pix_color_detect"), A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colordetect), 
+		   gensym("pix_colordetect"), A_NULL);
 }
 
 //---------------------------------------------------------------------------
