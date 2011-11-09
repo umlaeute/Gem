@@ -93,6 +93,7 @@ dist_gemhelp_DATA = \
 	pix_clearblock-help.pd \
 	pix_coloralpha-help.pd \
 	pix_color-help.pd \
+	pix_colordetect-help.pd \
 	pix_colormatrix-help.pd \
 	pix_colorreduce-help.pd \
 	pix_compare-help.pd \

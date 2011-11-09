@@ -37,7 +37,7 @@ typedef enum {
  PURPLE_PINK_LAVENDER = 7,
  PURPLE_PINK_MAGENTA = 8,
  GRAY = 9,
- NONE } color;
+ NONE} color;
 
 typedef enum {
  UNRELIABLE = 0,
@@ -74,7 +74,8 @@ pix_colordetect :: ~pix_colordetect()
 /////////////////////////////////////////////////////////
 void pix_colordetect :: processRGBAImage(imageStruct &image)
 {
-  extern float class_red[], class_green[], class_blue[];
+  // post("processing RGBA Image");
+  extern unsigned char class_red[], class_green[], class_blue[];
   unsigned i = image.xsize * image.ysize;
     
   unsigned char *base = image.data;
@@ -82,20 +83,24 @@ void pix_colordetect :: processRGBAImage(imageStruct &image)
       color result, second_guess;
       certainty c;
 
-      color_classify( base[chRed], base[chGreen], base[chBlue], 
+      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255., 
           &result, &second_guess, &c);
+
+      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue], 
+      //    result, second_guess, c);
 
       if (c == CERTAIN) {
         base[chRed] = class_red[result];
         base[chGreen] = class_green[result];
         base[chBlue] = class_blue[result];
       } else {
-        base[chRed] = 0;
-        base[chGreen] = 0;
-        base[chBlue] = 0;
+        base[chRed] = class_red[NONE];
+        base[chGreen] = class_green[NONE];
+        base[chBlue] = class_blue[NONE];
       }
       base += 4;
   }
+  // post("done processing RGBA Image");
 }
 
 /////////////////////////////////////////////////////////
@@ -137,46 +142,46 @@ char *certainty_name[3] =  {
 
 // the rgb values for the pure representative of each class, mainly for
 // visualization purposes 
-float class_red[] = {
+unsigned char class_red[] = {
 0,/*black,*/
-1,/*white,*/
-1,/*red,*/
+255,/*white,*/
+255,/*red,*/
 0,/*green,*/
 0,/*blue,*/
-1,/*yellow,*/
+255,/*yellow,*/
 0,/*blue-green,*/
-170/255,/*purple-pink-lavender,*/
-1,/*purple-pink-magenta,*/
-0.5,/*gray,*/
-154/255,/*none ~ brownish for visualization only */
+170,/*purple-pink-lavender,*/
+255,/*purple-pink-magenta,*/
+0.5*255,/*gray,*/
+154,/*none ~ brownish for visualization only ~ skin color in the future*/
 };
 
-float class_green[] = {
+unsigned char class_green[] = {
 0,/*black,*/
-1,/*white,*/
-1,/*red,*/
-0,/*green,*/
+255,/*white,*/
+0,/*red,*/
+255,/*green,*/
 0,/*blue,*/
-1,/*yellow,*/
-235/255,/*blue-green,*/
+255,/*yellow,*/
+235,/*blue-green,*/
 0,/*purple-pink-lavender,*/
 0,/*purple-pink-magenta,*/
-0.5,/*gray,*/
-115/255/*none*/
+0.5*255,/*gray,*/
+115/*none*/
 };
 
-float class_blue[] = {
+unsigned char class_blue[] = {
 0,/*black,*/
-1,/*white,*/
-1,/*red,*/
+255,/*white,*/
+0,/*red,*/
 0,/*green,*/
-0,/*blue,*/
-1,/*yellow,*/
-217/255,/*blue-green,*/
-1,/*purple-pink-lavender,*/
-1,/*purple-pink-magenta,*/
-0.5,/*gray,*/
-86/255/*none*/
+255,/*blue,*/
+0,/*yellow,*/
+217,/*blue-green,*/
+255,/*purple-pink-lavender,*/
+255,/*purple-pink-magenta,*/
+0.5*255,/*gray,*/
+86/*none*/
 };
 
 
