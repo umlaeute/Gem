@@ -76,7 +76,7 @@ is going to be spending a lot of time copying pixels.;
 #X obj 487 168 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X obj 451 251 pix_rds;
-#X text 11 238 [pix_buf] can be used to separate to gemlists processing
+#X text 11 238 [pix_buf] can be used to separate two gemlists processing
 the same image-data. Thus is is also called [pix_separator];
 #X text 22 362 Inlet 1: bang: copy of input-data to the output and
 force all subsequent [pix_]-objects to process.;
