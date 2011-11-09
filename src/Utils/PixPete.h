@@ -15,11 +15,11 @@ LOG
 #define _INCLUDE__GEM_UTILS_PIXPETE_H_
 
 #include <stdlib.h>
-#include <stdint.h>
 
 // utility functions from PeteHelpers.h
 
-#if 1
+#ifndef _MSC_VER
+# include <stdint.h>
 typedef uint32_t U32; 
 typedef uint16_t U16;
 typedef uint8_t U8;
