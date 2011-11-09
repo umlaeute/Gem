@@ -61,22 +61,22 @@ inline int powerOfTwo(int value)
 //
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef MIN
-inline int MIN(int x, int y) {  return (x<y)?x:y; }
-inline float MIN(float x, float y) {  return (x<y)?x:y; }
-inline double MIN(double x, double y) {  return (x<y)?x:y; }
+template <class T>
+inline T MIN(T x, T y) {  return (x<y)?x:y; }
 #endif
 #ifndef MAX
-inline int MAX(int x, int y) {  return (x>y)?x:y; }
-inline float MAX(float x, float y) {  return (x>y)?x:y; }
-inline double MAX(double x, double y) {  return (x>y)?x:y; }
+template <class T>
+inline T MAX(T x, T y) {  return (x>y)?x:y; }
 #endif
 
-inline unsigned char TRI_MAX(unsigned char v1, unsigned char v2, unsigned char v3){
+template <class T>
+inline T TRI_MAX(T v1, T v2, T v3){
   if (v1 > v2 && v1 > v3) return(v1);
   if (v2 > v3) return(v2);
   return(v3);
 }
-inline unsigned char TRI_MIN(unsigned char v1, unsigned char v2, unsigned char v3){
+template <class T>
+inline T TRI_MIN(T v1, T v2, T v3){
   if (v1 < v2 && v1 < v3) return(v1);
   if (v2 < v3) return(v2);
   return(v3);
@@ -103,17 +103,15 @@ inline unsigned char CLAMP(int x)
 
 //////////
 // Clamp a float to the range of an unsigned char
-inline unsigned char CLAMP(float x)
-    { return((unsigned char)((x > 255.f) ? 255.f : ( (x < 0.f) ? 0.f : x))); }
-inline unsigned char CLAMP(double x)
-    { return((unsigned char)((x > 255.f) ? 255.f : ( (x < 0.f) ? 0.f : x))); }
+template <class T>
+inline unsigned char CLAMP(T x)
+{ return((unsigned char)((x > (T)255) ? (T)255 : ( (x < (T)0) ? (T)0 : x))); }
 
 //////////
 // Clamp a float to 0. <= x <= 1.0
-inline float FLOAT_CLAMP(float x)
-    { return((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x)); }
-inline float FLOAT_CLAMP(double x)
-    { return((x > 1.f) ? 1.f : ( (x < 0.f) ? 0.f : x)); }
+template <class T>
+inline float FLOAT_CLAMP(T x)
+    { return((x > 1.) ? 1. : ( (x < 0.) ? 0. : x)); }
 
 /////////
 // Clamp the Y channel of YUV (16%235)
@@ -141,9 +139,8 @@ inline unsigned char INT_LERP(unsigned int p, unsigned int q, unsigned int a)
 
 //////////
 // Floating point LERP
-inline float FLOAT_LERP(float p, float q, float a)
-	{ return( a * (q - p) + p); }
-inline double FLOAT_LERP(double p, double q, double a)
+template <class T>
+inline T FLOAT_LERP(T p, T q, T a)
 	{ return( a * (q - p) + p); }
 
 
@@ -151,43 +148,29 @@ inline double FLOAT_LERP(double p, double q, double a)
 // Step function
 //
 ///////////////////////////////////////////////////////////////////////////////
-inline int stepFunc(float x, float a)
-    { return(x >= a); }
-inline int stepFunc(double x, double a)
-    { return(x >= a); }
-inline int stepFunc(int x, int a)
-    { return(x >= a); }
-inline int stepFunc(unsigned char x, unsigned char a)
+template <class T>
+inline int stepFunc(T x, T a)
     { return(x >= a); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Pulse function
 //
 ///////////////////////////////////////////////////////////////////////////////
-inline int pulseFunc(float x, float a, float b)
+template <class T>
+inline int pulseFunc(T x, T a, T b)
     { return(stepFunc(a, x) - stepFunc(b, x)); }
-inline int pulseFunc(double x, double a, double b)
-    { return(stepFunc(a, x) - stepFunc(b, x)); }
-inline int pulseFunc(int x, int a, int b)
-    { return(stepFunc(a, x) - stepFunc(b, x)); }
-inline int pulseFunc(unsigned char x, unsigned char a, unsigned char b)
-    { return(stepFunc(a, x) - stepFunc(b, x)); }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Clamp function
 //
 ///////////////////////////////////////////////////////////////////////////////
-inline float clampFunc(float x, float a, float b)
+template <class T>
+inline T clampFunc(T x, T a, T b)
     { return(x < a ? a : (x > b ? b : x)); }
-inline double clampFunc(double x, double a, double b)
-    { return(x < a ? a : (x > b ? b : x)); }
-inline int clampFunc(int x, int a, int b)
-    { return(x < a ? a : (x > b ? b : x)); }
-inline unsigned char clampFunc(unsigned char x, unsigned char a, unsigned char b)
-    { return(x < a ? a : (x > b ? b : x)); }
+/*
 inline void* clampFunc(void* x, void* a, void* b)
     { return(x < a ? a : (x > b ? b : x)); }
+*/
 /* 
    inline int GateInt(int nValue,int nMin,int nMax)
    inline float GateFlt(float nValue,float nMin,float nMax)
