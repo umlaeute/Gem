@@ -18,7 +18,7 @@
 #endif
 
 #ifndef GEM_VERSION_BUGFIX
-# define GEM_VERSION_BUGFIX CVS
+# define GEM_VERSION_BUGFIX 3
 #endif
 
 #ifndef GEM_VERSION_CODENAME 
