@@ -261,11 +261,7 @@ void recordQT :: setupQT() //this only needs to be done when codec info changes
   }
   if (m_compressImage->format == GL_BGRA){
     post("recordQT: using BGRA");
-#ifdef __LITTLE_ENDIAN__
-    colorspace = k32BGRAPixelFormat;
-#else
     colorspace = k32ARGBPixelFormat; 
-#endif
   }
 #ifdef _WIN32
   colorspace = k32RGBAPixelFormat;
