@@ -83,7 +83,7 @@ extern "C" {
     /* check whether we can find the abstractions in Gem's own path */
     snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
     buf[MAXPDSTRING-1]=0;
-    if (fd=open(buf, flags)>=0){
+    if ((fd=open(buf, flags))>=0){
       close(fd);
     } else {
       // can't find this abstraction...giving up
