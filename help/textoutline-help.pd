@@ -1,10 +1,10 @@
-#N canvas 26 90 733 630 10;
+#N canvas 26 90 653 587 10;
 #X text 54 30 Class: geometric object;
-#X obj 519 47 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 466 66 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X obj 544 364 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 468 346 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -22,32 +22,32 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 549 403 pd gemwin;
-#X msg 549 384 create;
-#X text 545 363 Create window:;
+#X restore 473 385 pd gemwin;
+#X msg 473 366 create;
+#X text 469 345 Create window:;
 #X obj 7 65 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 346 cnv 15 450 180 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 335 cnv 15 450 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 351 Inlets:;
+#X text 9 340 Inlets:;
 #X obj 8 295 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 294 Arguments:;
-#X text 452 8 GEM object;
-#X text 27 363 Inlet 1: gemlist;
-#X text 9 476 Outlets:;
-#X text 21 489 Outlet 1: gemlist;
-#X text 525 29 Example:;
-#X obj 522 94 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
+#X text 351 8 GEM object;
+#X text 27 352 Inlet 1: gemlist;
+#X text 9 465 Outlets:;
+#X text 21 478 Outlet 1: gemlist;
+#X text 472 48 Example:;
+#X obj 469 113 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 533 50 gemhead;
-#X floatatom 570 269 5 0 100 1 size - -;
-#X msg 543 134 font \$1;
-#X obj 543 115 openpanel;
-#X obj 543 98 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 474 72 gemhead;
+#X floatatom 511 291 5 0 100 1 size - -;
+#X msg 484 156 font \$1;
+#X obj 484 137 openpanel;
+#X obj 484 120 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X msg 551 160 text hello world!;
-#X msg 555 179 1 2 3 4;
+#X msg 492 182 text hello world!;
+#X msg 496 201 1 2 3 4;
 #X text 7 69 Description: Renders a line of text;
 #X text 63 306 initial text (defaults to "gem");
 #X text 10 123 Any TrueType-font can be rendered. Per default a file
@@ -60,27 +60,31 @@ aon the command-line and load fonts with just "font times.ttf".;
 \, "center"(default) and "base"(none);
 #X text 32 253 vertical justification can be one of "top" \, "bottom"
 \, "middle"(default) and "base"(none);
-#X msg 550 226 justify left base;
-#X floatatom 637 54 5 0 0 0 - - -;
-#X floatatom 596 49 4 0 0 0 - - -;
-#X text 27 377 Inlet 1: message: font <.TTF-file> : load a TrueType-font
+#X msg 491 248 justify left base;
+#X floatatom 578 76 5 0 0 0 - - -;
+#X floatatom 537 71 4 0 0 0 - - -;
+#X text 27 366 Inlet 1: message: font <.TTF-file> : load a TrueType-font
 ;
-#X text 27 391 Inlet 1: message: text [<blah>] : render the given text
+#X text 27 380 Inlet 1: message: text [<blah>] : render the given text
 ;
-#X text 27 404 Inlet 1: message: list [<blah>] : render the given text
+#X text 27 393 Inlet 1: message: list [<blah>] : render the given text
 ;
-#X text 27 428 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
+#X text 27 417 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
 justification;
-#X obj 533 71 rotateXYZ;
+#X obj 474 93 rotateXYZ;
 #X text 33 14 Synopsis: [textoutline];
-#X text 27 457 Inlet 2: float: size (in points). default: 20;
-#X obj 30 543 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
+#X text 27 446 Inlet 2: float: size (in points). default: 20;
+#X obj 30 532 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
-#X text 43 547 Note: on some systems it might be necessary to turn
+#X text 43 536 Note: on some systems it might be necessary to turn
 rendering ON before loading a font.;
-#X obj 533 290 textoutline;
-#X text 10 94 [textoutline] renders one line of a outlined text with the
-current color \, and all 3D-transformation;
+#X obj 474 312 textoutline;
+#X text 10 94 [textoutline] renders one line of a outlined text with
+the current color \, and all 3D-transformation;
+#X text 473 421 see also:;
+#X obj 487 486 textextruded;
+#X obj 489 441 text2d;
+#X obj 488 463 text3d;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;

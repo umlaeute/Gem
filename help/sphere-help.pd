@@ -1,4 +1,4 @@
-#N canvas 0 0 710 345 10;
+#N canvas 274 73 707 374 10;
 #X text 54 30 Class: geometric object;
 #X obj 479 47 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -60,6 +60,8 @@ inlet.;
 #X obj 497 222 sphere 1;
 #X text 35 168 size of the sphere \, segments;
 #X text 34 184 defaults: 1 \, 10;
+#X text 33 330 see also:;
+#X obj 102 331 sphere3d;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 19 0 31 0;

@@ -1,22 +1,22 @@
-#N canvas 57 47 639 383 10;
+#N canvas 57 47 633 363 10;
 #X text 452 8 GEM object;
-#X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 206 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 39 238 Inlets:;
-#X text 63 251 Inlet 1: gemlist;
-#X text 39 302 Outlets:;
-#X text 57 315 Outlet 1: gemlist;
-#X obj 8 176 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
+#X text 39 218 Inlets:;
+#X text 63 231 Inlet 1: gemlist;
+#X text 39 282 Outlets:;
+#X text 57 295 Outlet 1: gemlist;
+#X obj 8 156 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 175 Arguments:;
-#X obj 8 76 cnv 15 440 70 empty empty empty 20 12 0 14 -233017 -66577
+#X text 17 155 Arguments:;
+#X obj 8 76 cnv 15 430 70 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -50,12 +50,15 @@ matrix by the specified rotation;
 #X floatatom 468 162 5 0 0 0 - - -;
 #X msg 551 163 1 0 0;
 #X msg 566 187 0 1 1;
-#X text 63 186 1st argument: initial rotation amount (in degree);
-#X text 63 199 2nd-4th argument: (X Y Z) of the rotation-axis;
-#X text 63 266 Inlet 2: float: rotation amount around axis (in deg)
+#X text 63 166 1st argument: initial rotation amount (in degree);
+#X text 63 179 2nd-4th argument: (X Y Z) of the rotation-axis;
+#X text 63 246 Inlet 2: float: rotation amount around axis (in deg)
 ;
-#X text 63 284 Inlet 3: list: rotation axis (X Y Z);
+#X text 63 264 Inlet 3: list: rotation axis (X Y Z);
 #X text 39 130 the (x y z) vector determines the axis of rotation;
+#X text 38 332 see also:;
+#X obj 101 332 rotateXYZ;
+#X obj 169 332 accumrotate;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 22 0;

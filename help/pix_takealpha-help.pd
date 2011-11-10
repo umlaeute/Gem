@@ -1,20 +1,20 @@
-#N canvas 0 273 683 381 10;
+#N canvas 0 273 640 398 10;
 #X text 452 8 GEM object;
-#X obj 8 226 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 39 248 Inlets:;
-#X text 39 304 Outlets:;
+#X text 30 233 Inlets:;
+#X text 30 289 Outlets:;
 #X obj 8 186 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 185 Arguments:;
 #X obj 8 66 cnv 15 430 110 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 170 280 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 66 cnv 15 170 280 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 453 60 Example:;
-#X obj 514 290 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 453 49 Example:;
+#X obj 514 279 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -32,15 +32,15 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 519 329 pd gemwin;
-#X msg 519 310 create;
-#X text 515 289 Create window:;
-#X obj 451 198 cnv 15 160 40 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 519 318 pd gemwin;
+#X msg 519 299 create;
+#X text 515 278 Create window:;
+#X obj 451 187 cnv 15 160 40 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 119 gemhead;
-#X obj 502 102 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+#X obj 451 108 gemhead;
+#X obj 502 91 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
-#N canvas 0 0 587 366 image 0;
+#N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image examples/data/fractal.JPG;
@@ -52,15 +52,15 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 451 138 pd image;
-#X obj 451 263 pix_texture;
+#X restore 451 127 pd image;
+#X obj 451 252 pix_texture;
 #X text 63 196 <none>;
-#X text 47 318 Outlet 1: gemlist;
-#X text 53 262 Inlet 1: gemlist;
-#X obj 451 285 square 3;
-#X text 503 88 (JPEG \, TIFF \, ..);
-#X obj 519 122 gemhead;
-#N canvas 0 0 587 366 image 0;
+#X text 38 303 Outlet 1: gemlist;
+#X text 44 247 Inlet 1: gemlist;
+#X obj 451 274 square 3;
+#X text 503 77 (JPEG \, TIFF \, ..);
+#X obj 519 111 gemhead;
+#N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image examples/data/dancer.JPG;
@@ -72,16 +72,16 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 519 141 pd image;
-#X obj 570 103 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+#X restore 519 130 pd image;
+#X obj 570 92 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
-#X text 53 291 Inlet 2: gemlist;
-#X text 449 77 open two different images;
+#X text 44 276 Inlet 2: gemlist;
+#X text 449 66 open two different images;
 #X text 71 31 Class: pix mix object;
 #X text 29 158 The 2 images have to be of the same size.;
-#X obj 451 208 pix_takealpha;
-#X obj 519 169 pix_coloralpha;
-#X obj 451 243 alpha;
+#X obj 451 197 pix_takealpha;
+#X obj 519 158 pix_coloralpha;
+#X obj 451 232 alpha;
 #X text 29 67 Description: transfer the alpha-channel;
 #X text 29 84 [pix_takealpha] takes the alpha-channel of the 2nd image
 and applies it on the 1st image.;
@@ -89,6 +89,8 @@ and applies it on the 1st image.;
 #X text 27 130 If the 2nd image is in non-RGBA colorspace \, the luminance
 value is taken instead of the Alpha-value.;
 #X text 50 12 Synopsis: [pix_takealpha];
+#X text 31 356 see also:;
+#X obj 96 358 pix_mask;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;

@@ -11,12 +11,12 @@
 #X text 17 145 Arguments:;
 #X obj 8 66 cnv 15 430 70 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 66 cnv 15 170 200 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 453 60 Example:;
-#X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 453 49 Example:;
+#X obj 514 190 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -34,31 +34,33 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 519 293 pd gemwin;
-#X msg 519 274 create;
-#X text 515 253 Create window:;
+#X restore 519 229 pd gemwin;
+#X msg 519 210 create;
+#X text 515 189 Create window:;
 #X text 71 31 Class: manipulation object;
-#X obj 450 118 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 450 107 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 84 gemhead;
-#X obj 451 193 cube;
+#X obj 451 73 gemhead;
+#X obj 451 182 cube;
 #X text 62 156 a list of 3 (RGB) or 4 (RGBA) float-values.;
 #X text 63 229 Inlet 2: float: red value;
 #X text 63 244 Inlet 3: float: green value;
 #X text 63 259 Inlet 4: float: blue value;
 #X text 63 274 Inlet 5: float: alpha value;
-#X floatatom 479 122 3 0 1 0 - - -;
-#X floatatom 508 122 3 0 1 0 - - -;
-#X floatatom 536 122 3 0 1 0 - - -;
-#X floatatom 565 122 3 0 1 0 - - -;
+#X floatatom 479 111 3 0 1 0 - - -;
+#X floatatom 508 111 3 0 1 0 - - -;
+#X floatatom 536 111 3 0 1 0 - - -;
+#X floatatom 565 111 3 0 1 0 - - -;
 #X text 60 171 defaults: 0 0 0 1;
 #X text 50 12 Synopsis: [colorRGB];
-#X obj 451 156 colorRGB 0 1 0;
+#X obj 451 145 colorRGB 0 1 0;
 #X text 29 67 Description: colouring;
 #X text 22 81 [colorRGB] sets the colour of all subsequent shape and
 vertex operations until reset by another [color]/[colorRGB] object.
 If you set the alpha-value \, you will need an [alpha] object to enable
 alpha-blending;
+#X text 447 272 see also:;
+#X obj 449 297 color;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 30 0;

@@ -2,21 +2,21 @@
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 39 238 Inlets:;
-#X text 53 251 Inlet 1: gemlist;
-#X text 39 312 Outlets:;
-#X text 57 325 Outlet 1: gemlist;
+#X text 37 228 Inlets:;
+#X text 51 241 Inlet 1: gemlist;
+#X text 37 302 Outlets:;
+#X text 55 315 Outlet 1: gemlist;
 #X obj 8 176 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 175 Arguments:;
-#X obj 8 76 cnv 15 440 90 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 76 cnv 15 430 90 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -55,12 +55,15 @@ order) can be specified separately by arguments and changed via inlets.
 ;
 #X text 15 191 1st-3rd argument: rotation (in deg) around X- \, Y-
 and Z-axis;
-#X text 53 266 Inlet 2: float: rotation amount around X-axis (in deg)
+#X text 51 256 Inlet 2: float: rotation amount around X-axis (in deg)
 ;
-#X text 53 292 Inlet 4: float: rotation amount around Z-axis (in deg)
+#X text 51 282 Inlet 4: float: rotation amount around Z-axis (in deg)
 ;
-#X text 53 279 Inlet 3: float: rotation amount around Y-axis (in deg)
+#X text 51 269 Inlet 3: float: rotation amount around Y-axis (in deg)
 ;
+#X text 22 349 see also:;
+#X obj 85 349 rotate;
+#X obj 132 349 accumrotate;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 22 0;
