@@ -1,22 +1,22 @@
 #N canvas 207 28 639 433 10;
 #X text 452 8 GEM object;
-#X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 212 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 39 229 Inlets:;
-#X text 63 242 Inlet 1: gemlist;
-#X text 39 313 Outlets:;
-#X text 57 326 Outlet 1: gemlist;
-#X obj 8 164 cnv 15 430 50 empty empty empty 20 12 0 14 -195568 -66577
+#X text 39 211 Inlets:;
+#X text 63 228 Inlet 1: gemlist;
+#X text 39 295 Outlets:;
+#X text 57 312 Outlet 1: gemlist;
+#X obj 8 154 cnv 15 430 50 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 163 Arguments:;
-#X obj 8 76 cnv 15 440 70 empty empty empty 20 12 0 14 -233017 -66577
+#X text 17 153 Arguments:;
+#X obj 8 76 cnv 15 430 70 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
 #X obj 514 262 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -50,13 +50,15 @@
 #X obj 451 176 scaleXYZ 1 0.5 0.7;
 #X floatatom 506 131 5 0 0 1 Y-scale - -;
 #X floatatom 527 150 5 0 0 1 Z-scale - -;
-#X text 54 183 <X> <Y> <Z> : scaling factors along the axes.;
-#X text 63 258 Inlet 2: float: scaling amount along the X-axis;
-#X text 63 290 Inlet 4: float: scaling amount along the Z-axis;
-#X text 63 274 Inlet 3: float: scaling amount along the Y-axis;
+#X text 54 173 <X> <Y> <Z> : scaling factors along the axes.;
+#X text 63 244 Inlet 2: float: scaling amount along the X-axis;
+#X text 63 276 Inlet 4: float: scaling amount along the Z-axis;
+#X text 63 260 Inlet 3: float: scaling amount along the Y-axis;
 #X obj 451 200 rotate 45 1 1 1;
 #X text 39 97 [scaleXYZ] accepts a gemList and changes the current
 transformation matrix by the specified scale;
+#X text 17 340 see also:;
+#X obj 83 340 scale;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 24 0;

@@ -14,7 +14,7 @@
 #X text 453 60 Example:;
 #X obj 544 290 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -47,7 +47,7 @@
 #X obj 515 151 t f;
 #X obj 464 103 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#N canvas 0 0 450 300 open 0;
+#N canvas 0 22 450 300 open 0;
 #X obj 85 49 inlet;
 #X obj 85 237 outlet;
 #X obj 85 145 openpanel;
@@ -79,9 +79,6 @@ between two corresponding pixels that are smaller than "threshold"
 are ignored. The "threshold" is initially set to <threshold> and adjusts
 itself dynamically downwards towards <lo_threshold> (which is the absolute
 minimum);
-#X text 15 78 [pix_movement] detects movement in a frame with respect
-to the 2 previous frames and a "background"-image and stores it as
-a b/w-image (greyscale).;
 #X text 64 237 float: <lo_threshold> (0..1);
 #X text 66 252 float: <initial_threshold> (0..1);
 #X text 24 306 Inlet 1: bang: set the current frame as "background"
@@ -89,6 +86,11 @@ a b/w-image (greyscale).;
 #X text 24 323 Inlet 2: float: <lo_threshold> changes in the image
 that are smaller then <lo_threshold> are ignored;
 #X text 24 348 Inlet 3: float: <initial_threshold>;
+#X text 457 368 see also:;
+#X obj 521 370 pix_movement;
+#X text 15 78 [pix_movement2] detects movement in a frame with respect
+to the 2 previous frames and a "background"-image and stores it as
+a b/w-image (greyscale).;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 20 0;

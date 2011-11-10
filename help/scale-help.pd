@@ -9,14 +9,14 @@
 #X obj 8 256 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 255 Arguments:;
-#X obj 8 76 cnv 15 440 170 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 76 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -64,6 +64,8 @@ by the vector.;
 #X text 63 364 Inlet 3: list: scaling vector (X Y Z);
 #X text 63 347 Inlet 2: float: scaling amount along the vector;
 #X obj 451 196 scale 0.5;
+#X text 450 339 see also:;
+#X obj 452 363 scaleXYZ;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 29 0;

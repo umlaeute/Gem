@@ -1,11 +1,11 @@
-#N canvas 61 18 639 342 10;
+#N canvas 61 22 630 385 10;
 #X text 452 8 GEM object;
-#X obj 8 196 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 196 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 39 198 Inlets:;
-#X text 63 211 Inlet 1: gemlist;
-#X text 39 252 Outlets:;
-#X text 57 265 Outlet 1: gemlist;
+#X text 34 198 Inlets:;
+#X text 58 211 Inlet 1: gemlist;
+#X text 34 252 Outlets:;
+#X text 52 265 Outlet 1: gemlist;
 #X obj 8 146 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 145 Arguments:;
@@ -16,7 +16,7 @@
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -46,16 +46,18 @@
 #X obj 500 230 world_light;
 #X text 62 156 a list of 3 (RGB) or 4 (RGBA) float-values.;
 #X msg 478 130 0.4 0.8 1;
-#X text 63 229 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
+#X text 58 229 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X text 50 12 Synopsis: [diffuse];
 #X text 29 77 Description: diffuse colouring;
-#X text 60 171 defaults: 0.8 0.8 0.8 1;
+#X text 61 170 defaults: 0.8 0.8 0.8 1;
 #X text 22 91 [diffuse] accepts a gemList and sets the diffuse-color
 for all subsequent vertex-operations. You have to enable lighting to
 see any effects.;
 #X floatatom 561 190 5 0 0 0 - - -;
 #X obj 500 211 rotate 66 1 0 0;
 #X obj 451 156 diffuse 0 1 0;
+#X obj 451 355 diffuseRGB;
+#X text 448 332 see also:;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 30 0;

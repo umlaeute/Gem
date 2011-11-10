@@ -1,10 +1,10 @@
 #N canvas 26 90 733 630 10;
 #X text 54 30 Class: geometric object;
-#X obj 519 47 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 466 65 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X obj 544 364 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 466 341 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -22,32 +22,32 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 549 403 pd gemwin;
-#X msg 549 384 create;
-#X text 545 363 Create window:;
+#X restore 471 380 pd gemwin;
+#X msg 471 361 create;
+#X text 467 340 Create window:;
 #X obj 7 65 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 346 cnv 15 450 180 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 336 cnv 15 450 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 351 Inlets:;
+#X text 9 341 Inlets:;
 #X obj 8 295 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 294 Arguments:;
 #X text 452 8 GEM object;
-#X text 27 363 Inlet 1: gemlist;
-#X text 9 486 Outlets:;
-#X text 21 499 Outlet 1: gemlist;
-#X text 525 29 Example:;
-#X obj 522 94 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
+#X text 27 353 Inlet 1: gemlist;
+#X text 9 476 Outlets:;
+#X text 21 489 Outlet 1: gemlist;
+#X text 472 47 Example:;
+#X obj 469 112 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 533 50 gemhead;
-#X floatatom 578 269 5 0 100 1 size - -;
-#X msg 543 134 font \$1;
-#X obj 543 115 openpanel;
-#X obj 543 98 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 472 68 gemhead;
+#X floatatom 517 287 5 0 100 1 size - -;
+#X msg 482 152 font \$1;
+#X obj 482 133 openpanel;
+#X obj 482 116 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X msg 551 160 text hello world!;
-#X msg 555 179 1 2 3 4;
+#X msg 490 178 text hello world!;
+#X msg 494 197 1 2 3 4;
 #X text 7 69 Description: Renders a line of text;
 #X text 63 306 initial text (defaults to "gem");
 #X text 10 123 Any TrueType-font can be rendered. Per default a file
@@ -60,34 +60,37 @@ aon the command-line and load fonts with just "font times.ttf".;
 \, "center"(default) and "base"(none);
 #X text 32 253 vertical justification can be one of "top" \, "bottom"
 \, "middle"(default) and "base"(none);
-#X msg 550 206 justify left base;
-#X floatatom 637 54 5 0 0 0 - - -;
-#X floatatom 596 49 4 0 0 0 - - -;
-#X text 27 377 Inlet 1: message: font <.TTF-file> : load a TrueType-font
+#X msg 489 224 justify left base;
+#X floatatom 576 72 5 0 0 0 - - -;
+#X floatatom 535 67 4 0 0 0 - - -;
+#X text 27 367 Inlet 1: message: font <.TTF-file> : load a TrueType-font
 ;
-#X text 27 391 Inlet 1: message: text [<blah>] : render the given text
+#X text 27 381 Inlet 1: message: text [<blah>] : render the given text
 ;
-#X text 27 404 Inlet 1: message: list [<blah>] : render the given text
+#X text 27 394 Inlet 1: message: list [<blah>] : render the given text
 ;
-#X text 27 438 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
+#X text 27 428 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
 justification;
-#X obj 533 71 rotateXYZ;
-#X text 27 467 Inlet 2: float: size (in points). default: 20;
-#X obj 20 533 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
+#X obj 472 89 rotateXYZ;
+#X text 27 457 Inlet 2: float: size (in points). default: 20;
+#X obj 20 523 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
-#X text 33 537 Note: on some systems it might be necessary to turn
+#X text 33 527 Note: on some systems it might be necessary to turn
 rendering ON before loading a font.;
-#X obj 533 290 textextruded;
+#X obj 472 308 textextruded;
 #X text 33 14 Synopsis: [textextruded];
-#X msg 558 250 depth \$1;
-#X floatatom 558 231 5 0 0 1 depth - -;
+#X msg 497 268 depth \$1;
+#X floatatom 497 249 5 0 0 1 depth - -;
 #X text 10 94 [textextruded] renders one line of a extruded text with
 the current color \, and all 3D-transformation;
-#X text 27 418 Inlet 1: message: depth <float> : extrusion depth;
-#X obj 20 578 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
+#X text 27 408 Inlet 1: message: depth <float> : extrusion depth;
+#X obj 20 568 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
-#X text 22 583 Note: GEM needs to be compiled with FTGL-support for
+#X text 22 573 Note: GEM needs to be compiled with FTGL-support for
 this to work;
+#X text 472 418 siehe auch:;
+#X obj 545 418 text2d;
+#X obj 592 418 text3d;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;

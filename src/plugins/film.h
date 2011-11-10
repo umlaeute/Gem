@@ -34,7 +34,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
   
-class pixBlock;
+struct pixBlock;
 namespace gem {
   class Properties;
 }

@@ -1,4 +1,4 @@
-#N canvas 61 18 639 342 10;
+#N canvas 61 22 639 342 10;
 #X text 452 8 GEM object;
 #X obj 8 196 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -11,12 +11,12 @@
 #X text 17 145 Arguments:;
 #X obj 8 76 cnv 15 430 60 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 77 cnv 15 170 200 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
-#X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 510 209 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -39,9 +39,9 @@
 #X connect 7 0 0 0;
 #X connect 8 0 0 0;
 #X connect 9 0 8 0;
-#X restore 519 293 pd gemwin;
-#X msg 519 274 create;
-#X text 515 253 Create window:;
+#X restore 515 248 pd gemwin;
+#X msg 515 229 create;
+#X text 511 208 Create window:;
 #X text 71 31 Class: manipulation object;
 #X obj 450 118 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -57,6 +57,8 @@
 #X text 21 91 [emission] accepts a gemList and sets the emission-color
 for all subsequent vertex-operations. You have to enable lighting to
 see any effects.;
+#X text 448 285 see also:;
+#X obj 450 308 emissionRGB;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 24 0;

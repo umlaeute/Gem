@@ -1,4 +1,4 @@
-#N canvas 61 18 639 342 10;
+#N canvas 61 22 632 364 10;
 #X text 452 8 GEM object;
 #X obj 8 216 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -16,7 +16,7 @@
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -56,6 +56,8 @@
 #X text 22 96 [specular] accepts a gemList and sets the specular-color
 for all subsequent vertex-operations. You have to enable lighting to
 see any effects.;
+#X text 36 323 see also:;
+#X obj 97 323 specularRGB;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 28 0;

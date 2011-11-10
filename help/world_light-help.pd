@@ -1,22 +1,22 @@
-#N canvas 20 260 710 507 10;
+#N canvas 265 153 653 455 10;
 #X text 475 59 Example:;
 #X obj 7 64 cnv 15 450 200 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 316 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 317 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 321 Inlets:;
+#X text 26 322 Inlets:;
 #X obj 8 276 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 275 Arguments:;
 #X text 452 8 GEM object;
-#X text 27 333 Inlet 1: gemlist;
-#X text 9 387 Outlets:;
-#X text 21 400 Outlet 1: gemlist;
+#X text 44 334 Inlet 1: gemlist;
+#X text 26 388 Outlets:;
+#X text 38 401 Outlet 1: gemlist;
 #X obj 469 77 cnv 15 170 320 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 474 331 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -39,44 +39,47 @@
 #X restore 479 370 pd gemwin;
 #X msg 479 351 create;
 #X text 475 330 Create window:;
-#X obj 475 170 cnv 15 150 100 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 473 129 cnv 15 150 100 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 483 84 gemhead;
+#X obj 481 84 gemhead;
 #X text 53 30 Class: non-geometric object;
 #X text 7 69 Description: adds a point-light to the scene;
-#X text 27 360 Inlet 1: message: debug 1|0;
-#X text 28 375 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
-#X msg 570 223 1 1 1;
-#X obj 497 198 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X text 44 361 Inlet 1: message: debug 1|0;
+#X text 45 376 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
+#X msg 568 182 1 1 1;
+#X obj 495 157 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 497 219 debug \$1;
+#X msg 495 178 debug \$1;
 #X text 19 189 Keep in mind that the attributes have to be set before
 rendering the vertices \, so if you are trying for frame accurate rendering
 \, you will want to set the gemhead order to a low nuber so that all
 of the values of the light get set first.;
-#X obj 472 306 sphere;
-#X floatatom 563 88 5 0 0 0 - - -;
-#X obj 483 106 rotateXYZ 0 -120 0;
-#X obj 472 284 gemhead 40;
-#X obj 549 271 cnv 15 85 50 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 480 264 sphere;
+#X floatatom 561 88 5 0 0 0 - - -;
+#X obj 481 106 rotateXYZ 0 -120 0;
+#X obj 480 242 gemhead 40;
+#X obj 537 271 cnv 15 85 50 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X msg 551 298 lighting \$1;
-#X obj 551 276 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X msg 539 298 lighting \$1;
+#X obj 539 276 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 569 200 1 1 0;
+#X msg 567 159 1 1 0;
 #X text 18 169 The second inlet sets the color of the light-source.
 ;
 #X text 63 287 light-number;
-#X obj 483 245 world_light;
+#X obj 481 204 world_light;
 #X text 19 86 [world_light] produces a light which is at an infinite
 distance from the scene. This means that all of the light rays are
 parallel \, which reduces the computation somewhat.;
 #X text 17 135 You can adjust the light with [rotate]. If you are lost
 use "debug" to display the light source as a small cone.;
 #X text 33 14 Synopsis: [world_light];
-#X obj 492 175 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
+#X obj 490 134 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
 -1 0 1;
-#X text 27 347 Inlet 1: float: turn light on(1)/off(0);
+#X text 44 348 Inlet 1: float: turn light on(1)/off(0);
+#X text 40 425 see also:;
+#X obj 145 425 spot_light;
+#X obj 103 425 light;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 27 0;
