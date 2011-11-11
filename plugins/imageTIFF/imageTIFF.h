@@ -20,16 +20,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   imageTIFF
-  
+
   Loads in a picture
-  
+
   KEYWORDS
   pix
-  
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins { 
+namespace gem { namespace plugins {
     class GEM_EXPORT imageTIFF : public gem::plugins::imageloader, public gem::plugins::imagesaver {
  public:
 

@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -44,7 +44,7 @@ REGISTER_IMAGEFACTORY("tiff", imageTIFF);
 //
 /////////////////////////////////////////////////////////
 
-imageTIFF :: imageTIFF() 
+imageTIFF :: imageTIFF()
 {
   //post("imageTIFF");
 }
@@ -71,7 +71,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
   TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bits);
   TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samps);
-    
+
   int npixels = width * height;
 
   result.xsize=width;
@@ -107,7 +107,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
       TIFFClose(tif);
       return(false);
     }
-    
+
     result.reallocate();
     unsigned char *dstLine = result.data;
     int yStride = result.xsize * result.csize;
@@ -126,7 +126,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
 	  }
 	}
 	else if (samps == 3)  {
-	  for (uint32 i = 0; i < width; i++) {   
+	  for (uint32 i = 0; i < width; i++) {
 	    pixels[chRed]   = inp[0];   // Red
 	    pixels[chGreen] = inp[1];   // Green
 	    pixels[chBlue]  = inp[2];   // Blue
@@ -135,7 +135,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
 	    inp += 3;
 	  }
 	} else {
-	  for (uint32 i = 0; i < width; i++) {               
+	  for (uint32 i = 0; i < width; i++) {
 	    pixels[chRed]   = inp[0];   // Red
 	    pixels[chGreen] = inp[1];   // Green
 	    pixels[chBlue]  = inp[2];   // Blue
@@ -194,7 +194,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     }
     _TIFFfree(raster);
   }
-   
+
   TIFFClose(tif);
   return true;
 }
