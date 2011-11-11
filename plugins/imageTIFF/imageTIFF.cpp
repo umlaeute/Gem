@@ -217,7 +217,28 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
   short bits=8, samps=image.csize;
   int npixels = width * height;
   //int planar_conf = PLANARCONFIG_CONTIG;
-  const char *gemstring = "PD/GEM";
+  std::string software = "PD/GEM";
+  std::string artist;
+  std::string hostcomputer;
+
+  double xresolution = 72., yresolution=72.;
+  short resunit = RESUNIT_INCH;
+
+  props.get("xresolution", xresolution);
+  props.get("yresolution", yresolution);
+  std::string resunit_s;
+  if(props.get("resolutionunit", resunit_s)) {
+    if(("inch"==resunit_s) || ("english"==resunit_s) || ("imperial"==resunit_s))
+      resunit=RESUNIT_INCH;
+    else if(("centimeter"==resunit_s) || ("metric"==resunit_s))
+      resunit=RESUNIT_CENTIMETER;
+    else
+      resunit=RESUNIT_NONE;
+  }
+  props.get("software", software);
+  props.get("artist", artist);
+  props.get("hostcomputer", hostcomputer);
+
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, height);
@@ -226,11 +247,16 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, 1);
   TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
 
-  TIFFSetField(tif, TIFFTAG_XRESOLUTION, 72);
-  TIFFSetField(tif, TIFFTAG_YRESOLUTION, 72);
-  TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, RESUNIT_INCH);
+  TIFFSetField(tif, TIFFTAG_XRESOLUTION, xresolution); // RATIONAL
+  TIFFSetField(tif, TIFFTAG_YRESOLUTION, yresolution); // RATIONAL
+  TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, resunit);
 
-  TIFFSetField(tif, TIFFTAG_SOFTWARE, gemstring);
+  if(!software.empty())
+    TIFFSetField(tif, TIFFTAG_SOFTWARE, software.c_str());
+  if(!artist.empty())
+    TIFFSetField(tif, TIFFTAG_ARTIST, artist.c_str());
+  if(!hostcomputer.empty())
+    TIFFSetField(tif, TIFFTAG_HOSTCOMPUTER, hostcomputer.c_str());
 
   int yStride = image.xsize * image.csize;
   unsigned char *srcLine = &(image.data[npixels * image.csize]);
@@ -258,7 +284,12 @@ float imageTIFF::estimateSave(const imageStruct&img, const std::string&filename,
   if(mimetype == "image/tiff" || mimetype == "image/x-tiff")
     result += 100;
 
-  // LATER check some properties....
+  if(gem::Properties::UNSET != props.type("xresolution"))result+=1.;
+  if(gem::Properties::UNSET != props.type("yresolution"))result+=1.;
+  if(gem::Properties::UNSET != props.type("resolutionunit"))result+=1.;
+  if(gem::Properties::UNSET != props.type("software"))result+=1.;
+  if(gem::Properties::UNSET != props.type("artist"))result+=1.;
+  if(gem::Properties::UNSET != props.type("hostcomputer"))result+=1.;
 
   return result;
 }
@@ -271,5 +302,19 @@ void imageTIFF::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Pr
   mimetypes.push_back("image/tiff");
   mimetypes.push_back("image/x-tiff");
 
+  gem::any value;
+
+
+  value=72.f;
+  props.set("xresolution", value);
+  props.set("yresolution", value);
+
+  value=std::string("inch");
+  props.set("resolutionunit", value);
+  value=std::string("PD/GEM");
+  props.set("software", value);
+  value=std::string("");
+  props.set("artist", value);
+  props.set("hostcomputer", value);
 }
 #endif
