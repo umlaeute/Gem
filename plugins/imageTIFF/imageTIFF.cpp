@@ -195,6 +195,32 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     _TIFFfree(raster);
   }
 
+
+  double value_d;
+  short value_i16;
+  char value_s[MAXPDSTRING];
+  if(TIFFGetField(tif, TIFFTAG_XRESOLUTION, &value_d)) props.set("xresolution", value_d);
+  if(TIFFGetField(tif, TIFFTAG_YRESOLUTION, &value_d)) props.set("yresolution", value_d);
+  if(TIFFGetField(tif, TIFFTAG_XRESOLUTION, &value_d)) props.set("xresolution", value_d);
+  if(TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &value_i16)) {
+    std::string resunit;
+    switch(value_i16) {
+    case RESUNIT_INCH:
+      resunit="inch";
+      break;
+    case RESUNIT_CENTIMETER:
+      resunit="centimeter";
+      break;
+    default:
+      resunit="none";
+      break;
+    }
+    props.set("resolutionunit", resunit);
+  }
+  if(TIFFGetField(tif, TIFFTAG_SOFTWARE, &value_s)) props.set("software", std::string(value_s));
+  if(TIFFGetField(tif, TIFFTAG_ARTIST, &value_s)) props.set("artist", std::string(value_s));
+  if(TIFFGetField(tif, TIFFTAG_HOSTCOMPUTER, &value_s)) props.set("hostcomputer", std::string(value_s));
+
   TIFFClose(tif);
   return true;
 }
