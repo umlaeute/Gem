@@ -263,4 +263,13 @@ float imageTIFF::estimateSave(const imageStruct&img, const std::string&filename,
   return result;
 }
 
+
+void imageTIFF::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
+
+  mimetypes.push_back("image/tiff");
+  mimetypes.push_back("image/x-tiff");
+
+}
 #endif
