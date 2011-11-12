@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -87,7 +87,7 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-imageJPEG :: imageJPEG() 
+imageJPEG :: imageJPEG()
 {
   //post("imageJPEG");
 }
@@ -158,7 +158,7 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
   result.xsize = xSize;
   result.ysize = ySize;
   result.reallocate();
-   
+
   // cycle through the scan lines
   unsigned char *srcLine = new unsigned char[xSize * cSize];
   unsigned char *dstLine = result.data;
@@ -199,7 +199,7 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
 
   // finish the decompression
   jpeg_finish_decompress(&cinfo);
-   
+
   // cleanup
   jpeg_destroy_decompress(&cinfo);
   fclose(infile);
@@ -235,7 +235,7 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   }
   jpeg_stdio_dest(&cinfo, outfile);
 
-  imageStruct image; 
+  imageStruct image;
   constimage.convertTo(&image, GL_RGB);
   //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;
