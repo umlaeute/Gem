@@ -20,16 +20,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   imageMAGICK
-  
+
   Loads in a picture
-  
+
   KEYWORDS
   pix
-  
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins { 
+namespace gem { namespace plugins {
 class GEM_EXPORT imageMAGICK : public gem::plugins::imageloader, public gem::plugins::imagesaver {
  public:
 
@@ -56,7 +56,7 @@ class GEM_EXPORT imageMAGICK : public gem::plugins::imageloader, public gem::plu
   // can be used from threaded contexts
   virtual bool isThreadable(void) {return true;}
 
-  
+
  private:
   std::vector<std::string>m_mimetypes;
 

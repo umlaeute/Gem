@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -71,10 +71,10 @@ REGISTER_IMAGEFACTORY("magick", imageMAGICK);
 //
 /////////////////////////////////////////////////////////
 
-imageMAGICK :: imageMAGICK() 
+imageMAGICK :: imageMAGICK()
 {
   //post("imageMAGICK");
-  char**mimelist; 
+  char**mimelist;
   char what;
   mimelistlength_t  length;
   ExceptionInfo exception;
@@ -115,7 +115,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
     result.upsidedown=true;
 
     try {
-      image.write(0,0,result.xsize,result.ysize, 
+      image.write(0,0,result.xsize,result.ysize,
                   "RGBA",
                   Magick::CharPixel,
                   reinterpret_cast<void*>(result.data));
@@ -158,7 +158,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     }
     // 8 bits per channel are enough!
     // LATER make this dependent on the image->type
-    mimage.depth(8); 
+    mimage.depth(8);
     double quality;
     if(props.get("quality", quality)) {
       mimage.quality(quality);
@@ -186,14 +186,13 @@ float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filen
       result+=100.;
       break;
     }
-  } 
+  }
 
   if(gem::Properties::UNSET != props.type("quality"))
     result += 1.;
 
   return result;
 }
-
 
 void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
   mimetypes.clear();
@@ -206,8 +205,5 @@ void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::
   value=100.f;
   props.set("quality", value);
 }
-
-
-
 
 #endif
