@@ -30,7 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins { 
-class GEM_EXPORT imageMAGICK : public gem::plugins::imageBase {
+class GEM_EXPORT imageMAGICK : public gem::plugins::imageloader, public gem::plugins::imagesaver {
  public:
 
   //////////
@@ -47,6 +47,14 @@ class GEM_EXPORT imageMAGICK : public gem::plugins::imageBase {
   //////////
   // estimate, how well we could save this image
   virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+
+  ////////
+  // get writing capabilities of this backend (informative)
+  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
+
+  ////////
+  // can be used from threaded contexts
+  virtual bool isThreadable(void) {return true;}
 
   
  private:

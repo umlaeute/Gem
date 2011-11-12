@@ -195,4 +195,19 @@ float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filen
 }
 
 
+void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
+
+  mimetypes = m_mimetypes;
+
+  gem::any value;
+
+  value=100.f;
+  props.set("quality", value);
+}
+
+
+
+
 #endif
