@@ -162,9 +162,9 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
         np.x = cp->x + j; 
         np.y = cp->y + i;
 
-        if(m_image.GetPixel(np.y, np.x, chGray) > m_threshold) {
-          assert(np.x >= 0 && np.y >= 0);
-          assert(np.x <= m_image.xsize && np.y <= m_image.ysize);
+        if(np.x >= 0 && np.y >= 0 && 
+           np.x <= m_image.xsize && np.y <= m_image.ysize &&
+           m_image.GetPixel(np.y, np.x, chGray) > m_threshold ) {
           ptpush(&current, &np);
         }
       }
