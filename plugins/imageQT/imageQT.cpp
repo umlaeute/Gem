@@ -534,4 +534,18 @@ float imageQT::estimateSave(const imageStruct&img, const std::string&filename, c
   return result;
 }
 
+void imageQT::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
+
+  std::map<std::string, OSType>::iterator it;
+  for(it = s_mime2type.begin(); it!=s_mime2type.end(); ++it) {
+    mimetypes.push_back(it->first);
+  }
+
+  gem::any value;
+
+  value=100.f;
+  props.set("quality", value);
+}
 #endif /* have_quicktime */
