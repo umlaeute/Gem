@@ -408,22 +408,10 @@
 				RelativePath="..\..\src\plugins\imageloader.h">
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\imageloaderBase.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\imageloaderBase.h">
-			</File>
-			<File
 				RelativePath="..\..\src\plugins\imagesaver.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\imagesaver.h">
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\imagesaverBase.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\imagesaverBase.h">
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\PluginFactory.cpp">
