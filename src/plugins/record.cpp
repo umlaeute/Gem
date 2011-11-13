@@ -72,7 +72,9 @@ namespace gem { namespace plugins {
       addPlugin(ids, "QT4L");
       addPlugin(ids);
       
-#warning isThreadable
+#ifdef __GNUC__
+# warning isThreadable
+#endif
 #if 0
       unsigned int i;
       for(i=0; i<m_allHandles.size(); i++) {
@@ -213,7 +215,9 @@ namespace gem { namespace plugins {
     }
 
     virtual bool enumProperties(gem::Properties&props) {
-#warning enumerateProperties
+#ifdef __GNUC__
+# warning enumerateProperties
+#endif
 // shouldn't this return a merge of the properties of all selectedHandles?
       if(!checkSelectedHandles())
 	return false;
