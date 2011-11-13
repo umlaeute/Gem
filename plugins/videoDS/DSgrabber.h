@@ -84,7 +84,7 @@ public:
     {
     };
 
-    ~CSampleGrabberAllocator( )
+    ~CSampleGrabberAllocator(void)
     {
         // wipe out m_pBuffer before we try to delete it. It's not an allocated
         // buffer, and the default destructor will try to free it!
@@ -96,9 +96,9 @@ public:
     //
     HRESULT GetAllocatorRequirements( ALLOCATOR_PROPERTIES *pProps );
 
-    HRESULT Alloc( );
+    HRESULT Alloc(void);
 
-    void ReallyFree();
+    void ReallyFree(void);
 };
 
 //----------------------------------------------------------------------------
@@ -123,7 +123,7 @@ class CSampleGrabberInPin : public CTransInPlaceInputPin
 
 protected:
 
-    CSampleGrabber * SampleGrabber( ) { return (CSampleGrabber*) m_pFilter; }
+    CSampleGrabber * SampleGrabber(void) { return (CSampleGrabber*) m_pFilter; }
     HRESULT SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer );
 
 public:
@@ -137,7 +137,7 @@ public:
         memset( &m_allocprops, 0, sizeof( m_allocprops ) );
     }
 
-    ~CSampleGrabberInPin( )
+    ~CSampleGrabberInPin(void)
     {
         if( m_pPrivateAllocator ) delete m_pPrivateAllocator;
     }
@@ -178,7 +178,7 @@ protected:
     SAMPLECALLBACK m_callback;
     CCritSec m_Lock; // serialize access to our data
 
-    BOOL IsReadOnly( ) { return !m_bModifiesData; }
+    BOOL IsReadOnly(void) { return !m_bModifiesData; }
 
     // PURE, override this to ensure we get 
     // connected with the right media type

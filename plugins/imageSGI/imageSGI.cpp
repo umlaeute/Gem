@@ -37,11 +37,11 @@ REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-imageSGI :: imageSGI() 
+imageSGI :: imageSGI(void) 
 {
   //post("imageSGI");
 }
-imageSGI :: ~imageSGI()
+imageSGI :: ~imageSGI(void)
 {
   //post("~imageSGI");
 }

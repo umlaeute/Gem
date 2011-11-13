@@ -71,7 +71,7 @@ REGISTER_IMAGEFACTORY("magick", imageMAGICK);
 //
 /////////////////////////////////////////////////////////
 
-imageMAGICK :: imageMAGICK()
+imageMAGICK :: imageMAGICK(void)
 {
   //post("imageMAGICK");
   char**mimelist;
@@ -86,7 +86,7 @@ imageMAGICK :: imageMAGICK()
   }
 
 }
-imageMAGICK :: ~imageMAGICK()
+imageMAGICK :: ~imageMAGICK(void)
 {
   //post("~imageMAGICK");
 }

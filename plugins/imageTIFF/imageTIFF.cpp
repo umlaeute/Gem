@@ -44,11 +44,11 @@ REGISTER_IMAGEFACTORY("tiff", imageTIFF);
 //
 /////////////////////////////////////////////////////////
 
-imageTIFF :: imageTIFF()
+imageTIFF :: imageTIFF(void)
 {
   //post("imageTIFF");
 }
-imageTIFF :: ~imageTIFF()
+imageTIFF :: ~imageTIFF(void)
 {
   //post("~imageTIFF");
 }

@@ -87,11 +87,11 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-imageJPEG :: imageJPEG()
+imageJPEG :: imageJPEG(void)
 {
   //post("imageJPEG");
 }
-imageJPEG :: ~imageJPEG()
+imageJPEG :: ~imageJPEG(void)
 {
   //post("~imageJPEG");
 }
