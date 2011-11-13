@@ -8,10 +8,15 @@
  * Originally released under GPL v.2
  * -------------------------------------------------------------------------
  */ 
-#ifndef PSTK_H
-#define PSTK_H 1
+#ifndef GEM_UTILS_PSTK_H
+#define GEM_UTILS_PSTK_H 1
 
 #include "plist.h"
+
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+extern "C" {
+#endif
+
 
 /*
  *  Stack of (row,col) point coordinates. More suited for internal
@@ -62,4 +67,8 @@ typedef struct stk {
 int_stk
    *new_stk(int n);
 
-#endif /* !PSTK_H */
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+}
+#endif
+
+#endif /* !GEM_UTILS_PSTK_H */

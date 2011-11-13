@@ -9,10 +9,14 @@
  * -------------------------------------------------------------------------
  */ 
 
-#ifndef PLIST_H
-#define PLIST_H 1
+#ifndef GEM_UTILS_PLIST_H
+#define GEM_UTILS_PLIST_H 1
 
 #include <m_pd.h>
+
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+extern "C" {
+#endif
 
 #define animal_malloc_object(obj_type) ((obj_type *) malloc(sizeof(obj_type)))
 
@@ -92,4 +96,8 @@ void
    print_list(list *l),
    free_list(list **l);
 
-#endif /* !PLIST_H */
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+}
+#endif
+
+#endif /* !GEM_UTILS_PLIST_H */
