@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -18,7 +18,7 @@
 #endif
 
 
-#if defined __APPLE__ 
+#if defined __APPLE__
 # if !defined __x86_64__
 // with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
 // LATER make this a real check in configure
@@ -68,7 +68,7 @@
 # include <map>
 
 //# include <string.h>
-//# include <fcntl.h> 
+//# include <fcntl.h>
 
 using namespace gem::plugins;
 
@@ -85,18 +85,18 @@ FSPathMakeFSSpec(
   OSStatus   result;
   FSRef      ref;
   Boolean *isDirectory=NULL;
-  
+
   /* check parameters */
   require_action(NULL != spec, BadParameter, result = paramErr);
-   
+
   /* convert the POSIX path to an FSRef */
   result = FSPathMakeRef(path, &ref, isDirectory);
   require_noerr(result, FSPathMakeRef);
-   
+
   /* and then convert the FSRef to an FSSpec */
   result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
   require_noerr(result, FSGetCatalogInfo);
-   
+
  FSGetCatalogInfo:
  FSPathMakeRef:
  BadParameter:
@@ -113,7 +113,7 @@ FSPathMakeFSSpec(
     char filename[QT_MAX_FILENAMELENGTH];
     UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     FILE*fil=NULL;
-    
+
     snprintf(filename, QT_MAX_FILENAMELENGTH, "%s", path);
     c2pstr(filename);
     OSErr err=FSMakeFSSpec (0, 0L, filename8, spec);
@@ -140,12 +140,12 @@ static unsigned char* CStringToPString(char *string)
 {
   unsigned char *newString = (unsigned char*)MemAlloc(strlen(string) + 1);
   size_t i = 0;
-    
+
   for(i = 0; i < strlen(string); i++)
     newString[i+1] = string[i];
-    
+
   newString[0] = i;
-    
+
   return newString;
 }
 
@@ -229,16 +229,16 @@ static bool mime2type(const std::string&mimetype, OSType&filetype) {
 //
 /////////////////////////////////////////////////////////
 
-imageQT :: imageQT() : imageBase(false)
+imageQT :: imageQT(void)
 {
   static bool firsttime=true;
-  if(firsttime) { 
+  if(firsttime) {
 #ifdef _WIN32
     // Initialize QuickTime Media Layer
     OSErr		err = noErr;
     if ((err = InitializeQTML(0))) {
       throw(GemException("unable to initialize QuickTime"));
-    }	
+    }
     // start QuickTime
     if (err = EnterMovies()) {
       throw(GemException("unable to initialize QuickTime/Movies"));
@@ -249,7 +249,7 @@ imageQT :: imageQT() : imageBase(false)
   }
   //post("imageQT");
 }
-imageQT :: ~imageQT()
+imageQT :: ~imageQT(void)
 {
   //post("~imageQT");
 }
@@ -263,11 +263,11 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
 {
   Rect      r;
   if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;   //get an image size
-  ::OffsetRect(&r, -r.left, -r.top);                           
-  if (::GraphicsImportSetBoundsRect(inImporter, &r)) return NULL;      
+  ::OffsetRect(&r, -r.left, -r.top);
+  if (::GraphicsImportSetBoundsRect(inImporter, &r)) return NULL;
   ImageDescriptionHandle imageDescH = NULL;
   if (::GraphicsImportGetImageDescription(inImporter, &imageDescH)) return NULL;
-      
+
   result.xsize   = (*imageDescH)->width;
   result.ysize   = (*imageDescH)->height;
   result.upsidedown = true;
@@ -290,7 +290,7 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
   result.setCsizeByFormat(GL_RGBA_GEM);
   pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
 #endif
-  
+
   ::DisposeHandle(reinterpret_cast<Handle>(imageDescH));
   imageDescH = NULL;
   result.reallocate();
@@ -309,9 +309,9 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
                                  /* taken from pix_filmDarwin */
                                  pixelformat,   // gives noErr
                                  &r, NULL, NULL, 0,
-                                 // keepLocal,   
-                                 //useDistantHdwrMem, 
-                                 result.data, 
+                                 // keepLocal,
+                                 //useDistantHdwrMem,
+                                 result.data,
                                  static_cast<long>(result.xsize * result.csize));
   if (err) {
     error("Can't create QTNewWorld");
@@ -338,7 +338,7 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
     err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(myfilename.c_str()), &spec);
     if (err) {
       error("GemImageLoad: Unable to find file: %s", filename.c_str());
-      error("parID : %d", spec.parID); 
+      error("parID : %d", spec.parID);
       return false;
     }
     err = ::GetGraphicsImporterForFile(&spec, &importer);
@@ -377,11 +377,11 @@ static bool touch(std::string filename) {
 bool imageQT::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   OSErr			err=noErr;
   ComponentResult		cErr 	= 0;
-    
+
   GWorldPtr 			img	= NULL;
   GraphicsExportComponent 	geComp 	= NULL;
   Rect			r;
-    
+
   FSSpec			spec;
 
   OSType			osFileType=kQTFileTypeTIFF;
@@ -389,7 +389,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   std::string myfilename=filename.c_str();
 
   const UInt8*filename8=reinterpret_cast<const UInt8*>(myfilename.c_str());
-    
+
 #if defined __APPLE__
   FSRef			ref;
   err = ::FSPathMakeRef(filename8, &ref, NULL );
@@ -401,7 +401,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     }
     err = FSPathMakeRef(filename8, &ref, NULL);
   }
-    
+
   if (err != noErr) {
     verbose(1, "ERROR: %d in FSPathMakeRef()", err);
   }
@@ -427,7 +427,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     error("ERROR: %d in OpenADefaultComponent()", err);
     return false; // FIXME:
   }
-    
+
   r.top = 0;
   r.left = 0;
   r.bottom = constimage.ysize;
@@ -443,22 +443,22 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
 
     InvertGLImage(constimage.data, data, imageSize, rowBytes);
   }
-    
-  err = QTNewGWorldFromPtr(&img,  
+
+  err = QTNewGWorldFromPtr(&img,
                            IMAGEQT_RGBA_PIXELFORMAT,			   //k32RGBAPixelFormat,
                            &r, NULL, NULL, 0,
                            (data?data:constimage.data),
                            static_cast<long>(constimage.xsize * constimage.csize));
-  
+
   // is this the right place to free the "data" buffer (if used)?
   // i don't know, whether quicktime still needs the buffer...
-                
+
   if (err != noErr) {
     error("ERROR: %d in QTNewGWorldFromPtr()", err);
     if(data)delete[]data;
     return false; // FIXME:
   }
-       
+
   // Set the input GWorld for the exporter
   cErr = GraphicsExportSetInputGWorld(geComp, img);
   if (cErr != noErr)  {
@@ -466,7 +466,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     if(data)delete[]data;
     return false; // FIXME:
   }
-  
+
   // Set the output file to our FSSpec
   cErr = GraphicsExportSetOutputFile(geComp, &spec);
   if (cErr != noErr) {
@@ -474,7 +474,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     if(data)delete[]data;
     return false; // FIXME:
   }
-        
+
   // Set the compression quality (needed for JPEG, not necessarily for other formats)
   /*
     codecMinQuality
@@ -510,7 +510,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
     if(data)delete[]data;
     return false; // FIXME:
   }
-        
+
   // finally, close the component
   if (geComp != NULL)
     CloseComponent(geComp);
