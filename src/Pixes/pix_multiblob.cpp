@@ -129,16 +129,16 @@ calculates the Blobs, maximal x and y values are set
 algorithm adapted from imfill from animal.sf.net 
 by Ricardo Fabbri (labmacambira.sf.net)
 ------------------------------------------------------------*/
-void pix_multiblob :: makeBlob(Blob *pb, int x, int y)
+void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
 {
+  if(!pb)return;
+
   point *cp, np; // current pixel
   pstk_ptr current; // stack of current pixels
 
-  if(!pb)return;
-
   point seed;
-  seed.x = x;
-  seed.y = y;
+  seed.x = x_ini;
+  seed.y = y_ini;
   current = new_pstk();
   ptpush(&current, &seed);
   do {
@@ -146,15 +146,15 @@ void pix_multiblob :: makeBlob(Blob *pb, int x, int y)
     assert(cp);
 
     pb->area++;
-    t_float grey=(static_cast<t_float>(m_image.GetPixel(y, x, chGray))/255);
-    pb->m_xaccum +=grey*static_cast<t_float>(x);
-    pb->m_yaccum +=grey*static_cast<t_float>(y);
-    pb->m_xyaccum+=grey;
-
-    if(x<pb->xmin())pb->xmin(x);
-    if(x>pb->xmax())pb->xmax(x);
-    if(y<pb->ymin())pb->ymin(y);
-    if(y>pb->ymax())pb->ymax(y);
+    t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x, chGray))/255.0);
+    pb->m_xaccum  += grey*static_cast<t_float>(cp->x);
+    pb->m_yaccum  += grey*static_cast<t_float>(cp->y);
+    pb->m_xyaccum += grey;                      
+                                              
+    if (cp->x < pb->xmin()) pb->xmin(cp->x);          
+    if (cp->x > pb->xmax()) pb->xmax(cp->x);
+    if (cp->y < pb->ymin()) pb->ymin(cp->y);
+    if (cp->y > pb->ymax()) pb->ymax(cp->y);
 
     m_image.SetPixel(cp->y,cp->x,chGray,0);
     for(int i = -1; i<= 1; i++){
@@ -163,8 +163,8 @@ void pix_multiblob :: makeBlob(Blob *pb, int x, int y)
         np.y = cp->y + i;
 
         if(m_image.GetPixel(np.y, np.x, chGray) > m_threshold) {
-          assert(x >= 0 && y >= 0);
-          assert(x <= m_image.xsize && y <= m_image.ysize);
+          assert(np.x >= 0 && np.y >= 0);
+          assert(np.x <= m_image.xsize && np.y <= m_image.ysize);
           ptpush(&current, &np);
         }
       }
