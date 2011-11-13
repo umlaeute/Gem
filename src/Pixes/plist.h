@@ -12,6 +12,7 @@
 #ifndef PLIST_H
 #define PLIST_H 1
 
+#include <m_pd.h>
 
 #define animal_malloc_object(obj_type) ((obj_type *) malloc(sizeof(obj_type)))
 

@@ -12,6 +12,7 @@
 
 #include "pstk.h"
 #include <malloc.h>
+#include <assert.h>
 
 
 int 
