@@ -27,7 +27,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include "pix_multiblob.h"
-#include "pstk.h"
+#include "Utils/pstk.h"
 
 ////////////////////////
 // the Blob-structure

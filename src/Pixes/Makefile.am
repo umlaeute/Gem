@@ -150,10 +150,6 @@ libPixes_la_SOURCES=  \
     pix_movie.h \
     pix_multiblob.cpp \
     pix_multiblob.h \
-		plist.cpp \
-		plist.h \
-		pstk.cpp \
-		pstk.h \
     pix_multiimage.cpp \
     pix_multiimage.h \
     pix_multiply.cpp \
