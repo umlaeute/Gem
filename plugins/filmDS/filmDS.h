@@ -63,6 +63,8 @@ class GEM_EXPORT filmDS : public filmBase {
      // set the next frame to read;
      virtual errCode changeImage(int imgNum, int trackNum=-1);
 
+     // can be used within a threaded context
+     virtual bool isThreadable(void) { return true; }
 
      // the raw buffer for decoding...
      int			m_nRawBuffSize;

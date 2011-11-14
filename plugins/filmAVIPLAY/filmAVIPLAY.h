@@ -83,6 +83,9 @@ class GEM_EXPORT filmAVIPLAY : public filmBase {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum=-1);
 
+  // can be used within a threaded context
+  virtual bool isThreadable(void) { return true; }
+
  protected:
   IAviReadFile *m_avifile;
   IAviReadStream  *m_avistream;

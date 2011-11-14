@@ -62,6 +62,9 @@ class GEM_EXPORT filmMPEG3 : public filmBase {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
+  // cannot be used within a threaded context
+  virtual bool isThreadable(void) { return false; }
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------

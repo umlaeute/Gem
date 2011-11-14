@@ -69,6 +69,9 @@ class GEM_EXPORT filmDarwin : public filmBase {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum=-1);
 
+  // cannot be used within a threaded context
+  virtual bool isThreadable(void) { return false; }
+
  protected:
 #ifdef HAVE_CARBONQUICKTIME
   Movie			m_movie; 

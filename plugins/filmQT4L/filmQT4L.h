@@ -61,6 +61,9 @@ class GEM_EXPORT filmQT4L : public filmBase {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
+  // can be used within a threaded context
+  virtual bool isThreadable(void) { return true; }
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
