@@ -10,7 +10,8 @@
  */
 
 #include "plist.h"
-#include <malloc.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 #define Allocpoint() (plist_ptr) malloc(sizeof(pt))
