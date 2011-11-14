@@ -39,7 +39,8 @@ extern "C"
 
 using namespace gem::plugins;
 
-REGISTER_IMAGEFACTORY("jpeg", imageJPEG);
+REGISTER_IMAGELOADERFACTORY("jpeg", imageJPEG);
+REGISTER_IMAGESAVERFACTORY("jpeg", imageJPEG);
 
 
 /////////////////////////////////////////////////////////

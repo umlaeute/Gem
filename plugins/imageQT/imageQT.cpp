@@ -73,7 +73,8 @@
 using namespace gem::plugins;
 
 
-REGISTER_IMAGEFACTORY("QT", imageQT);
+REGISTER_IMAGELOADERFACTORY("QT", imageQT);
+REGISTER_IMAGESAVERFACTORY("QT", imageQT);
 
 
 #if defined __APPLE__

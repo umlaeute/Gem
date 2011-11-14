@@ -59,7 +59,8 @@ using namespace MagickCore;
 namespace MagickLib  {};
 using namespace MagickLib;
 
-REGISTER_IMAGEFACTORY("magick", imageMAGICK);
+REGISTER_IMAGELOADERFACTORY("magick", imageMAGICK);
+REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 
 
 /////////////////////////////////////////////////////////
