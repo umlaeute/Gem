@@ -6,7 +6,7 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-    pix_colordetect
+    pix_colorclassify
     
     Detects red, green, blue, yellow, white, black in an image
 
@@ -16,21 +16,21 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class pix_colordetect : public GemPixObj
+class pix_colorclassify : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_colordetect, GemPixObj);
+    CPPEXTERN_HEADER(pix_colorclassify, GemPixObj);
 
     public:
 
 	    //////////
 	    // Constructor
-    	pix_colordetect();
+    	pix_colorclassify();
     	
     protected:
     	
     	//////////
     	// Destructor
-    	virtual ~pix_colordetect();
+    	virtual ~pix_colorclassify();
 
     	//////////
     	// Do the processing
