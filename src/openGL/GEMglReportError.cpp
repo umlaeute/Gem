@@ -39,7 +39,7 @@ GEMglReportError :: ~GEMglReportError () {
 // Variables
 //
 void GEMglReportError :: render(GemState *state) {
-  GLenum err=glReportError();  
+  GLenum err=glReportError();
   outlet_float(m_outlet, static_cast<t_float>(err));
 }
 

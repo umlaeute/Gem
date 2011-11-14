@@ -78,10 +78,10 @@ void color :: colorMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void color :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_color), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_color),
 		   gensym("colour"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&color::colorMessCallback),
-    	    gensym("color"), A_GIMME, A_NULL); 
+    	    gensym("color"), A_GIMME, A_NULL);
 }
 void color :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

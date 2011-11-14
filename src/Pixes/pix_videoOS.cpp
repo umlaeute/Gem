@@ -17,20 +17,20 @@
     this is an attempt at a Linux version of pix_videoOS by Miller Puckette.
     Anyone conversant in c++ will probably howl at this.  I'm uncertain of
     several things.
-    
+
     First, the #includes I threw in pix_videoOS.h may not all be necessary; I
     notice that far fewer are needed for the other OSes.
-    
+
     Second, shouldn't the os-dependent state variables be "private"?  I
     followed the lead of the other os-dependent state variables.  Also,
     I think the indentation is goofy but perhaps there's some reason for it.
 
     Third, I probably shouldn't be using sprintf to generate filenames; I
     don't know the "modern" c++ way to do this.
-    
-    Fourth, I don't know why some state variables 
+
+    Fourth, I don't know why some state variables
     show up as "arguments" in the pix_videoOS :: pix_videoOS().
-     
+
     This code is written with the "bttv" device in mind, which memory mapes
     images up to 24 bits per pixel.  So we request the whole 24 and don't
     settle for anything of lower quality (nor do we offer anything of higher
@@ -107,7 +107,7 @@ int pix_videoOS :: stopTransfer()
 {
     if ( !m_haveVideo )
     	return(0);
-    
+
     return(1);
 }
 

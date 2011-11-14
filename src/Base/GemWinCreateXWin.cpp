@@ -35,77 +35,77 @@
 
 
 // window creation variables
-static int snglBuf24[] = {GLX_RGBA, 
-                          GLX_RED_SIZE, 8, 
-                          GLX_GREEN_SIZE, 8, 
-                          GLX_BLUE_SIZE, 8, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_STENCIL_SIZE, 8, 
+static int snglBuf24[] = {GLX_RGBA,
+                          GLX_RED_SIZE, 8,
+                          GLX_GREEN_SIZE, 8,
+                          GLX_BLUE_SIZE, 8,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_STENCIL_SIZE, 8,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           None};
-static int snglBuf24Stereo[] = {GLX_RGBA, 
-                          GLX_RED_SIZE, 8, 
-                          GLX_GREEN_SIZE, 8, 
-                          GLX_BLUE_SIZE, 8, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_STENCIL_SIZE, 8, 
+static int snglBuf24Stereo[] = {GLX_RGBA,
+                          GLX_RED_SIZE, 8,
+                          GLX_GREEN_SIZE, 8,
+                          GLX_BLUE_SIZE, 8,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_STENCIL_SIZE, 8,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
 								  GLX_STEREO,
                           None};
-static int dblBuf24[] =  {GLX_RGBA, 
-                          GLX_RED_SIZE, 4, 
-                          GLX_GREEN_SIZE, 4, 
-                          GLX_BLUE_SIZE, 4, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_STENCIL_SIZE, 8, 
+static int dblBuf24[] =  {GLX_RGBA,
+                          GLX_RED_SIZE, 4,
+                          GLX_GREEN_SIZE, 4,
+                          GLX_BLUE_SIZE, 4,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_STENCIL_SIZE, 8,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
-                          GLX_DOUBLEBUFFER, 
+                          GLX_DOUBLEBUFFER,
                           None};
-static int dblBuf24Stereo[] =  {GLX_RGBA, 
-                          GLX_RED_SIZE, 4, 
-                          GLX_GREEN_SIZE, 4, 
-                          GLX_BLUE_SIZE, 4, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_STENCIL_SIZE, 8, 
+static int dblBuf24Stereo[] =  {GLX_RGBA,
+                          GLX_RED_SIZE, 4,
+                          GLX_GREEN_SIZE, 4,
+                          GLX_BLUE_SIZE, 4,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_STENCIL_SIZE, 8,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
-                          GLX_DOUBLEBUFFER, 
+                          GLX_DOUBLEBUFFER,
 								  GLX_STEREO,
                           None};
-static int snglBuf8[] =  {GLX_RGBA, 
-                          GLX_RED_SIZE, 3, 
-                          GLX_GREEN_SIZE, 3, 
-                          GLX_BLUE_SIZE, 2, 
-                          GLX_DEPTH_SIZE, 16, 
+static int snglBuf8[] =  {GLX_RGBA,
+                          GLX_RED_SIZE, 3,
+                          GLX_GREEN_SIZE, 3,
+                          GLX_BLUE_SIZE, 2,
+                          GLX_DEPTH_SIZE, 16,
                           None};
-static int snglBuf8Stereo[] =  {GLX_RGBA, 
-                          GLX_RED_SIZE, 3, 
-                          GLX_GREEN_SIZE, 3, 
-                          GLX_BLUE_SIZE, 2, 
-                          GLX_DEPTH_SIZE, 16, 
+static int snglBuf8Stereo[] =  {GLX_RGBA,
+                          GLX_RED_SIZE, 3,
+                          GLX_GREEN_SIZE, 3,
+                          GLX_BLUE_SIZE, 2,
+                          GLX_DEPTH_SIZE, 16,
 								  GLX_STEREO,
                           None};
-static int dblBuf8[] =   {GLX_RGBA, 
-                          GLX_RED_SIZE, 1, 
-                          GLX_GREEN_SIZE, 2, 
-                          GLX_BLUE_SIZE, 1, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_DOUBLEBUFFER, 
+static int dblBuf8[] =   {GLX_RGBA,
+                          GLX_RED_SIZE, 1,
+                          GLX_GREEN_SIZE, 2,
+                          GLX_BLUE_SIZE, 1,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_DOUBLEBUFFER,
                           None};
 
-static int dblBuf8Stereo[] =   {GLX_RGBA, 
-                          GLX_RED_SIZE, 1, 
-                          GLX_GREEN_SIZE, 2, 
-                          GLX_BLUE_SIZE, 1, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_DOUBLEBUFFER, 
+static int dblBuf8Stereo[] =   {GLX_RGBA,
+                          GLX_RED_SIZE, 1,
+                          GLX_GREEN_SIZE, 2,
+                          GLX_BLUE_SIZE, 1,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_DOUBLEBUFFER,
 								  GLX_STEREO,
                           None};
 
@@ -115,7 +115,7 @@ int ErrorHandler (Display *dpy, XErrorEvent *event)
   // we don't really care about the error
   // let's hope for the best
   if(event)
-    xerr=event->error_code;  
+    xerr=event->error_code;
 
   if ( event->error_code != BadWindow ) {
     char buf[256];
@@ -148,7 +148,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XSetErrorHandler (ErrorHandler);
 
   if ( (info.dpy = XOpenDisplay(hints.display)) == NULL)
-    { 
+    {
       error("GEM: Could not open display %s",hints.display);
       return(0);
     }
@@ -166,7 +166,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
       error("GEM: X server has no OpenGL GLX extension");
       destroyGemWindow(info);
       return 0;
-    } 
+    }
 
   if (fullscreen){
     if (hints.display){
@@ -240,7 +240,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     return(0);
   }
   // create the X color map
-  info.cmap = XCreateColormap(info.dpy, RootWindow(info.dpy, vi->screen), 
+  info.cmap = XCreateColormap(info.dpy, RootWindow(info.dpy, vi->screen),
 			      vi->visual, AllocNone);
   if (!info.cmap) {
     error("GEM: Could not create X colormap");
@@ -294,7 +294,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   info.fs = fullscreen;
   info.win = XCreateWindow(info.dpy, RootWindow(info.dpy, vi->screen),
 			   x, y, hints.real_w, hints.real_h,
-			   0, vi->depth, InputOutput, 
+			   0, vi->depth, InputOutput,
 			   vi->visual, flags, &swa);
   if (!info.win)
     {
@@ -314,7 +314,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     XSetWMProtocols(info.dpy, info.win, &info.delete_atom,1);
 
   XSetStandardProperties(info.dpy, info.win,
-			 hints.title, "gem", 
+			 hints.title, "gem",
 			 None, 0, 0, NULL);
   try{
     xerr=0;
@@ -350,14 +350,14 @@ int cursorGemWindow(WindowInfo &info, int state)
 {
   if (!state) {
     static char data[1] = {0};
-	 
+
     Cursor cursor;
     Pixmap blank;
     XColor dummy;
-	 
+
     blank = XCreateBitmapFromData(info.dpy, info.win,
 				  data, 1, 1);
-	 
+
     cursor = XCreatePixmapCursor(info.dpy, blank, blank,
 				 &dummy, &dummy, 0, 0);
     XFreePixmap(info.dpy, blank);
@@ -416,10 +416,10 @@ void gemWinSwapBuffers(WindowInfo&nfo)
   glXSwapBuffers(nfo.dpy, nfo.win);
 }
 
-void gemWinMakeCurrent(WindowInfo&nfo) 
+void gemWinMakeCurrent(WindowInfo&nfo)
 {
   if (!nfo.dpy && !nfo.win && !nfo.context)return; // do not crash
-  glXMakeCurrent(nfo.dpy, nfo.win, nfo.context);   
+  glXMakeCurrent(nfo.dpy, nfo.win, nfo.context);
 }
 
 
@@ -438,37 +438,37 @@ GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
 
 GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
 {
-  XEvent event; 
-  XButtonEvent* eb = (XButtonEvent*)&event; 
-  XKeyEvent* kb  = (XKeyEvent*)&event; 
+  XEvent event;
+  XButtonEvent* eb = (XButtonEvent*)&event;
+  XKeyEvent* kb  = (XKeyEvent*)&event;
   XResizeRequestEvent *res = (XResizeRequestEvent*)&event;
   char keystring[2];
   KeySym keysym_return;
 
   while (XCheckWindowEvent(win.dpy,win.win,
-                           ResizeRedirectMask | 
+                           ResizeRedirectMask |
                            KeyPressMask | KeyReleaseMask |
-                           PointerMotionMask | 
+                           PointerMotionMask |
                            ButtonMotionMask |
-                           ButtonPressMask | 
+                           ButtonPressMask |
                            ButtonReleaseMask,
                            &event))
     {
       switch (event.type)
         {
-        case ButtonPress: 
-          triggerButtonEvent(eb->button-1, 1, eb->x, eb->y); 
-          break; 
-        case ButtonRelease: 
-          triggerButtonEvent(eb->button-1, 0, eb->x, eb->y); 
-          break; 
-        case MotionNotify: 
-          triggerMotionEvent(eb->x, eb->y); 
+        case ButtonPress:
+          triggerButtonEvent(eb->button-1, 1, eb->x, eb->y);
+          break;
+        case ButtonRelease:
+          triggerButtonEvent(eb->button-1, 0, eb->x, eb->y);
+          break;
+        case MotionNotify:
+          triggerMotionEvent(eb->x, eb->y);
           if(!win.have_border) {
             int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
             err=0;
           }
-          break; 
+          break;
         case KeyPress:
           if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
             //modifier key:use keysym
@@ -499,10 +499,10 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
           XResizeWindow(win.dpy, win.win, res->width, res->height);
           break;
         default:
-          break; 
+          break;
         }
     }
-  
+
   if (XCheckTypedEvent(win.dpy,  ClientMessage, &event)) {
     GemMan::destroyWindowSoon();
   }

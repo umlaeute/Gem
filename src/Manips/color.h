@@ -21,7 +21,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     color
-    
+
     color a gem object
 
 DESCRIPTION
@@ -29,7 +29,7 @@ DESCRIPTION
     Inlet for a list - "color"
 
     "color" - the RGB color to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN color : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN color : public GemBase
 	    //////////
 	    // Constructor
     	color(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~color();
@@ -58,9 +58,9 @@ class GEM_EXTERN color : public GemBase
     	//////////
     	// Color changed
     	void	    	colorMess(float red, float green, float blue, float alpha);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2 , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglEvalPoint2 :: GEMglEvalPoint2	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		i(static_cast<GLint>(arg0)), 
+		i(static_cast<GLint>(arg0)),
 		j(static_cast<GLint>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));

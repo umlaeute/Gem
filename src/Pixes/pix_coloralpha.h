@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_coloralpha
-    
+
     Set the alpha values of a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_coloralpha : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_coloralpha();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_coloralpha();

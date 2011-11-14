@@ -30,7 +30,7 @@ class GEM_EXTERN pix_mean_color : public GemPixObj
  public:
 	// constructor
 	pix_mean_color(int argc, t_atom *argv);
-	
+
  protected:
 	// destructor
 	virtual ~pix_mean_color();
@@ -40,7 +40,7 @@ class GEM_EXTERN pix_mean_color : public GemPixObj
 	virtual void processRGBAImage(imageStruct &image);
 	virtual void processGrayImage(imageStruct &image);
 	virtual void processYUVImage(imageStruct &image);
-	
+
 	t_outlet * m_list;
 };
 

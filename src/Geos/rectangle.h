@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     rectangle
-    
+
     Creates a rectangle
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN rectangle : public GemShape
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN rectangle : public GemShape
         //////////
         // Constructor
 		rectangle(t_floatarg width, t_floatarg height);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~rectangle();
@@ -57,7 +57,7 @@ class GEM_EXTERN rectangle : public GemShape
     	//////////
     	// How the object should be drawn
     	virtual void	typeMess(t_symbol *type);
-		
+
     	//////////
     	// The height of the object
         GLfloat	    	m_height;

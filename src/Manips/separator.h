@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     Push/pop the current OpenGL state
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org.
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -22,17 +22,17 @@ LOG
 -------------------------------------------------------------------
 CLASS
     separator
-    
+
     Separates the effects of the rest of the chain from the what
     	happens below the separator.
 
 DESCRIPTION
-    
+
     separator does NOT save the state of the pixes, if they are
     	being used!
-    
+
     "separatorstate" - whether to use separator blending
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN separator : public GemBase
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN separator : public GemBase
         //////////
         // Constructor
   separator(int, t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~separator();

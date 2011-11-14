@@ -37,9 +37,9 @@ pix_emboss :: ~pix_emboss()
 void pix_emboss :: processYUVImage(imageStruct &image)
 {
    long r,c,width, height,src,h,w;
-	
+
    width = image.xsize-1;
-   height = image.ysize-1;  
+   height = image.ysize-1;
    w = image.xsize*2;
    h = image.ysize*2;
    src =1;
@@ -52,8 +52,8 @@ void pix_emboss :: processYUVImage(imageStruct &image)
                                 image.data[ src -2 ] -
                                 image.data[src] -
                                 image.data[src + 2] -
-                                image.data[src+w-2] - 
-                                image.data[src+w] - 
+                                image.data[src+w-2] -
+                                image.data[src+w] -
                                 image.data[src+w+2] )/4;
             src+=2;
         }
@@ -61,15 +61,15 @@ void pix_emboss :: processYUVImage(imageStruct &image)
         /*
 	for (r=0; r < (width*height); r+= width) {
 		for (c=0; c < width; c++) {
-                
-			image.data[src+1] =(image.data[ r-1 + c-2 ] -	
-				      image.data[ r-1 + c ] -	
-				      image.data[ r-1 + c+2 ]+ 	
-				      image.data[ r+c -2 ] +	
-				      image.data[r+c] -		
-				      image.data[r+c+2] -		
-				      image.data[r+1+c-2] -   	
-				      image.data[r+1+c] -    	
+
+			image.data[src+1] =(image.data[ r-1 + c-2 ] -
+				      image.data[ r-1 + c ] -
+				      image.data[ r-1 + c+2 ]+
+				      image.data[ r+c -2 ] +
+				      image.data[r+c] -
+				      image.data[r+c+2] -
+				      image.data[r+1+c-2] -
+				      image.data[r+1+c] -
 				      image.data[r+1+c+2]
 				      )/9;
                                       src+=2;

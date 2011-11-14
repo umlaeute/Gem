@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     sphere
-    
+
     Creates a sphere
 
 KEYWORDS
     geo
 
 DESCRIPTION
-        
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN sphere : public GemGluObj
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN sphere : public GemGluObj
         //////////
         // Constructor
   sphere(t_floatarg size, t_floatarg slice=10.0);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~sphere();
@@ -58,7 +58,7 @@ class GEM_EXTERN sphere : public GemGluObj
         int 		oldStacks, oldSlices;
         GLenum		oldDrawType;
 	int             oldTexture;
-        
+
 };
 
 #endif	// for header file

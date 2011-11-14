@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_mix
-    
+
     Blends two images together.
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     gain $1 $2 - sets the gain for the left and right images.
@@ -42,9 +42,9 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
 	    //////////
     	// Constructor
     	pix_mix(int,t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_mix();
@@ -62,21 +62,21 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
 #ifdef __VEC__
         virtual void 	processYUV_Altivec (imageStruct &image, imageStruct &right);
 #endif
-        
+
         virtual void 	gainMess (float X, float Y);
-        
+
         long imageGain,rightGain;
-        
-         
+
+
          private:
-    
+
     	//////////
     	// Static member functions
-    	
+
         //static void gainCallback       (void *data, t_floatarg X, t_floatarg Y);
 	static void gainCallback       (void *data, t_symbol*,int,t_atom*);
-    
-         
+
+
 
 };
 

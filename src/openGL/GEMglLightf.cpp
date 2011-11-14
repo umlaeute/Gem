@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglLightf , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglLightf :: GEMglLightf	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		light(static_cast<GLenum>(arg0)), 
-		pname(static_cast<GLenum>(arg1)), 
+		light(static_cast<GLenum>(arg0)),
+		pname(static_cast<GLenum>(arg1)),
 		param(static_cast<GLfloat>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("light"));

@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_draw
-    
+
 	Draw a particle group
 
 DESCRIPTION
@@ -37,12 +37,12 @@ class GEM_EXTERN part_draw : public partlib_base
 	    //////////
 	    // Constructor
     	part_draw();
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_draw();
@@ -50,7 +50,7 @@ class GEM_EXTERN part_draw : public partlib_base
     	//////////
     	// How the object should be drawn
 		void			typeMess(int,t_atom*);
-    	
+
 		//////////
 		int				m_drawType;
 

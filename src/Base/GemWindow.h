@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    a window class to render to 
+    a window class to render to
 
     Copyright (c) 2009-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemWindow
-    
+
     a window
 
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 namespace gem {
   class Context;
@@ -40,11 +40,11 @@ class GEM_EXTERN GemWindow : public CPPExtern
   PIMPL*m_pimpl;
 
  public:
-    
+
   //////////
   // Constructor
   GemWindow(void);
-    	
+
   //////////
   // Destructor
   virtual ~GemWindow(void);
@@ -54,12 +54,12 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
   /* LATER think about detaching the output from the stack, so we can e.g. destroy a window from a mouse-callback */
-  void info(std::vector<t_atom>);  
-  void info(t_symbol*s, int, t_atom*);  
+  void info(std::vector<t_atom>);
+  void info(t_symbol*s, int, t_atom*);
   void info(std::string);
   void info(std::string, t_float);
   void info(std::string, int i);
-  void info(std::string, std::string);  
+  void info(std::string, std::string);
 
   /* tell downstream objects to render */
   void bang(void);
@@ -81,7 +81,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
   /* create a new context */
   static gem::Context*createContext(void);
-  /* destroy a given context; 
+  /* destroy a given context;
    * @returns  NULL
    */
   static gem::Context*destroyContext(gem::Context*);
@@ -153,7 +153,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* set/get the dimension of the context
    * setting is done by supplying arguments to the method;
    * querying is done by supplying NO arguments
-   * this should be kept throughout 
+   * this should be kept throughout
    */
   virtual void dimensionsMess(unsigned int width, unsigned int height) = 0;
 
@@ -174,7 +174,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
   virtual void    fullscreenMess(int on);
   virtual void        offsetMess(int x, int y);
- 
+
   /* creation/destruction */
   virtual void        createMess(std::string);
   virtual void       destroyMess(void);

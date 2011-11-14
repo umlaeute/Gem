@@ -102,9 +102,9 @@ void rotate :: vectorMess(float x, float y, float z)
 void rotate :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&rotate::angleMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL); 
+    	    gensym("ft1"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&rotate::vectorMessCallback),
-    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
+    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void rotate :: angleMessCallback(void *data, t_floatarg angle)
 {

@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    
+//
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -33,7 +33,7 @@ camera :: camera(int argc, t_atom *argv)
   m_vView        = CVector3(0.0, 0.0, 0.0);	// Init the view to a std starting view
   m_vUpVector    = CVector3(0.0, 1.0, 0.0);	// Init the UpVector
   //  Position     View         Up Vector
-  PositionCamera(0, 0.0, 4,   0, 0.0, 0,   0, 1, 0 ); 
+  PositionCamera(0, 0.0, 4,   0, 0.0, 0,   0, 1, 0 );
 }
 
 ////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ void camera :: render(GemState *)
 
   // Normalize the strafe vector
   // m_vSlide = Normalize(vCross);
-    
+
   if(forward) {
     //MoveCamera(m_speed);
     distance = distance - (m_speed/100);
@@ -92,7 +92,7 @@ void camera :: render(GemState *)
       else
 	incVRot(m_speed);
     }
-   
+
   calcCameraVals();
   GemMan::m_lookat[0] = m_vPosition.x;
   GemMan::m_lookat[1] = m_vPosition.y;
@@ -156,25 +156,25 @@ void camera :: distanceMess(float val)
 void camera :: calcCameraVals()
 {
   float temp;
-    
+
   // Calculating vertical position
   m_vPosition.y = distance * (float)sin(vAngle *PI/180);
-    
+
   // Calculating XZ plane dist and then using the value to calc X angle
   temp = distance * (float)cos( vAngle * PI/180);
-    
+
   m_vPosition.x = temp * (float)cos( hAngle * PI/180);
   m_vPosition.z = temp * (float)sin( hAngle * PI/180);
-    
+
   calcUpVector();
 }
 void camera :: calcUpVector()
 {
   float temp;
-    
+
   m_vUpVector.y = distance * (float)sin((vAngle +90) *PI/180);
   temp = distance * (float)cos((vAngle +90)*PI/180);
-    
+
   m_vUpVector.x = temp*(float)cos(hAngle * PI/180);
   m_vUpVector.z = temp*(float)sin(hAngle * PI/180);
 }
@@ -246,7 +246,7 @@ void camera :: RotateView(float angle, float x, float y, float z)
   CVector3 vNewView;
 
   // Get the view vector (The direction we are facing)
-  CVector3 vView = m_vView - m_vPosition;        
+  CVector3 vView = m_vView - m_vPosition;
 
   // Calculate the sine and cosine of the angle once
   float cosTheta = (float)cos(angle);
@@ -283,7 +283,7 @@ void camera :: MoveCamera(float speed)
 {
   // Get our view vector (The direction we are facing)
   CVector3 vVector = (m_vView - m_vPosition).normalize();
-    
+
   m_vPosition.x += vVector.x * speed;        // Add our acceleration to our position's X
   //m_vPosition.y += vVector.y * speed;
   m_vPosition.z += vVector.z * speed;        // Add our acceleration to our position's Z
@@ -301,7 +301,7 @@ void camera :: MoveCamera(float speed)
 ///////////////////////////////// SLIDE CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
 void camera :: SlideCamera(float speed)
-{    
+{
   // Add the slide vector to our position
   m_vPosition.x += m_vSlide.x * speed;
   m_vPosition.z += m_vSlide.z * speed;
@@ -318,13 +318,13 @@ void camera :: SlideCamera(float speed)
 void camera :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::hAngleMessCallback),
-		  gensym("hAngle"), A_FLOAT, A_NULL); 
+		  gensym("hAngle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::vAngleMessCallback),
 		  gensym("vAngle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::distanceMessCallback),
 		  gensym("distance"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::speedMessCallback),
-		  gensym("speed"), A_FLOAT, A_NULL); 
+		  gensym("speed"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::forwardMessCallback),
 		  gensym("forward"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::reverseMessCallback),

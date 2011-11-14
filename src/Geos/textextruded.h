@@ -22,7 +22,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     textextruded
-    
+
     Creates a textextruded string
 
 DESCRIPTION
@@ -37,9 +37,9 @@ class GEM_EXTERN textextruded : public TextBase
     //////////
     // Constructor
     textextruded(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     //////////
     // Destructor
     virtual ~textextruded();

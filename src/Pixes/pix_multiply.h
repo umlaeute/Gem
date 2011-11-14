@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_multiply
-    
+
     Multiply two images together.
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_multiply : public GemPixDualObj
 	    //////////
     	// Constructor
     	pix_multiply();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_multiply();
@@ -54,13 +54,13 @@ class GEM_EXTERN pix_multiply : public GemPixDualObj
     	//////////
     	//  This is called whenever a new image comes through.
 		//	The left image is an RGBA, the right is a gray8
-    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right); 	
+    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
 
     	//////////
     	//  This is called whenever a new image comes through.
 		//	Both images are gray8
     	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
-        
+
     	//////////
     	// Do the processing
     	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
@@ -70,7 +70,7 @@ class GEM_EXTERN pix_multiply : public GemPixDualObj
     	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
    	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
 #endif
-        
+
 };
 
 #endif	// for header file

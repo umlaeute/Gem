@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglBlendFunc );
 // Constructor
 //
 GEMglBlendFunc :: GEMglBlendFunc (int argc, t_atom*argv) :
-		sfactor(0), 
+		sfactor(0),
 		dfactor(0)
 {
   if(2==argc){sfactorMess(argv[0]); dfactorMess(argv[1]);} else if (argc) throw(GemException("invalid number of arguments"));

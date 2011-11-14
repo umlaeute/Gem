@@ -137,13 +137,13 @@ void specularRGB :: aMess(float val)
 void specularRGB :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&specularRGB::rMessCallback),
-    	    gensym("rVal"), A_FLOAT, A_NULL); 
+    	    gensym("rVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&specularRGB::gMessCallback),
-    	    gensym("gVal"), A_FLOAT, A_NULL); 
+    	    gensym("gVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&specularRGB::bMessCallback),
-    	    gensym("bVal"), A_FLOAT, A_NULL); 
+    	    gensym("bVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&specularRGB::aMessCallback),
-    	    gensym("aVal"), A_FLOAT, A_NULL); 
+    	    gensym("aVal"), A_FLOAT, A_NULL);
 }
 void specularRGB :: rMessCallback(void *data, t_floatarg val)
 {

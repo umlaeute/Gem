@@ -101,19 +101,19 @@ void cuboid :: renderShape(GemState *state)
 				glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
 //    	        glTexCoord2f(0.0, 0.0);
 		        glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey, v[faces[i][0]][2] * m_sizez);
-				
+
 				if (GemShape::m_texNum > 1)
 					curCoord = 1;
 	    		glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
 //    	        glTexCoord2f(1.0, 0.0);
 		        glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey, v[faces[i][1]][2] * m_sizez);
-				
+
 				if (GemShape::m_texNum > 2)
 					curCoord = 2;
 	    		glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
 //    	        glTexCoord2f(1.0, 1.0);
 		        glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey, v[faces[i][2]][2] * m_sizez);
-				
+
 				if (GemShape::m_texNum > 3)
 					curCoord = 3;
 				glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
@@ -173,10 +173,10 @@ void cuboid :: obj_setupCallback(t_class *classPtr)
 
 void cuboid :: heightMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->heightMess(size);  
+    GetMyClass(data)->heightMess(size);
 }
 
 void cuboid :: widthMessCallback(void *data, t_floatarg size)
 {
-    GetMyClass(data)->widthMess(size);  
+    GetMyClass(data)->widthMess(size);
 }

@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -61,9 +61,9 @@ namespace gem { namespace plugins {
     bool m_canThread;
 
   public:
-    recordMeta(void) : 
+    recordMeta(void) :
       m_handle(NULL),
-      m_canThread(false) 
+      m_canThread(false)
     {
       gem::PluginFactory<gem::plugins::record>::loadPlugins("record");
       std::vector<std::string>ids=gem::PluginFactory<gem::plugins::record>::getIDs();
@@ -71,7 +71,7 @@ namespace gem { namespace plugins {
       addPlugin(ids, "QT");
       addPlugin(ids, "QT4L");
       addPlugin(ids);
-      
+
 #ifdef __GNUC__
 # warning isThreadable
 #endif
@@ -112,7 +112,7 @@ namespace gem { namespace plugins {
           // not yet added, do so now!
           gem::plugins::record*handle=NULL;
           try {
-            handle=gem::PluginFactory<gem::plugins::record>::getInstance(key); 
+            handle=gem::PluginFactory<gem::plugins::record>::getInstance(key);
           } catch(GemException&x) {
             handle=NULL;
             verbose(1, "cannot use record plugin '%s': %s", key.c_str(), x.what());
@@ -228,7 +228,7 @@ namespace gem { namespace plugins {
 	if(m_selectedHandles[i]->enumProperties(props))
 	  return true;
       }
-      
+
       return false;
     }
 

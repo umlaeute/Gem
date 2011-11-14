@@ -117,7 +117,7 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
     for (x=0; x<m_xtiles*2; x++){
       int fromX=image.xsize*x/(m_xtiles*2);
       int offset=(2*m_xtiles)*y+x;
-      processGraySub_getMinMax(image, 
+      processGraySub_getMinMax(image,
                                fromX, fromX+half_xtile,
                                fromY, fromY+half_ytile,
                                m_minVals+offset,
@@ -166,7 +166,7 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
         mean=(min+max)/2;
       else mean=255;
 
-      processGraySub_threshold(image, 
+      processGraySub_threshold(image,
                                x*tile_xsize,(x+1)*tile_xsize,
                                y*tile_ysize,(y+1)*tile_ysize,
                                mean);
@@ -185,7 +185,7 @@ void pix_threshold_bernsen :: tilesMess(int w, int h)
 
   if(w>0)m_xtiles=w;
   if(h>0)m_ytiles=h;
-  
+
   m_minVals=new unsigned char[4*m_xtiles*m_ytiles];
   m_maxVals=new unsigned char[4*m_xtiles*m_ytiles];
 

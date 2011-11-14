@@ -86,7 +86,7 @@ int GemSIMD :: requestCPU(int req_cpuid)
   return cpuid;
 }
 
-int GemSIMD :: getCPU() 
+int GemSIMD :: getCPU()
 {
   return cpuid;
 }
@@ -110,7 +110,7 @@ int GemSIMD :: simd_runtime_check(void)
 
 		mov   eax, 1
 		cpuid
-		
+
 		mov      feature,edx
 
 		pop     ebx
@@ -127,7 +127,7 @@ int GemSIMD :: simd_runtime_check(void)
 				return realcpuid;
 		  }
 
-#elif defined (__GNUC__) 
+#elif defined (__GNUC__)
 
 # if defined (__POWERPC__)
     /* detecting whether a powerPC supports AltiVec or not seems to be complicated.

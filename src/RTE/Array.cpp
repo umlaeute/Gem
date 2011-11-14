@@ -29,8 +29,8 @@ public:
   size_t length;
 
   std::string name;
-  
-  PIMPL(void) : 
+
+  PIMPL(void) :
     f(0.),
     A(NULL),
     pointer(NULL),
@@ -82,12 +82,12 @@ gem::RTE::Array :: Array(void)
 
 }
 
-gem::RTE::Array :: Array(const gem::RTE::Array&a) 
+gem::RTE::Array :: Array(const gem::RTE::Array&a)
   : m_pimpl(new PIMPL)
 {
   m_pimpl->setName(a.m_pimpl->name);
 }
-gem::RTE::Array :: Array(const std::string&name) 
+gem::RTE::Array :: Array(const std::string&name)
   : m_pimpl(new PIMPL)
 {
   m_pimpl->setName(name);
@@ -97,11 +97,11 @@ gem::RTE::Array :: ~Array(void)
 {
   delete m_pimpl;
 }
-gem::RTE::Array& gem::RTE::Array :: operator=(const gem::RTE::Array&org) 
+gem::RTE::Array& gem::RTE::Array :: operator=(const gem::RTE::Array&org)
 {
   m_pimpl->setName(org.m_pimpl->name);
   return (*this);
-} 
+}
 
 
 bool gem::RTE::Array :: isValid(void) {
@@ -122,7 +122,7 @@ bool gem::RTE::Array :: resize(const size_t newsize) {
     garray_resize(m_pimpl->A, newsize);
 #endif
     return (size()==newsize);
-  } 
+  }
 
   return false;
 }

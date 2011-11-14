@@ -60,7 +60,7 @@ const int chY1          = 3;
 -------------------------------------------------------------------
 CLASS
     imageStruct
-    
+
     The basic image structure
 
 -----------------------------------------------------------------*/
@@ -84,7 +84,7 @@ struct GEM_EXTERN imageStruct
   // if we have allocated some space already, only re-allocate when needed.
   virtual unsigned char* reallocate(size_t size);
   virtual unsigned char* reallocate(void);
- 
+
   // delete the buffer (if it is ours)
   virtual void clear(void);
 
@@ -106,11 +106,11 @@ struct GEM_EXTERN imageStruct
   // the format - either GL_RGBA, GL_LUMINANCE
   // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
   GLenum          format;
-  
+
   //////////
   // is this owned by us (? what about underscores ?)
   int notowned;
-  
+
   //////////
   // gets a pixel
   /* X,Y are the coordinates
@@ -119,12 +119,12 @@ struct GEM_EXTERN imageStruct
    */
   // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C) const
-  { 
+  {
     return(data[clampFunc(Y, 0, ysize-1) * xsize * csize + clampFunc(X, 0, xsize-1) * csize + C]); }
-  
+
   //////////
   // sets a pixel
-  /* while X and Y should be clear (coordinates), 
+  /* while X and Y should be clear (coordinates),
    * C is the offset (like chRed==0 for red).
    * VAL is the value to set.
    */
@@ -137,7 +137,7 @@ struct GEM_EXTERN imageStruct
   virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a=NULL) const;
   virtual void getGrey(int X, int Y, unsigned char*g) const;
   virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
-  
+
   /* following will set the whole image-data to either black or white
    * the size of the image-data is NOT xsize*ysize*csize but datasize
    * this is mostly slower
@@ -148,7 +148,7 @@ struct GEM_EXTERN imageStruct
 
   /* certain formats are bound to certain csizes,
    * it's quite annoying to have to think again and again (ok, not much thinking)
-   * so we just give the format (like GL_LUMINANCE) 
+   * so we just give the format (like GL_LUMINANCE)
    * and it will set the image format to this format
    * and set and return the correct csize (like 1)
    * if no format is given the current format is used
@@ -156,7 +156,7 @@ struct GEM_EXTERN imageStruct
   virtual int setCsizeByFormat(int format);
   virtual int setCsizeByFormat(void);
 
-  
+
   /* various copy functions
    * sometimes we want to copy the whole image (including pixel-data),
    * but often it is enough to just copy the meta-data (without pixel-data)
@@ -164,7 +164,7 @@ struct GEM_EXTERN imageStruct
    */
   virtual void copy2Image(imageStruct *to) const;
   virtual void copy2ImageStruct(imageStruct *to) const; // copy the imageStruct (but not the actual data)
-  /* this is a sort of better copy2Image, 
+  /* this is a sort of better copy2Image,
    * which only copies the imageStruct-data if it is needed
    */
   virtual void refreshImage(imageStruct *to) const;
@@ -184,7 +184,7 @@ struct GEM_EXTERN imageStruct
    * orgdata points to the actual data in the given format
    * the datasize will be read from image.xsize, image.ysize
    * the dest-format will be given by image.format
-   *   this is maybe not really clean (the meta-data is stored in the destination, 
+   *   this is maybe not really clean (the meta-data is stored in the destination,
    *   while the source has no meta-data of its own)
    */
   virtual void convertTo  (imageStruct*to,   GLenum dest_format=0) const;
@@ -211,7 +211,7 @@ struct GEM_EXTERN imageStruct
   /* overloading the above two in order to accept pdp YV12 packets */
   virtual void fromYV12   (const short* Y, const short*U, const short*V);
   virtual void fromYV12   (const short* orgdata);
-  
+
   /* aliases */
   virtual void fromYUV422 (const unsigned char* orgdata){fromUYVY(orgdata);}
   virtual void fromYUV420P(const unsigned char* orgdata){fromYV12(orgdata);}
@@ -226,9 +226,9 @@ struct GEM_EXTERN imageStruct
   // "pdata" is the private data, and is the memory reserved by this class
   // this data is freed when the destructor is called
   unsigned char   *pdata;
-  // "datasize" is the size of data reserved at "pdata"    
+  // "datasize" is the size of data reserved at "pdata"
   size_t    datasize;
-  
+
   public:
   //////////
   // true if the image is flipped horizontally (origin is upper-left)
@@ -245,7 +245,7 @@ struct GEM_EXTERN imageStruct
 -------------------------------------------------------------------
 CLASS
     pixBlock
-    
+
     The pix block structure
 
 -----------------------------------------------------------------*/
@@ -261,7 +261,7 @@ struct GEM_EXTERN pixBlock
     // is this a newimage since last time?
     //	ie, has it been refreshed
     bool     	    newimage;
-    
+
     //////////
     // keeps track of when new films are loaded
     //	useful for rectangle_textures on OSX

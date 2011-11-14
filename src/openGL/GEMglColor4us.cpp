@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4us , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglColor4us :: GEMglColor4us	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		red(static_cast<GLushort>(arg0)), 
-		green(static_cast<GLushort>(arg1)), 
-		blue(static_cast<GLushort>(arg2)), 
+		red(static_cast<GLushort>(arg0)),
+		green(static_cast<GLushort>(arg1)),
+		blue(static_cast<GLushort>(arg2)),
 		alpha(static_cast<GLushort>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));

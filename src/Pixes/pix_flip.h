@@ -22,19 +22,19 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_flip
-    
+
     Flip a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     "horizontal" - Flip horizontally
     "vertical" - Flip vertically
     "both" - Flip in both directiosn
     "none" - Do nothing
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_flip : public GemPixObj
 {
@@ -45,9 +45,9 @@ class GEM_EXTERN pix_flip : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_flip();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_flip();
@@ -60,16 +60,16 @@ class GEM_EXTERN pix_flip : public GemPixObj
 
     	//////////
     	enum FlipType	{ HORIZONTAL, VERTICAL, BOTH, NONE };
-    	
+
     	//////////
     	void	    	flipMess(FlipType type);
 
     	//////////
     	// The flip type
     	FlipType 	    m_flip;
-    
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	horMessCallback(void *data);

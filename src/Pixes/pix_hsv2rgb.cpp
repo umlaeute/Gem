@@ -59,7 +59,7 @@ void pix_hsv2rgb :: processRGBAImage(imageStruct &image)
 	unsigned char p = static_cast<unsigned char>(v - vs);
 	unsigned char q = static_cast<unsigned char>(v - vsf);
 	unsigned char t = static_cast<unsigned char>(p + vsf);
-	
+
 	switch (i)
 	  {
 	  case 1:
@@ -84,7 +84,7 @@ void pix_hsv2rgb :: processRGBAImage(imageStruct &image)
 
       } else r=g=b=v;
       //      post("pix    : r=%d g=%d b=%d", r, g, b);
-      
+
       pixels[chRed] = r;
       pixels[chGreen]=g;
       pixels[chBlue] =b;

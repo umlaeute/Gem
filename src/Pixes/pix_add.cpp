@@ -68,7 +68,7 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
-  
+
   while(datasize--)    {
     register int alpha = *rightPix++;
     leftPix[chRed]   = CLAMP_HIGH(leftPix[chRed]   + alpha);
@@ -77,7 +77,7 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
     leftPix += 4;
     }
 }
- 
+
 /////////////////////////////////////////////////////////
 // do the YUV processing here
 //
@@ -91,7 +91,7 @@ void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
    //format is U Y V Y
 
    for (h=0; h<image.ysize; h++){
-     for(w=0; w<image.xsize/2; w++){   
+     for(w=0; w<image.xsize/2; w++){
         u = image.data [src+chU ] + (2*right.data[src+chU ]) - 255;
         image.data[src] = CLAMP(u);
         y0 =image.data [src+chY0] + right.data   [src+chY0];
@@ -100,7 +100,7 @@ void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
         image.data[src+2] = CLAMP(v);
         y1 = image.data[src+chY1] + right.data   [src+chY1];
         image.data[src+3] = CLAMP(y1);
-       
+
         src+=4;
      }
    }
@@ -161,7 +161,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
         //vector signed char v;
         vector	signed short v;
     }shortBuffer;
-    
+
         union
     {
         //unsigned int	i;
@@ -169,7 +169,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
         //vector signed char v;
         vector	unsigned char v;
     }charBuffer;
-     
+
     //vector unsigned char c;
     register vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
    // vector unsigned char zero = vec_splat_u8(0);
@@ -199,11 +199,11 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 
     //Load it into the vector unit
     c = charBuffer.v;
-        
+
     one =  vec_splat_u8( 1 );
-     
+
     shortBuffer.elements[0] = 255;
-   
+
     //Load it into the vector unit
     d = shortBuffer.v;
     d = static_cast<vector signed short>(vec_splat(static_cast<vector signed short>(d),0));
@@ -220,30 +220,30 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 	  vec_dst( rightData, prefetchSize, 1 );
 #endif
 	  //interleaved U Y V Y chars
-            
+
 	  //vec_mule UV * 2 to short vector U V U V shorts
 	  UVImage = static_cast<vector signed short>(vec_mule(one,inData[0]));
 	  UVRight = static_cast<vector signed short>(vec_mule(c,rightData[0]));
-            
+
 	  //vec_mulo Y * 1 to short vector Y Y Y Y shorts
 	  YImage = static_cast<vector signed short>(vec_mulo(c,inData[0]));
 	  YRight = static_cast<vector signed short>(vec_mulo(c,rightData[0]));
 
 	  //vel_subs UV - 255
 	  UVRight = static_cast<vector signed short>(vec_subs(UVRight, d));
-            
+
 	  //vec_adds UV
 	  UVTemp = vec_adds(UVImage,UVRight);
-            
+
 	  //vec_adds Y
 	  YTemp = vec_adds(YImage,YRight);
-            
+
 	  hiImage = vec_mergeh(UVTemp,YTemp);
 	  loImage = vec_mergel(UVTemp,YTemp);
-            
+
 	  //vec_mergel + vec_mergeh Y and UV
 	  inData[0] = vec_packsu(hiImage, loImage);
-        
+
 	  inData++;
 	  rightData++;
         }
@@ -261,7 +261,7 @@ void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 
     vector unsigned char *inData = (vector unsigned char*) image.data;
     vector unsigned char *rightData = (vector unsigned char*) right.data;
-   
+
         #ifndef PPC970
    	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
@@ -274,9 +274,9 @@ void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 	vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
-            
+
             inData[0] = vec_adds(inData[0], rightData[0]);
-        
+
             inData++;
             rightData++;
         }

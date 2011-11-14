@@ -36,7 +36,7 @@
 
 #include <map>
 static std::map<int, gemglutwindow*>s_windowmap;
- 
+
 CPPEXTERN_NEW(gemglutwindow);
 
 /////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -167,7 +167,7 @@ void gemglutwindow :: fullscreenMess(bool on)
     else {
       glutReshapeWindow(m_width, m_height);
       glutPositionWindow(m_xoffset, m_yoffset);
-    }  
+    }
   }
 }
 

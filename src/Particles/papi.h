@@ -127,7 +127,7 @@ PARTICLEDLL_API int pSetMaxParticles(int max_count);
 
 // Actions
 
-PARTICLEDLL_API void pAvoid(float magnitude, float epsilon, float look_ahead, 
+PARTICLEDLL_API void pAvoid(float magnitude, float epsilon, float look_ahead,
 							 PDomainEnum dtype,
 							 float a0 = 0.0f, float a1 = 0.0f, float a2 = 0.0f,
 							 float a3 = 0.0f, float a4 = 0.0f, float a5 = 0.0f,

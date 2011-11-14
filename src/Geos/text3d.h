@@ -23,7 +23,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     text3d
-    
+
     Creates a text3d string
 
 DESCRIPTION
@@ -38,9 +38,9 @@ class GEM_EXTERN text3d : public TextBase
 		//////////
 		// Constructor
     	text3d(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~text3d();

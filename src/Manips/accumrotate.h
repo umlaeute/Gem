@@ -22,17 +22,17 @@ LOG
 -------------------------------------------------------------------
 CLASS
 	accumrotate
-    
+
 	accumulate a rotation
 
 DESCRIPTION
-    
+
     Inlet for X - "xVal"
     Inlet for Y - "yVal"
     Inlet for Z - "zVal"
 
     "reset" - set the matrix to identity
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN accumrotate : public GemBase
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN accumrotate : public GemBase
         //////////
         // Constructor
 		accumrotate(int argc, t_atom *argv);
-    	
+
 	protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~accumrotate();
@@ -57,25 +57,25 @@ class GEM_EXTERN accumrotate : public GemBase
     	//////////
     	// The rotation matrix
 		Matrix			m_rotMatrix;
-				
+
     	//////////
     	// X value changed
     	void	    	xMess(float val);
-    	
+
     	//////////
     	// Y value changed
     	void	    	yMess(float val);
-    	
+
     	//////////
     	// Z value changed
     	void	    	zMess(float val);
-    	
+
     	//////////
     	// A reset was received
     	void	    	reset();
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	xMessCallback(void *data, t_floatarg val);

@@ -32,28 +32,28 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_filmOS
-    
+
   Loads in a movie
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_filmOS : public GemBase
 {
   CPPEXTERN_HEADER(pix_filmOS, GemBase);
-    
+
     public:
-  
+
   //////////
   // Constructor
   pix_filmOS(t_symbol *filename);
   //  pix_filmOS();
 
  protected:
-    
+
   //////////
   // Destructor
   virtual ~pix_filmOS();
@@ -94,16 +94,16 @@ class GEM_EXTERN pix_filmOS : public GemBase
   //////////
   // Delete texture object
   virtual void stopRendering() {}
-    	
+
   //////////
   virtual void setUpTextureState() {}
-		
+
   //////////
   // Change which image to display
   virtual void changeImage(int imgNum, int trackNum);
   //////////
   // change the colorspace
-  virtual void csMess(int format);	
+  virtual void csMess(int format);
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
@@ -115,7 +115,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
   //////////
   // the current file
   t_symbol *x_filename;
-	
+
   //////////
   // If a movie was loaded and what kind of Movie this is
   int 	    	m_haveMovie;
@@ -140,7 +140,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
 
   pixBlock    	m_pixBlock;
   imageStruct   m_imageStruct;
-  
+
 
   int		m_xsize;
   int		m_ysize;
@@ -159,7 +159,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
   t_outlet     *m_outEnd;
 
  protected:
-	
+
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *, int, t_atom*);

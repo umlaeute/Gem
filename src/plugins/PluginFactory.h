@@ -33,7 +33,7 @@ namespace gem {
     class GEM_EXPORT PluginFactory : public BasePluginFactory {
   public:
 
-    /** 
+    /**
      * constructor function type (without arguments)
      */
     typedef Class*(ctor_t)(void);
@@ -94,7 +94,7 @@ namespace gem {
 	dummy(void);
       };
   };
-  
+
 /* include the actual implementation */
 #include "PluginFactoryTimple.h"
 

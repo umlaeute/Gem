@@ -27,16 +27,16 @@
   -------------------------------------------------------------------
   CLASS
   pix_image
-    
+
   Loads in an image
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "open" - opens a file
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_image : public GemBase
 {
@@ -47,9 +47,9 @@ class GEM_EXTERN pix_image : public GemBase
   //////////
   // Constructor
   pix_image(t_symbol *filename);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_image();
@@ -57,7 +57,7 @@ class GEM_EXTERN pix_image : public GemBase
   //////////
   // When an open is received
   virtual void	openMess(std::string filename);
-    	
+
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -72,7 +72,7 @@ class GEM_EXTERN pix_image : public GemBase
   //////////
   // Clean up the image and the pixBlock
   void	    	cleanImage();
-    
+
   //-----------------------------------
   // GROUP:	Image data
   //-----------------------------------
@@ -81,33 +81,33 @@ class GEM_EXTERN pix_image : public GemBase
   // do we want threaded reading (default: yes);
   virtual void	threadMess(bool onoff);
 	bool m_wantThread;
- 
+
   //////////
   // the full filename of the image
 	std::string            m_filename;
 	gem::image::load::id_t m_id;
-   
+
   //////////
   // The original image
   imageStruct     *m_loadedImage;
-    	
+
   //////////
   // The pixBlock with the current image
   pixBlock    	m_pixBlock;
 
-	void     loaded(const gem::image::load::id_t ID, 
+	void     loaded(const gem::image::load::id_t ID,
                   imageStruct*img,
                   const gem::Properties&props);
 
 
   gem::RTE::Outlet m_infoOut;
-    	    	
+
  private:
-    	
+
   //////////
   // static member functions
-	static void     loadCallback(void*data, 
-                               gem::image::load::id_t ID, 
+	static void     loadCallback(void*data,
+                               gem::image::load::id_t ID,
                                imageStruct*img,
                                const gem::Properties&props);
 };

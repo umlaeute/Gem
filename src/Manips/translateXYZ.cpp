@@ -103,11 +103,11 @@ void translateXYZ :: zMess(float val)
 void translateXYZ :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&translateXYZ::xMessCallback),
-    	    gensym("xVal"), A_FLOAT, A_NULL); 
+    	    gensym("xVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&translateXYZ::yMessCallback),
-    	    gensym("yVal"), A_FLOAT, A_NULL); 
+    	    gensym("yVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&translateXYZ::zMessCallback),
-    	    gensym("zVal"), A_FLOAT, A_NULL); 
+    	    gensym("zVal"), A_FLOAT, A_NULL);
 }
 void translateXYZ :: xMessCallback(void *data, t_floatarg val)
 {

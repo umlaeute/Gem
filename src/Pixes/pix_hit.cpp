@@ -3,7 +3,7 @@
 // pix_hit
 //
 // hit test over user defined hit_areas...
-// 
+//
 // Author: Davide Morelli
 // http://ww.davidemorelli.it
 //
@@ -79,10 +79,10 @@ unsigned char pix_hit :: getGreyValue(GLenum format, unsigned char *data)
 void pix_hit :: processImage(imageStruct &image)
 {
   /* for each active rectangle test every pixel inside
-     and if the number of pixles with grey value is > minimum_threshold  
-     is > minimum_pixles send this rectangle id to the outlet 
+     and if the number of pixles with grey value is > minimum_threshold
+     is > minimum_pixles send this rectangle id to the outlet
      which means there has been a hit on that rectangle */
-	
+
   unsigned char *src=image.data;
   unsigned char data[3];
   int pixels_found;
@@ -97,7 +97,7 @@ void pix_hit :: processImage(imageStruct &image)
           int yPos = static_cast<int>(hit_areas[i].y * static_cast<float>(image.ysize));
 	  int Width = static_cast<int>(hit_areas[i].width * static_cast<float>(image.xsize));
           int Height = static_cast<int>(hit_areas[i].height * static_cast<float>(image.ysize));
-					
+
           go_on=true;
           bool hit=false;
           pixels_found=0;
@@ -156,7 +156,7 @@ void pix_hit :: processImage(imageStruct &image)
       case line:
         {
           // i need to get the line equation f(x)
-          // then 
+          // then
           // for each x bewteen x1 and x2
           // get y=f(x)
           // and do the hit test in x,y
@@ -166,16 +166,16 @@ void pix_hit :: processImage(imageStruct &image)
           /*
             equation of the line passing from p1 and p2:
             (y-y1)/(y2-y1)=(x-x1)/(x2-x1)
-            so 
+            so
             y = (x-x1)(y2-y1)/(x2-x1) + y1
-            and 
+            and
             x = (y-y1(x2-x1))/(y2-y1) - x1
           */
           int x1 = static_cast<int>(hit_areas[i].x * static_cast<float>(image.xsize));
           int y1 = static_cast<int>(hit_areas[i].y * static_cast<float>(image.ysize));
           int x2 = static_cast<int>(hit_areas[i].width * static_cast<float>(image.xsize));
-          int y2 = static_cast<int>(hit_areas[i].height * static_cast<float>(image.ysize));					
-					
+          int y2 = static_cast<int>(hit_areas[i].height * static_cast<float>(image.ysize));
+
           int diffx = abs(x2-x1);
           int diffy = abs(y2-y1);
 
@@ -189,7 +189,7 @@ void pix_hit :: processImage(imageStruct &image)
             int incr = 1;
             if ((x2-x1)<0)
               incr = -1;
-            int x=x1; 
+            int x=x1;
             while (x!=x2) {
               // NB diffx can't be == 0
               // (i would not be here)
@@ -209,14 +209,14 @@ void pix_hit :: processImage(imageStruct &image)
                 float where = (static_cast<float>(counter)/static_cast<float>(diffx));
                 // hit!
                 if (fabs(buffer[i] - where) > min_distance) {
-									
+
                   t_atom atom[2];
                   SETFLOAT(&atom[0], static_cast<t_float>(i));
                   SETFLOAT(&atom[1], static_cast<t_float>(where));
                   outlet_list(m_hits, gensym("list"), 2, atom);
                   buffer[i]=where;
                 }
-              } 
+              }
               counter++;
               x+=incr;
             }
@@ -226,7 +226,7 @@ void pix_hit :: processImage(imageStruct &image)
             int incr = 1;
             if ((y2-y1)<0)
               incr = -1;
-            int y=y1; 
+            int y=y1;
             while (y!=y2) {
               // NB diffy can't be == 0
               // (i would not be here)
@@ -252,7 +252,7 @@ void pix_hit :: processImage(imageStruct &image)
                   outlet_list(m_hits, gensym("list"), 2, atom);
                   buffer[i]=where;
                 }
-              } 
+              }
               counter++;
               y+=incr;
             }
@@ -397,21 +397,21 @@ void pix_hit :: del(int n)
 void pix_hit :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::thresholdCallback),
-                  gensym("threshold"), A_FLOAT, A_NULL); 
+                  gensym("threshold"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::minimumCallback),
-                  gensym("min"), A_FLOAT, A_NULL); 
+                  gensym("min"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::min_distanceCallback),
-                  gensym("min_distance"), A_FLOAT, A_NULL); 
+                  gensym("min_distance"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::createRectangleCallback),
-                  gensym("rectangle"), A_GIMME, A_NULL); 
+                  gensym("rectangle"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::createCircleCallback),
-                  gensym("circle"), A_GIMME, A_NULL); 
+                  gensym("circle"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::createLineCallback),
-                  gensym("line"), A_GIMME, A_NULL); 
+                  gensym("line"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::moveCallback),
-                  gensym("move"), A_GIMME, A_NULL); 
+                  gensym("move"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::deleteCallback),
-                  gensym("delete"), A_FLOAT, A_NULL); 
+                  gensym("delete"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::showCallback),
                   gensym("show"), A_FLOAT, A_NULL); }
 

@@ -63,8 +63,8 @@ void pix_coordinate :: render(GemState *state)
   if (m_oldTexType && m_numCoords){
     state->set(GemState::_GL_TEX_NUMCOORDS, m_numCoords);
 
-	if(m_oldTexType==2 && img!=NULL){ 
-	  // since we are using rectangle-textures (state->texture==2), 
+	if(m_oldTexType==2 && img!=NULL){
+	  // since we are using rectangle-textures (state->texture==2),
 	  // we want to scale the coordinates by the image-dimensions if they are available
 	  t_float xsize = (t_float)img->image.xsize;
 	  t_float ysize = (t_float)img->image.ysize;
@@ -103,9 +103,9 @@ void pix_coordinate :: coordsMess(int argc, t_atom *argv)
     	error("must have a even number of coordinates");
     	return;
     }
-    
+
     int numVals = argc / 2;
-    
+
     if (numVals != m_numCoords)
     {
       if(m_coords)delete [] m_coords;	    m_coords = NULL;
@@ -116,7 +116,7 @@ void pix_coordinate :: coordsMess(int argc, t_atom *argv)
       m_coords = new TexCoord[m_numCoords];
       m_rectcoords=new TexCoord[m_numCoords];
     }
-    
+
     for (int i = 0; i < numVals; i++)
     {
     	m_coords[i].s = atom_getfloat(&argv[2 * i]);

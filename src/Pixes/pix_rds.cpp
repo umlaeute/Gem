@@ -4,7 +4,7 @@
 //
 // This object is an based on the RandomDotStereoTV effect from EffecTV
 // Originally written by Fukuchi Kentarou
-// Copyright (C) 2002 FUKUCHI Kentarou                         
+// Copyright (C) 2002 FUKUCHI Kentarou
 //
 // ported by tigital@mac.com
 //
@@ -84,7 +84,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
 
                 x = image.xsize / 2 + i;
                 *(dest + x) = 0xffffffff;
-	
+
                 while(x + stride/2 < image.xsize) {
                     v = *(src + x + stride/2);
                     R = (v&0xff0000)>>(16+6);
@@ -117,7 +117,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
 
                 x = image.xsize / 2 + i;
                 *(dest + x) = 0xffffffff;
-	
+
                 while(x + stride/2 < image.xsize) {
                     v = *(src + x + stride/2);
                     R = (v&0xff0000)>>(16+6);
@@ -180,10 +180,10 @@ void pix_rds :: processGrayImage(imageStruct &image)
       for(y=0; y<image.ysize; y++) {
 	for(i=0; i<stride; i++) {
 	  if(inline_fastrand()&0xc0000000) continue;
-	  
+
 	  x = image.xsize / 2 + i;
 	  dest[x] = 0xff;
-	
+
 	  while(x + stride/2 < image.xsize) {
 	    v = src[x + stride/2];
 	    R=v>>6; G=v>>6; B=v>>7;
@@ -213,7 +213,7 @@ void pix_rds :: processGrayImage(imageStruct &image)
 
 	  x = image.xsize / 2 + i;
 	  dest[x] = 0xff;
-	
+
 	  while(x + stride/2 < image.xsize) {
 	    v = src[x + stride/2];
 	    R=v>>6; B=v>>7;
@@ -221,7 +221,7 @@ void pix_rds :: processGrayImage(imageStruct &image)
 	    if(x >= image.xsize) break;
 	    dest[x] = 0xff;
 	  }
-	  
+
 	  x = image.xsize / 2 + i;
 	  while(x - stride/2 >= 0) {
 	    v = src[x - stride/2];
@@ -273,10 +273,10 @@ void pix_rds :: processYUVImage(imageStruct &image)
       for(y=0; y<image.ysize; y++) {
 	for(i=0; i<stride; i++) {
 	  if(inline_fastrand()&0xc0000000) continue;
-	  
+
 	  x = image.xsize / 2 + i;
 	  dest[x] = 0xff;
-	
+
 	  while(x + stride/2 < image.xsize) {
 	    v = src[x + stride/2] & 0x00ff; // UYVY, we only want Y
 	    R=v>>6; B=v>>7;
@@ -306,7 +306,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 
 	  x = image.xsize / 2 + i;
 	  dest[x] = 0xff;
-	
+
 	  while(x + stride/2 < image.xsize) {
 	    v = src[x + stride/2] & 0x00ff;
 	    R=v>>6; B=v>>7;
@@ -314,7 +314,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 	    if(x >= image.xsize) break;
 	    dest[x] = 0xff;
 	  }
-	  
+
 	  x = image.xsize / 2 + i;
 	  while(x - stride/2 >= 0) {
 	    v = src[x - stride/2] & 0x00ff;

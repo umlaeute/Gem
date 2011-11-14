@@ -33,7 +33,7 @@ pix_tIIRf :: pix_tIIRf(t_floatarg fb_numf, t_floatarg ff_numf)
     m_bufnum(0),
     m_counter(0),
     m_inlet(NULL)
-{ 
+{
   int fb_num = (fb_numf>0.)?static_cast<int>(fb_numf):0;
   int ff_num = (ff_numf>0.)?static_cast<int>(ff_numf):0;
   fb_num++;
@@ -224,14 +224,14 @@ void pix_tIIRf :: processImage(imageStruct &image)
     // w[n] += w[n-J]*ffJ
     const unsigned int index=getIndex(m_counter, -j, m_bufnum-1);
     weightAdd(m_buffer[index],
-	      m_buffer[m_counter], 
-	      m_fb[j], 
+	      m_buffer[m_counter],
+	      m_fb[j],
 	      imagesize);
   }
 
   // feed-forward
   //  y[n] = ff0*w[n] + ff1*w[n-1] + ... + ffM*w[n-M]
-  weightSet(m_buffer[m_counter], 
+  weightSet(m_buffer[m_counter],
 	    m_buffer[m_bufnum-1],
 	    m_ff[0],
 	    imagesize);
@@ -277,5 +277,5 @@ void pix_tIIRf :: listMess(t_symbol *s, int argc, t_atom* argv)
   }
   for(i=0; i<m_fbnum; i++) { m_fb[i]=atom_getfloat(argv++); }
   for(i=0; i<m_ffnum; i++) { m_ff[i]=atom_getfloat(argv++); }
-    
+
 }

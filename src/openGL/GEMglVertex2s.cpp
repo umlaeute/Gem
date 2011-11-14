@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2s , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglVertex2s :: GEMglVertex2s	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		x(static_cast<GLshort>(arg0)), 
+		x(static_cast<GLshort>(arg0)),
 		y(static_cast<GLshort>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));

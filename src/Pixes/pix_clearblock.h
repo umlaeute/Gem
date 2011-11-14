@@ -24,12 +24,12 @@ class GemCache;
   -------------------------------------------------------------------
   CLASS
   pix_clearblock
-    
+
   Clear an image without destroying glTexture
 
   KEYWORDS
   pix
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_clearblock : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_clearblock : public GemBase
   //////////
   // Constructor
   pix_clearblock();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_clearblock();
@@ -57,10 +57,10 @@ class GEM_EXTERN pix_clearblock : public GemBase
 
   //////////
   virtual void	startRendering();
-    	
+
   //////////
   virtual void	stopRendering();
-    	
+
   //////////
   // The old cache
   GemCache    	*m_oldcache;

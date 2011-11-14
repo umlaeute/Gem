@@ -2,9 +2,9 @@
  * Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
  *
  * map that stores "any"thing
- * 
+ *
  * USAGE:
- * 
+ *
  *   Properties am;                                                     // create a new Properties
  *   am["a"] = 42;                                                      // assign value "42" to key "a"
  *   int i=0;
@@ -24,7 +24,7 @@
 #include <vector>
 #include <string>
 
-namespace gem 
+namespace gem
 {
   class Properties {
   private:
@@ -70,11 +70,11 @@ namespace gem
 
     /* get a property
      *  e.g.: double w=320; prop.get("width", w);
-     * NOTE: if no property of the given name exists or the existing property 
+     * NOTE: if no property of the given name exists or the existing property
      *       is of a different (incompatible) type, "value" will not be changed
      */
     template<class Class>
-      bool get(const std::string&key, Class&value) const { 
+      bool get(const std::string&key, Class&value) const {
        try {
 	 value=gem::any_cast<Class>(get(key));
       } catch (gem::bad_any_cast e) {
@@ -87,17 +87,17 @@ namespace gem
      */
     virtual std::vector<std::string>keys(void) const;
 
-    /* 
+    /*
      * delete a given key from the Properties
      */
     virtual void erase(const std::string);
-    /* 
+    /*
      * delete all keys from the Properties
      */
     virtual void clear(void);
 
 
-    /* 
+    /*
      * assign Properties from another set
      */
     virtual gem::Properties& assign(const gem::Properties&);

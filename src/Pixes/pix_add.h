@@ -22,12 +22,12 @@
 -------------------------------------------------------------------
 CLASS
     pix_add
-    
+
     Add two images together.
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -36,13 +36,13 @@ class GEM_EXTERN pix_add : public GemPixDualObj
     CPPEXTERN_HEADER(pix_add, GemPixDualObj);
 
     public:
-      
+
 	    //////////
     	// Constructor
     	pix_add();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_add();

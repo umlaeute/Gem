@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_follow
-    
+
 	Have the particles follow each other
 
 DESCRIPTION
@@ -37,22 +37,22 @@ class GEM_EXTERN part_follow : public partlib_base
 	    //////////
 	    // Constructor
     	part_follow(t_floatarg num);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_follow();
-		
+
 		//////////
 		void			numberMess(float num)	{ m_accel = num; }
 
 		//////////
 		float			m_accel;
-	
+
 	private:
 
 		//////////

@@ -22,7 +22,7 @@ public:
 
   struct codechandle {
     codechandle(gem::plugins::record*h, const std::string c):handle(h), codec(c) {}
-    
+
     gem::plugins::record*handle;
     std::string codec;
   };
@@ -61,7 +61,7 @@ public:
   static void addProperties(gem::Properties&props, int argc, t_atom*argv)
   {
     if(!argc)return;
-    
+
     if(argv->a_type != A_SYMBOL) {
       ::error("no key given...");
       return;
@@ -79,7 +79,7 @@ public:
     case 1:
       props.set(key, values[0]);
       break;
-    case 0: 
+    case 0:
       {
 	gem::any dummy;
 	props.set(key, dummy);
@@ -87,7 +87,7 @@ public:
       break;
     }
   }
-  
+
 };
 
 /////////////////////////////////////////////////////////
@@ -164,12 +164,12 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
       gem::plugins::record         *handle=NULL;
       startpost("backend #%d='%s'\t", m_allhandles.size(), key.c_str());
       try {
-        handle=gem::PluginFactory<gem::plugins::record>::getInstance(key); 
+        handle=gem::PluginFactory<gem::plugins::record>::getInstance(key);
       } catch (GemException&ex) {
         startpost("(%s) ", ex.what());
         handle=NULL;
       }
-      if(NULL==handle) { 
+      if(NULL==handle) {
         post("<--- DISABLED");
         break;
       }
@@ -248,7 +248,7 @@ void pix_record :: render(GemState *state)
   if(!img || !img->image.data){
     return;
   }
-  
+
   if(m_banged||m_automatic){
     //      if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
     bool success=m_handle->write(&img->image);

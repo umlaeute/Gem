@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_add
-    
+
     Creates a vertex_add
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_add : public GemBase
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_add : public GemBase
         //////////
         // Constructor
   vertex_add(int, t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_add(void);
-	
+
 	// which left-hand array to process
 	int m_leftType;
 
@@ -71,7 +71,7 @@ class GEM_EXTERN vertex_add : public GemBase
     	virtual void 	render(GemState *state);
         virtual void 	postrender(GemState *state);
         virtual void 	rightRender(GemState *state);
-        
+
         //private:
         static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
         static void	typeMessCallback(void *data, t_symbol*s,int, t_atom*);

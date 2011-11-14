@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_GIMME(text3d);
 text3d :: text3d(int argc, t_atom *argv)
   : TextBase(argc, argv) {
   fontNameMess(DEFAULT_FONT);
-} 
+}
 text3d :: ~text3d() {
   if(m_font)delete m_font;m_font=NULL;
 }

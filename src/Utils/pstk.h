@@ -7,7 +7,7 @@
  * This version released in 2011 under Gem license by Ricardo Fabbri
  * Originally released under GPL v.2
  * -------------------------------------------------------------------------
- */ 
+ */
 #ifndef GEM_UTILS_PSTK_H
 #define GEM_UTILS_PSTK_H 1
 
@@ -26,8 +26,8 @@ extern "C" {
 typedef plist_ptr pstk_ptr;
 
 #define new_pstk()    NULL
-#define pstk_is_empty(p)   ( (p)==NULL ) 
-#define pstk_isnt_empty(p)   ( (p)!=NULL )  
+#define pstk_is_empty(p)   ( (p)==NULL )
+#define pstk_isnt_empty(p)   ( (p)!=NULL )
 
 typedef struct {
    int x;
@@ -35,13 +35,13 @@ typedef struct {
 } point;
 
 
-int 
+int
    ptpush(pstk_ptr *stk, point *pt);
 
 point
    *ptpop(pstk_ptr *stk);
 
-void 
+void
    free_pstk(pstk_ptr *p);
 
 /*

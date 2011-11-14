@@ -43,7 +43,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 pix_movement :: pix_movement(t_floatarg f)
-{ 
+{
   buffer.xsize  = buffer.ysize = 64;
   buffer.setCsizeByFormat(GL_LUMINANCE);
   buffer.reallocate();
@@ -91,7 +91,7 @@ void pix_movement :: processRGBAImage(imageStruct &image)
     rp[chAlpha] = 255*(abs(grey-*wp)>threshold);
     *wp++=(unsigned char)grey;
     rp+=4;
-  } 
+  }
 }
 void pix_movement :: processYUVImage(imageStruct &image)
 {
@@ -101,7 +101,7 @@ void pix_movement :: processYUVImage(imageStruct &image)
   buffer.ysize = image.ysize;
   buffer.reallocate();
   if(doclear)buffer.setWhite();
-  
+
   int pixsize = image.ysize * image.xsize;
 
   int Y1, Y0;
@@ -110,7 +110,7 @@ void pix_movement :: processYUVImage(imageStruct &image)
   Y1 = chY1;
   Y0 = chY0;
   thresh = threshold;
-  
+
   unsigned char *rp = image.data; // read pointer
   unsigned char *wp=buffer.data; // write pointer to the copy
   unsigned char grey,grey1;
@@ -185,7 +185,7 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
 #endif
 
     int j = 16;
-    
+
     pixsize/=2;
     for (i=0; i < pixsize; i++) {
 # ifndef PPC970
@@ -196,10 +196,10 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
         vec_dst( rp+16, prefetchSize, 2 );
         vec_dst( wp+16, prefetchSize, 3 );
 # endif
-        
+
         grey0 = rp[0];
         grey1 = rp[1];
-            
+
 //      rp[Y0]=255*(abs(grey0-*wp)>thresh);
 
 //      UV0= (vector unsigned short)vec_mule(grey0,one);
@@ -209,7 +209,7 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
         Y1 = (vector unsigned short)vec_mulo(grey1,one);
 
         //wp is actually 1/2 the size of the image because it is only Y??
-        
+
         //here the full U Y V Y is stored
 //      UVwp0= (vector unsigned short)vec_mule(wp[0],one);
         Ywp0 = (vector unsigned short)vec_mulo(wp[0],one);
@@ -228,16 +228,16 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
 
         temp1 = vec_abs(vec_sub((vector signed short)Y1,(vector signed short)Ywp1));
         Y1 = (vector unsigned short)vec_cmpgt(temp1,thresh);
-       
+
         hiImage0 = vec_mergeh(UV0,Y0);
         loImage0 = vec_mergel(UV0,Y0);
 
         hiImage1 = vec_mergeh(UV1,Y1);
         loImage1 = vec_mergel(UV1,Y1);
-        
+
         grey0 = vec_packsu(hiImage0,loImage0);
         grey1 = vec_packsu(hiImage1,loImage1);
-        
+
         rp[0]=grey0;
         rp++;
         rp[0]=grey1;
@@ -245,11 +245,11 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
        // grey = rp[0];
        // rp[Y1]=255*(abs(grey-*wp)>thresh);
        // *wp++=grey;
-        
+
        // rp+=4;
        // rp++;
     }
-    
+
 # ifndef PPC970
     vec_dss(0);
     vec_dss(1);

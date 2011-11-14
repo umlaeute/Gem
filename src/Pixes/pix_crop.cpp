@@ -93,10 +93,10 @@ void pix_crop :: processImage(imageStruct &image)
 void pix_crop :: dimenMess(int x, int y){
   if(x<0)x=0;
   if(y<0)y=0;
-  
+
   wantSizeX=x;
   wantSizeY=y;
-  
+
   setPixModified();
 }
 void pix_crop :: dimXMess(int x){
@@ -120,7 +120,7 @@ void pix_crop :: offYMess(int y){
 void pix_crop :: offsetMess(int x, int y){
   offsetX=x;
   offsetY=y;
-  
+
   setPixModified();
 }
 
@@ -129,17 +129,17 @@ void pix_crop :: offsetMess(int x, int y){
 //
 /////////////////////////////////////////////////////////
 void pix_crop :: obj_setupCallback(t_class *classPtr){
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimenMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimenMessCallback),
 		  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offsetMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offsetMessCallback),
 		  gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimXMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimXMessCallback),
 		  gensym("dimenX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimYMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimYMessCallback),
 		  gensym("dimenY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offXMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offXMessCallback),
 		  gensym("offsetX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offYMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offYMessCallback),
 		  gensym("offsetY"), A_FLOAT, A_NULL);}
 
 void pix_crop :: dimenMessCallback(void *data, t_float x, t_float y){

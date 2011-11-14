@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -25,12 +25,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   film
-    
+
   parent class for the system- and library-dependent film-loader classes
-    
+
   KEYWORDS
   pix film movie
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -41,10 +41,10 @@ class GEM_EXTERN filmBase : public film
   class PIMPL;
   PIMPL*m_pimpl;
 
-  
+
   //////////
   // Constructor
- protected:  
+ protected:
   /* initialize the filmloader
    *
    * set 'threadable' to false, if your backend is known to be not threadsafe
@@ -66,10 +66,10 @@ class GEM_EXTERN filmBase : public film
 
   void close(void);
 
-  
+
   /**
    * list all properties the currently opened film supports
-   * if no film is opened, this returns generic backend properties 
+   * if no film is opened, this returns generic backend properties
    * which can be different from media specific properties
    * after calling, "readable" will hold a list of all properties that can be read
    * and "writeable" will hold a list of all properties that can be set
@@ -100,7 +100,7 @@ class GEM_EXTERN filmBase : public film
 
   //////////
   // set the wanted color-space
-  /* could be used for switching the colourspace on the fly 
+  /* could be used for switching the colourspace on the fly
    * normally the colour-space of a film could be set when opening a movie
    */
   virtual void requestColor(GLenum format){m_wantedFormat=format;}
@@ -151,7 +151,7 @@ class GEM_EXTERN filmBase : public film
    */
   int  m_curFrame, m_curTrack;
 
-  /* if the (frame,track) is the same as the last time, 
+  /* if the (frame,track) is the same as the last time,
    * we probably don't want to decode this frame again.
    * if so m_readNext should be FALSE
    */

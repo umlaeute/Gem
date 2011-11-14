@@ -67,7 +67,7 @@ pix_vpaint :: ~pix_vpaint()
 /////////////////////////////////////////////////////////
 bool pix_vpaint :: isRunnable(void) {
   /*
-   * Test for the required features 
+   * Test for the required features
    */
   /*    colorMatrixExtension = isExtensionSupported("GL_SGI_color_matrix");
         blendMinMaxExtension = isExtensionSupported("GL_EXT_blend_minmax");
@@ -83,7 +83,7 @@ bool pix_vpaint :: isRunnable(void) {
     error("both color_matrix and blend_minmax extension missing");
     return false;
   }
-  
+
   return true;
 }
 
@@ -154,14 +154,14 @@ void pix_vpaint :: init()
 	m_pbuffer->enable();
 
     /*
-     * Points 
+     * Points
      */
     points = (cPoint *) malloc(maxPoints * sizeof(cPoint));
     makepoints();
     makecone();
 
     /*
-     * Matrices 
+     * Matrices
      */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -171,13 +171,13 @@ void pix_vpaint :: init()
     glTranslatef(-m_w / 2.0, -m_h / 2.0, 0.0);
 
     /*
-     * Misc 
+     * Misc
      */
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
     /*
-     * Test for the required features 
+     * Test for the required features
      */
     /*    colorMatrixExtension = isExtensionSupported("GL_SGI_color_matrix");
           blendMinMaxExtension = isExtensionSupported("GL_EXT_blend_minmax");
@@ -186,14 +186,14 @@ void pix_vpaint :: init()
     */
     canDrawEdges = 1;
     /*
-     * Test for blend extension 
+     * Test for blend extension
      */
   if (canDrawEdges) {
     GLfloat table[256];
     int i;
 
     /*
-     * Pixel transfer parameters 
+     * Pixel transfer parameters
      */
     table[0] = 1.0;
     for (i = 1; i < 256; i++)
@@ -231,7 +231,7 @@ void pix_vpaint :: processImage(imageStruct &image)
     m_banged=false;
   }
   m_pbuffer->enable();
-    
+
   if (viewImage) {
 	glReadBuffer(GL_FRONT);
 	glDrawBuffer(GL_FRONT);
@@ -243,7 +243,7 @@ void pix_vpaint :: processImage(imageStruct &image)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	/*
-	 * Just draw the voronoi regions 
+	 * Just draw the voronoi regions
 	 */
 	for (int i = 0; i < numPoints; i++) {
 	    glPushMatrix();
@@ -281,7 +281,7 @@ void pix_vpaint :: processImage(imageStruct &image)
 	  glAccum(GL_RETURN, 0.5);
 
 	  /*
-	   * Convert to grayscale 
+	   * Convert to grayscale
 	   */
 	  glMatrixMode(GL_COLOR);
 	  glLoadMatrixf(sumMatrix);
@@ -290,14 +290,14 @@ void pix_vpaint :: processImage(imageStruct &image)
 	  glMatrixMode(GL_MODELVIEW);
 
 	  /*
-	   * Threshold 
+	   * Threshold
 	   */
 	  glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
 	  glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
 	  glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
 
 	  /*
-	   * Draw the voronoi regions in the front buffer 
+	   * Draw the voronoi regions in the front buffer
 	   */
 	  glDrawBuffer(GL_FRONT);
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -311,7 +311,7 @@ void pix_vpaint :: processImage(imageStruct &image)
 	  }
 
 	  /*
-	   * Blend in the edge lines 
+	   * Blend in the edge lines
 	   */
 	  glClear(GL_DEPTH_BUFFER_BIT);
 

@@ -43,14 +43,14 @@ static bool initGemWin(void) {
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
       return false;
-    }	
+    }
 	// Initialize QuickTime
 	EnterMovies();
 	if (err)
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
       return false;
-    }	
+    }
 	verbose(1, "Gem Man: QT init OK");
 # endif /* HAVE_QUICKTIME */
   return true;
@@ -80,12 +80,12 @@ public:
   ~Window(void) {
     destroy();
   }
-  static RECT getRealRect(int x, int y, unsigned int w, unsigned int h, 
-                          bool border, bool fullscreen, 
+  static RECT getRealRect(int x, int y, unsigned int w, unsigned int h,
+                          bool border, bool fullscreen,
                           DWORD &style, DWORD&exStyle) {
       exStyle=WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
       style  =WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-      
+
       if (fullscreen){
         exStyle  = WS_EX_APPWINDOW;
         style     |= WS_POPUP;
@@ -102,7 +102,7 @@ public:
       newSize.top  = y;
       newSize.right  = w+x;
       newSize.bottom = h+y;
-    
+
       AdjustWindowRectEx(&newSize, style, FALSE, exStyle); // no menu
       if (newSize.left<0 && x>=0){
         newSize.right-=newSize.left;
@@ -120,17 +120,17 @@ private:
   void create(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) {
     DWORD dwExStyle;
     DWORD style;
-    
+
     if (fullscreen){
         DEVMODE dmScreenSettings;								// Device Mode
-    
+
         if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
             ::error("GEM: couldn't get screen capabilities!");
         } else {
         w = dmScreenSettings.dmPelsWidth;
         h = dmScreenSettings.dmPelsHeight;
         }
-    
+
         x=y=0;
 
         memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
@@ -152,8 +152,8 @@ private:
 
       // Since Windows uses some of the window for the border, etc,
       //		we have to ask how big the window should really be
-      RECT newSize = getRealRect(x, y, w, h, 
-                          border, fullscreen, 
+      RECT newSize = getRealRect(x, y, w, h,
+                          border, fullscreen,
                           style, dwExStyle);
       // Create the window
       win = CreateWindowEx (
@@ -219,10 +219,10 @@ private:
 
     static bool bSetupPixelFormat(HDC hdc, int buffer) {
       PIXELFORMATDESCRIPTOR pfd;
-    
+
       // clean out the descriptor
       memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-    
+
       pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
       pfd.nVersion = 1;
       pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
@@ -237,7 +237,7 @@ private:
       pfd.cDepthBits = 16;
       pfd.cAccumBits = 0;
       pfd.cStencilBits = 8;
-      
+
       int pixelformat;
       if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
         {
@@ -261,7 +261,7 @@ private:
     gemw32window*obj=s_winmap[hWnd];
     if(obj)
       return obj->event(uMsg, wParam, lParam);
-    
+
     return(DefWindowProc (hWnd, uMsg, wParam, lParam));
   }
 };
@@ -293,7 +293,7 @@ bool gemw32window:: create(void)
   int y = m_yoffset;
 
   static bool firstTime = true;
-    
+
   // Register the frame class
   HINSTANCE hInstance = GetModuleHandle(NULL);
   if (!hInstance)  {
@@ -312,7 +312,7 @@ bool gemw32window:: create(void)
     wndclass.hbrBackground = NULL;
     wndclass.lpszMenuName  = NULL;
     wndclass.lpszClassName = "GEM";
-    
+
     if (!RegisterClass(&wndclass) )  {
       error("GEM: Unable to register window class");
       return false;
@@ -349,7 +349,7 @@ bool gemw32window:: create(void)
   } else  {
     ShowWindow(m_win->win, SW_SHOWNORMAL);
   }
-    
+
   UpdateWindow(m_win->win);
   dimension(w, h);
   position(x, y);
@@ -439,7 +439,7 @@ void gemw32window::topmostMess(bool state)
   m_topmost=state;
 
   if(m_win)
-    SetWindowPos(m_win->win, (state?HWND_TOPMOST:HWND_NOTOPMOST), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+    SetWindowPos(m_win->win, (state?HWND_TOPMOST:HWND_NOTOPMOST), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
@@ -451,7 +451,7 @@ void gemw32window :: dimensionsMess(unsigned int width, unsigned int height)
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -470,8 +470,8 @@ void gemw32window :: offsetMess(int x, int y) {
 void gemw32window::move(void) {
     if(m_win) {
         DWORD style, exStyle;
-        RECT newSize = Window::getRealRect(m_xoffset, m_yoffset, m_width, m_height, 
-                          m_border, m_fullscreen>0, 
+        RECT newSize = Window::getRealRect(m_xoffset, m_yoffset, m_width, m_height,
+                          m_border, m_fullscreen>0,
                           style, exStyle);
 
         //MoveWindow(m_win->win, m_xoffset, m_yoffset, m_width, m_height, true);
@@ -498,7 +498,7 @@ void gemw32window::swapBuffers(void)
 bool gemw32window::makeCurrent(void)
 {
   if (!m_win)return false;
-  wglMakeCurrent(m_win->dc, m_win->context); 
+  wglMakeCurrent(m_win->dc, m_win->context);
   return true;
 }
 
@@ -512,7 +512,7 @@ void gemw32window::dispatch(void)
     }
 }
 LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    
+
 	static RECT rcClient;
 	static int ctrlKeyDown = 0;
 
@@ -576,7 +576,7 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
       {
       }
       break;
-      
+
       // pass all unhandled messages to DefWindowProc
     default:
       lRet = DefWindowProc (m_win->win, uMsg, wParam, lParam);

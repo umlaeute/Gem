@@ -116,9 +116,9 @@ void pix_posterize :: processYUVImage(imageStruct &image)
 	      if ( image.data[src+3] > 100 && image.data[src+3] < 150) image.data[src+3]=235;
 	      src += 4;
 	    }
-	  } 
-	  break;                                                                
-    }	                    
+	  }
+	  break;
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ void pix_posterize :: obj_setupCallback(t_class *classPtr)
 {
 class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::factorMessCallback),
     	    gensym("factor"), A_FLOAT, A_NULL);
-            
+
 class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::limitMessCallback),
     	    gensym("limit"), A_FLOAT, A_NULL);
 

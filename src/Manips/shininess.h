@@ -21,7 +21,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     shininess
-    
+
     shininess a gem object
 
 DESCRIPTION
@@ -29,7 +29,7 @@ DESCRIPTION
     Inlet for a float - "shininess"
 
     "shininess" - the shininess to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN shininess : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN shininess : public GemBase
 	    //////////
 	    // Constructor
     	shininess(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~shininess();
@@ -62,9 +62,9 @@ class GEM_EXTERN shininess : public GemBase
     	//////////
     	// shininess changed
     	void	    	shininessMess(float val);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	shininessMessCallback(void *data, t_floatarg val);

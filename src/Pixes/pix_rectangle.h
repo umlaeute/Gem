@@ -31,12 +31,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_rectangle
-    
-    create a pix-rectangle with given RGB(A) 
+
+    create a pix-rectangle with given RGB(A)
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "coord"
@@ -44,7 +44,7 @@ DESCRIPTION
 
     "coord" - The coordinate-vector that defines the rect
 	"color"  - the RGB(A)-color for the rectangle
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_rectangle : public GemPixObj
 {
@@ -55,9 +55,9 @@ class GEM_EXTERN pix_rectangle : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_rectangle();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_rectangle();
@@ -67,15 +67,15 @@ class GEM_EXTERN pix_rectangle : public GemPixObj
     	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
 	virtual void 	processYUVImage (imageStruct &image);
-   
+
     	//////////
     	// Set the new color
     	void	    	vecColorMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// Set the new coordinates
     	void	    	vecCoordMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// The new color
 	unsigned char	m_color[4];
@@ -86,7 +86,7 @@ class GEM_EXTERN pix_rectangle : public GemPixObj
 	//////////
 	int				m_upper_right[2];
 
-    private:    
+    private:
     	//////////
     	// Static member functions
     	static void 	vecColorMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

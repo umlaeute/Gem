@@ -33,7 +33,7 @@ namespace gem
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
       : from(src.name()), to(dest.name())
     { }
-    virtual ~bad_any_cast(void) throw() 
+    virtual ~bad_any_cast(void) throw()
     { }
     virtual const std::string what(void) {
       std::string result = std::string("bad cast(");
@@ -245,7 +245,7 @@ namespace gem
       }
     }
 
-  // implicit casting is disabled by default 
+  // implicit casting is disabled by default
 
   #ifdef ANY_IMPLICIT_CASTING
     // automatic casting operator

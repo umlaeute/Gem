@@ -58,7 +58,7 @@ torus :: torus(int argc, t_atom *argv)
   default:
     throw(GemException("needs 0, 1, 2 or 3 arguments"));
   }
-	
+
   sizeMess(size);
   numSlicesMess(numSlices);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("inner"));
@@ -98,14 +98,14 @@ void torus :: render(GemState *state)
 
   GLenum type = m_drawType;
   switch(m_drawType){
-  case GL_LINE_LOOP: type=GL_LINE;  break;    
+  case GL_LINE_LOOP: type=GL_LINE;  break;
   case GL_POINTS   : type=GL_POINT; break;
   case GL_DEFAULT_GEM: // default
   case GL_POLYGON  : type=GL_FILL;  break;
   }
 #ifdef GLU_TRUE
   switch(m_drawType){
-  case GLU_LINE : type=GL_LINE;  break;    
+  case GLU_LINE : type=GL_LINE;  break;
   case GLU_POINT: type=GL_POINT; break;
   case GLU_FILL : type=GL_FILL;  break;
   }
@@ -140,7 +140,7 @@ void torus :: render(GemState *state)
   GLfloat s, t;
 
   glPushAttrib(GL_POLYGON_BIT);
-  glPolygonMode(GL_FRONT_AND_BACK, type); 
+  glPolygonMode(GL_FRONT_AND_BACK, type);
 
   theta = 0.0;
   cosTheta = 1.0;
@@ -187,7 +187,7 @@ void torus :: render(GemState *state)
 void torus :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&torus::innerRadiusCallback),
-    	    gensym("inner"), A_FLOAT, A_NULL); 
+    	    gensym("inner"), A_FLOAT, A_NULL);
 }
 void torus :: innerRadiusCallback(void *data, t_floatarg radius)
 {

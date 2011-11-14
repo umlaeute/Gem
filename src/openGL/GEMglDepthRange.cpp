@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglDepthRange , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglDepthRange :: GEMglDepthRange	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		near_val(static_cast<GLclampd>(arg0)), 
+		near_val(static_cast<GLclampd>(arg0)),
 		far_val(static_cast<GLclampd>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("near_val"));

@@ -28,14 +28,14 @@
   -------------------------------------------------------------------
   CLASS
   tube
-    
+
   Creates a tube
 
   KEYWORDS
   geo
-    
+
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN tube : public GemShape
 {
@@ -47,9 +47,9 @@ class GEM_EXTERN tube : public GemShape
   // Constructor
   tube(t_floatarg size, t_floatarg size2, t_floatarg high, t_floatarg order);
   //////////
-		
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~tube();
@@ -57,7 +57,7 @@ class GEM_EXTERN tube : public GemShape
 
   // The size2 of the object
   void	    	sizeMess2(float size2);
- 
+
   // The high of the object
   void	    	highMess(float high);
 

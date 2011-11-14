@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	partlib_base
-    
+
 	Base class of all the part_* objects
 
 DESCRIPTION
@@ -35,14 +35,14 @@ class GEM_EXTERN partlib_base : public GemBase
   //////////
   // Constructor
   partlib_base(void);
- 	
+
   //////////
   // Destructor
   virtual ~partlib_base();
-    	
+
   //////////
   virtual void 	render(GemState *);
-   
+
   virtual void renderParticles(GemState*)=0;
 
  protected:

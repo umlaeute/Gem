@@ -240,7 +240,7 @@ void pix_flip :: processGrayImage(imageStruct &image)
       }
       dstLine += yDstStride;
       srcLine += ySrcStride;
-    }   
+    }
 }
 /////////////////////////////////////////////////////////
 // flipMess

@@ -80,7 +80,7 @@ void curve :: render(GemState *state)
         m_texCoords[3][0]=0.f;m_texCoords[3][1]=1.f;
         break;
       }
-      
+
       glEnable(GL_MAP1_TEXTURE_COORD_2);
       glMap1f(GL_MAP1_TEXTURE_COORD_2, 0,   1,   2, m_numVertices, &m_texCoords[0][0]);
     }

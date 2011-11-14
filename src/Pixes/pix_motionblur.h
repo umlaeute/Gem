@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _INCLUDE__GEM_PIXES_PIX_MOTIONBLUR_H_ 
-#define _INCLUDE__GEM_PIXES_PIX_MOTIONBLUR_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_MOTIONBLUR_H_
+#define _INCLUDE__GEM_PIXES_PIX_MOTIONBLUR_H_
 
 #include "Base/GemPixObj.h"
 
@@ -16,17 +16,17 @@
 -------------------------------------------------------------------
 CLASS
     pix_motionblur
-    
-    
+
+
 
 KEYWORDS
     pix
     yuv
-    
+
 DESCRIPTION
 
   does motion blur by mixing the current and previous frames for a video 'feedback' effect
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_motionblur : public GemPixObj
@@ -38,9 +38,9 @@ CPPEXTERN_HEADER(pix_motionblur, GemPixObj);
 	    //////////
 	    // Constructor
     	pix_motionblur();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_motionblur();
@@ -64,14 +64,14 @@ CPPEXTERN_HEADER(pix_motionblur, GemPixObj);
 #ifdef __VEC__
         virtual void 	processYUVAltivec(imageStruct &image);
 #endif
-        
+
 	imageStruct     m_savedImage;
         int		m_blur0, m_blur1;
         t_inlet         *inletmotionblur;
 
-        
+
     private:
-    
+
     	//////////
     	// Static member functions
         static void motionblurCallback       (void *data, t_symbol*,int,t_atom*);

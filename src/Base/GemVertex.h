@@ -20,7 +20,7 @@ LOG
 class GEM_EXTERN GemVertex : public GemBase {
  protected:
 
-    	
+
   //////////
   // Constructor
   GemVertex();

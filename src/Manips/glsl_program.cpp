@@ -217,11 +217,11 @@ void glsl_program :: renderGL2()
                 glUniform2f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_FLOAT_VEC3:
-                glUniform3f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform3f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_FLOAT_VEC4:
-                glUniform4f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform4f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 		/* int vectors */
@@ -232,12 +232,12 @@ void glsl_program :: renderGL2()
                 glUniform2i( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]) );
 		break;
               case GL_INT_VEC3:
-                glUniform3i(m_loc[i], 
+                glUniform3i(m_loc[i],
 			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), static_cast<GLint>(m_param[i][2]) );
 		break;
               case GL_INT_VEC4:
-                glUniform4i(m_loc[i], 
-			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), 
+                glUniform4i(m_loc[i],
+			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
 			    static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
 		break;
 		/* bool vectors */
@@ -248,13 +248,13 @@ void glsl_program :: renderGL2()
                 glUniform2f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_BOOL_VEC3:
-                glUniform3f( m_loc[i], 
-			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform3f( m_loc[i],
+			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
 			     static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_BOOL_VEC4:
-                glUniform4f( m_loc[i], 
-			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform4f( m_loc[i],
+			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
 			     static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 
@@ -272,7 +272,7 @@ void glsl_program :: renderGL2()
 
 		/* textures */
 	      case GL_SAMPLER_1D: break;
-	      case GL_SAMPLER_2D: 
+	      case GL_SAMPLER_2D:
 		glUniform1i(m_loc[i], m_param[i][0]);
 		break;
 	      case GL_SAMPLER_3D: break;
@@ -287,7 +287,7 @@ void glsl_program :: renderGL2()
               }
             // remove flag because the value is in GL's state now...
             m_flag[i]=0;
-			
+
 	  }
       }
 	 // glUniform1i(glGetUniformLocation(m_program, "MyTex1"), 1);
@@ -315,11 +315,11 @@ void glsl_program :: renderARB()
                 glUniform2fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_FLOAT_VEC3_ARB:
-                glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_FLOAT_VEC4_ARB:
-                glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 
@@ -331,11 +331,11 @@ void glsl_program :: renderARB()
                 glUniform2iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]) );
 		break;
               case GL_INT_VEC3_ARB:
-                glUniform3iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), 
+                glUniform3iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
                                 static_cast<GLint>(m_param[i][2]) );
 		break;
               case GL_INT_VEC4_ARB:
-                glUniform4iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), 
+                glUniform4iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
                                 static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
 		break;
 
@@ -347,11 +347,11 @@ void glsl_program :: renderARB()
                 glUniform2fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
 		break;
               case GL_BOOL_VEC3_ARB:
-                glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_BOOL_VEC4_ARB:
-                glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]), 
+                glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 
@@ -378,7 +378,7 @@ void glsl_program :: renderARB()
 	      case GL_SAMPLER_2D_SHADOW_ARB: break;
 	      case GL_SAMPLER_2D_RECT_ARB:
 		glUniform1iARB(m_loc[i], m_param[i][0]);
-		break;	
+		break;
               default:
 		;
               }
@@ -403,7 +403,7 @@ void glsl_program :: render(GemState *state)
 
   if(GLEW_VERSION_2_0)
     renderGL2();
-  else 
+  else
     renderARB();
 }
 
@@ -416,7 +416,7 @@ void glsl_program :: postrender(GemState *state)
   if(m_linked) {
     if(GLEW_VERSION_2_0)
       glUseProgram(0);
-    else 
+    else
       glUseProgramObjectARB(0);
   }
 }
@@ -476,7 +476,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
       m_shaderObj[i]    = ui;
       m_shaderObjARB[i] = ui;//static_cast<GLhandleARB>(fi.i);
     }
-  
+
   //  not sure what to do here:  we don't want to link & re-link every render cycle,
   //  but we do want to link when there are new shaders to link...so I made a seperate
   //  link message
@@ -508,7 +508,7 @@ bool glsl_program :: LinkGL2()
   if(glProgramParameteriEXT) {
     glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoInType);
     glProgramParameteriEXT(m_program,GL_GEOMETRY_OUTPUT_TYPE_EXT,m_geoOutType);
-	
+
     int temp=m_geoOutVertices;
     if(temp<0)
       glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT,&temp);
@@ -531,7 +531,7 @@ bool glsl_program :: LinkGL2()
     }
 
   if(infoLog)delete[]infoLog;infoLog=NULL;
-  
+
   //
   // If all went well, make the ProgramObject part of the current state
   //
@@ -593,7 +593,7 @@ bool glsl_program :: LinkARB()
     }
   //post("freeing log");
   if(infoLogARB)delete[]infoLogARB;infoLogARB=NULL;
-  
+
   //
   // If all went well, make the ProgramObject part of the current state
   //
@@ -630,7 +630,7 @@ void glsl_program :: LinkProgram()
   GemCGLint vertexGPUProcessing, fragmentGPUProcessing;
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUVertexProcessing, &vertexGPUProcessing);
   CGLGetParameter (CGLGetCurrentContext(), kCGLCPGPUFragmentProcessing, &fragmentGPUProcessing);
-  
+
   post("vertex shader running in %sware", vertexGPUProcessing?"hard":"soft");
   post("fragment shader running in %sware", fragmentGPUProcessing?"hard":"soft");
 #endif //__APPLE__
@@ -674,14 +674,14 @@ void glsl_program :: getVariables()
                                &m_uniformCount);
   }
   createArrays();
-  
+
   //
   // Loop over the ActiveUniform's and store the results away.
   //
   GLchar *name=new GLchar[m_maxLength];
   GLcharARB *nameARB=new GLcharARB[m_maxLength];
   GLsizei    length=0;
-  for (i = 0; i < m_uniformCount; i++) 
+  for (i = 0; i < m_uniformCount; i++)
     {
       if(GLEW_VERSION_2_0) {
         glGetActiveUniform(m_program, i, m_maxLength, &length, &m_size[i], &m_type[i], name);
@@ -690,7 +690,7 @@ void glsl_program :: getVariables()
       } else if (GLEW_ARB_shader_objects) {
         glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &m_size[i], &m_type[i], nameARB);
         m_loc[i] = glGetUniformLocationARB( m_programARB, nameARB );
-        m_symname[i]=gensym(nameARB);      
+        m_symname[i]=gensym(nameARB);
       }
     }
   delete[]name;
@@ -705,7 +705,7 @@ void glsl_program :: printInfo()
 {
   int i;
 
-  if(!m_linked) 
+  if(!m_linked)
     {
       error("no GLSL-program linked");
       return;
@@ -713,25 +713,25 @@ void glsl_program :: printInfo()
 
   post("glsl_program Info");
   post("=================");
-	
+
   if(GLEW_VERSION_2_0) {
     startpost("linked shaders");
     for (i = 0; i < m_num; i++)  {
       startpost( " %d", m_shaderObj[i] );
-    } 
+    }
     post(": %d", m_program);
   } else {
   startpost("linked ARB-shaders");
    for (i = 0; i < m_num; i++)  {
       startpost( " %d", m_shaderObjARB[i] );
-    } 
+    }
     post(": %d", m_programARB);
   }
 
   post("");
   for (i=0; i<m_uniformCount; i++)
-    { 
-      startpost("uvar#%d: \"%s\": ",  
+    {
+      startpost("uvar#%d: \"%s\": ",
                 i, m_symname[i]->s_name);
 #define SWITCHPOST(label) case label: post("%s", #label); break
       switch (m_type[i])
@@ -815,7 +815,7 @@ void glsl_program:: outverticesMess(GLint vertices) {
   m_geoOutVertices=vertices;
   if(m_program && glProgramParameteriEXT) {
     int temp=m_geoOutVertices;
-  
+
     if(temp<0)
       glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT,&temp);
     glProgramParameteriEXT(m_program,GL_GEOMETRY_VERTICES_OUT_EXT,temp);

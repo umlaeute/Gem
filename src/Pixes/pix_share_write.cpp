@@ -217,7 +217,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     default:
       return 5;
     }
-  
+
   if (xsize <= 0 || ysize <= 0){
     return 3;
   }
@@ -226,7 +226,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   dummy.setCsizeByFormat(color);
 
   m_size = (size)?(size):(xsize * ysize * dummy.csize);
-	
+
   verbose(1, "%dx%dx%d: %d",
        xsize,ysize,dummy.csize, m_size);
 
@@ -272,7 +272,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     /* write the size into the shm-segment */
     t_pixshare_header *h=(t_pixshare_header *)shm_addr;
     h->size = (shm_desc.shm_segsz-sizeof(t_pixshare_header));
-    
+
     verbose(1, "shm:: id(%d) segsz(%d) cpid (%d) mem(0x%X)",
          shm_id,shm_desc.shm_segsz,shm_desc.shm_cpid, shm_addr);
   } else {
@@ -294,7 +294,7 @@ void pix_share_write :: render(GemState *state)
   if(shm_id>0){
     imageStruct *pix = &img->image;
     size_t size=pix->xsize*pix->ysize*pix->csize;
-	
+
     if (!shm_addr){
       error("no shmaddr");
       return;
@@ -310,13 +310,13 @@ void pix_share_write :: render(GemState *state)
       memcpy(shm_addr+sizeof(t_pixshare_header),pix->data,size);
     }
     else{
-      error("input image too large: %dx%dx%d=%d>%d", 
-           pix->xsize, pix->ysize, pix->csize, 
-           pix->xsize*pix->ysize*pix->csize, 
+      error("input image too large: %dx%dx%d=%d>%d",
+           pix->xsize, pix->ysize, pix->csize,
+           pix->xsize*pix->ysize*pix->csize,
            m_size);
     }
   }
-#endif /* WIN32 */			
+#endif /* WIN32 */
 }
 
 void pix_share_write :: obj_setupCallback(t_class *classPtr)

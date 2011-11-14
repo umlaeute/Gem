@@ -141,7 +141,7 @@ void pix_dump :: processYUVImage(imageStruct &image)
 void pix_dump :: trigger()
 {
   if (!m_data) return;
-  
+
   int n = 0, m = 0;
   int i = 0;
 

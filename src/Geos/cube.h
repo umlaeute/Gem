@@ -22,14 +22,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     cube
-    
+
     Creates a cube
 
 KEYWORDS
     geo
 
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN cube : public GemShape
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN cube : public GemShape
 	    //////////
 	    // Constructor
     	cube(t_floatarg size);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~cube();

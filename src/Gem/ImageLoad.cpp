@@ -42,21 +42,21 @@ namespace gem { namespace image {
       OutData(const InData&in) :
         cb(in.cb),
         userdata(in.userdata),
-        img(NULL) { 
+        img(NULL) {
       };
     };
 
     static gem::plugins::imageloader*s_imageloader;
     PixImageThreadLoader(void) :
       SynchedWorkerThread(false)
-    { 
+    {
       if(NULL==s_imageloader) {
 	s_imageloader=gem::plugins::imageloader::getInstance();
       }
       if(!s_imageloader)
 	throw(40);
 
-      if(!s_imageloader->isThreadable()) 
+      if(!s_imageloader->isThreadable())
         throw(42);
       start();
     }
@@ -140,14 +140,14 @@ namespace gem { namespace image {
                   gem::Properties&props) {
     if(!PixImageThreadLoader::s_imageloader)
       PixImageThreadLoader::s_imageloader=gem::plugins::imageloader::getInstance();
-    if((PixImageThreadLoader::s_imageloader) && 
-       (PixImageThreadLoader::s_imageloader->load(filename, result, props))) 
+    if((PixImageThreadLoader::s_imageloader) &&
+       (PixImageThreadLoader::s_imageloader->load(filename, result, props)))
       {
 	return true;
       }
     return false;
   }
-  
+
   bool load::async(load::callback cb,
                    void*userdata,
                    const std::string filename,
@@ -160,7 +160,7 @@ namespace gem { namespace image {
     PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance();
 
     //post("threadloader %p", threadloader);
-    
+
     if(threadloader) {
       return threadloader->queue(ID, cb, userdata, filename);
     }
@@ -224,7 +224,7 @@ GEM_EXTERN imageStruct *image2mem(const char *filename)
   imageStruct *img = new imageStruct();
   if(gem::image::load::sync(filename, *img, props))
     return img;
-  
+
   delete img;
   return NULL;
 }

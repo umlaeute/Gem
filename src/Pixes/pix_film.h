@@ -28,26 +28,26 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_film
-    
+
   Loads in a movie
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_film : public GemBase
 {
   CPPEXTERN_HEADER(pix_film, GemBase);
-    
-    public:  
+
+    public:
   //////////
   // Constructor
   pix_film(t_symbol *filename);
 
  protected:
-    
+
   //////////
   // Destructor
   virtual ~pix_film();
@@ -74,7 +74,7 @@ class GEM_EXTERN pix_film : public GemBase
   //////////
   // Change which image to display
   virtual void changeImage(int imgNum, int trackNum);
-	
+
   //////////
   // Change the colorspace
   // normally the cs-change will be passed through immediately.
@@ -122,7 +122,7 @@ class GEM_EXTERN pix_film : public GemBase
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
 
- 
+
  protected:
  /* grab-thread */
 #ifdef HAVE_PTHREADS

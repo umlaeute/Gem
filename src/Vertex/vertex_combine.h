@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_combine
-    
+
     Creates a vertex_combine
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_combine : public GemBase
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_combine : public GemBase
         //////////
         // Constructor
     	vertex_combine(void);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_combine(void);
-        
+
         float	*m_rightVertexArray;
         float	*m_rightColorArray;
 
@@ -60,7 +60,7 @@ class GEM_EXTERN vertex_combine : public GemBase
     	virtual void 	render(GemState *state);
         virtual void 	postrender(GemState *state);
         virtual void 	rightRender(GemState *state);
-        
+
         //private:
         static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
         static void	blendCallback(void *data, t_floatarg x);

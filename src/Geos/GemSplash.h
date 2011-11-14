@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemSplash
-    
+
     Creates a GemSplash
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemSplash : public GemBase
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN GemSplash : public GemBase
         //////////
         // Constructor
     	GemSplash();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~GemSplash();

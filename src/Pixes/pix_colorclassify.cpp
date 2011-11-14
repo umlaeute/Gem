@@ -78,16 +78,16 @@ void pix_colorclassify :: processRGBAImage(imageStruct &image)
   // post("processing RGBA Image");
   extern unsigned char class_red[], class_green[], class_blue[];
   unsigned i = image.xsize * image.ysize;
-    
+
   unsigned char *base = image.data;
 	while (i--) {
       color result, second_guess;
       certainty c;
 
-      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255., 
+      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255.,
           &result, &second_guess, &c);
 
-      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue], 
+      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue],
       //    result, second_guess, c);
 
       if (c == CERTAIN) {
@@ -110,7 +110,7 @@ void pix_colorclassify :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorclassify), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorclassify),
 		   gensym("pix_colorclassify"), A_NULL);
 }
 
@@ -142,7 +142,7 @@ char *certainty_name[3] =  {
 };
 
 // the rgb values for the pure representative of each class, mainly for
-// visualization purposes 
+// visualization purposes
 unsigned char class_red[] = {
 0,/*black,*/
 255,/*white,*/
@@ -186,7 +186,7 @@ unsigned char class_blue[] = {
 };
 
 
-void 
+void
 color_classify (
   float red,
   float green,
@@ -198,16 +198,16 @@ color_classify (
     float hue;
     float sat;
     float val;
-    
+
     *certainty_level = CERTAIN;
     *result = NONE;
     *second_guess = NONE;
-    
+
     rgb2hsv(red, green, blue, &hue, &sat, &val);
     hue *= 360;
 
     //fprintf(stderr, "%g, %g, %g\n", hue, sat, val);
-    
+
     if (val < 0.3) {
         if (sat > 0.3 && val > 0.2) {
             *second_guess = BLACK;
@@ -241,8 +241,8 @@ color_classify (
             return;
         }
     }
-    else if ((val < 0.65 && sat < 0.15) || 
-        (val < 0.7 && sat < 0.1) || 
+    else if ((val < 0.65 && sat < 0.15) ||
+        (val < 0.7 && sat < 0.1) ||
         (val < 0.5 && sat < 0.3 && (hue < 40 && hue > 10))) { // heuristica ~ marrons
         if (val < 0.50) {
             *result = BLACK;
@@ -264,18 +264,18 @@ color_classify (
             }
         }
     }
-    
+
     //RED
     if (hue < 30 || hue > 330) {
         if (hue > 10 && hue <= 30 && sat < 0.4) {
-            if (hue > 20) { 
+            if (hue > 20) {
                 *result = YELLOW;
                 *certainty_level = GOOD_GUESS;
                 if (val < 0.7) {
                     *second_guess = GRAY;
                 }
             }
-            else { 
+            else {
                 *result = RED;
                 *certainty_level = UNRELIABLE;
                 if (val < 0.7) {
@@ -307,7 +307,7 @@ color_classify (
     }
     // BLUE
     else if (hue > 185 && hue < 270) {
-        if (sat < 0.3) { 
+        if (sat < 0.3) {
             if (*certainty_level == CERTAIN) {
                 *certainty_level = GOOD_GUESS;
             }
@@ -387,7 +387,7 @@ color_classify (
 
 // Code from AnImaL animal.sf.net
 // 0 <= r, g, b, h, s, v <= 1
-void 
+void
 rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
 {
    float max, min, delta;
@@ -400,11 +400,11 @@ rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
       min = r;
    }
 
-   if (max < b) 
+   if (max < b)
       max = b;
    else if (min > b)
       min = b;
-    
+
    delta = max - min;
 
    *v = max;
@@ -429,15 +429,15 @@ rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
 
 
 
-void 
-print_color (color result, color second, certainty certainty_level) 
+void
+print_color (color result, color second, certainty certainty_level)
 {
   assert(result < num_colors);
   printf("%s ", color_name[result]);
 
   assert(second < num_colors);
   printf("%s ", color_name[second]);
-    
+
   assert(certainty_level < 3);
   printf("%s\n", certainty_name[certainty_level]);
 }

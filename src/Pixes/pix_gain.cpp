@@ -19,7 +19,7 @@
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_gain);
-  
+
 /////////////////////////////////////////////////////////
 //
 // pix_gain
@@ -138,38 +138,38 @@ void pix_gain :: processYUVImage(imageStruct &image)
   if(m_saturate) {
     for (h=0; h<image.ysize; h++){
       for(w=0; w<width; w++){
-	  
+
 	u = (((image.data[src] - 128) * U)>>8)+128;
 	image.data[src] = static_cast<unsigned char>(CLAMP(u));
-	  
+
 	y1 = (image.data[src+1] * Y)>>8;
 	image.data[src+1] = static_cast<unsigned char>(CLAMP(y1));
-	  
+
 	v = (((image.data[src+2] - 128) * V)>>8)+128;
 	image.data[src+2] = static_cast<unsigned char>(CLAMP(v));
-	  
+
 	y2 = (image.data[src+3] * Y)>>8;
 	image.data[src+3] = static_cast<unsigned char>(CLAMP(y2));
-	  
+
 	src+=4;
       }
     }
   } else {
     for (h=0; h<image.ysize; h++){
       for(w=0; w<width; w++){
-	  
+
 	u = (((image.data[src] - 128) * U)>>8)+128;
 	image.data[src] = static_cast<unsigned char>(u);
-	  
+
 	y1 = (image.data[src+1] * Y)>>8;
 	image.data[src+1] = static_cast<unsigned char>(y1);
-	  
+
 	v = (((image.data[src+2] - 128) * V)>>8)+128;
 	image.data[src+2] = static_cast<unsigned char>(v);
-	  
+
 	y2 = (image.data[src+3] * Y)>>8;
 	image.data[src+3] = static_cast<unsigned char>(y2);
-	  
+
 	src+=4;
       }
     }
@@ -194,7 +194,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
     // nothing to do!
     return;
   }
-  /* the MMX code goes easily into clipping, 
+  /* the MMX code goes easily into clipping,
    * since we are using (short) instead of (int)
    */
   if((R>256)||(G>256)||(B>256)||(B>256)){
@@ -215,19 +215,19 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
 
     while(pixsize--) {
       a1 = data_p[0];
-      
+
       a0=_mm_unpacklo_pi8(a1, null_64);
       a1=_mm_unpackhi_pi8(a1, null_64);
-      
+
       a0 = _mm_mullo_pi16(a0, gain_64);
       a1 = _mm_mullo_pi16(a1, gain_64);
 
       a0 = _mm_srai_pi16(a0, 8);
       a1 = _mm_srai_pi16(a1, 8);
-      
+
       data_p[0]=_mm_packs_pi16(a0, a1);
-      data_p++;      
-    } 
+      data_p++;
+    }
 
     _mm_empty();
 }
@@ -246,14 +246,14 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
     short	elements[8];
     vector	signed short v;
   }shortBuffer;
-    
+
   union
   {
     unsigned long	elements[8];
     vector	unsigned int v;
   }bitBuffer;
-    
-    
+
+
   register vector signed short d, hiImage, loImage, YImage, UVImage;
   vector unsigned char zero = vec_splat_u8(0);
   register vector signed int UVhi,UVlo,Yhi,Ylo;
@@ -261,7 +261,7 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
   register vector unsigned int bitshift;
   vector unsigned char *inData = (vector unsigned char*) image.data;
 
-    
+
   shortBuffer.elements[0] = 128;
   shortBuffer.elements[1] = 0;
   shortBuffer.elements[2] = 128;
@@ -270,74 +270,74 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
   shortBuffer.elements[5] = 0;
   shortBuffer.elements[6] = 128;
   shortBuffer.elements[7] = 0;
-    
+
   c = shortBuffer.v;
-    
+
   shortBuffer.elements[0] =static_cast<short> (m_gain[1]*255);
-  gain = shortBuffer.v; 
-  gain =  vec_splat(gain, 0 );  
+  gain = shortBuffer.v;
+  gain =  vec_splat(gain, 0 );
 
 
   bitBuffer.elements[0] = 8;
 
   //Load it into the vector unit
   bitshift = bitBuffer.v;
-  bitshift = vec_splat(bitshift,0); 
-     
+  bitshift = vec_splat(bitshift,0);
+
   shortBuffer.elements[0] = 128;
-   
+
   //Load it into the vector unit
   d = shortBuffer.v;
   d = (vector signed short)vec_splat((vector signed short)d,0);
-    
+
 #ifndef PPC970
   UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( inData, prefetchSize, 0 );
 #endif
-    
+
   for ( h=0; h<height; h++){
     for (w=0; w<width; w++){
 #ifndef PPC970
       vec_dst( inData, prefetchSize, 0 );
 #endif
       //interleaved U Y V Y chars
-            
+
       //expand the UInt8's to short's
       hiImage = (vector signed short) vec_mergeh( zero, inData[0] );
       loImage = (vector signed short) vec_mergel( zero, inData[0] );
-            
+
       //vec_subs -128
       hiImage = (vector signed short) vec_sub( hiImage, c );
-      loImage = (vector signed short) vec_sub( loImage, c );   
-            
+      loImage = (vector signed short) vec_sub( loImage, c );
+
       //now vec_mule the UV into two vector ints
       UVhi = vec_mule(gain,hiImage);
       UVlo = vec_mule(gain,loImage);
-            
+
       //now vec_mulo the Y into two vector ints
       Yhi = vec_mulo(gain,hiImage);
       Ylo = vec_mulo(gain,loImage);
-            
+
       //this is where to do the bitshift/divide due to the resolution
       UVhi = vec_sra(UVhi,bitshift);
       UVlo = vec_sra(UVlo,bitshift);
       Yhi = vec_sra(Yhi,bitshift);
       Ylo = vec_sra(Ylo,bitshift);
-            
+
       //pack the UV into a single short vector
       UVImage = vec_packs(UVhi,UVlo);
-            
+
       //pack the Y into a single short vector
       YImage = vec_packs(Yhi,Ylo);
-                                            
-            
+
+
       //vec_adds +128 to U V U V short
       UVImage = vec_adds(UVImage,d);
-            
+
       //vec_mergel + vec_mergeh Y and UV
       hiImage =  vec_mergeh(UVImage,YImage);
       loImage =  vec_mergel(UVImage,YImage);
-            
+
       //pack back to 16 chars
       inData[0] = vec_packsu(hiImage, loImage);
 

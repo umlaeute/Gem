@@ -45,7 +45,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_histo);
 //
 /////////////////////////////////////////////////////////
 pix_histo :: pix_histo(int argc, t_atom *argv)
-{ 
+{
   setMess(argc, argv);
 }
 
@@ -162,7 +162,7 @@ void pix_histo :: processRGBAImage(imageStruct &image)
 {
   int size=image.xsize*image.ysize;
   unsigned char *base = image.data;
-  
+
   int n_R=0, n_G=0, n_B=0, n_A=0;
 
   t_float incr=0.;
@@ -202,7 +202,7 @@ void pix_histo :: processRGBAImage(imageStruct &image)
   switch (m_mode) {
   case 1: // RGB->grey
     while (size--) {
-      
+
 #if 1
       const unsigned int grey =((base[chRed]  *RGB2GRAY_RED+
                                  base[chGreen]*RGB2GRAY_GREEN+
@@ -246,7 +246,7 @@ void pix_histo :: processYUVImage(imageStruct &image)
 {
   int size=image.xsize*image.ysize;
   unsigned char *base = image.data;
-  
+
   int n_Y=0, n_U=0, n_V=0;
 
   gem::RTE::Array tabY=gem::RTE::Array(name_R->s_name);

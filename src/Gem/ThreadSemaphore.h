@@ -16,7 +16,7 @@ LOG
 
 #include "Gem/ExportDef.h"
 
-namespace gem { 
+namespace gem {
   namespace thread {
     GEM_EXTERN class Semaphore {
     private:
@@ -26,7 +26,7 @@ namespace gem {
       Semaphore(void);
       virtual ~Semaphore(void);
       Semaphore(const Semaphore&);
-   
+
       void freeze (void);
       void thaw   (void);
 

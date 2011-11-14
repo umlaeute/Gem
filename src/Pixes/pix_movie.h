@@ -23,19 +23,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_movie
-    
+
   Loads in a movie
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_movie : public pix_film
 {
   CPPEXTERN_HEADER(pix_movie, pix_film);
-  
+
     public:
 
   //////////
@@ -43,7 +43,7 @@ class GEM_EXTERN pix_movie : public pix_film
   pix_movie(t_symbol *filename);
 
  protected:
-    
+
   //////////
   // Destructor
   virtual ~pix_movie();
@@ -69,7 +69,7 @@ class GEM_EXTERN pix_movie : public pix_film
   void          modeMess(int mode){m_pixtexture.m_rectangle=mode;}
 
  protected:
-	
+
   //////////
   // static member functions
   static void 	textureMessCallback(void *data, t_floatarg n);

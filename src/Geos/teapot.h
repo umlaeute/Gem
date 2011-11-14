@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
 	teapot
-    
+
     Creates a teapot
 
 KEYWORD
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN teapot : public GemGluObj
 	    //////////
 	    // Constructor
   teapot(t_floatarg size, t_floatarg slice);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~teapot();

@@ -42,7 +42,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_biquad);
 /////////////////////////////////////////////////////////
 pix_biquad :: pix_biquad(int argc, t_atom*argv) :
   set(false), fb0(1), fb1(0), fb2(0), ff1(1), ff2(0), ff3(0), m_mode(0)
-{ 
+{
   prev.xsize = 64;
   prev.ysize = 64;
   prev.setCsizeByFormat(GL_RGBA);
@@ -85,7 +85,7 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
   last.csize = image.csize;
   last.reallocate();
 
-  if (set) { 
+  if (set) {
     memcpy(prev.data, image.data, image.ysize * image.xsize * image.csize);
     memcpy(last.data, image.data, image.ysize * image.xsize * image.csize);
     set = false;
@@ -121,7 +121,7 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
     iff1 = static_cast<int>(256. * ff1);
     iff2 = static_cast<int>(256. * ff2);
     iff3 = static_cast<int>(256. * ff3);
-    
+
     int max=0;//JMZ
 
     while(pixsize--) {
@@ -168,8 +168,8 @@ void pix_biquad :: processYUVImage(imageStruct &image)
     unsigned char *this_p = image.data;
     unsigned char *last_p= last.data;
     unsigned char *prev_p= prev.data;
- 
-    
+
+
         // fast, because calculations are done in int !
         int ifb0,ifb1,ifb2,iff1,iff2,iff3;
         int Youtput,UVoutput,Youtput1,UVoutput1;
@@ -182,13 +182,13 @@ void pix_biquad :: processYUVImage(imageStruct &image)
 
         //it's unrolled but GCC still can't schedule this well at all
         //needs some manual scheduling...
-        
+
         while(pixsize--) {
             UVoutput  = (((ifb0 * (*this_p-128)) + (ifb1 * (*last_p-128)) + (ifb2 * (*prev_p-128)))>>8);
             *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput) + (iff2 * (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
             *prev_p++ = *last_p;
             *last_p++ = (unsigned char)CLAMP_Y(UVoutput+128);
-            
+
             Youtput   = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
             *this_p++ = (unsigned char)CLAMP_Y(((iff1 * Youtput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
             *prev_p++ = *last_p;
@@ -198,7 +198,7 @@ void pix_biquad :: processYUVImage(imageStruct &image)
             *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput1) + (iff2 * (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
             *prev_p++ = *last_p;
             *last_p++ = (unsigned char)CLAMP_Y(UVoutput1+128);
-            
+
             Youtput1   = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
             *this_p++ = (unsigned char)CLAMP_Y(((iff1 * Youtput1) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
             *prev_p++ = *last_p;
@@ -224,7 +224,7 @@ void pix_biquad :: processRGBAMMX(imageStruct &image)
   last.setCsizeByFormat(image.format);
   last.reallocate();
 
-  if (set) { 
+  if (set) {
     memcpy(prev.data, image.data, image.ysize * image.xsize * image.csize);
     memcpy(last.data, image.data, image.ysize * image.xsize * image.csize);
     set = false;
@@ -233,7 +233,7 @@ void pix_biquad :: processRGBAMMX(imageStruct &image)
     last.setBlack();
   }
   int pixsize = image.ysize * image.xsize * image.csize / sizeof(__m64);
-  
+
   //post("%f %f %f\t%f %f %f", fb0, fb1, fb2, ff1, ff2, ff3);
   //post("alpha-pre=%d", image.data[chAlpha]);
 
@@ -261,13 +261,13 @@ void pix_biquad :: processRGBAMMX(imageStruct &image)
   __m64 b0,b1;
   __m64 A0,A1;
   __m64 B0,B1;
-  
+
   __m64*this_p= (__m64*)image.data;
   __m64*last_p= (__m64*)last.data;
   __m64*prev_p= (__m64*)prev.data;
-  
+
   __m64 null_64 = _mm_setzero_si64();
-  
+
   /*
     float output = fb0 * *this_p + fb1 * *last_p + fb2 * *prev_p;
     *this_p++    = (unsigned char)(ff1 * output + ff2 * *last_p + ff3 * *prev_p);
@@ -279,7 +279,7 @@ void pix_biquad :: processRGBAMMX(imageStruct &image)
     this_64 = this_p[pixsize];
     last_64 = last_p[pixsize];
     prev_64 = prev_p[pixsize];
-    
+
     a0=_mm_unpacklo_pi8 (this_64, null_64);
     a1=_mm_unpackhi_pi8 (this_64, null_64);
 
@@ -390,7 +390,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
         signed int		i[4];
         vector signed int 	v;
     }intBuffer;
-    
+
     //unroll 4x
     int pixsize = (image.ysize * image.xsize * image.csize)/16;
 
@@ -413,7 +413,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
     intBuffer.i[0] = 8;
     shift = (vector unsigned int)intBuffer.v;
     shift = vec_splat(shift,0);
-    
+
     shortBuffer.s[0] = 128;
     UVoffset = shortBuffer.v;
     UVoffset = vec_splat(UVoffset,0);
@@ -441,7 +441,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
     shortBuffer.s[0] = (short)(256. * ff3);
     iff3 = shortBuffer.v;
     iff3 = vec_splat(iff3,0);
-    
+
     //setup the cache prefetch -- A MUST!!!
     //this gave a 30-40% speedup - the gain so far is about 450%
 #ifndef PPC970
@@ -469,8 +469,8 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
 
         UVprev = (vector signed short)vec_mule(prev_p[0],one);
         Yprev = (vector signed short)vec_mulo(prev_p[0],one);
-        
-        
+
+
          //subtract -128 offset from UV
 
         UVthis = vec_sub(UVthis,UVoffset);
@@ -480,7 +480,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
         UVprev = vec_sub(UVprev,UVoffset);
 
         //pack back to chars???  this would use less registers - maybe allow for unrolling?
-        
+
         //multiply by coeffecients into ints
         Yt0 = vec_mule(Ythis,ifb0);
         Yt1 = vec_mulo(Ythis,ifb0);
@@ -499,8 +499,8 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
 
         UVl0 = vec_mule(UVlast,ifb1);
         UVl1 = vec_mulo(UVlast,ifb1);
-        
-         //add  
+
+         //add
 
         Yt0 = vec_adds(vec_adds(Yl0,Yp0),Yt0);
         Yt1 = vec_adds(vec_adds(Yl1,Yp1),Yt1);
@@ -517,7 +517,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
         UVt1 = vec_adds(UVt1, intOffset);
 
         //merge then pack back to short
-        
+
         hiImage = vec_mergeh(Yt0,Yt1);
         loImage = vec_mergel(Yt0,Yt1);
 
@@ -527,13 +527,13 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
         loImage = vec_mergel(UVt0,UVt1);
 
         UVthis = vec_packs(hiImage,loImage);
-         
+
         output = vec_packsu(vec_mergeh(UVthis,Ythis),  vec_mergel(UVthis,Ythis));
 
         //restore UV offset for next set of processing
         UVthis = vec_subs(UVthis,UVoffset);
-        
-        /* 
+
+        /*
         *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput) + (iff2 * (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
          */
 
@@ -590,7 +590,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
         this_p++;
         prev_p++;
         last_p++;
-        
+
     }
 #ifndef PPC970
     vec_dss(2);
@@ -625,7 +625,7 @@ void pix_biquad :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_biquad::setMessCallback),
 		  gensym("set"), A_NULL);
-                  
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_biquad::modeMessCallback),
 		  gensym("mode"), A_DEFFLOAT, A_NULL);
   class_addlist(classPtr, reinterpret_cast<t_method>(&pix_biquad::faktorMessCallback));

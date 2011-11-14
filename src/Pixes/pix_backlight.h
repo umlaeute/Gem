@@ -4,7 +4,7 @@ LOG
 
     Copyright (c) 2003 James Tittle
     ported from pete's_plugins (www.petewarden.com)
-    
+
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -19,16 +19,16 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_backlight
-    
-    
+
+
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_backlight : public GemPixObj
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_backlight : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_backlight();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_backlight();
@@ -59,7 +59,7 @@ class GEM_EXTERN pix_backlight : public GemPixObj
 
 	U32*		pSource;
 	U32*		pOutput;
-	
+
 	float m_SpikeScale;
 	float m_SpikeFloor;
 	float m_SpikeCeiling;
@@ -68,7 +68,7 @@ class GEM_EXTERN pix_backlight : public GemPixObj
 	//void Pete_BackLight_DeInit();
 
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	scaleCallback(void *data, t_floatarg m_SpikeScale);

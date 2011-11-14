@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant interface)
 
 Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -23,12 +23,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   record
-    
+
   parent class for the system- and library-dependent record-loader classes
-    
+
   KEYWORDS
   pix record movie
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -39,7 +39,7 @@ public:
 
   //////////
   // returns an instance wrapping all plugins or NULL
-  // if NULL is returned, you might still try your luck with manually accessing the 
+  // if NULL is returned, you might still try your luck with manually accessing the
   // PluginFactory
   static record*getInstance(void);
 
@@ -49,7 +49,7 @@ public:
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
-   */ 
+   */
   virtual std::vector<std::string>getCodecs(void) = 0;
   /**
    * get a human readable description of the given codec (e.g. "Motion Jpeg A")
@@ -73,13 +73,13 @@ public:
 
   //////////
   // start recording
-  /* 
-   * returns TRUE if opening was successfull, FALSE otherwise 
+  /*
+   * returns TRUE if opening was successfull, FALSE otherwise
    */
   virtual bool start(const std::string filename, gem::Properties&props) = 0;
 
   //////////
-  // record a frame 
+  // record a frame
   virtual bool write(imageStruct*) = 0;
 
   //////////
@@ -91,7 +91,7 @@ public:
 
 
 
-/* 
+/*
  * factory code:
  * to use these macros, you have to include "plugins/PluginFactory.h"
  */

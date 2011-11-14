@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_tabread
-    
+
     Creates a vertex_tabread
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_tabread : public GemVertex
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN vertex_tabread : public GemVertex
         //////////
         // Constructor
   vertex_tabread(int, t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_tabread(void);
@@ -55,7 +55,7 @@ class GEM_EXTERN vertex_tabread : public GemVertex
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-		
+
 		//////////
 		// set the dirty flag
 		bool m_doit;

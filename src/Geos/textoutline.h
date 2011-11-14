@@ -22,7 +22,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     textoutline
-    
+
     Creates a textoutline string
 
 DESCRIPTION
@@ -37,9 +37,9 @@ class GEM_EXTERN textoutline : public TextBase
 		//////////
 		// Constructor
     	textoutline(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~textoutline();

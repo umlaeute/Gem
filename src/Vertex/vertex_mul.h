@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_mul
-    
+
     Creates a vertex_mul
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_mul : public vertex_add
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_mul : public vertex_add
         //////////
         // Constructor
   vertex_mul(int, t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_mul(void);
-	
+
     	//////////
     	// Do the rendering
 	virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);

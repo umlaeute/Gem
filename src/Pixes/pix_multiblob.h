@@ -10,14 +10,14 @@ Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelni
 Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	 
+
 -----------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------
 pix_multiblob
  tracks multiple blobs in one image
 
- LATER: split this object into 2 : 
+ LATER: split this object into 2 :
     - pix_multiblob (do the image-processing, unsorted!)
     - multiblob (ensure that blob3 of the last frame is blob3 f the current one...)
 
@@ -73,9 +73,9 @@ private :
 class GEM_EXTERN pix_multiblob : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_multiblob, GemPixObj);
-		
+
 public:
-  
+
   //////////
   // Constructor
   pix_multiblob(t_float f);
@@ -83,7 +83,7 @@ public:
   // outlets for results
   t_outlet        *m_infoOut;
 
-protected:  
+protected:
   //Destructor
   ~pix_multiblob();
 
@@ -104,7 +104,7 @@ protected:
   void threshMess(t_float thresh);
   unsigned char m_threshold;
 
-private: 
+private:
   static void blobSizeMessCallback(void *data, t_floatarg blobSize);
   static void threshMessCallback(void *data, t_floatarg thresh);
 };

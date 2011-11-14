@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramEnvParameter4dARB );
 // Constructor
 //
 GEMglProgramEnvParameter4dARB :: GEMglProgramEnvParameter4dARB	(int argc, t_atom*argv ) :
-		target(0), index(0), 
+		target(0), index(0),
 		m_x(0), m_y(0), m_z(0), m_w(0)
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));

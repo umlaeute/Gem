@@ -74,7 +74,7 @@ void part_draw :: typeMess(int ac,t_atom* av)
     switch(*(s->s_name)) {
     case 'l': case 'L': m_drawType=GL_LINES; break;
     case 'p': case 'P': m_drawType=GL_POINTS; break;
-    default: 
+    default:
       error("unknown draw style");
       return;
     }

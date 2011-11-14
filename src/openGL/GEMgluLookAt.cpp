@@ -52,7 +52,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMgluLookAt );
   m_upX=static_cast<GLdouble>(atom_getfloat(argv+6));
   m_upY=static_cast<GLdouble>(atom_getfloat(argv+7));
   m_upZ=static_cast<GLdouble>(atom_getfloat(argv+8));
-  
+
 
 	  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("eyeX"));
 	  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("eyeY"));

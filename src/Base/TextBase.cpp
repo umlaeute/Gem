@@ -16,7 +16,7 @@
 /////////////////////////////////////////////////////////
 
 /*
- * FIXXME: check how font handling behaves with multiple contexts 
+ * FIXXME: check how font handling behaves with multiple contexts
  */
 
 #include "TextBase.h"
@@ -48,7 +48,7 @@ std::string TextBase::DEFAULT_FONT = "vera.ttf";
 TextBase :: TextBase(int argc, t_atom *argv)
   :
   m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
-  m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY), 
+  m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY),
   m_inlet(NULL),
   m_font(NULL), m_fontname(NULL)
 {
@@ -287,7 +287,7 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
     height = y_offset;
   else if (m_heightJus == TOP)   height = ascender + y_offset;
   else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
-    
+
   if (m_depthJus == FRONT)       depth = z1;
   else if (m_depthJus == BACK)   depth = z2-z1;
   else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
@@ -313,7 +313,7 @@ void TextBase :: breakLine(wstring line)
     m_theText.push_back(line.substr(0,pos));
     line=line.erase(0,pos+1);
   }
-  
+
   // if there is still a text append it
   if(line.length())
     m_theText.push_back(line);
@@ -428,7 +428,7 @@ void TextBase :: makeLineDist()
   m_lineDist.clear();
   if (m_heightJus == BOTTOM || m_heightJus == BASEH)
     {
-      // so the offset will be a simple 
+      // so the offset will be a simple
       // [0 1 2 3 ... n] sequence
       for(i=0; i<m_theText.size(); i++)
         m_lineDist.push_back(i);
@@ -483,7 +483,7 @@ void TextBase :: stringMess(int argc, t_atom *argv)
 
   for (i = 0; i < argc; i++)    {
     int v=atom_getint(argv+i);
-    /* 
+    /*
      * i experienced crashes in FTGL with indices>65535;
      * since TrueType fonts cannot hold more than 65536 entries
      * we just clamp it...
@@ -550,7 +550,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
   JustifyHeight hType=MIDDLE;
   JustifyDepth  dType=HALFWAY;
   char c;
-  
+
   switch(argc){
   case 3:
     c=atom_getsymbol(argv+2)->s_name[2];
@@ -560,11 +560,11 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 's': case 'S': dType = BASED; break;
     case 'l': case 'L': case 'n': case 'N': dType = HALFWAY; break;
     default:
-      GetMyClass(data)->error("invalid depth justification: %s (must be: front|back|halfway|base)", 
+      GetMyClass(data)->error("invalid depth justification: %s (must be: front|back|halfway|base)",
 	    atom_getsymbol(argv+2)->s_name);
       return;
     }
-  case 2:    
+  case 2:
     c=atom_getsymbol(argv+1)->s_name[2];
     switch (c){
     case 't': case 'T': hType = BOTTOM; break;
@@ -572,7 +572,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 'd': case 'D': case 'n': case 'N': hType = MIDDLE; break;
     case 's': case 'S': hType = BASEH; break;
     default:
-      GetMyClass(data)->error("invalid height justification: %s (must be bottom|top|middle|base)", 
+      GetMyClass(data)->error("invalid height justification: %s (must be bottom|top|middle|base)",
 	    atom_getsymbol(argv+1)->s_name);
       return;
     }
@@ -593,7 +593,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     GetMyClass(data)->error("justification most be \"width [height [depth]]\"");
     return;
   }
-  
+
   switch(argc){
   case 1: GetMyClass(data)->setJustification(wType); break;
   case 2: GetMyClass(data)->setJustification(wType, hType); break;

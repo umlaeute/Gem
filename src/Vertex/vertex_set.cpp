@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_set);
 //
 /////////////////////////////////////////////////////////
 vertex_set :: vertex_set(int argc, t_atom*argv) : vertex_scale(argc, argv),
-						      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f) 
+						      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f)
 {}
 
 /////////////////////////////////////////////////////////
@@ -62,15 +62,15 @@ void vertex_set :: paramMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void vertex_set :: vertexProcess(int size, GLfloat*array){
   int count;
-   
+
   if (m_offset < 0) m_offset = 0;
   if (m_offset > size) m_offset = size;
   count = m_count;
-  
+
   if (count < 1) count = 1;
   if ((count + m_offset-1) > size) count = size - m_offset;// -1;
-  
-  //needs some altivec 
+
+  //needs some altivec
   if (m_offset){
     int src = (m_offset-1) * 4;
     for (int i=0; i< count; i++){
@@ -97,7 +97,7 @@ void vertex_set :: vertexProcess(int size, GLfloat*array){
 //
 /////////////////////////////////////////////////////////
 void vertex_set :: obj_setupCallback(t_class *classPtr)
-{ 
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_set::paramMessCallback),
 		  gensym("set"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_set::paramMessCallback),

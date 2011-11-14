@@ -23,7 +23,7 @@
   -------------------------------------------------------------------
   CLASS
   multimodel
-    
+
   Load multiple models
 
   DESCRIPTION
@@ -31,7 +31,7 @@
   Inlet for a list - "multimodel"
 
   "open" - the multimodel to set the object to
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN multimodel : public GemBase
 {
@@ -42,11 +42,11 @@ class GEM_EXTERN multimodel : public GemBase
   //////////
   // Constructor
   multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
-    	
+
   class multiModelCache
     {
     public:
-                
+
       multiModelCache(const char *_modelName)
         : refCount(0), next(NULL), models(NULL),
         numModels(0), baseModel(0), topModel(0),
@@ -70,12 +70,12 @@ class GEM_EXTERN multimodel : public GemBase
         int                 topModel;
         int                 skipRate;
     };
-  
+
   //////////
   static multiModelCache      *s_modelCache;
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~multimodel();
@@ -83,13 +83,13 @@ class GEM_EXTERN multimodel : public GemBase
   //////////
   // When an open is received
   virtual void	openMess(t_symbol *filename, int baseModel, int topModel, int skipRate);
-    	
+
   //////////
   void	    	cleanMultimodel();
 
   //////////
   virtual void	buildList();
-    	
+
   //////////
   virtual void	startRendering();
 
@@ -99,18 +99,18 @@ class GEM_EXTERN multimodel : public GemBase
   //////////
   // Change which model to display
   void	    	changeModel(int modelNum);
-    
+
   //////////
   // Set the rescale state
   void	    	rescaleMess(int state);
-    
+
   //////////
   multiModelCache *m_loadedCache;
-    	
+
   //-----------------------------------
   // GROUP:	Model data
   //-----------------------------------
-    
+
   //////////
   // The number of loaded models
   int 	    	m_numModels;
@@ -127,13 +127,13 @@ class GEM_EXTERN multimodel : public GemBase
   //////////
   // Which texture type (linear, spheric)
   virtual void	textureMess(int state);
-  glmtexture_t m_textype; 
+  glmtexture_t m_textype;
 
   bool    m_rebuild;
   float		m_currentH, m_currentW;
 
  private:
-    
+
   //////////
   // static member functions
   static void 	openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);

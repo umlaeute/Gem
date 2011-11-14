@@ -53,7 +53,7 @@ pix_cubemap :: pix_cubemap()
   m_textureType(GL_TEXTURE_CUBE_MAP),
   m_xRatio(1.), m_yRatio(1.),
   m_env(GL_MODULATE),
-  m_texunit(0), 
+  m_texunit(0),
   m_numTexUnits(0),
   m_map(0)
 {
@@ -68,7 +68,7 @@ pix_cubemap :: pix_cubemap()
 
   for(i=0; i<6; i++) {
     m_imgIn[i] = NULL;
-    m_img[i]   = NULL;  
+    m_img[i]   = NULL;
   }
 
   // create an inlet to receive external texture IDs
@@ -165,11 +165,11 @@ void pix_cubemap :: applyTex(GLint textype, imageStruct*img) {
   //if the texture is a power of two in size then there is no need to subtexture
   if(img) {
     glTexImage2D(textype, 0,
-		 img->csize, img->xsize, img->ysize, 
+		 img->csize, img->xsize, img->ysize,
 		 0, img->format, img->type, img->data);
     verbose(1, "tex:%d\timg=%d %d %d %d %d %d %d %x",
 	    textype, 0,
-	    GL_RGBA8, img->xsize, img->ysize, 
+	    GL_RGBA8, img->xsize, img->ysize,
 	    0, img->format, img->type, img->data);
     switch(textype) {
     case(GL_TEXTURE_CUBE_MAP_POSITIVE_X): post("X+"); break;

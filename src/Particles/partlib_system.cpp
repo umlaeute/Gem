@@ -26,7 +26,7 @@ struct AutoCall
 
 AutoCall::AutoCall()
 {
-	// The list of groups, etc.		
+	// The list of groups, etc.
 	_ParticleState::group_list = new ParticleGroup *[16];
 	_ParticleState::group_count = 16;
 	_ParticleState::alist_list = new PAHeader *[16];
@@ -71,7 +71,7 @@ _ParticleState &_GetPStateWithTID()
       {
 	//#pragma critical
 	//cerr << tid << " => " << i << endl;
-	
+
       return *_CtxHash[i];
       }
 
@@ -141,15 +141,15 @@ _ParticleState::_ParticleState()
 	in_call_list = false;
 	in_new_list = false;
 	vertexB_tracks = true;
-	
+
 	dt = 1.0f;
-	
+
 	group_id = -1;
 	list_id = -1;
 	pgrp = NULL;
 	pact = NULL;
 	tid = 0; // This will be filled in above if we're MP.
-	
+
 	Size = pDomain(PDPoint, 1.0f, 1.0f, 1.0f);
 	Vel = pDomain(PDPoint, 0.0f, 0.0f, 0.0f);
 	VertexB = pDomain(PDPoint, 0.0f, 0.0f, 0.0f);
@@ -188,7 +188,7 @@ int _ParticleState::GenerateGroups(int p_group_count)
 	int num_empty = 0;
 	int first_empty = -1;
 	int i;
-	
+
 	for(i=0; i<group_count; i++)
 	  {
 	    if(group_list[i])
@@ -205,7 +205,7 @@ int _ParticleState::GenerateGroups(int p_group_count)
 		  return first_empty;
 	      }
 	  }
-	
+
 	// Couldn't find a big enough gap. Reallocate.
 	int new_count = 16 + group_count + p_group_count;
 	ParticleGroup **glist = new ParticleGroup *[new_count];
@@ -215,7 +215,7 @@ int _ParticleState::GenerateGroups(int p_group_count)
 	delete [] group_list;
 	group_list = glist;
 	group_count = new_count;
-	
+
 	return GenerateGroups(p_group_count);
 }
 
@@ -226,7 +226,7 @@ int _ParticleState::GenerateLists(int list_count)
 	int num_empty = 0;
 	int first_empty = -1;
 	int i;
-	
+
 	for(i=0; i<alist_count; i++)
 	{
 		if(alist_list[i])
@@ -243,7 +243,7 @@ int _ParticleState::GenerateLists(int list_count)
 				return first_empty;
 		}
 	}
-	
+
 	// Couldn't find a big enough gap. Reallocate.
 	int new_count = 16 + alist_count + list_count;
 	PAHeader **new_list = new PAHeader *[new_count];
@@ -253,7 +253,7 @@ int _ParticleState::GenerateLists(int list_count)
 	delete [] alist_list;
 	alist_list = new_list;
 	alist_count = new_count;
-	
+
 	return GenerateLists(list_count);
 }
 
@@ -265,9 +265,9 @@ void _pCallActionList(ParticleAction *apa, int num_actions,
 	// All these require a particle group, so check for it.
 	if(pg == NULL)
 		return;
-	
+
 	PAHeader *pa = (PAHeader *)apa;
-	
+
 	// Step through all the actions in the action list.
 	for(int action = 0; action < num_actions; action++, pa++)
 	{
@@ -370,28 +370,28 @@ void _pAddActionToList(ParticleAction *S, int size)
 
 	if(!_ps.in_new_list)
 		return; // ERROR
-	
+
 	if(_ps.pact == NULL)
 		return; // ERROR
-	
+
 	if(_ps.list_id < 0)
 		return; // ERROR
-	
+
 	PAHeader *alist = _ps.pact;
-	
+
 	if(alist->actions_allocated <= alist->count)
 	{
 		// Must reallocate.
 		int new_alloc = 16 + alist->actions_allocated;
 		PAHeader *new_alist = new PAHeader[new_alloc];
 		memcpy(new_alist, alist, alist->count * sizeof(PAHeader));
-		
+
 		delete [] alist;
 		_ps.alist_list[_ps.list_id] = _ps.pact = alist = new_alist;
-		
+
 		alist->actions_allocated = new_alloc;
 	}
-	
+
 	// Now add it in.
 	memcpy(&alist[alist->count], S, size);
 	alist->count++;
@@ -502,11 +502,11 @@ PARTICLEDLL_API int pGenActionLists(int action_list_count)
 
 	if(_ps.in_new_list)
 		return -1; // ERROR
-	
+
 	_PLock();
 
 	int ind = _ps.GenerateLists(action_list_count);
-	
+
 	for(int i=ind; i<ind+action_list_count; i++)
 	{
 		_ps.alist_list[i] = new PAHeader[8];
@@ -526,12 +526,12 @@ PARTICLEDLL_API void pNewActionList(int action_list_num)
 
 	if(_ps.in_new_list)
 		return; // ERROR
-	
+
 	_ps.pact = _ps.GetListPtr(action_list_num);
-	
+
 	if(_ps.pact == NULL)
 		return; // ERROR
-	
+
 	_ps.list_id = action_list_num;
 	_ps.in_new_list = true;
 
@@ -545,9 +545,9 @@ PARTICLEDLL_API void pEndActionList()
 
 	if(!_ps.in_new_list)
 		return; // ERROR
-	
+
 	_ps.in_new_list = false;
-	
+
 	_ps.pact = NULL;
 	_ps.list_id = -1;
 }
@@ -595,24 +595,24 @@ PARTICLEDLL_API void pCallActionList(int action_list_num)
 
 		PACallActionList S;
 		S.action_list_num = action_list_num;
-		
+
 		_pSendAction(&S, PACallActionListID, sizeof(PACallActionList));
 	}
 	else
 	{
 		// Execute the specified action list.
 		PAHeader *pa = _ps.GetListPtr(action_list_num);
-		
+
 		if(pa == NULL)
 			return; // ERRROR
-		
+
 		// XXX A temporary hack.
 		pa->dt = _ps.dt;
-		
+
 		_ps.in_call_list = true;
-		
+
 		_pCallActionList(pa+1, pa->count-1, _ps.pgrp);
-		
+
 		_ps.in_call_list = false;
 	}
 }
@@ -632,7 +632,7 @@ PARTICLEDLL_API int pGenParticleGroups(int p_group_count, int max_particles)
 	// cerr << "Generating pg " << _ps.tid << " cnt= " << max_particles << endl;
 
 	int ind = _ps.GenerateGroups(p_group_count);
-	
+
 	for(int i=ind; i<ind+p_group_count; i++)
 	{
 		_ps.group_list[i] = (ParticleGroup *)new
@@ -643,7 +643,7 @@ PARTICLEDLL_API int pGenParticleGroups(int p_group_count, int max_particles)
 	}
 
 	_PUnLock();
-	
+
 	return ind;
 }
 
@@ -656,7 +656,7 @@ PARTICLEDLL_API void pDeleteParticleGroups(int p_group_num, int p_group_count)
 
 	if(p_group_num + p_group_count > _ps.group_count)
 		return; // ERROR
-	
+
 	_PLock();
 
 	for(int i = p_group_num; i < p_group_num + p_group_count; i++)
@@ -683,7 +683,7 @@ PARTICLEDLL_API void pCurrentGroup(int p_group_num)
 
 	if(_ps.in_new_list)
 		return; // ERROR
-	
+
 	_ps.pgrp = _ps.GetGroupPtr(p_group_num);
 	if(_ps.pgrp)
 		_ps.group_id = p_group_num;
@@ -698,11 +698,11 @@ PARTICLEDLL_API int pSetMaxParticles(int max_count)
 
 	if(_ps.in_new_list)
 		return 0; // ERROR
-	
+
 	ParticleGroup *pg = _ps.pgrp;
 	if(pg == NULL)
 		return 0; // ERROR
-	
+
 	if(max_count < 0)
 		return 0; // ERROR
 
@@ -719,7 +719,7 @@ PARTICLEDLL_API int pSetMaxParticles(int max_count)
 	}
 
 	_PLock();
-	
+
 	// Allocate particles.
 	ParticleGroup *pg2 =(ParticleGroup *)new Particle[max_count + 2];
 	if(pg2 == NULL)
@@ -729,14 +729,14 @@ PARTICLEDLL_API int pSetMaxParticles(int max_count)
 		pg->max_particles = pg->particles_allocated;
 
 		_PUnLock();
-		
+
 		return pg->max_particles;
 	}
-	
+
 	memcpy(pg2, pg, (pg->p_count + 2) * sizeof(Particle));
-	
+
 	delete [] pg;
-	
+
 	_ps.group_list[_ps.group_id] = _ps.pgrp = pg2;
 	pg2->max_particles = max_count;
 	pg2->particles_allocated = max_count;
@@ -753,7 +753,7 @@ PARTICLEDLL_API void pCopyGroup(int p_src_group_num, int index, int copy_count)
 
 	if(_ps.in_new_list)
 		return; // ERROR
-	
+
 	ParticleGroup *srcgrp = _ps.GetGroupPtr(p_src_group_num);
 	if(srcgrp == NULL)
 		return; // ERROR
@@ -795,7 +795,7 @@ PARTICLEDLL_API int pGetParticles(int index, int count, float *verts,
 
 	if(_ps.in_new_list)
 		return -1; // ERROR
-		
+
 	ParticleGroup *pg = _ps.pgrp;
 	if(pg == NULL)
 		return -2; // ERROR
@@ -862,7 +862,7 @@ PARTICLEDLL_API int pGetGroupCount()
 
 	if(_ps.in_new_list)
 		return 0; // ERROR
-	
+
 	if(_ps.pgrp == NULL)
 		return 0; // ERROR
 

@@ -3,9 +3,9 @@
   GEM - Graphics Environment for Multimedia
 
   render to offscreen buffer and make texture
-   
+
   created 11/27/2005
-   
+
   Copyright (c) 2005-2006 James Tittle II, tigital AT mac DOT com
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -22,13 +22,13 @@
   -------------------------------------------------------------------
   CLASS
   gemframebuffer
-    
+
   render to offscreen buffer and make texture
 
   DESCRIPTION
-    
+
   "bang" - sends out a state list
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemframebuffer : public GemBase
 {
@@ -41,18 +41,18 @@ class GEM_EXTERN gemframebuffer : public GemBase
   gemframebuffer(t_symbol *format, t_symbol *type);
 
  protected:
-       
+
   //////////
   // Destructor
   ~gemframebuffer(void);
-             
+
   //////////
   // A render message
   void         render(GemState *state);
   void         postrender(GemState *state);
   void         initFBO(void);
   void         destroyFBO(void);
-              
+
   //////////
   // Set up the modifying flags
   void         startRendering(void);
@@ -66,12 +66,12 @@ class GEM_EXTERN gemframebuffer : public GemBase
   //////////
   // change the size dimensions
   void         dimMess(int width, int height);
-      
-  ////////// 
+
+  //////////
   // format-message
   virtual void formatMess(std::string);
   virtual void typeMess(std::string);
-      
+
   virtual void colorMess(t_symbol*,int argc, t_atom*argv);
   virtual void perspectiveMess(t_symbol*,int argc, t_atom*argv);
 
@@ -80,7 +80,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
 
   virtual void fixFormat(GLenum wantedFormat);
   virtual void printInfo(void);
-       
+
  private:
   GLboolean             m_haveinit, m_wantinit;
   GLuint      m_frameBufferIndex;
@@ -100,7 +100,7 @@ class GEM_EXTERN gemframebuffer : public GemBase
   GLfloat     m_FBOcolor[4];
   t_outlet   *m_outTexInfo;
   GLfloat     m_perspect[6];
-    
+
   void        bangMess(void);
 };
 

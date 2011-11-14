@@ -27,12 +27,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
 	disk
-    
+
     Creates a disk
 
 KEYWORD
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -45,9 +45,9 @@ class GEM_EXTERN disk : public GemGluObj
 	    //////////
 	    // Constructor
     	disk(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~disk();
@@ -63,7 +63,7 @@ class GEM_EXTERN disk : public GemGluObj
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-	
+
 	private:
 
     	//////////

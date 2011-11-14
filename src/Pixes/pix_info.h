@@ -24,12 +24,12 @@ LOG
 CLASS
 
     pix_info
-    
+
 	Get image information
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
  outputs xsize, ysize, csize, format, data
@@ -44,9 +44,9 @@ class GEM_EXTERN pix_info : public GemBase
 	    //////////
     	// Constructor
     	pix_info();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_info();

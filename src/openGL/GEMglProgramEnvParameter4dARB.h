@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglProgramEnvParameter4dARB : public GemGLBase
 	  virtual void	yMess(t_float);	// FUN
 	  virtual void	zMess(t_float);	// FUN
 	  virtual void	wMess(t_float);	// FUN
-	  
+
 	  // this is protected because subclasses might want to use it
 	  static void 	paramMessCallback(void *data, t_symbol*, int, t_atom*);
 

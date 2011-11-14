@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     colorSquare
-    
+
     Creates a colorSquare
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN colorSquare : public GemShape
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN colorSquare : public GemShape
         //////////
         // Constructor
     	colorSquare(t_floatarg size);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~colorSquare();
@@ -63,7 +63,7 @@ class GEM_EXTERN colorSquare : public GemShape
         float           m_color[4][3];
 
     private:
-    
+
        	//////////
     	// static member functions
     	static void 	vert0MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);

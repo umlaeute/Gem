@@ -29,7 +29,7 @@ CPPEXTERN_NEW(gemlist);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemlist :: gemlist(void) 
+gemlist :: gemlist(void)
   : m_validState(false),
     m_tickTime(-1.f),
     m_lightState(false),
@@ -78,16 +78,16 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
 {
   if  ( !GemMan::windowExists() ) {
     // LATER: shouldn't this test for a valid context rather than an existing window??
-    //	error("you should not bang the gemlist now"); 
+    //	error("you should not bang the gemlist now");
     return;
   }
-  
+
   if(state) {
     t_atom ap[2];
-    
+
     if(!cache)
       cache=m_mycache;
-    
+
     ap->a_type=A_POINTER;
     ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(cache);
     (ap+1)->a_type=A_POINTER;

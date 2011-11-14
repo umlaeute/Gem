@@ -46,7 +46,7 @@ world_light :: world_light(t_floatarg lightNum)
   m_light = GemMan::requestLight(num);
   m_on = 1;
   m_change = 1;
-            
+
   // create the color inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("clrlist"));
 }
@@ -124,7 +124,7 @@ void world_light :: stopRendering()
 {
   if (m_thing)gluDeleteQuadric(m_thing);
   m_thing = NULL;
-  
+
   if (m_light)glDisable(m_light);
   m_change = 1;
 }
@@ -160,12 +160,12 @@ void world_light :: render(GemState *state)
           glDisable(m_light);
           return;
         }
-      
+
       glEnable(m_light);
       glLightfv(m_light, GL_DIFFUSE,  m_color);
       glLightfv(m_light, GL_SPECULAR, m_color);
     }
-  
+
   if (m_on)
     {
       glLightfv(m_light, GL_POSITION, m_position);

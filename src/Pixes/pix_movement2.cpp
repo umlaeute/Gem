@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_movement2, t_float,A_DEFFLOAT,t_float, A_DEFFLOA
   Constructor
   initializes the pixBlocks and pixBlobs
   ------------------------------------------------------------*/
-  pix_movement2 :: pix_movement2(t_float lothresh, t_float hithresh): 
+  pix_movement2 :: pix_movement2(t_float lothresh, t_float hithresh):
     m_frameIndex(0),
     m_storeBackground(true), m_resetThreshold(true)
 {
@@ -90,7 +90,7 @@ void pix_movement2 :: processImage(imageStruct &image){
     m_background.xsize = image.xsize;
     m_background.ysize = image.ysize;
     m_background.reallocate();
-    
+
     m_threshold.xsize = image.xsize;
     m_threshold.ysize = image.ysize;
     m_threshold.reallocate();

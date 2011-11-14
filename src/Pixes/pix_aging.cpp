@@ -73,16 +73,16 @@ void pix_aging :: processImage(imageStruct &image)
   unsigned char a;
   int width = image.xsize * image.csize;
   int height= image.ysize;
- 
+
   int n;
-  
+
   if (m_coloraging){
     n=count;
     while(n--){
       a = (*pixes & 0xfc)>>2;
       //      *pixes++ += 0x18 + ((fastrand()>>8)&0x10) - a;
       *pixes++ += 0x28 + fastrand()%8 - a;
-    } 
+    }
   }
   if (m_scratching){
    int i, y, y1, y2;
@@ -123,7 +123,7 @@ void pix_aging :: processImage(imageStruct &image)
 	  pixes[chRed]=0xc0;
 	  pixes[chGreen]=0xc0;
 	  pixes[chBlue]=0xc0;
-	
+
 	  pixes += width;
 	}
       } else {
@@ -175,14 +175,14 @@ void pix_aging :: processImage(imageStruct &image)
     int d, len;
     int x, y;
     pixes = image.data;
-    
+
     if(m_dustinterval == 0) {
       if((fastrand()&0xf0000000) == 0) {
 	m_dustinterval = fastrand()>>29;
       }
       return;
     }
-    
+
     dnum = m_areascale*4 + (fastrand()>>27);
     for(i=0; i<dnum; i++) {
       x = fastrand()%width;
@@ -202,7 +202,7 @@ void pix_aging :: processImage(imageStruct &image)
       ;
     }
     m_dustinterval--;
-  } 
+  }
 }
 
 void pix_aging :: scratchMess(int scratchlines)
@@ -239,7 +239,7 @@ void pix_aging :: colorMessCallback(void *data, t_floatarg state)
 }
 void pix_aging :: scratchMessCallback(void *data, t_floatarg state)
 {
-  GetMyClass(data)->scratchMess((int)state);  
+  GetMyClass(data)->scratchMess((int)state);
   GetMyClass(data)->setPixModified();
 }
 void pix_aging :: dustMessCallback(void *data, t_floatarg state)

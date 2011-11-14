@@ -38,10 +38,10 @@
 #ifdef GLX_VERSION_1_3
 struct PBuffer_data {
   Display *display;
-	
+
   GLXPbuffer pbuffer;
   GLXContext context;
-	
+
   GLXPbuffer old_pbuffer;
   GLXContext old_context;
 };
@@ -50,11 +50,11 @@ struct PBuffer_data {
  * constructor (linux specific)
  */
 PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height), data(NULL)
-{	
+{
   Display *display = glXGetCurrentDisplay();
   int screen = DefaultScreen(display);
   GLXContext old_context = glXGetCurrentContext();
-	
+
   std::vector<int> attrib;
   attrib.push_back(GLX_RENDER_TYPE);
   attrib.push_back(GLX_RGBA_BIT);
@@ -91,17 +91,17 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height),
     attrib.push_back(flags & GEM_PBUFLAG_MULTISAMPLE_2 ? 2 : 4);
   }
   attrib.push_back(0);
-	
+
   std::vector<int> pattrib;
-	
+
   pattrib.push_back(GLX_LARGEST_PBUFFER);
   pattrib.push_back(true);
   pattrib.push_back(GLX_PRESERVED_CONTENTS);
   pattrib.push_back(true);
-	
+
   GLXPbuffer pbuffer;
   GLXContext context;
-	
+
   try {
     int count;
     GLXFBConfig *config;
@@ -109,13 +109,13 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height),
     if(GLXEW_SGIX_fbconfig && GLXEW_SGIX_pbuffer) {
       debug("using SGIX pbuffers\n");
       pattrib.push_back(0);
-			
+
       config = glXChooseFBConfigSGIX(display,screen,&attrib[0],&count);
       if(!config) throw("glXChooseFBConfigSGIX() failed");
-			
+
       pbuffer = glXCreateGLXPbufferSGIX(display,config[0],width,height,&pattrib[0]);
       if(!pbuffer) throw("glXCreateGLXPbufferSGIX() failed");
-			
+
       context = glXCreateContextWithConfigSGIX(display,config[0],GLX_RGBA_TYPE,old_context,true);
       if(!context) throw("glXCreateContextWithConfigSGIX() failed");
     } else if (NULL!=glXChooseFBConfig) { /* LATER make a better check! */
@@ -126,15 +126,15 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height),
         pattrib.push_back(height);
         pattrib.push_back(0);
 
-        config = glXChooseFBConfig(display,screen,&attrib[0],&count);	
+        config = glXChooseFBConfig(display,screen,&attrib[0],&count);
         if(!config) throw("glXChooseFBConfig() failed");
 
         pbuffer = glXCreatePbuffer(display,config[0],&pattrib[0]);
         if(!pbuffer) throw("glXCreatePbuffer() failed");
-			
+
         XVisualInfo *visual = glXGetVisualFromFBConfig(display,config[0]);
         if(!visual) throw("glXGetVisualFromFBConfig() failed");
-			
+
         context = glXCreateContext(display,visual,old_context,true);
         if(!context) throw("glXCreateContext() failed");
     } else {
@@ -146,13 +146,13 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height),
     pbuffer = glXGetCurrentDrawable();
     context = old_context;
   }
-	
+
   data = new PBuffer_data;
   data->display = display;
-	
+
   data->pbuffer = pbuffer;
   data->context = context;
-	
+
   data->old_pbuffer = glXGetCurrentDrawable();
   data->old_context = old_context;
 }
@@ -170,7 +170,7 @@ PBuffer::~PBuffer() {
 void PBuffer::enable() {
   data->old_pbuffer = glXGetCurrentDrawable();
   data->old_context = glXGetCurrentContext();
-	
+
   if(!glXMakeCurrent(data->display,data->pbuffer,data->context)) {
     error("PBuffer::enable(): glXMakeCurrent() failed");
   }
@@ -192,7 +192,7 @@ void PBuffer::disable() {
 struct PBuffer_data {
   CGLPBufferObj		pbuffer;
   CGLContextObj		context;
-	
+
   CGLContextObj		old_context;
   CGLPixelFormatObj	pixfmt;
 };
@@ -238,7 +238,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   //	*att++=kCGLPFAPBuffer;
   *att++=kCGLPFAColorSize;
   *att++=(CGLPixelFormatAttribute)32;
-		
+
   if (flag & GEM_PBUFLAG_DEPTH){
     *att++=kCGLPFADepthSize;
     //*att++=(CGLPixelFormatAttribute)24;
@@ -255,22 +255,22 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   //*att++=kCGLPFADoubleBuffer;
   //	*att++=kCGLPFADisplayMask;
   //	*att++=kCGLPFAAllRenderers;
-		
+
   *att=(CGLPixelFormatAttribute)0;
-						
+
   data = new PBuffer_data;
   data->old_context = CGLGetCurrentContext();
   err = CGLGetVirtualScreen(data->old_context, &vs);
   verbose (2, "Target Context (0x%X) Renderer: %s\n",data->old_context, glGetString (GL_RENDERER));
   cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &npf));
-	
+
   cglReportError(CGLCreateContext (data->pixfmt, data->old_context, &(data->context)));
   verbose (2, "pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
-	
+
   /*	if (float_buffer)
     cglReportError( CGLCreatePBuffer ( width, height, GL_TEXTURE_2D, GL_FLOAT, 0, &(data->pbuffer) ) );
     else
-       */	
+       */
     cglReportError( CGLCreatePBuffer ( width, height, GL_TEXTURE_RECTANGLE_EXT, GL_RGBA, 0, &(data->pbuffer) ));
     cglReportError( CGLSetCurrentContext( data->context ) );
     cglReportError( CGLGetVirtualScreen(data->old_context, &vs) );
@@ -286,7 +286,7 @@ PBuffer::~PBuffer()
   if(data->pbuffer) CGLDestroyPBuffer( data->pbuffer );
   if(data->pixfmt) CGLDestroyPixelFormat( data->pixfmt );
   CGLSetCurrentContext(NULL);
-	
+
   delete data;
 }
 
@@ -317,7 +317,7 @@ struct PBuffer_data {
   HDC hdc;
   HPBUFFERARB pbuffer;
   HGLRC context;
-	
+
   HDC old_hdc;
   HGLRC old_context;
 };
@@ -341,10 +341,10 @@ static PFNWGLDESTROYPBUFFERARBPROC wglDestroyPbufferARB = NULL;
  * constructor (w32 specific)
  */
 PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) {
-	
+
   HDC old_hdc = wglGetCurrentDC();
   HGLRC old_context = wglGetCurrentContext();
-	
+
   std::vector<int> attrib;
   attrib.push_back(WGL_PIXEL_TYPE_ARB);
   attrib.push_back(WGL_TYPE_RGBA_ARB);
@@ -383,44 +383,44 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
     attrib.push_back(flags & 	GEM_PBUFLAG_MULTISAMPLE_2 ? 2 : 4);
   }
   attrib.push_back(0);
-	
+
   HDC hdc;
   HPBUFFERARB pbuffer;
   HGLRC context;
-	
+
   try {
-		
+
     if(!wglChoosePixelFormatARB) wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     if(!wglChoosePixelFormatARB) throw("wglGetProcAddress(\"wglChoosePixelFormatARB\") failed");
-		
+
     if(!wglCreatePbufferARB) wglCreatePbufferARB = (PFNWGLCREATEPBUFFERARBPROC)wglGetProcAddress("wglCreatePbufferARB");
     if(!wglCreatePbufferARB) throw("wglGetProcAddress(\"wglCreatePbufferARB\") failed");
-		
+
     if(!wglGetPbufferDCARB) wglGetPbufferDCARB = (PFNWGLGETPBUFFERDCARBPROC)wglGetProcAddress("wglGetPbufferDCARB");
     if(!wglGetPbufferDCARB) throw("wglGetProcAddress(\"wglGetPbufferDCARB\") failed");
-		
+
     if(!wglReleasePbufferDCARB) wglReleasePbufferDCARB = (PFNWGLRELEASEPBUFFERDCARBPROC)wglGetProcAddress("wglReleasePbufferDCARB");
     if(!wglReleasePbufferDCARB) throw("wglGetProcAddress(\"wglReleasePbufferDCARB\") failed\n");
-		
+
     if(!wglDestroyPbufferARB) wglDestroyPbufferARB = (PFNWGLDESTROYPBUFFERARBPROC)wglGetProcAddress("wglDestroyPbufferARB");
     if(!wglDestroyPbufferARB) throw("wglGetProcAddress(\"wglDestroyPbufferARB\") failed\n");
-		
+
     int pixelformat;
     unsigned int count;
     wglChoosePixelFormatARB(old_hdc,&attrib[0],NULL,1,&pixelformat,&count);
     if(count == 0) throw("wglChoosePixelFormatARB() failed");
-		
+
     int pattrib[] = { 0 };
-		
+
     pbuffer = wglCreatePbufferARB(old_hdc,pixelformat,width,height,pattrib);
     if(!pbuffer) throw("wglCreatePbufferARB() failed");
-		
+
     hdc = wglGetPbufferDCARB(pbuffer);
     if(!hdc) throw("wglGetPbufferDCARB() failed");
-		
+
     context = wglCreateContext(hdc);
     if(!context) throw("wglCreateContext() failed");
-		
+
     if(!wglShareLists(old_context,context)) throw("wglShareLists() failed");
   }
   catch(const char *err) {
@@ -428,12 +428,12 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
     hdc = old_hdc;
     context = old_context;
   }
-	
+
   data = new PBuffer_data;
   data->hdc = hdc;
   data->pbuffer = pbuffer;
   data->context = context;
-	
+
   data->old_hdc = old_hdc;
   data->old_context = old_context;
 }
@@ -452,7 +452,7 @@ PBuffer::~PBuffer() {
 void PBuffer::enable() {
   data->old_hdc = wglGetCurrentDC();
   data->old_context = wglGetCurrentContext();
-	
+
   if(!wglMakeCurrent(data->hdc,data->context)) {
     error("PBuffer::disable(): wglMakeCurrent() failed");
   }

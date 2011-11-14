@@ -601,7 +601,7 @@ static GLuint fixIndex(GLint current, GLuint baseindex) {
 
   if(current>0)
     return (GLuint)(current);
- 
+
   idx=(baseindex+current);
   if(idx>0)
     return (GLuint)idx;

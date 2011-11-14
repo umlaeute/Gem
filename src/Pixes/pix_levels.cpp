@@ -26,35 +26,35 @@ CPPEXTERN_NEW(pix_levels);
 //
 /////////////////////////////////////////////////////////
 pix_levels :: pix_levels()
-{ 
+{
     m_DoAuto = false;
     m_DoUniform = true;
     m_DoAllowInversion = true;
-    
+
     m_UniformInputFloor = 0.0f;		// 0 to 255
     m_UniformInputCeiling = 255.0f;	// 0 to 255
     m_UniformOutputFloor = 0.0f;	// 0 to 255
     m_UniformOutputCeiling = 255.0f;	// 0 to 255
-    
+
     m_RedInputFloor = 0.0f;		// 0 to 255
     m_RedInputCeiling = 255.0f;		// 0 to 255
     m_RedOutputFloor = 0.0f;		// 0 to 255
     m_RedOutputCeiling = 255.0f;	// 0 to 255
-    
+
     m_GreenInputFloor = 0.0f;		// 0 to 255
     m_GreenInputCeiling = 255.0f;	// 0 to 255
     m_GreenOutputFloor = 0.0f;		// 0 to 255
     m_GreenOutputCeiling = 255.0f;	// 0 to 255
-    
+
     m_BlueInputFloor = 0.0f;		// 0 to 255
     m_BlueInputCeiling = 255.0f;	// 0 to 255
     m_BlueOutputFloor = 0.0f;		// 0 to 255
     m_BlueOutputCeiling = 255.0f;	// 0 to 255
- 
+
     m_AlphaInputFloor = 0.0f;		// 0 to 255
     m_AlphaInputCeiling = 255.0f;	// 0 to 255
     m_AlphaOutputFloor = 0.0f;		// 0 to 255
-    m_AlphaOutputCeiling = 255.0f;	// 0 to 255  
+    m_AlphaOutputCeiling = 255.0f;	// 0 to 255
 
     m_LowPercentile = 5.0f;		// 0 to 100
     m_HighPercentile = 95.0f;		// 0 to 100
@@ -82,7 +82,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
 {
     nWidth = image.xsize*image.csize/4;
     nHeight = image.ysize;
-    
+
     pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
@@ -259,22 +259,22 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
 	    const int nSourceGreen=nCount;
 	    const int nSourceBlue =nCount;
 	    const int nSourceAlpha=nCount;
-	    
+
 	    const int nTempRed=  (((nSourceRed  -nRedInputLow  )*256)*nRedRecipInputDelta  )>>cnFixedShift;
 	    const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
 	    const int nTempBlue= (((nSourceBlue -nBlueInputLow )*256)*nBlueRecipInputDelta )>>cnFixedShift;
 	    const int nTempAlpha=(((nSourceAlpha-nAlphaInputLow)*256)*nAlphaRecipInputDelta)>>cnFixedShift;
-	    
+
 	    int nOutputRed  =((nTempRed  *nRedOutputDelta  )/256)+nRedOutputLow;
 	    int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
 	    int nOutputBlue =((nTempBlue *nBlueOutputDelta )/256)+nBlueOutputLow;
 	    int nOutputAlpha=((nTempAlpha*nAlphaOutputDelta)/256)+nAlphaOutputLow;
-	    
+
 	    nOutputRed  =clampFunc(nOutputRed  ,0,255);
 	    nOutputGreen=clampFunc(nOutputGreen,0,255);
 	    nOutputBlue =clampFunc(nOutputBlue ,0,255);
 	    nOutputAlpha=clampFunc(nOutputAlpha,0,255);
-	    
+
 	    pRedTable  [nCount]=(nOutputRed);
 	    pGreenTable[nCount]=(nOutputGreen);
 	    pBlueTable [nCount]=(nOutputBlue);
@@ -295,7 +295,7 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour) {
 	Pete_ZeroMemory(&nAlphaHistogram[0],256*sizeof(int));
 
 	const int nNumPixels = nWidth*nHeight;
-	
+
 	U32* pCurrentSource=pSource;
 	const U32* pSourceEnd=(pSource+nNumPixels);
 
@@ -467,12 +467,12 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour) {
 		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh-1);
 	}
 
-	int nLowLuminance = 
+	int nLowLuminance =
 		((90 * nRedLow)+
 		(115 * nGreenLow)+
 		(51 * nBlueLow))/256;
 
-	int nHighLuminance = 
+	int nHighLuminance =
 		((90 * nRedHigh)+
 		(115 * nGreenHigh)+
 		(51 * nBlueHigh))/256;
@@ -625,7 +625,7 @@ void pix_levels :: lowPCallback(void *data, t_floatarg m_LowPercentile)
 }
 void pix_levels :: hiPCallback(void *data, t_floatarg m_HighPercentile)
 {
-  GetMyClass(data)->m_HighPercentile=(m_HighPercentile);  
+  GetMyClass(data)->m_HighPercentile=(m_HighPercentile);
   GetMyClass(data)->setPixModified();
 }
 
@@ -634,7 +634,7 @@ void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t
   GetMyClass(data)->m_UniformInputFloor=(m_UniformInputFloor*255.);
   GetMyClass(data)->m_UniformInputCeiling=(m_UniformInputCeiling*255.);
   GetMyClass(data)->m_UniformOutputFloor=(m_UniformOutputFloor*255.);
-  GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling*255.);  
+  GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
 void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatarg m_RedInputCeiling, t_floatarg m_RedOutputFloor, t_floatarg m_RedOutputCeiling)
@@ -642,7 +642,7 @@ void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatar
   GetMyClass(data)->m_RedInputFloor=(m_RedInputFloor*255.);
   GetMyClass(data)->m_RedInputCeiling=(m_RedInputCeiling*255.);
   GetMyClass(data)->m_RedOutputFloor=(m_RedOutputFloor*255.);
-  GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling*255.);  
+  GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
 void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_floatarg m_GreenInputCeiling, t_floatarg m_GreenOutputFloor, t_floatarg m_GreenOutputCeiling)
@@ -650,7 +650,7 @@ void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_flo
   GetMyClass(data)->m_GreenInputFloor=(m_GreenInputFloor*255.);
   GetMyClass(data)->m_GreenInputCeiling=(m_GreenInputCeiling*255.);
   GetMyClass(data)->m_GreenOutputFloor=(m_GreenOutputFloor*255.);
-  GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling*255.);  
+  GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
 void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_floatarg m_BlueInputCeiling, t_floatarg m_BlueOutputFloor, t_floatarg m_BlueOutputCeiling)
@@ -658,6 +658,6 @@ void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_float
   GetMyClass(data)->m_BlueInputFloor=(m_BlueInputFloor*255.);
   GetMyClass(data)->m_BlueInputCeiling=(m_BlueInputCeiling*255.);
   GetMyClass(data)->m_BlueOutputFloor=(m_BlueOutputFloor*255.);
-  GetMyClass(data)->m_BlueOutputCeiling=(m_BlueOutputCeiling*255.);  
+  GetMyClass(data)->m_BlueOutputCeiling=(m_BlueOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }

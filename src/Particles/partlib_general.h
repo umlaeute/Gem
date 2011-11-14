@@ -33,12 +33,12 @@ struct ParticleGroup
 	int max_particles;	// Max particles allowed in group.
 	int particles_allocated; // Actual allocated size.
 	Particle list[1];	// Actually, num_particles in size
-	
+
 	inline void Remove(int i)
 	{
 		list[i] = list[--p_count];
 	}
-	
+
 	inline bool Add(const pVector &pos, const pVector &posB,
 		const pVector &size, const pVector &vel, const pVector &color,
 		const float alpha = 1.0f,
@@ -71,16 +71,16 @@ struct pDomain
 	float radius2;		// Inner radius
 	float radius1Sqr;	// Used for fast Within test of spheres,
 	float radius2Sqr;	// and for mag. of u and v vectors for plane.
-	
+
 	bool Within(const pVector &) const;
 	void Generate(pVector &) const;
-	
+
 	// This constructor is used when default constructing a
 	// ParticleAction that has a pDomain.
 	inline pDomain()
 	{
 	}
-	
+
 	// Construct a domain in the standard way.
 	pDomain(PDomainEnum dtype,
 		float a0=0.0f, float a1=0.0f, float a2=0.0f,
@@ -95,32 +95,32 @@ enum PActionEnum
 	PAHeaderID,			// The first action in each list.
 	PAAvoidID,			// Avoid entering the domain of space.
 	PABounceID,			// Bounce particles off a domain of space.
-	PACallActionListID,	// 
+	PACallActionListID,	//
 	PACopyVertexBID,	// Set the secondary position from current position.
 	PADampingID,		// Dampen particle velocities.
 	PAExplosionID,		// An Explosion.
 	PAFollowID,			// Accelerate toward the previous particle in the group.
 	PAGravitateID,		// Accelerate each particle toward each other particle.
 	PAGravityID,		// Acceleration in the given direction.
-	PAJetID,			// 
-	PAKillOldID,		// 
-	PAKillSlowID,		// 
-	PAMatchVelocityID,	// 
-	PAMoveID,			// 
-	PAOrbitLineID,		// 
-	PAOrbitPointID,		// 
-	PARandomAccelID,	// 
-	PARandomDisplaceID,	// 
-	PARandomVelocityID,	// 
-	PARestoreID,		// 
-	PASinkID,			// 
-	PASinkVelocityID,	// 
-	PASourceID,			// 
-	PASpeedLimitID,		// 
-	PATargetColorID,	// 
-	PATargetSizeID,		// 
-	PATargetVelocityID,	// 
-	PAVortexID			// 
+	PAJetID,			//
+	PAKillOldID,		//
+	PAKillSlowID,		//
+	PAMatchVelocityID,	//
+	PAMoveID,			//
+	PAOrbitLineID,		//
+	PAOrbitPointID,		//
+	PARandomAccelID,	//
+	PARandomDisplaceID,	//
+	PARandomVelocityID,	//
+	PARestoreID,		//
+	PASinkID,			//
+	PASinkVelocityID,	//
+	PASourceID,			//
+	PASpeedLimitID,		//
+	PATargetColorID,	//
+	PATargetSizeID,		//
+	PATargetVelocityID,	//
+	PAVortexID			//
 };
 
 // This method actually does the particle's action.
@@ -141,7 +141,7 @@ struct PAHeader : public ParticleAction
 	int actions_allocated;
 	int count;			// Total actions in the list.
 	float padding[96];	// This must be the largest action.
-	
+
 	ExecMethod
 };
 
@@ -151,7 +151,7 @@ struct PAAvoid : public ParticleAction
 	float look_ahead;	// how many time units ahead to look
 	float magnitude;	// what percent of the way to go each time
 	float epsilon;		// add to r^2 for softening
-	
+
 	ExecMethod
 };
 
@@ -161,14 +161,14 @@ struct PABounce : public ParticleAction
 	float oneMinusFriction;	// Friction tangent to surface
 	float resilience;	// Resilence perpendicular to surface
 	float cutoffSqr;	// cutoff velocity; friction applies iff v > cutoff
-	
+
 	ExecMethod
 };
 
 struct PACallActionList : public ParticleAction
 {
 	int action_list_num;	// The action list number to call
-	
+
 	ExecMethod
 };
 
@@ -176,7 +176,7 @@ struct PACopyVertexB : public ParticleAction
 {
 	bool copy_pos;		// True to copy pos to posB.
 	bool copy_vel;		// True to copy vel to velB.
-	
+
 	ExecMethod
 };
 
@@ -185,7 +185,7 @@ struct PADamping : public ParticleAction
 	pVector damping;	// Damping constant applied to velocity
 	float vlowSqr;		// Low and high cutoff velocities
 	float vhighSqr;
-	
+
 	ExecMethod
 };
 
@@ -197,7 +197,7 @@ struct PAExplosion : public ParticleAction
 	float stdev;		// Sharpness or width of shock wave
 	float age;			// How long it's been going on
 	float epsilon;		// Softening parameter
-	
+
 	ExecMethod
 };
 
@@ -206,7 +206,7 @@ struct PAFollow : public ParticleAction
 	float magnitude;	// The grav of each particle
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
@@ -215,14 +215,14 @@ struct PAGravitate : public ParticleAction
 	float magnitude;	// The grav of each particle
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
 struct PAGravity : public ParticleAction
 {
 	pVector direction;	// Amount to increment velocity
-	
+
 	ExecMethod
 };
 
@@ -233,7 +233,7 @@ struct PAJet : public ParticleAction
 	float magnitude;	// Scales acceleration
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
@@ -241,7 +241,7 @@ struct PAKillOld : public ParticleAction
 {
 	float age_limit;		// Exact age at which to kill particles.
 	bool kill_less_than;	// True to kill particles less than limit.
-	
+
 	ExecMethod
 };
 
@@ -258,13 +258,13 @@ struct PAMatchVelocity : public ParticleAction
 	float magnitude;	// The grav of each particle
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
 struct PAMove : public ParticleAction
 {
-	
+
 	ExecMethod
 };
 
@@ -274,7 +274,7 @@ struct PAOrbitLine : public ParticleAction
 	float magnitude;	// Scales acceleration
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
@@ -284,35 +284,35 @@ struct PAOrbitPoint : public ParticleAction
 	float magnitude;	// Scales acceleration
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
 struct PARandomAccel : public ParticleAction
 {
 	pDomain gen_acc;	// The domain of random accelerations.
-	
+
 	ExecMethod
 };
 
 struct PARandomDisplace : public ParticleAction
 {
 	pDomain gen_disp;	// The domain of random displacements.
-	
+
 	ExecMethod
 };
 
 struct PARandomVelocity : public ParticleAction
 {
 	pDomain gen_vel;	// The domain of random velocities.
-	
+
 	ExecMethod
 };
 
 struct PARestore : public ParticleAction
 {
 	float time_left;		// Time remaining until they should be in position.
-	
+
 	ExecMethod
 };
 
@@ -320,7 +320,7 @@ struct PASink : public ParticleAction
 {
 	bool kill_inside;	// True to dispose of particles *inside* domain
 	pDomain position;	// Disposal region
-	
+
 	ExecMethod
 };
 
@@ -328,7 +328,7 @@ struct PASinkVelocity : public ParticleAction
 {
 	bool kill_inside;	// True to dispose of particles with vel *inside* domain
 	pDomain velocity;	// Disposal region
-	
+
 	ExecMethod
 };
 
@@ -336,7 +336,7 @@ struct PASpeedLimit : public ParticleAction
 {
 	float min_speed;		// Clamp speed to this minimum.
 	float max_speed;		// Clamp speed to this maximum.
-	
+
 	ExecMethod
 };
 
@@ -352,7 +352,7 @@ struct PASource : public ParticleAction
 	float age;			// Initial age of the particles
 	float age_sigma;	// St. dev. of initial age of the particles
 	bool vertexB_tracks;	// True to get positionB from position.
-	
+
 	ExecMethod
 };
 
@@ -361,7 +361,7 @@ struct PATargetColor : public ParticleAction
 	pVector color;		// Color to shift towards
 	float alpha;		// Alpha value to shift towards
 	float scale;		// Amount to shift by (1 == all the way)
-	
+
 	ExecMethod
 };
 
@@ -369,7 +369,7 @@ struct PATargetSize : public ParticleAction
 {
 	pVector size;		// Size to shift towards
 	pVector scale;		// Amount to shift by per frame (1 == all the way)
-	
+
 	ExecMethod
 };
 
@@ -377,7 +377,7 @@ struct PATargetVelocity : public ParticleAction
 {
 	pVector velocity;	// Velocity to shift towards
 	float scale;		// Amount to shift by (1 == all the way)
-	
+
 	ExecMethod
 };
 
@@ -388,7 +388,7 @@ struct PAVortex : public ParticleAction
 	float magnitude;	// Scale for rotation around axis
 	float epsilon;		// Softening parameter
 	float max_radius;	// Only influence particles within max_radius
-	
+
 	ExecMethod
 };
 
@@ -399,20 +399,20 @@ struct _ParticleState
 	bool in_call_list;
 	bool in_new_list;
 	bool vertexB_tracks;
-	
+
 	int group_id;
 	int list_id;
 	ParticleGroup *pgrp;
 	PAHeader *pact;
 	int tid; // Only used in the MP case, but always define it.
-	
+
 	// These are static because all threads access the same groups.
 	// All accesses to these should be locked.
 	static ParticleGroup **group_list;
 	static PAHeader **alist_list;
 	static int group_count;
 	static int alist_count;
-	
+
 	pDomain Size;
 	pDomain Vel;
 	pDomain VertexB;
@@ -420,9 +420,9 @@ struct _ParticleState
 	float Alpha;
 	float Age;
 	float AgeSigma;
-	
+
 	_ParticleState();
-	
+
 	// Return an index into the list of particle groups where
 	// p_group_count groups can be added.
 	int GenerateGroups(int p_group_count);
@@ -437,7 +437,7 @@ inline _ParticleState &_GetPState()
 {
 	// Returns a reference to the appropriate particle state.
 	extern _ParticleState &_GetPStateWithTID();
-	
+
 	return _GetPStateWithTID();
 }
 
@@ -449,7 +449,7 @@ inline _ParticleState &_GetPState()
 {
 	// This is the global state.
 	extern _ParticleState __ps;
-	
+
 	return __ps;
 }
 #endif

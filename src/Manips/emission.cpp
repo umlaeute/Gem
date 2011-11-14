@@ -91,7 +91,7 @@ void emission :: emissionMess(float red, float green, float blue, float alpha)
 void emission :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&emission::emissionMessCallback),
-    	    gensym("emission"), A_GIMME, A_NULL); 
+    	    gensym("emission"), A_GIMME, A_NULL);
 }
 void emission :: emissionMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

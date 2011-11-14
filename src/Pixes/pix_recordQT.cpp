@@ -25,7 +25,7 @@
 
 
 CPPEXTERN_NEW_WITH_GIMME(pix_recordQT);
- 
+
   /////////////////////////////////////////////////////////
 //
 // pix_recordQT
@@ -52,12 +52,12 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
     error("needs 0, 2, or 4 values");
     m_xoff = m_yoff = 0;
     m_width = m_height = 128;
-	 
+
   }
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("size"));
-  
+
   m_outNumFrames = outlet_new(this->x_obj, 0);
 
   m_automatic = false;
@@ -66,20 +66,20 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
  // sprintf(m_pathname, "/Users/lincoln/Movies/temp");
 
   m_filename[0] = NULL;
-    
+
   m_banged = false;
-  
+
 
 # ifdef _WIN32
   // Initialize QuickTime Media Layer
 
-  
+
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
     error("Could not initialize quicktime: error %d\n", err);
     return;
   }
-	
+
   // Initialize QuickTime
   if (err = EnterMovies()) {
     error("Could not initialize quicktime: error %d\n", err);
@@ -94,7 +94,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
 	CodecNameSpec	codecName;
 	int	i;
 	int count;
-	
+
 	GetCodecNameList(&codecList,1);
 	post("%i codecs installed",codecList->count);
 	if (codecList->count < 64) count = codecList->count; else count = 64;
@@ -105,7 +105,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
 		codecContainer[i].ctype = codecName.cType;
 		codecContainer[i].codec = codecName.codec;
 		}
-  
+
   //initialize member variables
   stdComponent = NULL;
   hImageDesc = NULL;
@@ -115,7 +115,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_recordStop = 0;
   m_recordSetup = 0;
   m_codecType = kJPEGCodecType;
-  
+
   for(i = 0; i < count; i++){
 		if (codecContainer[i].ctype == kJPEGCodecType) m_codec = codecContainer[i].codec;
   }
@@ -126,25 +126,25 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_codecQualitySet = true;
   m_dialog = 0;
   m_currentFrame = 0;
-  
+
   #ifdef __APPLE__
   m_colorspace = GL_YUV422_GEM;
   #else
   m_colorspace = GL_BGRA_EXT;
   #endif
-  
+
   m_firstRun = 1;
-  
+
   m_ticks = 20;
-  
+
  // post("anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
-	
+
 	if (stdComponent == NULL){
 		post("failed to open compressor component");
 		return;
 	}
-	   
+
 }
 
 /////////////////////////////////////////////////////////
@@ -158,7 +158,7 @@ pix_recordQT :: ~pix_recordQT()
 	post("deconstructor");
 	if (stdComponent != NULL){
 	compErr = CloseComponent(stdComponent);
-	
+
 	if (compErr != noErr) post("CloseComponent failed with error %d",compErr);
 
 	}
@@ -166,14 +166,14 @@ pix_recordQT :: ~pix_recordQT()
 	/*
 	#ifdef HAVE_QUICKTIME
 # ifdef _WIN32
-	
+
 	post("exiting QT");
   // Initialize QuickTime
   ExitMovies();
-  
+
   // Initialize QuickTime Media Layer
   TerminateQTML();
-	
+
 # endif // WINDOWS
 #endif
 */
@@ -189,11 +189,11 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	FSSpec		theFSSpec;
     OSErr		err = noErr;
     FSRef		ref;
-	
+
 	ComponentResult			compErr = noErr;
 
 	m_recordSetup = 0; //if it fails then there is no setup
-	
+
 	//this mess should create and open a file for QT to use
 	//probably should be a separate function
 	//post("filename %s",m_filename);
@@ -202,7 +202,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
         error("no filename passed");
 		return;
 #ifdef __APPLE__
-		} else {            
+		} else {
 			err = ::FSPathMakeRef((UInt8*)m_filename, &ref, NULL);
 			if (err == fnfErr) {
 				// if the file does not yet exist, then let's create the file
@@ -218,15 +218,15 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 						//post("made new file %s",m_filename);
 			}
 
-    
 
-			
+
+
 
 			if (err) {
 				error("Unable to make file ref from filename %s", m_filename);
 				return;
 			}
-			
+
 			//err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
 			err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
 
@@ -234,10 +234,10 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 					error("error %d in FSGetCatalogInfo()", err);
 					return;
 				}
-		
-		
+
+
 			err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
-			
+
 			if (err != noErr && err != -37){
 					error("error %d in FSMakeFSSpec()", err);
 					return;
@@ -262,12 +262,12 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 					error("error %d in FSMakeFSSpec()", err);
 					return;
 				}
-	
+
 
 	}
-#endif    //APPLE 
+#endif    //APPLE
 
-	//create the movie from the file 
+	//create the movie from the file
 	err = CreateMovieFile(	&theFSSpec,
 							FOUR_CHAR_CODE('TVOD'),
 							smSystemScript,
@@ -281,7 +281,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		m_recordSetup = -1;
 		return;
 		}
-	
+
 
 
 	//give QT the dimensions of the image to compress
@@ -289,7 +289,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	m_srcRect.left = 0;
 	m_srcRect.bottom = m_height;
 	m_srcRect.right = m_width;
-	
+
 
 	if (m_colorspace == GL_YUV422_GEM){
 
@@ -298,7 +298,7 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 
 		//give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)
 		m_rowBytes = m_width * 2;
-		
+
 		//m_srcGWorld = NULL;//probably a memory leak
 		err = QTNewGWorldFromPtr(&m_srcGWorld,
 								k422YpCbCr8CodecType,
@@ -309,13 +309,13 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 								0,
 								m_compressImage.data,
 								m_rowBytes);
-	
+
 	}else{
 			//give QT the length of each pixel row in bytes (4 for ARGB)
 		m_rowBytes = m_width * 4;
-		
+
 		#ifdef __APPLE__
-		
+
 		//m_srcGWorld = NULL;//probably a memory leak
 		err = QTNewGWorldFromPtr(&m_srcGWorld,
 								k32ARGBPixelFormat,
@@ -338,12 +338,12 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		#endif
 
 	}
-	
+
 	if (err != noErr){
 		error("QTNewGWorldFromPtr failed with error %d",err);
 		return;
 		}
-	
+
 	SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
 
 #ifdef _WIN32
@@ -353,52 +353,52 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 	ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
 	SetMovieMatrix(m_movie,&aMatrix);
 #endif
-	
+
 	track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
-	
+
 	media = NewTrackMedia(track,VideoMediaType,600,NULL,0);
-	
+
 	//moved to constructor
 	/*
 	stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
-	
+
 	if (stdComponent == NULL){
 		error("failed to open compressor component");
 		return;
 	}*/
-	
+
 	//if the settings aren't already set then go ahead and do them
 	//if (!m_spatialQuality || !m_codecType || m_dialog ){
 	if (m_dialog ){
-	
+
 		//close the component if already open
 		if (stdComponent) compErr = CloseComponent(stdComponent);
-	
+
 		if (compErr != noErr) error("CloseComponent failed with error %d",compErr);
-		
+
 		//open a new component from scratch
 		stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
-	
+
 		if (stdComponent == NULL){
 			error("failed to open compressor component");
 			return;
 		}
-		
+
 		post("opening settings Dialog");
 		compErr = SCRequestSequenceSettings(stdComponent);
-	
+
 		if (compErr != noErr) error("SCRequestSequenceSettings failed with error %d",compErr);
-	
+
 		compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
 		compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
-	
+
 		if (compErr != noErr) error("SCGetInfo failed with error %d",compErr);
-		
+
 		m_codecType = SpatialSettings.codecType;
 		m_depth = SpatialSettings.depth;
 		m_spatialQuality = SpatialSettings.spatialQuality;
 		m_codec = SpatialSettings.codec;
-		
+
 		post("Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
 		post("Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
 		post("Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
@@ -406,29 +406,29 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		post("Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
 		post("Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
 		post("Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
-		
+
 		m_dialog = false; //don't keep doing it again
-		
+
 	}else{
-	
+
 	/*
 		compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
 		compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 		compErr = SCGetInfo(stdComponent, scDataRateSettingsType, &datarate);
-	
+
 		if (compErr != noErr) error("SCGetInfo failed with error %d",compErr);
-	*/	
+	*/
 		//post("manually filling in codec info");
 		//fill in manually
 		SpatialSettings.codecType = m_codecType;
 		SpatialSettings.codec = m_codec;
 		SpatialSettings.depth = 0; //should choose best depth
 		SpatialSettings.spatialQuality = m_spatialQuality;
-		
+
 		TemporalSettings.temporalQuality = m_spatialQuality;
 		TemporalSettings.frameRate = 0;
 		TemporalSettings.keyFrameRate = 0;
-		
+
 		/*
 		post("manual returned SpatialSettings.codecType %d",SpatialSettings.codecType);
 		post("manual returned SpatialSettings.codec %d",SpatialSettings.codec);
@@ -438,26 +438,26 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		post("manual returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
 		post("manual returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
 		*/
-		
+
 	}
-	
+
 	//if (m_codecType == kJPEGCodecType)
 	//post("SCSpatialSettings CodecType %d is p-jpeg",m_codecType);
 	//m_codec = SpatialSettings.codec;
 	//post("SCSpatialSettings Codec %s",m_codec);
-	
+
 	//post("SCSpatialSettings depth %d",m_depth);
-	
+
 	//if (m_spatialQuality == codecHighQuality) post("SCSpatialSettings SpatialQuality codecHighQuality");
-	
+
 	datarate.frameDuration = 33;
-	
+
 	compErr = SCSetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
 	compErr = SCSetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 	compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
-	
+
 	if (compErr != noErr) error("SCSetInfo failed with error %d",compErr);
-	
+
 #ifdef __APPLE__
 	compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
 #else
@@ -467,21 +467,21 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 		error("SCCompressSequenceBegin failed with error %d",compErr);
 		return;
 		}
-	
+
 	err = BeginMediaEdits(media);
 	if (err != noErr) {
 		error("BeginMediaEdits failed with error %d",err);
 		return;
 		}
-	
+
 
 	//this will show that everything is OK for recording
 	m_recordSetup = 1;
-	
+
 	//set the previous dimensions for the sanity check during compression
 	m_prevWidth = m_width;
 	m_prevHeight = m_height;
-	
+
 	//reset frame counter for new movie file
 	m_currentFrame = 0;
 
@@ -497,44 +497,44 @@ void pix_recordQT :: stopRecording()
 {
 	ComponentResult			compErr = noErr;
 	OSErr					err;
-	
-	
+
+
 	err = EndMediaEdits(media);
 	if (err != noErr) error("EndMediaEdits failed with error %d",err);
-	
+
 	err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
 	if (err != noErr) error("InsertMediaIntoTrack failed with error %d",err);
 
 	err = AddMovieResource(m_movie,nFileRefNum,&nResID,NULL);
 	if (err != noErr) error("AddMovieResource failed with error %d",err);
-	
+
 	err = CloseMovieFile(nFileRefNum);
 	if (err != noErr) error("CloseMovieFile failed with error %d",err);
-	
+
 	DisposeMovie(m_movie);
 	DisposeGWorld(m_srcGWorld);
 	m_srcGWorld = NULL;
-		
+
 	compErr = SCCompressSequenceEnd(stdComponent);
-	
+
 	if (compErr != noErr) error("SCCompressSequenceEnd failed with error %d",compErr);
-	
+
 	/*moved to destructor
 	compErr = CloseComponent(stdComponent);
-	
+
 	if (compErr != noErr) error("CloseComponent failed with error %d",compErr);
-	
+
 	*/
 	m_recordStop = 0;
 	m_recordSetup = 0;
 	m_recordStart = 0; //just to be sure
-	
+
 	m_currentFrame = 0; //reset the frame counter?
-	
+
 	m_firstRun = 1;
-	
+
 	outlet_float(m_outNumFrames,m_currentFrame);
-	
+
 	post("movie written to %s",m_filename);
 
 }
@@ -544,34 +544,34 @@ void pix_recordQT :: compressFrame()
 	OSErr					err;
 
 	Handle					compressedData; //data to put in QT mov
-	
+
 	ComponentResult			compErr = noErr;
 
 	short					syncFlag; //flag for keyframes
-	
 
-	
+
+
 	//this times the render length to give QT a better idea about the actual framerate of the movie
 	//the goal is to provide improved playback using internal QT playback routines
-	
+
 	#ifdef __APPLE__
 	//fakes the first run time
 	if (m_firstRun){
-	
+
 	  ::Microseconds(&startTime);
 		m_firstRun = 0;
-	
+
 	}
 	::Microseconds(&endTime);
-	
+
 	seconds = static_cast<float>(endTime.lo - startTime.lo) / 1000000.f;
-	
+
 	m_ticks = static_cast<int>(600 * seconds);
-	
+
 	if (m_ticks < 20) m_ticks = 20;
-	
+
 	#endif //timers
-	
+
 
 #ifdef _WIN32
   static int firstTime = 1;
@@ -594,13 +594,13 @@ void pix_recordQT :: compressFrame()
  // post("freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
 
 	m_ticks = static_cast<int>(600 * seconds);
-	
+
 	if (m_ticks < 20) m_ticks = 20;
 	}
 #endif
 
 	//post("frame compression took %f seconds %d ticks", seconds, m_ticks );
-	
+
 
 	//post("compressing frame");
 //apparently on OSX there is no member portPixMap in a GWorld so a function is used instead
@@ -626,7 +626,7 @@ void pix_recordQT :: compressFrame()
 										&syncFlag);
 #endif
 	if (compErr != noErr) error("SCCompressSequenceFrame failed with error %d",compErr);
-										 
+
 	err = AddMediaSample(media,
 							compressedData,
 							0,
@@ -636,13 +636,13 @@ void pix_recordQT :: compressFrame()
 							1,
 							syncFlag,
 							NULL);
-							
+
 	if (err != noErr) error("AddMediaSample failed with error %d",err);
-	
+
 	#ifdef __APPLE__
 	::Microseconds(&startTime);
-					
-	#endif //timer		
+
+	#endif //timer
 
 #ifdef _WIN32
 
@@ -650,11 +650,11 @@ void pix_recordQT :: compressFrame()
 //	  post("startTime %d",startTime.QuadPart);
 
 #endif
-																																															
+
 	m_currentFrame++;
-	
+
 	outlet_float(m_outNumFrames,m_currentFrame);
-	
+
 }
 
 
@@ -671,24 +671,24 @@ void pix_recordQT :: render(GemState *state)
 		m_compressImage = m_pixBlock->image;
 		m_height = m_pixBlock->image.ysize;
 		m_width = m_pixBlock->image.xsize;
-			
+
 
   if (m_automatic || m_banged) {
- 
+
     m_autocount++;
-    
-	
-	
-	
+
+
+
+
 	//record
 	if (m_recordStart) {
 		//if setupQT() has not been run do that first
 		if (!m_recordSetup) setupQT();
-		
+
 		//should check if the size has changed or else we will freak the compressor's trip out
 		if (m_width == m_prevWidth && m_height == m_prevHeight) {
 			//go ahead and grab a frame if everything is ready to go
-			if (m_recordSetup == 1) 
+			if (m_recordSetup == 1)
 				if (m_automatic && state->image->newimage) {
 					compressFrame();
 					}
@@ -707,14 +707,14 @@ void pix_recordQT :: render(GemState *state)
 				m_prevHeight = m_height; //go ahead and change dimensions
 			}
 	}
-	
+
 	//if recording is stopped and everything is setup then stop recording
 	if (m_recordStop){
 		//guard against someone not setting up QT beforehand
 		if (!m_recordSetup)	return;
 		stopRecording();
 	}
-	
+
 
   }
   }
@@ -768,7 +768,7 @@ void pix_recordQT :: getCodecList()
 	CodecNameSpec	codecName;
 	int	i;
 	int count;
-	
+
 	GetCodecNameList(&codecList,1);
 	post("%i codecs installed",codecList->count);
 	if (codecList->count < 64) count = codecList->count; else count = 64;
@@ -777,7 +777,7 @@ void pix_recordQT :: getCodecList()
 		post("codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
 		codecContainer[i].position = i;
 		codecContainer[i].ctype = codecName.cType;
-		
+
 		}
 }
 
@@ -798,11 +798,11 @@ void pix_recordQT :: codecMess(int argc, t_atom *argv)
 			argc--;
 		}
      }
-	
+
 	if (!strncmp(codecName,"jpeg",4)) {
 		//have to put the right things in here
 		m_codecType = kJPEGCodecType;
-		m_codec = (CodecComponent)65719;//65708; //this is pjpeg?!? 
+		m_codec = (CodecComponent)65719;//65708; //this is pjpeg?!?
 		post("kJPEGCodecType");
 	}
 	//do the same for these
@@ -822,7 +822,7 @@ void pix_recordQT :: fileMess(int argc, t_atom *argv)
 {
 
 //if recording is going do not accept a new file name
-//on OSX changing the name while recording won't have any effect 
+//on OSX changing the name while recording won't have any effect
 //but it will give the wrong message at the end if recording
 if (m_recordStart) return;
 

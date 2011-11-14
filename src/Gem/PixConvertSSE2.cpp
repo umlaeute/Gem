@@ -70,8 +70,8 @@ static void print_int(__m128i m){
 
 
 /* convert RGBA to YUV422 */
-void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata, 
-                       size_t size, 
+void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
+                       size_t size,
                        unsigned char *yuvdata)
 {
   const __m128i *rgba_p = (const __m128i*)rgbadata; /*  4 RGBA pixels */
@@ -79,19 +79,19 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
 
   const __m128i zero = _mm_setzero_si128();
 
-  const __m128i RG2Y=_mm_set_epi16(RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11, 
+  const __m128i RG2Y=_mm_set_epi16(RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11,
                                    RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11);
-  const __m128i BA2Y=_mm_set_epi16(RGB2YUV_14, RGB2YUV_13, RGB2YUV_14, RGB2YUV_13, 
+  const __m128i BA2Y=_mm_set_epi16(RGB2YUV_14, RGB2YUV_13, RGB2YUV_14, RGB2YUV_13,
                                    RGB2YUV_14, RGB2YUV_13, RGB2YUV_14, RGB2YUV_13);
 
-  const __m128i RG2U=_mm_set_epi16(RGB2YUV_22, RGB2YUV_21, RGB2YUV_22, RGB2YUV_21, 
+  const __m128i RG2U=_mm_set_epi16(RGB2YUV_22, RGB2YUV_21, RGB2YUV_22, RGB2YUV_21,
                                    RGB2YUV_22, RGB2YUV_21, RGB2YUV_22, RGB2YUV_21);
-  const __m128i BA2U=_mm_set_epi16(RGB2YUV_24, RGB2YUV_23, RGB2YUV_24, RGB2YUV_23, 
+  const __m128i BA2U=_mm_set_epi16(RGB2YUV_24, RGB2YUV_23, RGB2YUV_24, RGB2YUV_23,
                                    RGB2YUV_24, RGB2YUV_23, RGB2YUV_24, RGB2YUV_23);
 
-  const __m128i RG2V=_mm_set_epi16(RGB2YUV_32, RGB2YUV_31, RGB2YUV_32, RGB2YUV_31, 
+  const __m128i RG2V=_mm_set_epi16(RGB2YUV_32, RGB2YUV_31, RGB2YUV_32, RGB2YUV_31,
                                    RGB2YUV_32, RGB2YUV_31, RGB2YUV_32, RGB2YUV_31);
-  const __m128i BA2V=_mm_set_epi16(RGB2YUV_34, RGB2YUV_33, RGB2YUV_34, RGB2YUV_33, 
+  const __m128i BA2V=_mm_set_epi16(RGB2YUV_34, RGB2YUV_33, RGB2YUV_34, RGB2YUV_33,
                                    RGB2YUV_34, RGB2YUV_33, RGB2YUV_34, RGB2YUV_33);
 
   const __m128i OFFSET=_mm_set_epi16(Y_OFFSET, UV_OFFSET,
@@ -155,7 +155,7 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
     RGRG  = _mm_avg_epu16(_mm_unpackhi_epi64(RGRG0, RGRG1), _mm_unpacklo_epi64(RGRG0, RGRG1));
     /* (B01 A01 B23 A23 B45 A45 B67 A67) / 2 */
     BABA  = _mm_avg_epu16(_mm_unpackhi_epi64(BABA0, BABA1), _mm_unpacklo_epi64(BABA0, BABA1));
-    
+
     // get 4 U for 8 pixels (32bit each)
     //U_RG32 = _mm_madd_epi16(RGRG, RG2U); /* R4*a+G4*b R6*a+G6*b R5*a+G5*b R7*a+G7*b */
     //U_BA32 = _mm_madd_epi16(BABA, AB2U); /* B4*c+A4*d B6*c+A6*d B5*c+A5*d B7*c+A7*d */
@@ -204,21 +204,21 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
 }
 
 /* convert RGBA to YUV422 */
-void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata, 
-                       size_t size, 
+void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
+                       size_t size,
                        unsigned char *rgbadata)
 {
   __m128i *rgba_p = (__m128i*)rgbadata; /*  4 RGBA pixels */
   const __m128i *yuv_p  = (const __m128i*)yuvdata;  /* 4*2 YUV pixels */
-  
+
   const __m128i Y2RGB = _mm_set_epi16(YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0);
-  const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12, 
+  const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12,
                                       YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12);
-  const __m128i UV2G  = _mm_set_epi16(YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22, 
+  const __m128i UV2G  = _mm_set_epi16(YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22,
                                       YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22);
-  const __m128i UV2B  = _mm_set_epi16(YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32, 
+  const __m128i UV2B  = _mm_set_epi16(YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32,
                                       YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32);
-  const __m128i offset= _mm_set_epi16(Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET, 
+  const __m128i offset= _mm_set_epi16(Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET,
                                       Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET);
   const __m128i  A32  = _mm_set_epi32(255, 255, 255, 255);
 
@@ -250,7 +250,7 @@ void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
     UYVY0 = _mm_shuffle_epi32  (UYVY0, shuffle); /* U0 V0 U1 V1 Y0 Z0 Y1 Z1 */
 
     UYVY1 = _mm_shufflelo_epi16(UYVY1, shuffle);
-    UYVY1 = _mm_shufflehi_epi16(UYVY1, shuffle); 
+    UYVY1 = _mm_shufflehi_epi16(UYVY1, shuffle);
     UYVY1 = _mm_shuffle_epi32  (UYVY1, shuffle); /* U2 V2 U3 V3 Y2 Z2 Y3 Z3 */
 
     UV = _mm_unpacklo_epi32(UYVY0, UYVY1); /* U0 V0 U2 V2 U1 V1 U3 V3 */
@@ -300,23 +300,23 @@ void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
 
 
 /* convert RGB24 to YUV422 */
-void UYVY_to_RGB_SSE2(const unsigned char *yuvdata, 
-                       size_t size, 
+void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
+                       size_t size,
                        unsigned char *rgbdata)
 {
   const __m128i *yuv_p  = (const __m128i*)yuvdata;  /* 4*2 YUV pixels */
-  
+
   const __m128i Y2RGB = _mm_set_epi16(YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0,YUV2RGB_11,0);
-  const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12, 
+  const __m128i UV2R  = _mm_set_epi16(YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12,
                                       YUV2RGB_13, YUV2RGB_12, YUV2RGB_13, YUV2RGB_12);
-  const __m128i UV2G  = _mm_set_epi16(YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22, 
+  const __m128i UV2G  = _mm_set_epi16(YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22,
                                       YUV2RGB_23, YUV2RGB_22, YUV2RGB_23, YUV2RGB_22);
-  const __m128i UV2B  = _mm_set_epi16(YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32, 
+  const __m128i UV2B  = _mm_set_epi16(YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32,
                                       YUV2RGB_33, YUV2RGB_32, YUV2RGB_33, YUV2RGB_32);
-  const __m128i offset= _mm_set_epi16(Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET, 
+  const __m128i offset= _mm_set_epi16(Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET,
                                       Y_OFFSET, UV_OFFSET, Y_OFFSET, UV_OFFSET);
   const __m128i  A32  = _mm_set_epi32(255, 255, 255, 255);
-  const __m128i  all  =  _mm_set_epi8(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
+  const __m128i  all  =  _mm_set_epi8(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                       0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
 
   /* nomenclatura:
@@ -349,7 +349,7 @@ void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
     UYVY0 = _mm_shuffle_epi32  (UYVY0, shuffle); /* U0 V0 U1 V1 Y0 Z0 Y1 Z1 */
 
     UYVY1 = _mm_shufflelo_epi16(UYVY1, shuffle);
-    UYVY1 = _mm_shufflehi_epi16(UYVY1, shuffle); 
+    UYVY1 = _mm_shufflehi_epi16(UYVY1, shuffle);
     UYVY1 = _mm_shuffle_epi32  (UYVY1, shuffle); /* U2 V2 U3 V3 Y2 Z2 Y3 Z3 */
 
     UV = _mm_unpacklo_epi32(UYVY0, UYVY1); /* U0 V0 U2 V2 U1 V1 U3 V3 */

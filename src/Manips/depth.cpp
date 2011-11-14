@@ -29,9 +29,9 @@ CPPEXTERN_NEW_WITH_GIMME(depth);
 /////////////////////////////////////////////////////////
 depth :: depth(int argc, t_atom*argv)
        : m_state(1)
-{ 
+{
   switch(argc) {
-  case 0: 
+  case 0:
     break;
   case 1:
     if(A_FLOAT==argv->a_type){

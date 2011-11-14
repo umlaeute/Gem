@@ -58,7 +58,7 @@ disk :: disk(int argc, t_atom *argv)
   default:
     throw(GemException("needs 0, 1, 2 or 3 arguments"));
   }
-	
+
   sizeMess(size);
   numSlicesMess(numSlices);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("inner"));
@@ -254,7 +254,7 @@ void disk :: render(GemState *state)
 void disk :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&disk::innerRadiusCallback),
-    	    gensym("inner"), A_FLOAT, A_NULL); 
+    	    gensym("inner"), A_FLOAT, A_NULL);
 }
 void disk :: innerRadiusCallback(void *data, t_floatarg radius)
 {

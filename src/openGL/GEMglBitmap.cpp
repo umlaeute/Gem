@@ -27,9 +27,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglBitmap , t_floatarg, A_DEFFLOAT, t_floatarg,
 //
 GEMglBitmap :: GEMglBitmap	(t_float arg0=0, t_float arg1=0,
 				 t_float arg2=1, t_float arg3=1) :
-		xorig(static_cast<GLfloat>(arg0)), 
-		yorig(static_cast<GLfloat>(arg1)), 
-		xmove(static_cast<GLfloat>(arg2)), 
+		xorig(static_cast<GLfloat>(arg0)),
+		yorig(static_cast<GLfloat>(arg1)),
+		xmove(static_cast<GLfloat>(arg2)),
 		ymove(static_cast<GLfloat>(arg3))
 {
   // img info: width, height, bitmap
@@ -57,9 +57,9 @@ void GEMglBitmap :: render(GemState *state) {
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
   if(!img || !&img->image)return;
-  
+
   glBitmap (img->image.xsize, img->image.ysize,
-	    xorig, yorig, xmove, ymove, 
+	    xorig, yorig, xmove, ymove,
 	    img->image.data);
 }
 

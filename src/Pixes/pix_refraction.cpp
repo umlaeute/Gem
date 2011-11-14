@@ -14,7 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_refraction.h"
-	
+
 CPPEXTERN_NEW(pix_refraction);
 
 /////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ CPPEXTERN_NEW(pix_refraction);
 //
 /////////////////////////////////////////////////////////
 pix_refraction :: pix_refraction()
-{ 
+{
     m_Refraction = 2.0f;
     m_CellWidth = 16.0f;
     m_CellHeight = 16.0f;
@@ -40,8 +40,8 @@ pix_refraction :: pix_refraction()
 //
 /////////////////////////////////////////////////////////
 pix_refraction :: ~pix_refraction()
-{ 
-    
+{
+
 }
 
 /////////////////////////////////////////////////////////
@@ -61,9 +61,9 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-  
+
     pOutput = (U32*)myImage.data;
-	
+
     const int nHalfWidth=(nWidth/2);
     const int nHalfHeight=(nHeight/2);
 
@@ -86,7 +86,7 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
     }
 
     const int nHalfCellWidth=(nCellWidth/2);
-    const int nHalfCellHeight=(nCellHeight/2);	
+    const int nHalfCellHeight=(nCellHeight/2);
 
     //const int nYStartOffset=(nHalfCellHeight*(256))/nRefraction;
     //const int nXStartOffset=(nHalfCellWidth*(256))/nRefraction;
@@ -148,7 +148,7 @@ void pix_refraction :: processYUVImage(imageStruct &image)
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = (U32*)myImage.data;
-	
+
     const int nHalfWidth=(nWidth/2);
     const int nHalfHeight=(nHeight/2);
 
@@ -171,7 +171,7 @@ void pix_refraction :: processYUVImage(imageStruct &image)
     }
 
     const int nHalfCellWidth=(nCellWidth/2);
-    const int nHalfCellHeight=(nCellHeight/2);	
+    const int nHalfCellHeight=(nCellHeight/2);
 
     //const int nYStartOffset=(nHalfCellHeight*(256))/nRefraction;
     //const int nXStartOffset=(nHalfCellWidth*(256))/nRefraction;
@@ -243,12 +243,12 @@ void pix_refraction :: widthCallback(void *data, t_floatarg m_CellWidth)
 }
 void pix_refraction :: heightCallback(void *data, t_floatarg m_CellHeight)
 {
-  GetMyClass(data)->m_CellHeight=(m_CellHeight);  
+  GetMyClass(data)->m_CellHeight=(m_CellHeight);
   GetMyClass(data)->setPixModified();
 }
 
 void pix_refraction :: magCallback(void *data, t_floatarg m_DoAllowMagnification)
 {
-  GetMyClass(data)->m_DoAllowMagnification=(m_DoAllowMagnification);  
+  GetMyClass(data)->m_DoAllowMagnification=(m_DoAllowMagnification);
   GetMyClass(data)->setPixModified();
 }

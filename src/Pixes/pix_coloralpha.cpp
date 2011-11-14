@@ -47,7 +47,7 @@ void pix_coloralpha :: processRGBAImage(imageStruct &image)
     unsigned char *pixel = image.data;
 
     while(datasize--)
-    {		
+    {
                 /*
 		float tempVal = (float)pixel[chRed] + (float)pixel[chGreen] + (float)pixel[chBlue];
 		tempVal /= 3.f;
@@ -58,7 +58,7 @@ void pix_coloralpha :: processRGBAImage(imageStruct &image)
 		tempVal /= 3;
 		pixel[chAlpha] = (unsigned char)tempVal;
 		pixel += 4;
-    }    
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -67,6 +67,6 @@ void pix_coloralpha :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_coloralpha :: obj_setupCallback(t_class *)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_coloralpha), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_coloralpha),
 		   gensym("pix_colouralpha"), A_NULL);
 }

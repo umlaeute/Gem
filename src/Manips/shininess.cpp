@@ -90,7 +90,7 @@ void shininess :: shininessMess(float val)
 void shininess :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&shininess::shininessMessCallback),
-    	    gensym("shininess"), A_FLOAT, A_NULL); 
+    	    gensym("shininess"), A_FLOAT, A_NULL);
 }
 void shininess :: shininessMessCallback(void *data, t_floatarg val)
 {

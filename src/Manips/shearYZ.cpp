@@ -36,7 +36,7 @@ shearYZ :: shearYZ(int argc, t_atom *argv)
     {
         shear = 0.f;
     }
- 
+
     // create the new inlets
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("shearVal"));
 
@@ -86,7 +86,7 @@ void shearYZ :: shearMess(float val)
 void shearYZ :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&shearYZ::shearMessCallback),
-    	    gensym("shearVal"), A_FLOAT, A_NULL); 
+    	    gensym("shearVal"), A_FLOAT, A_NULL);
 }
 void shearYZ :: shearMessCallback(void *data, t_floatarg val)
 {

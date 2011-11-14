@@ -24,14 +24,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     mesh_square
-    
+
     Creates a mesh_square
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN mesh_square : public GemShape
 {
@@ -42,13 +42,13 @@ class GEM_EXTERN mesh_square : public GemShape
         //////////
         // Constructor
     	mesh_square(t_floatarg sizeX,t_floatarg sizeY);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~mesh_square();
-        
+
 
     	//////////
     	// Do the rendering

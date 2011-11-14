@@ -22,14 +22,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_model
-    
+
     Creates a vertex_model
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_model : public GemBase
 {
@@ -40,13 +40,13 @@ class GEM_EXTERN vertex_model : public GemBase
         //////////
         // Constructor
     	vertex_model(void);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_model(void);
-        
+
         //int	m_blend;
         float	*m_ColorArray;
         float	*m_VertexArray;
@@ -61,7 +61,7 @@ class GEM_EXTERN vertex_model : public GemBase
         int	m_haveModel;
         int	m_oldVSize,m_oldCSize;
         float	maxX, maxY, oldmaxX, oldmaxY;
-        
+
         //////////
 	// Should we rescale the model when loaded
 	// Default is yes
@@ -71,7 +71,7 @@ class GEM_EXTERN vertex_model : public GemBase
     	// Do the rendering
     	virtual void 	render(GemState *state);
         virtual void	openMess(t_symbol *filename);
-        
+
         private:
         static void	openMessCallback(void *data, t_symbol *filename);
 

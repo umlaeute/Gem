@@ -24,14 +24,14 @@ namespace gem {
     private:
       class PIMPL;
       PIMPL*m_pimpl;
-      
+
     public:
       Symbol(void);
       Symbol(const gem::RTE::Symbol&a);
       Symbol(const std::string&name);
       Symbol(const struct _symbol*name);
       Symbol(const unsigned int, const struct _atom*);
-      
+
       virtual ~Symbol(void);
 
       virtual Symbol&operator=(const Symbol&);

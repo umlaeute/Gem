@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglViewport , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglViewport :: GEMglViewport	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		x(static_cast<GLint>(arg0)), 
-		y(static_cast<GLint>(arg1)), 
-		width(static_cast<GLsizei>(arg2)), 
+		x(static_cast<GLint>(arg0)),
+		y(static_cast<GLint>(arg1)),
+		width(static_cast<GLsizei>(arg2)),
 		height(static_cast<GLsizei>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));

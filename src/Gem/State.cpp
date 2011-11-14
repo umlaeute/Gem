@@ -94,23 +94,23 @@ GemState :: GemState()
   set(_DIRTY, (dirty=false));
   set(_GL_DISPLAYLIST, (inDisplayList=false));
 
-  set(_GL_LIGHTING, (lighting=false)); 
-  set(_GL_SMOOTH, (smooth=false)); 
+  set(_GL_LIGHTING, (lighting=false));
+  set(_GL_SMOOTH, (smooth=false));
   set(_GL_TEX_TYPE, (texture=0));
   //  set(_PIX, (image=0));
   set(_GL_TEX_NUMCOORDS, (numTexCoords=0));  // LATER get rid of this
   set(_GL_TEX_COORDS, (texCoords=0));  // LATER make this a std::vector
   set(_GL_TEX_UNITS, (multiTexUnits=0));
-  set(_TIMING_TICK, (tickTime=50.f)); 
+  set(_TIMING_TICK, (tickTime=50.f));
   set(_GL_DRAWTYPE, (drawType=0));
 
   set(_GL_STACKS, data->stacks.get());
 
   /*
-    set("vertex.array.vertex", 0); 
-    set("vertex.array.color", 0); 
-    set("vertex.array.normal", 0); 
-    set("vertex.array.texcoord", 0); 
+    set("vertex.array.vertex", 0);
+    set("vertex.array.color", 0);
+    set("vertex.array.normal", 0);
+    set("vertex.array.texcoord", 0);
   */
 }
 
@@ -192,7 +192,7 @@ void GemState :: reset() {
 
 }
 
-GemState :: ~GemState() {  
+GemState :: ~GemState() {
   if(data)delete data;data=NULL;
 }
 
@@ -217,7 +217,7 @@ float GemState::texCoordY(int num) const {
 
 /* get a named property */
 bool GemState::get(const GemState::key_t key, any&value) {
-  std::map<GemState::key_t,any>::iterator it = 
+  std::map<GemState::key_t,any>::iterator it =
     data->data.find(key);
   if(it==data->data.end()) {
     if(key==_PIX) { value=image; return true; }
@@ -265,7 +265,7 @@ bool GemState::set(const GemState::key_t key, any value) {
     data->data.erase(key);
     return false;
   }
- 
+
   /* wrapper for DEPRECATED access to member variables */
   if(1) {
     try {

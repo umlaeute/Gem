@@ -27,12 +27,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_movie
-    
+
   Loads in a movie
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -42,15 +42,15 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
 
     CPPEXTERN_HEADER(pix_movieDarwin, GemBase);
 
-   
+
     public:
-  
+
   //////////
   // Constructor
   pix_movieDarwin(t_symbol *filename);
 
  protected:
-    
+
   //////////
   // Destructor
   virtual ~pix_movieDarwin();
@@ -58,7 +58,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   //////////
   // Do the rendering
   virtual void texFrame(GemState *state, int doit);
-    	
+
   //////////
   virtual void setUpTextureState();
 
@@ -76,7 +76,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
    //////////
   // Clear the dirty flag on the pixBlock
   virtual void postrender(GemState *state);
-  
+
   virtual void render(GemState *state);
 
   //////////
@@ -99,15 +99,15 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   //////////
   // Do the rendering
   virtual void getFrame();
-  
+
   virtual void MovRate(float rate);
-  
+
   virtual void changeImage(int imgNum, int trackNum);
-  
+
   //////////
   // load film into RAM
   virtual void LoadRam();
-  
+
   //////////
   // set the audio volume
   virtual void MovVolume(float volume);
@@ -131,28 +131,28 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int             m_oldTexture;
   pixBlock       *m_oldImage;
 
-  GLuint	m_textureObj;	
+  GLuint	m_textureObj;
   float		m_xRatio;
   float		m_yRatio;
   bool    upsidedown;
   GLint   m_textureType;
-  
+
    //////////
   // the current file
   t_symbol *x_filename;
-	
+
   //////////
   // a outlet for information like #frames and "reached end"
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
   t_outlet     *m_outTex; /* for texture sharing */
-        
+
   //////////
   // frame data
   unsigned char*m_frame;  /* this points to the main texture (might be black) */
   unsigned char*m_data;   /* this points always to the real data */
-  
-  
+
+
   //////////
   // If a movie was loaded and what kind of Movie this is
   int 	    	m_haveMovie;
@@ -170,10 +170,10 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int           m_numTracks;
   int           m_track;
 
-  
+
   pixBlock    	m_pixBlock;
   imageStruct   m_imageStruct;
-  
+
 
   int		m_xsize;
   int		m_ysize;
@@ -186,11 +186,11 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int		m_colorspace;
   int		m_format;
   int		m_rectangle;
-  
+
     //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
-   
+
   GWorldPtr		m_srcGWorld;
   Rect			m_srcRect;
   TimeValue		m_movieTime;
@@ -211,7 +211,7 @@ private:
   Movie			m_movie;
 
  protected:
-	
+
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);

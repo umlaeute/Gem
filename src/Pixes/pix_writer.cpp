@@ -38,7 +38,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_writer);
 //
 /////////////////////////////////////////////////////////
 pix_writer :: pix_writer(int argc, t_atom *argv)
-  : m_banged(false), 
+  : m_banged(false),
     m_automatic(false), m_autocount(0),
     m_filetype(0)
 {
@@ -67,7 +67,7 @@ void pix_writer :: processImage(imageStruct &image)
     } else {
       extension=(char*)"jpg";
     }
-    
+
     snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
 
     mem2image(&image, m_filename, m_filetype);

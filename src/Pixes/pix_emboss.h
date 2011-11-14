@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _INCLUDE__GEM_PIXES_PIX_EMBOSS_H_ 
-#define _INCLUDE__GEM_PIXES_PIX_EMBOSS_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_EMBOSS_H_
+#define _INCLUDE__GEM_PIXES_PIX_EMBOSS_H_
 
 #include "Base/GemPixObj.h"
 
@@ -16,18 +16,18 @@
 -------------------------------------------------------------------
 CLASS
     pix_emboss
-    
-    
+
+
 
 KEYWORDS
     pix
     yuv
-    
+
 DESCRIPTION
 
    embossment of images
    only YUV for now
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_emboss : public GemPixObj
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_emboss : public GemPixObj
   //////////
   // Constructor
   pix_emboss();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_emboss();
@@ -51,7 +51,7 @@ class GEM_EXTERN pix_emboss : public GemPixObj
   virtual void 	processYUVImage(imageStruct &image);
 
  private:
-    
+
   //////////
   // Static member functions
 };

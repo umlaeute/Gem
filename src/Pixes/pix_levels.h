@@ -20,16 +20,16 @@ const int nChannelFunction_Levels=256;
 -------------------------------------------------------------------
 CLASS
     pix_levels
-    
-    
+
+
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_levels : public GemPixObj
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_levels : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_levels();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_levels();
@@ -63,7 +63,7 @@ class GEM_EXTERN pix_levels : public GemPixObj
 
 	U32*		pSource;
 	U32*		pOutput;
-	
+
 	bool m_DoAuto;
 	bool m_DoUniform;
 	bool m_DoAllowInversion;
@@ -105,10 +105,10 @@ class GEM_EXTERN pix_levels : public GemPixObj
 	void Pete_Levels_CalculateAutoLevels(int colour=GL_RGBA);
 	void Pete_ChannelFunction_Render();
         void Pete_ChannelFunction_RenderYUV();
-	
-	
+
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	autoCallback(void *data, t_floatarg m_DoAuto);

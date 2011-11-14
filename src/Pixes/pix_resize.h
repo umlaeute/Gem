@@ -21,7 +21,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_resize
-    
+
     Resizes an image
 
 KEYWORDS
@@ -37,9 +37,9 @@ class GEM_EXTERN pix_resize : public GemPixObj
 	    //////////
 	    // Constructor
   pix_resize(t_floatarg w, t_floatarg h);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_resize();
@@ -47,7 +47,7 @@ class GEM_EXTERN pix_resize : public GemPixObj
     	//////////
     	// Do the processing
 	void 	processImage(imageStruct &image);
-	
+
 	//////////
 	// setting dimension and colourspace
 	void  dimenMess(int w, int h);
@@ -55,10 +55,10 @@ class GEM_EXTERN pix_resize : public GemPixObj
 	imageStruct   m_image;
 
  private:
-    	
+
 	//////////
 	// static member functions
-	static void   dimenMessCallback(void *data, t_float w, t_float h);	
+	static void   dimenMessCallback(void *data, t_float w, t_float h);
 };
 
 #endif	// for header file

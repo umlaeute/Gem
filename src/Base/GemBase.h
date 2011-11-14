@@ -9,7 +9,7 @@
   Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	
+
   -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_BASE_GEMBASE_H_
@@ -26,20 +26,20 @@ class GemState;
   -------------------------------------------------------------------
   CLASS
   GemBase
-    
+
   Base class for gem objects
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN GemBase : public CPPExtern
 {
  protected:
-    	
+
   //////////
   // Constructor
   GemBase();
-    	
+
   //////////
   // Destructor
   virtual     	~GemBase();
@@ -75,7 +75,7 @@ class GEM_EXTERN GemBase : public CPPExtern
   // has rendering started ?
   // deprecated, use 'getState()==RENDERING' instead
   bool            gem_amRendering;
-    	
+
   //////////
   // If anything in the object has changed
   virtual void  	setModified();
@@ -95,7 +95,7 @@ class GEM_EXTERN GemBase : public CPPExtern
   //////////
   // this gets called in the before the startRendering() routine
   // if it returns TRUE, the object's startRendering(), render() and stopRendering() functions will be called
-  // it it returns FALSE, the object will be disabled 
+  // it it returns FALSE, the object will be disabled
   // when rendering is restarted, this function get's called again
   // the default is to enable rendering
   // this function is important if you want to disable an object because it cannot be used (e.g. missing driver support)
@@ -106,9 +106,9 @@ class GEM_EXTERN GemBase : public CPPExtern
   static void 	real_obj_setupCallback(t_class *classPtr)
     { CPPExtern::real_obj_setupCallback(classPtr); GemBase::obj_setupCallback(classPtr); }
 
-    	
+
  private:
-    
+
   void	    	realStopRendering();
   void            gem_startstopMess(int state);
   void            gem_renderMess(GemCache* state, GemState* state2);
@@ -124,7 +124,7 @@ class GEM_EXTERN GemBase : public CPPExtern
   static void	stoprenderCallback(GemBase *data);	//DH
 #endif
 
-  /* whether the object is internally disabled or not 
+  /* whether the object is internally disabled or not
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
    */
   gem::ContextData<bool>m_enabled;

@@ -24,7 +24,7 @@
   CLASS
 
   part_velocity
-    
+
   Set the velocity domain for particles
 
   DESCRIPTION
@@ -39,12 +39,12 @@ class GEM_EXTERN part_velocity : public partlib_base
   //////////
   // Constructor
   part_velocity(int,t_atom*);
-    	
+
   //////////
   virtual void 	renderParticles(GemState *state);
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~part_velocity();

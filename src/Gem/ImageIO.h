@@ -13,7 +13,7 @@ LOG
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
- 
+
 #ifndef _INCLUDE__GEM_GEM_IMAGEIO_H_
 #define _INCLUDE__GEM_GEM_IMAGEIO_H_
 
@@ -27,10 +27,10 @@ struct imageStruct;
 // image2mem() reads an image file into memory
 //   and a pointer to an imageStruct
 //       NULL = failure
-// 
+//
 //       format:
 //    	  returns either GL_LUMINANCE or GL_RGBA
-// 
+//
 //   automatically allocates the memory for the user
 //
 // This can read TIFF, SGI, and JPG images
@@ -70,17 +70,17 @@ namespace gem {
        *
        * currently (with Pd being the only RTE),
        * the callback will always be called from within the main thread
-       * 
+       *
        * the callback might be called directly from within async(),
-       * in which case the ID given in the callback and returned by async() 
+       * in which case the ID given in the callback and returned by async()
        * is IMMEDIATE
        */
-      typedef void (*callback)(void *userdata, 
+      typedef void (*callback)(void *userdata,
 			       id_t ID,
 			       imageStruct*img,
 			       const Properties&props);
 
-      /* loads an image (given as 'filename') asynchronously 
+      /* loads an image (given as 'filename') asynchronously
        * image loading is done in a separate thread (if possible);
        * when the image is loaded, the callback 'cb' is called with the new image
        *
@@ -100,7 +100,7 @@ namespace gem {
 				   const std::string filename,
 				   id_t&ID
 				   );
-    
+
       /* cancels asynchronous loading of an image
        * removes the given ID (as returned by loadAsync()) from the loader queue
        * returns TRUE if item could be removed, or FALSE if no item ID is in the queue
@@ -110,7 +110,7 @@ namespace gem {
       static bool cancel(id_t ID);
 
       /* load an image in a synchronous way (that is argument compatible with async())
-       */ 
+       */
       static bool sync(callback cb,
 				  void*userdata,
 				  const std::string filename,
@@ -138,10 +138,10 @@ GEM_EXTERN extern imageStruct *image2mem(const char *filename);
 // image2mem() reads an image file into memory
 //   and a pointer to an imageStruct
 //       NULL = failure
-// 
+//
 //       format:
 //    	  returns either GL_LUMINANCE or GL_RGBA
-// 
+//
 //   automatically allocates the memory for the user
 //
 // This can write TIFF, JPG and other images (depending on which backends are available

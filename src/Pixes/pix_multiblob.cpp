@@ -19,7 +19,7 @@
 // based on (c) 2004, Jakob Leiner & Theresa Rienmüller
 // and stack-based code from animal.sf.net which is
 // (c) Ricardo Fabbri labmacambira.sf.net
-// 
+//
 //
 /////////////////////////////////////////////////////////
 
@@ -80,9 +80,9 @@ void Blob:: ymax(double y){
 }
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_multiblob,t_floatarg, A_DEFFLOAT);
-  
+
 /*------------------------------------------------------------
-  
+
 pix_multiblob
 
 ------------------------------------------------------------*/
@@ -126,7 +126,7 @@ pix_multiblob :: ~pix_multiblob()
 makeBlobs
 calculates the Blobs, maximal x and y values are set
 
-algorithm adapted from imfill from animal.sf.net 
+algorithm adapted from imfill from animal.sf.net
 by Ricardo Fabbri (labmacambira.sf.net)
 ------------------------------------------------------------*/
 void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
@@ -149,9 +149,9 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
     t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x, chGray))/255.0);
     pb->m_xaccum  += grey*static_cast<t_float>(cp->x);
     pb->m_yaccum  += grey*static_cast<t_float>(cp->y);
-    pb->m_xyaccum += grey;                      
-                                              
-    if (cp->x < pb->xmin()) pb->xmin(cp->x);          
+    pb->m_xyaccum += grey;
+
+    if (cp->x < pb->xmin()) pb->xmin(cp->x);
     if (cp->x > pb->xmax()) pb->xmax(cp->x);
     if (cp->y < pb->ymin()) pb->ymin(cp->y);
     if (cp->y > pb->ymax()) pb->ymax(cp->y);
@@ -159,10 +159,10 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
     m_image.SetPixel(cp->y,cp->x,chGray,0);
     for(int i = -1; i<= 1; i++){
       for(int j = -1; j <= 1; j++){
-        np.x = cp->x + j; 
+        np.x = cp->x + j;
         np.y = cp->y + i;
 
-        if(np.x >= 0 && np.y >= 0 && 
+        if(np.x >= 0 && np.y >= 0 &&
           np.x <= m_image.xsize && np.y <= m_image.ysize &&
           m_image.GetPixel(np.y, np.x, chGray) > m_threshold ) {
           ptpush(&current, &np);
@@ -198,11 +198,11 @@ void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber)
 }
 
 /*------------------------------------------------------------
-  
+
 render
 
 ------------------------------------------------------------*/
-void pix_multiblob :: doProcessing() 
+void pix_multiblob :: doProcessing()
 {
   int blobNumber = 0;
   int blobsize = static_cast<int>(m_blobsize * m_image.xsize * m_image.ysize);
@@ -268,15 +268,15 @@ void pix_multiblob :: processImage(imageStruct &image)
 {
   // store the image in greyscale
   // since the algorithm is destructive we do it in a sandbox...
-  
+
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
- 
+
   switch (image.format){
-  case GL_RGBA: 
+  case GL_RGBA:
     m_image.fromRGBA(image.data);
     break;
-  case GL_RGB:  
+  case GL_RGB:
     m_image.fromRGB(image.data);
     break;
   case GL_BGR_EXT:

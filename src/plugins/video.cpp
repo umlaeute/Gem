@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-  
+
 #include "plugins/video.h"
 #include "plugins/PluginFactory.h"
 

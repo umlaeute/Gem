@@ -4,7 +4,7 @@ LOG
 
     Copyright (c) 2003 James Tittle
     ported from pete's_plugins (www.petewarden.com)
-    
+
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -19,16 +19,16 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_refraction
-    
+
     View pix thru glass blocks
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_refraction : public GemPixObj
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_refraction : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_refraction();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_refraction();
@@ -63,9 +63,9 @@ class GEM_EXTERN pix_refraction : public GemPixObj
 	float 		m_CellWidth;
 	float 		m_CellHeight;
 	float 		m_DoAllowMagnification;
- 
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	refractCallback(void *data, t_floatarg m_Refraction);

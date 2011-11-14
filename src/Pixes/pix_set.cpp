@@ -51,11 +51,11 @@ pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
   m_pixBlock.image.csize = 4;
   m_pixBlock.image.format = GL_RGBA;
   m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-  
-  dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * 
+
+  dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
     m_pixBlock.image.csize * sizeof(unsigned char);
   m_pixBlock.image.allocate(dataSize);
-  
+
   memset(m_pixBlock.image.data, 0, dataSize);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("data"));
 }
@@ -106,10 +106,10 @@ void pix_set :: DATAMess(int argc, t_atom *argv)
 {
   int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize, counter, n;
   unsigned char *buffer = m_pixBlock.image.data;
-  
+
   //	argc--;
   memset(buffer, 0, picturesize*m_pixBlock.image.csize*sizeof(unsigned char));
-	
+
   switch (m_mode) {
   case GL_RGB:
     n = argc/3;
@@ -188,7 +188,7 @@ void pix_set :: SETMess(int xsize, int ysize)
 	m_pixBlock.image.csize = 4;
 	m_pixBlock.image.format = GL_RGBA;
 	m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-	
+
 	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
 		* 4 * sizeof(unsigned char);
 	m_pixBlock.image.allocate(dataSize);
@@ -233,7 +233,7 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
 		gensym("yuv"), A_NULL);
      class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::SETMessCallback),
 		gensym("set"), A_FLOAT, A_FLOAT, A_NULL);
-	
+
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::DATAMessCallback),
 		gensym("data"), A_GIMME, A_NULL);
 }

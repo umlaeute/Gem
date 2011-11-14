@@ -21,15 +21,15 @@ LOG
 -------------------------------------------------------------------
 CLASS
 	ortho
-    
+
 	Use orthogonal viewing
 
 DESCRIPTION
-    
+
     Inlet for a list - "orthostate"
 
     "orthostate" - whether to go orthogonal
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN ortho : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN ortho : public GemBase
 	    //////////
 	    // Constructor
     	ortho();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~ortho();
@@ -68,9 +68,9 @@ class GEM_EXTERN ortho : public GemBase
     	int	    		m_compat;
     	void	    	compatMess(int state);
 
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
      	static void 	orthoMessCallback(void *data, t_floatarg state);

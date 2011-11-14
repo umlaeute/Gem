@@ -4,7 +4,7 @@ LOG
 
     WorkerThread.h
        - part of GEM
-       - baseclass for queueing/dequeueing workloads for threaded 
+       - baseclass for queueing/dequeueing workloads for threaded
 
     Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -45,7 +45,7 @@ namespace gem { namespace thread {
 
       //////
       // cancel a datachunk from the TODO-queue
-      // if the chunk was successfully removed, returns TRUE 
+      // if the chunk was successfully removed, returns TRUE
       // (FALSE is returned, if e.g. the given datachunk was not found in the queue)
       // note that items already processed cannot be cancelled anymore
       virtual bool cancel(const id_t ID);
@@ -56,11 +56,11 @@ namespace gem { namespace thread {
 
     protected:
 
-      //// 
+      ////
       // the worker!
       // get's called from an alternative thread(s)
-      // when the queue is non-empty, 
-      // the first element is removed from the TODO queue, 
+      // when the queue is non-empty,
+      // the first element is removed from the TODO queue,
       // and this function is called with the 1st element as data
       // the result returned is added to the done queue (alongside the ID)
       virtual void* process(id_t ID, void*data) = 0;

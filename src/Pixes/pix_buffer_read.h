@@ -22,14 +22,14 @@
   -------------------------------------------------------------------
   CLASS
   pix_buffer_read
-  
+
   reads from a pix_buffer
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer_read : public GemPixObj
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   //////////
   // Constructor
   pix_buffer_read(t_symbol *s);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_buffer_read();
@@ -91,7 +91,7 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   // update pix_buffer & image
   bool m_needsupdate;
   virtual void update_image();
-  
+
  private:
   //////////
   // static member functions

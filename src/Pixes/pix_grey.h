@@ -24,14 +24,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_grey
-    
+
     Change pix from "any" color-space to GL_LUMINANCE
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_grey : public pix_rgba

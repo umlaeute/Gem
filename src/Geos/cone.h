@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     cone
-    
+
     Creates a cone
 
 KEYWORD
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -39,9 +39,9 @@ class GEM_EXTERN cone : public cylinder
 	    //////////
 	    // Constructor
   cone(t_floatarg size,t_floatarg slice);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~cone();

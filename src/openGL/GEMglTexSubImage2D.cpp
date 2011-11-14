@@ -33,7 +33,7 @@ GEMglTexSubImage2D :: GEMglTexSubImage2D	(int argc, t_atom*argv) :
 	if (argc>2)yoffset=atom_getint(argv+2);
 	if (argc>3)width  =atom_getint(argv+3);
 	if (argc>4)height =atom_getint(argv+4);
-	
+
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("level"));
 	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xoffset"));
 	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yoffset"));
@@ -67,9 +67,9 @@ void GEMglTexSubImage2D :: render(GemState *state) {
   if (!state)return;
   pixBlock*img=NULL;  state->get(GemState::_PIX, img);  if(!img || !&img->image)return;
   target=GL_TEXTURE_2D;
-  glTexSubImage2D (target, level, xoffset, yoffset, width, height, 
-		   img->image.format, 
-		   img->image.type, 
+  glTexSubImage2D (target, level, xoffset, yoffset, width, height,
+		   img->image.format,
+		   img->image.type,
 		   img->image.data);
 }
 

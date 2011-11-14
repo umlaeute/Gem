@@ -7,15 +7,15 @@
  * This version released in 2011 under Gem license by Ricardo Fabbri
  * Originally released under GPL v.2
  * -------------------------------------------------------------------------
- */ 
-  
+ */
+
 
 #include "pstk.h"
 #include <malloc.h>
 #include <assert.h>
 
 
-int 
+int
 ptpush(pstk_ptr *pstk, point *pt)
 {
    return PrependPList(pstk, pt->x, pt->y);
@@ -33,7 +33,7 @@ ptpop(pstk_ptr *pstk)
    ANIMAL_MALLOC_OBJECT(p,point,"ptpop",NULL);
 
    p->x = stk->x; p->y = stk->y;
-   
+
    /* remove top */
    aux=stk;
    stk=stk->next;
@@ -42,7 +42,7 @@ ptpop(pstk_ptr *pstk)
    return p;
 }
 
-void 
+void
 free_pstk(pstk_ptr *p)
 {
    free_plist(p);
@@ -62,6 +62,6 @@ new_stk(int n)
    ANIMAL_MALLOC_ARRAY(stk->data, int, n, func,NULL);
 
    stk->n   =  n;
-   stk->top = -1; 
+   stk->top = -1;
    return stk;
 }

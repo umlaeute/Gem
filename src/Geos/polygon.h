@@ -23,12 +23,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     polygon
-    
+
     Creates a polygon
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
 
     Inlet for a list - "vert_1"
@@ -39,7 +39,7 @@ DESCRIPTION
     "vert_1" - The second vertex
     ...
     "vert_9" - The tenth vertex
-     
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN polygon : public GemShape
 {
@@ -50,9 +50,9 @@ class GEM_EXTERN polygon : public GemShape
         //////////
         // Constructor
     	polygon(t_floatarg numInputs);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~polygon();
@@ -74,7 +74,7 @@ class GEM_EXTERN polygon : public GemShape
 	    //-----------------------------------
 	    // GROUP:	Member variables
 	    //-----------------------------------
-    
+
     	//////////
     	// The vertices
 			void createVertices(int);

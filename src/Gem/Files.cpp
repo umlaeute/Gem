@@ -25,9 +25,9 @@ namespace gem {
       DWORD errorNumber;
       HANDLE hFind;
       LPVOID lpErrorMessage;
-      
+
       hFind = FindFirstFile(pattern.c_str(), &findData);
-      if (hFind == INVALID_HANDLE_VALUE) 
+      if (hFind == INVALID_HANDLE_VALUE)
         {
           errorNumber = GetLastError();
           switch (errorNumber)
@@ -37,7 +37,7 @@ namespace gem {
               break;
             default:
               FormatMessage(
-                            FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+                            FORMAT_MESSAGE_ALLOCATE_BUFFER |
                             FORMAT_MESSAGE_FROM_SYSTEM,
                             NULL,
                             errorNumber,
@@ -58,17 +58,17 @@ namespace gem {
       glob_t glob_buffer;
       int i=0;
       switch( glob( pattern.c_str(), GLOB_TILDE, NULL, &glob_buffer ) ) {
-      case GLOB_NOSPACE: 
-        //        error("out of memory for \"%s\"",pattern.c_str()); 
+      case GLOB_NOSPACE:
+        //        error("out of memory for \"%s\"",pattern.c_str());
         return result;
 # ifdef GLOB_ABORTED
-      case GLOB_ABORTED: 
-        //error("aborted \"%s\"",pattern.c_str()); 
+      case GLOB_ABORTED:
+        //error("aborted \"%s\"",pattern.c_str());
         return result;
 # endif
 # ifdef GLOB_NOMATCH
-      case GLOB_NOMATCH: 
-        //error("nothing found for \"%s\"",pattern.c_str()); 
+      case GLOB_NOMATCH:
+        //error("nothing found for \"%s\"",pattern.c_str());
         return result;
 # endif
       }
@@ -84,7 +84,7 @@ namespace gem {
 
     std::string expandEnv(const std::string&value, bool bashfilename) {
       std::string ret;
-      /* FIXXME: 
+      /* FIXXME:
        *  ouch, on linux value has to include "$VARIABLENAME", check whether we need "%VARIABLENAME%" on w32
        */
 
@@ -101,11 +101,11 @@ namespace gem {
 
 #ifdef HAVE_WORDEXP_H
       wordexp_t pwordexp;
-      
+
       if(0==wordexp(ret.c_str(), &pwordexp, 0)) {
         pwordexp.we_offs=0;
         if(pwordexp.we_wordc) {
-          // we only take the first match into account 
+          // we only take the first match into account
           ret=pwordexp.we_wordv[0];
         }
 # ifdef __APPLE__
@@ -130,10 +130,10 @@ namespace gem {
       std::string Ext;
       std::string::size_type idx;
       idx = fileName.rfind('.');
-    
+
       if(idx != std::string::npos)
         Ext=fileName.substr(idx + 1);
-     
+
       if(lower) {
         // lower-case: http://www.cplusplus.com/forum/general/837/
 #if 0

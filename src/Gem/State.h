@@ -28,10 +28,10 @@ class TexCoord;
   -------------------------------------------------------------------
   CLASS
   TexCoord
-    
+
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN TexCoord
 {
@@ -47,11 +47,11 @@ class GEM_EXTERN TexCoord
   -------------------------------------------------------------------
   CLASS
   GemState
-    
+
   The state to pass among GEM objects
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 
 class GemStateData;
@@ -88,17 +88,17 @@ class GEM_EXTERN GemState
   // Are we in a display list creation?
   // deprecated: use property 'gl.displaylist' instead
   GEM_DEPRECATED  bool 	    	    inDisplayList;
-    	
+
   //////////
   // Lighting on?
   // deprecated: use property 'gl.lighting' instead
   GEM_DEPRECATED  bool 	    	    lighting;
-    	
+
   //////////
   // Smooth shading (flat is other type)
   // deprecated: use property 'gl.smooth' instead
   GEM_DEPRECATED  bool 	    	    smooth;
-    	
+
   //////////
   // Texture mapping on?
   // 0..off
@@ -106,23 +106,23 @@ class GEM_EXTERN GemState
   // 2..rectangle texture
   // deprecated: use property 'gl.tex.type' instead
   GEM_DEPRECATED  int 	    	    texture;
-    	
+
   //////////
   // The image to texture map
   // deprecated: use property 'pix' instead
   GEM_DEPRECATED  pixBlock	        *image;
-    	
+
   //////////
   // Texture coordinates.
   // This can be NULL if there aren't any coordinates
   // deprecated: use property 'gl.tex.coords' instead
   GEM_DEPRECATED  TexCoord    	    *texCoords;
-    	
+
   //////////
   // The number of TexCoords
   // deprecated: use property 'gl.tex.numcoords' instead
   GEM_DEPRECATED  int 	    	    numTexCoords;
-  
+
   //////////
   // The number of multiTexUnits
   //   default = 0, max = 7
@@ -145,7 +145,7 @@ class GEM_EXTERN GemState
   // how deep is the current stack /* 4 fields for the 4 stacks */
   // deprecated: use property 'gl.stacks' instead
   GEM_DEPRECATED  int stackDepth[4];
-	
+
   ////////////
   //vertex-array data
   // deprecated: use property 'vertex.dirty' instead
@@ -190,7 +190,7 @@ class GEM_EXTERN GemState
 
 
   /* get a named property */
-  /* if the property exists (as the given type), 
+  /* if the property exists (as the given type),
    * the value of the 2nd argument is set accordingly and <code>true</code> is returned
    * if the key does not exist (or the type is wrong) the value is not touched and <code>false</code> is returned instead
    */
@@ -223,5 +223,5 @@ class GEM_EXTERN GemState
  protected:
   GemStateData*data;
 };
-    	
+
 #endif	// for header file

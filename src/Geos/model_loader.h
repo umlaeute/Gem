@@ -1,8 +1,8 @@
-/*    
+/*
       glm.h
       Nate Robins, 1997, 2000
       nate@pobox.com, http://www.pobox.com/~nate
- 
+
       Wavefront OBJ model file format reader/writer/manipulator.
 
       Includes routines for generating smooth normals with
@@ -57,7 +57,7 @@ typedef enum
 
 
 
-/* GLMmaterial: Structure that defines a material in a model. 
+/* GLMmaterial: Structure that defines a material in a model.
  */
 typedef struct _GLMmaterial
 {
@@ -101,7 +101,7 @@ typedef struct _GLMmodel {
   GLuint   numnormals;          /* number of normals in model */
   GLfloat* normals;             /* array of normals */
 
-  /* 
+  /*
    * generated texcoords
    */
   GLuint   numtexcoords;        /* number of texcoords in model */
@@ -121,7 +121,7 @@ typedef struct _GLMmodel {
 
   GLfloat position[3];          /* position of the model */
 
-  /* 
+  /*
    * texcoords as stored in the model;
    * must never be modified
    */
@@ -134,7 +134,7 @@ typedef struct _GLMmodel {
  * scaling it to fit in a unit cube around the origin.  Returns the
  * scalefactor used.
  *
- * model - properly initialized GLMmodel structure 
+ * model - properly initialized GLMmodel structure
  */
 GLfloat
 glmUnitize(GLMmodel* model);
@@ -149,7 +149,7 @@ GLvoid
 glmDimensions(GLMmodel* model, GLfloat* dimensions);
 
 /* glmScale: Scales a model by a given amount.
- * 
+ *
  * model - properly initialized GLMmodel structure
  * scale - scalefactor (0.5 = half as large, 2.0 = twice as large)
  */
@@ -159,8 +159,8 @@ glmScale(GLMmodel* model, GLfloat scale);
 /* glmReverseWinding: Reverse the polygon winding for all polygons in
  * this model.  Default winding is counter-clockwise.  Also changes
  * the direction of the normals.
- * 
- * model - properly initialized GLMmodel structure 
+ *
+ * model - properly initialized GLMmodel structure
  */
 GLvoid
 glmReverseWinding(GLMmodel* model);
@@ -213,9 +213,9 @@ glmDelete(GLMmodel* model);
  * Returns a pointer to the created object which should be free'd with
  * glmDelete().
  *
- * filename - name of the file containing the Wavefront .OBJ format data.  
+ * filename - name of the file containing the Wavefront .OBJ format data.
  */
-GLMmodel* 
+GLMmodel*
 glmReadOBJ(char* filename);
 
 /* glmWriteOBJ: Writes a model description in Wavefront .OBJ format to
@@ -271,7 +271,7 @@ glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber);
  *            GLM_FLAT    -  render with facet normals
  *            GLM_SMOOTH  -  render with vertex normals
  *            GLM_TEXTURE -  render with texture coords
- *            GLM_FLAT and GLM_SMOOTH should not both be specified.  
+ *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
 glmList(GLMmodel* model, GLuint mode);
@@ -285,7 +285,7 @@ glmList(GLMmodel* model, GLuint mode);
  *            GLM_FLAT    -  render with facet normals
  *            GLM_SMOOTH  -  render with vertex normals
  *            GLM_TEXTURE -  render with texture coords
- *            GLM_FLAT and GLM_SMOOTH should not both be specified.  
+ *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
 glmListGroup(GLMmodel* model, GLuint mode, int groupNumber);
@@ -329,7 +329,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon);
  * height     - will contain the height of the image on return.
  *
  */
-GLubyte* 
+GLubyte*
 glmReadPPM(char* filename, int* width, int* height);
 
 #ifdef __cplusplus

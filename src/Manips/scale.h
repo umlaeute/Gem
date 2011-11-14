@@ -21,17 +21,17 @@ LOG
 -------------------------------------------------------------------
 CLASS
     scale
-    
+
     scale a gem object
 
 DESCRIPTION
-    
+
     Inlet for a list - "vector"
     Inlet for a float - "ft1"
 
     "vector" - the vector of scale
     "ft1" - the distance
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN scale : public GemBase
 {
@@ -42,9 +42,9 @@ class GEM_EXTERN scale : public GemBase
         //////////
         // Constructor
     	scale(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~scale();
@@ -64,13 +64,13 @@ class GEM_EXTERN scale : public GemBase
     	//////////
     	// Distance changed
     	void	    	distanceMess(float distance);
-    	
+
     	//////////
     	// Vector changed
     	void	    	vectorMess(float x, float y, float z);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	distanceMessCallback(void *data, t_floatarg distance);

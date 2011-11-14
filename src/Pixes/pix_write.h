@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_write
-    
+
     Writes a pix of the render buffer
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vert_size"
@@ -39,7 +39,7 @@ DESCRIPTION
 
     "vert_size" - Set the size of the pix
     "vert_pos" - Set the position of the pix
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_write : public GemBase
 {
@@ -50,9 +50,9 @@ class GEM_EXTERN pix_write : public GemBase
         //////////
         // Constructor
     	pix_write(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_write();
@@ -63,7 +63,7 @@ class GEM_EXTERN pix_write : public GemBase
 
       // check extensions
       virtual bool isRunnable(void);
-    	
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
@@ -75,19 +75,19 @@ class GEM_EXTERN pix_write : public GemBase
     	//////////
     	// Set the filename and filetype
     	virtual void	fileMess(int argc, t_atom *argv);
- 
+
     	//////////
     	// When a size message is received
     	virtual void	sizeMess(int width, int height);
-    	
+
     	//////////
     	// When a position message is received
     	virtual void	posMess(int x, int y);
-    	
+
     	//////////
     	// Clean up the image
     	void	    	cleanImage();
-    	
+
     	//////////
     	// The original pix_write
     	imageStruct 	*m_originalImage;
@@ -96,7 +96,7 @@ class GEM_EXTERN pix_write : public GemBase
 	//////////
 	// Manual writing
 	bool            m_banged;
-    	
+
 	//////////
 	// Automatic writing
 	bool            m_automatic;
@@ -104,7 +104,7 @@ class GEM_EXTERN pix_write : public GemBase
 	//////////
 	// Counter for automatic writing
 	int             m_autocount;
-    	
+
     	//////////
 	// path to write to
     	char	    	m_pathname[MAXPDSTRING];
@@ -119,21 +119,21 @@ class GEM_EXTERN pix_write : public GemBase
     	//////////
     	// The x position
     	int     	m_xoff;
-    	
+
     	//////////
     	// The y position
     	int     	m_yoff;
-    	
+
     	//////////
     	// The width
     	int     	m_width;
-    	
+
     	//////////
     	// The height
     	int     	m_height;
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);

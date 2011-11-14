@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     square
-    
+
     Creates a square
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN square : public GemShape
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN square : public GemShape
         //////////
         // Constructor
     	square(t_floatarg size);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~square();
-        
+
     	//////////
     	// Do the rendering
     	virtual void 	renderShape(GemState *state);

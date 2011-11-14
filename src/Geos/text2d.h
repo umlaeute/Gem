@@ -22,7 +22,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     text2d
-    
+
     Creates a text2d string
 
 DESCRIPTION
@@ -37,9 +37,9 @@ class GEM_EXTERN text2d : public TextBase
   /////////
 		// Constructor
     	text2d(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~text2d();

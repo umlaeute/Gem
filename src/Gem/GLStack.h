@@ -26,7 +26,7 @@ class GEM_EXTERN GLStack {
 
   enum GemStackId { MODELVIEW, COLOR, TEXTURE, PROJECTION };
 
-  /** push the given matrix to the stack if the maximum has not been reached 
+  /** push the given matrix to the stack if the maximum has not been reached
    *   returns true on success and false otherwise (stack overflow)
    * NOTE: needs valid openGL context
    * NOTE: might change the current matrix mode; you have to manually reset it
@@ -38,7 +38,7 @@ class GEM_EXTERN GLStack {
    */
   void push(void);
 
-  /** pop the given matrix from the stack if the maximum has not been reached 
+  /** pop the given matrix from the stack if the maximum has not been reached
    *   returns true on success and false otherwise (stack underflow)
    * NOTE: needs valid openGL context
    * NOTE: might change the current matrix mode; you have to manually reset it
@@ -49,12 +49,12 @@ class GEM_EXTERN GLStack {
    */
   void pop(void);
 
-  /** 
-   * reset the maximum stack depth of the given stack 
+  /**
+   * reset the maximum stack depth of the given stack
    * NOTE: needs valid openGL context
    */
   void reset(void);
-  /** 
+  /**
    * reset the maximum stack depth of all stacks
    *  returns the current stack depth (-1 on failure)
    * NOTE: needs valid openGL context

@@ -13,8 +13,8 @@
 #include <errno.h>
 
 CPPEXTERN_NEW_WITH_GIMME(pix_share_read);
-  
-  
+
+
   pix_share_read :: pix_share_read(int argc, t_atom*argv):pix_share_write(argc,argv)
 {
 
@@ -27,7 +27,7 @@ pix_share_read :: ~pix_share_read()
 }
 
 void pix_share_read :: render(GemState *state)
-{	
+{
 #ifndef _WIN32
   if(shm_id>0){
     if (shm_addr) {
@@ -40,7 +40,7 @@ void pix_share_read :: render(GemState *state)
         pix.image.ysize=h->ysize;
         pix.image.reallocate();
         pix.image.upsidedown=h->upsidedown;
-        
+
         memcpy(pix.image.data,data,imgsize);
 
         pix.newimage = true;

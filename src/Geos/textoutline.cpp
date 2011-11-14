@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_GIMME(textoutline);
 textoutline :: textoutline(int argc, t_atom *argv)
   : TextBase(argc, argv) {
   fontNameMess(DEFAULT_FONT);
-} 
+}
 textoutline :: ~textoutline() {
   if(m_font)delete m_font;m_font=NULL;
 }

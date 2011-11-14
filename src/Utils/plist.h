@@ -7,7 +7,7 @@
  * This version released in 2011 under Gem license by Ricardo Fabbri
  * Originally released under GPL v.2
  * -------------------------------------------------------------------------
- */ 
+ */
 
 #ifndef GEM_UTILS_PLIST_H
 #define GEM_UTILS_PLIST_H 1
@@ -65,10 +65,10 @@ typedef struct list { // list of single integer indexes
 #define isnt_empty(p)   ( (p)!=NULL )  /* "p" is plist_ptr */
 #define Nextpoint(p) ( (p)->next )
 
-plist_ptr 
+plist_ptr
    append_plist(plist_ptr *p, int x, int y);
 
-int 
+int
    PrependPList(plist_ptr *head, int x, int y);
 
 void
@@ -80,19 +80,19 @@ void
    @@@ the interface to list is more abstract than the plist interface
 */
 #define new_list()    NULL
-#define is_empty_list(l)   ( (l)==NULL )  
-#define isnt_empty_list(l) ( (l)!=NULL ) 
+#define is_empty_list(l)   ( (l)==NULL )
+#define isnt_empty_list(l) ( (l)!=NULL )
 #define next_list_node(listptr)  ( (listptr)->next )
 #define get_list_point(listptr) ( (listptr)->val )
 #define not_nil(listptr) ((listptr)!=NULL)
 #define get_list_head(l)   (l)  // returns  a listptr
 
-int 
+int
    list_remove_head(list **l, int *val),
    list_append(list **l, int val),
    list_prepend(list **l, int val);
 
-void 
+void
    print_list(list *l),
    free_list(list **l);
 

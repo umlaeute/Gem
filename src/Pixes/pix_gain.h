@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_gain
-    
+
     Change the overall gain of a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_gain"
@@ -35,7 +35,7 @@ DESCRIPTION
 
     "vec_gain" - The gain vector to set to
     "ft1" - The gain amount (all gains are equal)
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_gain : public GemPixObj
 {
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_gain : public GemPixObj
 	    //////////
 	    // Constructor
   pix_gain(int,t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_gain();
@@ -61,21 +61,21 @@ class GEM_EXTERN pix_gain : public GemPixObj
 #ifdef __MMX__
 	//////////
     	// MMX
-    	virtual void 	processRGBAMMX(imageStruct &image);   
+    	virtual void 	processRGBAMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
 	//////////
     	// altivec
-    	virtual void 	processYUVAltivec(imageStruct &image);   	
+    	virtual void 	processYUVAltivec(imageStruct &image);
 #endif
     	//////////
     	// Set the new gain
     	void	    	vecGainMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// Set the new gain
     	void	    	floatGainMess(float gain);
-    	 
+
     	//////////
     	// The new gain
     	float		  	m_gain[4];
@@ -86,9 +86,9 @@ class GEM_EXTERN pix_gain : public GemPixObj
 
 	//////////
 	bool  m_saturate;
-    
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

@@ -25,7 +25,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglColorMaterial );
 // Constructor
 //
 GEMglColorMaterial :: GEMglColorMaterial (int argc, t_atom*argv) :
-		face(0), 
+		face(0),
 		mode(0)
 {
   if(2==argc){faceMess(argv[0]); modeMess(argv[1]);} else if (argc) throw(GemException("invalid number of arguments"));

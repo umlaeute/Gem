@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_draw
-    
+
     Creates a pix_draw
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_draw : public GemBase
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_draw : public GemBase
 	    //////////
 	    // Constructor
     	pix_draw();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_draw();

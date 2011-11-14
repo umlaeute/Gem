@@ -3,10 +3,10 @@
 GEM - Graphics Environment for Multimedia
 
 Load an ARB vertex program/shader
- 
+
  *  Created by tigital on 10/16/04.
  *  Copyright 2004 tigital.
- 
+
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
 Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -29,28 +29,28 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   vertex_program
-    
+
   Loads in a vertex program/shader
-    
+
   KEYWORDS
-  
-    
+
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_program : public GemBase
 {
   CPPEXTERN_HEADER(vertex_program, GemBase);
-    
+
     public:
-  
+
   //////////
   // Constructor
   vertex_program(void);
   vertex_program(t_symbol *filename);
 
  protected:
-    
+
   //////////
   // Destructor
   virtual ~vertex_program();
@@ -103,12 +103,12 @@ class GEM_EXTERN vertex_program : public GemBase
   char*		m_programString;
   size_t	m_size;
   const char		*m_buf;
-  
+
   float		m_param[4];
   int	        m_envNum;
 
  protected:
-	
+
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);

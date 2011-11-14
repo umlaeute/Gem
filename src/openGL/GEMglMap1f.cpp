@@ -29,7 +29,7 @@ GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
 	if (argc>2)u2    =static_cast<GLfloat>(atom_getfloat(argv+2));
 	if (argc>3)stride=static_cast<GLint>(atom_getint(argv+3));
 	if (argc>4)order =static_cast<GLint>(atom_getint(argv+4));
-	
+
 	len=128;
 	points = new GLfloat[len];
 

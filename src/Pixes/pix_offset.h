@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_offset
-    
+
     Change the overall gain of a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_offset"
@@ -35,7 +35,7 @@ DESCRIPTION
 
     "vec_offset" - The offset vector to set to
     "ft1" - The offset amount (all offsets are equal)
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_offset : public GemPixObj
 {
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_offset : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_offset();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_offset();
@@ -61,24 +61,24 @@ class GEM_EXTERN pix_offset : public GemPixObj
 #ifdef __MMX__
 	//////////
 	// MMX
-    	virtual void 	processRGBAMMX(imageStruct &image); 
-     	virtual void 	processYUVMMX(imageStruct &image); 
-   	virtual void 	processGrayMMX(imageStruct &image); 
+    	virtual void 	processRGBAMMX(imageStruct &image);
+     	virtual void 	processYUVMMX(imageStruct &image);
+   	virtual void 	processGrayMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
 	//////////
     	// altivec
-    	virtual void 	processYUVAltivec(imageStruct &image); 
+    	virtual void 	processYUVAltivec(imageStruct &image);
 #endif
 
     	//////////
     	// Set the new offset
     	void	    	vecOffsetMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// Set the new offset
     	void	    	floatOffsetMess(float foffset);
-    	
+
     	//////////
     	// The new offset
     	unsigned char	m_offset[4];
@@ -90,7 +90,7 @@ class GEM_EXTERN pix_offset : public GemPixObj
 	bool  m_saturate;
 
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	vecOffsetMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

@@ -3,14 +3,14 @@
   GEM - Graphics Environment for Multimedia
 
   calc the histogramm of the pixBuf and write it to table(s)
-  
+
   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
   Copyright (c) Günther Geiger. geiger@epy.co.at
   Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   Copyright (c) 2002 James Tittle & Chris Clepper
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	
+
   -----------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------
@@ -18,9 +18,9 @@
 
   IOhannes m zmoelnig
   mailto:zmoelnig@iem.kug.ac.at
-	
+
   this code is published under the Gnu GeneralPublicLicense that should be distributed with gem & pd
-	  
+
   -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_HISTO_H_
@@ -35,26 +35,26 @@
 
   KEYWORDS
   pix
-  
+
   DESCRIPTION
-	
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_histo : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_histo, GemPixObj);
-		
+
     public:
-	
+
   //////////
   // Constructor
   pix_histo(int argc, t_atom *argv);
-	
+
  protected:
-	
+
   //////////
   // Destructor
   virtual ~pix_histo();
-	
+
   //////////
   // Do the processing
   virtual void 	processRGBAImage(imageStruct &image);
@@ -73,7 +73,7 @@ class GEM_EXTERN pix_histo : public GemPixObj
   //////////
   // check for good arrays
   t_float* checkarray(t_symbol *s, int *length);
-  
+
   //////////
   // do we need to redraw the table ?
   double updtime;

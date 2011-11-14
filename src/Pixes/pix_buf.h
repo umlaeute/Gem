@@ -24,15 +24,15 @@ class GemCache;
 -------------------------------------------------------------------
 CLASS
     pix_buf
-    
+
     Creates a pix_buf
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
     This makes an assumption that the size of the image doesn't
-    	change once the rendering has started    
+    	change once the rendering has started
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buf : public GemBase
@@ -44,9 +44,9 @@ class GEM_EXTERN pix_buf : public GemBase
 	    //////////
 	    // Constructor
     	pix_buf(t_floatarg);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_buf();
@@ -62,7 +62,7 @@ class GEM_EXTERN pix_buf : public GemBase
     	//////////
     	// Clean everything up
     	void	    	cleanImage();
-    	   	
+
 	//////////
 	// the pixBlock-cache
 	pixBlock    cachedPixBlock;
@@ -72,13 +72,13 @@ class GEM_EXTERN pix_buf : public GemBase
 	// force output of the buffer:
 	void            bangMess();
 	bool            m_banged;
-	
+
 	void            autoMess(int);
 	bool            m_auto;
 
 
 private:
-	
+
 	//////////
 	// Static member callbacks
 	static void bangMessCallback(void *);

@@ -7,7 +7,7 @@
  * This version released in 2011 under Gem license by Ricardo Fabbri
  * Originally released under GPL v.2
  * -------------------------------------------------------------------------
- */ 
+ */
 
 #include "plist.h"
 #include <malloc.h>
@@ -15,7 +15,7 @@
 
 #define Allocpoint() (plist_ptr) malloc(sizeof(pt))
 
-void 
+void
 free_plist(plist_ptr *p)
 {
    plist_ptr aux;
@@ -29,7 +29,7 @@ free_plist(plist_ptr *p)
 }
 
 
-/* 
+/*
  * Returns 0 if allocation fails; 1 for success;
  */
 int
@@ -49,16 +49,16 @@ PrependPList(plist_ptr *head, int x, int y)
 }
 
 /*
-   Returns NULL if allocation fails. 
+   Returns NULL if allocation fails.
    Otherwise, returns a pointer to the newly installed element.
 */
-plist_ptr 
+plist_ptr
 append_plist(plist_ptr *lst, int x, int y)
 {
    plist_ptr p, paux, prev=NULL;
 
    p=*lst;
-   
+
    while (p != NULL) {
       prev = p;
       p = p->next;
@@ -67,7 +67,7 @@ append_plist(plist_ptr *lst, int x, int y)
    paux = Allocpoint();
    if (!paux)
       return NULL;
-   
+
    paux->x = x;
    paux->y = y;
 
@@ -75,7 +75,7 @@ append_plist(plist_ptr *lst, int x, int y)
       prev->next = paux;
    else  /* list was intitially empty */
       *lst = paux;
-   
+
 
    paux->next = NULL;
 
@@ -105,7 +105,7 @@ print_list(list *p)
 }
 
 //-----------------------------------------------------------------------------
-void 
+void
 free_list(list **l)
 {
    list *aux;
@@ -128,7 +128,7 @@ list_append(list **lst, int val)
 
    if (last) {
       while (last->next)
-         last = last->next; 
+         last = last->next;
       pnode->next = last->next;
       last->next  = pnode;
    } else {
@@ -151,7 +151,7 @@ list_prepend(list **lst, int val)
    return true;
 }
 
-int 
+int
 list_remove_head(list **lst, int *val)
 {
    int elem;
@@ -160,7 +160,7 @@ list_remove_head(list **lst, int *val)
    if (is_empty_list(*lst))
       return false;
 
-   aux  = *lst; 
+   aux  = *lst;
    *lst = next_list_node(aux);
    elem = get_list_point(aux);
    free(aux);

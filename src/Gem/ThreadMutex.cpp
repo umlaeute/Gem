@@ -28,7 +28,7 @@ public:
   unsigned int*refcount;
   PIMPL(void) : mutex(new pthread_mutex_t), refcount(new unsigned int) {
     *refcount=1;
-    pthread_mutex_init(mutex, NULL); 
+    pthread_mutex_init(mutex, NULL);
   }
   PIMPL(const PIMPL&org) : mutex(org.mutex), refcount(org.refcount) {
     *refcount++;
@@ -36,7 +36,7 @@ public:
   ~PIMPL(void) {
     *refcount--;
     if(*refcount==0) {
-      pthread_mutex_destroy(mutex); 
+      pthread_mutex_destroy(mutex);
       delete mutex;
       delete refcount;
     }

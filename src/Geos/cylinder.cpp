@@ -85,7 +85,7 @@ void cylinder :: render(GemState *state)
     ysize0 = texCoords[1].t;
     ysize  = texCoords[2].t-ysize0;
   }
-    
+
   glPushMatrix();
   glTranslatef(0.f, 0.f, -m_size);
 
@@ -94,7 +94,7 @@ void cylinder :: render(GemState *state)
   dr = (topRadius - baseRadius) / stacks;
   dz = height / stacks;
   nz = (baseRadius - topRadius) / height;	/* Z component of normal vectors */
-  
+
   if (m_drawType == GL_POINT) {
     glBegin(GL_POINTS);
     for (i = 0; i < slices; i++) {

@@ -16,7 +16,7 @@
 // once this has proven to work (test on M$VC!), it is likely to be included automatically
 
 /* usage:
- *    void myclass::obj_setupCallback(t_class*classPtr) { 
+ *    void myclass::obj_setupCallback(t_class*classPtr) {
  *      CPPEXTERN_MSG (classPtr, "foo", gimmeMess); // A_GIMME
  *      CPPEXTERN_MSG0(classPtr, "doit", bangMess); // no args
  *      CPPEXTERN_MSG1(classPtr, "name", nameMess, t_symbol*);  // 1 arg (A_SYMBOL)

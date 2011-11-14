@@ -21,14 +21,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_dot
-  
+
   change the pixBuf into dots
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_dot : public GemPixObj
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_dot : public GemPixObj
   //////////
   // Constructor
   pix_dot();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_dot();
@@ -68,7 +68,7 @@ class GEM_EXTERN pix_dot : public GemPixObj
 
   //////////
   // Make dots
-    
+
   int m_xsize, m_ysize, m_csize;
     unsigned char *sharedbuffer;
     int sharedbuffer_length;
@@ -91,7 +91,7 @@ class GEM_EXTERN pix_dot : public GemPixObj
     bool m_useScale;
 
  private:
-  
+
   //////////
   // static member functions
   static void bangMessCallback(void *data);

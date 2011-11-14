@@ -25,7 +25,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawElements , t_floatarg, A_DEFFLOAT, t_fl
 //
 GEMglDrawElements :: GEMglDrawElements	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
   mode(static_cast<GLenum>(arg0)), // ub, us, ui
-  count(static_cast<GLsizei>(arg1)), 
+  count(static_cast<GLsizei>(arg1)),
   type(static_cast<GLenum>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));

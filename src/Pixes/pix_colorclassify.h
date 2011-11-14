@@ -7,7 +7,7 @@ Detects red, green, blue, yellow, white, black in an image
 Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	 
+
 -----------------------------------------------------------------*/
 #ifndef _INCLUDE__GEM_PIXES_PIX_COLOR_DETECT_H_
 #define _INCLUDE__GEM_PIXES_PIX_COLOR_DETECT_H_
@@ -18,12 +18,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -------------------------------------------------------------------
 CLASS
     pix_colorclassify
-    
+
     Detects red, green, blue, yellow, white, black in an image
 
 KEYWORDS
     pix, color
-    
+
 DESCRIPTION
     This algorithm uses interval logic in the the HSV colorspace to detect
     colors in 6 clases: red, green, blue, yellow, white, and black, together
@@ -33,7 +33,7 @@ DESCRIPTION
     different lighting conditions. The philosophy of the algorithm is to provide
     high precision at moderate recall, meaning it will only output a color class
     if it is sure of the result, and will output a flag if unsure, so that a
-    fallback algorithm can be useful (e.g. lookup the color from previous video frames).  
+    fallback algorithm can be useful (e.g. lookup the color from previous video frames).
 
 TODO
   - Enable the output of guesses for the 'not sure' class.
@@ -65,9 +65,9 @@ class pix_colorclassify : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_colorclassify();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_colorclassify();
@@ -77,7 +77,7 @@ class pix_colorclassify : public GemPixObj
     	virtual void 	processRGBAImage(imageStruct &image);
       // virtual void 	processGrayImage(imageStruct &image);
     	// virtual void 	processYUVImage(imageStruct &image);
-	
+
     private:
 };
 

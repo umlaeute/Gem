@@ -43,7 +43,7 @@
  * libraries which are fast should be first
  * libraries which offer features (like seeking) should be first
  *
- * of course we have a problem, if we have one fast non-seeking library and 
+ * of course we have a problem, if we have one fast non-seeking library and
  * one slower seeking library; which one should go first ???
  *
  * **********************
@@ -61,7 +61,7 @@
  *         should decode pretty much
  *         API for a bunch of other decoding libraries (e.g. FFMPEG)
  *         probems with mpeg files
- * MPEG1: linux only 
+ * MPEG1: linux only
  *        no seeking support
  *        likely to crash
  *        ONLY as fallback if nothing else works or is installed
@@ -77,7 +77,7 @@
  *          slow (?? but if it uses FFMPEG then it should be as fast as FFMPEG)
  *
  * libraries which might be worth done:
- * 
+ *
  * MPEG2: linux only
  *        fast (?)
  *        no seeking
@@ -145,7 +145,7 @@ void *pix_film :: grabThread(void*you)
     }
     select(0,0,0,0,&timout);
   }
-  
+
   me->m_thread_running=false;
   return NULL;
 }
@@ -180,7 +180,7 @@ pix_film :: pix_film(t_symbol *filename) :
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
-  
+
   std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::film>::getIDs();
 
   if(!addHandle(available_ids, "DirectShow"))
@@ -259,7 +259,7 @@ bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
       // not yet added, do so now!
       gem::plugins::film*handle=NULL;
       try {
-        handle=gem::PluginFactory<gem::plugins::film>::getInstance(key); 
+        handle=gem::PluginFactory<gem::plugins::film>::getInstance(key);
       } catch(GemException&x) {
         handle=NULL;
         verbose(1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
@@ -298,8 +298,8 @@ void pix_film :: closeMess(void){
         }
     }
   m_thread_id=0;
-  
-  if ( m_mutex ) 
+
+  if ( m_mutex )
     {
       pthread_mutex_destroy(m_mutex);
       free(m_mutex);
@@ -406,11 +406,11 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   SETFLOAT(ap+2, height);
   SETFLOAT(ap+3, fps);
   m_numFrames=frames;
-  post("loaded file: %s with %d frames (%dx%d) at %f fps", 
-       buf, 
-       (int)frames, 
-       (int)width, 
-       (int)height, 
+  post("loaded file: %s with %d frames (%dx%d) at %f fps",
+       buf,
+       (int)frames,
+       (int)width,
+       (int)height,
        fps);
   outlet_list(m_outNumFrames, 0, 4, ap);
 
@@ -547,11 +547,11 @@ void pix_film :: csMess(t_symbol *s, bool immediately)
   switch (c){
   case 'g': case 'G': m_format=GL_LUMINANCE; break;
   case 'y': case 'Y': m_format=GL_YCBCR_422_GEM; break;
-  case 'r': case 'R': 
+  case 'r': case 'R':
     if(gensym("RGB")==s||gensym("rgb")==s)
-      m_format=GL_RGB; 
+      m_format=GL_RGB;
     else
-      m_format=GL_RGBA; 
+      m_format=GL_RGBA;
     break;
   default:
     error("colorspace must be 'RGBA', 'YUV' or 'Gray'");
@@ -605,7 +605,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   } else {
     class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film), gensym("pix_filmQT"), A_DEFSYM, A_NULL);
   }
- 
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::openMessCallback),
 		  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::changeImageCallback),
@@ -634,10 +634,10 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
   } else if (argc==3){
     if ((argv[1].a_type == A_SYMBOL) || (argv[2].a_type == A_FLOAT)) {
       GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
-      codec=atom_getint(argv+2);    
+      codec=atom_getint(argv+2);
     } else if ((argv[2].a_type == A_SYMBOL) || (argv[1].a_type == A_FLOAT)) {
       GetMyClass(data)->csMess(atom_getsymbol(argv+2), false);
-      codec=atom_getint(argv+1);  
+      codec=atom_getint(argv+1);
     }
   }
   GetMyClass(data)->openMess(atom_getsymbol(argv), 0, codec);
@@ -646,7 +646,7 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
  illegal_openmess:
   GetMyClass(data)->error("open <filename> [<format>] [<preferred codec#>]");
   return;
-  
+
 }
 
 void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv){

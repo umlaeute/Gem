@@ -17,16 +17,16 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_lumaoffset
-    
-    
+
+
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_lumaoffset : public GemPixObj
 {
@@ -37,9 +37,9 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
     //////////
     // Constructor
     pix_lumaoffset();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_lumaoffset();
@@ -62,12 +62,12 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
 	float	m_LineGap;
 	bool	m_DoFilledLines;
 	bool	m_DoSmoothFill;
-	
+
 	SPete_MemHandle 	hPreviousLineHeights;
 	SPete_MemHandle 	hPreviousLineHeights2;
 	int hPreviousLineHeights_size;
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	offsetCallback(void *data, t_floatarg m_OffsetScale);

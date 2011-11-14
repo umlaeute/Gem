@@ -22,8 +22,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglProgramStringARB );
 // Constructor
 //
 GEMglProgramStringARB :: GEMglProgramStringARB	(int argc, t_atom*argv) :
-		target(static_cast<GLenum>(0)), 
-		format(static_cast<GLenum>(0)), 
+		target(static_cast<GLenum>(0)),
+		format(static_cast<GLenum>(0)),
 		len(static_cast<GLsizei>(0)),
                 string(NULL)
 {
@@ -67,7 +67,7 @@ bool GEMglProgramStringARB :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglProgramStringARB :: render(GemState *state) 
+void GEMglProgramStringARB :: render(GemState *state)
 {
 	glProgramStringARB (target, format, len, string);
 }
@@ -103,11 +103,11 @@ void GEMglProgramStringARB :: stringMess (t_symbol* arg1) {	// FUN
 void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::targetMessCallback),
 									gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::formatMessCallback), 
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::formatMessCallback),
 									gensym("format"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::lenMessCallback), 
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::lenMessCallback),
 									gensym("len"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::stringMessCallback), 
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::stringMessCallback),
 									gensym("string"), A_DEFSYMBOL, A_NULL);
 };
 

@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_quad
-    
+
     Creates a vertex_quad
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_quad : public GemBase
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_quad : public GemBase
         //////////
         // Constructor
     	vertex_quad(void);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_quad(void);
-        
+
         int	m_blend;
         float	*m_ColorArray;
         float	*m_VertexArray;

@@ -136,13 +136,13 @@ void pix_write :: doWrite()
 	glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
 	glTextureRangeAPPLE(...);
 	glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
-	
+
 	/* Copy from Frame Buffer */
 	glCopyTexSubImage2d(...);
-	
+
 	/* Flush into AGP */
 	glFlush(...);
-	
+
 	/* Pull out of AGP */
 	glGetTexImage(...);
 #endif
@@ -165,9 +165,9 @@ void pix_write :: render(GemState *state)
     } else {
       extension=(char*)"jpg";
     }
-    
+
     snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
-    
+
     m_autocount++;
     m_banged = false;
     doWrite();

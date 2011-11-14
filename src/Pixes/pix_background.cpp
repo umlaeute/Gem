@@ -54,7 +54,7 @@ void pix_background :: processRGBAImage(imageStruct &image)
 {
   int h,w,hlength;
   long src,pixsize;
-  
+
   src = 0;
   pixsize = image.xsize * image.ysize * image.csize;
 
@@ -69,7 +69,7 @@ void pix_background :: processRGBAImage(imageStruct &image)
 
   if (m_reset){
     memcpy(m_savedImage.data,image.data,pixsize);
-    m_reset = 0; 
+    m_reset = 0;
   }
 
   hlength = image.xsize;
@@ -96,7 +96,7 @@ void pix_background :: processRGBAImage(imageStruct &image)
       src+=4;
     }
   }
-  m_reset = 0; 
+  m_reset = 0;
 }
 
 void pix_background :: processGrayImage(imageStruct &image)
@@ -118,7 +118,7 @@ void pix_background :: processGrayImage(imageStruct &image)
 
   if (m_reset){
     memcpy(m_savedImage.data,image.data,pixsize);
-    m_reset = 0; 
+    m_reset = 0;
   }
 
   npixes=image.data;
@@ -130,7 +130,7 @@ void pix_background :: processGrayImage(imageStruct &image)
     oldpix=*opixes++;
     if((newpix>oldpix-thresh)&&(newpix<oldpix+thresh))npixes[-1]=0;
   }
-  m_reset = 0; 
+  m_reset = 0;
 }
 /////////////////////////////////////////////////////////
 // do the YUV processing here
@@ -152,14 +152,14 @@ void pix_background :: processYUVImage(imageStruct &image)
   m_savedImage.ysize=image.ysize;
   m_savedImage.setCsizeByFormat(image.format);
   m_savedImage.reallocate();
-  
+
   if (m_reset){
     memcpy(m_savedImage.data,image.data,pixsize);
-    m_reset = 0; 
+    m_reset = 0;
     // return;
   }
 
-   
+
   hlength = image.xsize/2;
 
   unsigned char*data =image.data;
@@ -167,7 +167,7 @@ void pix_background :: processYUVImage(imageStruct &image)
 
   for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
-          
+
       if (((data[src] > saved[src] - m_Urange)&&(data[src] < saved[src] + m_Urange))&&
 	  ((data[src+1] > saved[src+1] - m_Yrange)&&(data[src+1] < saved[src+1] + m_Yrange))&&
 	  ((data[src+2] > saved[src+2] - m_Vrange)&&(data[src+2] < saved[src+2] + m_Vrange)))
@@ -180,7 +180,7 @@ void pix_background :: processYUVImage(imageStruct &image)
       src+=4;
     }
   }
-  m_reset = 0; 
+  m_reset = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -220,9 +220,9 @@ void pix_background :: processRGBAMMX(imageStruct &image)
 
   while(i--){
     /* 7ops, 3memops */
-    /* i have the feeling that this is not faster at all! 
-     * even if i have the 3memops + ONLY 1 _mm_subs_pu8() 
-     * i am equally slow as the generic code; 
+    /* i have the feeling that this is not faster at all!
+     * even if i have the 3memops + ONLY 1 _mm_subs_pu8()
+     * i am equally slow as the generic code;
      * adding the other instruction does not change much
      */
     newpix=*data;
@@ -236,7 +236,7 @@ void pix_background :: processRGBAMMX(imageStruct &image)
     m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
     m1    = _mm_andnot_si64(m1, newpix);
 
-    *data++ = m1; 
+    *data++ = m1;
   }
   _mm_empty();
 }
@@ -254,7 +254,7 @@ void pix_background :: processYUVMMX(imageStruct &image)
   m_savedImage.ysize=image.ysize;
   m_savedImage.setCsizeByFormat(image.format);
   m_savedImage.reallocate();
-  
+
   if (m_reset){
     memcpy(m_savedImage.data,image.data,pixsize);
     // return;
@@ -297,7 +297,7 @@ void pix_background :: processYUVMMX(imageStruct &image)
     m1    = _mm_andnot_si64  (m1, newpix);
     m1    = _mm_or_si64      (m1, oldpix);
 
-    *data++ = m1; 
+    *data++ = m1;
   }
   _mm_empty();
 }
@@ -320,7 +320,7 @@ void pix_background :: processGrayMMX(imageStruct &image){
     memcpy(m_savedImage.data,image.data,pixsize);
   }
   m_reset=0;
-  if(m_Yrange==0)return;  
+  if(m_Yrange==0)return;
 
   __m64*npixes=(__m64*)image.data;
   __m64*opixes=(__m64*)m_savedImage.data;
@@ -330,12 +330,12 @@ void pix_background :: processGrayMMX(imageStruct &image){
   __m64 thresh8=_mm_set_pi8(thresh,thresh,thresh,thresh,
 			  thresh,thresh,thresh,thresh);
 
-  
+
   i=pixsize/sizeof(__m64)+(pixsize%sizeof(__m64)!=0);
   while(i--){
     newpix=npixes[i];
     oldpix=opixes[i];
-    
+
     m1    = _mm_subs_pu8 (newpix, oldpix);
     oldpix= _mm_subs_pu8 (oldpix, newpix);
     m1    = _mm_or_si64  (m1, oldpix); // |oldpix-newpix|
@@ -355,13 +355,13 @@ int pixsize = image.xsize * image.ysize * image.csize;
     h = image.ysize;
     w = image.xsize/8;
     width = image.xsize/8;
-    
+
     //check to see if the buffer isn't 16byte aligned (highly unlikely)
     if (image.ysize*image.xsize % 16 != 0){
         error("image not properly aligned for Altivec - try something SD or HD maybe?");
         return;
         }
-    
+
     union{
         unsigned short		s[8];
         vector unsigned short	v;
@@ -375,17 +375,17 @@ int pixsize = image.xsize * image.ysize * image.csize;
     m_savedImage.ysize=image.ysize;
     m_savedImage.setCsizeByFormat(image.format);
     m_savedImage.reallocate();
-    
+
     if (m_reset){
     memcpy(m_savedImage.data,image.data,pixsize);
-    m_reset = 0; 
+    m_reset = 0;
     }
-    
+
     register vector unsigned short	UVres1, Yres1, UVres2, Yres2;//interleave;
     register vector unsigned short	hiImage, loImage;
     register vector unsigned short	Yrange, UVrange, Yblank,UVblank,blank;
     register vector bool short		Ymasklo,Ymaskhi,  UVmaskhi;
-    register vector unsigned short	Yhi,Ylo,UVhi,UVlo; 
+    register vector unsigned short	Yhi,Ylo,UVhi,UVlo;
     register vector unsigned char	one = vec_splat_u8(1);
     register vector unsigned short	sone = vec_splat_u16(1);
     register vector unsigned int			Uhi, Ulo, Vhi, Vlo,Ures,Vres;
@@ -393,11 +393,11 @@ int pixsize = image.xsize * image.ysize * image.csize;
 
     vector unsigned char	*inData = (vector unsigned char*) image.data;
     vector unsigned char	*rightData = (vector unsigned char*) m_savedImage.data;
-    
+
     shortBuffer.s[0] =  m_Yrange;
     Yrange = shortBuffer.v;
     Yrange = vec_splat(Yrange,0);
-    
+
     shortBuffer.s[0] = 128;
     shortBuffer.s[1] = 0;
     shortBuffer.s[2] = 128;
@@ -407,15 +407,15 @@ int pixsize = image.xsize * image.ysize * image.csize;
     shortBuffer.s[6] = 128;
     shortBuffer.s[7] = 0;
     blank = shortBuffer.v;
-    
+
     shortBuffer.s[0] =  0;
     Yblank = shortBuffer.v;
     Yblank = vec_splat(Yblank,0);
-    
+
     shortBuffer.s[0] =  128;
     UVblank = shortBuffer.v;
     UVblank = vec_splat(UVblank,0);
-    
+
     shortBuffer.s[0] = m_Urange;
     shortBuffer.s[1] = m_Vrange;
     shortBuffer.s[2] = m_Urange;
@@ -425,17 +425,17 @@ int pixsize = image.xsize * image.ysize * image.csize;
     shortBuffer.s[6] = m_Urange;
     shortBuffer.s[7] = m_Vrange;
     UVrange = shortBuffer.v;
-    
-    
+
+
     //setup the cache prefetch -- A MUST!!!
     UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-    #ifndef PPC970 
+    #ifndef PPC970
     vec_dst( inData, prefetchSize, 0 );
     vec_dst( rightData, prefetchSize, 1 );
     vec_dst( inData+32, prefetchSize, 2 );
     vec_dst( rightData+32, prefetchSize, 3 );
     #endif //PPC970
-    
+
     for ( i=0; i<h; i++){
         for (j=0; j<w; j++)
         {
@@ -449,70 +449,70 @@ int pixsize = image.xsize * image.ysize * image.csize;
         //separate the U and V from Y
         UVres1 = (vector unsigned short)vec_mule(one,inData[0]);
         UVres2 = (vector unsigned short)vec_mule(one,rightData[0]);
-            
+
         //vec_mulo Y * 1 to short vector Y Y Y Y shorts
         Yres1 = (vector unsigned short)vec_mulo(one,inData[0]);
         Yres2 = (vector unsigned short)vec_mulo(one,rightData[0]);
-        
+
         Yhi = vec_adds(Yres2,Yrange);
         Ylo = vec_subs(Yres2,Yrange);
-        
+
         //go to ints for comparison
         UVhi = vec_adds(UVres2,UVrange);
         UVlo = vec_subs(UVres2,UVrange);
-        
+
         Uhi = vec_mule(sone,UVhi);
         Ulo = vec_mule(sone,UVlo);
-        
+
         Vhi = vec_mulo(sone,UVhi);
         Vlo = vec_mulo(sone,UVlo);
-        
+
         Ures = vec_mule(sone,UVres1);
          Vres = vec_mulo(sone,UVres1);
-         
+
          Umasklo = vec_cmpgt(Ures,Ulo);
          Umaskhi = vec_cmplt(Ures,Uhi);
-         
+
          Vmasklo = vec_cmpgt(Vres,Vlo);
          Vmaskhi = vec_cmplt(Vres,Vhi);
-         
+
          Umaskhi = vec_and(Umaskhi,Umasklo);
-         
+
          Vmaskhi = vec_and(Vmaskhi,Vmasklo);
-         
+
          Umasklo = vec_and(Umaskhi,Vmaskhi);
          Vmasklo = vec_and(Umaskhi,Vmaskhi);
-         
+
          hiImage = (vector unsigned short)vec_mergeh(Umasklo,Vmasklo);
          loImage = (vector unsigned short)vec_mergel(Umasklo,Vmasklo);
-         
+
          //pack it back down to bool short
          UVmaskhi = (vector bool short)vec_packsu(hiImage,loImage);
-         
+
          Ymasklo = vec_cmpgt(Yres1,Ylo);
          Ymaskhi = vec_cmplt(Yres1,Yhi);
-         
+
          Ymaskhi = vec_and(Ymaskhi,Ymasklo);
-         
+
          Ymaskhi = vec_and(Ymaskhi,UVmaskhi);
          UVmaskhi = vec_and(Ymaskhi,UVmaskhi);
-         
+
          //bitwise comparison and move using the result of the comparison as a mask
          Yres1 = vec_sel(Yres1,Yblank,Ymaskhi);
-         
+
          //UVres1 = vec_sel(UVres1,UVres2,UVmaskhi);
          UVres1 = vec_sel(UVres1,UVblank,UVmaskhi);
-         
+
          //merge the Y and UV back together
          hiImage = vec_mergeh(UVres1,Yres1);
          loImage = vec_mergel(UVres1,Yres1);
-         
+
          //pack it back down to unsigned char to store
          inData[0] = vec_packsu(hiImage,loImage);
-         
+
          inData++;
          rightData++;
-        
+
         }
         #ifndef PPC970
         vec_dss(0);
@@ -530,7 +530,7 @@ void pix_background :: rangeNMess(int argc, t_atom*argv){
   unsigned int v=0;
   m_Arange=255;
   switch(argc){
-  case 4:  
+  case 4:
     m_Arange=CLAMP((float)255.*atom_getfloat(argv+3));
   case 3:
     m_Yrange=CLAMP((float)255.*atom_getfloat(argv));

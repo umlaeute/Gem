@@ -26,12 +26,12 @@
 -------------------------------------------------------------------
 CLASS
     newWave
-    
+
     based on the SGI demo New Wave
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -44,9 +44,9 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // Constructor
   newWave( int, t_atom* );
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~newWave();
@@ -60,16 +60,16 @@ class GEM_EXTERN newWave : public GemShape
   void		forceMess(float posX, float posY, float valforce);
   void		positionMess(float posX, float posY, float posZ);
   void		textureMess(int mode);
-  void		bangMess();        
+  void		bangMess();
 
   //////////
   // Do the rendering
   virtual void 	renderShape(GemState *state);
-  
+
   //////////
   // How the object should be drawn
   virtual void	typeMess(t_symbol *type);
-		
+
   //////////
   // The height of the object
   GLfloat	    	m_height;
@@ -78,7 +78,7 @@ class GEM_EXTERN newWave : public GemShape
   // The height inlet
   t_inlet         *m_inletH;
   t_inlet		*m_inletM;
-  
+
   //////////
   // getStuff
   void		getforce(void);
@@ -104,7 +104,7 @@ class GEM_EXTERN newWave : public GemShape
   void set(float vec[3], float x, float y, float z);
   void reset( int value );
   void setOther( int value );
-  
+
   void getFaceNorms( void );
   void getVertNorms( void );
   void getFaceNormSegs( void );
@@ -115,7 +115,7 @@ class GEM_EXTERN newWave : public GemShape
   int alreadyInit;
   int m_textureMode; // how to texture...
 
-  
+
   float force[MAXGRID][MAXGRID],
       veloc[MAXGRID][MAXGRID],
       posit[MAXGRID][MAXGRID],
@@ -123,7 +123,7 @@ class GEM_EXTERN newWave : public GemShape
       vertNorms[MAXGRID][MAXGRID][3],
       faceNorms[2][MAXGRID][MAXGRID][3],
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
-  
+
   float texCoords[MAXGRID][MAXGRID][2];
 
   bool m_upsidedown;
@@ -133,7 +133,7 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // static member functions
   static void 	heightMessCallback(void *data, t_floatarg size);
-  static void 	modeMessCallback(void *data, t_floatarg mode); 
+  static void 	modeMessCallback(void *data, t_floatarg mode);
   static void 	setK1MessCallback(void *data, t_floatarg K);
   static void 	setD1MessCallback(void *data, t_floatarg D);
   static void 	setK2MessCallback(void *data, t_floatarg K);

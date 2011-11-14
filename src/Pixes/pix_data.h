@@ -23,12 +23,12 @@ LOG
 CLASS
 
     pix_data
-    
+
 	Get pixel information
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a float - "xPos"
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_data : public GemPixDualObj
 	    //////////
     	// Constructor
     	pix_data();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_data();

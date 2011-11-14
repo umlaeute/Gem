@@ -22,9 +22,9 @@ class GEM_EXTERN pix_contrast : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_contrast();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_contrast();
@@ -37,17 +37,17 @@ class GEM_EXTERN pix_contrast : public GemPixObj
 		virtual void 	processYUVAltivec(imageStruct &image);
 	#endif //__VEC__
 		virtual void 	processYUVImage(imageStruct &image);
-		
+
 		void	contrastMess(float contrast);
 		void	saturationMess(float contrast);
-		
+
 		float	m_contrast;
 		float	m_saturation;
 
                 t_inlet*m_inSat, *m_inCon;
 
  private:
-    
+
     	//////////
     	// Static member functions
     	static void 	contrastMessCallback(void *data, t_floatarg contrast);

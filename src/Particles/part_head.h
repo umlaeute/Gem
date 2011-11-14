@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_head
-    
+
 	Starting point for a particle system
 
 DESCRIPTION
@@ -37,12 +37,12 @@ class GEM_EXTERN part_head : public partlib_base
 	    //////////
 	    // Constructor
     	part_head(t_floatarg priority);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_head();
@@ -58,9 +58,9 @@ class GEM_EXTERN part_head : public partlib_base
     	//////////
     	// The speed of the object
         float	    	m_speed;
-	
+
     private:
-    
+
        	//////////
     	// static member functions
     	static void 	speedMessCallback(void *data, t_floatarg speed);

@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,12 +21,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   recordBase
-    
+
   parent class for the system- and library-dependent record-loader classes
-    
+
   KEYWORDS
   pix record movie
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -66,26 +66,26 @@ public:
 
   /**
    * default implementation: return empty list
-   */ 
+   */
   virtual std::vector<std::string>getCodecs(void);
   /**
    * default implementation: return empty string
-   */ 
+   */
   virtual const std::string getCodecDescription(const std::string codecname);
   /**
    * default implementation: return FALSE
-   */ 
+   */
   virtual bool setCodec(const std::string name);
   /**
    * default implementation: return empty propset
-   */ 
+   */
   virtual bool enumProperties(gem::Properties&props);
 
  public:
-  
+
   //////////
   // Constructor
-  
+
   /* initialize the recordloader
    */
   recordBase(void);

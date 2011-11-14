@@ -22,14 +22,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_delay
-  
+
   change the pixBuf into dots
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_delay : public GemPixObj
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_delay : public GemPixObj
   //////////
   // Constructor
   pix_delay(t_float &f);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_delay();
@@ -57,10 +57,10 @@ class GEM_EXTERN pix_delay : public GemPixObj
 
   int m_maxframes, m_curframe;
   int m_frame;
-   
+
 
  private:
-  
+
   //////////
   // static member functions
   static void delayMessCallback(void *data, t_floatarg);

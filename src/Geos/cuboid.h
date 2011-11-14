@@ -20,14 +20,14 @@
   -------------------------------------------------------------------
   CLASS
   cuboid
-    
+
   Creates a cuboid
 
   KEYWORDS
   geo
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN cuboid : public GemShape
 {
@@ -39,7 +39,7 @@ class GEM_EXTERN cuboid : public GemShape
   // Constructor
   cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez);
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~cuboid();
@@ -72,7 +72,7 @@ class GEM_EXTERN cuboid : public GemShape
   //////////
   // The height inlet
   t_inlet         *m_inletZ;
-		
+
  private:
 
   //////////

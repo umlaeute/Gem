@@ -84,7 +84,7 @@ void pix_delay :: processImage(imageStruct &image)
   //while(dataSize--)*src++=*dest++;
   memcpy(dest, src, dataSize);
   m_curframe++;
-  m_curframe%=m_maxframes;  
+  m_curframe%=m_maxframes;
 
   image.data=myImage.data+readframe*dataSize;
 }
@@ -103,5 +103,5 @@ void pix_delay :: obj_setupCallback(t_class *classPtr)
 
 void pix_delay :: delayMessCallback(void *data, t_floatarg frames)
 {
-  GetMyClass(data)->delayMess((int)frames);  
+  GetMyClass(data)->delayMess((int)frames);
 }

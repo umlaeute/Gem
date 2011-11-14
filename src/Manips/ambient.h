@@ -24,7 +24,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     ambient
-    
+
     ambient a gem object
 
 DESCRIPTION
@@ -32,7 +32,7 @@ DESCRIPTION
     Inlet for a list - "ambient"
 
     "ambient" - the RGB ambient to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN ambient : public GemBase
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN ambient : public GemBase
 	    //////////
 	    // Constructor
     	ambient(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~ambient();
@@ -65,9 +65,9 @@ class GEM_EXTERN ambient : public GemBase
     	//////////
     	// ambient changed
     	void	    	ambientMess(float red, float green, float blue, float alpha);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	ambientMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

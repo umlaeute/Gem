@@ -22,12 +22,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   imageloader
-    
+
   interface for the system- and library-dependent imageloader classes
-    
+
   KEYWORDS
   pix load an image
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -38,7 +38,7 @@ namespace gem { namespace plugins {
 
       //////////
       // returns an instance wrapping all plugins or NULL
-      // if NULL is returned, you might still try your luck with manually accessing the 
+      // if NULL is returned, you might still try your luck with manually accessing the
       // PluginFactory
       static imageloader*getInstance(void);
 
@@ -52,8 +52,8 @@ namespace gem { namespace plugins {
        * e.g. EXIF tags,...
        */
       /* returns TRUE if loading was successfull, FALSE otherwise */
-      virtual bool load(std::string filename, 
-			imageStruct&result, 
+      virtual bool load(std::string filename,
+			imageStruct&result,
 			gem::Properties&props) = 0;
 
       /* returns TRUE if this object can be used from within a thread */

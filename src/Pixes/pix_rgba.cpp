@@ -58,12 +58,12 @@ void pix_rgba :: processImage(imageStruct &image)
 
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
- 
+
   switch (image.format){
-  case GL_RGBA: 
+  case GL_RGBA:
     m_image.fromRGBA(image.data);
     break;
-  case GL_RGB:  
+  case GL_RGB:
     m_image.fromRGB(image.data);
     break;
   case GL_BGR_EXT:

@@ -22,7 +22,7 @@
  * so other objects can bind to it with "pd_findbyclass()"
  * NOTE: we need NO_STATIC_CLASS to be defined in pix_buffer.cpp for this to work
  * NOTE: we define it only in pix_buffer.cpp (before pix_buffer.h&CPPExtern.h are included)
- *       in order to not interfere with the class-status (non-static/static) of objects that 
+ *       in order to not interfere with the class-status (non-static/static) of objects that
  *       include this header-file
  */
 
@@ -41,7 +41,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYM);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_read :: pix_buffer_read(t_symbol *s) : 
+pix_buffer_read :: pix_buffer_read(t_symbol *s) :
   m_frame(0.f), m_auto(0.f), m_loop(0),
   m_haveImage(false),
   m_bindname(NULL),
@@ -58,7 +58,7 @@ pix_buffer_read :: pix_buffer_read(t_symbol *s) :
 //
 /////////////////////////////////////////////////////////
 pix_buffer_read :: ~pix_buffer_read(){
-  
+
 }
 
 /////////////////////////////////////////////////////////
@@ -109,13 +109,13 @@ void pix_buffer_read :: update_image()
   pix_buffer *buffer=NULL;
 
   m_haveImage=false;
-  
+
   if(m_bindname==NULL || m_bindname->s_name==NULL)
     {
       error("you must set a buffer name!");
       return;
     }
-  
+
   ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
   if(ohead==NULL)
     {
@@ -162,10 +162,10 @@ void pix_buffer_read :: render(GemState*state)
 
   /*
     pd_findbyclass costs at least 2 if's
-    if m_bindname is also used for other classes too, we get an 
+    if m_bindname is also used for other classes too, we get an
     additional penalty for traversing the list of classes;
     all in all, msp has done a good job
-  */ 
+  */
   if (NULL==pd_findbyclass(m_bindname, pix_buffer_class)) return;
 
   state->set(GemState::_PIX, &m_pixBlock);

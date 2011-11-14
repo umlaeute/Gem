@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-    replace the alpha-channel of the 1st image by that of the 2nd image 
+    replace the alpha-channel of the 1st image by that of the 2nd image
 
     Copyright (c) 1997-1998 Mark Danks
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_takealpha
-    
+
     Add two images together.
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_takealpha : public GemPixDualObj
 	    //////////
     	// Constructor
     	pix_takealpha();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_takealpha();

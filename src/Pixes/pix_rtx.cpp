@@ -20,7 +20,7 @@
 // pix_rtx
 //
 // this the RealTimeX - transformator, that does  a kind of swapping the time and the x axis
-// of a video (or any series of pictures) ON THE FLY 
+// of a video (or any series of pictures) ON THE FLY
 //
 // for more information, on how this works, look at
 // http://umlaeute.mur.at/rtx
@@ -49,7 +49,7 @@ CPPEXTERN_NEW(pix_rtx);
 //
 /////////////////////////////////////////////////////////
 pix_rtx :: pix_rtx()
-{ 
+{
    imageStruct image;
 
    image.xsize  = image.ysize = 64;
@@ -127,7 +127,7 @@ void pix_rtx :: processImage(imageStruct &image)
    size_t pixsize = image.ysize * image.xsize;
    int cols=image.xsize, c=0, c1=0;
    int rows=image.ysize, r=0;
-   
+
    unsigned char *pixels = image.data;
    unsigned char *wp;			// write pointer
    unsigned char *rp;			// read pointer
@@ -136,7 +136,7 @@ void pix_rtx :: processImage(imageStruct &image)
    if (!set_buffer) {
      wp = buffer.data + pixsize * buffer.csize * bufcount;
      memcpy(wp, pixels, pixsize * buffer.csize * sizeof(unsigned char));
-   } else { 
+   } else {
      // fill the buffer with the current frame
      // this might be useful to prevent the black screen in the beginning.
      // "set" message
@@ -158,7 +158,7 @@ void pix_rtx :: processImage(imageStruct &image)
        while (r < rows) {
 	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
 	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
-	 
+
 	 *pixels   = *rp;
 	 r++;
        }
@@ -172,7 +172,7 @@ void pix_rtx :: processImage(imageStruct &image)
        while (r < rows) {
 	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
 	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
-	 
+
 	 pixels[0]  = rp[0];
 	 pixels[1]  = rp[1];
 	 r++;
@@ -187,12 +187,12 @@ void pix_rtx :: processImage(imageStruct &image)
        while (r < rows) {
 	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
 	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
-	 
+
 	 pixels[chRed]   = rp[chRed];
 	 pixels[chBlue]  = rp[chBlue];
 	 pixels[chGreen] = rp[chGreen];
 	 pixels[chAlpha] = rp[chAlpha];
-	 
+
 	 r++;
        }
        r=0;

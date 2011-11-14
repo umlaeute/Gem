@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_writer
-    
+
     Writes a pix of the render buffer
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vert_size"
@@ -38,7 +38,7 @@ DESCRIPTION
 
     "vert_size" - Set the size of the pix
     "vert_pos" - Set the position of the pix
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_writer : public GemPixObj
 {
@@ -49,9 +49,9 @@ class GEM_EXTERN pix_writer : public GemPixObj
         //////////
         // Constructor
     	pix_writer(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_writer();
@@ -63,7 +63,7 @@ class GEM_EXTERN pix_writer : public GemPixObj
     	//////////
     	// Set the filename and filetype
     	virtual void	fileMess(int argc, t_atom *argv);
- 
+
     	//////////
     	// The original pix_writer
     	imageStruct 	*m_originalImage;
@@ -72,7 +72,7 @@ class GEM_EXTERN pix_writer : public GemPixObj
       //////////
       // Manual writing
       bool            m_banged;
-    	
+
       //////////
       // Automatic writing
       bool            m_automatic;
@@ -80,7 +80,7 @@ class GEM_EXTERN pix_writer : public GemPixObj
       //////////
       // Counter for automatic writing
       int             m_autocount;
-    	
+
     	//////////
       // path to write to
     	char	    	m_pathname[MAXPDSTRING];
@@ -93,7 +93,7 @@ class GEM_EXTERN pix_writer : public GemPixObj
     	int	    	m_filetype; // 0=tiff, [1..6=jpeg]
 
  private:
-    	
+
     	//////////
     	// static member functions
     	static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);

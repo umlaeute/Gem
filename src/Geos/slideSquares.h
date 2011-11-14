@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     slideSquares
-    
+
     Creates a bunch of sliding squares
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN slideSquares : public GemShape
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN slideSquares : public GemShape
         //////////
         // Constructor
 		slideSquares(t_floatarg width, t_floatarg height);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~slideSquares();
@@ -57,7 +57,7 @@ class GEM_EXTERN slideSquares : public GemShape
     	//////////
     	// How the object should be drawn
     	virtual void	typeMess(t_symbol *type);
-		
+
     	//////////
     	// The height of the object
         GLfloat	    	m_height;
@@ -65,8 +65,8 @@ class GEM_EXTERN slideSquares : public GemShape
         //////////
         // The height inlet
         t_inlet         *m_inletH;
-        
-        
+
+
         GLvoid 	Slide( int i );
         void	slide_init();
         float	xsize, ysize;

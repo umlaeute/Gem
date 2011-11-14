@@ -25,7 +25,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemPixObj
-    
+
     Base class for pix class gem objects
 
 DESCRIPTION
@@ -40,7 +40,7 @@ class GEM_EXTERN GemPixObj : public GemBase
   GemPixObj();
 
     protected:
-    	
+
   //////////
   // Destructor
   virtual ~GemPixObj()				{ }
@@ -76,7 +76,7 @@ class GEM_EXTERN GemPixObj : public GemBase
   // SIMD-optimized functions: by default the non-optimized function is called
   virtual void 	processGrayMMX(imageStruct &image);
   virtual void 	processGraySSE2(imageStruct &image);
-  virtual void 	processGrayAltivec(imageStruct &image);     
+  virtual void 	processGrayAltivec(imageStruct &image);
 
   //////////
   // The derived class should override this.
@@ -87,16 +87,16 @@ class GEM_EXTERN GemPixObj : public GemBase
   virtual void 	processYUVMMX(imageStruct &image);
   virtual void 	processYUVSSE2(imageStruct &image);
   virtual void 	processYUVAltivec(imageStruct &image);
-    	
+
   //////////
   // If the derived class needs the image resent.
   //  	This sets the dirty bit on the pixBlock.
   void	    	setPixModified();
-  
+
   //////////
   // Turn on/off processing
   void            processOnOff(int on);
-    
+
   //////////
   // the pixBlock-cache
   pixBlock    cachedPixBlock;
@@ -108,9 +108,9 @@ class GEM_EXTERN GemPixObj : public GemBase
 
   //////////
   // creation callback
-  static void 	real_obj_setupCallback(t_class *classPtr) { 
+  static void 	real_obj_setupCallback(t_class *classPtr) {
     GemBase::real_obj_setupCallback(classPtr);
-    GemPixObj::obj_setupCallback(classPtr); 
+    GemPixObj::obj_setupCallback(classPtr);
   }
 
   //////////
@@ -121,7 +121,7 @@ class GEM_EXTERN GemPixObj : public GemBase
   virtual void 	render(GemState *state);
   // turn the pointer back to the old data after rendering
   virtual void postrender(GemState *state);
-  
+
   void startRendering(void) {
     //post("start rendering");
     setPixModified();
@@ -130,7 +130,7 @@ class GEM_EXTERN GemPixObj : public GemBase
  private:
 
   static inline GemPixObj *GetMyClass(void *data) {return((GemPixObj *)((Obj_header *)data)->data);}
-    
+
   //////////
   // static member functions
   static void     obj_setupCallback(t_class *classPtr);

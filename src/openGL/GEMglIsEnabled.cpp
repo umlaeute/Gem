@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglIsEnabled );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglIsEnabled :: GEMglIsEnabled (int argc, t_atom*argv) : 
-  cap(0) 
+GEMglIsEnabled :: GEMglIsEnabled (int argc, t_atom*argv) :
+  cap(0)
 {
   if(1==argc)capMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cap"));

@@ -36,9 +36,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 scopeXYZ :: scopeXYZ(t_floatarg len)
-  : GemShape(), 
+  : GemShape(),
     m_drawType(GL_LINE_STRIP),
-    m_requestedLength(0), m_realLength(0), m_length(0), 
+    m_requestedLength(0), m_realLength(0), m_length(0),
     m_position(0),
     m_vertices(NULL)
 {
@@ -197,7 +197,7 @@ void scopeXYZ :: typeMess(t_symbol *type)
   case 'p': // point
     m_drawType = GL_POINTS;
     break;
-  case 'l': 
+  case 'l':
     { // line, linestrip
       char c2=s[4];
       switch(c2){
@@ -229,7 +229,7 @@ void scopeXYZ :: typeMess(t_symbol *type)
       }
     }
     break;
-  case 'q': 
+  case 'q':
     { // quad, quadstrip
       char c2=s[4];
       switch(c2){
@@ -255,7 +255,7 @@ void scopeXYZ :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ),
                    gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::linewidthMessCallback),
@@ -263,7 +263,7 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::lengthMessCallback),
                   gensym("length"), A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
                   gensym("dsp"), A_NULL);
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
 
@@ -298,7 +298,7 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
   // TODO: add some protection against segfaults when bufer is very small
   if(m_length<count)
     count=m_length;
-  
+
   /* fill in the left-side of the double-array */
   for(i=0; i<count; i++) {
     *vert++=*X++;
@@ -319,7 +319,7 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
 
   } else {
     // ordinary copy
-  
+
     memcpy(m_vertices+3*(position+m_length),
            m_vertices+3*(position),
            3*count*sizeof(t_sample));

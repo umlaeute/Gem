@@ -13,7 +13,7 @@ LOG
 
 #include "Base/GemPixObj.h"
 #include "Utils/GemMath.h"
-	
+
 enum {
     eRoundStyle,
     eLineStyle,
@@ -32,15 +32,15 @@ const int nFPMult=(1<<nFPShift);
 -------------------------------------------------------------------
 CLASS
     pix_halftone
-    
+
     View pix as halftone (like in newspaper-prints)
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_halftone : public GemPixObj
 {
@@ -51,9 +51,9 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_halftone();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_halftone();
@@ -67,7 +67,7 @@ class GEM_EXTERN pix_halftone : public GemPixObj
     	//////////
 	//
 	imageStruct    myImage;
-	
+
 	int 	m_CellSize;
 	int 	m_Style;
 	float 	m_Angle;
@@ -78,7 +78,7 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 	int nHeight;
 	U32*				pSource;
 	U32*				pOutput;
-	
+
 	struct SPete_HalfTone_Point {
 	    int nX;
 	    int nY;
@@ -162,7 +162,7 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 	static void 	sizeCallback(void *data, t_floatarg m_CellSize);
     	static void 	styleCallback(void *data, t_floatarg m_Style);
 	static void 	smoothCallback(void *data, t_floatarg m_Smoothing);
-	static void 	angleCallback(void *data, t_floatarg m_Angle); // 0..2pi 
+	static void 	angleCallback(void *data, t_floatarg m_Angle); // 0..2pi
 	/* callbacks for normalized values: smooth=0..1; angle=0..360 */
 	static void smoothNCallback(void *data, t_floatarg m_Smoothing);
 	static void angleDEGCallback(void *data, t_floatarg m_Angle);

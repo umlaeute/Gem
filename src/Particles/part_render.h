@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_render
-    
+
 	Draw a part_render group
 
 DESCRIPTION
@@ -37,13 +37,13 @@ class GEM_EXTERN part_render : public partlib_base
   //////////
   // Constructor
   part_render();
-    	
+
   //////////
   virtual void 	renderParticles(GemState *state);
   virtual void 	postrender(GemState *state);
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~part_render();

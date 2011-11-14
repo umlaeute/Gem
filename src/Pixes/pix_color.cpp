@@ -48,7 +48,7 @@ pix_color :: ~pix_color()
 void pix_color :: processRGBAImage(imageStruct &image)
 {
     int i = image.xsize * image.ysize;
-    
+
     unsigned char *base = image.data;
 	while (i--)
     {
@@ -98,7 +98,7 @@ void pix_color :: vecGainMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void pix_color :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_color), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_color),
 		   gensym("pix_colour"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
     	    gensym("vec_gain"), A_GIMME, A_NULL);
@@ -121,6 +121,6 @@ void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*ar
     GetMyClass(data)->error("\"color\" must be 1, 3 or 4 values");
     return;
   }
-   
+
   GetMyClass(data)->vecGainMess(r, g, b, a);
 }

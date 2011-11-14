@@ -23,14 +23,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_filmDarwin
-  
+
   Loads in a film
-  
+
   KEYWORDS
   pix
-  
+
   DESCRIPTION
-  
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_filmDarwin : public pix_filmOS
 {
@@ -58,13 +58,13 @@ class GEM_EXTERN pix_filmDarwin : public pix_filmOS
   //////////
   // Do the rendering
   virtual void getFrame();
-  
+
   virtual void postrender(GemState *state);
-  
+
   virtual void startRendering();
-  
+
   virtual void stopRendering();
-  
+
   //////////
   // load film into RAM
   virtual void LoadRam();
@@ -72,19 +72,19 @@ class GEM_EXTERN pix_filmDarwin : public pix_filmOS
   //////////
   // set the playback rate
   virtual void MovRate(float rate);
-  
+
   //////////
   // set the audio volume
   virtual void MovVolume(float volume);
-	
+
   //////////
   // dumps debug info
-  virtual void doDebug();     
-        
+  virtual void doDebug();
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
-   
+
   GWorldPtr		m_srcGWorld;
   Rect			m_srcRect;
   TimeValue		m_movieTime;
@@ -111,7 +111,7 @@ private:
   //-----------------------------------
 
  protected:
-	
+
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);

@@ -58,12 +58,12 @@ typedef struct {
   -------------------------------------------------------------------
   CLASS
   ripple
-    
+
   based on the SGI demo distort
 
   KEYWORDS
   geo
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -76,9 +76,9 @@ class GEM_EXTERN ripple : public GemShape
   //////////
   // Constructor
   ripple( t_floatarg width, t_floatarg height);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~ripple();
@@ -92,7 +92,7 @@ class GEM_EXTERN ripple : public GemShape
   //////////
   // Do the rendering
   virtual void 	renderShape(GemState *state);
-  
+
   //////////
   // How the object should be drawn
   virtual void	typeMess(t_symbol *type);
@@ -103,7 +103,7 @@ class GEM_EXTERN ripple : public GemShape
   void	ripple_bang();
   void	precalc_ripple_vector();
   void	precalc_ripple_amp();
-		
+
   //////////
   // The height of the object
   GLfloat	    	m_height;
@@ -113,11 +113,11 @@ class GEM_EXTERN ripple : public GemShape
   t_inlet   *m_inletH;
   t_inlet		*m_inletcX;
   t_inlet		*m_inletcY;
-  
+
   //////////
   // getStuff
   int m_gridX, m_gridY;
-  
+
   bool		m_alreadyInit;
   float		m_sizeX, m_sizeY, m_sizeY0;
   RIPPLE_VECTOR m_rippleVector[GRID_MAX_X][GRID_MAX_Y];

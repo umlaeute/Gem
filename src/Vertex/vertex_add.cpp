@@ -19,7 +19,7 @@
 #include "Gem/State.h"
 
 CPPEXTERN_NEW_WITH_GIMME(vertex_add);
- 
+
 /////////////////////////////////////////////////////////
 //
 // vertex_add
@@ -106,7 +106,7 @@ void vertex_add :: vertexProcess(int lsize, float*larray, int rsize, float*rarra
 }
 
 void vertex_add :: render(GemState *state)
-{ 
+{
   int   size=state->VertexArraySize;
   if(size<=0 || m_rightSize<=0) return;
 
@@ -155,7 +155,7 @@ void vertex_add :: render(GemState *state)
 void vertex_add :: postrender(GemState *state)
 {
 }
- 
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -168,15 +168,15 @@ void vertex_add :: rightRender(GemState *state)
   m_rightColorArray    = state->ColorArray;
   m_rightTexCoordArray = state->TexCoordArray;
   m_rightNormalArray   = state->NormalArray;
-} 
- 
- 
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void vertex_add :: obj_setupCallback(t_class *classPtr)
-{        
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_add::gem_rightMessCallback),
 		  gensym("gem_right"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_add::typeMessCallback),

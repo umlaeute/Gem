@@ -73,7 +73,7 @@ void pix_imageInPlace :: render(GemState *state)
     return;
 
   state->set(GemState::_GL_TEX_TYPE, 1);
-    
+
   glEnable(GL_TEXTURE_2D);
 
   if(GLEW_VERSION_1_1) {
@@ -142,7 +142,7 @@ void pix_imageInPlace :: downloadMess()
   if (!m_loadedCache->textBind[0])
     {
       glGenTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
-		
+
       for (int i = 0; i < m_numImages; ++i)
 	{
     if(GLEW_VERSION_1_1) {

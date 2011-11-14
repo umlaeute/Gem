@@ -6,13 +6,13 @@
 class GEM_EXTERN pix_movement2 : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_movement2, GemPixObj);
-		
+
     public:
-  
+
   //////////
   // Constructor
   pix_movement2(t_float lothresh=0.392f, t_float hithresh=0.588f);
-  
+
  protected:
   //Destructor
   ~pix_movement2();

@@ -91,11 +91,11 @@ gemhead :: gemhead(int argc, t_atom*argv) :
     throw(GemException("invalid arguments: 'gemhead [<priority> [<basereceivename>]]'"));
   }
 #else
-  if(argc==0) 
+  if(argc==0)
     priority=50.;
   else if(argv[0].a_type == A_FLOAT) {
     priority=atom_getfloat(argv);
-  } else 
+  } else
     throw(GemException("invalid arguments: 'gemhead [<priority>]'"));
 #endif
   m_priority=priority+1;
@@ -177,7 +177,7 @@ void gemhead :: bangMess()
     // make sure that the window and the cache exist
     if ( !GemMan::windowExists() || !m_cache )
 		return;
-    
+
     // make a dummy GemState
     GemState tempState;
     GemMan::fillGemState(tempState);

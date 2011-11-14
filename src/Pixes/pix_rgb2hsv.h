@@ -22,14 +22,14 @@
   -------------------------------------------------------------------
   CLASS
   pix_rgb2hsv
-    
+
   Change pix to greyscale
 
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_rgb2hsv : public GemPixObj
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_rgb2hsv : public GemPixObj
   //////////
   // Constructor
   pix_rgb2hsv();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_rgb2hsv();

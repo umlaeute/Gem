@@ -46,7 +46,7 @@ void ortho :: render(GemState *)
 {
   if (m_state)
     {
-      GLfloat aspect = 0; 
+      GLfloat aspect = 0;
       int width=1, height=1;
       GemMan::getDimen(&width, &height);
 

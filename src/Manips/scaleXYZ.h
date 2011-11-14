@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     scaleXYZ
-    
+
     scale a gem object
 
 DESCRIPTION
-    
+
     Inlet for X - "xVal"
     Inlet for Y - "yVal"
     Inlet for Z - "zVal"
@@ -40,9 +40,9 @@ class GEM_EXTERN scaleXYZ : public GemBase
         //////////
         // Constructor
     	scaleXYZ(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~scaleXYZ();
@@ -58,17 +58,17 @@ class GEM_EXTERN scaleXYZ : public GemBase
     	//////////
     	// X value changed
     	void	    	xMess(float val);
-    	
+
     	//////////
     	// Y value changed
     	void	    	yMess(float val);
-    	
+
     	//////////
     	// Z value changed
     	void	    	zMess(float val);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	xMessCallback(void *data, t_floatarg val);

@@ -21,7 +21,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     emission
-    
+
     emission a gem object
 
 DESCRIPTION
@@ -29,7 +29,7 @@ DESCRIPTION
     Inlet for a list - "emission"
 
     "emission" - the RGB emission to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN emission : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN emission : public GemBase
 	    //////////
 	    // Constructor
     	emission(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~emission();
@@ -62,9 +62,9 @@ class GEM_EXTERN emission : public GemBase
     	//////////
     	// emission changed
     	void	    	emissionMess(float red, float green, float blue, float alpha);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	emissionMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

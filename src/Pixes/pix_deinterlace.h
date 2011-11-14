@@ -17,14 +17,14 @@
 -------------------------------------------------------------------
 CLASS
     pix_deinterlace
-    
+
     Deinterlace a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_deinterlace : public GemPixObj
 {
@@ -35,9 +35,9 @@ class GEM_EXTERN pix_deinterlace : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_deinterlace();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_deinterlace();
@@ -54,18 +54,18 @@ class GEM_EXTERN pix_deinterlace : public GemPixObj
     //    virtual void 	processRGBAAltivec(imageStruct &image);
         virtual void 	processYUVAltivec(imageStruct &image);
 #endif
-     	    	  
+
     	//////////
     	// Do the processing
         virtual void 	processGrayImage(imageStruct &image);
-		
+
 		int	m_mode;
 		int	m_adaptive;
 
 		imageStruct		m_savedImage;
-		
+
 	private:
-	
+
 		static void 	modeMessCallback(void *data, t_floatarg contrast);
 		static void 	adaptiveMessCallback(void *data, t_floatarg contrast);
 };

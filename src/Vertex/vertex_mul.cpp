@@ -17,7 +17,7 @@
 #include "vertex_mul.h"
 
 CPPEXTERN_NEW_WITH_GIMME(vertex_mul);
- 
+
 /////////////////////////////////////////////////////////
 //
 // vertex_mul
@@ -60,7 +60,7 @@ void vertex_mul :: vertexProcess(int lsize, float*larray, int rsize, float*rarra
   }
 }
 
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //

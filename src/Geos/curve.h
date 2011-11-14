@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     curve
-    
+
     Creates a curve
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN curve : public polygon
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN curve : public polygon
 	    //////////
 	    // Constructor
     	curve(t_floatarg numInputs);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~curve();
@@ -53,7 +53,7 @@ class GEM_EXTERN curve : public polygon
     	//////////
     	// Resolution callback
     	void	    	resolutionMess(int res);
-    	
+
     	//////////
     	// The rendering resolution
     	int 	    	m_resolution;
@@ -61,7 +61,7 @@ class GEM_EXTERN curve : public polygon
 	GLfloat m_texCoords[4][2];
 
     private:
-    	
+
     	//////////
     	// Static member functions
      	static void 	resolutionMessCallback(void *data, t_floatarg res);

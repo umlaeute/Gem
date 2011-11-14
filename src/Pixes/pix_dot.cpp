@@ -4,7 +4,7 @@
 //
 // This object is an based on the DotTV effect from EffecTV
 // Originally written by Fukuchi Kentaro
-// Copyright (c) 2001 FUKUCHI Kentaro                              
+// Copyright (c) 2001 FUKUCHI Kentaro
 //
 // ported by tigital@mac.com
 //
@@ -32,7 +32,7 @@ CPPEXTERN_NEW(pix_dot);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_dot :: pix_dot() : 
+pix_dot :: pix_dot() :
   m_xsize(0), m_ysize(0), m_csize(0),
   sharedbuffer(NULL), sharedbuffer_length(0),
   tail(0),
@@ -42,8 +42,8 @@ pix_dot :: pix_dot() :
   dot_size(0), dot_hsize(0),
   sampx(NULL), sampy(NULL),
   state(0),
-  m_scale(1.0), 
-  pattern(NULL), 
+  m_scale(1.0),
+  pattern(NULL),
   heart_pattern(NULL),
   mode(0),
   m_useScale(true)
@@ -174,10 +174,10 @@ void pix_dot :: makePattern(int format)
 	    }
 	  }
 	}
-    }  
+    }
     break;
   }
-  
+
   /* The upper left part of a disk is needed, but generated pattern is a bottom
    * right part. So I spin the pattern. */
 }
@@ -337,17 +337,17 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 	  if(dot_size==0){
 	    dot_size=2;
 	    dots_width  = m_xsize / dot_size;
-	    dots_height = m_ysize / dot_size;	    
+	    dots_height = m_ysize / dot_size;
 	  }
 	}
 	dot_hsize = dot_size / 2;
-  
+
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
             error("couldn't make RGBA pattern");
             return;
         }
-       
+
         sharedbuffer_init();
         sharedbuffer_reset();
         sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
@@ -394,7 +394,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
     int avgluma = 0;
 
     if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
-    
+
     if (!alreadyInit)
     {
         m_xsize = image.xsize;
@@ -406,13 +406,13 @@ void pix_dot :: processYUVImage(imageStruct &image)
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
         dots_height = m_ysize / dot_size;
-  
+
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
             error("couldn't make YUV pattern");
             return;
         }
-        
+
         sharedbuffer_init();
         sharedbuffer_reset();
         sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
@@ -433,7 +433,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
       myImage.setBlack();
       alreadyInit = 1;
     }
-     
+
 
     dest = reinterpret_cast<U16*>(myImage.data);
 
@@ -463,7 +463,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
     int x, y, sx, sy;
 
     if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
-    
+
     if (!alreadyInit)
     {
         m_xsize = image.xsize;
@@ -475,13 +475,13 @@ void pix_dot :: processGrayImage(imageStruct &image)
         dot_hsize = dot_size / 2;
         dots_width = m_xsize / dot_size;
         dots_height = m_ysize / dot_size;
-  
+
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
             error("couldn't make luma pattern");
             return;
         }
-        
+
         sharedbuffer_init();
         sharedbuffer_reset();
         sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
@@ -502,7 +502,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
       myImage.setBlack();
       alreadyInit = 1;
     }
-     
+
     dest = (unsigned char*)myImage.data;
 
     for ( y=0; y<dots_height; y++) {
@@ -620,7 +620,7 @@ void pix_dot :: obj_setupCallback(t_class *classPtr)
 
 void pix_dot :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));  
+  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
 }
 
 void pix_dot :: scaleMessCallback(void *data, t_floatarg state)

@@ -51,12 +51,12 @@ void GemSplash :: render(GemState *state)
 
   // probably we should do a GemSplash contest
 }
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void GemSplash :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_GemSplash), gensym("Gem"), A_NULL); 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_GemSplash), gensym("Gem"), A_NULL);
 }

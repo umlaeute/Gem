@@ -21,14 +21,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_buffer_write
-  
+
   writes into a pix_buffer
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer_write : public GemPixObj
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_buffer_write : public GemPixObj
   //////////
   // Constructor
   pix_buffer_write(t_symbol *s);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_buffer_write();
@@ -59,7 +59,7 @@ class GEM_EXTERN pix_buffer_write : public GemPixObj
   t_symbol *m_bindname;
 
  private:
-  
+
   //////////
   // static member functions
   static void setMessCallback  (void*data, t_symbol*s);

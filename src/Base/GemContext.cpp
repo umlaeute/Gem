@@ -32,11 +32,11 @@ using namespace gem;
 
 class Context::PIMPL {
 public:
-  PIMPL(void) : 
+  PIMPL(void) :
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext), xcontext(new GemGlewXContext), 
+    context(new GLEWContext), xcontext(new GemGlewXContext),
 #else
-    context(NULL), xcontext(NULL), 
+    context(NULL), xcontext(NULL),
 #endif
     contextid(makeID())
   {
@@ -47,15 +47,15 @@ public:
 
     if(GLEW_ARB_imaging)
       glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+GemMan::STACKCOLOR);
-    else 
+    else
       maxStackDepth[GemMan::STACKCOLOR]=0;
   }
 
-  PIMPL(const PIMPL&p) : 
+  PIMPL(const PIMPL&p) :
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext(*p.context)), xcontext(new GemGlewXContext(*p.xcontext)), 
+    context(new GLEWContext(*p.context)), xcontext(new GemGlewXContext(*p.xcontext)),
 #else
-    context(NULL), xcontext(NULL), 
+    context(NULL), xcontext(NULL),
 #endif
     contextid(makeID())
   {
@@ -110,14 +110,14 @@ GLEWContext*    Context::PIMPL::s_context=NULL;
 GemGlewXContext*Context::PIMPL::s_xcontext=NULL;
 std::set<unsigned int>      Context::PIMPL::s_takenIDs;
 
-Context::Context(void) 
+Context::Context(void)
   : m_pimpl(new PIMPL())
 {
   push();
   std::string errstring="";
 
   GLenum err = glewInit();
-  
+
   if (GLEW_OK != err) {
     if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
       errstring="failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!";
@@ -143,7 +143,7 @@ Context::Context(void)
   GemMan::m_windowState++;
 }
 
-Context::Context(const Context&c) 
+Context::Context(const Context&c)
   : m_pimpl(new PIMPL(*(c.m_pimpl)))
 {
   push();
@@ -190,7 +190,7 @@ unsigned int Context::getContextId(void) {
 }
 
 /* returns the last GemWindow that called makeCurrent()
- * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ? 
+ * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ?
  */
 GLEWContext*Context::getGlewContext(void) {
   return PIMPL::s_context;

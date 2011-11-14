@@ -26,27 +26,27 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_movieOS
-    
+
   Loads in a movie
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_movieOS : public pix_filmDarwin
 {
     CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin);
-   
+
     public:
-  
+
   //////////
   // Constructor
   pix_movieOS(t_symbol *filename);
 
  protected:
-    
+
   //////////
   // Destructor
   virtual ~pix_movieOS();
@@ -73,7 +73,7 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   //////////
   // Delete texture object
   virtual void stopRendering();
-    	
+
   //////////
   virtual void setUpTextureState();
 
@@ -84,7 +84,7 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   //////////
   // The texture coordinates
   TexCoord    	m_coords[4];
-	
+
   //////////
   // this is what we get from upstream
   TexCoord       *m_oldTexCoords;
@@ -95,12 +95,12 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   // The size of the texture (so we can use sub image)
   int		m_dataSize[3];
 
-  GLuint	m_textureObj;	
+  GLuint	m_textureObj;
   float		m_xRatio;
   float		m_yRatio;
 
  protected:
-	
+
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);

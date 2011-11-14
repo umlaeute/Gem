@@ -50,7 +50,7 @@ scale :: scale(int argc, t_atom *argv)
     {
       throw(GemException("needs 0, 1, 3, or 4 arguments"));
     }
-  
+
   // create the new inlets
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vector"));
@@ -101,9 +101,9 @@ void scale :: vectorMess(float x, float y, float z)
 void scale :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&scale::distanceMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL); 
+    	    gensym("ft1"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&scale::vectorMessCallback),
-    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
+    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void scale :: distanceMessCallback(void *data, t_floatarg distance)
 {

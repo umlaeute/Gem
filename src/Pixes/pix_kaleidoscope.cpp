@@ -28,7 +28,7 @@ CPPEXTERN_NEW(pix_kaleidoscope);
 //
 /////////////////////////////////////////////////////////
 pix_kaleidoscope :: pix_kaleidoscope()
-{ 
+{
   m_Divisions = 7.0f;
   m_OutputAnglePreIncrement = 0.0f;
   m_SourceAnglePreIncrement = 0.0f;
@@ -74,7 +74,7 @@ pix_kaleidoscope :: pix_kaleidoscope()
 //
 /////////////////////////////////////////////////////////
 pix_kaleidoscope :: ~pix_kaleidoscope()
-{ 
+{
   Pete_Kaleidoscope_DeInit();
 
   inlet_free(m_inDiv);
@@ -156,7 +156,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 
   SPete_Kaleidoscope_PartitionData PartitionData;
   Pete_Kaleidoscope_PartitionLines(pLinesStart,nLinesCount,&PartitionData);
-	
+
   const float OutputCentreX=(m_OutputCentreX*(Width-1));
   const float OutputCentreY=(m_OutputCentreY*(Height-1));
 
@@ -207,7 +207,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
       } else if (fabsf(pCurrentLine->Y)<Pete_Kaleidoscope_Epsilon) {
 	if (pCurrentLine->Y<0.0f)
 	  IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
-	else 
+	else
 	  IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
 	IntersectionX=(pCurrentLine->X*IntersectionT);
       } else {
@@ -218,7 +218,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
       float RowEndU;
       float RowEndV;
       bool bDebugIsHalfLine;
-			
+
       if (bIsFirstSpan) {
 	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
 	SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
@@ -341,7 +341,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
       } else {
-		
+
 	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 	bDebugIsHalfLine=bIsHalfLine;
 
@@ -367,7 +367,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	  PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
 	} else nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
-	
+
 	int nRowEndX;
 
 	if (bIsFinalSpan) {
@@ -384,12 +384,12 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 
 	} else
 	  nRowEndX=static_cast<int>(IntersectionX-LeftX);
-				
+
 	U32* pRowStart=pOutputLineStart+nRowStartX;
 	int nRowLength=(nRowEndX-nRowStartX);
 	if (nRowLength<=0) nRowLength=1;
 	U32*const pSpanEnd=(pRowStart+nRowLength);
-	
+
 	const int nFPShift=16;
 	const int nFPMult=(1<<nFPShift);
 
@@ -421,7 +421,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	  int nNextU;
 	  if (nDeltaU>=0) nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
 	  else nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
-	  
+
 	  int nUDist;
 	  if (nDeltaU!=0) {
 	    nUDist=(nNextU-nCurrentU)/nDeltaU;
@@ -431,13 +431,13 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	  int nNextV;
 	  if (nDeltaV>=0)  nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
 	  else nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
-	  
+
 	  int nVDist;
 	  if (nDeltaV!=0) {
 	    nVDist=(nNextV-nCurrentV)/nDeltaV;
 	    nVDist+=1;
 	  } else nVDist=cnBiggestSignedInt;
-	  
+
 	  int nMinDist = (nUDist<nVDist)?nUDist:nVDist;
 
 	  int nStartU=nCurrentU%nTwoWidth;
@@ -449,7 +449,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	  if (nStartV>=nHeightFP)
 	    nStartV=(nTwoHeightMinusOne-nStartV);
 	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
-	  
+
 	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
 	  if (nEndU>=nWidthFP)
 	    nEndU=(nTwoWidthMinusOne-nEndU);
@@ -480,7 +480,7 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	  while (pCurrentOutput<pLocalSpanEnd) {
 	    const int nUIntegral=(nLocalCurrentU>>nFPShift);
 	    const int nVIntegral=(nLocalCurrentV>>nFPShift);
-						
+
 	    U32* pCurrentSource=
 	      pSource+(nVIntegral*nWidth)+nUIntegral;
 
@@ -520,7 +520,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 {
   nWidth = image.xsize/2;
   nHeight = image.ysize;
-    
+
   if (!init) {
     Pete_Kaleidoscope_Init();
     init = 1;
@@ -539,7 +539,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
   myImage.ysize = image.ysize;
 
   myImage.csize = image.csize;
-  myImage.type  = image.type; 
+  myImage.type  = image.type;
   //this is perhaps buggy
   //myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
@@ -592,7 +592,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
   SPete_Kaleidoscope_PartitionData PartitionData;
   Pete_Kaleidoscope_PartitionLines(pLinesStart,nLinesCount,&PartitionData);
-	
+
   const float OutputCentreX=(m_OutputCentreX*(Width-1));
   const float OutputCentreY=(m_OutputCentreY*(Height-1));
 
@@ -633,7 +633,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
     while ((pCurrentLine<=pLinesGroupEnd)&&(PreviousIntersectionX<RightX)) {
       const bool bIsFinalSpan=(pCurrentLine==pLinesGroupEnd);
       const bool bIsFirstSpan=(pCurrentLine==pLinesGroupStart);
-			
+
       float IntersectionX;
       float IntersectionT;
       if (bIsFinalSpan) {
@@ -723,7 +723,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 	} else {
 	  PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
 	}
-				
+
 	if (bIsHalfLine) {
 	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
 	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
@@ -756,7 +756,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
 	}
 
-				
+
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 	bDebugIsHalfLine=bIsHalfLine;
 
@@ -800,7 +800,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
       }
       if (IntersectionX>LeftX) {
 	int nRowStartX;
-	
+
 	if (PreviousIntersectionX<LeftX) {
 	  nRowStartX=0;
 
@@ -831,7 +831,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 	} else {
 	  nRowEndX=static_cast<int>(IntersectionX-LeftX);
 	}
-		
+
 	U32* pRowStart=pOutputLineStart+nRowStartX;
 	int nRowLength=(nRowEndX-nRowStartX);
 	if (nRowLength<=0) {
@@ -968,7 +968,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
       PreviousRowV=RowEndV;
 
       pCurrentLine+=1;
-			
+
     }
 
     CurrentY+=1.0f;
@@ -984,7 +984,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 {
   nWidth = image.xsize;
   nHeight = image.ysize;
-    
+
   if (!init) {
     Pete_Kaleidoscope_Init();
     init = 1;
@@ -1047,7 +1047,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 
   SPete_Kaleidoscope_PartitionData PartitionData;
   Pete_Kaleidoscope_PartitionLines(pLinesStart,nLinesCount,&PartitionData);
-	
+
   const float OutputCentreX=(m_OutputCentreX*(Width-1));
   const float OutputCentreY=(m_OutputCentreY*(Height-1));
 
@@ -1088,7 +1088,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
     while ((pCurrentLine<=pLinesGroupEnd)&&(PreviousIntersectionX<RightX)) {
       const bool bIsFinalSpan=(pCurrentLine==pLinesGroupEnd);
       const bool bIsFirstSpan=(pCurrentLine==pLinesGroupStart);
-			
+
       float IntersectionX;
       float IntersectionT;
       if (bIsFinalSpan) {
@@ -1178,7 +1178,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 	} else {
 	  PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
 	}
-				
+
 	if (bIsHalfLine) {
 	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
 	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
@@ -1211,7 +1211,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
 	}
 
-				
+
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 	bDebugIsHalfLine=bIsHalfLine;
 
@@ -1255,7 +1255,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
       }
       if (IntersectionX>LeftX) {
 	int nRowStartX;
-	
+
 	if (PreviousIntersectionX<LeftX) {
 	  nRowStartX=0;
 
@@ -1286,7 +1286,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 	} else {
 	  nRowEndX=static_cast<int>(IntersectionX-LeftX);
 	}
-		
+
 	unsigned char* pRowStart=pOutputLineStart+nRowStartX;
 	int nRowLength=(nRowEndX-nRowStartX);
 	if (nRowLength<=0) {
@@ -1423,7 +1423,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
       PreviousRowV=RowEndV;
 
       pCurrentLine+=1;
-			
+
     }
 
     CurrentY+=1.0f;
@@ -1520,7 +1520,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
 
   float YPos=-HalfHeight;
   while (pCurrent!=pTableEnd) {
-		
+
     const SPete_AngleTable_Entry* pLineEnd=pCurrent+nWidth;
 
     float XPos=-HalfWidth;
@@ -1619,7 +1619,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
   }
 
   *poutLinesCount=nLinesCount;
-	
+
 }
 
 extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2) {
@@ -1672,7 +1672,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Lin
   }
 
   const int nYNegCount=pCurrentLine-pLinesStart;
-	
+
   poutPartitionData->pYNegLines=pLinesStart;
   poutPartitionData->nYNegLinesCount=nYNegCount;
   poutPartitionData->pYPosLines=pLinesStart+nYNegCount;
@@ -1722,7 +1722,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* p
       RotationAngle=DivisionAngle*(nCurrentDivision-1);
     }
 
-    SPete_2dMatrix RotationTransform;	
+    SPete_2dMatrix RotationTransform;
     Pete_2dMatrix_SetToRotation(RotationAngle,&RotationTransform);
 
     Pete_2dMatrix_SetToIdentity(pCurrentTransform);
@@ -1730,11 +1730,11 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* p
     Pete_2dMatrix_Concatenate(pCurrentTransform,&ScreenToWorld,pCurrentTransform);
 
     Pete_2dMatrix_Concatenate(pCurrentTransform,&RotationTransform,pCurrentTransform);
-		
+
     if (bIsMirroredDivision) {
       Pete_2dMatrix_Concatenate(pCurrentTransform,&DirectionalScaleTransform,pCurrentTransform);
     }
-		
+
     Pete_2dMatrix_Concatenate(pCurrentTransform,&PanTransform,pCurrentTransform);
 
     Pete_2dMatrix_Concatenate(pCurrentTransform,&WorldToScreen,pCurrentTransform);
@@ -1774,8 +1774,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
 
       SPete_2dVector CurrentPos={X,Y};
 
-      const float PosDotA=Pete_2dVector_DotProduct(&CurrentPos,&GridA);			
-      const float PosDotB=Pete_2dVector_DotProduct(&CurrentPos,&GridB);			
+      const float PosDotA=Pete_2dVector_DotProduct(&CurrentPos,&GridA);
+      const float PosDotB=Pete_2dVector_DotProduct(&CurrentPos,&GridB);
 
       const float IntegralPosDotA=(floorf(PosDotA*RecipGridMagA)+0.5f)*GridMagA;
       const float IntegralPosDotB=(floorf(PosDotB*RecipGridMagB)+0.5f)*GridMagB;
@@ -1810,7 +1810,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
       pCurrentOutput+=1;
 
     }
-	
+
   }
 
 }
@@ -1832,7 +1832,7 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatr
 
   const float CosRotation=cos(Rotation);
   const float SinRotation=sin(Rotation);
-	
+
   poutResult->m[0][0]=CosRotation;
   poutResult->m[0][1]=-SinRotation;
   poutResult->m[0][2]=0.0f;
@@ -1849,7 +1849,7 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatr
 void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult) {
 
   SPete_2dMatrix TempResult;
-	
+
   int nY=0;
   for (nY=0; nY<3; nY+=1) {
 
@@ -1933,14 +1933,14 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
 
     U32* pOutputLineStart=pCurrentOutput;
     U32* pOutputLineEnd=(pOutputLineStart+nWidth);
-		
+
     const float StartX=-HalfWidth;
 
     const float StartVDotNMinusD=
       ((StartX*NormalX)+
        (CurrentY*NormalY))-
       PlaneD;
-		
+
     const float EndX=HalfWidth;
 
     float EndVDotNMinusD=
@@ -1967,7 +1967,7 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
 
 	const float SourceX=CurrentX-(TwoVDotNMinusD*NormalX);
 	const float SourceY=CurrentY-(TwoVDotNMinusD*NormalY);
-		
+
 	int nSourceX=static_cast<int>(SourceX+HalfWidth);
 	int nSourceY=static_cast<int>(SourceY+HalfHeight);
 
@@ -1980,7 +1980,7 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
 	  nSourceX;
 
 	*pCurrentOutput=*pSimpleMirrorSource;
-			
+
       }
 
       CurrentX+=1.0f;
@@ -1990,7 +1990,7 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
       pCurrentSource+=1;
 
     }
-		
+
     CurrentY+=1.0f;
 
   }
@@ -2014,7 +2014,7 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,float
 
 void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,SPete_2dVector* poutResult) {
 
-  SPete_2dVector Result;	
+  SPete_2dVector Result;
 
   Result.x=
     (pinMatrix->m[0][0]*pinVector->x)+
@@ -2068,7 +2068,7 @@ void pix_kaleidoscope :: outputAngCallback(void *data, t_floatarg m_OutputAngleP
 }
 void pix_kaleidoscope :: sourceAngCallback(void *data, t_floatarg m_SourceAnglePreIncrement)
 {
-  GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement);  
+  GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
 void pix_kaleidoscope :: outputAngleCallback(void *data, t_floatarg m_OutputAnglePreIncrement)
@@ -2084,7 +2084,7 @@ void pix_kaleidoscope :: sourceAngleCallback(void *data, t_floatarg m_SourceAngl
 void pix_kaleidoscope :: sourceCtrCallback(void *data, t_floatarg m_SourceCentreX, t_floatarg m_SourceCentreY)
 {
   GetMyClass(data)->m_SourceCentreX=(m_SourceCentreX);
-  GetMyClass(data)->m_SourceCentreY=(m_SourceCentreY);  
+  GetMyClass(data)->m_SourceCentreY=(m_SourceCentreY);
   GetMyClass(data)->setPixModified();
 }
 
@@ -2096,7 +2096,7 @@ void pix_kaleidoscope :: outputCtrCallback(void *data, t_floatarg m_OutputCentre
 }
 void pix_kaleidoscope :: rlpCallback(void *data, t_floatarg m_ReflectionLineProportion)
 {
-  GetMyClass(data)->m_ReflectionLineProportion=(m_ReflectionLineProportion);  
+  GetMyClass(data)->m_ReflectionLineProportion=(m_ReflectionLineProportion);
   GetMyClass(data)->setPixModified();
 }
 

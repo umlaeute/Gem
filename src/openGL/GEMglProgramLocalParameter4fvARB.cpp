@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglProgramLocalParameter4fvARB , t_floatarg, A
 // Constructor
 //
 GEMglProgramLocalParameter4fvARB :: GEMglProgramLocalParameter4fvARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		target(static_cast<GLenum>(arg0)), 
+		target(static_cast<GLenum>(arg0)),
 		index(static_cast<GLenum>(arg1))
 		//params(static_cast<GLfloat>(arg2))
 {

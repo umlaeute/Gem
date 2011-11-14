@@ -23,8 +23,8 @@ public:
   pthread_cond_t *cond;
   unsigned int *refcount;
   PIMPL(void) : mutex(new pthread_mutex_t), cond(new pthread_cond_t), refcount(new unsigned int) {
-    pthread_mutex_init(mutex, NULL); 
-    pthread_cond_init (cond , NULL); 
+    pthread_mutex_init(mutex, NULL);
+    pthread_cond_init (cond , NULL);
     *refcount=1;
   }
   PIMPL(const PIMPL&org) : mutex(org.mutex), cond(org.cond), refcount(org.refcount) {
@@ -35,12 +35,12 @@ public:
     *refcount--;
     if(0==*refcount) {
       if(mutex) {
-        pthread_mutex_destroy(mutex); 
+        pthread_mutex_destroy(mutex);
         delete mutex;
         mutex=NULL;
       }
       if(cond) {
-        pthread_cond_destroy(cond); 
+        pthread_cond_destroy(cond);
         delete cond;
         cond=NULL;
       }

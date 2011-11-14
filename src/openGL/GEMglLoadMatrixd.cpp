@@ -68,7 +68,7 @@ void GEMglLoadMatrixd :: matrixMess (int argc, t_atom*argv) {	// FUN
 
 void GEMglLoadMatrixd :: obj_setupCallback(t_class *classPtr) {
 //	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadMatrixd::matrixMessCallback),  	gensym("matrix"), A_DEFPOINTER, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadMatrixd::matrixMessCallback),  	
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadMatrixd::matrixMessCallback),
 									gensym("list"), A_GIMME, A_NULL);
 }
 
