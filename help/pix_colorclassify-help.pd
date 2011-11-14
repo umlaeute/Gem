@@ -1,4 +1,4 @@
-#N canvas 121 165 850 516 10;
+#N canvas 117 177 850 516 10;
 #X text 452 8 GEM object;
 #X obj 8 196 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -59,13 +59,7 @@
 #X obj 451 255 square 3;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X text 50 12 Synopsis: [pix_colordetect];
 #X text 29 77 Description: detects color classes in an image;
-#X text 42 95 [pix_colorreduce] will detect colors in a pixImage \,
-classifying each pixel into 6 classes: red \, green \, blue \, yellow
-\, black \, white \, or 'uncertain'. It will only detect a color if
-it is unambiguous.;
-#X obj 451 196 pix_colordetect;
 #X obj 8 324 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 16 323 See Also:;
@@ -77,14 +71,19 @@ it is unambiguous.;
 representatives for each pixel: red [1 0 0] \, green [0 1 0] \, blue
 [0 0 1] \, yellow [1 1 0] \, black [0 0 0] \, white [1 1 1] \, unsure
 [154/255 \, 115/255 \, 86/255];
-#X text 64 239;
-#X text 64 234;
-#X text 16 357 Author: Ricardo Fabbri <rfabbri@gmail.com>;
+#X obj 451 196 pix_colorclassify;
+#X text 16 357 Author: Ricardo Fabbri labmacambira.sf.net rfabbri at
+gmail;
+#X text 42 95 [pix_colorclassify] will detect colors in a pixImage
+\, classifying each pixel into 6 classes: red \, green \, blue \, yellow
+\, black \, white \, or 'uncertain'. It will only detect a color if
+it is unambiguous.;
+#X text 50 12 Synopsis: [pix_colorclassify];
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
-#X connect 17 0 26 0;
+#X connect 17 0 30 0;
 #X connect 18 0 20 0;
-#X connect 26 0 18 0;
+#X connect 30 0 18 0;
 #X coords 0 0 1 1 85 60 0;

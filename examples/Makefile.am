@@ -78,7 +78,7 @@ nobase_dist_gemexamples_DATA = \
 	04.video/05.buffer_rtx.pd \
 	04.video/06.frame_diff_tracking.pd \
 	04.video/07.bg_subtract_tracking.pd \
-	04.video/08.color_detection.pd \
+	04.video/08.color_classification.pd \
 	05.text/01.TextNoLoadBang.pd \
 	05.text/01.Text.pd \
 	05.text/03.ChangeTextNoLoadBang.pd \

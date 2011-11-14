@@ -1,4 +1,4 @@
-#N canvas 55 227 930 428 10;
+#N canvas 55 233 930 428 10;
 #X obj 297 283 separator;
 #X obj 297 304 pix_texture;
 #X obj 96 130 gemhead 10;
@@ -42,7 +42,6 @@
 #X obj 65 326 rotateXYZ 0 180 0;
 #X obj 65 305 translateXYZ -2.4 -2.4 0.1;
 #X text 72 264 Show color detection output;
-#X obj 65 240 pix_colordetect;
 #N canvas 249 346 1447 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
 -1 -1 0 1;
@@ -90,11 +89,14 @@ pixels whose color could not be reliably classified. The detector is
 high precision with moderate recall \, meaning it avoids false positives
 at the expense of a smaller number of classified pixels.;
 #X msg 228 153 dimen 320 240;
+#X obj 65 240 pix_colorclassify;
+#X text 7 385 Author: Ricardo Fabbri labmacambira.sf.net rfabbri at
+gmail;
 #X connect 0 0 1 0;
 #X connect 1 0 10 0;
 #X connect 2 0 3 0;
 #X connect 3 0 0 0;
-#X connect 3 0 16 0;
+#X connect 3 0 19 0;
 #X connect 6 0 3 0;
 #X connect 7 0 6 0;
 #X connect 8 0 3 0;
@@ -103,5 +105,5 @@ at the expense of a smaller number of classified pixels.;
 #X connect 11 0 14 0;
 #X connect 13 0 12 0;
 #X connect 14 0 13 0;
-#X connect 16 0 11 0;
-#X connect 19 0 3 0;
+#X connect 18 0 3 0;
+#X connect 19 0 11 0;

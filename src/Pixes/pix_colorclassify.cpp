@@ -10,6 +10,7 @@
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    Copyright (c) 2002 James Tittle & Chris Clepper
+//    Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
