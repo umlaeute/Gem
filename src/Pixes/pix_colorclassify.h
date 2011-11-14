@@ -44,7 +44,9 @@ SEE ALSO
     detect the color classes in an image. Pd already has this, but it is usually
     not as effective as the present data-driven hand-tuned approach where highly
     nonlinear and nonuniform aspects human percetion of a given number of
-    classes is in play. Another advantage of the present approach
+    classes is in play. Another advantage of the present approach is that the
+    internal parameters of the algorithm are sensible to a human in terms of
+    hue, saturation, and value, therefore being easy to modify and tweak.
 
     We also compared to a 'naive' algorithm which blindly computes the minimum
     distance of a given color to a representative of the color classes. On our
