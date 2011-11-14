@@ -17,10 +17,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE_GEMPLUGIN__FILMDS_FILMDS_H_
 #include "plugins/filmBase.h"
 
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
-# include <dshow.h>
-# include <qedit.h>
-#endif
+#include <dshow.h>
+#include <qedit.h>
 
    /*-----------------------------------------------------------------
      -------------------------------------------------------------------
@@ -47,7 +45,6 @@ class GEM_EXPORT filmDS : public filmBase {
      // Destructor
      virtual ~filmDS(void);
 
-#if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
      //////////
      // open a movie up
      virtual bool open(const std::string filename, const gem::Properties&);
@@ -66,6 +63,7 @@ class GEM_EXPORT filmDS : public filmBase {
      // can be used within a threaded context
      virtual bool isThreadable(void) { return true; }
 
+ protected:
      // the raw buffer for decoding...
      int			m_nRawBuffSize;
      unsigned char*	m_RawBuffer;
@@ -81,7 +79,6 @@ class GEM_EXPORT filmDS : public filmBase {
      int			m_ysize;
      int			m_csize;
 
- protected:
 
  private:
      IBaseFilter				*VideoFilter;		// Base Filter for video
@@ -98,7 +95,6 @@ class GEM_EXPORT filmDS : public filmBase {
 
      unsigned long		m_GraphRegister;
 
-#endif //DIRECT_SHOW
 };};   };
 
 #endif	// for header file
