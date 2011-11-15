@@ -65,10 +65,22 @@ class GEM_EXPORT filmMPEG3 : public filmBase {
   // cannot be used within a threaded context
   virtual bool isThreadable(void) { return false; }
 
+  // Property handling
+  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
  protected:
+  GLenum  m_wantedFormat; // format requested by the user
+  double m_fps;  // the frame-rate
+  int m_numFrames, m_numTracks; // number of frames in video
+  int m_curFrame, m_curTrack;
+  pixBlock m_image; // output image
+  bool m_readNext;
+  bool m_newfilm;
 
   mpeg3_t      *mpeg_file;
 #endif

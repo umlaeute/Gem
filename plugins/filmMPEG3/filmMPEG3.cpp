@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -17,6 +17,7 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_LIBMPEG3
 #include "filmMPEG3.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/Properties.h"
@@ -24,9 +25,7 @@
 
 using namespace gem::plugins;
 
-#ifdef HAVE_LIBMPEG3
 REGISTER_FILMFACTORY("MPEG3", filmMPEG3);
-#endif
 
 /* take care of API changes */
 #ifdef MPEG3_MAJOR
@@ -45,22 +44,26 @@ REGISTER_FILMFACTORY("MPEG3", filmMPEG3);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG3 :: filmMPEG3(void) : filmBase(false) {
-#ifdef HAVE_LIBMPEG3
-  mpeg_file=0;
-#endif
-}
+filmMPEG3 :: filmMPEG3(void) :
+  filmBase(false),
+  m_wantedFormat(GL_RGBA),
+  m_fps(-1.0),
+  m_numFrames(-1), m_numTracks(-1),
+  m_readNext(false),
+  m_newfilm(false),
+  mpeg_file(NULL)
+{ }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmMPEG3 :: ~filmMPEG3()
+filmMPEG3 :: ~filmMPEG3(void)
 {
   close();
 }
 
-#ifdef HAVE_LIBMPEG3
+
 void filmMPEG3 :: close(void)
 {
   if(mpeg_file)mpeg3_close(mpeg_file);
@@ -107,7 +110,7 @@ bool filmMPEG3 :: open(const std::string filename, const gem::Properties&wantPro
     m_image.image.reallocate();
     changeImage(0,-1);
     m_newfilm=true;
-    return true; 
+    return true;
   }
   goto unsupported;
  unsupported:
@@ -120,7 +123,7 @@ bool filmMPEG3 :: open(const std::string filename, const gem::Properties&wantPro
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmMPEG3 :: getFrame(){
+pixBlock* filmMPEG3 :: getFrame(void) {
   if (!m_readNext){
     return &m_image;
   }
@@ -142,8 +145,8 @@ pixBlock* filmMPEG3 :: getFrame(){
     i=m_image.image.ysize;
     while(i--)*dummy++=m_image.image.data+(i*m_image.image.xsize*m_image.image.csize);
     if (mpeg3_read_frame(mpeg_file, rows,
-			 0, 0, 
-			 m_image.image.xsize, m_image.image.ysize, 
+			 0, 0,
+			 m_image.image.xsize, m_image.image.ysize,
 			 m_image.image.xsize, m_image.image.ysize,
 			 MPEG3_RGBA8888,
 			 0)) {
@@ -188,4 +191,64 @@ film::errCode filmMPEG3 :: changeImage(int imgNum, int trackNum){
   m_readNext=false;
   return film::FAILURE;
 }
+
+
+///////////////////////////////
+// Properties
+bool filmMPEG3::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("frames", value);
+  readable.set("tracks", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  writeable.set("colorspace", value);
+
+  return false;
+}
+
+void filmMPEG3::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("colorspace", d)) {
+    m_wantedFormat=d;
+  }
+}
+
+void filmMPEG3::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("tracks"==key) {
+      d=m_numTracks;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
 #endif
