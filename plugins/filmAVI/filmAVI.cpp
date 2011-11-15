@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -39,7 +39,13 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 //
 /////////////////////////////////////////////////////////
 
-filmAVI :: filmAVI(void) : filmBase(),
+filmAVI :: filmAVI(void) :
+  filmBase(),
+  m_wantedFormat(GL_RGBA),
+  m_fps(-1.0),
+  m_numFrames(-1),
+  m_curFrame(-1),
+
   m_nRawBuffSize(0),
   m_RawBuffer(NULL),
   m_format(GL_BGR_EXT),
@@ -58,7 +64,7 @@ filmAVI :: filmAVI(void) : filmBase(),
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmAVI :: ~filmAVI()
+filmAVI :: ~filmAVI(void)
 {
   close();
   AVIFileExit();
@@ -94,7 +100,7 @@ void filmAVI :: close(void)
   if (m_RawBuffer){
     delete[] m_RawBuffer;
     m_RawBuffer = NULL;
-  }    
+  }
   m_nRawBuffSize = 0;
 }
 
@@ -162,7 +168,7 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
 
   m_pbmihDst->biCompression		= BI_RGB;
   m_pbmihDst->biSizeImage			= 0;
-    
+
   // Get the length of the movie
   m_numFrames = streaminfo.dwLength - 1;
 
@@ -192,7 +198,7 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
   //m_nRawBuffSize = MIN(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
   m_nRawBuffSize = MAX(static_cast<int>(streaminfo.dwSuggestedBufferSize), static_cast<int>(m_pbmihRaw->biSizeImage));
   if(!m_nRawBuffSize)m_nRawBuffSize = m_image.image.xsize * m_image.image.ysize * 3;
-  
+
   m_RawBuffer = new unsigned char[m_nRawBuffSize];
   m_frame     = new unsigned char[m_nRawBuffSize];
   m_reqFrame = 0;
@@ -208,7 +214,7 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmAVI :: getFrame(){
+pixBlock* filmAVI :: getFrame(void){
   BITMAPINFOHEADER* pbmih;
   long lBytesWritten;
   unsigned char*data=NULL;
@@ -219,8 +225,8 @@ pixBlock* filmAVI :: getFrame(){
   m_image.image.setCsizeByFormat(m_wantedFormat);
   m_image.image.reallocate();
 
-  if (!AVIStreamRead(m_streamVid, 
-		     m_reqFrame, 1, 
+  if (!AVIStreamRead(m_streamVid,
+		     m_reqFrame, 1,
 		     m_RawBuffer, m_nRawBuffSize,
 		     &lBytesWritten, 0)){
     m_pbmihRaw->biSize = lBytesWritten;
@@ -250,4 +256,59 @@ film::errCode filmAVI :: changeImage(int imgNum, int trackNum){
   m_reqFrame = imgNum;
   return film::SUCCESS;
 }
+
+
+///////////////////////////////
+// Properties
+bool filmAVI::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("frames", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  writeable.set("colorspace", value);
+
+  return false;
+}
+
+void filmAVI::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("colorspace", d)) {
+    m_wantedFormat=d;
+  }
+}
+
+void filmAVI::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
 #endif
