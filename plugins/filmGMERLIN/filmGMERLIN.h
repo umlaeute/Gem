@@ -14,7 +14,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 #ifndef _INCLUDE_GEMPLUGIN__FILMGMERLIN_FILMGMERLIN_H_
 #define _INCLUDE_GEMPLUGIN__FILMGMERLIN_FILMGMERLIN_H_
-#include "plugins/filmBase.h"
+#include "plugins/film.h"
+#include "Gem/Image.h"
 #include <stdio.h>
 
 # ifdef __cplusplus
@@ -49,7 +50,7 @@ extern "C" {
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmGMERLIN : public filmBase {
+class GEM_EXPORT filmGMERLIN : public film {
  public:
 
   //////////

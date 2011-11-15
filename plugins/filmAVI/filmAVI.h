@@ -16,7 +16,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef _INCLUDE_GEMPLUGIN__FILMAVI_FILMAVI_H_
 #define _INCLUDE_GEMPLUGIN__FILMAVI_FILMAVI_H_
 
-#include "plugins/filmBase.h"
+#include "plugins/film.h"
+#include "Gem/Image.h"
 #include <vfw.h>
 
 /*-----------------------------------------------------------------
@@ -33,7 +34,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmAVI : public filmBase {
+class GEM_EXPORT filmAVI : public film {
  public:
 
   //////////

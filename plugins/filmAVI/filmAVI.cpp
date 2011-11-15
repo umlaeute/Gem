@@ -40,7 +40,6 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 /////////////////////////////////////////////////////////
 
 filmAVI :: filmAVI(void) :
-  filmBase(),
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_numFrames(-1),

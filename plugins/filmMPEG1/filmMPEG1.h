@@ -15,7 +15,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef _INCLUDE_GEMPLUGIN__FILMMPEG1_FILMMPEG1_H_
 #define _INCLUDE_GEMPLUGIN__FILMMPEG1_FILMMPEG1_H_
-#include "plugins/filmBase.h"
+#include "plugins/film.h"
+#include "Gem/Image.h"
 #include <stdio.h>
 
 #include <mpeg.h>
@@ -34,7 +35,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmMPEG1 : public filmBase {
+class GEM_EXPORT filmMPEG1 : public film {
  public:
 
   //////////

@@ -45,7 +45,6 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 /////////////////////////////////////////////////////////
 
 filmGMERLIN :: filmGMERLIN(void) :
-  filmBase(),
   m_wantedFormat(GL_RGBA),
   m_fps(0.),
   m_numFrames(-1), m_numTracks(-1),
@@ -121,7 +120,7 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
 bool filmGMERLIN :: isThreadable(void) {
   if(m_numFrames<0)
     return false;
-  return filmBase::isThreadable();
+  return true;
 }
 
 /////////////////////////////////////////////////////////

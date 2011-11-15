@@ -37,7 +37,6 @@ REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 /////////////////////////////////////////////////////////
 
 filmMPEG1 :: filmMPEG1(void) : 
-  filmBase(),
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_curFrame(-1),

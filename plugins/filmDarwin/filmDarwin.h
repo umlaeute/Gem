@@ -24,7 +24,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 
 #ifdef HAVE_CARBONQUICKTIME
-#include "plugins/filmBase.h"
+#include "plugins/film.h"
+#include "Gem/Image.h"
 
 # include <Carbon/Carbon.h>
 # include <QuickTime/QuickTime.h>
@@ -43,7 +44,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmDarwin : public filmBase {
+class GEM_EXPORT filmDarwin : public film {
  public:
 
   //////////

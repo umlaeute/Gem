@@ -89,7 +89,6 @@ static bool filmQT_deinitQT(void) {
 /////////////////////////////////////////////////////////
 
 filmQT :: filmQT(void) :
-  filmBase(false),
   m_fps(-1.),
   m_numFrames(-1), m_numTracks(-1)
   m_curFrame(-1), m_curTrack(-1),

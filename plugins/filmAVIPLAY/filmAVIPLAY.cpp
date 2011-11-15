@@ -38,17 +38,17 @@ REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 //
 /////////////////////////////////////////////////////////
 
-filmAVIPLAY :: filmAVIPLAY(void) : filmBase() ,
-                                   m_wantedFormat(GL_RGBA),
-                                   m_fps(-1.0),
-                                   m_numFrames(-1), m_numTracks(-1),
-                                   m_curFrame(-1), m_curTrack(-1),
-                                   m_readNext(false), m_newfilm(false),
-                                   m_avifile(NULL),
-                                   m_avistream(NULL),
-                                   m_aviimage(NULL),
-                                   m_rawdata(NULL),
-                                   m_rawlength(0)
+filmAVIPLAY :: filmAVIPLAY(void) : 
+  m_wantedFormat(GL_RGBA),
+  m_fps(-1.0),
+  m_numFrames(-1), m_numTracks(-1),
+  m_curFrame(-1), m_curTrack(-1),
+  m_readNext(false), m_newfilm(false),
+  m_avifile(NULL),
+  m_avistream(NULL),
+  m_aviimage(NULL),
+  m_rawdata(NULL),
+  m_rawlength(0)
 {
 }
 

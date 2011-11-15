@@ -56,7 +56,6 @@ static void throwCtorError(const char*format, HRESULT RetVal) {
 }
 
 filmDS :: filmDS(void) :
-  filmBase() ,
   m_numFrames(-1),
   m_reqFrame(1),
   m_frame(NULL),

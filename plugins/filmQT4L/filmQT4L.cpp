@@ -40,7 +40,6 @@ REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
 /////////////////////////////////////////////////////////
 
 filmQT4L :: filmQT4L(void) :
-  filmBase(),
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),

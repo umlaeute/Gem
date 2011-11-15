@@ -45,7 +45,6 @@ REGISTER_FILMFACTORY("MPEG3", filmMPEG3);
 /////////////////////////////////////////////////////////
 
 filmMPEG3 :: filmMPEG3(void) :
-  filmBase(false),
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
