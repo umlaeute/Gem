@@ -86,7 +86,22 @@ class GEM_EXPORT filmAVIPLAY : public filmBase {
   // can be used within a threaded context
   virtual bool isThreadable(void) { return true; }
 
+  // Property handling
+  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
+
  protected:
+  GLenum  m_wantedFormat; // format requested by the user
+  double m_fps;  // the frame-rate
+  int  m_numFrames, m_numTracks; // number of frames in video
+  int m_curFrame, m_curTrack;
+  pixBlock m_image; // output image
+
+  bool m_readNext; // indicates whether we should perform a seek/read
+  bool m_newfilm;
+
+
   IAviReadFile *m_avifile;
   IAviReadStream  *m_avistream;
 
