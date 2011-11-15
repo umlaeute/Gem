@@ -38,6 +38,7 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 /////////////////////////////////////////////////////////
 
 filmDarwin :: filmDarwin(void) :
+  m_wantedFormat(GL_YUV422_GEM),
   m_auto(false),
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1),
