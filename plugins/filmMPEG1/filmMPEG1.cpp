@@ -19,6 +19,7 @@
 
 #include "filmMPEG1.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/Properties.h"
 
 using namespace gem::plugins;
 
@@ -37,13 +38,15 @@ REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 
 filmMPEG1 :: filmMPEG1(void) : 
   filmBase(),
+  m_wantedFormat(GL_RGBA),
+  m_fps(-1.0),
+  m_curFrame(-1),
+  m_newfilm(false),
   m_streamfile(NULL),
   m_reachedEnd(false),
   m_data(NULL), 
   m_length(0)
-{
-  m_numFrames=-1;
-}
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor
@@ -84,8 +87,6 @@ bool filmMPEG1 :: open(const std::string filename, int format)
     m_curFrame = 0;
     
     // Unfortunately there is no way to get the length of an MPEG-Stream
-    m_numFrames = -1;
-
     m_fps = (double)m_streamVid.PictureRate; // ??
     
     m_image.image.xsize  = m_streamVid.Width;
@@ -162,4 +163,56 @@ film::errCode filmMPEG1 :: changeImage(int imgNum, int trackNum){
   }
   return film::DONTKNOW;
 }
+
+///////////////////////////////
+// Properties
+bool filmMPEG1::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  writeable.set("colorspace", value);
+
+  return false;
+}
+
+void filmMPEG1::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("colorspace", d)) {
+    m_wantedFormat=(GLenum)d;
+  }
+}
+
+void filmMPEG1::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
+
+
 #endif
