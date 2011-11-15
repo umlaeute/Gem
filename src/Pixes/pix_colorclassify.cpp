@@ -110,8 +110,6 @@ void pix_colorclassify :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorclassify),
-		   gensym("pix_colorclassify"), A_NULL);
 }
 
 //---------------------------------------------------------------------------
