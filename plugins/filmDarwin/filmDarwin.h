@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load a digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load a digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -22,30 +22,30 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # define HAVE_CARBONQUICKTIME
 #endif
 
-#include "plugins/filmBase.h"
 
 #ifdef HAVE_CARBONQUICKTIME
+#include "plugins/filmBase.h"
+
 # include <Carbon/Carbon.h>
 # include <QuickTime/QuickTime.h>
-#endif /* HAVE_CARBONQUICKTIME */
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
   filmDarwin
-    
+
   film-loader class for MacOS-X (Darwin)
-    
+
   KEYWORDS
   pix film movie
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
 class GEM_EXPORT filmDarwin : public filmBase {
  public:
-  
+
   //////////
   // Constructor
   filmDarwin(void);
@@ -72,18 +72,28 @@ class GEM_EXPORT filmDarwin : public filmBase {
   // cannot be used within a threaded context
   virtual bool isThreadable(void) { return false; }
 
+  // Property handling
+  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
+
  protected:
-#ifdef HAVE_CARBONQUICKTIME
-  Movie			m_movie; 
+  bool m_auto;  // automatic progression
+  int m_numFrames, m_numTracks; // number of frames in video
+  int m_curFrame;
+  pixBlock m_image; // output image
+
+
+  Movie			m_movie;
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   Media			m_movieMedia;
   TimeValue		m_timeScale;
   TimeValue		duration;
-#endif //HAVE_CARBONQUICKTIME
   double		durationf;
 
 };};};
 
+#endif //HAVE_CARBONQUICKTIME
 #endif	// for header file

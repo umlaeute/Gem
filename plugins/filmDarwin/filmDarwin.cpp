@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -37,22 +37,25 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 //
 /////////////////////////////////////////////////////////
 
-filmDarwin :: filmDarwin(void) : filmBase(false),
-                                 m_movie(NULL),
-                                 m_srcGWorld(NULL),
-                                 m_movieTime(0),
-                                 m_movieTrack(0),
-                                 m_movieMedia(0),
-                                 m_timeScale(0),
-                                 durationf(0.)
-{
-}
+filmDarwin :: filmDarwin(void) :
+  filmBase(false),
+  m_auto(false),
+  m_numFrames(-1), m_numTracks(-1),
+  m_curFrame(-1),
+  m_movie(NULL),
+  m_srcGWorld(NULL),
+  m_movieTime(0),
+  m_movieTrack(0),
+  m_movieMedia(0),
+  m_timeScale(0),
+  durationf(0.)
+{}
 
 ////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmDarwin :: ~filmDarwin()
+filmDarwin :: ~filmDarwin(void)
 {
   close();
 }
@@ -86,11 +89,11 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   short	refnum = 0;
   OSType pixelformat=0;
   long hints;
-  
+
   if(filename.empty()) {
     //post("filmDarwin: no filename passed");
     goto unsupported;
-  } else { 
+  } else {
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
@@ -98,17 +101,17 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
       goto unsupported;
     }
   }
-  
+
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
     //error("filmDarwin: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
-  
+
   ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (refnum) ::CloseMovieFile(refnum);
-  
+
   // m_curFrame = -1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
   post("filmDarwin:  m_numTracks = %d",m_numTracks);
@@ -117,7 +120,7 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   long	movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
-        
+
   post("Movie duration = %d timescale = %d timebase = %d",movieDur,
        movieScale,
        (long)GetMovieTimeBase(m_movie));
@@ -132,7 +135,7 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   	durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
   }
 #else
-  GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0, 
+  GetMovieNextInterestingTime( m_movie, flags, (TimeValue)1, &whichMediaType, 0,
                                fixed1, NULL, &duration);
   m_numFrames = movieDur/duration;
 #endif
@@ -171,16 +174,16 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   pixelformat=k32ARGBPixelFormat;
 #endif
 
-  m_image.image.data = new unsigned char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize]; 
+  m_image.image.data = new unsigned char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize];
   m_rowBytes = m_image.image.xsize * m_image.image.csize;
   SetMoviePlayHints(m_movie, hints, hints);
-  err = QTNewGWorldFromPtr(	&m_srcGWorld, 
+  err = QTNewGWorldFromPtr(	&m_srcGWorld,
                             pixelformat,
-                            &m_srcRect, 
-                            NULL, 
-                            NULL, 
-                            0, 
-                            m_image.image.data, 
+                            &m_srcRect,
+                            NULL,
+                            NULL,
+                            0,
+                            m_image.image.data,
                             m_rowBytes);
   if (err) {
     //error("filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
@@ -201,17 +204,17 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmDarwin :: getFrame(){
+pixBlock* filmDarwin :: getFrame(void){
   CGrafPtr	 	savedPort;
   GDHandle     	savedDevice;
   Rect		m_srcRect;
   PixMapHandle	m_pixMap;
   Ptr			m_baseAddr;
-    
+
   ::GetGWorld(&savedPort, &savedDevice);
   ::SetGWorld(m_srcGWorld, NULL);
   ::GetMovieBox(m_movie, &m_srcRect);
-    
+
   m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
   m_baseAddr = ::GetPixBaseAddr(m_pixMap);
 
@@ -224,8 +227,8 @@ pixBlock* filmDarwin :: getFrame(){
     GoToBeginningOfMovie(m_movie);
     return NULL;
   }
-    
-  
+
+
   //check for last frame to loop the clip
   if (m_curFrame >= m_numFrames){
     return NULL;
@@ -236,10 +239,10 @@ pixBlock* filmDarwin :: getFrame(){
   m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * durationf);
 
   m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
-    
+
   //check for -1
   if (m_movieTime < 0) m_movieTime = 0;
-       
+
   // if this is the first frame, include the frame we are currently on
   if (m_curFrame == 0) flags |= nextTimeEdgeOK;
 
@@ -257,12 +260,11 @@ pixBlock* filmDarwin :: getFrame(){
     flags = 0;
     flags = nextTimeStep;
     // m_curFrame++;
-
   }else{
   }
 
   // set the time for the frame and give time to the movie toolbox	
-  SetMovieTimeValue(m_movie, m_movieTime); 
+  SetMovieTimeValue(m_movie, m_movieTime);
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 
   //  m_image.image.data = (unsigned char *)m_baseAddr;
@@ -275,4 +277,60 @@ film::errCode filmDarwin :: changeImage(int imgNum, int trackNum){
   //  return 0;
   return film::SUCCESS;
 }
-#endif /* CARBONQUiCKTIME */
+
+
+///////////////////////////////
+// Properties
+bool filmDarwin::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("frames", value);
+  readable.set("tracks", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  writeable.set("auto", value);
+
+  return false;
+}
+
+void filmDarwin::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("auto", d)) {
+    m_auto=(d>=0.5);
+  }
+}
+
+void filmDarwin::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("tracks"==key) {
+      d=m_numTracks;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
+#endif /* CARBONQUICKTIME */
