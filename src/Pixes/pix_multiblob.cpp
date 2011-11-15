@@ -24,7 +24,6 @@
 /////////////////////////////////////////////////////////
 
 
-#include <malloc.h>
 #include <assert.h>
 #include "pix_multiblob.h"
 #include "Utils/pstk.h"
