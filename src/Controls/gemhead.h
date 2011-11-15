@@ -25,13 +25,13 @@ class GemCache;
   -------------------------------------------------------------------
   CLASS
   gemhead
-    
+
   The starting point for all graphics trees
 
   DESCRIPTION
-    
+
   "bang" - sends out a state list
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemhead : public gemreceive
 {
@@ -42,11 +42,11 @@ class GEM_EXTERN gemhead : public gemreceive
   //////////
   // Constructor
   gemhead(int, t_atom*);
-    	
+
   //////////
   // A render message
   void	    	renderGL(GemState *state);
-    	    	
+
   //////////
   // Set up the modifying flags
   virtual void	    	startRendering();
@@ -63,13 +63,13 @@ class GEM_EXTERN gemhead : public gemreceive
   virtual void receive(t_symbol*s, int argc, t_atom*argv);
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~gemhead();
 
   std::string m_basename;
-    	
+
  private:
 
   t_outlet    	*m_out1;
@@ -77,7 +77,7 @@ class GEM_EXTERN gemhead : public gemreceive
   GemCache    	*m_cache;   	    	    // The cache information
 
   void            outputRenderOnOff(int state);
-    	
+
   void	    	renderOnOff(int state);     // Turn rendering on and off
   int 	    	m_renderOn;
 

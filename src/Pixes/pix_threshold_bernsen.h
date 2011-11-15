@@ -22,20 +22,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -------------------------------------------------------------------
 CLASS
     pix_threshold_bernsen
-    
+
     Clamp pixel values to a threshold_bernsen
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_thresh"
     Inlet for a float - "ft1"
-    
+
     "vec_thresh" - The threshold_bernsen vector
     "ft1" - Set all threshold_bernsens to one value
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
 {
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
         //////////
         // Constructor
     	pix_threshold_bernsen();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_threshold_bernsen();
@@ -58,10 +58,10 @@ class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
         static void processGraySub_getMinMax(imageStruct&image,
                                       int fromX, int toX,
                                       int fromY, int toY,
-                                      unsigned char*resultMin, 
+                                      unsigned char*resultMin,
                                       unsigned char*resultMax);
     	virtual void 	processGrayImage(imageStruct &image);
-        	
+
     	//////////
     	// set the number of tiles
     	void	    	tilesMess(int w, int h);
@@ -74,9 +74,9 @@ class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
         unsigned char*m_minVals;
         unsigned char*m_maxVals;
 
-    
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	tilesMessCallback(void *data, t_float w, t_float h);

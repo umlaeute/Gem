@@ -39,7 +39,7 @@ void pix_mean_color::processYUVImage(imageStruct &image)
 	t_atom out[4];
 	unsigned int datasize = (image.xsize * image.ysize) >> 1;
 	unsigned char *base = image.data;
-	
+
 	unsigned long sum[4] = {0,0,0,0};
 
 	for (unsigned int i = 0; i != datasize; ++i)
@@ -70,7 +70,7 @@ void pix_mean_color::processYUVImage(imageStruct &image)
         SETFLOAT(out+2, b);
 	SETFLOAT(out+3, 1.0);
 
-	outlet_list(m_list, 0, 4, out);	
+	outlet_list(m_list, 0, 4, out);
 
 }
 
@@ -79,7 +79,7 @@ void pix_mean_color::processGrayImage(imageStruct &image)
 	t_atom out[4];
 	unsigned int datasize = image.xsize * image.ysize;
 	unsigned char *base = image.data;
-	
+
 	unsigned long sum = 0;
 
 	for (unsigned int i = 0; i != datasize; ++i)
@@ -89,7 +89,7 @@ void pix_mean_color::processGrayImage(imageStruct &image)
 	}
 
         t_float grey = (t_float)sum / (t_float)(datasize*255);
-	
+
 	SETFLOAT(out,   grey );
 	SETFLOAT(out+1, grey);
 	SETFLOAT(out+2, grey);
@@ -103,7 +103,7 @@ void pix_mean_color::processRGBImage(imageStruct &image)
 	t_atom out[4];
 	unsigned int datasize = image.xsize * image.ysize;
 	unsigned char *base = image.data;
-	
+
 	unsigned long sum[3] = {0,0,0};
 
 	for (unsigned int i = 0; i != datasize; ++i)
@@ -114,8 +114,8 @@ void pix_mean_color::processRGBImage(imageStruct &image)
 		}
 		base += 3;
 	}
-	
-	
+
+
 	SETFLOAT(out,   (t_float)sum[0] / (t_float)(datasize*255));
         SETFLOAT(out+1, (t_float)sum[1] / (t_float)(datasize*255));
 	SETFLOAT(out+2, (t_float)sum[2] / (t_float)(datasize*255));
@@ -128,7 +128,7 @@ void pix_mean_color::processRGBAImage(imageStruct &image)
 {
 	unsigned int datasize = image.xsize * image.ysize;
 	unsigned char *base = image.data;
-	
+
 	unsigned long sum[4] = {0,0,0,0};
 
 	for (unsigned int i = 0; i != datasize; ++i)
@@ -139,9 +139,9 @@ void pix_mean_color::processRGBAImage(imageStruct &image)
 		}
 		base += 4;
 	}
-	
+
 	t_atom out[4];
-	
+
 	SETFLOAT(out,   (t_float)sum[chRed  ] / (t_float)(datasize*255) );
 	SETFLOAT(out+1, (t_float)sum[chGreen] / (t_float)(datasize*255) );
 	SETFLOAT(out+2, (t_float)sum[chBlue ] / (t_float)(datasize*255) );

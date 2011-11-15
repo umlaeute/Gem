@@ -39,7 +39,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 //
 /////////////////////////////////////////////////////////
 pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
-{ 
+{
   int fb_num = (fb_numf>0.)?static_cast<int>(fb_numf):0;
   int ff_num = (ff_numf>0.)?static_cast<int>(ff_numf):0;
   ff_count=ff_num;fb_count=fb_num;
@@ -125,7 +125,7 @@ void pix_tIIR :: processImage(imageStruct &image)
     }
     set=false;
     set_zero=false;
-  }  
+  }
 
   // do the filtering
   // feed-back
@@ -211,7 +211,7 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
     }
     set=false;
     set_zero=false;
-  }  
+  }
 
   // do the filtering
   // feed-back
@@ -232,7 +232,7 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
     a0=_mm_srli_pi16    (a0, 8);
     a0=_mm_packs_pu16   (a0, a1);
     dest[i] = a0;
-  } 
+  }
 
   j=fb_count;while(j--){
     if (s_fb[j+1]!=0){
@@ -283,7 +283,7 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
     a0=_mm_packs_pu16   (a0, a1);
     dest[i] = a0;
     //*dest++ = (unsigned char)((factor**source++)>>8);
-  }  
+  }
   _mm_empty();
 
 

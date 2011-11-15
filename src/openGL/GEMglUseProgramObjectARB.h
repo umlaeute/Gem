@@ -33,13 +33,13 @@ class GEM_EXTERN GEMglUseProgramObjectARB : public GemGLBase
 	protected:
 	  // Destructor
 	  virtual ~GEMglUseProgramObjectARB ();
-	  
+
     // check extensions
     virtual bool isRunnable(void);
 
 	  // Do the rendering
 	  virtual void	render (GemState *state);
-	  
+
 	  // clean up the postrendering
 	  virtual void	postrender (GemState *state);
 

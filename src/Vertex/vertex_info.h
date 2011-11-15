@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_info
-    
+
     Creates a vertex_info
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_info : public GemBase
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_info : public GemBase
         //////////
         // Constructor
     	vertex_info(void);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_info(void);
-        
+
         int 		m_previousSize;
         int		m_vertNum,m_vertCount;
         t_outlet	*m_Vsize;

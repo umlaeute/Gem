@@ -23,12 +23,12 @@ class TexCoord;
 -------------------------------------------------------------------
 CLASS
     pix_coordinate
-    
+
     sets the texture coordinates
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "coords"
@@ -44,9 +44,9 @@ class GEM_EXTERN pix_coordinate : public GemBase
 	    //////////
 	    // Constructor
     	pix_coordinate();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_coordinate();
@@ -64,7 +64,7 @@ class GEM_EXTERN pix_coordinate : public GemBase
     	TexCoord    	*m_coords;
 	// a place-holder, in case we want to scale the coords (for rectangle textures)
 	TexCoord        *m_rectcoords;
-    	
+
     	//////////
     	// The number
     	int 	    	m_numCoords;
@@ -79,9 +79,9 @@ class GEM_EXTERN pix_coordinate : public GemBase
     	//////////
     	// Set the texture coordinates
     	void	    	coordsMess(int argc, t_atom *argv);
-    	
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	coordsMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

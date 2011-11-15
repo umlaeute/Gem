@@ -21,7 +21,7 @@ namespace gem {
 
   Properties::Properties(const gem::Properties&org) :
     pimpl(new PIMPL())
-  { 
+  {
     assign(org);
   }
 
@@ -31,15 +31,15 @@ namespace gem {
   }
 #if 0
   any&Properties::operator[](const std::string&key) {
-    return pimpl->valuemap[key]; 
+    return pimpl->valuemap[key];
   }
 #endif
 
   any Properties::get(const std::string&key) const {
-    return pimpl->valuemap[key]; 
+    return pimpl->valuemap[key];
   }
 
-  void Properties::set(const std::string&key, gem::any value) {    
+  void Properties::set(const std::string&key, gem::any value) {
     const std::type_info*typ=&value.get_type();
     PropertyType pt = UNKNOWN;
 
@@ -118,7 +118,7 @@ namespace gem {
       pimpl->typemap[key]=UNKNOWN;
       break;
     }
-  } 
+  }
 
   std::vector<std::string>Properties::keys() const {
     std::vector<std::string>result;

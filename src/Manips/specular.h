@@ -24,7 +24,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     specular
-    
+
     specular a gem object
 
 DESCRIPTION
@@ -32,7 +32,7 @@ DESCRIPTION
     Inlet for a list - "specular"
 
     "specular" - the RGB specular to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN specular : public GemBase
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN specular : public GemBase
 	    //////////
 	    // Constructor
     	specular(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~specular();
@@ -65,9 +65,9 @@ class GEM_EXTERN specular : public GemBase
     	//////////
     	// specular changed
     	void	    	specularMess(float red, float green, float blue, float alpha);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	specularMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

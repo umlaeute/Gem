@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmOS, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 pix_filmOS :: pix_filmOS(t_symbol *filename) :
   m_oldImage(NULL),
-  m_haveMovie(0), m_auto(0), 
+  m_haveMovie(0), m_auto(0),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true),
   m_newFilm(0),
@@ -73,7 +73,7 @@ void pix_filmOS :: deleteBuffer()
     delete [] m_data;
     //post("deleted");
   }
-  
+
   m_pixBlock.image.data=NULL;
   m_frame=m_data=NULL;
   m_pixBlock.image.xsize=m_pixBlock.image.ysize=m_pixBlock.image.csize=0;
@@ -84,7 +84,7 @@ void pix_filmOS :: createBuffer()
   const int neededXSize = m_xsize;
   const int neededYSize = m_ysize;
   int	oldx, oldy;
-  
+
   oldx = 0;
   oldy = 0;
 
@@ -98,11 +98,11 @@ void pix_filmOS :: createBuffer()
 
       m_data = new unsigned char[dataSize];
       // memset(m_data, 0, dataSize);
-      
+
       m_pixBlock.image.data = m_data;
       m_pixBlock.image.notowned = 1;
       m_frame =  m_data;
-      
+
       oldx = m_pixBlock.image.xsize;
       oldy = m_pixBlock.image.ysize;
     }
@@ -129,7 +129,7 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
   m_haveMovie = GEM_MOVIE_NONE;
   realOpen(buf);
   if (m_haveMovie == GEM_MOVIE_NONE)return;
-  
+
 #ifndef __APPLE__
   createBuffer();
   prepareTexture();
@@ -153,7 +153,7 @@ void pix_filmOS :: startRendering()
 {
   m_pixBlock.newimage = 1;
   m_pixBlock.newfilm = 0;
-  
+
 }
 void pix_filmOS :: render(GemState *state)
 {
@@ -166,7 +166,7 @@ void pix_filmOS :: render(GemState *state)
   newImage = 0;
   if (!m_haveMovie || !m_pixBlock.image.data)return;
   // do we actually need to get a new frame from the movie ?
-  
+
   if (m_reqFrame != m_curFrame) {
     //newImage = 1;
     getFrame();
@@ -177,7 +177,7 @@ void pix_filmOS :: render(GemState *state)
   {
   newImage = 0;
   }
-   
+
   if (m_newFilm){
     m_pixBlock.newfilm = 1;
     m_newFilm = 0;
@@ -188,10 +188,10 @@ void pix_filmOS :: render(GemState *state)
 
   // whoa: the following construct seems to be a bug
   // i don't dare to "fix" it now
-  
+
 #ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
-        
+
       //  ::MoviesTask(NULL, 0);
 #endif
 
@@ -218,7 +218,7 @@ void pix_filmOS :: postrender(GemState *state)
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
-  
+
   m_newFilm = 0;
   m_pixBlock.newfilm = m_newFilm;
 }

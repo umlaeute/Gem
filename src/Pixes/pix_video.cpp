@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_video);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_video :: pix_video(int argc, t_atom*argv) : 
+pix_video :: pix_video(int argc, t_atom*argv) :
   m_videoHandle(NULL), m_driver(-1), m_running(UNKNOWN), m_infoOut(NULL)
 {
   gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
@@ -50,7 +50,7 @@ pix_video :: pix_video(int argc, t_atom*argv) :
   m_infoOut = outlet_new(this->x_obj, 0);
 
   /*
-   * calling driverMess() would immediately startTransfer(); 
+   * calling driverMess() would immediately startTransfer();
    * we probably don't want this in initialization phase
    */
   if(m_videoHandles.size()>0) {
@@ -63,7 +63,7 @@ pix_video :: pix_video(int argc, t_atom*argv) :
 
   if(!dev.empty())
     deviceMess(dev);
-    
+
 
 }
 
@@ -169,10 +169,10 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       gem::plugins::video         *handle=NULL;
       startpost("backend #%d='%s'\t", m_videoHandles.size(), key.c_str());
       try {
-        handle=gem::PluginFactory<gem::plugins::video>::getInstance(key); 
+        handle=gem::PluginFactory<gem::plugins::video>::getInstance(key);
       } catch (GemException&ex) {
       }
-      if(NULL==handle) { 
+      if(NULL==handle) {
         post("<--- DISABLED");
         continue;
       }
@@ -407,7 +407,7 @@ void pix_video :: enumerateMess()
 {
   std::vector<std::string>data;
   std::vector<std::string>backends;
-  unsigned int i=0; 
+  unsigned int i=0;
   for(i=0; i<m_videoHandles.size(); i++) {
     //    a.insert(a.end(), b.begin(), b.end());
     if(m_videoHandles[i]) {
@@ -500,7 +500,7 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
     case 1:
       props.set(key, values[0]);
       break;
-    case 0: 
+    case 0:
       {
 	gem::any dummy;
 	props.set(key, dummy);
@@ -547,11 +547,11 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
       int ac=0;
       switch(m_readprops.type(key)) {
       default:
-      case gem::Properties::UNSET: 
-        ac=0; 
+      case gem::Properties::UNSET:
+        ac=0;
         break;
-      case gem::Properties::NONE:  
-        ac=1; 
+      case gem::Properties::NONE:
+        ac=1;
         break;
       case gem::Properties::DOUBLE:
         do {
@@ -571,7 +571,7 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
           }
         } while(0);
         break;
-      }	    
+      }
       if(ac) {
         outlet_anything(m_infoOut, gensym("prop"), ac, ap);
       } else {
@@ -771,7 +771,7 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     	    gensym("get"), A_GIMME, A_NULL);
 
     CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertyMess);
-    class_addmethod(classPtr, 
+    class_addmethod(classPtr,
 		    reinterpret_cast<t_method>(&pix_video::  setPropertiesMessCallback),
 		    gensym("setProps"), A_GIMME, A_NULL);
     CPPEXTERN_MSG0(classPtr, "applyProps", applyPropertiesMess);
@@ -825,7 +825,7 @@ void pix_video :: modeMessCallback(void *data, t_symbol* nop, int argc, t_atom *
     if (A_SYMBOL==argv->a_type && A_FLOAT==(argv+1)->a_type){
       GetMyClass(data)->normMess(atom_getsymbol(argv)->s_name);
       GetMyClass(data)->channelMess(atom_getint(argv+1));
-    } else goto mode_error;  
+    } else goto mode_error;
     break;
   default:
   mode_error:
@@ -856,7 +856,7 @@ void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc, t_atom*argv
 }
 void pix_video :: driverMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
-  if(!argc) {    
+  if(!argc) {
     GetMyClass(data)->driverMess();
     return;
   }

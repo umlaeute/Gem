@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
 	cylinder
-    
+
     Creates a cylinder
 
 KEYWORD
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -39,9 +39,9 @@ class GEM_EXTERN cylinder : public GemGluObj
 	    //////////
 	    // Constructor
   cylinder(t_floatarg size,t_floatarg slize);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~cylinder();

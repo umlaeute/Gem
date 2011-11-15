@@ -22,11 +22,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     imageVert
-    
+
     map an image to polygons
 
 DESCRIPTION
-    
+
 	Notice that even though imageVert is derived from GemPixObj, we
 		still override a lot of the virtual functions...including
 		render.
@@ -41,9 +41,9 @@ class GEM_EXTERN imageVert : public GemPixObj
 	    //////////
 	    // Constructor
     	imageVert();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~imageVert();
@@ -69,7 +69,7 @@ class GEM_EXTERN imageVert : public GemPixObj
 		// [in] image - The image to use
 		// [in] texture - Is texture mapping turned on?
     	virtual void 	processYUVPix(imageStruct &image, int texture);
-        
+
     	//////////
     	// Do the rendering.
     	virtual void 	render(GemState *state);

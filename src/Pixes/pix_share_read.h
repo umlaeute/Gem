@@ -19,12 +19,12 @@ class GEM_EXTERN pix_share_read : public pix_share_write
 
     public:
   pix_share_read(int,t_atom*);
-		
+
  protected:
   ~pix_share_read();
-		
+
   virtual void render(GemState *state);
-		
+
   pixBlock	pix;
 };
 

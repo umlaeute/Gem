@@ -11,7 +11,7 @@ using namespace gem;
 class gem::BasePluginFactory::Pimpl {
   friend class BasePluginFactory;
   Pimpl(void) {
-    
+
   }
 
   ~Pimpl(void) {

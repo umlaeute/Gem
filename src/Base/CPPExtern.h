@@ -32,16 +32,16 @@ namespace gem {
 -------------------------------------------------------------------
 CLASS
     Obj_header
-    
+
     The obligatory object header
 
 DESCRIPTION
-    
+
     This is in a separate struct to assure that when PD uses the
-    class, the t_object is the very first thing.  If it were the 
+    class, the t_object is the very first thing.  If it were the
     first thing in CPPExtern, then there could be problems with
     the vtable.
-    
+
 -----------------------------------------------------------------*/
 struct GEM_EXTERN Obj_header
 {
@@ -61,31 +61,31 @@ struct GEM_EXTERN Obj_header
 -------------------------------------------------------------------
 CLASS
     CPPExtern
-    
+
     The base class for all externs written in C++
 
 DESCRIPTION
-    
+
     Each extern which is written in C++ needs to use the #defines at the
     end of this header file.  Currently, the operator new(size_t) and
     operator delete(void *) are not overridden.  This will be a problem
     when PD expects everything to fit in its memory space and control
     all memory allocation.
-    
+
     The define
-    
+
         CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS);
-    
+
     should be somewhere in your header file.
     One of the defines like
-    
+
     CPPEXTERN_NEW(NEW_CLASS);
     CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, t_floatarg, A_FLOAT, t_floatarg, A_FLOAT);
-    
+
     should be the first thing in your implementation file.
-    NEW_CLASS is the name of your class and PARENT_CLASS is the 
+    NEW_CLASS is the name of your class and PARENT_CLASS is the
     parent of your class.
-        
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN CPPExtern
 {
@@ -102,7 +102,7 @@ class GEM_EXTERN CPPExtern
     	//////////
     	// Destructor
     	virtual ~CPPExtern(void) = 0;
-    	
+
         //////////
         // Get the object's canvas
         const t_canvas            *getCanvas(void) const       { return(m_canvas); }
@@ -117,7 +117,7 @@ class GEM_EXTERN CPPExtern
         t_symbol             *m_objectname;
 
     protected:
-    	
+
     	//////////
     	// Creation callback
     	static void 	real_obj_setupCallback(t_class *) {}
@@ -300,7 +300,7 @@ static void obj_setupCallback(t_class *classPtr);
   }                                                         \
   AUTO_REGISTER_CLASS(NEW_CLASS);
 
-	
+
 ///////////////////////////////////////////////////////////////////////////////
 // static class:
 //   by default classes are declared static
@@ -315,7 +315,7 @@ static void obj_setupCallback(t_class *classPtr);
 
 ///////////////////////////////////////////////////////////////////////////////
 // auto registering a class
-// this creates a dummy class, whose constructor calls the setup-function 
+// this creates a dummy class, whose constructor calls the setup-function
 // (registering the class with pd)
 // a static copy of this class is created at runtime, to actually do the setup-call
 ///////////////////////////////////////////////////////////////////////////////
@@ -354,7 +354,7 @@ static void obj_setupCallback(t_class *classPtr);
     class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE HELPSYMBOL))
 # endif
 
-#else 
+#else
 # define SET_HELPSYMBOL(NEW_CLASS)
 #endif /* HELPSYMBOL */
 

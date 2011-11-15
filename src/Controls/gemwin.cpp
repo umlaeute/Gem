@@ -17,7 +17,7 @@
 #include "gemwin.h"
 
 #include "Gem/GemGL.h"
- 
+
 #ifdef __APPLE__
 # include <Carbon/Carbon.h>
 # include <AvailabilityMacros.h>
@@ -89,7 +89,7 @@ void gemwin :: bangMess()
       else /* double buffered mode */
         GemMan::render(NULL);
     }
-  else 
+  else
     error("no window");
 }
 
@@ -133,8 +133,8 @@ void gemwin :: createMess(t_symbol* s)
 
   /* just in case a "pleaseDestroy" is still pending... */
   GemMan::pleaseDestroy=false;
- 
-  if (s != &s_) 
+
+  if (s != &s_)
     disp = s->s_name;
 
   if ( !GemMan::windowExists() )  {
@@ -143,8 +143,8 @@ void gemwin :: createMess(t_symbol* s)
       error("no window made");
       return;
     }
-    GemMan::swapBuffers();	
-    GemMan::swapBuffers();	
+    GemMan::swapBuffers();
+    GemMan::swapBuffers();
   } else
     error("window already made");
 }
@@ -229,7 +229,7 @@ void gemwin :: dimensionsMess(int width, int height)
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -490,25 +490,25 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 		  gensym("destroy"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::printMessCallback),
 		  gensym("print"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::profileMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::profileMessCallback),
 		  gensym("profile"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::lightingMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::lightingMessCallback),
 		  gensym("lighting"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoMessCallback),
 		  gensym("stereo"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
 		  gensym("stereoSep"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
 		  gensym("stereoFoc"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
 		  gensym("stereosep"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
 		  gensym("stereofoc"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
 		  gensym("stereoLine"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
 		  gensym("stereoline"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::borderMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::borderMessCallback),
 		  gensym("border"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::frameMessCallback),
 		  gensym("frame"), A_FLOAT, A_NULL);
@@ -646,10 +646,10 @@ void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 
     case 5 :
       theta	= static_cast<float>(DEG2RAD) * atom_getfloat(&argv[4]);
-		
+
     case 4 :
       azimuth = static_cast<float>(DEG2RAD) * atom_getfloat(&argv[3]);
-		
+
       // just have position
     case 3 :
       {

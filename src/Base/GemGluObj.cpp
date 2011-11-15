@@ -33,7 +33,7 @@ GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
     m_drawType = (GLenum) GL_FILL;
     if(m_numSlices<=0)m_numSlices=10;
     if(m_numStacks<=0)m_numStacks=m_numSlices;
-    
+
     // the number of slices
     m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numslices"));
 }

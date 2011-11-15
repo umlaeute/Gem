@@ -380,7 +380,7 @@ static void dequeueEvents(void) {
   while(events) {
 
     switch(events->type) {
-    case( MOTION): 
+    case( MOTION):
       theList = s_motionList;
       while(theList)
         {
@@ -414,7 +414,7 @@ static void dequeueEvents(void) {
           KEYBOARD_CB callback = (KEYBOARD_CB)theList->func;
           (*callback)(events->string, events->value, events->state, theList->data);
           theList = theList->next;
-        } 
+        }
       break;
     case( RESIZE):
       theList = s_resizeList;

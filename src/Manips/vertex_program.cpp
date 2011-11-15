@@ -40,16 +40,16 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM);
 //
 /////////////////////////////////////////////////////////
 vertex_program :: vertex_program() :
-  m_programType(GEM_PROGRAM_none), 
-  m_programID(0), 
+  m_programType(GEM_PROGRAM_none),
+  m_programID(0),
   m_programString(NULL), m_size(0),
   m_buf(NULL),
   m_envNum(-1)
 {
 }
 vertex_program :: vertex_program(t_symbol *filename) :
-  m_programType(GEM_PROGRAM_none), 
-  m_programID(0), 
+  m_programType(GEM_PROGRAM_none),
+  m_programID(0),
   m_programString(NULL), m_size(0),
   m_envNum(-1)
 {
@@ -155,7 +155,7 @@ void vertex_program :: openMess(t_symbol *filename)
     post("unknown program header \"%s\" or error open \"%s\" file\n",
          m_programString,
          filename->s_name);
-    
+
     delete m_programString; m_programString=NULL;
     m_size=0;
     return;
@@ -231,7 +231,7 @@ void vertex_program :: LoadProgram(void)
   if(GLEW_ARB_vertex_program) {
     GLint isUnderNativeLimits;
     glGetProgramivARB( m_programTarget, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isUnderNativeLimits);
-  
+
     // If the program is over the hardware's limits, print out some information
     if (isUnderNativeLimits!=1)
       {
@@ -294,7 +294,7 @@ void vertex_program :: render(GemState *state)
       glProgramEnvParameter4fvARB(m_programTarget, m_envNum, m_param);
     }
   }
-} 
+}
 
 /////////////////////////////////////////////////////////
 // postrender
@@ -317,14 +317,14 @@ void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_f
 {
   if(envNum>=0){
     //float param[4] = {param1, param2, param3, param4};
-	
+
     m_param[0] = param1;
     m_param[1] = param2;
     m_param[2] = param3;
     m_param[3] = param4;
 
     m_envNum = envNum;
-  } else 
+  } else
     m_envNum = -1;
 }
 /////////////////////////////////////////////////////////
@@ -348,7 +348,7 @@ void vertex_program :: printInfo()
 	post("MAX_PROGRAM_MATRICES: %d", bitnum);
 	glGetIntegerv( GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB, &bitnum );
 	post("MAX_PROGRAM_MATRIX_STACK_DEPTH: %d", bitnum);
-	
+
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
 	post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
@@ -374,7 +374,7 @@ void vertex_program :: printInfo()
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
 	post("MAX_PROGRAM_ENV_PARAMETERS: %d", bitnum);
 	post("");
-	
+
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
 	post("PROGRAM_INSTRUCTIONS: %d", bitnum);
 	glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);

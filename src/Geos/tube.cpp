@@ -10,7 +10,7 @@
 // This primitive create a kind of cilender with paramettre :
 //		Diameter of the 1st circle (1st base of the object)
 //		Diameter of the 2nd circle
-//		X, Y, Z displacement between the 2 circle 
+//		X, Y, Z displacement between the 2 circle
 //		X, Y rotation of the 1st circle
 //		X, Y rotation of the 2nd circle
 //
@@ -53,11 +53,11 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOA
 /////////////////////////////////////////////////////////
 tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg order_in)
   : GemShape(size),
-    m_cos(NULL), m_sin(NULL), 
+    m_cos(NULL), m_sin(NULL),
     m_size2(size2), m_inlet2(NULL),
     m_high(height), m_inlethigh(NULL),
     m_TX(0.0), m_inletTX(NULL),
-    m_TY(0.0), m_inletTY(NULL), 
+    m_TY(0.0), m_inletTY(NULL),
     cos_rotX1(1.0),   sin_rotX1(0.0), m_inletrotX1(NULL),
     cos_rotY1(1.0),   sin_rotY1(0.0), m_inletrotY1(NULL),
     cos_rotX2(1.0),   sin_rotX2(0.0), m_inletrotX2(NULL),
@@ -80,7 +80,7 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
   m_inletrotY1 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotY1"));
   m_inletrotX2 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotX2"));
   m_inletrotY2 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotY2"));
- 
+
   m_drawType = GL_TRIANGLE_STRIP;
 }
 
@@ -88,7 +88,7 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
 // Destructor
 //
 /////////////////////////////////////////////////////////
-tube :: ~tube(){ 
+tube :: ~tube(){
   inlet_free(m_inlet2);
   inlet_free(m_inlethigh);
   inlet_free(m_inletTX);
@@ -111,14 +111,14 @@ void tube :: renderShape(GemState *state){
   GLfloat vectors1[TUBE_NUMPTS+3][3];
   GLfloat vectors2[TUBE_NUMPTS+3][3];
 #endif
-  GLfloat vectors_tmp; 
+  GLfloat vectors_tmp;
   float normal[3];
 
   int n;
 
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
 
-   
+
   for (n = 0; n < order ; n++)    {
     // definition des vecteurs de base des cercles
     vectors1[n][0] = m_cos[n] * m_size;
@@ -128,7 +128,7 @@ void tube :: renderShape(GemState *state){
     vectors2[n][0] = m_cos[n] * m_size2;
     vectors2[n][1] = m_sin[n] * m_size2;
     vectors2[n][2] = 0.0;
-    
+
     // rotation des vecteurs en x
     vectors_tmp    = cos_rotX1 * vectors1[n][1]; // - sin(m_rotX1) * vectors1[n][2];
     vectors1[n][2] = sin_rotX1 * vectors1[n][1]; // + cos(m_rotX1) * vectors1[n][2];
@@ -142,18 +142,18 @@ void tube :: renderShape(GemState *state){
     vectors_tmp    =  cos_rotY1 * vectors1[n][0] + sin_rotY1 * vectors1[n][2];
     vectors1[n][2] = -sin_rotY1 * vectors1[n][0] + cos_rotY1 * vectors1[n][2];
     vectors1[n][0] = vectors_tmp;
-    
+
     vectors_tmp    =  cos_rotY2 * vectors2[n][0] + sin_rotY2 * vectors2[n][2];
     vectors2[n][2] = -sin_rotY2 * vectors2[n][0] + cos_rotY2 * vectors2[n][2];
     vectors2[n][0] = vectors_tmp;
- 
+
     // translation du 2eme cercle par rapport au 1er
     vectors2[n][0] += m_TX;
     vectors2[n][1] += m_TY;
     vectors2[n][2] += m_high;
   }
   // copie des premiers vecteurs a la fin du tableau pour reboucler proprement
-		
+
   vectors2[order][0] = vectors2[0][0];
   vectors2[order][1] = vectors2[0][1];
   vectors2[order][2] = vectors2[0][2];
@@ -173,7 +173,7 @@ void tube :: renderShape(GemState *state){
   vectors1[order+2][0] = vectors1[2][0];
   vectors1[order+2][1] = vectors1[2][1];
   vectors1[order+2][2] = vectors1[2][2];
-  
+
   glLineWidth(m_linewidth);
   glBegin(m_drawType);
 
@@ -187,7 +187,7 @@ void tube :: renderShape(GemState *state){
       ysize0 = GemShape::m_texCoords[2].t;
       ysize1 = GemShape::m_texCoords[1].t;
     }
- 
+
     for (n = 1; n < order + 2 ; n++)	{
       Matrix::generateNormal(vectors1[n-1], vectors2[n], vectors1[n+1], normal);
       glNormal3fv(normal);

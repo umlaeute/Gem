@@ -24,14 +24,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_yuv
-    
+
     Change pix from "any" color-space to GL_YUV
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_yuv : public pix_rgba
@@ -43,7 +43,7 @@ class GEM_EXTERN pix_yuv : public pix_rgba
 	    //////////
 	    // Constructor
     	pix_yuv();
-    	
+
     protected:
 };
 

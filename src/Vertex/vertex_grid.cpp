@@ -61,17 +61,17 @@ vertex_grid :: ~vertex_grid()
 /////////////////////////////////////////////////////////
 void vertex_grid :: render(GemState *state)
 {
-  
+
    int h,w,src,y,t;
-   
+
   // m_x = 4;
   // m_y = 4;
   // m_spacex = 0.5f;
   // m_spacey = 0.5f;
-   
+
    if(m_x < 1)m_x = 1;
    if(m_y < 1)m_y = 1;
-  
+
     //texcoords s,t 0..state->texCoordX,texCoordY
     //ratios on OSX are on texcoord[1].s,t
     //
@@ -79,7 +79,7 @@ void vertex_grid :: render(GemState *state)
         //get the maximum x,y texcoord values
         maxX = state->texCoordX(1); //bottom right of image
         maxY = state->texCoordY(1);
-    
+
         //make a ratio between the max and number of vertices on each axis for interpolation
         ratioX = maxX / m_x;
         ratioY = maxY / m_y;
@@ -88,11 +88,11 @@ void vertex_grid :: render(GemState *state)
         post("ratioX %f",ratioX);
         post("ratioY %f",ratioY);
         }
-      
+
     ratioX = maxX / m_x;
     ratioY = maxY / m_y;
    if (m_x != m_oldx || m_y != m_oldy){
-        
+
         post("resizing arrays");
         m_x += 1; //to give the correct number of columns;
         delete [] m_VertexArray;
@@ -101,30 +101,30 @@ void vertex_grid :: render(GemState *state)
         m_VertexArray = new float [m_x * m_y * 4 * 2];
         m_ColorArray = new float [m_x * m_y * 4 * 2];
         m_TexCoordArray = new float [m_x * m_y * 2 * 2];
-        
+
         m_oldx = m_x;
         m_oldy = m_y;
         post("resizing arrays done");
    }
-    
+
     //this has to do two rows at once for TRIANGLE_STRIPS to draw correctly
     src=0;
     y = 0;
     t = 0;
-    
-    
-    
+
+
+
     //this could be put in a separate function and only done when the size changes
     //use memcpy() for render passes that don't change the size
     for (h=0;h<m_y;h++){
        // y = y *h;
         for(w=0;w<m_x;w++){
             m_VertexArray[src]= (w * m_spacex);
-            m_VertexArray[src+1]= (h * m_spacey); 
+            m_VertexArray[src+1]= (h * m_spacey);
             m_VertexArray[src+2]= 0.f;
             m_VertexArray[src+3]= 1.f;
             m_VertexArray[src+4]= (w * m_spacex);
-            m_VertexArray[src+5]= (h * m_spacey + m_spacey); 
+            m_VertexArray[src+5]= (h * m_spacey + m_spacey);
             m_VertexArray[src+6]= 0.f;
             m_VertexArray[src+7]= 1.f;
             m_ColorArray[src]= 1.f;
@@ -142,10 +142,10 @@ void vertex_grid :: render(GemState *state)
             m_TexCoordArray[t+3] = ((maxY - (h * ratioY)) - ratioY);
            // post(" %f %f",m_TexCoordArray[t],m_TexCoordArray[t+1]);
            // post(" %f %f",m_TexCoordArray[t+2],m_TexCoordArray[t+3]);
-            
+
             t+=4;
         }
-        
+
     }
     //post("");
    //post("m_TexCoordArray[t] %f",m_TexCoordArray[t]);
@@ -159,9 +159,9 @@ void vertex_grid :: render(GemState *state)
     state->VertexArrayStride = 4;
     state->VertexArraySize = src / 4;
     state->drawType = GL_TRIANGLE_STRIP;
-   
+
 }
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //

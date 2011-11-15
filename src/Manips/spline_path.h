@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     A spline path
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     spline_path
-    
+
 
 DESCRIPTION
-    
-    
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN spline_path : public GemPathBase
 {
@@ -36,9 +36,9 @@ class GEM_EXTERN spline_path : public GemPathBase
         //////////
         // Constructor
     	spline_path(int argc, t_atom *argv);
-   	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~spline_path();

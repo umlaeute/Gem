@@ -65,7 +65,7 @@ void pix_draw :: render(GemState *state)
 
   glPixelZoom(1,orientation);
 
-  glBitmap(0, 0, 0.f, 0.f, -(img->image.xsize)/2.f, 
+  glBitmap(0, 0, 0.f, 0.f, -(img->image.xsize)/2.f,
            -orientation*(img->image.ysize)/2.f, 0);
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

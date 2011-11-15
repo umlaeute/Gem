@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_killold
-    
+
 	Kill particles that are past a certain time
 
 DESCRIPTION
@@ -37,22 +37,22 @@ class GEM_EXTERN part_killold : public partlib_base
 	    //////////
 	    // Constructor
     	part_killold(t_floatarg num);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_killold();
-		
+
 		//////////
 		void			numberMess(float num)	{ m_killAge = num; }
 
 		//////////
 		float			m_killAge;
-	
+
 	private:
 
 		//////////

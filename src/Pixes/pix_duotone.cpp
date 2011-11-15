@@ -82,7 +82,7 @@ void pix_duotone :: processRGBImage(imageStruct &image)
     pixels[chRed]   = m_color1[0];
     pixels[chGreen] = m_color1[1];
     pixels[chBlue]  = m_color1[2];
-    
+
   } else {
     pixels[chRed]   = m_color2[0];
     pixels[chGreen] = m_color2[1];
@@ -101,7 +101,7 @@ void pix_duotone :: processGrayImage(imageStruct &image)
   int datasize =  image.xsize * image.ysize*image.csize;
   unsigned char *pixels = image.data;
   unsigned char thresh=m_thresh[0], grey1=m_color1[0], grey2=m_color2[0];
-  
+
   while(datasize--) {
     *pixels=(*pixels>thresh)?grey1:grey2;
     pixels++;

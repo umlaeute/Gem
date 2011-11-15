@@ -41,7 +41,7 @@ pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage, t_flo
   m_pixBlock.image = m_imageStruct;
 
   // make sure that there are some characters
-  if (filename->s_name[0]) { 
+  if (filename->s_name[0]) {
     if (skipRate == 0)  {
       if (topImage == 0)
 	openMess(filename, 0, (int)baseImage, 1);
@@ -69,7 +69,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     cleanImages();
 
     if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
-      m_cache=NULL;   
+      m_cache=NULL;
     /*
     if (!topImage)
     {
@@ -95,7 +95,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
             !strcmp(filename->s_name, cache->imageName)) found = 1;
         else cache = cache->next;
     }
-    
+
     // yep, we have it
     if (found)
     {
@@ -110,10 +110,10 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     }
 
     // nope, so create the new cache
-    // find the * in the filename    
+    // find the * in the filename
     char preName[256];
     char postName[256];
-    
+
     int i = 0;
     char *strPtr = filename->s_name;
     while (strPtr[i] && strPtr[i] != '*')
@@ -121,16 +121,16 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     	preName[i] = strPtr[i];
     	i++;
     }
-    
+
     if (!strPtr[i])
     {
     	error("Unable to find * in file name");
     	return;
     }
 
-    preName[i] = '\0';    
+    preName[i] = '\0';
     strcpy(postName, &(strPtr[i+1]));
-    
+
     // need to figure out how many filenames there are to load
     m_numImages = (topImage + 1 - baseImage) / skipRate;
 
@@ -174,7 +174,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
 
     // insert the cache at the end of the linked list
     multiImageCache *ptr = s_imageCache;
-    
+
     if (!ptr) s_imageCache = newCache;
     else
     {
@@ -194,15 +194,15 @@ void pix_multiimage :: render(GemState *state)
 {
     // if we don't have an image, just return
     if (!m_numImages) return;
-    
-    // do we need to reload the image?    
+
+    // do we need to reload the image?
     if (m_cache->resendImage)
     {
       m_loadedCache->images[m_curImage]->refreshImage(&m_pixBlock.image);
     	m_pixBlock.newimage = 1;
     	m_cache->resendImage = 0;
     }
-    
+
     state->set(GemState::_PIX, &m_pixBlock);
 }
 

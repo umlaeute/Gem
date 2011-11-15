@@ -21,7 +21,7 @@
   -------------------------------------------------------------------
   CLASS
   world_light
-    
+
   Creates a world_light - position is at infinity (can be rotated)
 
   DESCRIPTION
@@ -30,7 +30,7 @@
 
   "clrlist" - Determines color
   "int" - On/off state
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN world_light : public GemBase
 {
@@ -41,9 +41,9 @@ class GEM_EXTERN world_light : public GemBase
   //////////
   // Constructor
   world_light(t_floatarg lightNum);
-        
+
  protected:
-        
+
   //////////
   // Destructor
   virtual ~world_light();
@@ -59,11 +59,11 @@ class GEM_EXTERN world_light : public GemBase
   //////////
   // Turn on/off the debugging object
   void            debugMess(int state);
-        
+
   //////////
   // Turn the light on or off
   void            lightOnOffMess(int state);
-        
+
   //////////
   // Set the light's color
   void            lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
@@ -71,44 +71,44 @@ class GEM_EXTERN world_light : public GemBase
   //////////
   // If you care about the start of rendering
   virtual void    startRendering();
-        
+
   //////////
   // If you care about the stop of rendering
   virtual void    stopRendering();
-        
+
   //-----------------------------------
   // GROUP:   Member variables
   //-----------------------------------
-    
+
   //////////
   // The light color
   GLfloat         m_color[4];
-        
+
   //////////
   // The position
   GLfloat         m_position[4];
-                
+
   //////////
   // If a change occured
   int             m_change;
-        
+
   //////////
   // The on/off state of the light
   int             m_on;
-        
+
   //////////
   // The on/off state for debugging
   int             m_debug;
-        
+
   //////////
   // The light number with reference to OpenGL
   GLenum          m_light;
 
   //////////
   GLUquadricObj   *m_thing;
-        
+
  private:
-            
+
   //////////
   // Static member functions
   static void     lightColorMessCallback(void *data, t_symbol*,int,t_atom*);

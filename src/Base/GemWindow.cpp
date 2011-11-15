@@ -91,7 +91,7 @@ public:
       argv[i]=alist[i];
     }
 #endif
-    outlet_anything(infoOut, atom_getsymbol(argv), argc-1, argv+1); 
+    outlet_anything(infoOut, atom_getsymbol(argv), argc-1, argv+1);
     if(ap)
       delete[]ap;
   }
@@ -131,7 +131,7 @@ GemWindow :: GemWindow()
     m_xoffset(0), m_yoffset(0),
     m_border(true), m_fullscreen(false),
     m_buffer(2),
-    m_title("Gem"), 
+    m_title("Gem"),
     m_cursor(true),
     m_fsaa(0),
     m_context(NULL)
@@ -161,8 +161,8 @@ void GemWindow::info(std::vector<t_atom>l) {
 void GemWindow::info(t_symbol*s, int argc, t_atom*argv) {
   m_pimpl->queue(s, argc, argv);
 }
-void GemWindow::info(std::string s) { 
-  info(gensym(s.c_str()), 0, NULL); 
+void GemWindow::info(std::string s) {
+  info(gensym(s.c_str()), 0, NULL);
 }
 void GemWindow::info(std::string s, int i) {
   info(s, (t_float)i);
@@ -172,13 +172,13 @@ void GemWindow :: info(std::string s, t_float value)
 {
   t_atom atom;
   SETFLOAT(&atom, value);
-  info(gensym(s.c_str()), 1, &atom); 
+  info(gensym(s.c_str()), 1, &atom);
 }
 void GemWindow :: info(std::string s, std::string value)
 {
   t_atom atom;
   SETSYMBOL(&atom, gensym(value.c_str()));
-  info(gensym(s.c_str()), 1, &atom); 
+  info(gensym(s.c_str()), 1, &atom);
 }
 
 void GemWindow :: bang(void)
@@ -339,7 +339,7 @@ void GemWindow::       offsetMess(int x, int y) {
   m_xoffset=x;
   m_yoffset=y;
 }
- 
+
 void GemWindow::       createMess(std::string) {
   create();
 }

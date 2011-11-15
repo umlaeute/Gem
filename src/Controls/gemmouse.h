@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     Respond to mouse events
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     gemmouse
-    
+
     Respond to mouse events
 
 DESCRIPTION
-    
-    
+
+
 -----------------------------------------------------------------*/
 
 enum t_mousescale { NONE, WIDTH, HEIGHT, BOTH };
@@ -40,9 +40,9 @@ class GEM_EXTERN gemmouse : public CPPExtern
         //////////
         // Constructor
   gemmouse(int,t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~gemmouse();
@@ -58,7 +58,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
         //////////
         // mouse button
         void		mouseWheel(int axis, int value);
-        
+
         //////////
         // The xpos outlet
         t_outlet    	*m_outXPos;
@@ -84,7 +84,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
         // if !=0, the mouse-coordinate is scaled to 0..m_scale
         // if ==0, the mouse-coordinate is scaled to 0..windowsize
         t_float m_scaleX, m_scaleY;
-        
+
         //////////
         // should Y we scaled separately or like X ?
         t_mousescale m_scaleMode;

@@ -41,6 +41,10 @@ libUtils_la_SOURCES=  \
 	Matrix.cpp \
 	Matrix.h \
 	PixPete.h \
+	plist.cpp \
+	plist.h \
+	pstk.cpp \
+	pstk.h \
 	SIMD.cpp \
 	SIMD.h \
 	Vector.cpp \

@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     Base class for paths
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemPathBase
-    
+
 
 DESCRIPTION
-    
-    
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemPathBase : public CPPExtern
 {
@@ -36,9 +36,9 @@ class GEM_EXTERN GemPathBase : public CPPExtern
         //////////
         // Constructor
     	GemPathBase(int argc, t_atom *argv);
-   	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~GemPathBase();
@@ -46,7 +46,7 @@ class GEM_EXTERN GemPathBase : public CPPExtern
     	//////////
     	// When an open is received
     	virtual void	openMess(t_symbol *arrayname);
-    	
+
         //////////
         // When a float val is received
         virtual void    floatMess(t_float val) = 0;
@@ -64,7 +64,7 @@ class GEM_EXTERN GemPathBase : public CPPExtern
         t_outlet        *m_out1;
 
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	openMessCallback(void *data, t_symbol *arrayname);

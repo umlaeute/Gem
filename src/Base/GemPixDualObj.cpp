@@ -79,7 +79,7 @@ void GemPixDualObj :: render(GemState *state)
   default:						\
     process##CS ##_##CS(image, m_pixRight->image);		\
   }
-  
+
 #define PROCESS_DUALIMAGE(CS1, CS2) \
   process##CS1 ##_##CS2 (image, m_pixRight->image);
 
@@ -102,13 +102,13 @@ void GemPixDualObj :: processImage(imageStruct &image)
 
   //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
   if (!m_pixRightValid || !&image || !&m_pixRight || !&m_pixRight->image) return;
-  
+
     if (image.xsize != m_pixRight->image.xsize ||
     	image.ysize != m_pixRight->image.ysize)    {
-      error("two images do not have equal dimensions (%dx%d != %dx%d)", 
+      error("two images do not have equal dimensions (%dx%d != %dx%d)",
 	    image.xsize, image.ysize,
 	    m_pixRight->image.xsize, m_pixRight->image.ysize);
-      m_pixRightValid = 0;  
+      m_pixRightValid = 0;
     	return;
     }
 
@@ -171,7 +171,7 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
     rformat = new char[6];
     sprintf(rformat, "0x%04X", (unsigned int)left.format);
   }
-  
+
   error("no method to combine (%s) and (%s)", lformat, rformat);
 }
 
@@ -208,7 +208,7 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
     m_pixRight = 0;
     return;
   }
-  
+
   m_pixRightValid = 1;
   if (m_pixRight->newimage)setPixModified(); // force the left arm to create a new image
 }

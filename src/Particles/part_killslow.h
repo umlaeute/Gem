@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_killslow
-    
+
 	Kill particles that are too slow
 
 DESCRIPTION
@@ -37,22 +37,22 @@ class GEM_EXTERN part_killslow : public partlib_base
 	    //////////
 	    // Constructor
     	part_killslow(t_floatarg num);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_killslow();
-		
+
 		//////////
 		void			numberMess(float num)	{ m_killSpeed = num; }
 
 		//////////
 		float			m_killSpeed;
-	
+
 	private:
 
 		//////////

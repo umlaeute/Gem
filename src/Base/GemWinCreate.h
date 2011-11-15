@@ -44,19 +44,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   WindowInfo
-    
+
   All of the relavent information about an OpenGL window
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN WindowInfo
 {
  public:
-	
+
   // Constructor
   WindowInfo() :
-    fs(0), 
+    fs(0),
 #if defined _WIN32
     win(NULL), dc(NULL), context(NULL),
 #elif defined __APPLE__
@@ -69,7 +69,7 @@ class GEM_EXTERN WindowInfo
     have_constContext(0)
     {}
   int         fs;                 // FullScreen
-  
+
 #if defined _WIN32
 
   HWND        win;                // Window handle
@@ -84,8 +84,8 @@ class GEM_EXTERN WindowInfo
     long		pixelSize;	//
     Rect		r;		//
     PixMapHandle	pixMap;		// PixMap Handle
-    long		rowBytes;	// 
-    void 		*baseAddr;	// 
+    long		rowBytes;	//
+    void 		*baseAddr;	//
     short		fontList;	// Font
 
 #elif defined __linux__ || defined HAVE_GL_GLX_H
@@ -114,11 +114,11 @@ class GEM_EXTERN WindowInfo
   -------------------------------------------------------------------
   CLASS
   WindowHints
-    
+
   Hints for window creation
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN WindowHints
 {
@@ -153,7 +153,7 @@ class GEM_EXTERN WindowHints
   //////////
   // Should we do fullscreen ?
   int			fullscreen;
-  
+
   //////////
   // Is there a second screen ?
   int			secondscreen;
@@ -220,7 +220,7 @@ GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints);
 
 
 /////////
-// 
+//
 GEM_EXTERN extern void dispatchGemWindowMessages(WindowInfo &nfo);
 
 

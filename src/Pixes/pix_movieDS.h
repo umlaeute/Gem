@@ -10,7 +10,7 @@
 #include <dshow.h>
 #include <qedit.h>
 
- 
+
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
 
@@ -19,19 +19,19 @@ class GEM_EXTERN pix_movieDS : public GemBase
 
 	CPPEXTERN_HEADER(pix_movieDS, GemBase);
 
-   
-  public:  
+
+  public:
 	//////////
 	// Constructor
 	pix_movieDS(t_symbol *filename);
 	~pix_movieDS(void);
-	
+
   protected:
-	
+
 	//////////
 	// Do the rendering
 	virtual void texFrame(GemState *state, int doit);
-    	
+
 	//////////
 	virtual void setUpTextureState();
 
@@ -49,7 +49,7 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	//////////
 	// Clear the dirty flag on the pixBlock
 	virtual void postrender(GemState *state);
-  
+
 	virtual void render(GemState *state);
 
 	//////////
@@ -63,9 +63,9 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	virtual void getFrame();
 
 	virtual void MovRate(float rate);
-  
+
 	virtual void changeImage(int imgNum, int trackNum);
-  
+
 	//////////
 	// load film into RAM
 	//virtual void LoadRam();
@@ -82,25 +82,25 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	// The size of the texture (so we can use sub image)
 	int			m_dataSize[3];
 
-	GLuint		m_textureObj;	
+	GLuint		m_textureObj;
 	float		m_xRatio;
 	float		m_yRatio;
-  
+
 	//////////
 	// the current file
 	t_symbol	*x_filename;
-	
+
 	//////////
 	// a outlet for information like #frames and "reached end"
 	t_outlet	*m_outNumFrames;
 	t_outlet	*m_outEnd;
-        
+
 	//////////
 	// frame data
 	unsigned char	*m_frame;  /* this points to the main texture (might be black) */
 	unsigned char	*m_data;   /* this points always to the real data */
-  
-  
+
+
 	//////////
 	// If a movie was loaded and what kind of Movie this is
 	int				m_haveMovie;
@@ -118,10 +118,10 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	int				m_numTracks;
 	int				m_track;
 
-  
+
 	pixBlock		m_pixBlock;
 	imageStruct		m_imageStruct;
-  
+
 
 	int				m_xsize;
 	int				m_ysize;
@@ -134,11 +134,11 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	int				m_colorspace;
 	int				m_format;
 	int				m_rectangle;
-  
+
 	//-----------------------------------
 	// GROUP:	Movie data
 	//-----------------------------------
-   
+
 //	Rect			m_srcRect;
 //	TimeValue		m_movieTime;
 //	Track			m_movieTrack;
@@ -164,8 +164,8 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	IMediaPosition			*MediaPosition;		// MediaPosition interface
 	LONGLONG				m_Duration;			// Duration of video
 	LONGLONG				m_LastFrame;		// Last frame
-	
- protected:	
+
+ protected:
 	//////////
 	// static member functions
 	static void openMessCallback(void *data, t_symbol *filename);

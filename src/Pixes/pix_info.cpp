@@ -60,7 +60,7 @@ pix_info :: ~pix_info()
 /////////////////////////////////////////////////////////
 void pix_info :: render(GemState *state)
 {
-  
+
   // 0 0 0  6408  5121 1 1 0  0 9.59521e+08
   t_atom abuf[3];
   pixBlock*img=NULL;

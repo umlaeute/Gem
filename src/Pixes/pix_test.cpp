@@ -76,7 +76,7 @@ void pix_test :: processImage(imageStruct &image)
       int col=cols;
       while(col--){
 	*data++=off;
-	*data++=128;	
+	*data++=128;
       }
     }
     break;
@@ -90,7 +90,7 @@ void pix_test :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_test :: obj_setupCallback(t_class *classPtr)
 {
-   class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_test::floatMessCallback));    
+   class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_test::floatMessCallback));
    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_test::csizeMessCallback),
 		  gensym("csize"), A_FLOAT, A_NULL);
 }

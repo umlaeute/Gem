@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-  
+
 #include "plugins/imagesaver.h"
 #include "plugins/PluginFactory.h"
 
@@ -30,11 +30,11 @@ namespace gem { namespace plugins {
       if(NULL==s_extension2mime)
 	s_extension2mime = new  std::map<std::string, std::string>;
       std::map<std::string, std::string>&e2m=*s_extension2mime;
-      
+
       // avoid the use of '*/x-*' mimetypes as the "x-" is actually private
       // if a file-extension matches multiple mimetypes, chose the most obvious
       /* this is generated with something like:
-	 $  cat mimetypes.txt | while read mime exts; do for ext in $exts; do echo "e2m[\"${ext}\"]=\"${mime}\";"; done; done | sort 
+	 $  cat mimetypes.txt | while read mime exts; do for ext in $exts; do echo "e2m[\"${ext}\"]=\"${mime}\";"; done; done | sort
       */
 
       e2m["art"]="image/x-jg";
@@ -160,8 +160,8 @@ namespace gem { namespace plugins {
     std::vector<std::string>m_ids;
 
     bool m_threadable;
-  public:  
-    imagesaverMeta(void) : 
+  public:
+    imagesaverMeta(void) :
       m_threadable(true)
     {
       gem::PluginFactory<imagesaver>::loadPlugins("image");
@@ -213,7 +213,7 @@ namespace gem { namespace plugins {
 	  // not yet added, do so now!
 	  imagesaver*saver=NULL;
     try {
-	    saver=gem::PluginFactory<imagesaver>::getInstance(key); 
+	    saver=gem::PluginFactory<imagesaver>::getInstance(key);
     } catch(GemException&x) {
       saver=NULL;
       verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());

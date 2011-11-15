@@ -22,20 +22,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -------------------------------------------------------------------
 CLASS
     pix_threshold
-    
+
     Clamp pixel values to a threshold
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_thresh"
     Inlet for a float - "ft1"
-    
+
     "vec_thresh" - The threshold vector
     "ft1" - Set all thresholds to one value
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_threshold : public GemPixObj
 {
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_threshold : public GemPixObj
         //////////
         // Constructor
     	pix_threshold();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_threshold();
@@ -56,35 +56,35 @@ class GEM_EXTERN pix_threshold : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-    	
+
     	//////////
     	// Do the processing
     	virtual void 	processGrayImage(imageStruct &image);
-        	
+
         //////////
     	// Do the processing
     	virtual void 	processYUVImage(imageStruct &image);
-		
+
 #ifdef __VEC__
 	//////////
     	// Do the processing
     	virtual void 	processYUVAltivec(imageStruct &image);
-#endif  
+#endif
     	//////////
     	// Set the new threshold vector
     	void	    	vecThreshMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// Set the new threshold value
     	void	    	floatThreshMess(float thresh);
-    	
+
     	//////////
     	// The new color
     	unsigned char  	m_thresh[4];
         unsigned char	m_Y;
-    
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

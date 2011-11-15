@@ -3,10 +3,10 @@ LOG
     GEM - Graphics Environment for Multimedia
     pix_chroma_key.cpp
     gem_darwin
-  
+
     Created by chris clepper on Mon Oct 07 2002.
     Copyright (c) 2002-2006 cgc. All rights reserved.
- 
+
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -54,15 +54,15 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   unsigned char Ghi,Glo,Bhi,Blo,Rhi,Rlo;
   src =0;
 
-  Rhi = CLAMP(m_Yvalue + m_Yrange); 
+  Rhi = CLAMP(m_Yvalue + m_Yrange);
   Rlo = CLAMP(m_Yvalue - m_Yrange);
-  Ghi = CLAMP(m_Uvalue + m_Urange); 
+  Ghi = CLAMP(m_Uvalue + m_Urange);
   Glo = CLAMP(m_Uvalue - m_Urange);
-  Bhi = CLAMP(m_Vvalue + m_Vrange); 
+  Bhi = CLAMP(m_Vvalue + m_Vrange);
   Blo = CLAMP(m_Vvalue - m_Vrange);
 
-  if (m_direction) {    
-    while(datasize--){        
+  if (m_direction) {
+    while(datasize--){
       if ((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
 	  (leftPix[chRed]  < Rhi)&&(leftPix[chRed]  > Rlo)&&
 	  (leftPix[chGreen]< Ghi)&&(leftPix[chGreen]> Glo))
@@ -102,11 +102,11 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
    src =0;
    bool change1,change2,change3,change4;
 
-   Yhi = CLAMP(m_Yvalue + m_Yrange); 
+   Yhi = CLAMP(m_Yvalue + m_Yrange);
    Ylo = CLAMP(m_Yvalue - m_Yrange);
-   Uhi = CLAMP(m_Uvalue + m_Urange); 
+   Uhi = CLAMP(m_Uvalue + m_Urange);
    Ulo = CLAMP(m_Uvalue - m_Urange);
-   Vhi = CLAMP(m_Vvalue + m_Vrange); 
+   Vhi = CLAMP(m_Vvalue + m_Vrange);
    Vlo = CLAMP(m_Vvalue - m_Vrange);
    //format is U Y V Y
    xsize = image.xsize/2;
@@ -121,7 +121,7 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
                 {
                 image.data[src] = right.data[src];
                 image.data[src+1] = right.data[src+1];
-		
+
                 image.data[src+2] = right.data[src+2];
                 image.data[src+3] = right.data[src+3];
                 } */
@@ -138,11 +138,11 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 	       ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
 	       ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))&&
 	       ((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))
-	       )   
+	       )
 	     {
 	       image.data[src+2] = right.data[src+2];
 	       image.data[src+3] = right.data[src+3];
-	     }    
+	     }
 	   src+=4;
 	 }
        }
@@ -160,8 +160,8 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 	     }
 	   src+=4;
 	 }
-       }   
-     } 
+       }
+     }
    }else{
      /**/
      //this mode does interpolation between Y values if one of the pair lies outside the range
@@ -170,9 +170,9 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
        for (h=0; h<image.ysize; h++){
 	 for(w=0; w<image.xsize/4; w++){
 	   change1 = 0;
-	   change2 = 0;  
+	   change2 = 0;
 	   change3 = 0;
-	   change4 = 0;  
+	   change4 = 0;
 	   if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
 	       (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
 	       (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
@@ -195,7 +195,7 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 	       (image.data[src+7] < Yhi)&&(image.data[src+7] > Ylo)&&
 	       (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
 	     change4 = 1;
-	   }   
+	   }
 
 	   if (change1 && change2 && change3 && change4){
 	     image.data[src] = right.data[src];
@@ -216,7 +216,7 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 	       //   temp1 = ((image.data[src+1] * 255) + (right.data[src+1] * 0))>>8;
 	       image.data[src+1] = CLAMP(temp1 + temp2) ;
 	       image.data[src+2] = right.data[src+2];
-                
+
 	       //  temp2 = ((image.data[src+3] * 192) + (right.data[src+3] * 64))>>8;
 	       image.data[src+3] = CLAMP(temp1 + temp2);
 	       image.data[src+4] = right.data[src+4];
@@ -226,15 +226,15 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 	       image.data[src+6] = right.data[src+6];
 
 	       //  temp2 = ((image.data[src+7] * 64) + (right.data[src+7] * 192))>>8;
-	       image.data[src+7] = CLAMP(temp1 + temp2);                
+	       image.data[src+7] = CLAMP(temp1 + temp2);
 	       change1 = 0; change2 = 0;change3 = 0; change4 = 0;
-	     }  
+	     }
 	     //  }else{
 	     // }
-	   }    
+	   }
 	   src+=8;
 	 }
-       }    
+       }
      }else{
        for (h=0; h<image.ysize; h++){
 	 for(w=0; w<image.xsize/2; w++){
@@ -246,7 +246,7 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 	   if (!((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
 		 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))){
 	     image.data[src+2] = right.data[src+2];
-	     image.data[src+3] = right.data[src+3];   
+	     image.data[src+3] = right.data[src+3];
 	   }
 	   src+=4;
 	 }
@@ -265,19 +265,19 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   __m64 *rightPix = (__m64*)right.data;
 
 
-  const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange), 
+  const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange),
 			CLAMP(m_Uvalue + m_Urange),
 			CLAMP(m_Vvalue + m_Vrange),
 			(unsigned char)0xFF,
-			CLAMP(m_Yvalue + m_Yrange), 
+			CLAMP(m_Yvalue + m_Yrange),
 			CLAMP(m_Uvalue + m_Urange),
 			CLAMP(m_Vvalue + m_Vrange),
 			(unsigned char)0xFF);
-  const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange), 
+  const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange),
 			CLAMP(m_Uvalue - m_Urange),
 			CLAMP(m_Vvalue - m_Vrange),
 			(unsigned char)0x00,
-			CLAMP(m_Yvalue - m_Yrange), 
+			CLAMP(m_Yvalue - m_Yrange),
 			CLAMP(m_Uvalue - m_Urange),
 			CLAMP(m_Vvalue - m_Vrange),
 			(unsigned char)0x00);
@@ -286,7 +286,7 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 
   __m64 r, l, b0, b1;
 
-  if (m_direction) {    
+  if (m_direction) {
     while(datasize--){
       l=leftPix [datasize];
       r=rightPix[datasize];
@@ -334,19 +334,19 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
 
   // no m_mode yet (does it make any sense at all ?)
 
-  const __m64 hi=_mm_setr_pi8(CLAMP(m_Uvalue + m_Urange), 
+  const __m64 hi=_mm_setr_pi8(CLAMP(m_Uvalue + m_Urange),
 			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Vvalue + m_Vrange),
 			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Uvalue + m_Urange), 
+			      CLAMP(m_Uvalue + m_Urange),
 			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Vvalue + m_Vrange),
 			      CLAMP(m_Yvalue + m_Yrange));
-  const __m64 lo=_mm_setr_pi8(CLAMP(m_Uvalue - m_Urange), 
+  const __m64 lo=_mm_setr_pi8(CLAMP(m_Uvalue - m_Urange),
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Vvalue - m_Vrange),
 			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Uvalue - m_Urange), 
+			      CLAMP(m_Uvalue - m_Urange),
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Vvalue - m_Vrange),
 			      CLAMP(m_Yvalue - m_Yrange));
@@ -355,7 +355,7 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
 
   __m64 r, l, b0, b1;
 
-  if (m_direction) {    
+  if (m_direction) {
     while(datasize--){
       l=leftPix [datasize];
       r=rightPix[datasize];
@@ -403,19 +403,19 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 
   // no m_mode yet (does it make any sense at all ?)
 
-  const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange), 
+  const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange), 
+			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Yvalue + m_Yrange),
 			      CLAMP(m_Yvalue + m_Yrange));
-  const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange), 
+  const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange), 
+			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange),
 			      CLAMP(m_Yvalue - m_Yrange));
@@ -424,7 +424,7 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 
   __m64 r, l, b0, b1;
 
-  if (m_direction) {    
+  if (m_direction) {
     while(datasize--){
       l=leftPix [datasize];
       r=rightPix[datasize];
@@ -476,7 +476,7 @@ register int h,w,i,j,width;
     h = image.ysize;
     w = image.xsize/8;
     width = image.xsize/8;
-    
+
     //check to see if the buffer isn't 16byte aligned (highly unlikely)
     if (image.ysize*image.xsize % 16 != 0){
         error("image not properly aligned for Altivec");
@@ -504,45 +504,45 @@ register int h,w,i,j,width;
 
     vector unsigned char	*inData = (vector unsigned char*) image.data;
     vector unsigned char	*rightData = (vector unsigned char*) right.data;
-   
+
     shortBuffer.s[0] = CLAMP(m_Yvalue + m_Yrange);
     Yhi = shortBuffer.v;
     Yhi = vec_splat(Yhi,0);
-    
+
     shortBuffer.s[0] = CLAMP(m_Yvalue - m_Yrange);
     Ylo = shortBuffer.v;
     Ylo = vec_splat(Ylo,0);
-    
+
     longBuffer.i[0] = CLAMP(m_Uvalue + m_Urange);
     longBuffer.i[1] = CLAMP(m_Uvalue + m_Urange);
     longBuffer.i[2] = CLAMP(m_Uvalue + m_Urange);
     longBuffer.i[3] = CLAMP(m_Uvalue + m_Urange);
-    
-    
+
+
     Uhi = longBuffer.v;
-    
+
     longBuffer.i[0] = CLAMP(m_Uvalue - m_Urange);
     longBuffer.i[1] = CLAMP(m_Uvalue - m_Urange);
     longBuffer.i[2] = CLAMP(m_Uvalue - m_Urange);
     longBuffer.i[3] = CLAMP(m_Uvalue - m_Urange);
-    
-    
+
+
     Ulo = longBuffer.v;
-    
+
     longBuffer.i[0] = CLAMP(m_Vvalue + m_Vrange);
     longBuffer.i[1] = CLAMP(m_Vvalue + m_Vrange);
     longBuffer.i[2] = CLAMP(m_Vvalue + m_Vrange);
     longBuffer.i[3] = CLAMP(m_Vvalue + m_Vrange);
-    
-    
+
+
     Vhi = longBuffer.v;
-    
+
     longBuffer.i[0] = CLAMP(m_Vvalue - m_Vrange);
     longBuffer.i[1] = CLAMP(m_Vvalue - m_Vrange);
     longBuffer.i[2] = CLAMP(m_Vvalue - m_Vrange);
     longBuffer.i[3] = CLAMP(m_Vvalue - m_Vrange);
-    
-    
+
+
     Vlo = longBuffer.v;
     #ifndef PPC970
     //setup the cache prefetch -- A MUST!!!
@@ -551,7 +551,7 @@ register int h,w,i,j,width;
     vec_dst( rightData, prefetchSize, 1 );
     #endif
     if (m_direction) {
-    
+
     for ( i=0; i<h; i++){
         for (j=0; j<w; j++)
         {
@@ -560,70 +560,70 @@ register int h,w,i,j,width;
         vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
-        
+
 
         //separate the U and V from Y
         UVres1 = (vector unsigned short)vec_mule(one,inData[0]);
         UVres2 = (vector unsigned short)vec_mule(one,rightData[0]);
-        
+
         //vec_mulo Y * 1 to short vector Y Y Y Y shorts
         Yres1 = (vector unsigned short)vec_mulo(one,inData[0]);
         Yres2 = (vector unsigned short)vec_mulo(one,rightData[0]);
-                        
-         //compare the Y values   
+
+         //compare the Y values
          Ymasklo = vec_cmpgt(Yres1,Ylo);
          Ymaskhi = vec_cmplt(Yres1,Yhi);
-         
+
          Ymaskhi = vec_and(Ymaskhi,Ymasklo);
          /*
          UVmasklo = vec_cmpgt(Yres1,UVlo);
          UVmaskhi = vec_cmplt(Yres1,UVhi);
-         
+
          UVmaskhi = vec_and(UVmaskhi,UVmasklo);
          */
-         
+
          //so it seems the only way to do this is separate int vecs for U and V
          //more ops but still about 325% faster than scalar - so who cares?
          Ures = vec_mule(sone,UVres1);
          Vres = vec_mulo(sone,UVres1);
-         
+
          Umasklo = vec_cmpgt(Ures,Ulo);
          Umaskhi = vec_cmplt(Ures,Uhi);
-         
+
          Vmasklo = vec_cmpgt(Vres,Vlo);
          Vmaskhi = vec_cmplt(Vres,Vhi);
-         
+
          Umaskhi = vec_and(Umaskhi,Umasklo);
-         
+
          Vmaskhi = vec_and(Vmaskhi,Vmasklo);
-         
+
          Umasklo = vec_and(Umaskhi,Vmaskhi);
          Vmasklo = vec_and(Umaskhi,Vmaskhi);
-         
+
          hiImage = (vector unsigned short)vec_mergeh(Umasklo,Vmasklo);
          loImage = (vector unsigned short)vec_mergel(Umasklo,Vmasklo);
-         
+
          //pack it back down to bool short
          UVmaskhi = (vector bool short)vec_packsu(hiImage,loImage);
-         
+
          Ymaskhi = vec_and(Ymaskhi,UVmaskhi);
          UVmaskhi = vec_and(Ymaskhi,UVmaskhi);
          //bitwise comparison and move using the result of the comparison as a mask
          Yres1 = vec_sel(Yres1,Yres2,Ymaskhi);
-         
+
          //UVres1 = vec_sel(UVres1,UVres2,UVmaskhi);
          UVres1 = vec_sel(UVres1,UVres2,UVmaskhi);
-         
+
          //merge the Y and UV back together
          hiImage = vec_mergeh(UVres1,Yres1);
          loImage = vec_mergel(UVres1,Yres1);
-         
+
          //pack it back down to unsigned char to store
          inData[0] = vec_packsu(hiImage,loImage);
-         
+
             inData++;
             rightData++;
-         
+
         }
         #ifndef PPC970
         vec_dss(1);
@@ -635,32 +635,32 @@ register int h,w,i,j,width;
     for ( i=0; i<h; i++){
         for (j=0; j<w; j++)
         {
-        
+
         vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
 
-        
+
         UVres1 = (vector unsigned short)vec_mule(one,inData[0]);
         UVres2 = (vector unsigned short)vec_mule(one,rightData[0]);
-            
+
         //vec_mulo Y * 1 to short vector Y Y Y Y shorts
         Yres1 = (vector unsigned short)vec_mulo(one,inData[0]);
         Yres2 = (vector unsigned short)vec_mulo(one,rightData[0]);
-            
+
          Ymask1 = vec_cmplt(Yres1,Yres2);
-         
+
          Yres1 = vec_sel(Yres2,Yres1,Ymask1);
-         
+
          UVres1 = vec_sel(UVres2,UVres1,Ymask1);
-         
+
          hiImage = vec_mergeh(UVres1,Yres1);
          loImage = vec_mergel(UVres1,Yres1);
-         
+
          inData[0] = vec_packsu(hiImage,loImage);
-         
+
             inData++;
             rightData++;
-        
+
         }
         vec_dss(1);
         vec_dss(0);
@@ -679,13 +679,13 @@ void pix_chroma_key :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::directionCallback),
 		  gensym("direction"), A_DEFFLOAT, A_NULL);
-                  
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::modeCallback),
 		  gensym("mode"), A_DEFFLOAT, A_NULL);
-                  
+
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::rangeCallback),
 		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-                  
+
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::valueCallback),
 		  gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }

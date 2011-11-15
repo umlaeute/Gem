@@ -28,10 +28,10 @@ GemException::GemException(const std::string error) throw()
   : ErrorString(error)
 {}
 
-GemException::GemException() throw() 
-  : ErrorString(std::string("")) 
+GemException::GemException() throw()
+  : ErrorString(std::string(""))
 {}
-GemException::~GemException() throw() 
+GemException::~GemException() throw()
 {}
 const char *GemException::what() const throw() {
   return ErrorString.c_str();

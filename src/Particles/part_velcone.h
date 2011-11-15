@@ -24,7 +24,7 @@ LOG
 CLASS
 
 	part_velcone
-    
+
 	Set the velocity domain for particles
 
 DESCRIPTION
@@ -39,12 +39,12 @@ class GEM_EXTERN part_velcone : public partlib_base
 	    //////////
 	    // Constructor
     	part_velcone(t_floatarg val1, t_floatarg val2, t_floatarg val, t_floatarg radius);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_velcone();

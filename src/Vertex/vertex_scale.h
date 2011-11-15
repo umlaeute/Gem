@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_scale
-    
+
     Creates a vertex_scale
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_scale : public GemBase
 {
@@ -39,16 +39,16 @@ class GEM_EXTERN vertex_scale : public GemBase
   //////////
   // Constructor
   vertex_scale(int, t_atom*);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~vertex_scale(void);
 
   virtual void paramMess(int,t_atom*);
   float	m_x,m_y,m_z,m_w;
-  
+
   virtual void vertexMess(int offset, int count);
   int  m_offset,m_count;
 
@@ -57,7 +57,7 @@ class GEM_EXTERN vertex_scale : public GemBase
 
 
   t_inlet*m_parmIn, *m_vertIn;
-  
+
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);
@@ -66,7 +66,7 @@ class GEM_EXTERN vertex_scale : public GemBase
   static void 	paramMessCallback(void *data, t_symbol*, int, t_atom*);
 
  private:
-        
+
   static void 	modeMessCallback(void *data, t_symbol*, int, t_atom*);
   static void 	vertexMessCallback(void *data, t_floatarg num, t_floatarg counter);
 };

@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     triangle
-    
+
     Creates a triangle
 
 KEYWORDS
     geo
 
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN triangle : public GemShape
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN triangle : public GemShape
         //////////
         // Constructor
     	triangle(t_floatarg size);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~triangle();

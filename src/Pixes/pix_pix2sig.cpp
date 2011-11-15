@@ -2,7 +2,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at 
+// zmoelnig@iem.kug.ac.at
 //
 // Implementation file
 //
@@ -150,7 +150,7 @@ void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_pix2sig), gensym("pix_pix2sig~"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
 		  gensym("dsp"), A_NULL);
 }
 

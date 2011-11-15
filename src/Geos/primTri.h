@@ -22,14 +22,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     primtTri
-    
+
     Creates a triangle primitive
 
 KEYWORDS
     geo
 
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN primTri : public GemShape
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN primTri : public GemShape
         //////////
         // Constructor
     	primTri(t_floatarg size);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~primTri();

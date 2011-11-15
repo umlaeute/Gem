@@ -20,11 +20,11 @@ LOG
 
 #ifndef _MSC_VER
 # include <stdint.h>
-typedef uint32_t U32; 
+typedef uint32_t U32;
 typedef uint16_t U16;
 typedef uint8_t U8;
 #else
-typedef unsigned long U32; 
+typedef unsigned long U32;
 typedef unsigned short U16;
 typedef unsigned char U8;
 #endif
@@ -113,7 +113,7 @@ static inline void Pete_CopyAndConvert32BitTo24Bit(PETE_PIXELDATA32* pSource,PET
 
 static inline void Pete_InPlaceConvert24BitTo32Bit(PETE_PIXELDATA24* pBuffer,int nPixelCount) {
 	char* pBufferStart=(char*)pBuffer;
-	
+
 	char* pBuffer32Current=(pBufferStart+((nPixelCount-1)*SIZEOF_PETE_PIXELDATA32));
 	char* pBuffer24Current=(pBufferStart+((nPixelCount-1)*SIZEOF_PETE_PIXELDATA24));
 
@@ -195,7 +195,7 @@ typedef void* SPete_MemHandle;
 inline SPete_MemHandle Pete_NewHandle(int nBytesToAlloc) {
 	return malloc(nBytesToAlloc);
 }
-	
+
 inline void Pete_FreeHandle(SPete_MemHandle InHandle) {
 	free(InHandle);
 }

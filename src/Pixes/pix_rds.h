@@ -5,10 +5,10 @@ LOG
     random dot stereogram
     This object is an based on the RandomDotStereoTV effect from EffecTV
     Originally written by Fukuchi Kentarou
-    Copyright (C) 2002 FUKUCHI Kentarou                         
+    Copyright (C) 2002 FUKUCHI Kentarou
 
     ported by tigital@mac.com
-    
+
     Copyright (c) 2003 James Tittle tigital@mac.com
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -24,14 +24,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_rds
-  
+
   creates random dot stereogram from luminance
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
    send a "toggle" to input for switching between methods
    method 0 = crosseyed
    method 1 = walleyed
@@ -45,9 +45,9 @@ class GEM_EXTERN pix_rds : public GemPixObj
   //////////
   // Constructor
   pix_rds();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_rds();
@@ -65,7 +65,7 @@ class GEM_EXTERN pix_rds : public GemPixObj
   int	fastrand_val;
 
  private:
-  
+
   //////////
   // static member functions
   static void methMessCallback(void *data, t_floatarg state);

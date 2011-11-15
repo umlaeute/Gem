@@ -130,7 +130,7 @@ gem::RTE::Outlet :: Outlet(CPPExtern*parent)
 gem::RTE::Outlet :: ~Outlet(void)
 {
   delete m_pimpl;
-} 
+}
 
 void gem::RTE::Outlet :: send(void) {
   outlet_bang(m_pimpl->outlet);
@@ -146,7 +146,7 @@ void gem::RTE::Outlet :: send(std::string selector, std::vector<gem::any>data) {
     if(m_pimpl->any2atom(data[i], atomlist[i]))
       count++;
   }
-  
+
   outlet_anything(m_pimpl->outlet, gensym(selector.c_str()), count, atomlist);
   delete[]atomlist;
 }

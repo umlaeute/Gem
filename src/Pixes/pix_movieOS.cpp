@@ -39,8 +39,8 @@ pix_movieOS :: pix_movieOS(t_symbol *filename) :
 #else
 # error define pix_film for your OS
 #endif
-  , 
-   m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), 
+  ,
+   m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
    m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f)
 {
   m_film=false;
@@ -66,7 +66,7 @@ void pix_movieOS :: createBuffer()
 {
   int neededXSize = powerOfTwo(m_xsize);
   int neededYSize = powerOfTwo(m_ysize);
-  
+
   deleteBuffer();
   int dataSize = neededXSize * neededYSize * m_csize;
   m_pixBlock.image.data = new unsigned char[dataSize];
@@ -95,28 +95,28 @@ void pix_movieOS :: prepareTexture()
         // ratio for the texture map coordinates
         m_xRatio = (float)m_xsize / (float)neededXSize;
         m_yRatio = (float)m_ysize / (float)neededYSize;
-#ifndef __APPLE__   
+#ifndef __APPLE__
         m_coords[0].s = 0.f;
         m_coords[0].t = 0.f;
-    
+
         m_coords[1].s = m_xRatio;
         m_coords[1].t = 0.f;
-    
+
         m_coords[2].s = m_xRatio;
         m_coords[2].t = m_yRatio;
-    
+
         m_coords[3].s = 0.f;
         m_coords[3].t = m_yRatio;
 #else
         m_coords[3].s = 0.f;
         m_coords[3].t = 0.f;
-    
+
         m_coords[2].s = m_xRatio;
         m_coords[2].t = 0.f;
-    
+
         m_coords[1].s = m_xRatio;
         m_coords[1].t = m_yRatio;
-    
+
         m_coords[0].s = 0.f;
         m_coords[0].t = m_yRatio;
 #endif
@@ -124,25 +124,25 @@ void pix_movieOS :: prepareTexture()
 #ifndef __APPLE__
         m_coords[0].s = 0.f;
         m_coords[0].t = 0.f;
-    
+
         m_coords[1].s = m_pixBlock.image.xsize;
         m_coords[1].t = 0.f;
-    
+
         m_coords[2].s = m_pixBlock.image.xsize;
         m_coords[2].t = m_pixBlock.image.ysize;
-    
+
         m_coords[3].s = 0.f;
         m_coords[3].t = m_pixBlock.image.ysize;
 #else
         m_coords[3].s = 0.f;
         m_coords[3].t = 0.f;
-    
+
         m_coords[2].s = m_pixBlock.image.xsize;
         m_coords[2].t = 0.f;
-    
+
         m_coords[1].s = m_pixBlock.image.xsize;
         m_coords[1].t = m_pixBlock.image.ysize;
-    
+
         m_coords[0].s = 0.f;
         m_coords[0].t = m_pixBlock.image.ysize;
 #endif
@@ -175,7 +175,7 @@ void pix_movieOS :: texFrame(GemState *state, int doit)
 
     target = GL_TEXTURE_RECTANGLE_EXT;
   }
-  
+
   if (doit) {
     // if the size changed, then reset the texture
     if (m_pixBlock.image.csize != m_dataSize[0] ||
@@ -214,7 +214,7 @@ void pix_movieOS :: postrender(GemState *state)
   state->texture     = m_oldTexture;
 
   state->image       = m_oldImage;
-  
+
   //  post("postrender");
   m_pixBlock.newimage = 0;
 
@@ -222,7 +222,7 @@ void pix_movieOS :: postrender(GemState *state)
     glDisable(GL_TEXTURE_2D);
   else
     glDisable(GL_TEXTURE_RECTANGLE_EXT);
-  
+
   if (m_numFrames>0 && m_reqFrame>m_numFrames){
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
@@ -241,9 +241,9 @@ void pix_movieOS :: startRendering()
         glBindTexture(GL_TEXTURE_2D, m_textureObj);
     else
         glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
-  
+
     setUpTextureState();
-    
+
     m_pixBlock.newimage = 1;
     m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 }

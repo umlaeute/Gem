@@ -43,7 +43,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_curve);
 //
 /////////////////////////////////////////////////////////
 pix_curve :: pix_curve(int argc, t_atom *argv)
-{ 
+{
   setMess(argc, argv);
 }
 
@@ -136,7 +136,7 @@ void pix_curve :: processRGBAImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
-  
+
   int n_R, n_G, n_B, n_A;
 
   if (m_mode==0) return;
@@ -166,7 +166,7 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   case 4: // RGBA
   case 1: // one table for all
     if(! (tabR.isValid() && tabG.isValid() && tabB.isValid() && tabA.isValid()))
-       return;    
+       return;
     while (i--) {
       base[chRed   ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed   ]>>8 ]));
       base[chGreen ]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen ]>>8 ]));
@@ -187,7 +187,7 @@ void pix_curve :: processGrayImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
-  
+
   gem::RTE::Array tab=gem::RTE::Array(name_R->s_name);
   int n = tab.size();
 
@@ -202,7 +202,7 @@ void pix_curve :: processYUVImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize/2;
   unsigned char *base = image.data;
-  
+
   int n_Y, n_U, n_V;
 
   if (m_mode==0) return;

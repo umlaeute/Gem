@@ -41,8 +41,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 
 pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
-	pix_filmOS(filename), 
-  m_srcGWorld(NULL), 
+	pix_filmOS(filename),
+  m_srcGWorld(NULL),
   m_hiquality(1),
   m_play(0),
   m_rate(1.0),
@@ -95,16 +95,16 @@ void pix_filmDarwin :: realOpen(char *filename)
   FSSpec		theFSSpec;
   OSErr		err = noErr;
   FSRef		ref;
-	
+
 	Track		movieTrack, audioTrack;
 	Media		trackMedia;
-	
+
 	long		sampleCount;
 
   long		m_rowBytes;
-	
+
 	MatrixRecord	matrix;
-	
+
   if (!filename[0]) {
     error("no filename passed");
   } else {
@@ -127,7 +127,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     return;
   }
 
-	
+
 
   ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (refnum) ::CloseMovieFile(refnum);
@@ -135,25 +135,25 @@ void pix_filmDarwin :: realOpen(char *filename)
   m_reqFrame = 0;
   m_curFrame = -1;
   m_numTracks = static_cast<int>(GetMovieTrackCount(m_movie));
-	
+
   movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,movieTrackMediaType);  //get first video track
-	
+
   trackMedia = GetTrackMedia(movieTrack);
-	
+
   sampleCount = GetMediaSampleCount(trackMedia);
-	
+
   m_numFrames = sampleCount;
-	
+
   audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
-	
+
   SetTrackEnabled(audioTrack, FALSE);
-	
+
   // Get the length of the movie
 
   movieDur = static_cast<long>(GetMovieDuration(m_movie));
   movieScale = static_cast<long>(GetMovieTimeScale(m_movie));
 
-	
+
   durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
 
   // Get the bounds for the movie
@@ -164,52 +164,52 @@ void pix_filmDarwin :: realOpen(char *filename)
   m_ysize = m_srcRect.bottom - m_srcRect.top;
 
 	//long	index;
-	
+
 	//special code for trapping HD formats which have pixel dimensions which are different from what QT reports
 	//this is undocumented anywhere by Apple - thanks to Marc Van Olmen for helping sort this out
-	
+
 	ImageDescriptionHandle desc = NULL;
-	
+
 	desc = reinterpret_cast<ImageDescriptionHandle>(NewHandle(0));
-	
+
 	GetMediaSampleDescription(trackMedia,1,reinterpret_cast<SampleDescriptionHandle>(desc));
 # ifdef kDVCPROHD720pCodecType
 	//DVCPRO720p
 	if ((*desc)->cType == kDVCPROHD720pCodecType){
-	
+
 		post("kDVCPROHD720pCodecType");
-		
+
 		m_xsize = 960;
 		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
-		SetMovieBox(m_movie, &m_srcRect);		
+		SetMovieBox(m_movie, &m_srcRect);
 		ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
-	
+
 		SetMovieMatrix(m_movie,&matrix);
 	}
 
-	
+
 	//DVCPRO 1080i60
 	if ((*desc)->cType == kDVCPROHD1080i60CodecType){
-	
+
 		post("kDVCPROHD1080i60CodecType");
 		m_hiquality = 0;
-		
+
 		m_xsize = 1280;
 		SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
-			
+
 		ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
 		SetMovieBox(m_movie, &m_srcRect);
 		SetMovieMatrix(m_movie,&matrix);
-		
+
 	}
 
 # endif
 	//DVCPRO 1080i
-	
+
 	//HDV
-	
+
 	//post("image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
-	
+
 	// We will use a YUV GWorld/Texture to get the fastest performance
 	// 16 bits per pixel for 4:2:2
 	// RowBytes should be a multiple of 32 for GL_STORAGE_SHARED_APPLE to work
@@ -265,7 +265,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     return;
   }
 
-	
+
 
   /* movies task method */
   m_movieTime = GetMovieTime(m_movie,nil);
@@ -277,7 +277,7 @@ void pix_filmDarwin :: realOpen(char *filename)
   if (m_auto) {
     SetMovieRate(m_movie,X2Fix(1.0));
     m_play = 1;
-		
+
   }
   else {
     SetMovieRate(m_movie,X2Fix(0.0));
@@ -348,7 +348,7 @@ void pix_filmDarwin :: getFrame()
         //if (prevTime != curTime){
         newImage = 1;
         prevTime = curTime;
-			
+
         //find next frame bounds using GetMovieNextIntertestingTime()
         GetMovieNextInterestingTime(m_movie,
                                     flags,
@@ -440,7 +440,7 @@ void pix_filmDarwin :: getFrame()
                                         &m_movieTime,
                                         NULL);
       }
-        
+
       SetMovieTimeValue(m_movie, m_movieTime);
       m_Task = 1;
       newImage = 1;

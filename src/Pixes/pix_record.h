@@ -3,7 +3,7 @@
 
   GEM - Graphics Environment for Multimedia
 
-  write a pix block into a digital video (like AVI, Mpeg, Quicktime) 
+  write a pix block into a digital video (like AVI, Mpeg, Quicktime)
   (OS independant parent-class)
 
   Copyright (c) 2005-2010 Chris Clepper
@@ -28,18 +28,18 @@
   -------------------------------------------------------------------
   CLASS
   pix_record
-    
+
   Writes a pix to disk
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "file" - filename to write to
   "bang" - do write now
   "auto 0/1" - stop/start writing automatically
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_record : public GemBase
 {
@@ -50,16 +50,16 @@ class GEM_EXTERN pix_record : public GemBase
   //////////
   // Constructor
   pix_record(int argc, t_atom *argv);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_record();
-	
+
   virtual void	stopRecording();
   virtual void	startRecording();
-    	
+
   //////////
   // Do the rendering
   virtual void 	render(GemState *state);
@@ -72,7 +72,7 @@ class GEM_EXTERN pix_record : public GemBase
   // Set the filename and filetype
   std::string m_filename;
   virtual void	fileMess(t_symbol*s,int argc, t_atom *argv);
- 
+
   //////////
   // turn recording on/off
   virtual void	recordMess(bool on);
@@ -80,7 +80,7 @@ class GEM_EXTERN pix_record : public GemBase
   ////////
   // call up compression dialog
   virtual void	dialogMess();
-		
+
   virtual void	getCodecList();
   std::string m_codec;
   virtual void	codecMess(t_atom *argv);
@@ -88,28 +88,28 @@ class GEM_EXTERN pix_record : public GemBase
   //////////
   // Manual writing
   bool            m_banged;
-    	
+
   //////////
   // Automatic writing
   bool            m_automatic;
-	
+
   //////////
   // a outlet for information like #frames
   t_outlet     *m_outNumFrames;
   // another outlet for extra information (like list of codecs...)
   t_outlet     *m_outInfo;
-  
+
   int m_currentFrame; //keep track of the number of frames
-  
+
   //////////
   //
   int m_maxFrames;
-  
+
   gem::Properties m_props;
   virtual void	enumPropertiesMess(void);
   virtual void	setPropertiesMess(t_symbol*,int argc, t_atom*argv);
-  virtual void	clearPropertiesMess(void);	
-  
+  virtual void	clearPropertiesMess(void);
+
  private:
   bool m_recording;
   gem::plugins::record *m_handle;

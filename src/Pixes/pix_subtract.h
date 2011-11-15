@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_subtract
-    
+
     Subtract two images.
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_subtract : public GemPixDualObj
         //////////
     	// Constructor
     	pix_subtract();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_subtract();

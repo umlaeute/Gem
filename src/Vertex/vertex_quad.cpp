@@ -49,17 +49,17 @@ vertex_quad :: ~vertex_quad()
 /////////////////////////////////////////////////////////
 void vertex_quad :: render(GemState *state)
 {
-  
+
    static GLfloat	quad[16]= {-1.,-1.,0.,1.,
                         1.,-1.,0.,1.,
                         1.,1.,0.,1.,
                         -1.,1.,0.,1.};
-                        
+
     static GLfloat	color[16]=   {1.,1.,1.,1.,
                             1.,1.,1.,1.,
                             1.,1.,1.,1.,
                             1.,1.,1.,1.};
-                            
+
     GLfloat		texcoord[8] = {	0.0,1.0,
                                          1.0,1.0,
                                         1.0,0.0,
@@ -74,7 +74,7 @@ void vertex_quad :: render(GemState *state)
       coords[1].t = yRatio;
       coords[0].s = 0.f;
       coords[0].t = yRatio;*/
-      
+
       if (state->numTexCoords){
         texcoord[0] = state->texCoordX(0);
         texcoord[1] = state->texCoordY(0);
@@ -85,38 +85,38 @@ void vertex_quad :: render(GemState *state)
         texcoord[6] = state->texCoordX(3);
         texcoord[7] = state->texCoordY(3);
       }
-      
-   
+
+
     memcpy(m_VertexArray, quad, sizeof(quad));
     memcpy(m_ColorArray, color, sizeof(color));
     memcpy(m_TexCoordArray, texcoord, sizeof(texcoord));
    //state->VertexArray = 0;
    //state->ColorArray = 0;
-   
+
    //m_VertexArray = quad;
    //m_ColorArray = color;
-   
+
    state->VertexArray = m_VertexArray;
    state->ColorArray = m_ColorArray;
    state->TexCoordArray = m_TexCoordArray;
-   
+
    //let vertex draaw know which arrays to draw
    state->HaveColorArray = 1;
    state->HaveTexCoordArray = 1;
-   
-        
+
+
    //state->VertexArray = quad;
    // state->ColorArray = color;
     state->VertexArrayStride = 4;
     state->VertexArraySize = 4;
-      
+
     //  delete [] color;
     //  delete [] quad;
-      
-   
-   
+
+
+
 }
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //

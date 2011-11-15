@@ -21,13 +21,13 @@
   -------------------------------------------------------------------
   CLASS
   gemwin
-    
+
   The window manager
 
   DESCRIPTION
-    
+
   Access to GemMan.
-    
+
   "int"   - turn on/off the rendering (in double buffered mode)
   "bang"  - swap the buffers
   "render" - render a frame now
@@ -69,13 +69,13 @@
 class GEM_EXTERN gemwin : public CPPExtern
 {
   CPPEXTERN_HEADER(gemwin, CPPExtern);
-    
+
     public:
-    
+
   //////////
   // Constructor
   gemwin(t_floatarg framespersecond);
-    	
+
  private:
 
   //////////
@@ -110,10 +110,10 @@ class GEM_EXTERN gemwin : public CPPExtern
   void          fpsMess();
   void          fsaaMess(int value);
   t_outlet	*m_FrameRate;
-  
+
 
  private:
-    
+
   //////////
   // Static member functions
   static void 	bangMessCallback(void *data);
@@ -151,9 +151,9 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void	stereoFocMessCallback(void *, t_floatarg state);
   static void 	stereoSepMessCallback(void *, t_floatarg state);
   static void 	stereoLineMessCallback(void *, t_floatarg state);
-  static void 	cursorMessCallback(void *data, t_floatarg val);	
-  static void 	topmostMessCallback(void *data, t_floatarg val);	
-  static void 	blurMessCallback(void *data, t_floatarg val);	
+  static void 	cursorMessCallback(void *data, t_floatarg val);
+  static void 	topmostMessCallback(void *data, t_floatarg val);
+  static void 	blurMessCallback(void *data, t_floatarg val);
   static void 	fpsMessCallback(void *data);
   static void 	fsaaMessCallback(void *data,t_floatarg val);
 

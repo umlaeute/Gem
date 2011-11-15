@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_bitmask
-    
+
     Change the overall gain of a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_gain"
@@ -34,7 +34,7 @@ DESCRIPTION
 
     "vec_gain" - The gain vector to set to
     "ft1" - Which bit to use as a mask (converted to an int)
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_bitmask : public GemPixObj
 {
@@ -45,9 +45,9 @@ class GEM_EXTERN pix_bitmask : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_bitmask();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_bitmask();
@@ -67,19 +67,19 @@ class GEM_EXTERN pix_bitmask : public GemPixObj
     	//////////
     	// Set the new gain
     	void	    	vecMaskMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// Set the new mask
     	void	    	intMaskMess(int gain);
-    	
+
     	//////////
     	// The new gain
     	unsigned char	m_mask[4];
 
-	int m_mode; // whether we have only 1 value or separate values; interesting for YUV 
-    
+	int m_mode; // whether we have only 1 value or separate values; interesting for YUV
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

@@ -100,7 +100,7 @@ class GEM_EXTERN gemglutwindow : public GemWindow
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
-  // swap buffers 
+  // swap buffers
   virtual void swapBuffers(void);
   // dispatch events
   virtual void dispatch(void);
@@ -111,7 +111,7 @@ class GEM_EXTERN gemglutwindow : public GemWindow
   int m_window;
 
   //////////
-  // glut callbacks 
+  // glut callbacks
   static void displayCb(void);
   static void visibleCb(int);
   static void closeCb(void);

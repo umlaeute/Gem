@@ -24,14 +24,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     mesh_line
-    
+
     Creates a mesh_line
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN mesh_line : public GemShape
 {
@@ -42,13 +42,13 @@ class GEM_EXTERN mesh_line : public GemShape
         //////////
         // Constructor
     	mesh_line(t_floatarg sizeX);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~mesh_line();
-        
+
 
     	//////////
     	// Do the rendering

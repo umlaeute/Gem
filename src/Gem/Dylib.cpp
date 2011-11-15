@@ -51,9 +51,9 @@ public:
   HINSTANCE w32handle;
 #endif
   int dummy2;
- 
 
-  GemDylibHandle(void) : 
+
+  GemDylibHandle(void) :
     fullname(std::string()),
 #ifdef DL_OPEN
     dlhandle(NULL),
@@ -99,7 +99,7 @@ public:
     }
 
     sys_bashfilename(filename.c_str(), buf);
-  
+
 #ifdef DL_OPEN
     handle->dlhandle=dlopen(filename.c_str(), RTLD_NOW);
     if(handle->dlhandle) {
@@ -134,7 +134,7 @@ public:
     DWORD errorNumber = GetLastError();
     LPVOID lpErrorMessage;
     FormatMessage(
-                  FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+                  FORMAT_MESSAGE_ALLOCATE_BUFFER |
                   FORMAT_MESSAGE_FROM_SYSTEM,
                   NULL,
                   errorNumber,
@@ -146,7 +146,7 @@ public:
     error+=(unsigned int)errorNumber;
     throw(GemException(error));
 #endif
-  
+
     return NULL;
   }
 
@@ -188,7 +188,7 @@ public:
 
 };
 
-const std::string GemDylibHandle::defaultExtension = 
+const std::string GemDylibHandle::defaultExtension =
 #ifdef _WIN32
                                std::string(".dll")
 #elif defined DL_OPEN
@@ -201,8 +201,8 @@ const std::string GemDylibHandle::defaultExtension =
 
 
 
-GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::string extension) 
-  throw (GemException) : 
+GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::string extension)
+  throw (GemException) :
   m_handle(0) {
     m_handle=GemDylibHandle::open(obj, filename, extension);
     if(NULL==m_handle) {

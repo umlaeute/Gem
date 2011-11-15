@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     sphere3d
-    
+
     Creates a sphere3d
 
 KEYWORDS
     geo
 
 DESCRIPTION
-        
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN sphere3d : public GemGluObj
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN sphere3d : public GemGluObj
         //////////
         // Constructor
   sphere3d(t_floatarg size, t_floatarg slice=10.0, t_floatarg stack=0.0);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~sphere3d();
@@ -66,7 +66,7 @@ class GEM_EXTERN sphere3d : public GemGluObj
 	int             oldTexture;
 
         GLuint          m_displayList;
-        
+
  private:
         static void setCartMessCallback(void*, t_floatarg  i, t_floatarg j,
                                         t_floatarg x, t_floatarg y, t_floatarg z);

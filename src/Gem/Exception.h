@@ -16,16 +16,16 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemException
-    
+
     an exception class...
 
 DESCRIPTION
-    
-    this is a class, we can throw on creation, 
+
+    this is a class, we can throw on creation,
     to make sure that the pd-object can not be created
 
 
-    
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_GEM_EXCEPTION_H_
@@ -43,7 +43,7 @@ class GEM_EXTERN GemException
   GemException(const char*error) throw();
   GemException(const std::string error) throw();
   virtual ~GemException(void) throw();
-  
+
   virtual const char *what(void) const throw();
   virtual void report(const char*origin=0) const throw();
  private:

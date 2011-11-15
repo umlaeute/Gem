@@ -16,7 +16,7 @@ LOG
 
 #include "Gem/ExportDef.h"
 
-namespace gem { 
+namespace gem {
   namespace thread {
     GEM_EXTERN class Mutex {
     private:
@@ -28,7 +28,7 @@ namespace gem {
 
       Mutex(const Mutex&);
       Mutex&operator=(const Mutex&);
-      
+
       void lock   (void);
       void unlock (void);
       bool trylock(void);

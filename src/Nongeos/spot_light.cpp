@@ -70,11 +70,11 @@ void spot_light :: lightParamMess(float linAtt, float cutoff, float exponent)
   // convert from spherical coordinates
   // needs to be positive?
   if (linAtt >= 0) linearAttenuation = linAtt;
-  
+
   // spotCutoff needs to be 0-90 or 180
   if ( (cutoff >= 0) && (cutoff <= 90) ) spotCutoff = cutoff;
   else if (cutoff == 180) spotCutoff = cutoff;
-  
+
   // only 0-128
   if ( (exponent >= 0) && (exponent <= 128) ) spotExponent = exponent;
   m_change = 1;
@@ -108,7 +108,7 @@ void spot_light :: render(GemState *state)
       return;
     }
 
-    glEnable(m_light);          
+    glEnable(m_light);
 
     // setGlobal parameter
     glLightfv(m_light, GL_DIFFUSE,  m_color);
@@ -136,9 +136,9 @@ void spot_light :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&spot_light::lightParamMessCallback),
                   gensym("paramlist"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
-void spot_light :: lightParamMessCallback(void *data, 
-					  t_floatarg linAtt, 
-					  t_floatarg cutoff, 
+void spot_light :: lightParamMessCallback(void *data,
+					  t_floatarg linAtt,
+					  t_floatarg cutoff,
 					  t_floatarg exponent)
 {
   GetMyClass(data)->lightParamMess(linAtt, cutoff, exponent);

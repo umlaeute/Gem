@@ -24,7 +24,7 @@
 # define snprintf _snprintf
 #endif
 
-#if defined(__unix__) || defined(__APPLE__) 
+#if defined(__unix__) || defined(__APPLE__)
 # include <unistd.h>
 # include <strings.h>
 #endif
@@ -79,7 +79,7 @@ void pix_image :: openMess(std::string filename)
   if(filename.empty())return;
 
   gem::image::load::cancel(m_id);
- 
+
   m_filename = findFile(filename);
 
   gem::image::load::callback cb = loadCallback;
@@ -116,7 +116,7 @@ void pix_image :: openMess(std::string filename)
 }
 
 
-void    pix_image:: loaded(const gem::image::load::id_t ID, 
+void    pix_image:: loaded(const gem::image::load::id_t ID,
 			   imageStruct*img,
 			   const gem::Properties&props) {
   std::vector<gem::any>atoms;
@@ -148,7 +148,7 @@ void    pix_image:: loaded(const gem::image::load::id_t ID,
   }
 }
 void    pix_image:: loadCallback(void*data,
-				 gem::image::load::id_t ID, 
+				 gem::image::load::id_t ID,
 				 imageStruct*img,
 				 const gem::Properties&props) {
   pix_image*me=reinterpret_cast<pix_image*>(data);
@@ -157,7 +157,7 @@ void    pix_image:: loadCallback(void*data,
 
 
 
-    	    	
+
 
 /////////////////////////////////////////////////////////
 // render
@@ -172,7 +172,7 @@ void pix_image :: render(GemState *state)
     return;
   }
 
-  // do we need to reload the image?    
+  // do we need to reload the image?
   if (m_cache&&m_cache->resendImage)
     {
       m_loadedImage->refreshImage(&m_pixBlock.image);

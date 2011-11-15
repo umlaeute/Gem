@@ -353,7 +353,7 @@ void pix_videoDarwin :: InitSeqGrabber()
     //this call sets the input device
     if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
         //anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice);
-        post("SGSetChannelDevice trying %s", 
+        post("SGSetChannelDevice trying %s",
 	     (*devices)->entry[m_inputDevice].name[0],
 	     (*devices)->entry[m_inputDevice].name+1);
         anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);

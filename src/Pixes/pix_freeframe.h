@@ -44,14 +44,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_freeframe
-    
+
     load a FreeFrame-plugin and use it do process the image-data
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_freeframe : public GemPixObj
@@ -63,9 +63,9 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     //////////
     // Constructor
     pix_freeframe(t_symbol*s);
-    	
+
  protected:
-    	
+
     //////////
     // Destructor
     virtual ~pix_freeframe();

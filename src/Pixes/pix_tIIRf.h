@@ -3,11 +3,11 @@
   GEM - Graphics Environment for Multimedia
 
   time-domain filtering of pixes (Float precision)
-  
+
   Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	
+
   -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_TIIRF_H_
@@ -22,22 +22,22 @@
 
   KEYWORDS
   pix
-  
+
   DESCRIPTION
-	
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_tIIRf : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_tIIRf, GemPixObj);
-		
+
     public:
-	
+
   //////////
   // Constructor
   pix_tIIRf(t_floatarg,t_floatarg);
-	
+
  protected:
-	
+
   //////////
   // Destructor
   virtual ~pix_tIIRf();
@@ -53,7 +53,7 @@ class GEM_EXTERN pix_tIIRf : public GemPixObj
   //////////
   // set-flag
   enum { NONE, SET, CLEAR } m_set;
-	
+
   //////////
   // the filter factors (feed-forward, feed-back)
   t_float *m_ff, *m_fb;
@@ -71,7 +71,7 @@ class GEM_EXTERN pix_tIIRf : public GemPixObj
 
   // which buffer-image is the current one ?
   int m_counter;
-	
+
   //////////
   // the methods
   void setMess(t_symbol*,int,t_atom*);

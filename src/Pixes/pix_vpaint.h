@@ -24,16 +24,16 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_vpaint
-    
+
     Creates voronoi regions based on pixel color
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vert_size"
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_vpaint : public GemPixObj
 {
@@ -44,16 +44,16 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
         //////////
         // Constructor
     	pix_vpaint();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_vpaint();
 
       // extension check
       bool isRunnable(void);
-    	
+
     	//////////
     	// Do the processing
     	virtual void 	processImage(imageStruct &image);
@@ -61,8 +61,8 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
     	//////////
     	// When a size message is received
     	virtual void	sizeMess(int width, int height);
-    	
-		
+
+
 		//////////
 		//
 		void	makepoints();
@@ -71,16 +71,16 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
 		int		m_initialized;
 		int		maxPoints, numPoints, viewImage, useStrokes, drawEdges, moving, canDrawEdges;
 		int		mouseX, mouseY, lastX, lastY, sampleMenu, strokeMenu;
-		
+
 		/*
-		* Point structure 
+		* Point structure
 		*/
 		typedef struct {
 			int x, y;
 			unsigned char r, g, b;
 		} cPoint;
 		cPoint *points;
-    	
+
     	//////////
     	// The imageStruct with the current image
 		imageStruct     m_imageStruct;
@@ -90,27 +90,27 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
     	//////////
     	// The x position
     	int     	m_x;
-    	
+
     	//////////
     	// The y position
     	int     	m_y;
-    	
+
     	//////////
     	// The width
     	int     	m_w;
-    	
+
     	//////////
     	// The height
     	int     	m_h;
-		
+
 		//////////
 		// recalc the random points
 		bool		m_banged;
-    	
+
     private:
 
     t_inlet *m_sizinlet;
-    	
+
     //////////
     // static member functions
 		static void 	bangMessCallback(void *data);

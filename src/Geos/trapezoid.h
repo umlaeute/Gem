@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     trapezoid
-    
+
     Creates a trapezoid
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN trapezoid : public GemShape
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN trapezoid : public GemShape
         //////////
         // Constructor
   trapezoid(t_floatarg size, t_floatarg scale);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~trapezoid();

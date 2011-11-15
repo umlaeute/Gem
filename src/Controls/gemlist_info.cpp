@@ -9,7 +9,7 @@
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
-//   
+//
 ////////////////////////////////////////////////////////
 
 #include "gemlist_info.h"
@@ -88,8 +88,8 @@ void gemlist_info :: render(GemState *state) {
   shearYX = mi[0]*mi[1] + mi[4]*mi[5] + mi[8]*mi[9];
 
   mi[1] -= shearYX * mi[0]; //make X and Y orthogonal
-  mi[5] -= shearYX * mi[4]; 
-  mi[9] -= shearYX * mi[8]; 
+  mi[5] -= shearYX * mi[4];
+  mi[9] -= shearYX * mi[8];
 
   ScaleY = sqrt (mi[1] * mi[1] + mi[5] * mi[5] + mi[9] * mi[9]);
 
@@ -101,14 +101,14 @@ void gemlist_info :: render(GemState *state) {
   shearZX = mi[0]*mi[2] + mi[4]*mi[6] + mi[8]*mi[10];
 
   mi[2] -= shearZX * mi[0]; //make X and Z orthogonal
-  mi[6] -= shearZX * mi[4]; 
-  mi[10] -= shearZX * mi[8]; 
+  mi[6] -= shearZX * mi[4];
+  mi[10] -= shearZX * mi[8];
 
   shearZY = mi[1]*mi[2] + mi[5]*mi[6] + mi[9]*mi[10];
 
   mi[2] -= shearZY * mi[1]; //make X and Z orthogonal
-  mi[6] -= shearZY * mi[5]; 
-  mi[10] -= shearZY * mi[9]; 
+  mi[6] -= shearZY * mi[5];
+  mi[10] -= shearZY * mi[9];
 
   ScaleZ = sqrt (mi[2] * mi[2] + mi[6] * mi[6] + mi[10] * mi[10]);
 
@@ -142,11 +142,11 @@ void gemlist_info :: render(GemState *state) {
   SETFLOAT(alist+4, Y);
   SETFLOAT(alist+5, Z);
 
-  SETFLOAT(alist+6, mi[12]); 
+  SETFLOAT(alist+6, mi[12]);
   SETFLOAT(alist+7, mi[13]);
   SETFLOAT(alist+8, mi[14]);
 
-  SETFLOAT(alist+9, shearYX); 
+  SETFLOAT(alist+9, shearYX);
   SETFLOAT(alist+10, shearZX);
   SETFLOAT(alist+11, shearZY);
 

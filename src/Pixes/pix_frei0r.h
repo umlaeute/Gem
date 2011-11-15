@@ -29,14 +29,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_frei0r
-    
+
     load a Frei0r-plugin and use it do process the image-data
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_frei0r : public GemPixObj
@@ -48,9 +48,9 @@ class GEM_EXTERN pix_frei0r : public GemPixObj
     //////////
     // Constructor
     pix_frei0r(t_symbol*s);
-    	
+
  protected:
-    	
+
     //////////
     // Destructor
     virtual ~pix_frei0r();

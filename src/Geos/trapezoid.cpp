@@ -43,7 +43,7 @@ trapezoid :: trapezoid(t_floatarg size, t_floatarg top)
 //
 /////////////////////////////////////////////////////////
 trapezoid :: ~trapezoid()
-{ 
+{
   inlet_free(m_topinlet);
 }
 
@@ -111,13 +111,13 @@ void trapezoid :: texscaleMess(t_float scale)
   setModified();
 }
 
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void trapezoid :: obj_setupCallback(t_class *classPtr)
-{     
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&trapezoid::topMessCallback),
                   gensym("top"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&trapezoid::scaleMessCallback),

@@ -31,7 +31,7 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
 {
       int slice = m_numSlices;
       int stack = m_numSlices;
-      
+
       m_x = new float[slice * stack];
       m_y = new float[slice * stack];
       m_z = new float[slice * stack];
@@ -42,7 +42,7 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
       oldStacks = -1;
       oldSlices = -1;
       oldTexture= 0;
-    
+
 }
 
 /////////////////////////////////////////////////////////
@@ -105,10 +105,10 @@ void sphere :: createSphere(GemState *state)
         m_z = new float[slices * stacks * 3];
 
         src = 0;
-        
+
         if (!texType) {
             /* draw +Z end as a triangle fan */
-            
+
             for (j = 0; j <= slices; j++) {
                 theta = (j == slices) ? 0.0 : j * dtheta;
                 m_x[src] = -sin(theta) * sin(drho);
@@ -144,13 +144,13 @@ void sphere :: createSphere(GemState *state)
                 m_y[src] = cos(theta) * sin(rho + drho);
                 m_z[src] = nsign * cos(rho + drho);
                 src++;
-                
+
             }
         }
 
         if (!texType) {
             /* draw -Z end as a triangle fan */
-            
+
             rho = M_PI - drho;
             s = 1.0;
             t = dt;
@@ -170,9 +170,9 @@ void sphere :: createSphere(GemState *state)
         m_x = new float[slices * stacks * 2];
         m_y = new float[slices * stacks * 2];
         m_z = new float[slices * stacks * 2];
-        
+
         src = 0;
-        
+
         /* draw stack lines */
         for (i = 1; i < stacks; i++) {	/* stack line at i==stacks-1 was missing here */
             rho = i * drho;
@@ -196,7 +196,7 @@ void sphere :: createSphere(GemState *state)
             }
         }
     }
-    
+
     else if (m_drawType == GL_POINT) {
 
         //allocate memory - each style has a different number of vertices
@@ -216,10 +216,10 @@ void sphere :: createSphere(GemState *state)
                 src++;
             }
         }
-        
+
     }
-    
-    
+
+
 }
 /////////////////////////////////////////////////////////
 // render
@@ -256,7 +256,7 @@ void sphere :: render(GemState *state)
     ysize0 = texCoords[1].t;
     ysize  = texCoords[2].t-ysize0;
   }
-    
+
   drho = M_PI / static_cast<GLfloat>(stacks);
   dtheta = 2.0 * M_PI / static_cast<GLfloat>(slices);
 
@@ -265,7 +265,7 @@ void sphere :: render(GemState *state)
   /* cannot use triangle fan on texturing (s coord. at top/bottom tip varies) */
 
   //if anything changed then the geometry is rebuilt
-  if (stacks != oldStacks || slices != oldSlices || 
+  if (stacks != oldStacks || slices != oldSlices ||
       m_drawType != oldDrawType || texType!=oldTexture){
 
       //call the sphere creation function to fill the array
@@ -276,7 +276,7 @@ void sphere :: render(GemState *state)
       oldDrawType = m_drawType;
       oldTexture = texType;
   }
- 
+
   if (m_drawType == GL_FILL) {
     src = 0;
     if (!texType) {
@@ -347,13 +347,13 @@ void sphere :: render(GemState *state)
     }
   }
   else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-     
+
       src = 0;
-      
+
       for (i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here
           glBegin(GL_LINE_LOOP);
           for (j = 0; j < slices; j++) {
-        
+
               if (lighting)
                   glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
               glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
@@ -372,9 +372,9 @@ void sphere :: render(GemState *state)
               src++;
           }
           glEnd();
-      }   
+      }
   }
-  
+
   else if (m_drawType == GL_POINT) {
     /* top and bottom-most points */
     glBegin(GL_POINTS);
@@ -384,9 +384,9 @@ void sphere :: render(GemState *state)
     if (lighting)
       glNormal3f(0.0, 0.0, -nsign);
     glVertex3d(0.0, 0.0, -radius);
-    
+
     src = 0;
-    
+
     for (i = 1; i < stacks - 1; i++) {
         rho = i * drho;
         for (j = 0; j < slices; j++) {

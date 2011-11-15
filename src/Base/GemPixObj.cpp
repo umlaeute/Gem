@@ -24,7 +24,7 @@
 // GemPixObj
 //
 /////////////////////////////////////////////////////////
-GemPixObj :: GemPixObj() : 
+GemPixObj :: GemPixObj() :
   cachedPixBlock(pixBlock()),
   orgPixBlock(NULL), m_processOnOff(1),
   m_simd(GemSIMD::getCPU())
@@ -55,7 +55,7 @@ void GemPixObj :: render(GemState *state){
   // so that the objects can rely on their (buffered) images
   pixBlock*image=NULL;
   if (!state || !state->get(GemState::_PIX, image))return;
-  if(!image || 
+  if(!image ||
      !&image->image)  return;
   cachedPixBlock.newimage=image->newimage;
   if (!image->newimage) {
@@ -211,7 +211,7 @@ void GemPixObj :: processOnOff(int on)
 /////////////////////////////////////////////////////////
 void GemPixObj :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, reinterpret_cast<t_method>(&GemPixObj::floatMessCallback));    
+    class_addfloat(classPtr, reinterpret_cast<t_method>(&GemPixObj::floatMessCallback));
     class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPixObj::simdMessCallback),
 		  gensym("simd"), A_DEFFLOAT, A_NULL);
 }

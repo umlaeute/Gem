@@ -7,7 +7,7 @@
  *
  */
 #include "Gem/GemConfig.h"
- 
+
 #define STRINGIFY2(x) #x
 #define STRINGIFY(x) STRINGIFY2(x)
 
@@ -21,8 +21,8 @@
 # define GEM_VERSION_BUGFIX CVS
 #endif
 
-#ifndef GEM_VERSION_CODENAME 
-# define GEM_VERSION_CODENAME 
+#ifndef GEM_VERSION_CODENAME
+# define GEM_VERSION_CODENAME
 #endif
 
 

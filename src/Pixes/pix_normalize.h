@@ -23,12 +23,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_normalize
-    
+
     Change the overall gain of a pix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_gain"
@@ -36,7 +36,7 @@ DESCRIPTION
 
     "vec_gain" - The gain vector to set to
     "ft1" - Which bit to use as a mask (converted to an int)
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_normalize : public GemPixObj
 {
@@ -47,21 +47,21 @@ class GEM_EXTERN pix_normalize : public GemPixObj
     //////////
     // Constructor
     pix_normalize();
-    	
+
  protected:
-    	
+
     //////////
     // Destructor
     virtual ~pix_normalize();
-    
+
     //////////
     // Do the processing
     virtual void 	processRGBAImage(imageStruct &image);
     virtual void 	processGrayImage(imageStruct &image);
     virtual void 	processYUVImage(imageStruct &image);
- 
+
  private:
-    
+
     //////////
     // Static member functions
     static void 	vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

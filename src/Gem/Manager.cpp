@@ -200,7 +200,7 @@ void GemMan :: createContext(char* disp)
       error("GEM: A serious error occured creating const Context");
       error("GEM: Continue at your own risk!");
       m_windowContext = 0;
-    } else 
+    } else
     m_windowContext = 1;
   setResizeCallback(GemMan::resizeCallback, NULL);
 }
@@ -223,11 +223,11 @@ void GemMan :: initGem()
   if (alreadyInit)
     return;
   alreadyInit = 1;
-    
+
   // clear the light array
   for (int i = 0; i < NUM_LIGHTS; i++)
     s_lights[i] = 0;
-    
+
   m_clear_color[0] = 0.0;
   m_clear_color[1] = 0.0;
   m_clear_color[2] = 0.0;
@@ -330,7 +330,7 @@ void GemMan :: resetValues()
   glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
             m_perspect[2], m_perspect[3],				// bottom, top
             m_perspect[4], m_perspect[5]);				// front, back
-    
+
   glMatrixMode(GL_MODELVIEW);
   // TODO:
   //   shouldn't this be called here?
@@ -340,7 +340,7 @@ void GemMan :: resetValues()
 
   if (m_fogMode == FOG_OFF) {
     //  TODO:
-    //    this should be cached, & only disabled if it was enabled  
+    //    this should be cached, & only disabled if it was enabled
     glDisable(GL_FOG);
   } else {
     glEnable(GL_FOG);
@@ -374,7 +374,7 @@ void GemMan :: fillGemState(GemState &state)
   if (s_lightState) {
     // GemState['lighting'] = 1;
     state.set(GemState::_GL_LIGHTING, true);
-    state.set(GemState::_GL_SMOOTH, true);   
+    state.set(GemState::_GL_SMOOTH, true);
   }
 
   gem::GLStack*stacks=NULL;
@@ -440,7 +440,7 @@ void GemMan :: resetState()
   m_stereo=0;
   m_stereoSep = -15.f;
   m_stereoFocal = 0.f;
-  m_stereoLine = true; 
+  m_stereoLine = true;
 
   // setup the perspective values
   m_perspect[0] = -1.f;	// left
@@ -512,7 +512,7 @@ void GemMan :: render(void *)
   // are we profiling?
   double starttime=sys_getrealtime();
 	double stoptime=0;
-    
+
   s_hit = 0;
   resetValues();
 
@@ -560,7 +560,7 @@ void GemMan :: render(void *)
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
                 GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
                 GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
+
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
@@ -584,7 +584,7 @@ void GemMan :: render(void *)
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
                 GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
                 GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
+
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
@@ -659,7 +659,7 @@ void GemMan :: render(void *)
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
                 GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
                 GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
+
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
@@ -693,7 +693,7 @@ void GemMan :: render(void *)
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
                 GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
                 GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
- 
+
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
       gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
@@ -709,9 +709,9 @@ void GemMan :: render(void *)
       glLoadIdentity();
       gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
       renderChain(chain2, &currentState);
-    
+
       glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
-    } 
+    }
     break;
   case 3: // Crystal Eyes Stereo
     {
@@ -727,15 +727,15 @@ void GemMan :: render(void *)
       glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy, // left, right
                 GemMan::m_perspect[2], GemMan::m_perspect[3],     // bottom, top
                 GemMan::m_perspect[4], GemMan::m_perspect[5]);      // front, back
-         
+
       glMatrixMode(GL_MODELVIEW);
       glDrawBuffer(GL_BACK_LEFT);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-         
+
       glLoadIdentity();
       gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
                 m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
-         
+
       // render left view
       fillGemState(currentState);
       renderChain(chain1, &currentState);
@@ -821,7 +821,7 @@ void GemMan :: render(void *)
 
   if (!s_hit && (0.0 != deltime))
     clock_delay(s_clock, deltime);
-	
+
   glReportError();
 }
 
@@ -836,18 +836,18 @@ void GemMan :: startRendering()
       error("GEM: Create window first!");
       return;
     }
-    
+
   if (m_rendering)
     return;
-    
+
   post("GEM: Start rendering");
-    
+
   // set up all of the gemheads
   renderChain(gensym("__gem_render"), true);
   renderChain(gensym("__gem_render_osd"), true);
 
   m_rendering = 1;
-    
+
   // if only single buffering then just return
   if (GemMan::m_buffer == 1)
     return;
@@ -892,9 +892,9 @@ void GemMan :: windowInit()
 
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
-  glClearDepth(1.0);    
+  glClearDepth(1.0);
   glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
- 
+
 #ifdef __APPLE__
   GLint swapInt = 1;
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
@@ -902,14 +902,14 @@ void GemMan :: windowInit()
 
   /* i am not really sure whether it is a good idea to enable FSAA by default
    * this might slow down everything a lot;
-   * JMZ: additionally, we should not enable it, without checking first, 
+   * JMZ: additionally, we should not enable it, without checking first,
    * whether GL_NV_multisample_filter_hint is supported by the backend
    */
   if(GLEW_ARB_multisample)
     glEnable (GL_MULTISAMPLE_ARB);
   if(GLEW_NV_multisample_filter_hint)
     glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
- 
+
   resetValues();
 }
 
@@ -947,7 +947,7 @@ int GemMan :: createWindow(char* disp)
   myHints.display = disp;
   myHints.title = const_cast<char*>(GemMan::m_title.c_str());
   myHints.fsaa = fsaa;
-  
+
   if (disp) post("GEM: creating gem-window on display %s",disp);
   if (!createGemWindow(gfxInfo, myHints) )
     {
@@ -957,7 +957,7 @@ int GemMan :: createWindow(char* disp)
   /*
     Check for the presence of a couple of useful OpenGL extensions
     we can use to speed up the movie rendering.
-    
+
     GL_EXT_texture_rectangle allows for non-power-of-two sized
     textures.  Texture coordinates for these textures run from
     0..width, 0..height instead of 0..1, 0..1 as for normal
@@ -1037,12 +1037,12 @@ void GemMan :: destroyWindow()
   destroyGemWindow(gfxInfo);
 
   m_windowState = 0;
-    
+
   windowCleanup();
 
   // this should really go into the GemWinCreate<OS> files::
 
-  // reestablish the const glxContext 
+  // reestablish the const glxContext
   /* this crashes on linux with intel cards */
   gemWinMakeCurrent(constInfo);
   s_windowRun = 0;
@@ -1061,8 +1061,8 @@ int GemMan :: windowNumber(void) {
 int GemMan::createConstWindow(char* disp)
 {
   // can we only have one context?
-  if (s_singleContext) 
-    return(GemMan::createWindow(disp));		
+  if (s_singleContext)
+    return(GemMan::createWindow(disp));
 
   WindowHints myHints;
   myHints.title = const_cast<char*>(GemMan::m_title.c_str());
@@ -1138,7 +1138,7 @@ void GemMan :: swapBuffers()
       glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
                 m_perspect[2], m_perspect[3],			// bottom, top
                 m_perspect[4], m_perspect[5]);			// front, back
-    
+
       glMatrixMode(GL_MODELVIEW);
       // TODO:
       // shouldn't this be called here?
@@ -1343,7 +1343,7 @@ void GemMan :: freeLight(GLenum lightNum)
       break;
     case(GL_LIGHT6):
       i = 6;
-      break;	
+      break;
     case(GL_LIGHT7):
       i = 7;
       break;
@@ -1411,7 +1411,7 @@ void GemMan :: printInfo()
   post("blue: %d", bitnum);
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &bitnum);
   post("max texture: %d", bitnum);
-  
+
   post("lighting %d", s_lightState);
   for (int i = 0; i < NUM_LIGHTS; i++) {
     if (s_lights[i])

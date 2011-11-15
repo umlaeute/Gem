@@ -34,10 +34,10 @@
 #include <string.h>
 #include <ctype.h>
 
-#include<new> 
+#include<new>
 
 /* this is some magic for debugging:
- * to time execution of a code-block use 
+ * to time execution of a code-block use
  *   'START_TIMING;' at the beginning of the block and
  *   'STOP_TIMING("something");' at the end of the block
  */
@@ -79,13 +79,13 @@ pixBlock :: pixBlock()
 {}
 
 
-imageStruct :: imageStruct() 
+imageStruct :: imageStruct()
   : xsize (0),ysize(0),csize(0),
 #ifdef __APPLE__
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
 # ifdef __BIG_ENDIAN__
     type(GL_UNSIGNED_SHORT_8_8_REV_APPLE),
-# else 
+# else
     type(GL_UNSIGNED_SHORT_8_8_APPLE),
 # endif /* __BIG_ENDIAN__ */
     format(GL_YCBCR_422_GEM),
@@ -100,7 +100,7 @@ imageStruct :: imageStruct()
 #endif /* __APPLE__ */
 {}
 
-imageStruct :: imageStruct(const imageStruct&org) 
+imageStruct :: imageStruct(const imageStruct&org)
   : xsize (0),ysize(0),csize(0),
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
     notowned(0),data(NULL),pdata(NULL),datasize(0),
@@ -118,14 +118,14 @@ imageStruct :: ~imageStruct()
  * this code is taken from pd-devel (written by t.grill)
  * there used to be something in here written by g.geiger
  */
-GEM_EXTERN unsigned char* imageStruct::allocate(size_t size) 
+GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
 {
   if (pdata){
     delete [] pdata;
     pdata=NULL;
   }
 
-#ifdef __APPLE__ 
+#ifdef __APPLE__
   try {
     data = pdata =  new unsigned char [size];
   } catch ( const std::bad_alloc & e) {
@@ -135,7 +135,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
     return NULL;
   }
 
-  datasize=size;  
+  datasize=size;
 #else
   size_t array_size= size+(GEM_VECTORALIGNMENT/8-1);
   try {
@@ -154,12 +154,12 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
 #endif
   notowned=false;
   //post("created data [%d] @ %x: [%d]@%x", array_size, pdata, datasize, data);
-  return data; 
+  return data;
 }
 
-GEM_EXTERN unsigned char* imageStruct::allocate() 
+GEM_EXTERN unsigned char* imageStruct::allocate()
 {
-  return allocate(xsize*ysize*csize);  
+  return allocate(xsize*ysize*csize);
 }
 
 GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
@@ -173,17 +173,17 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
   data=pdata+offset;
   return data;
 }
-GEM_EXTERN unsigned char* imageStruct::reallocate() 
-{  
-  return reallocate(xsize*ysize*csize);  
+GEM_EXTERN unsigned char* imageStruct::reallocate()
+{
+  return reallocate(xsize*ysize*csize);
 }
- 
-GEM_EXTERN void imageStruct::clear() 
+
+GEM_EXTERN void imageStruct::clear()
 {
   if (pdata) { // pdata is always owned by imageStruct
     delete [] pdata;
   }
-  data = pdata = NULL;      
+  data = pdata = NULL;
   datasize=0;
 }
 
@@ -281,57 +281,57 @@ imageStruct&imageStruct::operator=(const imageStruct&org) {
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
 #ifdef __APPLE__
   switch(setformat){
-  case GL_LUMINANCE:  
-    format=GL_LUMINANCE;  
-    type  =GL_UNSIGNED_BYTE; 
-    csize =1; 
+  case GL_LUMINANCE:
+    format=GL_LUMINANCE;
+    type  =GL_UNSIGNED_BYTE;
+    csize =1;
     break;
 
   case GL_YUV422_GEM:
   default:
-    format=GL_YUV422_GEM; 
+    format=GL_YUV422_GEM;
     type  =
 #ifdef __BIG_ENDIAN__
       GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 #else
     GL_UNSIGNED_SHORT_8_8_APPLE;
 #endif
-    csize =2; 
+    csize =2;
     break;
 
-  case GL_RGB:  case GL_BGR_EXT: 
-    format=GL_BGR_EXT;    
-    type  =GL_UNSIGNED_BYTE; 
-    csize =3; 
+  case GL_RGB:  case GL_BGR_EXT:
+    format=GL_BGR_EXT;
+    type  =GL_UNSIGNED_BYTE;
+    csize =3;
     break;
-    
-  case GL_RGBA:  case GL_BGRA_EXT:   
+
+  case GL_RGBA:  case GL_BGRA_EXT:
     format=GL_BGRA_EXT;
 #ifdef __BIG_ENDIAN__
     type  =GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
     type  =GL_UNSIGNED_INT_8_8_8_8;
 #endif
-    csize =4; 
+    csize =4;
     break;
   }
 #else /* !__APPLE__ */
   switch(setformat){
-  case GL_LUMINANCE:  
-    format=GL_LUMINANCE;  
-    type=GL_UNSIGNED_BYTE; 
-    csize=1; 
+  case GL_LUMINANCE:
+    format=GL_LUMINANCE;
+    type=GL_UNSIGNED_BYTE;
+    csize=1;
     break;
-    
+
   case GL_YUV422_GEM:
-    format=GL_YUV422_GEM; 
+    format=GL_YUV422_GEM;
     type=GL_UNSIGNED_BYTE;
     csize=2;
     break;
-    
-  case GL_RGB: 
+
+  case GL_RGB:
     format=GL_RGB;
-    type=GL_UNSIGNED_BYTE; 
+    type=GL_UNSIGNED_BYTE;
     csize=3;
     break;
 
@@ -344,7 +344,7 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
     type=GL_UNSIGNED_BYTE;
     //type  =GL_UNSIGNED_INT_8_8_8_8;
 #endif
-    csize=4; 
+    csize=4;
     break;
   }
 #endif /* __APPLE__ */
@@ -358,7 +358,7 @@ GEM_EXTERN int imageStruct::setCsizeByFormat() {
 void pix_addsat(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
 {
   while(datasize--)
-    {           
+    {
       *leftPix = CLAMP_HIGH(static_cast<int>(*leftPix) + static_cast<int>(*rightPix));
       leftPix++;
       rightPix++;
@@ -421,10 +421,10 @@ GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from, GLenum to_form
   upsidedown=from->upsidedown;
 
   switch (from->format){
-  case GL_RGBA: 
+  case GL_RGBA:
     fromRGBA(from->data);
     break;
-  case GL_RGB:  
+  case GL_RGB:
     fromRGB(from->data);
     break;
   case GL_BGR_EXT:
@@ -458,10 +458,10 @@ GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt) const {
   to->upsidedown=upsidedown;
 
   switch (format){
-  case GL_RGBA: 
+  case GL_RGBA:
     to->fromRGBA(data);
     break;
-  case GL_RGB:  
+  case GL_RGB:
     to->fromRGB(data);
     break;
   case GL_BGR_EXT:
@@ -763,7 +763,7 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata) {
         pixels[2]=pixels[0];
         pixels[0]=dummy;
         pixels+=4;
-      } 
+      }
     } else {
       while(pixelnum--){
         pixels[0]=bgradata[2];
@@ -839,7 +839,7 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
     break;
   case GL_RGB:
     while(pixelnum--){
-      pixels[0]=abgrdata[3]; // R 
+      pixels[0]=abgrdata[3]; // R
       pixels[1]=abgrdata[2]; // G
       pixels[2]=abgrdata[1]; // B
       pixels+=3; abgrdata+=4;
@@ -857,7 +857,7 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
         dummy    =pixels[3]; pixels[3]=pixels[0]; pixels[0]=dummy;
         dummy    =pixels[1]; pixels[1]=pixels[2]; pixels[2]=dummy;
         pixels+=4;
-      } 
+      }
     } else {
       while(pixelnum--){
         pixels[0]=abgrdata[3]; // R
@@ -967,7 +967,7 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata) {
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
       while(pixelnum--){
-	*pixels++=((RGB2YUV_21*argbdata[chGreen]+ // R 
+	*pixels++=((RGB2YUV_21*argbdata[chGreen]+ // R
 		    RGB2YUV_22*argbdata[chBlue]+  // G
 		    RGB2YUV_23*argbdata[chAlpha]  // B
 		    )>>8)+UV_OFFSET; // U
@@ -1026,7 +1026,7 @@ GEM_EXTERN void imageStruct::fromGray(const unsigned char *greydata) {
       pixels[chY0]=*greydata++;
       pixels[chY1]=*greydata++;
       pixels[chU]=pixels[chV]=128;
-      pixels+=4;      
+      pixels+=4;
     }
     break;
   }
@@ -1070,7 +1070,7 @@ GEM_EXTERN void imageStruct::fromGray(short *greydata) {
       pixels[chY0]=(*greydata++)>>7;
       pixels[chY1]=(*greydata++)>>7;
       pixels[chU]=pixels[chV]=128;
-      pixels+=4;      
+      pixels+=4;
     }
     break;
   }
@@ -1161,7 +1161,7 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       const unsigned char*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
       const unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
       const unsigned char*pu=(format==GL_RGBA)?V:U;
- 
+
       int y, u, v, yy;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
@@ -1233,7 +1233,7 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
 	  *pixels2++=u;
 	  *pixels2++=*py2++;
 	  *pixels2++=v;
-	  *pixels2++=*py2++;	  
+	  *pixels2++=*py2++;
 	}
 	pixels1+=xsize*csize;	pixels2+=xsize*csize;
 	py1+=xsize*1;	py2+=xsize*1;
@@ -1443,7 +1443,7 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
 	    *pixels2++=u;
 	    *pixels2++=(*py2++)>>7;
 	    *pixels2++=v;
-	    *pixels2++=(*py2++)>>7;	  
+	    *pixels2++=(*py2++)>>7;
 	  }
 	  pixels1+=xsize*csize;	pixels2+=xsize*csize;
 	  py1+=xsize*1;	py2+=xsize*1;
@@ -1831,7 +1831,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char
   unsigned char red=0, green=0, blue=0, alpha=255;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
   unsigned char*pixels=data+position*csize;
-    
+
   switch(format) {
   case GL_LUMINANCE:
     red=green=blue=pixels[0];

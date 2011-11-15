@@ -20,14 +20,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_puzzle
-  
+
   shuffle areas of the pixBuf
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_puzzle : public GemPixObj
 {
@@ -38,9 +38,9 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   //////////
   // Constructor
   pix_puzzle();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_puzzle();
@@ -58,7 +58,7 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   virtual void  shuffle();
   virtual void  sizeMess(int width, int height);
   virtual void  moveMess(int direction);
- 
+
   int blocksize, blockxsize,blockysize,  blocknum, spacepos;
   int blockw, blockh;
   int *blockpos;
@@ -72,7 +72,7 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   int m_game;
 
  private:
-  
+
   //////////
   // static member functions
   static void bangMessCallback(void *data);

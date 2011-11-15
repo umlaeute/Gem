@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     colorRGB
-    
+
     color a gem object
 
 DESCRIPTION
-    
+
     Inlet for R - "rVal"
     Inlet for G - "gVal"
     Inlet for B - "bVal"
@@ -40,9 +40,9 @@ class GEM_EXTERN colorRGB : public GemBase
         //////////
         // Constructor
     	colorRGB(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~colorRGB();
@@ -58,21 +58,21 @@ class GEM_EXTERN colorRGB : public GemBase
     	//////////
     	// R value changed
     	void	    	rMess(float val);
-    	
+
     	//////////
     	// G value changed
     	void	    	gMess(float val);
-    	
+
     	//////////
     	// B value changed
     	void	    	bMess(float val);
-    	
+
     	//////////
     	// A value changed
     	void	    	aMess(float val);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	rMessCallback(void *data, t_floatarg val);

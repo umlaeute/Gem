@@ -42,11 +42,11 @@ LOG
 ///////////////////////////////////////////////////////////////////////////////
 //  Speedup found via Shark:  ppc only
 //
-//   If you do not require full precision, you can use the PowerPC floating-point 
+//   If you do not require full precision, you can use the PowerPC floating-point
 // reciprocal square-root estimate instruction (frsqrte) instead of calling sqrt().
 //
-//   If needed, you can increase the precision of the estimate returned by 
-// frsqrte (5-bits of precision) by using the Newton-Raphson method for improving 
+//   If needed, you can increase the precision of the estimate returned by
+// frsqrte (5-bits of precision) by using the Newton-Raphson method for improving
 // the estimate (x0) for 1/sqrt(a) (x1 = 0.5 * x0 * [3.0 - a * x0 * x0]).
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef __ppc__

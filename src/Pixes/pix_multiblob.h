@@ -7,16 +7,17 @@ Calculate the center of gravity of a pixBlock.
 Copyright (c) 1997-1998 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
 Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	 
+
 -----------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------
 pix_multiblob
  tracks multiple blobs in one image
 
- LATER: split this object into 2 : 
+ LATER: split this object into 2 :
     - pix_multiblob (do the image-processing, unsorted!)
     - multiblob (ensure that blob3 of the last frame is blob3 f the current one...)
 
@@ -30,7 +31,7 @@ pix_multiblob
 
 
 class GEM_EXTERN Blob {
- public:
+public:
 
   Blob();
   void setPosition(int p);
@@ -62,7 +63,8 @@ class GEM_EXTERN Blob {
 
   bool valid; // 0=invalid; 1=ok;
   bool rightPosition;
- private :
+
+private :
   double m_xmin, m_xmax;
   double m_ymin, m_ymax;
   int position;
@@ -71,9 +73,9 @@ class GEM_EXTERN Blob {
 class GEM_EXTERN pix_multiblob : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_multiblob, GemPixObj);
-		
-    public:
-  
+
+public:
+
   //////////
   // Constructor
   pix_multiblob(t_float f);
@@ -81,9 +83,7 @@ class GEM_EXTERN pix_multiblob : public GemPixObj
   // outlets for results
   t_outlet        *m_infoOut;
 
-  
-
- protected:  
+protected:
   //Destructor
   ~pix_multiblob();
 
@@ -104,10 +104,9 @@ class GEM_EXTERN pix_multiblob : public GemPixObj
   void threshMess(t_float thresh);
   unsigned char m_threshold;
 
- private: 
+private:
   static void blobSizeMessCallback(void *data, t_floatarg blobSize);
   static void threshMessCallback(void *data, t_floatarg thresh);
 };
-
 
 #endif 	// for header file

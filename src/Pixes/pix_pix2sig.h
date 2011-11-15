@@ -23,16 +23,16 @@
   -------------------------------------------------------------------
   CLASS
   pix_pix2sig
-    
+
   Interprete a pixel-image as 4 RGBA-signals
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   4 outlets with signals : R~, G~, B~, A~
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_pix2sig : public GemPixObj
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   //////////
   // Constructor
   pix_pix2sig();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual      ~pix_pix2sig();
@@ -65,7 +65,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   //-----------------------------------
   // GROUP:	Image data
   //-----------------------------------
-    
+
   //////////
   // The pixBlock with the current image
   //  pixBlock    	m_pixBlock;
@@ -79,7 +79,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   t_outlet *o_col[4];
 
  private:
-    	
+
   //////////
   // static member functions
   static void   dspMessCallback(void* data,t_signal** sp);

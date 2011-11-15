@@ -21,17 +21,17 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemShape
-    
+
     Base class for shapes
 
 DESCRIPTION
-    
+
     Inlet for a float - "ft1"
 
     "ft1" - the size of the shape
     "draw" - the drawing style
     "width" - the line width when drawing with lines
-    
+
 -----------------------------------------------------------------*/
 class TexCoord;
 class GEM_EXTERN GemShape : public GemBase
@@ -43,9 +43,9 @@ class GEM_EXTERN GemShape : public GemBase
         // [in] size - A size of 0. means to just use the default (ie, 1.)
     	GemShape(t_floatarg size);
 	GemShape();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~GemShape();
@@ -53,11 +53,11 @@ class GEM_EXTERN GemShape : public GemBase
 	    //-----------------------------------
 	    // GROUP:	Access functions
 	    //-----------------------------------
-    
+
     	//////////
     	// The width of the lines in line draw mode
     	void	    	linewidthMess(float linewidth);
-    	
+
     	//////////
     	// The size of the object
     	void	    	sizeMess(float size);
@@ -65,23 +65,23 @@ class GEM_EXTERN GemShape : public GemBase
     	//////////
     	// How the object should be drawn
     	virtual void	typeMess(t_symbol *type);
-    	
+
 	    //-----------------------------------
 	    // GROUP:	Utility functions
 	    //-----------------------------------
-	
-		void SetVertex(GemState* state,float x, float y, float z, 
-                   float tx, float ty, 
+
+		void SetVertex(GemState* state,float x, float y, float z,
+                   float tx, float ty,
                    int curCoord);
 
-		void SetVertex(GemState* state,float x, float y, float z, 
+		void SetVertex(GemState* state,float x, float y, float z,
                    float s, float t, float r, float q,
                    int curCoord);
 
 	    //-----------------------------------
 	    // GROUP:	Member variables
 	    //-----------------------------------
-    
+
     //////////
     // The line width for GL_LINE mode
     GLfloat	    	m_linewidth;
@@ -89,7 +89,7 @@ class GEM_EXTERN GemShape : public GemBase
     //////////
     // The size of the object
     GLfloat	    	m_size;
-	
+
     //////////
     // The drawing style (GL_LINE, GL_POLYGON, etc)
     GLenum	    	m_drawType;
@@ -108,7 +108,7 @@ class GEM_EXTERN GemShape : public GemBase
     // override this memberfunction if you don't want softblending
     virtual void render(GemState *state);
 
-        
+
     //////////
     // The size inlet
     t_inlet         *m_inlet;
@@ -116,14 +116,14 @@ class GEM_EXTERN GemShape : public GemBase
     //-----------------------------------
     // GROUP:	Setup functions
     //-----------------------------------
-    
+
     	//////////
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr)
         { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
-    	
+
     private:
-    
+
      	static inline GemShape *GetMyClass(void *data) {return((GemShape *)((Obj_header *)data)->data);}
 
        	//////////

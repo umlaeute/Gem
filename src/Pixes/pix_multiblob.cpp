@@ -17,11 +17,17 @@
 //
 //  pix_multiblob
 // based on (c) 2004, Jakob Leiner & Theresa Rienmüller
+// and stack-based code from animal.sf.net which is
+// (c) Ricardo Fabbri labmacambira.sf.net
+//
 //
 /////////////////////////////////////////////////////////
 
 
+#include <malloc.h>
+#include <assert.h>
 #include "pix_multiblob.h"
+#include "Utils/pstk.h"
 
 ////////////////////////
 // the Blob-structure
@@ -74,9 +80,9 @@ void Blob:: ymax(double y){
 }
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_multiblob,t_floatarg, A_DEFFLOAT);
-  
+
 /*------------------------------------------------------------
-  
+
 pix_multiblob
 
 ------------------------------------------------------------*/
@@ -87,7 +93,7 @@ Constructor
 initializes the pixBlocks and pixBlobs
 
 ------------------------------------------------------------*/
-  pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_threshold(10)
+pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_threshold(10)
 {
   m_blobNumber = static_cast<int>(f);
   if(m_blobNumber < 1)m_blobNumber = 6;
@@ -110,7 +116,8 @@ initializes the pixBlocks and pixBlobs
 Destructor
 
 ------------------------------------------------------------*/
-pix_multiblob :: ~pix_multiblob(){
+pix_multiblob :: ~pix_multiblob()
+{
   outlet_free(m_infoOut);
   if(currentBlobs)delete[]currentBlobs;
 }
@@ -118,52 +125,71 @@ pix_multiblob :: ~pix_multiblob(){
 /*------------------------------------------------------------
 makeBlobs
 calculates the Blobs, maximal x and y values are set
+
+algorithm adapted from imfill from animal.sf.net
+by Ricardo Fabbri (labmacambira.sf.net)
 ------------------------------------------------------------*/
-void pix_multiblob :: makeBlob(Blob *pb, int x, int y){
+void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
+{
   if(!pb)return;
 
-  if(x<0 || y<0)return;
-  if(x>m_image.xsize || y>m_image.xsize)return;
+  point *cp, np; // current pixel
+  pstk_ptr current; // stack of current pixels
 
-  pb->area++;
-  t_float grey=(static_cast<t_float>(m_image.GetPixel(y, x, chGray))/255);
-  pb->m_xaccum +=grey*static_cast<t_float>(x);
-  pb->m_yaccum +=grey*static_cast<t_float>(y);
-  pb->m_xyaccum+=grey;
+  point seed;
+  seed.x = x_ini;
+  seed.y = y_ini;
+  current = new_pstk();
+  ptpush(&current, &seed);
+  do {
+    cp = ptpop(&current);
+    assert(cp);
 
+    pb->area++;
+    t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x, chGray))/255.0);
+    pb->m_xaccum  += grey*static_cast<t_float>(cp->x);
+    pb->m_yaccum  += grey*static_cast<t_float>(cp->y);
+    pb->m_xyaccum += grey;
 
-  if(x<pb->xmin())pb->xmin(x);
-  if(x>pb->xmax())pb->xmax(x);
-  if(y<pb->ymin())pb->ymin(y);
-  if(y>pb->ymax())pb->ymax(y);
+    if (cp->x < pb->xmin()) pb->xmin(cp->x);
+    if (cp->x > pb->xmax()) pb->xmax(cp->x);
+    if (cp->y < pb->ymin()) pb->ymin(cp->y);
+    if (cp->y > pb->ymax()) pb->ymax(cp->y);
 
-  m_image.SetPixel(y,x,chGray,0);
+    m_image.SetPixel(cp->y,cp->x,chGray,0);
+    for(int i = -1; i<= 1; i++){
+      for(int j = -1; j <= 1; j++){
+        np.x = cp->x + j;
+        np.y = cp->y + i;
 
-  if(pb->area > 10000){return;}
-  for(int i = -1; i<= 1; i++){
-    for(int j = -1; j <= 1; j++){
-      if (m_image.GetPixel(y+i, x+j, chGray) > m_threshold)
-	{
-	  makeBlob(pb, x+j, y+i);
-	}
+        if(np.x >= 0 && np.y >= 0 &&
+          np.x <= m_image.xsize && np.y <= m_image.ysize &&
+          m_image.GetPixel(np.y, np.x, chGray) > m_threshold ) {
+          ptpush(&current, &np);
+        }
+      }
     }
-  }
+    free(cp);
+  } while (pstk_isnt_empty(current));
+
+  free_pstk(&current);
 }
 
 /*------------------------------------------------------------
 addToBlobArray
 adds a detected Blob to the blob list
 ------------------------------------------------------------*/
-void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber){
-  if (blobNumber >= m_blobNumber){
+void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber)
+{
+  if (blobNumber >= m_blobNumber) {
     // look whether we can replace a smaller blob
     float min = pb->area;
     int index=-1;
     int i = m_blobNumber;
     while(i--)
       if (currentBlobs[i].area < min){
-	min = currentBlobs[i].area;
-	index = i;
+        min = currentBlobs[i].area;
+        index = i;
       }
     if (index!=-1)currentBlobs[index] = *pb;
   } else {
@@ -172,11 +198,12 @@ void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber){
 }
 
 /*------------------------------------------------------------
-  
+
 render
 
 ------------------------------------------------------------*/
-void pix_multiblob :: doProcessing() {
+void pix_multiblob :: doProcessing()
+{
   int blobNumber = 0;
   int blobsize = static_cast<int>(m_blobsize * m_image.xsize * m_image.ysize);
 
@@ -184,21 +211,20 @@ void pix_multiblob :: doProcessing() {
 
 
   // detect blobs and add them to the currentBlobs-array
-  for(int y = 0; y < m_image.ysize; y++){
-    for(int x = 0; x < m_image.xsize; x++){
-      if (m_image.GetPixel(y,x,0) > 0)
-	{
-	  Blob *blob = new Blob();
-	  blob->xmin(m_image.xsize);
-	  blob->ymin(m_image.ysize);
+  for(int y = 0; y < m_image.ysize; y++) {
+    for(int x = 0; x < m_image.xsize; x++) {
+      if (m_image.GetPixel(y,x,0) > 0) {
+        Blob *blob = new Blob();
+        blob->xmin(m_image.xsize);
+        blob->ymin(m_image.ysize);
 
-	  makeBlob(blob, x, y);
-	  if(blob->area > blobsize){
-	    addToBlobArray(blob, blobNumber);
-	    blobNumber++;
-	  }
-	  if(blob)delete blob;
-	}
+        makeBlob(blob, x, y);
+        if(blob->area > blobsize) {
+          addToBlobArray(blob, blobNumber);
+          blobNumber++;
+        }
+        if (blob) delete blob;
+	    }
     }
   }
 
@@ -238,18 +264,19 @@ void pix_multiblob :: doProcessing() {
   if(ap)delete[]ap; ap=NULL;
 }
 
-void pix_multiblob :: processImage(imageStruct &image){
+void pix_multiblob :: processImage(imageStruct &image)
+{
   // store the image in greyscale
   // since the algorithm is destructive we do it in a sandbox...
-  
+
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
- 
+
   switch (image.format){
-  case GL_RGBA: 
+  case GL_RGBA:
     m_image.fromRGBA(image.data);
     break;
-  case GL_RGB:  
+  case GL_RGB:
     m_image.fromRGB(image.data);
     break;
   case GL_BGR_EXT:
@@ -267,14 +294,14 @@ void pix_multiblob :: processImage(imageStruct &image){
   }
 
   doProcessing();
-
 }
 
 
 /*------------------------------------------------------------
 blobSizeMess
 ------------------------------------------------------------*/
-void pix_multiblob :: blobSizeMess(t_float blobSize){
+void pix_multiblob :: blobSizeMess(t_float blobSize)
+{
   if((blobSize < 0.0)||(blobSize > 1.0))
     {
       error("blobsize %f out of range (0..1)!", blobSize);
@@ -286,7 +313,8 @@ void pix_multiblob :: blobSizeMess(t_float blobSize){
 /*------------------------------------------------------------
 threshMess
 ------------------------------------------------------------*/
-void pix_multiblob :: threshMess(t_float thresh){
+void pix_multiblob :: threshMess(t_float thresh)
+{
   if((thresh < 0.0)||(thresh > 1.0))
     {
       error("threshold %f out of range (0..1)!", thresh);
@@ -300,7 +328,8 @@ void pix_multiblob :: threshMess(t_float thresh){
 // static member function
 //
 /////////////////////////////////////////////////////////
-void pix_multiblob :: obj_setupCallback(t_class *classPtr){
+void pix_multiblob :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::blobSizeMessCallback),
 		  gensym("blobSize"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::threshMessCallback),
@@ -312,13 +341,15 @@ void pix_multiblob :: obj_setupCallback(t_class *classPtr){
 /*------------------------------------------------------------
 blobSizeMessCallback
 ------------------------------------------------------------*/
-void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize){
+void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize)
+{
   GetMyClass(data)->blobSizeMess(blobSize);
 }
 
 /*------------------------------------------------------------
 threshMessCallback
 ------------------------------------------------------------*/
-void pix_multiblob :: threshMessCallback(void *data, t_floatarg thresh){
+void pix_multiblob :: threshMessCallback(void *data, t_floatarg thresh)
+{
   GetMyClass(data)->threshMess(thresh);
 }

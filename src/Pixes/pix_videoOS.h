@@ -24,12 +24,12 @@ Linux version by Miller Puckette. msp@ucsd.edu
   -------------------------------------------------------------------
   CLASS
   pix_videoOS
-    
+
   Loads in an video
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "dimen" (int, int) - set the x,y dimensions
@@ -38,7 +38,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
   "contrast" (int) - the contrast
   "hue" (int) - the hue
   "sat" (int) - the saturation
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_videoOS : public GemBase
 {
@@ -49,9 +49,9 @@ class GEM_EXTERN pix_videoOS : public GemBase
   //////////
   // Constructor
   pix_videoOS(t_floatarg num = 0);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_videoOS();
@@ -63,7 +63,7 @@ class GEM_EXTERN pix_videoOS : public GemBase
   //////////
   // Clean up the pixBlock
   void	    	cleanPixBlock();
-    
+
   //////////
   // Set the video dimensions
   virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
@@ -72,55 +72,55 @@ class GEM_EXTERN pix_videoOS : public GemBase
   //////////
   // Set the video offset
   virtual void	offsetMess(int x, int y);
-    
+
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
   virtual int	startTransfer();
-    
+
   //////////
   // Stop the video device
   // [out] int - returns 0 if bad
   virtual int	stopTransfer();
-    
-  ////////// 
+
+  //////////
   // swap the image (upside down ?)
   virtual void	swapMess(int state);
 
-  ////////// 
+  //////////
   // enumerate the devices
   virtual void	enumerateMess();
-  ////////// 
+  //////////
   // colorspace-message
   virtual void	csMess(int format);
   virtual void	csMess(t_symbol*format);
-  ////////// 
+  //////////
   // property-dialog
   virtual void	dialogMess(int,t_atom*);
 
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
-    
+
   //////////
   // If video is connected
   int 	    	m_haveVideo;
-    	
+
   //////////
   // The pixBlock with the current image
   pixBlock    	m_pixBlock;
   imageStruct   m_imageStruct;
-    	
+
   //////////
   // Should swap the pixels?
   int 	    	m_swap;
-    	 
+
   //////////
   // Do we have to color swap?
   int 	    	m_colorSwap;
-    	
+
  private:
-    	
+
   //////////
   // static member functions
 

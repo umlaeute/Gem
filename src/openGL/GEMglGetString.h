@@ -32,17 +32,17 @@ class GEM_EXTERN GEMglGetString : public GemGLBase
     public:
   // Constructor
   GEMglGetString (t_floatarg);	// CON
-  
+
  protected:
   // Destructor
   virtual ~GEMglGetString ();
   // Do the rendering
   virtual void	render (GemState *state);
-  
+
   // variables
   GLenum name;		// VAR
   virtual void	nameMess(t_atom);	// FUN
-  
+
   // we need some inl/outets
   t_inlet *m_inlet;
   t_outlet*m_outlet;

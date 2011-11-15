@@ -29,16 +29,16 @@ static inline pVector RandVec()
 static inline float NRand(float sigma = 1.0f)
 {
 #define ONE_OVER_SIGMA_EXP (1.0f / 0.7975f)
-	
+
 	if(sigma == 0) return 0;
-	
+
 	float y;
 	do
 	{
 		y = -logf(drand48());
 	}
 	while(drand48() > expf(-fsqr(y - 1.0f)*0.5f));
-	
+
 	if(rand() & 0x1)
 		return y * sigma * ONE_OVER_SIGMA_EXP;
 	else
@@ -48,7 +48,7 @@ static inline float NRand(float sigma = 1.0f)
 void PAAvoid::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
-	
+
 	switch(position.type)
 	{
 	case PDPlane:
@@ -58,18 +58,18 @@ void PAAvoid::Execute(ParticleGroup *group)
 				for(int i = 0; i < group->p_count; i++)
 				{
 					Particle &m = group->list[i];
-					
+
 					// p2 stores the plane normal (the a,b,c of the plane eqn).
 					// Old and new distances: dist(p,plane) = n * p + d
 					// radius1 stores -n*p, which is d.
 					float dist = m.pos * position.p2 + position.radius1;
-					
+
 					if(dist < look_ahead)
 					{
 						float vm = m.vel.length();
 						pVector Vn = m.vel / vm;
 						// float dot = Vn * position.p2;
-						
+
 						pVector tmp = (position.p2 * (magdt / (dist*dist+epsilon))) + Vn;
 						m.vel = tmp * (vm / tmp.length());
 					}
@@ -80,16 +80,16 @@ void PAAvoid::Execute(ParticleGroup *group)
 				for(int i = 0; i < group->p_count; i++)
 				{
 					Particle &m = group->list[i];
-					
+
 					// p2 stores the plane normal (the a,b,c of the plane eqn).
 					// Old and new distances: dist(p,plane) = n * p + d
 					// radius1 stores -n*p, which is d.
 					float dist = m.pos * position.p2 + position.radius1;
-					
+
 					float vm = m.vel.length();
 					pVector Vn = m.vel / vm;
 					// float dot = Vn * position.p2;
-					
+
 					pVector tmp = (position.p2 * (magdt / (dist*dist+epsilon))) + Vn;
 					m.vel = tmp * (vm / tmp.length());
 				}
@@ -101,87 +101,87 @@ void PAAvoid::Execute(ParticleGroup *group)
 			// Compute the inverse matrix of the plane basis.
 			pVector &u = position.u;
 			pVector &v = position.v;
-			
+
 			// The normalized bases are needed inside the loop.
 			pVector un = u / position.radius1Sqr;
 			pVector vn = v / position.radius2Sqr;
-			
+
 			// w = u cross v
 			float wx = u.y*v.z-u.z*v.y;
 			float wy = u.z*v.x-u.x*v.z;
 			float wz = u.x*v.y-u.y*v.x;
-			
+
 			float det = 1/(wz*u.x*v.y-wz*u.y*v.x-u.z*wx*v.y-u.x*v.z*wy+v.z*wx*u.y+u.z*v.x*wy);
-			
+
 			pVector s1((v.y*wz-v.z*wy), (v.z*wx-v.x*wz), (v.x*wy-v.y*wx));
 			s1 *= det;
 			pVector s2((u.y*wz-u.z*wy), (u.z*wx-u.x*wz), (u.x*wy-u.y*wx));
 			s2 *= -det;
-			
+
 			// See which particles bounce.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt * look_ahead);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d.
 				float distold = m.pos * position.p2 + position.radius1;
 				float distnew = pnext * position.p2 + position.radius1;
-				
+
 				// Opposite signs if product < 0
 				// There is no faster way to do this.
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				float nv = position.p2 * m.vel;
 				float t = -distold / nv;
-				
+
 				// Actual intersection point p(t) = pos + vel t
 				pVector phit(m.pos + m.vel * t);
-				
+
 				// Offset from origin in plane, p - origin
 				pVector offset(phit - position.p1);
-				
+
 				// Dot product with basis vectors of old frame
 				// in terms of new frame gives position in uv frame.
 				float upos = offset * s1;
 				float vpos = offset * s2;
-				
+
 				// Did it cross plane outside triangle?
 				if(upos < 0 || vpos < 0 || upos > 1 || vpos > 1)
 					continue;
-				
+
 				// A hit! A most palpable hit!
 				// Compute distance to the three edges.
 				pVector uofs = (un * (un * offset)) - offset;
 				float udistSqr = uofs.length2();
 				pVector vofs = (vn * (vn * offset)) - offset;
 				float vdistSqr = vofs.length2();
-				
+
 				pVector foffset((u + v) - offset);
 				pVector fofs = (un * (un * foffset)) - foffset;
 				float fdistSqr = fofs.length2();
 				pVector gofs = (un * (un * foffset)) - foffset;
 				float gdistSqr = gofs.length2();
-				
+
 				pVector S;
 				if(udistSqr <= vdistSqr && udistSqr <= fdistSqr
 					&& udistSqr <= gdistSqr) S = uofs;
 				else if(vdistSqr <= fdistSqr && vdistSqr <= gdistSqr) S = vofs;
 				else if(fdistSqr <= gdistSqr) S = fofs;
 				else S = gofs;
-				
+
 				S.normalize();
-				
+
 				// We now have a vector to safety.
 				float vm = m.vel.length();
 				pVector Vn = m.vel / vm;
-				
+
 				// Blend S into V.
 				pVector tmp = (S * (magdt / (t*t+epsilon))) + Vn;
 				m.vel = tmp * (vm / tmp.length());
@@ -193,66 +193,66 @@ void PAAvoid::Execute(ParticleGroup *group)
 			// Compute the inverse matrix of the plane basis.
 			pVector &u = position.u;
 			pVector &v = position.v;
-			
+
 			// The normalized bases are needed inside the loop.
 			pVector un = u / position.radius1Sqr;
 			pVector vn = v / position.radius2Sqr;
-			
+
 			// f is the third (non-basis) triangle edge.
 			pVector f = v - u;
 			pVector fn(f);
 			fn.normalize();
-			
+
 			// w = u cross v
 			float wx = u.y*v.z-u.z*v.y;
 			float wy = u.z*v.x-u.x*v.z;
 			float wz = u.x*v.y-u.y*v.x;
-			
+
 			float det = 1/(wz*u.x*v.y-wz*u.y*v.x-u.z*wx*v.y-u.x*v.z*wy+v.z*wx*u.y+u.z*v.x*wy);
-			
+
 			pVector s1((v.y*wz-v.z*wy), (v.z*wx-v.x*wz), (v.x*wy-v.y*wx));
 			s1 *= det;
 			pVector s2((u.y*wz-u.z*wy), (u.z*wx-u.x*wz), (u.x*wy-u.y*wx));
 			s2 *= -det;
-			
+
 			// See which particles bounce.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt * look_ahead);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d.
 				float distold = m.pos * position.p2 + position.radius1;
 				float distnew = pnext * position.p2 + position.radius1;
-				
+
 				// Opposite signs if product < 0
 				// Is there a faster way to do this?
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				float nv = position.p2 * m.vel;
 				float t = -distold / nv;
-				
+
 				// Actual intersection point p(t) = pos + vel t
 				pVector phit(m.pos + m.vel * t);
-				
+
 				// Offset from origin in plane, p - origin
 				pVector offset(phit - position.p1);
-				
+
 				// Dot product with basis vectors of old frame
 				// in terms of new frame gives position in uv frame.
 				float upos = offset * s1;
 				float vpos = offset * s2;
-				
+
 				// Did it cross plane outside triangle?
 				if(upos < 0 || vpos < 0 || (upos + vpos) > 1)
 					continue;
-				
+
 				// A hit! A most palpable hit!
 				// Compute distance to the three edges.
 				pVector uofs = (un * (un * offset)) - offset;
@@ -266,13 +266,13 @@ void PAAvoid::Execute(ParticleGroup *group)
 				if(udistSqr <= vdistSqr && udistSqr <= fdistSqr) S = uofs;
 				else if(vdistSqr <= fdistSqr) S = vofs;
 				else S = fofs;
-				
+
 				S.normalize();
-				
+
 				// We now have a vector to safety.
 				float vm = m.vel.length();
 				pVector Vn = m.vel / vm;
-				
+
 				// Blend S into V.
 				pVector tmp = (S * (magdt / (t*t+epsilon))) + Vn;
 				m.vel = tmp * (vm / tmp.length());
@@ -283,27 +283,27 @@ void PAAvoid::Execute(ParticleGroup *group)
 		{
 			float r1Sqr = fsqr(position.radius1);
 			float r2Sqr = fsqr(position.radius2);
-			
+
 			// See which particles bounce.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt * look_ahead);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d. radius1Sqr stores d.
 				float distold = m.pos * position.p2 + position.radius1Sqr;
 				float distnew = pnext * position.p2 + position.radius1Sqr;
-				
+
 				// Opposite signs if product < 0
 				// Is there a faster way to do this?
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				// Find position at the crossing point by parameterizing
 				// p(t) = pos + vel * t
 				// Solve dist(p(t),plane) = 0 e.g.
@@ -316,26 +316,26 @@ void PAAvoid::Execute(ParticleGroup *group)
 				// will hit before dt. We just want to know when.
 				float nv = position.p2 * m.vel;
 				float t = -distold / nv;
-				
+
 				// Actual intersection point p(t) = pos + vel t
 				pVector phit(m.pos + m.vel * t);
-				
+
 				// Offset from origin in plane, phit - origin
 				pVector offset(phit - position.p1);
-				
+
 				float rad = offset.length2();
-				
+
 				if(rad > r1Sqr || rad < r2Sqr)
 					continue;
-				
+
 				// A hit! A most palpable hit!
 				pVector S = offset;
 				S.normalize();
-				
+
 				// We now have a vector to safety.
 				float vm = m.vel.length();
 				pVector Vn = m.vel / vm;
-				
+
 				// Blend S into V.
 				pVector tmp = (S * (magdt / (t*t+epsilon))) + Vn;
 				m.vel = tmp * (vm / tmp.length());
@@ -345,35 +345,35 @@ void PAAvoid::Execute(ParticleGroup *group)
 	case PDSphere:
 		{
 			float rSqr = position.radius1 * position.radius1;
-			
+
 			// See which particles are aimed toward the sphere.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// First do a ray-sphere intersection test and
 				// see if it's soon enough.
 				// Can I do this faster without t?
 				float vm = m.vel.length();
 				pVector Vn = m.vel / vm;
-				
+
 				pVector L = position.p1 - m.pos;
 				float v = L * Vn;
-				
+
 				float disc = rSqr - (L * L) + v * v;
 				if(disc < 0)
 					continue; // I'm not heading toward it.
-				
+
 				// Compute length for second rejection test.
 				float t = v - sqrtf(disc);
 				if(t < 0 || t > (vm * look_ahead))
 					continue;
-				
+
 				// Get a vector to safety.
 				pVector C = Vn ^ L;
 				C.normalize();
 				pVector S = Vn ^ C;
-				
+
 				// Blend S into V.
 				pVector tmp = (S * (magdt / (t*t+epsilon))) + Vn;
 				m.vel = tmp * (vm / tmp.length());
@@ -394,39 +394,39 @@ void PABounce::Execute(ParticleGroup *group)
 			// Compute the inverse matrix of the plane basis.
 			pVector &u = position.u;
 			pVector &v = position.v;
-			
+
 			// w = u cross v
 			float wx = u.y*v.z-u.z*v.y;
 			float wy = u.z*v.x-u.x*v.z;
 			float wz = u.x*v.y-u.y*v.x;
-			
+
 			float det = 1/(wz*u.x*v.y-wz*u.y*v.x-u.z*wx*v.y-u.x*v.z*wy+v.z*wx*u.y+u.z*v.x*wy);
-			
+
 			pVector s1((v.y*wz-v.z*wy), (v.z*wx-v.x*wz), (v.x*wy-v.y*wx));
 			s1 *= det;
 			pVector s2((u.y*wz-u.z*wy), (u.z*wx-u.x*wz), (u.x*wy-u.y*wx));
 			s2 *= -det;
-			
+
 			// See which particles bounce.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d.
 				float distold = m.pos * position.p2 + position.radius1;
 				float distnew = pnext * position.p2 + position.radius1;
-				
+
 				// Opposite signs if product < 0
 				// Is there a faster way to do this?
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				// Find position at the crossing point by parameterizing
 				// p(t) = pos + vel * t
 				// Solve dist(p(t),plane) = 0 e.g.
@@ -439,28 +439,28 @@ void PABounce::Execute(ParticleGroup *group)
 				// will hit before dt. We just want to know when.
 				float nv = position.p2 * m.vel;
 				float t = -distold / nv;
-				
+
 				// Actual intersection point p(t) = pos + vel t
 				pVector phit(m.pos + m.vel * t);
-				
+
 				// Offset from origin in plane, p - origin
 				pVector offset(phit - position.p1);
-				
+
 				// Dot product with basis vectors of old frame
 				// in terms of new frame gives position in uv frame.
 				float upos = offset * s1;
 				float vpos = offset * s2;
-				
+
 				// Did it cross plane outside triangle?
 				if(upos < 0 || vpos < 0 || (upos + vpos) > 1)
 					continue;
-				
+
 				// A hit! A most palpable hit!
-				
+
 				// Compute tangential and normal components of velocity
 				pVector vn(position.p2 * nv); // Normal Vn = (V.N)N
 				pVector vt(m.vel - vn); // Tangent Vt = V - Vn
-				
+
 				// Compute new velocity heading out:
 				// Don't apply friction if tangential velocity < cutoff
 				if(vt.length2() <= cutoffSqr)
@@ -474,27 +474,27 @@ void PABounce::Execute(ParticleGroup *group)
 		{
 			float r1Sqr = fsqr(position.radius1);
 			float r2Sqr = fsqr(position.radius2);
-			
+
 			// See which particles bounce.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d. radius1Sqr stores d.
 				float distold = m.pos * position.p2 + position.radius1Sqr;
 				float distnew = pnext * position.p2 + position.radius1Sqr;
-				
+
 				// Opposite signs if product < 0
 				// Is there a faster way to do this?
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				// Find position at the crossing point by parameterizing
 				// p(t) = pos + vel * t
 				// Solve dist(p(t),plane) = 0 e.g.
@@ -507,24 +507,24 @@ void PABounce::Execute(ParticleGroup *group)
 				// will hit before dt. We just want to know when.
 				float nv = position.p2 * m.vel;
 				float t = -distold / nv;
-				
+
 				// Actual intersection point p(t) = pos + vel t
 				pVector phit(m.pos + m.vel * t);
-				
+
 				// Offset from origin in plane, phit - origin
 				pVector offset(phit - position.p1);
-				
+
 				float rad = offset.length2();
-				
+
 				if(rad > r1Sqr || rad < r2Sqr)
 					continue;
-				
+
 				// A hit! A most palpable hit!
-				
+
 				// Compute tangential and normal components of velocity
 				pVector vn(position.p2 * nv); // Normal Vn = (V.N)N
 				pVector vt(m.vel - vn); // Tangent Vt = V - Vn
-				
+
 				// Compute new velocity heading out:
 				// Don't apply friction if tangential velocity < cutoff
 				if(vt.length2() <= cutoffSqr)
@@ -540,26 +540,26 @@ void PABounce::Execute(ParticleGroup *group)
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d.
 				float distold = m.pos * position.p2 + position.radius1;
 				float distnew = pnext * position.p2 + position.radius1;
-				
+
 				// Opposite signs if product < 0
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				// Compute tangential and normal components of velocity
 				float nmag = m.vel * position.p2;
 				pVector vn(position.p2 * nmag); // Normal Vn = (V.N)N
 				pVector vt(m.vel - vn); // Tangent Vt = V - Vn
-				
+
 				// Compute new velocity heading out:
 				// Don't apply friction if tangential velocity < cutoff
 				if(vt.length2() <= cutoffSqr)
@@ -574,38 +574,38 @@ void PABounce::Execute(ParticleGroup *group)
 			// Compute the inverse matrix of the plane basis.
 			pVector &u = position.u;
 			pVector &v = position.v;
-			
+
 			// w = u cross v
 			float wx = u.y*v.z-u.z*v.y;
 			float wy = u.z*v.x-u.x*v.z;
 			float wz = u.x*v.y-u.y*v.x;
-			
+
 			float det = 1/(wz*u.x*v.y-wz*u.y*v.x-u.z*wx*v.y-u.x*v.z*wy+v.z*wx*u.y+u.z*v.x*wy);
-			
+
 			pVector s1((v.y*wz-v.z*wy), (v.z*wx-v.x*wz), (v.x*wy-v.y*wx));
 			s1 *= det;
 			pVector s2((u.y*wz-u.z*wy), (u.z*wx-u.x*wz), (u.x*wy-u.y*wx));
 			s2 *= -det;
-			
+
 			// See which particles bounce.
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's current and next positions cross plane.
 				// If not, couldn't bounce, so keep going.
 				pVector pnext(m.pos + m.vel * dt);
-				
+
 				// p2 stores the plane normal (the a,b,c of the plane eqn).
 				// Old and new distances: dist(p,plane) = n * p + d
 				// radius1 stores -n*p, which is d.
 				float distold = m.pos * position.p2 + position.radius1;
 				float distnew = pnext * position.p2 + position.radius1;
-				
+
 				// Opposite signs if product < 0
 				if(distold * distnew >= 0)
 					continue;
-				
+
 				// Find position at the crossing point by parameterizing
 				// p(t) = pos + vel * t
 				// Solve dist(p(t),plane) = 0 e.g.
@@ -613,29 +613,29 @@ void PABounce::Execute(ParticleGroup *group)
 				// n * p + t (n * v) + D = 0 ->
 				// t = -(n * p + D) / (n * v)
 				float t = -distold / (position.p2 * m.vel);
-				
+
 				// Actual intersection point p(t) = pos + vel t
 				pVector phit(m.pos + m.vel * t);
-				
+
 				// Offset from origin in plane, p - origin
 				pVector offset(phit - position.p1);
-				
+
 				// Dot product with basis vectors of old frame
 				// in terms of new frame gives position in uv frame.
 				float upos = offset * s1;
 				float vpos = offset * s2;
-				
+
 				// Crossed plane outside bounce region if !(0<=[uv]pos<=1)
 				if(upos < 0 || upos > 1 || vpos < 0 || vpos > 1)
 					continue;
-				
+
 				// A hit! A most palpable hit!
-				
+
 				// Compute tangential and normal components of velocity
 				float nmag = m.vel * position.p2;
 				pVector vn(position.p2 * nmag); // Normal Vn = (V.N)N
 				pVector vt(m.vel - vn); // Tangent Vt = V - Vn
-				
+
 				// Compute new velocity heading out:
 				// Don't apply friction if tangential velocity < cutoff
 				if(vt.length2() <= cutoffSqr)
@@ -652,28 +652,28 @@ void PABounce::Execute(ParticleGroup *group)
 			for(int i = 0; i < group->p_count; i++)
 			{
 				Particle &m = group->list[i];
-				
+
 				// See if particle's next position is inside domain.
 				// If so, bounce it.
 				pVector pnext(m.pos + m.vel * dt);
-				
+
 				if(position.Within(pnext))
 				{
 					// See if we were inside on previous timestep.
 					bool pinside = position.Within(m.pos);
-					
+
 					// Normal to surface. This works for a sphere. Isn't
 					// computed quite right, should extrapolate particle
 					// position to surface.
 					pVector n(m.pos - position.p1);
 					n.normalize();
-					
+
 					// Compute tangential and normal components of velocity
 					float nmag = m.vel * n;
-					
+
 					pVector vn(n * nmag); // Normal Vn = (V.N)N
 					pVector vt = m.vel - vn; // Tangent Vt = V - Vn
-					
+
 					if(pinside)
 					{
 						// Previous position was inside. If normal component of
@@ -688,7 +688,7 @@ void PABounce::Execute(ParticleGroup *group)
 						// Previous position was outside -> particle will cross
 						// surface boundary. Reverse normal component of velocity,
 						// and apply friction (if Vt >= cutoff) and resilience.
-						
+
 						// Compute new velocity heading out:
 						// Don't apply friction if tangential velocity < cutoff
 						if(vt.length2() <= cutoffSqr)
@@ -714,7 +714,7 @@ void PACallActionList::Execute(ParticleGroup *group)
 void PACopyVertexB::Execute(ParticleGroup *group)
 {
 	int i;
-	
+
 	if(copy_pos)
 	{
 		for(i = 0; i < group->p_count; i++)
@@ -723,7 +723,7 @@ void PACopyVertexB::Execute(ParticleGroup *group)
 			m.posB = m.pos;
 		}
 	}
-	
+
 	if(copy_vel)
 	{
 		for(i = 0; i < group->p_count; i++)
@@ -740,12 +740,12 @@ void PADamping::Execute(ParticleGroup *group)
 	// This is important if dt is != 1.
 	pVector one(1,1,1);
 	pVector scale(one - ((one - damping) * dt));
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
 		float vSqr = m.vel.length2();
-		
+
 		if(vSqr >= vlowSqr && vSqr <= vhighSqr)
 		{
 			m.vel.x *= scale.x;
@@ -763,22 +763,22 @@ void PAExplosion::Execute(ParticleGroup *group)
 	float oneOverSigma = 1.0f / stdev;
 	float inexp = -0.5f*fsqr(oneOverSigma);
 	float outexp = (float)(ONEOVERSQRT2PI * oneOverSigma);
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
-		
+
 		// Figure direction to particle.
 		pVector dir(m.pos - center);
 		float distSqr = dir.length2();
 		float dist = sqrtf(distSqr);
 		float DistFromWaveSqr = fsqr(radius - dist);
-		
+
 		float Gd = (float)(exp(DistFromWaveSqr * inexp) * outexp);
-		
+
 		m.vel += dir * (Gd * magdt / (dist * (distSqr + epsilon)));
 	}
-	
+
 	age += dt;
 }
 
@@ -787,17 +787,17 @@ void PAFollow::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
 	float max_radiusSqr = max_radius * max_radius;
-	
+
 	if(max_radiusSqr < P_MAXFLOAT)
 	{
 		for(int i = 0; i < group->p_count - 1; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Accelerate toward the particle after me in the list.
 			pVector tohim(group->list[i+1].pos - m.pos); // tohim = p1 - p0
 			float tohimlenSqr = tohim.length2();
-			
+
 			if(tohimlenSqr < max_radiusSqr)
 			{
 				// Compute force exerted between the two bodies
@@ -810,11 +810,11 @@ void PAFollow::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count - 1; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Accelerate toward the particle after me in the list.
 			pVector tohim(group->list[i+1].pos - m.pos); // tohim = p1 - p0
 			float tohimlenSqr = tohim.length2();
-			
+
 			// Compute force exerted between the two bodies
 			m.vel += tohim * (magdt / (sqrtf(tohimlenSqr) * (tohimlenSqr + epsilon)));
 		}
@@ -826,21 +826,21 @@ void PAGravitate::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
 	float max_radiusSqr = max_radius * max_radius;
-	
+
 	if(max_radiusSqr < P_MAXFLOAT)
 	{
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Add interactions with other particles
 			for(int j = i + 1; j < group->p_count; j++)
 			{
 				Particle &mj = group->list[j];
-				
+
 				pVector tohim(mj.pos - m.pos); // tohim = p1 - p0
 				float tohimlenSqr = tohim.length2();
-				
+
 				if(tohimlenSqr < max_radiusSqr)
 				{
 					// Compute force exerted between the two bodies
@@ -856,18 +856,18 @@ void PAGravitate::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Add interactions with other particles
 			for(int j = i + 1; j < group->p_count; j++)
 			{
 				Particle &mj = group->list[j];
-				
+
 				pVector tohim(mj.pos - m.pos); // tohim = p1 - p0
 				float tohimlenSqr = tohim.length2();
-				
+
 				// Compute force exerted between the two bodies
 				pVector acc(tohim * (magdt / (sqrtf(tohimlenSqr) * (tohimlenSqr + epsilon))));
-				
+
 				m.vel += acc;
 				mj.vel -= acc;
 			}
@@ -879,7 +879,7 @@ void PAGravitate::Execute(ParticleGroup *group)
 void PAGravity::Execute(ParticleGroup *group)
 {
 	pVector ddir(direction * dt);
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		// Step velocity with acceleration
@@ -892,25 +892,25 @@ void PAJet::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
 	float max_radiusSqr = max_radius * max_radius;
-	
+
 	if(max_radiusSqr < P_MAXFLOAT)
 	{
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Figure direction to particle.
 			pVector dir(m.pos - center);
-			
+
 			// Distance to jet (force drops as 1/r^2)
 			// Soften by epsilon to avoid tight encounters to infinity
 			float rSqr = dir.length2();
-			
+
 			if(rSqr < max_radiusSqr)
 			{
 				pVector accel;
 				acc.Generate(accel);
-				
+
 				// Step velocity with acceleration
 				m.vel += accel * (magdt / (rSqr + epsilon));
 			}
@@ -921,17 +921,17 @@ void PAJet::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Figure direction to particle.
 			pVector dir(m.pos - center);
-			
+
 			// Distance to jet (force drops as 1/r^2)
 			// Soften by epsilon to avoid tight encounters to infinity
 			float rSqr = dir.length2();
-			
+
 			pVector accel;
 			acc.Generate(accel);
-			
+
 			// Step velocity with acceleration
 			m.vel += accel * (magdt / (rSqr + epsilon));
 		}
@@ -945,7 +945,7 @@ void PAKillOld::Execute(ParticleGroup *group)
 	for(int i = group->p_count-1; i >= 0; i--)
 	{
 		Particle &m = group->list[i];
-		
+
 		if(!((m.age < age_limit) ^ kill_less_than))
 			group->Remove(i);
 	}
@@ -957,7 +957,7 @@ void PAKillSlow::Execute(ParticleGroup *group)
 	// Must traverse list in reverse order so Remove will work
 	for (int i = group->p_count-1; i >= 0; i--) {
 		Particle &m = group->list[i];
-		
+
 		if ((m.vel.length2() < speedLimitSqr) == kill_less_than)
 			group->Remove(i);
 	}
@@ -968,26 +968,26 @@ void PAMatchVelocity::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
 	float max_radiusSqr = max_radius * max_radius;
-	
+
 	if(max_radiusSqr < P_MAXFLOAT)
 	{
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Add interactions with other particles
 			for(int j = i + 1; j < group->p_count; j++)
 			{
 				Particle &mj = group->list[j];
-				
+
 				pVector tohim(mj.pos - m.pos); // tohim = p1 - p0
 				float tohimlenSqr = tohim.length2();
-				
+
 				if(tohimlenSqr < max_radiusSqr)
 				{
 					// Compute force exerted between the two bodies
 					pVector acc(mj.vel * (magdt / (tohimlenSqr + epsilon)));
-					
+
 					m.vel += acc;
 					mj.vel -= acc;
 				}
@@ -999,18 +999,18 @@ void PAMatchVelocity::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Add interactions with other particles
 			for(int j = i + 1; j < group->p_count; j++)
 			{
 				Particle &mj = group->list[j];
-				
+
 				pVector tohim(mj.pos - m.pos); // tohim = p1 - p0
 				float tohimlenSqr = tohim.length2();
-				
+
 				// Compute force exerted between the two bodies
 				pVector acc(mj.vel * (magdt / (tohimlenSqr + epsilon)));
-				
+
 				m.vel += acc;
 				mj.vel -= acc;
 			}
@@ -1024,7 +1024,7 @@ void PAMove::Execute(ParticleGroup *group)
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
-		
+
 		m.age += dt;
 		m.pos += m.vel * dt;
 	}
@@ -1035,25 +1035,25 @@ void PAOrbitLine::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
 	float max_radiusSqr = max_radius * max_radius;
-	
+
 	if(max_radiusSqr < P_MAXFLOAT)
 	{
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Figure direction to particle from base of line.
 			pVector f(m.pos - p);
-			
+
 			pVector w(axis * (f * axis));
-			
+
 			// Direction from particle to nearest point on line.
 			pVector into = w - f;
-			
+
 			// Distance to line (force drops as 1/r^2, normalize by 1/r)
 			// Soften by epsilon to avoid tight encounters to infinity
 			float rSqr = into.length2();
-			
+
 			if(rSqr < max_radiusSqr)
 				// Step velocity with acceleration
 				m.vel += into * (magdt / (sqrtf(rSqr) + (rSqr + epsilon)));
@@ -1065,19 +1065,19 @@ void PAOrbitLine::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Figure direction to particle from base of line.
 			pVector f(m.pos - p);
-			
+
 			pVector w(axis * (f * axis));
-			
+
 			// Direction from particle to nearest point on line.
 			pVector into = w - f;
-			
+
 			// Distance to line (force drops as 1/r^2, normalize by 1/r)
 			// Soften by epsilon to avoid tight encounters to infinity
 			float rSqr = into.length2();
-			
+
 			// Step velocity with acceleration
 			m.vel += into * (magdt / (sqrtf(rSqr) + (rSqr + epsilon)));
 		}
@@ -1095,14 +1095,14 @@ void PAOrbitPoint::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Figure direction to particle.
 			pVector dir(center - m.pos);
-			
+
 			// Distance to gravity well (force drops as 1/r^2, normalize by 1/r)
 			// Soften by epsilon to avoid tight encounters to infinity
 			float rSqr = dir.length2();
-			
+
 			// Step velocity with acceleration
 			if(rSqr < max_radiusSqr)
 				m.vel += dir * (magdt / (sqrtf(rSqr) + (rSqr + epsilon)));
@@ -1114,14 +1114,14 @@ void PAOrbitPoint::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Figure direction to particle.
 			pVector dir(center - m.pos);
-			
+
 			// Distance to gravity well (force drops as 1/r^2, normalize by 1/r)
 			// Soften by epsilon to avoid tight encounters to infinity
 			float rSqr = dir.length2();
-			
+
 			// Step velocity with acceleration
 			m.vel += dir * (magdt / (sqrtf(rSqr) + (rSqr + epsilon)));
 		}
@@ -1134,10 +1134,10 @@ void PARandomAccel::Execute(ParticleGroup *group)
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
-		
+
 		pVector acceleration;
 		gen_acc.Generate(acceleration);
-		
+
 		// dt will affect this by making a higher probability of
 		// being near the original velocity after unit time. Smaller
 		// dt approach a normal distribution instead of a square wave.
@@ -1151,10 +1151,10 @@ void PARandomDisplace::Execute(ParticleGroup *group)
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
-		
+
 		pVector displacement;
 		gen_disp.Generate(displacement);
-		
+
 		// dt will affect this by making a higher probability of
 		// being near the original position after unit time. Smaller
 		// dt approach a normal distribution instead of a square wave.
@@ -1168,10 +1168,10 @@ void PARandomVelocity::Execute(ParticleGroup *group)
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
-		
+
 		pVector velocity;
 		gen_vel.Generate(velocity);
-		
+
 		// Shouldn't multiply by dt because velocities are
 		// invariant of dt. How should dt affect this?
 		m.vel = velocity;
@@ -1201,7 +1201,7 @@ void PARestore::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Already constrained, keep it there.
 			m.pos = m.posB;
 			m.vel = pVector(0,0,0);
@@ -1213,64 +1213,64 @@ void PARestore::Execute(ParticleGroup *group)
 		float dtSqr = dt * dt;
 		float tSqrInv2dt = dt * 2.0f / (t * t);
 		float tCubInv3dtSqr = dtSqr * 3.0f / (t * t * t);
-		
+
 		for(int i = 0; i < group->p_count; i++)
 		{
 #if 1
 			Particle &m = group->list[i];
-			
+
 			// Solve for a desired-behavior velocity function in each axis
 			// _pconstrain(m.pos.x, m.vel.x, m.posB.x, 0., timeLeft, &a, &b, &c);
-			
+
 			// Figure new velocity at next timestep
 			// m.vel.x = a * dtSqr + b * dt + c;
-			
+
 			float b = (-2*t*m.vel.x + 3*m.posB.x - 3*m.pos.x) * tSqrInv2dt;
 			float a = (t*m.vel.x - m.posB.x - m.posB.x + m.pos.x + m.pos.x) * tCubInv3dtSqr;
-			
+
 			// Figure new velocity at next timestep
 			m.vel.x += a + b;
-			
+
 			b = (-2*t*m.vel.y + 3*m.posB.y - 3*m.pos.y) * tSqrInv2dt;
 			a = (t*m.vel.y - m.posB.y - m.posB.y + m.pos.y + m.pos.y) * tCubInv3dtSqr;
-			
+
 			// Figure new velocity at next timestep
 			m.vel.y += a + b;
-			
+
 			b = (-2*t*m.vel.z + 3*m.posB.z - 3*m.pos.z) * tSqrInv2dt;
 			a = (t*m.vel.z - m.posB.z - m.posB.z + m.pos.z + m.pos.z) * tCubInv3dtSqr;
-			
+
 			// Figure new velocity at next timestep
 			m.vel.z += a + b;
 #else
 			Particle &m = group->list[i];
-			
+
 			// XXX Optimize this.
 			// Solve for a desired-behavior velocity function in each axis
 			float a, b, c; // Coefficients of velocity function needed
-			
+
 			_pconstrain(m.pos.x, m.vel.x, m.posB.x, 0.,
 				timeLeft, &a, &b, &c);
-			
+
 			// Figure new velocity at next timestep
 			m.vel.x = a * dtSqr + b * dt + c;
-			
+
 			_pconstrain(m.pos.y, m.vel.y, m.posB.y, 0.,
 				timeLeft, &a, &b, &c);
-			
+
 			// Figure new velocity at next timestep
 			m.vel.y = a * dtSqr + b * dt + c;
-			
+
 			_pconstrain(m.pos.z, m.vel.z, m.posB.z, 0.,
 				timeLeft, &a, &b, &c);
-			
+
 			// Figure new velocity at next timestep
 			m.vel.z = a * dtSqr + b * dt + c;
-			
+
 #endif
 		}
 	}
-	
+
 	time_left -= dt;
 }
 
@@ -1281,7 +1281,7 @@ void PASink::Execute(ParticleGroup *group)
 	for(int i = group->p_count-1; i >= 0; i--)
 	{
 		Particle &m = group->list[i];
-		
+
 		// Remove if inside/outside flag matches object's flag
 		if(!(position.Within(m.pos) ^ kill_inside))
 			group->Remove(i);
@@ -1295,7 +1295,7 @@ void PASinkVelocity::Execute(ParticleGroup *group)
 	for(int i = group->p_count-1; i >= 0; i--)
 	{
 		Particle &m = group->list[i];
-		
+
 		// Remove if inside/outside flag matches object's flag
 		if(!(velocity.Within(m.vel) ^ kill_inside))
 			group->Remove(i);
@@ -1306,17 +1306,17 @@ void PASinkVelocity::Execute(ParticleGroup *group)
 void PASource::Execute(ParticleGroup *group)
 {
 	int rate = int(floor(particle_rate * dt));
-	
+
 	// Dither the fraction particle in time.
 	if(drand48() < particle_rate * dt - float(rate))
 		rate++;
-	
+
 	// Don't emit more than it can hold.
 	if(group->p_count + rate > group->max_particles)
 		rate = group->max_particles - group->p_count;
-	
+
 	pVector pos, posB, vel, col, siz;
-	
+
 	if(vertexB_tracks)
 	{
 		for(int i = 0; i < rate; i++)
@@ -1346,7 +1346,7 @@ void PASource::Execute(ParticleGroup *group)
 			velocity.Generate(vel);
 			color.Generate(col);
 			float ag = age + NRand(age_sigma);
-			
+
 			group->Add(pos, posB, siz, vel, col, alpha, ag);
 		}
 	}
@@ -1356,7 +1356,7 @@ void PASpeedLimit::Execute(ParticleGroup *group)
 {
 	float min_sqr = min_speed*min_speed;
 	float max_sqr = max_speed*max_speed;
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
@@ -1378,7 +1378,7 @@ void PASpeedLimit::Execute(ParticleGroup *group)
 void PATargetColor::Execute(ParticleGroup *group)
 {
 	float scaleFac = scale * dt;
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
@@ -1393,7 +1393,7 @@ void PATargetSize::Execute(ParticleGroup *group)
 	float scaleFac_x = scale.x * dt;
 	float scaleFac_y = scale.y * dt;
 	float scaleFac_z = scale.z * dt;
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
@@ -1409,7 +1409,7 @@ void PATargetSize::Execute(ParticleGroup *group)
 void PATargetVelocity::Execute(ParticleGroup *group)
 {
 	float scaleFac = scale * dt;
-	
+
 	for(int i = 0; i < group->p_count; i++)
 	{
 		Particle &m = group->list[i];
@@ -1424,47 +1424,47 @@ void PAVortex::Execute(ParticleGroup *group)
 {
 	float magdt = magnitude * dt;
 	float max_radiusSqr = max_radius * max_radius;
-	
+
 	if(max_radiusSqr < P_MAXFLOAT)
 	{
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Vector from tip of vortex
 			pVector offset(m.pos - center);
-			
+
 			// Compute distance from particle to tip of vortex.
 			float rSqr = offset.length2();
-			
+
 			// Don't do anything to particle if too close or too far.
 			if(rSqr > max_radiusSqr)
 				continue;
-			
+
 			float r = sqrtf(rSqr);
-			
+
 			// Compute normalized offset vector.
 			pVector offnorm(offset / r);
-			
+
 			// Construct orthogonal vector frame in which to rotate
 			// transformed point around origin
 			float axisProj = offnorm * axis; // offnorm . axis
-			
+
 			// Components of offset perpendicular and parallel to axis
 			pVector w(axis * axisProj); // parallel component
 			pVector u(offnorm - w); // perpendicular component
-			
+
 			// Perpendicular component completing frame:
 			pVector v(axis ^ u);
-			
+
 			// Figure amount of rotation
 			// Resultant is (cos theta) u + (sin theta) v
 			float theta = magdt / (rSqr + epsilon);
 			float s = sinf(theta);
 			float c = cosf(theta);
-			
+
 			offset = (u * c + v * s + w) * r;
-			
+
 			// Translate back to object space
 			m.pos = offset + center;
 		}
@@ -1474,37 +1474,37 @@ void PAVortex::Execute(ParticleGroup *group)
 		for(int i = 0; i < group->p_count; i++)
 		{
 			Particle &m = group->list[i];
-			
+
 			// Vector from tip of vortex
 			pVector offset(m.pos - center);
-			
+
 			// Compute distance from particle to tip of vortex.
 			float rSqr = offset.length2();
-			
+
 			float r = sqrtf(rSqr);
-			
+
 			// Compute normalized offset vector.
 			pVector offnorm(offset / r);
-			
+
 			// Construct orthogonal vector frame in which to rotate
 			// transformed point around origin
 			float axisProj = offnorm * axis; // offnorm . axis
-			
+
 			// Components of offset perpendicular and parallel to axis
 			pVector w(axis * axisProj); // parallel component
 			pVector u(offnorm - w); // perpendicular component
-			
+
 			// Perpendicular component completing frame:
 			pVector v(axis ^ u);
-			
+
 			// Figure amount of rotation
 			// Resultant is (cos theta) u + (sin theta) v
 			float theta = magdt / (rSqr + epsilon);
 			float s = sinf(theta);
 			float c = cosf(theta);
-			
+
 			offset = (u * c + v * s + w) * r;
-			
+
 			// Translate back to object space
 			m.pos = offset + center;
 		}
@@ -1564,19 +1564,19 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 			p1 = pVector(a0, a1, a2);
 			pVector tp2 = pVector(a3, a4, a5);
 			pVector tp3 = pVector(a6, a7, a8);
-			
+
 			u = tp2 - p1;
 			v = tp3 - p1;
-			
+
 			// The rest of this is needed for bouncing.
 			radius1Sqr = u.length();
 			pVector tu = u / radius1Sqr;
 			radius2Sqr = v.length();
 			pVector tv = v / radius2Sqr;
-			
+
 			p2 = tu ^ tv; // This is the non-unit normal.
 			p2.normalize(); // Must normalize it.
-			
+
 			// radius1 stores the d of the plane eqn.
 			radius1 = -(p1 * p2);
 		}
@@ -1586,16 +1586,16 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 			p1 = pVector(a0, a1, a2);
 			u = pVector(a3, a4, a5);
 			v = pVector(a6, a7, a8);
-			
+
 			// The rest of this is needed for bouncing.
 			radius1Sqr = u.length();
 			pVector tu = u / radius1Sqr;
 			radius2Sqr = v.length();
 			pVector tv = v / radius2Sqr;
-			
+
 			p2 = tu ^ tv; // This is the non-unit normal.
 			p2.normalize(); // Must normalize it.
-			
+
 			// radius1 stores the d of the plane eqn.
 			radius1 = -(p1 * p2);
 		}
@@ -1605,7 +1605,7 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 			p1 = pVector(a0, a1, a2);
 			p2 = pVector(a3, a4, a5);
 			p2.normalize(); // Must normalize it.
-			
+
 			// radius1 stores the d of the plane eqn.
 			radius1 = -(p1 * p2);
 		}
@@ -1628,11 +1628,11 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 		{
 			// p2 is a vector from p1 to the other end of cylinder.
 			// p1 is apex of cone.
-			
+
 			p1 = pVector(a0, a1, a2);
 			pVector tmp(a3, a4, a5);
 			p2 = tmp - p1;
-			
+
 			if(a6 > a7)
 			{
 				radius1 = a6; radius2 = a7;
@@ -1642,22 +1642,22 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 				radius1 = a7; radius2 = a6;
 			}
 			radius1Sqr = fsqr(radius1);
-			
+
 			// Given an arbitrary nonzero vector n, make two orthonormal
 			// vectors u and v forming a frame [u,v,n.normalize()].
 			pVector n = p2;
 			float p2l2 = n.length2(); // Optimize this.
 			n.normalize();
-			
+
 			// radius2Sqr stores 1 / (p2.p2)
 			// XXX Used to have an actual if.
 			radius2Sqr = p2l2 ? 1.0f / p2l2 : 0.0f;
-			
+
 			// Find a vector orthogonal to n.
 			pVector basis(1.0f, 0.0f, 0.0f);
 			if(fabs(basis * n) > 0.999)
 				basis = pVector(0.0f, 1.0f, 0.0f);
-			
+
 			// Project away N component, normalize and cross to get
 			// second orthonormal vector.
 			u = basis - n * (basis * n);
@@ -1679,7 +1679,7 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 			p1 = pVector(a0, a1, a2); // Center point
 			p2 = pVector(a3, a4, a5); // Normal (not used in Within and Generate)
 			p2.normalize();
-			
+
 			if(a6 > a7)
 			{
 				radius1 = a6; radius2 = a7;
@@ -1688,12 +1688,12 @@ pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
 			{
 				radius1 = a7; radius2 = a6;
 			}
-			
+
 			// Find a vector orthogonal to n.
 			pVector basis(1.0f, 0.0f, 0.0f);
 			if(fabs(basis * p2) > 0.999)
 				basis = pVector(0.0f, 1.0f, 0.0f);
-			
+
 			// Project away N component, normalize and cross to get
 			// second orthonormal vector.
 			u = basis - p2 * (basis * p2);
@@ -1737,19 +1737,19 @@ bool pDomain::Within(const pVector &pos) const
 			//
 			// rad = x - dist * p2 = projected vector of x along the base
 			// p1 is the apex of the cone.
-			
+
 			pVector x(pos - p1);
-			
+
 			// Check axial distance
 			// radius2Sqr stores 1 / (p2.p2)
 			float dist = (p2 * x) * radius2Sqr;
 			if(dist < 0.0f || dist > 1.0f)
 				return false;
-			
+
 			// Check radial distance; scale radius along axis for cones
 			pVector xrad = x - p2 * dist; // Radial component of x
 			float rSqr = xrad.length2();
-			
+
 			if(type == PDCone)
 				return (rSqr <= fsqr(dist * radius1) &&
 				rSqr >= fsqr(dist * radius2));
@@ -1810,7 +1810,7 @@ void pDomain::Generate(pVector &pos) const
 		// Place on [-1..1] sphere
 		pos = RandVec() - vHalf;
 		pos.normalize();
-		
+
 		// Scale unit sphere pos by [0..r] and translate
 		// (should distribute as r^2 law)
 		if(radius1 == radius2)
@@ -1826,17 +1826,17 @@ void pDomain::Generate(pVector &pos) const
 			float theta = drand48() * 2.0f * float(M_PI); // Angle around axis
 			// Distance from axis
 			float r = radius2 + drand48() * (radius1 - radius2);
-			
+
 			float x = r * cosf(theta); // Weighting of each frame vector
 			float y = r * sinf(theta);
-			
+
 			// Scale radius along axis for cones
 			if(type == PDCone)
 			{
 				x *= dist;
 				y *= dist;
 			}
-			
+
 			pos = p1 + p2 * dist + u * x + v * y;
 		}
 		break;
@@ -1844,17 +1844,17 @@ void pDomain::Generate(pVector &pos) const
 		pos.x = p1.x + NRand(radius1);
 		pos.y = p1.y + NRand(radius1);
 		pos.z = p1.z + NRand(radius1);
-		
+
 		break;
 	case PDDisc:
 		{
 			float theta = drand48() * 2.0f * float(M_PI); // Angle around normal
 			// Distance from center
 			float r = radius2 + drand48() * (radius1 - radius2);
-			
+
 			float x = r * cosf(theta); // Weighting of each frame vector
 			float y = r * sinf(theta);
-			
+
 			pos = p1 + u * x + v * y;
 		}
 		break;

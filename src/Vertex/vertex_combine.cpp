@@ -20,7 +20,7 @@
 #include "string.h"
 #include "math.h"
 CPPEXTERN_NEW(vertex_combine);
- 
+
 /////////////////////////////////////////////////////////
 //
 // vertex_combine
@@ -30,7 +30,7 @@ CPPEXTERN_NEW(vertex_combine);
 //
 /////////////////////////////////////////////////////////
 vertex_combine :: vertex_combine()
-{      
+{
   m_blend = 0.f;
   //hopefully this gets us a right inlet that accepts another gem state
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd,gensym("gem_state"), gensym("gem_right"));
@@ -52,25 +52,25 @@ void vertex_combine :: render(GemState *state)
   int i,size,srcL,srcS,count,sizeR,ratio,remainder;
     GLfloat *VertexArray;
     float blendL, blendR, ratiof,countf;
-    
+
     VertexArray =state->VertexArray;
     if (state->VertexArray == NULL || state->VertexArraySize <= 0){
         post("no vertex array!");
         return;
     }
-    
+
     if (state->ColorArray == NULL ){
         post("no color array!");
         return;
     }
-    
+
     size = state->VertexArraySize;
-    sizeR = m_vertCountR;    
-    
+    sizeR = m_vertCountR;
+
     //dumb and dirty x-fade
     blendR = m_blend;
     blendL = fabs(1.f - m_blend);
-   
+
     if (size > sizeR){
         //left is larger
         ratiof = static_cast<float>(size)/sizeR;
@@ -101,7 +101,7 @@ void vertex_combine :: render(GemState *state)
         remainder = sizeR % size;
         post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
     }
-   
+
     /* -- this almost works - good for fast and dirty integer ratios
     if (size > sizeR){
         //left is larger
@@ -133,7 +133,7 @@ void vertex_combine :: render(GemState *state)
         post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
     }
     */
-  
+
 }
 
 /////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ void vertex_combine :: postrender(GemState *state)
 {
 //m_vertNum = 0;
 }
- 
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -155,7 +155,7 @@ if (state->VertexArray == NULL || state->VertexArraySize <= 0){
         post("no right vertex array!");
         return;
     }
-    
+
     if (state->ColorArray == NULL ){
         post("no right color array!");
     }
@@ -166,18 +166,18 @@ if (state->VertexArray == NULL || state->VertexArraySize <= 0){
 
     //post("state->VertexArraySize %d", state->VertexArraySize);
     //post("rightRender");
-} 
- 
- 
+}
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void vertex_combine :: obj_setupCallback(t_class *classPtr)
-{        
+{
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_combine::gem_rightMessCallback),
     	    gensym("gem_right"), A_GIMME, A_NULL);
-            
+
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_combine::blendCallback),
     	    gensym("blend"), A_FLOAT, A_NULL);
 }

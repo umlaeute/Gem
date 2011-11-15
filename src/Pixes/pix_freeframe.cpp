@@ -40,7 +40,7 @@
  * we therefore use dlopen() on OSX as well
  */
 #elif defined __APPLE__ && 0
-# include <mach-o/dyld.h> 
+# include <mach-o/dyld.h>
 # include <unistd.h>
 #else
 # define DL_OPEN
@@ -116,19 +116,19 @@ private:
       m_height=vis.FrameHeight;
       m_orientation=vis.Orientation;
       m_depth =vis.BitDepth;
-      
+
     }
 
   public:
-    FFInstance(FF_Main_FuncPtr plugin, VideoInfoStruct&vis) 
+    FFInstance(FF_Main_FuncPtr plugin, VideoInfoStruct&vis)
       : m_instance(NULL)
-      , m_plugin(plugin) 
+      , m_plugin(plugin)
     {
       create(vis);
     }
-    FFInstance(FF_Main_FuncPtr plugin, imageStruct&image) 
+    FFInstance(FF_Main_FuncPtr plugin, imageStruct&image)
       : m_instance(NULL)
-      , m_plugin(plugin) 
+      , m_plugin(plugin)
     {
 
       VideoInfoStruct vis;
@@ -169,14 +169,14 @@ private:
     }
 
     bool checkDimen(const imageStruct&img) {
-      return ( 
+      return (
               (img.xsize == m_width ) &&
               (img.ysize == m_height) &&
               (csize2depth       (img.csize     ) == m_depth ) &&
               (updown2orientation(img.upsidedown) == m_orientation)
               );
     }
-    
+
 
 
   };
@@ -265,7 +265,7 @@ private:
 
     if(m_plugin)
       close();
-  
+
     void *plugin_handle = NULL;
     FF_Main_FuncPtr plugmain = NULL;
 
@@ -315,7 +315,7 @@ private:
     std::string libname = name;
 
     if(loud)::post("trying to load %s", buf);
-  
+
 #ifdef DL_OPEN
     if(loud)::post("dlopen %s", libname.c_str());
     plugin_handle=dlopen(libname.c_str(), RTLD_NOW);
@@ -330,15 +330,15 @@ private:
 #elif defined __APPLE__
     CFURLRef bundleURL = NULL;
     CFBundleRef theBundle = NULL;
-    CFStringRef plugin = CFStringCreateWithCString(NULL, 
+    CFStringRef plugin = CFStringCreateWithCString(NULL,
                                                    libname.c_str(), kCFStringEncodingMacRoman);
-  
+
     bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
                                                plugin,
                                                kCFURLPOSIXPathStyle,
                                                true );
     theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
-  
+
     // Get a pointer to the function.
     if (theBundle){
       plugmain = reinterpret_cast<FF_Main_FuncPtr>(CFBundleGetFunctionPointerForName(
@@ -371,7 +371,7 @@ private:
   }
 
 
- /* GLOBAL 
+ /* GLOBAL
      0 	getInfo 	none 	Pointer to a PluginInfoStruct
      1 	initialise 	none 	Success/error code
      2 	deInitialise 	none 	Success/error code
@@ -538,7 +538,7 @@ private:
     m_parameter.clear();
     unsigned int count=getNumParameters_();
     unsigned int i;
-    
+
     m_parameterNames.push_back(""); // dummy parameter
     for(i=0; i<count; i++) {
       std::string name=getParameterName_(i);
@@ -579,12 +579,12 @@ private:
 
     getInfo_();
     getExtendedInfo_();
-    
+
     initParameters_();
     return true;
   }
 
-  
+
 public:
   FFPlugin(std::string name, const t_canvas*canvas=NULL)
     : m_plugin(NULL)
@@ -592,7 +592,7 @@ public:
     , m_rgba(false)
     , m_type(FF_EFFECT)
     , m_majorVersion(0)
-    , m_minorVersion(0)              
+    , m_minorVersion(0)
   {
     if(!open(name, canvas)) {
       throw(GemException(std::string("unable to open '"+name+"'")));
@@ -633,7 +633,7 @@ public:
   FFUInt32 getPluginCaps(FFUInt32 PluginCapsIndex) {
     return getPluginCaps_(PluginCapsIndex);
   }
-  
+
   bool processFrame(imageStruct&img) {
     if(NULL==img.data)
       return true;
@@ -711,7 +711,7 @@ public:
           }
         }
         break;
-      default: break;     
+      default: break;
       }
     }
   }
@@ -776,7 +776,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
       s_inletType=&s_symbol;
       break;
     default:
-      s_inletType=&s_float;    
+      s_inletType=&s_float;
     }
     m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt)));
   }
@@ -875,10 +875,10 @@ void pix_freeframe :: processImage(imageStruct &image)
 
   // just copied the code from [pix_rgba]
     switch(format) {
-    case GL_RGBA: 
+    case GL_RGBA:
       image.fromRGBA(m_image.data);
       break;
-    case GL_RGB:  
+    case GL_RGB:
       image.fromRGB(m_image.data);
       break;
     case GL_BGR_EXT:
@@ -956,7 +956,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
     return(obj);
   } catch (GemException&e) {
     ::verbose(2, "freeframe_loader: failed!");
-    //e.report(); 
+    //e.report();
     return NULL;
   }
   return 0;
@@ -983,7 +983,7 @@ bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
 
 static int freeframe_loader(t_canvas *canvas, char *classname) {
   return pix_freeframe::loader(canvas, classname);
-}  
+}
 
 /////////////////////////////////////////////////////////
 // static member function

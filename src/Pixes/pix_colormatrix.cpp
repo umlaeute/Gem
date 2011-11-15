@@ -35,7 +35,7 @@ pix_colormatrix :: pix_colormatrix()
     m_matrix[5] = 1.;
     m_matrix[10] = 1.;
     m_matrix[15] = 1.;
-    
+
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("matrix"));
 }
 
@@ -104,7 +104,7 @@ void pix_colormatrix :: matrixMess(int argc, t_atom *argv)
     	error("GEM: color matrix size not correct");
     	return;
     }
-    
+
     setPixModified();
 }
 
@@ -114,7 +114,7 @@ void pix_colormatrix :: matrixMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_colormatrix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colormatrix), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colormatrix),
 		   gensym("pix_colourmatrix"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colormatrix::matrixMessCallback),
     	    gensym("matrix"), A_GIMME, A_NULL);

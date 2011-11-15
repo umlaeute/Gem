@@ -23,7 +23,7 @@
   CLASS
 
   part_sink
-    
+
   Generate particles
 
   DESCRIPTION
@@ -38,16 +38,16 @@ class GEM_EXTERN part_sink : public partlib_base
   //////////
   // Constructor
   part_sink(int argc, t_atom*argv);
-    	
+
   //////////
   virtual void 	renderParticles(GemState *state);
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~part_sink();
-		
+
   //////////
   // kill inside?
   void			killMess(int num);
@@ -59,7 +59,7 @@ class GEM_EXTERN part_sink : public partlib_base
   void                  domainMess(t_symbol *s);
   float			m_arg[9];
   void			vectorMess(int argc, t_atom*argv);
-	
+
  private:
 
   //////////

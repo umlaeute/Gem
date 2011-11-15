@@ -47,7 +47,7 @@ static int find_pd_loader(void) {
   pd_register_loader=(loader_registrar_t)dlsym(RTLD_DEFAULT, "sys_register_loader");
 #elif defined _WIN32
   /* no idea whether this actually works... */
-  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle("pd.dll"), "sys_register_loader");  
+  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle("pd.dll"), "sys_register_loader");
 #else
   // no loader for older Pd's....
 #endif

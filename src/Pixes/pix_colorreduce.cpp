@@ -25,13 +25,13 @@ CPPEXTERN_NEW(pix_colorreduce);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_colorreduce :: pix_colorreduce() : 
+pix_colorreduce :: pix_colorreduce() :
   hRGBHistogram(NULL), hSortedColors(NULL), hInverseColorMap(NULL)
-{ 
+{
     m_TargetColorCount = 8.0f; 		// 1 to 255
     m_PalettePersistence = 0.95f;	// 0 to 1
     m_BoundarySmoothing = 0.10f;	// 0 or 1
-    
+
     cnGridSizeShift=3;
     cnGridSize=(1<<cnGridSizeShift);
     cnGridSizeMask=(cnGridSize-1);
@@ -110,7 +110,7 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
     myImage.type  = image.type;
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
-	
+
     const int nColors=static_cast<int>(m_TargetColorCount);
     const float PalettePersistence=m_PalettePersistence;
     const float BoundarySmoothing=m_BoundarySmoothing;
@@ -128,7 +128,7 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
     if (pInverseColorMap==NULL) {
 		return;
     }
-	
+
     const int nSampleSpacing=4;
 
     Pete_ColorReduce_CalcHistogram(nSampleSpacing,pHistogram,PalettePersistence);
@@ -152,7 +152,7 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 	pCurrentOutput+=1;
 
     }
-	
+
     Pete_UnLockHandle(hRGBHistogram);
     Pete_UnLockHandle(hSortedColors);
     Pete_UnLockHandle(hInverseColorMap);
@@ -230,7 +230,7 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
 	if (BoundarySmoothing==0.0f) {
 		return ClosestColor;
 	}
-	
+
 	U32 NextClosestColor=(pInvColorMapEntry->NextClosestColor);
 
 	const int nClosestRed=(ClosestColor>>SHIFT_RED)&0xff;
@@ -268,7 +268,7 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
 	}
 
 	const float UnWeightedLerpValue=(NextClosestDist/TotalDist);
-	
+
 	float WeightedLerpValue=(UnWeightedLerpValue-0.5f)/BoundarySmoothing;
 	WeightedLerpValue+=0.5f;
 	if (WeightedLerpValue>1.0f) {
@@ -321,19 +321,19 @@ void pix_colorreduce :: Pete_ColorReduce_CalcHistogram(
 	}
 
 	const int nNumPixels = nWidth*nHeight;
-	
+
 	U32* pCurrentSource=pSource;
 	const U32* pSourceEnd=(pSource+nNumPixels);
 
 	while (pCurrentSource<pSourceEnd) {
-		
+
 		U32* pSourceLineStart=pCurrentSource;
 		const U32* pSourceLineEnd=pCurrentSource+nWidth;
-			
+
 		while (pCurrentSource<pSourceLineEnd) {
 
 			U32 SourceColor=*pCurrentSource;
-			
+
 			const int nSourceRed=(SourceColor>>SHIFT_RED)&0xff;
 			const int nSourceGreen=(SourceColor>>SHIFT_GREEN)&0xff;
 			const int nSourceBlue=(SourceColor>>SHIFT_BLUE)&0xff;
@@ -385,7 +385,7 @@ void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSort
 	for (nCount=0; nCount<cnGridCellCount; nCount+=1) {
 
 		ppSortedColors[nCount]=&(pHistogram[nCount]);
-	
+
 	}
 
 	qsort((void*)ppSortedColors,cnGridCellCount,sizeof(int*),&Pete_ColorReduce_HistogramSortFunction);
@@ -428,7 +428,7 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 			for (nRedIndex=0; nRedIndex<cnGridSize; nRedIndex+=1) {
 
 				int nRed=(nRedIndex*cnGridCellWidth)+(cnGridCellHalfWidth);
-			
+
 				int nClosestDistance=cnBiggestSignedInt;
 				int nNextClosestDistance=cnBiggestSignedInt;
 				U32 ResultColor = 0;
@@ -443,7 +443,7 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 
 					const int nRedDist=nRed-nCandRed;
 					const int nRedDistSquared=(nRedDist*nRedDist);
-					
+
 					const int nGreenDist=nGreen-nCandGreen;
 					const int nGreenDistSquared=(nGreenDist*nGreenDist);
 
@@ -500,7 +500,7 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
 /////////////////////////////////////////////////////////
 void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorreduce), 
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorreduce),
 		   gensym("pix_colourreduce"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::countCallback),
 		  gensym("count"), A_DEFFLOAT, A_NULL);
@@ -527,6 +527,6 @@ void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersiste
 
 void pix_colorreduce :: smoothCallback(void *data, t_floatarg m_BoundarySmoothing)
 {
-  GetMyClass(data)->m_BoundarySmoothing=!(!static_cast<int>(m_BoundarySmoothing));  
+  GetMyClass(data)->m_BoundarySmoothing=!(!static_cast<int>(m_BoundarySmoothing));
   GetMyClass(data)->setPixModified();
 }

@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindProgramARB , t_floatarg, A_DEFFLOAT, t_fl
 // Constructor
 //
 GEMglBindProgramARB :: GEMglBindProgramARB	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		target(static_cast<GLenum>(arg0)), 
+		target(static_cast<GLenum>(arg0)),
 		program(static_cast<GLuint>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));

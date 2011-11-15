@@ -45,7 +45,7 @@ void polygon_smooth :: render(GemState *)
 {
   if (m_polygon_smoothState)    {
     glEnable(GL_POLYGON_SMOOTH);
-    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE); 
+    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
     glEnable(GL_LINE_SMOOTH);
     glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE);
   }

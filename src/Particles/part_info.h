@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_info
-    
+
 	Draw a part_info group
 
 DESCRIPTION
@@ -37,12 +37,12 @@ class GEM_EXTERN part_info : public partlib_base
   //////////
   // Constructor
   part_info();
-    	
+
   //////////
   virtual void 	renderParticles(GemState *state);
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~part_info();

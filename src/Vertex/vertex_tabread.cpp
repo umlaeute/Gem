@@ -65,7 +65,7 @@ static t_float* checkarray(t_symbol *s, int &length)
     error("%s: bad template for vertex_tabread", s->s_name);
     fp = 0;
   }
-  
+
   if (length==0){
     error("vertex_tabread: table %s is zero-lengthed", s->s_name);
     fp=0;
@@ -173,7 +173,7 @@ void vertex_tabread :: bangMess()
   m_doit = true;
 }
 
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //

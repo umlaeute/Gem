@@ -43,7 +43,7 @@ glsl_vertex :: glsl_vertex() :
   m_shader(0),
   m_shaderARB(0),
   m_compiled(0), m_size(0),
-  m_shaderString(NULL), 
+  m_shaderString(NULL),
   m_shaderFilename(NULL),
   m_shaderID(0)
 {
@@ -54,8 +54,8 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0), m_size(0), 
-  m_shaderString(NULL), 
+  m_compiled(0), m_size(0),
+  m_shaderString(NULL),
   m_shaderFilename(NULL),
   m_shaderID(0)
 {
@@ -222,7 +222,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
 
   if(GLEW_VERSION_2_0)
     openMessGL2();
-  else if (GLEW_ARB_vertex_shader) 
+  else if (GLEW_ARB_vertex_shader)
     openMessARB();
 
   verbose(1, "Loaded file: %s", buf);

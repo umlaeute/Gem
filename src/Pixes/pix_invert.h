@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_invert
-    
+
     Pixel color inversion
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_invert : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_invert();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_invert();

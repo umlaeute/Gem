@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     Turn on alpha blending
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,13 +21,13 @@ LOG
 -------------------------------------------------------------------
 CLASS
     alpha
-    
+
     Turn on alpha blending
 
 DESCRIPTION
-    
+
     "alphastate" - whether to use alpha blending
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN alpha : public GemBase
 {
@@ -38,9 +38,9 @@ class GEM_EXTERN alpha : public GemBase
         //////////
         // Constructor
     	alpha(t_floatarg);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~alpha();
@@ -74,7 +74,7 @@ class GEM_EXTERN alpha : public GemBase
     	//////////
     	// Alpha state changed
     	void	    	alphaMess(int alphaState);
-    	
+
      	//////////
     	// Alpha test changed
     	void	    	testMess(int alphaTest);
@@ -85,7 +85,7 @@ class GEM_EXTERN alpha : public GemBase
 
     	t_inlet *m_inlet;
    private:
-    	
+
     	//////////
     	// static member functions
     	static void 	alphaMessCallback(void *data, t_floatarg alpha);

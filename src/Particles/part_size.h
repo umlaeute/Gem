@@ -20,7 +20,7 @@ LOG
 CLASS
 
 	part_size
-    
+
 	Set the initial size
 
 DESCRIPTION
@@ -35,22 +35,22 @@ class GEM_EXTERN part_size : public partlib_base
 	    //////////
 	    // Constructor
     	part_size(int,t_atom*);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_size();
-		
+
 	//////////
 	void		sizeMess(int,t_atom*);
 
 	//////////
 	float		m_size[3];
-	
+
  private:
 
 	//////////

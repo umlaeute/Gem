@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -134,7 +134,7 @@ bool recordBase :: setCodec(const std::string name)
   return false;
 }
 
-bool recordBase :: enumProperties(gem::Properties&props) 
+bool recordBase :: enumProperties(gem::Properties&props)
 {
   props.clear();
   return false;

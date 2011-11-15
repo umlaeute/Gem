@@ -70,7 +70,7 @@ void GEMglUseProgramObjectARB :: programMess (int program) {	// FUN
 
 void GEMglUseProgramObjectARB :: obj_setupCallback(t_class *classPtr)
 {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUseProgramObjectARB::programMessCallback),  	
+	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUseProgramObjectARB::programMessCallback),
 									gensym("program"), A_FLOAT, A_NULL);
 }
 

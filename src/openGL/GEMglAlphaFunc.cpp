@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglAlphaFunc :: GEMglAlphaFunc	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		func(static_cast<GLenum>(arg0)), 
+		func(static_cast<GLenum>(arg0)),
 		ref(static_cast<GLclampf>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));

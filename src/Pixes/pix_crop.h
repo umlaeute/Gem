@@ -24,14 +24,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_crop
-    
+
     Change pix from "any" color-space to GL_RGBA
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_crop : public GemPixObj
@@ -43,13 +43,13 @@ class GEM_EXTERN pix_crop : public GemPixObj
   //////////
   // Constructor
   pix_crop(t_floatarg,t_floatarg,t_floatarg,t_floatarg);
-    	
+
  protected:
-  
+
   //////////
   // Destructor
   virtual ~pix_crop();
-  
+
 	//////////
 	// set dimension
 	void dimenMess(int, int);

@@ -58,7 +58,7 @@ LOG
 // poynton-values rounded
 # define YUV2RGB_11 298
 # define YUV2RGB_12   0
-# define YUV2RGB_13 409 
+# define YUV2RGB_13 409
 # define YUV2RGB_22 -100
 # define YUV2RGB_23 -208
 # define YUV2RGB_32 516
@@ -134,13 +134,13 @@ LOG
 # endif /* GNUC */
 
 
-  void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size, 
+  void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
 							unsigned char *pixels);
-  void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size, 
+  void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
 							 unsigned char *pixels);
-  void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size, 
+  void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
 							unsigned char *pixels);
-  void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size, 
+  void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
 							 unsigned char *pixels);
   void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, size_t pixelnum,
                               unsigned char *pixels);
@@ -154,14 +154,14 @@ LOG
 
 /* SSE2 */
 #ifdef __SSE2__
-void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata, 
-                       size_t size, 
+void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
+                       size_t size,
                        unsigned char *yuvdata);
-void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata, 
-                       size_t size, 
+void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
+                       size_t size,
                        unsigned char *rgbadata);
-void UYVY_to_RGB_SSE2(const unsigned char *yuvdata, 
-                      size_t size, 
+void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
+                      size_t size,
                       unsigned char *rgbadata);
 #endif /* SSE2 */
 

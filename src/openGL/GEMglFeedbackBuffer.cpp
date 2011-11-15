@@ -63,7 +63,7 @@ void GEMglFeedbackBuffer :: sizeMess (t_float arg1) {	// FUN
 	  len=size;
 	  delete[]buffer;
 	  buffer = new float[len];
-	}	  
+	}
 	setModified();
 }
 

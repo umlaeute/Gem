@@ -25,11 +25,11 @@ class GEM_EXTERN GemDylib {
   GemDylibHandle*m_handle;
 
  public:
-  GemDylib(const CPPExtern*obj, 
-	   const std::string libname, 
+  GemDylib(const CPPExtern*obj,
+	   const std::string libname,
 	   const std::string extension=std::string("")
 	   ) throw(GemException);
-  GemDylib(const std::string libname, 
+  GemDylib(const std::string libname,
 	   const std::string extension=std::string("")
 	   ) throw(GemException);
 
@@ -54,8 +54,8 @@ class GEM_EXTERN GemDylib {
    * if "extension" is NULL, a plaform-specific default is used
    * on success "true" is returned, else "false
    */
-  static bool LoadLib(const std::string procname, 
-		      const std::string baselibname, 
+  static bool LoadLib(const std::string procname,
+		      const std::string baselibname,
 		      const std::string fileext=std::string(""));
 
 

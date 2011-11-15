@@ -22,7 +22,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     model
-    
+
     read in a model file
 
 DESCRIPTION
@@ -30,7 +30,7 @@ DESCRIPTION
     Inlet for a list - "model"
 
     "open" - the RGB model to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN model : public GemBase
 {
@@ -41,9 +41,9 @@ class GEM_EXTERN model : public GemBase
 	    //////////
 	    // Constructor
     	model(t_symbol *filename);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~model();
@@ -51,7 +51,7 @@ class GEM_EXTERN model : public GemBase
     	//////////
     	// When an open is received
     	virtual void	openMess(t_symbol *filename);
-    	
+
     	//////////
     	// When a rescale is received
     	virtual void	rescaleMess(int state);
@@ -65,19 +65,19 @@ class GEM_EXTERN model : public GemBase
   	//////////
     	// Set smoothing factor
     	virtual void	smoothMess(t_float fsmooth);
-    	
+
   	//////////
     	// Set material mode
 	virtual void    materialMess(int material);
-        
+
         //////////
     	// Set material mode
 	virtual void    groupMess(int group);
 
    	//////////
-    	virtual void	cleanModel();   	
+    	virtual void	cleanModel();
 	//////////
-    	virtual void    buildList();	
+    	virtual void    buildList();
 
     	//////////
     	virtual void	render(GemState *state);
@@ -87,28 +87,28 @@ class GEM_EXTERN model : public GemBase
     	//////////
       GLMmodel       *m_model;
     	GLint	    	m_dispList;
-        
+
 	//////////
 	// Should we rescale the model when loaded
 	// Default is yes
 	int		m_rescaleModel;
-        
+
 	GLfloat         m_smooth;
 	int             m_material;
 
 	int             m_flags;
-        
+
   int             m_group;
-    	
+
   bool    m_rebuild;
   float		m_currentH, m_currentW;
 
   //////////////
   // how to texture
-  glmtexture_t m_textype; 
-        
+  glmtexture_t m_textype;
+
  private:
-    
+
   //////////
   // static member functions
   static void 	openMessCallback(void *data, t_symbol *filename);

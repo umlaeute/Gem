@@ -22,7 +22,7 @@ LOG
 CLASS
 
 	part_targetsize
-    
+
 	Set the target color for a particle system
 
 DESCRIPTION
@@ -37,12 +37,12 @@ class GEM_EXTERN part_targetsize : public partlib_base
 	    //////////
 	    // Constructor
     	part_targetsize(t_floatarg size, t_floatarg scale);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_targetsize();
@@ -58,13 +58,13 @@ class GEM_EXTERN part_targetsize : public partlib_base
     	//////////
     	// Scale changed
     	void	    	scaleMess(float x, float y, float z);
-    	
+
     	//////////
     	// Size changed
     	void	    	sizeMess(float sizex, float sizey, float sizez);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	scaleMessCallback(void *data, t_symbol*, int, t_atom*);

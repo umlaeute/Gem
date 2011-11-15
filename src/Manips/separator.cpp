@@ -35,13 +35,13 @@ separator :: separator(int argc, t_atom*argv)
   m_pushed[GLStack::COLOR     ]=false;
   m_pushed[GLStack::TEXTURE   ]=false;
   m_pushed[GLStack::PROJECTION]=false;
-  
+
   if(argc) {
     m_active[GLStack::MODELVIEW ]=false;
     m_active[GLStack::COLOR     ]=false;
     m_active[GLStack::TEXTURE   ]=false;
     m_active[GLStack::PROJECTION]=false;
-    
+
     while(argc) {
       t_symbol*s=atom_getsymbol(argv);
       if(gensym("model")==s) m_active[GLStack::MODELVIEW ]=true;
@@ -56,11 +56,11 @@ separator :: separator(int argc, t_atom*argv)
       else {
         throw(GemException("invalid separator mode"));
       }
-      
+
       argc--;
       argv++;
     }
-    
+
   } else {
     m_active[GLStack::MODELVIEW ]=true;
     m_active[GLStack::COLOR     ]=false;
@@ -98,7 +98,7 @@ void separator :: render(GemState *state)
   if(stacks) {
 #define PUSHGLSTACK(type)     if(m_active[type])m_pushed[type]=stacks->push(type)
     PUSHGLSTACK(GLStack::TEXTURE);
-    PUSHGLSTACK(GLStack::COLOR); 
+    PUSHGLSTACK(GLStack::COLOR);
     PUSHGLSTACK(GLStack::PROJECTION);
     PUSHGLSTACK(GLStack::MODELVIEW);
   }
@@ -136,7 +136,7 @@ void separator :: render(GemState *state)
       myCoords[i].s = coords[i].s;
       myCoords[i].t = coords[i].t;
     }
-  } 
+  }
 
   m_state.set(GemState::_GL_TEX_COORDS, myCoords);
   m_state.set(GemState::_GL_TEX_NUMCOORDS, num);
@@ -158,15 +158,15 @@ void separator :: postrender(GemState *state)
   if(stacks) {
 #define POPGLSTACK(type)     if(m_pushed[type]){stacks->pop(type);}m_pushed[type]=false
     POPGLSTACK(GLStack::TEXTURE);
-    POPGLSTACK(GLStack::COLOR); 
+    POPGLSTACK(GLStack::COLOR);
     POPGLSTACK(GLStack::PROJECTION);
-    POPGLSTACK(GLStack::MODELVIEW); 
+    POPGLSTACK(GLStack::MODELVIEW);
   }
   SEPARATOR_STATEASSIGN(&m_state, state, bool, GemState::_GL_LIGHTING);
   SEPARATOR_STATEASSIGN(&m_state, state, bool, GemState::_GL_SMOOTH);
   SEPARATOR_STATEASSIGN(&m_state, state, int, GemState::_GL_TEX_TYPE);
   SEPARATOR_STATEASSIGN(&m_state, state, pixBlock*, GemState::_PIX);
-	
+
 //this is a partial fix for the separator memory leak
 //
 //if the texcoords are of equal number, which they almost always are
@@ -198,7 +198,7 @@ void separator :: postrender(GemState *state)
       stateCoords[i].s = myCoords[i].s;
       stateCoords[i].t = myCoords[i].t;
     }
-  } 
+  }
 
   state->set(GemState::_GL_TEX_COORDS, stateCoords);
   state->set(GemState::_GL_TEX_NUMCOORDS, num);

@@ -76,7 +76,7 @@ class GEM_EXTERN gemmacwindow : public GemWindow
 
   // check whether we have a window and if so, make it current
   virtual bool makeCurrent(void);
-  
+
   virtual void swapBuffers(void);
 
   /* dispatch window events */
@@ -103,7 +103,7 @@ class GEM_EXTERN gemmacwindow : public GemWindow
 
   class Info;
   Info*m_info;
-  
+
   static bool     init(void);
 };
 

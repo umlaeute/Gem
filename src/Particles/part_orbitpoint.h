@@ -20,7 +20,7 @@ LOG
 CLASS
 
 	part_orbitpoint
-    
+
 	Orbit around a point
 
 DESCRIPTION
@@ -35,16 +35,16 @@ class GEM_EXTERN part_orbitpoint : public partlib_base
 	    //////////
 	    // Constructor
     	part_orbitpoint(t_floatarg val1, t_floatarg val2, t_floatarg val3, t_floatarg grav);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_orbitpoint();
-		
+
 		//////////
 		void			vectorMess(float val1, float val2, float val3)
 							{ m_pos[0] = val1; m_pos[1] = val2; m_pos[2] = val3; }
@@ -54,10 +54,10 @@ class GEM_EXTERN part_orbitpoint : public partlib_base
 
 		//////////
 		float			m_pos[3];
-	
+
 		//////////
 		float			m_grav;
-	
+
 	private:
 
 		//////////

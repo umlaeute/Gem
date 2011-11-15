@@ -37,77 +37,77 @@ CPPEXTERN_NEW(gemglxwindow);
   ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | DestroyNotify
 
 // window creation variables
-static int snglBuf24[] = {GLX_RGBA, 
-                          GLX_RED_SIZE, 8, 
-                          GLX_GREEN_SIZE, 8, 
-                          GLX_BLUE_SIZE, 8, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_STENCIL_SIZE, 8, 
+static int snglBuf24[] = {GLX_RGBA,
+                          GLX_RED_SIZE, 8,
+                          GLX_GREEN_SIZE, 8,
+                          GLX_BLUE_SIZE, 8,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_STENCIL_SIZE, 8,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           None};
-static int snglBuf24Stereo[] = {GLX_RGBA, 
-                                GLX_RED_SIZE, 8, 
-                                GLX_GREEN_SIZE, 8, 
-                                GLX_BLUE_SIZE, 8, 
-                                GLX_DEPTH_SIZE, 16, 
-                                GLX_STENCIL_SIZE, 8, 
+static int snglBuf24Stereo[] = {GLX_RGBA,
+                                GLX_RED_SIZE, 8,
+                                GLX_GREEN_SIZE, 8,
+                                GLX_BLUE_SIZE, 8,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_STENCIL_SIZE, 8,
                                 GLX_ACCUM_RED_SIZE, 8,
                                 GLX_ACCUM_GREEN_SIZE, 8,
                                 GLX_ACCUM_BLUE_SIZE, 8,
                                 GLX_STEREO,
                                 None};
-static int dblBuf24[] =  {GLX_RGBA, 
-                          GLX_RED_SIZE, 4, 
-                          GLX_GREEN_SIZE, 4, 
-                          GLX_BLUE_SIZE, 4, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_STENCIL_SIZE, 8, 
+static int dblBuf24[] =  {GLX_RGBA,
+                          GLX_RED_SIZE, 4,
+                          GLX_GREEN_SIZE, 4,
+                          GLX_BLUE_SIZE, 4,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_STENCIL_SIZE, 8,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
-                          GLX_DOUBLEBUFFER, 
+                          GLX_DOUBLEBUFFER,
                           None};
-static int dblBuf24Stereo[] =  {GLX_RGBA, 
-                                GLX_RED_SIZE, 4, 
-                                GLX_GREEN_SIZE, 4, 
-                                GLX_BLUE_SIZE, 4, 
-                                GLX_DEPTH_SIZE, 16, 
-                                GLX_STENCIL_SIZE, 8, 
+static int dblBuf24Stereo[] =  {GLX_RGBA,
+                                GLX_RED_SIZE, 4,
+                                GLX_GREEN_SIZE, 4,
+                                GLX_BLUE_SIZE, 4,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_STENCIL_SIZE, 8,
                                 GLX_ACCUM_RED_SIZE, 8,
                                 GLX_ACCUM_GREEN_SIZE, 8,
                                 GLX_ACCUM_BLUE_SIZE, 8,
-                                GLX_DOUBLEBUFFER, 
+                                GLX_DOUBLEBUFFER,
                                 GLX_STEREO,
                                 None};
-static int snglBuf8[] =  {GLX_RGBA, 
-                          GLX_RED_SIZE, 3, 
-                          GLX_GREEN_SIZE, 3, 
-                          GLX_BLUE_SIZE, 2, 
-                          GLX_DEPTH_SIZE, 16, 
+static int snglBuf8[] =  {GLX_RGBA,
+                          GLX_RED_SIZE, 3,
+                          GLX_GREEN_SIZE, 3,
+                          GLX_BLUE_SIZE, 2,
+                          GLX_DEPTH_SIZE, 16,
                           None};
-static int snglBuf8Stereo[] =  {GLX_RGBA, 
-                                GLX_RED_SIZE, 3, 
-                                GLX_GREEN_SIZE, 3, 
-                                GLX_BLUE_SIZE, 2, 
-                                GLX_DEPTH_SIZE, 16, 
+static int snglBuf8Stereo[] =  {GLX_RGBA,
+                                GLX_RED_SIZE, 3,
+                                GLX_GREEN_SIZE, 3,
+                                GLX_BLUE_SIZE, 2,
+                                GLX_DEPTH_SIZE, 16,
                                 GLX_STEREO,
                                 None};
-static int dblBuf8[] =   {GLX_RGBA, 
-                          GLX_RED_SIZE, 1, 
-                          GLX_GREEN_SIZE, 2, 
-                          GLX_BLUE_SIZE, 1, 
-                          GLX_DEPTH_SIZE, 16, 
-                          GLX_DOUBLEBUFFER, 
+static int dblBuf8[] =   {GLX_RGBA,
+                          GLX_RED_SIZE, 1,
+                          GLX_GREEN_SIZE, 2,
+                          GLX_BLUE_SIZE, 1,
+                          GLX_DEPTH_SIZE, 16,
+                          GLX_DOUBLEBUFFER,
                           None};
 
-static int dblBuf8Stereo[] =   {GLX_RGBA, 
-                                GLX_RED_SIZE, 1, 
-                                GLX_GREEN_SIZE, 2, 
-                                GLX_BLUE_SIZE, 1, 
-                                GLX_DEPTH_SIZE, 16, 
-                                GLX_DOUBLEBUFFER, 
+static int dblBuf8Stereo[] =   {GLX_RGBA,
+                                GLX_RED_SIZE, 1,
+                                GLX_GREEN_SIZE, 2,
+                                GLX_BLUE_SIZE, 1,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_DOUBLEBUFFER,
                                 GLX_STEREO,
                                 None};
 
@@ -117,7 +117,7 @@ static int ErrorHandler (Display *dpy, XErrorEvent *event)
   // we don't really care about the error
   // let's hope for the best
   if(event)
-    xerr=event->error_code;  
+    xerr=event->error_code;
 
   if ( event->error_code != BadWindow ) {
     char buf[256];
@@ -134,7 +134,7 @@ static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 }
 
 
- 
+
 
 struct gemglxwindow::PIMPL {
   int         fs;                 // FullScreen
@@ -146,7 +146,7 @@ struct gemglxwindow::PIMPL {
   GLXContext  context;            // OpenGL context
 
   Atom        delete_atom;
-  
+
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
 #endif
@@ -159,12 +159,12 @@ struct gemglxwindow::PIMPL {
 
   bool doDispatch;
 
-  PIMPL(void) : 
+  PIMPL(void) :
     fs(0),
-    dpy(NULL), 
-    win(0), 
-    cmap(0), 
-    context(NULL), 
+    dpy(NULL),
+    win(0),
+    cmap(0),
+    context(NULL),
     delete_atom(0),
 #ifdef HAVE_LIBXXF86VM
     //    deskMode(0),
@@ -196,7 +196,7 @@ struct gemglxwindow::PIMPL {
       //non alphanumeric key: use keysym
       return std::string(XKeysymToString(keysym_return));
     }
-    
+
     if (len==0) {
       //modifier key:use keysym
       //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
@@ -205,7 +205,7 @@ struct gemglxwindow::PIMPL {
     } else {
       keystring[KEYSTRING_SIZE-1]=0;
     }
-    
+
     return std::string(keystring);
   }
 
@@ -218,7 +218,7 @@ struct gemglxwindow::PIMPL {
 
     XSetErrorHandler (ErrorHandler);
 
-    if ( (dpy = XOpenDisplay(display.c_str())) == NULL) { 
+    if ( (dpy = XOpenDisplay(display.c_str())) == NULL) {
       ::error("Could not open display %s",display.c_str());
       return false;
     }
@@ -227,7 +227,7 @@ struct gemglxwindow::PIMPL {
     if ( !glXQueryExtension(dpy, NULL, NULL) ) {
       throw(GemException("X server has no OpenGL GLX extension"));
       return false;
-    } 
+    }
 
     if (fullscreen){
       if (!display.empty()){
@@ -289,7 +289,7 @@ struct gemglxwindow::PIMPL {
       context = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
       // this masterContext should only be initialized once by a static PIMPL
       // see below in gemglxwindow::create()
-      if(!masterContext) 
+      if(!masterContext)
         masterContext=context;
     } catch(void*e){
       context=NULL;
@@ -299,7 +299,7 @@ struct gemglxwindow::PIMPL {
       return false;
     }
     // create the X color map
-    cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), 
+    cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen),
                                     vi->visual, AllocNone);
     if (!cmap) {
       throw(GemException("Could not create X colormap"));
@@ -321,7 +321,7 @@ struct gemglxwindow::PIMPL {
           bestMode = i;
         }
       }
-    
+
       XF86VidModeSwitchToMode(dpy, screen, modes[bestMode]);
       XF86VidModeSetViewPort(dpy, screen, 0, 0);
       w = modes[bestMode]->hdisplay;
@@ -346,7 +346,7 @@ struct gemglxwindow::PIMPL {
 
     win = XCreateWindow(dpy, RootWindow(dpy, vi->screen),
                                  x, y, w, h,
-                                 0, vi->depth, InputOutput, 
+                                 0, vi->depth, InputOutput,
                                  vi->visual, flags, &swa);
     if (!win) {
       throw(GemException("Could not create X window"));
@@ -435,7 +435,7 @@ struct gemglxwindow::PIMPL {
       unsigned int borderDummy;
       int x, y;
       XGetGeometry(dpy, win,
-                   &winDummy, 
+                   &winDummy,
                    &x, &y,
                    &w, &h,
                    &borderDummy, &depthDummy);
@@ -472,7 +472,7 @@ gemglxwindow :: gemglxwindow(void) :
 /////////////////////////////////////////////////////////
 gemglxwindow :: ~gemglxwindow()
 {
-  if(m_pimpl->win) 
+  if(m_pimpl->win)
     destroyMess();
 
   delete m_pimpl;
@@ -497,38 +497,38 @@ void gemglxwindow :: swapBuffers(void) {
 
 void gemglxwindow::dispatch(void) {
   if(!m_pimpl->doDispatch)return;
-  XEvent event; 
-  XButtonEvent* eb = (XButtonEvent*)&event; 
-  XKeyEvent* kb  = (XKeyEvent*)&event; 
+  XEvent event;
+  XButtonEvent* eb = (XButtonEvent*)&event;
+  XKeyEvent* kb  = (XKeyEvent*)&event;
   char keystring[2];
   KeySym keysym_return;
 
   while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
                            StructureNotifyMask |
                            KeyPressMask | KeyReleaseMask |
-                           PointerMotionMask | 
+                           PointerMotionMask |
                            ButtonMotionMask |
-                           ButtonPressMask | 
+                           ButtonPressMask |
                            ButtonReleaseMask,
                            &event))
     {
       switch (event.type)
         {
-        case ButtonPress: 
+        case ButtonPress:
           button(eb->button-1, 1);
           motion(eb->x, eb->y);
-          break; 
-        case ButtonRelease: 
+          break;
+        case ButtonRelease:
           button(eb->button-1, 0);
           motion(eb->x, eb->y);
-          break; 
-        case MotionNotify: 
+          break;
+        case MotionNotify:
           motion(eb->x, eb->y);
           if(!m_pimpl->have_border) {
             int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
             err=0;
           }
-          break; 
+          break;
         case KeyPress:
           key(m_pimpl->key2string(kb), kb->keycode, 1);
           break;
@@ -536,15 +536,15 @@ void gemglxwindow::dispatch(void) {
           key(m_pimpl->key2string(kb), kb->keycode, 0);
           break;
         case ConfigureNotify:
-          if ((event.xconfigure.width != m_width) || 
+          if ((event.xconfigure.width != m_width) ||
               (event.xconfigure.height != m_height)) {
             m_width=event.xconfigure.width;
             m_height=event.xconfigure.height;
             XResizeWindow(m_pimpl->dpy, m_pimpl->win, m_width, m_height);
             dimension(m_width, m_height);
           }
-          if ((event.xconfigure.send_event) && 
-              ((event.xconfigure.x != m_xoffset) || 
+          if ((event.xconfigure.send_event) &&
+              ((event.xconfigure.x != m_xoffset) ||
                (event.xconfigure.y != m_yoffset))) {
             m_xoffset=event.xconfigure.x;
             m_yoffset=event.xconfigure.y;
@@ -553,10 +553,10 @@ void gemglxwindow::dispatch(void) {
           break;
         default:
           // post("event %d", event.type);
-          break; 
+          break;
         }
     }
-  
+
   if (XCheckTypedEvent(m_pimpl->dpy,  ClientMessage, &event)) {
     info("window", "destroy");
     //    GemMan::destroyWindowSoon();
@@ -598,7 +598,7 @@ void gemglxwindow :: titleMess(std::string s)
   m_title=s;
   if(m_pimpl->dpy && m_pimpl->win) {
     XSetStandardProperties(m_pimpl->dpy, m_pimpl->win,
-                           m_title.c_str(), "gem", 
+                           m_title.c_str(), "gem",
                            None, 0, 0, NULL);
   }
 
@@ -621,7 +621,7 @@ void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -696,7 +696,7 @@ bool gemglxwindow :: create(void)
   svalue[2]=0;
   if (m_fsaa!=0) setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
 
- 
+
   try {
     success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height);
   } catch (GemException&x) {
@@ -745,7 +745,7 @@ void gemglxwindow :: destroy(void)
     int err=0;
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
     glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
-    
+
     if (m_pimpl->win)
       err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
     if (m_pimpl->context) {
@@ -754,7 +754,7 @@ void gemglxwindow :: destroy(void)
     }
     if (m_pimpl->cmap)
       err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
-    
+
 #ifdef HAVE_LIBXXF86VM
     if (m_pimpl->fs){
       XF86VidModeSwitchToMode(m_pimpl->dpy, m_pimpl->screen, &m_pimpl->deskMode);
@@ -762,7 +762,7 @@ void gemglxwindow :: destroy(void)
       m_pimpl->fs=0;
     }
 #endif
-    
+
     err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
   }
   m_pimpl->dpy = NULL;
@@ -770,7 +770,7 @@ void gemglxwindow :: destroy(void)
   m_pimpl->cmap = 0;
   m_pimpl->context = NULL;
   if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
-  
+
   destroyGemWindow();
 }
 void gemglxwindow :: destroyMess(void)

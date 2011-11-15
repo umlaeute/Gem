@@ -74,10 +74,10 @@ void rubber :: rubber_init()
   int m;
 
   if (m_mass != NULL)delete[]m_mass;    m_mass=NULL;
-    
+
   m_mass = new MASS[m_grid_sizeX*m_grid_sizeY];
   if (m_mass == NULL)    {
-    error("can't allocate memory for masses.\n");	
+    error("can't allocate memory for masses.\n");
     return;
   }
 
@@ -107,10 +107,10 @@ void rubber :: rubber_init()
 
   m_spring=new SPRING[m_spring_count];
   if (m_spring == NULL)    {
-    error("can't allocate memory for springs.\n");	
+    error("can't allocate memory for springs.\n");
     return;
   }
-  
+
   k = 0;
   for (i = 1; i < m_grid_sizeX - 1; i++)
     for (j = 0; j < m_grid_sizeY - 1; j++)
@@ -140,14 +140,14 @@ void rubber :: rubber_init()
 void rubber :: renderShape(GemState *state)
 {
   int k, i, j;
-     
+
   if (GemShape::m_texType && GemShape::m_texNum>=3) {
 
     if ((xsize  != GemShape::m_texCoords[1].s) ||
         (ysize  != GemShape::m_texCoords[1].t) ||
         (ysize0 != GemShape::m_texCoords[2].t))
       m_alreadyInit = 0;
-    
+
     if (!m_alreadyInit)  {
       xsize  = GemShape::m_texCoords[1].s;
       ysize0 = GemShape::m_texCoords[2].t;
@@ -185,7 +185,7 @@ void rubber :: renderShape(GemState *state)
       rubber_init();
       m_alreadyInit = 1;
     }
-      
+
     k = 0;
     for (i = 0; i < m_grid_sizeX - 1; i++)  {
       for (j = 0; j < m_grid_sizeY - 1; j++){
@@ -269,7 +269,7 @@ void rubber :: rubber_dynamics()
         m_mass[k].x[0] += m_mass[k].v[0];
         m_mass[k].x[1] += m_mass[k].v[1];
         m_mass[k].x[2] += m_mass[k].v[2];
-      
+
         m_mass[k].v[0] *= (1.0 - m_drag);
         m_mass[k].v[1] *= (1.0 - m_drag);
         m_mass[k].v[2] *= (1.0 - m_drag);

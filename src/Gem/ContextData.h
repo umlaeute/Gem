@@ -20,7 +20,7 @@
   -------------------------------------------------------------------
   CLASS
   ContextData
-    
+
   rendering context specific data
   this is heavily inspired by VrJuggler
 
@@ -30,9 +30,9 @@
   if we have multiple contexts, such values most be generated for each context
   ContextData provides a generic (templated) datatype for this
 
-  LATER (SOONER) think about splitting the render() into a context-specific section that 
+  LATER (SOONER) think about splitting the render() into a context-specific section that
   set's up display-lists,... and a draw() function that just calls the pre-generated values
-    
+
   -----------------------------------------------------------------*/
 
 namespace gem {
@@ -50,7 +50,7 @@ template<class ContextDataType = int>
   {
     private:
     public:
-   
+
     //////////
     // Constructor
     ContextData(void) : m_haveDefaultValue(false) {;}
@@ -60,7 +60,7 @@ template<class ContextDataType = int>
     virtual ~ContextData() {
       m_ContextDataVector.clear();
     }
-    	
+
     /**
      * returns the context-specific value
      *

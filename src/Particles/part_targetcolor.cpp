@@ -102,9 +102,9 @@ void part_targetcolor :: colorMess(float red, float green, float blue, float alp
 void part_targetcolor :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetcolor::colorMessCallback),
-    	    gensym("color"), A_GIMME, A_NULL); 
+    	    gensym("color"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetcolor::scaleMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL); 
+    	    gensym("ft1"), A_FLOAT, A_NULL);
 }
 void part_targetcolor :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

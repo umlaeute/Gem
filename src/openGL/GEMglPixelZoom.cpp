@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglPixelZoom :: GEMglPixelZoom	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		xfactor(static_cast<GLfloat>(arg0)), 
+		xfactor(static_cast<GLfloat>(arg0)),
 		yfactor(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xfactor"));

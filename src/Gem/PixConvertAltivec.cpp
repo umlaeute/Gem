@@ -19,7 +19,7 @@
 
 #include "PixConvert.h"
 
-void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size, 
+void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
                           unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -27,7 +27,7 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
-  
+
   const vector unsigned char	*RGB_ptr = reinterpret_cast<const vector unsigned char*>( rgbdata);
   vector unsigned char	*YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
@@ -130,7 +130,7 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
 
   }
 }
-void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size, 
+void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
                            unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -138,7 +138,7 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
-  
+
   const vector unsigned char	*RGBA_ptr = reinterpret_cast<const vector unsigned char*>( rgbadata);
   vector unsigned char	*YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
@@ -242,7 +242,7 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
   }
 }
 
-void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size, 
+void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
                           unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -250,7 +250,7 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
-  
+
   const vector unsigned char	*BGR_ptr = reinterpret_cast<const vector unsigned char*>( bgrdata);
   vector unsigned char	*YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
@@ -354,7 +354,7 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
   }
 }
 
-void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size, 
+void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
                            unsigned char *pixels)
 {
   vector signed short  r0, r1, r2, g0, g1, g2, b0, b1, b2, c0, c16, c128;
@@ -363,13 +363,13 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   vector signed short u1, u2, uAvg, v1, v2, vAvg, out1, out2, out3, out4, uv1, uv2;
   unsigned int i;
-  
+
   const vector unsigned char	*BGRA_ptr = reinterpret_cast<const vector unsigned char*>( bgradata);
   vector unsigned char	*UYVY_ptr = reinterpret_cast<vector unsigned char*>( pixels);
 
   /* Permutation vector is used to extract the interleaved BGRA. */
   vector unsigned char vPerm1 =
-    static_cast<vector unsigned char>( 3,  7, 11, 15, 19, 23, 27, 31, // B0..B7    
+    static_cast<vector unsigned char>( 3,  7, 11, 15, 19, 23, 27, 31, // B0..B7
                             2,  6, 10, 14, 18, 22, 26, 30  /* G0..G7    */);
   vector unsigned char vPerm2 =
     static_cast<vector unsigned char>( 1,  5,  9, 13, 17, 21, 25, 29, /* R0..R7    */
@@ -383,20 +383,20 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
   vector signed short vConst2 =
     static_cast<vector signed short>( 14345, -12045, -2300,
                            16, 128, 0, 0, 0 );
-							  
+
   vector unsigned char avgPerm1 =
     static_cast<vector unsigned char>(  0,  1,  4,  5,  8,  9, 12, 13,
                              16, 17, 20, 21, 24, 25, 28, 29 );
   vector unsigned char avgPerm2 =
     static_cast<vector unsigned char>(  2,  3,  6,  7, 10, 11, 14, 15,
                              18, 19, 22, 23, 26, 27, 30, 31 );
-  vector unsigned char Perm1 = 
+  vector unsigned char Perm1 =
     static_cast<vector unsigned char>( 0, 1, 16, 17, 2, 3, 18, 19,
                             4, 5, 20, 21, 6, 7, 22, 23 );
-  vector unsigned char Perm2 = 
+  vector unsigned char Perm2 =
     static_cast<vector unsigned char>(  8,  9, 24, 25, 10, 11, 26, 27,
                              12, 13, 28, 29, 14, 15, 30, 31 );
-								 							
+
   r0 = vec_splat( vConst1, 2 ); /*  8432 */
   g0 = vec_splat( vConst1, 1 ); /* 16425 */
   b0 = vec_splat( vConst1, 0 ); /*  3176 */
@@ -419,7 +419,7 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
     const vector unsigned char *vec2 = BGRA_ptr++;
     const vector unsigned char *vec3 = BGRA_ptr++;
     const vector unsigned char *vec4 = BGRA_ptr++;
-	
+
     tc0 = vec_perm( *vec1, *vec2, vPerm1 ); // B0..B7  G0..G7
     tc1 = vec_perm( *vec1, *vec2, vPerm2 ); // R0..R7
     tc2 = vec_perm( *vec3, *vec4, vPerm1 ); // B8..B15 G8..G15
@@ -469,14 +469,14 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
     t4 = vec_adds( t4, c128 );
     t2 = vec_adds( t2, c128 );
     t5 = vec_adds( t5, c128 );
-	
+
     u1 = vec_perm( t1, t4, avgPerm1 ); // rearrange U's for averaging
     u2 = vec_perm( t1, t4, avgPerm2 );
     uAvg = vec_avg( u1, u2 );
     v1 = vec_perm( t2, t5, avgPerm1 ); // rearrange V's for averaging
     v2 = vec_perm( t2, t5, avgPerm2 );
     vAvg = vec_avg( v1, v2 );
-	
+
     uv1 = vec_perm( uAvg, vAvg, Perm1 );
     uv2 = vec_perm( uAvg, vAvg, Perm2 );
     out1 = vec_perm( uv1, t0, Perm1 );
@@ -491,7 +491,7 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
   }
 }
 
-void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V, 
+void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
 			    unsigned char *data, int xsize, int ysize)
 {
   // from geowar@apple.com, 3/15/2005
@@ -508,10 +508,10 @@ void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
   vector unsigned short uvShift = static_cast<vector unsigned short>( 8, 8, 8, 8, 8, 8, 8, 8 );
   vector unsigned short tempU, tempV, doneU, doneV, tempY1, tempY2, tempY3, tempY4,
     uv1, uv2, out1, out2, out3, out4, out5, out6, out7, out8;
-  vector unsigned char Perm1 = 
+  vector unsigned char Perm1 =
     static_cast<vector unsigned char>( 0, 1, 16, 17, 2, 3, 18, 19,
                             4, 5, 20, 21, 6, 7, 22, 23 );
-  vector unsigned char Perm2 = 
+  vector unsigned char Perm2 =
     static_cast<vector unsigned char>(  8,  9, 24, 25, 10, 11, 26, 27,
                              12, 13, 28, 29, 14, 15, 30, 31 );
   int row=ysize>>1;
@@ -537,30 +537,30 @@ void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
       tempV = vec_sra( (*pv++), uvShift );
       doneU = vec_add( tempU, uvAdd );
       doneV = vec_add( tempV, uvAdd );
-	  
+
       uv1 = vec_perm( doneU, doneV, Perm1 ); // uvuvuvuv uvuvuvuv
       uv2 = vec_perm( doneU, doneV, Perm2 );
-	  
+
       tempY1 = vec_sra( (*py1++), yShift );
       tempY2 = vec_sra( (*py2++), yShift );
-	  
+
       out1 = vec_perm( uv1, tempY1, Perm1 ); //fill Y's, U's & V's
       out2 = vec_perm( uv1, tempY1, Perm2 );
       out3 = vec_perm( uv1, tempY2, Perm1 ); //fill 2nd Y's, U's & V's
       out4 = vec_perm( uv1, tempY2, Perm2 );
-	  
+
       *pixels1 = vec_packsu( out1, out2 );
       *pixels2 = vec_packsu( out3, out4 );
-      pixels1++; pixels2++; 
-	  
+      pixels1++; pixels2++;
+
       tempY3 = vec_sra( (*py1++), yShift ); // load second set of Y's
       tempY4 = vec_sra( (*py2++), yShift );
-	  
+
       out5 = vec_perm( uv2, tempY3, Perm1 );
       out6 = vec_perm( uv2, tempY3, Perm2 );
       out7 = vec_perm( uv2, tempY4, Perm1 );
       out8 = vec_perm( uv2, tempY4, Perm2 );
-	  
+
       *pixels1 = vec_packsu( out5, out6 );
       *pixels2 = vec_packsu( out7, out8 );
       pixels1++; pixels2++;
@@ -589,22 +589,22 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
 													 128, 128, 128, 128 );
   vector unsigned short yShift = static_cast<vector unsigned short>( 7, 7, 7, 7, 7, 7, 7, 7 );
   vector unsigned short uvShift = static_cast<vector unsigned short>( 8, 8, 8, 8, 8, 8, 8, 8 );
-  
+
   vector signed short tempY1, tempY2, tempY3, tempY4,
 		tempUV1, tempUV2, tempUV3, tempUV4, tempUV5, tempUV6;
 
   vector unsigned char uvPerm = static_cast<vector unsigned char>( 16, 0, 17, 4, 18,  8, 19, 12,   // u0..u3
   														20, 2, 21, 6, 22, 10, 23, 14 ); // v0..v3
 
-  vector unsigned char uPerm = static_cast<vector unsigned char>( 0, 1, 2, 3, 4, 5, 6, 7, 
+  vector unsigned char uPerm = static_cast<vector unsigned char>( 0, 1, 2, 3, 4, 5, 6, 7,
 													   16,17,18,19,20,21,22,23);
   vector unsigned char vPerm = static_cast<vector unsigned char>( 8, 9, 10,11,12,13,14,15,
 													   24,25,26,27,28,29,30,31);
-  
+
   vector unsigned char yPerm = static_cast<vector unsigned char>( 16, 1, 17,  3, 18,  5, 19,  7, // y0..y3
 													   20, 9, 21, 11, 23, 13, 25, 15);// y4..y7
   vector unsigned char zeroVec = static_cast<vector unsigned char>(0);
-  
+
   int row=ysize>>1;
   int cols=xsize>>4;
 #if 0
@@ -615,7 +615,7 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
   vec_dst( py1, prefetchSize, 0 );
   vec_dst( py2, prefetchSize, 0 );
 # endif
-#endif  
+#endif
   while(row--){
     int col=cols;
     while(col--){
@@ -628,17 +628,17 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
       tempY1  = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, yPerm));
       tempY2  = static_cast<vector signed short>(vec_perm( *pixels2, zeroVec, yPerm));
 	  pixels1++;pixels2++;
-      
+
       tempUV2 = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, uvPerm));
       tempY3  = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, yPerm));
       tempY4  = static_cast<vector signed short>(vec_perm( *pixels2, zeroVec, yPerm));
 	  pixels1++;pixels2++;
-  
+
 	  tempUV3 = vec_sub( tempUV1, uvSub );
 	  tempUV4 = vec_sub( tempUV2, uvSub );
 	  tempUV5 = vec_sl( tempUV3, uvShift );
 	  tempUV6 = vec_sl( tempUV4, uvShift );
-	  
+
 	  *pCb = vec_perm( tempUV5, tempUV6, uPerm );
 	  *pCr = vec_perm( tempUV5, tempUV6, vPerm );
 	  pCr++; pCb++;
@@ -646,7 +646,7 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
 	  *py1++ = vec_sl( tempY1, yShift);
       *py2++ = vec_sl( tempY2, yShift);
       *py1++ = vec_sl( tempY3, yShift);
-      *py2++ = vec_sl( tempY4, yShift);      
+      *py2++ = vec_sl( tempY4, yShift);
 	}
 
 	py1+=(xsize>>3); py2+=(xsize>>3);
@@ -657,7 +657,7 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
 #ifdef NO_VECTORINT_TO_VECTORUNSIGNEDINT
 # warning disabling AltiVec for older gcc: please fix me
 #else
-void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, 
+void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 			    size_t pixelnum, unsigned char *output)
 {
   const vector unsigned char *UYVY_ptr=reinterpret_cast<const vector unsigned char *>(yuvdata);
@@ -677,24 +677,24 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
   vector signed int yEven, yOdd;
 
   vector unsigned int t0Even, t0Odd, t1Even, t1Odd, t2Even, t2Odd;
-  
+
   /* Load the equation constants. */
   vector signed short vConst =
     static_cast<vector signed short>(298, 519, 409, 16, 128, 255, -100, -210 );
 
-  vector unsigned char vPerm1 = 
+  vector unsigned char vPerm1 =
     static_cast<vector unsigned char>( 0, 1, 16, 17,  8,  9, 24, 25,
                             2, 3, 18, 19, 10, 11, 26, 27 );
-  vector unsigned char vPerm2 = 
+  vector unsigned char vPerm2 =
     static_cast<vector unsigned char>( 4, 5, 20, 21, 12, 13, 28, 29,
 							6, 7, 22, 23, 14, 15, 30, 31 );
-							 
+
   vector unsigned char vPermY =
     static_cast<vector unsigned char>(  2,  3,  6,  7, 10, 11, 14, 15,
 	                        18, 19, 22, 23, 26, 27, 30, 31 );
   vector unsigned char vPermU =
     static_cast<vector unsigned char>(  0,  1, 16, 17,  4,  5, 20, 21,
-	                         8,  9, 24, 25, 12, 13, 28, 29 );							
+	                         8,  9, 24, 25, 12, 13, 28, 29 );
   vector unsigned char vPermV =
     static_cast<vector unsigned char>(  2,  3, 18, 19,  6,  7, 22, 23,
 							10, 11, 26, 27, 14, 15, 30, 31 );
@@ -707,7 +707,7 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
   vector unsigned char uvPerm =
     static_cast<vector unsigned char>(  0,  1,  4,  5,  8,  9, 12, 13,
 	                        16, 17, 20, 21, 24, 25, 28, 29 );
-															 							
+
   zero   = vec_splat_u8(0);
   szero  = vec_splat_s16(0);
   one    = vec_splat_s16(1);
@@ -732,17 +732,17 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 
 	tempUV = static_cast<vector signed short>(vec_perm( hiImage, loImage, uvPerm ));
 	tempY  = static_cast<vector signed short>(vec_perm( hiImage, loImage, vPermY ));
-	
+
 	// subtract UV_OFFSET from UV's  (should this be saturated?)
 	tempUV = static_cast<vector signed short>(vec_sub( tempUV, v128 ));
 	// subtract Y-OFFSET from Y's    (should this be saturated?)
 	tempY  = static_cast<vector signed short>(vec_sub( tempY, v16 ));
-	
+
 	// expand to UUUU UUUU and VVVV VVVV
 	tempU = vec_perm(tempUV, tempUV, vPermU);
 	tempV = vec_perm(tempUV, tempUV, vPermV);
 	//below:
-	// 
+	//
 	//error: cannot convert `vector int' to `vector unsigned int' in assignment
 	tempUhi = vec_mule( tempU, one );
 	// unsigned int = vec_mule( signed short, signed short )
@@ -751,14 +751,14 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 	tempUlo = vec_mulo( tempU, one );
 	tempVhi = vec_mule( tempV, one );
 	tempVlo = vec_mulo( tempV, one );
-	
+
 	// uv_r = YUV2RGB_12*u + YUV2RGB_13*v
 	// uv_r = (-1)*u + 409*v (or "409*V - U")
 	uv_rEven = vec_mule( tempV, vU_R );
 	uv_rOdd  = vec_mulo( tempV, vU_R );
 	uv_rHi = vec_sub( uv_rEven, tempUhi );
 	uv_rLo = vec_sub( uv_rOdd, tempUlo );
-	
+
 	// uv_g = YUV2RGB_22*u + YUV2RGB_23*v
 	// uv_g = -100*u + (-210)*v
 	// multiply U by -100
@@ -770,12 +770,12 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 	// add U & V products
 	uv_gHi   = vec_add( uv_gUEven, uv_gVEven );
 	uv_gLo   = vec_add( uv_gUOdd, uv_gVOdd );
-	
+
 	// uv_b = YUV2RGB_32*u + YUV2RGB_33*v
 	// uv_b = 519*u + 0*v
 	uv_bEven = vec_mule( tempU, vU_B );
 	uv_bOdd  = vec_mulo( tempU, vU_B );
-	
+
 	// y = YUV2RGB_11 * tempY
 	// y = 298* (tempY - 16)
 	yEven = vec_mule( tempY, y0 );
@@ -788,7 +788,7 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 	t1Odd  = vec_add( yOdd, uv_gLo );
 	t2Even = vec_add( yEven, uv_rHi );
 	t2Odd  = vec_add( yOdd, uv_rLo );
-	
+
 	// shift while int's
 	t0Even = vec_sra( t0Even, vShift );
 	t0Odd  = vec_sra( t0Odd,  vShift );
@@ -796,7 +796,7 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 	t1Odd  = vec_sra( t1Odd,  vShift );
 	t2Even = vec_sra( t2Even, vShift );
 	t2Odd  = vec_sra( t2Odd,  vShift );
-	
+
 	// pack down to shorts
 	t0 = vec_packs( t0Even, t0Odd );
 	t1 = vec_packs( t1Even, t1Odd );
@@ -808,13 +808,13 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
 	// Permute to ARARARAR ARARARAR + re-interleave even & odd
 	tempRA1 = vec_perm( a255, t2, vPerm1 );
 	tempRA2 = vec_perm( a255, t2, vPerm2 );
-	
+
 	// Permute to ARGB's
 	out1 = vec_perm( tempRA1, tempGB1, vOutPerm1 );
 	out2 = vec_perm( tempRA1, tempGB1, vOutPerm2 );
 	out3 = vec_perm( tempRA2, tempGB2, vOutPerm1 );
 	out4 = vec_perm( tempRA2, tempGB2, vOutPerm2 );
-	
+
 	// pack down to char's
 	*BGRA_ptr = vec_packsu( out1, out2 );
 	BGRA_ptr++;

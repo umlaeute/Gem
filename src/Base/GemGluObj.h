@@ -38,7 +38,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemGluObj
-    
+
     A Glu object
 
 DESCRIPTION
@@ -46,18 +46,18 @@ DESCRIPTION
     Inlet for an int - "in2"
 
     "in2" - the number of slices in the object
-        
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemGluObj : public GemShape
 {
     public:
-    
+
 	    //////////
 	    // Constructor
   GemGluObj(t_floatarg size, t_floatarg slices=10.f, t_floatarg stacks=0.f);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~GemGluObj();
@@ -74,7 +74,7 @@ class GEM_EXTERN GemGluObj : public GemShape
     	//////////
     	// The number of slices
     	int 	    	m_numSlices, m_numStacks;
-    	
+
         //////////
         t_inlet         *m_sliceInlet;
 
@@ -82,9 +82,9 @@ class GEM_EXTERN GemGluObj : public GemShape
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr)
     	    { GemShape::real_obj_setupCallback(classPtr); GemGluObj::obj_setupCallback(classPtr); }
-    	
+
     private:
-    
+
      	static inline GemGluObj *GetMyClass(void *data) {return((GemGluObj *)((Obj_header *)data)->data);}
 
     	//////////

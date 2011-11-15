@@ -171,7 +171,7 @@ inline T clampFunc(T x, T a, T b)
 inline void* clampFunc(void* x, void* a, void* b)
     { return(x < a ? a : (x > b ? b : x)); }
 */
-/* 
+/*
    inline int GateInt(int nValue,int nMin,int nMax)
    inline float GateFlt(float nValue,float nMin,float nMax)
    inline void* GatePtr(void* pValue,void* pMin,void* pMax)
@@ -206,7 +206,7 @@ inline int GetMirrored(int inValue,const int nMax) {
 
 ///////////////////////////////////////////////////////////////////////////////
 // 2D-algebra
-//    
+//
 ///////////////////////////////////////////////////////////////////////////////
 static inline void Get2dTangent(float inX,float inY,float* poutX,float* poutY) {
 	*poutX=inY;
@@ -303,7 +303,7 @@ GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nkn
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Accelerated Pixel Manipulations 
+// Accelerated Pixel Manipulations
 // This is sort on a vector operation on 8 chars at the same time .... could be
 // implemented in MMX
 // Alpha channel is not added !! (would be nr 3 and 7)
@@ -351,7 +351,7 @@ GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nkn
 inline UInt32 GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
 {
 	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
-} 
+}
 #endif
 
 

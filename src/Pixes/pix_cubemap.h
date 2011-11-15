@@ -24,27 +24,27 @@
   -------------------------------------------------------------------
   CLASS
   pix_cubemap
-    
+
   Turns on texture mapping
 
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_cubemap : public GemBase
 {
   CPPEXTERN_HEADER(pix_cubemap, GemBase);
-    
+
     public:
-  
+
   //////////
   // Constructor
   pix_cubemap();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_cubemap();
@@ -69,7 +69,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
   //////////
   // Delete texture object
   virtual void	stopRendering();
-    	
+
   //////////
   // Turn on/off texture mapping
   void          textureOnOff(int on);
@@ -84,7 +84,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
   void          textureQuality(int type);
   GLuint	m_textureQuality;
-		
+
   //////////
   // Set the texture quality
   // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
@@ -111,7 +111,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
   /* send out our texture through the 2nd outlet to be used by others */
   void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
   t_outlet	*m_outTexID;
-		
+
   ////////
   // the texture object we are creating and destroying
   // we use it as our texture
@@ -128,7 +128,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
   // The texture coordinates
   TexCoord    	m_coords[4];
 
-	
+
   //////////
   // this is what we get from upstream
   void pushTexCoords(GemState*);
@@ -146,7 +146,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
   // texture envirnoment mode
   void		envMess(int num);
   GLint		m_env; // GL_TEXTURE_ENV_MODE
-		
+
   GLint	m_texunit;
   GLint	m_numTexUnits;
 

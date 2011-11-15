@@ -23,23 +23,23 @@ class gemhead;
 -------------------------------------------------------------------
 CLASS
     GemCache
-    
+
     The cache to pass among GEM objects
 
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 #define GEMCACHE_MAGIC 0x1234567
 class GEM_EXTERN GemCache
 {
     public:
-    
+
     	//////////
         // Constructor
     	GemCache(gemhead *parent);
 
       GemCache(const GemCache&);
-    	
+
       //////////
       // Destructor
       virtual ~GemCache(void);
@@ -50,7 +50,7 @@ class GEM_EXTERN GemCache
     	//////////
     	// Was a modification made which will void a display list?
     	bool 	    	    dirty;
-    	
+
     	//////////
     	// Should the image be resent?
     	bool 	    	    resendImage;

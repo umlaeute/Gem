@@ -51,8 +51,8 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   m_mode = 1;  //default to the fastest mode for systems that support it
   m_textureType = GL_TEXTURE_RECTANGLE_EXT;
 #endif
-  
-  m_inlet=new t_inlet*[m_reqTexUnits]; 
+
+  m_inlet=new t_inlet*[m_reqTexUnits];
   char tempVt[5];
   for(int i=0;i<m_reqTexUnits; i++){
     snprintf(tempVt, 5, "#%d", i);
@@ -66,7 +66,7 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
 //
 /////////////////////////////////////////////////////////
 pix_multitexture :: ~pix_multitexture()
-{ 
+{
   if(m_inlet){
     for(int i=0;i<m_reqTexUnits; i++){
       inlet_free(m_inlet[i]);
@@ -126,7 +126,7 @@ void pix_multitexture :: render(GemState *state)
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
 
   state->get(GemState::_GL_TEX_UNITS, m_reqTexUnits);
-	
+
 	if (m_textureType == GL_TEXTURE_2D)
 	{
 	  m_xRatio = 1.0;

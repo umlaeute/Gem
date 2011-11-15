@@ -27,7 +27,7 @@ LOG
 #ifndef OMIT_PLUGINFACTORY_TEMPLATE_IMPLEMENATION
 
 /* Implementation of templated PluginFactory */
-/* actually this should be done in a cpp file rather than a header-file, 
+/* actually this should be done in a cpp file rather than a header-file,
  * but since virtually no compiler can handle this it is done here...
  */
 

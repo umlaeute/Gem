@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_draw
-    
+
     Creates a vertex_draw
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_draw : public GemVertex
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_draw : public GemVertex
         //////////
         // Constructor
     	vertex_draw(void);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_draw(void);
-        
+
 	////////////
 	// use VertexArrayObjects
         int m_vao;
@@ -62,7 +62,7 @@ class GEM_EXTERN vertex_draw : public GemVertex
 	// VertexBufferObjects
 	// these are only used if "__VBO" is defined
 		GLuint	m_nVBOVertices, m_nVBOColor, m_nVBOTexCoords, m_nVBONormals;
-        
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);

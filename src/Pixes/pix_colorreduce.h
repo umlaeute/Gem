@@ -25,16 +25,16 @@ extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const v
 -------------------------------------------------------------------
 CLASS
     pix_colorreduce
-    
-    
+
+
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_colorreduce : public GemPixObj
 {
@@ -45,9 +45,9 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_colorreduce();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_colorreduce();
@@ -72,12 +72,12 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 	float	m_BoundarySmoothing;
 
 	imageStruct tempImage;
-	
+
 	typedef void* 		SPete_MemHandle;
 	SPete_MemHandle 	hRGBHistogram;
 	SPete_MemHandle		hSortedColors;
 	SPete_MemHandle		hInverseColorMap;
-	
+
 	int cnGridSizeShift;//=3;
 	int cnGridSize;//=(1<<cnGridSizeShift);
 	int cnGridSizeMask;//=(cnGridSize-1);
@@ -86,7 +86,7 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 	int cnGridCellWidth;//=(1<<cnColourToIndexShift);
 	int cnGridCellHalfWidth;//=(cnGridCellWidth/2);
 	int cnBiggestSignedInt;
-	
+
 	typedef struct _SPete_ColorReduce_InverseMapEntry {
 	    U32	ClosestColor;
 	    U32	NextClosestColor;
@@ -102,7 +102,7 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 	inline U32 Pete_ColorReduce_GetClosestColor(U32 Color,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,float BoundarySmoothing);
 
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	countCallback(void *data, t_floatarg m_TargetColorCount);

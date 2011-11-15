@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-  
+
 #include "plugins/imageBase.h"
 
 using namespace gem::plugins;
@@ -36,7 +36,7 @@ imageBase :: ~imageBase()
 {}
 
 bool imageBase :: enumProperties(gem::Properties&readable,
-			     gem::Properties&writeable) 
+			     gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();

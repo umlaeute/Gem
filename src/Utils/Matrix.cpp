@@ -209,7 +209,7 @@ void Matrix :: generateNormal(const float *v1, const float *v2, const float *v3,
 		v1v2[i] = v1[i] - v2[i];
 		v2v3[i] = v2[i] - v3[i];
 	}
-	
+
 	// cross product
 	dst[0] = (v1v2[1] * v2v3[2]) - (v1v2[2] * v2v3[1]);
 	dst[1] = (v1v2[2] * v2v3[0]) - (v1v2[0] * v2v3[2]);

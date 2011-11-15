@@ -21,18 +21,18 @@
   -------------------------------------------------------------------
   CLASS
   pix_sig2pix
-    
+
   Interprete 4 signals as RGBA-Values of a pixel-image
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "dimen" -- change pix_buf dimension
   4 inlets eat signals : R~, G~, B~, A~
   creation: width, height in pixels
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_sig2pix : public GemBase
 {
@@ -43,15 +43,15 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   //////////
   // Constructor
   pix_sig2pix(t_floatarg width, t_floatarg height);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual      ~pix_sig2pix();
 
   //////////
-  
+
   // DSP perform
   static t_int* perform(t_int* w);
 
@@ -78,7 +78,7 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   //-----------------------------------
   // GROUP:	Image data
   //-----------------------------------
-    
+
   //////////
   // The pixBlock with the current image
   pixBlock    	m_pixBlock;
@@ -92,7 +92,7 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   GLint         m_reqFormat;
 
  private:
-    	
+
   //////////
   // static member functions
   static void   dspMessCallback(void* data,t_signal** sp);

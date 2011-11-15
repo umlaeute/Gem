@@ -135,13 +135,13 @@ void diffuseRGB :: aMess(float val)
 void diffuseRGB :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&diffuseRGB::rMessCallback),
-    	    gensym("rVal"), A_FLOAT, A_NULL); 
+    	    gensym("rVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&diffuseRGB::gMessCallback),
-    	    gensym("gVal"), A_FLOAT, A_NULL); 
+    	    gensym("gVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&diffuseRGB::bMessCallback),
-    	    gensym("bVal"), A_FLOAT, A_NULL); 
+    	    gensym("bVal"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&diffuseRGB::aMessCallback),
-    	    gensym("aVal"), A_FLOAT, A_NULL); 
+    	    gensym("aVal"), A_FLOAT, A_NULL);
 }
 void diffuseRGB :: rMessCallback(void *data, t_floatarg val)
 {

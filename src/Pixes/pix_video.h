@@ -24,12 +24,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_video
-    
+
   Loads in an video
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "dimen" (int, int) - set the x,y dimensions
@@ -38,20 +38,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   "contrast" (int) - the contrast
   "hue" (int) - the hue
   "sat" (int) - the saturation
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_video : public GemBase
 {
   CPPEXTERN_HEADER(pix_video, GemBase);
-    
+
     public:
 
   //////////
   // Constructor
   pix_video(int, t_atom*);
-  
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_video();
@@ -74,7 +74,7 @@ class GEM_EXTERN pix_video : public GemBase
   // then starts a new backend, based on selected driver and/or device
   // returns true, if a new backend could be found
   virtual bool restart(void);
-  
+
   virtual void	deviceMess(std::string);
   virtual void	deviceMess(int dev);
 
@@ -102,9 +102,9 @@ class GEM_EXTERN pix_video : public GemBase
   // Set the video dimensions
   virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
                           int topmargin = 0 , int bottommargin = 0);
-  // Set the channel of the capturing device 
+  // Set the channel of the capturing device
   virtual void	channelMess(int channel, t_float freq=0);
-  // Set the channel of the capturing device 
+  // Set the channel of the capturing device
   virtual void	normMess(std::string);
   // Set the color-space
 
@@ -120,15 +120,15 @@ class GEM_EXTERN pix_video : public GemBase
   virtual void	applyPropertiesMess(void);
   virtual void	clearPropertiesMess(void);
 
-        
+
   //-----------------------------------
   // GROUP:	Video data
   //-----------------------------------
-    
+
   gem::plugins::video *m_videoHandle;
   std::vector<std::string>m_ids;
   std::vector<gem::plugins::video*>m_videoHandles;
-  
+
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
 
   int    m_driver;
@@ -145,7 +145,7 @@ class GEM_EXTERN pix_video : public GemBase
   t_outlet *m_infoOut;
 
  private:
-    	
+
   //////////
   // static member functions
 

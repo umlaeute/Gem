@@ -91,7 +91,7 @@ void fragment_program :: printInfo()
 
   post("Hardware Info");
   post("=============");
-  
+
   glGetIntegerv( GL_MAX_PROGRAM_MATRICES_ARB, &bitnum );
   post("MAX_PROGRAM_MATRICES: %d", bitnum);
   glGetIntegerv( GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB, &bitnum );

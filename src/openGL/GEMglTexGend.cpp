@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexGend , t_floatarg, A_DEFFLOAT, t_floatar
 // Constructor
 //
 GEMglTexGend :: GEMglTexGend	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		coord(static_cast<GLenum>(arg0)), 
-		pname(static_cast<GLenum>(arg1)), 
+		coord(static_cast<GLenum>(arg0)),
+		pname(static_cast<GLenum>(arg1)),
 		param(static_cast<GLdouble>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("coord"));

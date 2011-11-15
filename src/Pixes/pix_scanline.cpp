@@ -19,8 +19,8 @@ CPPEXTERN_NEW(pix_scanline);
 //
 /////////////////////////////////////////////////////////
 pix_scanline :: pix_scanline()
-{	
-    
+{
+
 inletScanline = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("interlace"));
 
 m_interlace = 0;
@@ -50,7 +50,7 @@ void pix_scanline :: processImage(imageStruct &image)
 
   interlace = m_interlace;
   if (interlace <= 0)interlace = 1;
-  length = image.ysize /interlace; 
+  length = image.ysize /interlace;
   width = image.xsize * image.csize;
   cleanup = image.ysize % interlace;
   srcline = 0;
@@ -105,7 +105,7 @@ void pix_scanline :: processYUVImage(imageStruct &image)
 
 interlace = m_interlace;
 if (interlace <= 0){interlace = 1;}
-length = image.ysize /interlace; 
+length = image.ysize /interlace;
 width = image.xsize * image.csize;
 cleanup = image.ysize % interlace;
 //post("interlace %d cleanup %d ", interlace, cleanup);
@@ -129,7 +129,7 @@ if (m_mode == 0){
                 image.data[dstline+w] = image.data[srcline+w];
                 }
             }
-        
+
         }
     }else{
     for (h =0; h<length;h++){
@@ -151,7 +151,7 @@ if (m_mode == 0){
                 image.data[dstline+w+1] = 0;
                 }
             }
-        
+
         }
 
     }

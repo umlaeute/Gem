@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_diff
-    
+
     Subtract two images.
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_diff : public GemPixDualObj
         //////////
     	// Constructor
     	pix_diff();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_diff();
@@ -50,8 +50,8 @@ class GEM_EXTERN pix_diff : public GemPixDualObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);  
-    	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);   
+    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+    	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
 
 #ifdef __MMX__
 	virtual void    processRGBA_MMX(imageStruct &image, imageStruct &right);
@@ -62,7 +62,7 @@ class GEM_EXTERN pix_diff : public GemPixDualObj
 
 #ifdef __VEC__
         virtual void 	processRGBA_Altivec(imageStruct &image, imageStruct &right);
-        virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);     
+        virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);
 #endif
 };
 

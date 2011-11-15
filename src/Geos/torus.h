@@ -27,12 +27,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
 	torus
-    
+
     Creates a torus
 
 KEYWORD
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -45,9 +45,9 @@ class GEM_EXTERN torus : public GemGluObj
 	    //////////
 	    // Constructor
     	torus(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~torus();
@@ -63,7 +63,7 @@ class GEM_EXTERN torus : public GemGluObj
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-	
+
 	private:
 
     	//////////

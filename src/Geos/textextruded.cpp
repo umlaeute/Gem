@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_GIMME(textextruded);
 textextruded :: textextruded(int argc, t_atom *argv)
   : TextBase(argc, argv) {
   fontNameMess(DEFAULT_FONT);
-} 
+}
 textextruded :: ~textextruded() {
   if(m_font)delete m_font;m_font=NULL;
 }
@@ -91,7 +91,7 @@ void textextruded :: setDepth(float prec)
 void textextruded :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&textextruded::depthMessCallback),
-		  gensym("depth"), A_FLOAT, A_NULL);  
+		  gensym("depth"), A_FLOAT, A_NULL);
 }
 void textextruded :: depthMessCallback(void *data, t_floatarg depth)
 {

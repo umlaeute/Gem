@@ -25,7 +25,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMaterialfv);
 // Constructor
 //
 GEMglMaterialfv :: GEMglMaterialfv	(int argc, t_atom*argv) :
-		face(0), 
+		face(0),
 		pname(0)
 {
   int i=0;
@@ -38,7 +38,7 @@ GEMglMaterialfv :: GEMglMaterialfv	(int argc, t_atom*argv) :
     throw GemException("GEMglMaterialfv: invalid number of parameters");
   default:
     paramMess(argc-2, argv+2);
-  case 2: 
+  case 2:
     face=getGLdefine(argv);
     pname=getGLdefine(argv+1);
     break;

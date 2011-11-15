@@ -40,8 +40,8 @@ void GemCache :: reset(gemhead *parent)
 {
   dirty      =true;
   resendImage=false;
-  vertexDirty=false; 
-  m_parent   =parent; 
+  vertexDirty=false;
+  m_parent   =parent;
   m_magic    =GEMCACHE_MAGIC;
 }
 /////////////////////////////////////////////////////////
@@ -55,10 +55,10 @@ GemCache :: ~GemCache()
 }
 
 GemCache&GemCache::operator=(const GemCache&org) {
-  dirty=org.dirty; 
-  resendImage=org.resendImage; 
+  dirty=org.dirty;
+  resendImage=org.resendImage;
   vertexDirty=org.vertexDirty;
-  m_parent=org.m_parent; 
+  m_parent=org.m_parent;
   m_magic=GEMCACHE_MAGIC;
   return *this;
 }

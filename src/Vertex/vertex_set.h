@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_set
-    
+
     Creates a vertex_set
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_set : public vertex_scale
 {
@@ -39,16 +39,16 @@ class GEM_EXTERN vertex_set : public vertex_scale
   //////////
   // Constructor
   vertex_set(int, t_atom*);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~vertex_set(void);
 
   virtual void paramMess(int,t_atom*);
   float	m_x,m_y,m_z,m_w;
-  
+
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);

@@ -27,12 +27,12 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pqtorusknots, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 //
 /////////////////////////////////////////////////////////
 pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
-  : 
+  :
   GemShape(width), m_steps(256), m_facets(16), m_scale(1), m_thickness(0.2),
-  m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4), m_vScale(64), 
+  m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4), m_vScale(64),
   m_P(2), m_Q(q),
-  m_Vertex(NULL), m_Normal(NULL), m_texcoords(NULL), m_Index(NULL), 
-  m_Indices(0), m_Vertices(0), 
+  m_Vertex(NULL), m_Normal(NULL), m_texcoords(NULL), m_Index(NULL),
+  m_Indices(0), m_Vertices(0),
   m_PrimitiveType(0)
 {
   m_Texcoord[0] = m_Texcoord[1] = m_Texcoord[2] = m_Texcoord[3] = 0;
@@ -78,7 +78,7 @@ void pqtorusknots :: genVert(){
   if(m_texcoords)delete[]m_texcoords; m_texcoords = NULL;
 
   int i, j;
-  /* formerly this was "m_thickness*=m_scale" 
+  /* formerly this was "m_thickness*=m_scale"
      which diminuished m_thickness each renderShape-cycle */
   GLfloat thickness = m_thickness * m_scale;
 
@@ -106,12 +106,12 @@ void pqtorusknots :: genVert(){
         }
     }
   for (i = 0; i < m_steps; i++)
-    {       
+    {
 
       int offsetF3= 3 * (i * (m_facets + 1) + m_facets);
       int offsetF2= 2 * (i * (m_facets + 1) + m_facets);
       int offset3 = 3 * (i * (m_facets + 1));
-  
+
       float centerpoint[3];
       float Pp = m_P * i * PI2 / m_steps;
       float Qp = m_Q * i * PI2 / m_steps;
@@ -119,7 +119,7 @@ void pqtorusknots :: genVert(){
       centerpoint[0] = r * cos(Pp);
       centerpoint[1] = r * cos(Qp);
       centerpoint[2] = r * sin(Pp);
-        
+
       float nextpoint[3];
       Pp = m_P * (i + 1) * PI2 / m_steps;
       Qp = m_Q * (i + 1) * PI2 / m_steps;
@@ -127,7 +127,7 @@ void pqtorusknots :: genVert(){
       nextpoint[0] = r * cos(Pp);
       nextpoint[1] = r * cos(Qp);
       nextpoint[2] = r * sin(Pp);
-        
+
       float T[3];
       T[0] = nextpoint[0] - centerpoint[0];
       T[1] = nextpoint[1] - centerpoint[1];
@@ -178,7 +178,7 @@ void pqtorusknots :: genVert(){
           length = sqrt(m_Normal[offset3j + 0] * m_Normal[offset3j + 0] +
                                m_Normal[offset3j + 1] * m_Normal[offset3j + 1] +
                                m_Normal[offset3j + 2] * m_Normal[offset3j + 2]);
-            
+
           m_Normal[offset3j + 0] /= length;
           m_Normal[offset3j + 1] /= length;
           m_Normal[offset3j + 2] /= length;
@@ -243,11 +243,11 @@ void pqtorusknots :: renderShape(GemState *state)
 {
   if(m_modified)genVert();
   if(!m_Index)return;
-  
+
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
 
-  glVertexPointer(3, GL_FLOAT, 0, m_Vertex);            
+  glVertexPointer(3, GL_FLOAT, 0, m_Vertex);
   glNormalPointer(GL_FLOAT, 0, m_Normal);
 
   if (GemShape::m_texType && GemShape::m_texNum)
@@ -391,20 +391,20 @@ void pqtorusknots :: obj_setupCallback(t_class *classPtr)
 
 void pqtorusknots :: scaleMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->scaleMess(size);  
+  GetMyClass(data)->scaleMess(size);
 }
 
 void pqtorusknots :: stepsMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->stepsMess(size);  
+  GetMyClass(data)->stepsMess(size);
 }
 void pqtorusknots :: facetsMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->facetsMess(size);  
+  GetMyClass(data)->facetsMess(size);
 }
 void pqtorusknots :: thickMessCallback(void *data, t_floatarg size)
 {
-  GetMyClass(data)->thickMess(size);  
+  GetMyClass(data)->thickMess(size);
 }
 void pqtorusknots :: clumpMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce )
 {

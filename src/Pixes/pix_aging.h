@@ -25,14 +25,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_aging
-    
+
     Make pix look old
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 typedef struct _scratch
 {
@@ -51,9 +51,9 @@ class GEM_EXTERN pix_aging : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_aging();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_aging();
@@ -61,7 +61,7 @@ class GEM_EXTERN pix_aging : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processImage(imageStruct &image);
-        
+
 	void scratchMess(int scratchlines);
 
 	////////
@@ -87,7 +87,7 @@ class GEM_EXTERN pix_aging : public GemPixObj
 	int m_dustinterval;
 
  private:
-	
+
 	//////////
 	// Static member callbacks
 	static void colorMessCallback(void *dump, t_float state);

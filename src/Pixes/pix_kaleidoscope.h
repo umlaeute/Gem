@@ -4,7 +4,7 @@ LOG
 
     this port Copyright (c) 2003 James Tittle
     ported from pete's_plugins (www.petewarden.com)
-    
+
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -38,16 +38,16 @@ extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void
 -------------------------------------------------------------------
 CLASS
     pix_kaleidoscope
-    
+
     View pix thru a variable kaleidoscope
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
-    
-   
+
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 {
@@ -58,9 +58,9 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_kaleidoscope();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_kaleidoscope();
@@ -85,7 +85,7 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	SPete_MemHandle hCosTable;
 	SPete_MemHandle hLines;
 	int nMaxLines;
-	
+
 	U32*				pSource;
 	U32*				pOutput;
 
@@ -98,7 +98,7 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	float m_OutputCentreY;
 	float m_ReflectionLineProportion;
 	float m_SourceAngleProportion;
-			
+
 	int nCosTableSizeShift;// = 10;
 	int nCosTableSize;// = (1<<nCosTableSizeShift);
 
@@ -126,7 +126,7 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 		SPete_Kaleidoscope_Line* pYPosLines;
 		int nYPosLinesCount;
 	};
-	
+
 	typedef struct SPete_2dMatrix {
 		float m[3][3];
 	} SPete_2dMatrix;
@@ -142,7 +142,7 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 
 	inline int Pete_Kaleidoscope_CosFA(int nAngleFA);
 	inline int Pete_Kaleidoscope_SinFA(int nAngleFA);
-	
+
 	int Pete_Kaleidoscope_Init();
 	void Pete_Kaleidoscope_DeInit();
 	void Pete_Kaleidoscope_SetupAngleTable();
@@ -152,7 +152,7 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	void Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* pTransforms);
 	void Pete_Kaleidoscope_Dev();
 	inline int GetMirrored(int inValue,const int nMax);
-	
+
 	inline void Pete_2dVector_Add(SPete_2dVector* pinA,SPete_2dVector* pinB,SPete_2dVector* poutResult)
 	{
 	    poutResult->x=(pinA->x+pinB->x);
@@ -167,12 +167,12 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	{
 	    return (pinA->x*pinB->x)+(pinA->y*pinB->y);
 	}
-	
+
 	inline void Pete_2dVector_Subtract(SPete_2dVector* pinA,SPete_2dVector* pinB,SPete_2dVector* poutResult) {
 	    poutResult->x=(pinA->x-pinB->x);
 	    poutResult->y=(pinA->y-pinB->y);
 	}
-	
+
 	void Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix);
 	void Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatrix* poutResult);
 	void Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult);
@@ -182,9 +182,9 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	void Pete_SimpleMirror_Render();
 
 #ifdef NO_HACK
-	int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections 
+	int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections
 #else
-	static int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections 
+	static int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections
 #endif
 
 	/* inlets for parameters */
@@ -195,9 +195,9 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 	t_inlet* m_inOCtr;
 	t_inlet* m_inRlp;
 	t_inlet* m_inSap;
-    
+
     private:
-    
+
     	//////////
     	// Static member functions
         static void 	sourceCtrCallback(void *data, t_floatarg m_SourceCentreX, t_floatarg m_SourceCentreY);

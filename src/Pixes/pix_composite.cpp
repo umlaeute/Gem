@@ -52,7 +52,7 @@ void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   unsigned char *dst = image.data;
   unsigned char *src1 = right.data;
   unsigned char *src2 = image.data;
-  
+
   while(datasize--)    {
     if ( (alpha = src2[chAlpha]) )      {
       if (alpha == 255)	{
@@ -85,7 +85,7 @@ void pix_composite :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   unsigned char *dst = image.data;
   unsigned char *src1 = right.data;
   unsigned char *src2 = image.data;
-  
+
   while(datasize--)    {
     int rightPix = *src1++;
     if ( unsigned int alpha = src2[chAlpha] )      {
@@ -136,7 +136,7 @@ void pix_composite :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 				  (short)0xFF);
 
   __m64 r0, r1, l0, l1, a, b, a0;
-  
+
   while(datasize--)    {
     r0=src1[datasize];
     l0=src2[datasize];
@@ -162,7 +162,7 @@ void pix_composite :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 
     a =_mm_subs_pu16    (one, a);
     b =_mm_subs_pu16    (one, b);
-    
+
     r0=_mm_mullo_pi16  (r0, a);
     r1=_mm_mullo_pi16  (r1, b);
 

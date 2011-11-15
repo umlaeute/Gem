@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     shearYX
-    
+
     shear a gem object
 
 DESCRIPTION
-    
-  
+
+
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN shearYX : public GemBase
@@ -39,9 +39,9 @@ class GEM_EXTERN shearYX : public GemBase
         //////////
         // Constructor
     	shearYX(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~shearYX();
@@ -57,9 +57,9 @@ class GEM_EXTERN shearYX : public GemBase
 
 		//shear value
 		float			shear;
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	shearMessCallback(void *data, t_floatarg val);

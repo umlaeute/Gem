@@ -46,7 +46,7 @@ part_size :: ~part_size()
 //
 /////////////////////////////////////////////////////////
 void part_size :: sizeMess(int argc, t_atom*argv)
-{ 
+{
   switch(argc){
   case 1:
     m_size[0]=m_size[1]=m_size[2]=atom_getfloat(argv);

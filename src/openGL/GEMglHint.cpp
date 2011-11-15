@@ -25,7 +25,7 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglHint );
 // Constructor
 //
 GEMglHint :: GEMglHint (int argc, t_atom*argv) :
-		target(0), 
+		target(0),
 		mode(0)
 {
   if(2==argc){targetMess(argv[0]); modeMess(argv[1]);} else if (argc) throw(GemException("invalid number of arguments"));

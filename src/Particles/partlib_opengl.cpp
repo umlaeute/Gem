@@ -24,10 +24,10 @@ PARTICLEDLL_API void pDrawGroupp(int primitive, bool const_size, bool const_colo
 
 	if(pg == NULL)
 		return; // ERROR
-	
+
 	if(pg->p_count < 1)
 		return;
-	
+
 	if(primitive == GL_POINTS)
 	{
 		glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT);
@@ -37,7 +37,7 @@ PARTICLEDLL_API void pDrawGroupp(int primitive, bool const_size, bool const_colo
 			glEnableClientState(GL_COLOR_ARRAY);
 			glColorPointer(4, GL_FLOAT, sizeof(Particle), &pg->list[0].color);
 		}
-		
+
 		glVertexPointer(3, GL_FLOAT, sizeof(Particle), &pg->list[0].pos);
 		glDrawArrays((GLenum)primitive, 0, pg->p_count);
 		glPopClientAttrib();
@@ -48,20 +48,20 @@ PARTICLEDLL_API void pDrawGroupp(int primitive, bool const_size, bool const_colo
 	{
 		// Assume GL_LINES
 		glBegin((GLenum)primitive);
-		
+
 		if(!const_color)
 		{
 			for(int i = 0; i < pg->p_count; i++)
 			{
 				Particle &m = pg->list[i];
-				
+
 				// Warning: this depends on alpha following color in the Particle struct.
 				glColor4fv((GLfloat *)&m.color);
 				glVertex3fv((GLfloat *)&m.pos);
-				
+
 				// For lines, make a tail with the velocity vector's direction and
 				// a length of radius.
-				pVector tail = m.pos - m.vel;			
+				pVector tail = m.pos - m.vel;
 				glVertex3fv((GLfloat *)&tail);
 			}
 		}
@@ -71,10 +71,10 @@ PARTICLEDLL_API void pDrawGroupp(int primitive, bool const_size, bool const_colo
 			{
 				Particle &m = pg->list[i];
 				glVertex3fv((GLfloat *)&m.pos);
-				
+
 				// For lines, make a tail with the velocity vector's direction and
 				// a length of radius.
-				pVector tail = m.pos - m.vel;			
+				pVector tail = m.pos - m.vel;
 				glVertex3fv((GLfloat *)&tail);
 			}
 		}
@@ -90,7 +90,7 @@ PARTICLEDLL_API void pDrawGroupl(int dlist, bool const_size, bool const_color, b
 	ParticleGroup *pg = _ps.pgrp;
 	if(pg == NULL)
 		return; // ERROR
-	
+
 	if(pg->p_count < 1)
 		return;
 

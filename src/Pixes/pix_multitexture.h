@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_multitexture
-    
+
     Assigns texID's to texUnits for later combining or shading
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -39,9 +39,9 @@ class GEM_EXTERN pix_multitexture : public GemBase
         //////////
         // Constructor
     	pix_multitexture(t_floatarg);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_multitexture();
@@ -66,7 +66,7 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	GLint			m_texID[32];
 	GLint			m_textureType;
 	int			m_mode; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
-		
+
 	//////////
 	// The texture coordinates
 	TexCoord    	m_coords[4];
@@ -75,12 +75,12 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	GLboolean		upsidedown;
 	int				m_texSizeX;
 	int				m_texSizeY;
- 	
+
 	//////////
 	// this is what we get from upstream
 	TexCoord       *m_oldTexCoords;
 	int             m_oldNumCoords;
-	int             m_oldTexture;	       
+	int             m_oldTexture;
 
  private:
 

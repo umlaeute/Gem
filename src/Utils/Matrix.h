@@ -21,19 +21,19 @@ LOG
 -------------------------------------------------------------------
 CLASS
     Matrix
-    
+
     4x4 Matrix class
 
 DESCRIPTION
 
 	Post-concatenation
 	Column-major
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN Matrix
 {
     public:
-    	
+
         //////////
         // Constructor
 		// Sets the matrix to identity
@@ -42,33 +42,33 @@ class GEM_EXTERN Matrix
         //////////
 		// Set the matrix to the identity
 		void identity(void);
-        
+
 		//////////
 		// Post mulitply the matrix
 		void multiply(Matrix *pMatrix);
-        
+
 		//////////
 		void scale(float x, float y, float z);
-        
+
 		//////////
 		void translate(float x, float y, float z);
-        
+
 		//////////
 		void rotateX(float degrees);
-        
+
 		//////////
 		void rotateY(float degrees);
-        
+
 		//////////
 		void rotateZ(float degrees);
-        
+
 		//////////
 		void transform(float srcX, float srcY, float srcZ, float *dstX, float *dstY, float *dstZ) const;
 
         //////////
 		// The actual matrix values
 		float				mat[4][4];
-		
+
         //////////
 		// Utility functions
 		static void generateNormal(const float *v1, const float *v2, const float *v3, float *dst);

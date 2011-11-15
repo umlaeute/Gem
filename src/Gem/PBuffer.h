@@ -24,7 +24,7 @@ struct PBuffer_data;
 
 class PBuffer {
 public:
-	
+
 	enum {
 		GEM_PBUFLAG_RGB = 1 << 0,
 		GEM_PBUFLAG_RGBA = 1 << 1,
@@ -34,13 +34,13 @@ public:
 		GEM_PBUFLAG_MULTISAMPLE_2 = 1 << 5,
 		GEM_PBUFLAG_MULTISAMPLE_4 = 1 << 6
 	};
-	
+
 	PBuffer(int width,int height,int flags = GEM_PBUFLAG_RGBA | GEM_PBUFLAG_DEPTH | GEM_PBUFLAG_STENCIL);
 	~PBuffer(void);
-	
+
 	void enable(void);
 	void disable(void);
-	
+
 	int width;
 	int height;
 

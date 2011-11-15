@@ -48,14 +48,14 @@ using std::wstring;
   -------------------------------------------------------------------
   CLASS
   TextBase
-    
+
   Base class for text objects
 
   DESCRIPTION
 
   "ft1" - The font size
   "text" - The text to draw
-  
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN TextBase : public GemBase
 {
@@ -66,10 +66,10 @@ class GEM_EXTERN TextBase : public GemBase
   //////////
   // Constructor with args
   TextBase(int argc, t_atom *argv);
-    	
-    	
+
+
  protected:
-  
+
   //////////
   // Destructor
   virtual ~TextBase();
@@ -87,7 +87,7 @@ class GEM_EXTERN TextBase : public GemBase
   // Set the text string from an ASCII list
   virtual void  stringMess(int argc, t_atom *argv);
   //-- /moocow
- 
+
   //////////
   // Set the text string
   virtual void  textMess(int argc, t_atom *argv);
@@ -114,7 +114,7 @@ class GEM_EXTERN TextBase : public GemBase
   enum JustifyWidth { LEFT, RIGHT, CENTER, BASEW };
   enum JustifyHeight { BOTTOM, TOP, MIDDLE, BASEH };
   enum JustifyDepth { FRONT, BACK, HALFWAY, BASED };
-	
+
   //////////
   // Set the justification
   virtual void setJustification(JustifyWidth wType);
@@ -132,7 +132,7 @@ class GEM_EXTERN TextBase : public GemBase
   //-----------------------------------
   // GROUP:	Member variables
   //-----------------------------------
-    
+
   //////////
   // The text to display
   // (one entry for each line)
@@ -151,7 +151,7 @@ class GEM_EXTERN TextBase : public GemBase
     //////////
     // Do we have a valid font?
     int m_valid;
-    	
+
     //////////
     // The font fize
     float		m_fontSize;
@@ -184,7 +184,7 @@ class GEM_EXTERN TextBase : public GemBase
     //////////
     // The default font name
     static std::string DEFAULT_FONT;
- 
+
     //////////
     // The font structure
 #ifdef FTGL
@@ -197,7 +197,7 @@ class GEM_EXTERN TextBase : public GemBase
 
     /* this is just handy to reload a font */
     t_symbol* m_fontname;
-    /* on starting to render, we reload the font, to make sure it is there 
+    /* on starting to render, we reload the font, to make sure it is there
      * this rids us of having to reload the font by hand everytime the rendering is restarted
      */
     virtual  void startRendering(void);
@@ -206,9 +206,9 @@ class GEM_EXTERN TextBase : public GemBase
     virtual void renderLine(const char*line,float dist);
     virtual void renderLine(const wchar_t*line,float dist);
 #endif
-  
+
  private:
-    	    
+
     ///////////
    // helpers:
 

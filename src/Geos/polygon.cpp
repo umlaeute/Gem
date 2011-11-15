@@ -33,10 +33,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(polygon, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 polygon :: polygon(t_floatarg numInputs)
-  : GemShape(), 
+  : GemShape(),
     m_numVertices(0),
     m_vertarray(NULL),
-    m_vert(NULL), 
+    m_vert(NULL),
     m_numInputs(0),
     m_inlet(NULL)
 {
@@ -46,10 +46,10 @@ polygon :: polygon(t_floatarg numInputs)
   // configure the inlets
 	if(realNum>0) {
 		createVertices(realNum);
-		
+
 		m_numInputs=realNum;
 		m_inlet=new t_inlet*[m_numInputs];
-		
+
 		char tempVt[7];
 		// create the proper number of inputs
 		for (i = 0; i < realNum; i++) {
@@ -89,14 +89,14 @@ void polygon :: createVertices(int num) {
 		delete[]m_vertarray;
 	m_numVertices=0;
 
-		
+
 	if(num>0) {
 		int i=0;
 
 		m_numVertices = num;
 		m_vert = new float*[num];
 		m_vertarray = new float[num*3];
-		
+
 		for (i = 0; i < num*3; i++)  {
 			m_vertarray[i]=0.0f;
 		}
@@ -174,11 +174,11 @@ void polygon :: listMess(int argc, t_atom*argv) {
 		}
 		createVertices(argc/3);
 	}
-	
+
 	if(m_numVertices*3==argc) {
 		int i=0;
 		for(i=0; i<m_numVertices; i++) {
-			setVert(i, 
+			setVert(i,
 							atom_getfloat(argv+0),
 							atom_getfloat(argv+1),
 							atom_getfloat(argv+2)
@@ -212,25 +212,25 @@ void polygon :: setVert(int whichOne, float x, float y, float z)
 /////////////////////////////////////////////////////////
 void polygon :: typeMess(t_symbol *type)
 {
-    if (!strcmp(type->s_name, "default")) 
+    if (!strcmp(type->s_name, "default"))
 	    m_drawType = GL_DEFAULT_GEM;
-    else if (!strcmp(type->s_name, "line")) 
+    else if (!strcmp(type->s_name, "line"))
 	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
+    else if (!strcmp(type->s_name, "fill"))
 	    m_drawType = GL_POLYGON;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;
-    else if (!strcmp(type->s_name, "linestrip")) 
+    else if (!strcmp(type->s_name, "linestrip"))
 	    m_drawType = GL_LINE_STRIP;
-    else if (!strcmp(type->s_name, "tri")) 
+    else if (!strcmp(type->s_name, "tri"))
 	    m_drawType = GL_TRIANGLES;
-    else if (!strcmp(type->s_name, "tristrip")) 
+    else if (!strcmp(type->s_name, "tristrip"))
 	    m_drawType = GL_TRIANGLE_STRIP;
-    else if (!strcmp(type->s_name, "trifan")) 
+    else if (!strcmp(type->s_name, "trifan"))
 	    m_drawType = GL_TRIANGLE_FAN;
-    else if (!strcmp(type->s_name, "quad")) 
+    else if (!strcmp(type->s_name, "quad"))
 	    m_drawType = GL_QUADS;
-    else if (!strcmp(type->s_name, "quadstrip")) 
+    else if (!strcmp(type->s_name, "quadstrip"))
 	    m_drawType = GL_QUAD_STRIP;
     else
     {

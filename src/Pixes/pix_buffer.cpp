@@ -50,8 +50,8 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
   m_bindname = s;
   m_numframes = (int)f;
   m_buffer = new imageStruct[m_numframes];
-  
-  pd_bind(&this->x_obj->ob_pd, m_bindname); 
+
+  pd_bind(&this->x_obj->ob_pd, m_bindname);
   outlet_new(this->x_obj, &s_float);
 }
 /////////////////////////////////////////////////////////
@@ -108,16 +108,16 @@ void pix_buffer :: resizeMess(int newsize)
 {
   int size=m_numframes;
   int i;
-  
+
   if(newsize<0) {
     error("refusing to resize to <0 frames!");
     return;
   }
-  
+
   imageStruct*buffer = new imageStruct[newsize];
   if(size>newsize)
     size=newsize;
-  
+
   for(i=0; i<size; i++) {
     if(0!=m_buffer[i].data) {
       // copy the image
@@ -128,11 +128,11 @@ void pix_buffer :: resizeMess(int newsize)
       m_buffer[i].allocate();
     }
   }
-  
+
   delete[]m_buffer;
   m_buffer=buffer;
   m_numframes=newsize;
-  
+
   bangMess();
 }
 
@@ -223,7 +223,7 @@ void pix_buffer :: saveMess(t_symbol *filename, int pos)
     return;
   }
   img=getMess(pos);
-  
+
   if(img && img->data){
     mem2image(img, filename->s_name, 0);
   } else {

@@ -46,7 +46,7 @@ void pix_multiply :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
-  
+
   while(datasize--)    {
     leftPix[chRed] = INT_MULT(leftPix[chRed], rightPix[chRed]);
     leftPix[chGreen] = INT_MULT(leftPix[chGreen], rightPix[chGreen]);
@@ -110,7 +110,7 @@ void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
        image.data[src+chY0] = CLAMP_Y(y1);
        y2 = (image.data[src+chY1] * right.data[src+chY1]) >> 8;
        image.data[src+chY1] = CLAMP_Y(y2);
-        
+
        src+=4;
     }
    }

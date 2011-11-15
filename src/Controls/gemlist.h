@@ -3,7 +3,7 @@
   GEM - Graphics Environment for Multimedia
 
   this object work with gemlist exactly like pd [float] work with float
-    
+
   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
   Copyright (c) Günther Geiger. geiger@epy.co.at
   Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -26,23 +26,23 @@ class GemCache;
   gemlist
 
   DESCRIPTION
-    
+
   "gemlist" - send the curent gemlist when banged.
   The curent gemlist can be set via the hot or cold inlet
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemlist : public GemBase
 {
   CPPEXTERN_HEADER(gemlist, GemBase);
 
  public:
-  
+
   //////////
   // Constructor
   gemlist(void);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~gemlist(void);

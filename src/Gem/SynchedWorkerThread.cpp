@@ -29,7 +29,7 @@ namespace gem { namespace thread {
     Mutex m_polling;
     bool polling;
 
-    PIMPL(SynchedWorkerThread*x) : owner(x), clock(NULL), 
+    PIMPL(SynchedWorkerThread*x) : owner(x), clock(NULL),
                                    m_flag(Mutex()), flag(false),
                                    m_polling(Mutex()), polling(false)
     {
@@ -91,7 +91,7 @@ namespace gem { namespace thread {
       m_polling.unlock();
 
       // just in case tack() is still hanging
-      // this is really ugly! 
+      // this is really ugly!
       // it might only work if called from the main thread
       if(sys_trylock()) {
         // system was locked, so unlock and re-lock

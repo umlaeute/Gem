@@ -89,7 +89,7 @@ void diffuse :: diffuseMess(float red, float green, float blue, float alpha)
 void diffuse :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&diffuse::diffuseMessCallback),
-    	    gensym("diffuse"), A_GIMME, A_NULL); 
+    	    gensym("diffuse"), A_GIMME, A_NULL);
 }
 void diffuse :: diffuseMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

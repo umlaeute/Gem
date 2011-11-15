@@ -162,8 +162,8 @@ std::string CPPExtern::findFile(const std::string f, const std::string e) const 
   t_canvas*canvas=const_cast<t_canvas*>(getCanvas());
   char*filename=const_cast<char*>(f.c_str());
   char*ext=const_cast<char*>(e.c_str());
-  
-  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext, 
+
+  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext,
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
 #if PD_MINOR_VERSION < 43
     close(fd);
@@ -186,7 +186,7 @@ std::string CPPExtern::findFile(const std::string file) const {
 }
 bool CPPExtern :: checkGemVersion(const int major, const int minor) {
   if(!GemVersion::versionCheck(major, minor)) {
-    ::error("GEM version mismatch: compiled for %d.%d but we are running %s", 
+    ::error("GEM version mismatch: compiled for %d.%d but we are running %s",
 	    major, minor,
 	    GemVersion::versionString());
         return false;

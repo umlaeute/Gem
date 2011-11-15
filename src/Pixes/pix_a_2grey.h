@@ -33,14 +33,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_a_2grey
-    
+
     Change pix to greyscale with respect to alpha
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_a_2grey : public GemPixObj
 {
@@ -51,9 +51,9 @@ class GEM_EXTERN pix_a_2grey : public GemPixObj
     //////////
     // Constructor
     pix_a_2grey(t_floatarg alpha);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_a_2grey();
@@ -61,7 +61,7 @@ class GEM_EXTERN pix_a_2grey : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-        
+
 	//////////
     	// Do the processing - this is a no-op
     	virtual void 	processGrayImage(imageStruct &image) { }
@@ -76,9 +76,9 @@ class GEM_EXTERN pix_a_2grey : public GemPixObj
     	//////////
     	// alpha setting
     	void	    	alphaMess(float alphaval);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	alphaMessCallback(void *data, t_floatarg alphaval);

@@ -345,7 +345,7 @@ void pix_puzzle :: bangMessCallback(void *data)
 
 void pix_puzzle :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
 {
-  GetMyClass(data)->sizeMess((int)width, (int)height);  
+  GetMyClass(data)->sizeMess((int)width, (int)height);
 }
 
 void pix_puzzle :: moveMessCallback(void *data, t_floatarg state)

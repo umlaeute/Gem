@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DE
 //
 /////////////////////////////////////////////////////////
 sphere3d :: sphere3d(t_floatarg size, t_floatarg slize, t_floatarg stack)
-  : GemGluObj(size, slize, stack), 
+  : GemGluObj(size, slize, stack),
     m_x(NULL), m_y(NULL), m_z(NULL),
     oldStacks(-1), oldSlices(-1), oldDrawType(0), oldTexture(-1),
     m_displayList(0)
@@ -68,7 +68,7 @@ void sphere3d :: createSphere3d()
   delete[]m_z;m_z = new float[slices * (stacks-1) + 2];
 
   setCartesian(0, 0, 0., 0., 1.);
-  
+
   rho=90;
   for(i=1; i<stacks; i++){
     rho-=drho;
@@ -187,12 +187,12 @@ void sphere3d :: render(GemState *state)
 
   /* i cannot remember right now why we don't want normals always to be build
    * if lighting is off, they just won't be used
-   * i guess the original reason was somehow related to performance 
+   * i guess the original reason was somehow related to performance
    *
    * GLboolean normals = (lighting)?GL_TRUE:GL_FALSE;
    */
   bool normals = GL_TRUE;
-  
+
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
 
@@ -202,7 +202,7 @@ void sphere3d :: render(GemState *state)
     ysize0 = texCoords[1].t;
     ysize  = texCoords[2].t-ysize0;
   }
-    
+
   /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */
   /* t goes from -1.0/+1.0 at z = -radius/+radius (linear along longitudes) */
   /* cannot use triangle fan on texturing (s coord. at top/bottom tip varies) */
@@ -211,23 +211,23 @@ void sphere3d :: render(GemState *state)
   if (stacks != oldStacks || slices != oldSlices){
     //call the sphere3d creation function to fill the array
     createSphere3d();
-    
+
     oldStacks = stacks;
     oldSlices = slices;
   }
   if (m_drawType != oldDrawType || texType!=oldTexture)m_modified=true;
   oldDrawType = m_drawType;
   oldTexture = texType;
-  
+
   if(!m_displayList)m_modified=true;
-  
+
   if(m_modified){
 
     if(m_displayList)glDeleteLists(m_displayList, 1);
 
     m_displayList=glGenLists(1);
     glNewList(m_displayList, GL_COMPILE_AND_EXECUTE);
- 
+
     if (m_drawType == GL_FILL) {
       t = 1.0;
       s = 0.0;
@@ -242,7 +242,7 @@ void sphere3d :: render(GemState *state)
         if(normals)glNormal3f(m_x[0], m_y[0], m_z[0]);
         if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
         glVertex3f(m_x[0], m_y[0], m_z[0]);
-    
+
         if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
         if(texType)glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
         glVertex3f(m_x[src], m_y[src], m_z[src]);
@@ -254,7 +254,7 @@ void sphere3d :: render(GemState *state)
       if(normals)glNormal3f(m_x[0], m_y[0], m_z[0]);
       if(texType)glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
       glVertex3f(m_x[0], m_y[0], m_z[0]);
-    
+
       if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
       if(texType)glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
       glVertex3f(m_x[src], m_y[src], m_z[src]);
@@ -327,12 +327,12 @@ void sphere3d :: render(GemState *state)
 
     }
     else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-     
-      src = 1;      
+
+      src = 1;
       for (i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here
         glBegin(GL_LINE_LOOP);
         for (j = 0; j < slices; j++) {
-        
+
           if (normals)
             glNormal3f(m_x[src], m_y[src], m_z[src]);
           glVertex3f(m_x[src], m_y[src], m_z[src]);
@@ -361,7 +361,7 @@ void sphere3d :: render(GemState *state)
         glEnd();
       }
     }
-  
+
     else if (m_drawType == GL_POINT) {
       /* top and bottom-most points */
       src=0;
@@ -400,16 +400,16 @@ void sphere3d :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void sphere3d :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("set"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("set"),
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("setCartesian"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("setCartesian"),
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSpherical"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSpherical"),
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSph"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSph"),
                   A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::printMessCallback), gensym("print"), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::printMessCallback), gensym("print"),
                   A_NULL);
 }
 
@@ -417,14 +417,14 @@ void sphere3d :: setCartMessCallback(void *data,
                                     t_floatarg i, t_floatarg j,
                                     t_floatarg x, t_floatarg y, t_floatarg z)
 {
-  GetMyClass(data)->setCartesian(static_cast<int>(i), static_cast<int>(j), 
+  GetMyClass(data)->setCartesian(static_cast<int>(i), static_cast<int>(j),
 				 x, y, z);
 }
 void sphere3d :: setSphMessCallback(void *data,
                                     t_floatarg i, t_floatarg j,
                                     t_floatarg r, t_floatarg phi, t_floatarg theta)
 {
-  GetMyClass(data)->setSpherical(static_cast<int>(i), static_cast<int>(j), 
+  GetMyClass(data)->setSpherical(static_cast<int>(i), static_cast<int>(j),
                                  r, phi, theta);
 }
 void sphere3d :: printMessCallback(void *data)

@@ -22,7 +22,7 @@
 #include "Gem/GLStack.h"
 #include "Gem/RTE.h"
 
-/* need GLUtil for glReportError */ 
+/* need GLUtil for glReportError */
 #include "Gem/GemGL.h"
 #include "Utils/GLUtil.h"
 #define GLDEBUG if(glReportError())::startpost("glError @ %s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
@@ -50,16 +50,16 @@ static GLenum id2maxdepth(enum GLStack::GemStackId id) {
   GLenum result=0;
   switch(id) {
   case GLStack::MODELVIEW:
-    result=GL_MAX_MODELVIEW_STACK_DEPTH; 
+    result=GL_MAX_MODELVIEW_STACK_DEPTH;
     break;
-  case GLStack::PROJECTION: 
-    result=GL_MAX_PROJECTION_STACK_DEPTH; 
+  case GLStack::PROJECTION:
+    result=GL_MAX_PROJECTION_STACK_DEPTH;
     break;
-  case GLStack::TEXTURE: 
-    result=GL_MAX_TEXTURE_STACK_DEPTH; 
+  case GLStack::TEXTURE:
+    result=GL_MAX_TEXTURE_STACK_DEPTH;
     break;
-  case GLStack::COLOR: 
-    result=GL_MAX_COLOR_MATRIX_STACK_DEPTH; 
+  case GLStack::COLOR:
+    result=GL_MAX_COLOR_MATRIX_STACK_DEPTH;
     break;
   default:
     //    ::error("GLStack: illegal stack matrix: %d");
@@ -73,16 +73,16 @@ static GLenum id2depth(enum GLStack::GemStackId id) {
   GLenum result=0;
   switch(id) {
   case GLStack::MODELVIEW:
-    result=GL_MODELVIEW_STACK_DEPTH; 
+    result=GL_MODELVIEW_STACK_DEPTH;
     break;
-  case GLStack::PROJECTION: 
-    result=GL_PROJECTION_STACK_DEPTH; 
+  case GLStack::PROJECTION:
+    result=GL_PROJECTION_STACK_DEPTH;
     break;
-  case GLStack::TEXTURE: 
-    result=GL_TEXTURE_STACK_DEPTH; 
+  case GLStack::TEXTURE:
+    result=GL_TEXTURE_STACK_DEPTH;
     break;
-  case GLStack::COLOR: 
-    result=GL_COLOR_MATRIX_STACK_DEPTH; 
+  case GLStack::COLOR:
+    result=GL_COLOR_MATRIX_STACK_DEPTH;
     break;
   default:
     //    ::error("GLStack: illegal stack matrix: %d");
@@ -96,16 +96,16 @@ static GLenum id2mode(enum GLStack::GemStackId id) {
   GLenum result=0;
   switch(id) {
   case GLStack::MODELVIEW:
-    result=GL_MODELVIEW; 
+    result=GL_MODELVIEW;
     break;
-  case GLStack::PROJECTION: 
-    result=GL_PROJECTION; 
+  case GLStack::PROJECTION:
+    result=GL_PROJECTION;
     break;
-  case GLStack::TEXTURE: 
-    result=GL_TEXTURE; 
+  case GLStack::TEXTURE:
+    result=GL_TEXTURE;
     break;
-  case GLStack::COLOR: 
-    result=GL_COLOR; 
+  case GLStack::COLOR:
+    result=GL_COLOR;
     break;
   default:
     //    ::error("GLStack: illegal stack matrix: %d");
@@ -126,13 +126,13 @@ GLStack::~GLStack() {
 #ifdef __GNUC__
 # warning push/pop texture matrix has to be done per texunit
   // each texunit has it's own matrix to be pushed/popped
-  // changing the texunit (e.g. in [pix_texture]) makes the 
-  // local depthcounter a useless, and we get a lot of 
+  // changing the texunit (e.g. in [pix_texture]) makes the
+  // local depthcounter a useless, and we get a lot of
   // stack under/overflows
-#endif  
+#endif
 
 
-/** push the given matrix to the stack if the maximum has not been reached 
+/** push the given matrix to the stack if the maximum has not been reached
  *   returns true on success and false otherwise (stack overflow)
  * NOTE: needs valid openGL context
  */
@@ -158,7 +158,7 @@ void GLStack::push() {
 }
 
 
-/** pop the given matrix from the stack if the maximum has not been reached 
+/** pop the given matrix from the stack if the maximum has not been reached
  *   returns true on success and false otherwise (stack underlow)
  * NOTE: needs valid openGL context
  */
@@ -181,8 +181,8 @@ void GLStack::pop() {
   pop(PROJECTION);
   pop(MODELVIEW);
 }
-/** 
- * reset the maximum stack depth of the given stack 
+/**
+ * reset the maximum stack depth of the given stack
  * NOTE: needs valid openGL context
  */
 void GLStack::reset() {
@@ -192,7 +192,7 @@ void GLStack::reset() {
   reset(COLOR);
 }
 
-/** 
+/**
  * reset the maximum stack depth of all stacks
  * NOTE: needs valid openGL context
  */

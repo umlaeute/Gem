@@ -34,7 +34,7 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
-    m_rectangle(false), 
+    m_rectangle(false),
     m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB),
     m_type(GL_UNSIGNED_BYTE),
     m_outTexInfo(NULL)
@@ -53,13 +53,13 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   m_FBOcolor[3] = 0.f;
 
   m_perspect[0] = -1.f;
-  m_perspect[1] = 1.f;	
+  m_perspect[1] = 1.f;
   m_perspect[2] = -1.f;
-  m_perspect[3] = 1.f;	
+  m_perspect[3] = 1.f;
   m_perspect[4] = 1.f;
-  m_perspect[5] = 20.f;	
+  m_perspect[5] = 20.f;
 
-  
+
   if(format && format->s_name && format!=gensym(""))
     formatMess(format->s_name);
   if(type   && type->s_name   && type  !=gensym(""))
@@ -118,17 +118,17 @@ void gemframebuffer :: render(GemState *state)
   if(!m_width || !m_height) {
     error("width and height must be present!");
   }
- 
+
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
 
   if (m_wantinit)
     initFBO();
-  
+
   // store the window viewport dimensions so we can reset them,
   // and set the viewport to the dimensions of our texture
   glGetIntegerv(GL_VIEWPORT, m_vp);
   glGetFloatv( GL_COLOR_CLEAR_VALUE, m_color );
-	
+
   glBindTexture( m_texTarget, 0 );
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
   // Bind the texture to the frame buffer.
@@ -136,11 +136,11 @@ void gemframebuffer :: render(GemState *state)
                             m_texTarget, m_offScreenID, 0);
   glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
                                GL_RENDERBUFFER_EXT, m_depthBufferIndex);
-  
+
   // debug yellow color
   // glClearColor( 1,1,0,0);
   glClearColor( m_FBOcolor[0], m_FBOcolor[1], m_FBOcolor[2], m_FBOcolor[3] );
-  
+
   // Clear the buffers and reset the model view matrix.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -148,7 +148,7 @@ void gemframebuffer :: render(GemState *state)
   // ensure every element of our texture is processed. By setting our
   // viewport to the dimensions of our destination texture and drawing
   // a screen-sized quad (see below), we ensure that every pixel of our
-  // texel is generated and processed in the fragment program.		
+  // texel is generated and processed in the fragment program.
   glViewport(0,0, m_width, m_height);
 
   if(stacks) stacks->push(gem::GLStack::PROJECTION);
@@ -286,7 +286,7 @@ void gemframebuffer :: initFBO()
 
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_S, wrapmode);
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_T, wrapmode);
-  
+
   // Initialize the render buffer.
   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_depthBufferIndex);
   glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, m_width, m_height);
@@ -295,7 +295,7 @@ void gemframebuffer :: initFBO()
   GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT) ;
   if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
     {
-      switch(status) {                                          
+      switch(status) {
       case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
         error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
         break;
@@ -415,7 +415,7 @@ void gemframebuffer :: colorMess(t_symbol*s,int argc, t_atom*argv)
   m_FBOcolor[1] = green;
   m_FBOcolor[2] = blue;
   m_FBOcolor[3] = alpha;
-    
+
   //  setModified();
 }
 

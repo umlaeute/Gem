@@ -29,7 +29,7 @@ CPPEXTERN_NEW(pix_zoom);
 pix_zoom :: pix_zoom()
 {
     zoomMess(1, 1);
-    
+
     // create the new inlet
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("zoom"));
 }

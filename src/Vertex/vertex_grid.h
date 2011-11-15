@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_grid
-    
+
     Creates a vertex_grid
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_grid : public GemBase
 {
@@ -39,13 +39,13 @@ class GEM_EXTERN vertex_grid : public GemBase
         //////////
         // Constructor
   vertex_grid(t_floatarg w, t_floatarg h);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~vertex_grid(void);
-        
+
         int	m_x,m_y,m_oldx,m_oldy;
         float	m_spacex, m_spacey;
         float 	maxX,maxY;

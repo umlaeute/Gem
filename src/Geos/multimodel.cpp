@@ -31,8 +31,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEF
 /////////////////////////////////////////////////////////
 multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
 			 t_floatarg topModel, t_floatarg skipRate)
-  : m_loadedCache(NULL), 
-    m_numModels(0), m_curModel(-1), 
+  : m_loadedCache(NULL),
+    m_numModels(0), m_curModel(-1),
     m_rescaleModel(1),
     m_textype(GLM_TEX_DEFAULT),
     m_rebuild(true),
@@ -41,7 +41,7 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mdl_num"));
 
   // make sure that there are some characters
-  if (filename->s_name[0]) { 
+  if (filename->s_name[0]) {
     int skipRatei=static_cast<int>(skipRate);
     int topModeli=static_cast<int>(topModel);
     int baseModeli=static_cast<int>(baseModel);
@@ -73,12 +73,12 @@ void multimodel :: cleanMultimodel()
   if (m_numModels) {
     // decrement the reference count
     m_loadedCache->refCount--;
-    
+
     // If the refCount == 0, then destroy the cache
     if (m_loadedCache->refCount == 0) {
       // find the cache
       multiModelCache *ptr = s_modelCache;
-      
+
       // if the loaded cache is the first cache in the list
       if (m_loadedCache == s_modelCache) {
         s_modelCache = m_loadedCache->next;
@@ -93,7 +93,7 @@ void multimodel :: cleanMultimodel()
         }
       }
     }
-    
+
     m_loadedCache = NULL;
     m_numModels = 0;
   }
@@ -106,7 +106,7 @@ void multimodel :: cleanMultimodel()
 void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int skipRate)
 {
   cleanMultimodel();
-    
+
   if (!topModel) {
     error("requires an int for number of models");
     return;
@@ -127,7 +127,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
 	!strcmp(filename->s_name, cache->modelName)) found = 1;
     else cache = cache->next;
   }
-    
+
   // yep, we have it
   if (found) {
     m_loadedCache = cache;
@@ -140,25 +140,25 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
   }
 
   // nope, so create the new cache
-  // find the * in the filename    
+  // find the * in the filename
   char preName[256];
   char postName[256];
-    
+
   int i = 0;
   char *strPtr = filename->s_name;
   while (strPtr[i] && strPtr[i] != '*') {
     preName[i] = strPtr[i];
     i++;
   }
-    
+
   if (!strPtr[i]) {
     error("unable to find * in file name");
     return;
   }
 
-  preName[i] = '\0';    
+  preName[i] = '\0';
   strcpy(postName, &(strPtr[i+1]));
-    
+
   // need to figure out how many filenames there are to load
   m_numModels = (topModel + 1 - baseModel) / skipRate;
 
@@ -178,7 +178,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
   for (i = 0; i < m_numModels; i++, realNum += skipRate) {
     char newName[256];
     sprintf(newName, "%s%d%s", bufName, realNum, postName);
-    
+
     // read the object in
     GLMmodel *m_model = glmReadOBJ(newName);
     if (!m_model) {
@@ -192,13 +192,13 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     //
     if (m_rescaleModel)
       glmUnitize(m_model);
-    
+
     // generate normals if this
     // object doesn't have them.
     //
     glmFacetNormals (m_model);
     glmVertexNormals(m_model, 90); /* SMOOTH */
-    
+
     glmTexture(m_model, m_textype, 1, 1);
     newCache->realmodels[i]=m_model;
   }
@@ -209,7 +209,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
 
   // insert the cache at the end of the linked list
   multiModelCache *ptr = s_modelCache;
-    
+
   if (!ptr) s_modelCache = newCache;
   else {
     while(ptr->next) ptr = ptr->next;
@@ -246,17 +246,17 @@ void multimodel :: buildList()
 void multimodel :: textureMess(int state)
 {
   switch(state) {
-  case 0: 
-    m_textype=GLM_TEX_LINEAR; 
+  case 0:
+    m_textype=GLM_TEX_LINEAR;
     break;
-  case 1: 
-    m_textype=GLM_TEX_SPHEREMAP; 
+  case 1:
+    m_textype=GLM_TEX_SPHEREMAP;
     break;
   case 2:
-    m_textype=GLM_TEX_UV; 
+    m_textype=GLM_TEX_UV;
     break;
   default:
-    m_textype=GLM_TEX_DEFAULT; 
+    m_textype=GLM_TEX_DEFAULT;
   }
   m_rebuild=true;
 }

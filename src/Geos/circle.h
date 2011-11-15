@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     circle
-    
+
     Creates a circle
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN circle : public GemShape
 {
@@ -39,9 +39,9 @@ class GEM_EXTERN circle : public GemShape
         //////////
         // Constructor
         circle(t_floatarg size);
-    	
+
     protected:
-    	
+
         //////////
         // Destructor
         virtual ~circle();

@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRasterPos4d , t_floatarg, A_DEFFLOAT, t_floa
 // Constructor
 //
 GEMglRasterPos4d :: GEMglRasterPos4d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		x(static_cast<GLdouble>(arg0)), 
-		y(static_cast<GLdouble>(arg1)), 
-		z(static_cast<GLdouble>(arg2)), 
+		x(static_cast<GLdouble>(arg0)),
+		y(static_cast<GLdouble>(arg1)),
+		z(static_cast<GLdouble>(arg2)),
 		w(static_cast<GLdouble>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));

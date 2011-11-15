@@ -21,18 +21,18 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_zoom
-    
+
     Change the pixel zooming for glDrawPixels
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-    
+
     Inlet for float, float - "zoom"
 
     "zoom" - the x and y mag
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_zoom : public GemBase
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN pix_zoom : public GemBase
         //////////
         // Constructor
     	pix_zoom();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_zoom();
@@ -69,9 +69,9 @@ class GEM_EXTERN pix_zoom : public GemBase
     	//////////
     	// Zoom mag
     	void	    	zoomMess(float xMag, float yMag);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	zoomMessCallback(void *data, t_floatarg xZoom, t_floatarg yZoom);

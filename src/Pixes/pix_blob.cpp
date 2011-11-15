@@ -113,7 +113,7 @@ void pix_blob :: processRGBAImage(imageStruct &image)
 	  gain_b * pixels[chBlue] + gain_a * pixels[chAlpha];
 	sum   += val;
 	sum_y += rows * val;
-	sum_x += cols * val;      
+	sum_x += cols * val;
 	pixels+=4;
       }
     }
@@ -124,7 +124,7 @@ void pix_blob :: processRGBAImage(imageStruct &image)
 	int val  = pixels[channel];
 	sum   += val;
 	sum_y += rows * val;
-	sum_x += cols * val;      
+	sum_x += cols * val;
 	pixels+=4;
       }
     }
@@ -149,7 +149,7 @@ void pix_blob :: processGrayImage(imageStruct &image)
       int val  = *pixels++;
       sum   += val;
       sum_y += rows * val;
-      sum_x += cols * val;      
+      sum_x += cols * val;
     }
   }
 

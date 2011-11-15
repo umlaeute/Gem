@@ -25,14 +25,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_buffer
-  
+
   this is a buffer object for storing frames of video
-  
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer : public CPPExtern
 {
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   virtual bool  putMess(imageStruct*img,int pos);
   virtual imageStruct* getMess(int pos);
   virtual int numFrames(void);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_buffer();
@@ -69,10 +69,10 @@ class GEM_EXTERN pix_buffer : public CPPExtern
 
   int m_numframes;
   t_symbol *m_bindname;
-   
+
 
  private:
-  
+
   //////////
   // static member functions
   static void allocateMessCallback(void *data,t_symbol*,int,t_atom*);

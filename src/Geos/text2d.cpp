@@ -38,7 +38,7 @@ text2d :: text2d(int argc, t_atom *argv)
   : TextBase(0,NULL), m_antialias(1), m_afont(NULL)
 {
   fontNameMess(DEFAULT_FONT);
-} 
+}
 
 text2d :: ~text2d() {
   if(m_font) delete m_font; m_font=NULL;
@@ -58,7 +58,7 @@ FTFont *text2d :: makeFont(const char*fontfile){
     delete m_afont;
     m_afont = NULL;
   }
-  
+
   return m_font;
 }
 /////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ void text2d :: render(GemState *)
     glPopMatrix();
     }
   }
-  else if (m_font) 
+  else if (m_font)
   {
     // Get ascender height (= height of the text)
     ascender = m_font->Ascender();
@@ -173,7 +173,7 @@ void text2d :: render(GemState*){}
 //
 /////////////////////////////////////////////////////////
 void text2d :: obj_setupCallback(t_class *classPtr )
-{ 
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&text2d::aliasMessCallback),
 		  gensym("alias"), A_FLOAT, A_NULL);
 }

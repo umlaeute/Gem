@@ -112,7 +112,7 @@ void newWave :: forceMess(float posX, float posY, float valforce)
 {
     setforce(posX, posY, valforce);
     setModified();
-    
+
 }
 
 void newWave :: textureMess(int mode)
@@ -124,7 +124,7 @@ void newWave :: textureMess(int mode)
   m_textureMode = mode;
   setModified();
   alreadyInit=0;
-  
+
 }
 
 /////////////////////////////////////////////////////////
@@ -155,13 +155,13 @@ void newWave :: renderShape(GemState *state)
             xsize  = GemShape::m_texCoords[1].s-xsize0;
             ysize0 = GemShape::m_texCoords[1].t;
             ysize  = GemShape::m_texCoords[2].t-ysize0;
-            
+
             setSize( gridX, gridY );
             setOther(m_textureMode);
             reset( resetMode );
             alreadyInit = 1;
           }
-        
+
         for (int i=0; i<gridX -1; ++i)
         {
             glBegin(m_drawType);
@@ -190,7 +190,7 @@ void newWave :: renderShape(GemState *state)
             reset( resetMode );
             alreadyInit = 1;
         }
- 
+
         for ( i = 0; i<gridX -1; ++i)
         {
             glBegin(m_drawType);
@@ -199,7 +199,7 @@ void newWave :: renderShape(GemState *state)
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );
                 glVertex3f( i*sizeX -1, j*sizeY -1, posit[i][j]*m_height );
-            
+
                 glNormal3fv( vertNorms[i+1][j] );
                 glTexCoord2fv( texCoords[i+1][j] );
                 glVertex3f( (i+1)*sizeX -1, j*sizeY -1, posit[i+1][j]*m_height );
@@ -252,7 +252,7 @@ void newWave :: getforce()
         {
             force[i][j] =0.0;
         }
-    // add (low amplitude) noise to avoid denormalisation. 
+    // add (low amplitude) noise to avoid denormalisation.
     // this noise does propagate thrus the all structure.
     force[2][2]= 2e-20 * (double)random2() * (1. / 2147483648.) - 1e-20;
 
@@ -265,7 +265,7 @@ void newWave :: getforce()
 				force[i][j] -= d;
 				force[i][j-1] += d;
 
-            
+
 				d = K1 * (posit[i][j] - posit[i-1][j]);
 				force[i][j] -= d;
 				force[i-1][j] += d;
@@ -280,7 +280,7 @@ void newWave :: getforce()
 				d = K2 * (posit[i][j] - posit[i-1][j-1]);
 				force[i][j] -= d;
 				force[i-1][j-1] += d;
-            
+
 			}
 
 		for ( i=0; i<gridX-1; i++)
@@ -336,7 +336,7 @@ void newWave :: getdamp()
                 d = D1 * ((posit[i][j] - posit[i][j-1])-(positold[i][j] - positold[i][j-1]));
                 force[i][j] -= d;
                 force[i][j-1] += d;
-            
+
                 d = D1 * ((posit[i][j] - posit[i-1][j])-(positold[i][j] - positold[i-1][j]));
                 force[i][j] -= d;
                 force[i-1][j] += d;
@@ -370,7 +370,7 @@ void newWave :: getdamp()
             {
                 d = D3 * (posit[i][j]-positold[i][j]);
                 force[i][j] -= d;
-            
+
                 d = D3 * (posit[i][j]-positold[i][j]);
                 force[i][j] -= d;
             }
@@ -386,7 +386,7 @@ void newWave :: setforce(float posX, float posY, float valforce)
   int posXi=static_cast<int>(posX);
   int posYi=static_cast<int>(posY);
   if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) & (posYi < gridY - 1) )
-    force[posXi][posYi] += valforce;   
+    force[posXi][posYi] += valforce;
 }
 
 /////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ void newWave :: position(float posX, float posY, float posZ)
   int posXi=static_cast<int>(posX);
   int posYi=static_cast<int>(posY);
   if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) & (posYi < gridY - 1) )
-    posit[posXi][posYi] = posZ;                        
+    posit[posXi][posYi] = posZ;
 }
 
 
@@ -477,7 +477,7 @@ void newWave :: setSize( int valueX, int valueY )
 /////////////////////////////////////////////////////////
 void newWave :: bangMess( )
 {
-    
+
 		savepos();
 
 		getvelocity();
@@ -531,7 +531,7 @@ void newWave :: cross(float vec0[3], float vec1[3], float vec2[3])
 void newWave :: norm(float vec[3])
 {
     float c = sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
-    scalDiv(vec, c); 
+    scalDiv(vec, c);
 }
 
 void newWave :: set(float vec[3], float x, float y, float z)
@@ -568,7 +568,7 @@ void newWave :: getFaceNorms(void)
             cross( norm0, vec0, vec1 );
             norm( norm0 );
 
-            cross( norm1, vec1, vec2 ); 
+            cross( norm1, vec1, vec2 );
             norm( norm1 );
 
             copy( faceNorms[0][i][j], norm0 );
@@ -697,15 +697,15 @@ void newWave :: reset(int value)
                 posit[i][j]= ((i > gridX*3/4 && j > gridY*3/4)) ? gridX/4 : 0.0;
                 break;
             case HILL:
-                posit[i][j]= 
+                posit[i][j]=
 		  (sin(M_PI * ((1.*i)/gridX)) +
 		   sin(M_PI * ((1.*j)/gridY)))* gridX/6.0;
 				break;
             case HILLFOUR:
-                posit[i][j]= 
+                posit[i][j]=
 		  (sin(M_PI*2.* ((1.*i)/gridX)) +
 		   sin(M_PI*2.* ((1.*j)/gridY)))* gridX/6.0;
-				break;        
+				break;
             }
             if (i==0||j==0||i==gridX-1||j==gridY-1) posit[i][j]=0.0;
         }
@@ -763,7 +763,7 @@ void newWave :: obj_setupCallback(t_class *classPtr)
 void newWave :: bangMessCallback(void *data)
 {
    	GetMyClass(data)->bangMess();
-    
+
 }
 void newWave :: heightMessCallback(void *data, t_floatarg size)
 {

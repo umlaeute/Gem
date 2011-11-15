@@ -22,14 +22,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   surface3d
-    
+
   Creates a surface3d
 
   KEYWORDS
   geo
-    
+
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 
 class GEM_EXTERN surface3d : public GemShape
@@ -41,9 +41,9 @@ class GEM_EXTERN surface3d : public GemShape
   //////////
   // Constructor
   surface3d(t_floatarg size_X, t_floatarg size_Y);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~surface3d();
@@ -70,13 +70,13 @@ class GEM_EXTERN surface3d : public GemShape
   t_float3 bicubic3(t_float X, t_float Y);
   void normalMess(int normal);
 
-  enum C3dDrawType{LINE, FILL, POINT, LINE1, LINE2, LINE3, LINE4, 
-	CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2} 
+  enum C3dDrawType{LINE, FILL, POINT, LINE1, LINE2, LINE3, LINE4,
+	CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2}
   m_drawType;
 
   virtual void	typeMess(t_symbol *type);
- 
-  t_float3		*m_posXYZ; 
+
+  t_float3		*m_posXYZ;
 
  private:
   static void		resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY );

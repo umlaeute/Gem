@@ -31,7 +31,7 @@ CPPEXTERN_NEW(pix_halftone);
 //
 /////////////////////////////////////////////////////////
 pix_halftone :: pix_halftone()
-{ 
+{
     m_CellSize = 8; // 1-32
     m_Style = 0;	// 0-4
     m_Smoothing = 128; // 0-255
@@ -39,7 +39,7 @@ pix_halftone :: pix_halftone()
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("angleDEG"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smoothN"));
-      
+
 }
 
 /////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 {
     nWidth = image.xsize;
     nHeight = image.ysize;
-    
+
     pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
@@ -65,7 +65,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
-    
+
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
     int nSmoothingThreshold=clampFunc(m_Smoothing,0,255);
@@ -110,7 +110,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 	nSnappedU<<=nFPShift;
 	nSnappedU*=nCellSize;
 	nSnappedU-=(nCellSizeFP*1024);
-			
+
 	SPete_HalfTone_Vertex RotatedPoints[4]={
 	  {{nSnappedU,nSnappedV},				{0,0}},
 	  {{(nSnappedU+nCellSizeFP),nSnappedV},			{nCellSizeFP-nFPMult,0}},
@@ -215,7 +215,7 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 	    *pCurrentOutput=OutputColour;
 
 	  }
-	}		
+	}
       }
     }
     image.data = myImage.data;
@@ -229,7 +229,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 {
     nWidth = image.xsize>>1;
     nHeight = image.ysize;
-	
+
     const unsigned char chroma = 128;
     pSource = reinterpret_cast<U32*>(image.data);
 
@@ -241,7 +241,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
   //  myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
-    
+
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
     int nSmoothingThreshold=clampFunc(m_Smoothing,0,255);
@@ -286,8 +286,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 		nSnappedU<<=nFPShift;
 		nSnappedU*=nCellSize;
 		nSnappedU-=(nCellSizeFP*1024);
-			
-		SPete_HalfTone_Vertex RotatedPoints[4]={ 
+
+		SPete_HalfTone_Vertex RotatedPoints[4]={
 					{{nSnappedU,nSnappedV},				{0,0}},
 					{{(nSnappedU+nCellSizeFP),nSnappedV},			{nCellSizeFP-nFPMult,0}},
 					{{(nSnappedU+nCellSizeFP),(nSnappedV+nCellSizeFP)},	{nCellSizeFP-nFPMult,nCellSizeFP-nFPMult}},
@@ -359,7 +359,7 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
 				if (nCurrentX<0)continue;
 				if (nCurrentX>=nWidth)break;
-				
+
 				int nTexUInt=(nTexU>>nFPShift);
 				int nTexVInt=(nTexV>>nFPShift);
 
@@ -418,7 +418,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 {
     nWidth = image.xsize;
     nHeight = image.ysize;
-    
+
     if (!init) {
 	Init(nWidth, nHeight);
 	init = 1;
@@ -430,7 +430,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     unsigned char* pOutput = myImage.data;
-    
+
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
     int nSmoothingThreshold=clampFunc(m_Smoothing,0,255);
@@ -474,7 +474,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 	nSnappedU<<=nFPShift;
 	nSnappedU*=nCellSize;
 	nSnappedU-=(nCellSizeFP*1024);
-			
+
 	SPete_HalfTone_Vertex RotatedPoints[4]={
 	  {{nSnappedU,nSnappedV},				{0,0}},
 	  {{(nSnappedU+nCellSizeFP),nSnappedV},			{nCellSizeFP-nFPMult,0}},
@@ -555,7 +555,7 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 	      pDotFuncTableStart+
 	      (nTexVInt*nCellSize)+
 	      nTexUInt;
-              
+
 	    unsigned char* pCurrentOutput=
 	      pOutput+(nCurrentY*nWidth)+nCurrentX;
 	    *pCurrentOutput=pGreyScaleTableStart[nLuminance-*pCurrentDotFunc];
@@ -620,16 +620,16 @@ int pix_halftone :: EuclideanDotFunc(float X,float Y, float scale) {
 int pix_halftone :: PSDiamondDotFunc(float X,float Y, float scale) {
   const float AbsX=fabsf(X);
   const float AbsY=fabsf(Y);
-	
+
   float Result;
 
   if ((AbsX+AbsY)<=1.5f) {
-    Result=2.0f-(AbsX*AbsX+AbsY*AbsY); 
-  } else if ((AbsX+AbsY)<=1.23f) { 
+    Result=2.0f-(AbsX*AbsX+AbsY*AbsY);
+  } else if ((AbsX+AbsY)<=1.23f) {
     Result=2.0f-((AbsY*0.76f)+AbsX);
   } else {
     Result=((AbsY-1.0f)*(AbsY-1.0f)+
-	    (AbsX-1.0f)*(AbsX-1.0f))-2.0f;	
+	    (AbsX-1.0f)*(AbsX-1.0f))-2.0f;
   }
 
   Result/=2.0f;
@@ -897,11 +897,11 @@ void pix_halftone :: Pete_HalfTone_LerpAlongEdges_Vertex(
       const int nOneMinusLerpValue=
 	(nY-nMiddleY)/(nYDist>>nFPShift);
       const int nLerpValue=nFPMult-nOneMinusLerpValue;
-      
+
       poutVertex->Pos.nX=
 	(nLerpValue*(nMiddleX>>nFPShift))+
 	(nOneMinusLerpValue*(nEndX>>nFPShift));
-      
+
       poutVertex->TexCoords.nX=
 	(nLerpValue*(nMiddleU>>nFPShift))+
 	(nOneMinusLerpValue*(nEndU>>nFPShift));
@@ -938,7 +938,7 @@ void pix_halftone :: Pete_HalfTone_GetRasterizationVertices(
 //		(poutTop->Pos.nX-poutLeft->Pos.nX)*
 //		(poutBottom->Pos.nX-poutRight->Pos.nX);
 //
-//	
+//
 //	if ((poutLeft->Pos.nX==poutRight->Pos.nX)||(DirDot>0)) {
 //
 //		SPete_HalfTone_Vertex SwapTemp;
@@ -1035,7 +1035,7 @@ void pix_halftone :: Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleT
       if (nDiff>nSmoothingThreshold) nGreyValue=255;
       else nGreyValue=(nDiff*255)/nSmoothingThreshold;
     }
-    
+
     pGreyScaleTableStart[nCount]=nGreyValue;
 	//if (!init)
 	//	post ("pGreyScaleTableStart[%d] = %d",nCount,nGreyValue);
@@ -1056,7 +1056,7 @@ void pix_halftone :: YUV_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,
       if (nDiff>nSmoothingThreshold) nGreyValue=235;
       else nGreyValue=(nDiff*235)/nSmoothingThreshold;
     }
-    
+
     pGreyScaleTableStart[nCount]=nGreyValue;
 	//if (!init)
 	//	post ("pGreyScaleTableStart[%d] = %d",nCount,nGreyValue);
@@ -1083,7 +1083,7 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
   U32* pSourceStart=    pImageData+(nTopY*nImageWidth)+nLeftX;
   U32* pSourceEnd=      pSourceStart+(nDeltaY*nImageWidth);
   U32* pCurrentSource=pSourceStart;
-  
+
   int nRedTotal=0;
   int nGreenTotal=0;
   int nBlueTotal=0;
@@ -1138,7 +1138,7 @@ U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
   U32* pSourceStart=    pImageData+(nTopY*nImageWidth)+nLeftX;
   U32* pSourceEnd=      pSourceStart+(nDeltaY*nImageWidth);
   U32* pCurrentSource=pSourceStart;
-  
+
   int nLumaTotal =0;
   int nLuma1, nLuma2 = 0;
 
@@ -1150,10 +1150,10 @@ U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
 		const U32 CurrentColour=*pCurrentSource;
 		//nLuma1 = ((CurrentColour&(0xff<<16))>>16)<<8;
 		//nLuma2 = ((CurrentColour&(0xff<<0))>>0)<<8;
-		
+
 		nLuma1 = ((CurrentColour&(0xff<<SHIFT_Y1))>>SHIFT_Y1);
 		nLuma2 = ((CurrentColour&(0xff<<SHIFT_Y2))>>SHIFT_Y2);
-		
+
 		nLumaTotal += nLuma1 + nLuma2;
 		//nLuma1Total += nLuma1;
 		//nLuma2Total += nLuma2;
@@ -1192,7 +1192,7 @@ unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,
   unsigned char* pSourceStart=    pImageData+(nTopY*nImageWidth)+nLeftX;
   unsigned char* pSourceEnd=      pSourceStart+(nDeltaY*nImageWidth);
   unsigned char* pCurrentSource=pSourceStart;
-  
+
   int nGreyTotal=0;
 
   while (pCurrentSource<pSourceEnd) {
@@ -1257,21 +1257,21 @@ void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
 }
 void pix_halftone :: smoothCallback(void *data, t_floatarg m_Smoothing)
 {
-  GetMyClass(data)->m_Smoothing=CLAMP(m_Smoothing);  
+  GetMyClass(data)->m_Smoothing=CLAMP(m_Smoothing);
   GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: angleCallback(void *data, t_floatarg m_Angle)
 {
-  GetMyClass(data)->m_Angle=(m_Angle);  
+  GetMyClass(data)->m_Angle=(m_Angle);
   GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: smoothNCallback(void *data, t_floatarg m_Smoothing)
 {
-  GetMyClass(data)->m_Smoothing=CLAMP(255.f*m_Smoothing);  
+  GetMyClass(data)->m_Smoothing=CLAMP(255.f*m_Smoothing);
   GetMyClass(data)->setPixModified();
 }
 void pix_halftone :: angleDEGCallback(void *data, t_floatarg m_Angle)
 {
-  GetMyClass(data)->m_Angle=(atan2f(1,1)*m_Angle/45.0);  
+  GetMyClass(data)->m_Angle=(atan2f(1,1)*m_Angle/45.0);
   GetMyClass(data)->setPixModified();
 }

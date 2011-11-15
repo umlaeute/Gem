@@ -26,14 +26,14 @@ LOG
   -------------------------------------------------------------------
   CLASS
   pix_test
-    
+
   Change pix to greyscale
 
   KEYWORDS
   pix
-    
+
   DESCRIPTION
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_test : public GemPixObj
 {
@@ -44,9 +44,9 @@ class GEM_EXTERN pix_test : public GemPixObj
   //////////
   // Constructor
   pix_test();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_test();

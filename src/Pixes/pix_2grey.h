@@ -22,14 +22,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_2grey
-    
+
     Change pix to greyscale
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_2grey : public GemPixObj
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN pix_2grey : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_2grey();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_2grey();
@@ -64,7 +64,7 @@ class GEM_EXTERN pix_2grey : public GemPixObj
         virtual void 	processRGBAAltivec(imageStruct &image);
         virtual void 	processYUVAltivec(imageStruct &image);
 #endif
-     	    	  
+
     	//////////
     	// Do the processing - this is a no-op
     	virtual void 	processGrayImage(imageStruct &image) { }

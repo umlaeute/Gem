@@ -20,7 +20,7 @@ LOG
 #include "Gem/ExportDef.h"
 
 namespace gem {
-  
+
   namespace files {
 
     GEM_EXTERN std::vector<std::string>getFilenameListing(const std::string&pattern);

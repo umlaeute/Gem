@@ -29,7 +29,7 @@
 class gem::RTE::Symbol::PIMPL {
 public:
   const t_symbol*sym;
-  
+
   PIMPL(void) : sym(NULL)
   {
   }
@@ -47,17 +47,17 @@ gem::RTE::Symbol :: Symbol(const gem::RTE::Symbol&Sym)
 {
   m_pimpl->sym=Sym.m_pimpl->sym;
 }
-gem::RTE::Symbol :: Symbol(const std::string&name) 
+gem::RTE::Symbol :: Symbol(const std::string&name)
   : m_pimpl(new PIMPL)
 {
   m_pimpl->sym=gensym(name.c_str());
 }
-gem::RTE::Symbol :: Symbol(const t_symbol*name) 
+gem::RTE::Symbol :: Symbol(const t_symbol*name)
   : m_pimpl(new PIMPL)
 {
   m_pimpl->sym=name;
 }
-gem::RTE::Symbol :: Symbol(const unsigned int argc, const t_atom*argv) 
+gem::RTE::Symbol :: Symbol(const unsigned int argc, const t_atom*argv)
   : m_pimpl(new PIMPL)
 {
   setSymbol(argc, argv);
@@ -101,7 +101,7 @@ gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_at
     if(!firsttime)
       name+=" ";
     firsttime=false;
-    name+=atomname; 
+    name+=atomname;
   }
 
   m_pimpl->sym=gensym(name.c_str());
@@ -114,5 +114,5 @@ t_symbol*gem::RTE::Symbol::getRTESymbol(void) const {
 std::string gem::RTE::Symbol::getString(void) const {
   if(m_pimpl->sym)
     return std::string(m_pimpl->sym->s_name);
-  return std::string();      
+  return std::string();
 }

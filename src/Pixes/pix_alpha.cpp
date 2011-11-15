@@ -52,11 +52,11 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
 {
     // process the image
     int count = image.xsize * image.ysize;
-    
+
     unsigned char *pixels = image.data;
 
     while(count--) {
-      if ( (pixels[chRed] >= m_lowThresh[0] &&  pixels[chRed] <= m_highThresh[0] ) 
+      if ( (pixels[chRed] >= m_lowThresh[0] &&  pixels[chRed] <= m_highThresh[0] )
 	   &&
 	   (pixels[chGreen] >= m_lowThresh[1] &&  pixels[chGreen] <= m_highThresh[1] )
 	   &&
@@ -65,7 +65,7 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
       }
       else pixels[chAlpha] = m_otheralpha;
       pixels += 4;
-    }    
+    }
 }
 
 

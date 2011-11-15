@@ -24,14 +24,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_rgba
-    
+
     Change pix from "any" color-space to GL_RGBA
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_rgba : public GemPixObj
@@ -43,9 +43,9 @@ class GEM_EXTERN pix_rgba : public GemPixObj
     //////////
     // Constructor
     pix_rgba();
-    	
+
  protected:
-    	
+
     //////////
     // Destructor
     virtual ~pix_rgba();

@@ -32,7 +32,7 @@ typedef struct {
             GLfloat	V;
             GLfloat	Speed;
 } TSlider;
-        
+
 TSlider	Sliders[64];
 //int	init = 0;
 
@@ -90,21 +90,21 @@ void slideSquares :: renderShape(GemState *state)
     {
       glBegin(m_drawType);
       for (i=0; i<= 31; i++){
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V ); 
+	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );
 	glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
 	if (GemShape::m_texNum > 1) curCoord = 1;
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1), GemShape::m_texCoords[curCoord].t*Sliders[i].V ); 
+	glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1), GemShape::m_texCoords[curCoord].t*Sliders[i].V );
 	glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
 	if (GemShape::m_texNum > 2) curCoord = 2;
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1)); 
+	glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
 	glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
 	if (GemShape::m_texNum > 3) curCoord = 3;
 	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U,GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
 	glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
-                
+
 	Slide( i );
       }
       glEnd();
@@ -113,21 +113,21 @@ void slideSquares :: renderShape(GemState *state)
     {
         glBegin(m_drawType);
             for (i=0; i<= 31; i++){
-	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V ); 
+	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V );
                 glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
 	        if (GemShape::m_texNum > 1) curCoord = 1;
-                    glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    ); 
+                    glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
 	        if (GemShape::m_texNum > 2) curCoord = 2;
-                    glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 ); 
+                    glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
 	        if (GemShape::m_texNum > 3) curCoord = 3;
-                    glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1); 
+                    glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1);
                     glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
-                
+
                 Slide( i );
             }
         glEnd();
@@ -142,7 +142,7 @@ void slideSquares :: slide_init()
         Sliders[i].V = (Sliders[i].Y/2 + 0.45);
         //Sliders[i].V = (Sliders[i].Y + 0.45);
         Sliders[i].Speed = ourRand(1)/320 + 1/1600;
-        
+
         /*post("sliders[%d].U = %f",i,Sliders[i].U);
         post("sliders[%d].X = %f",i,Sliders[i].X);
         post("sliders[%d].Y = %f",i,Sliders[i].Y);
@@ -187,9 +187,9 @@ void slideSquares :: heightMess(float size)
 /////////////////////////////////////////////////////////
 void slideSquares :: typeMess(t_symbol *type)
 {
-    if (!strcmp(type->s_name, "line")) 
+    if (!strcmp(type->s_name, "line"))
 	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
+    else if (!strcmp(type->s_name, "fill"))
 	    m_drawType = GL_QUADS;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;

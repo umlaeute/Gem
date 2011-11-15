@@ -154,7 +154,7 @@ void mesh_square :: renderShape(GemState *state)
             {
 				glTexCoord2fv( texCoords[i][j] );
                 glVertex3f( m_size * (i*sizeX -1), m_size * (j*sizeY -1), 0 );
-            
+
                 glTexCoord2fv( texCoords[i+1][j] );
                 glVertex3f( m_size * ((i+1)*sizeX -1), m_size * (j*sizeY -1), 0 );
             }

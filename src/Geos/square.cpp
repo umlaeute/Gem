@@ -49,7 +49,7 @@ void square :: renderShape(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
     if (m_drawType == GL_LINE_LOOP)
         glLineWidth(m_linewidth);
-        
+
     glBegin(m_drawType);
 
     SetVertex(state, -m_size,  -m_size, 0.0f,0.,0.,0);
@@ -59,5 +59,5 @@ void square :: renderShape(GemState *state)
 
     glEnd();
 }
- 
+
 void square :: obj_setupCallback(t_class *classPtr){}

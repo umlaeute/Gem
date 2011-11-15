@@ -7,7 +7,7 @@
  *
  */
 
- 
+
 #ifndef _INCLUDE__GEM_PIXES_PIX_VIDEODARWIN_H_
 #define _INCLUDE__GEM_PIXES_PIX_VIDEODARWIN_H_
 
@@ -17,17 +17,17 @@
 #include <QuickTime/QuickTime.h>
 
 #include "pix_videoOS.h"
- 
+
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
 	pix_video
-    
+
     Loads in a video
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     "dimen" (int, int) - set the x,y dimensions
@@ -36,7 +36,7 @@ DESCRIPTION
     "contrast" (int) - the contrast
     "hue" (int) - the hue
     "sat" (int) - the saturation
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_videoDarwin : public pix_videoOS
 {
@@ -48,9 +48,9 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
         // Constructor
     	pix_videoDarwin(t_floatarg w, t_floatarg h );
 
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_videoDarwin();
@@ -65,10 +65,10 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
 
     	//////////
     	virtual void	startRendering();
-		
+
 		//////////
     	virtual void	stopRendering();
-        
+
           //////////
           // Start up the video device
           // [out] int - returns 0 if bad
@@ -89,13 +89,13 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
         //////////
         // property-dialog
         virtual void	dialogMess(int,t_atom*);
-		
+
 		virtual void	derSwizzler(imageStruct &image);
-		
+
 		virtual void	setupCapture();
-		
+
 		virtual void	fileMess(int argc, t_atom *argv);
-  
+
 	//-----------------------------------
 	// GROUP:	Macintosh specific video data
 	//-----------------------------------
@@ -107,26 +107,26 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
         void			disposeOffscreen();
         void			disposeVideoChannel();
         //OSErr	videoFrame(SGChannel c, short bufferNum, Boolean *done);
-        
+
         void InitSeqGrabber();
         void resetSeqGrabber();
         void destroySeqGrabber();
         void DoVideoSettings();
         void dimenMess(int x, int y, int leftmargin, int rightmargin,
     	    	    	    int topmargin, int bottommargin);
-							
+
 		//void	qualityMess(int X);
 
         //-----------------------------------
         // GROUP:	Video data
         //-----------------------------------
-    
-    	int		m_newFrame; 
+
+    	int		m_newFrame;
 		bool	m_banged;
 		bool	m_auto;
 		char	m_filename[80];
 		int		m_record;
-        
+
         SeqGrabComponent	m_sg;		// Sequence Grabber Component
         SGChannel			m_vc;			// Video Channel
 		SGOutput			m_sgout; //output for writing to disk
@@ -141,33 +141,33 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
         long				m_rowBytes;		// Row bytes in a row
         int					m_quality;
         int					m_colorspace;
-		
+
 		int					m_inputDevice;
 		int					m_inputDeviceChannel;
 		VideoDigitizerComponent			m_vdig; //gotta have the vdig
 		VideoDigitizerError	vdigErr;
 		DigitizerInfo       m_vdigInfo; //the info about the VDIG
-		
+
 		FSSpec		theFSSpec;
 		short		nFileRefNum;
 		short		nResID;
-		
+
 		//functions and variables for controlling the vdig
 		unsigned short		m_brightness;
 		unsigned short		m_contrast;
 		unsigned short		m_saturation;
-		
+
 		virtual void		brightnessMess(float X);
 		virtual void		saturationMess(float X);
 		virtual void		contrastMess(float X);
-		
+
 		//IIDC functions
 		virtual void		exposureMess(float X);
 		virtual void		gainMess(float X);
 		virtual void		whiteBalanceMess(float U,float V);
-		
+
     private:
-    	
+
     	//////////
     	// static member functions
         static void qualityCallback(void *data, t_floatarg X);

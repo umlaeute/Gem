@@ -28,7 +28,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 //
 /////////////////////////////////////////////////////////
 model :: model(t_symbol *filename)
-  : m_model(0), m_dispList(0), 
+  : m_model(0), m_dispList(0),
     m_rescaleModel(1), m_smooth(90), m_material(0),
     m_flags(GLM_SMOOTH | GLM_TEXTURE),
     m_group(0),
@@ -93,17 +93,17 @@ void model :: materialMess(int material)
 void model :: textureMess(int state)
 {
   switch(state) {
-  case 0: 
-    m_textype=GLM_TEX_LINEAR; 
+  case 0:
+    m_textype=GLM_TEX_LINEAR;
     break;
-  case 1: 
-    m_textype=GLM_TEX_SPHEREMAP; 
+  case 1:
+    m_textype=GLM_TEX_SPHEREMAP;
     break;
   case 2:
-    m_textype=GLM_TEX_UV; 
+    m_textype=GLM_TEX_UV;
     break;
   default:
-    m_textype=GLM_TEX_DEFAULT; 
+    m_textype=GLM_TEX_DEFAULT;
   }
   m_rebuild=true;
 }
@@ -159,7 +159,7 @@ void model :: groupMess(int state)
 void model :: openMess(t_symbol *filename)
 {
   cleanModel();
-    
+
   char buf[MAXPDSTRING];
   canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
   // read the object in

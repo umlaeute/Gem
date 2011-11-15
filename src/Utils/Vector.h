@@ -29,18 +29,18 @@ public:
 class GEM_EXTERN CVector3 {
 public:
   // the elements of a vector:
-  float x, y, z; 
-    
+  float x, y, z;
+
   // A default constructor
   CVector3(void);
 
     // This is our constructor that allows us to initialize our data upon creating an instance
     CVector3(float X, float Y, float Z);
 
-    // Here we overload the + operator so we can add vectors together 
+    // Here we overload the + operator so we can add vectors together
     CVector3 operator+(CVector3 vVector) const;
 
-    // Here we overload the - operator so we can subtract vectors 
+    // Here we overload the - operator so we can subtract vectors
     CVector3 operator-(CVector3 vVector) const;
 
     // Here we overload the - operator so we can negate the vector
@@ -49,7 +49,7 @@ public:
     // Here we overload the * operator so we can multiply by scalars
     CVector3 operator*(float num) const;
 
-    // Here we overload the * operator so we can dot-multiply 
+    // Here we overload the * operator so we can dot-multiply
     float    operator*(CVector3 vVector) const;
 
      // cross-multiplication
@@ -71,7 +71,7 @@ public:
     // here we compare 2 vectors on approx. equality
     bool equals(CVector3 vVector, float epsilon) const;
 
-    
+
 };
 
 #endif /* _INCLUDE__GEM_UTILS_VECTOR_H_ */

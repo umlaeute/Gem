@@ -25,7 +25,7 @@ GEMglGenProgramsARB :: GEMglGenProgramsARB	(int argc, t_atom*argv) :
   n(0), programs(NULL)
 {
 	programsMess(argc, argv);
-	
+
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("programs"));
 
 }

@@ -27,10 +27,10 @@
 #include <errno.h>
 
 #define GEM_SETTINGS_FILE "gem.conf"
-static const char*s_configdir[] = { 
+static const char*s_configdir[] = {
 #ifdef __linux__
   "/etc/pd",
-  "~/.pd", 
+  "~/.pd",
 #elif defined __APPLE__
   "/Library/Pd",
   "~/Library/Pd",
@@ -157,14 +157,14 @@ struct PIMPL {
 
   void print(void) {
     std::map <std::string , t_atom>::iterator it;
-    for(it = data.begin(); 
+    for(it = data.begin();
         it != data.end();
         it++)
       {
         if(!it->first.empty()) {
           startpost("key ['%s']: '", it->first.c_str());
           postatom(1, &it->second);
-	  
+
           post("'");
         }
       }
@@ -206,7 +206,7 @@ struct PIMPL {
   }
 
   ~PIMPL(void) {
-    
+
   }
 
   void setEnv(std::string key, const std::string env) {
@@ -253,7 +253,7 @@ static PIMPL*settings=NULL;
 /* public static functions */
 void GemSettings::init() {
   if(settings)return;
-  settings=new PIMPL(); 
+  settings=new PIMPL();
 }
 void GemSettings::print() {
   if(!settings)return;

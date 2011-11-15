@@ -22,20 +22,20 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_convolve
-    
+
     Apply a convolution kernel
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "matrix"
     Inlet for a float - "ft1"
-    
+
     "matrix" - The matrix for the convolution kernal
     "ft1" - The range of the matrix
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_convolve : public GemPixObj
 {
@@ -46,9 +46,9 @@ class GEM_EXTERN pix_convolve : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_convolve(t_floatarg row, t_floatarg col);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_convolve();
@@ -63,37 +63,37 @@ class GEM_EXTERN pix_convolve : public GemPixObj
     	virtual void 	processRGBAImage(imageStruct &image);
     	virtual void 	processGrayImage(imageStruct &image);
 	virtual void 	processYUVImage(imageStruct &image);
-    	
+
     	//////////
     	// Set the matrix range
     	void	    	rangeMess(float range);
-    	
+
     	//////////
     	// Set the matrix
     	void	    	matrixMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// The matrix
     	short int  	*m_imatrix;
-    
+
     	//////////
     	// The range
     	int             m_irange;
-	
+
 
     	//////////
     	// The number of rows
     	int 	    	m_rows;
-    	
+
     	//////////
     	// The number of columns
     	int 	    	m_cols;
-        
+
         int 		m_chroma;
-    	
+
     private:
 	imageStruct tempImg;
-    
+
     	//////////
     	// Static member functions
     	static void 	rangeMessCallback(void *data, t_floatarg range);

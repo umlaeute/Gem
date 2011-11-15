@@ -22,18 +22,18 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_colormatrix
-    
+
     Apply a color matrix
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "matrix"
-    
+
     "matrix" - The matrix for the color conversion
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_colormatrix : public GemPixObj
 {
@@ -44,9 +44,9 @@ class GEM_EXTERN pix_colormatrix : public GemPixObj
 	    //////////
 	    // Constructor
     	pix_colormatrix();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_colormatrix();
@@ -54,17 +54,17 @@ class GEM_EXTERN pix_colormatrix : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-        
+
     	//////////
     	// Set the matrix
     	void	    	matrixMess(int argc, t_atom *argv);
-    	
+
     	//////////
     	// The matrix
     	float  	    	m_matrix[16];
-    
+
     private:
-    
+
     	//////////
     	// Static member functions
     	static void 	matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

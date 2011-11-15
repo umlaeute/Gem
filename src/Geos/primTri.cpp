@@ -105,11 +105,11 @@ void primTri :: renderShape(GemState *state)
     	        glTexCoord2f(0.f, 0.f);
  				glColor4fv(mColors[0]);
    				glVertex3fv(mVectors[0]);
-    	        
+
 				glTexCoord2f(1.f, 0.f);
  				glColor4fv(mColors[1]);
    				glVertex3fv(mVectors[1]);
-    	        
+
 				glTexCoord2f(.5f, 1.f);
  				glColor4fv(mColors[2]);
    				glVertex3fv(mVectors[2]);
@@ -126,9 +126,9 @@ void primTri :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void primTri :: typeMess(t_symbol *type)
 {
-    if (!strcmp(type->s_name, "line")) 
+    if (!strcmp(type->s_name, "line"))
 	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill")) 
+    else if (!strcmp(type->s_name, "fill"))
 	    m_drawType = GL_TRIANGLES;
     else if (!strcmp(type->s_name, "point"))
 	    m_drawType = GL_POINTS;
@@ -147,17 +147,17 @@ void primTri :: typeMess(t_symbol *type)
 void primTri :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect1MessCallback),
-    	    gensym("vect1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
+    	    gensym("vect1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect2MessCallback),
-    	    gensym("vect2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
+    	    gensym("vect2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect3MessCallback),
-    	    gensym("vect3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL); 
+    	    gensym("vect3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col1MessCallback),
-    	    gensym("col1"), A_GIMME, A_NULL); 
+    	    gensym("col1"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col2MessCallback),
-    	    gensym("col2"), A_GIMME, A_NULL); 
+    	    gensym("col2"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col3MessCallback),
-    	    gensym("col3"), A_GIMME, A_NULL); 
+    	    gensym("col3"), A_GIMME, A_NULL);
 }
 
 void primTri :: vect1MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)

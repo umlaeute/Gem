@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-  
+
 #include "imageloader.h"
 #include "plugins/PluginFactory.h"
 
@@ -82,7 +82,7 @@ namespace gem { namespace plugins {
           // not yet added, do so now!
           gem::plugins::imageloader*loader=NULL;
           try {
-            loader=gem::PluginFactory<gem::plugins::imageloader>::getInstance(key); 
+            loader=gem::PluginFactory<gem::plugins::imageloader>::getInstance(key);
           } catch(GemException&x) {
             loader=NULL;
             verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());

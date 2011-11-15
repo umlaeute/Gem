@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglRenderMode );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRenderMode :: GEMglRenderMode	(int argc, t_atom*argv) : 
-  mode(0) 
+GEMglRenderMode :: GEMglRenderMode	(int argc, t_atom*argv) :
+  mode(0)
 {
   if(1==argc)modeMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
 

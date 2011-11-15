@@ -94,7 +94,7 @@ class GEM_EXTERN gemglxwindow : public GemWindow
 
   virtual void    fullscreenMess(bool on);
   virtual void        offsetMess(int x, int y);
- 
+
   /* creation/destruction */
   virtual void        createMess(std::string);
   virtual void       destroyMess(void);

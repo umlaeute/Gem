@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRotated , t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 GEMglRotated :: GEMglRotated	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		angle(static_cast<GLdouble>(arg0)), 
-		x(static_cast<GLdouble>(arg1)), 
-		y(static_cast<GLdouble>(arg2)), 
+		angle(static_cast<GLdouble>(arg0)),
+		x(static_cast<GLdouble>(arg1)),
+		y(static_cast<GLdouble>(arg2)),
 		z(static_cast<GLdouble>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("angle"));

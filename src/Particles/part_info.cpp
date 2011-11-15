@@ -51,7 +51,7 @@ part_info :: part_info()
 //
 /////////////////////////////////////////////////////////
 part_info :: ~part_info()
-{ 
+{
   outlet_free(out_num);
   outlet_free(out_pos);
   outlet_free(out_col);

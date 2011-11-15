@@ -50,7 +50,7 @@ void pix_bitmask :: processRGBAImage(imageStruct &image)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *pixels = image.data;
-    
+
   while(datasize--)	{
     pixels[chRed] &= m_mask[chRed];
     pixels[chGreen] &= m_mask[chGreen];
@@ -63,7 +63,7 @@ void pix_bitmask :: processYUVImage(imageStruct &image)
 {
   int datasize = image.xsize * image.ysize / 2;
   unsigned char *pixels = image.data;
-  
+
   if (m_mode)
     while(datasize--)	{
       pixels[chU] &= m_mask[chGreen];
@@ -83,7 +83,7 @@ void pix_bitmask :: processGrayImage(imageStruct &image)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *pixels = image.data;
-    
+
   while(datasize--)	{
     pixels[chGray] &= m_mask[chRed];
     pixels++;

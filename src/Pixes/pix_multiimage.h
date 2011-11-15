@@ -24,12 +24,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_multiimage
-    
+
     Load multiple images into a pix block
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     You can select which file by giving a number.
@@ -44,11 +44,11 @@ class GEM_EXTERN pix_multiimage : public GemBase
 	    //////////
 	    // Constructor
     	pix_multiimage(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);
-    	
+
         class multiImageCache
         {
             public:
-                
+
                 multiImageCache(const char *_imageName)
                         : refCount(0), next(NULL), images(NULL), textBind(NULL),
                             numImages(0), baseImage(0), topImage(0), skipRate(0)
@@ -72,12 +72,12 @@ class GEM_EXTERN pix_multiimage : public GemBase
                 int                 topImage;
                 int                 skipRate;
         };
-    	
+
     	//////////
         static multiImageCache  *s_imageCache;
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_multiimage();
@@ -85,7 +85,7 @@ class GEM_EXTERN pix_multiimage : public GemBase
     	//////////
     	// When an open is received
     	virtual void	openMess(t_symbol *filename, int baseImage, int topImage, int skipRate);
-    	
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
@@ -100,15 +100,15 @@ class GEM_EXTERN pix_multiimage : public GemBase
     	//////////
     	// Change which image to display
     	void	    	changeImage(int imgNum);
-    
+
     	//////////
     	// Clean up the images and the pixBlock
     	void	    	cleanImages();
-    
+
 	    //-----------------------------------
 	    // GROUP:	Image data
 	    //-----------------------------------
-    
+
     	//////////
     	// The number of loaded images
     	int 	    	m_numImages;
@@ -125,9 +125,9 @@ class GEM_EXTERN pix_multiimage : public GemBase
     	//////////
     	// The original images
         multiImageCache *m_loadedCache;
-          	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	openMessCallback(void *data, t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);

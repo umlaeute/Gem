@@ -20,14 +20,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      -------------------------------------------------------------------
      CLASS
      imageBase
-    
+
      parent class for the system- and library-dependent imageBase-loader classes
      this class should only be used for plugin implementations
      the plugin-host should use the imageBaseloader/imageBasesaver classes resp.
-    
+
      KEYWORDS
      pix load an image
-    
+
      DESCRIPTION
 
      -----------------------------------------------------------------*/
@@ -35,10 +35,10 @@ namespace gem { namespace plugins {
 class GEM_EXTERN imageBase : public imageloader, public imagesaver
   {
   public:
-  
+
     //////////
     // Constructor
-  
+
     /* initialize the image class (set 'threadable' to FALSE if this object must
      * NOT be used within a threaded context
      */
@@ -53,9 +53,9 @@ class GEM_EXTERN imageBase : public imageloader, public imagesaver
     virtual bool isThreadable(void);
     virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
 
-    virtual float estimateSave( const imageStruct&img, 
-				const std::string&filename, 
-				const std::string&mimetype, 
+    virtual float estimateSave( const imageStruct&img,
+				const std::string&filename,
+				const std::string&mimetype,
 				const gem::Properties&props);
 
     /**
@@ -71,13 +71,13 @@ class GEM_EXTERN imageBase : public imageloader, public imagesaver
      * set a number of properties (as defined by "props")
      * the "props" may hold properties not supported by the currently opened device,
      *  which is legal; in this case the superfluous properties are simply ignored
-     * this function MAY modify the props; 
+     * this function MAY modify the props;
      */
     virtual void setProperties(gem::Properties&props);
 
     /**
      * get the current value of the given properties from the device
-     * if props holds properties that can not be read from the device, they are set to UNSET 
+     * if props holds properties that can not be read from the device, they are set to UNSET
      */
     virtual void getProperties(gem::Properties&props);
 

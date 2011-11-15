@@ -27,14 +27,14 @@
   -------------------------------------------------------------------
   CLASS
   pqtorusknots
-    
+
   Creates a pqtorus with knots
 
   KEYWORDS
   geo
 
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN pqtorusknots : public GemShape
 {
@@ -46,7 +46,7 @@ class GEM_EXTERN pqtorusknots : public GemShape
   // Constructor
   pqtorusknots(t_floatarg m_P, t_floatarg m_Q);
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pqtorusknots();
@@ -74,7 +74,7 @@ class GEM_EXTERN pqtorusknots : public GemShape
   //////////
   // Number of steps in the torus knot
   GLint	    	m_steps;
-		
+
   //////////
   // Number of facets in the torus knot
   GLint	    	m_facets;
@@ -86,23 +86,23 @@ class GEM_EXTERN pqtorusknots : public GemShape
   //////////
   // The thickness of the knot
   GLfloat	m_thickness;
-		
+
   //////////
   // The thickness of the knot
   GLfloat	m_clumps;
   GLfloat	m_clumpOffset;
   GLfloat	m_clumpScale;
-		
+
   //////////
   // The coordinate scale of the knot
   GLfloat	m_uScale;
   GLfloat	m_vScale;
-		
+
   //////////
   // The thickness of the knot
   GLfloat	m_P;
   GLfloat	m_Q;
-		
+
   //////////
   // Vertex Array Stuff
   GLfloat*      m_Vertex;

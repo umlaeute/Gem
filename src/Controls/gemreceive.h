@@ -3,7 +3,7 @@
   GEM - Graphics Environment for Multimedia
 
   ordered receive
-    
+
   Copyright (c) 2008-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -19,7 +19,7 @@
   -------------------------------------------------------------------
   CLASS
   gemreceive
-    
+
   [receive] with explicit order
 
   DESCRIPTION
@@ -30,7 +30,7 @@
   of an ordered [receive]
 
   the original object was [oreceive] in the iemguts library
-    
+
   -----------------------------------------------------------------*/
 
 EXTERN_STRUCT _bind_element;
@@ -51,11 +51,11 @@ class GEM_EXTERN gemreceive : public CPPExtern
   gemreceive(t_symbol*s, t_floatarg f=50.f);
 
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~gemreceive();
-        
+
   //////////
   // keyboard-button
   virtual void receive(t_symbol*s, int argc, t_atom*argv);

@@ -86,7 +86,7 @@ void pix_data :: trigger()
 
     t_float xFrac = fxPos - ixPos0;
     t_float yFrac = fyPos - iyPos0;
-  
+
     unsigned char r[2][2], g[2][2], b[2][2], a[2][2], G[2][2];
 
     m_pixRight->image.getRGB(ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0], &a[0][0]);
@@ -126,7 +126,7 @@ void pix_data :: trigger()
   }
     break;
   }
-  
+
   t_atom atom[4];
   // send out the color information
   outlet_float(m_grayOut, grey);
@@ -134,7 +134,7 @@ void pix_data :: trigger()
   SETFLOAT(&atom[1], green);
   SETFLOAT(&atom[2], blue);
   SETFLOAT(&atom[3], alpha);
-  outlet_list(m_colorOut, gensym("list"), 4, atom);	
+  outlet_list(m_colorOut, gensym("list"), 4, atom);
 }
 
 void pix_data :: xPos(t_float f) {
@@ -147,7 +147,7 @@ void pix_data :: qualityMess(int q) {
   if(q>=0)
     m_quality=q;
   else error("qualiy must be 0|1");
- 
+
 }
 
 

@@ -20,12 +20,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
 	video
-    
+
 	a OS-indendent parent-class for grabbing video-frames
-	
+
   KEYWORDS
 	pix, capture
-    
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXTERN videoBase : public video {
@@ -80,7 +80,7 @@ namespace gem { namespace plugins {
     virtual bool	   	restartTransfer(void);
 
  public:
-    /** 
+    /**
      * get the next frame (called when rendering)
      * grab the next frame from the device
      * if no new frame is available, this should set the "newimage" flag to false
@@ -117,7 +117,7 @@ namespace gem { namespace plugins {
     /**
      * set the device to be opened next time
      * the ID provided should match an index in the list returned by enumerate()
-     * after the device has been set, the caller(!) has to restart 
+     * after the device has been set, the caller(!) has to restart
      * (close() the current handle, try open() with the new settings)
      * the default implementation (which you normally shouldn't need to override)
      * will simply set m_devicenum and clear m_devicename
@@ -128,7 +128,7 @@ namespace gem { namespace plugins {
      * set the device to be opened next time
      * the list returned by enumerate() provides a set of valid names to use here
      * depending on the backend, other names might be possible as well (e.g. IP-cameras)
-     * after the device has been set, the caller(!) has to restart 
+     * after the device has been set, the caller(!) has to restart
      * (close() the current handle, try open() with the new settings)
      * the default implementation (which you normally shouldn't need to override)
      * will simply set m_devicename and clear m_devicenum
@@ -161,15 +161,15 @@ namespace gem { namespace plugins {
      * set a number of properties (as defined by "props")
      * the "props" may hold properties not supported by the currently opened device,
      *  which is legal; in this case the superfluous properties are simply ignored
-     * this function MAY modify the props; 
-     * namely one-shot properties (e.g. "do-white-balance-now") 
+     * this function MAY modify the props;
+     * namely one-shot properties (e.g. "do-white-balance-now")
      *     should be removed from the props
      */
     virtual void setProperties(gem::Properties&props);
 
     /**
      * get the current value of the given properties from the device
-     * if props holds properties that can not be read from the device, they are set to UNSET 
+     * if props holds properties that can not be read from the device, they are set to UNSET
      */
     virtual void getProperties(gem::Properties&props);
 
@@ -181,7 +181,7 @@ namespace gem { namespace plugins {
      * they want with the string list
      * if the list is empty, provide sane defaults (e.g. ALL dialogs)
      * if the system does not support dialogs, return FALSE
-     * if the system does support dialogs and the user has specified which one they want, 
+     * if the system does support dialogs and the user has specified which one they want,
      * return TRUE if at least one dialog could be handled
      */
     virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
@@ -195,13 +195,13 @@ namespace gem { namespace plugins {
      * \return FALSE if the colorspace cannot be set (e.g. while grabbing is active)
      */
     virtual bool	    	setColor(int);
-  
+
     //////////
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
-    // 
+    //
     videoBase(const std::string name);
-  
+
     //////////
     // Destructor
     virtual ~videoBase(void);
@@ -243,12 +243,12 @@ namespace gem { namespace plugins {
     /* stops the thread; waits at most "timeout" microseconds; if 0 waits forever; if -1 waits for time specified in ctor */
     bool stopThread(int timeout=-1);
 
-    /* locks the mutex #<id>; 
+    /* locks the mutex #<id>;
      * if the mutex does not exist (e.g. no threading), this will simply return
      * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
      */
     void lock(unsigned int id=0);
-    /* unlocks the mutex #<id>; 
+    /* unlocks the mutex #<id>;
      * if the mutex does not exist (e.g. no threading), this will simply return
      * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
      */
@@ -262,7 +262,7 @@ namespace gem { namespace plugins {
     //////////
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
-    // 
+    //
     videoBase(const std::string name, unsigned int numlocks);
 
     /*
@@ -276,13 +276,13 @@ namespace gem { namespace plugins {
     bool m_haveVideo;
     //! a place to store the image with grabFrame()
     pixBlock m_image;
-  
+
     unsigned int m_width;
     unsigned int m_height;
     int m_reqFormat;
 
     /* specify either devicename XOR devicenum */
-    /* if !m_devicename.empty() 
+    /* if !m_devicename.empty()
      *  then use m_devicename
      * elif m_devicenum>=0
      *  use m_devicenum (preferrable as index in the list returned by enumerate()

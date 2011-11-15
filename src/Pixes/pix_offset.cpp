@@ -14,11 +14,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
- 
+
 #include "pix_offset.h"
 
 CPPEXTERN_NEW(pix_offset);
- 
+
 /////////////////////////////////////////////////////////
 //
 // pix_offset
@@ -98,7 +98,7 @@ void pix_offset :: processGrayImage(imageStruct &image)
       grey = *pixels + m_grey;
       *pixels++ = CLAMP(grey);
     }
-  } else 
+  } else
     while(datasize--)*pixels++ += m_grey;
 }
 
@@ -110,8 +110,8 @@ void pix_offset :: processYUVImage(imageStruct &image)
 {
   int h,w;
   long src = 0;
-  
-  //format is U Y V Y  
+
+  //format is U Y V Y
   for (h=0; h<image.ysize; h++){
     for(w=0; w<image.xsize/2; w++){
       image.data[src+chU ] = CLAMP( image.data[src+chU] + U );
@@ -145,7 +145,7 @@ void pix_offset :: processRGBAMMX(imageStruct &image)
   } else {
     while(pixsize--) {
       data_p[0]=_mm_add_pi8(data_p[0], offset_64);
-      data_p++;      
+      data_p++;
     }
   }
   _mm_empty();
@@ -161,7 +161,7 @@ void pix_offset :: processYUVMMX(imageStruct &image)
 
   while(pixsize--) {
     data_p[0]=_mm_add_pi8(data_p[0], offset_64);
-    data_p++;      
+    data_p++;
   }
   _mm_empty();
 }
@@ -183,7 +183,7 @@ void pix_offset :: processGrayMMX(imageStruct &image)
   } else {
     while(pixsize--) {
       data_p[0]=_mm_add_pi8(data_p[0], offset_64);
-      data_p++;      
+      data_p++;
     }
   }
   _mm_empty();
@@ -198,13 +198,13 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
   width = image.xsize/16; //for altivec
   height = image.ysize;
   //format is U Y V Y
-  // start of working altivec function 
+  // start of working altivec function
   union
   {
     short	elements[8];
     vector	signed short v;
   }transferBuffer;
-    
+
   register vector signed short c, hi, lo;
   register vector signed short hi1, lo1;
   register vector signed short loadhi, loadhi1, loadlo, loadlo1;
@@ -225,82 +225,82 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
   //Load it into the vector unit
   c = transferBuffer.v;
 
-    
+
 #ifndef PPC970
   UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( inData+16, prefetchSize, 1 );
   vec_dst( inData+32, prefetchSize, 2 );
   vec_dst( inData+64, prefetchSize, 3 );
-#endif  
-     
+#endif
+
   //expand the UInt8's to short's
   loadhi = (vector signed short) vec_mergeh( zero, inData[0] );
   loadlo = (vector signed short) vec_mergel( zero, inData[0] );
-           
+
   loadhi1 = (vector signed short) vec_mergeh( zero, inData[1] );
   loadlo1 = (vector signed short) vec_mergel( zero, inData[1] );  \
-           
-        
+
+
   for ( h=0; h<height; h++){
     for (w=0; w<width; w++){
-        
+
 #ifndef PPC970
       vec_dst( inData, prefetchSize, 0 );
       vec_dst( inData+16, prefetchSize, 1 );
       vec_dst( inData+32, prefetchSize, 2 );
       vec_dst( inData+64, prefetchSize, 3 );
 #endif
-                    
+
       //add the constant to it
       hi = vec_add( loadhi, c );
       lo = vec_add( loadlo, c );
-            
+
       hi1 = vec_add( loadhi1, c );
       lo1 = vec_add( loadlo1, c );
-            
-            
+
+
       //expand the UInt8's to short's
       loadhi = (vector signed short) vec_mergeh( zero, inData[2] );
       loadlo = (vector signed short) vec_mergel( zero, inData[2] );
-           
-            
+
+
       loadhi1 = (vector signed short) vec_mergeh( zero, inData[3] );
       loadlo1 = (vector signed short) vec_mergel( zero, inData[3] );
-            
+
       //pack the result back down, with saturation
       inData[0] = vec_packsu( hi, lo );
       inData++;
-            
-            
+
+
       inData[0] = vec_packsu( hi1, lo1 );
       inData++;
     }
   }
-    
+
   //
   // finish the last iteration after the loop
   //
   hi = vec_add( loadhi, c );
   lo = vec_add( loadlo, c );
-            
+
   hi1 = vec_add( loadhi1, c );
   lo1 = vec_add( loadlo1, c );
-            
+
   //pack the result back down, with saturation
   inData[0] = vec_packsu( hi, lo );
-            
+
   inData++;
-            
+
   inData[0] = vec_packsu( hi1, lo1 );
-            
+
   inData++;
-    
+
 #ifndef PPC970
   vec_dss( 0 );
   vec_dss( 1 );
   vec_dss( 2 );
-  vec_dss( 3 );  //end of working altivec function 
+  vec_dss( 3 );  //end of working altivec function
 #endif
 }
 #endif

@@ -66,7 +66,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
-  
+
   // create an outlet to send texture info
   m_outTexInfo = outlet_new(this->x_obj, 0);
 }
@@ -117,7 +117,7 @@ bool pix_snap2tex :: isRunnable(void) {
 void pix_snap2tex :: snapMess()
 {
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
-  
+
   int width  = m_width;
   int height = m_height;
 
@@ -142,46 +142,46 @@ void pix_snap2tex :: snapMess()
   int x_2 = powerOfTwo(width);
   int y_2 = powerOfTwo(height);
 
-  if (width != m_oldWidth || height != m_oldHeight) 
+  if (width != m_oldWidth || height != m_oldHeight)
     {
       m_oldWidth = width;
       m_oldHeight = height;
-      
+
       float m_xRatio = (float)width / (float)x_2;
       float m_yRatio = (float)height / (float)y_2;
-		
+
       m_coords[0].s = 0.f;
       m_coords[0].t = 0.f;
-		
+
       m_coords[1].s = m_xRatio;
       m_coords[1].t = 0.f;
-		
+
       m_coords[2].s = m_xRatio;
       m_coords[2].t = m_yRatio;
-		
+
       m_coords[3].s = 0.f;
       m_coords[3].t = m_yRatio;
 
       m_texWidth = x_2;
       m_texHeight = y_2;
-		
+
       glCopyTexImage2D(	m_textureType, 0,
 			GL_RGBA16,
 			m_x, m_y,
-			m_texWidth, m_texHeight, 
+			m_texWidth, m_texHeight,
 			0);
-      
+
     } else {
     m_texHeight = m_height;
     m_texWidth = m_width;
   }
-  
+
   glCopyTexSubImage2D(m_textureType, 0,
                       0, 0,
                       m_x, m_y,		// position
                       m_texWidth,
-                      m_texHeight);		
-  
+                      m_texHeight);
+
   glDisable(m_textureType);
 
 }
@@ -250,7 +250,7 @@ void pix_snap2tex :: startRendering()
     setUpTextureState();
   } else {
     glGenTexturesEXT(1, &m_textureObj);
-    glBindTextureEXT(m_textureType, m_textureObj);    
+    glBindTextureEXT(m_textureType, m_textureObj);
     setUpTextureState();
   }
 
@@ -388,7 +388,7 @@ void pix_snap2tex :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::posMessCallback),
 		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
 
-  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::floatMessCallback));    
+  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::floatMessCallback));
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::textureMessCallback),
 		  gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap2tex::repeatMessCallback),

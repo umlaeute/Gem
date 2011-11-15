@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB , t_floatarg, A_DEFFLOAT, t_floa
 // Constructor
 //
 GEMglUniform1fARB :: GEMglUniform1fARB	(t_floatarg arg0=0, t_floatarg arg1=0) :
-		location(static_cast<GLint>(arg0)), 
+		location(static_cast<GLint>(arg0)),
 		val(static_cast<GLfloat>(arg1))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("location"));

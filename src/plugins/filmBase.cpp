@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -36,12 +36,12 @@ public:
   {  };
 };
 
-  filmBase :: filmBase(bool threadable) : 
+  filmBase :: filmBase(bool threadable) :
   m_pimpl(new PIMPL(threadable)),
 #ifdef __APPLE__
-  m_wantedFormat(GL_YUV422_GEM), 
+  m_wantedFormat(GL_YUV422_GEM),
 #else
-  m_wantedFormat(GL_RGBA), 
+  m_wantedFormat(GL_RGBA),
 #endif
   m_numFrames(0), m_numTracks(0),
   m_curFrame(0), m_curTrack(0),
@@ -51,12 +51,12 @@ public:
   m_newfilm(false)
 {}
 
-filmBase :: filmBase(void) : 
+filmBase :: filmBase(void) :
   m_pimpl(new PIMPL(true)),
 #ifdef __APPLE__
-  m_wantedFormat(GL_YUV422_GEM), 
+  m_wantedFormat(GL_YUV422_GEM),
 #else
-  m_wantedFormat(GL_RGBA), 
+  m_wantedFormat(GL_RGBA),
 #endif
   m_numFrames(0), m_numTracks(0),
   m_curFrame(0), m_curTrack(0),

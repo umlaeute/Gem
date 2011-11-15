@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-  
+
 #include "plugins/videoBase.h"
 #include "Gem/RTE.h"
 
@@ -95,17 +95,17 @@ public:
   ~PIMPL(void) {
     cont=false;
     lock_delete();
-    delete[]locks; 
+    delete[]locks;
     locks=NULL;
 
     doThaw();
 
     if(condition_mutex) {
-      pthread_mutex_destroy(condition_mutex); 
+      pthread_mutex_destroy(condition_mutex);
       delete condition_mutex;
     }
     if(condition_cond) {
-      pthread_cond_destroy(condition_cond); 
+      pthread_cond_destroy(condition_cond);
       delete condition_cond;
     }
   }
@@ -143,7 +143,7 @@ public:
       unsigned int i=0;
       for(i=0; i<numlocks; i++) {
         if(locks[i]) {
-          pthread_mutex_destroy(locks[i]); 
+          pthread_mutex_destroy(locks[i]);
           delete locks[i];
           locks[i]=NULL;
         }
@@ -183,7 +183,7 @@ public:
     post("starting capture thread");
     me->m_pimpl->cont=true;
     me->m_pimpl->running=true;
-    
+
     while(me->m_pimpl->cont) {
       if(!me->grabFrame()) {
         break;
@@ -215,7 +215,7 @@ public:
 //
 /////////////////////////////////////////////////////////
 videoBase :: videoBase(const std::string name, unsigned int locks) :
-  m_capturing(false), m_haveVideo(false), 
+  m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
   m_reqFormat(GL_RGBA),
   m_devicename(std::string("")), m_devicenum(0),
@@ -226,7 +226,7 @@ videoBase :: videoBase(const std::string name, unsigned int locks) :
   }
 }
 videoBase :: videoBase(const std::string name) :
-  m_capturing(false), m_haveVideo(false), 
+  m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
   m_reqFormat(GL_RGBA),
   m_devicename(std::string("")), m_devicenum(0),
@@ -327,9 +327,9 @@ bool videoBase :: startThread() {
   if(m_pimpl->threading) {
     if(!m_pimpl->lock_new())return false;
 
-    pthread_create(&m_pimpl->thread, 
+    pthread_create(&m_pimpl->thread,
                    0,
-                   m_pimpl->threadfun, 
+                   m_pimpl->threadfun,
                    this);
     while(!m_pimpl->running)
       usleep(10);
@@ -341,7 +341,7 @@ bool videoBase :: startThread() {
 bool videoBase :: stopThread(int timeout) {
   int i=0;
   if(!m_pimpl->threading)return true;
-  
+
   debugPost("stopThread: %d", timeout);
 
   m_pimpl->cont=false;
@@ -385,7 +385,7 @@ void videoBase :: usleep(unsigned long usec) {
   long sec_=0;
   //  long  sec_ = usec\1000000;
   sleep.tv_sec=sec_;
-  sleep.tv_usec=usec_; 
+  sleep.tv_usec=usec_;
   select(0,0,0,0,&sleep);
 }
 
@@ -490,7 +490,7 @@ void videoBase :: provide(const std::string name) {
 }
 
 bool videoBase :: enumProperties(gem::Properties&readable,
-			     gem::Properties&writeable) 
+			     gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();

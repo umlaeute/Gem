@@ -21,7 +21,7 @@ LOG
 -------------------------------------------------------------------
 CLASS
     diffuse
-    
+
     diffuse a gem object
 
 DESCRIPTION
@@ -29,7 +29,7 @@ DESCRIPTION
     Inlet for a list - "diffuse"
 
     "diffuse" - the RGB diffuse to set the object to
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN diffuse : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN diffuse : public GemBase
 	    //////////
 	    // Constructor
     	diffuse(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~diffuse();
@@ -62,9 +62,9 @@ class GEM_EXTERN diffuse : public GemBase
     	//////////
     	// diffuse changed
     	void	    	diffuseMess(float red, float green, float blue, float alpha);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	diffuseMessCallback(void *data, t_symbol *, int argc, t_atom *argv);

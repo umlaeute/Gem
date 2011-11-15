@@ -24,9 +24,9 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglTexCoord4d , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglTexCoord4d :: GEMglTexCoord4d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
-		s(static_cast<GLdouble>(arg0)), 
-		t(static_cast<GLdouble>(arg1)), 
-		r(static_cast<GLdouble>(arg2)), 
+		s(static_cast<GLdouble>(arg0)),
+		t(static_cast<GLdouble>(arg1)),
+		r(static_cast<GLdouble>(arg2)),
 		q(static_cast<GLdouble>(arg3))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));

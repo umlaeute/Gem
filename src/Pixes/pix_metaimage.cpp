@@ -14,7 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_metaimage.h"
-	
+
 CPPEXTERN_NEW(pix_metaimage);
 
 /////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ CPPEXTERN_NEW(pix_metaimage);
 //
 /////////////////////////////////////////////////////////
 pix_metaimage :: pix_metaimage()
-{ 
+{
     m_Size = 0.2f;
     m_DoDistanceBased = 0.0f;
     m_DoCheapAndNasty = 0.0f;
@@ -41,7 +41,7 @@ pix_metaimage :: pix_metaimage()
 //
 /////////////////////////////////////////////////////////
 pix_metaimage :: ~pix_metaimage()
-{ 
+{
     Pete_MetaImage_DeInit();
 }
 
@@ -58,7 +58,7 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 	init = 1;
     }
     pSource = reinterpret_cast<U32*>(image.data);
-    
+
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
@@ -67,7 +67,7 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 
     float SubWidth;
     float SubHeight;
-    
+
     m_Size = clampFunc(m_Size,0.0f,1.0f);
 
     if (m_DoDistanceBased>0.0f) {
@@ -86,7 +86,7 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
     U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
     if (pSubImageData==NULL) {
 		return;
-    } 
+    }
 
     U32 AverageColour=Pete_MetaImage_CreateSubImage(pSource,pSubImageData,SubWidth,SubHeight);
 
@@ -108,7 +108,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 	init = 1;
     }
     pSource = reinterpret_cast<U32*>(image.data);
-    
+
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
@@ -118,7 +118,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 
     float SubWidth;
     float SubHeight;
-    
+
     m_Size = clampFunc(m_Size,0.0f,1.0f);
 
     if (m_DoDistanceBased>0.0f) {
@@ -137,7 +137,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
     U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
     if (pSubImageData==NULL) {
 		return;
-    } 
+    }
 
     U32 AverageColour = CreateSubImageYUV(pSource,pSubImageData,SubWidth,SubHeight);
 
@@ -159,7 +159,7 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
 	init = 1;
     }
     pSource = reinterpret_cast<U32*>(image.data);
-    
+
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
@@ -169,7 +169,7 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
 
     float SubWidth;
     float SubHeight;
-    
+
     m_Size = clampFunc(m_Size,0.0f,1.0f);
 
     if (m_DoDistanceBased>0.0f) {
@@ -308,7 +308,7 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
   const int nYDelta=nClippedBottomY-nClippedTopY;
 
   if ((nXDelta<=0)||(nYDelta<=0))return;
-  
+
   U32* pCurrentSource=pShrunkBuffer;
 
   pCurrentSource+=((nClippedTopY-nTopY)*nWidth);
@@ -317,7 +317,7 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
   U32* pCurrentOutput=pOutput+(nClippedTopY*nWidth)+nClippedLeftX;
   U32*const pOutputEnd=(pCurrentOutput+(nYDelta*nWidth)+nXDelta);
 
-  while (pCurrentOutput<pOutputEnd) {		
+  while (pCurrentOutput<pOutputEnd) {
     U32*const pOutputLineStart=pCurrentOutput;
     U32*const pOutputLineEnd=pCurrentOutput+nXDelta;
     U32* pSourceLineStart=pCurrentSource;
@@ -360,10 +360,10 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
   const int nYDelta=nBottomY-nTopY;
 
   if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
-	
+
   U32* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
   U32*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
-  
+
   int nRedTotal=0;
   int nGreenTotal=0;
   int nBlueTotal=0;
@@ -371,7 +371,7 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
 
   int nSampleCount=0;
 
-  while (pCurrentImage<pImageEnd) {		
+  while (pCurrentImage<pImageEnd) {
     U32*const pImageLineStart=pCurrentImage;
     U32*const pImageLineEnd=pCurrentImage+nXDelta;
 
@@ -387,9 +387,9 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
       nGreenTotal+=nImageGreen;
       nBlueTotal+=nImageBlue;
       nAlphaTotal+=nImageAlpha;
-   
+
       nSampleCount+=1;
-      
+
       pCurrentImage+=nStride;
     }
 
@@ -412,7 +412,7 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
 }
 
 U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
-  
+
   if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
   if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
@@ -427,7 +427,7 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
   int nSampleCount=0;
 
   U32* pCurrentOutput=pOutput;
-	
+
   float SourceY;
   for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
 
@@ -481,7 +481,7 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
 }
 
 U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
-  
+
   if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
   if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
@@ -496,7 +496,7 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOu
   int nSampleCount=0;
 
   U32* pCurrentOutput=pOutput;
-	
+
   float SourceY;
   for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
     U32* pOutputLineStart=pCurrentOutput;
@@ -635,7 +635,7 @@ void pix_metaimage :: DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOut
   const int nYDelta=nClippedBottomY-nClippedTopY;
 
   if ((nXDelta<=0)||(nYDelta<=0))return;
-  
+
   U32* pCurrentSource=pShrunkBuffer;
 
   pCurrentSource+=((nClippedTopY-nTopY)*nWidth);
@@ -644,7 +644,7 @@ void pix_metaimage :: DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOut
   U32* pCurrentOutput=pOutput+(nClippedTopY*nWidth)+nClippedLeftX;
   U32*const pOutputEnd=(pCurrentOutput+(nYDelta*nWidth)+nXDelta);
 
-  while (pCurrentOutput<pOutputEnd) {		
+  while (pCurrentOutput<pOutputEnd) {
     U32*const pOutputLineStart=pCurrentOutput;
     U32*const pOutputLineEnd=pCurrentOutput+nXDelta;
     U32* pSourceLineStart=pCurrentSource;
@@ -684,17 +684,17 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
   const int nYDelta=nBottomY-nTopY;
 
   if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
-	
+
   U32* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
   U32*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
-  
+
   int nYTotal=0;
   int nUTotal=0;
   int nVTotal=0;
 
   int nSampleCount=0;
 
-  while (pCurrentImage<pImageEnd) {		
+  while (pCurrentImage<pImageEnd) {
     U32*const pImageLineStart=pCurrentImage;
     U32*const pImageLineEnd=pCurrentImage+nXDelta;
 
@@ -710,9 +710,9 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
       nYTotal+=nImageY1;
       nVTotal+=nImageV;
       nYTotal+=nImageY2;
-   
+
       nSampleCount+=1;
-      
+
       pCurrentImage+=nStride;
     }
 
@@ -732,7 +732,7 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
 }
 
 U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
- 
+
   if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
   if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
@@ -746,7 +746,7 @@ U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubW
   int nSampleCount=0;
 
   U32* pCurrentOutput=pOutput;
-	
+
   float SourceY;
   for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
 
@@ -813,7 +813,7 @@ U32 pix_metaimage :: ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float 
   int nSampleCount=0;
 
   U32* pCurrentOutput=pOutput;
-	
+
   float SourceY;
   for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
     U32* pOutputLineStart=pCurrentOutput;
@@ -940,7 +940,7 @@ void pix_metaimage :: DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutpu
   const int nYDelta=nClippedBottomY-nClippedTopY;
 
   if ((nXDelta<=0)||(nYDelta<=0))return;
-  
+
   U8*pCurrentSource=(U8*)pShrunkBuffer;
 
   pCurrentSource+=((nClippedTopY-nTopY)*nWidth);
@@ -949,7 +949,7 @@ void pix_metaimage :: DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutpu
   U8*pCurrentOutput=pOutput+(nClippedTopY*nWidth)+nClippedLeftX;
   U8*const pOutputEnd=(pCurrentOutput+(nYDelta*nWidth)+nXDelta);
 
-  while (pCurrentOutput<pOutputEnd) {		
+  while (pCurrentOutput<pOutputEnd) {
     U8*const pOutputLineStart=pCurrentOutput;
     U8*const pOutputLineEnd=pCurrentOutput+nXDelta;
     U8*pSourceLineStart=pCurrentSource;
@@ -974,14 +974,14 @@ U8 pix_metaimage :: GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRigh
   const int nYDelta=nBottomY-nTopY;
 
   if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
-	
+
   U8* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
   U8*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
-  
+
   int nYTotal=0;
   int nSampleCount=0;
 
-  while (pCurrentImage<pImageEnd) {		
+  while (pCurrentImage<pImageEnd) {
     U8*const pImageLineStart=pCurrentImage;
     U8*const pImageLineEnd=pCurrentImage+nXDelta;
 
@@ -1002,7 +1002,7 @@ U8 pix_metaimage :: GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRigh
 }
 
 U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight) {
- 
+
   if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
   if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
 
@@ -1014,7 +1014,7 @@ U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWid
   int nSampleCount=0;
 
   U8* pCurrentOutput=pOutput;
-	
+
   float SourceY;
   for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
 
@@ -1062,7 +1062,7 @@ U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float Su
   int nSampleCount=0;
 
   U8* pCurrentOutput=pOutput;
-	
+
   float SourceY;
   for (SourceY=0.0f; SourceY<nHeight; SourceY+=SourceYInc) {
     U8* pOutputLineStart=pCurrentOutput;
@@ -1114,6 +1114,6 @@ void pix_metaimage :: distanceCallback(void *data, t_floatarg m_DoDistanceBased)
 }
 void pix_metaimage :: cheapCallback(void *data, t_floatarg m_DoCheapAndNasty)
 {
-  GetMyClass(data)->m_DoCheapAndNasty=(m_DoCheapAndNasty);  
+  GetMyClass(data)->m_DoCheapAndNasty=(m_DoCheapAndNasty);
   GetMyClass(data)->setPixModified();
 }

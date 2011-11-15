@@ -39,7 +39,7 @@ GemShape :: GemShape(t_floatarg size)
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
 }
 GemShape :: GemShape()
-  : m_linewidth(1.0f), m_size(1.0f), m_drawType(GL_DEFAULT_GEM), m_blend(0), 
+  : m_linewidth(1.0f), m_size(1.0f), m_drawType(GL_DEFAULT_GEM), m_blend(0),
     m_inlet(NULL),
     m_texType(0), m_texNum(0),
     m_texCoords(NULL),
@@ -77,7 +77,7 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, 
     tx=state->texCoordX(curCoord);
     ty=state->texCoordY(curCoord);
   }
-  
+
   if (numUnits) {
     for( i=0; i<numUnits; i++) {
       glMultiTexCoord2fARB(GL_TEXTURE0+i, tx, ty);
@@ -88,7 +88,7 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, 
   glVertex3f( x, y, z );
 }
 
-void GemShape :: SetVertex(GemState* state,float x, float y, float z, 
+void GemShape :: SetVertex(GemState* state,float x, float y, float z,
                            float s, float t, float r, float q,
                            int curCoord)
 {
@@ -166,8 +166,8 @@ void GemShape :: typeMess(t_symbol *type)
     break;
   case 'S': // strip
     m_drawType = GL_TRIANGLE_STRIP;
-    break;  
-    
+    break;
+
   default:
     error ("unknown draw style");
     return;
@@ -194,7 +194,7 @@ void GemShape :: render(GemState *state)
     glEnable(GL_POLYGON_SMOOTH);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE); 
+    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
   }
 
   m_texType=0;

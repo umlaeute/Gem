@@ -21,14 +21,14 @@ LOG
 -------------------------------------------------------------------
 CLASS
     vertex_offset
-    
+
     Creates a vertex_offset
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_offset : public vertex_scale
 {
@@ -39,16 +39,16 @@ class GEM_EXTERN vertex_offset : public vertex_scale
   //////////
   // Constructor
   vertex_offset(int, t_atom*);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~vertex_offset(void);
 
   virtual void paramMess(int,t_atom*);
   float	m_x,m_y,m_z,m_w;
-  
+
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);

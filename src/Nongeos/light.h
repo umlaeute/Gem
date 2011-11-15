@@ -21,13 +21,13 @@
   -------------------------------------------------------------------
   CLASS
   light
-    
+
   Creates a light which can be positioned
 
   DESCRIPTION
-    
+
   Inlet for a list - "poslist"
-    
+
   "poslist" - Determines position
 
   -----------------------------------------------------------------*/
@@ -40,9 +40,9 @@ class GEM_EXTERN light : public world_light
   //////////
   // Constructor
   light(t_floatarg lightNum);
-        
+
  protected:
-        
+
   //////////
   // Destructor
   virtual ~light();

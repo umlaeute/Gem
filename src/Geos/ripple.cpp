@@ -25,14 +25,14 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 //
 /////////////////////////////////////////////////////////
 ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
-  : GemShape(1.0), 
+  : GemShape(1.0),
     m_ctrX(0.f), m_ctrY(0.f),
-    m_height(1.0), 
+    m_height(1.0),
     m_inletH(NULL), m_inletcX(NULL), m_inletcY(NULL),
     m_gridX(0), m_gridY(0),
     m_alreadyInit(false),
     m_sizeX(0.f), m_sizeY(0.f), m_sizeY0(0.f)
-             
+
 {
   int gridXi=static_cast<int>(gridX);
   int gridYi=static_cast<int>(gridY);
@@ -69,14 +69,14 @@ void ripple :: renderShape(GemState *state)
   glNormal3f(0.0f, 0.0f, 1.0f);
 
   glScalef(2.*m_size, 2.*m_size, 2.*m_size);
-    
+
   if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
       if ((m_sizeX  != GemShape::m_texCoords[1].s) ||
           (m_sizeY  != GemShape::m_texCoords[1].t) ||
           (m_sizeY0 != GemShape::m_texCoords[2].t))
         m_alreadyInit = false;
-    
+
       if (!m_alreadyInit)
         {
           m_sizeX  = GemShape::m_texCoords[1].s;
@@ -324,9 +324,9 @@ int ripple :: ripple_max_distance(int gx, int gy)
 void ripple :: ripple_bang()
 {
   int index = 0;
-    
+
   while (m_t[index] < m_max[index] && index < RIPPLE_COUNT)    index++;
-    
+
   if (index < RIPPLE_COUNT)    {
     m_cx[index] = (int)(1.0*m_ctrX/m_sizeX*m_gridX);
     m_cy[index] = (int)(1.0*m_ctrY/(m_sizeY+m_sizeY0)*m_gridY);
@@ -369,9 +369,9 @@ void ripple :: ctrYMess(float center)
 /////////////////////////////////////////////////////////
 void ripple :: typeMess(t_symbol *type)
 {
-  if (!strcmp(type->s_name, "line")) 
+  if (!strcmp(type->s_name, "line"))
     m_drawType = GL_LINE_LOOP;
-  else if (!strcmp(type->s_name, "fill")) 
+  else if (!strcmp(type->s_name, "fill"))
     m_drawType = GL_POLYGON;
   else if (!strcmp(type->s_name, "point"))
     m_drawType = GL_POINTS;

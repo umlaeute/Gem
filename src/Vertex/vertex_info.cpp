@@ -52,23 +52,23 @@ void vertex_info :: render(GemState *state)
 {
     int size;
     GLfloat *VertexArray;
-    
+
     VertexArray =state->VertexArray;
     if (state->VertexArray == NULL || state->VertexArraySize <= 0){
         error("no vertex array!");
         return;
     }
-    
+
     if (state->VertexArray == NULL ){
         error("no color array!");
         return;
     }
-    
+
     size = state->VertexArraySize;
-    
+
     outlet_float(m_Vsize, (t_float)size);
 }
- 
+
 /////////////////////////////////////////////////////////
 // static member function
 //

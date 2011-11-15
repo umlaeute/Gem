@@ -36,7 +36,7 @@ pix_invert :: pix_invert()
 /////////////////////////////////////////////////////////
 pix_invert :: ~pix_invert()
 { }
- 
+
 /////////////////////////////////////////////////////////
 // processImage
 //
@@ -44,7 +44,7 @@ pix_invert :: ~pix_invert()
 void pix_invert :: processRGBAImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize;
-    
+
   unsigned char *base = image.data;
   while (i) {
     i--;
@@ -134,12 +134,12 @@ void pix_invert :: processYUVMMX(imageStruct &image)
 void pix_invert :: processGrayImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize;
-    
+
   unsigned char *base = image.data;
   while (i--) {
     base[chGray] = 255 - base[chGray];
     base++;
-  }    
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -183,14 +183,14 @@ int h,w,width;
 
     vector unsigned char offset;
     vector unsigned char *inData = (vector unsigned char*) image.data;
-    
+
     charBuffer.c[0] = 255;
     offset = charBuffer.v;
     offset = (vector unsigned char) vec_splat(offset,0);
     #ifndef PPC970
     UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
 	vec_dst( inData, prefetchSize, 0 );
-       #endif 
+       #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {

@@ -43,12 +43,12 @@ typedef struct {
 -------------------------------------------------------------------
 CLASS
     rubber
-    
+
     based on the SGI demo distort
 
 KEYWORDS
     geo
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -61,9 +61,9 @@ class GEM_EXTERN rubber : public GemShape
   //////////
   // Constructor
   rubber( t_floatarg width, t_floatarg height);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~rubber();
@@ -74,20 +74,20 @@ class GEM_EXTERN rubber : public GemShape
   void		heightMess(float height);
   void		ctrXMess(float center);
   void		ctrYMess(float center);
-         
+
   //////////
   // Do the rendering
   virtual void 	renderShape(GemState *state);
-  
+
   //////////
   // How the object should be drawn
   virtual void	typeMess(t_symbol *type);
-        
+
   virtual void	rubber_init();
   virtual void	rubber_dynamics();
   virtual void	rubber_bang();
   virtual int	rubber_grab();
-		
+
   //////////
   // The height of the object
   GLfloat	    	m_height;
@@ -97,10 +97,10 @@ class GEM_EXTERN rubber : public GemShape
   t_inlet       *m_inletH;
   t_inlet		*inletcX;
   t_inlet		*inletcY;
-  
+
   //////////
   // member variables
-  
+
   int		m_speed;
   // index of grabbed mass point
   int		m_grab;
@@ -114,7 +114,7 @@ class GEM_EXTERN rubber : public GemShape
   MASS		*m_mass;
   SPRING	*m_spring;
   int		m_spring_count;
-    
+
  private:
 
   //////////

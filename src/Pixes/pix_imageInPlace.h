@@ -21,12 +21,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_imageInPlace
-    
+
     Load multiple images into a pix block and texture immediately
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     You can select which file by giving a number.
@@ -41,9 +41,9 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
 	    //////////
 	    // Constructor
     	pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_imageInPlace();
@@ -73,7 +73,7 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	//////////
     	// When a download is received
     	virtual void	downloadMess();
-    	
+
     	//////////
     	// When a purge is received
     	virtual void	purgeMess();
@@ -85,13 +85,13 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	//////////
     	// repeat message
     	virtual void	repeatMess(int type);
-    	
+
 	//////////
 	int				mInPreload;
     GLuint          m_textureQuality, m_repeat;
 
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	preloadMessCallback(void *data, t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);

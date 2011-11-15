@@ -72,7 +72,7 @@ void pix_rectangle :: processRGBAImage(imageStruct &image)
 
   if (m_upper_right[0] > image.xsize) m_upper_right[0] = image.xsize;
   if (m_lower_left[0] > image.xsize)  m_lower_left[0] = image.xsize;
- 
+
   if (m_upper_right[1] > image.ysize) m_upper_right[1] = image.ysize;
   if (m_lower_left[1] > image.ysize)  m_lower_left[1] = image.ysize;
 
@@ -106,14 +106,14 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   if (m_lower_left[1] > image.ysize)    m_lower_left[1] = image.ysize;
 
   row = (m_upper_right[1] - m_lower_left[1]);
-  
+
   while (row--)	{
     int offset=rowsize*(m_lower_left[1]+row) + m_lower_left[0] * pixelsize;
     offset-=(offset%4);
     pixels = image.data+offset;
 
     col = (m_upper_right[0] - m_lower_left[0])/2;
-    
+
     while (col--)	{
       pixels[chY0]= y;
       pixels[chU] = u;
@@ -129,7 +129,7 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
   int rowsize  = image.xsize * pixelsize;
   unsigned char *pixels = image.data;
   int col, row;
-	
+
   if (m_upper_right[0] > image.xsize)m_upper_right[0] = image.xsize;
   if (m_lower_left[0]  > image.xsize)m_lower_left [0] = image.xsize;
 
@@ -192,7 +192,7 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
   Y1 = atom_getint(&argv[1]);
   X2 = atom_getint(&argv[2]);
   Y2 = atom_getint(&argv[3]);
-  
+
   // check if within range
   if (X1 < 0)X1 = 0;
   if (X2 < 0)X2 = 0;

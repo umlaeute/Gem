@@ -21,18 +21,18 @@
   -------------------------------------------------------------------
   CLASS
   scopeXYZ
-    
+
   Creates a scopeXYZ~
 
   KEYWORDS
   geo
-    
+
   DESCRIPTION
 
   Inlet~ for signal X
   Inlet~ for signal Y
   Inlet~ for signal Z
-     
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN scopeXYZ : public GemShape
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN scopeXYZ : public GemShape
   //////////
   // Constructor
   scopeXYZ(t_floatarg len=0);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~scopeXYZ();
@@ -57,19 +57,19 @@ class GEM_EXTERN scopeXYZ : public GemShape
   //////////
   // The width of the lines in line draw mode
   void	    	linewidthMess(float linewidth);
-    	
+
   //////////
   // How the object should be drawn
   virtual void	typeMess(t_symbol *type);
-  
+
   //-----------------------------------
   // GROUP:	Member variables
   //-----------------------------------
-        
+
   //////////
   // The drawing style (GL_LINE, GL_QUAD_STRIP, etc)
   GLenum	    	m_drawType;
-		
+
   //////////
   // the number of points
   unsigned int m_requestedLength, m_realLength;
@@ -79,8 +79,8 @@ class GEM_EXTERN scopeXYZ : public GemShape
 
   virtual void	bangMess();
 
-  int m_position; 
-    	
+  int m_position;
+
   //////////
   // The vertices
   t_sample*m_vertices;
@@ -91,7 +91,7 @@ class GEM_EXTERN scopeXYZ : public GemShape
   void perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z);
 
  private:
-    	    
+
   //////////
   // Static member functions
   static void 	linewidthMessCallback(void *data, t_floatarg linewidth);

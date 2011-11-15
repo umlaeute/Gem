@@ -23,7 +23,7 @@ CPPEXTERN_NEW(pix_roll);
 /////////////////////////////////////////////////////////
 pix_roll :: pix_roll()
 {	long size,src;
-    
+
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("roll"));
 
   m_vroll = 0;
@@ -65,7 +65,7 @@ void pix_roll :: processRGBAImage(imageStruct &image)
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
     if(saved)delete saved;
     saved = new unsigned char [m_blurSize];
-  }    
+  }
   if (!m_axis) {
     m_vroll%=image.ysize;
     m_vroll+=image.ysize;
@@ -109,7 +109,7 @@ void pix_roll :: processRGBAImage(imageStruct &image)
       dstdata+=(image.xsize*image.csize-rollstart);
     }
   }
-  //  memcpy(image.data,saved,pixsize);     
+  //  memcpy(image.data,saved,pixsize);
   image.data=saved;
 }
 void pix_roll :: processImage(imageStruct &image)
@@ -127,7 +127,7 @@ void pix_roll :: processImage(imageStruct &image)
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
     if(saved)delete saved;
     saved = new unsigned char [m_blurSize];
-  }    
+  }
   if (!m_axis) {
     m_vroll%=image.ysize;
     m_vroll+=image.ysize;
@@ -161,7 +161,7 @@ void pix_roll :: processImage(imageStruct &image)
       dstdata+=(image.xsize*image.csize-rollstart);
     }
   }
-  //  memcpy(image.data,saved,pixsize);     
+  //  memcpy(image.data,saved,pixsize);
   image.data=saved;
 }
 /////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ void pix_roll :: processYUVImage(imageStruct &image)
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
     if(saved)delete saved;
     saved = new unsigned char [m_blurSize];
-  }    
+  }
   pixsize = image.ysize * image.xsize * image.csize;
   if (!m_axis) {
     //start at the breakpoint
@@ -214,15 +214,15 @@ void pix_roll :: processYUVImage(imageStruct &image)
     length = (image.xsize-m_vroll)*2;
     //moved the rolled part of the data
     src = rollstart;//offset source to start of roll
-    dst = 0; 
+    dst = 0;
 
     for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
-   
+
       for(w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
-        
+
         saved[dst] = image.data[src];
         saved[dst+1] = image.data[src+1];
-        
+
         src+=2;dst+=2;
       }
       src+= rollstart;
@@ -232,20 +232,20 @@ void pix_roll :: processYUVImage(imageStruct &image)
     src=0;
     dst=(image.xsize-m_vroll)*2;
     for (h=0; h<image.ysize; h++){ //fixed...we have to do every row
-   
+
       for(w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
-        
+
         saved[dst] = image.data[src];
         saved[dst+1] = image.data[src+1];
-        
-       
+
+
         src+=2;dst+=2;
       }
       src+= image.xsize*2-rollstart;
       dst+= image.xsize*2-rollstart;
     }
   }
-  memcpy(image.data,saved,pixsize);     
+  memcpy(image.data,saved,pixsize);
 
 }
 

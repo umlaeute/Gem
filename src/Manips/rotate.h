@@ -21,17 +21,17 @@ LOG
 -------------------------------------------------------------------
 CLASS
     rotate
-    
+
     rotate a gem object
 
 DESCRIPTION
-    
+
     Inlet for a list - "vector"
     Inlet for a float - "ft1"
 
     "vector" - the vector of rotation
     "ft1" - the angle
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN rotate : public GemBase
 {
@@ -42,9 +42,9 @@ class GEM_EXTERN rotate : public GemBase
         //////////
         // Constructor
     	rotate(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~rotate();
@@ -64,13 +64,13 @@ class GEM_EXTERN rotate : public GemBase
     	//////////
     	// Angle changed
     	void	    	angleMess(float angle);
-    	
+
     	//////////
     	// Vector changed
     	void	    	vectorMess(float x, float y, float z);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	angleMessCallback(void *data, t_floatarg angle);

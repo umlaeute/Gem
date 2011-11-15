@@ -25,8 +25,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglStencilOp );
 // Constructor
 //
 GEMglStencilOp :: GEMglStencilOp	(int argc, t_atom*argv) :
-		fail(0), 
-		zfail(0), 
+		fail(0),
+		zfail(0),
 		zpass(0)
 {
   if(3==argc){failMess(argv[0]); zfailMess(argv[1]); zpassMess(argv[2]);}else if(argc) throw(GemException("invalid number of arguments"));

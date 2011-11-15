@@ -448,12 +448,12 @@ void pix_texture :: render(GemState *state) {
             int i=0;
             for(i=0; i<m_numPbo; i++) {
               glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[i]);
-              glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, 
+              glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB,
                               m_buffer.xsize*m_buffer.ysize*m_buffer.csize,
                               0, GL_STREAM_DRAW_ARB);
             }
             glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
- 
+
           } else {
             verbose(1, "PBOs not supported! disabling");
             m_numPbo=0;
@@ -495,12 +495,12 @@ void pix_texture :: render(GemState *state) {
         int nextIndex=(m_curPbo+1)%m_numPbo;
 
         glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, m_pbo[index]);
-        glTexSubImage2D(m_textureType, 0, 
-                        0, 0, 
-                        m_imagebuf.xsize, 
-                        m_imagebuf.ysize, 
-                        m_imagebuf.format, 
-                        m_imagebuf.type, 
+        glTexSubImage2D(m_textureType, 0,
+                        0, 0,
+                        m_imagebuf.xsize,
+                        m_imagebuf.ysize,
+                        m_imagebuf.format,
+                        m_imagebuf.type,
                         NULL); /* <-- that's the key */
 
 

@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    
+//
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -29,14 +29,14 @@ CVector3::CVector3() : x(0), y(0), z(0) {}
 // This is our constructor that allows us to initialize our data upon creating an instance
 CVector3::CVector3(float X, float Y, float Z) : x(X), y(Y), z(Z) {}
 
-// Here we overload the + operator so we can add vectors together 
+// Here we overload the + operator so we can add vectors together
 CVector3 CVector3::operator+(CVector3 vVector) const
 {
   // Return the added vectors result.
   return CVector3(vVector.x + x, vVector.y + y, vVector.z + z);
 }
 
-// Here we overload the - operator so we can subtract vectors 
+// Here we overload the - operator so we can subtract vectors
 CVector3 CVector3::operator-(CVector3 vVector) const
 {
   // Return the subtracted vectors result
@@ -57,7 +57,7 @@ CVector3 CVector3::operator*(float num) const
   // Return the scaled vector
   return CVector3(x * num, y * num, z * num);
 }
-// Here we overload the * operator so we can dot-multiply 
+// Here we overload the * operator so we can dot-multiply
 // note: i chose dot-multiplication because this can be done consistently for vectors of any length
 //       but i don't know whether this is "the right way" to do
 float CVector3::operator*(CVector3 vVector) const
@@ -107,7 +107,7 @@ CVector3 CVector3::normalize() const
   vNormal.x = x*InvMagnitude;              // Divide the vector's X by the magnitude
   vNormal.y = y*InvMagnitude;              // Divide the vector's Y by the magnitude
   vNormal.z = z*InvMagnitude;              // Divide the vector's Z by the magnitude
-  
+
   return vNormal;                         // Return the normal
 }
 // compares to vectores and resturns true is they are equal (within a certain threshold)

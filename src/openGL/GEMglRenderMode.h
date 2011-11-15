@@ -38,17 +38,17 @@ class GEM_EXTERN GEMglRenderMode : public GemGLBase
 	virtual ~GEMglRenderMode ();
 	// Do the rendering
 	virtual void	render (GemState *state);
-	
+
 	// variables
 	GLenum mode;		// VAR
 	virtual void	modeMess(t_atom);	// FUN
-	
+
 	// we need some inlets
 	t_inlet *m_inlet;
 	t_outlet *m_outlet;
-	
+
  private:
-	
+
 	// static member functions
 	static void	 modeMessCallback (void*,t_symbol*,int,t_atom*);
 };

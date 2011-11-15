@@ -56,13 +56,13 @@ void pix_normalize :: processRGBAImage(imageStruct &image)
     if (min>blue) min=blue;
     if (max<red)  max=red;
     if (max<green)max=green;
-    if (max<blue) max=blue;    
+    if (max<blue) max=blue;
     pixels+=4;
   }
 
   t_float scale=(max-min)?255./(max-min):0;
   int iscale=static_cast<int>(scale*256);
- 
+
   n = datasize*image.csize;
   pixels=image.data;
   while(n--){
@@ -116,7 +116,7 @@ void pix_normalize :: processYUVImage(imageStruct &image)
   t_float scale=(max-min)?255./(max-min):0;
   int iscale=static_cast<int>(scale*256);
 
- 
+
   n = datasize/2;
   pixels=image.data;
   while(n--){

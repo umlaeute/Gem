@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3i , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglNormal3i :: GEMglNormal3i	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
-		nx(static_cast<GLint>(arg0)), 
-		ny(static_cast<GLint>(arg1)), 
+		nx(static_cast<GLint>(arg0)),
+		ny(static_cast<GLint>(arg1)),
 		nz(static_cast<GLint>(arg2))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("nx"));

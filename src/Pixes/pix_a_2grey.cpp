@@ -84,7 +84,7 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
         pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }
       pixels += 4;
-    }    
+    }
   }
 }
 
@@ -94,7 +94,7 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_a_2grey :: obj_setupCallback(t_class *classPtr)
 {
-   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_a_2grey), 
+   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_a_2grey),
 		   gensym("pix_a_2gray"), A_NULL);
    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_a_2grey::alphaMessCallback),
     	    gensym("ft1"), A_FLOAT, A_NULL);

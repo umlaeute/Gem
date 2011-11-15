@@ -24,7 +24,7 @@ LOG
 CLASS
 
 	part_gravity
-    
+
 	Apply gravity to particles
 
 DESCRIPTION
@@ -39,12 +39,12 @@ class GEM_EXTERN part_gravity : public partlib_base
 	    //////////
 	    // Constructor
     	part_gravity(t_floatarg val1, t_floatarg val2, t_floatarg val3);
-    	
+
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~part_gravity();
@@ -52,12 +52,12 @@ class GEM_EXTERN part_gravity : public partlib_base
     	//////////
     	// Vector changed
     	void	    	vectorMess(float x, float y, float z);
-    	
+
 		//////////
 		float			m_vector[3];
 
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);

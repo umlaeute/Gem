@@ -177,11 +177,11 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix), gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
 		  gensym("dsp"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
 		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::csMessCallback), 
+  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
 		  gensym("colorspace"), A_DEFSYMBOL, A_NULL);
 }
 

@@ -13,10 +13,10 @@ LOG
 
 -----------------------------------------------------------------*/
 
-/* 
+/*
  * compiler-issues:
  *
- * gcc: when gcc is invoked with "-mmmx" (or "-msse2" or "-maltivec") 
+ * gcc: when gcc is invoked with "-mmmx" (or "-msse2" or "-maltivec")
  *      the defines __MMX__ (or corresponding) will be defined automatically
  *
  * vc6: you will have to install the microsoft processor-pack to use MMX/SSE2

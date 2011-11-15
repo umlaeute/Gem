@@ -129,7 +129,7 @@ namespace gem { namespace thread {
 
     bool start(void) {
       if(isrunning)return true;
-      
+
       keeprunning=true;
       pthread_create(&p_thread, 0, process, this);
 

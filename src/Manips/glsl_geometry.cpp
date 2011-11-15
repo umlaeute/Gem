@@ -43,7 +43,7 @@ glsl_geometry :: glsl_geometry() :
   m_shader(0),
   m_shaderARB(0),
   m_compiled(0), m_size(0),
-  m_shaderString(NULL), 
+  m_shaderString(NULL),
   m_shaderFilename(NULL),
   m_shaderID(0)
 {
@@ -54,8 +54,8 @@ glsl_geometry :: glsl_geometry(t_symbol *filename) :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0), m_size(0), 
-  m_shaderString(NULL), 
+  m_compiled(0), m_size(0),
+  m_shaderString(NULL),
   m_shaderFilename(NULL),
   m_shaderID(0)
 {
@@ -211,7 +211,7 @@ void glsl_geometry :: openMess(t_symbol *filename)
 
   if(GLEW_EXT_geometry_shader4) // GLEW_VERSION_2_1
     openMessGL2();
-  else if (GLEW_ARB_geometry_shader4) 
+  else if (GLEW_ARB_geometry_shader4)
     openMessARB();
 
   verbose(1, "Loaded file: %s", buf);

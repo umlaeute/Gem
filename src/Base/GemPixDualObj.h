@@ -24,15 +24,15 @@ LOG
 -------------------------------------------------------------------
 CLASS
     GemPixDualObj
-    
+
     An object which accepts two pixes.
 
 DESCRIPTION
 
     Inlet for a gem - "gem_right"
-    
+
     "gem_right" - The second gem list
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemPixDualObj : public GemPixObj
 {
@@ -41,9 +41,9 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
         //////////
         // Constructor
     	GemPixDualObj();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~GemPixDualObj();
@@ -62,42 +62,42 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
     	// This is called whenever a new image comes through and
 	//		both of the image structs are RGBA
     	virtual void 	processDualImage(imageStruct &image, imageStruct &right) = 0;
-    	
+
     	//////////
     	// The derived class CAN override this.
     	// This is called whenever a new image comes through and both
     	//		of the image structs are gray8.
 		// The default behavior is to output an error.
         virtual void 	processDualGray(imageStruct &image, imageStruct &right);
-    	
+
     	//////////
     	// The derived class CAN override this.
-    	// This is called whenever a new image comes through and 
+    	// This is called whenever a new image comes through and
 		//		the left image is an RGBA while the right is a gray8.
 		// The default behavior is to output an error.
     	virtual void 	processRightGray(imageStruct &image, imageStruct &right);
-    	
+
     	//////////
     	// The derived class CAN override this.
     	// This is called whenever a new image comes through and
 		//		the left image is a gray8, the right is an RGBA
 		// The default behavior is to output an error.
     	virtual void 	processLeftGray(imageStruct &image, imageStruct &right);
-        
+
     	//////////
     	// The derived class CAN override this.
     	// This is called whenever a new image comes through and both
     	//		of the image structs are YUV.
 		// The default behavior is to output an error.
         virtual void 	processDualYUV(imageStruct &image, imageStruct &right);
-    	
+
     	//////////
     	// The derived class CAN override this.
-    	// This is called whenever a new image comes through and 
+    	// This is called whenever a new image comes through and
 		//		the left image is an RGBA while the right is a YUV.
 		// The default behavior is to output an error.
     	virtual void 	processRightYUV(imageStruct &image, imageStruct &right);
-    	
+
     	//////////
     	// The derived class CAN override this.
     	// This is called whenever a new image comes through and
@@ -112,7 +112,7 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
     	// The derived class SHOULD override these as needed
 
 	/* for simplicity this is done via preprocessor defines:
-	 * the functions defined are like : 
+	 * the functions defined are like :
 	 **  processRGBA_RGBA(left, right);
 	 */
 
@@ -132,7 +132,7 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 #undef  PROCESS_DUALIMAGE
 
 	/* for simplicity this is done via preprocessor defines:
-	 * the functions defined are like : 
+	 * the functions defined are like :
 	 **  processRGBA_Altivec(left, right);
 	 */
 #define PROCESS_DUALIMAGE_SIMD(CS1, CS2,_SIMD_EXT)			\
@@ -152,7 +152,7 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 	PROCESS_DUALIMAGE_SIMD(Gray, Gray, Altivec);
 #undef PROCESS_DUALIMAGE_SIMD
 
-#endif                
+#endif
         //////////
         virtual void	postrender(GemState *);
     	virtual void	stopRendering();
@@ -166,7 +166,7 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
 
     	//////////
     	pixBlock    	*m_pixRight;
-        
+
         int		m_pixRightValid;
         int		org_pixRightValid;
 
@@ -177,9 +177,9 @@ class GEM_EXTERN GemPixDualObj : public GemPixObj
     	// creation callback
     	static void 	real_obj_setupCallback(t_class *classPtr)
     	    { GemPixObj::real_obj_setupCallback(classPtr); GemPixDualObj::obj_setupCallback(classPtr); }
-    	
+
   private:
-    
+
      	static inline GemPixDualObj *GetMyClass(void *data) {return((GemPixDualObj *)((Obj_header *)data)->data);}
 
     	//////////

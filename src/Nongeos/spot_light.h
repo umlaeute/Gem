@@ -41,7 +41,7 @@ class GEM_EXTERN spot_light : public world_light
   //////////
   // Constructor
   spot_light(t_floatarg lightNum);
-    	
+
  protected:
 
   //////////
@@ -63,7 +63,7 @@ class GEM_EXTERN spot_light : public world_light
   // GROUP:	Member variables
   //-----------------------------------
 
-  // global lighting parameters	
+  // global lighting parameters
   GLfloat constantAttenuation;
   GLfloat linearAttenuation;
   GLfloat quadraticAttenuation;

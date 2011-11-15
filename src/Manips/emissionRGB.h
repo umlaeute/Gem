@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
     emissionRGB
-    
+
     emission a gem object
 
 DESCRIPTION
-    
+
     Inlet for R - "rVal"
     Inlet for G - "gVal"
     Inlet for B - "bVal"
@@ -40,9 +40,9 @@ class GEM_EXTERN emissionRGB : public GemBase
         //////////
         // Constructor
     	emissionRGB(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~emissionRGB();
@@ -62,21 +62,21 @@ class GEM_EXTERN emissionRGB : public GemBase
     	//////////
     	// R value changed
     	void	    	rMess(float val);
-    	
+
     	//////////
     	// G value changed
     	void	    	gMess(float val);
-    	
+
     	//////////
     	// B value changed
     	void	    	bMess(float val);
-    	
+
     	//////////
     	// A value changed
     	void	    	aMess(float val);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	rMessCallback(void *data, t_floatarg val);

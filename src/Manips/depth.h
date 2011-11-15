@@ -21,15 +21,15 @@ LOG
 -------------------------------------------------------------------
 CLASS
     depth
-    
+
     Turn on/off depth test
 
 DESCRIPTION
-    
+
     Inlet for a list - "depthstate"
 
     "depthstate" - whether to use the Z-buffer
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN depth : public GemBase
 {
@@ -40,9 +40,9 @@ class GEM_EXTERN depth : public GemBase
 	    //////////
 	    // Constructor
   depth(int, t_atom*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~depth();
@@ -62,9 +62,9 @@ class GEM_EXTERN depth : public GemBase
     	//////////
     	// Depth changed
     	void	    	depthMess(int state);
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	depthMessCallback(void *data, t_floatarg state);

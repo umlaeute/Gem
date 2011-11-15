@@ -22,12 +22,12 @@ LOG
 -------------------------------------------------------------------
 CLASS
     pix_snap
-    
+
     Snaps a pix of the render buffer
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vert_size"
@@ -36,7 +36,7 @@ DESCRIPTION
     "snap" - Snap a pix
     "vert_size" - Set the size of the pix
     "vert_pos" - Set the position of the pix
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_snap : public GemBase
 {
@@ -47,9 +47,9 @@ class GEM_EXTERN pix_snap : public GemBase
         //////////
         // Constructor
     	pix_snap(int argc, t_atom *argv);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_snap();
@@ -57,7 +57,7 @@ class GEM_EXTERN pix_snap : public GemBase
     	//////////
     	// When a snap is received
     	virtual void	snapMess();
-    	
+
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
@@ -69,42 +69,42 @@ class GEM_EXTERN pix_snap : public GemBase
     	//////////
     	// When a size message is received
     	virtual void	sizeMess(int width, int height);
-    	
+
     	//////////
     	// When a position message is received
     	virtual void	posMess(int x, int y);
-    	
+
     	//////////
     	// Clean up the image
     	void	    	cleanImage();
-    	
+
     	//////////
     	// The original pix_snap
     	imageStruct 	*m_originalImage;
-    	
+
     	//////////
     	// The pixBlock with the current image
     	pixBlock    	m_pixBlock;
 	imageStruct     m_imageStruct;
-    	
+
     	//////////
     	// The x position
     	int     	m_x;
-    	
+
     	//////////
     	// The y position
     	int     	m_y;
-    	
+
     	//////////
     	// The width
     	int     	m_width;
-    	
+
     	//////////
     	// The height
     	int     	m_height;
-    	
+
     private:
-    	
+
     	//////////
     	// static member functions
     	static void 	snapMessCallback(void *data);

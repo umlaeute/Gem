@@ -57,7 +57,7 @@ void pix_threshold :: processRGBAImage(imageStruct &image)
 		if (base[chBlue] < m_thresh[chBlue]) base[chBlue] = 0;
 		if (base[chAlpha] < m_thresh[chAlpha]) base[chAlpha] = 0;
 		base += 4;
-    }    
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ void pix_threshold :: processYUVImage(imageStruct &image)
 		//if (base[2] < m_thresh[2]) base[2] = 0;//v
 		if (base[3] < m_Y) base[3] = 0;//y2
 		base += 4;
-    }  
+    }
 }
 
 #ifdef __VEC__
@@ -88,8 +88,8 @@ void pix_threshold :: processYUVImage(imageStruct &image)
 void pix_threshold :: processYUVAltivec(imageStruct &image)
 {
     int datasize = (image.xsize/8) * image.ysize;
-	
-	vector unsigned char thresh, in;	
+
+	vector unsigned char thresh, in;
 	vector bool char	mask;
     unsigned char *base = image.data;
 
@@ -114,7 +114,7 @@ void pix_threshold :: processYUVAltivec(imageStruct &image)
 	charBuf.c[13] = m_Y;
 	charBuf.c[14] = 0;
 	charBuf.c[15] = m_Y;
-	
+
 	thresh = charBuf.v;
 
     while(datasize--)
@@ -128,11 +128,11 @@ void pix_threshold :: processYUVAltivec(imageStruct &image)
 		mask = vec_cmpgt(in,thresh);
 		in = vec_and(in,mask);
 		vec_st(in,0,base);
-		
+
 		base += 16;
-    }    
+    }
 }
-#endif //Altivec	  
+#endif //Altivec
 
 /////////////////////////////////////////////////////////
 // processGrayImage
@@ -148,7 +148,7 @@ void pix_threshold :: processGrayImage(imageStruct &image)
     {
 		if (base[chGray] < m_thresh[chRed]) base[chGray] = 0;
 		base++;
-    }    
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
     	error("not enough threshold values");
     	return;
     }
-    
+
     m_thresh[chRed] = CLAMP(atom_getfloat(&argv[0]) * 255);
     m_thresh[chGreen] = CLAMP(atom_getfloat(&argv[1]) * 255);
     m_thresh[chBlue] = CLAMP(atom_getfloat(&argv[2]) * 255);

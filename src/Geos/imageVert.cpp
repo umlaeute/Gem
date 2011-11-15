@@ -57,7 +57,7 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
 {
   float red, green, blue, alpha;
   float red2, green2, blue2, alpha2;
-    
+
   const int ySize = image.ysize;
   const int xSize = image.xsize;
   const int yStride = xSize * image.csize;
@@ -92,7 +92,7 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
 	red2   = oneDown[chRed] / 255.f;
 	green2 = oneDown[chGreen] / 255.f;
 	blue2  = oneDown[chBlue] / 255.f;
-    		        
+
 	glTexCoord2f(xTex, yTexDown);
 	glVertex3f(xCurrent, yDown, red2 + green2 + blue2);
 	glTexCoord2f(xTex, yTex);
@@ -126,7 +126,7 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
 	green2 = oneDown[chGreen] / 255.f;
 	blue2  = oneDown[chBlue] / 255.f;
 	alpha2 = oneDown[chAlpha] / 255.f;
-    		        
+
 	glColor4f(red2, green2, blue2, alpha2);
 	glVertex3f(xCurrent, yDown, red2 + green2 + blue2);
 	glColor4f(red, green, blue, alpha);
@@ -149,7 +149,7 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
 void imageVert :: processGrayPix(imageStruct &image, int texture)
 {
   float gray, gray2;
-    
+
   const int ySize = image.ysize;
   const int xSize = image.xsize;
   const int yStride = xSize * image.csize;
@@ -175,12 +175,12 @@ void imageVert :: processGrayPix(imageStruct &image, int texture)
       float xTex = 0.f;
       int xCount = xSize;
       glBegin(GL_QUAD_STRIP);
-                
+
       while(xCount--) {
 	unsigned char *oneDown = data - yStride;
 	gray   = data[chGray] / 255.f;
 	gray2  = oneDown[chGray] / 255.f;
-		    
+
 	glTexCoord2f(xTex, yTexDown);
 	glVertex3f(xCurrent, yDown, gray2 + gray2 + gray2);
 	glTexCoord2f(xTex, yTex);
@@ -201,13 +201,13 @@ void imageVert :: processGrayPix(imageStruct &image, int texture)
     while(yCount--)  {
       int xCount = xSize;
       float xCurrent = -.5f;
-	
+
       glBegin(GL_QUAD_STRIP);
       while(xCount--)  {
 	unsigned char *oneDown = data - yStride;
 	gray   = data[chGray] / 255.f;
 	gray2  = oneDown[chGray] / 255.f;
-    		        
+
 	glColor4f(gray2, gray2, gray2, 1.0f);
 	glVertex3f(xCurrent, yDown, gray2 + gray2 + gray2);
 	glColor4f(gray, gray, gray, 1.0f);
@@ -231,7 +231,7 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
 {
   error("YUV not yet implemented :-(");
 /*  float Y, Y2, U, U2, V, V2;
-    
+
   const int ySize = image.ysize;
   const int xSize = image.xsize;
   const int yStride = xSize * image.csize;
@@ -266,7 +266,7 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
 	Y2   = oneDown[chY] / 255.f;
 	U2 = oneDown[chU] / 255.f;
 	V2  = oneDown[chV] / 255.f;
-    		        
+
 	glTexCoord2f(xTex, yTexDown);
 	glVertex3f(xCurrent, yDown, Y2 + U2 + V2);
 	glTexCoord2f(xTex, yTex);
@@ -287,7 +287,7 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
     while(yCount--) {
       int xCount = xSize;
       float xCurrent = -.5f;
-    	    
+
       glBegin(GL_QUAD_STRIP);
       while(xCount--) {
 	unsigned char *oneDown = data - yStride;
@@ -298,7 +298,7 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
 	Y2   = oneDown[chY] / 255.f;
 	U2 = oneDown[chU] / 255.f;
 	V2  = oneDown[chV] / 255.f;
-    		        
+
 	glColor3f(Y2, U2, V2);
 	glVertex3f(xCurrent, yDown, Y2 + U2 + V2);
 	glColor3f(Y, U, V);

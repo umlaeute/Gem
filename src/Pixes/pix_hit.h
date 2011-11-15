@@ -3,7 +3,7 @@
 // pix_hit
 //
 // hit test over user defined hit_areas...
-// 
+//
 // Author: Davide Morelli
 // http://ww.davidemorelli.it
 //
@@ -23,11 +23,11 @@
 
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   bangs if there is a minimum number of pixels over a given threshold in a given rectangle
-   
+
   -----------------------------------------------------------------*/
 #define NUM_hit_areas 256
 #define DEF_THRESHOLD 127
@@ -60,9 +60,9 @@ class GEM_EXTERN pix_hit : public GemPixObj
   //////////
   // Constructor
   pix_hit(void);
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_hit();
@@ -94,9 +94,9 @@ class GEM_EXTERN pix_hit : public GemPixObj
   bool show;
 
   t_outlet    	*m_hits;
-    
+
  private:
-    
+
   static void	thresholdCallback(void *data, t_floatarg thresh);
   static void	minimumCallback(void *data, t_floatarg min);
   static void	min_distanceCallback(void *data, t_floatarg min);

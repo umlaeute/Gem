@@ -29,9 +29,9 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_scale);
 //
 /////////////////////////////////////////////////////////
 vertex_scale :: vertex_scale(int argc, t_atom*argv) : GemBase(),
-						      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f), 
+						      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f),
 						      m_offset(0), m_count(0),
-						      m_vertex(false), m_color(false), 
+						      m_vertex(false), m_color(false),
 						      m_normal(false), m_texture(false)
 {
   m_vertIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("vertex"));
@@ -100,15 +100,15 @@ void vertex_scale :: paramMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void vertex_scale :: vertexProcess(int size, GLfloat*array){
   int count;
-   
+
   if (m_offset < 0) m_offset = 0;
   if (m_offset > size) m_offset = size;
   count = m_count;
-  
+
   if (count < 1) count = 1;
   if ((count + m_offset-1) > size) count = size - m_offset;// -1;
-  
-  //needs some altivec 
+
+  //needs some altivec
   if (m_offset){
     int src = (m_offset-1) * 4;
     for (int i=0; i< count; i++){
@@ -156,7 +156,7 @@ void vertex_scale :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void vertex_scale :: obj_setupCallback(t_class *classPtr)
-{ 
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::modeMessCallback),
 		  gensym("mode"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::vertexMessCallback),
@@ -175,7 +175,7 @@ void vertex_scale :: paramMessCallback(void *data, t_symbol*, int argc, t_atom*a
 
 void vertex_scale :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg counter)
 {
-  GetMyClass(data)->vertexMess(static_cast<int>(num), 
+  GetMyClass(data)->vertexMess(static_cast<int>(num),
 			       static_cast<int>(counter));
 }
 void vertex_scale :: modeMessCallback(void *data, t_symbol*, int argc, t_atom*argv)

@@ -17,7 +17,7 @@
 #if 0
 # define debug_post ::post
 #else
-# define debug_post 
+# define debug_post
 #endif
 
 static t_class *gemreceive_proxy_class;
@@ -81,7 +81,7 @@ t_gemreceive_proxy*gemreceive::add_key(t_symbol*key)
 
 void gemreceive::add_element(t_gemreceive_proxy*bind_list, t_bind_element*element)
 {
-  /* insert the object according to it's priority 
+  /* insert the object according to it's priority
    * this is already the right queue
    */
   t_float priority=element->priority;
@@ -106,7 +106,7 @@ void gemreceive::add_element(t_gemreceive_proxy*bind_list, t_bind_element*elemen
   debug_post("inserting after %x:%g", last,     (last    ?    (last->priority):0));
   debug_post("inserting befor %x:%g", elements, (elements?(elements->priority):0));
 
-  element->next=elements;    
+  element->next=elements;
   if(last) {
     last->next = element;
   } else {
@@ -174,7 +174,7 @@ void gemreceive::unbind(gemreceive*x, t_symbol*key) {
       last->next=list->next;
     } else {
       proxy_list=list->next;
-    }    
+    }
 
     pd_unbind(&list->p_obj.ob_pd, list->key);
     list->next=0;
@@ -259,14 +259,14 @@ void gemreceive :: priorityMess(t_float f) {
 //
 /////////////////////////////////////////////////////////
 void gemreceive :: obj_setupCallback(t_class *classPtr)
-{ 
+{
   class_addsymbol(classPtr, reinterpret_cast<t_method>(gemreceive::nameCallback));
   class_addmethod(classPtr, reinterpret_cast<t_method>(gemreceive::priorityCallback), gensym(""), A_FLOAT, 0);
 
 
-  gemreceive_proxy_class = class_new(0, 0, 0, 
-                                     sizeof(t_gemreceive_proxy), 
-                                     CLASS_NOINLET | CLASS_PD, 
+  gemreceive_proxy_class = class_new(0, 0, 0,
+                                     sizeof(t_gemreceive_proxy),
+                                     CLASS_NOINLET | CLASS_PD,
                                      A_NULL);
   class_addanything(gemreceive_proxy_class, reinterpret_cast<t_method>(gemreceive::proxyCallback));
 }
@@ -284,7 +284,7 @@ void gemreceive :: proxyCallback(t_gemreceive_proxy*p, t_symbol*s, int argc, t_a
     if(o) {
       o->receive(s, argc, argv);
     }
-  } 
+  }
 }
 
 

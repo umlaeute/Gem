@@ -28,9 +28,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexSubImage1D, t_floatarg, A_DEFFLOAT, t_fl
 GEMglTexSubImage1D :: GEMglTexSubImage1D(t_floatarg arg0=0,
 					 t_floatarg arg1=0,
 					 t_floatarg arg2=0) :
-  level(static_cast<GLint>(arg0)), 
-  xoffset(static_cast<GLint>(arg1)), 
-  width(static_cast<GLsizei>(arg2)) 
+  level(static_cast<GLint>(arg0)),
+  xoffset(static_cast<GLint>(arg1)),
+  width(static_cast<GLsizei>(arg2))
 {
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("level"));
   m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xoffset"));
@@ -62,8 +62,8 @@ void GEMglTexSubImage1D :: render(GemState *state) {
   pixBlock*img=NULL;  state->get(GemState::_PIX, img);  if(!img || !&img->image)return;
   target=GL_TEXTURE_1D;
   glTexSubImage1D (target, level, xoffset, width,
-		   img->image.format, 
-		   img->image.type, 
+		   img->image.format,
+		   img->image.type,
 		   img->image.data);
 }
 

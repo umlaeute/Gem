@@ -34,10 +34,10 @@ GEM_EXTERN void gemAbortRendering();
 BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 {
     PIXELFORMATDESCRIPTOR pfd;
-	
+
 	// clean out the descriptor
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-    
+
     pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
     pfd.nVersion = 1;
     pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
@@ -132,13 +132,13 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			else
 				triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
       break;
-      
+
       // resize event
     case WM_SIZE:
       triggerResizeEvent(LOWORD(lParam), HIWORD(lParam));
       GetClientRect(hWnd, &rcClient);
       break;
-      
+
       // we want to override these messages
       // and not do anything
     case WM_DESTROY:
@@ -148,7 +148,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       {
       }
       break;
-      
+
       // pass all unhandled messages to DefWindowProc
     default:
       lRet = DefWindowProc (hWnd, uMsg, wParam, lParam);
@@ -164,7 +164,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 {
   static int firstTime = 1;
-    
+
   // Register the frame class
   HINSTANCE hInstance = GetModuleHandle(NULL);
   if (!hInstance)
@@ -206,13 +206,13 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
   bool fullscreen=(hints.fullscreen!=0);
   if (fullscreen){
     DEVMODE dmScreenSettings;								// Device Mode
-    
+
     if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
       error("GEM: couldn't get screen capabilities!");
     }
     int w = dmScreenSettings.dmPelsWidth;
     int h = dmScreenSettings.dmPelsHeight;
-    
+
     x=y=0;
 
     memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
@@ -379,9 +379,9 @@ int topmostGemWindow(WindowInfo &info, int state)
   static int topmost_state = 0;
   state=!(!state);
   if (state)
-	SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+	SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   else
-	SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE); 
+	SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   topmost_state = state;
   return topmost_state;
 }
@@ -392,10 +392,10 @@ void gemWinSwapBuffers(WindowInfo&nfo)
   SwapBuffers(nfo.dc);
 }
 
-void gemWinMakeCurrent(WindowInfo&nfo) 
+void gemWinMakeCurrent(WindowInfo&nfo)
 {
   if (!nfo.dc && !nfo.context)return; // do not crash ??
-  wglMakeCurrent(nfo.dc, nfo.context); 
+  wglMakeCurrent(nfo.dc, nfo.context);
 }
 
 bool initGemWin(void) {

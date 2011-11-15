@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef _INCLUDE__GEM_PIXES_PIX_ROLL_H_ 
-#define _INCLUDE__GEM_PIXES_PIX_ROLL_H_ 
+#ifndef _INCLUDE__GEM_PIXES_PIX_ROLL_H_
+#define _INCLUDE__GEM_PIXES_PIX_ROLL_H_
 
 #include "Base/GemPixObj.h"
 
@@ -16,17 +16,17 @@
 -------------------------------------------------------------------
 CLASS
     pix_roll
-    
-    
+
+
 
 KEYWORDS
     pix
     yuv
-    
+
 DESCRIPTION
 
    template for yuv_ objects
-   
+
 -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_roll : public GemPixObj
@@ -38,9 +38,9 @@ class GEM_EXTERN pix_roll : public GemPixObj
   //////////
   // Constructor
   pix_roll();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_roll();
@@ -53,17 +53,17 @@ class GEM_EXTERN pix_roll : public GemPixObj
   //////////
   // Do the YUV processing
   virtual void 	processYUVImage(imageStruct &image);
-        
+
   unsigned char  *saved;
   int		m_vroll,m_axis;
   int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
   t_inlet         *inletBlur;
-        
+
  private:
-    
+
   //////////
   // Static member functions
-    	
+
   static void rollCallback       (void *data, t_floatarg value);
   static void axisCallback       (void *data, t_floatarg value);
 };

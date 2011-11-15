@@ -110,7 +110,7 @@ extern "C" {
     verbose(-1, "GEM: Authors :\tMark Danks (original version)");
     for(unsigned int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
       verbose(-1, "GEM:\t\t%s", GEM_AUTHORS[i]);
-    }  
+    }
     verbose(-1, "GEM: with help by %s", GEM_OTHERAUTHORS);
     verbose(-1, "GEM: found a bug? miss a feature? please report it:");
     verbose(-1, "GEM: \thomepage http://gem.iem.at/");

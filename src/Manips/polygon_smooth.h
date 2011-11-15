@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     Turn on polygon smoothing
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,13 +21,13 @@ LOG
 -------------------------------------------------------------------
 CLASS
     polygon_smooth
-    
+
     Turn on polygon smoothing
 
 DESCRIPTION
-    
+
     "polygon_smoothstate" - whether to use polygon_smooth blending
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN polygon_smooth : public GemBase
 {
@@ -38,9 +38,9 @@ class GEM_EXTERN polygon_smooth : public GemBase
         //////////
         // Constructor
     	polygon_smooth();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~polygon_smooth();
@@ -61,7 +61,7 @@ class GEM_EXTERN polygon_smooth : public GemBase
    	void	    	polygon_smoothMess(int polygon_smoothState);
 
    private:
-    	
+
     	//////////
     	// static member functions
     	static void 	polygon_smoothMessCallback(void *data, t_floatarg polygon_smooth);

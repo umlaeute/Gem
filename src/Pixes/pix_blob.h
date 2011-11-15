@@ -9,7 +9,7 @@ Copyright (c) Günther Geiger. geiger@epy.co.at
 Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	 
+
 -----------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------
@@ -30,39 +30,39 @@ pix_blob
 CLASS
 
  pix_blob
- 
+
   Get pixel information
-  
+
    KEYWORDS
    pix
-   
+
 	DESCRIPTION
-	
+
 	 dumps the pix-data as a float-package
-	 
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_blob : public GemPixObj
 {
 	CPPEXTERN_HEADER(pix_blob, GemPixObj);
-		
+
 public:
-	
+
 	//////////
 	// Constructor
 	pix_blob(int argc, t_atom *argv);
-	
+
 protected:
-	
+
 	//////////
 	// Destructor
 	virtual ~pix_blob();
-	
+
 	//////////
 	// All we want is the pixel information, so this is a complete override.
 	virtual void 	processRGBAImage(imageStruct &image);
 	virtual void 	processGrayImage(imageStruct &image);
 	virtual void 	processYUVImage(imageStruct &image);
-	
+
 	//////////
 	void		ChannelMess(int  channel);
 	void            GainMess(int argc, t_atom *argv);
@@ -71,17 +71,17 @@ protected:
 	// The color outlet
 	t_outlet    	*m_xOut, *m_yOut;
 	t_outlet        *m_zOut;
-	
+
 	//////////
 	// user settings
 	int              m_method;
 
 	//////////
-	// 
+	//
 	t_float          m_gain[4];
 
 private:
-	
+
 	//////////
 	// Static member callbacks
 	static void gainMessCallback(void *dump, t_symbol *, int argc, t_atom *argv);

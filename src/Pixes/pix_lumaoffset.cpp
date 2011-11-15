@@ -14,7 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_lumaoffset.h"
-	
+
 CPPEXTERN_NEW(pix_lumaoffset);
 
 /////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ CPPEXTERN_NEW(pix_lumaoffset);
 //
 /////////////////////////////////////////////////////////
 pix_lumaoffset :: pix_lumaoffset()
-{ 
+{
     m_OffsetScale = 12.0f; 	// -127 to 127
     m_LineGap = 1.2f;		// 0 to 32
     m_DoFilledLines = false;	// 0 or 1
@@ -46,8 +46,8 @@ pix_lumaoffset :: pix_lumaoffset()
 //
 /////////////////////////////////////////////////////////
 pix_lumaoffset :: ~pix_lumaoffset()
-{ 
-    
+{
+
 }
 
 /////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 	init = 1;
     }
     pSource = reinterpret_cast<U32*>(image.data);
-    
+
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
@@ -75,10 +75,10 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
     const int nLineGap=static_cast<int>(m_LineGap);
 
     Pete_ZeroMemory(pOutput,(nNumPixels*sizeof(U32)));
-	
+
     U32* pCurrentSource=pSource;
     U32* pCurrentOutput=pOutput;
-	
+
     U32* pSourceEnd=(pSource+nNumPixels);
     U32* pOutputEnd=(pOutput+nNumPixels);
 
@@ -90,7 +90,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 		const U32 SourceColour=*pCurrentSource;
 		int nLuma=GetLuminance(SourceColour);
 		nLuma-=(128*255);
-				
+
 		const int nOffset=(nLuma*nOffsetScale)>>16;
 		U32*const pOffsetOutput=
 			    pCurrentOutput+(nOffset*nWidth);
@@ -110,7 +110,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
       if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ){
 	free(hPreviousLineHeights);
 	hPreviousLineHeights_size=nWidth*sizeof(U32*);
-	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
+	hPreviousLineHeights=malloc(hPreviousLineHeights_size);
       }
       U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights));
 	if (ppPreviousLineHeights==NULL)return;
@@ -167,7 +167,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 		    const int nDeltaGreen=(nDestGreen-nSourceGreen);
 		    const int nDeltaBlue=(nDestBlue-nSourceBlue);
 		    const int nDeltaAlpha=(nDestAlpha-nSourceAlpha);
-		    
+
 		    const int nIncRed=(nDeltaRed/nDestDistance);
 		    const int nIncGreen=(nDeltaGreen/nDestDistance);
 		    const int nIncBlue=(nDeltaBlue/nDestDistance);
@@ -193,7 +193,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 			nCurrentGreen+=nIncGreen;
 			nCurrentBlue+=nIncBlue;
 			nCurrentAlpha+=nIncAlpha;
-					
+
 			pOffsetOutput-=nWidth;
 		    }
 
@@ -262,7 +262,7 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
 	init = 1;
     }
     U8* pSource = static_cast<U8*>(image.data);
-    
+
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
@@ -275,10 +275,10 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
     const int nLineGap=static_cast<int>(m_LineGap);
 
     Pete_ZeroMemory(pOutput,(nNumPixels*sizeof(U8)));
-	
+
     U8* pCurrentSource=pSource;
     U8* pCurrentOutput=pOutput;
-	
+
     U8* pSourceEnd=(pSource+nNumPixels);
     U8* pOutputEnd=(pOutput+nNumPixels);
 
@@ -309,7 +309,7 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
       if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U8*)) ){
 	free(hPreviousLineHeights);
 	hPreviousLineHeights_size=nWidth*sizeof(U8*);
-	hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
+	hPreviousLineHeights=malloc(hPreviousLineHeights_size);
       }
       U8** ppPreviousLineHeights=static_cast<U8**>(Pete_LockHandle(hPreviousLineHeights));
 	if (ppPreviousLineHeights==NULL)return;
@@ -332,7 +332,7 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
                     const int nOffset = (nOffset0>(nHeight-1))?(nHeight-1):
                                         (nOffset0>(currentLineNumber))?(currentLineNumber):nOffset0;
 		    //const int nOffset=(nLuma*nOffsetScale)>>16;
-                    
+
 		    U8* pOffsetOutputStart=
 			    pCurrentOutput+(nOffset*nWidth);
 
@@ -360,7 +360,7 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
 				(pOffsetOutput>pPreviousOffsetOutput)) {
 			*pOffsetOutput=nCurrentGray;
 			nCurrentGray+=nIncGray;
-					
+
 			pOffsetOutput-=nWidth;
 		    }
 
@@ -428,14 +428,14 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
 void pix_lumaoffset :: processYUVImage(imageStruct &image)
 {
 	int nSourceU, nSourceY1, nSourceV, nSourceY2;
-	
+
     nWidth = image.xsize/2;
     nHeight = image.ysize;
     if (!init) {
 		init = 1;
     }
     pSource = reinterpret_cast<U32*>(image.data);
-    
+
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
@@ -450,7 +450,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 
     U32* pCurrentSource=pSource;
     U32* pCurrentOutput=pOutput;
-	
+
     U32* pSourceEnd = pSource+nNumPixels;
     U32* pOutputEnd = pOutput+nNumPixels;
 
@@ -466,10 +466,10 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 			  nSourceY2 = ((SourceColour>>SHIFT_Y2)&0xff)<<8;
 			  //nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
 			  nSourceY2 -= 32640;
-				
+
 				const int nOffset1=(nSourceY1*nOffsetScale)>>16;
 				const int nOffset2=(nSourceY2*nOffsetScale)>>16;
-				
+
 				U32* pOffsetOutput1=(pCurrentOutput+(nOffset1*nWidth));
 
 				if ((pOffsetOutput1<pOutputEnd) && static_cast<int>(pOffsetOutput1>=pOutput)) {
@@ -481,7 +481,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 						*pOffsetOutput1 |= SourceColour & 0xff00ffff;
 					}
 				}
-				
+
 				U32* pOffsetOutput2=(pCurrentOutput)+(nOffset2*nWidth);
 
 				if ((pOffsetOutput2<pOutputEnd) && static_cast<int>(pOffsetOutput2>=pOutput)) {
@@ -504,17 +504,17 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 		if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ){
 			free(hPreviousLineHeights);
 			hPreviousLineHeights_size=nWidth*sizeof(U32*);
-			hPreviousLineHeights=malloc(hPreviousLineHeights_size);	
+			hPreviousLineHeights=malloc(hPreviousLineHeights_size);
 		}
 		U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights));
 		if (ppPreviousLineHeights==NULL)return;
 
 		Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U32*)));
-		
+
 		if (hPreviousLineHeights2 ==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ){
 			free(hPreviousLineHeights2);
 			hPreviousLineHeights_size=nWidth*sizeof(U32*);
-			hPreviousLineHeights2=malloc(hPreviousLineHeights_size);	
+			hPreviousLineHeights2=malloc(hPreviousLineHeights_size);
 		}
 		U32** ppPreviousLineHeights2=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights2));
 		if (ppPreviousLineHeights2 ==NULL)return;
@@ -533,7 +533,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
                                 const U32 SourceColour=*pCurrentSource;
                                 nSourceU = ((SourceColour&(0xff<<24))>>24);
                                 nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
-                                nSourceY1 -= 32640; 
+                                nSourceY1 -= 32640;
                                 nSourceV = ((SourceColour&(0xff<<8))>>8);
                                 nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
                                 nSourceY2 -= 32640;
@@ -544,11 +544,11 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 //                                const int nOffset1=(nSourceY1*nOffsetScale)>>16;
 
                               //  const int nOffset2=(nSourceY2*nOffsetScale)>>16;
-                                
+
                                 //this doesn't fit with the rest of the Y handling but it works
                                 nSourceY1 = ((SourceColour&(0xff<<16))>>16);
                                 nSourceY2 = ((SourceColour&(0xff<<0))>>0);
-                                
+
 
                                 U32* pOffsetOutputStart1 = pCurrentOutput+(nOffset1*nWidth);
 
@@ -578,7 +578,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
                                     nDestDistance=(pOffsetOutput1 - pPreviousOffsetOutput1)/nWidth;
                                     if (nDestDistance==0)nDestDistance=1;
                                 }
-                                
+
 
                                 const int nDeltaU= (nDestU-nSourceU);
                                 const int nDeltaY1=(nDestY1-nSourceY1);
@@ -630,10 +630,10 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 					nSourceY1 -= 32640;								// 128*255
 					nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
 					nSourceY2 -= 32640;
-				
+
 					const int nOffset1=(nSourceY1*nOffsetScale)>>16;
 					//const int nOffset2=(nSourceY2*nOffsetScale)>>16;
-					
+
 					U32* pOffsetOutputStart=pCurrentOutput+(nOffset1*nWidth);
 					U32* pOffsetOutput=pOffsetOutputStart;
 					U32* pPreviousOffsetOutput=*ppCurrentLineHeight;
@@ -680,7 +680,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 						*pOffsetOutput1  = *pOffsetOutput1 & 0x000000ff;
 						*pOffsetOutput1 |= SourceColour & 0xffffff00;
 			}
-				
+
 			U32* pOffsetOutput2=(pCurrentOutput)+(nOffset2*nWidth);
 
 			if ((pOffsetOutput2<pOutputEnd) && static_cast<int>(pOffsetOutput2>=pOutput)) {
@@ -691,7 +691,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 			pCurrentOutput+=1;
 			ppCurrentLineHeight+=1;
 		}
-	
+
     }
 	image.data = myImage.data;
 }
@@ -725,12 +725,12 @@ void pix_lumaoffset :: gapCallback(void *data, t_floatarg m_LineGap)
 }
 void pix_lumaoffset :: fillCallback(void *data, t_floatarg m_DoFilledLines)
 {
-  GetMyClass(data)->m_DoFilledLines=(m_DoFilledLines!=0.0);  
+  GetMyClass(data)->m_DoFilledLines=(m_DoFilledLines!=0.0);
   GetMyClass(data)->setPixModified();
 }
 
 void pix_lumaoffset :: smoothCallback(void *data, t_floatarg m_DoSmoothFill)
 {
-  GetMyClass(data)->m_DoSmoothFill=(m_DoSmoothFill!=0.0);  
+  GetMyClass(data)->m_DoSmoothFill=(m_DoSmoothFill!=0.0);
   GetMyClass(data)->setPixModified();
 }

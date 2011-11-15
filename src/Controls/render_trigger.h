@@ -3,7 +3,7 @@ LOG
     GEM - Graphics Environment for Multimedia
 
     Send out a bang on pre and post render
-    
+
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -21,13 +21,13 @@ LOG
 -------------------------------------------------------------------
 CLASS
     render_trigger
-    
+
     Send out a bang on pre and post render
 
 DESCRIPTION
-    
+
     "render_triggerstate" - whether to use render_trigger blending
-    
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN render_trigger : public GemBase
 {
@@ -38,9 +38,9 @@ class GEM_EXTERN render_trigger : public GemBase
         //////////
         // Constructor
     	render_trigger();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~render_trigger();
@@ -57,7 +57,7 @@ class GEM_EXTERN render_trigger : public GemBase
         t_outlet        *m_preOut;	    // bang for the pre render
 
     	//////////
-        t_outlet        *m_postOut;	    // bang for the post render 
+        t_outlet        *m_postOut;	    // bang for the post render
 };
 
 #endif	// for header file
