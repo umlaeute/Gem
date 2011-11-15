@@ -118,7 +118,7 @@ void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
 
 static void rgb2hsv(float r, float g, float b, float *h, float *s, float *v);
 
-char *color_name[num_colors]  = {
+const char *color_name[num_colors]  = {
   "black",
   "white",
   "red",
@@ -133,7 +133,7 @@ char *color_name[num_colors]  = {
 };
 
 
-char *certainty_name[3] =  {
+const char *certainty_name[3] =  {
   "unreliable",
   "good-guess",
   "certain"
