@@ -26,6 +26,7 @@
 #include "filmGMERLIN.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
+#include "Gem/Properties.h"
 
 
 //#define GEM_FILMGMERLIN_TRACKSWITCH 1
@@ -44,6 +45,10 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 /////////////////////////////////////////////////////////
 
 filmGMERLIN :: filmGMERLIN(void) : filmBase(),
+                                   m_wantedFormat(GL_RGBA),
+                                   m_fps(0.),
+                                   m_numFrames(-1), m_numTracks(-1),
+                                   m_curFrame(-1),
                                    m_file(NULL),
                                    m_opt(NULL),
                                    m_seekable(false),
@@ -378,4 +383,56 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
 
   return film::FAILURE;
 }
+///////////////////////////////
+// Properties
+bool filmGMERLIN::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("frames", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  return false;
+}
+
+void filmGMERLIN::setProperties(gem::Properties&props) {
+}
+
+void filmGMERLIN::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("frames"==key && m_numFrames>=0) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("tracks"==key && m_numTracks>=0) {
+      d=m_numTracks;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
 #endif // GMERLIN

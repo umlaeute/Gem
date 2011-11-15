@@ -77,10 +77,21 @@ class GEM_EXPORT filmGMERLIN : public filmBase {
 
   virtual bool isThreadable(void);
 
+  // Property handling
+  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
  protected:
+  GLenum  m_wantedFormat; // format requested by the user
+  double m_fps;  // the frame-rate
+  int m_numFrames, m_numTracks; // number of frames in video
+  int m_curFrame;
+  pixBlock m_image; // output image
+
   bgav_t*   	 m_file;
   bgav_options_t * m_opt;
   bool           m_seekable; /* the track can be seeked */
