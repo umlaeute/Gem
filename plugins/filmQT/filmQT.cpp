@@ -17,7 +17,7 @@
 # include "config.h"
 #endif
 
-#if defined __APPLE__ 
+#if defined __APPLE__
 # if !defined __x86_64__
 // with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
 // LATER make this a real check in configure
@@ -68,7 +68,7 @@ static bool filmQT_initQT(void) {
   return true;
 }
 
-static bool filmQT_deinitQT(void) { 
+static bool filmQT_deinitQT(void) {
   // Deinitialize QuickTime Media Layer
   ExitMovies();
   // Deinitialize QuickTime Media Layer
@@ -88,14 +88,19 @@ static bool filmQT_deinitQT(void) {
 //
 /////////////////////////////////////////////////////////
 
-filmQT :: filmQT(void) : filmBase(false),
-			 m_movie(NULL),
-			 m_srcGWorld(NULL),
-			 m_movieTime(0),
-			 m_movieTrack(0),
-			 m_timeScale(1), 
-			 duration(0),
-			 m_bInit(false)
+filmQT :: filmQT(void) :
+  filmBase(false),
+  m_fps(-1.),
+  m_numFrames(-1), m_numTracks(-1)
+  m_curFrame(-1), m_curTrack(-1),
+  m_readNext(false),
+  m_movie(NULL),
+  m_srcGWorld(NULL),
+  m_movieTime(0),
+  m_movieTrack(0),
+  m_timeScale(1),
+  duration(0),
+  m_bInit(false)
 {
   if(!filmQT_initQT()) {
     throw(GemException("unable to initialize QuickTime"));
@@ -138,7 +143,6 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   long	movieDur, movieScale;
   OSType	whichMediaType;
   short		flags = 0;
-  int wantedFormat;
   double d;
 
   if (filename.empty())return false;
@@ -146,10 +150,6 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
     error("filmQT: object not correctly initialized\n");
     return false;
   }
-  if(wantProps.get("colorspace", d))
-    m_wantedFormat=d;
-     
-  wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
   // Clean up any open files:  closeMess();
 
   Str255	pstrFilename;
@@ -157,13 +157,13 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 
   err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
 #ifdef __APPLE__
-  if (err != noErr) {  
+  if (err != noErr) {
     FSRef		ref;
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
   }
 #endif
-  
+
   if (err != noErr) {
     error("filmQT: Unable to find file: %s (%d)", filename.c_str(), err);
     //goto unsupported;
@@ -196,8 +196,8 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   // shouldn't the flags be OR'ed instead of ADDed ? (jmz)
   flags = nextTimeMediaSample | nextTimeEdgeOK;
 
-  GetMovieNextInterestingTime( m_movie, flags, 
-			       static_cast<TimeValue>(1), 
+  GetMovieNextInterestingTime( m_movie, flags,
+			       static_cast<TimeValue>(1),
 			       &whichMediaType, 0,
 			       static_cast<Fixed>(1<<16), NULL, &duration);
   m_numFrames = movieDur/duration;
@@ -254,7 +254,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 // getFrame
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmQT :: getFrame()
+pixBlock* filmQT :: getFrame(void)
 {
   CGrafPtr	savedPort;
   GDHandle     	savedDevice;
@@ -271,15 +271,6 @@ pixBlock* filmQT :: getFrame()
   // set the time for the frame and give time to the movie toolbox
   SetMovieTimeValue(m_movie, m_movieTime);
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-#ifdef __GNUC__
-# warning m_wantedFormat ignored
-  // m_wantedFormat is nowhere respected when setting up the decoder
-  // we cannot just use it here and expect it to convert our image...
-  // it's left here as i have to check how it works on w32
-#endif
-  /*
-    m_image.image.setCsizeByFormat(m_wantedFormat);
-  */
   m_image.newimage = 1;
   m_image.image.upsidedown=true;
 
@@ -306,10 +297,63 @@ film::errCode filmQT :: changeImage(int imgNum, int trackNum){
   return film::SUCCESS;
 }
 
+///////////////////////////////
+// Properties
+bool filmQT::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("frames", value);
+  readable.set("tracks", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  return false;
+}
+
+void filmQT::setProperties(gem::Properties&props) {
+}
+
+void filmQT::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("tracks"==key) {
+      d=m_numTracks;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
 #ifdef LOADRAM
 //////////
 // load film into RAM
-void filmQT :: LoadRam(){
+void filmQT :: LoadRam(void){
   TimeValue	length;
   OSErr err;
   if (m_haveMovie){

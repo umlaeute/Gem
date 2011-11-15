@@ -28,12 +28,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   filmQT
-  
+
   Loads in a film
-  
+
   KEYWORDS
   pix
-  
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -66,12 +66,22 @@ class GEM_EXPORT filmQT : public filmBase
   // cannot be used within a threaded context
   virtual bool isThreadable(void) { return false; }
 
+  // Property handling
+  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
 
  protected:
+  double m_fps;  // the frame-rate
+  int m_numFrames, m_numTracks; // number of frames in video
+  int m_curFrame, m_curTrack;
+  pixBlock m_image; // output image
+  bool m_readNext;
+
   //-----------------------------------
   // GROUP:	Movie data
   //-----------------------------------
-  Movie			m_movie; 
+  Movie			m_movie;
   GWorldPtr		m_srcGWorld;
   TimeValue		m_movieTime;
   Track			m_movieTrack;
