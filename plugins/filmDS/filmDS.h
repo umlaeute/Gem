@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -24,19 +24,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
      -------------------------------------------------------------------
      CLASS
      filmDS
-    
+
      film-loader class for AVI(windoze)
-    
+
      KEYWORDS
      pix film movie
-    
+
      DESCRIPTION
 
      -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
 class GEM_EXPORT filmDS : public filmBase {
  public:
-  
+
      //////////
      // Constructor
      filmDS(void);
@@ -63,15 +63,17 @@ class GEM_EXPORT filmDS : public filmBase {
      // can be used within a threaded context
      virtual bool isThreadable(void) { return true; }
 
+     // Property handling
+     virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+     virtual void setProperties(gem::Properties&props);
+     virtual void getProperties(gem::Properties&props);
+
+
  protected:
-     // the raw buffer for decoding...
-     int			m_nRawBuffSize;
-     unsigned char*	m_RawBuffer;
-     GLint                 m_format;
+     int m_numFrames; // number of frames in video
+     pixBlock m_image; // output image
 
-     int 	    	m_reqFrame;
-
-     pixBlock		*m_pixBlock;
+     int 	    m_reqFrame;
 
      unsigned char*  m_frame;  /* this points to a buffer for decompression */
 
@@ -86,7 +88,6 @@ class GEM_EXPORT filmDS : public filmBase {
      IBaseFilter				*NullFilter;		// Null render base Filter for video
      ISampleGrabber			*SampleGrabber;		// Sample grabber
      IGraphBuilder			*FilterGraph;		// Filter Graph for movie playback
-     ISampleGrabber			*VideoGrabber;		// Video grabber
      IMediaControl			*MediaControl;		// MediaControl interface
      IMediaSeeking			*MediaSeeking;		// MediaSeeking interface
      IMediaPosition			*MediaPosition;		// MediaPosition interface

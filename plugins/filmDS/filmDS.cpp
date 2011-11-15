@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -21,6 +21,7 @@
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
+#include "Gem/Properties.h"
 
 using namespace gem::plugins;
 
@@ -47,22 +48,32 @@ void filmRemoveGraphFromRot(DWORD pdwRegister);
 //
 /////////////////////////////////////////////////////////
 
-filmDS :: filmDS(void) : filmBase() {
-  HRESULT RetVal;
-  m_reqFrame = 1;
-  m_frame = NULL;
-  m_csize=0;
-  m_xsize=0;
-  m_ysize=0;
-  FilterGraph=NULL;
-  VideoFilter=NULL;
-  SampleFilter=NULL;
-  NullFilter=NULL;
-  SampleGrabber=NULL;
-  MediaControl=NULL;
-  MediaSeeking=NULL;
-  MediaPosition=NULL;
+static void throwCtorError(const char*format, HRESULT RetVal) {
+  char errstring[MAXPDSTRING];
+  snprintf(errstring, MAXPDSTRING-1, format, RetVal);
+  errstring[MAXPDSTRING-1]=0;
+  throw(GemException(errstring));
+}
 
+filmDS :: filmDS(void) :
+  filmBase() ,
+  m_numFrames(-1),
+  m_reqFrame(1),
+  m_frame(NULL),
+  m_xsize(0), m_ysize(0), m_csize(0),
+  VideoFilter(NULL),
+  SampleFilter(NULL),
+  NullFilter(NULL),
+
+  SampleGrabber(NULL),
+  FilterGraph(NULL),
+  MediaControl(NULL),
+  MediaSeeking(NULL),
+  MediaPosition(NULL),
+  m_Duration(0),
+  m_LastFrame(0)
+{
+  HRESULT RetVal;
   CoInitialize(NULL);
 
   // Create the base object of a filter graph
@@ -71,8 +82,7 @@ filmDS :: filmDS(void) : filmBase() {
 
   if (RetVal != S_OK || NULL == FilterGraph)
     {
-      error("Unable to create FilterGraph interface %d", RetVal);
-		
+      throwCtorError("Unable to create FilterGraph interface %d", RetVal);
       return;
     }
 	
@@ -81,19 +91,17 @@ filmDS :: filmDS(void) : filmBase() {
 
   if (RetVal != S_OK || NULL == MediaControl)
     {
-      error("Unable to create MediaControl interface %d", RetVal);
-		
+      throwCtorError("Unable to create MediaControl interface %d", RetVal);
       return;
     }
 	
-  // Get the IMediaSeeking interface for rewinding video at loop point 
-  // and set time format to frames 
+  // Get the IMediaSeeking interface for rewinding video at loop point
+  // and set time format to frames
   RetVal	= FilterGraph->QueryInterface(IID_IMediaSeeking, (void **)&MediaSeeking);
 
   if (RetVal != S_OK || NULL == MediaSeeking)
     {
-      error("Unable to create MediaSeeking interface %d", RetVal);
-		
+      throwCtorError("Unable to create MediaSeeking interface %d", RetVal);
       return;
     }
 	
@@ -102,8 +110,7 @@ filmDS :: filmDS(void) : filmBase() {
 
   if (RetVal != S_OK || NULL == MediaPosition)
     {
-      error("Unable to create MediaPosition interface %d", RetVal);
-		
+      throwCtorError("Unable to create MediaPosition interface %d", RetVal);
       return;
     }
 }
@@ -155,7 +162,7 @@ filmDS :: ~filmDS()
 
 void filmDS :: close(void)
 {
-  
+
   // Stop the video. Filters cannot be remove until video is stopped
   if (MediaControl != NULL)
     {
@@ -234,11 +241,10 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   // Convert c-string to Wide string.
   memset(&WideFileName, 0, MAXPDSTRING * 2);
 	
-  if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(), filename.length(), WideFileName, 
+  if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(), filename.length(), WideFileName,
                                MAXPDSTRING))
     {
       error("filmDS: Unable to load %s", filename.c_str());
-		
       return false;
     }
 
@@ -248,19 +254,17 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK || NULL == VideoFilter)
     {
       error("filmDS: Unable to render %s", filename.c_str());
-		
       return false;
     }
 
   // Create an instance of the sample grabber filter. The filter allows frames to be
-  // buffered from a video source.  
+  // buffered from a video source.
   RetVal	= CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER,
                                    IID_IBaseFilter, (void**)&SampleFilter);
-    
+
   if (RetVal != S_OK || NULL == SampleFilter)
     {
       error("Unable to create SampleFilter interface %d", RetVal);
-		
       return false;
     }
 
@@ -270,20 +274,18 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK)
     {
       error("Unable to add SampleFilter %d", RetVal);
-		
       return false;
     }
 
-  // Find an interface to the SampleGrabber from the SampleGrabber filter. The 
+  // Find an interface to the SampleGrabber from the SampleGrabber filter. The
   // SampleGrabber allows frames to be grabbed from the filter. SetBufferSamples(TRUE)
-  // tells the SampleGrabber to buffer the frames. SetOneShot(FALSE) tells the 
+  // tells the SampleGrabber to buffer the frames. SetOneShot(FALSE) tells the
   // SampleGrabber to continuously grab frames.  has GetCurrentBuffer() method
   RetVal	= SampleFilter->QueryInterface(IID_ISampleGrabber, (void **)&SampleGrabber);
 
   if (RetVal != S_OK || NULL == SampleGrabber)
     {
       error("Unable to create SampleGrabber interface %d", RetVal);
-		
       return false;
     }
 
@@ -305,30 +307,27 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK)
     {
       error("Unable to setup sample grabber %d", RetVal);
-		
       return false;
     }
 
-  // Set the SampleGrabber to copy the data to a buffer. This only set to FALSE when a 
+  // Set the SampleGrabber to copy the data to a buffer. This only set to FALSE when a
   // callback is used.
   RetVal	= SampleGrabber->SetBufferSamples(TRUE);
 	
   if (RetVal != S_OK)
     {
       error("Unable to setup sample grabber %d", RetVal);
-		
       return false;
     }
- 
-  // Create the Null Renderer interface. The Null Renderer is used to disable rendering of a 
+
+  // Create the Null Renderer interface. The Null Renderer is used to disable rendering of a
   // video stream to a window.
   RetVal	= CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
                                    IID_IBaseFilter, (void**)&NullFilter);
-    
+
   if (RetVal != S_OK || NULL == NullFilter)
     {
       error("Unable to create NullFilter interface %d", RetVal);
-		
       return false;
     }
 
@@ -338,7 +337,6 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK)
     {
       error("Unable to add NullFilter %d", RetVal);
-		
       return false;
     }
 
@@ -352,7 +350,6 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK)
     {
       error("Unable to connect filters %d", RetVal);
-		
       return false;
     }
 
@@ -362,7 +359,6 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK)
     {
       error("Unable to connect filters %d", RetVal);
-		
       return false;
     }
 	
@@ -383,19 +379,17 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       if (RetVal != S_OK)
         {
           error("Unable to set video time format %d", RetVal);
-
           return false;
         }
     }
 	
-  // Get the duration of the video. Format will be in previously set time format. This is 
+  // Get the duration of the video. Format will be in previously set time format. This is
   // compatible with the value returned from GetCurrentPosition
   RetVal	= MediaSeeking->GetDuration(&m_Duration);
 	
   if (RetVal != S_OK)
     {
       error("Unable to get video duration %d", RetVal);
-
       return false;
     }
 	
@@ -411,7 +405,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       GUID		OutGuid;
 				
       OutGuid	= TIME_FORMAT_FRAME;
-      Guid	= TIME_FORMAT_MEDIA_TIME; 
+      Guid	= TIME_FORMAT_MEDIA_TIME;
 		
       //converts from 100 nanosecond format to number of frames
       MediaSeeking->ConvertTimeFormat(&OutFormat, &OutGuid, m_Duration, &Guid);
@@ -425,7 +419,6 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK)
     {
       error("Unable to get media type %d", RetVal);
-		
       return false;
     }
 
@@ -445,7 +438,6 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   else
     {
       error("Invalid media type returned %s", filename.c_str());
-
       return false;
     }
 	
@@ -462,7 +454,6 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       if (NULL == m_frame)
         {
           error("Unable to allocate memory for the video buffer %s", filename.c_str());
-
           return false;
         }
     }
@@ -494,14 +485,14 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       // Release the interface
       DVFilter->Release();
     }
-	 
+	
   // Setup the pixBlock data based on the media type.
   // this is a guess at the fast past for pixels on Windows
   m_image.image.xsize	= m_xsize;
   m_image.image.ysize	= m_ysize;
   m_image.image.csize	= m_csize;
   if (m_csize == 3) m_image.image.format	= GL_BGR_EXT;
-  if (m_csize == 4) m_image.image.format	= GL_BGRA; 
+  if (m_csize == 4) m_image.image.format	= GL_BGRA;
   m_image.image.type	= GL_UNSIGNED_BYTE;
 
   // Start the video stream
@@ -510,9 +501,8 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (RetVal != S_OK && RetVal != S_FALSE)
     {
       error("Unable to start video %d", RetVal);
-		
-      return false;
-    } 
+		      return false;
+    }
 	
   // Wait for the video to begin playing.
   while (TRUE)
@@ -525,8 +515,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       if (RetVal != S_OK && RetVal != VFW_S_STATE_INTERMEDIATE)
         {
           error("Unable to run video %d", RetVal);
-		
-          return false;
+		          return false;
         }
 
       // Ensure the video is running
@@ -542,7 +531,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   // Set the last frame to -1 so it will show the first frame.
   m_LastFrame	= -1;
 	
-  //	m_haveMovie	= TRUE;	  
+  //	m_haveMovie	= TRUE;	
 
 #ifdef REGISTER_FILTERGRAPH
   if (FAILED(RetVal = filmAddGraphToRot(FilterGraph, &m_GraphRegister))){
@@ -579,7 +568,7 @@ pixBlock* filmDS :: getFrame(){
  if (m_auto > 0.f){
 
 	 //if the video is paused then start it running again
-	 if (State != State_Running) 
+	 if (State != State_Running)
 	 {
 		 RetVal	= MediaControl->Run();
 		RetVal	= MediaControl->GetState(0, &State);
@@ -587,8 +576,8 @@ pixBlock* filmDS :: getFrame(){
 
 	 //set the rate of the clip
 	 RetVal	= MediaSeeking->SetRate(m_auto);
-  
-  
+
+
   if (SampleGrabber != NULL && State == State_Running)
     {
       // Get the current position of the video
@@ -600,15 +589,15 @@ pixBlock* filmDS :: getFrame(){
 
           if (S_OK == RetVal)
             {
-              // If the current position is >= the duration, reset the position to the 
+              // If the current position is >= the duration, reset the position to the
               // beginning
               if (CurrentPosition >= m_Duration)
                 {
-                  
+
 				LONGLONG	Current	= 0;
                   // Set the start position to 0, do not change the end position.
-                  RetVal	= MediaSeeking->SetPositions(&Current, 
-                                                             AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush, 
+                  RetVal	= MediaSeeking->SetPositions(&Current,
+                                                             AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
                                                              NULL, AM_SEEKING_NoPositioning);
 
                   m_image.newimage	= TRUE;
@@ -640,8 +629,8 @@ pixBlock* filmDS :: getFrame(){
         }
     }
 
-  }else{ 
-	  
+  }else{
+	
 	    LONGLONG frameSeek;
 
 		frameSeek = (LONGLONG) m_reqFrame;
@@ -656,8 +645,8 @@ pixBlock* filmDS :: getFrame(){
 		}
 
 
-		RetVal	= MediaSeeking->SetPositions(&frameSeek, 
-                                                AM_SEEKING_AbsolutePositioning, 
+		RetVal	= MediaSeeking->SetPositions(&frameSeek,
+                                                AM_SEEKING_AbsolutePositioning,
                                                 NULL, AM_SEEKING_NoPositioning);
 		
 		if (RetVal != S_OK)
@@ -691,9 +680,55 @@ film::errCode filmDS :: changeImage(int imgNum, int trackNum){
 	m_reqFrame = imgNum;
 
 	if (m_reqFrame > m_Duration) return film::FAILURE;
-  
+
   return film::SUCCESS;
 }
+
+
+
+///////////////////////////////
+// Properties
+bool filmDS::enumProperties(gem::Properties&readable, gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("frames", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  return false;
+}
+
+void filmDS::setProperties(gem::Properties&props) {
+}
+
+void filmDS::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
+
 
 HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
 {
@@ -702,7 +737,7 @@ HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
 	
   // Enumerate the pins on the filter
   pFilter->EnumPins(&pEnum);
-  
+
   if (NULL == pEnum)
     {
       return	E_FAIL;
@@ -771,7 +806,7 @@ HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilt
       return	E_FAIL;
     }
 
-  if (RetVal != S_OK) 
+  if (RetVal != S_OK)
     {
       pOut->Release();
 		
@@ -795,21 +830,21 @@ HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilt
   return	RetVal;
 }
 
-HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) 
+HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister)
 {
   IMoniker * pMoniker;
   IRunningObjectTable *pROT;
-  if (FAILED(GetRunningObjectTable(0, &pROT))) 
+  if (FAILED(GetRunningObjectTable(0, &pROT)))
     {
       return E_FAIL;
     }
 
   WCHAR wsz[128];
-  StringCchPrintfW(wsz, 128, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
+  StringCchPrintfW(wsz, 128, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph,
                    GetCurrentProcessId());
 
   HRESULT hr = CreateItemMoniker(L"!", wsz, &pMoniker);
-  if (SUCCEEDED(hr)) 
+  if (SUCCEEDED(hr))
     {
       hr = pROT->Register(0, pUnkGraph, pMoniker, pdwRegister);
       pMoniker->Release();
@@ -823,7 +858,7 @@ void filmRemoveGraphFromRot(DWORD pdwRegister)
 {
   IRunningObjectTable *pROT;
 
-  if (SUCCEEDED(GetRunningObjectTable(0, &pROT))) 
+  if (SUCCEEDED(GetRunningObjectTable(0, &pROT)))
     {
       pROT->Revoke(pdwRegister);
       pROT->Release();
