@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -39,10 +39,16 @@ REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
 //
 /////////////////////////////////////////////////////////
 
-filmQT4L :: filmQT4L(void) : filmBase(),
-			     m_quickfile(NULL),
-			     m_qtformat(0),
-			     m_lastFrame(0)
+filmQT4L :: filmQT4L(void) :
+  filmBase(),
+  m_wantedFormat(GL_RGBA),
+  m_fps(-1.0),
+  m_numFrames(-1), m_numTracks(-1),
+  m_curFrame(-1), m_curTrack(-1),
+  m_newfilm(false),
+  m_quickfile(NULL),
+  m_qtformat(0),
+  m_lastFrame(0)
 {
 }
 
@@ -134,10 +140,10 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
 /////////////////////////////////////////////////////////
 pixBlock* filmQT4L :: getFrame(){
   int i=m_image.image.ysize;
-  if (m_lastFrame==m_curFrame && 
-      m_image.image.format==m_wantedFormat) 
+  if (m_lastFrame==m_curFrame &&
+      m_image.image.format==m_wantedFormat)
   {
-	  m_image.newimage=0; 
+	  m_image.newimage=0;
 	  return &m_image;
   }
 
@@ -156,7 +162,7 @@ pixBlock* filmQT4L :: getFrame(){
     m_image.image.convertFrom(&m_qtimage);
     m_image.newimage=1; m_image.image.upsidedown=false;
     pimage = &m_image;
-    if(m_newfilm)m_image.newfilm=1; 
+    if(m_newfilm)m_image.newfilm=1;
 	m_newfilm=false;
   }
   delete[] rows;
@@ -176,4 +182,66 @@ film::errCode filmQT4L :: changeImage(int imgNum, int trackNum){
 #endif
   return film::SUCCESS;
 }
+
+
+
+///////////////////////////////
+// Properties
+bool filmQT4L::enumProperties(gem::Properties&readable,
+			      gem::Properties&writeable) {
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("frames", value);
+  readable.set("tracks", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+  writeable.set("colorspace", value);
+
+  return false;
+}
+
+void filmQT4L::setProperties(gem::Properties&props) {
+  double d;
+  if(props.get("colorspace", d)) {
+    m_wantedFormat=d;
+  }
+}
+
+void filmQT4L::getProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    props.erase(key);
+    if("fps"==key) {
+      d=m_fps;
+      value=d; props.set(key, value);
+    }
+    if("frames"==key) {
+      d=m_numFrames;
+      value=d; props.set(key, value);
+    }
+    if("tracks"==key) {
+      d=m_numTracks;
+      value=d; props.set(key, value);
+    }
+    if("width"==key) {
+      d=m_image.image.xsize;
+      value=d; props.set(key, value);
+    }
+    if("height"==key) {
+      d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+  }
+}
+
+
 #endif // QT4L
