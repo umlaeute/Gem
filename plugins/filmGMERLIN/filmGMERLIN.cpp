@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -44,28 +44,29 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 //
 /////////////////////////////////////////////////////////
 
-filmGMERLIN :: filmGMERLIN(void) : filmBase(),
-                                   m_wantedFormat(GL_RGBA),
-                                   m_fps(0.),
-                                   m_numFrames(-1), m_numTracks(-1),
-                                   m_curFrame(-1),
-                                   m_file(NULL),
-                                   m_opt(NULL),
-                                   m_seekable(false),
-                                   m_gformat(NULL),
-                                   m_finalformat(new gavl_video_format_t[1]),
-                                   m_track(0),
-                                   m_stream(0),
-                                   m_gframe(NULL),
-                                   m_finalframe(NULL),
-                                   m_gconverter(NULL),
-                                   m_fps_num(1), m_fps_denum(1),
-                                   m_next_timestamp(0),
+filmGMERLIN :: filmGMERLIN(void) :
+  filmBase(),
+  m_wantedFormat(GL_RGBA),
+  m_fps(0.),
+  m_numFrames(-1), m_numTracks(-1),
+  m_curFrame(-1),
+  m_file(NULL),
+  m_opt(NULL),
+  m_seekable(false),
+  m_gformat(NULL),
+  m_finalformat(new gavl_video_format_t[1]),
+  m_track(0),
+  m_stream(0),
+  m_gframe(NULL),
+  m_finalframe(NULL),
+  m_gconverter(NULL),
+  m_fps_num(1), m_fps_denum(1),
+  m_next_timestamp(0),
 #ifdef USE_FRAMETABLE
-                                   m_frametable(NULL),
+  m_frametable(NULL),
 #endif
-                                   m_lastFrame(0),
-                                   m_doConvert(false)
+  m_lastFrame(0),
+  m_doConvert(false)
 {
   m_gconverter=gavl_video_converter_create ();
 }
@@ -74,7 +75,7 @@ filmGMERLIN :: filmGMERLIN(void) : filmBase(),
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmGMERLIN :: ~filmGMERLIN()
+filmGMERLIN :: ~filmGMERLIN(void)
 {
   close();
   if(m_gconverter)gavl_video_converter_destroy(m_gconverter);m_gconverter=NULL;
@@ -118,7 +119,7 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
 }
 
 bool filmGMERLIN :: isThreadable(void) {
-  if(m_numFrames<0) 
+  if(m_numFrames<0)
     return false;
   return filmBase::isThreadable();
 }
@@ -276,8 +277,8 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
   if(m_numFrames<0)
     if(dur!=GAVL_TIME_UNDEFINED)
-      m_numFrames = gavl_time_to_frames(m_fps_num, 
-					m_fps_denum, 
+      m_numFrames = gavl_time_to_frames(m_fps_num,
+					m_fps_denum,
 					dur);
 
   return true;
@@ -287,7 +288,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmGMERLIN :: getFrame(){
+pixBlock* filmGMERLIN :: getFrame(void){
   if(!m_file)return NULL;
   bgav_read_video(m_file, m_gframe, m_stream);
   if(m_doConvert) {
