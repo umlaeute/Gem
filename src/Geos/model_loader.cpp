@@ -10,7 +10,7 @@
       coordinate generation (spheremap and planar projections) + more.
 
 */
-
+#define _CRT_SECURE_NO_WARNINGS
 #include "model_loader.h"
 /* for post(), error(),... */
 #include "m_pd.h"
