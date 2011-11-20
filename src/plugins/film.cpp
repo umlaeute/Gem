@@ -124,14 +124,12 @@ namespace gem { namespace plugins {
       if(!ids.empty()) {
 	// LATER: allow multiple IDs to be passed via 'backend'
 	unsigned int i=0;
-	post("trying backend '%s'", ids.c_str());
 	for(i=0; i<m_handles.size(); i++) {
 	  if(ids==m_ids[i] && m_handles[i]->open(name, requestprops)) {
 	    m_handle=m_handles[i];
 	  }
 	}
       }
-
       if(!m_handle) {
 	unsigned int i=0;
 	for(i=0; i<m_handles.size(); i++) {
@@ -174,9 +172,18 @@ namespace gem { namespace plugins {
 
     virtual bool enumProperties(gem::Properties&readable,
 				gem::Properties&writeable) {
+      // LATER: shouldn't we merge properties of all handles?
+      //      post("enumProperties stub");
+#ifdef __GNUC__
+# warning enumProperties stub
+#endif
+
       readable.clear();
       writeable.clear();
-      post("enumProperties stub");
+
+      if(m_handle)
+	return m_handle->enumProperties(readable, writeable);
+
       return false;
     }
 
