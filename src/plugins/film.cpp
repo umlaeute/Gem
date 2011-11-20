@@ -27,7 +27,6 @@ static gem::PluginFactoryRegistrar::dummy<gem::plugins::film> fac_filmdummy;
 namespace gem { namespace plugins {
   class filmMeta : public gem::plugins::film {
   private:
-    static filmMeta*s_instance;
     std::vector<gem::plugins::film*>m_handles; // all available handles
     gem::plugins::film*m_handle; // currently opened handle (or NULL)
     std::vector<std::string>m_ids; // list of handle names
@@ -114,20 +113,30 @@ namespace gem { namespace plugins {
 
     virtual bool open(const std::string name, const gem::Properties&requestprops) {
       if(m_handle)close();
-      int id=-1;
-      post("open() stub: implement 'codec' property");
 
-      if(id>=0) {
-	id=id % m_handles.size();
-	if(m_handles[id] && m_handles[id]->open(name, requestprops)) {
-	  m_handle=m_handles[id];
+      std::string ids;
+      if(requestprops.type("backends")!=gem::Properties::UNSET) {
+	requestprops.get("backends", ids);
+      }
+      //      requestprops.erase("backends");
+
+
+      if(!ids.empty()) {
+	// LATER: allow multiple IDs to be passed via 'backend'
+	unsigned int i=0;
+	post("trying backend '%s'", ids.c_str());
+	for(i=0; i<m_handles.size(); i++) {
+	  if(ids==m_ids[i] && m_handles[i]->open(name, requestprops)) {
+	    m_handle=m_handles[i];
+	  }
 	}
       }
+
       if(!m_handle) {
 	unsigned int i=0;
 	for(i=0; i<m_handles.size(); i++) {
-	  if(m_handles[id] && m_handles[id]->open(name, requestprops)) {
-	    m_handle=m_handles[id];
+	  if(m_handles[i] && m_handles[i]->open(name, requestprops)) {
+	    m_handle=m_handles[i];
 	    break;
 	  } else {
 
@@ -176,10 +185,25 @@ namespace gem { namespace plugins {
 	m_handle->setProperties(props);
     }
     virtual void getProperties(gem::Properties&props) {
+      std::string ids;
+      if(props.type("backends")!=gem::Properties::UNSET) {
+	unsigned int i;
+	for(i=0; i<m_ids.size(); i++) {
+	  if(!ids.empty())
+	    ids+=" ";
+	  ids=ids+m_ids[i];
+	}
+      }
+      props.erase("backends");
+
       if(m_handle)
 	m_handle->getProperties(props);
       else
 	props.clear();
+
+      if(!ids.empty()) {
+	props.set("backends", ids);
+      }
     }
   };
 };
