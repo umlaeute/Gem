@@ -43,7 +43,7 @@ filmQT4L :: filmQT4L(void) :
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
-  m_curFrame(-1), m_curTrack(-1),
+  m_curFrame(-1), m_curTrack(0),
   m_newfilm(false),
   m_quickfile(NULL),
   m_qtformat(0),
@@ -95,7 +95,7 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
       return false;
     }
     m_curFrame = -1;
-	
+
     // Get the number of tracks
     m_numTracks = quicktime_video_tracks(m_quickfile);
     // Get the length of the movie (on track current track)
