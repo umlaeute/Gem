@@ -30,6 +30,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#include <sstream>
+
 /***************************************
  * on the order of codec-libraries
  *
@@ -114,6 +116,23 @@
 # define debug post
 #endif
 
+static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while(std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+
+static std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    return split(s, delim, elems);
+}
+
+
+
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
 
@@ -173,7 +192,7 @@ pix_film :: pix_film(t_symbol *filename) :
   m_thread_running(false), m_wantThread(false)
 #endif
 {
-  gem::PluginFactory<gem::plugins::film>::loadPlugins("film");
+  m_handle = gem::plugins::film::getInstance();
 
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
@@ -181,33 +200,22 @@ pix_film :: pix_film(t_symbol *filename) :
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
 
-  std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::film>::getIDs();
 
-  if(!addHandle(available_ids, "DirectShow"))
-    addHandle(available_ids, "AVI");
-
-  addHandle(available_ids, "gmerlin");
-  addHandle(available_ids, "QuickTime");
-  addHandle(available_ids, "quicktime4linux");
-  addHandle(available_ids, "MPEG3");
-  addHandle(available_ids, "aviplay");
-  addHandle(available_ids, "MPEG1");
-
-  // the rest
-  addHandle(available_ids);
-  //openMess(filename);
-
-
-  if(m_handles.size()==0) {
-    error("no movie decoding backends found!");
+  if(m_handle) {
+    std::string backends;
+    gem::Properties props;
+    gem::any value;
+    value=backends;
+    props.set("backends", value);
+    m_handle->getProperties(props);
+    if(props.get("backends", backends)) {
+      m_ids=split(backends, ' ', m_ids);
+    }
   }
   unsigned int i;
   static bool firsttime=true;
   for(i=0; i<m_ids.size(); i++) {
-    if(firsttime)
-      post("%s support", m_ids[i].c_str());
-    else
-      verbose(1, "%s support", m_ids[i].c_str());
+    if(firsttime)verbose(0, "%s support", m_ids[i].c_str());
   }
   firsttime=false;
 }
@@ -221,63 +229,9 @@ pix_film :: ~pix_film()
   // Clean up the movie
   closeMess();
 
-  unsigned int i=0;
-  for(i=0; i<m_handles.size(); i++) {
-    delete m_handles[i];
-    m_handles[i]=NULL;
-  }
+  delete m_handle;
+  m_handle=NULL;
 }
-
-/////////////////////////////////////////////////////////
-// add backends
-//
-/////////////////////////////////////////////////////////
-bool pix_film :: addHandle( std::vector<std::string>available, std::string ID)
-{
-  int count=0;
-
-  std::vector<std::string>id;
-  if(!ID.empty()) {
-    // if requested 'cid' is in 'available' add it to the list of 'id's
-    if(std::find(available.begin(), available.end(), ID)!=available.end()) {
-      id.push_back(ID);
-    } else {
-      // request for an unavailable ID
-      verbose(2, "backend '%s' unavailable", ID.c_str());
-      return false;
-    }
-  } else {
-    // no 'ID' given: add all available IDs
-    id=available;
-  }
-
-  unsigned int i=0;
-  for(i=0; i<id.size(); i++) {
-    std::string key=id[i];
-    verbose(2, "trying to add '%s' as backend", key.c_str());
-    if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
-      // not yet added, do so now!
-      gem::plugins::film*handle=NULL;
-      try {
-        handle=gem::PluginFactory<gem::plugins::film>::getInstance(key);
-      } catch(GemException&x) {
-        handle=NULL;
-        verbose(1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
-      }
-      if(NULL==handle){
-        continue;
-      }
-      m_ids.push_back(key);
-      m_handles.push_back(handle);
-      count++;
-      verbose(2, "added backend#%d '%s' @ 0x%x", m_handles.size()-1, key.c_str(), handle);
-    }
-  }
-
-  return (count>0);
-}
-
-
 
 /////////////////////////////////////////////////////////
 // closeMess
@@ -307,39 +261,38 @@ void pix_film :: closeMess(void){
     }
 #endif
 
-  // Clean up any open files
-  int i=m_handles.size();
-  debug("closing %d handles", i);
-  while(i--){
-    debug("close %d", i);
-    if(m_handles[i]){
-      m_handles[i]->close();
-    }
-  }
-  m_handle=NULL;
-  //if(m_handle!=0)m_handle->close();
-  debug("closed");
+  if(m_handle)
+    m_handle->close();
 }
 
 /////////////////////////////////////////////////////////
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_film :: openMess(t_symbol *filename, int format, int codec)
+void pix_film :: openMess(std::string filename, int format, unsigned int backendNum) {
+  std::string backend;
+  if(m_ids.size()>0)
+    backend=m_ids[backendNum%m_ids.size()];
+
+  openMess(filename, format, backend);
+}
+
+void pix_film :: openMess(std::string filename, int format, std::string backend)
 {
   gem::Properties wantProps, gotProps;
 
-  //  if (filename==x_filename)return;
   closeMess();
 
   char buff[MAXPDSTRING];
-  char*buf=buff;
+  std::string fname=filename;
   // we first try to find the file-to-open with canvas_makefilename
   // if this fails, we just pass the given filename (could be a stream)
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buff, MAXPDSTRING);
-  if (FILE*fd=fopen(buff, "r"))fclose(fd);
-  else buf=filename->s_name;
-  m_handle=0;
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buff, MAXPDSTRING);
+  if (FILE*fd=fopen(buff, "r")) {
+    fname=buff;
+    fclose(fd);
+  }
+
 
   if (format==0)format=m_format;
   double d=(double)format;
@@ -350,37 +303,12 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
     wantProps.set("auto", v);
   }
 
-  if(codec>=0){
-    codec=codec%m_handles.size();
-    if (m_handles[codec] && m_handles[codec]->open(buf, wantProps )) {
-      m_handle = m_handles[codec];
-      verbose(1, "%s!: succeeded", m_ids[codec].c_str());
-    } else {
-      verbose(1, "%s!: failed", m_ids[codec].c_str());
-    }
-  }
-  debug("handle=%x of %d", m_handle, m_handles.size());
-  if(!m_handle && m_handles.size()>0){
-    unsigned int i=0;
-    post("opening %s with format %X", buf, format);
-    while(i<m_handles.size()){
-      debug("trying handle %d: %x", i, m_handles[i]);
-      if (m_handles[i] && m_handles[i]->open(buf, wantProps ))      {
-	verbose(1, "%s: succeeded", m_ids[i].c_str());
-        m_handle = m_handles[i];
-        break;
-      } else {
-	verbose(1, "%s: failed", m_ids[i].c_str());
-      }
-      i++;
-    }
+  if(!backend.empty()) {
+    wantProps.set("backends", backend);
   }
 
-  debug("got handle = %X", m_handle);
-
-  if (!m_handle){
-    //    post(" ... giving up!");
-    error("unable to open file: %s", filename->s_name);
+  if(!m_handle->open(fname, wantProps)) {
+    error("unable to open file: %s", filename.c_str());
     return;
   }
 
@@ -407,7 +335,7 @@ void pix_film :: openMess(t_symbol *filename, int format, int codec)
   SETFLOAT(ap+3, fps);
   m_numFrames=frames;
   post("loaded file: %s with %d frames (%dx%d) at %f fps",
-       buf,
+       fname.c_str(),
        (int)frames,
        (int)width,
        (int)height,
@@ -613,15 +541,20 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
-#if 0
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::csCallback),
-		  gensym("colorspace"), A_DEFSYM, A_NULL);
-#endif
   CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
 }
 void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
-  int codec=-1;
+  // possible messages:
+  //  's:filename'
+  //  's:filename' 's:colorspace'
+  //  's:filename' 'i:codec'
+  //  's:filename' 's:colorspace' 'i:codec'
+  //  's:filename' 'i:codec' 's:colorspace'
+  //  's:filename' 's:colorspace' 's:codec'
+
+  int backendID=-1;
+  std::string backend;
 
   if (!argc || argc>3)goto illegal_openmess;
   if (argv[0].a_type != A_SYMBOL)goto illegal_openmess;
@@ -630,32 +563,34 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
     if (argv[1].a_type == A_SYMBOL)
       GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
     else if (argv[1].a_type == A_FLOAT)
-      codec=atom_getint(argv+1);
+      backendID=atom_getint(argv+1);
   } else if (argc==3){
-    if ((argv[1].a_type == A_SYMBOL) || (argv[2].a_type == A_FLOAT)) {
+    if ((argv[1].a_type == A_SYMBOL) && (argv[2].a_type == A_FLOAT)) {
       GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
-      codec=atom_getint(argv+2);
-    } else if ((argv[2].a_type == A_SYMBOL) || (argv[1].a_type == A_FLOAT)) {
+      backendID=atom_getint(argv+2);
+    } else if ((argv[2].a_type == A_SYMBOL) && (argv[1].a_type == A_FLOAT)) {
       GetMyClass(data)->csMess(atom_getsymbol(argv+2), false);
-      codec=atom_getint(argv+1);
+      backendID=atom_getint(argv+1);
+
+    } else if ((argv[1].a_type == A_SYMBOL) && (argv[2].a_type == A_SYMBOL)) {
+      GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
+      backend=atom_getsymbol(argv+2)->s_name;
     }
   }
-  GetMyClass(data)->openMess(atom_getsymbol(argv), 0, codec);
+  if(backendID>=0)
+    GetMyClass(data)->openMess(atom_getsymbol(argv)->s_name, 0, backendID);
+  else
+    GetMyClass(data)->openMess(atom_getsymbol(argv)->s_name, 0, backend);
 
   return;
  illegal_openmess:
-  GetMyClass(data)->error("open <filename> [<format>] [<preferred codec#>]");
+  GetMyClass(data)->error("open <filename> [<format>] [<preferred backend>]");
   return;
 
 }
 
 void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv){
     GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
-}
-
-void pix_film :: threadCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->threadMess(static_cast<int>(state));
 }
 #endif /*OS-specific GEM_FILMBACKEND */
 

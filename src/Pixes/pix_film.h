@@ -57,11 +57,12 @@ class GEM_EXTERN pix_film : public GemBase
   virtual void closeMess(void);
   //////////
   // open a movie up (with a given format and a preferred codec)
-  virtual void openMess(t_symbol *filename, int format=0, int codec=-1);
+  virtual void openMess(std::string filename, int format, std::string codec);
+  virtual void openMess(std::string filename, int format, unsigned int codec);
 
   //////////
   // prepare for texturing (on open)
-  virtual void prepareTexture() {}
+  virtual void prepareTexture(void) {}
 
   //////////
   // Do the rendering
@@ -112,10 +113,8 @@ class GEM_EXTERN pix_film : public GemBase
   int           m_reqTrack;
   int           m_curTrack;
 
-  std::vector<gem::plugins::film*>m_handles;
   std::vector<std::string>m_ids;
-  gem::plugins::film         *m_handle;
-  virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
+  gem::plugins::film*m_handle;
 
   //////////
   // a outlet for information like #frames and "reached end"
@@ -144,8 +143,6 @@ class GEM_EXTERN pix_film : public GemBase
   // static member functions
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void csCallback         (void *data, t_symbol*s);
-  static void threadCallback     (void *data, t_floatarg state);
 };
 
 #endif	// for header file
