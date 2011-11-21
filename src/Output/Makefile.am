@@ -67,8 +67,8 @@ gemglutwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglutwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # object specific libraries
-gemglutwindow_la_CXXFLAGS += 
-gemglutwindow_la_LIBADD   += 
+gemglutwindow_la_CXXFLAGS += @GLUT_CFLAGS@
+gemglutwindow_la_LIBADD   += @GLUT_LIBS@
 gemglutwindow_la_LDFLAGS  += 
 
 ## SOURCES
