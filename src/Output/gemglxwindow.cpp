@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 
-#ifdef HAVE_LIBX11
+#ifdef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Gem/GemGL.h"
 #include <stdio.h>
