@@ -44,6 +44,7 @@ namespace gem { namespace plugins {
     }
     virtual bool open(const std::string name, const gem::Properties&requestprops) {
       gem::Properties props=requestprops;
+      m_image.newfilm=true;
       return m_handle->load(name, m_image.image, props);
     }
     virtual void close(void) {
@@ -54,6 +55,7 @@ namespace gem { namespace plugins {
       return SUCCESS;
     }
     virtual pixBlock* getFrame(void) {
+      m_image.newimage=true;
       return &m_image;
     }
     virtual bool isThreadable(void) { return false; }
