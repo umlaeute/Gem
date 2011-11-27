@@ -19,12 +19,69 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 #include "Gem/Properties.h"
+#include "imageloader.h"
+
 
 gem::plugins::film :: ~film(void) {}
 /* initialize the film factory */
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::film> fac_filmdummy;
 
 namespace gem { namespace plugins {
+  class filmIMAGE : public gem::plugins::film {
+    gem::plugins::imageloader*m_handle;
+    pixBlock m_image;
+
+  public:
+    filmIMAGE(void) :
+      m_handle(gem::plugins::imageloader::getInstance())
+    {
+      if(!m_handle)
+	throw(GemException("no 'image' backends"));
+    }
+
+    virtual ~filmIMAGE(void) {
+      delete m_handle;
+    }
+    virtual bool open(const std::string name, const gem::Properties&requestprops) {
+      gem::Properties props=requestprops;
+      return m_handle->load(name, m_image.image, props);
+    }
+    virtual void close(void) {
+      return;
+    }
+    virtual errCode changeImage(int imgNum, int trackNum=-1){
+      if(imgNum!=0)return FAILURE;
+      return SUCCESS;
+    }
+    virtual pixBlock* getFrame(void) {
+      return &m_image;
+    }
+    virtual bool isThreadable(void) { return false; }
+
+    virtual bool enumProperties(gem::Properties&readable,
+				gem::Properties&writeable) {
+      writeable.clear();
+      readable.clear();	
+    }
+    virtual void setProperties(gem::Properties&props) {
+    }
+    virtual void getProperties(gem::Properties&props) {
+      std::vector<std::string>keys=props.keys();
+      unsigned int i=0;
+      post("getting %d properties", keys.size());
+      for(i=0; i<keys.size(); i++) {
+	std::string key=keys[i];
+	post("getting property '%s'", key.c_str());
+	props.erase(key);
+	if("frames"==key) {double d=1; props.set(key, d); post("frames...");}
+	if("width"==key)  {double d=m_image.image.xsize; props.set(key, d); }
+	if("height"==key) {double d=m_image.image.ysize; props.set(key, d); }
+      }
+    }
+    
+  };
+
+
   class filmMeta : public gem::plugins::film {
   private:
     std::vector<gem::plugins::film*>m_handles; // all available handles
@@ -100,6 +157,15 @@ namespace gem { namespace plugins {
 	  m_canThread=false;
 	  break;
 	}
+      }
+      try {
+	gem::plugins::film*filmImage=new filmIMAGE();
+	if(NULL!=filmImage) {
+	  m_handles.push_back(filmImage);
+	  m_ids.push_back("image");
+	}
+      } catch (GemException&x) {
+
       }
     }
 
