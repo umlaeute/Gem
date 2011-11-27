@@ -70,10 +70,8 @@ namespace gem { namespace plugins {
     virtual void getProperties(gem::Properties&props) {
       std::vector<std::string>keys=props.keys();
       unsigned int i=0;
-      post("getting %d properties", keys.size());
       for(i=0; i<keys.size(); i++) {
 	std::string key=keys[i];
-	post("getting property '%s'", key.c_str());
 	props.erase(key);
 	if("frames"==key) {double d=1; props.set(key, d); post("frames...");}
 	if("width"==key)  {double d=m_image.image.xsize; props.set(key, d); }
