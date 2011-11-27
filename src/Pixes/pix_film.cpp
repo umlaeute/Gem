@@ -214,8 +214,10 @@ pix_film :: pix_film(t_symbol *filename) :
   }
   unsigned int i;
   static bool firsttime=true;
-  for(i=0; i<m_ids.size(); i++) {
-    if(firsttime)verbose(0, "%s support", m_ids[i].c_str());
+  if(firsttime) {
+    for(i=0; i<m_ids.size(); i++) {
+      verbose(0, "%s support", m_ids[i].c_str());
+    }
   }
   firsttime=false;
 }
@@ -263,6 +265,8 @@ void pix_film :: closeMess(void){
 
   if(m_handle)
     m_handle->close();
+
+  m_haveMovie=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -311,6 +315,9 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
     error("unable to open file: %s", filename.c_str());
     return;
   }
+
+  m_haveMovie=1;
+
 
   double width=-1;
   double height=-1;
@@ -368,7 +375,7 @@ void pix_film :: render(GemState *state)
 {
   int frame=-1;
   /* get the current frame from the file */
-  if (!m_handle)return;
+  if (!m_handle || m_haveMovie==0)return;
 
 #ifdef HAVE_PTHREADS
   if(m_thread_running) {
@@ -414,7 +421,7 @@ void pix_film :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_film :: postrender(GemState *state)
 {
-  if(!m_handle)return;
+  if (!m_handle || m_haveMovie==0)return;
   if (state) {
     pixBlock*img=NULL;
     state->get(GemState::_PIX, img);

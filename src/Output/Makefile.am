@@ -146,3 +146,48 @@ gemw32window_la_SOURCES = \
   gemw32window.h
 
 
+# convenience symlinks for pkglib_LTLIBRARIES
+
+## uha, this is ugly
+#%.@GEM_RTE_EXTENSION@: %.la
+#	rm -f $@
+#	test -f .libs/$@ && $(LN_S) .libs/$@ $@ || true
+#
+#.PHONY: clean-conviencesymlink
+#
+#clean-conviencesymlink:
+#	rm -f *.@GEM_RTE_EXTENSION@
+#
+#
+#all-local:: $(pkglib_LTLIBRARIES:.la=.@GEM_RTE_EXTENSION@)
+#
+#clean-local:: clean-conviencesymlink
+
+
+# convenience links: symlink the plugin-binary into top_builddir
+# include this makefile snippet in your plugin's Makefile.am to automatically
+# create symlinks to all pkglib_LTLIBRARIES binaries into your top builddir
+
+
+.PHONY: convenience-link clean-convenience-link
+
+convenience-link: $(pkglib_LTLIBRARIES)
+	  for soname in `echo | $(EGREP) -h "^dlname=" $^ | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
+            echo "$$soname: creating convenience link from $(abs_builddir)/.libs to $(top_builddir)"; \
+	    rm -f $(top_builddir)/$$soname ; \
+	    test -e $(abs_builddir)/.libs/$$soname && \
+	    cd $(abs_top_builddir) && \
+	    $(LN_S) $(abs_builddir)/.libs/$$soname $$soname || echo "create oops $$soname" && \
+	    cd $(abs_builddir); \
+	  done 
+
+clean-convenience-link:
+	  @for soname in `echo | $(EGREP) -h "^dlname=" $(pkglib_LTLIBRARIES) | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
+            echo "$$soname: cleaning convenience links"; \
+            test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname || echo "clean oops: $$soname"; \
+	  done 
+	
+
+all-local:: convenience-link
+
+clean-local:: clean-convenience-link
