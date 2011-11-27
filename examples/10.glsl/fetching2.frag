@@ -36,6 +36,9 @@ void main (void)
 	vec4 XH = mix(colorHG,colorHD,fract_pos.x);
  	vec4 X = mix(XB,XH,fract_pos.y) / 4.;
 
+	X = color5; // temprary remove normal interpolation because it did not work, and we don't realy need it.
+
+
 	X -= vec4(0.5);
 	X.xyz = normalize(X.xyz);
 
