@@ -43,6 +43,8 @@ libGeos_la_SOURCES=  \
     disk.h \
     GemSplash.cpp \
     GemSplash.h \
+	gemvertexbuffer.cpp \
+	gemvertexbuffer.h \
     imageVert.cpp \
     imageVert.h \
     mesh_line.cpp \
