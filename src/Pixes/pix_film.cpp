@@ -214,8 +214,10 @@ pix_film :: pix_film(t_symbol *filename) :
   }
   unsigned int i;
   static bool firsttime=true;
-  for(i=0; i<m_ids.size(); i++) {
-    if(firsttime)verbose(0, "%s support", m_ids[i].c_str());
+  if(firsttime) {
+    for(i=0; i<m_ids.size(); i++) {
+      verbose(0, "%s support", m_ids[i].c_str());
+    }
   }
   firsttime=false;
 }
