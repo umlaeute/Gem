@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "Base/GemGL.h"
+#include "Gem/GemGL.h"
 #include "gemcocoawindow.h"
 
 #include <vector>
