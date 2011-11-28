@@ -41,7 +41,7 @@ CPPEXTERN_NEW(gemvertexbuffer)
 /////////////////////////////////////////////////////////
 gemvertexbuffer :: gemvertexbuffer()
 { 
-	// post("gemvertexbuffer build on %s at %s\n", __DATE__, __TIME__);
+	//~ printf("gemvertexbuffer build on %s at %s\n", __DATE__, __TIME__);
 	vbo_size = 256 * 256;
 	
 	posArray = new float[vbo_size*3];
@@ -53,6 +53,10 @@ gemvertexbuffer :: gemvertexbuffer()
 	colVBO_enable = 0;
 	texVBO_enable = 0;
 	normVBO_enable = 0;
+	
+	posVBO = texVBO = colVBO = normVBO = 0;
+	 
+	size_change_flag = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -71,18 +75,28 @@ gemvertexbuffer :: ~gemvertexbuffer()
 void gemvertexbuffer :: cleanUp()
 {
 	// delete VBO
-	glBindBuffer(1, posVBO);
-    glDeleteBuffers(1, &posVBO);
-    glBindBuffer(1, texVBO);
-    glDeleteBuffers(1, &texVBO);
-    glBindBuffer(1, colVBO);
-    glDeleteBuffers(1, &colVBO);
-    glBindBuffer(1, normVBO);
-    glDeleteBuffers(1, &normVBO);
+	//~ printf("delete VBO\n");
+	if ( posVBO ){
+		glBindBuffer(1, posVBO);
+		glDeleteBuffers(1, &posVBO);
+	}
+    if ( texVBO ){
+		glBindBuffer(1, texVBO);
+		glDeleteBuffers(1, &texVBO);
+	}
+    if ( colVBO ){
+		glBindBuffer(1, colVBO);
+		glDeleteBuffers(1, &colVBO);
+	}
+	if ( normVBO ){
+		glBindBuffer(1, normVBO);
+		glDeleteBuffers(1, &normVBO);
+	}
     
     posVBO = texVBO = colVBO = normVBO = 0;
     
     // delete Array 
+    //~ printf("free array\n");
     free(posArray);
     free(texArray);
     free(colArray);
@@ -96,9 +110,10 @@ void gemvertexbuffer :: cleanUp()
 void gemvertexbuffer :: renderShape(GemState *state)
 {
 	if ( m_drawType == GL_DEFAULT_GEM ) m_drawType = GL_POINTS;
-	if ( !posVBO || !texVBO || !colVBO || !normVBO ) {
+	if ( !posVBO || !texVBO || !colVBO || !normVBO || size_change_flag ) {
 //		printf("create VBO\n");
 		createVBO();
+		size_change_flag = 0;
 	}	
 		// render from the VBO
 		if ( posVBO_enable )
@@ -334,12 +349,15 @@ void gemvertexbuffer :: tabMess(int argc, t_atom *argv, float *array, int stride
 void gemvertexbuffer :: resizeMess(float size)
 {
 	vbo_size = size>1?size:1;
+	//~ printf("cleanup\n");
 	cleanUp();
+	//~ printf("define array\n");
 	posArray = new float[vbo_size*3];
 	texArray = new float[vbo_size*2];
 	colArray = new float[vbo_size*4];
 	normArray = new float[vbo_size*3];
-	createVBO();
+	//~ printf("printf clear VBO\n");
+	size_change_flag = 1;
 }
 
 // Create VBO
@@ -350,13 +368,13 @@ void gemvertexbuffer :: createVBO()
  	unsigned int i, j;
 	
 	// create buffer object
-//	printf("create buffer object\n");
+	//~ printf("create buffer object\n");
 	glGenBuffers(1, &posVBO);
 	glGenBuffers(1, &colVBO);
 	glGenBuffers(1, &normVBO);
 	glGenBuffers(1, &texVBO);
 	
-//	printf("bind buffer\n");
+	//~ printf("bind buffer\n");
 	glBindBuffer(GL_ARRAY_BUFFER, posVBO);
 	glBufferData(GL_ARRAY_BUFFER, vbo_size * 3 * sizeof(float), posArray, GL_DYNAMIC_DRAW);
 
@@ -369,7 +387,7 @@ void gemvertexbuffer :: createVBO()
 	glBindBuffer(GL_ARRAY_BUFFER, normVBO);
 	glBufferData(GL_ARRAY_BUFFER, vbo_size * 3 * sizeof(float), normArray, GL_DYNAMIC_DRAW);
 	
-//  printf("done\n");
+	//~ printf("done\n");
 }
 
 void gemvertexbuffer :: copyArray(t_symbol *tab_name, float *array, unsigned int stride, unsigned int offset)
