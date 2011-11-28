@@ -91,6 +91,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 		int vbo_size;
 		bool posArray_dirty, 	texArray_dirty, colArray_dirty, normArray_dirty;
 		bool posVBO_enable, 	texVBO_enable, 	colVBO_enable, 	normVBO_enable;
+		bool size_change_flag;
 
 		float *posArray, *texArray, *colArray, *normArray;
 

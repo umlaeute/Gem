@@ -74,13 +74,13 @@ void vertex_model :: openMess(t_symbol *filename)
 
  m_haveModel = 0;
   //cleanModel();
-
+ 
   char buf[MAXPDSTRING];
-  canvas_makefilename(getCanvas(), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
   // read the object in
   m_model = glmReadOBJ(buf);
 
-  if (!m_model) return;
+  if (!m_model) return;    
 
   // set the size to -1 to 1
   if (m_rescaleModel)
@@ -90,13 +90,13 @@ void vertex_model :: openMess(t_symbol *filename)
   glmFacetNormals (m_model);
   glmVertexNormals(m_model, 90);
   glmTexture(m_model, GLM_TEX_DEFAULT, 1, 1);
-
+ 
   post("model->numtriangles %d",m_model->numtriangles);
   post("model->numgroups %d",m_model->numgroups);
   post("model->numvertices %d",m_model->numvertices);
   post("model->numnormals %d",m_model->numnormals);
   post("model->numtexcoords %d",m_model->numtexcoords);
-
+ 
   numvertices = static_cast<int>(m_model->numtriangles * m_model->numgroups * 3);
   m_vertcount = numvertices;
 
@@ -120,7 +120,7 @@ void vertex_model :: openMess(t_symbol *filename)
   m_tempTA = new float[numvertices * 2];
   delete [] m_tempNA;
   m_tempNA = new float[numvertices * 3];
-
+  
   src2 = 0;
   src3 = 0;
   src4 = 0;
@@ -184,11 +184,11 @@ void vertex_model :: openMess(t_symbol *filename)
         src3 += 3;
         src2 += 2;
         src4 += 4;
-
+        
         }
     group = group->next;
    }
-
+  
   src4 = src4/4;
   src2 = src2/4;
   post("i %d",i);
@@ -207,26 +207,26 @@ void vertex_model :: render(GemState *state)
 {
 
     int size,i,src,length;
-
-
-    if (!m_haveModel) return;
+   
+    
+    if (!m_haveModel) return;  
     //this will get the appropriate maximum texcoord size for use with the model
     src = 0;
-
-
-
+    
+    
+        
     size = m_vertcount * 4 * 4;
    // post("m_vertcount %d",m_vertcount);
     memcpy(m_tempVA, m_VertexArray, size);
-    memcpy(m_tempCA, m_ColorArray, size);
+    memcpy(m_tempCA, m_ColorArray, size); 
     size = m_vertcount * 4 * 3;
     memcpy(m_tempNA, m_NormalArray, size);
     /*
     if (state->numTexCoords) {
-
+    
         if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
             post("changing texcoords");
-
+            
             post("state->texCoordX(1) %f",state->texCoordX(1));
             post("state->texCoordY(1) %f",state->texCoordY(1));
             maxX = state->texCoordX(1);
@@ -252,15 +252,15 @@ void vertex_model :: render(GemState *state)
             post("m_tempTA[src] end %f",m_TexCoordArray[src]);
             }
         } */
-
+    
     size = m_vertcount * 4 * 2;
-   // memcpy(m_tempTA, m_TexCoordArray, size);
-
+   // memcpy(m_tempTA, m_TexCoordArray, size); 
+    
      if (state->numTexCoords) {
-
+    
         if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
          //   post("changing texcoords");
-
+            
          //   post("state->texCoordX(1) %f",state->texCoordX(1));
         //    post("state->texCoordY(1) %f",state->texCoordY(1));
             maxX = state->texCoordX(1);
@@ -288,10 +288,10 @@ void vertex_model :: render(GemState *state)
         //    }
         }
         }else{
-            memcpy(m_tempTA, m_TexCoordArray, size);
+            memcpy(m_tempTA, m_TexCoordArray, size); 
             }
-
-
+    
+           
     state->VertexArray = m_tempVA;
     state->ColorArray = m_tempCA;
     state->TexCoordArray = m_tempTA;
@@ -301,10 +301,10 @@ void vertex_model :: render(GemState *state)
     state->HaveNormalArray = 1;
     state->VertexArrayStride = 4;
     state->VertexArraySize = m_vertcount;
-
-
+      
+    
 }
-
+ 
 /////////////////////////////////////////////////////////
 // static member function
 //
