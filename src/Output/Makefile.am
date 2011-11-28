@@ -10,7 +10,7 @@ include ../check-sources.mk
 pkglib_LTLIBRARIES = 
 
 #if HAVE_COCOA
-if DISABLED
+if MACOSX
 pkglib_LTLIBRARIES += gemcocoawindow.la
 endif
 
