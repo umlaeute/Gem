@@ -23,8 +23,10 @@ pkglib_LTLIBRARIES += gemglxwindow.la
 endif
 
 #if HAVE_CARBON
-if DISABLED
+if HAVE_FRAMEWORK_QUICKTIME
+if HAVE_FRAMEWORK_CARBON
 pkglib_LTLIBRARIES += gemmacwindow.la
+endif
 endif
 
 if WINDOWS
