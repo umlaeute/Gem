@@ -396,9 +396,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
 
   if (err == fnfErr) {
     // if the file does not yet exist, then let's create the file
-    if(touch(myfilename)) {
-      return false;
-    }
+    touch(myfilename);
     err = FSPathMakeRef(filename8, &ref, NULL);
   }
     
