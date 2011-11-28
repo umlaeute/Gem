@@ -37,7 +37,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 
         //////////
         // Constructor
-    	gemvertexbuffer();
+    	gemvertexbuffer(t_floatarg size);
     	
     	/////////////
     	// Variables

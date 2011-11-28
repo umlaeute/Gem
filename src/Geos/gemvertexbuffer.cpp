@@ -29,7 +29,7 @@
 
 #define UNIX
 
-CPPEXTERN_NEW(gemvertexbuffer)
+CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT)
 
 /////////////////////////////////////////////////////////
 //
@@ -39,10 +39,10 @@ CPPEXTERN_NEW(gemvertexbuffer)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemvertexbuffer :: gemvertexbuffer()
+gemvertexbuffer :: gemvertexbuffer(t_floatarg size)
 { 
 	//~ printf("gemvertexbuffer build on %s at %s\n", __DATE__, __TIME__);
-	vbo_size = 256 * 256;
+	vbo_size = size>0?size:256*256;
 	
 	posArray = new float[vbo_size*3];
 	texArray = new float[vbo_size*2];
