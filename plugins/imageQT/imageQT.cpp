@@ -486,7 +486,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   CodecQ quality=codecHighQuality;
 
   double d=0.;
-  if(props.get("quality"), d) {
+  if(props.get("quality", d)) {
     // <0 = minqality
     // >=100 = lossless
     if(d<0.)d=0.;
