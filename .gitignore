@@ -1,4 +1,40 @@
+# backup copies
+*~
+# build products
+*\.la
 *\.lo
 *\.o
+*\.so
+*\.pd_darwin
+*\.pd_linux
 \.deps
 \.libs
+# autotools byproducts
+Makefile\.in
+aclocal\.m4
+autom4te\.cache/
+configure
+config\.guess
+config\.log
+config\.status
+config\.sub
+missing
+install-sh
+stamp-h1
+libtool
+depcomp
+ltmain\.sh
+config\.h
+config\.h\.in
+m4/libtool\.m4
+m4/ltoptions\.m4
+m4/ltsugar\.m4
+m4/ltversion\.m4
+m4/lt~obsolete\.m4
+# generated files
+src/Gem/version_current\.h
+Gem.pc
+# Makefiles are special
+# some are generated, some not
+Makefile
+!build/autoconf/Makefile
