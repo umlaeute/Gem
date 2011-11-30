@@ -21,7 +21,6 @@
 # include <winsock2.h>
 #endif
 
-
 class gem::thread::Mutex::PIMPL {
 public:
   pthread_mutex_t*mutex;
@@ -31,10 +30,10 @@ public:
     pthread_mutex_init(mutex, NULL); 
   }
   PIMPL(const PIMPL&org) : mutex(org.mutex), refcount(org.refcount) {
-    *refcount++;
+    ++*refcount;
   }
   ~PIMPL(void) {
-    *refcount--;
+    --*refcount;
     if(*refcount==0) {
       pthread_mutex_destroy(mutex); 
       delete mutex;
