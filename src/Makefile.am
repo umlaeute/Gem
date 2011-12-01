@@ -24,21 +24,6 @@ Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 Gem_la_LIBADD   =
 
 
-# RTE flags
-Gem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-Gem_la_LIBADD   += @GEM_RTE_LIBS@
-Gem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
-
-# openGL
-Gem_la_CXXFLAGS += @GL_CFLAGS@ @GLU_CFLAGS@ @AGL_CFLAGS@ 
-Gem_la_LIBADD   += @GL_LIBS@   @GLU_LIBS@   @AGL_LIBS@
-Gem_la_LDFLAGS  += 
-# and glew
-Gem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
-Gem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
-Gem_la_LDFLAGS  += 
-
-
 # LIBADD or LDADD for convenience libraries?
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
 Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
@@ -82,6 +67,21 @@ Gem_la_LIBADD += Vertex/libVertex.la
 endif
 
 SUBDIRS+=deprecated
+
+# RTE flags
+Gem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
+Gem_la_LIBADD   += @GEM_RTE_LIBS@
+Gem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+
+# openGL
+Gem_la_CXXFLAGS += @GL_CFLAGS@ @GLU_CFLAGS@ @AGL_CFLAGS@ 
+Gem_la_LIBADD   += @GL_LIBS@   @GLU_LIBS@   @AGL_LIBS@
+Gem_la_LDFLAGS  += 
+# and glew
+Gem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
+Gem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
+Gem_la_LDFLAGS  += 
+
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
