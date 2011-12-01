@@ -454,16 +454,21 @@ AC_ARG_WITH([extension],
 if test "x$with_extension" != "x"; then
  EXT=$with_extension
 else
- EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
-  if test "x$KERN" = "xDarwin"; then
-    EXT=pd_darwin
-  else
-   if test "x$host_os" = "x"
-   then
-    dnl just assuming that it is still linux (e.g. x86_64)
-    EXT="pd_linux"
-   fi
-  fi
+  case x$host_os in
+   x*darwin*)
+     EXT=pd_darwin
+     ;;
+   x*mingw* | x*cygwin*)
+     EXT=dll
+     ;;
+   x)
+     dnl just assuming that it is still linux (e.g. x86_64)
+     EXT="pd_linux"
+     ;;
+   *)
+     EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
+     ;;
+  esac
 fi
 GEM_RTE_EXTENSION=$EXT
 AC_SUBST(GEM_RTE_EXTENSION)
