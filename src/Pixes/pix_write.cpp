@@ -21,6 +21,11 @@
 #include "Gem/Cache.h"
 #include "Gem/ImageIO.h"
 
+// for path parsing
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+
 #include <stdio.h>
 #include <string.h>
 
@@ -65,7 +70,8 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_automatic = false;
   m_autocount = 0;
   m_filetype=0;
-  snprintf(m_pathname, MAXPDSTRING, "gem");
+  m_pathname = (char *)malloc(4*sizeof(char));
+  sprintf(m_pathname, "gem");
 
   m_banged = false;
 
@@ -75,6 +81,8 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_originalImage->ysize=m_height;
   m_originalImage->setCsizeByFormat(GL_RGBA);
   m_originalImage->allocate();
+  
+  printf("build on %s at %s\n",__DATE__, __TIME__);
 }
 
 /////////////////////////////////////////////////////////
@@ -83,7 +91,8 @@ pix_write :: pix_write(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_write :: ~pix_write()
 {
-  cleanImage();
+	free(m_pathname);
+	cleanImage();
 }
 
 
@@ -166,6 +175,7 @@ void pix_write :: render(GemState *state)
       extension=(char*)"jpg";
     }
 
+	m_filename = (char *)malloc((strlen(m_pathname)+10)*sizeof(char));
     snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
 
     m_autocount++;
@@ -198,11 +208,34 @@ void pix_write :: posMess(int x, int y)
 void pix_write :: fileMess(int argc, t_atom *argv)
 {
   char *extension = (char*)".tif";
+  char tmp[MAXPDSTRING];
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
-      atom_string(argv++, m_pathname, MAXPDSTRING);
+      atom_string(argv++, tmp, MAXPDSTRING);
       argc--;
-      snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s.%s", m_pathname, extension);
+      
+      struct passwd *pw = getpwuid(getuid());
+	  const char *homedir = pw->pw_dir;
+      free(m_pathname);
+      m_pathname = NULL;
+      
+      printf("passed string (tmp) : %s\n",tmp);
+ 
+      switch (tmp[0]){
+		case '/':
+			m_pathname = (char *)malloc(strlen(tmp)*sizeof(char));
+			strcpy(m_pathname, tmp);
+			break;
+		case '~':
+			m_pathname = (char *)malloc(strlen(tmp)+strlen(homedir)*sizeof(char));			
+			snprintf(m_pathname, (size_t)(MAXPDSTRING), "%s%s", homedir, tmp+1);
+			break;
+		default :
+			m_pathname = (char *)malloc(strlen(tmp)*sizeof(char));
+			strcpy(m_pathname, tmp);
+		}
+		printf("filename : %s\n", m_pathname);
+      
     }
     if (argc>0)
       m_filetype = atom_getint(argv);
