@@ -91,8 +91,8 @@ extern "C" {
     }
 
     verbose(1, "eventually adding Gem path '%s' to search-paths", mypath);
-# ifndef _MSC_VER
-    /* MSVC cannot really handle these non-exported symbols */
+# ifndef _WIN32
+    /* MSVC/MinGW cannot really handle these non-exported symbols */
     sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
 # endif
   }
