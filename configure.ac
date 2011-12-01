@@ -167,7 +167,11 @@ AC_CHECK_LIB([msvcrt], [fclose])
 # Standard C++ Libray:
 AC_CHECK_LIB([msvcprt], [main])
 # Winsock Library
-AC_CHECK_LIB([ws2_32], [select])
+AC_CHECK_LIB([ws2_32], [main])
+AC_CHECK_LIB([wsock32], [main])
+
+# w32 window creating 
+AC_CHECK_LIB([gdi32], [main])
 
 
 ## on OSX X shouldn't be used by default as there are other ways
