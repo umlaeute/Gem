@@ -392,6 +392,7 @@ tmp_rte_cppflags="$CPPFLAGS"
 tmp_rte_cflags="$CFLAGS"
 tmp_rte_cxxflags="$CXXFLAGS"
 tmp_rte_ldflags="$LDFLAGS"
+tmp_rte_libs="$LIBS"
 
 GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
@@ -436,6 +437,13 @@ if test -d "$with_pd" ; then
  LIBS="$LIBS ${GEM_RTE_LIBS}"
 fi
 
+AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
+if test "x$have_pddll" = "xyes"; then
+ GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-Xlinker -l:pd.dll"
+else
+ AC_CHECK_LIB([pd], [nullfn], [GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-lpd"])
+fi
+
 AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
 
 dnl LATER check why this doesn't use the --with-pd includes
@@ -477,6 +485,7 @@ CPPFLAGS="$tmp_rte_cppflags"
 CFLAGS="$tmp_rte_cflags"
 CXXFLAGS="$tmp_rte_cxxflags"
 LDFLAGS="$tmp_rte_ldflags"
+LIBS="$tmp_rte_libs"
 ]) # GEM_CHECK_RTE
 
 
