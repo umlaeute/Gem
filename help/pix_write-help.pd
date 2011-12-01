@@ -1,4 +1,4 @@
-#N canvas 336 49 795 602 10;
+#N canvas 23 49 795 602 10;
 #X obj 17 399 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 28 402 Inlets:;
@@ -17,10 +17,6 @@ write it to a file;
 0 0);
 #X text 52 528 Inlet 3: list: dimenX dimenY (in pixels \; default:
 window-size);
-#X text 52 429 Inlet 1: file <basefilename> : set basefilename \, and
-type = TIFF;
-#X text 52 478 Inlet 1: file <basefilename> <type> : set basefilename
-and type;
 #X text 466 15 GEM object;
 #X obj 459 77 cnv 15 250 300 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -69,8 +65,6 @@ and type;
 #X text 510 204 WRITE! one file;
 #X obj 464 329 gemhead;
 #X obj 464 354 square;
-#X text 52 453 Inlet 1: file <type> : set type (type=0 : TIFF \, type>0
-: JPG \, type = quality);
 #X text 463 309 display something;
 #X obj 466 510 pix_snap;
 #X text 26 99 When banged [pix_write] will take a snapshot of the current
@@ -95,13 +89,19 @@ TIFF-writing can be slow due to the large file size of uncompressed
 images! JPEG might be faster (but quality will be lower due to compression)
 ;
 #X text 543 181 activate/deactivate auto snapshot;
-#X connect 18 0 19 0;
-#X connect 19 0 18 0;
-#X connect 22 0 27 2;
-#X connect 25 0 27 1;
-#X connect 26 0 27 0;
-#X connect 28 0 27 0;
-#X connect 33 0 27 0;
-#X connect 34 0 33 0;
-#X connect 35 0 27 0;
-#X connect 37 0 38 0;
+#X text 52 453 Inlet 1: file <quality> : set type/quality (quality=0:TIFF
+\, quality>0:JPG);
+#X text 52 478 Inlet 1: file <basefilename> <quality> : set basefilename
+and type/quality;
+#X text 52 429 Inlet 1: file <basefilename> : set basefilename \, and
+type=TIFF;
+#X connect 16 0 17 0;
+#X connect 17 0 16 0;
+#X connect 20 0 25 2;
+#X connect 23 0 25 1;
+#X connect 24 0 25 0;
+#X connect 26 0 25 0;
+#X connect 31 0 25 0;
+#X connect 32 0 31 0;
+#X connect 33 0 25 0;
+#X connect 35 0 36 0;

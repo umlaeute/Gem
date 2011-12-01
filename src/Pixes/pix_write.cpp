@@ -75,14 +75,20 @@ pix_write :: pix_write(int argc, t_atom *argv)
 
   m_banged = false;
 
-
   m_originalImage = new imageStruct();
   m_originalImage->xsize=m_width;
   m_originalImage->ysize=m_height;
   m_originalImage->setCsizeByFormat(GL_RGBA);
   m_originalImage->allocate();
-  
-  printf("build on %s at %s\n",__DATE__, __TIME__);
+
+	// AV : i wanted to put thoses lines in fileMess() function but it crashes...
+	// we need to get patcher path each time we change the filename because the patcher may be saved as... 
+	// and its directory could change without updating m_patcherPath
+	m_canvas = canvas_getcurrent();
+	m_patcherPath = canvas_getdir(m_canvas);
+
+	printf("pix_write modified by Antoine Villeret, use at your own risk...\n");
+	printf("build on %s at %s\n",__DATE__, __TIME__);
 }
 
 /////////////////////////////////////////////////////////
@@ -209,6 +215,8 @@ void pix_write :: fileMess(int argc, t_atom *argv)
 {
   char *extension = (char*)".tif";
   char tmp[MAXPDSTRING];
+  unsigned int size;
+  
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
       atom_string(argv++, tmp, MAXPDSTRING);
@@ -223,16 +231,21 @@ void pix_write :: fileMess(int argc, t_atom *argv)
  
       switch (tmp[0]){
 		case '/':
-			m_pathname = (char *)malloc(strlen(tmp)*sizeof(char));
+			size = strlen(tmp)*sizeof(char);
+			m_pathname = (char *)malloc(size);
 			strcpy(m_pathname, tmp);
 			break;
 		case '~':
-			m_pathname = (char *)malloc(strlen(tmp)+strlen(homedir)*sizeof(char));			
-			snprintf(m_pathname, (size_t)(MAXPDSTRING), "%s%s", homedir, tmp+1);
+			size = (strlen(tmp)+strlen(homedir))*sizeof(char);
+			m_pathname = (char *)malloc(size);			
+			snprintf(m_pathname, (size_t)size, "%s%s", homedir, tmp+1);
 			break;
 		default :
-			m_pathname = (char *)malloc(strlen(tmp)*sizeof(char));
-			strcpy(m_pathname, tmp);
+			printf("allocation\n");
+			size = (strlen(tmp)+strlen(m_patcherPath->s_name)+2)*sizeof(char);
+			m_pathname = (char *)malloc(size);
+			printf("patcher path name : %s\n", m_patcherPath->s_name);
+			snprintf(m_pathname, (size_t)size, "%s/%s", m_patcherPath->s_name,tmp);
 		}
 		printf("filename : %s\n", m_pathname);
       
