@@ -32,6 +32,11 @@
 
 #include <sstream>
 
+#ifdef _WIN32
+// for select()
+# include <Winsock2.h>
+#endif
+
 /***************************************
  * on the order of codec-libraries
  *
