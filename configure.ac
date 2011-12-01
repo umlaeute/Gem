@@ -159,12 +159,13 @@ AC_CHECK_LIB([dl],[dlopen])
 
 # w32 compatibility library
 AC_CHECK_LIB([OLDNAMES], [close])
+AC_CHECK_LIB([coldname], [close])
 # Standard C++ Libray:
 AC_CHECK_LIB([libcpmt], [main])
 # C runtime library:
 AC_CHECK_LIB([msvcrt], [fclose])
 # Standard C++ Libray:
-AC_CHECK_LIB([msvcrpt], [main])
+AC_CHECK_LIB([msvcprt], [main])
 # Winsock Library
 AC_CHECK_LIB([ws2_32], [select])
 
