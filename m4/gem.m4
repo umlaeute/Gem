@@ -383,6 +383,7 @@ IEM_OPERATING_SYSTEM
 
 AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
+AC_SUBST(GEM_RTE)
 
 if test "x${libdir}" = "x\${exec_prefix}/lib"; then
  libdir='${exec_prefix}/lib/pd/extra'
@@ -396,7 +397,7 @@ tmp_rte_libs="$LIBS"
 
 GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
-GEM_RTE="pd"
+GEM_RTE="Pure Data"
 
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
