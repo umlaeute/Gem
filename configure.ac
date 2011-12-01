@@ -578,9 +578,10 @@ Configuration:
 
   Install path           : ${prefix}
 
- pure-data:
-  version                : ${PD_MAJORVERSION}.${PD_MINORVERSION}
-  extension              : ${EXT}
+ RTE (${GEM_RTE}):
+  external-extension     : ${GEM_RTE_EXTENSION}
+  CFLAGS                 : ${GEM_RTE_CFLAGS}
+  LIBS                   : ${GEM_RTE_LIBS}
 
  used optional libraries:
 
