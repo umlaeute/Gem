@@ -151,12 +151,23 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
+# Checks for libraries.
 
 AC_CHECK_LIB([m],[sin])
 AC_CHECK_LIB([z],[main])
 AC_CHECK_LIB([dl],[dlopen])
 
-# Checks for libraries.
+# w32 compatibility library
+AC_CHECK_LIB([OLDNAMES], [close])
+# Standard C++ Libray:
+AC_CHECK_LIB([libcpmt], [main])
+# C runtime library:
+AC_CHECK_LIB([msvcrt], [fclose])
+# Standard C++ Libray:
+AC_CHECK_LIB([msvcrpt], [main])
+# Winsock Library
+AC_CHECK_LIB([ws2_32], [select])
+
 
 ## on OSX X shouldn't be used by default as there are other ways
 ## however, if people really want it ("--with-x") they should get it
