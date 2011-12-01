@@ -107,10 +107,10 @@ class GEM_EXTERN pix_write : public GemBase
 
     	//////////
 	// path to write to
-    	char	    	m_pathname[MAXPDSTRING];
+    	char	    	*m_pathname;
     	//////////
 	// current file to write to
-    	char	    	m_filename[MAXPDSTRING+10];
+    	char	    	*m_filename;
 
     	//////////
 	// current file to write to
