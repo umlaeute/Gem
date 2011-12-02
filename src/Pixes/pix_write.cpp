@@ -87,8 +87,6 @@ pix_write :: pix_write(int argc, t_atom *argv)
 	m_canvas = canvas_getcurrent();
 	m_patcherPath = canvas_getdir(m_canvas);
 
-	printf("pix_write modified by Antoine Villeret, use at your own risk...\n");
-	printf("build on %s at %s\n",__DATE__, __TIME__);
 }
 
 /////////////////////////////////////////////////////////
@@ -226,8 +224,7 @@ void pix_write :: fileMess(int argc, t_atom *argv)
 	  const char *homedir = pw->pw_dir;
       free(m_pathname);
       m_pathname = NULL;
-      
-      printf("passed string (tmp) : %s\n",tmp);
+    
  
       switch (tmp[0]){
 		case '/':
@@ -241,13 +238,11 @@ void pix_write :: fileMess(int argc, t_atom *argv)
 			snprintf(m_pathname, (size_t)size, "%s%s", homedir, tmp+1);
 			break;
 		default :
-			printf("allocation\n");
 			size = (strlen(tmp)+strlen(m_patcherPath->s_name)+2)*sizeof(char);
 			m_pathname = (char *)malloc(size);
-			printf("patcher path name : %s\n", m_patcherPath->s_name);
 			snprintf(m_pathname, (size_t)size, "%s/%s", m_patcherPath->s_name,tmp);
 		}
-		printf("filename : %s\n", m_pathname);
+		//~ printf("filename : %s\n", m_pathname);
       
     }
     if (argc>0)
