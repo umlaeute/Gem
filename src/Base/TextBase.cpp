@@ -306,10 +306,11 @@ void TextBase :: breakLine(wstring line)
 {
   // split the string wherever there is a '\n'
   while(line.length()>0){
-    signed long pos=(signed long)line.find('\n');
-    if(pos<=0){
-      break;
-    }
+    size_t pos=line.find('\n');
+    
+    // if not found, we're done
+    if(wstring::npos == pos)break;
+
     m_theText.push_back(line.substr(0,pos));
     line=line.erase(0,pos+1);
   }
