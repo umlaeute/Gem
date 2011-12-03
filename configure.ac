@@ -239,8 +239,7 @@ GEM_CHECK_LIB([ImageMagick++], [Magick++], [main],
 GEM_CHECK_LIB([tiff], [tiff], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg], [jpeg_read_header],,,,[image loader])
 
-GEM_CHECK_LIB([ftgl], [ftgl], [main],,,[-lfreetype],[font support])
-
+IEM_CHECK_FTGL()
 
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay], [CreateIAviReadFile],,,,[movie loader])
@@ -313,9 +312,6 @@ GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
 # is this needed?
 dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
 
-# for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
-AC_CHECK_HEADERS([FTGL/ftgl.h])
-
 AC_ARG_WITH([default-font],
             AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
            )
@@ -329,10 +325,6 @@ fi
 
 # threading
 GEM_CHECK_THREADS
-
-# pkg-config checks
-
-dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
 
 # Checks for header files.
 AC_HEADER_STDC
