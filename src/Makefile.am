@@ -9,6 +9,8 @@ AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 
 # make sure -lstdc++ is kept first
+## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
+## for more info see configure.ac
 AM_LIBTOOLFLAGS = --preserve-dup-deps
 
 SUBDIRS=Gem RTE Utils Base plugins 
