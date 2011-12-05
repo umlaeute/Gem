@@ -49,3 +49,7 @@ libUtils_la_SOURCES=  \
 	SIMD.h \
 	Vector.cpp \
 	Vector.h
+
+if MINGW
+libUtils_la_SOURCES+=MSVCMinGW.cpp 
+endif
