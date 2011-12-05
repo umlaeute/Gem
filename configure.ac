@@ -129,6 +129,9 @@ AC_ARG_WITH([ALL],
 
 GEM_CHECK_RTE()
 
+AC_SUBST(GEM_CPPFLAGS)
+GEM_CPPFLAGS="-DGEM_INTERNAL"
+
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
 dnl unlike MMX or SSE
