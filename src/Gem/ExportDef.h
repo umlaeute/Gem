@@ -33,7 +33,10 @@ LOG
 /* CRT deprecation warnings */
 # define _CRT_SECURE_NO_WARNINGS 1
 
+#endif /* _MSC_VER */
 
+
+#ifdef _WIN32
 // Windows requires explicit import and exporting of functions and classes.
 // While this is a pain to do sometimes, in large software development
 //      projects, it is very usefull.
