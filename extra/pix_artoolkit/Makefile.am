@@ -19,7 +19,7 @@ endif
 
 ## some default flags
 pix_artoolkit_la_CXXFLAGS =
-pix_artoolkit_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+pix_artoolkit_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ -no-undefined
 pix_artoolkit_la_LIBADD   =
 
 # RTE flags

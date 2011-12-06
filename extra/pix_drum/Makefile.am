@@ -14,7 +14,7 @@ dist_extra_DATA += pix_drum-help.pd
 
 ## some default flags
 pix_drum_la_CXXFLAGS =
-pix_drum_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+pix_drum_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ -no-undefined
 pix_drum_la_LIBADD   =
 
 # RTE flags
