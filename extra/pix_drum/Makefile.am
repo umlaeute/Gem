@@ -32,7 +32,7 @@ pix_drum_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 ## uha, this is ugly
 pix_drum.@GEM_RTE_EXTENSION@: pix_drum.la
 	rm -f $@
-	test -f .libs/$@ && $(LN_S) .libs/$@ $@
+	test -f .libs/$@ && $(LN_S) .libs/$@ $@ || true
 
 .PHONY: clean-conviencesymlink
 
