@@ -16,6 +16,7 @@ gem_imageJPEG_la_LIBADD   =
 # RTE
 gem_imageJPEG_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_imageJPEG_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_imageJPEG_la @MOREFLAGS@
 
 # Dependencies
 gem_imageJPEG_la_CXXFLAGS += @GEM_LIB_JPEG_CFLAGS@

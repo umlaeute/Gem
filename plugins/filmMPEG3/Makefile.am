@@ -15,6 +15,7 @@ gem_filmMPEG3_la_LIBADD   =
 # RTE
 gem_filmMPEG3_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_filmMPEG3_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_filmMPEG3_la @MOREFLAGS@
 
 # Dependencies
 gem_filmMPEG3_la_CXXFLAGS += @GEM_LIB_LIBMPEG3_CFLAGS@

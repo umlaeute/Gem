@@ -17,6 +17,7 @@ gem_imageTIFF_la_LIBADD   =
 # RTE
 gem_imageTIFF_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_imageTIFF_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_imageTIFF_la @MOREFLAGS@
 
 # Dependencies
 gem_imageTIFF_la_CXXFLAGS += @GEM_LIB_TIFF_CFLAGS@

@@ -16,6 +16,7 @@ gem_imageMAGICK_la_LIBADD   =
 # RTE
 gem_imageMAGICK_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_imageMAGICK_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_imageMAGICK_la @MOREFLAGS@
 
 # Dependencies
 gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK___CFLAGS@

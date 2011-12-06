@@ -18,6 +18,7 @@ gem_recordQT4L_la_LIBADD   =
 # RTE
 gem_recordQT4L_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_recordQT4L_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_recordQT4L_la @MOREFLAGS@
 
 # Dependencies
 gem_recordQT4L_la_CXXFLAGS += @GEM_LIB_LIBQUICKTIME_CFLAGS@  @GEM_LIB_LQT_CFLAGS@

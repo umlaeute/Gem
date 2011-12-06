@@ -13,6 +13,7 @@ gem_videoTEST_la_LIBADD   =
 # RTE
 gem_videoTEST_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_videoTEST_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_videoTEST_la @MOREFLAGS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

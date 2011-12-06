@@ -16,6 +16,7 @@ gem_imageQT_la_LIBADD   =
 # RTE
 gem_imageQT_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_imageQT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_imageQT_la @MOREFLAGS@
 
 # Dependencies
 gem_imageQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@

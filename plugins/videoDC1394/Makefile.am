@@ -14,6 +14,7 @@ gem_videoDC1394_la_LIBADD   =
 # RTE
 gem_videoDC1394_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_videoDC1394_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_videoDC1394_la @MOREFLAGS@
 
 # Dependencies
 

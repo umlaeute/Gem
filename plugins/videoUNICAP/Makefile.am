@@ -14,6 +14,7 @@ gem_videoUNICAP_la_LIBADD   =
 # RTE
 gem_videoUNICAP_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_videoUNICAP_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# gem_videoUNICAP_la @MOREFLAGS@
 
 # Dependencies
 gem_videoUNICAP_la_CXXFLAGS += @GEM_LIB_LIBUNICAP_CFLAGS@ 
