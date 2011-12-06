@@ -130,7 +130,20 @@ AC_ARG_WITH([ALL],
 GEM_CHECK_RTE()
 
 AC_SUBST(GEM_CPPFLAGS)
+AC_SUBST(GEM_CFLAGS)
+AC_SUBST(GEM_CXXFLAGS)
+AC_SUBST(GEM_LIBS)
+
+AC_SUBST(GEM_EXTERNAL_CPPFLAGS)
+AC_SUBST(GEM_EXTERNAL_CFLAGS)
+AC_SUBST(GEM_EXTERNAL_LIBS)
+
+
 GEM_CPPFLAGS="-DGEM_INTERNAL"
+
+if "x$have_pddll" = "xyes"; then
+ GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll"
+fi
 
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
