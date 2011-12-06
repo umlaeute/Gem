@@ -44,6 +44,9 @@ gemcocoawindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemcocoawindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemcocoawindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemcocoawindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemcocoawindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemcocoawindow_la @MOREFLAGS@
 
 # object specific libraries
@@ -86,6 +89,9 @@ gemglutwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemglutwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglutwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemglutwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglutwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemglutwindow_la @MOREFLAGS@
 
 # object specific libraries
@@ -110,6 +116,9 @@ gemglxwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemglxwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglxwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemglxwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglxwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemglxwindow_la @MOREFLAGS@
 
 # object specific libraries
@@ -134,6 +143,9 @@ gemmacwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemmacwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemmacwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemmacwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemmacwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemmacwindow_la @MOREFLAGS@
 
 # object specific libraries
@@ -158,6 +170,9 @@ gemw32window_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemw32window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemw32window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemw32window_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemw32window_la @MOREFLAGS@
 
 # object specific libraries
