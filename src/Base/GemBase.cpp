@@ -68,7 +68,7 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-GemBase :: GemBase()
+GemBase :: GemBase(void)
   : gem_amRendering(false), m_cache(NULL), m_modified(true),
     m_out1(NULL),
     m_enabled(true), m_state(INIT)
@@ -80,7 +80,7 @@ GemBase :: GemBase()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-GemBase :: ~GemBase()
+GemBase :: ~GemBase(void)
 {
   if (gem_amRendering){
     stopRendering();
@@ -173,7 +173,7 @@ void GemBase :: continueRender(GemState*state){
 // setModified
 //
 /////////////////////////////////////////////////////////
-void GemBase :: setModified()
+void GemBase :: setModified(void)
 {
   if (m_cache&& (m_cache->m_magic!=GEMCACHE_MAGIC))
     m_cache=NULL;
@@ -192,7 +192,7 @@ void GemBase :: setModified()
 // realStopRendering
 //
 /////////////////////////////////////////////////////////
-void GemBase :: realStopRendering()
+void GemBase :: realStopRendering(void)
 {
   /* no idea what this function is for; ask the user when it appears */
   post("realStopRendering() called...please report this to the upstream developers");
@@ -207,7 +207,7 @@ void GemBase :: realStopRendering()
 // disabling the rendering of this object
 //
 /////////////////////////////////////////////////////////
-bool GemBase :: isRunnable()
+bool GemBase :: isRunnable(void)
 {
   return true;
 }
