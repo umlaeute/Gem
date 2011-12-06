@@ -31,9 +31,9 @@ Gem_la_LIBADD   =
 Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
 
 ## Output: disabled for now
-#if DISABLED
+if DISABLED
 SUBDIRS+=Output
-#endif
+endif
 
 if TARGET_CONTROLS
 SUBDIRS+=Controls

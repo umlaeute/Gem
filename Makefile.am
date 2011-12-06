@@ -8,6 +8,9 @@ SUBDIRS+=build
 ## plugins
 SUBDIRS+=plugins
 
+## window objects
+SUBDIRS+=src/Output
+
 ## extra objects
 SUBDIRS+=extra
 
