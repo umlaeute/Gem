@@ -23,6 +23,10 @@ pix_drum_la_LIBADD   += @GEM_RTE_LIBS@
 
 pix_drum_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
+# special flags for building externals
+pix_drum_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+pix_drum_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+
 
 # convenience symlinks
 ## uha, this is ugly

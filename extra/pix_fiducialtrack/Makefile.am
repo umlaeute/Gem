@@ -24,6 +24,10 @@ pix_fiducialtrack_la_LIBADD   += @GEM_RTE_LIBS@
 
 pix_fiducialtrack_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
+# special flags for building externals
+pix_fiducialtrack_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+pix_fiducialtrack_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+
 ### SOURCES
 pix_fiducialtrack_la_SOURCES = \
 	pix_fiducialtrack.cpp \
