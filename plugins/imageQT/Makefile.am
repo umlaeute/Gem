@@ -10,7 +10,7 @@ pkglib_LTLIBRARIES+= gem_imageQT.la
 endif
 
 gem_imageQT_la_CXXFLAGS =
-gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared
+gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_imageQT_la_LIBADD   =
 
 # RTE

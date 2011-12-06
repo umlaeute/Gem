@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_filmDarwin.la
 endif
 
 gem_filmDarwin_la_CXXFLAGS =
-gem_filmDarwin_la_LDFLAGS  = -module -avoid-version -shared
+gem_filmDarwin_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_filmDarwin_la_LIBADD   =
 
 # RTE

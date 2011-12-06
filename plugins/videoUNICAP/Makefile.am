@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_videoUNICAP.la
 endif
 
 gem_videoUNICAP_la_CXXFLAGS =
-gem_videoUNICAP_la_LDFLAGS  = -module -avoid-version -shared
+gem_videoUNICAP_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_videoUNICAP_la_LIBADD   =
 
 # RTE

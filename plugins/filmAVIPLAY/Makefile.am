@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_filmAVIPLAY.la
 endif
 
 gem_filmAVIPLAY_la_CXXFLAGS =
-gem_filmAVIPLAY_la_LDFLAGS  = -module -avoid-version -shared
+gem_filmAVIPLAY_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_filmAVIPLAY_la_LIBADD   =
 
 # RTE

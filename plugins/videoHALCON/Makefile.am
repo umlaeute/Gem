@@ -12,7 +12,7 @@ plugin_LTLIBRARIES+= gem_videoHALCON.la
 endif
 
 gem_videoHALCON_la_CXXFLAGS =
-gem_videoHALCON_la_LDFLAGS  = -module -avoid-version -shared
+gem_videoHALCON_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_videoHALCON_la_LIBADD   =
 
 # RTE

@@ -10,7 +10,7 @@ pkglib_LTLIBRARIES+= gem_imageMAGICK.la
 endif
 
 gem_imageMAGICK_la_CXXFLAGS =
-gem_imageMAGICK_la_LDFLAGS  = -module -avoid-version -shared
+gem_imageMAGICK_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_imageMAGICK_la_LIBADD   =
 
 # RTE

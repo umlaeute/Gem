@@ -7,7 +7,7 @@ pkglib_LTLIBRARIES=
 pkglib_LTLIBRARIES+=gem_videoTEST.la
 
 gem_videoTEST_la_CXXFLAGS =
-gem_videoTEST_la_LDFLAGS  = -module -avoid-version -shared
+gem_videoTEST_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_videoTEST_la_LIBADD   =
 
 # RTE

@@ -11,7 +11,7 @@ endif
 
 
 gem_imageTIFF_la_CXXFLAGS =
-gem_imageTIFF_la_LDFLAGS  = -module -avoid-version -shared
+gem_imageTIFF_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_imageTIFF_la_LIBADD   =
 
 # RTE

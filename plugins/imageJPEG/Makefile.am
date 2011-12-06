@@ -10,7 +10,7 @@ pkglib_LTLIBRARIES+= gem_imageJPEG.la
 endif
 
 gem_imageJPEG_la_CXXFLAGS =
-gem_imageJPEG_la_LDFLAGS  = -module -avoid-version -shared
+gem_imageJPEG_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_imageJPEG_la_LIBADD   =
 
 # RTE

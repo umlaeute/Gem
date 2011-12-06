@@ -5,7 +5,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 pkglib_LTLIBRARIES= gem_filmTEST.la
 
 gem_filmTEST_la_CXXFLAGS =
-gem_filmTEST_la_LDFLAGS  = -module -avoid-version -shared
+gem_filmTEST_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_filmTEST_la_LIBADD   =
 
 # RTE

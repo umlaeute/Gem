@@ -12,7 +12,7 @@ plugin_LTLIBRARIES+= gem_videoPYLON.la
 endif
 
 gem_videoPYLON_la_CXXFLAGS =
-gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared
+gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_videoPYLON_la_LIBADD   =
 
 # RTE

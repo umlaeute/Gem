@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_recordV4L.la
 endif
 
 gem_recordV4L_la_CXXFLAGS =
-gem_recordV4L_la_LDFLAGS  = -module -avoid-version -shared
+gem_recordV4L_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_recordV4L_la_LIBADD   =
 
 # RTE

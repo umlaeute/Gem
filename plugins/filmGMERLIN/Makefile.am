@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_filmGMERLIN.la
 endif
 
 gem_filmGMERLIN_la_CXXFLAGS =
-gem_filmGMERLIN_la_LDFLAGS  = -module -avoid-version -shared
+gem_filmGMERLIN_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_filmGMERLIN_la_LIBADD   =
 
 # RTE

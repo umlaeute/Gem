@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_filmMPEG1.la
 endif
 
 gem_filmMPEG1_la_CXXFLAGS =
-gem_filmMPEG1_la_LDFLAGS  = -module -avoid-version -shared
+gem_filmMPEG1_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
 gem_filmMPEG1_la_LIBADD   =
 
 # RTE
