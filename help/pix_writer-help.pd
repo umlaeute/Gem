@@ -1,4 +1,4 @@
-#N canvas 199 24 843 513 10;
+#N canvas 200 49 843 513 10;
 #X obj 17 340 cnv 15 430 150 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 28 342 Inlets:;
@@ -52,7 +52,6 @@ and type;
 #X msg 540 191 auto \$1;
 #X obj 540 172 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text 593 191 activate/desactivate auto snapshot;
 #X obj 541 215 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X text 560 214 WRITE! one file;
@@ -65,9 +64,6 @@ and type;
 or from HD (/) in osx for example. DO NOT USE SPACES in the basefilename
 ;
 #X text 81 41 Class: pix object;
-#X text 26 245 Supported file-types are TIFF (type=0) and JPEG (type>0
-\; quality=type \; ). TIFF-writing is very slow ! JPEG is fast (but
-very compressed with low quality);
 #X text 26 116 With the "file" message you can specify a base-filename
 and the type of image-files you want to create. The actual name of
 the file will be something like: "<basefilename><current#>.<ext>" (like
@@ -82,12 +78,17 @@ the file will be something like: "<basefilename><current#>.<ext>" (like
 #X text 60 22 Synopsis: [pix_writer];
 #X text 541 263 osx format;
 #X msg 540 245 file /Users/username/pix_test 99;
+#X text 26 239 Supported file-types are TIFF (quality=0) and JPEG (quality>0).
+TIFF-writing can be slow due to the large file size of uncompressed
+images! JPEG might be faster (but quality will be lower due to compression)
+;
+#X text 593 190 activate/deactivate auto snapshot;
 #X connect 14 0 15 0;
 #X connect 15 0 14 0;
-#X connect 18 0 40 0;
-#X connect 19 0 37 0;
-#X connect 24 0 37 0;
+#X connect 18 0 38 0;
+#X connect 19 0 35 0;
+#X connect 24 0 35 0;
 #X connect 25 0 24 0;
-#X connect 27 0 37 0;
-#X connect 40 0 37 0;
-#X connect 44 0 37 0;
+#X connect 26 0 35 0;
+#X connect 38 0 35 0;
+#X connect 42 0 35 0;
