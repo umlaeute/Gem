@@ -50,8 +50,14 @@
 
   -----------------------------------------------------------------*/
 
+#ifdef GEMW32WINDOW_INTERNAL
+# define GEMW32WINDOW_EXTERN GEM_EXPORT
+#else
+# define GEMW32WINDOW_EXTERN GEM_IMPORT
+#endif
 
-class GEM_EXTERN gemw32window : public GemWindow
+
+class GEMW32WINDOW_EXTERN gemw32window : public GemWindow
 {
   CPPEXTERN_HEADER(gemw32window, GemWindow);
 

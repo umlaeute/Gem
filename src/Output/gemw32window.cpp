@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 #ifdef _WIN32
+# define GEMW32WINDOW_INTERNAL
 # include "gemw32window.h"
 
 #define DEBUGLINE ::startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
