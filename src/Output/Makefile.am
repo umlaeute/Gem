@@ -44,6 +44,7 @@ gemcocoawindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemcocoawindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemcocoawindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# gemcocoawindow_la @MOREFLAGS@
 
 # object specific libraries
 gemcocoawindow_la_CXXFLAGS += 
@@ -85,6 +86,7 @@ gemglutwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemglutwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglutwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# gemglutwindow_la @MOREFLAGS@
 
 # object specific libraries
 gemglutwindow_la_CXXFLAGS += @GLUT_CFLAGS@
@@ -108,6 +110,7 @@ gemglxwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemglxwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglxwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# gemglxwindow_la @MOREFLAGS@
 
 # object specific libraries
 gemglxwindow_la_CXXFLAGS += $(X_CFLAGS)
@@ -131,6 +134,7 @@ gemmacwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemmacwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemmacwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# gemmacwindow_la @MOREFLAGS@
 
 # object specific libraries
 gemmacwindow_la_CXXFLAGS += 
@@ -154,6 +158,7 @@ gemw32window_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemw32window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemw32window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# gemw32window_la @MOREFLAGS@
 
 # object specific libraries
 gemw32window_la_CXXFLAGS += 
