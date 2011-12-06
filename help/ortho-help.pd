@@ -1,4 +1,4 @@
-#N canvas 396 96 629 343 10;
+#N canvas 397 92 629 343 10;
 #X obj 462 275 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
@@ -20,7 +20,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 467 314 pd gemwin;
-#X msg 467 295 destroy;
+#X msg 467 295 create;
 #X text 463 274 Create window:;
 #X text 485 29 Example:;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
