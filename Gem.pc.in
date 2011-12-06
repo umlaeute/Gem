@@ -10,5 +10,5 @@ includedir=@includedir@
 Name: Gem
 Description: Gem plugins and externals
 Version: @PACKAGE_VERSION@
-Cflags: -I${includedir}/Gem
-Libs: 
+Cflags: -I${includedir}/@PACKAGE@ @GEM_EXTERNAL_CPPFLAGS@ @GEM_EXTERNAL_CFLAGS@
+Libs: -L${libdir}/@PACKAGE@ @GEM_EXTERNAL_LIBS@
