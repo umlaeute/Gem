@@ -176,8 +176,8 @@ gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemw32window_la @MOREFLAGS@
 
 # object specific libraries
-gemw32window_la_CXXFLAGS += 
-gemw32window_la_LIBADD   += 
+gemw32window_la_CXXFLAGS += @GL_CFLAGS@
+gemw32window_la_LIBADD   += @GL_LIBS@ 
 gemw32window_la_LDFLAGS  += 
 
 ## SOURCES
