@@ -141,7 +141,7 @@ AC_SUBST(GEM_EXTERNAL_LIBS)
 
 GEM_CPPFLAGS="-DGEM_INTERNAL"
 
-if "x$have_pddll" = "xyes"; then
+if test "x$have_pddll" = "xyes"; then
  GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll"
 fi
 
