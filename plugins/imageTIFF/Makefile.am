@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 EXTRA_DIST = imageTIFF.sln imageTIFF.vcproj
 
