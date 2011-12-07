@@ -32,18 +32,15 @@ pix_noise
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-pix_noise
+ pix_noise
 
- set the pixels via a float-package
+ Generate a noise texture
 
-  KEYWORDS
+KEYWORDS
   pix
 
-   DESCRIPTION
-
-    "RGB"
-    "RGBA"
-    "GREY"
+DESCRIPTION
+   send a bang to generate a noise texture
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_noise : public GemPixObj
