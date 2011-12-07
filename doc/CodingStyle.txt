@@ -1,0 +1,145 @@
+Coding Guidelines for Gem
+=========================
+2011, IOhannes m zmölnig
+
+in no special order...
+
+directory structure
+-------------------
+src/Gem
+	Gem core architecture classes
+src/Utils
+	Utilitiy code that can be re-used in several different contexts
+src/RTE
+	Pd-specific code (RTE=Real Time Environment)
+	(in the far future i would like to have all Pd-specific code wrapped in
+	here)
+src/plugins
+	plugin infrastructure and (pure virtual) baseclasses for the various
+	plugins
+src/Base
+	Base classes for objectclasses
+src/deprecated
+	deprecated headers for backward compatibility
+
+src/Controls/
+	objectclasses: CONTROL
+src/Manips/
+	objectclasses: MANIPulatorS
+src/Geos/
+	objectclasses: GEometric ObjectS
+src/Nongeos/
+	objectclasses: positionable Objects that are not Geos
+src/openGL/
+	objectclasses: OPENGL wrapper objects
+src/Particles/
+	objectclasses: PARTICLE engine
+src/Pixes/
+	objectclasses: PIXEl proceSsing
+
+src/Output/
+	objectclasses: window handling
+
+plugins/*/
+	plugin implementations for various backends
+
+extra/*/
+	additional objectclasses
+
+directories containing objectclasses, should not hold auxiliary files!
+these should go into src/Utils/ (if they are of general interest) or the code
+should be embedded into the objectclass code.
+a noteable exception is the extra/*/ folder
+
+
+file structure
+--------------
+C++ files are suffixed ".cpp".
+they are accompanied by a header file ".h" containing the public interface.
+there is a file for each objectclass named like the objectclass. e.g.
+> src/Manips/ortho.cpp
+contains the code for the [ortho] objectclass.
+
+
+private/protected/public
+------------------------
+ctor/dtor should be public
+methods should be protected/public
+members should be protected
+
+private members should be hidden using a PIMPL idiom
+
+
+callbacks
+---------
+message callbacks from the RTE should be implemented using the CPPEXTERN_MSG*
+macros defined in src/RTE/MessageCallbacks.h
+this removes the need for static callbacks in the header-files
+
+
+C-style vs C++-style
+--------------------
+while Pd is written in C, Gem is written in C++;
+please try to use C++ idioms whenever possible.
+
+use STL instead of inventing your own data containers!
+esp. use "std::string" instead of "char*" whenever possible
+
+the Gem code base is full of C-idioms and types; this is mainly because i
+started as a C-programmer and only gradually learned using C++; don't repeat my
+follies :-)
+
+
+variable naming
+---------------
+member variables are usually prefixed with "m_"
+static variables are usually prefixed with "s_"
+
+
+initialization
+--------------
+initialize all member variables in the constructor(s).
+use "member initialization lists" when possible.
+e.g. use
+> foo::foo(void) : m_x(0), m_y(0) {}
+rather than
+> foo::foo(void) { m_x=0; m_y=0; }
+
+
+import/export
+-------------
+all functions/classes that should be visible from outside must be exported using
+the GEM_EXTERN macro.
+all objectclasses are exported.
+all utility classes are exported.
+
+
+dependencies
+------------
+the dependencies of Gem should be kept at a minimum (ideally only openGL)
+objectclasses that use special libraries should go into extra/
+if you want to add functionality to Gem that is (or can be) implemented by a
+number of different backends (libraries), this should be done via an abstract
+interface and plugins, thus moving the binary dependency outside of Gem.
+
+
+Indentation
+-----------
+TODO
+
+
+git commits
+-----------
+try to avoid committing pd-patches and C++ code within the same
+commit. conflicts in C++-code can usually easily be resolved, whereas
+conflicts in Pd-patches are usually impossible to resolve (but for the
+most trivial cases)
+
+
+git branching
+-------------
+try to avoid forking from branches other than master.
+esp. avoid branches on top of branches.
+before committing a pull rqeuest, make sure that your branch applies clean to
+current master.
+
