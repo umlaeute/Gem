@@ -1,16 +1,16 @@
-#N canvas 505 28 625 493 10;
-#X text 402 8 GEM object;
-#X obj -42 312 cnv 15 430 170 empty empty empty 20 12 0 14 -233017
+#N canvas 447 94 648 507 10;
+#X text 412 10 GEM object;
+#X obj -32 314 cnv 15 430 170 empty empty empty 20 12 0 14 -233017
 -66577 0;
-#X obj -42 279 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj -32 281 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text -33 278 Arguments:;
-#X obj -43 56 cnv 15 430 220 empty empty empty 20 12 0 14 -233017 -66577
+#X text -23 280 Arguments:;
+#X obj -33 58 cnv 15 430 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 393 56 cnv 15 170 350 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 403 58 cnv 15 170 350 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 397 39 Example:;
-#X obj 463 421 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 407 41 Example:;
+#X obj 473 423 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -30,59 +30,59 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 468 460 pd gemwin;
-#X msg 468 441 destroy;
-#X text 464 420 Create window:;
-#X obj 394 93 cnv 15 160 200 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 478 462 pd gemwin;
+#X msg 478 443 create;
+#X text 474 422 Create window:;
+#X obj 404 95 cnv 15 160 200 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 395 63 gemhead;
-#X text 21 31 Class: pix object;
-#X obj 395 352 pix_texture;
-#X msg 485 235 RGBA;
-#X msg 420 235 GREY;
-#X msg 455 235 RGB;
-#X text -17 291 <width> <height>;
-#X obj 413 100 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X obj 405 65 gemhead;
+#X text 31 33 Class: pix object;
+#X obj 405 354 pix_texture;
+#X msg 495 237 RGBA;
+#X msg 430 237 GREY;
+#X msg 465 237 RGB;
+#X text -7 293 <width> <height>;
+#X obj 423 102 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X obj 394 374 square 4;
-#X msg 407 329 quality \$1;
-#X obj 406 311 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 404 376 square 4;
+#X msg 417 331 quality \$1;
+#X obj 416 313 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text -36 58 Description: generate a noise texture;
-#X text 0 12 Synopsis: [pix_noise];
-#X msg 414 148 auto \$1;
-#X obj 414 126 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X text -26 60 Description: generate a noise texture;
+#X text 10 14 Synopsis: [pix_noise];
+#X msg 424 150 auto \$1;
+#X obj 424 128 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text -20 77 [pix_set] will allow you to generate a uniform noise
+#X text -10 79 [pix_set] will allow you to generate a uniform noise
 texture.;
-#X text -19 107 The size of the image can be set with creation-arguments.
+#X text -9 109 The size of the image can be set with creation-arguments.
 It defaults to 64*64. It can be dynamiccaly change by the set message.
 ;
-#X text -19 151 Each time you send a bang \, a new noise is generated.
+#X text -9 153 Each time you send a bang \, a new noise is generated.
 You can send an [auto 1( message to generate a texture for each render
 frame.;
-#X text -32 315 Inlet 1:;
-#X text -18 331 gemlist;
-#X text -18 364 bang : generate new image;
-#X text -18 380 auto 1|0 : generate new image for each frame on/off
+#X text -22 317 Inlet 1:;
+#X text -8 333 gemlist;
+#X text -8 366 bang : generate new image;
+#X text -8 382 auto 1|0 : generate new image for each frame on/off
 (default off);
-#X text -18 409 set <width> <height> : change size of the texture (default
+#X text -8 411 set <width> <height> : change size of the texture (default
 : 64*64 );
-#X text -32 442 Outlet 1:;
-#X text -16 457 gemlist;
-#X text -18 348 RGBA|RGB|GREY : set format of input-data (default :
+#X text -22 444 Outlet 1:;
+#X text -6 459 gemlist;
+#X text -8 350 RGBA|RGB|GREY : set format of input-data (default :
 RGBA);
-#X text -19 239 You might want to desactivate the interpolation of
-the texture by sending [quality 0( to pix_texture.;
-#X text 434 99 new noise;
-#X text 432 125 new noise each frame;
-#X text 414 169 change size of image;
-#X text -18 194 You can set the number of channels of the generated
+#X text -9 241 You might want to desactivate the interpolation of the
+texture by sending [quality 0( to pix_texture.;
+#X text 444 101 new noise;
+#X text 442 127 new noise each frame;
+#X text 424 171 change size of image;
+#X text -8 196 You can set the number of channels of the generated
 noise using message : RGBA / RGB / Grey. The output image will still
 be in RGBA-color-space.;
-#X text 418 216 change colorspace;
-#X obj 395 273 pix_noise 50 50;
-#X msg 415 187 set 250 250;
+#X text 428 218 change colorspace;
+#X obj 405 275 pix_noise 50 50;
+#X msg 425 189 set 250 250;
 #X connect 8 0 9 0;
 #X connect 9 0 8 0;
 #X connect 12 0 44 0;
