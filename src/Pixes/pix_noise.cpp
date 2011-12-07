@@ -17,7 +17,8 @@
 /////////////////////////////////////////////////////////
 //
 //  pix_noise
-//
+//  based on pix_set
+//  random function based on noise~
 //  2011
 //  Nicolas Montgermont
 //  mailto:nicolas_montgermont@yahoo.fr
@@ -26,7 +27,7 @@
 
 
 
-// this is to paint easily your own pictures by passing a package of floats that contain all necessary image data)
+// generate a uniform noise texture
 
 #include "pix_noise.h"
 #include "Gem/State.h"
@@ -41,25 +42,26 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_noise, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEF
 /////////////////////////////////////////////////////////
 pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize)
 {
-  int dataSize;
-  if (xsize < 1) xsize = 256;
-  if (ysize < 1) ysize = 256;
-  int randInit = 307*1319;
-  randNow = randInit;
+	int dataSize;
+	if (xsize < 1) xsize = 256;
+	if (ysize < 1) ysize = 256;
+	int randInit = 307*1319;
+	m_rand = randInit;
+	m_automatic = false;
+	m_banged = false;
+	
+	m_pixBlock.image = m_imageStruct;
+	m_pixBlock.image.xsize = (int)xsize;
+	m_pixBlock.image.ysize = (int)ysize;
+	m_pixBlock.image.csize = 4;
+	m_pixBlock.image.format = GL_RGBA;
+	m_pixBlock.image.type = GL_UNSIGNED_BYTE;
 
-  m_pixBlock.image = m_imageStruct;
-  m_pixBlock.image.xsize = (int)xsize;
-  m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.csize = 4;
-  m_pixBlock.image.format = GL_RGBA;
-  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-
-  dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
-    m_pixBlock.image.csize * sizeof(unsigned char);
-  m_pixBlock.image.allocate(dataSize);
-  memset(m_pixBlock.image.data, 0, dataSize);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("data"));
-	bangMess();	
+	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
+      m_pixBlock.image.csize * sizeof(unsigned char);
+	m_pixBlock.image.allocate(dataSize);
+	memset(m_pixBlock.image.data, 0, dataSize);
+	generateNoise();	
 }
 
 /////////////////////////////////////////////////////////
@@ -68,7 +70,7 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize)
 /////////////////////////////////////////////////////////
 pix_noise :: ~pix_noise()
 {
-  cleanPixBlock();
+	cleanPixBlock();
 }
 
 /////////////////////////////////////////////////////////
@@ -77,7 +79,11 @@ pix_noise :: ~pix_noise()
 /////////////////////////////////////////////////////////
 void pix_noise :: render(GemState *state)
 {
-  state->set(GemState::_PIX,&m_pixBlock);
+	if (m_automatic || m_banged) {
+		m_banged = false;
+		generateNoise();
+	}
+	state->set(GemState::_PIX,&m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////
@@ -99,34 +105,35 @@ void pix_noise :: postrender(GemState *state)
     //state->image = NULL;
 }
 
+/////////////////////////////////////////////////////////
+// random generator
+//
+/////////////////////////////////////////////////////////
 float pix_noise :: pix_random()
 {
-	randNow = randNow * 435898247 + 382842987;
-	return ((float)((randNow & 0x7fffffff) - 0x40000000)) * (float)(1.0 / 0x40000000);
+	m_rand = m_rand * 435898247 + 382842987;
+	return ((float)((m_rand & 0x7fffffff) - 0x40000000)) * (float)(1.0 / 0x40000000);
 }
 
 /////////////////////////////////////////////////////////
-// DATAMess
+// generate texture
 //
 /////////////////////////////////////////////////////////
-void pix_noise :: bangMess()
+void pix_noise :: generateNoise()
 {
 	int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize, counter, n;
 	unsigned char *buffer = m_pixBlock.image.data;
 	
-	//	argc--;
 	memset(buffer, 0, picturesize*m_pixBlock.image.csize*sizeof(unsigned char));
 	
 	switch (m_mode) {
 		case GL_RGB:
-			//n = argc/3;
 			counter=picturesize;
 			while (counter--) {
 				buffer[0] = (unsigned char)(255.*pix_random()); // red
 				buffer[1] = (unsigned char)(255.*pix_random()); // green
 				buffer[2] = (unsigned char)(255.*pix_random()); // blue
 				buffer[3] = 0;					     // alpha
-				//argv+=3; 
 				buffer+=4;
 			}
 			break;
@@ -135,7 +142,6 @@ void pix_noise :: bangMess()
 			while (counter--) {
 				buffer[0] = buffer[1] = buffer[2] = (unsigned char)(255.*pix_random());	// rgb
 				buffer[3] = 0;									// alpha
-				//argv++;	
 				buffer+=4;
 			}
 			break;
@@ -143,70 +149,17 @@ void pix_noise :: bangMess()
 			// ?
 			break;
 		default:
-			//n = argc/4;
 			counter=picturesize;
 			while (counter--) {
 				buffer[0] = (unsigned char)(255.*pix_random()); // red
 				buffer[1] = (unsigned char)(255.*pix_random()); // green
 				buffer[2] = (unsigned char)(255.*pix_random()); // blue
 				buffer[3] = (unsigned char)(255.*pix_random()); // alpha
-				//argv+=4; 
 				buffer+=4;
 			}
 	}
 	m_pixBlock.newimage = 1;
 }
-
-
-/////////////////////////////////////////////////////////
-// DATAMess
-//
-/////////////////////////////////////////////////////////
-void pix_noise :: DATAMess(int argc, t_atom *argv)
-{
-  int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize, counter, n;
-  unsigned char *buffer = m_pixBlock.image.data;
-
-  //	argc--;
-  memset(buffer, 0, picturesize*m_pixBlock.image.csize*sizeof(unsigned char));
-
-  switch (m_mode) {
-  case GL_RGB:
-    n = argc/3;
-    counter=(picturesize<n)?picturesize:n;
-    while (counter--) {
-      buffer[0] = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
-      buffer[1] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
-      buffer[2] = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
-      buffer[3] = 0;					     // alpha
-      argv+=3; buffer+=4;
-    }
-    break;
-  case GL_LUMINANCE:
-    counter=(picturesize<argc)?picturesize:argc;
-    while (counter--) {
-      buffer[0] = buffer[1] = buffer[2] = (unsigned char)(255.*atom_getfloat(argv));	// rgb
-      buffer[3] = 0;									// alpha
-      argv++;	buffer+=4;
-    }
-    break;
-  case GL_YCBCR_422_GEM:
-    // ?
-    break;
-  default:
-    n = argc/4;
-    counter=(picturesize<n)?picturesize:n;
-    while (counter--) {
-      buffer[0] = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
-      buffer[1] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
-      buffer[2] = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
-      buffer[3] = (unsigned char)(255.*atom_getfloat(&argv[3])); // alpha
-      argv+=4; buffer+=4;
-    }
-  }
-  m_pixBlock.newimage = 1;
-}
-
 
 
 /////////////////////////////////////////////////////////
@@ -261,8 +214,8 @@ void pix_noise :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 void pix_noise :: cleanPixBlock()
 {
-  m_pixBlock.image.clear();
-  m_pixBlock.image.data = NULL;
+	m_pixBlock.image.clear();
+	m_pixBlock.image.data = NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -271,6 +224,8 @@ void pix_noise :: cleanPixBlock()
 /////////////////////////////////////////////////////////
 void pix_noise :: obj_setupCallback(t_class *classPtr)
 {
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::autoMessCallback),
+					gensym("auto"), A_FLOAT, A_NULL);
 	class_addbang(classPtr, reinterpret_cast<t_method>(&pix_noise::bangMessCallback));
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBAMessCallback),
@@ -296,13 +251,16 @@ void pix_noise :: obj_setupCallback(t_class *classPtr)
      class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::SETMessCallback),
 		gensym("set"), A_FLOAT, A_FLOAT, A_NULL);
 
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::DATAMessCallback),
-		gensym("data"), A_GIMME, A_NULL);
+}
+
+void pix_noise :: autoMessCallback(void *data, t_floatarg on)
+{
+	GetMyClass(data)->m_automatic=(on!=0);
 }
 
 void pix_noise :: bangMessCallback(void *data)
 {
-	GetMyClass(data)->bangMess();
+	GetMyClass(data)->m_banged=true;
 }
 
 void pix_noise :: RGBAMessCallback(void *data)
@@ -328,7 +286,3 @@ void pix_noise :: SETMessCallback(void *data, t_float x, t_float y)
     GetMyClass(data)->SETMess((int)x, (int)y);
 }
 
-void pix_noise :: DATAMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-    GetMyClass(data)->DATAMess(argc, argv);
-}

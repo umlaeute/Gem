@@ -78,9 +78,8 @@ protected:
 	void	    	cleanPixBlock();
 	
 	//////////
-	// new texture
-	void	    	bangMess();
-	
+	// Generate noise texture
+	void	    	generateNoise();
 	//////////
 	// compute random
 	float	    	pix_random();
@@ -97,19 +96,22 @@ protected:
 	//////////
 	// Set a new image size
 	void	    	SETMess(int xsize, int ysize);
+
 	//////////
-	// Pass the data
-	void	    	DATAMess(int argc, t_atom *argv);
-
-
-	//-----------------------------------
-	// GROUP:	Paint data
-	//-----------------------------------
-
+	// Manual writing
+	bool            m_banged;
+	
+	//////////
+	// Automatic writing
+	bool            m_automatic;
+	
 	//////////
 	// paint mode
 	int 	    	m_mode;
-	int				randNow;
+	
+	//////////
+	// internal random value
+	int				m_rand;
 
 	//////////
 	// The pixBlock with the current image
@@ -120,6 +122,7 @@ private:
 
 	//////////
 	// static member functions
+	static void autoMessCallback(void *data, t_floatarg on);
 	static void bangMessCallback(void *data);
 	static void RGBAMessCallback(void *data);
 	static void RGBMessCallback(void *data);
@@ -127,8 +130,6 @@ private:
 	static void SETMessCallback(void *data, t_float x, t_float y);
 	static void YUVMessCallback(void *data);
 
-
-	static void DATAMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 
 #endif	// for header file
