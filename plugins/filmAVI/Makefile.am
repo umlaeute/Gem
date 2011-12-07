@@ -22,7 +22,9 @@ gem_filmAVI_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_filmAVI_la @MOREFLAGS@
 
 # Dependencies
-## none
+## video-for-windows
+gem_filmAVI_la_CXXFLAGS += @GEM_LIB_VFW32_CFLAGS@
+gem_filmAVI_la_LIBADD   += @GEM_LIB_VFW32_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
