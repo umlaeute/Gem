@@ -19,6 +19,7 @@ LOG
 #include <vector>
 #include "Gem/ExportDef.h"
 
+class CPPExtern;
 namespace gem {
 
   namespace files {
@@ -28,6 +29,8 @@ namespace gem {
 
     GEM_EXTERN std::string getExtension(const std::string&filename, bool make_lowercase=false);
 
+
+    GEM_EXTERN std::string getFullpath(const std::string&, const CPPExtern*obj=NULL);
 
     GEM_EXTERN void close(int fd);
   };
