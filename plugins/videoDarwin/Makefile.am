@@ -9,7 +9,10 @@ pkglib_LTLIBRARIES+=gem_videoDarwin.la
 endif
 
 gem_videoDarwin_la_CXXFLAGS =
-gem_videoDarwin_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_videoDarwin_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_videoDarwin_la_LDFLAGS += -no-undefined
+endif
 gem_videoDarwin_la_LIBADD   =
 
 # RTE

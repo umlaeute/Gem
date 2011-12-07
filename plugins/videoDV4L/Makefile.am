@@ -13,7 +13,10 @@ endif
 endif
 
 gem_videoDV4L_la_CXXFLAGS =
-gem_videoDV4L_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_videoDV4L_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_videoDV4L_la_LDFLAGS += -no-undefined
+endif
 gem_videoDV4L_la_LIBADD   =
 
 # RTE

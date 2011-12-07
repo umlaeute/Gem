@@ -22,7 +22,10 @@ nodist_EXTRA_Gem_la_SOURCES = dummy.cpp
 
 ## some default flags
 Gem_la_CXXFLAGS =
-Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ -no-undefined
+Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+if WINDOWS
+Gem_la_LDFLAGS += -no-undefined
+endif
 Gem_la_LIBADD   =
 
 

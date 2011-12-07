@@ -8,7 +8,10 @@ pkglib_LTLIBRARIES+= gem_videoV4L2.la
 endif
 
 gem_videoV4L2_la_CXXFLAGS =
-gem_videoV4L2_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_videoV4L2_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_videoV4L2_la_LDFLAGS += -no-undefined
+endif
 gem_videoV4L2_la_LIBADD   =
 
 # RTE

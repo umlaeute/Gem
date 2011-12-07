@@ -9,7 +9,10 @@ pkglib_LTLIBRARIES+= gem_videoVFW.la
 endif
 
 gem_videoVFW_la_CXXFLAGS =
-gem_videoVFW_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_videoVFW_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_videoVFW_la_LDFLAGS += -no-undefined
+endif
 gem_videoVFW_la_LIBADD   =
 
 # RTE

@@ -9,7 +9,10 @@ endif
 
 
 gem_filmMPEG3_la_CXXFLAGS =
-gem_filmMPEG3_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_filmMPEG3_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_filmMPEG3_la_LDFLAGS += -no-undefined
+endif
 gem_filmMPEG3_la_LIBADD   =
 
 # RTE

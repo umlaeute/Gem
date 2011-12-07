@@ -7,7 +7,10 @@ EXTRA_DIST = imageSGI.sln imageSGI.vcproj
 pkglib_LTLIBRARIES= gem_imageSGI.la
 
 gem_imageSGI_la_CXXFLAGS =
-gem_imageSGI_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_imageSGI_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_imageSGI_la_LDFLAGS += -no-undefined
+endif
 gem_imageSGI_la_LIBADD   =
 
 # RTE

@@ -15,7 +15,10 @@ dist_extra_DATA += pix_fiducialtrack-help.pd all.trees
 
 ## some default flags
 pix_fiducialtrack_la_CXXFLAGS =
-pix_fiducialtrack_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ -no-undefined
+pix_fiducialtrack_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+if WINDOWS
+pix_fiducialtrack_la_LDFLAGS += -no-undefined
+endif
 pix_fiducialtrack_la_LIBADD   =
 
 # RTE flags

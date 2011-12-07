@@ -9,7 +9,10 @@ pkglib_LTLIBRARIES+= gem_recordQT.la
 endif
 
 gem_recordQT_la_CXXFLAGS =
-gem_recordQT_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_recordQT_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_recordQT_la_LDFLAGS += -no-undefined
+endif
 gem_recordQT_la_LIBADD   =
 
 # RTE

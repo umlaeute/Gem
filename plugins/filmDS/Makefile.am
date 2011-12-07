@@ -10,7 +10,10 @@ pkglib_LTLIBRARIES+= gem_filmDS.la
 endif
 
 gem_filmDS_la_CXXFLAGS =
-gem_filmDS_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_filmDS_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_filmDS_la_LDFLAGS += -no-undefined
+endif
 gem_filmDS_la_LIBADD   =
 
 # RTE

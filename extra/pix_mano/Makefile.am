@@ -15,7 +15,10 @@ dist_extra_DATA += pix_mano-help.pd
 
 ## some default flags
 pix_mano_la_CXXFLAGS =
-pix_mano_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ -no-undefined
+pix_mano_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+if WINDOWS
+pix_mano_la_LDFLAGS += -no-undefined
+endif
 pix_mano_la_LIBADD   =
 
 # RTE flags

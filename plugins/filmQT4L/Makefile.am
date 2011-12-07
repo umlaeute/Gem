@@ -12,7 +12,10 @@ pkglib_LTLIBRARIES+= gem_filmQT4L.la
 endif
 
 gem_filmQT4L_la_CXXFLAGS =
-gem_filmQT4L_la_LDFLAGS  = -module -avoid-version -shared -no-undefined
+gem_filmQT4L_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_filmQT4L_la_LDFLAGS += -no-undefined
+endif
 gem_filmQT4L_la_LIBADD   =
 
 # RTE
