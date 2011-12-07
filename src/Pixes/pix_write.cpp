@@ -21,11 +21,7 @@
 #include "Gem/Cache.h"
 #include "Gem/ImageIO.h"
 
-// for path parsing
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
-
+#include "Gem/Files.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -70,8 +66,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_automatic = false;
   m_autocount = 0;
   m_filetype=0;
-  m_pathname = (char *)malloc(4*sizeof(char));
-  sprintf(m_pathname, "gem");
+  m_pathname="gem";
 
   m_banged = false;
 
@@ -82,7 +77,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_originalImage->allocate();
 
 	// AV : i wanted to put thoses lines in fileMess() function but it crashes...
-	// we need to get patcher path each time we change the filename because the patcher may be saved as... 
+	// we need to get patcher path each time we change the filename because the patcher may be saved as...
 	// and its directory could change without updating m_patcherPath
 	m_canvas = canvas_getcurrent();
 	m_patcherPath = canvas_getdir(m_canvas);
@@ -95,7 +90,6 @@ pix_write :: pix_write(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_write :: ~pix_write()
 {
-	free(m_pathname);
 	cleanImage();
 }
 
@@ -179,8 +173,8 @@ void pix_write :: render(GemState *state)
       extension=(char*)"jpg";
     }
 
-	m_filename = (char *)malloc((strlen(m_pathname)+10)*sizeof(char));
-    snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
+    snprintf(m_filename, (size_t)(MAXPDSTRING), "%s%05d.%s", m_pathname.c_str(), m_autocount, extension);
+    m_filename[MAXPDSTRING-1]=0;
 
     m_autocount++;
     m_banged = false;
@@ -214,36 +208,13 @@ void pix_write :: fileMess(int argc, t_atom *argv)
   char *extension = (char*)".tif";
   char tmp[MAXPDSTRING];
   unsigned int size;
-  
+
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
       atom_string(argv++, tmp, MAXPDSTRING);
       argc--;
-      
-      struct passwd *pw = getpwuid(getuid());
-	  const char *homedir = pw->pw_dir;
-      free(m_pathname);
-      m_pathname = NULL;
-    
- 
-      switch (tmp[0]){
-		case '/':
-			size = strlen(tmp)*sizeof(char);
-			m_pathname = (char *)malloc(size);
-			strcpy(m_pathname, tmp);
-			break;
-		case '~':
-			size = (strlen(tmp)+strlen(homedir))*sizeof(char);
-			m_pathname = (char *)malloc(size);			
-			snprintf(m_pathname, (size_t)size, "%s%s", homedir, tmp+1);
-			break;
-		default :
-			size = (strlen(tmp)+strlen(m_patcherPath->s_name)+2)*sizeof(char);
-			m_pathname = (char *)malloc(size);
-			snprintf(m_pathname, (size_t)size, "%s/%s", m_patcherPath->s_name,tmp);
-		}
-		//~ printf("filename : %s\n", m_pathname);
-      
+
+      m_pathname=gem::files::getFullpath(tmp, this);
     }
     if (argc>0)
       m_filetype = atom_getint(argv);
