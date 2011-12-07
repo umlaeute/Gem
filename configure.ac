@@ -323,7 +323,8 @@ fi
 AM_CONDITIONAL([HAVE_V4L2], [test "x${have_v4l2}" != "xno"])
 
 
-GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
+dnl GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
+GEM_CHECK_LIB([vfw32], [vfw32], [main],,,, [video input])
 # is this needed?
 dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
 
