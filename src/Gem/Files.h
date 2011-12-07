@@ -28,6 +28,8 @@ namespace gem {
 
     GEM_EXTERN std::string getExtension(const std::string&filename, bool make_lowercase=false);
 
+
+    GEM_EXTERN void close(int fd);
   };
 };
 

@@ -149,6 +149,10 @@ namespace gem {
     }
 
 
+    void close(int fd) {
+      ::close(fd);
+    }
+
 
   };
 };
