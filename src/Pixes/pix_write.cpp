@@ -88,7 +88,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_write :: ~pix_write()
+pix_write :: ~pix_write(void)
 {
 	cleanImage();
 }
@@ -111,7 +111,7 @@ bool pix_write :: isRunnable(void) {
 // writeMess
 //
 /////////////////////////////////////////////////////////
-void pix_write :: doWrite()
+void pix_write :: doWrite(void)
 {
   int width  = m_width;
   int height = m_height;
@@ -203,7 +203,7 @@ void pix_write :: posMess(int x, int y)
   m_yoff = y;
 }
 
-void pix_write :: fileMess(int argc, t_atom *argv)
+void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
   char *extension = (char*)".tif";
   char tmp[MAXPDSTRING];
@@ -227,7 +227,7 @@ void pix_write :: fileMess(int argc, t_atom *argv)
 // cleanImage
 //
 /////////////////////////////////////////////////////////
-void pix_write :: cleanImage()
+void pix_write :: cleanImage(void)
 {
   // release previous data
   if (m_originalImage)
@@ -243,36 +243,19 @@ void pix_write :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_write :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::fileMessCallback),
-		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::autoMessCallback),
-		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_write::bangMessCallback));
+  CPPEXTERN_MSG (classPtr, "file", fileMess);
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::sizeMessCallback),
-		  gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::posMessCallback),
-		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
+  CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
 }
 
-void pix_write :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_write :: autoMess(bool on)
 {
-  GetMyClass(data)->fileMess(argc, argv);
+  m_automatic=on;
 }
-void pix_write :: autoMessCallback(void *data, t_floatarg on)
+void pix_write :: bangMess(void)
 {
-  GetMyClass(data)->m_automatic=(on!=0);
-}
-void pix_write :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->m_banged=true;
-}
-
-void pix_write :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
-{
-  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
-}
-void pix_write :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
+  m_banged=true;
 }
