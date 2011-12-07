@@ -35,6 +35,9 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
+  : m_buffer(NULL),
+    m_numframes(0),
+    m_bindname(NULL)
 {
   if (s==&s_){
     static int buffercounter=0;
@@ -48,7 +51,7 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
 
   if (f<0)f=DEFAULT_NUM_FRAMES;
   m_bindname = s;
-  m_numframes = (int)f;
+  m_numframes = (unsigned int)f;
   m_buffer = new imageStruct[m_numframes];
 
   pd_bind(&this->x_obj->ob_pd, m_bindname);
@@ -58,7 +61,7 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer :: ~pix_buffer()
+pix_buffer :: ~pix_buffer( void )
 {
   if(m_buffer)delete [] m_buffer;
   pd_unbind(&this->x_obj->ob_pd, m_bindname);
@@ -68,7 +71,7 @@ pix_buffer :: ~pix_buffer()
 //   allocate memory for m_numframes images of size x*y (with pixelsize=c)
 //
 /////////////////////////////////////////////////////////
-void pix_buffer :: allocateMess(int x, int y, int c)
+void pix_buffer :: allocateMess(unsigned int x, unsigned int y, unsigned int c)
 {
   int i = m_numframes;
   int format=0;
@@ -141,11 +144,11 @@ void pix_buffer :: resizeMess(int newsize)
 // query the number of frames in the buffer
 //
 /////////////////////////////////////////////////////////
-void pix_buffer :: bangMess()
+void pix_buffer :: bangMess( void )
 {
   outlet_float(this->x_obj->ob_outlet, m_numframes);
 }
-int pix_buffer :: numFrames()
+unsigned int pix_buffer :: numFrames( void )
 {
   return m_numframes;
 }
@@ -181,7 +184,7 @@ imageStruct*pix_buffer :: getMess(int pos){
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer :: openMess(t_symbol *filename, int pos)
+void pix_buffer :: openMess(std::string filename, int pos)
 {
   // GRH: muss i wie in pix_image die ganzen andern Sachen a machen ????
 
@@ -194,7 +197,7 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
     error("index %d out of range (0..%d)!", pos, m_numframes);
     return;
   }
-  std::string file=findFile(filename->s_name);
+  std::string file=findFile(filename);
 
   image = image2mem(file.c_str());
   if(!image)
@@ -213,19 +216,19 @@ void pix_buffer :: openMess(t_symbol *filename, int pos)
 // saveMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer :: saveMess(t_symbol *filename, int pos)
+void pix_buffer :: saveMess(std::string filename, int pos)
 {
   // save an image from mem
   imageStruct*img=NULL;
 
-  if(NULL==filename||NULL==filename->s_name||gensym("")==filename){
+  if(filename.empty()){
     error("no filename given!");
     return;
   }
   img=getMess(pos);
 
   if(img && img->data){
-    mem2image(img, filename->s_name, 0);
+    mem2image(img, filename.c_str(), 0);
   } else {
     error("index %d out of range (0..%d) or slot empty!", pos, m_numframes);
     return;
@@ -260,25 +263,20 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer),
                    gensym("pix_depot"),
                    A_DEFSYM, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::allocateMessCallback),
-  		  gensym("allocate"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::resizeMessCallback),
-  		  gensym("resize"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_buffer::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::openMessCallback),
-  		  gensym("open"), A_SYMBOL, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::openMessCallback),
-  		  gensym("load"), A_SYMBOL, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::saveMessCallback),
-  		  gensym("save"), A_SYMBOL, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer::copyMessCallback),
-  		  gensym("copy"), A_FLOAT, A_FLOAT, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "resize", resizeMess, int);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG2(classPtr, "open", openMess, std::string, int);
+  CPPEXTERN_MSG2(classPtr, "load", openMess, std::string, int);
+  CPPEXTERN_MSG2(classPtr, "save", saveMess, std::string, int);
+  CPPEXTERN_MSG2(classPtr, "copy", copyMess, int, int);
+  CPPEXTERN_MSG (classPtr, "allocate", allocateMess);
 }
-void pix_buffer :: allocateMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
 {
-  int x=0;
-  int y=0;
-  int c=0;
+  unsigned int x=0;
+  unsigned int y=0;
+  unsigned int c=0;
 
   t_atom*ap=0;
 
@@ -293,66 +291,46 @@ void pix_buffer :: allocateMessCallback(void *data, t_symbol*s, int argc, t_atom
       case 'y': case 'Y': c=2; break;
       case 'r': case 'R': c=4; break;
       default:
-	GetMyClass(data)->error("invalid format %s!", atom_getsymbol(ap)->s_name);
+        error("invalid format %s!", atom_getsymbol(ap)->s_name);
 	return;
       }
     } else if(A_FLOAT==ap->a_type) {
 
-      c=atom_getint(ap);
+      c=(unsigned int)atom_getint(ap);
 
     } else {
-      GetMyClass(data)->error("invalid format!");
+      error("invalid format!");
       return;
     }
   case 2:
     if((A_FLOAT==argv->a_type) && (A_FLOAT==(argv+1)->a_type)) {
-      x=atom_getint(argv);
-      y=atom_getint(argv+1);
+      x=(unsigned int)atom_getint(argv);
+      y=(unsigned int)atom_getint(argv+1);
     } else {
-      GetMyClass(data)->error("invalid dimensions!");
+      error("invalid dimensions!");
       return;
     }
     break;
   case 1:
     if(A_FLOAT==argv->a_type) {
-      x=atom_getint(argv);
+      x=(unsigned int)atom_getint(argv);
       y=1;
       c=1;
     } else {
-      GetMyClass(data)->error("invalid dimension!");
+      error("invalid dimension!");
       return;
     }
     break;
   default:
-    GetMyClass(data)->error("usage: allocate <width> <height> <format>");
+    error("usage: allocate <width> <height> <format>");
     return;
   }
 
   if (x<1 || y<1 || c<0){
-    GetMyClass(data)->error("init-specs out of range");
+    error("init-specs out of range");
     return;
   }
   if (c==0)c=4;
 
-  GetMyClass(data)->allocateMess((int)x, (int)y, (int)c);
-}
-void pix_buffer :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->bangMess();
-}
-void pix_buffer :: openMessCallback(void *data, t_symbol *filename, t_floatarg pos)
-{
-  GetMyClass(data)->openMess(filename, (int)pos);
-}
-void pix_buffer :: saveMessCallback(void *data, t_symbol *filename, t_floatarg pos)
-{
-  GetMyClass(data)->saveMess(filename, (int)pos);
-}
-void pix_buffer :: resizeMessCallback(void *data, t_floatarg size)
-{
-  GetMyClass(data)->resizeMess((int)size);
-}
-void pix_buffer :: copyMessCallback(void *data, t_floatarg src, t_floatarg dst)
-{
-  GetMyClass(data)->copyMess((int)src, (int)dst);
+  allocateMess((int)x, (int)y, (int)c);
 }
