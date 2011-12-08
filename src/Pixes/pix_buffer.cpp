@@ -184,7 +184,7 @@ imageStruct*pix_buffer :: getMess(int pos){
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer :: openMess(std::string filename, int pos)
+void pix_buffer :: loadMess(std::string filename, int pos)
 {
   // GRH: muss i wie in pix_image die ganzen andern Sachen a machen ????
 
@@ -266,8 +266,8 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG1(classPtr, "resize", resizeMess, int);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
-  CPPEXTERN_MSG2(classPtr, "open", openMess, std::string, int);
-  CPPEXTERN_MSG2(classPtr, "load", openMess, std::string, int);
+  CPPEXTERN_MSG2(classPtr, "open", loadMess, std::string, int);
+  CPPEXTERN_MSG2(classPtr, "load", loadMess, std::string, int);
   CPPEXTERN_MSG2(classPtr, "save", saveMess, std::string, int);
   CPPEXTERN_MSG2(classPtr, "copy", copyMess, int, int);
   CPPEXTERN_MSG (classPtr, "allocate", allocateMess);

@@ -56,7 +56,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   virtual void  allocateMess(unsigned int,unsigned int,unsigned int);
   void          allocateMess(t_symbol*,int,t_atom*);
   virtual void  bangMess( void );
-  virtual void  openMess(std::string,int);
+  virtual void  loadMess(std::string,int);
   virtual void  saveMess(std::string,int);
 
   virtual void  copyMess(int,int);
