@@ -112,7 +112,7 @@ void pix_noise :: postrender(GemState *state)
 unsigned char pix_noise :: pix_random()
 {
 	m_rand = m_rand * 435898247 + 382842987;
-	return ((unsigned char)((m_rand << 24)));
+	return ((unsigned char)((m_rand >> 24)));
 }
 
 /////////////////////////////////////////////////////////

@@ -108,7 +108,7 @@ protected:
 	
 	//////////
 	// internal random value
-	int				m_rand;
+	uint32_t			m_rand;
 
 	//////////
 	// The pixBlock with the current image
