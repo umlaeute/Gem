@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "Gem/Files.h"
 
 /////////////////////////////////////////////////////////
 //
@@ -228,7 +229,7 @@ void pix_buffer :: saveMess(std::string filename, int pos)
   img=getMess(pos);
 
   if(img && img->data){
-    mem2image(img, filename.c_str(), 0);
+    mem2image(img, gem::files::getFullpath(filename).c_str(), 0);
   } else {
     error("index %d out of range (0..%d) or slot empty!", pos, m_numframes);
     return;
