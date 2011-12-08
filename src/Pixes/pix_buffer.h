@@ -18,6 +18,8 @@ LOG
 #include "Base/CPPExtern.h"
 #include "Gem/Image.h"
 
+#include "Gem/Properties.h"
+
 #define DEFAULT_NUM_FRAMES 100
 
 
@@ -34,6 +36,11 @@ LOG
   DESCRIPTION
 
   -----------------------------------------------------------------*/
+namespace gem { 
+  namespace plugins {class imagesaver;};
+  namespace RTE     {class Outlet;};
+};
+
 class GEM_EXTERN pix_buffer : public CPPExtern
 {
   CPPEXTERN_HEADER(pix_buffer, CPPExtern);
@@ -63,10 +70,19 @@ class GEM_EXTERN pix_buffer : public CPPExtern
 
   virtual void  resizeMess(int);
 
+  virtual void enumProperties( void );
+  virtual void clearProperties( void );
+  virtual void setProperties( t_symbol*, int, t_atom*);
+
  protected:
   imageStruct    *m_buffer;
   unsigned int m_numframes;
   t_symbol *m_bindname;
+
+  gem::Properties m_writeprops;
+
+  gem::plugins::imagesaver*m_handle;
+  gem::RTE::Outlet*m_outlet;
 };
 
 #endif	// for header file
