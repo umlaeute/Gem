@@ -12,7 +12,7 @@
 //
 /////////////////////////////////////////////////////////
 
-// we want our pd-class "pix_buffer_class" to be defined not-static
+// we want our pd-class "pix_buffer_class" to be defined non-static
 // so other pix_buffer_...-objects can bind to it
 #define NO_STATIC_CLASS
 
