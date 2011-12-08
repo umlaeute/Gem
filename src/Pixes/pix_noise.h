@@ -79,7 +79,7 @@ protected:
 	void	    	generateNoise();
 	//////////
 	// compute random
-	float	    	pix_random();
+	unsigned char	pix_random();
 	
 	//////////
 	// Set to RGBA-mode

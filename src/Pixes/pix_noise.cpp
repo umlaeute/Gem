@@ -109,10 +109,10 @@ void pix_noise :: postrender(GemState *state)
 // random generator
 //
 /////////////////////////////////////////////////////////
-float pix_noise :: pix_random()
+unsigned char pix_noise :: pix_random()
 {
 	m_rand = m_rand * 435898247 + 382842987;
-	return ((float)((m_rand & 0x7fffffff) - 0x40000000)) * (float)(1.0 / 0x40000000);
+	return ((unsigned char)((m_rand << 24)));
 }
 
 /////////////////////////////////////////////////////////
@@ -130,9 +130,9 @@ void pix_noise :: generateNoise()
 		case GL_RGB:
 			counter=picturesize;
 			while (counter--) {
-				buffer[0] = (unsigned char)(255.*pix_random()); // red
-				buffer[1] = (unsigned char)(255.*pix_random()); // green
-				buffer[2] = (unsigned char)(255.*pix_random()); // blue
+				buffer[0] = pix_random(); // red
+				buffer[1] = pix_random(); // green
+				buffer[2] = pix_random(); // blue
 				buffer[3] = 0;					     // alpha
 				buffer+=4;
 			}
@@ -140,7 +140,7 @@ void pix_noise :: generateNoise()
 		case GL_LUMINANCE:
 			counter=picturesize;
 			while (counter--) {
-				buffer[0] = buffer[1] = buffer[2] = (unsigned char)(255.*pix_random());	// rgb
+				buffer[0] = buffer[1] = buffer[2] = pix_random();	// rgb
 				buffer[3] = 0;									// alpha
 				buffer+=4;
 			}
@@ -151,10 +151,10 @@ void pix_noise :: generateNoise()
 		default:
 			counter=picturesize;
 			while (counter--) {
-				buffer[0] = (unsigned char)(255.*pix_random()); // red
-				buffer[1] = (unsigned char)(255.*pix_random()); // green
-				buffer[2] = (unsigned char)(255.*pix_random()); // blue
-				buffer[3] = (unsigned char)(255.*pix_random()); // alpha
+				buffer[0] = pix_random(); // red
+				buffer[1] = pix_random(); // green
+				buffer[2] = pix_random(); // blue
+				buffer[3] = pix_random(); // alpha
 				buffer+=4;
 			}
 	}
@@ -266,16 +266,19 @@ void pix_noise :: bangMessCallback(void *data)
 void pix_noise :: RGBAMessCallback(void *data)
 {
 	GetMyClass(data)->m_mode=GL_RGBA;
+	GetMyClass(data)->m_banged=true;
 }
 
 void pix_noise :: RGBMessCallback(void *data)
 {
 	GetMyClass(data)->m_mode=GL_RGB;
+	GetMyClass(data)->m_banged=true;
 }
 
 void pix_noise :: GREYMessCallback(void *data)
 {
 	GetMyClass(data)->m_mode=GL_LUMINANCE;
+	GetMyClass(data)->m_banged=true;
 }
 void pix_noise :: YUVMessCallback(void *data)
 {
@@ -284,5 +287,6 @@ void pix_noise :: YUVMessCallback(void *data)
 void pix_noise :: SETMessCallback(void *data, t_float x, t_float y)
 {
     GetMyClass(data)->SETMess((int)x, (int)y);
+	GetMyClass(data)->m_banged=true;
 }
 
