@@ -119,7 +119,7 @@ extern "C" {
 
 
     GemSettings::init();
-    Gem_addownpath("hsv2rgb.pd");
+    Gem_addownpath("Gem-meta.pd");
     GemMan::initGem();
   }
 
