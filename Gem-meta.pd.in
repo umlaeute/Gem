@@ -1,0 +1,10 @@
+#N canvas 1 51 320 90 10;
+#N canvas 1 51 382 134 META 1;
+#X text 10 10 NAME Gem;
+#X text 10 30 VERSION @PACKAGE_VERSION@;
+#X text 10 50 DESCRIPTION Graphics Environment for Multimedia;
+#X text 10 70 AUTHOR IOhannes m zmölnig & the Gem development team
+;
+#X text 10 90 LICENSE GPL-2+;
+#X restore 43 36 pd META;
+#X text 39 15 Gem: Graphics Environment for Multimedia;
