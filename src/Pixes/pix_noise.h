@@ -78,6 +78,9 @@ protected:
 	// Generate noise texture
 	void	    	generateNoise();
 	//////////
+	// initialize random generator
+	void	    	initRandom(float seed);	
+	//////////
 	// compute random
 	unsigned char	pix_random();
 	
@@ -108,8 +111,9 @@ protected:
 	
 	//////////
 	// internal random value
-	uint32_t			m_rand;
-
+	uint32_t		m_rand[55];
+	int				m_rand_ptr;
+	
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
@@ -120,6 +124,7 @@ private:
 	//////////
 	// static member functions
 	static void autoMessCallback(void *data, t_floatarg on);
+	static void seedMessCallback(void *data, t_floatarg seed);
 	static void bangMessCallback(void *data);
 	static void RGBAMessCallback(void *data);
 	static void RGBMessCallback(void *data);

@@ -46,7 +46,7 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize)
 	if (xsize < 1) xsize = 256;
 	if (ysize < 1) ysize = 256;
 	int randInit = 307*1319;
-	m_rand = randInit;
+	initRandom(randInit);
 	m_automatic = false;
 	m_banged = false;
 	
@@ -106,13 +106,41 @@ void pix_noise :: postrender(GemState *state)
 }
 
 /////////////////////////////////////////////////////////
+// initialize random generator
+//
+/////////////////////////////////////////////////////////
+void pix_noise :: initRandom(float seed)
+{
+	int i;
+	m_rand_ptr = 0;
+	for (i=0; i++; i<55) {
+		m_rand[i] = 0;
+	}
+	m_rand[2] = seed;
+}
+
+
+/////////////////////////////////////////////////////////
 // random generator
 //
 /////////////////////////////////////////////////////////
 unsigned char pix_noise :: pix_random()
 {
-	m_rand = m_rand * 435898247 + 382842987;
-	return ((unsigned char)((m_rand >> 24)));
+	// Lagged Fibonacci Generator
+	// S[n] = S[n-k]+S[n-j]
+	// with j = 24, k = 55
+
+	unsigned char tmp;
+	int m_rand_ptr_prec = m_rand_ptr;
+	
+	m_rand_ptr++;
+	if (m_rand_ptr>53) m_rand_ptr = 0;
+	
+	m_rand[m_rand_ptr] = m_rand[(m_rand_ptr + 1) % 55] + m_rand[(m_rand_ptr + 32) % 55];
+	return (unsigned char)((m_rand[m_rand_ptr] >> 24));
+	
+	//m_rand[m_rand_ptr] = m_rand[m_rand_ptr_prec] * 435898247 + 382842987;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -226,6 +254,8 @@ void pix_noise :: obj_setupCallback(t_class *classPtr)
 {
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::autoMessCallback),
 					gensym("auto"), A_FLOAT, A_NULL);
+	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::seedMessCallback),
+					gensym("seed"), A_FLOAT, A_NULL);
 	class_addbang(classPtr, reinterpret_cast<t_method>(&pix_noise::bangMessCallback));
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBAMessCallback),
@@ -256,6 +286,11 @@ void pix_noise :: obj_setupCallback(t_class *classPtr)
 void pix_noise :: autoMessCallback(void *data, t_floatarg on)
 {
 	GetMyClass(data)->m_automatic=(on!=0);
+}
+
+void pix_noise :: seedMessCallback(void *data, t_floatarg seed)
+{
+	GetMyClass(data)->initRandom(seed);
 }
 
 void pix_noise :: bangMessCallback(void *data)
