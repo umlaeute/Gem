@@ -72,7 +72,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static_mt.lib freetype235mt.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib"
+				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib freetype235mt.lib FTGL_static.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(FTGL)\msvc\Build&quot;;&quot;$(FTGL)\win32_vcpp\Build&quot;;&quot;$(FREETYPE)\objs&quot;"
 				IgnoreAllDefaultLibraries="true"
@@ -157,7 +157,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static_mtD.lib freetype214mt_D.lib libcpmtD.lib msvcrtD.lib msvcprtD.lib ws2_32.lib pthreadVC.lib"
+				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static.lib freetype235mt_D.lib libcpmtD.lib msvcrtD.lib msvcprtD.lib ws2_32.lib pthreadVC.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(FTGL)\msvc\Build&quot;;&quot;$(FTGL)\win32_vcpp\Build&quot;;&quot;$(FREETYPE)\objs&quot;"
 				IgnoreAllDefaultLibraries="true"
@@ -238,6 +238,22 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Utils\PixPete.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\plist.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\plist.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\pstk.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\pstk.h"
 				>
 			</File>
 			<File
@@ -553,27 +569,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\imageloaderBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\imageloaderBase.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\plugins\imagesaver.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\imagesaver.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\imagesaverBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\plugins\imagesaverBase.h"
 				>
 			</File>
 			<File
@@ -1632,6 +1632,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\pix_colorclassify.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_colorclassify.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\pix_colormatrix.cpp"
 					>
 				</File>
@@ -1992,22 +2000,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\pix_movieDarwin.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_movieDarwin.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_movieDS.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_movieDS.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\src\Pixes\pix_multiblob.cpp"
 					>
 				</File>
@@ -2093,14 +2085,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_record.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_recordQT.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_recordQT.h"
 					>
 				</File>
 				<File
