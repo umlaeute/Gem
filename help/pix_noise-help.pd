@@ -1,6 +1,6 @@
-#N canvas 447 94 648 507 10;
+#N canvas 509 22 641 529 10;
 #X text 462 20 GEM object;
-#X obj 18 324 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 18 324 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 18 291 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
@@ -10,7 +10,7 @@
 #X obj 453 68 cnv 15 170 350 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 457 51 Example:;
-#X obj 523 433 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 523 453 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -30,9 +30,9 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 528 472 pd gemwin;
-#X msg 528 453 create;
-#X text 524 432 Create window:;
+#X restore 528 492 pd gemwin;
+#X msg 528 473 create;
+#X text 524 452 Create window:;
 #X obj 454 105 cnv 15 160 200 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 455 75 gemhead;
@@ -44,7 +44,7 @@
 #X text 43 303 <width> <height>;
 #X obj 473 112 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X obj 454 386 square 4;
+#X obj 455 386 square 4;
 #X msg 467 341 quality \$1;
 #X obj 466 323 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
@@ -60,8 +60,8 @@
 (default off);
 #X text 42 421 set <width> <height> : change size of the texture (default
 : 64*64 );
-#X text 28 454 Outlet 1:;
-#X text 44 469 gemlist;
+#X text 28 474 Outlet 1:;
+#X text 44 489 gemlist;
 #X text 42 360 RGBA|RGB|GREY : set format of input-data (default :
 RGBA);
 #X text 41 251 You might want to desactivate the interpolation of the
@@ -83,6 +83,8 @@ It defaults to 64*64. It can be dynamically changed by the set message.
 #X text 41 163 Each time you send a bang \, a new noise is generated.
 You can send an [auto 1( message to generate a noise for each render
 frame.;
+#X text 42 453 seed <int> : change the initalization of the random
+function;
 #X connect 8 0 9 0;
 #X connect 9 0 8 0;
 #X connect 12 0 41 0;
