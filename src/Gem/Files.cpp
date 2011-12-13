@@ -2,7 +2,8 @@
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0400
-#include <windows.h>
+# include <io.h>
+# include <windows.h>
 #else
 # include <glob.h>
 #endif
@@ -164,7 +165,11 @@ namespace gem {
     }
 
     void close(int fd) {
+#ifdef _WIN32
+      ::_close(fd);
+#else
       ::close(fd);
+#endif
     }
 
 
