@@ -79,10 +79,13 @@ protected:
 	void	    	generateNoise();
 	//////////
 	// initialize random generator
-	void	    	initRandom(float seed);	
+	void	    	initRandom(int seed);	
 	//////////
 	// compute random
 	unsigned char	pix_random();
+	//////////
+	// initialize random generator
+	void	    	debug();	
 	
 	//////////
 	// Set to RGBA-mode
@@ -111,8 +114,8 @@ protected:
 	
 	//////////
 	// internal random value
-	uint32_t		m_rand[55];
-	int				m_rand_ptr;
+	int				m_rand[55];
+	int				m_rand_p,m_rand_k;
 	
 	//////////
 	// The pixBlock with the current image
@@ -131,6 +134,7 @@ private:
 	static void GREYMessCallback(void *data);
 	static void SETMessCallback(void *data, t_float x, t_float y);
 	static void YUVMessCallback(void *data);
+	static void debugMessCallback(void *data);
 
 };
 

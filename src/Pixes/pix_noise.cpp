@@ -18,7 +18,7 @@
 //
 //  pix_noise
 //  based on pix_set
-//  random function based on noise~
+//  random function : lagged fibonacci generator
 //  2011
 //  Nicolas Montgermont
 //  mailto:nicolas_montgermont@yahoo.fr
@@ -109,35 +109,51 @@ void pix_noise :: postrender(GemState *state)
 // initialize random generator
 //
 /////////////////////////////////////////////////////////
-void pix_noise :: initRandom(float seed)
+void pix_noise :: initRandom(int seed)
 {
-	int i;
-	m_rand_ptr = 0;
-	for (i=0; i++; i<55) {
-		m_rand[i] = 0;
+	int i,randval;
+	m_rand_p = 0;
+	m_rand_k = 24;
+	randval = seed;
+	for (i=0; i<55; i++) {
+		m_rand[i] = 0;//randval = randval * 435898247 + 382842987;
 	}
-	m_rand[2] = seed;
+	m_rand[0] = seed;
+	m_rand[24] = seed * 435898247 + 382842987;
+	//post("seed = %u",seed);
+	
 }
 
+/////////////////////////////////////////////////////////
+// debug internal state of generator
+//
+/////////////////////////////////////////////////////////
+void pix_noise :: debug()
+{
+	post("mrand_p = %i",m_rand_p);
+	post("mrand_k = %i",m_rand_k);
+	post("mrand[p] = %i",m_rand[m_rand_p]);
+	post("mrand[k] = %i",m_rand[m_rand_k]);
+	for (int i=0;i<55;i++) {
+		post("m_rand[%i] = %i",i,m_rand[i]);//randval = randval * 435898247 + 382842987;
+	}
+	
+}
 
 /////////////////////////////////////////////////////////
-// random generator
+// debug generator
 //
 /////////////////////////////////////////////////////////
 unsigned char pix_noise :: pix_random()
 {
 	// Lagged Fibonacci Generator
-	// S[n] = S[n-k]+S[n-j]
-	// with j = 24, k = 55
-
-	unsigned char tmp;
-	int m_rand_ptr_prec = m_rand_ptr;
+	// S[n] = S[n-p]+S[n-k]
+	// with p = 55, k = 24
 	
-	m_rand_ptr++;
-	if (m_rand_ptr>53) m_rand_ptr = 0;
-	
-	m_rand[m_rand_ptr] = m_rand[(m_rand_ptr + 1) % 55] + m_rand[(m_rand_ptr + 32) % 55];
-	return (unsigned char)((m_rand[m_rand_ptr] >> 24));
+	m_rand[m_rand_p] = m_rand[m_rand_p] + m_rand[m_rand_k];
+	if (++m_rand_p>54) m_rand_p = 0;
+	if (++m_rand_k>54) m_rand_k = 0;
+	return (unsigned char)(m_rand[m_rand_p]);
 	
 	//m_rand[m_rand_ptr] = m_rand[m_rand_ptr_prec] * 435898247 + 382842987;
 
@@ -257,7 +273,6 @@ void pix_noise :: obj_setupCallback(t_class *classPtr)
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::seedMessCallback),
 					gensym("seed"), A_FLOAT, A_NULL);
 	class_addbang(classPtr, reinterpret_cast<t_method>(&pix_noise::bangMessCallback));
-
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBAMessCallback),
 		gensym("RGBA"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBMessCallback),
@@ -280,7 +295,8 @@ void pix_noise :: obj_setupCallback(t_class *classPtr)
 		gensym("yuv"), A_NULL);
      class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::SETMessCallback),
 		gensym("set"), A_FLOAT, A_FLOAT, A_NULL);
-
+    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::debugMessCallback),
+					gensym("debug"), A_NULL);
 }
 
 void pix_noise :: autoMessCallback(void *data, t_floatarg on)
@@ -290,7 +306,7 @@ void pix_noise :: autoMessCallback(void *data, t_floatarg on)
 
 void pix_noise :: seedMessCallback(void *data, t_floatarg seed)
 {
-	GetMyClass(data)->initRandom(seed);
+	GetMyClass(data)->initRandom((int)seed);
 }
 
 void pix_noise :: bangMessCallback(void *data)
@@ -324,4 +340,7 @@ void pix_noise :: SETMessCallback(void *data, t_float x, t_float y)
     GetMyClass(data)->SETMess((int)x, (int)y);
 	GetMyClass(data)->m_banged=true;
 }
-
+void pix_noise :: debugMessCallback(void *data)
+{
+	GetMyClass(data)->debug();
+}
