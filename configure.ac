@@ -445,6 +445,8 @@ if test "x$enable_registerstruct" = "xyes"; then
 fi
 fi
 
+GEM_CHECK_CXXFLAGS([-mms-bitfields])
+
 if test "x$KERN" = "xDarwin"; then
  GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
 
