@@ -116,11 +116,8 @@ void pix_noise :: initRandom(int seed)
 	m_rand_k = 24;
 	randval = seed;
 	for (i=0; i<55; i++) {
-		m_rand[i] = 0;//randval = randval * 435898247 + 382842987;
+		m_rand[i] = seed = seed * 435898247 + 382842987;//random init
 	}
-	m_rand[0] = seed;
-	m_rand[24] = seed * 435898247 + 382842987;
-	//post("seed = %u",seed);
 	
 }
 
