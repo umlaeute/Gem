@@ -15,12 +15,21 @@ LOG
 # error you must not include PluginFactory Implementation directly! include PluginFactory.h instead
 #endif
 
-/* on M$VC (at least v2007) we must not define the template-implementation in the plugins
- * if we want to use the same implementation in both host and application
+#if 0 /* set to 1 to enable some debugging printout */
+# define GEM_PLUGFAC_DEBUG 1
+#else
+# define GEM_PLUGFAC_DEBUG 0
+#endif
+
+/* on W32 (regardless of whether we use MinGW or M$VC) we must _not_
+ * define the template-implementation in the plugins, if we want to
+ * use the same implementation in both host and plugin
+ * (if we do, the host and the plugin will see different factories!)
  *
- * on gcc (at least on linux) we have to provide the implementation
+ * on linux/gcc we have to provide the implementation
+ * (on osx/gcc as well, it seems)
  */
-#if defined _MSC_VER && !defined GEM_INTERNAL
+#if defined _WIN32 && !defined GEM_INTERNAL
 # define OMIT_PLUGINFACTORY_TEMPLATE_IMPLEMENATION
 #endif
 
@@ -43,7 +52,9 @@ template<class Class>
   if(NULL==s_factory) {
     s_factory=new PluginFactory<Class>;
   }
-  //std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
+#if GEM_PLUGFAC_DEBUG
+	std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
+#endif /* GEM_PLUGFAC_DEBUG */
   return s_factory;
 }
 
@@ -67,13 +78,18 @@ void PluginFactory<Class>::registerClass(std::string id, ctor_t*c) {
   if(NULL==fac) {
     std::cerr << "unable to get a factory!" << std::endl;
   }
-  //  std::cerr << "factory @ " << (void*)fac << std::endl;
+#if GEM_PLUGFAC_DEBUG
+  std::cerr << "register " << typeid(Class).name() << " @ factory: " << (void*)fac << std::endl;
+#endif /* GEM_PLUGFAC_DEBUG */
   fac->doRegisterClass(id, c);
 }
 
 template<class Class>
 Class*PluginFactory<Class>::getInstance(std::string id) {
   PluginFactory<Class>*fac=getPluginFactory();
+#if GEM_PLUGFAC_DEBUG
+  std::cerr << "getting " << typeid(Class).name() << " instance '" << id << "' from factory: " << (void*)fac << std::endl;
+#endif /* GEM_PLUGFAC_DEBUG */
   if(NULL==fac) {
     return NULL;
   }
@@ -83,6 +99,9 @@ Class*PluginFactory<Class>::getInstance(std::string id) {
 template<class Class>
   int PluginFactory<Class>::loadPlugins(std::string basename, std::string path) {
   PluginFactory<Class>*fac=getPluginFactory();
+#if GEM_PLUGFAC_DEBUG
+  std::cerr << "loading " << typeid(Class).name() << " plugins from factory: " << (void*)fac << std::endl;
+#endif /* GEM_PLUGFAC_DEBUG */
   if(NULL==fac) {
     return 0;
   }
