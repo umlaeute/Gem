@@ -193,11 +193,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\imageMAGICK.cpp"
+			RelativePath="..\imageMAGICK.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\imageMAGICK.h"
+			RelativePath="..\imageMAGICK.h"
 			>
 		</File>
 	</Files>

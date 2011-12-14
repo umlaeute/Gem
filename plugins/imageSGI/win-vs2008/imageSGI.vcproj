@@ -193,19 +193,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\imageSGI.cpp"
+			RelativePath="..\imageSGI.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\imageSGI.h"
+			RelativePath="..\imageSGI.h"
 			>
 		</File>
 		<File
-			RelativePath=".\sgiimage.cpp"
+			RelativePath="..\sgiimage.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\sgiimage.h"
+			RelativePath="..\sgiimage.h"
 			>
 		</File>
 	</Files>

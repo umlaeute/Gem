@@ -192,11 +192,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\filmQT.cpp"
+			RelativePath="..\filmQT.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\filmQT.h"
+			RelativePath="..\filmQT.h"
 			>
 		</File>
 	</Files>

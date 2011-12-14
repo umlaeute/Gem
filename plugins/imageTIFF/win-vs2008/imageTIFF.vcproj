@@ -193,11 +193,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\imageTIFF.cpp"
+			RelativePath="..\imageTIFF.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\imageTIFF.h"
+			RelativePath="..\imageTIFF.h"
 			>
 		</File>
 	</Files>

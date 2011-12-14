@@ -208,11 +208,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\pix_artoolkit.cpp"
+			RelativePath="..\pix_artoolkit.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\pix_artoolkit.h"
+			RelativePath="..\pix_artoolkit.h"
 			>
 		</File>
 	</Files>

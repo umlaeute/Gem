@@ -211,36 +211,36 @@
 			Name="libfidtrack"
 			>
 			<File
-				RelativePath=".\libfidtrack_fidtrackX.cpp"
+				RelativePath="..\libfidtrack_fidtrackX.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\libfidtrack_fidtrackX.h"
+				RelativePath="..\libfidtrack_fidtrackX.h"
 				>
 			</File>
 			<File
-				RelativePath=".\libfidtrack_segment.cpp"
+				RelativePath="..\libfidtrack_segment.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\libfidtrack_segment.h"
+				RelativePath="..\libfidtrack_segment.h"
 				>
 			</File>
 			<File
-				RelativePath=".\libfidtrack_treeidmap.cpp"
+				RelativePath="..\libfidtrack_treeidmap.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\libfidtrack_treeidmap.h"
+				RelativePath="..\libfidtrack_treeidmap.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\pix_fiducialtrack.cpp"
+			RelativePath="..\pix_fiducialtrack.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\pix_fiducialtrack.h"
+			RelativePath="..\pix_fiducialtrack.h"
 			>
 		</File>
 	</Files>

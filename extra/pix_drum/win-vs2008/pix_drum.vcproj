@@ -208,11 +208,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\pix_drum.cpp"
+			RelativePath="..\pix_drum.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\pix_drum.h"
+			RelativePath="..\pix_drum.h"
 			>
 		</File>
 	</Files>

@@ -192,11 +192,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\filmAVI.cpp"
+			RelativePath="..\filmAVI.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\filmAVI.h"
+			RelativePath="..\filmAVI.h"
 			>
 		</File>
 	</Files>

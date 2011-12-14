@@ -193,11 +193,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\imageJPEG.cpp"
+			RelativePath="..\imageJPEG.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\imageJPEG.h"
+			RelativePath="..\imageJPEG.h"
 			>
 		</File>
 	</Files>

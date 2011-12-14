@@ -208,11 +208,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\pix_mano.cpp"
+			RelativePath="..\pix_mano.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\pix_mano.h"
+			RelativePath="..\pix_mano.h"
 			>
 		</File>
 	</Files>

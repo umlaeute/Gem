@@ -192,11 +192,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\recordQT.cpp"
+			RelativePath="..\recordQT.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\recordQT.h"
+			RelativePath="..\recordQT.h"
 			>
 		</File>
 	</Files>

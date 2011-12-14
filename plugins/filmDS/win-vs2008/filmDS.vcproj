@@ -192,11 +192,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\filmDS.cpp"
+			RelativePath="..\filmDS.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\filmDS.h"
+			RelativePath="..\filmDS.h"
 			>
 		</File>
 	</Files>

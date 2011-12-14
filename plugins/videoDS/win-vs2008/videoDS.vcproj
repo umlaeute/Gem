@@ -192,19 +192,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\DSgrabber.cpp"
+			RelativePath="..\DSgrabber.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\DSgrabber.h"
+			RelativePath="..\DSgrabber.h"
 			>
 		</File>
 		<File
-			RelativePath=".\videoDS.cpp"
+			RelativePath="..\videoDS.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\videoDS.h"
+			RelativePath="..\videoDS.h"
 			>
 		</File>
 	</Files>

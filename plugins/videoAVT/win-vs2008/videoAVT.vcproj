@@ -135,10 +135,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\videoAVT.cpp">
+			RelativePath="..\videoAVT.cpp">
 		</File>
 		<File
-			RelativePath=".\videoAVT.h">
+			RelativePath="..\videoAVT.h">
 		</File>
 	</Files>
 	<Globals>

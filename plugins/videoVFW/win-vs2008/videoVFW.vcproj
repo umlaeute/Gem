@@ -192,11 +192,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\videoVFW.cpp"
+			RelativePath="..\videoVFW.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\videoVFW.h"
+			RelativePath="..\videoVFW.h"
 			>
 		</File>
 	</Files>

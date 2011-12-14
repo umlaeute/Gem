@@ -135,10 +135,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\videoPYLON.cpp">
+			RelativePath="..\videoPYLON.cpp">
 		</File>
 		<File
-			RelativePath=".\videoPYLON.h">
+			RelativePath="..\videoPYLON.h">
 		</File>
 	</Files>
 	<Globals>
