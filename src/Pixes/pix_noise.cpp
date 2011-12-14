@@ -216,7 +216,7 @@ void pix_noise :: autoMess(bool automatic)
   m_automatic=automatic;
 }
 /////////////////////////////////////////////////////////
-// RGBMess
+// <color>Mess
 //
 /////////////////////////////////////////////////////////
 void pix_noise :: RGBAMess(void)
@@ -227,16 +227,13 @@ void pix_noise :: RGBAMess(void)
 void pix_noise :: RGBMess(void)
 {
 	m_mode = GL_RGB;
+  bang();
 }
-/////////////////////////////////////////////////////////
-// GREYMess
-//
-/////////////////////////////////////////////////////////
 void pix_noise :: GREYMess(void)
 {
 	m_mode = GL_LUMINANCE;
+  bang();
 }
-
 /////////////////////////////////////////////////////////
 // SETMess
 //
@@ -256,6 +253,8 @@ void pix_noise :: SETMess(int xsize, int ysize)
 		* 4 * sizeof(unsigned char);
 	m_pixBlock.image.allocate(dataSize);
 	memset(m_pixBlock.image.data, 0, dataSize);
+
+  generateNoise();
 }
 
 /////////////////////////////////////////////////////////
@@ -274,79 +273,22 @@ void pix_noise :: cleanPixBlock()
 /////////////////////////////////////////////////////////
 void pix_noise :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::autoMessCallback),
-					gensym("auto"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::seedMessCallback),
-					gensym("seed"), A_FLOAT, A_NULL);
-	class_addbang(classPtr, reinterpret_cast<t_method>(&pix_noise::bangMessCallback));
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBAMessCallback),
-		gensym("RGBA"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBMessCallback),
-		gensym("RGB"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::GREYMessCallback),
-		gensym("GREY"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::GREYMessCallback),
-		gensym("GRAY"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::YUVMessCallback),
-		gensym("YUV"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBAMessCallback),
-		gensym("rgba"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::RGBMessCallback),
-		gensym("rgb"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::GREYMessCallback),
-		gensym("grey"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::GREYMessCallback),
-		gensym("gray"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::YUVMessCallback),
-		gensym("yuv"), A_NULL);
-     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::SETMessCallback),
-		gensym("set"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_noise::debugMessCallback),
-					gensym("debug"), A_NULL);
-}
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
+  CPPEXTERN_MSG1(classPtr, "seed", initRandom, int);
+  CPPEXTERN_MSG0(classPtr, "bang", bang);
 
-void pix_noise :: autoMessCallback(void *data, t_floatarg on)
-{
-	GetMyClass(data)->m_automatic=(on!=0);
-}
+  CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
+  CPPEXTERN_MSG0(classPtr, "RGB",  RGBMess);
+  CPPEXTERN_MSG0(classPtr, "GREY", GREYMess);
+  CPPEXTERN_MSG0(classPtr, "GRAY", GREYMess);
 
-void pix_noise :: seedMessCallback(void *data, t_floatarg seed)
-{
-	GetMyClass(data)->initRandom((int)seed);
-}
+  CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
+  CPPEXTERN_MSG0(classPtr, "rgb",  RGBMess);
+  CPPEXTERN_MSG0(classPtr, "grey", GREYMess);
+  CPPEXTERN_MSG0(classPtr, "gray", GREYMess);
+  CPPEXTERN_MSG0(classPtr, "yuv",  YUVMess);
 
-void pix_noise :: bangMessCallback(void *data)
-{
-	GetMyClass(data)->m_banged=true;
-}
+  CPPEXTERN_MSG2(classPtr, "set",  SETMess, int, int);
 
-void pix_noise :: RGBAMessCallback(void *data)
-{
-	GetMyClass(data)->m_mode=GL_RGBA;
-	GetMyClass(data)->m_banged=true;
-}
-
-void pix_noise :: RGBMessCallback(void *data)
-{
-	GetMyClass(data)->m_mode=GL_RGB;
-	GetMyClass(data)->m_banged=true;
-}
-
-void pix_noise :: GREYMessCallback(void *data)
-{
-	GetMyClass(data)->m_mode=GL_LUMINANCE;
-	GetMyClass(data)->m_banged=true;
-}
-void pix_noise :: YUVMessCallback(void *data)
-{
-  //	GetMyClass(data)->m_mode=GL_YCBCR_422_GEM;
-}
-void pix_noise :: SETMessCallback(void *data, t_float x, t_float y)
-{
-    GetMyClass(data)->SETMess((int)x, (int)y);
-	GetMyClass(data)->m_banged=true;
-}
-void pix_noise :: debugMessCallback(void *data)
-{
-	GetMyClass(data)->debug();
+  CPPEXTERN_MSG0(classPtr, "debug",  debug);
 }

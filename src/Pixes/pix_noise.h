@@ -122,21 +122,6 @@ protected:
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
 	imageStruct     m_imageStruct;
-
-private:
-
-	//////////
-	// static member functions
-	static void autoMessCallback(void *data, t_floatarg on);
-	static void seedMessCallback(void *data, t_floatarg seed);
-	static void bangMessCallback(void *data);
-	static void RGBAMessCallback(void *data);
-	static void RGBMessCallback(void *data);
-	static void GREYMessCallback(void *data);
-	static void SETMessCallback(void *data, t_float x, t_float y);
-	static void YUVMessCallback(void *data);
-	static void debugMessCallback(void *data);
-
 };
 
 #endif	// for header file
