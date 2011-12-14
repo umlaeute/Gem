@@ -48,7 +48,7 @@
 #X msg 467 341 quality \$1;
 #X obj 466 323 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text 24 70 Description: generate a noise texture;
+#X text 24 70 Description: generate a noise image;
 #X text 60 24 Synopsis: [pix_noise];
 #X msg 474 160 auto \$1;
 #X obj 474 138 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
@@ -58,25 +58,25 @@
 #X text 42 376 bang : generate new image;
 #X text 42 392 auto 1|0 : generate new image for each frame on/off
 (default off);
-#X text 42 421 set <width> <height> : change size of the texture (default
+#X text 42 421 set <width> <height> : change size of the image (default
 : 64*64 );
 #X text 28 474 Outlet 1:;
 #X text 44 489 gemlist;
 #X text 42 360 RGBA|RGB|GREY : set format of input-data (default :
 RGBA);
-#X text 41 251 You might want to desactivate the interpolation of the
+#X text 41 251 You might want to deactivate the interpolation of the
 texture by sending [quality 0( to pix_texture.;
 #X text 494 111 new noise;
 #X text 492 137 new noise each frame;
 #X text 474 181 change size of image;
 #X text 42 206 You can set the number of channels of the generated
-noise using message : RGBA / RGB / Grey. The output image will still
+noise using message : RGBA / RGB / GREY. The output image will still
 be in RGBA-color-space.;
 #X text 478 228 change colorspace;
 #X obj 455 285 pix_noise 50 50;
 #X msg 475 199 set 250 250;
 #X text 40 89 [pix_noise] will allow you to generate a uniform noise
-texture.;
+image.;
 #X text 41 119 The size of the image can be set with creation-arguments.
 It defaults to 64*64. It can be dynamically changed by the set message.
 ;
