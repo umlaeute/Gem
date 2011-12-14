@@ -22,11 +22,16 @@
 #endif
 
 #ifdef HAVE_VFW_H
-
 #include "videoVFW.h"
 #include "plugins/PluginFactory.h"
 using namespace gem::plugins;
 #include "Gem/RTE.h"
+
+
+/* MinGW headers seem to be incomplete */
+#ifndef AVSTREAMMASTER_NONE
+#define AVSTREAMMASTER_NONE 1
+#endif
 
 REGISTER_VIDEOFACTORY("VFW", videoVFW);
 /////////////////////////////////////////////////////////
