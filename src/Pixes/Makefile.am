@@ -158,6 +158,8 @@ libPixes_la_SOURCES=  \
     pix_multiply.h \
     pix_multitexture.cpp \
     pix_multitexture.h \
+    pix_noise.cpp \
+    pix_noise.h \
     pix_normalize.cpp \
     pix_normalize.h \
     pix_offset.cpp \
