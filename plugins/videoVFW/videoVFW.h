@@ -17,9 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/videoBase.h"
 
-#ifdef HAVE_VFW_H
-# include <vfw.h>
-#endif
+#include <vfw.h>
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -43,7 +41,6 @@ namespace gem { namespace plugins {
     // Destructor
     virtual ~videoVFW(void);
 
-#ifdef HAVE_VFW_H
     ////////
     // open the video-device
     virtual bool           openDevice(gem::Properties&);
@@ -75,8 +72,6 @@ namespace gem { namespace plugins {
     void		videoFrame(LPVIDEOHDR lpVHdr);
   private:
     static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
-
-#endif /*HAVE_VFW_H */
   }; 
 };};
 

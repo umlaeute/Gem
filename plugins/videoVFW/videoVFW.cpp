@@ -17,12 +17,17 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_LIBVFW32
+# define HAVE_VFW_H
+#endif
+
+#ifdef HAVE_VFW_H
+
 #include "videoVFW.h"
 #include "plugins/PluginFactory.h"
 using namespace gem::plugins;
 #include "Gem/RTE.h"
 
-#ifdef HAVE_VFW_H
 REGISTER_VIDEOFACTORY("VFW", videoVFW);
 /////////////////////////////////////////////////////////
 //
@@ -32,7 +37,7 @@ REGISTER_VIDEOFACTORY("VFW", videoVFW);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoVFW :: videoVFW()
+videoVFW :: videoVFW(void)
   : videoBase("vfw", 0), 
     m_hWndC(NULL)
 {
@@ -45,7 +50,7 @@ videoVFW :: videoVFW()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-videoVFW :: ~videoVFW()
+videoVFW :: ~videoVFW(void)
 {
   close();
 }
@@ -170,7 +175,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoVFW :: closeDevice()
+void videoVFW :: closeDevice(void)
 {
   if (m_hWndC) {
     capDriverDisconnect(m_hWndC);
@@ -212,7 +217,7 @@ void videoVFW :: videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr)
 // render
 //
 /////////////////////////////////////////////////////////
-bool videoVFW :: grabFrame()
+bool videoVFW :: grabFrame(void)
 {
   return true;
 }
@@ -221,7 +226,7 @@ bool videoVFW :: grabFrame()
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoVFW :: startTransfer()
+bool videoVFW :: startTransfer(void)
 {
   bool result= capCaptureSequenceNoFile(m_hWndC);
   m_image.newfilm=result;
@@ -233,7 +238,7 @@ bool videoVFW :: startTransfer()
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoVFW :: stopTransfer()
+bool videoVFW :: stopTransfer(void)
 {
   capCaptureStop(m_hWndC);
   return true;
@@ -284,7 +289,4 @@ void videoVFW :: setProperties(gem::Properties&props) {
 void videoVFW :: getProperties(gem::Properties&props) {
 }
 
-#else
-videoVFW ::  videoVFW() : videoBase("") { }
-videoVFW :: ~videoVFW() { }
-#endif
+#endif /* HAVE_VFW */
