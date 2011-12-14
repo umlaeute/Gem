@@ -266,9 +266,9 @@ namespace gem { namespace plugins {
       mimetypes.clear();
       props.clear();
 
-      int i;
+      unsigned int i;
       for(i=0; i<m_savers.size(); i++) {
-	int j;
+	unsigned int j;
 
 	std::vector<std::string>mimetypes_;
 	gem::Properties props_;
