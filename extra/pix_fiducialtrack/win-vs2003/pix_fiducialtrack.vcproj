@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="imageMAGICK"
+	Name="pix_fiducialtrack"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -14,8 +14,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)"
-			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
+			OutputDirectory="$(InputDir)\."
+			IntermediateDirectory="$(InputDir)\."
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -25,25 +25,32 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(IMAGEMAGICK)&quot;;&quot;$(IMAGEMAGICK)\magick&quot;;&quot;$(IMAGEMAGICK)\Magick++\lib&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBMAGICKPLUSPLUS"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
-				EnableEnhancedInstructionSet="2"
-				DefaultCharIsUnsigned="FALSE"/>
+				EnableEnhancedInstructionSet="0"
+				DefaultCharIsUnsigned="FALSE"
+				PrecompiledHeaderFile=".\Objects\pix_fiducialtrack.pch"
+				AssemblerListingLocation=".\Objects/"
+				ObjectFile=".\Objects/"
+				ProgramDataBaseFileName=".\Objects/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib CORE_RL_bzlib_.lib CORE_RL_coders_.lib CORE_RL_filters_.lib CORE_RL_jbig_.lib CORE_RL_jp2_.lib CORE_RL_jpeg_.lib CORE_RL_lcms_.lib CORE_RL_libxml_.lib CORE_RL_magick_.lib CORE_RL_Magick++_.lib CORE_RL_png_.lib CORE_RL_tiff_.lib CORE_RL_ttf_.lib CORE_RL_wand_.lib CORE_RL_xlib_.lib CORE_RL_zlib_.lib CORE_RL_wmf_.lib winmm.lib wsock32.lib"
-				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
+				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				OutputFile="pix_fiducialtrack.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(IMAGEMAGICK)\VisualMagick\lib\&quot;"
-				IgnoreAllDefaultLibraries="FALSE"
-				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
-				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
+				IgnoreAllDefaultLibraries="TRUE"
+				SubSystem="2"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -74,8 +81,8 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseDummy|Win32"
-			OutputDirectory="$(SolutionDir)"
-			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -86,23 +93,31 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="FALSE"/>
+				DefaultCharIsUnsigned="FALSE"
+				PrecompiledHeaderFile=".\Objects\pix_fiducialtrack.pch"
+				AssemblerListingLocation=".\Objects/"
+				ObjectFile=".\Objects/"
+				ProgramDataBaseFileName=".\Objects/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib"
-				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
+				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib"
+				OutputFile="pix_fiducialtrack.dll"
 				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
-				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
-				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
+				IgnoreAllDefaultLibraries="TRUE"
+				SubSystem="2"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -135,11 +150,33 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="libfidtrack"
+			Filter="">
+			<File
+				RelativePath="..\libfidtrack_fidtrackX.cpp">
+			</File>
+			<File
+				RelativePath="..\libfidtrack_fidtrackX.h">
+			</File>
+			<File
+				RelativePath="..\libfidtrack_segment.cpp">
+			</File>
+			<File
+				RelativePath="..\libfidtrack_segment.h">
+			</File>
+			<File
+				RelativePath="..\libfidtrack_treeidmap.cpp">
+			</File>
+			<File
+				RelativePath="..\libfidtrack_treeidmap.h">
+			</File>
+		</Filter>
 		<File
-			RelativePath=".\imageMAGICK.cpp">
+			RelativePath="..\pix_fiducialtrack.cpp">
 		</File>
 		<File
-			RelativePath=".\imageMAGICK.h">
+			RelativePath="..\pix_fiducialtrack.h">
 		</File>
 	</Files>
 	<Globals>

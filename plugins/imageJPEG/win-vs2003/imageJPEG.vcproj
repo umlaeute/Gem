@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="imageTIFF"
+	Name="imageJPEG"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -25,8 +25,8 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\tiff\libtiff&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBTIFF"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\Jpeg&quot;"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBJPEG"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
@@ -37,10 +37,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib vfw32.lib libcpmt.lib msvcrt.lib msvcprt.lib libtiff.lib"
+				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib vfw32.lib libcpmt.lib msvcrt.lib msvcprt.lib libjpeg.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\tiff&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\Jpeg&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
@@ -136,10 +136,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\imageTIFF.cpp">
+			RelativePath="..\imageJPEG.cpp">
 		</File>
 		<File
-			RelativePath=".\imageTIFF.h">
+			RelativePath="..\imageJPEG.h">
 		</File>
 	</Files>
 	<Globals>

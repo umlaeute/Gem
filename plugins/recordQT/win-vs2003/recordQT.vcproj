@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="filmQT"
+	Name="recordQT"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -135,10 +135,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\filmQT.cpp">
+			RelativePath="..\recordQT.cpp">
 		</File>
 		<File
-			RelativePath=".\filmQT.h">
+			RelativePath="..\recordQT.h">
 		</File>
 	</Files>
 	<Globals>

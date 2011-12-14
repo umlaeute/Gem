@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="pix_drum"
+	Name="videoAVT"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -14,8 +14,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(InputDir)\."
-			IntermediateDirectory="$(InputDir)\."
+			OutputDirectory="$(SolutionDir)"
+			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -25,32 +25,24 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(AVTROOT)\include&quot;;&quot;$(AVTROOT)\include\cpp&quot;"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_AVT"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
-				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="FALSE"
-				PrecompiledHeaderFile=".\Objects\pix_drum.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				EnableEnhancedInstructionSet="2"
+				DefaultCharIsUnsigned="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib libcpmt.lib msvcrt.lib msvcprt.lib"
-				OutputFile="pix_drum.dll"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib PvAPI.lib"
+				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
-				IgnoreAllDefaultLibraries="TRUE"
-				SubSystem="2"/>
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(AVTROOT)\lib\$(AVTARCH)&quot;"
+				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
+				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -81,8 +73,8 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseDummy|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)"
+			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -93,31 +85,23 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="FALSE"
-				PrecompiledHeaderFile=".\Objects\pix_drum.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				DefaultCharIsUnsigned="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib"
-				OutputFile="pix_drum.dll"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib"
+				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
-				IgnoreAllDefaultLibraries="TRUE"
-				SubSystem="2"/>
+				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
+				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -151,10 +135,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath=".\pix_drum.cpp">
+			RelativePath="..\videoAVT.cpp">
 		</File>
 		<File
-			RelativePath=".\pix_drum.h">
+			RelativePath="..\videoAVT.h">
 		</File>
 	</Files>
 	<Globals>

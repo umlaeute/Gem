@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="pix_fiducialtrack"
+	Name="imageSGI"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -14,8 +14,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(InputDir)\."
-			IntermediateDirectory="$(InputDir)\."
+			OutputDirectory="$(SolutionDir)"
+			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -26,31 +26,24 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
-				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="FALSE"
-				PrecompiledHeaderFile=".\Objects\pix_fiducialtrack.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				EnableEnhancedInstructionSet="2"
+				DefaultCharIsUnsigned="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib libcpmt.lib msvcrt.lib msvcprt.lib"
-				OutputFile="pix_fiducialtrack.dll"
+				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib vfw32.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
-				SubSystem="2"/>
+				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
+				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -81,8 +74,8 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseDummy|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)"
+			IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -93,31 +86,23 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;__SSE2__;__MMX__"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
 				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="FALSE"
-				PrecompiledHeaderFile=".\Objects\pix_fiducialtrack.pch"
-				AssemblerListingLocation=".\Objects/"
-				ObjectFile=".\Objects/"
-				ProgramDataBaseFileName=".\Objects/"
-				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				CompileAs="0"/>
+				DefaultCharIsUnsigned="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib"
-				OutputFile="pix_fiducialtrack.dll"
+				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib"
+				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
-				IgnoreAllDefaultLibraries="TRUE"
-				SubSystem="2"/>
+				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
+				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -150,33 +135,17 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="libfidtrack"
-			Filter="">
-			<File
-				RelativePath=".\libfidtrack_fidtrackX.cpp">
-			</File>
-			<File
-				RelativePath=".\libfidtrack_fidtrackX.h">
-			</File>
-			<File
-				RelativePath=".\libfidtrack_segment.cpp">
-			</File>
-			<File
-				RelativePath=".\libfidtrack_segment.h">
-			</File>
-			<File
-				RelativePath=".\libfidtrack_treeidmap.cpp">
-			</File>
-			<File
-				RelativePath=".\libfidtrack_treeidmap.h">
-			</File>
-		</Filter>
 		<File
-			RelativePath=".\pix_fiducialtrack.cpp">
+			RelativePath="..\imageSGI.cpp">
 		</File>
 		<File
-			RelativePath=".\pix_fiducialtrack.h">
+			RelativePath="..\imageSGI.h">
+		</File>
+		<File
+			RelativePath="..\sgiimage.cpp">
+		</File>
+		<File
+			RelativePath="..\sgiimage.h">
 		</File>
 	</Files>
 	<Globals>
