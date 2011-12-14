@@ -50,17 +50,12 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
 	int randInit = 307*1319;
 	initRandom(randInit);
 	
-	m_pixBlock.image = m_imageStruct;
+  //	m_pixBlock.image = m_imageStruct;
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
-	m_pixBlock.image.csize = 4;
-	m_pixBlock.image.format = GL_RGBA;
-	m_pixBlock.image.type = GL_UNSIGNED_BYTE;
+	m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+	m_pixBlock.image.allocate();
 
-	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
-    m_pixBlock.image.csize * sizeof(unsigned char);
-	m_pixBlock.image.allocate(dataSize);
-	memset(m_pixBlock.image.data, 0, dataSize);
 	generateNoise();	
 }
 
@@ -118,7 +113,6 @@ void pix_noise :: initRandom(int seed)
 	for (i=0; i<55; i++) {
 		m_rand[i] = seed = seed * 435898247 + 382842987;//random init
 	}
-	
 }
 
 /////////////////////////////////////////////////////////
@@ -159,15 +153,13 @@ unsigned char pix_noise :: random(void)
 /////////////////////////////////////////////////////////
 void pix_noise :: generateNoise(void)
 {
-	int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize, counter, n;
+	int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
 	unsigned char *buffer = m_pixBlock.image.data;
 	
-	memset(buffer, 0, picturesize*m_pixBlock.image.csize*sizeof(unsigned char));
-	
+  int counter=picturesize;
 	switch (m_mode) {
   case GL_RGB:
-    counter=picturesize;
-    while (counter--) {
+    while (counter-->0) {
       buffer[0] = random(); // red
       buffer[1] = random(); // green
       buffer[2] = random(); // blue
@@ -176,16 +168,14 @@ void pix_noise :: generateNoise(void)
     }
     break;
   case GL_LUMINANCE:
-    counter=picturesize;
-    while (counter--) {
+    while (counter-->0) {
       buffer[0] = buffer[1] = buffer[2] = random();	// rgb
       buffer[3] = 255;									// alpha
       buffer+=4;
     }
     break;
   default:
-    counter=picturesize;
-    while (counter--) {
+    while (counter-->0) {
       buffer[0] = random(); // red
       buffer[1] = random(); // green
       buffer[2] = random(); // blue

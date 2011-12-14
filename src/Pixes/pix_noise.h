@@ -119,7 +119,6 @@ class GEM_EXTERN pix_noise : public GemPixObj
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
-	imageStruct     m_imageStruct;
 };
 
 #endif	// for header file
