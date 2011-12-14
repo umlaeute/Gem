@@ -171,7 +171,7 @@ void pix_noise :: generateNoise(void)
       buffer[0] = random(); // red
       buffer[1] = random(); // green
       buffer[2] = random(); // blue
-      buffer[3] = 0;  		  // alpha
+      buffer[3] = 255;		  // alpha
       buffer+=4;
     }
     break;
@@ -179,7 +179,7 @@ void pix_noise :: generateNoise(void)
     counter=picturesize;
     while (counter--) {
       buffer[0] = buffer[1] = buffer[2] = random();	// rgb
-      buffer[3] = 0;									// alpha
+      buffer[3] = 255;									// alpha
       buffer+=4;
     }
     break;
