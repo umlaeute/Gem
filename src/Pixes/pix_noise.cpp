@@ -40,15 +40,16 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_noise, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEF
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize)
+pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
+  m_banged(false), m_automatic(false),
+  m_mode(GL_RGBA),
+  m_rand_p(0), m_rand_k(24)
 {
 	int dataSize;
 	if (xsize < 1) xsize = 256;
 	if (ysize < 1) ysize = 256;
 	int randInit = 307*1319;
 	initRandom(randInit);
-	m_automatic = false;
-	m_banged = false;
 	
 	m_pixBlock.image = m_imageStruct;
 	m_pixBlock.image.xsize = (int)xsize;
