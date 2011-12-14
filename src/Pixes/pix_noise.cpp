@@ -142,7 +142,7 @@ void pix_noise :: debug()
 // debug generator
 //
 /////////////////////////////////////////////////////////
-unsigned char pix_noise :: pix_random()
+unsigned char pix_noise :: random()
 {
 	// Lagged Fibonacci Generator
 	// S[n] = S[n-p]+S[n-k]
@@ -172,9 +172,9 @@ void pix_noise :: generateNoise()
 		case GL_RGB:
 			counter=picturesize;
 			while (counter--) {
-				buffer[0] = pix_random(); // red
-				buffer[1] = pix_random(); // green
-				buffer[2] = pix_random(); // blue
+				buffer[0] = random(); // red
+				buffer[1] = random(); // green
+				buffer[2] = random(); // blue
 				buffer[3] = 0;					     // alpha
 				buffer+=4;
 			}
@@ -182,7 +182,7 @@ void pix_noise :: generateNoise()
 		case GL_LUMINANCE:
 			counter=picturesize;
 			while (counter--) {
-				buffer[0] = buffer[1] = buffer[2] = pix_random();	// rgb
+				buffer[0] = buffer[1] = buffer[2] = random();	// rgb
 				buffer[3] = 0;									// alpha
 				buffer+=4;
 			}
@@ -193,14 +193,14 @@ void pix_noise :: generateNoise()
 		default:
 			counter=picturesize;
 			while (counter--) {
-				buffer[0] = pix_random(); // red
-				buffer[1] = pix_random(); // green
-				buffer[2] = pix_random(); // blue
-				buffer[3] = pix_random(); // alpha
+				buffer[0] = random(); // red
+				buffer[1] = random(); // green
+				buffer[2] = random(); // blue
+				buffer[3] = random(); // alpha
 				buffer+=4;
 			}
 	}
-	m_pixBlock.newimage = 1;
+	m_pixBlock.newimage = true;
 }
 
 

@@ -82,8 +82,7 @@ protected:
 	void	    	initRandom(int seed);	
 	//////////
 	// compute random
-	unsigned char	pix_random();
-	//////////
+	unsigned char	random(void);
 	// initialize random generator
 	void	    	debug();	
 	
