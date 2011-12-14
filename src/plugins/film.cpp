@@ -63,7 +63,8 @@ namespace gem { namespace plugins {
     virtual bool enumProperties(gem::Properties&readable,
 				gem::Properties&writeable) {
       writeable.clear();
-      readable.clear();	
+      readable.clear();
+	  return false;
     }
     virtual void setProperties(gem::Properties&props) {
     }
