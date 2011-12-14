@@ -207,7 +207,6 @@ void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
   char *extension = (char*)".tif";
   char tmp[MAXPDSTRING];
-  unsigned int size;
 
   if (argc) {
     if (argv->a_type == A_SYMBOL) {

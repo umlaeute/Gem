@@ -327,7 +327,7 @@ void pix_buffer :: enumProperties(void)
   }
 
   std::vector<gem::any>data;
-  int i=0;
+  unsigned int i=0;
 
   std::vector<std::string>keys=props.keys();
 
