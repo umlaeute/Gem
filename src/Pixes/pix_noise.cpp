@@ -185,6 +185,11 @@ void pix_noise :: generateNoise(void)
 	}
 	m_pixBlock.newimage = true;
 }
+void pix_noise :: seed(int seedval)
+{
+  initRandom(seedval);
+  bang();
+}
 
 /////////////////////////////////////////////////////////
 // trigger
@@ -257,7 +262,7 @@ void pix_noise :: cleanPixBlock(void)
 void pix_noise :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
-  CPPEXTERN_MSG1(classPtr, "seed", initRandom, int);
+  CPPEXTERN_MSG1(classPtr, "seed", seed, int);
   CPPEXTERN_MSG0(classPtr, "bang", bang);
 
   CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);

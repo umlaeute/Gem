@@ -88,6 +88,7 @@ class GEM_EXTERN pix_noise : public GemPixObj
 	// trigger new images
 	void	    	bang(void);
 	void	    	autoMess(bool);
+	void        seed(int);
 	void	    	debug(void);
 	
 	//////////
