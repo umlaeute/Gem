@@ -279,7 +279,6 @@ void pix_noise :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "rgb",  RGBMess);
   CPPEXTERN_MSG0(classPtr, "grey", GREYMess);
   CPPEXTERN_MSG0(classPtr, "gray", GREYMess);
-  CPPEXTERN_MSG0(classPtr, "yuv",  YUVMess);
 
   CPPEXTERN_MSG2(classPtr, "set",  SETMess, int, int);
 
