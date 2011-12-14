@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gem", "Gem.vcproj", "{E6CFDE67-C343-44D0-8584-5D82E396D594}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_artoolkit", "..\..\extra\pix_artoolkit\pix_artoolkit.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_artoolkit", "..\..\extra\pix_artoolkit\win-vs2008\pix_artoolkit.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
@@ -142,17 +142,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoHALCON", "..\..\plugin
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_drum", "..\..\extra\pix_drum\pix_drum.vcproj", "{D4A0BA99-E00E-4E4B-97E9-FEB8D5B27881}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_drum", "..\..\extra\pix_drum\win-vs2008\pix_drum.vcproj", "{D4A0BA99-E00E-4E4B-97E9-FEB8D5B27881}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_mano", "..\..\extra\pix_mano\pix_mano.vcproj", "{F9C06216-B28B-40CD-927E-2E63266F64D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_mano", "..\..\extra\pix_mano\win-vs2008\pix_mano.vcproj", "{F9C06216-B28B-40CD-927E-2E63266F64D8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_fiducialtrack", "..\..\extra\pix_fiducialtrack\pix_fiducialtrack.vcproj", "{138446C3-B0DB-4A1F-A30D-71F00C54F596}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_fiducialtrack", "..\..\extra\pix_fiducialtrack\win-vs2008\pix_fiducialtrack.vcproj", "{138446C3-B0DB-4A1F-A30D-71F00C54F596}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
