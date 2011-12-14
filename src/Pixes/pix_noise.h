@@ -1,24 +1,24 @@
 /*-----------------------------------------------------------------
 
- GEM - Graphics Environment for Multimedia
+GEM - Graphics Environment for Multimedia
 
- generate a noise pix texture
+generate a noise pix texture
 
- Copyright (c) 1997-1999 Mark Danks. mark@danks.org
- Copyright (c) Günther Geiger. geiger@epy.co.at
- Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
- For information on usage and redistribution, and for a DISCLAIMER OF ALL
- WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+Copyright (c) Günther Geiger. geiger@epy.co.at
+Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------
-pix_noise
+  pix_noise
 
   2011
   Nicolas Montgermont
   mailto:nicolas_montgermont@yahoo.fr
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_NOISE_H_
 #define _INCLUDE__GEM_PIXES_PIX_NOISE_H_
@@ -30,34 +30,34 @@ pix_noise
 #include "Gem/Cache.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
- pix_noise
+  -------------------------------------------------------------------
+  CLASS
+  pix_noise
 
- Generate a noise texture
+  Generate a noise texture
 
-KEYWORDS
+  KEYWORDS
   pix
 
-DESCRIPTION
-   send a bang to generate a noise texture
+  DESCRIPTION
+  send a bang to generate a noise texture
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class GEM_EXTERN pix_noise : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_noise, GemPixObj);
+  CPPEXTERN_HEADER(pix_noise, GemPixObj);
 
-public:
+ public:
 
 	//////////
 	// Constructor
 	pix_noise(t_floatarg xsize, t_floatarg ysize);
 
-protected:
+ protected:
 
 	//////////
 	// Destructor
-	virtual ~pix_noise();
+	virtual ~pix_noise(void);
 
 	//////////
 	// Do the rendering
@@ -68,35 +68,33 @@ protected:
 	virtual void 	postrender(GemState *state);
 
 	//////////
-	virtual void	startRendering();
+	virtual void	startRendering(void);
 
 	//////////
 	// Clean up the pixBlock
-	void	    	cleanPixBlock();
+	void	    	cleanPixBlock(void);
 	
 	//////////
 	// Generate noise texture
-	void	    	generateNoise();
+	void	    	generateNoise(void);
 	//////////
 	// initialize random generator
 	void	    	initRandom(int seed);	
 	//////////
 	// compute random
 	unsigned char	random(void);
-	// initialize random generator
-	void	    	debug();	
+
+	//////////
+	// trigger new images
 	void	    	bang(void);
 	void	    	autoMess(bool);
+	void	    	debug(void);
 	
 	//////////
-	// Set to RGBA-mode
-	void	    	RGBAMess();
-	//////////
-	// Set to RGB-mode
-	void	    	RGBMess();
-	//////////
-	// Set to GREYSCALE-mode
-	void	    	GREYMess();
+	// Set color mode
+	void	    	RGBAMess(void);
+	void	    	RGBMess(void);
+	void	    	GREYMess(void);
 	//////////
 	// Set a new image size
 	void	    	SETMess(int xsize, int ysize);
