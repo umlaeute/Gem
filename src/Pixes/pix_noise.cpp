@@ -203,19 +203,27 @@ void pix_noise :: generateNoise()
 	m_pixBlock.newimage = true;
 }
 
-
 /////////////////////////////////////////////////////////
-// RGBAMess
+// trigger
 //
 /////////////////////////////////////////////////////////
-void pix_noise :: RGBAMess(void)
+void pix_noise :: bang(void)
 {
-	m_mode = GL_RGBA;
+  m_banged=true;
+}
+void pix_noise :: autoMess(bool automatic)
+{
+  m_automatic=automatic;
 }
 /////////////////////////////////////////////////////////
 // RGBMess
 //
 /////////////////////////////////////////////////////////
+void pix_noise :: RGBAMess(void)
+{
+	m_mode = GL_RGBA;
+  bang();
+}
 void pix_noise :: RGBMess(void)
 {
 	m_mode = GL_RGB;

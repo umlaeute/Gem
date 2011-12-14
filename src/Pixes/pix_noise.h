@@ -85,6 +85,8 @@ protected:
 	unsigned char	random(void);
 	// initialize random generator
 	void	    	debug();	
+	void	    	bang(void);
+	void	    	autoMess(bool);
 	
 	//////////
 	// Set to RGBA-mode
