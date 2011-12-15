@@ -94,11 +94,11 @@ void pix_set :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_set :: DATAMess(int argc, t_atom *argv)
 {
+  m_pixBlock.image.setBlack();
+
   int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize, counter, n;
   unsigned char *buffer = m_pixBlock.image.data;
 
-  //	argc--;
-  memset(buffer, 0, picturesize*m_pixBlock.image.csize*sizeof(unsigned char));
 
   switch (m_mode) {
   case GL_RGB:
