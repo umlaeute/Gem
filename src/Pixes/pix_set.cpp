@@ -45,18 +45,8 @@ pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
   if (xsize < 1) xsize = 256;
   if (ysize < 1) ysize = 256;
 
-  m_pixBlock.image = m_imageStruct;
-  m_pixBlock.image.xsize = (int)xsize;
-  m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.csize = 4;
-  m_pixBlock.image.format = GL_RGBA;
-  m_pixBlock.image.type = GL_UNSIGNED_BYTE;
+  SETMess(xsize, ysize);
 
-  dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
-    m_pixBlock.image.csize * sizeof(unsigned char);
-  m_pixBlock.image.allocate(dataSize);
-
-  memset(m_pixBlock.image.data, 0, dataSize);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("data"));
 }
 
@@ -185,14 +175,9 @@ void pix_set :: SETMess(int xsize, int ysize)
 	m_pixBlock.image.clear();
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
-	m_pixBlock.image.csize = 4;
-	m_pixBlock.image.format = GL_RGBA;
-	m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-
-	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-		* 4 * sizeof(unsigned char);
-	m_pixBlock.image.allocate(dataSize);
-	memset(m_pixBlock.image.data, 0, dataSize);
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pixBlock.image.reallocate();
+  m_pixBlock.image.setBlack();
 }
 
 /////////////////////////////////////////////////////////
