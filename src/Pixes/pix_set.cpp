@@ -39,7 +39,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
+pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
+  m_mode(GL_RGBA)
 {
   int dataSize;
   if (xsize < 1) xsize = 256;
