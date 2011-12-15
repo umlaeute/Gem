@@ -60,7 +60,7 @@ protected:
 
 	//////////
 	// Destructor
-	virtual ~pix_set();
+	virtual ~pix_set(void);
 
 	//////////
 	// Do the rendering
@@ -71,21 +71,21 @@ protected:
 	virtual void 	postrender(GemState *state);
 
 	//////////
-	virtual void	startRendering();
+	virtual void	startRendering(void);
 
 	//////////
 	// Clean up the pixBlock
-	void	    	cleanPixBlock();
+	void	    	cleanPixBlock(void);
 
 	//////////
 	// Set to RGBA-mode
-	void	    	RGBAMess();
+	void	    	RGBAMess(void);
 	//////////
 	// Set to RGB-mode
-	void	    	RGBMess();
+	void	    	RGBMess(void);
 	//////////
 	// Set to GREYSCALE-mode
-	void	    	GREYMess();
+	void	    	GREYMess(void);
 	//////////
 	// Set a new image size
 	void	    	SETMess(int xsize, int ysize);
