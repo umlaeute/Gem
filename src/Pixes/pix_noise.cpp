@@ -41,7 +41,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_noise, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEF
 /////////////////////////////////////////////////////////
 pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   m_banged(false), m_automatic(false),
-  m_mode(GL_RGBA),
+  m_mode(GL_RGBA_GEM),
   m_rand_p(0), m_rand_k(24)
 {
 	int dataSize;
@@ -160,26 +160,26 @@ void pix_noise :: generateNoise(void)
 	switch (m_mode) {
   case GL_RGB:
     while (counter-->0) {
-      buffer[0] = random(); // red
-      buffer[1] = random(); // green
-      buffer[2] = random(); // blue
-      buffer[3] = 255;		  // alpha
+      buffer[chRed]   = random(); // red
+      buffer[chGreen] = random(); // green
+      buffer[chBlue]  = random(); // blue
+      buffer[chAlpha] = 255;		  // alpha
       buffer+=4;
     }
     break;
   case GL_LUMINANCE:
     while (counter-->0) {
-      buffer[0] = buffer[1] = buffer[2] = random();	// rgb
-      buffer[3] = 255;									// alpha
+      buffer[chRed] = buffer[chGreen] = buffer[chBlue] = random();	// rgb
+      buffer[chAlpha] = 255;			// alpha
       buffer+=4;
     }
     break;
   default:
     while (counter-->0) {
-      buffer[0] = random(); // red
-      buffer[1] = random(); // green
-      buffer[2] = random(); // blue
-      buffer[3] = random(); // alpha
+      buffer[chRed]   = random(); // red
+      buffer[chGreen] = random(); // green
+      buffer[chBlue]  = random(); // blue
+      buffer[chAlpha] = random(); // alpha
       buffer+=4;
     }
 	}
