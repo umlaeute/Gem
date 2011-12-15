@@ -115,18 +115,18 @@ void pix_set :: DATAMess(int argc, t_atom *argv)
     n = argc/3;
     counter=(picturesize<n)?picturesize:n;
     while (counter--) {
-      buffer[0] = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
-      buffer[1] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
-      buffer[2] = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
-      buffer[3] = 0;					     // alpha
+      buffer[chRed]   = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
+      buffer[chGreen] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
+      buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
+      buffer[chAlpha] = 0;					     // alpha
       argv+=3; buffer+=4;
     }
     break;
   case GL_LUMINANCE:
     counter=(picturesize<argc)?picturesize:argc;
     while (counter--) {
-      buffer[0] = buffer[1] = buffer[2] = (unsigned char)(255.*atom_getfloat(argv));	// rgb
-      buffer[3] = 0;									// alpha
+      buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(255.*atom_getfloat(argv));	// rgb
+      buffer[chAlpha] = 0;									// alpha
       argv++;	buffer+=4;
     }
     break;
@@ -137,10 +137,10 @@ void pix_set :: DATAMess(int argc, t_atom *argv)
     n = argc/4;
     counter=(picturesize<n)?picturesize:n;
     while (counter--) {
-      buffer[0] = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
-      buffer[1] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
-      buffer[2] = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
-      buffer[3] = (unsigned char)(255.*atom_getfloat(&argv[3])); // alpha
+      buffer[chRed]   = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
+      buffer[chGreen] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
+      buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
+      buffer[chAlpha] = (unsigned char)(255.*atom_getfloat(&argv[3])); // alpha
       argv+=4; buffer+=4;
     }
   }
