@@ -74,7 +74,7 @@ void pix_set :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_set :: startRendering()
 {
-    m_pixBlock.newimage = 1;
+    m_pixBlock.newimage = true;
 }
 
 /////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ void pix_set :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_set :: postrender(GemState *state)
 {
-    m_pixBlock.newimage = 0;
+    m_pixBlock.newimage = false;
     //state->image = NULL;
 }
 
@@ -134,7 +134,7 @@ void pix_set :: DATAMess(int argc, t_atom *argv)
       argv+=4; buffer+=4;
     }
   }
-  m_pixBlock.newimage = 1;
+  m_pixBlock.newimage = true;
 }
 
 
