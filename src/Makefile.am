@@ -4,7 +4,6 @@
 #   LDADD : ADDitional Linker Objects
 # also::  LIBADD (for other libraries) or LDADD (for final executables).
 
-
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 
@@ -13,15 +12,16 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 ## for more info see configure.ac
 AM_LIBTOOLFLAGS = --preserve-dup-deps
 
+DISTCLEANFILES =
+
 SUBDIRS=Gem RTE Utils Base plugins 
 pkglib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
-Gem_la_SOURCES = 
-nodist_EXTRA_Gem_la_SOURCES = dummy.cpp
+Gem_la_SOURCES = Version.cpp
 
 ## some default flags
-Gem_la_CXXFLAGS =
+Gem_la_CXXFLAGS = -DHAVE_VERSION_H
 Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
 if WINDOWS
 Gem_la_LDFLAGS += -no-undefined
@@ -94,6 +94,23 @@ endif
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
+
+
+## version stuff
+.PHONY: FORCE
+
+FORCE:
+
+Version.cpp: version_current.h FORCE
+
+version_current.h: $(srcdir)/version.h.in FORCE
+	$(SHELL) $(srcdir)/pkgversion.sh $< > $@
+
+DISTCLEANFILES += version_current.h
+CHECKUNUSED_IGNORE = version_current.h
+## /version stuff
+
+
 
 ## uha, this is ugly
 $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@: Gem.la
