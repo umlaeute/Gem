@@ -93,7 +93,7 @@ void pix_set :: postrender(GemState *state)
 // DATAMess
 //
 /////////////////////////////////////////////////////////
-void pix_set :: DATAMess(int argc, t_atom *argv)
+void pix_set :: DATAMess(t_symbol*s, int argc, t_atom *argv)
 {
   m_pixBlock.image.setBlack();
 
@@ -197,57 +197,18 @@ void pix_set :: cleanPixBlock()
 /////////////////////////////////////////////////////////
 void pix_set :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBAMessCallback),
-		gensym("RGBA"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBMessCallback),
-		gensym("RGB"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
-		gensym("GREY"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
-		gensym("GRAY"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::YUVMessCallback),
-		gensym("YUV"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBAMessCallback),
-		gensym("rgba"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::RGBMessCallback),
-		gensym("rgb"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
-		gensym("grey"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::GREYMessCallback),
-		gensym("gray"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::YUVMessCallback),
-		gensym("yuv"), A_NULL);
-     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::SETMessCallback),
-		gensym("set"), A_FLOAT, A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
+  CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
+  CPPEXTERN_MSG0(classPtr, "RGB" , RGBMess);
+  CPPEXTERN_MSG0(classPtr, "rgb" , RGBMess);
+  //  CPPEXTERN_MSG0(classPtr, "YUV" , YUVMess);
+  //  CPPEXTERN_MSG0(classPtr, "yuv" , YUVMess);
 
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_set::DATAMessCallback),
-		gensym("data"), A_GIMME, A_NULL);
-}
+  CPPEXTERN_MSG0(classPtr, "GREY", GREYMess);
+  CPPEXTERN_MSG0(classPtr, "grey", GREYMess);
+  CPPEXTERN_MSG0(classPtr, "GRAY", GREYMess);
+  CPPEXTERN_MSG0(classPtr, "gray", GREYMess);
 
-void pix_set :: RGBAMessCallback(void *data)
-{
-	GetMyClass(data)->m_mode=GL_RGBA;
-}
-
-void pix_set :: RGBMessCallback(void *data)
-{
-	GetMyClass(data)->m_mode=GL_RGB;
-}
-
-void pix_set :: GREYMessCallback(void *data)
-{
-	GetMyClass(data)->m_mode=GL_LUMINANCE;
-}
-void pix_set :: YUVMessCallback(void *data)
-{
-  //	GetMyClass(data)->m_mode=GL_YCBCR_422_GEM;
-}
-void pix_set :: SETMessCallback(void *data, t_float x, t_float y)
-{
-    GetMyClass(data)->SETMess((int)x, (int)y);
-}
-
-void pix_set :: DATAMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-    GetMyClass(data)->DATAMess(argc, argv);
+  CPPEXTERN_MSG (classPtr, "data", DATAMess);
+  CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
 }

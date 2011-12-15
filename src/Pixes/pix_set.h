@@ -91,7 +91,7 @@ protected:
 	void	    	SETMess(int xsize, int ysize);
 	//////////
 	// Pass the data
-	void	    	DATAMess(int argc, t_atom *argv);
+	void	    	DATAMess(t_symbol*s, int argc, t_atom *argv);
 
 
 	//-----------------------------------
@@ -105,19 +105,6 @@ protected:
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
-
-private:
-
-	//////////
-	// static member functions
-	static void RGBAMessCallback(void *data);
-	static void RGBMessCallback(void *data);
-	static void GREYMessCallback(void *data);
-	static void SETMessCallback(void *data, t_float x, t_float y);
-	static void YUVMessCallback(void *data);
-
-
-	static void DATAMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 
 #endif	// for header file
