@@ -20,6 +20,7 @@
 #include "Gem/Manager.h"
 #include "Gem/Settings.h"
 #include "Gem/Version.h"
+#include "Gem/Files.h"
 
 #include <stdio.h>
 
@@ -27,7 +28,6 @@
 # include <io.h>
 # include <windows.h>
 # define snprintf _snprintf
-# define close _close
 #else
 # include <unistd.h>
 #endif
@@ -47,9 +47,16 @@ static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christoph Steiner, et al.";
 
 extern "C" {
-#ifdef HAVE_S_STUFF_H
+#if defined HAVE_S_STUFF_H
 # include "s_stuff.h"
 
+# ifndef _WIN32
+  /* MSVC/MinGW cannot really handle these exported symbols */
+#  define GEM_ADDPATH
+# endif
+  
+#endif /* HAVE_S_STUFF_H */
+  
   /* this is ripped from m_imp.h */
   struct _gemclass
   {
@@ -59,20 +66,83 @@ extern "C" {
     /* ... */ /* the real t_class continues here... */
   };
 # define t_gemclass struct _gemclass
+} // for extern "C"
 
-  static void Gem_addownpath(const char*filename) {
+
+
+namespace Gem {
+  static bool checkVersion(const char*dirname, const char*filename, int flags) {
+    t_binbuf*bb=binbuf_new();
+    if(binbuf_read(bb, const_cast<char*>(filename), const_cast<char*>(dirname), flags)) {
+      /* couldn't find the file */
+      return true;
+    }
+
+    int argc = binbuf_getnatom(bb);
+    t_atom*argv=binbuf_getvec(bb);
+
+    const t_symbol* _X=gensym("#X");
+    const t_symbol* _text=gensym("text");
+    const t_symbol* _version=gensym("VERSION");
+
+    std::string gotversion;
+
+     int i;
+    /* search for: "#X text <num> <num> VERSION <string>;" */
+    //              #X text 10 30 VERSION 0.93 \;
+
+    for(i=0; i<argc; i++) {
+      if(A_SYMBOL!=argv[i].a_type)continue;
+      if((_X==atom_getsymbol(argv+i)) && (i+6<argc)) {
+        t_atom*ap=argv+i+1;     
+        if(_text   ==atom_getsymbol(ap+0) &&
+           _version==atom_getsymbol(ap+3) &&
+           A_FLOAT == ap[1].a_type &&
+           A_FLOAT == ap[2].a_type
+           ) {
+          char buf[MAXPDSTRING];
+    
+          if(A_SYMBOL==ap[4].a_type) {
+            gotversion=std::string(atom_getsymbol(ap+4)->s_name);
+          } else {
+            snprintf(buf, MAXPDSTRING-1, "%g", atom_getfloat(ap+4));
+            gotversion=std::string(buf);
+          }
+          break;
+        }
+      }
+    }
+    binbuf_free(bb);
+
+    int major, minor;
+    sscanf(gotversion.c_str(), "%d.%d", &major, &minor);
+
+    bool result=gem::Version::versionCheck(major,minor);
+    if(!result) {
+      error("Gem binary/abstractions version mismatch!");
+      verbose(0, "Gem binary is %d.%d, but Gem abstractions are %s", GEM_VERSION_MAJOR, GEM_VERSION_MINOR, gotversion.c_str());
+      verbose(0, "This usually means that you have a path to another version of Gem stored in your startup preferences");
+      verbose(0, "Consider removing the wrong path!");
+    }
+    
+    return result;
+  }
+
+
+  static void addownpath(const char*filename) {
     char buf[MAXPDSTRING];
     char*bufptr=NULL;
     int fd=-1;
 
     int flags=O_RDONLY;
-# ifdef _WIN32
+#ifdef _WIN32
     flags |= _O_BINARY;
-# endif
+#endif
 
     /* check whether we can find the abstractions (because they are already in Pd's path) */
     if ((fd=canvas_open(NULL, filename, "", buf, &bufptr, MAXPDSTRING, 1))>=0){
-      close(fd);
+      gem::files::close(fd);
+      checkVersion(buf, filename, flags);
       return;
     }
 
@@ -84,25 +154,26 @@ extern "C" {
     snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
     buf[MAXPDSTRING-1]=0;
     if ((fd=open(buf, flags))>=0){
-      close(fd);
+      gem::files::close(fd);
     } else {
       // can't find this abstraction...giving up
+      verbose(0, "please add path to '%s' to your search-path!", filename);
       return;
     }
 
-# ifndef _WIN32
-    /* MSVC/MinGW cannot really handle these non-exported symbols */
+#ifdef GEM_ADDPATH
     verbose(1, "eventually adding Gem path '%s' to search-paths", mypath);
     sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
-# else
-    verbose(0, "please add '%s' to your search-paths!", mypath);
-# endif
-  }
 #else
-  static void Gem_addownpath(const char*filename) {  }
+    verbose(0, "please manually add '%s' to your search-path!", mypath);
 #endif
 
-  GEM_EXTERN void Gem_setup()
+    checkVersion(mypath, filename, flags);
+  }
+}; // namespace
+
+namespace Gem {
+  void setup()
   {
     // startup GEM
     post("GEM: Graphics Environment for Multimedia");
@@ -119,10 +190,16 @@ extern "C" {
     verbose(-1, "GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
     verbose(-1, "GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
 
-
     GemSettings::init();
-    Gem_addownpath("Gem-meta.pd");
+    addownpath("Gem-meta.pd");
     GemMan::initGem();
+  }
+}; // namespace
+
+extern "C" {
+  GEM_EXTERN void Gem_setup()
+  {
+    Gem::setup();
   }
 
   GEM_EXTERN void gem_setup()
@@ -135,4 +212,4 @@ extern "C" {
     Gem_setup();
   }
 
-}   // for extern "C"
+}   // for extern"C"
