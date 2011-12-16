@@ -62,13 +62,6 @@ class GEM_EXTERN GemPathBase : public CPPExtern
         //////////
         // The outlet
         t_outlet        *m_out1;
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	openMessCallback(void *data, t_symbol *arrayname);
-        static void     floatMessCallback(void *data, float n);
 };
 
 #endif	// for header file

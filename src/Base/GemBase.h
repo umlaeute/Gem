@@ -118,11 +118,6 @@ class GEM_EXTERN GemBase : public CPPExtern
   friend class    gemhead;
   static void 	obj_setupCallback(t_class *classPtr);
   static void 	gem_MessCallback(void *, t_symbol *,int, t_atom*);
-  static void 	renderCallback(GemBase *data, GemState *state);
-  static void 	postrenderCallback(GemBase *data, GemState *state);
-#if 1 /*jmz this seems to be for gem2pdp*/
-  static void	stoprenderCallback(GemBase *data);	//DH
-#endif
 
   /* whether the object is internally disabled or not
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
@@ -134,7 +129,6 @@ class GEM_EXTERN GemBase : public CPPExtern
 
  protected:
   enum RenderState getState(void);
-
 };
 
 #endif	// for header file

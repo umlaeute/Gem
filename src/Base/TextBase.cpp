@@ -509,42 +509,22 @@ void TextBase :: stringMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void TextBase :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG(classPtr, "list", textMess);
+  CPPEXTERN_MSG(classPtr, "text", textMess);
 
-  class_addlist(classPtr, reinterpret_cast<t_method>(&TextBase::textMessCallback));
-
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::textMessCallback),
-		  gensym("text"), A_GIMME, A_NULL);
   //-- moocow
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::stringMessCallback),
-		  gensym("string"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG(classPtr, "string", stringMess);
   //-- /moocow
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::precisionMessCallback),
-		  gensym("precision"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::fontNameMessCallback),
-		  gensym("font"), A_SYMBOL, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "font", fontNameMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "ft1", setFontSize, float);
+  CPPEXTERN_MSG1(classPtr, "precision", setPrecision, float);
+  CPPEXTERN_MSG1(classPtr, "linedist", linedistMess, float);
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
 		  gensym("justify"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::fontSizeMessCallback),
-		  gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::linedistMessCallback),
-		  gensym("linedist"), A_FLOAT, A_NULL);
-}
-void TextBase :: textMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-  GetMyClass(data)->textMess(argc, argv);
 }
 
-//-- moocow
-void TextBase :: stringMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-  GetMyClass(data)->stringMess(argc, argv);
-}
-//-- /moocow
-
-void TextBase :: fontNameMessCallback(void *data, t_symbol *s)
-{
-  GetMyClass(data)->fontNameMess(s->s_name);
-}
 void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
 {
   JustifyWidth  wType=CENTER;
@@ -601,21 +581,8 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
   case 3: GetMyClass(data)->setJustification(wType, hType, dType); break;
   }
 }
-void TextBase :: fontSizeMessCallback(void *data, t_floatarg size)
-{
-  GetMyClass(data)->setFontSize(size);
-}
-void TextBase :: precisionMessCallback(void *data, t_floatarg prec)
-{
-  GetMyClass(data)->setPrecision(prec);
-}
-
 void TextBase :: linedistMess(float dist)
 {
   m_dist = dist;
   makeLineDist();
-}
-void TextBase :: linedistMessCallback(void *data, t_floatarg dist)
-{
-  GetMyClass(data)->linedistMess(dist);
 }

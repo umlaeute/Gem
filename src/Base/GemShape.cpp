@@ -225,29 +225,8 @@ void GemShape :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void GemShape :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::linewidthMessCallback),
-    	    gensym("width"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::typeMessCallback),
-    	    gensym("draw"), A_SYMBOL, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::blendMessCallback),
-    	    gensym("blend"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemShape::sizeMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "width", linewidthMess, float);
+  CPPEXTERN_MSG1(classPtr, "draw", typeMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "blend", blendMess, float);
+  CPPEXTERN_MSG1(classPtr, "ft1", sizeMess, float);
 }
-void GemShape :: linewidthMessCallback(void *data, t_floatarg linewidth)
-{
-    GetMyClass(data)->linewidthMess((float)linewidth);
-}
-void GemShape :: typeMessCallback(void *data, t_symbol *type)
-{
-    GetMyClass(data)->typeMess(type);
-}
-void GemShape :: sizeMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->sizeMess((float)size);
-}
-void GemShape :: blendMessCallback(void *data, t_floatarg blend)
-{
-    GetMyClass(data)->blendMess((float)blend);
-}
-
