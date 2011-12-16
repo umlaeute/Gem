@@ -100,17 +100,6 @@ void scale :: vectorMess(float x, float y, float z)
 /////////////////////////////////////////////////////////
 void scale :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&scale::distanceMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&scale::vectorMessCallback),
-    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "ft1", distanceMess, float);
+  CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
 }
-void scale :: distanceMessCallback(void *data, t_floatarg distance)
-{
-    GetMyClass(data)->distanceMess((float)distance);
-}
-void scale :: vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->vectorMess((float)x, (float)y, (float)z);
-}
-

@@ -134,28 +134,8 @@ void ambientRGB :: aMess(float val)
 /////////////////////////////////////////////////////////
 void ambientRGB :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&ambientRGB::rMessCallback),
-    	    gensym("rVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&ambientRGB::gMessCallback),
-    	    gensym("gVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&ambientRGB::bMessCallback),
-    	    gensym("bVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&ambientRGB::aMessCallback),
-    	    gensym("aVal"), A_FLOAT, A_NULL);
-}
-void ambientRGB :: rMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->rMess((float)val);
-}
-void ambientRGB :: gMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->gMess((float)val);
-}
-void ambientRGB :: bMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->bMess((float)val);
-}
-void ambientRGB :: aMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->aMess((float)val);
+  CPPEXTERN_MSG1(classPtr, "rVal", rMess, float);
+  CPPEXTERN_MSG1(classPtr, "gVal", gMess, float);
+  CPPEXTERN_MSG1(classPtr, "bVal", bMess, float);
+  CPPEXTERN_MSG1(classPtr, "aVal", aMess, float);
 }

@@ -84,11 +84,6 @@ void shearXY :: shearMess(float val)
 /////////////////////////////////////////////////////////
 void shearXY :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&shearXY::shearMessCallback),
-    	    gensym("shearVal"), A_FLOAT, A_NULL);
-}
-void shearXY :: shearMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->shearMess((float)val);
+  CPPEXTERN_MSG1(classPtr, "shearVal", shearMess, float);
 }
 

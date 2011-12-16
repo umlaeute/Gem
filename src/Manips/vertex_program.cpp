@@ -403,25 +403,8 @@ void vertex_program :: printInfo()
 /////////////////////////////////////////////////////////
 void vertex_program :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::openMessCallback),
-                  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::printMessCallback),
-                  gensym("print"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::paramMessCallback),
-                  gensym("parameter"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_program::paramMessCallback),
-                  gensym("param"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_NULL);
-}
-void vertex_program :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-void vertex_program :: printMessCallback(void *data)
-{
-	GetMyClass(data)->printInfo();
-}
-
-void vertex_program :: paramMessCallback(void *data, t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4)
-{
-  GetMyClass(data)->paramMess(static_cast<int>(envNum), param1, param2, param3, param4);
+  CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
+  CPPEXTERN_MSG0(classPtr, "print", printInfo);
+  CPPEXTERN_MSG5(classPtr, "param", paramMess, int, t_float, t_float, t_float, t_float);
+  CPPEXTERN_MSG5(classPtr, "parameter", paramMess, int, t_float, t_float, t_float, t_float);
 }

@@ -88,6 +88,8 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // shader message
   virtual void 	shaderMess(int argc, t_atom *argv);
+  void 	shaderMess(t_symbol*, int argc, t_atom *argv) { shaderMess(argc, argv); }
+  virtual void 	linkMess(t_symbol*, int, t_atom *);
 
   //////////
   // Do the linking
@@ -145,16 +147,10 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // static member functions
   static void paramMessCallback (void *data, t_symbol *, int, t_atom*);
-  static void shaderMessCallback (void *data, t_symbol *, int, t_atom*);
-  static void openMessCallback   (void *data, t_symbol *filename);
-  static void linkCallback  (void *, t_symbol*, int, t_atom*);
-  static void printMessCallback  (void *);
 
   static void intypeMessCallback  (void *, t_symbol*, int, t_atom*);
   static void outtypeMessCallback  (void *, t_symbol*, int, t_atom*);
   static void typeMessCallback  (void *, t_symbol*, int, t_atom*);
-  static void outverticesMessCallback  (void *, t_floatarg);
-
 };
 
 #endif	// for header file

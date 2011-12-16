@@ -84,14 +84,6 @@ class GEM_EXTERN alpha : public GemBase
     	void	    	depthtestMess(int i);
 
     	t_inlet *m_inlet;
-   private:
-
-    	//////////
-    	// static member functions
-    	static void 	alphaMessCallback(void *data, t_floatarg alpha);
-        static void     testMessCallback(void *data, t_floatarg alphaTest);
-        static void     depthtestMessCallback(void*, t_floatarg);
-        static void     funMessCallback(void *data, t_floatarg alphaTest);
 };
 
 #endif	// for header file

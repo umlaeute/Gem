@@ -68,13 +68,6 @@ class GEM_EXTERN translate : public GemBase
     	//////////
     	// Vector changed
     	void	    	vectorMess(float x, float y, float z);
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	distanceMessCallback(void *data, t_floatarg distance);
-    	static void 	vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
 };
 
 #endif	// for header file

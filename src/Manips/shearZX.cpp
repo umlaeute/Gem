@@ -85,11 +85,7 @@ void shearZX :: shearMess(float val)
 /////////////////////////////////////////////////////////
 void shearZX :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&shearZX::shearMessCallback),
-    	    gensym("shearVal"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "shearVal", shearMess, float);
 }
-void shearZX :: shearMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->shearMess((float)val);
-}
+
 

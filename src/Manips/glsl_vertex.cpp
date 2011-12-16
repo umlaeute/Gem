@@ -335,16 +335,6 @@ void glsl_vertex :: printInfo()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_vertex::openMessCallback),
-                  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_vertex::printMessCallback),
-                  gensym("print"), A_NULL);
-}
-void glsl_vertex :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-void glsl_vertex :: printMessCallback(void *data)
-{
-  GetMyClass(data)->printInfo();
+  CPPEXTERN_MSG0(classPtr, "print", printInfo);
+  CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
 }

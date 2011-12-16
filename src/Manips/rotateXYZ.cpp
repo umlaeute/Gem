@@ -106,23 +106,8 @@ void rotateXYZ :: zMess(float val)
 /////////////////////////////////////////////////////////
 void rotateXYZ :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&rotateXYZ::xMessCallback),
-    	    gensym("xVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&rotateXYZ::yMessCallback),
-    	    gensym("yVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&rotateXYZ::zMessCallback),
-    	    gensym("zVal"), A_FLOAT, A_NULL);
-}
-void rotateXYZ :: xMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->xMess((float)val);
-}
-void rotateXYZ :: yMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->yMess((float)val);
-}
-void rotateXYZ :: zMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->zMess((float)val);
+  CPPEXTERN_MSG1(classPtr, "xVal", xMess, float);
+  CPPEXTERN_MSG1(classPtr, "yVal", yMess, float);
+  CPPEXTERN_MSG1(classPtr, "zVal", zMess, float);
 }
 

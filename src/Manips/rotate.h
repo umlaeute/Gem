@@ -68,13 +68,6 @@ class GEM_EXTERN rotate : public GemBase
     	//////////
     	// Vector changed
     	void	    	vectorMess(float x, float y, float z);
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	angleMessCallback(void *data, t_floatarg angle);
-    	static void 	vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
 };
 
 #endif	// for header file

@@ -96,13 +96,6 @@ class GEM_EXTERN glsl_geometry : public GemBase
 
 
   t_outlet		*m_outShaderID;
-
- protected:
-
-  //////////
-  // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
-  static void printMessCallback  (void *);
 };
 
 #endif	// for header file
