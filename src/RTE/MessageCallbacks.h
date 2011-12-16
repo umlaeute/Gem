@@ -97,7 +97,7 @@ namespace gem {
   struct MSG_CONCAT3(CallbackClass, fun, line) {                \
     static void callback(void*data, gem::RteMess::TypeTemplate<typ0>::proxyType v0) \
       { GetMyClass(data)->fun(gem::RteMess::TypeTemplate<typ0>::cast(v0)); } \
-    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), gem::RteMess::TypeTemplate<typ0>::atomtype_id(),  A_NULL); } \
+    MSG_CONCAT3(CallbackClass, fun, line) (t_class*c, std::string s) { class_addmethod(c, reinterpret_cast<t_method>(callback), gensym(s.c_str()), ("symbol"==s)?A_SYMBOL:(gem::RteMess::TypeTemplate<typ0>::atomtype_id()),  A_NULL); } \
   };                                                                    \
   MSG_CONCAT3(CallbackClass, fun, line)  MSG_CONCAT3(CallbackClassInstance, fun, line) (cp, selector)
 #define CPPEXTERN_MSG2_(line, cp, selector, fun, typ0, typ1)    \
