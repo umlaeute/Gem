@@ -48,7 +48,7 @@ world_light :: world_light(t_floatarg lightNum)
   m_change = 1;
 
   // create the color inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("clrlist"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
 }
 
 ////////////////////////////////////////////////////////
@@ -101,6 +101,25 @@ void world_light :: lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLf
   m_color[3] = alpha;
   m_change = 1;
   setModified();
+}
+void world_light :: lightColorMess(t_symbol*s, int argc, t_atom*argv) {
+  GLfloat red=1.f, green=1.f, blue=1.f, alpha=1.f;
+  switch(argc){
+  case 4:
+    alpha=atom_getfloat(argv+3);
+  case 3:
+    red=atom_getfloat(argv);
+    green=atom_getfloat(argv+1);
+    blue=atom_getfloat(argv+2);
+    lightColorMess(red, green, blue, alpha);
+    break;
+  case 1:
+    red=atom_getfloat(argv);
+    lightColorMess(red, red, red, 1.f);
+    break;
+  default:
+    error("\"%s\" must be 1, 3 or 4 parameters", s->s_name);
+  }
 }
 
 ////////////////////////////////////////////////////////
@@ -179,33 +198,7 @@ void world_light :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void world_light :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&world_light::lightColorMessCallback),
-                  gensym("clrlist"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&world_light::debugMessCallback),
-                  gensym("debug"), A_FLOAT, A_NULL);
-  class_addfloat(classPtr, reinterpret_cast<t_method>(&world_light::lightOnOffMessCallback));
-}
-void world_light :: lightColorMessCallback(void *data, t_symbol*,int argc, t_atom*argv)
-{
-  GLfloat red=1.f, green=1.f, blue=1.f, alpha=1.f;
-  switch(argc){
-  case 4:
-    alpha=atom_getfloat(argv+3);
-  case 3:
-    red=atom_getfloat(argv);
-    green=atom_getfloat(argv+1);
-    blue=atom_getfloat(argv+2);
-    GetMyClass(data)->lightColorMess(red, green, blue, alpha);
-    break;
-  default:
-    GetMyClass(data)->error("\"color\" must be 3 or 4 parameters");
-  }
-}
-void world_light :: lightOnOffMessCallback(void *data, t_floatarg n)
-{
-  GetMyClass(data)->lightOnOffMess(static_cast<int>(n));
-}
-void world_light :: debugMessCallback(void *data, t_floatarg n)
-{
-  GetMyClass(data)->debugMess(static_cast<int>(n));
+  CPPEXTERN_MSG (classPtr, "color", lightColorMess);
+  CPPEXTERN_MSG1(classPtr, "debug", debugMess, int);
+  CPPEXTERN_MSG1(classPtr, "float", lightOnOffMess, int);
 }

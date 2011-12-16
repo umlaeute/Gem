@@ -67,6 +67,7 @@ class GEM_EXTERN world_light : public GemBase
   //////////
   // Set the light's color
   void            lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+  void            lightColorMess(t_symbol*, int, t_atom*);
 
   //////////
   // If you care about the start of rendering
@@ -106,14 +107,6 @@ class GEM_EXTERN world_light : public GemBase
 
   //////////
   GLUquadricObj   *m_thing;
-
- private:
-
-  //////////
-  // Static member functions
-  static void     lightColorMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void     lightOnOffMessCallback(void *data, t_floatarg n);
-  static void     debugMessCallback(void *data, t_floatarg n);
 };
 
 #endif  // for header file
