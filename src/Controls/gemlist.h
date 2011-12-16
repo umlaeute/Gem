@@ -64,7 +64,7 @@ class GEM_EXTERN gemlist : public GemBase
 
   virtual void ticktimeMess(t_float ticktime);
   virtual void lightingMess(bool state);
-  virtual void drawMess(t_atom arg);
+  virtual void drawMess(t_atom&arg);
 
 
   //////////
@@ -87,11 +87,7 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   // Static member callbacks
-  static void		triggerMessCallback(void *data);
   static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
-
-  static void 	ticktimeMessCallback(void *data, t_floatarg);
-  static void 	lightingMessCallback(void *data, t_floatarg);
   static void 	drawMessCallback(void *data, int,t_atom*);
 };
 

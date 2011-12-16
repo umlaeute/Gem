@@ -238,11 +238,11 @@ void gemreceive :: receive(t_symbol*s, int argc, t_atom*argv)
 }
 
 
-void gemreceive :: nameMess(t_symbol*s) {
+void gemreceive :: nameMess(std::string s) {
   if(m_name) {
     unbind(this, m_name);
   }
-  m_name=s;
+  m_name=gensym(s.c_str());
   bind(this, m_name, m_priority);
 }
 
@@ -260,9 +260,8 @@ void gemreceive :: priorityMess(t_float f) {
 /////////////////////////////////////////////////////////
 void gemreceive :: obj_setupCallback(t_class *classPtr)
 {
-  class_addsymbol(classPtr, reinterpret_cast<t_method>(gemreceive::nameCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(gemreceive::priorityCallback), gensym(""), A_FLOAT, 0);
-
+  CPPEXTERN_MSG1(classPtr, "symbol", nameMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "", priorityMess, t_float);
 
   gemreceive_proxy_class = class_new(0, 0, 0,
                                      sizeof(t_gemreceive_proxy),
@@ -285,15 +284,4 @@ void gemreceive :: proxyCallback(t_gemreceive_proxy*p, t_symbol*s, int argc, t_a
       o->receive(s, argc, argv);
     }
   }
-}
-
-
-
-void gemreceive :: nameCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->nameMess(s);
-}
-void gemreceive :: priorityCallback(void *data, t_float f)
-{
-  GetMyClass(data)->priorityMess(f);
 }
