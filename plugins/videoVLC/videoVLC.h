@@ -15,10 +15,12 @@ namespace gem { namespace plugins {
     class GEM_EXTERN videoVLC : public video {
  private:
    std::string m_name;
-   bool m_open;
+   std::string m_devname;
+
    pixBlock m_pixBlock;
    Properties m_props;
    unsigned int m_type;
+
   public:
    videoVLC(void);
 
@@ -59,13 +61,17 @@ namespace gem { namespace plugins {
    virtual bool stop(void);
 
 
-   virtual void prepareFrame(uint8_t*&, int);
-   virtual void processFrame(uint8_t*, int, int, int, int, mtime_t);
-
+   virtual void*  lockFrame(void**plane);
+   virtual void unlockFrame(void*picture, void*const*plane);
                   private:
-   static void prepareCB(void*, uint8_t**, int);
-   static void processCB(void*, uint8_t*, int, int, int, int, mtime_t);
 
+
+   static void  *lockCB(void*, void**plane);
+   static void unlockCB(void*, void*picture, void*const*plane);
+   static void displayCB(void*, void*picture);
+
+   libvlc_instance_t*m_instance;
+   libvlc_media_player_t*m_mediaplayer;
 };
 };}; // namespace
 

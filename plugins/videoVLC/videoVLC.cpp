@@ -16,12 +16,18 @@
 #endif
 #ifdef HAVE_LIBVLC
 
+#include <stdio.h>
+#ifdef _MSC_VER
+# define snprintf _snprintf
+#endif
 
 #include "videoVLC.h"
 #include "plugins/PluginFactory.h"
 
+#include "Gem/Exception.h"
 #include "Gem/RTE.h"
 
+#define MAXVLCSTRING 1024
 
 using namespace gem::plugins;
 
@@ -29,9 +35,22 @@ REGISTER_VIDEOFACTORY("vlc", videoVLC);
 
 videoVLC::videoVLC() :
   m_name(std::string("vlc")),
-  m_open(false),
-  m_type(0)
+  m_type(0),
+  m_instance(NULL),
+  m_mediaplayer(NULL)
 {
+  const char * const vlc_args[] = {
+    //    "--plugin-path=c:\\program files\\videolan\\vlc\\plugins",
+    "-I", "dummy", /* Don't use any interface */
+    "--ignore-config", /* Don't use VLC's config */
+    "--quiet",
+    //    "--sout=#transcode{vcodec=RV24,acodec=s16l}:smem",
+  };
+  m_instance=libvlc_new (sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+  if(!m_instance) {
+    throw(GemException("couldn't initialize libVLC"));
+  }
+
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
@@ -39,17 +58,70 @@ videoVLC::videoVLC() :
 }
 
 videoVLC::~videoVLC(void) {
+  if(m_instance)
+    libvlc_release(m_instance);
+
+}
+void videoVLC::close(void) {
+  if(m_mediaplayer)
+    libvlc_media_player_release(m_mediaplayer);
+  m_mediaplayer=NULL;
 }
 
 bool videoVLC::open(gem::Properties&props) {
   setProperties(props);
-  return (m_open);
+
+  if(m_mediaplayer)close();
+
+  if(m_devname.empty())
+    return false;
+
+  post("opening %s", m_devname.c_str());
+  libvlc_media_t*media = libvlc_media_new_location (m_instance, m_devname.c_str());
+  post("opening as location returned %p", media);
+  if(!media)
+    media = libvlc_media_new_path (m_instance, m_devname.c_str());
+  post("opening as path returned %p", media);
+
+  if(!media)
+    return false;
+
+  char s[MAXVLCSTRING];
+
+  libvlc_media_add_option(media,":noaudio");
+  libvlc_media_add_option(media,":no-video-title-show");
+#if 0
+  snprintf(s, MAXVLCSTRING, ":sout-smem-video-prerender-callback=%lld",(long long int)(intptr_t)prepareCB);
+  s[MAXVLCSTRING-1]=0;
+  libvlc_media_add_option(media,s);
+  sprintf(s,":sout-smem-video-postrender-callback=%lld",(long long int)(intptr_t)processCB);
+  libvlc_media_add_option(media,s);
+  sprintf(s,":sout-smem-video-data=%lld",(long long int)(intptr_t)this );
+  libvlc_media_add_option(media,s);
+#endif
+
+  m_mediaplayer=libvlc_media_player_new_from_media(media);
+  libvlc_media_release(media);
+
+  libvlc_video_set_callbacks(m_mediaplayer,
+                             lockCB,
+                             unlockCB,
+                             displayCB,
+                             this);
+
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_pixBlock.image.reallocate();
+  m_pixBlock.image.setWhite();
+
+  libvlc_video_set_format(m_mediaplayer,
+                          "RV32",
+                          m_pixBlock.image.xsize,
+                          m_pixBlock.image.ysize,
+                          m_pixBlock.image.xsize*m_pixBlock.image.csize);
+  return true;
 }
 
 pixBlock*videoVLC::getFrame(void) {
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
-
   return &m_pixBlock;
 }
 
@@ -60,28 +132,23 @@ std::vector<std::string>videoVLC::enumerate(void) {
 }
 
 bool videoVLC::setDevice(int ID) {
-
-  return m_open;
+  m_devname.clear();
+  return false;
 }
 bool videoVLC::setDevice(std::string device) {
-
-  return m_open;
+  m_devname=device;
+  return true;
 }
 bool videoVLC::enumProperties(gem::Properties&readable,
 			       gem::Properties&writeable) {
   readable.clear();
   writeable.clear();
 
-  /*
   writeable.set("width", 64);  readable.set("width", 64);
   writeable.set("height", 64); readable.set("height", 64);
-
-  writeable.set("type", std::string("noise"));
-  */
   return false;
 }
 void videoVLC::setProperties(gem::Properties&props) {
-#if 0
   m_props=props;
 
   double d;
@@ -93,21 +160,8 @@ void videoVLC::setProperties(gem::Properties&props) {
     if(d>0)
       m_pixBlock.image.ysize = d;
   }
-  std::string s;
-  if(props.get("type", s)) {
-    if("noise"==s)
-      m_type=0;
-    else if("red"==s)
-      m_type=1;
-    else if("green"==s)
-      m_type=2;
-    else if("blue"==s)
-      m_type=3;
-  }
-#endif
 }
 void videoVLC::getProperties(gem::Properties&props) {
-#if 0
   std::vector<std::string>keys=props.keys();
   double d;
   int i;
@@ -119,7 +173,6 @@ void videoVLC::getProperties(gem::Properties&props) {
       props.set(keys[i], m_pixBlock.image.ysize);
     }
   }
-#endif
 }
 
 std::vector<std::string>videoVLC::dialogs(void) {
@@ -139,28 +192,46 @@ const std::string videoVLC::getName(void) {
 }
 
 
-void videoVLC::close(void) {}
-bool videoVLC::start(void) {return false;}
-bool videoVLC::stop (void) {return false;}
-
-
-void videoVLC::prepareFrame( uint8_t*&pp_pixel_buffer , int size ) {
-  pp_pixel_buffer=NULL;
+bool videoVLC::start(void) {
+  int ret=-1;
+  if(m_mediaplayer) {
+    int ret=libvlc_media_player_play(m_mediaplayer);
+  }
+  return (0!=ret);
 }
-void videoVLC::processFrame(uint8_t*data, int width, int heigth, int pitch, int size, mtime_t pts) {
-
+bool videoVLC::stop (void) {
+  if(!m_mediaplayer)
+    return false;
+  libvlc_media_player_stop(m_mediaplayer);
+  return true;
 }
 
-void videoVLC::prepareCB( void* p_video_data, uint8_t** pp_pixel_buffer , int size ) {
-  videoVLC*obj=(videoVLC*)p_video_data;
+void*videoVLC::lockFrame(void**plane ) {
+  *plane=m_pixBlock.image.data;
+  post("prepareFrame %p @ %p", *plane, plane);
+
+  return *plane;
+}
+void videoVLC::unlockFrame(void*picture, void*const*plane) {
+  post("processFrame %p\t%p", picture, plane);
+}
+void*videoVLC::lockCB(void*opaque, void**plane ) {
+  post("   lockCB: %p", opaque);
+  videoVLC*obj=(videoVLC*)opaque;
   if(obj)
-    obj->prepareFrame(*pp_pixel_buffer, size);
+    return obj->lockFrame(plane);
+  
+  return NULL;
 }
-void videoVLC::processCB(void*p_video_data, uint8_t*data, int width, int heigth, int pitch, int size, mtime_t pts) {
-  videoVLC*obj=(videoVLC*)p_video_data;
+void videoVLC::unlockCB(void*opaque, void*picture, void*const*plane) {
+  post(" unlockCB: %p", opaque);
+  videoVLC*obj=(videoVLC*)opaque;
   if(obj)
-    obj->processFrame(data, width, heigth, pitch, size, pts);
+    obj->unlockFrame(picture, plane);
 }
-
+void videoVLC::displayCB(void*opaque, void*picture) {
+  post("displayCB: %p -> %p", opaque, picture);
+  videoVLC*obj=(videoVLC*)opaque;
+}
 
 #endif /* HAVE_LIBVLC */
