@@ -106,7 +106,7 @@ bool videoVLC::open(gem::Properties&props) {
   libvlc_video_set_callbacks(m_mediaplayer,
                              lockCB,
                              unlockCB,
-                             displayCB,
+                             NULL,
                              this);
 
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
@@ -208,12 +208,30 @@ bool videoVLC::stop (void) {
 
 void*videoVLC::lockFrame(void**plane ) {
   *plane=m_pixBlock.image.data;
-  post("prepareFrame %p @ %p", *plane, plane);
+  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
-  return *plane;
+  return NULL;
 }
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
-  post("processFrame %p\t%p", picture, plane);
+  post("processFrame %p\t%p", picture, *plane);
+
+  static unsigned char value=0;
+  value++;
+  if(value>=255)
+    value=0;
+
+  int w=64, h=64;
+  if(w>=m_pixBlock.image.xsize)w=m_pixBlock.image.xsize-1;
+  if(h>=m_pixBlock.image.ysize)h=m_pixBlock.image.ysize-1;
+
+  int x, y;
+  for(x=0; x<w; x++) {
+    for(y=0; y<h; y++) {
+      m_pixBlock.image.SetPixel(y, x, chRed, value);
+    }
+  }
+
+  m_pixBlock.newimage=true;
 }
 void*videoVLC::lockCB(void*opaque, void**plane ) {
   post("   lockCB: %p", opaque);
