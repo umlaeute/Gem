@@ -102,7 +102,7 @@ bool videoVLC::open(gem::Properties&props) {
   m_pixBlock.image.setWhite();
 
   libvlc_video_set_format(m_mediaplayer,
-                          "RV32",
+                          "RGBA",
                           m_pixBlock.image.xsize,
                           m_pixBlock.image.ysize,
                           m_pixBlock.image.xsize*m_pixBlock.image.csize);
