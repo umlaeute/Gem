@@ -3,6 +3,7 @@
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
+#include "Gem/ThreadMutex.h"
 
 #include <vlc/vlc.h>
 #include <stdarg.h>
@@ -16,6 +17,7 @@ namespace gem { namespace plugins {
  private:
    std::string m_name;
    std::string m_devname;
+   gem::thread::Mutex m_mutex;
 
    pixBlock m_pixBlock;
    Properties m_props;
@@ -51,7 +53,7 @@ namespace gem { namespace plugins {
 
    virtual bool isThreadable(void) {return true;}
    virtual bool reset(void) {return true;}
-   virtual void releaseFrame(void) {}
+   virtual void releaseFrame(void);
    virtual bool grabAsynchronous(bool) {return true;}
    virtual bool	dialog(std::vector<std::string>names=std::vector<std::string>()) {return false;}
    virtual bool	    	setColor(int) {return false;}

@@ -76,12 +76,9 @@ bool videoVLC::open(gem::Properties&props) {
   if(m_devname.empty())
     return false;
 
-  post("opening %s", m_devname.c_str());
   libvlc_media_t*media = libvlc_media_new_location (m_instance, m_devname.c_str());
-  post("opening as location returned %p", media);
   if(!media)
     media = libvlc_media_new_path (m_instance, m_devname.c_str());
-  post("opening as path returned %p", media);
 
   if(!media)
     return false;
@@ -90,15 +87,6 @@ bool videoVLC::open(gem::Properties&props) {
 
   libvlc_media_add_option(media,":noaudio");
   libvlc_media_add_option(media,":no-video-title-show");
-#if 0
-  snprintf(s, MAXVLCSTRING, ":sout-smem-video-prerender-callback=%lld",(long long int)(intptr_t)prepareCB);
-  s[MAXVLCSTRING-1]=0;
-  libvlc_media_add_option(media,s);
-  sprintf(s,":sout-smem-video-postrender-callback=%lld",(long long int)(intptr_t)processCB);
-  libvlc_media_add_option(media,s);
-  sprintf(s,":sout-smem-video-data=%lld",(long long int)(intptr_t)this );
-  libvlc_media_add_option(media,s);
-#endif
 
   m_mediaplayer=libvlc_media_player_new_from_media(media);
   libvlc_media_release(media);
@@ -122,7 +110,13 @@ bool videoVLC::open(gem::Properties&props) {
 }
 
 pixBlock*videoVLC::getFrame(void) {
+  m_mutex.lock();
   return &m_pixBlock;
+}
+
+void videoVLC::releaseFrame(void) {
+  //  post("release frame");
+  m_mutex.unlock();
 }
 
 std::vector<std::string>videoVLC::enumerate(void) {
@@ -207,34 +201,19 @@ bool videoVLC::stop (void) {
 }
 
 void*videoVLC::lockFrame(void**plane ) {
+  m_mutex.lock();
   *plane=m_pixBlock.image.data;
-  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
+  //  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
   return NULL;
 }
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
-  post("processFrame %p\t%p", picture, *plane);
-
-  static unsigned char value=0;
-  value++;
-  if(value>=255)
-    value=0;
-
-  int w=64, h=64;
-  if(w>=m_pixBlock.image.xsize)w=m_pixBlock.image.xsize-1;
-  if(h>=m_pixBlock.image.ysize)h=m_pixBlock.image.ysize-1;
-
-  int x, y;
-  for(x=0; x<w; x++) {
-    for(y=0; y<h; y++) {
-      m_pixBlock.image.SetPixel(y, x, chRed, value);
-    }
-  }
-
+  //  post("processFrame %p\t%p", picture, *plane);
   m_pixBlock.newimage=true;
+  m_mutex.unlock();
 }
 void*videoVLC::lockCB(void*opaque, void**plane ) {
-  post("   lockCB: %p", opaque);
+  //  post("   lockCB: %p", opaque);
   videoVLC*obj=(videoVLC*)opaque;
   if(obj)
     return obj->lockFrame(plane);
@@ -242,13 +221,13 @@ void*videoVLC::lockCB(void*opaque, void**plane ) {
   return NULL;
 }
 void videoVLC::unlockCB(void*opaque, void*picture, void*const*plane) {
-  post(" unlockCB: %p", opaque);
+  //  post(" unlockCB: %p", opaque);
   videoVLC*obj=(videoVLC*)opaque;
   if(obj)
     obj->unlockFrame(picture, plane);
 }
 void videoVLC::displayCB(void*opaque, void*picture) {
-  post("displayCB: %p -> %p", opaque, picture);
+  //  post("displayCB: %p -> %p", opaque, picture);
   videoVLC*obj=(videoVLC*)opaque;
 }
 
