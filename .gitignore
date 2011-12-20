@@ -39,3 +39,11 @@ Gem.pc
 # some are generated, some not
 Makefile
 !build/autoconf/Makefile
+## w32 build projects
+build/win-vs*/*
+plugins/*/win-vs*/*
+extra/*/win-vs*/*
+!*.dsw
+!*.dsp
+!*.sln
+!*.vcproj
