@@ -53,6 +53,7 @@ AC_CONFIG_FILES([plugins/videoUNICAP/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
+AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
@@ -327,6 +328,12 @@ dnl GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
 GEM_CHECK_LIB([vfw32], [vfw32], [main],,,, [video input])
 # is this needed?
 dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
+
+# VLC
+GEM_CHECK_LIB([libvlc], [vlc], [libvlc_clearerr],,,, [video input])
+
+
+
 
 AC_ARG_WITH([default-font],
             AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
