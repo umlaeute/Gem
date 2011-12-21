@@ -33,7 +33,7 @@ using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("vlc", videoVLC);
 
-videoVLC::videoVLC() :
+videoVLC::videoVLC(void) :
   m_name(std::string("vlc")),
   m_type(0),
   m_instance(NULL),
