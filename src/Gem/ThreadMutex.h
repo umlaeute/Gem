@@ -18,7 +18,7 @@ LOG
 
 namespace gem {
   namespace thread {
-    GEM_EXTERN class Mutex {
+    class GEM_EXTERN Mutex {
     private:
       class PIMPL;
       PIMPL*m_pimpl;
