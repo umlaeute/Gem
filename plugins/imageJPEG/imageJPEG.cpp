@@ -32,6 +32,10 @@ extern "C"
 # endif
 # undef EXTERN
 
+#if 1
+# define HAVE_BOOLEAN
+#endif
+
 # include "jpeglib.h"
 #include <setjmp.h>
 
