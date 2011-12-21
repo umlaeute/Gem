@@ -330,7 +330,7 @@ GEM_CHECK_LIB([vfw32], [vfw32], [main],,,, [video input])
 dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
 
 # VLC
-GEM_CHECK_LIB([libvlc], [vlc], [libvlc_clearerr],,,, [video input])
+GEM_CHECK_LIB([libvlc], [vlc], [libvlc_video_set_callbacks],,,, [video input])
 
 
 
