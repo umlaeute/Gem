@@ -1787,6 +1787,8 @@ GEM_EXTERN void imageStruct::fixUpDown(void) {
     memcpy(line1, line , linewidth);
   }
 
+  delete[]line;
+
   upsidedown=false;
 }
 
