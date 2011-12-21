@@ -18,7 +18,7 @@ LOG
 #include "Gem/WorkerThread.h"
 
 namespace gem { namespace thread {
-    GEM_EXTERN class SynchedWorkerThread : public WorkerThread {
+    class GEM_EXTERN SynchedWorkerThread : public WorkerThread {
 		  private:
       class PIMPL;
       PIMPL*m_pimpl;

@@ -18,7 +18,7 @@ LOG
 #include "Gem/ExportDef.h"
 
 namespace gem { namespace thread {
-    GEM_EXTERN class WorkerThread {
+    class GEM_EXTERN WorkerThread {
     private:
       class PIMPL;
       PIMPL*m_pimpl;

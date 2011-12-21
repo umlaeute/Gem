@@ -18,7 +18,7 @@
 
 namespace gem {
   namespace RTE {
-    GEM_EXTERN class Array {
+    class GEM_EXTERN Array {
     private:
       class PIMPL;
       PIMPL*m_pimpl;

@@ -20,7 +20,7 @@ struct _symbol;
 struct _atom;
 namespace gem {
   namespace RTE {
-    GEM_EXTERN class Symbol {
+    class GEM_EXTERN Symbol {
     private:
       class PIMPL;
       PIMPL*m_pimpl;

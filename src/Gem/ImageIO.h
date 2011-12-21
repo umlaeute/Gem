@@ -38,7 +38,7 @@ struct imageStruct;
 namespace gem {
   class Properties;
   namespace image {
-    GEM_EXTERN class load {
+    class GEM_EXTERN load {
     public:
       /**
        * loads an image (given as 'filename') synchronously
