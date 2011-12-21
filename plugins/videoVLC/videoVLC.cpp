@@ -31,6 +31,14 @@
 
 using namespace gem::plugins;
 
+#if 0
+# define LOCK(x)   post("%04d\t%s LOCK", __LINE__, __FUNCTION__), x.unlock(), post("%04d\t%s LOCKed", __LINE__, __FUNCTION__)
+# define UNLOCK(x) post("%04d\t%s UNLOCK", __LINE__, __FUNCTION__), x.unlock(), post("%04d\t%s UNLOCKed", __LINE__, __FUNCTION__)
+#else
+# define LOCK(x)   x.lock()
+# define UNLOCK(x) x.unlock()
+#endif
+
 REGISTER_VIDEOFACTORY("vlc", videoVLC);
 
 videoVLC::videoVLC(void) :
@@ -110,13 +118,13 @@ bool videoVLC::open(gem::Properties&props) {
 }
 
 pixBlock*videoVLC::getFrame(void) {
-  m_mutex.lock();
+  LOCK(m_mutex);
   return &m_pixBlock;
 }
 
 void videoVLC::releaseFrame(void) {
   //  post("release frame");
-  m_mutex.unlock();
+  UNLOCK(m_mutex);
 }
 
 std::vector<std::string>videoVLC::enumerate(void) {
@@ -201,7 +209,7 @@ bool videoVLC::stop (void) {
 }
 
 void*videoVLC::lockFrame(void**plane ) {
-  m_mutex.lock();
+  LOCK(m_mutex);
   *plane=m_pixBlock.image.data;
   //  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
@@ -210,7 +218,7 @@ void*videoVLC::lockFrame(void**plane ) {
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
   //  post("processFrame %p\t%p", picture, *plane);
   m_pixBlock.newimage=true;
-  m_mutex.unlock();
+  UNLOCK(m_mutex);
 }
 void*videoVLC::lockCB(void*opaque, void**plane ) {
   //  post("   lockCB: %p", opaque);
