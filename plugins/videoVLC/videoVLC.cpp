@@ -77,9 +77,9 @@ void videoVLC::close(void) {
 }
 
 bool videoVLC::open(gem::Properties&props) {
+  if(m_mediaplayer)close();
   setProperties(props);
 
-  if(m_mediaplayer)close();
 
   if(m_devname.empty())
     return false;
@@ -90,6 +90,27 @@ bool videoVLC::open(gem::Properties&props) {
 
   if(!media)
     return false;
+
+
+  int w=m_pixBlock.image.xsize;
+  int h=m_pixBlock.image.ysize;
+
+  double d;
+  if(props.get("width", d)) {
+    if(d>0)
+      w=d;
+  }
+  if(props.get("height", d)) {
+    if(d>0)
+      h=d;
+  }
+  m_pixBlock.image.xsize = w;
+  m_pixBlock.image.ysize = h;
+
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_pixBlock.image.reallocate();
+  m_pixBlock.image.setWhite();
+
 
   char s[MAXVLCSTRING];
 
@@ -104,10 +125,6 @@ bool videoVLC::open(gem::Properties&props) {
                              unlockCB,
                              NULL,
                              this);
-
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
-  m_pixBlock.image.setWhite();
 
   libvlc_video_set_format(m_mediaplayer,
                           "RGBA",
@@ -146,27 +163,42 @@ bool videoVLC::enumProperties(gem::Properties&readable,
   readable.clear();
   writeable.clear();
 
-  writeable.set("width", 64);  readable.set("width", 64);
-  writeable.set("height", 64); readable.set("height", 64);
+  writeable.set("width",  m_pixBlock.image.xsize);  readable.set("width",  m_pixBlock.image.xsize);
+  writeable.set("height",  m_pixBlock.image.ysize); readable.set("height",  m_pixBlock.image.ysize);
   return false;
 }
 void videoVLC::setProperties(gem::Properties&props) {
+  int width=-1;
+  int height=-1;
+
   m_props=props;
 
   double d;
   if(props.get("width", d)) {
     if(d>0)
-      m_pixBlock.image.xsize = d;
+      width = d;
   }
   if(props.get("height", d)) {
     if(d>0)
-      m_pixBlock.image.ysize = d;
+      height=d;
+  }
+
+  if(!m_mediaplayer) {
+    if(width>0)
+      m_pixBlock.image.xsize=width;
+    if(height>0)
+      m_pixBlock.image.ysize=height;
+  } else {
+    // changes will take effect with next restart
   }
 }
+
+
 void videoVLC::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
   double d;
   int i;
+
   for(i=0; i<keys.size(); i++) {
     if("width"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.xsize);
