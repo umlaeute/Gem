@@ -13,7 +13,7 @@ typedef int64_t mtime_t;
 #endif /* VLC_VAR_TIME */
 
 namespace gem { namespace plugins {
-    class GEM_EXTERN videoVLC : public video {
+    class GEM_EXPORT videoVLC : public video {
  private:
    std::string m_name;
    std::string m_devname;
