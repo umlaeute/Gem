@@ -21,7 +21,7 @@ pkglib_LTLIBRARIES = Gem.la
 Gem_la_SOURCES = Version.cpp
 
 ## some default flags
-Gem_la_CXXFLAGS = -DHAVE_VERSION_H
+Gem_la_CXXFLAGS = -DHAVE_VERSION_H @GEM_CPPFLAGS@
 Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
 if WINDOWS
 Gem_la_LDFLAGS += -no-undefined
