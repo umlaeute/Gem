@@ -431,6 +431,7 @@ _glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
     fprintf(file, "Ns %f\n", material->shininess / 128.0 * 1000.0);
     fprintf(file, "\n");
   }
+  fclose(file);
   return GL_TRUE;
 }
 
