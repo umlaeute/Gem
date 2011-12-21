@@ -154,7 +154,7 @@ namespace Gem {
     snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
     buf[MAXPDSTRING-1]=0;
     if ((fd=open(buf, flags))>=0){
-      gem::files::close(fd);
+      close(fd);
     } else {
       // can't find this abstraction...giving up
       verbose(0, "please add path to '%s' to your search-path!", filename);
