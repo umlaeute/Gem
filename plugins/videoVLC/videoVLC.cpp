@@ -250,6 +250,7 @@ void*videoVLC::lockFrame(void**plane ) {
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
   //  post("processFrame %p\t%p", picture, *plane);
   m_pixBlock.newimage=true;
+  m_pixBlock.image.upsidedown=true;
   UNLOCK(m_mutex);
 }
 void*videoVLC::lockCB(void*opaque, void**plane ) {
