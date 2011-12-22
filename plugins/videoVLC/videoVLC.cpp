@@ -91,18 +91,59 @@ bool videoVLC::open(gem::Properties&props) {
     return false;
 
 
+  char buf[MAXVLCSTRING];
+
+  libvlc_media_add_option(media,":noaudio");
+  libvlc_media_add_option(media,":no-video-title-show");
+
+
   int w=m_pixBlock.image.xsize;
   int h=m_pixBlock.image.ysize;
 
-  double d;
-  if(props.get("width", d)) {
-    if(d>0)
-      w=d;
+
+  std::vector<std::string>keys=props.keys();
+  unsigned int i;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    double d;
+    std::string s;
+    buf[0]=0;
+    if(0) {}
+    else if("width"==key) {
+      if(props.get(key, d)&&(d>0))
+        w=d;
+    } else if("height"==key) {
+      if(props.get(key, d)&&(d>0))
+        h=d;
+    } else {
+      gem::Properties::PropertyType type = props.type(key);
+      switch(type) {
+      case gem::Properties::NONE:
+        snprintf(buf, MAXVLCSTRING, ":%s", key.c_str());
+        break;
+      case gem::Properties::DOUBLE:
+        if(props.get(key, d)) {
+          snprintf(buf, MAXVLCSTRING, ":%s=%g", key.c_str(), d);
+        }
+        break;
+      case gem::Properties::STRING:
+        if(props.get(key, s)) {
+          /* need to find an option that actually takes strings, so i can test this with spaces */
+          snprintf(buf, MAXVLCSTRING, ":%s=%s", key.c_str(), s.c_str());
+        }
+        break;
+      default:
+        break;
+      }
+      if(0!=buf[0]) {
+        buf[MAXVLCSTRING-1]=0;
+        //post("vlc-option: '%s'", buf);
+        libvlc_media_add_option(media,buf);
+      }
+    }
+
   }
-  if(props.get("height", d)) {
-    if(d>0)
-      h=d;
-  }
+
   m_pixBlock.image.xsize = w;
   m_pixBlock.image.ysize = h;
 
@@ -110,11 +151,9 @@ bool videoVLC::open(gem::Properties&props) {
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setWhite();
 
+                   
 
-  char s[MAXVLCSTRING];
 
-  libvlc_media_add_option(media,":noaudio");
-  libvlc_media_add_option(media,":no-video-title-show");
 
   m_mediaplayer=libvlc_media_player_new_from_media(media);
   libvlc_media_release(media);
