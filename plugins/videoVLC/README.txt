@@ -1,76 +1,56 @@
-TODO: make a video plugin that uses libvlc...
-
-documentation:
-http://wiki.videolan.org/LibVLC
-http://wiki.videolan.org/Stream_to_memory_%28smem%29_tutorial
-
-http://forum.videolan.org/viewtopic.php?f=32&t=78513
->-----------------------------------------------
-
-/* callbacks */
-void vPreCallback( void* p_video_data, uint8_t** pp_pixel_buffer , int size )
-{ // called before video rendered
-        // TODO: Lock the mutex
-        *pp_pixel_buffer = // TODO: point to a place where pixdata can be stored
-}
-
-void vPostCallback( void* p_video_data, uint8_t* p_pixel_buffer, int width, int height, int pixel_pitch, int size, mtime_t pts )
-{ // called after video rendered
-        // TODO: explain how data should be handled
-        // TODO: Unlock the mutex
-}
-
-void aPreCallback( void* p_audio_data, uint8_t** pp_pcm_buffer , unsigned int size )
-{ // called before audio rendered
-}
-
-void aPostCallback( void* p_audio_data, uint8_t* p_pcm_buffer, unsigned int channels, unsigned int rate, unsigned int nb_samples, unsigned int bits_per_sample, unsigned int size, mtime_t pts )
-{ // called after audio rendered
-}
+videoVLC
+========
+open up a media via VLC and display it as a live video source
 
 
->-----------------------------------------------
+USAGE
+-----
+simply use any URI that VLC is capable of opening as the device name.
+e.g.
+[device screen://(
+  will capture the screen and output that through [pix_video]
+[device v4l2:///dev/video1(
+  will open /dev/video1 using v4l2 
+[device file:///tmp/kottan.flv(
+[device /tmp/kottan.flv(
+  will open the movie-file 'kottan.flv'
 
-     const char * const vlc_args[] = {
-         "--plugin-path=c:\\program files\\videolan\\vlc\\plugins",
-            "-I", "dummy", /* Don't use any interface */
-            "--ignore-config", /* Don't use VLC's config */
-         "--quiet",
-         "--sout=#transcode{vcodec=RV24,acodec=s16l}:smem",
-    };
-     
-     /* init vlc modules, should be done only once */
-     inst = libvlc_new (sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args); 
-     /* Create a new item */
-    m = libvlc_media_new_path (inst, "path_to_movie_file");       
 
-    libvlc_media_add_option(m,":noaudio");
-    libvlc_media_add_option(m,":no-video-title-show");
+output size
+-----------
+currently, there is no attempt to guess the original output size of the media you want to play back.
+instead, the media is always re-scaled to thhe size you request (or the default).
+change it with [dimen <w> <h>(
 
-    char s[512];
-      sprintf(s,":sout-smem-video-prerender-callback=%lld",(long long
-int)(intptr_t)vPreCallback);
-    libvlc_media_add_option(m,s);
-    sprintf(s,":sout-smem-video-postrender-callback=%lld",(long long
-int)(intptr_t)vPostCallback);
-    libvlc_media_add_option(m,s);
-    sprintf(s,":sout-smem-video-data=%lld",(long long int)(intptr_t)&vData );
-    libvlc_media_add_option(m,s);
 
-      sprintf(s,":sout-smem-audio-prerender-callback=%lld",(long long
-int)(intptr_t)aPreCallback);
-    libvlc_media_add_option(m,s);
-    sprintf(s,":sout-smem-audio-postrender-callback=%lld",(long long
-int)(intptr_t)aPostCallback);
-    libvlc_media_add_option(m,s);
-    sprintf(s,":sout-smem-audio-data=%lld",(long long int)(intptr_t)&aData );
-    libvlc_media_add_option(m,s);
-    sprintf(s,":sout-smem-time-sync=1");
-    libvlc_media_add_option(m,s);
+properties
+----------
+VLC offers many, many options for configuring the media playback.
+you can use them via the properties system.
+currently there is no way to get a list of supported properties.
+you can get the available options from VLC, e.g.:
+$ vlc -H
 
-     /* Create a media player playing environement */
-     mp = libvlc_media_player_new_from_media (m);     
-     /* No need to keep the media now */
-     libvlc_media_release (m);
-     /* play the media_player */
-     libvlc_media_player_play (mp);
+example:
+vlc has an option "--screen-fps <float>"; therefore:
+[clearProps, setProps screen-fps 40, device screen://(
+ will grab the screen at 40fps (rather than the default 1fps)
+
+the default options are "--noaudio" and "--no-video-title-show"
+
+
+pre-requisites
+--------------
+videoVLC depends on VLC-1.1.11
+if you want to compile videoVLC yourself, you will also need to have the 
+SDK (header-files + libvlc library) installed
+
+on W32, you might want to make sure that you add the full path to VLC to 
+your PATH environment variable, so videoVLC can find VLC and all the plugins!
+something along the lines of
+$ set PATH=%PATH%:%ProgramFiles%\VideoLAN\VLC
+
+
+AUTHORS
+-------
+brought to you by IOhannes m zmölnig
