@@ -31,11 +31,7 @@ CPPEXTERN_NEW(pix_rgba);
 /////////////////////////////////////////////////////////
 pix_rgba :: pix_rgba()
 {
-#ifdef __APPLE__
-  m_image.setCsizeByFormat(GL_BGRA_EXT);
-#else
-  m_image.setCsizeByFormat(GL_RGBA);
-#endif
+  m_image.setCsizeByFormat(GL_RGBA_GEM);
 }
 
 /////////////////////////////////////////////////////////

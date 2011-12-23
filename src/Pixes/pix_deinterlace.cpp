@@ -25,7 +25,7 @@ pix_deinterlace :: pix_deinterlace() :
 {
 	m_savedImage.xsize=320;
 	m_savedImage.ysize=240;
-	 m_savedImage.setCsizeByFormat(GL_RGBA);
+	 m_savedImage.setCsizeByFormat(GL_RGBA_GEM);
 	 m_savedImage.reallocate();
 	 m_savedImage.setBlack();
 }

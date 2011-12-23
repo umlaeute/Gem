@@ -53,7 +53,7 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   //	m_pixBlock.image = m_imageStruct;
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
-	m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+	m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
 	m_pixBlock.image.allocate();
 
 	generateNoise();	

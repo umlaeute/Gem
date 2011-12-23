@@ -41,7 +41,7 @@ public:
 #ifdef __APPLE__
   m_wantedFormat(GL_YUV422_GEM),
 #else
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GL_RGBA_GEM),
 #endif
   m_numFrames(0), m_numTracks(0),
   m_curFrame(0), m_curTrack(0),
@@ -56,7 +56,7 @@ filmBase :: filmBase(void) :
 #ifdef __APPLE__
   m_wantedFormat(GL_YUV422_GEM),
 #else
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GL_RGBA_GEM),
 #endif
   m_numFrames(0), m_numTracks(0),
   m_curFrame(0), m_curTrack(0),

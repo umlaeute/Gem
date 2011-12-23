@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_sig2pix :: pix_sig2pix(t_floatarg width=0, t_floatarg height=0) : m_reqFormat(GL_RGBA)
+pix_sig2pix :: pix_sig2pix(t_floatarg width=0, t_floatarg height=0) : m_reqFormat(GL_RGBA_GEM)
 {
 
   m_pixBlock.image = m_imageStruct;

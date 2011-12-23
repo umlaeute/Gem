@@ -93,7 +93,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
 
-    if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_RGBA);
+    if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_YUV422_GEM);
     Pete_Levels_SetupCFSettings();
     Pete_ChannelFunction_RenderYUV();
 

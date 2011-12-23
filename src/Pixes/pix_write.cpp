@@ -73,7 +73,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_originalImage = new imageStruct();
   m_originalImage->xsize=m_width;
   m_originalImage->ysize=m_height;
-  m_originalImage->setCsizeByFormat(GL_RGBA);
+  m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
   m_originalImage->allocate();
 
 	// AV : i wanted to put thoses lines in fileMess() function but it crashes...
@@ -125,7 +125,7 @@ void pix_write :: doWrite(void)
 #ifndef __APPLE__
   m_originalImage->setCsizeByFormat(GL_RGB);
 #else
-  m_originalImage->setCsizeByFormat(GL_RGBA);
+  m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
 #endif /* APPLE */
 
   m_originalImage->reallocate();

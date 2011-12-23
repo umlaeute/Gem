@@ -45,14 +45,13 @@ pix_biquad :: pix_biquad(int argc, t_atom*argv) :
 {
   prev.xsize = 64;
   prev.ysize = 64;
-  prev.setCsizeByFormat(GL_RGBA);
+  prev.setCsizeByFormat(GL_RGBA_GEM);
   prev.reallocate();
   prev.setBlack();
 
   last.xsize = 64;
   last.ysize = 64;
-  last.setCsizeByFormat(GL_RGBA);
-  last.csize = 4;
+  last.setCsizeByFormat(GL_RGBA_GEM);
   last.reallocate();
   last.setBlack();
 
