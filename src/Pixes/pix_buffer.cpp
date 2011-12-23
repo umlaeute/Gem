@@ -144,7 +144,7 @@ void pix_buffer :: allocateMess(unsigned int x, unsigned int y, unsigned int c)
     format=GL_RGB;
     break;
   case 4:
-    format=GL_RGBA;
+    format=GL_RGBA_GEM;
     break;
   default:
     format=0;
@@ -153,8 +153,7 @@ void pix_buffer :: allocateMess(unsigned int x, unsigned int y, unsigned int c)
   while(i--){
     m_buffer[i].xsize=x;
     m_buffer[i].ysize=y;
-    m_buffer[i].csize=c;
-    m_buffer[i].format=format;
+    m_buffer[i].setCsizeByFormat(format);
     m_buffer[i].reallocate();
     m_buffer[i].setBlack();
   }

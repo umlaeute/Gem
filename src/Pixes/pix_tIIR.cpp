@@ -73,8 +73,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
 
   m_buffer.xsize=64;
   m_buffer.ysize=64;
-  m_buffer.csize=4;
-  m_buffer.format=GL_RGBA;
+  m_buffer.setCsizeByFormat(GL_RGBA_GEM);
   m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*m_bufnum);
 }
 

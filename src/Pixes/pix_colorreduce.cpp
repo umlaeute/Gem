@@ -49,7 +49,7 @@ pix_colorreduce :: pix_colorreduce() :
 
     tempImage.xsize=0;
     tempImage.ysize=0;
-    tempImage.setCsizeByFormat(GL_RGBA);
+    tempImage.setCsizeByFormat(GL_RGBA_GEM);
 }
 
 /////////////////////////////////////////////////////////
@@ -69,11 +69,6 @@ void pix_colorreduce :: processYUVImage(imageStruct &image){
 
   tempImage.xsize=image.xsize;
   tempImage.ysize=image.ysize;
-#ifndef __APPLE__
-  tempImage.format=GL_RGBA;
-#else
-  tempImage.format=GL_BGRA_EXT;
-#endif
   tempImage.fromUYVY(image.data);
 
   processRGBAImage(tempImage);

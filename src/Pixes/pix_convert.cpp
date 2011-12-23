@@ -33,8 +33,7 @@ pix_convert :: pix_convert()
 {
   m_image.xsize=128;
   m_image.ysize=128;
-  m_image.csize=4;
-  m_image.format=GL_RGBA;
+  m_image.setCsizeByFormat(GL_RGBA_GEM);
   m_image.reallocate();
 }
 
