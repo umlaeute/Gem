@@ -33,8 +33,9 @@ m4/ltsugar\.m4
 m4/ltversion\.m4
 m4/lt~obsolete\.m4
 # generated files
-src/Gem/version_current\.h
+src/version_current\.h
 Gem.pc
+Gem-meta.pd
 # Makefiles are special
 # some are generated, some not
 Makefile
