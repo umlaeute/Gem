@@ -163,7 +163,7 @@ void pix_noise :: generateNoise(void)
       buffer[chRed]   = random(); // red
       buffer[chGreen] = random(); // green
       buffer[chBlue]  = random(); // blue
-      buffer[chAlpha] = 255;		  // alpha
+      buffer[chAlpha] = 255;	  // alpha
       buffer+=4;
     }
     break;
@@ -233,14 +233,8 @@ void pix_noise :: SETMess(int xsize, int ysize)
 	m_pixBlock.image.clear();
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
-	m_pixBlock.image.csize = 4;
-	m_pixBlock.image.format = GL_RGBA;
-	m_pixBlock.image.type = GL_UNSIGNED_BYTE;
-
-	dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize
-		* 4 * sizeof(unsigned char);
-	m_pixBlock.image.allocate(dataSize);
-	memset(m_pixBlock.image.data, 0, dataSize);
+	m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+	m_pixBlock.image.reallocate();
 
   generateNoise();
 }
