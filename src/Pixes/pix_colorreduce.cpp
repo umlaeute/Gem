@@ -101,8 +101,7 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
+    myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
 

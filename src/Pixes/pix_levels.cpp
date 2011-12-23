@@ -87,9 +87,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format=image.format;
+    myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
 
@@ -113,9 +111,7 @@ void pix_levels :: processRGBAImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format=image.format;
+    myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
 
