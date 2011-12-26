@@ -15,15 +15,15 @@ void main (void)
 {
 	vec2 pos = gl_TexCoord[0].st * vec2(90.,62.)/256. ; 
 
-	vec4 color1 = texture2DRect(texture,pos_(pos,-1.,-1.));
-	vec4 color2 = texture2DRect(texture,pos_(pos, 0.,-1.));
-	vec4 color3 = texture2DRect(texture,pos_(pos, 1.,-1.));
-	vec4 color4 = texture2DRect(texture,pos_(pos,-1., 0.));
-	vec4 color5 = texture2DRect(texture,pos_(pos, 0., 0.));
-	vec4 color6 = texture2DRect(texture,pos_(pos, 1., 0.));
-	vec4 color7 = texture2DRect(texture,pos_(pos,-1., 1.));
-	vec4 color8 = texture2DRect(texture,pos_(pos, 0., 1.));
-	vec4 color9 = texture2DRect(texture,pos_(pos, 1., 1.));
+	vec4 color1 = texture2DRect(texture,pos_(pos,-1./256.,-1./256.));
+	vec4 color2 = texture2DRect(texture,pos_(pos, 0./256.,-1./256.));
+	vec4 color3 = texture2DRect(texture,pos_(pos, 1./256.,-1./256.));
+	vec4 color4 = texture2DRect(texture,pos_(pos,-1./256., 0./256.));
+	vec4 color5 = texture2DRect(texture,pos_(pos, 0./256., 0./256.));
+	vec4 color6 = texture2DRect(texture,pos_(pos, 1./256., 0./256.));
+	vec4 color7 = texture2DRect(texture,pos_(pos,-1./256., 1./256.));
+	vec4 color8 = texture2DRect(texture,pos_(pos, 0./256., 1./256.));
+	vec4 color9 = texture2DRect(texture,pos_(pos, 1./256., 1./256.));
 
 	vec4 colorBG = color1 + color2 + color4 + color5;
 	vec4 colorBD = color3 + color2 + color6 + color5; 
@@ -35,9 +35,6 @@ void main (void)
 	vec4 XB = mix(colorBG,colorBD,fract_pos.x);
 	vec4 XH = mix(colorHG,colorHD,fract_pos.x);
  	vec4 X = mix(XB,XH,fract_pos.y) / 4.;
-
-	X = color5; // temprary remove normal interpolation because it did not work, and we don't realy need it.
-
 
 	X -= vec4(0.5);
 	X.xyz = normalize(X.xyz);
