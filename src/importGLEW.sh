@@ -1,7 +1,7 @@
 #!/bin/sh
 
 GLEW_DIR=$1
-OUTPUT_DIR=Base
+OUTPUT_DIR=Gem
 
 usage () {
  echo "usage: $0 </path/to/glew/>"
