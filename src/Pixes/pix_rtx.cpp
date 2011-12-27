@@ -53,8 +53,7 @@ pix_rtx :: pix_rtx()
    imageStruct image;
 
    image.xsize  = image.ysize = 64;
-   image.format = GL_RGBA;
-   image.csize  = 4;
+   image.setCsizeByFormat(GL_RGBA_GEM);
 
    create_buffer(image);
 
@@ -84,7 +83,7 @@ void pix_rtx :: create_buffer(imageStruct image)
 
    buffer.xsize = image.xsize;
    buffer.ysize = image.ysize;
-   buffer.csize = image.csize;
+   buffer.setCsizeByFormat(image.format);
    buffer.reallocate( dataSize );
    memset(buffer.data, 0, dataSize);
 }

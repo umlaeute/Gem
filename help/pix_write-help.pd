@@ -1,41 +1,107 @@
-#N canvas 95 74 798 603 10;
-#X msg 163 109 gemList;
-#X msg 163 239 gemList;
-#X msg 237 183 sizeX sizeY;
-#X msg 238 162 posX posY;
-#X text 174 43 [pix_write];
-#X text 96 64 Make a snapshot of the frame-buffer and write it to a
-file;
-#X obj 163 203 pix_write;
-#X msg 115 149 bang;
-#X msg 243 99 auto 0/1;
-#X msg 246 122 file <filename> [<type>];
-#X text 46 256 [pix_write] takes a picture of the frame buffer and
-saves it to a file. When a "bang" message is sent to [pix_write] \,
-that is the moment that something is captured from the current frame
-buffer. If you set "auto" to 1 (enabled) \, an image is written each
-rendering frame.;
-#X text 48 327 Currently only single-images are supported (no animations
-\, videos \, AVIs \, ...);
-#X text 47 534 You can set the size of the snapshot window as well
-as the position. These can be set via creation arguments too: [pix_write
-[<posX> <posY> [<sizeX> <sizeY>]]];
-#X text 48 367 With the "file" message you can specify a base-filename
-and the type of image-files you want to create.;
-#X text 48 410 The actual name of the file will be something like "<basefilename><current#>.<ext>"
-(like "GEM00001.tif");
-#X text 52 445 Supported file-types are TIFF (type=0) and JPEG (type>0
-\; quality=type \; you might want a high-quality (type>80) to like
-your images);
-#X text 52 496 TIFF-writing is very slow ! JPEG is fast (but ugly with
-low quality);
-#X text 475 437 "file <basefilename> <type>";
-#X text 473 403 "file <basefilename>" : assume type=TIFF;
-#X text 474 420 "file <type>": change type;
-#X connect 0 0 6 0;
-#X connect 2 0 6 2;
-#X connect 3 0 6 1;
-#X connect 6 0 1 0;
-#X connect 7 0 6 0;
-#X connect 8 0 6 0;
-#X connect 9 0 6 0;
+#N canvas 23 49 795 602 10;
+#X obj 17 399 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 28 402 Inlets:;
+#X text 28 559 Outlets:;
+#X obj 17 364 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X text 26 363 Arguments:;
+#X obj 17 69 cnv 15 430 290 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 46 572 Outlet 1: gemlist;
+#X text 52 416 Inlet 1: gemlist;
+#X text 27 72 Description: Make a snapshot of the frame-buffer and
+write it to a file;
+#X text 72 374 list: [offsetX offsetY [dimX dimY]];
+#X text 52 502 Inlet 2: list: offsetX offsetY (in pixels \; default:
+0 0);
+#X text 52 528 Inlet 3: list: dimenX dimenY (in pixels \; default:
+window-size);
+#X text 466 15 GEM object;
+#X obj 459 77 cnv 15 250 300 empty empty empty 20 12 0 14 -228992 -66577
+0;
+#X text 463 60 Example:;
+#X obj 604 313 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#N canvas 16 419 450 300 gemwin 0;
+#X obj 132 136 gemwin;
+#X obj 67 89 outlet;
+#X obj 67 10 inlet;
+#X obj 67 41 route create;
+#X msg 67 70 set destroy;
+#X msg 142 68 set create;
+#X msg 268 112 destroy;
+#X msg 132 112 create \, 1;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 3 0 7 0;
+#X connect 3 1 5 0;
+#X connect 3 1 6 0;
+#X connect 4 0 1 0;
+#X connect 5 0 1 0;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
+#X restore 609 352 pd gemwin;
+#X msg 609 333 create;
+#X text 605 312 Create window:;
+#X obj 460 106 cnv 15 240 190 empty empty empty 20 12 0 14 -24198 -66577
+0;
+#X msg 584 249 256 256;
+#X text 638 249 dimension;
+#X text 637 227 offset;
+#X msg 584 225 100 100;
+#X obj 461 84 gemhead 51;
+#X obj 461 272 pix_write 0 0 500 500;
+#X msg 488 116 file pix_test 99;
+#X text 600 138 type : jpg;
+#X text 600 127 name : pix_testXXXXX.jpg;
+#X text 600 151 quality : 99;
+#X text 600 115 set pix_write to:;
+#X msg 490 181 auto \$1;
+#X obj 490 162 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 491 205 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 510 204 WRITE! one file;
+#X obj 464 329 gemhead;
+#X obj 464 354 square;
+#X text 463 309 display something;
+#X obj 466 510 pix_snap;
+#X text 26 99 When banged [pix_write] will take a snapshot of the current
+frame buffer and saves it to a file. When a "bang" message is sent
+to [pix_write] \, that is the moment that something is captured from
+the current frame buffer. When grabbing \, be sure that something is
+in the rendering-buffer \, else you will get a black texture.;
+#X text 464 489 See also:;
+#X obj 466 534 pix_writer;
+#X text 26 240 BE CAREFUL with the filename \, depending on your OS
+\, relative names may be different. It start from the patch in Linux
+or from HD (/) in osx for example. DO NOT USE SPACES in the basefilename
+;
+#X text 81 41 Class: pix object;
+#X text 27 187 With the "file" message you can specify a base-filename
+and the type of image-files you want to create. The actual name of
+the file will be something like: "<basefilename><current#>.<ext>" (like
+"GEM00001.tif");
+#X text 60 22 Synopsis: [pix_write];
+#X text 26 299 Supported file-types are TIFF (quality=0) and JPEG (quality>0).
+TIFF-writing can be slow due to the large file size of uncompressed
+images! JPEG might be faster (but quality will be lower due to compression)
+;
+#X text 543 181 activate/deactivate auto snapshot;
+#X text 52 453 Inlet 1: file <quality> : set type/quality (quality=0:TIFF
+\, quality>0:JPG);
+#X text 52 478 Inlet 1: file <basefilename> <quality> : set basefilename
+and type/quality;
+#X text 52 429 Inlet 1: file <basefilename> : set basefilename \, and
+type=TIFF;
+#X connect 16 0 17 0;
+#X connect 17 0 16 0;
+#X connect 20 0 25 2;
+#X connect 23 0 25 1;
+#X connect 24 0 25 0;
+#X connect 26 0 25 0;
+#X connect 31 0 25 0;
+#X connect 32 0 31 0;
+#X connect 33 0 25 0;
+#X connect 35 0 36 0;

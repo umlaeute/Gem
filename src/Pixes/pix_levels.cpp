@@ -87,13 +87,11 @@ void pix_levels :: processYUVImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format=image.format;
+    myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
 
-    if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_RGBA);
+    if(m_DoAuto)Pete_Levels_CalculateAutoLevels(GL_YUV422_GEM);
     Pete_Levels_SetupCFSettings();
     Pete_ChannelFunction_RenderYUV();
 
@@ -113,9 +111,7 @@ void pix_levels :: processRGBAImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.csize = image.csize;
-    myImage.type  = image.type;
-    myImage.format=image.format;
+    myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     pOutput = reinterpret_cast<U32*>(myImage.data);
 

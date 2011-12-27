@@ -537,11 +537,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
-  //this is perhaps buggy
-  //myImage.setCsizeByFormat(image.format);
+  myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
 
   pOutput = reinterpret_cast<U32*>(myImage.data);

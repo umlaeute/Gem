@@ -89,11 +89,5 @@ void shininess :: shininessMess(float val)
 /////////////////////////////////////////////////////////
 void shininess :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&shininess::shininessMessCallback),
-    	    gensym("shininess"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "shininess", shininessMess, float);
 }
-void shininess :: shininessMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->shininessMess(val);
-}
-

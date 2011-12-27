@@ -104,9 +104,8 @@ void pix_snap :: snapMess()
 		m_originalImage = new imageStruct;
 		m_originalImage->xsize = m_width;
 		m_originalImage->ysize = m_height;
-                /* magic: on __APPLE__ this could actually set to GL_BGRA_EXT ! */
-                m_originalImage->setCsizeByFormat(GL_RGBA);
-                m_originalImage->upsidedown = 0;
+    m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
+    m_originalImage->upsidedown = false;
 
 		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
 	}

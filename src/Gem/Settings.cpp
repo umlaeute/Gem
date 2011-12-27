@@ -30,7 +30,7 @@
 static const char*s_configdir[] = {
 #ifdef __linux__
   "/etc/pd",
-  "~/.pd",
+  "~/.config/pure-data",
 #elif defined __APPLE__
   "/Library/Pd",
   "~/Library/Pd",

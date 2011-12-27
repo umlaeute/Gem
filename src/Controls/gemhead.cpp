@@ -26,7 +26,6 @@
 #include "Base/GemBase.h"
 
 #include "Gem/GLStack.h"
-#include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
 
 #include <stdio.h>
@@ -215,7 +214,7 @@ void gemhead :: setMess(t_float priority)
     rcv=m_basename+"_osd";
 
   gemreceive::priorityMess(priority);
-  gemreceive::nameMess(gensym(rcv.c_str()));
+  gemreceive::nameMess(rcv);
 }
 
 void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {

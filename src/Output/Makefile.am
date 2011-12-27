@@ -10,7 +10,7 @@ include ../check-sources.mk
 pkglib_LTLIBRARIES = 
 
 #if HAVE_COCOA
-if DISABLED
+if MACOSX
 pkglib_LTLIBRARIES += gemcocoawindow.la
 endif
 
@@ -23,8 +23,10 @@ pkglib_LTLIBRARIES += gemglxwindow.la
 endif
 
 #if HAVE_CARBON
-if DISABLED
+if HAVE_FRAMEWORK_QUICKTIME
+if HAVE_FRAMEWORK_CARBON
 pkglib_LTLIBRARIES += gemmacwindow.la
+endif
 endif
 
 if WINDOWS
@@ -42,6 +44,10 @@ gemcocoawindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemcocoawindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemcocoawindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemcocoawindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemcocoawindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemcocoawindow_la @MOREFLAGS@
 
 # object specific libraries
 gemcocoawindow_la_CXXFLAGS += 
@@ -49,10 +55,28 @@ gemcocoawindow_la_LIBADD   +=
 gemcocoawindow_la_LDFLAGS  += 
 
 ## SOURCES
+nodist_EXTRA_gemcocoawindow_la_SOURCES=gemcocoawindow.cpp
 gemcocoawindow_la_SOURCES = \
   gemcocoawindow.mm \
   gemcocoawindow.h
 
+
+######################################
+# ObjC++ nastiness {
+
+SUFFIXES=.mm
+
+am_gemcocoawindow_la_OBJECTS = gemcocoawindow_la-gemcocoawindow.lo
+
+gemcocoawindow_la-gemcocoawindow.lo: gemcocoawindow.mm
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gemcocoawindow_la_CXXFLAGS) $(CXXFLAGS) -MT gemcocoawindow_la-gemcocoawindow.lo -MD -MP -MF $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Tpo -c -o gemcocoawindow_la-gemcocoawindow.lo `test -f 'gemcocoawindow.mm' || echo '$(srcdir)/'`gemcocoawindow.mm
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Tpo $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gemcocoawindow.mm' object='gemcocoawindow_la-gemcocoawindow.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gemcocoawindow_la_CXXFLAGS) $(CXXFLAGS) -c -o gemcocoawindow_la-gemcocoawindow.lo `test -f 'gemcocoawindow.mm' || echo '$(srcdir)/'`gemcocoawindow.mm
+
+# } ObjC++ nastiness
+######################################
 
 ########### gemglutwindow ###########
 # some default flags
@@ -65,6 +89,10 @@ gemglutwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemglutwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglutwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemglutwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglutwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemglutwindow_la @MOREFLAGS@
 
 # object specific libraries
 gemglutwindow_la_CXXFLAGS += @GLUT_CFLAGS@
@@ -88,6 +116,10 @@ gemglxwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemglxwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglxwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemglxwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglxwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemglxwindow_la @MOREFLAGS@
 
 # object specific libraries
 gemglxwindow_la_CXXFLAGS += $(X_CFLAGS)
@@ -111,6 +143,10 @@ gemmacwindow_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemmacwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemmacwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemmacwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemmacwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemmacwindow_la @MOREFLAGS@
 
 # object specific libraries
 gemmacwindow_la_CXXFLAGS += 
@@ -134,10 +170,14 @@ gemw32window_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
 gemw32window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemw32window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemw32window_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemw32window_la @MOREFLAGS@
 
 # object specific libraries
-gemw32window_la_CXXFLAGS += 
-gemw32window_la_LIBADD   += 
+gemw32window_la_CXXFLAGS += @GL_CFLAGS@
+gemw32window_la_LIBADD   += @GL_LIBS@ 
 gemw32window_la_LDFLAGS  += 
 
 ## SOURCES
@@ -172,7 +212,7 @@ gemw32window_la_SOURCES = \
 .PHONY: convenience-link clean-convenience-link
 
 convenience-link: $(pkglib_LTLIBRARIES)
-	  for soname in `echo | $(EGREP) -h "^dlname=" $^ | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
+	  @for soname in `echo | $(EGREP) -h "^dlname=" $^ | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
             echo "$$soname: creating convenience link from $(abs_builddir)/.libs to $(top_builddir)"; \
 	    rm -f $(top_builddir)/$$soname ; \
 	    test -e $(abs_builddir)/.libs/$$soname && \

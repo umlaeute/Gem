@@ -265,6 +265,26 @@ namespace gem { namespace plugins {
     virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
       mimetypes.clear();
       props.clear();
+
+      unsigned int i;
+      for(i=0; i<m_savers.size(); i++) {
+	unsigned int j;
+
+	std::vector<std::string>mimetypes_;
+	gem::Properties props_;
+	m_savers[i]->getWriteCapabilities(mimetypes_, props_);
+
+	for(j=0; j<mimetypes_.size(); j++) {
+	  const std::string&mimetype=mimetypes_[j];
+	  if(std::find(mimetypes.begin(), mimetypes.end(), mimetype)==mimetypes.end()) {
+	    mimetypes.push_back(mimetypes_[j]);
+	  }
+	}
+	std::vector<std::string>keys=props_.keys();
+	for(j=0; j<keys.size(); j++) {
+	  props.set(keys[j], props_.get(keys[j]));
+	}
+      }
     }
     virtual bool isThreadable(void) {
       return m_threadable;

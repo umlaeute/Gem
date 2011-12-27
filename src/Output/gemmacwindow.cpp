@@ -14,7 +14,7 @@
 //
 /////////////////////////////////////////////////////////
 
-#ifdef __APPLE__
+#if defined __APPLE__  && !defined __x86_64
 #include "Gem/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>

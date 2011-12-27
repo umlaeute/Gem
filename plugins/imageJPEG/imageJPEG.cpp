@@ -32,6 +32,10 @@ extern "C"
 # endif
 # undef EXTERN
 
+#if (defined _WIN32) && (defined __MINGW32__)
+# define HAVE_BOOLEAN
+#endif
+
 # include "jpeglib.h"
 #include <setjmp.h>
 

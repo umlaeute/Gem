@@ -116,20 +116,24 @@ struct GEM_EXTERN imageStruct
   /* X,Y are the coordinates
    * C is the offset in the interleaved data (like chRed==0 for red)
    * you should use chRed instead of 0 (because it might not be 0)
+   *
+   * you must make sure that (0<=X<xsize) and (0<=Y<ysize)
    */
   // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C) const
   {
-    return(data[clampFunc(Y, 0, ysize-1) * xsize * csize + clampFunc(X, 0, xsize-1) * csize + C]); }
+    return(data[Y * xsize * csize + X * csize + C]); }
 
   //////////
   // sets a pixel
   /* while X and Y should be clear (coordinates),
    * C is the offset (like chRed==0 for red).
    * VAL is the value to set.
+   *
+   * you must make sure that (0<=X<xsize) and (0<=Y<ysize)
    */
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
-  { data[clampFunc(Y, 0, ysize-1) * xsize * csize + clampFunc(X, 0, xsize-1) * csize + C] = VAL; }
+  { data[Y * xsize * csize + X * csize + C] = VAL; }
 
 
   /////////

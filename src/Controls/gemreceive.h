@@ -62,7 +62,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
 
   //////////
   // the symbol we are bound to
-  void nameMess(t_symbol*s);
+  void nameMess(std::string);
   t_symbol*m_name;
 
   //////////
@@ -84,10 +84,6 @@ class GEM_EXTERN gemreceive : public CPPExtern
   //////////
   // Static member functions
   static void     proxyCallback(t_gemreceive_proxy*, t_symbol*s, int argc, t_atom*argv);
-
-  //////////
-  static void     nameCallback(void *data, t_symbol*s);
-  static void     priorityCallback(void *data, t_float f);
 
   static t_gemreceive_proxy*find_key(t_symbol*);
   static t_gemreceive_proxy*add_key(t_symbol*);

@@ -206,6 +206,7 @@ static char *build_left_heavy_depth_string( FidtrackerX *ft, FidSegRegion *r )
 }
 
 
+#if 0
 static void print_unordered_depth_string( FidSegRegion *r )
 {
     int i;
@@ -226,6 +227,7 @@ static void print_unordered_depth_string( FidSegRegion *r )
 
     printf( ")" );
 }
+#endif
 
 
 static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,

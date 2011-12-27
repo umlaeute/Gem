@@ -18,7 +18,7 @@ LOG
 
 namespace gem {
   namespace thread {
-    GEM_EXTERN class Semaphore {
+    class GEM_EXTERN Semaphore {
     private:
       class PIMPL;
       PIMPL*m_pimpl;

@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gem", "Gem.vcproj", "{E6CFDE67-C343-44D0-8584-5D82E396D594}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_artoolkit", "..\..\extra\pix_artoolkit\pix_artoolkit.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_artoolkit", "..\..\extra\pix_artoolkit\win-vs2008\pix_artoolkit.vcproj", "{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
@@ -107,77 +107,77 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "installer", "installer.vcpr
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmAVI", "..\..\plugins\filmAVI\filmAVI.vcproj", "{F2368753-AF77-43B7-BE96-1292EC104941}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmAVI", "..\..\plugins\filmAVI\win-vs2008\filmAVI.vcproj", "{F2368753-AF77-43B7-BE96-1292EC104941}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDS\filmDS.vcproj", "{6EA41ED7-ECCD-4A9A-BED0-E8E4B4BD77EB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDS\win-vs2008\filmDS.vcproj", "{6EA41ED7-ECCD-4A9A-BED0-E8E4B4BD77EB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmQT", "..\..\plugins\filmQT\filmQT.vcproj", "{92E57A6D-B582-46F0-B02D-E0F29A594143}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmQT", "..\..\plugins\filmQT\win-vs2008\filmQT.vcproj", "{92E57A6D-B582-46F0-B02D-E0F29A594143}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recordQT", "..\..\plugins\recordQT\recordQT.vcproj", "{FE35B992-784A-4DE2-A538-9285C83618C4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recordQT", "..\..\plugins\recordQT\win-vs2008\recordQT.vcproj", "{FE35B992-784A-4DE2-A538-9285C83618C4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoDS", "..\..\plugins\videoDS\videoDS.vcproj", "{3B5EC55E-FC95-45EB-B9C1-ACDA01D49061}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoDS", "..\..\plugins\videoDS\win-vs2008\videoDS.vcproj", "{3B5EC55E-FC95-45EB-B9C1-ACDA01D49061}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoVFW", "..\..\plugins\videoVFW\videoVFW.vcproj", "{1A49951B-8C31-45F4-B738-B36B960913C7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoVFW", "..\..\plugins\videoVFW\win-vs2008\videoVFW.vcproj", "{1A49951B-8C31-45F4-B738-B36B960913C7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoHALCON", "..\..\plugins\videoHALCON\videoHALCON.vcproj", "{4B82D19E-ABA3-4DE8-8144-AA6087C52454}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoHALCON", "..\..\plugins\videoHALCON\win-vs2008\videoHALCON.vcproj", "{4B82D19E-ABA3-4DE8-8144-AA6087C52454}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_drum", "..\..\extra\pix_drum\pix_drum.vcproj", "{D4A0BA99-E00E-4E4B-97E9-FEB8D5B27881}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_drum", "..\..\extra\pix_drum\win-vs2008\pix_drum.vcproj", "{D4A0BA99-E00E-4E4B-97E9-FEB8D5B27881}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_mano", "..\..\extra\pix_mano\pix_mano.vcproj", "{F9C06216-B28B-40CD-927E-2E63266F64D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_mano", "..\..\extra\pix_mano\win-vs2008\pix_mano.vcproj", "{F9C06216-B28B-40CD-927E-2E63266F64D8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_fiducialtrack", "..\..\extra\pix_fiducialtrack\pix_fiducialtrack.vcproj", "{138446C3-B0DB-4A1F-A30D-71F00C54F596}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pix_fiducialtrack", "..\..\extra\pix_fiducialtrack\win-vs2008\pix_fiducialtrack.vcproj", "{138446C3-B0DB-4A1F-A30D-71F00C54F596}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageQT", "..\..\plugins\imageQT\imageQT.vcproj", "{7AD29AEA-D4FD-4E87-B8C8-2C4CEAD24523}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageQT", "..\..\plugins\imageQT\win-vs2008\imageQT.vcproj", "{7AD29AEA-D4FD-4E87-B8C8-2C4CEAD24523}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageJPEG", "..\..\plugins\imageJPEG\imageJPEG.vcproj", "{94CA04E7-CCF9-4733-A1BD-F3283C21288A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageJPEG", "..\..\plugins\imageJPEG\win-vs2008\imageJPEG.vcproj", "{94CA04E7-CCF9-4733-A1BD-F3283C21288A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageTIFF", "..\..\plugins\imageTIFF\imageTIFF.vcproj", "{6D5697D9-964B-43B0-B5F8-5779E5EF7FCC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageTIFF", "..\..\plugins\imageTIFF\win-vs2008\imageTIFF.vcproj", "{6D5697D9-964B-43B0-B5F8-5779E5EF7FCC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageMAGICK", "..\..\plugins\imageMAGICK\imageMAGICK.vcproj", "{9E650453-D08D-416F-AE68-F8EDE6E92892}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageMAGICK", "..\..\plugins\imageMAGICK\win-vs2008\imageMAGICK.vcproj", "{9E650453-D08D-416F-AE68-F8EDE6E92892}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageSGI", "..\..\plugins\imageSGI\imageSGI.vcproj", "{4755C755-FB54-41CF-BECE-EC63B14F6151}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imageSGI", "..\..\plugins\imageSGI\win-vs2008\imageSGI.vcproj", "{4755C755-FB54-41CF-BECE-EC63B14F6151}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection

@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libPixes.la
@@ -158,6 +158,8 @@ libPixes_la_SOURCES=  \
     pix_multiply.h \
     pix_multitexture.cpp \
     pix_multitexture.h \
+    pix_noise.cpp \
+    pix_noise.h \
     pix_normalize.cpp \
     pix_normalize.h \
     pix_offset.cpp \

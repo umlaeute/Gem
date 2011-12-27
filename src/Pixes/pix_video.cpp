@@ -392,7 +392,7 @@ void pix_video :: colorMess(t_atom*a)
       case 'g': case 'G': format=GL_LUMINANCE; break;
       case 'y': case 'Y': format=GL_YCBCR_422_GEM; break;
       case 'r': case 'R':
-      default: format=GL_RGBA;
+      default: format=GL_RGBA_GEM;
       }
   } else format=atom_getint(a);
 

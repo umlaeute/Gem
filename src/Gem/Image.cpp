@@ -74,12 +74,12 @@ static int m_simd=3;
 static int m_simd=GemSIMD::getCPU();
 #endif
 
-pixBlock :: pixBlock()
+pixBlock :: pixBlock(void)
   : image(imageStruct()), newimage(0), newfilm(0)
 {}
 
 
-imageStruct :: imageStruct()
+imageStruct :: imageStruct(void)
   : xsize (0),ysize(0),csize(0),
 #ifdef __APPLE__
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
@@ -109,7 +109,7 @@ imageStruct :: imageStruct(const imageStruct&org)
   org.copy2Image(this);
 }
 
-imageStruct :: ~imageStruct()
+imageStruct :: ~imageStruct(void)
 {
   clear();
 }
@@ -157,7 +157,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
   return data;
 }
 
-GEM_EXTERN unsigned char* imageStruct::allocate()
+GEM_EXTERN unsigned char* imageStruct::allocate(void)
 {
   return allocate(xsize*ysize*csize);
 }
@@ -173,12 +173,12 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
   data=pdata+offset;
   return data;
 }
-GEM_EXTERN unsigned char* imageStruct::reallocate()
+GEM_EXTERN unsigned char* imageStruct::reallocate(void)
 {
   return reallocate(xsize*ysize*csize);
 }
 
-GEM_EXTERN void imageStruct::clear()
+GEM_EXTERN void imageStruct::clear(void)
 {
   if (pdata) { // pdata is always owned by imageStruct
     delete [] pdata;
@@ -211,7 +211,7 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to) const
   to->upsidedown=upsidedown;
   to->notowned= true; /* but pdata is always owned by us */
 }
-GEM_EXTERN void imageStruct::info() {
+GEM_EXTERN void imageStruct::info(void) {
   post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x) %d\n\t\t%x\t%x\t%d",
        xsize, ysize, csize,
        data, pdata, datasize,
@@ -351,7 +351,7 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat) {
 
   return csize;
 }
-GEM_EXTERN int imageStruct::setCsizeByFormat() {
+GEM_EXTERN int imageStruct::setCsizeByFormat(void) {
   return setCsizeByFormat(format);
 }
 
@@ -374,7 +374,7 @@ void pix_sub(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
   }
 }
 
-GEM_EXTERN void imageStruct::setBlack() {
+GEM_EXTERN void imageStruct::setBlack(void) {
   size_t i = datasize;
   unsigned char* dummy=data;
   switch (format){
@@ -390,7 +390,7 @@ GEM_EXTERN void imageStruct::setBlack() {
     break;
   }
 }
-GEM_EXTERN void imageStruct::setWhite() {
+GEM_EXTERN void imageStruct::setWhite(void) {
   size_t i = datasize;
   unsigned char* dummy=data;
   switch (format){
@@ -1770,7 +1770,7 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
 
 
 /* flip the image if it is upside down */
-GEM_EXTERN void imageStruct::fixUpDown() {
+GEM_EXTERN void imageStruct::fixUpDown(void) {
   if(!upsidedown)return; /* everything's fine! */
 
   int linewidth = xsize*csize;
@@ -1787,11 +1787,13 @@ GEM_EXTERN void imageStruct::fixUpDown() {
     memcpy(line1, line , linewidth);
   }
 
+  delete[]line;
+
   upsidedown=false;
 }
 
 /* swap the Red and Blue channel _in-place_ */
-GEM_EXTERN void imageStruct::swapRedBlue() {
+GEM_EXTERN void imageStruct::swapRedBlue(void) {
   size_t pixelnum=xsize*ysize;
   unsigned char *pixels=data;
   unsigned char dummy=0;

@@ -15,7 +15,10 @@ dist_extra_DATA += pix_fiducialtrack-help.pd all.trees
 
 ## some default flags
 pix_fiducialtrack_la_CXXFLAGS =
-pix_fiducialtrack_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+pix_fiducialtrack_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+if WINDOWS
+pix_fiducialtrack_la_LDFLAGS += -no-undefined
+endif
 pix_fiducialtrack_la_LIBADD   =
 
 # RTE flags
@@ -23,6 +26,10 @@ pix_fiducialtrack_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 pix_fiducialtrack_la_LIBADD   += @GEM_RTE_LIBS@
 
 pix_fiducialtrack_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
+
+# special flags for building externals
+pix_fiducialtrack_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+pix_fiducialtrack_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 
 ### SOURCES
 pix_fiducialtrack_la_SOURCES = \

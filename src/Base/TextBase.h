@@ -86,11 +86,13 @@ class GEM_EXTERN TextBase : public GemBase
   //////////
   // Set the text string from an ASCII list
   virtual void  stringMess(int argc, t_atom *argv);
+  void stringMess(t_symbol*, int argc, t_atom*argv) { stringMess(argc, argv); }
   //-- /moocow
 
   //////////
   // Set the text string
   virtual void  textMess(int argc, t_atom *argv);
+  void  textMess(t_symbol*, int argc, t_atom*argv) { textMess(argc, argv); }
 
   //////////
   // The font to use
@@ -219,12 +221,6 @@ class GEM_EXTERN TextBase : public GemBase
 
    //////////
    // Static member functions
-   static void 	textMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-   static void  stringMessCallback(void *data, t_symbol *, int argc, t_atom *argv); //--moo
-   static void 	fontSizeMessCallback(void *data, t_floatarg size);
-   static void  linedistMessCallback(void *data, t_floatarg dist);
-   static void 	precisionMessCallback(void *data, t_floatarg prec);
-   static void 	fontNameMessCallback(void *data, t_symbol *s);
    static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);
 };
 

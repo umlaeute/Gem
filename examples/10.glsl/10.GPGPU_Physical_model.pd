@@ -1,5 +1,5 @@
 #N struct 1002-xy-pad-knob-1 float x0 float y0 float id;
-#N canvas 282 291 918 594 10;
+#N canvas 875 218 764 482 10;
 #X obj 27 380 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
 #X floatatom 185 212 5 0 0 0 - - -;
@@ -559,7 +559,7 @@
 #X connect 15 0 14 0;
 #X restore 27 398 pd render _____________________;
 #X text 288 6 Made by Cyrille Henry 2008 10 24;
-#N canvas 6 50 812 549 shader_render 0;
+#N canvas 452 305 812 549 shader_render 0;
 #X obj 315 429 pix_texture;
 #X obj 67 256 gemframebuffer;
 #X obj 67 443 pix_texture;
@@ -612,6 +612,7 @@
 #X obj 278 25 inlet;
 #X obj 113 318 outlet;
 #X msg 43 143 open interpol.frag;
+#X msg 135 265 set -1;
 #X connect 0 0 7 0;
 #X connect 0 1 9 0;
 #X connect 1 0 4 0;
@@ -622,15 +623,17 @@
 #X connect 5 0 12 0;
 #X connect 6 0 3 0;
 #X connect 8 0 12 0;
+#X connect 8 0 13 0;
 #X connect 9 0 11 0;
 #X connect 10 0 0 0;
 #X connect 12 0 3 0;
+#X connect 13 0 9 0;
 #X restore 67 175 pd shader;
 #X obj 92 156 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 146 134 t b;
 #X msg 146 155 texture_mass 1;
-#N canvas 4 78 301 465 shader 0;
+#N canvas 668 405 301 465 shader 0;
 #X obj 110 298 pack 0 0;
 #X obj 131 278 t b f;
 #X msg 110 321 link \$1 \$2;
@@ -669,6 +672,7 @@
 #X obj 107 429 outlet;
 #X msg 52 94 open fetching2.vert;
 #X msg 48 183 open fetching2.frag;
+#X msg 132 373 set -1;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 1 1 0 1;
@@ -689,15 +693,17 @@
 #X connect 12 0 6 0;
 #X connect 13 0 8 0;
 #X connect 15 0 6 0;
+#X connect 15 0 21 0;
 #X connect 16 0 11 0;
 #X connect 17 0 18 0;
 #X connect 19 0 8 0;
 #X connect 20 0 7 0;
+#X connect 21 0 17 0;
 #X restore 315 208 pd shader;
 #X obj 345 185 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X obj 387 229 t b;
-#X obj 315 116 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 315 116 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 147 114 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
@@ -988,9 +994,7 @@
 #X obj 424 112 + 1;
 #X obj 424 134 / 2;
 #X floatatom 173 241 5 0 0 0 - - -;
-#X floatatom 245 524 5 0 0 0 - - -;
 #X obj 424 156 * 90;
-#X obj 169 486 * -1;
 #X connect 0 0 18 2;
 #X connect 0 0 7 0;
 #X connect 2 0 6 0;
@@ -1009,10 +1013,9 @@
 #X connect 12 1 16 0;
 #X connect 13 0 14 0;
 #X connect 14 0 15 0;
-#X connect 14 0 28 0;
 #X connect 15 0 5 0;
 #X connect 16 0 17 0;
-#X connect 17 0 30 0;
+#X connect 17 0 15 1;
 #X connect 19 0 20 0;
 #X connect 20 0 22 0;
 #X connect 20 1 25 0;
@@ -1020,9 +1023,8 @@
 #X connect 23 0 24 0;
 #X connect 24 0 18 0;
 #X connect 25 0 26 0;
-#X connect 26 0 29 0;
-#X connect 29 0 18 1;
-#X connect 30 0 15 1;
+#X connect 26 0 28 0;
+#X connect 28 0 18 1;
 #X restore 72 448 pd pointer-parser;
 #N canvas 419 563 751 371 add-controller 0;
 #X msg 520 189 traverse \$1 \, bang;
@@ -1111,8 +1113,8 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X obj 304 74 cnv 10 12 12 empty empty empty 20 12 0 14 -99865 -66577
 0;
 #N canvas 493 264 450 300 \$0-work 0;
-#X scalar 1002-xy-pad-knob-1 0 42 900 \;;
-#X coords 0 100 100 0 100 100 2 0 0;
+#X scalar 1002-xy-pad-knob-1 71.2205 45 900 \;;
+#X coords 0 100 100 0 100 100 1;
 #X restore 260 30 pd \$0-work;
 #X obj 451 532 wrap;
 #X obj 72 193 t b b;
@@ -1128,6 +1130,7 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X obj 444 309 * -6.28;
 #X obj 394 507 t f f;
 #X obj 337 537 s force_wind;
+#X obj 160 611 * -1;
 #X connect 0 0 1 0;
 #X connect 3 0 38 0;
 #X connect 4 0 5 1;
@@ -1144,7 +1147,7 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X connect 19 0 20 0;
 #X connect 19 1 18 0;
 #X connect 20 0 2 0;
-#X connect 20 1 16 0;
+#X connect 20 1 51 0;
 #X connect 21 0 33 0;
 #X connect 22 0 30 0;
 #X connect 23 0 24 0;
@@ -1177,12 +1180,13 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X connect 48 0 23 0;
 #X connect 49 0 50 0;
 #X connect 49 1 46 0;
+#X connect 51 0 16 0;
 #X coords 0 -1 1 1 100 100 2 260 30;
 #X restore 445 290 pd \$0-pad;
 #X obj 445 151 vsl 15 128 0 1 0 0 empty \$0-force force 0 -9 0 10 -262144
--1 -1 12700 1;
+-1 -1 7400 1;
 #X obj 538 152 vsl 15 128 0 1 0 0 empty \$0-direction direction 0 -9
-0 10 -262144 -1 -1 6219 1;
+0 10 -262144 -1 -1 0 1;
 #N canvas 424 571 337 368 wind-control. 0;
 #X obj 41 82 pack f f;
 #X msg 41 104 wind \$1 \$2;

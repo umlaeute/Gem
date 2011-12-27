@@ -217,7 +217,7 @@ public:
 videoBase :: videoBase(const std::string name, unsigned int locks) :
   m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
-  m_reqFormat(GL_RGBA),
+  m_reqFormat(GL_RGBA_GEM),
   m_devicename(std::string("")), m_devicenum(0),
   m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, locks, 0))
 {
@@ -228,7 +228,7 @@ videoBase :: videoBase(const std::string name, unsigned int locks) :
 videoBase :: videoBase(const std::string name) :
   m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
-  m_reqFormat(GL_RGBA),
+  m_reqFormat(GL_RGBA_GEM),
   m_devicename(std::string("")), m_devicenum(0),
   m_pimpl(new PIMPL(name.empty()?std::string("<unknown>"):name, 1, 0))
 {

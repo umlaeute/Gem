@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libUtils.la
@@ -49,3 +49,7 @@ libUtils_la_SOURCES=  \
 	SIMD.h \
 	Vector.cpp \
 	Vector.h
+
+if MINGW
+libUtils_la_SOURCES+=MSVCMinGW.cpp 
+endif

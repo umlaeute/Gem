@@ -1,6 +1,6 @@
 
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 EXTRA_DIST = imageQT.sln imageQT.vcproj
 
@@ -10,12 +10,19 @@ pkglib_LTLIBRARIES+= gem_imageQT.la
 endif
 
 gem_imageQT_la_CXXFLAGS =
-gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared
+gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_imageQT_la_LDFLAGS += -no-undefined
+endif
 gem_imageQT_la_LIBADD   =
 
 # RTE
 gem_imageQT_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_imageQT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gem_imageQT_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gem_imageQT_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gem_imageQT_la @MOREFLAGS@
 
 # Dependencies
 gem_imageQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@

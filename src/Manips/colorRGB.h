@@ -70,15 +70,6 @@ class GEM_EXTERN colorRGB : public GemBase
     	//////////
     	// A value changed
     	void	    	aMess(float val);
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	rMessCallback(void *data, t_floatarg val);
-    	static void 	gMessCallback(void *data, t_floatarg val);
-    	static void 	bMessCallback(void *data, t_floatarg val);
-    	static void 	aMessCallback(void *data, t_floatarg val);
 };
 
 #endif	// for header file

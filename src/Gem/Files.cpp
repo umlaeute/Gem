@@ -2,7 +2,8 @@
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0400
-#include <windows.h>
+# include <io.h>
+# include <windows.h>
 #else
 # include <glob.h>
 #endif
@@ -14,6 +15,7 @@
 #endif
 
 #include "Gem/RTE.h"
+#include "Base/CPPExtern.h"
 
 namespace gem {
   namespace files {
@@ -148,6 +150,27 @@ namespace gem {
       return Ext;
     }
 
+    std::string getFullpath(const std::string&path, const CPPExtern*obj) {
+      std::string result=expandEnv(path);
+      if(obj!=NULL) {
+        char buf[MAXPDSTRING];
+        t_canvas*canvas=const_cast<t_canvas*>(obj->getCanvas());
+
+        if(canvas) {
+          canvas_makefilename(canvas, const_cast<char*>(result.c_str()), buf, MAXPDSTRING);
+          result=buf;
+        }
+      }
+      return result;
+    }
+
+    void close(int fd) {
+#ifdef _WIN32
+      ::_close(fd);
+#else
+      ::close(fd);
+#endif
+    }
 
 
   };

@@ -17,6 +17,7 @@
 /////////////////////////////////////////////////////////
 #ifdef _MSC_VER
 # pragma warning( disable: 4091)
+# define snprintf _snprintf
 #endif /* _MSC_VER */
 
 #include "Dylib.h"
@@ -143,7 +144,10 @@ public:
                   0, NULL );
     std::cerr << "GemDylib: "<<errorNumber<<std::endl;
     std::string error = "DLLerror: ";
-    error+=(unsigned int)errorNumber;
+    char errbuf[10];
+    snprintf(errbuf, 10, "%d", errorNumber);
+    errbuf[10-1]=0;
+    error+=errbuf;
     throw(GemException(error));
 #endif
 

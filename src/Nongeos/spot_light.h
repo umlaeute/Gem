@@ -71,12 +71,6 @@ class GEM_EXTERN spot_light : public world_light
   GLfloat spotExponent;
 
   GLfloat spotDirection[3];
-
- private:
-
-  //////////
-  // Static member functions
-  static void		lightParamMessCallback(void *data, t_floatarg linAtt, t_floatarg cutoff, t_floatarg exponent);
 };
 
 

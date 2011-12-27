@@ -829,12 +829,9 @@ void glsl_program:: outverticesMess(GLint vertices) {
 /////////////////////////////////////////////////////////
 void glsl_program :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::shaderMessCallback),
-                  gensym("shader"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::linkCallback),
-                  gensym("link"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::printMessCallback),
-                  gensym("print"), A_NULL);
+  CPPEXTERN_MSG (classPtr, "shader", shaderMess);
+  CPPEXTERN_MSG (classPtr, "link", linkMess);
+  CPPEXTERN_MSG0(classPtr, "print", printInfo);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::intypeMessCallback),
                   gensym("geometry_intype"), A_GIMME, A_NULL);
@@ -842,31 +839,21 @@ void glsl_program :: obj_setupCallback(t_class *classPtr)
                   gensym("geometry_outtype"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::typeMessCallback),
                   gensym("geometry_type"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&glsl_program::outverticesMessCallback),
-                  gensym("geometry_outvertices"), A_FLOAT, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "geometry_outvertices", outverticesMess, int);
 
   class_addanything(classPtr, reinterpret_cast<t_method>(&glsl_program::paramMessCallback));
 }
-void glsl_program :: shaderMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
-{
-  GetMyClass(data)->shaderMess(argc, argv);
-}
-void glsl_program :: linkCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void glsl_program :: linkMess(t_symbol*, int argc, t_atom*argv)
 {
   if(argc)
-    GetMyClass(data)->shaderMess(argc, argv);
-  GetMyClass(data)->m_wantLink=1;
-}
-void glsl_program :: printMessCallback(void *data)
-{
-  GetMyClass(data)->printInfo();
+    shaderMess(argc, argv);
+  m_wantLink=1;
 }
 void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   GetMyClass(data)->paramMess(s, argc, argv);
 }
-
-
 void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc==1) {
@@ -875,7 +862,6 @@ void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc, t_ato
     GetMyClass(data)->error("input-type must be exactly one parameter");
   }
 }
-
 void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc==1) {
@@ -884,7 +870,6 @@ void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc, t_at
     GetMyClass(data)->error("output type must be exactly one parameter");
   }
 }
-
 void glsl_program :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if(argc==2) {
@@ -893,9 +878,4 @@ void glsl_program :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom 
   } else {
     GetMyClass(data)->error("type must have exactly two parameters (input-type & output-type)");
   }
-}
-
-void glsl_program :: outverticesMessCallback(void *data, t_floatarg f)
-{
-  GetMyClass(data)->outverticesMess(f);
 }

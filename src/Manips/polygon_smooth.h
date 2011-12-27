@@ -59,12 +59,6 @@ class GEM_EXTERN polygon_smooth : public GemBase
     	//////////
     	// Polygon_Smooth state changed
    	void	    	polygon_smoothMess(int polygon_smoothState);
-
-   private:
-
-    	//////////
-    	// static member functions
-    	static void 	polygon_smoothMessCallback(void *data, t_floatarg polygon_smooth);
 };
 
 #endif	// for header file

@@ -36,10 +36,12 @@ unsigned int fastrand()
 /////////////////////////////////////////////////////////
 pix_puzzle :: pix_puzzle()
 {
-  myImage.xsize=myImage.ysize=myImage.csize=1;
-  blocknum=1;
-  myImage.allocate(blocknum);
+  myImage.xsize=myImage.ysize=512;
+  myImage.setCsizeByFormat(GL_RGBA_GEM);
+  myImage.allocate();
 
+  blocknum=1;
+ 
   m_force = true;
 
   blockw = 8;
@@ -183,11 +185,14 @@ void pix_puzzle :: processImage(imageStruct &image)
   unsigned char *p, *q;
 
   if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
-    int dataSize = image.xsize * image.ysize * image.csize;
     myImage.clear();
     m_force = false;
 
-    myImage.allocate(dataSize);
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.setCsizeByFormat(image.format);
+
+    myImage.reallocate();
 
     makePuzzleBlocks(image.xsize, image.ysize, image.csize);
     shuffle();
@@ -195,8 +200,7 @@ void pix_puzzle :: processImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
 
   dest = myImage.data;
 
@@ -260,11 +264,13 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
   unsigned char *p, *q;
 
   if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
-    int dataSize = image.xsize * image.ysize * image.csize;
     myImage.clear();
     m_force = false;
 
-    myImage.allocate(dataSize);
+    myImage.xsize = image.xsize;
+    myImage.ysize = image.ysize;
+    myImage.setCsizeByFormat(image.format);
+    myImage.reallocate();
 
     makePuzzleBlocks(image.xsize, image.ysize, image.csize);
     shuffle();
@@ -272,8 +278,7 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.csize = image.csize;
-  myImage.type  = image.type;
+  myImage.setCsizeByFormat(image.format);
 
   dest = myImage.data;
 

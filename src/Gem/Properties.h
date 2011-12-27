@@ -20,13 +20,15 @@
 #ifndef GEM_PROPERTIES_H
 #define GEM_PROPERTIES_H
 
+#include "Gem/ExportDef.h"
+
 #include "Utils/any.h"
 #include <vector>
 #include <string>
 
 namespace gem
 {
-  class Properties {
+  class GEM_EXTERN Properties {
   private:
     class PIMPL;
     PIMPL*pimpl;

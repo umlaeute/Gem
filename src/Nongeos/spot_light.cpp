@@ -133,13 +133,5 @@ void spot_light :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void spot_light :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&spot_light::lightParamMessCallback),
-                  gensym("paramlist"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-}
-void spot_light :: lightParamMessCallback(void *data,
-					  t_floatarg linAtt,
-					  t_floatarg cutoff,
-					  t_floatarg exponent)
-{
-  GetMyClass(data)->lightParamMess(linAtt, cutoff, exponent);
+  CPPEXTERN_MSG3(classPtr, "paramlist", lightParamMess, float, float, float);
 }

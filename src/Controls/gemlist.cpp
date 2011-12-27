@@ -125,7 +125,7 @@ void gemlist :: lightingMess(bool light)
   m_mystate.set(GemState::_GL_LIGHTING, m_lightState);
   m_mystate.set(GemState::_GL_SMOOTH, m_lightState);
 }
-void gemlist :: drawMess(t_atom arg)
+void gemlist :: drawMess(t_atom&arg)
 {
   if(A_SYMBOL==arg.a_type) {
     t_symbol*type=atom_getsymbol(&arg);
@@ -174,33 +174,19 @@ void gemlist :: rightRender(GemCache*cache, GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&gemlist::triggerMessCallback));
+  CPPEXTERN_MSG0(classPtr, "bang", trigger);
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::gem_rightMessCallback), gensym("gem_right"), A_GIMME, A_NULL);
 
+  CPPEXTERN_MSG1(classPtr, "ticktime", ticktimeMess, float);
+  CPPEXTERN_MSG1(classPtr, "lighting", lightingMess, bool);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::ticktimeMessCallback), gensym("ticktime"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::lightingMessCallback), gensym("lighting"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::drawMessCallback), gensym("draw"), A_GIMME, A_NULL);
-}
-
-void gemlist::triggerMessCallback(void *data)
-{
-  GetMyClass(data)->trigger();
-}
-
-void gemlist :: ticktimeMessCallback(void *data, t_floatarg time)
-{
-  GetMyClass(data)->ticktimeMess(time);
-}
-void gemlist :: lightingMessCallback(void *data, t_floatarg light)
-{
-  GetMyClass(data)->lightingMess(light>0.f);
 }
 void gemlist :: drawMessCallback(void *data, int argc, t_atom*argv)
 {
   if(argc==1)GetMyClass(data)->drawMess(argv[0]);
 }
-
 void gemlist::gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   GemCache*cache=NULL;

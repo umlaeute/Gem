@@ -45,14 +45,13 @@ pix_biquad :: pix_biquad(int argc, t_atom*argv) :
 {
   prev.xsize = 64;
   prev.ysize = 64;
-  prev.setCsizeByFormat(GL_RGBA);
+  prev.setCsizeByFormat(GL_RGBA_GEM);
   prev.reallocate();
   prev.setBlack();
 
   last.xsize = 64;
   last.ysize = 64;
-  last.setCsizeByFormat(GL_RGBA);
-  last.csize = 4;
+  last.setCsizeByFormat(GL_RGBA_GEM);
   last.reallocate();
   last.setBlack();
 
@@ -78,11 +77,11 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
   bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
-  prev.csize = image.csize;
+  prev.setCsizeByFormat(image.format);
   prev.reallocate();
   last.xsize = image.xsize;
   last.ysize = image.ysize;
-  last.csize = image.csize;
+  last.setCsizeByFormat(image.format);
   last.reallocate();
 
   if (set) {
@@ -146,11 +145,11 @@ void pix_biquad :: processYUVImage(imageStruct &image)
     bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
     prev.xsize = image.xsize;
     prev.ysize = image.ysize;
-    prev.csize = image.csize;
+    prev.setCsizeByFormat(image.format);
     prev.reallocate();
     last.xsize = image.xsize;
     last.ysize = image.ysize;
-    last.csize = image.csize;
+    last.setCsizeByFormat(image.format);
     last.reallocate();
 
     if (set) {
@@ -359,11 +358,11 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
     bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
     prev.xsize = image.xsize;
     prev.ysize = image.ysize;
-    prev.csize = image.csize;
+    prev.setCsizeByFormat(image.format);
     prev.reallocate();
     last.xsize = image.xsize;
     last.ysize = image.ysize;
-    last.csize = image.csize;
+    last.setCsizeByFormat(image.format);
     last.reallocate();
 
     if (set) {

@@ -106,14 +106,6 @@ class GEM_EXTERN vertex_program : public GemBase
 
   float		m_param[4];
   int	        m_envNum;
-
- protected:
-
-  //////////
-  // static member functions
-  static void openMessCallback   (void *data, t_symbol *filename);
-  static void printMessCallback  (void *);
-  static void paramMessCallback	 (void *data, t_float envNum, t_float param1, t_float param2, t_float param3, t_float param4);
 };
 
 #endif	// for header file

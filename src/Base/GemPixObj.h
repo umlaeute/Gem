@@ -134,8 +134,9 @@ class GEM_EXTERN GemPixObj : public GemBase
   //////////
   // static member functions
   static void     obj_setupCallback(t_class *classPtr);
-  static void 	floatMessCallback(void *data, float n);
-  static void 	simdMessCallback(void *data, float n);
+
+ protected:
+  virtual void SIMD(int);
 };
 
 

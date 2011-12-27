@@ -73,8 +73,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
 
   m_buffer.xsize=64;
   m_buffer.ysize=64;
-  m_buffer.csize=4;
-  m_buffer.format=GL_RGBA;
+  m_buffer.setCsizeByFormat(GL_RGBA_GEM);
   m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*m_bufnum);
 }
 
@@ -100,8 +99,8 @@ void pix_tIIR :: processImage(imageStruct &image)
 
   // assume that the pix_size does not change !
   // if (oldsize<newsize){}
-  dest=m_buffer.data;
   m_buffer.reallocate(image.xsize*image.ysize*image.csize*m_bufnum);
+
   if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize || m_buffer.format!=image.format){
     m_buffer.xsize=image.xsize;
     m_buffer.ysize=image.ysize;
@@ -118,9 +117,9 @@ void pix_tIIR :: processImage(imageStruct &image)
     else{
       j=m_bufnum;
       while(j--){
-	source=image.data;
-	dest=m_buffer.data+j*imagesize;
-	i=imagesize;while(i--)*dest++=*source++;
+        source=image.data;
+        dest=m_buffer.data+j*imagesize;
+        i=imagesize;while(i--)*dest++=*source++;
       }
     }
     set=false;

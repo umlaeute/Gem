@@ -102,23 +102,8 @@ void translateXYZ :: zMess(float val)
 /////////////////////////////////////////////////////////
 void translateXYZ :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&translateXYZ::xMessCallback),
-    	    gensym("xVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&translateXYZ::yMessCallback),
-    	    gensym("yVal"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&translateXYZ::zMessCallback),
-    	    gensym("zVal"), A_FLOAT, A_NULL);
-}
-void translateXYZ :: xMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->xMess((float)val);
-}
-void translateXYZ :: yMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->yMess((float)val);
-}
-void translateXYZ :: zMessCallback(void *data, t_floatarg val)
-{
-    GetMyClass(data)->zMess((float)val);
+  CPPEXTERN_MSG1(classPtr, "xVal", xMess, float);
+  CPPEXTERN_MSG1(classPtr, "yVal", yMess, float);
+  CPPEXTERN_MSG1(classPtr, "zVal", zMess, float);
 }
 

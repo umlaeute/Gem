@@ -390,16 +390,13 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   std::string myfilename=filename.c_str();
 
   const UInt8*filename8=reinterpret_cast<const UInt8*>(myfilename.c_str());
-
 #if defined __APPLE__
   FSRef			ref;
   err = ::FSPathMakeRef(filename8, &ref, NULL );
 
   if (err == fnfErr) {
     // if the file does not yet exist, then let's create the file
-    if(touch(myfilename)) {
-      return false;
-    }
+    touch(myfilename);
     err = FSPathMakeRef(filename8, &ref, NULL);
   }
 
@@ -434,22 +431,24 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   r.bottom = constimage.ysize;
   r.right = constimage.xsize;
 
+  imageStruct rgbaimg;
+  rgbaimg.convertFrom(&constimage, GL_RGBA_GEM);
 
   unsigned char *data = NULL;
-  if(!constimage.upsidedown) { // the image is openGL-oriented, not quicktime-oriented! flip it!
-    int rowBytes = constimage.xsize * constimage.csize;
-    int imageSize = constimage.ysize * rowBytes;
+  if(!rgbaimg.upsidedown) { // the image is openGL-oriented, not quicktime-oriented! flip it!
+    int rowBytes = rgbaimg.xsize * rgbaimg.csize;
+    int imageSize = rgbaimg.ysize * rowBytes;
 
     data = new unsigned char[imageSize];
 
-    InvertGLImage(constimage.data, data, imageSize, rowBytes);
+    InvertGLImage(rgbaimg.data, data, imageSize, rowBytes);
   }
 
   err = QTNewGWorldFromPtr(&img,
                            IMAGEQT_RGBA_PIXELFORMAT,			   //k32RGBAPixelFormat,
                            &r, NULL, NULL, 0,
-                           (data?data:constimage.data),
-                           static_cast<long>(constimage.xsize * constimage.csize));
+                           (data?data:rgbaimg.data),
+                           static_cast<long>(rgbaimg.xsize * rgbaimg.csize));
 
   // is this the right place to free the "data" buffer (if used)?
   // i don't know, whether quicktime still needs the buffer...
@@ -489,7 +488,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   CodecQ quality=codecHighQuality;
 
   double d=0.;
-  if(props.get("quality"), d) {
+  if(props.get("quality", d)) {
     // <0 = minqality
     // >=100 = lossless
     if(d<0.)d=0.;

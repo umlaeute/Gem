@@ -55,15 +55,8 @@ class GEM_EXTERN shearXZ : public GemBase
     	// X value changed
     	void	    	shearMess(float val);
 
-		//shear value
-		float			shear;
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	shearMessCallback(void *data, t_floatarg val);
-
+	//shear value
+	float			shear;
 };
 
 #endif	// for header file

@@ -112,30 +112,10 @@ void accumrotate :: reset()
 /////////////////////////////////////////////////////////
 void accumrotate :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::xMessCallback),
-		  gensym("xVal"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::yMessCallback),
-		  gensym("yVal"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::zMessCallback),
-		  gensym("zVal"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&accumrotate::resetCallback),
-		  gensym("reset"), A_NULL);
-}
-void accumrotate :: xMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->xMess((float)val);
-}
-void accumrotate :: yMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->yMess((float)val);
-}
-void accumrotate :: zMessCallback(void *data, t_floatarg val)
-{
-  GetMyClass(data)->zMess((float)val);
-}
-void accumrotate :: resetCallback(void *data)
-{
-  GetMyClass(data)->reset();
+  CPPEXTERN_MSG1(classPtr, "xVal", xMess, float);
+  CPPEXTERN_MSG1(classPtr, "yVal", yMess, float);
+  CPPEXTERN_MSG1(classPtr, "zVal", zMess, float);
+  CPPEXTERN_MSG0(classPtr, "reset", reset);
 }
 
 

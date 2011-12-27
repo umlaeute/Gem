@@ -21,6 +21,7 @@
 #include "Gem/Cache.h"
 #include "Gem/ImageIO.h"
 
+#include "Gem/Files.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -65,25 +66,31 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_automatic = false;
   m_autocount = 0;
   m_filetype=0;
-  snprintf(m_pathname, MAXPDSTRING, "gem");
+  m_pathname="gem";
 
   m_banged = false;
-
 
   m_originalImage = new imageStruct();
   m_originalImage->xsize=m_width;
   m_originalImage->ysize=m_height;
-  m_originalImage->setCsizeByFormat(GL_RGBA);
+  m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
   m_originalImage->allocate();
+
+	// AV : i wanted to put thoses lines in fileMess() function but it crashes...
+	// we need to get patcher path each time we change the filename because the patcher may be saved as...
+	// and its directory could change without updating m_patcherPath
+	m_canvas = canvas_getcurrent();
+	m_patcherPath = canvas_getdir(m_canvas);
+
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_write :: ~pix_write()
+pix_write :: ~pix_write(void)
 {
-  cleanImage();
+	cleanImage();
 }
 
 
@@ -104,7 +111,7 @@ bool pix_write :: isRunnable(void) {
 // writeMess
 //
 /////////////////////////////////////////////////////////
-void pix_write :: doWrite()
+void pix_write :: doWrite(void)
 {
   int width  = m_width;
   int height = m_height;
@@ -118,7 +125,7 @@ void pix_write :: doWrite()
 #ifndef __APPLE__
   m_originalImage->setCsizeByFormat(GL_RGB);
 #else
-  m_originalImage->setCsizeByFormat(GL_RGBA);
+  m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
 #endif /* APPLE */
 
   m_originalImage->reallocate();
@@ -166,7 +173,8 @@ void pix_write :: render(GemState *state)
       extension=(char*)"jpg";
     }
 
-    snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
+    snprintf(m_filename, (size_t)(MAXPDSTRING), "%s%05d.%s", m_pathname.c_str(), m_autocount, extension);
+    m_filename[MAXPDSTRING-1]=0;
 
     m_autocount++;
     m_banged = false;
@@ -195,14 +203,17 @@ void pix_write :: posMess(int x, int y)
   m_yoff = y;
 }
 
-void pix_write :: fileMess(int argc, t_atom *argv)
+void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
   char *extension = (char*)".tif";
+  char tmp[MAXPDSTRING];
+
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
-      atom_string(argv++, m_pathname, MAXPDSTRING);
+      atom_string(argv++, tmp, MAXPDSTRING);
       argc--;
-      snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s.%s", m_pathname, extension);
+
+      m_pathname=gem::files::getFullpath(tmp, this);
     }
     if (argc>0)
       m_filetype = atom_getint(argv);
@@ -215,7 +226,7 @@ void pix_write :: fileMess(int argc, t_atom *argv)
 // cleanImage
 //
 /////////////////////////////////////////////////////////
-void pix_write :: cleanImage()
+void pix_write :: cleanImage(void)
 {
   // release previous data
   if (m_originalImage)
@@ -231,36 +242,19 @@ void pix_write :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_write :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::fileMessCallback),
-		  gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::autoMessCallback),
-		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_write::bangMessCallback));
+  CPPEXTERN_MSG (classPtr, "file", fileMess);
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::sizeMessCallback),
-		  gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_write::posMessCallback),
-		  gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
+  CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
 }
 
-void pix_write :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_write :: autoMess(bool on)
 {
-  GetMyClass(data)->fileMess(argc, argv);
+  m_automatic=on;
 }
-void pix_write :: autoMessCallback(void *data, t_floatarg on)
+void pix_write :: bangMess(void)
 {
-  GetMyClass(data)->m_automatic=(on!=0);
-}
-void pix_write :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->m_banged=true;
-}
-
-void pix_write :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
-{
-  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
-}
-void pix_write :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-  GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
+  m_banged=true;
 }

@@ -62,12 +62,6 @@ class GEM_EXTERN shininess : public GemBase
     	//////////
     	// shininess changed
     	void	    	shininessMess(float val);
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	shininessMessCallback(void *data, t_floatarg val);
 };
 
 #endif	// for header file

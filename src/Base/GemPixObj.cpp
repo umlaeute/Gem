@@ -211,15 +211,10 @@ void GemPixObj :: processOnOff(int on)
 /////////////////////////////////////////////////////////
 void GemPixObj :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, reinterpret_cast<t_method>(&GemPixObj::floatMessCallback));
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPixObj::simdMessCallback),
-		  gensym("simd"), A_DEFFLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "float", processOnOff, int);
+  CPPEXTERN_MSG1(classPtr, "simd" , SIMD    , int);
 }
-void GemPixObj :: floatMessCallback(void *data, float n)
+void GemPixObj :: SIMD(int n)
 {
-    GetMyClass(data)->processOnOff((int)n);
-}
-void GemPixObj :: simdMessCallback(void *data, float n)
-{
-  GetMyClass(data)->m_simd=GemSIMD::requestCPU((int)n);
+  m_simd=GemSIMD::requestCPU(n);
 }

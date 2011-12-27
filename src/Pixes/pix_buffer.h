@@ -18,6 +18,8 @@ LOG
 #include "Base/CPPExtern.h"
 #include "Gem/Image.h"
 
+#include "Gem/Properties.h"
+
 #define DEFAULT_NUM_FRAMES 100
 
 
@@ -34,53 +36,53 @@ LOG
   DESCRIPTION
 
   -----------------------------------------------------------------*/
+namespace gem { 
+  namespace plugins {class imagesaver;};
+  namespace RTE     {class Outlet;};
+};
+
 class GEM_EXTERN pix_buffer : public CPPExtern
 {
   CPPEXTERN_HEADER(pix_buffer, CPPExtern);
 
-    public:
+ public:
 
   //////////
   // Constructor
   pix_buffer(t_symbol *s,t_float f);
   virtual bool  putMess(imageStruct*img,int pos);
   virtual imageStruct* getMess(int pos);
-  virtual int numFrames(void);
-
- protected:
+  virtual unsigned int numFrames(void);
 
   //////////
   // Destructor
-  virtual ~pix_buffer();
+  virtual ~pix_buffer( void );
 
   //////////
   // Do the processing
-
-  imageStruct    *m_buffer;
-
-  virtual void  allocateMess(int,int,int);
-  virtual void  bangMess();
-  virtual void  openMess(t_symbol*,int);
-  virtual void  saveMess(t_symbol*,int);
+  virtual void  allocateMess(unsigned int,unsigned int,unsigned int);
+  void          allocateMess(t_symbol*,int,t_atom*);
+  virtual void  bangMess( void );
+  virtual void  loadMess(std::string,int);
+  virtual void  saveMess(std::string,int);
 
   virtual void  copyMess(int,int);
 
   virtual void  resizeMess(int);
 
-  int m_numframes;
+  virtual void enumProperties( void );
+  virtual void clearProperties( void );
+  virtual void setProperties( t_symbol*, int, t_atom*);
+
+ protected:
+  imageStruct    *m_buffer;
+  unsigned int m_numframes;
   t_symbol *m_bindname;
 
+  gem::Properties m_writeprops;
 
- private:
-
-  //////////
-  // static member functions
-  static void allocateMessCallback(void *data,t_symbol*,int,t_atom*);
-  static void bangMessCallback(void *data);
-  static void openMessCallback(void *data, t_symbol*, t_floatarg);
-  static void saveMessCallback(void *data, t_symbol*, t_floatarg);
-  static void resizeMessCallback(void *data, t_floatarg);
-  static void copyMessCallback(void *data, t_floatarg, t_floatarg);
+  gem::plugins::imagesaver*m_handle;
+  gem::RTE::Outlet*m_outlet;
 };
 
 #endif	// for header file

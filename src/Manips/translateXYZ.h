@@ -66,14 +66,6 @@ class GEM_EXTERN translateXYZ : public GemBase
     	//////////
     	// Z value changed
     	void	    	zMess(float val);
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	xMessCallback(void *data, t_floatarg val);
-    	static void 	yMessCallback(void *data, t_floatarg val);
-    	static void 	zMessCallback(void *data, t_floatarg val);
 };
 
 #endif	// for header file

@@ -48,7 +48,7 @@ void GemCache :: reset(gemhead *parent)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-GemCache :: ~GemCache()
+GemCache :: ~GemCache(void)
 {
   m_magic=0xFFFFFFF;
   m_parent=NULL;

@@ -608,7 +608,7 @@ public:
   }
 
   GLenum GLformat() {
-    GLenum format = (m_rgba?GL_RGBA:GL_RGB);
+    GLenum format = (m_rgba?GL_RGBA_GEM:GL_RGB);
     return format;
   }
 

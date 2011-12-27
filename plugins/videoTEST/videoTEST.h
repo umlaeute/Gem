@@ -5,7 +5,7 @@
 #include "Gem/Image.h"
 
 namespace gem { namespace plugins {
-    class GEM_EXTERN videoTEST : public video {
+    class GEM_EXPORT videoTEST : public video {
  private:
    std::string m_name;
    bool m_open;

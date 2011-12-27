@@ -116,26 +116,14 @@ class GEM_EXTERN gemwin : public CPPExtern
 
   //////////
   // Static member functions
-  static void 	bangMessCallback(void *data);
-  static void 	floatMessCallback(void *data, t_float state);
-  static void 	renderMessCallback(void *data);
   static void 	titleMessCallback(void *data, t_symbol* s);
   static void 	createMessCallback(void *data, t_symbol* s);
   static void 	createStereoMessCallback(void *data);
-  static void 	bufferMessCallback(void *data, t_floatarg buf);
-  static void 	dimensionsMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void 	offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void 	fullscreenMessCallback(void *data, t_floatarg on);
-  static void 	menuBarMessCallback(void *data, t_floatarg on);
-  static void 	secondscreenMessCallback(void *data, t_floatarg on);
   static void 	colorMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void 	clearmaskMessCallback(void *data, t_floatarg bitmask);
   static void 	ambientMessCallback(void *data, t_symbol*,int,t_atom*);
   static void 	specularMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void 	shininessMessCallback(void *data, t_floatarg val);
   static void	fogMessCallback(void *, t_symbol *, int argc, t_atom *argv);
   static void 	fogColorMessCallback(void *, t_symbol*,int,t_atom*);
-  static void	fogModeMessCallback(void *, t_floatarg val);
 
   // just call GemMan directly
   static void 	destroyMessCallback(void *);
@@ -151,12 +139,6 @@ class GEM_EXTERN gemwin : public CPPExtern
   static void	stereoFocMessCallback(void *, t_floatarg state);
   static void 	stereoSepMessCallback(void *, t_floatarg state);
   static void 	stereoLineMessCallback(void *, t_floatarg state);
-  static void 	cursorMessCallback(void *data, t_floatarg val);
-  static void 	topmostMessCallback(void *data, t_floatarg val);
-  static void 	blurMessCallback(void *data, t_floatarg val);
-  static void 	fpsMessCallback(void *data);
-  static void 	fsaaMessCallback(void *data,t_floatarg val);
-
 };
 
 #endif	// for header file

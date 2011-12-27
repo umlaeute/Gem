@@ -32,14 +32,15 @@ CPPEXTERN_NEW(pix_rds);
 /////////////////////////////////////////////////////////
 pix_rds :: pix_rds()
 {
-    myImage.xsize=myImage.ysize=myImage.csize=1;
-    myImage.allocate(1);
-    stride = 40;
-    method = 0;
+  myImage.xsize=myImage.ysize=512;
+  myImage.setCsizeByFormat(GL_RGBA_GEM);
+  myImage.allocate();
+  stride = 40;
+  method = 0;
 
-    doDots=1;
+  doDots=1;
 
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("stride"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("stride"));
 
 }
 

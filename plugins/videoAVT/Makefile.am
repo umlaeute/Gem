@@ -12,7 +12,10 @@ plugin_LTLIBRARIES+= gem_videoAVT.la
 endif
 
 gem_videoAVT_la_CXXFLAGS =
-gem_videoAVT_la_LDFLAGS  = -module -avoid-version -shared
+gem_videoAVT_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_videoAVT_la_LDFLAGS += -no-undefined
+endif
 gem_videoAVT_la_LIBADD   =
 
 # RTE
@@ -20,6 +23,7 @@ gem_videoAVT_la_CXXFLAGS += @GEM_RTE_CFLAGS@
 gem_videoAVT_la_LDFLAGS  += @GEM_RTE_LIBS@   
 #gem_videoAVT_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 #gem_videoAVT_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# #gem_videoAVT_la @MOREFLAGS@
 
 # Dependencies
 gem_videoAVT_la_CXXFLAGS += @GEM_LIB_LIBPVAPI_CFLAGS@

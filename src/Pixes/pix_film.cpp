@@ -32,6 +32,11 @@
 
 #include <sstream>
 
+#ifdef _WIN32
+// for select()
+# include <Winsock2.h>
+#endif
+
 /***************************************
  * on the order of codec-libraries
  *
@@ -180,7 +185,7 @@ void *pix_film :: grabThread(void*you)
 /////////////////////////////////////////////////////////
 pix_film :: pix_film(t_symbol *filename) :
   m_haveMovie(0),
-  m_auto(0), m_format(GL_RGBA),
+  m_auto(0), m_format(GL_RGBA_GEM),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_reqTrack(0), m_curTrack(0),
   m_handle(NULL),
@@ -486,7 +491,7 @@ void pix_film :: csMess(t_symbol *s, bool immediately)
     if(gensym("RGB")==s||gensym("rgb")==s)
       m_format=GL_RGB;
     else
-      m_format=GL_RGBA;
+      m_format=GL_RGBA_GEM;
     break;
   default:
     error("colorspace must be 'RGBA', 'YUV' or 'Gray'");

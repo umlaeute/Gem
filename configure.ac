@@ -53,6 +53,7 @@ AC_CONFIG_FILES([plugins/videoUNICAP/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
+AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
@@ -62,7 +63,7 @@ AC_CONFIG_FILES([extra/pix_drum/Makefile extra/pix_mano/Makefile])
 AC_CONFIG_FILES([extra/pix_fiducialtrack/Makefile])
 
 # other stuff
-AC_CONFIG_FILES([build/Makefile Gem.pc])
+AC_CONFIG_FILES([build/Makefile Gem.pc Gem-meta.pd])
 
 
 ##########################
@@ -118,7 +119,6 @@ dnl AC_PROG_OBJCXX
 
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
-#predeps_CXX="-lstdc++"
 
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -129,6 +129,22 @@ AC_ARG_WITH([ALL],
 
 
 GEM_CHECK_RTE()
+
+AC_SUBST(GEM_CPPFLAGS)
+AC_SUBST(GEM_CFLAGS)
+AC_SUBST(GEM_CXXFLAGS)
+AC_SUBST(GEM_LIBS)
+
+AC_SUBST(GEM_EXTERNAL_CPPFLAGS)
+AC_SUBST(GEM_EXTERNAL_CFLAGS)
+AC_SUBST(GEM_EXTERNAL_LIBS)
+
+
+GEM_CPPFLAGS="-DGEM_INTERNAL"
+
+if test "x$have_pddll" = "xyes"; then
+ GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll"
+fi
 
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
@@ -151,12 +167,28 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
+# Checks for libraries.
 
 AC_CHECK_LIB([m],[sin])
 AC_CHECK_LIB([z],[main])
 AC_CHECK_LIB([dl],[dlopen])
 
-# Checks for libraries.
+# w32 compatibility library
+AC_CHECK_LIB([OLDNAMES], [close])
+AC_CHECK_LIB([coldname], [close])
+# Standard C++ Libray:
+AC_CHECK_LIB([libcpmt], [main])
+# C runtime library:
+AC_CHECK_LIB([msvcrt], [fclose])
+# Standard C++ Libray:
+AC_CHECK_LIB([msvcprt], [main])
+# Winsock Library
+AC_CHECK_LIB([ws2_32], [main])
+AC_CHECK_LIB([wsock32], [main])
+
+# w32 window creating 
+AC_CHECK_LIB([gdi32], [main])
+
 
 ## on OSX X shouldn't be used by default as there are other ways
 ## however, if people really want it ("--with-x") they should get it
@@ -223,8 +255,7 @@ GEM_CHECK_LIB([ImageMagick++], [Magick++], [main],
 GEM_CHECK_LIB([tiff], [tiff], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg], [jpeg_read_header],,,,[image loader])
 
-GEM_CHECK_LIB([ftgl], [ftgl], [main],,,[-lfreetype],[font support])
-
+IEM_CHECK_FTGL()
 
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay], [CreateIAviReadFile],,,,[movie loader])
@@ -293,12 +324,16 @@ fi
 AM_CONDITIONAL([HAVE_V4L2], [test "x${have_v4l2}" != "xno"])
 
 
-GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
+dnl GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
+GEM_CHECK_LIB([vfw32], [vfw32], [main],,,, [video input])
 # is this needed?
 dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
 
-# for this to work properly, the INCLUDES had to be set with PKG_FTGL_CFLAGS
-AC_CHECK_HEADERS([FTGL/ftgl.h])
+# VLC
+GEM_CHECK_LIB([libvlc], [vlc], [libvlc_video_set_callbacks],,,, [video input])
+
+
+
 
 AC_ARG_WITH([default-font],
             AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
@@ -313,10 +348,6 @@ fi
 
 # threading
 GEM_CHECK_THREADS
-
-# pkg-config checks
-
-dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -420,6 +451,8 @@ if test "x$enable_registerstruct" = "xyes"; then
    might break things, if you are using several different compilers])
 fi
 fi
+
+GEM_CHECK_CXXFLAGS([-mms-bitfields])
 
 if test "x$KERN" = "xDarwin"; then
  GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
@@ -578,9 +611,10 @@ Configuration:
 
   Install path           : ${prefix}
 
- pure-data:
-  version                : ${PD_MAJORVERSION}.${PD_MINORVERSION}
-  extension              : ${EXT}
+ RTE (${GEM_RTE}):
+  external-extension     : ${GEM_RTE_EXTENSION}
+  CFLAGS                 : ${GEM_RTE_CFLAGS}
+  LIBS                   : ${GEM_RTE_LIBS}
 
  used optional libraries:
 

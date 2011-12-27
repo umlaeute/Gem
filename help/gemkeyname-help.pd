@@ -1,33 +1,31 @@
-#N canvas 369 20 507 575 10;
-#X text 135 37 part of GEM;
-#X text 87 100 keyboard events in the GEM window;
-#X text 152 70 [gemkeyname];
-#X text 51 318 [gemkeyname] sends out keyboard events which occur in
-the GEM window. Such event will give a symbolic description of the
-button. The "state"-outlet will be 1 for KEY_DOWN and 0 for KEY_UP.
-;
-#X text 52 383 It is not guaranteed \, that Windows and Linux versions
-will give the same description for the same key pressed !!! Also \,
-there is no guarantee \, that the pd-object [keyname] will return the
-same symbols as [gemkeyname];
-#X text 49 456 Furthermore \, i would like to make this object really
-cross-platform one day. Thus the KeyName might change on one system
-or another in future times.;
-#X text 52 508 USE AT YOUR OWN RISK!!!;
-#X obj 79 175 cnv 15 100 40 empty empty empty 20 12 0 14 -24198 -66577
+#N canvas 64 27 679 445 10;
+#X obj 27 85 cnv 15 450 200 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X floatatom 89 293 2 0 0 1 state - -;
-#X obj 348 176 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 27 325 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#X text 35 332 Inlets:;
+#X obj 27 290 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X text 36 291 Arguments:;
+#X text 472 28 GEM object;
+#X text 35 361 Outlets:;
+#X text 495 49 Example:;
+#X text 74 50 Class: control object;
+#X obj 486 84 cnv 15 170 180 empty empty empty 20 12 0 14 -228992 -66577
+0;
+#X obj 495 101 cnv 15 150 80 empty empty empty 20 12 0 14 -24198 -66577
+0;
+#X obj 546 194 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
 #X obj 67 41 route create;
 #X msg 67 70 set destroy;
-#X msg 155 70 set create;
-#X msg 197 134 destroy;
-#X msg 132 112 reset \, create \, 1;
+#X msg 142 68 set create;
+#X msg 198 112 destroy;
+#X msg 132 112 create \, 1;
 #X connect 2 0 3 0;
 #X connect 3 0 4 0;
 #X connect 3 0 7 0;
@@ -37,12 +35,34 @@ or another in future times.;
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 353 215 pd gemwin;
-#X msg 353 196 create;
-#X text 349 175 Create window:;
-#X obj 89 185 gemkeyname;
-#X symbolatom 154 239 10 0 0 0 keyName - -;
-#X connect 10 0 11 0;
-#X connect 11 0 10 0;
-#X connect 13 0 8 0;
-#X connect 13 1 14 0;
+#X restore 551 233 pd gemwin;
+#X msg 551 214 create;
+#X text 547 193 Create window:;
+#X text 38 89 Description: output keyboard events in the GEM window
+;
+#X text 37 265 USE AT YOUR OWN RISK !!!;
+#X text 82 302 none;
+#X text 53 344 Inlet 1: non - used;
+#X text 488 274 see also:;
+#X text 53 34 Synopsis: [gemkeyname];
+#X text 36 108 [gemkeyname] sends out keyboard events which occur in
+the GEM window. Such event will give a symbolic description of the
+button. The "state"-outlet will be 1 for KEY_DOWN and 0 for KEY_UP.
+;
+#X text 37 219 Furthermore \, i would like to make this object really
+cross-platform one day. Thus the KeyName might change on one system
+or another in future times.;
+#X text 37 161 It is not guaranteed \, that Windows / Linux / OSX versions
+will give the same description for the same key pressed !!! Also \,
+there is no guarantee \, that the pd-object [keyname] will return the
+same symbols as [gemkeyname];
+#X text 53 376 Outlet 1: state;
+#X text 53 390 Outlet 2: keyName;
+#X obj 489 299 gemkeyboard;
+#X floatatom 508 160 2 0 0 1 state - -;
+#X symbolatom 565 134 10 0 0 0 keyName - -;
+#X obj 508 115 gemkeyname;
+#X connect 12 0 13 0;
+#X connect 13 0 12 0;
+#X connect 29 0 27 0;
+#X connect 29 1 28 0;

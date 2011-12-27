@@ -19,7 +19,7 @@
 
 class CPPExtern;
 namespace gem { namespace RTE {
-    GEM_EXTERN class Outlet {
+    class GEM_EXTERN Outlet {
     private:
       class PIMPL;
       PIMPL*m_pimpl;

@@ -3,14 +3,12 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
 include ../check-sources.mk
-
-DISTCLEANFILES =
 
 noinst_LTLIBRARIES = libGem.la
 
-libGem_la_CXXFLAGS = -DHAVE_VERSION_H
+libGem_la_CXXFLAGS =
 libGem_la_LIBADD   =
 libGem_la_LDFLAGS  =
 
@@ -24,20 +22,6 @@ libGem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 libGem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
 libGem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
 
-
-## version stuff
-.PHONY: FORCE
-
-FORCE:
-
-Version.cpp: version_current.h FORCE
-
-version_current.h: $(srcdir)/../version.h.in FORCE
-	$(SHELL) $(srcdir)/../pkgversion.sh $< > $@
-
-DISTCLEANFILES += version_current.h
-CHECKUNUSED_IGNORE = version_current.h
-## /version stuff
 
 
 libGem_la_includedir = $(includedir)/Gem/Gem
@@ -129,7 +113,6 @@ libGem_la_SOURCES=  \
 	ThreadMutex.h \
 	ThreadSemaphore.cpp \
 	ThreadSemaphore.h \
-	Version.cpp \
 	Version.h \
 	WorkerThread.cpp \
 	WorkerThread.h

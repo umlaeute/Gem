@@ -73,16 +73,6 @@ void GemPathBase :: openMess(t_symbol *arrayname)
 /////////////////////////////////////////////////////////
 void GemPathBase :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPathBase::openMessCallback),
-		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addfloat(classPtr, reinterpret_cast<t_method>(&GemPathBase::floatMessCallback));
+  CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "float", floatMess, t_float);
 }
-void GemPathBase :: openMessCallback(void *data, t_symbol *arrayname)
-{
-  GetMyClass(data)->openMess(arrayname);
-}
-void GemPathBase :: floatMessCallback(void *data, float n)
-{
-  GetMyClass(data)->floatMess(n);
-}
-

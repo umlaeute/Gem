@@ -383,6 +383,7 @@ IEM_OPERATING_SYSTEM
 
 AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
+AC_SUBST(GEM_RTE)
 
 if test "x${libdir}" = "x\${exec_prefix}/lib"; then
  libdir='${exec_prefix}/lib/pd/extra'
@@ -392,10 +393,11 @@ tmp_rte_cppflags="$CPPFLAGS"
 tmp_rte_cflags="$CFLAGS"
 tmp_rte_cxxflags="$CXXFLAGS"
 tmp_rte_ldflags="$LDFLAGS"
+tmp_rte_libs="$LIBS"
 
 GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
-GEM_RTE="pd"
+GEM_RTE="Pure Data"
 
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
@@ -436,6 +438,13 @@ if test -d "$with_pd" ; then
  LIBS="$LIBS ${GEM_RTE_LIBS}"
 fi
 
+AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
+if test "x$have_pddll" = "xyes"; then
+ GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-Xlinker -l:pd.dll"
+else
+ AC_CHECK_LIB([pd], [nullfn], [GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-lpd"])
+fi
+
 AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
 
 dnl LATER check why this doesn't use the --with-pd includes
@@ -454,16 +463,21 @@ AC_ARG_WITH([extension],
 if test "x$with_extension" != "x"; then
  EXT=$with_extension
 else
- EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
-  if test "x$KERN" = "xDarwin"; then
-    EXT=pd_darwin
-  else
-   if test "x$host_os" = "x"
-   then
-    dnl just assuming that it is still linux (e.g. x86_64)
-    EXT="pd_linux"
-   fi
-  fi
+  case x$host_os in
+   x*darwin*)
+     EXT=pd_darwin
+     ;;
+   x*mingw* | x*cygwin*)
+     EXT=dll
+     ;;
+   x)
+     dnl just assuming that it is still linux (e.g. x86_64)
+     EXT="pd_linux"
+     ;;
+   *)
+     EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
+     ;;
+  esac
 fi
 GEM_RTE_EXTENSION=$EXT
 AC_SUBST(GEM_RTE_EXTENSION)
@@ -472,6 +486,7 @@ CPPFLAGS="$tmp_rte_cppflags"
 CFLAGS="$tmp_rte_cflags"
 CXXFLAGS="$tmp_rte_cxxflags"
 LDFLAGS="$tmp_rte_ldflags"
+LIBS="$tmp_rte_libs"
 ]) # GEM_CHECK_RTE
 
 

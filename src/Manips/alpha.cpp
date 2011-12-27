@@ -129,29 +129,8 @@ void alpha :: depthtestMess(int i)
 /////////////////////////////////////////////////////////
 void alpha :: obj_setupCallback(t_class *classPtr)
 {
-    class_addfloat(classPtr, reinterpret_cast<t_method>(&alpha::alphaMessCallback));
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&alpha::testMessCallback),
-    	gensym("test"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&alpha::funMessCallback),
-    	gensym("function"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&alpha::depthtestMessCallback),
-    	gensym("auto"), A_FLOAT, A_NULL);
-}
-void alpha :: alphaMessCallback(void *data, t_floatarg alphaState)
-{
-    GetMyClass(data)->alphaMess(static_cast<int>(alphaState));
-}
-void alpha :: testMessCallback(void *data, t_floatarg alphaTest)
-{
-    GetMyClass(data)->testMess(static_cast<int>(alphaTest));
-}
-
-void alpha :: depthtestMessCallback(void *data, t_floatarg f)
-{
-    GetMyClass(data)->depthtestMess(!static_cast<int>(f));
-}
-
-void alpha :: funMessCallback(void *data, t_floatarg alphaFun)
-{
-    GetMyClass(data)->funMess(static_cast<int>(alphaFun));
+  CPPEXTERN_MSG1(classPtr, "float"   , alphaMess    , int);
+  CPPEXTERN_MSG1(classPtr, "test"    , testMess     , int);
+  CPPEXTERN_MSG1(classPtr, "function", funMess      , int);
+  CPPEXTERN_MSG1(classPtr, "auto"    , depthtestMess, int);
 }

@@ -55,11 +55,11 @@ class GEM_EXTERN pix_write : public GemBase
 
     	//////////
     	// Destructor
-    	virtual ~pix_write();
+    	virtual ~pix_write(void);
 
     	//////////
     	// Write to the current filename
-    	virtual void	doWrite();
+    	virtual void	doWrite(void);
 
       // check extensions
       virtual bool isRunnable(void);
@@ -74,7 +74,7 @@ class GEM_EXTERN pix_write : public GemBase
 
     	//////////
     	// Set the filename and filetype
-    	virtual void	fileMess(int argc, t_atom *argv);
+    	virtual void	fileMess(t_symbol*, int argc, t_atom *argv);
 
     	//////////
     	// When a size message is received
@@ -84,9 +84,12 @@ class GEM_EXTERN pix_write : public GemBase
     	// When a position message is received
     	virtual void	posMess(int x, int y);
 
+      void autoMess(bool);
+      void bangMess(void);
+
     	//////////
     	// Clean up the image
-    	void	    	cleanImage();
+    	void	    	cleanImage(void);
 
     	//////////
     	// The original pix_write
@@ -107,10 +110,10 @@ class GEM_EXTERN pix_write : public GemBase
 
     	//////////
 	// path to write to
-    	char	    	m_pathname[MAXPDSTRING];
+  std::string m_pathname;
     	//////////
 	// current file to write to
-    	char	    	m_filename[MAXPDSTRING+10];
+  char m_filename[MAXPDSTRING];
 
     	//////////
 	// current file to write to
@@ -131,6 +134,17 @@ class GEM_EXTERN pix_write : public GemBase
     	//////////
     	// The height
     	int     	m_height;
+    	
+    	//////////
+    	// canvas
+    	t_canvas * m_canvas;
+  
+    	//////////
+    	// patcher path
+    	t_symbol * m_patcherPath;
+    	
+    	
+    	 	
 
     private:
 

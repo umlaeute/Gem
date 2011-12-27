@@ -1,5 +1,5 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 EXTRA_DIST = recordQT.sln recordQT.vcproj
 
@@ -9,12 +9,19 @@ pkglib_LTLIBRARIES+= gem_recordQT.la
 endif
 
 gem_recordQT_la_CXXFLAGS =
-gem_recordQT_la_LDFLAGS  = -module -avoid-version -shared
+gem_recordQT_la_LDFLAGS  = -module -avoid-version -shared 
+if WINDOWS
+gem_recordQT_la_LDFLAGS += -no-undefined
+endif
 gem_recordQT_la_LIBADD   =
 
 # RTE
 gem_recordQT_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 gem_recordQT_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gem_recordQT_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gem_recordQT_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gem_recordQT_la @MOREFLAGS@
 
 # Dependencies
 gem_recordQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@

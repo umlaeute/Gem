@@ -136,7 +136,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   size_t size=0;
   int    xsize=1;
   int    ysize=1;
-  GLenum color=GL_RGBA;
+  GLenum color=GL_RGBA_GEM;
 
   if(argc<1)return 7;
 #ifdef _WIN32
@@ -188,7 +188,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
                 color = GL_YUV422_GEM;
                 break;
               case 4:
-                color = GL_RGBA;
+                color = GL_RGBA_GEM;
                 break;
               default:
                 return 4;
@@ -205,7 +205,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
               color = GL_YUV422_GEM;
               break;
             case 'R': case 'r':
-              color = GL_RGBA;
+              color = GL_RGBA_GEM;
               break;
             default:
               return 4;

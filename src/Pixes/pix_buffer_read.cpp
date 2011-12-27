@@ -128,7 +128,7 @@ void pix_buffer_read :: update_image()
 
   if(m_loop)
     {
-      int numFrames=buffer->numFrames();
+      unsigned int numFrames=buffer->numFrames();
       m_frame=fmod(m_frame, numFrames);
       if(m_frame<0.f)m_frame+=numFrames;
     }

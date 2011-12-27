@@ -71,8 +71,7 @@ pix_tIIRf :: pix_tIIRf(t_floatarg fb_numf, t_floatarg ff_numf)
 
   m_image.xsize=0;
   m_image.ysize=0;
-  m_image.csize=4;
-  m_image.format=GL_RGBA;
+  m_image.setCsizeByFormat(GL_RGBA_GEM);
 }
 
 /////////////////////////////////////////////////////////
@@ -113,10 +112,8 @@ void pix_tIIRf ::allocate(imageStruct&img) {
 
   m_image.xsize=img.xsize;
   m_image.ysize=img.ysize;
-  m_image.csize=img.csize;
+  m_image.setCsizeByFormat(img.format);
   m_image.reallocate();
-
-  m_image.format=img.format;
   m_image.setBlack();
 
   size_t size=imgSize(&img);

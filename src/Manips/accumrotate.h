@@ -73,15 +73,6 @@ class GEM_EXTERN accumrotate : public GemBase
     	//////////
     	// A reset was received
     	void	    	reset();
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	xMessCallback(void *data, t_floatarg val);
-    	static void 	yMessCallback(void *data, t_floatarg val);
-    	static void 	zMessCallback(void *data, t_floatarg val);
-    	static void 	resetCallback(void *data);
 };
 
 #endif	// for header file
