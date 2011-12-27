@@ -1,6 +1,16 @@
-Base:
-	multiple output ?
+General:
+ osx: carbon/QuickTime not supported anymore since 10.6
+
+
+Output:
+	multiple output
 	"external" windows
+   alpha in gemwindow?
+
+ linux: sometimes window freezes on "destroy"; (JMZ: i experience this sometimes on improper shutdown, but after some (up to 30) seconds, the window finally gets destroyed and pd exits fine; if this is the same as the reported bug, than it is rather an inconvenience than a real bug; does this also happens with Output/ objects or only with the old code?)
+ linux: resizing the window yields weird results
+ osx: [gemcocoawindow] compatible with [gemmacwindow]?
+
 
 Controls:
 	selectables
@@ -15,6 +25,7 @@ Nongeos:
 	check for the maximum number of lights during runtime
 
 Particles:
+ incorporate "new" libparticle API
 
 Pixes:
 	MMX, SSE2
@@ -23,15 +34,26 @@ Pixes:
 
 	upsidedown: pix_rectangle does not respect the upside-down flag and thus sometimes the rectangle appears in the upper-left corner and sometimes in the lower-left corner
 	generally all images on all platforms should have the same (upsidedown!) orientation
+  see http://stackoverflow.com/questions/443086/opengl-topdown-bottomup-textures
+
 
 	pix_rtx: flickering on OSX/ppc in mode#0; 
 		how to prevent execessive memory usage?
 
+	pix_threshold: intial arguments
+
+	pix_crop: arguments/inlets differ!
+
+  pix_freeframe not supported on x86_64 architectures (newer versions of FF support x86_64; check whether this is compatible)
+
 	videopipes:
-		AVIsynth/frameserver (http://www.debugmode.com/frameserver/)
-		Syphon (http://syphon.v002.info/)
+		W32:AVIsynth/frameserver (http://www.debugmode.com/frameserver/)
+		W32:VirtualCamera
+		OSX:Syphon (http://syphon.v002.info/)
 
-
+ osx: pix_movie flickers (check whether this is still true)
+ w32: [pix_share_*] does not exist since the shared-memory concept has not made it to redmond yet
+ w32: crashes when texturing movies (related to GLEW?)
 
 
 
@@ -53,5 +75,5 @@ dreaming:
 BUGS:
  look into flext conflict (i guess it's related to "new/delete")
 
-  single-object externals will run the setup-function twice; this gives nasty warnings in Pd-0.42
+ single-object externals will run the setup-function twice; this gives nasty warnings in Pd-0.42
 
