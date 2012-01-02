@@ -20,14 +20,14 @@
   -------------------------------------------------------------------
   CLASS
   gemvertexbuffer
-    
+
   Creates a gemvertexbuffer
 
   KEYWORDS
   geo
-    
+
   DESCRIPTION
-    
+
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemvertexbuffer : public GemShape
 {
@@ -79,23 +79,23 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   // GL functionality
   void createVBO(void);
   void copyArray(t_symbol *tab_name, VertexBuffer&array, unsigned int stride, unsigned int offset);
-  static void posxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void posyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void poszMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void colrMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void colgMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void colbMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void colaMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void texuMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void texvMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void normxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void normyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void normzMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
-  static void resizeMessCallback(void *data, float size);
-  static void posVBO_enableMessCallback(void *data, float flag);
-  static void colVBO_enableMessCallback(void *data, float flag);
-  static void texVBO_enableMessCallback(void *data, float flag);
-  static void normVBO_enableMessCallback(void *data, float flag);
+  void posxMess(t_symbol*,int,t_atom*);
+  void posyMess(t_symbol*,int,t_atom*);
+  void poszMess(t_symbol*,int,t_atom*);
+  void colrMess(t_symbol*,int,t_atom*);
+  void colgMess(t_symbol*,int,t_atom*);
+  void colbMess(t_symbol*,int,t_atom*);
+  void colaMess(t_symbol*,int,t_atom*);
+  void texuMess(t_symbol*,int,t_atom*);
+  void texvMess(t_symbol*,int,t_atom*);
+  void normxMess(t_symbol*,int,t_atom*);
+  void normyMess(t_symbol*,int,t_atom*);
+  void normzMess(t_symbol*,int,t_atom*);
+  void resizeMess(unsigned int size);
+  void posVBO_enableMess(bool flag);
+  void colVBO_enableMess(bool flag);
+  void texVBO_enableMess(bool flag);
+  void normVBO_enableMess(bool flag);
 
   // Rendering window vars
   int vbo_size;

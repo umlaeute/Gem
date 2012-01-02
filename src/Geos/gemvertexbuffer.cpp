@@ -149,160 +149,62 @@ void gemvertexbuffer :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::posxMessCallback), 
-		gensym("posX"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::posyMessCallback), 
-		gensym("posY"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::poszMessCallback), 
-		gensym("posZ"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::colrMessCallback), 
-		gensym("colorR"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::colgMessCallback), 
-		gensym("colorG"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::colbMessCallback), 
-		gensym("colorB"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::colaMessCallback), 
-		gensym("colorA"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::texuMessCallback), 
-		gensym("textureU"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::texvMessCallback), 
-		gensym("textureV"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::normxMessCallback), 
-		gensym("normalX"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::normyMessCallback), 
-		gensym("normalY"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::normzMessCallback), 
-		gensym("normalZ"), A_GIMME, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::resizeMessCallback), 
-		gensym("resize"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::posVBO_enableMessCallback), 
-		gensym("m_position.enabled"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::colVBO_enableMessCallback), 
-		gensym("m_color.enabled"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::texVBO_enableMessCallback), 
-		gensym("m_texture.enabled"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&gemvertexbuffer::normVBO_enableMessCallback), 
-		gensym("m_normal.enabled"), A_FLOAT, A_NULL);			
+  CPPEXTERN_MSG (classPtr, "posX", posxMess);
+  CPPEXTERN_MSG (classPtr, "posY", posyMess);
+  CPPEXTERN_MSG (classPtr, "posZ", poszMess);
+
+  CPPEXTERN_MSG (classPtr, "colorR", colrMess);
+  CPPEXTERN_MSG (classPtr, "colorG", colgMess);
+  CPPEXTERN_MSG (classPtr, "colorB", colbMess);
+  CPPEXTERN_MSG (classPtr, "colorA", colaMess);
+
+  CPPEXTERN_MSG (classPtr, "textureU", texuMess);
+  CPPEXTERN_MSG (classPtr, "textureV", texvMess);
+
+  CPPEXTERN_MSG (classPtr, "normalX", normxMess);
+  CPPEXTERN_MSG (classPtr, "normalY", normyMess);
+  CPPEXTERN_MSG (classPtr, "normalZ", normzMess);
+
+
+  CPPEXTERN_MSG1(classPtr, "resize", resizeMess, unsigned int);
+
+  CPPEXTERN_MSG1(classPtr, "posVBO_enable" , posVBO_enableMess , bool);
+  CPPEXTERN_MSG1(classPtr, "colVBO_enable" , colVBO_enableMess , bool);
+  CPPEXTERN_MSG1(classPtr, "texVBO_enable" , texVBO_enableMess , bool);
+  CPPEXTERN_MSG1(classPtr, "normVBO_enable", normVBO_enableMess, bool);
 }
 
-void gemvertexbuffer :: posxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{	
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_position, 3, 0);
-	GetMyClass(data)->m_position.dirty = true;
-	GetMyClass(data)->m_position.enabled = true;
-	   
-}
-void gemvertexbuffer :: posyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_position, 3, 1);
-	GetMyClass(data)->m_position.dirty = true;
-	GetMyClass(data)->m_position.enabled = true;
-}
-void gemvertexbuffer :: poszMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_position, 3, 2);
-	GetMyClass(data)->m_position.dirty = true;
-	GetMyClass(data)->m_position.enabled = true;
-}
+void gemvertexbuffer :: posxMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_position, 3, 0); }
+void gemvertexbuffer :: posyMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_position, 3, 1); }
+void gemvertexbuffer :: poszMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_position, 3, 2); }
 
-void gemvertexbuffer :: colrMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_color, 4, 0);
-	GetMyClass(data)->m_color.dirty = true;
-	GetMyClass(data)->m_color.enabled = true;
-}
+void gemvertexbuffer :: colrMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_color   , 4, 0); }
+void gemvertexbuffer :: colgMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_color   , 4, 1); }
+void gemvertexbuffer :: colbMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_color   , 4, 2); }
+void gemvertexbuffer :: colaMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_color   , 4, 3); }
 
-void gemvertexbuffer :: colgMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_color, 4, 1);
-	GetMyClass(data)->m_color.dirty = true;
-	GetMyClass(data)->m_color.enabled = true;
-}
+void gemvertexbuffer :: texuMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_texture , 2, 0); }
+void gemvertexbuffer :: texvMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_texture , 2, 1); }
 
-void gemvertexbuffer :: colbMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_color, 4, 2);
-	GetMyClass(data)->m_color.dirty = true;
-	GetMyClass(data)->m_color.enabled = true;
-}
+void gemvertexbuffer :: normxMess(t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_normal  , 3, 0); }
+void gemvertexbuffer :: normyMess(t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_normal  , 3, 1); }
+void gemvertexbuffer :: normzMess(t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_normal  , 3, 2); }
 
-void gemvertexbuffer :: colaMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_color, 4, 3);
-	GetMyClass(data)->m_color.dirty = true;
-	GetMyClass(data)->m_color.enabled = true;
-}
-
-void gemvertexbuffer :: texuMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_texture, 2, 0);
-	GetMyClass(data)->m_texture.dirty = true;
-	GetMyClass(data)->m_texture.enabled = true;
-}
-
-void gemvertexbuffer :: texvMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_texture, 2, 1);
-	GetMyClass(data)->m_texture.dirty = true;
-	GetMyClass(data)->m_texture.enabled = true;
-}
-
-void gemvertexbuffer :: normxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_normal, 3, 0);
-	GetMyClass(data)->m_normal.dirty = true;
-	GetMyClass(data)->m_normal.enabled = true;
-}
-
-void gemvertexbuffer :: normyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_normal, 3, 1);
-	GetMyClass(data)->m_normal.dirty = true;
-	GetMyClass(data)->m_normal.enabled = true;
-}
-
-void gemvertexbuffer :: normzMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
-{
-	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->m_normal, 3, 2);
-	GetMyClass(data)->m_normal.dirty = true;
-	GetMyClass(data)->m_normal.enabled = true;
-}
-
-void gemvertexbuffer :: resizeMessCallback(void *data, float size)
-{
-	GetMyClass(data)->resizeMess(size);
-}
-
-void gemvertexbuffer :: posVBO_enableMessCallback(void *data, float flag)
-{
-	GetMyClass(data)->m_position.enabled = (flag != 0);
-}
-
-void gemvertexbuffer :: colVBO_enableMessCallback(void *data, float flag)
-{
-	GetMyClass(data)->m_color.enabled = (flag != 0);
-}
-
-void gemvertexbuffer :: texVBO_enableMessCallback(void *data, float flag)
-{
-	GetMyClass(data)->m_texture.enabled = (flag != 0);
-}
-
-void gemvertexbuffer :: normVBO_enableMessCallback(void *data, float flag)
-{
-	GetMyClass(data)->m_normal.enabled = (flag != 0);
-}
+void gemvertexbuffer :: posVBO_enableMess (bool flag){	m_position.enabled = flag; }
+void gemvertexbuffer :: colVBO_enableMess (bool flag){	m_color   .enabled = flag; }
+void gemvertexbuffer :: texVBO_enableMess (bool flag){	m_texture .enabled = flag; }
+void gemvertexbuffer :: normVBO_enableMess(bool flag){	m_normal  .enabled = flag; }
 
 void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int stride, int offset)
 {
 	int offset2 = 0;
 	t_symbol *tab_name;
-	if ( argv[0].a_type != A_SYMBOL ) 
+	if ( argv[0].a_type != A_SYMBOL )
 	{
 		error("first arg must be symbol (table name)");
 		return;
 	}
-	if ( argc > 1 ) 
+	if ( argc > 1 )
 	{
 		if ( argv[1].a_type != A_FLOAT )
 		{
@@ -313,9 +215,10 @@ void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int 
 	offset2 = offset2<0?0:offset2;
 	tab_name = argv[0].a_w.w_symbol;
 	copyArray(tab_name, array, stride, offset2 * stride + offset);
+  array.enabled=true;
 }
 
-void gemvertexbuffer :: resizeMess(float size)
+void gemvertexbuffer :: resizeMess(unsigned int size)
 {
 	vbo_size = size>1?size:1;
 	//~ printf("cleanup\n");
