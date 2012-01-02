@@ -39,24 +39,20 @@ CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemvertexbuffer :: gemvertexbuffer(t_floatarg size)
+gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
+  vbo_size(size>0?size:(256*256)),
+	posArray_dirty(false),  texArray_dirty(false),  colArray_dirty(false),  normArray_dirty(false),
+	posVBO_enable(false),   texVBO_enable(false),   colVBO_enable(false),   normVBO_enable(false),
+	size_change_flag(false),
+	posArray(NULL),         texArray(NULL),         colArray(NULL),         normArray(NULL),
+	posVBO(0),             	texVBO(0),             	colVBO(0),              normVBO(0)
 { 
 	//~ printf("gemvertexbuffer build on %s at %s\n", __DATE__, __TIME__);
-	vbo_size = size>0?size:256*256;
-	
+
 	posArray = new float[vbo_size*3];
 	texArray = new float[vbo_size*2];
 	colArray = new float[vbo_size*4];
 	normArray = new float[vbo_size*3];
-	
-	posVBO_enable = 0;
-	colVBO_enable = 0;
-	texVBO_enable = 0;
-	normVBO_enable = 0;
-	
-	posVBO = texVBO = colVBO = normVBO = 0;
-	 
-	size_change_flag = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -93,14 +89,14 @@ void gemvertexbuffer :: cleanUp()
 		glDeleteBuffers(1, &normVBO);
 	}
     
-    posVBO = texVBO = colVBO = normVBO = 0;
+  posVBO = texVBO = colVBO = normVBO = 0;
     
-    // delete Array 
-    //~ printf("free array\n");
-    free(posArray);
-    free(texArray);
-    free(colArray);
-    free(normArray);
+  // delete Array 
+  //~ printf("free array\n");
+  delete[]posArray; posArray=NULL;
+  delete[]texArray; texArray=NULL;
+  delete[]colArray; colArray=NULL;
+  delete[]normArray; normArray=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -113,7 +109,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
 	if ( !posVBO || !texVBO || !colVBO || !normVBO || size_change_flag ) {
 //		printf("create VBO\n");
 		createVBO();
-		size_change_flag = 0;
+		size_change_flag = false;
 	}	
 		// render from the VBO
 		if ( posVBO_enable )
@@ -122,7 +118,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
 			if ( posArray_dirty ) {
 				//~ printf("push pos vertex\n");
 				glBufferData(GL_ARRAY_BUFFER, vbo_size * 3 * sizeof(float), posArray, GL_DYNAMIC_DRAW);
-				posArray_dirty = 0;
+				posArray_dirty = false;
 			}
 			glVertexPointer(3, GL_FLOAT, 0, 0);
 		}
@@ -133,7 +129,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
 			if ( texArray_dirty ) {
 				//~ printf("push tex vertex\n");
 				glBufferData(GL_ARRAY_BUFFER, vbo_size * 2 * sizeof(float), texArray, GL_DYNAMIC_DRAW);
-				texArray_dirty = 0;
+				texArray_dirty = false;
 			}
 			glTexCoordPointer(2, GL_FLOAT, 0, 0);
 		}
@@ -144,7 +140,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
 			if ( colArray_dirty ) {
 				//~ printf("push col vertex\n");
 				glBufferData(GL_ARRAY_BUFFER, vbo_size * 4 * sizeof(float), colArray, GL_DYNAMIC_DRAW);
-				colArray_dirty = 0;
+				colArray_dirty = false;
 			}
 			glColorPointer(4, GL_FLOAT, 0, 0);
 		}
@@ -155,7 +151,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
 			if ( normArray_dirty ) {
 				//~ printf("push norm vertex\n");
 				glBufferData(GL_ARRAY_BUFFER, vbo_size * 3 * sizeof(float), normArray, GL_DYNAMIC_DRAW);
-				normArray_dirty = 0;
+				normArray_dirty = false;
 			}
 			glNormalPointer(GL_FLOAT, 0, 0);
 		}
@@ -219,84 +215,84 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
 void gemvertexbuffer :: posxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {	
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->posArray, 3, 0);
-	GetMyClass(data)->posArray_dirty = 1;
-	GetMyClass(data)->posVBO_enable = 1;
+	GetMyClass(data)->posArray_dirty = true;
+	GetMyClass(data)->posVBO_enable = true;
 	   
 }
 void gemvertexbuffer :: posyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->posArray, 3, 1);
-	GetMyClass(data)->posArray_dirty = 1;
-	GetMyClass(data)->posVBO_enable = 1;
+	GetMyClass(data)->posArray_dirty = true;
+	GetMyClass(data)->posVBO_enable = true;
 }
 void gemvertexbuffer :: poszMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->posArray, 3, 2);
-	GetMyClass(data)->posArray_dirty = 1;
-	GetMyClass(data)->posVBO_enable = 1;
+	GetMyClass(data)->posArray_dirty = true;
+	GetMyClass(data)->posVBO_enable = true;
 }
 
 void gemvertexbuffer :: colrMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->colArray, 4, 0);
-	GetMyClass(data)->colArray_dirty = 1;
-	GetMyClass(data)->colVBO_enable = 1;
+	GetMyClass(data)->colArray_dirty = true;
+	GetMyClass(data)->colVBO_enable = true;
 }
 
 void gemvertexbuffer :: colgMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->colArray, 4, 1);
-	GetMyClass(data)->colArray_dirty = 1;
-	GetMyClass(data)->colVBO_enable = 1;
+	GetMyClass(data)->colArray_dirty = true;
+	GetMyClass(data)->colVBO_enable = true;
 }
 
 void gemvertexbuffer :: colbMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->colArray, 4, 2);
-	GetMyClass(data)->colArray_dirty = 1;
-	GetMyClass(data)->colVBO_enable = 1;
+	GetMyClass(data)->colArray_dirty = true;
+	GetMyClass(data)->colVBO_enable = true;
 }
 
 void gemvertexbuffer :: colaMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->colArray, 4, 3);
-	GetMyClass(data)->colArray_dirty = 1;
-	GetMyClass(data)->colVBO_enable = 1;
+	GetMyClass(data)->colArray_dirty = true;
+	GetMyClass(data)->colVBO_enable = true;
 }
 
 void gemvertexbuffer :: texuMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->texArray, 2, 0);
-	GetMyClass(data)->texArray_dirty = 1;
-	GetMyClass(data)->texVBO_enable = 1;
+	GetMyClass(data)->texArray_dirty = true;
+	GetMyClass(data)->texVBO_enable = true;
 }
 
 void gemvertexbuffer :: texvMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->texArray, 2, 1);
-	GetMyClass(data)->texArray_dirty = 1;
-	GetMyClass(data)->texVBO_enable = 1;
+	GetMyClass(data)->texArray_dirty = true;
+	GetMyClass(data)->texVBO_enable = true;
 }
 
 void gemvertexbuffer :: normxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->normArray, 3, 0);
-	GetMyClass(data)->normArray_dirty = 1;
-	GetMyClass(data)->normVBO_enable = 1;
+	GetMyClass(data)->normArray_dirty = true;
+	GetMyClass(data)->normVBO_enable = true;
 }
 
 void gemvertexbuffer :: normyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->normArray, 3, 1);
-	GetMyClass(data)->normArray_dirty = 1;
-	GetMyClass(data)->normVBO_enable = 1;
+	GetMyClass(data)->normArray_dirty = true;
+	GetMyClass(data)->normVBO_enable = true;
 }
 
 void gemvertexbuffer :: normzMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv)
 {
 	GetMyClass(data)->tabMess(argc,argv, GetMyClass(data)->normArray, 3, 2);
-	GetMyClass(data)->normArray_dirty = 1;
-	GetMyClass(data)->normVBO_enable = 1;
+	GetMyClass(data)->normArray_dirty = true;
+	GetMyClass(data)->normVBO_enable = true;
 }
 
 void gemvertexbuffer :: resizeMessCallback(void *data, float size)
@@ -306,22 +302,22 @@ void gemvertexbuffer :: resizeMessCallback(void *data, float size)
 
 void gemvertexbuffer :: posVBO_enableMessCallback(void *data, float flag)
 {
-	GetMyClass(data)->posVBO_enable = flag != 0;
+	GetMyClass(data)->posVBO_enable = (flag != 0);
 }
 
 void gemvertexbuffer :: colVBO_enableMessCallback(void *data, float flag)
 {
-	GetMyClass(data)->colVBO_enable = flag != 0;
+	GetMyClass(data)->colVBO_enable = (flag != 0);
 }
 
 void gemvertexbuffer :: texVBO_enableMessCallback(void *data, float flag)
 {
-	GetMyClass(data)->texVBO_enable = flag != 0;
+	GetMyClass(data)->texVBO_enable = (flag != 0);
 }
 
 void gemvertexbuffer :: normVBO_enableMessCallback(void *data, float flag)
 {
-	GetMyClass(data)->normVBO_enable = flag != 0;
+	GetMyClass(data)->normVBO_enable = (flag != 0);
 }
 
 void gemvertexbuffer :: tabMess(int argc, t_atom *argv, float *array, int stride, int offset)
@@ -357,7 +353,7 @@ void gemvertexbuffer :: resizeMess(float size)
 	colArray = new float[vbo_size*4];
 	normArray = new float[vbo_size*3];
 	//~ printf("printf clear VBO\n");
-	size_change_flag = 1;
+	size_change_flag = true;
 }
 
 // Create VBO
