@@ -165,18 +165,22 @@ void gemvertexbuffer :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG (classPtr, "position", positionMess);
   CPPEXTERN_MSG (classPtr, "posX", posxMess);
   CPPEXTERN_MSG (classPtr, "posY", posyMess);
   CPPEXTERN_MSG (classPtr, "posZ", poszMess);
 
+  CPPEXTERN_MSG (classPtr, "color", colorMess);
   CPPEXTERN_MSG (classPtr, "colorR", colrMess);
   CPPEXTERN_MSG (classPtr, "colorG", colgMess);
   CPPEXTERN_MSG (classPtr, "colorB", colbMess);
   CPPEXTERN_MSG (classPtr, "colorA", colaMess);
 
+  CPPEXTERN_MSG (classPtr, "texture", textureMess);
   CPPEXTERN_MSG (classPtr, "textureU", texuMess);
   CPPEXTERN_MSG (classPtr, "textureV", texvMess);
 
+  CPPEXTERN_MSG (classPtr, "normal", normalMess);
   CPPEXTERN_MSG (classPtr, "normalX", normxMess);
   CPPEXTERN_MSG (classPtr, "normalY", normyMess);
   CPPEXTERN_MSG (classPtr, "normalZ", normzMess);
@@ -189,6 +193,69 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "texVBO_enable" , texVBO_enableMess , bool);
   CPPEXTERN_MSG1(classPtr, "normVBO_enable", normVBO_enableMess, bool);
 }
+
+void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, t_atom *argv){
+  int offset=0;
+  std::string tabname;
+  unsigned int i;
+
+  /*
+   * it's either interleaved data (1 tablename [+ offset])
+   * or separate data (<stride> tablenames [+ offset])
+   */
+
+  if(argc==1 || argc==2) {
+    if(argc>1) {
+      if(A_FLOAT==argv[1].a_type)
+        offset=atom_getfloat(argv+1);
+      else
+        goto failed;
+    }
+    if(A_SYMBOL==argv[0].a_type)
+      tabname=std::string(atom_getsymbol(argv)->s_name);
+    else
+      goto failed;
+
+    copyArray(tabname, vb, 1, offset*vb.stride);
+
+  } else if (argc == vb.stride || argc == (vb.stride+1)) {
+    if(argc>vb.stride) {
+      if(A_FLOAT==argv[vb.stride].a_type)
+        offset=atom_getfloat(argv+vb.stride);
+      else
+        goto failed;
+    }
+    for(i=0; i<vb.stride; i++) {
+      if(A_SYMBOL!=argv[i].a_type) goto failed;
+    }
+    for(i=0; i<vb.stride; i++) {
+      tabname=std::string(atom_getsymbol(argv+i)->s_name);
+      copyArray(tabname, vb, vb.stride, offset*vb.stride+i);
+    }
+  } else {
+      goto failed;
+  }
+
+  vb.enabled=true;
+  return;
+
+  failed:
+  error("illegal arguments to '%s': must be <table[1||%d]> [<offset>]", name.c_str(), vb.stride);
+  return;
+}
+void gemvertexbuffer :: positionMess (t_symbol*s, int argc, t_atom *argv){
+  tableMess(m_position, s->s_name, argc, argv);
+}
+void gemvertexbuffer :: textureMess (t_symbol*s, int argc, t_atom *argv){
+  tableMess(m_texture, s->s_name, argc, argv);
+}
+void gemvertexbuffer :: colorMess (t_symbol*s, int argc, t_atom *argv){
+  tableMess(m_color, s->s_name, argc, argv);
+}
+void gemvertexbuffer :: normalMess (t_symbol*s, int argc, t_atom *argv){
+  tableMess(m_normal, s->s_name, argc, argv);
+}
+
 
 void gemvertexbuffer :: posxMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_position, 0); }
 void gemvertexbuffer :: posyMess (t_symbol*s, int argc, t_atom *argv){	tabMess(argc,argv, m_position, 1); }
