@@ -60,6 +60,12 @@ void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_) {
   if(array)delete[]array;
   array=tmp;
   size=size_;
+
+  unsigned int i;
+  for(i=0; i<size*stride; i++) {
+    array[i]=0;
+  }
+
   dirty=true;
 }
 
