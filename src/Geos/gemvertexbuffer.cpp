@@ -266,6 +266,7 @@ void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&vb, unsigned 
 		{	
 			array[offset + i*stride] = vec[i].w_float;
 		}
+    vb.dirty=true;
 	}
 	//~ printf("copy done\n");
 }
