@@ -73,7 +73,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   // Do the rendering
   virtual void renderShape(GemState *state);
   //virtual void 	runKernel();
-  void tabMess(int argc, t_atom *argv, VertexBuffer&array, int stride, int offset);
+  void tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset);
   void resizeMess(float size);
 
  private :
