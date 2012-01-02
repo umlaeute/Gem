@@ -104,6 +104,8 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void colVBO_enableMess(bool flag);
   void texVBO_enableMess(bool flag);
   void normVBO_enableMess(bool flag);
+  void enableMess(t_symbol*,int,t_atom*);
+  void disableMess(t_symbol*,int,t_atom*);
 
   // Rendering window vars
   int vbo_size;
