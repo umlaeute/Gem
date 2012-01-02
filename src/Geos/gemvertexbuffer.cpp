@@ -38,10 +38,10 @@ gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_, unsigned int
   array(new float[size*stride]),
   dirty(false),
   enabled(false) {
-  ::post("created VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
+  //  ::post("created VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
 }
 gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void) {
-  ::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
+  //  ::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
   destroy();
   if(array)
     delete[]array;
@@ -69,7 +69,7 @@ bool gemvertexbuffer :: VertexBuffer:: render (void) {
   if ( enabled ) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     if ( dirty ) {
-      //~ printf("push pos vertex\n");
+      //      ::post("push vertex %p\n", this);
       glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array, GL_DYNAMIC_DRAW);
       dirty = false;
     }
@@ -244,15 +244,14 @@ void gemvertexbuffer :: createVBO(void)
   m_normal  .create();
 }
 
-void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&buf, unsigned int stride, unsigned int offset)
+void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&vb, unsigned int stride, unsigned int offset)
 {
 	t_garray *a;
 	int npoints, i;
 	t_word *vec;
 	t_float posx;
 
-  t_float*array=buf.array;
-	//~ printf("copy table %s to array\n", tab_name->s_name);
+  t_float*array=vb.array;
 	pd_findbyclass(tab_name, garray_class);
 	if (!(a = (t_garray *)pd_findbyclass(tab_name, garray_class)))
 		error("%s: no such array", tab_name->s_name);
@@ -261,6 +260,7 @@ void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&buf, unsigned
 	else
     {		
 		npoints = npoints>vbo_size?vbo_size:npoints;
+
 		//~ printf("start copying %d values\n",npoints);
 		for ( i = 0 ; i < npoints ; i++ )
 		{	
