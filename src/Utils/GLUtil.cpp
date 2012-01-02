@@ -31,7 +31,7 @@
 #define _GL_UNDEFINED -1
 
 // if error dump gl errors to debugger string, return error
-GEM_EXTERN GLenum glReportError (void)
+GLenum glReportError (void)
 {
 	GLenum err = glGetError();
 	if (GL_NO_ERROR != err) {
@@ -44,7 +44,7 @@ GEM_EXTERN GLenum glReportError (void)
 		return err;
 }
 
-GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
+int getGLbitfield(int argc, t_atom *argv){
   int accum=0;
   int mode=0;
 
@@ -74,7 +74,7 @@ GEM_EXTERN int getGLbitfield(int argc, t_atom *argv){
 
 }
 
-GEM_EXTERN int getGLdefine(const t_atom *ap)
+int getGLdefine(const t_atom *ap)
 {
   if (!ap)return _GL_UNDEFINED;
   if (ap->a_type == A_SYMBOL)return getGLdefine(ap->a_w.w_symbol);
@@ -82,13 +82,13 @@ GEM_EXTERN int getGLdefine(const t_atom *ap)
   return _GL_UNDEFINED;
 }
 
-GEM_EXTERN int getGLdefine(const t_symbol *s)
+int getGLdefine(const t_symbol *s)
 {
   if (s && s->s_name)return getGLdefine(s->s_name);
   else return _GL_UNDEFINED;
 }
 
-GEM_EXTERN int getGLdefine(const char *fixname)
+int getGLdefine(const char *fixname)
 {
   char namearray[MAXPDSTRING];
   char*name=namearray;
