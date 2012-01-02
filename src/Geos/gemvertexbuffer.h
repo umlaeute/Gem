@@ -96,5 +96,5 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 		float *posArray, *texArray, *colArray, *normArray;
 
 		// vbo variables
-		GLuint posVBO, colVBO, normVBO, texVBO;
+		GLuint posVBO, texVBO, colVBO, normVBO;
 };
