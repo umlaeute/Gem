@@ -31,24 +31,25 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 
-gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_) :
+gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_, unsigned int stride_) :
   size(size_),
+  stride(stride_),
   vbo(0),
-  array(new float[size_]),
+  array(new float[size*stride]),
   dirty(false),
   enabled(false) {
-  ::post("created VertexBuffer[%p] with %d elements at %p", this, size, array);
+  ::post("created VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
 }
 gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void) {
-  ::post("destroying VertexBuffer[%p] with %d elements at %p", this, size, array);
+  ::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
   destroy();
   if(array)
     delete[]array;
   array=NULL;
 }
 void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_) {
-  if(array)delete[]array; 
-  array=new float[size_];
+  if(array)delete[]array;
+  array=new float[size_*stride];
   size=size_;
   dirty=true;
 }
@@ -59,7 +60,7 @@ bool gemvertexbuffer :: VertexBuffer:: create (void) {
   }
   if(vbo) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), array, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array, GL_DYNAMIC_DRAW);
   }
   return (0!=vbo);
 }
@@ -69,7 +70,7 @@ bool gemvertexbuffer :: VertexBuffer:: render (void) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     if ( dirty ) {
       //~ printf("push pos vertex\n");
-      glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), array, GL_DYNAMIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array, GL_DYNAMIC_DRAW);
       dirty = false;
     }
   }
@@ -96,8 +97,11 @@ void gemvertexbuffer :: VertexBuffer:: destroy (void) {
 gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   vbo_size(size>0?size:(256*256)),
 	size_change_flag(false),
-  m_position(vbo_size*3), m_texture(vbo_size*2), m_color(vbo_size*4), m_normal(vbo_size*3)
-{ 
+  m_position(vbo_size,3),
+  m_texture (vbo_size,2),
+  m_color   (vbo_size,4),
+  m_normal  (vbo_size,3)
+{
 }
 
 /////////////////////////////////////////////////////////
@@ -122,25 +126,25 @@ void gemvertexbuffer :: renderShape(GemState *state)
 	}
   // render from the VBO
   if(m_position.render())
-    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
   if(m_texture.render())
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    glTexCoordPointer(m_texture.stride, GL_FLOAT, 0, 0);
   if(m_color.render())
-			glColorPointer(4, GL_FLOAT, 0, 0);
+			glColorPointer(m_color.stride, GL_FLOAT, 0, 0);
   if(m_normal.render())
 			glNormalPointer(GL_FLOAT, 0, 0);
 		
   if ( m_position.enabled ) glEnableClientState(GL_VERTEX_ARRAY);
-  if ( m_color.enabled ) glEnableClientState(GL_COLOR_ARRAY);
-  if ( m_texture.enabled ) glEnableClientState(GL_TEXTURE_COORD_ARRAY); 
-  if ( m_normal.enabled ) glEnableClientState(GL_NORMAL_ARRAY); 
+  if ( m_color.enabled    ) glEnableClientState(GL_COLOR_ARRAY);
+  if ( m_texture.enabled  ) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  if ( m_normal.enabled   ) glEnableClientState(GL_NORMAL_ARRAY);
 		
   glDrawArrays(m_drawType, 0, vbo_size);
 		
   if ( m_position.enabled ) glDisableClientState(GL_VERTEX_ARRAY);
-  if ( m_color.enabled ) glDisableClientState(GL_COLOR_ARRAY);
-  if ( m_texture.enabled ) glDisableClientState(GL_TEXTURE_COORD_ARRAY); 
-  if ( m_normal.enabled ) glDisableClientState(GL_NORMAL_ARRAY);	
+  if ( m_color.enabled    ) glDisableClientState(GL_COLOR_ARRAY);
+  if ( m_texture.enabled  ) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  if ( m_normal.enabled   ) glDisableClientState(GL_NORMAL_ARRAY);	
 }
 
 /////////////////////////////////////////////////////////
@@ -222,10 +226,10 @@ void gemvertexbuffer :: resizeMess(unsigned int size)
 {
 	vbo_size = size>1?size:1;
 	//~ printf("cleanup\n");
-  m_position.resize(vbo_size*3);
-  m_texture .resize(vbo_size*2);
-  m_color   .resize(vbo_size*4);
-  m_normal  .resize(vbo_size*3);
+  m_position.resize(vbo_size);
+  m_texture .resize(vbo_size);
+  m_color   .resize(vbo_size);
+  m_normal  .resize(vbo_size);
 
 	size_change_flag = true;
 }
@@ -235,9 +239,9 @@ void gemvertexbuffer :: resizeMess(unsigned int size)
 void gemvertexbuffer :: createVBO(void)
 {
   m_position.create();
-  m_texture.create();
-  m_color.create();
-  m_texture.create();
+  m_texture .create();
+  m_color   .create();
+  m_normal  .create();
 }
 
 void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&buf, unsigned int stride, unsigned int offset)
