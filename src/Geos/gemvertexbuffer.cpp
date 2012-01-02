@@ -32,24 +32,33 @@
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 
 gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_, unsigned int stride_) :
-  size(size_),
+  size(0),
   stride(stride_),
   vbo(0),
-  array(new float[size*stride]),
+  array(NULL),
   dirty(false),
-  enabled(false) {
-  //  ::post("created VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
+  enabled(false)
+{
+  resize(size_);
 }
 gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void) {
   //  ::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
   destroy();
+
   if(array)
     delete[]array;
   array=NULL;
 }
 void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_) {
+  t_float*tmp=NULL;
+  try {
+    tmp=new float[size_*stride];
+  } catch (std::bad_alloc& ba)  {
+    ::error("vertexbuffer resize failed: %s ", ba.what());
+    return;
+  }
   if(array)delete[]array;
-  array=new float[size_*stride];
+  array=tmp;
   size=size_;
   dirty=true;
 }
@@ -258,15 +267,14 @@ void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&vb, unsigned 
 	pd_findbyclass(tab_name, garray_class);
 	if (!(a = (t_garray *)pd_findbyclass(tab_name, garray_class)))
 		error("%s: no such array", tab_name->s_name);
-    else if (!garray_getfloatwords(a, &npoints, &vec))
-        error("%s: bad template for tabLink", tab_name->s_name);
-	else
-    {		
-		npoints = npoints>vbo_size?vbo_size:npoints;
+  else if (!garray_getfloatwords(a, &npoints, &vec))
+    error("%s: bad template for tabLink", tab_name->s_name);
+	else {
+    if(npoints>vb.size)
+      npoints=vb.size;
 
 		//~ printf("start copying %d values\n",npoints);
-		for ( i = 0 ; i < npoints ; i++ )
-		{	
+		for ( i = 0 ; i < npoints ; i++ )	{
 			array[offset + i*stride] = vec[i].w_float;
 		}
     vb.dirty=true;
