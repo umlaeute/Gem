@@ -29,7 +29,7 @@
 
 #define UNIX
 
-CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT)
+CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -59,7 +59,7 @@ gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
 // Destructor
 //
 /////////////////////////////////////////////////////////
-gemvertexbuffer :: ~gemvertexbuffer()
+gemvertexbuffer :: ~gemvertexbuffer(void)
 {
 	cleanUp();
 }
@@ -68,7 +68,7 @@ gemvertexbuffer :: ~gemvertexbuffer()
 // cleanup
 //
 /////////////////////////////////////////////////////////
-void gemvertexbuffer :: cleanUp()
+void gemvertexbuffer :: cleanUp(void)
 {
 	// delete VBO
 	//~ printf("delete VBO\n");
@@ -358,7 +358,7 @@ void gemvertexbuffer :: resizeMess(float size)
 
 // Create VBO
 //*****************************************************************************
-void gemvertexbuffer :: createVBO()
+void gemvertexbuffer :: createVBO(void)
 {
     // create VBO
  	unsigned int i, j;

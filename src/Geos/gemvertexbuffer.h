@@ -48,11 +48,11 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
     	
     	//////////
     	// Destructor
-    	virtual ~gemvertexbuffer();
+    	virtual ~gemvertexbuffer(void);
     	
     	//////////
     	// Destructor
-    	void cleanUp();    	
+    	void cleanUp(void);    	
         
     	//////////
     	// Do the rendering
@@ -66,7 +66,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 	private :
     	    	
 		// GL functionality
-		void createVBO();
+		void createVBO(void);
 		void copyArray(t_symbol *tab_name, float *array, unsigned int stride, unsigned int offset);
 		static void posxMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
 		static void posyMessCallback(void *data, t_symbol *symbol, int argc, t_atom *argv);
