@@ -214,7 +214,6 @@ void gemvertexbuffer :: normVBO_enableMess(bool flag){	m_normal  .enabled = flag
 void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset)
 {
 	int offset2 = 0;
-	t_symbol *tab_name;
 	if ( argv[0].a_type != A_SYMBOL )
 	{
 		error("first arg must be symbol (table name)");
@@ -229,7 +228,7 @@ void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int 
 		else offset2 = argv[1].a_w.w_float;
 	}
 	offset2 = offset2<0?0:offset2;
-	tab_name = argv[0].a_w.w_symbol;
+  std::string tab_name = atom_getsymbol(argv)->s_name;
 	copyArray(tab_name, array, array.stride, offset2 * array.stride + offset);
   array.enabled=true;
 }
@@ -256,7 +255,7 @@ void gemvertexbuffer :: createVBO(void)
   m_normal  .create();
 }
 
-void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&vb, unsigned int stride, unsigned int offset)
+void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, unsigned int stride, unsigned int offset)
 {
 	t_garray *a;
 	int npoints, i;
@@ -264,11 +263,12 @@ void gemvertexbuffer :: copyArray(t_symbol *tab_name, VertexBuffer&vb, unsigned 
 	t_float posx;
 
   t_float*array=vb.array;
-	pd_findbyclass(tab_name, garray_class);
-	if (!(a = (t_garray *)pd_findbyclass(tab_name, garray_class)))
-		error("%s: no such array", tab_name->s_name);
+  t_symbol*s=gensym(tab_name.c_str());
+	pd_findbyclass(s, garray_class);
+	if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
+		error("%s: no such array", tab_name.c_str());
   else if (!garray_getfloatwords(a, &npoints, &vec))
-    error("%s: bad template for tabLink", tab_name->s_name);
+    error("%s: bad template for tabLink", tab_name.c_str());
 	else {
     if(npoints>vb.size)
       npoints=vb.size;

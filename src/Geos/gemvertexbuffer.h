@@ -79,7 +79,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
  private :
   // GL functionality
   void createVBO(void);
-  void copyArray(t_symbol *tab_name, VertexBuffer&array, unsigned int stride, unsigned int offset);
+  void copyArray(const std::string&tab_name, VertexBuffer&array, unsigned int stride, unsigned int offset);
   void posxMess(t_symbol*,int,t_atom*);
   void posyMess(t_symbol*,int,t_atom*);
   void poszMess(t_symbol*,int,t_atom*);
