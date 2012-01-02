@@ -125,19 +125,22 @@ void gemvertexbuffer :: renderShape(GemState *state)
 		size_change_flag = false;
 	}
   // render from the VBO
-  if(m_position.render())
+  if(m_position.render()) {
     glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
-  if(m_texture.render())
+    glEnableClientState(GL_VERTEX_ARRAY);
+  }
+  if(m_texture.render()) {
     glTexCoordPointer(m_texture.stride, GL_FLOAT, 0, 0);
-  if(m_color.render())
-			glColorPointer(m_color.stride, GL_FLOAT, 0, 0);
-  if(m_normal.render())
-			glNormalPointer(GL_FLOAT, 0, 0);
-		
-  if ( m_position.enabled ) glEnableClientState(GL_VERTEX_ARRAY);
-  if ( m_color.enabled    ) glEnableClientState(GL_COLOR_ARRAY);
-  if ( m_texture.enabled  ) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  if ( m_normal.enabled   ) glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
+  if(m_color.render()) {
+    glColorPointer(m_color.stride, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_COLOR_ARRAY);
+  }
+  if(m_normal.render()) {
+    glNormalPointer(GL_FLOAT, 0, 0);
+    glEnableClientState(GL_NORMAL_ARRAY);
+  }
 		
   glDrawArrays(m_drawType, 0, vbo_size);
 		
