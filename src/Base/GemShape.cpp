@@ -17,7 +17,8 @@
 
 #include "GemShape.h"
 #include "Gem/State.h"
-#include <ctype.h>
+#include <algorithm>
+
 /////////////////////////////////////////////////////////
 //
 // a generic GemShape
@@ -26,6 +27,56 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
+
+namespace {
+  static char mytolower(char in){
+    if(in<='Z' && in>='A')
+      return in-('Z'-'z');
+    return in;
+  }
+
+  static void initialize_drawtypes(std::map<std::string, GLenum>&drawtypes) {
+    drawtypes["default"]=GL_DEFAULT_GEM;
+
+    drawtypes["point"]=GL_POINTS;
+    drawtypes["points"]=GL_POINTS;
+
+    drawtypes["line"]=GL_LINE_LOOP;
+    drawtypes["linestrip"]=GL_LINE_STRIP;
+
+    drawtypes["tri"]=GL_TRIANGLES;
+    drawtypes["triangle"]=GL_TRIANGLES;
+    drawtypes["tristrip"]=GL_TRIANGLE_STRIP;
+    drawtypes["trifan"]=GL_TRIANGLE_FAN;
+
+    drawtypes["quad"]=GL_QUADS;
+    drawtypes["quads"]=GL_QUADS;
+    drawtypes["quadstrip"]=GL_QUAD_STRIP;
+
+    drawtypes["strip"]=GL_TRIANGLE_STRIP;
+    drawtypes["fill"]=GL_POLYGON;
+
+    /* possible values for drawtypes:
+       default
+       fill
+       line
+       linestrip
+       point
+       points
+       quad
+       quadstrip
+       tri
+       triangle
+       trifan
+       tristrip
+
+       line1, line2, line3, line4
+       control_fill, control_line, control_line1, control_line2, control_point
+    */
+  }
+
+}
+
 GemShape :: GemShape(t_floatarg size)
   : m_linewidth(1.0f), m_size((float)size), m_drawType(GL_DEFAULT_GEM), m_blend(0),
     m_inlet(NULL),
@@ -37,6 +88,8 @@ GemShape :: GemShape(t_floatarg size)
 
   // the size inlet
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
+
+  initialize_drawtypes(m_drawTypes);
 }
 GemShape :: GemShape()
   : m_linewidth(1.0f), m_size(1.0f), m_drawType(GL_DEFAULT_GEM), m_blend(0),
@@ -46,6 +99,7 @@ GemShape :: GemShape()
     m_lighting(false)
 {
   // no size inlet
+  initialize_drawtypes(m_drawTypes);
 }
 
 /////////////////////////////////////////////////////////
@@ -144,34 +198,24 @@ void GemShape :: sizeMess(float size)
 /////////////////////////////////////////////////////////
 void GemShape :: typeMess(t_symbol *type)
 {
-  char c=toupper(*type->s_name);
-  switch (c){
-  case 'D': // default
-    m_drawType = GL_DEFAULT_GEM;
-    break;
-  case 'L': // line
-    m_drawType = GL_LINE_LOOP;
-    break;
-  case 'F': // fill
-    m_drawType = GL_POLYGON;
-    break;
-  case 'Q': // quads
-    m_drawType = GL_QUADS;
-    break;
-  case 'P': // point
-    m_drawType = GL_POINTS;
-    break;
-  case 'T': // triangles
-    m_drawType = GL_TRIANGLES;
-    break;
-  case 'S': // strip
-    m_drawType = GL_TRIANGLE_STRIP;
-    break;
+  if(0==m_drawTypes.size()) {
+    error("unable to change drawstyle");
+  }
 
-  default:
-    error ("unknown draw style");
+  std::string name=type->s_name;
+  std::transform(name.begin(), name.end(), name.begin(), mytolower);
+
+  std::map<std::string, GLenum>::iterator it=m_drawTypes.find(name);
+  if(m_drawTypes.end() == it) {
+    error ("unknown draw style '%s'... possible values are:", name.c_str());
+    it=m_drawTypes.begin();
+    while(m_drawTypes.end() != it) {
+      error("\t %s", it->first.c_str());
+      it++;
+    }
     return;
   }
+  m_drawType=it->second;
   setModified();
 }
 

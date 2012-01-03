@@ -16,7 +16,7 @@
 #define _INCLUDE__GEM_BASE_GEMSHAPE_H_
 
 #include "Base/GemBase.h"
-
+#include <map>
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -134,6 +134,8 @@ class GEM_EXTERN GemShape : public GemBase
   int m_texType, m_texNum;
   TexCoord*m_texCoords;
   bool m_lighting;
+
+  std::map<std::string, GLenum>m_drawTypes;
 };
 
 #endif	// for header file
