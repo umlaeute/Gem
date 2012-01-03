@@ -41,7 +41,10 @@ namespace {
     drawtypes["point"]=GL_POINTS;
     drawtypes["points"]=GL_POINTS;
 
+    /* how about GL_LINE ?? */
     drawtypes["line"]=GL_LINE_LOOP;
+    drawtypes["lineloop"]=GL_LINE_LOOP;
+    drawtypes["lines"]=GL_LINES;
     drawtypes["linestrip"]=GL_LINE_STRIP;
 
     drawtypes["tri"]=GL_TRIANGLES;
@@ -55,24 +58,6 @@ namespace {
 
     drawtypes["strip"]=GL_TRIANGLE_STRIP;
     drawtypes["fill"]=GL_POLYGON;
-
-    /* possible values for drawtypes:
-       default
-       fill
-       line
-       linestrip
-       point
-       points
-       quad
-       quadstrip
-       tri
-       triangle
-       trifan
-       tristrip
-
-       line1, line2, line3, line4
-       control_fill, control_line, control_line1, control_line2, control_point
-    */
   }
 
 }
