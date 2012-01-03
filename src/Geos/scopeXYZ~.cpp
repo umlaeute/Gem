@@ -188,29 +188,13 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ),
                    gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::linewidthMessCallback),
-                  gensym("linewidth"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::lengthMessCallback),
-                  gensym("length"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG1(classPtr, "linewidth", linewidthMess, float);
+  CPPEXTERN_MSG1(classPtr, "length", lengthMess, int);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
                   gensym("dsp"), A_NULL);
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
-
-  class_addbang(classPtr, reinterpret_cast<t_method>(&scopeXYZ::bangCallback));
-}
-void scopeXYZ :: bangCallback(void *data)
-{
-  GetMyClass(data)->bangMess();
-}
-
-void scopeXYZ :: linewidthMessCallback(void *data, t_floatarg linewidth)
-{
-  GetMyClass(data)->linewidthMess(linewidth);
-}
-void scopeXYZ :: lengthMessCallback(void *data, t_floatarg l)
-{
-  GetMyClass(data)->lengthMess(static_cast<int>(l));
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {
