@@ -522,25 +522,8 @@ void curve3d :: renderShape(GemState *state){
 //
 /////////////////////////////////////////////////////////
 void curve3d :: obj_setupCallback(t_class *classPtr){
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::resolutionMessCallback),
-		  gensym("res"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::gridMessCallback),
-		  gensym("grid"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::setMessCallback),
-		  gensym("set"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-}
-
-void curve3d :: resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY)
-{
-  GetMyClass(data)->resolutionMess(static_cast<int>(resX), static_cast<int>(resY));
-}
-void curve3d :: gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY)
-{
-  GetMyClass(data)->gridMess(static_cast<int>(gridX), static_cast<int>(gridY));
-}
-void curve3d :: setMessCallback(void *data, t_floatarg X, t_floatarg Y, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
-{
-  GetMyClass(data)->setMess(static_cast<int>(X), static_cast<int>(Y),
-			    posX, posY, posZ);
+  CPPEXTERN_MSG2(classPtr, "res", resolutionMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "grid", gridMess, int, int);
+  CPPEXTERN_MSG5(classPtr, "set", setMess, int, int, float, float, float);
 }
 

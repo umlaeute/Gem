@@ -344,33 +344,15 @@ void rubber :: heightMess(float height)
 /////////////////////////////////////////////////////////
 void rubber :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&rubber::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::heightMessCallback),
-                  gensym("Ht"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::ctrXMessCallback),
-                  gensym("cX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::ctrYMessCallback),
-                  gensym("cY"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "bang", rubber_bang);
+  CPPEXTERN_MSG1(classPtr, "Ht", heightMess, float);
+  CPPEXTERN_MSG1(classPtr, "cX", ctrXMess, float);
+  CPPEXTERN_MSG1(classPtr, "cY", ctrYMess, float);
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::dragMessCallback),
                   gensym("drag"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::springMessCallback),
                   gensym("spring"), A_FLOAT, A_NULL);
-}
-void rubber :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->rubber_bang();
-}
-void rubber :: heightMessCallback(void *data, t_floatarg height)
-{
-  GetMyClass(data)->heightMess(height);
-}
-void rubber :: ctrXMessCallback(void *data, t_floatarg center)
-{
-  GetMyClass(data)->ctrXMess(center);
-}
-void rubber :: ctrYMessCallback(void *data, t_floatarg center)
-{
-  GetMyClass(data)->ctrYMess(center);
 }
 void rubber :: dragMessCallback(void *data, t_floatarg drag)
 {

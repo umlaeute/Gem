@@ -115,10 +115,6 @@ class GEM_EXTERN rubber : public GemShape
 
   //////////
   // static member functions
-  static void	bangMessCallback(void *data);
-  static void 	heightMessCallback(void *data, t_floatarg height);
-  static void 	ctrXMessCallback(void *data, t_floatarg center);
-  static void 	ctrYMessCallback(void *data, t_floatarg center);
   static void 	dragMessCallback(void *data, t_floatarg drag);
   static void 	springMessCallback(void *data, t_floatarg spring);
 };

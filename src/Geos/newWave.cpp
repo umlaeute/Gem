@@ -102,9 +102,9 @@ newWave :: ~newWave()
     if(m_inletM)inlet_free(m_inletM);
 }
 
-void newWave :: modeMess(float mode)
+void newWave :: modeMess(int mode)
 {
-  reset(static_cast<int>(mode));
+  reset(mode);
   setModified();
 }
 
@@ -720,53 +720,26 @@ void newWave :: setOther(int value)
 /////////////////////////////////////////////////////////
 void newWave :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::heightMessCallback),
-    	    gensym("height"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::modeMessCallback),
-    	    gensym("mode"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::textureMessCallback),
-    	    gensym("texture"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG1(classPtr, "height", heightMess, float);
+  CPPEXTERN_MSG3(classPtr, "force", forceMess, float, float, float);
+  CPPEXTERN_MSG3(classPtr, "position", positionMess, float, float, float);
+  CPPEXTERN_MSG1(classPtr, "mode", modeMess, int);
+  CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
+  CPPEXTERN_MSG1(classPtr, "noise", noise, float);
+
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK1MessCallback),
-	   	    gensym("K1"), A_FLOAT, A_NULL);
+                  gensym("K1"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD1MessCallback),
-		    gensym("D1"), A_FLOAT, A_NULL);
+                  gensym("D1"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK2MessCallback),
-	   	    gensym("K2"), A_FLOAT, A_NULL);
+                  gensym("K2"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD2MessCallback),
-		    gensym("D2"), A_FLOAT, A_NULL);
+                  gensym("D2"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK3MessCallback),
-	   	    gensym("K3"), A_FLOAT, A_NULL);
+                  gensym("K3"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD3MessCallback),
-		    gensym("D3"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::forceMessCallback),
-		    gensym("force"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::positionMessCallback),
-		    gensym("position"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-	class_addbang(classPtr, reinterpret_cast<t_method>(&newWave::bangMessCallback));
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::noiseMessCallback),
-		    gensym("noise"), A_FLOAT, A_NULL);
-}
-
-void newWave :: bangMessCallback(void *data)
-{
-   	GetMyClass(data)->bangMess();
-
-}
-void newWave :: heightMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->heightMess(size);
-}
-void newWave :: forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce )
-{
-    GetMyClass(data)->forceMess(posX, posY, valforce);
-}
-void newWave :: positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
-{
-    GetMyClass(data)->positionMess(posX, posY, posZ);
-}
-void newWave :: modeMessCallback(void *data, t_floatarg mode)
-{
-    GetMyClass(data)->modeMess(mode);
+                  gensym("D3"), A_FLOAT, A_NULL);
 }
 
 void newWave :: setK1MessCallback(void *data, t_floatarg K)
@@ -782,7 +755,6 @@ void newWave :: setK3MessCallback(void *data, t_floatarg K)
     GetMyClass(data)->K3=(K);
 }
 
-
 void newWave :: setD1MessCallback(void *data, t_floatarg D)
 {
     GetMyClass(data)->D1=(D);
@@ -795,15 +767,3 @@ void newWave :: setD3MessCallback(void *data, t_floatarg D)
 {
     GetMyClass(data)->D3=(D);
 }
-
-void newWave :: textureMessCallback(void *data, t_floatarg D)
-{
-  GetMyClass(data)->textureMess(static_cast<int>(D));
-}
-
-
-void newWave :: noiseMessCallback(void *data, t_floatarg rnd)
-{
-    GetMyClass(data)->noise(rnd);
-}
-

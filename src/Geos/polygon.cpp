@@ -212,19 +212,14 @@ void polygon :: setVert(int whichOne, float x, float y, float z)
 /////////////////////////////////////////////////////////
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG4(classPtr, "vertex", setVert, int, float, float, float);
 	class_addlist(classPtr, reinterpret_cast<t_method>(&polygon::listCallback));
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&polygon::vertexCallback), gensym("vertex"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 	class_addanything(classPtr, reinterpret_cast<t_method>(&polygon::vertCallback));
 }
 
 void polygon :: listCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
 	GetMyClass(data)->listMess(argc, argv);
-}
-
-void polygon :: vertexCallback(void *data, t_floatarg id, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-	GetMyClass(data)->setVert(id, x, y, z);
 }
 
 void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)

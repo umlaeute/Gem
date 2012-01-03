@@ -86,9 +86,7 @@ class GEM_EXTERN polygon : public GemShape
     private:
     	//////////
     	// Static member functions
-    	static void 	typeMessCallback(void *data, t_symbol *type);
     	static void 	vertCallback(void *data, t_symbol *type, int argc, t_atom*argv);
-			static void   vertexCallback(void *data, t_floatarg id, t_floatarg x, t_floatarg y, t_floatarg z);
     	static void 	listCallback(void *data, t_symbol *type, int argc, t_atom*argv);
 };
 
