@@ -42,6 +42,12 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
   inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
 
   m_drawType = GL_POLYGON;
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_POLYGON;
+  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_POLYGON;
 }
 
 ////////////////////////////////////////////////////////
@@ -332,24 +338,6 @@ void rubber :: heightMess(float height)
   setModified();
 }
 
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void rubber :: typeMess(t_symbol *type)
-{
-  char c=*type->s_name;
-  switch(c){
-  case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
-  case 'd': case 'D': // default
-  case 'f': case 'F':   m_drawType = GL_POLYGON; break;
-  case 'p': case 'P':   m_drawType = GL_POINTS; break;
-  default:
-    error ("unknown draw style");
-    return;
-  }
-  setModified();
-}
 /////////////////////////////////////////////////////////
 // static member function
 //

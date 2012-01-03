@@ -66,6 +66,20 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
       m_posXYZ[a].z= 0.0;
     }
 
+  m_drawTypes.clear();
+  m_drawTypes["line"] = LINE;
+  m_drawTypes["fill"] = FILL;
+  m_drawTypes["point"] = POINT;
+  m_drawTypes["line1"] = LINE1;
+  m_drawTypes["line2"] = LINE2;
+  m_drawTypes["line3"] = LINE3;
+  m_drawTypes["line4"] = LINE4;
+  m_drawTypes["control_fill"] = CONTROL_FILL;
+  m_drawTypes["control_point"] = CONTROL_POINT;
+  m_drawTypes["control_line"] = CONTROL_LINE;
+  m_drawTypes["control_line1"] = CONTROL_LINE1;
+  m_drawTypes["control_line2"] = CONTROL_LINE2;
+  m_drawTypes["default"] = FILL;
 }
 
 //////////////////////////////////////////////////////////
@@ -134,45 +148,6 @@ void surface3d :: gridMess(int gridX, int gridY){
 void surface3d :: normalMess(int normal){
   compute_normal = normal;
 }
-
-//////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void surface3d :: typeMess(t_symbol *type){
-  if (gensym("line")==type)
-    m_drawType = LINE;
-  else if (gensym("fill")==type)
-    m_drawType = FILL;
-  else if (gensym("point")==type)
-    m_drawType = POINT;
-  else if (gensym("line1")==type)
-    m_drawType = LINE1;
-  else if (gensym("line2")==type)
-    m_drawType = LINE2;
-  else if (gensym("line3")==type)
-    m_drawType = LINE3;
-  else if (gensym("line4")==type)
-    m_drawType = LINE4;
-  else if (gensym("control_fill")==type)
-    m_drawType = CONTROL_FILL;
-  else if (gensym("control_point")==type)
-    m_drawType = CONTROL_POINT;
-  else if (gensym("control_line")==type)
-    m_drawType = CONTROL_LINE;
-  else if (gensym("control_line1")==type)
-    m_drawType = CONTROL_LINE1;
-  else if (gensym("control_line2")==type)
-    m_drawType = CONTROL_LINE2;
-  else if (gensym("default")==type)
-    m_drawType = FILL;
-  else    {
-    error ("unknown draw style: 's'", type->s_name);
-    return;
-  }
-  setModified();
-}
-
 
 //////////////////////////////////////////////////////////
 // interpolate

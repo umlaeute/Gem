@@ -40,6 +40,12 @@ pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
   if (m_P == 0.f) m_P = 1.f;
   if (m_Q == 0.f) m_Q = 0.f;
   m_drawType = GL_TRIANGLE_STRIP;
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_TRIANGLE_STRIP;
+  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_TRIANGLE_STRIP;
 }
 
 ////////////////////////////////////////////////////////
@@ -347,25 +353,6 @@ void pqtorusknots :: pqMess(float p, float q)
 }
 
 ////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void pqtorusknots :: typeMess(t_symbol *type)
-{
-  char c=*type->s_name;
-  switch(c){
-  case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
-  case 'f': case 'F':   //m_drawType = GL_QUADS; break;
-  case 'd': case 'D':   m_drawType = GL_TRIANGLE_STRIP; break;// default
-  case 'p': case 'P':   m_drawType = GL_POINTS; break;
-  default:
-    error ("GEM: square draw style");
-    return;
-  }
-  setModified();
-}
-
-////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -385,8 +372,6 @@ void pqtorusknots :: obj_setupCallback(t_class *classPtr)
                   gensym("uvScale"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::pqMessCallback),
                   gensym("pq"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::typeMessCallback),
-                  gensym("type"), A_SYMBOL, A_NULL);
 }
 
 void pqtorusknots :: scaleMessCallback(void *data, t_floatarg size)
@@ -417,8 +402,4 @@ void pqtorusknots :: uvScaleMessCallback(void *data, t_floatarg posX, t_floatarg
 void pqtorusknots :: pqMessCallback(void *data, t_floatarg posX, t_floatarg posY)
 {
   GetMyClass(data)->pqMess(posX, posY);
-}
-void pqtorusknots :: typeMessCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->typeMess(s);
 }

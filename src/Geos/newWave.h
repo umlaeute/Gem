@@ -67,10 +67,6 @@ class GEM_EXTERN newWave : public GemShape
   virtual void 	renderShape(GemState *state);
 
   //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
-
-  //////////
   // The height of the object
   GLfloat	    	m_height;
 

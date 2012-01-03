@@ -61,10 +61,6 @@ class GEM_EXTERN polygon : public GemShape
     	// Do the renderShapeing
     	virtual void 	renderShape(GemState *state);
 
-     	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-
     	//////////
     	// Set the vertices
     	void	    	setVert(int whichOne, float x, float y, float z);

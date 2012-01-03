@@ -30,12 +30,19 @@ GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
     m_numSlices((int)slices),m_numStacks((int)stacks),
     m_sliceInlet(NULL)
 {
-    m_drawType = (GLenum) GL_FILL;
-    if(m_numSlices<=0)m_numSlices=10;
-    if(m_numStacks<=0)m_numStacks=m_numSlices;
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_DEFAULT_GEM;
+  m_drawTypes["line"]=GL_LINE;
+  m_drawTypes["fill"]=GL_FILL;
+  m_drawTypes["point"]=GL_POINT;
+  m_drawTypes["points"]=GL_POINT;
 
-    // the number of slices
-    m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numslices"));
+  m_drawType = (GLenum) GL_FILL;
+  if(m_numSlices<=0)m_numSlices=10;
+  if(m_numStacks<=0)m_numStacks=m_numSlices;
+
+  // the number of slices
+  m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numslices"));
 }
 
 /////////////////////////////////////////////////////////
@@ -63,33 +70,6 @@ void GemGluObj :: numSlicesMess(int numSlices, int numStacks)
     m_numSlices = (numSlices < 2) ? 2 : numSlices;
     m_numStacks = (numStacks < 2) ? 2 : numStacks;
     setModified();
-}
-
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void GemGluObj :: typeMess(t_symbol *type)
-{
-  char c=*type->s_name;
-  switch (c){
-  case 'D': case 'd': // default
-    m_drawType = GL_DEFAULT_GEM;
-    break;
-  case 'L': case 'l': // line
-    m_drawType = GL_LINE;
-    break;
-  case 'F': case 'f': // fill
-    m_drawType = GL_FILL;
-    break;
-  case 'P': case 'p': // point
-    m_drawType = GL_POINT;
-    break;
-  default:
-    error ("unknown draw style");
-    return;
-  }
-  setModified();
 }
 
 /////////////////////////////////////////////////////////

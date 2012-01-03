@@ -207,40 +207,6 @@ void polygon :: setVert(int whichOne, float x, float y, float z)
 }
 
 /////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void polygon :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "default"))
-	    m_drawType = GL_DEFAULT_GEM;
-    else if (!strcmp(type->s_name, "line"))
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill"))
-	    m_drawType = GL_POLYGON;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else if (!strcmp(type->s_name, "linestrip"))
-	    m_drawType = GL_LINE_STRIP;
-    else if (!strcmp(type->s_name, "tri"))
-	    m_drawType = GL_TRIANGLES;
-    else if (!strcmp(type->s_name, "tristrip"))
-	    m_drawType = GL_TRIANGLE_STRIP;
-    else if (!strcmp(type->s_name, "trifan"))
-	    m_drawType = GL_TRIANGLE_FAN;
-    else if (!strcmp(type->s_name, "quad"))
-	    m_drawType = GL_QUADS;
-    else if (!strcmp(type->s_name, "quadstrip"))
-	    m_drawType = GL_QUAD_STRIP;
-    else
-    {
-	    error ("unknown draw style");
-	    return;
-    }
-    setModified();
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////

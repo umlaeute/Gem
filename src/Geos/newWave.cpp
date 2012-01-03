@@ -83,6 +83,12 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
     K1=0.05;
     D1=0.1;
 
+    m_drawTypes.clear();
+    m_drawTypes["default"]=GL_DEFAULT_GEM;
+    m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+    m_drawTypes["line"]=GL_LINE_STRIP;
+    m_drawTypes["fill"]=GL_TRIANGLE_STRIP;
+
 }
 
 /////////////////////////////////////////////////////////
@@ -218,25 +224,6 @@ void newWave :: heightMess(float size)
     m_height = size;
     setModified();
 }
-
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void newWave :: typeMess(t_symbol *type)
-{
-  char c=*type->s_name;
-  switch(c){
-  case 'l': case 'L': m_drawType = GL_LINE_STRIP; break;
-  case 'f': case 'F': m_drawType = GL_TRIANGLE_STRIP; break;
-  case 'p': case 'P': m_drawType = GL_POINTS; break;
-  default:
-    error ("unknown draw style");
-    return;
-  }
-  setModified();
-}
-
 
 /////////////////////////////////////////////////////////
 // getforce

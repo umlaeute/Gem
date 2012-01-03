@@ -69,8 +69,6 @@ class GEM_EXTERN curve3d : public GemShape
 	CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2}
   m_drawType;
 
-  virtual void	typeMess(t_symbol *type);
-
   t_float3		*m_posXYZ; // attention, valeur critique
 
  private:

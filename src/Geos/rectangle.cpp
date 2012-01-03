@@ -37,6 +37,12 @@ rectangle :: rectangle(t_floatarg width, t_floatarg height)
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
+
+    m_drawTypes.clear();
+    m_drawTypes["default"]=GL_DEFAULT_GEM;
+    m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+    m_drawTypes["line"]=GL_LINE_LOOP;
+    m_drawTypes["fill"]=GL_QUADS;
 }
 
 /////////////////////////////////////////////////////////
@@ -93,26 +99,6 @@ void rectangle :: renderShape(GemState *state)
 void rectangle :: heightMess(float size)
 {
     m_height = size;
-    setModified();
-}
-
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void rectangle :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "line"))
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill"))
-	    m_drawType = GL_QUADS;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error ("GEM: square draw style");
-	    return;
-    }
     setModified();
 }
 

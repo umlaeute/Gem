@@ -79,10 +79,6 @@ class GEM_EXTERN rubber : public GemShape
   // Do the rendering
   virtual void 	renderShape(GemState *state);
 
-  //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
-
   virtual void	rubber_init();
   virtual void	rubber_dynamics();
   virtual void	rubber_bang();

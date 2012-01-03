@@ -88,10 +88,6 @@ class GEM_EXTERN tube : public GemShape
   virtual void 	renderShape(GemState *state);
 
   //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
-
-  //////////
   // 2 PI
   static const float TWO_PI;
 
