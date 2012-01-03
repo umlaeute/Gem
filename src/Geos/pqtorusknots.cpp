@@ -40,6 +40,12 @@ pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
   if (m_P == 0.f) m_P = 1.f;
   if (m_Q == 0.f) m_Q = 0.f;
   m_drawType = GL_TRIANGLE_STRIP;
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_TRIANGLE_STRIP;
+  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_TRIANGLE_STRIP;
 }
 
 ////////////////////////////////////////////////////////
@@ -287,22 +293,22 @@ void pqtorusknots :: scaleMess(float size)
 // stepsMess
 //
 /////////////////////////////////////////////////////////
-void pqtorusknots :: stepsMess(float size)
+void pqtorusknots :: stepsMess(int size)
 {
   if (size<0)
     size = 0;
-  m_steps = static_cast<GLint>(size);
+  m_steps = size;
   setModified();
 }
 ////////////////////////////////////////////////////////
 // facetsMess
 //
 /////////////////////////////////////////////////////////
-void pqtorusknots :: facetsMess(float size)
+void pqtorusknots :: facetsMess(int size)
 {
   if(size<0)
     size=0;
-  m_facets = static_cast<GLint>(size);
+  m_facets = size;
   setModified();
 }
 ////////////////////////////////////////////////////////
@@ -347,78 +353,16 @@ void pqtorusknots :: pqMess(float p, float q)
 }
 
 ////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void pqtorusknots :: typeMess(t_symbol *type)
-{
-  char c=*type->s_name;
-  switch(c){
-  case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
-  case 'f': case 'F':   //m_drawType = GL_QUADS; break;
-  case 'd': case 'D':   m_drawType = GL_TRIANGLE_STRIP; break;// default
-  case 'p': case 'P':   m_drawType = GL_POINTS; break;
-  default:
-    error ("GEM: square draw style");
-    return;
-  }
-  setModified();
-}
-
-////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void pqtorusknots :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::scaleMessCallback),
-                  gensym("scale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::stepsMessCallback),
-                  gensym("steps"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::facetsMessCallback),
-                  gensym("facets"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::thickMessCallback),
-                  gensym("thick"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::clumpMessCallback),
-                  gensym("clump"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::uvScaleMessCallback),
-                  gensym("uvScale"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::pqMessCallback),
-                  gensym("pq"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pqtorusknots::typeMessCallback),
-                  gensym("type"), A_SYMBOL, A_NULL);
-}
-
-void pqtorusknots :: scaleMessCallback(void *data, t_floatarg size)
-{
-  GetMyClass(data)->scaleMess(size);
-}
-
-void pqtorusknots :: stepsMessCallback(void *data, t_floatarg size)
-{
-  GetMyClass(data)->stepsMess(size);
-}
-void pqtorusknots :: facetsMessCallback(void *data, t_floatarg size)
-{
-  GetMyClass(data)->facetsMess(size);
-}
-void pqtorusknots :: thickMessCallback(void *data, t_floatarg size)
-{
-  GetMyClass(data)->thickMess(size);
-}
-void pqtorusknots :: clumpMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce )
-{
-  GetMyClass(data)->clumpMess(posX, posY, valforce);
-}
-void pqtorusknots :: uvScaleMessCallback(void *data, t_floatarg posX, t_floatarg posY)
-{
-  GetMyClass(data)->uvScaleMess(posX, posY);
-}
-void pqtorusknots :: pqMessCallback(void *data, t_floatarg posX, t_floatarg posY)
-{
-  GetMyClass(data)->pqMess(posX, posY);
-}
-void pqtorusknots :: typeMessCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->typeMess(s);
+  CPPEXTERN_MSG1(classPtr, "scale", scaleMess, float);
+  CPPEXTERN_MSG1(classPtr, "steps", stepsMess, int);
+  CPPEXTERN_MSG1(classPtr, "facets", facetsMess, int);
+  CPPEXTERN_MSG1(classPtr, "thick", thickMess, float);
+  CPPEXTERN_MSG3(classPtr, "clump", clumpMess, float, float, float);
+  CPPEXTERN_MSG2(classPtr, "uvScale", uvScaleMess, float, float);
+  CPPEXTERN_MSG2(classPtr, "pq", pqMess, float, float);
 }

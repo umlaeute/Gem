@@ -79,10 +79,6 @@ class GEM_EXTERN rubber : public GemShape
   // Do the rendering
   virtual void 	renderShape(GemState *state);
 
-  //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
-
   virtual void	rubber_init();
   virtual void	rubber_dynamics();
   virtual void	rubber_bang();
@@ -119,10 +115,6 @@ class GEM_EXTERN rubber : public GemShape
 
   //////////
   // static member functions
-  static void	bangMessCallback(void *data);
-  static void 	heightMessCallback(void *data, t_floatarg height);
-  static void 	ctrXMessCallback(void *data, t_floatarg center);
-  static void 	ctrYMessCallback(void *data, t_floatarg center);
   static void 	dragMessCallback(void *data, t_floatarg drag);
   static void 	springMessCallback(void *data, t_floatarg spring);
 };

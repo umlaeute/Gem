@@ -42,6 +42,12 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
   inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
 
   m_drawType = GL_POLYGON;
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_POLYGON;
+  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_POLYGON;
 }
 
 ////////////////////////////////////////////////////////
@@ -333,56 +339,20 @@ void rubber :: heightMess(float height)
 }
 
 /////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void rubber :: typeMess(t_symbol *type)
-{
-  char c=*type->s_name;
-  switch(c){
-  case 'l': case 'L':   m_drawType = GL_LINE_LOOP; break;
-  case 'd': case 'D': // default
-  case 'f': case 'F':   m_drawType = GL_POLYGON; break;
-  case 'p': case 'P':   m_drawType = GL_POINTS; break;
-  default:
-    error ("unknown draw style");
-    return;
-  }
-  setModified();
-}
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void rubber :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&rubber::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::heightMessCallback),
-                  gensym("Ht"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::ctrXMessCallback),
-                  gensym("cX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::ctrYMessCallback),
-                  gensym("cY"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "bang", rubber_bang);
+  CPPEXTERN_MSG1(classPtr, "Ht", heightMess, float);
+  CPPEXTERN_MSG1(classPtr, "cX", ctrXMess, float);
+  CPPEXTERN_MSG1(classPtr, "cY", ctrYMess, float);
+
   class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::dragMessCallback),
                   gensym("drag"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::springMessCallback),
                   gensym("spring"), A_FLOAT, A_NULL);
-}
-void rubber :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->rubber_bang();
-}
-void rubber :: heightMessCallback(void *data, t_floatarg height)
-{
-  GetMyClass(data)->heightMess(height);
-}
-void rubber :: ctrXMessCallback(void *data, t_floatarg center)
-{
-  GetMyClass(data)->ctrXMess(center);
-}
-void rubber :: ctrYMessCallback(void *data, t_floatarg center)
-{
-  GetMyClass(data)->ctrYMess(center);
 }
 void rubber :: dragMessCallback(void *data, t_floatarg drag)
 {

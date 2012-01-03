@@ -55,13 +55,12 @@ class GEM_EXTERN pqtorusknots : public GemShape
   //////////
   // The variables of the object
   void	    	scaleMess(float size);
-  void	    	stepsMess(float size);
-  void	    	facetsMess(float size);
+  void	    	stepsMess(int size);
+  void	    	facetsMess(int size);
   void	    	thickMess(float size);
   virtual void	clumpMess(float clumps, float clumpOffset, float clumpScale);
   virtual void	uvScaleMess(float uScale, float vScale);
   virtual void	pqMess(float p, float q);
-  virtual void	typeMess(t_symbol*s);
 
   // setup the vertices and normals and...
   virtual void genVert();
@@ -113,19 +112,6 @@ class GEM_EXTERN pqtorusknots : public GemShape
   int		m_Indices;
   int		m_Vertices;
   int		m_PrimitiveType;
-
- private:
-
-  //////////
-  // Static member functions
-  static void 	scaleMessCallback(void *data, t_floatarg size);
-  static void 	stepsMessCallback(void *data, t_floatarg size);
-  static void 	facetsMessCallback(void *data, t_floatarg size);
-  static void 	thickMessCallback(void *data, t_floatarg size);
-  static void 	clumpMessCallback(void *data, t_floatarg clumps, t_floatarg clumpOffsets, t_floatarg clumpScale);
-  static void 	uvScaleMessCallback(void *data, t_floatarg uScale, t_floatarg vScale);
-  static void 	pqMessCallback(void *data, t_floatarg p, t_floatarg q);
-  static void 	typeMessCallback(void *data, t_symbol*s);
 
 };
 

@@ -59,6 +59,21 @@ curve3d :: curve3d(t_floatarg sizeX,t_floatarg sizeY )
       m_posXYZ[a].z= 0.0;
     }
 
+  m_drawTypes.clear();
+
+  m_drawTypes["line"] = LINE;
+  m_drawTypes["fill"] = FILL;
+  m_drawTypes["point"] = POINT;
+  m_drawTypes["line1"] = LINE1;
+  m_drawTypes["line2"] = LINE2;
+  m_drawTypes["line3"] = LINE3;
+  m_drawTypes["line4"] = LINE4;
+  m_drawTypes["control_fill"] = CONTROL_FILL;
+  m_drawTypes["control_point"] = CONTROL_POINT;
+  m_drawTypes["control_line"] = CONTROL_LINE;
+  m_drawTypes["control_line1"] = CONTROL_LINE1;
+  m_drawTypes["control_line2"] = CONTROL_LINE2;
+  m_drawTypes["default"] = FILL;
 }
 
 //////////////////////////////////////////////////////////
@@ -117,44 +132,6 @@ void curve3d :: resolutionMess(int resolutionX, int resolutionY){
 void curve3d :: gridMess(int gridX, int gridY){
   nb_pts_affich_X = (gridX < 2) ? 2 : gridX;
   nb_pts_affich_Y = (gridY < 2) ? 2 : gridY;
-  setModified();
-}
-
-//////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void curve3d :: typeMess(t_symbol *type){
-  if (gensym("line")==type)
-    m_drawType = LINE;
-  else if (gensym("fill")==type)
-    m_drawType = FILL;
-  else if (gensym("point")==type)
-    m_drawType = POINT;
-  else if (gensym("line1")==type)
-    m_drawType = LINE1;
-  else if (gensym("line2")==type)
-    m_drawType = LINE2;
-  else if (gensym("line3")==type)
-    m_drawType = LINE3;
-  else if (gensym("line4")==type)
-    m_drawType = LINE4;
-  else if (gensym("control_fill")==type)
-    m_drawType = CONTROL_FILL;
-  else if (gensym("control_point")==type)
-    m_drawType = CONTROL_POINT;
-  else if (gensym("control_line")==type)
-    m_drawType = CONTROL_LINE;
-  else if (gensym("control_line1")==type)
-    m_drawType = CONTROL_LINE1;
-  else if (gensym("control_line2")==type)
-    m_drawType = CONTROL_LINE2;
-  else if (gensym("default")==type)
-    m_drawType = FILL;
-  else    {
-    error ("unknown draw style: 's'", type->s_name);
-    return;
-  }
   setModified();
 }
 
@@ -545,25 +522,8 @@ void curve3d :: renderShape(GemState *state){
 //
 /////////////////////////////////////////////////////////
 void curve3d :: obj_setupCallback(t_class *classPtr){
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::resolutionMessCallback),
-		  gensym("res"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::gridMessCallback),
-		  gensym("grid"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&curve3d::setMessCallback),
-		  gensym("set"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-}
-
-void curve3d :: resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY)
-{
-  GetMyClass(data)->resolutionMess(static_cast<int>(resX), static_cast<int>(resY));
-}
-void curve3d :: gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY)
-{
-  GetMyClass(data)->gridMess(static_cast<int>(gridX), static_cast<int>(gridY));
-}
-void curve3d :: setMessCallback(void *data, t_floatarg X, t_floatarg Y, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
-{
-  GetMyClass(data)->setMess(static_cast<int>(X), static_cast<int>(Y),
-			    posX, posY, posZ);
+  CPPEXTERN_MSG2(classPtr, "res", resolutionMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "grid", gridMess, int, int);
+  CPPEXTERN_MSG5(classPtr, "set", setMess, int, int, float, float, float);
 }
 

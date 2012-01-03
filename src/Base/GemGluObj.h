@@ -63,10 +63,6 @@ class GEM_EXTERN GemGluObj : public GemShape
     	virtual ~GemGluObj();
 
     	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-
-    	//////////
     	// The number of slices in the quadric
     	void	    	numSlicesMess(int numSlices);
     	void	    	numSlicesMess(int numSlices, int numStacks);

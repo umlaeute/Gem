@@ -207,58 +207,19 @@ void polygon :: setVert(int whichOne, float x, float y, float z)
 }
 
 /////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void polygon :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "default"))
-	    m_drawType = GL_DEFAULT_GEM;
-    else if (!strcmp(type->s_name, "line"))
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill"))
-	    m_drawType = GL_POLYGON;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else if (!strcmp(type->s_name, "linestrip"))
-	    m_drawType = GL_LINE_STRIP;
-    else if (!strcmp(type->s_name, "tri"))
-	    m_drawType = GL_TRIANGLES;
-    else if (!strcmp(type->s_name, "tristrip"))
-	    m_drawType = GL_TRIANGLE_STRIP;
-    else if (!strcmp(type->s_name, "trifan"))
-	    m_drawType = GL_TRIANGLE_FAN;
-    else if (!strcmp(type->s_name, "quad"))
-	    m_drawType = GL_QUADS;
-    else if (!strcmp(type->s_name, "quadstrip"))
-	    m_drawType = GL_QUAD_STRIP;
-    else
-    {
-	    error ("unknown draw style");
-	    return;
-    }
-    setModified();
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG4(classPtr, "vertex", setVert, int, float, float, float);
 	class_addlist(classPtr, reinterpret_cast<t_method>(&polygon::listCallback));
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&polygon::vertexCallback), gensym("vertex"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 	class_addanything(classPtr, reinterpret_cast<t_method>(&polygon::vertCallback));
 }
 
 void polygon :: listCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
 	GetMyClass(data)->listMess(argc, argv);
-}
-
-void polygon :: vertexCallback(void *data, t_floatarg id, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-	GetMyClass(data)->setVert(id, x, y, z);
 }
 
 void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)

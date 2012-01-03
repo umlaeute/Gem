@@ -37,7 +37,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 scopeXYZ :: scopeXYZ(t_floatarg len)
   : GemShape(),
-    m_drawType(GL_LINE_STRIP),
     m_requestedLength(0), m_realLength(0), m_length(0),
     m_position(0),
     m_vertices(NULL)
@@ -49,6 +48,7 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
   int i;
   for (i=0; i<3; i++)
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal);
+
 }
 
 ////////////////////////////////////////////////////////
@@ -180,76 +180,6 @@ void scopeXYZ :: linewidthMess(float linewidth)
 }
 
 /////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void scopeXYZ :: typeMess(t_symbol *type)
-{
-  char*s=type->s_name;
-  char c=*s;
-  switch(c){
-  case 'd': // default
-    m_drawType = GL_DEFAULT_GEM;
-    break;
-  case 'f': // fill
-    m_drawType = GL_POLYGON;
-    break;
-  case 'p': // point
-    m_drawType = GL_POINTS;
-    break;
-  case 'l':
-    { // line, linestrip
-      char c2=s[4];
-      switch(c2){
-      case 's':
-        if(s[5])
-          m_drawType = GL_LINE_STRIP;
-        else
-          m_drawType = GL_LINES;
-        break;
-      default:
-        m_drawType = GL_LINE_LOOP;
-        break;
-      }
-    }
-    break;
-  case 't':
-    { // tri, tristrip, trifan
-      char c2=s[3];
-      switch(c2){
-      case 's':
-        m_drawType = GL_TRIANGLE_STRIP;
-        break;
-      case 'f':
-        m_drawType = GL_TRIANGLE_FAN;
-        break;
-      default:
-        m_drawType = GL_TRIANGLES;
-        break;
-      }
-    }
-    break;
-  case 'q':
-    { // quad, quadstrip
-      char c2=s[4];
-      switch(c2){
-      case 's':
-        m_drawType = GL_QUAD_STRIP;
-        break;
-      default:
-        m_drawType = GL_QUADS;
-        break;
-      }
-    }
-    break;
-  default:
-    error ("draw style");
-    return;
-  }
-  setModified();
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
@@ -258,29 +188,13 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ),
                    gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::linewidthMessCallback),
-                  gensym("linewidth"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::lengthMessCallback),
-                  gensym("length"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG1(classPtr, "linewidth", linewidthMess, float);
+  CPPEXTERN_MSG1(classPtr, "length", lengthMess, int);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
                   gensym("dsp"), A_NULL);
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
-
-  class_addbang(classPtr, reinterpret_cast<t_method>(&scopeXYZ::bangCallback));
-}
-void scopeXYZ :: bangCallback(void *data)
-{
-  GetMyClass(data)->bangMess();
-}
-
-void scopeXYZ :: linewidthMessCallback(void *data, t_floatarg linewidth)
-{
-  GetMyClass(data)->linewidthMess(linewidth);
-}
-void scopeXYZ :: lengthMessCallback(void *data, t_floatarg l)
-{
-  GetMyClass(data)->lengthMess(static_cast<int>(l));
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {

@@ -52,10 +52,6 @@ class GEM_EXTERN primTri : public GemShape
     	virtual void 	renderShape(GemState *state);
 
     	//////////
-    	// How the object should be drawn
-    	virtual void	typeMess(t_symbol *type);
-
-    	//////////
     	// Vector changed
     	void	    	vectMess(int which, float x, float y, float z)
 			{ mVectors[which][0] = x; mVectors[which][1] = y; mVectors[which][2] = z; }

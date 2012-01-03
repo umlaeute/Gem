@@ -93,9 +93,6 @@ class GEM_EXTERN ripple : public GemShape
   // Do the rendering
   virtual void 	renderShape(GemState *state);
 
-  //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
   void	ripple_dynamics();
   void	ripple_init();
   float	ripple_distance( int gx, int gy, int cx, int cy);

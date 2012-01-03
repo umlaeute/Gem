@@ -69,14 +69,7 @@ class GEM_EXTERN curve3d : public GemShape
 	CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2}
   m_drawType;
 
-  virtual void	typeMess(t_symbol *type);
-
   t_float3		*m_posXYZ; // attention, valeur critique
-
- private:
-  static void		resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY );
-  static void		gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY );
-  static void		setMessCallback(void *data, t_floatarg X,t_floatarg Y,t_floatarg posX,t_floatarg posY,t_floatarg posZ);
 };
 
 #endif	// for header file

@@ -46,6 +46,13 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
 
   m_drawType = GL_POLYGON;
   precalc_ripple_amp();
+
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_POLYGON;
+  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_POLYGON;
 }
 
 ////////////////////////////////////////////////////////
@@ -363,27 +370,6 @@ void ripple :: ctrYMess(float center)
   setModified();
 }
 
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void ripple :: typeMess(t_symbol *type)
-{
-  if (!strcmp(type->s_name, "line"))
-    m_drawType = GL_LINE_LOOP;
-  else if (!strcmp(type->s_name, "fill"))
-    m_drawType = GL_POLYGON;
-  else if (!strcmp(type->s_name, "point"))
-    m_drawType = GL_POINTS;
-  else if (!strcmp(type->s_name, "default"))
-    m_drawType = GL_POLYGON;
-  else
-    {
-	    error ("unknown draw style?");
-	    return;
-    }
-  setModified();
-}
 /////////////////////////////////////////////////////////
 // static member function
 //

@@ -56,7 +56,7 @@ class GEM_EXTERN newWave : public GemShape
   int		gridX, gridY;
   short		size, mode, speed;
   void	    heightMess(float size);
-  void		modeMess(float mode);
+  void		modeMess(int mode);
   void		forceMess(float posX, float posY, float valforce);
   void		positionMess(float posX, float posY, float posZ);
   void		textureMess(int mode);
@@ -65,10 +65,6 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // Do the rendering
   virtual void 	renderShape(GemState *state);
-
-  //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
 
   //////////
   // The height of the object
@@ -132,20 +128,12 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // static member functions
-  static void 	heightMessCallback(void *data, t_floatarg size);
-  static void 	modeMessCallback(void *data, t_floatarg mode);
   static void 	setK1MessCallback(void *data, t_floatarg K);
   static void 	setD1MessCallback(void *data, t_floatarg D);
   static void 	setK2MessCallback(void *data, t_floatarg K);
   static void 	setD2MessCallback(void *data, t_floatarg D);
   static void 	setK3MessCallback(void *data, t_floatarg K);
   static void 	setD3MessCallback(void *data, t_floatarg D);
-  static void 	forceMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg valforce );
-  static void 	positionMessCallback(void *data, t_floatarg posX, t_floatarg posY, t_floatarg posZ );
-  static void 	textureMessCallback(void *data, t_floatarg mode);
-  static void 	bangMessCallback(void *data);
-  static void 	noiseMessCallback(void *data, t_floatarg rnd);
-
 };
 
 #endif	// for header file

@@ -56,6 +56,12 @@ primTri :: primTri(t_floatarg size)
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col1"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col2"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col3"));
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_TRIANGLES;
+  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_TRIANGLES;
 }
 
 /////////////////////////////////////////////////////////
@@ -118,26 +124,6 @@ void primTri :: renderShape(GemState *state)
 
 	if (!GemShape::m_lighting)
 		glShadeModel(GL_FLAT);
-}
-
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void primTri :: typeMess(t_symbol *type)
-{
-    if (!strcmp(type->s_name, "line"))
-	    m_drawType = GL_LINE_LOOP;
-    else if (!strcmp(type->s_name, "fill"))
-	    m_drawType = GL_TRIANGLES;
-    else if (!strcmp(type->s_name, "point"))
-	    m_drawType = GL_POINTS;
-    else
-    {
-	    error ("unknown draw style");
-	    return;
-    }
-    setModified();
 }
 
 /////////////////////////////////////////////////////////

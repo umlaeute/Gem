@@ -82,6 +82,13 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
   m_inletrotY2 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotY2"));
 
   m_drawType = GL_TRIANGLE_STRIP;
+
+  m_drawTypes.clear();
+  m_drawTypes["default"]=GL_TRIANGLE_STRIP;
+  m_drawTypes["point"]=GL_POINTS;
+  m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINE_LOOP;
+  m_drawTypes["fill"]=GL_TRIANGLE_STRIP;
 }
 
 //////////////////////////////////////////////////////////
@@ -325,24 +332,6 @@ void tube :: slicesMess(int slices){
       m_sin[i] = sin(TWO_PI * 1. * i / order);
     }
 
-  setModified();
-}
-//////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void tube :: typeMess(t_symbol *type){
-  char c=*type->s_name;
-
-  switch (c) {
-  case 'l': case 'L': m_drawType = GL_LINE_LOOP; break;
-  case 'd': case 'D': // default
-  case 'f': case 'F': m_drawType = GL_TRIANGLE_STRIP; break;
-  case 'p': case 'P': m_drawType = GL_POINTS; break;
-  default:
-    error("unknown draw style");
-    return;
-  }
   setModified();
 }
 

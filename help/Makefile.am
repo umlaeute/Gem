@@ -39,6 +39,7 @@ dist_gemhelp_DATA = \
 	gemorb-help.pd \
 	gemreceive-help.pd \
 	gemtablet-help.pd \
+	gemvertexbuffer-help.pd \
 	gemwin-help.pd \
 	GLdefine-help.pd \
 	glsl_fragment-help.pd \

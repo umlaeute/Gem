@@ -58,17 +58,9 @@ class GEM_EXTERN scopeXYZ : public GemShape
   // The width of the lines in line draw mode
   void	    	linewidthMess(float linewidth);
 
-  //////////
-  // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
-
   //-----------------------------------
   // GROUP:	Member variables
   //-----------------------------------
-
-  //////////
-  // The drawing style (GL_LINE, GL_QUAD_STRIP, etc)
-  GLenum	    	m_drawType;
 
   //////////
   // the number of points
@@ -94,10 +86,6 @@ class GEM_EXTERN scopeXYZ : public GemShape
 
   //////////
   // Static member functions
-  static void 	linewidthMessCallback(void *data, t_floatarg linewidth);
-  static void 	lengthMessCallback(void *data, t_floatarg linewidth);
-  static void 	bangCallback(void *data);
-
   static void 	dspCallback(void *data, t_signal** sp);
   static t_int*   perform(t_int* w);
 
