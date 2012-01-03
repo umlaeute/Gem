@@ -37,7 +37,6 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 scopeXYZ :: scopeXYZ(t_floatarg len)
   : GemShape(),
-    m_drawType(GL_LINE_STRIP),
     m_requestedLength(0), m_realLength(0), m_length(0),
     m_position(0),
     m_vertices(NULL)
@@ -49,6 +48,7 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
   int i;
   for (i=0; i<3; i++)
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal);
+
 }
 
 ////////////////////////////////////////////////////////
@@ -176,76 +176,6 @@ void scopeXYZ :: bangMess(void){
 void scopeXYZ :: linewidthMess(float linewidth)
 {
   m_linewidth = (linewidth < 0.0f) ? 0.0f : linewidth;
-  setModified();
-}
-
-/////////////////////////////////////////////////////////
-// typeMess
-//
-/////////////////////////////////////////////////////////
-void scopeXYZ :: typeMess(t_symbol *type)
-{
-  char*s=type->s_name;
-  char c=*s;
-  switch(c){
-  case 'd': // default
-    m_drawType = GL_DEFAULT_GEM;
-    break;
-  case 'f': // fill
-    m_drawType = GL_POLYGON;
-    break;
-  case 'p': // point
-    m_drawType = GL_POINTS;
-    break;
-  case 'l':
-    { // line, linestrip
-      char c2=s[4];
-      switch(c2){
-      case 's':
-        if(s[5])
-          m_drawType = GL_LINE_STRIP;
-        else
-          m_drawType = GL_LINES;
-        break;
-      default:
-        m_drawType = GL_LINE_LOOP;
-        break;
-      }
-    }
-    break;
-  case 't':
-    { // tri, tristrip, trifan
-      char c2=s[3];
-      switch(c2){
-      case 's':
-        m_drawType = GL_TRIANGLE_STRIP;
-        break;
-      case 'f':
-        m_drawType = GL_TRIANGLE_FAN;
-        break;
-      default:
-        m_drawType = GL_TRIANGLES;
-        break;
-      }
-    }
-    break;
-  case 'q':
-    { // quad, quadstrip
-      char c2=s[4];
-      switch(c2){
-      case 's':
-        m_drawType = GL_QUAD_STRIP;
-        break;
-      default:
-        m_drawType = GL_QUADS;
-        break;
-      }
-    }
-    break;
-  default:
-    error ("draw style");
-    return;
-  }
   setModified();
 }
 
