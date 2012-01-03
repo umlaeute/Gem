@@ -691,7 +691,7 @@ performances if you wish to update point position at every frame;
 #X obj 298 213 t f f;
 #X obj 298 277 * 7;
 #X obj 298 256 - 0.5;
-#X msg 82 384 draw line;
+#X msg 82 384 draw linestrip;
 #X obj 82 363 loadbang;
 #X obj 63 30 loadbang;
 #X msg 63 52 0;
