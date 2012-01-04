@@ -146,7 +146,7 @@ glmUnitize(GLMmodel* model);
  * dimensions - array of 3 GLfloats (GLfloat dimensions[3])
  */
 GLvoid
-glmDimensions(GLMmodel* model, GLfloat* dimensions);
+glmDimensions(const GLMmodel* model, GLfloat* dimensions);
 
 /* glmScale: Scales a model by a given amount.
  *
@@ -216,7 +216,7 @@ glmDelete(GLMmodel* model);
  * filename - name of the file containing the Wavefront .OBJ format data.
  */
 GLMmodel*
-glmReadOBJ(char* filename);
+glmReadOBJ(const char* filename);
 
 /* glmWriteOBJ: Writes a model description in Wavefront .OBJ format to
  * a file.
@@ -231,7 +231,7 @@ glmReadOBJ(char* filename);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLint
-glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode);
+glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode);
 
 /* glmDraw: Renders the model to the current OpenGL context using the
  * mode specified.
@@ -245,7 +245,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(GLMmodel* model, GLuint mode);
+glmDraw(const GLMmodel* model, GLuint mode);
 
 
 /* glmDrawGroup: Renders a single group of model to the current OpenGL context using the
@@ -260,7 +260,7 @@ glmDraw(GLMmodel* model, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber);
+glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber);
 
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
@@ -274,7 +274,7 @@ glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(GLMmodel* model, GLuint mode);
+glmList(const GLMmodel* model, GLuint mode);
 
 /* glmListGroup: Generates and returns a display list for the model group using
  * the mode specified.
@@ -288,7 +288,7 @@ glmList(GLMmodel* model, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmListGroup(GLMmodel* model, GLuint mode, int groupNumber);
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber);
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.
@@ -330,7 +330,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon);
  *
  */
 GLubyte*
-glmReadPPM(char* filename, int* width, int* height);
+glmReadPPM(const char* filename, int* width, int* height);
 
 #ifdef __cplusplus
 }
