@@ -43,8 +43,12 @@ gemify_glew_c () {
  if test -f "$1"; then
 cat <<EOF
 #ifdef HAVE_CONFIG_H
-# include "Base/config.h"
+# include "config.h"
 #endif
+
+/* exporting symbols for external objects */
+#define GLEW_BUILD
+
 #ifndef HAVE_LIBGLEW
 EOF
 
