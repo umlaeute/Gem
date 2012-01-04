@@ -19,7 +19,7 @@
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
-  multimodel::multiModelCache *multimodel::s_modelCache = NULL;
+multimodel::multiModelCache *multimodel::s_modelCache = NULL;
 
 /////////////////////////////////////////////////////////
 //
@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEF
 //
 /////////////////////////////////////////////////////////
 multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
-			 t_floatarg topModel, t_floatarg skipRate)
+                         t_floatarg topModel, t_floatarg skipRate)
   : m_loadedCache(NULL),
     m_numModels(0), m_curModel(-1),
     m_rescaleModel(1),
@@ -55,7 +55,7 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
   }
 }
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
@@ -122,9 +122,9 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
   int found = 0;
   while (!found && cache) {
     if (baseModel == cache->baseModel &&
-	topModel == cache->topModel &&
-	skipRate == cache->skipRate &&
-	!strcmp(filename->s_name, cache->modelName)) found = 1;
+        topModel == cache->topModel &&
+        skipRate == cache->skipRate &&
+        !strcmp(filename->s_name, cache->modelName)) found = 1;
     else cache = cache->next;
   }
 
@@ -135,7 +135,7 @@ void multimodel :: openMess(t_symbol *filename, int baseModel, int topModel, int
     m_curModel = 0;
     m_numModels = m_loadedCache->numModels;
     post("loaded models: %s from %d to %d skipping %d",
-	 filename->s_name, baseModel, topModel, skipRate);
+         filename->s_name, baseModel, topModel, skipRate);
     return;
   }
 
@@ -327,16 +327,16 @@ void multimodel :: changeModel(int modelNum)
 void multimodel :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::openMessCallback),
-		  gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::changeModelCallback),
-		  gensym("mdl_num"), A_FLOAT, A_NULL);
+                  gensym("mdl_num"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::rescaleMessCallback),
-		  gensym("rescale"), A_FLOAT, A_NULL);
+                  gensym("rescale"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::textureMessCallback),
-		  gensym("texture"), A_FLOAT, A_NULL);
+                  gensym("texture"), A_FLOAT, A_NULL);
 }
 void multimodel :: openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel,
-				    t_floatarg topModel, t_floatarg skipRate)
+                                    t_floatarg topModel, t_floatarg skipRate)
 {
   int skipRatei=static_cast<int>(skipRate);
   int topModeli=static_cast<int>(topModel);
@@ -345,9 +345,9 @@ void multimodel :: openMessCallback(void *data, t_symbol *filename, t_floatarg b
   if (skipRatei == 0)
     {
       if (topModeli == 0)
-	GetMyClass(data)->openMess(filename, 0, topModeli, 0);
+        GetMyClass(data)->openMess(filename, 0, topModeli, 0);
       else
-	GetMyClass(data)->openMess(filename, baseModeli, topModeli, 0);
+        GetMyClass(data)->openMess(filename, baseModeli, topModeli, 0);
     }
   else
     GetMyClass(data)->openMess(filename, baseModeli, topModeli, skipRatei);
