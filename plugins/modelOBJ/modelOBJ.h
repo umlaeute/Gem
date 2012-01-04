@@ -12,7 +12,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifndef _INCLUDE__GEMPLUGIN__MODELOBJ_MODELOBJ_H_
 #define _INCLUDE__GEMPLUGIN__MODELOBJ_MODELOBJ_H_
+
 #include "plugins/modelloader.h"
+#include "model_loader.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -50,6 +52,20 @@ namespace gem { namespace plugins {
   virtual bool enumProperties(gem::Properties&, gem::Properties&);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
+
+protected:
+  virtual bool create(void);
+  virtual void destroy(void);
+  bool    m_rebuild;
+
+  GLMmodel *m_model;
+  GLint	  	m_dispList;
+
+	int       m_material;
+	int       m_flags;
+  int       m_group;
+  float		  m_currentH, m_currentW;
+  glmtexture_t m_textype;
 };
 };}; // namespace gem::plugins
 
