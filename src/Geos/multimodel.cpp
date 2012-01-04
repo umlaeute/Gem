@@ -114,10 +114,13 @@ void multimodel :: openMess(const std::string&filename, int baseModel, int topMo
   char bufName[MAXPDSTRING];
   canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName, MAXPDSTRING);
 
+  char newName[MAXPDSTRING];
+  newName[0]=0;
   for (i = 0; i < numModels; i++, realNum += skipRate) {
-    char newName[256];
-    sprintf(newName, "%s%d%s", bufName, realNum, postName);
+    snprintf(newName, MAXPDSTRING, "%s%d%s", bufName, realNum, postName);
+    newName[MAXPDSTRING-1]=0;
 
+    verbose(1, "trying to load '%s'", newName);
     loaders.push_back(gem::plugins::modelloader::getInstance());
     if(!loaders[i])
       break;
@@ -127,7 +130,7 @@ void multimodel :: openMess(const std::string&filename, int baseModel, int topMo
 
   if(loaders.size()!=numModels) {
     /* outch, something went wrong! */
-    error("failed to load model#%d of %d...resetting to original models", i, numModels);
+    error("failed to load model#%d of %d (%s)...resetting to original models", i, numModels, newName);
 
     for(i=0; i<loaders.size(); i++) {
       if(loaders[i])
