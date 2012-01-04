@@ -25,6 +25,8 @@
 /* need GLUtil for glReportError */
 #include "Gem/GemGL.h"
 #include "Utils/GLUtil.h"
+#include <map>
+
 #define GLDEBUG if(glReportError())::startpost("glError @ %s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
 
 using namespace gem;
@@ -46,76 +48,39 @@ public:
 };
 };
 
-static GLenum id2maxdepth(enum GLStack::GemStackId id) {
-  GLenum result=0;
-  switch(id) {
-  case GLStack::MODELVIEW:
-    result=GL_MAX_MODELVIEW_STACK_DEPTH;
-    break;
-  case GLStack::PROJECTION:
-    result=GL_MAX_PROJECTION_STACK_DEPTH;
-    break;
-  case GLStack::TEXTURE:
-    result=GL_MAX_TEXTURE_STACK_DEPTH;
-    break;
-  case GLStack::COLOR:
-    result=GL_MAX_COLOR_MATRIX_STACK_DEPTH;
-    break;
-  default:
-    //    ::error("GLStack: illegal stack matrix: %d");
-    break;
-  }
-  return result;
-}
-
-
-static GLenum id2depth(enum GLStack::GemStackId id) {
-  GLenum result=0;
-  switch(id) {
-  case GLStack::MODELVIEW:
-    result=GL_MODELVIEW_STACK_DEPTH;
-    break;
-  case GLStack::PROJECTION:
-    result=GL_PROJECTION_STACK_DEPTH;
-    break;
-  case GLStack::TEXTURE:
-    result=GL_TEXTURE_STACK_DEPTH;
-    break;
-  case GLStack::COLOR:
-    result=GL_COLOR_MATRIX_STACK_DEPTH;
-    break;
-  default:
-    //    ::error("GLStack: illegal stack matrix: %d");
-    break;
-  }
-  return result;
-}
-
-
-static GLenum id2mode(enum GLStack::GemStackId id) {
-  GLenum result=0;
-  switch(id) {
-  case GLStack::MODELVIEW:
-    result=GL_MODELVIEW;
-    break;
-  case GLStack::PROJECTION:
-    result=GL_PROJECTION;
-    break;
-  case GLStack::TEXTURE:
-    result=GL_TEXTURE;
-    break;
-  case GLStack::COLOR:
-    result=GL_COLOR;
-    break;
-  default:
-    //    ::error("GLStack: illegal stack matrix: %d");
-    break;
-  }
-  return result;
+namespace {
+  static std::map<enum GLStack::GemStackId, GLenum>s_id2mode;
+  static std::map<enum GLStack::GemStackId, GLenum>s_id2depth;
+  static std::map<enum GLStack::GemStackId, GLenum>s_id2maxdepth;
+  static std::map<enum GLStack::GemStackId, bool>s_id2init;
 }
 
 
 GLStack:: GLStack(bool haveValidContext) : data(new Data()) {
+  static bool firsttime=true;
+  if(firsttime) {
+    s_id2mode[MODELVIEW] =GL_MODELVIEW;
+    s_id2mode[PROJECTION]=GL_PROJECTION;
+    s_id2mode[TEXTURE]   =GL_TEXTURE;
+    s_id2mode[COLOR]     =GL_COLOR;
+
+    s_id2depth[MODELVIEW] =GL_MODELVIEW_STACK_DEPTH;
+    s_id2depth[PROJECTION]=GL_PROJECTION_STACK_DEPTH;
+    s_id2depth[TEXTURE]   =GL_TEXTURE_STACK_DEPTH;
+    s_id2depth[COLOR]     =GL_COLOR_MATRIX_STACK_DEPTH;
+
+    s_id2maxdepth[MODELVIEW] =GL_MAX_MODELVIEW_STACK_DEPTH;
+    s_id2maxdepth[PROJECTION]=GL_MAX_PROJECTION_STACK_DEPTH;
+    s_id2maxdepth[TEXTURE]   =GL_MAX_TEXTURE_STACK_DEPTH;
+    s_id2maxdepth[COLOR]     =GL_MAX_COLOR_MATRIX_STACK_DEPTH;
+
+    s_id2init[MODELVIEW] =false;
+    s_id2init[PROJECTION]=false;
+    s_id2init[TEXTURE]   =false;
+    s_id2init[COLOR]     =false;
+  }
+  firsttime=false;
+
   if(haveValidContext) {
     reset();
   }
@@ -137,7 +102,7 @@ GLStack::~GLStack() {
  * NOTE: needs valid openGL context
  */
 bool GLStack::push(enum GemStackId id) {
-  GLenum mode=id2mode(id);
+  GLenum mode=s_id2mode[id];
   if(!mode)return false;
   if(data->stackDepth[id]<data->maxDepth[id]) {
     glMatrixMode(mode);
@@ -163,7 +128,7 @@ void GLStack::push() {
  * NOTE: needs valid openGL context
  */
 bool GLStack::pop(enum GemStackId id) {
-  GLenum mode=id2mode(id);
+  GLenum mode=s_id2mode[id];
   if(!mode)return false;
 
   data->stackDepth[id]--;
@@ -197,14 +162,30 @@ void GLStack::reset() {
  * NOTE: needs valid openGL context
  */
 int GLStack::reset(enum GemStackId id) {
-  GLenum maxdepth=id2maxdepth(id);
-  GLenum depth=id2depth(id);
+  bool firsttime=!(s_id2init[id]);
+  if(firsttime) {
+    s_id2init[id]=true;
+
+    if(COLOR == id && !GLEW_ARB_imaging) {
+      s_id2maxdepth[id]=0;
+      s_id2depth[id]=0;
+    }
+    glReportError(); // clear any errors so far
+  }
+
+
+  GLenum maxdepth=s_id2maxdepth[id];
+  GLenum depth=s_id2depth[id];
 
   if(maxdepth && depth) {
-    if(COLOR != id || GLEW_ARB_imaging) {
-      glGetIntegerv(maxdepth, data->maxDepth+id);
-      glGetIntegerv(depth, data->stackDepth+id);
-    }
+    /* hmm, some ati-cards (with fglrx) report GLEW_ARB_imaging support but fail the 'depth' test for COLOR */
+    
+    glGetIntegerv(maxdepth, data->maxDepth+id);
+    if(firsttime && glReportError())s_id2maxdepth[id]=0;
+
+    glGetIntegerv(depth, data->stackDepth+id);
+    if(firsttime && glReportError())s_id2depth[id]=0;
+
     data->orgDepth[id]=data->stackDepth[id];
     return data->stackDepth[id];
   }
