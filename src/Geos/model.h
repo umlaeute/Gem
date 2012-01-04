@@ -1,16 +1,16 @@
 /*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
+  LOG
+  GEM - Graphics Environment for Multimedia
 
-    read in a model file
+  read in a model file
 
-    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyright (c) Günther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+  Copyright (c) Günther Geiger. geiger@epy.co.at
+  Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+  For information on usage and redistribution, and for a DISCLAIMER OF ALL
+  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_GEOS_MODEL_H_
 #define _INCLUDE__GEM_GEOS_MODEL_H_
@@ -19,86 +19,86 @@ LOG
 #include "model_loader.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    model
+  -------------------------------------------------------------------
+  CLASS
+  model
 
-    read in a model file
+  read in a model file
 
-DESCRIPTION
+  DESCRIPTION
 
-    Inlet for a list - "model"
+  Inlet for a list - "model"
 
-    "open" - the RGB model to set the object to
+  "open" - the RGB model to set the object to
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class GEM_EXTERN model : public GemBase
 {
-    CPPEXTERN_HEADER(model, GemBase);
+  CPPEXTERN_HEADER(model, GemBase);
 
-    public:
+ public:
 
-	    //////////
-	    // Constructor
-    	model(t_symbol *filename);
+  //////////
+  // Constructor
+  model(t_symbol *filename);
 
-    protected:
+ protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~model();
+  //////////
+  // Destructor
+  virtual ~model(void);
 
-    	//////////
-    	// When an open is received
-    	virtual void	openMess(t_symbol *filename);
+  //////////
+  // When an open is received
+  virtual void	openMess(const std::string&filename);
 
-    	//////////
-    	// When a rescale is received
-    	virtual void	rescaleMess(int state);
-  	//////////
-    	// When a reverse is received
-    	virtual void	reverseMess(int state);
-  	//////////
-    	// Which texture type (linear, spheric)
-    	virtual void	textureMess(int state);
+  //////////
+  // When a rescale is received
+  virtual void	rescaleMess(bool state);
+  //////////
+  // When a reverse is received
+  virtual void	reverseMess(int state);
+  //////////
+  // Which texture type (linear, spheric)
+  virtual void	textureMess(int state);
 
-  	//////////
-    	// Set smoothing factor
-    	virtual void	smoothMess(t_float fsmooth);
+  //////////
+  // Set smoothing factor
+  virtual void	smoothMess(t_float fsmooth);
 
-  	//////////
-    	// Set material mode
-	virtual void    materialMess(int material);
+  //////////
+  // Set material mode
+  virtual void    materialMess(int material);
 
-        //////////
-    	// Set material mode
-	virtual void    groupMess(int group);
+  //////////
+  // Set material mode
+  virtual void    groupMess(int group);
 
-   	//////////
-    	virtual void	cleanModel();
-	//////////
-    	virtual void    buildList();
+  //////////
+  virtual void	cleanModel(void);
+  //////////
+  virtual void    buildList(void);
 
-    	//////////
-    	virtual void	render(GemState *state);
-    	//////////
-    	virtual void	startRendering();
+  //////////
+  virtual void	render(GemState *state);
+  //////////
+  virtual void	startRendering(void);
 
-    	//////////
-      GLMmodel       *m_model;
-    	GLint	    	m_dispList;
+  //////////
+  GLMmodel *m_model;
+  GLint	  	m_dispList;
 
 	//////////
 	// Should we rescale the model when loaded
 	// Default is yes
-	int		m_rescaleModel;
+	bool		m_rescaleModel;
 
-	GLfloat         m_smooth;
-	int             m_material;
+	GLfloat m_smooth;
+	int     m_material;
 
-	int             m_flags;
+	int     m_flags;
 
-  int             m_group;
+  int     m_group;
 
   bool    m_rebuild;
   float		m_currentH, m_currentW;
@@ -106,18 +106,6 @@ class GEM_EXTERN model : public GemBase
   //////////////
   // how to texture
   glmtexture_t m_textype;
-
- private:
-
-  //////////
-  // static member functions
-  static void 	openMessCallback(void *data, t_symbol *filename);
-  static void	rescaleMessCallback(void *data, t_floatarg);
-  static void	smoothMessCallback(void *data, t_floatarg);
-	static void     reverseMessCallback(void *data, t_floatarg);
-	static void     materialMessCallback(void *data, t_floatarg);
-	static void     textureMessCallback(void *data, t_floatarg);
-  static void     groupMessCallback(void *data, t_floatarg);
 };
 
 #endif	// for header file

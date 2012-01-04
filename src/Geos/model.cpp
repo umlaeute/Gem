@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 model :: model(t_symbol *filename)
   : m_model(0), m_dispList(0),
-    m_rescaleModel(1), m_smooth(90), m_material(0),
+    m_rescaleModel(true), m_smooth(90), m_material(0),
     m_flags(GLM_SMOOTH | GLM_TEXTURE),
     m_group(0),
     m_rebuild(true),
@@ -37,14 +37,14 @@ model :: model(t_symbol *filename)
     m_textype(GLM_TEX_DEFAULT)
 {
   // make sure that there are some characters
-  if (filename&&filename->s_name&&*filename->s_name) openMess(filename);
+  if (filename&&filename->s_name&&*filename->s_name) openMess(filename->s_name);
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-model :: ~model()
+model :: ~model(void)
 {
   cleanModel();
 }
@@ -53,7 +53,7 @@ model :: ~model()
 // cleanModel
 //
 /////////////////////////////////////////////////////////
-void model :: cleanModel()
+void model :: cleanModel(void)
 {
   if (m_dispList)
     {
@@ -136,7 +136,7 @@ void model :: reverseMess(int reverse)
 // matrialMess
 //
 /////////////////////////////////////////////////////////
-void model :: rescaleMess(int state)
+void model :: rescaleMess(bool state)
 {
   m_rescaleModel = state;
 }
@@ -156,12 +156,12 @@ void model :: groupMess(int state)
 // openMess
 //
 /////////////////////////////////////////////////////////
-void model :: openMess(t_symbol *filename)
+void model :: openMess(const std::string&filename)
 {
   cleanModel();
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
   // read the object in
   m_model = glmReadOBJ(buf);
   if (!m_model){
@@ -189,7 +189,7 @@ void model :: openMess(t_symbol *filename)
 // buildList
 //
 /////////////////////////////////////////////////////////
-void model :: buildList()
+void model :: buildList(void)
 {
   if (!m_model) return;
   if(!(GLEW_VERSION_1_1)) {
@@ -228,7 +228,7 @@ void model :: render(GemState *state)
   glCallList(m_dispList);
 }
 
-void model :: startRendering()
+void model :: startRendering(void)
 {
   // build a display list
   buildList();
@@ -241,48 +241,11 @@ void model :: startRendering()
 /////////////////////////////////////////////////////////
 void model :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::openMessCallback),
-		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::rescaleMessCallback),
-		  gensym("rescale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::smoothMessCallback),
-		  gensym("smooth"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::reverseMessCallback),
-		  gensym("revert"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::materialMessCallback),
-		  gensym("material"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::textureMessCallback),
-		  gensym("texture"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::groupMessCallback),
-		  gensym("group"), A_FLOAT, A_NULL);
-
-}
-void model :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-void model :: rescaleMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->rescaleMess(static_cast<int>(state));
-}
-void model :: smoothMessCallback(void *data, t_floatarg smooth)
-{
-  GetMyClass(data)->smoothMess(smooth);
-}
-void model :: reverseMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->reverseMess(static_cast<int>(state));
-}
-void model :: textureMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->textureMess(static_cast<int>(state));
-}
-void model :: materialMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->materialMess(static_cast<int>(state));
-}
-
-void model :: groupMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->groupMess(static_cast<int>(state));
+  CPPEXTERN_MSG1(classPtr, "open", openMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "rescale", rescaleMess, bool);
+  CPPEXTERN_MSG1(classPtr, "smooth", smoothMess, float);
+  CPPEXTERN_MSG1(classPtr, "revert", reverseMess, float);
+  CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
+  CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
+  CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
 }
