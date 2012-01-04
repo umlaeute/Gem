@@ -16,7 +16,7 @@
 #define _INCLUDE__GEM_GEOS_MODEL_H_
 
 #include "Base/GemBase.h"
-#include "model_loader.h"
+#include "Gem/Properties.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -32,6 +32,8 @@
   "open" - the RGB model to set the object to
 
   -----------------------------------------------------------------*/
+namespace gem { namespace plugins { class modelloader; };};
+
 class GEM_EXTERN model : public GemBase
 {
   CPPEXTERN_HEADER(model, GemBase);
@@ -52,60 +54,37 @@ class GEM_EXTERN model : public GemBase
   // When an open is received
   virtual void	openMess(const std::string&filename);
 
+  virtual void applyProperties(void);
+
   //////////
   // When a rescale is received
   virtual void	rescaleMess(bool state);
   //////////
   // When a reverse is received
-  virtual void	reverseMess(int state);
+  virtual void	reverseMess(bool state);
   //////////
   // Which texture type (linear, spheric)
   virtual void	textureMess(int state);
-
   //////////
   // Set smoothing factor
   virtual void	smoothMess(t_float fsmooth);
-
   //////////
   // Set material mode
-  virtual void    materialMess(int material);
+  virtual void  materialMess(int material);
 
   //////////
-  // Set material mode
+  // Set groups to render
   virtual void    groupMess(int group);
 
   //////////
-  virtual void	cleanModel(void);
-  //////////
-  virtual void    buildList(void);
-
-  //////////
   virtual void	render(GemState *state);
-  //////////
-  virtual void	startRendering(void);
 
-  //////////
-  GLMmodel *m_model;
-  GLint	  	m_dispList;
+  gem::plugins::modelloader*m_loader;
+  bool m_loaded;
 
-	//////////
-	// Should we rescale the model when loaded
-	// Default is yes
-	bool		m_rescaleModel;
+  gem::Properties m_properties;
 
-	GLfloat m_smooth;
-	int     m_material;
-
-	int     m_flags;
-
-  int     m_group;
-
-  bool    m_rebuild;
-  float		m_currentH, m_currentW;
-
-  //////////////
-  // how to texture
-  glmtexture_t m_textype;
+  float m_currentH, m_currentW;
 };
 
 #endif	// for header file
