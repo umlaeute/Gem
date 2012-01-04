@@ -51,7 +51,6 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
 #endif
 
   m_model = glmReadOBJ(name.c_str());
-  post("opening %s returned %p", name.c_str(), m_model);
   if (!m_model){
     return false;
   }
