@@ -53,10 +53,6 @@ libGeos_la_SOURCES=  \
     mesh_square.h \
     model.cpp \
     model.h \
-    model_loader.cpp \
-    model_loader.h \
-    multimodel.cpp \
-    multimodel.h \
     newWave.cpp \
     newWave.h \
     polygon.cpp \
