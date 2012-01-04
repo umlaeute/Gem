@@ -17,13 +17,9 @@
 
 #include "Base/GemBase.h"
 #include <string.h>
-#include "model_loader.h"
+#include "plugins/modelloader.h"
+#include "Gem/Properties.h"
 
-#ifdef _MSC_VER
-# if _MSC_VER >= 1500
-#  define strdup _strdup
-# endif
-#endif
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -49,37 +45,6 @@ class GEM_EXTERN multimodel : public GemBase
   // Constructor
   multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
 
-  class multiModelCache
-    {
-    public:
-
-      multiModelCache(const char *_modelName)
-        : refCount(0), next(NULL), models(NULL),
-        numModels(0), baseModel(0), topModel(0),
-        skipRate(0)
-          { modelName = strdup(_modelName); }
-        ~multiModelCache()
-          { delete modelName;
-            for (int i = 0; i < numModels; i++) {
-              glmDelete(realmodels[i]);
-              glDeleteLists(models[i], 1);
-            }
-            delete [] models;
-          }
-        int                 refCount;
-        multiModelCache     *next;
-        GLint               *models;
-        GLMmodel            **realmodels;
-        int                 numModels;
-        char                *modelName;
-        int                 baseModel;
-        int                 topModel;
-        int                 skipRate;
-    };
-
-  //////////
-  static multiModelCache      *s_modelCache;
-
  protected:
 
   //////////
@@ -88,16 +53,7 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // When an open is received
-  virtual void	openMess(t_symbol *filename, int baseModel, int topModel, int skipRate);
-
-  //////////
-  void	    	cleanMultimodel();
-
-  //////////
-  virtual void	buildList();
-
-  //////////
-  virtual void	startRendering();
+  virtual void	openMess(const std::string&filename, int baseModel, int topModel, int skipRate);
 
   //////////
   virtual void	render(GemState *state);
@@ -106,37 +62,25 @@ class GEM_EXTERN multimodel : public GemBase
   // Change which model to display
   void	    	changeModel(int modelNum);
 
-  //////////
-  // Set the rescale state
-  void	    	rescaleMess(int state);
 
-  //////////
-  multiModelCache *m_loadedCache;
+  void	    	cleanMultimodel(void);
+
 
   //-----------------------------------
   // GROUP:	Model data
   //-----------------------------------
 
-  //////////
-  // The number of loaded models
-  int 	    	m_numModels;
-
-  //////////
-  // The current model
+  std::vector<gem::plugins::modelloader*>m_loaders;
   int 	    	m_curModel;
 
-  //////////
-  // Rescale the models when loaded?
-  int 	    	m_rescaleModel;
 
-
-  //////////
-  // Which texture type (linear, spheric)
+  virtual void  applyProperties(void);
+  virtual void	rescaleMess(bool state);
   virtual void	textureMess(int state);
-  glmtexture_t m_textype;
-
-  bool    m_rebuild;
+  virtual void	smoothMess(float state);
   float		m_currentH, m_currentW;
+
+  gem::Properties m_properties;
 
  private:
 
