@@ -27,6 +27,8 @@ libplugins_la_SOURCES= \
         imagesaver.h \
         film.cpp \
         film.h \
+        modelloader.cpp \
+        modelloader.h \
         record.cpp \
         record.h \
         video.cpp \
