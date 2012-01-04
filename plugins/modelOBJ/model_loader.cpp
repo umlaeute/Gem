@@ -462,7 +462,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass() failed reading comment"); continue;
+        verbose(1, "_glmFirstPass failed reading comment"); continue;
       }
       break;
     case 'v':               /* v, vn, vt */
@@ -470,33 +470,32 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading vertex"); return GL_FALSE;
+          error("_glmFirstPass failed reading vertex"); return GL_FALSE;
         }
         numvertices++;
         break;
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading normals"); return GL_FALSE;
+          error("_glmFirstPass failed reading normals"); return GL_FALSE;
         }
         numnormals++;
         break;
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading texcoords"); return GL_FALSE;
+          error("_glmFirstPass failed reading texcoords"); return GL_FALSE;
         }
         numtexcoords++;
         break;
       default:
-        error("_glmFirstPass(): Unknown token \"%s\".", buf);
-        return -1;
-        break;
+        error("_glmFirstPass: Unknown token \"%s\".", buf);
+        return GL_FALSE;
       }
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass() failed reading material"); return GL_FALSE;
+        error("_glmFirstPass failed reading material"); return GL_FALSE;
       }
       sscanf(buf, "%s %s", buf, buf);
       model->mtllibname = strdup(buf);
@@ -505,13 +504,13 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case 'u':
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass() failed reading u"); continue;
+        verbose(1, "_glmFirstPass failed reading u"); continue;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass() failed reading groups"); return GL_FALSE;
+        error("_glmFirstPass failed reading groups"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       sscanf(buf, "%s", buf);
@@ -571,7 +570,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass() failed reading"); continue;
+        verbose(1, "_glmFirstPass failed reading"); continue;
       }
       break;
     }
@@ -590,6 +589,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     group->numtriangles = 0;
     group = group->next;
   }
+
   return GL_TRUE;
 }
 
