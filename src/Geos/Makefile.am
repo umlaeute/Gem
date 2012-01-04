@@ -43,8 +43,8 @@ libGeos_la_SOURCES=  \
     disk.h \
     GemSplash.cpp \
     GemSplash.h \
-	gemvertexbuffer.cpp \
-	gemvertexbuffer.h \
+    gemvertexbuffer.cpp \
+    gemvertexbuffer.h \
     imageVert.cpp \
     imageVert.h \
     mesh_line.cpp \
@@ -53,6 +53,8 @@ libGeos_la_SOURCES=  \
     mesh_square.h \
     model.cpp \
     model.h \
+    multimodel.cpp \
+    multimodel.h \
     newWave.cpp \
     newWave.h \
     polygon.cpp \
@@ -97,4 +99,3 @@ libGeos_la_SOURCES=  \
     triangle.h \
     tube.cpp \
     tube.h
-
