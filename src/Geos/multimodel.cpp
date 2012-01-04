@@ -35,18 +35,8 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mdl_num"));
   
   // make sure that there are some characters
-  if (filename->s_name[0]) {
-    int skipRatei=static_cast<int>(skipRate);
-    int topModeli=static_cast<int>(topModel);
-    int baseModeli=static_cast<int>(baseModel);
-    if (skipRatei == 0) {
-      if (topModeli == 0)
-        openMess(filename->s_name, 0, baseModeli, 1);
-      else
-        openMess(filename->s_name, baseModeli, topModeli, 1);
-    }
-    else openMess(filename->s_name, baseModeli, topModeli, skipRatei);
-  }
+  if (filename->s_name[0])
+    openMess(filename->s_name, baseModel, topModel, skipRate);
 }
 
 ////////////////////////////////////////////////////////
@@ -55,7 +45,24 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
 /////////////////////////////////////////////////////////
 multimodel :: ~multimodel()
 {
+  cleanMultimodel();
 }
+
+void multimodel :: openMess(const std::string&filename, 
+                            float baseModel, float topModel, float skipRate)
+{
+  int skipRatei=static_cast<int>(skipRate);
+  int topModeli=static_cast<int>(topModel);
+  int baseModeli=static_cast<int>(baseModel);
+  if (skipRatei == 0) {
+    if (topModeli == 0)
+      open(filename, 0, baseModeli, 1);
+    else
+      open(filename, baseModeli, topModeli, 1);
+  }
+  else open(filename, baseModeli, topModeli, skipRatei);
+}
+
 
 /////////////////////////////////////////////////////////
 // cleanMultimodel
@@ -73,10 +80,10 @@ void multimodel :: cleanMultimodel(void)
 }
 
 /////////////////////////////////////////////////////////
-// openMess
+// open
 //
 /////////////////////////////////////////////////////////
-void multimodel :: openMess(const std::string&filename, int baseModel, int topModel, int skipRate)
+void multimodel :: open(const std::string&filename, int baseModel, int topModel, int skipRate)
 {
   std::vector<gem::plugins::modelloader*>loaders;
 
@@ -254,40 +261,14 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::openMessCallback),
                   gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::changeModelCallback),
-                  gensym("mdl_num"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::rescaleMessCallback),
-                  gensym("rescale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::textureMessCallback),
-                  gensym("texture"), A_FLOAT, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "mdl_num", changeModel, int);
+  CPPEXTERN_MSG1(classPtr, "rescale", rescaleMess, bool);
+  CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
+  CPPEXTERN_MSG1(classPtr, "smooth", smoothMess, float);
 }
 void multimodel :: openMessCallback(void *data, t_symbol *filesymbol, t_floatarg baseModel,
                                     t_floatarg topModel, t_floatarg skipRate)
 {
-  int skipRatei=static_cast<int>(skipRate);
-  int topModeli=static_cast<int>(topModel);
-  int baseModeli=static_cast<int>(baseModel);
-  std::string filename=filesymbol->s_name;
-
-  if (skipRatei == 0)
-    {
-      if (topModeli == 0)
-        GetMyClass(data)->openMess(filename, 0, topModeli, 0);
-      else
-        GetMyClass(data)->openMess(filename, baseModeli, topModeli, 0);
-    }
-  else
-    GetMyClass(data)->openMess(filename, baseModeli, topModeli, skipRatei);
-}
-void multimodel :: changeModelCallback(void *data, t_floatarg modelNum)
-{
-  GetMyClass(data)->changeModel(static_cast<int>(modelNum));
-}
-void multimodel :: rescaleMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->rescaleMess(static_cast<int>(state));
-}
-void multimodel :: textureMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->textureMess(static_cast<int>(state));
+  GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel, skipRate);
 }

@@ -53,7 +53,8 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // When an open is received
-  virtual void	openMess(const std::string&filename, int baseModel, int topModel, int skipRate);
+  virtual void	openMess(const std::string&filename, float baseModel, float topModel, float skipRate);
+  virtual void	open(const std::string&filename, int baseModel, int topModel, int skipRate);
 
   //////////
   virtual void	render(GemState *state);
@@ -87,9 +88,6 @@ class GEM_EXTERN multimodel : public GemBase
   //////////
   // static member functions
   static void 	openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
-  static void 	changeModelCallback(void *data, t_floatarg modelNum);
-  static void 	rescaleMessCallback(void *data, t_floatarg modelNum);
-	static void   textureMessCallback(void *data, t_floatarg);
 };
 
 #endif	// for header file
