@@ -24,6 +24,10 @@ SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC
 ## proprietary video capture plugins
 SUBDIRS += videoAVT videoHALCON videoPYLON
 
+## asset loading plugins
+SUBDIRS += modelOBJ
+
+
 ## filmTEST is not built by default, but we want to ship it
 DIST_SUBDIRS = $(SUBDIRS) filmTEST videoTEST
 

@@ -38,6 +38,8 @@ AC_CONFIG_FILES([plugins/filmQT/Makefile])
 AC_CONFIG_FILES([plugins/filmQT4L/Makefile])
 AC_CONFIG_FILES([plugins/filmTEST/Makefile])
 
+AC_CONFIG_FILES([plugins/modelOBJ/Makefile])
+
 AC_CONFIG_FILES([plugins/recordQT/Makefile])
 AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
 AC_CONFIG_FILES([plugins/recordV4L/Makefile])
