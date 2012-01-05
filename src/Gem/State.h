@@ -70,8 +70,9 @@ class GEM_EXTERN GemState
     _GL_TEX_TYPE,
     _GL_TEX_COORDS,
     _GL_TEX_NUMCOORDS,
-    _GL_TEX_UNITS,
-
+    _GL_TEX_UNITS,       /* <int> # of texUnits */
+    _GL_TEX_ORIENTATION, /* <bool> false=bottomleft; true=topleft */
+    _GL_TEX_BASECOORD,   /* <TexCoord> width/height of texture  */
 
 
 
