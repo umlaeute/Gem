@@ -72,14 +72,15 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   return true;
 }
 
-void modelOBJ :: render(void) {
+bool modelOBJ :: render(void) {
   if(m_rebuild) {
     glmTexture(m_model, m_textype, m_currentH, m_currentW);
-    create();
+    compile();
   }
   if(m_dispList)
     glCallList(m_dispList);
 
+  return (0!=m_dispList);
 }
 void modelOBJ :: close(void)  {
   destroy();
@@ -143,16 +144,18 @@ void modelOBJ :: setProperties(gem::Properties&props) {
   }
 
   if(props.get("reverse", d)) {
-    // LATER:move this to create()
+    // LATER:move this to compile()
     if(m_model)
       glmReverseWinding(m_model);
     m_rebuild=true;
   }
 }
 void modelOBJ :: getProperties(gem::Properties&props) {
+  props.clear();
 }
 
-bool modelOBJ :: create(void)  {
+
+bool modelOBJ :: compile(void)  {
   if(!m_model) return false;
   if(!(GLEW_VERSION_1_1)) {
     //    verbose(1, "cannot build display-list now...do you have a window?");

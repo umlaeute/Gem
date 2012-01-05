@@ -45,7 +45,8 @@ namespace gem { namespace plugins {
 
   //////////
   // render the asset
-  virtual void render(void);
+  virtual bool render(void);
+  virtual bool compile(void);
 
   //////////
   // property handling
@@ -54,7 +55,6 @@ namespace gem { namespace plugins {
   virtual void getProperties(gem::Properties&);
 
 protected:
-  virtual bool create(void);
   virtual void destroy(void);
   bool    m_rebuild;
 
