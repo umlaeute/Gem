@@ -18,7 +18,6 @@
 #include "Gem/State.h"
 #include "plugins/modelloader.h"
 
-
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 
   /////////////////////////////////////////////////////////
@@ -180,16 +179,32 @@ void model :: openMess(const std::string&filename)
 void model :: render(GemState *state)
 {
   if(!m_loaded)return;
-  if (state && (m_currentW != state->texCoordX(2) || m_currentH != state->texCoordY(2))) {
-    m_currentW = state->texCoordX(2);
-    m_currentH = state->texCoordY(2);
+  float scaleX=1.f, scaleY=1.f;
+  float transY=0.f;
 
-    m_properties.set("texwidth", m_currentW);
-    m_properties.set("texheight", m_currentH);
-    applyProperties();
+  if (state) {
+    bool upsidedown=true; 
+    TexCoord baseCoord(1., 1.);
+
+    state->get(GemState::_GL_TEX_ORIENTATION, upsidedown);
+    state->get(GemState::_GL_TEX_BASECOORD, baseCoord);
+
+    scaleX=baseCoord.s;
+    scaleY=(upsidedown?-1.f:1.f)*baseCoord.t;
+    transY=(upsidedown?-1.f:0.f);
   }
 
+  glMatrixMode(GL_TEXTURE);
+  glScalef(scaleX, scaleY, 1.f);
+  glTranslatef(0.f, transY, 0.f);
+  glMatrixMode(GL_MODELVIEW);
+
   m_loader->render();
+
+  glMatrixMode(GL_TEXTURE);
+  glTranslatef(0.f, -transY, 0.f);
+  glScalef(1./scaleX, 1./scaleY, 1.f);
+  glMatrixMode(GL_MODELVIEW);
 }
 
 /////////////////////////////////////////////////////////
