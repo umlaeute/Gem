@@ -146,7 +146,7 @@ class GEM_EXTERN pix_texture : public GemBase
   //////////
   // The texture coordinates
   TexCoord    	m_coords[4];
-
+  TexCoord      m_baseCoord;
 
   //////////
   // this is what we get from upstream
@@ -155,6 +155,9 @@ class GEM_EXTERN pix_texture : public GemBase
   TexCoord       *m_oldTexCoords;
   int             m_oldNumCoords;
   int             m_oldTexture;
+  TexCoord        m_oldBaseCoord;
+  bool            m_oldOrientation;
+
 
 
   int m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT

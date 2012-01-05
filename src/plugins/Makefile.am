@@ -25,18 +25,22 @@ libplugins_la_SOURCES= \
         imageloader.h \
         imagesaver.cpp \
         imagesaver.h \
-        imageBase.cpp \
-        imageBase.h \
         film.cpp \
         film.h \
-        filmBase.cpp \
-        filmBase.h \
+        modelloader.cpp \
+        modelloader.h \
         record.cpp \
         record.h \
+        video.cpp \
+        video.h
+
+libplugins_la_SOURCES+= \
+        imageBase.cpp \
+        imageBase.h \
+        filmBase.cpp \
+        filmBase.h \
         recordBase.cpp \
         recordBase.h \
-        video.cpp \
-        video.h \
         videoBase.cpp \
         videoBase.h
 

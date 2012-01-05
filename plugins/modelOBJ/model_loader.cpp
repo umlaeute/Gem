@@ -153,7 +153,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 
 /* glmFindGroup: Find a group in the model */
 GLMgroup*
-_glmFindGroup(GLMmodel* model, char* name)
+_glmFindGroup(const GLMmodel* model, const char* name)
 {
   GLMgroup* group;
 
@@ -171,7 +171,7 @@ _glmFindGroup(GLMmodel* model, char* name)
 
 /* glmAddGroup: Add a group to the model */
 GLMgroup*
-_glmAddGroup(GLMmodel* model, char* name)
+_glmAddGroup(GLMmodel* model, const char* name)
 {
   GLMgroup* group;
 
@@ -192,7 +192,7 @@ _glmAddGroup(GLMmodel* model, char* name)
 
 /* glmFindGroup: Find a material in the model */
 GLuint
-_glmFindMaterial(GLMmodel* model, char* name)
+_glmFindMaterial(const GLMmodel* model, const char* name)
 {
   GLuint i;
 
@@ -220,7 +220,7 @@ _glmFindMaterial(GLMmodel* model, char* name)
  * NOTE: the return value should be free'd.
  */
 static char*
-_glmDirName(char* path)
+_glmDirName(const char* path)
 {
   char* dir;
   char* s;
@@ -243,7 +243,7 @@ _glmDirName(char* path)
  * name  - name of the material library
  */
 static GLint
-_glmReadMTL(GLMmodel* model, char* name)
+_glmReadMTL(GLMmodel* model, const char* name)
 {
   FILE* file;
   char* dir;
@@ -387,7 +387,7 @@ _glmReadMTL(GLMmodel* model, char* name)
  * mtllibname - name of the material library to be written
  */
 static GLboolean
-_glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
+_glmWriteMTL(const GLMmodel* model, const char* modelpath, const char* mtllibname)
 {
   FILE* file;
   char* dir;
@@ -454,7 +454,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   char        buf[128];
 
   /* make a default group */
-  group = _glmAddGroup(model, (char*)"default");
+  group = _glmAddGroup(model, "default");
 
   numvertices = numnormals = numtexcoords = numtriangles = 0;
   while(fscanf(file, "%s", buf) != EOF) {
@@ -462,7 +462,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass() failed reading comment"); continue;
+        verbose(1, "_glmFirstPass failed reading comment"); continue;
       }
       break;
     case 'v':               /* v, vn, vt */
@@ -470,33 +470,32 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading vertex"); return GL_FALSE;
+          error("_glmFirstPass failed reading vertex"); return GL_FALSE;
         }
         numvertices++;
         break;
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading normals"); return GL_FALSE;
+          error("_glmFirstPass failed reading normals"); return GL_FALSE;
         }
         numnormals++;
         break;
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass() failed reading texcoords"); return GL_FALSE;
+          error("_glmFirstPass failed reading texcoords"); return GL_FALSE;
         }
         numtexcoords++;
         break;
       default:
-        error("_glmFirstPass(): Unknown token \"%s\".", buf);
-        return -1;
-        break;
+        error("_glmFirstPass: Unknown token \"%s\".", buf);
+        return GL_FALSE;
       }
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass() failed reading material"); return GL_FALSE;
+        error("_glmFirstPass failed reading material"); return GL_FALSE;
       }
       sscanf(buf, "%s %s", buf, buf);
       model->mtllibname = strdup(buf);
@@ -505,13 +504,13 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case 'u':
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass() failed reading u"); continue;
+        verbose(1, "_glmFirstPass failed reading u"); continue;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass() failed reading groups"); return GL_FALSE;
+        error("_glmFirstPass failed reading groups"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       sscanf(buf, "%s", buf);
@@ -571,7 +570,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass() failed reading"); continue;
+        verbose(1, "_glmFirstPass failed reading"); continue;
       }
       break;
     }
@@ -590,6 +589,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     group->numtriangles = 0;
     group = group->next;
   }
+
   return GL_TRUE;
 }
 
@@ -887,7 +887,7 @@ glmUnitize(GLMmodel* model)
  * dimensions - array of 3 GLfloats (GLfloat dimensions[3])
  */
 GLvoid
-glmDimensions(GLMmodel* model, GLfloat* dimensions)
+glmDimensions(const GLMmodel* model, GLfloat* dimensions)
 {
   GLuint i;
   GLfloat maxx, minx, maxy, miny, maxz, minz;
@@ -1407,7 +1407,7 @@ glmDelete(GLMmodel* model)
  * filename - name of the file containing the Wavefront .OBJ format data.
  */
 GLMmodel*
-glmReadOBJ(char* filename)
+glmReadOBJ(const char* filename)
 {
   GLMmodel* model;
   FILE*   file;
@@ -1501,7 +1501,7 @@ glmReadOBJ(char* filename)
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLint
-glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
+glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 {
   GLuint  i;
   FILE*   file;
@@ -1695,7 +1695,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(GLMmodel* model, GLuint mode)
+glmDraw(const GLMmodel* model, GLuint mode)
 {
   static GLuint i;
   static GLMgroup* group;
@@ -1812,7 +1812,7 @@ glmDraw(GLMmodel* model, GLuint mode)
  * GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(GLMmodel* model, GLuint mode)
+glmList(const GLMmodel* model, GLuint mode)
 {
   GLuint modList;
 
@@ -1829,7 +1829,7 @@ glmList(GLMmodel* model, GLuint mode)
  */
 
 GLvoid
-glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber)
+glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber)
 {
   static GLuint i;
   static GLMgroup* group;
@@ -1949,7 +1949,7 @@ glmDrawGroup(GLMmodel* model, GLuint mode,int groupNumber)
 }
 
 GLuint
-glmListGroup(GLMmodel* model, GLuint mode, int groupNumber)
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber)
 {
   GLuint modList;
 
@@ -2037,7 +2037,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
  *
  */
 GLubyte*
-glmReadPPM(char* filename, int* width, int* height)
+glmReadPPM(const char* filename, int* width, int* height)
 {
   FILE* fp;
   int i, w, h, d;

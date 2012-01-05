@@ -15,7 +15,8 @@
 /////////////////////////////////////////////////////////
 
 #include "model.h"
- #include "Gem/State.h"
+#include "Gem/State.h"
+#include "plugins/modelloader.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 
@@ -27,45 +28,41 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-model :: model(t_symbol *filename)
-  : m_model(0), m_dispList(0),
-    m_rescaleModel(1), m_smooth(90), m_material(0),
-    m_flags(GLM_SMOOTH | GLM_TEXTURE),
-    m_group(0),
-    m_rebuild(true),
-    m_currentH(1.f), m_currentW(1.f),
-    m_textype(GLM_TEX_DEFAULT)
+model :: model(t_symbol *filename) :
+  m_loader(gem::plugins::modelloader::getInstance()),
+  m_loaded(false)
 {
   // make sure that there are some characters
-  if (filename&&filename->s_name&&*filename->s_name) openMess(filename);
+  if (filename&&filename->s_name&&*filename->s_name) openMess(filename->s_name);
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-model :: ~model()
+model :: ~model(void)
 {
-  cleanModel();
+  if(m_loaded) {
+    m_loader->close();
+  }
+  if(m_loader) {
+    delete m_loader;
+    m_loader=NULL;
+  }
 }
 
-/////////////////////////////////////////////////////////
-// cleanModel
-//
-/////////////////////////////////////////////////////////
-void model :: cleanModel()
+void model :: applyProperties(void)
 {
-  if (m_dispList)
-    {
-      // destroy display list
-      glDeleteLists(m_dispList, 1);
-      m_dispList = 0;
-    }
-  if(m_model) {
-    glmDelete(m_model);
-    m_model=NULL;
+#if 0
+  std::vector<std::string>keys=m_properties.keys();
+  unsigned int i;
+  for(i=0; i<keys.size(); i++) {
+    post("key[%d]=%s ... %d", i, keys[i].c_str(), m_properties.type(keys[i]));
   }
+#endif
 
+  if(m_loader)
+    m_loader->setProperties(m_properties);
 }
 
 /////////////////////////////////////////////////////////
@@ -74,16 +71,9 @@ void model :: cleanModel()
 /////////////////////////////////////////////////////////
 void model :: materialMess(int material)
 {
-  if (!m_model) return;
-  m_material = material;
-  switch (material) {
-  case 0:
-    m_flags=GLM_SMOOTH | GLM_TEXTURE;
-    break;
-  default:
-    m_flags=GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL;
-  }
-  buildList();
+  gem::any value=material;
+  m_properties.set("usematerials", value);
+  applyProperties();
 }
 
 /////////////////////////////////////////////////////////
@@ -92,20 +82,27 @@ void model :: materialMess(int material)
 /////////////////////////////////////////////////////////
 void model :: textureMess(int state)
 {
+  std::string textype;
   switch(state) {
   case 0:
-    m_textype=GLM_TEX_LINEAR;
+    textype="linear";
     break;
   case 1:
-    m_textype=GLM_TEX_SPHEREMAP;
+    textype="spheremap";
     break;
   case 2:
-    m_textype=GLM_TEX_UV;
+    textype="UV";
     break;
   default:
-    m_textype=GLM_TEX_DEFAULT;
+    break;
   }
-  m_rebuild=true;
+  if(textype.empty()) {
+    m_properties.erase("textype");
+  } else {
+    gem::any value=textype;
+    m_properties.set("textype", value);
+  }
+  applyProperties();
 }
 
 /////////////////////////////////////////////////////////
@@ -113,32 +110,30 @@ void model :: textureMess(int state)
 //
 /////////////////////////////////////////////////////////
 void model :: smoothMess(t_float fsmooth)
-{
-  if (!m_model) return;
-  if (fsmooth<0.)fsmooth=0.;
-  else if (fsmooth>1) fsmooth=1.;
-  m_smooth = fsmooth*180.;
-  glmVertexNormals(m_model, m_smooth);
-  buildList();
+{  
+  m_properties.set("smooth", fsmooth);
+  applyProperties();
 }
 
 /////////////////////////////////////////////////////////
 // rescaleMess
 //
 /////////////////////////////////////////////////////////
-void model :: reverseMess(int reverse)
+void model :: reverseMess(bool reverse)
 {
-  if (!m_model) return;
-  glmReverseWinding(m_model);
-  buildList();
+  gem::any value=reverse;
+  m_properties.set("reverse", value);
+  applyProperties();
 }
 /////////////////////////////////////////////////////////
 // matrialMess
 //
 /////////////////////////////////////////////////////////
-void model :: rescaleMess(int state)
+void model :: rescaleMess(bool state)
 {
-  m_rescaleModel = state;
+  gem::any value=(double)state;
+  m_properties.set("rescale", value);
+  applyProperties();
 }
 
 /////////////////////////////////////////////////////////
@@ -147,8 +142,9 @@ void model :: rescaleMess(int state)
 /////////////////////////////////////////////////////////
 void model :: groupMess(int state)
 {
-  m_group = state;
-  buildList();
+  gem::any value=state;
+  m_properties.set("group", value);
+  applyProperties();
 }
 
 
@@ -156,55 +152,24 @@ void model :: groupMess(int state)
 // openMess
 //
 /////////////////////////////////////////////////////////
-void model :: openMess(t_symbol *filename)
+void model :: openMess(const std::string&filename)
 {
-  cleanModel();
+  if(!m_loader) {
+    error("no model loader backends found");
+    return;
+  }
+  m_loader->close();
+  m_loaded=false;
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
-  // read the object in
-  m_model = glmReadOBJ(buf);
-  if (!m_model){
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
+  if(!m_loader->open(buf, m_properties)) {
       error("unable to read model '%s'", buf);
       return;
   }
 
-  // set the size to -1 to 1
-  //
-  if (m_rescaleModel)
-    glmUnitize(m_model);
-
-  // generate normals if this
-  // object doesn't have them.
-  //
-  glmFacetNormals (m_model);
-  glmVertexNormals(m_model, m_smooth);
-
-  glmTexture(m_model, m_textype, m_currentH, m_currentW);
-  buildList();
-  this->setModified();
-}
-
-/////////////////////////////////////////////////////////
-// buildList
-//
-/////////////////////////////////////////////////////////
-void model :: buildList()
-{
-  if (!m_model) return;
-  if(!(GLEW_VERSION_1_1)) {
-    verbose(1, "cannot build display-list now...do you have a window?");
-    return;
-  }
-  if (m_dispList)glDeleteLists(m_dispList, 1);
-  //  m_flags = GLM_SMOOTH | GLM_MATERIAL;
-  if (!m_group){
-    m_dispList = glmList(m_model, m_flags);
-  }
-  else
-  {
-    m_dispList = glmListGroup(m_model, m_flags,m_group);
-  }
+  m_loaded=true;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -213,27 +178,34 @@ void model :: buildList()
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
-  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2)))
-    {
-      m_rebuild=true;
-    }
-  if(m_rebuild) {
-    m_currentH = state->texCoordX(2);
-    m_currentW = state->texCoordY(2);
-    glmTexture(m_model, m_textype, m_currentH, m_currentW);
-    buildList();
-    m_rebuild=false;
+  if(!m_loaded)return;
+  float scaleX=1.f, scaleY=1.f;
+  float transY=0.f;
+
+  if (state) {
+    bool upsidedown=true; 
+    TexCoord baseCoord(1., 1.);
+
+    state->get(GemState::_GL_TEX_ORIENTATION, upsidedown);
+    state->get(GemState::_GL_TEX_BASECOORD, baseCoord);
+
+    scaleX=baseCoord.s;
+    scaleY=(upsidedown?-1.f:1.f)*baseCoord.t;
+    transY=(upsidedown?-1.f:0.f);
   }
-  if (!m_dispList)return;
-  glCallList(m_dispList);
-}
 
-void model :: startRendering()
-{
-  // build a display list
-  buildList();
-}
+  glMatrixMode(GL_TEXTURE);
+  glScalef(scaleX, scaleY, 1.f);
+  glTranslatef(0.f, transY, 0.f);
+  glMatrixMode(GL_MODELVIEW);
 
+  m_loader->render();
+
+  glMatrixMode(GL_TEXTURE);
+  glTranslatef(0.f, -transY, 0.f);
+  glScalef(1./scaleX, 1./scaleY, 1.f);
+  glMatrixMode(GL_MODELVIEW);
+}
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -241,48 +213,11 @@ void model :: startRendering()
 /////////////////////////////////////////////////////////
 void model :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::openMessCallback),
-		  gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::rescaleMessCallback),
-		  gensym("rescale"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::smoothMessCallback),
-		  gensym("smooth"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::reverseMessCallback),
-		  gensym("revert"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::materialMessCallback),
-		  gensym("material"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::textureMessCallback),
-		  gensym("texture"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&model::groupMessCallback),
-		  gensym("group"), A_FLOAT, A_NULL);
-
-}
-void model :: openMessCallback(void *data, t_symbol *filename)
-{
-  GetMyClass(data)->openMess(filename);
-}
-void model :: rescaleMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->rescaleMess(static_cast<int>(state));
-}
-void model :: smoothMessCallback(void *data, t_floatarg smooth)
-{
-  GetMyClass(data)->smoothMess(smooth);
-}
-void model :: reverseMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->reverseMess(static_cast<int>(state));
-}
-void model :: textureMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->textureMess(static_cast<int>(state));
-}
-void model :: materialMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->materialMess(static_cast<int>(state));
-}
-
-void model :: groupMessCallback(void *data, t_floatarg state)
-{
-  GetMyClass(data)->groupMess(static_cast<int>(state));
+  CPPEXTERN_MSG1(classPtr, "open", openMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "rescale", rescaleMess, bool);
+  CPPEXTERN_MSG1(classPtr, "smooth", smoothMess, float);
+  CPPEXTERN_MSG1(classPtr, "revert", reverseMess, bool);
+  CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
+  CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
+  CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
 }
