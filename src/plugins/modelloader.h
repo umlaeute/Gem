@@ -70,7 +70,7 @@ class GEM_EXTERN modelloader
                     const gem::Properties&requestprops) = 0;
 
   //////////
-  // render the next frame
+  // render the model
   /* this is the core-function of this class !!!!
    * when called it renders the given asset
    *
@@ -80,7 +80,16 @@ class GEM_EXTERN modelloader
    *
    * this may be called from multiple openGL contexts!
    */
-  virtual void render(void) = 0;
+  virtual bool render(void) = 0;
+
+  //////////
+  // prepare rendering of model
+  /* the host CAN call this with a valid openGL context, in order
+   * to allow the plugin to generate display-lists and the like
+   *
+   * nothing must be drawn when this gets called
+   */
+  virtual bool compile(void) = 0;
 
   //////////
   // close the asset file
