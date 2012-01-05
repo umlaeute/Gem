@@ -123,16 +123,21 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
 
   char newName[MAXPDSTRING];
   newName[0]=0;
+
   for (i = 0; i < numModels; i++, realNum += skipRate) {
     snprintf(newName, MAXPDSTRING, "%s%d%s", bufName, realNum, postName);
     newName[MAXPDSTRING-1]=0;
-
     verbose(1, "trying to load '%s'", newName);
-    loaders.push_back(gem::plugins::modelloader::getInstance());
-    if(!loaders[i])
+
+    gem::plugins::modelloader*loader=gem::plugins::modelloader::getInstance();
+    if(!loader) break;
+
+    if(loader->open(newName, m_properties))
+      loaders.push_back(loader);
+    else {
+      delete loader;
       break;
-    if(!loaders[i]->open(newName, m_properties))
-      break;
+    }
   }
 
   if(loaders.size()!=numModels) {
