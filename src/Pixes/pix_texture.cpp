@@ -52,6 +52,7 @@ pix_texture :: pix_texture()
     m_extUpsidedown(false),
     m_realTextureObj(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
+    m_oldBaseCoord(TexCoord(1.,1.)), m_oldOrientation(true),
     m_textureType( GL_TEXTURE_2D ),
     m_rectangle(0), m_env(GL_MODULATE),
     m_clientStorage(0), //have to do this due to texture corruption issues
@@ -208,11 +209,15 @@ void pix_texture :: pushTexCoords(GemState*state) {
   state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
+  state->get(GemState::_GL_TEX_ORIENTATION, m_oldOrientation);
+  state->get(GemState::_GL_TEX_BASECOORD, m_oldBaseCoord);
 }
 
 void pix_texture :: popTexCoords(GemState*state) {
   tex2state(state, m_oldTexCoords, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
+  state->set(GemState::_GL_TEX_ORIENTATION, m_oldOrientation);
+  state->set(GemState::_GL_TEX_BASECOORD, m_oldBaseCoord);
 }
 
 
@@ -240,8 +245,8 @@ void pix_texture :: render(GemState *state) {
   if(!m_textureOnOff)return;
   if(!state)return;
 
-  GLboolean upsidedown=false;
-  GLboolean normalized=true;
+  bool upsidedown=false;
+  bool normalized=true;
 
   int texType = m_textureType;
   int x_2=1, y_2=1;
@@ -549,6 +554,11 @@ void pix_texture :: render(GemState *state) {
   } else {
     state->set(GemState::_GL_TEX_TYPE, 1);
   }
+  
+  m_baseCoord.s=m_xRatio;
+  m_baseCoord.t=m_yRatio;
+  state->set(GemState::_GL_TEX_BASECOORD, m_baseCoord);
+  state->set(GemState::_GL_TEX_ORIENTATION, upsidedown);
 
   sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
 }
