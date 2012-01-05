@@ -25,7 +25,7 @@ SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC
 SUBDIRS += videoAVT videoHALCON videoPYLON
 
 ## asset loading plugins
-SUBDIRS += modelOBJ
+SUBDIRS += modelOBJ modelASSIMP
 
 
 ## filmTEST is not built by default, but we want to ship it

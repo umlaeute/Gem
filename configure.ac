@@ -39,6 +39,7 @@ AC_CONFIG_FILES([plugins/filmQT4L/Makefile])
 AC_CONFIG_FILES([plugins/filmTEST/Makefile])
 
 AC_CONFIG_FILES([plugins/modelOBJ/Makefile])
+AC_CONFIG_FILES([plugins/modelASSIMP/Makefile])
 
 AC_CONFIG_FILES([plugins/recordQT/Makefile])
 AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
@@ -333,6 +334,9 @@ dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
 
 # VLC
 GEM_CHECK_LIB([libvlc], [vlc], [libvlc_video_set_callbacks],,,, [video input])
+
+# assimp
+GEM_CHECK_LIB([assimp], [assimp], [aiDetachAllLogStreams],,,, [3D model loading])
 
 
 
