@@ -54,6 +54,14 @@ model :: ~model(void)
 
 void model :: applyProperties(void)
 {
+#if 0
+  std::vector<std::string>keys=m_properties.keys();
+  unsigned int i;
+  for(i=0; i<keys.size(); i++) {
+    post("key[%d]=%s ... %d", i, keys[i].c_str(), m_properties.type(keys[i]));
+  }
+#endif
+
   if(m_loader)
     m_loader->setProperties(m_properties);
 }
@@ -124,7 +132,7 @@ void model :: reverseMess(bool reverse)
 /////////////////////////////////////////////////////////
 void model :: rescaleMess(bool state)
 {
-  gem::any value=state;
+  gem::any value=(double)state;
   m_properties.set("rescale", value);
   applyProperties();
 }
