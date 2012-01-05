@@ -67,14 +67,14 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   }
   setProperties(props);
 
-  glmTexture(m_model, m_textype, m_currentH, m_currentW);
+  glmTexture(m_model, m_textype, m_currentW, m_currentH);
   m_rebuild=true;
   return true;
 }
 
 bool modelOBJ :: render(void) {
   if(m_rebuild) {
-    glmTexture(m_model, m_textype, m_currentH, m_currentW);
+    glmTexture(m_model, m_textype, m_currentW, m_currentH);
     compile();
   }
   if(m_dispList)
@@ -112,7 +112,6 @@ void modelOBJ :: setProperties(gem::Properties&props) {
   if(props.get("texheight", d)) {
     if(d!=m_currentH)
       m_rebuild=true;
-
     m_currentH=d;
   }
   if(props.get("usematerials", d)) {

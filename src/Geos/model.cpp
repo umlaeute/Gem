@@ -180,9 +180,9 @@ void model :: openMess(const std::string&filename)
 void model :: render(GemState *state)
 {
   if(!m_loaded)return;
-  if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2))) {
-    m_currentH = state->texCoordX(2);
-    m_currentW = state->texCoordY(2);
+  if (state && (m_currentW != state->texCoordX(2) || m_currentH != state->texCoordY(2))) {
+    m_currentW = state->texCoordX(2);
+    m_currentH = state->texCoordY(2);
 
     m_properties.set("texwidth", m_currentW);
     m_properties.set("texheight", m_currentH);
