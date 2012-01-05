@@ -70,6 +70,8 @@ protected:
   struct aiVector3D m_offset;
 
   struct aiVector3D m_min, m_max, m_center;
+
+  bool m_useMaterial;
 };
 };}; // namespace gem::plugins
 

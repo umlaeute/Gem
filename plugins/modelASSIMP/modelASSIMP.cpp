@@ -176,7 +176,7 @@ static void Color4f(const struct aiColor4D *color)
 }
 
 // ----------------------------------------------------------------------------
-static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd)
+static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd, const bool use_material)
 {
 	int i;
 	unsigned int n = 0, t;
@@ -190,21 +190,24 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 	// draw all meshes assigned to this node
 	for (; n < nd->mNumMeshes; ++n) {
 		const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
+    if(use_material)
+      apply_material(sc->mMaterials[mesh->mMaterialIndex]);
 
-		apply_material(sc->mMaterials[mesh->mMaterialIndex]);
-
+#if 0
 		if(mesh->mNormals == NULL) {
-			glDisable(GL_LIGHTING);
+      glDisable(GL_LIGHTING);
 		} else {
 			glEnable(GL_LIGHTING);
 		}
+#endif
 
+#if 0
 		if(mesh->mColors[0] != NULL) {
 			glEnable(GL_COLOR_MATERIAL);
 		} else {
 			glDisable(GL_COLOR_MATERIAL);
 		}
-
+#endif
 		for (t = 0; t < mesh->mNumFaces; ++t) {
 			const struct aiFace* face = &mesh->mFaces[t];
 			GLenum face_mode;
@@ -220,10 +223,16 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 
 			for(i = 0; i < face->mNumIndices; i++) {
 				int index = face->mIndices[i];
-				if(mesh->mColors[0] != NULL)
+        
+				if(use_material && mesh->mColors[0] != NULL)
 					Color4f(&mesh->mColors[0][index]);
+
 				if(mesh->mNormals != NULL) 
 					glNormal3fv(&mesh->mNormals[index].x);
+
+        if(mesh->HasTextureCoords(0))
+          glTexCoord2f(mesh->mTextureCoords[0][index].x, mesh->mTextureCoords[0][index].y);
+
 				glVertex3fv(&mesh->mVertices[index].x);
 			}
 
@@ -234,7 +243,7 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 
 	// draw all children
 	for (n = 0; n < nd->mNumChildren; ++n) {
-		recursive_render(scene, sc, nd->mChildren[n]);
+		recursive_render(scene, sc, nd->mChildren[n], use_material);
 	}
 
 	glPopMatrix();
@@ -245,7 +254,8 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 modelASSIMP :: modelASSIMP(void) : 
   m_rebuild(true),
   m_scene(NULL), m_dispList(0),
-  m_scale(1.f)
+  m_scale(1.f),
+  m_useMaterial(false)
 {
 }
 
@@ -324,7 +334,6 @@ void modelASSIMP :: setProperties(gem::Properties&props) {
   }
 #endif
 
-
   if(props.get("rescale", d)) {
     bool b=(bool)d;
     if(b) {
@@ -342,6 +351,13 @@ void modelASSIMP :: setProperties(gem::Properties&props) {
       m_offset.x=m_offset.y=m_offset.z=0.f;
     }
   }
+  if(props.get("usematerials", d)) {
+    bool useMaterial=d;
+    if(useMaterial!=m_useMaterial)
+      m_rebuild=true;
+    m_useMaterial=useMaterial;
+  }
+
 }
 void modelASSIMP :: getProperties(gem::Properties&props) {
 }
@@ -364,7 +380,7 @@ bool modelASSIMP :: compile(void)  {
     // now begin at the root node of the imported data and traverse
     // the scenegraph by multiplying subsequent local transforms
     // together on GL's matrix stack.
-    recursive_render(m_scene, m_scene, m_scene->mRootNode);
+    recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial);
     glEndList();
   }
 
