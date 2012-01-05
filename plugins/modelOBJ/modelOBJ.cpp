@@ -67,14 +67,14 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   }
   setProperties(props);
 
-  glmTexture(m_model, m_textype, m_currentW, m_currentH);
+  glmTexture(m_model, m_textype, 1,1);
   m_rebuild=true;
   return true;
 }
 
 bool modelOBJ :: render(void) {
   if(m_rebuild) {
-    glmTexture(m_model, m_textype, m_currentW, m_currentH);
+    glmTexture(m_model, m_textype, 1,1);
     compile();
   }
   if(m_dispList)
