@@ -125,29 +125,36 @@ static void apply_material(const struct aiMaterial *mtl)
 	if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
 		color4_to_float4(&diffuse, c);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
+  //post("diffuse: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
 	set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
 	if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &specular))
 		color4_to_float4(&specular, c);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
+  //post("specular: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
 	set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
 	if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &ambient))
 		color4_to_float4(&ambient, c);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
+  //post("ambient: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
 	set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
 	if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &emission))
 		color4_to_float4(&emission, c);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
+  //  post("emission: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
 	max = 1;
 	ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
 	max = 1;
 	ret2 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH, &strength, &max);
-	if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS))
+	if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
+    //post("shininess: %gx%g=%g\t%g", shininess, strength, shininess*strength);
+  }
 	else {
+    /* JMZ: in modelOBJ the default shininess is 65 */
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 0.0f);
 		set_float4(c, 0.0f, 0.0f, 0.0f, 0.0f);
 		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
