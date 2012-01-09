@@ -22,8 +22,8 @@ gem_modelASSIMP_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_modelASSIMP_la @MOREFLAGS@
 
 # Dependencies
-gem_modelASSIMP_la_CXXFLAGS += @PKG_ASSIMP_CFLAGS@
-gem_modelASSIMP_la_LIBADD   += @PKG_ASSIMP_LIBS@
+gem_modelASSIMP_la_CXXFLAGS += @PKG_ASSIMP_CFLAGS@ @GL_CFLAGS@
+gem_modelASSIMP_la_LIBADD   += @PKG_ASSIMP_LIBS@ @GL_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
