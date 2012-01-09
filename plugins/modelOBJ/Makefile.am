@@ -22,7 +22,10 @@ gem_modelOBJ_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_modelOBJ_la @MOREFLAGS@
 
 # Dependencies
-## none
+gem_modelOBJ_la_CXXFLAGS += @GL_CFLAGS@
+gem_modelOBJ_la_LIBADD   += @GL_LIBS@
+
+
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
