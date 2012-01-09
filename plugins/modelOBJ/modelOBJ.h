@@ -29,7 +29,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 
 namespace gem { namespace plugins {
-    class GEM_EXTERN modelOBJ : public gem::plugins::modelloader {
+    class GEM_EXPORT modelOBJ : public gem::plugins::modelloader {
  public:
   /////////
   // ctor/dtor
