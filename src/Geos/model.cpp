@@ -121,7 +121,7 @@ void model :: smoothMess(t_float fsmooth)
 /////////////////////////////////////////////////////////
 void model :: reverseMess(bool reverse)
 {
-  gem::any value=reverse;
+  gem::any value=(double)reverse;
   m_properties.set("reverse", value);
   applyProperties();
 }
