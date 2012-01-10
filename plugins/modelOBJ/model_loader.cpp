@@ -1458,10 +1458,10 @@ glmDelete(GLMmodel* model)
     //free(group->name);
     group->name.clear();
     delete[]group->triangles;
-    delete[]group;
+    delete group;
   }
 
-  delete[]model;
+  delete model;
 }
 
 /* glmReadOBJ: Reads a model description from a Wavefront .OBJ file.
