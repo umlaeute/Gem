@@ -49,9 +49,9 @@ pix_fiducialtrack_la_SOURCES = \
 	pix_fiducialtrack.h
 
 libfidtrack_la_SOURCES = \
-	libfidtrack_fidtrackX.cpp \
-	libfidtrack_fidtrackX.h \
-	libfidtrack_segment.cpp \
-	libfidtrack_segment.h \
-	libfidtrack_treeidmap.cpp \
-	libfidtrack_treeidmap.h
+	fidtrackX.c \
+	fidtrackX.h \
+	segment.c \
+	segment.h \
+	treeidmap.cpp \
+	treeidmap.h

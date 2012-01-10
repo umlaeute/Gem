@@ -20,9 +20,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include <vector>
 
-#include "libfidtrack_fidtrackX.h"
+#include "fidtrackX.h"
 #define MAX_FIDUCIAL_COUNT 512
-#include "libfidtrack_segment.h"
+#include "segment.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

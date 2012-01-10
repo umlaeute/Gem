@@ -2,7 +2,7 @@
 # define NDEBUG
 #endif
 
-#include "libfidtrack_treeidmap.h"
+#include "treeidmap.h"
 #ifdef _MSC_VER
 # pragma warning( disable: 4091)
 #endif /* _MSC_VER */
@@ -168,7 +168,7 @@ public:
     ~TreeIdMapImplementation()
     {
         while( !strings_.empty() ){
-	  delete [] reinterpret_cast<const char*>(strings_.back());
+	  delete [] (const char*)(strings_.back());
             strings_.pop_back();
         }
     }
@@ -191,12 +191,12 @@ void initialize_treeidmap_from_file( TreeIdMap* treeidmap, const char *file_name
 
 void terminate_treeidmap( TreeIdMap* treeidmap )
 {
-  delete static_cast<TreeIdMapImplementation*>(treeidmap->implementation_);
+  delete (TreeIdMapImplementation*)(treeidmap->implementation_);
     treeidmap->implementation_ = 0;
 }
 
 // returns -1 for unfound id
 int treestring_to_id( TreeIdMap* treeidmap, const char *treestring )
 {
-  return (static_cast<TreeIdMapImplementation*>(treeidmap->implementation_))->treestring_to_id( treestring );
+  return ((TreeIdMapImplementation*)(treeidmap->implementation_))->treestring_to_id( treestring );
 }

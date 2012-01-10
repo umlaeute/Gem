@@ -26,8 +26,8 @@ extern "C"
 #endif /* __cplusplus */
 
 
-#include "libfidtrack_segment.h"
-#include "libfidtrack_treeidmap.h"
+#include "segment.h"
+#include "treeidmap.h"
 
   /* JMZ: taken from floatpoint.h */
 typedef struct FloatPoint{
