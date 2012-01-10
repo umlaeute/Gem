@@ -24,11 +24,11 @@
  */
 typedef struct _GLMmaterial
 {
-  char* name;                   /* name of material */
+  std::string name;                   /* name of material */
   GLfloat diffuse[4];           /* diffuse component */
   GLfloat ambient[4];           /* ambient component */
   GLfloat specular[4];          /* specular component */
-  GLfloat emmissive[4];         /* emmissive component */
+  // GLfloat emmissive[4];         /* emmissive component */
   GLfloat shininess;            /* specular exponent */
 } GLMmaterial;
 
@@ -45,7 +45,7 @@ typedef struct _GLMtriangle {
 /* GLMgroup: Structure that defines a group in a model.
  */
 typedef struct _GLMgroup {
-  char*             name;           /* name of this group */
+  std::string       name;           /* name of this group */
   GLuint            numtriangles;   /* number of triangles in this group */
   GLuint*           triangles;      /* array of triangle indices */
   GLuint            material;       /* index to material for group */
@@ -55,8 +55,8 @@ typedef struct _GLMgroup {
 /* GLMmodel: Structure that defines a model.
  */
 typedef struct _GLMmodel {
-  char*    pathname;            /* path to this model */
-  char*    mtllibname;          /* name of the material library */
+  std::string    pathname;            /* path to this model */
+  std::string    mtllibname;          /* name of the material library */
 
   GLuint   numvertices;         /* number of vertices in model */
   GLfloat* vertices;            /* array of vertices  */
@@ -196,11 +196,10 @@ _glmEqual(GLfloat* u, GLfloat* v, GLfloat epsilon)
 static GLfloat*
 _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 {
-  GLfloat* copies;
   GLuint   copied;
   GLuint   i, j;
 
-  copies = (GLfloat*)malloc(sizeof(GLfloat) * 3 * (*numvectors + 1));
+  GLfloat*copies = new GLfloat[3*(*numvectors+1)];
   memcpy(copies, vectors, (sizeof(GLfloat) * 3 * (*numvectors + 1)));
 
   copied = 1;
@@ -230,7 +229,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 
 /* glmFindGroup: Find a group in the model */
 static GLMgroup*
-_glmFindGroup(const GLMmodel* model, const char* name)
+_glmFindGroup(const GLMmodel* model, const std::string&name)
 {
   GLMgroup* group;
 
@@ -238,7 +237,7 @@ _glmFindGroup(const GLMmodel* model, const char* name)
 
   group = model->groups;
   while(group) {
-    if (!strcmp(name, group->name))
+    if (name==group->name)
       break;
     group = group->next;
   }
@@ -248,14 +247,14 @@ _glmFindGroup(const GLMmodel* model, const char* name)
 
 /* glmAddGroup: Add a group to the model */
 static GLMgroup*
-_glmAddGroup(GLMmodel* model, const char* name)
+_glmAddGroup(GLMmodel* model, const std::string&name)
 {
   GLMgroup* group;
 
   group = _glmFindGroup(model, name);
   if (!group) {
-    group = (GLMgroup*)malloc(sizeof(GLMgroup));
-    group->name = strdup(name);
+    group = new GLMgroup;
+    group->name = name;
     group->material = 0;
     group->numtriangles = 0;
     group->triangles = NULL;
@@ -269,20 +268,20 @@ _glmAddGroup(GLMmodel* model, const char* name)
 
 /* glmFindGroup: Find a material in the model */
 static GLuint
-_glmFindMaterial(const GLMmodel* model, const char* name)
+_glmFindMaterial(const GLMmodel* model, const std::string&name)
 {
   GLuint i;
 
   /* XXX doing a linear search on a string key'd list is pretty lame,
      but it works and is fast enough for now. */
   for (i = 0; i < model->nummaterials; i++) {
-    if (!strcmp(model->materials[i].name, name))
+    if (name==model->materials[i].name)
       goto found;
   }
 
   /* didn't find the name, so print a warning and return the default
      material (0). */
-  error("_glmFindMaterial():  can't find material \"%s\".", name);
+  error("_glmFindMaterial():  can't find material \"%s\".", name.c_str());
   i = 0;
 
  found:
@@ -317,7 +316,7 @@ _glmDirName(const std::string&path)
  * name  - name of the material library
  */
 static GLint
-_glmReadMTL(GLMmodel* model, const char* name)
+_glmReadMTL(GLMmodel* model, const std::string&name)
 {
   FILE* file;
   char    buf[128];
@@ -360,12 +359,12 @@ _glmReadMTL(GLMmodel* model, const char* name)
 
   rewind(file);
 
-  model->materials = (GLMmaterial*)malloc(sizeof(GLMmaterial) * nummaterials);
+  model->materials = new GLMmaterial[nummaterials];
   model->nummaterials = nummaterials;
 
   /* set the default material */
   for (i = 0; i < nummaterials; i++) {
-    model->materials[i].name = NULL;
+    model->materials[i].name.clear();
     model->materials[i].shininess = 65.0f;
     model->materials[i].diffuse[0] = 0.8f;
     model->materials[i].diffuse[1] = 0.8f;
@@ -455,7 +454,7 @@ _glmReadMTL(GLMmodel* model, const char* name)
  * mtllibname - name of the material library to be written
  */
 static GLboolean
-_glmWriteMTL(const GLMmodel* model, const char* modelpath, const char* mtllibname)
+_glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtllibname)
 {
   FILE* file;
   GLMmaterial* material;
@@ -483,7 +482,7 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const char* mtllibnam
 
   for (i = 0; i < model->nummaterials; i++) {
     material = &model->materials[i];
-    fprintf(file, "newmtl %s\n", material->name);
+    fprintf(file, "newmtl %s\n", material->name.c_str());
     fprintf(file, "Ka %f %f %f\n",
             material->ambient[0], material->ambient[1], material->ambient[2]);
     fprintf(file, "Kd %f %f %f\n",
@@ -560,7 +559,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
         error("_glmFirstPass failed reading material"); return GL_FALSE;
       }
       sscanf(buf, "%s %s", buf, buf);
-      model->mtllibname = strdup(buf);
+      model->mtllibname = buf;
       _glmReadMTL(model, buf);
       break;
     case 'u':
@@ -647,7 +646,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   /* allocate memory for the triangles in each group */
   group = model->groups;
   while(group) {
-    group->triangles = (GLuint*)malloc(sizeof(GLuint) * group->numtriangles);
+    group->triangles = new GLuint[group->numtriangles];
     group->numtriangles = 0;
     group = group->next;
   }
@@ -1065,12 +1064,11 @@ glmFacetNormals(GLMmodel* model)
 
   /* clobber any old facetnormals */
   if (model->facetnorms)
-    free(model->facetnorms);
+    delete[]model->facetnorms;
 
   /* allocate memory for the new facet normals */
   model->numfacetnorms = model->numtriangles;
-  model->facetnorms = (GLfloat*)malloc(sizeof(GLfloat) *
-                                       3 * (model->numfacetnorms + 1));
+  model->facetnorms = new GLfloat[3 * (model->numfacetnorms + 1)];
 
   for (i = 0; i < model->numtriangles; i++) {
     model->triangles[i].findex = i+1;
@@ -1130,31 +1128,31 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
 
   /* nuke any previous normals */
   if (model->normals)
-    free(model->normals);
+    delete[]model->normals;
 
   /* allocate space for new normals */
   model->numnormals = model->numtriangles * 3; /* 3 normals per triangle */
-  model->normals = (GLfloat*)malloc(sizeof(GLfloat)* 3* (model->numnormals+1));
+  model->normals = new GLfloat[3* (model->numnormals+1)];
 
   /* allocate a structure that will hold a linked list of triangle
      indices for each vertex */
-  members = (GLMnode**)malloc(sizeof(GLMnode*) * (model->numvertices + 1));
+  members = new GLMnode*[model->numvertices + 1];
   for (i = 1; i <= model->numvertices; i++)
     members[i] = NULL;
 
   /* for every triangle, create a node for each vertex in it */
   for (i = 0; i < model->numtriangles; i++) {
-    node = (GLMnode*)malloc(sizeof(GLMnode));
+    node = new GLMnode;
     node->index = i;
     node->next  = members[T(i).vindices[0]];
     members[T(i).vindices[0]] = node;
 
-    node = (GLMnode*)malloc(sizeof(GLMnode));
+    node = new GLMnode;
     node->index = i;
     node->next  = members[T(i).vindices[1]];
     members[T(i).vindices[1]] = node;
 
-    node = (GLMnode*)malloc(sizeof(GLMnode));
+    node = new GLMnode;
     node->index = i;
     node->next  = members[T(i).vindices[2]];
     members[T(i).vindices[2]] = node;
@@ -1240,23 +1238,23 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     while (node) {
       tail = node;
       node = node->next;
-      free(tail);
+      delete tail;
     }
   }
-  free(members);
+  delete[]members;
 
   /* pack the normals array (we previously allocated the maximum
      number of normals that could possibly be created (numtriangles *
      3), so get rid of some of them (usually alot unless none of the
      facet normals were averaged)) */
   normals = model->normals;
-  model->normals = (GLfloat*)malloc(sizeof(GLfloat)* 3* (model->numnormals+1));
+  model->normals = new GLfloat[3* (model->numnormals+1)];
   for (i = 1; i <= model->numnormals; i++) {
     model->normals[3 * i + 0] = normals[3 * i + 0];
     model->normals[3 * i + 1] = normals[3 * i + 1];
     model->normals[3 * i + 2] = normals[3 * i + 2];
   }
-  free(normals);
+  delete[]normals;
 }
 
 /* glmUVTexture: Generates texture coordinates according to a
@@ -1274,10 +1272,10 @@ glmUVTexture(GLMmodel* model, float h, float w)
   if(!(model->uvtexcoords))return;
 
   if (model->texcoords)
-    free(model->texcoords);
+    delete[]model->texcoords;
 
   model->numtexcoords = model->numuvtexcoords;
-  model->texcoords=(GLfloat*)malloc(sizeof(GLfloat)*2*(model->numuvtexcoords+1));
+  model->texcoords=new GLfloat[2*(model->numuvtexcoords+1)];
 
   /* do the calculations */
   for(i = 1; i <= model->numtexcoords; i++) {
@@ -1315,9 +1313,9 @@ glmLinearTexture(GLMmodel* model, float h, float w)
   if (!(model))return;
 
   if (model->texcoords)
-    free(model->texcoords);
+    delete[]model->texcoords;
   model->numtexcoords = model->numvertices;
-  model->texcoords=(GLfloat*)malloc(sizeof(GLfloat)*2*(model->numtexcoords+1));
+  model->texcoords=new GLfloat[2*(model->numtexcoords+1)];
 
   glmDimensions(model, dimensions);
   scalefactor = 2.0f /
@@ -1367,9 +1365,9 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
   if (!(model->normals))return;
 
   if (model->texcoords)
-    free(model->texcoords);
+    delete[]model->texcoords;
   model->numtexcoords = model->numnormals;
-  model->texcoords=(GLfloat*)malloc(sizeof(GLfloat)*2*(model->numtexcoords+1));
+  model->texcoords=new GLfloat[2*(model->numtexcoords+1)];
 
   for (i = 1; i <= model->numnormals; i++) {
     z = model->normals[3 * i + 0];  /* re-arrange for pole distortion */
@@ -1438,27 +1436,32 @@ glmDelete(GLMmodel* model)
 
   if (!(model))return;
 
-  if (model->pathname)     free(model->pathname);
-  if (model->mtllibname) free(model->mtllibname);
-  if (model->vertices)     free(model->vertices);
-  if (model->normals)  free(model->normals);
-  if (model->texcoords)  free(model->texcoords);
-  if (model->facetnorms) free(model->facetnorms);
-  if (model->triangles)  free(model->triangles);
+  //  if (model->pathname)   free(model->pathname);
+  //  if (model->mtllibname) free(model->mtllibname);
+  model->pathname.clear();
+  model->mtllibname.clear();
+
+  if (model->vertices)   delete[]model->vertices;
+  if (model->normals)    delete[]model->normals;
+  if (model->texcoords)  delete[]model->texcoords;
+  if (model->facetnorms) delete[]model->facetnorms;
+  if (model->triangles)  delete[]model->triangles;
   if (model->materials) {
     for (i = 0; i < model->nummaterials; i++)
-      free(model->materials[i].name);
+      //free(model->materials[i].name);
+      model->materials[i].name.clear();
   }
-  free(model->materials);
+  delete[]model->materials;
   while(model->groups) {
     group = model->groups;
     model->groups = model->groups->next;
-    free(group->name);
-    free(group->triangles);
-    free(group);
+    //free(group->name);
+    group->name.clear();
+    delete[]group->triangles;
+    delete[]group;
   }
 
-  free(model);
+  delete[]model;
 }
 
 /* glmReadOBJ: Reads a model description from a Wavefront .OBJ file.
@@ -1481,9 +1484,9 @@ glmReadOBJ(const char* filename)
   }
 
   /* allocate a new model */
-  model = (GLMmodel*)malloc(sizeof(GLMmodel));
-  model->pathname    = strdup(filename);
-  model->mtllibname    = NULL;
+  model = new GLMmodel;
+  model->pathname      = filename;
+  model->mtllibname.clear();
   model->numvertices   = 0;
   model->vertices    = NULL;
   model->numnormals    = 0;
@@ -1512,17 +1515,13 @@ glmReadOBJ(const char* filename)
   }
 
   /* allocate memory */
-  model->vertices = (GLfloat*)malloc(sizeof(GLfloat) *
-                                     3 * (model->numvertices + 1));
-  model->triangles = (GLMtriangle*)malloc(sizeof(GLMtriangle) *
-                                          model->numtriangles);
+  model->vertices = new GLfloat[3 * (model->numvertices + 1)];
+  model->triangles = new GLMtriangle[model->numtriangles];
   if (model->numnormals) {
-    model->normals = (GLfloat*)malloc(sizeof(GLfloat) *
-                                      3 * (model->numnormals + 1));
+    model->normals = new GLfloat[3 * (model->numnormals + 1)];
   }
   if (model->numuvtexcoords) {
-    model->uvtexcoords = (GLfloat*)malloc(sizeof(GLfloat) *
-                                          2 * (model->numuvtexcoords + 1));
+    model->uvtexcoords = new GLfloat[2 * (model->numuvtexcoords + 1)];
   }
 
   /* rewind to beginning of file and read in the data this pass */
@@ -1625,8 +1624,8 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   fprintf(file, "#  http://www.pobox.com/~ndr\n");
   fprintf(file, "#  \n");
 
-  if (mode & GLM_MATERIAL && model->mtllibname) {
-    fprintf(file, "\nmtllib %s\n\n", model->mtllibname);
+  if (mode & GLM_MATERIAL && !(model->mtllibname.empty())) {
+    fprintf(file, "\nmtllib %s\n\n", model->mtllibname.c_str());
     _glmWriteMTL(model, filename, model->mtllibname);
   }
 
@@ -1679,9 +1678,9 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 
   group = model->groups;
   while(group) {
-    fprintf(file, "g %s\n", group->name);
+    fprintf(file, "g %s\n", group->name.c_str());
     if (mode & GLM_MATERIAL)
-      fprintf(file, "usemtl %s\n", model->materials[group->material].name);
+      fprintf(file, "usemtl %s\n", model->materials[group->material].name.c_str());
     for (i = 0; i < group->numtriangles; i++) {
       if (mode & GLM_SMOOTH && mode & GLM_TEXTURE) {
         fprintf(file, "f %d/%d/%d %d/%d/%d %d/%d/%d\n",
@@ -2052,12 +2051,11 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
   }
 
   /* free space for old vertices */
-  free(vectors);
+  delete[]vectors;
 
   /* allocate space for the new vertices */
   model->numvertices = numvectors;
-  model->vertices = (GLfloat*)malloc(sizeof(GLfloat) *
-                                     3 * (model->numvertices + 1));
+  model->vertices = new GLfloat[3 * (model->numvertices + 1)];
 
   /* copy the optimized vertices into the actual vertex list */
   for (i = 1; i <= model->numvertices; i++) {
@@ -2066,7 +2064,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
     model->vertices[3 * i + 2] = copies[3 * i + 2];
   }
 
-  free(copies);
+  delete[]copies;
 }
 
 /* glmReadPPM: read a PPM raw (type P6) file.  The PPM file has a header
@@ -2138,13 +2136,13 @@ glmReadPPM(const char* filename, int* width, int* height)
   }
 
   /* grab all the image data in one fell swoop. */
-  image = (unsigned char*)malloc(sizeof(unsigned char)*w*h*3);
+  image = new unsigned char[w*h*3];
   size_t count = fread(image, sizeof(unsigned char), w*h*3, fp);
   fclose(fp);
   if(count!=static_cast<size_t>(w*h*3)) {
     error("_glmReadPPM failed to read all bytes");
     *width=*height=0;
-    free(image);
+    delete[]image;
     image=NULL;
     return NULL;
   }
