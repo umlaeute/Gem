@@ -51,6 +51,26 @@ something along the lines of
 $ set PATH=%PATH%:%ProgramFiles%\VideoLAN\VLC
 
 
+COMPILATION
+-----------
+
+w32/MinGW
+---------
+on w32/MinGW, configure will most likely not find your installation of the vlc
+this is what i use approximately to enable vlc support when building Gem with MinGW
+(the code is bash-script, change appropriately if you use another shell; the leading '$'
+is to indicate newlines - don't copy them)
+also make sure that VLC_PATH does not contain any spaces!
+
+$ VLC_PATH="/home/zmoelnig/programfiles/i386/VideoLAN/VLC/"
+$ VLC_CFLAGS="-I${VLC_PATH}/sdk/include/"
+$ VLC_LIBS="-L${VLC_PATH} -lvlc"
+$ ./configure PKG_LIBVLC_CFLAGS="${VLC_CFLAGS}" PKG_LIBVLC_LIBS="${VLC_LIBS}"
+
+again: don't forget to add ${VLC_PATH} to your PATH, prior to running Pd/Gem
+
+
+
 AUTHORS
 -------
 brought to you by IOhannes m zmölnig
