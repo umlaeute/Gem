@@ -6,20 +6,39 @@ AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
 include ../check-sources.mk
 
-noinst_LTLIBRARIES = libParticles.la
+noinst_LTLIBRARIES = libParticles.la libPAPI.la
 
-libParticles_la_CXXFLAGS =
+libParticles_la_CXXFLAGS = 
 libParticles_la_LIBADD   =
 libParticles_la_LDFLAGS  =
+
+libPAPI_la_CXXFLAGS =
+libPAPI_la_LIBADD   =
+libPAPI_la_LDFLAGS  =
 
 # RTE flags
 libParticles_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
 libParticles_la_LIBADD   += @GEM_RTE_LIBS@
 libParticles_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
+libParticles_la_LIBADD   += libPAPI.la
+
+libPAPI_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+libPAPI_la_LIBADD   += 
+libPAPI_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+
+libPAPI_la_SOURCES=  \
+    papi/papi.h \
+    papi/actionapi.cpp \
+    papi/actions.cpp \
+    papi/general.h \
+    papi/opengl.cpp \
+    papi/system.cpp \
+    papi/vector.h
 
 libParticles_la_SOURCES=  \
-    papi.h \
+    partlib_base.cpp \
+    partlib_base.h \
     part_color.cpp \
     part_color.h \
     part_damp.cpp \
@@ -38,14 +57,6 @@ libParticles_la_SOURCES=  \
     part_killold.h \
     part_killslow.cpp \
     part_killslow.h \
-    partlib_actionapi.cpp \
-    partlib_actions.cpp \
-    partlib_base.cpp \
-    partlib_base.h \
-    partlib_general.h \
-    partlib_opengl.cpp \
-    partlib_system.cpp \
-    partlib_vector.h \
     part_orbitpoint.cpp \
     part_orbitpoint.h \
     part_render.cpp \

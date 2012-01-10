@@ -16,7 +16,7 @@
 #define _INCLUDE__GEM_PARTICLES_PART_SINK_H_
 
 #include "Particles/partlib_base.h"
-#include "papi.h"
+#include "papi/papi.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

@@ -17,7 +17,7 @@
 #include <string.h>
 #include "Gem/State.h"
 
-#include "papi.h"
+#include "papi/papi.h"
 
 /////////////////////////////////////////////////////////
 //

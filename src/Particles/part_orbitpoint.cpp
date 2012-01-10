@@ -15,7 +15,7 @@
 #include "part_orbitpoint.h"
 
 
-#include "papi.h"
+#include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(part_orbitpoint, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

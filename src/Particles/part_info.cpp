@@ -17,7 +17,7 @@
 #include <string.h>
 
 
-#include "papi.h"
+#include "papi/papi.h"
 
 CPPEXTERN_NEW(part_info);
 

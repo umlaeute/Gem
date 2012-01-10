@@ -15,7 +15,7 @@
 #include "part_vertex.h"
 
 
-#include "papi.h"
+#include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_THREE_ARGS(part_vertex, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

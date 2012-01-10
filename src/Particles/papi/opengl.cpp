@@ -6,7 +6,7 @@
 //
 // (l) 3004:forum::für::umläute:2003 modified for Gem
 
-#include "partlib_general.h"
+#include "general.h"
 
 #include "Gem/GemGL.h"
 

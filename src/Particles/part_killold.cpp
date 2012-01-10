@@ -15,7 +15,7 @@
 #include "part_killold.h"
 
 
-#include "papi.h"
+#include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(part_killold, t_floatarg, A_DEFFLOAT);
 

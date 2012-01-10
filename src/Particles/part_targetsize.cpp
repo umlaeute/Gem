@@ -15,7 +15,7 @@
 #include "part_targetsize.h"
 
 
-#include "papi.h"
+#include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(part_targetsize, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

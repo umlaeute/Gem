@@ -8,7 +8,7 @@
 // (l) 3004:forum::für::umläute:2003 modified for Gem
 //                                   added KillSlow again (like in 1.11)
 
-#include "partlib_general.h"
+#include "general.h"
 
 extern void _pAddActionToList(ParticleAction *S, int size);
 extern void _pCallActionList(ParticleAction *pa, int num_actions,

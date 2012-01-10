@@ -15,7 +15,7 @@
 #ifndef _INCLUDE__GEM_PARTICLES_PART_VELSPHERE_H_
 #define _INCLUDE__GEM_PARTICLES_PART_VELSPHERE_H_
 
-#include "papi.h"
+#include "papi/papi.h"
 
 #include "Particles/partlib_base.h"
 

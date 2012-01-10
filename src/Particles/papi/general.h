@@ -11,7 +11,7 @@
 #define partlib_general_h
 
 #include "papi.h"
-#include "partlib_vector.h"
+#include "vector.h"
 
 // A single particle
 struct Particle

@@ -17,7 +17,7 @@
 #include "part_head.h"
 
 
-#include "papi.h"
+#include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(part_head, t_floatarg, A_DEFFLOAT);
 
