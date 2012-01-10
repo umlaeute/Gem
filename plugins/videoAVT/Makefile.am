@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
-EXTRA_DIST = avt.m4 videoAVT.sln videoAVT.vcproj LICENSE.txt README.txt
+EXTRA_DIST = avt.m4 LICENSE.txt README.txt
+EXTRA_DIST += win-vs2003/videoAVT.sln win-vs2003/videoAVT.vcproj
+EXTRA_DIST += win-vs2008/videoAVT.sln win-vs2008/videoAVT.vcproj
 
 plugindir=$(libdir)/Gem
 

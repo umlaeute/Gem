@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = imageQT.sln imageQT.vcproj
+EXTRA_DIST =
+EXTRA_DIST += win-vs2003/imageQT.sln win-vs2003/imageQT.vcproj
+EXTRA_DIST += win-vs2008/imageQT.sln win-vs2008/imageQT.vcproj
 
 pkglib_LTLIBRARIES=
 if HAVE_FRAMEWORK_QUICKTIME

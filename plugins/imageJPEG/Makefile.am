@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = imageJPEG.sln imageJPEG.vcproj
+EXTRA_DIST =
+EXTRA_DIST += win-vs2003/imageJPEG.sln win-vs2003/imageJPEG.vcproj
+EXTRA_DIST += win-vs2008/imageJPEG.sln win-vs2008/imageJPEG.vcproj
 
 pkglib_LTLIBRARIES=
 if HAVE_LIB_JPEG

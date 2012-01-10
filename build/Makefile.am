@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
 	osx-projectbuilder/Gem.pbproj/project.pbxproj \
-	win-nsis/gem.nsi \
+	win-nsis/Gem.nsi \
 	win-nsis/buildinstaller.bat \
 	win-nsis/uninstaller1.nsi \
 	win-nsis/uninstaller2.nsi \

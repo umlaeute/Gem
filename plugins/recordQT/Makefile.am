@@ -1,7 +1,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = recordQT.sln recordQT.vcproj
+EXTRA_DIST =
+EXTRA_DIST += win-vs2003/recordQT.sln win-vs2003/recordQT.vcproj
+EXTRA_DIST += win-vs2008/recordQT.sln win-vs2008/recordQT.vcproj
 
 pkglib_LTLIBRARIES=
 if HAVE_FRAMEWORK_QUICKTIME

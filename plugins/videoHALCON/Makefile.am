@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
-EXTRA_DIST = halcon.m4 videoHALCON.sln videoHALCON.vcproj LICENSE.txt README.txt
+EXTRA_DIST = halcon.m4 LICENSE.txt README.txt
+EXTRA_DIST += win-vs2003/videoHALCON.sln win-vs2003/videoHALCON.vcproj
+EXTRA_DIST += win-vs2008/videoHALCON.sln win-vs2008/videoHALCON.vcproj
 
 plugindir=$(libdir)/Gem
 

@@ -3,7 +3,8 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/src/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
 EXTRA_DIST =
-EXTRA_DIST +=pix_mano.sln pix_mano.vcproj
+EXTRA_DIST+=win-vs2003/pix_mano.sln win-vs2003/pix_mano.vcproj
+EXTRA_DIST+=win-vs2008/pix_mano.sln win-vs2008/pix_mano.vcproj
 
 extradir=$(libdir)/pix_mano
 

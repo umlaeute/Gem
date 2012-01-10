@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = imageSGI.sln imageSGI.vcproj
+EXTRA_DIST =
+EXTRA_DIST += win-vs2003/imageSGI.sln win-vs2003/imageSGI.vcproj
+EXTRA_DIST += win-vs2008/imageSGI.sln win-vs2008/imageSGI.vcproj
 
 pkglib_LTLIBRARIES= gem_imageSGI.la
 

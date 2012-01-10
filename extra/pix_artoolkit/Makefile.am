@@ -2,7 +2,8 @@ ACLOCAL_AMFLAGS = -I ../../m4
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
 EXTRA_DIST =
-EXTRA_DIST += pix_artoolkit.sln  pix_artoolkit.vcproj autogen.sh
+EXTRA_DIST+= win-vs2003/pix_artoolkit.sln  win-vs2003/pix_artoolkit.vcproj autogen.sh
+EXTRA_DIST+= win-vs2008/pix_artoolkit.sln  win-vs2008/pix_artoolkit.vcproj autogen.sh
 
 extradir=$(libdir)/pix_artoolkit
 dist_extra_DATA  = 

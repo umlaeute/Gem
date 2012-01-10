@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I ../../m4 -I .
 AM_CPPFLAGS = -I$(srcdir)/../../src
 
-EXTRA_DIST = pylon.m4 videoPYLON.sln videoPYLON.vcproj LICENSE.txt README.txt
+EXTRA_DIST = pylon.m4 LICENSE.txt README.txt
+EXTRA_DIST += win-vs2003/videoPYLON.sln win-vs2003/videoPYLON.vcproj
+EXTRA_DIST += win-vs2008/videoPYLON.sln win-vs2008/videoPYLON.vcproj
 
 plugindir=$(libdir)/Gem
 

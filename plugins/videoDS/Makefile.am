@@ -1,7 +1,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = videoDS.sln videoDS.vcproj
+EXTRA_DIST =
+EXTRA_DIST += win-vs2003/videoDS.sln win-vs2003/videoDS.vcproj
+EXTRA_DIST += win-vs2008/videoDS.sln win-vs2008/videoDS.vcproj
 
 pkglib_LTLIBRARIES=
 if WINDOWS

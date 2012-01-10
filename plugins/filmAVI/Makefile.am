@@ -2,7 +2,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = filmAVI.sln filmAVI.vcproj
+EXTRA_DIST = 
+EXTRA_DIST += win-vs2003/filmAVI.sln win-vs2003/filmAVI.vcproj
+EXTRA_DIST += win-vs2008/filmAVI.sln win-vs2008/filmAVI.vcproj
 
 pkglib_LTLIBRARIES=
 if WINDOWS
