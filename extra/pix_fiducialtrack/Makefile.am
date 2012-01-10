@@ -54,4 +54,6 @@ libfidtrack_la_SOURCES = \
 	segment.c \
 	segment.h \
 	treeidmap.cpp \
-	treeidmap.h
+	treeidmap.h \
+	floatpoint.h \
+	default_trees.h

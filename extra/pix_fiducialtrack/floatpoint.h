@@ -18,40 +18,36 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef INCLUDED_TREEIDMAP_H
-#define INCLUDED_TREEIDMAP_H
+#ifndef INCLUDED_FLOATPOINT_H
+#define INCLUDED_FLOATPOINT_H
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif /* __cplusplus */
 
-typedef struct TreeIdMap{
-    void *implementation_;
 
-    int tree_count;
-    int min_node_count, max_node_count;
-    int min_depth, max_depth;
+typedef struct FloatPoint{
+    float x, y;
 
-    int max_adjacencies;
+}FloatPoint;
 
-}TreeIdMap;
+typedef struct DoublePoint{
+    short x, y;
 
-void initialize_treeidmap_from_file( TreeIdMap* treeidmap, const char *file_name );
-void initialize_treeidmap( TreeIdMap* treeidmap );
+}DoublePoint;
 
-void terminate_treeidmap( TreeIdMap* treeidmap );
+typedef struct IntPoint{
+    short x, y;
 
-#define INVALID_TREE_ID     (-1)
-//#define FINGER_COUNT  (2)
-//#define FINGER_ID  (-10)
+}IntPoint;
 
+typedef struct ShortPoint{
+    short x, y;
 
-// returns INVALID_TREE_ID for unfound id
-int treestring_to_id( TreeIdMap* treeidmap, const char *treestring );
-
+}ShortPoint;
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* INCLUDED_TREEIDMAP_H */
+#endif /* INCLUDED_FLOATPOINT_H */

@@ -94,7 +94,7 @@ void pix_fiducialtrack :: processGrayImage(imageStruct &image)
     initialized=true;
   }
 
-  step_segmenter( &segmenter, image.data, m_width, m_height );
+  step_segmenter( &segmenter, image.data);
   int count = find_fiducialsX( fiducials, MAX_FIDUCIAL_COUNT,  
                                &fidtrackerx , 
                                &segmenter, 
