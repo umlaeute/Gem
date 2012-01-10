@@ -15,6 +15,8 @@
 /* for post(), error(),... */
 #include "m_pd.h"
 
+#include <string>
+
 #define T(x) (model->triangles[(x)])
 
 /* _GLMnode: general purpose node */
@@ -219,19 +221,16 @@ _glmFindMaterial(const GLMmodel* model, const char* name)
  *
  * NOTE: the return value should be free'd.
  */
-static char*
-_glmDirName(const char* path)
+static std::string
+_glmDirName(const std::string&path)
 {
-  char* dir;
-  char* s;
+  std::string dir;
 
-  dir = strdup(path);
+  size_t last = path.find_last_of('/');
+  if(path.npos == last)
+    return dir;
 
-  s = strrchr(dir, '/');
-  if (s)
-    s[1] = '\0';
-  else
-    dir[0] = '\0';
+  dir=std::string(path, 0, last+1);
 
   return dir;
 }
@@ -246,23 +245,17 @@ static GLint
 _glmReadMTL(GLMmodel* model, const char* name)
 {
   FILE* file;
-  char* dir;
-  char* filename;
   char    buf[128];
   GLuint nummaterials, i;
 
-  dir = _glmDirName(model->pathname);
-  filename = (char*)malloc(sizeof(char) * (strlen(dir) + strlen(name) + 1));
-  strcpy(filename, dir);
-  strcat(filename, name);
-  free(dir);
+  std::string filename = _glmDirName(model->pathname);
+  filename+=name;
 
-  file = fopen(filename, "r");
+  file = fopen(filename.c_str(), "r");
   if (!file) {
-    error("_glmReadMTL() failed: can't open material file \"%s\".",filename);
+    error("_glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
     return -1;
   }
-  free(filename);
 
   /* count the number of materials in the file */
   nummaterials = 1;
@@ -390,24 +383,18 @@ static GLboolean
 _glmWriteMTL(const GLMmodel* model, const char* modelpath, const char* mtllibname)
 {
   FILE* file;
-  char* dir;
-  char* filename;
   GLMmaterial* material;
   GLuint i;
 
-  dir = _glmDirName(modelpath);
-  filename = (char*)malloc(sizeof(char) * (strlen(dir)+strlen(mtllibname)));
-  strcpy(filename, dir);
-  strcat(filename, mtllibname);
-  free(dir);
+  std::string filename = _glmDirName(model->pathname);
+  filename+=mtllibname;
 
   /* open the file */
-  file = fopen(filename, "w");
+  file = fopen(filename.c_str(), "w");
   if (!file) {
-    error("_glmWriteMTL() failed: can't open file \"%s\".",filename);
+    error("_glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
     return GL_FALSE;
   }
-  free(filename);
 
   /* spit out a header */
   fprintf(file, "#  \n");
@@ -950,7 +937,6 @@ GLvoid
 glmReverseWinding(GLMmodel* model)
 {
   GLuint i, swap;
-
   if (!(model))return;
 
   for (i = 0; i < model->numtriangles; i++) {
