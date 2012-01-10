@@ -66,6 +66,7 @@ protected:
   int       m_group;
   float		  m_currentH, m_currentW;
   glmtexture_t m_textype;
+  bool      m_reverse;
 };
 };}; // namespace gem::plugins
 

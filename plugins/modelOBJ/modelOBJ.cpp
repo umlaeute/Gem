@@ -31,7 +31,8 @@ modelOBJ :: modelOBJ(void) :
   m_group(0),
   m_rebuild(false),
   m_currentH(1.f), m_currentW(1.f),
-  m_textype(GLM_TEX_DEFAULT)
+  m_textype(GLM_TEX_DEFAULT),
+  m_reverse(false)
 {
 }
 
@@ -54,6 +55,7 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   if (!m_model){
     return false;
   }
+  m_reverse=false;
 
   double d=1;
   requestprops.get("rescale", d);
@@ -144,9 +146,12 @@ void modelOBJ :: setProperties(gem::Properties&props) {
 
   if(props.get("reverse", d)) {
     // LATER:move this to compile()
-    if(m_model)
+    bool reverse=d;
+    if((reverse!=m_reverse) && m_model) {
       glmReverseWinding(m_model);
-    m_rebuild=true;
+      m_rebuild=true;
+    }
+    m_reverse=reverse;
   }
 }
 void modelOBJ :: getProperties(gem::Properties&props) {
