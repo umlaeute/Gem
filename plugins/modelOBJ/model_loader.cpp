@@ -193,7 +193,7 @@ _glmEqual(GLfloat* u, GLfloat* v, GLfloat epsilon)
  * epsilon     - maximum difference between vectors
  *
  */
-GLfloat*
+static GLfloat*
 _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 {
   GLfloat* copies;
@@ -229,7 +229,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 }
 
 /* glmFindGroup: Find a group in the model */
-GLMgroup*
+static GLMgroup*
 _glmFindGroup(const GLMmodel* model, const char* name)
 {
   GLMgroup* group;
@@ -247,7 +247,7 @@ _glmFindGroup(const GLMmodel* model, const char* name)
 }
 
 /* glmAddGroup: Add a group to the model */
-GLMgroup*
+static GLMgroup*
 _glmAddGroup(GLMmodel* model, const char* name)
 {
   GLMgroup* group;
@@ -268,7 +268,7 @@ _glmAddGroup(GLMmodel* model, const char* name)
 }
 
 /* glmFindGroup: Find a material in the model */
-GLuint
+static GLuint
 _glmFindMaterial(const GLMmodel* model, const char* name)
 {
   GLuint i;
