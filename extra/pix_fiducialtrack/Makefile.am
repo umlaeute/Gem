@@ -9,6 +9,7 @@ EXTRA_DIST +=pix_fiducialtrack.sln pix_fiducialtrack.vcproj
 extradir=$(libdir)/pix_fiducialtrack
 
 extra_LTLIBRARIES = pix_fiducialtrack.la
+noinst_LTLIBRARIES = libfidtrack.la
 
 dist_extra_DATA  = 
 dist_extra_DATA += pix_fiducialtrack-help.pd all.trees
@@ -31,10 +32,23 @@ pix_fiducialtrack_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 pix_fiducialtrack_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
 pix_fiducialtrack_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 
+pix_fiducialtrack_la_LIBADD   += libfidtrack.la
+
+libfidtrack_la_CXXFLAGS  =
+libfidtrack_la_LIBADD    =
+libfidtrack_la_LDFLAGS   =
+
+## libfidtrack links against RTE because it uses "error"
+libfidtrack_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
+libfidtrack_la_LIBADD   += @GEM_RTE_LIBS@
+libfidtrack_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+
 ### SOURCES
 pix_fiducialtrack_la_SOURCES = \
 	pix_fiducialtrack.cpp \
-	pix_fiducialtrack.h \
+	pix_fiducialtrack.h
+
+libfidtrack_la_SOURCES = \
 	libfidtrack_fidtrackX.cpp \
 	libfidtrack_fidtrackX.h \
 	libfidtrack_segment.cpp \
