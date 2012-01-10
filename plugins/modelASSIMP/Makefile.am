@@ -4,7 +4,11 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 EXTRA_DIST = modelASSIMP.sln modelASSIMP.vcproj
 
-pkglib_LTLIBRARIES= gem_modelASSIMP.la
+pkglib_LTLIBRARIES=
+
+if HAVE_LIB_ASSIMP
+pkglib_LTLIBRARIES += gem_modelASSIMP.la
+endif
 
 gem_modelASSIMP_la_CXXFLAGS =
 gem_modelASSIMP_la_LDFLAGS  = -module -avoid-version -shared 

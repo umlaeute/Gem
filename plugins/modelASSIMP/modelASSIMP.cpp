@@ -161,17 +161,19 @@ static void apply_material(const struct aiMaterial *mtl)
 	}
 
 	max = 1;
-	if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME, &wireframe, &max))
+	if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME, &wireframe, &max)) {
 		fill_mode = wireframe ? GL_LINE : GL_FILL;
-	else
+  }	else {
 		fill_mode = GL_FILL;
+  }
 	glPolygonMode(GL_FRONT_AND_BACK, fill_mode);
 
 	max = 1;
-	if((AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_TWOSIDED, &two_sided, &max)) && two_sided)
+	if((AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_TWOSIDED, &two_sided, &max)) && two_sided) {
 		glEnable(GL_CULL_FACE);
-	else 
+	} else {
 		glDisable(GL_CULL_FACE);
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -200,7 +202,7 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
     if(use_material)
       apply_material(sc->mMaterials[mesh->mMaterialIndex]);
 
-#if 0
+#if 0 /* handled globally */
 		if(mesh->mNormals == NULL) {
       glDisable(GL_LIGHTING);
 		} else {
@@ -245,7 +247,6 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 
 			glEnd();
 		}
-
 	}
 
 	// draw all children
@@ -383,12 +384,20 @@ bool modelASSIMP :: compile(void)  {
   m_dispList=glGenLists(1);
 
   if(m_dispList) {
+    GLboolean useColorMaterial=GL_FALSE;
+    glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
     glNewList(m_dispList, GL_COMPILE);
+
+    glDisable(GL_COLOR_MATERIAL);
+
     // now begin at the root node of the imported data and traverse
     // the scenegraph by multiplying subsequent local transforms
     // together on GL's matrix stack.
     recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial);
+    if(useColorMaterial)
+      glEnable(GL_COLOR_MATERIAL);
     glEndList();
+
   }
 
   bool res = (0 != m_dispList);
