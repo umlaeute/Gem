@@ -13,6 +13,11 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifdef __APPLE__
+# ifdef __x86_64
+#  define NO_AUTO_REGISTER_CLASS
+# endif
+#endif
 
 #include "gemwin.h"
 
