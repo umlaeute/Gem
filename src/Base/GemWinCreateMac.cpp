@@ -1620,5 +1620,24 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
     ReleaseEvent( theEvent );
   }
 }
+#else 
+/* dummy implementations for x86_64 */
+#include "GemWinCreate.h"
 
+// window/context creation&destruction
+bool initGemWin(void) { return true; }
+int createGemWindow(WindowInfo &info, WindowHints &hints) { return 0; }
+void destroyGemWindow(WindowInfo &info) {}
+void initWin_sharedContext(WindowInfo &info, WindowHints &hints) {}
+
+// rendering
+void gemWinSwapBuffers(WindowInfo&nfo) {}
+void gemWinMakeCurrent(WindowInfo&nfo) {}
+
+// mouse/keyboard/...
+void dispatchGemWindowMessages(WindowInfo &win) {}
+
+// window behaviour
+int cursorGemWindow(WindowInfo &info, int state) { return 0; }
+int topmostGemWindow(WindowInfo &info, int state){return 0;}
 #endif
