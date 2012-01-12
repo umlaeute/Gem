@@ -36,6 +36,28 @@ REGISTER_IMAGELOADERFACTORY("tiff", imageTIFF);
 REGISTER_IMAGESAVERFACTORY("tiff", imageTIFF);
 
 
+#ifdef _MSC_VER
+# define vsnprintf _vsnprintf
+#endif
+
+namespace {
+ static void imageTIFF_verbosehandler(const int verbosity, const char*module, const char*fmt, va_list ap) {
+   std::string result=module;
+   result+=": ";
+   char buf[MAXPDSTRING];
+   vsnprintf(buf, MAXPDSTRING, fmt, ap);
+   buf[MAXPDSTRING-1]=0;
+   result+=buf;
+   verbose(verbosity, "%s", result.c_str());
+ }
+ static void imageTIFF_errorhandler(const char*module, const char*fmt, va_list ap) {
+   imageTIFF_verbosehandler(2, module, fmt, ap);
+ }
+ static void imageTIFF_warnhandler(const char*module, const char*fmt, va_list ap) {
+   imageTIFF_verbosehandler(3, module, fmt, ap);
+ }
+};
+
 /////////////////////////////////////////////////////////
 //
 // imageTIFF
@@ -48,6 +70,12 @@ REGISTER_IMAGESAVERFACTORY("tiff", imageTIFF);
 imageTIFF :: imageTIFF(void)
 {
   //post("imageTIFF");
+ bool firsttime=true;
+ if(firsttime) {
+   TIFFSetErrorHandler(imageTIFF_errorhandler);
+   TIFFSetWarningHandler(imageTIFF_warnhandler);
+ }
+ firsttime=false;
 }
 imageTIFF :: ~imageTIFF(void)
 {
