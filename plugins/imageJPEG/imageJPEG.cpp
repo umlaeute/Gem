@@ -111,7 +111,7 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
   FILE * infile;
   ::verbose(2, "reading '%s' with libJPEG", filename.c_str());
   if ((infile = fopen(filename.c_str(), "rb")) == NULL) {
-    //error("GemImageLoad(JPEG): Unable to open image file: %s", filename);
+    //verbose(2, "GemImageLoad(JPEG): Unable to open image file: %s", filename.c_str());
     return(false);
   }
 
