@@ -1,0 +1,34 @@
+#!/bin/sh
+
+## this is for documentary purposes
+## how i configured Gem on mingw to build with a number of external libraries
+## TODO: QuickTime, ImageMagick, GMerlin
+## TODO: avt, halcon, pylon
+
+PROGRAMFILES=/home/zmoelnig/programfiles/i386/
+GEMLIBS=/home/zmoelnig/src/GemLibs/
+
+
+## where to find pd headers and lib
+PDPATH="${PROGRAMFILES}/pd"
+
+## image loading
+JPEG="${GEMLIBS}/libjpeg-turbo-gcc"
+TIFF="${GEMLIBS}/tiff-4.0.0/libtiff"
+
+## video capture
+VLC="${PRGORAMFILES}/VideoLAN/VLC"
+
+## model loading
+ASSIMP="/home/zmoelnig/src/assimp--2.0.863-sdk"
+
+./configure --with-pd=${PDPATH} \
+	PKG_JPEG_CFLAGS="-I${JPEG}/include " \
+	PKG_JPEG_LIBS="-L${JPEG}/lib -ljpeg " \
+	PKG_TIFF_CFLAGS="-I${TIFF} " \
+	PKG_TIFF_LIBS="-L${TIFF} -ltiff" \
+	PKG_LIBVLC_CFLAGS="-I${VLC}/sdk/include " \
+	PKG_LIBVLC_LIBS="-L${VLC} -lvlc " \
+	PKG_ASSIMP_CFLAGS="-I${ASSIMP}/include " \
+	PKG_ASSIMP_LIBS="-L${ASSIMP}/bin/assimp_release-dll_win32 -Xlinker -l:Assimp32.dll " \
+
