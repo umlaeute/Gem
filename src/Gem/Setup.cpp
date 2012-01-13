@@ -18,7 +18,6 @@
 /* -------------------------- setup function ------------------------------ */
 
 #include "Gem/Manager.h"
-#include "Gem/Settings.h"
 #include "Gem/Version.h"
 #include "Gem/Files.h"
 
@@ -172,6 +171,7 @@ namespace Gem {
   }
 }; // namespace
 
+namespace GemSettings { void init(void); };
 namespace Gem {
   void setup()
   {
