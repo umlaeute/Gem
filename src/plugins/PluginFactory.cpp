@@ -146,14 +146,33 @@ void gem::BasePluginFactory::set(std::string id, void*ptr) {
 #include "record.h"
 #include "video.h"
 
+
+namespace {
+  static bool default_true (const char*name, int global, int local) {
+    bool res = true;
+    if(local<0)
+      res=(0!=global);
+    else
+      res=(0!=local);
+    return res;
+  }
+
+}
+#define PLUGIN_INIT(x) s=-1; GemSettings::get("gem.plugins."#x".startup", s); \
+	if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
+
 namespace gem { namespace plugins {
 void init(void) {
-    delete gem::plugins::film::getInstance();
-    delete gem::plugins::imageloader::getInstance();
-    delete gem::plugins::imagesaver::getInstance();
-    delete gem::plugins::modelloader::getInstance();
-    delete gem::plugins::record::getInstance();
-    delete gem::plugins::video::getInstance();
+    int s, s0=1;
+    GemSettings::get("gem.plugins.startup", s0);
+    using namespace gem::plugins;
+
+    PLUGIN_INIT(film);
+    PLUGIN_INIT(imageloader);
+    PLUGIN_INIT(imagesaver);
+    PLUGIN_INIT(modelloader);
+    PLUGIN_INIT(record);
+    PLUGIN_INIT(video);
 }
 }; };
 
