@@ -84,10 +84,7 @@ public:
     m_handle(NULL),
     m_canThread(true)
   {
-    static bool firsttime=true;
-    if(firsttime)
-      gem::PluginFactory<gem::plugins::modelloader>::loadPlugins("model");
-    firsttime=false;
+    gem::PluginFactory<gem::plugins::modelloader>::loadPlugins("model");
     std::vector<std::string>ids=gem::PluginFactory<gem::plugins::modelloader>::getIDs();
 
     //addPlugin(ids, "MPEG1");
