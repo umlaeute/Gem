@@ -137,3 +137,23 @@ void gem::BasePluginFactory::set(std::string id, void*ptr) {
     m_pimpl->p_ctors[id]=ptr;
 }
 
+
+
+#include "film.h"
+#include "imageloader.h"
+#include "imagesaver.h"
+#include "modelloader.h"
+#include "record.h"
+#include "video.h"
+
+namespace gem { namespace plugins {
+void init(void) {
+    delete gem::plugins::film::getInstance();
+    delete gem::plugins::imageloader::getInstance();
+    delete gem::plugins::imagesaver::getInstance();
+    delete gem::plugins::modelloader::getInstance();
+    delete gem::plugins::record::getInstance();
+    delete gem::plugins::video::getInstance();
+}
+}; };
+
