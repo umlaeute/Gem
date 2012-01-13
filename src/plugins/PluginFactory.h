@@ -14,10 +14,9 @@
 namespace gem {
 
   class GEM_EXTERN BasePluginFactory {
-  public:
-    int doLoadPlugins(std::string basename, std::string path);
   protected:
-    BasePluginFactory();
+    int doLoadPlugins(std::string basename, std::string path);
+    BasePluginFactory(void);
     virtual ~BasePluginFactory(void);
 
     std::vector<std::string>get(void);
@@ -59,8 +58,10 @@ namespace gem {
 
   private:
     static PluginFactory<Class>*s_factory;
-    static PluginFactory<Class>*getPluginFactory();
+  public:
+    static PluginFactory<Class>*getPluginFactory(void);
 
+  private:
     void doRegisterClass(std::string id, ctor_t*c);
     Class*doGetInstance(std::string id);
     std::vector<std::string>doGetIDs(void);
