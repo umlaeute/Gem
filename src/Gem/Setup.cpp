@@ -172,6 +172,8 @@ namespace Gem {
 }; // namespace
 
 namespace GemSettings { void init(void); };
+namespace gem { namespace plugins { void init(void); }; };
+
 namespace Gem {
   void setup()
   {
@@ -193,6 +195,10 @@ namespace Gem {
     GemSettings::init();
     addownpath("Gem-meta.pd");
     GemMan::initGem();
+
+
+    // initialize some plugins
+    gem::plugins::init();
   }
 }; // namespace
 
