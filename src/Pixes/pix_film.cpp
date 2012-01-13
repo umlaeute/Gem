@@ -210,6 +210,11 @@ pix_film :: pix_film(t_symbol *filename) :
       verbose(1, "%s support", m_ids[i].c_str());
   }
   firsttime=false;
+
+
+  if(filename && gensym("") != filename) {
+    openMess(filename->s_name, 0, std::string());
+  }
 }
 
 /////////////////////////////////////////////////////////
