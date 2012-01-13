@@ -32,6 +32,20 @@ gem::BasePluginFactory::~BasePluginFactory(void) {
 }
 
 int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path) {
+  int already=m_pimpl->p_loaded.size();
+  if(already>0) {
+    int once=1;
+    GemSettings::get("gem.plugins.once", once);
+    std::string key="gem.plugins.";
+    key+=basename;
+    key+=".once";
+    GemSettings::get(key, once);
+
+    if(0!=once) {
+      std::cerr << "not reloading '" << basename << "' plugins (already "<<already<<" loaded)" << std::endl;
+      return 0;
+    }
+  }
   if(path.empty()){
     GemSettings::get("gem.path", path);
   }
@@ -122,3 +136,4 @@ void gem::BasePluginFactory::set(std::string id, void*ptr) {
   if(m_pimpl)
     m_pimpl->p_ctors[id]=ptr;
 }
+
