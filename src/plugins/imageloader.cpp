@@ -37,15 +37,16 @@ namespace gem { namespace plugins {
       addLoader(available_ids, "magick");
       addLoader(available_ids);
 
-      if(m_ids.size()>0) {
-        startpost("Image loading support:");
+      static bool firsttime=true;
+      if(firsttime && m_ids.size()>0) {
+        startpost("GEM: image loading support:");
         unsigned int i;
         for(i=0; i<m_ids.size(); i++) {
           startpost(" %s", m_ids[i].c_str());
         }
         endpost();
       }
-
+      firsttime=false;
 
       m_canThread=true;
       unsigned int i;
