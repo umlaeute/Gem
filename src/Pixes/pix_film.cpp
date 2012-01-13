@@ -225,6 +225,11 @@ pix_film :: pix_film(t_symbol *filename) :
     }
   }
   firsttime=false;
+
+
+  if(filename && gensym("") != filename) {
+    openMess(filename->s_name, 0, std::string());
+  }
 }
 
 /////////////////////////////////////////////////////////
