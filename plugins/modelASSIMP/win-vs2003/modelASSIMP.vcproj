@@ -25,7 +25,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\Jpeg&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\assimp--2.0.863\include&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBJPEG"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -37,10 +37,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib opengl32.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib opengl32.lib libcpmt.lib msvcrt.lib msvcprt.lib Assimp32.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\Jpeg&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\assimp--2.0.863\lib&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				ImportLibrary="$(ProjectDir)/$(TargetName).lib"/>
