@@ -17,6 +17,10 @@
 #include "Gem/State.h"
 #include <stdio.h>
 
+#ifdef _MSC_VER
+# define snprintf _snprintf
+#endif
+
 CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
