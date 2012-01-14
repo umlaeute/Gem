@@ -25,7 +25,7 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(SolutionDir)\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\FTGL\include&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\freetype2\include\&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;WIN32_LEAN_AND_MEAN;NDEBUG;_LANGUAGE_C_PLUS_PLUS;GEM_INTERNAL;GLEW_BUILD;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
