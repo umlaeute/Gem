@@ -60,6 +60,8 @@ filmDS :: filmDS(void) :
   m_reqFrame(1),
   m_frame(NULL),
   m_xsize(0), m_ysize(0), m_csize(0),
+  m_auto(0.f),
+
   VideoFilter(NULL),
   SampleFilter(NULL),
   NullFilter(NULL),
@@ -701,6 +703,18 @@ bool filmDS::enumProperties(gem::Properties&readable, gem::Properties&writeable)
 }
 
 void filmDS::setProperties(gem::Properties&props) {
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    if("auto"==key) {
+        if(props.get(key, d)) {
+          m_auto=d;
+        }
+    }
+  }
 }
 
 void filmDS::getProperties(gem::Properties&props) {

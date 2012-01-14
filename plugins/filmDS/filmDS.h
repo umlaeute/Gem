@@ -82,6 +82,8 @@ class GEM_EXPORT filmDS : public film {
      int			m_ysize;
      int			m_csize;
 
+     double         m_auto;
+
 
  private:
      IBaseFilter				*VideoFilter;		// Base Filter for video
