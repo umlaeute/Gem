@@ -35,11 +35,11 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
   int already=m_pimpl->p_loaded.size();
   if(already>0) {
     int once=1;
-    GemSettings::get("gem.plugins.once", once);
+    gem::Settings::get("gem.plugins.once", once);
     std::string key="gem.plugins.";
     key+=basename;
     key+=".once";
-    GemSettings::get(key, once);
+    gem::Settings::get(key, once);
 
     if(0!=once) {
       std::cerr << "not reloading '" << basename << "' plugins (already "<<already<<" loaded)" << std::endl;
@@ -47,7 +47,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
     }
   }
   if(path.empty()){
-    GemSettings::get("gem.path", path);
+    gem::Settings::get("gem.path", path);
   }
   if(!path.empty()){
     path=path+std::string("/");
@@ -158,13 +158,13 @@ namespace {
   }
 
 }
-#define PLUGIN_INIT(x) s=-1; GemSettings::get("gem.plugins."#x".startup", s); \
+#define PLUGIN_INIT(x) s=-1; gem::Settings::get("gem.plugins."#x".startup", s); \
 	if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
 
 namespace gem { namespace plugins {
 void init(void) {
     int s, s0=1;
-    GemSettings::get("gem.plugins.startup", s0);
+    gem::Settings::get("gem.plugins.startup", s0);
     using namespace gem::plugins;
 
     PLUGIN_INIT(film);

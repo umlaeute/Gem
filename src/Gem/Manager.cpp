@@ -171,7 +171,7 @@ void GemMan :: checkOpenGLExtensions(void)
   else if (GLEW_EXT_texture_rectangle)
     texture_rectangle_supported=1;
 
-  t_atom*a=GemSettings::get("texture.rectangle");
+  t_atom*a=gem::Settings::get("texture.rectangle");
   if(a) {
     int i=atom_getint(a);
     if(0==i)
@@ -183,7 +183,7 @@ void GemMan :: createContext(char* disp)
 {
   // can we only have one context?
 
-  t_atom*a=GemSettings::get("window.singlecontext"); // find a better name!
+  t_atom*a=gem::Settings::get("window.singlecontext"); // find a better name!
   if(a) {
     int i=atom_getint(a);
     if(1==i)
@@ -411,28 +411,28 @@ void GemMan :: resetState()
   // window hints
   m_height = 500;
   m_width = 500;
-  GemSettings::get("window.width", m_width);
-  GemSettings::get("window.height", m_height);
+  gem::Settings::get("window.width", m_width);
+  gem::Settings::get("window.height", m_height);
 
   m_w=m_width;
   m_h=m_height;
   m_xoffset = 0;
   m_yoffset = 0;
 
-  GemSettings::get("window.x", m_xoffset);
-  GemSettings::get("window.y", m_yoffset);
+  gem::Settings::get("window.x", m_xoffset);
+  gem::Settings::get("window.y", m_yoffset);
 
   m_fullscreen = 0;
-  GemSettings::get("window.fullscreen", m_fullscreen);
+  gem::Settings::get("window.fullscreen", m_fullscreen);
 
   m_border = 1;
-  GemSettings::get("window.border", m_border);
+  gem::Settings::get("window.border", m_border);
 
   m_menuBar = 1;
-  GemSettings::get("window.menubar", m_menuBar);
+  gem::Settings::get("window.menubar", m_menuBar);
 
   m_title = "GEM";
-  GemSettings::get("window.title", m_title);
+  gem::Settings::get("window.title", m_title);
 
 
   m_buffer = 2;
@@ -474,7 +474,7 @@ void GemMan :: resetState()
   m_topmost = 0;
 
   t_float rate=20.;
-  GemSettings::get("window.fps", rate);
+  gem::Settings::get("window.fps", rate);
   frameRate(rate);
 
 }
@@ -1423,9 +1423,9 @@ void GemMan :: printInfo()
 
   post("");
 
-  post("GemSettings");
+  post("gem::Settings");
   post("-----------");
-  GemSettings::print();
+  gem::Settings::print();
 }
 
 /////////////////////////////////////////////////////////

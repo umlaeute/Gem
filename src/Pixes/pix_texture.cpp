@@ -73,15 +73,15 @@ pix_texture :: pix_texture()
 #endif
 
   int ival=1;
-  GemSettings::get("texture.repeat", ival);
+  gem::Settings::get("texture.repeat", ival);
   repeatMess(ival);
 
   ival=1;
-  GemSettings::get("texture.quality", ival);
+  gem::Settings::get("texture.quality", ival);
   textureQuality(ival);
 
-  GemSettings::get("texture.rectangle", m_rectangle);
-  GemSettings::get("texture.pbo", m_numPbo);
+  gem::Settings::get("texture.rectangle", m_rectangle);
+  gem::Settings::get("texture.pbo", m_numPbo);
 
   // create an inlet to receive external texture IDs
   m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("extTexture"));
@@ -192,7 +192,7 @@ bool pix_texture :: isRunnable(void) {
     glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_numTexUnits );
 
   int wantRectangle=1;
-  GemSettings::get("texture.rectangle", wantRectangle);
+  gem::Settings::get("texture.rectangle", wantRectangle);
 
   m_canRectangle=0;
   if(wantRectangle) {
@@ -250,7 +250,7 @@ void pix_texture :: render(GemState *state) {
 
   int texType = m_textureType;
   int x_2=1, y_2=1;
-  GLboolean useExternalTexture=false;
+  bool useExternalTexture=false;
   int do_rectangle = (m_rectangle)?m_canRectangle:0;
   int newfilm = 0;
   pixBlock*img=NULL;

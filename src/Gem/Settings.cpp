@@ -247,54 +247,54 @@ static PIMPL*settings=NULL;
 
 
 
-/* GemSettings: the public API */
+/* gem::Settings: the public API */
 
 
 /* public static functions */
-void GemSettings::init() {
+void gem::Settings::init() {
   if(settings)return;
   settings=new PIMPL();
 }
-void GemSettings::print() {
+void gem::Settings::print() {
   if(!settings)return;
   settings->print();
 }
-void GemSettings::save() {
+void gem::Settings::save() {
   if(!settings)return;
-  post("GemSettings: save not yet implemented!");
+  post("gem::Settings: save not yet implemented!");
 }
 
 
 
-t_atom*GemSettings::get(const std::string s) {
+t_atom*gem::Settings::get(const std::string s) {
   if(NULL==settings) init();
   return settings->get(s.c_str());
 }
-void GemSettings::set(const std::string s, t_atom*v) {
+void gem::Settings::set(const std::string s, t_atom*v) {
   settings->set(s.c_str(), v);
 }
 
 
-void GemSettings::get(const std::string key, int&value) {
+void gem::Settings::get(const std::string key, int&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getint(a);
   }
 }
-void GemSettings::get(const std::string key, float&value) {
+void gem::Settings::get(const std::string key, float&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getfloat(a);
   }
 }
-void GemSettings::get(const std::string key, double&value) {
+void gem::Settings::get(const std::string key, double&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getfloat(a);
   }
 }
 
-void GemSettings::get(const std::string key, std::string&value) {
+void gem::Settings::get(const std::string key, std::string&value) {
   t_atom*a=get(key);
   if(a) {
     value=atom_getsymbol(a)->s_name;
@@ -302,7 +302,7 @@ void GemSettings::get(const std::string key, std::string&value) {
 }
 
 
-std::vector<std::string>GemSettings::keys(void) {
+std::vector<std::string>gem::Settings::keys(void) {
   std::vector<std::string>result;
   if(NULL==settings) init();
   if(NULL!=settings) {

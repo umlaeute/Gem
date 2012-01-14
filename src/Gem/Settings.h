@@ -17,20 +17,19 @@ LOG
 #include <vector>
 
 typedef struct _atom t_atom;
-class GemSettings {
- public:
-  static void init(void);
-  static void print(void);
-  static void save(void);
+namespace gem { namespace Settings {
+  void init(void);
+  void print(void);
+  void save(void);
 
-  static t_atom*get(const std::string key);
-  static void set(const std::string key, t_atom*value=NULL);
+  t_atom*get(const std::string key);
+  void set(const std::string key, t_atom*value=NULL);
 
-  static void get(const std::string key, int&value);
-  static void get(const std::string key, float&value);
-  static void get(const std::string key, double&value);
-  static void get(const std::string key, std::string&value);
+  void get(const std::string key, int&value);
+  void get(const std::string key, float&value);
+  void get(const std::string key, double&value);
+  void get(const std::string key, std::string&value);
 
-  static std::vector<std::string> keys();
-};
+  std::vector<std::string> keys();
+}; };
 #endif

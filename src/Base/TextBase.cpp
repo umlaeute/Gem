@@ -53,8 +53,8 @@ TextBase :: TextBase(int argc, t_atom *argv)
   m_font(NULL), m_fontname(NULL)
 {
   // initial text
-  GemSettings::get("font.face", DEFAULT_FONT);
-  GemSettings::get("font.size", m_fontSize);
+  gem::Settings::get("font.face", DEFAULT_FONT);
+  gem::Settings::get("font.size", m_fontSize);
 
 
   m_theText.push_back(L"gem");

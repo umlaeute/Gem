@@ -138,8 +138,8 @@ GemWindow :: GemWindow()
 {
   int i;
 
-  i=m_width;  GemSettings::get("window.width" , i), m_width =i;
-  i=m_height; GemSettings::get("window.height", i), m_height=i;
+  i=m_width;  gem::Settings::get("window.width" , i), m_width =i;
+  i=m_height; gem::Settings::get("window.height", i), m_height=i;
   m_pimpl->infoOut = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////

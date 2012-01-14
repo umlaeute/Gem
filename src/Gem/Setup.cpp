@@ -171,8 +171,10 @@ namespace Gem {
   }
 }; // namespace
 
-namespace GemSettings { void init(void); };
-namespace gem { namespace plugins { void init(void); }; };
+namespace gem { 
+    namespace plugins { void init(void); };
+    namespace Settings{ void init(void); };
+};
 
 namespace Gem {
   void setup()
@@ -192,7 +194,7 @@ namespace Gem {
     verbose(-1, "GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
     verbose(-1, "GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
 
-    GemSettings::init();
+    gem::Settings::init();
     addownpath("Gem-meta.pd");
     GemMan::initGem();
 
