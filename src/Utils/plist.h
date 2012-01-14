@@ -12,7 +12,7 @@
 #ifndef GEM_UTILS_PLIST_H
 #define GEM_UTILS_PLIST_H 1
 
-#include <m_pd.h>
+#include "Gem/RTE.h"
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
 extern "C" {
