@@ -16,12 +16,18 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#ifdef _MSC_VER
+# define snprintf _snprintf
+#endif
+
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
+#include "Gem/Exception.h"
 
 using namespace gem::plugins;
 
