@@ -36,7 +36,8 @@ namespace gem { namespace thread {
       virtual bool stop(bool wait=true);
 
       typedef unsigned int id_t;
-      static const id_t INVALID, IMMEDIATE;
+      static const id_t INVALID;
+      static const id_t IMMEDIATE;
 
       // queue a 'data' chunk onto the TODO queue
       // the returned 'ID' can be used to interact with the queues
