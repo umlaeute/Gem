@@ -154,22 +154,28 @@
 			Name="libfidtrack"
 			Filter="">
 			<File
-				RelativePath="..\libfidtrack_fidtrackX.cpp">
+				RelativePath="..\default_trees.h">
 			</File>
 			<File
-				RelativePath="..\libfidtrack_fidtrackX.h">
+				RelativePath="..\fidtrackX.c">
 			</File>
 			<File
-				RelativePath="..\libfidtrack_segment.cpp">
+				RelativePath="..\fidtrackX.h">
 			</File>
 			<File
-				RelativePath="..\libfidtrack_segment.h">
+				RelativePath="..\floatpoint.h">
 			</File>
 			<File
-				RelativePath="..\libfidtrack_treeidmap.cpp">
+				RelativePath="..\segment.c">
 			</File>
 			<File
-				RelativePath="..\libfidtrack_treeidmap.h">
+				RelativePath="..\segment.h">
+			</File>
+			<File
+				RelativePath="..\treeidmap.cpp">
+			</File>
+			<File
+				RelativePath="..\treeidmap.h">
 			</File>
 		</Filter>
 		<File

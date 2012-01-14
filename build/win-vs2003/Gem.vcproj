@@ -24,7 +24,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;..\..\..\GemLibs\FTGL\include;..\..\..\GemLibs\freetype2\include\"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(SolutionDir)\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\FTGL\include&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\freetype2\include\&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -40,7 +40,7 @@
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static_mt.lib freetype214mt.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;..\..\..\GemLibs\FTGL\win32_vcpp\Build;..\..\..\GemLibs\freetype2\objs"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\FTGL\win32_vcpp\Build&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\freetype2\objs&quot;"
 				IgnoreAllDefaultLibraries="TRUE"
 				SubSystem="2"/>
 			<Tool
