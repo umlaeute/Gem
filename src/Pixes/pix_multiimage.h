@@ -15,10 +15,10 @@ LOG
 #ifndef _INCLUDE__GEM_PIXES_PIX_MULTIIMAGE_H_
 #define _INCLUDE__GEM_PIXES_PIX_MULTIIMAGE_H_
 
-#include <string.h>
-
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
+
+#include <string.h>
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

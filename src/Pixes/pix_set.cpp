@@ -42,7 +42,6 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA)
 {
-  int dataSize;
   if (xsize < 1) xsize = 256;
   if (ysize < 1) ysize = 256;
 
@@ -171,7 +170,6 @@ void pix_set :: GREYMess(void)
 /////////////////////////////////////////////////////////
 void pix_set :: SETMess(int xsize, int ysize)
 {
-	int dataSize;
 	if ((xsize < 1) || (ysize < 1)) return;
 	m_pixBlock.image.clear();
 	m_pixBlock.image.xsize = (int)xsize;
