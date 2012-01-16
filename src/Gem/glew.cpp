@@ -3,9 +3,6 @@
 #endif
 #ifndef HAVE_LIBGLEW
 
-/* exporting symbols for external objects */
-#define GLEW_BUILD
-
 /*
 ** The OpenGL Extension Wrangler Library
 ** Copyright (C) 2002-2008, Milan Ikits <milan ikits[]ieee org>
