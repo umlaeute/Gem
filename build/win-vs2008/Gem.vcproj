@@ -49,7 +49,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;GEM_INTERNAL;__SSE2__;__MMX__"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;WIN32_LEAN_AND_MEAN;NDEBUG;_LANGUAGE_C_PLUS_PLUS;GEM_INTERNAL;GLEW_BUILD;__SSE2__;__MMX__"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -477,7 +477,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Gem\Version.cpp"
+				RelativePath="..\..\src\Version.cpp"
 				>
 			</File>
 			<File
@@ -574,6 +574,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\plugins\imagesaver.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\modelloader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\modelloader.h"
 				>
 			</File>
 			<File
@@ -841,14 +849,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Geos\model.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Geos\model_loader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Geos\model_loader.h"
 					>
 				</File>
 				<File
@@ -2483,15 +2483,23 @@
 					Name="partlib"
 					>
 					<File
-						RelativePath="..\..\src\Particles\papi.h"
+						RelativePath="..\..\src\Particles\papi\actionapi.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\src\Particles\partlib_actionapi.cpp"
+						RelativePath="..\..\src\Particles\papi\actions.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\src\Particles\partlib_actions.cpp"
+						RelativePath="..\..\src\Particles\papi\general.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\src\Particles\papi\opengl.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\src\Particles\papi\papi.h"
 						>
 					</File>
 					<File
@@ -2503,19 +2511,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\src\Particles\partlib_general.h"
+						RelativePath="..\..\src\Particles\papi\system.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\src\Particles\partlib_opengl.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\src\Particles\partlib_system.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\src\Particles\partlib_vector.h"
+						RelativePath="..\..\src\Particles\papi\vector.h"
 						>
 					</File>
 				</Filter>
