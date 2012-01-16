@@ -30,7 +30,6 @@
 # define GEM_MULTICONTEXT
 #endif
 
-//#define GLEW_STATIC
 #include "Gem/glew.h"
 
 #ifdef __APPLE__
