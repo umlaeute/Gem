@@ -31,6 +31,12 @@
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
+
+#if defined _MSC_VER
+/* disable deprecated warnings */
+# pragma warning( disable : 4996 )
+#endif
+
 #define CATCH_ANY(y) catch(gem::bad_any_cast&x) { ::verbose(3, "%s:%d [%s] %d:: %s", __FILE__, __LINE__, __FUNCTION__, (y), x.what().c_str()); }
 
 using namespace gem;

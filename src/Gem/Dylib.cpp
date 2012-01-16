@@ -21,6 +21,7 @@
 #endif /* _MSC_VER */
 
 #include "Dylib.h"
+#include "Files.h"
 #include "Base/CPPExtern.h"
 
 #include <string>
@@ -76,7 +77,7 @@ public:
     char*bufptr;
     int fd=0;
     if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
-      ::close(fd);
+      gem::files::close(fd);
       fullname_=buf;
       fullname_+="/";
       fullname_+=bufptr;
@@ -158,7 +159,7 @@ public:
     const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
     const char*ext=extension.c_str();
 
-    std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
+	std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
     if(fullname.empty()) {
       fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
     }
