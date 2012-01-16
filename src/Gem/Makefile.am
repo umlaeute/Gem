@@ -60,13 +60,18 @@ libGem_la_include_HEADERS += \
 	ThreadMutex.h \
 	ThreadSemaphore.h
 
-libGem_la_SOURCES=  \
+libGem_la_SOURCES =
+
+if !HAVE_LIB_GLEW
+libGem_la_SOURCES += glew.cpp
+endif !HAVE_LIB_GLEW
+
+libGem_la_SOURCES += \
 	configDarwin.h \
 	configLinux.h \
 	configNT.h \
 	GemConfig.h \
 	GemGL.h \
-	glew.cpp \
 	glew.h \
 	glxew.h \
 	wglew.h \
