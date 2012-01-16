@@ -15,7 +15,7 @@ LOG
 #ifndef _INCLUDE__GEM_GEM_LOADERS_H_
 #define _INCLUDE__GEM_GEM_LOADERS_H_
 
-#include "m_pd.h"
+#include "Gem/RTE.h"
 
 extern "C" {
   typedef int (*gem_loader_t)(t_canvas *canvas, char *classname);
