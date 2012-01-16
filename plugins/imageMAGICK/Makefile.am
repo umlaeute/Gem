@@ -7,7 +7,7 @@ EXTRA_DIST += win-vs2003/imageMAGICK.sln win-vs2003/imageMAGICK.vcproj
 EXTRA_DIST += win-vs2008/imageMAGICK.sln win-vs2008/imageMAGICK.vcproj
 
 pkglib_LTLIBRARIES=
-if HAVE_LIB_IMAGEMAGICK__
+if HAVE_LIB_IMAGEMAGICK
 pkglib_LTLIBRARIES+= gem_imageMAGICK.la
 endif
 
@@ -27,8 +27,8 @@ gem_imageMAGICK_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_imageMAGICK_la @MOREFLAGS@
 
 # Dependencies
-gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK___CFLAGS@
-gem_imageMAGICK_la_LIBADD   += @GEM_LIB_IMAGEMAGICK___LIBS@
+gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK_CFLAGS@
+gem_imageMAGICK_la_LIBADD   += @GEM_LIB_IMAGEMAGICK_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

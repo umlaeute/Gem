@@ -17,8 +17,8 @@
 # include "config.h"
 #endif
 
-#ifdef HAVE_LIBMAGICKPLUSPLUS
-# include <Magick++.h>
+#ifdef HAVE_LIBMAGICK
+# include <magick/MagickCore.h>
 
 #include <string.h>
 #include "imageMAGICK.h"
@@ -63,6 +63,36 @@ REGISTER_IMAGELOADERFACTORY("magick", imageMAGICK);
 REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 
 
+
+namespace {
+  static bool showException(ExceptionInfo*exception, const std::string&prefix=std::string()) {
+    if(!exception)return true;
+    if (exception->severity == UndefinedException) 
+      return true;
+
+    bool iswarning=exception->severity < ErrorException;
+
+    std::string message=prefix;
+    if(!prefix.empty())
+      message+=": ";
+
+    message += SetClientName(0);
+    if ( exception->reason != 0 ) {
+      message += std::string(": ");
+      message += std::string(exception->reason);
+    }
+    if ( exception->description != 0 )
+      message += " (" + std::string(exception->description) + ")";
+
+    if(iswarning) {
+      verbose(1, "%s", message.c_str());
+    } else {
+      verbose(1, "%s", message.c_str());
+    }
+    return iswarning;
+  }
+}
+
 /////////////////////////////////////////////////////////
 //
 // imageMAGICK
@@ -74,6 +104,10 @@ REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 
 imageMAGICK :: imageMAGICK(void)
 {
+  if(!IsMagickInstantiated())
+    MagickCoreGenesis(NULL,MagickTrue);
+
+
   //post("imageMAGICK");
   char**mimelist;
   char what;
@@ -98,40 +132,49 @@ imageMAGICK :: ~imageMAGICK(void)
 /////////////////////////////////////////////////////////
 bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
-  Magick::Image image;
-  try {
-    ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
-    // Read a file into image object
-    try {
-      image.read( filename );
-    } catch (Magick::Warning e) {
-      verbose(1, "magick loading problem: %s", e.what());
-    }
+  ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
+  ExceptionInfo*exception=AcquireExceptionInfo();
+  ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL); 
+  CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
-    result.xsize=static_cast<GLint>(image.columns());
-    result.ysize=static_cast<GLint>(image.rows());
-    result.setCsizeByFormat(GL_RGBA);
-    result.reallocate();
+  Image*image=ReadImage(image_info,exception);
+  if(!showException(exception, "magick reading problem"))
+    goto failed;
+  if (image == (Image *) NULL)
+    goto failed;
 
-    result.upsidedown=true;
+  result.xsize=static_cast<GLint>(image->columns);
+  result.ysize=static_cast<GLint>(image->rows);
+  result.setCsizeByFormat(GL_RGBA);
+  result.reallocate();
 
-    try {
-      image.write(0,0,result.xsize,result.ysize,
-                  "RGBA",
-                  Magick::CharPixel,
-                  reinterpret_cast<void*>(result.data));
-    } catch (Magick::Warning e) {
-      verbose(1, "magick decoding problem: %s", e.what());
-    }
-  }catch( Magick::Exception e )  {
-    verbose(1, "magick loading image failed with: %s", e.what());
-    return false;
-  }
+  result.upsidedown=true;
+
+  
+  ExportImagePixels(image, 0, 0, result.xsize, result.ysize,
+                    "RGBA",
+                    CharPixel,
+                    reinterpret_cast<void*>(result.data),
+                    exception);
+  if(!showException(exception, "magick decoding problem"))
+    goto failed;
+
+  image_info=DestroyImageInfo(image_info); 
+  exception=DestroyExceptionInfo(exception);
   return true;
+
+ failed:
+  image_info=DestroyImageInfo(image_info); 
+  exception=DestroyExceptionInfo(exception);
+  return false;
 }
 bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
+
+  ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL); 
+  Image*finalImage=NULL;
+  CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
   std::string cs;
   switch(img->format) {
@@ -151,31 +194,50 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="BGRA";
     break;
   }
-  try{
-    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel, pImage->data);
-    // since openGL is upside down
-    if(!pImage->upsidedown) {
-      mimage.flip();
-    }
-    // 8 bits per channel are enough!
-    // LATER make this dependent on the image->type
-    mimage.depth(8);
-    double quality;
-    if(props.get("quality", quality)) {
-      mimage.quality(quality);
-    }
-    // finally convert and export
-    mimage.write(filename);
-  } catch (Magick::Exception e){
-    error("%s", e.what());
-    if(pImage!=&image)delete[]pImage; pImage=NULL;
-    return false;
-  } catch (...) {
-      error("imageMAGICK:: uncaught exception!");
-      return false;
+
+  ExceptionInfo*exception=AcquireExceptionInfo();
+  Image *mimage = ConstituteImage(pImage->xsize,pImage->ysize,
+                                 cs.c_str(), CharPixel,
+                                 pImage->data,exception);
+  if(!showException(exception, "magick conversion problem"))
+    goto failed;
+
+  finalImage=(pImage->upsidedown)?mimage:FlipImage( mimage, exception );
+  if(!showException(exception, "magick flipping problem"))
+    goto failed;
+
+  finalImage->depth=8;
+  //options->depth = 8;
+
+  double quality;
+  if(props.get("quality", quality)) {
+    finalImage->quality=quality;
+    //options->quality = quality;
   }
-  if(pImage!=&image)delete[]pImage; pImage=NULL;
+
+  WriteImage(image_info,finalImage);
+  if(!showException(&finalImage->exception, "magick writing problem"))
+    goto failed;
+
+
+  if(finalImage!=mimage)
+    finalImage=DestroyImage(finalImage); 
+
+  mimage=DestroyImage(mimage); 
+  exception=DestroyExceptionInfo(exception); 
+  image_info=DestroyImageInfo(image_info);
+  
   return true;
+
+ failed:
+  if(finalImage!=mimage)
+    finalImage=DestroyImage(finalImage); 
+
+  mimage=DestroyImage(mimage); 
+  exception=DestroyExceptionInfo(exception); 
+  image_info=DestroyImageInfo(image_info);
+
+  return false;
 }
 
 float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
