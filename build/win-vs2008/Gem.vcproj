@@ -820,6 +820,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\src\Geos\gemvertexbuffer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\Geos\gemvertexbuffer.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\src\Geos\imageVert.cpp"
 					>
 				</File>
@@ -2029,6 +2037,14 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_multitexture.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_noise.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_noise.h"
 					>
 				</File>
 				<File
