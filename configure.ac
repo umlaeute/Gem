@@ -250,8 +250,8 @@ if test "x$with_ImageMagick" = "x"; then
  with_ImageMagick="$with_imagemagick"
 fi
 
-GEM_CHECK_LIB([ImageMagick++], [Magick++], [main],
-	AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
+GEM_CHECK_LIB([ImageMagick], [Magick], [main],
+	AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick]),
 	,,[image loader])
 #if test "x${have_ImageMagick}" = "xyes"
 #then
