@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="modelOBJ"
-	ProjectGUID="{4755C755-FB54-41CF-BECE-EC63B14F6151}"
+	ProjectGUID="{958A7694-C3A6-4CE8-A4EB-6AD0D55D3511}"
 	RootNamespace="gem"
 	TargetFrameworkVersion="131072"
 	>
@@ -193,19 +193,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\modelOBJ.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\modelOBJ.h"
-			>
-		</File>
-		<File
 			RelativePath="..\model_loader.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\model_loader.h"
+			>
+		</File>
+		<File
+			RelativePath="..\modelOBJ.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\modelOBJ.h"
 			>
 		</File>
 	</Files>
