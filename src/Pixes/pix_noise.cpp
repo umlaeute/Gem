@@ -44,7 +44,6 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA_GEM),
   m_rand_p(0), m_rand_k(24)
 {
-	int dataSize;
 	if (xsize < 1) xsize = 256;
 	if (ysize < 1) ysize = 256;
 	int randInit = 307*1319;
@@ -228,7 +227,6 @@ void pix_noise :: GREYMess(void)
 /////////////////////////////////////////////////////////
 void pix_noise :: SETMess(int xsize, int ysize)
 {
-	int dataSize;
 	if ((xsize < 1) || (ysize < 1)) return;
 	m_pixBlock.image.clear();
 	m_pixBlock.image.xsize = (int)xsize;

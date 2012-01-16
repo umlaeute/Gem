@@ -370,7 +370,6 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
 	t_garray *a;
 	int npoints, i;
 	t_word *vec;
-	t_float posx;
 
   t_float*array=vb.array;
   t_symbol*s=gensym(tab_name.c_str());
