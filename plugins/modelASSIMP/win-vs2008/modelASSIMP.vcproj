@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib libcpmt.lib msvcrt.lib msvcprt.lib opengl32.lib Assimp.lib"
+				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib libcpmt.lib msvcrt.lib msvcprt.lib opengl32.lib assimp.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)\..\..\..\..\assimp--2.0.863-sdk\lib\assimp_release-dll_win32&quot;"
