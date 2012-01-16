@@ -143,7 +143,7 @@ AC_SUBST(GEM_EXTERNAL_CFLAGS)
 AC_SUBST(GEM_EXTERNAL_LIBS)
 
 
-GEM_CPPFLAGS="-DGEM_INTERNAL -DGLEW_BUILD"
+GEM_CPPFLAGS="-DGEM_INTERNAL"
 
 if test "x$have_pddll" = "xyes"; then
  GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll"
@@ -218,6 +218,9 @@ IEM_CHECK_AGL
 
 ## use system's libGLEW
 GEM_CHECK_LIB([glew], [GLEW], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+if test "x${have_glew}" != "xyes"; then
+  GEM_CPPFLAGS+=" -DGLEW_BUILD"
+fi
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
 ### "-lstdc++" really has to be added before e.g. "-lGL" in order to avoid
