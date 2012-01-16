@@ -143,7 +143,7 @@ public:
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (LPTSTR) &lpErrorMessage,
                   0, NULL );
-    std::cerr << "GemDylib: "<<errorNumber<<std::endl;
+    std::cerr << "GemDylib failed: "<<errorNumber<<std::endl;
     std::string error = "DLLerror: ";
     char errbuf[10];
     snprintf(errbuf, 10, "%d", errorNumber);
@@ -159,9 +159,11 @@ public:
     const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
     const char*ext=extension.c_str();
 
-	std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
+	//std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
+	std::string fullname=gem::files::getFullpath(filename+ext, obj);
     if(fullname.empty()) {
-      fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
+      //fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
+      fullname=gem::files::getFullpath(filename+GemDylibHandle::defaultExtension, obj);
     }
 
     if(fullname.empty()) {
