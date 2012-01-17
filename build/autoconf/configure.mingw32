@@ -18,7 +18,7 @@ TIFF="${GEMLIBS}/tiff-4.0.0/libtiff"
 IMAGEMAGICK="${GEMLIBS}/ImageMagick-6.7.2-gcc"
 
 ## video capture
-VLC="${PRGORAMFILES}/VideoLAN/VLC"
+VLC="${PROGRAMFILES}/VideoLAN/VLC"
 
 ## model loading
 ASSIMP="/home/zmoelnig/src/assimp--2.0.863-sdk"
@@ -29,7 +29,7 @@ ASSIMP="/home/zmoelnig/src/assimp--2.0.863-sdk"
 	PKG_TIFF_CFLAGS="-I${TIFF} " \
 	PKG_TIFF_LIBS="-L${TIFF} -ltiff" \
 	PKG_IMAGEMAGICK_CFLAGS="-I${IMAGEMAGICK} " \
-	PKG_IMAGEMAGICK_LIBS="-L${IMAGEMAGICK}\magick -lMagickCore" \
+	PKG_IMAGEMAGICK_LIBS="-L${IMAGEMAGICK}/magick -lMagickCore" \
 	PKG_LIBVLC_CFLAGS="-I${VLC}/sdk/include " \
 	PKG_LIBVLC_LIBS="-L${VLC} -lvlc " \
 	PKG_ASSIMP_CFLAGS="-I${ASSIMP}/include " \
