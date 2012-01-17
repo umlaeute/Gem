@@ -68,8 +68,8 @@ REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 namespace {
   static bool showException(ExceptionInfo*exception, const std::string&prefix=std::string()) {
     if(!exception)return true;
-    if (exception->severity == UndefinedException) 
-      return true;
+    if (exception->severity == UndefinedException)
+      return false;
 
     bool iswarning=exception->severity < ErrorException;
 
@@ -90,7 +90,7 @@ namespace {
     } else {
       verbose(1, "%s", message.c_str());
     }
-    return iswarning;
+    return (!iswarning);
   }
 }
 
@@ -133,16 +133,17 @@ imageMAGICK :: ~imageMAGICK(void)
 /////////////////////////////////////////////////////////
 bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
+  bool success=false;
   ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
   ExceptionInfo*exception=AcquireExceptionInfo();
-  ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL); 
+  ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
   Image*image=ReadImage(image_info,exception);
-  if(!showException(exception, "magick reading problem"))
-    goto failed;
+  if(showException(exception, "magick reading problem"))
+    goto cleanup;
   if (image == (Image *) NULL)
-    goto failed;
+    goto cleanup;
 
   result.xsize=static_cast<GLint>(image->columns);
   result.ysize=static_cast<GLint>(image->rows);
@@ -151,29 +152,32 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 
   result.upsidedown=true;
 
-  
+
   ExportImagePixels(image, 0, 0, result.xsize, result.ysize,
                     "RGBA",
                     CharPixel,
                     reinterpret_cast<void*>(result.data),
                     exception);
-  if(!showException(exception, "magick decoding problem"))
-    goto failed;
+  if(showException(exception, "magick decoding problem"))
+    goto cleanup;
 
-  image_info=DestroyImageInfo(image_info); 
-  exception=DestroyExceptionInfo(exception);
-  return true;
+  success=true;
 
- failed:
-  image_info=DestroyImageInfo(image_info); 
-  exception=DestroyExceptionInfo(exception);
-  return false;
+ cleanup:
+  post("magick: cleanup: %d %p", __LINE__, image_info);
+  if(image_info)
+    image_info=DestroyImageInfo(image_info);
+  post("magick: cleanup: %d %p", __LINE__, exception);
+  if(exception)
+    exception=DestroyExceptionInfo(exception);
+  post("magick: cleanup: %d %d", __LINE__, success);
+  return success;
 }
 bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
 
-  ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL); 
+  ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   Image*finalImage=NULL;
   CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
@@ -200,11 +204,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
   Image *mimage = ConstituteImage(pImage->xsize,pImage->ysize,
                                  cs.c_str(), CharPixel,
                                  pImage->data,exception);
-  if(!showException(exception, "magick conversion problem"))
+  if(showException(exception, "magick conversion problem"))
     goto failed;
 
   finalImage=(pImage->upsidedown)?mimage:FlipImage( mimage, exception );
-  if(!showException(exception, "magick flipping problem"))
+  if(showException(exception, "magick flipping problem"))
     goto failed;
 
   finalImage->depth=8;
@@ -217,25 +221,25 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
   }
 
   WriteImage(image_info,finalImage);
-  if(!showException(&finalImage->exception, "magick writing problem"))
+  if(showException(&finalImage->exception, "magick writing problem"))
     goto failed;
 
 
   if(finalImage!=mimage)
-    finalImage=DestroyImage(finalImage); 
+    finalImage=DestroyImage(finalImage);
 
-  mimage=DestroyImage(mimage); 
-  exception=DestroyExceptionInfo(exception); 
+  mimage=DestroyImage(mimage);
+  exception=DestroyExceptionInfo(exception);
   image_info=DestroyImageInfo(image_info);
-  
+
   return true;
 
  failed:
   if(finalImage!=mimage)
-    finalImage=DestroyImage(finalImage); 
+    finalImage=DestroyImage(finalImage);
 
-  mimage=DestroyImage(mimage); 
-  exception=DestroyExceptionInfo(exception); 
+  mimage=DestroyImage(mimage);
+  exception=DestroyExceptionInfo(exception);
   image_info=DestroyImageInfo(image_info);
 
   return false;
