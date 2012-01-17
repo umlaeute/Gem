@@ -77,7 +77,7 @@ pix_rtx :: ~pix_rtx()
 // CreateBuffer
 //
 /////////////////////////////////////////////////////////
-void pix_rtx :: create_buffer(imageStruct image)
+void pix_rtx :: create_buffer(const imageStruct&image)
 {
    size_t dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char); // only 1 channel !!, to keep data-size handy
 
