@@ -15,7 +15,7 @@ PDPATH="${PROGRAMFILES}/pd"
 ## image loading
 JPEG="${GEMLIBS}/libjpeg-turbo-gcc"
 TIFF="${GEMLIBS}/tiff-4.0.0/libtiff"
-IMAGEMAGICK="${GEMLIBS}/../ImageMagick-6.7.2"
+IMAGEMAGICK="${GEMLIBS}/ImageMagick-6.7.2-gcc"
 
 ## video capture
 VLC="${PRGORAMFILES}/VideoLAN/VLC"
