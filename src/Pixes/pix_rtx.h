@@ -59,8 +59,8 @@ protected:
 	
 	//////////
 	// create a buffer that fits to the current imageSize
-	virtual void   create_buffer(imageStruct image);
-	
+	virtual void   create_buffer(const imageStruct&image);
+
 	//////////
 	// delete the buffer
 	virtual void   delete_buffer();
