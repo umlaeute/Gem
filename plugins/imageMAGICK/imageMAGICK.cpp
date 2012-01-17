@@ -18,13 +18,14 @@
 #endif
 
 #ifdef HAVE_LIBMAGICK
-# include <magick/MagickCore.h>
 
 #include <string.h>
 #include "imageMAGICK.h"
 #include "plugins/PluginFactory.h"
 
 #include "Gem/RTE.h"
+
+#include <magick/MagickCore.h>
 
 // hmm, the GetMimeList() function has changed!
 //  ImageMagick-6.6.2-0: **GetMimeList(const char *,unsigned long *,ExceptionInfo *),
