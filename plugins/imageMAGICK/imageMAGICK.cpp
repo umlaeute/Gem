@@ -22,7 +22,6 @@
 #include <string.h>
 #include "imageMAGICK.h"
 #include "plugins/PluginFactory.h"
-
 #include "Gem/RTE.h"
 
 #include <magick/MagickCore.h>
@@ -152,7 +151,6 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 
   result.upsidedown=true;
 
-
   ExportImagePixels(image, 0, 0, result.xsize, result.ysize,
                     "RGBA",
                     CharPixel,
@@ -164,13 +162,10 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
   success=true;
 
  cleanup:
-  post("magick: cleanup: %d %p", __LINE__, image_info);
   if(image_info)
     image_info=DestroyImageInfo(image_info);
-  post("magick: cleanup: %d %p", __LINE__, exception);
   if(exception)
     exception=DestroyExceptionInfo(exception);
-  post("magick: cleanup: %d %d", __LINE__, success);
   return success;
 }
 bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
