@@ -2,9 +2,11 @@
 ## this is shamelessly taken from Pd-extended...
 
 SRCDIR=$1
-VOLUME_NAME=Gem
+VOLUME_NAME=Gem-0.93.3
 PACKAGE_NAME="${VOLUME_NAME}"
 DESTDIR="/Volumes/${VOLUME_NAME}"
+
+VOLUME_NAME=${SRCDIR%/}
 
 if [ -d "${SRCDIR}" ]; then
  echo "creating Gem installer from ${SRCDIR}"
@@ -21,31 +23,30 @@ hdiutil attach build.dmg
 #install -p ${SRCDIR}${manualsdir}/Pd/ReadMe.html "${DESTDIR}"
 
 # add link to /Library/Pd for easy install
-/usr/bin/osacompile -o "${DESTDIR}/System-wide Installation.app" droplet_system.as
-./icon2app "${DESTDIR}/System-wide Installation.app" /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/LibraryFolderIcon.icns
+SYSTEMINSTALLER="${DESTDIR}/Gem System-wide Installer.app"
+/usr/bin/osacompile -o "${SYSTEMINSTALLER}" installer_system.applescript
+./icon2app "${SYSTEMINSTALLER}" /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/GroupFolder.icns
 
-# add link to ~/Library/Pd for easy install
-/usr/bin/osacompile -o "${DESTDIR}/User-specific Installation.app" droplet_user.as
-./icon2app "${DESTDIR}/User-specific Installation.app" /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/HomeFolderIcon.icns
+## add link to ~/Library/Pd for easy install
+USERINSTALLER="${DESTDIR}/Gem User-specific Installer.app"
+/usr/bin/osacompile -o "${USERINSTALLER}" installer_user.applescript
+./icon2app "${USERINSTALLER}" /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/UsersFolderIcon.icns
 
-# Install to .background for easier manual DS_Store makeing 
-install -d "${DESTDIR}/.background"
-# The full path to the background image needs to be added to .DS_Store to work
-# Hence the background image will only show when the disk image is called 
-# VOLUME_NAME=Pd-extended - that is what the current DS_Store uses.
-# To create the DS_Store file one must... search the net.
-install -p background.png "${DESTDIR}/.background/"
+# a manually crafted .DS_Store file
 install -p DS_Store "${DESTDIR}/.DS_Store"
 
 # To enable the local image icon
-install -p VolumeIcon.icns "${DESTDIR}/.VolumeIcon.icns"
-/Developer/Tools/SetFile -a C "${DESTDIR}/.VolumeIcon.icns" "${DESTDIR}"
+#install -p VolumeIcon.icns "${DESTDIR}/.VolumeIcon.icns"
+#/Developer/Tools/SetFile -a C "${DESTDIR}/.VolumeIcon.icns" "${DESTDIR}"
 
 #chmod -R a-w "${DESTDIR}/${PD_APP_NAME}.app/Contents/Resources"
 
 
 hdiutil detach $(mount | grep "${VOLUME_NAME}" | cut -d ' ' -f 1)
 hdiutil convert -format UDZO -o "${PACKAGE_NAME}.dmg" build.dmg
+
+exit 0
+
 rm -f build.dmg
 
 
