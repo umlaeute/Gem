@@ -2,7 +2,7 @@
 # > /usr/bin/osacompile -o droplet.app droplet.as
 
 on open thefiles    
-    set outputFolder to (path to library folder from system domain as text) & "Pd:"
+    set outputFolder to (path to library folder as text) & "Pd:"
     do shell script "/bin/mkdir -p " & quoted form of POSIX path of outputFolder
     tell application "Finder"
         duplicate thefiles to outputFolder replacing true
