@@ -1,0 +1,68 @@
+#!/bin/sh
+
+## OSX cmdline utility
+## changes the icon of an app (or any other folder)
+
+# example iconfile: /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/HomeFolderIcon.icns
+
+OLDDIR=$(pwd)
+
+usage () {
+  echo "$0 <app or directory(writeable)> <iconfile.icns>" 1>&2
+  exit 1
+}
+
+mywhich() {
+ for i in $@
+ do
+   if [ -x "$(which $i)" ]; then
+     echo "$(which $i)"
+     return
+   fi
+ done
+ echo "unable to find executable: $@" 1>&2
+ exit 1
+}
+
+APP=$1
+ICON=$2
+
+DEVTOOLS=/Developer/Tools
+REZ=$(mywhich Rez ${DEVTOOLS}/Rez)
+SETFILE=$(mywhich SetFile ${DEVTOOLS}/SetFile)
+
+if [ "x${REZ}" = "x" ]; then exit 1; fi
+if [ "x${SETFILE}" = "x" ]; then exit 1; fi
+
+# this is the output file
+ICONFILE=$'Icon\r'
+
+if [ -d "${APP}" ]; then
+ cd "${APP}"
+else
+ usage
+fi
+
+if [ -f "${ICON}" ]; then
+ :
+else
+ if [ -f "${OLDDIR}/${ICON}" ]; then
+   ICON="${OLDDIR}/${ICON}"
+ else
+   usage
+ fi
+fi
+
+
+touch "${ICONFILE}" || usage
+cat << EOF > "${ICONFILE}"
+/*
+ * process this file with: 
+ *     ${REZ} <thisfile> -o <file-to-add-icon-to>
+ * after that, enable the icon with
+ *     ${SETFILE} -a V <file-to-add-icon-to>
+ */
+read 'icns' (-16455) "${ICON}";
+EOF
+
+Rez "${ICONFILE}" -o "${ICONFILE}" && SetFile -a V "${ICONFILE}"
