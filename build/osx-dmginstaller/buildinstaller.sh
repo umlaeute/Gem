@@ -2,9 +2,9 @@
 ## this is shamelessly taken from Pd-extended...
 
 SRCDIR=$1
-VOLUME_NAME = Gem
-PACKAGE_NAME = ${VOLUME_NAME}
-DESTDIR=/Volumes/${VOLUME_NAME}
+VOLUME_NAME=Gem
+PACKAGE_NAME="${VOLUME_NAME}"
+DESTDIR="/Volumes/${VOLUME_NAME}"
 
 if [ -d "${SRCDIR}" ]; then
  echo "creating Gem installer from ${SRCDIR}"
