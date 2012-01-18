@@ -65,4 +65,4 @@ cat << EOF > "${ICONFILE}"
 read 'icns' (-16455) "${ICON}";
 EOF
 
-Rez "${ICONFILE}" -o "${ICONFILE}" && SetFile -a V "${ICONFILE}"
+Rez "${ICONFILE}" -o "${ICONFILE}" && SetFile -a C .
