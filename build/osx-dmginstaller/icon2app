@@ -34,15 +34,6 @@ SETFILE=$(mywhich SetFile ${DEVTOOLS}/SetFile)
 if [ "x${REZ}" = "x" ]; then exit 1; fi
 if [ "x${SETFILE}" = "x" ]; then exit 1; fi
 
-# this is the output file
-ICONFILE=$'Icon\r'
-
-if [ -d "${APP}" ]; then
- cd "${APP}"
-else
- usage
-fi
-
 if [ -f "${ICON}" ]; then
  :
 else
@@ -53,16 +44,54 @@ else
  fi
 fi
 
+if [ -d "${APP}" ]; then
+ # this is the output file
+ ICONFILE=$'Icon\r'
+ RSRCFILE="${ICONFILE}"
+ DIR=${APP}
+else
+ if [ -f "${APP}" ]; then
+  :
+ else
+  usage
+ fi
+ DIR=${APP%/*}
+ if [ "x${DIR}" = "x" ]; then
+   DIR=.
+ fi
+ if [ "x${DIR}" = "x${APP}" ]; then
+   DIR=.
+ fi
 
-touch "${ICONFILE}" || usage
-cat << EOF > "${ICONFILE}"
+ # this is the output file
+ ICONFILE=${APP##*/}
+ RSRCFILE="${ICONFILE}.r"
+fi
+
+echo DIR $DIR
+echo ICO $ICONFILE
+echo RSR $RSRCFILE
+
+cd "${DIR}"
+
+touch "${RSRCFILE}" || usage
+cat << EOF > "${RSRCFILE}"
 /*
  * process this file with: 
  *     ${REZ} <thisfile> -o <file-to-add-icon-to>
  * after that, enable the icon with
- *     ${SETFILE} -a V <file-to-add-icon-to>
+ *     ${SETFILE} -a C <file-to-add-icon-to>
  */
 read 'icns' (-16455) "${ICON}";
 EOF
 
-Rez "${ICONFILE}" -o "${ICONFILE}" && SetFile -a C .
+Rez "${RSRCFILE}" -o "${ICONFILE}" 
+if [ "x${RSRCFILE}" = "x${ICONFILE}" ]; then
+ # we are woriking on a directory
+ SetFile -a C .
+else
+ # we are woriking on a file
+ SetFile -a C "${ICONFILE}"
+ rm "${RSRCFILE}"
+fi
+
