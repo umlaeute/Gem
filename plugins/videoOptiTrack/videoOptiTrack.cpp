@@ -25,8 +25,29 @@ using namespace gem::plugins;
 
 #include "plugins/PluginFactory.h"
 
-REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
+namespace {
+	struct OptiTrackInit {
+		OptiTrackInit(void) {
+			std::cerr << "initializing Natural Point's CameraSDK...";
+			CameraLibrary::CameraManager::X().WaitForInitialization();
+			std::cerr << " done" << std::endl;
+		}
+		~OptiTrackInit(void) {
+			std::cerr << "shutting down Natural Point's CameraSDK...";
+#if 0
+			CameraLibrary::CameraManager::X().Shutdown();
+#else
+			std::cerr << " (skipped)";
+#endif
+			std::cerr << " done" << std::endl;
+		}
+	};
+	static OptiTrackInit oti;
+}
 
+
+
+REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
 
 using namespace CameraLibrary;
 
@@ -40,24 +61,28 @@ videoOptiTrack::videoOptiTrack(void) :
 	m_camera(NULL),
 	m_frame(NULL)
 {
-	CameraManager::X();
+	std::cerr << "Natural Point's OptiTrack Camera SDK support for Gem" << std::endl;
+
 	if(s_refCount==0) {
-		if(!CameraManager::X().WaitForInitialization()) {
-			throw(GemException("couldn't initialize OptiTrack"));
+		if(!CameraManager::X().AreCamerasInitialized()) {
+			std::cerr << "re-initializing Natural Point's CameraSDK...";
+			if(!CameraManager::X().WaitForInitialization()) {
+				std::cerr << " failed" << std::endl;
+				throw(GemException("couldn't initialize OptiTrack"));
+			}
+			std::cerr << " done" << std::endl;
 		}
 	}
 	s_refCount++;
 
+#if 0
 	if(!CameraManager::X().AreCamerasInitialized()) {
 	  post("deferring camera init!");
 	} else {
 	  post("cameras initialized");
 	}
+#endif
 
-	post("m_pixBlock@%p", &m_pixBlock);
-	post("image@%p", &m_pixBlock.image);
-	post("width@%p", &m_pixBlock.image.xsize);
-return;
 	m_pixBlock.image.xsize = 320;
 	m_pixBlock.image.ysize = 240;
 	m_pixBlock.image.setCsizeByFormat(GL_RGBA);
@@ -65,17 +90,19 @@ return;
 }
 
 videoOptiTrack::~videoOptiTrack(void) {
+	close();
+
+	s_refCount--;
+	post("~videoOT: %d", s_refCount);
+	if(s_refCount==0) {
+      CameraManager::X().Shutdown();
+	}
 }
 void videoOptiTrack::close(void) {
 	stop();
 	if(m_camera)
 		m_camera->Release();
 	m_camera=NULL;
-
-	s_refCount--;
-	if(s_refCount==0) {
-      CameraManager::X().Shutdown();
-	}
 }
 
 bool videoOptiTrack::open(gem::Properties&props) {
