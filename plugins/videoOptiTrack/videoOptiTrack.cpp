@@ -5,7 +5,7 @@
 // daniel@bogusfront.org
 // zmoelnig@iem.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 2003 Daniel Heckenberg.
 //    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -30,38 +30,93 @@ REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
 
 using namespace CameraLibrary;
 
-const std::string videoOptiTrack::s_name = std::string("OptiTrack");
+namespace {
+ static const std::string s_name = std::string("OptiTrack");
+ static unsigned int s_refCount=0;
+}
 
-videoOptiTrack::videoOptiTrack(void)
+
+videoOptiTrack::videoOptiTrack(void) :
+	m_camera(NULL),
+	m_frame(NULL)
 {
+	CameraManager::X();
+	if(s_refCount==0) {
+		if(!CameraManager::X().WaitForInitialization()) {
+			throw(GemException("couldn't initialize OptiTrack"));
+		}
+	}
+	s_refCount++;
 
-  //  CameraManager::X().WaitForInitialization();
-  throw(GemException("couldn't initialize OptiTrack"));
+	if(!CameraManager::X().AreCamerasInitialized()) {
+	  post("deferring camera init!");
+	} else {
+	  post("cameras initialized");
+	}
 
-  m_pixBlock.image.xsize = 64;
-  m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
+	post("m_pixBlock@%p", &m_pixBlock);
+	post("image@%p", &m_pixBlock.image);
+	post("width@%p", &m_pixBlock.image.xsize);
+return;
+	m_pixBlock.image.xsize = 320;
+	m_pixBlock.image.ysize = 240;
+	m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+	m_pixBlock.image.reallocate();
 }
 
 videoOptiTrack::~videoOptiTrack(void) {
 }
 void videoOptiTrack::close(void) {
+	stop();
+	if(m_camera)
+		m_camera->Release();
+	m_camera=NULL;
+
+	s_refCount--;
+	if(s_refCount==0) {
+      CameraManager::X().Shutdown();
+	}
 }
 
 bool videoOptiTrack::open(gem::Properties&props) {
-  return false;
+	m_camera = CameraManager::X().GetCamera();
+	if(!m_camera) {
+      return false;
+	}	
+	m_pixBlock.image.xsize = m_camera->Width();	
+	m_pixBlock.image.ysize = m_camera->Height();	
+	setProperties(props);
+	return true;
 }
 
 pixBlock*videoOptiTrack::getFrame(void) {
+  m_frame = m_camera->GetFrame();
+  if(!m_frame)return NULL;
+
+  m_pixBlock.image.reallocate();
+  m_frame->Rasterize(m_pixBlock.image.xsize, m_pixBlock.image.ysize,
+	                 m_pixBlock.image.xsize, m_pixBlock.image.csize*8,
+					 m_pixBlock.image.data);
+
   return &m_pixBlock;
 }
 
 void videoOptiTrack::releaseFrame(void) {
+	if(m_frame)
+		m_frame->Release();
+	m_frame=NULL;
 }
 
 std::vector<std::string>videoOptiTrack::enumerate(void) {
   std::vector<std::string>result;
+  if(CameraManager::X().AreCamerasInitialized()) {
+	  post("got cameras!");
+
+  } else {
+	  post("re-trying initialization....");
+	  CameraManager::X().WaitForInitialization();
+  }
+
   //  result.push_back("vlc");
   return result;
 }
@@ -91,24 +146,17 @@ void videoOptiTrack::setProperties(gem::Properties&props) {
 
   double d;
   if(props.get("width", d)) {
-    if(d>0)
-      width = d;
+	  if(d>0) {
+		  width = d;
+		  m_pixBlock.image.xsize=width;
+	  }
   }
   if(props.get("height", d)) {
-    if(d>0)
-      height=d;
+	  if(d>0) {
+		  height=d;
+		  m_pixBlock.image.ysize=height;
+	  }
   }
-
-#if 0
-  if(!m_mediaplayer) {
-    if(width>0)
-      m_pixBlock.image.xsize=width;
-    if(height>0)
-      m_pixBlock.image.ysize=height;
-  } else {
-    // changes will take effect with next restart
-  }
-#endif
 }
 
 
@@ -145,9 +193,17 @@ const std::string videoOptiTrack::getName(void) {
 
 
 bool videoOptiTrack::start(void) {
-  return false;
+	if(m_camera)
+		m_camera->Start();
+
+  return (NULL!=m_camera);
 }
 bool videoOptiTrack::stop (void) {
-  return false;
+	bool status=false;
+	if(m_camera) {
+		status=m_camera->IsCameraRunning();
+		m_camera->Stop();
+	}
+  return status;
 }
 #endif /* HAVE_LIBOPTITRACK */
