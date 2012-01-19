@@ -12,6 +12,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE_GEMPLUGIN__VIDEOOPTITRACK_VIDEOOPTITRACK_H_
 
 #include "plugins/video.h"
+#include "Gem/Image.h"
+#include "Gem/Properties.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -69,6 +71,10 @@ namespace gem { namespace plugins {
    virtual bool stop(void);
    
   protected:
+	  static const std::string s_name;
+	  gem::Properties m_props;
+	  std::string m_devname;
+	  pixBlock m_pixBlock;
   }; 
 };};
 

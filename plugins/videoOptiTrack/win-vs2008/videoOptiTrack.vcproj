@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="videoOptiTrack"
-	ProjectGUID="{3B5EC55E-FC95-45EB-B9C1-ACDA01D49061}"
+	ProjectGUID="{9DC8B017-773B-426C-83D2-467723E09CBD}"
 	RootNamespace="gem"
 	TargetFrameworkVersion="131072"
 	>
@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib ddraw.lib atls.lib strmiids.lib strmbase.lib libcpmt.lib msvcrt.lib msvcprt.lib winmm.lib"
+				AdditionalDependencies="Gem.lib pd.lib OLDNAMES.lib libcpmt.lib msvcrt.lib msvcprt.lib winmm.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
@@ -191,14 +191,6 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\DSgrabber.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\DSgrabber.h"
-			>
-		</File>
 		<File
 			RelativePath="..\videoOptiTrack.cpp"
 			>

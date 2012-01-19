@@ -21,6 +21,8 @@
 #include "videoOptiTrack.h"
 using namespace gem::plugins;
 #include "Gem/RTE.h"
+#include "Gem/Exception.h"
+
 #include "plugins/PluginFactory.h"
 
 REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
@@ -28,9 +30,9 @@ REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
 
 using namespace CameraLibrary;
 
+const std::string videoOptiTrack::s_name = std::string("OptiTrack");
 
-videoOptiTrack::videoOptiTrack(void) :
-  m_name(std::string("OptiTrack")),
+videoOptiTrack::videoOptiTrack(void)
 {
 
   //  CameraManager::X().WaitForInitialization();
@@ -130,15 +132,15 @@ std::vector<std::string>videoOptiTrack::dialogs(void) {
   return result;
 }
 bool videoOptiTrack::provides(const std::string name) {
-  return (name==m_name);
+  return (name==s_name);
 }
 std::vector<std::string>videoOptiTrack::provides(void) {
   std::vector<std::string>result;
-  result.push_back(m_name);
+  result.push_back(s_name);
   return result;
 }
 const std::string videoOptiTrack::getName(void) {
-  return m_name;
+  return s_name;
 }
 
 
