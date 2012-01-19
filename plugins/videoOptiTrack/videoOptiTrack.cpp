@@ -28,6 +28,7 @@ using namespace gem::plugins;
 namespace {
 	struct OptiTrackInit {
 		OptiTrackInit(void) {
+			CameraLibrary::CameraManager::X();
 			std::cerr << "initializing Natural Point's CameraSDK...";
 			CameraLibrary::CameraManager::X().WaitForInitialization();
 			std::cerr << " done" << std::endl;
@@ -56,7 +57,6 @@ namespace {
  static unsigned int s_refCount=0;
 }
 
-
 videoOptiTrack::videoOptiTrack(void) :
 	m_camera(NULL),
 	m_frame(NULL)
@@ -75,13 +75,11 @@ videoOptiTrack::videoOptiTrack(void) :
 	}
 	s_refCount++;
 
-#if 0
-	if(!CameraManager::X().AreCamerasInitialized()) {
-	  post("deferring camera init!");
+	if(CameraManager::X().AreCamerasInitialized()) {
+		std::cerr << "cameras initialized!" << std::endl;
 	} else {
-	  post("cameras initialized");
+		std::cerr << "cameras not yet initialized" << std::endl;
 	}
-#endif
 
 	m_pixBlock.image.xsize = 320;
 	m_pixBlock.image.ysize = 240;
