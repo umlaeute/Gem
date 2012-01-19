@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib cameralibrary.lib"
+				AdditionalDependencies="Gem.lib pd.lib cameralibrary.lib OLDNAMES.lib libcpmt.lib msvcrt.lib msvcprt.lib winmm.lib "
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2008&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(NP_CAMERASDK)\lib&quot;"
