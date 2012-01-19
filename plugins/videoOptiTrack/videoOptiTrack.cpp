@@ -25,29 +25,6 @@ using namespace gem::plugins;
 
 #include "plugins/PluginFactory.h"
 
-namespace {
-	struct OptiTrackInit {
-		OptiTrackInit(void) {
-			CameraLibrary::CameraManager::X();
-			std::cerr << "initializing Natural Point's CameraSDK...";
-			CameraLibrary::CameraManager::X().WaitForInitialization();
-			std::cerr << " done" << std::endl;
-		}
-		~OptiTrackInit(void) {
-			std::cerr << "shutting down Natural Point's CameraSDK...";
-#if 0
-			CameraLibrary::CameraManager::X().Shutdown();
-#else
-			std::cerr << " (skipped)";
-#endif
-			std::cerr << " done" << std::endl;
-		}
-	};
-	static OptiTrackInit oti;
-}
-
-
-
 REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
 
 using namespace CameraLibrary;
@@ -63,23 +40,14 @@ videoOptiTrack::videoOptiTrack(void) :
 {
 	std::cerr << "Natural Point's OptiTrack Camera SDK support for Gem" << std::endl;
 
-	if(s_refCount==0) {
-		if(!CameraManager::X().AreCamerasInitialized()) {
-			std::cerr << "re-initializing Natural Point's CameraSDK...";
-			if(!CameraManager::X().WaitForInitialization()) {
-				std::cerr << " failed" << std::endl;
-				throw(GemException("couldn't initialize OptiTrack"));
-			}
-			std::cerr << " done" << std::endl;
+	if(0==s_refCount) {
+		if(CameraManager::X().WaitForInitialization()) {
+			std::cerr << "OptiTrack cameras initialized!" << std::endl;
+		} else {
+			throw(GemException("OptiTrack cameras not yet initialized"));
 		}
 	}
 	s_refCount++;
-
-	if(CameraManager::X().AreCamerasInitialized()) {
-		std::cerr << "cameras initialized!" << std::endl;
-	} else {
-		std::cerr << "cameras not yet initialized" << std::endl;
-	}
 
 	m_pixBlock.image.xsize = 320;
 	m_pixBlock.image.ysize = 240;
@@ -88,6 +56,7 @@ videoOptiTrack::videoOptiTrack(void) :
 }
 
 videoOptiTrack::~videoOptiTrack(void) {
+	std::cerr<<"~videoOptiTrack" << std::endl;
 	close();
 
 	s_refCount--;
@@ -97,6 +66,7 @@ videoOptiTrack::~videoOptiTrack(void) {
 	}
 }
 void videoOptiTrack::close(void) {
+	std::cerr<<"close()" << std::endl;
 	stop();
 	if(m_camera)
 		m_camera->Release();
@@ -104,18 +74,39 @@ void videoOptiTrack::close(void) {
 }
 
 bool videoOptiTrack::open(gem::Properties&props) {
-	m_camera = CameraManager::X().GetCamera();
+	std::cerr<<"open camera " << m_devname << std::endl;
+	if(CameraManager::X().AreCamerasInitialized()) {
+		std::cerr<<"cameras intialized" << std::endl;
+	} else std::cerr<<"cameras  not intialized" << std::endl;
+	CameraList list;
+	unsigned int i=0;
+	for(i=0; i<list.Count(); i++) {
+        std::cerr<<"trying vcamera " << list[i].UID() << std::endl;
+		m_camera = CameraManager::X().GetCamera(list[i].UID());
+		if(m_camera)break;
+	} 
+	if(!m_camera)
+		m_camera = CameraManager::CameraFactory(0);
+	
 	if(!m_camera) {
+	  std::cerr << "got no camera " << (void*)m_camera << std::endl;
       return false;
-	}	
+	}
+	std::cerr << "default size";
 	m_pixBlock.image.xsize = m_camera->Width();	
 	m_pixBlock.image.ysize = m_camera->Height();	
+	std::cerr << ": "<<m_pixBlock.image.xsize << "x" <<m_pixBlock.image.ysize << std::endl;
 	setProperties(props);
+	std::cerr << "applied props" << std::endl;
 	return true;
 }
 
 pixBlock*videoOptiTrack::getFrame(void) {
+	std::cerr<<"getFrame from " << (void*)m_camera << std::endl;
+  if(!m_camera)return NULL;
+
   m_frame = m_camera->GetFrame();
+  std::cerr<<"gotFrame " << (void*)m_frame << std::endl;
   if(!m_frame)return NULL;
 
   m_pixBlock.image.reallocate();
@@ -127,6 +118,7 @@ pixBlock*videoOptiTrack::getFrame(void) {
 }
 
 void videoOptiTrack::releaseFrame(void) {
+	std::cerr<<"releaseFrame" << std::endl;
 	if(m_frame)
 		m_frame->Release();
 	m_frame=NULL;
@@ -142,18 +134,64 @@ std::vector<std::string>videoOptiTrack::enumerate(void) {
 	  CameraManager::X().WaitForInitialization();
   }
 
-  //  result.push_back("vlc");
+  CameraList list;
+  unsigned int i;
+  for(i=0; i<list.Count(); i++) {
+	  std::cerr << "Device " << i << ": " << list[i].Name() << std::endl;
+	  result.push_back(list[i].Name());
+  }
   return result;
 }
 
 bool videoOptiTrack::setDevice(int ID) {
   m_devname.clear();
-  return false;
+  return true;
 }
 bool videoOptiTrack::setDevice(std::string device) {
   m_devname=device;
   return true;
 }
+
+
+/*
+  SetAEC(bool);
+  SetAGC(bool);
+  SetContinuousIR(bool);
+  SetEnableBlockingMask(bool);
+  SetHighPowerMode(bool);
+  SetIRFilter(bool);
+  SetMarkerOverlay(bool);
+  SetTextOverlay(bool);
+  
+  SetExposure(int);
+  SetFrameDecimation(int);
+  SetFrameRate(int);
+  SetGrayscaleDecimation(int);
+  SetIntensity(int);
+  SetPrecisionCap(int);
+  SetShutterDelay(int);
+  SetStatusIntensity(int);
+  SetThreshold(int);
+
+  SetName(const char*);
+
+
+  SetVideoType(eVideoMode);
+  SetLateMJPEGDecompression(bool);
+  SetMJPEGQuality(int);
+
+  SetAllLED(eStatusLEDs);
+  SetLED(eStatusLEDs, bool);
+
+  SetNumeric(bool, int);
+
+  SetWindow(int, int, int, int);
+  SetObjectColor(int);
+  SetBitMaskPixel(int x, int y, bool);
+
+  SetCameraParameter(char*name, float value);
+*/
+
 bool videoOptiTrack::enumProperties(gem::Properties&readable,
 			       gem::Properties&writeable) {
   readable.clear();
@@ -161,14 +199,64 @@ bool videoOptiTrack::enumProperties(gem::Properties&readable,
 
   writeable.set("width",  m_pixBlock.image.xsize);  readable.set("width",  m_pixBlock.image.xsize);
   writeable.set("height",  m_pixBlock.image.ysize); readable.set("height",  m_pixBlock.image.ysize);
-  return false;
+
+#define SETCAMERAPROP_BOOL(name) writeable.set(#name, 1);
+#define SETCAMERAPROP_INT(name)  writeable.set(#name, 1);
+#define SETCAMERAPROP_STR(name)  writeable.set(#name, std::string(""));
+  SETCAMERAPROP_BOOL(AEC);
+  SETCAMERAPROP_BOOL(AGC);
+  SETCAMERAPROP_BOOL(ContinuousIR);
+  SETCAMERAPROP_BOOL(EnableBlockingMask);
+  SETCAMERAPROP_BOOL(HighPowerMode);
+  SETCAMERAPROP_BOOL(IRFilter);
+  SETCAMERAPROP_BOOL(MarkerOverlay);
+  SETCAMERAPROP_BOOL(TextOverlay);
+  SETCAMERAPROP_INT(Exposure);
+  SETCAMERAPROP_INT(FrameDecimation);
+  SETCAMERAPROP_INT(FrameRate);
+  SETCAMERAPROP_INT(GrayscaleDecimation);
+  SETCAMERAPROP_INT(Intensity);
+  SETCAMERAPROP_INT(PrecisionCap);
+  SETCAMERAPROP_INT(ShutterDelay);
+  SETCAMERAPROP_INT(StatusIntensity);
+  SETCAMERAPROP_INT(Threshold);
+  SETCAMERAPROP_STR(Name);
+#undef SETCAMERAPROP_BOOL
+#undef SETCAMERAPROP_INT
+#undef SETCAMERAPROP_STR
+
+#define GETCAMERAPROP_BOOL(name) readable.set(#name, 1);
+#define GETCAMERAPROP_INT(name)  readable.set(#name, 1);
+#define GETCAMERAPROP_STR(name)  readable.set(#name, std::string(""));
+  GETCAMERAPROP_BOOL(AEC);
+  GETCAMERAPROP_BOOL(AGC);
+  GETCAMERAPROP_BOOL(ContinuousIR);
+  GETCAMERAPROP_BOOL(HighPowerMode);
+  GETCAMERAPROP_BOOL(IRFilter);
+  GETCAMERAPROP_BOOL(MarkerOverlay);
+  GETCAMERAPROP_BOOL(TextOverlay);
+  GETCAMERAPROP_INT(Exposure);
+  GETCAMERAPROP_INT(FrameDecimation);
+  GETCAMERAPROP_INT(FrameRate);
+  GETCAMERAPROP_INT(GrayscaleDecimation);
+  GETCAMERAPROP_INT(Intensity);
+  GETCAMERAPROP_INT(PrecisionCap);
+  GETCAMERAPROP_INT(ShutterDelay);
+  GETCAMERAPROP_INT(Threshold);
+  GETCAMERAPROP_STR(Name);
+#undef GETCAMERAPROP_BOOL
+#undef GETCAMERAPROP_INT
+#undef GETCAMERAPROP_STR
+
+  return true;
 }
 void videoOptiTrack::setProperties(gem::Properties&props) {
   int width=-1;
   int height=-1;
-
+  std::string s;
   m_props=props;
 
+  
   double d;
   if(props.get("width", d)) {
 	  if(d>0) {
@@ -182,6 +270,59 @@ void videoOptiTrack::setProperties(gem::Properties&props) {
 		  m_pixBlock.image.ysize=height;
 	  }
   }
+#define SETCAMERAPROP_BOOL(name) do { if(props.get(#name, d)) {bool b=(d>0.5); m_camera->Set##name(b); } } while(0)
+#define SETCAMERAPROP_INT(name)  do { if(props.get(#name, d)) {int i=(int)d; m_camera->Set##name(i); } } while(0)
+#define SETCAMERAPROP_STR(name)  do { if(props.get(#name, s)) {int i=(int)d; m_camera->Set##name(s.c_str()); } } while(0)
+  SETCAMERAPROP_BOOL(AEC);
+  SETCAMERAPROP_BOOL(AGC);
+  SETCAMERAPROP_BOOL(ContinuousIR);
+  SETCAMERAPROP_BOOL(EnableBlockingMask);
+  SETCAMERAPROP_BOOL(HighPowerMode);
+  SETCAMERAPROP_BOOL(IRFilter);
+  SETCAMERAPROP_BOOL(MarkerOverlay);
+  SETCAMERAPROP_BOOL(TextOverlay);
+  SETCAMERAPROP_INT(Exposure);
+  SETCAMERAPROP_INT(FrameDecimation);
+  SETCAMERAPROP_INT(FrameRate);
+  SETCAMERAPROP_INT(GrayscaleDecimation);
+  SETCAMERAPROP_INT(Intensity);
+  SETCAMERAPROP_INT(PrecisionCap);
+  SETCAMERAPROP_INT(ShutterDelay);
+  SETCAMERAPROP_INT(StatusIntensity);
+  SETCAMERAPROP_INT(Threshold);
+  SETCAMERAPROP_STR(Name);
+#undef SETCAMERAPROP_BOOL
+#undef SETCAMERAPROP_INT
+#undef SETCAMERAPROP_STR
+
+  int m_quality=-1;
+  d=-1;
+  if(props.get("quality", d)) 
+	  m_quality=d;
+  if(m_quality<0) {
+	  m_camera->SetVideoType(GrayscaleMode);
+  } else {
+	  	  m_camera->SetVideoType(MJPEGMode);
+		  m_camera->SetMJPEGQuality(m_quality);
+  }
+
+/*
+  SetAllLED(eStatusLEDs);
+  SetLED(eStatusLEDs, bool);
+
+  SetVideoType(eVideoMode);
+  SetLateMJPEGDecompression(bool);
+  SetMJPEGQuality(int);
+
+  SetName(const char*);
+  SetNumeric(bool, int);
+
+  SetWindow(int, int, int, int);
+  SetObjectColor(int);
+  SetBitMaskPixel(int x, int y, bool);
+
+  SetCameraParameter(char*name, float value);
+*/
 }
 
 
@@ -190,13 +331,39 @@ void videoOptiTrack::getProperties(gem::Properties&props) {
   double d;
   int i;
 
+  props.clear();
+  if(!m_camera)return;
   for(i=0; i<keys.size(); i++) {
-    if("width"==keys[i]) {
-      props.set(keys[i], m_pixBlock.image.xsize);
+	const std::string key=keys[i];
+    if("width"==key) {
+      props.set(key, m_pixBlock.image.xsize);
     }
-    if("height"==keys[i]) {
-      props.set(keys[i], m_pixBlock.image.ysize);
+    if("height"==key) {
+      props.set(key, m_pixBlock.image.ysize);
     }
+
+#define GETCAMERAPROP_BOOL(name) do { if(#name == key) {double v=m_camera->##name(); props.set(key, v); } } while(0)
+#define GETCAMERAPROP_INT(name)  do { if(#name == key) {double v=m_camera->##name(); props.set(key, v); } } while(0)
+#define GETCAMERAPROP_STR(name)  do { if(#name == key) {std::string v=m_camera->##name(); props.set(key, v); } } while(0)
+  GETCAMERAPROP_BOOL(AEC);
+  GETCAMERAPROP_BOOL(AGC);
+  GETCAMERAPROP_BOOL(ContinuousIR);
+  GETCAMERAPROP_BOOL(HighPowerMode);
+  GETCAMERAPROP_BOOL(IRFilter);
+  GETCAMERAPROP_BOOL(MarkerOverlay);
+  GETCAMERAPROP_BOOL(TextOverlay);
+  GETCAMERAPROP_INT(Exposure);
+  GETCAMERAPROP_INT(FrameDecimation);
+  GETCAMERAPROP_INT(FrameRate);
+  GETCAMERAPROP_INT(GrayscaleDecimation);
+  GETCAMERAPROP_INT(Intensity);
+  GETCAMERAPROP_INT(PrecisionCap);
+  GETCAMERAPROP_INT(ShutterDelay);
+  GETCAMERAPROP_INT(Threshold);
+  GETCAMERAPROP_STR(Name);
+#undef GETCAMERAPROP_BOOL
+#undef GETCAMERAPROP_INT
+#undef GETCAMERAPROP_STR
   }
 }
 
@@ -218,12 +385,17 @@ const std::string videoOptiTrack::getName(void) {
 
 
 bool videoOptiTrack::start(void) {
-	if(m_camera)
+	std::cerr<<"start" << std::endl;
+	bool status = false;
+	if(m_camera) {
 		m_camera->Start();
+		status=m_camera->IsCameraRunning();
+	}
 
-  return (NULL!=m_camera);
+  return status;
 }
 bool videoOptiTrack::stop (void) {
+	std::cerr<<"stop" << std::endl;
 	bool status=false;
 	if(m_camera) {
 		status=m_camera->IsCameraRunning();
