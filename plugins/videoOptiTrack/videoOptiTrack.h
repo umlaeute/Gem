@@ -15,16 +15,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Gem/Image.h"
 #include "Gem/Properties.h"
 
+/* Natural Point's Camera SDK */
+/* ... they really like generic names */
+#include <cameralibrary.h>
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
   pix_video
-    
+
   captures a video using NaturalPoints OptiTrack cameras
-    
+
   KEYWORDS
   pix
-    
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoOptiTrack : public video {
@@ -32,8 +36,8 @@ namespace gem { namespace plugins {
    //////////
    // Constructor
    videoOptiTrack(void);
-    	    	
-    //////////^
+
+   //////////
    // Destructor
    virtual ~videoOptiTrack(void);
 
@@ -69,13 +73,15 @@ namespace gem { namespace plugins {
    virtual void close(void);
    virtual bool start(void);
    virtual bool stop(void);
-   
+
   protected:
-	  static const std::string s_name;
 	  gem::Properties m_props;
 	  std::string m_devname;
 	  pixBlock m_pixBlock;
-  }; 
+
+	  CameraLibrary::Camera*m_camera;
+	  CameraLibrary::Frame *m_frame;
+  };
 };};
 
 
