@@ -44,26 +44,29 @@ pix_video :: pix_video(int argc, t_atom*argv) :
   addHandle(ids, "v4l2");
   addHandle(ids, "v4l");
   addHandle(ids, "dv4l");
-
+#define MARK std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")"<<std::endl
+  MARK;
   addHandle(ids);
 
+  MARK;
   m_infoOut = outlet_new(this->x_obj, 0);
 
   /*
    * calling driverMess() would immediately startTransfer();
    * we probably don't want this in initialization phase
    */
+  MARK;
   if(m_videoHandles.size()>0) {
     m_driver=-1;
   } else {
     error("no video backends found!");
   }
-
+MARK;
   std::string dev=gem::RTE::Symbol(argc, argv);
-
+MARK;
   if(!dev.empty())
     deviceMess(dev);
-
+MARK;
 
 }
 
@@ -162,8 +165,10 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
   }
 
   for(i=0; i<id.size(); i++) {
+	  MARK;
     std::string key=id[i];
-    verbose(2, "trying to add '%s' as backend", key.c_str());
+    verbose(2, "trying to add '%s' as backend (%d)", key.c_str(), id.size());
+	MARK;
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
       gem::plugins::video         *handle=NULL;
@@ -171,6 +176,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       try {
         handle=gem::PluginFactory<gem::plugins::video>::getInstance(key);
       } catch (GemException&ex) {
+		  handle=NULL;
       }
       if(NULL==handle) {
         post("<--- DISABLED");
@@ -189,10 +195,13 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       m_ids.push_back(key);
       m_videoHandles.push_back(handle);
       count++;
+	  MARK;
       verbose(2, "added backend#%d '%s' @ 0x%x", m_videoHandles.size()-1, key.c_str(), handle);
-    }
+	  MARK;
+	}
+	MARK;
   }
-
+MARK;
   return (count>0);
 }
 
@@ -278,7 +287,7 @@ void pix_video :: driverMess(int dev)
       if(m_videoHandle->open(m_writeprops)) {
         enumPropertyMess();
         if(STARTED==m_running)
-	  m_videoHandle->start();
+	       m_videoHandle->start();
       }
     }
   } else {
