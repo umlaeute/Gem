@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="videoTEST"
-	ProjectGUID="{1A49951B-8C31-45F4-B738-B36B960913C7}"
+	ProjectGUID="{AEFA779E-A699-4C47-8406-FBEED28AACF1}"
 	RootNamespace="gem"
 	TargetFrameworkVersion="131072"
 	>
@@ -70,10 +70,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib vfw32.lib OLDNAMES.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="Gem.lib pd.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
+				GenerateManifest="false"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
