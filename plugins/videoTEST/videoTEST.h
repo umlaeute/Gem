@@ -49,8 +49,8 @@ namespace gem { namespace plugins {
 
 
    virtual void close(void) {};
-   virtual bool start(void) {};
-   virtual bool stop(void)  {};
+   virtual bool start(void) {return true;};
+   virtual bool stop(void)  {return true;};
 };
 };}; // namespace
 
