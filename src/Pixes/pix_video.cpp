@@ -263,11 +263,12 @@ void pix_video :: driverMess(std::string s)
 }
 void pix_video :: driverMess(int dev)
 {
-  if(dev>=m_videoHandles.size()){
-    error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
-    return;
-  }
   if(dev>=0) {
+	if(dev>=m_videoHandles.size()){
+		error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
+		return;
+	}
+
     if(m_videoHandle){
       m_videoHandle->stop();
       m_videoHandle->close();
