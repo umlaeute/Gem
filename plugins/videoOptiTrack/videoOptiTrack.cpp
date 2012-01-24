@@ -72,7 +72,7 @@ videoOptiTrack::videoOptiTrack(void) :
 	m_pixBlock.image.xsize = 320;
 	m_pixBlock.image.ysize = 240;
 	m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-	m_pixBlock.image.reallocate();
+	m_pixBlock.image.allocate();
 }
 
 videoOptiTrack::~videoOptiTrack(void) {
@@ -131,6 +131,7 @@ pixBlock*videoOptiTrack::getFrame(void) {
      m_frame->Rasterize(m_pixBlock.image.xsize, m_pixBlock.image.ysize,
 	                 m_pixBlock.image.xsize, m_pixBlock.image.csize*8,
 					 m_pixBlock.image.data);
+	 m_pixBlock.newimage=true;
   }
   return &m_pixBlock;
 }
