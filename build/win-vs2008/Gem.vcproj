@@ -51,7 +51,7 @@
 				AdditionalIncludeDirectories="..\..\src;&quot;..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;WIN32_LEAN_AND_MEAN;NDEBUG;_LANGUAGE_C_PLUS_PLUS;GEM_INTERNAL;GLEW_BUILD;__SSE2__;__MMX__"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="2"
 				PrecompiledHeaderFile="$(IntDir)\$(ProjectName).pch"

@@ -28,7 +28,7 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_DIRECTSHOW"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="FALSE"/>
@@ -87,7 +87,7 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="FALSE"/>
