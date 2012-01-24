@@ -153,10 +153,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib opengl32.lib glu32.lib FTGL_static.lib freetype235mt_D.lib libcpmtD.lib msvcrtD.lib msvcprtD.lib ws2_32.lib pthreadVC.lib"
+				AdditionalDependencies="pd.lib opengl32.lib glu32.lib b freetype235mt_D.lib FTGL.lib ws2_32.lib pthreadVC.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;..\..\..\pure-data\pd\bin\&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(FTGL)\msvc\Build&quot;;&quot;$(FTGL)\win32_vcpp\Build&quot;;&quot;$(FREETYPE)\objs&quot;"
-				IgnoreAllDefaultLibraries="true"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
