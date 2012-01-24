@@ -95,10 +95,10 @@ bool videoOptiTrack::open(gem::Properties&props) {
 	CameraList list;
 	unsigned int i=0;
 	for(i=0; i<list.Count(); i++) {
-        std::cerr<<"trying vcamera " << list[i].UID() << std::endl;
+        std::cerr<<"trying vcamera["<<i<<"/"<<list.Count()<<"] " << list[i].UID() << std::endl;
 		m_camera = CameraManager::X().GetCamera(list[i].UID());
 		if(m_camera)break;
-	} 
+	}
 
 	if(!m_camera)
 		m_camera = CameraManager::X().GetCamera();
@@ -110,22 +110,20 @@ bool videoOptiTrack::open(gem::Properties&props) {
 	  std::cerr << "got no camera " << (void*)m_camera << std::endl;
       return false;
 	}
-	std::cerr << "default size";
 	m_pixBlock.image.xsize = m_camera->Width();	
 	m_pixBlock.image.ysize = m_camera->Height();	
-	std::cerr << ": "<<m_pixBlock.image.xsize << "x" <<m_pixBlock.image.ysize << std::endl;
 	setProperties(props);
 	std::cerr << "applied props" << std::endl;
 	return true;
 }
 
 pixBlock*videoOptiTrack::getFrame(void) {
-	std::cerr<<"getFrame from " << (void*)m_camera << std::endl;
+  //std::cerr<<"getFrame from " << (void*)m_camera << std::endl;
   if(!m_camera)return NULL;
 
   m_frame = m_camera->GetFrame();
-  std::cerr<<"gotFrame " << (void*)m_frame << std::endl;
   if(!m_frame)return NULL;
+ // std::cerr<<"gotFrame " << (void*)m_frame << std::endl;
 
   m_pixBlock.image.reallocate();
   m_frame->Rasterize(m_pixBlock.image.xsize, m_pixBlock.image.ysize,
@@ -136,7 +134,7 @@ pixBlock*videoOptiTrack::getFrame(void) {
 }
 
 void videoOptiTrack::releaseFrame(void) {
-	std::cerr<<"releaseFrame" << std::endl;
+	//std::cerr<<"releaseFrame" << std::endl;
 	if(m_frame)
 		m_frame->Release();
 	m_frame=NULL;
@@ -154,10 +152,12 @@ std::vector<std::string>videoOptiTrack::enumerate(void) {
 
   CameraList list;
   unsigned int i;
+  std::cerr << "got " << list.Count() << " cams" << std::endl;
   for(i=0; i<list.Count(); i++) {
 	  std::cerr << "Device " << i << ": " << list[i].Name() << std::endl;
 	  result.push_back(list[i].Name());
   }
+
   return result;
 }
 
@@ -320,6 +320,7 @@ void videoOptiTrack::setProperties(gem::Properties&props) {
   if(m_quality<0) {
 	  m_camera->SetVideoType(GrayscaleMode);
   } else {
+	  post("MJPEG: %d", m_quality);
 	  	  m_camera->SetVideoType(MJPEGMode);
 		  m_camera->SetMJPEGQuality(m_quality);
   }
