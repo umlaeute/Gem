@@ -121,15 +121,17 @@ pixBlock*videoOptiTrack::getFrame(void) {
   //std::cerr<<"getFrame from " << (void*)m_camera << std::endl;
   if(!m_camera)return NULL;
 
-  m_frame = m_camera->GetFrame();
-  if(!m_frame)return NULL;
+  //m_frame = m_camera->GetFrame();
+  m_frame = m_camera->GetLatestFrame();
  // std::cerr<<"gotFrame " << (void*)m_frame << std::endl;
+  //if(!m_frame)return NULL;
 
   m_pixBlock.image.reallocate();
-  m_frame->Rasterize(m_pixBlock.image.xsize, m_pixBlock.image.ysize,
+  if(m_frame) {
+     m_frame->Rasterize(m_pixBlock.image.xsize, m_pixBlock.image.ysize,
 	                 m_pixBlock.image.xsize, m_pixBlock.image.csize*8,
 					 m_pixBlock.image.data);
-
+  }
   return &m_pixBlock;
 }
 
