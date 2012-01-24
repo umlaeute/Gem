@@ -18,6 +18,10 @@
 #endif
 #ifdef HAVE_LIBOPTITRACK
 
+#ifndef CAMERALIBRARY_IMPORTS
+# warning CAMERALIBRARY_IMPORTS
+#endif
+
 #include "videoOptiTrack.h"
 using namespace gem::plugins;
 #include "Gem/RTE.h"
