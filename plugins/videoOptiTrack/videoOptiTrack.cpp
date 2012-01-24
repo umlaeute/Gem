@@ -99,6 +99,10 @@ bool videoOptiTrack::open(gem::Properties&props) {
 		m_camera = CameraManager::X().GetCamera(list[i].UID());
 		if(m_camera)break;
 	} 
+
+	if(!m_camera)
+		m_camera = CameraManager::X().GetCamera();
+
 	if(!m_camera)
 		m_camera = CameraManager::CameraFactory(0);
 	
