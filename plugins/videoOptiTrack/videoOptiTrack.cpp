@@ -34,24 +34,40 @@ REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
 using namespace CameraLibrary;
 
 namespace {
+ struct CMInitBase {
+	 CMInitBase(void) {
+		 std::cerr << "enable development...";
+		 cCameraLibraryStartupSettings::X().EnableDevelopment();
+		 std::cerr << "done"<<std::endl;
+	 }
+ };
+ struct CMInit : CMInitBase {
+	 CameraLibrary::CameraManager&m_camman;
+
+	 CMInit(void) :
+ 	        CMInitBase(),
+			m_camman(CameraLibrary::CameraManager::X())
+			{
+				std::cerr << "waiting for CameraManager init...";
+				m_camman.WaitForInitialization();
+				std::cerr << "done"<<std::endl;
+			}
+     ~CMInit(void) {
+		 std::cerr << "shuttind down CameraManager...";
+		 CameraLibrary::CameraManager::X().Shutdown();
+		 std::cerr << "done"<<std::endl;
+	 }
+ };
+ static CMInit s_camlib;
+
  static const std::string s_name = std::string("OptiTrack");
- static unsigned int s_refCount=0;
 }
 
 videoOptiTrack::videoOptiTrack(void) :
 	m_camera(NULL),
 	m_frame(NULL)
 {
-	std::cerr << "Natural Point's OptiTrack Camera SDK support for Gem" << std::endl;
-
-	if(0==s_refCount) {
-		if(CameraManager::X().WaitForInitialization()) {
-			std::cerr << "OptiTrack cameras initialized!" << std::endl;
-		} else {
-			throw(GemException("OptiTrack cameras not yet initialized"));
-		}
-	}
-	s_refCount++;
+	std::cerr << "Natural Point's OptiTrack Camera SDK support for Gem: " << __DATE__ << " :: "<< __TIME__ << std::endl;
 
 	m_pixBlock.image.xsize = 320;
 	m_pixBlock.image.ysize = 240;
@@ -60,14 +76,8 @@ videoOptiTrack::videoOptiTrack(void) :
 }
 
 videoOptiTrack::~videoOptiTrack(void) {
-	std::cerr<<"~videoOptiTrack" << std::endl;
 	close();
-
-	s_refCount--;
-	post("~videoOT: %d", s_refCount);
-	if(s_refCount==0) {
-      CameraManager::X().Shutdown();
-	}
+	std::cerr<<"~videoOptiTrack" << std::endl;
 }
 void videoOptiTrack::close(void) {
 	std::cerr<<"close()" << std::endl;
