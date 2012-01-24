@@ -53,7 +53,7 @@
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				EnableEnhancedInstructionSet="2"
+				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="false"
 			/>
 			<Tool
@@ -225,7 +225,7 @@
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				EnableEnhancedInstructionSet="2"
+				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="false"
 			/>
 			<Tool

@@ -30,7 +30,7 @@
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
-				EnableEnhancedInstructionSet="2"
+				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="FALSE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
