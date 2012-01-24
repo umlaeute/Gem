@@ -167,7 +167,7 @@ bool videoOptiTrack::setDevice(int ID) {
   m_devname.clear();
   return true;
 }
-bool videoOptiTrack::setDevice(std::string device) {
+bool videoOptiTrack::setDevice(const std::string device) {
   m_devname=device;
   return true;
 }
