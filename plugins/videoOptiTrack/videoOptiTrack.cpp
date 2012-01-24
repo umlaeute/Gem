@@ -54,7 +54,7 @@ namespace {
 			}
      ~CMInit(void) {
 		 std::cerr << "shuttind down CameraManager...";
-		 CameraLibrary::CameraManager::X().Shutdown();
+		 //CameraLibrary::CameraManager::X().Shutdown();
 		 std::cerr << "done"<<std::endl;
 	 }
  };
