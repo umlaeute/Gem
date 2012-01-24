@@ -77,10 +77,15 @@ namespace gem { namespace plugins {
   protected:
 	  gem::Properties m_props;
 	  std::string m_devname;
-	  pixBlock m_pixBlock;
+	  int m_devnum;
+	  int m_quality;
 
 	  CameraLibrary::Camera*m_camera;
 	  CameraLibrary::Frame *m_frame;
+
+	  bool m_resize;
+	  pixBlock m_pixBlock;
+
   };
 };};
 
