@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2010-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -51,23 +51,6 @@ namespace gem { namespace plugins {
       m_codecs.clear();
       m_codechandle.clear();
     }
-
-    // set to TRUE if we can use the current handle in another thread
-    bool m_canThread;
-
-  public:
-    videoMeta(void) :
-      m_handle(NULL),
-      m_canThread(false)
-    {
-      gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
-      std::vector<std::string>ids=gem::PluginFactory<gem::plugins::video>::getIDs();
-
-	  addPlugin(ids, "v4l2");
-	  addPlugin(ids, "v4l");
-	  addPlugin(ids, "dv4l");
-      addPlugin(ids);
-    }
     bool addPlugin( std::vector<std::string>available, std::string ID=std::string("")) {
       int count=0;
 
@@ -78,7 +61,7 @@ namespace gem { namespace plugins {
           id.push_back(ID);
         } else {
           // request for an unavailable ID
-          verbose(2, "backend '%s' unavailable", ID.c_str());
+          verbose(2, "Gem::video: backend '%s' unavailable", ID.c_str());
           return false;
         }
       } else {
@@ -89,7 +72,7 @@ namespace gem { namespace plugins {
       unsigned int i=0;
       for(i=0; i<id.size(); i++) {
         std::string key=id[i];
-        verbose(2, "trying to add '%s' as backend", key.c_str());
+        verbose(2, "Gem::video: trying to add '%s' as backend", key.c_str());
         if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
           // not yet added, do so now!
           gem::plugins::video*handle=NULL;
@@ -97,44 +80,62 @@ namespace gem { namespace plugins {
             handle=gem::PluginFactory<gem::plugins::video>::getInstance(key);
           } catch(GemException&x) {
             handle=NULL;
-            verbose(1, "cannot use video plugin '%s': %s", key.c_str(), x.what());
+            verbose(1, "Gem::video: cannot use video plugin '%s': %s", key.c_str(), x.what());
           }
           if(NULL==handle)continue;
           m_ids.push_back(key);
           m_allHandles.push_back(handle);
           count++;
-          verbose(2, "added backend#%d '%s'", m_allHandles.size()-1, key.c_str());
+          verbose(2, "Gem::video: added backend#%d '%s'", m_allHandles.size()-1, key.c_str());
         }
       }
       return (count>0);
     }
 
+    // set to TRUE if we can use the current handle in another thread
+    bool m_canThread;
+
   public:
+    videoMeta(void) :
+      m_handle(NULL),
+      m_canThread(false)
+    {
+      // compat
+      gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
+      std::vector<std::string>ids=gem::PluginFactory<gem::plugins::video>::getIDs();
+
+      // LATER: also add w32 & osx default backends
+      addPlugin(ids, "v4l2");
+      addPlugin(ids, "v4l");
+      addPlugin(ids, "dv4l");
+      addPlugin(ids);
+    }
+
     virtual ~videoMeta(void) {
+      // compat
       unsigned int i;
       for(i=0; i<m_allHandles.size(); i++) {
         delete m_allHandles[i];
         m_allHandles[i]=NULL;
       }
     }
-	virtual std::vector<std::string>enumerate(void){
-		  std::vector<std::string>result;
-#if 1
-		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  std::cerr << "enumerating " << i << " of " << m_allHandles.size() << std::endl;
+    virtual std::vector<std::string>enumerate(void){ 
+      // almost compat
+      // LATER: the consumer should know which device corresponds to which backend/driver
+      /* maybe something like
+       *   "devicename:backend" with ':' being some special character unlikely to be found in devicenames
+       */
+      std::vector<std::string>result;
+      for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  std::vector<std::string>res=m_allHandles[i]->enumerate();
-			  std::cerr << "got "<<res.size()<<" devices"<<std::endl;
 			  for(unsigned int j=0; j<res.size(); j++) {
-				  std::cerr << "pushback " << res[j]<<std::endl;
 				  result.push_back(res[j]);
 			  }
-			  std::cerr << "total "<<result.size()<<" devices"<<std::endl;
 		  }
-		  std::cerr << "final "<<result.size()<<" devices"<<std::endl;
-#endif
 		  return result;
-	}
+    }
 	  virtual bool setDevice(int ID){
+      // compat
 		  bool result=false;
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  if(m_allHandles[i]->setDevice(ID))
@@ -143,6 +144,7 @@ namespace gem { namespace plugins {
 		  return result;
 	  }
 	  virtual bool	    	setDevice(const std::string ID) {
+      // compat
 		  bool result=false;
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  if(m_allHandles[i]->setDevice(ID))
@@ -151,6 +153,10 @@ namespace gem { namespace plugins {
 		  return result;
 	  }
 	  virtual bool open(gem::Properties&props) {
+      // LATER: driver-selection
+      /* e.g. add a reserved "_backend" property and use that to select the correct driver
+       * available backends could be queried with "_backends"
+       */
 		  if(m_handle)close();
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  if(m_allHandles[i]->open(props)) {
@@ -161,72 +167,108 @@ namespace gem { namespace plugins {
 		  return false;
 	  }
 	  virtual bool start(void) {
+      // OK
 		  if(m_handle)
 			  return m_handle->start();
 		  return false;
 	  }
 	  virtual pixBlock *getFrame(void) {
+      // OK
 		  if(m_handle)return m_handle->getFrame();
 		  return NULL;
 	  }
-      virtual void releaseFrame(void) {
+    virtual void releaseFrame(void) {
+      // OK
 		  if(m_handle)m_handle->releaseFrame();
 	  }
 	  virtual bool stop(void) {
+      // OK
 		  if(m_handle)
 			  return m_handle->stop();
 		  return false;
 	  }
 	  virtual void close(void) {
+      // OK
 		  if(m_handle)
 			  m_handle->close();
 		  m_handle=NULL;
 	  }
 	  virtual bool reset(void) {
+      // OK
 		  if(m_handle)
 			  return m_handle->reset();
 		  return false;
 	  }
 	  virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable) {
+      // OK
 		  if(m_handle)
 			  return m_handle->enumProperties(readable, writeable);
 		  return false;
 	  }
-      virtual void setProperties(gem::Properties&props) {
+    virtual void setProperties(gem::Properties&props) {
+      // OK
 		  if(m_handle)
 			  m_handle->setProperties(props);
 	  }
-      virtual void getProperties(gem::Properties&props) {
+    virtual void getProperties(gem::Properties&props) {
+      // OK
 		  if(m_handle)
 			  m_handle->getProperties(props);
 	  }
-      virtual bool dialog(std::vector<std::string>names) {
+    virtual bool dialog(std::vector<std::string>names) {
+      // OK
+      /* LATER: what if no device is currently opened?
+       *  e.g. when we want to set the device with dialog?
+       *  think: if there's only one backend, use that
+       *  try all available backends, until one returns true
+       *  filter backends based on "_backend" selection?
+       */
 		  if(m_handle)
 			  return m_handle->dialog(names);
 		  return false;
 	  }
-      virtual std::vector<std::string>dialogs(void) {
+    virtual std::vector<std::string>dialogs(void) {
+      // OK
 		  if(m_handle)
 			  return m_handle->dialogs();
+
 		  std::vector<std::string>result;
+      for(unsigned int i=0; i<m_allHandles.size(); i++) {
+			  std::vector<std::string>res=m_allHandles[i]->dialogs();
+			  for(unsigned int j=0; j<res.size(); j++) {
+				  result.push_back(res[j]);
+			  }
+		  }
 		  return result;
 	  }
 	  virtual bool isThreadable(void) {
+      // OK
+      // LATER properly set m_canThread in ctor
 		  if(m_handle)
 			  return m_handle->isThreadable();
 		  return m_canThread;
 	  }
 	  virtual bool grabAsynchronous(bool state) {
+      // OK
+      // LATER get rid of that entirely?
 		  if(m_handle)
 			  return m_handle->grabAsynchronous(state);
 		  return false;
 	  }
 	  virtual bool setColor(int color){
-		  if(m_handle)
-			  return m_handle->setColor(color);
-		  return false;
+      // OK
+      // LATER get rid of that!
+      // think about the return value...
+      bool result=true;
+      for(unsigned int i=0; i<m_allHandles.size(); i++) {
+        if(!m_allHandles[i]->setColor(color)) {
+          result=false;
+        }
+		  }
+		  return result;
 	  }
 	  virtual bool provides(const std::string ID){
+      // OK
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  if(m_allHandles[i]->provides(ID))
 				  return true;
@@ -234,6 +276,8 @@ namespace gem { namespace plugins {
 		  return false;
 	  }
 	  virtual std::vector<std::string>provides(void){
+      // OK
+      // LATER: remove dupes
 		  std::vector<std::string>result;
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  std::vector<std::string>res=m_allHandles[i]->provides();
@@ -243,16 +287,16 @@ namespace gem { namespace plugins {
 		  }
 		  return result;
 	  }
-	  virtual const std::string getName(void) {return std::string("meta");}
+	  virtual const std::string getName(void) {
+      // OK
+      // LATER: special handling of empty names in host(!)
+      return std::string("");
+    }
   };
 };
 };
 
-
-
 gem::plugins::video*gem::plugins::video::getInstance(void) {
-	return NULL;
-
-  gem::plugins::video*result=new videoMeta();
-  return result;
+  video*result=new videoMeta();
+	return result;
 }
