@@ -10,7 +10,7 @@ static double getRandom(void) {
   return random_nextseed * (1./4294967296.);;
 }
 
-videoTEST::videoTEST() :
+videoTEST::videoTEST(void) :
   m_name(std::string("test")),
   m_open(false),
   m_type(0)
@@ -112,6 +112,7 @@ bool videoTEST::enumProperties(gem::Properties&readable,
   writeable.set("height", 64); readable.set("height", 64);
 
   writeable.set("type", std::string("noise"));
+  return true;
 }
 void videoTEST::setProperties(gem::Properties&props) {
   m_props=props;

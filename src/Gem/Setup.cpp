@@ -14,6 +14,23 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+
+/* OLDNAMES.lib pd.lib opengl32.lib glu32.lib freetype235mt.lib FTGL_static.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib 
+ * pd.lib freetype235mt.lib FTGL_static.lib opengl32.lib glu32.lib ws2_32.lib pthreadVC.lib (?)
+
+ * OLDNAMES.lib: _close, _open, _strdup
+ * pd.lib
+ * opengl32.lib
+ * glu32.lib: gluFunctions (sphere, cylinder, lookat,...)
+ * freetype235mt.lib FTGL_static.lib
+ * libcpmt.lib: std::cerr,...
+ * msvcrt.lib: typeinfo,...
+ * ws2_32.lib
+ * pthreadVC.lib
+
+*/
+
+
 #include "Gem/GemConfig.h"
 /* -------------------------- setup function ------------------------------ */
 
@@ -31,7 +48,12 @@
 # include <unistd.h>
 #endif
 
-# include <fcntl.h>
+#include <fcntl.h>
+
+#ifndef _MSC_VER
+# define _open open
+# define _close close
+#endif
 
 
 static const char GEM_MAINTAINER[] = "IOhannes m zmoelnig";
@@ -152,8 +174,8 @@ namespace Gem {
     /* check whether we can find the abstractions in Gem's own path */
     snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
     buf[MAXPDSTRING-1]=0;
-    if ((fd=open(buf, flags))>=0){
-      close(fd);
+    if ((fd=_open(buf, flags))>=0){
+      _close(fd);
     } else {
       // can't find this abstraction...giving up
       verbose(0, "please add path to '%s' to your search-path!", filename);

@@ -51,9 +51,9 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\..\assimp--2.0.863-sdk\include&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBASSIMP"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				EnableEnhancedInstructionSet="2"
+				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="false"
 			/>
 			<Tool
@@ -70,11 +70,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib Gem.lib pd.lib libcpmt.lib msvcrt.lib msvcprt.lib opengl32.lib assimp.lib"
+				AdditionalDependencies="Gem.lib pd.lib opengl32.lib assimp.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProjectDir)\..\..\..\..\assimp--2.0.863-sdk\lib\assimp_release-dll_win32&quot;"
-				IgnoreAllDefaultLibraries="true"
 				ProgramDatabaseFile="$(ProjectDir)/$(ProjectName).pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -138,7 +137,7 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="0"
 				DefaultCharIsUnsigned="false"

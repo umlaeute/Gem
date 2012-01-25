@@ -192,6 +192,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modelASSIMP", "..\..\plugin
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoOptiTrack", "..\..\plugins\videoOptiTrack\win-vs2008\videoOptiTrack.vcproj", "{9DC8B017-773B-426C-83D2-467723E09CBD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoTEST", "..\..\plugins\videoTEST\win-vs2008\videoTEST.vcproj", "{AEFA779E-A699-4C47-8406-FBEED28AACF1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -300,6 +307,18 @@ Global
 		{32A8EA41-EC6E-4F4D-9A82-8B2175F549A2}.Release|Win32.Build.0 = Release|Win32
 		{32A8EA41-EC6E-4F4D-9A82-8B2175F549A2}.ReleaseDummy|Win32.ActiveCfg = ReleaseDummy|Win32
 		{32A8EA41-EC6E-4F4D-9A82-8B2175F549A2}.ReleaseDummy|Win32.Build.0 = ReleaseDummy|Win32
+		{9DC8B017-773B-426C-83D2-467723E09CBD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9DC8B017-773B-426C-83D2-467723E09CBD}.Debug|Win32.Build.0 = Debug|Win32
+		{9DC8B017-773B-426C-83D2-467723E09CBD}.Release|Win32.ActiveCfg = Release|Win32
+		{9DC8B017-773B-426C-83D2-467723E09CBD}.Release|Win32.Build.0 = Release|Win32
+		{9DC8B017-773B-426C-83D2-467723E09CBD}.ReleaseDummy|Win32.ActiveCfg = ReleaseDummy|Win32
+		{9DC8B017-773B-426C-83D2-467723E09CBD}.ReleaseDummy|Win32.Build.0 = ReleaseDummy|Win32
+		{AEFA779E-A699-4C47-8406-FBEED28AACF1}.Debug|Win32.ActiveCfg = ReleaseDummy|Win32
+		{AEFA779E-A699-4C47-8406-FBEED28AACF1}.Debug|Win32.Build.0 = ReleaseDummy|Win32
+		{AEFA779E-A699-4C47-8406-FBEED28AACF1}.Release|Win32.ActiveCfg = Release|Win32
+		{AEFA779E-A699-4C47-8406-FBEED28AACF1}.Release|Win32.Build.0 = Release|Win32
+		{AEFA779E-A699-4C47-8406-FBEED28AACF1}.ReleaseDummy|Win32.ActiveCfg = ReleaseDummy|Win32
+		{AEFA779E-A699-4C47-8406-FBEED28AACF1}.ReleaseDummy|Win32.Build.0 = ReleaseDummy|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
