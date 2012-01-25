@@ -27,6 +27,13 @@
 
 CPPEXTERN_NEW_WITH_GIMME(pix_video);
 
+
+#if 0
+# define MARK std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")"<<std::endl
+#else
+# define MARK
+#endif
+
 /////////////////////////////////////////////////////////
 //
 // pix_video
@@ -44,7 +51,6 @@ pix_video :: pix_video(int argc, t_atom*argv) :
   addHandle(ids, "v4l2");
   addHandle(ids, "v4l");
   addHandle(ids, "dv4l");
-#define MARK std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")"<<std::endl
   MARK;
   addHandle(ids);
 
