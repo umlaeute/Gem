@@ -103,7 +103,7 @@ namespace gem { namespace image {
     static PixImageThreadLoader*getInstance(bool retry=true) {
       static bool didit=false;
       if(!retry && didit)
-	return s_instance;
+        return s_instance;
       didit=true;
 
       if(NULL==s_instance) {
@@ -189,7 +189,10 @@ namespace gem { namespace image {
   bool load::cancel(id_t ID) {
     PixImageThreadLoader*threadloader=PixImageThreadLoader::getInstance(false);
     if(threadloader) {
-      return threadloader->cancel(ID);
+      bool success=threadloader->cancel(ID);
+      if(!success)
+        poll();
+      return success;
     }
     return false;
   }
