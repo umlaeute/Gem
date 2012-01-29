@@ -216,16 +216,20 @@ namespace gem { namespace thread {
   bool WorkerThread::cancel(WorkerThread::id_t ID) {
     bool success=false;
 #ifdef WORKERTHREAD_DEQUEUE
-    QUEUE< std::pair<WorkerThread::id_t, void*> > :: iterator it;
-    m_pimpl->m_todo.lock();
-
-    for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
-      if(it->first == ID) {
-        m_pimpl->q_todo.erase(it);
-        break;
+    if(!success) {
+      /* cancel from TODO list */
+      QUEUE< std::pair<WorkerThread::id_t, void*> > :: iterator it;
+      m_pimpl->m_todo.lock();
+      
+      for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
+        if(it->first == ID) {
+          m_pimpl->q_todo.erase(it);
+          success=true;
+          break;
+        }
       }
+      m_pimpl->m_todo.unlock();
     }
-    m_pimpl->m_todo.unlock();
 #endif
     return success;
   }
