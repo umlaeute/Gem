@@ -109,6 +109,14 @@ namespace gem { namespace plugins {
       addPlugin(ids, "v4l");
       addPlugin(ids, "dv4l");
       addPlugin(ids);
+
+
+
+      for(unsigned int i=0; i<m_allHandles.size(); i++) {
+        if(!m_handles[i]->isThreadable()) {
+          m_canThread=false;
+          break;
+        }
     }
 
     virtual ~videoMeta(void) {
