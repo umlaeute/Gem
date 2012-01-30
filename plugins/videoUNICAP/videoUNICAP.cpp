@@ -720,12 +720,11 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
         if(props.get(key, d)) {
           if(d>=0 && d < prop.menu.menu_item_count) {
             int i=d;
-            post("directly setting menu-value to '%s' (please report if this works!)", prop.menu.menu_items[i]);
-            prop.value=i;
+            /* unfortunately we must use the symbolic value and cannot simply set using the index... */
+            strncpy(prop.menu_item, prop.menu.menu_items[i], 128);
             status= unicap_set_property(m_handle, &prop );
           }
         } else if (props.get(key, s)) {
-          post("setting menu-value to '%s' (please report if this works!)", s.c_str());
           strncpy(prop.menu_item, s.c_str(), 128);
           status= unicap_set_property(m_handle, &prop );
         }
