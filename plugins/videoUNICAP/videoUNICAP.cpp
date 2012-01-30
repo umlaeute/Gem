@@ -6,9 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -16,6 +14,13 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#if defined HAVE_LIBUNICAP && !defined HAVE_UNICAP
+# define HAVE_UNICAP
+#endif
+
+
+#ifdef HAVE_UNICAP
 
 #include "videoUNICAP.h"
 #include "plugins/PluginFactory.h"
@@ -29,7 +34,7 @@ using namespace gem::plugins;
 #define debugPost
 #define debugThread
 
-#if 0
+#if 1
 # undef debugPost 
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
 #endif
@@ -53,8 +58,6 @@ using namespace gem::plugins;
   ((((unsigned char*)a)[2])<< 8)+  \
   ((((unsigned char*)a)[3])<< 0))
 */
-
-#ifdef HAVE_UNICAP
 
 static void post_fmt(unicap_format_t*fmt) {
   if(!fmt)return;
@@ -81,7 +84,7 @@ static void post_fmt(unicap_format_t*fmt) {
 
 REGISTER_VIDEOFACTORY("unicap", videoUNICAP);
 
-videoUNICAP :: videoUNICAP() : videoBase("unicap", 0)
+videoUNICAP :: videoUNICAP(void) : videoBase("unicap", 0)
                              , m_handle(NULL)
 {
   m_width=0; m_height=0;
@@ -93,20 +96,20 @@ videoUNICAP :: videoUNICAP() : videoBase("unicap", 0)
 // Destructor
 //
 ////////////////////////////////////////////////////////
-videoUNICAP :: ~videoUNICAP()
+videoUNICAP :: ~videoUNICAP(void)
 {
   close();
 }
 
 //////////////////
 // this reads the data that was captured by capturing() and returns it within a pixBlock
-pixBlock *videoUNICAP :: getFrame(){
+pixBlock *videoUNICAP :: getFrame(void) {
 
   mutex.lock();
   return &m_image;
 }
 
-void videoUNICAP::releaseFrame() {
+void videoUNICAP::releaseFrame(void) {
   mutex.unlock();
   videoBase::releaseFrame();
 }
@@ -137,7 +140,7 @@ bool videoUNICAP :: openDevice(gem::Properties&props) {
   setProperties(props);
   return true;
 }
-void videoUNICAP :: closeDevice() {
+void videoUNICAP :: closeDevice(void) {
   if(m_handle) {
     unicap_close(m_handle);
     m_handle=NULL;
@@ -250,7 +253,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoUNICAP :: startTransfer()
+bool videoUNICAP :: startTransfer(void)
 {
   unicap_status_t status = 0;
   unicap_format_t format;
@@ -286,7 +289,7 @@ bool videoUNICAP :: startTransfer()
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoUNICAP :: stopTransfer()
+bool videoUNICAP :: stopTransfer(void)
 {
   unicap_stop_capture (m_handle);        // (3)
 
@@ -301,7 +304,7 @@ bool videoUNICAP :: setColor(int format)
   return true;
 }
 
-std::vector<std::string> videoUNICAP::enumerate() {
+std::vector<std::string> videoUNICAP::enumerate(void) {
   std::vector<std::string> result;
   int devcount=0;
   unicap_status_t status = 0;
@@ -352,7 +355,7 @@ std::vector<std::string> videoUNICAP::enumerate() {
   return result;
 }
 
-bool videoUNICAP :: defaultFormat() {
+bool videoUNICAP :: defaultFormat(void) {
   if(!m_handle)return false;
   int count=0;
   unicap_status_t status= unicap_reenumerate_formats(m_handle, &count );
@@ -599,9 +602,4 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
     if (running)start();
   }
 }
-
-
-#else
-videoUNICAP ::  videoUNICAP() : videoBase("") {}
-videoUNICAP :: ~videoUNICAP() {}
 #endif /* HAVE_UNICAP */

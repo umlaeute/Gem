@@ -2,11 +2,9 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an video into a pix block
+capture an image using unicap
 
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) GÃŒnther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 	
@@ -17,17 +15,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/videoBase.h"
 
-#if defined HAVE_LIBUNICAP && !defined HAVE_UNICAP
-# define HAVE_UNICAP
-#endif
-
-#ifdef HAVE_UNICAP
 #include <map>
-# define private unicap_private
-#  include <unicap.h>
-# undef private
-# include "Gem/ThreadMutex.h"
-#endif
+#define private unicap_private
+#include <unicap.h>
+#undef private
+#include "Gem/ThreadMutex.h"
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -50,7 +42,6 @@ namespace gem { namespace plugins {
   // Destructor
   virtual ~videoUNICAP(void);
   
-#ifdef HAVE_UNICAP
   ////////
   // open the video-device
   virtual bool           openDevice(gem::Properties&writeprops);
@@ -100,8 +91,6 @@ namespace gem { namespace plugins {
 			  unicap_handle_t handle, 
 			  unicap_data_buffer_t * buffer, 
 			  void *usr_data);
-
-#endif /* HAVE_VIDEO4LINUX2 */
  };
 };};
 
