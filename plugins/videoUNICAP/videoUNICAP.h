@@ -121,7 +121,11 @@ namespace gem { namespace plugins {
                           unicap_handle_t handle, 
                           unicap_data_buffer_t * buffer, 
                           void *usr_data);
-                  };
+
+  /* are we currently rendering? */
+  bool m_running;
+
+ };
 };};
 
 #endif	// for header file

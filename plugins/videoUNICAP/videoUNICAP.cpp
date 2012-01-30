@@ -36,12 +36,12 @@ using namespace gem::plugins;
 
 #if 1
 # undef debugPost 
-# define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__), ::post
 #endif
 
 #if 1
 # undef debugThread
-# define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__), ::post
 #endif
 
 
@@ -64,10 +64,11 @@ namespace {
 }
 
 videoUNICAP :: videoUNICAP(void) : 
-  m_width(0), m_height(0),
+  m_width(-1), m_height(-1),
   m_handle(NULL),
   m_devicenum(-1),
-  m_reqFormat(GL_RGBA_GEM)
+  m_reqFormat(GL_RGBA_GEM),
+  m_running(false)
 {
   enumerate();
 }
@@ -266,7 +267,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
   }
 
   unsigned char*data=buffer->data;
-  post("data: %p", data);
+  debugPost("data: %p", data);
 
   mutex.lock();
   m_pix.image.xsize=fmt->size.width;
@@ -306,6 +307,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
 /////////////////////////////////////////////////////////
 bool videoUNICAP :: start(void)
 {
+  if(m_running)stop();
   unicap_status_t status = 0;
   unicap_format_t format;
   //  defaultFormat();
@@ -337,7 +339,6 @@ bool videoUNICAP :: start(void)
     }
   }
 
-
   int w=-1;
   int h=-1;
   double d;
@@ -345,7 +346,7 @@ bool videoUNICAP :: start(void)
   if(m_props.get("height", d) && d>0)h=d;
 
   double penalty=-1.;
-
+  debugPost("dimensions: %dx%d\t%f", w, h, penalty);
   if ((w>0 || h>0)) {
     /* try to find a format that matches the desired width/height best */
     for(unsigned int formatid_index=0; formatid_index<formatid.size(); formatid_index++) {
@@ -357,14 +358,21 @@ bool videoUNICAP :: start(void)
 
       /* If a video format has more than one size, try to find the best match */
       if(format.size_count) {
-        if(penalty<0)
+        if(penalty<0) {
           penalty=dimension_penalty(w, h, format.sizes[0]);
+          default_format=format_index;
+          default_size=0;
+        }
+        debugPost("current penalty=%f", penalty);
         for( unsigned size_index = 0; size_index < format.size_count; size_index++ ) {
           double p=dimension_penalty(w, h, format.sizes[size_index]);
-          if(p<penalty) {
+          debugPost("[%d/%d] penalty for (%dx%d) vs (%dx%d)=%f <> %f", format_index, size_index, 
+                    w, h, format.sizes[size_index].width, format.sizes[size_index].height, 
+                    p, penalty);
+          if(p<penalty) { penalty=p;
             default_format=format_index;
             default_size=size_index;
-            penalty=p;
+            debugPost("new champion format=%d\tsize=%d", default_format, default_size);
           }
         }
       }
@@ -380,32 +388,36 @@ bool videoUNICAP :: start(void)
   post_fmt(&format);
 
   if(default_size>format.size_count) {
-    post("oops: want size #%d of %d", default_size, format.size_count);
+    debugPost("oops: want size #%d of %d", default_size, format.size_count);
     default_size=0;
   }
   format.size.width = format.sizes[default_size].width;
   format.size.height = format.sizes[default_size].height;
 
   format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM; 
-
+  debugPost("setting format (%d/%d)", default_format, default_size);
+  post_fmt(&format);
   if( !SUCCESS( unicap_set_format( m_handle, &format ) ) )  {
     verbose(1, "failed to set format");
     return false;
   }
-
+  unicap_unregister_callback(m_handle, UNICAP_EVENT_NEW_FRAME);
   status=unicap_register_callback (m_handle, 
                                    UNICAP_EVENT_NEW_FRAME, 
                                    (unicap_callback_t) newFrameCB,
                                    (void *) this);
   debugPost("registered callback: %x", status);
-  if(!SUCCESS(status))
+  if(!SUCCESS(status)) {
+    debugPost("callback miserably failed");
     return false;
+  }
   status=unicap_start_capture (m_handle);
   debugPost("start capture: %x", status);
   if(!SUCCESS(status))
     return false;
 
-  return true;
+  m_running=true;
+  return m_running;
 }
 
 /////////////////////////////////////////////////////////
@@ -414,14 +426,25 @@ bool videoUNICAP :: start(void)
 /////////////////////////////////////////////////////////
 bool videoUNICAP :: stop(void)
 {
-  unicap_stop_capture (m_handle);        // (3)
+  bool wasrunning=m_running;
+  if(m_running)
+    unicap_stop_capture (m_handle);        // (3)
 
-  return true;
+  m_running=false;
+
+  return wasrunning;
 }
 
 bool videoUNICAP :: reset(void) {
 #warning reset
-  return false;
+  bool wasrunning=stop();
+  close();
+  enumerate();
+  if(wasrunning) {
+    open(m_props);
+    start();
+  }
+  return true;
 }
 
 bool videoUNICAP :: setColor(int format)
@@ -588,7 +611,6 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
   return true;
 }
 void videoUNICAP :: getProperties(gem::Properties&props) {
-  m_props=props;
   if(!m_handle)return;
   unicap_status_t status=0;
 
@@ -644,6 +666,8 @@ void videoUNICAP :: getProperties(gem::Properties&props) {
 
 }
 void videoUNICAP :: setProperties(gem::Properties&props) {
+  m_props=props;
+  debugPost("handle=%p", m_handle);
   if(!m_handle)
     return;
 
@@ -661,23 +685,19 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
     std::string s;
 
 
-    if("width"==key) {
-      if(props.get(key, d)) {
-        width=d;
-        if(m_width!=width) {
-          m_width=width;
-          restart=true;
-        }
+    if(("width"==key) && props.get(key, d)) {
+      width=d;
+      if(m_width!=width) {
+        m_width=width;
+        restart=true;
       }
       continue;
     }
-    if ("height"==key) {
-      if(props.get(key, d)) {
-        height=d;
-        if(m_height!=height) {
-          m_height=height;
-          restart=true;
-        }
+    if(("height"==key) && props.get(key, d)) {
+      height=d;
+      if(m_height!=height) {
+        m_height=height;
+        restart=true;
       }
       continue;
     }
@@ -714,7 +734,7 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
         // ?
         break;
       }
-
+      
       if(!SUCCESS(status)) {
         verbose(1, "could not set property '%s'", key.c_str());
 #if 0
@@ -722,27 +742,13 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
         verbose(1, "successfully set property '%s'", key.c_str());
 #endif
       }
-
     }
   }
 
   while(restart) { restart=false;
-    unicap_format_t fmt;
-    status=unicap_get_format(m_handle, &fmt);
-    post("setting dimen(%d)", status);post_fmt(&fmt);
-
-
-    if(!SUCCESS(status))break;
+    debugPost("restarting stream due to property change");
     bool running=stop();
     debugPost("running=%d", running);
-
-    if(m_width>0)
-      fmt.size.width=m_width;
-    if(m_height>0)
-      fmt.size.height=m_height;
-
-    status=unicap_set_format(m_handle, &fmt);
-
     if (running)start();
   }
 }
