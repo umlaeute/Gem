@@ -39,37 +39,11 @@ using namespace gem::plugins;
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
 #endif
 
-#if 0
+#if 1
 # undef debugThread
 # define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
 #endif
 
-
-#ifdef FOURCC
-# undef FOURCC
-#endif
-
-
-#define FOURCC(a,b,c,d) (unsigned int)((((unsigned int)d)<<24)+(((unsigned int)c)<<16)+(((unsigned int)b)<<8)+a) 
-/*
-  #define FOURCC(a) (unsigned int) ( 
-  ((((unsigned char*)a)[0])<<24)+  \
-  ((((unsigned char*)a)[1])<<16)+  \
-  ((((unsigned char*)a)[2])<< 8)+  \
-  ((((unsigned char*)a)[3])<< 0))
-*/
-
-static void post_fmt(unicap_format_t*fmt) {
-  if(!fmt)return;
-  debugPost("format %dx%d+%d+%d '%s' -> %d (%d[%d]/%d)",
-            fmt->size.width, fmt->size.height,
-            fmt->size.x, fmt->size.y,
-            fmt->identifier,
-            fmt->buffer_size,
-            fmt->buffer_type,
-            fmt->system_buffer_count,
-            fmt->buffer_types);
-}
 
 /////////////////////////////////////////////////////////
 //
@@ -84,11 +58,17 @@ static void post_fmt(unicap_format_t*fmt) {
 
 REGISTER_VIDEOFACTORY("unicap", videoUNICAP);
 
-videoUNICAP :: videoUNICAP(void) : videoBase("unicap", 0)
-                             , m_handle(NULL)
+
+namespace {
+  static const std::string s_name = std::string("unicap");
+}
+
+videoUNICAP :: videoUNICAP(void) : 
+  m_width(0), m_height(0),
+  m_handle(NULL),
+  m_devicenum(-1),
+  m_reqFormat(GL_RGBA_GEM)
 {
-  m_width=0; m_height=0;
-  provide("analog");
   enumerate();
 }
   
@@ -104,20 +84,21 @@ videoUNICAP :: ~videoUNICAP(void)
 //////////////////
 // this reads the data that was captured by capturing() and returns it within a pixBlock
 pixBlock *videoUNICAP :: getFrame(void) {
-
   mutex.lock();
-  return &m_image;
+  return &m_pix;
 }
 
 void videoUNICAP::releaseFrame(void) {
   mutex.unlock();
-  videoBase::releaseFrame();
 }
 
-bool videoUNICAP :: openDevice(gem::Properties&props) {
+bool videoUNICAP :: open(gem::Properties&props) {
   std::vector<unsigned int>ds;
   if(m_devicename.empty()) {
-    ds.push_back(m_devicenum);
+    if(m_devicenum>=0)
+      ds.push_back(m_devicenum);
+    else
+      ds.push_back(0);
   } else {
     ds=m_name2devices[m_devicename];
   }
@@ -140,7 +121,7 @@ bool videoUNICAP :: openDevice(gem::Properties&props) {
   setProperties(props);
   return true;
 }
-void videoUNICAP :: closeDevice(void) {
+void videoUNICAP :: close(void) {
   if(m_handle) {
     unicap_close(m_handle);
     m_handle=NULL;
@@ -158,94 +139,164 @@ void videoUNICAP::newFrameCB (unicap_event_t event,
     v->newFrame(handle, buffer);
 }
 
-typedef enum {
-  FIRST=0,
-  RGB, 
-  RGBA, 
-  BGR,
-  BGRA,
-  RGB16,
-  ABGR,
-  ARGB,
-  GREY,
-  GREY16,
-  UYVY,
-  YUY2,
-  YVYU,
-  YV12,
-  YU12,
+namespace {
+  typedef enum {
+    FIRST=0,
+    RGB, 
+    RGBA, 
+    BGR,
+    BGRA,
+    RGB16,
+    ABGR,
+    ARGB,
+    GREY,
+    GREY16,
+    UYVY,
+    YUY2,
+    YVYU,
+    YV12,
+    YU12,
   
-  ILLEGAL
-} fourcc_t;
+    ILLEGAL
+  } fourcc_t;
+
+#ifdef FOURCC
+# undef FOURCC
+#endif
+
+
+#define FOURCC(a,b,c,d) (unsigned int)((((unsigned int)d)<<24)+(((unsigned int)c)<<16)+(((unsigned int)b)<<8)+a) 
+  /*
+    #define FOURCC(a) (unsigned int) ( 
+    ((((unsigned char*)a)[0])<<24)+             \
+    ((((unsigned char*)a)[1])<<16)+             \
+    ((((unsigned char*)a)[2])<< 8)+             \
+    ((((unsigned char*)a)[3])<< 0))
+  */
+
+  static void post_fmt(unicap_format_t*fmt) {
+    if(!fmt)return;
+    const char*buftype="unknown";
+    if(UNICAP_BUFFER_TYPE_USER==fmt->buffer_type)buftype="USER";
+    if(UNICAP_BUFFER_TYPE_SYSTEM==fmt->buffer_type)buftype="SYSTEM";
+
+    debugPost("format '%s': ((%dx%d+%d+%d)) < (%dx%d+%d+%d) < ((%dx%d+%d+%d)) in +%d+%d steps\n"
+              "\t%d sizes\n"
+              "\tbuffers: %d types, %d systembuffers, %d size, type=%s"
+              "",
+              fmt->identifier,
+              fmt->min_size.width, fmt->min_size.height,fmt->min_size.x, fmt->min_size.y,
+              fmt->size.width, fmt->size.height,fmt->size.x, fmt->size.y,
+              fmt->max_size.width, fmt->max_size.height,fmt->max_size.x, fmt->max_size.y,
+              fmt->h_stepping, fmt->v_stepping,
+
+              fmt->size_count,
+
+              fmt->buffer_types, fmt->system_buffer_count, fmt->buffer_size, buftype,
+              0);
+  }
+
+  fourcc_t fourcc2fmt(unsigned int fourcc) {
+    fourcc_t format=ILLEGAL;
+    switch(fourcc) {
+    default: format=ILLEGAL; break;
+
+    case (FOURCC('R', 'G', 'B', '2')):    format=RGB;    break;
+    case (FOURCC('R', 'G', 'B', ' ')):    format=RGB;    break;
+    case (FOURCC('R', 'G', 'B', 'A')):    format=RGBA;   break;
+    case (FOURCC('B', 'G', 'R', ' ')):    format=BGR;    break;
+    case (FOURCC('B', 'G', 'R', 'A')):    format=BGRA;   break;
+    case (FOURCC('A', 'B', 'G', 'R')):    format=ABGR;   break;
+    case (FOURCC('A', 'R', 'G', 'B')):    format=ARGB;   break;
+
+    case (FOURCC('Y', '8', '0', '0')):
+    case (FOURCC('Y', ' ', ' ', ' ')):
+    case (FOURCC('G', 'R', 'E', 'Y')):    format=GREY;    break;
+    case (FOURCC('Y', '1', '6', ' ')):    format=GREY16;  break;
+
+    case (FOURCC('U', 'Y', 'N', 'V')):
+    case (FOURCC('Y', '4', '2', '2')):
+    case (FOURCC('H', 'D', 'Y', 'C')): // ?
+    case (FOURCC('U', 'Y', 'V', 'Y')):    format=UYVY;    break;
+
+    case (FOURCC('Y', 'U', 'Y', 'V')):
+    case (FOURCC('Y', 'U', 'N', 'V')):
+    case (FOURCC('Y', 'U', 'Y', '2')):    format=YUY2;    break;
+
+    case (FOURCC('Y', 'V', 'Y', 'U')):    format=YVYU;    break;
+    }
+
+    return format;
+  }
+
+  float dimension_penalty(int w, int h, unicap_rect_t&size) {
+    if(w>0 && h>0) {
+      if(1) {
+        // compare diagonals (penalty for very stretched formats
+        double r=sqrt(w*w+h*h);
+        double r0=sqrt(size.width*size.width+size.height*size.height);
+        return fabs(r-r0);
+      } else {
+        // compare area
+        double r=sqrt(w*h);
+        double r0=sqrt(size.width*size.height);
+        return fabs(r-r0);
+      }
+    } else if (w>0) {
+      return fabs(w-size.width);
+    } else if (h>0) {
+      return fabs(h-size.height);
+    }
+    return 0.;
+  }
+
+
+};
 
 
 void videoUNICAP::newFrame (unicap_handle_t handle, 
                             unicap_data_buffer_t * buffer) {
   unicap_format_t*fmt=&(buffer->format);
   post_fmt(fmt);
-  fourcc_t format=ILLEGAL;
+  fourcc_t format=fourcc2fmt(fmt->fourcc);
 
-  switch(fmt->fourcc) {
-  case (FOURCC('R', 'G', 'B', '2')):    format=RGB;    break;
-  case (FOURCC('R', 'G', 'B', ' ')):    format=RGB;    break;
-  case (FOURCC('R', 'G', 'B', 'A')):    format=RGBA;   break;
-  case (FOURCC('B', 'G', 'R', ' ')):    format=BGR;    break;
-  case (FOURCC('B', 'G', 'R', 'A')):    format=BGRA;   break;
-  case (FOURCC('A', 'B', 'G', 'R')):    format=ABGR;   break;
-  case (FOURCC('A', 'R', 'G', 'B')):    format=ARGB;   break;
-
-  case (FOURCC('Y', '8', '0', '0')):
-  case (FOURCC('Y', ' ', ' ', ' ')):
-  case (FOURCC('G', 'R', 'E', 'Y')):    format=GREY;    break;
-  case (FOURCC('Y', '1', '6', ' ')):    format=GREY16;  break;
-
-  case (FOURCC('U', 'Y', 'N', 'V')):
-  case (FOURCC('Y', '4', '2', '2')):
-  case (FOURCC('H', 'D', 'Y', 'C')): // ?
-  case (FOURCC('U', 'Y', 'V', 'Y')):    format=UYVY;    break;
-
-  case (FOURCC('Y', 'U', 'Y', 'V')):
-  case (FOURCC('Y', 'U', 'N', 'V')):
-  case (FOURCC('Y', 'U', 'Y', '2')):    format=YUY2;    break;
-
-  case (FOURCC('Y', 'V', 'Y', 'U')):    format=YVYU;    break;
-
-  default:
+  if(ILLEGAL==format) {
     verbose(1, "unsupported format '%s'", fmt->identifier);
-    break;
+    return;
   }
 
   unsigned char*data=buffer->data;
+  post("data: %p", data);
 
-  lock();
-  m_image.image.xsize=fmt->size.width;
-  m_image.image.ysize=fmt->size.height;
+  mutex.lock();
+  m_pix.image.xsize=fmt->size.width;
+  m_pix.image.ysize=fmt->size.height;
 
-  m_image.image.upsidedown=true;
+  m_pix.image.upsidedown=true;
 
-  m_image.image.reallocate(); // actually this is also done in from*()
+  m_pix.image.reallocate(); // actually this is also done in from*()
   switch (format) {
-  case RGB: m_image.image.fromRGB(data); break;
-  case RGBA: m_image.image.fromRGBA(data); break;
-  case BGR: m_image.image.fromBGR(data); break;
-  case BGRA: m_image.image.fromBGRA(data); break;
-  case RGB16: m_image.image.fromRGB16(data); break;
-  case ABGR: m_image.image.fromABGR(data); break;
-  case ARGB: m_image.image.fromARGB(data); break;
-  case GREY: m_image.image.fromGray(data); break;
-  case GREY16: m_image.image.fromGray((short*)data); break;
-  case UYVY: m_image.image.fromUYVY(data); break;
-  case YUY2: m_image.image.fromYUY2(data); break;
-  case YVYU: m_image.image.fromYVYU(data); break;
-  case YV12: m_image.image.fromYV12(data); break;
-  case YU12: m_image.image.fromYU12(data); break;
+  case RGB: m_pix.image.fromRGB(data); break;
+  case RGBA: m_pix.image.fromRGBA(data); break;
+  case BGR: m_pix.image.fromBGR(data); break;
+  case BGRA: m_pix.image.fromBGRA(data); break;
+  case RGB16: m_pix.image.fromRGB16(data); break;
+  case ABGR: m_pix.image.fromABGR(data); break;
+  case ARGB: m_pix.image.fromARGB(data); break;
+  case GREY: m_pix.image.fromGray(data); break;
+  case GREY16: m_pix.image.fromGray((short*)data); break;
+  case UYVY: m_pix.image.fromUYVY(data); break;
+  case YUY2: m_pix.image.fromYUY2(data); break;
+  case YVYU: m_pix.image.fromYVYU(data); break;
+  case YV12: m_pix.image.fromYV12(data); break;
+  case YU12: m_pix.image.fromYU12(data); break;
   default:
     verbose(1, "cannot convert from given format");
     break;
   }
-  m_image.newimage=1;
+  m_pix.newimage=1;
 
-  unlock();
+  mutex.unlock();
 }
 
 
@@ -253,24 +304,95 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
 // startTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoUNICAP :: startTransfer(void)
+bool videoUNICAP :: start(void)
 {
   unicap_status_t status = 0;
   unicap_format_t format;
-  defaultFormat();
-  if (!SUCCESS (unicap_get_format (m_handle, &format))) {
-    verbose(1, "failed to query format");
+  //  defaultFormat();
+  unicap_format_t format_spec;
+  unicap_void_format( &format_spec );
+
+  int default_format=0 ;
+  int default_size=0;
+
+  unsigned int count_format=0;
+
+  std::string s;
+  if(m_props.get("format", s)) {
+    for( unsigned i = 0; SUCCESS( unicap_enumerate_formats( m_handle, NULL, &format, i ) ); i++) {
+      count_format++;
+      if(s == format.identifier) {
+        default_format=i;
+        break;
+      }
+    }
+  }
+
+  std::vector<int>formatid;
+  if(default_format>=0) {
+    formatid.push_back(default_format);
+  } else {
+    for(int i=0; i<count_format; i++) {
+      formatid.push_back(i);
+    }
+  }
+
+
+  int w=-1;
+  int h=-1;
+  double d;
+  if(m_props.get("width" , d) && d>0)w=d;
+  if(m_props.get("height", d) && d>0)h=d;
+
+  double penalty=-1.;
+
+  if ((w>0 || h>0)) {
+    /* try to find a format that matches the desired width/height best */
+    for(unsigned int formatid_index=0; formatid_index<formatid.size(); formatid_index++) {
+      int format_index=formatid[formatid_index];
+      if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format, format_index) ) )  {
+        post("Failed to get video format %d", format_index);
+        continue;
+      }
+
+      /* If a video format has more than one size, try to find the best match */
+      if(format.size_count) {
+        if(penalty<0)
+          penalty=dimension_penalty(w, h, format.sizes[0]);
+        for( unsigned size_index = 0; size_index < format.size_count; size_index++ ) {
+          double p=dimension_penalty(w, h, format.sizes[size_index]);
+          if(p<penalty) {
+            default_format=format_index;
+            default_size=size_index;
+            penalty=p;
+          }
+        }
+      }
+
+    }
+  }
+
+  
+  unicap_void_format( &format_spec );
+  if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format, default_format) ) )  {
     return false;
   }
-  debugPost("got format: %x", status);
   post_fmt(&format);
+
+  if(default_size>format.size_count) {
+    post("oops: want size #%d of %d", default_size, format.size_count);
+    default_size=0;
+  }
+  format.size.width = format.sizes[default_size].width;
+  format.size.height = format.sizes[default_size].height;
+
   format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM; 
-  if (!SUCCESS (unicap_set_format (m_handle, &format))) {
-    verbose(1, "failed to set format (sysbuf)");
-    
+
+  if( !SUCCESS( unicap_set_format( m_handle, &format ) ) )  {
+    verbose(1, "failed to set format");
     return false;
   }
-  debugPost("set format %x", status);
+
   status=unicap_register_callback (m_handle, 
                                    UNICAP_EVENT_NEW_FRAME, 
                                    (unicap_callback_t) newFrameCB,
@@ -282,6 +404,7 @@ bool videoUNICAP :: startTransfer(void)
   debugPost("start capture: %x", status);
   if(!SUCCESS(status))
     return false;
+
   return true;
 }
 
@@ -289,18 +412,23 @@ bool videoUNICAP :: startTransfer(void)
 // stopTransfer
 //
 /////////////////////////////////////////////////////////
-bool videoUNICAP :: stopTransfer(void)
+bool videoUNICAP :: stop(void)
 {
   unicap_stop_capture (m_handle);        // (3)
 
   return true;
 }
 
+bool videoUNICAP :: reset(void) {
+#warning reset
+  return false;
+}
+
 bool videoUNICAP :: setColor(int format)
 {
-  if (format<=0 || format==m_reqFormat)return -1;
+  if (format<=0 || format==m_reqFormat)return false;
   m_reqFormat=format;
-  restartTransfer();
+  //  restartTransfer();
   return true;
 }
 
@@ -309,6 +437,11 @@ std::vector<std::string> videoUNICAP::enumerate(void) {
   int devcount=0;
   unicap_status_t status = 0;
   int i=0;
+
+  m_providers.clear();
+  m_providers.push_back(s_name);
+  m_providers.push_back("analog");
+
 
   status = unicap_reenumerate_devices(&devcount);
   if(!SUCCESS(status))
@@ -354,6 +487,16 @@ std::vector<std::string> videoUNICAP::enumerate(void) {
 
   return result;
 }
+bool videoUNICAP::setDevice(int ID) {
+  m_devicename.clear();
+  m_devicenum=ID;
+  return true;
+}
+bool videoUNICAP::setDevice(const std::string ID) {
+  m_devicename=ID;
+  m_devicenum=-1;
+  return true;
+}
 
 bool videoUNICAP :: defaultFormat(void) {
   if(!m_handle)return false;
@@ -362,25 +505,25 @@ bool videoUNICAP :: defaultFormat(void) {
   if(!SUCCESS(status))
     return false;
 
+  debugPost("got %d formats", count);
   if(count==0)return true;
 
   unicap_format_t format;
 
+  for(int i=0; i<count; i++) {
 
-  status=unicap_enumerate_formats( m_handle, NULL, &format, 0 );
+    status=unicap_enumerate_formats( m_handle, NULL, &format, i );
 
-  debugPost("got %d formats", count);
-
-  post_fmt(&format);
+    post_fmt(&format);
 
 #if 0
-  if(count==1) {
-    
-    status= unicap_set_format(m_handle, &format);
-    return SUCCESS(status);
-  }
+    if(count==1) {
+      
+      status= unicap_set_format(m_handle, &format);
+      return SUCCESS(status);
+    }
 #endif
-  
+  }
 
   return true;
 }
@@ -445,6 +588,7 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
   return true;
 }
 void videoUNICAP :: getProperties(gem::Properties&props) {
+  m_props=props;
   if(!m_handle)return;
   unicap_status_t status=0;
 
@@ -602,4 +746,28 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
     if (running)start();
   }
 }
+
+void videoUNICAP::provide(const std::string name) {
+  if(!provides(name))
+    m_providers.push_back(name);
+}
+
+bool videoUNICAP::provides(const std::string name) {
+  for(unsigned int i=0; i<m_providers.size(); i++) {
+    if(name == m_providers[i])
+      return true;
+  }
+  return (false);
+}
+std::vector<std::string>videoUNICAP::provides(void) {
+  std::vector<std::string>result;
+  for(unsigned int i=0; i<m_providers.size(); i++) {
+    result.push_back(m_providers[i]);
+  }
+  return result;
+}
+const std::string videoUNICAP::getName(void) {
+  return s_name;
+}
+
 #endif /* HAVE_UNICAP */
