@@ -110,13 +110,12 @@ namespace gem { namespace plugins {
       addPlugin(ids, "dv4l");
       addPlugin(ids);
 
-
-
       for(unsigned int i=0; i<m_allHandles.size(); i++) {
-        if(!m_handles[i]->isThreadable()) {
+        if(!m_allHandles[i]->isThreadable()) {
           m_canThread=false;
           break;
         }
+      }
     }
 
     virtual ~videoMeta(void) {
