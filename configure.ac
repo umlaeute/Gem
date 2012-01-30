@@ -299,6 +299,9 @@ if test "x$have_unicap" = "xyes"; then
                     have_unicap="yes"
                   ],[have_unicap="no"])
 fi
+if test "x$have_libunicap"; then
+ have_unicap="yes"
+fi
 AM_CONDITIONAL([HAVE_LIB_UNICAP], [test "x${have_unicap}" = "xyes"])
 
 
