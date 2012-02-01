@@ -111,7 +111,6 @@ imageMAGICK :: imageMAGICK(void)
   if(!IsMagickInstantiated())
     MagickCoreGenesis(NULL,MagickTrue);
 
-
   //post("imageMAGICK");
   char**mimelist;
   char what;
@@ -175,6 +174,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
+  bool result=false;
 
   ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   Image*finalImage=NULL;
@@ -204,11 +204,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
                                  cs.c_str(), CharPixel,
                                  pImage->data,exception);
   if(showException(exception, "magick conversion problem"))
-    goto failed;
+    goto cleanup;
 
   finalImage=(pImage->upsidedown)?mimage:FlipImage( mimage, exception );
   if(showException(exception, "magick flipping problem"))
-    goto failed;
+    goto cleanup;
 
   finalImage->depth=8;
   //options->depth = 8;
@@ -221,9 +221,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
 
   WriteImage(image_info,finalImage);
   if(showException(&finalImage->exception, "magick writing problem"))
-    goto failed;
+    goto cleanup;
 
+  result=true;
 
+ cleanup:
   if(finalImage!=mimage)
     finalImage=DestroyImage(finalImage);
 
@@ -231,17 +233,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
   exception=DestroyExceptionInfo(exception);
   image_info=DestroyImageInfo(image_info);
 
-  return true;
-
- failed:
-  if(finalImage!=mimage)
-    finalImage=DestroyImage(finalImage);
-
-  mimage=DestroyImage(mimage);
-  exception=DestroyExceptionInfo(exception);
-  image_info=DestroyImageInfo(image_info);
-
-  return false;
+  return result;
 }
 
 float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
