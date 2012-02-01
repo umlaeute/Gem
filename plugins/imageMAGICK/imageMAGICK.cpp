@@ -73,12 +73,16 @@ namespace {
     bool iswarning=exception->severity < ErrorException;
 
     std::string message=prefix;
-    if(!prefix.empty())
-      message+=": ";
+    message+="[";
+    message+= SetClientName(0);
+    message+="]";
 
-    message += SetClientName(0);
+    if(!iswarning)
+      message+"!";
+
+    message+=": ";
+
     if ( exception->reason != 0 ) {
-      message += std::string(": ");
       message += std::string(exception->reason);
     }
     if ( exception->description != 0 )
