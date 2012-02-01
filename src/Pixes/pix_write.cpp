@@ -132,6 +132,7 @@ void pix_write :: doWrite(void)
 
   /* the orientation is always correct, since we get it from openGL */
   /* if we do need flipping, this must be handled in mem2image() */
+  // FIXXXME: upsidedown should default be 'true'
   m_originalImage->upsidedown=false;
 
 

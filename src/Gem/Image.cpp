@@ -92,19 +92,15 @@ imageStruct :: imageStruct(void)
 #else /* !__APPLE__ */
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
 #endif /* __APPLE__ */
-    notowned(0),data(NULL),pdata(NULL),datasize(0),
-#ifdef __APPLE__
-    upsidedown(1)
-#else /* !__APPLE__ */
-  upsidedown(0)
-#endif /* __APPLE__ */
+    notowned(false),data(NULL),pdata(NULL),datasize(0),
+    upsidedown(true)
 {}
 
 imageStruct :: imageStruct(const imageStruct&org)
   : xsize (0),ysize(0),csize(0),
     type(GL_UNSIGNED_BYTE), format(GL_RGBA),
     notowned(0),data(NULL),pdata(NULL),datasize(0),
-    upsidedown(0)
+    upsidedown(true)
 {
   org.copy2Image(this);
 }
@@ -1771,7 +1767,7 @@ GEM_EXTERN extern int getPixFormat(char*cformat){
 
 /* flip the image if it is upside down */
 GEM_EXTERN void imageStruct::fixUpDown(void) {
-  if(!upsidedown)return; /* everything's fine! */
+  if(upsidedown)return; /* everything's fine! */
 
   int linewidth = xsize*csize;
   unsigned char*line = new unsigned char[linewidth];
@@ -1789,7 +1785,7 @@ GEM_EXTERN void imageStruct::fixUpDown(void) {
 
   delete[]line;
 
-  upsidedown=false;
+  upsidedown=true;
 }
 
 /* swap the Red and Blue channel _in-place_ */

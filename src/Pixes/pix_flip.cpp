@@ -58,7 +58,7 @@ void pix_flip :: processRGBAImage(imageStruct &image)
     unsigned char *dstLine = image.data;
 
     FlipType flip=m_flip;
-    if(image.upsidedown) {
+    if(!image.upsidedown) {
       switch(flip) {
       case(HORIZONTAL) : flip=BOTH;break;
       case(VERTICAL)   : flip=NONE;break;
@@ -67,7 +67,7 @@ void pix_flip :: processRGBAImage(imageStruct &image)
       default   :break;
       }
     }
-    image.upsidedown=false;
+    image.upsidedown=true;
 
     switch(flip)
     {
@@ -128,7 +128,7 @@ void pix_flip :: processYUVImage(imageStruct &image)
     unsigned char *dstLine = image.data;
 
     FlipType flip=m_flip;
-    if(image.upsidedown) {
+    if(!image.upsidedown) {
       switch(flip) {
       case(HORIZONTAL) : flip=BOTH;break;
       case(VERTICAL)   : flip=NONE;break;
@@ -137,7 +137,7 @@ void pix_flip :: processYUVImage(imageStruct &image)
       default   :break;
       }
     }
-    image.upsidedown=false;
+    image.upsidedown=true;
 
     switch(flip)
     {
@@ -195,7 +195,7 @@ void pix_flip :: processGrayImage(imageStruct &image)
     unsigned char *dstLine = image.data;
 
     FlipType flip=m_flip;
-    if(image.upsidedown) {
+    if(!image.upsidedown) {
       switch(flip) {
       case(HORIZONTAL) : flip=BOTH;break;
       case(VERTICAL)   : flip=NONE;break;
@@ -204,7 +204,7 @@ void pix_flip :: processGrayImage(imageStruct &image)
       default   :break;
       }
     }
-    image.upsidedown=false;
+    image.upsidedown=true;
 
     switch(flip)
     {

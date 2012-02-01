@@ -75,6 +75,7 @@ void pix_crop :: processImage(imageStruct &image)
   if (offY<0)offY=0;
 
   int i=0;
+  // FIXXXME make upsidedown the default
   while(i<y){
     int oldrow=image.upsidedown?(image.ysize-((offY+i)%image.ysize)-1):(offY+i)%image.ysize;
     unsigned char *newdata = m_data+(x*i)*csize;

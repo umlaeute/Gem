@@ -105,6 +105,7 @@ void pix_snap :: snapMess()
 		m_originalImage->xsize = m_width;
 		m_originalImage->ysize = m_height;
     m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
+    // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 
 		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
