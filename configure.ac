@@ -249,10 +249,22 @@ AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x
 if test "x$with_ImageMagick" = "x"; then
  with_ImageMagick="$with_imagemagick"
 fi
+if test "x$with_MagickCore" = "x"; then
+ with_MagickCore="$with_ImageMagick"
+fi
 
-GEM_CHECK_LIB([ImageMagick], [Magick], [main],
-	AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick]),
-	,,[image loader])
+GEM_CHECK_LIB([ImageMagick++], 
+              [Magick++], 
+              [main],
+              AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
+              ,,[image loader])
+
+GEM_CHECK_LIB([MagickCore], 
+              [Magick], 
+              [main],
+              AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
+   	          ,,[image loader])
+
 #if test "x${have_ImageMagick}" = "xyes"
 #then
 # with_tiff=no
@@ -563,6 +575,14 @@ dnl give some feedback about the configuration
 
 if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
+fi
+
+if test "x$have_ImageMagick" = "xyes"; then
+  have_ImageMagick="yes (Magick++)"
+else
+  if test "x$have_MagickCore" = "xyes"; then
+    have_ImageMagick="yes (MagickCore)"
+  fi
 fi
 
 if test "x$have_quicktime_framework" = "x"; then have_quicktime_framework="no"; fi

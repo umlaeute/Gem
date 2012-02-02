@@ -7,8 +7,12 @@ EXTRA_DIST += win-vs2003/imageMAGICK.sln win-vs2003/imageMAGICK.vcproj
 EXTRA_DIST += win-vs2008/imageMAGICK.sln win-vs2008/imageMAGICK.vcproj
 
 pkglib_LTLIBRARIES=
-if HAVE_LIB_IMAGEMAGICK
+if HAVE_LIB_IMAGEMAGICK__
 pkglib_LTLIBRARIES+= gem_imageMAGICK.la
+else
+if HAVE_LIB_MAGICKCORE
+pkglib_LTLIBRARIES+= gem_imageMAGICK.la
+endif
 endif
 
 gem_imageMAGICK_la_CXXFLAGS =
@@ -27,13 +31,28 @@ gem_imageMAGICK_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_imageMAGICK_la @MOREFLAGS@
 
 # Dependencies
-gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK_CFLAGS@
-gem_imageMAGICK_la_LIBADD   += @GEM_LIB_IMAGEMAGICK_LIBS@
+if HAVE_LIB_IMAGEMAGICK__
+gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_IMAGEMAGICK___CFLAGS@
+gem_imageMAGICK_la_LIBADD   += @GEM_LIB_IMAGEMAGICK___LIBS@
+else
+if HAVE_LIB_MAGICKCORE
+gem_imageMAGICK_la_CXXFLAGS += @GEM_LIB_MAGICKCORE_CFLAGS@
+gem_imageMAGICK_la_LIBADD   += @GEM_LIB_MAGICKCORE_LIBS@
+endif
+endif
+
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
 
 
 ### SOURCES
-gem_imageMAGICK_la_SOURCES= imageMAGICK.cpp imageMAGICK.h
+gem_imageMAGICK_la_SOURCES = imageMAGICK.cpp imageMAGICK.h
 
+if HAVE_LIB_IMAGEMAGICK__
+gem_imageMAGICK_la_SOURCES+= MagickPlusPlus.cpp
+else
+if HAVE_LIB_MAGICKCORE
+gem_imageMAGICK_la_SOURCES+= MagickCore.cpp
+endif
+endif
