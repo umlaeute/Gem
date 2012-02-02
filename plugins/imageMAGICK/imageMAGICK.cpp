@@ -238,7 +238,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
 
 float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   float result=0.5; // slightly preference for MAGICK
-
+  error("GEM::imageMAGICK::save seems to be broken! we are trying to fix it");
   int i;
   for(i=0; i<m_mimetypes.size(); i++) {
     if(mimetype==m_mimetypes[i]) {
