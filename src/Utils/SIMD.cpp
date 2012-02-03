@@ -1,6 +1,8 @@
 #include "SIMD.h"
-#include "m_pd.h"
+#include "Thread.h"
+#include "Gem/RTE.h"
 #include <string>
+
 
 int GemSIMD::cpuid = GEM_SIMD_NONE;
 int GemSIMD::realcpuid = GEM_SIMD_NONE;
@@ -60,6 +62,7 @@ GemSIMD :: GemSIMD(void)
      usingstr="invalid";
    }
    verbose(-1, "GEM: using %s optimization", usingstr.c_str());
+   verbose(-1, "GEM: detected %d CPUs", gem::thread::getCPUCount());
  }
 }
 
