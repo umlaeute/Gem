@@ -4,7 +4,7 @@ LOG
 
     Thread.h
        - part of GEM
-       - simple thread abstraction
+       - simple platform independent thread abstraction
 
     Copyright (c) 2011-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -18,18 +18,43 @@ LOG
 #include "Gem/ExportDef.h"
 
 namespace gem { namespace thread {
+    /**
+     * get the number of available CPUs on the system
+     */
     GEM_EXTERN extern unsigned int getCPUCount(void);
-#if 0
+
     class GEM_EXTERN Thread {
     private:
       class PIMPL;
       PIMPL*m_pimpl;
       friend class PIMPL;
 
+      Thread(const Thread&);
+      Thread&operator=(const Thread&);
     public:
-    };
-#endif
+      Thread(void);
+      virtual ~Thread(void);
 
+      ////
+      // start thread
+      virtual bool start(void);
+      ////
+      // stop thread 
+      //  waits for at most wait4usec microseconds
+      //  is wait4usec==0, waits until process terminates (e.g. forever)
+      virtual bool stop(unsigned int wait4usec=0);
+
+    protected:
+      ////
+      // the worker!
+      // get's called from an alternative thread
+      // if TRUE is returned, process() will be called again
+      //  until stop() is called
+      // if FALSE is returned, the thread may exit
+      virtual bool process(void) = 0;
+
+
+    };
 };}; // namespace
 
 

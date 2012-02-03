@@ -25,8 +25,6 @@
 # include <unistd.h>
 #endif
 
-using namespace gem::thread;
-
 unsigned int  gem::thread::getCPUCount(void) {
   // http://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
 
@@ -84,3 +82,99 @@ unsigned int  gem::thread::getCPUCount(void) {
 
   return 1; // safe default
 }
+
+
+#include <pthread.h>
+#if defined __linux__ || defined __APPLE__
+# include <unistd.h>
+# include <sys/time.h>
+#endif
+#ifdef _WIN32
+# include <winsock2.h>
+#endif
+
+namespace gem { namespace thread {
+
+class Thread::PIMPL { public:
+  Thread*owner;
+  volatile bool keeprunning;
+  volatile bool isrunning;
+  pthread_t p_thread;
+
+  PIMPL(Thread*x):
+    owner(x),
+    keeprunning(true),
+    isrunning(false)
+  {}
+  ~PIMPL(void) {
+    stop(0);
+  }
+  static inline void*process(void*you) {
+    PIMPL*me=reinterpret_cast<PIMPL*>(you);
+    Thread*owner=me->owner;
+    me->isrunning=true;
+
+    while(me->keeprunning) {
+      if(!owner->process())
+	break;
+    }
+    me->isrunning=false;
+    return 0;
+  }
+  bool start(void) {
+    if(isrunning)return true;
+
+    keeprunning=true;
+    pthread_create(&p_thread, 0, process, this);
+
+    struct timeval sleep;
+    while(!isrunning) {
+      sleep.tv_sec=0;
+      sleep.tv_usec=10;
+      select(0,0,0,0,&sleep);
+    }
+
+    return true;  
+  }
+
+  bool stop(unsigned int timeout) {
+      if(!isrunning)return true;
+      int timmy=(timeout/10); // we are sleeping for 10usec in each cycle
+      bool checktimeout=(timeout>0);
+
+      keeprunning=false;
+
+      struct timeval sleep;
+      while(isrunning) {
+        sleep.tv_sec=0;
+        sleep.tv_usec=10;
+        select(0,0,0,0,&sleep);
+	if(checktimeout && (timmy--<10))break;
+      }
+      return (!isrunning);
+  }
+};
+
+Thread::Thread(void) :
+  m_pimpl(new PIMPL(this)) {
+}
+Thread::~Thread(void) {
+  stop(true);
+  delete m_pimpl;
+  m_pimpl=0;
+}
+bool Thread::start(void) {
+  return m_pimpl->start();
+}
+bool Thread::stop(unsigned int timeout) {
+  return m_pimpl->stop(timeout);
+}
+/* _private_ dummy implementations */
+Thread&Thread::operator=(const Thread&org) {
+  return (*this);
+}
+Thread::Thread(const Thread&org) : m_pimpl(new PIMPL(this)) {
+}
+
+
+};}; // namespace
