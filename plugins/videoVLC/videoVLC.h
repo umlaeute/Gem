@@ -3,7 +3,7 @@
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
-#include "Gem/ThreadMutex.h"
+#include "Utils/ThreadMutex.h"
 
 #include <vlc/vlc.h>
 #include <stdarg.h>

@@ -17,7 +17,7 @@
 /////////////////////////////////////////////////////////
 #include "ImageIO.h"
 #include "Gem/RTE.h"
-#include "Gem/SynchedWorkerThread.h"
+#include "Utils/SynchedWorkerThread.h"
 
 #include "plugins/imageloader.h"
 
