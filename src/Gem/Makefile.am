@@ -55,7 +55,6 @@ libGem_la_include_HEADERS += \
 	PixConvert.h
 
 libGem_la_include_HEADERS += \
-	Thread.h \
 	WorkerThread.h \
 	SynchedWorkerThread.h \
 	ThreadMutex.h \
@@ -115,8 +114,6 @@ libGem_la_SOURCES += \
 	State.h \
 	SynchedWorkerThread.cpp \
 	SynchedWorkerThread.h \
-	Thread.cpp \
-	Thread.h \
 	ThreadMutex.cpp \
 	ThreadMutex.h \
 	ThreadSemaphore.cpp \

@@ -18,6 +18,8 @@ LOG
 #include "Gem/ExportDef.h"
 
 namespace gem { namespace thread {
+    GEM_EXTERN extern unsigned int getCPUCount(void);
+#if 0
     class GEM_EXTERN Thread {
     private:
       class PIMPL;
@@ -25,9 +27,8 @@ namespace gem { namespace thread {
       friend class PIMPL;
 
     public:
-      static unsigned int getCPUCount(void);
     };
-
+#endif
 
 };}; // namespace
 

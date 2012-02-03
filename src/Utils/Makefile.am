@@ -27,6 +27,7 @@ libUtils_la_include_HEADERS = \
 	Matrix.h \
 	PixPete.h \
 	SIMD.h \
+	Thread.h \
 	Vector.h 
 
 
@@ -47,6 +48,8 @@ libUtils_la_SOURCES=  \
 	pstk.h \
 	SIMD.cpp \
 	SIMD.h \
+	Thread.cpp \
+	Thread.h \
 	Vector.cpp \
 	Vector.h
 

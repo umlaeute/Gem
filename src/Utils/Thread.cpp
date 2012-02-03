@@ -27,7 +27,7 @@
 
 using namespace gem::thread;
 
-unsigned int Thread::getCPUCount(void) {
+unsigned int  gem::thread::getCPUCount(void) {
   // http://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
 
 #ifdef _OPENMP
