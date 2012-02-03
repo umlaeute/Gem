@@ -19,32 +19,35 @@ NEW:::
 ------
 
 Gem is now supported by W32, linux and macOS-X
-the IRIX version might work (but most probably will not): if you want to use Gem under IRIX,feel free to make it work and report failure and success to me, so i can incorporate any needed changes into the main Gem-trunk.
+the IRIX version might work (but most probably will not): if you want to use Gem
+under IRIX, feel free to make it work and report failure and success to me, so i
+can incorporate any needed changes into the main Gem-trunk.
 
 for installation instructions see below
 
 
-NEW (gem>=0.87):::
+NEW (Gem>=0.87):::
 -----------------
 (note: this NEWs only refer to the packaging, not to features of Gem)
 
 As with GEM-0.87, i have broken the distribution into various packages
-gem-<gemver>.tgz :: quite everything (except binaries and auxiliary libraries)
-gem-doc-<gemver>.tgz :: example-patches, manual, ...
-gem-bin-<gemver>.zip :: W32-binary (containing a single file "Gem.dll")
-gem-bin-doc-<gemver>.zip :: W32-binary + documentation
+Gem-<gemver>.tgz :: quite everything (except binaries and auxiliary libraries)
+Gem-doc-<gemver>.tgz :: example-patches, manual, ...
+Gem-bin-<gemver>.zip :: W32-binary (containing a single file "Gem.dll")
+Gem-bin-doc-<gemver>.zip :: W32-binary + documentation
 
 GemLibs-<OS>-<libver>.tgz :: auxiliary libraries (used to be "AuxLibs")
 
 1) the core Gem-packages:
-the core Gem-packages all extract into the same directory gem-<gemver>/
+the core Gem-packages all extract into the same directory Gem-<gemver>/
 there are install-scripts for windoze (and probably IRIX)
 these will install the documentation...
 
 
 2) the GemLib-package:
-I don't know, whether it has much sense, to break the core Gem-package (doc/src/bin),
-but i do know, that the GemLibs should be in a distinct package (just for the sake of downloading)
+I don't know, whether it has much sense, to break the core Gem-package
+(doc/src/bin), but i do know, that the GemLibs should be in a distinct package
+(just for the sake of downloading)
 
 the GemLibs have their own version numbering, starting with 1.
 You can get the newest GemLib from the place mentioned above
@@ -137,11 +140,15 @@ if your Gem-binary lives somewhere else use something like "pd -lib /path/to/my/
 you could also use "pd -path /path/to/my -lib Gem"
 after loading Gem you will see a bit of a welcome message on the konsole
 
-NOTE: there *must not* be any file extension with the "-lib"-flag:: "pd -lib Gem.dll" will miserably fail
+NOTE: there *must not* be any file extension with the "-lib"-flag.
+	e.g. this will fail miserably:
+	"pd -lib Gem.dll"
 NOTE: please note the spelling: it is "Gem" and not "gem" nor "GEM"
 
-if you have problems loading any library including Gem, have a look at the pd-documentation
-if you have problems loading just Gem (but other libraries work), send me a bug-report (see below)
+if you have problems loading any library including Gem, have a look at the
+pd-documentation.
+if you have problems loading just Gem (but other libraries work), send me a
+bug-report (see below)
 
 BUG-REPORTS:
 ============
@@ -155,10 +162,12 @@ please specify at least the following things:
 	Operating-System (kernel-version,...)
 	video-card, driver
 	other hardware that is related to your problem (e.g.: camera)
-	does your system work with similar applications (e.g.: capture-software, openGL (games, "glxgears")
-	what is the output of pd when you start it with the "-verbose" flag (e.g.:"pd -verbose -lib Gem")
+	does your system work with similar applications (e.g.: capture-software,
+	openGL (games, "glxgears")
+	what is the output of pd when you start it with the "-verbose" flag
+	(e.g.:"pd -verbose -lib Gem")
 
-please do not use the puredata bugtracker for reporting gem-specific bugs.
+please do not use the puredata bugtracker for reporting Gem-specific bugs.
 
 ----
 have fun
