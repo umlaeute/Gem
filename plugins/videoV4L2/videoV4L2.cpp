@@ -693,8 +693,7 @@ bool videoV4L2 :: stopTransfer()
 
   // stop streaming
   if(m_tvfd){
-    enum v4l2_buf_type type;
-    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (-1 == xioctl (m_tvfd, VIDIOC_STREAMOFF, &type)){
       perror("v4l2: VIDIOC_STREAMOFF");
     }
@@ -736,6 +735,7 @@ std::vector<std::string> videoV4L2::enumerate() {
     verbose(2, "V4L2: v4l2_open returned %d", fd);
     if(fd<0)continue;
     struct v4l2_capability cap;
+    memset (&cap, 0, sizeof (cap));
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
       if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) {
         result.push_back(dev);      
