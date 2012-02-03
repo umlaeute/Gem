@@ -45,11 +45,16 @@ these will install the documentation...
 
 
 2) the GemLib-package:
-I don't know, whether it has much sense, to break the core Gem-package
-(doc/src/bin), but i do know, that the GemLibs should be in a distinct package
-(just for the sake of downloading)
+Gem supports many 3rd party libraries, bundling all of them seems like a waste
+of space and might impose legal issues. OTOH, it makes it much easier to setup
+an environment to build Gem (esp. on systems that don't have package managers)
+GemLibs is a small collections of libraries that can add some capabilities to
+Gem, which it would lack otherwise (e.g. support for a given image format). It
+is far from complete and most likely outdated, so usually you are better off, if
+you just install any needed libraries manually.
+Most of these libraries are only needed to build certain plugins.
 
-the GemLibs have their own version numbering, starting with 1.
+GemLibs have their own version numbering, starting with 1.
 You can get the newest GemLib from the place mentioned above
 
 
@@ -82,8 +87,11 @@ b) archive (do it by hand)
 
 	1) unzip the GEM package
 
-	2) put the subfolders of Gem-<version>\ into the "extra" folder of your
-		Pd installation
+	2) put the subfolders of Gem-<version>\ into a directory where Pd will
+	find it. If you are using an up-to-date version of Pd (>=0.43), put them
+	into the folder "Application Data\Pd\" in your home directory.
+	For older versions of Pd, put them into the "extra" folder of your Pd
+	installation.
 	   e.g. if you installed Pd as "C:\Program Files\Pd-0.43-0" you should
 		end up with:
 		"C:\Program Files\Pd-0.43-0\extra\Gem"
@@ -92,8 +100,7 @@ b) archive (do it by hand)
 		"C:\Program Files\Pd-0.43-0\extra\pix_mano"
 		...
 
-	   there is no need to copy the README.txt found in Gem-<version>\ into
-		"extra"
+	   there is no need to copy the README.txt found in Gem-<version>\ 
 
 	3) please note that the archive comes with all plugins
 		in most cases, you won't need all of them, and having plugins
@@ -128,9 +135,10 @@ you will have to tell pd that it should load that library !!
 you cannot create any Gem-objects without having loaded the Gem-library into pd !!!
 
 make sure you have the proper binary for you OS
-  - windows: Gem.dll
-  - macOS-X: Gem.pd_darwin
-  - linux  : Gem.pd_linux
+  - windows: Gem.dll, Gem.m_i386, Gem.m_*
+  - macOS-X: Gem.pd_darwin, Gem.d_fat, Gem.d_ppc, Gem.d_*
+  - linux  : Gem.pd_linux, Gem.l_i386, Gem.l_ia64, Gem.l_*
+  - freeBSD: Gem.pd_freebsd, Gem.b_i386, Gem.b_*
   - irix   : Gem.pd_irix
   - ...
 
