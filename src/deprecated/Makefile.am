@@ -1,10 +1,13 @@
 #####################################################################
-# Gem/deprecated: compat header files for pre-0.93 header layout
+# Gem/deprecated: compat header files for older directory layouts
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
 
-nobase_pkginclude_HEADERS = \
+nobase_pkginclude_HEADERS =
+
+# pre-0.93 header layout
+nobase_pkginclude_HEADERS += \
 	Base/GemCache.h \
 	Base/GemContextData.h \
 	Base/GemEvent.h \
@@ -26,3 +29,10 @@ nobase_pkginclude_HEADERS = \
 	Base/GemVector.h \
 	Base/GemVersion.h \
 	Base/Matrix.h
+
+# Thread-stuff moved to Utils/ in 0.93->0.94
+nobase_pkginclude_HEADERS += \
+	Gem/SynchedWorkerThread.h \
+	Gem/ThreadMutex.h \
+	Gem/ThreadSemaphore.h \
+	Gem/WorkerThread.h
