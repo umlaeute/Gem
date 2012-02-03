@@ -27,9 +27,14 @@ libUtils_la_include_HEADERS = \
 	Matrix.h \
 	PixPete.h \
 	SIMD.h \
-	Thread.h \
 	Vector.h 
 
+libUtils_la_include_HEADERS += \
+	Thread.h \
+	ThreadMutex.h \
+	ThreadSemaphore.h \
+	WorkerThread.h \
+	SynchedWorkerThread.h
 
 libUtils_la_SOURCES=  \
 	any.h \
@@ -50,6 +55,14 @@ libUtils_la_SOURCES=  \
 	SIMD.h \
 	Thread.cpp \
 	Thread.h \
+	ThreadMutex.cpp \
+	ThreadMutex.h \
+	ThreadSemaphore.cpp \
+	ThreadSemaphore.h \
+	WorkerThread.cpp \
+	WorkerThread.h \
+	SynchedWorkerThread.cpp \
+	SynchedWorkerThread.h \
 	Vector.cpp \
 	Vector.h
 

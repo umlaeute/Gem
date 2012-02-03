@@ -15,7 +15,7 @@ LOG
 #ifndef _INCLUDE__GEM_GEM_SYNCHEDWORKERTHREAD_H_
 #define _INCLUDE__GEM_GEM_SYNCHEDWORKERTHREAD_H_
 
-#include "Gem/WorkerThread.h"
+#include "Utils/WorkerThread.h"
 
 namespace gem { namespace thread {
     class GEM_EXTERN SynchedWorkerThread : public WorkerThread {

@@ -54,12 +54,6 @@ libGem_la_include_HEADERS += \
 	ImageIO.h \
 	PixConvert.h
 
-libGem_la_include_HEADERS += \
-	WorkerThread.h \
-	SynchedWorkerThread.h \
-	ThreadMutex.h \
-	ThreadSemaphore.h
-
 libGem_la_SOURCES =
 
 if !HAVE_LIB_GLEW
@@ -112,13 +106,5 @@ libGem_la_SOURCES += \
 	Setup.cpp \
 	State.cpp \
 	State.h \
-	SynchedWorkerThread.cpp \
-	SynchedWorkerThread.h \
-	ThreadMutex.cpp \
-	ThreadMutex.h \
-	ThreadSemaphore.cpp \
-	ThreadSemaphore.h \
-	Version.h \
-	WorkerThread.cpp \
-	WorkerThread.h
+	Version.h
 
