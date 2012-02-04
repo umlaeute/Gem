@@ -391,10 +391,49 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
       devname+=buf;
     }
   }
-  const char*dev_name=devname.c_str();
 
   // try to open the device
+  printf("substring : %s\n", devname.substr(0,3).c_str());
+  std::string pattern("bus");
+  
+  if (devname.substr(0,3) == pattern){
+	  std::string tmpdevname = devname.substr(3);
+	  std::cout << "bus address :" << tmpdevname << std::endl;
+	  
+	  std::vector<std::string> alldev = enumerate();
+	  int i;
+		for(i=0; i<alldev.size(); i++) {
+			std::string dev=alldev[i];
+			verbose(2, "V4L2: found possible device %s", dev.c_str());
+			int fd=v4l2_open(dev.c_str(), O_RDWR);
+			verbose(2, "V4L2: v4l2_open returned %d", fd);
+			if(fd<0)continue;
+			struct v4l2_capability cap;
+			if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
+				
+				std::string bus;
+				bus = (char*) cap.bus_info;
+				std::cout << "bus : " << bus << std::endl;
+			  if ( devname.substr(3) == bus ) {
+					devname = dev;
+					break;
+			  }
+			} else {
+			  verbose(1, "%s is no v4l2 device", dev.c_str());
+			}
+			v4l2_close(fd);
+		}
+		if ( i >= alldev.size() ) {
+			error("v4l2 : no device on bus %s", devname.substr(3).c_str());
+			devname = "";
+		}
+		std::cout << "devname : " << devname << std::endl;
+		std::cout << "iteration " << i << " device "  << alldev.size() << std::endl;
+	 }
+	 
+  const char*dev_name=devname.c_str();
   debugPost("v4l2: device: %s", dev_name);
+
   
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
