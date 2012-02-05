@@ -1,4 +1,4 @@
-#N canvas 147 88 871 639 10;
+#N canvas 487 149 1048 639 10;
 #X text 451 6 GEM object;
 #X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -41,7 +41,7 @@ film into the specified colorspace.;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
 #X restore 722 499 pd gemwin;
-#X msg 722 477 create;
+#X msg 722 477 destroy;
 #X text 718 456 Create window:;
 #X obj 563 86 cnv 15 230 280 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -63,21 +63,21 @@ system.;
 #X obj 567 53 gemhead;
 #X msg 596 124 dimen 64 64;
 #X msg 586 99 dimen 256 128;
-#X msg 635 261 enumerate;
-#X msg 641 283 dialog;
+#X msg 631 277 enumerate;
+#X msg 637 299 dialog;
 #X msg 604 153 colorspace RGBA;
 #X msg 609 211 device 0;
-#X msg 642 312 driver dv;
-#N canvas 515 117 572 549 properties 0;
+#X msg 641 319 driver dv;
+#N canvas 195 162 689 571 properties 0;
 #X msg 41 203 enumProps;
 #X obj 31 21 cnv 15 400 80 empty empty readProperties 20 12 0 14 -233017
 -66577 0;
-#X obj 39 47 hradio 15 1 0 1 \$0-propreadId \$0-propreadId empty 0
+#X obj 39 47 hradio 15 1 0 13 \$0-propreadId \$0-propreadId empty 0
 -8 0 10 -262144 -1 -1 0;
 #X obj 40 70 cnv 15 260 20 empty \$0-propreadName <none> 10 9 0 14
 -203904 -66577 0;
-#N canvas 185 50 450 537 PropertyLogic 0;
-#N canvas 1408 84 774 460 id2property 0;
+#N canvas 183 84 450 537 PropertyLogic 0;
+#N canvas 126 91 774 460 id2property 0;
 #X obj 353 106 r \$0-info;
 #X obj 353 130 route proplist;
 #X obj 353 152 route read numread;
@@ -300,13 +300,13 @@ system.;
 -66577 0;
 #X obj 31 111 cnv 15 400 80 empty empty writeProperties 20 12 0 14
 -233017 -66577 0;
-#X obj 39 137 hradio 15 1 0 1 \$0-propwriteId \$0-propwriteId empty
+#X obj 39 137 hradio 15 1 0 10 \$0-propwriteId \$0-propwriteId empty
 0 -8 0 10 -262144 -1 -1 0;
 #X obj 40 160 cnv 15 260 20 empty \$0-propwriteName <none> 10 9 0 14
 -203904 -66577 0;
 #X obj 311 160 nbx 5 20 -1e+37 1e+37 0 0 \$0-propwriteValue \$0-propwriteValue
 empty 0 -8 0 14 -204786 -1 -1 0 256;
-#X msg 66 315 get 50_fields;
+#X msg 66 315 get bus_info;
 #X msg 83 392 set quality 5;
 #X obj 66 294 r \$0-propget;
 #X obj 83 372 r \$0-propset;
@@ -330,6 +330,9 @@ might contain spaces (and other weird characters);
 #X text 247 461 add values to the property list (don't apply yet);
 #X text 247 479 add values to the property list (don't apply yet);
 #X text 247 499 apply current property list;
+#X msg 465 400 get driver;
+#X msg 545 400 get bus_info;
+#X msg 384 400 get driver;
 #X connect 0 0 4 0;
 #X connect 10 0 4 0;
 #X connect 11 0 4 0;
@@ -340,12 +343,15 @@ might contain spaces (and other weird characters);
 #X connect 23 0 4 0;
 #X connect 24 0 4 0;
 #X connect 25 0 4 0;
-#X restore 336 430 pd properties;
+#X connect 30 0 4 0;
+#X connect 31 0 4 0;
+#X connect 32 0 4 0;
+#X restore 406 437 pd properties;
 #X obj 618 459 t a a;
 #X obj 618 480 print info;
 #X obj 655 459 s \$0-info;
 #X obj 586 376 t a a;
-#N canvas 166 121 570 420 device 0;
+#N canvas 162 135 570 420 device 0;
 #X obj 204 60 cnv 20 20 20 empty \$0-open-canvas 0 4 10 0 16 -233017
 -1 0;
 #X obj 60 61 hradio 18 1 0 8 empty empty empty 0 -6 0 8 -225271 -1
@@ -380,7 +386,7 @@ might contain spaces (and other weird characters);
 #X connect 14 0 15 0;
 #X connect 15 0 8 0;
 #X coords 0 -1 1 1 165 20 1 60 60;
-#X restore 609 187 pd device;
+#X restore 608 186 pd device;
 #X obj 36 565 cnv 15 400 30 empty empty empty 20 12 0 14 -260097 -66577
 0;
 #X text 48 565 NOTE: usually you cannot use a camera more than once
@@ -392,7 +398,7 @@ at the same time!;
 #X obj 647 346 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X msg 665 345 driver \$1;
-#X text 686 286 (if available);
+#X text 682 302 (if available);
 #X text 16 388 Inlet 1: dialog: open a dialog to configure the input
 device (depending on driver / Operating System);
 #X text 18 501 Outlet 2: info (for enumerating devices \, querying
@@ -403,6 +409,149 @@ properties \, ...);
 #X text 54 600 you can use [pix_buffer] to distribute the same pix
 to different parts of your render-chain;
 #X msg 625 235 device /dev/fw1;
+#N canvas 105 114 655 381 v4l2_only 1;
+#X msg -101 59 device usb-0000:00:04.1-4;
+#X msg -101 79 device usb-0000:00:06.0-2;
+#X msg -101 99 device usb-0000:00:04.0-1;
+#X text -148 26 With V4L2 backend you can choose a device by its physical
+location on the bus :;
+#X text -153 159 you can also get some read-only properties :;
+#X msg -152 176 get driver;
+#X msg -62 176 get card;
+#X msg 28 176 get bus_info;
+#X text -158 120 contrary to /dev/video* files \, this address is not
+related to the plug order of the devices;
+#N canvas 761 184 450 537 PropertyLogic 0;
+#N canvas 419 192 774 460 id2property 0;
+#X obj 353 106 r \$0-info;
+#X obj 353 130 route proplist;
+#X obj 353 152 route read numread;
+#X obj 434 181 t b f;
+#X obj 353 174 list;
+#X obj 353 219 list prepend;
+#X msg 353 196 \$1;
+#X obj 353 239 t l l;
+#X obj 95 197 list prepend;
+#X obj 95 69 inlet readID;
+#X obj 123 378 outlet readName;
+#X obj 95 176 t b f;
+#X obj 95 219 list split;
+#X obj 123 266 symbol;
+#X msg 123 241 symbol \$1;
+#X obj 95 91 route float;
+#X msg 432 333 number \$1;
+#X obj 557 223 loadbang;
+#X obj 432 353 s \$0-propreadIdv4l2;
+#X msg 557 244 3;
+#X obj 95 144 +;
+#X obj 185 147 - 3;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 2 1 3 0;
+#X connect 3 0 5 1;
+#X connect 3 1 16 0;
+#X connect 3 1 21 0;
+#X connect 4 0 6 0;
+#X connect 5 0 7 0;
+#X connect 6 0 5 0;
+#X connect 7 0 8 1;
+#X connect 7 1 5 1;
+#X connect 8 0 12 0;
+#X connect 9 0 15 0;
+#X connect 11 0 8 0;
+#X connect 11 1 12 1;
+#X connect 12 1 14 0;
+#X connect 13 0 10 0;
+#X connect 14 0 13 0;
+#X connect 15 0 20 0;
+#X connect 16 0 18 0;
+#X connect 17 0 19 0;
+#X connect 19 0 16 0;
+#X connect 20 0 11 0;
+#X connect 21 0 20 1;
+#X restore 75 139 pd id2property;
+#X obj 75 237 list prepend set;
+#X obj 75 259 list trim;
+#X obj 75 281 t b a;
+#N canvas 738 297 450 300 getProp 0;
+#X msg 44 156 label \$1;
+#X msg 197 154 get \$1;
+#X obj 44 81 inlet;
+#X obj 197 176 outlet;
+#X obj 290 57 r \$0-info;
+#X obj 290 79 route prop;
+#N canvas 1 84 450 300 sroute 0;
+#X obj 73 12 inlet;
+#X obj 312 9 inlet;
+#X obj 73 113 outlet;
+#X obj 73 34 list split 1;
+#X obj 73 56 select s;
+#X obj 73 78 list prepend;
+#X connect 0 0 3 0;
+#X connect 1 0 4 1;
+#X connect 3 0 4 0;
+#X connect 3 1 5 1;
+#X connect 4 0 5 0;
+#X connect 5 0 2 0;
+#X restore 290 113 pd sroute;
+#X obj 44 123 t s s s;
+#X msg 290 226 label \$1;
+#X obj 106 29 loadbang;
+#X obj 106 51 t b b;
+#X msg 106 73 symbol <none>;
+#X msg 203 71 symbol --;
+#X obj 290 247 s \$0-propreadValuev4l2;
+#X obj 44 177 s \$0-propreadNamev4l2;
+#X connect 0 0 14 0;
+#X connect 1 0 3 0;
+#X connect 2 0 7 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 8 0;
+#X connect 7 0 0 0;
+#X connect 7 1 1 0;
+#X connect 7 2 6 1;
+#X connect 8 0 13 0;
+#X connect 9 0 10 0;
+#X connect 10 0 11 0;
+#X connect 10 1 12 0;
+#X connect 11 0 0 0;
+#X connect 12 0 8 0;
+#X restore 75 165 pd getProp;
+#X obj 75 212 list prepend get;
+#X obj 75 190 route get set;
+#X obj 75 310 s \$0-propget;
+#X obj 54 38 inlet;
+#X obj 54 66 s \$0-ctl;
+#X obj 59 105 r \$0-propreadIdv4l2;
+#X connect 0 0 4 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 7 0;
+#X connect 3 1 7 0;
+#X connect 4 0 6 0;
+#X connect 5 0 1 0;
+#X connect 6 0 5 0;
+#X connect 8 0 9 0;
+#X connect 10 0 0 0;
+#X restore -152 214 pd PropertyLogic;
+#X obj -195 238 cnv 15 400 80 empty empty readPropertiesv4l2 20 12
+0 14 -233017 -66577 0;
+#X obj -182 264 hradio 15 1 0 3 \$0-propreadIdv4l2 \$0-propreadIdv4l2
+empty 0 -8 0 10 -262144 -1 -1 0;
+#X obj -183 285 cnv 15 150 20 empty \$0-propreadNamev4l2 bus_info 10
+9 0 14 -203904 -66577 0;
+#X obj -24 285 cnv 15 200 20 empty \$0-propreadValuev4l2 usb-0000:00:04.1-4
+10 9 0 14 -261234 -66577 0;
+#X obj -201 86 s \$0-ctl;
+#X connect 0 0 14 0;
+#X connect 1 0 14 0;
+#X connect 2 0 14 0;
+#X connect 5 0 9 0;
+#X connect 6 0 9 0;
+#X connect 7 0 9 0;
+#X restore 406 456 pd v4l2_only;
 #X connect 17 0 18 0;
 #X connect 18 0 17 0;
 #X connect 22 0 21 0;
