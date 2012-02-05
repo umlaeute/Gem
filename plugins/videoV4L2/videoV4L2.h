@@ -182,7 +182,8 @@ namespace gem { namespace plugins {
 		     gem::Properties&readable,
 		     gem::Properties&writeable);
   std::map<std::string, struct v4l2_queryctrl>m_readprops, m_writeprops;
-
+  struct v4l2_capability m_caps;
+  
   __u32 m_frameSize; // the size of a v4l2 frame
 
 #endif /* HAVE_VIDEO4LINUX2 */
