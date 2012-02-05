@@ -392,13 +392,8 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
     }
   }
 
-  // try to open the device
-  printf("substring : %s\n", devname.substr(0,3).c_str());
-  std::string pattern("bus");
-  
-  if (devname.substr(0,3) == pattern){
-	  std::string tmpdevname = devname.substr(3);
-	  std::cout << "bus address :" << tmpdevname << std::endl;
+
+  if (devname.at(0) != '/'){ // assuming all v4l2 device's paths starts with '/'
 	  
 	  std::vector<std::string> alldev = enumerate();
 	  int i;
@@ -413,28 +408,26 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
 				
 				std::string bus;
 				bus = (char*) cap.bus_info;
-				std::cout << "bus : " << bus << std::endl;
-			  if ( devname.substr(3) == bus ) {
+			  if ( devname == bus ) {
 					devname = dev;
 					break;
 			  }
 			} else {
-			  verbose(1, "%s is no v4l2 device", dev.c_str());
+			  verbose(1, "v4l2 : %s is no v4l2 device\n", dev.c_str());
 			}
 			v4l2_close(fd);
 		}
 		if ( i >= alldev.size() ) {
-			error("v4l2 : no device on bus %s", devname.substr(3).c_str());
+			error("v4l2 : no v4l2 input device on bus %s\n", devname.c_str());
 			devname = "";
 		}
-		std::cout << "devname : " << devname << std::endl;
-		std::cout << "iteration " << i << " device "  << alldev.size() << std::endl;
 	 }
 	 
+
   const char*dev_name=devname.c_str();
   debugPost("v4l2: device: %s", dev_name);
 
-  
+  // try to open the device  
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
   if (-1 == m_tvfd) {
@@ -825,6 +818,8 @@ void videoV4L2::addProperties(struct v4l2_queryctrl queryctrl,
     m_writeprops[name]=queryctrl;
     writeable.set(name, typ);
   }
+  
+  
 }
 
 bool videoV4L2 :: enumProperties(gem::Properties&readable,
@@ -842,7 +837,7 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
   m_writeprops.clear();
 
   memset (&queryctrl, 0, sizeof (queryctrl));
-
+  
   for (id = V4L2_CID_BASE;
        id < V4L2_CID_LASTP1;
        id++) {
@@ -866,6 +861,14 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
 	break;
     }
   }
+  
+	if (-1 != xioctl (m_tvfd, VIDIOC_QUERYCAP, &m_caps)) {
+		readable.set("driver", (char*) m_caps.driver);
+		readable.set("card", (char*) m_caps.card);
+		readable.set("bus_info", (char*) m_caps.bus_info);
+	}
+	
+			
   return true;
 }
 void videoV4L2 :: getProperties(gem::Properties&props) {
@@ -961,8 +964,14 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
 	getformat|=WIDTH_FLAG;
       } else if("height" == key) {
 	getformat|=HEIGHT_FLAG;
-      } else {
-      }
+	  } else if("driver" == key) {
+		  props.set("driver", (char*) m_caps.driver);
+	  } else if("card" == key) {
+		  props.set("card", (char*) m_caps.card);
+	  } else if("bus_info" == key) {
+		  props.set("bus_info", (char*) m_caps.bus_info);
+	  } else {		  
+	  }
     }
   }
 
