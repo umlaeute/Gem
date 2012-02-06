@@ -304,11 +304,18 @@ void pix_video :: driverMess(int dev)
 
 void pix_video :: driverMess() {
   // a little bit of info
+  t_atom at;
+  t_atom*ap=&at;
   if(m_videoHandle) {
     post("current driver: '%s'", m_videoHandle->getName().c_str());
+
+    SETSYMBOL(ap+0, gensym(m_videoHandle->getName().c_str()));
+    outlet_anything(m_infoOut, gensym("currentdriver"), 1, ap);
   }
-  if(m_videoHandles.size()>1) {
+  if(m_videoHandles.size()>0) {
     unsigned int i=0;
+    SETFLOAT(ap+0, m_videoHandles.size());
+    outlet_anything(m_infoOut, gensym("drivers"), 1, ap);
     post("available drivers:");
     for(i=0; i<m_videoHandles.size(); i++) {
       gem::plugins::video*handle= m_videoHandles[i];
@@ -316,11 +323,27 @@ void pix_video :: driverMess() {
       startpost("\t'%s' provides ", handle->getName().c_str());
       std::vector<std::string>backends=handle->provides();
       unsigned int j=0;
+
+      unsigned int asize=0;
+      if(backends.size()>0) {
+        asize=backends.size();
+        ap=new t_atom[asize];
+      } else {
+        asize=1;
+        ap=new t_atom[1];
+        SETSYMBOL(ap, gensym(handle->getName().c_str()));
+      }
+
       for(j=0; j<backends.size(); j++) {
         startpost("'%s' ", backends[j].c_str());
+        SETSYMBOL(ap+j, gensym(backends[j].c_str()));
       }
       if(j==0)startpost("<nothing>");
       endpost();
+      
+      outlet_anything(m_infoOut, gensym("driver"), asize, ap);
+      delete[]ap;ap =NULL;
+      asize=0;
     }
   }
 }
