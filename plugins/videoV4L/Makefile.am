@@ -3,9 +3,12 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 pkglib_LTLIBRARIES= 
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 
 if HAVE_V4L
 pkglib_LTLIBRARIES+=gem_videoV4L.la
+dist_gemhelp_DATA +=v4l-videoplugin.pd
 endif
 
 gem_videoV4L_la_CXXFLAGS =

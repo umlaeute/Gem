@@ -3,9 +3,12 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 
 if VIDEODARWIN
 pkglib_LTLIBRARIES+=gem_videoDarwin.la
+dist_gemhelp_DATA +=Darwin-videoplugin.pd
 endif
 
 gem_videoDarwin_la_CXXFLAGS =

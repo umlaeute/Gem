@@ -3,8 +3,12 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if HAVE_LIB_LIBDC1394_2
 pkglib_LTLIBRARIES+= gem_videoDC1394.la
+dist_gemhelp_DATA +=dc1394-videoplugin.pd
 endif
 
 gem_videoDC1394_la_CXXFLAGS =

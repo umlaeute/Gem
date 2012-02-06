@@ -6,8 +6,12 @@ EXTRA_DIST+=win-vs2003/videoVFW.sln win-vs2003/videoVFW.vcproj
 EXTRA_DIST+=win-vs2008/videoVFW.sln win-vs2008/videoVFW.vcproj
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if WINDOWS
 pkglib_LTLIBRARIES+= gem_videoVFW.la
+dist_gemhelp_DATA +=VFW-videoplugin.pd
 endif
 
 gem_videoVFW_la_CXXFLAGS =

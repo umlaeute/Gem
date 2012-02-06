@@ -9,8 +9,11 @@ EXTRA_DIST += win-vs2008/videoPYLON.sln win-vs2008/videoPYLON.vcproj
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES=
+dist_plugin_DATA  =
+
 if HAVE_PYLON
 plugin_LTLIBRARIES+= gem_videoPYLON.la
+dist_plugin_DATA  += pylon-videoplugin.pd
 endif
 
 gem_videoPYLON_la_CXXFLAGS =

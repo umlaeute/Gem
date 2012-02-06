@@ -3,8 +3,12 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if HAVE_LIB_LIBUNICAP
 pkglib_LTLIBRARIES+= gem_videoUNICAP.la
+dist_gemhelp_DATA +=unicap-videoplugin.pd
 endif
 
 gem_videoUNICAP_la_CXXFLAGS =

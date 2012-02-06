@@ -9,8 +9,11 @@ EXTRA_DIST += win-vs2008/videoAVT.sln win-vs2008/videoAVT.vcproj
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES=
+dist_plugin_DATA  =
+
 if HAVE_LIB_LIBPVAPI
 plugin_LTLIBRARIES+= gem_videoAVT.la
+dist_plugin_DATA  += avt-videoplugin.pd
 endif
 
 gem_videoAVT_la_CXXFLAGS =

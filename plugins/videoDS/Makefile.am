@@ -6,8 +6,12 @@ EXTRA_DIST += win-vs2003/videoDS.sln win-vs2003/videoDS.vcproj
 EXTRA_DIST += win-vs2008/videoDS.sln win-vs2008/videoDS.vcproj
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if WINDOWS
 pkglib_LTLIBRARIES+= gem_videoDS.la
+dist_gemhelp_DATA +=DS-videoplugin.pd
 endif
 
 gem_videoDS_la_CXXFLAGS =

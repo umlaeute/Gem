@@ -6,8 +6,12 @@ EXTRA_DIST += win-vs2003/videoOptiTrack.sln win-vs2003/videoOptiTrack.vcproj
 EXTRA_DIST += win-vs2008/videoOptiTrack.sln win-vs2008/videoOptiTrack.vcproj
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if DISABLED
 pkglib_LTLIBRARIES+= gem_videoOptiTrack.la
+dist_gemhelp_DATA +=OptiTrack-videoplugin.pd
 endif
 
 gem_videoOptiTrack_la_CXXFLAGS =

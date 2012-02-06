@@ -9,8 +9,11 @@ EXTRA_DIST += win-vs2008/videoHALCON.sln win-vs2008/videoHALCON.vcproj
 plugindir=$(libdir)/Gem
 
 plugin_LTLIBRARIES=
+dist_plugin_DATA  =
+
 if HAVE_HALCON
 plugin_LTLIBRARIES+= gem_videoHALCON.la
+dist_plugin_DATA  += halcon-videoplugin.pd
 endif
 
 gem_videoHALCON_la_CXXFLAGS =

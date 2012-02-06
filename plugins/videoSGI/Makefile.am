@@ -3,8 +3,12 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if IRIX
 pkglib_LTLIBRARIES+=gem_videoSGI.la
+dist_gemhelp_DATA +=sgi-videoplugin.pd
 endif
 
 gem_videoSGI_la_CXXFLAGS =
