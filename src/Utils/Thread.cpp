@@ -25,6 +25,11 @@
 # include <unistd.h>
 #endif
 
+//#if defined HAVE_SYS_SYSCTL_H
+#if defined (__APPLE__) || defined (__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+# include <sys/sysctl.h>
+#endif
+
 unsigned int  gem::thread::getCPUCount(void) {
   // http://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
 
