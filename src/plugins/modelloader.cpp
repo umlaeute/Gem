@@ -150,6 +150,13 @@ public:
     return false;
   }
 
+  virtual modelbuffer*getBuffer(modelbuffer_type type) {
+    if((type<=INVALID)||(type>LAST)) return NULL;
+    if(m_handle)
+      return m_handle->getBuffer(type);
+    return NULL;
+  }
+
   virtual void close(void)  {
     if(m_handle)
       m_handle->close();
