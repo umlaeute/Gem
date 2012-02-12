@@ -37,6 +37,27 @@ namespace gem { namespace plugins {
 class GEM_EXTERN modelloader
 {
  public:
+  enum modelbuffer_type {
+    INVALID=-1,
+    VERTEX=0,
+    TEXCOORD,
+    NORMAL,
+    COLOR,
+    /*
+      EdgeFlag
+      FogCoord
+      Index
+      SecondaryColor
+    */
+    LAST
+  };
+  struct modelbuffer {
+    unsigned int size;
+    float*data;
+
+    modelbuffer(unsigned int size);
+    ~modelbuffer(void);
+  };
 
   //////////
   // returns an instance wrapping all plugins or NULL
@@ -80,7 +101,7 @@ class GEM_EXTERN modelloader
    *
    * this may be called from multiple openGL contexts!
    */
-  virtual bool render(void) = 0;
+  virtual bool render(void) = 0; // FIXXME scheduled for removal
 
   //////////
   // prepare rendering of model
@@ -89,7 +110,16 @@ class GEM_EXTERN modelloader
    *
    * nothing must be drawn when this gets called
    */
-  virtual bool compile(void) = 0;
+  virtual bool compile(void) = 0; // FIXXME scheduled for removal
+
+  //////////
+  // get buffer of a given type
+  /* returns an array of values suitable for use in an VBO
+   *  or NULL if not applicable
+   * the returned modelbuffer must stay valid until the next call to getBuffer()
+   *  or until the model is closed
+   */
+  virtual modelbuffer*getBuffer(modelbuffer_type type) = 0;
 
   //////////
   // close the asset file
