@@ -2021,6 +2021,115 @@ glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber)
   return modList;
 }
 
+
+static void
+_glmMakeArrays(GLModel*model)
+{
+  group = model->groups;
+  glmFacetNormals (model);
+  glmVertexNormals(model, 90);
+  glmTexture(model, GLM_TEX_DEFAULT, 1, 1);
+ 
+  post("model->numtriangles %d",model->numtriangles);
+  post("model->numgroups %d",model->numgroups);
+  post("model->numvertices %d",model->numvertices);
+  post("model->numnormals %d",model->numnormals);
+  post("model->numtexcoords %d",model->numtexcoords);
+ 
+  numvertices = static_cast<int>(model->numtriangles * model->numgroups * 3);
+  m_vertcount = numvertices;
+
+  // would it be a bad idea to make all arrays equally sized ?
+  // (fill up the missing elements with zeros
+
+  delete [] m_VertexArray;
+  m_VertexArray = new float[numvertices * 4];  // x, y, z, w
+  delete [] m_ColorArray;
+  m_ColorArray = new float[numvertices * 4];   // r, g, b, a
+  delete [] m_TexCoordArray;
+  m_TexCoordArray = new float[numvertices * 2];// u, v
+  delete [] m_NormalArray;
+  m_NormalArray = new float[numvertices * 3];  // x, y, z
+
+  delete [] m_tempVA;
+  m_tempVA = new float[numvertices * 4];
+  delete [] m_tempCA;
+  m_tempCA = new float[numvertices * 4];
+  delete [] m_tempTA;
+  m_tempTA = new float[numvertices * 2];
+  delete [] m_tempNA;
+  m_tempNA = new float[numvertices * 3];
+  
+  src2 = 0;
+  src3 = 0;
+  src4 = 0;
+  while(group){
+    for (i = 0; i < group->numtriangles; i++) {
+        triangle = &T(group->triangles[i]);
+        trivert = &model->vertices[3 * triangle->vindices[0]];
+        m_VertexArray[src4] = trivert[0];
+        m_VertexArray[src4+1] = trivert[1];
+        m_VertexArray[src4+2] = trivert[2];
+        m_VertexArray[src4+3] = 1;
+        m_ColorArray[src4] = 1;
+        m_ColorArray[src4+1] = 1;
+        m_ColorArray[src4+2] = 1;
+        m_ColorArray[src4+3] = 1;
+        tritext = &model->texcoords[2 * triangle->tindices[0]];
+        m_TexCoordArray[src2] = tritext[0];
+        m_TexCoordArray[src2+1] = tritext[1];
+        trinorm = &model->normals[3 * triangle->nindices[0]];
+        m_NormalArray[src3] = trinorm[0];
+        m_NormalArray[src3+1] = trinorm[1];
+        m_NormalArray[src3+2] = trinorm[2];
+        src3 += 3;
+        src2 += 2;
+        src4 += 4;
+        trivert = &model->vertices[3 * triangle->vindices[1]];
+        m_VertexArray[src4] = trivert[0];
+        m_VertexArray[src4+1] = trivert[1];
+        m_VertexArray[src4+2] = trivert[2];
+        m_VertexArray[src4+3] = 1;
+        m_ColorArray[src4] = 1;
+        m_ColorArray[src4+1] = 1;
+        m_ColorArray[src4+2] = 1;
+        m_ColorArray[src4+3] = 1;
+        tritext = &model->texcoords[2 * triangle->tindices[1]];
+        m_TexCoordArray[src2] = tritext[0];
+        m_TexCoordArray[src2+1] = tritext[1];
+        trinorm = &model->normals[3 * triangle->nindices[1]];
+        m_NormalArray[src3] = trinorm[0];
+        m_NormalArray[src3+1] = trinorm[1];
+        m_NormalArray[src3+2] = trinorm[2];
+        src3 += 3;
+        src2 += 2;
+        src4 += 4;
+        trivert = &model->vertices[3 * triangle->vindices[2]];
+        m_VertexArray[src4] = trivert[0];
+        m_VertexArray[src4+1] = trivert[1];
+        m_VertexArray[src4+2] = trivert[2];
+        m_VertexArray[src4+3] = 1;
+        m_ColorArray[src4] = 1;
+        m_ColorArray[src4+1] = 1;
+        m_ColorArray[src4+2] = 1;
+        m_ColorArray[src4+3] = 1;
+        tritext = &model->texcoords[2 * triangle->tindices[2]];
+        m_TexCoordArray[src2] = tritext[0];
+        m_TexCoordArray[src2+1] = tritext[1];
+        trinorm = &model->normals[3 * triangle->nindices[2]];
+        m_NormalArray[src3] = trinorm[0];
+        m_NormalArray[src3+1] = trinorm[1];
+        m_NormalArray[src3+2] = trinorm[2];
+        src3 += 3;
+        src2 += 2;
+        src4 += 4;
+        
+        }
+    group = group->next;
+   }
+}
+
+
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.
  *
