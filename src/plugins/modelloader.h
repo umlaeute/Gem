@@ -119,7 +119,7 @@ class GEM_EXTERN modelloader
    * the returned modelbuffer must stay valid until the next call to getBuffer()
    *  or until the model is closed
    */
-  virtual modelbuffer*getBuffer(modelbuffer_type type) = 0;
+  virtual modelbuffer*getBuffer(modelbuffer_type type) {return NULL;}; // FIXXXME should be virtual
 
   //////////
   // close the asset file
