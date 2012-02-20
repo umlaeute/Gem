@@ -85,7 +85,7 @@ class GEM_EXTERN pix_snap : public GemBase
     	//////////
     	// The pixBlock with the current image
     	pixBlock    	m_pixBlock;
-	imageStruct     m_imageStruct;
+      imageStruct     m_imageStruct;
 
     	//////////
     	// The x position
@@ -103,13 +103,6 @@ class GEM_EXTERN pix_snap : public GemBase
     	// The height
     	int     	m_height;
 
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	snapMessCallback(void *data);
-    	static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
-    	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
 };
 
 #endif	// for header file

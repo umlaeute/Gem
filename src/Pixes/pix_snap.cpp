@@ -60,7 +60,7 @@ pix_snap :: pix_snap(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_snap :: ~pix_snap()
+pix_snap :: ~pix_snap(void)
 {
     cleanImage();
 }
@@ -69,7 +69,7 @@ pix_snap :: ~pix_snap()
 // snapMess
 //
 /////////////////////////////////////////////////////////
-void pix_snap :: snapMess()
+void pix_snap :: snapMess(void)
 {
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
@@ -181,7 +181,7 @@ void pix_snap :: posMess(int x, int y)
 // cleanImage
 //
 /////////////////////////////////////////////////////////
-void pix_snap :: cleanImage()
+void pix_snap :: cleanImage(void)
 {
     // release previous data
     if (m_originalImage)
@@ -199,24 +199,10 @@ void pix_snap :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_snap :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap::snapMessCallback),
-    	    gensym("snap"), A_NULL);
-    class_addbang(classPtr, reinterpret_cast<t_method>(&pix_snap::snapMessCallback));
+  CPPEXTERN_MSG0(classPtr, "snap", snapMess);
+  CPPEXTERN_MSG0(classPtr, "bang", snapMess);
 
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap::sizeMessCallback),
-    	    gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_snap::posMessCallback),
-    	    gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
-}
-void pix_snap :: snapMessCallback(void *data)
-{
-    GetMyClass(data)->snapMess();
-}
-void pix_snap :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
-{
-    GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
-}
-void pix_snap :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
-{
-    GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
+  CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess , int, int);
+
 }
