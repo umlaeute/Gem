@@ -19,6 +19,7 @@
 #include "Gem/Manager.h"
 #include "Gem/Cache.h"
 #include "Gem/State.h"
+#include "Gem/Settings.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_snap);
 
@@ -30,8 +31,11 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_snap :: pix_snap(int argc, t_atom *argv)
-    	  : m_originalImage(NULL)
+pix_snap :: pix_snap(int argc, t_atom *argv) :
+  m_originalImage(NULL),
+  m_x(0), m_y(0), m_width(0), m_height(0),
+  m_numPbo(0), m_curPbo(0), m_pbo(NULL)
+
 {
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data = NULL;
@@ -52,6 +56,9 @@ pix_snap :: pix_snap(int argc, t_atom *argv)
     m_x = m_y = 0;
     m_width = m_height = 128;
   }
+
+  gem::Settings::get("snap.pbo", m_numPbo);
+
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
 }
@@ -193,6 +200,29 @@ void pix_snap :: cleanImage(void)
     }
 }
 
+
+
+////////////////////////////////////////////////////////
+// Pixel Buffer Object message
+//
+/////////////////////////////////////////////////////////
+void pix_snap :: pboMess(int num)
+{
+  if(num<0) {
+    return;
+  }
+
+  if(m_pbo) {
+    glDeleteBuffersARB(m_numPbo, m_pbo);
+    delete[]m_pbo;
+    m_pbo=NULL;
+    m_numPbo=0;
+  }
+
+  m_numPbo=num;
+  setModified();
+}
+
 /////////////////////////////////////////////////////////
 // static member functions
 //
@@ -205,4 +235,5 @@ void pix_snap :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
   CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess , int, int);
 
+  CPPEXTERN_MSG1(classPtr, "pbo",  pboMess , int);
 }

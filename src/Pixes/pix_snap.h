@@ -103,6 +103,11 @@ class GEM_EXTERN pix_snap : public GemBase
     	// The height
     	int     	m_height;
 
+      /* using PBOs for (hopefully) optimized pixel transfers */
+      void pboMess(int num_pbos);
+      GLint m_numPbo;
+      GLint m_curPbo;
+      GLuint *m_pbo;                   // IDs of PBO
 };
 
 #endif	// for header file
