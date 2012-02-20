@@ -1,13 +1,13 @@
 /*
-      glm.c
-      Nate Robins, 1997, 2000
-      nate@pobox.com, http://www.pobox.com/~nate
+  glm.c
+  Nate Robins, 1997, 2000
+  nate@pobox.com, http://www.pobox.com/~nate
 
-      Wavefront OBJ model file format reader/writer/manipulator.
+  Wavefront OBJ model file format reader/writer/manipulator.
 
-      Includes routines for generating smooth normals with
-      preservation of edges, welding redundant vertices & texture
-      coordinate generation (spheremap and planar projections) + more.
+  Includes routines for generating smooth normals with
+  preservation of edges, welding redundant vertices & texture
+  coordinate generation (spheremap and planar projections) + more.
 
 */
 #define _CRT_SECURE_NO_WARNINGS
@@ -2023,9 +2023,9 @@ glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber)
 
 
 static void
-_glmMakeArrays(GLModel*model)
-{
-  group = model->groups;
+_glmMakeArrays(GLMmodel*model) {
+  int numvertices;
+  GLMgroup*group = model->groups;
   glmFacetNormals (model);
   glmVertexNormals(model, 90);
   glmTexture(model, GLM_TEX_DEFAULT, 1, 1);
@@ -2065,68 +2065,68 @@ _glmMakeArrays(GLModel*model)
   src4 = 0;
   while(group){
     for (i = 0; i < group->numtriangles; i++) {
-        triangle = &T(group->triangles[i]);
-        trivert = &model->vertices[3 * triangle->vindices[0]];
-        m_VertexArray[src4] = trivert[0];
-        m_VertexArray[src4+1] = trivert[1];
-        m_VertexArray[src4+2] = trivert[2];
-        m_VertexArray[src4+3] = 1;
-        m_ColorArray[src4] = 1;
-        m_ColorArray[src4+1] = 1;
-        m_ColorArray[src4+2] = 1;
-        m_ColorArray[src4+3] = 1;
-        tritext = &model->texcoords[2 * triangle->tindices[0]];
-        m_TexCoordArray[src2] = tritext[0];
-        m_TexCoordArray[src2+1] = tritext[1];
-        trinorm = &model->normals[3 * triangle->nindices[0]];
-        m_NormalArray[src3] = trinorm[0];
-        m_NormalArray[src3+1] = trinorm[1];
-        m_NormalArray[src3+2] = trinorm[2];
-        src3 += 3;
-        src2 += 2;
-        src4 += 4;
-        trivert = &model->vertices[3 * triangle->vindices[1]];
-        m_VertexArray[src4] = trivert[0];
-        m_VertexArray[src4+1] = trivert[1];
-        m_VertexArray[src4+2] = trivert[2];
-        m_VertexArray[src4+3] = 1;
-        m_ColorArray[src4] = 1;
-        m_ColorArray[src4+1] = 1;
-        m_ColorArray[src4+2] = 1;
-        m_ColorArray[src4+3] = 1;
-        tritext = &model->texcoords[2 * triangle->tindices[1]];
-        m_TexCoordArray[src2] = tritext[0];
-        m_TexCoordArray[src2+1] = tritext[1];
-        trinorm = &model->normals[3 * triangle->nindices[1]];
-        m_NormalArray[src3] = trinorm[0];
-        m_NormalArray[src3+1] = trinorm[1];
-        m_NormalArray[src3+2] = trinorm[2];
-        src3 += 3;
-        src2 += 2;
-        src4 += 4;
-        trivert = &model->vertices[3 * triangle->vindices[2]];
-        m_VertexArray[src4] = trivert[0];
-        m_VertexArray[src4+1] = trivert[1];
-        m_VertexArray[src4+2] = trivert[2];
-        m_VertexArray[src4+3] = 1;
-        m_ColorArray[src4] = 1;
-        m_ColorArray[src4+1] = 1;
-        m_ColorArray[src4+2] = 1;
-        m_ColorArray[src4+3] = 1;
-        tritext = &model->texcoords[2 * triangle->tindices[2]];
-        m_TexCoordArray[src2] = tritext[0];
-        m_TexCoordArray[src2+1] = tritext[1];
-        trinorm = &model->normals[3 * triangle->nindices[2]];
-        m_NormalArray[src3] = trinorm[0];
-        m_NormalArray[src3+1] = trinorm[1];
-        m_NormalArray[src3+2] = trinorm[2];
-        src3 += 3;
-        src2 += 2;
-        src4 += 4;
+      triangle = &T(group->triangles[i]);
+      trivert = &model->vertices[3 * triangle->vindices[0]];
+      m_VertexArray[src4] = trivert[0];
+      m_VertexArray[src4+1] = trivert[1];
+      m_VertexArray[src4+2] = trivert[2];
+      m_VertexArray[src4+3] = 1;
+      m_ColorArray[src4] = 1;
+      m_ColorArray[src4+1] = 1;
+      m_ColorArray[src4+2] = 1;
+      m_ColorArray[src4+3] = 1;
+      tritext = &model->texcoords[2 * triangle->tindices[0]];
+      m_TexCoordArray[src2] = tritext[0];
+      m_TexCoordArray[src2+1] = tritext[1];
+      trinorm = &model->normals[3 * triangle->nindices[0]];
+      m_NormalArray[src3] = trinorm[0];
+      m_NormalArray[src3+1] = trinorm[1];
+      m_NormalArray[src3+2] = trinorm[2];
+      src3 += 3;
+      src2 += 2;
+      src4 += 4;
+      trivert = &model->vertices[3 * triangle->vindices[1]];
+      m_VertexArray[src4] = trivert[0];
+      m_VertexArray[src4+1] = trivert[1];
+      m_VertexArray[src4+2] = trivert[2];
+      m_VertexArray[src4+3] = 1;
+      m_ColorArray[src4] = 1;
+      m_ColorArray[src4+1] = 1;
+      m_ColorArray[src4+2] = 1;
+      m_ColorArray[src4+3] = 1;
+      tritext = &model->texcoords[2 * triangle->tindices[1]];
+      m_TexCoordArray[src2] = tritext[0];
+      m_TexCoordArray[src2+1] = tritext[1];
+      trinorm = &model->normals[3 * triangle->nindices[1]];
+      m_NormalArray[src3] = trinorm[0];
+      m_NormalArray[src3+1] = trinorm[1];
+      m_NormalArray[src3+2] = trinorm[2];
+      src3 += 3;
+      src2 += 2;
+      src4 += 4;
+      trivert = &model->vertices[3 * triangle->vindices[2]];
+      m_VertexArray[src4] = trivert[0];
+      m_VertexArray[src4+1] = trivert[1];
+      m_VertexArray[src4+2] = trivert[2];
+      m_VertexArray[src4+3] = 1;
+      m_ColorArray[src4] = 1;
+      m_ColorArray[src4+1] = 1;
+      m_ColorArray[src4+2] = 1;
+      m_ColorArray[src4+3] = 1;
+      tritext = &model->texcoords[2 * triangle->tindices[2]];
+      m_TexCoordArray[src2] = tritext[0];
+      m_TexCoordArray[src2+1] = tritext[1];
+      trinorm = &model->normals[3 * triangle->nindices[2]];
+      m_NormalArray[src3] = trinorm[0];
+      m_NormalArray[src3+1] = trinorm[1];
+      m_NormalArray[src3+2] = trinorm[2];
+      src3 += 3;
+      src2 += 2;
+      src4 += 4;
         
-        }
+    }
     group = group->next;
-   }
+  }
 }
 
 
