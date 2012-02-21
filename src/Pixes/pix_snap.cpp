@@ -72,6 +72,23 @@ pix_snap :: ~pix_snap(void)
     cleanImage();
 }
 
+
+#ifdef DEBUG_TIME
+#include <sys/time.h>
+
+#define START_TIMING() float mseconds=0.f;      \
+  timeval startTime, endTime;             \
+  gettimeofday(&startTime, 0)
+#define STOP_TIMING(x) gettimeofday(&endTime, 0);       \
+  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +	\
+    (endTime.tv_usec - startTime.tv_usec) * 0.001;      \
+  post("%d PBO time = %f ms", x, mseconds)
+
+#else
+#define START_TIMING()
+#define STOP_TIMING(x)
+#endif
+
 /////////////////////////////////////////////////////////
 // snapMess
 //
@@ -145,7 +162,9 @@ void pix_snap :: snapMess(void)
       m_numPbo=0;
     }
   }
+
   if(m_pbo) {
+    START_TIMING();
     m_curPbo=(m_curPbo+1)%m_numPbo;
     int index=m_curPbo;
     int nextIndex=(m_curPbo+1)%m_numPbo;
@@ -163,7 +182,9 @@ void pix_snap :: snapMess(void)
       glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);     // release pointer to the mapped buffer
     }
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
+    STOP_TIMING(m_numPbo);
   } else {
+    START_TIMING();
     glFinish();
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_PACK_ROW_LENGTH, 0);
@@ -172,6 +193,7 @@ void pix_snap :: snapMess(void)
 
     glReadPixels(m_x, m_y, m_width, m_height,
                  m_originalImage->format, m_originalImage->type, m_originalImage->data);
+    STOP_TIMING(-1);
   }
 
   if (m_cache)
