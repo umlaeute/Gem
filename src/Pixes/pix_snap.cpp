@@ -83,31 +83,27 @@ void pix_snap :: snapMess(void)
   if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
 
-	if (m_width <= 0 || m_height <= 0)
-	{
+	if (m_width <= 0 || m_height <= 0) {
 		error("Illegal size");
 		return;
 	}
 	// do we need to remake the data?
-	int makeNew = 0;
+	bool makeNew = false;
+  bool makePbo = false;
 
-    // release previous data
-    if (m_originalImage)
-    {
+  // release previous data
+  if (m_originalImage)  {
 		if (m_originalImage->xsize != m_width ||
-			m_originalImage->ysize != m_height)
-		{
+        m_originalImage->ysize != m_height) {
 			m_originalImage->clear();
 			delete m_originalImage;
 			m_originalImage = NULL;
-			makeNew = 1;
+			makeNew = true;
 		}
-	}
-	else
-		makeNew = 1;
-
-    if (makeNew)
-	{
+	}	else {
+		makeNew = true;
+  }
+  if (makeNew) {
 		m_originalImage = new imageStruct;
 		m_originalImage->xsize = m_width;
 		m_originalImage->ysize = m_height;
@@ -116,8 +112,58 @@ void pix_snap :: snapMess(void)
     m_originalImage->upsidedown = false;
 
 		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
-	}
 
+    makePbo=true;
+  }
+
+
+  if(m_numPbo>0 && !m_pbo)
+    makePbo=true;
+  else if(m_numPbo<=0)
+    makePbo=false;
+
+  /* FIXXME */
+  if(makePbo) {
+    post("makePBO");
+    if(m_pbo) {
+      delete[]m_pbo;
+      m_pbo=NULL;
+    }
+    if(GLEW_ARB_pixel_buffer_object) {
+      m_pbo=new GLuint[m_numPbo];
+      glGenBuffersARB(m_numPbo, m_pbo);
+      int i=0;
+      for(i=0; i<m_numPbo; i++) {
+        glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[i]);
+        glBufferDataARB(GL_PIXEL_PACK_BUFFER_ARB,
+                        m_originalImage->xsize*m_originalImage->ysize*m_originalImage->csize,
+                        0, GL_STREAM_READ_ARB);
+      }
+      glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
+    } else {
+      verbose(1, "PBOs not supported! disabling");
+      m_numPbo=0;
+    }
+  }
+  if(m_pbo) {
+    m_curPbo=(m_curPbo+1)%m_numPbo;
+    int index=m_curPbo;
+    int nextIndex=(m_curPbo+1)%m_numPbo;
+
+    glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[index]);
+
+    glReadPixels(m_x, m_y, m_width, m_height,
+                 m_originalImage->format, m_originalImage->type, 0);
+
+
+    glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[nextIndex]);
+    GLubyte* src = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+    if(src) {
+      m_originalImage->fromRGBA(src);
+      glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);     // release pointer to the mapped buffer
+    }
+    glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
+  } else {
     glFinish();
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_PACK_ROW_LENGTH, 0);
@@ -125,12 +171,11 @@ void pix_snap :: snapMess(void)
     glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
 
     glReadPixels(m_x, m_y, m_width, m_height,
-    	    	 m_originalImage->format, m_originalImage->type, m_originalImage->data);
+                 m_originalImage->format, m_originalImage->type, m_originalImage->data);
+  }
 
-    if (m_cache)
+  if (m_cache)
 		m_cache->resendImage = 1;
-
-    //post("snapped image");
 }
 
 /////////////////////////////////////////////////////////
@@ -141,7 +186,7 @@ void pix_snap :: render(GemState *state)
 {
     // if we don't have an image, just return
     if (!m_originalImage)
-		return;
+      return;
 
     // do we need to reload the image?
     if (m_cache&&m_cache->resendImage)
