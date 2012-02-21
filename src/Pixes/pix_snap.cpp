@@ -76,17 +76,17 @@ pix_snap :: ~pix_snap(void)
 #ifdef DEBUG_TIME
 #include <sys/time.h>
 
-#define START_TIMING() float mseconds=0.f;      \
+# define START_TIMING() float mseconds=0.f;      \
   timeval startTime, endTime;             \
   gettimeofday(&startTime, 0)
-#define STOP_TIMING(x) gettimeofday(&endTime, 0);       \
+# define STOP_TIMING(x) gettimeofday(&endTime, 0);       \
   mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +	\
     (endTime.tv_usec - startTime.tv_usec) * 0.001;      \
   post("%d PBO time = %f ms", x, mseconds)
 
 #else
-#define START_TIMING()
-#define STOP_TIMING(x)
+# define START_TIMING()
+# define STOP_TIMING(x)
 #endif
 
 /////////////////////////////////////////////////////////
@@ -141,7 +141,6 @@ void pix_snap :: snapMess(void)
 
   /* FIXXME */
   if(makePbo) {
-    post("makePBO");
     if(m_pbo) {
       delete[]m_pbo;
       m_pbo=NULL;
