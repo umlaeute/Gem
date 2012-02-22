@@ -33,10 +33,15 @@ if WINDOWS
 pkglib_LTLIBRARIES += gemw32window.la
 endif
 
+COMMON_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+if WINDOWS
+COMMON_LDFLAGS += -no-undefined
+endif
+
 ########### gemcocoawindow ###########
 # some default flags
 gemcocoawindow_la_CXXFLAGS =
-gemcocoawindow_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+gemcocoawindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemcocoawindow_la_LIBADD   =
 # RTE flags
 gemcocoawindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
@@ -81,7 +86,7 @@ gemcocoawindow_la-gemcocoawindow.lo: gemcocoawindow.mm
 ########### gemglutwindow ###########
 # some default flags
 gemglutwindow_la_CXXFLAGS =
-gemglutwindow_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+gemglutwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemglutwindow_la_LIBADD   =
 # RTE flags
 gemglutwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
@@ -108,7 +113,7 @@ gemglutwindow_la_SOURCES = \
 ########### gemglxwindow ###########
 # some default flags
 gemglxwindow_la_CXXFLAGS =
-gemglxwindow_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+gemglxwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemglxwindow_la_LIBADD   =
 # RTE flags
 gemglxwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
@@ -135,7 +140,7 @@ gemglxwindow_la_SOURCES = \
 ########### gemmacwindow ###########
 # some default flags
 gemmacwindow_la_CXXFLAGS =
-gemmacwindow_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+gemmacwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemmacwindow_la_LIBADD   =
 # RTE flags
 gemmacwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
@@ -162,7 +167,7 @@ gemmacwindow_la_SOURCES = \
 ########### gemw32window ###########
 # some default flags
 gemw32window_la_CXXFLAGS =
-gemw32window_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+gemw32window_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemw32window_la_LIBADD   =
 # RTE flags
 gemw32window_la_CXXFLAGS += @GEM_RTE_CFLAGS@
