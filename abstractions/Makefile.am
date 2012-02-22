@@ -4,8 +4,10 @@ SUFFIXES = .pd
 
 gemhelpdir=$(pkglibdir)
 
+nodist_gemhelp_DATA = \
+	gemdefaultwindow.pd
+
 dist_gemhelp_DATA = \
-	gemdefaultwindow.pd \
 	gemhead.pd \
 	gemmouse.pd \
 	gemorb.pd \
@@ -24,3 +26,4 @@ dist_gemhelp_DATA = \
 	rgb2yuv.pd \
 	yuv2rgb-help.pd \
 	yuv2rgb.pd
+

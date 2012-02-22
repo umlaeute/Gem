@@ -555,6 +555,31 @@ if test "x$enable_pascalstrings" != "xno"; then
   GEM_CHECK_CXXFLAGS([-fpascal-strings])
 fi
 
+AC_ARG_WITH([defaultwindow],
+             AS_HELP_STRING([--with-defaultwindow=<>],[specify default window backend (default: auto)]))
+
+case "$with_defaultwindow" in
+ gem*)
+	GEM_DEFAULT_WINDOW="$with_defaultwindow"
+	;;
+ *)
+	GEM_DEFAULT_WINDOW=""
+	;;
+esac
+if test "x${GEM_DEFAULT_WINDOW}" = "x"; then
+ if test "x$WINDOWS" = "xyes"; then
+   GEM_DEFAULT_WINDOW="gemw32window"
+ elif test "x$DARWIN" = "xyes"; then
+   #GEM_DEFAULT_WINDOW="gemmacwindow"
+   GEM_DEFAULT_WINDOW="gemcocoawindow"
+ elif test "x$no_glx" != "xyes"; then
+     GEM_DEFAULT_WINDOW="gemglxwindow"
+ elif test "x$no_glut" != "xyes"; then
+     GEM_DEFAULT_WINDOW="gemglutwindow"
+ fi
+fi
+AC_SUBST(GEM_DEFAULT_WINDOW)
+AC_CONFIG_FILES([abstractions/gemdefaultwindow.pd])
 
 ## dummy conditionals that are always "true" (ENABLED) or "false" (DISABLED)
 enabled="yes"
@@ -630,6 +655,7 @@ AC_MSG_RESULT([
 Result:
   Target                 : Gem.${EXT}
   Objects                : ${GEM_TARGETS}
+  default window         : ${GEM_DEFAULT_WINDOW}
 
 Configuration:
   Compiler               : ${CXX}
@@ -653,6 +679,7 @@ Configuration:
  used optional libraries:
 
   font-rendering         : ${have_font}
+     default font        : ${GEM_DEFAULT_FONT}
 
   image-support
     use ImageMagick      : ${have_ImageMagick}

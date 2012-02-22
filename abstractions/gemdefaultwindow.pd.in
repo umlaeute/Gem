@@ -7,7 +7,7 @@
 #X obj 208 143 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 232 208 print gem\$0win;
-#X obj 125 100 gemglutwindow;
+#X obj 125 100 @GEM_DEFAULT_WINDOW@;
 #X connect 0 0 7 0;
 #X connect 2 0 1 0;
 #X connect 2 1 4 0;
