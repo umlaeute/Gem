@@ -1,9 +1,9 @@
-#N canvas 2470 327 839 579 10;
+#N canvas 2428 188 1030 765 10;
 #X text 462 18 GEM object;
-#X obj 18 206 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 18 206 cnv 15 430 210 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 49 208 Inlets:;
-#X text 49 329 Outlets:;
+#X text 49 301 Outlets:;
 #X obj 18 168 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 27 167 Arguments:;
@@ -12,7 +12,7 @@
 #X obj 459 87 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 463 70 Example:;
-#X obj 524 264 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 524 271 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -32,10 +32,10 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 529 303 pd gemwin;
-#X msg 529 284 create;
-#X text 525 263 Create window:;
-#X obj 460 168 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 529 310 pd gemwin;
+#X msg 529 291 destroy;
+#X text 525 270 Create window:;
+#X obj 460 151 cnv 15 160 90 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 461 94 gemhead;
 #X text 81 41 Class: pix object;
@@ -54,18 +54,17 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 461 123 pd image;
-#X obj 461 243 pix_texture;
+#X obj 461 250 pix_texture;
 #X text 73 178 <none>;
-#X obj 461 265 square 3;
+#X obj 461 272 square 3;
 #X text 526 115 open an image;
 #X text 519 128 (JPEG \, TIFF \, ..);
-#X obj 18 443 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 18 424 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 26 444 See Also:;
-#X text 83 443 examples/04.video/08.color_detection.pd;
+#X text 26 425 See Also:;
+#X text 83 424 examples/04.video/08.color_detection.pd;
 #X text 66 229 Inlet 1: gemlist \, RGBA image;
-#X obj 461 206 pix_colorclassify;
-#X text 26 478 Author: Ricardo Fabbri labmacambira.sf.net rfabbri at
+#X text 26 459 Author: Ricardo Fabbri labmacambira.sf.net rfabbri at
 gmail;
 #X text 60 22 Synopsis: [pix_equal];
 #X text 38 107 [pix_equal] outputs a binary image where 'white' marks
@@ -74,16 +73,26 @@ those pixels that are equal to a given value (within given closed bounds)
 #X text 67 248 Inlets 2(3): list of lower(upper) bounds [R G B A <
 \, with each value ranging from 0 to 255 \, and A being optional and
 equal to 0(255) by default.;
-#X text 67 347 Outlet 1: gemlist \, a binary RGBA image with white
+#X text 67 319 Outlet 1: gemlist \, a binary RGBA image with white
 pixels marking only those pixels that are within the specified (closed)
 RGBA ranges simultaneously on all four channels. This can be used \,
 for instance \, in separating color blobs from [pix_colorclassify].
 ;
-#X text 39 87 Description: marks the pixels equal to given values;
+#X text 39 87 Description: marks the pixels nearly equal to a given
+color;
+#X obj 461 209 pix_equal;
+#X msg 528 172 200 180 0 0;
+#X text 524 156 lower bound;
+#X text 526 204 upper bound;
+#X msg 528 192 255 255 50 255;
+#X text 457 342 e.g. marks whatever is within a certain bright yellow
+range and having any alpha;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
-#X connect 17 0 27 0;
+#X connect 17 0 33 0;
 #X connect 18 0 20 0;
-#X connect 27 0 18 0;
+#X connect 33 0 18 0;
+#X connect 34 0 33 1;
+#X connect 37 0 33 2;
