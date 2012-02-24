@@ -9,6 +9,7 @@
 //    Copyright (c) 1997-1998 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2012 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -63,36 +64,13 @@ void pix_equal :: processRGBAImage(imageStruct &image)
     }
 }
 
-/////////////////////////////////////////////////////////
-// processGrayImage
-//
-/////////////////////////////////////////////////////////
-//void pix_equal :: processGrayImage(imageStruct &image)
-//{
-//    int datasize = image.xsize * image.ysize;
-
-//    unsigned char *base = image.data;
-
-//    while(datasize--)
-//    {
-//    if (base[chGray] < m_thresh[chRed]) base[chGray] = 0;
-//    base++;
-//    }    
-//}
-
-/////////////////////////////////////////////////////////
-// vecThreshMess
-//
-/////////////////////////////////////////////////////////
-
 void pix_equal :: vecUpperBoundMess(int argc, t_atom *argv)
 {
     if (argc >= 4)
     {
     	m_upper[chAlpha] = (atom_getfloat(&argv[3]));
     }
-    else if (argc == 3) m_upper[3] = 0;
-    else
+    else if (argc != 3)
     {
     	error("not enough upper bound values");
     	return;
@@ -110,8 +88,7 @@ void pix_equal :: vecLowerBoundMess(int argc, t_atom *argv)
     {
     	m_lower[chAlpha] = (atom_getfloat(&argv[3]));
     }
-    else if (argc == 3) m_lower[3] = 0;
-    else
+    else if (argc != 3)
     {
     	error("not enough lower bound values");
     	return;
@@ -123,10 +100,6 @@ void pix_equal :: vecLowerBoundMess(int argc, t_atom *argv)
     setPixModified();
 }
 
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
 void pix_equal :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_equal::vecLowerMessCallback),

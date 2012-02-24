@@ -2,12 +2,9 @@
 LOG
 GEM - Graphics Environment for Multimedia
 
-Clamp pixel values to a threshold
+Marks the pixels equal to given values/range
 
-Copyright (c) 1997-1998 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-Copyright (c) 2002 James Tittle & Chris Clepper
+Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -26,17 +23,15 @@ CLASS
     mark pixels nearly equal to a given color, within given bounds
 
 KEYWORDS
-    pix
+    pix, color
     
 DESCRIPTION
 
-    Inlet for a list - "vec_thresh"
     Inlet for a list - "vec_low"
     Inlet for a float  - "vec_up"
     
-    "vec_color" - The color vector to search for
-    "vec_low" - Lower bound to search for
-    "vec_up" - Upper bound to search for
+    "vec_low" - Lower bound in RGBA to search for
+    "vec_up" - Upper bound in RGBA to search for
    
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_equal : public GemPixObj
@@ -45,8 +40,8 @@ class GEM_EXTERN pix_equal : public GemPixObj
 
     public:
 
-        //////////
-        // Constructor
+      //////////
+      // Constructor
     	pix_equal();
     	
     protected:
@@ -60,20 +55,7 @@ class GEM_EXTERN pix_equal : public GemPixObj
     	virtual void 	processRGBAImage(imageStruct &image);
     	
     	//////////
-    	// Do the processing
-//      virtual void 	processGrayImage(imageStruct &image);
-        	
-        //////////
-    	// Do the processing
-//      virtual void 	processYUVImage(imageStruct &image);
-		
-//#ifdef __VEC__
-	//////////
-    	// Do the processing
-//      virtual void 	processYUVAltivec(imageStruct &image);
-//#endif  
-    	//////////
-    	// Set the new color vector
+    	// Set the new color range vectors
     	void	    	vecLowerBoundMess(int argc, t_atom *argv);
     	void	    	vecUpperBoundMess(int argc, t_atom *argv);
 
