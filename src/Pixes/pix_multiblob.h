@@ -48,6 +48,16 @@ public:
   // the diamter
   double diameter();
 
+  double angle() {
+      double mm_11 = m_11 - xmid()*m_yaccum;
+      double mm_02 = m_02 - ymid()*m_yaccum;
+      double mm_20 = m_20 - xmid()*m_xaccum;
+      return .5*atan2(2.*mm_11,(mm_20-mm_02));
+  }
+  
+  // the angular orientation of the principal axis in radians
+  double orientation();
+
   // the squared distance to another blob
   double distance2(Blob b);
   // the distance to another blob
@@ -58,8 +68,14 @@ public:
   void ymin(double y);
   void ymax(double y);
 
+  // area:  moment M_00
   int area;
+  // m_xaccum: moment M_10
+  // m_yaccum: moment M_01
   double m_xaccum, m_yaccum, m_xyaccum;
+
+  // raw moments for orientation calculation
+  double m_11, m_02, m_20;
 
   bool valid; // 0=invalid; 1=ok;
   bool rightPosition;

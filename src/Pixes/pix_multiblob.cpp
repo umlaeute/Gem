@@ -146,11 +146,16 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
 
     pb->area++;
     t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x, chGray))/255.0);
-    pb->m_xaccum  += grey*static_cast<t_float>(cp->x);
-    pb->m_yaccum  += grey*static_cast<t_float>(cp->y);
-    pb->m_xyaccum += grey;
-
-    if (cp->x < pb->xmin()) pb->xmin(cp->x);
+    double x = static_cast<t_float>(cp->x);
+    double y = static_cast<t_float>(cp->y);
+    pb->m_xaccum  += grey*x;
+    pb->m_yaccum  += grey*y;
+    pb->m_xyaccum += grey;                     
+    pb->m_11 += grey*x*y;
+    pb->m_20 += grey*x*x;
+    pb->m_02 += grey*y*y;
+                                              
+    if (cp->x < pb->xmin()) pb->xmin(cp->x);          
     if (cp->x > pb->xmax()) pb->xmax(cp->x);
     if (cp->y < pb->ymin()) pb->ymin(cp->y);
     if (cp->y > pb->ymax()) pb->ymax(cp->y);
@@ -238,27 +243,28 @@ void pix_multiblob :: doProcessing()
 
   // no create a matrix of [blobNumber*3] elements
   // each row holds all information on our blob
-  t_atom*ap = new t_atom[2+blobNumber*8];
+  t_atom*ap = new t_atom[2+blobNumber*9];
   SETFLOAT(ap, static_cast<t_float>(blobNumber));
-  SETFLOAT(ap+1, 8.0);
+  SETFLOAT(ap+1, 9.0);
 
   int bn=blobNumber;
-  for(bn=0; bn<blobNumber; bn++){
-    SETFLOAT(ap+bn*8+2, currentBlobs[bn].xmid()*scaleX); // weighted X
-    SETFLOAT(ap+bn*8+3, currentBlobs[bn].ymid()*scaleY); // weighted Y
-    SETFLOAT(ap+bn*8+4, currentBlobs[bn].m_xyaccum*scaleXY); // weighted Area
+  for(bn=0; bn<blobNumber; bn++) {
+    SETFLOAT(ap+bn*9+2, currentBlobs[bn].xmid()*scaleX); // weighted X
+    SETFLOAT(ap+bn*9+3, currentBlobs[bn].ymid()*scaleY); // weighted Y
+    SETFLOAT(ap+bn*9+4, currentBlobs[bn].m_xyaccum*scaleXY); // weighted Area
 
-    SETFLOAT(ap+bn*8+5, currentBlobs[bn].xmin()*scaleX); // minX
-    SETFLOAT(ap+bn*8+6, currentBlobs[bn].ymin()*scaleY); // minY
-    SETFLOAT(ap+bn*8+7, currentBlobs[bn].xmax()*scaleX); // maxX
-    SETFLOAT(ap+bn*8+8, currentBlobs[bn].ymax()*scaleY); // maxY
+    SETFLOAT(ap+bn*9+5, currentBlobs[bn].xmin()*scaleX); // minX
+    SETFLOAT(ap+bn*9+6, currentBlobs[bn].ymin()*scaleY); // minY
+    SETFLOAT(ap+bn*9+7, currentBlobs[bn].xmax()*scaleX); // maxX
+    SETFLOAT(ap+bn*9+8, currentBlobs[bn].ymax()*scaleY); // maxY
 
-    SETFLOAT(ap+bn*8+9, currentBlobs[bn].area*scaleXY);  // unweighted Area
+    SETFLOAT(ap+bn*9+9, currentBlobs[bn].area*scaleXY);  // unweighted Area
+    SETFLOAT(ap+bn*9+10, currentBlobs[bn].angle());      // weighted orientation
   }
 
   // i admit that it is naughty to use "matrix" from zexy/iemmatrix
   // but it is the best thing i can think of for 2-dimensional arrays
-  outlet_anything(m_infoOut, gensym("matrix"), 2+8*blobNumber, ap);
+  outlet_anything(m_infoOut, gensym("matrix"), 2+9*blobNumber, ap);
 
   if(ap)delete[]ap; ap=NULL;
 }
