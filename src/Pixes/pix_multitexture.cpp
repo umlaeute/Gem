@@ -196,47 +196,48 @@ void pix_multitexture :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_multitexture :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::texUnitMessCallback),
-                  gensym("texunit"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::dimenMessCallback),
-                  gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::modeCallback),
-		gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multitexture::modeCallback),
-		gensym("rectangle"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG2(classPtr, "texunit", texUnitMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "dimen",   dimenMess,   int, int);
+
+  CPPEXTERN_MSG1(classPtr, "rectangle",rectangleMess,   bool);
+  CPPEXTERN_MSG1(classPtr, "mode"     ,rectangleMess,   bool);
+
   // generic inlets for texUnit
   class_addanything(classPtr, reinterpret_cast<t_method>(&pix_multitexture::parmCallback));
 }
-void pix_multitexture :: texUnitMessCallback(void *data, float n, float texID)
+void pix_multitexture :: texUnitMess(int n, int texID)
 {
-  GetMyClass(data)->m_texID[(int)n] = (GLint)texID;
-}
-
-void pix_multitexture :: dimenMessCallback(void *data, float sizeX, float sizeY)
-{
-  GetMyClass(data)->m_texSizeX = (int)sizeX;
-  GetMyClass(data)->m_texSizeY = (int)sizeY;
-}
-
-void pix_multitexture :: modeCallback(void *data, t_floatarg textype)
-{
-  GetMyClass(data)->m_mode=((int)textype);
-  if (textype)
-  {
-    //    GetMyClass(data)->m_oldType = GetMyClass(data)->m_textureType;
-    GetMyClass(data)->m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-    GetMyClass(data)->post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
-  }else{
-    GetMyClass(data)->m_textureType = GL_TEXTURE_2D;
-    GetMyClass(data)->post("using mode 0:GL_TEXTURE_2D");
+  if(n<0 || n>=MAX_MULTITEX_ID) {
+    error("ID %d out of range 0..%d", n, MAX_MULTITEX_ID-1);
+    return;
   }
+  m_texID[(int)n] = (GLint)texID;
 }
 
-void pix_multitexture :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
+void pix_multitexture :: dimenMess(int sizeX, int sizeY)
+{
+  m_texSizeX = sizeX;
+  m_texSizeY = sizeY;
+  setModified();
+}
+void pix_multitexture :: rectangleMess(bool wantrect)
+{
+  m_mode=((int)wantrect);
+  if (wantrect)  {
+    m_textureType = GL_TEXTURE_RECTANGLE_EXT;
+    verbose(1, "using mode 1:GL_TEXTURE_RECTANGLE_EXT");
+  }else{
+    m_textureType = GL_TEXTURE_2D;
+    verbose(1, "using mode 0:GL_TEXTURE_2D");
+  }
+  setModified();
+}
+
+void pix_multitexture :: parmCallback(void*data, t_symbol*s, int argc, t_atom*argv){
   if(argc>0&&argv->a_type==A_FLOAT&&('#'==*s->s_name)){
     int i = atoi(s->s_name+1);
-    GetMyClass(data)->m_texID[i]=(GLint)atom_getint(argv);
+    GetMyClass(data)->texUnitMess(i, atom_getint(argv));
   } else {
-     GetMyClass(data)->error("invalid texUnit specified!");
+    GetMyClass(data)->error("invalid texUnit specified!");
   }
 }
