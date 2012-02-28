@@ -477,7 +477,7 @@ fi
 fi
 
 if test "x$WINDOWS" = "xyes"; then
- GEM_CHECK_CXXFLAGS([-mms-bitfields])
+ GEM_CHECK_CXXFLAGS([-mms-bitfields], [GEM_EXTERNAL_CFLAGS+="-mms-bitfields"])
 fi
 
 if test "x$KERN" = "xDarwin"; then
