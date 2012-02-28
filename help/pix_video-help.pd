@@ -1,4 +1,4 @@
-#N canvas 234 68 871 639 10;
+#N canvas 235 64 871 639 10;
 #X text 451 6 GEM object;
 #X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -72,7 +72,7 @@ system.;
 #X msg 41 203 enumProps;
 #X obj 31 21 cnv 15 400 80 empty empty readProperties 20 12 0 14 -233017
 -66577 0;
-#X obj 39 47 hradio 15 1 0 12 \$0-propreadId \$0-propreadId empty 0
+#X obj 39 47 hradio 15 1 0 1 \$0-propreadId \$0-propreadId empty 0
 -8 0 10 -262144 -1 -1 0;
 #X obj 40 70 cnv 15 260 20 empty \$0-propreadName <none> 10 9 0 14
 -203904 -66577 0;
@@ -307,7 +307,7 @@ system.;
 -66577 0;
 #X obj 31 111 cnv 15 400 80 empty empty writeProperties 20 12 0 14
 -233017 -66577 0;
-#X obj 39 137 hradio 15 1 0 9 \$0-propwriteId \$0-propwriteId empty
+#X obj 39 137 hradio 15 1 0 1 \$0-propwriteId \$0-propwriteId empty
 0 -8 0 10 -262144 -1 -1 0;
 #X obj 40 160 cnv 15 260 20 empty \$0-propwriteName <none> 10 9 0 14
 -203904 -66577 0;
@@ -347,7 +347,7 @@ might contain spaces (and other weird characters);
 #X connect 23 0 4 0;
 #X connect 24 0 4 0;
 #X connect 25 0 4 0;
-#X restore 336 430 pd properties;
+#X restore 396 430 pd properties;
 #X obj 618 459 t a a;
 #X obj 618 480 print info;
 #X obj 655 459 s \$0-info;
@@ -410,15 +410,10 @@ properties \, ...);
 #X text 54 600 you can use [pix_buffer] to distribute the same pix
 to different parts of your render-chain;
 #X msg 625 235 device /dev/fw1;
-#N canvas 696 49 586 667 backend 0;
+#N canvas 697 49 586 667 backend 0;
 #X obj 104 122 bng 15 250 50 0 \$0-backendinfo \$0-backendinfo <--show_info_on_drivers
 17 8 0 10 -262144 -1 -1;
 #N canvas 15 49 450 300 \$0-backendinfo 0;
-#X obj 60 120 v4l2-videoplugin \$0;
-#X text 50 65 You are currently using the 'v4l2' driver;
-#X text 50 90 Click on any of the patches below for information about
-a specific driver:;
-#X text 50 50 On this system you have 1 drivers available;
 #X restore 184 207 pd \$0-backendinfo;
 #X obj 184 240 r \$0-backendinfo;
 #X msg 223 331 clear;
