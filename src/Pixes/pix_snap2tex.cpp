@@ -32,43 +32,42 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex);
 /////////////////////////////////////////////////////////
 
 pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
-  : m_textureOnOff(1), m_textureQuality(GL_LINEAR),
-    m_textureType(GL_TEXTURE_2D), m_repeat(GL_REPEAT),
+  :
+    m_textureObj(0), m_textureType(GL_TEXTURE_2D),
+    m_didTexture(false), m_init(false),
+
+    m_textureOnOff(true),
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
+    m_rectangle(0), m_canRectangle(0),
+    m_texUnit(0),
+    m_x(0), m_y(0), m_width(-1), m_height(-1),
     m_texWidth(-1), m_texHeight(-1),
     m_xRatio(1.), m_yRatio(1.),
-    m_oldWidth(-1), m_oldHeight(-1),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
-    m_textureObj(0),
-    m_didTexture(false),
-    m_texUnit(0),
     m_outTexInfo(NULL)
 {
-  if (argc == 4)
-    {
-      m_x = atom_getint(&argv[0]);
-      m_y = atom_getint(&argv[1]);
-      m_width = atom_getint(&argv[2]);
-      m_height = atom_getint(&argv[3]);
-    }
-  else if (argc == 2)
-    {
-      m_x = m_y = 0;
-      m_width = atom_getint(&argv[0]);
-      m_height = atom_getint(&argv[1]);
-    }
-  else if (argc == 0)
-    {
-      m_x = m_y = 0;
-      m_width = m_height = -1;
-    }
-  else
-    {
-      error("needs 0, 2, or 4 values");
-      m_x = m_y = 0;
-      m_width = m_height = 128;
-    }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  switch(argc) {
+  case 4:
+    m_x = atom_getint(&argv[0]);
+    m_y = atom_getint(&argv[1]);
+    m_width = atom_getint(&argv[2]);
+    m_height = atom_getint(&argv[3]);
+    break;
+  case 2:
+    m_x = m_y = 0;
+    m_width = atom_getint(&argv[0]);
+    m_height = atom_getint(&argv[1]);
+    break;
+  default:
+    error("needs 0, 2, or 4 values");
+  case 0:
+    m_x = m_y = 0;
+    m_width = m_height = -1;
+    break;
+  }
+
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("size"));
 
   // create an outlet to send texture info
   m_outTexInfo = outlet_new(this->x_obj, 0);
@@ -78,7 +77,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_snap2tex :: ~pix_snap2tex()
+pix_snap2tex :: ~pix_snap2tex(void)
 {
 }
 
@@ -86,7 +85,7 @@ pix_snap2tex :: ~pix_snap2tex()
 // setUpTextureState
 //
 /////////////////////////////////////////////////////////
-void pix_snap2tex :: setUpTextureState()
+void pix_snap2tex :: setUpTextureState(void)
 {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -94,9 +93,10 @@ void pix_snap2tex :: setUpTextureState()
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_repeat);
   glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-
-  if (m_mode && m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
+#if 0
+  if (m_rectangle && m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+#endif
 }
 
 
@@ -105,19 +105,44 @@ void pix_snap2tex :: setUpTextureState()
 //
 /////////////////////////////////////////////////////////
 bool pix_snap2tex :: isRunnable(void) {
-  if(GLEW_VERSION_1_1 || GLEW_EXT_texture_object)
-    return true;
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
+    error("your system lacks texture support");
+    return false;
+  }
 
-  error("your system lacks texture support");
-  return false;
+  /* check rectangle possibilities */
+  m_canRectangle=GL_TEXTURE_2D;
+  if(GLEW_ARB_texture_rectangle)
+    m_canRectangle=GL_TEXTURE_RECTANGLE_ARB;
+  else if (GLEW_EXT_texture_rectangle)
+    m_canRectangle=GL_TEXTURE_RECTANGLE_EXT;
+
+  return true;
 }
 
+
+void pix_snap2tex :: setTexCoords(float x, float y) {
+  m_xRatio = x;
+  m_yRatio = y;
+
+  m_coords[0].s = 0.f;
+  m_coords[0].t = 0.f;
+
+  m_coords[1].s = x;
+  m_coords[1].t = 0.f;
+
+  m_coords[2].s = x;
+  m_coords[2].t = y;
+
+  m_coords[3].s = 0.f;
+  m_coords[3].t = y;
+}
 
 /////////////////////////////////////////////////////////
 // snapMess
 //
 /////////////////////////////////////////////////////////
-void pix_snap2tex :: snapMess()
+void pix_snap2tex :: snapMess(void)
 {
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
@@ -129,13 +154,15 @@ void pix_snap2tex :: snapMess()
 
   if (width <= 0 || height <= 0)
     {
-      error("Illegal size");
+      error("Illegal size %dx%d", width, height);
       return;
     }
 
   if(GLEW_VERSION_1_3) {
     glActiveTexture(GL_TEXTURE0_ARB + m_texUnit);
   }
+
+  m_textureType = (m_rectangle?m_canRectangle:GL_TEXTURE_2D);
 
   glEnable(m_textureType);
 
@@ -145,42 +172,34 @@ void pix_snap2tex :: snapMess()
     glBindTextureEXT(m_textureType, m_textureObj);
   }
 
-  // if the size changed, then reset the texture
-  int x_2 = powerOfTwo(width);
-  int y_2 = powerOfTwo(height);
-
-  if (width != m_oldWidth || height != m_oldHeight)
-    {
-      m_oldWidth = width;
-      m_oldHeight = height;
-
-      m_xRatio = (float)width / (float)x_2;
-      m_yRatio = (float)height / (float)y_2;
-
-      m_coords[0].s = 0.f;
-      m_coords[0].t = 0.f;
-
-      m_coords[1].s = m_xRatio;
-      m_coords[1].t = 0.f;
-
-      m_coords[2].s = m_xRatio;
-      m_coords[2].t = m_yRatio;
-
-      m_coords[3].s = 0.f;
-      m_coords[3].t = m_yRatio;
-
+  if (m_init) {
+    m_init=false;
+    // if the size changed, then reset the texture
+    if(GL_TEXTURE_2D == m_textureType) {
+      int x_2 = powerOfTwo(width);
+      int y_2 = powerOfTwo(height);
       m_texWidth = x_2;
       m_texHeight = y_2;
+      setTexCoords((float)width / (float)x_2, (float)height / (float)y_2);
 
       glCopyTexImage2D(	m_textureType, 0,
                         GL_RGBA16,
                         m_x, m_y,
                         m_texWidth, m_texHeight,
                         0);
-
     } else {
-    m_texHeight = m_height;
-    m_texWidth = m_width;
+      setTexCoords(width, height);
+      m_texWidth  = width;
+      m_texHeight = height;
+      glCopyTexImage2D(	m_textureType, 0,
+                        GL_RGBA16,
+                        m_x, m_y,
+                        m_texWidth, m_texHeight,
+                        0);
+    }
+  } else {
+    m_texHeight = height;
+    m_texWidth = width;
   }
 
   glCopyTexSubImage2D(m_textureType, 0,
@@ -264,7 +283,7 @@ void pix_snap2tex :: postrender(GemState *state)
 // startRendering
 //
 /////////////////////////////////////////////////////////
-void pix_snap2tex :: startRendering()
+void pix_snap2tex :: startRendering(void)
 {
   if(GLEW_VERSION_1_1) {
     glGenTextures(1, &m_textureObj);
@@ -272,6 +291,8 @@ void pix_snap2tex :: startRendering()
     if(GLEW_VERSION_1_3) {
       glActiveTexture(GL_TEXTURE0_ARB + m_texUnit);
     }
+
+    m_textureType = (m_rectangle?m_canRectangle:GL_TEXTURE_2D);
 
     glBindTexture(m_textureType, m_textureObj);
     setUpTextureState();
@@ -284,19 +305,20 @@ void pix_snap2tex :: startRendering()
     glActiveTexture(GL_TEXTURE0_ARB);
   }
 
-  m_oldWidth = m_oldHeight = m_texWidth = m_texHeight = -1;
+  m_texWidth = m_texHeight = -1;
+  m_init=true;
+
   if (!m_textureObj)	{
     error("Unable to allocate texture object");
     return;
   }
-
 }
 
 /////////////////////////////////////////////////////////
 // stopRendering
 //
 /////////////////////////////////////////////////////////
-void pix_snap2tex :: stopRendering()
+void pix_snap2tex :: stopRendering(void)
 {
   if(m_textureObj) {
     if(GLEW_VERSION_1_1) {
@@ -306,7 +328,7 @@ void pix_snap2tex :: stopRendering()
     }
   }
   m_textureObj = 0;
-  m_oldWidth = m_oldHeight = m_texWidth = m_texHeight = -1;
+  m_texWidth = m_texHeight = -1;
 }
 
 
@@ -333,21 +355,10 @@ void pix_snap2tex :: posMess(int x, int y)
 }
 
 /////////////////////////////////////////////////////////
-// cleanImage
-//
-/////////////////////////////////////////////////////////
-void pix_snap2tex :: cleanImage()
-{
-  // release previous data
-  error("clean is unimplemented.");
-  setModified();
-}
-
-/////////////////////////////////////////////////////////
 // textureOnOff
 //
 /////////////////////////////////////////////////////////
-void pix_snap2tex :: textureOnOff(int on)
+void pix_snap2tex :: textureOnOff(bool on)
 {
   m_textureOnOff = on;
   setModified();
@@ -440,14 +451,14 @@ void pix_snap2tex :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "snap", snapMess);
   CPPEXTERN_MSG0(classPtr, "bang", snapMess);
 
-  CPPEXTERN_MSG1(classPtr, "float" , textureOnOff, int);
+  CPPEXTERN_MSG1(classPtr, "float" , textureOnOff, bool);
 
-  CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
-  CPPEXTERN_MSG2(classPtr, "vert_pos" , posMess , int, int);
+  CPPEXTERN_MSG2(classPtr, "size", sizeMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "pos" , posMess , int, int);
 
   CPPEXTERN_MSG1(classPtr, "quality" , textureQuality, int);
   CPPEXTERN_MSG1(classPtr, "repeat" , repeatMess, int);
 
-  CPPEXTERN_MSG1(classPtr, "mode" , modeMess, int);
+  CPPEXTERN_MSG1(classPtr, "rectangle" , rectangleMess, int);
   CPPEXTERN_MSG1(classPtr, "texUnit" , texUnitMess, int);
 }

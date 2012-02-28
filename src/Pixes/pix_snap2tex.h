@@ -56,15 +56,11 @@ class pix_snap2tex : public GemBase
 
   //////////
   // Destructor
-  virtual ~pix_snap2tex();
+  virtual ~pix_snap2tex(void);
 
   ////////
   // extension check
   virtual bool isRunnable(void);
-
-  //////////
-  // When a snap is received
-  virtual void	snapMess();
 
   //////////
   // Do the rendering
@@ -75,43 +71,36 @@ class pix_snap2tex : public GemBase
   virtual void 	postrender(GemState *state);
 
   //////////
-  // When a size message is received
-  virtual void	sizeMess(int width, int height);
-
-  //////////
-  // When a position message is received
-  virtual void	posMess(int x, int y);
-
-  //////////
-  // Clean up the image
-  void	    	cleanImage();
-  //////////
   // Establish texture object
-  virtual void	startRendering();
+  virtual void	startRendering(void);
 
   //////////
   // Delete texture object
-  virtual void	stopRendering();
+  virtual void	stopRendering(void);
+
+
+  //////////
+  // When a snap is received
+  virtual void	snapMess(void);
+  GLuint m_textureObj;
+	GLint 	m_textureType;
+	bool m_didTexture; // used in postrender() to check whether render() did texture
+	bool m_init;
 
   //////////
   // Turn on/off texture mapping
-  void            textureOnOff(int on);
+  void textureOnOff(bool on);
+  bool             m_textureOnOff;
 
 	//////////
 	// Set up the texture state
-	void			setUpTextureState();
-
-  //////////
-  int             m_textureOnOff;
-
-  //////////
-  GLuint			m_textureQuality;
+	void setUpTextureState(void);
 
   //////////
   // Set the texture quality
   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
   void      textureQuality(int type);
-	int				m_textureType;
+  GLuint			m_textureQuality;
 
 	//////////
 	// Set the texture quality
@@ -119,35 +108,27 @@ class pix_snap2tex : public GemBase
 	void			repeatMess(int type);
 	GLuint			m_repeat;
 
-	void			modeMess(int type);
-	int				m_mode;
+	void			rectangleMess(int);
+	int				m_rectangle, m_canRectangle;
 
 	void			texUnitMess(int unit);
   GLuint    m_texUnit;
 
-
   //////////
-  // The position
+  // position & size for grabbing
+  virtual void	sizeMess(int width, int height);
+  virtual void	posMess(int x, int y);
   int     	m_x, m_y;
-
-
-  //////////
-  // The size
   int     	m_width, m_height;
 
   //////////
   // The texture size
   int     	m_texWidth, m_texHeight;
-  // for texcoords
-  float m_xRatio, m_yRatio;
 
-	//////////
-	// The last image size (used to detect if image has changed)
-  // LATER use setModified() for that
-	int			m_oldWidth, m_oldHeight;
-
+  void setTexCoords(float x, float y);
 	// The texture coordinates
 	TexCoord    	m_coords[4];
+  float m_xRatio, m_yRatio;
 
 	//////////
 	// this is what we get from upstream
@@ -155,19 +136,8 @@ class pix_snap2tex : public GemBase
 	int             m_oldNumCoords;
 	int             m_oldTexture;
 
-
   //////////
-  // The texture object number
-  GLuint	   m_textureObj;
-
-
-	//////////
-	// did we really do texturing in render() ??
-	// good to know in the postrender()...
-	bool          m_didTexture;
-
-
-
+  // outlet for texture-infor
 	t_outlet	*m_outTexInfo;
 };
 
