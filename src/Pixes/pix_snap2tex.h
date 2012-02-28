@@ -1,18 +1,18 @@
 /*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
+  LOG
+  GEM - Graphics Environment for Multimedia
 
-    Snap a pix of the render buffer into a texture
+  Snap a pix of the render buffer into a texture
 
-    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyright (c) Günther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    Copyright (c) 2003 Daniel Heckenberg
+  Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+  Copyright (c) Günther Geiger. geiger@epy.co.at
+  Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+  Copyright (c) 2003 Daniel Heckenberg
 
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  For information on usage and redistribution, and for a DISCLAIMER OF ALL
+  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_SNAP_TEX_H_
 #define _INCLUDE__GEM_PIXES_PIX_SNAP_TEX_H_
@@ -21,97 +21,96 @@ LOG
 #include "Gem/State.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    pix_snap2tex
+  -------------------------------------------------------------------
+  CLASS
+  pix_snap2tex
 
-    Snaps a pix of the render buffer into a texture
+  Snaps a pix of the render buffer into a texture
 
-KEYWORDS
-    pix
+  KEYWORDS
+  pix
 
-DESCRIPTION
+  DESCRIPTION
 
-    Inlet for a list - "vert_size"
-    Inlet for a list - "vert_pos"
+  Inlet for a list - "vert_size"
+  Inlet for a list - "vert_pos"
 
-    "snap" - Snap a pix
-    "vert_size" - Set the size of the pix
-    "vert_pos" - Set the position of the pix
+  "snap" - Snap a pix
+  "vert_size" - Set the size of the pix
+  "vert_pos" - Set the position of the pix
 	"quality" - set the texture mapping algorithm
-    "texture" - turn texture mapping on/off
+  "texture" - turn texture mapping on/off
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 class pix_snap2tex : public GemBase
 {
-    CPPEXTERN_HEADER(pix_snap2tex, GemBase);
+  CPPEXTERN_HEADER(pix_snap2tex, GemBase);
 
-    public:
+ public:
 
-        //////////
-        // Constructor
-    	pix_snap2tex(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  pix_snap2tex(int argc, t_atom *argv);
 
-    protected:
+ protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_snap2tex();
+  //////////
+  // Destructor
+  virtual ~pix_snap2tex();
 
-      ////////
-      // extension check
-      virtual bool isRunnable(void);
+  ////////
+  // extension check
+  virtual bool isRunnable(void);
 
-    	//////////
-    	// When a snap is received
-    	virtual void	snapMess();
+  //////////
+  // When a snap is received
+  virtual void	snapMess();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void 	render(GemState *state);
 
-    	//////////
-    	// Clear the dirty flag on the pixBlock
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Clear the dirty flag on the pixBlock
+  virtual void 	postrender(GemState *state);
 
-    	//////////
-    	// When a size message is received
-    	virtual void	sizeMess(int width, int height);
+  //////////
+  // When a size message is received
+  virtual void	sizeMess(int width, int height);
 
-    	//////////
-    	// When a position message is received
-    	virtual void	posMess(int x, int y);
+  //////////
+  // When a position message is received
+  virtual void	posMess(int x, int y);
 
-    	//////////
-    	// Clean up the image
-    	void	    	cleanImage();
-    	//////////
-    	// Establish texture object
-    	virtual void	startRendering();
+  //////////
+  // Clean up the image
+  void	    	cleanImage();
+  //////////
+  // Establish texture object
+  virtual void	startRendering();
 
-    	//////////
-    	// Delete texture object
-    	virtual void	stopRendering();
+  //////////
+  // Delete texture object
+  virtual void	stopRendering();
 
-        //////////
-        // Turn on/off texture mapping
-        void            textureOnOff(int on);
+  //////////
+  // Turn on/off texture mapping
+  void            textureOnOff(int on);
 
 	//////////
 	// Set up the texture state
 	void			setUpTextureState();
 
-        //////////
-        int             m_textureOnOff;
+  //////////
+  int             m_textureOnOff;
 
-        //////////
-        GLuint			m_textureQuality;
+  //////////
+  GLuint			m_textureQuality;
 
-        //////////
-        // Set the texture quality
-        // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
-        void            textureQuality(int type);
-	int				m_mode;
+  //////////
+  // Set the texture quality
+  // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
+  void      textureQuality(int type);
 	int				m_textureType;
 
 	//////////
@@ -120,34 +119,32 @@ class pix_snap2tex : public GemBase
 	void			repeatMess(int type);
 	GLuint			m_repeat;
 
-    	//////////
-    	// The x position
-    	int     	m_x;
+	void			modeMess(int type);
+	int				m_mode;
 
-    	//////////
-    	// The y position
-    	int     	m_y;
+	void			texUnitMess(int unit);
+  GLuint    m_texUnit;
 
-    	//////////
-    	// The width
-    	int     	m_width;
 
-    	//////////
-    	// The height
-    	int     	m_height;
+  //////////
+  // The position
+  int     	m_x, m_y;
 
-		//////////
-    	// The texture width
-    	int     	m_texWidth;
 
-    	//////////
-    	// The texture height
-    	int     	m_texHeight;
+  //////////
+  // The size
+  int     	m_width, m_height;
+
+  //////////
+  // The texture size
+  int     	m_texWidth, m_texHeight;
+  // for texcoords
+  float m_xRatio, m_yRatio;
 
 	//////////
-	// The last image size
-	int			m_oldWidth;
-	int			m_oldHeight;
+	// The last image size (used to detect if image has changed)
+  // LATER use setModified() for that
+	int			m_oldWidth, m_oldHeight;
 
 	// The texture coordinates
 	TexCoord    	m_coords[4];
@@ -159,10 +156,9 @@ class pix_snap2tex : public GemBase
 	int             m_oldTexture;
 
 
-    	//////////
-    	// The texture object number
-    	GLuint	    	m_textureObj;
-	t_outlet	*m_outTexInfo;
+  //////////
+  // The texture object number
+  GLuint	   m_textureObj;
 
 
 	//////////
@@ -170,17 +166,9 @@ class pix_snap2tex : public GemBase
 	// good to know in the postrender()...
 	bool          m_didTexture;
 
-    private:
 
-    	//////////
-    	// static member functions
-    	static void 	snapMessCallback(void *data);
-    	static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
-    	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
-    	static void 	floatMessCallback(void *data, float n);
-    	static void 	textureMessCallback(void *data, t_floatarg n);
-	static void 	modeCallback(void *data, t_floatarg n);
-	static void 	repeatMessCallback(void *data, t_floatarg n);
+
+	t_outlet	*m_outTexInfo;
 };
 
 #endif	// for header file
