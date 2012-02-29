@@ -99,7 +99,7 @@ class GEM_EXPORT filmGMERLIN : public film {
   gavl_video_format_t*m_gformat,*m_finalformat;
   int m_track, m_stream;
   gavl_video_frame_t*m_gframe,*m_finalframe;
-  gavl_video_converter_s*m_gconverter;
+  gavl_video_converter_t*m_gconverter;
 
   int m_fps_num, m_fps_denum;
 
