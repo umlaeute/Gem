@@ -460,5 +460,5 @@ void pix_snap2tex :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "repeat" , repeatMess, int);
 
   CPPEXTERN_MSG1(classPtr, "rectangle" , rectangleMess, int);
-  CPPEXTERN_MSG1(classPtr, "texUnit" , texUnitMess, int);
+  CPPEXTERN_MSG1(classPtr, "texunit" , texUnitMess, int);
 }
