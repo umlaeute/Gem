@@ -1,4 +1,4 @@
-#N canvas 2428 188 1030 765 10;
+#N canvas 1526 184 639 504 10;
 #X text 462 18 GEM object;
 #X obj 18 206 cnv 15 430 210 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -33,7 +33,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 529 310 pd gemwin;
-#X msg 529 291 destroy;
+#X msg 529 291 create;
 #X text 525 270 Create window:;
 #X obj 460 151 cnv 15 160 90 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -41,7 +41,7 @@
 #X text 81 41 Class: pix object;
 #X obj 520 95 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
-#N canvas 0 0 587 366 image 0;
+#N canvas 4 49 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image examples/data/fractal.JPG;
@@ -70,9 +70,9 @@ gmail;
 #X text 38 107 [pix_equal] outputs a binary image where 'white' marks
 those pixels that are equal to a given value (within given closed bounds)
 \, and 'black' marks the remaining ones.;
-#X text 67 248 Inlets 2(3): list of lower(upper) bounds [R G B A <
-\, with each value ranging from 0 to 255 \, and A being optional and
-equal to 0(255) by default.;
+#X text 67 248 Inlet 2(resp.3): list of lower(resp.upper) bounds [R
+G B A( \, with each value ranging from 0 to 1 \, and A being optional
+and equal to 0(resp.1) by default.;
 #X text 67 319 Outlet 1: gemlist \, a binary RGBA image with white
 pixels marking only those pixels that are within the specified (closed)
 RGBA ranges simultaneously on all four channels. This can be used \,
@@ -81,12 +81,13 @@ for instance \, in separating color blobs from [pix_colorclassify].
 #X text 39 87 Description: marks the pixels nearly equal to a given
 color;
 #X obj 461 209 pix_equal;
-#X msg 528 172 200 180 0 0;
+#X msg 528 172 0.8 0.7 0 0;
 #X text 524 156 lower bound;
 #X text 526 204 upper bound;
-#X msg 528 192 255 255 50 255;
-#X text 457 342 e.g. marks whatever is within a certain bright yellow
-range and having any alpha;
+#X msg 528 192 1 1 0.2 1;
+#X text 456 373 and having any alpha;
+#X text 457 342 e.g. marks whatever is within;
+#X text 456 358 a certain bright yellow range;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
