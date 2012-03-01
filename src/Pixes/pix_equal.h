@@ -56,20 +56,13 @@ class GEM_EXTERN pix_equal : public GemPixObj
     	
     	//////////
     	// Set the new color range vectors
-    	void	    	vecLowerBoundMess(int argc, t_atom *argv);
-    	void	    	vecUpperBoundMess(int argc, t_atom *argv);
+    	void	    	vecLowerBoundMess(t_symbol*,int argc, t_atom *argv);
+    	void	    	vecUpperBoundMess(t_symbol*,int argc, t_atom *argv);
 
     	//////////
     	// The bounds
     	unsigned char  	m_upper[4];
     	unsigned char  	m_lower[4];
-
-    private:
-    
-    	//////////
-    	// Static member functions
-    	static void 	vecLowerMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	vecUpperMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 
 #endif	// for header file
