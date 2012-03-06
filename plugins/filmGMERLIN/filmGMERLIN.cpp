@@ -45,16 +45,14 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 /////////////////////////////////////////////////////////
 
 filmGMERLIN :: filmGMERLIN(void) :
-  m_fps(0.),
   m_numFrames(-1), m_numTracks(-1),
   m_file(NULL),
   m_opt(NULL),
-  m_track(0),
-  m_stream(0),
+  m_track(0), m_stream(0),
   m_gframe(NULL),
   m_finalframe(NULL),
   m_gconverter(NULL),
-  m_fps_num(1), m_fps_denum(1),
+  m_fps(0.), m_fps_num(1), m_fps_denum(1),
   m_next_timestamp(0),
 #ifdef USE_FRAMETABLE
   m_frametable(NULL),
