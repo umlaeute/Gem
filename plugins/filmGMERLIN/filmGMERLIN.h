@@ -93,7 +93,6 @@ class GEM_EXPORT filmGMERLIN : public film {
 
   bgav_t*   	 m_file;
   bgav_options_t * m_opt;
-  bool           m_seekable; /* the track can be seeked */
   gavl_video_format_t*m_gformat,*m_finalformat;
   int m_track, m_stream;
   gavl_video_frame_t*m_gframe,*m_finalframe;

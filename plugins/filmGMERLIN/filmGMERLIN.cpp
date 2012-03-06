@@ -49,7 +49,6 @@ filmGMERLIN :: filmGMERLIN(void) :
   m_numFrames(-1), m_numTracks(-1),
   m_file(NULL),
   m_opt(NULL),
-  m_seekable(false),
   m_gformat(NULL),
   m_finalformat(new gavl_video_format_t[1]),
   m_track(0),
@@ -214,8 +213,6 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   } else {
     post("track %d does not contain a video-stream: skipping");
   }
-
-  m_seekable=bgav_can_seek_sample(m_file);
 
   bgav_set_video_stream(m_file, m_stream, BGAV_STREAM_DECODE);
   if(!bgav_start(m_file)) {
