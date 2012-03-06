@@ -87,7 +87,6 @@ class GEM_EXPORT filmGMERLIN : public film {
   // GROUP:	Movie data
   //-----------------------------------
  protected:
-  GLenum  m_wantedFormat; // format requested by the user
   double m_fps;  // the frame-rate
   int m_numFrames, m_numTracks; // number of frames in video
   pixBlock m_image; // output image
