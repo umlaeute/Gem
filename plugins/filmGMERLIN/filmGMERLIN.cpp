@@ -48,7 +48,6 @@ filmGMERLIN :: filmGMERLIN(void) :
   m_wantedFormat(GL_RGBA),
   m_fps(0.),
   m_numFrames(-1), m_numTracks(-1),
-  m_curFrame(-1),
   m_file(NULL),
   m_opt(NULL),
   m_seekable(false),
@@ -341,7 +340,6 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
 #endif /* GEM_FILMGMERLIN_TRACKSWITCH */
 
   if(imgNum>=m_numFrames || imgNum<0)return film::FAILURE;
-  if(imgNum>0)m_curFrame=imgNum;
 
   if(bgav_can_seek(m_file)) {
     if(0) {
