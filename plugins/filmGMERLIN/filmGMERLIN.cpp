@@ -49,8 +49,6 @@ filmGMERLIN :: filmGMERLIN(void) :
   m_numFrames(-1), m_numTracks(-1),
   m_file(NULL),
   m_opt(NULL),
-  m_gformat(NULL),
-  m_finalformat(new gavl_video_format_t[1]),
   m_track(0),
   m_stream(0),
   m_gframe(NULL),
@@ -221,28 +219,30 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   }
   m_next_timestamp=bgav_video_start_time(m_file, m_track);
 
-  m_gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
-  m_gframe = gavl_video_frame_create_nopad(m_gformat);
+  gavl_video_format_t*gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
+  m_gframe = gavl_video_frame_create_nopad(gformat);
 
-  m_finalformat->frame_width = m_gformat->frame_width;
-  m_finalformat->frame_height = m_gformat->frame_height;
-  m_finalformat->image_width = m_gformat->image_width;
-  m_finalformat->image_height = m_gformat->image_height;
-  m_finalformat->pixel_width = m_gformat->pixel_width;
-  m_finalformat->pixel_height = m_gformat->pixel_height;
-  m_finalformat->frame_duration = m_gformat->frame_duration;
-  m_finalformat->timescale = m_gformat->timescale;
+
+  gavl_video_format_t finalformat[1];
+  finalformat->frame_width = gformat->frame_width;
+  finalformat->frame_height = gformat->frame_height;
+  finalformat->image_width = gformat->image_width;
+  finalformat->image_height = gformat->image_height;
+  finalformat->pixel_width = gformat->pixel_width;
+  finalformat->pixel_height = gformat->pixel_height;
+  finalformat->frame_duration = gformat->frame_duration;
+  finalformat->timescale = gformat->timescale;
 
 #ifdef __APPLE__
-  m_finalformat->pixelformat=GAVL_YUY2;
+  finalformat->pixelformat=GAVL_YUY2;
 #else
-  m_finalformat->pixelformat=GAVL_RGBA_32;
+  finalformat->pixelformat=GAVL_RGBA_32;
 #endif
 	
-  m_finalframe = gavl_video_frame_create_nopad(m_finalformat);
-  m_doConvert= (gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat)>0);
-  m_image.image.xsize=m_gformat->frame_width;
-  m_image.image.ysize=m_gformat->frame_height;
+  m_finalframe = gavl_video_frame_create_nopad(finalformat);
+  m_doConvert= (gavl_video_converter_init (m_gconverter, gformat, finalformat)>0);
+  m_image.image.xsize=gformat->frame_width;
+  m_image.image.ysize=gformat->frame_height;
 #ifdef __APPLE__
   m_image.image.setCsizeByFormat(GL_YUV422_GEM);
 #else
@@ -252,14 +252,14 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_image.image.upsidedown=true;
   m_image.newfilm=true;
 
-  if(m_gformat->frame_duration) {
-    m_fps = m_gformat->timescale / m_gformat->frame_duration;
+  if(gformat->frame_duration) {
+    m_fps = gformat->timescale / gformat->frame_duration;
   } else {
-    m_fps = m_gformat->timescale;
+    m_fps = gformat->timescale;
   }
 
-  m_fps_num=m_gformat->timescale;
-  m_fps_denum=m_gformat->frame_duration;
+  m_fps_num=gformat->timescale;
+  m_fps_denum=gformat->frame_duration;
 
   m_numFrames=-1;
 #ifdef USE_FRAMETABLE
