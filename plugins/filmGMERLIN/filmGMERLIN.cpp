@@ -59,7 +59,6 @@ filmGMERLIN :: filmGMERLIN(void) :
 #ifdef USE_FRAMETABLE
   m_frametable(NULL),
 #endif
-  m_lastFrame(0),
   m_doConvert(false)
 {
   m_gconverter=gavl_video_converter_create ();

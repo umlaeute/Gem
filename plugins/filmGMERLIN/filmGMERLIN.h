@@ -107,8 +107,6 @@ class GEM_EXPORT filmGMERLIN : public film {
   static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
   virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
 
-  int m_lastFrame;
-
  private:
   // whether we need to convert to use it in Gem
   bool m_doConvert;
