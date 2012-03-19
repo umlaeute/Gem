@@ -13,46 +13,45 @@
 #include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    pix_motionblur
+  -------------------------------------------------------------------
+  CLASS
+  pix_motionblur
 
+  KEYWORDS
+  pix
+  yuv
 
-
-KEYWORDS
-    pix
-    yuv
-
-DESCRIPTION
+  DESCRIPTION
 
   does motion blur by mixing the current and previous frames for a video 'feedback' effect
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_motionblur : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_motionblur, GemPixObj);
+  CPPEXTERN_HEADER(pix_motionblur, GemPixObj);
 
-    public:
+ public:
 
-	    //////////
-	    // Constructor
-    	pix_motionblur();
+  //////////
+  // Constructor
+  pix_motionblur(void);
 
-    protected:
+ protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_motionblur();
+  //////////
+  // Destructor
+  virtual ~pix_motionblur(void);
 
 
-	void motionblurMessage(int, t_atom*);
+	void motionblurMessage(t_symbol*, int, t_atom*);
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-      	virtual void 	processGrayImage(imageStruct &image);
-  	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void 	processRGBAImage(imageStruct &image);
+  virtual void 	processGrayImage(imageStruct &image);
+  virtual void 	processYUVImage(imageStruct &image);
+
 #ifdef __MMX__
 	virtual void    processMMX(imageStruct &image);
 
@@ -62,21 +61,12 @@ CPPEXTERN_HEADER(pix_motionblur, GemPixObj);
 #endif
 
 #ifdef __VEC__
-        virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void 	processYUVAltivec(imageStruct &image);
 #endif
 
 	imageStruct     m_savedImage;
-        int		m_blur0, m_blur1;
-        t_inlet         *inletmotionblur;
-
-
-    private:
-
-    	//////////
-    	// Static member functions
-        static void motionblurCallback       (void *data, t_symbol*,int,t_atom*);
-
-
+  int		m_blur0, m_blur1;
+  t_inlet         *inletmotionblur;
 };
 
 #endif
