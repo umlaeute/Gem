@@ -24,9 +24,6 @@ Nongeos:
 	add other light-types
 	check for the maximum number of lights during runtime
 
-Particles:
- incorporate "new" libparticle API
-
 Pixes:
 	MMX, SSE2
 		pix_blur pix_tIIR pix_motionblur: these call explicitely the altivec-functions if compiled with alitvec, rather than relying on the SIMD-dispatcher; remove explicit calls!
