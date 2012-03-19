@@ -38,7 +38,13 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
+pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
+  set(false), set_zero(false),
+  m_ff(NULL), m_fb(NULL),
+  ff_count(0), fb_count(0),
+  m_inlet(NULL),
+  m_bufnum(0),
+  m_counter(0)
 {
   int fb_num = (fb_numf>0.)?static_cast<int>(fb_numf):0;
   int ff_num = (ff_numf>0.)?static_cast<int>(ff_numf):0;
@@ -65,11 +71,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
   }
   m_ff[0]=1.0;
 
-  set = false;
-  set_zero = false;
-
   m_bufnum=(fb_num>ff_num)?fb_num:ff_num;
-  m_counter=0;
 
   m_buffer.xsize=64;
   m_buffer.ysize=64;
@@ -81,7 +83,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_tIIR :: ~pix_tIIR()
+pix_tIIR :: ~pix_tIIR(void)
 {
   // clean my buffer
 }
@@ -203,9 +205,9 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
     else{
       j=m_bufnum;
       while(j--){
-	source=(__m64*)image.data;
-	dest=((__m64*)m_buffer.data)+j*imagesize;
-	i=imagesize;while(i--)dest[i]=source[i];
+        source=(__m64*)image.data;
+        dest=((__m64*)m_buffer.data)+j*imagesize;
+        i=imagesize;while(i--)dest[i]=source[i];
       }
     }
     set=false;
@@ -240,27 +242,27 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
       factor =_mm_set1_pi16(s_fb[j+1]);
       null_64=_mm_setzero_si64();
       i=imagesize;while(i--){
-	a0 = source[i];
-	b0 = dest[i];
+        a0 = source[i];
+        b0 = dest[i];
 
-	a1=_mm_unpackhi_pi8 (a0, null_64);
-	a0=_mm_unpacklo_pi8 (a0, null_64);
-	b1=_mm_unpackhi_pi8 (b0, null_64);
-	b0=_mm_unpacklo_pi8 (b0, null_64);
+        a1=_mm_unpackhi_pi8 (a0, null_64);
+        a0=_mm_unpacklo_pi8 (a0, null_64);
+        b1=_mm_unpackhi_pi8 (b0, null_64);
+        b0=_mm_unpacklo_pi8 (b0, null_64);
 
-	a1=_mm_mullo_pi16   (a1, factor);
-	a0=_mm_mullo_pi16   (a0, factor);
+        a1=_mm_mullo_pi16   (a1, factor);
+        a0=_mm_mullo_pi16   (a0, factor);
 
-	a1=_mm_srli_pi16    (a1, 8);
-	a0=_mm_srli_pi16    (a0, 8);
+        a1=_mm_srli_pi16    (a1, 8);
+        a0=_mm_srli_pi16    (a0, 8);
 
-	a1=_mm_adds_pu16    (a1, b1);
-	a0=_mm_adds_pu16    (a0, b0);
+        a1=_mm_adds_pu16    (a1, b1);
+        a0=_mm_adds_pu16    (a0, b0);
 
-	a0=_mm_packs_pu16   (a0, a1);
+        a0=_mm_packs_pu16   (a0, a1);
 
-	dest[i]=a0;
-	// *dest++ += (unsigned char)((factor**source++)>>8);
+        dest[i]=a0;
+        // *dest++ += (unsigned char)((factor**source++)>>8);
       }
     }
   }
@@ -293,28 +295,28 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
       factor =_mm_set1_pi16(s_ff[j+1]);
       null_64=_mm_setzero_si64();
       i=imagesize;while(i--){
-	a0 = source[i];
-	b0 = dest[i];
+        a0 = source[i];
+        b0 = dest[i];
 
-	a1=_mm_unpackhi_pi8 (a0, null_64);
-	a0=_mm_unpacklo_pi8 (a0, null_64);
-	b1=_mm_unpackhi_pi8 (b0, null_64);
-	b0=_mm_unpacklo_pi8 (b0, null_64);
+        a1=_mm_unpackhi_pi8 (a0, null_64);
+        a0=_mm_unpacklo_pi8 (a0, null_64);
+        b1=_mm_unpackhi_pi8 (b0, null_64);
+        b0=_mm_unpacklo_pi8 (b0, null_64);
 
-	a1=_mm_mullo_pi16   (a1, factor);
-	a0=_mm_mullo_pi16   (a0, factor);
+        a1=_mm_mullo_pi16   (a1, factor);
+        a0=_mm_mullo_pi16   (a0, factor);
 
-	a1=_mm_srli_pi16    (a1, 8);
-	a0=_mm_srli_pi16    (a0, 8);
+        a1=_mm_srli_pi16    (a1, 8);
+        a0=_mm_srli_pi16    (a0, 8);
 
-	a1=_mm_adds_pu16    (a1, b1);
-	a0=_mm_adds_pu16    (a0, b0);
+        a1=_mm_adds_pu16    (a1, b1);
+        a0=_mm_adds_pu16    (a0, b0);
 
-	a0=_mm_packs_pu16   (a0, a1);
-	dest[i]=a0;
-	//*dest++ += (unsigned char)((factor**source++)>>8);
+        a0=_mm_packs_pu16   (a0, a1);
+        dest[i]=a0;
+        //*dest++ += (unsigned char)((factor**source++)>>8);
       }
-  _mm_empty();
+      _mm_empty();
 
     }
   }
@@ -335,13 +337,12 @@ void pix_tIIR :: processGrayMMX(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_tIIR :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_tIIR::setMessCallback),
-		  gensym("set"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG(classPtr, "set", setMess);
 }
 
-void pix_tIIR :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)
+void pix_tIIR :: setMess(t_symbol *s, int argc, t_atom* argv)
 {
-  GetMyClass(data)->set = true;
-  GetMyClass(data)->set_zero = (argc>0 && atom_getint(argv)==0);
-  GetMyClass(data)->setPixModified();
+  set = true;
+  set_zero = (argc>0 && atom_getint(argv)==0);
+  setPixModified();
 }
