@@ -25,8 +25,6 @@ Nongeos:
 	check for the maximum number of lights during runtime
 
 Pixes:
-	MMX, SSE2
-		pix_blur pix_tIIR pix_motionblur: these call explicitely the altivec-functions if compiled with alitvec, rather than relying on the SIMD-dispatcher; remove explicit calls!
 	windows movie loader (have a look at guliverkli?; use gmerlin?)
 
 	upsidedown: pix_rectangle does not respect the upside-down flag and thus sometimes the rectangle appears in the upper-left corner and sometimes in the lower-left corner
