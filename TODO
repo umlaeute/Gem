@@ -1,6 +1,9 @@
 General:
  osx: carbon/QuickTime not supported anymore since 10.6
 
+Optimization:
+ use a more performant float2int conversion as described in
+	http://www.mega-nerd.com/FPcast/
 
 Output:
 	multiple output
