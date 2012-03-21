@@ -49,7 +49,7 @@ namespace gem { namespace thread {
   class WorkerThread::PIMPL {
   public:
     WorkerThread*owner;
-    WorkerThread::id_t ID;
+    WorkerThread::id_t ID; /* for generating the next ID */
 
     bool keeprunning;
     bool isrunning;
@@ -60,12 +60,15 @@ namespace gem { namespace thread {
     Mutex m_done;
     Semaphore s_newdata;
 
+    WorkerThread::id_t processingID; /* the ID currently processed or INVALID: must only be written in the thread! */
+
     pthread_t p_thread;
 
     PIMPL(WorkerThread*x) : owner(x), ID(0),
                             keeprunning(true), isrunning(false),
                             m_todo(Mutex()), m_done(Mutex()),
-                            s_newdata(Semaphore())
+                            s_newdata(Semaphore()),
+                            processingID(WorkerThread::INVALID)
     {
 
     }
@@ -103,7 +106,8 @@ namespace gem { namespace thread {
           me->m_todo.lock();
         }
         in=me->q_todo.front();
-        me->q_todo.POP();
+         me->processingID=in.first;
+         me->q_todo.POP();
         me->m_todo.unlock();
 
         //std::cerr << "THREAD: processing data " << in.second  << " as "<<in.first<<std::endl;
@@ -117,6 +121,7 @@ namespace gem { namespace thread {
         bool newdata=true;//me->q_done.empty();
         //std::cerr<<"THREAD: processed "<< out.first <<" -> "<< newdata<<std::endl;
         me->q_done.PUSH(out);
+        me->processingID=WorkerThread::INVALID;
         me->m_done.unlock();
         //std::cerr << "THREAD: signaling newdata "<<newdata<<" for "<< out.first << std::endl;
         if(newdata)wt->signal();
@@ -216,24 +221,42 @@ namespace gem { namespace thread {
   bool WorkerThread::cancel(WorkerThread::id_t ID) {
     bool success=false;
 #ifdef WORKERTHREAD_DEQUEUE
-    QUEUE< std::pair<WorkerThread::id_t, void*> > :: iterator it;
-    m_pimpl->m_todo.lock();
+    if(!success) {
+      /* cancel from TODO list */
+      QUEUE< std::pair<WorkerThread::id_t, void*> > :: iterator it;
+      //std::cerr << "cancelling "<< (int)ID <<" from TODO" << std::endl;
+      m_pimpl->m_todo.lock();
+      
+      for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
+        if(it->first == ID) {
+          m_pimpl->q_todo.erase(it);
+          success=true;
+          break;
+        }
+      }
+      m_pimpl->m_todo.unlock();
 
-    for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
-      if(it->first == ID) {
-        m_pimpl->q_todo.erase(it);
-        break;
+      /* TODO: if ID is currently in the process, cancel that as well ... */
+      if(WorkerThread::INVALID != ID) {
+        /* ... or at least block until it is done... */
+        struct timeval sleep;
+        while(ID==m_pimpl->processingID) {
+          sleep.tv_sec=0;
+          sleep.tv_usec=10;
+          select(0,0,0,0,&sleep);
+        }
       }
     }
     m_pimpl->m_todo.unlock();
 #endif
+    //    std::cerr << "cancelling "<< (int)ID <<" success " << success << std::endl;
     return success;
   }
   bool WorkerThread::dequeue(WorkerThread::id_t&ID, void*&data) {
     std::pair <id_t, void*> DATA;
     DATA.first=WorkerThread::INVALID;
     DATA.second=0;
-
+    //std::cerr << "dequeuing "<< (int)ID << std::endl;
     m_pimpl->m_done.lock();
     if(!m_pimpl->q_done.empty()) {
       DATA=m_pimpl->q_done.front();
@@ -243,7 +266,7 @@ namespace gem { namespace thread {
 
     ID=DATA.first;
     data=DATA.second;
-    //    std::cerr<<"dequeuing "<<data<<" as "<< ID<<std::endl;
+    //std::cerr<<"dequeuing "<<data<<" as "<< ID<<std::endl;
 
     return (WorkerThread::INVALID != ID);
   }
