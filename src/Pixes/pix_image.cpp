@@ -17,6 +17,7 @@
 #include "pix_image.h"
 
 #include "Gem/State.h"
+#include "Gem/Settings.h"
 
 #ifdef _WIN32
 # include <io.h>
@@ -50,6 +51,10 @@ pix_image :: pix_image(t_symbol *filename) :
   m_id(gem::image::load::INVALID),
   m_infoOut(gem::RTE::Outlet(this))
 {
+  int ival=m_wantThread;
+  gem::Settings::get("image.loading.thread", ival);
+  m_wantThread=ival;
+
   if(filename!=&s_)openMess(filename->s_name);
   gem::image::load::poll();
 }
