@@ -17,10 +17,6 @@ LOG
 #ifndef _INCLUDE__GEM_UTILS_FUNCTIONS_H_
 #define _INCLUDE__GEM_UTILS_FUNCTIONS_H_
 
-#ifdef __APPLE__
-#include <Carbon/Carbon.h>
-#endif
-
 #include "Gem/ExportDef.h"
 
 /* this should be included for ALL platforms:
@@ -348,7 +344,9 @@ GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nkn
 
 #ifdef __APPLE__
 //Ian Ollman's function to determine the cache prefetch for altivec vec_dst()
-inline UInt32 GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
+#include <inttypes.h>
+
+inline uint32_t GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
 {
 	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
 }
