@@ -28,6 +28,7 @@
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
 
+#define MARK std::cerr << "" << __FILE__ << ":" <<__LINE__<<"\t"<<__FUNCTION__<<std::endl
 
 //#define GEM_FILMGMERLIN_TRACKSWITCH 1
 
@@ -121,13 +122,17 @@ bool filmGMERLIN :: isThreadable(void) {
 /////////////////////////////////////////////////////////
 bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&wantProps)
 {
+  MARK;
   close();
-
+  MARK;
   m_track=0;
-
+  MARK;
   m_file = bgav_create();
+  MARK;
   if(!m_file) return false;
+  MARK;
   m_opt = bgav_get_options(m_file);
+  MARK;
   if(!m_opt) return false;
 
   /*
@@ -135,17 +140,20 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
     bgav_options_set_read_timeout(m_opt,      read_timeout);
     bgav_options_set_network_bandwidth(m_opt, network_bandwidth);
   */
+  MARK;
   bgav_options_set_seek_subtitles(m_opt, 0);
+  MARK;
   bgav_options_set_sample_accurate(m_opt, 1);
-
+  MARK;
   bgav_options_set_log_callback(m_opt,
                                 log_callback,
                                 this);
-
+  MARK;
   const char*filename=sfilename.c_str();
-
+  MARK;
   if(!strncmp(filename, "vcd://", 6))
     {
+  MARK;
       if(!bgav_open_vcd(m_file, filename + 5))
         {
           //error("Could not open VCD Device %s",  filename + 5);
@@ -154,6 +162,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
     }
   else if(!strncmp(filename, "dvd://", 6))
     {
+  MARK;
       if(!bgav_open_dvd(m_file, filename + 5))
         {
           //error("Could not open DVD Device %s", filename + 5);
@@ -162,6 +171,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
     }
   else if(!strncmp(filename, "dvb://", 6))
     {
+  MARK;
       if(!bgav_open_dvb(m_file, filename + 6))
         {
           //error("Could not open DVB Device %s", filename + 6);
@@ -169,6 +179,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
         }
     }
   else {
+  MARK;
     post("trying to open gmerlin '%s'", filename);
     if(!bgav_open(m_file, filename)) {
       error("Could not open file %s", filename);
@@ -178,8 +189,10 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
     }
     post("open success!");
   }
+  MARK;
   if(bgav_is_redirector(m_file))
     {
+  MARK;
       int i=0;
       int num_urls=bgav_redirector_get_num_urls(m_file);
       post("Found redirector:");
@@ -197,30 +210,37 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
       /* couldn't open a redirected stream */
       return false;
     }
-
+  MARK;
   /*
    * ok, we have been able to open the "file"
    * now get some information from it...
    */
   m_numTracks = bgav_num_tracks(m_file);
+  MARK;
   // LATER: check whether this track has a video-stream...
   int numvstreams=bgav_num_video_streams (m_file, m_track);
   if(numvstreams) {
+  MARK;
     bgav_select_track(m_file, m_track);
+  MARK;
   } else {
     post("track %d does not contain a video-stream: skipping");
   }
-
+  MARK;
   bgav_set_video_stream(m_file, m_stream, BGAV_STREAM_DECODE);
+  MARK;
   if(!bgav_start(m_file)) {
+  MARK;
     close();
+  MARK;
     return false;
   }
+  MARK;
   m_next_timestamp=bgav_video_start_time(m_file, m_track);
-
+  MARK;
   gavl_video_format_t*gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
   m_gframe = gavl_video_frame_create_nopad(gformat);
-
+  MARK;
 
   gavl_video_format_t finalformat[1];
   finalformat->frame_width = gformat->frame_width;
@@ -231,13 +251,13 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   finalformat->pixel_height = gformat->pixel_height;
   finalformat->frame_duration = gformat->frame_duration;
   finalformat->timescale = gformat->timescale;
-
+  MARK;
 #ifdef __APPLE__
   finalformat->pixelformat=GAVL_YUY2;
 #else
   finalformat->pixelformat=GAVL_RGBA_32;
 #endif
-	
+	  MARK;
   m_finalframe = gavl_video_frame_create_nopad(finalformat);
   m_doConvert= (gavl_video_converter_init (m_gconverter, gformat, finalformat)>0);
   m_image.image.xsize=gformat->frame_width;
@@ -250,30 +270,30 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_image.image.notowned=true;
   m_image.image.upsidedown=true;
   m_image.newfilm=true;
-
+  MARK;
   if(gformat->frame_duration) {
     m_fps = gformat->timescale / gformat->frame_duration;
   } else {
     m_fps = gformat->timescale;
   }
-
+  MARK;
   m_fps_num=gformat->timescale;
   m_fps_denum=gformat->frame_duration;
-
+  MARK;
   m_numFrames=-1;
 #ifdef USE_FRAMETABLE
   m_frametable=bgav_get_frame_table(m_file, m_track);
   if(m_frametable)
     m_numFrames=gavl_frame_table_num_frames (m_frametable);
 #endif
-
+  MARK;
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
   if(m_numFrames<0)
     if(dur!=GAVL_TIME_UNDEFINED)
       m_numFrames = gavl_time_to_frames(m_fps_num,
 					m_fps_denum,
 					dur);
-
+  MARK;
   return true;
 }
 
