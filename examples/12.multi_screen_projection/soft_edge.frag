@@ -35,24 +35,27 @@ void main (void)
     vec2 black = pos_new;
     black *= geometry_screen;
     black = fract(black);
-    black *= vec2(1.)+overlap;
+	black *= 1. + (overlap/ (geometry_screen/2.));
     black -= 1.;
-    black = max(black,0.)/max(overlap,1.);
-    if ( floor(pos_new.x*geometry_screen.x) < geometry_screen.x-1. )
+    black = max(black,0.);
+	black *= (geometry_screen / 2.) / overlap;
+    if ( ( floor(pos_new.x*geometry_screen.x) < geometry_screen.x-1. ) && (overlap.x != 0.) )
         color *= (1.-black.x);
-    if ( floor(pos_new.y*geometry_screen.y) < geometry_screen.y-1. )
-        color *= (1.-black.y);
+    if ( ( floor(pos_new.y*geometry_screen.y) < geometry_screen.y-1. ) && (overlap.x != 0.) )
+    	color *= (1.-black.y);
 
 // compute fade on Left and bottom
     black = pos_new;
     black *= geometry_screen;
     black = fract(black);
-    black *= vec2(1.)+overlap;
-    black -= overlap;
-    black = max(-black,0.)/max(overlap,1.);
-    if ( floor(pos_new.x*geometry_screen.x) > 0. )
+	black = vec2(1.) - black;
+	black *= 1. + (overlap/ (geometry_screen/2.));
+    black -= 1.;
+    black = max(black,0.);
+	black *= (geometry_screen / 2.) / overlap;
+    if ( ( floor(pos_new.x*geometry_screen.x) > 0. ) && (overlap.x != 0.) )
         color *= (1.-black.x);
-    if ( floor(pos_new.y*geometry_screen.y) > 0. )
+    if ( ( floor(pos_new.y*geometry_screen.y) > 0. ) && (overlap.x != 0.) )
         color *= (1.-black.y);
 
     gl_FragColor = color;
