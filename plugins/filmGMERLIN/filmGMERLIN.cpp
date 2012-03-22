@@ -169,12 +169,14 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
         }
     }
   else {
+    post("trying to open gmerlin '%s'", filename);
     if(!bgav_open(m_file, filename)) {
-      //error("Could not open file %s", filename);
+      error("Could not open file %s", filename);
       close();
-
+      post("closed file");
       return false;
     }
+    post("open success!");
   }
   if(bgav_is_redirector(m_file))
     {
