@@ -1,4 +1,4 @@
-#N canvas 367 173 691 494 10;
+#N canvas 365 180 996 500 10;
 #X obj 39 307 r render;
 #X obj 39 437 pix_texture;
 #X obj 110 353 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
@@ -10,10 +10,16 @@
 the gemchain like in this example.;
 #X floatatom 109 462 5 0 0 0 - - -;
 #X obj 39 49 flat_projection 20;
-#X text 299 154 <- abstraction [flat_projection];
+#X text 304 191 <- abstraction [flat_projection];
 #X obj 39 416 pix_image ../data/fractal.JPG;
 #X msg 51 24 offset 1024 0;
 #X text 176 23 other messages to the gemwin;
+#X text 305 133 This define the way screen are physically connected
+to the computer.;
+#X text 306 93 This define the way screen are positioned in space to
+create a single image.;
+#X text 305 159 geometry screen and geometry computer can be diferents
+\, but should define the same number of screen.;
 #X connect 0 0 10 0;
 #X connect 1 0 5 0;
 #X connect 2 0 3 0;
