@@ -43,7 +43,7 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
   : GemShape(1),
     nb_pts_control_X(4), nb_pts_control_Y(4),
     nb_pts_affich_X (30), nb_pts_affich_Y (30),
-    m_drawType(FILL), m_posXYZ(NULL),
+    m_posXYZ(NULL),
     compute_normal(1)
 {
   int i, j, a;
@@ -80,6 +80,8 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
   m_drawTypes["control_line1"] = CONTROL_LINE1;
   m_drawTypes["control_line2"] = CONTROL_LINE2;
   m_drawTypes["default"] = FILL;
+
+  m_drawType = FILL;
 }
 
 //////////////////////////////////////////////////////////
