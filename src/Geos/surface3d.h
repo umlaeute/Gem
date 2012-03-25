@@ -62,13 +62,13 @@ class GEM_EXTERN surface3d : public GemShape
   int nb_pts_control_Y;
   int nb_pts_affich_X;
   int nb_pts_affich_Y;
-  int compute_normal;
+  bool compute_normal;
   void resolutionMess(int resX, int resY);
   void gridMess(int gridX, int gridY);
   void setMess(int X,int Y,float posX, float posY,float posZ);
   void interpolate(float X,float Y);
   t_float3 bicubic3(t_float X, t_float Y);
-  void normalMess(int normal);
+  void normalMess(bool normal);
 
   enum C3dDrawType{LINE, FILL, POINT, 
                    LINE1, LINE2, LINE3, LINE4,
@@ -77,10 +77,6 @@ class GEM_EXTERN surface3d : public GemShape
   t_float3		*m_posXYZ;
 
  private:
-  static void		resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY );
-  static void		gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY );
-  static void		setMessCallback(void *data, t_floatarg X,t_floatarg Y,t_floatarg posX,t_floatarg posY,t_floatarg posZ);
-  static void		normalMessCallback(void *data, t_floatarg normal);
   static void       interpolate(void *data, t_floatarg X, t_floatarg Y);
   static t_float		cubic(t_floatarg X0, t_floatarg X1, t_floatarg X2, t_floatarg X3, t_floatarg fract);
   static t_float3		cubic3(t_float3 X0, t_float3 X1, t_float3 X2, t_float3 X3, t_floatarg fract);
