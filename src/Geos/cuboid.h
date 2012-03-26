@@ -42,7 +42,7 @@ class GEM_EXTERN cuboid : public GemShape
 
   //////////
   // Destructor
-  virtual ~cuboid();
+  virtual ~cuboid(void);
 
 
 	//////////
@@ -73,12 +73,6 @@ class GEM_EXTERN cuboid : public GemShape
   // The height inlet
   t_inlet         *m_inletZ;
 
- private:
-
-  //////////
-  // Static member functions
-  static void 	heightMessCallback(void *data, t_floatarg sizey);
-  static void 	widthMessCallback(void *data, t_floatarg sizez);
 };
 
 #endif	// for header file

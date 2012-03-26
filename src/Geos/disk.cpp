@@ -68,7 +68,7 @@ disk :: disk(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-disk :: ~disk()
+disk :: ~disk(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -253,11 +253,7 @@ void disk :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void disk :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&disk::innerRadiusCallback),
-    	    gensym("inner"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "inner", innerRadius, float);
 }
-void disk :: innerRadiusCallback(void *data, t_floatarg radius)
-{
-    GetMyClass(data)->innerRadius(radius);
-}
+
 

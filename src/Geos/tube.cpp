@@ -95,7 +95,7 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
 // Destructor
 //
 /////////////////////////////////////////////////////////
-tube :: ~tube(){
+tube :: ~tube(void){
   inlet_free(m_inlet2);
   inlet_free(m_inlethigh);
   inlet_free(m_inletTX);
@@ -222,76 +222,39 @@ void tube :: renderShape(GemState *state){
   glLineWidth(1.0);
 }
 
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: sizeMess2(float size2){
   m_size2 = size2;
   setModified();
 }
 
-//////////////////////////////////////////////////////////
-// highMess
-//
-/////////////////////////////////////////////////////////
 void tube :: highMess(float high){
   m_high = high;
   setModified();
 }
 
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: TXMess(float TX){
   m_TX = TX;
   setModified();
 }
-
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: TYMess(float TY){
   m_TY = TY;
   setModified();
 }
-
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: rotX1Mess(float rotX1){
   cos_rotX1 = cos(rotX1/360 * TWO_PI);
   sin_rotX1 = sin(rotX1/360 * TWO_PI);
   setModified();
 }
-
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: rotX2Mess(float rotX2){
   cos_rotX2 = cos(rotX2/360 * TWO_PI);
   sin_rotX2 = sin(rotX2/360 * TWO_PI);
   setModified();
 }
-
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: rotY1Mess(float rotY1){
   cos_rotY1 = cos(rotY1/360 * TWO_PI );
   sin_rotY1 = sin(rotY1/360 * TWO_PI);
   setModified();
 }
-
-//////////////////////////////////////////////////////////
-// size2Mess
-//
-/////////////////////////////////////////////////////////
 void tube :: rotY2Mess(float rotY2){
   cos_rotY2 = cos(rotY2/360 * TWO_PI);
   sin_rotY2 = sin(rotY2/360 * TWO_PI);
@@ -340,71 +303,16 @@ void tube :: slicesMess(int slices){
 //
 /////////////////////////////////////////////////////////
 void tube :: obj_setupCallback(t_class *classPtr){
+  CPPEXTERN_MSG1(classPtr, "size2", sizeMess2, float);
+  CPPEXTERN_MSG1(classPtr, "high", highMess, float);
 
-  // compute sin/cos lookup table
+  CPPEXTERN_MSG1(classPtr, "TX", TXMess, float);
+  CPPEXTERN_MSG1(classPtr, "TY", TYMess, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::sizeMessCallback2),
-		  gensym("size2"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::highMessCallback),
-		  gensym("high"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::TXMessCallback),
-		  gensym("TX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::TYMessCallback),
-		  gensym("TY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotX1MessCallback),
-		  gensym("rotX1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotX2MessCallback),
-		  gensym("rotX2"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotY1MessCallback),
-		  gensym("rotY1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::rotY2MessCallback),
-		  gensym("rotY2"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "rotX1", rotX1Mess, float);
+  CPPEXTERN_MSG1(classPtr, "rotX2", rotX2Mess, float);
+  CPPEXTERN_MSG1(classPtr, "rotY1", rotY1Mess, float);
+  CPPEXTERN_MSG1(classPtr, "rotY2", rotY2Mess, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&tube::slicesMessCallback),
-		  gensym("numslices"), A_FLOAT, A_NULL);
-}
-
-void tube :: sizeMessCallback2(void *data, t_floatarg size2)
-{
-  GetMyClass(data)->sizeMess2(size2);
-}
-
-void tube :: highMessCallback(void *data, t_floatarg high)
-{
-  GetMyClass(data)->highMess(high);
-}
-
-void tube :: TXMessCallback(void *data, t_floatarg TX)
-{
-  GetMyClass(data)->TXMess(TX);
-}
-
-void tube :: TYMessCallback(void *data, t_floatarg TY)
-{
-  GetMyClass(data)->TYMess(TY);
-}
-
-void tube :: rotX1MessCallback(void *data, t_floatarg rotX1)
-{
-  GetMyClass(data)->rotX1Mess(rotX1);
-}
-
-void tube :: rotX2MessCallback(void *data, t_floatarg rotX2)
-{
-  GetMyClass(data)->rotX2Mess(rotX2);
-}
-
-void tube :: rotY1MessCallback(void *data, t_floatarg rotY1)
-{
-  GetMyClass(data)->rotY1Mess(rotY1);
-}
-
-void tube :: rotY2MessCallback(void *data, t_floatarg rotY2)
-{
-  GetMyClass(data)->rotY2Mess(rotY2);
-}
-
-void tube :: slicesMessCallback(void *data, t_floatarg slices)
-{
-  GetMyClass(data)->slicesMess(static_cast<int>(slices));
+  CPPEXTERN_MSG1(classPtr, "numslices", slicesMess, int);
 }

@@ -47,22 +47,21 @@ class GEM_EXTERN mesh_line : public GemShape
 
     	//////////
     	// Destructor
-    	virtual ~mesh_line();
+    	virtual ~mesh_line(void);
 
 
     	//////////
     	// Do the rendering
     	virtual void 	renderShape(GemState *state);
-      static void 	gridMessCallback(void *data, t_floatarg size);
 
+      void		setGrid( int valueX);
+      void		getTexCoords(void);
 
 		//////////
 		// getStuff
 		int 		gridX;
 		float		xsize, xsize0;
 		int 		alreadyInit;
-		void		setGrid( int valueX);
-		void		getTexCoords(void);
 		float 		texCoords[MAXGRID][MAXGRID][2];
 };
 

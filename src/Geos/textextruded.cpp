@@ -90,10 +90,5 @@ void textextruded :: setDepth(float prec)
 /////////////////////////////////////////////////////////
 void textextruded :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&textextruded::depthMessCallback),
-		  gensym("depth"), A_FLOAT, A_NULL);
-}
-void textextruded :: depthMessCallback(void *data, t_floatarg depth)
-{
-  GetMyClass(data)->setDepth(depth);
+  CPPEXTERN_MSG1(classPtr, "depth", setDepth, float);
 }

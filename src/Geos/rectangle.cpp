@@ -49,7 +49,7 @@ rectangle :: rectangle(t_floatarg width, t_floatarg height)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-rectangle :: ~rectangle()
+rectangle :: ~rectangle(void)
 {
     inlet_free(m_inletH);
 }
@@ -108,11 +108,6 @@ void rectangle :: heightMess(float size)
 /////////////////////////////////////////////////////////
 void rectangle :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&rectangle::heightMessCallback),
-    	    gensym("ft2"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "ft2", heightMess, float);
 }
 
-void rectangle :: heightMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->heightMess(size);
-}

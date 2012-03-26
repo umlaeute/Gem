@@ -59,7 +59,7 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
 // Destructor
 //
 /////////////////////////////////////////////////////////
-ripple :: ~ripple()
+ripple :: ~ripple(void)
 {
   inlet_free(m_inletH);
   inlet_free(m_inletcX);
@@ -149,7 +149,7 @@ void ripple :: renderShape(GemState *state)
 //	coordinates assigned to them.
 /////////////////////////////////////////////////////////
 
-void ripple :: ripple_init()
+void ripple :: ripple_init(void)
 {
   int i, j;
   glDisable(GL_DEPTH_TEST);
@@ -178,7 +178,7 @@ void ripple :: ripple_init()
 //	Precompute ripple displacement vectors.
 /////////////////////////////////////////////////////////
 
-void ripple :: precalc_ripple_vector()
+void ripple :: precalc_ripple_vector(void)
 {
   int i, j, z;
   float x, y, l;
@@ -212,7 +212,7 @@ void ripple :: precalc_ripple_vector()
 //	Precompute ripple amplitude decay.
 /////////////////////////////////////////////////////////
 
-void ripple :: precalc_ripple_amp()
+void ripple :: precalc_ripple_amp(void)
 {
   int i;
   double t;
@@ -236,7 +236,7 @@ void ripple :: precalc_ripple_amp()
 //	for the next frame of animation.
 /////////////////////////////////////////////////////////
 
-void ripple :: ripple_dynamics()
+void ripple :: ripple_dynamics(void)
 {
   int i, j, k;
   int x, y;
@@ -328,7 +328,7 @@ int ripple :: ripple_max_distance(int gx, int gy)
 //	a limit on the number of ripples that can be simultaneously
 //	generated.
 /////////////////////////////////////////////////////////
-void ripple :: ripple_bang()
+void ripple :: ripple_bang(void)
 {
   int index = 0;
 
@@ -376,28 +376,8 @@ void ripple :: ctrYMess(float center)
 /////////////////////////////////////////////////////////
 void ripple :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&ripple::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&ripple::heightMessCallback),
-                  gensym("Ht"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&ripple::ctrXMessCallback),
-                  gensym("cX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&ripple::ctrYMessCallback),
-                  gensym("cY"), A_FLOAT, A_NULL);
-}
-
-void ripple :: bangMessCallback(void *data)
-{
-  GetMyClass(data)->ripple_bang();
-}
-void ripple :: heightMessCallback(void *data, t_floatarg height)
-{
-  GetMyClass(data)->heightMess(height);
-}
-void ripple :: ctrXMessCallback(void *data, t_floatarg center)
-{
-  GetMyClass(data)->ctrXMess(center);
-}
-void ripple :: ctrYMessCallback(void *data, t_floatarg center)
-{
-  GetMyClass(data)->ctrYMess(center);
+  CPPEXTERN_MSG0(classPtr, "bang", ripple_bang);
+  CPPEXTERN_MSG1(classPtr, "Ht", heightMess, float);
+  CPPEXTERN_MSG1(classPtr, "cX", ctrXMess, float);
+  CPPEXTERN_MSG1(classPtr, "cY", ctrYMess, float);
 }

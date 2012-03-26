@@ -44,7 +44,7 @@ class GEM_EXTERN rectangle : public GemShape
 
     	//////////
     	// Destructor
-    	virtual ~rectangle();
+    	virtual ~rectangle(void);
 
     	//////////
     	// The height of the object
@@ -61,12 +61,6 @@ class GEM_EXTERN rectangle : public GemShape
         //////////
         // The height inlet
         t_inlet         *m_inletH;
-
-	private:
-
-        //////////
-        // Static member functions
-        static void 	heightMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

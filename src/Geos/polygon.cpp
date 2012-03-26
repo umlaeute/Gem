@@ -65,7 +65,7 @@ polygon :: polygon(t_floatarg numInputs)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-polygon :: ~polygon()
+polygon :: ~polygon(void)
 {
   if(m_vert)
 		delete[]m_vert;

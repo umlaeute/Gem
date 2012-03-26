@@ -44,7 +44,7 @@ class GEM_EXTERN trapezoid : public GemShape
 
     	//////////
     	// Destructor
-    	virtual ~trapezoid();
+    	virtual ~trapezoid(void);
 
 
 
@@ -62,8 +62,6 @@ class GEM_EXTERN trapezoid : public GemShape
     	//////////
     	// Do the renderShapeing
     	virtual void 	renderShape(GemState *state);
-      static void 	scaleMessCallback(void *data, t_floatarg size);
-      static void 	topMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

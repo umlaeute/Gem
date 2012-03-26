@@ -170,20 +170,6 @@ class GEM_EXTERN tube : public GemShape
   //////////
   // The order of the object
   int			order;
-
- private:
-  //////////
-  // Static member functions
-  static void 	sizeMessCallback2(void *data, t_floatarg size2);
-  static void 	highMessCallback(void *data, t_floatarg high);
-  static void 	TXMessCallback(void *data, t_floatarg TX);
-  static void 	TYMessCallback(void *data, t_floatarg TY);
-  static void 	rotX1MessCallback(void *data, t_floatarg rotX1);
-  static void 	rotY1MessCallback(void *data, t_floatarg rotY1);
-  static void 	rotX2MessCallback(void *data, t_floatarg rotX2);
-  static void 	rotY2MessCallback(void *data, t_floatarg rotY2);
-  static void 	slicesMessCallback(void *data, t_floatarg slice);
-
 };
 
 #endif	// for header file

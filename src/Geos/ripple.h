@@ -81,7 +81,7 @@ class GEM_EXTERN ripple : public GemShape
 
   //////////
   // Destructor
-  virtual ~ripple();
+  virtual ~ripple(void);
 
   //////////
   // The height of the object
@@ -93,13 +93,13 @@ class GEM_EXTERN ripple : public GemShape
   // Do the rendering
   virtual void 	renderShape(GemState *state);
 
-  void	ripple_dynamics();
-  void	ripple_init();
+  void	ripple_dynamics(void);
+  void	ripple_init(void);
   float	ripple_distance( int gx, int gy, int cx, int cy);
   int	ripple_max_distance( int gx, int gy );
-  void	ripple_bang();
-  void	precalc_ripple_vector();
-  void	precalc_ripple_amp();
+  void	ripple_bang(void);
+  void	precalc_ripple_vector(void);
+  void	precalc_ripple_amp(void);
 
   //////////
   // The height of the object
@@ -127,14 +127,6 @@ class GEM_EXTERN ripple : public GemShape
   int m_max[RIPPLE_COUNT];
 
   int m_rippleMax;
- private:
-
-  //////////
-  // static member functions
-  static void	bangMessCallback(void *data);
-  static void 	heightMessCallback(void *data, t_floatarg height);
-  static void 	ctrXMessCallback(void *data, t_floatarg center);
-  static void 	ctrYMessCallback(void *data, t_floatarg center);
 };
 
 #endif	// for header file

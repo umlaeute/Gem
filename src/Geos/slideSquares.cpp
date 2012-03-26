@@ -72,7 +72,7 @@ slideSquares :: slideSquares(t_floatarg width, t_floatarg height)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-slideSquares :: ~slideSquares()
+slideSquares :: ~slideSquares(void)
 {
     inlet_free(m_inletH);
 }
@@ -139,7 +139,7 @@ void slideSquares :: renderShape(GemState *state)
         glEnd();
     }
 }
-void slideSquares :: slide_init()
+void slideSquares :: slide_init(void)
 {
     for (int i=0; i<63; i++) {
         Sliders[i].U = ourRand(1);
@@ -193,12 +193,5 @@ void slideSquares :: heightMess(float size)
 /////////////////////////////////////////////////////////
 void slideSquares :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&slideSquares::heightMessCallback),
-    	    gensym("Ht"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "Ht", heightMess, float);
 }
-
-void slideSquares :: heightMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->heightMess(size);
-}
-

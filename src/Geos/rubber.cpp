@@ -54,7 +54,7 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
 // Destructor
 //
 /////////////////////////////////////////////////////////
-rubber :: ~rubber()
+rubber :: ~rubber(void)
 {
   inlet_free(m_inletH);
   inlet_free(inletcX);
@@ -73,7 +73,7 @@ void rubber :: ctrYMess(float center)
   setModified();
 }
 
-void rubber :: rubber_init()
+void rubber :: rubber_init(void)
 {
   int i, j;
   int k;
@@ -229,7 +229,7 @@ void rubber :: renderShape(GemState *state)
   Do the dynamics simulation for the next frame.
 */
 
-void rubber :: rubber_dynamics()
+void rubber :: rubber_dynamics(void)
 {
   int k;
   float d[3];
@@ -296,7 +296,7 @@ void rubber :: rubber_dynamics()
   given screen coordinate.
 */
 
-int rubber :: rubber_grab()
+int rubber :: rubber_grab(void)
 {
   float dx[2];
   float d;
@@ -323,7 +323,7 @@ int rubber :: rubber_grab()
 // bangMess
 //
 /////////////////////////////////////////////////////////
-void rubber :: rubber_bang()
+void rubber :: rubber_bang(void)
 {
   m_grab=(m_grab+1)?-1:rubber_grab();
 }
@@ -349,16 +349,15 @@ void rubber :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "cX", ctrXMess, float);
   CPPEXTERN_MSG1(classPtr, "cY", ctrYMess, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::dragMessCallback),
-                  gensym("drag"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&rubber::springMessCallback),
-                  gensym("spring"), A_FLOAT, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "drag", dragMess, float);
+  CPPEXTERN_MSG1(classPtr, "spring", springMess, float);
 }
-void rubber :: dragMessCallback(void *data, t_floatarg drag)
+void rubber :: dragMess(float drag)
 {
-  GetMyClass(data)->m_drag=(drag);
+  m_drag=drag;
 }
-void rubber :: springMessCallback(void *data, t_floatarg spring)
+void rubber :: springMess(float spring)
 {
-  GetMyClass(data)->m_springKS=(spring);
+  m_springKS=spring;
 }

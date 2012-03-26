@@ -64,11 +64,6 @@ class GEM_EXTERN torus : public GemGluObj
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-	private:
-
-    	//////////
-    	// Static member functions
-    	static void 	innerRadiusCallback(void *data, t_floatarg radius);
 };
 
 #endif	// for header file

@@ -44,10 +44,10 @@ sphere3d :: sphere3d(t_floatarg size, t_floatarg slize, t_floatarg stack)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-sphere3d :: ~sphere3d()
+sphere3d :: ~sphere3d(void)
 { }
 
-void sphere3d :: createSphere3d()
+void sphere3d :: createSphere3d(void)
 {
   // GLdouble radius=m_size;
   GLint slices=m_numSlices;
@@ -103,7 +103,7 @@ void sphere3d :: print(int i, int j) {
   post("[%3d|%3d]=%4d: %g %g %g", i, j, index, m_x[index], m_y[index], m_z[index]);
 }
 
-void sphere3d :: print() {
+void sphere3d :: print(void) {
   int i=0, j=0;
 
   post("%d lines of longitude and %d lines of lattitude and %d poles", m_numSlices, m_numStacks-1, 2);
@@ -400,34 +400,10 @@ void sphere3d :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void sphere3d :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("set"),
-                  A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setCartMessCallback), gensym("setCartesian"),
-                  A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSpherical"),
-                  A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::setSphMessCallback), gensym("setSph"),
-                  A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+  CPPEXTERN_MSG5(classPtr, "set", setCartesian, int, int, float, float, float);
+  CPPEXTERN_MSG5(classPtr, "setCartesian", setCartesian, int, int, float, float, float);
+  CPPEXTERN_MSG5(classPtr, "setSpherical", setSpherical, int, int, float, float, float);
+  CPPEXTERN_MSG5(classPtr, "setSph", setSpherical, int, int, float, float, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&sphere3d::printMessCallback), gensym("print"),
-                  A_NULL);
-}
-
-void sphere3d :: setCartMessCallback(void *data,
-                                    t_floatarg i, t_floatarg j,
-                                    t_floatarg x, t_floatarg y, t_floatarg z)
-{
-  GetMyClass(data)->setCartesian(static_cast<int>(i), static_cast<int>(j),
-				 x, y, z);
-}
-void sphere3d :: setSphMessCallback(void *data,
-                                    t_floatarg i, t_floatarg j,
-                                    t_floatarg r, t_floatarg phi, t_floatarg theta)
-{
-  GetMyClass(data)->setSpherical(static_cast<int>(i), static_cast<int>(j),
-                                 r, phi, theta);
-}
-void sphere3d :: printMessCallback(void *data)
-{
-  GetMyClass(data)->print();
+  CPPEXTERN_MSG0(classPtr, "print", print);
 }

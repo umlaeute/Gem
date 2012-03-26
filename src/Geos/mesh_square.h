@@ -47,26 +47,25 @@ class GEM_EXTERN mesh_square : public GemShape
 
     	//////////
     	// Destructor
-    	virtual ~mesh_square();
+    	virtual ~mesh_square(void);
 
 
     	//////////
     	// Do the rendering
     	virtual void 	renderShape(GemState *state);
-      static void 	gridMessCallback(void *data, t_floatarg size);
-      static void 	gridXMessCallback(void *data, t_floatarg size);
-      static void 	gridYMessCallback(void *data, t_floatarg size);
 
+		void		setSize( int valueX, int valueY );
+		void		setSize( int valueXY );
+		void    setGridX(int valX);
+		void    setGridY(int valY);
+		void		getTexCoords(void);
 
 		//////////
 		// getStuff
 		int 		gridX, gridY;
 		float		xsize, xsize0, ysize, ysize0;
 		int 		alreadyInit;
-		void		setSize( int valueX, int valueY );
-		void            setGridX(int valX);
-		void            setGridY(int valX);
-		void		getTexCoords(void);
+
 		float 		texCoords[MAXGRID][MAXGRID][2];
 };
 
