@@ -47,7 +47,7 @@ class GEM_EXTERN part_gravity : public partlib_base
 
     	//////////
     	// Destructor
-    	virtual ~part_gravity();
+    	virtual ~part_gravity(void);
 
     	//////////
     	// Vector changed
@@ -55,12 +55,6 @@ class GEM_EXTERN part_gravity : public partlib_base
 
 		//////////
 		float			m_vector[3];
-
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
 };
 
 #endif	// for header file

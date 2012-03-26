@@ -43,30 +43,28 @@ part_source :: part_source(t_floatarg num)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_source :: ~part_source()
+part_source :: ~part_source(void)
 { }
 /////////////////////////////////////////////////////////
 // vel.domain
 //
 /////////////////////////////////////////////////////////
-void part_source :: domainMess(t_symbol*s)
-{
-  char *str=s->s_name;
-
-       if (!strcmp(str,"point"    ))m_domain=PDPoint;
-  else if (!strcmp(str,"line"     ))m_domain=PDLine;
-  else if (!strcmp(str,"triangle" ))m_domain=PDTriangle;
-  else if (!strcmp(str,"plane"    ))m_domain=PDPlane;
-  else if (!strcmp(str,"box"      ))m_domain=PDBox;
-  else if (!strcmp(str,"sphere"   ))m_domain=PDSphere;
-  else if (!strcmp(str,"cylinder" ))m_domain=PDCylinder;
-  else if (!strcmp(str,"cone"     ))m_domain=PDCone;
-  else if (!strcmp(str,"blob"     ))m_domain=PDBlob;
-  else if (!strcmp(str,"disc"     ))m_domain=PDDisc;
-  else if (!strcmp(str,"rectangle"))m_domain=PDRectangle;
-  else error("GEM: particles: unknown domain");
+void part_source :: domainMess(const std::string&str) {
+  if(0) {
+  } else if (str=="point"    ) { m_domain=PDPoint;
+  } else if (str=="line"     ) { m_domain=PDLine;
+  } else if (str=="triangle" ) { m_domain=PDTriangle;
+  } else if (str=="plane"    ) { m_domain=PDPlane;
+  } else if (str=="box"      ) { m_domain=PDBox;
+  } else if (str=="sphere"   ) { m_domain=PDSphere;
+  } else if (str=="cylinder" ) { m_domain=PDCylinder;
+  } else if (str=="cone"     ) { m_domain=PDCone;
+  } else if (str=="blob"     ) { m_domain=PDBlob;
+  } else if (str=="disc"     ) { m_domain=PDDisc;
+  } else if (str=="rectangle") { m_domain=PDRectangle;
+  } else error("unknown domain '%s'", str.c_str());
 }
-void part_source :: vectorMess(int argc, t_atom*argv){
+void part_source :: vectorMess(t_symbol*s, int argc, t_atom*argv){
   int i=9;
   while(i--)if(argc>i)m_arg[i]=atom_getfloat(argv+i);
 }
@@ -83,29 +81,17 @@ void part_source :: renderParticles(GemState *state)
   }
 }
 
+void part_source :: numberMess(float num) {
+  m_numberToAdd = num;
+}
+
 /////////////////////////////////////////////////////////
 // static member functions
 //
 /////////////////////////////////////////////////////////
 void part_source :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_source::numberMessCallback),
-		  gensym("numToAdd"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_source::domainMessCallback),
-		  gensym("domain"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_source::vectorMessCallback),
-		  gensym("vector"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "numToAdd", numberMess, float);
+  CPPEXTERN_MSG1(classPtr, "domain", domainMess, std::string);
+  CPPEXTERN_MSG (classPtr, "vector", vectorMess);
 }
-void part_source :: numberMessCallback(void *data, t_floatarg num)
-{
-  GetMyClass(data)->numberMess(num);
-}
-void part_source :: domainMessCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->domainMess(s);
-}
-void part_source :: vectorMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
-{
-  GetMyClass(data)->vectorMess(argc, argv);
-}
-

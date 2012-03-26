@@ -36,7 +36,7 @@ class GEM_EXTERN part_render : public partlib_base
 
   //////////
   // Constructor
-  part_render();
+  part_render(void);
 
   //////////
   virtual void 	renderParticles(GemState *state);
@@ -47,23 +47,18 @@ class GEM_EXTERN part_render : public partlib_base
   //////////
   // Destructor
   virtual ~part_render();
+  void		colorMess(bool state);
+  void		sizeMess (bool state);
 
   // How the object should be drawn
-  GLfloat        *m_pos;
-  void		colorMess(int state);
   bool		m_colorize;
-  GLfloat        *m_colors;
-  void		sizeMess(int state);
   bool		m_sizing;
+
+  GLfloat        *m_pos;
+  GLfloat        *m_colors;
   GLfloat        *m_sizes;
 
   int           m_number;
-
- private:
-  //////////
-  // static member functions
-  static void 	colorMessCallback(void *data,  t_floatarg state);
-  static void 	sizeMessCallback(void *data,  t_floatarg state);
 };
 
 #endif	// for header file

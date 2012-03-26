@@ -47,26 +47,16 @@ class GEM_EXTERN part_velsphere : public partlib_base
 
   //////////
   // Destructor
-  virtual ~part_velsphere();
+  virtual ~part_velsphere(void);
 
   //////////
-  void			vectorMess(float val1, float val2, float val3)
-    { m_pos[0] = val1; m_pos[1] = val2; m_pos[2] = val3; }
-
-  //////////
-  void			numberMess(float num)	{ m_radius = num; }
+  void			vectorMess(float val1, float val2, float val3);
+  void			velMess   (float num);
 
   //////////
   float			m_pos[3];
   //////////
   float			m_radius;
-
- private:
-
-  //////////
-  // static member functions
-  static void		numberMessCallback(void *data, t_floatarg num);
-  static void		vectorMessCallback(void *data, t_floatarg num1, t_floatarg num2, t_floatarg num3);
 };
 
 #endif	// for header file

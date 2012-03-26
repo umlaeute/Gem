@@ -45,19 +45,13 @@ class GEM_EXTERN part_killslow : public partlib_base
 
     	//////////
     	// Destructor
-    	virtual ~part_killslow();
+    	virtual ~part_killslow(void);
 
-		//////////
-		void			numberMess(float num)	{ m_killSpeed = num; }
+      //////////
+      void			speedMess(float num);
 
-		//////////
-		float			m_killSpeed;
-
-	private:
-
-		//////////
-		// static member functions
-		static void		numberMessCallback(void *data, t_floatarg num);
+      //////////
+      float			m_killSpeed;
 };
 
 #endif	// for header file

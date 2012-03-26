@@ -43,24 +43,18 @@ class GEM_EXTERN part_damp : public partlib_base
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
-    protected:
-
     	//////////
     	// Destructor
-    	virtual ~part_damp();
+    	virtual ~part_damp(void);
 
     	//////////
     	// Vector changed
     	void	    	vectorMess(float x, float y, float z);
 
-		//////////
-		float			m_vector[3];
+ protected:
 
-    private:
-
-    	//////////
-    	// static member functions
-    	static void 	vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z);
+      //////////
+      float			m_vector[3];
 };
 
 #endif	// for header file

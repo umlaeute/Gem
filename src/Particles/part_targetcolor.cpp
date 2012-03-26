@@ -32,10 +32,9 @@ part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
 {
 	scaleMess(.05f);
 
-	if (argc == 5)
-	{
+	if (argc == 5) {
 		colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-				  atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+              atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
 		scaleMess(atom_getfloat(&argv[4]));
 	}
   else if (argc == 4) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
@@ -43,10 +42,9 @@ part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
   else if (argc == 3) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
                                 atom_getfloat(&argv[2]), 1.f);
   else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
-  else
-    {
-      throw(GemException("needs 0, 3, 4, or 5 arguments"));
-    }
+  else {
+    throw(GemException("needs 0, 3, 4, or 5 arguments"));
+  }
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("color"));
@@ -57,7 +55,7 @@ part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_targetcolor :: ~part_targetcolor()
+part_targetcolor :: ~part_targetcolor(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -103,8 +101,7 @@ void part_targetcolor :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetcolor::colorMessCallback),
     	    gensym("color"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetcolor::scaleMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
+    CPPEXTERN_MSG1(classPtr, "ft1", scaleMess, float);
 }
 void part_targetcolor :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -113,7 +110,4 @@ void part_targetcolor :: colorMessCallback(void *data, t_symbol *, int argc, t_a
     GetMyClass(data)->colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
     	    	    	       atom_getfloat(&argv[2]), alpha);
 }
-void part_targetcolor :: scaleMessCallback(void *data, t_floatarg scale)
-{
-    GetMyClass(data)->scaleMess((float)scale);
-}
+

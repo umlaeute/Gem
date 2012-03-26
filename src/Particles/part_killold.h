@@ -45,19 +45,13 @@ class GEM_EXTERN part_killold : public partlib_base
 
     	//////////
     	// Destructor
-    	virtual ~part_killold();
+    	virtual ~part_killold(void);
 
-		//////////
-		void			numberMess(float num)	{ m_killAge = num; }
+      //////////
+      void			ageMess(float age);
 
-		//////////
-		float			m_killAge;
-
-	private:
-
-		//////////
-		// static member functions
-		static void		numberMessCallback(void *data, t_floatarg num);
+      //////////
+      float			m_killAge;
 };
 
 #endif	// for header file

@@ -29,7 +29,7 @@ CPPEXTERN_NEW(part_render);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_render :: part_render()
+part_render :: part_render(void)
 {
   m_colorize=true;
   m_sizing  =true;
@@ -43,7 +43,7 @@ part_render :: part_render()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_render :: ~part_render()
+part_render :: ~part_render(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -100,13 +100,13 @@ void part_render :: postrender(GemState*){
 
 /////////////////////////////////////////////////////////
 // typeMess
-void part_render :: colorMess(int state)
+void part_render :: colorMess(bool state)
 {
-  m_colorize=!(!state);
+  m_colorize=state;
 }
-void part_render :: sizeMess(int state)
+void part_render :: sizeMess(bool state)
 {
-  m_sizing=!(!state);
+  m_sizing=state;
 }
 
 
@@ -116,16 +116,6 @@ void part_render :: sizeMess(int state)
 /////////////////////////////////////////////////////////
 void part_render :: obj_setupCallback(t_class *classPtr)
 {
-   class_addmethod(classPtr, reinterpret_cast<t_method>(&part_render::colorMessCallback),
-    	    gensym("colorize"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_render::sizeMessCallback),
-    	    gensym("size"), A_FLOAT, A_NULL);
-}
-void part_render :: colorMessCallback(void *data,  t_floatarg f)
-{
-    GetMyClass(data)->colorMess((int)f);
-}
-void part_render :: sizeMessCallback(void *data,  t_floatarg f)
-{
-    GetMyClass(data)->sizeMess((int)f);
+  CPPEXTERN_MSG1(classPtr, "colorize", colorMess, bool);
+  CPPEXTERN_MSG1(classPtr, "size", sizeMess, bool);
 }

@@ -64,16 +64,14 @@ void part_velcone :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_velcone :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velcone::vectorMessCallback),
-    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velcone::numberMessCallback),
-    	    gensym("vel"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
+  CPPEXTERN_MSG1(classPtr, "vel", velMess, float);
 }
-void part_velcone :: numberMessCallback(void *data, t_floatarg num)
-{
-    GetMyClass(data)->numberMess(num);
+void part_velcone :: vectorMess(float val1, float val2, float val3) {
+  m_pos[0] = val1; 
+  m_pos[1] = val2; 
+  m_pos[2] = val3;
 }
-void part_velcone :: vectorMessCallback(void *data, t_floatarg val1, t_floatarg val2, t_floatarg val3)
-{
-    GetMyClass(data)->vectorMess((float)val1, (float)val2, (float)val3);
+void	part_velcone :: velMess(float num)	{ 
+  m_radius = num;
 }

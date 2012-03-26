@@ -43,19 +43,13 @@ class GEM_EXTERN part_size : public partlib_base
 
     	//////////
     	// Destructor
-    	virtual ~part_size();
+    	virtual ~part_size(void);
 
-	//////////
-	void		sizeMess(int,t_atom*);
+      //////////
+      void		sizeMess(t_symbol*,int,t_atom*);
 
-	//////////
-	float		m_size[3];
-
- private:
-
-	//////////
-	// static member functions
-	static void	sizeMessCallback(void *data, t_symbol*,int,t_atom*);
+      //////////
+      float		m_size[3];
 };
 
 #endif	// for header file
