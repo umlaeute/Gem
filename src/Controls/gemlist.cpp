@@ -148,7 +148,6 @@ void gemlist :: drawMess(t_atom&arg)
     }
   }
   else m_drawType=atom_getint(&arg);
-
   m_mystate.set(GemState::_GL_DRAWTYPE, m_drawType);
 }
 
@@ -176,26 +175,25 @@ void gemlist :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", trigger);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::gem_rightMessCallback), gensym("gem_right"), A_GIMME, A_NULL);
-
+  CPPEXTERN_MSG (classPtr, "gem_right", rightMess);
   CPPEXTERN_MSG1(classPtr, "ticktime", ticktimeMess, float);
   CPPEXTERN_MSG1(classPtr, "lighting", lightingMess, bool);
-
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemlist::drawMessCallback), gensym("draw"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG (classPtr, "draw", drawMess);
 }
-void gemlist :: drawMessCallback(void *data, int argc, t_atom*argv)
+void gemlist :: drawMess(t_symbol*s, int argc, t_atom*argv)
 {
-  if(argc==1)GetMyClass(data)->drawMess(argv[0]);
+  if(argc==1)
+    drawMess(argv[0]);
 }
-void gemlist::gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void gemlist::rightMess(t_symbol *s, int argc, t_atom *argv)
 {
   GemCache*cache=NULL;
   GemState*state=NULL;
   if (argc==1 && argv->a_type==A_FLOAT){
-    GetMyClass(data)->rightRender(cache, state);
+    rightRender(cache, state);
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
     cache=reinterpret_cast<GemCache*>(argv->a_w.w_gpointer);
     state=reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer);
-    GetMyClass(data)->rightRender( cache, state );
-  } else GetMyClass(data)->error("wrong righthand arguments....");
+    rightRender( cache, state );
+  } else error("wrong righthand arguments....");
 }

@@ -60,11 +60,13 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   void			trigger(void);
-  virtual void   	rightRender(GemCache*cache, GemState *state);
+  virtual void rightRender(GemCache*cache, GemState *state);
+  void         rightMess(t_symbol *s, int argc, t_atom *argv);
 
   virtual void ticktimeMess(t_float ticktime);
   virtual void lightingMess(bool state);
   virtual void drawMess(t_atom&arg);
+  virtual void drawMess(t_symbol*s, int argc, t_atom*argv);
 
 
   //////////
@@ -82,13 +84,6 @@ class GEM_EXTERN gemlist : public GemBase
 
 
   t_inlet   *m_inlet;
-
- private:
-
-  //////////
-  // Static member callbacks
-  static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
-  static void 	drawMessCallback(void *data, int,t_atom*);
 };
 
 #endif	// for header file
