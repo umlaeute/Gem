@@ -565,7 +565,7 @@ void pix_background :: obj_setupCallback(t_class *classPtr)
 }
 
 
-void pix_background :: rangeCallback(void *data, t_floatarg Y, t_floatarg U, t_floatarg V)
+void pix_background :: rangeCallback(void *data, t_float Y, t_float U, t_float V)
 {
   GetMyClass(data)->m_Yrange=((int)Y);
   GetMyClass(data)->m_Urange=((int)U);

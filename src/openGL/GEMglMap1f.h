@@ -69,11 +69,11 @@ class GEM_EXTERN GEMglMap1f : public GemGLBase
 	  t_inlet *m_inlet[6];
 
 	// static member functions
-	  static void	 targetMessCallback (void*, t_floatarg);
-	  static void	 u1MessCallback (void*, t_floatarg);
-	  static void	 u2MessCallback (void*, t_floatarg);
-	  static void	 strideMessCallback (void*, t_floatarg);
-	  static void	 orderMessCallback (void*, t_floatarg);
+	  static void	 targetMessCallback (void*, t_float);
+	  static void	 u1MessCallback (void*, t_float);
+	  static void	 u2MessCallback (void*, t_float);
+	  static void	 strideMessCallback (void*, t_float);
+	  static void	 orderMessCallback (void*, t_float);
 	  static void	 pointsMessCallback (void*, t_symbol*,int,t_atom*);
 };
 #endif // for header file

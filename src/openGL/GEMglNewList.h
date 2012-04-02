@@ -52,7 +52,7 @@ class GEM_EXTERN GEMglNewList : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 modeMessCallback (void*, t_floatarg);
-	  static void	 listMessCallback (void*, t_floatarg);
+	  static void	 modeMessCallback (void*, t_float);
+	  static void	 listMessCallback (void*, t_float);
 };
 #endif // for header file

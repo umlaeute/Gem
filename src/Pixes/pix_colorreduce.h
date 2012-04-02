@@ -105,9 +105,9 @@ class GEM_EXTERN pix_colorreduce : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	countCallback(void *data, t_floatarg m_TargetColorCount);
-	static void 	persistCallback(void *data, t_floatarg m_PalettePersistence);
-	static void 	smoothCallback(void *data, t_floatarg m_BoundarySmoothing);
+    	static void 	countCallback(void *data, t_float m_TargetColorCount);
+	static void 	persistCallback(void *data, t_float m_PalettePersistence);
+	static void 	smoothCallback(void *data, t_float m_BoundarySmoothing);
 };
 
 #endif	// for header file

@@ -86,15 +86,15 @@ void GEMglVertex4d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4d::wMessCallback),  	gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglVertex4d :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex4d :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex4d :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex4d :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex4d :: zMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex4d :: zMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex4d :: wMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex4d :: wMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->wMess ( static_cast<t_float>(arg0));
 }

@@ -81,7 +81,7 @@ class GEM_EXTERN pix_a_2grey : public GemPixObj
 
     	//////////
     	// static member functions
-    	static void 	alphaMessCallback(void *data, t_floatarg alphaval);
+    	static void 	alphaMessCallback(void *data, t_float alphaval);
 };
 
 #endif	// for header file

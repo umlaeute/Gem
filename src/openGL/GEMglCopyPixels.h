@@ -62,10 +62,10 @@ class GEM_EXTERN GEMglCopyPixels : public GemGLBase
 	  t_inlet *m_inlet[5];
 
 	// static member functions
-	  static void	 xMessCallback (void*, t_floatarg);
-	  static void	 yMessCallback (void*, t_floatarg);
-	  static void	 widthMessCallback (void*, t_floatarg);
-	  static void	 heightMessCallback (void*, t_floatarg);
-	  static void	 typeMessCallback (void*, t_floatarg);
+	  static void	 xMessCallback (void*, t_float);
+	  static void	 yMessCallback (void*, t_float);
+	  static void	 widthMessCallback (void*, t_float);
+	  static void	 heightMessCallback (void*, t_float);
+	  static void	 typeMessCallback (void*, t_float);
 };
 #endif // for header file

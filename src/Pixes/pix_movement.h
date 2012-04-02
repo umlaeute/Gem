@@ -83,7 +83,7 @@ protected:
 
 	//////////
 	// the methods
-	static void threshMessCallback(void *data, t_floatarg fthresh);
+	static void threshMessCallback(void *data, t_float fthresh);
 };
 
 #endif	// for header file

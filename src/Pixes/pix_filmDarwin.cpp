@@ -549,17 +549,17 @@ void pix_filmDarwin :: ramCallback(void *data)
   GetMyClass(data)->LoadRam();
 }
 
-void pix_filmDarwin :: hiqualityCallback(void *data, t_floatarg state)
+void pix_filmDarwin :: hiqualityCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_hiquality=static_cast<int>(state);
 }
 
-void pix_filmDarwin :: rateCallback(void *data, t_floatarg state)
+void pix_filmDarwin :: rateCallback(void *data, t_float state)
 {
   GetMyClass(data)->MovRate(state);
 }
 
-void pix_filmDarwin :: volumeCallback(void *data, t_floatarg state)
+void pix_filmDarwin :: volumeCallback(void *data, t_float state)
 {
   GetMyClass(data)->MovVolume(state);
 }

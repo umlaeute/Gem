@@ -95,8 +95,8 @@ class GEM_EXTERN pix_dot : public GemPixObj
   //////////
   // static member functions
   static void bangMessCallback(void *data);
-  static void sizeMessCallback(void *data, t_floatarg width, t_floatarg height);
-  static void scaleMessCallback(void *data, t_floatarg state);
+  static void sizeMessCallback(void *data, t_float width, t_float height);
+  static void scaleMessCallback(void *data, t_float state);
 };
 
 #endif	// for header file

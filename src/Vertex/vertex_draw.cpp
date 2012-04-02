@@ -324,17 +324,17 @@ void vertex_draw :: obj_setupCallback(t_class *classPtr)
     	    gensym("draw"), A_SYMBOL, A_NULL);
 }
 
-void vertex_draw :: defaultMessCallback(void *data, t_floatarg size)
+void vertex_draw :: defaultMessCallback(void *data, t_float size)
 {
     GetMyClass(data)->m_defaultDraw=(static_cast<int>(size));
 }
 
-void vertex_draw :: colorMessCallback(void *data, t_floatarg size)
+void vertex_draw :: colorMessCallback(void *data, t_float size)
 {
     GetMyClass(data)->m_color=(static_cast<int>(size));
 }
 
-void vertex_draw :: texcoordMessCallback(void *data, t_floatarg t)
+void vertex_draw :: texcoordMessCallback(void *data, t_float t)
 {
     GetMyClass(data)->m_texcoord=(static_cast<int>(t));
 }

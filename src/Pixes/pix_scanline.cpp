@@ -171,13 +171,13 @@ void pix_scanline :: obj_setupCallback(t_class *classPtr)
 		  gensym("mode"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_scanline :: rollCallback(void *data, t_floatarg value)
+void pix_scanline :: rollCallback(void *data, t_float value)
 {
   GetMyClass(data)->m_interlace=((long)value);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_scanline :: modeCallback(void *data, t_floatarg value)
+void pix_scanline :: modeCallback(void *data, t_float value)
 {
   GetMyClass(data)->m_mode=((long)value);
   GetMyClass(data)->setPixModified();

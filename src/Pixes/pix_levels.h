@@ -111,15 +111,15 @@ class GEM_EXTERN pix_levels : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	autoCallback(void *data, t_floatarg m_DoAuto);
-	static void 	uniCallback(void *data, t_floatarg m_DoUniform);
-	static void 	invCallback(void *data, t_floatarg m_DoAllowInversion);
-	static void 	uniformCallback(void *data, t_floatarg m_UniformInputFloor, t_floatarg m_UniformInputCeiling, t_floatarg m_UniformOutputFloor, t_floatarg m_UniformOutputCeiling);
-	static void 	redCallback(void *data, t_floatarg m_RedInputFloor, t_floatarg m_RedInputCeiling, t_floatarg m_RedOutputFloor, t_floatarg m_RedOutputCeiling);
-	static void 	greenCallback(void *data, t_floatarg m_GreenInputFloor,t_floatarg m_GreenInputCeiling, t_floatarg m_GreenOutputFloor, t_floatarg m_GreenOutputCeiling);
-	static void 	blueCallback(void *data, t_floatarg m_BlueInputFloor, t_floatarg m_BlueInputCeiling, t_floatarg m_BlueOutputFloor, t_floatarg m_BlueOutputCeiling);
-	static void 	lowPCallback(void *data, t_floatarg m_LowPercentile);
-	static void 	hiPCallback(void *data, t_floatarg m_HighPercentile);
+    	static void 	autoCallback(void *data, t_float m_DoAuto);
+	static void 	uniCallback(void *data, t_float m_DoUniform);
+	static void 	invCallback(void *data, t_float m_DoAllowInversion);
+	static void 	uniformCallback(void *data, t_float m_UniformInputFloor, t_float m_UniformInputCeiling, t_float m_UniformOutputFloor, t_float m_UniformOutputCeiling);
+	static void 	redCallback(void *data, t_float m_RedInputFloor, t_float m_RedInputCeiling, t_float m_RedOutputFloor, t_float m_RedOutputCeiling);
+	static void 	greenCallback(void *data, t_float m_GreenInputFloor,t_float m_GreenInputCeiling, t_float m_GreenOutputFloor, t_float m_GreenOutputCeiling);
+	static void 	blueCallback(void *data, t_float m_BlueInputFloor, t_float m_BlueInputCeiling, t_float m_BlueOutputFloor, t_float m_BlueOutputCeiling);
+	static void 	lowPCallback(void *data, t_float m_LowPercentile);
+	static void 	hiPCallback(void *data, t_float m_HighPercentile);
 };
 
 #endif	// for header file

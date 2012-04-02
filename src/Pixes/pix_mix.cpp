@@ -437,7 +437,7 @@ void pix_mix :: obj_setupCallback(t_class *classPtr)
 		  gensym("gain"), A_GIMME, A_NULL);//A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-//void pix_mix :: gainCallback(void *data, t_floatarg X, t_floatarg Y)
+//void pix_mix :: gainCallback(void *data, t_float X, t_float Y)
 void pix_mix :: gainCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   if (argc<1)return;

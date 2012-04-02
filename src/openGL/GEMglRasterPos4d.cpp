@@ -86,15 +86,15 @@ void GEMglRasterPos4d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::wMessCallback),  	gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRasterPos4d :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos4d :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos4d :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos4d :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos4d :: zMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos4d :: zMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos4d :: wMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos4d :: wMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->wMess ( static_cast<t_float>(arg0));
 }

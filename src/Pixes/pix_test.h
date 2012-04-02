@@ -66,8 +66,8 @@ class GEM_EXTERN pix_test : public GemPixObj
   unsigned char off;
   unsigned char csize;
 
-  static void floatMessCallback(void *data, float n);
-  static void csizeMessCallback(void *data, float n);
+  void floatMess(unsigned int);
+  void csizeMess(unsigned int);
 };
 
 #endif	// for header file

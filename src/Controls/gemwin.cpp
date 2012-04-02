@@ -517,11 +517,11 @@ void gemwin :: printMessCallback(void *)
 {
   GemMan::printInfo();
 }
-void gemwin :: profileMessCallback(void *, t_floatarg state)
+void gemwin :: profileMessCallback(void *, t_float state)
 {
   GemMan::m_profile = static_cast<int>(state);
 }
-void gemwin :: lightingMessCallback(void *, t_floatarg state)
+void gemwin :: lightingMessCallback(void *, t_float state)
 {
   GemMan::lightingOnOff(static_cast<int>(state));
 }
@@ -555,7 +555,7 @@ void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     GetMyClass(data)->error("\"fogcolor\" expects 3 or 4 values");
   }
 }
-void gemwin :: stereoMessCallback(void *data, t_floatarg state)
+void gemwin :: stereoMessCallback(void *data, t_float state)
 {
   int mode = static_cast<int>(state);
   if (mode<0 || mode>3){
@@ -565,19 +565,19 @@ void gemwin :: stereoMessCallback(void *data, t_floatarg state)
 
   GemMan::m_stereo = mode;
 }
-void gemwin :: stereoSepMessCallback(void *, t_floatarg state)
+void gemwin :: stereoSepMessCallback(void *, t_float state)
 {
   GemMan::m_stereoSep = state;
 }
-void gemwin :: stereoFocMessCallback(void *, t_floatarg state)
+void gemwin :: stereoFocMessCallback(void *, t_float state)
 {
   GemMan::m_stereoFocal = state;
 }
-void gemwin :: stereoLineMessCallback(void *, t_floatarg state)
+void gemwin :: stereoLineMessCallback(void *, t_float state)
 {
   GemMan::m_stereoLine = (state!=0.0);
 }
-void gemwin :: borderMessCallback(void *, t_floatarg state)
+void gemwin :: borderMessCallback(void *, t_float state)
 {
   GemMan::m_border = static_cast<int>(state);
 }
@@ -589,7 +589,7 @@ void gemwin :: resetMessCallback(void *)
 {
   GemMan::resetState();
 }
-void gemwin :: frameMessCallback(void *, t_floatarg rate)
+void gemwin :: frameMessCallback(void *, t_float rate)
 {
   GemMan::frameRate(static_cast<float>(rate));
 }

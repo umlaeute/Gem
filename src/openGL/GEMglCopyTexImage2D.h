@@ -74,13 +74,13 @@ class GEM_EXTERN GEMglCopyTexImage2D : public GemGLBase
 	  t_inlet *m_inlet[8];
 
 	// static member functions
-	  static void	 targetMessCallback (void*, t_floatarg);
-	  static void	 levelMessCallback (void*, t_floatarg);
-	  static void	 internalFormatMessCallback (void*, t_floatarg);
-	  static void	 xMessCallback (void*, t_floatarg);
-	  static void	 yMessCallback (void*, t_floatarg);
-	  static void	 widthMessCallback (void*, t_floatarg);
-	  static void	 heightMessCallback (void*, t_floatarg);
-	  static void	 borderMessCallback (void*, t_floatarg);
+	  static void	 targetMessCallback (void*, t_float);
+	  static void	 levelMessCallback (void*, t_float);
+	  static void	 internalFormatMessCallback (void*, t_float);
+	  static void	 xMessCallback (void*, t_float);
+	  static void	 yMessCallback (void*, t_float);
+	  static void	 widthMessCallback (void*, t_float);
+	  static void	 heightMessCallback (void*, t_float);
+	  static void	 borderMessCallback (void*, t_float);
 };
 #endif // for header file

@@ -77,9 +77,9 @@ class GEM_EXTERN surface3d : public GemShape
   t_float3		*m_posXYZ;
 
  private:
-  static void       interpolate(void *data, t_floatarg X, t_floatarg Y);
-  static t_float		cubic(t_floatarg X0, t_floatarg X1, t_floatarg X2, t_floatarg X3, t_floatarg fract);
-  static t_float3		cubic3(t_float3 X0, t_float3 X1, t_float3 X2, t_float3 X3, t_floatarg fract);
+  static void		interpolate(void *data, t_float X, t_float Y);
+  static t_float	cubic (t_float  X0, t_float  X1, t_float  X2, t_float  X3, t_float fract);
+  static t_float3	cubic3(t_float3 X0, t_float3 X1, t_float3 X2, t_float3 X3, t_float fract);
 };
 
 #endif	// for header file

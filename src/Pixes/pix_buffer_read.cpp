@@ -220,15 +220,15 @@ void pix_buffer_read :: setMessCallback(void *data, t_symbol*s)
 {
   GetMyClass(data)->setMess(s);
 }
-void pix_buffer_read :: frameMessCallback(void *data, t_floatarg f)
+void pix_buffer_read :: frameMessCallback(void *data, t_float f)
 {
   GetMyClass(data)->frameMess((int)f);
 }
-void pix_buffer_read :: autoMessCallback(void *data, t_floatarg f)
+void pix_buffer_read :: autoMessCallback(void *data, t_float f)
 {
   GetMyClass(data)->autoMess(f);
 }
-void pix_buffer_read :: loopMessCallback(void *data, t_floatarg f)
+void pix_buffer_read :: loopMessCallback(void *data, t_float f)
 {
   GetMyClass(data)->loopMess(f>0.f);
 }

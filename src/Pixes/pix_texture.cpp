@@ -771,7 +771,23 @@ void pix_texture :: pboMess(int num)
   m_numPbo=num;
   setModified();
 }
-
+void pix_texture :: modeMess(int mode)
+{
+  error("'mode' message is deprecated; please use 'rectangle' instead");
+  textureRectangle(mode);
+}
+void pix_texture :: clientStorage(int mode)
+{
+  m_clientStorage=mode;
+}
+void pix_texture :: yuvMess(int mode)
+{
+  m_yuv=mode;
+}
+void pix_texture :: texunitMess(int unit)
+{
+  m_texunit=unit;
+}
 
 ////////////////////////////////////////////////////////
 // static member functions
@@ -779,107 +795,55 @@ void pix_texture :: pboMess(int num)
 /////////////////////////////////////////////////////////
 void pix_texture :: obj_setupCallback(t_class *classPtr)
 {
-  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_texture::floatMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::textureMessCallback),
-                  gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::repeatMessCallback),
-                  gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::envMessCallback),
-                  gensym("env"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::modeCallback),
-                  gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::rectangleCallback),
-                  gensym("rectangle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::clientStorageCallback),
-                  gensym("client_storage"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::yuvCallback),
-                  gensym("yuv"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "float", textureOnOff, int);
+  CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
+  CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
+  CPPEXTERN_MSG1(classPtr, "env", envMess, int);
+  CPPEXTERN_MSG1(classPtr, "rectangle", textureRectangle, int);
+  CPPEXTERN_MSG1(classPtr, "mode", modeMess, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::extTextureCallback),
-                  gensym("extTexture"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::texunitCallback),
-                  gensym("texunit"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "client_storage", clientStorage, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_texture::pboCallback),
-                  gensym("pbo"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "yuv", yuvMess, int);
+  CPPEXTERN_MSG1(classPtr, "pbo", pboMess, int);
+
+  CPPEXTERN_MSG1(classPtr, "texunit", texunitMess, int);
+
+  CPPEXTERN_MSG (classPtr, "extTexture", extTextureMess);
 
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_texture), gensym("pix_texture2"), A_NULL);
 }
-void pix_texture :: floatMessCallback(void *data, float n)
-{
-  GetMyClass(data)->textureOnOff((int)n);
-}
-void pix_texture :: textureMessCallback(void *data, t_floatarg quality)
-{
-  GetMyClass(data)->textureQuality((int)quality);
-}
-void pix_texture :: repeatMessCallback(void *data, t_floatarg repeat)
-{
-  GetMyClass(data)->repeatMess((int)repeat);
-}
-void pix_texture :: envMessCallback(void *data, t_floatarg num )
-{
-  GetMyClass(data)->envMess((int) num);
-}
-void pix_texture :: modeCallback(void *data, t_floatarg rectangle)
-{
-  GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
-  GetMyClass(data)->textureRectangle((int)rectangle);
-}
-void pix_texture :: rectangleCallback(void *data, t_floatarg rectangle)
-{
-  GetMyClass(data)->textureRectangle((int)rectangle);
-}
 
-void pix_texture :: clientStorageCallback(void *data, t_floatarg do_clientstorage)
-{
-  GetMyClass(data)->m_clientStorage=((int)do_clientstorage);
-}
-
-void pix_texture :: yuvCallback(void *data, t_floatarg do_yuv)
-{
-  GetMyClass(data)->m_yuv=((int)do_yuv);
-}
-
-void pix_texture :: extTextureCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+void pix_texture :: extTextureMess(t_symbol*s, int argc, t_atom*argv)
 {
   int index=5;
   switch(argc){
   case 5:
     if(A_FLOAT!=argv[4].a_type)break;
-    GetMyClass(data)->m_extUpsidedown=atom_getint(argv+4);
+    m_extUpsidedown=atom_getint(argv+4);
   case 4:
     index=4;
     if(A_FLOAT!=argv[3].a_type)break;
-    GetMyClass(data)->m_extType=atom_getint(argv+3);
+    m_extType=atom_getint(argv+3);
   case 3:
     index=3;
     if(A_FLOAT!=argv[2].a_type)break;
     index=2;
     if(A_FLOAT!=argv[1].a_type)break;
-    GetMyClass(data)->m_extWidth =atom_getfloat(argv+1);
-    GetMyClass(data)->m_extHeight=atom_getfloat(argv+2);
+    m_extWidth =atom_getfloat(argv+1);
+    m_extHeight=atom_getfloat(argv+2);
   case 1:
     index=1;
     if(A_FLOAT!=argv[0].a_type)break;
-    GetMyClass(data)->m_extTextureObj=atom_getint(argv+0);
+    m_extTextureObj=atom_getint(argv+0);
     index=0;
     return;
   default:
-    GetMyClass(data)->error("arguments: <texId> [<width> <height> [<type> [<upsidedown>]]]");
+    error("arguments: <texId> [<width> <height> [<type> [<upsidedown>]]]");
     return;
   }
   if(index)
-    GetMyClass(data)->error("invalid type of argument #%d", index);
+    error("invalid type of argument #%d", index);
 
 
-}
-void pix_texture :: texunitCallback(void *data, t_floatarg unit)
-{
-  GetMyClass(data)->m_texunit=(int)unit;
-}
-
-void pix_texture :: pboCallback(void *data, t_floatarg numpbo)
-{
-  GetMyClass(data)->pboMess((int)numpbo);
 }

@@ -57,8 +57,8 @@ class GEM_EXTERN vertex_grid : public GemBase
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-        static void 	sizeMessCallback(void *data, t_floatarg x, t_floatarg y);
-        static void 	spacingMessCallback(void *data, t_floatarg x, t_floatarg y);
+        static void 	sizeMessCallback(void *data, t_float x, t_float y);
+        static void 	spacingMessCallback(void *data, t_float x, t_float y);
 
 };
 

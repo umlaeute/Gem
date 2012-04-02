@@ -121,8 +121,8 @@ protected:
   unsigned char m_threshold;
 
 private:
-  static void blobSizeMessCallback(void *data, t_floatarg blobSize);
-  static void threshMessCallback(void *data, t_floatarg thresh);
+  static void blobSizeMessCallback(void *data, t_float blobSize);
+  static void threshMessCallback(void *data, t_float thresh);
 };
 
 #endif 	// for header file

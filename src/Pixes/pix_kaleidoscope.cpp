@@ -2051,52 +2051,52 @@ void pix_kaleidoscope :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::rlpCallback),
 		  gensym("rlp"), A_DEFFLOAT, A_NULL);
 }
-void pix_kaleidoscope :: divCallback(void *data, t_floatarg m_Divisions)
+void pix_kaleidoscope :: divCallback(void *data, t_float m_Divisions)
 {
   GetMyClass(data)->m_Divisions=(m_Divisions);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: outputAngCallback(void *data, t_floatarg m_OutputAnglePreIncrement)
+void pix_kaleidoscope :: outputAngCallback(void *data, t_float m_OutputAnglePreIncrement)
 {
   GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceAngCallback(void *data, t_floatarg m_SourceAnglePreIncrement)
+void pix_kaleidoscope :: sourceAngCallback(void *data, t_float m_SourceAnglePreIncrement)
 {
   GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: outputAngleCallback(void *data, t_floatarg m_OutputAnglePreIncrement)
+void pix_kaleidoscope :: outputAngleCallback(void *data, t_float m_OutputAnglePreIncrement)
 {
   GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement*deg2rad);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceAngleCallback(void *data, t_floatarg m_SourceAnglePreIncrement)
+void pix_kaleidoscope :: sourceAngleCallback(void *data, t_float m_SourceAnglePreIncrement)
 {
   GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement*deg2rad);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceCtrCallback(void *data, t_floatarg m_SourceCentreX, t_floatarg m_SourceCentreY)
+void pix_kaleidoscope :: sourceCtrCallback(void *data, t_float m_SourceCentreX, t_float m_SourceCentreY)
 {
   GetMyClass(data)->m_SourceCentreX=(m_SourceCentreX);
   GetMyClass(data)->m_SourceCentreY=(m_SourceCentreY);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: outputCtrCallback(void *data, t_floatarg m_OutputCentreX, t_floatarg m_OutputCentreY)
+void pix_kaleidoscope :: outputCtrCallback(void *data, t_float m_OutputCentreX, t_float m_OutputCentreY)
 {
   GetMyClass(data)->m_OutputCentreX=(m_OutputCentreX);
   GetMyClass(data)->m_OutputCentreY=(m_OutputCentreY);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: rlpCallback(void *data, t_floatarg m_ReflectionLineProportion)
+void pix_kaleidoscope :: rlpCallback(void *data, t_float m_ReflectionLineProportion)
 {
   GetMyClass(data)->m_ReflectionLineProportion=(m_ReflectionLineProportion);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: sapCallback(void *data, t_floatarg m_SourceAngleProportion)
+void pix_kaleidoscope :: sapCallback(void *data, t_float m_SourceAngleProportion)
 {
   GetMyClass(data)->m_SourceAngleProportion=(m_SourceAngleProportion);
   GetMyClass(data)->setPixModified();

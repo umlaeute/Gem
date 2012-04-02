@@ -159,13 +159,13 @@ class GEM_EXTERN pix_halftone : public GemPixObj
     private:
     	//////////
     	// Static member functions
-	static void 	sizeCallback(void *data, t_floatarg m_CellSize);
-    	static void 	styleCallback(void *data, t_floatarg m_Style);
-	static void 	smoothCallback(void *data, t_floatarg m_Smoothing);
-	static void 	angleCallback(void *data, t_floatarg m_Angle); // 0..2pi
+	static void 	sizeCallback(void *data, t_float m_CellSize);
+    	static void 	styleCallback(void *data, t_float m_Style);
+	static void 	smoothCallback(void *data, t_float m_Smoothing);
+	static void 	angleCallback(void *data, t_float m_Angle); // 0..2pi
 	/* callbacks for normalized values: smooth=0..1; angle=0..360 */
-	static void smoothNCallback(void *data, t_floatarg m_Smoothing);
-	static void angleDEGCallback(void *data, t_floatarg m_Angle);
+	static void smoothNCallback(void *data, t_float m_Smoothing);
+	static void angleDEGCallback(void *data, t_float m_Angle);
 };
 
 #endif	// for header file

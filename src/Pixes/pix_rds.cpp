@@ -359,12 +359,12 @@ void pix_rds :: obj_setupCallback(t_class *classPtr)
 		  gensym("seed"), A_FLOAT, A_NULL);
 }
 
-void pix_rds :: methMessCallback(void *data, t_floatarg state)
+void pix_rds :: methMessCallback(void *data, t_float state)
 {
   GetMyClass(data)->method=((int)state);
   GetMyClass(data)->setPixModified();
 }
-void pix_rds :: strideMessCallback(void *data, t_floatarg state)
+void pix_rds :: strideMessCallback(void *data, t_float state)
 {
   if(state<0.f){
     GetMyClass(data)->error("stride must be > 0!");
@@ -373,7 +373,7 @@ void pix_rds :: strideMessCallback(void *data, t_floatarg state)
   GetMyClass(data)->stride=((int)state);
   GetMyClass(data)->setPixModified();
 }
-void pix_rds :: seedMessCallback(void *data, t_floatarg state)
+void pix_rds :: seedMessCallback(void *data, t_float state)
 {
   GetMyClass(data)->fastrand_val=((int)state);
   GetMyClass(data)->setPixModified();

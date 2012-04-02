@@ -67,9 +67,9 @@ void GEMglNewList :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNewList::modeMessCallback),  	gensym("mode"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglNewList :: modeMessCallback (void* data, t_floatarg arg0){
+void GEMglNewList :: modeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
-void GEMglNewList :: listMessCallback (void* data, t_floatarg arg0){
+void GEMglNewList :: listMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->listMess ( static_cast<t_float>(arg0));
 }

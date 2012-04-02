@@ -170,22 +170,22 @@ class GEM_EXTERN pix_videoDarwin : public pix_videoOS
 
     	//////////
     	// static member functions
-        static void qualityCallback(void *data, t_floatarg X);
+        static void qualityCallback(void *data, t_float X);
         static void resetCallback(void *data);
         static void colorspaceCallback(void *data, t_symbol *cs);
         static void csMessCallback(void *data, t_symbol *cs);
-		static void deviceCallback(void *data, t_floatarg X);
-		static void brightnessCallback(void *data, t_floatarg X);
-		static void saturationCallback(void *data, t_floatarg X);
-		static void contrastCallback(void *data, t_floatarg X);
-		static void exposureCallback(void *data, t_floatarg X);
-		static void gainCallback(void *data, t_floatarg X);
-		static void whiteBalanceCallback(void *data, t_floatarg U,t_floatarg V);
+		static void deviceCallback(void *data, t_float X);
+		static void brightnessCallback(void *data, t_float X);
+		static void saturationCallback(void *data, t_float X);
+		static void contrastCallback(void *data, t_float X);
+		static void exposureCallback(void *data, t_float X);
+		static void gainCallback(void *data, t_float X);
+		static void whiteBalanceCallback(void *data, t_float U,t_float V);
 		static void bangMessCallback(void *data);
-		static void autoCallback(void *data, t_floatarg X);
+		static void autoCallback(void *data, t_float X);
 		static void fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-		static void recordCallback(void *data, t_floatarg X);
-		static void inputCallback(void *data, t_floatarg X);
+		static void recordCallback(void *data, t_float X);
+		static void inputCallback(void *data, t_float X);
 };
 
 #endif

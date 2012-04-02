@@ -263,13 +263,13 @@ void pix_roll :: obj_setupCallback(t_class *classPtr)
                   gensym("axis"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_roll :: rollCallback(void *data, t_floatarg value)
+void pix_roll :: rollCallback(void *data, t_float value)
 {
   GetMyClass(data)->m_vroll=((long)value);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_roll :: axisCallback(void *data, t_floatarg value)
+void pix_roll :: axisCallback(void *data, t_float value)
 {
   GetMyClass(data)->m_axis=((long)value);
   GetMyClass(data)->setPixModified();

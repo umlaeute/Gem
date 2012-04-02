@@ -119,21 +119,21 @@ void GEMglTexSubImage2D :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage2D::heightMessCallback),  	gensym("height"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglTexSubImage2D :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglTexSubImage2D :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage2D :: levelMessCallback (void* data, t_floatarg arg0){
+void GEMglTexSubImage2D :: levelMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage2D :: xoffsetMessCallback (void* data, t_floatarg arg0){
+void GEMglTexSubImage2D :: xoffsetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xoffsetMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage2D :: yoffsetMessCallback (void* data, t_floatarg arg0){
+void GEMglTexSubImage2D :: yoffsetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yoffsetMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage2D :: widthMessCallback (void* data, t_floatarg arg0){
+void GEMglTexSubImage2D :: widthMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage2D :: heightMessCallback (void* data, t_floatarg arg0){
+void GEMglTexSubImage2D :: heightMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->heightMess ( static_cast<t_float>(arg0));
 }

@@ -61,9 +61,9 @@ class GEM_EXTERN GEMglTexSubImage1D : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 targetMessCallback (void*, t_floatarg);
-	  static void	 levelMessCallback (void*, t_floatarg);
-	  static void	 xoffsetMessCallback (void*, t_floatarg);
-	  static void	 widthMessCallback (void*, t_floatarg);
+	  static void	 targetMessCallback (void*, t_float);
+	  static void	 levelMessCallback (void*, t_float);
+	  static void	 xoffsetMessCallback (void*, t_float);
+	  static void	 widthMessCallback (void*, t_float);
 };
 #endif // for header file

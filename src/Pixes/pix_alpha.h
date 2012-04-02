@@ -97,10 +97,10 @@ class GEM_EXTERN pix_alpha : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	highThreshMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
-    	static void 	lowThreshMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue);
-    	static void 	alphaMessCallback(void *data, t_floatarg alpha);
-    	static void 	otheralphaMessCallback(void *data, t_floatarg alpha);
+    	static void 	highThreshMessCallback(void *data, t_float red, t_float green, t_float blue);
+    	static void 	lowThreshMessCallback(void *data, t_float red, t_float green, t_float blue);
+    	static void 	alphaMessCallback(void *data, t_float alpha);
+    	static void 	otheralphaMessCallback(void *data, t_float alpha);
 };
 
 #endif	// for header file

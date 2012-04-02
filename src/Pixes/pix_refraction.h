@@ -68,10 +68,10 @@ class GEM_EXTERN pix_refraction : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	refractCallback(void *data, t_floatarg m_Refraction);
-	static void 	widthCallback(void *data, t_floatarg m_CellWidth);
-	static void 	heightCallback(void *data, t_floatarg m_CellHeight);
-	static void 	magCallback(void *data, t_floatarg m_DoAllowMagnification);
+    	static void 	refractCallback(void *data, t_float m_Refraction);
+	static void 	widthCallback(void *data, t_float m_CellWidth);
+	static void 	heightCallback(void *data, t_float m_CellHeight);
+	static void 	magCallback(void *data, t_float m_DoAllowMagnification);
 };
 
 #endif	// for header file

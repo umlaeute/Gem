@@ -92,8 +92,8 @@ class GEM_EXTERN pix_data : public GemPixDualObj
         //////////
         // Static member callbacks
 	static void		triggerMessCallback(void *data);
-	static void		xPosCallback(void *data, t_floatarg pos);
-	static void		yPosCallback(void *data, t_floatarg pos);
+	static void		xPosCallback(void *data, t_float pos);
+	static void		yPosCallback(void *data, t_float pos);
 };
 
 #endif	// for header file

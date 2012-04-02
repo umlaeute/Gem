@@ -346,7 +346,7 @@ void pix_multiblob :: obj_setupCallback(t_class *classPtr)
 /*------------------------------------------------------------
 blobSizeMessCallback
 ------------------------------------------------------------*/
-void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize)
+void pix_multiblob :: blobSizeMessCallback(void *data, t_float blobSize)
 {
   GetMyClass(data)->blobSizeMess(blobSize);
 }
@@ -354,7 +354,7 @@ void pix_multiblob :: blobSizeMessCallback(void *data, t_floatarg blobSize)
 /*------------------------------------------------------------
 threshMessCallback
 ------------------------------------------------------------*/
-void pix_multiblob :: threshMessCallback(void *data, t_floatarg thresh)
+void pix_multiblob :: threshMessCallback(void *data, t_float thresh)
 {
   GetMyClass(data)->threshMess(thresh);
 }

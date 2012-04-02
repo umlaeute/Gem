@@ -68,9 +68,9 @@ void GEMglLineStipple :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLineStipple::patternMessCallback),  	gensym("pattern"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglLineStipple :: factorMessCallback (void* data, t_floatarg arg0){
+void GEMglLineStipple :: factorMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->factorMess ( static_cast<t_float>(arg0));
 }
-void GEMglLineStipple :: patternMessCallback (void* data, t_floatarg arg0){
+void GEMglLineStipple :: patternMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->patternMess ( static_cast<t_float>(arg0));
 }

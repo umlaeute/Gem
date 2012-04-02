@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglTexGenfv : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 coordMessCallback (void*, t_floatarg);
-	  static void	 pnameMessCallback (void*, t_floatarg);
+	  static void	 coordMessCallback (void*, t_float);
+	  static void	 pnameMessCallback (void*, t_float);
 	  static void	 paramsMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

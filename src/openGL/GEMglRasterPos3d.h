@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglRasterPos3d : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 xMessCallback (void*, t_floatarg);
-	  static void	 yMessCallback (void*, t_floatarg);
-	  static void	 zMessCallback (void*, t_floatarg);
+	  static void	 xMessCallback (void*, t_float);
+	  static void	 yMessCallback (void*, t_float);
+	  static void	 zMessCallback (void*, t_float);
 };
 #endif // for header file

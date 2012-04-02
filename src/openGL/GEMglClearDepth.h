@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglClearDepth : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 depthMessCallback (void*, float);
+	  static void	 depthMessCallback (void*, t_float);
 };
 #endif // for header file

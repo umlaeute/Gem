@@ -50,7 +50,7 @@ class GEM_EXTERN part_source : public partlib_base
 
   //////////
   // Number to add
-  void			numberMess(t_float num);
+  void			numberMess(float num);
   void      domainMess(const std::string&s);
   void			vectorMess(t_symbol*s, int argc, t_atom*argv);
 

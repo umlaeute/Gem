@@ -65,7 +65,7 @@ class GEM_EXTERN pix_normalize : public GemPixObj
     //////////
     // Static member functions
     static void 	vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    static void 	floatMaskMessCallback(void *data, t_floatarg gain);
+    static void 	floatMaskMessCallback(void *data, t_float gain);
 };
 
 #endif	// for header file

@@ -81,9 +81,9 @@ void GEMglFeedbackBuffer :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFeedbackBuffer::typeMessCallback),  	gensym("type"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglFeedbackBuffer :: sizeMessCallback (void* data, t_floatarg arg0){
+void GEMglFeedbackBuffer :: sizeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sizeMess ( static_cast<t_float>(arg0));
 }
-void GEMglFeedbackBuffer :: typeMessCallback (void* data, t_floatarg arg0){
+void GEMglFeedbackBuffer :: typeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->typeMess ( static_cast<t_float>(arg0));
 }

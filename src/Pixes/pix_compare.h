@@ -74,7 +74,7 @@ CPPEXTERN_HEADER(pix_compare, GemPixDualObj);
 
     	//////////
     	// Static member functions
-    	static void directionCallback       (void *data, t_floatarg state);
+    	static void directionCallback       (void *data, t_float state);
 
 
 };

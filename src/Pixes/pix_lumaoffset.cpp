@@ -711,25 +711,25 @@ void pix_lumaoffset :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::smoothCallback),
 		  gensym("smooth"), A_DEFFLOAT, A_NULL);
 }
-void pix_lumaoffset :: offsetCallback(void *data, t_floatarg m_OffsetScale)
+void pix_lumaoffset :: offsetCallback(void *data, t_float m_OffsetScale)
 {
   GetMyClass(data)->m_OffsetScale=(m_OffsetScale);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_lumaoffset :: gapCallback(void *data, t_floatarg m_LineGap)
+void pix_lumaoffset :: gapCallback(void *data, t_float m_LineGap)
 {
   if(m_LineGap<0)m_LineGap=0.f;
   GetMyClass(data)->m_LineGap=(m_LineGap);
   GetMyClass(data)->setPixModified();
 }
-void pix_lumaoffset :: fillCallback(void *data, t_floatarg m_DoFilledLines)
+void pix_lumaoffset :: fillCallback(void *data, t_float m_DoFilledLines)
 {
   GetMyClass(data)->m_DoFilledLines=(m_DoFilledLines!=0.0);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_lumaoffset :: smoothCallback(void *data, t_floatarg m_DoSmoothFill)
+void pix_lumaoffset :: smoothCallback(void *data, t_float m_DoSmoothFill)
 {
   GetMyClass(data)->m_DoSmoothFill=(m_DoSmoothFill!=0.0);
   GetMyClass(data)->setPixModified();

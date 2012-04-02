@@ -86,15 +86,15 @@ void GEMglClearAccum :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearAccum::alphaMessCallback),  	gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClearAccum :: redMessCallback (void* data, t_floatarg arg0){
+void GEMglClearAccum :: redMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
-void GEMglClearAccum :: greenMessCallback (void* data, t_floatarg arg0){
+void GEMglClearAccum :: greenMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
-void GEMglClearAccum :: blueMessCallback (void* data, t_floatarg arg0){
+void GEMglClearAccum :: blueMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }
-void GEMglClearAccum :: alphaMessCallback (void* data, t_floatarg arg0){
+void GEMglClearAccum :: alphaMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->alphaMess ( static_cast<t_float>(arg0));
 }

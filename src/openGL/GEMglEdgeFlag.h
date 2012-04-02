@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglEdgeFlag : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 flagMessCallback (void*, t_floatarg);
+	  static void	 flagMessCallback (void*, t_float);
 };
 #endif // for header file

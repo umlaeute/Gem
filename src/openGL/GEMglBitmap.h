@@ -58,9 +58,9 @@ class GEM_EXTERN GEMglBitmap : public GemGLBase
 	  t_inlet *m_inlet[4];
 
 	// static member functions
-	  static void	 xorigMessCallback (void*, t_floatarg);
-	  static void	 yorigMessCallback (void*, t_floatarg);
-	  static void	 xmoveMessCallback (void*, t_floatarg);
-	  static void	 ymoveMessCallback (void*, t_floatarg);
+	  static void	 xorigMessCallback (void*, t_float);
+	  static void	 yorigMessCallback (void*, t_float);
+	  static void	 xmoveMessCallback (void*, t_float);
+	  static void	 ymoveMessCallback (void*, t_float);
 };
 #endif // for header file

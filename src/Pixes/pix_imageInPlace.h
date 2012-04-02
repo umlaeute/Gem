@@ -94,11 +94,11 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
 
     	//////////
     	// static member functions
-    	static void 	preloadMessCallback(void *data, t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);
+    	static void 	preloadMessCallback(void *data, t_symbol *filename, t_float baseImage, t_float topImage, t_float skipRate);
     	static void 	downloadImageCallback(void *data);
     	static void 	purgeImageCallback(void *data);
-    	static void 	textureMessCallback(void *data, t_floatarg type);
-    	static void 	repeatMessCallback(void *data, t_floatarg type);
+    	static void 	textureMessCallback(void *data, t_float type);
+    	static void 	repeatMessCallback(void *data, t_float type);
 };
 
 #endif	// for header file

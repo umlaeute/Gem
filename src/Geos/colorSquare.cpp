@@ -143,19 +143,19 @@ void colorSquare :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert3MessCallback),
     	    gensym("vert3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
-void colorSquare :: vert0MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b)
+void colorSquare :: vert0MessCallback(void *data, t_float r, t_float g, t_float b)
 {
     GetMyClass(data)->vertColorMess(0, r, g, b);
 }
-void colorSquare :: vert1MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b)
+void colorSquare :: vert1MessCallback(void *data, t_float r, t_float g, t_float b)
 {
     GetMyClass(data)->vertColorMess(1, r, g, b);
 }
-void colorSquare :: vert2MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b)
+void colorSquare :: vert2MessCallback(void *data, t_float r, t_float g, t_float b)
 {
     GetMyClass(data)->vertColorMess(2, r, g, b);
 }
-void colorSquare :: vert3MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b)
+void colorSquare :: vert3MessCallback(void *data, t_float r, t_float g, t_float b)
 {
     GetMyClass(data)->vertColorMess(3, r, g, b);
 }

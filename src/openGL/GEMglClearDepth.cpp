@@ -62,6 +62,6 @@ void GEMglClearDepth :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearDepth::depthMessCallback),  	gensym("depth"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClearDepth :: depthMessCallback (void* data, float arg0){
+void GEMglClearDepth :: depthMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->depthMess ( arg0);
 }

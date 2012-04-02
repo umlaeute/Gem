@@ -79,7 +79,7 @@ void pix_zoom :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_zoom::zoomMessCallback),
     	    gensym("zoom"), A_FLOAT, A_FLOAT, A_NULL);
 }
-void pix_zoom :: zoomMessCallback(void *data, t_floatarg xMag, t_floatarg yMag)
+void pix_zoom :: zoomMessCallback(void *data, t_float xMag, t_float yMag)
 {
     GetMyClass(data)->zoomMess((float)xMag, (float)yMag);
 }

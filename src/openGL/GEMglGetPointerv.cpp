@@ -66,6 +66,6 @@ void GEMglGetPointerv :: obj_setupCallback(t_class *classPtr) {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetPointerv::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglGetPointerv :: pnameMessCallback (void* data, t_floatarg arg0) {
+void GEMglGetPointerv :: pnameMessCallback (void* data, t_float arg0) {
 	GetMyClass(data)->pnameMess ( arg0 );
 }

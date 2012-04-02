@@ -348,12 +348,12 @@ void pix_puzzle :: bangMessCallback(void *data)
   GetMyClass(data)->shuffle();
 }
 
-void pix_puzzle :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
+void pix_puzzle :: sizeMessCallback(void *data, t_float width, t_float height)
 {
   GetMyClass(data)->sizeMess((int)width, (int)height);
 }
 
-void pix_puzzle :: moveMessCallback(void *data, t_floatarg state)
+void pix_puzzle :: moveMessCallback(void *data, t_float state)
 {
   GetMyClass(data)->moveMess((int)state);
 }

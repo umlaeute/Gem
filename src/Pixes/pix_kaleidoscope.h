@@ -200,15 +200,15 @@ class GEM_EXTERN pix_kaleidoscope : public GemPixObj
 
     	//////////
     	// Static member functions
-        static void 	sourceCtrCallback(void *data, t_floatarg m_SourceCentreX, t_floatarg m_SourceCentreY);
-        static void 	outputCtrCallback(void *data, t_floatarg m_OutputCentreX, t_floatarg m_SourceCentreY);
-    	static void 	outputAngCallback(void *data, t_floatarg m_OutputAnglePreIncrement);
-	static void 	sourceAngCallback(void *data, t_floatarg m_SourceAnglePreIncrement);
-    	static void 	outputAngleCallback(void *data, t_floatarg m_OutputAnglePreIncrement);
-	static void 	sourceAngleCallback(void *data, t_floatarg m_SourceAnglePreIncrement);
-    	static void 	divCallback(void *data, t_floatarg m_Divisions);
-	static void 	sapCallback(void *data, t_floatarg m_SourceAngleProportion);
-	static void 	rlpCallback(void *data, t_floatarg m_ReflectionLineProportion);
+        static void 	sourceCtrCallback(void *data, t_float m_SourceCentreX, t_float m_SourceCentreY);
+        static void 	outputCtrCallback(void *data, t_float m_OutputCentreX, t_float m_SourceCentreY);
+    	static void 	outputAngCallback(void *data, t_float m_OutputAnglePreIncrement);
+	static void 	sourceAngCallback(void *data, t_float m_SourceAnglePreIncrement);
+    	static void 	outputAngleCallback(void *data, t_float m_OutputAnglePreIncrement);
+	static void 	sourceAngleCallback(void *data, t_float m_SourceAnglePreIncrement);
+    	static void 	divCallback(void *data, t_float m_Divisions);
+	static void 	sapCallback(void *data, t_float m_SourceAngleProportion);
+	static void 	rlpCallback(void *data, t_float m_ReflectionLineProportion);
 };
 
 #endif	// for header file

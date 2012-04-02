@@ -73,7 +73,7 @@ class GEM_EXTERN pix_mix : public GemPixDualObj
     	//////////
     	// Static member functions
 
-        //static void gainCallback       (void *data, t_floatarg X, t_floatarg Y);
+        //static void gainCallback       (void *data, t_float X, t_float Y);
 	static void gainCallback       (void *data, t_symbol*,int,t_atom*);
 
 

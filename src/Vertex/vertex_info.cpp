@@ -79,7 +79,7 @@ void vertex_info :: obj_setupCallback(t_class *classPtr)
     	    gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
-void vertex_info :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg counter)
+void vertex_info :: vertexMessCallback(void *data,  t_float num, t_float counter)
 {
   GetMyClass(data)->m_vertNum=(static_cast<int>(num));
   GetMyClass(data)->m_vertCount=(static_cast<int>(counter));

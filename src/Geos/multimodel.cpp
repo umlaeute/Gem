@@ -276,7 +276,7 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "smooth", smoothMess, float);
 }
-void multimodel :: openMessCallback(void *data, t_symbol *filesymbol, t_floatarg baseModel,
+void multimodel :: openMessCallback(void *data, t_symbol *filesymbol, t_float baseModel,
                                     t_floatarg topModel, t_floatarg skipRate)
 {
   GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel, skipRate);

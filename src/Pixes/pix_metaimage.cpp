@@ -1102,17 +1102,17 @@ void pix_metaimage :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::cheapCallback),
 		  gensym("cheap"), A_DEFFLOAT, A_NULL);
 }
-void pix_metaimage :: sizeCallback(void *data, t_floatarg sz)
+void pix_metaimage :: sizeCallback(void *data, t_float sz)
 {
   GetMyClass(data)->m_Size=(sz);
   GetMyClass(data)->setPixModified();
 }
-void pix_metaimage :: distanceCallback(void *data, t_floatarg m_DoDistanceBased)
+void pix_metaimage :: distanceCallback(void *data, t_float m_DoDistanceBased)
 {
   GetMyClass(data)->m_DoDistanceBased=(m_DoDistanceBased);
   GetMyClass(data)->setPixModified();
 }
-void pix_metaimage :: cheapCallback(void *data, t_floatarg m_DoCheapAndNasty)
+void pix_metaimage :: cheapCallback(void *data, t_float m_DoCheapAndNasty)
 {
   GetMyClass(data)->m_DoCheapAndNasty=(m_DoCheapAndNasty);
   GetMyClass(data)->setPixModified();

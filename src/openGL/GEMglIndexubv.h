@@ -51,6 +51,6 @@ class GEM_EXTERN GEMglIndexubv : public GemGLBase
 	  t_inlet *m_inlet;
 
 	// static member functions
-         static void    cMessCallback (void*, t_floatarg);
+         static void    cMessCallback (void*, t_float);
 };
 #endif // for header file

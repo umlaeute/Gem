@@ -105,7 +105,7 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void autoCallback       (void *data, t_floatarg state);
+  static void autoCallback       (void *data, t_float state);
 };
 
 #endif	// for header file

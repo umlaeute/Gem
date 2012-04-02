@@ -60,9 +60,9 @@ class GEM_EXTERN GEMglProgramStringARB : public GemGLBase
 	  t_inlet *m_inlet[4];
 
 	// static member functions
-	  static void	 targetMessCallback (void*, t_floatarg);
-	  static void	 formatMessCallback (void*, t_floatarg);
-	  static void	 lenMessCallback (void*, t_floatarg);
+	  static void	 targetMessCallback (void*, t_float);
+	  static void	 formatMessCallback (void*, t_float);
+	  static void	 lenMessCallback (void*, t_float);
 	  static void	 stringMessCallback (void*, t_symbol*);
 };
 #endif // for header file

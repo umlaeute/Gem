@@ -155,31 +155,31 @@ void GEMglMap2f :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap2f::pointsMessCallback),  	gensym("points"), A_GIMME, A_NULL);
 }
 
-void GEMglMap2f :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: u1MessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: u1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: u2MessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: u2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: ustrideMessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: ustrideMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->ustrideMess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: uorderMessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: uorderMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->uorderMess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: v1MessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: v1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->v1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: v2MessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: v2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->v2Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: vstrideMessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: vstrideMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->vstrideMess ( static_cast<t_float>(arg0));
 }
-void GEMglMap2f :: vorderMessCallback (void* data, t_floatarg arg0){
+void GEMglMap2f :: vorderMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->vorderMess ( static_cast<t_float>(arg0));
 }
 void GEMglMap2f :: pointsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

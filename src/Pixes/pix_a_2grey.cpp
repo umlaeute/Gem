@@ -102,7 +102,7 @@ void pix_a_2grey :: obj_setupCallback(t_class *classPtr)
     	    gensym("alpha"), A_FLOAT, A_NULL);
 }
 
-void pix_a_2grey :: alphaMessCallback(void *data, t_floatarg alphaval)
+void pix_a_2grey :: alphaMessCallback(void *data, t_float alphaval)
 {
     GetMyClass(data)->alphaMess(alphaval);
 }

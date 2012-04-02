@@ -125,8 +125,8 @@ class GEM_EXTERN pix_videoOS : public GemBase
   // static member functions
 
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
-  static void offsetMessCallback(void *data, t_floatarg x, t_floatarg y);
-  static void swapMessCallback(void *data, t_floatarg state);
+  static void offsetMessCallback(void *data, t_float x, t_float y);
+  static void swapMessCallback(void *data, t_float state);
 
   /* dummy callbacks; won't do anything, but are here for future compatibility */
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);

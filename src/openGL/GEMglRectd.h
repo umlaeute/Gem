@@ -59,9 +59,9 @@ class GEM_EXTERN GEMglRectd : public GemGLBase
 	  t_inlet *m_inlet[4];
 
 	// static member functions
-	  static void	 x1MessCallback (void*, t_floatarg);
-	  static void	 y1MessCallback (void*, t_floatarg);
-	  static void	 x2MessCallback (void*, t_floatarg);
-	  static void	 y2MessCallback (void*, t_floatarg);
+	  static void	 x1MessCallback (void*, t_float);
+	  static void	 y1MessCallback (void*, t_float);
+	  static void	 x2MessCallback (void*, t_float);
+	  static void	 y2MessCallback (void*, t_float);
 };
 #endif // for header file

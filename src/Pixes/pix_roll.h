@@ -64,8 +64,8 @@ class GEM_EXTERN pix_roll : public GemPixObj
   //////////
   // Static member functions
 
-  static void rollCallback       (void *data, t_floatarg value);
-  static void axisCallback       (void *data, t_floatarg value);
+  static void rollCallback       (void *data, t_float value);
+  static void axisCallback       (void *data, t_float value);
 };
 
 #endif

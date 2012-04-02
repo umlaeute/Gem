@@ -86,15 +86,15 @@ void GEMglScissor :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglScissor::heightMessCallback),  	gensym("height"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglScissor :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglScissor :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglScissor :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglScissor :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglScissor :: widthMessCallback (void* data, t_floatarg arg0){
+void GEMglScissor :: widthMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
-void GEMglScissor :: heightMessCallback (void* data, t_floatarg arg0){
+void GEMglScissor :: heightMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->heightMess ( static_cast<t_float>(arg0));
 }

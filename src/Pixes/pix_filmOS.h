@@ -164,8 +164,8 @@ class GEM_EXTERN pix_filmOS : public GemBase
   // static member functions
   static void openMessCallback   (void *data, t_symbol *, int, t_atom*);
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void autoCallback       (void *data, t_floatarg state);
-  // static void colorspaceCallback(void *data, t_floatarg state);
+  static void autoCallback       (void *data, t_float state);
+  // static void colorspaceCallback(void *data, t_float state);
   static void colorspaceCallback(void *data, t_symbol *state);
 };
 #endif	// for header file

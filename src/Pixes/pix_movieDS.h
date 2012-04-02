@@ -170,9 +170,9 @@ class GEM_EXTERN pix_movieDS : public GemBase
 	// static member functions
 	static void openMessCallback(void *data, t_symbol *filename);
 	static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
-	static void autoCallback(void *data, t_floatarg state);
-	static void rateCallback(void *data, t_floatarg state);
-	static void rectangleCallback(void *data, t_floatarg state);
+	static void autoCallback(void *data, t_float state);
+	static void rateCallback(void *data, t_float state);
+	static void rectangleCallback(void *data, t_float state);
 };
 
 HRESULT movieGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);

@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglColor3ub : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 redMessCallback (void*, t_floatarg);
-	  static void	 greenMessCallback (void*, t_floatarg);
-	  static void	 blueMessCallback (void*, t_floatarg);
+	  static void	 redMessCallback (void*, t_float);
+	  static void	 greenMessCallback (void*, t_float);
+	  static void	 blueMessCallback (void*, t_float);
 };
 #endif // for header file

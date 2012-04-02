@@ -503,7 +503,7 @@ void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::smoothCallback),
 		  gensym("smooth"), A_DEFFLOAT, A_NULL);
 }
-void pix_colorreduce :: countCallback(void *data, t_floatarg m_TargetColorCount)
+void pix_colorreduce :: countCallback(void *data, t_float m_TargetColorCount)
 {
   if(m_TargetColorCount>255)m_TargetColorCount=255.f;
   if(m_TargetColorCount<0)m_TargetColorCount=0.f;
@@ -511,7 +511,7 @@ void pix_colorreduce :: countCallback(void *data, t_floatarg m_TargetColorCount)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersistence)
+void pix_colorreduce :: persistCallback(void *data, t_float m_PalettePersistence)
 {
   if(m_PalettePersistence>255)m_PalettePersistence=255.f;
   if(m_PalettePersistence<0)m_PalettePersistence=0.f;
@@ -519,7 +519,7 @@ void pix_colorreduce :: persistCallback(void *data, t_floatarg m_PalettePersiste
   GetMyClass(data)->setPixModified();
 }
 
-void pix_colorreduce :: smoothCallback(void *data, t_floatarg m_BoundarySmoothing)
+void pix_colorreduce :: smoothCallback(void *data, t_float m_BoundarySmoothing)
 {
   GetMyClass(data)->m_BoundarySmoothing=!(!static_cast<int>(m_BoundarySmoothing));
   GetMyClass(data)->setPixModified();

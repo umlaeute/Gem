@@ -74,8 +74,8 @@ class GEM_EXTERN pix_background : public GemPixObj
   //////////
   // Static member functions
 
-  static void rangeCallback       (void *data, t_floatarg Y, t_floatarg U, t_floatarg V);
-  //  static void rangeNCallback      (void *data, t_floatarg Y, t_floatarg U, t_floatarg V);
+  static void rangeCallback       (void *data, t_float Y, t_float U, t_float V);
+  //  static void rangeNCallback      (void *data, t_float Y, t_float U, t_float V);
   static void rangeNCallback      (void *data, t_symbol*,int,t_atom*);
   static void resetCallback       (void *data);
 

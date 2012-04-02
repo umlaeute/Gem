@@ -128,17 +128,17 @@ class GEM_EXTERN gemwin : public CPPExtern
   // just call GemMan directly
   static void 	destroyMessCallback(void *);
   static void 	printMessCallback(void *);
-  static void 	profileMessCallback(void *, t_floatarg state);
+  static void 	profileMessCallback(void *, t_float state);
   static void 	resetMessCallback(void *);
-  static void 	lightingMessCallback(void *, t_floatarg state);
-  static void 	borderMessCallback(void *, t_floatarg state);
-  static void 	frameMessCallback(void *, t_floatarg framesPerSecond);
+  static void 	lightingMessCallback(void *, t_float state);
+  static void 	borderMessCallback(void *, t_float state);
+  static void 	frameMessCallback(void *, t_float framesPerSecond);
   static void	perspectiveMessCallback(void *, t_symbol *, int argc, t_atom *argv);
   static void	viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
-  static void 	stereoMessCallback(void *data, t_floatarg state);
-  static void	stereoFocMessCallback(void *, t_floatarg state);
-  static void 	stereoSepMessCallback(void *, t_floatarg state);
-  static void 	stereoLineMessCallback(void *, t_floatarg state);
+  static void 	stereoMessCallback(void *data, t_float state);
+  static void	stereoFocMessCallback(void *, t_float state);
+  static void 	stereoSepMessCallback(void *, t_float state);
+  static void 	stereoLineMessCallback(void *, t_float state);
 };
 
 #endif	// for header file

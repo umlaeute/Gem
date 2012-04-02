@@ -65,6 +65,6 @@ void GEMglBlendEquation :: obj_setupCallback(t_class *classPtr) {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBlendEquation::modeMessCallback),  	gensym("mode"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglBlendEquation :: modeMessCallback (void* data, t_floatarg arg0){
+void GEMglBlendEquation :: modeMessCallback (void* data, t_float arg0){
   GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }

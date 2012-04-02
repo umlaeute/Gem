@@ -202,7 +202,7 @@ void pix_threshold :: vecThreshMessCallback(void *data, t_symbol *, int argc, t_
 {
     GetMyClass(data)->vecThreshMess(argc, argv);
 }
-void pix_threshold :: floatThreshMessCallback(void *data, t_floatarg thresh)
+void pix_threshold :: floatThreshMessCallback(void *data, t_float thresh)
 {
     GetMyClass(data)->floatThreshMess((float)thresh);
 }

@@ -58,6 +58,6 @@ void GEMglRasterPos2dv :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2dv::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglRasterPos2dv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1) {
+void GEMglRasterPos2dv :: vMessCallback (void* data, t_float arg0, t_float arg1) {
 	GetMyClass(data)->vMess ( arg0, arg1);
 }

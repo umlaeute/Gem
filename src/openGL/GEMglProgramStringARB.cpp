@@ -111,13 +111,13 @@ void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
 									gensym("string"), A_DEFSYMBOL, A_NULL);
 };
 
-void GEMglProgramStringARB :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglProgramStringARB :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( arg0 );
 }
-void GEMglProgramStringARB :: formatMessCallback (void* data, t_floatarg arg1){
+void GEMglProgramStringARB :: formatMessCallback (void* data, t_float arg1){
 	GetMyClass(data)->formatMess ( arg1 );
 }
-void GEMglProgramStringARB :: lenMessCallback (void* data, t_floatarg arg2){
+void GEMglProgramStringARB :: lenMessCallback (void* data, t_float arg2){
 	GetMyClass(data)->lenMess ( arg2 );
 }
 void GEMglProgramStringARB :: stringMessCallback (void* data, t_symbol* arg3){

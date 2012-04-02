@@ -49,6 +49,6 @@ class GEM_EXTERN GEMglActiveTextureARB : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 texUnitMessCallback (void*, t_floatarg);
+	  static void	 texUnitMessCallback (void*, t_float);
 };
 #endif // for header file

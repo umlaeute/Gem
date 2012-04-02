@@ -43,7 +43,7 @@ class GEM_EXTERN GEMglGetPointerv : public GemGLBase
 
 	// variable
 	GLenum pname;
-	virtual void	pnameMess(t_floatarg);	// FUN
+	virtual void	pnameMess(t_float);	// FUN
 	GLvoid **params;		// VAR
 
 	private:
@@ -52,6 +52,6 @@ class GEM_EXTERN GEMglGetPointerv : public GemGLBase
 	  t_inlet *m_inlet;
 
 	// static member functions
-         static void    pnameMessCallback (void*,t_floatarg);
+         static void    pnameMessCallback (void*,t_float);
 };
 #endif // for header file

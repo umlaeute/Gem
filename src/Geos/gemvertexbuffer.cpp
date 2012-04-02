@@ -50,7 +50,7 @@ gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void) {
   array=NULL;
 }
 void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_) {
-  t_float*tmp=NULL;
+  float*tmp=NULL;
   try {
     tmp=new float[size_*stride];
   } catch (std::bad_alloc& ba)  {
@@ -371,7 +371,7 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
 	int npoints, i;
 	t_word *vec;
 
-  t_float*array=vb.array;
+  float*array=vb.array;
   t_symbol*s=gensym(tab_name.c_str());
 	pd_findbyclass(s, garray_class);
 	if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))

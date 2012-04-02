@@ -350,13 +350,13 @@ void pix_deinterlace :: obj_setupCallback(t_class *classPtr)
 	class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_deinterlace::adaptiveMessCallback), gensym("adaptive"),A_FLOAT,A_NULL);
 }
 
-void pix_deinterlace :: modeMessCallback(void *data,t_floatarg mode)
+void pix_deinterlace :: modeMessCallback(void *data,t_float mode)
 {
 
 	GetMyClass(data)->m_mode = (int)mode;
 
 }
-void pix_deinterlace :: adaptiveMessCallback(void *data,t_floatarg mode)
+void pix_deinterlace :: adaptiveMessCallback(void *data,t_float mode)
 {
 
 	GetMyClass(data)->m_adaptive = (int)mode;

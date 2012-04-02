@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglPixelZoom : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 xfactorMessCallback (void*, t_floatarg);
-	  static void	 yfactorMessCallback (void*, t_floatarg);
+	  static void	 xfactorMessCallback (void*, t_float);
+	  static void	 yfactorMessCallback (void*, t_float);
 };
 #endif // for header file

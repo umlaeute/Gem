@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglTexCoord3i : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 sMessCallback (void*, t_floatarg);
-	  static void	 tMessCallback (void*, t_floatarg);
-	  static void	 rMessCallback (void*, t_floatarg);
+	  static void	 sMessCallback (void*, t_float);
+	  static void	 tMessCallback (void*, t_float);
+	  static void	 rMessCallback (void*, t_float);
 };
 #endif // for header file

@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglPolygonOffset : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 factorMessCallback (void*, t_floatarg);
-	  static void	 unitsMessCallback (void*, t_floatarg);
+	  static void	 factorMessCallback (void*, t_float);
+	  static void	 unitsMessCallback (void*, t_float);
 };
 #endif // for header file

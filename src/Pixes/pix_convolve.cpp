@@ -740,12 +740,12 @@ void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc, t_atom
 {
     GetMyClass(data)->matrixMess(argc, argv);
 }
-void pix_convolve :: rangeMessCallback(void *data, t_floatarg range)
+void pix_convolve :: rangeMessCallback(void *data, t_float range)
 {
     GetMyClass(data)->rangeMess(range);
 }
 
-void pix_convolve :: chromaMessCallback(void *data, t_floatarg value)
+void pix_convolve :: chromaMessCallback(void *data, t_float value)
 {
     GetMyClass(data)->m_chroma=static_cast<int>(value);
 }

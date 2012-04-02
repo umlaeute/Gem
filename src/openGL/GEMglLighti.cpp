@@ -77,12 +77,12 @@ void GEMglLighti :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLighti::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglLighti :: lightMessCallback (void* data, t_floatarg arg0){
+void GEMglLighti :: lightMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->lightMess ( static_cast<t_float>(arg0));
 }
-void GEMglLighti :: pnameMessCallback (void* data, t_floatarg arg0){
+void GEMglLighti :: pnameMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglLighti :: paramMessCallback (void* data, t_floatarg arg0){
+void GEMglLighti :: paramMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

@@ -263,11 +263,11 @@ class GEM_EXTERN pix_recordQT : public GemBase
     	//////////
     	// static member functions
     	static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-    	static void 	autoMessCallback(void *data, t_floatarg on);
+    	static void 	autoMessCallback(void *data, t_float on);
     	static void 	bangMessCallback(void *data);
-    	static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
-    	static void 	posMessCallback(void *data, t_floatarg x, t_floatarg y);
-		static void 	recordMessCallback(void *data, t_floatarg on);
+    	static void 	sizeMessCallback(void *data, t_float width, t_float height );
+    	static void 	posMessCallback(void *data, t_float x, t_float y);
+		static void 	recordMessCallback(void *data, t_float on);
 		static void 	dialogMessCallback(void *data);
 		static void 	codeclistMessCallback(void *data);
 		static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);

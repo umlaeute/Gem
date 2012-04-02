@@ -77,12 +77,12 @@ void GEMglTexCoord3f :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord3f::rMessCallback),  	gensym("r"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexCoord3f :: sMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord3f :: sMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord3f :: tMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord3f :: tMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord3f :: rMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord3f :: rMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->rMess ( static_cast<t_float>(arg0));
 }

@@ -126,7 +126,7 @@ void vertex_quad :: obj_setupCallback(t_class *classPtr)
     	    gensym("blend"), A_FLOAT, A_NULL);
 }
 
-void vertex_quad :: blendMessCallback(void *data, t_floatarg size)
+void vertex_quad :: blendMessCallback(void *data, t_float size)
 {
   GetMyClass(data)->m_blend=static_cast<int>(size);
 }

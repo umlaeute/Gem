@@ -63,6 +63,6 @@ void GEMglEvalCoord1fv :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord1fv::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalCoord1fv :: vMessCallback (void* data, t_floatarg arg0) {
+void GEMglEvalCoord1fv :: vMessCallback (void* data, t_float arg0) {
 	GetMyClass(data)->vMess ( arg0);
 }

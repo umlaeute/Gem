@@ -83,12 +83,12 @@ void GEMglEvalMesh1 :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i2MessCallback),  	gensym("i2"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalMesh1 :: modeMessCallback (void* data, t_floatarg arg0){
+void GEMglEvalMesh1 :: modeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
-void GEMglEvalMesh1 :: i1MessCallback (void* data, t_floatarg arg0){
+void GEMglEvalMesh1 :: i1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->i1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglEvalMesh1 :: i2MessCallback (void* data, t_floatarg arg0){
+void GEMglEvalMesh1 :: i2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->i2Mess ( static_cast<t_float>(arg0));
 }

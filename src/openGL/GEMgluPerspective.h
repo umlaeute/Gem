@@ -58,9 +58,9 @@ class GEM_EXTERN GEMgluPerspective : public GemGLBase
 	  t_inlet *m_inlet[4];
 
 	// static member functions
-	  static void	 fovyMessCallback (void*, t_floatarg);
-	  static void	 aspectMessCallback (void*, t_floatarg);
-	  static void	 nearMessCallback (void*, t_floatarg);
-	  static void	 farMessCallback (void*, t_floatarg);
+	  static void	 fovyMessCallback (void*, t_float);
+	  static void	 aspectMessCallback (void*, t_float);
+	  static void	 nearMessCallback (void*, t_float);
+	  static void	 farMessCallback (void*, t_float);
 };
 #endif // for header file

@@ -237,7 +237,7 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
           gensym("repeat"), A_FLOAT, A_NULL);
 }
 
-void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_floatarg baseImage,
+void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_float baseImage,
 					     t_floatarg topImage, t_floatarg skipRate)
 {
   if ((int)skipRate == 0)
@@ -258,11 +258,11 @@ void pix_imageInPlace :: purgeImageCallback(void *data)
 {
   GetMyClass(data)->purgeMess();
 }
-void pix_imageInPlace :: textureMessCallback(void *data, t_floatarg quality)
+void pix_imageInPlace :: textureMessCallback(void *data, t_float quality)
 {
   GetMyClass(data)->textureQuality((int)quality);
 }
-void pix_imageInPlace :: repeatMessCallback(void *data, t_floatarg repeat)
+void pix_imageInPlace :: repeatMessCallback(void *data, t_float repeat)
 {
   GetMyClass(data)->repeatMess((int)repeat);
 }

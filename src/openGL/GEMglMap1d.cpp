@@ -120,19 +120,19 @@ void GEMglMap1d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::pointsMessCallback),  	gensym("points"), A_GIMME, A_NULL);
 }
 
-void GEMglMap1d :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglMap1d :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( arg0);
 }
-void GEMglMap1d :: u1MessCallback (void* data, t_floatarg arg0){
+void GEMglMap1d :: u1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u1Mess ( arg0);
 }
-void GEMglMap1d :: u2MessCallback (void* data, t_floatarg arg0){
+void GEMglMap1d :: u2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u2Mess ( arg0);
 }
-void GEMglMap1d :: strideMessCallback (void* data, t_floatarg arg0){
+void GEMglMap1d :: strideMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->strideMess ( arg0);
 }
-void GEMglMap1d :: orderMessCallback (void* data, t_floatarg arg0){
+void GEMglMap1d :: orderMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->orderMess (arg0);
 }
 void GEMglMap1d :: pointsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){

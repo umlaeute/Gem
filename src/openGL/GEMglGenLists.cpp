@@ -62,6 +62,6 @@ void GEMglGenLists :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenLists::rangeMessCallback),  	gensym("range"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglGenLists :: rangeMessCallback (void* data, t_floatarg arg0){
+void GEMglGenLists :: rangeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->rangeMess (arg0);
 }

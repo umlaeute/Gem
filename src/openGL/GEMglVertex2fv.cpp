@@ -58,6 +58,6 @@ void GEMglVertex2fv :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex2fv::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglVertex2fv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1) {
+void GEMglVertex2fv :: vMessCallback (void* data, t_float arg0, t_float arg1) {
 	GetMyClass(data)->vMess ( arg0, arg1);
 }

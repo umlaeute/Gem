@@ -68,9 +68,9 @@ void GEMglPixelZoom :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelZoom::yfactorMessCallback),  	gensym("yfactor"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPixelZoom :: xfactorMessCallback (void* data, t_floatarg arg0){
+void GEMglPixelZoom :: xfactorMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xfactorMess ( static_cast<t_float>(arg0));
 }
-void GEMglPixelZoom :: yfactorMessCallback (void* data, t_floatarg arg0){
+void GEMglPixelZoom :: yfactorMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yfactorMess ( static_cast<t_float>(arg0));
 }

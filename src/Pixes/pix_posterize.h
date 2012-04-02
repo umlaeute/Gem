@@ -59,8 +59,8 @@ CPPEXTERN_HEADER(pix_posterize, GemPixObj);
 
     	//////////
     	// Static member functions
-    	static void 	factorMessCallback(void *data, t_floatarg size);
-        static void 	limitMessCallback(void *data, t_floatarg size);
+    	static void 	factorMessCallback(void *data, t_float size);
+        static void 	limitMessCallback(void *data, t_float size);
 
 };
 

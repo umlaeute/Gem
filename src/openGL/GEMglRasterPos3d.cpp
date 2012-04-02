@@ -77,12 +77,12 @@ void GEMglRasterPos3d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos3d::zMessCallback),  	gensym("z"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRasterPos3d :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos3d :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos3d :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos3d :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos3d :: zMessCallback (void* data, t_floatarg arg0){
+void GEMglRasterPos3d :: zMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

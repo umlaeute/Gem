@@ -56,7 +56,7 @@ class GEM_EXTERN GEMglEvalCoord2f : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 uMessCallback (void*, t_floatarg);
-	  static void	 vMessCallback (void*, t_floatarg);
+	  static void	 uMessCallback (void*, t_float);
+	  static void	 vMessCallback (void*, t_float);
 };
 #endif // for header file

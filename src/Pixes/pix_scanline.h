@@ -61,8 +61,8 @@ CPPEXTERN_HEADER(pix_scanline, GemPixObj);
     	//////////
     	// Static member functions
 
-        static void rollCallback       (void *data, t_floatarg value);
-        static void modeCallback       (void *data, t_floatarg value);
+        static void rollCallback       (void *data, t_float value);
+        static void modeCallback       (void *data, t_float value);
 
 
 };

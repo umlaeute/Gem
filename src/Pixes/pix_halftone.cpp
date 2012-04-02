@@ -1227,7 +1227,7 @@ void pix_halftone :: obj_setupCallback(t_class *classPtr)
 		  gensym("angleDEG"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_halftone :: sizeCallback(void *data, t_floatarg m_CellSize)
+void pix_halftone :: sizeCallback(void *data, t_float m_CellSize)
 {
   int size=static_cast<int>(m_CellSize);
   if(size<1){
@@ -1242,7 +1242,7 @@ void pix_halftone :: sizeCallback(void *data, t_floatarg m_CellSize)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
+void pix_halftone :: styleCallback(void *data, t_float m_Style)
 {
   int style=static_cast<int>(m_Style);
   if(style<0||style>4){
@@ -1252,22 +1252,22 @@ void pix_halftone :: styleCallback(void *data, t_floatarg m_Style)
   GetMyClass(data)->m_Style=style;
   GetMyClass(data)->setPixModified();
 }
-void pix_halftone :: smoothCallback(void *data, t_floatarg m_Smoothing)
+void pix_halftone :: smoothCallback(void *data, t_float m_Smoothing)
 {
   GetMyClass(data)->m_Smoothing=CLAMP(m_Smoothing);
   GetMyClass(data)->setPixModified();
 }
-void pix_halftone :: angleCallback(void *data, t_floatarg m_Angle)
+void pix_halftone :: angleCallback(void *data, t_float m_Angle)
 {
   GetMyClass(data)->m_Angle=(m_Angle);
   GetMyClass(data)->setPixModified();
 }
-void pix_halftone :: smoothNCallback(void *data, t_floatarg m_Smoothing)
+void pix_halftone :: smoothNCallback(void *data, t_float m_Smoothing)
 {
   GetMyClass(data)->m_Smoothing=CLAMP(255.f*m_Smoothing);
   GetMyClass(data)->setPixModified();
 }
-void pix_halftone :: angleDEGCallback(void *data, t_floatarg m_Angle)
+void pix_halftone :: angleDEGCallback(void *data, t_float m_Angle)
 {
   GetMyClass(data)->m_Angle=(atan2f(1,1)*m_Angle/45.0);
   GetMyClass(data)->setPixModified();

@@ -50,8 +50,8 @@ class GEM_EXTERN pix_contrast : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	contrastMessCallback(void *data, t_floatarg contrast);
-		static void 	saturationMessCallback(void *data, t_floatarg contrast);
+    	static void 	contrastMessCallback(void *data, t_float contrast);
+		static void 	saturationMessCallback(void *data, t_float contrast);
 
 };
 #endif

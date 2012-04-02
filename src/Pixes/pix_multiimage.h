@@ -130,8 +130,8 @@ class GEM_EXTERN pix_multiimage : public GemBase
 
     	//////////
     	// static member functions
-    	static void 	openMessCallback(void *data, t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);
-    	static void 	changeImageCallback(void *data, t_floatarg imgNum);
+    	static void 	openMessCallback(void *data, t_symbol *filename, t_float baseImage, t_float topImage, t_float skipRate);
+    	static void 	changeImageCallback(void *data, t_float imgNum);
 };
 
 #endif	// for header file

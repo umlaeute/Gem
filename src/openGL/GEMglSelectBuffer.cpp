@@ -89,6 +89,6 @@ void GEMglSelectBuffer :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglSelectBuffer::sizeMessCallback),  	gensym("size"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglSelectBuffer :: sizeMessCallback (void* data, t_floatarg arg0){
+void GEMglSelectBuffer :: sizeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sizeMess (arg0);
 }

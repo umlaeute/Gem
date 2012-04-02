@@ -68,7 +68,7 @@ class GEM_EXTERN vertex_scale : public GemBase
  private:
 
   static void 	modeMessCallback(void *data, t_symbol*, int, t_atom*);
-  static void 	vertexMessCallback(void *data, t_floatarg num, t_floatarg counter);
+  static void 	vertexMessCallback(void *data, t_float num, t_float counter);
 };
 
 #endif	// for header file

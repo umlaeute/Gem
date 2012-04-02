@@ -76,13 +76,6 @@ class GEM_EXTERN pix_buf : public GemBase
 	void            autoMess(int);
 	bool            m_auto;
 
-
-private:
-
-	//////////
-	// Static member callbacks
-	static void bangMessCallback(void *);
-	static void autoMessCallback(void *, t_floatarg);
 };
 
 #endif	// for header file

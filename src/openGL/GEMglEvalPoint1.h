@@ -53,6 +53,6 @@ class GEM_EXTERN GEMglEvalPoint1 : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 iMessCallback (void*, t_floatarg);
+	  static void	 iMessCallback (void*, t_float);
 };
 #endif // for header file

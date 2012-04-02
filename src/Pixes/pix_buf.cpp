@@ -103,15 +103,7 @@ void pix_buf :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buf),
 		   gensym("pix_separator"), A_DEFFLOAT, A_NULL);
-  class_addbang(classPtr, &pix_buf::bangMessCallback);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buf::autoMessCallback),
-		  gensym("auto"), A_FLOAT, A_NULL);
 
-}
-
-void pix_buf :: bangMessCallback(void *data){
-  GetMyClass(data)->bangMess();
-}
-void pix_buf :: autoMessCallback(void *data, t_floatarg f){
-  GetMyClass(data)->autoMess((int)f);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG1(classPtr, "auto", autoMess, int);
 }

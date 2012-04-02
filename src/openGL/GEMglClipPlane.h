@@ -50,7 +50,7 @@ class GEM_EXTERN GEMglClipPlane : public GemGLBase
   t_inlet *m_inlet[2];
 
   // static member functions
-  static void    vMessCallback (void*, t_floatarg, t_floatarg, t_floatarg, t_floatarg);
-  static void    planeMessCallback (void*, t_floatarg);
+  static void    vMessCallback (void*, t_float, t_float, t_float, t_float);
+  static void    planeMessCallback (void*, t_float);
 };
 #endif // for header file

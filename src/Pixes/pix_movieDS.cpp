@@ -808,17 +808,17 @@ void pix_movieDS::changeImageCallback(void *data, t_symbol *, int argc, t_atom *
 	GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
-void pix_movieDS::autoCallback(void *data, t_floatarg state)
+void pix_movieDS::autoCallback(void *data, t_float state)
 {
 	GetMyClass(data)->m_auto=!(!(int)state);
 }
 
-void pix_movieDS::rateCallback(void *data, t_floatarg state)
+void pix_movieDS::rateCallback(void *data, t_float state)
 {
 	GetMyClass(data)->MovRate(state);
 }
 
-void pix_movieDS::rectangleCallback(void *data, t_floatarg state)
+void pix_movieDS::rectangleCallback(void *data, t_float state)
 {
 	GetMyClass(data)->m_rectangle=(int)state;
 }
