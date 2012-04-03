@@ -76,6 +76,8 @@ void pix_clearblock :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_clearblock :: startRendering()
 {
+  stopRendering();
+
   if (m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
 
@@ -91,7 +93,11 @@ void pix_clearblock :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_clearblock :: stopRendering()
 {
+  if(m_oldcache) {
     if (m_cache) delete m_cache;
+    m_cache=NULL;
+  }
+  m_oldcache=NULL;
 }
 
 /////////////////////////////////////////////////////////
