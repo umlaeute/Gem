@@ -100,21 +100,21 @@ namespace gem { namespace thread {
         // wait till we are signalled new data
 
         me->m_todo.lock();
-        if(me->q_todo.empty()) {
-        empty:
+        while(me->q_todo.empty()) {
           me->m_todo.unlock();
           //std::cerr << "THREAD: waiting for new data...freeze"<<std::endl;
           me->s_newdata.freeze();
           //std::cerr << "THREAD: waiting for new data...thawed "<<me->keeprunning<<std::endl;
 
           // either new data has arrived or we are told to stop
-          if(!me->keeprunning)
-            break;
+          if(!me->keeprunning) {
+            me->isrunning = false;
+            return 0;
+          }
 
           me->m_todo.lock();
         }
-        if(me->q_todo.empty())
-          goto empty;
+
         in=me->q_todo.front();
          me->processingID=in.first;
          me->q_todo.POP();
