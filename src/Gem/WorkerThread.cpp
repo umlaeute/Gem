@@ -94,6 +94,7 @@ namespace gem { namespace thread {
 
         me->m_todo.lock();
         if(me->q_todo.empty()) {
+        empty:
           me->m_todo.unlock();
           //std::cerr << "THREAD: waiting for new data...freeze"<<std::endl;
           me->s_newdata.freeze();
@@ -105,6 +106,8 @@ namespace gem { namespace thread {
 
           me->m_todo.lock();
         }
+        if(me->q_todo.empty())
+          goto empty;
         in=me->q_todo.front();
          me->processingID=in.first;
          me->q_todo.POP();
