@@ -30,10 +30,10 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
+#define MAX_MULTITEX_ID 32
 class GEM_EXTERN pix_multitexture : public GemBase
 {
     CPPEXTERN_HEADER(pix_multitexture, GemBase);
-
     public:
 
         //////////
@@ -63,7 +63,7 @@ class GEM_EXTERN pix_multitexture : public GemBase
 
 	int			m_reqTexUnits; // requested # of texture Units, defaults to m_max
 	GLint			m_max; // maximum # of texture units suppport by the specific card
-	GLint			m_texID[32];
+	GLint			m_texID[MAX_MULTITEX_ID];
 	GLint			m_textureType;
 	int			m_mode; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
 
@@ -82,14 +82,15 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	int             m_oldNumCoords;
 	int             m_oldTexture;
 
+
+  void texUnitMess(int n, int texID);
+  void dimenMess(int, int);
+  void rectangleMess(bool mode);
  private:
 
 	//////////
 	// static member functions
-	static void 	texUnitMessCallback(void *data, float n, float texID);
-	static void		dimenMessCallback(void *data, float sizeX, float sizeY);
-	static void		modeCallback(void *data, t_floatarg quality);
-	static void		parmCallback(void *data, t_symbol*,int , t_atom*);
+	static void		parmCallback(void*,t_symbol*,int , t_atom*);
 };
 
 #endif	// for header file

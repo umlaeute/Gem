@@ -74,9 +74,9 @@ void GEMglBindTexture :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindTexture::textureMessCallback),  	gensym("texture"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglBindTexture :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglBindTexture :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglBindTexture :: textureMessCallback (void* data, t_floatarg arg0){
+void GEMglBindTexture :: textureMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->textureMess ( static_cast<t_float>(arg0));
 }

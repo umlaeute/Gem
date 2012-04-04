@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglPointSize : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 sizeMessCallback (void*, t_floatarg);
+	  static void	 sizeMessCallback (void*, t_float);
 };
 #endif // for header file

@@ -83,12 +83,12 @@ void GEMglDrawArrays :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawArrays::countMessCallback),  	gensym("count"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglDrawArrays :: modeMessCallback (void* data, t_floatarg arg0){
+void GEMglDrawArrays :: modeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
-void GEMglDrawArrays :: firstMessCallback (void* data, t_floatarg arg0){
+void GEMglDrawArrays :: firstMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->firstMess ( static_cast<t_float>(arg0));
 }
-void GEMglDrawArrays :: countMessCallback (void* data, t_floatarg arg0){
+void GEMglDrawArrays :: countMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->countMess ( static_cast<t_float>(arg0));
 }

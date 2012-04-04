@@ -39,7 +39,7 @@ mesh_line :: mesh_line(t_floatarg sizeX)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-mesh_line :: ~mesh_line()
+mesh_line :: ~mesh_line(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -135,20 +135,9 @@ void mesh_line :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void mesh_line :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_line::gridMessCallback),
-                  gensym("grid"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "grid", setGrid, int);
 }
 
-/////////////////////////////////////////////////////////
-// setGrid
-//
-/////////////////////////////////////////////////////////
-
-void mesh_line :: gridMessCallback(void *data, t_floatarg grid)
-{
-  int gridi=static_cast<int>(grid);
-  GetMyClass(data)->setGrid(gridi);
-}
 
 
 

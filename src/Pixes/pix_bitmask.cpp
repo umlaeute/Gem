@@ -186,7 +186,7 @@ void pix_bitmask :: vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom
 {
     GetMyClass(data)->vecMaskMess(argc, argv);
 }
-void pix_bitmask :: floatMaskMessCallback(void *data, t_floatarg mask)
+void pix_bitmask :: floatMaskMessCallback(void *data, t_float mask)
 {
     GetMyClass(data)->intMaskMess((int)mask);
 }

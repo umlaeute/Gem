@@ -304,7 +304,7 @@ void pix_multiimage :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::changeImageCallback),
     	    gensym("img_num"), A_FLOAT, A_NULL);
 }
-void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_floatarg baseImage,
+void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_float baseImage,
                                         t_floatarg topImage, t_floatarg skipRate)
 {
     if ((int)skipRate == 0)
@@ -317,7 +317,7 @@ void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_floata
     else
 		GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
 }
-void pix_multiimage :: changeImageCallback(void *data, t_floatarg imgNum)
+void pix_multiimage :: changeImageCallback(void *data, t_float imgNum)
 {
     GetMyClass(data)->changeImage((int)imgNum);
 }

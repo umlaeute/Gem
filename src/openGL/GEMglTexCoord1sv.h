@@ -48,6 +48,6 @@ class GEM_EXTERN GEMglTexCoord1sv : public GemGLBase
 	  t_inlet *m_inlet;
 
 	// static member functions
-         static void    vMessCallback (void*, t_floatarg);
+         static void    vMessCallback (void*, t_float);
 };
 #endif // for header file

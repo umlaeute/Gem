@@ -43,8 +43,8 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
   : GemShape(1),
     nb_pts_control_X(4), nb_pts_control_Y(4),
     nb_pts_affich_X (30), nb_pts_affich_Y (30),
-    m_drawType(FILL), m_posXYZ(NULL),
-    compute_normal(1)
+    m_posXYZ(NULL),
+    compute_normal(true)
 {
   int i, j, a;
 
@@ -80,6 +80,8 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
   m_drawTypes["control_line1"] = CONTROL_LINE1;
   m_drawTypes["control_line2"] = CONTROL_LINE2;
   m_drawTypes["default"] = FILL;
+
+  m_drawType = FILL;
 }
 
 //////////////////////////////////////////////////////////
@@ -145,7 +147,7 @@ void surface3d :: gridMess(int gridX, int gridY){
 // normal
 //
 /////////////////////////////////////////////////////////
-void surface3d :: normalMess(int normal){
+void surface3d :: normalMess(bool normal){
   compute_normal = normal;
 }
 
@@ -607,31 +609,8 @@ void surface3d :: renderShape(GemState *state){
 //
 /////////////////////////////////////////////////////////
 void surface3d :: obj_setupCallback(t_class *classPtr){
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&surface3d::resolutionMessCallback),
-		  gensym("res"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&surface3d::gridMessCallback),
-		  gensym("grid"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&surface3d::setMessCallback),
-		  gensym("set"), A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&surface3d::normalMessCallback),
-		  gensym("normal"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG2(classPtr, "res",  resolutionMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "grid", gridMess, int, int);
+  CPPEXTERN_MSG5(classPtr, "set", setMess, int, int, float, float, float);
+  CPPEXTERN_MSG1(classPtr, "normal",  normalMess, bool);
 }
-
-void surface3d :: resolutionMessCallback(void *data, t_floatarg resX, t_floatarg resY)
-{
-  GetMyClass(data)->resolutionMess(static_cast<int>(resX), static_cast<int>(resY));
-}
-void surface3d :: gridMessCallback(void *data, t_floatarg gridX, t_floatarg gridY)
-{
-  GetMyClass(data)->gridMess(static_cast<int>(gridX), static_cast<int>(gridY));
-}
-void surface3d :: setMessCallback(void *data, t_floatarg X, t_floatarg Y, t_floatarg posX, t_floatarg posY, t_floatarg posZ)
-{
-  GetMyClass(data)->setMess(static_cast<int>(X), static_cast<int>(Y),
-			    posX, posY, posZ);
-}
-void surface3d :: normalMessCallback(void *data, t_floatarg normalMess)
-{
-  GetMyClass(data)->normalMess(static_cast<int>(normalMess));
-}
-

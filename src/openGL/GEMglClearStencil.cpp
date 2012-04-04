@@ -59,6 +59,6 @@ void GEMglClearStencil :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearStencil::sMessCallback),  	gensym("s"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClearStencil :: sMessCallback (void* data, t_floatarg arg0){
+void GEMglClearStencil :: sMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }

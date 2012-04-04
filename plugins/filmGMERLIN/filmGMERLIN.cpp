@@ -45,26 +45,18 @@ REGISTER_FILMFACTORY("gmerlin", filmGMERLIN);
 /////////////////////////////////////////////////////////
 
 filmGMERLIN :: filmGMERLIN(void) :
-  m_wantedFormat(GL_RGBA),
-  m_fps(0.),
   m_numFrames(-1), m_numTracks(-1),
-  m_curFrame(-1),
   m_file(NULL),
   m_opt(NULL),
-  m_seekable(false),
-  m_gformat(NULL),
-  m_finalformat(new gavl_video_format_t[1]),
-  m_track(0),
-  m_stream(0),
+  m_track(0), m_stream(0),
   m_gframe(NULL),
   m_finalframe(NULL),
   m_gconverter(NULL),
-  m_fps_num(1), m_fps_denum(1),
+  m_fps(0.), m_fps_num(1), m_fps_denum(1),
   m_next_timestamp(0),
 #ifdef USE_FRAMETABLE
   m_frametable(NULL),
 #endif
-  m_lastFrame(0),
   m_doConvert(false)
 {
   m_gconverter=gavl_video_converter_create ();
@@ -217,8 +209,6 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
     post("track %d does not contain a video-stream: skipping");
   }
 
-  m_seekable=bgav_can_seek_sample(m_file);
-
   bgav_set_video_stream(m_file, m_stream, BGAV_STREAM_DECODE);
   if(!bgav_start(m_file)) {
     close();
@@ -226,28 +216,30 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   }
   m_next_timestamp=bgav_video_start_time(m_file, m_track);
 
-  m_gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
-  m_gframe = gavl_video_frame_create_nopad(m_gformat);
+  gavl_video_format_t*gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
+  m_gframe = gavl_video_frame_create_nopad(gformat);
 
-  m_finalformat->frame_width = m_gformat->frame_width;
-  m_finalformat->frame_height = m_gformat->frame_height;
-  m_finalformat->image_width = m_gformat->image_width;
-  m_finalformat->image_height = m_gformat->image_height;
-  m_finalformat->pixel_width = m_gformat->pixel_width;
-  m_finalformat->pixel_height = m_gformat->pixel_height;
-  m_finalformat->frame_duration = m_gformat->frame_duration;
-  m_finalformat->timescale = m_gformat->timescale;
+
+  gavl_video_format_t finalformat[1];
+  finalformat->frame_width = gformat->frame_width;
+  finalformat->frame_height = gformat->frame_height;
+  finalformat->image_width = gformat->image_width;
+  finalformat->image_height = gformat->image_height;
+  finalformat->pixel_width = gformat->pixel_width;
+  finalformat->pixel_height = gformat->pixel_height;
+  finalformat->frame_duration = gformat->frame_duration;
+  finalformat->timescale = gformat->timescale;
 
 #ifdef __APPLE__
-  m_finalformat->pixelformat=GAVL_YUY2;
+  finalformat->pixelformat=GAVL_YUY2;
 #else
-  m_finalformat->pixelformat=GAVL_RGBA_32;
+  finalformat->pixelformat=GAVL_RGBA_32;
 #endif
 	
-  m_finalframe = gavl_video_frame_create_nopad(m_finalformat);
-  m_doConvert= (gavl_video_converter_init (m_gconverter, m_gformat, m_finalformat)>0);
-  m_image.image.xsize=m_gformat->frame_width;
-  m_image.image.ysize=m_gformat->frame_height;
+  m_finalframe = gavl_video_frame_create_nopad(finalformat);
+  m_doConvert= (gavl_video_converter_init (m_gconverter, gformat, finalformat)>0);
+  m_image.image.xsize=gformat->frame_width;
+  m_image.image.ysize=gformat->frame_height;
 #ifdef __APPLE__
   m_image.image.setCsizeByFormat(GL_YUV422_GEM);
 #else
@@ -257,14 +249,14 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   m_image.image.upsidedown=true;
   m_image.newfilm=true;
 
-  if(m_gformat->frame_duration) {
-    m_fps = m_gformat->timescale / m_gformat->frame_duration;
+  if(gformat->frame_duration) {
+    m_fps = gformat->timescale / gformat->frame_duration;
   } else {
-    m_fps = m_gformat->timescale;
+    m_fps = gformat->timescale;
   }
 
-  m_fps_num=m_gformat->timescale;
-  m_fps_denum=m_gformat->frame_duration;
+  m_fps_num=gformat->timescale;
+  m_fps_denum=gformat->frame_duration;
 
   m_numFrames=-1;
 #ifdef USE_FRAMETABLE
@@ -341,7 +333,6 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
 #endif /* GEM_FILMGMERLIN_TRACKSWITCH */
 
   if(imgNum>=m_numFrames || imgNum<0)return film::FAILURE;
-  if(imgNum>0)m_curFrame=imgNum;
 
   if(bgav_can_seek(m_file)) {
     if(0) {

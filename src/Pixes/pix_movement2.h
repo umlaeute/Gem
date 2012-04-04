@@ -34,8 +34,8 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
   void bangMess();
 
  private:
-  static void threshMessCallback(void *data, t_floatarg fthresh);
-  static void lowThreshMessCallback(void *data, t_floatarg fthresh);
+  static void threshMessCallback(void *data, t_float fthresh);
+  static void lowThreshMessCallback(void *data, t_float fthresh);
   static void bangMessCallback(void *data);
 };
 

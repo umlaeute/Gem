@@ -66,8 +66,8 @@ class GEM_EXTERN pix_deinterlace : public GemPixObj
 
 	private:
 
-		static void 	modeMessCallback(void *data, t_floatarg contrast);
-		static void 	adaptiveMessCallback(void *data, t_floatarg contrast);
+		static void 	modeMessCallback(void *data, t_float contrast);
+		static void 	adaptiveMessCallback(void *data, t_float contrast);
 };
 
 

@@ -77,12 +77,12 @@ void GEMglVertex3s :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex3s::zMessCallback),  	gensym("z"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglVertex3s :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex3s :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex3s :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex3s :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex3s :: zMessCallback (void* data, t_floatarg arg0){
+void GEMglVertex3s :: zMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

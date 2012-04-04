@@ -38,32 +38,28 @@ class GEM_EXTERN part_head : public partlib_base
 	    // Constructor
     	part_head(t_floatarg priority);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
-
     protected:
 
     	//////////
     	// Destructor
-    	virtual ~part_head();
+    	virtual ~part_head(void);
 
-		//////////
-		// The particle group
-		int				m_particleGroup;
+    	//////////
+    	virtual void 	renderParticles(GemState *state);
 
     	//////////
     	// The speed of the particle system
     	void	    	speedMess(float speed);
 
+
+      //////////
+      // The particle group
+      int				m_particleGroup;
+
+
     	//////////
     	// The speed of the object
-        float	    	m_speed;
-
-    private:
-
-       	//////////
-    	// static member functions
-    	static void 	speedMessCallback(void *data, t_floatarg speed);
+      float	    	m_speed;
 };
 
 #endif	// for header file

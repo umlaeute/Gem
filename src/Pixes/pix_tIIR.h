@@ -43,7 +43,7 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_tIIR, GemPixObj);
 
-    public:
+ public:
 
   //////////
   // Constructor
@@ -53,7 +53,7 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
 
   //////////
   // Destructor
-  virtual ~pix_tIIR();
+  virtual ~pix_tIIR(void);
 
   //////////
   // Do the processing
@@ -88,7 +88,7 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
 
   //////////
   // the methods
-  static void setMessCallback(void *data, t_symbol*,int,t_atom*);
+  void setMess(t_symbol*,int,t_atom*);
 };
 
 #endif	// for header file

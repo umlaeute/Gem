@@ -68,7 +68,7 @@ primTri :: primTri(t_floatarg size)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-primTri :: ~primTri()
+primTri :: ~primTri(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -146,15 +146,15 @@ void primTri :: obj_setupCallback(t_class *classPtr)
     	    gensym("col3"), A_GIMME, A_NULL);
 }
 
-void primTri :: vect1MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
+void primTri :: vect1MessCallback(void *data, t_float x, t_float y, t_float z)
 {
     GetMyClass(data)->vectMess(0, x, y, z);
 }
-void primTri :: vect2MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
+void primTri :: vect2MessCallback(void *data, t_float x, t_float y, t_float z)
 {
     GetMyClass(data)->vectMess(1, x, y, z);
 }
-void primTri :: vect3MessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
+void primTri :: vect3MessCallback(void *data, t_float x, t_float y, t_float z)
 {
     GetMyClass(data)->vectMess(2, x, y, z);
 }
@@ -171,7 +171,7 @@ void primTri :: col2MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
     float alpha = 1.f;
     if (argc == 4)
-		alpha = atom_getfloat(&argv[3]);
+      alpha = atom_getfloat(&argv[3]);
     GetMyClass(data)->colMess(1, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
     	    	    	       atom_getfloat(&argv[2]), alpha);
 }
@@ -179,7 +179,7 @@ void primTri :: col3MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
     float alpha = 1.f;
     if (argc == 4)
-		alpha = atom_getfloat(&argv[3]);
+      alpha = atom_getfloat(&argv[3]);
     GetMyClass(data)->colMess(2, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
     	    	    	       atom_getfloat(&argv[2]), alpha);
 }

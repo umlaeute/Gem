@@ -86,12 +86,12 @@ void GEMglMapGrid1d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1d::u2MessCallback),  	gensym("u2"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglMapGrid1d :: unMessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid1d :: unMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->unMess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid1d :: u1MessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid1d :: u1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid1d :: u2MessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid1d :: u2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }

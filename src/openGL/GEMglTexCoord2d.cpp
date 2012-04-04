@@ -68,9 +68,9 @@ void GEMglTexCoord2d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord2d::tMessCallback),  	gensym("t"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexCoord2d :: sMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord2d :: sMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord2d :: tMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord2d :: tMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }

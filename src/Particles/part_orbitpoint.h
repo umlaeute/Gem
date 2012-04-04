@@ -43,27 +43,15 @@ class GEM_EXTERN part_orbitpoint : public partlib_base
 
     	//////////
     	// Destructor
-    	virtual ~part_orbitpoint();
+    	virtual ~part_orbitpoint(void);
 
-		//////////
-		void			vectorMess(float val1, float val2, float val3)
-							{ m_pos[0] = val1; m_pos[1] = val2; m_pos[2] = val3; }
+      //////////
+      void			vectorMess(float val1, float val2, float val3);
+      void			gravMess(float num);
 
-		//////////
-		void			numberMess(float num)	{ m_grav = num; }
-
-		//////////
-		float			m_pos[3];
-
-		//////////
-		float			m_grav;
-
-	private:
-
-		//////////
-		// static member functions
-		static void		numberMessCallback(void *data, t_floatarg num);
-		static void		vectorMessCallback(void *data, t_floatarg val1, t_floatarg val2, t_floatarg val3);
+      //////////
+      float			m_pos[3];
+      float			m_grav;
 };
 
 #endif	// for header file

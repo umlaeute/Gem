@@ -86,15 +86,15 @@ void GEMglRectf :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectf::y2MessCallback),  	gensym("y2"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRectf :: x1MessCallback (void* data, t_floatarg arg0){
+void GEMglRectf :: x1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->x1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglRectf :: y1MessCallback (void* data, t_floatarg arg0){
+void GEMglRectf :: y1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->y1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglRectf :: x2MessCallback (void* data, t_floatarg arg0){
+void GEMglRectf :: x2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->x2Mess ( static_cast<t_float>(arg0));
 }
-void GEMglRectf :: y2MessCallback (void* data, t_floatarg arg0){
+void GEMglRectf :: y2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->y2Mess ( static_cast<t_float>(arg0));
 }

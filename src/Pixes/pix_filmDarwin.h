@@ -116,10 +116,10 @@ private:
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
   static void ramCallback(void *data);
-  static void hiqualityCallback(void *data, t_floatarg state);
-  static void rateCallback(void *data, t_floatarg state);
+  static void hiqualityCallback(void *data, t_float state);
+  static void rateCallback(void *data, t_float state);
   static void debugCallback(void *data);
-  static void volumeCallback(void *data, t_floatarg state);
+  static void volumeCallback(void *data, t_float state);
 
 };
 

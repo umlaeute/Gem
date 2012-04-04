@@ -87,12 +87,12 @@ void GEMglMultiTexCoord2fARB :: obj_setupCallback(t_class *classPtr) {
 					gensym("t"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglMultiTexCoord2fARB :: texUnitMessCallback (void* data, t_floatarg arg0){
+void GEMglMultiTexCoord2fARB :: texUnitMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
 }
-void GEMglMultiTexCoord2fARB :: sMessCallback (void* data, t_floatarg arg0){
+void GEMglMultiTexCoord2fARB :: sMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
-void GEMglMultiTexCoord2fARB :: tMessCallback (void* data, t_floatarg arg0){
+void GEMglMultiTexCoord2fARB :: tMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }

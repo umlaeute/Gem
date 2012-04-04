@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglStencilFunc : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 funcMessCallback (void*, t_floatarg);
-	  static void	 refMessCallback (void*, t_floatarg);
-	  static void	 maskMessCallback (void*, t_floatarg);
+	  static void	 funcMessCallback (void*, t_float);
+	  static void	 refMessCallback (void*, t_float);
+	  static void	 maskMessCallback (void*, t_float);
 };
 #endif // for header file

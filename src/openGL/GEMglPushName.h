@@ -53,6 +53,6 @@ class GEM_EXTERN GEMglPushName : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 nameMessCallback (void*, t_floatarg);
+	  static void	 nameMessCallback (void*, t_float);
 };
 #endif // for header file

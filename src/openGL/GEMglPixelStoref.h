@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglPixelStoref : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 pnameMessCallback (void*, t_floatarg);
-	  static void	 paramMessCallback (void*, t_floatarg);
+	  static void	 pnameMessCallback (void*, t_float);
+	  static void	 paramMessCallback (void*, t_float);
 };
 #endif // for header file

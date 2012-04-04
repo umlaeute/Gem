@@ -59,12 +59,6 @@ class GEM_EXTERN text2d : public TextBase
 	virtual FTFont*	makeFont(const char*fontname);
 	FTFont                  *m_afont;
 #endif
-
- private:
-
-  //////////
-  // callbacks
-  static void  aliasMessCallback(void *data, t_floatarg io);
 };
 
 #endif	// for header file

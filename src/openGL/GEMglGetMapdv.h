@@ -56,7 +56,7 @@ class GEM_EXTERN GEMglGetMapdv : public GemGLBase
 	t_inlet *m_inlet[2];
 
 	// static member functions
-         static void    targetMessCallback(void*, t_floatarg);
-         static void    queryMessCallback (void*, t_floatarg);
+         static void    targetMessCallback(void*, t_float);
+         static void    queryMessCallback (void*, t_float);
 };
 #endif // for header file

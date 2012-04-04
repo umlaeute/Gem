@@ -123,8 +123,8 @@ class GEM_EXTERN pix_record : public GemBase
   void 	bangMess();
   static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 
-  static void 	minMessCallback(void *data, t_floatarg min);
-  static void 	maxMessCallback(void *data, t_floatarg max);
+  static void 	minMessCallback(void *data, t_float min);
+  static void 	maxMessCallback(void *data, t_float max);
 
   class PIMPL;
   PIMPL*m_pimpl;

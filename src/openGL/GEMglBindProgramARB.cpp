@@ -72,9 +72,9 @@ void GEMglBindProgramARB :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindProgramARB::programMessCallback),  	gensym("program"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglBindProgramARB :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglBindProgramARB :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglBindProgramARB :: programMessCallback (void* data, t_floatarg arg0){
+void GEMglBindProgramARB :: programMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->programMess ( static_cast<t_float>(arg0));
 }

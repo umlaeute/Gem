@@ -96,9 +96,9 @@ class GEM_EXTERN pix_convolve : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	rangeMessCallback(void *data, t_floatarg range);
+    	static void 	rangeMessCallback(void *data, t_float range);
     	static void 	matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-        static void 	chromaMessCallback(void *data, t_floatarg value);
+        static void 	chromaMessCallback(void *data, t_float value);
 };
 
 #endif	// for header file

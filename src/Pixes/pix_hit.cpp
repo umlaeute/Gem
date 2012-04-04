@@ -415,18 +415,18 @@ void pix_hit :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_hit::showCallback),
                   gensym("show"), A_FLOAT, A_NULL); }
 
-void pix_hit :: thresholdCallback(void *data, t_floatarg val)
+void pix_hit :: thresholdCallback(void *data, t_float val)
 {
   GetMyClass(data)->threshold(FLOAT_CLAMP(val));
 }
 
-void pix_hit :: minimumCallback(void *data, t_floatarg val)
+void pix_hit :: minimumCallback(void *data, t_float val)
 {
   int n = static_cast<int>(FLOAT_CLAMP(val));
   GetMyClass(data)->minimum(n);
 }
 
-void pix_hit :: min_distanceCallback(void *data, t_floatarg val)
+void pix_hit :: min_distanceCallback(void *data, t_float val)
 {
   GetMyClass(data)->set_min_distance(FLOAT_CLAMP(val));
 }
@@ -486,12 +486,12 @@ void pix_hit :: moveCallback(void *data, t_symbol *sl, int argc, t_atom *argv)
   GetMyClass(data)->move(n,x,y,w,h);
 }
 
-void pix_hit :: deleteCallback(void *data, t_floatarg id)
+void pix_hit :: deleteCallback(void *data, t_float id)
 {
   GetMyClass(data)->del(static_cast<int>(id));
 }
 
-void pix_hit :: showCallback(void *data, t_floatarg val)
+void pix_hit :: showCallback(void *data, t_float val)
 {
   GetMyClass(data)->set_show(static_cast<int>(val));
 }

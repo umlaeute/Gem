@@ -60,8 +60,8 @@ class GEM_EXTERN GEMglProgramEnvParameter4fvARB : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 targetMessCallback (void*, t_floatarg);
-	  static void	 indexMessCallback (void*, t_floatarg);
+	  static void	 targetMessCallback (void*, t_float);
+	  static void	 indexMessCallback (void*, t_float);
 	  static void	 paramsMessCallback (void*, t_symbol*, int, t_atom*);
 };
 #endif // for header file

@@ -61,7 +61,7 @@ class GEM_EXTERN GEMglPrioritizeTextures : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 nMessCallback (void*, t_floatarg);
+	  static void	 nMessCallback (void*, t_float);
 	  static void	 texturesMessCallback (void*, t_symbol*, int, t_atom*);
 	  static void	 prioritiesMessCallback (void*, t_symbol*, int,t_atom*);
 };

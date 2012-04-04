@@ -100,6 +100,8 @@ libPixes_la_SOURCES=  \
     pix_duotone.h \
     pix_emboss.cpp \
     pix_emboss.h \
+    pix_equal.cpp \
+    pix_equal.h \
     pix_film.cpp \
     pix_film.h \
     pix_flip.cpp \

@@ -190,7 +190,7 @@ void vertex_combine :: gem_rightMessCallback(void *data, t_symbol *s, int argc, 
   } else GetMyClass(data)->error("wrong righthand arguments....");
 }
 
-void vertex_combine :: blendCallback(void *data, t_floatarg x)
+void vertex_combine :: blendCallback(void *data, t_float x)
 {
   GetMyClass(data)->m_blend = x;
 }

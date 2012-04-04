@@ -114,7 +114,7 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
     //////////
     // static member functions
 		static void 	bangMessCallback(void *data);
-    static void 	sizeMessCallback(void *data, t_floatarg width, t_floatarg height );
+    static void 	sizeMessCallback(void *data, t_float width, t_float height );
 };
 
 #endif	// for header file

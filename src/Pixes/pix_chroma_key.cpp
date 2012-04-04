@@ -690,18 +690,18 @@ void pix_chroma_key :: obj_setupCallback(t_class *classPtr)
 		  gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void pix_chroma_key :: directionCallback(void *data, t_floatarg state)
+void pix_chroma_key :: directionCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_direction=!(!(int)state);
 }
 
-void pix_chroma_key :: modeCallback(void *data, t_floatarg state)
+void pix_chroma_key :: modeCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_mode=!(!(int)state);
 }
 
 //make separate ranges for Y U V
-void pix_chroma_key :: rangeCallback(void *data, t_floatarg Yval, t_floatarg Uval,t_floatarg Vval)
+void pix_chroma_key :: rangeCallback(void *data, t_float Yval, t_float Uval,t_float Vval)
 {
   if(fabs(Yval)<=1.0 && fabs(Uval)<=1.0 && fabs(Vval)<=1.0) {
     GetMyClass(data)->m_Yrange=((unsigned char)255*Yval);
@@ -715,7 +715,7 @@ void pix_chroma_key :: rangeCallback(void *data, t_floatarg Yval, t_floatarg Uva
   }
 }
 
-void pix_chroma_key :: valueCallback(void *data, t_floatarg Yval, t_floatarg Uval, t_floatarg Vval)
+void pix_chroma_key :: valueCallback(void *data, t_float Yval, t_float Uval, t_float Vval)
 {
   if(fabs(Yval)<=1.0 && fabs(Uval)<=1.0 && fabs(Vval)<=1.0) {
     GetMyClass(data)->m_Yvalue=((unsigned char)255*Yval);

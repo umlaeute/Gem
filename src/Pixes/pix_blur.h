@@ -13,60 +13,53 @@
 #include "Base/GemPixObj.h"
 
 /*-----------------------------------------------------------------
--------------------------------------------------------------------
-CLASS
-    pix_blur
+  -------------------------------------------------------------------
+  CLASS
+  pix_blur
 
 
 
-KEYWORDS
-    pix
-    yuv
+  KEYWORDS
+  pix
+  yuv
 
-DESCRIPTION
+  DESCRIPTION
 
   old motion blur object.  soon to be an abstraction for pix_convolve ??
 
------------------------------------------------------------------*/
+  -----------------------------------------------------------------*/
 
 class GEM_EXTERN pix_blur : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_blur, GemPixObj);
+  CPPEXTERN_HEADER(pix_blur, GemPixObj);
 
-    public:
+ public:
 
-	    //////////
-	    // Constructor
-    	pix_blur();
+  //////////
+  // Constructor
+  pix_blur(void);
 
-    protected:
+ protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_blur();
+  //////////
+  // Destructor
+  virtual ~pix_blur(void);
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-      	virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
-        virtual void 	processYUVAltivec(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void 	processRGBAImage(imageStruct &image);
+  virtual void 	processGrayImage(imageStruct &image);
+  virtual void 	processYUVImage(imageStruct &image);
+#ifdef __VEC__
+  virtual void 	processYUVAltivec(imageStruct &image);
+#endif /* __VEC__ */
 
-        unsigned int  *saved;
-        int		m_blur;
-         float		m_blurf;
-        int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
-        t_inlet         *inletBlur;
+  unsigned int  *saved;
+  void blurMess(float value);
+  float		m_blurf;
+  int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
 
-
-    private:
-
-    	//////////
-    	// Static member functions
-
-        static void blurCallback       (void *data, t_floatarg value);
-
-
+  t_inlet         *inletBlur;
 };
 
 #endif

@@ -161,7 +161,7 @@ text2d :: text2d(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-text2d :: ~text2d()
+text2d :: ~text2d(void)
 {}
 
 void text2d :: render(GemState*){}
@@ -174,15 +174,11 @@ void text2d :: render(GemState*){}
 /////////////////////////////////////////////////////////
 void text2d :: obj_setupCallback(t_class *classPtr )
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&text2d::aliasMessCallback),
-		  gensym("alias"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "alias", aliasMess, int);
 }
 
 void text2d :: aliasMess(int io)
 {
   m_antialias = io;
 }
-void text2d :: aliasMessCallback(void *data, t_floatarg io)
-{
-  GetMyClass(data)->aliasMess(static_cast<int>(io));
-}
+

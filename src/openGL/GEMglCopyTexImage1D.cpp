@@ -124,24 +124,24 @@ void GEMglCopyTexImage1D :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage1D::borderMessCallback),  	gensym("border"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglCopyTexImage1D :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage1D :: levelMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: levelMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage1D :: internalFormatMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: internalFormatMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->internalFormatMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage1D :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage1D :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage1D :: widthMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: widthMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage1D :: borderMessCallback (void* data, t_floatarg arg0){
+void GEMglCopyTexImage1D :: borderMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->borderMess ( static_cast<t_float>(arg0));
 }

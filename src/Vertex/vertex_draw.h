@@ -78,9 +78,9 @@ class GEM_EXTERN vertex_draw : public GemVertex
 	int 	m_defaultDraw;
 
  private:
-        static void 	colorMessCallback(void *data, t_floatarg size);
-        static void 	texcoordMessCallback(void *data, t_floatarg t);
-        static void 	defaultMessCallback(void *data, t_floatarg size);
+        static void 	colorMessCallback(void *data, t_float size);
+        static void 	texcoordMessCallback(void *data, t_float t);
+        static void 	defaultMessCallback(void *data, t_float size);
         static void 	typeMessCallback(void *data, t_symbol*s);
 
 };

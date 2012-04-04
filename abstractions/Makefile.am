@@ -2,10 +2,12 @@ AUTOMAKE_OPTIONS = foreign
 
 SUFFIXES = .pd
 
-gemhelpdir=$(pkglibdir)
+gemabsdir=$(pkglibdir)
 
-dist_gemhelp_DATA = \
-	gemdefaultwindow.pd \
+nodist_gemabs_DATA = \
+	gemdefaultwindow.pd
+
+dist_gemabs_DATA = \
 	gemhead.pd \
 	gemmouse.pd \
 	gemorb.pd \
@@ -24,3 +26,4 @@ dist_gemhelp_DATA = \
 	rgb2yuv.pd \
 	yuv2rgb-help.pd \
 	yuv2rgb.pd
+

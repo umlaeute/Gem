@@ -71,9 +71,9 @@ class GEM_EXTERN pix_backlight : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	scaleCallback(void *data, t_floatarg m_SpikeScale);
-	static void 	floorCallback(void *data, t_floatarg m_SpikeFloor);
-	static void 	ceilingCallback(void *data, t_floatarg m_SpikeCeiling);
+    	static void 	scaleCallback(void *data, t_float m_SpikeScale);
+	static void 	floorCallback(void *data, t_float m_SpikeFloor);
+	static void 	ceilingCallback(void *data, t_float m_SpikeCeiling);
 };
 
 #endif	// for header file

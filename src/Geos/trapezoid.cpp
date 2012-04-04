@@ -42,7 +42,7 @@ trapezoid :: trapezoid(t_floatarg size, t_floatarg top)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-trapezoid :: ~trapezoid()
+trapezoid :: ~trapezoid(void)
 {
   inlet_free(m_topinlet);
 }
@@ -118,18 +118,6 @@ void trapezoid :: texscaleMess(t_float scale)
 /////////////////////////////////////////////////////////
 void trapezoid :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&trapezoid::topMessCallback),
-                  gensym("top"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&trapezoid::scaleMessCallback),
-                  gensym("texscale"), A_FLOAT, A_NULL);
-}
-
-void trapezoid :: scaleMessCallback(void *data, t_floatarg scale)
-{
-  GetMyClass(data)->texscaleMess(scale);
-}
-
-void trapezoid :: topMessCallback(void *data, t_floatarg top)
-{
-  GetMyClass(data)->toplengthMess(top);
+  CPPEXTERN_MSG1(classPtr, "top", toplengthMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "texscale", texscaleMess, t_float);
 }

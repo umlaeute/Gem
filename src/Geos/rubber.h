@@ -111,12 +111,8 @@ class GEM_EXTERN rubber : public GemShape
   SPRING	*m_spring;
   int		m_spring_count;
 
- private:
-
-  //////////
-  // static member functions
-  static void 	dragMessCallback(void *data, t_floatarg drag);
-  static void 	springMessCallback(void *data, t_floatarg spring);
+  void 	dragMess(float);
+  void 	springMess(float);
 };
 
 #endif	// for header file

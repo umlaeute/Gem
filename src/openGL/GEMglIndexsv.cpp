@@ -57,6 +57,6 @@ void GEMglIndexsv :: obj_setupCallback(t_class *classPtr) {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexsv::cMessCallback),  	gensym("c"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglIndexsv :: cMessCallback (void* data, t_floatarg arg0) {
+void GEMglIndexsv :: cMessCallback (void* data, t_float arg0) {
 	GetMyClass(data)->cMess (arg0);
 }

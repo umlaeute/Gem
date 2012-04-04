@@ -44,7 +44,7 @@ class GEM_EXTERN slideSquares : public GemShape
 
     	//////////
     	// Destructor
-    	virtual ~slideSquares();
+    	virtual ~slideSquares(void);
 
     	//////////
     	// The height of the object
@@ -64,14 +64,8 @@ class GEM_EXTERN slideSquares : public GemShape
 
 
         GLvoid 	Slide( int i );
-        void	slide_init();
+        void	slide_init(void);
         float	xsize, ysize;
-
-	private:
-
-		//////////
-		// Static member functions
-    	static void 	heightMessCallback(void *data, t_floatarg size);
 };
 
 #endif	// for header file

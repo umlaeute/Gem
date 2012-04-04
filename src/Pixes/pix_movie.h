@@ -72,10 +72,10 @@ class GEM_EXTERN pix_movie : public pix_film
 
   //////////
   // static member functions
-  static void 	textureMessCallback(void *data, t_floatarg n);
-  static void 	modeCallback(void *data, t_floatarg n);
-  static void 	rectangleCallback(void *data, t_floatarg n);
-  static void 	repeatMessCallback(void *data, t_floatarg n);
+  static void 	textureMessCallback(void *data, t_float n);
+  static void 	modeCallback(void *data, t_float n);
+  static void 	rectangleCallback(void *data, t_float n);
+  static void 	repeatMessCallback(void *data, t_float n);
 
 };
 

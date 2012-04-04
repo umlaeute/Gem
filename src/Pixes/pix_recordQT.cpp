@@ -901,7 +901,7 @@ void pix_recordQT :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom 
 {
   GetMyClass(data)->fileMess(argc, argv);
 }
-void pix_recordQT :: autoMessCallback(void *data, t_floatarg on)
+void pix_recordQT :: autoMessCallback(void *data, t_float on)
 {
   GetMyClass(data)->m_automatic=(on!=0);
 }
@@ -910,16 +910,16 @@ void pix_recordQT :: bangMessCallback(void *data)
   GetMyClass(data)->m_banged=true;
 }
 
-void pix_recordQT :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
+void pix_recordQT :: sizeMessCallback(void *data, t_float width, t_float height)
 {
   GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
 }
-void pix_recordQT :: posMessCallback(void *data, t_floatarg x, t_floatarg y)
+void pix_recordQT :: posMessCallback(void *data, t_float x, t_float y)
 {
   GetMyClass(data)->posMess(static_cast<int>(x), static_cast<int>(y));
 }
 
-void pix_recordQT :: recordMessCallback(void *data, t_floatarg on)
+void pix_recordQT :: recordMessCallback(void *data, t_float on)
 {
 	if (!(!static_cast<int>(on))) {
 		GetMyClass(data)->m_recordStart=1;

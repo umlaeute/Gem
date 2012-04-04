@@ -106,21 +106,21 @@ void GEMglOrtho :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zFarMessCallback),  	gensym("zFar"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglOrtho :: leftMessCallback (void* data, t_floatarg arg0){
+void GEMglOrtho :: leftMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->leftMess ( static_cast<t_float>(arg0));
 }
-void GEMglOrtho :: rightMessCallback (void* data, t_floatarg arg0){
+void GEMglOrtho :: rightMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->rightMess ( static_cast<t_float>(arg0));
 }
-void GEMglOrtho :: bottomMessCallback (void* data, t_floatarg arg0){
+void GEMglOrtho :: bottomMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->bottomMess ( static_cast<t_float>(arg0));
 }
-void GEMglOrtho :: topMessCallback (void* data, t_floatarg arg0){
+void GEMglOrtho :: topMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->topMess ( static_cast<t_float>(arg0));
 }
-void GEMglOrtho :: zNearMessCallback (void* data, t_floatarg arg0){
+void GEMglOrtho :: zNearMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->zNearMess ( static_cast<t_float>(arg0));
 }
-void GEMglOrtho :: zFarMessCallback (void* data, t_floatarg arg0){
+void GEMglOrtho :: zFarMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->zFarMess ( static_cast<t_float>(arg0));
 }

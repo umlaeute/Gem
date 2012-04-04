@@ -65,11 +65,11 @@ class GEM_EXTERN GEMglFrustum : public GemGLBase
 	  t_inlet *m_inlet[6];
 
 	// static member functions
-	  static void	 leftMessCallback (void*, t_floatarg);
-	  static void	 rightMessCallback (void*, t_floatarg);
-	  static void	 bottomMessCallback (void*, t_floatarg);
-	  static void	 topMessCallback (void*, t_floatarg);
-	  static void	 zNearMessCallback (void*, t_floatarg);
-	  static void	 zFarMessCallback (void*, t_floatarg);
+	  static void	 leftMessCallback (void*, t_float);
+	  static void	 rightMessCallback (void*, t_float);
+	  static void	 bottomMessCallback (void*, t_float);
+	  static void	 topMessCallback (void*, t_float);
+	  static void	 zNearMessCallback (void*, t_float);
+	  static void	 zFarMessCallback (void*, t_float);
 };
 #endif // for header file

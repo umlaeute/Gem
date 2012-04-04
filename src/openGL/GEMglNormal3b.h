@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglNormal3b : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 nxMessCallback (void*, t_floatarg);
-	  static void	 nyMessCallback (void*, t_floatarg);
-	  static void	 nzMessCallback (void*, t_floatarg);
+	  static void	 nxMessCallback (void*, t_float);
+	  static void	 nyMessCallback (void*, t_float);
+	  static void	 nzMessCallback (void*, t_float);
 };
 #endif // for header file

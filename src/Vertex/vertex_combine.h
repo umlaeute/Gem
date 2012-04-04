@@ -63,7 +63,7 @@ class GEM_EXTERN vertex_combine : public GemBase
 
         //private:
         static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
-        static void	blendCallback(void *data, t_floatarg x);
+        static void	blendCallback(void *data, t_float x);
 
 };
 

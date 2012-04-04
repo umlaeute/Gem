@@ -56,7 +56,7 @@ class GEM_EXTERN GEMglUniform1fARB : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 locMessCallback (void*, t_floatarg);
-	  static void	 valMessCallback (void*, t_floatarg);
+	  static void	 locMessCallback (void*, t_float);
+	  static void	 valMessCallback (void*, t_float);
 };
 #endif // for header file

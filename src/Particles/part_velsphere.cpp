@@ -44,7 +44,7 @@ part_velsphere :: part_velsphere(t_floatarg xpos, t_floatarg ypos, t_floatarg zp
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_velsphere :: ~part_velsphere()
+part_velsphere :: ~part_velsphere(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -59,22 +59,22 @@ void part_velsphere :: renderParticles(GemState *state)
     }
 }
 
+void part_velsphere::vectorMess(float val1, float val2, float val3){
+  m_pos[0] = val1;
+  m_pos[1] = val2;
+  m_pos[2] = val3;
+}
+void part_velsphere::velMess(float num)	{
+  m_radius = num;
+}
+
 /////////////////////////////////////////////////////////
 // static member functions
 //
 /////////////////////////////////////////////////////////
 void part_velsphere :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velsphere::vectorMessCallback),
-		  gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_velsphere::numberMessCallback),
-		  gensym("vel"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
+  CPPEXTERN_MSG1(classPtr, "vel", velMess, float);
 }
-void part_velsphere :: numberMessCallback(void *data, t_floatarg num)
-{
-  GetMyClass(data)->numberMess(num);
-}
-void part_velsphere :: vectorMessCallback(void *data, t_floatarg val1, t_floatarg val2, t_floatarg val3)
-{
-  GetMyClass(data)->vectorMess((float)val1, (float)val2, (float)val3);
-}
+

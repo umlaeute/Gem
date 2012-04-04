@@ -87,7 +87,7 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // static member functions
-  static void 	openMessCallback(void *data, t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
+  static void 	openMessCallback(void *data, t_symbol *filename, t_float baseModel, t_float topModel, t_float skipRate);
 };
 
 #endif	// for header file

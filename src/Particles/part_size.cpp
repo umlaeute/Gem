@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_GIMME(part_size);
 part_size :: part_size(int argc, t_atom*argv)
 {
   m_size[0]=m_size[1]=m_size[2]=1.0f;
-  sizeMess(argc,argv);
+  sizeMess(0, argc,argv);
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
 }
 
@@ -45,7 +45,7 @@ part_size :: ~part_size()
 // sizeMess
 //
 /////////////////////////////////////////////////////////
-void part_size :: sizeMess(int argc, t_atom*argv)
+void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
 {
   switch(argc){
   case 1:
@@ -75,11 +75,6 @@ void part_size :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_size :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_size::sizeMessCallback),
-		  gensym("size"), A_GIMME, A_NULL);
-}
-void part_size :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
-{
-  GetMyClass(data)->sizeMess(argc, argv);
+  CPPEXTERN_MSG (classPtr, "size", sizeMess);
 }
 

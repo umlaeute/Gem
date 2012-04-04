@@ -349,7 +349,7 @@ void pix_compare :: obj_setupCallback(t_class *classPtr)
 		  gensym("direction"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_compare :: directionCallback(void *data, t_floatarg state)
+void pix_compare :: directionCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_direction=!(!(int)state);
   GetMyClass(data)->setPixModified();

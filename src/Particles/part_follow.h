@@ -38,26 +38,21 @@ class GEM_EXTERN part_follow : public partlib_base
 	    // Constructor
     	part_follow(t_floatarg num);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
-
     protected:
 
     	//////////
     	// Destructor
-    	virtual ~part_follow();
+    	virtual ~part_follow(void);
 
-		//////////
-		void			numberMess(float num)	{ m_accel = num; }
+    	//////////
+    	virtual void 	renderParticles(GemState *state);
 
-		//////////
-		float			m_accel;
+      //////////
+      void			accelMess(float);
 
-	private:
+      //////////
+      float			m_accel;
 
-		//////////
-		// static member functions
-		static void		numberMessCallback(void *data, t_floatarg num);
 };
 
 #endif	// for header file

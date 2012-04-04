@@ -68,9 +68,9 @@ void GEMglPolygonOffset :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonOffset::unitsMessCallback),  	gensym("units"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPolygonOffset :: factorMessCallback (void* data, t_floatarg arg0){
+void GEMglPolygonOffset :: factorMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->factorMess ( static_cast<t_float>(arg0));
 }
-void GEMglPolygonOffset :: unitsMessCallback (void* data, t_floatarg arg0){
+void GEMglPolygonOffset :: unitsMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->unitsMess ( static_cast<t_float>(arg0));
 }

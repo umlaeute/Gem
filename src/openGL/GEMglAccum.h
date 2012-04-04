@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglAccum : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 opMessCallback (void*, t_floatarg);
-	  static void	 valueMessCallback (void*, t_floatarg);
+	  static void	 opMessCallback (void*, t_float);
+	  static void	 valueMessCallback (void*, t_float);
 };
 #endif // for header file

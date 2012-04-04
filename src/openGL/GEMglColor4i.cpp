@@ -86,15 +86,15 @@ void GEMglColor4i :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4i::alphaMessCallback),  	gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglColor4i :: redMessCallback (void* data, t_floatarg arg0){
+void GEMglColor4i :: redMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor4i :: greenMessCallback (void* data, t_floatarg arg0){
+void GEMglColor4i :: greenMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor4i :: blueMessCallback (void* data, t_floatarg arg0){
+void GEMglColor4i :: blueMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor4i :: alphaMessCallback (void* data, t_floatarg arg0){
+void GEMglColor4i :: alphaMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->alphaMess ( static_cast<t_float>(arg0));
 }

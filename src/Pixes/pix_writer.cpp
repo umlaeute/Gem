@@ -112,7 +112,7 @@ void pix_writer :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *a
 {
   GetMyClass(data)->fileMess(argc, argv);
 }
-void pix_writer :: autoMessCallback(void *data, t_floatarg on)
+void pix_writer :: autoMessCallback(void *data, t_float on)
 {
   GetMyClass(data)->m_automatic=(on!=0);
 }

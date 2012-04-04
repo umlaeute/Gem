@@ -59,6 +59,6 @@ void GEMglLineWidth :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLineWidth::widthMessCallback),  	gensym("width"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglLineWidth :: widthMessCallback (void* data, t_floatarg arg0){
+void GEMglLineWidth :: widthMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }

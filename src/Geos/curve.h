@@ -64,7 +64,7 @@ class GEM_EXTERN curve : public polygon
 
     	//////////
     	// Static member functions
-     	static void 	resolutionMessCallback(void *data, t_floatarg res);
+     	static void 	resolutionMessCallback(void *data, t_float res);
 };
 
 #endif	// for header file

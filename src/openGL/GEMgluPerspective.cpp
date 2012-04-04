@@ -84,15 +84,15 @@ void GEMgluPerspective :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluPerspective::farMessCallback),  	gensym("far"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMgluPerspective :: fovyMessCallback (void* data, t_floatarg arg0){
+void GEMgluPerspective :: fovyMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->fovyMess ( static_cast<t_float>(arg0));
 }
-void GEMgluPerspective :: aspectMessCallback (void* data, t_floatarg arg0){
+void GEMgluPerspective :: aspectMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->aspectMess ( static_cast<t_float>(arg0));
 }
-void GEMgluPerspective :: nearMessCallback (void* data, t_floatarg arg0){
+void GEMgluPerspective :: nearMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->nearMess ( static_cast<t_float>(arg0));
 }
-void GEMgluPerspective :: farMessCallback (void* data, t_floatarg arg0){
+void GEMgluPerspective :: farMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->farMess ( static_cast<t_float>(arg0));
 }

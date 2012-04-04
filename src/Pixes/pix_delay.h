@@ -63,7 +63,7 @@ class GEM_EXTERN pix_delay : public GemPixObj
 
   //////////
   // static member functions
-  static void delayMessCallback(void *data, t_floatarg);
+  static void delayMessCallback(void *data, t_float);
 };
 
 #endif	// for header file

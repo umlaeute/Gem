@@ -152,14 +152,14 @@ void pix_duotone :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::threshMessCallback),
     	    gensym("thresh"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
-void pix_duotone :: color1MessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3)
+void pix_duotone :: color1MessCallback(void *data, t_float value1, t_float value2, t_float value3)
 {
     GetMyClass(data)->m_color1[0]=(unsigned char)(value1*255);
     GetMyClass(data)->m_color1[1]=(unsigned char)(value2*255);
     GetMyClass(data)->m_color1[2]=(unsigned char)(value3*255);
     GetMyClass(data)->setPixModified();
 }
-void pix_duotone :: color2MessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3)
+void pix_duotone :: color2MessCallback(void *data, t_float value1, t_float value2, t_float value3)
 {
     GetMyClass(data)->m_color2[0]=(unsigned char)(value1*255);
     GetMyClass(data)->m_color2[1]=(unsigned char)(value2*255);
@@ -167,7 +167,7 @@ void pix_duotone :: color2MessCallback(void *data, t_floatarg value1, t_floatarg
     GetMyClass(data)->setPixModified();
 }
 
-void pix_duotone :: threshMessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3)
+void pix_duotone :: threshMessCallback(void *data, t_float value1, t_float value2, t_float value3)
 {
     GetMyClass(data)->m_thresh[0]=(unsigned char)(value1*255);
     GetMyClass(data)->m_thresh[1]=(unsigned char)(value2*255);

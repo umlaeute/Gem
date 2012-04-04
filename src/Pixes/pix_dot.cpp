@@ -618,12 +618,12 @@ void pix_dot :: obj_setupCallback(t_class *classPtr)
 }
 
 
-void pix_dot :: sizeMessCallback(void *data, t_floatarg width, t_floatarg height)
+void pix_dot :: sizeMessCallback(void *data, t_float width, t_float height)
 {
   GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
 }
 
-void pix_dot :: scaleMessCallback(void *data, t_floatarg state)
+void pix_dot :: scaleMessCallback(void *data, t_float state)
 {
   GetMyClass(data)->scaleMess( state );
 }

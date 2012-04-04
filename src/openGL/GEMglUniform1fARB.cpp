@@ -77,9 +77,9 @@ void GEMglUniform1fARB :: obj_setupCallback(t_class *classPtr) {
 		gensym("val"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglUniform1fARB :: locMessCallback (void* data, t_floatarg arg0){
+void GEMglUniform1fARB :: locMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->locMess ( static_cast<t_float>(arg0));
 }
-void GEMglUniform1fARB :: valMessCallback (void* data, t_floatarg arg0){
+void GEMglUniform1fARB :: valMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->valMess ( static_cast<t_float>(arg0));
 }

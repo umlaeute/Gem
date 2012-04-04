@@ -718,7 +718,7 @@ void pix_backlight :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::ceilingCallback),
 		  gensym("ceiling"), A_DEFFLOAT, A_NULL);
 }
-void pix_backlight :: scaleCallback(void *data, t_floatarg m_SpikeScale)
+void pix_backlight :: scaleCallback(void *data, t_float m_SpikeScale)
 {
   m_SpikeScale*=255.0;
   //  if(m_SpikeScale<0.f)m_SpikeScale=0.f;else if(m_SpikeScale>255.f)m_SpikeScale=255.f;
@@ -726,7 +726,7 @@ void pix_backlight :: scaleCallback(void *data, t_floatarg m_SpikeScale)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_backlight :: floorCallback(void *data, t_floatarg m_SpikeFloor)
+void pix_backlight :: floorCallback(void *data, t_float m_SpikeFloor)
 {
   m_SpikeFloor*=255.0;
   if(m_SpikeFloor<0.f)m_SpikeFloor=0.f;else if(m_SpikeFloor>255.f)m_SpikeFloor=255.f;
@@ -734,7 +734,7 @@ void pix_backlight :: floorCallback(void *data, t_floatarg m_SpikeFloor)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_backlight :: ceilingCallback(void *data, t_floatarg m_SpikeCeiling)
+void pix_backlight :: ceilingCallback(void *data, t_float m_SpikeCeiling)
 {
   m_SpikeCeiling*=255.0;
   if(m_SpikeCeiling<0.f)m_SpikeCeiling=0.f;else if(m_SpikeCeiling>255.f)m_SpikeCeiling=255.f;

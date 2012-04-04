@@ -67,10 +67,15 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   virtual void 	processYUVAltivec(imageStruct &image);
 #endif
 
+  //////////
+  // the methods
+  void setMess(void);
+  void modeMess(int mode);
+  void faktorMess(t_symbol*, int, t_atom*);
 
   //////////
   // the image-latches
-  imageStruct    prev;
+  imageStruct  prev;
   imageStruct	 last;
 
   //////////
@@ -80,17 +85,11 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   //////////
   // the biquad-factors
   t_float fb0, fb1, fb2, ff1, ff2, ff3;
-  void faktorMess(int, t_atom*);
 
   // 0..integer-processing(fast) [default]
   // 1..float-processing(slow)
   int m_mode;
 
-  //////////
-  // the methods
-  static void setMessCallback(void *data);
-  static void modeMessCallback(void *data,float value);
-  static void faktorMessCallback(void *data, t_symbol *s, int argc, t_atom* argv);
 
 };
 

@@ -135,12 +135,12 @@ class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::limitMessCa
 
 }
 
-void pix_posterize :: factorMessCallback(void *data, t_floatarg size)
+void pix_posterize :: factorMessCallback(void *data, t_float size)
 {
     GetMyClass(data)->factorMess(size);
 }
 
-void pix_posterize :: limitMessCallback(void *data, t_floatarg size)
+void pix_posterize :: limitMessCallback(void *data, t_float size)
 {
     GetMyClass(data)->limitMess(size);
 }

@@ -119,7 +119,7 @@ void pix_buffer_write :: setMessCallback(void *data, t_symbol*s)
 {
   GetMyClass(data)->setMess(s);
 }
-void pix_buffer_write :: frameMessCallback(void *data, t_floatarg f)
+void pix_buffer_write :: frameMessCallback(void *data, t_float f)
 {
   GetMyClass(data)->frameMess((int)f);
 }

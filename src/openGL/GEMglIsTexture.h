@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglIsTexture : public GemGLBase
 	  t_outlet*m_outlet;
 
 	// static member functions
-	  static void	 textureMessCallback (void*, t_floatarg);
+	  static void	 textureMessCallback (void*, t_float);
 };
 #endif // for header file

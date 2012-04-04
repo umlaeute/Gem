@@ -122,23 +122,23 @@ class GEM_EXTERN camera : public GemBase
 
     	//////////
     	// static member functions
-    	static void 	hAngleMessCallback(void *data, t_floatarg val);
-    	static void 	vAngleMessCallback(void *data, t_floatarg val);
-    	static void 	distanceMessCallback(void *data, t_floatarg val);
-    	static void 	speedMessCallback(void *data, t_floatarg val);
-    	static void 	forwardMessCallback(void *data, t_floatarg val);
-	static void	reverseMessCallback(void *data, t_floatarg val);
-    	static void 	leftMessCallback(void *data, t_floatarg val);
-	static void 	rightMessCallback(void *data, t_floatarg val);
-    	static void 	slideLeftMessCallback(void *data, t_floatarg val);
-	static void 	slideRightMessCallback(void *data, t_floatarg val);
-    	static void 	upMessCallback(void *data, t_floatarg val);
-	static void 	downMessCallback(void *data, t_floatarg val);
+    	static void 	hAngleMessCallback(void *data, t_float val);
+    	static void 	vAngleMessCallback(void *data, t_float val);
+    	static void 	distanceMessCallback(void *data, t_float val);
+    	static void 	speedMessCallback(void *data, t_float val);
+    	static void 	forwardMessCallback(void *data, t_float val);
+	static void	reverseMessCallback(void *data, t_float val);
+    	static void 	leftMessCallback(void *data, t_float val);
+	static void 	rightMessCallback(void *data, t_float val);
+    	static void 	slideLeftMessCallback(void *data, t_float val);
+	static void 	slideRightMessCallback(void *data, t_float val);
+    	static void 	upMessCallback(void *data, t_float val);
+	static void 	downMessCallback(void *data, t_float val);
 	static void 	resetMessCallback(void *);
-	static void 	modeMessCallback(void *data, t_floatarg val);
-	static void 	lookXMessCallback(void *data, t_floatarg val);
-    	static void 	lookYMessCallback(void *data, t_floatarg val);
-	static void 	lookZMessCallback(void *data, t_floatarg val);
+	static void 	modeMessCallback(void *data, t_float val);
+	static void 	lookXMessCallback(void *data, t_float val);
+    	static void 	lookYMessCallback(void *data, t_float val);
+	static void 	lookZMessCallback(void *data, t_float val);
 };
 
 #endif	// for header file

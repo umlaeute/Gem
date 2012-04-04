@@ -59,6 +59,6 @@ void GEMglPointSize :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPointSize::sizeMessCallback),  	gensym("size"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPointSize :: sizeMessCallback (void* data, t_floatarg arg0){
+void GEMglPointSize :: sizeMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sizeMess ( static_cast<t_float>(arg0));
 }

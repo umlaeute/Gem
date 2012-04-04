@@ -1149,17 +1149,17 @@ void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
     class_addbang(classPtr,reinterpret_cast<t_method>(&pix_videoDarwin::bangMessCallback));
 }
 
-void pix_videoDarwin :: qualityCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: qualityCallback(void *data, t_float X)
 {
     GetMyClass(data)->qualityMess((int)X);
 }
 
-void pix_videoDarwin :: autoCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: autoCallback(void *data, t_float X)
 {
     GetMyClass(data)->m_auto=((int)X);
 }
 
-void pix_videoDarwin :: recordCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: recordCallback(void *data, t_float X)
 {
     GetMyClass(data)->m_record=((int)X);
     GetMyClass(data)->setupCapture();
@@ -1176,42 +1176,42 @@ void pix_videoDarwin :: resetCallback(void *data)
     GetMyClass(data)->resetSeqGrabber();
 }
 
-void pix_videoDarwin :: deviceCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: deviceCallback(void *data, t_float X)
 {
   GetMyClass(data)->m_inputDevice=((int)X);
 }
 
-void pix_videoDarwin :: inputCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: inputCallback(void *data, t_float X)
 {
   GetMyClass(data)->m_inputDeviceChannel=((int)X);
 }
 
-void pix_videoDarwin :: brightnessCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: brightnessCallback(void *data, t_float X)
 {
   GetMyClass(data)->brightnessMess(X);
 }
 
-void pix_videoDarwin :: saturationCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: saturationCallback(void *data, t_float X)
 {
   GetMyClass(data)->saturationMess(X);
 }
 
-void pix_videoDarwin :: contrastCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: contrastCallback(void *data, t_float X)
 {
   GetMyClass(data)->contrastMess(X);
 }
 
-void pix_videoDarwin :: exposureCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: exposureCallback(void *data, t_float X)
 {
   GetMyClass(data)->exposureMess(X);
 }
 
-void pix_videoDarwin :: gainCallback(void *data, t_floatarg X)
+void pix_videoDarwin :: gainCallback(void *data, t_float X)
 {
   GetMyClass(data)->gainMess(X);
 }
 
-void pix_videoDarwin :: whiteBalanceCallback(void *data, t_floatarg U, t_floatarg V)
+void pix_videoDarwin :: whiteBalanceCallback(void *data, t_float U, t_float V)
 {
   GetMyClass(data)->whiteBalanceMess(U,V);
 }

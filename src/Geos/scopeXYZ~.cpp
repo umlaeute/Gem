@@ -55,7 +55,7 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-scopeXYZ :: ~scopeXYZ()
+scopeXYZ :: ~scopeXYZ(void)
 {
   if(m_vertices)delete[]m_vertices;
 }

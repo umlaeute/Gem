@@ -60,11 +60,9 @@ void part_killslow :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_killslow :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_killslow::numberMessCallback),
-    	    gensym("speed"), A_FLOAT, A_NULL);
-}
-void part_killslow :: numberMessCallback(void *data, t_floatarg num)
-{
-    GetMyClass(data)->numberMess(num);
+  CPPEXTERN_MSG1(classPtr, "speed", speedMess, float);
 }
 
+void part_killslow :: speedMess(float num)	{ 
+  m_killSpeed = num;
+}

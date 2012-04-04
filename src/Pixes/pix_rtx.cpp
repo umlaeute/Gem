@@ -217,7 +217,7 @@ void pix_rtx :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::setMessCallback),
 		  gensym("set"), A_NULL);
 }
-void pix_rtx :: modeMessCallback(void *data, t_floatarg newmode)
+void pix_rtx :: modeMessCallback(void *data, t_float newmode)
 {
     GetMyClass(data)->mode=(newmode!=0);
 }

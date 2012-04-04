@@ -41,7 +41,7 @@ part_head :: part_head(t_floatarg numParts)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_head :: ~part_head()
+part_head :: ~part_head(void)
 {
 	if (m_particleGroup < 0)
 		pDeleteParticleGroups(m_particleGroup, 1);
@@ -77,10 +77,5 @@ void part_head :: speedMess(float speed)
 /////////////////////////////////////////////////////////
 void part_head :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_head::speedMessCallback),
-    	    gensym("speed"), A_FLOAT, A_NULL);
-}
-void part_head :: speedMessCallback(void *data, t_floatarg speed)
-{
-    GetMyClass(data)->speedMess((float)speed);
+  CPPEXTERN_MSG1(classPtr, "speed", speedMess, float);
 }

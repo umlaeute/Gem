@@ -97,15 +97,15 @@ class GEM_EXTERN pix_hit : public GemPixObj
 
  private:
 
-  static void	thresholdCallback(void *data, t_floatarg thresh);
-  static void	minimumCallback(void *data, t_floatarg min);
-  static void	min_distanceCallback(void *data, t_floatarg min);
-  static void	deleteCallback(void *data, t_floatarg id);
+  static void	thresholdCallback(void *data, t_float thresh);
+  static void	minimumCallback(void *data, t_float min);
+  static void	min_distanceCallback(void *data, t_float min);
+  static void	deleteCallback(void *data, t_float id);
   static void	createRectangleCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	createCircleCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	createLineCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
   static void	moveCallback(void *data, t_symbol *sl, int argc, t_atom *argv);
-  static void	showCallback(void *data, t_floatarg val);
+  static void	showCallback(void *data, t_float val);
 
 };
 

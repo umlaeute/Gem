@@ -44,7 +44,7 @@ class GEM_EXTERN sphere : public GemGluObj
 
     	//////////
     	// Destructor
-    	virtual ~sphere();
+    	virtual ~sphere(void);
 
     	//////////
     	// Do the rendering

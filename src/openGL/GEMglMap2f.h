@@ -81,15 +81,15 @@ class GEM_EXTERN GEMglMap2f : public GemGLBase
 	  t_inlet *m_inlet[10];
 
 	// static member functions
-	  static void	 targetMessCallback (void*, t_floatarg);
-	  static void	 u1MessCallback (void*, t_floatarg);
-	  static void	 u2MessCallback (void*, t_floatarg);
-	  static void	 ustrideMessCallback (void*, t_floatarg);
-	  static void	 uorderMessCallback (void*, t_floatarg);
-	  static void	 v1MessCallback (void*, t_floatarg);
-	  static void	 v2MessCallback (void*, t_floatarg);
-	  static void	 vstrideMessCallback (void*, t_floatarg);
-	  static void	 vorderMessCallback (void*, t_floatarg);
+	  static void	 targetMessCallback (void*, t_float);
+	  static void	 u1MessCallback (void*, t_float);
+	  static void	 u2MessCallback (void*, t_float);
+	  static void	 ustrideMessCallback (void*, t_float);
+	  static void	 uorderMessCallback (void*, t_float);
+	  static void	 v1MessCallback (void*, t_float);
+	  static void	 v2MessCallback (void*, t_float);
+	  static void	 vstrideMessCallback (void*, t_float);
+	  static void	 vorderMessCallback (void*, t_float);
 	  static void	 pointsMessCallback (void*, t_symbol*, int,t_atom*);
 };
 #endif // for header file

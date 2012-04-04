@@ -74,9 +74,9 @@ void GEMglEvalPoint2 :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::jMessCallback),  	gensym("j"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalPoint2 :: iMessCallback (void* data, t_floatarg arg0){
+void GEMglEvalPoint2 :: iMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
 }
-void GEMglEvalPoint2 :: jMessCallback (void* data, t_floatarg arg0){
+void GEMglEvalPoint2 :: jMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->jMess ( static_cast<t_float>(arg0));
 }

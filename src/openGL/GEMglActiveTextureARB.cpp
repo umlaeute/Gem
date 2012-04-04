@@ -63,6 +63,6 @@ void GEMglActiveTextureARB :: obj_setupCallback(t_class *classPtr) {
 									gensym("texUnit"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglActiveTextureARB :: texUnitMessCallback (void* data, t_floatarg arg0){
+void GEMglActiveTextureARB :: texUnitMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
 }

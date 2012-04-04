@@ -206,14 +206,14 @@ void pix_movement2 :: obj_setupCallback(t_class*classPtr){
   threshMessCallback
   ------------------------------------------------------------
 */
-void pix_movement2 :: threshMessCallback(void *data, t_floatarg thresh)
+void pix_movement2 :: threshMessCallback(void *data, t_float thresh)
 {
   GetMyClass(data)->threshMess(static_cast<int>(255*thresh));
 }
 /*------------------------------------------------------------
   lowThreshMessCallback
   ------------------------------------------------------------*/
-void pix_movement2 :: lowThreshMessCallback(void *data, t_floatarg thresh)
+void pix_movement2 :: lowThreshMessCallback(void *data, t_float thresh)
 {
   GetMyClass(data)->lowThreshMess(static_cast<int>(255*thresh));
 }

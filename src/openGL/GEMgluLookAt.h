@@ -73,14 +73,14 @@ class GEM_EXTERN GEMgluLookAt : public GemGLBase
 	  t_inlet *m_inlet[9];
 
     // static member functions
-	  static void eyeXMessCallback(void*, t_floatarg );
-	  static void eyeYMessCallback(void*, t_floatarg );
-	  static void eyeZMessCallback(void*, t_floatarg );
-	  static void centerXMessCallback(void*, t_floatarg );
-	  static void centerYMessCallback(void*, t_floatarg );
-	  static void centerZMessCallback(void*, t_floatarg );
-	  static void upXMessCallback(void*, t_floatarg );
-	  static void upYMessCallback(void*, t_floatarg );
-	  static void upZMessCallback(void*, t_floatarg );
+	  static void eyeXMessCallback(void*, t_float );
+	  static void eyeYMessCallback(void*, t_float );
+	  static void eyeZMessCallback(void*, t_float );
+	  static void centerXMessCallback(void*, t_float );
+	  static void centerYMessCallback(void*, t_float );
+	  static void centerZMessCallback(void*, t_float );
+	  static void upXMessCallback(void*, t_float );
+	  static void upYMessCallback(void*, t_float );
+	  static void upZMessCallback(void*, t_float );
 };
 #endif /* for header file */

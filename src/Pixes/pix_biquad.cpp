@@ -55,7 +55,7 @@ pix_biquad :: pix_biquad(int argc, t_atom*argv) :
   last.reallocate();
   last.setBlack();
 
-  if(argc)faktorMess(argc, argv);
+  if(argc)faktorMess(0, argc, argv);
 }
 
 /////////////////////////////////////////////////////////
@@ -600,7 +600,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
 #endif /* __VEC__ */
 
 
-void pix_biquad :: faktorMess(int argc, t_atom*argv){
+void pix_biquad :: faktorMess(t_symbol*, int argc, t_atom*argv){
   if (argc<5 || argc>6){
     error("illegal number of arguments");
     return;
@@ -622,25 +622,16 @@ void pix_biquad :: faktorMess(int argc, t_atom*argv){
 /////////////////////////////////////////////////////////
 void pix_biquad :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_biquad::setMessCallback),
-		  gensym("set"), A_NULL);
-
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_biquad::modeMessCallback),
-		  gensym("mode"), A_DEFFLOAT, A_NULL);
-  class_addlist(classPtr, reinterpret_cast<t_method>(&pix_biquad::faktorMessCallback));
+  CPPEXTERN_MSG0(classPtr, "set", setMess);
+  CPPEXTERN_MSG (classPtr, "list", faktorMess);
+  CPPEXTERN_MSG1(classPtr, "mode", modeMess, int);
+}
+void pix_biquad :: setMess()
+{
+  set = true;
 }
 
-void pix_biquad :: faktorMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)
+void pix_biquad :: modeMess(int mode)
 {
-  GetMyClass(data)->faktorMess(argc, argv);
-}
-
-void pix_biquad :: setMessCallback(void *data)
-{
-  GetMyClass(data)->set = true;
-}
-
-void pix_biquad :: modeMessCallback(void *data, float value)
-{
-  GetMyClass(data)->m_mode = static_cast<int>(value);
+  m_mode = mode;
 }

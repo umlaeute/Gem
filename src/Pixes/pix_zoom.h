@@ -74,7 +74,7 @@ class GEM_EXTERN pix_zoom : public GemBase
 
     	//////////
     	// static member functions
-    	static void 	zoomMessCallback(void *data, t_floatarg xZoom, t_floatarg yZoom);
+    	static void 	zoomMessCallback(void *data, t_float xZoom, t_float yZoom);
 };
 
 #endif	// for header file

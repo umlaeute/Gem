@@ -55,9 +55,6 @@ class GEM_EXTERN textextruded : public TextBase
     //////////
     // Set the precision for rendering
     virtual void	setDepth(float depth);
- private:
-    static void 	depthMessCallback(void *data, t_floatarg depth);
-
 };
 
 #endif	// for header file

@@ -368,11 +368,11 @@ void pix_offset :: vecOffsetMessCallback(void *data, t_symbol *, int argc, t_ato
 {
   GetMyClass(data)->vecOffsetMess(argc, argv);
 }
-void pix_offset :: floatOffsetMessCallback(void *data, t_floatarg offset)
+void pix_offset :: floatOffsetMessCallback(void *data, t_float offset)
 {
   GetMyClass(data)->floatOffsetMess(offset);
 }
-void pix_offset :: saturateMessCallback(void *data, t_floatarg sat)
+void pix_offset :: saturateMessCallback(void *data, t_float sat)
 {
   GetMyClass(data)->saturateMess(static_cast<int>(sat));
 }

@@ -86,8 +86,14 @@ class GEM_EXTERN newWave : public GemShape
   void 		noise(float);
   void		getTexCoords(void);
   void		setSize( int valueX, int valueY );
- // void		setK( float value );
- // void		setD( float value );
+
+  void 	setK1Mess(float K);
+  void 	setD1Mess(float D);
+  void 	setK2Mess(float K);
+  void 	setD2Mess(float D);
+  void 	setK3Mess(float K);
+  void 	setD3Mess(float D);
+
   void		position( float posX, float posY, float posZ );
   void		setforce( float posX, float posY, float valforce);
 
@@ -123,17 +129,6 @@ class GEM_EXTERN newWave : public GemShape
   float texCoords[MAXGRID][MAXGRID][2];
 
   bool m_upsidedown;
-
- private:
-
-  //////////
-  // static member functions
-  static void 	setK1MessCallback(void *data, t_floatarg K);
-  static void 	setD1MessCallback(void *data, t_floatarg D);
-  static void 	setK2MessCallback(void *data, t_floatarg K);
-  static void 	setD2MessCallback(void *data, t_floatarg D);
-  static void 	setK3MessCallback(void *data, t_floatarg K);
-  static void 	setD3MessCallback(void *data, t_floatarg D);
 };
 
 #endif	// for header file

@@ -48,7 +48,7 @@ cuboid :: cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-cuboid :: ~cuboid()
+cuboid :: ~cuboid(void)
 {
   inlet_free(m_inletY);
   inlet_free(m_inletZ);
@@ -165,18 +165,7 @@ void cuboid :: widthMess(float sizez)
 /////////////////////////////////////////////////////////
 void cuboid :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&cuboid::heightMessCallback),
-    	    gensym("ft2"), A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&cuboid::widthMessCallback),
-	    gensym("ft3"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "ft2", heightMess, float);
+  CPPEXTERN_MSG1(classPtr, "ft3", widthMess, float);
 }
 
-void cuboid :: heightMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->heightMess(size);
-}
-
-void cuboid :: widthMessCallback(void *data, t_floatarg size)
-{
-    GetMyClass(data)->widthMess(size);
-}

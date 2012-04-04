@@ -247,7 +247,7 @@ void pix_blob :: gainMessCallback(void *data, t_symbol *, int argc, t_atom *argv
   GetMyClass(data)->GainMess(argc, argv);
 }
 
-void pix_blob :: channelMessCallback(void *data, t_floatarg channel)
+void pix_blob :: channelMessCallback(void *data, t_float channel)
 {
   GetMyClass(data)->ChannelMess((int)channel);
 }

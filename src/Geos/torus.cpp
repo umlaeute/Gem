@@ -68,7 +68,7 @@ torus :: torus(int argc, t_atom *argv)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-torus :: ~torus()
+torus :: ~torus(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -186,11 +186,7 @@ void torus :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void torus :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&torus::innerRadiusCallback),
-    	    gensym("inner"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "inner", innerRadius, float);
 }
-void torus :: innerRadiusCallback(void *data, t_floatarg radius)
-{
-    GetMyClass(data)->innerRadius(radius);
-}
+
 

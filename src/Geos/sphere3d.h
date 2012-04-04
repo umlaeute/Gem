@@ -44,13 +44,13 @@ class GEM_EXTERN sphere3d : public GemGluObj
 
     	//////////
     	// Destructor
-    	virtual ~sphere3d();
+    	virtual ~sphere3d(void);
 
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-        virtual void  	createSphere3d();
+        virtual void  	createSphere3d(void);
 
         virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y, GLfloat z);
         virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth, GLfloat elevation);
@@ -63,15 +63,8 @@ class GEM_EXTERN sphere3d : public GemGluObj
         GLfloat		*m_z;
         int 		oldStacks, oldSlices;
         GLenum		oldDrawType;
-	int             oldTexture;
+        int             oldTexture;
 
         GLuint          m_displayList;
-
- private:
-        static void setCartMessCallback(void*, t_floatarg  i, t_floatarg j,
-                                        t_floatarg x, t_floatarg y, t_floatarg z);
-        static void setSphMessCallback(void*, t_floatarg  i, t_floatarg j,
-                                       t_floatarg r, t_floatarg phi, t_floatarg theta);
-        static void printMessCallback(void*);
 };
 #endif	// for header file

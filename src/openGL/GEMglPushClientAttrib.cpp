@@ -68,6 +68,6 @@ void GEMglPushClientAttrib :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPushClientAttrib::maskMessCallback),  	gensym("mask"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglPushClientAttrib :: maskMessCallback (void* data, t_floatarg arg0){
+void GEMglPushClientAttrib :: maskMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

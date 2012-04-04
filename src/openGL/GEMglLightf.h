@@ -56,8 +56,8 @@ class GEM_EXTERN GEMglLightf : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 lightMessCallback (void*, t_floatarg);
-	  static void	 pnameMessCallback (void*, t_floatarg);
-	  static void	 paramMessCallback (void*, t_floatarg);
+	  static void	 lightMessCallback (void*, t_float);
+	  static void	 pnameMessCallback (void*, t_float);
+	  static void	 paramMessCallback (void*, t_float);
 };
 #endif // for header file

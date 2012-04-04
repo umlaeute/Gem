@@ -114,21 +114,21 @@ void GEMglMapGrid2f :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid2f::v2MessCallback),  	gensym("v2"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglMapGrid2f :: unMessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid2f :: unMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->unMess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid2f :: u1MessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid2f :: u1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid2f :: u2MessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid2f :: u2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid2f :: vnMessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid2f :: vnMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->vnMess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid2f :: v1MessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid2f :: v1MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->v1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid2f :: v2MessCallback (void* data, t_floatarg arg0){
+void GEMglMapGrid2f :: v2MessCallback (void* data, t_float arg0){
 	GetMyClass(data)->v2Mess ( static_cast<t_float>(arg0));
 }

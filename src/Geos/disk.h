@@ -50,25 +50,19 @@ class GEM_EXTERN disk : public GemGluObj
 
     	//////////
     	// Destructor
-    	virtual ~disk();
-
-    	//////////
-		// Inner radius of the disk
-		float			m_innerRadius;
-
-    	//////////
-		// Set the inner radius
-		void			innerRadius(float radius);
+    	virtual ~disk(void);
 
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
 
-	private:
+    	//////////
+      // Set the inner radius
+      void			innerRadius(float radius);
 
     	//////////
-    	// Static member functions
-    	static void 	innerRadiusCallback(void *data, t_floatarg radius);
+      // Inner radius of the disk
+      float			m_innerRadius;
 };
 
 #endif	// for header file

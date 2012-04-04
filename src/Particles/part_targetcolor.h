@@ -45,15 +45,7 @@ class GEM_EXTERN part_targetcolor : public partlib_base
 
     	//////////
     	// Destructor
-    	virtual ~part_targetcolor();
-
-    	//////////
-    	// The scale factor angle
-    	float	    	m_scale;
-
-		//////////
-		// The color vector (RGBA)
-		float			m_color[4];
+    	virtual ~part_targetcolor(void);
 
     	//////////
     	// Scale changed
@@ -63,11 +55,19 @@ class GEM_EXTERN part_targetcolor : public partlib_base
     	// Color changed
     	void	    	colorMess(float red, float green, float blue, float alpha);
 
+
+    	//////////
+    	// The scale factor angle
+    	float	    	m_scale;
+
+      //////////
+      // The color vector (RGBA)
+      float			m_color[4];
+
     private:
 
     	//////////
     	// static member functions
-    	static void 	scaleMessCallback(void *data, t_floatarg scale);
     	static void 	colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 

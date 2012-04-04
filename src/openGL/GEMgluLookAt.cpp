@@ -149,31 +149,31 @@ void GEMgluLookAt :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMgluLookAt::upZMessCallback),  	gensym("upZ"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMgluLookAt :: eyeXMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: eyeXMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->eyeXMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: eyeYMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: eyeYMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->eyeYMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: eyeZMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: eyeZMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->eyeZMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: centerXMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: centerXMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->centerXMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: centerYMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: centerYMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->centerYMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: centerZMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: centerZMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->centerZMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: upXMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: upXMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->upXMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: upYMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: upYMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->upYMess( static_cast<t_float>(arg0));
 }
-void GEMgluLookAt :: upZMessCallback (void*data, t_floatarg arg0) {
+void GEMgluLookAt :: upZMessCallback (void*data, t_float arg0) {
 	GetMyClass(data)->upZMess( static_cast<t_float>(arg0));
 }
 

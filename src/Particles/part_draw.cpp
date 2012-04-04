@@ -29,7 +29,7 @@ CPPEXTERN_NEW(part_draw);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_draw :: part_draw()
+part_draw :: part_draw(void)
 		   : m_drawType(GL_LINES)
 { }
 
@@ -37,7 +37,7 @@ part_draw :: part_draw()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_draw :: ~part_draw()
+part_draw :: ~part_draw(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -48,17 +48,14 @@ void part_draw :: renderParticles(GemState *state)
 {
   bool lighting=false;
   state->get(GemState::_GL_LIGHTING, lighting);
-	if (lighting)
-	{
+	if (lighting)	{
 		glDisable(GL_LIGHTING);
 	}
-	if (m_tickTime > 0.f)
-	{
+	if (m_tickTime > 0.f)	{
 		pMove();
 	}
 	pDrawGroupp(m_drawType);
-	if (lighting)
-	{
+	if (lighting) {
 		glEnable(GL_LIGHTING);
 	}
 }
@@ -67,7 +64,7 @@ void part_draw :: renderParticles(GemState *state)
 // typeMess
 //
 /////////////////////////////////////////////////////////
-void part_draw :: typeMess(int ac,t_atom* av)
+void part_draw :: typeMess(t_symbol*s,int ac,t_atom* av)
 {
   if(ac&&A_SYMBOL==av->a_type) {
     t_symbol*s=atom_getsymbolarg(0,ac,av);
@@ -90,12 +87,7 @@ void part_draw :: typeMess(int ac,t_atom* av)
 /////////////////////////////////////////////////////////
 void part_draw :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_draw::typeMessCallback),
-    	    gensym("draw"), A_GIMME, A_NULL);
-}
-void part_draw :: typeMessCallback(void *data,  t_symbol *s, int ac,t_atom* av)
-{
-    GetMyClass(data)->typeMess(ac,av);
+  CPPEXTERN_MSG (classPtr, "draw", typeMess);
 }
 
 

@@ -95,7 +95,7 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
 // Destructor
 //
 /////////////////////////////////////////////////////////
-newWave :: ~newWave()
+newWave :: ~newWave(void)
 {
     alreadyInit = 0;
     if(m_inletH)inlet_free(m_inletH);
@@ -229,7 +229,7 @@ void newWave :: heightMess(float size)
 // getforce
 //
 /////////////////////////////////////////////////////////
-void newWave :: getforce()
+void newWave :: getforce(void)
 {
     float d;
     int i;
@@ -308,7 +308,7 @@ void newWave :: noise(float rnd)
 // getdamp
 //
 /////////////////////////////////////////////////////////
-void newWave :: getdamp()
+void newWave :: getdamp(void)
 {
     float d;
     int i;
@@ -393,7 +393,7 @@ void newWave :: position(float posX, float posY, float posZ)
 // savepos
 //
 /////////////////////////////////////////////////////////
-void newWave :: savepos()
+void newWave :: savepos(void)
 {
     int i;
     int j;
@@ -409,7 +409,7 @@ void newWave :: savepos()
 // getvelocity
 //
 /////////////////////////////////////////////////////////
-void newWave :: getvelocity()
+void newWave :: getvelocity(void)
 {
     for (int i=1; i<gridX-1; i++)
         for (int j=1;j<gridY-1; j++)
@@ -420,7 +420,7 @@ void newWave :: getvelocity()
 // getposition
 //
 /////////////////////////////////////////////////////////
-void newWave :: getposition()
+void newWave :: getposition(void)
 {
     for ( int i=1; i<gridX-1; i++)
         for ( int j=1;j<gridY-1; j++)
@@ -462,7 +462,7 @@ void newWave :: setSize( int valueX, int valueY )
 // bang
 //
 /////////////////////////////////////////////////////////
-void newWave :: bangMess( )
+void newWave :: bangMess(void)
 {
 
 		savepos();
@@ -728,42 +728,25 @@ void newWave :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "noise", noise, float);
 
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK1MessCallback),
-                  gensym("K1"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD1MessCallback),
-                  gensym("D1"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK2MessCallback),
-                  gensym("K2"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD2MessCallback),
-                  gensym("D2"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setK3MessCallback),
-                  gensym("K3"), A_FLOAT, A_NULL);
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&newWave::setD3MessCallback),
-                  gensym("D3"), A_FLOAT, A_NULL);
+
+  CPPEXTERN_MSG1(classPtr, "K1", setK1Mess, float);
+  CPPEXTERN_MSG1(classPtr, "K2", setK2Mess, float);
+  CPPEXTERN_MSG1(classPtr, "K3", setK3Mess, float);
+  CPPEXTERN_MSG1(classPtr, "D1", setD1Mess, float);
+  CPPEXTERN_MSG1(classPtr, "D2", setD2Mess, float);
+  CPPEXTERN_MSG1(classPtr, "D3", setD3Mess, float);
 }
 
-void newWave :: setK1MessCallback(void *data, t_floatarg K)
-{
-    GetMyClass(data)->K1=(K);
-}
-void newWave :: setK2MessCallback(void *data, t_floatarg K)
-{
-    GetMyClass(data)->K2=(K);
-}
-void newWave :: setK3MessCallback(void *data, t_floatarg K)
-{
-    GetMyClass(data)->K3=(K);
-}
+void newWave :: setK1Mess(float K)
+{ K1=K; }
+void newWave :: setK2Mess(float K)
+{ K2=K; }
+void newWave :: setK3Mess(float K)
+{ K3=K; }
 
-void newWave :: setD1MessCallback(void *data, t_floatarg D)
-{
-    GetMyClass(data)->D1=(D);
-}
-void newWave :: setD2MessCallback(void *data, t_floatarg D)
-{
-    GetMyClass(data)->D2=(D);
-}
-void newWave :: setD3MessCallback(void *data, t_floatarg D)
-{
-    GetMyClass(data)->D3=(D);
-}
+void newWave :: setD1Mess(float D)
+{ D1=D; }
+void newWave :: setD2Mess(float D)
+{ D2=D; }
+void newWave :: setD3Mess(float D)
+{ D3=D; }

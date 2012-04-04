@@ -86,15 +86,15 @@ void GEMglViewport :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglViewport::heightMessCallback),  	gensym("height"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglViewport :: xMessCallback (void* data, t_floatarg arg0){
+void GEMglViewport :: xMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglViewport :: yMessCallback (void* data, t_floatarg arg0){
+void GEMglViewport :: yMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglViewport :: widthMessCallback (void* data, t_floatarg arg0){
+void GEMglViewport :: widthMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }
-void GEMglViewport :: heightMessCallback (void* data, t_floatarg arg0){
+void GEMglViewport :: heightMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->heightMess ( static_cast<t_float>(arg0));
 }

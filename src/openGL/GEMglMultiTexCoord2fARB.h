@@ -57,9 +57,9 @@ class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 texUnitMessCallback (void*, t_floatarg);
-	  static void	 sMessCallback (void*, t_floatarg);
-	  static void	 tMessCallback (void*, t_floatarg);
+	  static void	 texUnitMessCallback (void*, t_float);
+	  static void	 sMessCallback (void*, t_float);
+	  static void	 tMessCallback (void*, t_float);
 };
 #endif // for header file
 

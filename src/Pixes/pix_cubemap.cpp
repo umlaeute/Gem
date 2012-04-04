@@ -414,54 +414,31 @@ void pix_cubemap :: envMess(int num)
 /////////////////////////////////////////////////////////
 void pix_cubemap :: obj_setupCallback(t_class *classPtr)
 {
-  //  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::imageRight_callback), gensym("gem_imageX+"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageX-"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "float", textureOnOff, int);
+  CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
+  CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
+  CPPEXTERN_MSG1(classPtr, "env", envMess, int);
+  CPPEXTERN_MSG1(classPtr, "texunit", texunitMess, int);
+  CPPEXTERN_MSG1(classPtr, "map", mapMess, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageY+"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageY-"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageZ+"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::rightImage_callback), gensym("gem_imageZ-"), A_GIMME, A_NULL);
-
-  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_cubemap::floatMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::textureMessCallback),
-                  gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::repeatMessCallback),
-                  gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::envMessCallback),
-                  gensym("env"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::texunitCallback),
-                  gensym("texunit"), A_FLOAT, A_NULL);
-
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_cubemap::mapCallback),
-                  gensym("map"), A_FLOAT, A_NULL);
+  //  CPPEXTERN_MSG (classPtr, "gem_imageX+", rightImageMess);
+  CPPEXTERN_MSG (classPtr, "gem_imageX-", rightImageMess);
+  CPPEXTERN_MSG (classPtr, "gem_imageY+", rightImageMess);
+  CPPEXTERN_MSG (classPtr, "gem_imageY-", rightImageMess);
+  CPPEXTERN_MSG (classPtr, "gem_imageZ+", rightImageMess);
+  CPPEXTERN_MSG (classPtr, "gem_imageZ-", rightImageMess);
 }
-void pix_cubemap :: floatMessCallback(void *data, float n)
+void pix_cubemap :: texunitMess(int unit)
 {
-  GetMyClass(data)->textureOnOff((int)n);
+  m_texunit=unit;
 }
-void pix_cubemap :: textureMessCallback(void *data, t_floatarg quality)
+void pix_cubemap :: mapMess(int unit)
 {
-  GetMyClass(data)->textureQuality((int)quality);
-}
-void pix_cubemap :: repeatMessCallback(void *data, t_floatarg repeat)
-{
-  GetMyClass(data)->repeatMess((int)repeat);
-}
-void pix_cubemap :: envMessCallback(void *data, t_floatarg num )
-{
-  GetMyClass(data)->envMess((int) num);
-}
-void pix_cubemap :: texunitCallback(void *data, t_floatarg unit)
-{
-  GetMyClass(data)->m_texunit=(int)unit;
-}
-void pix_cubemap :: mapCallback(void *data, t_floatarg unit)
-{
-  GetMyClass(data)->m_map=(int)unit;
+  m_map=unit;
 }
 
-void pix_cubemap :: rightImage_callback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
 {
   int id=-1;
   if(gensym("gem_imageX+")==s)id=0;
@@ -472,9 +449,9 @@ void pix_cubemap :: rightImage_callback(void *data, t_symbol *s, int argc, t_ato
   if(gensym("gem_imageZ-")==s)id=5;
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
+    rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
   } else {
-    GetMyClass(data)->error("wrong righthand arguments...");
+    error("wrong righthand arguments...");
     ::error("post: %d", argc);
   }
 }

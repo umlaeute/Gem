@@ -88,7 +88,7 @@ class GEM_EXTERN pix_threshold : public GemPixObj
     	//////////
     	// Static member functions
     	static void 	vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	floatThreshMessCallback(void *data, t_floatarg thresh);
+    	static void 	floatThreshMessCallback(void *data, t_float thresh);
 };
 
 #endif	// for header file

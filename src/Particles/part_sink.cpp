@@ -35,11 +35,11 @@ part_sink :: part_sink(int argc, t_atom*argv)
 
   if (argc>0){
     if (argv->a_type==A_SYMBOL){
-      domainMess(atom_getsymbol(argv));
+      domainMess(atom_getsymbol(argv)->s_name);
       argv++;
       argc--;
     }
-    vectorMess(argc, argv);
+    vectorMess(0, argc, argv);
   }
 
   //inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("kill"));
@@ -57,25 +57,26 @@ part_sink :: ~part_sink()
 // vel.domain
 //
 /////////////////////////////////////////////////////////
-void part_sink :: domainMess(t_symbol*s)
+void part_sink :: domainMess(const std::string&str)
 {
-  if      (s==gensym("point"    ))m_domain=PDPoint;
-  else if (s==gensym("line"     ))m_domain=PDLine;
-  else if (s==gensym("triangle" ))m_domain=PDTriangle;
-  else if (s==gensym("plane"    ))m_domain=PDPlane;
-  else if (s==gensym("box"      ))m_domain=PDBox;
-  else if (s==gensym("sphere"   ))m_domain=PDSphere;
-  else if (s==gensym("cylinder" ))m_domain=PDCylinder;
-  else if (s==gensym("cone"     ))m_domain=PDCone;
-  else if (s==gensym("blob"     ))m_domain=PDBlob;
-  else if (s==gensym("disc"     ))m_domain=PDDisc;
-  else if (s==gensym("rectangle"))m_domain=PDRectangle;
-  else error("GEM: particles: unknown domain");
+  if(0) {
+  } else if (str == "point"    ) { m_domain=PDPoint;
+  } else if (str == "line"     ) { m_domain=PDLine;
+  } else if (str == "triangle" ) { m_domain=PDTriangle;
+  } else if (str == "plane"    ) { m_domain=PDPlane;
+  } else if (str == "box"      ) { m_domain=PDBox;
+  } else if (str == "sphere"   ) { m_domain=PDSphere;
+  } else if (str == "cylinder" ) { m_domain=PDCylinder;
+  } else if (str == "cone"     ) { m_domain=PDCone;
+  } else if (str == "blob"     ) { m_domain=PDBlob;
+  } else if (str == "disc"     ) { m_domain=PDDisc;
+  } else if (str == "rectangle") { m_domain=PDRectangle;
+  } else error("unknown domain '%s'", str.c_str());
 }
 void part_sink :: killMess(int kill){
   m_kill=kill>0;
 }
-void part_sink :: vectorMess(int argc, t_atom*argv){
+void part_sink :: vectorMess(t_symbol*s, int argc, t_atom*argv){
   int i=9;
   while(i--)if(argc>i)m_arg[i]=atom_getfloat(argv+i);
 }
@@ -98,23 +99,8 @@ void part_sink :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_sink :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_sink::killMessCallback),
-		  gensym("kill"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_sink::domainMessCallback),
-		  gensym("domain"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_sink::vectorMessCallback),
-		  gensym("vector"), A_GIMME, A_NULL);
-}
-void part_sink :: killMessCallback(void *data, t_floatarg num)
-{
-  GetMyClass(data)->killMess((int)num);
-}
-void part_sink :: domainMessCallback(void *data, t_symbol*s)
-{
-  GetMyClass(data)->domainMess(s);
-}
-void part_sink :: vectorMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
-{
-  GetMyClass(data)->vectorMess(argc, argv);
+  CPPEXTERN_MSG1(classPtr, "kill", killMess, int);
+  CPPEXTERN_MSG1(classPtr, "domain", domainMess, std::string);
+  CPPEXTERN_MSG (classPtr, "vector", vectorMess);
 }
 

@@ -36,29 +36,23 @@ class GEM_EXTERN part_draw : public partlib_base
 
 	    //////////
 	    // Constructor
-    	part_draw();
+    	part_draw(void);
 
     	//////////
     	virtual void 	renderParticles(GemState *state);
 
-    protected:
-
     	//////////
     	// Destructor
-    	virtual ~part_draw();
+    	virtual ~part_draw(void);
 
     	//////////
     	// How the object should be drawn
-		void			typeMess(int,t_atom*);
+      void			typeMess(t_symbol*,int,t_atom*);
 
-		//////////
-		int				m_drawType;
+ protected:
 
-	private:
-
-		//////////
-		// static member functions
-		static void 	typeMessCallback(void *data,  t_symbol *s,int,t_atom *);
+      //////////
+      int				m_drawType;
 };
 
 #endif	// for header file

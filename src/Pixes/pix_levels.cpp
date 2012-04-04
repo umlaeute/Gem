@@ -597,35 +597,35 @@ void pix_levels :: obj_setupCallback(t_class *classPtr)
 		  gensym("hiP"), A_DEFFLOAT, A_NULL);
 }
 
-void pix_levels :: autoCallback(void *data, t_floatarg m_DoAuto)
+void pix_levels :: autoCallback(void *data, t_float m_DoAuto)
 {
   GetMyClass(data)->m_DoAuto=(m_DoAuto>0.);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_levels :: uniCallback(void *data, t_floatarg m_DoUniform)
+void pix_levels :: uniCallback(void *data, t_float m_DoUniform)
 {
   GetMyClass(data)->m_DoUniform=(m_DoUniform>0.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: invCallback(void *data, t_floatarg m_DoAllowInversion)
+void pix_levels :: invCallback(void *data, t_float m_DoAllowInversion)
 {
   GetMyClass(data)->m_DoAllowInversion=(m_DoAllowInversion>0.);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_levels :: lowPCallback(void *data, t_floatarg m_LowPercentile)
+void pix_levels :: lowPCallback(void *data, t_float m_LowPercentile)
 {
   GetMyClass(data)->m_LowPercentile=(m_LowPercentile);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: hiPCallback(void *data, t_floatarg m_HighPercentile)
+void pix_levels :: hiPCallback(void *data, t_float m_HighPercentile)
 {
   GetMyClass(data)->m_HighPercentile=(m_HighPercentile);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t_floatarg m_UniformInputCeiling, t_floatarg m_UniformOutputFloor, t_floatarg m_UniformOutputCeiling)
+void pix_levels :: uniformCallback(void *data, t_float m_UniformInputFloor, t_float m_UniformInputCeiling, t_float m_UniformOutputFloor, t_float m_UniformOutputCeiling)
 {
   GetMyClass(data)->m_UniformInputFloor=(m_UniformInputFloor*255.);
   GetMyClass(data)->m_UniformInputCeiling=(m_UniformInputCeiling*255.);
@@ -633,7 +633,7 @@ void pix_levels :: uniformCallback(void *data, t_floatarg m_UniformInputFloor, t
   GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatarg m_RedInputCeiling, t_floatarg m_RedOutputFloor, t_floatarg m_RedOutputCeiling)
+void pix_levels :: redCallback(void *data, t_float m_RedInputFloor, t_float m_RedInputCeiling, t_float m_RedOutputFloor, t_float m_RedOutputCeiling)
 {
   GetMyClass(data)->m_RedInputFloor=(m_RedInputFloor*255.);
   GetMyClass(data)->m_RedInputCeiling=(m_RedInputCeiling*255.);
@@ -641,7 +641,7 @@ void pix_levels :: redCallback(void *data, t_floatarg m_RedInputFloor, t_floatar
   GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_floatarg m_GreenInputCeiling, t_floatarg m_GreenOutputFloor, t_floatarg m_GreenOutputCeiling)
+void pix_levels :: greenCallback(void *data, t_float m_GreenInputFloor, t_float m_GreenInputCeiling, t_float m_GreenOutputFloor, t_float m_GreenOutputCeiling)
 {
   GetMyClass(data)->m_GreenInputFloor=(m_GreenInputFloor*255.);
   GetMyClass(data)->m_GreenInputCeiling=(m_GreenInputCeiling*255.);
@@ -649,7 +649,7 @@ void pix_levels :: greenCallback(void *data, t_floatarg m_GreenInputFloor, t_flo
   GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: blueCallback(void *data, t_floatarg m_BlueInputFloor, t_floatarg m_BlueInputCeiling, t_floatarg m_BlueOutputFloor, t_floatarg m_BlueOutputCeiling)
+void pix_levels :: blueCallback(void *data, t_float m_BlueInputFloor, t_float m_BlueInputCeiling, t_float m_BlueOutputFloor, t_float m_BlueOutputCeiling)
 {
   GetMyClass(data)->m_BlueInputFloor=(m_BlueInputFloor*255.);
   GetMyClass(data)->m_BlueInputCeiling=(m_BlueInputCeiling*255.);

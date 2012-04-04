@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglIsList : public GemGLBase
 	  t_outlet*m_outlet;
 
 	// static member functions
-	  static void	 listMessCallback (void*, t_floatarg);
+	  static void	 listMessCallback (void*, t_float);
 };
 #endif // for header file

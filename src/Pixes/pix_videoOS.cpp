@@ -196,11 +196,11 @@ void pix_videoOS :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *a
 			      static_cast<int>(atom_getfloatarg(4, ac, av)),
 			      static_cast<int>(atom_getfloatarg(5, ac, av)) );
 }
-void pix_videoOS :: offsetMessCallback(void *data, t_floatarg x, t_floatarg y)
+void pix_videoOS :: offsetMessCallback(void *data, t_float x, t_float y)
 {
     GetMyClass(data)->offsetMess(static_cast<int>(x), static_cast<int>(y));
 }
-void pix_videoOS :: swapMessCallback(void *data, t_floatarg state)
+void pix_videoOS :: swapMessCallback(void *data, t_float state)
 {
     GetMyClass(data)->swapMess(static_cast<int>(state));
 }

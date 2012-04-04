@@ -173,13 +173,13 @@ void vertex_grid :: obj_setupCallback(t_class *classPtr)
     	    gensym("spacing"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
-void vertex_grid :: sizeMessCallback(void *data, t_floatarg x, t_floatarg y)
+void vertex_grid :: sizeMessCallback(void *data, t_float x, t_float y)
 {
     GetMyClass(data)->m_x=(static_cast<int>(x));
     GetMyClass(data)->m_y=(static_cast<int>(y));
 }
 
-void vertex_grid :: spacingMessCallback(void *data, t_floatarg x, t_floatarg y)
+void vertex_grid :: spacingMessCallback(void *data, t_float x, t_float y)
 {
   GetMyClass(data)->m_spacex=(static_cast<float>(x));
   GetMyClass(data)->m_spacey=(static_cast<float>(y));

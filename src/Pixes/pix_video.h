@@ -156,7 +156,7 @@ class GEM_EXTERN pix_video : public GemBase
 
   static void closeMessCallback(void *data);
   static void openMessCallback(void *data, t_symbol*, int, t_atom*);
-  static void runningMessCallback(void *data, t_floatarg dev);
+  static void runningMessCallback(void *data, t_float dev);
 
 
 
@@ -170,14 +170,14 @@ class GEM_EXTERN pix_video : public GemBase
   static void applyPropertiesMessCallback(void *data);
   static void clearPropertiesMessCallback(void *data);
 
-  static void asynchronousMessCallback(void *data, t_floatarg);
+  static void asynchronousMessCallback(void *data, t_float);
 
   static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
   static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
   static void normMessCallback(void *data, t_symbol*format);
   static void modeMessCallback(void *data, t_symbol*,int,t_atom*);
   static void colorMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void qualityMessCallback(void *data, t_floatarg dev);
+  static void qualityMessCallback(void *data, t_float dev);
 };
 
 #endif	// for header file

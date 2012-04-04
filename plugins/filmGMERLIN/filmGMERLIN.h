@@ -87,20 +87,16 @@ class GEM_EXPORT filmGMERLIN : public film {
   // GROUP:	Movie data
   //-----------------------------------
  protected:
-  GLenum  m_wantedFormat; // format requested by the user
-  double m_fps;  // the frame-rate
-  int m_numFrames, m_numTracks; // number of frames in video
-  int m_curFrame;
   pixBlock m_image; // output image
+  int m_numFrames, m_numTracks; // number of frames in video
 
   bgav_t*   	 m_file;
   bgav_options_t * m_opt;
-  bool           m_seekable; /* the track can be seeked */
-  gavl_video_format_t*m_gformat,*m_finalformat;
   int m_track, m_stream;
   gavl_video_frame_t*m_gframe,*m_finalframe;
-  gavl_video_converter_s*m_gconverter;
+  gavl_video_converter_t*m_gconverter;
 
+  double m_fps;  // the frame-rate
   int m_fps_num, m_fps_denum;
 
   int64_t m_next_timestamp;
@@ -108,14 +104,14 @@ class GEM_EXPORT filmGMERLIN : public film {
   gavl_frame_table_t *m_frametable;
 #endif
 
-  static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
-  virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
-
-  int m_lastFrame;
-
- private:
-  // whether we need to convert to use it in Gem
+  // whether we need to convert the image before using it in Gem
   bool m_doConvert;
+
+
+  virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
+ private:
+  static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
+
 };};};
 
 #endif	// for header file

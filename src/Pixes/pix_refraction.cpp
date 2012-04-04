@@ -230,24 +230,24 @@ void pix_refraction :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::magCallback),
 		  gensym("mag"), A_DEFFLOAT, A_NULL);
 }
-void pix_refraction :: refractCallback(void *data, t_floatarg m_Refraction)
+void pix_refraction :: refractCallback(void *data, t_float m_Refraction)
 {
   GetMyClass(data)->m_Refraction=(m_Refraction);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_refraction :: widthCallback(void *data, t_floatarg m_CellWidth)
+void pix_refraction :: widthCallback(void *data, t_float m_CellWidth)
 {
   GetMyClass(data)->m_CellWidth=(m_CellWidth);
   GetMyClass(data)->setPixModified();
 }
-void pix_refraction :: heightCallback(void *data, t_floatarg m_CellHeight)
+void pix_refraction :: heightCallback(void *data, t_float m_CellHeight)
 {
   GetMyClass(data)->m_CellHeight=(m_CellHeight);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_refraction :: magCallback(void *data, t_floatarg m_DoAllowMagnification)
+void pix_refraction :: magCallback(void *data, t_float m_DoAllowMagnification)
 {
   GetMyClass(data)->m_DoAllowMagnification=(m_DoAllowMagnification);
   GetMyClass(data)->setPixModified();

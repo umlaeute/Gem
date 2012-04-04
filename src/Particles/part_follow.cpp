@@ -38,7 +38,7 @@ part_follow :: part_follow(t_floatarg num)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_follow :: ~part_follow()
+part_follow :: ~part_follow(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -59,11 +59,9 @@ void part_follow :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_follow :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_follow::numberMessCallback),
-		  gensym("accel"), A_FLOAT, A_NULL);
-}
-void part_follow :: numberMessCallback(void *data, t_floatarg num)
-{
-  GetMyClass(data)->numberMess(num);
+  CPPEXTERN_MSG1(classPtr, "accel", accelMess, float);
 }
 
+void part_follow :: accelMess(float accel) {
+  m_accel=accel;
+}

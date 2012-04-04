@@ -47,22 +47,15 @@ class GEM_EXTERN part_velocity : public partlib_base
 
   //////////
   // Destructor
-  virtual ~part_velocity();
+  virtual ~part_velocity(void);
 
   //////////
-  void		vectorMess(int argc, t_atom*argv);
-  void		domainMess(t_symbol*s);
+  void		vectorMess(t_symbol*s, int argc, t_atom*argv);
+  void		domainMess(const std::string&);
 
   //////////
   float		m_arg[9];
   PDomainEnum	m_domain;
-
- private:
-
-  //////////
-  // static member functions
-  static void	domainMessCallback(void *data, t_symbol*s);
-  static void	vectorMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 
 #endif	// for header file

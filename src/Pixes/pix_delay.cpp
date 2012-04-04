@@ -101,7 +101,7 @@ void pix_delay :: obj_setupCallback(t_class *classPtr)
 }
 
 
-void pix_delay :: delayMessCallback(void *data, t_floatarg frames)
+void pix_delay :: delayMessCallback(void *data, t_float frames)
 {
   GetMyClass(data)->delayMess((int)frames);
 }

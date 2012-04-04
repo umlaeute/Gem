@@ -50,6 +50,6 @@ class GEM_EXTERN GEMglLineWidth : public GemGLBase
 	  t_inlet *m_inlet[1];
 
 	// static member functions
-	  static void	 widthMessCallback (void*, t_floatarg);
+	  static void	 widthMessCallback (void*, t_float);
 };
 #endif // for header file

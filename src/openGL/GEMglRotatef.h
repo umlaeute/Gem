@@ -59,9 +59,9 @@ class GEM_EXTERN GEMglRotatef : public GemGLBase
 	  t_inlet *m_inlet[4];
 
 	// static member functions
-	  static void	 angleMessCallback (void*, t_floatarg);
-	  static void	 xMessCallback (void*, t_floatarg);
-	  static void	 yMessCallback (void*, t_floatarg);
-	  static void	 zMessCallback (void*, t_floatarg);
+	  static void	 angleMessCallback (void*, t_float);
+	  static void	 xMessCallback (void*, t_float);
+	  static void	 yMessCallback (void*, t_float);
+	  static void	 zMessCallback (void*, t_float);
 };
 #endif // for header file

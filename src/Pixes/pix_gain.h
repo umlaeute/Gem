@@ -92,8 +92,8 @@ class GEM_EXTERN pix_gain : public GemPixObj
     	//////////
     	// Static member functions
     	static void 	vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	floatGainMessCallback(void *data, t_floatarg gain);
-    	static void 	saturateMessCallback(void *data, t_floatarg saturate);
+    	static void 	floatGainMessCallback(void *data, t_float gain);
+    	static void 	saturateMessCallback(void *data, t_float saturate);
 };
 
 #endif	// for header file

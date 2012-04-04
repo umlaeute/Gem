@@ -70,10 +70,10 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	offsetCallback(void *data, t_floatarg m_OffsetScale);
-	static void 	gapCallback(void *data, t_floatarg m_LineGap);
-	static void 	fillCallback(void *data, t_floatarg m_DoFilledLines);
-	static void 	smoothCallback(void *data, t_floatarg m_DoSmoothFill);
+    	static void 	offsetCallback(void *data, t_float m_OffsetScale);
+	static void 	gapCallback(void *data, t_float m_LineGap);
+	static void 	fillCallback(void *data, t_float m_DoFilledLines);
+	static void 	smoothCallback(void *data, t_float m_DoSmoothFill);
 };
 
 #endif	// for header file

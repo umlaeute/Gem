@@ -86,15 +86,15 @@ void GEMglTexCoord4i :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord4i::qMessCallback),  	gensym("q"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexCoord4i :: sMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord4i :: sMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord4i :: tMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord4i :: tMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord4i :: rMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord4i :: rMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->rMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord4i :: qMessCallback (void* data, t_floatarg arg0){
+void GEMglTexCoord4i :: qMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->qMess ( static_cast<t_float>(arg0));
 }

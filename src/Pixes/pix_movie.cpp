@@ -161,22 +161,22 @@ void pix_movie :: obj_setupCallback(t_class *classPtr)
 		  gensym("rectangle"), A_FLOAT, A_NULL);
 }
 
-void pix_movie :: textureMessCallback(void *data, t_floatarg quality)
+void pix_movie :: textureMessCallback(void *data, t_float quality)
 {
   GetMyClass(data)->textureQuality(static_cast<int>(quality));
 }
-void pix_movie :: repeatMessCallback(void *data, t_floatarg quality)
+void pix_movie :: repeatMessCallback(void *data, t_float quality)
 {
   GetMyClass(data)->repeatMess(static_cast<int>(quality));
 }
 
-void pix_movie :: modeCallback(void *data, t_floatarg quality)
+void pix_movie :: modeCallback(void *data, t_float quality)
 {
 	GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
     GetMyClass(data)->modeMess(static_cast<int>(quality));
 }
 
-void pix_movie :: rectangleCallback(void *data, t_floatarg quality)
+void pix_movie :: rectangleCallback(void *data, t_float quality)
 {
     GetMyClass(data)->modeMess(static_cast<int>(quality));
 }

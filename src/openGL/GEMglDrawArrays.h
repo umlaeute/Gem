@@ -59,8 +59,8 @@ class GEM_EXTERN GEMglDrawArrays : public GemGLBase
 	  t_inlet *m_inlet[3];
 
 	// static member functions
-	  static void	 modeMessCallback (void*, t_floatarg);
-	  static void	 firstMessCallback (void*, t_floatarg);
-	  static void	 countMessCallback (void*, t_floatarg);
+	  static void	 modeMessCallback (void*, t_float);
+	  static void	 firstMessCallback (void*, t_float);
+	  static void	 countMessCallback (void*, t_float);
 };
 #endif // for header file

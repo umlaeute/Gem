@@ -45,13 +45,11 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // Constructor
-  pix_texture();
-
- protected:
+  pix_texture(void);
 
   //////////
   // Destructor
-  virtual ~pix_texture();
+  virtual ~pix_texture(void);
 
 
   ////////
@@ -68,35 +66,56 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // Establish texture object
-  virtual void	startRendering();
+  virtual void	startRendering(void);
 
   //////////
   // Delete texture object
-  virtual void	stopRendering();
+  virtual void	stopRendering(void);
 
   //////////
   // if we need to rebuild the list
-  virtual void   setModified();
+  virtual void   setModified(void);
 
-  //////////
-  // Turn on/off texture mapping
-  void          textureOnOff(int on);
-  int           m_textureOnOff;
+  /* send out our texture through the 2nd outlet to be used by others */
+  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
+
 
   //////////
   // Set up the texture state
-  void		setUpTextureState();
+  void		setUpTextureState(void);
+  void pushTexCoords(GemState*);
+  void popTexCoords(GemState*);
+
+
+  void textureOnOff(int on);
+  void textureQuality(int type);   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
+  void repeatMess(int type);
+  void textureRectangle(int mode);
+  void modeMess(int mode);
+  void envMess(int num);
+  void pboMess(int num_pbos);
+
+  void clientStorage(int mode);
+  void yuvMess(int mode);
+
+  void texunitMess(int unit);
+
+  void extTextureMess(t_symbol*, int, t_atom*);
+
+
+ protected:
+
+  //////////
+  // Turn on/off texture mapping
+  int           m_textureOnOff;
 
   //////////
   // Set the texture quality
-  // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
-  void          textureQuality(int type);
   GLuint		  m_textureQuality;
 
   //////////
   // Set the texture quality
   // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
-  void          repeatMess(int type);
   GLuint        m_repeat, m_doRepeat;
 
   //////////
@@ -126,8 +145,6 @@ class GEM_EXTERN pix_texture : public GemBase
   GLboolean   m_extUpsidedown;
   t_inlet         *m_inTexID;
 
-  /* send out our texture through the 2nd outlet to be used by others */
-  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
   t_outlet	*m_outTexID;
 
 
@@ -150,27 +167,21 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // this is what we get from upstream
-  void pushTexCoords(GemState*);
-  void popTexCoords(GemState*);
   TexCoord       *m_oldTexCoords;
   int             m_oldNumCoords;
   int             m_oldTexture;
   TexCoord        m_oldBaseCoord;
   bool            m_oldOrientation;
 
-
-
   int m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 
   GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
 
-  void    textureRectangle(int mode);
   int		m_rectangle; //rectangle or power of 2
   int m_canRectangle; // openGL caps and GemSettings
 
   //////////
   // texture envirnoment mode
-  void		envMess(int num);
   GLint		m_env; // GL_TEXTURE_ENV_MODE
 
   int		m_clientStorage; //for Apple's client storage extension
@@ -181,7 +192,6 @@ class GEM_EXTERN pix_texture : public GemBase
 
 
   /* using PBOs for (hopefully) optimized pixel transfers */
-  void pboMess(int num_pbos);
   GLint m_numPbo;
   GLint m_curPbo;
   GLuint *m_pbo;                   // IDs of PBO
@@ -189,23 +199,6 @@ class GEM_EXTERN pix_texture : public GemBase
 
   /* upside down texture? */
   GLboolean m_upsidedown;
-
- private:
-
-	//////////
-	// static member functions
-	static void 	floatMessCallback(void *data, float n);
-	static void 	textureMessCallback(void *data, t_floatarg n);
-	static void 	modeCallback(void *data, t_floatarg n);
-	static void 	rectangleCallback(void *data, t_floatarg n);
-	static void   envMessCallback(void *data, t_floatarg n);
-	static void 	repeatMessCallback(void *data, t_floatarg n);
-	static void 	clientStorageCallback(void *data, t_floatarg n);
-	static void 	yuvCallback(void *data, t_floatarg n);
-  static void		texunitCallback(void *data, t_floatarg unit);
-  static void 	extTextureCallback(void *data, t_symbol*,int,t_atom*);
-
-	static void 	pboCallback(void *data, t_floatarg n);
 };
 
 #endif	// for header file

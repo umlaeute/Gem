@@ -77,12 +77,12 @@ void GEMglTexGeni :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGeni::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexGeni :: coordMessCallback (void* data, t_floatarg arg0){
+void GEMglTexGeni :: coordMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->coordMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexGeni :: pnameMessCallback (void* data, t_floatarg arg0){
+void GEMglTexGeni :: pnameMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexGeni :: paramMessCallback (void* data, t_floatarg arg0){
+void GEMglTexGeni :: paramMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

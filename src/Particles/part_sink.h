@@ -46,27 +46,16 @@ class GEM_EXTERN part_sink : public partlib_base
 
   //////////
   // Destructor
-  virtual ~part_sink();
+  virtual ~part_sink(void);
 
   //////////
-  // kill inside?
   void			killMess(int num);
+  void      domainMess(const std::string&s);
+  void			vectorMess(t_symbol*,int argc, t_atom*argv);
+
   bool			m_kill;
-
-  //////////
-  // vel.domain
   PDomainEnum           m_domain;
-  void                  domainMess(t_symbol *s);
   float			m_arg[9];
-  void			vectorMess(int argc, t_atom*argv);
-
- private:
-
-  //////////
-  // static member functions
-  static void		killMessCallback(void *data, t_floatarg num);
-  static void		domainMessCallback(void *data, t_symbol*s);
-  static void		vectorMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 
 #endif	// for header file

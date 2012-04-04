@@ -313,7 +313,7 @@ void pix_movieOS :: changeImageCallback(void *data, t_symbol *, int argc, t_atom
     GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
-void pix_movieOS :: autoCallback(void *data, t_floatarg state)
+void pix_movieOS :: autoCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_auto=!(!(int)state);
 }

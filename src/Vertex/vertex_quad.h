@@ -55,7 +55,7 @@ class GEM_EXTERN vertex_quad : public GemBase
     	//////////
     	// Do the rendering
     	virtual void 	render(GemState *state);
-        static void 	blendMessCallback(void *data, t_floatarg size);
+        static void 	blendMessCallback(void *data, t_float size);
 
 };
 

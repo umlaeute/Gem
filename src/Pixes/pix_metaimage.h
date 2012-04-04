@@ -95,9 +95,9 @@ class GEM_EXTERN pix_metaimage : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	sizeCallback(void *data, t_floatarg sz);
-	static void 	distanceCallback(void *data, t_floatarg m_DoDistanceBased);
-	static void 	cheapCallback(void *data, t_floatarg m_DoCheapAndNasty);
+    	static void 	sizeCallback(void *data, t_float sz);
+	static void 	distanceCallback(void *data, t_float m_DoDistanceBased);
+	static void 	cheapCallback(void *data, t_float m_DoCheapAndNasty);
 };
 
 #endif	// for header file

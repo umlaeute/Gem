@@ -92,10 +92,10 @@ void GEMglProgramEnvParameter4fvARB :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramEnvParameter4fvARB::paramsMessCallback),  	gensym("params"), A_GIMME, A_NULL);
 };
 
-void GEMglProgramEnvParameter4fvARB :: targetMessCallback (void* data, t_floatarg arg0){
+void GEMglProgramEnvParameter4fvARB :: targetMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglProgramEnvParameter4fvARB :: indexMessCallback (void* data, t_floatarg arg0){
+void GEMglProgramEnvParameter4fvARB :: indexMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->indexMess ( static_cast<t_float>(arg0));
 }
 void GEMglProgramEnvParameter4fvARB :: paramsMessCallback (void* data, t_symbol*,int argc, t_atom*argv){

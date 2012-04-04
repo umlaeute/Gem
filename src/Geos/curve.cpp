@@ -42,7 +42,7 @@ curve :: curve(t_floatarg numInputs)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-curve :: ~curve()
+curve :: ~curve(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -109,10 +109,6 @@ void curve :: resolutionMess(int resolution)
 /////////////////////////////////////////////////////////
 void curve :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&curve::resolutionMessCallback),
-    	    gensym("res"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "res", resolutionMess, int);
 }
-void curve :: resolutionMessCallback(void *data, t_floatarg res)
-{
-    GetMyClass(data)->resolutionMess(static_cast<int>(res));
-}
+

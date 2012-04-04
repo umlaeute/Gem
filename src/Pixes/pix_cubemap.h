@@ -156,23 +156,11 @@ class GEM_EXTERN pix_cubemap : public GemBase
   void rightImage(int id, GemState *state);
   imageStruct*m_img[6];
 
+  void texunitMess(int);
+  void mapMess(int);
+  void rightImageMess(t_symbol*, int, t_atom*);
+
   t_inlet*m_imgIn[6];
-
-
- private:
-
-  //////////
-  // static member functions
-  static void floatMessCallback(void *data, float n);
-  static void textureMessCallback(void *data, t_floatarg n);
-  static void modeCallback(void *data, t_floatarg n);
-  static void envMessCallback(void *data, t_floatarg n);
-  static void repeatMessCallback(void *data, t_floatarg n);
-  static void texunitCallback(void *data, t_floatarg unit);
-  static void mapCallback(void *data, t_floatarg unit);
-
-  static void rightImage_callback(void*, t_symbol*, int, t_atom*);
-
 };
 
 #endif	// for header file

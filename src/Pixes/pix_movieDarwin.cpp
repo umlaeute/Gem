@@ -915,17 +915,17 @@ void pix_movieDarwin :: changeImageCallback(void *data, t_symbol *, int argc, t_
   GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
-void pix_movieDarwin :: autoCallback(void *data, t_floatarg state)
+void pix_movieDarwin :: autoCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_auto=!(!static_cast<int>(state));
 }
 
-void pix_movieDarwin :: rateCallback(void *data, t_floatarg state)
+void pix_movieDarwin :: rateCallback(void *data, t_float state)
 {
   GetMyClass(data)->MovRate(state);
 }
 
-void pix_movieDarwin :: volumeCallback(void *data, t_floatarg state)
+void pix_movieDarwin :: volumeCallback(void *data, t_float state)
 {
   GetMyClass(data)->MovVolume(state);
 }
@@ -935,12 +935,12 @@ void pix_movieDarwin :: ramCallback(void *data)
   GetMyClass(data)->LoadRam();
 }
 
-void pix_movieDarwin :: hiqualityCallback(void *data, t_floatarg state)
+void pix_movieDarwin :: hiqualityCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_hiquality=static_cast<int>(state);
 }
 
-void pix_movieDarwin :: rectangleCallback(void *data, t_floatarg state)
+void pix_movieDarwin :: rectangleCallback(void *data, t_float state)
 {
   GetMyClass(data)->m_rectangle=static_cast<int>(state);
 }

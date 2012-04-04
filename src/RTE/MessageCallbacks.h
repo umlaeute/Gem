@@ -46,7 +46,11 @@ namespace gem {
       struct TypeTemplate : TypeTemplateCore<T, T> {
       };
     template<>
-      struct TypeTemplate<t_float> : TypeTemplateCore<t_float> {
+      struct TypeTemplate<float> : TypeTemplateCore<t_float, float> {
+        static t_atomtype atomtype_id(void) { return A_FLOAT; }
+      };
+    template<>
+      struct TypeTemplate<double> : TypeTemplateCore<t_float, double> {
         static t_atomtype atomtype_id(void) { return A_FLOAT; }
       };
     template<>

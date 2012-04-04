@@ -77,12 +77,12 @@ void GEMglColor3i :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3i::blueMessCallback),  	gensym("blue"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglColor3i :: redMessCallback (void* data, t_floatarg arg0){
+void GEMglColor3i :: redMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor3i :: greenMessCallback (void* data, t_floatarg arg0){
+void GEMglColor3i :: greenMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor3i :: blueMessCallback (void* data, t_floatarg arg0){
+void GEMglColor3i :: blueMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }

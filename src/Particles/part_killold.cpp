@@ -39,7 +39,7 @@ part_killold :: part_killold(t_floatarg num)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_killold :: ~part_killold()
+part_killold :: ~part_killold(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -60,11 +60,9 @@ void part_killold :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_killold :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_killold::numberMessCallback),
-    	    gensym("age"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "age", ageMess, float);
 }
-void part_killold :: numberMessCallback(void *data, t_floatarg num)
-{
-    GetMyClass(data)->numberMess(num);
+void part_killold :: ageMess(float age) { 
+  m_killAge = age;
 }
 

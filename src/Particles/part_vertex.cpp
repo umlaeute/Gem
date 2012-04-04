@@ -51,17 +51,18 @@ void part_vertex :: renderParticles(GemState *state)
   }
 }
 
+void part_vertex::posMess(t_float x, t_float y, t_float z)	{ 
+  m_x=x;
+  m_y=y;
+  m_z=z; 
+}
+
 /////////////////////////////////////////////////////////
 // static member functions
 //
 /////////////////////////////////////////////////////////
 void part_vertex :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_vertex::posMessCallback),
-		  gensym(""), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-}
-void part_vertex :: posMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-  GetMyClass(data)->posMess(x, y, z);
+  CPPEXTERN_MSG3(classPtr, "", posMess, float, float, float);
 }
 

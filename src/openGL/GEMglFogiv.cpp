@@ -78,7 +78,7 @@ void GEMglFogiv :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogiv::paramsMessCallback),  	gensym("params"), A_GIMME, A_NULL);
 }
 
-void GEMglFogiv :: pnameMessCallback (void* data, t_floatarg arg0) {
+void GEMglFogiv :: pnameMessCallback (void* data, t_float arg0) {
 	GetMyClass(data)->pnameMess (arg0);
 }
 void GEMglFogiv :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv) {

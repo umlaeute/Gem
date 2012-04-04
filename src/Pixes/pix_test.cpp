@@ -90,15 +90,14 @@ void pix_test :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_test :: obj_setupCallback(t_class *classPtr)
 {
-   class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_test::floatMessCallback));
-   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_test::csizeMessCallback),
-		  gensym("csize"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "float", floatMess, unsigned int);
+  CPPEXTERN_MSG1(classPtr, "csize", csizeMess, unsigned int);
 }
-void pix_test :: csizeMessCallback(void *data, float n)
+void pix_test :: csizeMess(unsigned int n)
 {
-  GetMyClass(data)->csize=(unsigned char)n;
+  csize=n;
 }
-void pix_test :: floatMessCallback(void *data, float n)
+void pix_test :: floatMess(unsigned int n)
 {
-  GetMyClass(data)->off=(unsigned char)n;
+  off=n;
 }

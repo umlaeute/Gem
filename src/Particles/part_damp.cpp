@@ -40,7 +40,7 @@ part_damp :: part_damp(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_damp :: ~part_damp()
+part_damp :: ~part_damp(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -72,10 +72,5 @@ void part_damp :: vectorMess(float x, float y, float z)
 /////////////////////////////////////////////////////////
 void part_damp :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_damp::vectorMessCallback),
-    	    gensym("vector"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-}
-void part_damp :: vectorMessCallback(void *data, t_floatarg x, t_floatarg y, t_floatarg z)
-{
-    GetMyClass(data)->vectorMess((float)x, (float)y, (float)z);
+  CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
 }

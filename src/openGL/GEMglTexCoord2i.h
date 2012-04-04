@@ -53,7 +53,7 @@ class GEM_EXTERN GEMglTexCoord2i : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 sMessCallback (void*, t_floatarg);
-	  static void	 tMessCallback (void*, t_floatarg);
+	  static void	 sMessCallback (void*, t_float);
+	  static void	 tMessCallback (void*, t_float);
 };
 #endif // for header file

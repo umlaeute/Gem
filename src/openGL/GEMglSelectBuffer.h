@@ -57,6 +57,6 @@ class GEM_EXTERN GEMglSelectBuffer : public GemGLBase
 	  t_outlet*m_bufout;
 
 	// static member functions
-	  static void	 sizeMessCallback (void*, t_floatarg);
+	  static void	 sizeMessCallback (void*, t_float);
 };
 #endif // for header file

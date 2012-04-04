@@ -65,10 +65,10 @@ class GEM_EXTERN GEMglEvalMesh2 : public GemGLBase
 	  t_inlet *m_inlet[5];
 
 	// static member functions
-	  static void	 modeMessCallback (void*, t_floatarg);
-	  static void	 i1MessCallback (void*, t_floatarg);
-	  static void	 i2MessCallback (void*, t_floatarg);
-	  static void	 j1MessCallback (void*, t_floatarg);
-	  static void	 j2MessCallback (void*, t_floatarg);
+	  static void	 modeMessCallback (void*, t_float);
+	  static void	 i1MessCallback (void*, t_float);
+	  static void	 i2MessCallback (void*, t_float);
+	  static void	 j1MessCallback (void*, t_float);
+	  static void	 j2MessCallback (void*, t_float);
 };
 #endif // for header file

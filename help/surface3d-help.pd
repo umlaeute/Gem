@@ -1,4 +1,4 @@
-#N canvas 2687 225 968 681 10;
+#N canvas 41 102 968 681 10;
 #X text 58 45 Class: geometric object;
 #X obj 13 64 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -1610,6 +1610,7 @@ points;
 #X connect 12 0 11 0;
 #X connect 17 0 89 0;
 #X connect 18 0 89 0;
+#X connect 19 0 89 0;
 #X connect 20 0 89 0;
 #X connect 21 0 89 0;
 #X connect 22 0 89 0;

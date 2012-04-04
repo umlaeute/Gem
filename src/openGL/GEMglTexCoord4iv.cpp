@@ -60,6 +60,6 @@ void GEMglTexCoord4iv :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord4iv::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglTexCoord4iv :: vMessCallback (void* data, t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) {
+void GEMglTexCoord4iv :: vMessCallback (void* data, t_float arg0, t_float arg1, t_float arg2, t_float arg3) {
 	GetMyClass(data)->vMess ( arg0, arg1, arg2, arg3);
 }

@@ -55,7 +55,7 @@ class GEM_EXTERN vertex_info : public GemBase
     	virtual void 	render(GemState *state);
 
  private:
-        static void 	vertexMessCallback(void *data, t_floatarg num, t_floatarg counter);
+        static void 	vertexMessCallback(void *data, t_float num, t_float counter);
 
 };
 

@@ -97,15 +97,15 @@ void GEMglBitmap :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::ymoveMessCallback),  	gensym("ymove"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglBitmap :: xorigMessCallback (void* data, t_floatarg arg0){
+void GEMglBitmap :: xorigMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xorigMess ( static_cast<t_float>(arg0));
 }
-void GEMglBitmap :: yorigMessCallback (void* data, t_floatarg arg0){
+void GEMglBitmap :: yorigMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->yorigMess ( static_cast<t_float>(arg0));
 }
-void GEMglBitmap :: xmoveMessCallback (void* data, t_floatarg arg0){
+void GEMglBitmap :: xmoveMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->xmoveMess ( static_cast<t_float>(arg0));
 }
-void GEMglBitmap :: ymoveMessCallback (void* data, t_floatarg arg0){
+void GEMglBitmap :: ymoveMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->ymoveMess ( static_cast<t_float>(arg0));
 }

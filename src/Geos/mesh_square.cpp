@@ -40,7 +40,7 @@ mesh_square :: mesh_square(t_floatarg sizeX, t_floatarg sizeY)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-mesh_square :: ~mesh_square()
+mesh_square :: ~mesh_square(void)
 { }
 
 /////////////////////////////////////////////////////////
@@ -73,6 +73,10 @@ void mesh_square :: setSize( int valueX, int valueY )
 	else gridY = gridX;
 
     getTexCoords();
+}
+void mesh_square :: setSize( int valueXY )
+{
+  setSize(valueXY, valueXY);
 }
 
 void mesh_square :: setGridX( int valueX )
@@ -170,35 +174,10 @@ void mesh_square :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void mesh_square :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_square::gridMessCallback),
-                  gensym("grid"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_square::gridXMessCallback),
-                  gensym("gridX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&mesh_square::gridYMessCallback),
-                  gensym("gridY"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "grid", setSize, int);
+  CPPEXTERN_MSG1(classPtr, "gridX", setGridX, int);
+  CPPEXTERN_MSG1(classPtr, "gridY", setGridY, int);
 }
 
-/////////////////////////////////////////////////////////
-// setGrid
-//
-/////////////////////////////////////////////////////////
-
-void mesh_square :: gridMessCallback(void *data, t_floatarg grid)
-{
-  int gridi=static_cast<int>(grid);
-  GetMyClass(data)->setSize(gridi,gridi);
-}
-
-void mesh_square :: gridXMessCallback(void *data, t_floatarg grid)
-{
-  int gridi=static_cast<int>(grid);
-  GetMyClass(data)->setGridX(gridi);
-}
-
-void mesh_square :: gridYMessCallback(void *data, t_floatarg grid)
-{
-  int gridi=static_cast<int>(grid);
-  GetMyClass(data)->setGridY(gridi);
-}
 
 

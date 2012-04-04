@@ -408,11 +408,11 @@ void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *a
 {
   GetMyClass(data)->vecGainMess(argc, argv);
 }
-void pix_gain :: floatGainMessCallback(void *data, t_floatarg gain)
+void pix_gain :: floatGainMessCallback(void *data, t_float gain)
 {
   GetMyClass(data)->floatGainMess(gain);
 }
-void pix_gain :: saturateMessCallback(void *data, t_floatarg sat)
+void pix_gain :: saturateMessCallback(void *data, t_float sat)
 {
   GetMyClass(data)->saturateMess(static_cast<int>(sat));
 }

@@ -68,11 +68,11 @@ class GEM_EXTERN GEMglMapGrid2f : public GemGLBase
 	  t_inlet *m_inlet[6];
 
 	// static member functions
-	  static void	 unMessCallback (void*, t_floatarg);
-	  static void	 u1MessCallback (void*, t_floatarg);
-	  static void	 u2MessCallback (void*, t_floatarg);
-	  static void	 vnMessCallback (void*, t_floatarg);
-	  static void	 v1MessCallback (void*, t_floatarg);
-	  static void	 v2MessCallback (void*, t_floatarg);
+	  static void	 unMessCallback (void*, t_float);
+	  static void	 u1MessCallback (void*, t_float);
+	  static void	 u2MessCallback (void*, t_float);
+	  static void	 vnMessCallback (void*, t_float);
+	  static void	 v1MessCallback (void*, t_float);
+	  static void	 v2MessCallback (void*, t_float);
 };
 #endif // for header file

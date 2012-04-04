@@ -74,9 +74,9 @@ void GEMglEvalCoord2d :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord2d::vMessCallback),  	gensym("v"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalCoord2d :: uMessCallback (void* data, t_floatarg arg0){
+void GEMglEvalCoord2d :: uMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->uMess ( static_cast<t_float>(arg0));
 }
-void GEMglEvalCoord2d :: vMessCallback (void* data, t_floatarg arg0){
+void GEMglEvalCoord2d :: vMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->vMess ( static_cast<t_float>(arg0));
 }

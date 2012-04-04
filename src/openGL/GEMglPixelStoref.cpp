@@ -68,9 +68,9 @@ void GEMglPixelStoref :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelStoref::paramMessCallback),  	gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPixelStoref :: pnameMessCallback (void* data, t_floatarg arg0){
+void GEMglPixelStoref :: pnameMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglPixelStoref :: paramMessCallback (void* data, t_floatarg arg0){
+void GEMglPixelStoref :: paramMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

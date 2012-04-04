@@ -59,6 +59,6 @@ void GEMglEdgeFlag :: obj_setupCallback(t_class *classPtr) {
 	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEdgeFlag::flagMessCallback),  	gensym("flag"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglEdgeFlag :: flagMessCallback (void* data, t_floatarg arg0){
+void GEMglEdgeFlag :: flagMessCallback (void* data, t_float arg0){
 	GetMyClass(data)->flagMess ( static_cast<t_float>(arg0));
 }

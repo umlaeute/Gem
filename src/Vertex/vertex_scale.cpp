@@ -173,7 +173,7 @@ void vertex_scale :: paramMessCallback(void *data, t_symbol*, int argc, t_atom*a
   GetMyClass(data)->paramMess(argc, argv);
 }
 
-void vertex_scale :: vertexMessCallback(void *data,  t_floatarg num, t_floatarg counter)
+void vertex_scale :: vertexMessCallback(void *data,  t_float num, t_float counter)
 {
   GetMyClass(data)->vertexMess(static_cast<int>(num),
 			       static_cast<int>(counter));

@@ -57,7 +57,7 @@ class GEM_EXTERN GEMglFeedbackBuffer : public GemGLBase
 	  t_inlet *m_inlet[2];
 
 	// static member functions
-	  static void	 sizeMessCallback (void*, t_floatarg);
-	  static void	 typeMessCallback (void*, t_floatarg);
+	  static void	 sizeMessCallback (void*, t_float);
+	  static void	 typeMessCallback (void*, t_float);
 };
 #endif // for header file

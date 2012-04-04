@@ -66,10 +66,10 @@ class GEM_EXTERN colorSquare : public GemShape
 
        	//////////
     	// static member functions
-    	static void 	vert0MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);
-    	static void 	vert1MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);
-    	static void 	vert2MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);
-    	static void 	vert3MessCallback(void *data, t_floatarg r, t_floatarg g, t_floatarg b);
+    	static void 	vert0MessCallback(void *data, t_float r, t_float g, t_float b);
+    	static void 	vert1MessCallback(void *data, t_float r, t_float g, t_float b);
+    	static void 	vert2MessCallback(void *data, t_float r, t_float g, t_float b);
+    	static void 	vert3MessCallback(void *data, t_float r, t_float g, t_float b);
 };
 
 #endif	// for header file

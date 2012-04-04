@@ -129,19 +129,19 @@ void pix_alpha :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_alpha::lowThreshMessCallback),
     	    gensym("low_val"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
-void pix_alpha :: highThreshMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
+void pix_alpha :: highThreshMessCallback(void *data, t_float red, t_float green, t_float blue)
 {
     GetMyClass(data)->highThreshMess((float)red, (float)green, (float)blue);
 }
-void pix_alpha :: lowThreshMessCallback(void *data, t_floatarg red, t_floatarg green, t_floatarg blue)
+void pix_alpha :: lowThreshMessCallback(void *data, t_float red, t_float green, t_float blue)
 {
     GetMyClass(data)->lowThreshMess((float)red, (float)green, (float)blue);
 }
-void pix_alpha :: alphaMessCallback(void *data, t_floatarg alpha)
+void pix_alpha :: alphaMessCallback(void *data, t_float alpha)
 {
     GetMyClass(data)->alphaMess((float)alpha);
 }
-void pix_alpha :: otheralphaMessCallback(void *data, t_floatarg alpha)
+void pix_alpha :: otheralphaMessCallback(void *data, t_float alpha)
 {
     GetMyClass(data)->otheralphaMess((float)alpha);
 }

@@ -81,9 +81,9 @@ class GEM_EXTERN pix_duotone : public GemPixObj
 
     	//////////
     	// Static member functions
-    	static void 	color1MessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3);
-    	static void 	color2MessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3);
-        static void 	threshMessCallback(void *data, t_floatarg value1, t_floatarg value2, t_floatarg value3);
+    	static void 	color1MessCallback(void *data, t_float value1, t_float value2, t_float value3);
+    	static void 	color2MessCallback(void *data, t_float value1, t_float value2, t_float value3);
+        static void 	threshMessCallback(void *data, t_float value1, t_float value2, t_float value3);
 };
 
 #endif	// for header file

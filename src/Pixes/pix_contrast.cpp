@@ -320,12 +320,12 @@ void pix_contrast :: obj_setupCallback(t_class *classPtr)
 
 }
 
-void pix_contrast :: contrastMessCallback(void *data, t_floatarg contrast)
+void pix_contrast :: contrastMessCallback(void *data, t_float contrast)
 {
 	GetMyClass(data)->contrastMess(contrast);
 }
 
-void pix_contrast :: saturationMessCallback(void *data, t_floatarg saturation)
+void pix_contrast :: saturationMessCallback(void *data, t_float saturation)
 {
 	GetMyClass(data)->saturationMess(saturation);
 }
