@@ -29,10 +29,10 @@
 #include "Gem/Exception.h"
 
 #include "plugins/PluginFactory.h"
+using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("OptiTrack", videoOptiTrack);
 
-using namespace gem::plugins;
 using namespace CameraLibrary;
 
 namespace {
