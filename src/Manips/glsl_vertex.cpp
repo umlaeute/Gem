@@ -207,7 +207,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
     memset(m_shaderString,0,size + 1);
     fseek(file,0,SEEK_SET);
     size_t count=fread(m_shaderString,1,size,file);
-	int err=ferror(file);
+    int err=ferror(file);
     fclose(file);
     if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
   } else {
