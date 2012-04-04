@@ -181,7 +181,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       startpost("backend #%d='%s'\t", m_videoHandles.size(), key.c_str());
       try {
         handle=gem::PluginFactory<gem::plugins::video>::getInstance(key);
-      } catch (GemException&ex) {
+      } catch (GemException&) {
 		  handle=NULL;
       }
       if(NULL==handle) {
@@ -279,8 +279,9 @@ void pix_video :: driverMess(std::string s)
 void pix_video :: driverMess(int dev)
 {
   if(dev>=0) {
-	if(dev>=m_videoHandles.size()){
-		error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
+    unsigned int udev=(unsigned int)dev;
+	if(udev>=m_videoHandles.size()){
+		error("driverID (%d) must not exceed %d", udev, m_videoHandles.size());
 		return;
 	}
 
@@ -288,7 +289,7 @@ void pix_video :: driverMess(int dev)
       m_videoHandle->stop();
       m_videoHandle->close();
     }
-    m_videoHandle=m_videoHandles[dev];
+    m_videoHandle=m_videoHandles[udev];
     if(m_videoHandle){
       if(m_videoHandle->open(m_writeprops)) {
         enumPropertyMess();
@@ -765,6 +766,14 @@ void pix_video :: qualityMess(int q) {
 }
 
 
+void pix_video :: resetMess(void) {
+  if(m_videoHandle)
+    m_videoHandle->reset();
+  else
+	    WITH_VIDEOHANDLES_DO(reset());
+}
+
+
 /////////////////////////////////////////////////////////
 // transferMess
 //
@@ -833,6 +842,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
     	    gensym("color"), A_GIMME, A_NULL);
     CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
+
+	CPPEXTERN_MSG0(classPtr, "reset", resetMess);
 
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)

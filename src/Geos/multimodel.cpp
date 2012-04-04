@@ -147,11 +147,11 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
   if(loaders.size()!=numModels) {
     /* outch, something went wrong! */
     error("failed to load model#%d of %d (%s)...resetting to original models", i, numModels, newName);
-
-    for(i=0; i<loaders.size(); i++) {
-      if(loaders[i])
-        delete loaders[i];
-      loaders[i]=NULL;
+    unsigned int ui;
+    for(ui=0; ui<loaders.size(); ui++) {
+      if(loaders[ui])
+        delete loaders[ui];
+      loaders[ui]=NULL;
     }
     loaders.clear();
     return;

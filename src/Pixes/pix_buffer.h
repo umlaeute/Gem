@@ -50,8 +50,8 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   //////////
   // Constructor
   pix_buffer(t_symbol *s,t_float f);
-  virtual bool  putMess(imageStruct*img,int pos);
-  virtual imageStruct* getMess(int pos);
+  virtual bool  putMess(imageStruct*img,unsigned int pos);
+  virtual imageStruct* getMess(unsigned int pos);
   virtual unsigned int numFrames(void);
 
   //////////

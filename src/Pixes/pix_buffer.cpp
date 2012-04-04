@@ -212,8 +212,8 @@ unsigned int pix_buffer :: numFrames( void )
 // put an image into the buffer @ position <pos>
 //
 /////////////////////////////////////////////////////////
-bool pix_buffer :: putMess(imageStruct*img,int pos){
-  if (pos<0 || pos>=m_numframes)return false;
+bool pix_buffer :: putMess(imageStruct*img, unsigned int pos){
+  if (pos>=m_numframes)return false;
   if(!img)return false;
   img->copy2Image(m_buffer+pos);
   return true;
@@ -222,11 +222,11 @@ bool pix_buffer :: putMess(imageStruct*img,int pos){
 // get an image from the buffer @ position <pos>
 //
 /////////////////////////////////////////////////////////
-imageStruct*pix_buffer :: getMess(int pos){
+imageStruct*pix_buffer :: getMess(unsigned int pos){
 
   //post("getting frame: %d", pos);
 
-  if (pos<0 || pos>=m_numframes)return 0;
+  if (pos>=m_numframes)return 0;
 
   /* just allocated but no image */
   if(0==m_buffer[pos].format)

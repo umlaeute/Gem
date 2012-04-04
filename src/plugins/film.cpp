@@ -165,7 +165,7 @@ namespace gem { namespace plugins {
 	  m_handles.push_back(filmImage);
 	  m_ids.push_back("image");
 	}
-      } catch (GemException&x) {
+      } catch (GemException&) {
 
       }
     }
