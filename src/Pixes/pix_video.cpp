@@ -766,6 +766,14 @@ void pix_video :: qualityMess(int q) {
 }
 
 
+void pix_video :: resetMess(void) {
+  if(m_videoHandle)
+    m_videoHandle->reset();
+  else
+	    WITH_VIDEOHANDLES_DO(reset());
+}
+
+
 /////////////////////////////////////////////////////////
 // transferMess
 //
@@ -834,6 +842,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
     	    gensym("color"), A_GIMME, A_NULL);
     CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
+
+	CPPEXTERN_MSG0(classPtr, "reset", resetMess);
 
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
