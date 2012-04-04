@@ -204,7 +204,13 @@ namespace gem { namespace plugins {
       // OK
 		  if(m_handle)
 			  return m_handle->reset();
-		  return false;
+
+	  bool result=false;
+		for(unsigned int i=0; i<m_allHandles.size(); i++) {
+			if(m_allHandles[i]->reset())
+				result=true;
+		}
+		return result;
 	  }
 	  virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable) {
       // OK
