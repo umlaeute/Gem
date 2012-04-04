@@ -130,7 +130,7 @@ void vertex_program :: openMess(t_symbol *filename)
   std::string fn = findFile(filename->s_name);
   m_buf=fn.c_str();
 
-  FILE *file = fopen(m_buf,"r");
+  FILE *file = fopen(m_buf,"rb");
   if(file) {
     fseek(file,0,SEEK_END);
     long size = ftell(file);
@@ -139,8 +139,9 @@ void vertex_program :: openMess(t_symbol *filename)
     memset(m_programString,0,size + 1);
     fseek(file,0,SEEK_SET);
     size_t count = fread(m_programString,1,size,file);
+    int err=ferror(file);
     fclose(file);
-    if(count<(size_t)size){error("error reading file"); return;}
+    if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
   } else {
     m_programString = new char[strlen(m_buf) + 1];
     strcpy(m_programString,m_buf);
