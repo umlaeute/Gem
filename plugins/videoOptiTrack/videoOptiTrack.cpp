@@ -38,7 +38,7 @@ using namespace CameraLibrary;
 namespace {
   struct CMInitBase {
     CMInitBase(void) {
-      std::cerr << "enable development...";
+		std::cerr << "OptiTrack: enable development...";
       cCameraLibraryStartupSettings::X().EnableDevelopment();
       std::cerr << "done"<<std::endl;
     }
@@ -50,12 +50,12 @@ namespace {
       CMInitBase(),
 			m_camman(CameraLibrary::CameraManager::X())
     {
-      std::cerr << "waiting for CameraManager init...";
+		std::cerr << "OptiTrack: waiting for CameraManager init...";
       m_camman.WaitForInitialization();
       std::cerr << "done"<<std::endl;
     }
     ~CMInit(void) {
-      std::cerr << "shuttind down CameraManager...";
+		std::cerr << "OptiTrack: shutting down CameraManager...";
       //CameraLibrary::CameraManager::X().Shutdown();
       std::cerr << "done"<<std::endl;
     }
@@ -82,7 +82,7 @@ videoOptiTrack::~videoOptiTrack(void) {
 	close();
 }
 void videoOptiTrack::close(void) {
-	std::cerr<<"close()" << std::endl;
+    //MARK;
 	stop();
 	if(m_camera)
 		m_camera->Release();
@@ -429,7 +429,7 @@ const std::string videoOptiTrack::getName(void) {
 
 
 bool videoOptiTrack::start(void) {
-	std::cerr<<"start" << std::endl;
+	//MARK;
 	bool status = false;
 	if(m_camera) {
 		m_camera->Start();
@@ -439,7 +439,7 @@ bool videoOptiTrack::start(void) {
   return status;
 }
 bool videoOptiTrack::stop (void) {
-	std::cerr<<"stop" << std::endl;
+	//MARK;
 	bool status=false;
 	if(m_camera) {
 		status=m_camera->IsCameraRunning();
