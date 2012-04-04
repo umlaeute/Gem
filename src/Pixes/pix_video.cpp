@@ -279,8 +279,9 @@ void pix_video :: driverMess(std::string s)
 void pix_video :: driverMess(int dev)
 {
   if(dev>=0) {
-	if(dev>=m_videoHandles.size()){
-		error("driverID (%d) must not exceed %d", dev, m_videoHandles.size());
+    unsigned int udev=(unsigned int)dev;
+	if(udev>=m_videoHandles.size()){
+		error("driverID (%d) must not exceed %d", udev, m_videoHandles.size());
 		return;
 	}
 
@@ -288,7 +289,7 @@ void pix_video :: driverMess(int dev)
       m_videoHandle->stop();
       m_videoHandle->close();
     }
-    m_videoHandle=m_videoHandles[dev];
+    m_videoHandle=m_videoHandles[udev];
     if(m_videoHandle){
       if(m_videoHandle->open(m_writeprops)) {
         enumPropertyMess();
