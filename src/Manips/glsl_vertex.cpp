@@ -198,7 +198,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
   std::string fn = findFile(filename->s_name);
   const char*buf=fn.c_str();
 
-  FILE *file = fopen(buf,"r");
+  FILE *file = fopen(buf,"rb");
   if(file) {
     fseek(file,0,SEEK_END);
     long size = ftell(file);
