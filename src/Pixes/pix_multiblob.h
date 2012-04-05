@@ -96,33 +96,34 @@ public:
   // Constructor
   pix_multiblob(t_float f);
 
-  // outlets for results
-  t_outlet        *m_infoOut;
-
-protected:
   //Destructor
-  ~pix_multiblob();
+  ~pix_multiblob(void);
 
   void processImage(imageStruct &image);
-  void doProcessing();
-  imageStruct m_image;
+  void doProcessing(void);
 
-  int m_blobNumber;
-  Blob *currentBlobs;
   void addToBlobArray(Blob *pblob, int blobNumber);
   void makeBlob(Blob *pb, int x, int y);
 
-  // the minimum size of a blob (relative to the image)
+  void numBlobsMess(unsigned int blobs);
   void blobSizeMess(t_float blobSize);
+  void threshMess(t_float thresh);
+
+protected:
+
+  imageStruct m_image;
+
+  int m_blobNumber;
+  Blob *m_currentBlobs;
+
+  // the minimum size of a blob (relative to the image)
   t_float m_blobsize;
 
   // the minimum value of a pixel to be within a blob
-  void threshMess(t_float thresh);
   unsigned char m_threshold;
 
-private:
-  static void blobSizeMessCallback(void *data, t_float blobSize);
-  static void threshMessCallback(void *data, t_float thresh);
+  // outlets for results
+  t_outlet        *m_infoOut;
 };
 
 #endif 	// for header file

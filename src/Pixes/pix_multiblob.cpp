@@ -92,14 +92,13 @@ Constructor
 initializes the pixBlocks and pixBlobs
 
 ------------------------------------------------------------*/
-pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_threshold(10)
+pix_multiblob :: pix_multiblob(t_floatarg f) : 
+  m_infoOut(NULL),
+  m_blobNumber(0),
+  m_currentBlobs(NULL),
+  m_blobsize(0.001), 
+  m_threshold(10)
 {
-  m_blobNumber = static_cast<int>(f);
-  if(m_blobNumber < 1)m_blobNumber = 6;
-
-  // initialize blob-structures
-  currentBlobs = new Blob[m_blobNumber];
-
   // initialize image
   m_image.xsize=320;
   m_image.ysize=240;
@@ -108,6 +107,11 @@ pix_multiblob :: pix_multiblob(t_floatarg f) : m_blobsize(0.001), m_threshold(10
 
   // outlets
   m_infoOut = outlet_new(this->x_obj, &s_list);
+
+  m_blobNumber = static_cast<int>(f);
+  if(m_blobNumber < 1)m_blobNumber = 6;
+  numBlobsMess(m_blobNumber);
+
 }
 
 /*------------------------------------------------------------
@@ -118,7 +122,7 @@ Destructor
 pix_multiblob :: ~pix_multiblob()
 {
   outlet_free(m_infoOut);
-  if(currentBlobs)delete[]currentBlobs;
+  if(m_currentBlobs)delete[]m_currentBlobs;
 }
 
 /*------------------------------------------------------------
@@ -191,13 +195,13 @@ void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber)
     int index=-1;
     int i = m_blobNumber;
     while(i--)
-      if (currentBlobs[i].area < min){
-        min = currentBlobs[i].area;
+      if (m_currentBlobs[i].area < min){
+        min = m_currentBlobs[i].area;
         index = i;
       }
-    if (index!=-1)currentBlobs[index] = *pb;
+    if (index!=-1)m_currentBlobs[index] = *pb;
   } else {
-    currentBlobs[blobNumber] = *pb;
+    m_currentBlobs[blobNumber] = *pb;
   }
 }
 
@@ -206,7 +210,7 @@ void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber)
 render
 
 ------------------------------------------------------------*/
-void pix_multiblob :: doProcessing()
+void pix_multiblob :: doProcessing(void)
 {
   int blobNumber = 0;
   int blobsize = static_cast<int>(m_blobsize * m_image.xsize * m_image.ysize);
@@ -241,7 +245,7 @@ void pix_multiblob :: doProcessing()
   t_float scaleY = 1./m_image.ysize;
   t_float scaleXY=scaleX*scaleY;
 
-  // no create a matrix of [blobNumber*3] elements
+  // now create a matrix of [blobNumber*3] elements
   // each row holds all information on our blob
   t_atom*ap = new t_atom[2+blobNumber*9];
   SETFLOAT(ap, static_cast<t_float>(blobNumber));
@@ -249,17 +253,17 @@ void pix_multiblob :: doProcessing()
 
   int bn=blobNumber;
   for(bn=0; bn<blobNumber; bn++) {
-    SETFLOAT(ap+bn*9+2, currentBlobs[bn].xmid()*scaleX); // weighted X
-    SETFLOAT(ap+bn*9+3, currentBlobs[bn].ymid()*scaleY); // weighted Y
-    SETFLOAT(ap+bn*9+4, currentBlobs[bn].m_xyaccum*scaleXY); // weighted Area
+    SETFLOAT(ap+bn*9+2, m_currentBlobs[bn].xmid()*scaleX); // weighted X
+    SETFLOAT(ap+bn*9+3, m_currentBlobs[bn].ymid()*scaleY); // weighted Y
+    SETFLOAT(ap+bn*9+4, m_currentBlobs[bn].m_xyaccum*scaleXY); // weighted Area
 
-    SETFLOAT(ap+bn*9+5, currentBlobs[bn].xmin()*scaleX); // minX
-    SETFLOAT(ap+bn*9+6, currentBlobs[bn].ymin()*scaleY); // minY
-    SETFLOAT(ap+bn*9+7, currentBlobs[bn].xmax()*scaleX); // maxX
-    SETFLOAT(ap+bn*9+8, currentBlobs[bn].ymax()*scaleY); // maxY
+    SETFLOAT(ap+bn*9+5, m_currentBlobs[bn].xmin()*scaleX); // minX
+    SETFLOAT(ap+bn*9+6, m_currentBlobs[bn].ymin()*scaleY); // minY
+    SETFLOAT(ap+bn*9+7, m_currentBlobs[bn].xmax()*scaleX); // maxX
+    SETFLOAT(ap+bn*9+8, m_currentBlobs[bn].ymax()*scaleY); // maxY
 
-    SETFLOAT(ap+bn*9+9, currentBlobs[bn].area*scaleXY);  // unweighted Area
-    SETFLOAT(ap+bn*9+10, currentBlobs[bn].angle());      // weighted orientation
+    SETFLOAT(ap+bn*9+9, m_currentBlobs[bn].area*scaleXY);  // unweighted Area
+    SETFLOAT(ap+bn*9+10, m_currentBlobs[bn].angle());      // weighted orientation
   }
 
   // i admit that it is naughty to use "matrix" from zexy/iemmatrix
@@ -327,6 +331,18 @@ void pix_multiblob :: threshMess(t_float thresh)
   m_threshold = CLAMP(thresh*255);
 }
 
+/*------------------------------------------------------------
+threshMess
+------------------------------------------------------------*/
+void pix_multiblob :: numBlobsMess(unsigned int blobs)
+{
+  if(m_currentBlobs)delete[]m_currentBlobs;
+
+  // initialize blob-structures
+  m_currentBlobs = new Blob[blobs];
+  m_blobNumber=blobs;
+}
+
 
 
 /////////////////////////////////////////////////////////
@@ -335,26 +351,9 @@ void pix_multiblob :: threshMess(t_float thresh)
 /////////////////////////////////////////////////////////
 void pix_multiblob :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::blobSizeMessCallback),
-		  gensym("blobSize"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::threshMessCallback),
-		  gensym("thresh"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiblob::threshMessCallback),
-		  gensym("threshold"), A_FLOAT, A_NULL);
-}
+  CPPEXTERN_MSG1(classPtr, "blobSize", blobSizeMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "thresh", threshMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "threshold", threshMess, t_float);
 
-/*------------------------------------------------------------
-blobSizeMessCallback
-------------------------------------------------------------*/
-void pix_multiblob :: blobSizeMessCallback(void *data, t_float blobSize)
-{
-  GetMyClass(data)->blobSizeMess(blobSize);
-}
-
-/*------------------------------------------------------------
-threshMessCallback
-------------------------------------------------------------*/
-void pix_multiblob :: threshMessCallback(void *data, t_float thresh)
-{
-  GetMyClass(data)->threshMess(thresh);
+  CPPEXTERN_MSG1(classPtr, "blobs", numBlobsMess, unsigned int);
 }
