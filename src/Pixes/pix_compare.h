@@ -4,7 +4,7 @@ LOG
 
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyright (c) GÂžnther Geiger. geiger@epy.co.at
+    Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     Copyright (c) 2003 Daniel Heckenberg
 
