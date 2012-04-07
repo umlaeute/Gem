@@ -44,12 +44,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="Gem.lib pd.lib"
 				OutputFile="pix_drum.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
-				IgnoreAllDefaultLibraries="TRUE"
 				SubSystem="2"/>
 			<Tool
 				Name="VCMIDLTool"

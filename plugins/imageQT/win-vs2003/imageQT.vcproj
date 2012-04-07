@@ -37,7 +37,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="Gem.lib pd.lib QTMLClient.lib OLDNAMES.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="Gem.lib QTMLClient.lib pd.lib"
 				OutputFile="$(OutDir)/gem_$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;;&quot;$(ProgramFiles)\QuickTime SDK\Libraries&quot;"
