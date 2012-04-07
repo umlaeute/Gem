@@ -18,6 +18,8 @@
 #include "RTE/RTE.h"
 
 #include "m_pd.h"
+#include <sstream>
+
 
 #if defined __linux__ || defined __APPLE__
 # define DL_OPEN
@@ -68,8 +70,14 @@ const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
     rte_getversion(&imajor, &iminor, &ibugfix);
     major=(unsigned int)imajor;
     minor=(unsigned int)iminor;
+
+    std::stringstream sstm;
+    sstm << "" << imajor << "."<<iminor<<"-"<<ibugfix;
+    return sstm.str();
   }
-  return std::string("???");
+
+  /* empty string: unknown */
+  return std::string("");
 }
 
 void*RTE :: getFunction(const std::string&name) {
@@ -79,6 +87,7 @@ void*RTE :: getFunction(const std::string&name) {
   /* no idea whether this actually works... */
   return (void*)GetProcAddress( GetModuleHandle("pd.dll"), name.c_str());
 #else
+
   // no loader for older Pd's....
 #endif
   return NULL;
