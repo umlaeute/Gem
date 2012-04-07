@@ -21,6 +21,7 @@
 
 
 #include "Loaders.h"
+#include "RTE/RTE.h"
 
 #if defined __linux__ || defined __APPLE__
 # define DL_OPEN
@@ -38,25 +39,18 @@
 extern "C" {
   typedef void (*loader_registrar_t)(gem_loader_t loader);
 }
-static loader_registrar_t pd_register_loader = NULL;
+static loader_registrar_t rte_register_loader = NULL;
 
-static int find_pd_loader(void) {
-  if(pd_register_loader)return 1;
-
-#ifdef DL_OPEN
-  pd_register_loader=(loader_registrar_t)dlsym(RTLD_DEFAULT, "sys_register_loader");
-#elif defined _WIN32
-  /* no idea whether this actually works... */
-  pd_register_loader = (loader_registrar_t)GetProcAddress( GetModuleHandle("pd.dll"), "sys_register_loader");
-#else
-  // no loader for older Pd's....
-#endif
-
-  return(NULL!=pd_register_loader);
+static int find_rte_loader(void) {
+  if(rte_register_loader)return 1;
+  gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+  if(rte)
+    rte_register_loader=(loader_registrar_t)rte->getFunction("sys_register_loader");
+  return(NULL!=rte_register_loader);
 }
 
 void gem_register_loader(gem_loader_t loader) {
-  if(find_pd_loader()) {
-    pd_register_loader(loader);
+  if(find_rte_loader()) {
+    rte_register_loader(loader);
   }
 }
