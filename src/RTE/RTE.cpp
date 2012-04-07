@@ -16,6 +16,9 @@
 /////////////////////////////////////////////////////////
 
 #include "RTE/RTE.h"
+
+#include "m_pd.h"
+
 #if defined __linux__ || defined __APPLE__
 # define DL_OPEN
 #endif
@@ -51,6 +54,11 @@ const std::string RTE :: getName(void) {
 }
 
 const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
+  int imajor, iminor, ibugfix;
+
+  sys_getversion(&imajor, &iminor, &ibugfix);
+  major=(unsigned int)imajor;
+  minor=(unsigned int)iminor;
   return std::string("???");
 }
 
