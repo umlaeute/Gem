@@ -37,7 +37,14 @@ class RTE::PIMPL {
 
 RTE :: RTE (void) :
   m_pimpl(NULL)
-{    }
+{  }
+
+RTE :: ~RTE (void)
+{
+  if(m_pimpl)
+    delete(m_pimpl);
+  m_pimpl=NULL;
+}
 
 const std::string RTE :: getName(void) {
   return std::string("Pd");
@@ -46,7 +53,6 @@ const std::string RTE :: getName(void) {
 const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
   return std::string("???");
 }
-
 
 void*RTE :: getFunction(const std::string&name) {
 #ifdef DL_OPEN
@@ -60,10 +66,11 @@ void*RTE :: getFunction(const std::string&name) {
   return NULL;
 }
 
-static RTE*s_rte=NULL;
+static  RTE*s_rte=NULL;
 RTE* RTE::getRuntimeEnvironment(void) {
   if(s_rte==NULL)
     s_rte=new RTE();
 
   return s_rte;
 }
+
