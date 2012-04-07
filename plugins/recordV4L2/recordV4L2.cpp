@@ -33,6 +33,7 @@ using namespace gem::plugins;
 #include <stdio.h>
 
 #include <stdlib.h>
+#include <unistd.h>
 
 
 #ifdef  HAVE_VIDEO4LINUX2
