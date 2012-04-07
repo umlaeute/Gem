@@ -14,6 +14,8 @@
 
 #include "CPPExtern.h"
 
+#include "RTE/RTE.h"
+
 #ifdef _WIN32
 # include <io.h>
 #endif
@@ -152,6 +154,7 @@ void CPPExtern :: error(const char*fmt,...) const
   }
 }
 
+typedef int (*close_t)(int fd);
 
 std::string CPPExtern::findFile(const std::string f, const std::string e) const {
   char buf[MAXPDSTRING], buf2[MAXPDSTRING];
@@ -165,11 +168,18 @@ std::string CPPExtern::findFile(const std::string f, const std::string e) const 
 
   if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext,
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
-#if PD_MINOR_VERSION < 43
-    close(fd);
-#else
-    sys_close(fd);
-#endif
+    static close_t rte_close=NULL;
+    if(NULL==rte_close) {
+      gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+      if(rte) {
+	rte_close=(close_t)rte->getFunction("sys_close");
+      }
+      if(NULL==rte_close) {
+	rte_close=close;
+      }
+    }
+    rte_close(fd);
+
     result=buf2;
     result+="/";
     result+=bufptr;
