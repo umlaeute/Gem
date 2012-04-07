@@ -53,12 +53,22 @@ const std::string RTE :: getName(void) {
   return std::string("Pd");
 }
 
+typedef void (*rte_getversion_t)(int*major,int*minor,int*bugfix);
 const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
-  int imajor, iminor, ibugfix;
+  static rte_getversion_t rte_getversion=NULL;
+  if(NULL==rte_getversion) {
+    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+    if(rte) {
+      rte_getversion=(rte_getversion_t)rte->getFunction("sys_getversion");
+    }
+  }
 
-  sys_getversion(&imajor, &iminor, &ibugfix);
-  major=(unsigned int)imajor;
-  minor=(unsigned int)iminor;
+  if(rte_getversion) {
+    int imajor, iminor, ibugfix;
+    rte_getversion(&imajor, &iminor, &ibugfix);
+    major=(unsigned int)imajor;
+    minor=(unsigned int)iminor;
+  }
   return std::string("???");
 }
 
