@@ -142,6 +142,7 @@ dist_gemhelp_DATA = \
 	pix_multiimage-help.pd \
 	pix_multitexture-help.pd \
 	pix_multiply-help.pd \
+	pix_noise-help.pd \
 	pix_normalize-help.pd \
 	pix_offset-help.pd \
 	pix_pix2sig~-help.pd \
