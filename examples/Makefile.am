@@ -145,6 +145,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/geo.frag \
 	10.glsl/geo.geom \
 	10.glsl/geo.vert \
+	10.glsl/_glsl.pd \
 	10.glsl/GLSL_mix.frag \
 	10.glsl/GLSL_mix.vert \
 	10.glsl/img1.jpg \
@@ -165,6 +166,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/panoramique.vert \
 	10.glsl/P_distord.frag \
 	10.glsl/P_distord.vert \
+	10.glsl/single_blur.pd \
 	10.glsl/T_distord.frag \
 	10.glsl/T_distord.vert \
 	10.glsl/texture.frag \
