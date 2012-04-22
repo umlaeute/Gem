@@ -126,6 +126,9 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/12.tri2fan.pd \
 	10.glsl/13.panoramique.pd \
 	10.glsl/14.blur.pd \
+	10.glsl/15.bicubic_image_interpolation.pd \
+	10.glsl/bicubic_interpolation.frag \
+	10.glsl/bicubic_interpolation.vert \
 	10.glsl/blur.frag \
 	10.glsl/blur.vert \
 	10.glsl/cam1.jpg \
