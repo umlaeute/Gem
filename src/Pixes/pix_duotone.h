@@ -5,7 +5,7 @@ LOG
     add offset-values to the RGBA-Channels (without clamping to 0..255)
 
     Copyright (c) 1997-1998 Mark Danks. mark@danks.org
-    Copyright (c) GÂžnther Geiger. geiger@epy.co.at
+    Copyright (c) Günther Geiger. geiger@epy.co.at
     Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     Copyright (c) 2002 James Tittle & Chris Clepper
     For information on usage and redistribution, and for a DISCLAIMER OF ALL

@@ -117,6 +117,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/03.texture_distortion.pd \
 	10.glsl/04.game_of_life.pd \
 	10.glsl/05.multitexture.pd \
+	10.glsl/05.multitexture_bis.pd \
 	10.glsl/06.rectangle_multitexture.pd \
 	10.glsl/07.framebuffer_and_shader.pd \
 	10.glsl/08.multi_pass_rendering.pd \
@@ -125,6 +126,12 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/11.geometry.pd \
 	10.glsl/12.tri2fan.pd \
 	10.glsl/13.panoramique.pd \
+	10.glsl/14.blur.pd \
+	10.glsl/15.bicubic_image_interpolation.pd \
+	10.glsl/bicubic_interpolation.frag \
+	10.glsl/bicubic_interpolation.vert \
+	10.glsl/blur.frag \
+	10.glsl/blur.vert \
 	10.glsl/cam1.jpg \
 	10.glsl/cam2.jpg \
 	10.glsl/cam3.jpg \
@@ -138,6 +145,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/geo.frag \
 	10.glsl/geo.geom \
 	10.glsl/geo.vert \
+	10.glsl/_glsl.pd \
 	10.glsl/GLSL_mix.frag \
 	10.glsl/GLSL_mix.vert \
 	10.glsl/img1.jpg \
@@ -158,6 +166,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/panoramique.vert \
 	10.glsl/P_distord.frag \
 	10.glsl/P_distord.vert \
+	10.glsl/single_blur.pd \
 	10.glsl/T_distord.frag \
 	10.glsl/T_distord.vert \
 	10.glsl/texture.frag \

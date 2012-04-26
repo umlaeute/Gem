@@ -6,6 +6,7 @@
 # include <windows.h>
 #else
 # include <glob.h>
+# include <unistd.h>
 #endif
 
 #include "Files.h"

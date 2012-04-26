@@ -35,7 +35,7 @@ using namespace gem::plugins;
 #include <stdio.h>
 
 #include <stdlib.h>
-
+#include <unistd.h>
 
 REGISTER_RECORDFACTORY("V4L", recordV4L);
 /////////////////////////////////////////////////////////

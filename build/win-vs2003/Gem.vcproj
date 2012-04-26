@@ -189,10 +189,40 @@
 				RelativePath="..\..\src\Utils\SIMD.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Utils\SynchedWorkerThread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\SynchedWorkerThread.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\Thread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\Thread.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\ThreadMutex.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\ThreadMutex.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\ThreadSemaphore.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\ThreadSemaphore.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Utils\Vector.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\Utils\Vector.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\WorkerThread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\WorkerThread.h">
 			</File>
 		</Filter>
 		<Filter
@@ -256,16 +286,7 @@
 				RelativePath="..\..\src\Gem\GLStack.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Gem\glxew.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Gem\Image.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\Image.h">
@@ -331,24 +352,6 @@
 				RelativePath="..\..\src\Gem\State.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Gem\SynchedWorkerThread.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\SynchedWorkerThread.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\ThreadMutex.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\ThreadMutex.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\ThreadSemaphore.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\ThreadSemaphore.h">
-			</File>
-			<File
 				RelativePath="..\..\src\Version.cpp">
 			</File>
 			<File
@@ -356,12 +359,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\wglew.h">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\WorkerThread.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\Gem\WorkerThread.h">
 			</File>
 		</Filter>
 		<Filter
@@ -381,6 +378,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Rte\Outlet.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\RTE.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Rte\RTE.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Rte\Symbol.cpp">

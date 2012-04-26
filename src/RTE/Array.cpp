@@ -19,6 +19,7 @@
 
 #include "Gem/RTE.h"
 #include "RTE/Array.h"
+#include "RTE/RTE.h"
 
 
 class gem::RTE::Array::PIMPL {
@@ -114,13 +115,23 @@ bool gem::RTE::Array :: name(const std::string&s) {
 const std::string gem::RTE::Array :: name(void) {
   return m_pimpl->name;
 }
+typedef void (*rte_resize_t)(t_garray *x, long n);
 bool gem::RTE::Array :: resize(const size_t newsize) {
   if(m_pimpl->A) {
-#if (defined PD_MAJOR_VERSION && defined PD_MINOR_VERSION) && (PD_MAJOR_VERSION > 0 || PD_MINOR_VERSION > 43)
-    garray_resize_long(m_pimpl->A, newsize);
-#else
-    garray_resize(m_pimpl->A, newsize);
-#endif
+    static rte_resize_t rte_resize=NULL;
+    static bool rte_resize_checked=false;
+    if(false==rte_resize_checked) {
+      gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+      if(rte) {
+	rte_resize=(rte_resize_t)rte->getFunction("garray_resize_long");
+      }
+    }
+    rte_resize_checked=true;
+    if(rte_resize)
+      rte_resize(m_pimpl->A, newsize);
+    else
+      garray_resize(m_pimpl->A, newsize);
+
     return (size()==newsize);
   }
 

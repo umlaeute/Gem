@@ -22,6 +22,7 @@
 using namespace gem::plugins;
 
 #include "Gem/RTE.h"
+#include <unistd.h>
 
 #ifdef HAVE_DV
 #define MAX_PORTNUM 64
