@@ -214,11 +214,26 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
 }
 bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   struct jpeg_compress_struct cinfo;
-  struct jpeg_error_mgr jerr;
+
   /* More stuff */
-  FILE * outfile;		/* target file */
+  FILE * outfile=NULL;		/* target file */
   JSAMPROW row_pointer;	/* pointer to JSAMPLE row[s] */
   int row_stride;		/* physical row width in image buffer */
+
+  // We set up the normal JPEG error routines, then override error_exit
+  my_error_mgr jerr;
+  cinfo.err = jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = my_error_exit;
+
+  // Establish the setjmp return context for my_error_exit to use.
+  if ( setjmp(jerr.setjmp_buffer) ) {
+    // If we get here, the JPEG code has signaled an error.
+    // We need to clean up the JPEG object, close the input file, and return.
+    jpeg_destroy_compress(&cinfo);
+    if(outfile)
+      fclose(outfile);
+    return(false);
+  }
 
   double fquality=100;
   props.get("quality", fquality);
@@ -228,8 +243,6 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
     error("don't know how to write YUV-images with libJPEG");
     return false;
   }
-
-  cinfo.err = jpeg_std_error(&jerr);
 
   /* Now we can initialize the JPEG compression object. */
   jpeg_create_compress(&cinfo);
