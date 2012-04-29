@@ -101,8 +101,14 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     if(props.get("quality", quality)) {
       mimage.quality(quality);
     }
-    // finally convert and export
-    mimage.write(filename);
+
+    try {
+      // finally convert and export
+      mimage.write(filename);
+    } catch (Magick::Warning e) {
+      verbose(1, "magick saving problem: %s", e.what());
+    }
+
   } catch (Magick::Exception e){
     error("%s", e.what());
     if(pImage!=&image)delete pImage; pImage=NULL;
