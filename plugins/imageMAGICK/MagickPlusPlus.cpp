@@ -105,12 +105,12 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     mimage.write(filename);
   } catch (Magick::Exception e){
     error("%s", e.what());
-    if(pImage!=&image)delete[]pImage; pImage=NULL;
+    if(pImage!=&image)delete pImage; pImage=NULL;
     return false;
   } catch (...) {
       error("imageMAGICK:: uncaught exception!");
       return false;
   }
-  if(pImage!=&image)delete[]pImage; pImage=NULL;
+  if(pImage!=&image)delete pImage; pImage=NULL;
   return true;
 }
