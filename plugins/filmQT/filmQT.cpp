@@ -139,7 +139,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   long		m_rowBytes;
 
   short	refnum = 0;
-  long	movieDur, movieScale;
+  long	movieDur, movieTimeScale;
   OSType	whichMediaType;
   short		flags = 0;
   double d;
@@ -188,7 +188,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 
   // Get the length of the movie
   movieDur = static_cast<long>(GetMovieDuration(m_movie));
-  movieScale = static_cast<long>(GetMovieTimeScale(m_movie));
+  movieTimeScale = static_cast<long>(GetMovieTimeScale(m_movie));
 
   whichMediaType = VisualMediaCharacteristic;
 
