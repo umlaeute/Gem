@@ -15,15 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "slideSquares.h"
-
 #include "Gem/State.h"
-#include <string.h>
-#include "math.h"
-#ifdef __APPLE__
-#include <Carbon/Carbon.h>
-#else
-#include <stdlib.h>
-#endif
 
 typedef struct {
             GLfloat	X;
