@@ -202,7 +202,15 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 			       &whichMediaType, 0,
 			       static_cast<Fixed>(1<<16), NULL, &m_frameduration);
   m_numFrames = movieDur/m_frameduration;
+
+#warning m_fps cannot be the same as m_numFrames
   m_fps = m_numFrames;
+
+#if 0
+  // from the old pix_filmDarwin code::
+  sampleCount = GetMediaSampleCount(trackMedia);
+  m_numFrames = sampleCount;
+#endif
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
