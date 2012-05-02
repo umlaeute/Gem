@@ -1,0 +1,6 @@
+TODO for [pix_hit]
+
+- variable number of tests
+- make "move" really move (currently it requires exactly 1+4 args, where it
+  really should only have 1+2)
+- checks, whether we have enough args in A_GIMME
