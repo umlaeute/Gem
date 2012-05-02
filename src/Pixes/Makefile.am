@@ -118,8 +118,6 @@ libPixes_la_SOURCES=  \
     pix_halftone.h \
     pix_histo.cpp \
     pix_histo.h \
-    pix_hit.cpp \
-    pix_hit.h \
     pix_hsv2rgb.cpp \
     pix_hsv2rgb.h \
     pix_image.cpp \

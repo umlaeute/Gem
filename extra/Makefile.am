@@ -7,6 +7,7 @@ SUBDIRS  =
 SUBDIRS += pix_mano pix_drum
 SUBDIRS += pix_artoolkit
 SUBDIRS += pix_fiducialtrack
+SUBDIRS += pix_hit
 
 EXTRA_DIST = \
 	README-EXTRA.txt

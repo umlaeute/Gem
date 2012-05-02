@@ -29,6 +29,11 @@ fi
 #  AC_CONFIG_SUBDIRS([pix_mano])
 #fi
 
+## pix_hit (Davide Morelli)
+#if test -d "$srcdir/pix_hit"; then
+#  AC_CONFIG_SUBDIRS([pix_hit])
+#fi
+
 ### pix_opencv (Yves Degoyon & Lluis Gomez i Bigorda)
 #if test -d "$srcdir/pix_opencv"; then
 #  AC_CONFIG_SUBDIRS([pix_opencv])
