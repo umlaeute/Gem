@@ -1,0 +1,136 @@
+#N canvas 1494 239 690 594 10;
+#X text 452 8 GEM object;
+#X obj 9 173 cnv 15 430 345 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 40 175 Inlets:;
+#X text 39 420 Outlets:;
+#X obj 9 136 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X text 18 134 Arguments:;
+#X text 453 39 Example:;
+#X text 17 434 Outlet 1: gemlist;
+#X text 24 189 Inlet 1: gemlist;
+#X text 71 31 Class: pix object (analysis);
+#X obj 9 56 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 452 57 cnv 15 200 450 empty empty empty 20 12 0 14 -228992 -66577
+0;
+#X obj 453 356 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#N canvas 0 22 450 300 gemwin 0;
+#X obj 132 136 gemwin;
+#X obj 67 89 outlet;
+#X obj 67 10 inlet;
+#X msg 67 70 set destroy;
+#X msg 132 112 create \, 1;
+#X msg 198 112 destroy;
+#X msg 156 71 set create;
+#X obj 67 41 route create;
+#X connect 2 0 7 0;
+#X connect 3 0 1 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 6 0 1 0;
+#X connect 7 0 3 0;
+#X connect 7 0 4 0;
+#X connect 7 1 6 0;
+#X connect 7 1 5 0;
+#X restore 461 395 pd gemwin;
+#X msg 461 376 create;
+#X text 457 355 Create window:;
+#X obj 453 152 cnv 15 185 120 empty empty empty 20 12 0 14 -24198 -66577
+0;
+#X obj 457 62 gemhead;
+#X obj 457 279 pix_texture;
+#X obj 457 130 pix_film;
+#X obj 521 130 t f;
+#X obj 470 82 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#N canvas 0 22 450 300 open 0;
+#X obj 85 49 inlet;
+#X obj 85 237 outlet;
+#X obj 85 145 openpanel;
+#X msg 85 179 open \$1;
+#X msg 259 213 auto 1;
+#X obj 259 189 loadbang;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 4 0 1 0;
+#X connect 5 0 4 0;
+#X restore 470 110 pd open;
+#X text 511 56 open a supported;
+#X text 512 67 movie-clip;
+#X text 529 93 macOS: quicktime;
+#X text 522 83 windos: *.AVI;
+#X text 529 103 linux: depends...;
+#X floatatom 469 166 3 0 100 2 threshold - -;
+#X obj 469 180 / 100;
+#X obj 457 301 square 4;
+#X msg 469 197 threshold \$1;
+#X floatatom 559 166 3 0 100 2 min - -;
+#X msg 549 131 auto \$1;
+#X obj 604 133 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X obj 457 241 pix_hit;
+#X text 50 12 Synopsis: [pix_hit];
+#X text 31 56 Description: hit test over user defined hit_areas...
+;
+#X text 64 145 (none);
+#X text 24 245 Inlet 1: min_distance <float>: (default=0.01);
+#X text 24 204 Inlet 1: threshold <float>: minimum luminance of a pixel
+to be taken into account. (default=0.5);
+#X text 24 280 Inlet 1: circle <ID> <x> <y> <r>: add check <ID> whether
+blob is within circle at x/y with radius r;
+#X text 24 327 Inlet 1: move <ID> <x> <y> <w> <h>: move test <ID> to
+new position;
+#X text 24 302 Inlet 1: line <ID> <x1> <y1> <x2> <y2>: add test <ID>
+whether blob is crossing line between x1/y1 and x2/y2;
+#X text 24 258 Inlet 1: rectangle <ID> <x> <y> <w> <h>: add test <ID>
+whether blob is within rectangle at x/y with dimension w/h;
+#X text 24 369 Inlet 1: delete <ID>: remove test <ID>;
+#X text 24 381 Inlet 1: show <bool>: whether to mark hit blobs in the
+output image or not (default: 0);
+#X text 17 447 Outlet 2: hit info: "list <ID:int> <hit:bool>" that
+indicates which tests were successfull.;
+#X text 12 71 [pix_hit] detects whether a "min" number of pixels is
+over a given "threshold" within a given test area. You can add up to
+256 (currently this is a hardcoded limit) test areas \, each of them
+can be a circle \, a rectangle or a line.;
+#X text 24 233 Inlet 1: min <float>: minimum number of pixels (default=1)
+;
+#X obj 535 301 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 556 301 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 577 301 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 559 180 min \$1;
+#X msg 510 217 rectangle 0 0.5 0.5 0.2 0.1;
+#X msg 510 236 circle 1 0.2 0.2 0.15;
+#X obj 535 280 route 0 1 2;
+#X msg 510 254 line 2 0.7 0.1 0.8 0.9;
+#X connect 13 0 14 0;
+#X connect 14 0 13 0;
+#X connect 17 0 19 0;
+#X connect 18 0 30 0;
+#X connect 19 0 35 0;
+#X connect 19 2 20 0;
+#X connect 20 0 19 1;
+#X connect 21 0 22 0;
+#X connect 22 0 19 0;
+#X connect 28 0 29 0;
+#X connect 29 0 31 0;
+#X connect 31 0 35 0;
+#X connect 32 0 53 0;
+#X connect 33 0 19 0;
+#X connect 34 0 33 0;
+#X connect 35 0 18 0;
+#X connect 35 1 56 0;
+#X connect 53 0 35 0;
+#X connect 54 0 35 0;
+#X connect 55 0 35 0;
+#X connect 56 0 50 0;
+#X connect 56 1 51 0;
+#X connect 56 2 52 0;
+#X connect 57 0 35 0;
