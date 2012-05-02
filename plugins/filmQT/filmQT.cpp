@@ -331,11 +331,11 @@ void filmQT::getProperties(gem::Properties&props) {
       d=m_fps;
       value=d; props.set(key, value);
     }
-    if("frames"==key) {
+    if("frames"==key && m_numFrames>=0) {
       d=m_numFrames;
       value=d; props.set(key, value);
     }
-    if("tracks"==key) {
+    if("tracks"==key && m_numTracks>=0) {
       d=m_numTracks;
       value=d; props.set(key, value);
     }
