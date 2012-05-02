@@ -98,7 +98,7 @@ filmQT :: filmQT(void) :
   m_movieTime(0),
   m_movieTrack(0),
   m_timeScale(1),
-  duration(0),
+  m_frameduration(0),
   m_bInit(false)
 {
   if(!filmQT_initQT()) {
@@ -195,11 +195,13 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   // shouldn't the flags be OR'ed instead of ADDed ? (jmz)
   flags = nextTimeMediaSample | nextTimeEdgeOK;
 
+  m_frameduration=0;
+
   GetMovieNextInterestingTime( m_movie, flags,
 			       static_cast<TimeValue>(1),
 			       &whichMediaType, 0,
-			       static_cast<Fixed>(1<<16), NULL, &duration);
-  m_numFrames = movieDur/duration;
+			       static_cast<Fixed>(1<<16), NULL, &m_frameduration);
+  m_numFrames = movieDur/m_frameduration;
   m_fps = m_numFrames;
 
   // Get the bounds for the movie
@@ -291,7 +293,7 @@ film::errCode filmQT :: changeImage(int imgNum, int trackNum){
    * this is good because the decoder-class need not care about auto-play anylonger
    * this is bad, because we might do it more sophisticated in the decoder-class
    */
-  m_movieTime = static_cast<long>(m_curFrame * duration);
+  m_movieTime = static_cast<long>(m_curFrame * m_frameduration);
 
   return film::SUCCESS;
 }
