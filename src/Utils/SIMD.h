@@ -34,12 +34,13 @@ const int GEM_SIMD_MMX=1;
 const int GEM_SIMD_SSE2=2;
 const int GEM_SIMD_ALTIVEC=3;
 
-
-#if defined __APPLE__ && defined __VEC__
-# ifndef __APPLE_ALTIVEC__
+#if defined __APPLE__
+# if defined __VEC__ && !defined __APPLE_ALTIVEC__
 #  undef __VEC__
 # endif
-#endif
+
+# include <libkern/OSTypes.h>
+#endif /* APPLE */
 
 /* include for SIMD on PC's */
 #ifdef __SSE2__
