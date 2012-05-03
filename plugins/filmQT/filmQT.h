@@ -87,7 +87,7 @@ class GEM_EXPORT filmQT : public film
   TimeValue		m_movieTime;
   Track			m_movieTrack;
   TimeValue		m_timeScale;
-  TimeValue		m_duration;
+  TimeValue		m_frameDuration;
 
   // managed to initialize our Quicktime-Decoder
   bool			m_bInit;
