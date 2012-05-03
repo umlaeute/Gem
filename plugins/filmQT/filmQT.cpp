@@ -201,10 +201,12 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 			       static_cast<TimeValue>(1),
 			       &whichMediaType, 0,
 			       static_cast<Fixed>(1<<16), NULL, &m_frameDuration);
-  m_numFrames = movieDur/m_frameDuration;
+  if(movieDur<=0)
+    m_numFrames=-1;
+  else
+    m_numFrames = movieDur/m_frameDuration;
 
-#warning m_fps cannot be the same as m_numFrames
-  m_fps = m_numFrames;
+  m_fps = (float)movieTimeScale/(float)m_frameDuration;
 
 #if 0
   // from the old pix_filmDarwin code::
