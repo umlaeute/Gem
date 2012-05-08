@@ -11,7 +11,7 @@
 #X text 27 233 Inlet 1: gemlist;
 #X text 9 280 Outlets:;
 #X text 21 293 Outlet 1: gemlist;
-#X text 63 186 size of the cube;
+#X text 63 186 none;
 #X text 475 29 Example:;
 #X text 33 14 Synopsis: [gemlist];
 #X text 54 30 Class: control object;
