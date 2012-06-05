@@ -862,12 +862,25 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
     }
   }
   
+  	readable.set("channel",0);
+  	readable.set("frequency",0);
+  	readable.set("norm",0);
+  	readable.set("width",0);
+  	readable.set("height",0);
+  	
+  	writeable.set("channel",0);
+  	writeable.set("frequency",0);
+  	writeable.set("norm",0);
+  	writeable.set("width",0);
+  	writeable.set("height",0);
+  	
+ 
+
 	if (-1 != xioctl (m_tvfd, VIDIOC_QUERYCAP, &m_caps)) {
 		readable.set("driver", (char*) m_caps.driver);
 		readable.set("card", (char*) m_caps.card);
 		readable.set("bus_info", (char*) m_caps.bus_info);
-	}
-	
+	}	
 			
   return true;
 }
