@@ -27,7 +27,7 @@
 #include <string>
 #include <stdio.h>
 
-#if defined __linux__ || defined __APPLE__
+#if defined __linux__ || defined __APPLE__ || defined __FreeBSD_kernel__
 #include <unistd.h>
 # define DL_OPEN
 #endif
