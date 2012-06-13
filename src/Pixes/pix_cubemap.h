@@ -143,7 +143,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
   GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
 
   //////////
-  // texture envirnoment mode
+  // texture environment mode
   void		envMess(int num);
   GLint		m_env; // GL_TEXTURE_ENV_MODE
 

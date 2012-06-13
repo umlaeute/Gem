@@ -181,7 +181,7 @@ class GEM_EXTERN pix_texture : public GemBase
   int m_canRectangle; // openGL caps and GemSettings
 
   //////////
-  // texture envirnoment mode
+  // texture environment mode
   GLint		m_env; // GL_TEXTURE_ENV_MODE
 
   int		m_clientStorage; //for Apple's client storage extension

@@ -25,7 +25,7 @@ KEYWORDS
 
 DESCRIPTION
 
-   does manipulations of the rows of pixels by copying, deleteing or moving them
+   does manipulations of the rows of pixels by copying, deleting or moving them
 
 -----------------------------------------------------------------*/
 

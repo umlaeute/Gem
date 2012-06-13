@@ -39,7 +39,7 @@ namespace gem { namespace plugins {
 
     /**
      * reset the backend, possibly re-enumerating devices
-     * returns TRUE if reset was successfull
+     * returns TRUE if reset was successful
      */
     virtual bool          reset(void);
 
@@ -54,7 +54,7 @@ namespace gem { namespace plugins {
     virtual bool           openDevice(gem::Properties&props) = 0;
 
     /**
-     * close the video device, freeing all ressources
+     * close the video device, freeing all resources
      * once the device has been closed it should be useable by other applications,...
      * this get's called when switching to another backend or when deleting the object
      */
@@ -91,7 +91,7 @@ namespace gem { namespace plugins {
     /**
      * release a frame (after use)
      * this gets called once for each frame retrieved via getFrame()
-     * if you are using DMA or the like, now is the time to release the ressource
+     * if you are using DMA or the like, now is the time to release the resource
      */
     virtual void releaseFrame(void);
 
@@ -99,7 +99,7 @@ namespace gem { namespace plugins {
     /** turn on/off "asynchronous"-grabbing
      * default is "true"
      * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
-     * non-"continous" means, that the device will only issue a new grab when a frame has read
+     * non-"continuous" means, that the device will only issue a new grab when a frame has read
      *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
      * returns: the old state
      */
@@ -245,12 +245,12 @@ namespace gem { namespace plugins {
 
     /* locks the mutex #<id>;
      * if the mutex does not exist (e.g. no threading), this will simply return
-     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
+     * the default mutex #0 is locked by default in the getFrame() to protect the m_image resource
      */
     void lock(unsigned int id=0);
     /* unlocks the mutex #<id>;
      * if the mutex does not exist (e.g. no threading), this will simply return
-     * the default mutex #0 is locked by default in the getFrame() to protect the m_image ressource
+     * the default mutex #0 is locked by default in the getFrame() to protect the m_image resource
      */
     void unlock(unsigned int id=0);
 
@@ -285,7 +285,7 @@ namespace gem { namespace plugins {
     /* if !m_devicename.empty()
      *  then use m_devicename
      * elif m_devicenum>=0
-     *  use m_devicenum (preferrable as index in the list returned by enumerate()
+     *  use m_devicenum (preferable as index in the list returned by enumerate()
      * else
      *  try open a "default" device
      */

@@ -90,7 +90,7 @@ class GEM_EXTERN world_light : public GemBase
   GLfloat         m_position[4];
 
   //////////
-  // If a change occured
+  // If a change occurred
   int             m_change;
 
   //////////

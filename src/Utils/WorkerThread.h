@@ -70,7 +70,7 @@ namespace gem { namespace thread {
       // this get's called to indicate that new data is in the DONE queue
       // you can use it to set a semaphore in the main thread, to fetch
       // the data
-      // it get's called once after process() has been successfull
+      // it get's called once after process() has been successful
       // and will nott be called before dequeue has been called at least once
       //
       virtual void signal(void);

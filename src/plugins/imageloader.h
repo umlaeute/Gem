@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an image and return the frame(OS independant interface)
+Load an image and return the frame(OS independent interface)
 
 Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -51,7 +51,7 @@ namespace gem { namespace plugins {
        * props can be filled by the loader with additional information on the image
        * e.g. EXIF tags,...
        */
-      /* returns TRUE if loading was successfull, FALSE otherwise */
+      /* returns TRUE if loading was successful, FALSE otherwise */
       virtual bool load(std::string filename,
 			imageStruct&result,
 			gem::Properties&props) = 0;

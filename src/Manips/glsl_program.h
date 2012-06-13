@@ -30,8 +30,8 @@ namespace gem { namespace utils { namespace glsl {
                     GEM_EXTERN GLuint atom_getshader (t_atom&ap);
                     /* once the shader is to be glDelete'd, call
                      *   gem::utils::glsl::delshader(shaderID);
-                     * so we can free any internal ressources
-                     * glDelete() must still be called explicitely!
+                     * so we can free any internal resources
+                     * glDelete() must still be called explicitly!
                      */
                     GEM_EXTERN void delshader(GLuint i);
                   }; };

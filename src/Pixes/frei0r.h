@@ -239,7 +239,7 @@ void f0r_deinit();
  * List of supported color models.
  *
  * Note: the color models are endian independent, because the
- * color components are defined by their positon in memory, not
+ * color components are defined by their position in memory, not
  * by their significance in an uint32_t value.
  *
  * For effects that work on the color components,

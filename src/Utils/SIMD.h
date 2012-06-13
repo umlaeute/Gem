@@ -111,7 +111,7 @@ class GEM_EXTERN GemSIMD
  private:
   /* this is the maximum capability of the CPU */
   static int realcpuid;
-  /* this is the current choosen capability (normally this equals realcpuid) */
+  /* this is the current chosen capability (normally this equals realcpuid) */
   static int cpuid;
 };
 

@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
-(OS independant parent-class)
+(OS independent parent-class)
 
 Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -47,7 +47,7 @@ namespace gem { namespace plugins {
   // open a movie up
   /* open the record "filename" (think better about URIs ?)
    */
-  /* returns TRUE if opening was successfull, FALSE otherwise */
+  /* returns TRUE if opening was successful, FALSE otherwise */
   virtual bool open(const std::string filename);
   //////////
   // close the movie file
@@ -92,7 +92,7 @@ public:
 
   ////////
   // Destructor
-  /* free what is apropriate */
+  /* free what is appropriate */
   virtual ~recordBase(void);
 
  protected:

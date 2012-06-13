@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an image and return the frame(OS independant interface)
+Load an image and return the frame(OS independent interface)
 
 Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -49,7 +49,7 @@ namespace gem { namespace plugins {
 
       /* save the image 'img' under the filename 'filename', respecting as many 'props' as possible
        *
-       * returns TRUE if saving was successfull, FALSE otherwise */
+       * returns TRUE if saving was successful, FALSE otherwise */
       virtual bool save(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) = 0;
 
       /* estimate how 'well' we could save the 'img'
@@ -101,7 +101,7 @@ namespace gem { namespace plugins {
        *
        * list all (known) mimetypes and properties this backend supports for writing
        *  both can be empty, if they are not known when requested
-       * if only some properties/mimetypes are explicitely known (but it is likely that more are supported),
+       * if only some properties/mimetypes are explicitly known (but it is likely that more are supported),
        * it is generally better, to list the few rather than nothing
        */
       virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) = 0;

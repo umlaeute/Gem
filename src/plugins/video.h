@@ -90,7 +90,7 @@ namespace gem { namespace plugins {
       /**
        * release a frame (after use)
        * this gets called once for each frame retrieved via getFrame()
-       * if you are using DMA or the like, now is the time to release the ressource
+       * if you are using DMA or the like, now is the time to release the resource
        */
       virtual void releaseFrame(void) = 0;
 
@@ -102,7 +102,7 @@ namespace gem { namespace plugins {
 
       /**
        * reset the backend, possibly re-enumerating devices
-       * returns TRUE if reset was successfull
+       * returns TRUE if reset was successful
        */
       virtual bool          reset(void) = 0;
 
@@ -177,7 +177,7 @@ namespace gem { namespace plugins {
       /** turn on/off "asynchronous"-grabbing
        * default is "true"
        * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
-       * non-"continous" means, that the device will only issue a new grab when a frame has read
+       * non-"continuous" means, that the device will only issue a new grab when a frame has read
        *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
        * returns: the old state
        */

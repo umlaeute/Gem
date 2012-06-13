@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an image and return the frame(OS independant parent-class)
+Load an image and return the frame(OS independent parent-class)
 
 Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -46,7 +46,7 @@ class GEM_EXTERN imageBase : public imageloader, public imagesaver
 
     ////////
     // Destructor
-    /* free what is apropriate */
+    /* free what is appropriate */
     virtual ~imageBase(void);
 
 

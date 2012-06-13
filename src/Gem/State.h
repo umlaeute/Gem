@@ -138,7 +138,7 @@ class GEM_EXTERN GemState
   GEM_DEPRECATED  float				tickTime;
 
   //////////////////
-  // the default draw-type (might be overriden within a Geo)
+  // the default draw-type (might be overridden within a Geo)
   // deprecated: use property 'gl.drawtype' instead
   GEM_DEPRECATED  GLenum				drawType;
 

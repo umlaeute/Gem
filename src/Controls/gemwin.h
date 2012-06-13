@@ -45,7 +45,7 @@
   "specular" - the specular light color
   "shininess" - the shininess value
   "stereo" - select stereo-mode (0=off; 1=normal)
-  "stereoSep" - the stereo seperation
+  "stereoSep" - the stereo separation
   "stereoFoc" - the distance to the focal point
   "stereoLine" - draw a line between two stereo screens...
   "perspective" - set the perspective viewing

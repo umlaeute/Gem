@@ -208,7 +208,7 @@ class GEM_EXTERN GemMan
   //////////
   // Changing these variables is likely to crash GEM
   // This is constant rendering window information
-  // This window is always avaliable (although not visible)
+  // This window is always available (although not visible)
   static WindowInfo   &getConstWindowInfo(void);
   static int 	    createConstWindow(char* disp = 0);
 
@@ -222,7 +222,7 @@ class GEM_EXTERN GemMan
   static GLfloat    m_mat_specular[4];	// default specular material
   static GLfloat    m_mat_shininess;	// default shininess material
 
-  static GLfloat    m_stereoSep;		// stereo seperation
+  static GLfloat    m_stereoSep;		// stereo separation
   static GLfloat    m_stereoFocal;		// distance to focal point
   static bool	    m_stereoLine;		// draw a line between 2 stereo-screens
 

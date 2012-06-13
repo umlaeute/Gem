@@ -51,7 +51,7 @@ class GEM_EXTERN GemDylib {
   public:
   /**
    * LoadLib(): convenience function that searches a library named <baselibname> and then runs <procname>()
-   * if "extension" is NULL, a plaform-specific default is used
+   * if "extension" is NULL, a platform-specific default is used
    * on success "true" is returned, else "false
    */
   static bool LoadLib(const std::string procname,

@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
-(OS independant parent-class)
+(OS independent parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -79,7 +79,7 @@ class GEM_EXTERN film
    * but i guess film* makes more sense, because then, [pix_film] doesn't have to know
    * anything about the internal cs of the decoder
    */
-  /* returns TRUE if loading was successfull, FALSE otherwise */
+  /* returns TRUE if loading was successful, FALSE otherwise */
   virtual bool open(const std::string, 
 		    const gem::Properties&requestprops) = 0;
 

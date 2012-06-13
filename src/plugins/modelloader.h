@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an asset (like .obj oder .dxf)
-(OS independant parent-class)
+(OS independent parent-class)
 
 Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -65,7 +65,7 @@ class GEM_EXTERN modelloader
    *         if a property can not be determined (e.g. variable fps), it should be set unset
    *   
    */
-  /* returns TRUE if loading was successfull, FALSE otherwise */
+  /* returns TRUE if loading was successful, FALSE otherwise */
   virtual bool open(const std::string&, 
                     const gem::Properties&requestprops) = 0;
 

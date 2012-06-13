@@ -35,7 +35,7 @@ namespace gem
 
   public:
     enum PropertyType {
-      UNSET=-1, /* not set, in-existant */
+      UNSET=-1, /* not set, in-existent */
       NONE,   /* "bang" */
       DOUBLE, /* double */
       STRING, /* std::string */

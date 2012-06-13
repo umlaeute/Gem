@@ -4,7 +4,7 @@
   GEM - Graphics Environment for Multimedia
 
   write a pix block into a digital video (like AVI, Mpeg, Quicktime)
-  (OS independant parent-class)
+  (OS independent parent-class)
 
   Copyright (c) 2005-2010 Chris Clepper
   Copyright (c) 2009-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at

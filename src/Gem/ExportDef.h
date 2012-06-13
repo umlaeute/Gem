@@ -42,7 +42,7 @@ LOG
 #ifdef DLL_EXPORT
 // Windows requires explicit import and exporting of functions and classes.
 // While this is a pain to do sometimes, in large software development
-//      projects, it is very usefull.
+//      projects, it is very useful.
 # define GEM_EXPORT __declspec(dllexport)
 # define GEM_IMPORT __declspec(dllimport)
 
