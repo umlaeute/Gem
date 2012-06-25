@@ -9,7 +9,7 @@ EXTRA_DIST += win-vs2008/modelASSIMP.sln win-vs2008/modelASSIMP.vcproj
 pkglib_LTLIBRARIES=
 
 if HAVE_LIB_ASSIMP
-pkglib_LTLIBRARIES += gem_modelASSIMP22.la
+pkglib_LTLIBRARIES += gem_modelASSIMP2.la
 endif
 
 gem_modelASSIMP2_la_CXXFLAGS =
