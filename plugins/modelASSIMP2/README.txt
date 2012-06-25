@@ -1,5 +1,5 @@
-read a model using ASSIMP (http://assimp.sf.net)
-------------------------------------------------
+read a model using ASSIMPv2 (http://assimp.sf.net)
+--------------------------------------------------
 
 
 

@@ -15,9 +15,9 @@
 # include "config.h"
 #endif
 
-#ifdef HAVE_LIBASSIMP
+#if (defined HAVE_LIBASSIMP2) && (defined HAVE_ASSIMP_H)
 
-#include "modelASSIMP.h"
+#include "modelASSIMP2.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
@@ -30,7 +30,7 @@
 
 using namespace gem::plugins;
 
-REGISTER_MODELLOADERFACTORY("ASSIMP", modelASSIMP);
+REGISTER_MODELLOADERFACTORY("ASSIMP2", modelASSIMP2);
 
 
 namespace {
@@ -259,7 +259,7 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 
 };
 
-modelASSIMP :: modelASSIMP(void) : 
+modelASSIMP2 :: modelASSIMP2(void) : 
   m_rebuild(true),
   m_scene(NULL), m_dispList(0),
   m_scale(1.f),
@@ -267,11 +267,11 @@ modelASSIMP :: modelASSIMP(void) :
 {
 }
 
-modelASSIMP ::~modelASSIMP(void) {
+modelASSIMP2 ::~modelASSIMP2(void) {
   destroy();
 }
 
-bool modelASSIMP :: open(const std::string&name, const gem::Properties&requestprops) {
+bool modelASSIMP2 :: open(const std::string&name, const gem::Properties&requestprops) {
   destroy();
 
 	m_scene = aiImportFile(name.c_str(), aiProcessPreset_TargetRealtime_Quality);
@@ -300,7 +300,7 @@ bool modelASSIMP :: open(const std::string&name, const gem::Properties&requestpr
   return true;
 }
 
-bool modelASSIMP :: render(void) {
+bool modelASSIMP2 :: render(void) {
   if(m_rebuild || 0==m_dispList)
     compile();
 
@@ -319,18 +319,18 @@ bool modelASSIMP :: render(void) {
 
   return (!m_dispList);
 }
-void modelASSIMP :: close(void)  {
+void modelASSIMP2 :: close(void)  {
   destroy();
 }
 
-bool modelASSIMP :: enumProperties(gem::Properties&readable,
+bool modelASSIMP2 :: enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
   readable.clear();
   writeable.clear();
   return false;
 }
 
-void modelASSIMP :: setProperties(gem::Properties&props) {
+void modelASSIMP2 :: setProperties(gem::Properties&props) {
   double d;
 
 
@@ -367,10 +367,10 @@ void modelASSIMP :: setProperties(gem::Properties&props) {
   }
 
 }
-void modelASSIMP :: getProperties(gem::Properties&props) {
+void modelASSIMP2 :: getProperties(gem::Properties&props) {
 }
 
-bool modelASSIMP :: compile(void)  {
+bool modelASSIMP2 :: compile(void)  {
   if(!m_scene) return false;
   if(!(GLEW_VERSION_1_1)) {
     //    verbose(1, "cannot build display-list now...do you have a window?");
@@ -404,7 +404,7 @@ bool modelASSIMP :: compile(void)  {
   if(res) m_rebuild=false;
   return res;
 }
-void modelASSIMP :: destroy(void)  {
+void modelASSIMP2 :: destroy(void)  {
   /* LATER: check valid contexts (remove glDelete from here) */
   if (m_dispList) {
     // destroy display list

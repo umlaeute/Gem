@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEMPLUGIN__MODELASSIMP_MODELASSIMP_H_
-#define _INCLUDE__GEMPLUGIN__MODELASSIMP_MODELASSIMP_H_
+#ifndef _INCLUDE__GEMPLUGIN__MODELASSIMP2_MODELASSIMP2_H_
+#define _INCLUDE__GEMPLUGIN__MODELASSIMP2_MODELASSIMP2_H_
 
 #include "plugins/modelloader.h"
 
@@ -24,7 +24,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  modelASSIMP
+  modelASSIMP2
     
   loads an Alias WaveFront .obj file as an asset
     
@@ -34,12 +34,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 
 namespace gem { namespace plugins {
-    class GEM_EXPORT modelASSIMP : public gem::plugins::modelloader {
+    class GEM_EXPORT modelASSIMP2 : public gem::plugins::modelloader {
  public:
   /////////
   // ctor/dtor
-  modelASSIMP(void);
-  virtual ~modelASSIMP(void);
+  modelASSIMP2(void);
+  virtual ~modelASSIMP2(void);
 
   virtual bool isThreadable(void) { return true; }
 

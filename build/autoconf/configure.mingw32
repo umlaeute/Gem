@@ -32,6 +32,6 @@ ASSIMP="/home/zmoelnig/src/assimp--2.0.863-sdk"
 	PKG_IMAGEMAGICK_LIBS="-L${IMAGEMAGICK}/magick -lMagickCore" \
 	PKG_LIBVLC_CFLAGS="-I${VLC}/sdk/include " \
 	PKG_LIBVLC_LIBS="-L${VLC} -lvlc " \
-	PKG_ASSIMP_CFLAGS="-I${ASSIMP}/include " \
+	PKG_ASSIMP_CFLAGS="-I${ASSIMP}/include -DHAVE_ASSIMP_H" \
 	PKG_ASSIMP_LIBS="-L${ASSIMP}/bin/assimp_release-dll_win32 -Xlinker -l:Assimp32.dll " \
 

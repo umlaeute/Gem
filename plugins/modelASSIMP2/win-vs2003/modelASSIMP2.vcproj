@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="modelASSIMP"
+	Name="modelASSIMP2"
 	ProjectGUID="{FF21A158-2BDE-483F-85C3-80C9DF0A0ABC}"
 	RootNamespace="gem"
 	SccProjectName=""
@@ -135,10 +135,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\modelASSIMP.cpp">
+			RelativePath="..\modelASSIMP2.cpp">
 		</File>
 		<File
-			RelativePath="..\modelASSIMP.h">
+			RelativePath="..\modelASSIMP2.h">
 		</File>
 	</Files>
 	<Globals>

@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="modelASSIMP"
+	Name="modelASSIMP2"
 	ProjectGUID="{32A8EA41-EC6E-4F4D-9A82-8B2175F549A2}"
 	RootNamespace="gem"
 	TargetFrameworkVersion="131072"
@@ -49,7 +49,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\..\assimp--2.0.863-sdk\include&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBASSIMP"
+				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBASSIMP;HAVE_ASSIMP_H"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -192,11 +192,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\modelASSIMP.cpp"
+			RelativePath="..\modelASSIMP2.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\modelASSIMP.h"
+			RelativePath="..\modelASSIMP2.h"
 			>
 		</File>
 	</Files>
