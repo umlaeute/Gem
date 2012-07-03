@@ -103,7 +103,7 @@ not satisfied with the decoding quality of because it is unstable)
 \, you can simply remove the corresponding gem_filmNAME.dll file from
 your Gem-directory.;
 #X text 35 123 which media can be decoded \, depends on the installed
-plugins and onthe codecs you have installed on your system.;
+plugins and on the codecs you have installed on your system.;
 #X obj 45 248 cnv 15 200 15 empty empty empty 20 12 0 14 -203904 -66577
 0;
 #X obj 45 303 cnv 15 200 15 empty empty empty 20 12 0 14 -203904 -66577
