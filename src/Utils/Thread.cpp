@@ -62,7 +62,7 @@ unsigned int  gem::thread::getCPUCount(void) {
   uint32_t count;
 
   int mib[4];
-  size_t len = sizeof(count); 
+  size_t len = sizeof(count);
 
   /* set the mib for hw.ncpu */
   mib[0] = CTL_HW;
@@ -74,7 +74,7 @@ unsigned int  gem::thread::getCPUCount(void) {
   if( count < 1 ) {
     mib[1] = HW_NCPU;
     sysctl( mib, 2, &count, &len, NULL, 0 );
-    
+
     if(count < 1 ) count = 1;
   }
 
@@ -103,6 +103,17 @@ unsigned int  gem::thread::getCPUCount(void) {
 #ifdef _WIN32
 # include <winsock2.h>
 #endif
+
+void gem::thread::usleep(unsigned long usec) {
+  struct timeval sleep;
+  long usec_ = usec%1000000;
+  long sec_=0;
+  //  long  sec_ = usec\1000000;
+  sleep.tv_sec=sec_;
+  sleep.tv_usec=usec_;
+  select(0,0,0,0,&sleep);
+}
+
 
 namespace gem { namespace thread {
 
@@ -138,14 +149,11 @@ class Thread::PIMPL { public:
     keeprunning=true;
     pthread_create(&p_thread, 0, process, this);
 
-    struct timeval sleep;
     while(!isrunning) {
-      sleep.tv_sec=0;
-      sleep.tv_usec=10;
-      select(0,0,0,0,&sleep);
+      usleep(10);
     }
 
-    return true;  
+    return true;
   }
 
   bool stop(unsigned int timeout) {
@@ -155,11 +163,8 @@ class Thread::PIMPL { public:
 
       keeprunning=false;
 
-      struct timeval sleep;
       while(isrunning) {
-        sleep.tv_sec=0;
-        sleep.tv_usec=10;
-        select(0,0,0,0,&sleep);
+        usleep(10);
 	if(checktimeout && (timmy--<10))break;
       }
       return (!isrunning);
@@ -186,6 +191,5 @@ Thread&Thread::operator=(const Thread&org) {
 }
 Thread::Thread(const Thread&org) : m_pimpl(new PIMPL(this)) {
 }
-
 
 };}; // namespace

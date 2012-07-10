@@ -39,7 +39,7 @@ namespace gem { namespace thread {
       // start thread
       virtual bool start(void);
       ////
-      // stop thread 
+      // stop thread
       //  waits for at most wait4usec microseconds
       //  is wait4usec==0, waits until process terminates (e.g. forever)
       virtual bool stop(unsigned int wait4usec=0);
@@ -52,9 +52,12 @@ namespace gem { namespace thread {
       //  until stop() is called
       // if FALSE is returned, the thread may exit
       virtual bool process(void) = 0;
-
-
     };
+
+
+    ////////
+    // wrapper around select() or whatever
+    GEM_EXTERN void usleep(unsigned long usec);
 };}; // namespace
 
 
