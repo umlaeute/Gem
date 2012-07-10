@@ -27,15 +27,13 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/Exception.h"
 
+// for usleep()
+#include "Utils/Thread.h"
+
 #include <ctype.h>
 #include <stdio.h>
 
 #include <sstream>
-
-#ifdef _WIN32
-// for select()
-# include <Winsock2.h>
-#endif
 
 /***************************************
  * on the order of codec-libraries
@@ -136,9 +134,6 @@ static std::vector<std::string> split(const std::string &s, char delim) {
     return split(s, delim, elems);
 }
 
-
-
-
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
 
 #ifdef HAVE_PTHREADS
@@ -146,14 +141,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
 void *pix_film :: grabThread(void*you)
 {
   pix_film *me=reinterpret_cast<pix_film*>(you);
-  struct timeval timout;
   me->m_thread_running=true;
   //me->post("using pthreads");
   while(me->m_thread_continue){
     int reqFrame=static_cast<int>(me->m_reqFrame);
     int reqTrack=static_cast<int>(me->m_reqTrack);
-    timout.tv_sec = 0;
-    timout.tv_usec=100;
 
     if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack){
 
@@ -167,7 +159,7 @@ void *pix_film :: grabThread(void*you)
 
       pthread_mutex_unlock(me->m_mutex);
     }
-    select(0,0,0,0,&timout);
+    gem::thread::usleep(100);
   }
 
   me->m_thread_running=false;
@@ -371,6 +363,9 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
       m_reqFrame=0;
       m_curFrame=-1;
       pthread_create(&m_thread_id, 0, grabThread, this);
+      while(!m_thread_running){
+        gem::thread::usleep(10);
+      }
       debug("thread created");
     }
   }
