@@ -21,7 +21,7 @@ namespace gem { namespace thread {
     /**
      * get the number of available CPUs on the system
      */
-    GEM_EXTERN extern unsigned int getCPUCount(void);
+    GEM_EXTERN unsigned int getCPUCount(void);
 
     class GEM_EXTERN Thread {
     private:
