@@ -127,6 +127,7 @@ class GEM_EXTERN pix_film : public GemBase
 #ifdef HAVE_PTHREADS
   pthread_t m_thread_id;
   pthread_mutex_t *m_mutex;
+  pthread_cond_t   m_runcondition;
   static void*grabThread(void*);
 
   pixBlock*m_frame;

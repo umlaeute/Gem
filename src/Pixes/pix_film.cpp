@@ -142,6 +142,8 @@ void *pix_film :: grabThread(void*you)
 {
   pix_film *me=reinterpret_cast<pix_film*>(you);
   me->m_thread_running=true;
+  pthread_cond_signal(&me->m_runcondition);
+
   //me->post("using pthreads");
   while(me->m_thread_continue){
     int reqFrame=static_cast<int>(me->m_reqFrame);
@@ -184,11 +186,14 @@ pix_film :: pix_film(t_symbol *filename) :
   m_outNumFrames(NULL), m_outEnd(NULL),
 #ifdef HAVE_PTHREADS
   m_thread_id(0), m_mutex(NULL), m_frame(NULL), m_thread_continue(false),
-  m_thread_running(false), m_wantThread(true)
-#else
-  m_thread_running(false), m_wantThread(false)
 #endif
+  m_thread_running(false), m_wantThread(false)
 {
+#ifdef HAVE_PTHREADS
+  m_wantThread=true;
+  pthread_cond_init(&m_runcondition, 0);
+#endif
+
   m_handle = gem::plugins::film::getInstance();
 
   // setting the current frame
@@ -232,6 +237,8 @@ pix_film :: ~pix_film()
 {
   // Clean up the movie
   closeMess();
+
+  pthread_cond_destroy(&m_runcondition);
 
   delete m_handle;
   m_handle=NULL;
@@ -362,10 +369,11 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
       m_thread_continue = true;
       m_reqFrame=0;
       m_curFrame=-1;
+      pthread_mutex_lock(m_mutex);
       pthread_create(&m_thread_id, 0, grabThread, this);
-      while(!m_thread_running){
-        gem::thread::usleep(10);
-      }
+      pthread_cond_wait(&m_runcondition, m_mutex);
+      pthread_mutex_unlock(m_mutex);
+
       debug("thread created");
     }
   }
