@@ -58,6 +58,9 @@ public:
   pthread_cond_t*condition_cond;
   pthread_mutex_t*condition_mutex;
 
+  pthread_cond_t*runCondition;
+  pthread_mutex_t*runMutex;
+
   unsigned int timeout;
 
   bool cont;
@@ -72,6 +75,7 @@ public:
     locks(NULL),
     numlocks(0),
     asynchronous(true), condition_cond(NULL), condition_mutex(NULL),
+    runMutex(NULL), runCondition(NULL),
     timeout(timeout_),
     cont(true),
     running(false),
@@ -90,6 +94,13 @@ public:
 
       pthread_mutex_init(condition_mutex, NULL);
       pthread_cond_init(condition_cond, NULL);
+
+
+      runMutex=new pthread_mutex_t;
+      runCondition =new pthread_cond_t;
+
+      pthread_mutex_init(runMutex, NULL);
+      pthread_cond_init(runCondition, NULL);
     }
   }
   ~PIMPL(void) {
@@ -108,6 +119,15 @@ public:
       pthread_cond_destroy(condition_cond);
       delete condition_cond;
     }
+    if(runMutex) {
+      pthread_mutex_destroy(runMutex);
+      delete runMutex;
+    }
+    if(runCondition) {
+      pthread_cond_destroy(runCondition);
+      delete runCondition;
+    }
+
   }
 
   void lock(unsigned int i) {
@@ -180,9 +200,11 @@ public:
   static void*threadfun(void*you) {
     videoBase*me=(videoBase*)you;
     pixBlock*pix=NULL;
-    post("starting capture thread");
     me->m_pimpl->cont=true;
     me->m_pimpl->running=true;
+
+    if(me->m_pimpl->runCondition)
+      pthread_cond_signal(me->m_pimpl->runCondition);
 
     while(me->m_pimpl->cont) {
       if(!me->grabFrame()) {
@@ -317,7 +339,6 @@ bool videoBase :: restartTransfer()
   return false;
 }
 
-
 bool videoBase :: startThread() {
   debugPost("startThread %d", m_pimpl->running);
   if(m_pimpl->running) {
@@ -327,10 +348,19 @@ bool videoBase :: startThread() {
   if(m_pimpl->threading) {
     if(!m_pimpl->lock_new())return false;
 
+    if(m_pimpl->runMutex)
+      pthread_mutex_lock(m_pimpl->runMutex);
+
     pthread_create(&m_pimpl->thread,
                    0,
                    m_pimpl->threadfun,
                    this);
+    if(m_pimpl->runMutex) {
+      if(m_pimpl->runCondition) {
+        pthread_cond_wait(m_pimpl->runCondition, m_pimpl->runMutex);
+      }
+      pthread_mutex_unlock(m_pimpl->runMutex);
+    }
     while(!m_pimpl->running)
       usleep(10);
 
