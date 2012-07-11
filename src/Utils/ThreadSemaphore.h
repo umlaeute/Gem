@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	- locks a thread (wrapper around pthread's sem_t)
+	- locks a thread (wrapper around pthread's cond_t)
 
     Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -27,7 +27,9 @@ namespace gem {
       virtual ~Semaphore(void);
       Semaphore(const Semaphore&);
 
+      /** block the current thread until the Semaphore is thaw()ed again */
       void freeze (void);
+      /** unblock any waiting threads */
       void thaw   (void);
 
       virtual Semaphore&operator=(const Semaphore&);
