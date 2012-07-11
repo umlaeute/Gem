@@ -70,6 +70,8 @@ namespace gem { namespace thread {
     WorkerThread::id_t processingID; /* the ID currently processed or INVALID: must only be written in the thread! */
 
     pthread_t p_thread;
+    pthread_mutex_t p_runmutex;
+    pthread_cond_t  p_runcond;
 
     PIMPL(WorkerThread*x) : owner(x), ID(0),
                             keeprunning(true), isrunning(false),
@@ -77,10 +79,13 @@ namespace gem { namespace thread {
                             s_newdata(Semaphore()),
                             processingID(WorkerThread::INVALID)
     {
-
+      pthread_mutex_init(&p_runmutex, 0);
+      pthread_cond_init (&p_runcond , 0);
     }
     ~PIMPL(void) {
       stop(true);
+      pthread_cond_destroy (&p_runcond );
+      pthread_mutex_destroy(&p_runmutex);
     }
 
     inline WorkerThread::id_t nextID(void) {
@@ -94,6 +99,8 @@ namespace gem { namespace thread {
       PIMPL*me=reinterpret_cast<PIMPL*>(you);
       WorkerThread*wt=me->owner;
       me->isrunning=true;
+      pthread_cond_signal(&me->p_runcond);
+
       std::pair <id_t, void*> in, out;
 
       while(me->keeprunning) {
@@ -144,16 +151,12 @@ namespace gem { namespace thread {
 
     bool start(void) {
       if(isrunning)return true;
-
       keeprunning=true;
-      pthread_create(&p_thread, 0, process, this);
 
-      struct timeval sleep;
-      while(!isrunning) {
-        sleep.tv_sec=0;
-        sleep.tv_usec=10;
-        select(0,0,0,0,&sleep);
-      }
+      pthread_mutex_lock(&p_runmutex);
+      pthread_create(&p_thread, 0, process, this);
+      pthread_cond_wait(&p_runcond, &p_runmutex);
+      pthread_mutex_unlock(&p_runmutex);
 
       return true;
 
