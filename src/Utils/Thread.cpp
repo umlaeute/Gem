@@ -16,6 +16,7 @@
 #endif
 
 #include "Thread.h"
+#include "ThreadSemaphore.h"
 
 #ifdef _WIN32
 # include <windows.h>
@@ -122,23 +123,31 @@ class Thread::PIMPL { public:
   volatile bool keeprunning;
   volatile bool isrunning;
   pthread_t p_thread;
+  pthread_mutex_t p_mutex;
+  pthread_cond_t p_cond;
 
   PIMPL(Thread*x):
     owner(x),
     keeprunning(true),
     isrunning(false)
-  {}
+  {
+    pthread_mutex_init(&p_mutex, 0);
+    pthread_cond_init (&p_cond , 0);
+  }
   ~PIMPL(void) {
     stop(0);
+    pthread_cond_destroy (&p_cond );
+    pthread_mutex_destroy(&p_mutex);
   }
   static inline void*process(void*you) {
     PIMPL*me=reinterpret_cast<PIMPL*>(you);
     Thread*owner=me->owner;
+    pthread_cond_signal(&me->p_cond);
     me->isrunning=true;
 
     while(me->keeprunning) {
       if(!owner->process())
-	break;
+        break;
     }
     me->isrunning=false;
     return 0;
@@ -147,11 +156,11 @@ class Thread::PIMPL { public:
     if(isrunning)return true;
 
     keeprunning=true;
-    pthread_create(&p_thread, 0, process, this);
 
-    while(!isrunning) {
-      usleep(10);
-    }
+    pthread_mutex_lock(&p_mutex);
+    pthread_create(&p_thread, 0, process, this);
+    pthread_cond_wait(&p_cond, &p_mutex);
+    pthread_mutex_unlock(&p_mutex);
 
     return true;
   }
@@ -165,7 +174,7 @@ class Thread::PIMPL { public:
 
       while(isrunning) {
         usleep(10);
-	if(checktimeout && (timmy--<10))break;
+        if(checktimeout && (timmy--<10))break;
       }
       return (!isrunning);
   }
