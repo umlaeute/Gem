@@ -142,8 +142,8 @@ class Thread::PIMPL { public:
   static inline void*process(void*you) {
     PIMPL*me=reinterpret_cast<PIMPL*>(you);
     Thread*owner=me->owner;
-    pthread_cond_signal(&me->p_cond);
     me->isrunning=true;
+    pthread_cond_signal(&me->p_cond);
 
     while(me->keeprunning) {
       if(!owner->process())
