@@ -58,7 +58,7 @@ namespace gem { namespace plugins {
         //////////
         // Constructor
     	videoHALCON(void);
-    	    	
+
     	//////////
     	// Destructor
     	virtual ~videoHALCON(void);

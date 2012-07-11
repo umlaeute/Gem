@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -12,47 +12,47 @@ For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
-   
+
 #ifndef _INCLUDE_GEMPLUGIN__RECORDV4L_RECORDV4L_H_
 #define _INCLUDE_GEMPLUGIN__RECORDV4L_RECORDV4L_H_
-   
+
 #include "plugins/record.h"
 
 #if defined HAVE_LIBV4L1 || defined HAVE_LINUX_VIDEODEV_H
 # define HAVE_VIDEO4LINUX
 #endif
-   
+
 #if defined HAVE_LINUX_VIDEODEV_H
 # include <linux/videodev.h>
 #endif /*  HAVE_LINUX_VIDEODEV_H */
 
 #if defined HAVE_LIBV4L1
-#  include <libv4l1.h> 
+#  include <libv4l1.h>
 #endif /* HAVE_LIBV4L1 */
 
- 
+
 /*---------------------------------------------------------------
  -------------------------------------------------------------------
   CLASS
   recordV4L
-    
+
   class for outputting video using a v4l loopback device
-    
+
   KEYWORDS
   pix record movie
-  
+
   DESCRIPTION
-  
+
   -----------------------------------------------------------------*/
 #if defined HAVE_VIDEO4LINUX
 
 namespace gem { namespace plugins {
  class GEM_EXPORT recordV4L : public record {
  public:
-  
+
   //////////
   // Constructor
-  
+
   recordV4L(void);
 
   ////////
@@ -69,17 +69,17 @@ namespace gem { namespace plugins {
   //////////
   // open a movie up
   // open the recordV4L "filename" (think better about URIs ?)
-  // returns TRUE if opening was successfull, FALSE otherwise 
+  // returns TRUE if opening was successfull, FALSE otherwise
   virtual bool start(const std::string filename, gem::Properties&);
 
-  
+
   //////////
   // initialize the encoder
   // dummyImage provides meta-information (e.g. size) that must not change during the encoding cycle
   // (if it does, abort the recording session)
   // framedur is the duration of one frame in [ms]
-  //   
-  // returns TRUE if init was successfull, FALSE otherwise 
+  //
+  // returns TRUE if init was successfull, FALSE otherwise
   bool init(const imageStruct* dummyImage, const int framedur);
 
   //////////
@@ -94,7 +94,7 @@ namespace gem { namespace plugins {
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
-   */ 
+   */
   virtual std::vector<std::string>getCodecs(void);
   virtual const std::string getCodecDescription(const std::string);
   virtual bool enumProperties(gem::Properties&);

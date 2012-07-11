@@ -54,7 +54,7 @@ class GEM_EXTERN shearYZ : public GemBase
     	//////////
     	// X value changed
     	void	    	shearMess(float val);
-	
+
 	//shear value
 	float			shear;
 };

@@ -7,7 +7,7 @@ capture an image using unicap
 Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOUNICAP_VIDEOUNICAP_H_
@@ -27,9 +27,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_video
-    
+
   grabs a video via UNICAP (http://unicap-imaging.org/)
-    
+
   KEYWORDS
   pix
 
@@ -40,16 +40,16 @@ namespace gem { namespace plugins {
   //////////
   // Constructor
   videoUNICAP(void);
-  
+
   //////////
   // Destructor
   virtual ~videoUNICAP(void);
-  
+
   ////////
   // open the video-device
   virtual bool           open(gem::Properties&writeprops);
   virtual void          close(void);
-    
+
   //////////
   // Start up the video device
   // [out] int - returns false if starting failed
@@ -110,16 +110,16 @@ namespace gem { namespace plugins {
 
   int m_reqFormat;
 
-  void newFrame (unicap_handle_t handle, 
+  void newFrame (unicap_handle_t handle,
                  unicap_data_buffer_t * buffer);
 
   gem::thread::Mutex mutex;
   gem::Properties m_props;
 
   private:
-  static void newFrameCB (unicap_event_t event, 
-                          unicap_handle_t handle, 
-                          unicap_data_buffer_t * buffer, 
+  static void newFrameCB (unicap_event_t event,
+                          unicap_handle_t handle,
+                          unicap_data_buffer_t * buffer,
                           void *usr_data);
 
   /* are we currently rendering? */

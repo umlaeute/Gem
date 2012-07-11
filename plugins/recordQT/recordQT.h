@@ -6,7 +6,7 @@
  *  Copyright 2005. All rights reserved.
  *
  */
- 
+
 //this will record QT movies
 #ifndef _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
 #define _INCLUDE_GEMPLUGIN__RECORDQT_RECORDQT_H_
@@ -14,7 +14,7 @@
 
 #define QT_MAX_FILENAMELENGTH 256
 
-#if defined _WIN32 
+#if defined _WIN32
 # include <QTML.h>
 # include <Movies.h>
 # include <QuicktimeComponents.h>
@@ -28,12 +28,12 @@
   -------------------------------------------------------------------
   CLASS
   recordQT
-    
+
   Writes a pix of the render buffer
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   Inlet for a list - "vert_size"
@@ -45,7 +45,7 @@
 
   "vert_size" - Set the size of the pix
   "vert_pos" - Set the position of the pix
-    
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT recordQT : public record
@@ -62,11 +62,11 @@ namespace gem { namespace plugins {
 
   virtual void stop(void);
   virtual bool start(const std::string filename, gem::Properties&);
-    	
+
   //////////
   // Do the rendering
   virtual bool write(imageStruct*img);
- 
+
   ////////
   // call up compression dialog
   virtual bool	dialog(void);
@@ -81,11 +81,11 @@ namespace gem { namespace plugins {
   virtual bool enumProperties(gem::Properties&props);
 
  private:
-		
+
   virtual void	setupQT(void);
-		
+
   virtual void	compressFrame(void);
-	
+
   //////
   // is recording setup and ready to go?
   bool		m_recordSetup;
@@ -93,7 +93,7 @@ namespace gem { namespace plugins {
   bool		m_recordStart;
   bool		m_recordStop;
 
-    	
+
   //////////
   // current file to write to
   char	    	m_filename[QT_MAX_FILENAMELENGTH];
@@ -117,7 +117,7 @@ namespace gem { namespace plugins {
 
   //number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
   int					m_ticks;
-		
+
   bool	m_firstRun;
 
   //////////
@@ -148,7 +148,7 @@ namespace gem { namespace plugins {
   short		nResID;
 
   void resetCodecSettings(void);
-		
+
   //this will hold the ctype value of the codecs listed by getCodecList()
   typedef struct codecListStorage{
     int		position;
@@ -156,7 +156,7 @@ namespace gem { namespace plugins {
     char* name;
     CodecComponent		codec;
   };
-  
+
   codecListStorage *codecContainer;
   int numCodecContainer;
 

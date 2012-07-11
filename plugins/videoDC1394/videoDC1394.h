@@ -11,7 +11,7 @@
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
     Linux version by Miller Puckette. msp@ucsd.edu
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEODC1394_VIDEODC1394_H_
@@ -32,12 +32,12 @@
 -------------------------------------------------------------------
 CLASS
 	pix_video
-    
+
     Loads in a video
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
 -----------------------------------------------------------------*/
@@ -47,7 +47,7 @@ namespace gem { namespace plugins {
         //////////
         // Constructor
     	videoDC1394(void);
-    	    	
+
     	//////////
     	// Destructor
     	virtual ~videoDC1394(void);
@@ -56,7 +56,7 @@ namespace gem { namespace plugins {
 	// open the video-device
 	virtual bool           openDevice(gem::Properties&);
 	virtual void          closeDevice(void);
-    
+
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
@@ -80,7 +80,7 @@ namespace gem { namespace plugins {
 	//////////
 	// get available devices
 	virtual std::vector<std::string>enumerate(void);
-  
+
  protected:
 
   //-----------------------------------

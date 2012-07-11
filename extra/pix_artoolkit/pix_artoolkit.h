@@ -59,19 +59,19 @@ typedef struct {
   -------------------------------------------------------------------
   CLASS
   pix_artoolkit
-    
+
   Detect markers and its 3d positions using ARToolKit
 
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "loadmarker" - load marker data file
   "loadcpara" - load camera parameter file
   "continuous" - continuous mode
   "reset" - reset imported markers and camera parameters
-   
+
   -----------------------------------------------------------------*/
 class GEM_EXPORT pix_artoolkit : public GemPixObj
 {
@@ -88,14 +88,14 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
     OUTPUT_QUATERNION = 1,
     OUTPUT_EULER = 2
   };
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_artoolkit();
 
-#ifdef HAVE_ARTOOLKIT	
+#ifdef HAVE_ARTOOLKIT
   //////////
   // Do the processing
   virtual void 	processRGBAImage(imageStruct &image);
@@ -110,7 +110,7 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
   void			outputmodeMess(t_int outputmode);
 
   //////////
-  // 
+  //
   void			continuousMess(t_int continuousmode);
   void			thresholdMess(t_int threshold);
 
@@ -119,7 +119,7 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
   void			clearMess(void);
 
   //////////
-  // Initialize 
+  // Initialize
   void			init(void);
 
   //////////
@@ -129,14 +129,14 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
 
   t_outlet	*m_outMarker;
 
-#ifdef HAVE_ARTOOLKIT	
-  imageStruct	m_image;			// 
+#ifdef HAVE_ARTOOLKIT
+  imageStruct	m_image;			//
 
   ARParam	wparam;				//
   int		m_xsize;			// image size (x)
   int		m_ysize;			// image size (y)
   int		m_thresh;			// threshold
-  int		m_count;			// 
+  int		m_count;			//
   outputMode	m_outputMode;		// output mode (OUTPUT_QUARTANION, OUTPUT_CARTESIAN)
   bool		m_continuous;		// continuous mode (true:continuous, false:one shot)
   t_symbol	*m_cparam_name;		// camera parameter file name
@@ -145,7 +145,7 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
   //		char                *config_name;	//"Data/multi/marker.dat"
   //		ARMultiMarkerInfoT  *config;		//
 #endif /* HAVE_ARTOOLKIT */
-    
+
   //////////
   // Static member functions
   static void 	loadcparaMessCallback(void *data, t_symbol *filename);

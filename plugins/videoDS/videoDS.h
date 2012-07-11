@@ -23,12 +23,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   pix_video
-    
+
   captures a video on Apple machines
-    
+
   KEYWORDS
   pix
-    
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoDS : public videoBase {
@@ -36,7 +36,7 @@ namespace gem { namespace plugins {
     //////////
     // Constructor
     videoDS(void);
-    	    	
+
     //////////
     // Destructor
     virtual ~videoDS(void);
@@ -47,7 +47,7 @@ namespace gem { namespace plugins {
     virtual bool           openDevice(gem::Properties&props);
     // and close the video-device
     virtual void          closeDevice(void);
-    
+
     //////////
     // Start up the video device
     // [out] int - returns 0 if bad
@@ -69,7 +69,7 @@ namespace gem { namespace plugins {
     virtual bool dialog(std::vector<std::string>);
     virtual std::vector<std::string>dialogs(void);
     virtual std::vector<std::string>videoDS :: enumerate(void);
-    
+
   protected:
     //-----------------------------------
     // GROUP:	Video data
@@ -113,7 +113,7 @@ namespace gem { namespace plugins {
 
     unsigned long	  m_GraphRegister;
 #endif /*HAVE_DIRECTSHOW */
-  }; 
+  };
 };};
 
 

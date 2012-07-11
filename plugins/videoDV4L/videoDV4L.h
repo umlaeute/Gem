@@ -11,7 +11,7 @@
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
     Linux version by Miller Puckette. msp@ucsd.edu
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEODV4L_VIDEODV4L_H_
@@ -43,12 +43,12 @@
 -------------------------------------------------------------------
 CLASS
 	pix_video
-    
+
     Loads in a video
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     "dimen" (int, int) - set the x,y dimensions
@@ -57,7 +57,7 @@ DESCRIPTION
     "contrast" (int) - the contrast
     "hue" (int) - the hue
     "sat" (int) - the saturation
-    
+
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoDV4L : public videoBase {
@@ -65,7 +65,7 @@ namespace gem { namespace plugins {
         //////////
         // Constructor
     	videoDV4L(void);
-    	    	
+
     	//////////
     	// Destructor
     	virtual ~videoDV4L(void);
@@ -74,7 +74,7 @@ namespace gem { namespace plugins {
 	// open the video-device
 	virtual bool           openDevice(gem::Properties&props);
 	virtual void          closeDevice(void);
-    
+
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
@@ -103,7 +103,7 @@ namespace gem { namespace plugins {
 			      gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
-    
+
  protected:
 
   //-----------------------------------

@@ -54,7 +54,7 @@ public:
       double mm_20 = m_20 - xmid()*m_xaccum;
       return .5*atan2(2.*mm_11,(mm_20-mm_02));
   }
-  
+
   // the angular orientation of the principal axis in radians
   double orientation();
 

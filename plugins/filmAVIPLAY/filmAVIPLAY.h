@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -24,7 +24,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif
 
 #ifdef HAVE_LIBAVIPLAY
-   /* this used to be <avifile/avifile.h> 
+   /* this used to be <avifile/avifile.h>
     * but on my system it changed to <avifile-0.7/avifile.h>
     * so we now find the correct path via "configure"
     */
@@ -47,19 +47,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   filmAVIPLAY
-    
+
   film-loader class for AVIPLAY(linux)
-    
+
   KEYWORDS
   pix film movie
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
 class GEM_EXPORT filmAVIPLAY : public film {
  public:
-  
+
   //////////
   // Constructor
   filmAVIPLAY(void);

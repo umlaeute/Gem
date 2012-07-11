@@ -33,7 +33,7 @@ extern "C"
     Segmenter s;
 
     ...
-    
+
     initialize_segmenter( &s, WIDTH, HEIGHT, 8 );
 
     ...
@@ -88,7 +88,7 @@ typedef struct Region{
 	struct Span *first_span;
 	struct Span *last_span;
 	int area;
-	
+
     int flags;
 
     short level;                            /* initialized to UNKNOWN_REGION_LEVEL */
@@ -96,7 +96,7 @@ typedef struct Region{
     short children_visited_count;           /* initialized to 0 */
     short descendent_count;                 /* initialized to 0x7FFF */
     char *depth_string;                     /* not initialized by segmenter */
-    
+
     short adjacent_region_count;
     struct Region *adjacent_regions[ 1 ];   /* variable length array of length max_adjacent_regions */
 } Region;
@@ -141,7 +141,7 @@ typedef struct Segmenter{
 
     int sizeof_region;
     int max_adjacent_regions;
-	
+
 	int width, height;
 
     RegionReference **regions_under_construction;

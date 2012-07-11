@@ -25,9 +25,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   modelASSIMP2
-    
+
   loads an Alias WaveFront .obj file as an asset
-    
+
   KEYWORDS
   asset model
 

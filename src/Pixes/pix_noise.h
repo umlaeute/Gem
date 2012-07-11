@@ -73,13 +73,13 @@ class GEM_EXTERN pix_noise : public GemPixObj
 	//////////
 	// Clean up the pixBlock
 	void	    	cleanPixBlock(void);
-	
+
 	//////////
 	// Generate noise texture
 	void	    	generateNoise(void);
 	//////////
 	// initialize random generator
-	void	    	initRandom(int seed);	
+	void	    	initRandom(int seed);
 	//////////
 	// compute random
 	unsigned char	random(void);
@@ -90,7 +90,7 @@ class GEM_EXTERN pix_noise : public GemPixObj
 	void	    	autoMess(bool);
 	void        seed(int);
 	void	    	debug(void);
-	
+
 	//////////
 	// Set color mode
 	void	    	RGBAMess(void);
@@ -103,20 +103,20 @@ class GEM_EXTERN pix_noise : public GemPixObj
 	//////////
 	// Manual writing
 	bool            m_banged;
-	
+
 	//////////
 	// Automatic writing
 	bool            m_automatic;
-	
+
 	//////////
 	// paint mode
 	int 	    	m_mode;
-	
+
 	//////////
 	// internal random value
 	int				m_rand[55];
 	int				m_rand_p,m_rand_k;
-	
+
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;

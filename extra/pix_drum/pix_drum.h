@@ -22,12 +22,12 @@ WARRANTIES, see the file, "LICENSE.txt" in this distribution.
 -------------------------------------------------------------------
 CLASS
     pix_drum
-    
+
     Clamp pixel values to a threshold
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_thresh"
@@ -35,7 +35,7 @@ DESCRIPTION
 
     "vec_thresh" - The threshold vector
     "ft1" - Set all thresholds to one value
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXPORT pix_drum : public GemPixObj
 {
@@ -46,9 +46,9 @@ class GEM_EXPORT pix_drum : public GemPixObj
         //////////
         // Constructor
     	pix_drum();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_drum();
@@ -56,7 +56,7 @@ class GEM_EXPORT pix_drum : public GemPixObj
 
     	void	    	vecBoundsMess(t_symbol*,int argc, t_atom *argv);
     	void	    	vecThreshMess(t_symbol*,int argc, t_atom *argv);
-    	
+
 		t_outlet *outlet1;
 		t_outlet *outlet2;
 		t_outlet *outlet3;
@@ -66,9 +66,9 @@ class GEM_EXPORT pix_drum : public GemPixObj
 		int head, bottom, right, left, mode, pix_dist, min_width, pix_dist_ctr;
 		int Xsize, Ysize;
 		float thresh, min_height;
-    
+
     private:
-    
+
 };
 
 #endif	// for header file

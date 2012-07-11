@@ -13,11 +13,11 @@ namespace gem { namespace pylon { namespace cameraproperties {
                     gem::Properties&getKeys(void);
                     gem::Properties&setKeys(void);
 
-                    void get(Pylon::CBaslerGigECamera*device, 
+                    void get(Pylon::CBaslerGigECamera*device,
                              std::string key,
                              gem::any&result);
 
-                    bool set(Pylon::CBaslerGigECamera*device, 
+                    bool set(Pylon::CBaslerGigECamera*device,
                              std::string key,
                              gem::Properties&props);
 

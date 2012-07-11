@@ -48,7 +48,7 @@ class GEM_EXTERN part_velcone : public partlib_base
     	//////////
     	// Destructor
     	virtual ~part_velcone(void);
-      
+
       //////////
       void			vectorMess(float val1, float val2, float val3);
       void			velMess(float num);

@@ -26,12 +26,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   filmMPEG3
-  
+
   Loads in a film
-  
+
   KEYWORDS
   pix
-  
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/

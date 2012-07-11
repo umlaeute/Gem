@@ -36,7 +36,7 @@ LOG
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { 
+namespace gem {
   namespace plugins {class imagesaver;};
   namespace RTE     {class Outlet;};
 };

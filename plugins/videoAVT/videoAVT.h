@@ -9,7 +9,7 @@
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
     Linux version by Miller Puckette. msp@ucsd.edu
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOAVT_VIDEOAVT_H_
@@ -54,16 +54,16 @@
 -------------------------------------------------------------------
 CLASS
 	videoAVT
-    
+
     Grabs in a video
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     support for the "AVT GiGE SDK" by Prosilica
-    
+
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoAVT : public videoBase {
@@ -71,7 +71,7 @@ namespace gem { namespace plugins {
         //////////
         // Constructor
     	videoAVT(void);
-    	    	
+
     	//////////
     	// Destructor
     	virtual ~videoAVT(void);
@@ -81,7 +81,7 @@ namespace gem { namespace plugins {
 	// open the video-device
 	virtual bool           openDevice(gem::Properties&props);
 	virtual void          closeDevice(void);
-    
+
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
@@ -97,7 +97,7 @@ namespace gem { namespace plugins {
 
 	virtual std::vector<std::string>enumerate(void);
 
-	
+
 	//////////
 	// properties
 	virtual bool enumProperties(gem::Properties&readable,
@@ -105,7 +105,7 @@ namespace gem { namespace plugins {
 	virtual void setProperties(gem::Properties&writeprops);
 	virtual void getProperties(gem::Properties&readprops);
 
-   
+
  protected:
 
   tPvHandle m_grabber;
@@ -120,7 +120,7 @@ namespace gem { namespace plugins {
 
 #endif /* HAVE_AVT */
 
-}; 
+};
 };};
 
 #endif	// for header file

@@ -9,7 +9,7 @@ Copyright (c) Günther Geiger. geiger@epy.co.at
 Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOV4L2_VIDEOV4L2_H_
@@ -24,7 +24,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #ifdef HAVE_VIDEO4LINUX2
 # ifdef HAVE_LIBV4L2
-#  include <libv4l2.h> 
+#  include <libv4l2.h>
 # endif /* HAVE_LIBV4L2 */
 
 # include <map>
@@ -44,7 +44,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <linux/videodev2.h>
 # include <sys/mman.h>
 #ifdef HAVE_PTHREADS
-/* the bad thing is, that we currently don't have any alternative to using PTHREADS 
+/* the bad thing is, that we currently don't have any alternative to using PTHREADS
  * LATER: make threading optional
  *        (or at least disabled capturing when no pthreads are available)
  */
@@ -66,12 +66,12 @@ struct t_v4l2_buffer {
   -------------------------------------------------------------------
   CLASS
   pix_video
-    
+
   Loads in a video
-    
+
   KEYWORDS
   pix
-    
+
   DESCRIPTION
 
   "dimen" (int, int) - set the x,y dimensions
@@ -80,7 +80,7 @@ struct t_v4l2_buffer {
   "contrast" (int) - the contrast
   "hue" (int) - the hue
   "sat" (int) - the saturation
-    
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoV4L2 : public videoBase {
@@ -88,17 +88,17 @@ namespace gem { namespace plugins {
   //////////
   // Constructor
   videoV4L2(void);
-  
+
   //////////
   // Destructor
   virtual ~videoV4L2(void);
-  
+
 #ifdef HAVE_VIDEO4LINUX2
   ////////
   // open the video-device
   virtual bool           openDevice(gem::Properties&writeprops);
   virtual void          closeDevice(void);
-    
+
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
@@ -133,7 +133,7 @@ namespace gem { namespace plugins {
   //-----------------------------------
   // GROUP:	Linux specific video data
   //-----------------------------------
-	
+
 
   int m_gotFormat; // the format returned by the v4l2-device (not an openGL-format!)
   bool m_colorConvert; // do we have to convert the colour-space manually ?
@@ -153,7 +153,7 @@ namespace gem { namespace plugins {
   int m_minwidth;
   int m_maxheight;
   int m_minheight;
-  
+
   //////////
   // the capturing thread
   pthread_t m_thread_id;
@@ -161,7 +161,7 @@ namespace gem { namespace plugins {
   bool      m_frame_ready;
 
   /* capture frames (in a separate thread! */
-  void*capturing(void); 
+  void*capturing(void);
   /* static callback for pthread_create: calls capturing() */
   static void*capturing_(void*);
 
@@ -175,7 +175,7 @@ namespace gem { namespace plugins {
   bool      m_rendering; // "true" when rendering is on, false otherwise
 
   /* use this in the capture-thread to cleanup */
-  bool      m_stopTransfer;  
+  bool      m_stopTransfer;
 
   /* internal housekeeping of properties */
   void addProperties(struct v4l2_queryctrl queryctrl,
@@ -183,7 +183,7 @@ namespace gem { namespace plugins {
 		     gem::Properties&writeable);
   std::map<std::string, struct v4l2_queryctrl>m_readprops, m_writeprops;
   struct v4l2_capability m_caps;
-  
+
   __u32 m_frameSize; // the size of a v4l2 frame
 
 #endif /* HAVE_VIDEO4LINUX2 */

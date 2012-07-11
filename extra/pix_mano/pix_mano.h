@@ -2,12 +2,12 @@
 //
 // pix_mano - an object to track a hand and its fingers
 //
-// Jaime Oliver,  
+// Jaime Oliver,
 //
 // jaime.oliver2@gmail.com
 // this is still a testing version, no guarantees...
 //
-// the license for this object is GNU 
+// the license for this object is GNU
 //
 // for more information: www.jaimeoliver.pe
 // Silent Percussion Project
@@ -38,9 +38,9 @@ class GEM_EXPORT pix_mano : public GemPixObj
   //////////
   // Constructor
   pix_mano();
-    	
+
  protected:
-    	
+
   //////////
   // Destructor
   virtual ~pix_mano();
@@ -52,15 +52,15 @@ class GEM_EXPORT pix_mano : public GemPixObj
   //////////
   // Set the new threshold vector
   void	    	vecBoundsMess(t_symbol*,int argc, t_atom *argv);
-    	
+
   //////////
   // Set the new threshold value
   void	    	vecThreshMess(t_symbol*,int argc, t_atom *argv);
-		
+
   //////////
   // Set the new threshold value
   void	    	vecParamsMess(t_symbol*,int argc, t_atom *argv);
-    	
+
   //////////
   // The new color
   t_outlet *outlet1;
@@ -76,7 +76,7 @@ class GEM_EXPORT pix_mano : public GemPixObj
   unsigned int Xsize, Ysize;
   int hop, prev_tip;
   float tp_i[50], tp_x[50], tp_y[50], tp_m[50], tp_a[50], tp_s[50];
-    
+
  private:
   class PIMPL;
   PIMPL*m_pimpl;

@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -12,20 +12,20 @@ For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
-   
+
 #ifndef _INCLUDE_GEMPLUGIN__RECORDQT4L_RECORDQT4L_H_
 #define _INCLUDE_GEMPLUGIN__RECORDQT4L_RECORDQT4L_H_
-   
+
 #include "plugins/record.h"
-   
-#if defined HAVE_LIBQUICKTIME 
+
+#if defined HAVE_LIBQUICKTIME
 #define GEM_USE_RECORDQT4L
 
 /* don't add relative paths to the quicktime-headers here!
  * they should be found by configure!
  * if not, then rather give the full path by hand in Make.config
  * or the command line!
- * using things like "lqt/lqt.h" will break compilation on other 
+ * using things like "lqt/lqt.h" will break compilation on other
  * systems!
  */
 # include <lqt.h>
@@ -33,27 +33,27 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #endif
 
 #include <map>
- 
+
 /*---------------------------------------------------------------
  -------------------------------------------------------------------
   CLASS
   recordQT4L
-    
+
   class for recording video-streams into a qt4l-movie
-    
+
   KEYWORDS
   pix record movie
-  
+
   DESCRIPTION
-  
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT recordQT4L : public record {
  public:
-  
+
   //////////
   // Constructor
-  
+
   /* initialize the recordQT4L plugin
    *
    * set the default colour-space to format (like GL_RGBA)
@@ -77,18 +77,18 @@ namespace gem { namespace plugins {
   //////////
   // open a movie up
   // open the recordQT4L "filename" (think better about URIs ?)
-  // returns TRUE if opening was successfull, FALSE otherwise 
+  // returns TRUE if opening was successfull, FALSE otherwise
   virtual bool start(const std::string filename, gem::Properties&props);
 
 
-  
+
   //////////
   // initialize the encoder
   // dummyImage provides meta-information (e.g. size) that must not change during the encoding cycle
   // (if it does, abort the recording session)
   // fps is the number of frames per second
-  //   
-  // returns TRUE if init was successfull, FALSE otherwise 
+  //
+  // returns TRUE if init was successfull, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const double fps);
 
 
@@ -105,7 +105,7 @@ namespace gem { namespace plugins {
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
-   */ 
+   */
   virtual std::vector<std::string>getCodecs(void);
   virtual const std::string getCodecDescription(const std::string codecname);
 

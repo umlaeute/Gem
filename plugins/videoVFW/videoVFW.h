@@ -23,12 +23,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
 	pix_video
-    
+
   captures a video on NT machines
-    
+
   KEYWORDS
   pix
-    
+
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoVFW : public videoBase {
@@ -36,7 +36,7 @@ namespace gem { namespace plugins {
     //////////
     // Constructor
     videoVFW(void);
-    	    	
+
     //////////
     // Destructor
     virtual ~videoVFW(void);
@@ -45,7 +45,7 @@ namespace gem { namespace plugins {
     // open the video-device
     virtual bool           openDevice(gem::Properties&);
     virtual void          closeDevice(void);
-    
+
     //////////
     // Start up the video device
     // [out] int - returns 0 if bad
@@ -72,7 +72,7 @@ namespace gem { namespace plugins {
     void		videoFrame(LPVIDEOHDR lpVHdr);
   private:
     static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
-  }; 
+  };
 };};
 
 #endif	// for header file

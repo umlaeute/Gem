@@ -11,7 +11,7 @@
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
     Linux version by Miller Puckette. msp@ucsd.edu
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOPYLON_VIDEOPYLON_H_
@@ -37,12 +37,12 @@ typedef Pylon::CBaslerGigECamera Camera_t;
 -------------------------------------------------------------------
 CLASS
 	pix_video
-    
+
     Loads in a video
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     "dimen" (int, int) - set the x,y dimensions
@@ -51,7 +51,7 @@ DESCRIPTION
     "contrast" (int) - the contrast
     "hue" (int) - the hue
     "sat" (int) - the saturation
-    
+
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoPYLON : public videoBase {
@@ -59,7 +59,7 @@ namespace gem { namespace plugins {
     //////////
     // Constructor
     videoPYLON(void);
-    	    	
+
     //////////
     // Destructor
     virtual ~videoPYLON(void);
@@ -68,7 +68,7 @@ namespace gem { namespace plugins {
     // open the video-device
     virtual bool           openDevice(gem::Properties&writeprops);
     virtual void          closeDevice(void);
-    
+
     //////////
     // Start up the video device
     // [out] bool - returns FALSE if bad
@@ -77,7 +77,7 @@ namespace gem { namespace plugins {
     // Stop the video device
     // [out] bool - returns FALSE if bad
     bool	   	stopTransfer(void);
-    
+
     //////////
     // get the next frame
     bool grabFrame(void);
@@ -91,13 +91,13 @@ namespace gem { namespace plugins {
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
-   
+
   protected:
   class CGrabBuffer;
 
   Pylon::PylonAutoInitTerm autoInitTerm;
   Pylon::CTlFactory*m_factory;
-    
+
   Pylon::CBaslerGigECamera*m_camera;
   Pylon::CBaslerGigEStreamGrabber*m_grabber;
 
@@ -107,7 +107,7 @@ namespace gem { namespace plugins {
   uint32_t m_numBuffers;
   std::vector<CGrabBuffer*> m_buffers;
   std::map<std::string, Pylon::CDeviceInfo>m_id2device;
-}; 
+};
 };};
 
 #endif	// for header file

@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block 
+Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
 (OS independant parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
@@ -12,12 +12,12 @@ For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
-   
+
 #ifndef _INCLUDE_GEMPLUGIN__RECORDV4L2_RECORDV4L2_H_
 #define _INCLUDE_GEMPLUGIN__RECORDV4L2_RECORDV4L2_H_
-   
+
 #include "plugins/record.h"
-   
+
 #if defined HAVE_LINUX_VIDEODEV2_H
 # define HAVE_VIDEO4LINUX2
 # include <linux/videodev2.h>
@@ -25,29 +25,29 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include <string>
 #include <map>
- 
+
 /*---------------------------------------------------------------
  -------------------------------------------------------------------
   CLASS
   recordV4L2
-    
+
   class for outputting video using a v4l2 loopback device
-    
+
   KEYWORDS
   pix record movie
-  
+
   DESCRIPTION
-  
+
   -----------------------------------------------------------------*/
 #if defined HAVE_VIDEO4LINUX2
 
 namespace gem { namespace plugins {
  class GEM_EXPORT recordV4L2 : public record {
  public:
-  
+
   //////////
   // Constructor
-  
+
   recordV4L2(void);
 
   ////////
@@ -63,17 +63,17 @@ namespace gem { namespace plugins {
   //////////
   // open a movie up
   // open the recordV4L2 "filename" (or URI)
-  // returns TRUE if opening was successfull, FALSE otherwise 
+  // returns TRUE if opening was successfull, FALSE otherwise
   virtual bool start(const std::string filename, gem::Properties&);
 
-  
+
   //////////
   // initialize the encoder
   // dummyImage provides meta-information (e.g. size) that must not change during the encoding cycle
   // (if it does, abort the recording session)
   // framedur is the duration of one frame in [ms]
-  //   
-  // returns TRUE if init was successfull, FALSE otherwise 
+  //
+  // returns TRUE if init was successfull, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const int framedur);
 
   //////////
@@ -88,7 +88,7 @@ namespace gem { namespace plugins {
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
-   */ 
+   */
   virtual std::vector<std::string>getCodecs(void);
   virtual const std::string getCodecDescription(const std::string);
   virtual bool enumProperties(gem::Properties&);

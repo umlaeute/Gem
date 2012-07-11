@@ -19,20 +19,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -------------------------------------------------------------------
 CLASS
     pix_equal
-    
+
     mark pixels nearly equal to a given color, within given bounds
 
 KEYWORDS
     pix, color
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_low"
     Inlet for a float  - "vec_up"
-    
+
     "vec_low" - Lower bound in RGBA to search for
     "vec_up" - Upper bound in RGBA to search for
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_equal : public GemPixObj
 {
@@ -43,9 +43,9 @@ class GEM_EXTERN pix_equal : public GemPixObj
       //////////
       // Constructor
     	pix_equal();
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_equal();
@@ -53,7 +53,7 @@ class GEM_EXTERN pix_equal : public GemPixObj
     	//////////
     	// Do the processing
     	virtual void 	processRGBAImage(imageStruct &image);
-    	
+
     	//////////
     	// Set the new color range vectors
     	void	    	vecLowerBoundMess(t_symbol*,int argc, t_atom *argv);

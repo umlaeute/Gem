@@ -11,7 +11,7 @@
     WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
     Linux version by Miller Puckette. msp@ucsd.edu
-	
+
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOV4L_VIDEOV4L_H_
@@ -24,7 +24,7 @@
 #endif /* HAVE_LINUX_VIDEODEV_H */
 
 #ifdef HAVE_LIBV4L1
-# include <libv4l1.h> 
+# include <libv4l1.h>
 #endif /* HAVE_LIBV4L1 */
 
 #include <stdio.h>
@@ -51,12 +51,12 @@
 -------------------------------------------------------------------
 CLASS
 	videoV4L
-    
+
     grab images from a v4l(1) device
-    
+
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     "dimen" (int, int) - set the x,y dimensions
@@ -65,7 +65,7 @@ DESCRIPTION
     "contrast" (int) - the contrast
     "hue" (int) - the hue
     "sat" (int) - the saturation
-    
+
 -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
  class GEM_EXPORT videoV4L : public videoBase {
@@ -73,7 +73,7 @@ namespace gem { namespace plugins {
         //////////
         // Constructor
     	videoV4L(void);
-    	    	
+
     	//////////
     	// Destructor
     	virtual ~videoV4L(void);
@@ -82,7 +82,7 @@ namespace gem { namespace plugins {
 	// open the video-device
 	virtual bool           openDevice(gem::Properties&props);
 	virtual void          closeDevice(void);
-    
+
     	//////////
     	// Start up the video device
     	// [out] int - returns 0 if bad
@@ -107,13 +107,13 @@ namespace gem { namespace plugins {
 	virtual bool	    	setColor(int);
 
 	virtual std::vector<std::string>enumerate(void);
-   
+
  protected:
 
   //-----------------------------------
   // GROUP:	Linux specific video data
   //-----------------------------------
-	
+
   struct video_tuner vtuner;
   struct video_picture vpicture;
   struct video_buffer vbuffer;

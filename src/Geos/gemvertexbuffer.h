@@ -15,7 +15,7 @@
 #include "Base/GemShape.h"
 #include "Gem/Image.h"
 #include "Gem/State.h"
-	
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -57,18 +57,18 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   //////////
   // Constructor
   gemvertexbuffer(t_floatarg size);
-    	
+
   /////////////
     // Variables
     //float range_x;
     //float range_y;
-    	
+
     protected:
-    	
+
   //////////
   // Destructor
   virtual ~gemvertexbuffer(void);
-    	
+
   //////////
   // Do the rendering
   virtual void renderShape(GemState *state);

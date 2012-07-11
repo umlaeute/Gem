@@ -28,20 +28,20 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -------------------------------------------------------------------
 CLASS
     pix_fiducialtrack
-    
+
     Clamp pixel values to a fiducialtrack
 
 KEYWORDS
     pix
-    
+
 DESCRIPTION
 
     Inlet for a list - "vec_thresh"
     Inlet for a float - "ft1"
-    
+
     "vec_thresh" - The fiducialtrack vector
     "ft1" - Set all fiducialtracks to one value
-   
+
 -----------------------------------------------------------------*/
 class GEM_EXPORT pix_fiducialtrack : public GemPixObj
 {
@@ -52,9 +52,9 @@ class GEM_EXPORT pix_fiducialtrack : public GemPixObj
         //////////
         // Constructor
     	pix_fiducialtrack(t_symbol*);
-    	
+
     protected:
-    	
+
     	//////////
     	// Destructor
     	virtual ~pix_fiducialtrack();
@@ -80,7 +80,7 @@ class GEM_EXPORT pix_fiducialtrack : public GemPixObj
 
         t_outlet*m_infoOut;
         t_atom   m_outlist[4];
-    
+
     	//////////
     	// Static member functions
     	static void 	treeMessCallback(void *data, t_symbol*s);

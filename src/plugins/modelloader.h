@@ -20,12 +20,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -------------------------------------------------------------------
   CLASS
   modelloader
-    
+
   parent class for the system- and library-dependent model-loader classes
-    
+
   KEYWORDS
   asset model
-    
+
   DESCRIPTION
 
   -----------------------------------------------------------------*/
@@ -40,7 +40,7 @@ class GEM_EXTERN modelloader
 
   //////////
   // returns an instance wrapping all plugins or NULL
-  // if NULL is returned, you might still try your luck with manually accessing the 
+  // if NULL is returned, you might still try your luck with manually accessing the
   // PluginFactory
   static modelloader*getInstance(void);
 
@@ -55,18 +55,18 @@ class GEM_EXTERN modelloader
    * try to open the modelloader with the requested properties
    *
    * about properties:
-   *  requestprops: are properties that can change the behaviour of how the 
-   *                asset is opened; examples are "rescale" (e.g. true); 
+   *  requestprops: are properties that can change the behaviour of how the
+   *                asset is opened; examples are "rescale" (e.g. true);
    *                the backend need not implement any of the properties
    *
    *  resultprops: give feedback about the opened asset
    *               if the asset could not be opened, the content is undefined
    *               if the asset was successfully opened, the specified properties should be set to their values
    *         if a property can not be determined (e.g. variable fps), it should be set unset
-   *   
+   *
    */
   /* returns TRUE if loading was successful, FALSE otherwise */
-  virtual bool open(const std::string&, 
+  virtual bool open(const std::string&,
                     const gem::Properties&requestprops) = 0;
 
   //////////
@@ -75,7 +75,7 @@ class GEM_EXTERN modelloader
    * when called it renders the given asset
    *
    * this is the only time that guarantees a valid openGL context
-   * the plugin is free to compile a displaylist and use it 
+   * the plugin is free to compile a displaylist and use it
    * in consecutive calls
    *
    * this may be called from multiple openGL contexts!
@@ -102,7 +102,7 @@ class GEM_EXTERN modelloader
 
   /**
    * list all properties the currently opened asset supports
-   * if no asset is opened, this returns generic backend properties 
+   * if no asset is opened, this returns generic backend properties
    * which can be different from media specific properties
    * after calling, "readable" will hold a list of all properties that can be read
    * and "writeable" will hold a list of all properties that can be set
@@ -116,17 +116,17 @@ class GEM_EXTERN modelloader
    * set a number of properties (as defined by "props")
    * the "props" may hold properties not supported by the currently opened media,
    *  which is legal; in this case the superfluous properties are simply ignored
-   * this function MAY modify the props; 
+   * this function MAY modify the props;
    * namely one-shot properties should be removed from the props
    *
    * examples: "smooth" 0.5
-   *           "group"  3 
+   *           "group"  3
    */
   virtual void setProperties(gem::Properties&props) = 0;
 
   /**
    * get the current value of the given properties from the media
-   * if props holds properties that can not be read for the media, they are set to UNSET 
+   * if props holds properties that can not be read for the media, they are set to UNSET
    *
    * examples: "/textures" (number of textures)
    *           "/animations" (number of animations)
