@@ -98,9 +98,10 @@ namespace gem { namespace thread {
     static inline void*process(void*you) {
       PIMPL*me=reinterpret_cast<PIMPL*>(you);
       WorkerThread*wt=me->owner;
+      pthread_mutex_lock  (&me->p_runmutex);
       me->isrunning=true;
-      pthread_cond_signal(&me->p_runcond);
-
+      pthread_cond_signal (&me->p_runcond );
+      pthread_mutex_unlock(&me->p_runmutex);
       std::pair <id_t, void*> in, out;
 
       while(me->keeprunning) {
@@ -153,9 +154,9 @@ namespace gem { namespace thread {
       if(isrunning)return true;
       keeprunning=true;
 
-      pthread_mutex_lock(&p_runmutex);
-      pthread_create(&p_thread, 0, process, this);
-      pthread_cond_wait(&p_runcond, &p_runmutex);
+      pthread_mutex_lock  (&p_runmutex);
+      pthread_create      (&p_thread, 0, process, this);
+      pthread_cond_wait   (&p_runcond, &p_runmutex);
       pthread_mutex_unlock(&p_runmutex);
 
       return true;

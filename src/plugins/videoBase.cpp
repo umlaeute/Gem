@@ -203,8 +203,12 @@ public:
     me->m_pimpl->cont=true;
     me->m_pimpl->running=true;
 
-    if(me->m_pimpl->runCondition)
-      pthread_cond_signal(me->m_pimpl->runCondition);
+    if(me->m_pimpl->runMutex) {
+      pthread_mutex_lock(me->m_pimpl->runMutex);
+      if(me->m_pimpl->runCondition)
+        pthread_cond_signal(me->m_pimpl->runCondition);
+      pthread_mutex_unlock(me->m_pimpl->runMutex);
+    }
 
     while(me->m_pimpl->cont) {
       if(!me->grabFrame()) {

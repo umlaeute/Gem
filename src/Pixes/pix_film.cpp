@@ -141,8 +141,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
 void *pix_film :: grabThread(void*you)
 {
   pix_film *me=reinterpret_cast<pix_film*>(you);
+  pthread_mutex_lock  ( me->m_mutex);
   me->m_thread_running=true;
-  pthread_cond_signal(&me->m_runcondition);
+  pthread_cond_signal (&me->m_runcondition);
+  pthread_mutex_unlock( me->m_mutex);
 
   //me->post("using pthreads");
   while(me->m_thread_continue){

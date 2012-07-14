@@ -142,9 +142,10 @@ class Thread::PIMPL { public:
   static inline void*process(void*you) {
     PIMPL*me=reinterpret_cast<PIMPL*>(you);
     Thread*owner=me->owner;
+    pthread_mutex_lock  (&me->p_mutex);
     me->isrunning=true;
-    pthread_cond_signal(&me->p_cond);
-
+    pthread_cond_signal (&me->p_cond );
+    pthread_mutex_unlock(&me->p_mutex);
     while(me->keeprunning) {
       if(!owner->process())
         break;
