@@ -73,6 +73,7 @@ class GEM_EXPORT filmQT : public film
   virtual void getProperties(gem::Properties&props);
 
  protected:
+  GLenum m_wantedFormat; // the requested pixel format (in GL)
   double m_fps;  // the frame-rate
   int m_numFrames, m_numTracks; // number of frames in video
   int m_curFrame, m_curTrack;

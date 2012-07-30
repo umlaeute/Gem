@@ -40,7 +40,7 @@ using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("QuickTime", filmQT);
 # ifdef __APPLE__
-#  define FILMQT_DEFAULT_PIXELFORMAT k32ARGBPixelFormat
+#  define FILMQT_DEFAULT_PIXELFORMAT GL_YCBCR_422_APPLE
 
 static bool filmQT_initQT(void) { return true; }
 static bool filmQT_deinitQT(void) { return true; }
@@ -50,7 +50,7 @@ static bool filmQT_deinitQT(void) { return true; }
 /* TextUtils.h is from QTdev */
 #  include "TextUtils.h"
 #  define OffsetRect MacOffsetRect
-#  define FILMQT_DEFAULT_PIXELFORMAT k32RGBAPixelFormat
+#  define FILMQT_DEFAULT_PIXELFORMAT GL_RGBA
 
 static bool filmQT_initQT(void) {
   // Initialize QuickTime Media Layer
@@ -89,6 +89,7 @@ static bool filmQT_deinitQT(void) {
 /////////////////////////////////////////////////////////
 
 filmQT :: filmQT(void) :
+  m_wantedFormat(FILMQT_DEFAULT_PIXELFORMAT),
   m_fps(-1.),
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1), m_curTrack(-1),
@@ -105,7 +106,7 @@ filmQT :: filmQT(void) :
   if(!filmQT_initQT()) {
     throw(GemException("unable to initialize QuickTime"));
   }
-  m_image.image.setCsizeByFormat(GL_RGBA);
+  m_image.image.setCsizeByFormat(m_wantedFormat);
   m_bInit = true;
 }
 
@@ -144,6 +145,9 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   OSType	whichMediaType;
   short		flags = 0;
   double d;
+
+  OSType pixelformat=0;
+  long hints=0;
 
   if (filename.empty())return false;
   if (!m_bInit){
@@ -222,18 +226,39 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
 
-  m_image.image.setCsizeByFormat(GL_RGBA);
+  switch(m_wantedFormat) {
+  default: // if no other format is requested, use YUV
+  case GL_YCBCR_422_APPLE:
+post("YUV");
+    m_image.image.format = m_wantedFormat;
+    hints |= hintsHighQuality | hintsDeinterlaceFields;
+    pixelformat=k422YpCbCr8CodecType;
+    break;
+  case GL_BGRA_EXT:
+post("BGRA");
+    m_image.image.format = GL_BGRA_EXT;
+    hints |= hintsHighQuality;
+    pixelformat=k32ARGBPixelFormat;
+    break;
+  case GL_RGBA:
+post("RGBA");
+    m_image.image.format = GL_RGBA;
+    hints |= hintsHighQuality;
+    pixelformat=k32RGBAPixelFormat;
+    break;
+  }
+  m_image.image.setCsizeByFormat();
   m_image.image.allocate();
 
-  m_rowBytes = m_image.image.xsize * 4;
-  // SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
+  m_rowBytes = m_image.image.xsize * m_image.image.csize;
+  SetMoviePlayHints(m_movie, hints, hints);
   err = SetMovieAudioMute(m_movie, true, 0);
   if(noErr!=err) {
     error("filmQT: unable to mute movie...");
   }
 
   err = QTNewGWorldFromPtr(	&m_srcGWorld,
-				FILMQT_DEFAULT_PIXELFORMAT,
+				pixelformat,
 				&m_srcRect,
 				NULL,
 				NULL,
