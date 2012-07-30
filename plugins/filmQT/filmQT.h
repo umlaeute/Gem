@@ -78,6 +78,7 @@ class GEM_EXPORT filmQT : public film
   int m_curFrame, m_curTrack;
   pixBlock m_image; // output image
   bool m_readNext;
+  float			m_auto;
 
   //-----------------------------------
   // GROUP:	Movie data
