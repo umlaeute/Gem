@@ -115,6 +115,7 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   if (refnum) ::CloseMovieFile(refnum);
 
   // m_curFrame = -1;
+  if(m_curFrame==-1)m_curFrame=-2;
   m_lastFrame=-1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
   verbose(1, "filmDarwin:  m_numTracks = %d",(int)m_numTracks);
@@ -220,41 +221,42 @@ pixBlock* filmDarwin :: getFrame(void){
   }
 
   if(m_numFrames<0) {
-    /* FIXXME: LATER implement this:: */
     /* the opened media doesn't support seeking
      * so we return the next frame, if a new frame was requested
      * and the last frame if no new frame was requested
      */
+    m_movieTime = GetMovieTime(m_movie, NULL);
+
+
+    if(m_curFrame<0 && m_lastFrame<0) {
+       m_curFrame=0;
+    }
+
+    /* if we have a valid curFrame (>=0) and curFrame progresses (curFrame>lastFrame), get the next image
+     * always get the image, if lastFrame<0
+     */
+    if(m_curFrame>m_lastFrame) {
+      m_image.newimage=1;
+      SetMovieRate(m_movie,X2Fix(1.0));
+    } else {
+      m_image.newimage=0;
+      SetMovieRate(m_movie,X2Fix(0.0));
+    }
+
+    MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+    m_lastFrame=m_curFrame;
+
+    return &m_image;
   }
 
-
   //check for last frame to loop the clip
-  if(m_numFrames>0) {
-   if (m_curFrame >= m_numFrames){
+  if (m_curFrame >= m_numFrames){
      return NULL;
      m_curFrame = 0;
      m_movieTime = 0;
-   }
-   m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * m_durationf);
-   m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
-  } else {
-   m_movieTime = GetMovieTime(m_movie, NULL);
-
-   /* if we have a valid curFrame (>=0) and curFrame progresses (curFrame>lastFrame), get the next image
-    * always get the image, if lastFrame<0
-    */
-
-   if(m_curFrame>=0 && m_lastFrame>=0 && m_curFrame>m_lastFrame)
-     SetMovieRate(m_movie,X2Fix(1.0));
-   else
-     SetMovieRate(m_movie,X2Fix(0.0));
-
-   m_lastFrame=m_curFrame;
-   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-
-   m_image.newimage=1;
-   return &m_image;
   }
+  m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * m_durationf);
+  m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
 
   //check for -1
   if (m_movieTime < 0) m_movieTime = 0;
@@ -282,7 +284,7 @@ pixBlock* filmDarwin :: getFrame(void){
   SetMovieTimeValue(m_movie, m_movieTime);
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 
-  m_image.newimage=1;
+  m_image.newimage=(m_lastFrame != m_curFrame);
   m_lastFrame=m_curFrame;
   return &m_image;
 }
