@@ -93,6 +93,7 @@ class GEM_EXPORT filmDarwin : public film {
   Media			m_movieMedia;
   TimeValue		m_timeScale;
   double		m_durationf;
+  double		m_fps;
 
 };};};
 

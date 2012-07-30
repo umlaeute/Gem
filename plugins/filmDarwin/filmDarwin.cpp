@@ -48,7 +48,8 @@ filmDarwin :: filmDarwin(void) :
   m_movieTrack(0),
   m_movieMedia(0),
   m_timeScale(0),
-  m_durationf(0.)
+  m_durationf(0.),
+  m_fps(1.)
 {}
 
 ////////////////////////////////////////////////////////
@@ -132,9 +133,11 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   m_numFrames= GetMediaSampleCount(trackMedia);
   if(m_numFrames>0) {
     m_durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
+    m_fps=static_cast<double>(m_numFrames)*static_cast<double>(movieScale)/static_cast<double>(movieDur);
   } else {
     m_numFrames=-1;
-    m_durationf = 1.f/30.f;
+    m_fps=30.f;
+    m_durationf=static_cast<double>(movieScale)/m_fps;
   }
   verbose(1, "numFrames= %d...%f", (int)m_numFrames, (float)m_durationf);
 
@@ -292,6 +295,7 @@ bool filmDarwin::enumProperties(gem::Properties&readable,
   readable.set("tracks", value);
   readable.set("width", value);
   readable.set("height", value);
+  readable.set("fps", value);
 
   writeable.set("auto", value);
 
@@ -327,6 +331,10 @@ void filmDarwin::getProperties(gem::Properties&props) {
     }
     if("height"==key) {
       d=m_image.image.ysize;
+      value=d; props.set(key, value);
+    }
+    if("fps"==key) {
+      d=m_fps;
       value=d; props.set(key, value);
     }
   }
