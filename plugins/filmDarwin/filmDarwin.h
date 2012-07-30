@@ -92,8 +92,7 @@ class GEM_EXPORT filmDarwin : public film {
   Track			m_movieTrack;
   Media			m_movieMedia;
   TimeValue		m_timeScale;
-  TimeValue		duration;
-  double		durationf;
+  double		m_durationf;
 
 };};};
 
