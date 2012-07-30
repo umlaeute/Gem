@@ -252,7 +252,11 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
     goto unsupported;
   }
 
-  SetMovieRate(m_movie,X2Fix(m_auto));
+  if(m_frameDuration)
+    SetMovieRate(m_movie,X2Fix(m_auto));
+  else if (m_auto == 0.f)
+    SetMovieRate(m_movie,X2Fix(1.f));
+
   ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 
   m_readNext=true;
