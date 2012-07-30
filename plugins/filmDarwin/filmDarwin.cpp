@@ -232,10 +232,10 @@ pixBlock* filmDarwin :: getFrame(void){
        m_curFrame=0;
     }
 
-    /* if we have a valid curFrame (>=0) and curFrame progresses (curFrame>lastFrame), get the next image
+    /* if we have a valid curFrame (>=0) and curFrame progresses (curFrame!=lastFrame), get the next image
      * always get the image, if lastFrame<0
      */
-    if(m_curFrame>m_lastFrame) {
+    if(m_curFrame!=m_lastFrame) {
       m_image.newimage=1;
       SetMovieRate(m_movie,X2Fix(1.0));
     } else {
