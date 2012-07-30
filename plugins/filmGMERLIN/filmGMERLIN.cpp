@@ -231,7 +231,14 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   finalformat->timescale = gformat->timescale;
 
 #ifdef __APPLE__
-  finalformat->pixelformat=GAVL_YUY2;
+  /* GAVL_UYVY definitely works on PowerPC
+   * m.e.grimm also reported that he had to use UYVY,
+   * i assume he is on x86_64;
+   *  so make it the default for now
+   */
+  finalformat->pixelformat=GAVL_UYVY;
+  /* don't know what this is exactly: */
+  //finalformat->pixelformat=GAVL_YUY2;
 #else
   finalformat->pixelformat=GAVL_RGBA_32;
 #endif
