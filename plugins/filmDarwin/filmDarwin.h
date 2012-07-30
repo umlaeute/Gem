@@ -82,7 +82,7 @@ class GEM_EXPORT filmDarwin : public film {
   GLenum  m_wantedFormat; // format requested by the user
   bool m_auto;  // automatic progression
   int m_numFrames, m_numTracks; // number of frames in video
-  int m_curFrame;
+  int m_curFrame, m_lastFrame;
   pixBlock m_image; // output image
 
 

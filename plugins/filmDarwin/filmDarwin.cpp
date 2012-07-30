@@ -41,7 +41,7 @@ filmDarwin :: filmDarwin(void) :
   m_wantedFormat(GL_YUV422_GEM),
   m_auto(false),
   m_numFrames(-1), m_numTracks(-1),
-  m_curFrame(-1),
+  m_curFrame(-1), m_lastFrame(-1),
   m_movie(NULL),
   m_srcGWorld(NULL),
   m_movieTime(0),
@@ -115,6 +115,7 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   if (refnum) ::CloseMovieFile(refnum);
 
   // m_curFrame = -1;
+  m_lastFrame=-1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
   verbose(1, "filmDarwin:  m_numTracks = %d",(int)m_numTracks);
 
@@ -238,7 +239,17 @@ pixBlock* filmDarwin :: getFrame(void){
    m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
   } else {
    m_movieTime = GetMovieTime(m_movie, NULL);
-   SetMovieRate(m_movie,X2Fix(1.0));
+
+   /* if we have a valid curFrame (>=0) and curFrame progresses (curFrame>lastFrame), get the next image
+    * always get the image, if lastFrame<0
+    */
+
+   if(m_curFrame>=0 && m_lastFrame>=0 && m_curFrame>m_lastFrame)
+     SetMovieRate(m_movie,X2Fix(1.0));
+   else
+     SetMovieRate(m_movie,X2Fix(0.0));
+
+   m_lastFrame=m_curFrame;
    MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 
    m_image.newimage=1;
@@ -272,6 +283,7 @@ pixBlock* filmDarwin :: getFrame(void){
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
 
   m_image.newimage=1;
+  m_lastFrame=m_curFrame;
   return &m_image;
 }
 
