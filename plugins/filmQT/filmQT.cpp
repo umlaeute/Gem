@@ -93,6 +93,7 @@ filmQT :: filmQT(void) :
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1), m_curTrack(-1),
   m_readNext(false),
+  m_auto(0.f),
   m_movie(NULL),
   m_srcGWorld(NULL),
   m_movieTime(0),
@@ -182,7 +183,6 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   }
   if (refnum) ::CloseMovieFile(refnum);
 
-
   m_curFrame = -1;
   m_numTracks = static_cast<int>(GetMovieTrackCount(m_movie));
 
@@ -208,7 +208,8 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 
   if(m_frameDuration>=movieDur) {
     m_fps=30.f;
-    m_frameDuration=1./m_fps;
+    //m_frameDuration=(float)movieTimeScale/m_fps;
+    m_frameDuration=0;
     m_numFrames=-1;
   } else {
     m_fps = (float)movieTimeScale/(float)m_frameDuration;
@@ -251,8 +252,10 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
     goto unsupported;
   }
 
-  SetMovieRate(m_movie,X2Fix(1.0));
+  SetMovieRate(m_movie,X2Fix(m_auto));
   ::MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
+
+  m_readNext=true;
 
   return true;
 
@@ -270,21 +273,21 @@ pixBlock* filmQT :: getFrame(void)
   CGrafPtr	savedPort;
   GDHandle     	savedDevice;
   Rect		m_srcRect;
-  PixMapHandle	m_pixMap;
-  Ptr		m_baseAddr;
 
   ::GetGWorld(&savedPort, &savedDevice);
   ::SetGWorld(m_srcGWorld, NULL);
   ::GetMovieBox(m_movie, &m_srcRect);
 
-  m_pixMap = ::GetGWorldPixMap(m_srcGWorld);
-  m_baseAddr = ::GetPixBaseAddr(m_pixMap);
   // set the time for the frame and give time to the movie toolbox
-  SetMovieTimeValue(m_movie, m_movieTime);
+  if(m_frameDuration>0)
+    SetMovieTimeValue(m_movie, m_movieTime);
   MoviesTask(m_movie, 0);	// *** this does the actual drawing into the GWorld ***
-  m_image.newimage = 1;
-  m_image.image.upsidedown=true;
+  m_image.newimage = m_readNext;
 
+  m_image.image.upsidedown=true;
+  SetMovieRate(m_movie,X2Fix(m_auto));
+
+  m_readNext=(m_auto!=0.f);
   return &m_image;
 }
 
@@ -297,6 +300,10 @@ film::errCode filmQT :: changeImage(int imgNum, int trackNum){
   }
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
   m_readNext=true;
+
+  if(imgNum!=m_curFrame && m_frameDuration<1)
+    SetMovieRate(m_movie,X2Fix(1.0));
+
   m_curFrame = imgNum;
 
   /* i have moved the "auto"-thing into [pix_film].
@@ -304,6 +311,7 @@ film::errCode filmQT :: changeImage(int imgNum, int trackNum){
    * this is bad, because we might do it more sophisticated in the decoder-class
    */
   m_movieTime = static_cast<long>(m_curFrame * m_frameDuration);
+
 
   return film::SUCCESS;
 }
