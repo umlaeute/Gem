@@ -508,23 +508,23 @@
 			Name="RTE"
 			>
 			<File
-				RelativePath="..\..\src\Rte\Array.cpp"
+				RelativePath="..\..\src\RTE\Array.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Rte\Array.h"
+				RelativePath="..\..\src\RTE\Array.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Rte\MessageCallbacks.h"
+				RelativePath="..\..\src\RTE\MessageCallbacks.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Rte\Outlet.cpp"
+				RelativePath="..\..\src\RTE\Outlet.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Rte\Outlet.h"
+				RelativePath="..\..\src\RTE\Outlet.h"
 				>
 			</File>
 			<File
@@ -536,11 +536,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Rte\Symbol.cpp"
+				RelativePath="..\..\src\RTE\Symbol.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Rte\Symbol.h"
+				RelativePath="..\..\src\RTE\Symbol.h"
 				>
 			</File>
 		</Filter>
