@@ -240,7 +240,9 @@ pix_film :: ~pix_film()
   // Clean up the movie
   closeMess();
 
+#ifdef HAVE_PTHREADS
   pthread_cond_destroy(&m_runcondition);
+#endif
 
   delete m_handle;
   m_handle=NULL;
