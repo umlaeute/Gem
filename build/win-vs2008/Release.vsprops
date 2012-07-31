@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="Release"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="2"
+		InlineFunctionExpansion="2"
+		FavorSizeOrSpeed="1"
+		PreprocessorDefinitions="NDEBUG;__SSE2__;__MMX__"
+		RuntimeLibrary="2"
+		EnableFunctionLevelLinking="true"
+		EnableEnhancedInstructionSet="2"
+	/>
+</VisualStudioPropertySheet>
