@@ -49,3 +49,4 @@ extra/*/win-vs*/*
 !*.dsp
 !*.sln
 !*.vcproj
+!*.vsprops
