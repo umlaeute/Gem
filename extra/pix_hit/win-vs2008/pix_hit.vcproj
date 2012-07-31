@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="pix_hit"
-	ProjectGUID="{D4A0BA99-E00E-4E4B-97E9-FEB8D5B27881}"
+	ProjectGUID="{EE21F78A-1620-4206-931A-ACABA1598567}"
 	RootNamespace="gem"
 	TargetFrameworkVersion="131072"
 	>
@@ -77,12 +77,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="OLDNAMES.lib pd.lib Gem.lib libcpmt.lib msvcrt.lib msvcprt.lib"
+				AdditionalDependencies="pd.lib Gem.lib"
 				OutputFile="pix_hit.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2003&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\bin&quot;;&quot;$(ProgramFiles)\pd\bin&quot;"
-				IgnoreAllDefaultLibraries="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"

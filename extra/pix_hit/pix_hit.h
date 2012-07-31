@@ -51,7 +51,7 @@ typedef struct _hitarea
   float height; // rectangle height or second point y
 } t_hitarea;
 
-class GEM_EXTERN pix_hit : public GemPixObj
+class GEM_EXPORT pix_hit : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_hit, GemPixObj);
 
