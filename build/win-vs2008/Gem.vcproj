@@ -528,6 +528,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\RTE\RTE.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\RTE\RTE.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\Rte\Symbol.cpp"
 				>
 			</File>
@@ -1876,14 +1884,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_histo.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_hit.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_hit.h"
 					>
 				</File>
 				<File
