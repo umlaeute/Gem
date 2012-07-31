@@ -3,8 +3,8 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 EXTRA_DIST =
-EXTRA_DIST += win-vs2003/modelASSIMP.sln win-vs2003/modelASSIMP.vcproj
-EXTRA_DIST += win-vs2008/modelASSIMP.sln win-vs2008/modelASSIMP.vcproj
+EXTRA_DIST += win-vs2003/modelASSIMP2.sln win-vs2003/modelASSIMP2.vcproj
+EXTRA_DIST += win-vs2008/modelASSIMP2.sln win-vs2008/modelASSIMP2.vcproj
 
 pkglib_LTLIBRARIES=
 
