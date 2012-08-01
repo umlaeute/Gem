@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="plugin"
-	InheritedPropertySheets=".\Gem.vsprops;.\Release.vsprops;.\pluginCommon.vsprops"
+	Name="extra"
+	InheritedPropertySheets=".\Gem.vsprops"
 	>
 </VisualStudioPropertySheet>
