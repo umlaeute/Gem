@@ -4,4 +4,12 @@
 	Version="8.00"
 	Name="VFW"
 	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="HAVE_VFW_H;HAVE_LIBVFW32"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="vfw32.lib"
+	/>
 </VisualStudioPropertySheet>

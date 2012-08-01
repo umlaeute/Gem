@@ -1,7 +1,17 @@
-<?xml version="1.0"?>
-<VisualStudioPropertySheet 
-	ProjectType="Visual C++" 
-	Version="8.00" 
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
 	Name="HALCON"
 	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="&quot;$(HALCONROOT)\include&quot;;&quot;$(HALCONROOT)\include\cpp&quot;"
+		PreprocessorDefinitions="HAVE_HALCON"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="halcon.lib halconcpp.lib"
+		AdditionalLibraryDirectories="$(HALCONROOT)\lib\$(HALCONARCH)"
+	/>
 </VisualStudioPropertySheet>

@@ -7,6 +7,8 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		Optimization="0"
+		InlineFunctionExpansion="0"
+		FavorSizeOrSpeed="0"
 		PreprocessorDefinitions="_DEBUG;DEBUG"
 		RuntimeLibrary="1"
 		WarningLevel="3"

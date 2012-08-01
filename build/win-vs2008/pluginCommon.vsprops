@@ -6,4 +6,8 @@
 	OutputDirectory="$(SolutionDir)"
 	IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
 	>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="$(OutDir)/gem_$(ProjectName).dll"
+	/>
 </VisualStudioPropertySheet>

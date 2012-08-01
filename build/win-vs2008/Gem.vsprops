@@ -11,6 +11,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
+		AdditionalDependencies="Gem.lib"
 		AdditionalLibraryDirectories="&quot;$(SolutionDir)&quot;;&quot;$(ProjectDir)\..\..\build\win-vs2008&quot;;"
 	/>
 </VisualStudioPropertySheet>
