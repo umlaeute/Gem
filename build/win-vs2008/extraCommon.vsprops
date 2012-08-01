@@ -12,6 +12,6 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		OutputFile="$(OutDir)\$(ProjectName).dll"
+		OutputFile="$(OutDir)\..\$(ProjectName).dll"
 	/>
 </VisualStudioPropertySheet>
