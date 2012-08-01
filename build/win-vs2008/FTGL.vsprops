@@ -6,11 +6,12 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\src;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src&quot;"
+		AdditionalIncludeDirectories="&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src&quot;"
+		PreprocessorDefinitions="HAVE_LIBFTGL;HAVE_FTGL_FTGL_H;FTGL_LIBRARY_STATIC"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="freetype235mt.lib FTGL.lib"
+		AdditionalDependencies="FTGL.lib"
 		AdditionalLibraryDirectories="&quot;$(FTGL)\msvc\Build&quot;;&quot;$(FTGL)\win32_vcpp\Build&quot;;&quot;$(FREETYPE)\objs&quot;"
 	/>
 </VisualStudioPropertySheet>
