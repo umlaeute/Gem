@@ -140,8 +140,7 @@ void videoTEST::setProperties(gem::Properties&props) {
 }
 void videoTEST::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
-  double d;
-  int i;
+  unsigned int i;
   for(i=0; i<keys.size(); i++) {
     if("width"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.xsize);

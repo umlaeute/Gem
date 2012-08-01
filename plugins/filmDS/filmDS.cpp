@@ -23,6 +23,16 @@
 
 #if defined(_WIN32) && defined(HAVE_DIRECTSHOW)
 
+#ifndef HAVE_DXTRANS_H
+// http://jaewon.mine.nu/jaewon/2009/06/17/a-workaround-for-a-missing-file-dxtrans-h-in-directx-sdk/
+# pragma include_alias( "dxtrans.h", "qedit.h" )
+# define __IDxtCompositor_INTERFACE_DEFINED__
+# define __IDxtAlphaSetter_INTERFACE_DEFINED__
+# define __IDxtJpeg_INTERFACE_DEFINED__
+# define __IDxtKey_INTERFACE_DEFINED__
+#endif
+
+
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"

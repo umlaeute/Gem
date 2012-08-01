@@ -24,6 +24,20 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 
+#ifdef _MSC_VER
+# if !defined(_W64)
+#  if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
+#   define _W64 __w64
+#  else
+#   define _W64
+#  endif
+# endif
+# ifdef _WIN64
+typedef __int64         ssize_t;
+# else
+typedef _w64 int        ssize_t;
+# endif
+#endif
 #include <magick/MagickCore.h>
 
 // hmm, the GetMimeList() function has changed!
@@ -80,7 +94,6 @@ imageMAGICK :: imageMAGICK(void)
 
   //post("imageMAGICK");
   char**mimelist;
-  char what;
   mimelistlength_t  length;
   ExceptionInfo exception;
   GetExceptionInfo(&exception);
@@ -100,7 +113,7 @@ imageMAGICK :: ~imageMAGICK(void)
 
 float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
   float result=0.5; // slightly preference for MAGICK
-  int i;
+  unsigned int i;
   for(i=0; i<m_mimetypes.size(); i++) {
     if(mimetype==m_mimetypes[i]) {
       result+=100.;

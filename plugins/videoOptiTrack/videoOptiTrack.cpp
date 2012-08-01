@@ -95,7 +95,7 @@ bool videoOptiTrack::open(gem::Properties&props) {
 	}
 	CameraList list;
 	if(!m_devname.empty()) {
-		for(unsigned int i=0; i<list.Count(); i++) {
+		for(int i=0; i<list.Count(); i++) {
 			if(list[i].Name()==m_devname)
 				m_camera = CameraManager::X().GetCamera(list[i].UID());
 			if(m_camera)break;
@@ -159,7 +159,7 @@ std::vector<std::string>videoOptiTrack::enumerate(void) {
   }
 
   CameraList list;
-  unsigned int i;
+  int i;
   for(i=0; i<list.Count(); i++) {
 	  result.push_back(list[i].Name());
   }
@@ -361,10 +361,11 @@ void videoOptiTrack::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
   double d;
   std::string s;
-  int i;
 
   props.clear();
   if(!m_camera)return;
+
+  unsigned int i;
   for(i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     if("width"==key) {

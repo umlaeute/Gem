@@ -18,7 +18,9 @@
 #endif
 
 #ifdef HAVE_LIBVFW32
-# define HAVE_VFW_H
+# ifndef HAVE_VFW_H
+#  define HAVE_VFW_H
+# endif
 #endif
 
 #ifdef HAVE_VFW_H

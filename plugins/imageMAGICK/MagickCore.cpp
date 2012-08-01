@@ -18,6 +18,21 @@
 
 #include "imageMAGICK.h"
 #include "Gem/RTE.h"
+
+#ifdef _MSC_VER
+# if !defined(_W64)
+#  if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
+#   define _W64 __w64
+#  else
+#   define _W64
+#  endif
+# endif
+# ifdef _WIN64
+typedef __int64         ssize_t;
+# else
+typedef _w64 int        ssize_t;
+# endif
+#endif
 #include <magick/MagickCore.h>
 
 using namespace gem::plugins;
