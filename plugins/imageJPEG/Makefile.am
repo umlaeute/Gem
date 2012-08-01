@@ -5,6 +5,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 EXTRA_DIST =
 EXTRA_DIST += win-vs2003/imageJPEG.sln win-vs2003/imageJPEG.vcproj
 EXTRA_DIST += win-vs2008/imageJPEG.sln win-vs2008/imageJPEG.vcproj
+EXTRA_DIST += win-vs2008/JPEG.vsprops
 
 pkglib_LTLIBRARIES=
 if HAVE_LIB_JPEG

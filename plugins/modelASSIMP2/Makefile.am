@@ -5,6 +5,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 EXTRA_DIST =
 EXTRA_DIST += win-vs2003/modelASSIMP2.sln win-vs2003/modelASSIMP2.vcproj
 EXTRA_DIST += win-vs2008/modelASSIMP2.sln win-vs2008/modelASSIMP2.vcproj
+EXTRA_DIST += win-vs2008/ASSIMP2.vsprops
 
 pkglib_LTLIBRARIES=
 

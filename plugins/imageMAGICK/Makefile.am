@@ -5,6 +5,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 EXTRA_DIST =
 EXTRA_DIST += win-vs2003/imageMAGICK.sln win-vs2003/imageMAGICK.vcproj
 EXTRA_DIST += win-vs2008/imageMAGICK.sln win-vs2008/imageMAGICK.vcproj
+EXTRA_DIST += win-vs2008/ImageMagick_Release.vsprops win-vs2008/ImageMagick.vsprops
 
 pkglib_LTLIBRARIES=
 if HAVE_LIB_IMAGEMAGICK__

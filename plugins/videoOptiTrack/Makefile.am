@@ -4,6 +4,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 EXTRA_DIST =
 EXTRA_DIST += win-vs2003/videoOptiTrack.sln win-vs2003/videoOptiTrack.vcproj
 EXTRA_DIST += win-vs2008/videoOptiTrack.sln win-vs2008/videoOptiTrack.vcproj
+EXTRA_DIST += win-vs2008/OptiTrack.vsprops
 
 pkglib_LTLIBRARIES=
 gemhelpdir=$(pkglibdir)
