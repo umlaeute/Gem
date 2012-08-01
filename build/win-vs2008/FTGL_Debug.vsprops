@@ -2,15 +2,16 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="FTGL_Debug"
+	Name="FTGL Debug"
+	InheritedPropertySheets=".\FTGL.vsprops"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\src;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src&quot;"
+		AdditionalIncludeDirectories=""
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="freetype235mt_D.lib FTGL.lib"
-		AdditionalLibraryDirectories="&quot;$(FTGL)\msvc\Build&quot;;&quot;$(FTGL)\win32_vcpp\Build&quot;;&quot;$(FREETYPE)\objs&quot;"
+		AdditionalDependencies="freetype235mt_D.lib"
+		AdditionalLibraryDirectories=""
 	/>
 </VisualStudioPropertySheet>

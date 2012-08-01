@@ -9,9 +9,9 @@
 		Optimization="2"
 		InlineFunctionExpansion="2"
 		FavorSizeOrSpeed="1"
-		PreprocessorDefinitions="NDEBUG;__SSE2__;__MMX__"
+		PreprocessorDefinitions="NDEBUG"
 		RuntimeLibrary="2"
 		EnableFunctionLevelLinking="true"
-		EnableEnhancedInstructionSet="2"
+		WarningLevel="3"
 	/>
 </VisualStudioPropertySheet>

@@ -3,6 +3,6 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="extra"
-	InheritedPropertySheets=".\Gem.vsprops"
+	InheritedPropertySheets=".\Gem.vsprops;.\extraCommon.vsprops;.\Release.vsprops"
 	>
 </VisualStudioPropertySheet>
