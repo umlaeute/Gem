@@ -1407,12 +1407,6 @@
 					RelativePath="..\..\src\Pixes\pix_histo.h">
 				</File>
 				<File
-					RelativePath="..\..\src\Pixes\pix_hit.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_hit.h">
-				</File>
-				<File
 					RelativePath="..\..\src\Pixes\pix_hsv2rgb.cpp">
 				</File>
 				<File
