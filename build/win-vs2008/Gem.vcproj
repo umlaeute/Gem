@@ -534,10 +534,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\image.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\plugins\imageBase.cpp"
 				>
 			</File>
@@ -962,10 +958,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Geos\teapot.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\Geos\TexFont.h"
 					>
 				</File>
 				<File
@@ -1793,6 +1785,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\pix_equal.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_equal.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\pix_film.cpp"
 					>
 				</File>
@@ -2554,10 +2554,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\openGL\GEMglArrayElement.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\openGL\GemGLBase.h"
 					>
 				</File>
 				<File
