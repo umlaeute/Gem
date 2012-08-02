@@ -408,9 +408,6 @@
 				RelativePath="..\..\src\plugins\filmBase.h">
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\image.h">
-			</File>
-			<File
 				RelativePath="..\..\src\plugins\imageBase.cpp">
 			</File>
 			<File
@@ -614,6 +611,12 @@
 					RelativePath="..\..\src\Geos\GemSplash.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Geos\gemvertexbuffer.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Geos\gemvertexbuffer.h">
+				</File>
+				<File
 					RelativePath="..\..\src\Geos\imageVert.cpp">
 				</File>
 				<File
@@ -726,9 +729,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Geos\teapot.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Geos\TexFont.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Geos\text2d.cpp">
@@ -1227,6 +1227,12 @@
 					RelativePath="..\..\src\Pixes\pix_coloralpha.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\pix_colorclassify.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_colorclassify.h">
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\pix_colormatrix.cpp">
 				</File>
 				<File
@@ -1345,6 +1351,12 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_emboss.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_equal.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_equal.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_film.cpp">
@@ -1531,6 +1543,12 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_multitexture.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_noise.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_noise.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_normalize.cpp">
@@ -1939,9 +1957,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\openGL\GEMglArrayElement.h">
-				</File>
-				<File
-					RelativePath="..\..\src\openGL\GemGLBase.h">
 				</File>
 				<File
 					RelativePath="..\..\src\openGL\GEMglBegin.cpp">
