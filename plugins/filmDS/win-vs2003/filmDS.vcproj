@@ -24,7 +24,7 @@
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="1"
-				OptimizeForProcessor="2"
+				OptimizeForProcessor="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
 				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_DIRECTSHOW"
 				StringPooling="TRUE"

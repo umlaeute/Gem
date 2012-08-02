@@ -25,7 +25,7 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(SolutionDir)\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\FTGL\include&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\freetype2\include\&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NT;__WIN32__;WIN32_LEAN_AND_MEAN;NDEBUG;_LANGUAGE_C_PLUS_PLUS;GEM_INTERNAL;GLEW_BUILD;__SSE2__;__MMX__"
+				PreprocessorDefinitions="GEM_INTERNAL;GLEW_BUILD;__SSE2__;__MMX__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;NT;WIN32;_WINDOWS;__WIN32__;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
@@ -408,9 +408,6 @@
 				RelativePath="..\..\src\plugins\filmBase.h">
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\image.h">
-			</File>
-			<File
 				RelativePath="..\..\src\plugins\imageBase.cpp">
 			</File>
 			<File
@@ -614,6 +611,12 @@
 					RelativePath="..\..\src\Geos\GemSplash.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Geos\gemvertexbuffer.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Geos\gemvertexbuffer.h">
+				</File>
+				<File
 					RelativePath="..\..\src\Geos\imageVert.cpp">
 				</File>
 				<File
@@ -726,9 +729,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Geos\teapot.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Geos\TexFont.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Geos\text2d.cpp">
@@ -1227,6 +1227,12 @@
 					RelativePath="..\..\src\Pixes\pix_coloralpha.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\pix_colorclassify.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_colorclassify.h">
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\pix_colormatrix.cpp">
 				</File>
 				<File
@@ -1347,6 +1353,12 @@
 					RelativePath="..\..\src\Pixes\pix_emboss.h">
 				</File>
 				<File
+					RelativePath="..\..\src\Pixes\pix_equal.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_equal.h">
+				</File>
+				<File
 					RelativePath="..\..\src\Pixes\pix_film.cpp">
 				</File>
 				<File
@@ -1393,12 +1405,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_histo.h">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_hit.cpp">
-				</File>
-				<File
-					RelativePath="..\..\src\Pixes\pix_hit.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_hsv2rgb.cpp">
@@ -1531,6 +1537,12 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_multitexture.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_noise.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_noise.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_normalize.cpp">
@@ -1939,9 +1951,6 @@
 				</File>
 				<File
 					RelativePath="..\..\src\openGL\GEMglArrayElement.h">
-				</File>
-				<File
-					RelativePath="..\..\src\openGL\GemGLBase.h">
 				</File>
 				<File
 					RelativePath="..\..\src\openGL\GEMglBegin.cpp">

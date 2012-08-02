@@ -26,7 +26,7 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\src&quot;;&quot;$(ProjectDir)\..\..\..\..\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(ProjectDir)\..\..\..\GemLibs\assimp--2.0.863\include&quot;"
-				PreprocessorDefinitions="NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN;HAVE_LIBJPEG"
+				PreprocessorDefinitions="HAVE_LIBASSIMP2;HAVE_ASSIMP_H;NT;WIN32;_WINDOWS;__WIN32__;_LANGUAGE_C_PLUS_PLUS;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
