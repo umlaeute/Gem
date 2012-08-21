@@ -160,8 +160,14 @@ void gemsdlwindow :: dimensionsMess(unsigned int width, unsigned int height)
 /////////////////////////////////////////////////////////
 void gemsdlwindow :: fullscreenMess(int on)
 {
+  bool toggle=false;
   m_fullscreen = on;
-  if(makeCurrent()){
+  if(m_surface) {
+    if(( m_fullscreen && !(m_surface->flags & SDL_FULLSCREEN)) ||
+       (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN)))
+        toggle=true;
+  }
+  if(toggle && makeCurrent()){
     SDL_WM_ToggleFullScreen( m_surface );
   }
 }
@@ -233,7 +239,7 @@ bool gemsdlwindow :: create(void)
     return false;
   }
   titleMess(m_title);
-  //fullscreenMess(m_fullscreen);
+  fullscreenMess(m_fullscreen);
 
   dispatch();
   return true;
