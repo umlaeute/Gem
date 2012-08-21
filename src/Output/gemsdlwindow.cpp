@@ -43,7 +43,7 @@ namespace {
 gemsdlwindow :: gemsdlwindow(void) :
   m_surface(NULL),
   m_videoFlags(0),
-  m_bpp(16)
+  m_bpp(0)
 {
   if(!sdl_count) {
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
