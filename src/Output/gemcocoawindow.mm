@@ -475,7 +475,7 @@ void gemcocoawindow :: offsetMess(int x, int y) {
   m_yoffset = y;
   move();
 }
-void gemcocoawindow :: fullscreenMess(bool on) {
+void gemcocoawindow :: fullscreenMess(int on) {
 #warning fullscreen
   m_fullscreen = on;
   if(m_pimpl->view) {

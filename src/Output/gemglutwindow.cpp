@@ -158,7 +158,7 @@ void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
 // fullscreenMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: fullscreenMess(bool on)
+void gemglutwindow :: fullscreenMess(int on)
 {
   m_fullscreen = on;
   if(makeCurrent()){
