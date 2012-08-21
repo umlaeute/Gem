@@ -150,7 +150,7 @@ void gemsdlwindow :: dimensionsMess(unsigned int width, unsigned int height)
 // fullscreenMess
 //
 /////////////////////////////////////////////////////////
-void gemsdlwindow :: fullscreenMess(bool on)
+void gemsdlwindow :: fullscreenMess(int on)
 {
   m_fullscreen = on;
   if(makeCurrent()){
