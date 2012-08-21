@@ -28,6 +28,10 @@ static std::map<int, gemsdlwindow*>s_windowmap;
 
 CPPEXTERN_NEW(gemsdlwindow);
 
+namespace {
+  static unsigned int sdl_count = 0;
+}
+
 /////////////////////////////////////////////////////////
 //
 // gemsdlwindow
@@ -41,12 +45,11 @@ gemsdlwindow :: gemsdlwindow(void) :
   m_videoFlags(0),
   m_bpp(16)
 {
-  static bool initDone=false;
-  if(!initDone) {
+  if(!sdl_count) {
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
       throw(GemException("could not initialize SDL window infrastructure"));
   }
-  initDone=true;
+  sdl_count++;
 }
 
 /////////////////////////////////////////////////////////
@@ -56,6 +59,11 @@ gemsdlwindow :: gemsdlwindow(void) :
 gemsdlwindow :: ~gemsdlwindow()
 {
   destroyMess();
+
+  sdl_count--;
+  if(!sdl_count) {
+    SDL_Quit(); // ????
+  }
 }
 
 
@@ -177,8 +185,8 @@ bool gemsdlwindow :: create(void)
     return false;
   }
 
-  if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-    error("could not initialize SDL window infrastructure");
+  if ( SDL_InitSubSystem( SDL_INIT_VIDEO ) < 0 ) {
+    error("could not (re)initialize SDL window infrastructure");
     return false;
   }
 
@@ -248,7 +256,7 @@ void gemsdlwindow :: destroy(void)
 void gemsdlwindow :: destroyMess(void)
 {
   if(makeCurrent()) {
-    SDL_Quit(); // ????
+    SDL_QuitSubSystem( SDL_INIT_VIDEO );
   }
   destroy();
 }
