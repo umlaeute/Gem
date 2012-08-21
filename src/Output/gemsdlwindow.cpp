@@ -129,6 +129,9 @@ void gemsdlwindow :: fsaaMess(int value)
 void gemsdlwindow :: titleMess(std::string s)
 {
   m_title = s;
+  if(m_surface) {
+    SDL_WM_SetCaption(m_title.c_str(), m_title.c_str());
+  }
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
