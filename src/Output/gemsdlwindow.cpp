@@ -48,6 +48,7 @@ gemsdlwindow :: gemsdlwindow(void) :
   if(!sdl_count) {
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
       throw(GemException("could not initialize SDL window infrastructure"));
+    SDL_EnableUNICODE(1);
   }
   sdl_count++;
 }
@@ -86,8 +87,8 @@ void gemsdlwindow :: doRender()
 
 
 static std::map<SDLKey, std::string>s_key2symbol;
-static std::string key2symbol(SDLKey k) {
 static std::map<SDLKey, std::string>s_worldkey2symbol;
+static std::string key2symbol(SDLKey k, Uint16 unicode) {
   if(0==s_key2symbol.size()) {
     s_key2symbol[SDLK_BACKSPACE]="BackSpace";
     s_key2symbol[SDLK_TAB]="Tab";
@@ -325,6 +326,9 @@ static std::map<SDLKey, std::string>s_worldkey2symbol;
   }
   std::string s = s_key2symbol[k];
   if(s.empty()) {
+    if(unicode) {
+      s=unicode;
+    } else {
       s=s_worldkey2symbol[k];
     }
   }
@@ -385,7 +389,6 @@ void gemsdlwindow :: dispatch()
       break;
     }
   }
-
 }
 
 
