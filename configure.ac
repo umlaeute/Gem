@@ -224,6 +224,8 @@ if test "x${have_glew}" != "xyes"; then
   GEM_CPPFLAGS+=" -DGLEW_BUILD"
 fi
 
+GEM_CHECK_LIB([sdl], [SDL], [SDL_Quit],,,,[SDL windowing], [yes])
+
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
 ### "-lstdc++" really has to be added before e.g. "-lGL" in order to avoid
 ### triggering the bug

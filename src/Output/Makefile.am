@@ -33,6 +33,11 @@ if WINDOWS
 pkglib_LTLIBRARIES += gemw32window.la
 endif
 
+if HAVE_LIB_SDL
+pkglib_LTLIBRARIES += gemsdlwindow.la
+endif
+
+
 COMMON_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 if WINDOWS
 COMMON_LDFLAGS += -no-undefined
@@ -164,6 +169,34 @@ gemmacwindow_la_SOURCES = \
   gemmacwindow.h
 
 
+########### gemsdlwindow ###########
+# some default flags
+gemsdlwindow_la_CXXFLAGS =
+gemsdlwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
+gemsdlwindow_la_LIBADD   =
+# RTE flags
+gemsdlwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+gemsdlwindow_la_LIBADD   += @GEM_RTE_LIBS@
+# arch flags
+gemsdlwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+gemsdlwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemsdlwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemsdlwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemsdlwindow_la @MOREFLAGS@
+
+# object specific libraries
+gemsdlwindow_la_CXXFLAGS += @GEM_LIB_SDL_CFLAGS@
+gemsdlwindow_la_LIBADD   += @GEM_LIB_SDL_LIBS@
+gemsdlwindow_la_LDFLAGS  +=
+
+## SOURCES
+gemsdlwindow_la_SOURCES = \
+  gemsdlwindow.cpp \
+  gemsdlwindow.h
+
+
+
 ########### gemw32window ###########
 # some default flags
 gemw32window_la_CXXFLAGS =
@@ -231,7 +264,7 @@ clean-convenience-link:
             echo "$$soname: cleaning convenience links"; \
             test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname || echo "clean oops: $$soname"; \
 	  done 
-	
+
 
 all-local:: convenience-link
 
