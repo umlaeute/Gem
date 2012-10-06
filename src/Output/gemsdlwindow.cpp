@@ -327,6 +327,7 @@ static std::string key2symbol(SDLKey k, Uint16 unicode) {
   std::string s = s_key2symbol[k];
   if(s.empty()) {
     if(unicode) {
+      s_worldkey2symbol[k]=unicode;
       s=unicode;
     } else {
       s=s_worldkey2symbol[k];
