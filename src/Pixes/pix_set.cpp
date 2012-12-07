@@ -253,7 +253,7 @@ void pix_set :: ROISIZEMess(int xsize, int ysize)
 		m_roisize[0] = 0;
 	} else if (xsize > m_pixBlock.image.xsize) {
 		m_roisize[0] = m_pixBlock.image.xsize;
-		verbose(4,"roisize shoul be > image size");
+		error("roisize shoul be <= image size");
 	} else {
 		m_roisize[0]=xsize;
 	}
@@ -331,7 +331,7 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 			b=(unsigned char)(255.*atom_getfloat(&argv[2]));
 			a=(unsigned char)(255.*atom_getfloat(&argv[3]));;
 		} else {
-		  error("fill need 1 or 4 float arg in RGB mode");
+		  error("fill need 1 or 4 float arg in RGBA mode");
 		  return;
 		}	  
 		while (counter--) {
