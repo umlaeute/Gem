@@ -90,6 +90,16 @@ protected:
 	// Set a new image size
 	void	    	SETMess(int xsize, int ysize);
 	//////////
+	// Set ROI offset
+	void	    	ROIOFFSETMess(int xsize, int ysize);
+	//////////
+	// Set ROI size
+	void	    	ROISIZEMess(int xsize, int ysize);
+	// Set clear the whole image
+	void	    	FILLMess(t_symbol*s, int argc, t_atom *argv);
+	// Bang message
+	void	    	BANGMess(void);
+	//////////
 	// Pass the data
 	void	    	DATAMess(t_symbol*s, int argc, t_atom *argv);
 
@@ -101,6 +111,11 @@ protected:
 	//////////
 	// paint mode
 	int 	    	m_mode;
+	
+	/////////
+	// size and offset to draw only on a ROI
+	int m_roisize[2], m_roioffset[2];
+	int m_roiflag;
 
 	//////////
 	// The pixBlock with the current image
