@@ -32,6 +32,7 @@
 
 #include "pix_set.h"
 #include "Gem/State.h"
+#include "Gem/Rectangle.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -43,14 +44,11 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 //
 /////////////////////////////////////////////////////////
 pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
-  m_mode(GL_RGBA), m_roiflag(0)
+  m_mode(GL_RGBA),
+  m_roi(NULL)
 {
   if (xsize < 1) xsize = 256;
   if (ysize < 1) ysize = 256;
-  m_roisize[0] = xsize;
-  m_roisize[1] = ysize;
-  m_roioffset[0]=0;
-  m_roioffset[1]=0;
   
   SETMess(xsize, ysize);
 
@@ -104,16 +102,27 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
    int picturesize, counter, n;
    int i = 0, j;
    unsigned char *buffer;
+
+   int roi_x1=0;
+   int roi_x2=m_pixBlock.image.xsize;
+   int roi_y1=0;
+   int roi_y2=m_pixBlock.image.ysize;
+
    
-   if (m_roiflag==0){ 
+   if (!m_roi){
 	  // if no ROI is set, set whole image black before setting pixels values
 	  m_pixBlock.image.setBlack();
 	  buffer = m_pixBlock.image.data;
 	  picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
 
    } else {
-	   buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / m_roisize[0] + m_roioffset[1] ) * m_pixBlock.image.xsize + (i % m_roisize[0]) + m_roioffset[0]) ;
-	   picturesize = m_roisize[0]*m_roisize[1];
+     roi_x1=m_roi->x1*m_pixBlock.image.xsize;
+     roi_x2=m_roi->x2*m_pixBlock.image.xsize;
+     roi_y1=m_roi->y1*m_pixBlock.image.ysize;
+     roi_y2=m_roi->y2*m_pixBlock.image.ysize;
+
+	   buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+	   picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
    }
 
    
@@ -129,9 +138,9 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
       buffer[chAlpha] = 0;					     // alpha
       argv+=3;
-      if (m_roiflag!=0) {
+      if (m_roi!=0) {
 		  i++;
-		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / m_roisize[0] + m_roioffset[1] ) * m_pixBlock.image.xsize + (i % m_roisize[0]) + m_roioffset[0]) ;
+		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	  } else {
 		  buffer+=4;
 	  }
@@ -143,9 +152,9 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(255.*atom_getfloat(argv));	// rgb
       buffer[chAlpha] = 0;									// alpha
       argv++;
-      if (m_roiflag!=0) {
+      if (m_roi!=0) {
 		  i++;
-		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / m_roisize[0] + m_roioffset[1] ) * m_pixBlock.image.xsize + (i % m_roisize[0]) + m_roioffset[0]) ;
+		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	  } else {
 		  buffer+=4;
 	  }
@@ -163,9 +172,9 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
       buffer[chAlpha] = (unsigned char)(255.*atom_getfloat(&argv[3])); // alpha
       argv+=4; 
-      if (m_roiflag!=0) {
+      if (m_roi!=0) {
 		  i++;
-		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / m_roisize[0] + m_roioffset[1] ) * m_pixBlock.image.xsize + (i % m_roisize[0]) + m_roioffset[0]) ;
+		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	  } else {
 		  buffer+=4;
 	  }
@@ -211,65 +220,9 @@ void pix_set :: SETMess(int xsize, int ysize)
 	m_pixBlock.image.clear();
 	m_pixBlock.image.xsize = (int)xsize;
 	m_pixBlock.image.ysize = (int)ysize;
-	ROISIZEMess(m_roisize[0],m_roisize[1]); // reset roisizeqq
-	ROIOFFSETMess(m_roioffset[0], m_roioffset[1]); // reset roioffset
   m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
-}
-
-/////////////////////////////////////////////////////////
-// ROIOFFSETMess
-//
-/////////////////////////////////////////////////////////
-void pix_set :: ROIOFFSETMess(int xoffset, int yoffset)
-{
-	if ( xoffset<0 ){
-		m_roioffset[0] = 0;
-	} else if (xoffset+m_roisize[0] > m_pixBlock.image.xsize) {
-		m_roioffset[0] = m_pixBlock.image.xsize-m_roisize[0];
-	} else {
-		m_roioffset[0]=xoffset;
-	}
-	
-	if ( yoffset<0 ){
-		m_roioffset[1] = 0;
-	} else if (yoffset+m_roisize[1] > m_pixBlock.image.ysize) {
-		m_roioffset[1] = m_pixBlock.image.ysize-m_roisize[1];
-	} else {
-		m_roioffset[1]=yoffset;
-	}
-	
-	m_roiflag=((m_roioffset[0]!=0) || (m_roioffset[1]!=0)) || (m_roisize[0]<m_pixBlock.image.xsize) || (m_roisize[1]<m_pixBlock.image.ysize);
-}
-
-/////////////////////////////////////////////////////////
-// ROISIZEMess
-//
-/////////////////////////////////////////////////////////
-void pix_set :: ROISIZEMess(int xsize, int ysize)
-{
-	if ( xsize<0 ){
-		m_roisize[0] = 0;
-	} else if (xsize > m_pixBlock.image.xsize) {
-		m_roisize[0] = m_pixBlock.image.xsize;
-		error("roisize shoul be <= image size");
-	} else {
-		m_roisize[0]=xsize;
-	}
-	
-	if ( ysize<0 ){
-		m_roisize[1] = 0;
-	} else if (ysize > m_pixBlock.image.ysize) {
-		m_roisize[1] = m_pixBlock.image.ysize;
-	} else {
-		m_roisize[1]=xsize;
-	}
-	
-	m_roisize[0] = xsize>0?xsize:1;
-	m_roisize[1] = ysize>0?ysize:1;
-	m_roiflag=((m_roioffset[0]!=0) || (m_roioffset[1]!=0)) || (m_roisize[0]<m_pixBlock.image.xsize) || (m_roisize[1]<m_pixBlock.image.ysize);
-
 }
 
 /////////////////////////////////////////////////////////
@@ -383,8 +336,6 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG (classPtr, "data", DATAMess);
   CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
-  CPPEXTERN_MSG2(classPtr, "roioffset", ROIOFFSETMess, int, int);
-  CPPEXTERN_MSG2(classPtr, "roisize", ROISIZEMess, int, int);
   CPPEXTERN_MSG(classPtr, "fill", FILLMess);
   CPPEXTERN_MSG0(classPtr, "bang", BANGMess);
 

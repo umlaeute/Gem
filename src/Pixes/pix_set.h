@@ -46,6 +46,9 @@ pix_set
     "GREY"
 
 -----------------------------------------------------------------*/
+namespace gem {
+  class Rectangle;
+};
 class GEM_EXTERN pix_set : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_set, GemPixObj);
@@ -112,10 +115,8 @@ protected:
 	// paint mode
 	int 	    	m_mode;
 	
-	/////////
 	// size and offset to draw only on a ROI
-	int m_roisize[2], m_roioffset[2];
-	int m_roiflag;
+  gem::Rectangle*m_roi;
 
 	//////////
 	// The pixBlock with the current image
