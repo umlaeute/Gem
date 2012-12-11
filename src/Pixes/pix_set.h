@@ -28,6 +28,7 @@ pix_set
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
 #include "Gem/Cache.h"
+#include "Gem/Rectangle.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -46,9 +47,7 @@ pix_set
     "GREY"
 
 -----------------------------------------------------------------*/
-namespace gem {
-  class Rectangle;
-};
+
 class GEM_EXTERN pix_set : public GemPixObj
 {
     CPPEXTERN_HEADER(pix_set, GemPixObj);
@@ -116,11 +115,13 @@ protected:
 	int 	    	m_mode;
 	
 	// size and offset to draw only on a ROI
-  gem::Rectangle*m_roi;
+  gem::Rectangle m_roi;
+  bool           m_doROI;
 
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
+  pixBlock     *m_pixels;
 };
 
 #endif	// for header file

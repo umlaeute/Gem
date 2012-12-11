@@ -45,7 +45,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 /////////////////////////////////////////////////////////
 pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA),
-  m_roi(NULL)
+  m_doROI(false),
+  m_pixels(NULL)
 {
   if (xsize < 1) xsize = 256;
   if (ysize < 1) ysize = 256;
@@ -70,7 +71,18 @@ pix_set :: ~pix_set()
 /////////////////////////////////////////////////////////
 void pix_set :: render(GemState *state)
 {
-  state->set(GemState::_PIX,&m_pixBlock);
+  gem::Rectangle*roi=NULL;
+  state->get(GemState::getKey("pix.roi.rectangle"),roi);
+  state->get(GemState::_PIX,m_pixels);
+  if(roi) {
+    m_roi=*roi;
+    m_doROI=true;
+  } else {
+    m_doROI=false;
+  }
+  if(!m_pixels) {
+    state->set(GemState::_PIX,&m_pixBlock);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -89,7 +101,7 @@ void pix_set :: startRendering()
 void pix_set :: postrender(GemState *state)
 {
     m_pixBlock.newimage = false;
-    //state->image = NULL;
+    state->set(GemState::_PIX,&m_pixels);
 }
 
 
@@ -103,30 +115,29 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
    int i = 0, j;
    unsigned char *buffer;
 
-   int roi_x1=0;
-   int roi_x2=m_pixBlock.image.xsize;
-   int roi_y1=0;
-   int roi_y2=m_pixBlock.image.ysize;
+   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
 
+   int roi_x1=0;
+   int roi_x2=pixels->image.xsize;
+   int roi_y1=0;
+   int roi_y2=pixels->image.ysize;
    
-   if (!m_roi){
+   if (!m_doROI){
 	  // if no ROI is set, set whole image black before setting pixels values
-	  m_pixBlock.image.setBlack();
-	  buffer = m_pixBlock.image.data;
-	  picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
+	  pixels->image.setBlack();
+	  buffer = pixels->image.data;
+	  picturesize = pixels->image.xsize * pixels->image.ysize;
 
    } else {
-     roi_x1=m_roi->x1*m_pixBlock.image.xsize;
-     roi_x2=m_roi->x2*m_pixBlock.image.xsize;
-     roi_y1=m_roi->y1*m_pixBlock.image.ysize;
-     roi_y2=m_roi->y2*m_pixBlock.image.ysize;
+     roi_x1=m_roi.x1*(float)pixels->image.xsize;
+     roi_x2=m_roi.x2*(float)pixels->image.xsize;
+     roi_y1=m_roi.y1*(float)pixels->image.ysize;
+     roi_y2=m_roi.y2*(float)pixels->image.ysize;
 
-	   buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+	   buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	   picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
    }
-
-   
-
+   post("ROI: %d/%d .. %d/%d (%d/%d)", roi_x1, roi_y1, roi_x2, roi_y2, pixels->image.xsize, pixels->image.ysize);
 
   switch (m_mode) {
   case GL_RGB:
@@ -138,12 +149,12 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
       buffer[chAlpha] = 0;					     // alpha
       argv+=3;
-      if (m_roi!=0) {
-		  i++;
-		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
-	  } else {
-		  buffer+=4;
-	  }
+      if (m_doROI) {
+        i++;
+        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+      } else {
+        buffer+=4;
+      }
     }
     break;
   case GL_LUMINANCE:
@@ -152,12 +163,12 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(255.*atom_getfloat(argv));	// rgb
       buffer[chAlpha] = 0;									// alpha
       argv++;
-      if (m_roi!=0) {
-		  i++;
-		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
-	  } else {
-		  buffer+=4;
-	  }
+      if (m_doROI) {
+        i++;
+        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+      } else {
+        buffer+=4;
+      }
     }
     break;
   case GL_YCBCR_422_GEM:
@@ -172,15 +183,15 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
       buffer[chAlpha] = (unsigned char)(255.*atom_getfloat(&argv[3])); // alpha
       argv+=4; 
-      if (m_roi!=0) {
-		  i++;
-		  buffer = m_pixBlock.image.data + m_pixBlock.image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_pixBlock.image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
-	  } else {
-		  buffer+=4;
-	  }
+      if (m_doROI) {
+        i++;
+        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+      } else {
+        buffer+=4;
+      }
     }
   }
-  m_pixBlock.newimage = true;
+  pixels->newimage = true;
 }
 
 
@@ -292,7 +303,7 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 		  buffer[chGreen] = g; // green
 		  buffer[chBlue]  = b; // blue
 		  buffer[chAlpha] = a; // alpha
-	      buffer+=4;
+      buffer+=4;
 		}
 	}
 }
@@ -336,7 +347,6 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG (classPtr, "data", DATAMess);
   CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
-  CPPEXTERN_MSG(classPtr, "fill", FILLMess);
+  CPPEXTERN_MSG (classPtr, "fill", FILLMess);
   CPPEXTERN_MSG0(classPtr, "bang", BANGMess);
-
 }
