@@ -68,9 +68,9 @@ class GemStateData {
 
   std::auto_ptr<GLStack>stacks;
 
-  static std::map <std::string, GemState::key_t> keys;
+  static std::map <std::string, int> keys;
 };
-std::map <std::string, GemState::key_t> GemStateData::keys;
+std::map <std::string, int> GemStateData::keys;
 
 /////////////////////////////////////////////////////////
 //
