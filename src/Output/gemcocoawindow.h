@@ -45,7 +45,7 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
   virtual void              titleMess(std::string s);
   virtual void dimensionsMess(unsigned int width, unsigned int height);
   virtual void             offsetMess(int x, int y);
-  virtual void         fullscreenMess(bool on);
+  virtual void         fullscreenMess(int on);
   virtual void             cursorMess(bool on);
   virtual void            menubarMess(int value);
   void		         move(void); // apply dimen/offset to current window

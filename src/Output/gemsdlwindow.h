@@ -10,15 +10,16 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEM_OUTPUT_GEMGLXWINDOW_H_
-#define _INCLUDE__GEM_OUTPUT_GEMGLXWINDOW_H_
+#ifndef _INCLUDE__GEM_OUTPUT_GEMSDLWINDOW_H_
+#define _INCLUDE__GEM_OUTPUT_GEMSDLWINDOW_H_
 
 #include "Base/GemWindow.h"
+#include <SDL.h>
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  gemglxwindow
+  gemsdlwindow
 
   The window manager
 
@@ -51,65 +52,70 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglxwindow : public GemWindow
+class GEM_EXTERN gemsdlwindow : public GemWindow
 {
-  CPPEXTERN_HEADER(gemglxwindow, GemWindow);
+  CPPEXTERN_HEADER(gemsdlwindow, GemWindow);
 
     public:
 
   //////////
   // Constructor
-  gemglxwindow(void);
+  gemsdlwindow(void);
 
  private:
 
   //////////
   // Destructor
-  virtual ~gemglxwindow(void);
+  virtual ~gemsdlwindow(void);
 
+  void doRender(void);
 
-  // create window
-  virtual bool create(void);
-
-  // destroy window
-  virtual void destroy(void);
-
-  // check whether we have a window and if so, make it current
-  virtual bool makeCurrent(void);
-  virtual void swapBuffers(void);
-
-  /* dispatch window events */
-  void dispatch(void);
+  /* rendering */
+  void renderMess(void);
 
   /* render context (pre creation) */
-  virtual void  bufferMess(int buf);
+  void  bufferMess(int buf);
   virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string);
-  virtual void borderMess(bool on);
+  virtual void titleMess(std::string s);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
-
   virtual void    fullscreenMess(int on);
   virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
+  virtual bool        create(void);
+  virtual void destroy(void);
+
   virtual void        createMess(std::string);
   virtual void       destroyMess(void);
 
   /* post creation */
   virtual void        cursorMess(bool on);
 
-  //// X display specification (e.g. "remote:0.1")
-  std::string m_display;
+  void menuMess(void);
+  void addMenuMess(t_symbol*, int, t_atom*);
 
-  void       print(void);
+
+  // check whether we have a window and if so, make it current
+  virtual bool makeCurrent(void);
+  // swap buffers
+  virtual void swapBuffers(void);
+  // dispatch events
+  virtual void dispatch(void);
+
  private:
 
-  class PIMPL;
-  PIMPL*m_pimpl;
+  /* the SDL surface */
+  SDL_Surface*m_surface;
+
+  /* hints how to create the window */
+  int m_videoFlags;
+
+  /* bits per pixel */
+  unsigned int m_bpp;
 };
 
 #endif    // for header file

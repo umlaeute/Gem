@@ -634,7 +634,7 @@ void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
 // fullscreenMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: fullscreenMess(bool on)
+void gemglxwindow :: fullscreenMess(int on)
 {
   m_fullscreen = on;
 }

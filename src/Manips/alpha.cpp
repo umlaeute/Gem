@@ -97,12 +97,66 @@ void alpha :: funMess(int fun)
 {
   switch(fun){
   case 1:
-     m_function=GL_ONE;
-     break;
-  default:
+    m_function=GL_ONE;
+    break;
+  case 2:
+    m_function=GL_ZERO;
+    break;
+  case 3:
+    m_function=GL_SRC_COLOR;
+    break;
+  case 4:
+    m_function=GL_ONE_MINUS_SRC_COLOR;
+    break;
+  case 5:
+    m_function=GL_DST_COLOR;
+    break;
+  case 6:
+    m_function=GL_ONE_MINUS_DST_COLOR;
+    break;
+  case 7:
+    m_function=GL_SRC_ALPHA;
+    break;
+  case 8:
     m_function=GL_ONE_MINUS_SRC_ALPHA;
+    break;
+  case 9:
+    m_function=GL_DST_ALPHA;
+    break;
+  case 10:
+    m_function=GL_ONE_MINUS_DST_ALPHA;
+    break;
+  case 11:
+    m_function=GL_CONSTANT_COLOR;
+    break;
+  case 12:
+    m_function=GL_ONE_MINUS_CONSTANT_COLOR;
+    break;
+  case 13:
+    m_function=GL_CONSTANT_ALPHA;
+    break;
+  case 14:
+    m_function=GL_ONE_MINUS_CONSTANT_ALPHA;
+    break;
+  case 15:
+    m_function=GL_SRC_ALPHA_SATURATE;
+    break;
+  case 16:
+    m_function=GL_SRC1_COLOR;
+    break;
+  case 17:
+    m_function=GL_ONE_MINUS_SRC1_COLOR;
+    break;
+  case 18:
+    m_function=GL_SRC1_ALPHA;
+    break;
+  case 19:
+    m_function=GL_ONE_MINUS_SRC1_ALPHA;
+    break;
+   default:
+     m_function=GL_ONE_MINUS_SRC_ALPHA;
   }
-    setModified();
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // testMess
