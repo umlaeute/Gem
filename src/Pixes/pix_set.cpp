@@ -137,7 +137,6 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
 	   buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	   picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
    }
-   post("ROI: %d/%d .. %d/%d (%d/%d)", roi_x1, roi_y1, roi_x2, roi_y2, pixels->image.xsize, pixels->image.ysize);
 
   switch (m_mode) {
   case GL_RGB:
