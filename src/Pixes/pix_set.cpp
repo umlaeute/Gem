@@ -129,10 +129,10 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
 	  picturesize = pixels->image.xsize * pixels->image.ysize;
 
    } else {
-     roi_x1=m_roi.x1*(float)pixels->image.xsize;
-     roi_x2=m_roi.x2*(float)pixels->image.xsize;
-     roi_y1=m_roi.y1*(float)pixels->image.ysize;
-     roi_y2=m_roi.y2*(float)pixels->image.ysize;
+     roi_x1=m_roi.x1*(0.5+pixels->image.xsize);
+     roi_x2=m_roi.x2*(0.5+pixels->image.xsize);
+     roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
+     roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
 
 	   buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	   picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
