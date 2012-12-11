@@ -31,6 +31,7 @@ libGem_la_include_HEADERS = \
 	RTE.h \
 	State.h \
 	Cache.h \
+	Rectangle.h \
 	Exception.h \
 	Dylib.h \
 	Files.h \
@@ -100,6 +101,8 @@ libGem_la_SOURCES += \
 	PBuffer.h \
 	Properties.cpp \
 	Properties.h \
+	Rectangle.cpp \
+	Rectangle.h \
 	RTE.h \
 	Settings.cpp \
 	Settings.h \
