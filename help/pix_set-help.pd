@@ -1,9 +1,9 @@
-#N canvas 362 268 654 456 10;
+#N canvas 140 193 794 585 10;
 #X text 452 8 GEM object;
-#X obj 8 325 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 9 326 cnv 15 430 240 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 328 Inlets:;
-#X text 38 395 Outlets:;
+#X text 38 511 Outlets:;
 #X obj 8 286 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 285 Arguments:;
@@ -14,7 +14,7 @@
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 22 450 300 gemwin 0;
+#N canvas 1 98 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -33,22 +33,20 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 519 293 pd gemwin;
-#X msg 519 274 create;
+#X msg 519 274 destroy;
 #X text 515 253 Create window:;
 #X obj 450 114 cnv 15 160 100 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
-#X text 46 408 Outlet 1: gemlist;
+#X text 46 524 Outlet 1: gemlist;
 #X text 53 342 Inlet 1: gemlist;
 #X text 50 12 Synopsis: [pix_set];
-#X obj 451 186 pix_set 4 4;
 #X obj 451 233 pix_texture;
 #X obj 450 255 square;
 #X msg 459 160 RGBA;
 #X msg 458 119 GREY;
 #X msg 460 140 RGB;
-#X msg 502 133 1 0 0 0 1 0 0 0 1 1 1 0 1 0 1 0 1 1;
 #X text 63 296 <width> <height>;
 #X text 21 79 [pix_set] will allow you to set the image-data of a pixel
 with one long list of (m*n) Pixel-Tupel.;
@@ -63,19 +61,99 @@ is simply "V1 V2 ...";
 of the image will be set to 0 (black).;
 #X text 16 257 The image will always be in RGBA-color-space !;
 #X text 53 355 Inlet 1: RGBA|RGB|GREY : set format of input-data;
-#X text 52 369 Inlet 2: list : interleaved image-data (R1 G1 B1 A1
+#X text 52 485 Inlet 2: list : interleaved image-data (R1 G1 B1 A1
 R2 B2...) or (R1 B1 G1 R2 B2...) or (L1 L2 L3...);
 #X text 29 56 Description: set the pixel-data of an image;
 #X text 460 376 see also;
 #X obj 530 377 pix_dump;
 #X msg 536 233 quality 0;
+#X obj 449 186 pix_set 4 4;
+#X obj 536 213 loadbang;
+#X msg 512 166 1 0.25 0.5 0.75 1 0 0 0 1 1 1 0 1 0 1 0 1 1;
+#X text 53 370 Inlet 1: bang send image (to update texture for example)
+;
+#X text 53 383 Inlet 1: roisize x y : set the size of the region of
+interest;
+#X text 53 409 Inlet 1: roioffset x y : set the offset of the region
+of interest;
+#X text 53 434 Inlet 1: fill : set the whole image with value (value
+could be G \, RGB or RGBA);
+#X text 53 460 Inlet 1: set : set the size of the image;
+#X obj 502 142 r pix_set_in;
+#N canvas 450 120 839 542 advanced_features 0;
+#X msg 19 416 set 16 16;
+#X msg 50 434 set 4 4;
+#X msg 46 309 roisize 1 4 \, roioffset 2 0;
+#X msg 33 286 roisize 2 2 \, roioffset 2 2;
+#X msg 21 264 roisize 2 2 \, roioffset 0 0;
+#X msg 24 93 fill \$1 \, bang;
+#X floatatom 24 76 5 0 1 0 - - -;
+#X msg 186 114 fill \$1 \$2 \$3 \$4 \, bang;
+#X obj 186 92 pack 0 0 0 0;
+#X floatatom 186 47 5 0 1 0 - - -;
+#X floatatom 226 47 5 0 1 0 - - -;
+#X floatatom 266 47 5 0 1 0 - - -;
+#X floatatom 312 48 5 0 1 0 - - -;
+#X obj 24 177 s pix_set_in;
+#X text 33 30 fill message fill the whole image with the given values
+;
+#X text 187 134 in RGBA mode you can set each channel;
+#X obj 312 64 t b f;
+#X obj 266 64 t b f;
+#X obj 226 64 t b f;
+#X floatatom 446 47 5 0 1 0 - - -;
+#X floatatom 486 47 5 0 1 0 - - -;
+#X floatatom 526 47 5 0 1 0 - - -;
+#X obj 526 64 t b f;
+#X obj 486 64 t b f;
+#X text 437 132 in RGB mode you can set each channel;
+#X msg 446 114 fill \$1 \$2 \$3 \, bang;
+#X obj 446 92 pack 0 0 0;
+#X obj 21 351 s pix_set_in;
+#X text 216 285 always set roisize before roioffset because offset
+is cliped again roisize to keep the roi in the image area;
+#X text 52 247 set the region of interest;
+#X obj 19 479 s pix_set_in;
+#X text 44 390 set the size of the image;
+#X connect 0 0 30 0;
+#X connect 1 0 30 0;
+#X connect 2 0 27 0;
+#X connect 3 0 27 0;
+#X connect 4 0 27 0;
+#X connect 5 0 13 0;
+#X connect 6 0 5 0;
+#X connect 7 0 13 0;
+#X connect 8 0 7 0;
+#X connect 9 0 8 0;
+#X connect 10 0 18 0;
+#X connect 11 0 17 0;
+#X connect 12 0 16 0;
+#X connect 16 0 8 0;
+#X connect 16 1 8 3;
+#X connect 17 0 8 0;
+#X connect 17 1 8 2;
+#X connect 18 0 8 0;
+#X connect 18 1 8 1;
+#X connect 19 0 26 0;
+#X connect 20 0 23 0;
+#X connect 21 0 22 0;
+#X connect 22 0 26 0;
+#X connect 22 1 26 2;
+#X connect 23 0 26 0;
+#X connect 23 1 26 1;
+#X connect 25 0 13 0;
+#X connect 26 0 25 0;
+#X restore 503 121 pd advanced_features;
+#X text 477 411 and example/04.pix/27.bitmap_font.pd;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 19 0;
+#X connect 14 0 36 0;
 #X connect 19 0 20 0;
-#X connect 20 0 21 0;
-#X connect 22 0 19 0;
-#X connect 23 0 19 0;
-#X connect 24 0 19 0;
-#X connect 25 0 19 1;
-#X connect 37 0 20 0;
+#X connect 21 0 36 0;
+#X connect 22 0 36 0;
+#X connect 23 0 36 0;
+#X connect 35 0 19 0;
+#X connect 36 0 19 0;
+#X connect 37 0 35 0;
+#X connect 38 0 36 1;
+#X connect 44 0 36 0;
