@@ -59,20 +59,21 @@ class GEM_EXTERN GemState
 {
  public:
   typedef enum {
-    _DIRTY,
-    _TIMING_TICK,
-    _PIX,
-    _GL_STACKS,
-    _GL_DISPLAYLIST,
-    _GL_LIGHTING,
-    _GL_SMOOTH,
-    _GL_DRAWTYPE,
-    _GL_TEX_TYPE,
-    _GL_TEX_COORDS,
-    _GL_TEX_NUMCOORDS,
-    _GL_TEX_UNITS,       /* <int> # of texUnits */
-    _GL_TEX_ORIENTATION, /* <bool> false=bottomleft; true=topleft */
-    _GL_TEX_BASECOORD,   /* <TexCoord> width/height of texture  */
+    _ILLEGAL=-1,
+    _DIRTY, /* "dirty" */
+    _TIMING_TICK, /* "timing.tick" */
+    _PIX, /* "pix" */
+    _GL_STACKS, /* "stacks" */
+    _GL_DISPLAYLIST, /* */
+    _GL_LIGHTING, /* */
+    _GL_SMOOTH, /* */
+    _GL_DRAWTYPE, /* */
+    _GL_TEX_TYPE, /* "tex.type" */
+    _GL_TEX_COORDS, /* "tex.coords" */
+    _GL_TEX_NUMCOORDS, /* "tex.numcoords" */
+    _GL_TEX_UNITS,       /* "tex.units" <int> # of texUnits */
+    _GL_TEX_ORIENTATION, /* "tex.orientation" <bool> false=bottomleft; true=topleft */
+    _GL_TEX_BASECOORD,   /* "tex.basecoords" <TexCoord> width/height of texture  */
 
 
 
@@ -220,6 +221,8 @@ class GEM_EXTERN GemState
 
   // Copy assignment
   GemState& operator=(const GemState&);
+
+  static const key_t getKey(const std::string&);
 
  protected:
   GemStateData*data;

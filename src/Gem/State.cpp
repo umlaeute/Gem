@@ -67,7 +67,10 @@ class GemStateData {
   std::map <GemState::key_t, any> data;
 
   std::auto_ptr<GLStack>stacks;
+
+  static std::map <std::string, key_t> keys;
 };
+std::map <std::string, key_t> GemStateData::keys;
 
 /////////////////////////////////////////////////////////
 //
@@ -300,3 +303,34 @@ bool GemState::remove(const GemState::key_t key) {
   return (0!=data->data.erase(key));
 }
 
+const GemState::key_t GemState::getKey(const std::string&s) {
+  if(GemStateData::keys.empty()) {
+    GemStateData::keys["dirty"]=_DIRTY;
+    GemStateData::keys["timing.tick"]=_TIMING_TICK;
+    GemStateData::keys["pix"]=_PIX;
+    GemStateData::keys["gl.stacks"]=_GL_STACKS;
+    GemStateData::keys["gl.displaylist"]=_GL_DISPLAYLIST;
+    GemStateData::keys["gl.lighting"]=_GL_LIGHTING;
+    GemStateData::keys["gl.smooth"]=_GL_SMOOTH;
+    GemStateData::keys["gl.drawtype"]=_GL_DRAWTYPE;
+    GemStateData::keys["gl.tex.type"]=_GL_TEX_TYPE;
+    GemStateData::keys["gl.tex.coords"]=_GL_TEX_COORDS;
+    GemStateData::keys["gl.tex.numcoords"]=_GL_TEX_NUMCOORDS;
+    GemStateData::keys["gl.tex.units"]=_GL_TEX_UNITS;
+    GemStateData::keys["gl.tex.orientation"]=_GL_TEX_ORIENTATION;
+    GemStateData::keys["gl.tex.basecoord"]=_GL_TEX_BASECOORD;
+  }
+
+  key_t result=_ILLEGAL;
+
+  std::map<std::string, int>::iterator it =  GemStateData::keys.find(s);
+
+  if(it == GemStateData::keys.end()) {
+    result=(key_t)it->second;
+  } else {
+    result=(key_t)GemStateData::keys.size();
+    GemStateData::keys[s]=result;
+  }
+
+  return result;
+}
