@@ -186,6 +186,8 @@ libPixes_la_SOURCES=  \
     pix_rgba.h \
     pix_roll.cpp \
     pix_roll.h \
+    pix_roi.cpp \
+    pix_roi.h \
     pix_rtx.cpp \
     pix_rtx.h \
     pix_scanline.cpp \
