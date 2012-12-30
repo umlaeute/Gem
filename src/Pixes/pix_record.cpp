@@ -502,7 +502,7 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
 		  gensym("codec"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
-  CPPEXTERN_MSG (classPtr, "set", fileMess);
+  CPPEXTERN_MSG (classPtr, "set", setPropertiesMess);
 
   CPPEXTERN_MSG0(classPtr, "clearprops", clearPropertiesMess);
 }
