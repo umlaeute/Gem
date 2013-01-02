@@ -334,6 +334,18 @@
 				RelativePath="..\..\src\Gem\Properties.h">
 			</File>
 			<File
+				RelativePath="..\..\src\Gem\Rectangle.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\Rectangle.h">
+			</File>
+			<File
 				RelativePath="..\..\src\Gem\RTE.h">
 			</File>
 			<File
@@ -1621,6 +1633,12 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_rgba.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_roi.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_roi.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_roll.cpp">
