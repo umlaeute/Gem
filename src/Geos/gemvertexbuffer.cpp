@@ -233,7 +233,7 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
     copyArray(tabname, vb, 1, offset*vb.stride);
 
   } else if (argc == vb.stride || argc == (vb.stride+1)) {
-    if(argc>vb.stride) {
+    if(((unsigned int)argc)>vb.stride) {
       if(A_FLOAT==argv[vb.stride].a_type)
         offset=atom_getfloat(argv+vb.stride);
       else
@@ -379,7 +379,7 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
   else if (!garray_getfloatwords(a, &npoints, &vec))
     error("%s: bad template for tabLink", tab_name.c_str());
 	else {
-    if(npoints>vb.size)
+    if(((unsigned int)npoints)>vb.size)
       npoints=vb.size;
 
 		//~ printf("start copying %d values\n",npoints);

@@ -233,7 +233,7 @@ void multimodel :: rescaleMess(bool state)
 /////////////////////////////////////////////////////////
 void multimodel :: render(GemState *state)
 {
-  if (0==m_loaders.size() || m_curModel<0 || m_curModel>=m_loaders.size())
+  if (0==m_loaders.size() || m_curModel<0 || ((unsigned int)m_curModel)>=m_loaders.size())
     return;
 
   if (state && (m_currentH != state->texCoordX(2) || m_currentW != state->texCoordY(2))) {
@@ -254,7 +254,7 @@ void multimodel :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void multimodel :: changeModel(int modelNum)
 {
-  if (modelNum < 0 || modelNum >= m_loaders.size()) {
+  if (modelNum < 0 || ((unsigned int)modelNum) >= m_loaders.size()) {
     error("selection %d out of range: 0..%d", modelNum, m_loaders.size()-1);
     return;
   }

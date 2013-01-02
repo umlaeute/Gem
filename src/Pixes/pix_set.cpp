@@ -112,7 +112,7 @@ void pix_set :: postrender(GemState *state)
 void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
 {
    int picturesize, counter, n;
-   int i = 0, j;
+   int i = 0;
    unsigned char *buffer;
 
    pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
