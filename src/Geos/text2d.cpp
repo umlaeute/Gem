@@ -33,9 +33,8 @@ CPPEXTERN_NEW_WITH_GIMME(text2d);
 //
 /////////////////////////////////////////////////////////
 #ifdef FTGL
-
 text2d :: text2d(int argc, t_atom *argv)
-  : TextBase(0,NULL), m_antialias(1), m_afont(NULL)
+  : TextBase(argc,argv), m_antialias(1), m_afont(NULL)
 {
   fontNameMess(DEFAULT_FONT);
 }
