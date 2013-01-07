@@ -278,6 +278,7 @@ GEM_CHECK_LIB([tiff], [tiff], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg], [jpeg_read_header],,,,[image loader])
 
 IEM_CHECK_FTGL()
+GEM_CHECK_LIB([fribidi], [fribidi],[fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
 
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay], [CreateIAviReadFile],,,,[movie loader])
