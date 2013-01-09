@@ -34,7 +34,7 @@ typedef unsigned __int8 uint8_t;
 # include <unistd.h>
 #endif
 
-#include "Utils/String.h"
+#include "Utils/GemString.h"
 
 std::string TextBase::DEFAULT_FONT = "vera.ttf";
 

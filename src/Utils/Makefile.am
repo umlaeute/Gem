@@ -33,7 +33,7 @@ libUtils_la_include_HEADERS = \
 	Matrix.h \
 	PixPete.h \
 	SIMD.h \
-	String.h \
+	GemString.h \
 	Vector.h 
 
 libUtils_la_include_HEADERS += \
@@ -70,8 +70,8 @@ libUtils_la_SOURCES=  \
 	WorkerThread.h \
 	SynchedWorkerThread.cpp \
 	SynchedWorkerThread.h \
-	String.cpp \
-	String.h \
+	GemString.cpp \
+	GemString.h \
 	Vector.cpp \
 	Vector.h
 

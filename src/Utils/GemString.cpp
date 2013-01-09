@@ -1,6 +1,6 @@
 #include "Gem/GemConfig.h"
 
-#include "String.h"
+#include "GemString.h"
 
 
 #ifdef _WIN32
