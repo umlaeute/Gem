@@ -155,6 +155,7 @@ dist_gemhelp_DATA = \
 	pix_resize-help.pd \
 	pix_rgb2hsv-help.pd \
 	pix_rgba-help.pd \
+	pix_roi-help.pd \
 	pix_roll-help.pd \
 	pix_rtx-help.pd \
 	pix_scanline-help.pd \
