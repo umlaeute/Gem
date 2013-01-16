@@ -448,6 +448,22 @@
 			<File
 				RelativePath="..\..\src\Gem\Rectangle.cpp"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\Gem\"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\Gem\"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\Rectangle.h"
