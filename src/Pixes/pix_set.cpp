@@ -241,9 +241,34 @@ void pix_set :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 {
-	int counter = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
-	unsigned char 	*buffer = m_pixBlock.image.data;
+	unsigned char 	*buffer;
 	unsigned char r,g,b,a;	
+	int i=0, picturesize;
+   
+   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
+
+   int roi_x1=0;
+   int roi_x2=pixels->image.xsize;
+   int roi_y1=0;
+   int roi_y2=pixels->image.ysize;
+   
+	if (!m_doROI){
+	  // if no ROI is set, set whole image black before setting pixels values
+	  pixels->image.setBlack();
+	  buffer = pixels->image.data;
+	  picturesize = pixels->image.xsize * pixels->image.ysize;
+
+   } else {
+     roi_x1=m_roi.x1*(0.5+pixels->image.xsize);
+     roi_x2=m_roi.x2*(0.5+pixels->image.xsize);
+     roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
+     roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
+
+	 buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+	 picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
+   }
+   
+   	int counter = picturesize;
 
 	switch (m_mode) {
 	  case GL_RGB:
@@ -263,7 +288,12 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 		  buffer[chGreen] = g; // green
 		  buffer[chBlue]  = b; // blue
 		  buffer[chAlpha] = a; // alpha
-		  buffer+=4;
+		if (m_doROI) {
+			i++;
+			buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+		  } else {
+			buffer+=4;
+		  }
 		}
 		break;
 	  case GL_LUMINANCE:
@@ -279,7 +309,12 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 		  buffer[chGreen] = g;
 		  buffer[chBlue] = b;
 		  buffer[chAlpha] = a;
-		  buffer+=4;
+		  if (m_doROI) {
+			i++;
+			buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+		  } else {
+			buffer+=4;
+		  }		
 		}
 		break;
 	  case GL_YCBCR_422_GEM:
@@ -302,8 +337,13 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 		  buffer[chGreen] = g; // green
 		  buffer[chBlue]  = b; // blue
 		  buffer[chAlpha] = a; // alpha
-      buffer+=4;
-		}
+		  if (m_doROI) {
+			i++;
+			buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+		  } else {
+			buffer+=4;
+		  }
+      }
 	}
 }
 
