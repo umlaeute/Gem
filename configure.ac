@@ -100,7 +100,6 @@ AC_SUBST(CXXCPP)
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
-AC_SUBST(INCLUDES)
 AC_SUBST(LIBS)
 
 AC_SUBST(CXXFLAGS)
@@ -666,7 +665,6 @@ Configuration:
   Compiler               : ${CXX}
   CXXFLAGS               : ${CXXFLAGS} ${X_CFLAGS}
 			 : ${PKG_CFLAGS}
-  INCLUDES               : ${INCLUDES}
   DEFINES		 : ${DEFINES}
 
   LIBS                   : ${LIBS}
