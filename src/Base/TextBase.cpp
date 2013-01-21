@@ -34,6 +34,8 @@ typedef unsigned __int8 uint8_t;
 # include <unistd.h>
 #endif
 
+#include "Utils/GemString.h"
+
 std::string TextBase::DEFAULT_FONT = "vera.ttf";
 
 /////////////////////////////////////////////////////////
@@ -310,73 +312,19 @@ void TextBase :: breakLine(wstring line)
     
     // if not found, we're done
     if(wstring::npos == pos)break;
+    wstring lin=line.substr(0,pos);
 
-    m_theText.push_back(line.substr(0,pos));
+    m_theText.push_back(gem::string::getVisualLine(lin));
     line=line.erase(0,pos+1);
   }
 
   // if there is still a text append it
-  if(line.length())
-    m_theText.push_back(line);
+  if(line.length()) {
+    //m_theText.push_back(line);
+    m_theText.push_back(gem::string::getVisualLine(line));
+  }
   makeLineDist();
   setModified();
-}
-
-static const uint8_t utf8d[] = {
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-
-  070,070,070,070,070,070,070,070,070,070,070,070,070,070,070,070,
-  050,050,050,050,050,050,050,050,050,050,050,050,050,050,050,050,
-  030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,
-  030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,030,
-  204,204,188,188,188,188,188,188,188,188,188,188,188,188,188,188,
-  188,188,188,188,188,188,188,188,188,188,188,188,188,188,188,188,
-  174,158,158,158,158,158,158,158,158,158,158,158,158,142,126,126,
-  111, 95, 95, 95, 79,207,207,207,207,207,207,207,207,207,207,207,
-
-  0,1,1,1,8,7,6,4,5,4,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,4,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,4,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,8,7,6,4,5,4,3,2,1,1,1,1,
-
-};
-
-static std::wstring toWstring(const char*str) throw(int){
-  std::wstring result;
-
-  wchar_t unic = 0;
-  uint8_t data, byte, stat = 9;
-
-  int len=0;
-
-  while((byte=*str++)) {
-    data = utf8d[ byte ];
-    stat = utf8d[ 256 + (stat << 4) + (data >> 4) ];
-    byte = (byte ^ (uint8_t)(data << 4));
-
-    unic = (unic << 6) | byte;
-
-    if (!stat) {
-      // unic is now a proper code point, we just print it out.
-      result+=unic;
-      unic = 0;
-    }
-
-    if (stat == 1) {
-      // the byte is not allowed here; the state would have to
-      // be reset to continue meaningful reading of the string
-
-      throw(len);
-    }
-
-    len++;
-  }
-
-  return result;
 }
 
 void TextBase :: textMess(int argc, t_atom *argv)
@@ -403,7 +351,7 @@ void TextBase :: textMess(int argc, t_atom *argv)
       } else {
         char*sp=atom_getsymbol(&argv[i])->s_name;
         try {
-          std::wstring ws=toWstring(sp);
+          std::wstring ws=gem::string::toWstring(sp);
           line+=ws;
         } catch (int i) {
             i=0;
@@ -497,7 +445,7 @@ void TextBase :: stringMess(int argc, t_atom *argv)
     }
     line += static_cast<wchar_t>(v);
   }
-  line += L'\0';
+  //line += L'\0';
 
   breakLine(line);
 }

@@ -25,7 +25,7 @@
 				FavorSizeOrSpeed="1"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\src&quot;;&quot;$(SolutionDir)\..\..\..\pure-data\pd\src&quot;;&quot;$(ProgramFiles)\pd\src&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\FTGL\include&quot;;&quot;$(SolutionDir)\..\..\..\GemLibs\freetype2\include\&quot;"
-				PreprocessorDefinitions="GEM_INTERNAL;GLEW_BUILD;__SSE2__;__MMX__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;NT;WIN32;_WINDOWS;__WIN32__;WIN32_LEAN_AND_MEAN"
+				PreprocessorDefinitions="GEM_INTERNAL;GLEW_BUILD;HAVE_LIBFTGL;FTGL_LIBRARY_STATIC;__SSE2__;__MMX__;NDEBUG;_LANGUAGE_C_PLUS_PLUS;NT;WIN32;_WINDOWS;__WIN32__;WIN32_LEAN_AND_MEAN"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="TRUE"
@@ -332,6 +332,18 @@
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\Properties.h">
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\Rectangle.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\src\Gem\Rectangle.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Gem\RTE.h">
@@ -1621,6 +1633,12 @@
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_rgba.h">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_roi.cpp">
+				</File>
+				<File
+					RelativePath="..\..\src\Pixes\pix_roi.h">
 				</File>
 				<File
 					RelativePath="..\..\src\Pixes\pix_roll.cpp">

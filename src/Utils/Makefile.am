@@ -18,6 +18,12 @@ libUtils_la_LIBADD   += @GEM_RTE_LIBS@
 libUtils_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 
+# BiDirectional text output
+libUtils_la_CXXFLAGS += @GEM_LIB_FRIBIDI_CFLAGS@
+libUtils_la_LIBADD   += @GEM_LIB_FRIBIDI_LIBS@
+
+
+
 libUtils_la_includedir = $(includedir)/Gem/Utils
 libUtils_la_include_HEADERS = \
 	any.h \
@@ -27,6 +33,7 @@ libUtils_la_include_HEADERS = \
 	Matrix.h \
 	PixPete.h \
 	SIMD.h \
+	GemString.h \
 	Vector.h 
 
 libUtils_la_include_HEADERS += \
@@ -63,6 +70,8 @@ libUtils_la_SOURCES=  \
 	WorkerThread.h \
 	SynchedWorkerThread.cpp \
 	SynchedWorkerThread.h \
+	GemString.cpp \
+	GemString.h \
 	Vector.cpp \
 	Vector.h
 

@@ -100,7 +100,6 @@ AC_SUBST(CXXCPP)
 AC_SUBST(CXX)
 AC_SUBST(GEM_TARGETS)
 AC_SUBST(EXT)
-AC_SUBST(INCLUDES)
 AC_SUBST(LIBS)
 
 AC_SUBST(CXXFLAGS)
@@ -278,6 +277,7 @@ GEM_CHECK_LIB([tiff], [tiff], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg], [jpeg_read_header],,,,[image loader])
 
 IEM_CHECK_FTGL()
+GEM_CHECK_LIB([fribidi], [fribidi],[fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
 
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay], [CreateIAviReadFile],,,,[movie loader])
@@ -665,7 +665,6 @@ Configuration:
   Compiler               : ${CXX}
   CXXFLAGS               : ${CXXFLAGS} ${X_CFLAGS}
 			 : ${PKG_CFLAGS}
-  INCLUDES               : ${INCLUDES}
   DEFINES		 : ${DEFINES}
 
   LIBS                   : ${LIBS}

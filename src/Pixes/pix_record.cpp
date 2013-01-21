@@ -410,7 +410,7 @@ void pix_record :: codecMess(t_atom *argv)
   } else if (A_FLOAT==argv->a_type) {
     int id=atom_getint(argv);
     std::vector<std::string>codecs=m_handle->getCodecs();
-    if(id>0 && id<codecs.size())
+    if(id>0 && ((unsigned int)id)<codecs.size())
       sid=codecs[id];
     else {
       error("invalid codec# %d (0..%d)", id, codecs.size());
@@ -455,8 +455,10 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
 		  gensym("codec"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
-  CPPEXTERN_MSG (classPtr, "set", fileMess);
+  CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertiesMess);
+  CPPEXTERN_MSG (classPtr, "set", setPropertiesMess);
 
+  CPPEXTERN_MSG0(classPtr, "clearProps", clearPropertiesMess);
   CPPEXTERN_MSG0(classPtr, "clearprops", clearPropertiesMess);
 }
 
