@@ -36,7 +36,7 @@ namespace gem { namespace plugins {
       m_handle(gem::plugins::imageloader::getInstance())
     {
       if(!m_handle)
-	throw(GemException("no 'image' backends"));
+        throw(GemException("no 'image' backends"));
     }
 
     virtual ~filmIMAGE(void) {
@@ -61,10 +61,10 @@ namespace gem { namespace plugins {
     virtual bool isThreadable(void) { return false; }
 
     virtual bool enumProperties(gem::Properties&readable,
-				gem::Properties&writeable) {
+                                gem::Properties&writeable) {
       writeable.clear();
       readable.clear();
-	  return false;
+      return false;
     }
     virtual void setProperties(gem::Properties&props) {
     }
@@ -72,11 +72,11 @@ namespace gem { namespace plugins {
       std::vector<std::string>keys=props.keys();
       unsigned int i=0;
       for(i=0; i<keys.size(); i++) {
-	std::string key=keys[i];
-	props.erase(key);
-	if("frames"==key) {double d=1; props.set(key, d); post("frames...");}
-	if("width"==key)  {double d=m_image.image.xsize; props.set(key, d); }
-	if("height"==key) {double d=m_image.image.ysize; props.set(key, d); }
+        std::string key=keys[i];
+        props.erase(key);
+        if("frames"==key) {double d=1; props.set(key, d); post("frames...");}
+        if("width"==key)  {double d=m_image.image.xsize; props.set(key, d); }
+        if("height"==key) {double d=m_image.image.ysize; props.set(key, d); }
       }
     }
     
@@ -142,7 +142,7 @@ namespace gem { namespace plugins {
       std::vector<std::string>ids=gem::PluginFactory<gem::plugins::film>::getIDs();
 
       if(!addPlugin(ids, "DirectShow"))
-	addPlugin(ids, "AVI");
+        addPlugin(ids, "AVI");
 
       addPlugin(ids, "gmerlin");
       addPlugin(ids, "QuickTime");
@@ -154,17 +154,17 @@ namespace gem { namespace plugins {
 
       unsigned int i;
       for(i=0; i<m_handles.size(); i++) {
-	if(!m_handles[i]->isThreadable()) {
-	  m_canThread=false;
-	  break;
-	}
+        if(!m_handles[i]->isThreadable()) {
+          m_canThread=false;
+          break;
+        }
       }
       try {
-	gem::plugins::film*filmImage=new filmIMAGE();
-	if(NULL!=filmImage) {
-	  m_handles.push_back(filmImage);
-	  m_ids.push_back("image");
-	}
+        gem::plugins::film*filmImage=new filmIMAGE();
+        if(NULL!=filmImage) {
+          m_handles.push_back(filmImage);
+          m_ids.push_back("image");
+        }
       } catch (GemException&) {
 
       }
@@ -183,62 +183,62 @@ namespace gem { namespace plugins {
 
       std::string ids;
       if(requestprops.type("backends")!=gem::Properties::UNSET) {
-	requestprops.get("backends", ids);
+        requestprops.get("backends", ids);
       }
       //      requestprops.erase("backends");
 
 
       if(!ids.empty()) {
-	// LATER: allow multiple IDs to be passed via 'backend'
-	unsigned int i=0;
-	for(i=0; i<m_handles.size(); i++) {
-	  if(ids==m_ids[i] && m_handles[i]->open(name, requestprops)) {
-	    m_handle=m_handles[i];
-	  }
-	}
+        // LATER: allow multiple IDs to be passed via 'backend'
+        unsigned int i=0;
+        for(i=0; i<m_handles.size(); i++) {
+          if(ids==m_ids[i] && m_handles[i]->open(name, requestprops)) {
+            m_handle=m_handles[i];
+          }
+        }
       }
       if(!m_handle) {
-	unsigned int i=0;
-	for(i=0; i<m_handles.size(); i++) {
-	  if(m_handles[i] && m_handles[i]->open(name, requestprops)) {
-	    m_handle=m_handles[i];
-	    break;
-	  } else {
+        unsigned int i=0;
+        for(i=0; i<m_handles.size(); i++) {
+          if(m_handles[i] && m_handles[i]->open(name, requestprops)) {
+            m_handle=m_handles[i];
+            break;
+          } else {
 
-	  }
-	}
+          }
+        }
       }
       return (NULL!=m_handle);
     }
 
     virtual errCode changeImage(int imgNum, int trackNum=-1){
       if(m_handle)
-	return m_handle->changeImage(imgNum, trackNum);
+        return m_handle->changeImage(imgNum, trackNum);
 
       return FAILURE;
     }
 
     virtual pixBlock* getFrame(void) {
       if(m_handle)
-	return m_handle->getFrame();
+        return m_handle->getFrame();
       return NULL;
     }
 
     virtual void close(void)  {
       if(m_handle)
-	m_handle->close();
+        m_handle->close();
       m_handle=NULL;
     }
 
     virtual bool isThreadable(void) {
       if(m_handle)
-	return m_handle->isThreadable();
+        return m_handle->isThreadable();
 
       return m_canThread;
     }
 
     virtual bool enumProperties(gem::Properties&readable,
-				gem::Properties&writeable) {
+                                gem::Properties&writeable) {
       // LATER: shouldn't we merge properties of all handles?
       //      post("enumProperties stub");
 #ifdef __GNUC__
@@ -249,34 +249,34 @@ namespace gem { namespace plugins {
       writeable.clear();
 
       if(m_handle)
-	return m_handle->enumProperties(readable, writeable);
+        return m_handle->enumProperties(readable, writeable);
 
       return false;
     }
 
     virtual void setProperties(gem::Properties&props) {
       if(m_handle)
-	m_handle->setProperties(props);
+        m_handle->setProperties(props);
     }
     virtual void getProperties(gem::Properties&props) {
       std::string ids;
       if(props.type("backends")!=gem::Properties::UNSET) {
-	unsigned int i;
-	for(i=0; i<m_ids.size(); i++) {
-	  if(!ids.empty())
-	    ids+=" ";
-	  ids=ids+m_ids[i];
-	}
+        unsigned int i;
+        for(i=0; i<m_ids.size(); i++) {
+          if(!ids.empty())
+            ids+=" ";
+          ids=ids+m_ids[i];
+        }
       }
       props.erase("backends");
 
       if(m_handle)
-	m_handle->getProperties(props);
+        m_handle->getProperties(props);
       else
-	props.clear();
+        props.clear();
 
       if(!ids.empty()) {
-	props.set("backends", ids);
+        props.set("backends", ids);
       }
     }
   };
