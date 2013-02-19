@@ -1,9 +1,9 @@
-#N canvas 180 169 724 565 10;
+#N canvas 28 88 704 601 10;
 #X text 452 8 GEM object;
-#X obj 9 272 cnv 15 430 280 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 9 272 cnv 15 430 320 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 40 274 Inlets:;
-#X text 39 441 Outlets:;
+#X text 39 461 Outlets:;
 #X obj 9 239 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 18 238 Arguments:;
@@ -38,47 +38,47 @@
 #X obj 451 88 cnv 15 155 250 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 63 gemhead;
-#X text 17 455 Outlet 1: gemlist;
-#X text 24 288 Inlet 1: gemlist;
+#X text 17 477 Outlet 1: gemlist;
+#X text 18 288 Inlet 1: gemlist;
 #X obj 451 360 pix_texture;
-#X obj 463 93 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 463 90 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #X text 505 57 open a supported;
 #X text 506 68 movie-clip;
 #X floatatom 466 312 5 0 0 3 length - -;
 #X floatatom 514 312 5 0 0 3 width - -;
 #X floatatom 565 312 5 0 0 3 height - -;
-#X obj 512 250 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X obj 514 251 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
-#X floatatom 502 233 5 0 10000 1 frameNum - -;
+#X floatatom 504 233 5 0 10000 1 frameNum - -;
 #X text 71 31 Class: pix object (pix source);
 #X text 29 57 Description: load in a movie-file;
-#X obj 463 122 openpanel;
-#X msg 463 142 open \$1;
+#X obj 463 117 openpanel;
+#X msg 463 136 open \$1;
 #X obj 451 382 rectangle 4 3;
 #X text 50 12 Synopsis: [pix_film];
 #X text 15 78 [pix_film] loads in a preproducecd digital-video to be
 used aas a texture \, bitblit or something else.;
 #X text 64 249 symbol: file to load initially;
-#X text 24 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
+#X text 18 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
 the movie <filename> and decodes it into the specified color-space.
 ;
-#X text 24 346 Inlet 1: message: colorspace "RGBA|YUV|Grey": decodes
+#X text 18 346 Inlet 1: message: colorspace "RGBA|YUV|Grey": decodes
 the current film into the specified colorspace.;
-#X text 24 375 Inlet 1: message : auto 1|0 : starts/stops automatic
+#X text 18 375 Inlet 1: message : auto 1|0 : starts/stops automatic
 playback.;
-#X text 22 407 Inlet 2: float: <frame#> changes the frame to be decoded
+#X text 16 429 Inlet 2: float: <frame#> changes the frame to be decoded
 on rendering.;
-#X text 17 524 Outlet 3: bang: indicates that the last frame has been
+#X text 17 550 Outlet 3: bang: indicates that the last frame has been
 reached. (or: an illegal frame would have been decoded);
-#X msg 469 185 auto \$1;
-#X obj 469 167 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X msg 469 174 auto \$1;
+#X obj 469 156 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 480 209 colorspace Grey;
+#X msg 480 193 colorspace Grey;
 #X text 13 104 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
 the movie should be decoded (RGBA \, YUV or Grey).;
-#X text 17 471 Outlet 2: list: <length> <width> <height> <fps>: gets
+#X text 17 494 Outlet 2: list: <length> <width> <height> <fps>: gets
 the dimensions (in frames and pixels) of a film when it gets loaded.
 if length is not available (video-streams) -1 is returned.;
 #X text 14 144 Normally \, you will only get one specified (via the
@@ -87,7 +87,7 @@ you have to change the frame accordingly \, OR use the "auto" message
 \, to automatically proceed to the next frame each rendering-cycle.
 In auto-mode \, the film is NOT looped. Instead you can reset the current-frame
 to zero when the end of the film is reached.;
-#N canvas 17 82 928 614 :: 0;
+#N canvas 18 78 928 614 :: 0;
 #X text 24 16 the format [pix_film] is able to decode depends on the
 system you are running Gem.;
 #X text 33 52 basically Gem's decoding capabailities are handled by
@@ -156,6 +156,9 @@ for OS-X only;
 #X obj 473 275 unpack 0 0 0 0;
 #X floatatom 581 276 5 0 0 3 fps - -;
 #X obj 451 251 pix_film;
+#X msg 486 212 driver foo;
+#X text 17 401 Inlet 1: message : driver <name>: open the film using
+only the specified backend(s);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 48 0;
@@ -174,3 +177,4 @@ for OS-X only;
 #X connect 48 0 17 0;
 #X connect 48 1 46 0;
 #X connect 48 2 24 0;
+#X connect 49 0 48 0;
