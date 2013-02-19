@@ -277,7 +277,7 @@ void gemglutwindow :: destroyMess(void)
 
     int window=m_window;
     m_window=0; // so that we no longer receive any event
-    glutWMCloseFunc     (NULL);
+    glutCloseFunc     (NULL);
     glutDestroyWindow(window);
     glutMainLoopEvent();
     glutMainLoopEvent();
