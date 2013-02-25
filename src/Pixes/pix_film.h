@@ -87,8 +87,17 @@ class GEM_EXTERN pix_film : public GemBase
   // turn on/off threaded reading
   virtual void threadMess(int);
 
-
+  //////////
+  // automatic frame increment
   virtual void autoMess(double state);
+
+  //////////
+  // which backend to use (exclusively)
+  std::vector<std::string>m_backends;
+  virtual void backendMess(t_symbol*,int,t_atom*);
+  virtual void backendMess(const std::string&);
+  virtual void backendMess(int);
+
 
 
   //-----------------------------------

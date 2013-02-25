@@ -33,7 +33,7 @@
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
 #X restore 599 469 pd gemwin;
-#X msg 599 450 destroy;
+#X msg 599 450 create;
 #X text 595 429 Create window:;
 #X obj 451 78 cnv 15 155 200 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -44,11 +44,11 @@
 -1;
 #X text 505 47 open a supported;
 #X text 506 58 movie-clip;
-#X obj 480 367 unpack 0 0 0;
+#X obj 471 367 unpack 0 0 0 0;
 #X floatatom 466 390 5 0 0 3 length - -;
 #X floatatom 515 390 5 0 0 3 width - -;
 #X floatatom 565 390 5 0 0 3 height - -;
-#X obj 520 348 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X obj 530 348 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
 #X text 71 21 Class: pix object (pix source);
 #X text 29 47 Description: load in a movie-file;
@@ -67,9 +67,9 @@ reached;
 #X text 13 94 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
 the movie should be decoded (RGBA \, YUV or Grey).;
-#X text 17 507 Outlet 2: list: <length> <width> <height>: gets the
-dimensions (in fps and pixels) of a film when it gets loaded. if length
-is not available (video-streams) -1 is returned.;
+#X text 17 507 Outlet 2: list: <length> <width> <height> <fps>: gets
+the dimensions (in frames and pixels) of a film when it gets loaded.
+if length is not available (video-streams) -1 is returned.;
 #X text 14 134 Normally \, you will only get one specified (via the
 second inlet) frame of the film \, To play back a complete film \,
 you have to change the frame accordingly \, OR use the "auto" message
@@ -131,6 +131,7 @@ is a combination of [pix_film] and [pix_texture];
 #X text 23 419 Inlet 1: rectangle 0|1 : use rectangle-texturing when
 available (default=1);
 #X msg 513 256 rectangle \$1;
+#X floatatom 615 390 5 0 0 3 fps - -;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 41 0;
@@ -138,6 +139,7 @@ available (default=1);
 #X connect 20 0 21 0;
 #X connect 20 1 22 0;
 #X connect 20 2 23 0;
+#X connect 20 3 59 0;
 #X connect 27 0 28 0;
 #X connect 28 0 41 0;
 #X connect 33 0 41 0;

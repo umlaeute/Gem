@@ -206,14 +206,13 @@ pix_film :: pix_film(t_symbol *filename) :
 
 
   if(m_handle) {
-    std::string backends;
     gem::Properties props;
     gem::any value;
-    value=backends;
+    value=m_ids;
     props.set("backends", value);
     m_handle->getProperties(props);
-    if(props.get("backends", backends)) {
-      m_ids=split(backends, ' ', m_ids);
+    if(props.get("backends", m_ids)) {
+      //
     }
   }
   unsigned int i;
@@ -297,7 +296,7 @@ void pix_film :: openMess(std::string filename, int format, unsigned int backend
 void pix_film :: openMess(std::string filename, int format, std::string backend)
 {
   gem::Properties wantProps, gotProps;
-
+  std::vector<std::string>backends;
   closeMess();
 
   char buff[MAXPDSTRING];
@@ -321,7 +320,12 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
   }
 
   if(!backend.empty()) {
-    wantProps.set("backends", backend);
+    // FIXXME: check whether using vector<string> works on all platforms
+    std::vector<std::string>backends;
+    backends.push_back(backend);
+    wantProps.set("backends", backends);
+  } else if (!m_backends.empty()) {
+    wantProps.set("backends", m_backends);
   }
 
   if(!m_handle->open(fname, wantProps)) {
@@ -540,8 +544,29 @@ void pix_film :: autoMess(double speed)
     m_handle->setProperties(props);
 }
 
+void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
+{
+  int i;
+  m_backends.clear();
+  for(i=0; i<argc; i++) {
+    t_symbol *b=atom_getsymbol(argv+i);
+    m_backends.push_back(b->s_name);
+  }
+}
 
+void pix_film :: backendMess(const std::string&backend)
+{
+  m_backends.clear();
+  m_backends.push_back(backend);
+}
 
+void pix_film :: backendMess(int backendNum)
+{
+  std::string backend;
+  if(backendNum>=0 && m_ids.size()>0)
+    backend=m_ids[backendNum%m_ids.size()];
+  backendMess(backend);
+}
 
 /////////////////////////////////////////////////////////
 // static member function
@@ -566,6 +591,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
   CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
+  CPPEXTERN_MSG (classPtr, "driver", backendMess);
 }
 void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {
