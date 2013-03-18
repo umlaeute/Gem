@@ -101,6 +101,7 @@ pix_share_write :: pix_share_write(int argc, t_atom*argv)
     throw(GemException("unknown error"));
     break;
   }
+  m_outlet = outlet_new(this->x_obj,0);
 }
 
 pix_share_write :: ~pix_share_write()
@@ -277,6 +278,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
          shm_id,shm_desc.shm_segsz,shm_desc.shm_cpid, shm_addr);
   } else {
     error("couldn't get shm_id: error %d", errno);
+    return -1; // AV : added because i'm usure of what value is returned when we get this error...
   }
 #endif /* _WIN32 */
   return 0;
@@ -332,6 +334,9 @@ void pix_share_write :: setMessCallback(void *data, t_symbol *s, int argc, t_ato
     //GetMyClass(data)->freeShm();
     err = GetMyClass(data)->getShm(argc, argv);
     if(err)GetMyClass(data)->error("couldn't get new shared memory block! %d", err);
+    t_atom atom;
+    SETFLOAT(&atom, (t_float) err);
+    outlet_anything(GetMyClass(data)->m_outlet, gensym("error"), 1, &atom);
   } else
     GetMyClass(data)->error("no args given!");
 }

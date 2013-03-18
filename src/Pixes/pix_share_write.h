@@ -32,7 +32,7 @@ class GEM_EXTERN pix_share_write : public GemBase
   struct shmid_ds shm_desc;
 #endif
   size_t m_size;
-
+  t_outlet *m_outlet;
   static void 	setMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 
 };
