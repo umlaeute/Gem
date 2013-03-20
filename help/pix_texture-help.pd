@@ -1,18 +1,18 @@
-#N canvas 1003 189 647 643 10;
+#N canvas 1042 113 647 818 10;
 #X text 452 8 GEM object;
-#X obj 8 392 cnv 15 430 245 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 392 cnv 15 430 380 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 19 394 Inlets:;
-#X text 22 575 Outlets:;
+#X text 22 695 Outlets:;
 #X obj 8 352 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 351 Arguments:;
 #X obj 8 56 cnv 15 430 285 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 170 450 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 77 cnv 15 170 600 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
-#X obj 515 462 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 515 572 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -36,10 +36,10 @@
 #X connect 7 0 0 0;
 #X connect 8 0 0 0;
 #X connect 9 0 0 0;
-#X restore 520 501 pd gemwin;
-#X msg 520 482 create;
-#X text 516 461 Create window:;
-#X obj 455 266 cnv 15 160 160 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 520 611 pd gemwin;
+#X msg 520 592 create;
+#X text 516 571 Create window:;
+#X obj 455 276 cnv 15 160 265 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
@@ -61,11 +61,11 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
-#X obj 454 437 pix_texture;
+#X obj 454 547 pix_texture;
 #X text 63 362 <none>;
-#X text 57 592 Outlet 1: gemlist;
+#X text 57 712 Outlet 1: gemlist;
 #X text 33 408 Inlet 1: gemlist;
-#X obj 452 461 square 3;
+#X obj 452 571 square 3;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
 #X text 50 12 Synopsis: [pix_texture];
@@ -73,8 +73,8 @@
 #X text 16 79 enables texture mapping with the current pix. Whatever
 pix values are in the network currently will be used (ie \, all processing
 after the pix_texture will not have any effect).;
-#X msg 461 341 quality \$1;
-#X obj 461 322 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X msg 461 451 quality \$1;
+#X obj 461 432 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 33 423 Inlet 1: 0|1 turn texturing On/off;
 #X text 33 437 Inlet 1: quality 0|1 : GL_NEAREST | GL_LINEAR(default)
@@ -85,23 +85,23 @@ computationally expensive). However \, on many machines (especially
 SGIs) \, there is no speed difference.;
 #X text 14 233 [pix_texture] is able to texture images of ANY size
 (even non-power of 2);
-#X obj 542 362 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 542 472 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 542 381 rectangle \$1;
-#X obj 469 387 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X msg 542 491 rectangle \$1;
+#X obj 469 497 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X obj 542 322 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 542 432 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 469 406 client_storage \$1;
-#X msg 542 341 repeat \$1;
+#X msg 469 516 client_storage \$1;
+#X msg 542 451 repeat \$1;
 #X text 33 453 Inlet 1: repeat 0|1 : CLAMP_TO_EDGE or REPEAT(default)
 ;
 #X text 32 470 Inlet 1: rectangle 0|1 : use rectangle-texturing when
 available (default=1);
 #X text 32 498 Inlet 1: client_storage 0|1 : use client-storage when
 available (default=1);
-#X msg 493 297 env \$1;
-#X obj 494 277 hradio 15 1 0 6 empty empty empty 0 -6 0 8 -262144 -1
+#X msg 493 407 env \$1;
+#X obj 493 387 hradio 15 1 0 6 empty empty empty 0 -6 0 8 -262144 -1
 -1 0;
 #X obj 472 222 pack 0 0 1;
 #X obj 452 243 color 0 0.5 0;
@@ -128,8 +128,23 @@ Some modes allow mixing with fragment colors (BLEND \, ADD \, COMBINE
 \, MODULATE) \, while REPLACE and DECAL ignore the current fragment/texture
 color.;
 #X text 457 149 set base fragment color;
-#X text 57 609 Outlet 2: <texture ID> <tex width> <tex height> <tex
-type> <upsidedown flag>;
+#X text 57 730 Outlet 2: texture info : <id> <width> <height> <type>
+<upsidedown flag>;
+#X text 32 576 Inlet 1: message: texunit <f>;
+#X text 112 611 (usefull only with shader);
+#X text 112 594 (change texunit of the texture);
+#X floatatom 463 286 5 0 0 0 - - -;
+#X msg 463 305 texunit \$1;
+#X text 32 668 Inlet 1: message: mode (deprecated use rectangle instead)
+;
+#X obj 473 331 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 473 351 yuv \$1;
+#X text 32 626 Inlet 1: message: yuv : enable/disable yuv mode;
+#X text 32 646 Inlet 1: message: pbo : change pixel buffer object number
+;
+#X floatatom 537 332 5 0 0 0 - - -;
+#X msg 537 351 pbo \$1;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
@@ -155,3 +170,9 @@ type> <upsidedown flag>;
 #X connect 49 1 45 2;
 #X connect 50 0 49 0;
 #X connect 51 0 45 0;
+#X connect 62 0 63 0;
+#X connect 63 0 18 0;
+#X connect 65 0 66 0;
+#X connect 66 0 18 0;
+#X connect 69 0 70 0;
+#X connect 70 0 18 0;
