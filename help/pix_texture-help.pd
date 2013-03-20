@@ -1,6 +1,6 @@
-#N canvas 536 22 647 648 10;
+#N canvas 1003 189 647 643 10;
 #X text 452 8 GEM object;
-#X obj 8 392 cnv 15 430 235 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 392 cnv 15 430 245 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 19 394 Inlets:;
 #X text 22 575 Outlets:;
@@ -14,7 +14,7 @@
 #X text 453 60 Example:;
 #X obj 515 462 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 22 450 300 gemwin 0;
+#N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -45,7 +45,7 @@
 #X text 71 31 Class: pix object;
 #X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
-#N canvas 0 22 587 366 image 0;
+#N canvas 0 50 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
 #X obj 77 205 pix_image examples/data/fractal.JPG;
@@ -96,29 +96,28 @@ SGIs) \, there is no speed difference.;
 #X msg 542 341 repeat \$1;
 #X text 33 453 Inlet 1: repeat 0|1 : CLAMP_TO_EDGE or REPEAT(default)
 ;
-#X text 32 470 Inlet 1: rectangle 0|1 : use rectangle-texturing when available
-(default=1);
+#X text 32 470 Inlet 1: rectangle 0|1 : use rectangle-texturing when
+available (default=1);
 #X text 32 498 Inlet 1: client_storage 0|1 : use client-storage when
 available (default=1);
 #X msg 493 297 env \$1;
 #X obj 494 277 hradio 15 1 0 6 empty empty empty 0 -6 0 8 -262144 -1
--1 5;
+-1 0;
 #X obj 472 222 pack 0 0 1;
 #X obj 452 243 color 0 0.5 0;
 #X obj 498 196 t b f;
 #X obj 499 177 nbx 3 14 0 1 0 0 empty empty green 0 -6 0 10 -262144
--1 -1 1 256;
+-1 -1 0 256;
 #X obj 540 196 t b f;
 #X obj 541 177 nbx 3 14 0 1 0 0 empty empty blue 0 -6 0 10 -262144
--1 -1 1 256;
+-1 -1 0 256;
 #X obj 458 196 nbx 3 14 0 1 0 0 empty empty red 0 -6 0 10 -262144 -1
--1 1 256;
-#X text 57 608 Outlet 2: texture ID;
+-1 0 256;
 #X text 14 262 [pix_texture] tries to use the fastest way to get a
 pix onto a texture. This implies using "rectangle"-texturing if available.
 This \, in turn \, can lead to some problems with several geos. Try
-using "rectangle 0" if you experience problems. Rectangle textures cannot
-be REPEATed (they are always clamped-to-edge);
+using "rectangle 0" if you experience problems. Rectangle textures
+cannot be REPEATed (they are always clamped-to-edge);
 #X text 32 526 Inlet 1: env 0|1|2|3|4|5 : texture environment mode
 ;
 #X text 57 541 0=GL_REPLACE \, 1=GL_DECAL \, 2=GL_BLEND \, 3=GL_ADD
@@ -129,6 +128,8 @@ Some modes allow mixing with fragment colors (BLEND \, ADD \, COMBINE
 \, MODULATE) \, while REPLACE and DECAL ignore the current fragment/texture
 color.;
 #X text 457 149 set base fragment color;
+#X text 57 609 Outlet 2: <texture ID> <tex width> <tex height> <tex
+type> <upsidedown flag>;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
