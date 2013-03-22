@@ -174,6 +174,7 @@ dist_gemhelp_DATA = \
 	pix_videoDS-help.pd \
 	pix_video-help.pd \
 	pix_write-help.pd \
+	pix_writer-help.pd \
 	pix_yuv-help.pd \
 	pix_zoom-help.pd \
 	polygon-help.pd \
