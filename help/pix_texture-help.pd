@@ -1,9 +1,9 @@
-#N canvas 1042 113 647 818 10;
+#N canvas 43 49 647 715 10;
 #X text 452 8 GEM object;
-#X obj 8 392 cnv 15 430 380 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 392 cnv 15 430 360 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 19 394 Inlets:;
-#X text 22 695 Outlets:;
+#X text 22 665 Outlets:;
 #X obj 8 352 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 351 Arguments:;
@@ -63,7 +63,7 @@
 #X restore 451 113 pd image;
 #X obj 454 547 pix_texture;
 #X text 63 362 <none>;
-#X text 57 712 Outlet 1: gemlist;
+#X text 57 682 Outlet 1: gemlist;
 #X text 33 408 Inlet 1: gemlist;
 #X obj 452 571 square 3;
 #X text 516 105 open an image;
@@ -96,9 +96,9 @@ SGIs) \, there is no speed difference.;
 #X msg 542 451 repeat \$1;
 #X text 33 453 Inlet 1: repeat 0|1 : CLAMP_TO_EDGE or REPEAT(default)
 ;
-#X text 32 470 Inlet 1: rectangle 0|1 : use rectangle-texturing when
+#X text 32 470 Inlet 1: rectangle 0|1 : use rectangle-texturing if
 available (default=1);
-#X text 32 498 Inlet 1: client_storage 0|1 : use client-storage when
+#X text 32 498 Inlet 1: client_storage 0|1 : use client-storage if
 available (default=1);
 #X msg 493 407 env \$1;
 #X obj 493 387 hradio 15 1 0 6 empty empty empty 0 -6 0 8 -262144 -1
@@ -128,23 +128,21 @@ Some modes allow mixing with fragment colors (BLEND \, ADD \, COMBINE
 \, MODULATE) \, while REPLACE and DECAL ignore the current fragment/texture
 color.;
 #X text 457 149 set base fragment color;
-#X text 57 730 Outlet 2: texture info : <id> <width> <height> <type>
+#X text 57 700 Outlet 2: texture info : <id> <width> <height> <type>
 <upsidedown flag>;
 #X text 32 576 Inlet 1: message: texunit <f>;
 #X text 112 611 (usefull only with shader);
 #X text 112 594 (change texunit of the texture);
 #X floatatom 463 286 5 0 0 0 - - -;
 #X msg 463 305 texunit \$1;
-#X text 32 668 Inlet 1: message: mode (deprecated use rectangle instead)
-;
 #X obj 473 331 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X msg 473 351 yuv \$1;
-#X text 32 626 Inlet 1: message: yuv : enable/disable yuv mode;
 #X text 32 646 Inlet 1: message: pbo : change pixel buffer object number
 ;
 #X floatatom 537 332 5 0 0 0 - - -;
 #X msg 537 351 pbo \$1;
+#X text 32 626 Inlet 1: message: yuv : use native YUV-mode if available (default: 1);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
@@ -172,7 +170,7 @@ color.;
 #X connect 51 0 45 0;
 #X connect 62 0 63 0;
 #X connect 63 0 18 0;
-#X connect 65 0 66 0;
-#X connect 66 0 18 0;
-#X connect 69 0 70 0;
-#X connect 70 0 18 0;
+#X connect 64 0 65 0;
+#X connect 65 0 18 0;
+#X connect 67 0 68 0;
+#X connect 68 0 18 0;
