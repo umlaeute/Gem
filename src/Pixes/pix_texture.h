@@ -83,7 +83,7 @@ class GEM_EXTERN pix_texture : public GemBase
   //////////
   // Set up the texture state
   void		setUpTextureState(void);
-  void setTexFilters(void);
+  void setTexFilters(bool);
   void pushTexCoords(GemState*);
   void popTexCoords(GemState*);
 

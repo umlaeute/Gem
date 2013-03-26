@@ -137,14 +137,14 @@ void pix_texture :: setUpTextureState() {
   } else
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
 
-  setTexFilters();
+  setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap));
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
 }
 
-void pix_texture :: setTexFilters() {
+void pix_texture :: setTexFilters(bool mipmap) {
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureMagQuality);
-  if (m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap)) {
+  if (mipmap) {
     glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureMinQuality);
   } else {
     glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -212,6 +212,8 @@ bool pix_texture :: isRunnable(void) {
       m_canRectangle=1;
   }
 
+  m_canMipmap=(GLEW_ARB_framebuffer_object!=0);
+
   return true;
 }
 
@@ -257,6 +259,7 @@ void pix_texture :: render(GemState *state) {
 
   bool upsidedown=false;
   bool normalized=true;
+  bool canMipmap=m_canMipMap;
 
   int texType = m_textureType;
   int x_2=1, y_2=1;
@@ -310,19 +313,18 @@ void pix_texture :: render(GemState *state) {
       m_textureType = GL_TEXTURE_RECTANGLE_ARB;
       debug("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
       normalized = 0;
-      m_canMipmap = false;
+      canMipmap = false;
       break;
     case 1:
       m_textureType = GL_TEXTURE_RECTANGLE_EXT;
       debug("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
       normalized = 0;
-      m_canMipmap = false;
+      canMipmap = false;
       break;
     default:
       m_textureType = GL_TEXTURE_2D;
       debug("using mode 0:GL_TEXTURE_2D");
       normalized = 0;
-      m_canMipmap = true;
       break;
     }
 
@@ -546,11 +548,11 @@ void pix_texture :: render(GemState *state) {
     }
   } // rebuildlist
 
-  if (m_wantMipmap && m_canMipmap && !m_hasMipmap) {
+  if (m_wantMipmap && canMipmap && !m_hasMipmap) {
     glGenerateMipmap(m_textureType);
     m_hasMipmap = true;
   }
-  setTexFilters();
+  setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && canMipmap));
 
   setTexCoords(m_coords, m_xRatio, m_yRatio, m_upsidedown);
 
@@ -693,7 +695,7 @@ void pix_texture :: textureQuality(int type)
       glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
     }
     glBindTexture(m_textureType, m_textureObj);
-    setTexFilters();
+    setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap));
   }
   setModified();
 }
