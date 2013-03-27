@@ -259,7 +259,7 @@ void pix_texture :: render(GemState *state) {
 
   bool upsidedown=false;
   bool normalized=true;
-  bool canMipmap=m_canMipMap;
+  bool canMipmap=m_canMipmap;
 
   int texType = m_textureType;
   int x_2=1, y_2=1;
