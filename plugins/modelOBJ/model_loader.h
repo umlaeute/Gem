@@ -128,6 +128,58 @@ glmVertexNormals(GLMmodel* model, GLfloat angle);
 GLvoid
 glmTexture(GLMmodel* model, glmtexture_t type=GLM_TEX_DEFAULT, float h=1.0, float w=1.0);
 
+
+/*
+ * glmGetNumVertices: get number of vertices in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumVertices(GLMmodel *model);
+/*
+ * glmGetNumNormals: get number of normals in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumNormals(GLMmodel *model);
+/*
+ * glmGetNumTexCoords: get number of texcoords in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumTexCoords(GLMmodel *model);
+/*
+ * glmGetNumFacetNorms: get number of facetnorms in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumFacetNorms(GLMmodel *model);
+/*
+ * glmGetNumTriangles: get number of triangles in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumTriangles(GLMmodel *model);
+/*
+ * glmGetNumMaterials: get number of materials in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumMaterials(GLMmodel *model);
+/*
+ * glmGetNumGroups: get number of groups in the model
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+GLuint
+glmGetNumGroups(GLMmodel *model);
+
+
 /* glmDelete: Deletes a GLMmodel structure.
  *
  * model - initialized GLMmodel structure
