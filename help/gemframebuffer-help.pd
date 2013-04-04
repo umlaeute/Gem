@@ -1,4 +1,4 @@
-#N canvas 131 3 893 604 10;
+#N canvas 125 98 893 604 10;
 #X obj 465 9 cnv 15 420 570 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 472 293 cnv 15 300 60 empty empty empty 20 12 0 14 -191407 -66577
@@ -36,7 +36,7 @@
 #X obj 664 449 rotateXYZ -40 0 200;
 #X floatatom 707 429 5 0 0 0 - - -;
 #X obj 477 487 pqtorusknots;
-#N canvas 0 22 450 300 rotation 0;
+#N canvas 0 50 450 300 rotation 0;
 #X obj 33 19 inlet;
 #X obj 33 110 % 360;
 #X obj 33 62 i;
@@ -67,7 +67,7 @@
 #X connect 12 0 8 0;
 #X restore 509 443 pd rotation;
 #X floatatom 531 167 5 0 0 0 - - -;
-#N canvas 125 20 450 300 rotation 0;
+#N canvas 125 50 450 300 rotation 0;
 #X obj 112 29 inlet;
 #X obj 112 105 % 360;
 #X obj 112 57 i;
@@ -96,7 +96,7 @@
 #X msg 637 525 lighting \$1;
 #X obj 615 526 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#N canvas 0 22 450 300 gemwin 0;
+#N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -154,7 +154,6 @@ gfx-card;
 #X text 102 330 (dimension of the framebuffer texture);
 #X text 106 465 (usefull only with shader);
 #X text 106 448 (change texunit of the texture);
-#X text 31 557 Outlet 2: texture Id;
 #X text 104 402 (texturing mode \; rectangle (1) or normalized (0))
 ;
 #X text 100 296 (color format of the framebuffer);
@@ -175,6 +174,8 @@ want to manually insert a [translateXYZ 0 0 -4].;
 #X text 23 482 Inlet 1: message: perspec <left><right><bottom><top><near>
 ;
 #X text 428 482 <far>;
+#X text 31 557 Outlet 2: texture info : <id> <width> <height> <type>
+<0.>;
 #X connect 3 0 18 0;
 #X connect 4 0 19 0;
 #X connect 5 0 38 0;
@@ -191,7 +192,7 @@ want to manually insert a [translateXYZ 0 0 -4].;
 #X connect 15 0 40 0;
 #X connect 16 0 4 0;
 #X connect 17 0 36 0;
-#X connect 18 0 86 0;
+#X connect 18 0 85 0;
 #X connect 18 1 19 1;
 #X connect 19 0 20 0;
 #X connect 20 0 29 0;
@@ -227,10 +228,10 @@ want to manually insert a [translateXYZ 0 0 -4].;
 #X connect 50 0 51 0;
 #X connect 51 0 50 0;
 #X connect 53 0 50 0;
-#X connect 84 0 3 0;
-#X connect 85 0 86 1;
-#X connect 86 0 17 0;
-#X connect 87 0 86 3;
-#X connect 88 0 86 2;
+#X connect 83 0 3 0;
+#X connect 84 0 85 1;
+#X connect 85 0 17 0;
+#X connect 86 0 85 3;
+#X connect 87 0 85 2;
+#X connect 88 0 38 0;
 #X connect 89 0 38 0;
-#X connect 90 0 38 0;
