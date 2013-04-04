@@ -66,41 +66,42 @@ pix_share_write :: pix_share_write(int argc, t_atom*argv)
 #endif
 {
   if(argc<1){
-    throw(GemException("no ID given"));
-  }
-  int err  = getShm(argc, argv);
+    //~ throw(GemException("no ID given"));
+  } else {
+      int err  = getShm(argc, argv);
 
-  switch(err){
-  case 0:
-    break;
-  case 1:
-    throw(GemException("no valid size given"));
-    break;
-  case 2:
-    throw(GemException("given size < 0"));
-    break;
-  case 3:
-    throw(GemException("no valid dimensions given"));
-    break;
-  case 4:
-    throw(GemException("<color> must be one of: 4,2,1,RGBA,YUV,Grey"));
-    break;
-  case 5:
-    throw(GemException("arguments: <id> <width> <height> <color>"));
-    break;
-  case 6:
-    throw(GemException("couldn't get shared memory"));
-    break;
-  case 7:
-    throw(GemException("no ID given"));
-    break;
-  case 8:
-    throw(GemException("invalid ID..."));
-    break;
-   default:
-    throw(GemException("unknown error"));
-    break;
-  }
+      switch(err){
+      case 0:
+        break;
+      case 1:
+        throw(GemException("no valid size given"));
+        break;
+      case 2:
+        throw(GemException("given size < 0"));
+        break;
+      case 3:
+        throw(GemException("no valid dimensions given"));
+        break;
+      case 4:
+        throw(GemException("<color> must be one of: 4,2,1,RGBA,YUV,Grey"));
+        break;
+      case 5:
+        throw(GemException("arguments: <id> <width> <height> <color>"));
+        break;
+      case 6:
+        throw(GemException("couldn't get shared memory"));
+        break;
+      case 7:
+        throw(GemException("no ID given"));
+        break;
+      case 8:
+        throw(GemException("invalid ID..."));
+        break;
+       default:
+        throw(GemException("unknown error"));
+        break;
+      }
+    }
   m_outlet = outlet_new(this->x_obj,0);
 }
 
