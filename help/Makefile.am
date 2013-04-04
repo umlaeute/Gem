@@ -113,6 +113,7 @@ dist_gemhelp_DATA = \
 	pix_draw-help.pd \
 	pix_dump-help.pd \
 	pix_duotone-help.pd \
+	pix_equal-help.pd \
 	pix_film-help.pd \
 	pix_flip-help.pd \
 	pix_freeframe-help.pd \
@@ -215,6 +216,7 @@ dist_gemhelp_DATA = \
 	torus-help.pd \
 	translate-help.pd \
 	translateXYZ-help.pd \
+	trapezoid-help.pd \
 	triangle-help.pd \
 	tube-help.pd \
 	vertex_program-help.pd \
