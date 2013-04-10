@@ -69,6 +69,7 @@ class GEM_EXPORT pix_mano : public GemPixObj
   t_outlet *outlet4;
   t_outlet *outlet5;
   t_outlet *outlet6;
+  t_outlet *outlet7;
   int head, bottom, mode, left, right, pixtip, min_entry_size, min_perim, pixsamp;
   unsigned int pixavg;
   float thresh, tip_scalar;

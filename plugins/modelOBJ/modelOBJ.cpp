@@ -64,7 +64,7 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   glmFacetNormals (m_model);
 
   gem::Properties props=requestprops;
-  if(gem::Properties::UNSET==requestprops.type("smooth")) {
+  if(gem::Properties::UNSET==requestprops.type("smooth") && 0==glmGetNumNormals(m_model)) {
     props.set("smooth", 0.5);
   }
   setProperties(props);

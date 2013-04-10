@@ -83,6 +83,7 @@ class GEM_EXTERN pix_texture : public GemBase
   //////////
   // Set up the texture state
   void		setUpTextureState(void);
+  void setTexFilters(bool);
   void pushTexCoords(GemState*);
   void popTexCoords(GemState*);
 
@@ -111,7 +112,8 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // Set the texture quality
-  GLuint		  m_textureQuality;
+  GLuint      m_textureMinQuality, m_textureMagQuality;
+  bool        m_wantMipmap, m_canMipmap, m_hasMipmap;
 
   //////////
   // Set the texture quality

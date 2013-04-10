@@ -26,14 +26,14 @@
 #X msg 471 384 create;
 #X text 468 365 Create window:;
 #X text 475 59 Example:;
-#X obj 7 67 cnv 15 450 200 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 67 cnv 15 450 210 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 316 cnv 15 450 260 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 316 cnv 15 450 280 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 9 321 Inlets:;
-#X obj 8 276 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 8 282 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 275 Arguments:;
+#X text 17 281 Arguments:;
 #X text 452 8 GEM object;
 #X text 27 333 Inlet 1: gemlist;
 #X text 9 560 Outlets:;
@@ -44,7 +44,7 @@
 #X text 7 69 Description: Renders an Alias/Wavefront-Model.;
 #X text 16 86 The model object renders 3D-models that are saved in
 Alias/Wavefront's OBJ-format.;
-#X text 63 286 optional: name of a OBJ-file to be loaded;
+#X text 63 292 optional: name of a OBJ-file to be loaded;
 #X obj 470 313 cnv 15 50 30 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 583 384 gemhead;

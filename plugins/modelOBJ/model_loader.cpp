@@ -1424,6 +1424,42 @@ GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
   }
 }
 
+/*
+ * glmGetNumVertices: get number of vertices in the model
+ */
+GLuint
+glmGetNumVertices(GLMmodel *model){return (model && model->vertices)?model->numvertices:0;}
+/*
+ * glmGetNumNormals: get number of normals in the model
+ */
+GLuint
+glmGetNumNormals(GLMmodel *model){return (model && model->normals)?model->numnormals:0;}
+/*
+ * glmGetNumTexCoords: get number of texcoords in the model
+ */
+GLuint
+glmGetNumTexCoords(GLMmodel *model){return (model && model->texcoords)?model->numtexcoords:0;}
+/*
+ * glmGetNumFacetNorms: get number of facetnorms in the model
+ */
+GLuint
+glmGetNumFacetNorms(GLMmodel *model){return (model && model->facetnorms)?model->numfacetnorms:0;}
+/*
+ * glmGetNumTriangles: get number of triangles in the model
+ */
+GLuint
+glmGetNumTriangles(GLMmodel *model){return (model && model->triangles)?model->numtriangles:0;}
+/*
+ * glmGetNumMaterials: get number of materials in the model
+ */
+GLuint
+glmGetNumMaterials(GLMmodel *model){return (model && model->materials)?model->nummaterials:0;}
+/*
+ * glmGetNumGroups: get number of groups in the model
+ */
+GLuint
+glmGetNumGroups(GLMmodel *model){return (model && model->groups)?model->numgroups:0;}
+
 /* glmDelete: Deletes a GLMmodel structure.
  *
  * model - initialized GLMmodel structure
