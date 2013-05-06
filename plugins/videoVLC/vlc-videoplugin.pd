@@ -1,2 +1,21 @@
-#N canvas 8 49 505 112 10;
-#X text 89 47 Nothing special about this backend...;
+#N canvas 773 330 763 434 10;
+#X obj 152 143 s \$1-ctl;
+#X text 64 18 With VLC backend you can open whatever VLC can as far
+as its a video : a file \, a stream;
+#X msg 44 89 driver vlc;
+#X text 19 72 1- select the backend;
+#X text 194 73 2- open what you want;
+#X msg 180 90 device file:///home/me/video.avi;
+#X text 196 109 note the path should be the same you enter in VLC in
+"Open network stream" window;
+#X text 64 212 VLC doesn't know the resolution of the video \, so please
+set it yourself :;
+#X obj 158 297 s \$1-ctl;
+#X msg 114 256 dimen 640 480;
+#X msg 226 258 dimen 1920 1080;
+#X text 71 313 you can easily over- or undersample your video with
+this (if don't care about the interpolation quality...);
+#X connect 2 0 0 0;
+#X connect 5 0 0 0;
+#X connect 9 0 8 0;
+#X connect 10 0 8 0;
