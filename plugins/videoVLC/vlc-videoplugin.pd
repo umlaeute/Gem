@@ -1,6 +1,6 @@
-#N canvas 773 330 763 434 10;
+#N canvas 771 336 763 434 10;
 #X obj 152 143 s \$1-ctl;
-#X text 64 18 With VLC backend you can open whatever VLC can as far
+#X text 63 27 With VLC backend you can open whatever VLC can as far
 as its a video : a file \, a stream;
 #X msg 44 89 driver vlc;
 #X text 19 72 1- select the backend;
