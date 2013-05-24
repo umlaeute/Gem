@@ -41,7 +41,8 @@ CPPEXTERN_NEW(gemglfwindow);
 //
 /////////////////////////////////////////////////////////
 gemglfwindow :: gemglfwindow(void) :
-  m_profile_major(0), m_profile_minor(0)
+  m_profile_major(0), m_profile_minor(0),
+  m_wheelpos(0)
 {
   if(s_instances==0) {
     if(!glfwInit()) {
@@ -281,6 +282,57 @@ void gemglfwindow :: cursorMess(bool setting)
   }
 }
 
+
+void gemglfwindow::windowsizeCallback(int w, int h) {
+  dimension(w, h);
+}
+int gemglfwindow::windowcloseCallback() {
+  info("window", "destroy");
+  return 0;
+}
+void gemglfwindow::windowrefreshCallback() {
+  ::post("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__);
+}
+void gemglfwindow::keyCallback(int key, int action) {
+  t_atom ap[3];
+  SETSYMBOL(ap+0, gensym("key"));
+  SETFLOAT (ap+1, key);
+  SETFLOAT (ap+2, action);
+
+  info(gensym("keyboard"), 3, ap);
+}
+void gemglfwindow::charCallback(int character, int action) {
+  t_atom ap[3];
+  std::string sid;
+  sid += character;
+  SETSYMBOL(ap+0, gensym("keyname"));
+  SETSYMBOL(ap+1, gensym(sid.c_str()));
+  SETFLOAT (ap+2, action);
+
+  info(gensym("keyboard"), 3, ap);
+}
+void gemglfwindow::mousebuttonCallback(int button, int action) {
+  gemglfwindow:: button(button, action);
+}
+void gemglfwindow::mouseposCallback(int x, int y) {
+  motion(x, y);
+}
+#define WHEELUP   3
+#define WHEELDOWN 4
+void gemglfwindow::mousewheelCallback(int pos) {
+  if(m_wheelpos<pos) {
+    while(m_wheelpos++<pos) {
+      button(WHEELUP, 1);
+      button(WHEELUP, 0);
+    }
+  } else   if(m_wheelpos>pos) {
+    while(m_wheelpos-->pos) {
+      button(WHEELDOWN, 1);
+      button(WHEELDOWN, 0);
+    }
+  }
+}
+
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -290,28 +342,32 @@ void gemglfwindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "glprofile", glprofileMess, int, int);
 }
 
+#ifdef CALLBACK
+# undef CALLBACK
+#endif
+#define CALLBACK(x) if(0!=s_window)return s_window->x
 void gemglfwindow::windowsizeCb(int w, int h) {
-  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d %d", w, h);
+  CALLBACK(windowsizeCallback(w, h));
 }
 int gemglfwindow::windowcloseCb() {
-  ::post("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__);
+  CALLBACK(windowcloseCallback());
   return 0;
 }
 void gemglfwindow::windowrefreshCb() {
-  ::post("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__);
+  CALLBACK(windowrefreshCallback());
 }
 void gemglfwindow::keyCb(int key, int action) {
-  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d[%d]", key, action);
+  CALLBACK(keyCallback(key, action));
 }
 void gemglfwindow::charCb(int character, int action) {
-  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d[%d]", character, action);
+  CALLBACK(charCallback(character, action));
 }
 void gemglfwindow::mousebuttonCb(int button, int action) {
-  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d[%d]", button, action);
+  CALLBACK(mousebuttonCallback(button, action));
 }
 void gemglfwindow::mouseposCb(int x, int y) {
-  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d %d", x, y);
+  CALLBACK(mouseposCallback(x, y));
 }
 void gemglfwindow::mousewheelCb(int pos) {
-  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d", pos);
+  CALLBACK(mousewheelCallback(pos));
 }

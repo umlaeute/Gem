@@ -108,7 +108,15 @@ class GEM_EXTERN gemglfwindow : public GemWindow
 
   //////////
   // glfw callbacks
-
+  void windowsizeCallback(int width, int height);
+  int  windowcloseCallback(void);
+  void windowrefreshCallback(void);
+  void keyCallback(int key, int action);
+  void charCallback(int character, int action);
+  void mousebuttonCallback(int button, int action);
+  void mouseposCallback(int x, int y);
+  int m_wheelpos;
+  void mousewheelCallback(int pos);
   static void windowsizeCb(int width, int height);
   static int  windowcloseCb(void);
   static void windowrefreshCb(void);
