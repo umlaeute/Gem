@@ -73,7 +73,7 @@ class GEM_EXTERN gemglutwindow : public GemWindow
   void renderMess(void);
 
   /* render context (pre creation) */
-  void  bufferMess(int buf);
+  virtual void  bufferMess(int buf);
   virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
