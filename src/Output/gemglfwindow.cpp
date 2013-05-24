@@ -64,7 +64,6 @@ gemglfwindow :: ~gemglfwindow()
 
 
 bool gemglfwindow :: makeCurrent(void){
-  post("makeCurrent:%d", s_window);
   return(s_window);
 }
 
@@ -110,6 +109,7 @@ void gemglfwindow :: bufferMess(int buf)
 /////////////////////////////////////////////////////////
 void gemglfwindow :: fsaaMess(int value)
 {
+  m_fsaa=value;
 }
 
 /////////////////////////////////////////////////////////
@@ -150,17 +150,8 @@ void gemglfwindow :: dimensionsMess(unsigned int width, unsigned int height)
 /////////////////////////////////////////////////////////
 void gemglfwindow :: fullscreenMess(int on)
 {
-#if 0
-  m_fullscreen = on;
-  if(makeCurrent()){
-    if(m_fullscreen)
-      glfwFullScreen();
-    else {
-      glfwReshapeWindow(m_width, m_height);
-      glfwPositionWindow(m_xoffset, m_yoffset);
-    }
-  }
-#endif
+  m_fullscreen=on;
+  // FIXXME: on the fly switching
 }
 
 /////////////////////////////////////////////////////////
@@ -182,69 +173,45 @@ void gemglfwindow :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 bool gemglfwindow :: create(void)
 {
+  int mode = GLFW_WINDOW;
   if(s_window) {
     error("window already made!");
     return false;
   }
 
+  if(m_fullscreen)
+    mode=GLFW_FULLSCREEN;
 
   if (!glfwOpenWindow(m_width, m_height,
                       8, 8, 8, 8,  /* RGBA bits */
                       24, 8,       /* depth/stencil bits */
-                      GLFW_WINDOW)) {
+                      mode)) {
     error("glfw couldn't create window");
     return false;
   }
+  glfwOpenWindowHint(GLFW_FSAA_SAMPLES, m_fsaa);
 
-#if 0
-  unsigned int mode=GLUT_RGB | GLUT_DEPTH;
-  if(2==m_buffer)
-    mode|=GLUT_DOUBLE;
-  else
-    mode|=GLUT_SINGLE;
+  // FIXXME: single/double buffering
 
-  glfwInitDisplayMode(mode);
-
-  s_window=glfwCreateWindow(m_title.c_str());
-  s_windowmap[s_window]=this;
-
-  glfwDisplayFunc   (&gemglfwindow::displayCb);
-  glfwVisibilityFunc(&gemglfwindow::visibleCb);
-
-  glfwCloseFunc     (&gemglfwindow::closeCb);
-  glfwKeyboardFunc(&gemglfwindow::keyboardCb);
-  glfwSpecialFunc(&gemglfwindow::specialCb);
-  glfwReshapeFunc(&gemglfwindow::reshapeCb);
-  glfwMouseFunc(&gemglfwindow::mouseCb);
-  glfwMotionFunc(&gemglfwindow::motionCb);
-  glfwPassiveMotionFunc(&gemglfwindow::passivemotionCb);
-  glfwEntryFunc(&gemglfwindow::entryCb);
-  glfwKeyboardUpFunc(&gemglfwindow::keyboardupCb);
-  glfwSpecialUpFunc(&gemglfwindow::specialupCb);
-  glfwJoystickFunc(&gemglfwindow::joystickCb, 20);
-
-  glfwMenuStateFunc(&gemglfwindow::menustateCb);
-  glfwMenuStatusFunc(&gemglfwindow::menustatusCb);
-
-  glfwWindowStatusFunc(&gemglfwindow::windowstatusCb);
-
-  //  glfwNameFunc(&gemglfwindow::nameCb);
-
-  if(!createGemWindow()) {
-    destroyMess();
-    return false;
-  }
-  titleMess(m_title);
-  fullscreenMess(m_fullscreen);
-
-  dispatch();
-
-#endif
   if(!createGemWindow()) {
     destroyMess();
     return false;
   }
   s_window=true;
+
+  titleMess(m_title);
+  offsetMess(m_xoffset, m_yoffset);
+  cursorMess(m_cursor);
+
+  glfwSetWindowSizeCallback   (windowsizeCb);
+  glfwSetWindowCloseCallback  (windowcloseCb);
+  glfwSetWindowRefreshCallback(windowrefreshCb);
+  glfwSetKeyCallback          (keyCb);
+  glfwSetCharCallback         (charCb);
+  glfwSetMouseButtonCallback  (mousebuttonCb);
+  glfwSetMousePosCallback     (mouseposCb);
+  glfwSetMouseWheelCallback   (mousewheelCb);
+  dispatch();
   return s_window;
 }
 void gemglfwindow :: createMess(std::string) {
@@ -258,18 +225,14 @@ void gemglfwindow :: createMess(std::string) {
 /////////////////////////////////////////////////////////
 void gemglfwindow :: destroy(void)
 {
-  post( "destroy %d", s_window);
   destroyGemWindow();
   s_window=false;
   info("window", "closed");
 }
 void gemglfwindow :: destroyMess(void)
 {
-  post( "destroyMess %d", s_window);
   if(makeCurrent()) {
-    post("glosing window");
     glfwCloseWindow();
-    s_window=false; // so that we no longer receive any event
   }
   destroy();
 }
@@ -280,12 +243,13 @@ void gemglfwindow :: destroyMess(void)
 /////////////////////////////////////////////////////////
 void gemglfwindow :: cursorMess(bool setting)
 {
-#if 0
   m_cursor=setting;
-  if(makeCurrent()){
-    glfwSetCursor(setting?GLUT_CURSOR_INHERIT:GLUT_CURSOR_NONE);
+  if(makeCurrent()) {
+    if(m_cursor)
+      glfwEnable(GLFW_MOUSE_CURSOR);
+    else
+      glfwDisable(GLFW_MOUSE_CURSOR);
   }
-#endif
 }
 
 /////////////////////////////////////////////////////////
@@ -306,18 +270,27 @@ void gemglfwindow :: obj_setupCallback(t_class *classPtr)
 }
 
 void gemglfwindow::windowsizeCb(int w, int h) {
+  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d %d", w, h);
 }
-void gemglfwindow::windowcloseCb() {
+int gemglfwindow::windowcloseCb() {
+  ::post("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__);
+  return 0;
 }
 void gemglfwindow::windowrefreshCb() {
+  ::post("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__);
 }
 void gemglfwindow::keyCb(int key, int action) {
+  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d[%d]", key, action);
 }
 void gemglfwindow::charCb(int character, int action) {
+  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d[%d]", character, action);
 }
 void gemglfwindow::mousebuttonCb(int button, int action) {
+  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d[%d]", button, action);
 }
 void gemglfwindow::mouseposCb(int x, int y) {
+  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d %d", x, y);
 }
 void gemglfwindow::mousewheelCb(int pos) {
+  ::startpost("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__); ::post("%d", pos);
 }

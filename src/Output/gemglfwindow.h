@@ -73,7 +73,7 @@ class GEM_EXTERN gemglfwindow : public GemWindow
   void renderMess(void);
 
   /* render context (pre creation) */
-  void  bufferMess(int buf);
+  virtual void  bufferMess(int buf);
   virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
@@ -107,7 +107,7 @@ class GEM_EXTERN gemglfwindow : public GemWindow
   // glfw callbacks
 
   static void windowsizeCb(int width, int height);
-  static void windowcloseCb(void);
+  static int  windowcloseCb(void);
   static void windowrefreshCb(void);
   static void keyCb(int key, int action);
   static void charCb(int character, int action);
