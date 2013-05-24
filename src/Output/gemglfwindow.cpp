@@ -27,7 +27,7 @@
 /* whether we have a dinwo created or not
  * (GLFW<3 only allows a single window
  */
-static bool s_window = false;
+static gemglfwindow* s_window = 0;
 static unsigned int s_instances=0;
 
 CPPEXTERN_NEW(gemglfwindow);
@@ -66,7 +66,7 @@ gemglfwindow :: ~gemglfwindow()
 
 
 bool gemglfwindow :: makeCurrent(void){
-  return(s_window);
+  return(0!=s_window);
 }
 
 void gemglfwindow :: swapBuffers(void) {
@@ -81,7 +81,7 @@ void gemglfwindow :: doRender()
 }
 void gemglfwindow :: dispatch()
 {
-  if(!s_window)return;
+  if(0==s_window)return;
   glfwPollEvents();
 }
 
@@ -95,7 +95,7 @@ void gemglfwindow :: bufferMess(int buf)
   switch(buf) {
   case 1: case 2:
     m_buffer=buf;
-    if(s_window) {
+    if(0!=s_window) {
       post("changing buffer type will only effect newly created windows");
     }
     break;
@@ -193,7 +193,7 @@ void gemglfwindow :: glprofileMess(int major, int minor)
 bool gemglfwindow :: create(void)
 {
   int mode = GLFW_WINDOW;
-  if(s_window) {
+  if(0!=s_window) {
     error("window already made!");
     return false;
   }
@@ -226,7 +226,7 @@ bool gemglfwindow :: create(void)
     destroyMess();
     return false;
   }
-  s_window=true;
+  s_window=this;
 
   titleMess(m_title);
   offsetMess(m_xoffset, m_yoffset);
@@ -241,7 +241,7 @@ bool gemglfwindow :: create(void)
   glfwSetMousePosCallback     (mouseposCb);
   glfwSetMouseWheelCallback   (mousewheelCb);
   dispatch();
-  return s_window;
+  return (0!=s_window);
 }
 void gemglfwindow :: createMess(std::string) {
   create();
@@ -255,7 +255,7 @@ void gemglfwindow :: createMess(std::string) {
 void gemglfwindow :: destroy(void)
 {
   destroyGemWindow();
-  s_window=false;
+  s_window=0;
   info("window", "closed");
 }
 void gemglfwindow :: destroyMess(void)
