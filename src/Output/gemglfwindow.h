@@ -101,6 +101,9 @@ class GEM_EXTERN gemglfwindow : public GemWindow
   // dispatch events
   virtual void dispatch(void);
 
+  void glprofileMess(int, int);
+  unsigned int m_profile_major, m_profile_minor;
+
  private:
 
   //////////

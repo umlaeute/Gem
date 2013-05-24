@@ -40,7 +40,9 @@ CPPEXTERN_NEW(gemglfwindow);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemglfwindow :: gemglfwindow(void) {
+gemglfwindow :: gemglfwindow(void) :
+  m_profile_major(0), m_profile_minor(0)
+{
   if(s_instances==0) {
     if(!glfwInit()) {
       throw(GemException("could not initialize GLFW infrastructure"));
@@ -168,6 +170,23 @@ void gemglfwindow :: offsetMess(int x, int y)
 }
 
 /////////////////////////////////////////////////////////
+// offsetMess
+//
+/////////////////////////////////////////////////////////
+void gemglfwindow :: glprofileMess(int major, int minor)
+{
+  if(major>0) {
+    m_profile_major=major;
+    m_profile_minor=0;
+    if(minor>0)
+      m_profile_minor=minor;
+  } else {
+    m_profile_major=0;
+    m_profile_minor=0;
+  }
+}
+
+/////////////////////////////////////////////////////////
 // createMess
 //
 /////////////////////////////////////////////////////////
@@ -184,6 +203,12 @@ bool gemglfwindow :: create(void)
 
   glfwOpenWindowHint(GLFW_FSAA_SAMPLES, m_fsaa);
 
+
+  if(m_profile_major) {
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, m_profile_major); // We want OpenGL 3.3
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, m_profile_minor);
+    glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
+  }
 
   if (!glfwOpenWindow(m_width, m_height,
                       8, 8, 8, 8,  /* RGBA bits */
@@ -262,15 +287,7 @@ void gemglfwindow :: cursorMess(bool setting)
 /////////////////////////////////////////////////////////
 void gemglfwindow :: obj_setupCallback(t_class *classPtr)
 {
-  int argc=0;
-  char*argv=NULL;
-
-  static bool firsttime=true;
-
-  if(firsttime) {
-
-  }
-  firsttime=false;
+  CPPEXTERN_MSG2(classPtr, "glprofile", glprofileMess, int, int);
 }
 
 void gemglfwindow::windowsizeCb(int w, int h) {
