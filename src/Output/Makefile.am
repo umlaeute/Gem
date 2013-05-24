@@ -37,6 +37,12 @@ if HAVE_LIB_SDL
 pkglib_LTLIBRARIES += gemsdlwindow.la
 endif
 
+if HAVE_LIB_LIBGLFW
+pkglib_LTLIBRARIES += gemglfwindow.la
+endif
+
+
+
 
 COMMON_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 if WINDOWS
@@ -222,6 +228,34 @@ gemw32window_la_LDFLAGS  +=
 gemw32window_la_SOURCES = \
   gemw32window.cpp \
   gemw32window.h
+
+
+
+########### gemglfwindow ###########
+# some default flags
+gemglfwindow_la_CXXFLAGS =
+gemglfwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
+gemglfwindow_la_LIBADD   =
+# RTE flags
+gemglfwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+gemglfwindow_la_LIBADD   += @GEM_RTE_LIBS@
+# arch flags
+gemglfwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+gemglfwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemglfwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglfwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemglfwindow_la @MOREFLAGS@
+
+# object specific libraries
+gemglfwindow_la_CXXFLAGS += @GEM_LIB_LIBGLFW_CFLAGS@
+gemglfwindow_la_LIBADD   += @GEM_LIB_LIBGLFW_LIBS@
+gemglfwindow_la_LDFLAGS  +=
+
+## SOURCES
+gemglfwindow_la_SOURCES = \
+  gemglfwindow.cpp \
+  gemglfwindow.h
 
 
 # convenience symlinks for pkglib_LTLIBRARIES
