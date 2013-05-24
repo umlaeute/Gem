@@ -182,6 +182,9 @@ bool gemglfwindow :: create(void)
   if(m_fullscreen)
     mode=GLFW_FULLSCREEN;
 
+  glfwOpenWindowHint(GLFW_FSAA_SAMPLES, m_fsaa);
+
+
   if (!glfwOpenWindow(m_width, m_height,
                       8, 8, 8, 8,  /* RGBA bits */
                       24, 8,       /* depth/stencil bits */
@@ -189,7 +192,8 @@ bool gemglfwindow :: create(void)
     error("glfw couldn't create window");
     return false;
   }
-  glfwOpenWindowHint(GLFW_FSAA_SAMPLES, m_fsaa);
+
+
 
   // FIXXME: single/double buffering
 
