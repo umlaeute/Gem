@@ -357,7 +357,7 @@ void gemglutwindow::visibleCb(int state) {
 }
 
 void gemglutwindow::closeCb(void) {
-  CALLBACK4WIN->info("window", "close");
+  CALLBACK4WIN->info("window", "destroy");
 }
 
 
