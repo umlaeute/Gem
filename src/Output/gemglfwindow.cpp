@@ -291,7 +291,7 @@ int gemglfwindow::windowcloseCallback() {
   return 0;
 }
 void gemglfwindow::windowrefreshCallback() {
-  ::post("%s:%d %s  ", __FILE__, __LINE__, __FUNCTION__);
+  info("window", "exposed");
 }
 void gemglfwindow::keyCallback(int key, int action) {
   t_atom ap[3];
