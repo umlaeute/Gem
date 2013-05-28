@@ -1,0 +1,137 @@
+dimen <int:width> <int:height>
+---
+glut: window dimension changed
+glx : window dimension changed
+sdl : window dimension changed
+glfw: window dimension changed
+
+offset <int:x> <int:y>
+---
+glut: -
+glx : window moved to new position
+sdl : -
+glfw: -
+
+window hidden
+---
+glut: window entered hidden state (e.g. minimized)
+glx : -
+glfw: -
+sdl : -
+
+window full
+---
+glut: window entered fully visible state
+glx : -
+glfw: -
+sdl : -
+
+window partial
+---
+glut: window entered partially covered state
+glx : -
+glfw: -
+sdl : -
+
+window covered
+---
+glut: window entered fully covered state (by another window)
+glx : -
+glfw: -
+sdl : -
+
+window unknown
+---
+glut: window entered unknown state
+glx : -
+glfw: -
+sdl : -
+
+window exposed
+---
+sdl : window became fully(?) visible after being minimized
+glfw: window became fully(?) visible after being minimized
+
+window close
+---
+glut: user requested window to close
+TODO: change to 'window destroy'
+
+window destroy
+---
+glx : user requested window to close
+sdl : user requested window to close
+glfw: user requested window to close
+
+window closed
+---
+glut: window was closed/destroyed
+glx : -
+sdl : window was closed/destroyed
+glfw: window was closed/destroyed (FIXXME: window doesn't really close)
+
+visible <int:state>
+---
+glut: ?visiblecallabck?
+glx : -
+sdl : window entered hidden(0) (e.g. minimized) or exposed(1) (restored) state
+glfw: -
+
+menu new <int:id>
+---
+glut: ???
+glx : -
+glfw: -
+sdl : -
+
+menu <int:menu>
+---
+glut: ???
+glx : -
+sdl : -
+glfw: -
+
+entry <int:state>
+---
+glut: mouse entered(1) or left(0) window
+glx : -
+sdl : mouse entered(0)/left(1) painting window
+glfw: -
+
+inputentry <int:state>
+---
+sdl : mouse entered(0)/left(1) window (incl. decoration)
+glfw: -
+glut: -
+glx : -
+
+
+mouse motion <int:x> <int:y>
+---
+glut: mousepointer moved to position x/y (upperleft)
+glx : mousepointer moved to position x/y (upperleft)
+sdl : mousepointer moved to position x/y (upperleft)
+glfw: mousepointer moved to position x/y (upperleft)
+
+mouse button <int:button> <int:state>
+---
+glut: mousebutton was pressed (left:0, middle:1, right:2, scrollup:3, scrolldown:4)
+glx : mousebutton was pressed (left:0, middle:1, right:2, scrollup:3, scrolldown:4)
+sdl : mousebutton was pressed (left:1, middle:2, right:3, scrollup:4, scrolldown:5) // FIXXME
+glfw: mousebutton was pressed (left:0, middle:2, right:1, scrollup:3, scrolldown:4) // FIXXME
+
+keyboard key <int:keynum> <int:state>
+---
+    : Space=, a=, A=, ShiftLeft=; no?repeat
+glut: Space=32, a=97, A=65, ShiftLeft=112; repeat
+glx : Space=65, a=38, A=38, ShiftLeft=50; repeat
+sdl : Space=65, a=38, A=38, ShiftLeft=50; norepeat
+glfw: Space=32, a=65, A=65, ShiftLeft=287; norepeat
+
+keyboard keyname <symbol:keyname> <int:state>
+---
+    : Space='', a='', A='', ShiftLeft=''; no?repeat
+glut: Space=' ', a='a', A='A', ShiftLeft='<unknown>'; repeat,release
+glx : Space=' ', a='a', A='A', ShiftLeft='Shift_L'; repeat,release
+sdl : Space='Space', a='a', A='a', ShiftLeft='Shift_L';  norepeat,release
+glfw: Space='Space', a='a', A='A', ShiftLeft=NO; norepeat,norelease
