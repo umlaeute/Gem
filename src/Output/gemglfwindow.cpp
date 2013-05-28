@@ -304,7 +304,13 @@ void gemglfwindow::keyCallback(int key, int action) {
 void gemglfwindow::charCallback(int character, int action) {
   t_atom ap[3];
   std::string sid;
-  sid += character;
+  switch(character) {
+  case 32:
+    sid = "Space";
+    break;
+  default:
+    sid += character;
+  }
   SETSYMBOL(ap+0, gensym("keyname"));
   SETSYMBOL(ap+1, gensym(sid.c_str()));
   SETFLOAT (ap+2, action);
