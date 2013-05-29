@@ -45,10 +45,7 @@ public:
     glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      maxStackDepth+GemMan::STACKTEXTURE);
     glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   maxStackDepth+GemMan::STACKPROJECTION);
 
-    if(GLEW_ARB_imaging)
-      glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+GemMan::STACKCOLOR);
-    else
-      maxStackDepth[GemMan::STACKCOLOR]=0;
+    maxStackDepth[GemMan::STACKCOLOR]=0;
   }
 
   PIMPL(const PIMPL&p) :
@@ -113,9 +110,11 @@ std::set<unsigned int>      Context::PIMPL::s_takenIDs;
 Context::Context(void)
   : m_pimpl(new PIMPL())
 {
-  push();
+  if(!m_pimpl) {
+    throw(GemException("failed to initialize GemContext"));
+  }
   std::string errstring="";
-
+  push(); // make our context the current one, for subsequent glew-calls
   GLenum err = glewInit();
 
   if (GLEW_OK != err) {
@@ -126,20 +125,25 @@ Context::Context(void)
     } else {
       errstring="failed to init GLEW";
     }
-  }
+  } else {
+    GLint colorstack = 0;
+    if(GLEW_ARB_imaging)
+      glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, &colorstack);
 
-  post("GLEW version %s",glewGetString(GLEW_VERSION));
+    m_pimpl->maxStackDepth[GemMan::STACKCOLOR]=colorstack;
 
-  if(!m_pimpl) {
-    errstring="failed to init GemContext";
+    post("GLEW version %s",glewGetString(GLEW_VERSION));
   }
 
   pop();
 
   if(!errstring.empty()) {
-    if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
+    delete m_pimpl; m_pimpl=NULL;
     throw(GemException(errstring));
   }
+
+  /* update the stack variables (late initalization) */
+  push(); pop();
   GemMan::m_windowState++;
 }
 
