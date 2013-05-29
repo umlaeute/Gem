@@ -218,7 +218,25 @@ IEM_CHECK_GLX
 IEM_CHECK_AGL
 
 ## use system's libGLEW
+GEM_ARG_ENABLE([multicontext], [experimental support for multiple windows])
+## glewmx-args default to glew-args
+if test "x$with_glewmx" = "x"; then with_glewmx="$with_glew"; fi
+if test "x$with_glewmx-includes" = "x"; then with_glewmx="$with_glew-includes"; fi
+if test "x$with_glewmx-libs" = "x"; then with_glewmx="$with_glew-libs"; fi
+
 GEM_CHECK_LIB([glew], [GLEW], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+GEM_CHECK_LIB([glewmx], [GLEWmx], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+
+
+if test "x$enable_multicontext" = "xyes"; then
+  have_glew="${have_glewmx}"
+  GEM_LIB_GLEW_CFLAGS="$GEM_LIB_GLEWMX_CFLAGS"
+  GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
+
+  AM_CONDITIONAL(HAVE_LIB_GLEW, [test "x${have_glew}" = "xyes"])
+fi
+AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
+
 if test "x${have_glew}" != "xyes"; then
   GEM_CPPFLAGS+=" -DGLEW_BUILD"
 fi

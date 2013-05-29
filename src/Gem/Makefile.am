@@ -19,10 +19,13 @@ libGem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 
 # GLEW
+if ENABLE_MULTICONTEXT
+libGem_la_CXXFLAGS += @GEM_LIB_GLEWMX_CFLAGS@
+libGem_la_LIBADD   += @GEM_LIB_GLEWMX_LIBS@
+else !ENABLE_MULTICONTEXT
 libGem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
 libGem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
-
-
+endif !ENABLE_MULTICONTEXT
 
 libGem_la_includedir = $(includedir)/Gem/Gem
 libGem_la_include_HEADERS = \
