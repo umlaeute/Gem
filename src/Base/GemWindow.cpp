@@ -258,15 +258,16 @@ gem::Context*GemWindow::destroyContext(gem::Context*ctx){
 bool GemWindow::createGemWindow(void){
   if(!m_context) {
     try {
+      if(m_pimpl->mycontext)delete m_pimpl->mycontext;
       m_pimpl->mycontext = new gem::Context();
     } catch (GemException&x) {
-      m_context=NULL;
+      m_context=0;
       error("%s", x.what());
       return false;
     }
     m_context=m_pimpl->mycontext;
   } else {
-    m_pimpl->mycontext = NULL;
+    m_pimpl->mycontext = 0;
   }
 
   m_pimpl->dispatch();
@@ -278,6 +279,7 @@ bool GemWindow::createGemWindow(void){
 void GemWindow::destroyGemWindow(void){
   m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
   m_pimpl->undispatch();
+  m_context=m_pimpl->mycontext;
 }
 
 bool GemWindow::pushContext(void){
