@@ -111,6 +111,21 @@ static int dblBuf8Stereo[] =   {GLX_RGBA,
                                 GLX_STEREO,
                                 None};
 
+static int*dblBufs[]={
+  dblBuf24Stereo,
+  dblBuf24,
+  dblBuf8Stereo,
+  dblBuf8,
+  0
+};
+static int*snglBufs[]={
+  snglBuf24Stereo,
+  snglBuf24,
+  snglBuf8Stereo,
+  snglBuf8,
+  0
+};
+
 static int xerr;
 static int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
@@ -242,44 +257,32 @@ struct gemglxwindow::PIMPL {
 #endif
       }
     }
-    XVisualInfo *vi;
-    // the user wants double buffer
-    if (buffer == 2) {
-      // try for a double-buffered on 24bit machine (try stereo first)
-      vi = glXChooseVisual(dpy, screen, dblBuf24Stereo);
-      if (vi == NULL)
-        vi = glXChooseVisual(dpy, screen, dblBuf24);
-      if (vi == NULL) {
-        // try for a double buffered on a 8bit machine (try stereo first)
-        vi = glXChooseVisual(dpy, screen, dblBuf8Stereo);
-        if(vi == NULL)
-          vi = glXChooseVisual(dpy, screen, dblBuf8);
-        if (vi == NULL) {
-          throw(GemException("Unable to create double buffer window"));
-          return false;
-        }
-        ::post("Only using 8 color bits");
-      }
+    XVisualInfo *vi=0;
+    static int**buf=0;
+    switch(buffer) {
+    default: ::error("only single/double buffer supported; defaulting to double");
+    case 2: buf=dblBufs; break;
+    case 1: buf=snglBufs; break;
     }
-    // the user wants single buffer
-    else {
-      // try for a single buffered on a 24bit machine (try stereo first)
-      vi = glXChooseVisual(dpy, screen, snglBuf24Stereo);
-      if (vi == NULL)
-        vi = glXChooseVisual(dpy, screen, snglBuf24);
-      if (vi == NULL) {
-        // try for a single buffered on a 8bit machine (try stereo first)
-        vi = glXChooseVisual(dpy, screen, snglBuf8Stereo);
-        if (vi == NULL)
-          vi = glXChooseVisual(dpy, screen, snglBuf8);
-        if (vi == NULL) {
-          throw(GemException("Unable to create single buffer window"));
-          return false;
-        }
-        ::post("Only using 8 color bits");
+    // the user wants double buffer
+    for(; *buf; buf++) {
+      vi = glXChooseVisual(dpy, screen, *buf);
+      if(vi)break;
+    }
+    if (vi == NULL) {
+      std::string errstr="Unable to create ";
+      switch(buffer) {
+      default: errstr+="???"; break;
+      case 1:  errstr+"single"; break;
+      case 2:  errstr+"double"; break;
       }
+      errstr+=" buffer window";
+      throw(GemException(errstr));
+      return false;
     }
 
+    if(vi->depth<24)
+      ::post("Only using %d color bits", vi->depth);
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
       ::error("TrueColor visual required for this program (got %d)", vi->c_class);
       return false;
@@ -760,9 +763,6 @@ void gemglxwindow :: destroy(void)
       // this crashes sometimes on my laptop:
       glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
     }
-
-    // FIXXME: destroy visual
-    //XFree( _glfwWin.visual );
 
     if (m_pimpl->win) {
       XUnmapWindow      (m_pimpl->dpy, m_pimpl->win);
