@@ -348,6 +348,8 @@ struct gemglxwindow::PIMPL {
                                  x, y, w, h,
                                  0, vi->depth, InputOutput,
                                  vi->visual, flags, &swa);
+    XFree( vi );
+
     if (!win) {
       throw(GemException("Could not create X window"));
       return false;
