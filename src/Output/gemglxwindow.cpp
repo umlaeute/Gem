@@ -743,17 +743,6 @@ void gemglxwindow :: destroy(void)
    */
   if (m_pimpl->dpy) {
     int err=0;
-    /* patch by cesare marilungo to prevent the crash "on my laptop" */
-    glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
-
-    if (m_pimpl->win)
-      err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
-    if (m_pimpl->context) {
-      // this crashes sometimes on my laptop:
-      glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
-    }
-    if (m_pimpl->cmap)
-      err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
 
 #ifdef HAVE_LIBXXF86VM
     if (m_pimpl->fs){
@@ -763,6 +752,25 @@ void gemglxwindow :: destroy(void)
     }
 #endif
 
+    /* patch by cesare marilungo to prevent the crash "on my laptop" */
+    glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
+    if (m_pimpl->context) {
+      // this crashes sometimes on my laptop:
+      glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
+    }
+
+    // FIXXME: destroy visual
+    //XFree( _glfwWin.visual );
+
+    if (m_pimpl->win) {
+      XUnmapWindow      (m_pimpl->dpy, m_pimpl->win);
+      err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
+    }
+
+    if (m_pimpl->cmap)
+      err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
+
+    XFlush( m_pimpl->dpy );
     err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
   }
   m_pimpl->dpy = NULL;
