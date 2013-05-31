@@ -164,6 +164,9 @@ GemShapeVBO :: ~GemShapeVBO()
 
 void GemShapeVBO :: render(GemState *state)
 {
+  // TODO: a check for a profile that doesn't support glBegin() no more
+  if( m_vbo && !GLEW_EXT_vertex_array)m_vbo = 0;
+
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=m_pimpl->m_defaultDrawType;
   if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES)
     glLineWidth(m_linewidth);
