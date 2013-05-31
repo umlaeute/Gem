@@ -40,13 +40,13 @@ static float s_vertices[]={
 };
 
 static float s_normals[]={
-0, 0, 1,
-0, 0, 1,
-0, 0, 1,
+0, 0, -1,
+0, 0, -1,
+0, 0, -1,
 
-0, 0, 1,
-0, 0, 1,
-0, 0, 1,
+0, 0, -1,
+0, 0, -1,
+0, 0, -1,
 };
 
 static float s_texcoords[]={
