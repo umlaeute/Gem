@@ -50,7 +50,7 @@ public:
       case COLOR   : m_type=GL_COLOR_ARRAY; break;
       case NORMAL  : m_type=GL_NORMAL_ARRAY; break;
       default: /* all the rest is texcoords */
-      case TEXCOORD: m_type=GL_TEXTURE_COORD_ARRAY; break;
+      case TEXTURE : m_type=GL_TEXTURE_COORD_ARRAY; break;
       }
     }
     ~VBO(void) {
@@ -110,19 +110,19 @@ public:
 	m_arrays[i]->render();
       }
     }
-    for(i=0; i<TEXCOORD; i++) {
+    for(i=0; i<TEXTURE; i++) {
       if(m_arrays[i]) {
 	m_arrays[i]->render();
       }
     }
     if(doTex)
       if(texUnits>0) {
-	for(i=TEXCOORD; i<m_arrays.size(); i++) {
+	for(i=TEXTURE; i<m_arrays.size(); i++) {
 	  if(m_arrays[i]) {
 	    glClientActiveTexture(GL_TEXTURE0+texUnit);
 	    m_arrays[i]->render();
 	  }
-	  texUnit=(texUnit+i-TEXCOORD)%texUnits;
+	  texUnit=(texUnit+i-TEXTURE)%texUnits;
 	}
       } else {
 	if(m_arrays[i]) {

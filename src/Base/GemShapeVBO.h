@@ -47,7 +47,7 @@ public:
     VERTEX   = 0,
     COLOR    = 1,
     NORMAL   = 2,
-    TEXCOORD = 3,
+    TEXTURE  = 3,
 
     _LAST
   } arraytype_t;

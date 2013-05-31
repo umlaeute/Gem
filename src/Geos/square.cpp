@@ -68,7 +68,7 @@ square :: square(t_floatarg size)
   vec.assign(s_normals, s_normals+sizeof(s_normals)/sizeof(*s_normals));
   setArray(NORMAL, vec, 3);
   vec.assign(s_texcoords, s_texcoords+sizeof(s_texcoords)/sizeof(*s_texcoords));
-  setArray(TEXCOORD, vec, 2);
+  setArray((arraytype_t)(TEXTURE+0), vec, 2);
   setDefaultDrawtype(GL_POLYGON);
 }
 
