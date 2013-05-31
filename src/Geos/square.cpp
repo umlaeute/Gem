@@ -39,12 +39,36 @@ static float s_vertices[]={
 -1, -1, 0,
 };
 
+static float s_normals[]={
+0, 0, 1,
+0, 0, 1,
+0, 0, 1,
+
+0, 0, 1,
+0, 0, 1,
+0, 0, 1,
+};
+
+static float s_texcoords[]={
+0, 1,
+0, 0,
+1, 0,
+
+1, 0,
+1, 1,
+0, 1,
+};
+
 square :: square(t_floatarg size)
         : GemShapeVBO(size)
 {
   std::vector<float>vec;
   vec.assign(s_vertices, s_vertices+sizeof(s_vertices)/sizeof(*s_vertices));
-  setArray(VERTEX, vec);
+  setArray(VERTEX, vec, 3);
+  vec.assign(s_normals, s_normals+sizeof(s_normals)/sizeof(*s_normals));
+  setArray(NORMAL, vec, 3);
+  vec.assign(s_texcoords, s_texcoords+sizeof(s_texcoords)/sizeof(*s_texcoords));
+  setArray(TEXCOORD, vec, 2);
   setDefaultDrawtype(GL_POLYGON);
 }
 
