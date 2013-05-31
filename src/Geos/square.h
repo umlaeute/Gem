@@ -15,7 +15,7 @@ LOG
 #ifndef _INCLUDE__GEM_GEOS_SQUARE_H_
 #define _INCLUDE__GEM_GEOS_SQUARE_H_
 
-#include "Base/GemShape.h"
+#include "Base/GemShapeVBO.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -30,9 +30,9 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN square : public GemShape
+class GEM_EXTERN square : public GemShapeVBO
 {
-    CPPEXTERN_HEADER(square, GemShape);
+    CPPEXTERN_HEADER(square, GemShapeVBO);
 
     public:
 
