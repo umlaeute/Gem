@@ -116,17 +116,24 @@ public:
     }
   }
   void setArray(arraytype_t type, std::vector<float>&values, unsigned int stride) {
-    if(m_arrays.size()<type) {
-      m_arrays.resize(type);
+    unsetArray(type);
+    if(m_arrays.size()<=type) {
+      m_arrays.resize(type+1);
     }
-    if(m_arrays[type])
-      delete m_arrays[type];
     m_arrays[type]=new PIMPL::VBO(type, values, stride);
 
     if(VERTEX==type || 1>m_size) {
       m_size   = values.size()/stride;
     }
   }
+  void unsetArray(arraytype_t type) {
+    if(m_arrays.size()<=type) {
+      return;
+    }
+    if(m_arrays[type])
+      delete m_arrays[type];
+  }
+
 };
 
 
@@ -212,6 +219,10 @@ void GemShapeVBO :: setArray(arraytype_t type, std::vector<float>&values, unsign
   else 
     m_pimpl->setArray(type, values, stride);
 }
+void GemShapeVBO :: unsetArray(arraytype_t type) {
+  m_pimpl->unsetArray(type);
+}
+
 void GemShapeVBO :: setDefaultDrawtype(GLenum mode) {
   m_pimpl->m_defaultDrawType=mode;
 }

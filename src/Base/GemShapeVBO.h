@@ -62,8 +62,9 @@ protected:
   int m_vbo;
   void vboMess(int mode);
 
-  /* add a given array */
-  void setArray(arraytype_t type, std::vector<float>&values, unsigned int stride=3);
+  /* add/delete a given array */
+  void setArray  (arraytype_t type, std::vector<float>&values, unsigned int stride=3);
+  void unsetArray(arraytype_t type);
   /* provide a default drawtype */
   void setDefaultDrawtype(GLenum);
 
