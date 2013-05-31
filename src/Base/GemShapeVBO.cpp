@@ -34,11 +34,11 @@
 class GemShapeVBO :: PIMPL {
 public:
   class VBO {
+  public:
     std::vector<float>m_data;
     GLuint m_vbo;
     GLenum m_type;
     GLuint m_stride;
-  public:
     VBO(arraytype_t type, std::vector<float>&data, GLuint stride=3) :
       m_data(data),
       m_vbo(0),
