@@ -49,6 +49,7 @@ public:
       case VERTEX  : m_type=GL_VERTEX_ARRAY; break;
       case COLOR   : m_type=GL_COLOR_ARRAY; break;
       case NORMAL  : m_type=GL_NORMAL_ARRAY; break;
+      default: /* all the rest is texcoords */
       case TEXCOORD: m_type=GL_TEXTURE_COORD_ARRAY; break;
       }
     }
@@ -101,13 +102,34 @@ public:
     }
   }
 
-  void renderVBO(GLenum drawType) {
+  void renderVBO(GLenum drawType, bool doTex, int texUnits) {
     unsigned int i;
+    int texUnit=0;
     for(i=0; i<m_arrays.size(); i++) {
       if(m_arrays[i]) {
 	m_arrays[i]->render();
       }
     }
+    for(i=0; i<TEXCOORD; i++) {
+      if(m_arrays[i]) {
+	m_arrays[i]->render();
+      }
+    }
+    if(doTex)
+      if(texUnits>0) {
+	for(i=TEXCOORD; i<m_arrays.size(); i++) {
+	  if(m_arrays[i]) {
+	    glClientActiveTexture(GL_TEXTURE0+texUnit);
+	    m_arrays[i]->render();
+	  }
+	  texUnit=(texUnit+i-TEXCOORD)%texUnits;
+	}
+      } else {
+	if(m_arrays[i]) {
+	  m_arrays[i]->render();
+	}
+      }
+
     glDrawArrays(drawType, 0, m_size);
     for(i=0; i<m_arrays.size(); i++) {
       if(m_arrays[i]) {
@@ -182,15 +204,17 @@ void GemShapeVBO :: render(GemState *state)
   m_texNum =0;
   m_texCoords=NULL;
   m_lighting=false;
+  int numUnits = 0;
 
   state->get(GemState::_GL_TEX_COORDS,    m_texCoords);
   state->get(GemState::_GL_TEX_TYPE,      m_texType);
   state->get(GemState::_GL_TEX_NUMCOORDS, m_texNum);
   state->get(GemState::_GL_LIGHTING,      m_lighting);
+  state->get(GemState::_GL_TEX_UNITS,     numUnits);
 
   switch(m_vbo) {
   case 0: renderShape(state); break;
-  case 1: m_pimpl->renderVBO(m_drawType); break;
+  case 1: m_pimpl->renderVBO(m_drawType, m_texNum>0, numUnits); break;
   default: error("illegal rendermode: VBO=%d", m_vbo);
   }
 
