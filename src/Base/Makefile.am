@@ -72,6 +72,8 @@ libBase_la_SOURCES=  \
     GemPixObj.h \
     GemShape.cpp \
     GemShape.h \
+    GemShapeVBO.cpp \
+    GemShapeVBO.h \
     GemVertex.cpp \
     GemVertex.h \
     GemWinCreate.h \
