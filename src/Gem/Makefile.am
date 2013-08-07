@@ -61,7 +61,7 @@ libGem_la_include_HEADERS += \
 libGem_la_SOURCES =
 
 if !HAVE_LIB_GLEW
-libGem_la_SOURCES += glew.cpp
+libGem_la_SOURCES += glew.c
 endif !HAVE_LIB_GLEW
 
 libGem_la_SOURCES += \
