@@ -115,9 +115,9 @@ int getGLdefine(const char *fixname)
 
     /*
 
-     grep define glew.h                              \
+     grep define ../Gem/glew.h                              \
           | grep "GL_" | awk '{print $2}'            \
-          | egrep "^GL_" | awk '{print length($1),$1}'  \
+          | egrep "^GL_" | sort -u | awk '{print length($1),$1}'  \
           | sort -n                                     \
           | sed -e 's|\([0-9]*\) \(.*\)$|\1 \2\n\1|'    \
           | sed -e :a -e '/^\([0-9]*\)$/N; s/\n/ /; ta'                 \
