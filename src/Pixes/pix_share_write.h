@@ -26,10 +26,13 @@ class GEM_EXTERN pix_share_write : public GemBase
   int getShm(int,t_atom*);
 
   virtual void render(GemState *state);
+  unsigned char *shm_addr;
 #ifndef _WIN32
   int	shm_id;
-  unsigned char *shm_addr;
   struct shmid_ds shm_desc;
+#else
+  HANDLE m_MapFile;
+  char m_fileMappingName[MAXPDSTRING];
 #endif
   size_t m_size;
   t_outlet *m_outlet;
