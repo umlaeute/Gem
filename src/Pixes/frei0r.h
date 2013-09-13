@@ -186,7 +186,7 @@
 #define INCLUDED_FREI0R_H
 
 #ifdef _MSC_VER
- typedef unsigned long uint32_t;
+ // typedef unsigned long uint32_t;
 #else
 # include <inttypes.h>
 #endif
