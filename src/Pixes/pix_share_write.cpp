@@ -114,6 +114,10 @@ pix_share_write :: ~pix_share_write()
 void pix_share_write :: freeShm()
 {
 #ifdef _WIN32
+  if ( shm_addr ) UnmapViewOfFile( shm_addr );
+  shm_addr = NULL;
+  if ( m_MapFile ) CloseHandle( m_MapFile );
+  m_MapFile = NULL;
 #else
   if(shm_addr){
     if (shmdt(shm_addr) == -1) error("shmdt failed at %x", shm_addr);
@@ -128,7 +132,7 @@ void pix_share_write :: freeShm()
     }
   }
   shm_id=0;
-#endif
+#endif /* _WIN32 */
 }
 
 int pix_share_write :: getShm(int argc,t_atom*argv)
@@ -142,9 +146,16 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
 
   if(argc<1)return 7;
 #ifdef _WIN32
+  if ( shm_addr ) UnmapViewOfFile( shm_addr );
+  if ( m_MapFile ) CloseHandle( m_MapFile );
+  if(A_FLOAT==argv->a_type){
+	snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%g", atom_getfloat(argv));
+  } else if (A_SYMBOL==argv->a_type){
+	snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%s", atom_getsymbol(argv)->s_name);
+  }
+
 #else
   if(shm_id>0)freeShm();
-#endif
   if(A_FLOAT==argv->a_type){
     char buf[MAXPDSTRING];
     snprintf(buf, MAXPDSTRING-1, "%g", atom_getfloat(argv));
@@ -154,6 +165,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     fake = hash_str2us(atom_getsymbol(argv)->s_name);
   }
   if(fake<=0)return 8;
+#endif /* _WIN32 */
 
   argc--; argv++;
 
@@ -233,7 +245,35 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
        xsize,ysize,dummy.csize, m_size);
 
 #ifdef _WIN32
-  error("no shared memory on w32!");
+  int segmentSize=m_size+sizeof(t_pixshare_header);
+  
+  m_MapFile = CreateFileMapping(
+               INVALID_HANDLE_VALUE,    // use paging file
+               NULL,                    // default security
+               PAGE_READWRITE,          // read/write access
+               (segmentSize & 0xFFFFFFFF00000000) >> 32,         // maximum object size (high-order DWORD)
+               segmentSize & 0xFFFFFFFF,         // maximum object size (low-order DWORD)
+               m_fileMappingName);      // name of mapping object
+
+  if (m_MapFile == NULL)
+  {
+    error("Could not create file mapping object %s - error %ld.",m_fileMappingName, GetLastError());
+    return -1;
+  }
+
+  shm_addr = (unsigned char*) MapViewOfFile(m_MapFile,   // handle to map object
+                      FILE_MAP_ALL_ACCESS, // read/write permission
+                      0,
+                      0,
+                      segmentSize);
+
+  if ( !shm_addr ){
+    error("Could not get a view of file %s - error %ld",m_fileMappingName, GetLastError());
+    return -1;
+  } else {
+    verbose(0,"File mapping object %s successfully created.",m_fileMappingName);
+  }
+
 #else
 
   /* get a new segment with the size specified by the user
@@ -295,6 +335,9 @@ void pix_share_write :: render(GemState *state)
 
 #ifndef _WIN32
   if(shm_id>0){
+#else
+  if(m_MapFile){
+#endif /* _WIN32 */
     imageStruct *pix = &img->image;
     size_t size=pix->xsize*pix->ysize*pix->csize;
 
@@ -319,7 +362,6 @@ void pix_share_write :: render(GemState *state)
            m_size);
     }
   }
-#endif /* WIN32 */
 }
 
 void pix_share_write :: obj_setupCallback(t_class *classPtr)

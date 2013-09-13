@@ -15,6 +15,11 @@
 #ifndef _WIN32
 # include <sys/ipc.h>
 # include <sys/shm.h>
+#else
+# include <windows.h>
+# include <stdio.h>
+# include <conio.h>
+# include <tchar.h>
 #endif
 
 // this is the header of the shared-memory segment
