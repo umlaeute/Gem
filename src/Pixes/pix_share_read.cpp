@@ -30,6 +30,9 @@ void pix_share_read :: render(GemState *state)
 {
 #ifndef _WIN32
   if(shm_id>0){
+#else
+  if(m_MapFile){
+#endif /* _WIN32 */
     if (shm_addr) {
       t_pixshare_header *h=(t_pixshare_header *)shm_addr;
       unsigned char* data=shm_addr+sizeof(t_pixshare_header);
@@ -51,7 +54,6 @@ void pix_share_read :: render(GemState *state)
       error("no shmaddr");
     }
   }
-#endif
 }
 
 void pix_share_read :: obj_setupCallback(t_class *classPtr)
