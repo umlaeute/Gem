@@ -128,7 +128,7 @@ with the next incoming image.;
 a time n as follows;
 #X msg 517 183 set 0;
 #X text 11 79 [pix_tIIR] is a time-based filter like [pix_motionblur]
-\, [pix_biquad] or pd's [biquad~]. The filter has a feedback- and a
+\, [pix_biquad] or Pd's [biquad~]. The filter has a feedback- and a
 feedforward-section \, the length of each can be specified as arguments.
 The objects will have an inlet for each feedback-coefficient and an
 inlet for each feedforward-coefficient.;

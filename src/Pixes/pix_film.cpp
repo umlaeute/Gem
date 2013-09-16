@@ -187,7 +187,10 @@ pix_film :: pix_film(t_symbol *filename) :
   m_handle(NULL),
   m_outNumFrames(NULL), m_outEnd(NULL),
 #ifdef HAVE_PTHREADS
-  m_thread_id(0), m_mutex(NULL), m_frame(NULL), m_thread_continue(false),
+# ifndef _WIN32
+  m_thread_id(0),
+# endif /* _WIN32 */
+  m_mutex(NULL), m_frame(NULL), m_thread_continue(false),
 #endif
   m_thread_running(false), m_wantThread(false)
 {
@@ -265,7 +268,9 @@ void pix_film :: closeMess(void){
           counter++;
         }
     }
+#ifndef _WIN32
   m_thread_id=0;
+#endif
 
   if ( m_mutex )
     {
