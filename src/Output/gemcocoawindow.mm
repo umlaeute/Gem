@@ -6,7 +6,7 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2011 IOhannes m zmoelnig. forum::für::umläute. IEM
+//    Copyright (c) 2011-2013 IOhannes m zmoelnig. forum::für::umläute. IEM
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
