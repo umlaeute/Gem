@@ -245,6 +245,8 @@ GEM_CHECK_LIB([sdl], [SDL], [SDL_Quit],,,,[SDL windowing], [yes])
 
 ## use GLFW windowing framework
 GEM_CHECK_LIB([libglfw], [glfw], [glfwInit],,,,[GLFW windowing], [yes])
+## use GLFW3 windowing framework
+GEM_CHECK_LIB([glfw3], [glfw3], [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
 
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
