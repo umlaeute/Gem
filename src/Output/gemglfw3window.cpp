@@ -246,6 +246,7 @@ bool gemglfw3window :: create(void)
     return false;
   }
   s_windowmap[m_window]=this;
+  makeCurrent();
 
   // FIXXME: single/double buffering
 
