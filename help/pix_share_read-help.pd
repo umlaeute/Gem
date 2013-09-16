@@ -43,7 +43,7 @@
 #X text 63 241 <i:ID> <i:width> <i:height> <colorspace>;
 #X text 446 284 see also:;
 #X text 18 127 [pix_share_write] and [pix_share_read] need not be in
-the same instance of pd. However all objects need to have access to
+the same instance of Pd. However all objects need to have access to
 the same memory (they probably need to run on the same computer);
 #X obj 451 154 pix_texture;
 #X obj 451 175 square;
@@ -58,7 +58,7 @@ to the same ID).;
 ;
 #X text 50 12 Synopsis: [pix_share_read];
 #X text 446 333 Run the [pix_share_write] help-patch;
-#X text 446 347 in a different pd instance on your;
+#X text 446 347 in a different Pd instance on your;
 #X text 447 361 machine to see the effect.;
 #X obj 519 285 pix_share_write 322 1 1 1;
 #X text 117 299 set <ID> <width> <height> <colorspace>;

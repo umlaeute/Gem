@@ -16,7 +16,7 @@
 #X text 71 31 Class: pix object;
 #X text 29 57 Description: a storage place for a number of images;
 #X text 11 79 [pix_buffer] is a named storage place for images. It
-is quite similar to pd's [table] object (but you cannot open it and
+is quite similar to Pd's [table] object (but you cannot open it and
 have a look at it's contents).;
 #X text 50 11 Synopsis: [pix_buffer];
 #X text 23 281 Inlet 1: bang: get the size of the buffer in frames

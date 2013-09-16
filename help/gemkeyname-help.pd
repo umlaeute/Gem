@@ -54,7 +54,7 @@ cross-platform one day. Thus the KeyName might change on one system
 or another in future times.;
 #X text 37 161 It is not guaranteed \, that Windows / Linux / OSX versions
 will give the same description for the same key pressed !!! Also \,
-there is no guarantee \, that the pd-object [keyname] will return the
+there is no guarantee \, that the Pd-object [keyname] will return the
 same symbols as [gemkeyname];
 #X text 53 376 Outlet 1: state;
 #X text 53 390 Outlet 2: keyName;

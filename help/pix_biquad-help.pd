@@ -127,7 +127,7 @@
 with the next incoming image.;
 #X text 439 378 see also:;
 #X obj 509 381 pix_tIIR;
-#X text 23 76 basically it works like the pd-object [biquad~] (except
+#X text 23 76 basically it works like the Pd-object [biquad~] (except
 \, that applies to images instead of samples);
 #X text 39 134 y(n) = ff1 * w(n) + ff2 * w(n-1) + ff3 * w(n-2);
 #X text 40 149 w(n) = fb0 * x(n) + fb1 * w(n-1) + fb2 * w(n-2);
