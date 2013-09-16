@@ -212,6 +212,7 @@ bool gemglfw3window :: create(void)
     error("window already made!");
     return false;
   }
+  glfwDefaultWindowHints();
 
   GLFWmonitor*monitor=NULL;
   if(m_fullscreen) {
