@@ -285,11 +285,14 @@ void gemglfw3window :: destroy(void)
   s_windowmap.erase(m_window);
   m_window=0;
   info("window", "closed");
+  glfwPollEvents();
 }
 void gemglfw3window :: destroyMess(void)
 {
   if(makeCurrent()) {
+    glfwPollEvents();
     glfwDestroyWindow(m_window);
+    glfwPollEvents();
   }
   destroy();
 }
