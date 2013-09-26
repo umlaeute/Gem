@@ -57,7 +57,7 @@ static const t_namemap_data s_namemap_data[] = {
   #include "GLUtil_generated.h"
   { 0    , 0 }
 };
-static std::map<const char*, int>s_namemap;
+static std::map<std::string, int>s_namemap;
 static void create_namemap(void) {
   const t_namemap_data*data = 0;
   for(data = s_namemap_data; data->s; data++) {
@@ -140,7 +140,7 @@ int getGLdefine(const char *fixname)
   if(firsttime)create_namemap();
   firsttime=0;
 
-  std::map<const char*,int>::iterator it = s_namemap.find(str.c_str());
+  std::map<std::string,int>::iterator it = s_namemap.find(str);
   if(it!=s_namemap.end()) {
     return it->second;
   }
