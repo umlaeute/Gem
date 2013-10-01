@@ -371,6 +371,7 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
 	int npoints, i;
 	t_word *vec;
 
+  float*array=vb.array;
   t_symbol*s=gensym(tab_name.c_str());
 	pd_findbyclass(s, garray_class);
 	if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
@@ -378,12 +379,8 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
   else if (!garray_getfloatwords(a, &npoints, &vec))
     error("%s: bad template for tabLink", tab_name.c_str());
 	else {
-    if(((unsigned int)npoints)!=vb.size){
-      vb.resize(npoints);
-	}
-  
-    float*array=vb.array;
-
+    if(((unsigned int)npoints)>vb.size)
+      npoints=vb.size;
 
 		//~ printf("start copying %d values\n",npoints);
 		for ( i = 0 ; i < npoints ; i++ )	{
