@@ -37,7 +37,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(triangle, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 triangle :: triangle(t_floatarg size)
   : GemShape(size),
-    m_vertexbuffer(0)
+    m_vertexbuffer(0),
+    m_vertexArrayID(0)
 {
     m_drawType = GL_TRIANGLES;
 }
@@ -120,8 +121,6 @@ void triangle :: renderShape(GemState *state)
       glBindVertexArray(m_vertexArrayID);
       post("array=%d", m_vertexArrayID);
     }
-
-
     if(!m_vertexbuffer) {
       // Generate 1 buffer, put the resulting identifier in vertexbuffer
       glGenBuffers(1, &m_vertexbuffer);
