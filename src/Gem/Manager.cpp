@@ -19,6 +19,7 @@
 
 #include "Gem/Manager.h"
 
+#include "Gem/ContextData.h"
 
 #include "Gem/Settings.h"
 #include "Gem/GLStack.h"
@@ -103,9 +104,11 @@ int GemMan::fsaa = 0;
 bool GemMan::pleaseDestroy=false;
 
 // static data
-static const int NUM_LIGHTS = 8;   	// the maximum number of lights
+
 static int s_lightState = 0;        // is lighting on or off
-static int s_lights[NUM_LIGHTS];    // the lighting array
+gem::ContextData<GLint>s_numlights(0); // the maximum number of lights
+gem::ContextData<int*>s_lights    (0); // the lighting array
+
 
 static t_clock *s_clock = NULL;
 static double s_deltime = 50.;
@@ -224,9 +227,6 @@ void GemMan :: initGem()
     return;
   alreadyInit = 1;
 
-  // clear the light array
-  for (int i = 0; i < NUM_LIGHTS; i++)
-    s_lights[i] = 0;
 
   m_clear_color[0] = 0.0;
   m_clear_color[1] = 0.0;
@@ -1263,54 +1263,42 @@ int GemMan :: getProfileLevel() {
 /////////////////////////////////////////////////////////
 GLenum GemMan :: requestLight(int specific)
 {
+  int num_lights = s_numlights;
   int i = 0;
   if (specific > 0)
     i = specific - 1;
-  else
-    {
-      while(s_lights[i])
-        {
-          i++;
-          if (i >= NUM_LIGHTS)
-            {
-              error("GEM: Unable to allocate light");
-              return(static_cast<GLenum>(0));
-            }
-        }
-    }
-  s_lights[i]++;
-  GLenum retLight;
-  switch(i)
-    {
-    case (0) :
-      retLight = GL_LIGHT0;
-      break;
-    case (1) :
-      retLight = GL_LIGHT1;
-      break;
-    case (2) :
-      retLight = GL_LIGHT2;
-      break;
-    case (3) :
-      retLight = GL_LIGHT3;
-      break;
-    case (4) :
-      retLight = GL_LIGHT4;
-      break;
-    case (5) :
-      retLight = GL_LIGHT5;
-      break;
-    case (6) :
-      retLight = GL_LIGHT6;
-      break;
-    case (7) :
-      retLight = GL_LIGHT7;
-      break;
-    default :
-      error("GEM: Unable to allocate world_light");
+  else {
+    if(num_lights<0)
       return(static_cast<GLenum>(0));
+    if(!num_lights) {
+      glGetIntegerv(GL_MAX_LIGHTS, &num_lights);
+      if(num_lights <= 0) {
+	s_numlights=-1;
+	return(static_cast<GLenum>(0));
+      }
+      s_lights=new int[num_lights];
+      int j;
+      // clear the light array
+      for(j=0; j<num_lights; j++)s_lights[j]=0;
+      s_numlights=num_lights;
     }
-  return(retLight);
+
+    while(s_lights[i]) {
+      i++;
+      if (i >= num_lights) {
+	error("GEM: Unable to allocate light");
+	return(static_cast<GLenum>(0));
+      }
+    }
+  }
+  s_lights[i]++;
+  if(i>=0 && i<s_numlights) {
+    return  GL_LIGHT0 + i;
+  } else {
+    int num = s_numlights;
+    error("GEM: Unable to allocate light (%d/%d)", i, num);
+  }
+  return(static_cast<GLenum>(0));
 }
 
 /////////////////////////////////////////////////////////
@@ -1319,44 +1307,16 @@ GLenum GemMan :: requestLight(int specific)
 /////////////////////////////////////////////////////////
 void GemMan :: freeLight(GLenum lightNum)
 {
-  /* LATER use maxlights and calculate i dynamically */
-  int i = 0;
-  switch(lightNum)
-    {
-    case(GL_LIGHT0):
-      i = 0;
-      break;
-    case(GL_LIGHT1):
-      i = 1;
-      break;
-    case(GL_LIGHT2):
-      i = 2;
-      break;
-    case(GL_LIGHT3):
-      i = 3;
-      break;
-    case(GL_LIGHT4):
-      i = 4;
-      break;
-    case(GL_LIGHT5):
-      i = 5;
-      break;
-    case(GL_LIGHT6):
-      i = 6;
-      break;
-    case(GL_LIGHT7):
-      i = 7;
-      break;
-    default:
-      error("GEM: Error freeing a light - bad number");
-      return;
-    }
+  int i = lightNum - GL_LIGHT0;
+  if(i<0 || i >= s_numlights) {
+    error("GEM: Error freeing a light - bad number");
+    return;
+  }
   s_lights[i]--;
-  if (s_lights[i] < 0)
-    {
-      error("GEM: light ref count below zero: %d", i);
-      s_lights[i] = 0;
-    }
+  if (s_lights[i] < 0) {
+    error("GEM: light ref count below zero: %d", i);
+    s_lights[i] = 0;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -1413,7 +1373,7 @@ void GemMan :: printInfo()
   post("max texture: %d", bitnum);
 
   post("lighting %d", s_lightState);
-  for (int i = 0; i < NUM_LIGHTS; i++) {
+  for (int i = 0; i < s_numlights; i++) {
     if (s_lights[i])
       post("light%d: on", i);
   }
