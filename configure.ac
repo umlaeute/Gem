@@ -229,6 +229,8 @@ GEM_CHECK_LIB([glewmx], [GLEWmx], [glewInit],,,,[OpenGL Extension Wrangler libra
 
 
 if test "x$enable_multicontext" = "xyes"; then
+  GEM_CPPFLAGS+=" -DGLEW_MX"
+  AC_DEFINE([GLEW_MX], [1], [multi-context support]),
   have_glew="${have_glewmx}"
   GEM_LIB_GLEW_CFLAGS="$GEM_LIB_GLEWMX_CFLAGS"
   GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
