@@ -289,11 +289,17 @@ struct gemglxwindow::PIMPL {
     }
     // create the rendering context
     try {
-      context = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
+      GLXContext parentcontext = 0;
+#ifndef GLEW_MX
+      parentcontext = masterContext;
+#endif
+      context = glXCreateContext(dpy, vi, parentcontext, GL_TRUE);
+#ifndef GLEW_MX
       // this masterContext should only be initialized once by a static PIMPL
       // see below in gemglxwindow::create()
       if(!masterContext)
         masterContext=context;
+#endif
     } catch(void*e){
       context=NULL;
     }
@@ -451,11 +457,15 @@ struct gemglxwindow::PIMPL {
     return true;
   }
 
+#ifndef GLEW_MX
   static GLXContext  masterContext;// The GLXcontext to share rendering with
   static gem::Context*masterGemContext;
+#endif
 };
+#ifndef GLEW_MX
 GLXContext   gemglxwindow::PIMPL::masterContext=NULL;
 gem::Context*gemglxwindow::PIMPL::masterGemContext=NULL;
+#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -662,6 +672,7 @@ bool gemglxwindow :: create(void)
 {
   bool success=true;
 
+#ifndef GLEW_MX
   static gemglxwindow::PIMPL*constPimpl=NULL;
   if(!constPimpl) {
     constPimpl=new PIMPL();
@@ -688,6 +699,7 @@ bool gemglxwindow :: create(void)
   if(constPimpl->masterGemContext && !m_context) {
     m_context=constPimpl->masterGemContext;
   }
+#endif
 
   int modeNum=4;
   int bestMode=0;
@@ -701,7 +713,6 @@ bool gemglxwindow :: create(void)
   svalue[2]=0;
   if (m_fsaa!=0) setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
 
-
   try {
     success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height);
   } catch (GemException&x) {
@@ -709,7 +720,9 @@ bool gemglxwindow :: create(void)
     success=false;
   }
   if(!success)return false;
-
+#ifdef GLEW_MX
+  m_context=createContext();
+#endif
   XMapRaised(m_pimpl->dpy, m_pimpl->win);
   //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
   XEvent report;
@@ -717,9 +730,14 @@ bool gemglxwindow :: create(void)
   if (glXIsDirect(m_pimpl->dpy, m_pimpl->context))
     post("Direct Rendering enabled!");
 
+  if(!createGemWindow()) {
+    destroyMess();
+    return false;
+  }
+
   cursorMess(m_cursor);
   titleMess(m_title);
-  return createGemWindow();
+  return true;
 }
 void gemglxwindow :: createMess(std::string display)
 {
@@ -781,7 +799,13 @@ void gemglxwindow :: destroy(void)
   m_pimpl->context = NULL;
   if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
 
+#ifdef GLEW_MX
+  m_context=destroyContext(m_context);
+#endif
+
   destroyGemWindow();
+
+
 }
 void gemglxwindow :: destroyMess(void)
 {
