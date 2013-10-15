@@ -29,7 +29,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 world_light :: world_light(t_floatarg lightNum)
-  : m_debug(0), m_thing(NULL)
+  : m_change(1), m_on(1), m_debug(0),
+    m_light(0), m_lightID(0),
+    m_thing(NULL)
 {
   m_color[0] = m_color[1] = m_color[2] = m_color[3] = 1.0;
 
@@ -38,14 +40,10 @@ world_light :: world_light(t_floatarg lightNum)
   m_position[2] = 2.0;
   m_position[3] = 0.0;
 
-  int num;
   if (lightNum < 1.f)
-    num = 0;
+    m_lightID = 0;
   else
-    num = static_cast<int>(lightNum);
-  m_light = GemMan::requestLight(num);
-  m_on = 1;
-  m_change = 1;
+    m_lightID = static_cast<int>(lightNum);
 
   // create the color inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
@@ -58,7 +56,8 @@ world_light :: world_light(t_floatarg lightNum)
 world_light :: ~world_light()
 {
   if(gem_amRendering) {
-    // this should be handled in ~GemBase
+    // this should really handle all current contexts:
+    // >  with c in contexts do stopRendering();
     stopRendering();
   }
 
@@ -104,7 +103,7 @@ void world_light :: lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLf
 }
 void world_light :: lightColorMess(t_symbol*s, int argc, t_atom*argv) {
   GLfloat red=1.f, green=1.f, blue=1.f, alpha=1.f;
-  switch(argc){
+  switch(argc) {
   case 4:
     alpha=atom_getfloat(argv+3);
   case 3:
@@ -129,6 +128,8 @@ void world_light :: lightColorMess(t_symbol*s, int argc, t_atom*argv) {
 void world_light :: startRendering()
 {
   if (m_thing)stopRendering();
+  m_light = GemMan::requestLight(m_lightID);
+  GLenum light=m_light;
   m_thing = gluNewQuadric();
   gluQuadricTexture(m_thing, GL_FALSE);
   gluQuadricDrawStyle(m_thing, static_cast<GLenum>(GLU_FILL));
@@ -169,27 +170,25 @@ void world_light :: renderDebug()
 
 void world_light :: render(GemState *state)
 {
+  int light=m_light;
   if (!m_light)return;
 
-  if (m_change)
-    {
-      m_change = 0;
-      if ( !m_on )
-        {
-          glDisable(m_light);
-          return;
-        }
-
-      glEnable(m_light);
-      glLightfv(m_light, GL_DIFFUSE,  m_color);
-      glLightfv(m_light, GL_SPECULAR, m_color);
+  if (m_change) {
+    m_change = 0;
+    if ( !m_on ) {
+      glDisable(light);
+      return;
     }
 
-  if (m_on)
-    {
-      glLightfv(m_light, GL_POSITION, m_position);
-      renderDebug();
-    }
+    glEnable(light);
+    glLightfv(light, GL_DIFFUSE,  m_color);
+    glLightfv(light, GL_SPECULAR, m_color);
+  }
+
+  if (m_on) {
+    glLightfv(light, GL_POSITION, m_position);
+    renderDebug();
+  }
 }
 
 /////////////////////////////////////////////////////////

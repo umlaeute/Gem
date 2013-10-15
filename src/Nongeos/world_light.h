@@ -103,7 +103,8 @@ class GEM_EXTERN world_light : public GemBase
 
   //////////
   // The light number with reference to OpenGL
-  GLenum          m_light;
+  gem::ContextData<GLenum> m_light;
+  int                      m_lightID; // the requested light
 
   //////////
   GLUquadricObj   *m_thing;
