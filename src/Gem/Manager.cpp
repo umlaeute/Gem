@@ -1309,7 +1309,8 @@ void GemMan :: freeLight(GLenum lightNum)
 {
   int i = lightNum - GL_LIGHT0;
   if(i<0 || i >= s_numlights) {
-    error("GEM: Error freeing a light - bad number");
+    int numlights=s_numlights;
+    error("GEM: Error freeing a light - bad number: %d/%d", i, numlights);
     return;
   }
   s_lights[i]--;
