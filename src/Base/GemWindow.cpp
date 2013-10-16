@@ -382,6 +382,30 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
 
   //  CPPEXTERN_MSG0(classPtr, "print", printMess);
+
+  struct _CallbackClass_die {
+    static void callback(void*data) {
+      // dying!
+      GemWindow*gw=GetMyClass(data);
+      GemWindow*s_last=GemWindow::PIMPL::s_lastWindow;
+      gw->makeCurrent();
+      gw->pushContext();
+      t_symbol*s=gensym("__gem_private__object");
+      if(s->s_thing) {
+	t_atom ap[1];
+	SETFLOAT(ap, -1);
+	typedmess(s->s_thing, gensym("gem_state"), 1, ap);
+      }
+      gw->popContext();
+      if(s_last && GemWindow::PIMPL::s_windows.count(s_last)>0) {
+	s_last->makeCurrent();
+      }
+    }
+    _CallbackClass_die (struct _class*c) {
+      class_addmethod(c, reinterpret_cast<t_method>(callback), gensym("__gem_private_die"), A_NULL);
+    }
+  };
+  _CallbackClass_die _CallbackClassInstance_die (classPtr);
 }
 int GemWindow::call4all(GemWindow::callback_t function,void*data) {
   int i=0;
