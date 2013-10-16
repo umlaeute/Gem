@@ -101,27 +101,29 @@ void GemBase :: gem_startstopMess(int state)
 {
   // for now, this is important, as it is the only way to call the stopRendering
 #if 1
-  if (state && !gem_amRendering){
+  if (state>0 && !gem_amRendering){
     m_enabled = isRunnable();
     if(m_enabled) {
       startRendering();
       m_state=RENDERING;
     }
   }
-  else if (!state && gem_amRendering){
+  else if ((state<=0) && gem_amRendering){
     if(m_enabled) {
       stopRendering();
       m_state=ENABLED;
     }
   }
 
-  gem_amRendering=(state!=0);
-
+  gem_amRendering=(state>0);
 
   // continue sending out the cache message
-  t_atom ap[1];
-  SETFLOAT(ap, state);
-  outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
+  // but only for state 0/1 (e.g. "-1" will stopRendering without propagation)
+  if(0 == state || 1 == state) {
+    t_atom ap[1];
+    SETFLOAT(ap, state);
+    outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
+  }
 #else
   post("gem_startstopMess(%d) called...please report this to the upstream developers", state);
 #endif
