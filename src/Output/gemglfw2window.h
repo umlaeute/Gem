@@ -18,7 +18,7 @@
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  gemglfwindow
+  gemglfw2window
 
   The window manager
 
@@ -51,21 +51,21 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglfwindow : public GemWindow
+class GEM_EXTERN gemglfw2window : public GemWindow
 {
-  CPPEXTERN_HEADER(gemglfwindow, GemWindow);
+  CPPEXTERN_HEADER(gemglfw2window, GemWindow);
 
     public:
 
   //////////
   // Constructor
-  gemglfwindow(void);
+  gemglfw2window(void);
 
  private:
 
   //////////
   // Destructor
-  virtual ~gemglfwindow(void);
+  virtual ~gemglfw2window(void);
 
   void doRender(void);
 
