@@ -17,6 +17,7 @@
 #include "world_light.h"
 
 #include "Gem/Manager.h"
+#include "Base/GemWindow.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT);
 
@@ -48,22 +49,21 @@ world_light :: world_light(t_floatarg lightNum)
   // create the color inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
 }
-
 ////////////////////////////////////////////////////////
 // Destructor
 //
 ////////////////////////////////////////////////////////
 world_light :: ~world_light()
 {
-  if(gem_amRendering) {
-    // this should really handle all current contexts:
-    // >  with c in contexts do stopRendering();
-    stopRendering();
-  }
-
-  if (m_light)
-    GemMan::freeLight(m_light);
-
+  struct cb_struct {
+    static void callback(void*data) {
+      world_light*wl=reinterpret_cast<world_light*>(data);
+      if(wl->gem_amRendering) wl->stopRendering();
+      if(wl->m_light)         GemMan::freeLight(wl->m_light);
+    }
+    cb_struct(void*data) { GemWindow::call4all(callback, data); }
+  };
+  cb_struct callme(this);
 }
 
 ////////////////////////////////////////////////////////
@@ -128,8 +128,10 @@ void world_light :: lightColorMess(t_symbol*s, int argc, t_atom*argv) {
 void world_light :: startRendering()
 {
   if (m_thing)stopRendering();
-  m_light = GemMan::requestLight(m_lightID);
   GLenum light=m_light;
+  if(!light) {
+    m_light = GemMan::requestLight(m_lightID);
+  }
   m_thing = gluNewQuadric();
   gluQuadricTexture(m_thing, GL_FALSE);
   gluQuadricDrawStyle(m_thing, static_cast<GLenum>(GLU_FILL));
