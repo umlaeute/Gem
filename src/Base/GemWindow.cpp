@@ -20,6 +20,8 @@
 #include "GemContext.h"
 #include "Gem/Exception.h"
 
+#include <set>
+
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
@@ -31,8 +33,10 @@ public:
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
     dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
+    s_windows.insert(parent);
   }
   ~PIMPL(void) {
+    s_windows.erase(parent);
     if(qClock) clock_free (qClock);  qClock=NULL;
     if(dispatchClock) clock_free (dispatchClock);  dispatchClock=NULL;
     if(infoOut)outlet_free(infoOut); infoOut=NULL;
@@ -113,9 +117,11 @@ public:
     clock_delay(qClock, 0);
   }
 
-
+  static std::set<GemWindow*>s_windows;
+  static GemWindow*s_lastWindow;
 };
-
+std::set<GemWindow*>GemWindow::PIMPL::s_windows;
+GemWindow* GemWindow::PIMPL::s_lastWindow = 0;
 
 /////////////////////////////////////////////////////////
 //
@@ -306,6 +312,7 @@ void GemWindow::render(void){
     error("unable to switch to current context, cannot render!");
     return;
   }
+  m_pimpl->s_lastWindow = this;
   bang();
   if(m_buffer==2)
     swapBuffers();
@@ -375,4 +382,22 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
 
   //  CPPEXTERN_MSG0(classPtr, "print", printMess);
+}
+int GemWindow::call4all(GemWindow::callback_t function,void*data) {
+  int i=0;
+  GemWindow*s_last=GemWindow::PIMPL::s_lastWindow;
+
+  std::set<GemWindow*>::iterator it;
+  for (it=GemWindow::PIMPL::s_windows.begin(); it!=GemWindow::PIMPL::s_windows.end(); ++it) {
+    (*it)->makeCurrent();
+    (*it)->pushContext();
+    function(data);
+    (*it)->popContext();
+    i++;
+  }
+
+  if(s_last && GemWindow::PIMPL::s_windows.count(s_last)>0) {
+    s_last->makeCurrent();
+  }
+  return i;
 }

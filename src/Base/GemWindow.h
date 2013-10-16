@@ -201,6 +201,13 @@ class GEM_EXTERN GemWindow : public CPPExtern
   int          m_fsaa;
 
   gem::Context*  m_context;
+
+ public:
+  typedef void (*callback_t )(void*data);
+  /* calls the given 'function' with argument 'data'
+   * for all windows, with each window being made 'current'
+   */
+  static int call4all(callback_t function,void*data);
 };
 
 
