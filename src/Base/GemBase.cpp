@@ -74,6 +74,7 @@ GemBase :: GemBase(void)
     m_enabled(true), m_state(INIT)
 {
   m_out1 = outlet_new(this->x_obj, 0);
+  pd_bind(&this->x_obj->ob_pd, gensym("__gem_private__object"));
 }
 
 /////////////////////////////////////////////////////////
@@ -86,9 +87,10 @@ GemBase :: ~GemBase(void)
     stopRendering();
     gem_amRendering=false;
   }
+  if (m_out1)
+    outlet_free(m_out1);
 
-    if (m_out1)
-        outlet_free(m_out1);
+  pd_unbind(&this->x_obj->ob_pd, gensym("__gem_private__object"));
 }
 
 /////////////////////////////////////////////////////////
