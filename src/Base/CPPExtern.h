@@ -157,7 +157,10 @@ class GEM_EXTERN CPPExtern
 #define CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)    	    	\
 public:     	    	    	    	    	    	    	\
 static void obj_freeCallback(void *data)    	    	    	\
-{ CPPExtern *mydata = ((Obj_header *)data)->data; delete mydata; \
+{ CPPExtern *mydata = ((Obj_header *)data)->data;               \
+ if(zgetfn(&mydata->x_obj->ob_pd, gensym("__gem_private_die")))	\
+   pd_typedmess(&mydata->x_obj->ob_pd, gensym("__gem_private_die"), 0, 0); \
+ delete mydata;							\
   ((Obj_header *)data)->Obj_header::~Obj_header(); }   	    	\
 static void real_obj_setupCallback(t_class *classPtr)  	    	\
 { PARENT_CLASS::real_obj_setupCallback(classPtr);    	    	\
