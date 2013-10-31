@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Gem">
+</Property><Property Name="Fichier solution" Value="C:\MinGW\msys\1.0\home\antoine\pd\externals\Gem\build\win-vs2008\Gem.sln">
+</Property><Property Name="Fichier d'options utilisateur" Value="C:\MinGW\msys\1.0\home\antoine\pd\externals\Gem\build\win-vs2008\Gem.suo">
+</Property><Property Name="Date" Value="vendredi 13 septembre 2013">
+</Property><Property Name="Time" Value="09:11">
+</Property><Property Name="Numéro de journal" Value="2">
+</Property></Properties><Event ErrorLevel="2" Project="" Source="Gem.sln" Description="Erreur lors de la création du fichier de sauvegarde : C:\MinGW\msys\1.0\home\antoine\pd\externals\Gem\build\win-vs2008\Gem.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="Gem.suo" Description="Fichier correctement sauvegardé en tant que C:\MinGW\msys\1.0\home\antoine\pd\externals\Gem\build\win-vs2008\Gem.suo.old">
+</Event><Event ErrorLevel="3" Project="Gem" Source="Gem.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="pix_artoolkit" Source="..\..\extra\pix_artoolkit\win-vs2008\pix_artoolkit.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="installer" Source="installer.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="filmAVI" Source="..\..\plugins\filmAVI\win-vs2008\filmAVI.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="filmDS" Source="..\..\plugins\filmDS\win-vs2008\filmDS.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="filmQT" Source="..\..\plugins\filmQT\win-vs2008\filmQT.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="recordQT" Source="..\..\plugins\recordQT\win-vs2008\recordQT.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="videoDS" Source="..\..\plugins\videoDS\win-vs2008\videoDS.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="videoVFW" Source="..\..\plugins\videoVFW\win-vs2008\videoVFW.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="videoHALCON" Source="..\..\plugins\videoHALCON\win-vs2008\videoHALCON.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="pix_drum" Source="..\..\extra\pix_drum\win-vs2008\pix_drum.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="pix_mano" Source="..\..\extra\pix_mano\win-vs2008\pix_mano.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="pix_fiducialtrack" Source="..\..\extra\pix_fiducialtrack\win-vs2008\pix_fiducialtrack.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="imageQT" Source="..\..\plugins\imageQT\win-vs2008\imageQT.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="imageJPEG" Source="..\..\plugins\imageJPEG\win-vs2008\imageJPEG.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="imageTIFF" Source="..\..\plugins\imageTIFF\win-vs2008\imageTIFF.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="imageMAGICK" Source="..\..\plugins\imageMAGICK\win-vs2008\imageMAGICK.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="imageSGI" Source="..\..\plugins\imageSGI\win-vs2008\imageSGI.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="modelOBJ" Source="..\..\plugins\modelOBJ\win-vs2008\modelOBJ.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="modelASSIMP2" Source="..\..\plugins\modelASSIMP2\win-vs2008\modelASSIMP2.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="videoOptiTrack" Source="..\..\plugins\videoOptiTrack\win-vs2008\videoOptiTrack.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="videoTEST" Source="..\..\plugins\videoTEST\win-vs2008\videoTEST.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="3" Project="pix_hit" Source="..\..\extra\pix_hit\win-vs2008\pix_hit.vcproj" Description="Aucune conversion requise">
+</Event><Event ErrorLevel="0" Project="" Source="Gem.sln" Description="Solution correctement convertie">
+</Event><Event ErrorLevel="3" Project="" Source="Gem.sln" Description="Converted">
+</Event></UpgradeLog>

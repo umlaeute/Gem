@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="extra - common config"
+	OutputDirectory="$(ProjectDir)"
+	IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PrecompiledHeaderFile="$(IntDir)\$(ProjectName).pch"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="$(OutDir)\..\$(ProjectName).dll"
+	/>
+</VisualStudioPropertySheet>

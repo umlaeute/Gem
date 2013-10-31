@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="pthread"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\..\..\pd\src;&quot;$(ProgramFiles)\pd\src&quot;"
+		PreprocessorDefinitions="HAVE_PTHREADS;HAVE_PTHREAD_H"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="pthreadVC.lib"
+		AdditionalLibraryDirectories="..\..\..\pd\bin;&quot;$(ProgramFiles)\pd\bin&quot;"
+	/>
+</VisualStudioPropertySheet>

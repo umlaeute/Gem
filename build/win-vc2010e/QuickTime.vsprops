@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="QuickTime"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(ProgramFiles)\QuickTime SDK\CIncludes"
+		PreprocessorDefinitions="HAVE_QUICKTIME"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="QTMLClient.lib"
+		AdditionalLibraryDirectories="$(ProgramFiles)\QuickTime SDK\Libraries"
+	/>
+</VisualStudioPropertySheet>

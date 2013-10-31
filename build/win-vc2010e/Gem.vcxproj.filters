@@ -1,0 +1,3606 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="temp">
+      <UniqueIdentifier>{838c748e-ef6e-410e-bbcd-062a84f6e3b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{bcfac8de-1829-4112-b312-8b3ecf5eba05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gem">
+      <UniqueIdentifier>{cf29ef9f-4708-4f02-a7aa-2157c8f537d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RTE">
+      <UniqueIdentifier>{2bcabc40-93d3-46f4-80c6-4f48ce6c2653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins">
+      <UniqueIdentifier>{e54b6541-64b0-467f-b3b2-95267e19cb72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{171271e5-af58-4de8-94e9-d89289d04c76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Base">
+      <UniqueIdentifier>{fa263a74-e5b8-413d-b510-eee0fc343e89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Geos">
+      <UniqueIdentifier>{5781c1fb-c2e3-4140-b1a2-9f3487f62e82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Nongeos">
+      <UniqueIdentifier>{b8b23aa7-3afe-47f2-82ac-26e9efcce0bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Manips">
+      <UniqueIdentifier>{80086c9a-1b64-4436-96db-4fa8c47bbe2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Controls">
+      <UniqueIdentifier>{627ef35f-664b-4f53-99da-c2724ab26b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Pixes">
+      <UniqueIdentifier>{595f337f-123d-4551-9a59-722802e1a93f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Particles">
+      <UniqueIdentifier>{8f5d6771-b20f-4616-853b-e80594964c2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Particles\partlib">
+      <UniqueIdentifier>{27fc179f-2961-452a-b164-7fcf934a4a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\OpenGL">
+      <UniqueIdentifier>{b9f6e54f-d47f-4e95-99bf-72ed700f8398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Output">
+      <UniqueIdentifier>{17a5c8b2-5fd8-4b1c-bc8e-660b235395b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{8f539b0f-8000-4b94-88f4-13dde9e41e72}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Utils\any.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\Functions.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\GemMath.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\GemString.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\GLUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\GLUtil_generated.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\Matrix.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\PixPete.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\plist.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\pstk.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\SIMD.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\SynchedWorkerThread.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\Thread.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\ThreadMutex.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\ThreadSemaphore.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\Vector.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utils\WorkerThread.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Cache.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\ContextData.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Dylib.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Event.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Exception.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\ExportDef.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Files.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\GemConfig.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\GemGL.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\glew.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\GLStack.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\glxew.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Image.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\ImageIO.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Loaders.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Manager.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\PBuffer.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\PixConvert.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Properties.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Rectangle.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\RTE.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Settings.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\State.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\Version.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\wglew.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RTE\Array.h">
+      <Filter>RTE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RTE\MessageCallbacks.h">
+      <Filter>RTE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RTE\Outlet.h">
+      <Filter>RTE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RTE\RTE.h">
+      <Filter>RTE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RTE\Symbol.h">
+      <Filter>RTE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\film.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\filmBase.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\imageBase.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\imageloader.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\imagesaver.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\modelloader.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\PluginFactory.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\PluginFactoryTimple.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\record.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\recordBase.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\video.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\plugins\videoBase.h">
+      <Filter>plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\CPPExtern.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemBase.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemContext.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemGLBase.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemGluObj.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemPathBase.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemPixDualObj.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemPixObj.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemShape.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemVertex.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemWinCreate.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\GemWindow.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Base\TextBase.h">
+      <Filter>Objects\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\circle.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\colorSquare.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\cone.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\cube.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\cuboid.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\curve.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\curve3d.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\cylinder.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\disk.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\GemSplash.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\gemvertexbuffer.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\imageVert.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\mesh_line.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\mesh_square.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\model.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\multimodel.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\newWave.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\polygon.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\pqtorusknots.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\primTri.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\rectangle.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\ripple.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\rubber.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\scopeXYZ~.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\slideSquares.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\sphere.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\sphere3d.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\square.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\surface3d.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\teapot.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\text2d.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\text3d.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\textextruded.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\textoutline.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\torus.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\trapezoid.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\triangle.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Geos\tube.h">
+      <Filter>Objects\Geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Nongeos\light.h">
+      <Filter>Objects\Nongeos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Nongeos\spot_light.h">
+      <Filter>Objects\Nongeos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Nongeos\world_light.h">
+      <Filter>Objects\Nongeos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\accumrotate.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\alpha.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\ambient.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\ambientRGB.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\camera.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\color.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\colorRGB.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\depth.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\diffuse.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\diffuseRGB.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\emission.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\emissionRGB.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\fragment_program.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\glsl_fragment.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\glsl_geometry.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\glsl_program.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\glsl_vertex.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\linear_path.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\ortho.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\polygon_smooth.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\rotate.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\rotateXYZ.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\scale.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\scaleXYZ.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\separator.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shearXY.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shearXZ.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shearYX.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shearYZ.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shearZX.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shearZY.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\shininess.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\specular.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\specularRGB.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\spline_path.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\translate.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\translateXYZ.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Manips\vertex_program.h">
+      <Filter>Objects\Manips</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemframebuffer.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemhead.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemkeyboard.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemkeyname.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemlist.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemlist_info.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemlist_matrix.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemmouse.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemreceive.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\gemwin.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controls\render_trigger.h">
+      <Filter>Objects\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\FreeFrame.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\frei0r.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_2grey.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_a_2grey.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_add.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_aging.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_alpha.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_background.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_backlight.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_biquad.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_bitmask.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_blob.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_blur.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_buf.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_buffer.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_buffer_read.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_buffer_write.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_chroma_key.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_clearblock.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_color.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_coloralpha.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_colorclassify.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_colormatrix.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_colorreduce.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_compare.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_composite.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_contrast.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_convert.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_convolve.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_coordinate.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_crop.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_cubemap.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_curve.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_data.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_deinterlace.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_delay.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_diff.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_dot.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_draw.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_dump.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_duotone.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_emboss.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_equal.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_film.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_flip.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_freeframe.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_frei0r.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_gain.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_grey.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_halftone.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_histo.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_hsv2rgb.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_image.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_imageInPlace.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_info.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_invert.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_kaleidoscope.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_levels.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_lumaoffset.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_mask.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_mean_color.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_metaimage.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_mix.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_motionblur.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_movement.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_movement2.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_movie.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_multiblob.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_multiimage.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_multiply.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_multitexture.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_noise.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_normalize.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_offset.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_pix2sig.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_posterize.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_puzzle.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_rds.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_record.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_rectangle.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_refraction.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_resize.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_rgb2hsv.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_rgba.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_roi.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_roll.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_rtx.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_scanline.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_set.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_share.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_share_read.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_share_write.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_sig2pix.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_snap.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_snap2tex.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_subtract.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_takealpha.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_test.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_texture.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_threshold.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_threshold_bernsen.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_tIIR.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_tIIRf.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_video.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_vpaint.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_write.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_writer.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_yuv.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Pixes\pix_zoom.h">
+      <Filter>Objects\Pixes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_color.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_damp.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_draw.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_follow.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_gravity.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_head.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_info.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_killold.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_killslow.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_orbitpoint.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_render.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_sink.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_size.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_source.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_targetcolor.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_targetsize.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_velcone.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_velocity.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_velsphere.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\part_vertex.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\papi\general.h">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\papi\papi.h">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\partlib_base.h">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Particles\papi\vector.h">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglAccum.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglActiveTextureARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglAlphaFunc.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglAreTexturesResident.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglArrayElement.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglBegin.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglBindProgramARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglBindTexture.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglBitmap.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglBlendEquation.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglBlendFunc.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCallList.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClear.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClearAccum.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClearColor.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClearDepth.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClearIndex.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClearStencil.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglClipPlane.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3b.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3bv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3ub.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3ubv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3ui.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3uiv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3us.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor3usv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4b.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4bv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4ub.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4ubv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4ui.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4uiv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4us.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColor4usv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColorMask.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglColorMaterial.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCopyPixels.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCopyTexImage1D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCopyTexImage2D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCopyTexSubImage1D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCopyTexSubImage2D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglCullFace.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDeleteTextures.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDepthFunc.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDepthMask.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDepthRange.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDisable.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDisableClientState.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDrawArrays.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDrawBuffer.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglDrawElements.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEdgeFlag.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEnable.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEnableClientState.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEnd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEndList.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord1d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord1dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord1f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord1fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord2d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord2dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord2f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalCoord2fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalMesh1.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalMesh2.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalPoint1.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglEvalPoint2.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFeedbackBuffer.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFinish.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFlush.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFogf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFogfv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFogi.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFogiv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFrontFace.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglFrustum.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGenLists.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGenProgramsARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGenTextures.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetError.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetFloatv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetIntegerv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetMapdv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetMapfv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetMapiv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetPointerv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglGetString.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglHint.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexdv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexfv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexi.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexiv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexMask.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexs.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexsv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexub.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIndexubv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglInitNames.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIsEnabled.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIsList.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglIsTexture.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLightf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLighti.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLightModelf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLightModeli.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLineStipple.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLineWidth.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLoadIdentity.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLoadMatrixd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLoadMatrixf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLoadName.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLoadTransposeMatrixd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLoadTransposeMatrixf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglLogicOp.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMap1d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMap1f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMap2d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMap2f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMapGrid1d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMapGrid1f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMapGrid2d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMapGrid2f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMaterialf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMaterialfv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMateriali.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMatrixMode.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMultiTexCoord2fARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMultMatrixd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMultMatrixf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMultTransposeMatrixd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglMultTransposeMatrixf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNewList.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3b.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3bv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglNormal3sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglOrtho.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPassThrough.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPixelStoref.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPixelStorei.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPixelTransferf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPixelTransferi.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPixelZoom.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPointSize.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPolygonMode.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPolygonOffset.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPopAttrib.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPopClientAttrib.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPopMatrix.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPopName.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPrioritizeTextures.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglProgramEnvParameter4dARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglProgramEnvParameter4fvARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglProgramLocalParameter4fvARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglProgramStringARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPushAttrib.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPushClientAttrib.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPushMatrix.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglPushName.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos2sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos3sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRasterPos4sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRectd.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRectf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRecti.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRects.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRenderMode.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglReportError.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRotated.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglRotatef.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglScaled.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglScalef.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglScissor.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglSelectBuffer.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglShadeModel.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglStencilFunc.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglStencilMask.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglStencilOp.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord1sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord2sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord3sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexCoord4sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexEnvf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexEnvi.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexGend.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexGenf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexGenfv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexGeni.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexImage2D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexParameterf.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexParameteri.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexSubImage1D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTexSubImage2D.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTranslated.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglTranslatef.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMgluLookAt.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglUniform1fARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMgluPerspective.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglUseProgramObjectARB.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex2sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex3sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4d.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4dv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4f.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4fv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4i.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4iv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4s.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglVertex4sv.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GEMglViewport.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\openGL\GLdefine.h">
+      <Filter>Objects\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Output\gemw32window.h">
+      <Filter>Objects\Output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gem\configNT.h">
+      <Filter>config</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Utils\Functions.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\GemString.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\GLUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\Matrix.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\MSVCMinGW.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\plist.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\pstk.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\SIMD.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\SynchedWorkerThread.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\Thread.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\ThreadMutex.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\ThreadSemaphore.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\Vector.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\WorkerThread.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Cache.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\ContextData.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Dylib.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Event.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Exception.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Files.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\glew.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\GLStack.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Image.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\ImageLoad.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\ImageSave.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Loaders.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Manager.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\PBuffer.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\PixConvertAltivec.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\PixConvertSSE2.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Properties.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Rectangle.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Settings.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\Setup.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gem\State.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Version.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RTE\Array.cpp">
+      <Filter>RTE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RTE\Outlet.cpp">
+      <Filter>RTE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RTE\RTE.cpp">
+      <Filter>RTE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RTE\Symbol.cpp">
+      <Filter>RTE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\film.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\filmBase.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\imageBase.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\imageloader.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\imagesaver.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\modelloader.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\PluginFactory.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\record.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\recordBase.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\video.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\videoBase.cpp">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\CPPExtern.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemBase.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemContext.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemGluObj.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemPathBase.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemPixDualObj.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemPixObj.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemShape.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemVertex.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemWinCreateNT.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\GemWindow.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\TextBase.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\circle.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\colorSquare.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\cone.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\cube.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\cuboid.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\curve.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\curve3d.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\cylinder.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\disk.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\GemSplash.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\gemvertexbuffer.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\imageVert.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\mesh_line.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\mesh_square.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\model.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\multimodel.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\newWave.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\polygon.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\pqtorusknots.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\primTri.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\rectangle.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\ripple.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\rubber.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\scopeXYZ~.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\slideSquares.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\sphere.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\sphere3d.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\square.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\surface3d.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\teapot.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\text2d.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\text3d.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\textextruded.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\textoutline.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\torus.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\trapezoid.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\triangle.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Geos\tube.cpp">
+      <Filter>Objects\Geos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Nongeos\light.cpp">
+      <Filter>Objects\Nongeos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Nongeos\spot_light.cpp">
+      <Filter>Objects\Nongeos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Nongeos\world_light.cpp">
+      <Filter>Objects\Nongeos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\accumrotate.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\alpha.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\ambient.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\ambientRGB.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\camera.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\color.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\colorRGB.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\depth.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\diffuse.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\diffuseRGB.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\emission.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\emissionRGB.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\fragment_program.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\glsl_fragment.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\glsl_geometry.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\glsl_program.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\glsl_vertex.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\linear_path.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\ortho.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\polygon_smooth.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\rotate.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\rotateXYZ.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\scale.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\scaleXYZ.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\separator.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shearXY.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shearXZ.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shearYX.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shearYZ.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shearZX.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shearZY.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\shininess.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\specular.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\specularRGB.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\spline_path.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\translate.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\translateXYZ.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Manips\vertex_program.cpp">
+      <Filter>Objects\Manips</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemframebuffer.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemhead.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemkeyboard.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemkeyname.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemlist.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemlist_info.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemlist_matrix.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemmouse.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemreceive.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\gemwin.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controls\render_trigger.cpp">
+      <Filter>Objects\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_2grey.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_a_2grey.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_add.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_aging.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_alpha.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_background.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_backlight.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_biquad.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_bitmask.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_blob.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_blur.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_buf.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_buffer.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_buffer_read.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_buffer_write.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_chroma_key.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_clearblock.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_color.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_coloralpha.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_colorclassify.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_colormatrix.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_colorreduce.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_compare.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_composite.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_contrast.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_convert.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_convolve.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_coordinate.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_crop.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_cubemap.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_curve.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_data.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_deinterlace.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_delay.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_diff.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_dot.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_draw.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_dump.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_duotone.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_emboss.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_equal.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_film.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_flip.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_freeframe.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_frei0r.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_gain.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_grey.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_halftone.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_histo.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_hsv2rgb.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_image.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_imageInPlace.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_info.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_invert.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_kaleidoscope.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_levels.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_lumaoffset.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_mask.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_mean_color.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_metaimage.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_mix.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_motionblur.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_movement.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_movement2.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_movie.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_multiblob.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_multiimage.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_multiply.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_multitexture.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_noise.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_normalize.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_offset.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_pix2sig.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_posterize.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_puzzle.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_rds.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_record.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_rectangle.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_refraction.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_resize.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_rgb2hsv.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_rgba.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_roi.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_roll.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_rtx.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_scanline.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_set.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_share_read.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_share_write.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_sig2pix.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_snap.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_snap2tex.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_subtract.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_takealpha.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_test.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_texture.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_threshold.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_threshold_bernsen.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_tIIR.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_tIIRf.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_video.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_vpaint.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_write.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_writer.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_yuv.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Pixes\pix_zoom.cpp">
+      <Filter>Objects\Pixes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_color.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_damp.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_draw.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_follow.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_gravity.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_head.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_info.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_killold.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_killslow.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_orbitpoint.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_render.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_sink.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_size.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_source.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_targetcolor.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_targetsize.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_velcone.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_velocity.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_velsphere.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\part_vertex.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\papi\actionapi.cpp">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\papi\actions.cpp">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\papi\opengl.cpp">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\partlib_base.cpp">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Particles\papi\system.cpp">
+      <Filter>Objects\Particles\partlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglAccum.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglActiveTextureARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglAlphaFunc.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglAreTexturesResident.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglArrayElement.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglBegin.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglBindProgramARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglBindTexture.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglBitmap.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglBlendEquation.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglBlendFunc.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCallList.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClear.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClearAccum.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClearColor.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClearDepth.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClearIndex.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClearStencil.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglClipPlane.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3b.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3bv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3ub.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3ubv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3ui.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3uiv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3us.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor3usv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4b.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4bv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4ub.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4ubv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4ui.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4uiv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4us.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColor4usv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColorMask.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglColorMaterial.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCopyPixels.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCopyTexImage1D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCopyTexImage2D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCopyTexSubImage1D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCopyTexSubImage2D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglCullFace.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDeleteTextures.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDepthFunc.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDepthMask.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDepthRange.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDisable.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDisableClientState.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDrawArrays.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDrawBuffer.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglDrawElements.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEdgeFlag.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEnable.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEnableClientState.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEnd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEndList.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord1d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord1dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord1f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord1fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord2d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord2dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord2f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalCoord2fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalMesh1.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalMesh2.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalPoint1.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglEvalPoint2.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFeedbackBuffer.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFinish.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFlush.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFogf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFogfv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFogi.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFogiv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFrontFace.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglFrustum.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGenLists.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGenProgramsARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGenTextures.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetError.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetFloatv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetIntegerv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetMapdv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetMapfv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetMapiv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetPointerv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglGetString.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglHint.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexdv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexfv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexi.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexiv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexMask.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexs.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexsv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexub.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIndexubv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglInitNames.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIsEnabled.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIsList.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglIsTexture.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLightf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLighti.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLightModelf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLightModeli.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLineStipple.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLineWidth.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLoadIdentity.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLoadMatrixd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLoadMatrixf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLoadName.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLoadTransposeMatrixd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLoadTransposeMatrixf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglLogicOp.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMap1d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMap1f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMap2d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMap2f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMapGrid1d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMapGrid1f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMapGrid2d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMapGrid2f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMaterialf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMaterialfv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMateriali.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMatrixMode.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMultiTexCoord2fARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMultMatrixd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMultMatrixf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMultTransposeMatrixd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglMultTransposeMatrixf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNewList.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3b.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3bv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglNormal3sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglOrtho.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPassThrough.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPixelStoref.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPixelStorei.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPixelTransferf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPixelTransferi.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPixelZoom.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPointSize.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPolygonMode.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPolygonOffset.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPopAttrib.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPopClientAttrib.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPopMatrix.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPopName.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPrioritizeTextures.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglProgramEnvParameter4dARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglProgramEnvParameter4fvARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglProgramLocalParameter4fvARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglProgramStringARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPushAttrib.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPushClientAttrib.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPushMatrix.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglPushName.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos2sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos3sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRasterPos4sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRectd.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRectf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRecti.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRects.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRenderMode.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglReportError.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRotated.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglRotatef.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglScaled.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglScalef.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglScissor.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglSelectBuffer.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglShadeModel.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglStencilFunc.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglStencilMask.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglStencilOp.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord1sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord2sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord3sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexCoord4sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexEnvf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexEnvi.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexGend.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexGenf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexGenfv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexGeni.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexImage2D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexParameterf.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexParameteri.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexSubImage1D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTexSubImage2D.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTranslated.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglTranslatef.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMgluLookAt.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglUniform1fARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMgluPerspective.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglUseProgramObjectARB.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex2sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex3sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4d.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4dv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4f.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4fv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4i.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4iv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4s.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglVertex4sv.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GEMglViewport.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\openGL\GLdefine.cpp">
+      <Filter>Objects\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Output\gemw32window.cpp">
+      <Filter>Objects\Output</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

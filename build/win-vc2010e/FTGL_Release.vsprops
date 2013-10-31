@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="FTGL Release"
+	InheritedPropertySheets=".\FTGL.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\..\src;&quot;$(FREETYPE)\include&quot;;&quot;$(FTGL)\src&quot;"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="freetype235mt.lib"
+		AdditionalLibraryDirectories=""
+	/>
+</VisualStudioPropertySheet>

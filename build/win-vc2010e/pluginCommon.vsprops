@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="plugin - common config"
+	OutputDirectory="$(SolutionDir)"
+	IntermediateDirectory="$(ProjectDir)/$(ConfigurationName)"
+	>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="$(OutDir)/gem_$(ProjectName).dll"
+	/>
+</VisualStudioPropertySheet>
