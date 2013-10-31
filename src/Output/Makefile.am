@@ -41,6 +41,10 @@ if HAVE_LIB_LIBGLFW
 pkglib_LTLIBRARIES += gemglfwindow.la
 endif
 
+if HAVE_LIB_GLFW3
+pkglib_LTLIBRARIES += gemglfw3window.la
+endif
+
 
 
 
@@ -258,6 +262,34 @@ gemglfwindow_la_SOURCES = \
   gemglfwindow.h
 
 
+########### gemglfw3window ###########
+# some default flags
+gemglfw3window_la_CXXFLAGS =
+gemglfw3window_la_LDFLAGS  = $(COMMON_LDFLAGS)
+gemglfw3window_la_LIBADD   =
+# RTE flags
+gemglfw3window_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+gemglfw3window_la_LIBADD   += @GEM_RTE_LIBS@
+# arch flags
+gemglfw3window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+gemglfw3window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemglfw3window_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglfw3window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemglfw3window_la @MOREFLAGS@
+
+# object specific libraries
+gemglfw3window_la_CXXFLAGS += @GEM_LIB_GLFW3_CFLAGS@
+gemglfw3window_la_LIBADD   += @GEM_LIB_GLFW3_LIBS@
+gemglfw3window_la_LDFLAGS  +=
+
+## SOURCES
+gemglfw3window_la_SOURCES = \
+  gemglfw3window.cpp \
+  gemglfw3window.h
+
+
+# convenience symlinks for pkglib_LTLIBRARIES
 # convenience symlinks for pkglib_LTLIBRARIES
 
 ## uha, this is ugly

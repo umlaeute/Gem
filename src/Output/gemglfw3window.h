@@ -10,15 +10,15 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEM_OUTPUT_GEMGLFWINDOW_H_
-#define _INCLUDE__GEM_OUTPUT_GEMGLFWINDOW_H_
+#ifndef _INCLUDE__GEM_OUTPUT_GEMGLFW3WINDOW_H_
+#define _INCLUDE__GEM_OUTPUT_GEMGLFW3WINDOW_H_
 
 #include "Base/GemWindow.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  gemglfwindow
+  gemglfw3window
 
   The window manager
 
@@ -51,21 +51,21 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglfwindow : public GemWindow
+class GEM_EXTERN gemglfw3window : public GemWindow
 {
-  CPPEXTERN_HEADER(gemglfwindow, GemWindow);
+  CPPEXTERN_HEADER(gemglfw3window, GemWindow);
 
     public:
 
   //////////
   // Constructor
-  gemglfwindow(void);
+  gemglfw3window(void);
 
  private:
 
   //////////
   // Destructor
-  virtual ~gemglfwindow(void);
+  virtual ~gemglfw3window(void);
 
   void doRender(void);
 
@@ -104,6 +104,10 @@ class GEM_EXTERN gemglfwindow : public GemWindow
   void glprofileMess(int, int);
   unsigned int m_profile_major, m_profile_minor;
 
+  void glesMess(bool);
+  bool m_gles;
+  GLFWwindow *m_window;
+
  private:
 
   //////////
@@ -111,20 +115,19 @@ class GEM_EXTERN gemglfwindow : public GemWindow
   void windowsizeCallback(int width, int height);
   int  windowcloseCallback(void);
   void windowrefreshCallback(void);
-  void keyCallback(int key, int action);
-  void charCallback(int character, int action);
-  void mousebuttonCallback(int button, int action);
-  void mouseposCallback(int x, int y);
-  int m_wheelpos;
-  void mousewheelCallback(int pos);
-  static void windowsizeCb(int width, int height);
-  static int  windowcloseCb(void);
-  static void windowrefreshCb(void);
-  static void keyCb(int key, int action);
-  static void charCb(int character, int action);
-  static void mousebuttonCb(int button, int action);
-  static void mouseposCb(int x, int y);
-  static void mousewheelCb(int pos);
+  void keyCallback(int key, int scancode, int action, int mods);
+  void charCallback(unsigned int character);
+  void mousebuttonCallback(int button, int action, int mods);
+  void mouseposCallback(float x, float y);
+  void scrollCallback(float x, float y);
+  static void windowsizeCb(GLFWwindow*, int width, int height);
+  static void windowcloseCb(GLFWwindow*);
+  static void windowrefreshCb(GLFWwindow*);
+  static void keyCb(GLFWwindow*, int key, int scancode, int action, int mods);
+  static void charCb(GLFWwindow*, unsigned int character);
+  static void mousebuttonCb(GLFWwindow*, int button, int action, int mods);
+  static void mouseposCb(GLFWwindow*, double x, double y);
+  static void scrollCb(GLFWwindow*, double x, double y);
 };
 
 #endif    // for header file

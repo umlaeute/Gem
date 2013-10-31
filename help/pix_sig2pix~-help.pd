@@ -74,7 +74,7 @@ factor with [block~] to get decent framerates.;
 #X text 12 74 [pix_sig2pix~] will interprete the 4 incoming audio-streams
 as values for the red \, green \, blue and alpha channel of an image.
 Each image corresponds to an audio-block (signal-vector). The default
-blocksize in pd is 64 samples. If you want images with more than 64
+blocksize in Pd is 64 samples. If you want images with more than 64
 pixels \, you will have to change the blocksize with the [block~] object.
 The default image-size is calculated from the blocksize (eg: 64samples
 -> 8x8 & 128samples -> 16x8) \, but you can set it either with arguments

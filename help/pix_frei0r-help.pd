@@ -22,7 +22,7 @@ Frei0r is a minimalistic plugin API for realtime video effects.;
 #X text 15 513 You can get more information as well as links to downloadable
 plugin-packs at http://piksel.org/frei0r;
 #X msg 455 330 gemList;
-#X text 12 308 Plugins are searched in all the paths that pd searches
+#X text 12 308 Plugins are searched in all the paths that Pd searches
 for abstractions \, ...!;
 #X text 28 56 Description: run a Frei0r effect;
 #X obj 449 113 gemhead;
@@ -90,7 +90,7 @@ for abstractions \, ...!;
 #X text 515 190 need RGBA images!;
 #X obj 451 289 pix_frei0r pixeliz0r;
 #X text 442 426 finding the "pixeliz0r" plugin;
-#X text 445 457 plugin set) in pd's search path;
+#X text 445 457 plugin set) in Pd's search path;
 #X text 443 441 (which is part of the official frei0r;
 #X text 12 112 If you specify the plugin when creating the object (e.g
 [pix_frei0r bw0r] or [pix_bw0r] \, the plugin is fixed and you cannot

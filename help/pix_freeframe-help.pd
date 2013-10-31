@@ -81,7 +81,7 @@ domain and commercial plugin-packs at http://freeframe.org;
 #X text 442 431 This example relies on;
 #X text 442 446 finding the "WaveVFX" plugin;
 #X text 443 461 (which is part of PeteWarden's;
-#X text 445 477 plugins) in pd's search path;
+#X text 445 477 plugins) in Pd's search path;
 #X obj 451 179 pix_rgba;
 #X text 513 176 FreeFrame plugins;
 #X text 515 190 need RGBA images!;
@@ -92,7 +92,7 @@ new one);
 #X text 13 154 However \, if you only create an object [pix_freeframe]
 (without specifying the pugin \, you will get a dynamic version \,
 where you can load in a plugin using the "load" message.;
-#X text 12 308 Plugins are searched in all the paths that pd searches
+#X text 12 308 Plugins are searched in all the paths that Pd searches
 for abstractions \, ...!;
 #X text 13 284 FreeFrame numerical parameters are supposed to be in
 the range 0..1.;
