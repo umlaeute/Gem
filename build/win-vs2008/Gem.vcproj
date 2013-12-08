@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\pthread.vsprops;.\puredata.vsprops;.\FTGL_Release.vsprops;.\Release.vsprops;.\SIMD.vsprops;.\GemInternal.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;.\puredata.vsprops;.\pthread.vsprops;.\FTGL_Release.vsprops;.\Release.vsprops;.\SIMD.vsprops;.\GemInternal.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -354,7 +354,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\Gem\glew.cpp"
+				RelativePath="..\..\src\Gem\glew.c"
 				>
 			</File>
 			<File
