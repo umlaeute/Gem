@@ -6,6 +6,15 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\..\GemLibs\ARToolKit\include&quot;"
+		AdditionalIncludeDirectories="&quot;$(ARTOOLKIT_DIR)\include&quot;"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="libAR.lib"
+		AdditionalLibraryDirectories="$(ARTOOLKIT_DIR)\lib"
+	/>
+	<UserMacro
+		Name="ARTOOLKIT_DIR"
+		Value="C:\dev\ARToolKit"
 	/>
 </VisualStudioPropertySheet>
