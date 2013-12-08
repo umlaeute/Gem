@@ -6,12 +6,16 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(ProjectDir)\..\..\..\..\assimp--2.0.863-sdk\include"
+		AdditionalIncludeDirectories="&quot;$(ASSIMP2_DIR)\include&quot;"
 		PreprocessorDefinitions="HAVE_LIBASSIMP;HAVE_ASSIMP_H"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="assimp.lib"
-		AdditionalLibraryDirectories="$(ProjectDir)\..\..\..\..\assimp--2.0.863-sdk\lib\assimp_release-dll_win32"
+		AdditionalLibraryDirectories="&quot;$(ASSIMP2_DIR)\lib\assimp_release-dll_win32&quot;"
+	/>
+	<UserMacro
+		Name="ASSIMP2_DIR"
+		Value="C:\dev\assimp--2.0.863-sdk"
 	/>
 </VisualStudioPropertySheet>
