@@ -99,8 +99,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void normyMess(t_symbol*,int,t_atom*);
   void normzMess(t_symbol*,int,t_atom*);
   void resizeMess(unsigned int size);
-  void startMess(unsigned int  size);
-  void endMess(unsigned int  size);
+  void partialDrawMess(unsigned int  start, unsigned int  end);
   void posVBO_enableMess(bool flag);
   void colVBO_enableMess(bool flag);
   void texVBO_enableMess(bool flag);
