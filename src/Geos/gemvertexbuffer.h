@@ -74,7 +74,6 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   virtual void renderShape(GemState *state);
   //virtual void 	runKernel();
   void tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset);
-  void resizeMess(float size);
 
  private :
   // GL functionality
@@ -100,6 +99,8 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void normyMess(t_symbol*,int,t_atom*);
   void normzMess(t_symbol*,int,t_atom*);
   void resizeMess(unsigned int size);
+  void startMess(unsigned int  size);
+  void endMess(unsigned int  size);
   void posVBO_enableMess(bool flag);
   void colVBO_enableMess(bool flag);
   void texVBO_enableMess(bool flag);
@@ -109,6 +110,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 
   // Rendering window vars
   int vbo_size;
+  unsigned int m_draw_start_id, m_draw_end_id;
   bool size_change_flag;
   VertexBuffer m_position, m_texture, m_color, m_normal;
 };
