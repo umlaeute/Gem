@@ -1,4 +1,4 @@
-#N canvas 142 215 1084 672 10;
+#N canvas 689 196 1084 672 10;
 #N canvas 1 84 450 300 fps 0;
 #X obj 46 -61 gemhead;
 #X obj 46 -21 realtime;
@@ -20,7 +20,7 @@
 #X floatatom 466 172 5 0 0 1 fps - -, f 5;
 #X obj 6 76 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 7 236 cnv 15 450 260 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 236 cnv 15 450 300 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 7 181 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
 0;
@@ -65,14 +65,14 @@
 #X connect 13 1 12 0;
 #X connect 14 0 15 0;
 #X restore 467 115 pd gemwin;
-#X msg 467 96 create;
+#X msg 467 96 destroy;
 #X text 463 75 Create window:;
 #X text 6 80 Description: Renders a vertexbuffer.;
 #X text 11 179 Arguments:;
 #X text 9 241 Inlets:;
 #X text 27 253 Inlet 1: gemlist;
-#X text 9 450 Outlets:;
-#X text 21 463 Outlet 1: gemlist;
+#X text 9 500 Outlets:;
+#X text 21 513 Outlet 1: gemlist;
 #X text 27 409 Inlet 1: message: postion_enable float \, color_enable
 float \, texture_enable float \, normal_enable float : enable/disable
 the use of this data;
@@ -792,7 +792,7 @@ at default offset=0);
 #X text 51 453 offset is always optional (default=0) \, and comes after
 the table names;
 #X text 50 507 unset table data is initialized to 0.f;
-#X restore 371 309 pd tabledata;
+#X restore 371 339 pd tabledata;
 #X text 27 384 Inlet 1: message: resize float : change the number of
 vertex to use;
 #X text 23 98 Vertex position \, color etc can be copy from pd table
@@ -845,15 +845,23 @@ draw lot's of points very efficiently.;
 #X connect 18 0 15 0;
 #X restore 797 222 pd load_tables;
 #X obj 609 49 t a a;
-#X obj 579 575 gemvertexbuffer;
 #X text 57 190 number of vertex to be used. number in form of 2^n work
 better;
+#X floatatom 836 275 5 0 0 0 - - -, f 5;
+#X floatatom 906 276 5 0 0 0 - - -, f 5;
+#X text 835 244 draw only a part of OpenGL array :, f 19;
+#X obj 866 334 pack 0 0;
+#X obj 906 295 t b f;
+#X msg 866 356 partial_draw \$1 \$2;
+#X obj 579 575 gemvertexbuffer;
+#X text 27 449 Inlet 1: message: partialdraw float float : draw only
+the given index range of OpenGL array;
 #X connect 0 0 1 0;
 #X connect 9 0 10 0;
 #X connect 10 0 9 0;
-#X connect 21 0 72 0;
-#X connect 22 0 72 0;
-#X connect 23 0 72 0;
+#X connect 21 0 79 0;
+#X connect 22 0 79 0;
+#X connect 23 0 79 0;
 #X connect 24 0 23 0;
 #X connect 25 0 38 0;
 #X connect 26 0 46 0;
@@ -861,24 +869,24 @@ better;
 #X connect 28 0 25 0;
 #X connect 29 0 71 0;
 #X connect 31 0 32 0;
-#X connect 32 0 72 0;
+#X connect 32 0 79 0;
 #X connect 33 0 36 0;
 #X connect 34 0 35 0;
-#X connect 35 0 72 0;
-#X connect 36 0 72 0;
+#X connect 35 0 79 0;
+#X connect 36 0 79 0;
 #X connect 38 0 39 0;
-#X connect 39 0 72 0;
+#X connect 39 0 79 0;
 #X connect 40 0 41 0;
 #X connect 41 0 42 0;
 #X connect 42 0 38 0;
 #X connect 44 0 29 0;
-#X connect 46 0 72 0;
+#X connect 46 0 79 0;
 #X connect 47 0 48 1;
 #X connect 48 0 28 0;
-#X connect 49 0 72 0;
-#X connect 50 0 72 0;
-#X connect 51 0 72 0;
-#X connect 52 0 72 0;
+#X connect 49 0 79 0;
+#X connect 50 0 79 0;
+#X connect 51 0 79 0;
+#X connect 52 0 79 0;
 #X connect 53 0 69 0;
 #X connect 56 0 55 0;
 #X connect 58 0 57 0;
@@ -887,3 +895,9 @@ better;
 #X connect 69 1 50 0;
 #X connect 69 2 70 0;
 #X connect 71 0 27 0;
+#X connect 73 0 76 0;
+#X connect 74 0 77 0;
+#X connect 76 0 78 0;
+#X connect 77 0 76 0;
+#X connect 77 1 76 1;
+#X connect 78 0 79 0;
