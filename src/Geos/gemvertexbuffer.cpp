@@ -111,6 +111,8 @@ void gemvertexbuffer :: VertexBuffer:: destroy (void) {
 /////////////////////////////////////////////////////////
 gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   vbo_size(size>0?size:(256*256)),
+  m_draw_start_id(0),
+  m_draw_end_id(vbo_size),
 	size_change_flag(false),
   m_position(vbo_size,3),
   m_texture (vbo_size,2),
@@ -157,7 +159,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
     glEnableClientState(GL_NORMAL_ARRAY);
   }
 		
-  glDrawArrays(m_drawType, 0, vbo_size);
+  glDrawArrays(m_drawType, m_draw_start_id, m_draw_end_id-m_draw_start_id);
 		
   if ( m_position.enabled ) glDisableClientState(GL_VERTEX_ARRAY);
   if ( m_color.enabled    ) glDisableClientState(GL_COLOR_ARRAY);
@@ -192,6 +194,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "normalZ", normzMess);
 
   CPPEXTERN_MSG1(classPtr, "resize", resizeMess, unsigned int);
+  CPPEXTERN_MSG2(classPtr, "partial_draw", partialDrawMess, unsigned int, unsigned int);
 
   CPPEXTERN_MSG (classPtr, "enable", enableMess);
   CPPEXTERN_MSG (classPtr, "disable", disableMess);
@@ -346,6 +349,7 @@ void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int 
 void gemvertexbuffer :: resizeMess(unsigned int size)
 {
 	vbo_size = size>1?size:1;
+  m_draw_end_id=vbo_size;
 	//~ printf("cleanup\n");
   m_position.resize(vbo_size);
   m_texture .resize(vbo_size);
@@ -354,6 +358,8 @@ void gemvertexbuffer :: resizeMess(unsigned int size)
 
 	size_change_flag = true;
 }
+
+void gemvertexbuffer :: partialDrawMess(unsigned int start, unsigned int end) { m_draw_start_id = start; m_draw_end_id = end;}
 
 // Create VBO
 //*****************************************************************************
