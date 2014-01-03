@@ -16,6 +16,7 @@
 
 #include "slideSquares.h"
 #include "Gem/State.h"
+#include "Utils/Functions.h"
 
 typedef struct {
             GLfloat	X;
