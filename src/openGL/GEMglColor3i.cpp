@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3i , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColor3i :: GEMglColor3i	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglColor3i :: GEMglColor3i	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		red(static_cast<GLint>(arg0)),
 		green(static_cast<GLint>(arg1)),
 		blue(static_cast<GLint>(arg2))

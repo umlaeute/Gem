@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2iv , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex2iv :: GEMglVertex2iv	(t_floatarg arg0=0, t_floatarg arg1=0) {
+GEMglVertex2iv :: GEMglVertex2iv	(t_floatarg arg0, t_floatarg arg1) {
 vMess(arg0, arg1);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglTexCoord2s , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexCoord2s :: GEMglTexCoord2s	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglTexCoord2s :: GEMglTexCoord2s	(t_floatarg arg0, t_floatarg arg1) :
 		s(static_cast<GLshort>(arg0)),
 		t(static_cast<GLshort>(arg1))
 {

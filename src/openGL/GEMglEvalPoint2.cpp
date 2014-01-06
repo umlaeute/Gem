@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2 , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglEvalPoint2 :: GEMglEvalPoint2	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglEvalPoint2 :: GEMglEvalPoint2	(t_floatarg arg0, t_floatarg arg1) :
 		i(static_cast<GLint>(arg0)),
 		j(static_cast<GLint>(arg1))
 {

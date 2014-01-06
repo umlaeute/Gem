@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_resize :: pix_resize(t_floatarg width=0, t_floatarg height=0)
+pix_resize :: pix_resize(t_floatarg width, t_floatarg height)
 {
   dimenMess((int)width, (int)height);
 }

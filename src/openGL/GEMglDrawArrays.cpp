@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawArrays , t_floatarg, A_DEFFLOAT, t_floa
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDrawArrays :: GEMglDrawArrays	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglDrawArrays :: GEMglDrawArrays	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		mode(static_cast<GLenum>(arg0)),
 		first(static_cast<GLint>(arg1)),
 		count(static_cast<GLsizei>(arg2))
