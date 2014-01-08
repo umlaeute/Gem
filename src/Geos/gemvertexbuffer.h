@@ -106,9 +106,11 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void normVBO_enableMess(bool flag);
   void enableMess(t_symbol*,int,t_atom*);
   void disableMess(t_symbol*,int,t_atom*);
+  void partialDrawMess(unsigned int start, unsigned int end);
 
   // Rendering window vars
   int vbo_size;
+  int m_range[2];
   bool size_change_flag;
   VertexBuffer m_position, m_texture, m_color, m_normal;
 };
