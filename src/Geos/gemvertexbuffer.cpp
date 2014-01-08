@@ -42,7 +42,7 @@ gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_, unsigned int
   resize(size_);
 }
 gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void) {
-  //  ::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
+  //::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
   destroy();
 
   if(array)
@@ -51,6 +51,7 @@ gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void) {
 }
 void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_) {
   float*tmp=NULL;
+  //::post("VertexBuffer::resize %d->%d", size, size_);
   try {
     tmp=new float[size_*stride];
   } catch (std::bad_alloc& ba)  {
@@ -65,7 +66,6 @@ void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_) {
   for(i=0; i<size*stride; i++) {
     array[i]=0;
   }
-
   dirty=true;
 }
 
@@ -81,10 +81,11 @@ bool gemvertexbuffer :: VertexBuffer:: create (void) {
 }
 bool gemvertexbuffer :: VertexBuffer:: render (void) {
   // render from the VBO
+  //::post("VertexBuffer::render: %d?", enabled);
   if ( enabled ) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     if ( dirty ) {
-      //      ::post("push vertex %p\n", this);
+      //::post("push vertex %p\n", this);
       glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array, GL_DYNAMIC_DRAW);
       dirty = false;
     }
@@ -92,14 +93,12 @@ bool gemvertexbuffer :: VertexBuffer:: render (void) {
   return enabled;
 }
 void gemvertexbuffer :: VertexBuffer:: destroy (void) {
-	if ( vbo ){
-		glBindBuffer(1, vbo);
-		glDeleteBuffers(1, &vbo);
-	}
+  if ( vbo ){
+    glBindBuffer(1, vbo);
+    glDeleteBuffers(1, &vbo);
+  }
   vbo=0;
 }
-
-
 
 /////////////////////////////////////////////////////////
 //
@@ -111,7 +110,7 @@ void gemvertexbuffer :: VertexBuffer:: destroy (void) {
 /////////////////////////////////////////////////////////
 gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   vbo_size(size>0?size:(256*256)),
-	size_change_flag(false),
+  size_change_flag(false),
   m_position(vbo_size,3),
   m_texture (vbo_size,2),
   m_color   (vbo_size,4),
@@ -133,12 +132,11 @@ gemvertexbuffer :: ~gemvertexbuffer(void)
 /////////////////////////////////////////////////////////
 void gemvertexbuffer :: renderShape(GemState *state)
 {
-	if ( m_drawType == GL_DEFAULT_GEM ) m_drawType = GL_POINTS;
-	if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || size_change_flag ) {
-//		printf("create VBO\n");
-		createVBO();
-		size_change_flag = false;
-	}
+  if ( m_drawType == GL_DEFAULT_GEM ) m_drawType = GL_POINTS;
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || size_change_flag ) {
+    createVBO();
+    size_change_flag = false;
+  }
   // render from the VBO
   if(m_position.render()) {
     glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
@@ -156,13 +154,13 @@ void gemvertexbuffer :: renderShape(GemState *state)
     glNormalPointer(GL_FLOAT, 0, 0);
     glEnableClientState(GL_NORMAL_ARRAY);
   }
-		
+
   glDrawArrays(m_drawType, 0, vbo_size);
-		
+
   if ( m_position.enabled ) glDisableClientState(GL_VERTEX_ARRAY);
   if ( m_color.enabled    ) glDisableClientState(GL_COLOR_ARRAY);
   if ( m_texture.enabled  ) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  if ( m_normal.enabled   ) glDisableClientState(GL_NORMAL_ARRAY);	
+  if ( m_normal.enabled   ) glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 /////////////////////////////////////////////////////////
@@ -251,13 +249,13 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
       copyArray(tabname, vb, vb.stride, offset*vb.stride+i);
     }
   } else {
-      goto failed;
+    goto failed;
   }
 
   vb.enabled=true;
   return;
 
-  failed:
+ failed:
   error("illegal arguments to '%s': must be <table[1||%d]> [<offset>]", name.c_str(), vb.stride);
   return;
 }
@@ -327,36 +325,35 @@ void gemvertexbuffer :: disableMess (t_symbol*s, int argc, t_atom *argv){
 
 void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset)
 {
-	int offset2 = 0;
-	if ( argv[0].a_type != A_SYMBOL )
+  int offset2 = 0;
+  if ( argv[0].a_type != A_SYMBOL )
+    {
+      error("first arg must be symbol (table name)");
+      return;
+    }
+  if ( argc > 1 )
+    {
+      if ( argv[1].a_type != A_FLOAT )
 	{
-		error("first arg must be symbol (table name)");
-		return;
+	  error("second arg must be float (offset)");
 	}
-	if ( argc > 1 )
-	{
-		if ( argv[1].a_type != A_FLOAT )
-		{
-			error("second arg must be float (offset)");
-		}
-		else offset2 = argv[1].a_w.w_float;
-	}
-	offset2 = offset2<0?0:offset2;
+      else offset2 = argv[1].a_w.w_float;
+    }
+  offset2 = offset2<0?0:offset2;
   std::string tab_name = atom_getsymbol(argv)->s_name;
-	copyArray(tab_name, array, array.stride, offset2 * array.stride + offset);
+  copyArray(tab_name, array, array.stride, offset2 * array.stride + offset);
   array.enabled=true;
 }
 
 void gemvertexbuffer :: resizeMess(unsigned int size)
 {
-	vbo_size = size>1?size:1;
-	//~ printf("cleanup\n");
+  vbo_size = size>1?size:1;
   m_position.resize(vbo_size);
   m_texture .resize(vbo_size);
   m_color   .resize(vbo_size);
   m_normal  .resize(vbo_size);
 
-	size_change_flag = true;
+  size_change_flag = true;
 }
 
 // Create VBO
@@ -397,7 +394,6 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
 
     if(npts>vb.size-offset)npts=vb.size-offset;
 
-    //~ printf("start copying %d values\n",npts);
     for ( i = 0 ; i < npts ; i++ )	{
       array[offset + i*stride] = vec[i].w_float;
     }
