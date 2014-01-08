@@ -218,7 +218,12 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
    * or separate data (<stride> tablenames [+ offset])
    */
 
-  if(argc==1 || argc==2) {
+  if(argc==0) {
+    vb.enabled=false;
+    return;
+  }
+
+  if(argc==1 || argc==2) { // interleaved (+offset)
     if(argc>1) {
       if(A_FLOAT==argv[1].a_type)
         offset=atom_getfloat(argv+1);
@@ -231,8 +236,7 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
       goto failed;
     copyArray(tabname, vb, 0, offset*vb.stride);
 
-
-  } else if (argc == vb.stride || argc == (vb.stride+1)) {
+  } else if (argc == vb.stride || argc == (vb.stride+1)) {  // planar (+offset)
     if(((unsigned int)argc)>vb.stride) {
       if(A_FLOAT==argv[vb.stride].a_type)
         offset=atom_getfloat(argv+vb.stride);
