@@ -229,8 +229,8 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
       tabname=std::string(atom_getsymbol(argv)->s_name);
     else
       goto failed;
+    copyArray(tabname, vb, 0, offset*vb.stride);
 
-    copyArray(tabname, vb, 1, offset*vb.stride);
 
   } else if (argc == vb.stride || argc == (vb.stride+1)) {
     if(((unsigned int)argc)>vb.stride) {
@@ -367,26 +367,45 @@ void gemvertexbuffer :: createVBO(void)
 
 void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, unsigned int stride, unsigned int offset)
 {
-	t_garray *a;
-	int npoints, i;
-	t_word *vec;
+  t_garray *a;
+  int npoints, i;
+  t_word *vec;
+
+  if(offset>vb.size) {
+    error("offset %d is bigger than vertexbuffer size (%d)", offset, vb.size);
+    return;
+  }
 
   float*array=vb.array;
   t_symbol*s=gensym(tab_name.c_str());
-	pd_findbyclass(s, garray_class);
-	if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-		error("%s: no such array", tab_name.c_str());
-  else if (!garray_getfloatwords(a, &npoints, &vec))
+  pd_findbyclass(s, garray_class);
+  if (!(a = (t_garray *)pd_findbyclass(s, garray_class))) {
+    error("%s: no such array", tab_name.c_str());
+    return;
+  }
+  if (!garray_getfloatwords(a, &npoints, &vec)) {
     error("%s: bad template for tabLink", tab_name.c_str());
-	else {
-    if(((unsigned int)npoints)>vb.size)
-      npoints=vb.size;
+    return;
+  }
 
-		//~ printf("start copying %d values\n",npoints);
-		for ( i = 0 ; i < npoints ; i++ )	{
-			array[offset + i*stride] = vec[i].w_float;
-		}
-    vb.dirty=true;
-	}
-	//~ printf("copy done\n");
+  unsigned int npts=(unsigned int)npoints;
+  if(stride) {  // single channel
+
+    if(npts>vb.size-offset)npts=vb.size-offset;
+
+    //~ printf("start copying %d values\n",npts);
+    for ( i = 0 ; i < npts ; i++ )	{
+      array[offset + i*stride] = vec[i].w_float;
+    }
+  } else {
+    // interleaved channels
+    npts=npts/vb.stride;
+    if(npts>vb.size-offset)npts=vb.size-offset;
+    npts*=vb.stride;
+
+    for ( i = 0 ; i < npts ; i++ ) {
+      array[offset+i] = vec[i].w_float;
+    }
+  }
+  vb.dirty=true;
 }
