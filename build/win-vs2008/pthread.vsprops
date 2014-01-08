@@ -6,12 +6,20 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\..\pd\src;&quot;$(ProgramFiles)\pd\src&quot;"
+		AdditionalIncludeDirectories="$(PTHREAD_INCDIR)"
 		PreprocessorDefinitions="HAVE_PTHREADS;HAVE_PTHREAD_H"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="pthreadVC.lib"
-		AdditionalLibraryDirectories="..\..\..\pd\bin;&quot;$(ProgramFiles)\pd\bin&quot;"
+		AdditionalLibraryDirectories="$(PD_DIR)\bin"
+	/>
+	<UserMacro
+		Name="PD_DIR"
+		Value="C:\dev\pd-0.45.3"
+	/>
+	<UserMacro
+		Name="PTHREAD_INCDIR"
+		Value="C:\dev\pthreads-w32-2-9-1-release\Pre-built.2\include"
 	/>
 </VisualStudioPropertySheet>

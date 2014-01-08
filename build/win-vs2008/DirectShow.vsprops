@@ -6,12 +6,12 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses&quot;"
+		AdditionalIncludeDirectories="C:\WinDDK\7600.16385.1\inc\atl71;&quot;C:\Program Files\Microsoft DirectX SDK (August 2007)\Include&quot;;&quot;C:\Program Files\Microsoft SDKs\Windows\v6.0\Samples\Multimedia\DirectShow\BaseClasses&quot;"
 		PreprocessorDefinitions="HAVE_DIRECTSHOW"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="ddraw.lib atls.lib strmiids.lib strmbase.lib"
-		AdditionalLibraryDirectories="&quot;C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release&quot;"
+		AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft SDKs\Windows\v6.0\Samples\Multimedia\DirectShow\BaseClasses\Release_MBCS&quot;;C:\WinDDK\7600.16385.1\lib\ATL\i386;&quot;C:\Program Files\Microsoft DirectX SDK (August 2007)\Lib\x86&quot;"
 	/>
 </VisualStudioPropertySheet>

@@ -17,6 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\build\win-vs2008\plugin.vsprops;.\TIFF.vsprops"
 			UseOfMFC="0"

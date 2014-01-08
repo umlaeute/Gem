@@ -1,4 +1,4 @@
-; TODO
+﻿; TODO
 ; - check whether Pd is installed
 ;  this is where Pd stores it's settings:
 ;   HKEY_LOCAL_MACHINE\SOFTWARE\Pd
@@ -19,7 +19,7 @@
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Gem"
 !ifndef PRODUCT_VERSION
- !define PRODUCT_VERSION "0.93"
+ !define PRODUCT_VERSION "0.94-rc2"
 !endif
 !define PRODUCT_ARCH "-W32-i686"
 !define PRODUCT_PUBLISHER "iem et al."
@@ -30,7 +30,7 @@
 OutFile "Gem-${PRODUCT_VERSION}${PRODUCT_ARCH}.exe"
 
 !define BASE_INDIR "..\.."
-!define BUILD_INDIR "..\win-vs2003"
+!define BUILD_INDIR "..\win-vs2008"
 
 
 ; MUI 1.67 compatible ------
@@ -204,12 +204,34 @@ SectionGroup "plugins" SEC_plugin
    SetOutPath "$GEM_OUTDIR"
    File "${BUILD_INDIR}\gem_videoHALCON.dll"
   SectionEnd
+  Section /o "OptiTrack capturing" SEC_plugin_videoOptiTrack
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoOptiTrack.dll"
+  SectionEnd
 ;  Section /o "Basler/PYLON capturing" SEC_plugin_videoPYLON
 ;   SetOverwrite ifnewer
 ;   SetOutPath "$GEM_OUTDIR"
 ;   File "${BUILD_INDIR}\gem_videoPYLON.dll"
 ;  SectionEnd
+  Section /o "VLC capturing" SEC_plugin_videoVLC
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_videoVLC.dll"
+  SectionEnd
  SectionGroupEnd
+ SectionGroup "video" SEC_plugin_model
+  Section /o "VLC capturing" SEC_plugin_modelASSIMP2
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_modelASSIMP2.dll"
+  SectionEnd
+  Section /o "VLC capturing" SEC_plugin_modelOBJ
+   SetOverwrite ifnewer
+   SetOutPath "$GEM_OUTDIR"
+   File "${BUILD_INDIR}\gem_modelOBJ.dll"
+  SectionEnd
+  SectionGroupEnd
 SectionGroupEnd
 
 SectionGroup "extra" SEC_extra
@@ -255,11 +277,15 @@ Section "Development" SEC_dev
  SetOutPath "$GEMDEV_OUTDIR\RTE"
  File ${BASE_INDIR}\src\RTE\MessageCallbacks.h
  File ${BASE_INDIR}\src\RTE\Array.h
+ File ${BASE_INDIR}\src\RTE\Outlet.h
+ File ${BASE_INDIR}\src\RTE\RTE.h
+ File ${BASE_INDIR}\src\RTE\Symbol.h
  SetOutPath "$GEMDEV_OUTDIR\Gem"
- File ${BASE_INDIR}\src\Gem\ThreadSemaphore.h
- File ${BASE_INDIR}\src\Gem\ThreadMutex.h
- File ${BASE_INDIR}\src\Gem\SynchedWorkerThread.h
- File ${BASE_INDIR}\src\Gem\WorkerThread.h
+ File ${BASE_INDIR}\src\Gem\GemConfig.h
+ File ${BASE_INDIR}\src\Gem\Rectangle.h
+ File ${BASE_INDIR}\src\Gem\configDarwin.h
+ File ${BASE_INDIR}\src\Gem\configLinux.h
+ File ${BASE_INDIR}\src\Gem\configNT.h
  File ${BASE_INDIR}\src\Gem\PixConvert.h
  File ${BASE_INDIR}\src\Gem\ImageIO.h
  File ${BASE_INDIR}\src\Gem\Image.h
@@ -284,6 +310,14 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\Gem\Version.h
  File ${BASE_INDIR}\src\Gem\ExportDef.h
  SetOutPath "$GEMDEV_OUTDIR\Utils"
+ File ${BASE_INDIR}\src\Utils\GLUtil_generated.h
+ File ${BASE_INDIR}\src\Utils\GemString.h
+ File ${BASE_INDIR}\src\Utils\SynchedWorkerThread.h
+ File ${BASE_INDIR}\src\Utils\Thread.h
+ File ${BASE_INDIR}\src\Utils\ThreadMutex.h
+ File ${BASE_INDIR}\src\Utils\ThreadSemaphore.h
+ File ${BASE_INDIR}\src\Utils\plist.h
+ File ${BASE_INDIR}\src\Utils\pstk.h
  File ${BASE_INDIR}\src\Utils\Vector.h
  File ${BASE_INDIR}\src\Utils\SIMD.h
  File ${BASE_INDIR}\src\Utils\PixPete.h
@@ -293,6 +327,8 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\Utils\Functions.h
  File ${BASE_INDIR}\src\Utils\any.h
  SetOutPath "$GEMDEV_OUTDIR\Base"
+ File ${BASE_INDIR}\src\Base\GemVertex.h
+ File ${BASE_INDIR}\src\Base\GemWinCreate.h
  File ${BASE_INDIR}\src\Base\GemContext.h
  File ${BASE_INDIR}\src\Base\GemWindow.h
  File ${BASE_INDIR}\src\Base\TextBase.h
@@ -305,6 +341,11 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\Base\GemBase.h
  File ${BASE_INDIR}\src\Base\CPPExtern.h
  SetOutPath "$GEMDEV_OUTDIR\plugins"
+ File ${BASE_INDIR}\src\plugins\filmBase.h
+ File ${BASE_INDIR}\src\plugins\imageBase.h
+ File ${BASE_INDIR}\src\plugins\modelloader.h
+ File ${BASE_INDIR}\src\plugins\recordBase.h
+ File ${BASE_INDIR}\src\plugins\videoBase.h
  File ${BASE_INDIR}\src\plugins\video.h
  File ${BASE_INDIR}\src\plugins\record.h
  File ${BASE_INDIR}\src\plugins\imagesaver.h
@@ -334,6 +375,11 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\deprecated\Base\GemEvent.h
  File ${BASE_INDIR}\src\deprecated\Base\GemContextData.h
  File ${BASE_INDIR}\src\deprecated\Base\GemCache.h
+ SetOutPath "$GEMDEV_OUTDIR\Gem"
+ File ${BASE_INDIR}\src\deprecated\Gem\SynchedWorkerThread.h
+ File ${BASE_INDIR}\src\deprecated\Gem\ThreadMutex.h
+ File ${BASE_INDIR}\src\deprecated\Gem\ThreadSemaphore.h
+ File ${BASE_INDIR}\src\deprecated\Gem\WorkerThread.h
 
 
  WriteRegStr SHCTX "Environment" "GemDevDir" "$GEMDEV_OUTDIR"
