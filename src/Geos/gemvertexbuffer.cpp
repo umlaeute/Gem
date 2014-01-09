@@ -108,6 +108,8 @@ gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   m_color   (vbo_size,4),
   m_normal  (vbo_size,3)
 {
+  m_range[0]=0;
+  m_range[1]=-1;
 }
 
 /////////////////////////////////////////////////////////
@@ -146,8 +148,18 @@ void gemvertexbuffer :: renderShape(GemState *state)
     glNormalPointer(GL_FLOAT, 0, 0);
     glEnableClientState(GL_NORMAL_ARRAY);
   }
-  int start = m_range[0]>0?m_range[0]:0;
-  int end = m_range[1] > vbo_size ? vbo_size:m_range[1];
+
+  unsigned int start = MIN(m_range[0], m_range[1]);
+  unsigned int end   = MAX(m_range[0], m_range[1]);
+
+  if(start>=vbo_size)start=vbo_size-1;
+  if(end  >=vbo_size)end  =vbo_size-1;
+
+  if (start == end && 0 == start) {
+    start=0;
+    end=vbo_size;
+  }
+
   glDrawArrays(m_drawType, start, end-start);
 
   if ( m_position.enabled ) glDisableClientState(GL_VERTEX_ARRAY);
