@@ -146,8 +146,9 @@ void gemvertexbuffer :: renderShape(GemState *state)
     glNormalPointer(GL_FLOAT, 0, 0);
     glEnableClientState(GL_NORMAL_ARRAY);
   }
-
-  glDrawArrays(m_drawType, 0, vbo_size);
+  int start = m_range[0]>0?m_range[0]:0;
+  int end = m_range[1] > vbo_size ? vbo_size:m_range[1];
+  glDrawArrays(m_drawType, start, end-start);
 
   if ( m_position.enabled ) glDisableClientState(GL_VERTEX_ARRAY);
   if ( m_color.enabled    ) glDisableClientState(GL_COLOR_ARRAY);
@@ -185,6 +186,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG (classPtr, "enable", enableMess);
   CPPEXTERN_MSG (classPtr, "disable", disableMess);
+  CPPEXTERN_MSG2(classPtr, "draw_range", partialDrawMess, unsigned int, unsigned int);
 
   CPPEXTERN_MSG1(classPtr, "position_enable", posVBO_enableMess , bool);
   CPPEXTERN_MSG1(classPtr, "color_enable"   , colVBO_enableMess , bool);
@@ -347,6 +349,8 @@ void gemvertexbuffer :: resizeMess(unsigned int size)
 
   size_change_flag = true;
 }
+
+void gemvertexbuffer :: partialDrawMess(unsigned int start, unsigned int end) { m_range[0] = start; m_range[1] = end;}
 
 // Create VBO
 //*****************************************************************************

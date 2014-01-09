@@ -1,5 +1,5 @@
-#N canvas 144 210 1084 672 10;
-#N canvas 1 84 450 300 fps 0;
+#N canvas 735 225 983 722 10;
+#N canvas 1 89 450 300 fps 0;
 #X obj 46 -61 gemhead;
 #X obj 46 -21 realtime;
 #X obj 46 -41 t b b;
@@ -17,10 +17,10 @@
 #X connect 6 0 7 0;
 #X connect 7 0 5 0;
 #X restore 466 149 pd fps;
-#X floatatom 466 172 5 0 0 1 fps - -;
+#X floatatom 466 172 5 0 0 1 fps - -, f 5;
 #X obj 6 76 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 7 236 cnv 15 450 260 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 236 cnv 15 450 300 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 7 181 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
 0;
@@ -65,7 +65,7 @@
 #X connect 13 1 12 0;
 #X connect 14 0 15 0;
 #X restore 467 115 pd gemwin;
-#X msg 467 96 create;
+#X msg 467 96 destroy;
 #X text 463 75 Create window:;
 #X text 6 80 Description: Renders a vertexbuffer.;
 #X text 11 179 Arguments:;
@@ -73,22 +73,22 @@
 better;
 #X text 9 241 Inlets:;
 #X text 27 253 Inlet 1: gemlist;
-#X text 9 450 Outlets:;
-#X text 21 463 Outlet 1: gemlist;
+#X text 9 505 Outlets:;
+#X text 21 518 Outlet 1: gemlist;
 #X text 27 409 Inlet 1: message: postion_enable float \, color_enable
 float \, texture_enable float \, normal_enable float : enable/disable
 the use of this data;
-#X obj 569 6 cnv 15 400 600 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 569 7 cnv 15 400 700 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X obj 576 568 cnv 15 150 30 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 576 668 cnv 15 150 30 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X msg 792 483 draw line;
-#X msg 802 504 draw points;
+#X msg 792 593 draw line;
+#X msg 802 614 draw points;
 #X msg 692 384 color_enable \$1;
 #X obj 673 384 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 579 134 GEMglPointSize 1;
-#X obj 816 528 loadbang;
+#X obj 816 638 loadbang;
 #X obj 579 76 translateXYZ 0 0 -2;
 #X obj 579 114 rotateXYZ -45 0 -50;
 #X obj 609 27 gemhead;
@@ -125,8 +125,8 @@ as soon as they are updated;
 #X obj 579 33 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X text 577 14 Example:;
-#X msg 816 551 resize 128;
-#X floatatom 710 88 5 0 0 0 - - -;
+#X msg 816 661 resize 128;
+#X floatatom 710 88 5 0 0 0 - - -, f 5;
 #X obj 579 95 scale 3;
 #X msg 593 271 position blablax blablay blablaz;
 #X msg 604 290 color colorr colorg colorb colora;
@@ -137,12 +137,12 @@ as soon as they are updated;
 #X obj 841 56 cnv 15 120 160 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #N canvas 614 149 657 666 lorenz 0;
-#X floatatom 82 248 5 0 0 0 - - -;
-#X floatatom 124 248 5 0 0 0 - - -;
-#X floatatom 83 201 5 0 0 0 - - -;
-#X floatatom 125 201 5 0 0 0 - - -;
-#X floatatom 81 156 5 0 0 0 - - -;
-#X floatatom 124 156 5 0 0 0 - - -;
+#X floatatom 82 248 5 0 0 0 - - -, f 5;
+#X floatatom 124 248 5 0 0 0 - - -, f 5;
+#X floatatom 83 201 5 0 0 0 - - -, f 5;
+#X floatatom 125 201 5 0 0 0 - - -, f 5;
+#X floatatom 81 156 5 0 0 0 - - -, f 5;
+#X floatatom 124 156 5 0 0 0 - - -, f 5;
 #N canvas 145 116 1131 666 table 0;
 #X obj 266 31 loadbang;
 #X msg 266 53 dsp 1;
@@ -159,15 +159,15 @@ as soon as they are updated;
 #X obj 392 275 v pr;
 #X obj 523 276 v r;
 #X obj 449 277 v b;
-#X floatatom 392 246 5 0 0 0 - - -;
-#X floatatom 523 248 5 0 0 0 - - -;
+#X floatatom 392 246 5 0 0 0 - - -, f 5;
+#X floatatom 523 248 5 0 0 0 - - -, f 5;
 #X msg 393 221 10;
 #X obj 447 218 expr 8./3;
 #X msg 344 344 set 1.2 2.3 4.4;
-#X floatatom 449 247 7 0 0 0 - - -;
+#X floatatom 449 247 7 0 0 0 - - -, f 7;
 #X msg 321 308 stop;
 #X msg 291 275 start;
-#X floatatom 615 248 5 0 0 0 - - -;
+#X floatatom 615 248 5 0 0 0 - - -, f 5;
 #X obj 615 277 v dt;
 #X msg 526 220 18;
 #X msg 611 221 0.01;
@@ -257,7 +257,7 @@ which generate chotic signals;
 #X obj 38 136 alpha;
 #X msg 118 577 draw line;
 #X msg 184 575 draw points;
-#X floatatom 147 288 5 0 0 0 - - -;
+#X floatatom 147 288 5 0 0 0 - - -, f 5;
 #X msg 82 449 color_enable \$1;
 #X obj 82 430 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
@@ -329,15 +329,15 @@ which generate chotic signals;
 #X obj 849 80 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #N canvas 1285 273 805 628 wave 0;
-#X floatatom 87 237 5 0 0 0 - - -;
-#X floatatom 129 237 5 0 0 0 - - -;
-#X floatatom 172 237 5 0 0 0 - - -;
-#X floatatom 88 190 5 0 0 0 - - -;
-#X floatatom 130 190 5 0 0 0 - - -;
-#X floatatom 173 190 5 0 0 0 - - -;
-#X floatatom 86 145 5 0 0 0 - - -;
-#X floatatom 129 145 5 0 0 0 - - -;
-#X floatatom 173 145 5 0 0 0 - - -;
+#X floatatom 87 237 5 0 0 0 - - -, f 5;
+#X floatatom 129 237 5 0 0 0 - - -, f 5;
+#X floatatom 172 237 5 0 0 0 - - -, f 5;
+#X floatatom 88 190 5 0 0 0 - - -, f 5;
+#X floatatom 130 190 5 0 0 0 - - -, f 5;
+#X floatatom 173 190 5 0 0 0 - - -, f 5;
+#X floatatom 86 145 5 0 0 0 - - -, f 5;
+#X floatatom 129 145 5 0 0 0 - - -, f 5;
+#X floatatom 173 145 5 0 0 0 - - -, f 5;
 #X obj 43 592 gemvertexbuffer;
 #N canvas 186 169 1131 747 table 0;
 #X obj 36 59 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
@@ -467,7 +467,7 @@ which generate chotic signals;
 #X obj 341 72 t b b;
 #X obj 349 318 f;
 #X obj 440 380 +;
-#X floatatom 903 395 5 0 0 0 - - -;
+#X floatatom 903 395 5 0 0 0 - - -, f 5;
 #X obj 583 71 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 87 310 sig~ 0.3;
@@ -702,9 +702,9 @@ performances if you wish to update point position at every frame;
 #X obj 118 231 table \$0phasor 8192;
 #X obj 79 306 i \$0;
 #X msg 79 342 posX \$1phasor \, posY \$1sound;
-#X floatatom 150 14 5 0 0 0 - - -;
+#X floatatom 150 14 5 0 0 0 - - -, f 5;
 #X obj 15 157 scale 1;
-#X floatatom 52 115 5 0 0 0 - - -;
+#X floatatom 52 115 5 0 0 0 - - -, f 5;
 #X obj 290 118 t b b;
 #X msg 227 395 draw points;
 #X connect 0 0 32 0;
@@ -847,7 +847,16 @@ draw lot's of points very efficiently.;
 #X connect 18 0 15 0;
 #X restore 797 222 pd load_tables;
 #X obj 609 49 t a a;
-#X obj 579 575 gemvertexbuffer;
+#X obj 579 675 gemvertexbuffer;
+#X msg 728 569 draw_range \$1 \$2;
+#X obj 728 549 pack 0 0;
+#X floatatom 728 507 5 0 0 0 - - -, f 5;
+#X floatatom 764 508 5 0 0 0 - - -, f 5;
+#X obj 764 527 t b f;
+#X text 27 449 Inlet 1: message: draw_range float float : set the range
+for partial draw.;
+#X text 726 480 set start and end indexes to draw only a range of VBO
+, f 32;
 #X connect 0 0 1 0;
 #X connect 9 0 10 0;
 #X connect 10 0 9 0;
@@ -887,3 +896,9 @@ draw lot's of points very efficiently.;
 #X connect 70 1 51 0;
 #X connect 70 2 71 0;
 #X connect 72 0 28 0;
+#X connect 74 0 73 0;
+#X connect 75 0 74 0;
+#X connect 76 0 75 0;
+#X connect 77 0 78 0;
+#X connect 78 0 75 0;
+#X connect 78 1 75 1;
