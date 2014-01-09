@@ -6,12 +6,16 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(ProjectDir)\..\..\..\..\GemLibs\tiff\libtiff"
+		AdditionalIncludeDirectories="$(LIBTIFF_DIR)\include"
 		PreprocessorDefinitions="HAVE_LIBTIFF"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		AdditionalDependencies="libtiff.lib"
-		AdditionalLibraryDirectories="$(ProjectDir)\..\..\..\..\GemLibs\tiff"
+		AdditionalLibraryDirectories="$(LIBTIFF_DIR)\lib"
+	/>
+	<UserMacro
+		Name="LIBTIFF_DIR"
+		Value="C:\dev\tiff-3.8.2-1-lib"
 	/>
 </VisualStudioPropertySheet>
