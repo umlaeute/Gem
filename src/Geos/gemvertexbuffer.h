@@ -110,7 +110,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 
   // Rendering window vars
   int vbo_size;
-  int m_range[2];
+  unsigned int m_range[2];
   bool size_change_flag;
   VertexBuffer m_position, m_texture, m_color, m_normal;
 };
