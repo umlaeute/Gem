@@ -7,7 +7,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="&quot;$(PD_DIR)\src&quot;"
+		AdditionalIncludeDirectories="&quot;$(PD_DIR)\src&quot;;&quot;$(PD_DIR)\include&quot;"
 		PreprocessorDefinitions="MSW"
 	/>
 	<Tool
@@ -17,6 +17,6 @@
 	/>
 	<UserMacro
 		Name="PD_DIR"
-		Value="C:\dev\pd-0.45.3"
+		Value="$(ProgramFiles)\pd"
 	/>
 </VisualStudioPropertySheet>

@@ -6,7 +6,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(PTHREAD_INCDIR)"
+		AdditionalIncludeDirectories="&quot;$(PTHREAD_INCDIR)&quot;;&quot;$(PD_DIR)\src&quot;;&quot;$(PD_DIR)\include&quot;"
 		PreprocessorDefinitions="HAVE_PTHREADS;HAVE_PTHREAD_H"
 	/>
 	<Tool
@@ -16,7 +16,7 @@
 	/>
 	<UserMacro
 		Name="PD_DIR"
-		Value="C:\dev\pd-0.45.3"
+		Value="$(ProgramFiles)\pd"
 	/>
 	<UserMacro
 		Name="PTHREAD_INCDIR"
