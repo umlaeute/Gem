@@ -227,25 +227,22 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
     return;
   }
 
-  if(argc==1 || argc==2) { // interleaved (+offset)
-    if(argc>1) {
-      if(A_FLOAT==argv[1].a_type)
-        offset=atom_getfloat(argv+1);
-      else
-        goto failed;
-    }
-    if(A_SYMBOL==argv[0].a_type)
-      tabname=std::string(atom_getsymbol(argv)->s_name);
-    else
-      goto failed;
-    copyArray(tabname, vb, 0, offset*vb.stride);
+  if(A_SYMBOL!=argv[0].a_type)
+    goto failed;
 
-  } else if (argc == vb.stride || argc == (vb.stride+1)) {  // planar (+offset)
+  if(argc==1 || (argc==2 && A_FLOAT == argv[1].a_type)) { // interleaved (+offset)
+    if(argc>1) {
+      offset=atom_getfloat(argv+1);
+    }
+    tabname=std::string(atom_getsymbol(argv)->s_name);
+    copyArray(tabname, vb, 0, offset*vb.stride);
+    vb.enabled=true;
+    return;
+  }
+
+  if (argc == vb.stride || (argc == (vb.stride+1)) && A_FLOAT == argv[vb.stride].a_type) {  // planar (+offset)
     if(((unsigned int)argc)>vb.stride) {
-      if(A_FLOAT==argv[vb.stride].a_type)
-        offset=atom_getfloat(argv+vb.stride);
-      else
-        goto failed;
+      offset=atom_getfloat(argv+vb.stride);
     }
     for(i=0; i<vb.stride; i++) {
       if(A_SYMBOL!=argv[i].a_type) goto failed;
@@ -262,7 +259,7 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, 
   return;
 
  failed:
-  error("illegal arguments to '%s': must be <table[1||%d]> [<offset>]", name.c_str(), vb.stride);
+  error("illegal arguments to '%s': must be <table[1..%d]> [<offset>]", name.c_str(), vb.stride);
   return;
 }
 void gemvertexbuffer :: positionMess (t_symbol*s, int argc, t_atom *argv){
