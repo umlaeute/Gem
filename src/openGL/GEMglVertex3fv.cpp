@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglVertex3fv , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex3fv :: GEMglVertex3fv	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) {
+GEMglVertex3fv :: GEMglVertex3fv	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) {
 vMess(arg0, arg1, arg2);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }

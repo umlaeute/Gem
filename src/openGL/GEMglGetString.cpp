@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetString , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetString :: GEMglGetString	(t_floatarg arg0=0) :
+GEMglGetString :: GEMglGetString	(t_floatarg arg0) :
   name(static_cast<GLenum>(arg0)) {
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));
   m_outlet=outlet_new(this->x_obj, 0);

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2i , t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex2i :: GEMglVertex2i	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglVertex2i :: GEMglVertex2i	(t_floatarg arg0, t_floatarg arg1) :
 		x(static_cast<GLint>(arg0)),
 		y(static_cast<GLint>(arg1))
 {

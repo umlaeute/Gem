@@ -21,7 +21,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglProgramEnvParameter4fvARB , t_floatarg, A_D
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglProgramEnvParameter4fvARB :: GEMglProgramEnvParameter4fvARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglProgramEnvParameter4fvARB :: GEMglProgramEnvParameter4fvARB	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		target(static_cast<GLenum>(arg0)),
 		index(static_cast<GLenum>(arg1))
 		//params(static_cast<GLfloat>(arg2))

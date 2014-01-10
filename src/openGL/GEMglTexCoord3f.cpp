@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexCoord3f , t_floatarg, A_DEFFLOAT, t_floa
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexCoord3f :: GEMglTexCoord3f	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglTexCoord3f :: GEMglTexCoord3f	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		s(static_cast<GLfloat>(arg0)),
 		t(static_cast<GLfloat>(arg1)),
 		r(static_cast<GLfloat>(arg2))

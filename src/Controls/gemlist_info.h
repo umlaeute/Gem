@@ -29,7 +29,7 @@ class GEM_EXTERN gemlist_info : public GemBase
 
     public:
   // Constructor
-  gemlist_info (t_floatarg);	// CON
+  gemlist_info (t_floatarg arg0=0);	// CON
  protected:
   // Destructor
   virtual ~gemlist_info ();

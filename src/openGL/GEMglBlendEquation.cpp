@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0=0) :
+GEMglBlendEquation :: GEMglBlendEquation	(t_floatarg arg0) :
   mode(static_cast<GLenum>(arg0))
 {
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));

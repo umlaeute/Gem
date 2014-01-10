@@ -29,7 +29,7 @@ class GEM_EXTERN gemlist_matrix : public GemBase
 
     public:
   // Constructor
-  gemlist_matrix (t_floatarg);	// CON
+  gemlist_matrix (t_floatarg arg0=0);	// CON
  protected:
   // Destructor
   virtual ~gemlist_matrix ();
