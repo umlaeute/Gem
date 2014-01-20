@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLineWidth , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLineWidth :: GEMglLineWidth	(t_floatarg arg0=0) :
+GEMglLineWidth :: GEMglLineWidth	(t_floatarg arg0) :
 		width(static_cast<GLfloat>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("width"));

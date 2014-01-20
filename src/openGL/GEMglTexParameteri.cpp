@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexParameteri , t_floatarg, A_DEFFLOAT, t_f
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexParameteri :: GEMglTexParameteri	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglTexParameteri :: GEMglTexParameteri	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		target(static_cast<GLenum>(arg0)),
 		pname(static_cast<GLenum>(arg1)),
 		param(static_cast<GLint>(arg2))

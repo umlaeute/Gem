@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferf , t_floatarg, A_DEFFLOAT, t_fl
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPixelTransferf :: GEMglPixelTransferf	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglPixelTransferf :: GEMglPixelTransferf	(t_floatarg arg0, t_floatarg arg1) :
 		pname(static_cast<GLenum>(arg0)),
 		param(static_cast<GLfloat>(arg1))
 {

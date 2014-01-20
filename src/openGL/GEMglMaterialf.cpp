@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMaterialf , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMaterialf :: GEMglMaterialf	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglMaterialf :: GEMglMaterialf	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		face(static_cast<GLenum>(arg0)),
 		pname(static_cast<GLenum>(arg1)),
 		param(static_cast<GLfloat>(arg2))

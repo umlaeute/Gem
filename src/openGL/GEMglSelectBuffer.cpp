@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglSelectBuffer , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0=16){
+GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0){
 	len=-1;
 	buffer=0;
 	sizeMess(arg0);

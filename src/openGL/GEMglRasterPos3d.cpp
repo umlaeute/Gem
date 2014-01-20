@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3d , t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRasterPos3d :: GEMglRasterPos3d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglRasterPos3d :: GEMglRasterPos3d	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		x(static_cast<GLdouble>(arg0)),
 		y(static_cast<GLdouble>(arg1)),
 		z(static_cast<GLdouble>(arg2))

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRasterPos4s , t_floatarg, A_DEFFLOAT, t_floa
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRasterPos4s :: GEMglRasterPos4s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglRasterPos4s :: GEMglRasterPos4s	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		x(static_cast<GLshort>(arg0)),
 		y(static_cast<GLshort>(arg1)),
 		z(static_cast<GLshort>(arg2)),

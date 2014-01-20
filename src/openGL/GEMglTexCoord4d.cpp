@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglTexCoord4d , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexCoord4d :: GEMglTexCoord4d	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglTexCoord4d :: GEMglTexCoord4d	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		s(static_cast<GLdouble>(arg0)),
 		t(static_cast<GLdouble>(arg1)),
 		r(static_cast<GLdouble>(arg2)),

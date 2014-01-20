@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPixelZoom :: GEMglPixelZoom	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglPixelZoom :: GEMglPixelZoom	(t_floatarg arg0, t_floatarg arg1) :
 		xfactor(static_cast<GLfloat>(arg0)),
 		yfactor(static_cast<GLfloat>(arg1))
 {

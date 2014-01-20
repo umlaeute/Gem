@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglNewList , t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglNewList :: GEMglNewList	(t_floatarg arg0=0, t_floatarg arg1=GL_COMPILE_AND_EXECUTE) :
+GEMglNewList :: GEMglNewList	(t_floatarg arg0, t_floatarg arg1=GL_COMPILE_AND_EXECUTE) :
   list(static_cast<GLuint>(arg0)),
 		mode(static_cast<GLenum>(arg1))
 {
