@@ -310,7 +310,10 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     shm_addr = (unsigned char*)shmat(shm_id,NULL,0666);
 
     if (!shm_addr) return 6;
-    shmctl(shm_id,IPC_STAT,&shm_desc);
+    if (!shmctl(shm_id,IPC_STAT,&shm_desc)){
+		error("couldn't get shm_id info");
+		return errno;
+	}
     /* write the size into the shm-segment */
     t_pixshare_header *h=(t_pixshare_header *)shm_addr;
     h->size = (shm_desc.shm_segsz-sizeof(t_pixshare_header));
