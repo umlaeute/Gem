@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexd , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglIndexd :: GEMglIndexd	(t_floatarg arg0=0) :
+GEMglIndexd :: GEMglIndexd	(t_floatarg arg0) :
 		c(static_cast<GLdouble>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("c"));

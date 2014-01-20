@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushAttrib , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPushAttrib :: GEMglPushAttrib	(t_floatarg arg0=0) :
+GEMglPushAttrib :: GEMglPushAttrib	(t_floatarg arg0) :
 		mask(static_cast<GLbitfield>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mask"));

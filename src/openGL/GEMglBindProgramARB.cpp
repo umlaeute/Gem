@@ -21,7 +21,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindProgramARB , t_floatarg, A_DEFFLOAT, t_fl
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBindProgramARB :: GEMglBindProgramARB	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglBindProgramARB :: GEMglBindProgramARB	(t_floatarg arg0, t_floatarg arg1) :
 		target(static_cast<GLenum>(arg0)),
 		program(static_cast<GLuint>(arg1))
 {

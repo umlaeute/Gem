@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB , t_floatarg, A_DEFFLOAT, t_floa
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglUniform1fARB :: GEMglUniform1fARB	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglUniform1fARB :: GEMglUniform1fARB	(t_floatarg arg0, t_floatarg arg1) :
 		location(static_cast<GLint>(arg0)),
 		val(static_cast<GLfloat>(arg1))
 {

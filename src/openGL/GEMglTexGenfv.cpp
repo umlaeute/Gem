@@ -22,7 +22,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexGenfv , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexGenfv :: GEMglTexGenfv	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglTexGenfv :: GEMglTexGenfv	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		coord(static_cast<GLenum>(arg0)),
 		pname(static_cast<GLenum>(arg1))
 {

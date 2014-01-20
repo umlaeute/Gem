@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglAlphaFunc :: GEMglAlphaFunc	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglAlphaFunc :: GEMglAlphaFunc	(t_floatarg arg0, t_floatarg arg1) :
 		func(static_cast<GLenum>(arg0)),
 		ref(static_cast<GLclampf>(arg1))
 {

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRecti , t_floatarg, A_DEFFLOAT, t_floatarg, 
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRecti :: GEMglRecti	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglRecti :: GEMglRecti	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		x1(static_cast<GLint>(arg0)),
 		y1(static_cast<GLint>(arg1)),
 		x2(static_cast<GLint>(arg2)),

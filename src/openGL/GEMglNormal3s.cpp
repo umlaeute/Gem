@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3s , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglNormal3s :: GEMglNormal3s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglNormal3s :: GEMglNormal3s	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		nx(static_cast<GLshort>(arg0)),
 		ny(static_cast<GLshort>(arg1)),
 		nz(static_cast<GLshort>(arg2))
