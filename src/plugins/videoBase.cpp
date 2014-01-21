@@ -14,7 +14,7 @@
 
 #include "plugins/videoBase.h"
 #include "Gem/RTE.h"
-
+#include <sys/select.h>
 #include <iostream>
 
 #if 0

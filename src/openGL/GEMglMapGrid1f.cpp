@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMapGrid1f :: GEMglMapGrid1f	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglMapGrid1f :: GEMglMapGrid1f	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		un(static_cast<GLint>(arg0)),
 		u1(static_cast<GLfloat>(arg1)),
 		u2(static_cast<GLfloat>(arg2))

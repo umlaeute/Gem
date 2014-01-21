@@ -21,7 +21,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLoadMatrixd , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLoadMatrixd :: GEMglLoadMatrixd	(t_floatarg arg0=0)
+GEMglLoadMatrixd :: GEMglLoadMatrixd	(t_floatarg arg0)
 {
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("list"));
 }

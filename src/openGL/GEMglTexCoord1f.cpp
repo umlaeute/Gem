@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglTexCoord1f , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexCoord1f :: GEMglTexCoord1f	(t_floatarg arg0=0) :
+GEMglTexCoord1f :: GEMglTexCoord1f	(t_floatarg arg0) :
 		s(static_cast<GLfloat>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("s"));

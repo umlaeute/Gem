@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-alpha :: alpha(t_floatarg fun=0)
+alpha :: alpha(t_floatarg fun)
        : m_alphaState(1),
 	 m_alphaTest(1),
 	 m_depthtest(1)
