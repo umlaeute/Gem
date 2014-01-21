@@ -32,6 +32,7 @@ void pix_share_read :: render(GemState *state)
 #else
   if(m_MapFile){
 #endif /* _WIN32 */
+	shm_addr = (unsigned char*)shmat(shm_id,NULL,0666);
     if (shm_addr) {
       t_pixshare_header *h=(t_pixshare_header *)shm_addr;
       unsigned char* data=shm_addr+sizeof(t_pixshare_header);
