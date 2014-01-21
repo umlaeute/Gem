@@ -14,7 +14,9 @@
 
 #include "plugins/videoBase.h"
 #include "Gem/RTE.h"
-#include <sys/select.h>
+#ifdef HAVE_SYS_SELECT_H
+# include <sys/select.h>
+#endif
 #include <iostream>
 
 #if 0
