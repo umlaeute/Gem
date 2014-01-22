@@ -309,7 +309,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     /* now that we have a shm-segment, get the pointer to the data */
     shm_addr = (unsigned char*)shmat(shm_id,NULL,0666);
 
-    if (!shm_addr) return 6;
+    if (shm_addr==(void *)-1) return 6;
     if(shmctl(shm_id,IPC_STAT,&shm_desc)<0) {
       return 8;
     }
