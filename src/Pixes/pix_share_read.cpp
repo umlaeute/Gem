@@ -33,7 +33,7 @@ void pix_share_read :: render(GemState *state)
   if(m_MapFile){
 #endif /* _WIN32 */
 	shm_addr = (unsigned char*)shmat(shm_id,NULL,0666);
-    if (shm_addr) {
+    if (shm_addr != (void *)-1) {
       t_pixshare_header *h=(t_pixshare_header *)shm_addr;
       unsigned char* data=shm_addr+sizeof(t_pixshare_header);
       int csize=pix.image.setCsizeByFormat(h->format);
