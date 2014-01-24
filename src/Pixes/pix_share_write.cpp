@@ -351,7 +351,10 @@ void pix_share_write :: render(GemState *state)
     size_t size=pix->xsize*pix->ysize*pix->csize;
 
     if (!shm_addr){
+      t_atom atom;
       error("no shmaddr");
+      SETFLOAT(&atom, -1);
+      outlet_anything(m_outlet, gensym("error"), 1, &atom);
       return;
     }
 
