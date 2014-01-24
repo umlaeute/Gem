@@ -387,8 +387,8 @@ bool videoUNICAP :: start(void)
   }
   post_fmt(&format);
   if(format.size_count<1 || format.sizes==NULL){
-	  error("Can't get supported format. Device might be busy.");
-	  return false;
+    verbose(1, "can't get supported formats. Device might be busy.");
+    return false;
   }
 
   if(default_size>format.size_count) {
