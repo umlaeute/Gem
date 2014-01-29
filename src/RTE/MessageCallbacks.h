@@ -64,6 +64,7 @@ namespace gem {
     template<>
       struct TypeTemplate<unsigned int> : TypeTemplateCore<t_float, unsigned int> {
         static t_atomtype atomtype_id(void) { return A_FLOAT; }
+        static unsigned int cast(t_float f) { return (f>0.)?static_cast<unsigned int>(f):0; }
       };
     template<>
       struct TypeTemplate<bool> : TypeTemplateCore<t_float, bool> {
