@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-<<<<<<< HEAD
   <PropertyGroup Label="UserMacros">
-    <BASECLASSES_DIR>C:\Program Files\Microsoft SDKs\Windows\v6.1\Samples\Multimedia\DirectShow\BaseClasses</BASECLASSES_DIR>
+    <BASECLASSES_DIR>C:\Program Files\Microsoft SDKs\Windows\v7.1\Samples\multimedia\directshow\baseclasses</BASECLASSES_DIR>
     <BASECLASSES_LIBDIR>$(BASECLASSES_DIR)\Release</BASECLASSES_LIBDIR>
     <WINSDK6_DIR>C:\Program Files\Microsoft SDKs\Windows\v6.1\</WINSDK6_DIR>
     <DXSDK_INCDIR>C:\Users\win7\dev\DirectX SDK august2007\Include</DXSDK_INCDIR>
@@ -26,25 +25,12 @@
   </ItemGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(DXSDK_INCDIR);$(WINSDK6_DIR)\include;$(BASECLASSES_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BASECLASSES_DIR);$(DXSDK_INCDIR);$(WINSDK6_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_DIRECTSHOW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>strmiids.lib;strmbase.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(BASECLASSES_LIBDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-=======
-  <PropertyGroup>
-    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-  </PropertyGroup>
-  <ItemDefinitionGroup>
-    <ClCompile>
-      <AdditionalIncludeDirectories>C:\DXSDK\samples\C++\DirectShow\BaseClasses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HAVE_DIRECTSHOW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <AdditionalDependencies>ddraw.lib;atls.lib;strmiids.lib;strmbase.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\DXSDK\samples\C++\DirectShow\BaseClasses\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
->>>>>>> master
     </Link>
   </ItemDefinitionGroup>
 </Project>

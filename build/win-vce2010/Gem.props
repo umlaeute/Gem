@@ -12,11 +12,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Gem.lib;%(AdditionalDependencies)</AdditionalDependencies>
-<<<<<<< HEAD
       <AdditionalLibraryDirectories>$(SolutionDir);$(ProjectDir)\..\..\build\win-vce2010;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-=======
-      <AdditionalLibraryDirectories>$(SolutionDir);$(ProjectDir)\..\..\build\win-vs2008;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
->>>>>>> master
     </Link>
   </ItemDefinitionGroup>
 </Project>
