@@ -453,23 +453,23 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   key="multishot"; type=0;
   readable .set(key, type);
   writeable.set(key, type);
-  
+
   key="reset_bus"; type=0; // free leftover ISO channels or bandwidth but force all camera on bus to re-enumerate
   writeable.set(key, type);
-  
+
   key="reset_camera"; type=0; // restore camera default settings
   writeable.set(key, type);
-  
+
   key="power"; type=0; // switch camera on/off
   writeable.set(key, type);
-  
+
   dc1394featureset_t feature_set;
   dc1394error_t err;
-  
+
   err = dc1394_feature_get_all(m_dccamera, &feature_set);
   dc1394bool_t is_readable;
   if ( err ) return false;
-    
+
   for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
 	  if ( feature_set.feature[i].available ) {
 		  // TODO remove space in feature name (eg. "Trigger Delay")
@@ -480,7 +480,7 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
 		  writeable.set(key,type);
 		}
   }
-  
+
   return true;
 }
 void videoDC1394::getProperties(gem::Properties&props) {
@@ -592,14 +592,14 @@ void videoDC1394::getProperties(gem::Properties&props) {
       DC1394_TRYGET(multi_shot(m_dccamera, &is_on, &numFrames));
       value=((DC1394_TRUE==is_on)?numFrames:-1);
       props.set(key, value);
-    } else 
+    } else
     {
 		dc1394featureset_t feature_set;
 		dc1394error_t err;
 		err = dc1394_feature_get_all(m_dccamera, &feature_set);
 		dc1394bool_t is_readable;
 		// if ( err ) return false;
-		
+
 		uint32_t dc1394_value;
 		for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
 
@@ -608,7 +608,7 @@ void videoDC1394::getProperties(gem::Properties&props) {
 				value = dc1394_value;
 				props.set(key, value);
 			}
-		}    
+		}
 	}
   }
 }
@@ -739,37 +739,37 @@ void videoDC1394::setProperties(gem::Properties&props) {
 	err=dc1394_video_set_multi_shot(m_dccamera, numFrames, pwr);
       }
     } else if("reset_bus" == key) {
-		if (props.get(key, value)) {
-	      dc1394switch_t pwr=DC1394_OFF;
-	      if(value>0) {
-		    props.set(key,0);
-		    err=dc1394_reset_bus( m_dccamera ) ;
-	      }
-	    }		  
-	} else if("reset_camera" == key) {
-		if (props.get(key, value)) {
-	      dc1394switch_t pwr=DC1394_OFF;
-	      if(value>0) {
-		    props.set(key,0);
-		    err=dc1394_camera_reset( m_dccamera );
-		  }
-	    }
-	} else if("power" == key) {
-	  if (props.get(key, value)) {
-	    dc1394switch_t pwr=DC1394_OFF;
-	    if(value>0) {
-		  pwr=DC1394_ON;
-	    }
-	    err=dc1394_camera_set_power(m_dccamera,pwr);
-	  }
+      if (props.get(key, value)) {
+	dc1394switch_t pwr=DC1394_OFF;
+	if(value>0) {
+	  props.set(key,0);
+	  err=dc1394_reset_bus( m_dccamera ) ;
 	}
+      }
+    } else if("reset_camera" == key) {
+      if (props.get(key, value)) {
+	dc1394switch_t pwr=DC1394_OFF;
+	if(value>0) {
+	  props.set(key,0);
+	  err=dc1394_camera_reset( m_dccamera );
+	}
+      }
+    } else if("power" == key) {
+      if (props.get(key, value)) {
+	dc1394switch_t pwr=DC1394_OFF;
+	if(value>0) {
+	  pwr=DC1394_ON;
+	}
+	err=dc1394_camera_set_power(m_dccamera,pwr);
+      }
+    }
     else {
 		dc1394featureset_t feature_set;
 		dc1394error_t err;
 		err = dc1394_feature_get_all(m_dccamera, &feature_set);
 		dc1394bool_t is_readable;
 		// if ( err ) return false;
-		
+
 		uint32_t dc1394_value;
 		for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
 
@@ -779,7 +779,7 @@ void videoDC1394::setProperties(gem::Properties&props) {
 				dc1394_feature_set_value(m_dccamera, feature_set.feature[i].id, dc1394_value);
 				// TODO : limit to min / max value for each parametter
 			}
-		}    
+		}
 	}
     if(DC1394_SUCCESS!=err) {
       error("videoDC1394: setting '%s' failed with '%s'",
