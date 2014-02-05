@@ -455,15 +455,12 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   writeable.set(key, type);
   
   key="reset_bus"; type=0; // free leftover ISO channels or bandwidth but force all camera on bus to re-enumerate
-  readable .set(key, type);
   writeable.set(key, type);
   
   key="reset_camera"; type=0; // restore camera default settings
-  readable .set(key, type);
   writeable.set(key, type);
   
   key="power"; type=0; // switch camera on/off
-  readable .set(key, type);
   writeable.set(key, type);
   
   dc1394featureset_t feature_set;
