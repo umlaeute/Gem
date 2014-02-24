@@ -115,7 +115,7 @@ public:
 	m_arrays[i]->render();
       }
     }
-    if(doTex)
+    if(doTex) {
       if(texUnits>0) {
 	for(i=TEXTURE; i<m_arrays.size(); i++) {
 	  if(m_arrays[i]) {
@@ -129,6 +129,7 @@ public:
 	  m_arrays[i]->render();
 	}
       }
+    }
 
     glDrawArrays(drawType, 0, m_size);
     for(i=0; i<m_arrays.size(); i++) {
