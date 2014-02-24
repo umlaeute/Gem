@@ -130,7 +130,7 @@ class GEM_EXTERN glsl_program : public GemBase
   bool        m_wantLink;
   int		  m_num;
 
-  t_outlet	 *m_outProgramID;
+  t_outlet	 *m_outProgramID, *m_outInfo;
 
   ////////
   // for geometry shaders we need a bit more...
@@ -141,6 +141,7 @@ class GEM_EXTERN glsl_program : public GemBase
   virtual void outverticesMess(GLint);
   GLint  m_geoOutVertices;
 
+  virtual void getAttribLocation(const std::string&);
 
  private:
 

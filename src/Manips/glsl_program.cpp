@@ -124,6 +124,8 @@ glsl_program :: glsl_program()  :
 
   // create an outlet to send texture ID
   m_outProgramID = outlet_new(this->x_obj, &s_float);
+
+  m_outInfo = outlet_new(this->x_obj, 0);
 }
 
 ////////////////////////////////////////////////////////
@@ -821,6 +823,15 @@ void glsl_program:: outverticesMess(GLint vertices) {
     glProgramParameteriEXT(m_program,GL_GEOMETRY_VERTICES_OUT_EXT,temp);
   }
 }
+void glsl_program:: getAttribLocation(const std::string&s) {
+  if(m_program) {
+    t_atom ap[2];
+    GLint attrib = glGetAttribLocation(m_program, s.c_str());
+    SETSYMBOL(ap+0, gensym(s.c_str()));
+    SETFLOAT (ap+1, attrib);
+    outlet_anything(m_outInfo, gensym("attrib_location"), 2, ap);
+  }
+}
 
 
 /////////////////////////////////////////////////////////
@@ -841,6 +852,7 @@ void glsl_program :: obj_setupCallback(t_class *classPtr)
                   gensym("geometry_type"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "geometry_outvertices", outverticesMess, int);
+  CPPEXTERN_MSG1(classPtr, "get_attrib_location", getAttribLocation, std::string);
 
   class_addanything(classPtr, reinterpret_cast<t_method>(&glsl_program::paramMessCallback));
 }
