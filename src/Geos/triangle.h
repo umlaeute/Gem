@@ -50,8 +50,8 @@ class GEM_EXTERN triangle : public GemShape
     	// Do the renderShapeing
     	virtual void 	renderShape(GemState *state);
 
-      GLuint m_vertexArrayID;
-      GLuint m_vertexbuffer;
+      gem::ContextData<GLuint> m_vertexArrayID;
+      gem::ContextData<GLuint> m_vertexbuffer;
 };
 
 #endif	// for header file
