@@ -18,7 +18,7 @@
 
 #include "Gem/RTE.h"
 
-#include <stack>
+#include <list>
 #include <set>
 
 #ifdef GEM_MULTICONTEXT
@@ -71,6 +71,17 @@ public:
 #endif
   }
 
+  void makeCurrent(void) {
+    GemMan::maxStackDepth[GemMan::STACKMODELVIEW] = maxStackDepth[GemMan::STACKMODELVIEW];
+    GemMan::maxStackDepth[GemMan::STACKCOLOR]     = maxStackDepth[GemMan::STACKCOLOR];
+    GemMan::maxStackDepth[GemMan::STACKTEXTURE]   = maxStackDepth[GemMan::STACKTEXTURE];
+    GemMan::maxStackDepth[GemMan::STACKPROJECTION]= maxStackDepth[GemMan::STACKPROJECTION];
+
+    s_context  =context;
+    s_xcontext =xcontext;
+    s_contextid=contextid;
+  }
+
   GLint maxStackDepth[4];
 
   GLEWContext    *context;
@@ -101,11 +112,14 @@ public:
   static unsigned int s_contextid;
   static GLEWContext*s_context;
   static GemGlewXContext*s_xcontext;
+
+  static std::list<Context*>s_contextStack;
 };
 unsigned int    Context::PIMPL::s_contextid=0;
 GLEWContext*    Context::PIMPL::s_context=NULL;
 GemGlewXContext*Context::PIMPL::s_xcontext=NULL;
 std::set<unsigned int>      Context::PIMPL::s_takenIDs;
+std::list<Context*>Context::PIMPL::s_contextStack;
 
 Context::Context(void)
   : m_pimpl(new PIMPL())
@@ -174,19 +188,21 @@ Context::~Context(void) {
 }
 
 bool Context::push(void) {
-  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]= m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
-  GemMan::maxStackDepth[GemMan::STACKCOLOR]=     m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
-  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
-  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
-
-  m_pimpl->s_context=m_pimpl->context;
-  m_pimpl->s_xcontext=m_pimpl->xcontext;
-  m_pimpl->s_contextid=m_pimpl->contextid;
+  m_pimpl->makeCurrent();
+  m_pimpl->s_contextStack.push_back(this);
   return true;
 }
 
 bool Context::pop(void) {
-  return true;
+  Context*ctx=m_pimpl->s_contextStack.back();
+  m_pimpl->s_contextStack.pop_back();
+
+  if(ctx) {
+    ctx->m_pimpl->makeCurrent();
+    return true;
+  }
+
+  return false;
 }
 
 unsigned int Context::getContextId(void) {
