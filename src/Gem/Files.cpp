@@ -59,7 +59,7 @@ namespace gem {
 #else
       /* use glob */
       glob_t glob_buffer;
-      int i=0;
+      unsigned int i=0;
       switch( glob( pattern.c_str(), GLOB_TILDE, NULL, &glob_buffer ) ) {
       case GLOB_NOSPACE:
         //        error("out of memory for \"%s\"",pattern.c_str());
