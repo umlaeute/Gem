@@ -75,7 +75,7 @@ public:
     locks(NULL),
     numlocks(0),
     asynchronous(true), condition_cond(NULL), condition_mutex(NULL),
-    runMutex(NULL), runCondition(NULL),
+    runCondition(NULL), runMutex(NULL),
     timeout(timeout_),
     cont(true),
     running(false),
