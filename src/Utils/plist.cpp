@@ -121,7 +121,7 @@ free_list(list **l)
 int
 list_append(list **lst, int val)
 {
-   char *fname="list_append";
+   const char *fname="list_append";
    list *pnode, *last=*lst;
 
    ANIMAL_MALLOC_OBJECT(pnode, list, fname,false);

@@ -55,7 +55,7 @@ int_stk *
 new_stk(int n)
 {
    int_stk *stk;
-   char *func="new_stk";
+   const char *func="new_stk";
 
    assert(n);
    ANIMAL_MALLOC_OBJECT(stk,int_stk,func,NULL);
