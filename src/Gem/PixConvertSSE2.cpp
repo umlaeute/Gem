@@ -43,7 +43,7 @@
 static void print_char(__m128i m){
   _mm_pause();
   unsigned char*s=(unsigned char*)&m;
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<(sizeof(__m128i)/sizeof(unsigned char)); i++){
     startpost(PRINT_MASK, *s);s++;
   }
@@ -52,7 +52,7 @@ static void print_char(__m128i m){
 static void print_short(__m128i m){
   _mm_pause();
   signed short*s=(signed short*)&m;
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<(sizeof(__m128i)/sizeof(signed short)); i++){
     startpost(PRINT_MASK, *s);s++;
   }
@@ -61,7 +61,7 @@ static void print_short(__m128i m){
 static void print_int(__m128i m){
   _mm_pause();
   signed int*s=(signed int*)&m;
-  int i=0;
+  unsigned int i=0;
   for(i=0; i<(sizeof(__m128i)/sizeof(signed int)); i++){
     startpost(PRINT_MASK, *s);s++;
   }
