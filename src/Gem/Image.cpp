@@ -1104,11 +1104,10 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       const unsigned char*pv=(format==GL_BGR_EXT)?U:V;
       const unsigned char*pu=(format==GL_RGB)?U:V;
 
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
@@ -1158,11 +1157,10 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       const unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
       const unsigned char*pu=(format==GL_RGBA)?V:U;
 
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
@@ -1266,11 +1264,10 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       const short*pv=V;//(format==GL_BGR_EXT)?V:U;
       const short*pu=U;//(format==GL_RGB)?V:U;
 
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
@@ -1355,11 +1352,10 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       const short*pv=V;//(format==GL_BGRA_EXT)?U:V;
       const short*pu=U;//(format==GL_RGBA)?U:V;
 
-      int y, u, v, yy;
+      int y, u, v;
       int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
