@@ -191,9 +191,10 @@ void GemState :: reset() {
   drawType = 0;
 
   if(GemMan::windowExists()) {
-    GLStack *stacks;
+    GLStack *stacks=NULL;
     get(GemState::_GL_STACKS, stacks);
-    stacks->reset();
+    if(stacks)
+      stacks->reset();
   }
 
   set(GemState::_PIX, (image=0));
