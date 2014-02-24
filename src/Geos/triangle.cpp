@@ -117,8 +117,7 @@ void triangle :: renderShape(GemState *state)
     if (m_drawType == GL_LINE_LOOP)
       glLineWidth(m_linewidth);
 
-    GLuint vb0=m_vertexbuffer;
-    post("m_vertexbuffer=%d", vb0);
+    if(1) { GLuint vb0=m_vertexbuffer; post("m_vertexbuffer=%d", vb0);}
 
     if(!m_vertexbuffer) {
       // Generate 1 buffer, put the resulting identifier in vertexbuffer
