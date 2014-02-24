@@ -73,7 +73,7 @@ private:
         m_ids.push_back(key);
         m_handles.push_back(handle);
         count++;
-        verbose(2, "added backend#%d '%s'", m_handles.size()-1, key.c_str());
+        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1), key.c_str());
       }
     }
     return (count>0);
