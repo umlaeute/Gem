@@ -385,15 +385,18 @@ void destroyGemWindow(WindowInfo &info)
       /* patch by cesare marilungo to prevent the crash "on my laptop" */
       glXMakeCurrent(info.dpy, None, NULL); /* this crashes if no window is there! */
 
-      if (info.win)
+      if (info.win) {
 	err=XDestroyWindow(info.dpy, info.win);
+	if(err!=0) { error("GEM.XWin: XDestroyWindow returned %d", err); }
+      }
       if (info.have_constContext && info.context) {
         // this crashes sometimes on my laptop:
 	glXDestroyContext(info.dpy, info.context);
       }
-      if (info.cmap)
+      if (info.cmap) {
 	err=XFreeColormap(info.dpy, info.cmap);
-
+	if(err!=0) { error("GEM.XWin: XFreeColormap returned %d", err); }
+      }
 #ifdef HAVE_LIBXXF86VM
       if (info.fs){
 	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
@@ -403,6 +406,7 @@ void destroyGemWindow(WindowInfo &info)
 #endif
 
       err=XCloseDisplay(info.dpy); /* this crashes if no window is there */
+      if(err!=0) { error("GEM.XWin: XCloseDisplay returned %d", err); }
     }
   info.dpy = NULL;
   info.win = 0;
@@ -466,6 +470,7 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
           triggerMotionEvent(eb->x, eb->y);
           if(!win.have_border) {
             int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
+	    if(err!=0) { error("GEM.XWin: XSetInputFocus returned %d", err); }
             err=0;
           }
           break;
