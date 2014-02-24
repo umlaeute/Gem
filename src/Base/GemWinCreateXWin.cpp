@@ -109,6 +109,17 @@ static int dblBuf8Stereo[] =   {GLX_RGBA,
 								  GLX_STEREO,
                           None};
 
+static int printXerror(Display*dpy, const char*fun, int err) {
+  #define MAX_XERROR_SIZE 1024
+  if(err!=0) {
+    char buf[MAX_XERROR_SIZE];
+    XGetErrorText(dpy, err, buf, MAX_XERROR_SIZE);
+    buf[MAX_XERROR_SIZE-1]=0;
+    verbose(0, "GEM.XWin[%s]: %s", fun, buf);
+  }
+  return 0;
+}
+
 static int xerr=0;
 int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
@@ -387,7 +398,7 @@ void destroyGemWindow(WindowInfo &info)
 
       if (info.win) {
 	err=XDestroyWindow(info.dpy, info.win);
-	if(err!=0) { error("GEM.XWin: XDestroyWindow returned %d", err); }
+	err=printXerror(info.dpy, "XDestroyWindow", err);
       }
       if (info.have_constContext && info.context) {
         // this crashes sometimes on my laptop:
@@ -395,7 +406,7 @@ void destroyGemWindow(WindowInfo &info)
       }
       if (info.cmap) {
 	err=XFreeColormap(info.dpy, info.cmap);
-	if(err!=0) { error("GEM.XWin: XFreeColormap returned %d", err); }
+	err=printXerror(info.dpy, "XFreeColormap", err);
       }
 #ifdef HAVE_LIBXXF86VM
       if (info.fs){
@@ -406,7 +417,7 @@ void destroyGemWindow(WindowInfo &info)
 #endif
 
       err=XCloseDisplay(info.dpy); /* this crashes if no window is there */
-      if(err!=0) { error("GEM.XWin: XCloseDisplay returned %d", err); }
+      err=printXerror(info.dpy, "XCloseDisplay", err);
     }
   info.dpy = NULL;
   info.win = 0;
@@ -470,8 +481,7 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
           triggerMotionEvent(eb->x, eb->y);
           if(!win.have_border) {
             int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
-	    if(err!=0) { error("GEM.XWin: XSetInputFocus returned %d", err); }
-            err=0;
+	    err=printXerror(win.dpy, "XSetInputFocus", err);
           }
           break;
         case KeyPress:
