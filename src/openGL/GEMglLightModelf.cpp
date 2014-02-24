@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglLightModelf , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLightModelf :: GEMglLightModelf	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglLightModelf :: GEMglLightModelf	(t_floatarg arg0, t_floatarg arg1) :
 		pname(static_cast<GLenum>(arg0)),
 		param(static_cast<GLfloat>(arg1))
 {

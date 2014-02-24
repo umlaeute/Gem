@@ -34,7 +34,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-gemlist_info :: gemlist_info	(t_floatarg arg0=0) {
+gemlist_info :: gemlist_info	(t_floatarg) {
   m_outletRotation = outlet_new(this->x_obj, 0);
   m_outletShear = outlet_new(this->x_obj, 0);
   m_outletScale = outlet_new(this->x_obj, 0);

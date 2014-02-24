@@ -15,10 +15,9 @@
 CPPEXTERN_NEW_WITH_GIMME(pix_share_read);
 
 
-  pix_share_read :: pix_share_read(int argc, t_atom*argv):pix_share_write(argc,argv)
-{
-
-}
+pix_share_read :: pix_share_read(int argc, t_atom*argv)
+ : pix_share_write(argc,argv)
+{}
 
 pix_share_read :: ~pix_share_read()
 {
@@ -52,12 +51,12 @@ void pix_share_read :: render(GemState *state)
     }
     else{
       error("no shmaddr");
+      t_atom atom;
+	  SETFLOAT(&atom, -1);
+	  outlet_anything(m_outlet, gensym("error"), 1, &atom);
     }
   }
 }
 
 void pix_share_read :: obj_setupCallback(t_class *classPtr)
-{
-
-}
-
+{}

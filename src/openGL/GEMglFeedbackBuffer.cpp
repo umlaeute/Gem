@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer , t_floatarg, A_DEFFLOAT, t_fl
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglFeedbackBuffer :: GEMglFeedbackBuffer	(t_floatarg arg0=128, t_floatarg arg1=0) :
+GEMglFeedbackBuffer :: GEMglFeedbackBuffer	(t_floatarg arg0, t_floatarg arg1) :
 		size(static_cast<GLsizei>(arg0)), type(static_cast<GLenum>(arg1))
 {
 	len=(size>0)?size:128;

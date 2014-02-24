@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include <typeinfo>
 #include <algorithm>
+#include <string>
 
 
 namespace gem

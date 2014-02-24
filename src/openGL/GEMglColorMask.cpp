@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColorMask , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColorMask :: GEMglColorMask	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglColorMask :: GEMglColorMask	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		red(static_cast<GLboolean>(arg0)),
 		green(static_cast<GLboolean>(arg1)),
 		blue(static_cast<GLboolean>(arg2)),

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4s , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex4s :: GEMglVertex4s	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglVertex4s :: GEMglVertex4s	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		x(static_cast<GLshort>(arg0)),
 		y(static_cast<GLshort>(arg1)),
 		z(static_cast<GLshort>(arg2)),
