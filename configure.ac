@@ -27,6 +27,7 @@ AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
 AC_CONFIG_FILES([plugins/imageSGI/Makefile])
 
+AC_CONFIG_FILES([plugins/filmAVFoundation/Makefile])
 AC_CONFIG_FILES([plugins/filmAVI/Makefile])
 AC_CONFIG_FILES([plugins/filmAVIPLAY/Makefile])
 AC_CONFIG_FILES([plugins/filmDS/Makefile])
@@ -127,6 +128,9 @@ AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_SED
+
+# required for QTKit / Cocoa
+AC_PROG_OBJCXX
 
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
@@ -263,14 +267,31 @@ dnl some checks for osX
 GEM_CHECK_FRAMEWORK([Cocoa],
                         [have_cocoa_framework="yes"], 
                         [have_cocoa_framework="no"])
-GEM_CHECK_FRAMEWORK([Carbon], 
-                        [have_carbon_framework="yes"], 
-                        [have_carbon_framework="no"])
-GEM_CHECK_FRAMEWORK([QuickTime],
-                        [have_quicktime_framework="yes"], 
-                        [have_quicktime_framework="no"])
+#GEM_CHECK_FRAMEWORK([Carbon], 
+#                        [have_carbon_framework="yes"], 
+#                        [have_carbon_framework="no"])
+#GEM_CHECK_FRAMEWORK([QuickTime],
+#                        [have_quicktime_framework="yes"], 
+#                        [have_quicktime_framework="no"])
+GEM_CHECK_FRAMEWORK([AVFoundation],
+                        [have_avfoundaiton_framework="yes"], 
+                        [have_avfoundation_framework="no"])
+AC_SUBST(GEM_FRAMEWORK_CARBON)
+AC_SUBST(GEM_FRAMEWORK_QUICKTIME)
+AM_CONDITIONAL(HAVE_FRAMEWORK_CARBON, [test "x$gem_check_ldflags_success" = "xyes"])
+AM_CONDITIONAL(HAVE_FRAMEWORK_QUICKTIME, [test "x$gem_check_ldflags_success" = "xyes"])
 
-AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
+AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes" && test "x${have_avfoundation_framework}" = "xno") # don't need Carbon if QTKit is available
+
+# prefer AVFoundation over QuickTime
+AC_MSG_CHECKING([if AVFoundation is available, if so then do not use QuickTime or Carbon frameworks])
+if test GEM_FRAMEWORK_QUICKTIME && test "x$have_avfoundation_framework" = "xyes"; then
+ have_carbon_framework="no"
+ have_quicktime_framework="no"
+ AC_MSG_RESULT([yes])
+else
+ AC_MSG_RESULT([no])
+fi
 
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
@@ -312,14 +333,16 @@ GEM_CHECK_LIB([libquicktime], [quicktime], [quicktime_init],,,,[movie loader])
 GEM_CHECK_LIB([lqt], [quicktime], [quicktime_init],,,,[movie loader])
 
 # special function in libquicktime
-old_cflags=${CFLAGS}
-old_ldflags=${LDFLAGS}
-CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
-LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
-AC_CHECK_FUNCS([lqt_seek_video])
-AC_CHECK_FUNCS([lqt_open_write])
-CFLAGS=${old_cflags}
-LDFLAGS=${old_ldflags}
+if test "x$have_avfoundation_framework" = "xno"; then
+ old_cflags=${CFLAGS}
+ old_ldflags=${LDFLAGS}
+ CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
+ LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+ AC_CHECK_FUNCS([lqt_seek_video])
+ AC_CHECK_FUNCS([lqt_open_write])
+ CFLAGS=${old_cflags}
+ LDFLAGS=${old_ldflags}
+fi
 
 #video
 GEM_CHECK_LIB([libdc1394-2], [dc1394], [main],,,, [video input])
@@ -643,9 +666,13 @@ else
 fi
 
 if test "x$have_quicktime_framework" = "x"; then have_quicktime_framework="no"; fi
-
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
+fi
+
+if test "x$have_avfoundation_framework" = "x"; then have_avfoundation_framework="no"; fi
+if test "x$have_avfoundation_framework" = "xyes"; then
+ have_libavfoundation="yes (framework)"
 fi
 
 have_ieee1394=""
@@ -713,6 +740,7 @@ Configuration:
   image-support
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
@@ -720,6 +748,7 @@ Configuration:
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
+    use AVFoundation     : ${have_libavfoundation}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
   capture-support 
@@ -731,7 +760,8 @@ Configuration:
     use Unicap           : ${have_unicap}
     use Video-for-WinDOS : ${have_vfw32}
     use QuickTime        : ${have_quicktime_framework}
-])
+    use AVFoundation     : ${have_avfoundation_framework}
+]) 
 
 if test "x$have_pd" = "xno"; then
   AC_MSG_ERROR([Pd (header) is mandatory and seems to be missing!])
