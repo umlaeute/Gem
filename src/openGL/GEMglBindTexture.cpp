@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBindTexture :: GEMglBindTexture	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglBindTexture :: GEMglBindTexture	(t_floatarg arg0, t_floatarg arg1) :
 		target(static_cast<GLenum>(arg0)),
 		texture(static_cast<GLuint>(arg1))
 {

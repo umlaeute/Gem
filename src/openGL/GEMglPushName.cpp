@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushName , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPushName :: GEMglPushName	(t_floatarg arg0=0) :
+GEMglPushName :: GEMglPushName	(t_floatarg arg0) :
 		name(static_cast<GLuint>(arg0))
 {
 	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));

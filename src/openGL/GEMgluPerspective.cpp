@@ -21,7 +21,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMgluPerspective , t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMgluPerspective :: GEMgluPerspective	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMgluPerspective :: GEMgluPerspective	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		fovy(static_cast<GLdouble>(arg0)),
 		aspect(static_cast<GLdouble>(arg1)),
 		m_near(static_cast<GLdouble>(arg2)),

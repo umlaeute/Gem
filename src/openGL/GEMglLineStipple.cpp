@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglLineStipple , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLineStipple :: GEMglLineStipple	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglLineStipple :: GEMglLineStipple	(t_floatarg arg0, t_floatarg arg1) :
 		factor(static_cast<GLint>(arg0)),
 		pattern(static_cast<GLushort>(arg1))
 {

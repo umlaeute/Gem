@@ -19,7 +19,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Gem/Image.h"
 
 #include <dshow.h>
+#if WINVER > 0x0600
+#include "qedit.h" // local replacement of qedit.h which is no longer included in SDK 7.0
+#else
 #include <qedit.h>
+#endif
 
    /*-----------------------------------------------------------------
      -------------------------------------------------------------------

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglScalef , t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglScalef :: GEMglScalef	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglScalef :: GEMglScalef	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		x(static_cast<GLfloat>(arg0)),
 		y(static_cast<GLfloat>(arg1)),
 		z(static_cast<GLfloat>(arg2))

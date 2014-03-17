@@ -45,7 +45,7 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="installerCVS.bat"
+				BuildCommandLine="installer.bat"
 				ReBuildCommandLine=""
 				CleanCommandLine=""
 				Output=""
@@ -62,4 +62,6 @@
 	</References>
 	<Files>
 	</Files>
+	<Globals>
+	</Globals>
 </VisualStudioProject>

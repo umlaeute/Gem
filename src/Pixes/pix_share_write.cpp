@@ -290,6 +290,10 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     int id = shmget(fake,sizeof(t_pixshare_header),0666);
     if(id>0){ /* yea, we got it! */
       t_pixshare_header*h=(t_pixshare_header*)shmat(id,NULL,0666);
+      if (!shm_addr || shm_addr==(void *)-1){
+	shm_addr=NULL;
+	return 8;
+      }
       /* read the size of the blob from the shared segment */
       if(h&&h->size){
         error("someone was faster: only got %d bytes instead of %d",
@@ -308,9 +312,14 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   if(shm_id>0){
     /* now that we have a shm-segment, get the pointer to the data */
     shm_addr = (unsigned char*)shmat(shm_id,NULL,0666);
+    if (!shm_addr || shm_addr==(void *)-1){
+      shm_addr=NULL;
+      return 8;
+    }
 
-    if (!shm_addr) return 6;
-    shmctl(shm_id,IPC_STAT,&shm_desc);
+    if(shmctl(shm_id,IPC_STAT,&shm_desc)<0) {
+      return 8;
+    }
     /* write the size into the shm-segment */
     t_pixshare_header *h=(t_pixshare_header *)shm_addr;
     h->size = (shm_desc.shm_segsz-sizeof(t_pixshare_header));
@@ -342,7 +351,10 @@ void pix_share_write :: render(GemState *state)
     size_t size=pix->xsize*pix->ysize*pix->csize;
 
     if (!shm_addr){
+      t_atom atom;
       error("no shmaddr");
+      SETFLOAT(&atom, -1);
+      outlet_anything(m_outlet, gensym("error"), 1, &atom);
       return;
     }
 

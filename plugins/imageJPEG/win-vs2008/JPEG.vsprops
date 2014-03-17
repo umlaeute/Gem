@@ -6,12 +6,16 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(ProjectDir)\..\..\..\..\GemLibs\Jpeg"
+		AdditionalIncludeDirectories="$(LIBJPEG_DIR)\include"
 		PreprocessorDefinitions="HAVE_LIBJPEG"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="libjpeg.lib"
-		AdditionalLibraryDirectories="$(ProjectDir)\..\..\..\..\GemLibs\Jpeg"
+		AdditionalDependencies="jpeg.lib"
+		AdditionalLibraryDirectories="$(LIBJPEG_DIR)\lib"
+	/>
+	<UserMacro
+		Name="LIBJPEG_DIR"
+		Value="C:\dev\jpeg-6b-4-lib"
 	/>
 </VisualStudioPropertySheet>

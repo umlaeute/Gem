@@ -32,6 +32,11 @@
 # define __IDxtKey_INTERFACE_DEFINED__
 #endif
 
+#include <atlbase.h>
+#include <atlconv.h>
+#include <streams.h>
+#include <dvdmedia.h>
+#define REGISTER_FILTERGRAPH 1
 
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
@@ -42,12 +47,6 @@
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("DirectShow", filmDS);
-
-#include <atlbase.h>
-#include <atlconv.h>
-#include <streams.h>
-#include <dvdmedia.h>
-#define REGISTER_FILTERGRAPH 1
 
 #include <strsafe.h>
 

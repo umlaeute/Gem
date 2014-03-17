@@ -11,6 +11,10 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalLibraryDirectories="$(IMAGEMAGICK)\VisualMagick\lib\"
+		AdditionalLibraryDirectories="$(IMAGEMAGICK)\VisualMagick\lib"
+	/>
+	<UserMacro
+		Name="IMAGEMAGICK"
+		Value="C:\dev\ImageMagick-6.8.6"
 	/>
 </VisualStudioPropertySheet>

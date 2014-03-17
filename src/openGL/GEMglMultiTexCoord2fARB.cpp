@@ -21,7 +21,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMultiTexCoord2fARB , t_floatarg, A_DEFFLOAT
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMultiTexCoord2fARB :: GEMglMultiTexCoord2fARB	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglMultiTexCoord2fARB :: GEMglMultiTexCoord2fARB	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		texUnit(static_cast<GLenum>(arg0)),
 		s(static_cast<GLfloat>(arg1)),
 		t(static_cast<GLfloat>(arg2))

@@ -17,6 +17,10 @@
 # include "config.h"
 #endif
 
+#ifdef _WIN32
+#include <stdio.h> // AV : in windows, this should be included before tiffio.h
+#endif /* WINVER */
+
 #ifdef HAVE_LIBTIFF
 extern "C"
 {

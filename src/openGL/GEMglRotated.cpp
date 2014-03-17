@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRotated , t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRotated :: GEMglRotated	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglRotated :: GEMglRotated	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		angle(static_cast<GLdouble>(arg0)),
 		x(static_cast<GLdouble>(arg1)),
 		y(static_cast<GLdouble>(arg2)),

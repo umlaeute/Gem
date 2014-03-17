@@ -86,7 +86,7 @@ the same memory (they probably need to run on the same computer);
 #X msg 602 243 shmem segment successfully created;
 #X msg 638 223 can't create shmem segment error \$1;
 #X obj 602 203 route error;
-#X obj 602 263 print pix_share_read;
+#X obj 602 263 print pix_share_write;
 #X text 56 334 Outlet 2: error number \, 0=no error;
 #X obj 451 176 pix_share_write;
 #X text 548 175 arguments are optional;

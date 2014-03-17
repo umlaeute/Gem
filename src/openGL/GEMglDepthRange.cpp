@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglDepthRange , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDepthRange :: GEMglDepthRange	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglDepthRange :: GEMglDepthRange	(t_floatarg arg0, t_floatarg arg1) :
 		near_val(static_cast<GLclampd>(arg0)),
 		far_val(static_cast<GLclampd>(arg1))
 {

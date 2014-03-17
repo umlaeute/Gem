@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglStencilFunc , t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglStencilFunc :: GEMglStencilFunc	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglStencilFunc :: GEMglStencilFunc	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		func(static_cast<GLenum>(arg0)),
 		ref(static_cast<GLint>(arg1)),
 		mask(static_cast<GLuint>(arg2))
