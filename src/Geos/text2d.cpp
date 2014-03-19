@@ -93,63 +93,63 @@ void text2d :: render(GemState *)
   unsigned int i;
 
   if(m_antialias && m_afont)
-  {
-    // Get ascender height (= height of the text)
-    ascender = m_afont->Ascender();
-
-    // step through the lines
-    for(i=0; i<m_theText.size(); i++)
     {
-      m_afont->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
-      y_offset = m_lineDist[i]*m_fontSize;
+      // Get ascender height (= height of the text)
+      ascender = m_afont->Ascender();
 
-    if (m_widthJus == LEFT)       width = x1;
-    else if (m_widthJus == RIGHT) width = x2-x1;
-    else if (m_widthJus == CENTER)width = x2 / 2.f;
+      // step through the lines
+      for(i=0; i<m_theText.size(); i++)
+	{
+	  m_afont->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
+	  y_offset = m_lineDist[i]*m_fontSize;
 
-      if (m_heightJus == BOTTOM || m_heightJus == BASEH)
-        height = y_offset;
-      else if (m_heightJus == TOP)   height = ascender + y_offset;
-      else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
+	  if (m_widthJus == LEFT)       width = x1;
+	  else if (m_widthJus == RIGHT) width = x2-x1;
+	  else if (m_widthJus == CENTER)width = x2 / 2.f;
 
-    glPushMatrix();
+	  if (m_heightJus == BOTTOM || m_heightJus == BASEH)
+	    height = y_offset;
+	  else if (m_heightJus == TOP)   height = ascender + y_offset;
+	  else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
 
-    glRasterPos2i(0,0);
-    glBitmap(0,0,0.0,0.0,-width,-height, NULL);
-      m_afont->Render(m_theText[i].c_str());
+	  glPushMatrix();
 
-    glPopMatrix();
+	  glRasterPos2i(0,0);
+	  glBitmap(0,0,0.0,0.0,-width,-height, NULL);
+	  m_afont->Render(m_theText[i].c_str());
+
+	  glPopMatrix();
+	}
     }
-  }
   else if (m_font)
-  {
-    // Get ascender height (= height of the text)
-    ascender = m_font->Ascender();
-
-    // step through the lines
-    for(i=0; i<m_theText.size(); i++)
     {
-      m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
-      y_offset = m_lineDist[i]*m_fontSize;
+      // Get ascender height (= height of the text)
+      ascender = m_font->Ascender();
 
-    if (m_widthJus == LEFT)       width = x1;
-    else if (m_widthJus == RIGHT) width = x2-x1;
-    else if (m_widthJus == CENTER)width = x2 / 2.f;
+      // step through the lines
+      for(i=0; i<m_theText.size(); i++)
+	{
+	  m_font->BBox(m_theText[i].c_str(), x1, y1, z1, x2, y2, z2); // FTGL
+	  y_offset = m_lineDist[i]*m_fontSize;
 
-      if (m_heightJus == BOTTOM || m_heightJus == BASEH)
-        height = y_offset;
-      else if (m_heightJus == TOP)   height = ascender + y_offset;
-      else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
+	  if (m_widthJus == LEFT)       width = x1;
+	  else if (m_widthJus == RIGHT) width = x2-x1;
+	  else if (m_widthJus == CENTER)width = x2 / 2.f;
 
-    glPushMatrix();
+	  if (m_heightJus == BOTTOM || m_heightJus == BASEH)
+	    height = y_offset;
+	  else if (m_heightJus == TOP)   height = ascender + y_offset;
+	  else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
 
-    glRasterPos2i(0,0);
-    glBitmap(0,0,0.0,0.0,-width,-height, NULL);
-      m_font->Render(m_theText[i].c_str());
+	  glPushMatrix();
 
-    glPopMatrix();
-  }
-}
+	  glRasterPos2i(0,0);
+	  glBitmap(0,0,0.0,0.0,-width,-height, NULL);
+	  m_font->Render(m_theText[i].c_str());
+
+	  glPopMatrix();
+	}
+    }
 }
 
 

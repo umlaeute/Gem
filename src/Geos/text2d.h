@@ -51,7 +51,7 @@ class GEM_EXTERN text2d : public TextBase
 	//////
 	// anti aliasing (aka: pixmap instead of bitmap)
 	int m_antialias;
-  void aliasMess(int io);
+	void aliasMess(int io);
 
 #ifdef FTGL
 	virtual void            setFontSize(void);
