@@ -52,6 +52,7 @@ TextBase :: TextBase(int argc, t_atom *argv)
   m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
   m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY),
   m_inlet(NULL),
+  m_infoOut(gem::RTE::Outlet(this)),
   m_font(NULL), m_fontname(NULL)
 {
   // initial text
@@ -258,6 +259,47 @@ void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType)
 void TextBase :: setJustification(JustifyWidth wType)
 {
   m_widthJus = wType;
+}
+
+
+void TextBase :: getBBox(float&x0,float&y0,float&z0,
+			 float&x1,float&y1,float&z1) {
+#ifdef FTGL
+
+#endif
+}
+void TextBase :: fontInfo(void) {
+  if(!m_font)return;
+  std::vector<gem::any>atoms;
+  gem::any value;
+#ifdef FTGL
+  value = m_font->Ascender();
+  atoms.clear(); atoms.push_back(value);
+  m_infoOut.send("ascender", atoms);
+
+  value = m_font->Descender();
+  atoms.clear(); atoms.push_back(value);
+  m_infoOut.send("descender", atoms);
+
+  value = m_font->LineHeight();
+  atoms.clear(); atoms.push_back(value);
+  m_infoOut.send("height", atoms);
+
+  if(!m_theText.empty()) {
+    float x0, y0, z0, x1, y1, z1;
+    x0=y0=z0=0;
+    x1=y1=z1=0;
+    getBBox(x0, y0, z0, x1, y1, z1);
+    atoms.clear();
+    atoms.push_back(x0);
+    atoms.push_back(y0);
+    atoms.push_back(z0);
+    atoms.push_back(x1);
+    atoms.push_back(y1);
+    atoms.push_back(z1);
+    m_infoOut.send("bbox", atoms);
+  }
+#endif
 }
 
 void TextBase :: justifyFont(float x1, float y1, float z1,
