@@ -14,7 +14,9 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#ifndef MARK
+# define MARK() post("%s:%d\t%s", __FILE__, __LINE__, __FUNCTION__)
+#endif
 /*
  * FIXXME: check how font handling behaves with multiple contexts
  */
@@ -48,7 +50,7 @@ std::string TextBase::DEFAULT_FONT = "vera.ttf";
 /////////////////////////////////////////////////////////
 TextBase :: TextBase(int argc, t_atom *argv)
   :
-  m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+  m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(3.f),
   m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY),
   m_inlet(NULL),
   m_infoOut(gem::RTE::Outlet(this)),
@@ -118,6 +120,7 @@ void TextBase :: render(GemState *)
     {
       renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize);
     }
+  fontInfo();
 }
 
 ////////////////////////////////////////////////////////
@@ -126,13 +129,7 @@ void TextBase :: render(GemState *)
 ////////////////////////////////////////////////////////
 void TextBase :: setFontSize(float size){
   m_fontSize = size;
-  int fs=static_cast<int>(m_fontSize);
-  if(fs<0)fs=-fs;
-  if (!m_font)return;
-  if (! m_font->FaceSize(fs) ) {
-    error("unable to set fontsize !");
-  }
-  setModified();
+  setFontSize();
 }
 ////////////////////////////////////////////////////////
 // setPrecision
@@ -140,8 +137,13 @@ void TextBase :: setFontSize(float size){
 ////////////////////////////////////////////////////////
 void TextBase :: setPrecision(float prec)
 {
-  m_precision = prec;
-  error("no settable precision for FTGL !");
+  if(prec<=0.f)
+    prec=1.f;
+  if(prec>=1000.f)
+    prec=1000.f;
+  m_precision = 3.*prec;
+
+  setFontSize();
 }
 
 ////////////////////////////////////////////////////////
@@ -176,7 +178,7 @@ void TextBase :: fontNameMess(const std::string filename){
   }
   m_fontname=gensym(filename.c_str());
 
-  setFontSize(m_fontSize);
+  setFontSize();
   m_font->Depth(m_fontDepth);
   m_font->CharMap(ft_encoding_unicode);
 
@@ -197,7 +199,16 @@ TextBase :: ~TextBase(){
 //
 /////////////////////////////////////////////////////////
 void TextBase :: setFontSize(){
-  setFontSize(m_fontSize);
+  if (!m_font)return;
+
+  unsigned int old=m_font->FaceSize();
+  int fs=static_cast<int>(m_fontSize*m_precision);
+  if(fs<0)fs=-fs;
+  if(!m_font->FaceSize(fs)) {
+    error("unable to set fontsize !");
+  }
+
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -320,8 +331,8 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
     depth = 0;
     break;
   }
-
-  glScalef(FONT_SCALE, FONT_SCALE, FONT_SCALE);
+  const GLfloat scale = FONT_SCALE/m_precision;
+  glScalef(scale, scale, scale);
   glTranslatef(-width, -height, -depth);
 }
 
