@@ -46,7 +46,6 @@ std::string TextBase::DEFAULT_FONT = "vera.ttf";
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifdef FTGL
 TextBase :: TextBase(int argc, t_atom *argv)
   :
   m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
@@ -184,45 +183,6 @@ void TextBase :: fontNameMess(const std::string filename){
   setModified();
 }
 
-#else /* !FTGL */
-
-TextBase :: TextBase(int argc, t_atom *argv){
-  static bool first_time=true;
-  if (first_time){
-    post("Gem has been compiled without FONT-support !");
-    first_time=false;
-  }
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-}
-
-/////////////////////////////////////////////////////////
-// setFontSize
-//
-/////////////////////////////////////////////////////////
-void TextBase :: setFontSize(float size)
-{}
-/////////////////////////////////////////////////////////
-// setPrecision
-//
-/////////////////////////////////////////////////////////
-void TextBase :: setPrecision(float prec)
-{}
-
-/////////////////////////////////////////////////////////
-// fontNameMess
-//
-/////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const std::string s)
-{}
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void TextBase :: render(GemState*)
-{/* a no-op */ }
-
-#endif /* FTGL */
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -266,15 +226,13 @@ void TextBase :: setJustification(JustifyWidth wType)
 
 void TextBase :: getBBox(float&x0,float&y0,float&z0,
 			 float&x1,float&y1,float&z1) {
-#ifdef FTGL
 
-#endif
 }
 void TextBase :: fontInfo(void) {
   if(!m_font)return;
   std::vector<gem::any>atoms;
   gem::any value;
-#ifdef FTGL
+
   value = m_font->Ascender();
   atoms.clear(); atoms.push_back(value);
   m_infoOut.send("ascender", atoms);
@@ -301,7 +259,6 @@ void TextBase :: fontInfo(void) {
     atoms.push_back(z1);
     m_infoOut.send("bbox", atoms);
   }
-#endif
 }
 
 void TextBase :: justifyFont(float x1, float y1, float z1,
@@ -312,12 +269,7 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
   float depth  = 0.f;
 
   // Get ascender height (= height of the text)
-#ifdef FTGL
   float ascender = m_font->Ascender();
-#else
-  // we don't have any ascender when not using FTGL
-  float ascender = m_fontSize;
-#endif
 
   switch (m_widthJus) {
   case LEFT:
@@ -383,7 +335,7 @@ void TextBase :: breakLine(wstring line)
   // split the string wherever there is a '\n'
   while(line.length()>0){
     size_t pos=line.find('\n');
-    
+
     // if not found, we're done
     if(wstring::npos == pos)break;
     wstring lin=line.substr(0,pos);
