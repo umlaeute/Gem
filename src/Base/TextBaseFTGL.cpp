@@ -201,7 +201,6 @@ TextBase :: ~TextBase(){
 void TextBase :: setFontSize(){
   if (!m_font)return;
 
-  unsigned int old=m_font->FaceSize();
   int fs=static_cast<int>(m_fontSize*m_precision);
   if(fs<0)fs=-fs;
   if(!m_font->FaceSize(fs)) {
