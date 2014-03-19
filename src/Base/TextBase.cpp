@@ -275,25 +275,55 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
   float ascender = m_fontSize;
 #endif
 
-  if (m_widthJus == LEFT)       width = x1;
-  else if (m_widthJus == RIGHT) width = x2-x1;
-  else if (m_widthJus == CENTER)width = x2 / 2.f;
-  else if (m_widthJus == BASEW) width = 0;
+  switch (m_widthJus) {
+  case LEFT:
+    width=x1;
+    break;
+  case RIGHT:
+    width=x2-x1;
+    break;
+  default:
+  case CENTER:
+    width=x2 / 2.f;
+    break;
+  case BASEW:
+    width=0;
+    break;
+  }
 
   //  if (m_heightJus == BOTTOM)     height = y1;
   //  else if (m_heightJus == TOP)   height = y2-y1;
   //  else if (m_heightJus == MIDDLE)height = y2 / 2.f;
   //  else if (m_heightJus == BASEH) height = 0;
-
-  if (m_heightJus == BOTTOM || m_heightJus == BASEH)
+  switch(m_heightJus) {
+  case BOTTOM:
+  case BASEH:
     height = y_offset;
-  else if (m_heightJus == TOP)   height = ascender + y_offset;
-  else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
+    break;
+  case TOP:
+    height = ascender + y_offset;
+    break;
+  default:
+  case MIDDLE:
+    height = (ascender/2.f) + y_offset;
+    break;
+  }
 
-  if (m_depthJus == FRONT)       depth = z1;
-  else if (m_depthJus == BACK)   depth = z2-z1;
-  else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
-  else if (m_depthJus == BASED)  depth = 0;
+  switch(m_depthJus) {
+  case FRONT:
+    depth = z1;
+    break;
+  case BACK:
+    depth = z2-z1;
+    break;
+  default:
+  case HALFWAY:
+    depth = z2 / 2.f;
+    break;
+  case BASED:
+    depth = 0;
+    break;
+  }
 
   glScalef(FONT_SCALE, FONT_SCALE, FONT_SCALE);
   glTranslatef(-width, -height, -depth);
