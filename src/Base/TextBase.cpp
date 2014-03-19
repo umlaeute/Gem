@@ -127,8 +127,10 @@ void TextBase :: render(GemState *)
 ////////////////////////////////////////////////////////
 void TextBase :: setFontSize(float size){
   m_fontSize = size;
+  int fs=static_cast<int>(m_fontSize);
+  if(fs<0)fs=-fs;
   if (!m_font)return;
-  if (! m_font->FaceSize(static_cast<int>(m_fontSize)) ) {
+  if (! m_font->FaceSize(fs) ) {
     error("unable to set fontsize !");
   }
   setModified();
