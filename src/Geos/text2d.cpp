@@ -64,14 +64,17 @@ FTFont *text2d :: makeFont(const char*fontfile){
 // setFontSize
 //
 /////////////////////////////////////////////////////////
-void text2d :: setFontSize(t_float size){
-  m_fontSize = size;
-  int isize=static_cast<int>(m_fontSize);
-  if (m_font)if (! m_font->FaceSize(isize) ) {
-    error("GEMtext: unable set fontsize !");
+void text2d :: setFontSize(){
+  if (!m_font)return;
+
+  int fs=static_cast<int>(m_fontSize);
+  if(fs<0)fs=-fs;
+
+  if (m_font)if (! m_font->FaceSize(fs) ) {
+    error("unable set fontsize!");
   }
-  if (m_afont)if (! m_afont->FaceSize(isize) ) {
-    error("GEMtext: unable set fontsize !");
+  if (m_afont)if (! m_afont->FaceSize(fs) ) {
+    error("unable set fontfize !");
   }
   setModified();
 }

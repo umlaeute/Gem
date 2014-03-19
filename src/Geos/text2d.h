@@ -54,7 +54,7 @@ class GEM_EXTERN text2d : public TextBase
   void aliasMess(int io);
 
 #ifdef FTGL
-	void            setFontSize(t_float size);
+	virtual void            setFontSize(void);
 
 	virtual FTFont*	makeFont(const char*fontname);
 	FTFont                  *m_afont;
