@@ -41,7 +41,12 @@ text3d :: ~text3d() {
 }
 FTFont *text3d :: makeFont(const char*fontfile){
   if(m_font)delete m_font; m_font=NULL;
+  // TextureFont looks nicer, but does not allow for texturing
+#if 0
+  m_font =  new FTGLTextureFont(fontfile);
+#else
   m_font =  new FTGLPolygonFont(fontfile);
+#endif
   if (m_font->Error()){
     delete m_font;
     m_font = NULL;

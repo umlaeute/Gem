@@ -14,7 +14,9 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#ifndef MARK
+# define MARK() post("%s:%d\t%s", __FILE__, __LINE__, __FUNCTION__)
+#endif
 /*
  * FIXXME: check how font handling behaves with multiple contexts
  */
@@ -46,12 +48,12 @@ std::string TextBase::DEFAULT_FONT = "vera.ttf";
 // Constructor
 //
 /////////////////////////////////////////////////////////
-#ifdef FTGL
 TextBase :: TextBase(int argc, t_atom *argv)
   :
-  m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(1.f),
+  m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(3.f),
   m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY),
   m_inlet(NULL),
+  m_infoOut(gem::RTE::Outlet(this)),
   m_font(NULL), m_fontname(NULL)
 {
   // initial text
@@ -118,6 +120,7 @@ void TextBase :: render(GemState *)
     {
       renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize);
     }
+  fontInfo();
 }
 
 ////////////////////////////////////////////////////////
@@ -126,11 +129,7 @@ void TextBase :: render(GemState *)
 ////////////////////////////////////////////////////////
 void TextBase :: setFontSize(float size){
   m_fontSize = size;
-  if (!m_font)return;
-  if (! m_font->FaceSize(static_cast<int>(m_fontSize)) ) {
-    error("unable to set fontsize !");
-  }
-  setModified();
+  setFontSize();
 }
 ////////////////////////////////////////////////////////
 // setPrecision
@@ -138,8 +137,13 @@ void TextBase :: setFontSize(float size){
 ////////////////////////////////////////////////////////
 void TextBase :: setPrecision(float prec)
 {
-  m_precision = prec;
-  error("no settable precision for FTGL !");
+  if(prec<=0.f)
+    prec=1.f;
+  if(prec>=1000.f)
+    prec=1000.f;
+  m_precision = 3.*prec;
+
+  setFontSize();
 }
 
 ////////////////////////////////////////////////////////
@@ -174,52 +178,13 @@ void TextBase :: fontNameMess(const std::string filename){
   }
   m_fontname=gensym(filename.c_str());
 
-  setFontSize(m_fontSize);
+  setFontSize();
   m_font->Depth(m_fontDepth);
   m_font->CharMap(ft_encoding_unicode);
 
   setModified();
 }
 
-#else /* !FTGL */
-
-TextBase :: TextBase(int argc, t_atom *argv){
-  static bool first_time=true;
-  if (first_time){
-    post("Gem has been compiled without FONT-support !");
-    first_time=false;
-  }
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-}
-
-/////////////////////////////////////////////////////////
-// setFontSize
-//
-/////////////////////////////////////////////////////////
-void TextBase :: setFontSize(float size)
-{}
-/////////////////////////////////////////////////////////
-// setPrecision
-//
-/////////////////////////////////////////////////////////
-void TextBase :: setPrecision(float prec)
-{}
-
-/////////////////////////////////////////////////////////
-// fontNameMess
-//
-/////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const std::string s)
-{}
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void TextBase :: render(GemState*)
-{/* a no-op */ }
-
-#endif /* FTGL */
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -234,7 +199,15 @@ TextBase :: ~TextBase(){
 //
 /////////////////////////////////////////////////////////
 void TextBase :: setFontSize(){
-  setFontSize(m_fontSize);
+  if (!m_font)return;
+
+  int fs=static_cast<int>(m_fontSize*m_precision);
+  if(fs<0)fs=-fs;
+  if(!m_font->FaceSize(fs)) {
+    error("unable to set fontsize !");
+  }
+
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -260,6 +233,44 @@ void TextBase :: setJustification(JustifyWidth wType)
   m_widthJus = wType;
 }
 
+
+void TextBase :: getBBox(float&x0,float&y0,float&z0,
+			 float&x1,float&y1,float&z1) {
+
+}
+void TextBase :: fontInfo(void) {
+  if(!m_font)return;
+  std::vector<gem::any>atoms;
+  gem::any value;
+
+  value = m_font->Ascender();
+  atoms.clear(); atoms.push_back(value);
+  m_infoOut.send("ascender", atoms);
+
+  value = m_font->Descender();
+  atoms.clear(); atoms.push_back(value);
+  m_infoOut.send("descender", atoms);
+
+  value = m_font->LineHeight();
+  atoms.clear(); atoms.push_back(value);
+  m_infoOut.send("height", atoms);
+
+  if(!m_theText.empty()) {
+    float x0, y0, z0, x1, y1, z1;
+    x0=y0=z0=0;
+    x1=y1=z1=0;
+    getBBox(x0, y0, z0, x1, y1, z1);
+    atoms.clear();
+    atoms.push_back(x0);
+    atoms.push_back(y0);
+    atoms.push_back(z0);
+    atoms.push_back(x1);
+    atoms.push_back(y1);
+    atoms.push_back(z1);
+    m_infoOut.send("bbox", atoms);
+  }
+}
+
 void TextBase :: justifyFont(float x1, float y1, float z1,
                              float x2, float y2, float z2, float y_offset)
 {
@@ -268,34 +279,59 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
   float depth  = 0.f;
 
   // Get ascender height (= height of the text)
-#ifdef FTGL
   float ascender = m_font->Ascender();
-#else
-  // we don't have any ascender when not using FTGL
-  float ascender = m_fontSize;
-#endif
 
-  if (m_widthJus == LEFT)       width = x1;
-  else if (m_widthJus == RIGHT) width = x2-x1;
-  else if (m_widthJus == CENTER)width = x2 / 2.f;
-  else if (m_widthJus == BASEW) width = 0;
+  switch (m_widthJus) {
+  case LEFT:
+    width=x1;
+    break;
+  case RIGHT:
+    width=x2-x1;
+    break;
+  default:
+  case CENTER:
+    width=x2 / 2.f;
+    break;
+  case BASEW:
+    width=0;
+    break;
+  }
 
   //  if (m_heightJus == BOTTOM)     height = y1;
   //  else if (m_heightJus == TOP)   height = y2-y1;
   //  else if (m_heightJus == MIDDLE)height = y2 / 2.f;
   //  else if (m_heightJus == BASEH) height = 0;
-
-  if (m_heightJus == BOTTOM || m_heightJus == BASEH)
+  switch(m_heightJus) {
+  case BOTTOM:
+  case BASEH:
     height = y_offset;
-  else if (m_heightJus == TOP)   height = ascender + y_offset;
-  else if (m_heightJus == MIDDLE)height = (ascender/2.f) + y_offset;
+    break;
+  case TOP:
+    height = ascender + y_offset;
+    break;
+  default:
+  case MIDDLE:
+    height = (ascender/2.f) + y_offset;
+    break;
+  }
 
-  if (m_depthJus == FRONT)       depth = z1;
-  else if (m_depthJus == BACK)   depth = z2-z1;
-  else if (m_depthJus == HALFWAY)depth = z2 / 2.f;
-  else if (m_depthJus == BASED)  depth = 0;
-
-  glScalef(FONT_SCALE, FONT_SCALE, FONT_SCALE);
+  switch(m_depthJus) {
+  case FRONT:
+    depth = z1;
+    break;
+  case BACK:
+    depth = z2-z1;
+    break;
+  default:
+  case HALFWAY:
+    depth = z2 / 2.f;
+    break;
+  case BASED:
+    depth = 0;
+    break;
+  }
+  const GLfloat scale = FONT_SCALE/m_precision;
+  glScalef(scale, scale, scale);
   glTranslatef(-width, -height, -depth);
 }
 
@@ -309,7 +345,7 @@ void TextBase :: breakLine(wstring line)
   // split the string wherever there is a '\n'
   while(line.length()>0){
     size_t pos=line.find('\n');
-    
+
     // if not found, we're done
     if(wstring::npos == pos)break;
     wstring lin=line.substr(0,pos);

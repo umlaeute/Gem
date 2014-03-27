@@ -2,7 +2,7 @@
 # Gem/Particles: objectlcasses for particle systems
 #####################################################################
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
 include ../check-sources.mk
 

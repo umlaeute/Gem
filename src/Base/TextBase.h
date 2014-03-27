@@ -24,6 +24,7 @@
 
 #include "Gem/GemConfig.h"
 
+#include "RTE/Outlet.h"
 #include "Base/GemBase.h"
 
 #include <vector>
@@ -145,83 +146,94 @@ class GEM_EXTERN TextBase : public GemBase
   // (1 = 1 line, 0.5 = 0.5 lines, ...)
   float m_dist;
 
-  ///////////
-    // vector with the offset
-    // of the individual lines
-    vector<float> m_lineDist;
+  //////////
+  // vector with the offset
+  // offset there individual lines
+  vector<float> m_lineDist;
 
-    //////////
-    // Do we have a valid font?
-    int m_valid;
+  //////////
+  // Do we have a valid font?
+  int m_valid;
 
-    //////////
-    // The font fize
-    float		m_fontSize;
+  //////////
+  // The font fize
+  float		m_fontSize;
 
-    //////////
-    // The font depth (only for extruded fonts)
-    float		m_fontDepth;
+  //////////
+  // The font depth (only for extruded fonts)
+  float		m_fontDepth;
 
-    //////////
-    // The rendering precision
-    float		m_precision;
+  //////////
+  // The rendering precision
+  float		m_precision;
 
-    //////////
-    // The width justification
-    JustifyWidth	m_widthJus;
+  //////////
+  // The width justification
+  JustifyWidth	m_widthJus;
 
-    //////////
-    // The height justification
-    JustifyHeight	m_heightJus;
+  //////////
+  // The height justification
+  JustifyHeight	m_heightJus;
 
-    //////////
-    // The depth justification
-    JustifyDepth	m_depthJus;
+  //////////
+  // The depth justification
+  JustifyDepth	m_depthJus;
 
-    //////////
-    // The inlet
-    t_inlet         *m_inlet;
+  //////////
+  // The inlet
+  t_inlet         *m_inlet;
 
 
-    //////////
-    // The default font name
-    static std::string DEFAULT_FONT;
+  //////////
+  // The default font name
+  static std::string DEFAULT_FONT;
 
-    //////////
-    // The font structure
+  //////////
+  // get the bounding-box for the current text/font/...
+  void getBBox(float&x0,float&y0,float&z0, float&x1,float&y1,float&z1);
+  //////////
+  // output information about the current font/text
+  // including the bbox
+  void fontInfo(void);
+  // an outlet to send font/text/...-info back to the patch
+  gem::RTE::Outlet m_infoOut;
+
+
+  //////////
+  // The font structure
 #ifdef FTGL
-    FTFont		*m_font;
-    /* this should delete (m_font) if it is notnull and recreate it.
-     * a pointer to the new structure is returned (and is set to m_font).
-     * if creation fails, the font is cleaned-up and NULL is returned
-     */
-    virtual FTFont* makeFont(const char*fontname)=0;
+  FTFont		*m_font;
+  /* this should delete (m_font) if it is notnull and recreate it.
+   * a pointer to the new structure is returned (and is set to m_font).
+   * if creation fails, the font is cleaned-up and NULL is returned
+   */
+  virtual FTFont* makeFont(const char*fontname)=0;
 
-    /* this is just handy to reload a font */
-    t_symbol* m_fontname;
-    /* on starting to render, we reload the font, to make sure it is there
-     * this rids us of having to reload the font by hand every time the rendering is restarted
-     */
-    virtual  void startRendering(void);
+  /* this is just handy to reload a font */
+  t_symbol* m_fontname;
+  /* on starting to render, we reload the font, to make sure it is there
+   * this rids us of having to reload the font by hand every time the rendering is restarted
+   */
+  virtual  void startRendering(void);
 
-    /* render one line of the text */
-    virtual void renderLine(const char*line,float dist);
-    virtual void renderLine(const wchar_t*line,float dist);
+  /* render one line of the text */
+  virtual void renderLine(const char*line,float dist);
+  virtual void renderLine(const wchar_t*line,float dist);
 #endif
 
  private:
 
-    ///////////
-   // helpers:
+  ///////////
+  // helpers:
 
-   ///////////
-   // helper to make the
-   // line distance vector
-   void makeLineDist();
+  ///////////
+  // helper to make the
+  // line distance vector
+  void makeLineDist();
 
-   //////////
-   // Static member functions
-   static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);
+  //////////
+  // Static member functions
+  static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);
 };
 
 #endif	// for header file

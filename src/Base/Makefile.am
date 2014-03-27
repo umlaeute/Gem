@@ -80,6 +80,7 @@ libBase_la_SOURCES=  \
     GemWinCreateXWin.cpp \
     GemWindow.cpp \
     GemWindow.h \
-    TextBase.cpp \
+    TextBaseNone.cpp \
+    TextBaseFTGL.cpp \
     TextBase.h
 
