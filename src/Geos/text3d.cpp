@@ -33,25 +33,61 @@ CPPEXTERN_NEW_WITH_GIMME(text3d);
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 text3d :: text3d(int argc, t_atom *argv)
-  : TextBase(argc, argv) {
+: TextBase(argc, argv), m_antialias(true),
+  m_aafont(NULL), m_pyfont(NULL)
+{
   fontNameMess(DEFAULT_FONT);
 }
 text3d :: ~text3d() {
-  if(m_font)delete m_font;m_font=NULL;
+  if(m_aafont)delete m_aafont;m_aafont=NULL;
+  if(m_pyfont)delete m_pyfont;m_pyfont=NULL;
+  m_font=NULL;
+}
+
+FTFont *text3d :: selectFont(void){
+  if(m_antialias && NULL!=m_aafont)
+    return m_aafont;
+  if(!m_antialias && NULL!=m_pyfont)
+    return m_pyfont;
+
+  if(m_pyfont)
+    return m_pyfont;
+  return m_aafont;
 }
 FTFont *text3d :: makeFont(const char*fontfile){
-  if(m_font)delete m_font; m_font=NULL;
+  if(m_aafont)delete m_aafont;m_aafont=NULL;
+  if(m_pyfont)delete m_pyfont;m_pyfont=NULL;
+  m_font=NULL;
   // TextureFont looks nicer, but does not allow for texturing
-#if 0
-  m_font =  new FTGLTextureFont(fontfile);
-#else
-  m_font =  new FTGLPolygonFont(fontfile);
-#endif
-  if (m_font->Error()){
-    delete m_font;
-    m_font = NULL;
+  m_aafont =  new FTGLTextureFont(fontfile);
+  if(m_aafont && m_aafont->Error()) {
+    delete m_aafont;
+    m_aafont = NULL;
   }
-  return m_font;
+  m_pyfont =  new FTGLPolygonFont(fontfile);
+  if (m_pyfont->Error()){
+    delete m_pyfont;
+    m_pyfont = NULL;
+  }
+  return selectFont();
+}
+void text3d :: setFontSize(){
+  if (!m_font)return;
+
+  int fs=static_cast<int>(m_fontSize*m_precision);
+  if(fs<0)fs=-fs;
+
+  if (m_pyfont) {
+    if (! m_pyfont->FaceSize(fs) )
+      error("unable to set fontsize!");
+  }
+  if (m_aafont) {
+    if (! m_aafont->FaceSize(fs) )
+      error("unable to set antialiased-fontfize!");
+  }
+  m_font=selectFont();
+
+  setModified();
 }
 
 
@@ -74,5 +110,15 @@ text3d :: ~text3d()
 // static member function
 //
 /////////////////////////////////////////////////////////
-void text3d :: obj_setupCallback(t_class *)
-{ }
+void text3d :: obj_setupCallback(t_class *classPtr)
+{
+  CPPEXTERN_MSG1(classPtr, "alias", aliasMess, int);
+  CPPEXTERN_MSG1(classPtr, "antialias", aliasMess, int);
+}
+void text3d :: aliasMess(int io)
+{
+  m_antialias = io;
+#ifdef FTGL
+  m_font=selectFont();
+#endif
+}
