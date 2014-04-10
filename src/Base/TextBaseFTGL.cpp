@@ -95,7 +95,11 @@ void TextBase :: renderLine(const char*line, float dist) {
 
   glPushMatrix();
   glNormal3f(0.0, 0.0, 1.0);
-  justifyFont(x1, y1, z1, x2, y2, z2, dist);
+
+  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  glScalef(just.scale, just.scale, just.scale);
+  glTranslatef(-just.width, -just.height, -just.depth);
+
   m_font->Render(line);
   glPopMatrix();
 }
@@ -106,7 +110,11 @@ void TextBase :: renderLine(const wchar_t*line, float dist) {
 
   glPushMatrix();
   glNormal3f(0.0, 0.0, 1.0);
-  justifyFont(x1, y1, z1, x2, y2, z2, dist);
+
+  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  glScalef(just.scale, just.scale, just.scale);
+  glTranslatef(-just.width, -just.height, -just.depth);
+
   m_font->Render(line);
   glPopMatrix();
 }
@@ -336,9 +344,6 @@ TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
   result.height=height;
   result.depth=depth;
   return result;
-  const GLfloat scale = FONT_SCALE/m_precision;
-  glScalef(scale, scale, scale);
-  glTranslatef(-width, -height, -depth);
 }
 
 
