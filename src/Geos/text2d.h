@@ -57,7 +57,9 @@ class GEM_EXTERN text2d : public TextBase
 	virtual void            setFontSize(void);
 
 	virtual FTFont*	makeFont(const char*fontname);
-	FTFont                  *m_afont;
+	virtual FTFont* selectFont(void);
+	FTGLPixmapFont *m_aafont;
+	FTGLBitmapFont *m_bmfont;
 #endif
 };
 

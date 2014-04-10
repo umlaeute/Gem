@@ -34,48 +34,61 @@ CPPEXTERN_NEW_WITH_GIMME(text2d);
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 text2d :: text2d(int argc, t_atom *argv)
-  : TextBase(argc,argv), m_antialias(1), m_afont(NULL)
+  : TextBase(argc,argv), m_antialias(true),
+  m_aafont(NULL), m_bmfont(NULL)
 {
   fontNameMess(DEFAULT_FONT);
 }
 
 text2d :: ~text2d() {
-  if(m_font) delete m_font; m_font=NULL;
-  if(m_afont)delete m_afont;m_afont=NULL;
+  if(m_bmfont) delete m_bmfont; m_bmfont=NULL;
+  if(m_aafont) delete m_aafont; m_aafont=NULL;
+}
+
+FTFont *text2d :: selectFont(void){
+  if(m_antialias && NULL!=m_aafont)
+    return m_aafont;
+  if(!m_antialias && NULL!=m_bmfont)
+    return m_bmfont;
+
+  if(m_bmfont)
+    return m_bmfont;
+  return m_aafont;
 }
 FTFont *text2d :: makeFont(const char*fontfile){
-  if(m_font) delete m_font;  m_font=NULL;
-  if(m_afont)delete m_afont; m_afont=NULL;
+  if(m_bmfont) delete m_bmfont; m_bmfont=NULL;
+  if(m_aafont) delete m_aafont; m_aafont=NULL;
 
-  m_font =  new FTGLBitmapFont(fontfile);
-  if (m_font->Error()){
-    delete m_font;
-    m_font = NULL;
+  m_bmfont =  new FTGLBitmapFont(fontfile);
+  if (m_bmfont && m_bmfont->Error()){
+    delete m_bmfont;
+    m_bmfont = NULL;
   }
-  m_afont =  new FTGLPixmapFont(fontfile);
-  if (m_afont->Error()){
-    delete m_afont;
-    m_afont = NULL;
+  m_aafont =  new FTGLPixmapFont(fontfile);
+  if (m_aafont && m_aafont->Error()){
+    delete m_aafont;
+    m_aafont = NULL;
   }
 
-  return m_font;
+  return selectFont();
 }
 /////////////////////////////////////////////////////////
 // setFontSize
 //
 /////////////////////////////////////////////////////////
 void text2d :: setFontSize(){
-  if (!m_font)return;
-
   int fs=static_cast<int>(m_fontSize);
   if(fs<0)fs=-fs;
 
-  if (m_font)if (! m_font->FaceSize(fs) ) {
-    error("unable set fontsize!");
+  if (m_bmfont) {
+    if (! m_bmfont->FaceSize(fs) )
+      error("unable to set fontsize!");
   }
-  if (m_afont)if (! m_afont->FaceSize(fs) ) {
-    error("unable set fontfize !");
+  if (m_aafont) {
+    if (! m_aafont->FaceSize(fs) )
+      error("unable to set antialiased-fontfize!");
   }
+  m_font=selectFont();
   setModified();
 }
 
