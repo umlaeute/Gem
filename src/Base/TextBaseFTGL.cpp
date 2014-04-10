@@ -82,15 +82,6 @@ void TextBase :: startRendering(void) {
 /////////////////////////////////////////////////////////
 void TextBase :: renderLine(const char*line, float dist) {
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-#if 0
-  startpost("renderline: "); {
-    const char*c=line;
-    while(c) {
-      startpost("%c (%x)", c, c);
-      c++;
-    }
-  }
-#endif
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
   glPushMatrix();
