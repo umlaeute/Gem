@@ -271,8 +271,8 @@ void TextBase :: fontInfo(void) {
   }
 }
 
-void TextBase :: justifyFont(float x1, float y1, float z1,
-                             float x2, float y2, float z2, float y_offset)
+TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
+						float x2, float y2, float z2, float y_offset)
 {
   float width  = 0.f;
   float height = 0.f;
@@ -330,6 +330,12 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
     depth = 0;
     break;
   }
+  TextBase::Justification result;
+  result.scale=FONT_SCALE/m_precision;
+  result.width=width;
+  result.height=height;
+  result.depth=depth;
+  return result;
   const GLfloat scale = FONT_SCALE/m_precision;
   glScalef(scale, scale, scale);
   glTranslatef(-width, -height, -depth);

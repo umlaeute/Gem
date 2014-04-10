@@ -124,12 +124,18 @@ class GEM_EXTERN TextBase : public GemBase
   virtual void setJustification(JustifyWidth wType, JustifyHeight hType);
   virtual void setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType);
 
+  typedef struct Justification_ {
+    float width;
+    float height;
+    float depth;
+    float scale;
+  } Justification;
   //////////
   // do the justification
   // x1,...,z2 just defines the bounding box of the rendered string.
   // y_offset is the offset of the current line
-  virtual void justifyFont(float x1, float y1, float z1,
-			   float x2, float y2, float z2, float y_offset=0);
+  virtual Justification justifyFont(float x1, float y1, float z1,
+				    float x2, float y2, float z2, float y_offset=0);
 
 
   //-----------------------------------
