@@ -154,5 +154,9 @@ void text2d :: obj_setupCallback(t_class *classPtr )
 void text2d :: aliasMess(int io)
 {
   m_antialias = io;
+#ifdef FTGL
+  m_font=selectFont();
+#endif
+
 }
 
