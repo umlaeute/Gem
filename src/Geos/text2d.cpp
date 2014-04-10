@@ -149,6 +149,7 @@ void text2d :: render(GemState*){}
 void text2d :: obj_setupCallback(t_class *classPtr )
 {
   CPPEXTERN_MSG1(classPtr, "alias", aliasMess, int);
+  CPPEXTERN_MSG1(classPtr, "antialias", aliasMess, int);
 }
 
 void text2d :: aliasMess(int io)
