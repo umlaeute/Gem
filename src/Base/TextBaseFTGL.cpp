@@ -171,7 +171,8 @@ void TextBase :: fontNameMess(const std::string filename){
 
   /* now read font */
   if(m_font)delete m_font; m_font=NULL;
-  if (makeFont(bufptr)==NULL){
+  m_font=makeFont(bufptr);
+  if (NULL==m_font){
     error("unable to open font '%s'", bufptr);
     return;
   }
