@@ -65,7 +65,7 @@ FTFont *text3d :: makeFont(const char*fontfile){
     m_aafont = NULL;
   }
   m_pyfont =  new FTGLPolygonFont(fontfile);
-  if (m_pyfont->Error()){
+  if (m_pyfont && m_pyfont->Error()){
     delete m_pyfont;
     m_pyfont = NULL;
   }
