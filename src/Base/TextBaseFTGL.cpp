@@ -138,8 +138,6 @@ void TextBase :: setPrecision(float prec)
 {
   if(prec<=0.f)
     prec=1.f;
-  if(prec>=1000.f)
-    prec=1000.f;
   m_precision = 3.*prec;
 
   setFontSize();
@@ -203,6 +201,7 @@ void TextBase :: setFontSize(){
 
   int fs=static_cast<int>(m_fontSize*m_precision);
   if(fs<0)fs=-fs;
+
   if(!m_font->FaceSize(fs)) {
     error("unable to set fontsize !");
   }
