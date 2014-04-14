@@ -190,7 +190,7 @@ AC_CHECK_LIB([msvcprt], [main])
 AC_CHECK_LIB([ws2_32], [main])
 AC_CHECK_LIB([wsock32], [main])
 
-# w32 window creating 
+# w32 window creating
 AC_CHECK_LIB([gdi32], [main])
 
 
@@ -261,13 +261,13 @@ LIBS=$stdcxx_LIBS
 
 dnl some checks for osX
 GEM_CHECK_FRAMEWORK([Cocoa],
-                        [have_cocoa_framework="yes"], 
+                        [have_cocoa_framework="yes"],
                         [have_cocoa_framework="no"])
-GEM_CHECK_FRAMEWORK([Carbon], 
-                        [have_carbon_framework="yes"], 
+GEM_CHECK_FRAMEWORK([Carbon],
+                        [have_carbon_framework="yes"],
                         [have_carbon_framework="no"])
 GEM_CHECK_FRAMEWORK([QuickTime],
-                        [have_quicktime_framework="yes"], 
+                        [have_quicktime_framework="yes"],
                         [have_quicktime_framework="no"])
 
 AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
@@ -280,14 +280,14 @@ if test "x$with_MagickCore" = "x"; then
  with_MagickCore="$with_ImageMagick"
 fi
 
-GEM_CHECK_LIB([ImageMagick++], 
-              [Magick++], 
+GEM_CHECK_LIB([ImageMagick++],
+              [Magick++],
               [main],
               AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
               ,,[image loader])
 
-GEM_CHECK_LIB([MagickCore], 
-              [Magick], 
+GEM_CHECK_LIB([MagickCore],
+              [Magick],
               [main],
               AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
    	          ,,[image loader])
@@ -430,7 +430,7 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $PKG_LIBS"
 AC_MSG_CHECKING(for lqt_open_write)
-AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])], 
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
@@ -643,7 +643,6 @@ else
 fi
 
 if test "x$have_quicktime_framework" = "x"; then have_quicktime_framework="no"; fi
-
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
 fi
@@ -722,7 +721,7 @@ Configuration:
     use QuickTime        : ${have_libquicktime}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
-  capture-support 
+  capture-support
     use PLUGINS		 : ${use_video_plugins}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
