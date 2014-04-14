@@ -269,8 +269,20 @@ GEM_CHECK_FRAMEWORK([Carbon],
 GEM_CHECK_FRAMEWORK([QuickTime],
                         [have_quicktime_framework="yes"],
                         [have_quicktime_framework="no"])
+GEM_CHECK_FRAMEWORK([AVFoundation],
+                        [have_avfoundaiton_framework="yes"],
+                        [have_avfoundation_framework="no"])
 
 AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
+# prefer AVFoundation over QuickTime
+AC_MSG_CHECKING([if AVFoundation is available, if so then do not use QuickTime or Carbon frameworks])
+if test GEM_FRAMEWORK_QUICKTIME && test "x$have_avfoundation_framework" = "xyes"; then
+ have_carbon_framework="no"
+ have_quicktime_framework="no"
+ AC_MSG_RESULT([yes])
+else
+ AC_MSG_RESULT([no])
+fi
 
 #fallback to imagemagick if people are too lazy to type ImageMagick
 if test "x$with_ImageMagick" = "x"; then
@@ -647,6 +659,11 @@ if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
 fi
 
+if test "x$have_avfoundation_framework" = "x"; then have_avfoundation_framework="no"; fi
+if test "x$have_avfoundation_framework" = "xyes"; then
+ have_libavfoundation="yes (framework)"
+fi
+
 have_ieee1394=""
 if test "x$have_libdc1394_2" = "xyes"; then
  have_ieee1394="$have_ieee1394 libdc1394"
@@ -712,6 +729,7 @@ Configuration:
   image-support
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
@@ -719,6 +737,7 @@ Configuration:
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
+    use AVFoundation     : ${have_libavfoundation}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
   capture-support
@@ -730,6 +749,7 @@ Configuration:
     use Unicap           : ${have_unicap}
     use Video-for-WinDOS : ${have_vfw32}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
 ])
 
 if test "x$have_pd" = "xno"; then
