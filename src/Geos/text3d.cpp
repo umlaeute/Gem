@@ -80,10 +80,14 @@ void text3d :: setFontSize(){
   if (m_pyfont) {
     if (! m_pyfont->FaceSize(fs) )
       error("unable to set fontsize!");
+    if(m_pyfont->Error())
+      error("error setting fontsize");
   }
   if (m_aafont) {
     if (! m_aafont->FaceSize(fs) )
       error("unable to set antialiased-fontfize!");
+    if(m_aafont->Error())
+      error("error setting aa-fontsize");
   }
   m_font=selectFont();
 
