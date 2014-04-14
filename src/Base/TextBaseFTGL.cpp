@@ -117,7 +117,7 @@ void TextBase :: render(GemState *)
   // step through the lines
   for(i=0; i<m_theText.size(); i++)
     {
-      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize);
+      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize*m_dist);
     }
   fontInfo();
 }
@@ -447,7 +447,7 @@ void TextBase :: makeLineDist()
 
   float diff = (m_theText.size()-1)*0.5;
   for(i=0; i<m_theText.size(); i++)
-    m_lineDist.push_back((i-diff)*m_dist);
+    m_lineDist.push_back((i-diff));
 }
 
 
