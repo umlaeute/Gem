@@ -129,6 +129,9 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_SED
 
+# required for QTKit / Cocoa
+AC_PROG_OBJCXX
+
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
 
@@ -275,6 +278,8 @@ GEM_CHECK_FRAMEWORK([AVFoundation],
                         [have_avfoundation_framework="no"])
 
 AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
+#AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes" && test "x${have_avfoundation_framework}" = "xno") # don't need Carbon if QTKit is available
+
 # prefer AVFoundation over QuickTime
 AC_MSG_CHECKING([if AVFoundation is available, if so then do not use QuickTime or Carbon frameworks])
 if test GEM_FRAMEWORK_QUICKTIME && test "x$have_avfoundation_framework" = "xyes"; then
@@ -325,14 +330,16 @@ GEM_CHECK_LIB([libquicktime], [quicktime], [quicktime_init],,,,[movie loader])
 GEM_CHECK_LIB([lqt], [quicktime], [quicktime_init],,,,[movie loader])
 
 # special function in libquicktime
-old_cflags=${CFLAGS}
-old_ldflags=${LDFLAGS}
-CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
-LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
-AC_CHECK_FUNCS([lqt_seek_video])
-AC_CHECK_FUNCS([lqt_open_write])
-CFLAGS=${old_cflags}
-LDFLAGS=${old_ldflags}
+if test "x$have_avfoundation_framework" = "xno"; then
+ old_cflags=${CFLAGS}
+ old_ldflags=${LDFLAGS}
+ CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
+ LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+ AC_CHECK_FUNCS([lqt_seek_video])
+ AC_CHECK_FUNCS([lqt_open_write])
+ CFLAGS=${old_cflags}
+ LDFLAGS=${old_ldflags}
+fi
 
 #video
 GEM_CHECK_LIB([libdc1394-2], [dc1394], [main],,,, [video input])
