@@ -43,6 +43,7 @@ text2d :: text2d(int argc, t_atom *argv)
 text2d :: ~text2d() {
   if(m_bmfont) delete m_bmfont; m_bmfont=NULL;
   if(m_aafont) delete m_aafont; m_aafont=NULL;
+  m_font=NULL;
 }
 
 FTFont *text2d :: selectFont(void){
@@ -58,6 +59,7 @@ FTFont *text2d :: selectFont(void){
 FTFont *text2d :: makeFont(const char*fontfile){
   if(m_bmfont) delete m_bmfont; m_bmfont=NULL;
   if(m_aafont) delete m_aafont; m_aafont=NULL;
+  m_font=NULL;
 
   m_bmfont =  new FTGLBitmapFont(fontfile);
   if (m_bmfont && m_bmfont->Error()){
@@ -158,6 +160,5 @@ void text2d :: aliasMess(int io)
 #ifdef FTGL
   m_font=selectFont();
 #endif
-
 }
 
