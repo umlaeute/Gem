@@ -117,7 +117,7 @@ void TextBase :: render(GemState *)
   // step through the lines
   for(i=0; i<m_theText.size(); i++)
     {
-      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize*m_dist);
+      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize*m_dist*m_precision);
     }
   fontInfo();
 }

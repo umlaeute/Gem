@@ -105,7 +105,7 @@ void text2d :: renderLine(const char*line, float dist) {
   glPushMatrix();
   glNormal3f(0.0, 0.0, 1.0);
 
-  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist/m_precision);
 
   glRasterPos2i(0,0);
   glBitmap(0,0,0.0,0.0,-just.width,-just.height, NULL);
@@ -119,7 +119,7 @@ void text2d :: renderLine(const wchar_t*line, float dist) {
   glPushMatrix();
   glNormal3f(0.0, 0.0, 1.0);
 
-  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist/m_precision);
 
   glRasterPos2i(0,0);
   glBitmap(0,0,0.0,0.0,-just.width,-just.height, NULL);
