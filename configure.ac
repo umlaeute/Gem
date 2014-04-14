@@ -119,6 +119,8 @@ AC_SUBST(prefix)
 
 # Checks for programs.
 AC_PROG_CXX
+## older versions of autotools lack tests for ObjC/ObjC++
+## so we only run these if the m4-macros are defined
 m4_ifdef([AC_PROG_OBJC], [AC_PROG_OBJC])
 m4_ifdef([AC_PROG_OBJCXX], [AC_PROG_OBJCXX])
 
@@ -128,9 +130,6 @@ AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_SED
-
-# required for QTKit / Cocoa
-AC_PROG_OBJCXX
 
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
@@ -330,16 +329,14 @@ GEM_CHECK_LIB([libquicktime], [quicktime], [quicktime_init],,,,[movie loader])
 GEM_CHECK_LIB([lqt], [quicktime], [quicktime_init],,,,[movie loader])
 
 # special function in libquicktime
-if test "x$have_avfoundation_framework" = "xno"; then
- old_cflags=${CFLAGS}
- old_ldflags=${LDFLAGS}
- CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
- LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
- AC_CHECK_FUNCS([lqt_seek_video])
- AC_CHECK_FUNCS([lqt_open_write])
- CFLAGS=${old_cflags}
- LDFLAGS=${old_ldflags}
-fi
+old_cflags=${CFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
+LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+AC_CHECK_FUNCS([lqt_seek_video])
+AC_CHECK_FUNCS([lqt_open_write])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
 
 #video
 GEM_CHECK_LIB([libdc1394-2], [dc1394], [main],,,, [video input])
