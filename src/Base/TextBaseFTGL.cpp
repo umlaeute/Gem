@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2001-2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    Copyright (c) 2005 Georg Holzmann <grh@mur.at>
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -82,20 +82,15 @@ void TextBase :: startRendering(void) {
 /////////////////////////////////////////////////////////
 void TextBase :: renderLine(const char*line, float dist) {
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
-#if 0
-  startpost("renderline: "); {
-    const char*c=line;
-    while(c) {
-      startpost("%c (%x)", c, c);
-      c++;
-    }
-  }
-#endif
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
   glPushMatrix();
   glNormal3f(0.0, 0.0, 1.0);
-  justifyFont(x1, y1, z1, x2, y2, z2, dist);
+
+  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  glScalef(just.scale, just.scale, just.scale);
+  glTranslatef(-just.width, -just.height, -just.depth);
+
   m_font->Render(line);
   glPopMatrix();
 }
@@ -106,7 +101,11 @@ void TextBase :: renderLine(const wchar_t*line, float dist) {
 
   glPushMatrix();
   glNormal3f(0.0, 0.0, 1.0);
-  justifyFont(x1, y1, z1, x2, y2, z2, dist);
+
+  Justification just=justifyFont(x1, y1, z1, x2, y2, z2, dist);
+  glScalef(just.scale, just.scale, just.scale);
+  glTranslatef(-just.width, -just.height, -just.depth);
+
   m_font->Render(line);
   glPopMatrix();
 }
@@ -118,7 +117,7 @@ void TextBase :: render(GemState *)
   // step through the lines
   for(i=0; i<m_theText.size(); i++)
     {
-      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize);
+      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize*m_dist*m_precision);
     }
   fontInfo();
 }
@@ -139,8 +138,6 @@ void TextBase :: setPrecision(float prec)
 {
   if(prec<=0.f)
     prec=1.f;
-  if(prec>=1000.f)
-    prec=1000.f;
   m_precision = 3.*prec;
 
   setFontSize();
@@ -172,7 +169,8 @@ void TextBase :: fontNameMess(const std::string filename){
 
   /* now read font */
   if(m_font)delete m_font; m_font=NULL;
-  if (makeFont(bufptr)==NULL){
+  m_font=makeFont(bufptr);
+  if (NULL==m_font){
     error("unable to open font '%s'", bufptr);
     return;
   }
@@ -203,6 +201,7 @@ void TextBase :: setFontSize(){
 
   int fs=static_cast<int>(m_fontSize*m_precision);
   if(fs<0)fs=-fs;
+
   if(!m_font->FaceSize(fs)) {
     error("unable to set fontsize !");
   }
@@ -271,8 +270,8 @@ void TextBase :: fontInfo(void) {
   }
 }
 
-void TextBase :: justifyFont(float x1, float y1, float z1,
-                             float x2, float y2, float z2, float y_offset)
+TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
+						float x2, float y2, float z2, float y_offset)
 {
   float width  = 0.f;
   float height = 0.f;
@@ -330,9 +329,12 @@ void TextBase :: justifyFont(float x1, float y1, float z1,
     depth = 0;
     break;
   }
-  const GLfloat scale = FONT_SCALE/m_precision;
-  glScalef(scale, scale, scale);
-  glTranslatef(-width, -height, -depth);
+  TextBase::Justification result;
+  result.scale=FONT_SCALE/m_precision;
+  result.width=width;
+  result.height=height;
+  result.depth=depth;
+  return result;
 }
 
 
@@ -445,7 +447,7 @@ void TextBase :: makeLineDist()
 
   float diff = (m_theText.size()-1)*0.5;
   for(i=0; i<m_theText.size(); i++)
-    m_lineDist.push_back((i-diff)*m_dist);
+    m_lineDist.push_back((i-diff));
 }
 
 
