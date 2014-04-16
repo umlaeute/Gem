@@ -116,7 +116,8 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
   }
 
   preName[i] = '\0';
-  strcpy(postName, &(strPtr[i+1]));
+  strncpy(postName, &(strPtr[i+1]), 255);
+  postName[255]='\0';
 
   // need to figure out how many filenames there are to load
   int numModels = (topModel + 1 - baseModel) / skipRate;
