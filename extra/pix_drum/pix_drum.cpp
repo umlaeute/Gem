@@ -151,7 +151,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 				}
 				p++;
 			}
-			else if (tempint = 1){
+			else if (tempint == 1){
 				tempint = 0;
 				if (p > min_width) {
 					spL_x[spL] = temp_highest_int;
@@ -503,7 +503,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
 				}
 				p++;
 			}
-			else if (tempint = 1){
+			else if (tempint == 1){
 				tempint = 0;
 				if (p > min_width) {
 					spL_x[spL] = temp_highest_int;
