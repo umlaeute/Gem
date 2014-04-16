@@ -492,7 +492,12 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
 static const int offset_pix_=strlen("pix_");
 
 static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
-  ::verbose(2, "frei0r_loader: %s",(s?(s->s_name):"<none>"));
+  if(!s){
+    ::verbose(2, "frei0r_loader: no name given")
+    return 0;
+  }
+
+  ::verbose(2, "frei0r_loader: %s",s->s_name);
   try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(pix_frei0r_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
@@ -503,8 +508,8 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
     CPPExtern::m_holdname=NULL;
     return(obj);
   } catch (GemException&e) {
-	  ::verbose(2, "frei0r_loader: failed! (%s)", e.what());
-    return NULL;
+    ::verbose(2, "frei0r_loader: failed! (%s)", e.what());
+    return 0;
   }
   return 0;
 }

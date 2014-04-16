@@ -944,7 +944,12 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
 static const int offset_pix_=strlen("pix_");
 
 static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
-  ::verbose(2, "freeframe_loader: %s",(s?(s->s_name):"<none>"));
+  if(!s){
+    ::verbose(2, "freeframe_loader: no name given")
+    return 0;
+  }
+
+  ::verbose(2, "freeframe_loader: %s",s->s_name);
   try{	    	    	    	    	    	    	    	\
     Obj_header *obj = new (pd_new(pix_freeframe_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
@@ -956,7 +961,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
     return(obj);
   } catch (GemException&e) {
     ::verbose(2, "freeframe_loader: failed! (%s)", e.what());
-    return NULL;
+    return 0;
   }
   return 0;
 }
