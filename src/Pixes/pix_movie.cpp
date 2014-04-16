@@ -124,7 +124,8 @@ void pix_movie :: postrender(GemState *state)
     }
   }
 
-  m_pixtexture.postrender(state);
+  if(state)
+    m_pixtexture.postrender(state);
 }
 
 
