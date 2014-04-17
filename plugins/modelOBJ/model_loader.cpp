@@ -379,7 +379,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     model->materials[i].specular[2] = 0.0f;
     model->materials[i].specular[3] = 1.0f;
   }
-  model->materials[0].name = strdup("default");
+  model->materials[0].name = std::string("default");
 
   /* now, read in the data */
   nummaterials = 0;
@@ -397,7 +397,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       }
       sscanf(buf, "%s %s", buf, buf);
       nummaterials++;
-      model->materials[nummaterials].name = strdup(buf);
+      model->materials[nummaterials].name = std::string(buf);
       break;
     case 'N':
       fscanf(file, "%f", &model->materials[nummaterials].shininess);
