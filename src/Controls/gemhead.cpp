@@ -157,7 +157,7 @@ void gemhead :: renderGL(GemState *state)
   ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(m_cache);  // the cache ?
   (ap+1)->a_type=A_POINTER;
   (ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
-  outlet_anything(this->m_outlet, gensym("gem_state"), 2, ap);
+  outlet_anything(m_outlet, gensym("gem_state"), 2, ap);
 
   m_cache->dirty = false;
   m_cache->vertexDirty=false;
@@ -248,7 +248,7 @@ void gemhead :: outputRenderOnOff(int state)
   // continue sending out the cache message
   t_atom ap[1];
   SETFLOAT(ap, state);
-  outlet_anything(this->m_outlet, gensym("gem_state"), 1, ap);
+  outlet_anything(m_outlet, gensym("gem_state"), 1, ap);
 }
 
 /////////////////////////////////////////////////////////
