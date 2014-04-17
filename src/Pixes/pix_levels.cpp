@@ -25,40 +25,42 @@ CPPEXTERN_NEW(pix_levels);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_levels :: pix_levels()
+pix_levels :: pix_levels() :
+  nHeight(0), nWidth(0),
+  init(0),
+  pSource(0), pOutput(0),
+    m_DoAuto(false),
+    m_DoUniform(true),
+    m_DoAllowInversion(true),
+
+    m_UniformInputFloor(0.0f),
+    m_UniformInputCeiling(255.0f),
+    m_UniformOutputFloor(0.0f),
+    m_UniformOutputCeiling(255.0f),
+
+    m_RedInputFloor(0.0f),
+    m_RedInputCeiling(255.0f),
+    m_RedOutputFloor(0.0f),
+    m_RedOutputCeiling(255.0f),
+
+    m_GreenInputFloor(0.0f),
+    m_GreenInputCeiling(255.0f),
+    m_GreenOutputFloor(0.0f),
+    m_GreenOutputCeiling(255.0f),
+
+    m_BlueInputFloor(0.0f),
+    m_BlueInputCeiling(255.0f),
+    m_BlueOutputFloor(0.0f),
+    m_BlueOutputCeiling(255.0f),
+
+    m_AlphaInputFloor(0.0f),
+    m_AlphaInputCeiling(255.0f),
+    m_AlphaOutputFloor(0.0f),
+    m_AlphaOutputCeiling(255.0f),
+
+    m_LowPercentile(5.0f),
+    m_HighPercentile(95.0f)
 {
-    m_DoAuto = false;
-    m_DoUniform = true;
-    m_DoAllowInversion = true;
-
-    m_UniformInputFloor = 0.0f;		// 0 to 255
-    m_UniformInputCeiling = 255.0f;	// 0 to 255
-    m_UniformOutputFloor = 0.0f;	// 0 to 255
-    m_UniformOutputCeiling = 255.0f;	// 0 to 255
-
-    m_RedInputFloor = 0.0f;		// 0 to 255
-    m_RedInputCeiling = 255.0f;		// 0 to 255
-    m_RedOutputFloor = 0.0f;		// 0 to 255
-    m_RedOutputCeiling = 255.0f;	// 0 to 255
-
-    m_GreenInputFloor = 0.0f;		// 0 to 255
-    m_GreenInputCeiling = 255.0f;	// 0 to 255
-    m_GreenOutputFloor = 0.0f;		// 0 to 255
-    m_GreenOutputCeiling = 255.0f;	// 0 to 255
-
-    m_BlueInputFloor = 0.0f;		// 0 to 255
-    m_BlueInputCeiling = 255.0f;	// 0 to 255
-    m_BlueOutputFloor = 0.0f;		// 0 to 255
-    m_BlueOutputCeiling = 255.0f;	// 0 to 255
-
-    m_AlphaInputFloor = 0.0f;		// 0 to 255
-    m_AlphaInputCeiling = 255.0f;	// 0 to 255
-    m_AlphaOutputFloor = 0.0f;		// 0 to 255
-    m_AlphaOutputCeiling = 255.0f;	// 0 to 255
-
-    m_LowPercentile = 5.0f;		// 0 to 100
-    m_HighPercentile = 95.0f;		// 0 to 100
-
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("uniform"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("red"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("green"));
