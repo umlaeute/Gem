@@ -256,36 +256,33 @@ int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize)
  */
 unsigned int32 *longimagedata(const char *name)
 {
-  unsigned int32 *base, *lptr;
-  unsigned char *rledat, *verdat;
-  unsigned int32 *starttab, *lengthtab;
-  FILE *inf;
-  IMAGE *image;
+  unsigned int32 *base=NULL, *lptr=NULL;
+  unsigned char *rledat=NULL, *verdat=NULL;
+  unsigned int32 *starttab=NULL, *lengthtab=NULL;
+  FILE *inf=NULL;
+  IMAGE *image=NULL;
   int y, z, tablen;
   int xsize, ysize, zsize;
   int bpp, rle, badorder;
   unsigned int rlebuflen;
-	unsigned int cur;
+  unsigned int cur;
 
   inf = fopen(name,"rb");
-  if(!inf)
-    {
-      return(NULL);
-    }
+  if(!inf) {
+    goto error;
+  }
   image = (IMAGE *)malloc(sizeof(IMAGE));
   readheader(inf,image);
   if(image->imagic != IMAGIC)
     {
-      fclose(inf);
-      return(NULL);
+      goto error;
     }
   rle = ISRLE(image->type);
   bpp = BPP(image->type);
   if(bpp != 1 )
     {
       printf("longimagedata: image must have 1 byte per pix chan\n");
-      fclose(inf);
-      return(NULL);
+      goto error;
     }
   xsize = image->xsize;
   ysize = image->ysize;
@@ -340,10 +337,14 @@ unsigned int32 *longimagedata(const char *name)
                   if(lengthtab[y+z*ysize]>rlebuflen)
                     {
                       printf("longimagedata: rlebuf(%d) is too small - bad poop : %d\n",rlebuflen, lengthtab[y+z*ysize]);
-                      return(NULL);
+		      goto error;
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
-                  if(count<1){error("error reading file"); return 0;}
+                  if(count<1){
+		    free(base);
+		    error("error reading file");
+		    goto error;
+		  }
 
                   cur += lengthtab[y+z*ysize];
 #ifdef IRISGL
@@ -368,7 +369,10 @@ unsigned int32 *longimagedata(const char *name)
                       cur = starttab[y+z*ysize];
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
-                  if(count<1){error("error reading file"); return 0;}
+                  if(count<1){
+		    error("error reading file");
+		    goto error;
+		  }
 
                   cur += lengthtab[y+z*ysize];
 #ifdef IRISGL
@@ -384,15 +388,8 @@ unsigned int32 *longimagedata(const char *name)
         setalpha((unsigned char *)base,xsize*ysize);
       else if(zsize<3) 
         copybw((int32 *)base,xsize*ysize);
-      fclose(inf);
-      free(starttab);
-      free(lengthtab);
-      free(rledat);
-      free(image);
-      return base;
-    }
-	else
-    {
+      goto success;
+    } else {
       base = (unsigned int32 *)
         malloc((xsize*ysize+TAGLEN)*sizeof(int32));
       addlongimgtag(base,xsize,ysize);
@@ -404,7 +401,10 @@ unsigned int32 *longimagedata(const char *name)
           for(y=0; y<ysize; y++)
             {
               size_t count = fread(verdat,xsize,1,inf);
-              if(count<1){error("error reading file"); return 0;}
+              if(count<1){
+		error("error reading file");
+		goto error;
+	      }
 
 #ifdef IRISGL
               interleaverow((unsigned char *)lptr,verdat,3-z,xsize);
@@ -418,11 +418,23 @@ unsigned int32 *longimagedata(const char *name)
         setalpha((unsigned char *)base,xsize*ysize);
       else if(zsize<3) 
         copybw((int32 *)base,xsize*ysize);
-      fclose(inf);
-      free(verdat);
-      free(image);
-      return base;
+      goto success;
     }
+ error:
+  if(base)free(base);
+  base=NULL;
+ success:
+  if(lptr)free(lptr);
+  if(rledat)free(rledat);
+  if(verdat)free(verdat);
+  if(starttab)free(starttab);
+  if(lengthtab)free(lengthtab);
+  if(inf)fclose(inf);
+
+  if(image)free(image);
+
+  return(base);
+
 }
 
 /* static utility functions for longimagedata */
