@@ -307,7 +307,7 @@ private:
       if(canvas) {
         canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(name.c_str()), buf, MAXPDSTRING);
       } else {
-        if(loud)::error("pix_freeframe[%s]: unfindeable");
+        if(loud)::error("pix_freeframe[%s]: unfindeable", name.c_str());
         return false;
       }
     }
