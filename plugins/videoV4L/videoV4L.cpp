@@ -483,7 +483,7 @@ bool videoV4L::enumProperties(gem::Properties&readable,
     writeable.set(keys[i], type);
   }
   keys.clear();
-
+  return true;
 }
 void videoV4L::setProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
