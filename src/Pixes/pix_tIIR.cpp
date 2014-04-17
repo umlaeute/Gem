@@ -180,7 +180,6 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
     s_fb[i]=static_cast<short>(m_fb[i]*256.+0.5);
   }
 
-
   int imagesize = image.xsize*image.ysize*image.csize;
   __m64 *dest, *source;
 
@@ -324,6 +323,10 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
 
   m_counter++;
   m_counter%=m_bufnum;
+
+  delete[]s_ff;
+  delete[]s_fb;
+
 }
 void pix_tIIR :: processYUVMMX(imageStruct &image)
 { processRGBAMMX(image); }
