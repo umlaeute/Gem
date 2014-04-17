@@ -30,12 +30,13 @@
 
 ////////////////////////
 // the Blob-structure
-Blob::Blob(){
-  m_xmin = 0; m_xmax = 0.0;
-  m_ymin = 0; m_ymax = 0.0;
-  m_xaccum=0; m_yaccum=0; m_xyaccum=0;
-  area = 0;
-}
+Blob::Blob() :
+  area(0),
+  m_xaccum(0), m_yaccum(0), m_xyaccum(0),
+  m_11(0.), m_02(0.), m_20(0.),
+  m_xmin(0.), m_xmax(0.),
+  m_ymin(0.), m_ymax(0.)
+{}
 
 double Blob:: xmin(){
   return m_xmin;
@@ -93,11 +94,11 @@ initializes the pixBlocks and pixBlobs
 
 ------------------------------------------------------------*/
 pix_multiblob :: pix_multiblob(t_floatarg f) : 
-  m_infoOut(NULL),
   m_blobNumber(0),
   m_currentBlobs(NULL),
   m_blobsize(0.001), 
-  m_threshold(10)
+  m_threshold(10),
+  m_infoOut(NULL)
 {
   // initialize image
   m_image.xsize=320;
