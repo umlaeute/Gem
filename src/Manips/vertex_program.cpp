@@ -157,7 +157,7 @@ void vertex_program :: openMess(t_symbol *filename)
          m_programString,
          filename->s_name);
 
-    delete m_programString; m_programString=NULL;
+    delete[] m_programString; m_programString=NULL;
     m_size=0;
     return;
   }
