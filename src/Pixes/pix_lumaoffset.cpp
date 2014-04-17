@@ -25,20 +25,15 @@ CPPEXTERN_NEW(pix_lumaoffset);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_lumaoffset :: pix_lumaoffset()
+pix_lumaoffset :: pix_lumaoffset() :
+  init(0),
+  m_OffsetScale(12.0f),
+  m_LineGap(1.2f),
+  m_DoFilledLines(false), m_DoSmoothFill(false),
+  hPreviousLineHeights(NULL), hPreviousLineHeights2(NULL), hPreviousLineHeights_size(0)
 {
-    m_OffsetScale = 12.0f; 	// -127 to 127
-    m_LineGap = 1.2f;		// 0 to 32
-    m_DoFilledLines = false;	// 0 or 1
-    m_DoSmoothFill = false;	// 0 or 1
-
-    init =0;
-
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offset"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("gap"));
-
-    hPreviousLineHeights_size=0;
-    hPreviousLineHeights=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -56,18 +51,18 @@ pix_lumaoffset :: ~pix_lumaoffset()
 /////////////////////////////////////////////////////////
 void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 {
-    nWidth = image.xsize;
-    nHeight = image.ysize;
+    const int nWidth = image.xsize;
+    const int nHeight = image.ysize;
     if (!init) {
 	init = 1;
     }
-    pSource = reinterpret_cast<U32*>(image.data);
+    U32*pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+    U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
     const int nNumPixels=nWidth*nHeight;
 
@@ -256,8 +251,8 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 }
 void pix_lumaoffset :: processGrayImage(imageStruct &image)
 {
-    nWidth = image.xsize;
-    nHeight = image.ysize;
+    const int nWidth = image.xsize;
+    const int nHeight = image.ysize;
     if (!init) {
 	init = 1;
     }
@@ -429,19 +424,19 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 {
 	int nSourceU, nSourceY1, nSourceV, nSourceY2;
 
-    nWidth = image.xsize/2;
-    nHeight = image.ysize;
+    const int nWidth = image.xsize/2;
+    const int nHeight = image.ysize;
     if (!init) {
 		init = 1;
     }
-    pSource = reinterpret_cast<U32*>(image.data);
+    U32*pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
     myImage.setBlack();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+    U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
     const int nNumPixels=nWidth*nHeight;
 
