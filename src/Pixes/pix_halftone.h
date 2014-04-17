@@ -76,8 +76,6 @@ class GEM_EXTERN pix_halftone : public GemPixObj
 
 	int nWidth;
 	int nHeight;
-	U32*				pSource;
-	U32*				pOutput;
 
 	struct SPete_HalfTone_Point {
 	    int nX;

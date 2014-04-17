@@ -58,13 +58,13 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
     nWidth = image.xsize;
     nHeight = image.ysize;
 
-    pSource = reinterpret_cast<U32*>(image.data);
+    U32*pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+    U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
@@ -231,13 +231,13 @@ void pix_halftone :: processYUVImage(imageStruct &image)
     nHeight = image.ysize;
 
     const unsigned char chroma = 128;
-    pSource = reinterpret_cast<U32*>(image.data);
+    U32*pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+    U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
