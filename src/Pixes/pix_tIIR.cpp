@@ -86,6 +86,13 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
 pix_tIIR :: ~pix_tIIR(void)
 {
   // clean my buffer
+  delete[]m_ff;
+  delete[]m_fb;
+  t_inlet **inlet = m_inlet;
+  int i;
+  for(i=0; i<(ff_num+fb_num)) {
+    inlet_free(*inlet++);
+  }
 }
 
 /////////////////////////////////////////////////////////
