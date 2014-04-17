@@ -27,7 +27,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(sphere, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 //
 /////////////////////////////////////////////////////////
 sphere :: sphere(t_floatarg size, t_floatarg slize)
-  : GemGluObj(size, slize)
+  : GemGluObj(size, slize),
+    m_x(0), m_y(0), m_z(0),
+    oldStacks(-1), oldSlices(-1),
+    oldDrawType(0), oldTexture(0)
 {
       int slice = m_numSlices;
       int stack = m_numSlices;
@@ -37,12 +40,6 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
       m_z = new float[slice * stack];
 
       oldDrawType = m_drawType;
-
-      //init these so the first render always creates the Sphere
-      oldStacks = -1;
-      oldSlices = -1;
-      oldTexture= 0;
-
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +47,11 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
 //
 /////////////////////////////////////////////////////////
 sphere :: ~sphere()
-{ }
+{
+  delete[]m_x;
+  delete[]m_y;
+  delete[]m_z;
+}
 
 /////////////////////////////////////////////////////////
 // createSphere
