@@ -441,6 +441,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     }
   }
+  if(file)fclose(file);
   return 0;
  mtlread_failed:
   if(file)fclose(file);
