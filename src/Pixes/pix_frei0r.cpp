@@ -493,7 +493,7 @@ static const int offset_pix_=strlen("pix_");
 
 static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
   if(!s){
-    ::verbose(2, "frei0r_loader: no name given")
+    ::verbose(2, "frei0r_loader: no name given");
     return 0;
   }
 
