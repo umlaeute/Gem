@@ -864,11 +864,11 @@ _glmSecondPass(GLMmodel* model, FILE* file)
   }
 
   /* announce the memory requirements */
-  verbose(1, " Memory: %d bytes",
+  verbose(1, " Memory: %d bytes", (int)(
           numvertices  * 3*sizeof(GLfloat) +
           numnormals   * 3*sizeof(GLfloat) * (numnormals ? 1 : 0) +
           numtexcoords * 3*sizeof(GLfloat) * (numtexcoords ? 1 : 0) +
-          numtriangles * sizeof(GLMtriangle));
+          numtriangles * sizeof(GLMtriangle)));
 
   return GL_TRUE;
 }
