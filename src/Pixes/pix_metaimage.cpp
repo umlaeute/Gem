@@ -25,14 +25,15 @@ CPPEXTERN_NEW(pix_metaimage);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_metaimage :: pix_metaimage()
+pix_metaimage :: pix_metaimage() :
+  init(0),
+  nHeight(0), nWidth(0),
+  pSource(0), pOutput(0),
+  m_Size(0.2f),
+  m_DoDistanceBased(0.0f),
+  m_DoCheapAndNasty(0.0f),
+  hSubImage(NULL)
 {
-    m_Size = 0.2f;
-    m_DoDistanceBased = 0.0f;
-    m_DoCheapAndNasty = 0.0f;
-    hSubImage = NULL;
-
-    init =0;
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
 }
 
