@@ -81,7 +81,6 @@ private:
   class FFInstance {
     FFInstanceID    m_instance;
     FF_Main_FuncPtr m_plugin;
-
     static inline FFUInt32 csize2depth(unsigned int csize) {
       switch(csize) {
       case(4):
@@ -130,7 +129,6 @@ private:
       : m_instance(NULL)
       , m_plugin(plugin)
     {
-
       VideoInfoStruct vis;
       vis.FrameWidth =image.xsize;
       vis.FrameHeight=image.ysize;
@@ -198,6 +196,13 @@ private:
   unsigned int m_majorVersion, m_minorVersion;
   bool m_cancopy;
 
+#ifdef DL_OPEN
+  void           *m_dlhandle;
+#endif
+#ifdef _WIN32
+  HINSTANCE       m_w32handle;
+#endif
+
   FFMixed callInstance(FFUInt32 funcode, FFMixed value) {
     if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
     return m_instance->call(funcode, value);
@@ -255,6 +260,15 @@ private:
     }
 
     deinitialize_();
+
+#ifdef DL_OPEN
+    if(m_dlhandle)dlclose(m_dlhandle);m_dlhandle=NULL;
+#endif
+#ifdef __APPLE__
+#endif
+#ifdef _WIN32
+    if(m_w32handle)FreeLibrary(m_w32handle);m_w32handle=NULL;
+#endif
   }
 
   bool open(std::string name, const t_canvas*canvas) {
@@ -266,7 +280,6 @@ private:
     if(m_plugin)
       close();
 
-    void *plugin_handle = NULL;
     FF_Main_FuncPtr plugmain = NULL;
 
     char buf[MAXPDSTRING];
@@ -318,14 +331,14 @@ private:
 
 #ifdef DL_OPEN
     if(loud)::post("dlopen %s", libname.c_str());
-    plugin_handle=dlopen(libname.c_str(), RTLD_NOW);
-    if(!plugin_handle){
+    m_dlhandle=dlopen(libname.c_str(), RTLD_NOW);
+    if(!m_dlhandle){
       if(loud)::error("pix_freeframe[%s]: %s", libname.c_str(), dlerror());
       return NULL;
     }
     dlerror();
 
-    plugmain = reinterpret_cast<FF_Main_FuncPtr>(dlsym(plugin_handle, hookname));
+    plugmain = reinterpret_cast<FF_Main_FuncPtr>(dlsym(m_dlhandle, hookname));
 
 #elif defined __APPLE__
     CFURLRef bundleURL = NULL;
@@ -352,16 +365,15 @@ private:
     if(theBundle != NULL) CFRelease( theBundle );
     if(plugin != NULL)    CFRelease( plugin );
 #elif defined _WIN32
-    HINSTANCE ntdll;
     char buffer[MAXPDSTRING];
     sys_bashfilename(libname.c_str(), buffer);
     libname=buffer;
-    ntdll = LoadLibrary(libname.c_str());
-    if (!ntdll) {
+    m_w32handle = LoadLibrary(libname.c_str());
+    if (!m_w32handle) {
       if(loud)::post("%s: couldn't load", libname.c_str());
       return false;
     }
-    plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(ntdll, hookname));
+    plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(m_w32handle, hookname));
 #else
 # error no way to load dynamic linked libraries on this OS
 #endif
@@ -593,6 +605,13 @@ public:
     , m_type(FF_EFFECT)
     , m_majorVersion(0)
     , m_minorVersion(0)
+    , m_cancopy(false)
+#ifdef DL_OPEN
+    , m_dlhandle(NULL)
+#endif
+#ifdef _WIN32
+    , m_w32handle(NULL)
+#endif
   {
     if(!open(name, canvas)) {
       throw(GemException(std::string("unable to open '"+name+"'")));
@@ -605,6 +624,7 @@ public:
     }
   }
   virtual ~FFPlugin(void) {
+    close();
   }
 
   GLenum GLformat() {
