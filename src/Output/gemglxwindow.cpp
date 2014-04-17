@@ -431,8 +431,7 @@ struct gemglxwindow::PIMPL {
          * LATER re-think the entire dual-context thing
          */
 
-        throw(GemException("problems making glX-context current: refusing to continue"));
-        throw(GemException("try setting the environment variable GEM_SINGLE_CONTEXT=1"));
+        throw(GemException("problems making glX-context current: refusing to continue\ntry setting the environment variable GEM_SINGLE_CONTEXT=1"));
         return false;
       }
       Window winDummy;
