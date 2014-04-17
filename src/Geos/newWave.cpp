@@ -52,6 +52,7 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
   m_height = 1.f;
 
   switch(argc){
+    /* coverity[unterminated_default] */
   default:
     error("ignoring extra arguments");
   case 3:

@@ -93,6 +93,7 @@ void pix_blob :: processRGBAImage(imageStruct &image)
   case 4:
     channel = chAlpha;
     break;
+    /* coverity[unterminated_default] */
   default:
     error("no method %d: using GREY", m_method);
   case 0:

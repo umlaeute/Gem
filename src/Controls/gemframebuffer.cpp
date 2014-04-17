@@ -449,6 +449,7 @@ void gemframebuffer :: fixFormat(GLenum wantFormat)
   }
 
   switch(wantFormat) {
+    /* coverity[unterminated_default] */
   default:
     verbose(1,"using default format");
   case GL_RGB:

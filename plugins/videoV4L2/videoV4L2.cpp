@@ -274,10 +274,12 @@ void *videoV4L2 :: capturing(void)
 
     if (-1 == xioctl (m_tvfd, VIDIOC_DQBUF, &buf)) {
       switch (errno) {
+    /* coverity[unterminated_case] */
       case EAGAIN:
         perror("v4l2: VIDIOC_DQBUF: stopping capture thread!");
         m_stopTransfer=true;
         m_continue_thread=false;
+    /* coverity[unterminated_case] */
       case EIO:
         /* Could ignore EIO, see spec. */
         /* fall through */
