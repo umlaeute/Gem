@@ -51,6 +51,7 @@
 
 #include "videoV4L.h"
 #include "plugins/PluginFactory.h"
+#include <string.h>
 using namespace gem::plugins;
 
 #include "Gem/RTE.h"
@@ -84,18 +85,21 @@ REGISTER_VIDEOFACTORY("v4l", videoV4L);
 
 
 videoV4L :: videoV4L() : videoBase("v4l")
-                       ,
-                         tvfd(0),
-                         frame(0),
-                         videobuf(NULL), 
-                         mytopmargin(0), mybottommargin(0), 
-                         myleftmargin(0), myrightmargin(0),
-                         m_gotFormat(0),m_colorConvert(false),
-                         m_norm(VIDEO_MODE_AUTO),
-                         m_channel(V4L_COMPOSITEIN),
-                         errorcount(0)
-			 
+  ,
+  tvfd(0),
+  frame(0),
+  videobuf(NULL),
+  mytopmargin(0), mybottommargin(0),
+  myleftmargin(0), myrightmargin(0),
+  m_gotFormat(0),m_colorConvert(false),
+  m_norm(VIDEO_MODE_AUTO),
+  m_channel(V4L_COMPOSITEIN),
+  errorcount(0)
 {
+  unsigned int i;
+  for(i=0; i<V4L_NBUF; i++) {
+    memset(vmmap+i, 0, sizeof(vmmap[i]));
+  }
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 

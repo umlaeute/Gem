@@ -123,9 +123,8 @@ namespace gem { namespace plugins {
   struct video_mbuf vmbuf;
   struct video_mmap vmmap[V4L_NBUF];
   int tvfd;
-  int frame, last_frame;
+  int frame;
   unsigned char *videobuf;
-  int skipnext;
   int mytopmargin, mybottommargin;
   int myleftmargin, myrightmargin;
 
