@@ -20,6 +20,7 @@
 #include "Gem/GemGL.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
@@ -190,6 +191,9 @@ struct gemglxwindow::PIMPL {
     have_border(false),
     doDispatch(false)
   {
+#ifdef HAVE_LIBXXF86VM
+    memset(&deskMode, 0, sizeof(deskMode));
+#endif
   }
   ~PIMPL(void) {
   }
