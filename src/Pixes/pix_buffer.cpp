@@ -122,6 +122,7 @@ pix_buffer :: ~pix_buffer( void )
 
   if(m_buffer)delete [] m_buffer; m_buffer=NULL;
   if(m_handle)delete m_handle; m_handle=NULL;
+  delete m_outlet;
 }
 /////////////////////////////////////////////////////////
 // allocateMess
