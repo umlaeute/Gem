@@ -44,6 +44,7 @@ public:
         delete cond;
         cond=NULL;
       }
+      delete refcount;
     }
   }
   inline void freeze(void) {
