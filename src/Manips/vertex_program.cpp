@@ -139,6 +139,7 @@ void vertex_program :: openMess(t_symbol *filename)
     memset(m_programString,0,size + 1);
     fseek(file,0,SEEK_SET);
     size_t count = fread(m_programString,1,size,file);
+    m_programString[size]='\0';
     int err=ferror(file);
     fclose(file);
     if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
