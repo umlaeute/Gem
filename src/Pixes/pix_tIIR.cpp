@@ -93,6 +93,7 @@ pix_tIIR :: ~pix_tIIR(void)
   for(i=0; i<(ff_num+fb_num)) {
     inlet_free(*inlet++);
   }
+  delete[]m_inlet;
 }
 
 /////////////////////////////////////////////////////////
