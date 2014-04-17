@@ -74,8 +74,8 @@ class GEM_EXTERN pix_aging : public GemPixObj
 
 	////////
 	// scratching
-	t_scratch *m_scratch;
 	int m_scratchlines;
+	t_scratch *m_scratch;
 
 	////////
 	// pits
