@@ -55,6 +55,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
 
   m_fb = new t_float[fb_num];
   m_ff = new t_float[ff_num];
+  m_inletCount=fb_num+ff_num;
 
   int i=0;
   while(i<fb_num){
@@ -90,7 +91,7 @@ pix_tIIR :: ~pix_tIIR(void)
   delete[]m_fb;
   t_inlet **inlet = m_inlet;
   int i;
-  for(i=0; i<(ff_num+fb_num)) {
+  for(i=0; i<m_inletCount; i++) {
     inlet_free(*inlet++);
   }
   delete[]m_inlet;
