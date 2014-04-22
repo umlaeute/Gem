@@ -161,7 +161,7 @@ void gemhead :: renderGL(GemState *state)
 
   m_cache->dirty = false;
   m_cache->vertexDirty=false;
-  state->get(GemState::_GL_STACKS, stacks);
+  if(state) state->get(GemState::_GL_STACKS, stacks);
   if(stacks)stacks->pop();
 }
 

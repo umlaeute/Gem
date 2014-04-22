@@ -117,9 +117,9 @@ int ErrorHandler (Display *dpy, XErrorEvent *event)
   if(event)
     xerr=event->error_code;
 
-  if ( event->error_code != BadWindow ) {
+  if ( xerr != BadWindow ) {
     char buf[256];
-    XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
+    XGetErrorText (dpy, xerr, buf, sizeof(buf));
     error("GEM-Xwin: %s\n", buf);
   } else
     error("GEM-Xwin: BadWindow (%d)\n", xerr);
