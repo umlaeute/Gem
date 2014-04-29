@@ -23,7 +23,12 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap2d );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMap2d :: GEMglMap2d	(int argc, t_atom *argv){
+GEMglMap2d :: GEMglMap2d	(int argc, t_atom *argv) :
+  target(0),
+  u1(0.), u2(0.), ustride(0), uorder(0),
+  v1(0.), v2(0.), vstride(0), vorder(0),
+  points(0), len(0)
+{
 	if (argc>0)target =static_cast<GLenum>(atom_getint(argv+0));
 	if (argc>1)u1     =static_cast<GLdouble>(atom_getfloat(argv+1));
 	if (argc>2)u2     =static_cast<GLdouble>(atom_getfloat(argv+2));

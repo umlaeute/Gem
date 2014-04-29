@@ -148,6 +148,11 @@ CPPEXTERN_NEW(pix_mano)
 // Constructor
 // #####################################################
 pix_mano :: pix_mano() :
+  outlet1(0), outlet2(0), outlet3(0), outlet4(0), outlet5(0), outlet6(0), outlet7(0),
+  head(0), bottom(240), mode(0), left(0), right(0), pixtip(0), min_entry_size(10), min_perim(50),
+  pixsamp(4), pixavg(20),
+  thresh(0.f), tip_scalar(0.4f),
+  prev_tip(0),
   m_pimpl(new PIMPL())
 {
   post("pix_mano v0.02 2012-10-15");
@@ -161,20 +166,11 @@ pix_mano :: pix_mano() :
   outlet5 = outlet_new(this->x_obj, gensym("list"));
   outlet6 = outlet_new(this->x_obj, gensym("list"));
   outlet7 = outlet_new(this->x_obj, gensym("list"));
-  thresh = 0;
-  tip_scalar = 0.4;
-  head = mode = 0;
-  bottom = 240;
-  min_entry_size = 10;
-  min_perim = 50;
-  pixsamp = 4;
-  pixavg = 20;
   int i;
   for (i=0; i<50; i++) {
     tp_i[i] = i;
     tp_x[i] = tp_y[i] = tp_m[i] = tp_a[i] = tp_s[i] = 0;
   }
-  prev_tip = 0;
 }
 
 // #####################################################
@@ -801,7 +797,7 @@ void pix_mano :: processGrayImage(imageStruct &image)  {
                   xcoord = image.csize * xcount + ycoord;
                   base[chGray + xcoord] = 255;
                   ycount = temp_y;
-                  for (xcount = temp_x; xcount < contourx[c-1]; xcount--) { //from old origin to new origin,
+                  for (xcount = temp_x; xcount < contourx[c-1]; xcount++) { //from old origin to new origin,
                     ycoord = image.csize * xsize * ycount;  xcoord = image.csize * xcount + ycoord;
                     base[chGray + xcoord] = 0; //make them all black
                   }
@@ -1017,8 +1013,8 @@ void pix_mano :: processGrayImage(imageStruct &image)  {
             xval_int  +=  (int) partialx[i];
             yval_int  +=  (int) partialy[i];
           }
-          hx =  (xval_int / n); // + e_ctrx[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
-          hy =  (yval_int / n); // + e_ctry[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
+          hx =  n?(xval_int / n):0; // + e_ctrx[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
+          hy =  n?(yval_int / n):0; // + e_ctry[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
           // ******* Determine TOTAL HAND AREA
           hand_area = (float) h / (float) tot_area;
           // ******* find HAND DIRECTION

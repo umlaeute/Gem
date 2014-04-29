@@ -23,7 +23,10 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMapGrid2f );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMapGrid2f :: GEMglMapGrid2f	(int argc, t_atom *argv){
+GEMglMapGrid2f :: GEMglMapGrid2f	(int argc, t_atom *argv) :
+  un(0), u1(0.f), u2(0.f),
+  vn(0), v1(0.f), v2(0.f)
+{
 	if (argc>0)un=atom_getint (argv+0);
 	if (argc>1)u1=atom_getfloat(argv+1);
 	if (argc>2)u2=atom_getfloat(argv+2);

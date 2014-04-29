@@ -74,6 +74,7 @@ public:
 
   PIMPL(const std::string name_, unsigned int locks_, unsigned int timeout_) :
     threading(locks_>0),
+    thread(0),
     locks(NULL),
     numlocks(0),
     asynchronous(true), condition_cond(NULL), condition_mutex(NULL),

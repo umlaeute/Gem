@@ -26,6 +26,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexSubImage1D, t_floatarg, A_DEFFLOAT, t_fl
 // Constructor
 //
 GEMglTexSubImage1D :: GEMglTexSubImage1D(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+  target(0),
   level(static_cast<GLint>(arg0)),
   xoffset(static_cast<GLint>(arg1)),
   width(static_cast<GLsizei>(arg2))

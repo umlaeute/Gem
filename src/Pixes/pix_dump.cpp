@@ -39,13 +39,14 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
   //
   /////////////////////////////////////////////////////////
 pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
-  m_dataOut(0),
-  xsize(0), ysize(0),
-  m_xsize(0), m_ysize(0),
-  m_csize(3),
-  oldimagex(0), oldimagey(0),
-  m_bufsize(0), m_buffer(0),
-  m_xstep(1.), m_ystep(1.)
+    m_dataOut(0),
+    xsize(0), ysize(0),
+    m_xsize(0), m_ysize(0), m_csize(3),
+    m_buffer(0),
+    m_bufsize(0),
+    oldimagex(0), oldimagey(0),
+    m_xstep(1), m_ystep(1),
+    m_data(0)
 {
   xsize = static_cast<int>(fx);
   ysize = static_cast<int>(fy);

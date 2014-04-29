@@ -34,7 +34,7 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
-    m_rectangle(false),
+    m_rectangle(false), m_canRectangle(0),
     m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB),
     m_type(GL_UNSIGNED_BYTE),
     m_outTexInfo(NULL)

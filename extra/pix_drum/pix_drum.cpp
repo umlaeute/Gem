@@ -34,20 +34,18 @@ CPPEXTERN_NEW(pix_drum)
 /////////////////////////////////////////////////////////
 // Constructor
 /////////////////////////////////////////////////////////
-pix_drum :: pix_drum()
+pix_drum :: pix_drum(void) :
+  outlet1(0), outlet2(0), outlet3(0), outlet4(0),
+  head(0), bottom(240), right(320), left(0), mode(0), pix_dist(0), min_width(10), pix_dist_ctr(0),
+  thresh(0.), min_height(.14)
 {
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_params"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_thresh"));
-	outlet1 = outlet_new(this->x_obj, gensym("list"));
-	outlet2 = outlet_new(this->x_obj, gensym("list"));
-	outlet3 = outlet_new(this->x_obj, gensym("list"));
-	outlet4 = outlet_new(this->x_obj, gensym("list"));
+    outlet1 = outlet_new(this->x_obj, gensym("list"));
+    outlet2 = outlet_new(this->x_obj, gensym("list"));
+    outlet3 = outlet_new(this->x_obj, gensym("list"));
+    outlet4 = outlet_new(this->x_obj, gensym("list"));
     m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_thresh[chAlpha] = 0;
-	head = left = mode = 0;
-	min_width = 10;
-	min_height = .14;
-	bottom = 240;
-	right = 320;
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -596,7 +594,7 @@ void pix_drum :: vecThreshMess(t_symbol*s,int argc, t_atom *argv)
 	min_height		= (float)	atom_getfloat(&argv[3]);
 	min_width		= (int)		atom_getfloat(&argv[4]);
 	pix_dist_ctr	= (int)		atom_getfloat(&argv[5]);
-	post("mode = %d   thress = %f	pix_dist = %d", mode, thresh, pix_dist);
+	post("mode = %d   thresh = %f	pix_dist = %d", mode, thresh, pix_dist);
     setPixModified();
 }
 

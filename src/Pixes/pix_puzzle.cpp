@@ -34,23 +34,18 @@ unsigned int fastrand()
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_puzzle :: pix_puzzle()
+pix_puzzle :: pix_puzzle() :
+  blockxsize(0), blockysize(0),  blocknum(1), spacepos(0),
+  blockw(8), blockh(8),
+  blockpos(0),
+  blockoffset(0),
+  marginw(0), marginh(0),
+  m_force(true),
+  m_game(false)
 {
   myImage.xsize=myImage.ysize=512;
   myImage.setCsizeByFormat(GL_RGBA_GEM);
   myImage.allocate();
-
-  blocknum=1;
- 
-  m_force = true;
-
-  blockw = 8;
-  blockh = 8;
-
-  blockoffset = 0;
-  blockpos = 0;
-
-  m_game = false;
 }
 
 /////////////////////////////////////////////////////////

@@ -29,7 +29,8 @@ CPPEXTERN_NEW_WITH_GIMME(part_velocity);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_velocity :: part_velocity(int argc, t_atom*argv)
+part_velocity :: part_velocity(int argc, t_atom*argv) :
+  m_domain(PDPoint)
 {
   int i=9;
   while(i--)m_arg[i]=0.0;

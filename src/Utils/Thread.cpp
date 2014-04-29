@@ -129,7 +129,8 @@ class Thread::PIMPL { public:
   PIMPL(Thread*x):
     owner(x),
     keeprunning(true),
-    isrunning(false)
+    isrunning(false),
+    p_thread(0)
   {
     pthread_mutex_init(&p_mutex, 0);
     pthread_cond_init (&p_cond , 0);

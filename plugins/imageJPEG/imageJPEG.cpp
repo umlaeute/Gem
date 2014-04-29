@@ -236,8 +236,10 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   }
 
   double fquality=100;
-  props.get("quality", fquality);
   int quality=fquality;
+
+  if(props.get("quality", fquality))
+     quality=fquality;
 
   if(GL_YUV422_GEM==constimage.format) {
     error("don't know how to write YUV-images with libJPEG");

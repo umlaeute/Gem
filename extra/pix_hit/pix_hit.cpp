@@ -15,6 +15,11 @@
 
 CPPEXTERN_NEW(pix_hit);
 
+_hitarea::_hitarea(void) :
+  type(rectangle), x(0.),y(0.), width(0.), height(0.)
+{}
+
+
 /////////////////////////////////////////////////////////
 //
 // pix_hit

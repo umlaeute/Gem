@@ -26,23 +26,23 @@ CPPEXTERN_NEW(pix_colorreduce);
 //
 /////////////////////////////////////////////////////////
 pix_colorreduce :: pix_colorreduce() :
-  hRGBHistogram(NULL), hSortedColors(NULL), hInverseColorMap(NULL)
+  nHeight(0), nWidth(0),
+  init(0),
+  pSource(0), pOutput(0),
+  m_TargetColorCount(8.0f),
+  m_PalettePersistence(0.95f),
+  m_BoundarySmoothing(0.10f),
+  hRGBHistogram(NULL), hSortedColors(NULL), hInverseColorMap(NULL),
+  cnGridSizeShift(3),
+  cnGridSize(1<<cnGridSizeShift),
+  cnGridSizeMask(cnGridSize-1),
+  cnGridCellCount(cnGridSize*cnGridSize*cnGridSize),
+  cnColorToIndexShift(8-cnGridSizeShift),
+  cnGridCellWidth(1<<cnColorToIndexShift),
+  cnGridCellHalfWidth(cnGridCellWidth/2),
+  cnBiggestSignedInt(0x7fffffff),
+  pInvColorMapEntry(0)
 {
-    m_TargetColorCount = 8.0f; 		// 1 to 255
-    m_PalettePersistence = 0.95f;	// 0 to 1
-    m_BoundarySmoothing = 0.10f;	// 0 or 1
-
-    cnGridSizeShift=3;
-    cnGridSize=(1<<cnGridSizeShift);
-    cnGridSizeMask=(cnGridSize-1);
-    cnGridCellCount=(cnGridSize*cnGridSize*cnGridSize);
-    cnColorToIndexShift=(8-cnGridSizeShift);
-    cnGridCellWidth=(1<<cnColorToIndexShift);
-    cnGridCellHalfWidth=(cnGridCellWidth/2);
-    cnBiggestSignedInt=0x7fffffff;
-
-    init =0;
-
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("count"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("persist"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smooth"));

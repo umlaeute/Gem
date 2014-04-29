@@ -31,6 +31,7 @@ CPPEXTERN_NEW(pix_coordinate);
 /////////////////////////////////////////////////////////
 pix_coordinate :: pix_coordinate()
   : m_coords(NULL), m_rectcoords(NULL), m_numCoords(0),
+    m_oldTexType(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0)
 {
     // the size inlet
