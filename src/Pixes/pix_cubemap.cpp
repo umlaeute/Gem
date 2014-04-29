@@ -194,13 +194,11 @@ void pix_cubemap :: render(GemState *state) {
   if(!m_textureOnOff)return;
 
   /* here comes the work: a new image has to be transfered from main memory to GPU and attached to a texture object */
-  if(state) {
-    pixBlock*img=NULL;
-    state->get(GemState::_PIX, img);
-    if(img) {
-      if(img->newimage)
-        m_img[0]=&img->image;
-    }
+  pixBlock*img=NULL;
+  state->get(GemState::_PIX, img);
+  if(img) {
+    if(img->newimage)
+      m_img[0]=&img->image;
   }
 
 
