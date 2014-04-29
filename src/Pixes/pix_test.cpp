@@ -72,6 +72,7 @@ void pix_test :: processImage(imageStruct &image)
     int datasize=image.xsize*image.xsize*image.csize;
     while(datasize--)*data++=off;
     break;
+#if 0
     while(rows--){
       int col=cols;
       while(col--){
@@ -79,6 +80,7 @@ void pix_test :: processImage(imageStruct &image)
 	*data++=128;
       }
     }
+#endif
     break;
   }
   image.data=myImage.data;
