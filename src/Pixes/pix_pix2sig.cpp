@@ -28,7 +28,11 @@ CPPEXTERN_NEW(pix_pix2sig);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_pix2sig :: pix_pix2sig() : m_data(NULL), m_size(0)
+pix_pix2sig :: pix_pix2sig(void) :
+  m_data(NULL),
+  m_size(0),
+  m_csize(4),
+  m_format(GL_RGBA_GEM)
 {
   int i=4;
   while(i--)
