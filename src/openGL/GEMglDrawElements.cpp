@@ -44,10 +44,14 @@ GEMglDrawElements :: GEMglDrawElements	(t_floatarg arg0, t_floatarg arg1, t_floa
 // Destructor
 //
 GEMglDrawElements :: ~GEMglDrawElements () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
-inlet_free(m_inlet[3]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[3]);
+
+  delete[]indices_ui;
+  delete[]indices_us;
+  delete[]indices_ub;
 }
 //////////////////
 // extension check

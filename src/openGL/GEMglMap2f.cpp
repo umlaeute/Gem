@@ -52,16 +52,18 @@ GEMglMap2f :: GEMglMap2f	(int argc, t_atom *argv){
 // Destructor
 //
 GEMglMap2f :: ~GEMglMap2f () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
-inlet_free(m_inlet[3]);
-inlet_free(m_inlet[4]);
-inlet_free(m_inlet[5]);
-inlet_free(m_inlet[6]);
-inlet_free(m_inlet[7]);
-inlet_free(m_inlet[8]);
-inlet_free(m_inlet[9]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[3]);
+  inlet_free(m_inlet[4]);
+  inlet_free(m_inlet[5]);
+  inlet_free(m_inlet[6]);
+  inlet_free(m_inlet[7]);
+  inlet_free(m_inlet[8]);
+  inlet_free(m_inlet[9]);
+
+  delete[]points;
 }
 
 //////////////////

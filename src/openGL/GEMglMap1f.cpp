@@ -44,12 +44,14 @@ GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
 // Destructor
 //
 GEMglMap1f :: ~GEMglMap1f () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
-inlet_free(m_inlet[3]);
-inlet_free(m_inlet[4]);
-inlet_free(m_inlet[5]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[3]);
+  inlet_free(m_inlet[4]);
+  inlet_free(m_inlet[5]);
+
+  delete[]points;
 }
 
 //////////////////
