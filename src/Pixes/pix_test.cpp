@@ -25,11 +25,12 @@ CPPEXTERN_NEW(pix_test);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_test :: pix_test()
+pix_test :: pix_test() :
+  orgImage(0), orgdata(0),
+  off(0), csize(2)
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
   myImage.data = new unsigned char[1];
-  csize=2;
 }
 
 /////////////////////////////////////////////////////////
