@@ -1689,7 +1689,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   } else if (mode & GLM_FLAT) {
     fprintf(file, "\n");
     fprintf(file, "# %d normals\n", model->numfacetnorms);
-    for (i = 1; i <= model->numnormals; i++) {
+    for (i = 1; i <= model->numfacetnorms; i++) {
       fprintf(file, "vn %f %f %f\n",
               model->facetnorms[3 * i + 0],
               model->facetnorms[3 * i + 1],

@@ -387,7 +387,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
   if(devname.empty()) {
     devname="/dev/video";
     if(m_devicenum>=0) {
-      char buf[255];
+      char buf[256];
       snprintf(buf, 255, "%d", m_devicenum);
       buf[255]=0;
       devname+=buf;

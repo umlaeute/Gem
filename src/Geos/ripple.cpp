@@ -332,7 +332,7 @@ void ripple :: ripple_bang(void)
 {
   int index = 0;
 
-  while (m_t[index] < m_max[index] && index < RIPPLE_COUNT)    index++;
+  while (index < RIPPLE_COUNT && m_t[index] < m_max[index])    index++;
 
   if (index < RIPPLE_COUNT)    {
     m_cx[index] = (int)(1.0*m_ctrX/m_sizeX*m_gridX);

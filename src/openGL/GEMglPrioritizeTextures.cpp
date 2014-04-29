@@ -39,9 +39,12 @@ GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0) :
 // Destructor
 //
 GEMglPrioritizeTextures :: ~GEMglPrioritizeTextures () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+
+  delete[]textures;
+  delete[]priorities;
 }
 
 //////////////////
