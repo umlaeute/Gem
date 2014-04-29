@@ -628,7 +628,7 @@ void videoV4L::setProperties(gem::Properties&props) {
 void videoV4L::getProperties(gem::Properties&props) {
 #define IOCTL_ONCE(x, y) if(!y##_done)if(v4l1_ioctl(tvfd, x, &y) < 0) {perror("v4l"#x"");} else y##_done=true
 
-  bool vpicture_done=false, vchannel_done, vcap_done=false;
+  bool vpicture_done=false, vchannel_done=false, vcap_done=false;
 
 
 
