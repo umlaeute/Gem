@@ -447,7 +447,8 @@ void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
   if(gensym("gem_imageZ-")==s)id=5;
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
+    if(id>=0)rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
+    else error("unknown message '%s'" ,s->s_name);
   } else {
     error("wrong righthand arguments...");
     ::error("post: %d", argc);
