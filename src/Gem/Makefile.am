@@ -27,6 +27,8 @@ libGem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
 libGem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
 endif !ENABLE_MULTICONTEXT
 
+libGem_la_CFLAGS    = $(libGem_la_CXXFLAGS)
+
 libGem_la_includedir = $(includedir)/Gem/Gem
 libGem_la_include_HEADERS = \
 	ExportDef.h \
