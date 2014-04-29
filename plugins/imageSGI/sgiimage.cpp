@@ -188,7 +188,9 @@ static int writeheader(FILE *outf, IMAGE *image)
 
   memset(&t, 0, sizeof(IMAGE));
   fwrite(&t,sizeof(IMAGE),1,outf);
-  fseek(outf,0,SEEK_SET);
+  if(fseek(outf,0,SEEK_SET)<0) {
+    return -1;
+  }
   putshort(outf,image->imagic);
   putshort(outf,image->type);
   putshort(outf,image->dim);
@@ -256,11 +258,11 @@ int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize)
  */
 unsigned int32 *longimagedata(const char *name)
 {
-  unsigned int32 *base, *lptr;
-  unsigned char *rledat, *verdat;
-  unsigned int32 *starttab, *lengthtab;
-  FILE *inf;
-  IMAGE *image;
+  unsigned int32 *base=NULL, *lptr=NULL;
+  unsigned char *rledat=NULL, *verdat=NULL;
+  unsigned int32 *starttab=NULL, *lengthtab=NULL;
+  FILE *inf=NULL;
+  IMAGE *image=NULL;
   int y, z, tablen;
   int xsize, ysize, zsize;
   int bpp, rle, badorder;
@@ -276,16 +278,14 @@ unsigned int32 *longimagedata(const char *name)
   readheader(inf,image);
   if(image->imagic != IMAGIC)
     {
-      fclose(inf);
-      return(NULL);
+      goto ko;
     }
   rle = ISRLE(image->type);
   bpp = BPP(image->type);
   if(bpp != 1 )
     {
       printf("longimagedata: image must have 1 byte per pix chan\n");
-      fclose(inf);
-      return(NULL);
+      goto ko;
     }
   xsize = image->xsize;
   ysize = image->ysize;
@@ -297,7 +297,10 @@ unsigned int32 *longimagedata(const char *name)
       lengthtab = (unsigned int32 *)malloc(tablen);
       rlebuflen = static_cast<int32>(1.05*xsize+10);
       rledat = (unsigned char *)malloc(rlebuflen);
-      fseek(inf,512,SEEK_SET);
+      if(fseek(inf,512,SEEK_SET)<0) {
+	printf("longimagedata: fseek returned 0\n");
+	goto ko;
+      }
       readtab(inf,starttab,tablen);
       readtab(inf,lengthtab,tablen);
 
@@ -319,7 +322,9 @@ unsigned int32 *longimagedata(const char *name)
             break;
         }
 
-      fseek(inf,512+2*tablen,SEEK_SET);
+      if(fseek(inf,512+2*tablen,SEEK_SET)) {
+	goto ko;
+      }
       cur = 512+2*tablen;
       base = (unsigned int32 *)
         malloc((xsize*ysize+TAGLEN)*sizeof(int32));
@@ -334,16 +339,18 @@ unsigned int32 *longimagedata(const char *name)
                 {
                   if(cur != starttab[y+z*ysize])
                     {
-                      fseek(inf,starttab[y+z*ysize],SEEK_SET);
+                      if(fseek(inf,starttab[y+z*ysize],SEEK_SET)<0) {
+			goto ko;
+		      }
                       cur = starttab[y+z*ysize];
                     }
                   if(lengthtab[y+z*ysize]>rlebuflen)
                     {
                       printf("longimagedata: rlebuf(%d) is too small - bad poop : %d\n",rlebuflen, lengthtab[y+z*ysize]);
-                      return(NULL);
+		      goto ko;
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
-                  if(count<1){error("error reading file"); return 0;}
+                  if(count<1){error("error reading file"); goto ko;}
 
                   cur += lengthtab[y+z*ysize];
 #ifdef IRISGL
@@ -364,11 +371,13 @@ unsigned int32 *longimagedata(const char *name)
                 {
                   if(cur != starttab[y+z*ysize])
                     {
-                      fseek(inf,starttab[y+z*ysize],SEEK_SET);
+                      if (fseek(inf,starttab[y+z*ysize],SEEK_SET) < 0) {
+			goto ko;
+		      }
                       cur = starttab[y+z*ysize];
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
-                  if(count<1){error("error reading file"); return 0;}
+                  if(count<1){error("error reading file"); goto ko;}
 
                   cur += lengthtab[y+z*ysize];
 #ifdef IRISGL
@@ -384,27 +393,22 @@ unsigned int32 *longimagedata(const char *name)
         setalpha((unsigned char *)base,xsize*ysize);
       else if(zsize<3) 
         copybw((int32 *)base,xsize*ysize);
-      fclose(inf);
-      free(starttab);
-      free(lengthtab);
-      free(rledat);
-      free(image);
-      return base;
-    }
-	else
-    {
+      goto ok;
+    }else{
       base = (unsigned int32 *)
         malloc((xsize*ysize+TAGLEN)*sizeof(int32));
       addlongimgtag(base,xsize,ysize);
       verdat = (unsigned char *)malloc(xsize);
-      fseek(inf,512,SEEK_SET);
+      if(fseek(inf,512,SEEK_SET) < 0) {
+	goto ko;
+      }
       for(z=0; z<zsize; z++)
         {
           lptr = base;
           for(y=0; y<ysize; y++)
             {
               size_t count = fread(verdat,xsize,1,inf);
-              if(count<1){error("error reading file"); return 0;}
+              if(count<1){error("error reading file"); goto ko;}
 
 #ifdef IRISGL
               interleaverow((unsigned char *)lptr,verdat,3-z,xsize);
@@ -418,11 +422,18 @@ unsigned int32 *longimagedata(const char *name)
         setalpha((unsigned char *)base,xsize*ysize);
       else if(zsize<3) 
         copybw((int32 *)base,xsize*ysize);
-      fclose(inf);
-      free(verdat);
-      free(image);
-      return base;
+      goto ok;
     }
+ ko:
+  if(base)free(base);
+  base=NULL;
+ ok:
+  fclose(inf);
+  free(starttab);
+  free(lengthtab);
+  free(rledat);
+  free(image);
+  return base;
 }
 
 /* static utility functions for longimagedata */
@@ -548,7 +559,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   int32 *starttab, *lengthtab;
   unsigned char *rlebuf;
   unsigned int32 *lumbuf;
-  int rlebuflen, goodwrite;
+  int rlebuflen, goodwrite=0;
 
   goodwrite = 1;
   outf = fopen(name,"wb");
@@ -578,7 +589,10 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   image->min = 0;
   image->max = 255;
   goodwrite *= writeheader(outf,image);
-  fseek(outf,512+2*tablen,SEEK_SET);
+  if(fseek(outf,512+2*tablen,SEEK_SET) < 0) {
+    printf("longstoimage: fseek failed\n");
+    goto longstoimage_close;
+  }
   pos = 512+2*tablen;
   for(y=0; y<ysize; y++) {
     for(z=0; z<zsize; z++) {
@@ -609,7 +623,11 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
     lptr += xsize;
   }
 
-  fseek(outf,512,SEEK_SET);
+  if(fseek(outf,512,SEEK_SET) < 0) {
+    printf("longstoimage: fseek failed...\n");
+    goodwrite=0;
+    goto longstoimage_close;
+  }
   goodwrite *= writetab(outf,(unsigned int32 *)starttab,tablen);
   goodwrite *= writetab(outf,(unsigned int32 *)lengthtab,tablen);
  longstoimage_close:
