@@ -174,8 +174,9 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     case 1: /* just the size */
       {
         if(A_FLOAT!=argv->a_type)return 1;
-        size=atom_getint(argv);
-        if(size<0)return 2;
+        int ssize=atom_getint(argv);
+        if(ssize<0)return 2;
+        size=ssize;
       }
       break;
     case 2: /* x*y; assume GL_RGBA */
