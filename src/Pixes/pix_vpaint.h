@@ -70,7 +70,6 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
 		void	init();
 		int		m_initialized;
 		int		maxPoints, numPoints, viewImage, useStrokes, drawEdges, moving, canDrawEdges;
-		int		mouseX, mouseY, lastX, lastY, sampleMenu, strokeMenu;
 
 		/*
 		* Point structure

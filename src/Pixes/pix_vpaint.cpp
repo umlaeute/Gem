@@ -38,12 +38,15 @@ CPPEXTERN_NEW(pix_vpaint);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_vpaint :: pix_vpaint()
-    	  : m_initialized(0), maxPoints(2048), numPoints(0),
-		    viewImage(0), useStrokes(1), drawEdges(0), moving(0), m_banged(false)
+pix_vpaint :: pix_vpaint(void) :
+  m_initialized(0), maxPoints(2048), numPoints(0),
+  viewImage(0), useStrokes(1), drawEdges(0), moving(0), canDrawEdges(false),
+  m_pbuffer(0),
+  m_x(0), m_y(0),
+  m_w(128), m_h(128),
+  m_banged(false),
+  m_sizinlet(0)
 {
-  m_w = m_h = 128;
-
   m_sizinlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
 }
 
