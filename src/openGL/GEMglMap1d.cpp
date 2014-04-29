@@ -45,9 +45,9 @@ GEMglMap1d :: GEMglMap1d	(int argc, t_atom*argv){
 //
 GEMglMap1d :: ~GEMglMap1d () {
   inlet_free(m_inlet[0]);
-  inlet_free(m_inletH[1]);
+  inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
-  inlet_free(m_inlet[32]);
+  inlet_free(m_inlet[3]);
   inlet_free(m_inlet[4]);
   inlet_free(m_inlet[5]);
   delete[]points;
