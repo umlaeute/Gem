@@ -356,7 +356,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
         Plaum: "Relying on a constant framerate is not good."
         m_fps_denum and m_fps_num are set only once!
       */
-      int64_t seekposOrg = imgNum*m_fps_denum;
+      int64_t seekposOrg = (int64_t)imgNum*(int64_t)m_fps_denum;
       int64_t seekpos = seekposOrg;
 
 #if 0
