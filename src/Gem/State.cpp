@@ -233,9 +233,9 @@ bool GemState::get(const GemState::key_t key, any&value) {
     if(key==_PIX) { value=image; return true; }
     if(key==_GL_TEX_NUMCOORDS) { value=numTexCoords; return true; }
 
-
     return false; // FIXXME
 
+#if 0
     if(key==_DIRTY) { value=dirty; return true; }
     if(key==_GL_DISPLAYLIST) { value=inDisplayList; return true; }
 
@@ -246,6 +246,7 @@ bool GemState::get(const GemState::key_t key, any&value) {
     if(key==_GL_TEX_UNITS) { value=multiTexUnits; return true; }
     if(key==_TIMING_TICK) { value=tickTime; return true; }
     if(key==_GL_DRAWTYPE) { value=drawType; return true; }
+#endif
 
 #if 0
     //if(key==GemState::_GL_STACKS) { value=stackDepth[4]; return true; }
