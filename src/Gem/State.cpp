@@ -162,6 +162,7 @@ GemState::GemState(const GemState&org) :
   multiTexUnits(org.multiTexUnits),
   tickTime(org.tickTime),
   drawType(org.drawType),
+  VertexDirty(org.VertexDirty),
   VertexArray(org.VertexArray),
   VertexArraySize(org.VertexArraySize),
   VertexArrayStride(org.VertexArrayStride),
