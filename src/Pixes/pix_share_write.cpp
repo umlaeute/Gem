@@ -59,12 +59,17 @@ int hash_str2us(std::string s) {
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_share_write :: pix_share_write(int argc, t_atom*argv)
+pix_share_write :: pix_share_write(int argc, t_atom*argv) :
 #ifdef _WIN32
 #else
-  : shm_id(0), shm_addr(NULL)
+  shm_id(0), shm_addr(NULL),
 #endif
+  m_size(0),
+  m_outlet(0)
 {
+#ifndef _WIN32
+  memset(&shm_desc, 0, sizeof(shm_desc));
+#endif
   if(argc<1){
     //~ throw(GemException("no ID given"));
   } else {
