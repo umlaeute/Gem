@@ -113,6 +113,7 @@ pix_share_write :: pix_share_write(int argc, t_atom*argv) :
 pix_share_write :: ~pix_share_write()
 {
   freeShm();
+  outlet_free(m_outlet);
 }
 
 
