@@ -797,7 +797,7 @@ void pix_mano :: processGrayImage(imageStruct &image)  {
                   xcoord = image.csize * xcount + ycoord;
                   base[chGray + xcoord] = 255;
                   ycount = temp_y;
-                  for (xcount = temp_x; xcount < contourx[c-1]; xcount--) { //from old origin to new origin,
+                  for (xcount = temp_x; xcount < contourx[c-1]; xcount++) { //from old origin to new origin,
                     ycoord = image.csize * xsize * ycount;  xcoord = image.csize * xcount + ycoord;
                     base[chGray + xcoord] = 0; //make them all black
                   }
