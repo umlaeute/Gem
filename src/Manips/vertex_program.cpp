@@ -41,6 +41,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 vertex_program :: vertex_program() :
   m_programType(GEM_PROGRAM_none),
+  m_programTarget(0),
   m_programID(0),
   m_programString(NULL), m_size(0),
   m_buf(NULL),
