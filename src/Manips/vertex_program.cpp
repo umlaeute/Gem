@@ -127,7 +127,7 @@ void vertex_program :: openMess(t_symbol *filename)
 
   // Clean up any open files
   closeMess();
-  std::string fn = findFile(filename->s_name);
+  std::string fn = std::string(findFile(filename->s_name));
   m_buf=fn.c_str();
 
   FILE *file = fopen(m_buf,"rb");
