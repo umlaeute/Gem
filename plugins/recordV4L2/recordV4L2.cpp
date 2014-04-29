@@ -47,7 +47,9 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 /////////////////////////////////////////////////////////
 
 recordV4L2 :: recordV4L2(void): 
-  m_fd(-1)
+  m_fd(-1),
+  m_init(false),
+  m_palette(0)
 {
   m_image.xsize=720;
   m_image.xsize=576;
