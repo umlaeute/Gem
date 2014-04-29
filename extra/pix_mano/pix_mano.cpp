@@ -1013,8 +1013,8 @@ void pix_mano :: processGrayImage(imageStruct &image)  {
             xval_int  +=  (int) partialx[i];
             yval_int  +=  (int) partialy[i];
           }
-          hx =  (xval_int / n); // + e_ctrx[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
-          hy =  (yval_int / n); // + e_ctry[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
+          hx =  n?(xval_int / n):0; // + e_ctrx[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
+          hy =  n?(yval_int / n):0; // + e_ctry[tempint2]) / 2 ; // * (e_size[tempint2] / 3))) / (n + (e_size[tempint2] / 3));
           // ******* Determine TOTAL HAND AREA
           hand_area = (float) h / (float) tot_area;
           // ******* find HAND DIRECTION
