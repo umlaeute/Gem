@@ -447,8 +447,13 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     }
   case 2:
     if((A_FLOAT==argv->a_type) && (A_FLOAT==(argv+1)->a_type)) {
-      x=(unsigned int)atom_getint(argv);
-      y=(unsigned int)atom_getint(argv+1);
+      int i=atom_getint(argv);
+      if(i<0) {	error("invalid dimenstions: x=%d < 0", i); return; }
+      x=(unsigned int)i;
+
+      i=atom_getint(argv+1);
+      if(i<0) {	error("invalid dimenstions: y=%d < 0", i); return; }
+      y=(unsigned int)i;
     } else {
       error("invalid dimensions!");
       return;
@@ -456,7 +461,9 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     break;
   case 1:
     if(A_FLOAT==argv->a_type) {
-      x=(unsigned int)atom_getint(argv);
+      int i=atom_getint(argv);
+      if(i<0) {	error("invalid dimenstions: x=%d < 0", i); return; }
+      x=(unsigned int)i;
       y=1;
       c=1;
     } else {
@@ -469,7 +476,7 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     return;
   }
 
-  if (x<1 || y<1 || c<0){
+  if (x<1 || y<1){
     error("init-specs out of range");
     return;
   }
