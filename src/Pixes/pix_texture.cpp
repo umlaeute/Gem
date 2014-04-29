@@ -255,7 +255,6 @@ void pix_texture :: render(GemState *state) {
   pushTexCoords(state);
 
   if(!m_textureOnOff)return;
-  if(!state)return;
 
   bool upsidedown=false;
   bool normalized=true;
