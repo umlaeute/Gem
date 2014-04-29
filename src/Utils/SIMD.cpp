@@ -7,7 +7,16 @@
 int GemSIMD::cpuid = GEM_SIMD_NONE;
 int GemSIMD::realcpuid = GEM_SIMD_NONE;
 
-
+namespace {
+  static void addArch(std::string&archs, const std::string&arch) {
+    if(archs.empty())
+      archs=arch;
+    else {
+      archs+="/";
+      archs+=arch;
+    }
+  }
+};
 
 GemSIMD :: GemSIMD(void)
 {
@@ -17,19 +26,16 @@ GemSIMD :: GemSIMD(void)
  std::string compiledstr;
 
 #ifdef __MMX__
- if(compiledarchs>0)compiledstr+="/";
- compiledstr+="MMX";
+ addArch(compiledstr, "MMX");
  compiledarchs++;
 #endif
 #ifdef __SSE2__
- if(compiledarchs>0)compiledstr+="/";
- compiledstr+="SSE2";
+ addArch(compiledstr, "SSE2");
  compiledarchs++;
 #endif
 
 #ifdef __VEC__
- if(compiledarchs>0)compiledstr+="/";
- compiledstr+="AltiVec";
+ addArch(compiledstr, "AltiVec");
  compiledarchs++;
 #endif
 
