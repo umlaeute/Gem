@@ -28,11 +28,11 @@ public:
     *refcount=1;
   }
   PIMPL(const PIMPL&org) : mutex(org.mutex), cond(org.cond), refcount(org.refcount) {
-    *refcount++;
+    (*refcount)++;
   }
 
   ~PIMPL(void) {
-    *refcount--;
+    (*refcount)--;
     if(0==*refcount) {
       if(mutex) {
         pthread_mutex_destroy(mutex);
