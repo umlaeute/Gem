@@ -382,7 +382,7 @@ void pix_texture :: render(GemState *state) {
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
-      m_imagebuf.fromYUV422(img->image.data);
+      if(img)m_imagebuf.fromYUV422(img->image.data);
     }
     if (normalized) {
       m_buffer.xsize = m_imagebuf.xsize;
