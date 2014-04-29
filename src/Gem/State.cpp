@@ -172,7 +172,7 @@ GemState::GemState(const GemState&org) :
   HaveNormalArray(org.HaveNormalArray),
   TexCoordArray(org.TexCoordArray),
   HaveTexCoordArray(org.HaveTexCoordArray),
-  data(NULL)
+  data(new GemStateData())
 {
   data->copyFrom(org.data);
 }
