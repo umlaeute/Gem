@@ -505,7 +505,7 @@ void pix_texture :: render(GemState *state) {
         img->newfilm = 0;
       }
 
-      if(m_pbo) {
+      if(m_pbo && m_numPbo) {
         m_curPbo=(m_curPbo+1)%m_numPbo;
         int index=m_curPbo;
         int nextIndex=(m_curPbo+1)%m_numPbo;
