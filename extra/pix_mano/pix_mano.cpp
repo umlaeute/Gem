@@ -148,6 +148,11 @@ CPPEXTERN_NEW(pix_mano)
 // Constructor
 // #####################################################
 pix_mano :: pix_mano() :
+  outlet1(0), outlet2(0), outlet3(0), outlet4(0), outlet5(0), outlet6(0), outlet7(0),
+  head(0), bottom(240), mode(0), left(0), right(0), pixtip(0), min_entry_size(10), min_perim(50),
+  pixsamp(4), pixavg(20),
+  thresh(0.f), tip_scalar(0.4f),
+  prev_tip(0),
   m_pimpl(new PIMPL())
 {
   post("pix_mano v0.02 2012-10-15");
@@ -161,20 +166,11 @@ pix_mano :: pix_mano() :
   outlet5 = outlet_new(this->x_obj, gensym("list"));
   outlet6 = outlet_new(this->x_obj, gensym("list"));
   outlet7 = outlet_new(this->x_obj, gensym("list"));
-  thresh = 0;
-  tip_scalar = 0.4;
-  head = mode = 0;
-  bottom = 240;
-  min_entry_size = 10;
-  min_perim = 50;
-  pixsamp = 4;
-  pixavg = 20;
   int i;
   for (i=0; i<50; i++) {
     tp_i[i] = i;
     tp_x[i] = tp_y[i] = tp_m[i] = tp_a[i] = tp_s[i] = 0;
   }
-  prev_tip = 0;
 }
 
 // #####################################################
