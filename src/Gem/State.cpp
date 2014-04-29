@@ -325,12 +325,12 @@ const GemState::key_t GemState::getKey(const std::string&s) {
 
   std::map<std::string, int>::iterator it =  GemStateData::keys.find(s);
 
-  if(it == GemStateData::keys.end()) {
+  if(it != GemStateData::keys.end()) {
     result=(key_t)it->second;
   } else {
+    /* add a new key */
     result=(key_t)GemStateData::keys.size();
     GemStateData::keys[s]=result;
   }
-
   return result;
 }
