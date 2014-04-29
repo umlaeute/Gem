@@ -77,7 +77,8 @@ namespace gem { namespace thread {
                             keeprunning(true), isrunning(false),
                             m_todo(Mutex()), m_done(Mutex()),
                             s_newdata(Semaphore()),
-                            processingID(WorkerThread::INVALID)
+                            processingID(WorkerThread::INVALID),
+                            p_thread(0)
     {
       pthread_mutex_init(&p_runmutex, 0);
       pthread_cond_init (&p_runcond , 0);
