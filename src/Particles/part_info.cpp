@@ -44,6 +44,12 @@ part_info :: part_info()
   out_vel = outlet_new(this->x_obj, 0);
   out_siz = outlet_new(this->x_obj, 0);
   out_age = outlet_new(this->x_obj, 0);
+
+  unsigned int i;
+  const unsigned int alistsize=sizeof(m_alist)/sizeof(*m_alist);
+  for(i=0; i<alistsize; i++) {
+    SETFLOAT(m_alist+i, 0.f);
+  }
 }
 
 /////////////////////////////////////////////////////////
