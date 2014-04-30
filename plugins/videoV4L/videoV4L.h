@@ -116,10 +116,8 @@ namespace gem { namespace plugins {
 
   struct video_tuner vtuner;
   struct video_picture vpicture;
-  struct video_buffer vbuffer;
   struct video_capability vcap;
   struct video_channel vchannel;
-  struct video_audio vaudio;
   struct video_mbuf vmbuf;
   struct video_mmap vmmap[V4L_NBUF];
   int tvfd;

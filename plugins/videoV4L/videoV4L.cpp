@@ -97,9 +97,15 @@ videoV4L :: videoV4L() : videoBase("v4l")
   errorcount(0)
 {
   unsigned int i;
+  memset(&vtuner,   0, sizeof(vtuner));
+  memset(&vpicture, 0, sizeof(vpicture));
+  memset(&vcap,     0, sizeof(vcap));
+  memset(&vchannel, 0, sizeof(vchannel));
+  memset(&vmbuf,    0, sizeof(vmbuf));
   for(i=0; i<V4L_NBUF; i++) {
     memset(vmmap+i, 0, sizeof(vmmap[i]));
   }
+
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 
