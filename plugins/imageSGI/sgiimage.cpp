@@ -263,8 +263,9 @@ unsigned int32 *longimagedata(const char *name)
   unsigned int32 *starttab=NULL, *lengthtab=NULL;
   FILE *inf=NULL;
   IMAGE *image=NULL;
-  int y, z, tablen;
-  int xsize, ysize, zsize;
+  int y, z;
+  unsigned long tablen;
+  unsigned short xsize, ysize, zsize;
   int bpp, rle, badorder;
   unsigned int rlebuflen;
   unsigned int cur;
