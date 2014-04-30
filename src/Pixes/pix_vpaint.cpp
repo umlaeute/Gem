@@ -41,6 +41,7 @@ CPPEXTERN_NEW(pix_vpaint);
 pix_vpaint :: pix_vpaint(void) :
   m_initialized(0), maxPoints(2048), numPoints(0),
   viewImage(0), useStrokes(1), drawEdges(0), moving(0), canDrawEdges(false),
+  points(0),
   m_pbuffer(0),
   m_x(0), m_y(0),
   m_w(128), m_h(128),

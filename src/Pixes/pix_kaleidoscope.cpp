@@ -29,6 +29,7 @@ CPPEXTERN_NEW(pix_kaleidoscope);
 /////////////////////////////////////////////////////////
 pix_kaleidoscope :: pix_kaleidoscope() :
   nWidth(0), nHeight(0),
+  hAngleTable(0), hCosTable(0), hLines(0),
   nMaxLines(128),
   pSource(0), pOutput(0),
   m_Divisions(7.0f),
