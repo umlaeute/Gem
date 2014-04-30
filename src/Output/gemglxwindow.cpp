@@ -250,8 +250,8 @@ struct gemglxwindow::PIMPL {
 
     if (fullscreen){
       if (!display.empty()){
-        throw(GemException("fullscreen not available on remote display"));
         fullscreen=false;
+        throw(GemException("fullscreen not available on remote display"));
       } else {
 #ifdef HAVE_LIBXXF86VM
         XF86VidModeGetAllModeLines(dpy, screen, &modeNum, &modes);
