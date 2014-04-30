@@ -179,6 +179,7 @@ struct gemglxwindow::PIMPL {
     fs(0),
     dpy(NULL),
     win(0),
+    screen(0),
     cmap(0),
     context(NULL),
     delete_atom(0),
