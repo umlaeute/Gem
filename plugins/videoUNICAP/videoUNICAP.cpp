@@ -708,7 +708,8 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
     }
 
     unicap_property_t prop;
-    strncpy(prop.identifier, key.c_str(), 128);
+    strncpy(prop.identifier, key.c_str(), 127);
+    prop.identifier[127]=0;
     status=unicap_get_property(m_handle, &prop );
 
     if(SUCCESS(status)) {
@@ -731,7 +732,8 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
             status= unicap_set_property(m_handle, &prop );
           }
         } else if (props.get(key, s)) {
-          strncpy(prop.menu_item, s.c_str(), 128);
+          strncpy(prop.menu_item, s.c_str(), 127);
+	  prop.menu_item[127]=0;
           status= unicap_set_property(m_handle, &prop );
         }
         break;
