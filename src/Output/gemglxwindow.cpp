@@ -132,15 +132,17 @@ static int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
   // we don't really care about the error
   // let's hope for the best
-  if(event)
+  if(event) {
     xerr=event->error_code;
 
-  if ( event->error_code != BadWindow ) {
-    char buf[256];
-    XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
-    error("Xwin: %s\n", buf);
-  } else
-    error("Xwin: BadWindow (%d)\n", xerr);
+    if ( xerr != BadWindow ) {
+      char buf[256];
+      XGetErrorText (dpy, xerr, buf, sizeof(buf));
+      error("Xwin: %s\n", buf);
+    } else {
+      error("Xwin: BadWindow (%d)\n", xerr);
+    }
+  }
   return (0);
 }
 
