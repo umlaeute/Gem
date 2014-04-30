@@ -417,6 +417,7 @@ unsigned int32 *longimagedata(const char *name)
       for(z=0; z<zsize; z++)
         {
           lptr = base;
+	  /* coverity[tainted_data] */
           for(y=0; y<ysize; y++)
             {
               size_t count = fread(verdat,xsize,1,inf);
