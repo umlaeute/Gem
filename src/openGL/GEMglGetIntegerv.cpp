@@ -24,7 +24,10 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGetIntegerv );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) {
+GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) :
+  pname(0),
+  m_inlet(0), m_outlet(0)
+{
   unsigned int i;
   unsigned int alistlen=sizeof(m_alist)/sizeof(*m_alist);
   for(i=0; i<alistlen; i++)SETFLOAT(m_alist+i, 0.);
