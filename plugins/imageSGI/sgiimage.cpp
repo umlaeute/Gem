@@ -280,6 +280,12 @@ unsigned int32 *longimagedata(const char *name)
     {
       goto error;
     }
+  switch(image->zsize) {
+  case 4: case 3: case 1:
+    break;
+  default:
+    goto error;
+  }
   rle = ISRLE(image->type);
   bpp = BPP(image->type);
   if(bpp != 1 )
@@ -573,6 +579,14 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   unsigned char *rlebuf;
   unsigned int32 *lumbuf;
   int rlebuflen, goodwrite=0;
+
+  switch(zsize) {
+  case 4: case 3: case 1:
+    break;
+  default:
+    printf("longstoimage: invalid zsize %d (must be 1,3 or 4)\n");
+    return 0;
+  }
 
   goodwrite = 1;
   outf = fopen(name,"wb");
