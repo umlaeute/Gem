@@ -28,8 +28,17 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(rubber, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 //
 /////////////////////////////////////////////////////////
 rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
-  : GemShape(1.0), m_height(0.0), m_speed(0), m_grab(-1),
-    m_alreadyInit(0), m_springKS(0.3), m_drag(0.5), m_mass(NULL), m_spring(NULL)
+  : GemShape(1.0),
+    ctrX(0.f), ctrY(0.f),
+    m_height(0.0),
+    m_inletH(0), inletcX(0), inletcY(0),
+    m_speed(0), m_grab(-1),
+    m_alreadyInit(0),
+    m_springKS(0.3), m_drag(0.5),
+    xsize(0.), ysize(0.), ysize0(0.),
+    m_grid_sizeX(GRID_SIZE_X), m_grid_sizeY(GRID_SIZE_Y),
+    m_mass(NULL), m_spring(NULL),
+    m_spring_count(0)
 {
   int gridXi=static_cast<int>(gridX);
   int gridYi=static_cast<int>(gridY);
