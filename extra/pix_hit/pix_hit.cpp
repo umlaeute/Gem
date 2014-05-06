@@ -64,7 +64,7 @@ unsigned char pix_hit :: getGreyValue(GLenum format, unsigned char *data)
       break;
       // YUV
     case(GL_YCBCR_422_GEM):
-      return data[chY1];
+      return data[chY0];
       break;
       // RGB, RGBA
     case(GL_RGB): case (GL_RGBA): case (GL_BGRA_EXT):
