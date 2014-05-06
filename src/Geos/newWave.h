@@ -54,7 +54,6 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // The height of the object
   int		gridX, gridY;
-  short		size, mode, speed;
   void	    heightMess(float size);
   void		modeMess(int mode);
   void		forceMess(float posX, float posY, float valforce);
@@ -127,8 +126,6 @@ class GEM_EXTERN newWave : public GemShape
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
 
   float texCoords[MAXGRID][MAXGRID][2];
-
-  bool m_upsidedown;
 };
 
 #endif	// for header file
