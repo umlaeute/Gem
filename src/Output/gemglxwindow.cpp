@@ -398,17 +398,16 @@ struct gemglxwindow::PIMPL {
         XFree(stylePtr);
       }
 
-
       if (style & XIMPreeditPosition) {
         XPoint spot = {0, 0};
         XFontSet inputXfs;
+        memset(&inputXfs, 0, sizeof(inputXfs));
         preedit_attname = XNPreeditAttributes;
         preedit_attlist = XVaCreateNestedList(0,
                                               XNSpotLocation, &spot,
                                               XNFontSet, inputXfs,
                                               NULL);
       }
-
 
       inputContext=XCreateIC(inputMethod,
                                       XNInputStyle, style,
