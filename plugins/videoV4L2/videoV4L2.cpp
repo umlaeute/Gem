@@ -1085,13 +1085,17 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	default:
 	  continue;
 	}
-	xioctl(m_tvfd, VIDIOC_S_STD, &stdid);
+	if(0 != xioctl(m_tvfd, VIDIOC_S_STD, &stdid)) {
+	  perror("v4l2: unable to set standard");
+	}
 
       } else if("channel" == key) {
 	double ch;
 	if(props.get("channel", ch)) {
 	  int channel=ch;
-	  xioctl(m_tvfd, VIDIOC_S_INPUT, &channel);
+	  if(0 != xioctl(m_tvfd, VIDIOC_S_INPUT, &channel)) {
+	    perror("v4l2: unable to set channel");
+	  }
 	}
       } else if("frequency" == key) {
       } else if("width" == key) {
