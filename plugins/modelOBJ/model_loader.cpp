@@ -2266,12 +2266,13 @@ glmReadPPM(const char* filename, int* width, int* height)
   }
 
   /* grab all the image data in one fell swoop. */
-  if(w>0 && w<65536 && h>0 && h<65536)
+  if(w>0 && w<65536 && h>0 && h<65536) {
     /* coverity[tainted_data] we have to trust the image file... */
     imagesize=w*h*3;
-  else
+  } else {
+    fclose(fp);
     return NULL;
-
+  }
   image = new unsigned char[imagesize];
   size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
