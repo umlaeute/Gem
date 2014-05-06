@@ -314,8 +314,8 @@ bool videoUNICAP :: start(void)
   unicap_format_t format_spec;
   unicap_void_format( &format_spec );
 
-  int default_format=0 ;
-  int default_size=-1;
+  int default_format=-1;
+  int default_size=0;
 
   unsigned int count_format=0;
 
