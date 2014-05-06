@@ -99,10 +99,10 @@ class GEM_EXTERN vertex_program : public GemBase
   GLuint    m_programType;
 
   GLuint 	m_programTarget;
-  GLuint    m_programID;
+  GLuint        m_programID;
   char*		m_programString;
   size_t	m_size;
-  const char		*m_buf;
+  std::string   m_buf;
 
   float		m_param[4];
   int	        m_envNum;
