@@ -585,7 +585,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   case 4: case 3: case 1:
     break;
   default:
-    printf("longstoimage: invalid zsize %d (must be 1,3 or 4)\n");
+    printf("longstoimage: invalid zsize %d (must be 1,3 or 4)\n", zsize);
     return 0;
   }
 
