@@ -2230,7 +2230,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   FILE* fp;
   int i, w, h, d;
   unsigned char* image;
-  size_t imagesize=0;
+  unsigned long imagesize=0;
   char head[70];          /* max line <= 70 in PPM (per spec). */
 
   fp = fopen(filename, "rb");
