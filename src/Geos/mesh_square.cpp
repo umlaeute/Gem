@@ -29,10 +29,19 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(mesh_square, t_floatarg, A_DEFFLOAT, t_floatarg, A_D
 //
 /////////////////////////////////////////////////////////
 mesh_square :: mesh_square(t_floatarg sizeX, t_floatarg sizeY)
-        : GemShape(1)
+  : GemShape(1),
+    gridX(0), gridY(0),
+    xsize(0), xsize0(0), ysize(0), ysize0(0),
+    alreadyInit(0)
 {
   int sizeXi=static_cast<int>(sizeX);
   int sizeYi=static_cast<int>(sizeY);
+
+  for ( int i = 0; i < MAXGRID; ++i)
+    for ( int j = 0; j < MAXGRID; ++j) {
+      texCoords[i][j][0] = ((1.*i)/(MAXGRID-1.));
+      texCoords[i][j][1] = ((1.*j)/(MAXGRID-1.));
+    }
   setSize(sizeXi,sizeYi);
 }
 
