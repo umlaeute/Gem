@@ -71,6 +71,7 @@ using namespace gem::plugins;
 #ifdef HAVE_VIDEO4LINUX2
 
 #include <sys/stat.h>
+#include <string.h>
 
 REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 
@@ -87,6 +88,7 @@ videoV4L2 :: videoV4L2() : videoBase("v4l2", 0)
                                      m_stopTransfer(false),
                                      m_frameSize(0)
 {
+  memset(&m_caps, 0, sizeof(m_caps));
   if (!m_width)m_width=320;
   if (!m_height)m_height=240;
   m_capturing=false;
