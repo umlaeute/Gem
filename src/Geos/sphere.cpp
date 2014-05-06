@@ -61,8 +61,8 @@ sphere :: ~sphere()
 void sphere :: createSphere(GemState *state)
 {
    // GLdouble radius=m_size;
-    GLint slices=m_numSlices;
-    GLint stacks=m_numSlices;
+    GLint slices=(m_numSlices>0)?m_numSlices:10;
+    GLint stacks=(m_numStacks>0)?m_numStacks:10;
 
     GLfloat rho, drho, theta, dtheta;
     GLfloat s, t, ds, dt;
@@ -230,8 +230,8 @@ void sphere :: createSphere(GemState *state)
 void sphere :: render(GemState *state)
 {
   GLdouble radius=m_size;
-  GLint slices=m_numSlices;
-  GLint stacks=m_numSlices;
+  GLint slices=(m_numSlices>0)?m_numSlices:10;
+  GLint stacks=(m_numStacks>0)?m_numStacks:10;
 
   GLfloat rho, drho, dtheta;
   GLfloat s, t, ds, dt;
