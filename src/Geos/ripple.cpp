@@ -266,7 +266,9 @@ void ripple :: ripple_dynamics(void)
           sy = 1.0;
         mi = x;
         mj = y;
+	/* coverity[dead_error_line] <0 is a safety check (even if it never triggers) */
         if(mi<0)mi=0;if(mi>=m_gridX)mi=m_gridX-1;
+	/* coverity[dead_error_line] <0 is a safety check (see above) */
         if(mj<0)mj=0;if(mj>=m_gridY)mj=m_gridY-1;
 
         r = m_t[k] - m_rippleVector[mi][mj].r;
