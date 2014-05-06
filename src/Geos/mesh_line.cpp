@@ -29,9 +29,18 @@ CPPEXTERN_NEW_WITH_ONE_ARG(mesh_line, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 mesh_line :: mesh_line(t_floatarg sizeX)
-        : GemShape(1)
+  : GemShape(1),
+    xsize(0.), xsize0(0.),
+    alreadyInit(0)
 {
   int sizeXi=static_cast<int>(sizeX);
+
+  for ( int i = 0; i < MAXGRID; ++i)
+    for ( int j = 0; j < MAXGRID; ++j) {
+      texCoords[i][j][0] = ((1.*i)/(MAXGRID-1.));
+      texCoords[i][j][1] = ((1.*j)/(MAXGRID-1.));
+    }
+
   setGrid(sizeXi);
 }
 
