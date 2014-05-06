@@ -352,9 +352,13 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
 
   m_handle->getProperties(gotProps);
 
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("width", width);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("height", height);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("frames", frames);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("fps", fps);
 
   t_atom ap[4];
