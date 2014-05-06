@@ -213,31 +213,35 @@ void gemframebuffer :: postrender(GemState *state)
   outlet_list(m_outTexInfo, 0, 5, ap);
 }
 
+namespace {
+  const std::string getFormatString(int fmt){
+    std::string format;
+    switch(fmt) {
+    case GL_YUV422_GEM: format="YUV"; break;
+    case GL_RGB: format="RGB"; break;
+    case GL_RGBA: format="RGBA"; break;
+    case GL_BGRA: format="BGRA"; break;
+    case GL_RGB_FLOAT32_ATI: format="RGB32"; break;
+    default: format="<unknown>";
+    }
+    return format;
+  };
+};
 void gemframebuffer :: printInfo()
 {
-  std::string format, internalformat;
-  switch(m_format) {
-  case GL_YUV422_GEM: format="YUV"; break;
-  case GL_RGB: format="RGB"; break;
-  case GL_RGBA: format="RGBA"; break;
-  case GL_BGRA: format="BGRA"; break;
-  case GL_RGB_FLOAT32_ATI: format="RGB32"; break;
-  default: format="<unknown>";
-  }
-  switch(m_internalformat) {
-  case GL_YUV422_GEM: internalformat="YUV"; break;
-  case GL_RGB: internalformat="RGB"; break;
-  case GL_RGBA: internalformat="RGBA"; break;
-  case GL_BGRA: internalformat="BGRA"; break;
-  case GL_RGB_FLOAT32_ATI: internalformat="RGB32"; break;
-  default: internalformat="<unknown>";
-  }
-  std::string rectangle;
-  int rect=(m_rectangle?m_canRectangle:GL_TEXTURE_2D);
-  if(GL_TEXTURE_2D==rect)   rectangle="2D";
-  else if(GL_TEXTURE_RECTANGLE_ARB==rect)rectangle="RECTANGLE(ARB)";
-  else if(GL_TEXTURE_RECTANGLE_EXT==rect)rectangle="RECTANGLE(EXT)";
+  std::string format = getFormatString(m_format);
+  std::string internalformat = getFormatString(m_internalformat);
 
+  std::string rectangle;
+  switch(m_rectangle?m_canRectangle:GL_TEXTURE_2D) {
+  case GL_TEXTURE_2D:            rectangle="2D";             break;
+  case GL_TEXTURE_RECTANGLE_ARB: rectangle="RECTANGLE(ARB)"; break;
+#if 0
+    /* TR_ARB == TR_EXT for all practical purposes */
+  case GL_TEXTURE_RECTANGLE_EXT: rectangle="RECTANGLE(EXT)"; break;
+#endif
+  default:                       rectangle="<unknown>";
+  }
 
   std::string type;
   switch(m_type) {
