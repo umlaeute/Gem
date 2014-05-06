@@ -68,6 +68,7 @@ void sphere :: createSphere(GemState *state)
     GLfloat s, t, ds, dt;
     GLint i, j, imin, imax;
     GLenum orientation = true; /* GLU_INSIDE; */
+    /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
     GLfloat nsign = (orientation)?-1.0:1.0;
 
     GLfloat xsize = 1.0, xsize0 = 0.0;
@@ -236,6 +237,7 @@ void sphere :: render(GemState *state)
   GLfloat s, t, ds, dt;
   GLint i, j, imin, imax;
   GLenum orientation = true; /* GLU_INSIDE; */
+  /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
   GLfloat nsign = (orientation)?-1.0:1.0;
 
   int src=0;
