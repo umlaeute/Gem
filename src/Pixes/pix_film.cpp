@@ -166,7 +166,9 @@ void *pix_film :: grabThread(void*you)
     gem::thread::usleep(100);
   }
 
+  pthread_mutex_lock  (me->m_mutex);
   me->m_thread_running=false;
+  pthread_mutex_unlock(me->m_mutex);
   return NULL;
 }
 #endif
