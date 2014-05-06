@@ -2230,6 +2230,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   FILE* fp;
   int i, w, h, d;
   unsigned char* image;
+  size_t imagesize=0;
   char head[70];          /* max line <= 70 in PPM (per spec). */
 
   fp = fopen(filename, "rb");
@@ -2265,10 +2266,16 @@ glmReadPPM(const char* filename, int* width, int* height)
   }
 
   /* grab all the image data in one fell swoop. */
-  image = new unsigned char[w*h*3];
-  size_t count = fread(image, sizeof(unsigned char), w*h*3, fp);
+  if(w>0 && w<65536 && h>0 && h<65536)
+    /* coverity[tainted_data] we have to trust the image file... */
+    imagesize=w*h*3;
+  else
+    return NULL;
+
+  image = new unsigned char[imagesize];
+  size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
-  if(count!=static_cast<size_t>(w*h*3)) {
+  if(count!=imagesize) {
     error("_glmReadPPM failed to read all bytes");
     *width=*height=0;
     delete[]image;
