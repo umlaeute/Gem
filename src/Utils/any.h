@@ -36,7 +36,7 @@ namespace gem
     { }
     virtual ~bad_any_cast(void) throw()
     { }
-    virtual const char* what(void) {
+    virtual const char* what(void) const throw() {
       return result.c_str();
     }
     const std::string result;
