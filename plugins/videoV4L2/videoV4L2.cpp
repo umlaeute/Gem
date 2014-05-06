@@ -37,9 +37,9 @@ using namespace gem::plugins;
 
 
 /* debugging helpers  */
-#define debugPost
-#define debugThread
-#define debugIOCTL 
+#define debugPost(...)   do {} while (0)
+#define debugThread(...) do {} while (0)
+#define debugIOCTL(...)  do {} while (0)
 
 #if 0
 # undef debugPost
