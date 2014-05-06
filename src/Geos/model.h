@@ -83,8 +83,6 @@ class GEM_EXTERN model : public GemBase
   bool m_loaded;
 
   gem::Properties m_properties;
-
-  float m_currentH, m_currentW;
 };
 
 #endif	// for header file
