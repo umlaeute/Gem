@@ -31,8 +31,8 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
     m_inletH(NULL), m_inletcX(NULL), m_inletcY(NULL),
     m_gridX(0), m_gridY(0),
     m_alreadyInit(false),
-    m_sizeX(0.f), m_sizeY(0.f), m_sizeY0(0.f)
-
+    m_sizeX(0.f), m_sizeY(0.f), m_sizeY0(0.f),
+    m_rippleMax(0.f)
 {
   int gridXi=static_cast<int>(gridX);
   int gridYi=static_cast<int>(gridY);
