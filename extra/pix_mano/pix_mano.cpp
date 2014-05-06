@@ -974,7 +974,7 @@ void pix_mano :: processGrayImage(imageStruct &image)  {
             diffx = tx - tx1;
             diffy = ty - ty1;
             avgcontx = ii?((tx - tx1) / ii):0;
-            avgconty = ii?((ty - ty1) / ii):0
+            avgconty = ii?((ty - ty1) / ii):0;
             //  post("avgx=%d, avgy=%d, i=%d, ii=%d, tx = %d, %d ty = %d, %d", diffx, diffy, i, ii, tx, tx1, ty, ty1);
             //  post("avgx=%d, avgy=%d, i=%d, ii=%d, tx = %d, %d ty = %d, %d", avgcontx, avgconty, i, ii, tx, tx1, ty, ty1);
             if (i % pixsamp == 0) { // sample filtered contour
