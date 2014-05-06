@@ -105,7 +105,7 @@ static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, int32 n);
 static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int32 cnt);
 static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int32 n);
 
-#define TAGLEN	(5)
+#define TAGLEN	(5UL)
 
 /*
  *	addlongimgtag - 
