@@ -21,6 +21,7 @@
 #include "Utils/PixPete.h"
 #include "pix_dot.h"
 #include <stdlib.h>
+#include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW(pix_dot);
 
@@ -553,9 +554,15 @@ void pix_dot :: yuv_init()
     int i;
     if(!initialized) {
         for(i=20; i<256; i++) {
+#if 0
 	  R2Y[i] =  static_cast<int>(0.257f*i);
 	  G2Y[i] =  static_cast<int>(0.504f*i);
 	  B2Y[i] =  static_cast<int>(0.098f*i);
+#else
+	  R2Y[i] =  static_cast<int>(RGB2GRAY_RED  *i)>>8;
+	  G2Y[i] =  static_cast<int>(RGB2GRAY_GREEN*i)>>8;
+	  B2Y[i] =  static_cast<int>(RGB2GRAY_BLUE *i)>>8;
+#endif
         }
         initialized = 1;
     }
