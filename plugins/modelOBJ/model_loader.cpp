@@ -2268,7 +2268,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   /* grab all the image data in one fell swoop. */
   if(w>0 && w<65536 && h>0 && h<65536) {
     /* coverity[tainted_data] we have to trust the image file... */
-    imagesize=w*h*3;
+    imagesize=(unsigned long)w*h*3;
   } else {
     fclose(fp);
     return NULL;
