@@ -327,9 +327,9 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 	m_csize = image.csize;
 
 	if(m_useScale){
-	  dot_size = static_cast<int>(8 * m_scale);
-	  dot_size = dot_size & 0xfe;
-	  if(dot_size==0)dot_size=2;
+	  dot_hsize =(static_cast<int>(8 * m_scale)) >> 1;
+	  if(dot_hsize<1)dot_hsize=1;
+	  dot_size = dot_hsize * 2;
 	  dots_width = m_xsize / dot_size;
 	  dots_height = m_ysize / dot_size;
 	} else {
@@ -401,9 +401,9 @@ void pix_dot :: processYUVImage(imageStruct &image)
         m_ysize = image.ysize;
 	m_csize = image.csize;
 
-        dot_size = static_cast<int>(8 * m_scale);
-        dot_size = dot_size & 0xfe;
-        dot_hsize = dot_size / 2;
+        dot_hsize = (static_cast<int>(8 * m_scale)) >> 1;
+        if(dot_hsize<1)dot_hsize=1;
+        dot_size = dot_hsize * 2;
         dots_width = m_xsize / dot_size;
         dots_height = m_ysize / dot_size;
 
@@ -466,9 +466,9 @@ void pix_dot :: processGrayImage(imageStruct &image)
         m_ysize = image.ysize;
 	m_csize = image.csize;
 
-        dot_size = static_cast<int>(8 * m_scale);
-        dot_size = dot_size & 0xfe;
-        dot_hsize = dot_size / 2;
+        dot_hsize = static_cast<int>(8 * m_scale) >> 1;
+        if(dot_hsize<1)dot_hsize=1;
+        dot_size = dot_hsize * 2;
         dots_width = m_xsize / dot_size;
         dots_height = m_ysize / dot_size;
 
