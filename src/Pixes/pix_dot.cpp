@@ -441,12 +441,8 @@ void pix_dot :: processYUVImage(imageStruct &image)
         sy = sampy[y];
         for ( x=0; x<dots_width; x++){
             sx = sampx[x];
-            //sx2 = sampx[x+1];
             luma  = ((src[sy*image.xsize+sx+1])>>SHIFT_Y1)&0xff;
-	    luma2 = ((src[sy*image.xsize+sx+1])>>SHIFT_Y2)&0xff;
-	    avgluma = (luma + luma2)>>1;
-            drawDotYUV(x, y, avgluma, dest);
-            //drawDot(x+1, y, luma2, dest);
+            drawDotYUV(x, y, luma, dest);
         }
     }
     image.data = myImage.data;
