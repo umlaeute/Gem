@@ -298,7 +298,7 @@ unsigned int32 *longimagedata(const char *name)
   zsize = image->zsize;
   if(rle)
     {
-      tablen = ysize*zsize*sizeof(int32);
+      tablen = (unsigned long)ysize*zsize*sizeof(int32);
       starttab = (unsigned int32 *)malloc(tablen);
       lengthtab = (unsigned int32 *)malloc(tablen);
       rlebuflen = static_cast<int32>(1.05*xsize+10);
