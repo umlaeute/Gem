@@ -275,6 +275,12 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
 
   set_depth( r, 0 );
   sum_leaf_centers( ft, r, width, height );
+  if(ft->total_leaf_count<1 || ft->black_leaf_count<1 || ft->white_leaf_count<1) {
+    //fprintf(stderr, "did not find any leafs (%d)!", ft->total_leaf_count);
+    r->flags |= LOST_SYMBOL_FLAG;
+    f->id = INVALID_FIDUCIAL_ID;
+    return;
+  }
   ft->average_leaf_size = ft->total_leaf_size / (double)(ft->total_leaf_count);
 
   all_x = (double)(ft->black_x_sum + ft->white_x_sum) / (double)(ft->black_leaf_count + ft->white_leaf_count);
