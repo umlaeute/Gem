@@ -4,7 +4,7 @@
  *
  *      This code should work on machines with any byte order.
  *
- *	Could someone make this run real fast using multiple processors 
+ *	Could someone make this run real fast using multiple processors
  *	or how about using memory mapped files to speed it up?
  *
  *				Paul Haeberli - 1991
@@ -49,7 +49,7 @@ typedef struct {
   unsigned short 	zsize;
   unsigned int32 	min;
   unsigned int32 	max;
-  unsigned int32	wastebytes;	
+  unsigned int32	wastebytes;
   char 		name[80];
   unsigned int32	colormap;
 
@@ -108,7 +108,7 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
 #define TAGLEN	(5UL)
 
 /*
- *	addlongimgtag - 
+ *	addlongimgtag -
  *		this is used to extract image data from core dumps.
  *
  */
@@ -223,7 +223,7 @@ static void readtab(FILE *inf, unsigned int32 *tab, int32 len)
 }
 
 /*
- *	sizeofimage - 
+ *	sizeofimage -
  *		return the xsize and ysize of an iris image file.
  *
  */
@@ -240,7 +240,7 @@ int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize)
   readheader(inf,&image);
   if(image.imagic != IMAGIC)
     {
-      fclose(inf); 
+      fclose(inf);
       return(0);
     }
   *xsize = image.xsize;
@@ -251,8 +251,8 @@ int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize)
 }
 
 /*
- *	longimagedata - 
- *		read in a B/W RGB or RGBA iris image file and return a 
+ *	longimagedata -
+ *		read in a B/W RGB or RGBA iris image file and return a
  *	pointer to an array of longs.
  *
  */
@@ -324,7 +324,7 @@ unsigned int32 *longimagedata(const char *name)
                 }
               cur = starttab[y+z*ysize];
             }
-          if(badorder) 
+          if(badorder)
             break;
         }
 
@@ -606,7 +606,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   lumbuf = (unsigned int32 *)malloc(xsize*sizeof(int32));
 
   memset(image,0,sizeof(IMAGE));
-  image->imagic = IMAGIC; 
+  image->imagic = IMAGIC;
   image->type = RLE(1);
   if(zsize>1)
     image->dim = 3;
@@ -689,7 +689,7 @@ static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, size_t n)
 static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int32 cnt)
 {
   unsigned char *iptr, *ibufend, *sptr, *optr;
-  short todo, cc;							
+  short todo, cc;
   int32 count;
 
   lbuf += z;
