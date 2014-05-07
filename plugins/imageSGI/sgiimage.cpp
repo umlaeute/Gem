@@ -264,7 +264,7 @@ unsigned int32 *longimagedata(const char *name)
   FILE *inf=NULL;
   IMAGE *image=NULL;
   int y, z;
-  unsigned long tablen;
+  unsigned long tablen, xysize;
   unsigned short xsize, ysize, zsize;
   int bpp, rle, badorder;
   unsigned int rlebuflen;
@@ -332,8 +332,9 @@ unsigned int32 *longimagedata(const char *name)
 	goto error;
       }
       cur = 512+2*tablen;
+      xysize=(unsigned long)xsize*(unsigned long)ysize;
       base = (unsigned int32 *)
-        malloc((xsize*ysize+TAGLEN)*sizeof(int32));
+        malloc((xysize+TAGLEN)*sizeof(int32));
       addlongimgtag(base,xsize,ysize);
 
   		if(badorder)
@@ -401,14 +402,14 @@ unsigned int32 *longimagedata(const char *name)
               lptr += xsize;
             }
         }
-      if(zsize == 3) 
-        setalpha((unsigned char *)base,xsize*ysize);
-      else if(zsize<3) 
-        copybw((int32 *)base,xsize*ysize);
+      if(zsize == 3)
+        setalpha((unsigned char *)base,xysize);
+      else if(zsize<3)
+        copybw((int32 *)base,xysize);
       goto success;
     } else {
       base = (unsigned int32 *)
-        malloc((xsize*ysize+TAGLEN)*sizeof(int32));
+        malloc((xysize+TAGLEN)*sizeof(int32));
       addlongimgtag(base,xsize,ysize);
       verdat = (unsigned char *)malloc(xsize);
       if(fseek(inf,512,SEEK_SET) < 0) {
@@ -434,10 +435,10 @@ unsigned int32 *longimagedata(const char *name)
               lptr += xsize;
             }
         }
-      if(zsize == 3) 
-        setalpha((unsigned char *)base,xsize*ysize);
-      else if(zsize<3) 
-        copybw((int32 *)base,xsize*ysize);
+      if(zsize == 3)
+        setalpha((unsigned char *)base,xysize);
+      else if(zsize<3)
+        copybw((int32 *)base,xysize);
       goto success;
     }
  error:
