@@ -99,9 +99,9 @@ typedef struct {
 #define CHANOFFSET(z)	(3-(z))	/* this is byte order dependent */
 
 static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z);
-static void setalpha(unsigned char *lptr, int32 n);
-static void copybw(int32 *lptr, int32 n);
-static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, int32 n); 
+static void setalpha(unsigned char *lptr, size_t n);
+static void copybw(int32 *lptr, size_t n);
+static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, size_t n);
 static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int32 cnt);
 static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int32 n);
 
@@ -468,7 +468,7 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
   }
 }
 
-static void copybw(int32 *lptr, int32 n)
+static void copybw(int32 *lptr, size_t n)
 {
   while(n>=8) {
     lptr[0] = 0xff000000+(0x010101*(lptr[0]&0xff));
@@ -488,7 +488,7 @@ static void copybw(int32 *lptr, int32 n)
   }
 }
 
-static void setalpha(unsigned char *lptr, int32 n)
+static void setalpha(unsigned char *lptr, size_t n)
 {
 #ifndef IRISGL
 	lptr +=3;
@@ -676,7 +676,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
 
 /* static utility functions for longstoimage */
 
-static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, int32 n) 
+static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, size_t n)
 {
   lumptr += CHANOFFSET(0);
   while(n--) {
