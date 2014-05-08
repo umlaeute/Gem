@@ -11,6 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Gem/GemConfig.h"
 
 #include "plugins/videoBase.h"
 #include "Gem/RTE.h"
