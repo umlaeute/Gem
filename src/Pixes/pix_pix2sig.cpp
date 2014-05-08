@@ -28,7 +28,11 @@ CPPEXTERN_NEW(pix_pix2sig);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_pix2sig :: pix_pix2sig() : m_data(NULL), m_size(0)
+pix_pix2sig :: pix_pix2sig(void) :
+  m_data(NULL),
+  m_size(0),
+  m_csize(4),
+  m_format(GL_RGBA_GEM)
 {
   int i=4;
   while(i--)
@@ -84,12 +88,16 @@ t_int* pix_pix2sig :: perform(t_int* w)
     scale0 = scale1 = scale2 = scale3 = 1./255.;
     int csize=x->m_csize;
     switch (csize){
+    /* coverity[unterminated_default] */
     default:
       scale3=1./255.;
+    /* coverity[unterminated_case] */
     case 3:
       scale2=1./255.;
+    /* coverity[unterminated_case] */
     case 2:
       scale1=1./255.;
+    /* coverity[unterminated_case] */
     case 1:
       scale0=1./255.;
     case 0:

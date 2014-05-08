@@ -1454,7 +1454,6 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
 GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
   // this is the yuv-format with Gem
   if(!yuvdata)return;
-  data=data;
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
@@ -1566,7 +1565,6 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
 
 GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
   if(!yuvdata)return;
-  data=data;
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
@@ -1662,7 +1660,6 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
 GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata) {
   // this is the yuv-format with Gem
   if(!yuvdata)return;
-  data=data;
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();

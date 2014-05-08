@@ -501,6 +501,31 @@ void GemMan :: renderChain(t_symbol*s, GemState *state){
   }
 }
 
+namespace {
+typedef enum {
+  WHITE=0,
+  RED,
+  GREEN,
+  BLUE,
+} color_t;
+  static inline void setColorMask(color_t color) {
+    switch (color){
+    default: /* white */
+      glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+      break;
+    case RED: /* red */
+      glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
+      break;
+    case GREEN: /* green */
+      glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
+      break;
+    case BLUE: /* blue */
+      glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
+      break;
+    }
+  }
+};
+
 void GemMan :: render(void *)
 {
   int profiling=m_profile;
@@ -632,8 +657,8 @@ void GemMan :: render(void *)
       int ySize = m_h;
       float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
-      int left_color=0;  // RED
-      int right_color=1; // GREEN
+      color_t left_color=RED;
+      color_t right_color=GREEN;
 
       glClear(GL_COLOR_BUFFER_BIT & m_clear_mask);
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
@@ -641,17 +666,7 @@ void GemMan :: render(void *)
       glClear(GL_ACCUM_BUFFER_BIT & m_clear_mask);
 
       // setup the left viewpoint
-      switch (left_color){
-      case 1:
-        glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
-        break;
-      case 2:
-        glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-        break;
-      case 0:
-      default:
-        glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-      }
+      setColorMask(left_color);
 
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
@@ -675,17 +690,7 @@ void GemMan :: render(void *)
 
       // setup the right viewpoint
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
-      switch (right_color){
-      case 0:
-        glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-        break;
-      case 1:
-      default:
-        glColorMask(GL_FALSE,GL_TRUE,GL_FALSE, GL_TRUE);
-        break;
-      case 2:
-        glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-      }
+      setColorMask(right_color);
 
       // setup the matrices
       glMatrixMode(GL_PROJECTION);

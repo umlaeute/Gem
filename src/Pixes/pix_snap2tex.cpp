@@ -58,6 +58,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
     break;
+    /* coverity[unterminated_default] */
   default:
     error("needs 0, 2, or 4 values");
   case 0:

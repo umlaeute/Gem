@@ -132,8 +132,12 @@ namespace PluginFactoryRegistrar {
   template<class ChildClass, class BaseClass>
     BaseClass* allocator() {
     ChildClass* res0 = new ChildClass();
-    BaseClass* res1 = dynamic_cast<BaseClass*>(res0);
+    BaseClass*  res1 = dynamic_cast<BaseClass*>(res0);
     if(NULL==res1) {
+      /* if ChildClass is derived from BaseClass and we successfully allocated an object,
+       * this code cannot never be reached;
+       * the compiler can check this during template expansion, be we don't */
+      /* coverity[dead_error_line] FIXXME stackoverflow:23489764 */
       delete res0;
     }
     return res1;

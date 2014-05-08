@@ -774,10 +774,11 @@ void videoDC1394::setProperties(gem::Properties&props) {
 		for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
 
 			if (feature_set.feature[i].available && key == dc1394_feature_get_string(feature_set.feature[i].id)) {
-				props.get(key, value);
-				dc1394_value = value;
-				dc1394_feature_set_value(m_dccamera, feature_set.feature[i].id, dc1394_value);
-				// TODO : limit to min / max value for each parametter
+			  if(props.get(key, value)) {
+			    dc1394_value = value;
+			    dc1394_feature_set_value(m_dccamera, feature_set.feature[i].id, dc1394_value);
+			    // TODO : limit to min / max value for each parameter
+			  }
 			}
 		}
 	}

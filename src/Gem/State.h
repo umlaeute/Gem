@@ -209,7 +209,7 @@ class GEM_EXTERN GemState
       value=gem::any_cast<T>(val);
       return true;
     } catch (gem::bad_any_cast&x) {
-      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key, x.what().c_str());
+      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key, x.what());
       // type problem
     }
     return false;

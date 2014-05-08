@@ -32,20 +32,14 @@ namespace gem
 {
   struct GEM_EXTERN bad_any_cast : std::bad_cast {
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
-      : from(src.name()), to(dest.name())
+      : result(std::string("bad cast (")+src.name() + "->" + dest.name()+")")
     { }
     virtual ~bad_any_cast(void) throw()
     { }
-    virtual const std::string what(void) {
-      std::string result = std::string("bad cast(");
-      result+= from;
-      result+= std::string("->");
-      result+= to;
-      result+= std::string(")");
-      return result;
+    virtual const char* what(void) const throw() {
+      return result.c_str();
     }
-    const std::string from;
-    const std::string to;
+    const std::string result;
   };
 
   namespace any_detail {

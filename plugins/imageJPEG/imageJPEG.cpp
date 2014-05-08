@@ -236,8 +236,10 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   }
 
   double fquality=100;
-  props.get("quality", fquality);
   int quality=fquality;
+
+  if(props.get("quality", fquality))
+     quality=fquality;
 
   if(GL_YUV422_GEM==constimage.format) {
     error("don't know how to write YUV-images with libJPEG");
@@ -279,7 +281,7 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
       rowindex=(cinfo.image_height-cinfo.next_scanline-1);
     row_pointer = & image_buffer[rowindex * row_stride];
 
-    if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) < 0){
+    if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) <= 0){
       error("GEM: could not write line %d to image %s", cinfo.next_scanline, filename.c_str());
       jpeg_finish_compress(&cinfo);
       fclose(outfile);

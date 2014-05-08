@@ -30,12 +30,13 @@ CPPEXTERN_NEW(pix_halftone);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_halftone :: pix_halftone()
+pix_halftone :: pix_halftone() :
+  m_CellSize(8),
+  m_Style(0),
+  m_Angle(0.0f),
+  m_Smoothing(128),
+  init(0)
 {
-    m_CellSize = 8; // 1-32
-    m_Style = 0;	// 0-4
-    m_Smoothing = 128; // 0-255
-    m_Angle = 0.0f; // 0-360
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("angleDEG"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smoothN"));
@@ -55,16 +56,16 @@ pix_halftone :: ~pix_halftone()
 /////////////////////////////////////////////////////////
 void pix_halftone :: processRGBAImage(imageStruct &image)
 {
-    nWidth = image.xsize;
-    nHeight = image.ysize;
+    const int nWidth = image.xsize;
+    const int nHeight = image.ysize;
 
-    pSource = reinterpret_cast<U32*>(image.data);
+    U32*pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+    U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
@@ -227,17 +228,17 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_halftone :: processYUVImage(imageStruct &image)
 {
-    nWidth = image.xsize>>1;
-    nHeight = image.ysize;
+    const int nWidth = image.xsize>>1;
+    const int nHeight = image.ysize;
 
     const unsigned char chroma = 128;
-    pSource = reinterpret_cast<U32*>(image.data);
+    U32*pSource = reinterpret_cast<U32*>(image.data);
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
     myImage.setCsizeByFormat(image.format);
     myImage.reallocate();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+    U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
     int nCellSize=clampFunc(m_CellSize,1,nMaxCellSize);
     int nStyle=clampFunc(m_Style,0,4);
@@ -413,8 +414,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_halftone :: processGrayImage(imageStruct &image)
 {
-    nWidth = image.xsize;
-    nHeight = image.ysize;
+    const int nWidth = image.xsize;
+    const int nHeight = image.ysize;
 
     if (!init) {
 	Init(nWidth, nHeight);

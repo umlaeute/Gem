@@ -166,7 +166,9 @@ void *pix_film :: grabThread(void*you)
     gem::thread::usleep(100);
   }
 
+  pthread_mutex_lock  (me->m_mutex);
   me->m_thread_running=false;
+  pthread_mutex_unlock(me->m_mutex);
   return NULL;
 }
 #endif
@@ -352,9 +354,13 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
 
   m_handle->getProperties(gotProps);
 
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("width", width);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("height", height);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("frames", frames);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
   gotProps.get("fps", fps);
 
   t_atom ap[4];

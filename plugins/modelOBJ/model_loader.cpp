@@ -346,7 +346,9 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
         error("_glmReadMTL() failed reading new material"); goto mtlread_failed;
       }
       nummaterials++;
-      sscanf(buf, "%s %s", buf, buf);
+      if(EOF == sscanf(buf, "%s %s", buf, buf)) {
+        error("_glmReadMTL() failed reading material"); goto mtlread_failed;
+      }
       break;
     default:
       /* eat up rest of line */
@@ -379,7 +381,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     model->materials[i].specular[2] = 0.0f;
     model->materials[i].specular[3] = 1.0f;
   }
-  model->materials[0].name = strdup("default");
+  model->materials[0].name = std::string("default");
 
   /* now, read in the data */
   nummaterials = 0;
@@ -395,35 +397,50 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       if(NULL==fgets(buf, sizeof(buf), file)) {
         error("_glmReadMTL() really failed reading new material"); goto mtlread_failed;
       }
-      sscanf(buf, "%s %s", buf, buf);
-      nummaterials++;
-      model->materials[nummaterials].name = strdup(buf);
+      if(EOF != sscanf(buf, "%s %s", buf, buf)) {
+	nummaterials++;
+	model->materials[nummaterials].name = std::string(buf);
+      } else {
+	error("_glmReadMTL() failed reading material");
+      }
       break;
     case 'N':
-      fscanf(file, "%f", &model->materials[nummaterials].shininess);
-      /* wavefront shininess is from [0, 1000], so scale for OpenGL */
-      model->materials[nummaterials].shininess /= 1000.0;
-      model->materials[nummaterials].shininess *= 128.0;
+      if (EOF != fscanf(file, "%f", &model->materials[nummaterials].shininess)) {
+	/* wavefront shininess is from [0, 1000], so scale for OpenGL */
+	model->materials[nummaterials].shininess /= 1000.0;
+	model->materials[nummaterials].shininess *= 128.0;
+      } else {
+	error("_glmReadMTL() failed reading material shininess");
+      }
       break;
     case 'K':
       switch(buf[1]) {
       case 'd':
-        fscanf(file, "%f %f %f",
-               &model->materials[nummaterials].diffuse[0],
-               &model->materials[nummaterials].diffuse[1],
-               &model->materials[nummaterials].diffuse[2]);
+        if(EOF != fscanf(file, "%f %f %f",
+			 &model->materials[nummaterials].diffuse[0],
+			 &model->materials[nummaterials].diffuse[1],
+			 &model->materials[nummaterials].diffuse[2])) {
+	} else {
+	  error("_glmReadMTL() failed reading diffuse material");
+	}
         break;
       case 's':
-        fscanf(file, "%f %f %f",
-               &model->materials[nummaterials].specular[0],
-               &model->materials[nummaterials].specular[1],
-               &model->materials[nummaterials].specular[2]);
+        if(EOF != fscanf(file, "%f %f %f",
+			 &model->materials[nummaterials].specular[0],
+			 &model->materials[nummaterials].specular[1],
+			 &model->materials[nummaterials].specular[2])) {
+	} else {
+	  error("_glmReadMTL() failed reading specular material");
+	}
         break;
       case 'a':
-        fscanf(file, "%f %f %f",
-               &model->materials[nummaterials].ambient[0],
-               &model->materials[nummaterials].ambient[1],
-               &model->materials[nummaterials].ambient[2]);
+        if(EOF != fscanf(file, "%f %f %f",
+			 &model->materials[nummaterials].ambient[0],
+			 &model->materials[nummaterials].ambient[1],
+			 &model->materials[nummaterials].ambient[2])) {
+	} else {
+	  error("_glmReadMTL() failed reading ambient material");
+	}
         break;
       default:
         /* eat up rest of line */
@@ -441,6 +458,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     }
   }
+  if(file)fclose(file);
   return 0;
  mtlread_failed:
   if(file)fclose(file);
@@ -558,9 +576,12 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       if(NULL==fgets(buf, sizeof(buf), file)) {
         error("_glmFirstPass failed reading material"); return GL_FALSE;
       }
-      sscanf(buf, "%s %s", buf, buf);
-      model->mtllibname = buf;
-      _glmReadMTL(model, buf);
+      if(EOF != sscanf(buf, "%s %s", buf, buf)) {
+	model->mtllibname = buf;
+	_glmReadMTL(model, buf);
+      } else {
+	error("glmFirstPass failed reading material lib");
+      }
       break;
     case 'u':
       /* eat up rest of line */
@@ -574,7 +595,11 @@ _glmFirstPass(GLMmodel* model, FILE* file)
         error("_glmFirstPass failed reading groups"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
-      sscanf(buf, "%s", buf);
+      if(EOF != sscanf(buf, "%s", buf)) {
+      } else {
+	error("_glmFirstPass failed reading single-string group name");
+	return GL_FALSE;
+      }
 #else
       buf[strlen(buf)-1] = '\0';  /* nuke '\n' */
 #endif
@@ -582,13 +607,19 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       break;
     case 'f':               /* face */
       v = n = t = 0;
-      fscanf(file, "%s", buf);
+      if(EOF != fscanf(file, "%s", buf)) {
       /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
          if (strstr(buf, "//")) {
            /* v//n */
-             sscanf(buf, "%d//%d", &v, &n);
-           fscanf(file, "%d//%d", &v, &n);
-           fscanf(file, "%d//%d", &v, &n);
+	   if(EOF == sscanf(buf, "%d//%d", &v, &n)) {
+	     verbose(1, "_glmFirstPass: failed reading v/n.");
+	   }
+           if(EOF == fscanf(file, "%d//%d", &v, &n)) {
+	     verbose(1, "_glmFirstPass: failed reading v/n..");
+	   }
+           if(EOF == fscanf(file, "%d//%d", &v, &n)) {
+	     verbose(1, "_glmFirstPass: failed reading v/n...");
+	   }
            numtriangles++;
            group->numtriangles++;
            while(fscanf(file, "%d//%d", &v, &n) > 0) {
@@ -597,8 +628,12 @@ _glmFirstPass(GLMmodel* model, FILE* file)
            }
          } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
            /* v/t/n */
-           fscanf(file, "%d/%d/%d", &v, &t, &n);
-           fscanf(file, "%d/%d/%d", &v, &t, &n);
+           if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+	     verbose(1, "_glmFirstPass: failed reading v/t/n.");
+	   }
+           if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+	     verbose(1, "_glmFirstPass: failed reading v/t/n..");
+	   }
            numtriangles++;
            group->numtriangles++;
            while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
@@ -607,8 +642,12 @@ _glmFirstPass(GLMmodel* model, FILE* file)
            }
          } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
            /* v/t */
-           fscanf(file, "%d/%d", &v, &t);
-           fscanf(file, "%d/%d", &v, &t);
+           if(EOF == fscanf(file, "%d/%d", &v, &t)) {
+	     verbose(1, "_glmFirstPass: failed reading v/t.");
+	   }
+           if(EOF == fscanf(file, "%d/%d", &v, &t)) {
+	     verbose(1, "_glmFirstPass: failed reading v/t..");
+	   }
            numtriangles++;
            group->numtriangles++;
            while(fscanf(file, "%d/%d", &v, &t) > 0) {
@@ -617,8 +656,12 @@ _glmFirstPass(GLMmodel* model, FILE* file)
            }
          } else {
            /* v */
-           fscanf(file, "%d", &v);
-           fscanf(file, "%d", &v);
+           if(EOF == fscanf(file, "%d", &v)) {
+	     verbose(1, "_glmFirstPass: failed reading v.");
+	   }
+           if(EOF == fscanf(file, "%d", &v)) {
+	     verbose(1, "_glmFirstPass: failed reading v..");
+	   }
            numtriangles++;
            group->numtriangles++;
            while(fscanf(file, "%d", &v) > 0) {
@@ -626,6 +669,9 @@ _glmFirstPass(GLMmodel* model, FILE* file)
              group->numtriangles++;
            }
          }
+      } else {
+	verbose(1, "_glmFirstPass failed reading facet...");
+      }
       break;
 
     default:
@@ -716,24 +762,33 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     case 'v':               /* v, vn, vt */
       switch(buf[1]) {
       case '\0':          /* vertex */
-        fscanf(file, "%f %f %f",
-               &vertices[3 * numvertices + 0],
-               &vertices[3 * numvertices + 1],
-               &vertices[3 * numvertices + 2]);
-        numvertices++;
+        if(EOF != fscanf(file, "%f %f %f",
+			 &vertices[3 * numvertices + 0],
+			 &vertices[3 * numvertices + 1],
+			 &vertices[3 * numvertices + 2])) {
+	  numvertices++;
+	} else {
+	  verbose(1, "_glmSecondPass failed reading vertex %d", numvertices);
+	}
         break;
       case 'n':           /* normal */
-        fscanf(file, "%f %f %f",
-               &normals[3 * numnormals + 0],
-               &normals[3 * numnormals + 1],
-               &normals[3 * numnormals + 2]);
-        numnormals++;
+        if(EOF != fscanf(file, "%f %f %f",
+			 &normals[3 * numnormals + 0],
+			 &normals[3 * numnormals + 1],
+			 &normals[3 * numnormals + 2])) {
+	  numnormals++;
+	} else {
+	  verbose(1, "_glmSecondPass failed reading normal %d", numnormals);
+	}
         break;
       case 't':           /* texcoord */
-        fscanf(file, "%f %f",
-               &texcoords[2 * numtexcoords + 0],
-               &texcoords[2 * numtexcoords + 1]);
-        numtexcoords++;
+        if(EOF != fscanf(file, "%f %f",
+			 &texcoords[2 * numtexcoords + 0],
+			 &texcoords[2 * numtexcoords + 1])) {
+	  numtexcoords++;
+	} else {
+	  verbose(1, "_glmSecondPass failed reading texcoord %d", numtexcoords);
+	}
         break;
       }
       break;
@@ -741,8 +796,11 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       if(NULL==fgets(buf, sizeof(buf), file)) {
         error("_glmSecondPass() failed reading material"); return GL_FALSE;
       }
-      sscanf(buf, "%s %s", buf, buf);
-      group->material = material = _glmFindMaterial(model, buf);
+      if(EOF != sscanf(buf, "%s %s", buf, buf)) {
+	group->material = material = _glmFindMaterial(model, buf);
+      } else {
+        error("_glmSecondPass() failed finding material"); return GL_FALSE;
+      }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
@@ -750,7 +808,9 @@ _glmSecondPass(GLMmodel* model, FILE* file)
         error("_glmSecondPass() failed reading group"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
-      sscanf(buf, "%s", buf);
+      if(EOF == sscanf(buf, "%s", buf)) {
+	error("_glmSecondPass() failed reading single-string group name"); return GL_FALSE;
+      }
 #else
       buf[strlen(buf)-1] = '\0';  /* nuke '\n' */
 #endif
@@ -759,19 +819,28 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'f':               /* face */
       v = n = t = 0;
-      fscanf(file, "%s", buf);
+      if(EOF != fscanf(file, "%s", buf)) {
       /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
          if (strstr(buf, "//")) {
            /* v//n */
-             sscanf(buf, "%d//%d", &v, &n);
-           T(numtriangles).vindices[0] = fixIndex(v,numvertices);
-           T(numtriangles).nindices[0] = fixIndex(n,numnormals);
-           fscanf(file, "%d//%d", &v, &n);
-           T(numtriangles).vindices[1] = fixIndex(v,numvertices);
-           T(numtriangles).nindices[1] = fixIndex(n, numnormals);
-           fscanf(file, "%d//%d", &v, &n);
-           T(numtriangles).vindices[2] = fixIndex(v,numvertices);
-           T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+	   if(EOF != sscanf(buf, "%d//%d", &v, &n)) {
+	     T(numtriangles).vindices[0] = fixIndex(v,numvertices);
+	     T(numtriangles).nindices[0] = fixIndex(n,numnormals);
+	   } else {
+	     error("_glmSecondPass() failed reading v/n.");
+	   }
+           if(EOF != fscanf(file, "%d//%d", &v, &n)) {
+	     T(numtriangles).vindices[1] = fixIndex(v,numvertices);
+	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
+	   } else {
+	     error("_glmSecondPass() failed reading v/n..");
+	   }
+           if(EOF != fscanf(file, "%d//%d", &v, &n)) {
+	     T(numtriangles).vindices[2] = fixIndex(v,numvertices);
+	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+	   } else {
+	     error("_glmSecondPass() failed reading v/n...");
+	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
            while(fscanf(file, "%d//%d", &v, &n) > 0) {
@@ -789,14 +858,20 @@ _glmSecondPass(GLMmodel* model, FILE* file)
            T(numtriangles).vindices[0] = fixIndex(v,numvertices);
            T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
            T(numtriangles).nindices[0] = fixIndex(n, numnormals);
-           fscanf(file, "%d/%d/%d", &v, &t, &n);
-           T(numtriangles).vindices[1] = fixIndex(v, numvertices);
-           T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
-           T(numtriangles).nindices[1] = fixIndex(n, numnormals);
-           fscanf(file, "%d/%d/%d", &v, &t, &n);
-           T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-           T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
-           T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+           if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
+	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
+	   } else {
+	     error("_glmSecondPass() failed reading v/t/n.");
+	   }
+           if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+	   } else {
+	     error("_glmSecondPass() failed reading v/t/n..");
+	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
            while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
@@ -816,12 +891,18 @@ _glmSecondPass(GLMmodel* model, FILE* file)
            /* v/t */
            T(numtriangles).vindices[0] = fixIndex(v, numvertices);
            T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
-           fscanf(file, "%d/%d", &v, &t);
-           T(numtriangles).vindices[1] = fixIndex(v, numvertices);
-           T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
-           fscanf(file, "%d/%d", &v, &t);
-           T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-           T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+           if(EOF != fscanf(file, "%d/%d", &v, &t)) {
+	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
+	   } else {
+	     error("_glmSecondPass() failed reading v/t.");
+	   }
+           if(EOF != fscanf(file, "%d/%d", &v, &t)) {
+	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+	   } else {
+	     error("_glmSecondPass() failed reading v/t..");
+	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
            while(fscanf(file, "%d/%d", &v, &t) > 0) {
@@ -836,12 +917,21 @@ _glmSecondPass(GLMmodel* model, FILE* file)
            }
          } else {
            /* v */
-           sscanf(buf, "%d", &v);
-           T(numtriangles).vindices[0] = fixIndex(v, numvertices);
-           fscanf(file, "%d", &v);
-           T(numtriangles).vindices[1] = fixIndex(v, numvertices);
-           fscanf(file, "%d", &v);
-           T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+           if(EOF != sscanf(buf, "%d", &v)) {
+	     T(numtriangles).vindices[0] = fixIndex(v, numvertices);
+	   } else {
+	     error("_glmSecondPass() failed reading v.");
+	   }
+           if(EOF != fscanf(file, "%d", &v)) {
+	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+	   } else {
+	     error("_glmSecondPass() failed reading v..");
+	   }
+           if(EOF != fscanf(file, "%d", &v)) {
+	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+	   } else {
+	     error("_glmSecondPass() failed reading v...");
+	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
            while(fscanf(file, "%d", &v) > 0) {
@@ -852,6 +942,9 @@ _glmSecondPass(GLMmodel* model, FILE* file)
              numtriangles++;
            }
          }
+      } else {
+	verbose(1, "_glmSecondPass() failed reading..."); continue;
+      }
       break;
 
     default:
@@ -864,11 +957,11 @@ _glmSecondPass(GLMmodel* model, FILE* file)
   }
 
   /* announce the memory requirements */
-  verbose(1, " Memory: %d bytes",
+  verbose(1, " Memory: %d bytes", (int)(
           numvertices  * 3*sizeof(GLfloat) +
-          numnormals   * 3*sizeof(GLfloat) * (numnormals ? 1 : 0) +
-          numtexcoords * 3*sizeof(GLfloat) * (numtexcoords ? 1 : 0) +
-          numtriangles * sizeof(GLMtriangle));
+          numnormals   * 3*sizeof(GLfloat) +
+          numtexcoords * 3*sizeof(GLfloat) +
+          numtriangles * 1*sizeof(GLMtriangle)));
 
   return GL_TRUE;
 }
@@ -1688,7 +1781,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   } else if (mode & GLM_FLAT) {
     fprintf(file, "\n");
     fprintf(file, "# %d normals\n", model->numfacetnorms);
-    for (i = 1; i <= model->numnormals; i++) {
+    for (i = 1; i <= model->numfacetnorms; i++) {
       fprintf(file, "vn %f %f %f\n",
               model->facetnorms[3 * i + 0],
               model->facetnorms[3 * i + 1],
@@ -2137,6 +2230,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   FILE* fp;
   int i, w, h, d;
   unsigned char* image;
+  unsigned long imagesize=0;
   char head[70];          /* max line <= 70 in PPM (per spec). */
 
   fp = fopen(filename, "rb");
@@ -2172,10 +2266,17 @@ glmReadPPM(const char* filename, int* width, int* height)
   }
 
   /* grab all the image data in one fell swoop. */
-  image = new unsigned char[w*h*3];
-  size_t count = fread(image, sizeof(unsigned char), w*h*3, fp);
+  if(w>0 && w<65536 && h>0 && h<65536) {
+    /* coverity[tainted_data] we have to trust the image file... */
+    imagesize=(unsigned long)w*h*3;
+  } else {
+    fclose(fp);
+    return NULL;
+  }
+  image = new unsigned char[imagesize];
+  size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
-  if(count!=static_cast<size_t>(w*h*3)) {
+  if(count!=imagesize) {
     error("_glmReadPPM failed to read all bytes");
     *width=*height=0;
     delete[]image;

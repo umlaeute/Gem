@@ -21,6 +21,7 @@
 #include "Utils/PixPete.h"
 #include "pix_dot.h"
 #include <stdlib.h>
+#include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW(pix_dot);
 
@@ -327,9 +328,9 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 	m_csize = image.csize;
 
 	if(m_useScale){
-	  dot_size = static_cast<int>(8 * m_scale);
-	  dot_size = dot_size & 0xfe;
-	  if(dot_size==0)dot_size=2;
+	  dot_hsize =(static_cast<int>(8 * m_scale)) >> 1;
+	  if(dot_hsize<1)dot_hsize=1;
+	  dot_size = dot_hsize * 2;
 	  dots_width = m_xsize / dot_size;
 	  dots_height = m_ysize / dot_size;
 	} else {
@@ -401,9 +402,9 @@ void pix_dot :: processYUVImage(imageStruct &image)
         m_ysize = image.ysize;
 	m_csize = image.csize;
 
-        dot_size = static_cast<int>(8 * m_scale);
-        dot_size = dot_size & 0xfe;
-        dot_hsize = dot_size / 2;
+        dot_hsize = (static_cast<int>(8 * m_scale)) >> 1;
+        if(dot_hsize<1)dot_hsize=1;
+        dot_size = dot_hsize * 2;
         dots_width = m_xsize / dot_size;
         dots_height = m_ysize / dot_size;
 
@@ -441,12 +442,8 @@ void pix_dot :: processYUVImage(imageStruct &image)
         sy = sampy[y];
         for ( x=0; x<dots_width; x++){
             sx = sampx[x];
-            //sx2 = sampx[x+1];
             luma  = ((src[sy*image.xsize+sx+1])>>SHIFT_Y1)&0xff;
-	    luma2 = ((src[sy*image.xsize+sx+1])>>SHIFT_Y2)&0xff;
-	    avgluma = (luma + luma2)>>1;
-            drawDotYUV(x, y, avgluma, dest);
-            //drawDot(x+1, y, luma2, dest);
+            drawDotYUV(x, y, luma, dest);
         }
     }
     image.data = myImage.data;
@@ -470,9 +467,9 @@ void pix_dot :: processGrayImage(imageStruct &image)
         m_ysize = image.ysize;
 	m_csize = image.csize;
 
-        dot_size = static_cast<int>(8 * m_scale);
-        dot_size = dot_size & 0xfe;
-        dot_hsize = dot_size / 2;
+        dot_hsize = static_cast<int>(8 * m_scale) >> 1;
+        if(dot_hsize<1)dot_hsize=1;
+        dot_size = dot_hsize * 2;
         dots_width = m_xsize / dot_size;
         dots_height = m_ysize / dot_size;
 
@@ -557,9 +554,15 @@ void pix_dot :: yuv_init()
     int i;
     if(!initialized) {
         for(i=20; i<256; i++) {
+#if 0
 	  R2Y[i] =  static_cast<int>(0.257f*i);
 	  G2Y[i] =  static_cast<int>(0.504f*i);
 	  B2Y[i] =  static_cast<int>(0.098f*i);
+#else
+	  R2Y[i] =  static_cast<int>(RGB2GRAY_RED  *i)>>8;
+	  G2Y[i] =  static_cast<int>(RGB2GRAY_GREEN*i)>>8;
+	  B2Y[i] =  static_cast<int>(RGB2GRAY_BLUE *i)>>8;
+#endif
         }
         initialized = 1;
     }

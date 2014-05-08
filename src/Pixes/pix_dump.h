@@ -77,8 +77,8 @@ protected:
 	int           xsize, ysize;      // proposed x/y-sizes
 	int           m_xsize,  m_ysize;
 	int           m_csize;
+	unsigned int  m_bufsize;
 	t_atom       *m_buffer;
-	int           m_bufsize;
 
 	int           oldimagex;
 	int           oldimagey;

@@ -29,22 +29,25 @@ CPPEXTERN_NEW(part_render);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_render :: part_render(void)
-{
-  m_colorize=true;
-  m_sizing  =true;
-  m_number=1000;
-  m_colors = new GLfloat[m_number*4];
-  m_sizes  = new GLfloat[m_number*3];
-  m_pos    = new GLfloat[m_number*3];
-}
+part_render :: part_render(void) :
+  m_colorize(true),
+  m_sizing(true),
+  m_number(1000),
+  m_colors(new GLfloat[m_number*4]),
+  m_sizes(new GLfloat[m_number*3]),
+  m_pos(new GLfloat[m_number*3])
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
 part_render :: ~part_render(void)
-{ }
+{
+  delete[]m_colors;
+  delete[]m_sizes;
+  delete[]m_pos;
+}
 
 /////////////////////////////////////////////////////////
 // renderParticles

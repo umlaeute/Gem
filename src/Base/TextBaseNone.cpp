@@ -22,7 +22,12 @@
 #include "TextBase.h"
 #ifndef FTGL
 
-TextBase :: TextBase(int argc, t_atom *argv){
+TextBase :: TextBase(int argc, t_atom *argv) :
+  m_dist(1), m_valid(0), m_fontSize(20), m_fontDepth(20), m_precision(3.f),
+  m_widthJus(CENTER), m_heightJus(MIDDLE), m_depthJus(HALFWAY),
+  m_inlet(NULL),
+  m_infoOut(gem::RTE::Outlet(this))
+{
   static bool first_time=true;
   if (first_time){
     post("Gem has been compiled without FONT-support !");

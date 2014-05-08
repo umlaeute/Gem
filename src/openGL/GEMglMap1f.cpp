@@ -23,7 +23,11 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglMap1f );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
+GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv) :
+  target(0),
+  u1(0.f), u2(0.f), stride(0), order(0),
+  points(0), len(0)
+{
 	if (argc>0)target=static_cast<GLenum>(atom_getint(argv+0));
 	if (argc>1)u1    =static_cast<GLfloat>(atom_getfloat(argv+1));
 	if (argc>2)u2    =static_cast<GLfloat>(atom_getfloat(argv+2));
@@ -44,12 +48,14 @@ GEMglMap1f :: GEMglMap1f	(int argc, t_atom*argv){
 // Destructor
 //
 GEMglMap1f :: ~GEMglMap1f () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
-inlet_free(m_inlet[3]);
-inlet_free(m_inlet[4]);
-inlet_free(m_inlet[5]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[3]);
+  inlet_free(m_inlet[4]);
+  inlet_free(m_inlet[5]);
+
+  delete[]points;
 }
 
 //////////////////

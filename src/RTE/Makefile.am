@@ -21,6 +21,7 @@ libRTE_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libRTE_la_includedir = $(includedir)/Gem/RTE
 libRTE_la_include_HEADERS = \
+	RTE.h \
 	Array.h \
 	MessageCallbacks.h
 

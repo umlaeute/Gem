@@ -25,11 +25,12 @@ CPPEXTERN_NEW(pix_test);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_test :: pix_test()
+pix_test :: pix_test() :
+  orgImage(0), orgdata(0),
+  off(0), csize(2)
 {
   myImage.xsize=myImage.ysize=myImage.csize=1;
   myImage.data = new unsigned char[1];
-  csize=2;
 }
 
 /////////////////////////////////////////////////////////
@@ -72,6 +73,7 @@ void pix_test :: processImage(imageStruct &image)
     int datasize=image.xsize*image.xsize*image.csize;
     while(datasize--)*data++=off;
     break;
+#if 0
     while(rows--){
       int col=cols;
       while(col--){
@@ -79,6 +81,7 @@ void pix_test :: processImage(imageStruct &image)
 	*data++=128;
       }
     }
+#endif
     break;
   }
   image.data=myImage.data;

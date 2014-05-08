@@ -101,3 +101,38 @@ RTE* RTE::getRuntimeEnvironment(void) {
   return s_rte;
 }
 
+typedef int (*close_t)(int fd);
+#include <unistd.h>
+std::string RTE::findFile(const std::string&f, const std::string&e, const void* ctx) const {
+  char buf[MAXPDSTRING], buf2[MAXPDSTRING];
+  char*bufptr=0;
+  std::string result="";
+  int fd=-1;
+
+  t_canvas*canvas=static_cast<t_canvas*>(const_cast<void*>(ctx));
+  char*filename=const_cast<char*>(f.c_str());
+  char*ext=const_cast<char*>(e.c_str());
+
+  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext,
+                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    static close_t rte_close=NULL;
+    if(NULL==rte_close) {
+      RTE*rte=RTE::getRuntimeEnvironment();
+      if(rte) {
+	rte_close=(close_t)rte->getFunction("sys_close");
+      }
+      if(NULL==rte_close) {
+	rte_close=close;
+      }
+    }
+    rte_close(fd);
+
+    result=buf2;
+    result+="/";
+    result+=bufptr;
+  } else {
+    canvas_makefilename(canvas, filename, buf, MAXPDSTRING);
+    result=buf;
+  }
+  return result;
+}

@@ -25,17 +25,19 @@ CPPEXTERN_NEW(pix_backlight);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_backlight :: pix_backlight()
+pix_backlight :: pix_backlight() :
+	nHeight(0),
+	nWidth(0),
+	init(0),
+	pSource(0),
+	pOutput(0),
+	m_SpikeScale(127.0f),
+	m_SpikeFloor(0.0f),
+	m_SpikeCeiling(255.0f)
 {
-    m_SpikeScale = 127.0f;	// 0 to 255
-    m_SpikeFloor = 0.0f;	// 0 to 255
-    m_SpikeCeiling = 255.0f;	// 0 to 255
-    init =0;
-
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("scale"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("floor"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ceiling"));
-
 }
 
 /////////////////////////////////////////////////////////

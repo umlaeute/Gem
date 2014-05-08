@@ -44,6 +44,12 @@ namespace gem {
        * @return pointer to the function named 'name', or NULL if it doesn't exist
        */
       virtual void*getFunction(const std::string&name);
+
+      /**
+       * find a file in the given context(canvas), searching RTEs search paths
+       * @return expanded filename
+       */
+      virtual std::string findFile(const std::string&name, const std::string&ext, const void*context) const;
     };
   };
 };

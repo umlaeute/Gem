@@ -34,8 +34,6 @@ class GEM_EXTERN Blob {
 public:
 
   Blob();
-  void setPosition(int p);
-  int  getPosition();
   double xmin();
   double xmax();
   double ymin();
@@ -77,13 +75,9 @@ public:
   // raw moments for orientation calculation
   double m_11, m_02, m_20;
 
-  bool valid; // 0=invalid; 1=ok;
-  bool rightPosition;
-
 private :
   double m_xmin, m_xmax;
   double m_ymin, m_ymax;
-  int position;
 };
 
 class GEM_EXTERN pix_multiblob : public GemPixObj

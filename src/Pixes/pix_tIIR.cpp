@@ -55,6 +55,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
 
   m_fb = new t_float[fb_num];
   m_ff = new t_float[ff_num];
+  m_inletCount=fb_num+ff_num;
 
   int i=0;
   while(i<fb_num){
@@ -86,6 +87,14 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
 pix_tIIR :: ~pix_tIIR(void)
 {
   // clean my buffer
+  delete[]m_ff;
+  delete[]m_fb;
+  t_inlet **inlet = m_inlet;
+  int i;
+  for(i=0; i<m_inletCount; i++) {
+    inlet_free(*inlet++);
+  }
+  delete[]m_inlet;
 }
 
 /////////////////////////////////////////////////////////
@@ -179,7 +188,6 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   i=fb_count+1;while(i--){
     s_fb[i]=static_cast<short>(m_fb[i]*256.+0.5);
   }
-
 
   int imagesize = image.xsize*image.ysize*image.csize;
   __m64 *dest, *source;
@@ -324,6 +332,10 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
 
   m_counter++;
   m_counter%=m_bufnum;
+
+  delete[]s_ff;
+  delete[]s_fb;
+
 }
 void pix_tIIR :: processYUVMMX(imageStruct &image)
 { processRGBAMMX(image); }

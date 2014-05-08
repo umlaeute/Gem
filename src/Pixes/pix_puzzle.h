@@ -59,7 +59,7 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   virtual void  sizeMess(int width, int height);
   virtual void  moveMess(int direction);
 
-  int blocksize, blockxsize,blockysize,  blocknum, spacepos;
+  int blockxsize,blockysize,  blocknum, spacepos;
   int blockw, blockh;
   int *blockpos;
   int *blockoffset;

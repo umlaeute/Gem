@@ -54,19 +54,19 @@ class GEM_EXTERN mesh_square : public GemShape
     	// Do the rendering
     	virtual void 	renderShape(GemState *state);
 
-		void		setSize( int valueX, int valueY );
-		void		setSize( int valueXY );
-		void    setGridX(int valX);
-		void    setGridY(int valY);
-		void		getTexCoords(void);
+	void	setSize( int valueX, int valueY );
+	void	setSize( int valueXY );
+	void    setGridX(int valX);
+	void    setGridY(int valY);
+	void	getTexCoords(void);
 
-		//////////
-		// getStuff
-		int 		gridX, gridY;
-		float		xsize, xsize0, ysize, ysize0;
-		int 		alreadyInit;
+	//////////
+	// getStuff
+	int 		gridX, gridY;
+	float		xsize, xsize0, ysize, ysize0;
+	int 		alreadyInit;
 
-		float 		texCoords[MAXGRID][MAXGRID][2];
+	float 		texCoords[MAXGRID][MAXGRID][2];
 };
 
 #endif	// for header file

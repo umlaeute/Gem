@@ -65,7 +65,6 @@ class GEM_EXTERN slideSquares : public GemShape
 
         GLvoid 	Slide( int i );
         void	slide_init(void);
-        float	xsize, ysize;
 };
 
 #endif	// for header file

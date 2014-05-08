@@ -91,6 +91,7 @@ void disk :: render(GemState *state)
 
   GLfloat da, dr;
 
+  /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
   GLenum orientation = true; /* GLU_INSIDE; */
 
   TexCoord*texCoords=NULL;

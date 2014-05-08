@@ -41,9 +41,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 vertex_program :: vertex_program() :
   m_programType(GEM_PROGRAM_none),
+  m_programTarget(0),
   m_programID(0),
   m_programString(NULL), m_size(0),
-  m_buf(NULL),
+  m_buf(std::string()),
   m_envNum(-1)
 {
 }
@@ -51,6 +52,7 @@ vertex_program :: vertex_program(t_symbol *filename) :
   m_programType(GEM_PROGRAM_none),
   m_programID(0),
   m_programString(NULL), m_size(0),
+  m_buf(std::string()),
   m_envNum(-1)
 {
   openMess(filename);
@@ -127,10 +129,9 @@ void vertex_program :: openMess(t_symbol *filename)
 
   // Clean up any open files
   closeMess();
-  std::string fn = findFile(filename->s_name);
-  m_buf=fn.c_str();
+  m_buf = findFile(filename->s_name);
 
-  FILE *file = fopen(m_buf,"rb");
+  FILE *file = fopen(m_buf.c_str(),"rb");
   if(file) {
     fseek(file,0,SEEK_END);
     long size = ftell(file);
@@ -139,12 +140,13 @@ void vertex_program :: openMess(t_symbol *filename)
     memset(m_programString,0,size + 1);
     fseek(file,0,SEEK_SET);
     size_t count = fread(m_programString,1,size,file);
+    m_programString[size]='\0';
     int err=ferror(file);
     fclose(file);
     if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
   } else {
-    m_programString = new char[strlen(m_buf) + 1];
-    strcpy(m_programString,m_buf);
+    m_programString = new char[strlen(m_buf.c_str()) + 1];
+    strcpy(m_programString,m_buf.c_str());
   }
   m_size=strlen(m_programString);
   m_programType=queryProgramtype(m_programString);
@@ -157,12 +159,12 @@ void vertex_program :: openMess(t_symbol *filename)
          m_programString,
          filename->s_name);
 
-    delete m_programString; m_programString=NULL;
+    delete[] m_programString; m_programString=NULL;
     m_size=0;
     return;
   }
 
-  post("Loaded file: %s\n", m_buf);
+  post("Loaded file: %s\n", m_buf.c_str());
 }
 
 /////////////////////////////////////////////////////////
@@ -243,31 +245,31 @@ void vertex_program :: LoadProgram(void)
         glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &aluInstructions);
         glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &maxAluInstructions);
         if (aluInstructions>maxAluInstructions)
-          post("[%s]: Compiles to too many ALU instructions (%d, limit is %d)\n", m_buf, aluInstructions, maxAluInstructions);
+          post("[%s]: Compiles to too many ALU instructions (%d, limit is %d)\n", m_buf.c_str(), aluInstructions, maxAluInstructions);
 
         GLint textureInstructions, maxTextureInstructions;
         glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &textureInstructions);
         glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &maxTextureInstructions);
         if (textureInstructions>maxTextureInstructions)
-          post("[%s]: Compiles to too many texture instructions (%d, limit is %d)\n", m_buf, textureInstructions, maxTextureInstructions);
+          post("[%s]: Compiles to too many texture instructions (%d, limit is %d)\n", m_buf.c_str(), textureInstructions, maxTextureInstructions);
 
         GLint textureIndirections, maxTextureIndirections;
         glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INDIRECTIONS_ARB, &textureIndirections);
         glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &maxTextureIndirections);
         if (textureIndirections>maxTextureIndirections)
-          post("[%s]: Compiles to too many texture indirections (%d, limit is %d)\n", m_buf, textureIndirections, maxTextureIndirections);
+          post("[%s]: Compiles to too many texture indirections (%d, limit is %d)\n", m_buf.c_str(), textureIndirections, maxTextureIndirections);
 
         GLint nativeTextureIndirections, maxNativeTextureIndirections;
         glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &nativeTextureIndirections);
         glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &maxNativeTextureIndirections);
         if (nativeTextureIndirections>maxNativeTextureIndirections)
-          post("[%s]: Compiles to too many native texture indirections (%d, limit is %d)\n", m_buf, nativeTextureIndirections, maxNativeTextureIndirections);
+          post("[%s]: Compiles to too many native texture indirections (%d, limit is %d)\n", m_buf.c_str(), nativeTextureIndirections, maxNativeTextureIndirections);
 
         GLint nativeAluInstructions, maxNativeAluInstructions;
         glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &nativeAluInstructions);
         glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &maxNativeAluInstructions);
         if (nativeAluInstructions>maxNativeAluInstructions)
-          post("[%s]: Compiles to too many native ALU instructions (%d, limit is %d)\n", m_buf, nativeAluInstructions, maxNativeAluInstructions);
+          post("[%s]: Compiles to too many native ALU instructions (%d, limit is %d)\n", m_buf.c_str(), nativeAluInstructions, maxNativeAluInstructions);
       }
   }
 }

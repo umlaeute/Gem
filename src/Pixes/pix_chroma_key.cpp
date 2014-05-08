@@ -27,12 +27,11 @@ CPPEXTERN_NEW(pix_chroma_key);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_chroma_key :: pix_chroma_key()
-{
-  m_direction = 1;
-  m_mode=1;
-  m_Yrange = m_Vrange = m_Vrange = m_Yvalue = m_Uvalue = m_Vvalue = 0;
-}
+pix_chroma_key :: pix_chroma_key() :
+  m_direction(1),
+  m_mode(1),
+  m_Yrange(0), m_Urange(0), m_Vrange(0), m_Yvalue(0), m_Uvalue(0), m_Vvalue(0)
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor

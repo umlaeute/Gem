@@ -119,6 +119,10 @@ public:
                 is >> s;
                 if( s.empty() )
                     continue;
+		if (s.size() < 1 || s.size()>0x7FFFFFFF ) {
+		  std::cout << "implausible data in tree file: " << file_name << std::endl;
+		  continue;
+		}
 
                 int depthSequenceLength;
 

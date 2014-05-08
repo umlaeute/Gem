@@ -46,7 +46,9 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 /////////////////////////////////////////////////////////
 
 videoDV4L :: videoDV4L() : videoBase("dv4l"),
+                           m_dvfd(-1),
                            m_raw(NULL),
+                           m_iec(NULL),
                            m_decoder(NULL),
                            m_parsed(false),
                            m_quality(DV_QUALITY_BEST)

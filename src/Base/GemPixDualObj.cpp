@@ -144,35 +144,31 @@ void GemPixDualObj :: processImage(imageStruct &image)
 // process
 //
 /////////////////////////////////////////////////////////
-
+namespace {
+std::string format2string(GLenum fmt) {
+  std::string result="unknown";
+  switch (fmt) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    result = "RGBA";break;
+  case GL_LUMINANCE:
+    result = "Gray";break;
+  case GL_YCBCR_422_GEM:
+    result = "YUV";break;
+  default: do {
+      char fmtstring[7];
+      snprintf(fmtstring, 6, "0x%04X", (unsigned int)fmt);
+      fmtstring[6]='\0';
+      result=fmtstring;
+    } while(0);
+  }
+ return result;
+}
+}
 void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
-  char *lformat, *rformat;
-  switch (left.format) {
-  case GL_RGBA:
-  case GL_BGRA_EXT:
-    lformat =(char*)"RGBA";break;
-  case GL_LUMINANCE:
-    lformat =(char*)"Gray";break;
-  case GL_YCBCR_422_GEM:
-    lformat =(char*)"YUV";break;
-  default:
-    lformat = new char[6];
-    sprintf(lformat,"0x%04X", (unsigned int)left.format);
-  }
-  switch (right.format) {
-  case GL_RGBA:
-  case GL_BGRA_EXT:
-    rformat =(char*)"RGBA";break;
-  case GL_LUMINANCE:
-    rformat =(char*)"Gray";break;
-  case GL_YCBCR_422_GEM:
-    rformat =(char*)"YUV";break;
-  default:
-    rformat = new char[6];
-    sprintf(rformat, "0x%04X", (unsigned int)left.format);
-  }
-
-  error("no method to combine (%s) and (%s)", lformat, rformat);
+  std::string lformat=format2string(left.format);
+  std::string rformat=format2string(right.format);
+  error("no method to combine (%s) and (%s)", lformat.c_str(), rformat.c_str());
 }
 
 /////////////////////////////////////////////////////////
