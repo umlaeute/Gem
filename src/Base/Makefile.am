@@ -80,7 +80,13 @@ libBase_la_SOURCES=  \
     GemWinCreateXWin.cpp \
     GemWindow.cpp \
     GemWindow.h \
-    TextBaseNone.cpp \
-    TextBaseFTGL.cpp \
     TextBase.h
 
+
+if HAVE_LIB_FTGL
+libBase_la_SOURCES+= \
+    TextBaseFTGL.cpp
+else !HAVE_LIB_FTGL
+libBase_la_SOURCES+= \
+    TextBaseNone.cpp
+endif !HAVE_LIB_FTGL
