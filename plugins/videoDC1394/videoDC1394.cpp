@@ -471,14 +471,25 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   if ( err ) return false;
 
   for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
-	  if ( feature_set.feature[i].available ) {
-		  // TODO remove space in feature name (eg. "Trigger Delay")
-		  key = dc1394_feature_get_string(feature_set.feature[i].id);
-		  type=0; // what is this ?
-		  dc1394_feature_is_readable(m_dccamera, feature_set.feature[i].id, &is_readable );
-		  if ( is_readable ) readable.set(key,type);
-		  writeable.set(key,type);
-		}
+    if ( feature_set.feature[i].available ) {
+      // TODO remove space in feature name (eg. "Trigger Delay")
+      key = dc1394_feature_get_string(feature_set.feature[i].id);
+      type=0; // what is this ?
+      dc1394_feature_is_readable(m_dccamera, feature_set.feature[i].id, &is_readable );
+      if ( is_readable ) readable.set(key,type);
+      writeable.set(key,type);
+      
+      dc1394feature_t feature = feature_set.feature[i].id;
+      dc1394feature_modes_t *modes;
+      err=dc1394_feature_get_modes(m_dccamera, feature, modes);
+      if(err==DC1394_SUCCESS) {
+        if(modes->num>1){
+          key+="Mode"; type=std::string("");
+          readable .set(key, type);
+          writeable.set(key, type);
+        }
+      }
+    }
   }
 
   return true;
