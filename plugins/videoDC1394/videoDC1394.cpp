@@ -483,9 +483,9 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
       dc1394feature_modes_t *modes;
       err=dc1394_feature_get_modes(m_dccamera, feature, modes);
       if(err==DC1394_SUCCESS) {
+        key+="Mode"; type=std::string("");
+        readable .set(key, type);
         if(modes->num>1){
-          key+="Mode"; type=std::string("");
-          readable .set(key, type);
           writeable.set(key, type);
         }
       }
