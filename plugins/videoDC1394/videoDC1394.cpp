@@ -605,22 +605,33 @@ void videoDC1394::getProperties(gem::Properties&props) {
       props.set(key, value);
     } else
     {
-		dc1394featureset_t feature_set;
-		dc1394error_t err;
-		err = dc1394_feature_get_all(m_dccamera, &feature_set);
-		dc1394bool_t is_readable;
-		// if ( err ) return false;
+    dc1394featureset_t feature_set;
+    dc1394error_t err;
+    err = dc1394_feature_get_all(m_dccamera, &feature_set);
+    dc1394bool_t is_readable;
+    // if ( err ) return false;
 
-		uint32_t dc1394_value;
-		for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
-
-			if (feature_set.feature[i].available && key == dc1394_feature_get_string(feature_set.feature[i].id)) {
-				dc1394_feature_get_value(m_dccamera, feature_set.feature[i].id, &dc1394_value);
-				value = dc1394_value;
-				props.set(key, value);
-			}
-		}
-	}
+    uint32_t dc1394_value;
+    for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
+      dc1394feature_t feature=feature_set.feature[i].id;
+      std::string sfeature = dc1394_feature_get_string(feature);
+      if (feature_set.feature[i].available && key == dc1394_feature_get_string(feature)) {
+        dc1394_feature_get_value(m_dccamera, feature, &dc1394_value);
+        value = dc1394_value;
+        props.set(key, value);
+      } else if (feature_set.feature[i].available && key == sfeature + "Mode"){
+        dc1394feature_mode_t feature_mode;
+        dc1394_feature_get_mode(m_dccamera, feature, &feature_mode);
+        switch(feature_mode) {
+        case DC1394_FEATURE_MODE_MANUAL: svalue="MANUAL"; break;
+        case DC1394_FEATURE_MODE_AUTO : svalue="AUTO"; break;
+        case DC1394_FEATURE_MODE_ONE_PUSH_AUTO : svalue="ONE_PUSH"; break;
+        default: continue;
+        }
+        props.set(key+"Mode", svalue);
+      }
+    }
+  }
   }
 }
 void videoDC1394::setProperties(gem::Properties&props) {
