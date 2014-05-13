@@ -463,6 +463,10 @@ void gemframebuffer :: fixFormat(GLenum wantFormat)
     m_internalformat = GL_RGB_FLOAT32_ATI;
     m_format = GL_RGB;
     break;
+  case  GL_RGBA32F:
+    m_internalformat = GL_RGBA32F;
+    m_format = GL_RGB;
+    break;
   case GL_RGBA:
     m_internalformat = GL_RGBA;
     m_format = GL_RGBA;
@@ -502,6 +506,8 @@ void gemframebuffer :: formatMess(std::string format)
     tmp_format = GL_RGBA;
   } else if ("RGB32"==format) {
       tmp_format =  GL_RGB_FLOAT32_ATI;
+  } else if ("RGBA32F"==format) {
+      tmp_format =  GL_RGBA32F;
   }
 
   if(tmp_format)
