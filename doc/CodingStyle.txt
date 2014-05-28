@@ -1,6 +1,6 @@
 Coding Guidelines for Gem
 =========================
-2011, IOhannes m zmölnig
+2011-2014, IOhannes m zmölnig
 
 in no special order...
 
@@ -89,6 +89,13 @@ the Gem code base is full of C-idioms and types; this is mainly because i
 started as a C-programmer and only gradually learned using C++; don't repeat my
 follies :-)
 
+C++ standard
+------------
+Gem compiles on many platforms: the build machine that builds the W32-binaries
+is an old XP-machine running "Microsoft VisualStudio 6", which was released
+in 1998. Gem needs to be able to compile on this machine.
+This means, that we cannot use any new language features introduced after (or
+around) that date, including: C++98, C++03, C++11, C++??
 
 variable naming
 ---------------
