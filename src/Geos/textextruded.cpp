@@ -65,21 +65,9 @@ void textextruded :: setDepth(float prec)
 
 textextruded :: textextruded(int argc, t_atom *argv)
   : TextBase(argc, argv)
-{
-  error("FTGL-support is needed for extruded fonts!");
-}
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
+{}
 textextruded :: ~textextruded()
 {}
-
-/////////////////////////////////////////////////////////
-// setPrecision
-//
-/////////////////////////////////////////////////////////
 void textextruded :: setDepth(float prec)
 {}
 #endif /* FTGL */

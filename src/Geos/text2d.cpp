@@ -128,20 +128,11 @@ void text2d :: renderLine(const wchar_t*line, float dist) {
 }
 
 #else /* !FTGL */
-
 text2d :: text2d(int argc, t_atom *argv)
   : TextBase(argc, argv)
-{ }
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-text2d :: ~text2d(void)
 {}
-
-void text2d :: render(GemState*){}
-
+text2d :: ~text2d()
+{}
 #endif /* FTGL */
 
 /////////////////////////////////////////////////////////
