@@ -66,6 +66,23 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
 { }
 
 
+void TextBase::breakLine(wstring)
+{ }
+void TextBase::setFontSize(float)
+{ }
+void TextBase::setFontSize(void)
+{ }
+void TextBase::setJustification(JustifyWidth)
+{ }
+void TextBase::setJustification(JustifyWidth, JustifyHeight)
+{ }
+void TextBase::setJustification(JustifyWidth, JustifyHeight, JustifyDepth)
+{ }
+TextBase::Justification TextBase::justifyFont(float, float, float, float, float, float, float)
+{ }
+
+
+
 /////////////////////////////////////////////////////////
 // static member function
 //
