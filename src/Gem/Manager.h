@@ -198,6 +198,7 @@ class GEM_EXTERN GemMan
   static int	   fsaa;
   static bool      pleaseDestroy;
 
+#ifndef GEM_MULTICONTEXT
   //////////
   // Changing these variables is likely to crash GEM
   // This is current rendering window information
@@ -210,6 +211,7 @@ class GEM_EXTERN GemMan
   // This is constant rendering window information
   // This window is always available (although not visible)
   static WindowInfo   &getConstWindowInfo(void);
+#endif /* GEM_MULTICONTEXT */
   static int 	    createConstWindow(char* disp = 0);
 
   // gemwin is allowed to modifying "global" window attributes
