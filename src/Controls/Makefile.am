@@ -32,8 +32,6 @@ libControls_la_SOURCES=  \
     gemlist_info.h \
     gemlist_matrix.cpp \
     gemlist_matrix.h \
-    gemmouse.cpp \
-    gemmouse.h \
     gemreceive.cpp \
     gemreceive.h \
     render_trigger.cpp \
@@ -42,6 +40,8 @@ libControls_la_SOURCES=  \
 if ENABLE_MULTICONTEXT
 else !ENABLE_MULTICONTEXT
 libControls_la_SOURCES+=  \
+    gemmouse.cpp \
+    gemmouse.h \
     gemwin.cpp \
     gemwin.h
 endif !ENABLE_MULTICONTEXT
