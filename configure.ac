@@ -239,6 +239,9 @@ AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
 
 if test "x${have_glew}" != "xyes"; then
   GEM_CPPFLAGS+=" -DGLEW_BUILD"
+  if test "x${enable_multicontext}" = "xyes"; then
+    GEM_CPPFLAGS+=" -DGLEW_MX"
+  fi
 fi
 
 GEM_CHECK_LIB([sdl], [SDL], [SDL_Quit],,,,[SDL windowing], [yes])
