@@ -36,8 +36,12 @@ libControls_la_SOURCES=  \
     gemmouse.h \
     gemreceive.cpp \
     gemreceive.h \
-    gemwin.cpp \
-    gemwin.h \
     render_trigger.cpp \
     render_trigger.h
 
+if ENABLE_MULTICONTEXT
+else !ENABLE_MULTICONTEXT
+libControls_la_SOURCES+=  \
+    gemwin.cpp \
+    gemwin.h
+endif !ENABLE_MULTICONTEXT
