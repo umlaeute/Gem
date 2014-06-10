@@ -911,7 +911,9 @@ void GemMan :: windowInit()
 
 #ifdef __APPLE__
   GLint swapInt = 1;
+# ifndef GEM_MULTICONTEXT
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
+# endif /* GEM_MULTICONTEXT */
 #endif
 
   /* i am not really sure whether it is a good idea to enable FSAA by default
