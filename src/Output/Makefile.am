@@ -38,7 +38,7 @@ pkglib_LTLIBRARIES += gemsdlwindow.la
 endif
 
 if HAVE_LIB_LIBGLFW
-pkglib_LTLIBRARIES += gemglfwindow.la
+pkglib_LTLIBRARIES += gemglfw2window.la
 endif
 
 if HAVE_LIB_GLFW3
@@ -235,31 +235,31 @@ gemw32window_la_SOURCES = \
 
 
 
-########### gemglfwindow ###########
+########### gemglfw2window ###########
 # some default flags
-gemglfwindow_la_CXXFLAGS =
-gemglfwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
-gemglfwindow_la_LIBADD   =
+gemglfw2window_la_CXXFLAGS =
+gemglfw2window_la_LDFLAGS  = $(COMMON_LDFLAGS)
+gemglfw2window_la_LIBADD   =
 # RTE flags
-gemglfwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemglfwindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemglfw2window_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+gemglfw2window_la_LIBADD   += @GEM_RTE_LIBS@
 # arch flags
-gemglfwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
-gemglfwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+gemglfw2window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+gemglfw2window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 # flags for building Gem externals
-gemglfwindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
-gemglfwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
-# gemglfwindow_la @MOREFLAGS@
+gemglfw2window_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemglfw2window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemglfw2window_la @MOREFLAGS@
 
 # object specific libraries
-gemglfwindow_la_CXXFLAGS += @GEM_LIB_LIBGLFW_CFLAGS@
-gemglfwindow_la_LIBADD   += @GEM_LIB_LIBGLFW_LIBS@
-gemglfwindow_la_LDFLAGS  +=
+gemglfw2window_la_CXXFLAGS += @GEM_LIB_LIBGLFW_CFLAGS@
+gemglfw2window_la_LIBADD   += @GEM_LIB_LIBGLFW_LIBS@
+gemglfw2window_la_LDFLAGS  +=
 
 ## SOURCES
-gemglfwindow_la_SOURCES = \
-  gemglfwindow.cpp \
-  gemglfwindow.h
+gemglfw2window_la_SOURCES = \
+  gemglfw2window.cpp \
+  gemglfw2window.h
 
 
 ########### gemglfw3window ###########
