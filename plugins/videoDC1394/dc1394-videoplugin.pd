@@ -1,4 +1,4 @@
-#N canvas 6 85 730 205 10;
+#N canvas 4 90 730 247 10;
 #X text 56 64 mode can be MANUAL \, AUTO and ONE_PUSH.;
 #X text 57 118 in AUTO mode \, the camera adjusts itself the parameter
 all the time.;
@@ -8,7 +8,7 @@ of a paramter (aka feature) with the message;
 #X msg 296 33 set featureMode mode;
 #X msg 357 79 set feature value;
 #X text 547 12 example :;
-#X msg 543 31 set gainMode AUTO;
-#X msg 542 76 set gain 124;
 #X text 57 158 in ONE_PUSH mode \, the camera adjusts itself the parameter
 only once.;
+#X msg 542 76 set Gain 124;
+#X msg 544 31 set GainMode AUTO;
