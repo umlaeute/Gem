@@ -624,10 +624,10 @@ void videoDC1394::getProperties(gem::Properties&props) {
           dc1394feature_mode_t feature_mode;
           dc1394_feature_get_mode(m_dccamera, feature, &feature_mode);
           switch(feature_mode) {
-          case DC1394_FEATURE_MODE_MANUAL: svalue="MANUAL"; break;
-          case DC1394_FEATURE_MODE_AUTO : svalue="AUTO"; break;
-          case DC1394_FEATURE_MODE_ONE_PUSH_AUTO : svalue="ONE_PUSH"; break;
-          default: continue;
+              case DC1394_FEATURE_MODE_MANUAL: svalue="MANUAL"; break;
+              case DC1394_FEATURE_MODE_AUTO : svalue="AUTO"; break;
+              case DC1394_FEATURE_MODE_ONE_PUSH_AUTO : svalue="ONE_PUSH"; break;
+              default: continue;
           }
           props.set(key+"Mode", svalue);
         }
