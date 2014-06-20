@@ -629,7 +629,7 @@ void videoDC1394::getProperties(gem::Properties&props) {
               case DC1394_FEATURE_MODE_ONE_PUSH_AUTO : svalue="ONE_PUSH"; break;
               default: continue;
           }
-          props.set(key+"Mode", svalue);
+          props.set(key, svalue);
         }
       }
     }
@@ -805,16 +805,16 @@ void videoDC1394::setProperties(gem::Properties&props) {
             // TODO : limit to min / max value for each parameter
           }
         } else if(key==sfeature+"Mode"){
-          dc1394feature_mode_t mode = DC1394_FEATURE_MODE_MANUAL;
-          if ( "AUTO" == svalue ) {
-            mode = DC1394_FEATURE_MODE_AUTO;
-          } else if ( "ONE_PUSH" == svalue ){
-            mode = DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
-          } else {
-            mode = DC1394_FEATURE_MODE_MANUAL;
+          if(props.get(key, svalue)){
+            dc1394feature_mode_t mode = DC1394_FEATURE_MODE_MANUAL;
+            if ( "AUTO" == svalue ) {
+              mode = DC1394_FEATURE_MODE_AUTO;
+            } else if ( "ONE_PUSH" == svalue ){
+              mode = DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
+            }
+            err=dc1394_feature_set_mode(m_dccamera, feature, mode);
+            if (err!=DC1394_SUCCESS) error("can't set %s to %s",key.c_str(), svalue.c_str());
           }
-          err=dc1394_feature_set_mode(m_dccamera, DC1394_FEATURE_GAIN, mode);
-          if (err!=DC1394_SUCCESS) error("can't set %s to %s",key.c_str(), svalue.c_str());
         }
       }
     }
