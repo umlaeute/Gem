@@ -359,7 +359,11 @@ void gemvertexbuffer :: resizeMess(unsigned int size)
   size_change_flag = true;
 }
 
-void gemvertexbuffer :: partialDrawMess(unsigned int start, unsigned int end) { m_range[0] = start; m_range[1] = end;}
+void gemvertexbuffer :: partialDrawMess(unsigned int start, unsigned int end) 
+{ 
+  m_range[0] = start; 
+  m_range[1] = end;
+}
 
 // Create VBO
 //*****************************************************************************
