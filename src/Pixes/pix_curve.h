@@ -71,11 +71,7 @@ class GEM_EXTERN pix_curve : public GemPixObj
 
   //////////
   // Set new arrays
-  void	    	setMess(int argc, t_atom *argv);
-
-  //////////
-  // the methods
-  static void setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv);
+  void	    	setMess(t_symbol*s,int argc, t_atom *argv);
 
 };
 

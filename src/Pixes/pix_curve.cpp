@@ -47,7 +47,7 @@ pix_curve :: pix_curve(int argc, t_atom *argv):
   m_mode(0)
 {
   if(argc)
-    setMess(argc, argv);
+    setMess(0, argc, argv);
 }
 
 /////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ pix_curve :: ~pix_curve()
 // Set Message
 //
 ///////////////////////////////////
-void pix_curve :: setMess(int argc, t_atom *argv)
+void pix_curve :: setMess(t_symbol*,int argc, t_atom *argv)
 {
   t_atom *ap=argv;
   int n=argc;
@@ -238,11 +238,5 @@ void pix_curve :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_curve :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_curve::setMessCallback),
-		  gensym("set"), A_GIMME,0);
-}
-
-void pix_curve :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)
-{
-    GetMyClass(data)->setMess(argc, argv);
+  CPPEXTERN_MSG(classPtr, "set", setMess);
 }
