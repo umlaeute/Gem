@@ -102,35 +102,6 @@ void pix_curve :: setMess(int argc, t_atom *argv)
   setPixModified();
 }
 
-
-///////////////
-// check if array exists and whether it is a floatarray
-//
-///////////////
-t_float* pix_curve :: checkarray(t_symbol *s, int *length)
-{
-    t_garray *a;
-    t_float  *fp;
-    *length = 0;
-
-    if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-    {
-    	if (*s->s_name) error("%s: no such array", s->s_name);
-    	fp = 0;
-    }
-    else if (!garray_getfloatarray(a, length, &fp))
-    {
-    	error("%s: bad template for tabwrite~", s->s_name);
-    	fp = 0;
-    }
-
-    if (*length==0){
-      error("table %s is zero-lengthed", s->s_name);
-      fp=0;
-    }
-    return fp;
-}
-
 #define setTable(tab, nam) if (nam)tab.name(nam->s_name)
 #define checkTable(tab) bool use_##tab=tab.isValid(); int n_##tab=tab.size(); post(#tab": %d\t%d", use_##tab, n_##tab)
 #define applyTable(tab, chan) if (use_##tab) base[chan]=CLAMP(static_cast<int>(tab[ n_##tab*base[chan]>>8 ]));

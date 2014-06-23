@@ -70,11 +70,6 @@ class GEM_EXTERN pix_curve : public GemPixObj
   int m_mode;
 
   //////////
-  // check for good arrays
-  t_float* checkarray(t_symbol *s, int *length);
-
-
-  //////////
   // Set new arrays
   void	    	setMess(int argc, t_atom *argv);
 
