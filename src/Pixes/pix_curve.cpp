@@ -46,7 +46,8 @@ pix_curve :: pix_curve(int argc, t_atom *argv):
   name_R(0), name_G(0), name_B(0), name_A(0),
   m_mode(0)
 {
-  setMess(argc, argv);
+  if(argc)
+    setMess(argc, argv);
 }
 
 /////////////////////////////////////////////////////////
