@@ -103,7 +103,7 @@ void pix_curve :: setMess(int argc, t_atom *argv)
 }
 
 #define setTable(tab, nam) if (nam)tab.name(nam->s_name)
-#define checkTable(tab) bool use_##tab=tab.isValid(); int n_##tab=tab.size(); post(#tab": %d\t%d", use_##tab, n_##tab)
+#define checkTable(tab) bool use_##tab=tab.isValid(); int n_##tab=tab.size()
 #define applyTable(tab, chan) if (use_##tab) base[chan]=CLAMP(static_cast<int>(tab[ n_##tab*base[chan]>>8 ]));
 
 /////////////////////////////////////////////////////////
