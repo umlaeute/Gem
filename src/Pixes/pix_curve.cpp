@@ -131,6 +131,9 @@ t_float* pix_curve :: checkarray(t_symbol *s, int *length)
     return fp;
 }
 
+#define setTable(tab, nam) if (nam)tab.name(nam->s_name)
+#define checkTable(tab) bool use_##tab=tab.isValid(); int n_##tab=tab.size(); post(#tab": %d\t%d", use_##tab, n_##tab)
+#define applyTable(tab, chan) if (use_##tab) base[chan]=CLAMP(static_cast<int>(tab[ n_##tab*base[chan]>>8 ]));
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -141,41 +144,53 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
 
-  int n_R, n_G, n_B, n_A;
+  switch(m_mode){
+  case 4: case 3: case 1:  break;
+  default:                 return;
+  }
 
-  if (m_mode==0) return;
+  gem::RTE::Array tabR, tabG, tabB, tabA;
 
-  gem::RTE::Array tabR=gem::RTE::Array(name_R->s_name);
-  gem::RTE::Array tabG=gem::RTE::Array(name_G->s_name);
-  gem::RTE::Array tabB=gem::RTE::Array(name_B->s_name);
-  gem::RTE::Array tabA=gem::RTE::Array(name_A->s_name);
+  switch(m_mode) {
+  case 4:
+    setTable(tabA, name_A);
+  case 3:
+    setTable(tabR, name_R);
+    setTable(tabG, name_G);
+    setTable(tabB, name_B);
+    break;
+  case 1:
+    setTable(tabR, name_R);
+    setTable(tabG, name_R);
+    setTable(tabB, name_R);
+    setTable(tabA, name_R);
+    break;
+  default:
+    error("invalid mode %d", m_mode);
+    return;
+  }
 
-  n_R=tabR.size();
-  n_G=tabG.size();
-  n_B=tabB.size();
-  n_A=tabA.size();
+  checkTable(tabR);
+  checkTable(tabG);
+  checkTable(tabB);
+  checkTable(tabA);
 
   switch (m_mode) {
   case 3: // only RGB
-    if(! (tabR.isValid() && tabG.isValid() && tabB.isValid()))
-       return;
     while (i--) {
-      base[chRed  ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed  ]>>8 ]));
-      base[chGreen]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen]>>8 ]));
-      base[chBlue ]=CLAMP(static_cast<int>(tabB[ n_B*base[chBlue ]>>8 ]));
-
+      applyTable(tabR, chRed);
+      applyTable(tabG, chGreen);
+      applyTable(tabB, chBlue);
       base+=4;
     }
     break;
   case 4: // RGBA
   case 1: // one table for all
-    if(! (tabR.isValid() && tabG.isValid() && tabB.isValid() && tabA.isValid()))
-       return;
     while (i--) {
-      base[chRed   ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed   ]>>8 ]));
-      base[chGreen ]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen ]>>8 ]));
-      base[chBlue  ]=CLAMP(static_cast<int>(tabB[ n_B*base[chBlue  ]>>8 ]));
-      base[chAlpha ]=CLAMP(static_cast<int>(tabA[ n_A*base[chAlpha]>>8 ]));
+      applyTable(tabR, chRed);
+      applyTable(tabG, chGreen);
+      applyTable(tabB, chBlue);
+      applyTable(tabA, chBlue);
 
       base+=4;
     }
@@ -191,13 +206,17 @@ void pix_curve :: processGrayImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
+  switch(m_mode){
+  case 1: break;
+  default: return;
+  }
 
-  gem::RTE::Array tab=gem::RTE::Array(name_R->s_name);
-  int n = tab.size();
+  gem::RTE::Array tabY;
+  setTable(tabY, name_R);
+  checkTable(tabY);
 
-  if(!tab.isValid())return;
   while (i--) {
-    base[chGray]=CLAMP(static_cast<int>(tab[ n*base[chGray]>>8 ]));
+    applyTable(tabY, chGray);
     base++;
   }
 }
@@ -206,40 +225,35 @@ void pix_curve :: processYUVImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize/2;
   unsigned char *base = image.data;
+  switch(m_mode){
+  case 3: case 1:  break;
+  default:         return;
+  }
 
-  int n_Y, n_U, n_V;
+  gem::RTE::Array tabY, tabU, tabV;
 
-  if (m_mode==0) return;
-
-  gem::RTE::Array tabY=gem::RTE::Array(name_R->s_name);
-  gem::RTE::Array tabU=gem::RTE::Array(name_G->s_name);
-  gem::RTE::Array tabV=gem::RTE::Array(name_B->s_name);
-
-  n_Y=tabY.size();
-  n_U=tabU.size();
-  n_V=tabV.size();
+  setTable(tabY, name_R);
+  setTable(tabU, name_G);
+  setTable(tabV, name_B);
+  checkTable(tabY);
+  checkTable(tabU);
+  checkTable(tabV);
 
   switch (m_mode) {
+  case 4: // ignore 4th table
   case 3: // YUV
-    if(! (tabY.isValid() && tabU.isValid() && tabV.isValid()))
-      return;
     while (i--) {
-      base[chU ]=CLAMP(static_cast<int>(tabY[ n_U*base[chU ]>>8 ]));
-      base[chY0]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY0]>>8 ]));
-      base[chV ]=CLAMP(static_cast<int>(tabY[ n_V*base[chV ]>>8 ]));
-      base[chY1]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY1]>>8 ]));
-
+      applyTable(tabU, chU );
+      applyTable(tabY, chY0);
+      applyTable(tabV, chV );
+      applyTable(tabY, chY1);
       base+=4;
     }
     break;
   case 1: // only Y
-    if(! (tabY.isValid()))
-      return;
-
     while (i--) {
-      base[chY0]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY0]>>8 ]));
-      base[chY1]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY1]>>8 ]));
-
+      applyTable(tabY, chY0);
+      applyTable(tabY, chY1);
       base+=4;
     }
   default:
