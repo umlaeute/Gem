@@ -146,6 +146,9 @@ else
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$4])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$4])])dnl
 
+  AC_CHECK_LIB([$2],[$4],,,[$7])
+  AC_CHECK_HEADERS([$3])
+
 ## unset ac_Lib is possible
   (unset ac_Lib) >/dev/null 2>&1 && unset ac_Lib
 
@@ -210,6 +213,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$8])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$8])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$4),[1], [Define to 1 if you have the `$4' function.])
+
     GEM_LIB_[]NAME[]_CFLAGS=${PKG_[]NAME[]_CFLAGS}
     GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
     GEM_CHECK_LIB_CFLAGS="${GEM_LIB_[]NAME[]_CFLAGS} ${GEM_CHECK_LIB_CFLAGS}"
@@ -228,6 +232,8 @@ dnl turn of further checking for this package
 fi[]dnl
 
 AM_CONDITIONAL(HAVE_LIB_[]NAME, [test "x${have_[]Name}" = "xyes"])
+AS_IF([test "x${have_[]Name}" = "xyes" ],
+      [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_LIB_$1),[1], [$8])],[])
 # restore original flags
 CPPFLAGS="$tmp_gem_check_lib_cppflags"
 CFLAGS="$tmp_gem_check_lib_cflags"
