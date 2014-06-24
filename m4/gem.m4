@@ -90,8 +90,7 @@ undefine([NAME])
 ])# GEM_TARGET_DISABLED
 
 
-
-# GEM_CHECK_LIB(NAME, LIBRARY, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT], [DEFAULT-WITH_VALUE])
+# GEM_CHECK_LIB(NAME, LIBRARY, HEADER, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT], [DEFAULT-WITH_VALUE])
 #
 ## this automatically adds the option "--without-NAME" to disable the checking for the library
 ## additionally it gives the options "--with-NAME-includes" and "--with-NAME-libs", 
@@ -106,15 +105,15 @@ AC_SUBST(GEM_LIB_[]NAME[]_CFLAGS)
 AC_SUBST(GEM_LIB_[]NAME[]_LIBS)
 
 AC_ARG_WITH([Name],
-             AC_HELP_STRING([--without-[]Name], [disable Name ($7)]))
+             AC_HELP_STRING([--without-[]Name], [disable Name ($8)]))
 AC_ARG_WITH([]Name-includes,
              AC_HELP_STRING([--with-[]Name-includes=/path/to/[]Name/include/], [include path for Name]))
 AC_ARG_WITH([]Name-libs,
              AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for Name]))
 
-  if test "x$with_[]Name" = "x"; then with_[]Name="$8"; fi 
+  if test "x$with_[]Name" = "x"; then with_[]Name="$9"; fi
 
-  if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi 
+  if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi
   if test "x$with_ALL" = "xno"  && test "x$with_[]Name" = "x"; then with_[]Name="no"; fi
 
 tmp_gem_check_lib_cppflags="$CPPFLAGS"
@@ -135,14 +134,14 @@ else
     LIBS="-L$with_[]Name[]_libs $LIBS"
   fi
   AS_LITERAL_IF([$2],
-              [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$3])],
-              [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$3])])dnl
+              [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$4])],
+              [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$4])])dnl
 
 ## unset ac_Lib is possible
   (unset ac_Lib) >/dev/null 2>&1 && unset ac_Lib
 
 ## 1st we check, whether pkg-config knows something about this package
-dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB([$2],[$3],,,[$6]))
+dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB([$2],[$4],,,[$7]))
   PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(ac_Lib)yes,:)
 
   if test "x$ac_Lib" != "xyes"; then
@@ -187,9 +186,9 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
     fi
    fi
 
-## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB
+## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB / AC_CHECK_HEADERS
    if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
-    AC_CHECK_LIB([$2],[$3],,,[$6])
+    AC_CHECK_LIB([$2],[$4],,,[$7])
     PKG_[]NAME[]_LIBS="-l$2"
    else
      PKG_LIBS="${PKG_[]NAME[]_LIBS} ${PKG_LIBS}"
@@ -198,19 +197,19 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 
   AS_IF([test "x$ac_Lib" != "xno"],
    [
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$7])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$7])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$3),[1], [Define to 1 if you have the `$3' function.])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$8])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$8])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$4),[1], [Define to 1 if you have the `$4' function.])
     GEM_LIB_[]NAME[]_CFLAGS=${PKG_[]NAME[]_CFLAGS}
     GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
-dnl    PKG_LIBS="$6 ${PKG_LIBS}"
+dnl    PKG_LIBS="$7 ${PKG_LIBS}"
     have_[]Name="yes"
 dnl turn of further checking for this package
     with_[]Name="no"
-    [$4]
+    [$5]
    ],[
     have_[]Name="no"
-    [$5]
+    [$6]
    ])
    AS_VAR_POPDEF([ac_Lib])dnl
 

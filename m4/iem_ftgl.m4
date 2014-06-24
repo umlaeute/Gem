@@ -8,7 +8,7 @@ AC_DEFUN([IEM_CHECK_FTGL],
 dnl PKG_CHECK_MODULES(PKG_FT2,freetype2)
 
 
-GEM_CHECK_LIB([ftgl], [ftgl], [main],,,[-lfreetype],[font support])
+GEM_CHECK_LIB([ftgl], [ftgl],, [main],,,[-lfreetype],[font support])
 
 tmp_gem_check_ftgl_cflags="$CFLAGS"
 tmp_gem_check_ftgl_cxxflags="$CXXFLAGS"
