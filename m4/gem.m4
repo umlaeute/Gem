@@ -129,9 +129,11 @@ else
     CFLAGS="-I$with_[]Name[]_includes $CFLAGS"
     CPPFLAGS="-I$with_[]Name[]_includes $CPPFLAGS"
     CXXFLAGS="-I$with_[]Name[]_includes $CXXFLAGS"
+    PKG_[]NAME[]_CFLAGS="-I$with_[]Name[]_includes"
   fi
   if test -d "$with_[]Name[]_libs"; then
     LIBS="-L$with_[]Name[]_libs $LIBS"
+    PKG_[]NAME[]_LIBS="-L$with_[]Name[]_libs"
   fi
   AS_LITERAL_IF([$2],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$4])],
