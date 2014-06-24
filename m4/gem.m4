@@ -90,12 +90,19 @@ undefine([NAME])
 ])# GEM_TARGET_DISABLED
 
 
-# GEM_CHECK_LIB(NAME, LIBRARY, HEADER, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT], [DEFAULT-WITH_VALUE])
+# GEM_CHECK_LIB(NAME, LIBRARY, HEADERS, FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [ADDITIONAL_LIBS], [HELP-TEXT], [DEFAULT-WITH_VALUE])
 #
 ## this automatically adds the option "--without-NAME" to disable the checking for the library
-## additionally it gives the options "--with-NAME-includes" and "--with-NAME-libs", 
+##
+## per default, this tries to use pkg-config or NAME-config to determine build flags.
+## if this fails, LIBRARY (containing FUNCTION) and HEADERS are checked for explicitely
+## both LIBRARY and *all* HEADERS must be present to succeed.
+## HEADERS may be empty
+##
+## additionally this gives the options "--with-NAME-includes" and "--with-NAME-libs",
 ## to manually add searchpaths for the include-files and libraries
-## the only check performed on these paths is whether they are real paths
+## the only check performed on these paths is whether they are real paths.
+## using the ...-includes or ...-libs flags, overrides PKG_..._CFLAGS (resp PKG_..._LIBS)
 AC_DEFUN([GEM_CHECK_LIB],
 [
  define([Name],[translit([$1],[./-+], [____])])
