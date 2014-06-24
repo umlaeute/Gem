@@ -20,7 +20,7 @@ AC_LANG(C++)
 
 
 ## check for AVT!
-GEM_CHECK_LIB(libPvAPI,PvAPI,,main,,,,[video input (Prosilica)])
+GEM_CHECK_LIB([libPvAPI],[PvAPI],[PvApi.h],[PvInitialize],,,,[video input (Prosilica)])
 
 
 
