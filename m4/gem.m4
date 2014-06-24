@@ -144,7 +144,7 @@ else
 
 ## 1st we check, whether pkg-config knows something about this package
 dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB([$2],[$4],,,[$7]))
-  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(ac_Lib)yes,:)
+  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET([ac_Lib], [yes]),:)
 
   if test "x$ac_Lib" != "xyes"; then
 ## pkg-config has failed
