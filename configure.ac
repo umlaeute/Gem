@@ -224,8 +224,8 @@ if test "x$with_glewmx" = "x"; then with_glewmx="$with_glew"; fi
 if test "x$with_glewmx-includes" = "x"; then with_glewmx="$with_glew-includes"; fi
 if test "x$with_glewmx-libs" = "x"; then with_glewmx="$with_glew-libs"; fi
 
-GEM_CHECK_LIB([glew], [GLEW],, [glewInit],,,,[OpenGL Extension Wrangler library], [no])
-GEM_CHECK_LIB([glewmx], [GLEWmx],, [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+GEM_CHECK_LIB([glew], [GLEW],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+GEM_CHECK_LIB([glewmx], [GLEWmx],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
 
 
 if test "x$enable_multicontext" = "xyes"; then
@@ -244,12 +244,12 @@ if test "x${have_glew}" != "xyes"; then
   fi
 fi
 
-GEM_CHECK_LIB([sdl], [SDL],, [SDL_Quit],,,,[SDL windowing], [yes])
+GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing], [yes])
 
 ## use GLFW windowing framework
 GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW windowing], [yes])
 ## use GLFW3 windowing framework
-GEM_CHECK_LIB([glfw3], [glfw3],, [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
+GEM_CHECK_LIB([glfw3], [glfw3],[GLFW/glfw3.h], [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
 
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
@@ -284,13 +284,13 @@ if test "x$with_MagickCore" = "x"; then
 fi
 
 GEM_CHECK_LIB([ImageMagick++], 
-              [Magick++],,
+              [Magick++],[Magick++.h],
               [main],
               AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
               ,,[image loader])
 
 GEM_CHECK_LIB([MagickCore], 
-              [Magick],,
+              [Magick],[magick/MagickCore.h],
               [main],
               AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
    	          ,,[image loader])
@@ -300,19 +300,19 @@ GEM_CHECK_LIB([MagickCore],
 # with_tiff=no
 # with_jpeg=no
 #fi
-GEM_CHECK_LIB([tiff], [tiff],, [TIFFOpen],,,,[image loader])
-GEM_CHECK_LIB([jpeg], [jpeg],, [jpeg_read_header],,,,[image loader])
+GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
+GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
 
 IEM_CHECK_FTGL()
-GEM_CHECK_LIB([fribidi], [fribidi],, [fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
+GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
 
 ## film en/decoders
-GEM_CHECK_LIB([avifile], [aviplay],, [CreateIAviReadFile],,,,[movie loader])
-GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec],, [gavl_start],,,,[movie loader])
-GEM_CHECK_LIB([mpeg], [mpeg],, [OpenMPEG],,,,[movie loader])
-GEM_CHECK_LIB([libmpeg3], [mpeg3],, [mpeg3_check_sig],,,,[movie loader])
-GEM_CHECK_LIB([libquicktime], [quicktime],, [quicktime_init],,,,[movie loader])
-GEM_CHECK_LIB([lqt], [quicktime],, [quicktime_init],,,,[movie loader])
+GEM_CHECK_LIB([avifile], [aviplay],[avifile.h], [CreateIAviReadFile],,,,[movie loader])
+GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec],[gmerlin/avdec.h], [gavl_start],,,,[movie loader])
+GEM_CHECK_LIB([mpeg], [mpeg],[mpeg.h], [OpenMPEG],,,,[movie loader])
+GEM_CHECK_LIB([libmpeg3], [mpeg3],[libmpeg3.h], [mpeg3_check_sig],,,,[movie loader])
+GEM_CHECK_LIB([libquicktime], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
+GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
 
 # special function in libquicktime
 old_cflags=${CFLAGS}
@@ -325,15 +325,15 @@ CFLAGS=${old_cflags}
 LDFLAGS=${old_ldflags}
 
 #video
-GEM_CHECK_LIB([libdc1394-2], [dc1394],,   [main],,,, [video input])
-GEM_CHECK_LIB([libdv],       [dv],,       [main],,,, [video input])
-GEM_CHECK_LIB([libraw1394],  [raw1394],,  [main],,,, [video input])
-GEM_CHECK_LIB([libiec61883], [iec61883],, [main],,,, [video input])
+GEM_CHECK_LIB([libdc1394-2], [dc1394],[dc1394/dc1394.h],   [dc1394_new],,,, [video input])
+GEM_CHECK_LIB([libdv],       [dv],[libdv/dv.h],       [dv_cleanup],,,, [video input])
+GEM_CHECK_LIB([libraw1394],  [raw1394],[libraw1394/raw1394.h],  [raw1394_new_handle],,,, [video input])
+GEM_CHECK_LIB([libiec61883], [iec61883],[libiec61883/iec61883.h], [iec61883_dv_fb_init],,,, [video input])
 AC_CHECK_HEADERS([vl/vl.h])
 
 GEM_ARG_WITH([unicap], [video input], [force])
 
-GEM_CHECK_LIB([libunicap], [unicap],, [unicap_check_version],,,, [video input])
+GEM_CHECK_LIB([libunicap], [unicap],[unicap.h], [unicap_check_version],,,, [video input])
 
 if test "x$have_unicap" = "xyes"; then
  AC_CHECK_HEADER([unicap/unicap.h],
@@ -351,7 +351,7 @@ AM_CONDITIONAL([HAVE_LIB_UNICAP], [test "x${have_unicap}" = "xyes"])
 have_v4l="no"
 GEM_ARG_WITH([v4l], [video input], [force])
 AC_CHECK_HEADERS([linux/videodev.h], have_v4l="yes")
-GEM_CHECK_LIB([libv4l1], [v4l1],, [v4l1_open],,,, [video output])
+GEM_CHECK_LIB([libv4l1], [v4l1],[libv4l1.h], [v4l1_open],,,, [video output])
 if test "x$have_libv4l1" = "xyes"; then
   have_v4l="yes (libv4l)"
 fi
@@ -364,7 +364,7 @@ AM_CONDITIONAL([HAVE_V4L], [test "x${have_v4l}" != "xno"])
 have_v4l2="no"
 GEM_ARG_WITH([v4l2], [video input], [force])
 AC_CHECK_HEADERS([linux/videodev2.h])
-GEM_CHECK_LIB([libv4l2], [v4l2],, [v4l2_open],,,, [video input])
+GEM_CHECK_LIB([libv4l2], [v4l2],[libv4l2.h], [v4l2_open],,,, [video input])
 # AC_DEFINE([HAVE_VIDEO4LINUX2], [], [video capturing using v4l2])
 
 if test "x$have_libv4l2" = "xyes"; then
@@ -377,15 +377,15 @@ AM_CONDITIONAL([HAVE_V4L2], [test "x${have_v4l2}" != "xno"])
 
 
 dnl GEM_CHECK_LIB([vfw32], [vfw32],, [AVIFileInit],,,, [video input])
-GEM_CHECK_LIB([vfw32], [vfw32],, [main],,,, [video input])
+GEM_CHECK_LIB([vfw32], [vfw32],[vfw.h], [capGetVideoFormat],,,, [video input])
 # is this needed?
 dnl GEM_CHECK_LIB([avicap32],[avicap32],,[main],,,,[video input])
 
 # VLC
-GEM_CHECK_LIB([libvlc], [vlc],, [libvlc_video_set_callbacks],,,, [video input])
+GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [video input])
 
 # assimp
-GEM_CHECK_LIB([assimp], [assimp],, [aiDetachAllLogStreams],,,, [3D model loading])
+GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
 
 
 
