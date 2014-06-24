@@ -247,15 +247,7 @@ fi
 GEM_CHECK_LIB([sdl], [SDL],, [SDL_Quit],,,,[SDL windowing], [yes])
 
 ## use GLFW windowing framework
-GEM_CHECK_LIB([libglfw], [glfw],, [glfwInit],,,,[GLFW windowing], [yes])
-if test "x${have_libglfw}" = "xyes"; then
-   old_cppflags=${CPPFLAGS}
-   CPPFLAGS="${GEM_LIB_LIBGLFW_CPPFLAGS} ${CPPFLAGS}"
-   AC_CHECK_HEADERS([GL/glfw.h],, [have_libglfw="no"])
-   CPPFLAGS=${old_cppflags}
-fi
-AM_CONDITIONAL(HAVE_LIB_LIBGLFW, [test "x${have_libglfw}" = "xyes"])
-
+GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW windowing], [yes])
 ## use GLFW3 windowing framework
 GEM_CHECK_LIB([glfw3], [glfw3],, [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
 
