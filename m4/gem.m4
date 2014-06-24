@@ -189,11 +189,15 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
    fi
 
 ## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB / AC_CHECK_HEADERS
+   AS_VAR_SET([ac_Lib], [yes])
    if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
-    AC_CHECK_LIB([$2],[$4],,,[$7])
+    AC_CHECK_LIB([$2],[$4],,AS_VAR_SET([ac_Lib], [no]),[$7])
     PKG_[]NAME[]_LIBS="-l$2"
    else
      PKG_LIBS="${PKG_[]NAME[]_LIBS} ${PKG_LIBS}"
+   fi
+   if test "x$3" != "x" && test "x${ac_Lib}" != "xno"; then
+    AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
    fi
   fi
 
