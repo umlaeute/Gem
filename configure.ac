@@ -112,8 +112,8 @@ AC_SUBST(X_PRE_LIBS)
 AC_SUBST(X_LIBS)
 AC_SUBST(X_EXTRA_LIBS)
 
-AC_SUBST(PKG_CFLAGS)
-AC_SUBST(PKG_LIBS)
+AC_SUBST(GEM_CHECK_LIB_CFLAGS)
+AC_SUBST(GEM_CHECK_LIB_LIBS)
 AC_SUBST(prefix)
 
 # Checks for programs.
@@ -431,7 +431,7 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
-LIBS="$LIBS $PKG_LIBS"
+LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
 AC_MSG_CHECKING(for lqt_open_write)
 AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])], 
         AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
@@ -693,11 +693,11 @@ Result:
 Configuration:
   Compiler               : ${CXX}
   CXXFLAGS               : ${CXXFLAGS} ${X_CFLAGS}
-			 : ${PKG_CFLAGS}
+			 : ${GEM_CHECK_LIB_CFLAGS}
   DEFINES		 : ${DEFINES}
 
   LIBS                   : ${LIBS}
-			 : ${PKG_LIBS}
+			 : ${GEM_CHECK_LIB_LIBS}
   LDFLAGS		 : ${LDFLAGS}
 			 : ${X_LIBS}
 

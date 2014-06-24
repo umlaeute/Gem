@@ -177,7 +177,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
     if test "x$PKG_[]NAME[]_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_[]NAME --cflags >/dev/null 2>&1; then
         PKG_[]NAME[]_CFLAGS=$(${gem_check_lib_pkgconfig_[]NAME} --cflags)
-        PKG_CFLAGS="$PKG_[]NAME[]_CFLAGS $PKG_CFLAGS"
+        GEM_CHECK_LIB_CFLAGS="$PKG_[]NAME[]_CFLAGS $GEM_CHECK_LIB_CFLAGS"
       fi
     fi
  
@@ -198,10 +198,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 ## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB / AC_CHECK_HEADERS
    AS_VAR_SET([ac_Lib], [yes])
    if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
-    AC_CHECK_LIB([$2],[$4],,AS_VAR_SET([ac_Lib], [no]),[$7])
-    PKG_[]NAME[]_LIBS="-l$2"
-   else
-     PKG_LIBS="${PKG_[]NAME[]_LIBS} ${PKG_LIBS}"
+    AC_CHECK_LIB([$2],[$4],PKG_[]NAME[]_LIBS="-l$2",AS_VAR_SET([ac_Lib], [no]),[$7])
    fi
    if test "x$3" != "x" && test "x${ac_Lib}" != "xno"; then
     AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
@@ -215,7 +212,9 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$4),[1], [Define to 1 if you have the `$4' function.])
     GEM_LIB_[]NAME[]_CFLAGS=${PKG_[]NAME[]_CFLAGS}
     GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
-dnl    PKG_LIBS="$7 ${PKG_LIBS}"
+    GEM_CHECK_LIB_CFLAGS="${GEM_LIB_[]NAME[]_CFLAGS} ${GEM_CHECK_LIB_CFLAGS}"
+    GEM_CHECK_LIB_LIBS="${GEM_LIB_[]NAME[]_LIBS} ${GEM_CHECK_LIB_LIBS}"
+
     have_[]Name="yes"
 dnl turn of further checking for this package
     with_[]Name="no"
