@@ -164,7 +164,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
    if test "x$1" != "x"; then
     gem_check_lib_pkgconfig_[]NAME="$1"-config
     if which -- "$gem_check_lib_pkgconfig_[]NAME" >/dev/null 2>&1; then
-     gem_check_lib_pkgconfig_[]NAME=`which "$1"-config`
+     gem_check_lib_pkgconfig_[]NAME=$(which "$1"-config)
      AC_MSG_RESULT([yes])
     else
      gem_check_lib_pkgconfig_[]NAME=""
@@ -344,7 +344,7 @@ if test "$fat_binary" != no; then
     if test -z "$TARGET_ARCHS"; then
    	# Respect ARCH given to --enable-fat-binary if present.
      if test "$fat_binary" != yes; then
-	    TARGET_ARCHS=`echo "$fat_binary" | tr ',' ' '`
+	    TARGET_ARCHS=$(echo "$fat_binary" | tr ',' ' ')
      else
 	    # Choose a default set of architectures based upon platform.
       TARGET_ARCHS="ppc i386"
@@ -492,7 +492,7 @@ else
      EXT="pd_linux"
      ;;
    *)
-     EXT=pd_`echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//'`
+     EXT=pd_$(echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//')
      ;;
   esac
 fi
