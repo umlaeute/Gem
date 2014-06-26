@@ -40,7 +40,7 @@
 #include <sys/time.h>
 #include <linux/types.h>
 #include <sys/mman.h>
-//#ifdef HAVE_PTHREADS
+//#if (defined HAVE_PTHREADS) || (defined HAVE_PTHREAD)
 #include <pthread.h>
 //#endif
 #define V4L_DEVICENO 0
