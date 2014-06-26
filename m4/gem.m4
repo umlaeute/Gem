@@ -132,6 +132,7 @@ tmp_gem_check_lib_libs="$LIBS"
 if test x$with_[]Name = "xno"; then
   have_[]Name="no (forced)"
 else
+  have_[]Name="no (needs check)"
   if test -d "$with_[]Name[]_includes"; then
     CFLAGS="-I$with_[]Name[]_includes $CFLAGS"
     CPPFLAGS="-I$with_[]Name[]_includes $CPPFLAGS"
@@ -145,9 +146,6 @@ else
   AS_LITERAL_IF([$2],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$4])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$4])])dnl
-
-  AC_CHECK_LIB([$2],[$4],,,[$7])
-  AC_CHECK_HEADERS([$3])
 
 ## unset ac_Lib is possible
   (unset ac_Lib) >/dev/null 2>&1 && unset ac_Lib
@@ -174,13 +172,13 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 
    if test "x$gem_check_lib_pkgconfig_[]NAME" != "x"; then
 ## fabulous, we have ${1}-config
+   AS_VAR_SET([ac_Lib], [yes])
 ## lets see what it reveals
 
 ## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
     if test "x$PKG_[]NAME[]_CFLAGS" = "x"; then
       if $gem_check_lib_pkgconfig_[]NAME --cflags >/dev/null 2>&1; then
         PKG_[]NAME[]_CFLAGS=$(${gem_check_lib_pkgconfig_[]NAME} --cflags)
-        GEM_CHECK_LIB_CFLAGS="$PKG_[]NAME[]_CFLAGS $GEM_CHECK_LIB_CFLAGS"
       fi
     fi
  
@@ -199,16 +197,18 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
    fi
 
 ## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB / AC_CHECK_HEADERS
-   AS_VAR_SET([ac_Lib], [yes])
-   if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
-    AC_CHECK_LIB([$2],[$4],PKG_[]NAME[]_LIBS="-l$2",AS_VAR_SET([ac_Lib], [no]),[$7])
-   fi
-   if test "x$3" != "x" && test "x${ac_Lib}" != "xno"; then
-    AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
+   if test "x$ac_Lib" != "xyes"; then
+     AS_VAR_SET([ac_Lib], [yes])
+     if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
+      AC_CHECK_LIB([$2],[$4],PKG_[]NAME[]_LIBS="-l$2",AS_VAR_SET([ac_Lib], [no]),[$7])
+     fi
+     if test "x$3" != "x" && test "x${ac_Lib}" != "xno"; then
+      AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
+     fi
    fi
   fi
 
-  AS_IF([test "x$ac_Lib" != "xno"],
+  AS_IF([test "x$ac_Lib" = "xyes"],
    [
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$8])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$8])
@@ -218,6 +218,9 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
     GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
     GEM_CHECK_LIB_CFLAGS="${GEM_LIB_[]NAME[]_CFLAGS} ${GEM_CHECK_LIB_CFLAGS}"
     GEM_CHECK_LIB_LIBS="${GEM_LIB_[]NAME[]_LIBS} ${GEM_CHECK_LIB_LIBS}"
+
+    CPPFLAGS="${PKG_[]NAME[]_CFLAGS} ${CPPFLAGS}"
+    LDFLAGS="${PKG_[]NAME[]_LIBS} ${LDFLAGS}"
 
     have_[]Name="yes"
 dnl turn of further checking for this package
@@ -230,6 +233,9 @@ dnl turn of further checking for this package
    AS_VAR_POPDEF([ac_Lib])dnl
 
 fi[]dnl
+
+AC_CHECK_LIB([$2],[$4],,,[$7])
+AC_CHECK_HEADERS([$3])
 
 AM_CONDITIONAL(HAVE_LIB_[]NAME, [test "x${have_[]Name}" = "xyes"])
 AS_IF([test "x${have_[]Name}" = "xyes" ],
