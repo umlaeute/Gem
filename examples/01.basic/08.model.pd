@@ -42,7 +42,7 @@
 #X connect 7 0 0 0;
 #X connect 8 0 0 0;
 #X restore 38 129 pd gemwin;
-#X msg 38 105 destroy;
+#X msg 38 105 create;
 #X text 34 85 Create window and render;
 #X text 69 378 Gem can load 3d-models in the alias|wavefront .obj format
 ;
