@@ -70,6 +70,7 @@ nobase_dist_gemexamples_DATA = \
 	04.pix/24.time-filtering.pd \
 	04.pix/25.buffer.pd \
 	04.pix/26.framebuffer_readback.pd \
+	04.pix/27.bitmap_font.pd \
 	04.video/00.SimpleVideo.pd \
 	04.video/01.VideoPaint.pd \
 	04.video/02.VideoSphere.pd \
