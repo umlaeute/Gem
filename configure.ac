@@ -188,7 +188,7 @@ AC_CHECK_LIB([msvcrt], [fclose])
 AC_CHECK_LIB([msvcprt], [main])
 # Winsock Library
 AC_CHECK_LIB([ws2_32], [main])
-AC_CHECK_LIB([wsock32], [main])
+AC_CHECK_LIB([wsock32], [select])
 
 # w32 window creating 
 AC_CHECK_LIB([gdi32], [main])
