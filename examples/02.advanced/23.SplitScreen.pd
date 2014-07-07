@@ -1,4 +1,4 @@
-#N canvas 28 51 799 698 10;
+#N canvas 26 51 799 698 10;
 #N canvas 22 50 213 300 Gem.init 0;
 #X obj 71 191 outlet;
 #X obj 71 81 loadbang;
@@ -11,7 +11,7 @@
 #X connect 3 1 2 0;
 #X connect 4 0 0 0;
 #X restore 24 75 pd Gem.init;
-#N canvas 332 99 682 322 gemwin 0;
+#N canvas 330 97 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
 -1 -1 1 1;
 #X obj 102 161 r \$0-gemstart;
@@ -60,8 +60,8 @@
 #X obj 141 501 + 1;
 #X obj 141 523 % 360;
 #X obj 36 669 teapot;
-#X obj 54 214 gemhead;
-#X obj 54 236 world_light;
+#X obj 142 101 gemhead;
+#X obj 142 123 world_light;
 #X obj 36 417 gemreceive framehead 50;
 #X obj 36 648 scale 1;
 #N canvas 223 51 450 300 scale 0;
@@ -139,7 +139,7 @@
 #X msg 255 187 0;
 #X msg 290 185 0;
 #X obj 133 78 loadbang;
-#X obj 202 83 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 202 83 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 133 122 random 6;
 #X obj 133 100 metro 500;
@@ -240,19 +240,26 @@
 #X obj 305 82 unpack 0 0 0;
 #X obj 277 102 rotateXYZ 0 0 0;
 #X msg 454 40 view 0 0 -4 \$1;
-#X floatatom 454 19 5 0 0 0 - - -, f 5;
 #X obj 277 213 s framehead1;
 #X obj 588 50 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 263 17 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X obj 263 263 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 263 263 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
-#X obj 588 278 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 588 278 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 423 540 ortho;
 #X obj 246 664 square 1;
 #X obj 246 503 translateXYZ 3 -2 0;
+#X text 14 161 this will render a single scene;
+#X text 13 189 from two different view-points;
+#X text 13 175 into two framebuffers.;
+#X text 16 224 the red sphere is only rendered;
+#X text 18 240 in the left-hand "screen".;
+#X obj 454 23 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 10
+-262144 -1 -1 0 256;
+#X floatatom 141 549 5 0 0 0 - - -, f 5;
 #X connect 0 0 1 0;
 #X connect 2 0 11 0;
 #X connect 3 0 2 0;
@@ -281,12 +288,12 @@
 #X connect 23 1 21 0;
 #X connect 24 0 26 3;
 #X connect 25 0 18 0;
-#X connect 26 0 76 0;
-#X connect 27 0 77 0;
+#X connect 26 0 75 0;
+#X connect 27 0 76 0;
 #X connect 28 0 3 0;
 #X connect 29 0 30 0;
 #X connect 30 0 31 0;
-#X connect 31 0 75 0;
+#X connect 31 0 74 0;
 #X connect 33 0 36 0;
 #X connect 34 0 32 0;
 #X connect 35 0 37 0;
@@ -315,7 +322,7 @@
 #X connect 61 1 65 0;
 #X connect 62 0 67 0;
 #X connect 62 1 56 1;
-#X connect 64 0 70 0;
+#X connect 64 0 69 0;
 #X connect 64 1 60 0;
 #X connect 65 0 57 1;
 #X connect 65 1 57 2;
@@ -325,10 +332,11 @@
 #X connect 66 2 67 3;
 #X connect 67 0 57 0;
 #X connect 68 0 61 0;
-#X connect 69 0 68 0;
-#X connect 71 0 58 0;
-#X connect 72 0 55 0;
-#X connect 73 0 46 0;
-#X connect 74 0 50 0;
-#X connect 75 0 33 0;
-#X connect 77 0 19 0;
+#X connect 70 0 58 0;
+#X connect 71 0 55 0;
+#X connect 72 0 46 0;
+#X connect 73 0 50 0;
+#X connect 74 0 33 0;
+#X connect 76 0 19 0;
+#X connect 82 0 68 0;
+#X connect 83 0 2 2;
