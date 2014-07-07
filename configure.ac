@@ -174,7 +174,7 @@ GEM_TARGET_DISABLED(Vertex)
 # Checks for libraries.
 
 AC_CHECK_LIB([m],[sin])
-AC_CHECK_LIB([z],[main])
+AC_CHECK_LIB([z],[zlibVersion])
 AC_CHECK_LIB([dl],[dlopen])
 
 # w32 compatibility library
