@@ -112,8 +112,11 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
   t_canvas*canvas=static_cast<t_canvas*>(const_cast<void*>(ctx));
   char*filename=const_cast<char*>(f.c_str());
   char*ext=const_cast<char*>(e.c_str());
+  char*cnvdir=NULL;
+  if(canvas)
+    cnvdir=canvas_getdir(canvas)->s_name;
 
-  if ((fd=open_via_path(canvas_getdir(canvas)->s_name, filename, ext,
+  if ((fd=open_via_path(cnvdir, filename, ext,
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
     static close_t rte_close=NULL;
     if(NULL==rte_close) {
