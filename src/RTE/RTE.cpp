@@ -136,8 +136,12 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
     result+="/";
     result+=bufptr;
   } else {
-    canvas_makefilename(canvas, filename, buf, MAXPDSTRING);
-    result=buf;
+    if(canvas) {
+      canvas_makefilename(canvas, filename, buf, MAXPDSTRING);
+      result=buf;
+    } else {
+      result=f+e;
+    }
   }
   return result;
 }
