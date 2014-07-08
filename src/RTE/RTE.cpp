@@ -112,7 +112,9 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
   t_canvas*canvas=static_cast<t_canvas*>(const_cast<void*>(ctx));
   char*filename=const_cast<char*>(f.c_str());
   char*ext=const_cast<char*>(e.c_str());
-  char*cnvdir=NULL;
+  const char nullstring[]="\0";
+  const char*cnvdir=nullstring;
+
   if(canvas)
     cnvdir=canvas_getdir(canvas)->s_name;
 
