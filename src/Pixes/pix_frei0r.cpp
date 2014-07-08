@@ -525,8 +525,9 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
   return 0;
 }
 bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
-  if(strncmp("pix_", classname.c_str(), offset_pix_))
+  if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
+  }
   std::string pluginname = classname.substr(offset_pix_);
   std::string filename = pluginname;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
