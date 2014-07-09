@@ -107,6 +107,9 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
   success=true;
 
  cleanup:
+  if(image)
+    DestroyImage(image);
+  image=NULL;
   if(image_info)
     image_info=DestroyImageInfo(image_info);
   if(exception)
