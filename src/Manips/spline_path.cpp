@@ -52,8 +52,8 @@ void spline_path :: floatMess(t_float val)
     }
 
     int size;
-    t_float *vec;
-    if (!garray_getfloatarray(m_array, &size, &vec))
+    t_word *vec;
+    if (!garray_getfloatwords(m_array, &size, &vec))
         return;
 
     if (size % m_numDimens)
@@ -63,7 +63,7 @@ void spline_path :: floatMess(t_float val)
     }
 
     t_float output[64];
-    splineFunc(val, output, m_numDimens, size / m_numDimens, vec);
+    splineFunc(val, output, m_numDimens, size / m_numDimens, &vec->w_float);
 
 	t_atom argv[64];
     for (int i = 0; i < m_numDimens; i++)
