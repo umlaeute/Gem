@@ -105,34 +105,6 @@ void pix_histo :: setMess(int argc, t_atom *argv)
 
 
 ///////////////
-// check if array exists and whether it is a floatarray
-//
-///////////////
-t_float* pix_histo :: checkarray(t_symbol *s, int *length)
-{
-    t_garray *a;
-    t_word  *fp;
-    *length = 0;
-
-    if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-    {
-      if (*s->s_name) error("%s: no such array", s->s_name);
-      fp->w_float = 0;
-    }
-    else if (!garray_getfloatwords(a, length, &fp))
-    {
-      error("%s: bad template for tabwrite~", s->s_name);
-      fp->w_float = 0;
-    }
-
-    if (*length==0){
-      error("table %s is zero-lengthed", s->s_name);
-      fp->w_float=0;
-    }
-    return &fp->w_float;
-}
-
-///////////////
 // update graphs
 //
 ///////////////
