@@ -63,7 +63,7 @@ void spline_path :: floatMess(t_float val)
     }
 
     t_float output[64];
-    splineFunc(val, output, m_numDimens, size / m_numDimens, &vec->w_float);
+    splineFunc(val, output, m_numDimens, size / m_numDimens, &(vec->w_float));
 
 	t_atom argv[64];
     for (int i = 0; i < m_numDimens; i++)
