@@ -45,7 +45,7 @@ class GEM_EXTERN spline_path : public GemPathBase
 
         //////////
         // When a float val is received
-        virtual void    floatMess(t_float val);
+	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
 };
 
 #endif	// for header file

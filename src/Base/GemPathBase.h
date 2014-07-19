@@ -49,7 +49,11 @@ class GEM_EXTERN GemPathBase : public CPPExtern
 
         //////////
         // When a float val is received
-        virtual void    floatMess(t_float val) = 0;
+        virtual void    floatMess(t_float val);
+
+	///////////
+	// do the actual interpolation
+	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts) = 0;
 
         //////////
         // The number of dimensions
