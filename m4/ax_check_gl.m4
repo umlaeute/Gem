@@ -199,14 +199,12 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_HEADERS_DEFAULT],
 AC_DEFUN([_AX_CHECK_GL_MANUAL_HEADERS_DARWIN_NOX],[
  AC_LANG_PUSH([C])
  _AX_CHECK_GL_SAVE_FLAGS()
- # FIXME: use -framework opengl as an extra cflags
- CFLAGS="-framework opengl ${GL_CFLAGS} ${CFLAGS}"
+ # FIXME: use -framework OpenGL as an extra cflags
+ CFLAGS="-framework OpenGL ${GL_CFLAGS} ${CFLAGS}"
  AC_CHECK_HEADERS([OpenGL/gl.h],[ax_check_gl_have_headers="yes"],
                                 [ax_check_gl_have_headers_headers="no"],
 			        [_AX_CHECK_GL_INCLUDES_DEFAULT()])
- AS_IF([test "X$ax_check_gl_have_headers" = "yes"],
-       [GL_CFLAGS="-framework opengl ${GL_CFLAGS}"])
- _AX_CHECK_GL_SAVE_FLAGS()
+ _AX_CHECK_GL_RESTORE_FLAGS()
  AC_LANG_POP([C])
 ])
 
@@ -215,8 +213,8 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_HEADERS_DARWIN],
 [AC_REQUIRE([_AX_CHECK_GL_NEED_X])dnl
  AS_CASE([$ax_check_gl_need_x],
          # try to get X libs if possible do not use framework
-         [yes],[_AX_CHECK_GL_MANUAL_HEADERS_DEFAULT()]
-	 [no],[_AX_CHECK_GL_MANUAL_HEADERS_DARWIN_NOX()]
+         [yes],[_AX_CHECK_GL_MANUAL_HEADERS_DEFAULT()],
+	 [no],[_AX_CHECK_GL_MANUAL_HEADERS_DARWIN_NOX()],
 	 # per default use framework that will select if possible no_x version
 	 [_AX_CHECK_GL_MANUAL_HEADERS_DARWIN_NOX()
 	  # if not found set that we need x in order to found the good library
@@ -267,22 +265,22 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_GENERIC],
 # and http://web.eecs.umich.edu/~sugih/courses/eecs487/glut-howto/
 AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_DARWIN],
 [# ldhack list
- ldhack1 = "-Wl,-framework,OpenGL"
- ldhack2 = "-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib"
- ldhack3 = "$ldhack1,$ldhack2"
+ ldhack1="-Wl,-framework,OpenGL"
+ ldhack2="-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib"
+ ldhack3="$ldhack1,$ldhack2"
 
  # select hack
- AS_IF([test "X$ax_check_gl_need_x" = "Xyes"],
+ AS_IF([test "X$ax_check_gl_need_x" != "Xyes"],
        [# libs already set by -framework cflag
         darwinlibs=""
         ldhacks="$ldhack1 $ldhack2 $ldhack3"],
        [# do not use framework ldflags in case of x version
-        darwinlibs="GL gl MesaGL"
-        ldhack="$ldhack2"])
+        darwinlibs="-lGL -lgl -lMesaGL"
+        ldhacks="$ldhack2"])
 
  ax_check_gl_link_opengl="no"
  for extralibs in " " $darwinlibs; do
-   for extraldflags in " " ldhacks; do
+   for extraldflags in " " $ldhacks; do
        AC_LANG_PUSH([C])
         _AX_CHECK_GL_SAVE_FLAGS()
        CFLAGS="${GL_CFLAGS} ${CFLAGS}"
@@ -299,6 +297,7 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_DARWIN],
  done;
  GL_LIBS="$extralibs ${GL_LIBS}"
  GL_LDFLAGS="$extraldflags ${GL_LDFLAGS}"
+ ax_cv_check_gl_lib_opengl="$ax_check_gl_link_opengl"
 ])
 
 dnl Check library manually: subroutine must set
