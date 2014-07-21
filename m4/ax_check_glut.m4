@@ -116,7 +116,7 @@ AC_DEFUN([_AX_CHECK_GLUT_HEADERS],
  CFLAGS="${GLUT_CFLAGS} ${CFLAGS}"
  # see comment in _AX_CHECK_GL_INCLUDES_DEFAULT
  AC_CHECK_HEADERS([windows.h],[],[],[AC_INCLUDES_DEFAULT])
- AC_CHECK_HEADERS([GL/glut.h OpenGL/glut.h],
+ AC_CHECK_HEADERS([GL/glut.h GLUT/glut.h],
                          [ax_check_glut_have_headers="yes";break],
                          [ax_check_glut_have_headers_headers="no"],
 			 [_AX_CHECK_GLUT_INCLUDES_DEFAULT()])
@@ -124,6 +124,24 @@ AC_DEFUN([_AX_CHECK_GLUT_HEADERS],
  _AX_CHECK_GLUT_RESTORE_FLAGS()
  AC_LANG_POP([C])
 ])
+
+# dnl try to find lib under darwin
+AC_DEFUN([_AX_CHECK_GLUT_MANUAL_LIBS_DARWIN],
+[dnl
+ AC_LANG_PUSH([C])
+ _AX_CHECK_GLUT_SAVE_FLAGS()
+ CFLAGS="${GLUT_CFLAGS} ${CFLAGS}"
+ LIBS="${GLUT_LIBS} ${LIBS}"
+ LDFLAGS="-framework GLUT ${GLUT_LDFLAGS} ${LDFLAGS}"
+ AC_LINK_IFELSE([_AX_CHECK_GLUT_PROGRAM],
+                      [ax_check_glut_lib_opengl="yes"
+                       GLUT_LDFLAGS="-framework GLUT ${GLUT_LDFLAGS}"
+		      ],
+                      [ax_check_glut_lib_opengl="no"])
+  _AX_CHECK_GLUT_RESTORE_FLAGS()
+  AC_LANG_PUSH([C])
+])
+
 
 # dnl try to found library (generic case)
 # dnl $1 is set to the library to found
@@ -158,8 +176,8 @@ AC_DEFUN([_AX_CHECK_GLUT_MANUAL_LIBS],
 [AC_REQUIRE([AC_CANONICAL_HOST])
  GLUT_LIBS="${GLUT_LIBS} ${GLU_LIBS}"
  AS_CASE([${host}],
-         # try first cygwin version
-         [*-cygwin*],[_AX_CHECK_GLUT_MANUAL_LIBS_GENERIC([GLUT glut MesaGLUT freeglut freeglut32 glut32])],
+         # try Darwin version
+         [*-darwin*],[_AX_CHECK_GLUT_MANUAL_LIBS_DARWIN()],
          # try first native
 	 [*-mingw*],[_AX_CHECK_GLUT_MANUAL_LIBS_GENERIC([glut32 GLUT glut MesaGLUT freeglut freeglut32])],
 	 [_AX_CHECK_GLUT_MANUAL_LIBS_GENERIC([GLUT glut freeglut MesaGLUT])])
