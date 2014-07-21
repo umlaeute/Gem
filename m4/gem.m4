@@ -27,17 +27,17 @@ AC_DEFUN([GEM_ARG_WITHOUT],
 # same as GEM_ARG_WITH but with "enable"
 AC_DEFUN([GEM_ARG_ENABLE],
 [AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--disable-$1], [disable $1 ($2)]),,[
-                if test "x$3" != "x"; then enable_$1="yes"; fi
-             ])
+               AC_HELP_STRING([--disable-$1], [disable $1 ($2)]),
+               ,
+               [enable_$1="yes"])
 ])# GEM_ARG_ENABLE
 
 # inverse of GEM_ARG_ENABLE
 AC_DEFUN([GEM_ARG_DISABLE],
 [AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--enable-$1], [enable $1 ($2)]),,[
-                if test "x$3" != "x"; then enable_$1="no"; fi
-             ])
+               AC_HELP_STRING([--enable-$1], [enable $1 ($2)]),
+               ,
+               [enable_$1="no"])
 ])# GEM_ARG_DISABLE
 
 
