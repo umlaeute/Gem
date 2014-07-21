@@ -218,7 +218,7 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_HEADERS_DARWIN],
 	 # per default use framework that will select if possible no_x version
 	 [_AX_CHECK_GL_MANUAL_HEADERS_DARWIN_NOX()
 	  # if not found set that we need x in order to found the good library
-	  AS_IF([test "X$ax_check_gl_have_headers" = "yes"],
+	  AS_IF([test "X$ax_check_gl_have_headers" != "yes"],
 	        [ax_check_gl_need_x="no"],
 		[ax_check_gl_need_x="yes"
 		 # retry with general test
