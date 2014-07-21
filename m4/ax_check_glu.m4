@@ -144,9 +144,9 @@ AC_DEFUN([_AX_CHECK_GLU_LINK],
 [dnl
  AC_LANG_PUSH([C])
  _AX_CHECK_GLU_SAVE_FLAGS()
- CFLAGS="${GLU_CFLAGS} ${CFLAGS}"
- LIBS="${GLU_LIBS} ${LIBS}"
- LDFLAGS="${GLU_LDFLAGS} ${LDFLAGS}"
+ CFLAGS="${GLU_CFLAGS} ${GL_CFLAGS} ${CFLAGS}"
+ LIBS="${GLU_LIBS} ${GL_LIBS} ${LIBS}"
+ LDFLAGS="${GLU_LDFLAGS} ${GL_LDFLAGS} ${LDFLAGS}"
  AC_LINK_IFELSE([_AX_CHECK_GLU_PROGRAM],
                 [ax_check_glu_link_opengl="yes"],
                 [ax_check_glu_link_opengl="no"])
@@ -229,6 +229,21 @@ AS_IF([test X$ax_cv_varargs_glu_tesscb = Xyes],
                  [Use nonstandard varargs form for the GLU tesselator callback])])
 ])
 
+# dnl try to found library (generic case)
+# dnl $1 is set to the library to found
+AC_DEFUN([_AX_CHECK_GLU_MANUAL_LIBS_DARWIN],
+[dnl
+ AC_LANG_PUSH([C])
+ _AX_CHECK_GLU_SAVE_FLAGS()
+ CFLAGS="${GLU_CFLAGS} ${GL_CFLAGS} ${CFLAGS}"
+ LIBS="${GLU_LIBS} ${GL_LIBS} ${LIBS}"
+ LDFLAGS="${GLU_LDFLAGS} ${GL_LDFLAGS} ${LDFLAGS}"
+ AC_LINK_IFELSE([_AX_CHECK_GLU_PROGRAM],
+                [ax_check_glu_lib_opengl="yes"],
+                [ax_check_glu_lib_opengl="no"])
+ _AX_CHECK_GLU_RESTORE_FLAGS()
+ AC_LANG_PUSH([C])
+])
 
 # dnl try to found library (generic case)
 # dnl $1 is set to the library to found
@@ -260,6 +275,8 @@ AC_DEFUN([_AX_CHECK_GLU_MANUAL_LIBS],
 [AC_REQUIRE([AC_CANONICAL_HOST])
  GLU_LIBS="${GLU_LIBS} ${GL_LIBS}"
  AS_CASE([${host}],
+         # try Darwin frameworks
+         [*-darwin*],[_AX_CHECK_GLU_MANUAL_LIBS_DARWIN()],
          # try first cygwin version
          [*-cygwin*],[_AX_CHECK_GLU_MANUAL_LIBS_GENERIC([GLU glu MesaGLU glu32])],
          # try first native
