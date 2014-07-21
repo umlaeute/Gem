@@ -117,7 +117,7 @@ gemglutwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # object specific libraries
 gemglutwindow_la_CXXFLAGS += @GLUT_CFLAGS@
 gemglutwindow_la_LIBADD   += @GLUT_LIBS@
-gemglutwindow_la_LDFLAGS  += 
+gemglutwindow_la_LDFLAGS  += @GLUT_LDFLAGS@
 
 ## SOURCES
 gemglutwindow_la_SOURCES = \
@@ -226,7 +226,7 @@ gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # object specific libraries
 gemw32window_la_CXXFLAGS += @GL_CFLAGS@
 gemw32window_la_LIBADD   += @GL_LIBS@ 
-gemw32window_la_LDFLAGS  += 
+gemw32window_la_LDFLAGS  += @GL_LDFLAGS@
 
 ## SOURCES
 gemw32window_la_SOURCES = \
