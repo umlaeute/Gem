@@ -232,10 +232,9 @@ dnl turn of further checking for this package
    ])
    AS_VAR_POPDEF([ac_Lib])dnl
 
+   AC_CHECK_LIB([$2],[$4],,,[$7])
+   AC_CHECK_HEADERS([$3])
 fi[]dnl
-
-AC_CHECK_LIB([$2],[$4],,,[$7])
-AC_CHECK_HEADERS([$3])
 
 AM_CONDITIONAL(HAVE_LIB_[]NAME, [test "x${have_[]Name}" = "xyes"])
 AS_IF([test "x${have_[]Name}" = "xyes" ],
