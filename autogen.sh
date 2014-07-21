@@ -163,3 +163,8 @@ else
 
   manual_autoreconf
 fi
+
+SYSTEMINFO=${0%/*}/systeminfo.sh
+if [ -x "${SYSTEMINFO}" ]; then
+ ${SYSTEMINFO}
+fi
