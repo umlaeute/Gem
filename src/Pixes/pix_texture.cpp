@@ -222,14 +222,17 @@ void pix_texture :: pushTexCoords(GemState*state) {
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
   state->get(GemState::_GL_TEX_ORIENTATION, m_oldOrientation);
-  state->get(GemState::_GL_TEX_BASECOORD, m_oldBaseCoord);
+  TexCoord*tx=0;
+  if(state->get(GemState::_GL_TEX_BASECOORD, tx) && tx) {
+    m_oldBaseCoord=*tx;
+  }
 }
 
 void pix_texture :: popTexCoords(GemState*state) {
   tex2state(state, m_oldTexCoords, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
   state->set(GemState::_GL_TEX_ORIENTATION, m_oldOrientation);
-  state->set(GemState::_GL_TEX_BASECOORD, m_oldBaseCoord);
+  state->set(GemState::_GL_TEX_BASECOORD, &m_oldBaseCoord);
 }
 
 
