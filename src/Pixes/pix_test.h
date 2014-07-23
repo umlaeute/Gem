@@ -53,21 +53,12 @@ class GEM_EXTERN pix_test : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void 	render(GemState*);
 
-  //////////
-  // Do the processing - this is a no-op
-  virtual void 	processGrayImage(imageStruct &image) { }
+  pixBlock    m_pix;
 
-  imageStruct    myImage;
-  imageStruct  *orgImage;
-  unsigned char*orgdata;
-
-  unsigned char off;
-  unsigned char csize;
-
-  void floatMess(unsigned int);
-  void csizeMess(unsigned int);
+  void dimenMess(unsigned int, unsigned int);
+  void csMess(std::string);
 };
 
 #endif	// for header file
