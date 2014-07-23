@@ -229,7 +229,7 @@ namespace gem
 
     template<typename T>
     const T& cast(void) const {
-      if (get_type() != typeid(T)) {
+      if (!compatible<T>()) {
         throw bad_any_cast(get_type(), typeid(T));
       }
       if (sizeof(T) <= sizeof(void*)) {
@@ -238,6 +238,16 @@ namespace gem
       else {
         return *reinterpret_cast<T const*>(object);
       }
+    }
+
+    /// Returns true if the two types are the same.
+    bool compatible(const any& x) const {
+        return get_type() == x.get_type();
+    }
+    /// Returns true if the two types are the same.
+    template<typename T>
+    bool compatible() const {
+        return (get_type() == typeid(T));
     }
 
   // implicit casting is disabled by default
