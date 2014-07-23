@@ -25,6 +25,8 @@
 
 #include "RTE/Symbol.h"
 
+#include <algorithm>
+
 CPPEXTERN_NEW_WITH_GIMME(pix_video);
 
 

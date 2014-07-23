@@ -20,6 +20,7 @@
 #include "Gem/Properties.h"
 #include <string>
 
+#include <algorithm>
 
 namespace gem { namespace plugins {
 

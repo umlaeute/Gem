@@ -19,6 +19,8 @@
 #include "Gem/Files.h"
 #include "Gem/Exception.h"
 
+#include <algorithm>
+
 gem::plugins::imagesaver :: ~imagesaver(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver> fac_imagesaverdummy;

@@ -20,6 +20,8 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
+#include <algorithm>
+
 gem::plugins::record :: ~record(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::record> fac_recorddummy;

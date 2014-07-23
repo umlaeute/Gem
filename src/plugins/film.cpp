@@ -21,6 +21,7 @@
 #include "Gem/Properties.h"
 #include "imageloader.h"
 
+#include <algorithm>
 
 gem::plugins::film :: ~film(void) {}
 /* initialize the film factory */

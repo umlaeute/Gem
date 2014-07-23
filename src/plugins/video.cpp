@@ -15,8 +15,9 @@
 #include "plugins/video.h"
 #include "plugins/PluginFactory.h"
 
-gem::plugins::video :: ~video(void) {}
+#include <algorithm>
 
+gem::plugins::video :: ~video(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::video> fac_videodummy;
 

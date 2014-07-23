@@ -18,6 +18,8 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
+#include <algorithm>
+
 gem::plugins::imageloader :: ~imageloader(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy;
