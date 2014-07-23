@@ -27,6 +27,7 @@ AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
 AC_CONFIG_FILES([plugins/imageSGI/Makefile])
 
+AC_CONFIG_FILES([plugins/filmAVFoundation/Makefile])
 AC_CONFIG_FILES([plugins/filmAVI/Makefile])
 AC_CONFIG_FILES([plugins/filmAVIPLAY/Makefile])
 AC_CONFIG_FILES([plugins/filmDS/Makefile])
@@ -118,6 +119,8 @@ AC_SUBST(prefix)
 
 # Checks for programs.
 AC_PROG_CXX
+## older versions of autotools lack tests for ObjC/ObjC++
+## so we only run these if the m4-macros are defined
 m4_ifdef([AC_PROG_OBJC], [AC_PROG_OBJC])
 m4_ifdef([AC_PROG_OBJCXX], [AC_PROG_OBJCXX])
 
@@ -190,7 +193,7 @@ AC_CHECK_LIB([msvcprt], [main])
 AC_CHECK_LIB([ws2_32], [main])
 AC_CHECK_LIB([wsock32], [select])
 
-# w32 window creating 
+# w32 window creating
 AC_CHECK_LIB([gdi32], [main])
 
 
@@ -264,14 +267,17 @@ LIBS=$stdcxx_LIBS
 
 dnl some checks for osX
 GEM_CHECK_FRAMEWORK([Cocoa],
-                        [have_cocoa_framework="yes"], 
+                        [have_cocoa_framework="yes"],
                         [have_cocoa_framework="no"])
-GEM_CHECK_FRAMEWORK([Carbon], 
-                        [have_carbon_framework="yes"], 
+GEM_CHECK_FRAMEWORK([Carbon],
+                        [have_carbon_framework="yes"],
                         [have_carbon_framework="no"])
 GEM_CHECK_FRAMEWORK([QuickTime],
-                        [have_quicktime_framework="yes"], 
+                        [have_quicktime_framework="yes"],
                         [have_quicktime_framework="no"])
+GEM_CHECK_FRAMEWORK([AVFoundation],
+                        [have_avfoundation_framework="yes"],
+                        [have_avfoundation_framework="no"])
 
 AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
 
@@ -433,7 +439,7 @@ AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup st
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
 AC_MSG_CHECKING(for lqt_open_write)
-AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])], 
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
@@ -646,9 +652,13 @@ else
 fi
 
 if test "x$have_quicktime_framework" = "x"; then have_quicktime_framework="no"; fi
-
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
+fi
+
+if test "x$have_avfoundation_framework" = "x"; then have_avfoundation_framework="no"; fi
+if test "x$have_avfoundation_framework" = "xyes"; then
+ have_libavfoundation="yes (framework)"
 fi
 
 have_ieee1394=""
@@ -716,6 +726,7 @@ Configuration:
   image-support
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
@@ -723,9 +734,10 @@ Configuration:
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
+    use AVFoundation     : ${have_libavfoundation}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
-  capture-support 
+  capture-support
     use PLUGINS		 : ${use_video_plugins}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
@@ -734,6 +746,7 @@ Configuration:
     use Unicap           : ${have_unicap}
     use Video-for-WinDOS : ${have_vfw32}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
 ])
 
 if test "x$have_pd" = "xno"; then
