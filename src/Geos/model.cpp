@@ -185,9 +185,12 @@ void model :: render(GemState *state)
   if (state) {
     bool upsidedown=true; 
     TexCoord baseCoord(1., 1.);
+    TexCoord*tc=NULL;
 
     state->get(GemState::_GL_TEX_ORIENTATION, upsidedown);
-    state->get(GemState::_GL_TEX_BASECOORD, baseCoord);
+    if(state->get(GemState::_GL_TEX_BASECOORD, tc) && tc!=0) {
+      baseCoord=*tc;
+    }
 
     scaleX=baseCoord.s;
     scaleY=(upsidedown?-1.f:1.f)*baseCoord.t;
