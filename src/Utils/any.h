@@ -1,12 +1,11 @@
 /*
- * (C) Copyright Christopher Diggins 2005-2011
+ * (C) Copyright Christopher Diggins 2005
  * (C) Copyright Pablo Aguilar 2005
  * (C) Copyright Kevlin Henney 2001
  *
- * Copyright (C) 2010-2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
- *       downloaded this code from http://www.codeproject.com/Articles/11250/High-Performance-Dynamic-Typing-in-C-using-a-Repla
+ * Copyright (C) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+ *       downloaded this code from http://www.codeproject.com/KB/cpp/dynamic_typing.aspx
  *         changed namespace/defines "cdiggins" to something "gem"
- *         added any_cast<> for compat
  *
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
@@ -25,239 +24,286 @@
 
 #include <stdexcept>
 #include <typeinfo>
+#include <algorithm>
+#include <string>
+
 
 namespace gem
 {
-  struct GEM_EXTERN bad_any_cast
-  {
-      virtual const char* what(void) const throw() {
-	  return "gem::bad_any_cast: "
-                   "failed conversion using gem::any_cast";
-      }
+  struct GEM_EXTERN bad_any_cast : std::bad_cast {
+    bad_any_cast(const std::type_info& src, const std::type_info& dest)
+      : result(std::string("bad cast (")+src.name() + "->" + dest.name()+")")
+    { }
+    virtual ~bad_any_cast(void) throw()
+    { }
+    virtual const char* what(void) const throw() {
+      return result.c_str();
+    }
+    const std::string result;
   };
 
-namespace anyimpl
-{
+  namespace any_detail {
+    // function pointer table
 
-    struct empty_any
-    {
+    struct fxn_ptr_table {
+      const std::type_info& (*get_type)(void);
+      void (*static_delete)(void**);
+      void (*clone)(void* const*, void**);
+      void (*move)(void* const*,void**);
     };
 
-    struct base_any_policy
+    // static functions for small value-types
+
+    template<bool is_small>
+    struct fxns
     {
-        virtual void static_delete(void** x) = 0;
-        virtual void copy_from_value(void const* src, void** dest) = 0;
-        virtual void clone(void* const* src, void** dest) = 0;
-        virtual void move(void* const* src, void** dest) = 0;
-        virtual void* get_value(void** src) = 0;
-        virtual size_t get_size() = 0;
-        virtual const std::type_info&get_type() = 0;
+      template<typename T>
+      struct type {
+        static const std::type_info& get_type(void) {
+          return typeid(T);
+        }
+        static void static_delete(void** x) {
+          reinterpret_cast<T*>(x)->~T();
+        }
+        static void clone(void* const* src, void** dest) {
+          new(dest) T(*reinterpret_cast<T const*>(src));
+        }
+        static void move(void* const* src, void** dest) {
+          reinterpret_cast<T*>(dest)->~T();
+          *reinterpret_cast<T*>(dest) = *reinterpret_cast<T const*>(src);
+         }
+      };
     };
 
-    template<typename T>
-    struct typed_base_any_policy : base_any_policy
-    {
-        virtual size_t get_size() { return sizeof(T); }
-        virtual const std::type_info&get_type() {return typeid(T);}
-    };
+    // static functions for big value-types (bigger than a void*)
 
-    template<typename T>
-    struct small_any_policy : typed_base_any_policy<T>
-    {
-        virtual void static_delete(void** x) { }
-        virtual void copy_from_value(void const* src, void** dest)
-            { new(dest) T(*reinterpret_cast<T const*>(src)); }
-        virtual void clone(void* const* src, void** dest) { *dest = *src; }
-        virtual void move(void* const* src, void** dest) { *dest = *src; }
-        virtual void* get_value(void** src) { return reinterpret_cast<void*>(src); }
-    };
-
-    template<typename T>
-    struct big_any_policy : typed_base_any_policy<T>
-    {
-        virtual void static_delete(void** x) { if (*x)
-            delete(*reinterpret_cast<T**>(x)); *x = NULL; }
-        virtual void copy_from_value(void const* src, void** dest) {
-           *dest = new T(*reinterpret_cast<T const*>(src)); }
-        virtual void clone(void* const* src, void** dest) {
-           *dest = new T(**reinterpret_cast<T* const*>(src)); }
-        virtual void move(void* const* src, void** dest) {
-          (*reinterpret_cast<T**>(dest))->~T();
-          **reinterpret_cast<T**>(dest) = **reinterpret_cast<T* const*>(src); }
-        virtual void* get_value(void** src) { return *src; }
-    };
-
-    template<typename T>
-    struct choose_policy
-    {
-        typedef big_any_policy<T> type;
-    };
-
-    template<typename T>
-    struct choose_policy<T*>
-    {
-        typedef small_any_policy<T*> type;
-    };
-
-    struct any;
-
-    /// Choosing the policy for an any type is illegal, but should never happen.
-    /// This is designed to throw a compiler error.
     template<>
-    struct choose_policy<any>
+    struct fxns<false>
     {
-        typedef void type;
+      template<typename T>
+      struct type {
+        static const std::type_info& get_type(void) {
+          return typeid(T);
+        }
+        static void static_delete(void** x) {
+          delete(*reinterpret_cast<T**>(x));
+        }
+        static void clone(void* const* src, void** dest) {
+          *dest = new T(**reinterpret_cast<T* const*>(src));
+        }
+        static void move(void* const* src, void** dest) {
+          (*reinterpret_cast<T**>(dest))->~T();
+          **reinterpret_cast<T**>(dest) = **reinterpret_cast<T* const*>(src);
+        }
+      };
     };
 
-    /// Specializations for small types.
-    #define SMALL_POLICY(TYPE) template<> struct \
-       choose_policy<TYPE> { typedef small_any_policy<TYPE> type; };
-
-    SMALL_POLICY(signed char);
-    SMALL_POLICY(unsigned char);
-    SMALL_POLICY(signed short);
-    SMALL_POLICY(unsigned short);
-    SMALL_POLICY(signed int);
-    SMALL_POLICY(unsigned int);
-    SMALL_POLICY(signed long);
-    SMALL_POLICY(unsigned long);
-    SMALL_POLICY(float);
-    SMALL_POLICY(bool);
-
-    #undef SMALL_POLICY
-
-    /// This function will return a different policy for each type.
     template<typename T>
-    base_any_policy* get_policy()
+    struct get_table
     {
-        static typename choose_policy<T>::type policy;
-        return &policy;
+      static const bool is_small = sizeof(T) <= sizeof(void*);
+
+      static fxn_ptr_table* get(void)
+      {
+        static fxn_ptr_table static_table = {
+          fxns<is_small>::template type<T>::get_type
+        , fxns<is_small>::template type<T>::static_delete
+        , fxns<is_small>::template type<T>::clone
+        , fxns<is_small>::template type<T>::move
+        };
+        return &static_table;
+      }
     };
-}
 
-GEM_EXTERN struct any
-{
-private:
-    // fields
-    anyimpl::base_any_policy* policy;
-    void* object;
+    struct empty {
+    };
+  } // namespace any_detail
 
-public:
-    /// Initializing constructor.
+
+  struct GEM_EXTERN any
+  {
+    // structors
+
     template <typename T>
-    any(const T& x)
-        : policy(anyimpl::get_policy<anyimpl::empty_any>()), object(NULL)
-    {
-        assign(x);
+    any(const T& x) : table(NULL), object(NULL) {
+      table = any_detail::get_table<T>::get();
+      if (sizeof(T) <= sizeof(void*)) {
+        new(&object) T(x);
+      }
+      else {
+        object = new T(x);
+      }
     }
 
-    /// Empty constructor.
-    any()
-        : policy(anyimpl::get_policy<anyimpl::empty_any>()), object(NULL)
-    { }
-
-    /// Special initializing constructor for string literals.
-    any(const char* x)
-        : policy(anyimpl::get_policy<anyimpl::empty_any>()), object(NULL)
-    {
-        assign(x);
+    any(void) : table(NULL), object(NULL) {
+      table = any_detail::get_table<any_detail::empty>::get();
+      object = NULL;
     }
 
-    /// Copy constructor.
-    any(const any& x)
-        : policy(anyimpl::get_policy<anyimpl::empty_any>()), object(NULL)
-    {
-        assign(x);
+    any(const any& x) : table(NULL), object(NULL) {
+      table = any_detail::get_table<any_detail::empty>::get();
+      assign(x);
     }
 
-    /// Destructor.
-    ~any() {
-        policy->static_delete(&object);
+    virtual ~any(void) {
+      table->static_delete(&object);
     }
 
-    /// Assignment function from another any.
+    // assignment
+
     any& assign(const any& x) {
+      // are we copying between the same type?
+
+      if (table == x.table) {
+        // if so, we can avoid reallocation
+
+        table->move(&x.object, &object);
+      }
+      else {
         reset();
-        policy = x.policy;
-        policy->clone(&x.object, &object);
-        return *this;
+        x.table->clone(&x.object, &object);
+        table = x.table;
+      }
+      return *this;
     }
 
-    /// Assignment function.
     template <typename T>
-    any& assign(const T& x) {
+    any& assign(const T& x)
+    {
+      // are we copying between the same type?
+
+      any_detail::fxn_ptr_table* x_table = any_detail::get_table<T>::get();
+      if (table == x_table) {
+        // if so, we can avoid deallocating and resuse memory
+
+        if (sizeof(T) <= sizeof(void*)) {
+          // create copy on-top of object pointer itself
+
+          new(&object) T(x);
+        }
+        else {
+          // create copy on-top of old version
+
+          new(object) T(x);
+        }
+      }
+      else {
         reset();
-        policy = anyimpl::get_policy<T>();
-        policy->copy_from_value(&x, &object);
-        return *this;
+        if (sizeof(T) <= sizeof(void*)) {
+          // create copy on-top of object pointer itself
+
+          new(&object) T(x);
+          // update table pointer
+
+          table = x_table;
+        }
+        else {
+          object = new T(x);
+          table = x_table;
+        }
+      }
+      return *this;
     }
 
-    /// Assignment operator.
+    // assignment operator
+
     template<typename T>
-    any& operator=(const T& x) {
-        return assign(x);
+    any& operator=(T const& x) {
+      return assign(x);
+    }
+    any& operator=(const any& x) {
+      return assign(x);
     }
 
-    /// Assignment operator, specialed for literal strings.
-    /// They have types like const char [6] which don't work as expected.
-    any& operator=(const char* x) {
-        return assign(x);
-    }
+    // utility functions
 
-    /// Utility functions
     any& swap(any& x) {
-        std::swap(policy, x.policy);
-        std::swap(object, x.object);
-        return *this;
+      std::swap(table, x.table);
+      std::swap(object, x.object);
+      return *this;
     }
 
-    /// Cast operator. You can only cast to the original type.
+    const std::type_info& get_type(void) const {
+      return table->get_type();
+    }
+
     template<typename T>
-    T& cast() {
-        if (policy != anyimpl::get_policy<T>())
-            throw gem::bad_any_cast();
-        T* r = reinterpret_cast<T*>(policy->get_value(&object));
-        return *r;
-    }
-
-    /// Returns true if the any contains no value.
-    bool empty() const {
-        return policy == anyimpl::get_policy<anyimpl::empty_any>();
-    }
-
-    /// Frees any allocated memory, and sets the value to NULL.
-    void reset() {
-        policy->static_delete(&object);
-        policy = anyimpl::get_policy<anyimpl::empty_any>();
+    const T& cast(void) const {
+      if (!compatible<T>()) {
+        throw bad_any_cast(get_type(), typeid(T));
+      }
+      if (sizeof(T) <= sizeof(void*)) {
+        return *reinterpret_cast<T const*>(&object);
+      }
+      else {
+        return *reinterpret_cast<T const*>(object);
+      }
     }
 
     /// Returns true if the two types are the same.
     bool compatible(const any& x) const {
-        return policy == x.policy;
+        return get_type() == x.get_type();
     }
     /// Returns true if the two types are the same.
     template<typename T>
     bool compatible() const {
-        return policy ==  anyimpl::get_policy<T>();
-    }
-    const std::type_info& get_type(void) const {
-        return policy->get_type();
+        return (get_type() == typeid(T));
     }
 
-};
+  // implicit casting is disabled by default
+
+  #ifdef ANY_IMPLICIT_CASTING
+    // automatic casting operator
+
     template<typename T>
-    T& any_cast(any* this_) {
-        return this_->cast<T>();
+    operator T(void) const {
+      return cast<T>();
     }
-    template<typename T>
-    T const* any_cast(any const* this_) {
-        return any_cast<T>(const_cast<any*>(this_));
-    }
-    template<typename T>
-    T const& any_cast(any const& this_){
-      return (const_cast<any*>(&this_)->cast<T>());//*any_cast<T>(const_cast<any*>(&this_));
+  #endif // implicit casting
+
+
+    bool empty(void) const {
+      return table == any_detail::get_table<any_detail::empty>::get();
     }
 
+    void reset(void)
+    {
+      if (empty()) return;
+      table->static_delete(&object);
+      table = any_detail::get_table<any_detail::empty>::get();
+      object = NULL;
+    }
+
+    // fields
+
+    any_detail::fxn_ptr_table* table;
+    void* object;
+  };
+
+  // boost::any-like casting
+
+  template<typename T>
+  T* any_cast(any* this_) {
+    if (this_->get_type() != typeid(T)) {
+      throw bad_any_cast(this_->get_type(), typeid(T));
+    }
+    if (sizeof(T) <= sizeof(void*)) {
+      return reinterpret_cast<T*>(&this_->object);
+    }
+    else {
+      return reinterpret_cast<T*>(this_->object);
+    }
+  }
+
+  template<typename T>
+  T const* any_cast(any const* this_) {
+    return any_cast<T>(const_cast<any*>(this_));
+  }
+
+  template<typename T>
+  T const& any_cast(any const& this_){
+    return *any_cast<T>(const_cast<any*>(&this_));
+  }
 }
 
 #ifdef _MSC_VER
