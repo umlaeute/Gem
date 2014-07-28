@@ -290,7 +290,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
 
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
-  if test "x$gem_check_ldflags_success" = "xyes"; then
+  if test "x${gem_check_ldflags_success}" = "xyes"; then
     AC_MSG_RESULT([yes])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [framework $1])
@@ -298,10 +298,10 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
     [$2]
   else
     AC_MSG_RESULT([no])
-    LDFLAGS="$gem_check_ldflags_org"
     [$3]
   fi
-AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
+  LDFLAGS="${gem_check_ldflags_org}"
+  AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
 undefine([NAME])
 ])# GEM_CHECK_FRAMEWORK
 
