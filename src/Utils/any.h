@@ -60,7 +60,11 @@ namespace gem
       template<typename T>
       struct type {
         static const std::type_info& get_type(void) {
-          return typeid(T);
+          const std::type_info&res=typeid(T);
+          // the following is a dummy use of the type_info struct
+          // to make the template engine work properly on OSX/10.9
+          static std::string _ = res.name();
+          return res;
         }
         static void static_delete(void** x) {
           reinterpret_cast<T*>(x)->~T();
@@ -83,7 +87,8 @@ namespace gem
       template<typename T>
       struct type {
         static const std::type_info& get_type(void) {
-          return typeid(T);
+          const std::type_info&res=typeid(T);
+          return res;
         }
         static void static_delete(void** x) {
           delete(*reinterpret_cast<T**>(x));
