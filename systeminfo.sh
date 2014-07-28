@@ -63,6 +63,11 @@ get_cpus__OSX() {
    sysctl -n hw.ncpu
   fi
 }
+get_cpus__W32() {
+  if [ $((NUMBER_OF_PROCESSORS)) -gt 0 ]; then
+    echo "${NUMBER_OF_PROCESSORS}"
+  fi
+}
 
 get_cpus() {
  # default value
@@ -72,7 +77,10 @@ get_cpus() {
    CPU_COUNT=$(get_cpus__proc)
  fi
  if [ $((CPU_COUNT)) -lt 1 ]; then
-   CPU_COUNT=$(get_cpus__proc)
+   CPU_COUNT=$(get_cpus__OSX)
+ fi
+ if [ $((CPU_COUNT)) -lt 1 ]; then
+   CPU_COUNT=$(get_cpus__W32)
  fi
 
  if [ $((CPU_COUNT)) -lt 1 ]; then
