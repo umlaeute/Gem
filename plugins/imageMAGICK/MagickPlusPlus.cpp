@@ -47,14 +47,18 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 
     result.xsize=static_cast<GLint>(image.columns());
     result.ysize=static_cast<GLint>(image.rows());
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GL_RGBA_GEM);
     result.reallocate();
 
     result.upsidedown=true;
 
     try {
       image.write(0,0,result.xsize,result.ysize,
+#ifdef __APPLE__
+                  "ARGB",
+#else
                   "RGBA",
+#endif
                   Magick::CharPixel,
                   reinterpret_cast<void*>(result.data));
     } catch (Magick::Warning e) {
@@ -76,7 +80,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="K";
     break;
   case GL_RGBA:
+#ifdef __APPLE__
+    cs="ABGR";
+#else
     cs="RGBA";
+#endif
     break;
   default:
     pImage=new imageStruct();
@@ -85,7 +93,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="RGB";
     break;
   case GL_BGRA_EXT:
+#ifdef __APPLE__
+    cs="ARGB";
+#else
     cs="BGRA";
+#endif
     break;
   }
   try{
