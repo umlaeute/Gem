@@ -521,6 +521,11 @@ AC_SUBST(GEM_PTHREAD_LIBS)
 
 if test "x$enable_threads" != "xno"; then
  AX_PTHREAD
+
+ AS_IF([test "x$ax_pthread_ok" = "xyes"], [
+   AC_CHECK_TYPES([ptw32_handle_t], [], [], [#include <pthread.h>])
+ ])
+
  GEM_THREADS_CFLAGS=""
  AC_LIB_APPENDTOVAR([GEM_THREADS_CFLAGS], "${PTHREAD_CFLAGS}")
  GEM_THREADS_LIBS="${GEM_THREADS_LIBS}${GEM_THREADS_LIBS:+ }${PTHREAD_LIBS}"
