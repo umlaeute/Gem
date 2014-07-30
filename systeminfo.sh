@@ -16,6 +16,14 @@ get_os__OSX() {
       echo "$(sw_vers -productName) $(sw_vers -productVersion) ($(sw_vers -buildVersion))"
    fi
 }
+wmicos() {
+  echo $(wmic OS get $@ | grep . | tail -1)
+}
+get_os__W32() {
+   if [ "x$(mywhich wmic)" != "x" ]; then
+      echo "$(wmicos Caption) - $(wmicos CSDVersion) [$(wmicos Version)]"
+   fi
+}
 get_os() {
  # default value
  GUESS_OS=""
@@ -25,6 +33,9 @@ get_os() {
  fi
  if [ "x${GUESS_OS}" = "x" ]; then
    GUESS_OS=$(get_os__OSX)
+ fi
+ if [ "x${GUESS_OS}" = "x" ]; then
+   GUESS_OS=$(get_os__W32)
  fi
 
  if [ "x${GUESS_OS}" = "x" ]; then
