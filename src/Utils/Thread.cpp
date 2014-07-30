@@ -127,10 +127,12 @@ class Thread::PIMPL { public:
   pthread_cond_t p_cond;
 
   PIMPL(Thread*x):
-    owner(x),
-    keeprunning(true),
-    isrunning(false),
-    p_thread(0)
+    owner(x)
+    , keeprunning(true)
+    , isrunning(false)
+#ifndef HAVE_PTW32_HANDLE_T
+    , p_thread(0)
+#endif
   {
     pthread_mutex_init(&p_mutex, 0);
     pthread_cond_init (&p_cond , 0);
