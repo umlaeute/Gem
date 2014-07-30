@@ -12,41 +12,36 @@
 \.libs
 # autotools byproducts
 Makefile\.in
-aclocal\.m4
-autom4te\.cache/
-configure
-config\.guess
-config\.log
-config\.status
-config\.sub
-missing
-install-sh
-stamp-h1
-libtool
-depcomp
-ltmain\.sh
-config\.h
-config\.h\.in
-m4/libtool\.m4
-m4/ltoptions\.m4
-m4/ltsugar\.m4
-m4/ltversion\.m4
-m4/lt~obsolete\.m4
+/aclocal\.m4
+/src/config\.h
+/src/config\.h\.in
+/m4/libtool\.m4
+/m4/ltoptions\.m4
+/m4/ltsugar\.m4
+/m4/ltversion\.m4
+/m4/lt~obsolete\.m4
+## BEGIN autotools generated files
+/autom4te\.cache/
+/compile
+/configure
+/config\.guess
+/config\.log
+/config\.status
+/config\.sub
+/depcomp
+/install-sh
+/libtool
+/ltmain\.sh
+/missing
+/stamp-h1
+## END autotools generated files
 # generated files
-src/version_current\.h
-Gem.pc
-Gem-meta.pd
+/src/version_current\.h
+/Gem.pc
+/Gem-meta.pd
 # Makefiles are special
 # some are generated, some not
 Makefile
 !build/autoconf/Makefile
-## w32 build projects
-build/win-vs*/*
-plugins/*/win-vs*/*
-extra/*/win-vs*/*
-*.vcproj.*.*.user
-!*.dsw
-!*.dsp
-!*.sln
-!*.vcproj
-!*.vsprops
+## OSX-byproducts
+.DS_Store
