@@ -113,6 +113,13 @@ void pix_test :: csMess(std::string cs)
   m_pix.image.reallocate();
   m_pix.newfilm=true;
 }
+void pix_test :: postrender(GemState *state)
+{
+  m_pix.newimage = false;
+  m_pix.newfilm  = false;
+  state->set(GemState::_PIX, static_cast<pixBlock*>(0));
+}
+
 void pix_test :: dimenMess(unsigned int w, unsigned int h)
 {
   m_pix.image.xsize=w;

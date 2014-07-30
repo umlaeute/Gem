@@ -54,6 +54,7 @@ class GEM_EXTERN pix_test : public GemPixObj
   //////////
   // Do the processing
   virtual void 	render(GemState*);
+  virtual void 	postrender(GemState*);
 
   pixBlock    m_pix;
 
