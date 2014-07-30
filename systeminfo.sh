@@ -1,14 +1,18 @@
 #!/bin/sh
 
+mywhich() {
+  which $@ 2>/dev/null
+}
+
 
 ## get full OS name
 get_os__linux() {
-   if [ "x$(which lsb_release)" != "x" ]; then
+   if [ "x$(mywhich lsb_release)" != "x" ]; then
       lsb_release -sd
    fi
 }
 get_os__OSX() {
-   if [ "x$(which sw_vers)" != "x" ]; then
+   if [ "x$(mywhich sw_vers)" != "x" ]; then
       echo "$(sw_vers -productName) $(sw_vers -productVersion) ($(sw_vers -buildVersion))"
    fi
 }
@@ -33,7 +37,7 @@ get_os() {
 
 ## get kernel version
 get_kernel__uname() {
-   if [ "x$(which uname)" != "x" ]; then
+   if [ "x$(mywhich uname)" != "x" ]; then
       uname -a
    fi
 }
@@ -59,7 +63,7 @@ get_cpus__proc() {
   fi
 }
 get_cpus__OSX() {
-  if [ "x$(which sysctl)" != "x" ]; then
+  if [ "x$(mywhich sysctl)" != "x" ]; then
    sysctl -n hw.ncpu
   fi
 }
