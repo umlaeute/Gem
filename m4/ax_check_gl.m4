@@ -256,7 +256,7 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_GENERIC],
  	 [no],[],
  	 [GL_LIBS="${ac_cv_search_glBegin} ${GL_LIBS}"])
   _AX_CHECK_GL_RESTORE_FLAGS()
-  AC_LANG_PUSH([C])
+  AC_LANG_POP([C])
 ])
 
 # dnl try to found lib under darwin
