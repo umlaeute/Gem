@@ -13,8 +13,8 @@ libplugins_la_LIBADD   =
 libplugins_la_LDFLAGS  =
 
 # RTE flags
-libplugins_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libplugins_la_LIBADD   += @GEM_RTE_LIBS@
+libplugins_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@ @GEM_THREADS_CFLAGS@
+libplugins_la_LIBADD   += @GEM_RTE_LIBS@ @GEM_THREADS_LIBS@
 libplugins_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libplugins_la_SOURCES= \
