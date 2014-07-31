@@ -161,6 +161,12 @@ case ${host_os} in
 
         darwin*)
         ax_pthread_flags="-pthread $ax_pthread_flags"
+	;;
+
+	mingw*)
+        # on mingw, we want to use -lpthread first,
+        # as "-pthread" will only set the CFLAGS (and leave LIBS untouched)
+        ax_pthread_flags="pthread $ax_pthread_flags"
         ;;
 esac
 
