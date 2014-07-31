@@ -516,8 +516,8 @@ AC_DEFUN([GEM_CHECK_THREADS],
 [
 GEM_ARG_ENABLE([threads], [default: use threads])
 
-AC_SUBST(GEM_PTHREAD_CFLAGS)
-AC_SUBST(GEM_PTHREAD_LIBS)
+AC_SUBST(GEM_THREADS_CFLAGS)
+AC_SUBST(GEM_THREADS_LIBS)
 
 if test "x$enable_threads" != "xno"; then
  AX_PTHREAD
