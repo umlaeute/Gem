@@ -417,6 +417,7 @@ GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from, GLenum to_form
   upsidedown=from->upsidedown;
 
   switch (from->format){
+  default:  error("%s: unable to convert from %d", __FUNCTION__, from->format); return;
   case GL_RGBA:
     fromRGBA(from->data);
     break;
@@ -454,6 +455,7 @@ GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt) const {
   to->upsidedown=upsidedown;
 
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_RGBA:
     to->fromRGBA(data);
     break;
@@ -482,6 +484,7 @@ GEM_EXTERN void imageStruct::fromRGB(const unsigned char *rgbdata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_RGB:
     memcpy(data, rgbdata, pixelnum*csize);
     break;
@@ -544,6 +547,7 @@ GEM_EXTERN void imageStruct::fromRGB16(const unsigned char *rgb16data) {
   unsigned char *pixels=data;
   unsigned short rgb;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_RGBA:
     while(pixelnum--){
       rgb=*rgbdata++;
@@ -588,6 +592,7 @@ GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_RGB:
     while(pixelnum--){
       *pixels++=*rgbadata++;
@@ -677,6 +682,7 @@ GEM_EXTERN void imageStruct::fromBGR(const unsigned char *bgrdata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_BGR_EXT:
     memcpy(data, bgrdata, pixelnum*csize);
     break;
@@ -731,6 +737,7 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_BGR_EXT:
     while(pixelnum--){
       *pixels++=*bgradata++;
@@ -825,6 +832,7 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_BGR_EXT:
     while(pixelnum--){
       abgrdata++;
@@ -912,6 +920,7 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_BGR_EXT:
     while(pixelnum--){
       pixels[0]=argbdata[3]; // B
@@ -992,6 +1001,7 @@ GEM_EXTERN void imageStruct::fromGray(const unsigned char *greydata) {
   unsigned char *pixels=data;
   register unsigned char grey=0;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_RGB:
   case GL_BGR_EXT:
     while(pixelnum--){
@@ -1036,6 +1046,7 @@ GEM_EXTERN void imageStruct::fromGray(short *greydata) {
   unsigned char *pixels=data;
   register short grey=0;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_RGB:
   case GL_BGR_EXT:
     while(pixelnum--){
@@ -1091,6 +1102,7 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
   setCsizeByFormat();
   reallocate();
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_LUMINANCE:
     memcpy(data, Y, pixelnum);
     break;
@@ -1253,6 +1265,7 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
   setCsizeByFormat();
   reallocate();
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_LUMINANCE:
     memcpy(data, Y, pixelnum);
     break;
@@ -1459,6 +1472,7 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_YUV422_GEM:
     memcpy(data, yuvdata, pixelnum*csize);
     break;
@@ -1570,6 +1584,7 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
@@ -1665,6 +1680,7 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata) {
   reallocate();
   unsigned char *pixels=data;
   switch (format){
+  default:  error("%s: unable to convert to %d", __FUNCTION__, format); return;
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
