@@ -20,8 +20,11 @@ namespace gem { namespace plugins {
    gem::thread::Mutex m_mutex;
 
    pixBlock m_pixBlock;
+   imageStruct*m_convertImg;
    Properties m_props;
    unsigned int m_type;
+
+   void resize(unsigned int width, unsigned int height, GLenum format=0);
 
   public:
    videoVLC(void);

@@ -40,6 +40,11 @@ using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("vlc", videoVLC);
 
+namespace {
+  static const char*  format_string="RV32";
+  static const GLenum format_enum  = GL_RGBA_GEM;
+};
+
 videoVLC::videoVLC(void) :
   m_name(std::string("vlc")),
   m_type(0),
@@ -57,17 +62,19 @@ videoVLC::videoVLC(void) :
   if(!m_instance) {
     throw(GemException("couldn't initialize libVLC"));
   }
-
-  m_pixBlock.image.xsize = 64;
-  m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
+  resize(64,64,format_enum);
 }
 
 videoVLC::~videoVLC(void) {
   if(m_instance)
     libvlc_release(m_instance);
 
+  if(&m_pixBlock.image == m_convertImg) {
+    m_convertImg=0;
+  } else if (m_convertImg) {
+    delete m_convertImg;
+    m_convertImg=0;
+  }
 }
 void videoVLC::close(void) {
   if(m_mediaplayer)
@@ -143,12 +150,7 @@ bool videoVLC::open(gem::Properties&props) {
     }
 
   }
-
-  m_pixBlock.image.xsize = w;
-  m_pixBlock.image.ysize = h;
-
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
+  resize(w,h,format_enum);
   m_pixBlock.image.setWhite();
 
                    
@@ -165,10 +167,11 @@ bool videoVLC::open(gem::Properties&props) {
                              this);
 
   libvlc_video_set_format(m_mediaplayer,
-                          "RGBA",
+                          format_string,
                           m_pixBlock.image.xsize,
                           m_pixBlock.image.ysize,
                           m_pixBlock.image.xsize*m_pixBlock.image.csize);
+
   return true;
 }
 
@@ -280,13 +283,23 @@ bool videoVLC::stop (void) {
 
 void*videoVLC::lockFrame(void**plane ) {
   LOCK(m_mutex);
-  *plane=m_pixBlock.image.data;
+  *plane=m_convertImg->data;
   //  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
   return NULL;
 }
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
-  //  post("processFrame %p\t%p", picture, *plane);
+  //post("processFrame %p\t%p", picture, *plane);
+
+  if(&m_pixBlock.image != m_convertImg) {
+  // convert the image from the buffer
+#ifdef __APPLE__
+    m_pixBlock.image.fromARGB(m_convertImg->data);
+#else
+    m_pixBlock.image.fromRGBA(m_convertImg->data);
+#endif /* __APPLE__ */
+  }
+
   m_pixBlock.newimage=true;
   m_pixBlock.image.upsidedown=true;
   UNLOCK(m_mutex);
@@ -309,5 +322,33 @@ void videoVLC::displayCB(void*opaque, void*picture) {
   //  post("displayCB: %p -> %p", opaque, picture);
   videoVLC*obj=(videoVLC*)opaque;
 }
+void videoVLC::resize(unsigned int width, unsigned int height, GLenum format) {
+  bool do_convert = false;
+#ifdef __APPLE__
+  do_convert=true;
+#endif
 
+  if(0==format)
+    format=format_enum;
+
+  m_pixBlock.image.xsize = width;
+  m_pixBlock.image.ysize = height;
+  m_pixBlock.image.setCsizeByFormat(format);
+  m_pixBlock.image.reallocate();
+
+  if(&m_pixBlock.image == m_convertImg) {
+    m_convertImg=0;
+  } else if (m_convertImg) {
+    delete m_convertImg;
+    m_convertImg=0;
+  }
+
+  if(do_convert) {
+    m_convertImg=new imageStruct;
+    m_pixBlock.image.copy2ImageStruct(m_convertImg);
+    m_convertImg->allocate();
+  } else {
+    m_convertImg=&m_pixBlock.image;
+  }
+}
 #endif /* HAVE_LIBVLC */
