@@ -852,6 +852,28 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
   case GL_ABGR_EXT:
     memcpy(data, abgrdata, pixelnum*csize);
     break;
+  case GL_BGRA_EXT:
+    if(abgrdata==data){
+      // in place conversion
+      unsigned char dummy=0;
+      while(pixelnum--){
+	dummy     = pixels[0];
+	pixels[0] = pixels[1];
+	pixels[1] = pixels[2];
+	pixels[2] = pixels[3];
+	pixels[3] = dummy;
+        pixels+=4;
+      }
+    } else {
+      while(pixelnum--){
+        pixels[0]=abgrdata[1]; // B
+        pixels[1]=abgrdata[2]; // G
+        pixels[2]=abgrdata[3]; // R
+        pixels[3]=abgrdata[0]; // A
+        pixels+=4;abgrdata+=4;
+      }
+    }
+    break;
   case GL_RGBA:
     if(abgrdata==data){
       // in place conversion
@@ -942,6 +964,25 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata) {
     memcpy(data, argbdata, pixelnum*csize);
     break;
 #endif
+  case GL_BGRA_EXT:
+    if(argbdata==data){
+      // in place conversion
+      unsigned char dummy=0;
+      while(pixelnum--){
+	dummy = pixels[0]; pixels[0] = pixels[3]; pixels[3]=dummy;
+	dummy = pixels[1]; pixels[1] = pixels[2]; pixels[2]=dummy;
+        pixels+=4;
+      }
+    } else {
+      while(pixelnum--){
+        pixels[0]=argbdata[3]; // B
+        pixels[1]=argbdata[2]; // G
+        pixels[2]=argbdata[1]; // R
+        pixels[3]=argbdata[0]; // A
+        pixels+=4;argbdata+=4;
+      }
+    }
+    break;
   case GL_RGBA:
     while(pixelnum--){
       pixels[0]=argbdata[1]; // R
