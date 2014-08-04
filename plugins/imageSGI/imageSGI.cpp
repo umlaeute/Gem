@@ -148,6 +148,8 @@ float imageSGI::estimateSave(const imageStruct&img, const std::string&filename, 
   float result=0;
   if("image/sgi" == mimetype)result+=100;
   else if ("image/x-rgb" == mimetype)result+=50;
+
+  if(gem::Properties::UNSET != props.type("imagename"))result+=1.;
   return result;
 }
 void imageSGI::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
@@ -156,4 +158,7 @@ void imageSGI::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Pro
 
   mimetypes.push_back("image/sgi");
   mimetypes.push_back("image/x-rgb"); // ??
+
+  gem::any value=std::string("");
+  props.set("imagename", value);
 }
