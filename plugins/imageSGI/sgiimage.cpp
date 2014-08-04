@@ -575,7 +575,8 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z)
  *	RGBA image file is saved.
  *
  */
-int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, const char *name)
+int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
+		 const char *name, const char*imgname)
 {
   FILE *outf;
   IMAGE *image;
@@ -620,7 +621,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   image->zsize = static_cast<unsigned short>(zsize);
   image->min = 0;
   image->max = 255;
-  goodwrite *= writeheader(outf,image, 0);
+  goodwrite *= writeheader(outf, image, imgname);
   if(fseek(outf,512+2*tablen,SEEK_SET) < 0) {
     printf("longstoimage: fseek failed\n");
     goto longstoimage_close;
