@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -27,7 +27,7 @@
 using namespace gem::plugins;
 
 REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
-
+REGISTER_IMAGESAVERFACTORY ("SGI", imageSGI);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,7 @@ REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-imageSGI :: imageSGI(void) 
+imageSGI :: imageSGI(void)
 {
   //post("imageSGI");
 }
@@ -54,7 +54,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
 {
   int32 xsize, ysize, csize;
   if (!sizeofimage(filename.c_str(), &xsize, &ysize, &csize) )
-    return(NULL);
+    return(false);
 
   ::verbose(2, "reading '%s' with SGI", filename.c_str());
 
@@ -70,7 +70,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
     return(false);
   }
   result.reallocate();
-   
+
   unsigned int32 *readData = longimagedata((char *)filename.c_str());
   if (!readData) {
     //error("GemImageLoad: error reading SGI image file: %s", filename.c_str());
@@ -127,7 +127,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
   }
 
   free(readData);
-   
+
   return true;
 }
 

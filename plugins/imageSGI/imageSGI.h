@@ -14,6 +14,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef _INCLUDE_GEMPLUGIN__IMAGESGI_IMAGESGI_H_
 #define _INCLUDE_GEMPLUGIN__IMAGESGI_IMAGESGI_H_
 #include "plugins/imageloader.h"
+#include "plugins/imagesaver.h"
 #include <stdio.h>
 
 /*-----------------------------------------------------------------
@@ -30,7 +31,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT imageSGI : public gem::plugins::imageloader {
+class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugins::imagesaver {
  public:
 
   //////////
