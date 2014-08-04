@@ -115,7 +115,8 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
 unsigned int32 *
 getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize)
 {
-  sizeofimage(textureFile, xsize, ysize, csize);
+  int size=sizeofimage(textureFile, xsize, ysize, csize);
+  if(size<1)return 0;
   return longimagedata(textureFile);
 }
 
