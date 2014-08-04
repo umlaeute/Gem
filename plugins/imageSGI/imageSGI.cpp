@@ -135,8 +135,12 @@ bool imageSGI::save(const imageStruct&image, const std::string&filename, const s
   imageStruct img;
   image.convertTo(&img, GL_RGBA);
   unsigned int32*data=(unsigned int32*)img.data;
+
+  std::string name="Gem image";
+  props.get("imagename", name);
+
   int result=0;
-  if(data)longstoimage(data, img.xsize, img.ysize, 4, filename.c_str());
+  if(data)result=longstoimage(data, img.xsize, img.ysize, 4, filename.c_str(), name.c_str());
 
   return (0!=result);
 }
