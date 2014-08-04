@@ -51,6 +51,7 @@ class GEM_EXPORT imageSGI : public gem::plugins::imageloader {
 
   // this is always threadable
   virtual bool isThreadable(void) { return true; }
+  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
 
 
 };

@@ -132,8 +132,24 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
 }
 
 bool imageSGI::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  return false;
+  imageStruct img;
+  image.convertTo(&img, GL_RGBA);
+  unsigned int32*data=(unsigned int32*)img.data;
+  int result=0;
+  if(data)longstoimage(data, img.xsize, img.ysize, 4, filename.c_str());
+
+  return (0!=result);
 }
 float imageSGI::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  return 0.;
+  float result=0;
+  if("image/sgi" == mimetype)result+=100;
+  else if ("image/x-rgb" == mimetype)result+=50;
+  return result;
+}
+void imageSGI::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
+
+  mimetypes.push_back("image/sgi");
+  mimetypes.push_back("image/x-rgb"); // ??
 }
