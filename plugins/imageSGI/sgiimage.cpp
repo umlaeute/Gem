@@ -449,7 +449,6 @@ unsigned int32 *longimagedata(const char *name)
   if(base)free(base);
   base=NULL;
  success:
-  if(lptr)free(lptr);
   if(rledat)free(rledat);
   if(verdat)free(verdat);
   if(starttab)free(starttab);
