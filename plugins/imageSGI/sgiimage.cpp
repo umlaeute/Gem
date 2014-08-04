@@ -182,9 +182,13 @@ static void readheader(FILE *inf, IMAGE *image)
   image->zsize = getshort(inf);
 }
 
-static int writeheader(FILE *outf, IMAGE *image)
+static int writeheader(FILE *outf, IMAGE *image, const char*name)
 {
   IMAGE t;
+  size_t namelen=0;
+  if(0==name)
+    name="no name";
+  namelen=strnlen(name, MAXPDSTRING);
 
   memset(&t, 0, sizeof(IMAGE));
   fwrite(&t,sizeof(IMAGE),1,outf);
@@ -200,7 +204,7 @@ static int writeheader(FILE *outf, IMAGE *image)
   putlong(outf,image->min);
   putlong(outf,image->max);
   putlong(outf,0);
-  return fwrite("no name",8,1,outf);
+  return fwrite(name,namelen,1,outf);
 }
 
 static int writetab(FILE *outf, unsigned int32 *tab, int32 len)
@@ -567,7 +571,7 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z)
  *	represents one pixel.  xsize and ysize specify the dimensions of
  *	the pixel array.  zsize specifies what kind of image file to
  *	write out.  if zsize is 1, the luminance of the pixels are
- *	calculated, and a sinlge channel black and white image is saved.
+ *	calculated, and a single channel black and white image is saved.
  *	If zsize is 3, an RGB image file is saved.  If zsize is 4, an
  *	RGBA image file is saved.
  *
@@ -617,7 +621,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   image->zsize = static_cast<unsigned short>(zsize);
   image->min = 0;
   image->max = 255;
-  goodwrite *= writeheader(outf,image);
+  goodwrite *= writeheader(outf,image, 0);
   if(fseek(outf,512+2*tablen,SEEK_SET) < 0) {
     printf("longstoimage: fseek failed\n");
     goto longstoimage_close;
