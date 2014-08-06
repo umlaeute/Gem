@@ -189,7 +189,7 @@ static int writeheader(FILE *outf, IMAGE *image, const char*name)
   size_t namelen=0;
   if(0==name)
     name="no name";
-  namelen=strnlen(name, MAXPDSTRING);
+  namelen=strlen(name);
 
   memset(&t, 0, sizeof(IMAGE));
   fwrite(&t,sizeof(IMAGE),1,outf);
@@ -205,6 +205,15 @@ static int writeheader(FILE *outf, IMAGE *image, const char*name)
   putlong(outf,image->min);
   putlong(outf,image->max);
   putlong(outf,0);
+
+  // name can only be 80 characters (including terminating 0-byte) long
+  if(namelen>79){
+    unsigned char buf[1];
+    buf[0]=0;
+
+    fwrite(name, 79, 1, outf);
+    return fwrite(buf, 1, 1, outf);
+  }
   return fwrite(name,namelen,1,outf);
 }
 
