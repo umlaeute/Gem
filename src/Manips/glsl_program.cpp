@@ -135,10 +135,10 @@ glsl_program :: ~glsl_program()
   gem::utils::glsl::delshader(m_program);
   gem::utils::glsl::delshader(m_programARB);
 
-  if(GLEW_VERSION_2_0 && m_program)
+  if(m_program && GLEW_VERSION_2_0)
     glDeleteProgram( m_program );
   m_program=0;
-  if(GLEW_ARB_shader_objects && m_programARB)
+  if(m_programARB && GLEW_ARB_shader_objects)
     glDeleteObjectARB( m_programARB );
   m_programARB=0;
 
