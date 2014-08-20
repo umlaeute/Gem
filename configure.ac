@@ -671,11 +671,15 @@ if test "x$have_ieee1394" = "x"; then
 else
  have_ieee1394="yes (${have_ieee1394# })"
 fi
-
 if test "x${have_v4l}" = "x"; then have_v4l="no"; fi
 if test "x${have_v4l2}" = "x"; then have_v4l2="no"; fi
 if test "x${have_ieee1394}" = "x"; then have_ieee1394="no"; fi
 if test "x${have_libdv}" = "x"; then have_libdv="no"; fi
+if test "x${have_libdv}" != "xno"; then
+   if test "x${have_libiec61883}" != "xyes"; then have_libdv="no (missing libiec61883)"; fi
+   if test "x${have_libraw1394}" != "xyes"; then have_libdv="no (missing libraw1394)"; fi
+fi
+
 if test "x${have_unicap}" = "x"; then have_unicap="no"; fi
 if test "x${have_vfw32}" = "x"; then have_vfw32="no"; fi
 # TODO: have_ds
