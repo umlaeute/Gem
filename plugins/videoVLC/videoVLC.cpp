@@ -47,6 +47,7 @@ namespace {
 
 videoVLC::videoVLC(void) :
   m_name(std::string("vlc")),
+  m_convertImg(0),
   m_type(0),
   m_instance(NULL),
   m_mediaplayer(NULL)
