@@ -8,19 +8,19 @@ dnl with or without modifications, as long as this notice is preserved.
 # --------------------------------------------------------------
 AC_DEFUN([GEM_ARG_WITH],
 [
-  if test "x$with_ALL" = "xyes" && test "x${with_$1}" = "x"; then with_$1="yes"; fi 
-  if test "x$with_ALL" = "xno"  && test "x${with_$1}" = "x"; then with_$1="no"; fi
+  AS_IF([ test "x$with_ALL" = "xyes" -a "x${with_$1}" = "x" ], [ with_$1="yes" ])
+  AS_IF([ test "x$with_ALL" = "xno"  -a "x${with_$1}" = "x" ], [ with_$1="no"  ])
 
   AC_ARG_WITH([$1],
              AC_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
-                if test "x$3" != "x"; then with_$1="yes"; fi
+                AS_IF([ test "x$3" != "x" ], [ with_$1="yes" ])
            ])
 ])# GEM_ARG_WITH
 # inverse of GEM_ARG_WITH
 AC_DEFUN([GEM_ARG_WITHOUT],
 [AC_ARG_WITH([$1],
              AC_HELP_STRING([--with-$1], [enable $1-lib ($2)]),,[
-                if test "x$3" = "xforce"; then with_$1="no"; fi
+                AS_IF([ test "x$3" = "xforce" ], [ with_$1="no" ])
            ])
 ])# GEM_ARG_WITHOUT
 
@@ -49,13 +49,13 @@ AC_CONFIG_FILES([src/$1/Makefile])
 AC_ARG_ENABLE([$1],
              AC_HELP_STRING([--disable-$1], [disable $1-objects]),
              [
-                if test "x$enableval" != "xno"; then
+                AS_IF([ test "x$enableval" != "xno" ], [
                   AC_MSG_RESULT([building Gem with $1-objects])
                   target_[]NAME="yes"
-                else
+                ], [
                    AC_MSG_RESULT([building Gem without $1-objects])
-                  target_[]NAME="no"
-                fi
+                   target_[]NAME="no"
+                ])
              ],
              [
                   AC_MSG_RESULT([building Gem with $1-objects])
@@ -73,13 +73,13 @@ AC_CONFIG_FILES([src/$1/Makefile])
 AC_ARG_ENABLE([$1],
              AC_HELP_STRING([--enable-$1], [enable $1-objects]),
              [
-                if test "x$enableval" != "xyes"; then
+                AS_IF([ test "x$enableval" != "xyes" ], [
                    AC_MSG_RESULT([building Gem without $1-objects])
-                  target_[]NAME="no"
-                else
+                   target_[]NAME="no"
+                ],[
                   AC_MSG_RESULT([building Gem with $1-objects])
                   target_[]NAME="yes"
-                fi
+                ])
              ],
              [
                    AC_MSG_RESULT([building Gem without $1-objects])
