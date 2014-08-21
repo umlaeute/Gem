@@ -112,10 +112,10 @@ AC_SUBST(GEM_LIB_[]NAME[]_LIBS)
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable Name ($8)]))
-AC_ARG_WITH([]Name-includes,
-             AC_HELP_STRING([--with-[]Name-includes=/path/to/[]Name/include/], [include path for Name]))
+AC_ARG_WITH([]Name-cflags,
+             AC_HELP_STRING([--with-[]Name-cflags=-I/path/to/[]Name/include/], [compiler flags for Name]))
 AC_ARG_WITH([]Name-libs,
-             AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for Name]))
+             AC_HELP_STRING([--with-[]Name-libs="-L/path/to/[]Name/lib/ -l[]Name"], [linker flags for Name]))
 
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
@@ -130,16 +130,36 @@ if test x$with_[]Name = "xno"; then
   have_[]Name="no (forced)"
 else
   have_[]Name="no (needs check)"
-  if test -d "$with_[]Name[]_includes"; then
-    CFLAGS="-I$with_[]Name[]_includes $CFLAGS"
-    CPPFLAGS="-I$with_[]Name[]_includes $CPPFLAGS"
-    CXXFLAGS="-I$with_[]Name[]_includes $CXXFLAGS"
-    PKG_[]NAME[]_CFLAGS="-I$with_[]Name[]_includes"
-  fi
-  if test -d "$with_[]Name[]_libs"; then
-    LIBS="-L$with_[]Name[]_libs $LIBS"
-    PKG_[]NAME[]_LIBS="-L$with_[]Name[]_libs"
-  fi
+
+## -includes -> -cflags transition
+  AS_IF([test "x$with_[]Name[]_includes" != "x" ],[
+    AS_IF([test "x$with_[]Name[]_cflags" = "x" ],
+     [with_[]Name[]_cflags=$with_[]Name[]_includes],
+     [AC_MSG_ERROR([--with-[]Name[]-includes conflicts with --with-[]Name[]-cflags])]
+    )
+  ])
+
+  tmp_gem_check_lib_extracflags=""
+  tmp_gem_check_lib_extralibs=""
+  AS_IF([test -d "$with_[]Name[]_cflags" ],
+        [tmp_gem_check_lib_extracflags="-I$with_[]Name[]_cflags"],
+        [tmp_gem_check_lib_extracflags="$with_[]Name[]_cflags"])
+  AS_IF([test -d "$with_[]Name[]_libs" ],
+        [tmp_gem_check_lib_extralibs="-L$with_[]Name[]_libs"],
+        [tmp_gem_check_lib_extralibs="$with_[]Name[]_libs"])
+
+  AS_IF([test "x$tmp_gem_check_lib_extracflags" != "x" ],[
+    CFLAGS="$tmp_gem_check_lib_extracflags $CFLAGS"
+    CPPFLAGS="$tmp_gem_check_lib_extracflags $CPPFLAGS"
+    CXXFLAGS="$tmp_gem_check_lib_extracflags $CXXFLAGS"
+    PKG_[]NAME[]_CFLAGS="$tmp_gem_check_lib_extracflags"
+    ])
+
+  AS_IF([test "x$tmp_gem_check_lib_extralibs" != "x" ],[
+    LIBS="$tmp_gem_check_lib_extralibs $LIBS"
+    PKG_[]NAME[]_LIBS="$tmp_gem_check_lib_extralibs"
+    ])
+
   AS_LITERAL_IF([$2],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2_$4])],
               [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$2''_$4])])dnl
@@ -156,53 +176,53 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 ## check whether there is a ${1}-config lying around
    AC_MSG_CHECKING([for $1-config])
    gem_check_lib_pkgconfig_[]NAME=""
-   if test "x$1" != "x"; then
+   AS_IF([ test "x$1" != "x" ],[
     gem_check_lib_pkgconfig_[]NAME="$1"-config
-    if which -- "$gem_check_lib_pkgconfig_[]NAME" >/dev/null 2>&1; then
+    AS_IF([ which -- "$gem_check_lib_pkgconfig_[]NAME" >/dev/null 2>&1 ],[
      gem_check_lib_pkgconfig_[]NAME=$(which "$1"-config)
      AC_MSG_RESULT([yes])
-    else
+    ],[
      gem_check_lib_pkgconfig_[]NAME=""
      AC_MSG_RESULT([no])
-    fi
-   fi
+    ])
+   ])
 
-   if test "x$gem_check_lib_pkgconfig_[]NAME" != "x"; then
+   AS_IF([ test "x$gem_check_lib_pkgconfig_[]NAME" != "x" ],[
 ## fabulous, we have ${1}-config
    AS_VAR_SET([ac_Lib], [yes])
 ## lets see what it reveals
 
 ## if PKG_<name>_CFLAGS is undefined, we try to get it from ${1}-config
-    if test "x$PKG_[]NAME[]_CFLAGS" = "x"; then
-      if $gem_check_lib_pkgconfig_[]NAME --cflags >/dev/null 2>&1; then
+    AS_IF([ test "x$PKG_[]NAME[]_CFLAGS" = "x" ], [
+      AS_IF([ $gem_check_lib_pkgconfig_[]NAME --cflags >/dev/null 2>&1 ], [
         PKG_[]NAME[]_CFLAGS=$(${gem_check_lib_pkgconfig_[]NAME} --cflags)
-      fi
-    fi
+      ])
+    ])
  
 ## if PKG_<name>_LIBS is undefined, we try to get it from ${1}-config
 ## we first try to get it via "--plugin-libs" (this is almost certainly what we want)
 ## if that fails we try to get it via  "--libs"
-    if test "x$PKG_[]NAME[]_LIBS" = "x"; then
-      if $gem_check_lib_pkgconfig_[]NAME --plugin-libs >/dev/null 2>&1; then
+    AS_IF([ test "x$PKG_[]NAME[]_LIBS" = "x" ], [
+      AS_IF([ $gem_check_lib_pkgconfig_[]NAME --plugin-libs >/dev/null 2>&1 ], [
         PKG_[]NAME[]_LIBS=$(${gem_check_lib_pkgconfig_[]NAME} --plugin-libs)
-      else
-       if $gem_check_lib_pkgconfig_[]NAME --libs >/dev/null 2>&1; then
+      ],[
+       AS_IF([ $gem_check_lib_pkgconfig_[]NAME --libs >/dev/null 2>&1 ], [
         PKG_[]NAME[]_LIBS=$(${gem_check_lib_pkgconfig_[]NAME} --libs)
-       fi
-      fi
-    fi
-   fi
+       ])
+      ])
+    ])
+   ])
 
 ## if we still don't know about the libs, we finally fall back to AC_CHECK_LIB / AC_CHECK_HEADERS
-   if test "x$ac_Lib" != "xyes"; then
+   AS_IF([ test "x$ac_Lib" != "xyes" ],[
      AS_VAR_SET([ac_Lib], [yes])
-     if test "x${PKG_[]NAME[]_LIBS}" = "x"; then
+     AS_IF([ test "x${PKG_[]NAME[]_LIBS}" = "x" ],[
       AC_CHECK_LIB([$2],[$4],PKG_[]NAME[]_LIBS="-l$2",AS_VAR_SET([ac_Lib], [no]),[$7])
-     fi
-     if test "x$3" != "x" && test "x${ac_Lib}" != "xno"; then
+     ])
+     AS_IF([ test "x$3" != "x" && test "x${ac_Lib}" != "xno" ],[
       AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
-     fi
-   fi
+     ])
+   ])
   fi
 
   AS_IF([test "x$ac_Lib" = "xyes"],
