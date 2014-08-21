@@ -8,13 +8,12 @@ dnl with or without modifications, as long as this notice is preserved.
 # --------------------------------------------------------------
 AC_DEFUN([GEM_ARG_WITH],
 [
-  AS_IF([ test "x$with_ALL" = "xyes" -a "x${with_$1}" = "x" ], [ with_$1="yes" ])
-  AS_IF([ test "x$with_ALL" = "xno"  -a "x${with_$1}" = "x" ], [ with_$1="no"  ])
-
   AC_ARG_WITH([$1],
              AC_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
                 AS_IF([ test "x$3" != "x" ], [ with_$1="yes" ])
            ])
+  AS_IF([ test "x${with_$1}" = "x" ], [ with_$1="${with_ALL}" ])
+
 ])# GEM_ARG_WITH
 # inverse of GEM_ARG_WITH
 AC_DEFUN([GEM_ARG_WITHOUT],
@@ -118,10 +117,8 @@ AC_ARG_WITH([]Name-includes,
 AC_ARG_WITH([]Name-libs,
              AC_HELP_STRING([--with-[]Name-libs=/path/to/[]Name/lib/], [library path for Name]))
 
-  if test "x$with_[]Name" = "x"; then with_[]Name="$9"; fi
-
-  if test "x$with_ALL" = "xyes" && test "x$with_[]Name" = "x"; then with_[]Name="yes"; fi
-  if test "x$with_ALL" = "xno"  && test "x$with_[]Name" = "x"; then with_[]Name="no"; fi
+  AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
+  AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
 
 tmp_gem_check_lib_cppflags="$CPPFLAGS"
 tmp_gem_check_lib_cflags="$CFLAGS"
