@@ -115,7 +115,7 @@ AC_ARG_WITH([Name],
 AC_ARG_WITH([]Name-cflags,
              AC_HELP_STRING([--with-[]Name-cflags=-I/path/to/[]Name/include/], [compiler flags for Name]))
 AC_ARG_WITH([]Name-libs,
-             AC_HELP_STRING([--with-[]Name-libs="-L/path/to/[]Name/lib/ -l[]Name"], [linker flags for Name]))
+             AC_HELP_STRING([--with-[]Name-libs="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
 
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
