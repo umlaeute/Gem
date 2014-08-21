@@ -126,9 +126,9 @@ tmp_gem_check_lib_cxxflags="$CXXFLAGS"
 tmp_gem_check_lib_ldflags="$LDFLAGS"
 tmp_gem_check_lib_libs="$LIBS"
 
-if test x$with_[]Name = "xno"; then
+AS_IF([ test x$with_[]Name = "xno" ],[
   have_[]Name="no (forced)"
-else
+],[
   have_[]Name="no (needs check)"
 
 ## -includes -> -cflags transition
@@ -171,7 +171,7 @@ else
 dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB([$2],[$4],,,[$7]))
   PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET([ac_Lib], [yes]),:)
 
-  if test "x$ac_Lib" != "xyes"; then
+  AS_IF([test "x$ac_Lib" != "xyes" ],[
 ## pkg-config has failed
 ## check whether there is a ${1}-config lying around
    AC_MSG_CHECKING([for $1-config])
@@ -223,7 +223,7 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
       AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
      ])
    ])
-  fi
+  ])
 
   AS_IF([test "x$ac_Lib" = "xyes"],
    [
@@ -251,7 +251,7 @@ dnl turn of further checking for this package
 
    AC_CHECK_LIB([$2],[$4],,,[$7])
    AC_CHECK_HEADERS([$3])
-fi[]dnl
+])
 
 AM_CONDITIONAL(HAVE_LIB_[]NAME, [test "x${have_[]Name}" = "xyes"])
 AS_IF([test "x${have_[]Name}" = "xyes" ],
@@ -280,15 +280,14 @@ int main(){
   return 0;
 }
 EOF
-if $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&1
-then
+AS_IF([ $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&1 ],[
   AC_MSG_RESULT([yes])
   CXXFLAGS="${CXXFLAGS} [$1]"
   [$2]
-else
+],[
   AC_MSG_RESULT([no])
   [$3]
-fi
+])
 ])# GEM_CHECK_CXXFLAGS
 
 # GEM_CHECK_FRAMEWORK(FRAMEWORK, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
@@ -307,16 +306,16 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
 
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
-  if test "x${gem_check_ldflags_success}" = "xyes"; then
+  AS_IF([ test "x${gem_check_ldflags_success}" = "xyes" ], [
     AC_MSG_RESULT([yes])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [framework $1])
     GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
     [$2]
-  else
+  ],[
     AC_MSG_RESULT([no])
     [$3]
-  fi
+  ])
   LDFLAGS="${gem_check_ldflags_org}"
   AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
 undefine([NAME])
@@ -334,14 +333,14 @@ AC_DEFUN([GEM_CHECK_LDFLAGS],
 
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
-  if test "x$gem_check_ldflags_success" = "xyes"; then
+  AS_IF([ test "x$gem_check_ldflags_success" = "xyes" ],[
     AC_MSG_RESULT([yes])
     [$2]
-  else
+  ],[
     AC_MSG_RESULT([no])
     LDFLAGS="$gem_check_ldflags_org"
     [$3]
-  fi
+  ])
 ])# GEM_CHECK_LDFLAGS
 
 
@@ -359,19 +358,19 @@ AC_ARG_ENABLE(fat-binary,
                           platform; when building multiple architectures, 
 			  dependency-tracking must be disabled],
        [fat_binary=$enableval], [fat_binary=no])
-if test "$fat_binary" != no; then
+AS_IF([test "x$fat_binary" != "xno" ],[
     AC_MSG_CHECKING([target architectures])
 
     # Respect TARGET_ARCHS setting from environment if available.
-    if test -z "$TARGET_ARCHS"; then
-   	# Respect ARCH given to --enable-fat-binary if present.
-     if test "$fat_binary" != yes; then
-	    TARGET_ARCHS=$(echo "$fat_binary" | tr ',' ' ')
-     else
-	    # Choose a default set of architectures based upon platform.
-      TARGET_ARCHS="ppc i386"
-     fi
-    fi
+    AS_IF([ test -z "$TARGET_ARCHS" ],[
+       # Respect ARCH given to --enable-fat-binary if present.
+     AS_IF([ test "x$fat_binary" != "xyes" ],[
+       TARGET_ARCHS=$(echo "$fat_binary" | tr ',' ' ')
+     ],[
+       # Choose a default set of architectures based upon platform.
+       TARGET_ARCHS="ppc i386"
+     ])
+    ])
     AC_MSG_RESULT([$TARGET_ARCHS])
 
    define([Name],[translit([$1],[./-], [___])])
@@ -384,30 +383,30 @@ if test "$fat_binary" != no; then
     tmp_arch_count=$((tmp_arch_count+1))
    done
 
-   if test "$tmp_arch_count" -gt 1; then
-     if test "x$enable_dependency_tracking" != xno; then
+   AS_IF([ test "$tmp_arch_count" -gt 1 ],[
+     AS_IF([ test "x$enable_dependency_tracking" != xno ],[
      	AC_MSG_ERROR([when building for multiple architectures, you MUST turn off dependency-tracking])
-     fi
-   fi
+     ])
+   ])
 
-   if test "x$[]Name" != "x"; then
+   AS_IF([ test "x$[]Name" != "x" ],[
     tmp_arch_cflags="$CFLAGS"
     tmp_arch_cxxflags="$CXXFLAGS"
     GEM_CHECK_CXXFLAGS($[]Name,,[]Name="")
     []Name[]_CXXFLAGS+=$[]Name
     CFLAGS="$tmp_arch_cflags"
     CXXFLAGS="$tmp_arch_cxxflags"
-   fi
+   ])
 
-   if test "x$[]Name" != "x"; then
+   AS_IF([ test "x$[]Name" != "x" ],[
     tmp_arch_ldflags="$LDFLAGS"
     GEM_CHECK_LDFLAGS($[]Name,,[]Name="")
     []Name[]_LDFLAGS+=$[]Name
     LDFLAGS="$tmp_arch_ldflags"
-   fi
+   ])
 
    undefine([Name])
-fi
+])
 ])# GEM_CHECK_FAT
 
 # GEM_CHECK_RTE()
@@ -424,9 +423,9 @@ AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
 AC_SUBST(GEM_RTE)
 
-if test "x${libdir}" = "x\${exec_prefix}/lib"; then
+AS_IF([ test "x${libdir}" = "x\${exec_prefix}/lib" ],[
  libdir='${exec_prefix}/lib/pd/extra'
-fi
+])
 
 tmp_rte_cppflags="$CPPFLAGS"
 tmp_rte_cflags="$CFLAGS"
@@ -442,20 +441,20 @@ AC_ARG_WITH([pd],
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
 
 ## some default paths
-if test "x${with_pd}" = "x"; then
+AS_IF([ test "x${with_pd}" = "x" ],[
  case $host_os in
  *darwin*)
-    if test -d "/Applications/Pd-extended.app/Contents/Resources"; then with_pd="/Applications/Pd-extended.app/Contents/Resources"; fi
-    if test -d "/Applications/Pd.app/Contents/Resources"; then with_pd="/Applications/Pd.app/Contents/Resources"; fi
+    AS_IF([ test -d "/Applications/Pd-extended.app/Contents/Resources" ], [ with_pd="/Applications/Pd-extended.app/Contents/Resources" ])
+    AS_IF([ test -d "/Applications/Pd.app/Contents/Resources" ], [ with_pd="/Applications/Pd.app/Contents/Resources" ])
  ;;
  *mingw* | *cygwin*)
-    if test -d "${PROGRAMFILES}/Pd-extended"; then with_pd="${PROGRAMFILES}/Pd-extended"; fi
-    if test -d "${PROGRAMFILES}/pd"; then with_pd="${PROGRAMFILES}/pd"; fi
+    AS_IF([ test -d "${PROGRAMFILES}/Pd-extended" ], [ with_pd="${PROGRAMFILES}/Pd-extended" ])
+    AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
  ;;
  esac
-fi
+])
 
-if test -d "$with_pd" ; then
+AS_IF([ test -d "$with_pd"  ],[
  if test -d "${with_pd}/src" ; then
    AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/src")
  elif test -d "${with_pd}/include/pd" ; then
@@ -465,24 +464,24 @@ if test -d "$with_pd" ; then
  else
    AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}")
  fi
- if test -d "${with_pd}/bin" ; then
+ AS_IF([ test -d "${with_pd}/bin"  ],[
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}/bin"
- else
+ ],[
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
- fi
+ ])
 
  CPPFLAGS="$CPPFLAGS ${GEM_RTE_CFLAGS}"
  CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
  CXXFLAGS="$CXXFLAGS ${GEM_RTE_CFLAGS}"
  LIBS="$LIBS ${GEM_RTE_LIBS}"
-fi
+])
 
 AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
-if test "x$have_pddll" = "xyes"; then
+AS_IF([ test "x$have_pddll" = "xyes" ], [
  GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-Xlinker -l:pd.dll"
-else
+],[
  AC_CHECK_LIB([pd], [nullfn], [GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-lpd"])
-fi
+])
 
 AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
 
@@ -499,9 +498,9 @@ AC_CHECK_HEADERS([s_stuff.h], [], [],
 # the extension
 AC_ARG_WITH([extension], 
 		AS_HELP_STRING([--with-extension=<ext>],[enforce a certain file-extension (e.g. pd_linux)]))
-if test "x$with_extension" != "x"; then
+AS_IF([ test "x$with_extension" != "x" ],[
  EXT=$with_extension
-else
+],[
   case x$host_os in
    x*darwin*)
      EXT=pd_darwin
@@ -517,7 +516,7 @@ else
      EXT=pd_$(echo $host_os | sed -e '/.*/s/-.*//' -e 's/\[.].*//')
      ;;
   esac
-fi
+])
 GEM_RTE_EXTENSION=$EXT
 AC_SUBST(GEM_RTE_EXTENSION)
 
@@ -536,15 +535,17 @@ GEM_ARG_ENABLE([threads], [default: use threads])
 AC_SUBST(GEM_THREADS_CFLAGS)
 AC_SUBST(GEM_THREADS_LIBS)
 
-if test "x$enable_threads" != "xno"; then
+AS_IF([ test "x$enable_threads" != "xno" ],[
  AX_PTHREAD
 
  AS_IF([test "x$ax_pthread_ok" = "xyes"], [
-   AC_CHECK_TYPES([ptw32_handle_t], [], [], [#include <pthread.h>])
+   AC_CHECK_TYPES([ptw32_handle_t], [], [], [
+   #include <pthread.h>
+   ])
  ])
 
  GEM_THREADS_CFLAGS=""
  AC_LIB_APPENDTOVAR([GEM_THREADS_CFLAGS], "${PTHREAD_CFLAGS}")
  GEM_THREADS_LIBS="${GEM_THREADS_LIBS}${GEM_THREADS_LIBS:+ }${PTHREAD_LIBS}"
-fi
+])
 ])
