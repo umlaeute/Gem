@@ -11,7 +11,7 @@
 #X text 13 9 A stack is a "first in \, last out" structure.;
 #X text 13 48 Right inlet stores atom(s).;
 #X text 13 29 Left inlet unstores the most recently stored atom.;
-#X text 11 301 stack-help.pd (GPL) <claudiusmaximus@goto10.org>;
+#X text 11 301 stack-help.pd (GPL) <claude@mathr.co.uk>;
 #X connect 0 0 1 0;
 #X connect 0 1 2 0;
 #X connect 3 0 0 1;

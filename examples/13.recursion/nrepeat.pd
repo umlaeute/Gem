@@ -23,7 +23,7 @@
 #X text 233 23 count;
 #X text 8 225 repeated;
 #X text 119 381 counter;
-#X text 30 419 nrepeat.pd (GPL) <claudiusmaximus@goto10.org>;
+#X text 30 419 nrepeat.pd (GPL) <claude@mathr.co.uk>;
 #X connect 0 0 1 0;
 #X connect 1 0 7 0;
 #X connect 1 1 2 0;
