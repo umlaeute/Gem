@@ -18,8 +18,8 @@ if [ -r "$1" ]; then
 fi
 
 TESTPATCHES="          \
-	object_gemstate_simple.pd      \
-	object_pix.pd  \
+	nop      \
+	_object_pix  \
 	"
 
 ORDERS="OWRrwo OWRrow WORrwo WORrow WROrwo WROrow"
@@ -29,11 +29,13 @@ cat "${OBJECTS}" | sed -e 's|;$||' | while read obj
 do
  for patch in ${TESTPATCHES}; do
   for order in ${ORDERS}; do
-   if test -e "${patch}" ; then
     echo "testing ${patch} ($order) with ${obj}..." 1>&2
+    if test ! -e "${patch}.pd" ; then
+     patch="t a"
+    fi
+    sed -e "s|@PRERENDER@|${patch}|g" object_gemstate.template > object_gemstate.pd
     order=$(echo $order | grep -o .)
-    "${PD}" ${PDARGS} -open ${patch} -send "order ${order}" -send "object ${obj}" 2>&1
-   fi
+    "${PD}" ${PDARGS} -open object_gemstate.pd -send "order ${order}" -send "object ${obj}" 2>&1
   done
  done
 done >> "${LOGFILE}"
