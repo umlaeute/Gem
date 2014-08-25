@@ -1,0 +1,13 @@
+#N canvas 1 51 450 300 10;
+#X obj 133 55 inlet;
+#X obj 133 77 pix_image fractal.JPG;
+#X obj 133 121 outlet;
+#X obj 253 150 pack 0 0;
+#X obj 253 172 print image;
+#X obj 133 99 pix_info;
+#X connect 0 0 1 0;
+#X connect 1 0 5 0;
+#X connect 3 0 4 0;
+#X connect 5 0 2 0;
+#X connect 5 1 3 0;
+#X connect 5 2 3 1;
