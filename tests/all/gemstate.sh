@@ -20,9 +20,10 @@ fi
 TESTPATCHES="          \
 	nop      \
 	_object_pix  \
+	_object_tex  \
 	"
 
-ORDERS="OWRrwo OWRrow WORrwo WORrow WROrwo WROrow"
+ORDERS="OWRo WORo WROo OWRrwo OWRrow WORrwo WORrow WROrwo WROrow"
 
 rm -f "${LOGFILE}"
 cat "${OBJECTS}" | sed -e 's|;$||' | while read obj
