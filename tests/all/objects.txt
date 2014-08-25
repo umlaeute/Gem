@@ -434,7 +434,7 @@ pix_emboss;
 pix_fiducialtrack;
 pix_film;
 pix_flip;
-pix_freeframe bla;
+pix_freeframe;
 pix_gain;
 pix_grey;
 pix_halftone;
