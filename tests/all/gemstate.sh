@@ -23,7 +23,11 @@ TESTPATCHES="          \
 	_object_tex  \
 	"
 
-ORDERS="OWRo WORo WROo OWRrwo OWRrow WORrwo WORrow WROrwo WROrow"
+
+if [ "x${ORDERS}" = "x" ]; then
+ ORDERS="${ORDERS} Oo OWo OWow OWwo WOo WOow WOwo"
+ ORDERS="${ORDERS} OWRo WORo WROo OWRrwo OWRrow WORrwo WORrow WROrwo WROrow"
+fi
 
 rm -f "${LOGFILE}"
 cat "${OBJECTS}" | sed -e 's|;$||' | while read obj
