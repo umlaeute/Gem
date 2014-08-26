@@ -211,6 +211,16 @@ void GemWindow::button(unsigned int devId, int id, int state)
 
   info(gensym("mouse"), 4, ap);
 }
+/* mouse entering/leaving window */
+void GemWindow::entry(unsigned int devId, int state)
+{
+  t_atom ap[3];
+  SETFLOAT (ap+0, devId);
+  SETSYMBOL(ap+1, gensym("entry"));
+  SETFLOAT (ap+2, state);
+
+  info(gensym("mouse"), 3, ap);
+}
 
 /* keyboard buttons */
 void GemWindow::key(unsigned int devId, std::string sid, int iid, int state) {
