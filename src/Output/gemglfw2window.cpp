@@ -318,17 +318,17 @@ void gemglfw2window::charCallback(int character, int action) {
   info(gensym("keyboard"), 3, ap);
 }
 void gemglfw2window::mousebuttonCallback(int button, int action) {
-  unsigned int devID=0;
+  int devID=0;
   gemglfw2window:: button(devID, button, action);
 }
 void gemglfw2window::mouseposCallback(int x, int y) {
-  unsigned int devID=0;
+  int devID=0;
   motion(devID, x, y);
 }
 #define WHEELUP   3
 #define WHEELDOWN 4
 void gemglfw2window::mousewheelCallback(int pos) {
-  unsigned int devID=0;
+  int devID=0;
   if(m_wheelpos<pos) {
     while(m_wheelpos++<pos) {
       button(devID, WHEELUP, 1);

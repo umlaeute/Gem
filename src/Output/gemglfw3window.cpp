@@ -346,11 +346,11 @@ void gemglfw3window::charCallback(unsigned int character) {
   info(gensym("keyboard"), 3, ap);
 }
 void gemglfw3window::mousebuttonCallback(int button, int action, int mods) {
-  unsigned int devID=0;
+  int devID=0;
   gemglfw3window:: button(devID, button, action);
 }
 void gemglfw3window::mouseposCallback(float x, float y) {
-  unsigned int devID=0;
+  int devID=0;
   motion(devID, x, y);
 }
 #define WHEELUP   3
@@ -362,7 +362,7 @@ void gemglfw3window::mouseposCallback(float x, float y) {
 
 void gemglfw3window::scrollCallback(float x, float y) {
   int i, dir;
-  unsigned int devID=0;
+  int devID=0;
   dir=(x>0)?WHEELUP:WHEELDOWN;
   if(x<0)x=-x;
   for(i=0; i<x; i++) {

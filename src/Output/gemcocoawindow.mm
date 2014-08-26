@@ -241,7 +241,7 @@ static std::string key2name(NSString*s, unsigned short keycode) {
 void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   if(!e)return;
   NSEventType type = [e type];
-  unsigned int devID=0;
+  int devID=0;
 
   switch(type) {
   case(NSLeftMouseUp): 

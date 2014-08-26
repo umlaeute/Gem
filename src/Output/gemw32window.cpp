@@ -519,7 +519,7 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	// assume that we handle the message
   long lRet = 0;
-  unsigned int devID=0;
+  int devID=0;
   switch (uMsg)
     {
       // mouse motion
