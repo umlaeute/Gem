@@ -402,7 +402,7 @@ void gemsdlwindow :: dispatch()
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
       motion(event.button.which, event.button.x, event.button.y);
-      button(event.button.which, event.button.button, event.button.state==SDL_PRESSED);
+      button(event.button.which, event.button.button-SDL_BUTTON_LEFT, event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);
