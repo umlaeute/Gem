@@ -216,19 +216,15 @@ void GemWindow::button(unsigned int devId, int id, int state)
 void GemWindow::key(unsigned int devId, std::string sid, int iid, int state) {
   t_atom ap[4];
   SETFLOAT (ap+0, devId);
-  SETSYMBOL(ap+1, gensym("key"));
-
-  SETFLOAT (ap+2, iid);
+  SETSYMBOL(ap+1, gensym("keyname"));
+  SETSYMBOL(ap+2, gensym(sid.c_str()));
   SETFLOAT (ap+3, state);
-
   info(gensym("keyboard"), 4, ap);
 
   //SETFLOAT (ap+0, devId);
-  SETSYMBOL(ap+1, gensym("keyname"));
-
-  SETSYMBOL(ap+2, gensym(sid.c_str()));
-  //  SETFLOAT (ap+2, state);
-
+  SETSYMBOL(ap+1, gensym("key"));
+  SETFLOAT (ap+2, iid);
+  //SETFLOAT (ap+3, state);
   info(gensym("keyboard"), 4, ap);
 }
 
