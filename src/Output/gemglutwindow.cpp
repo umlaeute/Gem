@@ -397,36 +397,36 @@ static std::string key2symbol(int c) {
   return std::string("<unknown>");
 }
 void gemglutwindow::keyboardCb(unsigned char c, int x, int y) {
-  CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), c, 1);
+  CALLBACK4WIN->motion( 0,x,y);
+  ggw->key( 0,key2symbol(c), c, 1);
 }
 void gemglutwindow::keyboardupCb(unsigned char c, int x, int y) {
-  CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), c, 0);
+  CALLBACK4WIN->motion( 0,x,y);
+  ggw->key( 0,key2symbol(c), c, 0);
 }
 
 void gemglutwindow::specialCb(int c, int x, int y) {
-  CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), c, 1);
+  CALLBACK4WIN->motion(0,x,y);
+  ggw->key(0,key2symbol(c), c, 1);
 }
 
 void gemglutwindow::specialupCb(int c, int x, int y) {
-  CALLBACK4WIN->motion(x,y);
-  ggw->key(key2symbol(c), c, 0);
+  CALLBACK4WIN->motion(0,x,y);
+  ggw->key(0,key2symbol(c), c, 0);
 }
 
 void gemglutwindow::reshapeCb(int x, int y) {
   CALLBACK4WIN->dimension(x, y);
 }
 void gemglutwindow::mouseCb(int button, int state, int x, int y) {
-  CALLBACK4WIN->motion(x,y);
-  ggw->button(button, !state);
+  CALLBACK4WIN->motion(0,x,y);
+  ggw->button(0,button, !state);
 }
 void gemglutwindow::motionCb(int x, int y) {
-  CALLBACK4WIN->motion(x,y);
+  CALLBACK4WIN->motion(0,x,y);
 }
 void gemglutwindow::passivemotionCb(int x, int y) {
-  CALLBACK4WIN->motion(x,y);
+  CALLBACK4WIN->motion(0,x,y);
 }
 
 void gemglutwindow::entryCb(int state) {

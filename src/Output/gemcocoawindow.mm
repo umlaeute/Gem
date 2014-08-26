@@ -241,16 +241,18 @@ static std::string key2name(NSString*s, unsigned short keycode) {
 void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   if(!e)return;
   NSEventType type = [e type];
+  unsigned int devID=0;
+
   switch(type) {
   case(NSLeftMouseUp): 
   case(NSRightMouseUp):
   case(NSOtherMouseUp):
-    button([e buttonNumber], false);
+    button(devID, [e buttonNumber], false);
     break;
   case(NSLeftMouseDown): 
   case(NSRightMouseDown):
   case(NSOtherMouseDown):
-    button([e buttonNumber], [e pressure]);
+    button(devID, [e buttonNumber], [e pressure]);
     break;
   case(NSMouseMoved):
   case(NSLeftMouseDragged):
@@ -258,7 +260,7 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   case(NSOtherMouseDragged):
     {
       NSPoint p=[e locationInWindow];
-      motion(static_cast<int>(p.x), static_cast<int>(p.y));
+      motion(devID, static_cast<int>(p.x), static_cast<int>(p.y));
     }
     break;
     break;
@@ -276,11 +278,11 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   case(NSKeyDown):
     if (![e isARepeat]) {
       // how to get names of special keys? e.g. PageUp
-      key(key2name([e characters], [e keyCode]), [e keyCode], true);
+      key(devID, key2name([e characters], [e keyCode]), [e keyCode], true);
     }
     break;
   case(NSKeyUp):
-    key(key2name([e characters], [e keyCode]), [e keyCode], false);
+    key(devID, key2name([e characters], [e keyCode]), [e keyCode], false);
     break;
   case(NSFlagsChanged):
     do {
@@ -289,7 +291,7 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
       if(newflags != oldflags) {
         unsigned long modified = newflags ^ oldflags;
         m_pimpl->modifierFlags = newflags;
-#define MODFLAGS2KEY(mask, name) if(modified & mask) key(name, [e keyCode], static_cast<bool>(mask & newflags))
+#define MODFLAGS2KEY(mask, name) if(modified & mask) key(devID, name, [e keyCode], static_cast<bool>(mask & newflags))
         MODFLAGS2KEY(NSAlphaShiftKeyMask, "Caps_Lock"); // Caps_Lock
         MODFLAGS2KEY(NSShiftKeyMask, "Shift_L");     // Shift_L
         MODFLAGS2KEY(NSControlKeyMask, "Control_L"); // Control_L

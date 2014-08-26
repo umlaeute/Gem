@@ -347,7 +347,7 @@ void gemsdlwindow :: dispatch()
   std::vector<t_atom>al;
   t_atom a;
   int state;
-
+  unsigned long devID=0;
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch(event.type) {
@@ -369,15 +369,15 @@ void gemsdlwindow :: dispatch()
       break;
     case SDL_KEYUP:
     case SDL_KEYDOWN:
-      key(key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
+      key(devID, key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
       break;
     case SDL_MOUSEMOTION:
-      motion(event.motion.x, event.motion.y);
+      motion(devID, event.motion.x, event.motion.y);
       break;
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
-      motion(event.button.x, event.button.y);
-      button(event.button.button, event.button.state==SDL_PRESSED);
+      motion(devID, event.button.x, event.button.y);
+      button(devID, event.button.button, event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);

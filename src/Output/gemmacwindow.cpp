@@ -1413,6 +1413,7 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
   //MouseWheelAxis	axis = 0;
   UInt32				modifiers = 0;
   long				wheelDelta = 0;
+  unsigned long devID=0;
 
   if (eventNotHandledErr == result)
     {
@@ -1443,7 +1444,7 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
             GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode);
             GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macKeyCode[0]);
             macKeyCode[1]='\0';
-            key((char *)&macKeyCode, keyCode, (kEventRawKeyDown==kind));
+            key(devID, (char *)&macKeyCode, keyCode, (kEventRawKeyDown==kind));
             result = noErr;
             break;
           }
@@ -1456,7 +1457,7 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
             GetEventParameter(event, kEventParamMouseLocation, typeQDPoint,
                               NULL, sizeof(Point), NULL, &location);
             QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-            motion(static_cast<int>(location.h),
+            motion(devID, static_cast<int>(location.h),
                    static_cast<int>(location.v)
                    );
             result = noErr;
@@ -1466,7 +1467,7 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
             GetEventParameter(event, kEventParamMouseLocation, typeQDPoint,
                               NULL, sizeof(Point), NULL, &location);
             QDGlobalToLocalPoint( GetWindowPort( winRef ), &location );
-            motion(static_cast<int>(location.h),
+            motion(devID, static_cast<int>(location.h),
                    static_cast<int>(location.v)
                    );
             result = noErr;
@@ -1492,8 +1493,8 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
               buttonid-=1;
               break;
             }
-            button(buttonid, (kEventMouseDown==kind));
-            motion(static_cast<int>(location.h),
+            button(devID, buttonid, (kEventMouseDown==kind));
+            motion(devID, static_cast<int>(location.h),
                    static_cast<int>(location.v)
                    );
 

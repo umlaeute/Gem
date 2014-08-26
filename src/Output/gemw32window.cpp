@@ -519,33 +519,33 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	// assume that we handle the message
   long lRet = 0;
-
+  unsigned int devID=0;
   switch (uMsg)
     {
       // mouse motion
     case WM_MOUSEMOVE:
-      motion(LOWORD(lParam), HIWORD(lParam));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
 
       // left button up/down
     case WM_LBUTTONUP: case WM_LBUTTONDOWN:
-      button(0, (uMsg==WM_LBUTTONDOWN));
-      motion(LOWORD(lParam), HIWORD(lParam));
+      button(devID, 0, (uMsg==WM_LBUTTONDOWN));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
       // middle button up/down
     case WM_MBUTTONUP: case WM_MBUTTONDOWN:
-      button(1, (uMsg==WM_MBUTTONDOWN));
-      motion(LOWORD(lParam), HIWORD(lParam));
+      button(devID, 1, (uMsg==WM_MBUTTONDOWN));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
       // middle button up/down
     case WM_RBUTTONUP: case WM_RBUTTONDOWN:
-      button(2, (uMsg==WM_RBUTTONDOWN));
-      motion(LOWORD(lParam), HIWORD(lParam));
+      button(devID, 2, (uMsg==WM_RBUTTONDOWN));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
 
       // keyboard action
     case WM_KEYUP: case WM_KEYDOWN:
-        key((char*)&wParam, (int)wParam, (uMsg==WM_KEYDOWN));
+      key(devID, (char*)&wParam, (int)wParam, (uMsg==WM_KEYDOWN));
       break;
       // resize event
     case WM_SIZE:

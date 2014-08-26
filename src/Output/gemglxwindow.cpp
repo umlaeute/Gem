@@ -512,6 +512,7 @@ void gemglxwindow::dispatch(void) {
   XKeyEvent* kb  = (XKeyEvent*)&event;
   char keystring[2];
   KeySym keysym_return;
+  unsigned long devID=0;
 
   while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
                            StructureNotifyMask |
@@ -525,25 +526,25 @@ void gemglxwindow::dispatch(void) {
       switch (event.type)
         {
         case ButtonPress:
-          button(eb->button-1, 1);
-          motion(eb->x, eb->y);
+          button(devID, eb->button-1, 1);
+          motion(devID, eb->x, eb->y);
           break;
         case ButtonRelease:
-          button(eb->button-1, 0);
-          motion(eb->x, eb->y);
+          button(devID, eb->button-1, 0);
+          motion(devID, eb->x, eb->y);
           break;
         case MotionNotify:
-          motion(eb->x, eb->y);
+          motion(devID, eb->x, eb->y);
           if(!m_pimpl->have_border) {
             int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
             err=0;
           }
           break;
         case KeyPress:
-          key(m_pimpl->key2string(kb), kb->keycode, 1);
+          key(devID, m_pimpl->key2string(kb), kb->keycode, 1);
           break;
         case KeyRelease:
-          key(m_pimpl->key2string(kb), kb->keycode, 0);
+          key(devID, m_pimpl->key2string(kb), kb->keycode, 0);
           break;
         case ConfigureNotify:
           if ((event.xconfigure.width != m_width) ||
