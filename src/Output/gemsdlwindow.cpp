@@ -30,7 +30,31 @@ CPPEXTERN_NEW(gemsdlwindow);
 
 namespace {
   static unsigned int sdl_count = 0;
+};
+
+
+#ifdef __APPLE__
+#include <dlfcn.h>
+//This must be called before playing with SDL, else it won't work on osx.
+
+namespace {
+static void pre_init()
+{
+    void* cocoa_lib;
+
+    cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa", RTLD_LAZY );
+    if(!cocoa_lib)return;
+    void (*nsappload)(void);
+    nsappload = (void(*)()) dlsym( cocoa_lib, "NSApplicationLoad");
+    if(!nsappload)return;
+    nsappload();
 }
+};
+#else /* __APPLE__ */
+namespace {
+ void pre_init() {;}
+};
+#endif /* __APPLE__ */
 
 /////////////////////////////////////////////////////////
 //
@@ -46,6 +70,7 @@ gemsdlwindow :: gemsdlwindow(void) :
   m_bpp(0)
 {
   if(!sdl_count) {
+    pre_init();
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
       throw(GemException("could not initialize SDL window infrastructure"));
     SDL_EnableUNICODE(1);
