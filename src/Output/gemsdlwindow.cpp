@@ -38,8 +38,8 @@ namespace {
 //This must be called before playing with SDL, else it won't work on osx.
 
 namespace {
-static void pre_init()
-{
+  static void pre_init()
+  {
     void* cocoa_lib;
 
     cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa", RTLD_LAZY );
@@ -48,11 +48,11 @@ static void pre_init()
     nsappload = (void(*)()) dlsym( cocoa_lib, "NSApplicationLoad");
     if(!nsappload)return;
     nsappload();
-}
+  }
 };
 #else /* __APPLE__ */
 namespace {
- void pre_init() {;}
+  void pre_init() {;}
 };
 #endif /* __APPLE__ */
 
