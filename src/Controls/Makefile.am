@@ -22,10 +22,6 @@ libControls_la_SOURCES=  \
     gemframebuffer.h \
     gemhead.cpp \
     gemhead.h \
-    gemkeyboard.cpp \
-    gemkeyboard.h \
-    gemkeyname.cpp \
-    gemkeyname.h \
     gemlist.cpp \
     gemlist.h \
     gemlist_info.cpp \
@@ -40,6 +36,10 @@ libControls_la_SOURCES=  \
 if ENABLE_MULTICONTEXT
 else !ENABLE_MULTICONTEXT
 libControls_la_SOURCES+=  \
+    gemkeyboard.cpp \
+    gemkeyboard.h \
+    gemkeyname.cpp \
+    gemkeyname.h \
     gemmouse.cpp \
     gemmouse.h \
     gemwin.cpp \
