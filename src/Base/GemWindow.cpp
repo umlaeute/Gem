@@ -190,7 +190,7 @@ void GemWindow :: bang(void)
 
 
 /* mouse movement */
-void GemWindow::motion(unsigned int devId, int x, int y)
+void GemWindow::motion(int devId, int x, int y)
 {
   t_atom ap[4];
   SETFLOAT (ap+0, devId);
@@ -201,7 +201,7 @@ void GemWindow::motion(unsigned int devId, int x, int y)
   info(gensym("mouse"), 4, ap);
 }
 /* mouse buttons */
-void GemWindow::button(unsigned int devId, int id, int state)
+void GemWindow::button(int devId, int id, int state)
 {
   t_atom ap[4];
   SETFLOAT (ap+0, devId);
@@ -212,7 +212,7 @@ void GemWindow::button(unsigned int devId, int id, int state)
   info(gensym("mouse"), 4, ap);
 }
 /* mouse entering/leaving window */
-void GemWindow::entry(unsigned int devId, int state)
+void GemWindow::entry(int devId, int state)
 {
   t_atom ap[3];
   SETFLOAT (ap+0, devId);
@@ -223,7 +223,7 @@ void GemWindow::entry(unsigned int devId, int state)
 }
 
 /* keyboard buttons */
-void GemWindow::key(unsigned int devId, std::string sid, int iid, int state) {
+void GemWindow::key(int devId, std::string sid, int iid, int state) {
   t_atom ap[4];
   SETFLOAT (ap+0, devId);
   SETSYMBOL(ap+1, gensym("keyname"));
