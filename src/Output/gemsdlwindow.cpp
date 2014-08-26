@@ -357,7 +357,7 @@ void gemsdlwindow :: dispatch()
     case SDL_ACTIVEEVENT: {
       state=event.active.gain;
       if(event.active.state & SDL_APPMOUSEFOCUS) {
-        info("entry", state);
+        entry(devID, state);
       }
       if(event.active.state & SDL_APPINPUTFOCUS) {
         info("inputentry", state);

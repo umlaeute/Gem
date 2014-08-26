@@ -117,7 +117,7 @@ void passivemotionCb(int x, int y) {
   CALLBACK4WIN->motion(0,x,y);
 }
 void entryCb(int state) {
-  CALLBACK4WIN->info("entry", state);
+  CALLBACK4WIN->entry(0, state);
 }
 void joystickCb(unsigned int a, int x, int y, int z) {
 }
@@ -153,7 +153,7 @@ void windowstatusCb(int value) {
     CALLBACK4WIN->motion(id,x,y);
   }
   void multiEntryCb(int id, int state) {
-    CALLBACK4WIN->info("entry", state);
+    CALLBACK4WIN->entry(id, state);
   }
 #endif
 }; /* namespace */
