@@ -369,15 +369,15 @@ void gemsdlwindow :: dispatch()
       break;
     case SDL_KEYUP:
     case SDL_KEYDOWN:
-      key(devID, key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
+      key(event.key.which, key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
       break;
     case SDL_MOUSEMOTION:
-      motion(devID, event.motion.x, event.motion.y);
+      motion(event.motion.which, event.motion.x, event.motion.y);
       break;
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
-      motion(devID, event.button.x, event.button.y);
-      button(devID, event.button.button, event.button.state==SDL_PRESSED);
+      motion(event.button.which, event.button.x, event.button.y);
+      button(event.button.which, event.button.button, event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);
