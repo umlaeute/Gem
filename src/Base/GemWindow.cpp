@@ -23,8 +23,8 @@
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
-                        infoOut(NULL),
                         mycontext(0),
+                        infoOut(0), rejectOut(0),
                         dispatchClock(0),
                         dispatchTime(10.),
                         qClock(0)
@@ -36,12 +36,14 @@ public:
     if(qClock) clock_free (qClock);  qClock=0;
     if(dispatchClock) clock_free (dispatchClock);  dispatchClock=0;
     if(infoOut)outlet_free(infoOut); infoOut=0;
+    if(rejectOut)outlet_free(rejectOut); rejectOut=0;
   }
 
   GemWindow*parent;
   gem::Context*mycontext;
 
   t_outlet*infoOut;
+  t_outlet*rejectOut;
 
   t_clock*dispatchClock;
   double dispatchTime;
@@ -138,7 +140,8 @@ GemWindow :: GemWindow()
 
   i=m_width;  gem::Settings::get("window.width" , i), m_width =i;
   i=m_height; gem::Settings::get("window.height", i), m_height=i;
-  m_pimpl->infoOut = outlet_new(this->x_obj, 0);
+  m_pimpl->infoOut   = outlet_new(this->x_obj, 0);
+  m_pimpl->rejectOut = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -369,6 +372,11 @@ void GemWindow::       printMess(void) {
   // nada
 }
 
+void GemWindow:: anyMess(t_symbol*s, int argc, t_atom*argv){
+  outlet_anything(m_pimpl->rejectOut, s, argc, argv);
+}
+
+
 void GemWindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", render);
@@ -383,6 +391,16 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-
   //  CPPEXTERN_MSG0(classPtr, "print", printMess);
+
+  struct _CB_any {
+    static void callback(void*data, t_symbol*s, int argc, t_atom*argv){
+      GemWindow*gw=GetMyClass(data);
+      gw->anyMess(s, argc, argv);
+    }
+    _CB_any (struct _class*c) {
+      class_addanything(c, reinterpret_cast<t_method>(_CB_any::callback));
+    }
+  };
+  _CB_any CB_any (classPtr);
 }

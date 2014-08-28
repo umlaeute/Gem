@@ -185,6 +185,9 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* print some info */
   virtual void        printMess(void);
 
+  /* fallback callback */
+  virtual void        anyMess(t_symbol*s, int argc, t_atom*argv);
+
  protected:
   unsigned int m_width, m_height;
 
