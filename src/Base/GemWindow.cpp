@@ -23,19 +23,19 @@
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
-                        mycontext(NULL),
                         infoOut(NULL),
-                        dispatchClock(NULL),
+                        mycontext(0),
+                        dispatchClock(0),
                         dispatchTime(10.),
-                        qClock(NULL)
+                        qClock(0)
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
     dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
   }
   ~PIMPL(void) {
-    if(qClock) clock_free (qClock);  qClock=NULL;
-    if(dispatchClock) clock_free (dispatchClock);  dispatchClock=NULL;
-    if(infoOut)outlet_free(infoOut); infoOut=NULL;
+    if(qClock) clock_free (qClock);  qClock=0;
+    if(dispatchClock) clock_free (dispatchClock);  dispatchClock=0;
+    if(infoOut)outlet_free(infoOut); infoOut=0;
   }
 
   GemWindow*parent;
@@ -79,8 +79,8 @@ public:
 
   void sendInfo(std::vector<t_atom>alist) {
     int argc=alist.size();
-    t_atom*ap=NULL;
-    t_atom*argv=NULL;
+    t_atom*ap=0;
+    t_atom*argv=0;
 #if 0
     argv=alist.data();
 #else
@@ -112,8 +112,6 @@ public:
   void requeue(void) {
     clock_delay(qClock, 0);
   }
-
-
 };
 
 
@@ -134,7 +132,7 @@ GemWindow :: GemWindow()
     m_title("Gem"),
     m_cursor(true),
     m_fsaa(0),
-    m_context(NULL)
+    m_context(0)
 {
   int i;
 
@@ -150,7 +148,7 @@ GemWindow :: ~GemWindow()
 {
   if(m_pimpl) {
     m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
-    delete m_pimpl; m_pimpl=NULL;
+    delete m_pimpl; m_pimpl=0;
   }
 }
 
@@ -162,7 +160,7 @@ void GemWindow::info(t_symbol*s, int argc, t_atom*argv) {
   m_pimpl->queue(s, argc, argv);
 }
 void GemWindow::info(std::string s) {
-  info(gensym(s.c_str()), 0, NULL);
+  info(gensym(s.c_str()), 0, 0);
 }
 void GemWindow::info(std::string s, int i) {
   info(s, (t_float)i);
@@ -263,7 +261,7 @@ gem::Context*GemWindow::createContext(void){
 }
 gem::Context*GemWindow::destroyContext(gem::Context*ctx){
   if(ctx)delete ctx;
-  ctx=NULL;
+  ctx=0;
   return ctx;
 }
 
