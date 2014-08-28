@@ -298,7 +298,7 @@ GEM_CHECK_LIB([ImageMagick++],
 
 GEM_CHECK_LIB([MagickCore], 
               [Magick],[magick/MagickCore.h],
-              [main],
+              [IsMagickInstantiated],
               AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
    	          ,,[image loader])
 
