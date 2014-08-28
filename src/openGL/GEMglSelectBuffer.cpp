@@ -51,10 +51,12 @@ bool GEMglSelectBuffer :: isRunnable(void) {
 // Render
 //
 void GEMglSelectBuffer :: render(GemState *state) {
-  glSelectBuffer (size, buffer);
+  if(buffer)
+    glSelectBuffer (size, buffer);
 }
 
 void GEMglSelectBuffer :: postrender(GemState *state) {
+  if(!buffer)return;
   t_atom*ap=new t_atom[size];
   int i=0;
   for(i=0; i<size; i++) {
