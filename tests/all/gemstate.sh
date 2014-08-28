@@ -11,6 +11,9 @@ PDARGS="-noprefs -stderr"
 PDARGS="${PDARGS} -oss -nosound -nrt"
 PDARGS="${PDARGS} -nogui"
 PDARGS="${PDARGS} -path ../../abstractions:../../:../../examples/data -lib Gem"
+PD="${PD} ${PDARGS}"
+
+
 OBJECT_FILE="objects.txt"
 
 if [ -r "$1" ]; then
@@ -44,7 +47,7 @@ done
 rm -f "${LOGFILE}"
 if which parallel >/dev/null; then
  echo "parallel found"
- parallel ./gemstate_run.sh :::: "${OBJECT_FILE}" ::: ${TESTPATCHES} ::: ${ORDERS} >> "${LOGFILE}"
+ PD=${PD} parallel ./gemstate_run.sh :::: "${OBJECT_FILE}" ::: ${TESTPATCHES} ::: ${ORDERS} >> "${LOGFILE}"
 else
  cat "${OBJECT_FILE}" | while read obj
  do
@@ -52,7 +55,8 @@ else
    for order in ${ORDERS}; do
      echo "testing ${patch} ($order) with ${obj}..." 1>&2
      order=$(echo $order | grep -o .)
-     "${PD}" ${PDARGS} -open "object_gemstate.${patch}.pd" -send "order ${order}" -send "object ${obj}" 2>&1
+     #"${PD}" ${PDARGS} -open "object_gemstate.${patch}.pd" -send "order ${order}" -send "object ${obj}" 2>&1
+     PD=${PD} ./gemstate_run.sh "${obj}" "${patch}" "${order}" >> "${LOGFILE}"
    done
   done
  done >> "${LOGFILE}"
