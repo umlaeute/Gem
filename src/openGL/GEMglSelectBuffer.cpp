@@ -37,6 +37,7 @@ GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0) :
 GEMglSelectBuffer :: ~GEMglSelectBuffer () {
   inlet_free(m_inlet);
   outlet_free(m_bufout);
+  delete[]buffer;
 }
 
 //////////////////
