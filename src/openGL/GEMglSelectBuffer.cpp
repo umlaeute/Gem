@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglSelectBuffer , t_floatarg, A_DEFFLOAT);
 // Constructor
 //
 GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0){
-	len=-1;
+       len=0;
 	buffer=0;
 	sizeMess(arg0);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("size"));
