@@ -36,12 +36,6 @@ mesh_square :: mesh_square(t_floatarg sizeX, t_floatarg sizeY)
 {
   int sizeXi=static_cast<int>(sizeX);
   int sizeYi=static_cast<int>(sizeY);
-
-  for ( int i = 0; i < MAXGRID; ++i)
-    for ( int j = 0; j < MAXGRID; ++j) {
-      texCoords[i][j][0] = ((1.*i)/(MAXGRID-1.));
-      texCoords[i][j][1] = ((1.*j)/(MAXGRID-1.));
-    }
   setSize(sizeXi,sizeYi);
 }
 
@@ -80,8 +74,16 @@ void mesh_square :: setSize( int valueX, int valueY )
 
 	if(valueY>1) gridY = valueY;
 	else gridY = gridX;
-
-    getTexCoords();
+  texCoords.resize(gridX);
+  for ( int i = 0; i < gridX; ++i){
+    texCoords[i].resize(gridY);
+    for ( int j = 0; j < gridY; ++j) {
+      texCoords[i][j].resize(2);
+      texCoords[i][j][0] = ((1.*i)/(gridX-1.));
+      texCoords[i][j][1] = ((1.*j)/(gridY-1.));
+    }
+  }
+  getTexCoords();
 }
 void mesh_square :: setSize( int valueXY )
 {
@@ -139,10 +141,10 @@ void mesh_square :: renderShape(GemState *state)
     		glBegin(m_drawType);
             for (int j = 0; j < gridY ; j++)
             {
-                glTexCoord2fv( texCoords[i][j] );
+                glTexCoord2fv( (GLfloat *) &texCoords[i][j] );
                 glVertex3f( m_size * (i*sizeX - 1), m_size * (j*sizeY -1) , 0);
 
-                glTexCoord2fv( texCoords[i+1][j] );
+                glTexCoord2fv( (GLfloat *) &texCoords[i+1][j] );
                 glVertex3f(  m_size * ((i+1)*sizeX - 1), m_size * (j*sizeY -1), 0);
             }
             glEnd();
@@ -165,10 +167,10 @@ void mesh_square :: renderShape(GemState *state)
             glBegin(m_drawType);
             for ( j = 0; j < gridY  ; j++)
             {
-				glTexCoord2fv( texCoords[i][j] );
+				glTexCoord2fv( (GLfloat *) &texCoords[i][j] );
                 glVertex3f( m_size * (i*sizeX -1), m_size * (j*sizeY -1), 0 );
 
-                glTexCoord2fv( texCoords[i+1][j] );
+                glTexCoord2fv( (GLfloat *) &texCoords[i+1][j] );
                 glVertex3f( m_size * ((i+1)*sizeX -1), m_size * (j*sizeY -1), 0 );
             }
             glEnd();
