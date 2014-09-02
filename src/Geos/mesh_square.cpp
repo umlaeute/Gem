@@ -56,8 +56,8 @@ void mesh_square :: getTexCoords(void)
     {
         for ( int j = 0; j < gridY; ++j)
         {
-	  texCoords[i][j][0] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
-	  texCoords[i][j][1] = ((ysize*(1.*j)/(gridY-1.)) + ysize0 );
+          texCoords[i][j][0] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
+          texCoords[i][j][1] = ((ysize*(1.*j)/(gridY-1.)) + ysize0 );
             //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
         }
     }
@@ -127,23 +127,22 @@ void mesh_square :: renderShape(GemState *state)
 
         if (!alreadyInit)
         {
-			xsize0 = GemShape::m_texCoords[0].s;
-	    	xsize  = GemShape::m_texCoords[1].s-xsize0;
-	    	ysize0 = GemShape::m_texCoords[1].t;
-	    	ysize  = GemShape::m_texCoords[2].t-ysize0;
+          xsize0 = GemShape::m_texCoords[0].s;
+          xsize  = GemShape::m_texCoords[1].s-xsize0;
+          ysize0 = GemShape::m_texCoords[1].t;
+          ysize  = GemShape::m_texCoords[2].t-ysize0;
 
-            setSize( gridX, gridY );
-            alreadyInit = 1;
+          setSize( gridX, gridY );
+          alreadyInit = 1;
         }
 
         for (int i=0; i<(gridX-1) ; i++)
         {
-    		glBegin(m_drawType);
+            glBegin(m_drawType);
             for (int j = 0; j < gridY ; j++)
             {
                 glTexCoord2fv( (GLfloat *) &texCoords[i][j] );
                 glVertex3f( m_size * (i*sizeX - 1), m_size * (j*sizeY -1) , 0);
-
                 glTexCoord2fv( (GLfloat *) &texCoords[i+1][j] );
                 glVertex3f(  m_size * ((i+1)*sizeX - 1), m_size * (j*sizeY -1), 0);
             }
@@ -155,8 +154,8 @@ void mesh_square :: renderShape(GemState *state)
         {
             xsize = 1;
             ysize = 1;
-			ysize0= 0;
-			xsize0= 0;
+            ysize0= 0;
+            xsize0= 0;
 
             setSize( gridX, gridY);
             alreadyInit = 1;
@@ -167,7 +166,7 @@ void mesh_square :: renderShape(GemState *state)
             glBegin(m_drawType);
             for ( j = 0; j < gridY  ; j++)
             {
-				glTexCoord2fv( (GLfloat *) &texCoords[i][j] );
+                glTexCoord2fv( (GLfloat *) &texCoords[i][j] );
                 glVertex3f( m_size * (i*sizeX -1), m_size * (j*sizeY -1), 0 );
 
                 glTexCoord2fv( (GLfloat *) &texCoords[i+1][j] );
