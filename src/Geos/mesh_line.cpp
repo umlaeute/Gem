@@ -35,12 +35,6 @@ mesh_line :: mesh_line(t_floatarg sizeX)
 {
   int sizeXi=static_cast<int>(sizeX);
 
-  for ( int i = 0; i < MAXGRID; ++i)
-    for ( int j = 0; j < MAXGRID; ++j) {
-      texCoords[i][j][0] = ((1.*i)/(MAXGRID-1.));
-      texCoords[i][j][1] = ((1.*j)/(MAXGRID-1.));
-    }
-
   setGrid(sizeXi);
 }
 
@@ -59,7 +53,7 @@ void mesh_line :: getTexCoords(void)
 {
     for ( int i = 0; i < gridX; ++i)
     {
-	  texCoords[i][0][0] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
+      texCoords[i] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
             //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
     }
 }
@@ -70,8 +64,10 @@ void mesh_line :: getTexCoords(void)
 /////////////////////////////////////////////////////////
 void mesh_line :: setGrid( int valueX)
 {
-	if(valueX>=1) gridX = valueX;
-	else gridX = 5;
+  if(valueX>=1) gridX = valueX;
+  else gridX = 5;
+
+  texCoords.resize(gridX);
 
     getTexCoords();
 }
@@ -112,7 +108,7 @@ void mesh_line :: renderShape(GemState *state)
    		glBegin(m_drawType);
         for (int i=0; i<=(gridX-1) ; i++)
         {
-            glTexCoord2fv( texCoords[i][0] );
+            glTexCoord2fv( (GLfloat *) &texCoords[i] );
             glVertex3f( m_size * (i*sizeX - 1),0 , 0);
         }
         glEnd();
@@ -121,7 +117,7 @@ void mesh_line :: renderShape(GemState *state)
         if (!alreadyInit)
         {
             xsize = 1;
-			xsize0= 0;
+            xsize0= 0;
 
             setGrid( gridX);
             alreadyInit = 1;
@@ -130,7 +126,7 @@ void mesh_line :: renderShape(GemState *state)
         glBegin(m_drawType);
         for ( i = 0; i<=(gridX -1); i++)
         {
-    		glTexCoord2fv( texCoords[i][0] );
+            glTexCoord2fv( (GLfloat *) &texCoords[i] );
             glVertex3f( m_size * (i*sizeX -1), 0 , 0 );
         }
         glEnd();
