@@ -449,8 +449,8 @@ void newWave :: getTexCoords(void)
 /////////////////////////////////////////////////////////
 void newWave :: setSize( int valueX, int valueY )
 {
-    gridX = valueX;
-    gridY = valueY;
+    gridX = valueX>MAXGRID?MAXGRID:valueX;
+    gridY = valueY>MAXGRID?MAXGRID:valueY;
 
     reset(resetMode);
 
