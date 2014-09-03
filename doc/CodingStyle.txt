@@ -11,10 +11,10 @@ if you still have questions, please ask them on the gem-dev mailinglist:
 Version Control System
 ======================
 Gem uses `git` for source code management.
-the official public repository is on sourceforge:
-   git://git.code.sf.net/p/pd-gem/gem
-a secondary repository is on github:
+the official public repository is on github:
    https://github.com/umlaeute/Gem
+a secondary repository is on sourceforge:
+   git://git.code.sf.net/p/pd-gem/gem
 
 contributing
 ------------
