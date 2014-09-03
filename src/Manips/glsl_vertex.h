@@ -61,6 +61,7 @@ class GEM_EXTERN glsl_vertex : public GemBase
   virtual bool openMessGL2(void);
   virtual bool openMessARB(void);
   virtual void openMess(t_symbol *filename);
+  virtual void loadShader();
 
 
   ////////

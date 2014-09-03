@@ -182,11 +182,15 @@ void glsl_vertex :: openMess(t_symbol *filename)
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
 
-  if(getState()==INIT) {
-    post("shader '%s' will be loaded when rendering is turned on (openGL context needed)", filename->s_name);
-    m_shaderFilename=filename;
-    return;
-  }
+  m_shaderFilename=filename;
+
+  if (getState()==RENDERING) loadShader();
+  return;
+}
+
+void glsl_vertex :: loadShader()
+{
+  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name)return;
 
   if(!isRunnable()) {
     return;
@@ -195,7 +199,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
-  std::string fn = findFile(filename->s_name);
+  std::string fn = findFile(m_shaderFilename->s_name);
   const char*buf=fn.c_str();
 
   FILE *file = fopen(buf,"rb");
@@ -254,14 +258,13 @@ bool glsl_vertex :: isRunnable() {
 /////////////////////////////////////////////////////////
 void glsl_vertex :: startRendering()
 {
-  if(NULL!=m_shaderFilename)
-    openMess(m_shaderFilename);
+  loadShader();
 
   if (m_shaderString == NULL)
-    {
-      error("need to load a shader");
-      return;
-    }
+  {
+    error("need to load a shader");
+    return;
+  }
 }
 
 ////////////////////////////////////////////////////////
