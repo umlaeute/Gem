@@ -133,6 +133,12 @@ void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topI
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: downloadMess()
 {
+  if(getState()==INIT) {
+#error defer download
+    error("not initialized yet with a valid context");
+    return;
+  }
+
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
     error("cannot download now: do you have a window?");
     return;
@@ -210,7 +216,7 @@ void pix_imageInPlace :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else {
-    if(GLEW_EXT_texture_edge_clamp)
+    if(getState()!=INIT && GLEW_EXT_texture_edge_clamp)
       m_repeat = GL_CLAMP_TO_EDGE;
     else
       m_repeat = GL_CLAMP;

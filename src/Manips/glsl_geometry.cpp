@@ -284,6 +284,10 @@ void glsl_geometry :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_geometry :: printInfo()
 {
+  if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
   if(GLEW_EXT_geometry_shader4 || GLEW_ARB_geometry_shader4) {
     GLint bitnum = 0;
     post("glsl_geometry Hardware Info");
