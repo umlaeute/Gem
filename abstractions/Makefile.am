@@ -8,6 +8,7 @@ nodist_gemabs_DATA = \
 	gemdefaultwindow.pd
 
 dist_gemabs_DATA = \
+	gemkeyname.pd \
 	gemhead.pd \
 	gemmouse.pd \
 	gemorb.pd \
