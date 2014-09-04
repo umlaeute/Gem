@@ -235,14 +235,10 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
 		  gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::downloadImageCallback),
-		  gensym("download"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::purgeImageCallback),
-		  gensym("purge"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::textureMessCallback),
-          gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::repeatMessCallback),
-          gensym("repeat"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "download", downloadMess);
+  CPPEXTERN_MSG0(classPtr, "purge", purgeMess);
+  CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
+  CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
 }
 
 void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_float baseImage,
@@ -257,20 +253,4 @@ void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_f
     }
   else
     GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
-}
-void pix_imageInPlace :: downloadImageCallback(void *data)
-{
-  GetMyClass(data)->downloadMess();
-}
-void pix_imageInPlace :: purgeImageCallback(void *data)
-{
-  GetMyClass(data)->purgeMess();
-}
-void pix_imageInPlace :: textureMessCallback(void *data, t_float quality)
-{
-  GetMyClass(data)->textureQuality((int)quality);
-}
-void pix_imageInPlace :: repeatMessCallback(void *data, t_float repeat)
-{
-  GetMyClass(data)->repeatMess((int)repeat);
 }
