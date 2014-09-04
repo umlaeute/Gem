@@ -96,7 +96,6 @@ pix_snap :: ~pix_snap(void)
 void pix_snap :: snapMess(void)
 {
   if(getState()==INIT) {
-#error defer to after window creation
     verbose(0, "not initialized yet with a valid context");
     return;
   }
