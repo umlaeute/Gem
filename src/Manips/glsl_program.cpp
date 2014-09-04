@@ -135,10 +135,10 @@ glsl_program :: ~glsl_program()
   gem::utils::glsl::delshader(m_program);
   gem::utils::glsl::delshader(m_programARB);
 
-  if(m_program && GLEW_VERSION_2_0)
+  if(m_program)
     glDeleteProgram( m_program );
   m_program=0;
-  if(m_programARB && GLEW_ARB_shader_objects)
+  if(m_programARB)
     glDeleteObjectARB( m_programARB );
   m_programARB=0;
 
@@ -707,11 +707,10 @@ void glsl_program :: printInfo()
 {
   int i;
 
-  if(!m_linked)
-    {
-      error("no GLSL-program linked");
-      return;
-    }
+  if(!m_linked) {
+    error("no GLSL-program linked");
+    return;
+  }
 
   post("glsl_program Info");
   post("=================");

@@ -723,7 +723,7 @@ void pix_texture :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else {
-    if(GLEW_EXT_texture_edge_clamp)
+    if( (getState()!=INIT) && GLEW_EXT_texture_edge_clamp)
       m_repeat = GL_CLAMP_TO_EDGE;
     else
       m_repeat = GL_CLAMP;

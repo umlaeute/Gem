@@ -95,6 +95,10 @@ pix_snap :: ~pix_snap(void)
 /////////////////////////////////////////////////////////
 void pix_snap :: snapMess(void)
 {
+  if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
   if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)

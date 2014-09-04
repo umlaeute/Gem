@@ -70,6 +70,10 @@ bool glsl_fragment :: isRunnable() {
 /////////////////////////////////////////////////////////
 void glsl_fragment :: printInfo()
 {
+  if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
   if(GLEW_VERSION_2_0 || GLEW_ARB_shader_objects) {
     GLint bitnum = 0;
     post("glsl_fragment Hardware Info");
