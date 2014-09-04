@@ -33,6 +33,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg,
 /////////////////////////////////////////////////////////
 pix_imageInPlace :: pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
   : pix_multiimage(filename, baseImage, topImage, skipRate),
+    m_wantDownload(false),
     mInPreload(0),
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT)
 
@@ -64,6 +65,7 @@ bool pix_imageInPlace :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: render(GemState *state)
 {
+  if(m_wantDownload)downloadMess();
   // if we don't have an image, just return
   if (!m_numImages)
     return;
@@ -134,11 +136,11 @@ void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topI
 void pix_imageInPlace :: downloadMess()
 {
   if(getState()==INIT) {
-#error defer download
-    error("not initialized yet with a valid context");
+    m_wantDownload=true;
+    verbose(0, "deferring download until we have a valid context");
     return;
   }
-
+  m_wantDownload=false;
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
     error("cannot download now: do you have a window?");
     return;

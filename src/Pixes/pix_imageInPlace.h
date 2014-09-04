@@ -73,6 +73,7 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	//////////
     	// When a download is received
     	virtual void	downloadMess();
+	bool m_wantDownload;
 
     	//////////
     	// When a purge is received
