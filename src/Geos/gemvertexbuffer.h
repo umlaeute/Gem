@@ -36,6 +36,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
  protected:
   class VertexBuffer {
   public:
+  	VertexBuffer();
     VertexBuffer(unsigned int size, unsigned int stride);
     ~VertexBuffer(void);
     void resize(unsigned int);
@@ -45,10 +46,16 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 
     unsigned int size;
     unsigned int stride;
-
+	
     GLuint vbo;
     float*array;
     bool dirty;
+	
+	GLuint attrib_index;
+	const GLchar* attrib_name;
+	std::string attrib_name_str;
+	std::string attrib_array;
+	
     bool enabled;
   };
 
@@ -73,7 +80,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   // Do the rendering
   virtual void renderShape(GemState *state);
   //virtual void 	runKernel();
-  void tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset);
+  void tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array, unsigned int offset);
   void resizeMess(float size);
 
  private :
@@ -81,7 +88,8 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void createVBO(void);
   void copyArray(const std::string&tab_name, VertexBuffer&array, unsigned int stride, unsigned int offset);
 
-  void tableMess (VertexBuffer&vb, std::string name, int argc, t_atom *argv);
+  void tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv);
+  void attributeMess(t_symbol*,int,t_atom*);
   void positionMess(t_symbol*,int,t_atom*);
   void textureMess(t_symbol*,int,t_atom*);
   void colorMess(t_symbol*,int,t_atom*);
@@ -100,17 +108,26 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void normyMess(t_symbol*,int,t_atom*);
   void normzMess(t_symbol*,int,t_atom*);
   void resizeMess(unsigned int size);
+  void attribVBO_enableMess(bool flag);
   void posVBO_enableMess(bool flag);
   void colVBO_enableMess(bool flag);
   void texVBO_enableMess(bool flag);
   void normVBO_enableMess(bool flag);
   void enableMess(t_symbol*,int,t_atom*);
   void disableMess(t_symbol*,int,t_atom*);
-  void partialDrawMess(unsigned int start, unsigned int end);
+  
+  void attribute(t_symbol*s, int argc, t_atom *argv);
+  void setProgramID(float ID);
+  void resetAttributes(void);
+  void printAttributes(void);
 
   // Rendering window vars
   unsigned int vbo_size;
-  unsigned int m_range[2];
   bool size_change_flag;
+  // glsl_program vars
+  unsigned int glsl_program;
+
   VertexBuffer m_position, m_texture, m_color, m_normal;
-};
+  std::vector <VertexBuffer> m_attribute;
+  };
+
