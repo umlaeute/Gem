@@ -569,7 +569,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv){
     m_attribute[i].resize(vbo_size);
   }
   for(unsigned int i=0;i<m_attribute.size();i++) {
-	copyArray(m_attribute[i].attrib_array, m_attribute[i], 1, offset*m_attribute[i].stride);
+    copyArray(m_attribute[i].attrib_array, m_attribute[i], 1, offset*m_attribute[i].stride);
   }
   
   return;
