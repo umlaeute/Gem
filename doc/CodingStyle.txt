@@ -45,20 +45,37 @@ e.g.
 
 git commits
 -----------
-avoid committing pd-patches and C++ code within the same
-commit. conflicts in C++-code can usually easily be resolved, whereas
+commit often!
+
+We want to be able to track down a bug to the very commit it was introduced (e.g. using `git bisect`).
+If this commit does numerous unrelated things, it makes finding the bug unnecessary complicated.
+
+Here are a few rules that should help to make good commits:
+
+Each commit should be a *small* and *incremental* change to the codebase.
+
+please break your commit into *sensible* chunks.
+A sensible chunk only does a single thing (e.g. "fix bug #666", or "proper indentation").
+If you have fixed two bugs in a single file, it's probably good to make this *two separate* commits.
+Even if each commit only changes a single line.
+Otoh, a sensible chunk *can* (and often does) spread over multiple files.
+E.g. if you have added a new feature by adding a new method to an object, this most often means that
+you had to edit both the header and the implementation file for this object.
+The changes to both files belong together and therefore should go into a single commit.
+
+Avoid committing pd-patches and C++ code within the same
+commit. Conflicts in C++-code can usually easily be resolved, whereas
 conflicts in Pd-patches are usually impossible to resolve (but for the
 most trivial cases).
 
-do not add binary data to the git repository (without a consens on gem-dev first)
-
+Do *not* add binary data to the git repository (without a consensus on gem-dev first).
+Not even temporarily!
 
 git branching
 -------------
-try to avoid forking from branches other than master.
-esp. avoid branches on top of branches.
-before committing a pull rqeuest, make sure that your branch applies clean to
-current master.
+Try to avoid forking from branches other than master.
+Esp. avoid branches on top of branches.
+Before committing a pull request, make sure that your branch applies clean to current master.
 
 
 
