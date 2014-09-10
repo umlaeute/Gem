@@ -174,6 +174,8 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
+# checks for default headers
+IEM_CHECK_INCLUDES_DEFAULT([windows.h])
 
 # threading
 GEM_CHECK_THREADS
