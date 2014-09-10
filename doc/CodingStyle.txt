@@ -25,6 +25,23 @@ when you started working on your contribution).
 the preferred way for contributing is by forking the github repository
 and creating a pull request once your code is ready.
 
+if you do not want to create an account on github, this is fine as well.
+Just clone the repository, and send me the patch-set.
+e.g.
+
+    $ git clone https://github.com/umlaeute/Gem.git
+    $ cd Gem
+    $ git checkout -b nifty_feature
+    // now fix a bug
+    $ git commit -m "fixed crasher bug"
+    // now add a feature
+    $ git commit -m "made zgonc work"
+
+    $ git format-path master/origin
+    // this will create a number of .patch files
+    // zip them, and send them to me
+    $ tar cvzf /tmp/nifty_feature.tgz *.patch
+
 
 git commits
 -----------
