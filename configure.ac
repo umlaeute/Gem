@@ -424,8 +424,7 @@ GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [vid
 GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
 
 
-
-
+## text support
 AC_ARG_WITH([default-font],
             AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
            )
