@@ -174,6 +174,35 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
+
+# threading
+GEM_CHECK_THREADS
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
+AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
+
+AC_CHECK_HEADERS([wordexp.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+AC_CHECK_SIZEOF([unsigned int])
+AC_CHECK_SIZEOF([void *])
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MMAP
+AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
+
 # Checks for libraries.
 
 AC_CHECK_LIB([m],[sin])
@@ -407,34 +436,6 @@ if test "x$with_default_font" != "x" && \
   AC_DEFINE_UNQUOTED([GEM_DEFAULT_FONT], "${with_default_font}", [default font for text rendering])
   AC_MSG_RESULT([using "${with_default_font}" as default font])
 fi
-
-# threading
-GEM_CHECK_THREADS
-
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
-AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
-AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
-
-AC_CHECK_HEADERS([wordexp.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-
-AC_CHECK_SIZEOF([unsigned int])
-AC_CHECK_SIZEOF([void *])
-
-# Checks for library functions.
-AC_FUNC_ERROR_AT_LINE
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_MMAP
-AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
 
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
