@@ -120,4 +120,5 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   bool size_change_flag;
   unsigned int glsl_program;
   VertexBuffer m_position, m_texture, m_color, m_normal;
+  std::vector <VertexBuffer> m_attribute;
 };
