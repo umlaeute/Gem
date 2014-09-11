@@ -53,10 +53,12 @@ videoVLC::videoVLC(void) :
   m_mediaplayer(NULL)
 {
   const char * const vlc_args[] = {
-    //    "--plugin-path=c:\\program files\\videolan\\vlc\\plugins",
+    //"--plugin-path=c:\\program files\\videolan\\vlc\\plugins",
+#if 0
     "-I", "dummy", /* Don't use any interface */
     "--ignore-config", /* Don't use VLC's config */
     "--quiet",
+#endif
     //    "--sout=#transcode{vcodec=RV24,acodec=s16l}:smem",
   };
   m_instance=libvlc_new (sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);

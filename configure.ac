@@ -174,6 +174,37 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
+# checks for default headers
+IEM_CHECK_INCLUDES_DEFAULT([windows.h])
+
+# threading
+GEM_CHECK_THREADS
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
+AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
+
+AC_CHECK_HEADERS([wordexp.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+AC_CHECK_SIZEOF([unsigned int])
+AC_CHECK_SIZEOF([void *])
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MMAP
+AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
+
 # Checks for libraries.
 
 AC_CHECK_LIB([m],[sin])
@@ -248,12 +279,12 @@ if test "x${have_glew}" != "xyes"; then
   fi
 fi
 
-GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing], [yes])
+GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing])
 
 ## use GLFW windowing framework
-GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW windowing], [yes])
+GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW2 windowing])
 ## use GLFW3 windowing framework
-GEM_CHECK_LIB([glfw3], [glfw3],[GLFW/glfw3.h], [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
+GEM_CHECK_LIB([glfw3], [glfw3],[GLFW/glfw3.h], [glfwGetPrimaryMonitor],,,,[GLFW3 windowing])
 
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
@@ -395,8 +426,7 @@ GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [vid
 GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
 
 
-
-
+## text support
 AC_ARG_WITH([default-font],
             AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
            )
@@ -408,34 +438,6 @@ if test "x$with_default_font" != "x" && \
   AC_MSG_RESULT([using "${with_default_font}" as default font])
 fi
 
-# threading
-GEM_CHECK_THREADS
-
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
-AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
-AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
-
-AC_CHECK_HEADERS([wordexp.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-
-AC_CHECK_SIZEOF([unsigned int])
-AC_CHECK_SIZEOF([void *])
-
-# Checks for library functions.
-AC_FUNC_ERROR_AT_LINE
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_MMAP
-AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
-
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
@@ -445,6 +447,7 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
+
 
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then

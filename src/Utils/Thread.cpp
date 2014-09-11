@@ -19,6 +19,7 @@
 #include "ThreadSemaphore.h"
 
 #ifdef _WIN32
+# include <winsock2.h>
 # include <windows.h>
 #endif
 
@@ -100,9 +101,6 @@ unsigned int  gem::thread::getCPUCount(void) {
 #if defined __linux__ || defined __APPLE__
 # include <unistd.h>
 # include <sys/time.h>
-#endif
-#ifdef _WIN32
-# include <winsock2.h>
 #endif
 
 void gem::thread::usleep(unsigned long usec) {
