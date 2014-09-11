@@ -36,6 +36,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
  protected:
   class VertexBuffer {
   public:
+    VertexBuffer();
     VertexBuffer(unsigned int size, unsigned int stride);
     ~VertexBuffer(void);
     void resize(unsigned int);

@@ -22,6 +22,19 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 
+gemvertexbuffer :: VertexBuffer:: VertexBuffer() :
+  size(0),
+  stride(0),
+  vbo(0),
+  array(NULL),
+  dirty(false),
+  enabled(false),
+  attrib_index(0),
+  attrib_name(""),
+  attrib_array(""),
+  offset(0)
+{
+}
 gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_, unsigned int stride_) :
   size(0),
   stride(stride_),
