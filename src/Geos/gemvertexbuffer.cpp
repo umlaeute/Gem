@@ -386,7 +386,6 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
     return;
   }
 
-  float*array=vb.array;
   t_symbol*s=gensym(tab_name.c_str());
   pd_findbyclass(s, garray_class);
   if (!(a = (t_garray *)pd_findbyclass(s, garray_class))) {
@@ -398,6 +397,9 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
     return;
   }
 
+  if(((unsigned int)npoints)!=vb.size) vb.resize(npoints);
+  float*array=vb.array;
+  
   unsigned int npts=(unsigned int)npoints;
   if(stride) {  // single channel
 
