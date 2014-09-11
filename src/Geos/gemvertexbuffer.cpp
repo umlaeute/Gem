@@ -41,7 +41,11 @@ gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_, unsigned int
   vbo(0),
   array(NULL),
   dirty(false),
-  enabled(false)
+  enabled(false),
+  attrib_index(0),
+  attrib_name(""),
+  attrib_array(""),
+  offset(0)
 {
   resize(size_);
 }
