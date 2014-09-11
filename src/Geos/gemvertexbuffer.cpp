@@ -229,6 +229,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "normVBO_enable", normVBO_enableMess, bool);
   /* attributes */
   CPPEXTERN_MSG1 (classPtr, "program"          , setProgramID, float);
+  CPPEXTERN_MSG  (classPtr, "attribute"        , attribute);
 }
 
 void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv){
@@ -449,4 +450,91 @@ void gemvertexbuffer :: setProgramID(float ID)
   // add 0.5 to glsl_program ID
   float fix = 0.5f;
   glsl_program = ID + fix;
+}
+
+void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
+{
+  unsigned int vbo_stride=0;
+  unsigned int tab_offset=0;
+  int glsl_index =-1;
+  GLenum attrib_type;
+  std::string tabname;
+  std::string name;
+  const char* name_ch;
+  
+  if(glsl_program==0)
+  {
+    error("glsl_program has not been set");
+    return;
+  }
+
+  if((argc!=2 && argc!=3) || (argv[0].a_type!=A_SYMBOL || argv[1].a_type!=A_SYMBOL))
+  {
+    error("illegal arguments to 'attribute': must be <vbo_index> <attribute_name> <table> [<offset>]");
+    return;
+  }
+  if(argc==3)
+  {
+    if(argv[2].a_type==A_FLOAT)tab_offset=atom_getfloat(argv+2);
+	else
+	{
+      error("illegal arguments to 'attribute': must be <vbo_index> <attribute_name> <table> [<offset>]");
+      return;
+	}
+  }
+  
+  name=std::string(atom_getsymbol(argv+0)->s_name);
+    for(unsigned int i=0;i<m_attribute.size();i++)
+	{
+      if(name.compare(m_attribute[i].attrib_name) == 0)
+	  {
+        tabname=std::string(atom_getsymbol(argv+1)->s_name);
+		copyArray(tabname, m_attribute[i], 1, tab_offset*m_attribute[i].stride);  // always interleaved
+		m_attribute[i].attrib_array = tabname;
+		m_attribute[i].offset = tab_offset;
+		return;
+	  }
+    }
+	
+  name_ch = name.c_str();
+  glsl_index = glGetAttribLocation(glsl_program, name_ch);
+  if(glsl_index==-1){
+    error("illegal arguments to 'attribute': '%s' not found in glsl_program", name_ch);
+    return;
+  }
+  
+  glGetActiveAttrib(glsl_program, glsl_index, NULL, NULL, NULL, &attrib_type, NULL);
+  switch(attrib_type)
+  {
+  case GL_FLOAT:      vbo_stride=1;
+    break;
+  case GL_FLOAT_VEC2: vbo_stride=2;
+    break;
+  case GL_FLOAT_VEC3: vbo_stride=3;
+    break;
+  case GL_FLOAT_VEC4: vbo_stride=4;
+    break;
+  case GL_FLOAT_MAT2: vbo_stride=4;
+	break;
+  case GL_FLOAT_MAT3: vbo_stride=9;
+	break;
+  case GL_FLOAT_MAT4: vbo_stride=16;
+    break;
+  default: error("illegal arguments to 'attribute': must be type 'float', 'vec2-4' or 'mat2-4'"); 
+  }
+  
+  tabname=std::string(atom_getsymbol(argv+1)->s_name);
+  m_attribute.reserve(m_attribute.size()+1);
+  m_attribute.push_back(VertexBuffer());
+  m_attribute.back().stride = vbo_stride;
+  m_attribute.back().attrib_index = glsl_index;
+  m_attribute.back().attrib_name = name;
+  m_attribute.back().attrib_array = tabname;
+  m_attribute.back().offset = tab_offset;
+  m_attribute.back().enabled = true;
+  
+  for(unsigned int i=0;i<m_attribute.size();i++)m_attribute[i].resize(vbo_size);
+  for(unsigned int i=0;i<m_attribute.size();i++)
+    copyArray(m_attribute[i].attrib_array, m_attribute[i], 1, m_attribute[i].offset*m_attribute[i].stride);
+  return;
 }
