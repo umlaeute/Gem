@@ -14,7 +14,6 @@
 
 #include "pix_tIIRf.h"
 #include "Utils/Functions.h"
-#include "RTE/MessageCallbacks.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIRf, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

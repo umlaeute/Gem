@@ -28,7 +28,6 @@
 
 #include "pix_curve.h"
 #include <string.h>
-#include <math.h>
 #include "Utils/Functions.h"
 #include "RTE/Array.h"
 

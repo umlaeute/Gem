@@ -24,12 +24,6 @@
 
 #include "pix_movement.h"
 #include <string.h>
-#include <math.h>
-#include <time.h>
-#ifdef __APPLE__
-# include <Carbon/Carbon.h>
-#endif
-
 #include "Utils/Functions.h"
 #include "Gem/PixConvert.h"
 
