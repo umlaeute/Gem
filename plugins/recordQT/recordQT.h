@@ -158,7 +158,7 @@ namespace gem { namespace plugins {
   void resetCodecSettings(void);
 
   //this will hold the ctype value of the codecs listed by getCodecList()
-  typedef struct codecListStorage{
+  struct codecListStorage{
     int		position;
     int		ctype;
     char* name;
