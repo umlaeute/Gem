@@ -144,11 +144,24 @@ gemvertexbuffer :: ~gemvertexbuffer(void)
 void gemvertexbuffer :: renderShape(GemState *state)
 {
   if ( m_drawType == GL_DEFAULT_GEM ) m_drawType = GL_POINTS;
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || size_change_flag ) {
+  int attrib_vbos = 1;
+  for(unsigned int i=0;i<m_attribute.size();i++){
+    if(!m_attribute[i].vbo) {
+	  attrib_vbos = 0;
+	  break;
+	}
+  }
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || !attrib_vbos || size_change_flag ) {
     createVBO();
     size_change_flag = false;
   }
   // render from the VBO
+  for(unsigned int i=0;i<m_attribute.size();i++) {
+    if(m_attribute[i].render()) { 
+	  glEnableVertexAttribArray(m_attribute[i].attrib_index);
+	  glVertexAttribPointer(m_attribute[i].attrib_index, m_attribute[i].stride, GL_FLOAT, GL_FALSE, 0, 0);
+    }
+  }
   if(m_position.render()) {
     glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -179,6 +192,9 @@ void gemvertexbuffer :: renderShape(GemState *state)
 
   glDrawArrays(m_drawType, start, end-start);
 
+  for(unsigned int i=0;i<m_attribute.size();i++) {
+    if ( m_attribute[i].enabled ) glDisableVertexAttribArray(m_attribute[i].attrib_index);
+  }
   if ( m_position.enabled ) glDisableClientState(GL_VERTEX_ARRAY);
   if ( m_color.enabled    ) glDisableClientState(GL_COLOR_ARRAY);
   if ( m_texture.enabled  ) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
