@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset , t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPolygonOffset :: GEMglPolygonOffset	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglPolygonOffset :: GEMglPolygonOffset	(t_floatarg arg0, t_floatarg arg1) :
 		factor(static_cast<GLfloat>(arg0)),
 		units(static_cast<GLfloat>(arg1))
 {

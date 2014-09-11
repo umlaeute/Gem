@@ -12,6 +12,7 @@
 #include "plugins/PluginFactory.h"
 
 #include <map>
+#include <algorithm>
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record);
 

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0=16) :
+GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0) :
 		n(static_cast<GLsizei>(arg0)) {
 	if (n>0) t_len=p_len=n;
 	else t_len=p_len=16;
@@ -39,9 +39,12 @@ GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0=16) :
 // Destructor
 //
 GEMglPrioritizeTextures :: ~GEMglPrioritizeTextures () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+
+  delete[]textures;
+  delete[]priorities;
 }
 
 //////////////////

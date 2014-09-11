@@ -135,10 +135,12 @@ glsl_program :: ~glsl_program()
   gem::utils::glsl::delshader(m_program);
   gem::utils::glsl::delshader(m_programARB);
 
-  if(GLEW_VERSION_2_0 && m_program)
-    glDeleteProgram( m_program ); m_program=0;
-  if(GLEW_ARB_shader_objects && m_programARB)
-    glDeleteObjectARB( m_programARB ); m_programARB=0;
+  if(m_program)
+    glDeleteProgram( m_program );
+  m_program=0;
+  if(m_programARB)
+    glDeleteObjectARB( m_programARB );
+  m_programARB=0;
 
   destroyArrays();
 }
@@ -218,11 +220,11 @@ void glsl_program :: renderGL2()
 		break;
               case GL_FLOAT_VEC3:
                 glUniform3f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
-                                static_cast<GLfloat>(m_param[i][2]) );
+			     static_cast<GLfloat>(m_param[i][2]) );
 		break;
               case GL_FLOAT_VEC4:
                 glUniform4f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
-                                static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
+			     static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
 		break;
 		/* int vectors */
               case GL_INT:
@@ -290,7 +292,7 @@ void glsl_program :: renderGL2()
 
 	  }
       }
-	 // glUniform1i(glGetUniformLocation(m_program, "MyTex1"), 1);
+    // glUniform1i(glGetUniformLocation(m_program, "MyTex1"), 1);
   } else {
     /* JMZ: this is really annoying... */
     //error("no program linked");
@@ -386,7 +388,7 @@ void glsl_program :: renderARB()
             m_flag[i]=0;
 	  }
       }
-	//  glUniform1iARB(glGetUniformLocationARB(program_object, "MyTex1"), 1);
+    //  glUniform1iARB(glGetUniformLocationARB(program_object, "MyTex1"), 1);
   } else {
     /* JMZ: this is really annoying... */
     //error("no program linked");
@@ -705,11 +707,10 @@ void glsl_program :: printInfo()
 {
   int i;
 
-  if(!m_linked)
-    {
-      error("no GLSL-program linked");
-      return;
-    }
+  if(!m_linked) {
+    error("no GLSL-program linked");
+    return;
+  }
 
   post("glsl_program Info");
   post("=================");
@@ -721,8 +722,8 @@ void glsl_program :: printInfo()
     }
     post(": %d", m_program);
   } else {
-  startpost("linked ARB-shaders");
-   for (i = 0; i < m_num; i++)  {
+    startpost("linked ARB-shaders");
+    for (i = 0; i < m_num; i++)  {
       startpost( " %d", m_shaderObjARB[i] );
     }
     post(": %d", m_programARB);
@@ -765,31 +766,31 @@ void glsl_program :: printInfo()
         default:
 	  switch(m_type[i]) {
 	    //	  SWITCHPOST(GL_FLOAT_ARB);
-	  SWITCHPOST(GL_FLOAT_VEC2_ARB);
-	  SWITCHPOST(GL_FLOAT_VEC3_ARB);
-	  SWITCHPOST(GL_FLOAT_VEC4_ARB);
+	    SWITCHPOST(GL_FLOAT_VEC2_ARB);
+	    SWITCHPOST(GL_FLOAT_VEC3_ARB);
+	    SWITCHPOST(GL_FLOAT_VEC4_ARB);
 
-	  //	  SWITCHPOST(GL_INT_ARB);
-	  SWITCHPOST(GL_INT_VEC2_ARB);
-	  SWITCHPOST(GL_INT_VEC3_ARB);
-	  SWITCHPOST(GL_INT_VEC4_ARB);
+	    //	  SWITCHPOST(GL_INT_ARB);
+	    SWITCHPOST(GL_INT_VEC2_ARB);
+	    SWITCHPOST(GL_INT_VEC3_ARB);
+	    SWITCHPOST(GL_INT_VEC4_ARB);
 
-	  SWITCHPOST(GL_BOOL_ARB);
-	  SWITCHPOST(GL_BOOL_VEC2_ARB);
-	  SWITCHPOST(GL_BOOL_VEC3_ARB);
-	  SWITCHPOST(GL_BOOL_VEC4_ARB);
+	    SWITCHPOST(GL_BOOL_ARB);
+	    SWITCHPOST(GL_BOOL_VEC2_ARB);
+	    SWITCHPOST(GL_BOOL_VEC3_ARB);
+	    SWITCHPOST(GL_BOOL_VEC4_ARB);
 
-	  SWITCHPOST(GL_FLOAT_MAT2_ARB);
-	  SWITCHPOST(GL_FLOAT_MAT3_ARB);
-	  SWITCHPOST(GL_FLOAT_MAT4_ARB);
+	    SWITCHPOST(GL_FLOAT_MAT2_ARB);
+	    SWITCHPOST(GL_FLOAT_MAT3_ARB);
+	    SWITCHPOST(GL_FLOAT_MAT4_ARB);
 
-	  SWITCHPOST(GL_SAMPLER_1D_ARB);
-	  SWITCHPOST(GL_SAMPLER_2D_ARB);
-	  SWITCHPOST(GL_SAMPLER_3D_ARB);
-	  SWITCHPOST(GL_SAMPLER_CUBE_ARB);
-	  SWITCHPOST(GL_SAMPLER_1D_SHADOW_ARB);
-	  SWITCHPOST(GL_SAMPLER_2D_SHADOW_ARB);
-	  SWITCHPOST(GL_SAMPLER_2D_RECT_ARB);
+	    SWITCHPOST(GL_SAMPLER_1D_ARB);
+	    SWITCHPOST(GL_SAMPLER_2D_ARB);
+	    SWITCHPOST(GL_SAMPLER_3D_ARB);
+	    SWITCHPOST(GL_SAMPLER_CUBE_ARB);
+	    SWITCHPOST(GL_SAMPLER_1D_SHADOW_ARB);
+	    SWITCHPOST(GL_SAMPLER_2D_SHADOW_ARB);
+	    SWITCHPOST(GL_SAMPLER_2D_RECT_ARB);
 	  default:
 	    post("unknown (0x%X)", m_type[i]);
 	    break;

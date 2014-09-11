@@ -27,6 +27,7 @@ AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
 AC_CONFIG_FILES([plugins/imageSGI/Makefile])
 
+AC_CONFIG_FILES([plugins/filmAVFoundation/Makefile])
 AC_CONFIG_FILES([plugins/filmAVI/Makefile])
 AC_CONFIG_FILES([plugins/filmAVIPLAY/Makefile])
 AC_CONFIG_FILES([plugins/filmDS/Makefile])
@@ -112,12 +113,14 @@ AC_SUBST(X_PRE_LIBS)
 AC_SUBST(X_LIBS)
 AC_SUBST(X_EXTRA_LIBS)
 
-AC_SUBST(PKG_CFLAGS)
-AC_SUBST(PKG_LIBS)
+AC_SUBST(GEM_CHECK_LIB_CFLAGS)
+AC_SUBST(GEM_CHECK_LIB_LIBS)
 AC_SUBST(prefix)
 
 # Checks for programs.
 AC_PROG_CXX
+## older versions of autotools lack tests for ObjC/ObjC++
+## so we only run these if the m4-macros are defined
 m4_ifdef([AC_PROG_OBJC], [AC_PROG_OBJC])
 m4_ifdef([AC_PROG_OBJCXX], [AC_PROG_OBJCXX])
 
@@ -171,239 +174,17 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
-# Checks for libraries.
-
-AC_CHECK_LIB([m],[sin])
-AC_CHECK_LIB([z],[main])
-AC_CHECK_LIB([dl],[dlopen])
-
-# w32 compatibility library
-AC_CHECK_LIB([OLDNAMES], [close])
-AC_CHECK_LIB([coldname], [close])
-# Standard C++ Libray:
-AC_CHECK_LIB([libcpmt], [main])
-# C runtime library:
-AC_CHECK_LIB([msvcrt], [fclose])
-# Standard C++ Libray:
-AC_CHECK_LIB([msvcprt], [main])
-# Winsock Library
-AC_CHECK_LIB([ws2_32], [main])
-AC_CHECK_LIB([wsock32], [main])
-
-# w32 window creating 
-AC_CHECK_LIB([gdi32], [main])
-
-
-## on OSX X shouldn't be used by default as there are other ways
-## however, if people really want it ("--with-x") they should get it
-if test "x$KERN" = "xDarwin"; then
- if test "x$with_x" = "x"; then
-   with_x="no"
- fi
-fi
-
-AC_PATH_X
-AC_PATH_XTRA
-
-if test "x$with_x" != "xno"; then
-# AC_CHECK_LIB([X11],[main])
-# AC_CHECK_LIB([Xext],[main])
- AC_CHECK_LIB([Xxf86vm],[XF86VidModeGetAllModeLines])
-fi
-
-IEM_CHECK_GL
-IEM_CHECK_GLU
-IEM_CHECK_GLUT
-IEM_CHECK_GLX
-IEM_CHECK_AGL
-
-## use system's libGLEW
-GEM_ARG_ENABLE([multicontext], [experimental support for multiple windows])
-## glewmx-args default to glew-args
-if test "x$with_glewmx" = "x"; then with_glewmx="$with_glew"; fi
-if test "x$with_glewmx-includes" = "x"; then with_glewmx="$with_glew-includes"; fi
-if test "x$with_glewmx-libs" = "x"; then with_glewmx="$with_glew-libs"; fi
-
-GEM_CHECK_LIB([glew], [GLEW], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
-GEM_CHECK_LIB([glewmx], [GLEWmx], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
-
-
-if test "x$enable_multicontext" = "xyes"; then
-  have_glew="${have_glewmx}"
-  GEM_LIB_GLEW_CFLAGS="$GEM_LIB_GLEWMX_CFLAGS"
-  GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
-
-  AM_CONDITIONAL(HAVE_LIB_GLEW, [test "x${have_glew}" = "xyes"])
-fi
-AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
-
-if test "x${have_glew}" != "xyes"; then
-  GEM_CPPFLAGS+=" -DGLEW_BUILD"
-fi
-
-GEM_CHECK_LIB([sdl], [SDL], [SDL_Quit],,,,[SDL windowing], [yes])
-
-## use GLFW windowing framework
-GEM_CHECK_LIB([libglfw], [glfw], [glfwInit],,,,[GLFW windowing], [yes])
-## use GLFW3 windowing framework
-GEM_CHECK_LIB([glfw3], [glfw3], [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
-
-
-## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
-### "-lstdc++" really has to be added before e.g. "-lGL" in order to avoid
-### triggering the bug
-### however, libtool is way to clever and eliminates duplicate LIBS entries.
-### since "-lstdc++" is usually found in the postdeps, this  would remove the
-### entry found in LIBS; so we add it to the predeps_CXX (only)
-stdcxx_LIBS=$LIBS
-AC_CHECK_LIB([stdc++],[main],[predeps_CXX="$predeps_CXX -lstdc++"])
-LIBS=$stdcxx_LIBS
-
-dnl some checks for osX
-GEM_CHECK_FRAMEWORK([Cocoa],
-                        [have_cocoa_framework="yes"], 
-                        [have_cocoa_framework="no"])
-GEM_CHECK_FRAMEWORK([Carbon], 
-                        [have_carbon_framework="yes"], 
-                        [have_carbon_framework="no"])
-GEM_CHECK_FRAMEWORK([QuickTime],
-                        [have_quicktime_framework="yes"], 
-                        [have_quicktime_framework="no"])
-
-AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
-
-#fallback to imagemagick if people are too lazy to type ImageMagick
-if test "x$with_ImageMagick" = "x"; then
- with_ImageMagick="$with_imagemagick"
-fi
-if test "x$with_MagickCore" = "x"; then
- with_MagickCore="$with_ImageMagick"
-fi
-
-GEM_CHECK_LIB([ImageMagick++], 
-              [Magick++], 
-              [main],
-              AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
-              ,,[image loader])
-
-GEM_CHECK_LIB([MagickCore], 
-              [Magick], 
-              [main],
-              AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
-   	          ,,[image loader])
-
-#if test "x${have_ImageMagick}" = "xyes"
-#then
-# with_tiff=no
-# with_jpeg=no
-#fi
-GEM_CHECK_LIB([tiff], [tiff], [TIFFOpen],,,,[image loader])
-GEM_CHECK_LIB([jpeg], [jpeg], [jpeg_read_header],,,,[image loader])
-
-IEM_CHECK_FTGL()
-GEM_CHECK_LIB([fribidi], [fribidi],[fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
-
-## film en/decoders
-GEM_CHECK_LIB([avifile], [aviplay], [CreateIAviReadFile],,,,[movie loader])
-GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec], [gavl_start],,,,[movie loader])
-GEM_CHECK_LIB([mpeg], [mpeg], [OpenMPEG],,,,[movie loader])
-GEM_CHECK_LIB([libmpeg3], [mpeg3], [mpeg3_check_sig],,,,[movie loader])
-GEM_CHECK_LIB([libquicktime], [quicktime], [quicktime_init],,,,[movie loader])
-GEM_CHECK_LIB([lqt], [quicktime], [quicktime_init],,,,[movie loader])
-
-# special function in libquicktime
-old_cflags=${CFLAGS}
-old_ldflags=${LDFLAGS}
-CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
-LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
-AC_CHECK_FUNCS([lqt_seek_video])
-AC_CHECK_FUNCS([lqt_open_write])
-CFLAGS=${old_cflags}
-LDFLAGS=${old_ldflags}
-
-#video
-GEM_CHECK_LIB([libdc1394-2], [dc1394], [main],,,, [video input])
-GEM_CHECK_LIB([libdv],[dv], [main],,,, [video input])
-GEM_CHECK_LIB([libraw1394], [raw1394], [main],,,, [video input])
-GEM_CHECK_LIB([libiec61883], [iec61883], [main],,,, [video input])
-AC_CHECK_HEADERS([vl/vl.h])
-
-GEM_ARG_WITH([unicap], [video input], [force])
-
-GEM_CHECK_LIB([libunicap], [unicap], [unicap_check_version],,,, [video input])
-
-if test "x$have_unicap" = "xyes"; then
- AC_CHECK_HEADER([unicap/unicap.h],
-                  [
-                    AC_DEFINE([HAVE_UNICAP], [], [video capturing using UNICAP])
-                    have_unicap="yes"
-                  ],[have_unicap="no"])
-fi
-if test "x$have_libunicap"; then
- have_unicap="yes"
-fi
-AM_CONDITIONAL([HAVE_LIB_UNICAP], [test "x${have_unicap}" = "xyes"])
-
-
-have_v4l="no"
-GEM_ARG_WITH([v4l], [video input], [force])
-AC_CHECK_HEADERS([linux/videodev.h], have_v4l="yes")
-GEM_CHECK_LIB([libv4l1], [v4l1], [v4l1_open],,,, [video output])
-if test "x$have_libv4l1" = "xyes"; then
-  have_v4l="yes (libv4l)"
-fi
-if test "x$with_v4l" = "xno"; then
-  have_v4l="no"
-fi
-AM_CONDITIONAL([HAVE_V4L], [test "x${have_v4l}" != "xno"])
-
-
-have_v4l2="no"
-GEM_ARG_WITH([v4l2], [video input], [force])
-AC_CHECK_HEADERS([linux/videodev2.h])
-GEM_CHECK_LIB([libv4l2], [v4l2], [v4l2_open],,,, [video input])
-# AC_DEFINE([HAVE_VIDEO4LINUX2], [], [video capturing using v4l2])
-
-if test "x$have_libv4l2" = "xyes"; then
-  have_v4l2="yes (libv4l)"
-fi
-if test "x$with_v4l2" = "xno"; then
-  have_v4l2="no"
-fi
-AM_CONDITIONAL([HAVE_V4L2], [test "x${have_v4l2}" != "xno"])
-
-
-dnl GEM_CHECK_LIB([vfw32], [vfw32], [AVIFileInit],,,, [video input])
-GEM_CHECK_LIB([vfw32], [vfw32], [main],,,, [video input])
-# is this needed?
-dnl GEM_CHECK_LIB([avicap32],[avicap32],[main],,,,[video input])
-
-# VLC
-GEM_CHECK_LIB([libvlc], [vlc], [libvlc_video_set_callbacks],,,, [video input])
-
-# assimp
-GEM_CHECK_LIB([assimp], [assimp], [aiDetachAllLogStreams],,,, [3D model loading])
-
-
-
-
-AC_ARG_WITH([default-font],
-            AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
-           )
-if test "x$with_default_font" != "x" && \
-   test "x$with_default_font" != "xno" &&
-   test "x$with_default_font" != "xyes"; then
-
-  AC_DEFINE_UNQUOTED([GEM_DEFAULT_FONT], "${with_default_font}", [default font for text rendering])
-  AC_MSG_RESULT([using "${with_default_font}" as default font])
-fi
+# checks for default headers
+IEM_CHECK_INCLUDES_DEFAULT([windows.h])
 
 # threading
 GEM_CHECK_THREADS
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h float.h memory.h stddef.h stdlib.h string.h strings.h sys/ioctl.h sys/time.h termios.h unistd.h])
+AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
+AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
 
 AC_CHECK_HEADERS([wordexp.h])
 
@@ -424,15 +205,249 @@ AC_FUNC_MALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
 
+# Checks for libraries.
+
+AC_CHECK_LIB([m],[sin])
+AC_CHECK_LIB([z],[zlibVersion])
+AC_CHECK_LIB([dl],[dlopen])
+
+# w32 compatibility library
+AC_CHECK_LIB([OLDNAMES], [close])
+AC_CHECK_LIB([coldname], [close])
+# Standard C++ Libray:
+AC_CHECK_LIB([libcpmt], [main])
+# C runtime library:
+AC_CHECK_LIB([msvcrt], [fclose])
+# Standard C++ Libray:
+AC_CHECK_LIB([msvcprt], [main])
+# Winsock Library
+AC_CHECK_LIB([ws2_32], [main])
+AC_CHECK_LIB([wsock32], [select])
+
+# w32 window creating
+AC_CHECK_LIB([gdi32], [main])
+
+
+## on OSX X shouldn't be used by default as there are other ways
+## however, if people really want it ("--with-x") they should get it
+if test "x$KERN" = "xDarwin"; then
+ if test "x$with_x" = "x"; then
+   with_x="no"
+ fi
+fi
+
+AC_PATH_X
+AC_PATH_XTRA
+
+if test "x$with_x" != "xno"; then
+# AC_CHECK_LIB([X11],[main])
+# AC_CHECK_LIB([Xext],[main])
+ AC_CHECK_LIB([Xxf86vm],[XF86VidModeGetAllModeLines])
+ AC_CHECK_HEADERS([X11/extensions/XInput2.h])
+fi
+
+IEM_CHECK_GL
+IEM_CHECK_GLU
+IEM_CHECK_GLUT
+IEM_CHECK_GLX
+IEM_CHECK_AGL
+
+## use system's libGLEW
+GEM_ARG_ENABLE([multicontext], [experimental support for multiple windows])
+## glewmx-args default to glew-args
+if test "x$with_glewmx" = "x"; then with_glewmx="$with_glew"; fi
+if test "x$with_glewmx-includes" = "x"; then with_glewmx="$with_glew-includes"; fi
+if test "x$with_glewmx-libs" = "x"; then with_glewmx="$with_glew-libs"; fi
+
+GEM_CHECK_LIB([glew], [GLEW],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+GEM_CHECK_LIB([glewmx], [GLEWmx],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
+
+
+if test "x$enable_multicontext" = "xyes"; then
+  have_glew="${have_glewmx}"
+  GEM_LIB_GLEW_CFLAGS="$GEM_LIB_GLEWMX_CFLAGS"
+  GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
+
+  AM_CONDITIONAL(HAVE_LIB_GLEW, [test "x${have_glew}" = "xyes"])
+fi
+AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
+
+if test "x${have_glew}" != "xyes"; then
+  GEM_CPPFLAGS+=" -DGLEW_BUILD"
+  if test "x${enable_multicontext}" = "xyes"; then
+    GEM_CPPFLAGS+=" -DGLEW_MX"
+  fi
+fi
+
+GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing])
+
+## use GLFW windowing framework
+GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW2 windowing])
+## use GLFW3 windowing framework
+GEM_CHECK_LIB([glfw3], [glfw3],[GLFW/glfw3.h], [glfwGetPrimaryMonitor],,,,[GLFW3 windowing])
+
+
+## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
+### "-lstdc++" really has to be added before e.g. "-lGL" in order to avoid
+### triggering the bug
+### however, libtool is way to clever and eliminates duplicate LIBS entries.
+### since "-lstdc++" is usually found in the postdeps, this  would remove the
+### entry found in LIBS; so we add it to the predeps_CXX (only)
+stdcxx_LIBS=$LIBS
+AC_CHECK_LIB([stdc++],[main],[predeps_CXX="$predeps_CXX -lstdc++"])
+LIBS=$stdcxx_LIBS
+
+dnl some checks for osX
+GEM_CHECK_FRAMEWORK([Cocoa],
+                        [have_cocoa_framework="yes"],
+                        [have_cocoa_framework="no"])
+GEM_CHECK_FRAMEWORK([Carbon],
+                        [have_carbon_framework="yes"],
+                        [have_carbon_framework="no"])
+GEM_CHECK_FRAMEWORK([QuickTime],
+                        [have_quicktime_framework="yes"],
+                        [have_quicktime_framework="no"])
+GEM_CHECK_FRAMEWORK([AVFoundation],
+                        [have_avfoundation_framework="yes"],
+                        [have_avfoundation_framework="no"])
+
+AM_CONDITIONAL(VIDEODARWIN, test "x${have_carbon_framework}" = "xyes" && test "x${have_quicktime_framework}" = "xyes")
+
+#fallback to imagemagick if people are too lazy to type ImageMagick
+if test "x$with_ImageMagick" = "x"; then
+ with_ImageMagick="$with_imagemagick"
+fi
+if test "x$with_MagickCore" = "x"; then
+ with_MagickCore="$with_ImageMagick"
+fi
+
+GEM_CHECK_LIB([ImageMagick++], 
+              [Magick++],[Magick++.h],
+              [main],
+              AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
+              ,,[image loader])
+
+GEM_CHECK_LIB([MagickCore], 
+              [Magick],[magick/MagickCore.h],
+              [IsMagickInstantiated],
+              AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
+   	          ,,[image loader])
+
+#if test "x${have_ImageMagick}" = "xyes"
+#then
+# with_tiff=no
+# with_jpeg=no
+#fi
+GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
+GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
+
+IEM_CHECK_FTGL()
+GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
+
+## film en/decoders
+GEM_CHECK_LIB([avifile], [aviplay],[avifile.h], [CreateIAviReadFile],,,,[movie loader])
+GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec],[gmerlin/avdec.h], [gavl_start],,,,[movie loader])
+GEM_CHECK_LIB([mpeg], [mpeg],[mpeg.h], [OpenMPEG],,,,[movie loader])
+GEM_CHECK_LIB([libmpeg3], [mpeg3],[libmpeg3.h], [mpeg3_check_sig],,,,[movie loader])
+GEM_CHECK_LIB([libquicktime], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
+GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
+
+# special function in libquicktime
+old_cflags=${CFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
+LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+AC_CHECK_FUNCS([lqt_seek_video])
+AC_CHECK_FUNCS([lqt_open_write])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
+
+#video
+GEM_CHECK_LIB([libdc1394-2], [dc1394],[dc1394/dc1394.h],   [dc1394_new],,,, [video input])
+GEM_CHECK_LIB([libdv],       [dv],[libdv/dv.h],       [dv_cleanup],,,, [video input])
+GEM_CHECK_LIB([libraw1394],  [raw1394],[libraw1394/raw1394.h],  [raw1394_new_handle],,,, [video input])
+GEM_CHECK_LIB([libiec61883], [iec61883],[libiec61883/iec61883.h], [iec61883_dv_fb_init],,,, [video input])
+AC_CHECK_HEADERS([vl/vl.h])
+
+GEM_ARG_WITH([unicap], [video input], [force])
+
+GEM_CHECK_LIB([libunicap], [unicap],[unicap.h], [unicap_check_version],,,, [video input])
+
+if test "x$have_unicap" = "xyes"; then
+ AC_CHECK_HEADER([unicap/unicap.h],
+                  [
+                    AC_DEFINE([HAVE_UNICAP], [], [video capturing using UNICAP])
+                    have_unicap="yes"
+                  ],[have_unicap="no"])
+fi
+if test "x$have_libunicap"; then
+ have_unicap="yes"
+fi
+AM_CONDITIONAL([HAVE_LIB_UNICAP], [test "x${have_unicap}" = "xyes"])
+
+
+have_v4l="no"
+GEM_ARG_WITH([v4l], [video input], [force])
+AC_CHECK_HEADERS([linux/videodev.h], have_v4l="yes")
+GEM_CHECK_LIB([libv4l1], [v4l1],[libv4l1.h], [v4l1_open],,,, [video output])
+if test "x$have_libv4l1" = "xyes"; then
+  have_v4l="yes (libv4l)"
+fi
+if test "x$with_v4l" = "xno"; then
+  have_v4l="no"
+fi
+AM_CONDITIONAL([HAVE_V4L], [test "x${have_v4l}" != "xno"])
+
+
+have_v4l2="no"
+GEM_ARG_WITH([v4l2], [video input], [force])
+AC_CHECK_HEADERS([linux/videodev2.h])
+GEM_CHECK_LIB([libv4l2], [v4l2],[libv4l2.h], [v4l2_open],,,, [video input])
+# AC_DEFINE([HAVE_VIDEO4LINUX2], [], [video capturing using v4l2])
+
+if test "x$have_libv4l2" = "xyes"; then
+  have_v4l2="yes (libv4l)"
+fi
+if test "x$with_v4l2" = "xno"; then
+  have_v4l2="no"
+fi
+AM_CONDITIONAL([HAVE_V4L2], [test "x${have_v4l2}" != "xno"])
+
+
+dnl GEM_CHECK_LIB([vfw32], [vfw32],, [AVIFileInit],,,, [video input])
+GEM_CHECK_LIB([vfw32], [vfw32],[vfw.h], [capGetVideoFormat],,,, [video input])
+# is this needed?
+dnl GEM_CHECK_LIB([avicap32],[avicap32],,[main],,,,[video input])
+
+# VLC
+GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [video input])
+
+# assimp
+GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
+
+
+## text support
+AC_ARG_WITH([default-font],
+            AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
+           )
+if test "x$with_default_font" != "x" && \
+   test "x$with_default_font" != "xno" &&
+   test "x$with_default_font" != "xyes"; then
+
+  AC_DEFINE_UNQUOTED([GEM_DEFAULT_FONT], "${with_default_font}", [default font for text rendering])
+  AC_MSG_RESULT([using "${with_default_font}" as default font])
+fi
+
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
-LIBS="$LIBS $PKG_LIBS"
+LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
 AC_MSG_CHECKING(for lqt_open_write)
-AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])], 
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
+
 
 ### make-depend flags
 if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
@@ -641,9 +656,13 @@ else
 fi
 
 if test "x$have_quicktime_framework" = "x"; then have_quicktime_framework="no"; fi
-
 if test "x$have_quicktime_framework" = "xyes"; then
  have_libquicktime="yes (framework)"
+fi
+
+if test "x$have_avfoundation_framework" = "x"; then have_avfoundation_framework="no"; fi
+if test "x$have_avfoundation_framework" = "xyes"; then
+ have_libavfoundation="yes (framework)"
 fi
 
 have_ieee1394=""
@@ -656,11 +675,15 @@ if test "x$have_ieee1394" = "x"; then
 else
  have_ieee1394="yes (${have_ieee1394# })"
 fi
-
 if test "x${have_v4l}" = "x"; then have_v4l="no"; fi
 if test "x${have_v4l2}" = "x"; then have_v4l2="no"; fi
 if test "x${have_ieee1394}" = "x"; then have_ieee1394="no"; fi
 if test "x${have_libdv}" = "x"; then have_libdv="no"; fi
+if test "x${have_libdv}" != "xno"; then
+   if test "x${have_libiec61883}" != "xyes"; then have_libdv="no (missing libiec61883)"; fi
+   if test "x${have_libraw1394}" != "xyes"; then have_libdv="no (missing libraw1394)"; fi
+fi
+
 if test "x${have_unicap}" = "x"; then have_unicap="no"; fi
 if test "x${have_vfw32}" = "x"; then have_vfw32="no"; fi
 # TODO: have_ds
@@ -688,11 +711,11 @@ Result:
 Configuration:
   Compiler               : ${CXX}
   CXXFLAGS               : ${CXXFLAGS} ${X_CFLAGS}
-			 : ${PKG_CFLAGS}
+			 : ${GEM_CHECK_LIB_CFLAGS}
   DEFINES		 : ${DEFINES}
 
   LIBS                   : ${LIBS}
-			 : ${PKG_LIBS}
+			 : ${GEM_CHECK_LIB_LIBS}
   LDFLAGS		 : ${LDFLAGS}
 			 : ${X_LIBS}
 
@@ -711,6 +734,7 @@ Configuration:
   image-support
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
@@ -718,9 +742,10 @@ Configuration:
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
+    use AVFoundation     : ${have_libavfoundation}
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
-  capture-support 
+  capture-support
     use PLUGINS		 : ${use_video_plugins}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
@@ -729,6 +754,7 @@ Configuration:
     use Unicap           : ${have_unicap}
     use Video-for-WinDOS : ${have_vfw32}
     use QuickTime        : ${have_quicktime_framework}
+    use AVFoundation     : ${have_avfoundation_framework}
 ])
 
 if test "x$have_pd" = "xno"; then

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglTexCoord1sv , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexCoord1sv :: GEMglTexCoord1sv	(t_floatarg arg0=0) {
+GEMglTexCoord1sv :: GEMglTexCoord1sv	(t_floatarg arg0) {
 vMess(arg0);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }

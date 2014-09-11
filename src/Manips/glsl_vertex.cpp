@@ -8,7 +8,7 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) GÂžnther Geiger.
+//    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -182,11 +182,15 @@ void glsl_vertex :: openMess(t_symbol *filename)
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
 
-  if( !GLEW_VERSION_1_1 ) { /* stupid check whether we have a valid context */
-    post("shader '%s' will be loaded when rendering is turned on (openGL context needed)", filename->s_name);
-    m_shaderFilename=filename;
-    return;
-  }
+  m_shaderFilename=filename;
+
+  if (getState()==RENDERING) loadShader();
+  return;
+}
+
+void glsl_vertex :: loadShader()
+{
+  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name)return;
 
   if(!isRunnable()) {
     return;
@@ -195,7 +199,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
-  std::string fn = findFile(filename->s_name);
+  std::string fn = findFile(m_shaderFilename->s_name);
   const char*buf=fn.c_str();
 
   FILE *file = fopen(buf,"rb");
@@ -207,6 +211,7 @@ void glsl_vertex :: openMess(t_symbol *filename)
     memset(m_shaderString,0,size + 1);
     fseek(file,0,SEEK_SET);
     size_t count=fread(m_shaderString,1,size,file);
+    m_shaderString[size]='\0';
     int err=ferror(file);
     fclose(file);
     if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
@@ -253,14 +258,12 @@ bool glsl_vertex :: isRunnable() {
 /////////////////////////////////////////////////////////
 void glsl_vertex :: startRendering()
 {
-  if(NULL!=m_shaderFilename)
-    openMess(m_shaderFilename);
+  loadShader();
 
-  if (m_shaderString == NULL)
-    {
-      error("need to load a shader");
-      return;
-    }
+  if (m_shaderString == NULL) {
+    error("need to load a shader");
+    return;
+  }
 }
 
 ////////////////////////////////////////////////////////

@@ -24,11 +24,12 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT, t
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_crop :: pix_crop(t_floatarg x=0, t_floatarg y=0, t_floatarg w=64, t_floatarg h=64)
+pix_crop :: pix_crop(t_floatarg x, t_floatarg y, t_floatarg w, t_floatarg h) :
+  m_data(0), m_size(0),
+  sizeX(0), sizeY(0), sizeC(0),
+  offsetX(0), offsetY(0),
+  wantSizeX(0), wantSizeY(0)
 {
-  m_data = NULL;
-  m_size = 0;
-
   if(w<=1. && h<=1.) {
     w=h=64.;
   }

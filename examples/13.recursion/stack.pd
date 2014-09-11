@@ -17,7 +17,7 @@
 #X obj 166 47 t b a b;
 #X obj 109 217 list prepend;
 #X obj 120 182 print stack-internal-error;
-#X text 17 330 stack.pd (GPL) <claudiusmaximus@goto10.org>;
+#X text 17 330 stack.pd (GPL) <claude@mathr.co.uk>;
 #X connect 0 0 4 0;
 #X connect 2 0 15 0;
 #X connect 4 0 11 0;

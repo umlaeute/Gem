@@ -34,7 +34,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_matrix , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-gemlist_matrix :: gemlist_matrix	(t_floatarg arg0=0) {
+gemlist_matrix :: gemlist_matrix	(t_floatarg) {
   m_outletMatrice = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////

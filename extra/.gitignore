@@ -1,0 +1,16 @@
+## BEGIN autotools generated files
+/aclocal\.m4
+/autom4te\.cache/
+/compile
+/configure
+/config\.guess
+/config\.log
+/config\.status
+/config\.sub
+/depcomp
+/install-sh
+/libtool
+/ltmain\.sh
+/missing
+/stamp-h1
+## END autotools generated files

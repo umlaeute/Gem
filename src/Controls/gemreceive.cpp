@@ -163,7 +163,7 @@ void gemreceive::unbind(gemreceive*x, t_symbol*key) {
     elements->priority=0;
     elements->next=0;
 
-    freebytes(elements, sizeof(elements));
+    freebytes(elements, sizeof(*elements));
   } else {
     // not here...
   }

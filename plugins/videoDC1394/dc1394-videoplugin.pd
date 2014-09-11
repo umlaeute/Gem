@@ -1,2 +1,14 @@
-#N canvas 8 49 505 112 10;
-#X text 89 47 Nothing special about this backend...;
+#N canvas 4 90 730 247 10;
+#X text 56 64 mode can be MANUAL \, AUTO and ONE_PUSH.;
+#X text 57 118 in AUTO mode \, the camera adjusts itself the parameter
+all the time.;
+#X text 56 79 in MANUAL mode \, the parameter's value is set with;
+#X text 55 18 if your device supports it \, you can change the mode
+of a paramter (aka feature) with the message;
+#X msg 296 33 set featureMode mode;
+#X msg 357 79 set feature value;
+#X text 547 12 example :;
+#X text 57 158 in ONE_PUSH mode \, the camera adjusts itself the parameter
+only once.;
+#X msg 542 76 set Gain 124;
+#X msg 544 31 set GainMode AUTO;

@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglVertex3i , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex3i :: GEMglVertex3i	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0) :
+GEMglVertex3i :: GEMglVertex3i	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
 		x(static_cast<GLint>(arg0)),
 		y(static_cast<GLint>(arg1)),
 		z(static_cast<GLint>(arg2))

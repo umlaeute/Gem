@@ -1,8 +1,113 @@
 Coding Guidelines for Gem
 =========================
-2011, IOhannes m zmölnig
+2011-2014, IOhannes m zmölnig
 
-in no special order...
+Questions
+=========
+Read the entire CodingStyle guide.
+
+If you still have questions, please ask them on the gem-dev mailinglist:
+   http://lists.puredata.info/listinfo/gem-dev
+
+A general discussion about the "contribution workflow" in Gem can be found in the gem wiki:
+   https://github.com/umlaeute/Gem/wiki/Contributing
+
+
+Programming Language
+====================
+Gem is (mainly) written in C++.
+
+C-style vs C++-style
+--------------------
+while Pd is written in C, Gem is written in C++;
+please try to use C++ idioms whenever possible.
+
+use STL instead of inventing your own data containers!
+esp. use "std::string" instead of "char*" whenever possible
+
+the Gem code base is full of C-idioms and types; this is mainly because i
+started as a C-programmer and only gradually learned using C++; don't repeat my
+follies :-)
+
+C++ standard
+------------
+Gem compiles on many platforms: the build machine that builds the W32-binaries
+is an old XP-machine running "Microsoft VisualStudio 6", which was released
+in 1998. Gem needs to be able to compile on this machine.
+This means, that we cannot use any new language features introduced after (or
+around) that date, including: C++98, C++03, C++11, C++??
+
+
+private/protected/public
+------------------------
+ctor/dtor should be public
+methods should be protected/public
+members should be protected
+
+private members should be hidden using a PIMPL idiom
+
+initialization
+--------------
+initialize all member variables in the constructor(s).
+use "member initialization lists" when possible.
+e.g. use
+> foo::foo(void) : m_x(0), m_y(0) {}
+rather than
+> foo::foo(void) { m_x=0; m_y=0; }
+
+
+callbacks
+---------
+message callbacks from the RTE should be implemented using the CPPEXTERN_MSG*
+macros defined in src/RTE/MessageCallbacks.h
+this removes the need for static callbacks in the header-files
+
+variable naming
+---------------
+member variables should be prefixed with "m_"
+static variables should be prefixed with "s_"
+
+import/export
+-------------
+all functions/classes that should be visible from outside must be exported using
+the GEM_EXTERN macro.
+all objectclasses are exported.
+all utility classes are exported.
+
+
+
+Dependencies
+============
+the dependencies of Gem should be kept at a minimum (ideally only openGL)
+objectclasses that use special libraries should go into extra/
+if you want to add functionality to Gem that is (or can be) implemented by a
+number of different backends (libraries), this should be done via an abstract
+interface and *plugins*, thus moving the binary dependency outside of Gem.
+
+
+Code layout
+===========
+
+whitespace
+----------
+Please avoid *any* trailing whitespace.
+Remove trailing whitespaces before committing.
+`git` has a *pre-commit* hook example, that checks for trailing whitespace and
+will warn you when you try committing such code.
+you can enable it with something like:
+$ cp .git/hooks/pre-commit.sample .git/hooks/pre-commit
+
+Indentation
+-----------
+TODO
+
+
+
+
+
+
+Filesystem layout
+=================
 
 directory structure
 -------------------
@@ -59,87 +164,3 @@ they are accompanied by a header file ".h" containing the public interface.
 there is a file for each objectclass named like the objectclass. e.g.
 > src/Manips/ortho.cpp
 contains the code for the [ortho] objectclass.
-
-
-private/protected/public
-------------------------
-ctor/dtor should be public
-methods should be protected/public
-members should be protected
-
-private members should be hidden using a PIMPL idiom
-
-
-callbacks
----------
-message callbacks from the RTE should be implemented using the CPPEXTERN_MSG*
-macros defined in src/RTE/MessageCallbacks.h
-this removes the need for static callbacks in the header-files
-
-
-C-style vs C++-style
---------------------
-while Pd is written in C, Gem is written in C++;
-please try to use C++ idioms whenever possible.
-
-use STL instead of inventing your own data containers!
-esp. use "std::string" instead of "char*" whenever possible
-
-the Gem code base is full of C-idioms and types; this is mainly because i
-started as a C-programmer and only gradually learned using C++; don't repeat my
-follies :-)
-
-
-variable naming
----------------
-member variables are usually prefixed with "m_"
-static variables are usually prefixed with "s_"
-
-
-initialization
---------------
-initialize all member variables in the constructor(s).
-use "member initialization lists" when possible.
-e.g. use
-> foo::foo(void) : m_x(0), m_y(0) {}
-rather than
-> foo::foo(void) { m_x=0; m_y=0; }
-
-
-import/export
--------------
-all functions/classes that should be visible from outside must be exported using
-the GEM_EXTERN macro.
-all objectclasses are exported.
-all utility classes are exported.
-
-
-dependencies
-------------
-the dependencies of Gem should be kept at a minimum (ideally only openGL)
-objectclasses that use special libraries should go into extra/
-if you want to add functionality to Gem that is (or can be) implemented by a
-number of different backends (libraries), this should be done via an abstract
-interface and plugins, thus moving the binary dependency outside of Gem.
-
-
-Indentation
------------
-TODO
-
-
-git commits
------------
-try to avoid committing pd-patches and C++ code within the same
-commit. conflicts in C++-code can usually easily be resolved, whereas
-conflicts in Pd-patches are usually impossible to resolve (but for the
-most trivial cases)
-
-
-git branching
--------------
-try to avoid forking from branches other than master.
-esp. avoid branches on top of branches.
-before committing a pull rqeuest, make sure that your branch applies clean to
-current master.
-

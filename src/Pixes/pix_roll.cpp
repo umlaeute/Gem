@@ -21,20 +21,17 @@ CPPEXTERN_NEW(pix_roll);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_roll :: pix_roll()
-{	long size,src;
+pix_roll :: pix_roll() :
+  saved(0),
+  m_vroll(0), m_axis(0),
+  m_blurH(240), m_blurW(240), m_blurSize(0), m_blurBpp(2),
+  inletBlur(0)
+{	long size;
 
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("roll"));
 
-  m_vroll = 0;
-  m_blurH = 240;
-  m_blurW = 240;
-  m_blurBpp = 2;
   size = 320 * 240 * 4;
   saved = new unsigned char [size];
-  src=0;
-  m_axis = 0;
-
 }
 
 /////////////////////////////////////////////////////////

@@ -25,8 +25,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglBitmap , t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBitmap :: GEMglBitmap	(t_float arg0=0, t_float arg1=0,
-				 t_float arg2=1, t_float arg3=1) :
+GEMglBitmap :: GEMglBitmap	(t_float arg0, t_float arg1, t_float arg2, t_float arg3) :
 		xorig(static_cast<GLfloat>(arg0)),
 		yorig(static_cast<GLfloat>(arg1)),
 		xmove(static_cast<GLfloat>(arg2)),

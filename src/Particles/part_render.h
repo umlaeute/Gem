@@ -54,11 +54,12 @@ class GEM_EXTERN part_render : public partlib_base
   bool		m_colorize;
   bool		m_sizing;
 
+  unsigned int           m_number;
+
   GLfloat        *m_pos;
   GLfloat        *m_colors;
   GLfloat        *m_sizes;
 
-  int           m_number;
 };
 
 #endif	// for header file

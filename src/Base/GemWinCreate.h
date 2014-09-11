@@ -67,7 +67,15 @@ class GEM_EXTERN WindowInfo
 #else
 #endif
     have_constContext(0)
-    {}
+    {
+#if defined _WIN32
+#elif defined __APPLE__
+#elif defined __linux__ || defined HAVE_GL_GLX_H
+# ifdef HAVE_LIBXXF86VM
+      memset(&deskMode, 0, sizeof(deskMode));
+# endif
+#endif
+    }
   int         fs;                 // FullScreen
 
 #if defined _WIN32

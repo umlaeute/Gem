@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4ui , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColor4ui :: GEMglColor4ui	(t_floatarg arg0=0, t_floatarg arg1=0, t_floatarg arg2=0, t_floatarg arg3=0) :
+GEMglColor4ui :: GEMglColor4ui	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
 		red(static_cast<GLuint>(arg0)),
 		green(static_cast<GLuint>(arg1)),
 		blue(static_cast<GLuint>(arg2)),

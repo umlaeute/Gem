@@ -62,9 +62,7 @@ class GEM_EXPORT pix_drum : public GemPixObj
 		t_outlet *outlet3;
 		t_outlet *outlet4;
     	unsigned char  	m_thresh[4];
-        unsigned char	m_Y;
 		int head, bottom, right, left, mode, pix_dist, min_width, pix_dist_ctr;
-		int Xsize, Ysize;
 		float thresh, min_height;
 
     private:

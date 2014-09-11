@@ -7,7 +7,16 @@
 int GemSIMD::cpuid = GEM_SIMD_NONE;
 int GemSIMD::realcpuid = GEM_SIMD_NONE;
 
-
+namespace {
+  static void addArch(std::string&archs, const std::string&arch) {
+    if(archs.empty())
+      archs=arch;
+    else {
+      archs+="/";
+      archs+=arch;
+    }
+  }
+};
 
 GemSIMD :: GemSIMD(void)
 {
@@ -17,19 +26,16 @@ GemSIMD :: GemSIMD(void)
  std::string compiledstr;
 
 #ifdef __MMX__
- if(compiledarchs>0)compiledstr+="/";
- compiledstr+="MMX";
+ addArch(compiledstr, "MMX");
  compiledarchs++;
 #endif
 #ifdef __SSE2__
- if(compiledarchs>0)compiledstr+="/";
- compiledstr+="SSE2";
+ addArch(compiledstr, "SSE2");
  compiledarchs++;
 #endif
 
 #ifdef __VEC__
- if(compiledarchs>0)compiledstr+="/";
- compiledstr+="AltiVec";
+ addArch(compiledstr, "AltiVec");
  compiledarchs++;
 #endif
 
@@ -170,16 +176,19 @@ int GemSIMD :: simd_runtime_check(void)
      * see http://www.sandpile.org/ia32/cpuid.htm for what which bit is
      */
 # ifdef __SSE2__
+    /* coverity[dead_error_condition] on amd64 all below this is dead, as we always have SSE2 */
     if(edx & 1<<26){ // SSE2
       realcpuid=GEM_SIMD_SSE2;
       return realcpuid;
     }
 # endif
 # ifdef __SSE__
+    /* coverity[dead_error_condition] on amd64 all below this is dead, as we always have SSE */
     if(edx & 1<<25){ // SSE
     }
 # endif
 # ifdef __MMX__
+    /* coverity[dead_error_condition] on amd64 all below this is dead, as we always have MMX */
     if(edx & 1<<23){ // MMX
       realcpuid=GEM_SIMD_MMX;
       return realcpuid;

@@ -64,11 +64,6 @@ class GEM_EXTERN pix_writer : public GemPixObj
     	// Set the filename and filetype
     	virtual void	fileMess(int argc, t_atom *argv);
 
-    	//////////
-    	// The original pix_writer
-    	imageStruct 	*m_originalImage;
-
-
       //////////
       // Manual writing
       bool            m_banged;

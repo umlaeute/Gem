@@ -73,11 +73,14 @@ namespace gem { namespace thread {
     pthread_mutex_t p_runmutex;
     pthread_cond_t  p_runcond;
 
-    PIMPL(WorkerThread*x) : owner(x), ID(0),
-                            keeprunning(true), isrunning(false),
-                            m_todo(Mutex()), m_done(Mutex()),
-                            s_newdata(Semaphore()),
-                            processingID(WorkerThread::INVALID)
+    PIMPL(WorkerThread*x) : owner(x), ID(0)
+			  , keeprunning(true), isrunning(false)
+			  , m_todo(Mutex()), m_done(Mutex())
+			  , s_newdata(Semaphore())
+			  , processingID(WorkerThread::INVALID)
+#ifndef HAVE_PTW32_HANDLE_T
+			  , p_thread(0)
+#endif
     {
       pthread_mutex_init(&p_runmutex, 0);
       pthread_cond_init (&p_runcond , 0);

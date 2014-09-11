@@ -27,7 +27,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(sphere, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLO
 //
 /////////////////////////////////////////////////////////
 sphere :: sphere(t_floatarg size, t_floatarg slize)
-  : GemGluObj(size, slize)
+  : GemGluObj(size, slize),
+    m_x(0), m_y(0), m_z(0),
+    oldStacks(-1), oldSlices(-1),
+    oldDrawType(0), oldTexture(0)
 {
       int slice = m_numSlices;
       int stack = m_numSlices;
@@ -37,12 +40,6 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
       m_z = new float[slice * stack];
 
       oldDrawType = m_drawType;
-
-      //init these so the first render always creates the Sphere
-      oldStacks = -1;
-      oldSlices = -1;
-      oldTexture= 0;
-
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +47,11 @@ sphere :: sphere(t_floatarg size, t_floatarg slize)
 //
 /////////////////////////////////////////////////////////
 sphere :: ~sphere()
-{ }
+{
+  delete[]m_x;
+  delete[]m_y;
+  delete[]m_z;
+}
 
 /////////////////////////////////////////////////////////
 // createSphere
@@ -60,13 +61,14 @@ sphere :: ~sphere()
 void sphere :: createSphere(GemState *state)
 {
    // GLdouble radius=m_size;
-    GLint slices=m_numSlices;
-    GLint stacks=m_numSlices;
+    GLint slices=(m_numSlices>0)?m_numSlices:10;
+    GLint stacks=(m_numStacks>0)?m_numStacks:10;
 
     GLfloat rho, drho, theta, dtheta;
     GLfloat s, t, ds, dt;
     GLint i, j, imin, imax;
     GLenum orientation = true; /* GLU_INSIDE; */
+    /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
     GLfloat nsign = (orientation)?-1.0:1.0;
 
     GLfloat xsize = 1.0, xsize0 = 0.0;
@@ -228,13 +230,14 @@ void sphere :: createSphere(GemState *state)
 void sphere :: render(GemState *state)
 {
   GLdouble radius=m_size;
-  GLint slices=m_numSlices;
-  GLint stacks=m_numSlices;
+  GLint slices=(m_numSlices>0)?m_numSlices:10;
+  GLint stacks=(m_numStacks>0)?m_numStacks:10;
 
   GLfloat rho, drho, dtheta;
   GLfloat s, t, ds, dt;
   GLint i, j, imin, imax;
   GLenum orientation = true; /* GLU_INSIDE; */
+  /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
   GLfloat nsign = (orientation)?-1.0:1.0;
 
   int src=0;

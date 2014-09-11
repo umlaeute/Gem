@@ -36,6 +36,7 @@ GEMglMaterialfv :: GEMglMaterialfv	(int argc, t_atom*argv) :
   case 0: break;
   case 1:
     throw GemException("GEMglMaterialfv: invalid number of parameters");
+    /* coverity[unterminated_default] */
   default:
     paramMess(argc-2, argv+2);
   case 2:

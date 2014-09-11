@@ -74,12 +74,23 @@ libBase_la_SOURCES=  \
     GemShape.h \
     GemVertex.cpp \
     GemVertex.h \
+    GemWindow.cpp \
+    GemWindow.h \
+    TextBase.h
+
+if ENABLE_MULTICONTEXT
+else !ENABLE_MULTICONTEXT
+libBase_la_SOURCES+= \
     GemWinCreate.h \
     GemWinCreateMac.cpp \
     GemWinCreateNT.cpp \
-    GemWinCreateXWin.cpp \
-    GemWindow.cpp \
-    GemWindow.h \
-    TextBase.cpp \
-    TextBase.h
+    GemWinCreateXWin.cpp
+endif !ENABLE_MULTICONTEXT
 
+if HAVE_LIB_FTGL
+libBase_la_SOURCES+= \
+    TextBaseFTGL.cpp
+else !HAVE_LIB_FTGL
+libBase_la_SOURCES+= \
+    TextBaseNone.cpp
+endif !HAVE_LIB_FTGL

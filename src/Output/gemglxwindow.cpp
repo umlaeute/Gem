@@ -20,6 +20,7 @@
 #include "Gem/GemGL.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
@@ -131,15 +132,17 @@ static int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
   // we don't really care about the error
   // let's hope for the best
-  if(event)
+  if(event) {
     xerr=event->error_code;
 
-  if ( event->error_code != BadWindow ) {
-    char buf[256];
-    XGetErrorText (dpy, event->error_code, buf, sizeof(buf));
-    error("Xwin: %s\n", buf);
-  } else
-    error("Xwin: BadWindow (%d)\n", xerr);
+    if ( xerr != BadWindow ) {
+      char buf[256];
+      XGetErrorText (dpy, xerr, buf, sizeof(buf));
+      error("Xwin: %s\n", buf);
+    } else {
+      error("Xwin: BadWindow (%d)\n", xerr);
+    }
+  }
   return (0);
 }
 
@@ -178,6 +181,7 @@ struct gemglxwindow::PIMPL {
     fs(0),
     dpy(NULL),
     win(0),
+    screen(0),
     cmap(0),
     context(NULL),
     delete_atom(0),
@@ -190,6 +194,9 @@ struct gemglxwindow::PIMPL {
     have_border(false),
     doDispatch(false)
   {
+#ifdef HAVE_LIBXXF86VM
+    memset(&deskMode, 0, sizeof(deskMode));
+#endif
   }
   ~PIMPL(void) {
   }
@@ -246,8 +253,8 @@ struct gemglxwindow::PIMPL {
 
     if (fullscreen){
       if (!display.empty()){
-        throw(GemException("fullscreen not available on remote display"));
         fullscreen=false;
+        throw(GemException("fullscreen not available on remote display"));
       } else {
 #ifdef HAVE_LIBXXF86VM
         XF86VidModeGetAllModeLines(dpy, screen, &modeNum, &modes);
@@ -391,17 +398,16 @@ struct gemglxwindow::PIMPL {
         XFree(stylePtr);
       }
 
-
       if (style & XIMPreeditPosition) {
         XPoint spot = {0, 0};
         XFontSet inputXfs;
+        memset(&inputXfs, 0, sizeof(inputXfs));
         preedit_attname = XNPreeditAttributes;
         preedit_attlist = XVaCreateNestedList(0,
                                               XNSpotLocation, &spot,
                                               XNFontSet, inputXfs,
                                               NULL);
       }
-
 
       inputContext=XCreateIC(inputMethod,
                                       XNInputStyle, style,
@@ -431,8 +437,7 @@ struct gemglxwindow::PIMPL {
          * LATER re-think the entire dual-context thing
          */
 
-        throw(GemException("problems making glX-context current: refusing to continue"));
-        throw(GemException("try setting the environment variable GEM_SINGLE_CONTEXT=1"));
+        throw(GemException("problems making glX-context current: refusing to continue\ntry setting the environment variable GEM_SINGLE_CONTEXT=1"));
         return false;
       }
       Window winDummy;
@@ -507,6 +512,7 @@ void gemglxwindow::dispatch(void) {
   XKeyEvent* kb  = (XKeyEvent*)&event;
   char keystring[2];
   KeySym keysym_return;
+  unsigned long devID=0;
 
   while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
                            StructureNotifyMask |
@@ -520,25 +526,25 @@ void gemglxwindow::dispatch(void) {
       switch (event.type)
         {
         case ButtonPress:
-          button(eb->button-1, 1);
-          motion(eb->x, eb->y);
+          button(devID, eb->button-1, 1);
+          motion(devID, eb->x, eb->y);
           break;
         case ButtonRelease:
-          button(eb->button-1, 0);
-          motion(eb->x, eb->y);
+          button(devID, eb->button-1, 0);
+          motion(devID, eb->x, eb->y);
           break;
         case MotionNotify:
-          motion(eb->x, eb->y);
+          motion(devID, eb->x, eb->y);
           if(!m_pimpl->have_border) {
             int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
             err=0;
           }
           break;
         case KeyPress:
-          key(m_pimpl->key2string(kb), kb->keycode, 1);
+          key(devID, m_pimpl->key2string(kb), kb->keycode, 1);
           break;
         case KeyRelease:
-          key(m_pimpl->key2string(kb), kb->keycode, 0);
+          key(devID, m_pimpl->key2string(kb), kb->keycode, 0);
           break;
         case ConfigureNotify:
           if ((event.xconfigure.width != m_width) ||

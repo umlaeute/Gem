@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetPointerv , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetPointerv :: GEMglGetPointerv	(t_floatarg arg0=0) {
+GEMglGetPointerv :: GEMglGetPointerv	(t_floatarg arg0) {
 	pnameMess(arg0);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }

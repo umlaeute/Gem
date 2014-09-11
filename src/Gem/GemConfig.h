@@ -61,4 +61,8 @@
 #  define FTGL
 #endif
 
+#ifdef HAVE_PTHREAD
+# define HAVE_PTHREADS
+#endif
+
 #endif /* HAVE_BASE_GEMCONFIG_H_ */

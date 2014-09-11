@@ -57,9 +57,10 @@ void polygon_smooth :: render(GemState *)
 /////////////////////////////////////////////////////////
 void polygon_smooth :: postrender(GemState *)
 {
-  if (m_polygon_smoothState)
+  if (m_polygon_smoothState) {
     glDisable(GL_POLYGON_SMOOTH);
     glDisable(GL_LINE_SMOOTH);
+  }
 }
 
 /////////////////////////////////////////////////////////

@@ -26,20 +26,15 @@ CPPEXTERN_NEW_WITH_GIMME(shearXZ);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-shearXZ :: shearXZ(int argc, t_atom *argv)
+shearXZ :: shearXZ(int argc, t_atom *argv) :
+  shear(0.f)
 {
-    if (argc == 1)
-    {
-        shear = atom_getfloat(&argv[0]);
-    }
-    else if (argc == 0)
-    {
-        shear = 0.f;
-    }
+  if (argc) {
+    shear = atom_getfloat(&argv[0]);
+  }
 
-    // create the new inlets
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("shearVal"));
-
+  // create the new inlets
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("shearVal"));
 }
 
 /////////////////////////////////////////////////////////

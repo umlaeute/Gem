@@ -11,7 +11,7 @@
 #X obj 14 183 rotate 45 0 0 1;
 #X obj 14 203 translate 2 0 1 0;
 #X text 170 17 A tutorial on recursion in Gem;
-#X text 170 37 (GPL) 2007 Claude Heiland-Allen <claudiusmaximus@goto10.org>
+#X text 170 37 (GPL) 2007 Claude Heiland-Allen <claude@mathr.co.uk>
 ;
 #X text 170 77 A common idiom in Gem is to use the [repeat] object
 found in the Zexy library \, to generate multiple copies of the same

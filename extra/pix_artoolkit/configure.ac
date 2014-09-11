@@ -13,11 +13,7 @@ GEM_CHECK_FAT(GEM_ARCH)
 AC_SUBST(GEM_ARCH_CXXFLAGS)
 AC_SUBST(GEM_ARCH_LDFLAGS)
 
-GEM_CHECK_LIB(artoolkit,AR, arInitCparam,,,,ARToolKit)
-AC_CHECK_HEADERS([AR/ar.h])
-AC_CHECK_LIB([AR], [arInitCparam])
-
-
+GEM_CHECK_LIB([artoolkit],[AR],[AR/ar.h], [arInitCparam],,,,[ARToolKit])
 
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile])

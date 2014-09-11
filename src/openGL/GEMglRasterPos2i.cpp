@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2i , t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRasterPos2i :: GEMglRasterPos2i	(t_floatarg arg0=0, t_floatarg arg1=0) :
+GEMglRasterPos2i :: GEMglRasterPos2i	(t_floatarg arg0, t_floatarg arg1) :
 		x(static_cast<GLint>(arg0)),
 		y(static_cast<GLint>(arg1))
 {

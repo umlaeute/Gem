@@ -19,6 +19,8 @@
 #include "Gem/Files.h"
 #include "Gem/Exception.h"
 
+#include <algorithm>
+
 gem::plugins::imagesaver :: ~imagesaver(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver> fac_imagesaverdummy;
@@ -224,7 +226,7 @@ namespace gem { namespace plugins {
 	  m_ids.push_back(key);
 	  m_savers.push_back(saver);
 	  count++;
-	  verbose(2, "added backend#%d '%s' @ 0x%x", m_savers.size()-1, key.c_str(), saver);
+	  verbose(2, "added backend#%d '%s' @ %p", (int)(m_savers.size()-1), key.c_str(), saver);
 	}
       }
       return (count>0);

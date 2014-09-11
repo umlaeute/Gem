@@ -28,6 +28,9 @@ gem_videoDV4L_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
 # flags for building Gem externals
 gem_videoDV4L_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
 gem_videoDV4L_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# flags for threading
+gem_videoDV4L_la_CXXFLAGS += @GEM_THREADS_CFLAGS@
+gem_videoDV4L_la_LIBADD   += @GEM_THREADS_LIBS@
 # gem_videoDV4L_la @MOREFLAGS@
 
 # Dependencies

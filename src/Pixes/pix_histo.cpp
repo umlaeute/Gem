@@ -36,7 +36,7 @@
 CPPEXTERN_NEW_WITH_GIMME(pix_histo);
 
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_histo
 //
@@ -44,7 +44,9 @@ CPPEXTERN_NEW_WITH_GIMME(pix_histo);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_histo :: pix_histo(int argc, t_atom *argv)
+pix_histo :: pix_histo(int argc, t_atom *argv) :
+  name_R(0), name_G(0), name_B(0), name_A(0),
+  m_mode(0)
 {
   setMess(argc, argv);
 }
@@ -89,6 +91,7 @@ void pix_histo :: setMess(int argc, t_atom *argv)
     name_R=name_G=name_B=name_A=atom_getsymbol(ap);
     m_mode=1;
     break;
+    /* coverity[unterminated_case] */
   case 4:
     name_A=atom_getsymbol(ap+3);
     m_mode=4;
@@ -102,34 +105,6 @@ void pix_histo :: setMess(int argc, t_atom *argv)
 
 
 ///////////////
-// check if array exists and whether it is a floatarray
-//
-///////////////
-t_float* pix_histo :: checkarray(t_symbol *s, int *length)
-{
-    t_garray *a;
-    t_float  *fp;
-    *length = 0;
-
-    if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-    {
-    	if (*s->s_name) error("%s: no such array", s->s_name);
-    	fp = 0;
-    }
-    else if (!garray_getfloatarray(a, length, &fp))
-    {
-    	error("%s: bad template for tabwrite~", s->s_name);
-    	fp = 0;
-    }
-
-    if (*length==0){
-      error("table %s is zero-lengthed", s->s_name);
-      fp=0;
-    }
-    return fp;
-}
-
-///////////////
 // update graphs
 //
 ///////////////
@@ -138,9 +113,11 @@ void pix_histo :: update_graphs(void)
   t_garray *a;
 
   switch (m_mode) {
+    /* coverity[unterminated_case] */
   case 4:
     if ((a = (t_garray *)pd_findbyclass(name_A, garray_class)))
       garray_redraw(a);
+    /* coverity[unterminated_case] */
   case 3:
     if ((a = (t_garray *)pd_findbyclass(name_G, garray_class)))
       garray_redraw(a);
@@ -174,11 +151,13 @@ void pix_histo :: processRGBAImage(imageStruct &image)
 
   if (m_mode==0) return;
   switch (m_mode) {
+    /* coverity[unterminated_case] */
   case 4:
     if(!tabA.isValid())return;
     n_A=tabA.size();
     tabA.set(0);
 
+    /* coverity[unterminated_case] */
   case 3:
     if(!tabB.isValid())return;
     n_B=tabB.size();
@@ -255,6 +234,7 @@ void pix_histo :: processYUVImage(imageStruct &image)
 
   if (m_mode==0) return;
   switch (m_mode) {
+    /* coverity[unterminated_case] */
   case 3:
     if(!tabU.isValid())return;
     n_U=tabU.size();

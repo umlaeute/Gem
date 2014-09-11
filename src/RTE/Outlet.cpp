@@ -33,15 +33,13 @@ public:
     if(parent_)parent_=NULL;
   }
   static bool any2atom(const gem::any value, t_atom&atom) {
-    const std::type_info*typ=&value.get_type();
-
     double d=0;
     std::string s=std::string();
     void*p=NULL;
 
     t_atomtype atype=A_FLOAT;
 
-#define ISTYPE(type) (*typ == typeid(type))
+#define ISTYPE(type) (value.compatible<type>())
     if (value.empty()) {
       return false;
     } else if(ISTYPE(bool)) {

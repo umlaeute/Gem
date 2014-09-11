@@ -31,8 +31,8 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
     m_inletH(NULL), m_inletcX(NULL), m_inletcY(NULL),
     m_gridX(0), m_gridY(0),
     m_alreadyInit(false),
-    m_sizeX(0.f), m_sizeY(0.f), m_sizeY0(0.f)
-
+    m_sizeX(0.f), m_sizeY(0.f), m_sizeY0(0.f),
+    m_rippleMax(0.f)
 {
   int gridXi=static_cast<int>(gridX);
   int gridYi=static_cast<int>(gridY);
@@ -266,7 +266,9 @@ void ripple :: ripple_dynamics(void)
           sy = 1.0;
         mi = x;
         mj = y;
+	/* coverity[dead_error_line] <0 is a safety check (even if it never triggers) */
         if(mi<0)mi=0;if(mi>=m_gridX)mi=m_gridX-1;
+	/* coverity[dead_error_line] <0 is a safety check (see above) */
         if(mj<0)mj=0;if(mj>=m_gridY)mj=m_gridY-1;
 
         r = m_t[k] - m_rippleVector[mi][mj].r;
@@ -332,7 +334,7 @@ void ripple :: ripple_bang(void)
 {
   int index = 0;
 
-  while (m_t[index] < m_max[index] && index < RIPPLE_COUNT)    index++;
+  while (index < RIPPLE_COUNT && m_t[index] < m_max[index])    index++;
 
   if (index < RIPPLE_COUNT)    {
     m_cx[index] = (int)(1.0*m_ctrX/m_sizeX*m_gridX);

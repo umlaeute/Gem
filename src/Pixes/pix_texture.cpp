@@ -255,7 +255,6 @@ void pix_texture :: render(GemState *state) {
   pushTexCoords(state);
 
   if(!m_textureOnOff)return;
-  if(!state)return;
 
   bool upsidedown=false;
   bool normalized=true;
@@ -383,7 +382,7 @@ void pix_texture :: render(GemState *state) {
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
-      m_imagebuf.fromYUV422(img->image.data);
+      if(img)m_imagebuf.fromYUV422(img->image.data);
     }
     if (normalized) {
       m_buffer.xsize = m_imagebuf.xsize;
@@ -506,7 +505,7 @@ void pix_texture :: render(GemState *state) {
         img->newfilm = 0;
       }
 
-      if(m_pbo) {
+      if(m_pbo && m_numPbo) {
         m_curPbo=(m_curPbo+1)%m_numPbo;
         int index=m_curPbo;
         int nextIndex=(m_curPbo+1)%m_numPbo;
@@ -724,7 +723,7 @@ void pix_texture :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else {
-    if(GLEW_EXT_texture_edge_clamp)
+    if( (getState()!=INIT) && GLEW_EXT_texture_edge_clamp)
       m_repeat = GL_CLAMP_TO_EDGE;
     else
       m_repeat = GL_CLAMP;

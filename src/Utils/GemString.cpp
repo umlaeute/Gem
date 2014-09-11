@@ -9,7 +9,7 @@ typedef unsigned __int8 uint8_t;
 # include <stdint.h>
 #endif
 
-#ifdef HAVE_LIBFRIBIDI
+#ifdef  HAVE_FRIBIDI_H
 # include <fribidi.h>
 
 #include "m_pd.h"
@@ -69,7 +69,7 @@ namespace gem {
 };
 
 
-#else /* !HAVE_LIBFRIBIDI */
+#else /* !HAVE_FRIBIDI_H */
 namespace gem {
   namespace string {
     std::wstring getVisualLine(const std::string&instring)  { return toWstring(instring.c_str()); }
@@ -78,7 +78,7 @@ namespace gem {
     }
   };
 };
-#endif /* !HAVE_LIBFRIBIDI */
+#endif /* !HAVE_FRIBIDI_H */
 
 
 static const uint8_t utf8d[] = {

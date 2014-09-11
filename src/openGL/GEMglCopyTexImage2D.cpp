@@ -23,12 +23,14 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyTexImage2D );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglCopyTexImage2D :: GEMglCopyTexImage2D	(int argc,t_atom*argv){
-	target=0;
-	level=0;
-	internalFormat=0;
-	x=y=width=0;
-	border=0;
+GEMglCopyTexImage2D :: GEMglCopyTexImage2D	(int argc,t_atom*argv) :
+  target(0),
+  level(0),
+  internalFormat(0),
+  x(0), y(0),
+  width(0), height(0),
+  border(0)
+{
 	if (argc>0)target        =atom_getint(argv+0);
 	if (argc>1)level         =atom_getint(argv+1);
 	if (argc>2)internalFormat=atom_getint(argv+2);

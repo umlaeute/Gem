@@ -58,6 +58,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
     break;
+    /* coverity[unterminated_default] */
   default:
     error("needs 0, 2, or 4 values");
   case 0:
@@ -144,6 +145,10 @@ void pix_snap2tex :: setTexCoords(float x, float y) {
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: snapMess(void)
 {
+ if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
   int width  = m_width;

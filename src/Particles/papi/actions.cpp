@@ -1515,8 +1515,11 @@ void PAVortex::Execute(ParticleGroup *group)
 // Stuff for the pDomain.
 
 pDomain::pDomain(PDomainEnum dtype, float a0, float a1,
-				 float a2, float a3, float a4, float a5,
-				 float a6, float a7, float a8)
+		 float a2, float a3, float a4, float a5,
+		 float a6, float a7, float a8) :
+  type(dtype),
+  radius1(0.f),     radius2(1.f),
+  radius1Sqr(0.f),  radius2Sqr(1.f)
 {
 	type = dtype;
 	switch(type)

@@ -72,8 +72,6 @@ class GEM_EXTERN gemhead : public gemreceive
 
  private:
 
-  t_outlet    	*m_out1;
-
   GemCache    	*m_cache;   	    	    // The cache information
 
   void            outputRenderOnOff(int state);

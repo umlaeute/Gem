@@ -25,26 +25,21 @@
 #include <stdexcept>
 #include <typeinfo>
 #include <algorithm>
+#include <string>
 
 
 namespace gem
 {
   struct GEM_EXTERN bad_any_cast : std::bad_cast {
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
-      : from(src.name()), to(dest.name())
+      : result(std::string("bad cast (")+src.name() + "->" + dest.name()+")")
     { }
     virtual ~bad_any_cast(void) throw()
     { }
-    virtual const std::string what(void) {
-      std::string result = std::string("bad cast(");
-      result+= from;
-      result+= std::string("->");
-      result+= to;
-      result+= std::string(")");
-      return result;
+    virtual const char* what(void) const throw() {
+      return result.c_str();
     }
-    const std::string from;
-    const std::string to;
+    const std::string result;
   };
 
   namespace any_detail {
@@ -65,7 +60,11 @@ namespace gem
       template<typename T>
       struct type {
         static const std::type_info& get_type(void) {
-          return typeid(T);
+          const std::type_info&res=typeid(T);
+          // the following is a dummy use of the type_info struct
+          // to make the template engine work properly on OSX/10.9
+          static std::string _ = res.name();
+          return res;
         }
         static void static_delete(void** x) {
           reinterpret_cast<T*>(x)->~T();
@@ -88,7 +87,8 @@ namespace gem
       template<typename T>
       struct type {
         static const std::type_info& get_type(void) {
-          return typeid(T);
+          const std::type_info&res=typeid(T);
+          return res;
         }
         static void static_delete(void** x) {
           delete(*reinterpret_cast<T**>(x));
@@ -234,7 +234,7 @@ namespace gem
 
     template<typename T>
     const T& cast(void) const {
-      if (get_type() != typeid(T)) {
+      if (!compatible<T>()) {
         throw bad_any_cast(get_type(), typeid(T));
       }
       if (sizeof(T) <= sizeof(void*)) {
@@ -243,6 +243,16 @@ namespace gem
       else {
         return *reinterpret_cast<T const*>(object);
       }
+    }
+
+    /// Returns true if the two types are the same.
+    bool compatible(const any& x) const {
+        return get_type() == x.get_type();
+    }
+    /// Returns true if the two types are the same.
+    template<typename T>
+    bool compatible() const {
+        return (get_type() == typeid(T));
     }
 
   // implicit casting is disabled by default

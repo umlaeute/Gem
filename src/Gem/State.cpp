@@ -37,7 +37,7 @@
 # pragma warning( disable : 4996 )
 #endif
 
-#define CATCH_ANY(y) catch(gem::bad_any_cast&x) { ::verbose(3, "%s:%d [%s] %d:: %s", __FILE__, __LINE__, __FUNCTION__, (y), x.what().c_str()); }
+#define CATCH_ANY(y) catch(gem::bad_any_cast&x) { ::verbose(3, "%s:%d [%s] %d:: %s", __FILE__, __LINE__, __FUNCTION__, (y), x.what()); }
 
 using namespace gem;
 
@@ -162,6 +162,7 @@ GemState::GemState(const GemState&org) :
   multiTexUnits(org.multiTexUnits),
   tickTime(org.tickTime),
   drawType(org.drawType),
+  VertexDirty(org.VertexDirty),
   VertexArray(org.VertexArray),
   VertexArraySize(org.VertexArraySize),
   VertexArrayStride(org.VertexArrayStride),
@@ -171,7 +172,7 @@ GemState::GemState(const GemState&org) :
   HaveNormalArray(org.HaveNormalArray),
   TexCoordArray(org.TexCoordArray),
   HaveTexCoordArray(org.HaveTexCoordArray),
-  data(NULL)
+  data(new GemStateData())
 {
   data->copyFrom(org.data);
 }
@@ -232,9 +233,9 @@ bool GemState::get(const GemState::key_t key, any&value) {
     if(key==_PIX) { value=image; return true; }
     if(key==_GL_TEX_NUMCOORDS) { value=numTexCoords; return true; }
 
-
     return false; // FIXXME
 
+#if 0
     if(key==_DIRTY) { value=dirty; return true; }
     if(key==_GL_DISPLAYLIST) { value=inDisplayList; return true; }
 
@@ -245,6 +246,7 @@ bool GemState::get(const GemState::key_t key, any&value) {
     if(key==_GL_TEX_UNITS) { value=multiTexUnits; return true; }
     if(key==_TIMING_TICK) { value=tickTime; return true; }
     if(key==_GL_DRAWTYPE) { value=drawType; return true; }
+#endif
 
 #if 0
     //if(key==GemState::_GL_STACKS) { value=stackDepth[4]; return true; }
@@ -325,12 +327,12 @@ const GemState::key_t GemState::getKey(const std::string&s) {
 
   std::map<std::string, int>::iterator it =  GemStateData::keys.find(s);
 
-  if(it == GemStateData::keys.end()) {
+  if(it != GemStateData::keys.end()) {
     result=(key_t)it->second;
   } else {
+    /* add a new key */
     result=(key_t)GemStateData::keys.size();
     GemStateData::keys[s]=result;
   }
-
   return result;
 }

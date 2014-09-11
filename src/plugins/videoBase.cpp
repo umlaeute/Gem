@@ -11,10 +11,13 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#include "Gem/GemConfig.h"
 
 #include "plugins/videoBase.h"
 #include "Gem/RTE.h"
-
+#ifdef HAVE_SYS_SELECT_H
+# include <sys/select.h>
+#endif
 #include <iostream>
 
 #if 0
@@ -72,6 +75,9 @@ public:
 
   PIMPL(const std::string name_, unsigned int locks_, unsigned int timeout_) :
     threading(locks_>0),
+#ifndef HAVE_PTW32_HANDLE_T
+    thread(0),
+#endif
     locks(NULL),
     numlocks(0),
     asynchronous(true), condition_cond(NULL), condition_mutex(NULL),

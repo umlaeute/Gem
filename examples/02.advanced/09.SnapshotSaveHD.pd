@@ -1,4 +1,4 @@
-#N canvas 482 49 762 392 10;
+#N canvas 73 51 832 392 10;
 #X msg 26 26 create \, 1;
 #X msg 39 53 destroy;
 #X obj 340 29 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
@@ -19,11 +19,15 @@ in the GEM window with the white rectangle edge.;
 #X obj 151 125 gemreceive \$0-gemhead;
 #X obj 151 145 separator;
 #X text 303 136 <-- a [gemhead] replacement;
-#X text 387 56 1st and 2nd arguments : resolution (here : 3000x2000
+#X text 407 50 1st and 2nd arguments : resolution (here : 3000x2000
 pixels);
 #X obj 151 52 snapshotHD 4000 2000 /tmp/myPic.tif;
-#X text 390 74 3rd argument : TIFF file name (here : /tmp/myPic.tif)
+#X text 410 68 3rd argument : TIFF file name (here : /tmp/myPic.tif)
 ;
+#X text 152 333 [snapshotHD] uses openGL-framebuffers. thus the maximum
+resolution is limited by your openGL-implementation!;
+#X msg 342 90 symbol /tmp/foo.tif;
+#X text 485 93 <- save as another imagefile.;
 #X connect 0 0 6 0;
 #X connect 1 0 6 0;
 #X connect 2 0 17 1;
@@ -37,3 +41,4 @@ pixels);
 #X connect 13 0 14 0;
 #X connect 14 0 8 0;
 #X connect 17 0 12 0;
+#X connect 20 0 17 1;

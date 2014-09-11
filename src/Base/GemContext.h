@@ -23,7 +23,7 @@ typedef struct WGLEWContextStruct WGLEWContext;
 typedef struct GLXEWContextStruct GLXEWContext;
 #  define GemGlewXContext GLXEWContext
 # else
-#  define GemGlewXContext void
+// no GemGlewXContext on this platform...
 # endif
 
 typedef struct GLEWContextStruct GLEWContext;
@@ -50,7 +50,9 @@ class GEM_EXTERN Context {
  public:
   static unsigned int getContextId(void);
   static GLEWContext*getGlewContext(void);
+#ifdef GemGlewXContext
   static GemGlewXContext*getGlewXContext(void);
+#endif /* GemGlewXContext */
 };
 
 }; // namespace

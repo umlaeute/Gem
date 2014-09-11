@@ -25,6 +25,8 @@
 
 #include "RTE/Symbol.h"
 
+#include <algorithm>
+
 CPPEXTERN_NEW_WITH_GIMME(pix_video);
 
 
@@ -485,7 +487,7 @@ void pix_video :: dialogMess(int argc, t_atom*argv)
     std::vector<std::string>data;
     while(argc>0) {
       data.push_back(std::string(atom_getsymbol(argv)->s_name));
-      argv++;
+      argv++;argc--;
     }
 
     if(!m_videoHandle->dialog(data)) {

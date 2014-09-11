@@ -92,6 +92,10 @@ class GEM_EXTERN pix_film : public GemBase
   virtual void autoMess(double state);
 
   //////////
+  // (re)query info from loaded film
+  virtual void bangMess();
+
+  //////////
   // which backend to use (exclusively)
   std::vector<std::string>m_backends;
   virtual void backendMess(t_symbol*,int,t_atom*);

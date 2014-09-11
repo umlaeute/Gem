@@ -42,9 +42,12 @@ CPPEXTERN_NEW_WITH_GIMME(pix_curve);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_curve :: pix_curve(int argc, t_atom *argv)
+pix_curve :: pix_curve(int argc, t_atom *argv):
+  name_R(0), name_G(0), name_B(0), name_A(0),
+  m_mode(0)
 {
-  setMess(argc, argv);
+  if(argc)
+    setMess(0, argc, argv);
 }
 
 /////////////////////////////////////////////////////////
@@ -60,7 +63,7 @@ pix_curve :: ~pix_curve()
 // Set Message
 //
 ///////////////////////////////////
-void pix_curve :: setMess(int argc, t_atom *argv)
+void pix_curve :: setMess(t_symbol*,int argc, t_atom *argv)
 {
   t_atom *ap=argv;
   int n=argc;
@@ -87,6 +90,7 @@ void pix_curve :: setMess(int argc, t_atom *argv)
     name_R=name_G=name_B=name_A=atom_getsymbol(ap);
     m_mode=1;
     break;
+    /* coverity[unterminated_case] */
   case 4:
     name_A=atom_getsymbol(ap+3);
     m_mode=4;
@@ -98,35 +102,9 @@ void pix_curve :: setMess(int argc, t_atom *argv)
   setPixModified();
 }
 
-
-///////////////
-// check if array exists and whether it is a floatarray
-//
-///////////////
-t_float* pix_curve :: checkarray(t_symbol *s, int *length)
-{
-    t_garray *a;
-    t_float  *fp;
-    *length = 0;
-
-    if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-    {
-    	if (*s->s_name) error("%s: no such array", s->s_name);
-    	fp = 0;
-    }
-    else if (!garray_getfloatarray(a, length, &fp))
-    {
-    	error("%s: bad template for tabwrite~", s->s_name);
-    	fp = 0;
-    }
-
-    if (*length==0){
-      error("table %s is zero-lengthed", s->s_name);
-      fp=0;
-    }
-    return fp;
-}
-
+#define setTable(tab, nam) if (nam)tab.name(nam->s_name)
+#define checkTable(tab) bool use_##tab=tab.isValid(); int n_##tab=tab.size()
+#define applyTable(tab, chan) if (use_##tab) base[chan]=CLAMP(static_cast<int>(tab[ n_##tab*base[chan]>>8 ]));
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -137,41 +115,53 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
 
-  int n_R, n_G, n_B, n_A;
+  switch(m_mode){
+  case 4: case 3: case 1:  break;
+  default:                 return;
+  }
 
-  if (m_mode==0) return;
+  gem::RTE::Array tabR, tabG, tabB, tabA;
 
-  gem::RTE::Array tabR=gem::RTE::Array(name_R->s_name);
-  gem::RTE::Array tabG=gem::RTE::Array(name_G->s_name);
-  gem::RTE::Array tabB=gem::RTE::Array(name_B->s_name);
-  gem::RTE::Array tabA=gem::RTE::Array(name_A->s_name);
+  switch(m_mode) {
+  case 4:
+    setTable(tabA, name_A);
+  case 3:
+    setTable(tabR, name_R);
+    setTable(tabG, name_G);
+    setTable(tabB, name_B);
+    break;
+  case 1:
+    setTable(tabR, name_R);
+    setTable(tabG, name_R);
+    setTable(tabB, name_R);
+    setTable(tabA, name_R);
+    break;
+  default:
+    error("invalid mode %d", m_mode);
+    return;
+  }
 
-  n_R=tabR.size();
-  n_G=tabG.size();
-  n_B=tabB.size();
-  n_A=tabA.size();
+  checkTable(tabR);
+  checkTable(tabG);
+  checkTable(tabB);
+  checkTable(tabA);
 
   switch (m_mode) {
   case 3: // only RGB
-    if(! (tabR.isValid() && tabG.isValid() && tabB.isValid()))
-       return;
     while (i--) {
-      base[chRed  ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed  ]>>8 ]));
-      base[chGreen]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen]>>8 ]));
-      base[chBlue ]=CLAMP(static_cast<int>(tabB[ n_B*base[chBlue ]>>8 ]));
-
+      applyTable(tabR, chRed);
+      applyTable(tabG, chGreen);
+      applyTable(tabB, chBlue);
       base+=4;
     }
     break;
   case 4: // RGBA
   case 1: // one table for all
-    if(! (tabR.isValid() && tabG.isValid() && tabB.isValid() && tabA.isValid()))
-       return;
     while (i--) {
-      base[chRed   ]=CLAMP(static_cast<int>(tabR[ n_R*base[chRed   ]>>8 ]));
-      base[chGreen ]=CLAMP(static_cast<int>(tabG[ n_G*base[chGreen ]>>8 ]));
-      base[chBlue  ]=CLAMP(static_cast<int>(tabB[ n_B*base[chBlue  ]>>8 ]));
-      base[chAlpha ]=CLAMP(static_cast<int>(tabA[ n_A*base[chAlpha]>>8 ]));
+      applyTable(tabR, chRed);
+      applyTable(tabG, chGreen);
+      applyTable(tabB, chBlue);
+      applyTable(tabA, chBlue);
 
       base+=4;
     }
@@ -187,13 +177,17 @@ void pix_curve :: processGrayImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
+  switch(m_mode){
+  case 1: break;
+  default: return;
+  }
 
-  gem::RTE::Array tab=gem::RTE::Array(name_R->s_name);
-  int n = tab.size();
+  gem::RTE::Array tabY;
+  setTable(tabY, name_R);
+  checkTable(tabY);
 
-  if(!tab.isValid())return;
   while (i--) {
-    base[chGray]=CLAMP(static_cast<int>(tab[ n*base[chGray]>>8 ]));
+    applyTable(tabY, chGray);
     base++;
   }
 }
@@ -202,40 +196,35 @@ void pix_curve :: processYUVImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize/2;
   unsigned char *base = image.data;
+  switch(m_mode){
+  case 3: case 1:  break;
+  default:         return;
+  }
 
-  int n_Y, n_U, n_V;
+  gem::RTE::Array tabY, tabU, tabV;
 
-  if (m_mode==0) return;
-
-  gem::RTE::Array tabY=gem::RTE::Array(name_R->s_name);
-  gem::RTE::Array tabU=gem::RTE::Array(name_G->s_name);
-  gem::RTE::Array tabV=gem::RTE::Array(name_B->s_name);
-
-  n_Y=tabY.size();
-  n_U=tabU.size();
-  n_V=tabV.size();
+  setTable(tabY, name_R);
+  setTable(tabU, name_G);
+  setTable(tabV, name_B);
+  checkTable(tabY);
+  checkTable(tabU);
+  checkTable(tabV);
 
   switch (m_mode) {
+  case 4: // ignore 4th table
   case 3: // YUV
-    if(! (tabY.isValid() && tabU.isValid() && tabV.isValid()))
-      return;
     while (i--) {
-      base[chU ]=CLAMP(static_cast<int>(tabY[ n_U*base[chU ]>>8 ]));
-      base[chY0]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY0]>>8 ]));
-      base[chV ]=CLAMP(static_cast<int>(tabY[ n_V*base[chV ]>>8 ]));
-      base[chY1]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY1]>>8 ]));
-
+      applyTable(tabU, chU );
+      applyTable(tabY, chY0);
+      applyTable(tabV, chV );
+      applyTable(tabY, chY1);
       base+=4;
     }
     break;
   case 1: // only Y
-    if(! (tabY.isValid()))
-      return;
-
     while (i--) {
-      base[chY0]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY0]>>8 ]));
-      base[chY1]=CLAMP(static_cast<int>(tabY[ n_Y*base[chY1]>>8 ]));
-
+      applyTable(tabY, chY0);
+      applyTable(tabY, chY1);
       base+=4;
     }
   default:
@@ -249,11 +238,5 @@ void pix_curve :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_curve :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_curve::setMessCallback),
-		  gensym("set"), A_GIMME,0);
-}
-
-void pix_curve :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)
-{
-    GetMyClass(data)->setMess(argc, argv);
+  CPPEXTERN_MSG(classPtr, "set", setMess);
 }

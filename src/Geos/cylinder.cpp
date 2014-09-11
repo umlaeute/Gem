@@ -64,6 +64,7 @@ void cylinder :: render(GemState *state)
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;
   GLint i, j;
+  /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
   GLboolean orientation = false; /* true=INSIDE */
   GLfloat nsign = (orientation)?-1.0:1.0;
 

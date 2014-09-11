@@ -7,6 +7,8 @@
  * Modified so that it doesn't exit on error.
  * Added support for reading grayscale, rgb, and rgba images
  *				Mark Danks - 1998
+ * Added support for embedding a name when writing images
+ *                              IOhannes m zmölnig - 2014
  */
 
 #ifndef __SGIIMAGE_H__
@@ -16,7 +18,8 @@
 
 
 extern unsigned int32 *getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize);
-extern int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, const char *name);
+extern int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
+			const char *filename, const char*name);
 extern unsigned int32 *longimagedata(const char *name);
 extern int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize);
 

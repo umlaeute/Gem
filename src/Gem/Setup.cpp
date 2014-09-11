@@ -91,7 +91,7 @@ extern "C" {
 
 
 
-namespace Gem {
+namespace {
   static bool checkVersion(const char*dirname, const char*filename, int flags) {
     t_binbuf*bb=binbuf_new();
     if(binbuf_read(bb, const_cast<char*>(filename), const_cast<char*>(dirname), flags)) {
@@ -140,15 +140,15 @@ namespace Gem {
 
     bool result=gem::Version::versionCheck(major,minor);
     if(!result) {
-      error("Gem binary/abstractions version mismatch!");
-      verbose(0, "Gem binary is %d.%d, but Gem abstractions are %s", GEM_VERSION_MAJOR, GEM_VERSION_MINOR, gotversion.c_str());
-      verbose(0, "This usually means that you have a path to another version of Gem stored in your startup preferences");
-      verbose(0, "Consider removing the wrong path!");
+      error("GEM: binary/abstractions version mismatch!");
+      error("GEM:   continue at your own risk...");
+      verbose(0, "GEM: binary is %d.%d, but Gem abstractions are %s", GEM_VERSION_MAJOR, GEM_VERSION_MINOR, gotversion.c_str());
+      verbose(0, "GEM: This usually means that you have a path to another version of Gem stored in your startup preferences");
+      verbose(0, "GEM: Consider removing the wrong path!");
     }
     
     return result;
   }
-
 
   static void addownpath(const char*filename) {
     char buf[MAXPDSTRING];
@@ -178,15 +178,21 @@ namespace Gem {
       _close(fd);
     } else {
       // can't find this abstraction...giving up
-      verbose(0, "please add path to '%s' to your search-path!", filename);
+      error("GEM: unable to find Gem's abstractions");
+      error("GEM: please add path to '%s' to your search-path!", filename);
       return;
     }
 
 #ifdef GEM_ADDPATH
-    verbose(1, "eventually adding Gem path '%s' to search-paths", mypath);
+    verbose(1, "GEM: eventually adding Gem's path '%s' to search-paths", mypath);
     sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
 #else
-    verbose(0, "please manually add '%s' to your search-path!", mypath);
+    error("GEM: unable to find Gem's abstractions!");
+    error("GEM: please manually add '%s' to your search-path", mypath);
+#ifndef HAVE_S_STUFF_H
+    verbose(2, "GEM: Gem cannot auto-add the search path,");
+    verbose(2, "GEM:   due to missing <s_stuff.h> during compilation");
+#endif
 #endif
 
     checkVersion(mypath, filename, flags);

@@ -129,7 +129,8 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     }
 
     preName[i] = '\0';
-    strcpy(postName, &(strPtr[i+1]));
+    strncpy(postName, &(strPtr[i+1]), 255);
+    postName[255]='\0';
 
     // need to figure out how many filenames there are to load
     m_numImages = (topImage + 1 - baseImage) / skipRate;

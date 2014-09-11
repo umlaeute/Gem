@@ -43,7 +43,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <asm/types.h>
 # include <linux/videodev2.h>
 # include <sys/mman.h>
-#ifdef HAVE_PTHREADS
+#if (defined HAVE_PTHREADS) || (defined HAVE_PTHREAD)
 /* the bad thing is, that we currently don't have any alternative to using PTHREADS
  * LATER: make threading optional
  *        (or at least disabled capturing when no pthreads are available)

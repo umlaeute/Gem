@@ -75,8 +75,6 @@ class GEM_EXTERN pix_duotone : public GemPixObj
     	// The new offset
     	unsigned char 	m_color1[3],m_color2[3],m_thresh[3];
 
-        short Y,U,V;
-
     private:
 
     	//////////

@@ -60,6 +60,7 @@ class GEM_EXTERN pix_multitexture : public GemBase
     	virtual void 	postrender(GemState *state);
 
         t_inlet**m_inlet;
+	unsigned int m_numInlets;
 
 	int			m_reqTexUnits; // requested # of texture Units, defaults to m_max
 	GLint			m_max; // maximum # of texture units suppport by the specific card

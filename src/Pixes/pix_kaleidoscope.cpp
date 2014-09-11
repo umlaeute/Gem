@@ -27,39 +27,46 @@ CPPEXTERN_NEW(pix_kaleidoscope);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_kaleidoscope :: pix_kaleidoscope()
+pix_kaleidoscope :: pix_kaleidoscope() :
+  nWidth(0), nHeight(0),
+  hAngleTable(0), hCosTable(0), hLines(0),
+  nMaxLines(128),
+  pSource(0), pOutput(0),
+  m_Divisions(7.0f),
+  m_OutputAnglePreIncrement(0.0f),
+  m_SourceAnglePreIncrement(0.0f),
+  m_SourceCentreX(0.5f),
+  m_SourceCentreY(0.5f),
+  m_OutputCentreX(0.5f),
+  m_OutputCentreY(0.5f),
+  m_ReflectionLineProportion(0.5f),
+  m_SourceAngleProportion(1.0f),
+
+  nCosTableSizeShift(10),
+  nCosTableSize((1<<nCosTableSizeShift)),
+  nFixedShift(16),
+  nFixedMult((1<<nFixedShift)),
+  nFixedMask((nFixedMult-1)),
+  nDistanceShift(6),
+  nDistanceMult((1<<nDistanceShift)),
+  FixedAngleMult((nFixedMult/Pete_TwoPi)),
+  nHalfPiFA((nFixedMult/4)),
+  nFAToCosTableShift((nFixedShift - nCosTableSizeShift)),
+  Pete_Kaleidoscope_Epsilon(0.0001f),
+  nMaxDivisions(64),
+  init(0),
+
+  m_Angle(0.f),
+  m_PlaneD(0.f),
+  m_DoSimpleMirrorAll(0.f),
+
+#ifdef NO_HACK
+  g_pCurrentCosTable(0),
+#endif
+  m_inDiv(0), m_inSAngle(0), m_inSCtr(0),
+  m_inOAngle(0), m_inOCtr(0), m_inRlp(0),
+  m_inSap(0)
 {
-  m_Divisions = 7.0f;
-  m_OutputAnglePreIncrement = 0.0f;
-  m_SourceAnglePreIncrement = 0.0f;
-  m_SourceCentreX = 0.5f;
-  m_SourceCentreY = 0.5f;
-  m_OutputCentreX = 0.5f;
-  m_OutputCentreY = 0.5f;
-  m_ReflectionLineProportion = 0.5f;
-  m_SourceAngleProportion = 1.0f;
-  nMaxLines=128;
-  nCosTableSizeShift = 10;
-  nCosTableSize = (1<<nCosTableSizeShift);
-
-  nFixedShift = 16;
-  nFixedMult = (1<<nFixedShift);
-  nFixedMask = (nFixedMult-1);
-
-  nDistanceShift = 6;
-  nDistanceMult = (1<<nDistanceShift);
-
-  FixedAngleMult = (nFixedMult/Pete_TwoPi);
-
-  nHalfPiFA = (nFixedMult/4);
-
-  nFAToCosTableShift = (nFixedShift - nCosTableSizeShift);
-
-  Pete_Kaleidoscope_Epsilon = 0.0001f;
-
-  nMaxDivisions = 64;
-  init =0;
-
   m_inDiv=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("div"));
   m_inSAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("sourceAngle"));
   m_inSCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("sourceCtr"));
@@ -985,13 +992,15 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
     Pete_Kaleidoscope_Init();
     init = 1;
   }
-  unsigned char* pSource = image.data;
+  unsigned char*pSourceP=image.data;
+  pSource = reinterpret_cast<U32*>(pSourceP);
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
   myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
-  unsigned char* pOutput = myImage.data;
+  unsigned char*pOutputP=myImage.data;
+  pOutput = reinterpret_cast<U32*>(pOutputP);
 
   if (m_Divisions<1.0f) {
     const int nByteCount=(nWidth*nHeight*sizeof(unsigned char));
@@ -1080,7 +1089,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
     float PreviousRowU = 0.0f;
     float PreviousRowV = 0.0f;
 
-    unsigned char* pOutputLineStart=pOutput+(nScanLine*nWidth);
+    unsigned char* pOutputLineStart=pOutputP+(nScanLine*nWidth);
     while ((pCurrentLine<=pLinesGroupEnd)&&(PreviousIntersectionX<RightX)) {
       const bool bIsFinalSpan=(pCurrentLine==pLinesGroupEnd);
       const bool bIsFirstSpan=(pCurrentLine==pLinesGroupStart);
@@ -1399,7 +1408,7 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 	    const int nUIntegral=(nLocalCurrentU>>nFPShift);
 	    const int nVIntegral=(nLocalCurrentV>>nFPShift);
 	    unsigned char* pCurrentSource=
-	      pSource+(nVIntegral*nWidth)+nUIntegral;
+	      pSourceP+(nVIntegral*nWidth)+nUIntegral;
 	    *pCurrentOutput=*pCurrentSource;
 	    pCurrentOutput+=1;
 	    nLocalCurrentU+=nLocalDeltaU;
