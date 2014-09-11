@@ -216,19 +216,16 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   switch(m_wantedFormat) {
   default: // if no other format is requested, use YUV
   case GL_YCBCR_422_APPLE:
-post("YUV");
     m_image.image.format = m_wantedFormat;
     hints |= hintsHighQuality | hintsDeinterlaceFields;
     pixelformat=k422YpCbCr8CodecType;
     break;
   case GL_BGRA_EXT:
-post("BGRA");
     m_image.image.format = GL_BGRA_EXT;
     hints |= hintsHighQuality;
     pixelformat=k32ARGBPixelFormat;
     break;
   case GL_RGBA:
-post("RGBA");
     m_image.image.format = GL_RGBA;
     hints |= hintsHighQuality;
     pixelformat=k32RGBAPixelFormat;
