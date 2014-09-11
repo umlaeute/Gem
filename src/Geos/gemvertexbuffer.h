@@ -114,6 +114,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void partialDrawMess(unsigned int start, unsigned int end);
   void setProgramID(float ID);
   void attribute(t_symbol*s, int argc, t_atom *argv);
+  void attribVBO_enableMess(bool flag);
 
   // Rendering window vars
   unsigned int vbo_size;

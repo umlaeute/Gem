@@ -246,6 +246,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   /* attributes */
   CPPEXTERN_MSG1 (classPtr, "program"          , setProgramID, float);
   CPPEXTERN_MSG  (classPtr, "attribute"        , attribute);
+  CPPEXTERN_MSG1 (classPtr, "attribute_enable" , attribVBO_enableMess , bool);
 }
 
 void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv){
@@ -332,17 +333,21 @@ void gemvertexbuffer :: posVBO_enableMess (bool flag){	m_position.enabled = flag
 void gemvertexbuffer :: colVBO_enableMess (bool flag){	m_color   .enabled = flag; }
 void gemvertexbuffer :: texVBO_enableMess (bool flag){	m_texture .enabled = flag; }
 void gemvertexbuffer :: normVBO_enableMess(bool flag){	m_normal  .enabled = flag; }
+void gemvertexbuffer :: attribVBO_enableMess (bool flag) {	
+  for(unsigned int i=0;i<m_attribute.size();i++)m_attribute[i].enabled=flag;
+}
 
 void gemvertexbuffer :: enableMess (t_symbol*s, int argc, t_atom *argv){
   int i;
   for(i=0; i<argc; i++) {
     if(0) {;}
+	else if("attribute"==std::string(atom_getsymbol(argv+i)->s_name))attribVBO_enableMess(true);
     else if("position"==std::string(atom_getsymbol(argv+i)->s_name))m_position.enabled=true;
     else if("color"   ==std::string(atom_getsymbol(argv+i)->s_name))m_color   .enabled=true;
     else if("texture" ==std::string(atom_getsymbol(argv+i)->s_name))m_texture .enabled=true;
     else if("normal"  ==std::string(atom_getsymbol(argv+i)->s_name))m_normal  .enabled=true;
     else {
-      error("enable: illegal argument#%d: must be 'position', 'color', 'texture' or 'normal'", i);
+      error("enable: illegal argument#%d: must be 'position', 'color', 'texture', 'normal' or 'attribute'", i);
     }
   }
 }
@@ -350,12 +355,13 @@ void gemvertexbuffer :: disableMess (t_symbol*s, int argc, t_atom *argv){
   int i;
   for(i=0; i<argc; i++) {
     if(0) {;}
+	else if("attribute"==std::string(atom_getsymbol(argv+i)->s_name))attribVBO_enableMess(false);
     else if("position"==std::string(atom_getsymbol(argv+i)->s_name))m_position.enabled=false;
     else if("color"   ==std::string(atom_getsymbol(argv+i)->s_name))m_color   .enabled=false;
     else if("texture" ==std::string(atom_getsymbol(argv+i)->s_name))m_texture .enabled=false;
     else if("normal"  ==std::string(atom_getsymbol(argv+i)->s_name))m_normal  .enabled=false;
     else {
-      error("disable: illegal argument#%d: must be 'position', 'color', 'texture' or 'normal'", i);
+      error("disable: illegal argument#%d: must be 'position', 'color', 'texture', 'normal' or 'attribute'", i);
     }
   }
 }
@@ -387,6 +393,7 @@ void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv, VertexBuffer&ar
 void gemvertexbuffer :: resizeMess(unsigned int size)
 {
   vbo_size = size>1?size:1;
+  for(unsigned int i=0;i<m_attribute.size();i++) m_attribute[i].resize(vbo_size);
   m_position.resize(vbo_size);
   m_texture .resize(vbo_size);
   m_color   .resize(vbo_size);
