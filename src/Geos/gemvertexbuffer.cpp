@@ -405,6 +405,7 @@ void gemvertexbuffer :: partialDrawMess(unsigned int start, unsigned int end)
 //*****************************************************************************
 void gemvertexbuffer :: createVBO(void)
 {
+  for(unsigned int i=0;i<m_attribute.size();i++)m_attribute[i].create();
   m_position.create();
   m_texture .create();
   m_color   .create();
