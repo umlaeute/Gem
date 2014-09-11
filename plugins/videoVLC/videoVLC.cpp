@@ -299,7 +299,7 @@ void videoVLC::unlockFrame(void*picture, void*const*plane) {
 #ifdef __APPLE__
     m_pixBlock.image.fromARGB(m_convertImg->data);
 #else
-    m_pixBlock.image.fromRGBA(m_convertImg->data);
+    m_pixBlock.image.fromBGRA(m_convertImg->data);
 #endif /* __APPLE__ */
   }
 
@@ -326,10 +326,7 @@ void videoVLC::displayCB(void*opaque, void*picture) {
   videoVLC*obj=(videoVLC*)opaque;
 }
 void videoVLC::resize(unsigned int width, unsigned int height, GLenum format) {
-  bool do_convert = false;
-#ifdef __APPLE__
-  do_convert=true;
-#endif
+  bool do_convert = true;
 
   if(0==format)
     format=format_enum;
