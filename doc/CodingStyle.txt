@@ -4,79 +4,13 @@ Coding Guidelines for Gem
 
 Questions
 =========
-read the entire CodingStyle guide.
-if you still have questions, please ask them on the gem-dev mailinglist:
+Read the entire CodingStyle guide.
+
+If you still have questions, please ask them on the gem-dev mailinglist:
    http://lists.puredata.info/listinfo/gem-dev
 
-Version Control System
-======================
-Gem uses `git` for source code management.
-the official public repository is on github:
-   https://github.com/umlaeute/Gem
-a secondary repository is on sourceforge:
-   git://git.code.sf.net/p/pd-gem/gem
-
-contributing
-------------
-if you want to contribute, please make sure that your changes can be
-applied to the latest HEAD (which might be slightly different from the one
-when you started working on your contribution).
-
-the preferred way for contributing is by forking the github repository
-and creating a pull request once your code is ready.
-
-if you do not want to create an account on github, this is fine as well.
-Just clone the repository, and send me the patch-set.
-e.g.
-
-    $ git clone https://github.com/umlaeute/Gem.git
-    $ cd Gem
-    $ git checkout -b nifty_feature
-    // now fix a bug
-    $ git commit -m "fixed crasher bug"
-    // now add a feature
-    $ git commit -m "made zgonc work"
-
-    $ git format-path master/origin
-    // this will create a number of .patch files
-    // zip them, and send them to me
-    $ tar cvzf /tmp/nifty_feature.tgz *.patch
-
-
-git commits
------------
-commit often!
-
-We want to be able to track down a bug to the very commit it was introduced (e.g. using `git bisect`).
-If this commit does numerous unrelated things, it makes finding the bug unnecessary complicated.
-
-Here are a few rules that should help to make good commits:
-
-Each commit should be a *small* and *incremental* change to the codebase.
-
-please break your commit into *sensible* chunks.
-A sensible chunk only does a single thing (e.g. "fix bug #666", or "proper indentation").
-If you have fixed two bugs in a single file, it's probably good to make this *two separate* commits.
-Even if each commit only changes a single line.
-Otoh, a sensible chunk *can* (and often does) spread over multiple files.
-E.g. if you have added a new feature by adding a new method to an object, this most often means that
-you had to edit both the header and the implementation file for this object.
-The changes to both files belong together and therefore should go into a single commit.
-
-Avoid committing pd-patches and C++ code within the same
-commit. Conflicts in C++-code can usually easily be resolved, whereas
-conflicts in Pd-patches are usually impossible to resolve (but for the
-most trivial cases).
-
-Do *not* add binary data to the git repository (without a consensus on gem-dev first).
-Not even temporarily!
-
-git branching
--------------
-Try to avoid forking from branches other than master.
-Esp. avoid branches on top of branches.
-Before committing a pull request, make sure that your branch applies clean to current master.
-
+A general discussion about the "contribution workflow" in Gem can be found in the gem wiki:
+   https://github.com/umlaeute/Gem/wiki/Contributing
 
 
 Programming Language
