@@ -21,6 +21,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include <Carbon/Carbon.h>
 # include <QuickTime/QuickTime.h>
 #elif defined _WIN32
+
+
+# ifdef __MINGW32__
+/* hack to avoid the use of microsofts non-standard extension (u)i64 instead of (U)LL */
+#  include <ConditionalMacros.h>
+#  undef TARGET_OS_WIN32
+#  include <Math64.h>
+#  define TARGET_OS_WIN32 1
+# endif /* MINGW */
+
 # include <QTML.h>
 # include <Movies.h>
 #endif
