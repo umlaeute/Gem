@@ -20,6 +20,7 @@
 #include "Gem/Manager.h"
 #include <math.h>
 #include <stdio.h>
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 

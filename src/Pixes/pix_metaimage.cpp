@@ -14,6 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_metaimage.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_metaimage);
 

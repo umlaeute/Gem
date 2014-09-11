@@ -27,6 +27,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_tIIR.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 

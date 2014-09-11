@@ -14,6 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_refraction.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_refraction);
 

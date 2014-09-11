@@ -14,6 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_halftone.h"
+#include "Utils/Functions.h"
 
 #ifndef NDEBUG
 # define NDEBUG

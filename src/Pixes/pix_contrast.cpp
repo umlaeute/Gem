@@ -8,6 +8,7 @@
  */
 
 #include "pix_contrast.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_contrast);
 

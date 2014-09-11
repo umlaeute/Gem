@@ -22,10 +22,6 @@ LOG
 #include <string.h>
 #include <stdlib.h>
 
-// basic helper functions, like CLAMP and powerOfTwo
-#include "Utils/Functions.h"
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Color component defines
 //

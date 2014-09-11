@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "pix_mean_color.h"
-
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_mean_color);
 
