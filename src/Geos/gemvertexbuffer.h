@@ -51,6 +51,10 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
     float*array;
     bool dirty;
     bool enabled;
+	GLuint attrib_index;
+	std::string attrib_name;
+	std::string attrib_array;
+	unsigned int offset;
   };
 
 
