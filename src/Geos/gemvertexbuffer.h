@@ -73,7 +73,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   // Do the rendering
   virtual void renderShape(GemState *state);
   //virtual void 	runKernel();
-  void tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset);
+  void tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array, unsigned int offset);
   void resizeMess(float size);
 
  private :
@@ -81,7 +81,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void createVBO(void);
   void copyArray(const std::string&tab_name, VertexBuffer&array, unsigned int stride, unsigned int offset);
 
-  void tableMess (VertexBuffer&vb, std::string name, int argc, t_atom *argv);
+  void tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv);
   void positionMess(t_symbol*,int,t_atom*);
   void textureMess(t_symbol*,int,t_atom*);
   void colorMess(t_symbol*,int,t_atom*);
@@ -104,8 +104,8 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void colVBO_enableMess(bool flag);
   void texVBO_enableMess(bool flag);
   void normVBO_enableMess(bool flag);
-  void enableMess(t_symbol*,int,t_atom*);
-  void disableMess(t_symbol*,int,t_atom*);
+  void enableMess(t_symbol*,unsigned int,t_atom*);
+  void disableMess(t_symbol*,unsigned int,t_atom*);
   void partialDrawMess(unsigned int start, unsigned int end);
 
   // Rendering window vars
