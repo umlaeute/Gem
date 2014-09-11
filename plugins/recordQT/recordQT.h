@@ -25,7 +25,7 @@
 
 # include <QTML.h>
 # include <Movies.h>
-# include <QuicktimeComponents.h>
+# include <QuickTimeComponents.h>
 #endif
 #ifdef __APPLE__
 # include <QuickTime/QuickTime.h>
