@@ -247,6 +247,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1 (classPtr, "program"          , setProgramID, float);
   CPPEXTERN_MSG  (classPtr, "attribute"        , attribute);
   CPPEXTERN_MSG1 (classPtr, "attribute_enable" , attribVBO_enableMess , bool);
+  CPPEXTERN_MSG0 (classPtr, "reset_attributes" , resetAttributes);
 }
 
 void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv){
@@ -561,4 +562,9 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   for(unsigned int i=0;i<m_attribute.size();i++)
     copyArray(m_attribute[i].attrib_array, m_attribute[i], 1, m_attribute[i].offset*m_attribute[i].stride);
   return;
+}
+
+void gemvertexbuffer :: resetAttributes(void)
+{
+  std::vector<VertexBuffer>().swap(m_attribute);
 }

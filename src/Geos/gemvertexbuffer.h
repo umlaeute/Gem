@@ -115,6 +115,7 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void setProgramID(float ID);
   void attribute(t_symbol*s, int argc, t_atom *argv);
   void attribVBO_enableMess(bool flag);
+  void resetAttributes(void);
 
   // Rendering window vars
   unsigned int vbo_size;
