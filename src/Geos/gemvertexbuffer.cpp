@@ -109,6 +109,7 @@ gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
 {
   m_range[0]=0;
   m_range[1]=-1;
+  glsl_program=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -209,6 +210,8 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "colVBO_enable" , colVBO_enableMess , bool);
   CPPEXTERN_MSG1(classPtr, "texVBO_enable" , texVBO_enableMess , bool);
   CPPEXTERN_MSG1(classPtr, "normVBO_enable", normVBO_enableMess, bool);
+  /* attributes */
+  CPPEXTERN_MSG1 (classPtr, "program"          , setProgramID, float);
 }
 
 void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv){
@@ -419,4 +422,14 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, u
     }
   }
   vb.dirty=true;
+}
+
+// attributes
+//*****************************************************************************
+
+void gemvertexbuffer :: setProgramID(float ID)
+{
+  // add 0.5 to glsl_program ID
+  float fix = 0.5f;
+  glsl_program = ID + fix;
 }

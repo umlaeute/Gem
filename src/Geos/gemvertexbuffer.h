@@ -107,10 +107,12 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void enableMess(t_symbol*,unsigned int,t_atom*);
   void disableMess(t_symbol*,unsigned int,t_atom*);
   void partialDrawMess(unsigned int start, unsigned int end);
+  void setProgramID(float ID);
 
   // Rendering window vars
   unsigned int vbo_size;
   unsigned int m_range[2];
   bool size_change_flag;
+  unsigned int glsl_program;
   VertexBuffer m_position, m_texture, m_color, m_normal;
 };
