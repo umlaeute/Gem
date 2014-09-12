@@ -19,6 +19,7 @@ LOG
 #include "Base/GemPixObj.h"
 #include "Gem/Image.h"
 #include "Gem/PBuffer.h"
+#include "Utils/GemMath.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
