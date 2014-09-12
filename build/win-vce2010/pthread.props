@@ -18,7 +18,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(PTHREAD_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HAVE_PTHREADS;HAVE_PTHREAD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_PTW32_HANDLE_T;HAVE_PTHREADS;HAVE_PTHREAD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>pthreadVC.lib;%(AdditionalDependencies)</AdditionalDependencies>
