@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_bitmask.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_bitmask);
 

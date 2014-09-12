@@ -19,6 +19,7 @@
 
 #include "Gem/Settings.h"
 #include "Gem/Image.h"
+#include "Utils/Functions.h"
 #include <string.h>
 
 #ifdef debug

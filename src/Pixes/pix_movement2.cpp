@@ -16,7 +16,7 @@
 
 #include "pix_movement2.h"
 #include <string.h>
-#include <math.h>
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_movement2, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
 

@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_offset.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_offset);
 

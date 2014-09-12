@@ -26,7 +26,7 @@
 #include "m_pd.h"
 #include "Image.h"
 #include "PixConvert.h"
-
+#include "Utils/Functions.h"
 // utility functions from PeteHelpers.h
 //#include "Utils/PixPete.h"
 

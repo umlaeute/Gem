@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_rgb2hsv.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_rgb2hsv);
 
