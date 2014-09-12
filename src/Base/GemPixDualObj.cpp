@@ -20,6 +20,7 @@
 
 #include "Gem/Cache.h"
 #include "Gem/State.h"
+#include "Utils/Functions.h"
 
 #include <string.h>
 #include <stdio.h>

@@ -8,6 +8,8 @@
  */
 
 #include "pix_blur.h"
+#include "Utils/Functions.h"
+
 CPPEXTERN_NEW(pix_blur);
 
 /////////////////////////////////////////////////////////

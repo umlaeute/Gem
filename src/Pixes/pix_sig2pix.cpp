@@ -18,6 +18,7 @@
 
 #include "pix_sig2pix.h"
 #include "Gem/State.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
 

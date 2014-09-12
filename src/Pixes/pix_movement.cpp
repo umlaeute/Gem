@@ -24,12 +24,7 @@
 
 #include "pix_movement.h"
 #include <string.h>
-#include <math.h>
-#include <time.h>
-#ifdef __APPLE__
-# include <Carbon/Carbon.h>
-#endif
-
+#include "Utils/Functions.h"
 #include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT);

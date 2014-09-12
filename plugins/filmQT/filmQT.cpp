@@ -17,19 +17,6 @@
 # include "config.h"
 #endif
 
-#if defined __APPLE__
-# if !defined __x86_64__
-// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
-// LATER make this a real check in configure
-#  define HAVE_CARBONQUICKTIME
-# elif defined HAVE_QUICKTIME
-#  undef HAVE_QUICKTIME
-# endif
-#endif
-
-#ifdef HAVE_QUICKTIME
-
-
 #include "filmQT.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/Properties.h"
@@ -229,19 +216,16 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   switch(m_wantedFormat) {
   default: // if no other format is requested, use YUV
   case GL_YCBCR_422_APPLE:
-post("YUV");
     m_image.image.format = m_wantedFormat;
     hints |= hintsHighQuality | hintsDeinterlaceFields;
     pixelformat=k422YpCbCr8CodecType;
     break;
   case GL_BGRA_EXT:
-post("BGRA");
     m_image.image.format = GL_BGRA_EXT;
     hints |= hintsHighQuality;
     pixelformat=k32ARGBPixelFormat;
     break;
   case GL_RGBA:
-post("RGBA");
     m_image.image.format = GL_RGBA;
     hints |= hintsHighQuality;
     pixelformat=k32RGBAPixelFormat;
@@ -416,4 +400,3 @@ void filmQT :: LoadRam(void){
   }
 }
 #endif // LoadRAM
-#endif // HAVE_QT
