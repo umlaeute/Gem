@@ -1845,21 +1845,6 @@
     <ClInclude Include="..\..\src\Gem\configNT.h">
       <Filter>config</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Pixes\pix_filmOS.h">
-      <Filter>Objects\Pixes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Pixes\pix_movieDS.h">
-      <Filter>Objects\Pixes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Pixes\pix_movieOS.h">
-      <Filter>Objects\Pixes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Pixes\pix_recordQT.h">
-      <Filter>Objects\Pixes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Pixes\pix_videoOS.h">
-      <Filter>Objects\Pixes</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Utils\Functions.cpp">
@@ -3619,21 +3604,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Base\TextBaseNone.cpp">
       <Filter>Objects\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Pixes\pix_filmOS.cpp">
-      <Filter>Objects\Pixes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Pixes\pix_movieDS.cpp">
-      <Filter>Objects\Pixes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Pixes\pix_movieOS.cpp">
-      <Filter>Objects\Pixes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Pixes\pix_recordQT.cpp">
-      <Filter>Objects\Pixes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Pixes\pix_videoOS.cpp">
-      <Filter>Objects\Pixes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
