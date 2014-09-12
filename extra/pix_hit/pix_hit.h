@@ -13,6 +13,7 @@
 #define _INCLUDE__GEM_PIXES_PIX_HIT_H_
 
 #include "Base/GemPixObj.h"
+#include "Utils/Functions.h"
 
 #include <stdio.h>
 
