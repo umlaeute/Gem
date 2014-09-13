@@ -234,7 +234,7 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, unsigned i
       offset=atom_getfloat(argv+1);
     }
     tabname=std::string(atom_getsymbol(argv)->s_name);
-    copyArray(tabname, vb, 0, offset*vb.stride);
+    copyArray(tabname, vb, 1, offset*vb.stride);
     vb.enabled=true;
     return;
   }
