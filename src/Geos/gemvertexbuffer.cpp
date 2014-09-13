@@ -370,7 +370,7 @@ void gemvertexbuffer :: disableMess (t_symbol*s, int argc, t_atom *argv){
 
 
 
-void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array, int offset)
+void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array, unsigned int offset)
 {
   int offset2 = 0;
   if ( argv[0].a_type != A_SYMBOL )

@@ -109,8 +109,8 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   void colVBO_enableMess(bool flag);
   void texVBO_enableMess(bool flag);
   void normVBO_enableMess(bool flag);
-  void enableMess(t_symbol*,unsigned int,t_atom*);
-  void disableMess(t_symbol*,unsigned int,t_atom*);
+  void enableMess(t_symbol*,int,t_atom*);
+  void disableMess(t_symbol*,int,t_atom*);
   void partialDrawMess(unsigned int start, unsigned int end);
   void setProgramID(float ID);
   void attribute(t_symbol*s, int argc, t_atom *argv);
