@@ -151,8 +151,8 @@ void gemvertexbuffer :: renderShape(GemState *state)
   unsigned int start = std::min(m_range[0], m_range[1]);
   unsigned int end   = std::max(m_range[0], m_range[1]);
 
-  if(start>=vbo_size)start=vbo_size-1;
-  if(end  >=vbo_size)end  =vbo_size-1;
+  if(start>=vbo_size)start=vbo_size;
+  if(end  >=vbo_size)end  =vbo_size;
 
   if (start == end && 0 == start) {
     start=0;
