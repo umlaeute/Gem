@@ -119,6 +119,7 @@ void gemvertexbuffer :: VertexBuffer:: destroy (void) {
 gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   vbo_size(size>0?size:(256*256)),
   size_change_flag(false),
+  glsl_program(0),
   m_position(vbo_size,3),
   m_texture (vbo_size,2),
   m_color   (vbo_size,4),
@@ -126,7 +127,6 @@ gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
 {
   m_range[0]=0;
   m_range[1]=-1;
-  glsl_program=0;
 }
 
 /////////////////////////////////////////////////////////
