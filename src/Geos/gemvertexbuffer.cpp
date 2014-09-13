@@ -211,7 +211,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "normVBO_enable", normVBO_enableMess, bool);
 }
 
-void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, int argc, t_atom *argv){
+void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv){
   int offset=0;
   std::string tabname;
   unsigned int i;
@@ -325,7 +325,7 @@ void gemvertexbuffer :: disableMess (t_symbol*s, int argc, t_atom *argv){
 
 
 
-void gemvertexbuffer :: tabMess(int argc, t_atom *argv, VertexBuffer&array, int offset)
+void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array, int offset)
 {
   int offset2 = 0;
   if ( argv[0].a_type != A_SYMBOL )
@@ -377,7 +377,8 @@ void gemvertexbuffer :: createVBO(void)
 void gemvertexbuffer :: copyArray(const std::string&tab_name, VertexBuffer&vb, unsigned int stride, unsigned int offset)
 {
   t_garray *a;
-  int npoints, i;
+  int npoints;
+  unsigned int i;
   t_word *vec;
 
   if(offset>vb.size) {
