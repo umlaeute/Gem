@@ -529,7 +529,9 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
     return;
   }
 
-  glGetActiveAttrib(glsl_program, glsl_index, NULL, NULL, NULL, &attrib_type, NULL);
+  glGetActiveAttrib(glsl_program, glsl_index,  /* GLuint program, GLuint index */
+                    0, NULL, NULL,          /* GLsizei maxLength, GLsizei* length, GLint* size */
+                    &attrib_type, NULL);       /* GLenum* type, GLchar* name */
   switch(attrib_type)
   {
   case GL_FLOAT:      vbo_stride=1;
