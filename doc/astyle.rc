@@ -1,3 +1,6 @@
+## asytyle configuration for Gem
+# usage: astyle --options=astyle.conf file.cpp
+
 ## CRLF line-ending
 lineend=linux
 
