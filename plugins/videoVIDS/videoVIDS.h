@@ -1,13 +1,9 @@
-#ifndef _INCLUDE_GEMPLUGIN__VIDEOVLC_VIDEOVLC_H_
-#define _INCLUDE_GEMPLUGIN__VIDEOVLC_VIDEOVLC_H_
+#ifndef _INCLUDE_GEMPLUGIN__VIDEOVIDS_VIDEOVIDS_H_
+#define _INCLUDE_GEMPLUGIN__VIDEOVIDS_VIDEOVIDS_H_
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
 #include <stdarg.h>
-
-#ifndef VLC_VAR_TIME
-typedef int64_t mtime_t;
-#endif /* VLC_VAR_TIME */
 
 namespace gem
 {
