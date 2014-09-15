@@ -32,12 +32,15 @@ using namespace gem::plugins;
 REGISTER_VIDEOFACTORY("VIDS", videoVIDS);
 
 videoVIDS::videoVIDS(void) :
-  m_name(std::string("videoInput"))
+  m_name(std::string("videoInput")),
+  m_ID(-1), m_wantID(-1)
 {
+  m_vi.setVerbose(false);
 }
 
 videoVIDS::~videoVIDS(void)
 {
+  close();
 }
 const std::string videoVIDS::getName(void)
 {
@@ -56,16 +59,27 @@ std::vector<std::string>videoVIDS::provides(void)
 
 std::vector<std::string>videoVIDS::enumerate(void)
 {
-  std::vector<std::string>result;
+  m_vi.listDevices();
+  std::vector<std::string>result=m_vi.getDeviceList();
   return result;
 }
 
 bool videoVIDS::setDevice(int ID)
 {
-  return false;
+  m_wantID=ID;
+  return true;
 }
 bool videoVIDS::setDevice(std::string device)
 {
+  if(m_vi.listDevices(true)) {
+    std::vector<std::string>devs=m_vi.getDeviceList();
+    for(unsigned int i=0; i<devs.size(); i++) {
+      if(devs[i]==device) {
+	m_wantID=i;
+	return true;
+      }
+    }
+  }
   return false;
 }
 bool videoVIDS::enumProperties(gem::Properties&readable,
@@ -118,28 +132,63 @@ void videoVIDS::getProperties(gem::Properties&props)
 
 bool videoVIDS::open(gem::Properties&props)
 {
+  if(m_wantID>=0 && m_wantID<m_vi.listDevices(true))
+    return true;
+
   return false;
 }
 void videoVIDS::close(void)
 {
+  stop();
+  m_wantID=-1;
 }
 
 bool videoVIDS::start(void)
 {
+  if(m_wantID>=0) {
+    if(m_vi.setupDevice(m_wantID)) {
+      m_ID=m_wantID;
+      return true;
+    }
+  }
   return false;
 }
 bool videoVIDS::stop (void)
 {
+  if(m_ID>=0) {
+    m_vi.stopDevice(m_ID);
+    m_ID=-1;
+    return true;
+  }
   return false;
 }
 bool videoVIDS::reset()
 {
+  if(m_ID>=0) {
+    return m_vi.restartDevice(m_ID);
+  }
   return false;
 }
 
 pixBlock*videoVIDS::getFrame(void)
 {
-  return 0;
+  if(m_ID<0)return NULL;
+  if(m_vi.isFrameNew(m_ID)){
+    int w=m_vi.getWidth(m_ID);
+    int h=m_vi.getHeight(m_ID);
+    unsigned char*data=m_pixBlock.image.data;
+    m_pixBlock.image.xsize=w;
+    m_pixBlock.image.ysize=h;
+    m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+    m_pixBlock.image.reallocate();
+    m_pixBlock.newimage=(data==m_pixBlock.image.data);
+
+    m_pixBlock.image.fromRGB(m_vi.getPixels(m_ID, true, true));
+    m_pixBlock.newimage=true;
+  } else {
+    m_pixBlock.newimage=false;
+  }
+  return &m_pixBlock;
 }
 
 void videoVIDS::releaseFrame(void)
@@ -149,11 +198,25 @@ void videoVIDS::releaseFrame(void)
 std::vector<std::string>videoVIDS::dialogs(void)
 {
   std::vector<std::string>result;
+  result.push_back("format");
   return result;
 }
 bool videoVIDS::dialog(std::vector<std::string>dlgs)
 {
-  return false;
+  bool doit=false;
+  if(m_ID>=0) {
+    if(dlgs.empty())
+      doit=true;
+
+    if(!doit) {
+      for(unsigned int i=0; i<dlgs.size(); i++)
+	if(dlgs[i]=="format")doit=true;
+    }
+    if(doit) {
+      m_vi.showSettingsWindow(m_ID);
+    }
+  }
+  return doit;
 }
 
 bool videoVIDS::isThreadable()

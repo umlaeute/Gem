@@ -3,7 +3,12 @@
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
-#include <stdarg.h>
+
+#ifdef NULL
+# undef NULL
+# define NULL 0
+#endif
+#include <videoInput.h>
 
 namespace gem
 {
@@ -51,6 +56,8 @@ private:
   std::string m_name;
   pixBlock m_pixBlock;
   gem::Properties m_props;
+  videoInput m_vi;
+  int m_ID, m_wantID;
 };
 };
 }; // namespace
