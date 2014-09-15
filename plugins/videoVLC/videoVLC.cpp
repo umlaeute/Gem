@@ -52,16 +52,7 @@ videoVLC::videoVLC(void) :
   m_instance(NULL),
   m_mediaplayer(NULL)
 {
-  const char * const vlc_args[] = {
-    //"--plugin-path=c:\\program files\\videolan\\vlc\\plugins",
-#if 0
-    "-I", "dummy", /* Don't use any interface */
-    "--ignore-config", /* Don't use VLC's config */
-    "--quiet",
-#endif
-    //    "--sout=#transcode{vcodec=RV24,acodec=s16l}:smem",
-  };
-  m_instance=libvlc_new (sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+  m_instance=libvlc_new (0, 0);
   if(!m_instance) {
     throw(GemException("couldn't initialize libVLC"));
   }
