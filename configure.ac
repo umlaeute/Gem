@@ -57,6 +57,7 @@ AC_CONFIG_FILES([plugins/videoUNICAP/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
+AC_CONFIG_FILES([plugins/videoVIDS/Makefile])
 AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 
 ## extra holds additional objects/libraries
