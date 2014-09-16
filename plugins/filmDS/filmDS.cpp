@@ -1136,13 +1136,18 @@ filmDS::~filmDS()
   close();
 }
 
-bool filmDS::open(const std::string path, const gem::Properties&)
+bool filmDS::open(const std::string path, const gem::Properties&props)
 {
   close();
   player = new DirectShowVideo();
   bool res=player->loadMovie(path);
-  if(res)
+  if(res) {
     player->play();
+    double d;
+    if(props.get("auto", d)) {
+      player->setSpeed(d);
+    }
+  }
 
   return res;
 }
@@ -1211,11 +1216,18 @@ bool filmDS::enumProperties(gem::Properties&readable,
   readable.set("width", value);
   readable.set("height", value);
 
-
+  writeable.set("auto", value);
   return true;
 }
 void filmDS::setProperties(gem::Properties&props)
-{}
+{
+  double d;
+  if(props.get("auto", d)) {
+    if(player && player->isLoaded()) {
+      player->setSpeed(d);
+    }
+  }
+}
 void filmDS::getProperties(gem::Properties&props)
 {
   std::vector<std::string> keys=props.keys();
