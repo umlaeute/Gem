@@ -22,6 +22,11 @@
 #include <aviriff.h>
 #include <windows.h>
 
+#ifndef HEADER
+// Returns the address of the BITMAPINFOHEADER from the VIDEOINFOHEADER
+# define HEADER(pVideoInfo) (&(((VIDEOINFOHEADER *) (pVideoInfo))->bmiHeader))
+#endif
+
 //for threading
 #include <process.h>
 
