@@ -1035,7 +1035,10 @@ public:
     }
     return 0;
   }
-
+  double getFramesPerSecond(void)
+  {
+    return 1. / averageTimePerFrame;
+  }
   void getPixels(unsigned char * dstBuffer)
   {
 
