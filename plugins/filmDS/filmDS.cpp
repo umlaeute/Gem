@@ -539,23 +539,26 @@ public:
     //printf("step 6\n");
     std::wstring filePathW = std::wstring(path.begin(), path.end());
 
+#define USE_RENDERFILE
+#ifdef USE_RENDERFILE
     //this is the easier way to connect the graph, but we have to remove the video window manually
     hr = m_pGraph->RenderFile(filePathW.c_str(), NULL);
-
+#else
     //this is the more manual way to do it - its a pain though because the audio won't be connected by default
-    /*hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile);
+    hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile);
     if (FAILED(hr)){
         printf("unable to AddSourceFilter\n");
         tearDown();
         return false;
-    }*/
-    //hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
-    //if (FAILED(hr)){
-    //        printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
-    //        tearDown();
-    //        return false;
-    //}
+    }
 
+    hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
+    if (FAILED(hr)){MARK_HR(hr);
+            printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
+            tearDown();
+            return false;
+    }
+#endif
     //printf("step 7\n");
     if (SUCCEEDED(hr)) {
 
@@ -591,13 +594,14 @@ public:
         return false;
       }
 
-      //hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
-      //if (FAILED(hr)){
-      //        printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
-      //        tearDown();
-      //        return false;
-      //}
-
+#ifndef USE_RENDERFILE
+      hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
+      if (FAILED(hr)){MARK_HR(hr);
+              printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
+              tearDown();
+              return false;
+      }
+#endif
       AM_MEDIA_TYPE mt;
       ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
 
@@ -616,6 +620,7 @@ public:
       videoSize = width * height * 3;
       //printf("video dimensions are %i %i\n", width, height);
 
+#ifdef USE_RENDERFILE
       //we need to manually change the output from the renderer window to the null renderer
       IBaseFilter * m_pVideoRenderer;
       IPin* pinIn = 0;
@@ -670,6 +675,7 @@ public:
         tearDown();
         return false;
       }
+#endif
 
       //printf("step 8\n");
       // Run the graph.
