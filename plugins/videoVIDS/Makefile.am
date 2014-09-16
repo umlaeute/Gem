@@ -31,7 +31,7 @@ gem_videoVIDS_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 
 # Dependencies
 gem_videoVIDS_la_CXXFLAGS += -I$(srcdir)/videoInput
-gem_videoVIDS_la_LIBADD   += -lole32 -loleaut32 -lstrmiids -luuid
+gem_videoVIDS_la_LDFLAGS  += -lole32 -loleaut32  -Xlinker -lstrmiids -Xlinker -luuid
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
