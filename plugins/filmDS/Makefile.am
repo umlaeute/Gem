@@ -27,8 +27,8 @@ gem_filmDS_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_filmDS_la @MOREFLAGS@
 
 # Dependencies
-# none
-
+gem_filmDS_la_CXXFLAGS +=
+gem_filmDS_la_LDFLAGS  += -lole32 -loleaut32  -Xlinker -lstrmiids -Xlinker -luuid
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
 
