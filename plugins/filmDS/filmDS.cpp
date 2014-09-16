@@ -539,7 +539,7 @@ public:
     //printf("step 6\n");
     std::wstring filePathW = std::wstring(path.begin(), path.end());
 
-#define USE_RENDERFILE
+//#define USE_RENDERFILE
 #ifdef USE_RENDERFILE
     //this is the easier way to connect the graph, but we have to remove the video window manually
     hr = m_pGraph->RenderFile(filePathW.c_str(), NULL);
