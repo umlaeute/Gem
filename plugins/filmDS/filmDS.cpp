@@ -1034,10 +1034,11 @@ public:
     return 0;
   }
 
-  int getApproximateNoFrames()
+  double getApproximateNoFrames()
   {
     if( bVideoOpened && averageTimePerFrame > 0.0 ) {
-      return getDurationInSeconds() / averageTimePerFrame;
+      double d=getDurationInSeconds() / averageTimePerFrame;
+      return d;
     }
     return 0;
   }
@@ -1251,7 +1252,7 @@ void filmDS::getProperties(gem::Properties&props)
       }
       if("frames"==key) {
 	d=player->getApproximateNoFrames();
-	value=d; props.set(key, value);
+	value=(int)(d+0.5); props.set(key, value);
       }
       if("width"==key) {
 	d=player->getWidth();
