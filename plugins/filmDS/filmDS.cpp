@@ -19,7 +19,7 @@
 
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
-
+#include "Gem/Properties.h"
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -1140,12 +1140,17 @@ bool filmDS::open(const std::string path, const gem::Properties&)
 {
   close();
   player = new DirectShowVideo();
-  return player->loadMovie(path);
+  bool res=player->loadMovie(path);
+  if(res)
+    player->play();
+
+  return res;
 }
 
 void filmDS::close()
 {
   if( player ) {
+    player->stop();
     delete player;
     player = NULL;
   }
@@ -1153,13 +1158,16 @@ void filmDS::close()
 
 pixBlock*filmDS::getFrame(void)
 {
+  printf("getting frame...%p\n", player);
   if(!player || !player->isLoaded())
     return NULL;
 
   m_image.newfilm=false;
   m_image.newimage=false;
 
+  player->update();
   if(player->isFrameNew()) {
+    printf("getting new frame\n");
     m_image.newimage=true;
     int w=player->getWidth();
     int h=player->getHeight();
@@ -1170,27 +1178,73 @@ pixBlock*filmDS::getFrame(void)
       m_image.image.reallocate();
 
       m_image.newfilm=true;
+      printf("getting new film\n");
     }
-    player->update();
     player->getPixels(m_image.image.data);
   }
   return&m_image;
 }
 
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
-{ 
-  return DONTKNOW;
+{
+  if( player && player->isLoaded() ) {
+    if(imgNum<0)
+      return FAILURE;
+
+    //frame = ofClamp(frame, 0, getTotalNumFrames());
+    player->setApproximateFrame(imgNum);
+    return SUCCESS;
+  }
+  return FAILURE;
 }
   // Property handling
 bool filmDS::enumProperties(gem::Properties&readable,
 			    gem::Properties&writeable)
 {
-  return false;
+  readable.clear();
+  writeable.clear();
+
+  gem::any value;
+  value=0.;
+  readable.set("fps", value);
+  readable.set("frames", value);
+  readable.set("width", value);
+  readable.set("height", value);
+
+
+  return true;
 }
 void filmDS::setProperties(gem::Properties&props)
 {}
 void filmDS::getProperties(gem::Properties&props)
-{}
+{
+  std::vector<std::string> keys=props.keys();
+  gem::any value;
+  double d;
+  unsigned int i=0;
+  if(player && player->isLoaded()) {
+    for(i=0; i<keys.size(); i++) {
+      std::string key=keys[i];
+      props.erase(key);
+      if("fps"==key) {
+	d=player->getFramesPerSecond();
+	value=d; props.set(key, value);
+      }
+      if("frames"==key) {
+	d=player->getApproximateNoFrames();
+	value=d; props.set(key, value);
+      }
+      if("width"==key) {
+	d=player->getWidth();
+	value=d; props.set(key, value);
+      }
+      if("height"==key) {
+	d=player->getHeight();
+	value=d; props.set(key, value);
+      }
+    }
+  }
+}
 
 #if 0
 void filmDS::play()
