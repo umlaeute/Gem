@@ -27,6 +27,7 @@
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
+#define MARK_HR(hr)if(hr)printf("%s:%d (%s)\t: 0x%X", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)", __FILE__, __LINE__, __FUNCTION__);
 
 #include <dshow.h>
 #pragma include_alias( "dxtrans.h", "qedit.h" )
