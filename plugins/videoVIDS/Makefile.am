@@ -30,12 +30,16 @@ gem_videoVIDS_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_videoVIDS_la @MOREFLAGS@
 
 # Dependencies
-gem_videoVIDS_la_CXXFLAGS += -I$(srcdir)/videoInput/videoInputSrcAndDemos/libs/videoInput
-gem_videoVIDS_la_LIBADD   += -L$(srcdir)/videoInput/compiledLib/CodeBlocks12/ -lvideoInputLib -lole32 -loleaut32 -lstrmiids -luuid
+gem_videoVIDS_la_CXXFLAGS += -I$(srcdir)/videoInput
+gem_videoVIDS_la_LIBADD   += -lole32 -loleaut32 -lstrmiids -luuid
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
 
 
 ### SOURCES
-gem_videoVIDS_la_SOURCES= videoVIDS.cpp videoVIDS.h
+gem_videoVIDS_la_SOURCES=         \
+	videoInput/videoInput.cpp \
+	videoInput/videoInput.h   \
+	videoVIDS.cpp             \
+	videoVIDS.h
