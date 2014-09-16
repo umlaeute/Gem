@@ -1133,8 +1133,6 @@ filmDS::~filmDS()
 
 bool filmDS::open(const std::string path, const gem::Properties&)
 {
-  path = ofToDataPath(path);
-
   close();
   player = new DirectShowVideo();
   return player->loadMovie(path);
@@ -1148,19 +1146,48 @@ void filmDS::close()
   }
 }
 
-void filmDS::update()
+pixBlock*filmDS::getFrame(void)
 {
-  if( player && player->isLoaded() ) {
-    player->update();
+  if(!player || !player->isLoaded())
+    return NULL;
 
-    if( pix.getWidth() != player->getWidth() ) {
-      pix.allocate(player->getWidth(), player->getHeight(), OF_IMAGE_COLOR);
+  m_image.newfilm=false;
+  m_image.newimage=false;
+
+  if(player->isFrameNew()) {
+    m_image.newimage=true;
+    int w=player->getWidth();
+    int h=player->getHeight();
+    if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
+      m_image.image.xsize=w;
+      m_image.image.ysize=h;
+      m_image.image.setCsizeByFormat(GL_RGB);
+      m_image.image.reallocate();
+
+      m_image.newfilm=true;
     }
-
-    player->getPixels(pix.getPixels());
+    player->update();
+    player->getPixels(m_image.image.data);
   }
+  return&m_image;
 }
 
+film::errCode filmDS::changeImage(int imgNum, int trackNum)
+{ 
+  return DONTKNOW;
+}
+  // Property handling
+bool filmDS::enumProperties(gem::Properties&readable,
+			    gem::Properties&writeable)
+{
+  return false;
+}
+void filmDS::setProperties(gem::Properties&props)
+{}
+void filmDS::getProperties(gem::Properties&props)
+{}
+
+#if 0
 void filmDS::play()
 {
   if( player && player->isLoaded() ) {
@@ -1175,60 +1202,9 @@ void filmDS::stop()
   }
 }
 
-bool filmDS::isFrameNew()
-{
-  return ( player && player->isFrameNew() );
-}
-
-unsigned char * filmDS::getPixels()
-{
-  return pix.getPixels();
-}
-
-ofPixelsRef filmDS::getPixelsRef()
-{
-  return pix;
-}
-
-float filmDS::getWidth()
-{
-  if( player && player->isLoaded() ) {
-    return player->getWidth();
-  }
-  return 0.0;
-}
-
-float filmDS::getHeight()
-{
-  if( player && player->isLoaded() ) {
-    return player->getHeight();
-  }
-  return 0.0;
-}
-
-bool filmDS::isPaused()
-{
-  return ( player && player->isPaused() );
-}
-
-bool filmDS::isLoaded()
-{
-  return ( player && player->isLoaded() );
-}
-
-bool filmDS::isPlaying()
-{
-  return ( player && player->isPlaying() );
-}
-
 bool filmDS::setPixelFormat(ofPixelFormat pixelFormat)
 {
   return (pixelFormat == OF_PIXELS_RGB);
-}
-
-ofPixelFormat filmDS::getPixelFormat()
-{
-  return OF_PIXELS_RGB;
 }
 
 //should implement!
@@ -1240,67 +1216,10 @@ float filmDS::getPosition()
   return 0.0;
 }
 
-float filmDS::getSpeed()
-{
-  if( player && player->isLoaded() ) {
-    return player->getSpeed();
-  }
-  return 0.0;
-}
-
-float filmDS::getDuration()
-{
-  if( player && player->isLoaded() ) {
-    return player->getDurationInSeconds();
-  }
-  return 0.0;
-}
-
-
-bool filmDS::getIsMovieDone()
-{
-  return ( player && player->isMovieDone() );
-}
-
-void filmDS::setPaused(bool bPause)
-{
-  if( player && player->isLoaded() ) {
-    player->setPaused(bPause);
-  }
-}
-
 void filmDS::setPosition(float pct)
 {
   if( player && player->isLoaded() ) {
     player->setPosition(pct);
-  }
-}
-
-void filmDS::setVolume(float volume)
-{
-  if( player && player->isLoaded() ) {
-    player->setVolume(volume);
-  }
-}
-
-void filmDS::setLoopState(ofLoopType state)
-{
-  if( player ) {
-    if( state == OF_LOOP_NONE ) {
-      player->setLoop(false);
-    } else if( state == OF_LOOP_NORMAL ) {
-      player->setLoop(false);
-    } else {
-      ofLogError("filmDS") << " cannot set loop of type palindrome "
-                                       << endl;
-    }
-  }
-}
-
-void filmDS::setSpeed(float speed)
-{
-  if( player && player->isLoaded() ) {
-    player->setSpeed(speed);
   }
 }
 
@@ -1320,40 +1239,16 @@ int filmDS::getTotalNumFrames()
   return 0;
 }
 
-ofLoopType filmDS::getLoopState()
-{
-  if( player ) {
-    if( player->isLooping() ) {
-      return OF_LOOP_NORMAL;
-    }
-
-  }
-  return OF_LOOP_NONE;
-}
-
 void filmDS::setFrame(int frame)
 {
   if( player && player->isLoaded() ) {
     frame = ofClamp(frame, 0, getTotalNumFrames());
     return player->setAproximateFrame(frame);
   }
-}  // frame 0 = first frame...
+}
 
 void filmDS::firstFrame()
 {
   setPosition(0.0);
 }
-
-void filmDS::nextFrame()
-{
-  if( player && player->isLoaded() ) {
-    player->nextFrame();
-  }
-}
-
-void filmDS::previousFrame()
-{
-  if( player && player->isLoaded() ) {
-    player->preFrame();
-  }
-}
+#endif
