@@ -49,7 +49,7 @@ Thanks to:
 
 //this is for TryEnterCriticalSection
 #ifndef _WIN32_WINNT
-	#   define _WIN32_WINNT 0x400
+#   define _WIN32_WINNT 0x400
 #endif
 #include <windows.h>
 
@@ -190,59 +190,60 @@ static int comInitCount = 0;
 
 ////////////////////////////////////////   VIDEO DEVICE   ///////////////////////////////////
 
-class videoDevice{
+class videoDevice
+{
 
 
-	public:
+public:
 
-		videoDevice();
-		void setSize(int w, int h);
-		void NukeDownstream(IBaseFilter *pBF);
-		void destroyGraph();
-		~videoDevice();
+  videoDevice();
+  void setSize(int w, int h);
+  void NukeDownstream(IBaseFilter *pBF);
+  void destroyGraph();
+  ~videoDevice();
 
-		int videoSize;
-		int width;
-		int height;
-		int tryWidth;
-		int tryHeight;
+  int videoSize;
+  int width;
+  int height;
+  int tryWidth;
+  int tryHeight;
 
-		ICaptureGraphBuilder2 *pCaptureGraph;	// Capture graph builder object
-		IGraphBuilder *pGraph;					// Graph builder object
-	    IMediaControl *pControl;				// Media control object
-		IBaseFilter *pVideoInputFilter;  		// Video Capture filter
-		IBaseFilter *pGrabberF;
-		IBaseFilter * pDestFilter;
-		IAMStreamConfig *streamConf;
-		ISampleGrabber * pGrabber;    			// Grabs frame
-		AM_MEDIA_TYPE * pAmMediaType;
+  ICaptureGraphBuilder2 *pCaptureGraph;	// Capture graph builder object
+  IGraphBuilder *pGraph;					// Graph builder object
+  IMediaControl *pControl;				// Media control object
+  IBaseFilter *pVideoInputFilter;  		// Video Capture filter
+  IBaseFilter *pGrabberF;
+  IBaseFilter * pDestFilter;
+  IAMStreamConfig *streamConf;
+  ISampleGrabber * pGrabber;    			// Grabs frame
+  AM_MEDIA_TYPE * pAmMediaType;
 
-		IMediaEventEx * pMediaEvent;
+  IMediaEventEx * pMediaEvent;
 
-		GUID videoType;
-		long formatType;
+  GUID videoType;
+  long formatType;
 
-		SampleGrabberCallback * sgCallback;
+  SampleGrabberCallback * sgCallback;
 
-		bool tryDiffSize;
-		bool useCrossbar;
-		bool readyToCapture;
-		bool sizeSet;
-		bool setupStarted;
-		bool specificFormat;
-		bool autoReconnect;
-		int  nFramesForReconnect;
-		unsigned long nFramesRunning;
-		int  connection;
-		int	 storeConn;
-		int  myID;
-		long requestedFrameTime; //ie fps
+  bool tryDiffSize;
+  bool useCrossbar;
+  bool readyToCapture;
+  bool sizeSet;
+  bool setupStarted;
+  bool specificFormat;
+  bool autoReconnect;
+  int  nFramesForReconnect;
+  unsigned long nFramesRunning;
+  int  connection;
+  int	 storeConn;
+  int  myID;
+  long requestedFrameTime; //ie fps
 
-		char 	nDeviceName[255];
-		WCHAR 	wDeviceName[255];
+  char 	nDeviceName[255];
+  WCHAR 	wDeviceName[255];
 
-		unsigned char * pixels;
-		char * pBuffer;
+  unsigned char * pixels;
+  char * pBuffer;
 
 };
 
@@ -253,156 +254,171 @@ class videoDevice{
 
 
 
-class videoInput{
+class videoInput
+{
 
-	public:
-		videoInput();
-		~videoInput();
+public:
+  videoInput();
+  ~videoInput();
 
-		//turns off console messages - default is to print messages
-		static void setVerbose(bool _verbose);
+  //turns off console messages - default is to print messages
+  static void setVerbose(bool _verbose);
 
-		//this allows for multithreaded use of VI ( default is single threaded ).
-		//call this before any videoInput calls. 
-		//note if your app has other COM calls then you should set VIs COM usage to match the other COM mode 
-		static void setComMultiThreaded(bool bMulti);
+  //this allows for multithreaded use of VI ( default is single threaded ).
+  //call this before any videoInput calls.
+  //note if your app has other COM calls then you should set VIs COM usage to match the other COM mode
+  static void setComMultiThreaded(bool bMulti);
 
-		//Functions in rough order they should be used.
-		static int listDevices(bool silent = false);
-		static std::vector <std::string> getDeviceList(); 
+  //Functions in rough order they should be used.
+  static int listDevices(bool silent = false);
+  static std::vector <std::string> getDeviceList();
 
-		//needs to be called after listDevices - otherwise returns NULL
-		static char * getDeviceName(int deviceID);
-		static int getDeviceIDFromName(char * name);
+  //needs to be called after listDevices - otherwise returns NULL
+  static char * getDeviceName(int deviceID);
+  static int getDeviceIDFromName(char * name);
 
-		//choose to use callback based capture - or single threaded
-		void setUseCallback(bool useCallback);
+  //choose to use callback based capture - or single threaded
+  void setUseCallback(bool useCallback);
 
-		//call before setupDevice
-		//directshow will try and get the closest possible framerate to what is requested
-		void setIdealFramerate(int deviceID, int idealFramerate);
+  //call before setupDevice
+  //directshow will try and get the closest possible framerate to what is requested
+  void setIdealFramerate(int deviceID, int idealFramerate);
 
-		//some devices will stop delivering frames after a while - this method gives you the option to try and reconnect
-		//to a device if videoInput detects that a device has stopped delivering frames.
-		//you MUST CALL isFrameNew every app loop for this to have any effect
-		void setAutoReconnectOnFreeze(int deviceNumber, bool doReconnect, int numMissedFramesBeforeReconnect);
+  //some devices will stop delivering frames after a while - this method gives you the option to try and reconnect
+  //to a device if videoInput detects that a device has stopped delivering frames.
+  //you MUST CALL isFrameNew every app loop for this to have any effect
+  void setAutoReconnectOnFreeze(int deviceNumber, bool doReconnect,
+                                int numMissedFramesBeforeReconnect);
 
-		//Choose one of these four to setup your device
-		bool setupDevice(int deviceID);
-		bool setupDevice(int deviceID, int w, int h);
+  //Choose one of these four to setup your device
+  bool setupDevice(int deviceID);
+  bool setupDevice(int deviceID, int w, int h);
 
-		//These two are only for capture cards
-		//USB and Firewire cameras souldn't specify connection
-		bool setupDevice(int deviceID, int connection);
-		bool setupDevice(int deviceID, int w, int h, int connection);
+  //These two are only for capture cards
+  //USB and Firewire cameras souldn't specify connection
+  bool setupDevice(int deviceID, int connection);
+  bool setupDevice(int deviceID, int w, int h, int connection);
 
-		//If you need to you can set your NTSC/PAL/SECAM
-		//preference here. if it is available it will be used.
-		//see #defines above for available formats - eg VI_NTSC_M or VI_PAL_B
-		//should be called after setupDevice
-		//can be called multiple times
-		bool setFormat(int deviceNumber, int format);
-		void setRequestedMediaSubType(int mediatype); // added by gameover
+  //If you need to you can set your NTSC/PAL/SECAM
+  //preference here. if it is available it will be used.
+  //see #defines above for available formats - eg VI_NTSC_M or VI_PAL_B
+  //should be called after setupDevice
+  //can be called multiple times
+  bool setFormat(int deviceNumber, int format);
+  void setRequestedMediaSubType(int mediatype); // added by gameover
 
-		//Tells you when a new frame has arrived - you should call this if you have specified setAutoReconnectOnFreeze to true
-		bool isFrameNew(int deviceID);
+  //Tells you when a new frame has arrived - you should call this if you have specified setAutoReconnectOnFreeze to true
+  bool isFrameNew(int deviceID);
 
-		bool isDeviceSetup(int deviceID);
+  bool isDeviceSetup(int deviceID);
 
-		//Returns the pixels - flipRedAndBlue toggles RGB/BGR flipping - and you can flip the image too
-		unsigned char * getPixels(int deviceID, bool flipRedAndBlue = true, bool flipImage = false);
+  //Returns the pixels - flipRedAndBlue toggles RGB/BGR flipping - and you can flip the image too
+  unsigned char * getPixels(int deviceID, bool flipRedAndBlue = true,
+                            bool flipImage = false);
 
-		//Or pass in a buffer for getPixels to fill returns true if successful.
-		bool getPixels(int id, unsigned char * pixels, bool flipRedAndBlue = true, bool flipImage = false);
+  //Or pass in a buffer for getPixels to fill returns true if successful.
+  bool getPixels(int id, unsigned char * pixels, bool flipRedAndBlue = true,
+                 bool flipImage = false);
 
-		//Launches a pop up settings window
-		//For some reason in GLUT you have to call it twice each time.
-		void showSettingsWindow(int deviceID);
+  //Launches a pop up settings window
+  //For some reason in GLUT you have to call it twice each time.
+  void showSettingsWindow(int deviceID);
 
-		//Manual control over settings thanks.....
-		//These are experimental for now.
-		bool setVideoSettingFilter(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
-		bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue, long Flags = NULL);
-		bool getVideoSettingFilter(int deviceID, long Property, long &min, long &max, long &SteppingDelta, long &currentValue, long &flags, long &defaultValue);
+  //Manual control over settings thanks.....
+  //These are experimental for now.
+  bool setVideoSettingFilter(int deviceID, long Property, long lValue,
+                             long Flags = NULL, bool useDefaultValue = false);
+  bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue,
+                                long Flags = NULL);
+  bool getVideoSettingFilter(int deviceID, long Property, long &min,
+                             long &max, long &SteppingDelta, long &currentValue, long &flags,
+                             long &defaultValue);
 
-		bool setVideoSettingCamera(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
-		bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue, long Flags = NULL);
-		bool getVideoSettingCamera(int deviceID, long Property, long &min, long &max, long &SteppingDelta, long &currentValue, long &flags, long &defaultValue);
+  bool setVideoSettingCamera(int deviceID, long Property, long lValue,
+                             long Flags = NULL, bool useDefaultValue = false);
+  bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue,
+                                long Flags = NULL);
+  bool getVideoSettingCamera(int deviceID, long Property, long &min,
+                             long &max, long &SteppingDelta, long &currentValue, long &flags,
+                             long &defaultValue);
 
-		//bool setVideoSettingCam(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
+  //bool setVideoSettingCam(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
 
-		//get width, height and number of pixels
-		int  getWidth(int deviceID);
-		int  getHeight(int deviceID);
-		int  getSize(int deviceID);
+  //get width, height and number of pixels
+  int  getWidth(int deviceID);
+  int  getHeight(int deviceID);
+  int  getSize(int deviceID);
 
-		//completely stops and frees a device
-		void stopDevice(int deviceID);
+  //completely stops and frees a device
+  void stopDevice(int deviceID);
 
-		//as above but then sets it up with same settings
-		bool restartDevice(int deviceID);
+  //as above but then sets it up with same settings
+  bool restartDevice(int deviceID);
 
-		//number of devices available
-		int  devicesFound;
+  //number of devices available
+  int  devicesFound;
 
-		long propBrightness;
-		long propContrast;
-		long propHue;
-		long propSaturation;
-		long propSharpness;
-		long propGamma;
-		long propColorEnable;
-		long propWhiteBalance;
-		long propBacklightCompensation;
-		long propGain;
+  long propBrightness;
+  long propContrast;
+  long propHue;
+  long propSaturation;
+  long propSharpness;
+  long propGamma;
+  long propColorEnable;
+  long propWhiteBalance;
+  long propBacklightCompensation;
+  long propGain;
 
-		long propPan;
-		long propTilt;
-		long propRoll;
-		long propZoom;
-		long propExposure;
-		long propIris;
-		long propFocus;
+  long propPan;
+  long propTilt;
+  long propRoll;
+  long propZoom;
+  long propExposure;
+  long propIris;
+  long propFocus;
 
-	private:
+private:
 
-		void setPhyCon(int deviceID, int conn);
-		void setAttemptCaptureSize(int deviceID, int w, int h);
-		bool setup(int deviceID);
-		void processPixels(unsigned char * src, unsigned char * dst, int width, int height, bool bRGB, bool bFlip);
-		int  start(int deviceID, videoDevice * VD);
-		int  getDeviceCount();
-		void getMediaSubtypeAsString(GUID type, char * typeAsString);
+  void setPhyCon(int deviceID, int conn);
+  void setAttemptCaptureSize(int deviceID, int w, int h);
+  bool setup(int deviceID);
+  void processPixels(unsigned char * src, unsigned char * dst, int width,
+                     int height, bool bRGB, bool bFlip);
+  int  start(int deviceID, videoDevice * VD);
+  int  getDeviceCount();
+  void getMediaSubtypeAsString(GUID type, char * typeAsString);
 
-		HRESULT getDevice(IBaseFilter **pSrcFilter, int deviceID, WCHAR * wDeviceName, char * nDeviceName);
-		static HRESULT ShowFilterPropertyPages(IBaseFilter *pFilter);
-		HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath);
-		HRESULT routeCrossbar(ICaptureGraphBuilder2 **ppBuild, IBaseFilter **pVidInFilter, int conType, GUID captureMode);
+  HRESULT getDevice(IBaseFilter **pSrcFilter, int deviceID,
+                    WCHAR * wDeviceName, char * nDeviceName);
+  static HRESULT ShowFilterPropertyPages(IBaseFilter *pFilter);
+  HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath);
+  HRESULT routeCrossbar(ICaptureGraphBuilder2 **ppBuild,
+                        IBaseFilter **pVidInFilter, int conType, GUID captureMode);
 
-		//don't touch
-		static bool comInit();
-		static bool comUnInit();
+  //don't touch
+  static bool comInit();
+  static bool comUnInit();
 
-		int  connection;
-		int  callbackSetCount;
-		bool bCallback;
+  int  connection;
+  int  callbackSetCount;
+  bool bCallback;
 
-		GUID CAPTURE_MODE;
-		GUID requestedMediaSubType;
+  GUID CAPTURE_MODE;
+  GUID requestedMediaSubType;
 
-		//Extra video subtypes
-		GUID MEDIASUBTYPE_Y800;
-		GUID MEDIASUBTYPE_Y8;
-		GUID MEDIASUBTYPE_GREY;
+  //Extra video subtypes
+  GUID MEDIASUBTYPE_Y800;
+  GUID MEDIASUBTYPE_Y8;
+  GUID MEDIASUBTYPE_GREY;
 
-		videoDevice * VDList[VI_MAX_CAMERAS];
-		GUID mediaSubtypes[VI_NUM_TYPES];
-		long formatTypes[VI_NUM_FORMATS];
+  videoDevice * VDList[VI_MAX_CAMERAS];
+  GUID mediaSubtypes[VI_NUM_TYPES];
+  long formatTypes[VI_NUM_FORMATS];
 
-		static void __cdecl basicThread(void * objPtr);
+  static void __cdecl basicThread(void * objPtr);
 
-		static char deviceNames[VI_MAX_CAMERAS][255];
+  static char deviceNames[VI_MAX_CAMERAS][255];
 
 };
 
- #endif
+#endif
