@@ -643,7 +643,6 @@ public:
         tearDown();
         return false;
       }
-
       //SaveGraphFile(m_pGraph, L"test1.grf");
 
       //we have to remove it as well otherwise the graph builder will reconnect it
@@ -1163,7 +1162,7 @@ void filmDS::close()
 
 pixBlock*filmDS::getFrame(void)
 {
-  printf("getting frame...%p\n", player);
+  //printf("getting frame...%p\n", player);
   if(!player || !player->isLoaded())
     return NULL;
 
@@ -1172,7 +1171,7 @@ pixBlock*filmDS::getFrame(void)
 
   player->update();
   if(player->isFrameNew()) {
-    printf("getting new frame\n");
+    //printf("getting new frame\n");
     m_image.newimage=true;
     int w=player->getWidth();
     int h=player->getHeight();
@@ -1183,7 +1182,7 @@ pixBlock*filmDS::getFrame(void)
       m_image.image.reallocate();
 
       m_image.newfilm=true;
-      printf("getting new film\n");
+      //printf("getting new film\n");
     }
     player->getPixels(m_image.image.data);
   }
@@ -1197,6 +1196,7 @@ film::errCode filmDS::changeImage(int imgNum, int trackNum)
       return FAILURE;
 
     //frame = ofClamp(frame, 0, getTotalNumFrames());
+    //float frame=player->getCurrentFrameNo();
     player->setApproximateFrame(imgNum);
     return SUCCESS;
   }
