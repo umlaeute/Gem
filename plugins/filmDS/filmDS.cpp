@@ -18,6 +18,7 @@
 #endif
 
 #include "filmDS.h"
+#include "plugins/PluginFactory.h"
 
 
 //-------------------------------------------------------------------------
@@ -1121,6 +1122,7 @@ protected:
 //-------------------------------------------------------------------------
 
 using namespace gem::plugins;
+REGISTER_FILMFACTORY("DirectShow", filmDS);
 filmDS::filmDS()
 {
   player = NULL;
