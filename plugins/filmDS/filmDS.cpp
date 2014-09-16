@@ -968,7 +968,7 @@ public:
       int curFrame = getCurrentFrameNo();
       float curFrameF = curFrame;
       for(int i = 1; i < 20; i++) {
-        setAproximateFrameF( curFrameF + 0.3 * (float)i );
+        setApproximateFrameF( curFrameF + 0.3 * (float)i );
         if( getCurrentFrameNo() >= curFrame + 1 ) {
           break;
         }
@@ -983,7 +983,7 @@ public:
       int curFrame = getCurrentFrameNo();
       float curFrameF = curFrame;
       for(int i = 1; i < 20; i++) {
-        setAproximateFrameF( curFrameF - 0.3 * (float)i );
+        setApproximateFrameF( curFrameF - 0.3 * (float)i );
         if( getCurrentFrameNo() <= curFrame + 1 ) {
           break;
         }
@@ -991,10 +991,10 @@ public:
     }
   }
 
-  void setAproximateFrameF(float frameF)
+  void setApproximateFrameF(float frameF)
   {
     if( bVideoOpened ) {
-      float pct = frameF / (float)getAproximateNoFrames();
+      float pct = frameF / (float)getApproximateNoFrames();
       if( pct > 1.0 ) {
         pct = 1.0;
       }
@@ -1005,10 +1005,10 @@ public:
     }
   }
 
-  void setAproximateFrame(int frame)
+  void setApproximateFrame(int frame)
   {
     if( bVideoOpened ) {
-      float pct = (float)frame / (float)getAproximateNoFrames();
+      float pct = (float)frame / (float)getApproximateNoFrames();
       if( pct > 1.0 ) {
         pct = 1.0;
       }
@@ -1022,12 +1022,12 @@ public:
   int getCurrentFrameNo()
   {
     if( bVideoOpened ) {
-      return getPosition() * (float) getAproximateNoFrames();
+      return getPosition() * (float) getApproximateNoFrames();
     }
     return 0;
   }
 
-  int getAproximateNoFrames()
+  int getApproximateNoFrames()
   {
     if( bVideoOpened && averageTimePerFrame > 0.0 ) {
       return getDurationInSeconds() / averageTimePerFrame;
@@ -1234,7 +1234,7 @@ int filmDS::getCurrentFrame()
 int filmDS::getTotalNumFrames()
 {
   if( player && player->isLoaded() ) {
-    return player->getAproximateNoFrames();
+    return player->getApproximateNoFrames();
   }
   return 0;
 }
@@ -1243,7 +1243,7 @@ void filmDS::setFrame(int frame)
 {
   if( player && player->isLoaded() ) {
     frame = ofClamp(frame, 0, getTotalNumFrames());
-    return player->setAproximateFrame(frame);
+    return player->setApproximateFrame(frame);
   }
 }
 
