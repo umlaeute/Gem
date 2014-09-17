@@ -39,7 +39,8 @@ REGISTER_VIDEOFACTORY("VIDS", videoVIDS);
 
 videoVIDS::videoVIDS(void) :
   m_name(std::string("videoInput")),
-  m_ID(-1), m_wantID(-1)
+  m_ID(-1), m_wantID(-1),
+  m_width(64), m_height(64)
 {
   m_vi.setVerbose(false);
 }
