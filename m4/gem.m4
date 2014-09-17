@@ -349,8 +349,6 @@ AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
 
   AS_IF([ test "x${gem_check_ldflags_success}" = "xyes" ], [
     have_[]Name="yes"
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [framework $1])
     GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
     GEM_FRAMEWORK_[]NAME[]_LIBS="-framework [$1]"
     [$2]
@@ -360,8 +358,12 @@ AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
   ])
   LDFLAGS="${gem_check_ldflags_org}"
 ])
+  AS_IF([ test "x${have_[]Name}" = "xyes" ],[
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [$1 framework])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [$1 framework])
+  ])
   AC_MSG_RESULT([${have_[]Name}])
-  AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
+  AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x${have_[]Name}" = "xyes"])
 undefine([NAME])
 undefine([Name])
 ])# GEM_CHECK_FRAMEWORK
