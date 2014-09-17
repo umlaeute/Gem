@@ -22,7 +22,12 @@
 
 #include <sys/types.h>
 #ifdef _WIN32
-# include <winsock.h>
+# if (_MSC_VER < 1600)
+#  include<WinSock.h>
+# else
+#  include <winsock2.h>
+#  include <WS2tcpip.h>
+# endif
 #else
 # include <sys/socket.h>
 # include <netdb.h>
