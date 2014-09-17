@@ -340,6 +340,13 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
 AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
   have_[]Name="no (forced)"
 ],[
+ AS_IF([ test "x${with_[]Name[]_framework_CFLAGS}${with_[]Name[]_framework_LIBS}" != "x" ], [
+## manually forced: yes
+    GEM_FRAMEWORK_[]NAME[]_CFLAGS=${with_[]Name[]_framework_CFLAGS}
+    GEM_FRAMEWORK_[]NAME[]_LIBS=${with_[]Name[]_framework_LIBS}
+    GEM_FRAMEWORK_[]NAME[]=${GEM_FRAMEWORK_[]NAME[]_LIBS}
+    have_[]Name="yes"
+ ],[
   have_[]Name="no (needs check)"
 
   gem_check_ldflags_org="${LDFLAGS}"
@@ -357,6 +364,7 @@ AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
     [$3]
   ])
   LDFLAGS="${gem_check_ldflags_org}"
+ ])
 ])
   AS_IF([ test "x${have_[]Name}" = "xyes" ],[
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [$1 framework])
