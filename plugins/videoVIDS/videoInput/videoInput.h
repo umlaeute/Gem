@@ -282,7 +282,7 @@ public:
 
   //call before setupDevice
   //directshow will try and get the closest possible framerate to what is requested
-  void setIdealFramerate(int deviceID, int idealFramerate);
+  void setIdealFramerate(int deviceID, float idealFramerate);
 
   //some devices will stop delivering frames after a while - this method gives you the option to try and reconnect
   //to a device if videoInput detects that a device has stopped delivering frames.
