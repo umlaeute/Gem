@@ -112,10 +112,10 @@ AC_SUBST(GEM_LIB_[]NAME[]_LIBS)
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable Name ($8)]))
-AC_ARG_WITH([]Name-cflags,
-             AC_HELP_STRING([--with-[]Name-cflags=-I/path/to/[]Name/include/], [compiler flags for Name]))
-AC_ARG_WITH([]Name-libs,
-             AC_HELP_STRING([--with-[]Name-libs="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
+AC_ARG_WITH([]Name-CFLAGS,
+             AC_HELP_STRING([--with-[]Name-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name]))
+AC_ARG_WITH([]Name-LIBS,
+             AC_HELP_STRING([--with-[]Name-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
 
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
@@ -131,22 +131,46 @@ AS_IF([ test x$with_[]Name = "xno" ],[
 ],[
   have_[]Name="no (needs check)"
 
-## -includes -> -cflags transition
-  AS_IF([test "x$with_[]Name[]_includes" != "x" ],[
-    AS_IF([test "x$with_[]Name[]_cflags" = "x" ],
-     [with_[]Name[]_cflags=$with_[]Name[]_includes],
-     [AC_MSG_ERROR([--with-[]Name[]-includes conflicts with --with-[]Name[]-cflags])]
-    )
-  ])
 
+## first check for conflicting flags:
+## - only one (1!) of _CFLAGS, _cflags and _includes must be present
+  AS_IF([test "x${with_[]Name[]_CFLAGS}${with_[]Name[]_cflags}${with_[]Name[]_includes}" != "x" ],[
+      AS_IF([test "x${with_[]Name[]_CFLAGS}" != "x" -a "x${with_[]Name[]_cflags}${with_[]Name[]_includes}" != "x" ],[
+             AC_MSG_ERROR([you_ can only use one (1!) of --with-[]Name[]-CFLAGS (preferred), --with-[]Name[]-cflags and --with-[]Name[]-includes])
+            ],[
+	    AS_IF([test "x${with_[]Name[]_cflags}" != "x" -a "x${with_[]Name[]_includes}" != "x" ],[
+                   AC_MSG_ERROR([you can only use one (1!) of --with-[]Name[]-CFLAGS (preferred), --with-[]Name[]-cflags and --with-[]Name[]-includes])
+                  ])
+            ])
+      ])
+## - only one (1!) of _LIBS and _libs must be present
+    AS_IF([test "x${with_[]Name[]_LIBS}" != "x" -a "x${with_[]Name[]_libs}" != "x" ],[
+           AC_MSG_ERROR([you can only use one (1!) of --with-[]Name[]-LIBS (preferred) and --with-[]Name[]-libs])
+          ])
+
+## then check for fallbacks
+### - _CFLAGS defaults to _cflags defaults to _includes
+  AS_IF([test "x${with_[]Name[]_CFLAGS}" = "x" ],[
+    AS_IF([test "x${with_[]Name[]_cflags}" = "x"],[
+           with_[]Name[]_CFLAGS=${with_[]Name[]_includes}
+          ],[
+           with_[]Name[]_CFLAGS=${with_[]Name[]_cflags}
+          ])
+        ])
+### - _LIBS defaults to _libs
+  AS_IF([test "x${with_[]Name[]_LIBS}" = "x" ],[
+         with_[]Name[]_LIBS=${with_[]Name[]_libs}
+        ])
+
+## check for directories (so we need to prefix -I or -L)
   tmp_gem_check_lib_extracflags=""
   tmp_gem_check_lib_extralibs=""
-  AS_IF([test -d "$with_[]Name[]_cflags" ],
-        [tmp_gem_check_lib_extracflags="-I$with_[]Name[]_cflags"],
-        [tmp_gem_check_lib_extracflags="$with_[]Name[]_cflags"])
-  AS_IF([test -d "$with_[]Name[]_libs" ],
-        [tmp_gem_check_lib_extralibs="-L$with_[]Name[]_libs"],
-        [tmp_gem_check_lib_extralibs="$with_[]Name[]_libs"])
+  AS_IF([test -d "$with_[]Name[]_CFLAGS" ],
+        [tmp_gem_check_lib_extracflags="-I$with_[]Name[]_CFLAGS"],
+        [tmp_gem_check_lib_extracflags="$with_[]Name[]_CFLAGS"])
+  AS_IF([test -d "$with_[]Name[]_LIBS" ],
+        [tmp_gem_check_lib_extralibs="-L$with_[]Name[]_LIBS"],
+        [tmp_gem_check_lib_extralibs="$with_[]Name[]_LIBS"])
 
   AS_IF([test "x$tmp_gem_check_lib_extracflags" != "x" ],[
     CFLAGS="$tmp_gem_check_lib_extracflags $CFLAGS"
