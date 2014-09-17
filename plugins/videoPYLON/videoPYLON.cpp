@@ -440,7 +440,7 @@ bool videoPYLON :: openDevice(gem::Properties&props)
     uint32_t maxchannel=m_camera->GetNumStreamGrabberChannels();
     if(channel>maxchannel)channel=maxchannel;
 
-    m_grabber=new Pylon::CBaslerGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
+    m_grabber=new Pylon::CPylonGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
   } catch (GenICam::GenericException &e) {
     std::cerr << e.GetDescription() << std::endl;
     close();
