@@ -42,7 +42,7 @@ videoVIDS::videoVIDS(void) :
   m_ID(-1), m_wantID(-1),
   m_width(64), m_height(64)
 {
-  m_vi.setVerbose(false);
+  videoInput::setVerbose(false);
 }
 
 videoVIDS::~videoVIDS(void)
