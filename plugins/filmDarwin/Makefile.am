@@ -4,7 +4,11 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 pkglib_LTLIBRARIES=
 if MACOSX
+if HAVE_FRAMEWORK_QUICKTIME
+if HAVE_FRAMEWORK_CARBON
 pkglib_LTLIBRARIES+= gem_filmDarwin.la
+endif
+endif
 endif
 
 gem_filmDarwin_la_CXXFLAGS =

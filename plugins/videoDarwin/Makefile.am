@@ -6,9 +6,13 @@ pkglib_LTLIBRARIES=
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
-if VIDEODARWIN
+if MACOSX
+if HAVE_FRAMEWORK_QUICKTIME
+if HAVE_FRAMEWORK_CARBON
 pkglib_LTLIBRARIES+=gem_videoDarwin.la
 dist_gemhelp_DATA +=Darwin-videoplugin.pd
+endif
+endif
 endif
 
 gem_videoDarwin_la_CXXFLAGS =
