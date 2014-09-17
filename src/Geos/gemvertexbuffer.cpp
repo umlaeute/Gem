@@ -20,6 +20,16 @@
 #include "Gem/Manager.h"
 #include "Utils/Functions.h"
 
+#ifdef _MSC_VER
+# ifdef min
+#   undef min
+# endif
+# ifdef max
+#  undef max
+# endif
+#endif
+
+
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 
 gemvertexbuffer :: VertexBuffer:: VertexBuffer() :
