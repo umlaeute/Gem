@@ -43,6 +43,7 @@ videoVIDS::videoVIDS(void) :
   m_width(64), m_height(64)
 {
   videoInput::setVerbose(false);
+  MARK();
 }
 
 videoVIDS::~videoVIDS(void)
@@ -401,11 +402,11 @@ pixBlock*videoVIDS::getFrame(void)
 {
   if(m_ID<0)return NULL;
   if(m_vi.isFrameNew(m_ID)){
-    int w=m_vi.getWidth(m_ID);
-    int h=m_vi.getHeight(m_ID);
+    m_width=m_vi.getWidth(m_ID);
+    m_height=m_vi.getHeight(m_ID);
     unsigned char*data=m_pixBlock.image.data;
-    m_pixBlock.image.xsize=w;
-    m_pixBlock.image.ysize=h;
+    m_pixBlock.image.xsize=m_width;
+    m_pixBlock.image.ysize=m_height;
     m_pixBlock.image.setCsizeByFormat(GL_RGBA);
     m_pixBlock.image.reallocate();
     m_pixBlock.newimage=(data==m_pixBlock.image.data);
