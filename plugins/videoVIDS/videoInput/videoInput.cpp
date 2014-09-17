@@ -1442,8 +1442,10 @@ bool videoInput::setVideoSettingFilterPct(int deviceID, long Property,
     } else {
       rasterValue += stepAmnt - mod;
     }
-    printf("RASTER - pctValue is %f - value is %i - step is %i - mod is %i - rasterValue is %i\n",
-           pctValue, value, stepAmnt, mod, rasterValue);
+    if(verbose) {
+      printf("RASTER - pctValue is %f - value is %i - step is %i - mod is %i - rasterValue is %i\n",
+              pctValue, value, stepAmnt, mod, rasterValue);
+    }
   }
 
   return setVideoSettingFilter(deviceID, Property, rasterValue, Flags,
