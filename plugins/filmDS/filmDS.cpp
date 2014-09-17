@@ -526,8 +526,8 @@ public:
     ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
 
     mt.majortype         = MEDIATYPE_Video;
-    mt.subtype                 = MEDIASUBTYPE_RGB24;
-    mt.formattype         = FORMAT_VideoInfo;
+    mt.subtype           = MEDIASUBTYPE_RGB32;
+    mt.formattype        = FORMAT_VideoInfo;
 
     //printf("step 5.5\n");
     hr = m_pGrabber->SetMediaType(&mt);
@@ -617,7 +617,7 @@ public:
       height = infoheader->bmiHeader.biHeight;
       averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
 
-      videoSize = width * height * 3;
+      videoSize = width * height * 4;
       //printf("video dimensions are %i %i\n", width, height);
 
 #ifdef USE_RENDERFILE
@@ -816,7 +816,7 @@ public:
                      int height, bool bRGB, bool bFlip)
   {
 
-    int widthInBytes = width * 3;
+    int widthInBytes = width * 4;
     int numBytes = widthInBytes * height;
 
     if(!bRGB) {
@@ -840,7 +840,7 @@ public:
         int y = (height - 1) * widthInBytes;
         src += y;
 
-        for(int i = 0; i < numBytes; i+=3) {
+        for(int i = 0; i < numBytes; i+=4) {
           if(x >= width) {
             x = 0;
             src -= widthInBytes*2;
@@ -855,11 +855,14 @@ public:
           *dst = *src;
           dst++;
 
-          src+=3;
+          *dst = *(src+3);
+          dst++;
+
+          src+=4;
           x++;
         }
       } else {
-        for(int i = 0; i < numBytes; i+=3) {
+        for(int i = 0; i < numBytes; i+=4) {
           *dst = *(src+2);
           dst++;
 
@@ -869,7 +872,10 @@ public:
           *dst = *src;
           dst++;
 
-          src+=3;
+          *dst = *(src+3);
+          dst++;
+
+          src+=4;
         }
       }
     }
@@ -1149,6 +1155,7 @@ bool filmDS::open(const std::string path, const gem::Properties&props)
   player = new DirectShowVideo();
   bool res=player->loadMovie(path);
   if(res) {
+    player->setPosition(0.0);
     player->play();
     double d;
     if(props.get("auto", d)) {
@@ -1174,6 +1181,9 @@ pixBlock*filmDS::getFrame(void)
   if(!player || !player->isLoaded())
     return NULL;
 
+  if(player->isMovieDone())
+    return NULL;
+
   m_image.newfilm=false;
   m_image.newimage=false;
 
@@ -1186,7 +1196,7 @@ pixBlock*filmDS::getFrame(void)
     if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
       m_image.image.xsize=w;
       m_image.image.ysize=h;
-      m_image.image.setCsizeByFormat(GL_RGB);
+      m_image.image.setCsizeByFormat(GL_RGBA);
       m_image.image.reallocate();
 
       m_image.newfilm=true;
