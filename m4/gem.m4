@@ -322,7 +322,6 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   define([Name],[translit([$1],[./-+], [____])])
   define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
                               [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
-  AC_SUBST(GEM_FRAMEWORK_[]NAME[])
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_CFLAGS)
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_LIBS)
 
@@ -344,7 +343,6 @@ AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
 ## manually forced: yes
     GEM_FRAMEWORK_[]NAME[]_CFLAGS=${with_[]Name[]_framework_CFLAGS}
     GEM_FRAMEWORK_[]NAME[]_LIBS=${with_[]Name[]_framework_LIBS}
-    GEM_FRAMEWORK_[]NAME[]=${GEM_FRAMEWORK_[]NAME[]_LIBS}
     have_[]Name="yes"
  ],[
   have_[]Name="no (needs check)"
@@ -356,7 +354,7 @@ AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
 
   AS_IF([ test "x${gem_check_ldflags_success}" = "xyes" ], [
     have_[]Name="yes"
-    GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
+    GEM_FRAMEWORK_[]NAME[]_CFLAGS=""
     GEM_FRAMEWORK_[]NAME[]_LIBS="-framework [$1]"
     [$2]
   ],[
