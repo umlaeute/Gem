@@ -14,6 +14,12 @@
 # include "config.h"
 #endif
 
+#if 0
+# define MARK() printf("%s:%d\t%s\n", __FILE__, __LINE__, __FUNCTION__)
+#else
+# define MARK()
+#endif
+
 #include <stdio.h>
 #ifdef _MSC_VER
 # define snprintf _snprintf
