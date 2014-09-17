@@ -319,11 +319,28 @@ AS_IF([ $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&
 #
 AC_DEFUN([GEM_CHECK_FRAMEWORK],
 [
+  define([Name],[translit([$1],[./-+], [____])])
   define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
                               [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
   AC_SUBST(GEM_FRAMEWORK_[]NAME[])
+  AC_SUBST(GEM_FRAMEWORK_[]NAME[]_CFLAGS)
+  AC_SUBST(GEM_FRAMEWORK_[]NAME[]_LIBS)
 
-  AC_MSG_CHECKING([for "$1"-framework])
+  AC_ARG_WITH([Name]-framework,
+             AC_HELP_STRING([--without-[]Name[]-framework], [disable Name-framework]))
+  AC_ARG_WITH([]Name[]-framework-CFLAGS,
+             AC_HELP_STRING([--with-[]Name[]-framework-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name-framework]))
+  AC_ARG_WITH([]Name[]-framework-LIBS,
+             AC_HELP_STRING([--with-[]Name[]-framework-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name-framework]))
+  AS_IF([ test "x$with_[]Name[]_framework" = "x" ], [ with_[]Name="$with_ALL" ])
+
+
+  AC_MSG_CHECKING([for $1-framework])
+
+AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
+  have_[]Name="no (forced)"
+],[
+  have_[]Name="no (needs check)"
 
   gem_check_ldflags_org="${LDFLAGS}"
   LDFLAGS="-framework [$1] ${LDFLAGS}"
@@ -331,18 +348,22 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
   AS_IF([ test "x${gem_check_ldflags_success}" = "xyes" ], [
-    AC_MSG_RESULT([yes])
+    have_[]Name="yes"
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [framework $1])
     GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
+    GEM_FRAMEWORK_[]NAME[]_LIBS="-framework [$1]"
     [$2]
   ],[
-    AC_MSG_RESULT([no])
+    have_[]Name="no"
     [$3]
   ])
   LDFLAGS="${gem_check_ldflags_org}"
+])
+  AC_MSG_RESULT([${have_[]Name}])
   AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
 undefine([NAME])
+undefine([Name])
 ])# GEM_CHECK_FRAMEWORK
 
 # GEM_CHECK_LDFLAGS(ADDITIONAL-LDFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
