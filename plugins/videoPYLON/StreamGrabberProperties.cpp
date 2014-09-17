@@ -25,7 +25,7 @@
 namespace gem{namespace pylon{namespace streamgrabberproperties{
   static gem::Properties writeprops, readprops;
 
-  typedef Pylon::CBaslerGigEStreamGrabber DEVICE;
+  typedef Pylon::CPylonGigEStreamGrabber DEVICE;
 
 #define GETSETBOOL(T)                                                   \
   static bool get##T(DEVICE*device) { return device->T.GetValue(); }    \

@@ -30,7 +30,7 @@
 # ifdef _WIN64
 typedef __int64         ssize_t;
 # else
-typedef _w64 int        ssize_t;
+typedef _w64 long        ssize_t;
 # endif
 #endif
 #include <magick/MagickCore.h>
