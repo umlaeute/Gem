@@ -91,6 +91,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Pixes\pix_filmOS.h" />
+    <ClInclude Include="..\..\src\Pixes\pix_movieDS.h" />
+    <ClInclude Include="..\..\src\Pixes\pix_movieOS.h" />
+    <ClInclude Include="..\..\src\Pixes\pix_recordQT.h" />
+    <ClInclude Include="..\..\src\Pixes\pix_videoOS.h" />
     <ClInclude Include="..\..\src\Utils\any.h" />
     <ClInclude Include="..\..\src\Utils\Functions.h" />
     <ClInclude Include="..\..\src\Utils\GemMath.h" />
@@ -693,6 +698,11 @@
     <ClCompile Include="..\..\src\Base\TextBaseFTGL.cpp" />
     <ClCompile Include="..\..\src\Base\TextBaseNone.cpp" />
     <ClCompile Include="..\..\src\Gem\glew.c" />
+    <ClCompile Include="..\..\src\Pixes\pix_filmOS.cpp" />
+    <ClCompile Include="..\..\src\Pixes\pix_movieDS.cpp" />
+    <ClCompile Include="..\..\src\Pixes\pix_movieOS.cpp" />
+    <ClCompile Include="..\..\src\Pixes\pix_recordQT.cpp" />
+    <ClCompile Include="..\..\src\Pixes\pix_videoOS.cpp" />
     <ClCompile Include="..\..\src\Utils\Functions.cpp" />
     <ClCompile Include="..\..\src\Utils\GemString.cpp" />
     <ClCompile Include="..\..\src\Utils\GLUtil.cpp" />
