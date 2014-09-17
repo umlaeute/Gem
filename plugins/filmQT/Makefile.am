@@ -27,8 +27,8 @@ gem_filmQT_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_filmQT_la @MOREFLAGS@
 
 # Dependencies
-gem_filmQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@
-gem_filmQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@
+gem_filmQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME_CFLAGS@
+gem_filmQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

@@ -27,8 +27,8 @@ gem_videoDarwin_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_videoDarwin_la @MOREFLAGS@
 
 # Dependencies
-gem_videoDarwin_la_CXXFLAGS += 
-gem_videoDarwin_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@ @GEM_FRAMEWORK_CARBON@
+gem_videoDarwin_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME_CFLAGS@ @GEM_FRAMEWORK_CARBON_CFLAGS@
+gem_videoDarwin_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME_LIBS@ @GEM_FRAMEWORK_CARBON_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
