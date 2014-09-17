@@ -510,6 +510,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (m_csize == 3) m_image.image.format	= GL_BGR_EXT;
   if (m_csize == 4) m_image.image.format	= GL_BGRA;
   m_image.image.type	= GL_UNSIGNED_BYTE;
+  m_image.image.upsidedown=false;
 
   // Start the video stream
   RetVal	= MediaControl->Run();
