@@ -159,7 +159,8 @@ struct gemglxwindow::PIMPL {
   Window      win;                // X Window
   int         screen;             // X Screen
   Colormap    cmap;               // X color map
-  GLXContext  glxcontext;            // OpenGL context
+  GLXContext  glxcontext;         // OpenGL context
+  gem::Context*gemcontext;        // Gem Context (for sharing)
 
   Atom        delete_atom;
 
@@ -181,7 +182,7 @@ struct gemglxwindow::PIMPL {
     win(0),
     screen(0),
     cmap(0),
-    glxcontext(NULL),
+    glxcontext(NULL), gemcontext(NULL),
     delete_atom(0),
 #ifdef HAVE_LIBXXF86VM
     //    deskMode(0),
