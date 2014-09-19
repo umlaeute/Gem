@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <map>
 
 #include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
@@ -295,11 +296,12 @@ struct gemglxwindow::PIMPL {
     }
     // create the rendering context
     try {
-      glxcontext = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
-      // this masterContext should only be initialized once by a static PIMPL
-      // see below in gemglxwindow::create()
-      if(!masterContext)
-        masterContext=glxcontext;
+      // first check whether we have a shared context for 'display'
+      GLXContext sharedContext=0;
+      if(s_shared.count(display)>0) {
+	sharedContext=s_shared[display].glxcontext;;
+      }
+      glxcontext = glXCreateContext(dpy, vi, sharedContext, GL_TRUE);
     } catch(void*e){
       glxcontext=NULL;
     }
@@ -454,12 +456,11 @@ struct gemglxwindow::PIMPL {
     }
     return true;
   }
-
-  static GLXContext  masterContext;// The GLXcontext to share rendering with
-  static gem::Context*masterGemContext;
+  static std::map<std::string,gemglxwindow::PIMPL>s_shared;
 };
-GLXContext   gemglxwindow::PIMPL::masterContext=NULL;
-gem::Context*gemglxwindow::PIMPL::masterGemContext=NULL;
+std::map<std::string,gemglxwindow::PIMPL>gemglxwindow::PIMPL::s_shared;
+
+
 
 /////////////////////////////////////////////////////////
 //
@@ -666,32 +667,37 @@ void gemglxwindow :: offsetMess(int x, int y)
 bool gemglxwindow :: create(void)
 {
   bool success=true;
+  /*
+   * hmm, this crashes when enabled
+   * when disabled, we don't get textures on two screens
+   */
+  #warning context-sharing disabled
+  bool context_sharing=false;
+  if(!m_context && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
 
-  static gemglxwindow::PIMPL*constPimpl=NULL;
-  if(!constPimpl) {
-    constPimpl=new PIMPL();
-
-    try {
-      int x=0, y=0;
-      unsigned int w=1, h=1;
-      success=constPimpl->create("", 2, false, false, x, y, w, h);
-      constPimpl->masterContext=constPimpl->glxcontext;
-    } catch (GemException&x) {
-      error("const context creation failed: %s", x.what());
-      verbose(0, "continuing at your own risk!");
-    }
-    if(!constPimpl->masterGemContext) {
+    gemglxwindow::PIMPL*sharedPimpl=&gemglxwindow::PIMPL::s_shared[m_display];
+    if(!sharedPimpl->glxcontext) {
       try {
-	constPimpl->masterGemContext = createContext();
+	int x=0, y=0;
+	unsigned int w=1, h=1;
+	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h);
       } catch (GemException&x) {
-	constPimpl->masterGemContext = NULL;
-	error("context creation failed: %s", x.what());
+	error("creation of shared glxcontext failed: %s", x.what());
+	verbose(0, "continuing at your own risk!");
+      }
+      if(!sharedPimpl->gemcontext) {
+	try {
+	  sharedPimpl->gemcontext = createContext();
+	} catch (GemException&x) {
+	  sharedPimpl->gemcontext = NULL;
+	  error("creationg of shared gem::context failed: %s", x.what());
+	}
       }
     }
-  }
 
-  if(constPimpl->masterGemContext && !m_context) {
-    m_context=constPimpl->masterGemContext;
+    m_context=sharedPimpl->gemcontext;
+  } else { // no context sharing
+    /* creation of gem::Context is deferred until *after* window creation */
   }
 
   int modeNum=4;
@@ -714,6 +720,17 @@ bool gemglxwindow :: create(void)
     success=false;
   }
   if(!success)return false;
+
+  /* create a gem::context if we don't already have (a shared) one */
+  if(!m_context) {
+    try {
+      m_context = createContext();
+    } catch (GemException&x) {
+      m_context = NULL;
+      error("creationg of gem::context failed: %s", x.what());
+    }
+  }
+
 
   XMapRaised(m_pimpl->dpy, m_pimpl->win);
   //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
