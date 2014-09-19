@@ -152,8 +152,6 @@ static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 }
 
 
-
-
 struct gemglxwindow::PIMPL {
   int         fs;                 // FullScreen
 
@@ -161,7 +159,7 @@ struct gemglxwindow::PIMPL {
   Window      win;                // X Window
   int         screen;             // X Screen
   Colormap    cmap;               // X color map
-  GLXContext  context;            // OpenGL context
+  GLXContext  glxcontext;            // OpenGL context
 
   Atom        delete_atom;
 
@@ -183,7 +181,7 @@ struct gemglxwindow::PIMPL {
     win(0),
     screen(0),
     cmap(0),
-    context(NULL),
+    glxcontext(NULL),
     delete_atom(0),
 #ifdef HAVE_LIBXXF86VM
     //    deskMode(0),
@@ -296,15 +294,15 @@ struct gemglxwindow::PIMPL {
     }
     // create the rendering context
     try {
-      context = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
+      glxcontext = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
       // this masterContext should only be initialized once by a static PIMPL
       // see below in gemglxwindow::create()
       if(!masterContext)
-        masterContext=context;
+        masterContext=glxcontext;
     } catch(void*e){
-      context=NULL;
+      glxcontext=NULL;
     }
-    if (context == NULL) {
+    if (glxcontext == NULL) {
       throw(GemException("Could not create rendering context"));
       return false;
     }
@@ -429,7 +427,7 @@ struct gemglxwindow::PIMPL {
 
     try{
       xerr=0;
-      glXMakeCurrent(dpy, win, context);
+      glXMakeCurrent(dpy, win, glxcontext);
 
       if(xerr!=0) {
         /* seems like the error-handler was called; so something did not work the way it should
@@ -490,11 +488,11 @@ gemglxwindow :: ~gemglxwindow()
 
 
 bool gemglxwindow :: makeCurrent(void){
-  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->context)
+  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->glxcontext)
     return false;
 
   xerr=0;
-  glXMakeCurrent(m_pimpl->dpy, m_pimpl->win, m_pimpl->context);
+  glXMakeCurrent(m_pimpl->dpy, m_pimpl->win, m_pimpl->glxcontext);
   if(xerr!=0) {
     return false;
   }
@@ -676,7 +674,7 @@ bool gemglxwindow :: create(void)
       int x=0, y=0;
       unsigned int w=1, h=1;
       success=constPimpl->create("", 2, false, false, x, y, w, h);
-      constPimpl->masterContext=constPimpl->context;
+      constPimpl->masterContext=constPimpl->glxcontext;
     } catch (GemException&x) {
       error("const context creation failed: %s", x.what());
       verbose(0, "continuing at your own risk!");
@@ -720,7 +718,7 @@ bool gemglxwindow :: create(void)
   //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
   XEvent report;
   XIfEvent(m_pimpl->dpy, &report, WaitForNotify, (char*)m_pimpl->win);
-  if (glXIsDirect(m_pimpl->dpy, m_pimpl->context))
+  if (glXIsDirect(m_pimpl->dpy, m_pimpl->glxcontext))
     post("Direct Rendering enabled!");
 
   cursorMess(m_cursor);
@@ -765,9 +763,9 @@ void gemglxwindow :: destroy(void)
 
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
     glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
-    if (m_pimpl->context) {
+    if (m_pimpl->glxcontext) {
       // this crashes sometimes on my laptop:
-      glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
+      glXDestroyContext(m_pimpl->dpy, m_pimpl->glxcontext);
     }
 
     if (m_pimpl->win) {
@@ -784,7 +782,7 @@ void gemglxwindow :: destroy(void)
   m_pimpl->dpy = NULL;
   m_pimpl->win = 0;
   m_pimpl->cmap = 0;
-  m_pimpl->context = NULL;
+  m_pimpl->glxcontext = NULL;
   if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
 
   destroyGemWindow();
