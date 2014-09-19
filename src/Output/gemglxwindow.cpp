@@ -18,7 +18,6 @@
 #ifdef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Gem/GemGL.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <map>
@@ -185,9 +184,6 @@ struct gemglxwindow::PIMPL {
     cmap(0),
     glxcontext(NULL), gemcontext(NULL),
     delete_atom(0),
-#ifdef HAVE_LIBXXF86VM
-    //    deskMode(0),
-#endif
     inputMethod(NULL),
     inputContext(NULL),
 
