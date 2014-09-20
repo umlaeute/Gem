@@ -906,14 +906,14 @@ for partial draw.;
 #X obj 36 465 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X msg 36 498 attribute_enable \$1;
-#X obj 319 87 table exmp_LightPosition;
-#X obj 319 108 table exmp_BrickColor;
-#X obj 319 128 table exmp_MortarColor;
-#X obj 319 149 table exmp_BrickSize;
-#X obj 319 169 table exmp_BrickPct;
-#X msg 223 465 position exmp_position \, attribute LightPosition exmp_LightPosition
-\, attribute BrickColor exmp_BrickColor \, attribute MortarColor exmp_MortarColor
-\, attribute BrickSize exmp_BrickSize \, attribute BrickPct exmp_BrickPct
+#X obj 319 87 table exmpl_LightPosition;
+#X obj 319 108 table exmpl_BrickColor;
+#X obj 319 128 table exmpl_MortarColor;
+#X obj 319 149 table exmpl_BrickSize;
+#X obj 319 169 table exmpl_BrickPct;
+#X msg 223 465 position exmpl_position \, attribute LightPosition exmpl_LightPosition
+\, attribute BrickColor exmpl_BrickColor \, attribute MortarColor exmpl_MortarColor
+\, attribute BrickSize exmpl_BrickSize \, attribute BrickPct exmpl_BrickPct
 ;
 #X obj 224 608 loadbang;
 #X msg 224 635 resize 16 \, draw quad;
@@ -925,7 +925,7 @@ for partial draw.;
 #X obj 66 190 f;
 #X obj 93 190 + 1;
 #X obj 39 160 t f b;
-#X obj 39 219 tabwrite exmp_BrickColor;
+#X obj 39 219 tabwrite exmpl_BrickColor;
 #X obj 39 17 loadbang;
 #X obj 39 387 drip;
 #X obj 39 360 t a b;
@@ -934,7 +934,7 @@ for partial draw.;
 #X obj 93 444 + 1;
 #X obj 39 414 t f b;
 #X obj 39 267 loadbang;
-#X obj 39 473 tabwrite exmp_BrickPct;
+#X obj 39 473 tabwrite exmpl_BrickPct;
 #X obj 39 643 drip;
 #X obj 39 616 t a b;
 #X msg 81 670 0;
@@ -942,7 +942,7 @@ for partial draw.;
 #X obj 93 700 + 1;
 #X obj 39 670 t f b;
 #X obj 39 525 loadbang;
-#X obj 39 729 tabwrite exmp_BrickSize;
+#X obj 39 729 tabwrite exmpl_BrickSize;
 #X obj 39 944 drip;
 #X obj 39 917 t a b;
 #X msg 81 971 0;
@@ -950,7 +950,7 @@ for partial draw.;
 #X obj 93 1001 + 1;
 #X obj 39 971 t f b;
 #X obj 39 816 loadbang;
-#X obj 39 1030 tabwrite exmp_LightPosition;
+#X obj 39 1030 tabwrite exmpl_LightPosition;
 #X obj 39 1211 drip;
 #X obj 39 1184 t a b;
 #X msg 81 1238 0;
@@ -958,7 +958,7 @@ for partial draw.;
 #X obj 93 1268 + 1;
 #X obj 39 1238 t f b;
 #X obj 39 1103 loadbang;
-#X obj 39 1297 tabwrite exmp_MortarColor;
+#X obj 39 1297 tabwrite exmpl_MortarColor;
 #X obj 39 1525 drip;
 #X obj 39 1498 t a b;
 #X msg 81 1552 0;
@@ -966,7 +966,7 @@ for partial draw.;
 #X obj 93 1582 + 1;
 #X obj 39 1552 t f b;
 #X obj 39 1397 loadbang;
-#X obj 39 1611 tabwrite exmp_position;
+#X obj 39 1611 tabwrite exmpl_position;
 #X msg 39 50 1 1 1 1 1 1 1 1 1 1 1 1 1 0.5 0.5 1 0.5 0.5 1 0.5 0.5
 1 0.5 0.5 0 0.5 0.6 0 0.5 0.6 0 0.5 0.6 0 0.5 0.6 1 1 1 1 1 1 1 1 1
 1 1 1;
@@ -1060,7 +1060,7 @@ for partial draw.;
 #X obj 223 431 t b f;
 #X obj 289 363 cnv 15 280 40 empty empty empty 20 12 0 14 -204786 -66577
 0;
-#X msg 298 375 attribute LightPosition exmp_LightPosition;
+#X msg 298 375 attribute LightPosition exmpl_LightPosition;
 #X text 296 322 syntax:;
 #X text 319 559 <----- essential for lookup functions;
 #X text 296 338 attribute <name> <array> <offset(optional)>;
@@ -1082,8 +1082,7 @@ can be added;
 or geo \, they must be changed to attribute/varying type in the vert
 and frag files;
 #X restore 297 415 pd more;
-#X obj 319 66 table exmp_position;
-#X text 453 230 commit \; pull-request \;;
+#X obj 319 66 table exmpl_position;
 #X connect 0 0 13 0;
 #X connect 1 0 6 0;
 #X connect 2 0 1 0;
