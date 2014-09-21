@@ -30,6 +30,8 @@
 
 #define _GL_UNDEFINED -1
 
+using namespace gem;
+
 // if error dump gl errors to debugger string, return error
 GLenum glReportError (bool verbose)
 {
