@@ -60,6 +60,8 @@ static WindowInfo constInfo;
 #endif /* GEM_MULTICONTEXT */
 
 
+using namespace gem;
+
 static bool glewInitialized = false;
 
 // static member data

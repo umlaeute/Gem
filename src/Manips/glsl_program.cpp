@@ -19,6 +19,7 @@
 #include <stdlib.h>
 
 #include <map>
+using namespace gem;
 
 namespace gem {
   namespace utils {
