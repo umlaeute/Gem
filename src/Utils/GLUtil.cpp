@@ -19,6 +19,7 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "Gem/RTE.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32

@@ -21,15 +21,16 @@ LOG
 
 /* for t_symbol/t_atom */
 /* LATER get rid of that (std::string) */
-#include "Gem/RTE.h"
+struct _atom;
+struct _symbol;
 
 /* for GLenum */
 #include "Gem/GemGL.h"
 
 GEM_EXTERN extern GLenum		glReportError (void);
 GEM_EXTERN extern int           getGLdefine(const char *name);
-GEM_EXTERN extern int           getGLdefine(const t_symbol *name);
-GEM_EXTERN extern int           getGLdefine(const t_atom *name);
-GEM_EXTERN extern int           getGLbitfield(int argc, t_atom *argv);
+GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
+GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
+GEM_EXTERN extern int           getGLbitfield(int argc, struct _atom *argv);
 #endif  // for header file
 
