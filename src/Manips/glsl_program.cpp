@@ -721,13 +721,13 @@ void glsl_program :: printInfo()
     for (i = 0; i < m_num; i++)  {
       startpost( " %d", m_shaderObj[i] );
     }
-    post(": %d", m_program);
+    post("-> %d", m_program);
   } else {
     startpost("linked ARB-shaders");
     for (i = 0; i < m_num; i++)  {
       startpost( " %d", m_shaderObjARB[i] );
     }
-    post(": %d", m_programARB);
+    post("-> %d", m_programARB);
   }
 
   post("");
