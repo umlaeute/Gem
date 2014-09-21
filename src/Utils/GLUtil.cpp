@@ -31,10 +31,10 @@
 #define _GL_UNDEFINED -1
 
 // if error dump gl errors to debugger string, return error
-GLenum glReportError (void)
+GLenum glReportError (bool verbose)
 {
 	GLenum err = glGetError();
-	if (GL_NO_ERROR != err) {
+	if (verbose && GL_NO_ERROR != err) {
 		post("GL: %s",(char*)gluErrorString(err));
 	}
 	// ensure we are returning an OSStatus noErr if no error condition

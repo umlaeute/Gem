@@ -27,7 +27,7 @@ struct _symbol;
 /* for GLenum */
 #include "Gem/GemGL.h"
 
-GEM_EXTERN extern GLenum		glReportError (void);
+GEM_EXTERN extern GLenum	glReportError (bool verbose=true);
 GEM_EXTERN extern int           getGLdefine(const char *name);
 GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
 GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
