@@ -15,7 +15,7 @@
 #include "GLdefine.h"
 
 CPPEXTERN_NEW_WITH_GIMME ( GLdefine );
-using namespace gem;
+using namespace gem::utils::gl;
 
 /////////////////////////////////////////////////////////
 //

@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 #include <map>
-using namespace gem;
+using namespace gem::utils::gl;
 
 namespace gem {
   namespace utils {

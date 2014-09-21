@@ -15,7 +15,7 @@
 #include "GEMglGetString.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetString , t_floatarg, A_DEFFLOAT);
-using namespace gem;
+using namespace gem::utils::gl;
 
 /////////////////////////////////////////////////////////
 //

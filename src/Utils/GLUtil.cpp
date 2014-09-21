@@ -30,10 +30,8 @@
 
 #define _GL_UNDEFINED -1
 
-using namespace gem;
-
 // if error dump gl errors to debugger string, return error
-GLenum glReportError (bool verbose)
+GLenum gem::utils::gl::glReportError (bool verbose)
 {
 	GLenum err = glGetError();
 	if (verbose && GL_NO_ERROR != err) {
@@ -46,7 +44,7 @@ GLenum glReportError (bool verbose)
 		return err;
 }
 
-int getGLbitfield(int argc, t_atom *argv){
+int gem::utils::gl::getGLbitfield(int argc, t_atom *argv){
   int accum=0;
   int mode=0;
 
@@ -76,7 +74,7 @@ int getGLbitfield(int argc, t_atom *argv){
 
 }
 
-int getGLdefine(const t_atom *ap)
+int gem::utils::gl::getGLdefine(const t_atom *ap)
 {
   if (!ap)return _GL_UNDEFINED;
   if (ap->a_type == A_SYMBOL)return getGLdefine(ap->a_w.w_symbol);
@@ -84,13 +82,13 @@ int getGLdefine(const t_atom *ap)
   return _GL_UNDEFINED;
 }
 
-int getGLdefine(const t_symbol *s)
+int gem::utils::gl::getGLdefine(const t_symbol *s)
 {
   if (s && s->s_name)return getGLdefine(s->s_name);
   else return _GL_UNDEFINED;
 }
 
-int getGLdefine(const char *fixname)
+int gem::utils::gl::getGLdefine(const char *fixname)
 {
   char namearray[MAXPDSTRING];
   char*name=namearray;

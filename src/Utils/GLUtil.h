@@ -28,12 +28,12 @@ struct _symbol;
 #include "Gem/GemGL.h"
 
 
-namespace gem {
+namespace gem {namespace utils {namespace gl {
 GEM_EXTERN extern GLenum	glReportError (bool verbose=true);
 GEM_EXTERN extern int           getGLdefine(const char *name);
 GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
 GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
 GEM_EXTERN extern int           getGLbitfield(int argc, struct _atom *argv);
-};
+};};}; /* namespace */
 #endif  // for header file
 

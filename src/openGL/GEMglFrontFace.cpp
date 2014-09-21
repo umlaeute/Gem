@@ -16,7 +16,7 @@
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME ( GEMglFrontFace );
-using namespace gem;
+using namespace gem::utils::gl;
 
 /////////////////////////////////////////////////////////
 //
