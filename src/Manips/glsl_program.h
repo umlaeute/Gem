@@ -19,6 +19,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE__GEM_MANIPS_GLSL_PROGRAM_H_
 
 #include "Base/GemBase.h"
+#include "Utils/GLUtil.h"
 
 #define MAX_NUM_SHADERS 32
 
@@ -131,6 +132,10 @@ class GEM_EXTERN glsl_program : public GemBase
   int		  m_num;
 
   t_outlet	 *m_outProgramID;
+
+  gem::utils::gl::GLuintMap m_shadermapper, m_programmapper;
+  float                 m_programmapped;
+
 
   ////////
   // for geometry shaders we need a bit more...

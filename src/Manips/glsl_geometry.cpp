@@ -45,7 +45,10 @@ glsl_geometry :: glsl_geometry() :
   m_compiled(0), m_size(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0)
+  m_shaderID(0),
+  m_outShaderID(0),
+  m_idmapper("glsl.shader"),
+  m_idmapped(0.)
 {
   // create an outlet to send shader object ID
   m_outShaderID = outlet_new(this->x_obj, &s_float);
@@ -57,7 +60,10 @@ glsl_geometry :: glsl_geometry(t_symbol *filename) :
   m_compiled(0), m_size(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0)
+  m_shaderID(0),
+  m_outShaderID(0),
+  m_idmapper("glsl.shader"),
+  m_idmapped(0.)
 {
   openMess(filename);
 
@@ -88,9 +94,7 @@ void glsl_geometry :: closeMess(void)
   if(m_shaderARB)
     glDeleteObjectARB( m_shaderARB );
 
-  gem::utils::glsl::delshader(m_shader);
-  gem::utils::glsl::delshader(m_shaderARB);
-
+  m_idmapper.del(m_idmapped);m_idmapped=0.;
 
   m_shader=0;
   m_shaderARB = 0;
@@ -106,7 +110,7 @@ bool glsl_geometry :: openMessGL2(void)
 {
   if (m_shader) {
     glDeleteShader( m_shader );
-    gem::utils::glsl::delshader(m_shader);
+    m_idmapper.del(m_idmapped);m_idmapped=0.;
   }
   m_shader = glCreateShader(m_shaderTarget);
 
@@ -138,7 +142,7 @@ bool glsl_geometry :: openMessARB(void)
 {
   if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
-    gem::utils::glsl::delshader(m_shaderARB);
+    m_idmapper.del(m_idmapped);m_idmapped=0.;
   }
   m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
 
@@ -223,8 +227,11 @@ void glsl_geometry :: openMess(t_symbol *filename)
     {
       t_atom a;
       // send shaderID to outlet
-      gem::utils::glsl::atom_setshader(a, m_shader?m_shader:m_shaderARB);
-
+      if(m_shader)
+	m_idmapped=m_idmapper.set(m_shader, m_idmapped);
+      else
+	m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
+      SETFLOAT(&a, m_idmapped);
       outlet_list(m_outShaderID, gensym("list"), 1, &a);
     }
 }

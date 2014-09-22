@@ -115,6 +115,8 @@ glsl_program :: glsl_program()  :
   m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
   m_num(0),
   m_outProgramID(NULL),
+  m_shadermapper("glsl.shader"), m_programmapper("glsl.program"),
+  m_programmapped(0.),
   m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP),  m_geoOutVertices(-1)
 {
   int i=0;
@@ -133,8 +135,7 @@ glsl_program :: glsl_program()  :
 /////////////////////////////////////////////////////////
 glsl_program :: ~glsl_program()
 {
-  gem::utils::glsl::delshader(m_program);
-  gem::utils::glsl::delshader(m_programARB);
+  m_programmapper.del(m_programmapped);m_programmapped=0.;
 
   if(m_program)
     glDeleteProgram( m_program );
@@ -462,28 +463,28 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
 {
   int i;
 
-  if (!argc)
-    {
-      error("can't link non-existent shaders");
-      return;
-    }
+  if (!argc) {
+    error("can't link non-existent shaders");
+    return;
+  }
 
-  if(argc>MAX_NUM_SHADERS)
-    {
-      argc=MAX_NUM_SHADERS;
+  m_num=0;
+  for (i = 0; i < argc; i++) {
+    if(m_num>=MAX_NUM_SHADERS) {
       post("only %d shaders supported; skipping the rest", MAX_NUM_SHADERS);
+      break;
     }
-  for (i = 0; i < argc; i++)
-    {
-      GLuint ui=gem::utils::glsl::atom_getshader(argv[i]);
-      m_shaderObj[i]    = ui;
-      m_shaderObjARB[i] = ui;//static_cast<GLhandleARB>(fi.i);
+    GLuint ui=0;
+    t_float f=atom_getfloat(argv+i);
+    try {
+      ui=m_shadermapper.get(f);
+    } catch(GemException&x) {
+      post("unable to get shader for %f", f);
     }
-
-  //  not sure what to do here:  we don't want to link & re-link every render cycle,
-  //  but we do want to link when there are new shaders to link...so I made a seperate
-  //  link message
-  m_num = argc;
+    m_shaderObj[m_num]    = ui;
+    m_shaderObjARB[m_num] = ui;//static_cast<GLhandleARB>(fi.i);
+    m_num++;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -498,7 +499,7 @@ bool glsl_program :: LinkGL2()
 
   if(m_program) {
     glDeleteProgram( m_program );
-    gem::utils::glsl::delshader(m_program);
+    m_programmapper.del(m_programmapped);m_programmapped=0.;
     m_program = 0;
   }
   m_program = glCreateProgram();
@@ -560,7 +561,7 @@ bool glsl_program :: LinkARB()
 
   if(m_programARB) {
     glDeleteObjectARB( m_programARB );
-    gem::utils::glsl::delshader(m_programARB);
+    m_programmapper.del(m_programmapped);m_programmapped=0.;
     m_programARB = 0;
   }
   m_programARB = glCreateProgramObjectARB();
@@ -613,6 +614,7 @@ bool glsl_program :: LinkARB()
 
 void glsl_program :: LinkProgram()
 {
+  bool success=false;
   if (!m_num)
     {
       error("can't link zero shaders");
@@ -620,9 +622,14 @@ void glsl_program :: LinkProgram()
     }
 
   if(GLEW_VERSION_2_0)
-    LinkGL2();
+    success=LinkGL2();
   else
-    LinkARB();
+    success=LinkARB();
+
+
+  if(!success) {
+    return;
+  }
 
   //post("getting variables");
   getVariables();
@@ -642,7 +649,12 @@ void glsl_program :: LinkProgram()
   // send program ID to outlet
   /* JMZ: shouldn't this be only done, when we have a linked program? */
   t_atom a;
-  gem::utils::glsl::atom_setshader(a, (GLEW_VERSION_2_0)?m_program:m_programARB);
+  if(GLEW_VERSION_2_0) {
+    m_programmapped=m_programmapper.set(m_program, m_programmapped);
+  } else {
+    m_programmapped=m_programmapper.set(m_programARB, m_programmapped);
+  }
+  SETFLOAT(&a, m_programmapped);
   outlet_list(m_outProgramID, 0, 1, &a);
 
 }

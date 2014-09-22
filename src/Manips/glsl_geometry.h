@@ -93,9 +93,9 @@ class GEM_EXTERN glsl_geometry : public GemBase
   t_symbol* m_shaderFilename;
 
   GLint			m_shaderID;
-
-
   t_outlet		*m_outShaderID;
+  gem::utils::gl::GLuintMap m_idmapper;
+  float                 m_idmapped;
 };
 
 #endif	// for header file
