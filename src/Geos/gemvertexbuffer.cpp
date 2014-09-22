@@ -733,12 +733,14 @@ void gemvertexbuffer :: resetAttributes(void)
 
 void gemvertexbuffer :: printAttributes(void)
 {
+  if(glsl_program) {
+    post("GLSL-ProgramID: %d", glsl_program);
+  }
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     int j = i + 1;  // start counting at 1
     post("Attribute%d: %s", j, m_attribute[i].attrib_name.c_str());
-    post("size: %d", m_attribute[i].size);
-    post("stride: %d", m_attribute[i].stride);
-    post("program_index: %d", m_attribute[i].attrib_index);
-    post("- - - - - - - - - - - - ");
+    post("\tsize: %d", m_attribute[i].size);
+    post("\tstride: %d", m_attribute[i].stride);
+    post("\tprogram_index: %d", m_attribute[i].attrib_index);
   }
 }
