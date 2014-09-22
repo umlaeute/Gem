@@ -39,6 +39,7 @@ protected:
   public:
     VertexBuffer();
     VertexBuffer(unsigned int size, unsigned int stride);
+    VertexBuffer(const VertexBuffer&);
     ~VertexBuffer(void);
     void resize(unsigned int);
     bool create(void);

@@ -60,6 +60,21 @@ gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_,
 {
   resize(size_);
 }
+gemvertexbuffer :: VertexBuffer:: VertexBuffer (const VertexBuffer&vb)
+  :size(0)
+  ,stride(vb.stride)
+  ,vbo(vb.vbo)
+  ,array(NULL)
+  ,dirty(false)
+  ,enabled(vb.enabled)
+  ,attrib_index(vb.attrib_index)
+  ,attrib_name(vb.attrib_name)
+  ,attrib_array(vb.attrib_array)
+  ,offset(vb.offset)
+{
+  resize(vb.size);
+}
+
 gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void)
 {
   //::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
@@ -73,7 +88,6 @@ gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void)
 void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_)
 {
   float*tmp=NULL;
-  //::post("VertexBuffer::resize %d->%d", size, size_);
   try {
     tmp=new float[size_*stride];
   } catch (std::bad_alloc& ba)  {
@@ -82,6 +96,7 @@ void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_)
   }
   if(array) {
     delete[]array;
+    array=0;
   }
   array=tmp;
   size=size_;
@@ -690,8 +705,8 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
 
   tabname=std::string(atom_getsymbol(argv+1)->s_name);
   m_attribute.reserve(m_attribute.size()+1);
-  m_attribute.push_back(VertexBuffer());
-  m_attribute.back().stride = vbo_stride;
+
+  m_attribute.push_back(VertexBuffer(0, vbo_stride));
   m_attribute.back().attrib_index = glsl_index;
   m_attribute.back().attrib_name = name;
   m_attribute.back().attrib_array = tabname;
