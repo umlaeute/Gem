@@ -15,6 +15,7 @@
 #include "Base/GemShape.h"
 #include "Gem/Image.h"
 #include "Gem/State.h"
+#include "Utils/GLUtil.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -130,4 +131,6 @@ private :
   unsigned int glsl_program;
   VertexBuffer m_position, m_texture, m_color, m_normal;
   std::vector <VertexBuffer> m_attribute;
+
+  gem::utils::gl::GLuintMap m_idmapper;
 };

@@ -159,7 +159,8 @@ gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   m_position(vbo_size,3),
   m_texture (vbo_size,2),
   m_color   (vbo_size,4),
-  m_normal  (vbo_size,3)
+  m_normal  (vbo_size,3),
+  m_idmapper("glsl.program")
 {
   m_range[0]=0;
   m_range[1]=-1;
@@ -620,8 +621,10 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
 void gemvertexbuffer :: setProgramID(float ID)
 {
   // add 0.5 to glsl_program ID
-  float fix = 0.5f;
-  glsl_program = ID + fix;
+  glsl_program=0;
+  try {
+    glsl_program = m_idmapper.get(ID);
+  } catch(GemException&x) {}
 }
 
 void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
