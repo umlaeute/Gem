@@ -135,6 +135,12 @@ bool glsl_geometry :: openMessGL2(void)
     free(log);
     return false;
   }
+  if(m_shader) {
+    t_atom a;
+    m_idmapped=m_idmapper.set(m_shader, m_idmapped);
+    SETFLOAT(&a, m_idmapped);
+    outlet_list(m_outShaderID, gensym("list"), 1, &a);
+  }
   return true;
 }
 
@@ -167,20 +173,32 @@ bool glsl_geometry :: openMessARB(void)
     free(log);
     return false;
   }
-
+  if(m_shaderARB) {
+    t_atom a;
+    m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
+    SETFLOAT(&a, m_idmapped);
+    outlet_list(m_outShaderID, gensym("list"), 1, &a);
+  }
   return true;
 }
+
+
+
 
 void glsl_geometry :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
-  if( !GLEW_VERSION_1_1 ) { /* stupid check whether we have a valid context */
-    post("shader '%s' will be loaded when rendering is turned on (openGL context needed)", filename->s_name);
-    m_shaderFilename=filename;
-    return;
-  }
 
+  m_shaderFilename=filename;
+
+  if (getState()==RENDERING) loadShader();
+  return;
+}
+
+void glsl_geometry :: loadShader()
+{
+  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name)return;
   if(!isRunnable()) {
     return;
   }
@@ -188,7 +206,7 @@ void glsl_geometry :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
-  std::string fn = findFile(filename->s_name);
+  std::string fn = findFile(m_shaderFilename->s_name);
   const char*buf=fn.c_str();
 
   FILE *file = fopen(buf,"rb");
@@ -222,18 +240,6 @@ void glsl_geometry :: openMess(t_symbol *filename)
 
   verbose(1, "Loaded file: %s", buf);
   m_shaderFilename=NULL;
-
-  if (m_shader || m_shaderARB)
-    {
-      t_atom a;
-      // send shaderID to outlet
-      if(m_shader)
-	m_idmapped=m_idmapper.set(m_shader, m_idmapped);
-      else
-	m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
-      SETFLOAT(&a, m_idmapped);
-      outlet_list(m_outShaderID, gensym("list"), 1, &a);
-    }
 }
 
 ////////////////////////////////////////////////////////
@@ -259,14 +265,12 @@ bool glsl_geometry :: isRunnable() {
 /////////////////////////////////////////////////////////
 void glsl_geometry :: startRendering()
 {
-  if(NULL!=m_shaderFilename)
-    openMess(m_shaderFilename);
+  loadShader();
 
-  if (m_shaderString == NULL)
-    {
-      error("need to load a shader");
-      return;
-    }
+  if (m_shaderString == NULL) {
+    error("need to load a shader");
+    return;
+  }
 }
 
 ////////////////////////////////////////////////////////
