@@ -136,9 +136,7 @@ bool glsl_vertex :: openMessGL2(void)
   }
   if(m_shader) {
     t_atom a;
-    post("mapping %d to %f", m_shader, m_idmapped);
     m_idmapped=m_idmapper.set(m_shader, m_idmapped);
-    post("mapped %d to %f", m_shader, m_idmapped);
     SETFLOAT(&a, m_idmapped);
     outlet_list(m_outShaderID, gensym("list"), 1, &a);
   }
@@ -177,7 +175,6 @@ bool glsl_vertex :: openMessARB(void)
   if(m_shaderARB) {
     t_atom a;
     m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
-    post("mappedARB %d to %f", m_shaderARB, m_idmapped);
     SETFLOAT(&a, m_idmapped);
     outlet_list(m_outShaderID, gensym("list"), 1, &a);
   }
