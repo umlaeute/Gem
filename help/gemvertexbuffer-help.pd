@@ -1,4 +1,4 @@
-#N canvas 165 77 983 722 10;
+#N canvas 152 51 983 713 10;
 #N canvas 1 89 450 300 fps 0;
 #X obj 46 -61 gemhead;
 #X obj 46 -21 realtime;
@@ -17,7 +17,7 @@
 #X connect 6 0 7 0;
 #X connect 7 0 5 0;
 #X restore 466 149 pd fps;
-#X floatatom 466 172 5 0 0 1 fps - -;
+#X floatatom 466 172 5 0 0 1 fps - -, f 5;
 #X obj 6 76 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 7 236 cnv 15 450 375 empty empty empty 20 12 0 14 -233017 -66577
@@ -65,12 +65,10 @@
 #X connect 13 1 12 0;
 #X connect 14 0 15 0;
 #X restore 467 115 pd gemwin;
-#X msg 467 96 destroy;
+#X msg 467 96 create;
 #X text 463 75 Create window:;
 #X text 6 80 Description: Renders a vertexbuffer.;
 #X text 11 179 Arguments:;
-#X text 57 190 number of vertex to be used. nuber in form of 2^n work
-better;
 #X text 9 241 Inlets:;
 #X text 27 253 Inlet 1: gemlist;
 #X text 9 580 Outlets:;
@@ -103,7 +101,7 @@ better;
 #X obj 579 234 pix_texture;
 #X obj 593 153 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#N canvas 0 50 450 300 openpanel 0;
+#N canvas 1 51 450 300 openpanel 0;
 #X obj 114 62 inlet;
 #X obj 121 254 outlet;
 #X obj 114 125 openpanel;
@@ -120,8 +118,8 @@ better;
 #X obj 579 32 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X text 577 14 Example:;
-#X msg 816 661 resize 128;
-#X floatatom 636 96 5 0 0 0 - - -;
+#X msg 816 658 resize 128;
+#X floatatom 636 96 5 0 0 0 - - -, f 5;
 #X obj 579 95 scale 3;
 #X msg 593 271 position blablax blablay blablaz;
 #X msg 604 290 color colorr colorg colorb colora;
@@ -132,12 +130,12 @@ better;
 #X obj 841 56 cnv 15 120 160 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #N canvas 615 145 657 666 lorenz 0;
-#X floatatom 82 248 5 0 0 0 - - -;
-#X floatatom 124 248 5 0 0 0 - - -;
-#X floatatom 83 201 5 0 0 0 - - -;
-#X floatatom 125 201 5 0 0 0 - - -;
-#X floatatom 81 156 5 0 0 0 - - -;
-#X floatatom 124 156 5 0 0 0 - - -;
+#X floatatom 82 248 5 0 0 0 - - -, f 5;
+#X floatatom 124 248 5 0 0 0 - - -, f 5;
+#X floatatom 83 201 5 0 0 0 - - -, f 5;
+#X floatatom 125 201 5 0 0 0 - - -, f 5;
+#X floatatom 81 156 5 0 0 0 - - -, f 5;
+#X floatatom 124 156 5 0 0 0 - - -, f 5;
 #N canvas 145 116 1131 666 table 0;
 #X obj 266 31 loadbang;
 #X msg 266 53 dsp 1;
@@ -154,15 +152,15 @@ better;
 #X obj 392 275 v pr;
 #X obj 523 276 v r;
 #X obj 449 277 v b;
-#X floatatom 392 246 5 0 0 0 - - -;
-#X floatatom 523 248 5 0 0 0 - - -;
+#X floatatom 392 246 5 0 0 0 - - -, f 5;
+#X floatatom 523 248 5 0 0 0 - - -, f 5;
 #X msg 393 221 10;
 #X obj 447 218 expr 8./3;
 #X msg 344 344 set 1.2 2.3 4.4;
-#X floatatom 449 247 7 0 0 0 - - -;
+#X floatatom 449 247 7 0 0 0 - - -, f 7;
 #X msg 321 308 stop;
 #X msg 291 275 start;
-#X floatatom 615 248 5 0 0 0 - - -;
+#X floatatom 615 248 5 0 0 0 - - -, f 5;
 #X obj 615 277 v dt;
 #X msg 526 220 18;
 #X msg 611 221 0.01;
@@ -252,7 +250,7 @@ which generate chotic signals;
 #X obj 38 136 alpha;
 #X msg 118 577 draw line;
 #X msg 184 575 draw points;
-#X floatatom 147 288 5 0 0 0 - - -;
+#X floatatom 147 288 5 0 0 0 - - -, f 5;
 #X msg 82 449 color_enable \$1;
 #X obj 82 430 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
@@ -324,15 +322,15 @@ which generate chotic signals;
 #X obj 849 80 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #N canvas 285 255 805 628 wave 0;
-#X floatatom 87 237 5 0 0 0 - - -;
-#X floatatom 129 237 5 0 0 0 - - -;
-#X floatatom 172 237 5 0 0 0 - - -;
-#X floatatom 88 190 5 0 0 0 - - -;
-#X floatatom 130 190 5 0 0 0 - - -;
-#X floatatom 173 190 5 0 0 0 - - -;
-#X floatatom 86 145 5 0 0 0 - - -;
-#X floatatom 129 145 5 0 0 0 - - -;
-#X floatatom 173 145 5 0 0 0 - - -;
+#X floatatom 87 237 5 0 0 0 - - -, f 5;
+#X floatatom 129 237 5 0 0 0 - - -, f 5;
+#X floatatom 172 237 5 0 0 0 - - -, f 5;
+#X floatatom 88 190 5 0 0 0 - - -, f 5;
+#X floatatom 130 190 5 0 0 0 - - -, f 5;
+#X floatatom 173 190 5 0 0 0 - - -, f 5;
+#X floatatom 86 145 5 0 0 0 - - -, f 5;
+#X floatatom 129 145 5 0 0 0 - - -, f 5;
+#X floatatom 173 145 5 0 0 0 - - -, f 5;
 #X obj 43 592 gemvertexbuffer;
 #N canvas 145 161 1131 747 table 0;
 #X obj 36 59 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
@@ -462,7 +460,7 @@ which generate chotic signals;
 #X obj 341 72 t b b;
 #X obj 349 318 f;
 #X obj 440 380 +;
-#X floatatom 903 395 5 0 0 0 - - -;
+#X floatatom 903 395 5 0 0 0 - - -, f 5;
 #X obj 583 71 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 87 310 sig~ 0.3;
@@ -697,12 +695,12 @@ performances if you wish to update point position at every frame;
 #X obj 118 231 table \$0phasor 8192;
 #X obj 79 306 i \$0;
 #X msg 79 342 posX \$1phasor \, posY \$1sound;
-#X floatatom 155 34 5 0 0 0 - - -;
+#X floatatom 155 34 5 0 0 0 - - -, f 5;
 #X obj 15 157 scale 1;
-#X floatatom 52 115 5 0 0 0 - - -;
+#X floatatom 52 115 5 0 0 0 - - -, f 5;
 #X msg 227 395 draw points;
 #X msg 298 73 8192;
-#X floatatom 298 95 5 0 0 0 - - -;
+#X floatatom 298 95 5 0 0 0 - - -, f 5;
 #X obj 298 234 /;
 #X obj 298 118 t f b f f;
 #X msg 414 154 resize \$1;
@@ -764,7 +762,7 @@ update vertex normals from tables;
 colorA: update vertex colors from tables;
 #X text 27 267 Inlet 1: message: position / posX / posY / posZ: update
 vertex positions from tables;
-#N canvas 430 157 679 574 tabledata 0;
+#N canvas 428 155 679 574 tabledata 0;
 #X text 65 43 applying table data as vertex data;
 #X msg 30 100 position tabX tabY tabZ 0;
 #X msg 30 130 position tabXYZ 0;
@@ -802,7 +800,7 @@ at default offset=0);
 #X text 51 453 offset is always optional (default=0) \, and comes after
 the table names;
 #X text 50 507 unset table data is initialized to 0.f;
-#X restore 371 309 pd tabledata;
+#X restore 464 333 pd tabledata;
 #X text 27 384 Inlet 1: message: resize float : change the number of
 vertex to use;
 #X text 23 98 Vertex position \, color etc can be copy from pd table
@@ -857,181 +855,18 @@ draw lot's of points very efficiently.;
 #X obj 579 675 gemvertexbuffer;
 #X msg 728 569 draw_range \$1 \$2;
 #X obj 728 549 pack 0 0;
-#X floatatom 728 507 5 0 0 0 - - -;
-#X floatatom 774 507 5 0 0 0 - - -;
+#X floatatom 728 507 5 0 0 0 - - -, f 5;
+#X floatatom 774 507 5 0 0 0 - - -, f 5;
 #X obj 774 526 t b f;
 #X text 27 452 Inlet 1: message: draw_range float float : set the range
 for partial draw.;
 #X text 726 480 set start and end indexes to draw only a range of VBO
-;
+, f 33;
 #X text 668 458 as soon as they are updated;
 #X text 598 443 default : all VBO are disabled \, but they are enabled
 ;
-#X floatatom 699 135 5 1 64 0 - - -;
-#X floatatom 719 113 5 0 0 0 - - -;
-#X obj 841 216 cnv 15 120 55 empty empty empty 20 12 0 14 -204786 -66577
-0;
-#X obj 852 222 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
-1;
-#N canvas 354 59 604 727 shader 0;
-#X obj 154 30 inlet;
-#X msg 184 370 link \$1 \$2;
-#X obj 184 341 pack f f;
-#X obj 154 264 glsl_vertex;
-#X obj 154 307 glsl_fragment;
-#X obj 168 150 loadbang;
-#X obj 154 399 glsl_program;
-#X obj 229 124 gemhead 1;
-#X obj 229 149 t b b;
-#X msg 269 150 0;
-#X msg 229 91 1;
-#X obj 229 179 del 1;
-#X obj 154 673 gemvertexbuffer;
-#X obj 154 116 gemhead;
-#X obj 36 403 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
-1;
-#X msg 36 433 position_enable \$1;
-#X msg 105 366 print;
-#X msg 101 278 print;
-#X msg 103 233 print;
-#X obj 241 548 cnv 15 90 40 empty empty empty 20 12 0 14 -204786 -66577
-0;
-#X msg 250 559 program \$1;
-#X obj 30 544 cnv 15 120 70 empty empty empty 20 12 0 14 -204786 -66577
-0;
-#X msg 39 583 print_attributes;
-#X msg 38 556 reset_attributes;
-#X obj 27 487 cnv 15 140 40 empty empty empty 20 12 0 14 -204786 -66577
-0;
-#X obj 36 465 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
-1;
-#X msg 36 498 attribute_enable \$1;
-#X obj 319 87 table exmpl_LightPosition;
-#X obj 319 108 table exmpl_BrickColor;
-#X obj 319 128 table exmpl_MortarColor;
-#X obj 319 149 table exmpl_BrickSize;
-#X obj 319 169 table exmpl_BrickPct;
-#X msg 223 465 position exmpl_position \, attribute LightPosition exmpl_LightPosition
-\, attribute BrickColor exmpl_BrickColor \, attribute MortarColor exmpl_MortarColor
-\, attribute BrickSize exmpl_BrickSize \, attribute BrickPct exmpl_BrickPct
-;
-#X obj 224 608 loadbang;
-#X msg 224 635 resize 16 \, draw quad;
-#X text 358 635 4 quads;
-#N canvas 825 51 479 708 load_tables 0;
-#X obj 39 17 loadbang;
-#X obj 39 147 loadbang;
-#X obj 39 265 loadbang;
-#X obj 39 376 loadbang;
-#X obj 39 493 loadbang;
-#X obj 39 587 loadbang;
-#X msg 39 50 0 1 1 1 1 1 1 1 1 1 1 1 1 1 0.5 0.5 1 0.5 0.5 1 0.5 0.5
-1 0.5 0.5 0 0.5 0.6 0 0.5 0.6 0 0.5 0.6 0 0.5 0.6 1 1 1 1 1 1 1 1 1
-1 1 1;
-#X obj 39 109 s exmpl_BrickColor;
-#X msg 39 180 0 0.92 0.9 0.92 0.9 0.92 0.9 0.92 0.9 0.92 0.9 0.92 0.9
-0.92 0.9 0.92 0.9 0.82 0.7 0.82 0.7 0.82 0.7 0.82 0.7 0.92 0.9 0.92
-0.9 0.92 0.9 0.92 0.9;
-#X obj 39 233 s exmpl_BrickPct;
-#X msg 39 298 0 0.32 0.2 0.32 0.2 0.32 0.2 0.32 0.2 0.32 0.2 0.32 0.2
-0.32 0.2 0.32 0.2 0.92 0.45 0.92 0.45 0.92 0.45 0.92 0.45 0.62 0.2
-0.62 0.2 0.62 0.2 0.62 0.2;
-#X obj 39 349 s exmpl_BrickSize;
-#X msg 39 407 0 -3 -1 -0.2 -3 -1 -0.2 -3 -1 -0.2 -3 -1 -0.2 -3 -1 -0.2
--3 -1 -0.2 -3 -1 -0.2 -3 -1 -0.2 3.5 -6 -0.4 3.5 -6 -0.4 3.5 -6 -0.4
-3.5 -6 -0.4 -3 -1 -0.2 -3 -1 -0.2 -3 -1 -0.2 -3 -1 -0.2;
-#X obj 39 460 s exmpl_LightPosition;
-#X msg 39 618 0 -3.25 3.25 0 -0.75 3.25 0 -0.75 0.75 0 -3.25 0.75 0
-0.75 3.25 0 3.25 3.25 0 3.25 0.75 0 0.75 0.75 0 0.75 -0.75 0 3.25 -0.75
-0 3.25 -3.25 0 0.75 -3.25 0 -3.25 -0.75 0 -0.75 -0.75 0 -0.75 -3.25
-0 -3.25 -3.25 0;
-#X obj 39 681 s exmpl_position;
-#X msg 39 524 0 1 0.5 0.5 1 0.5 0.5 1 0.5 0.5 1 0.5 0.5 1 1 1 1 1 1
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0;
-#X obj 39 557 s exmpl_MortarColor;
-#X connect 0 0 6 0;
-#X connect 1 0 8 0;
-#X connect 2 0 10 0;
-#X connect 3 0 12 0;
-#X connect 4 0 16 0;
-#X connect 5 0 14 0;
-#X connect 6 0 7 0;
-#X connect 8 0 9 0;
-#X connect 10 0 11 0;
-#X connect 12 0 13 0;
-#X connect 14 0 15 0;
-#X connect 16 0 17 0;
-#X restore 319 34 pd load_tables;
-#X msg 168 207 open brick.vert;
-#X msg 195 234 open brick.frag;
-#X obj 97 63 loadbang;
-#X msg 97 85 0;
-#X obj 168 179 t b b;
-#X obj 223 431 t b f;
-#X obj 289 363 cnv 15 280 40 empty empty empty 20 12 0 14 -204786 -66577
-0;
-#X msg 298 375 attribute LightPosition exmpl_LightPosition;
-#X text 296 322 syntax:;
-#X text 319 559 <----- essential for lookup functions;
-#X text 296 338 attribute <name> <array> <offset(optional)>;
-#X obj 290 411 cnv 15 60 25 empty empty empty 20 12 0 14 -204786 -66577
-0;
-#N canvas 272 274 483 439 more 0;
-#X text 66 43 syntax:;
-#X text 67 95 adds an attribute to gemvertexbuffer;
-#X text 67 127 if the attribute already exists in gemvertexbuffer \,
-this message updates the attribute with the array data;
-#X text 66 60 attribute <name> <array> <offset(optional)>;
-#X text 66 281 attribute tables are interleaved only;
-#X text 64 177 if the vert or frag files are changed \, the attributes
-in gemvertexbuffer can be reset with a "reset_attributes" msg and re-added
-;
-#X text 65 236 there is no limit for the amount of attributes that
-can be added;
-#X text 66 321 in order to set 'uniform' type variables once per vertex
-or geo \, they must be changed to attribute/varying type in the vert
-and frag files;
-#X restore 297 415 pd more;
-#X obj 319 66 table exmpl_position;
-#X connect 0 0 13 0;
-#X connect 1 0 6 0;
-#X connect 2 0 1 0;
-#X connect 3 0 4 0;
-#X connect 3 1 2 0;
-#X connect 4 0 6 0;
-#X connect 4 1 2 1;
-#X connect 5 0 41 0;
-#X connect 6 0 12 0;
-#X connect 6 1 42 0;
-#X connect 7 0 8 0;
-#X connect 8 0 11 0;
-#X connect 8 1 9 0;
-#X connect 9 0 7 0;
-#X connect 10 0 7 0;
-#X connect 11 0 41 0;
-#X connect 13 0 3 0;
-#X connect 14 0 15 0;
-#X connect 15 0 12 0;
-#X connect 16 0 6 0;
-#X connect 17 0 4 0;
-#X connect 18 0 3 0;
-#X connect 20 0 12 0;
-#X connect 22 0 12 0;
-#X connect 23 0 12 0;
-#X connect 25 0 26 0;
-#X connect 26 0 12 0;
-#X connect 32 0 12 0;
-#X connect 33 0 34 0;
-#X connect 34 0 12 0;
-#X connect 37 0 3 0;
-#X connect 38 0 4 0;
-#X connect 39 0 40 0;
-#X connect 40 0 13 0;
-#X connect 41 0 37 0;
-#X connect 41 1 38 0;
-#X connect 42 0 32 0;
-#X connect 42 1 20 0;
-#X restore 852 245 pd shader;
+#X floatatom 699 135 5 1 64 0 - - -, f 5;
+#X floatatom 719 113 5 0 0 0 - - -, f 5;
 #X text 27 479 Inlet 1: message: program float : set the id for glsl
 program.;
 #X text 27 409 Inlet 1: message: postion_enable float \, color_enable
@@ -1043,50 +878,54 @@ attribute / update attribute from table;
 data;
 #X text 27 552 Inlet 1: message: print_attributes : print active attributes
 ;
+#X text 14 646 see examples/10.glsl/16.vertexbuffer_attributes.pd on
+how to;
+#X text 15 661 use attribute tables with the vertex buffer.;
+#X text 57 190 number of vertices to be used. if this is a power of
+two (2^n) \, you might have some performance gain.;
 #X connect 0 0 1 0;
 #X connect 9 0 10 0;
 #X connect 10 0 9 0;
-#X connect 21 0 70 0;
-#X connect 22 0 70 0;
-#X connect 23 0 70 0;
-#X connect 24 0 23 0;
-#X connect 25 0 37 0;
-#X connect 26 0 45 0;
-#X connect 27 0 47 0;
-#X connect 28 0 25 0;
-#X connect 29 0 27 0;
-#X connect 31 0 32 0;
-#X connect 32 0 70 0;
-#X connect 33 0 36 0;
-#X connect 34 0 35 0;
-#X connect 35 0 70 0;
-#X connect 36 0 70 0;
-#X connect 37 0 38 0;
-#X connect 38 0 70 0;
+#X connect 20 0 69 0;
+#X connect 21 0 69 0;
+#X connect 22 0 69 0;
+#X connect 23 0 22 0;
+#X connect 24 0 36 0;
+#X connect 25 0 44 0;
+#X connect 26 0 46 0;
+#X connect 27 0 24 0;
+#X connect 28 0 26 0;
+#X connect 30 0 31 0;
+#X connect 31 0 69 0;
+#X connect 32 0 35 0;
+#X connect 33 0 34 0;
+#X connect 34 0 69 0;
+#X connect 35 0 69 0;
+#X connect 36 0 37 0;
+#X connect 37 0 69 0;
+#X connect 38 0 39 0;
 #X connect 39 0 40 0;
-#X connect 40 0 41 0;
-#X connect 41 0 37 0;
-#X connect 43 0 29 0;
-#X connect 45 0 70 0;
-#X connect 46 0 47 1;
-#X connect 47 0 28 0;
-#X connect 48 0 70 0;
-#X connect 49 0 70 0;
-#X connect 50 0 70 0;
-#X connect 51 0 70 0;
-#X connect 52 0 68 0;
-#X connect 55 0 54 0;
-#X connect 57 0 56 0;
-#X connect 59 0 58 0;
-#X connect 68 0 48 0;
-#X connect 68 1 49 0;
-#X connect 68 2 69 0;
+#X connect 40 0 36 0;
+#X connect 42 0 28 0;
+#X connect 44 0 69 0;
+#X connect 45 0 46 1;
+#X connect 46 0 27 0;
+#X connect 47 0 69 0;
+#X connect 48 0 69 0;
+#X connect 49 0 69 0;
+#X connect 50 0 69 0;
+#X connect 51 0 67 0;
+#X connect 54 0 53 0;
+#X connect 56 0 55 0;
+#X connect 58 0 57 0;
+#X connect 67 0 47 0;
+#X connect 67 1 48 0;
+#X connect 67 2 68 0;
+#X connect 70 0 69 0;
 #X connect 71 0 70 0;
 #X connect 72 0 71 0;
-#X connect 73 0 72 0;
-#X connect 74 0 75 0;
-#X connect 75 0 72 0;
-#X connect 75 1 72 1;
-#X connect 80 0 25 1;
-#X connect 81 0 28 3;
-#X connect 83 0 84 0;
+#X connect 73 0 74 0;
+#X connect 74 0 71 0;
+#X connect 74 1 71 1;
+#X connect 79 0 24 1;
+#X connect 80 0 27 3;
