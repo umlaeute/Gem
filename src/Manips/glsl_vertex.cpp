@@ -294,6 +294,11 @@ void glsl_vertex :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_vertex :: printInfo()
 {
+  if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
+
   if(GLEW_VERSION_2_0 || GLEW_ARB_vertex_shader) {
     GLint bitnum = 0;
     post("glsl_vertex Hardware Info");
