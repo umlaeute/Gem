@@ -33,8 +33,9 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
 {
   CPPEXTERN_HEADER(gemvertexbuffer, GemShape);
 
- protected:
-  class VertexBuffer {
+protected:
+  class VertexBuffer
+  {
   public:
     VertexBuffer();
     VertexBuffer(unsigned int size, unsigned int stride);
@@ -51,24 +52,24 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
     float*array;
     bool dirty;
     bool enabled;
-	GLuint attrib_index;
-	std::string attrib_name;
-	std::string attrib_array;
-	unsigned int offset;
+    GLuint attrib_index;
+    std::string attrib_name;
+    std::string attrib_array;
+    unsigned int offset;
   };
 
 
- public:
+public:
   //////////
   // Constructor
   gemvertexbuffer(t_floatarg size);
 
   /////////////
-    // Variables
-    //float range_x;
-    //float range_y;
+  // Variables
+  //float range_x;
+  //float range_y;
 
-    protected:
+protected:
 
   //////////
   // Destructor
@@ -78,15 +79,18 @@ class GEM_EXTERN gemvertexbuffer : public GemShape
   // Do the rendering
   virtual void renderShape(GemState *state);
   //virtual void 	runKernel();
-  void tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array, unsigned int offset);
+  void tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array,
+               unsigned int offset);
   void resizeMess(float size);
 
- private :
+private :
   // GL functionality
   void createVBO(void);
-  void copyArray(const std::string&tab_name, VertexBuffer&array, unsigned int stride, unsigned int offset);
+  void copyArray(const std::string&tab_name, VertexBuffer&array,
+                 unsigned int stride, unsigned int offset);
 
-  void tableMess (VertexBuffer&vb, std::string name, unsigned int argc, t_atom *argv);
+  void tableMess (VertexBuffer&vb, std::string name, unsigned int argc,
+                  t_atom *argv);
   void positionMess(t_symbol*,int,t_atom*);
   void textureMess(t_symbol*,int,t_atom*);
   void colorMess(t_symbol*,int,t_atom*);
