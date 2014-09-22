@@ -48,8 +48,9 @@ libUtils_la_SOURCES=  \
 	Functions.cpp \
 	Functions.h \
 	GLUtil.cpp \
-	GLUtil_generated.h \
 	GLUtil.h \
+	GLUtil_define.cpp \
+	GLUtil_define_generated.h \
 	GemMath.h \
 	Matrix.cpp \
 	Matrix.h \
