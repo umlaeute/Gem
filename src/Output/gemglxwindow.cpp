@@ -285,7 +285,7 @@ struct gemglxwindow::PIMPL {
     }
 
     if(vi->depth<24)
-      ::post("Only using %d color bits", vi->depth);
+      ::verbose(0, "Only using %d color bits", vi->depth);
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
       ::error("TrueColor visual required for this program (got %d)", vi->c_class);
       return false;
