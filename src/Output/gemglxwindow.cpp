@@ -686,7 +686,7 @@ bool gemglxwindow :: create(void)
 	  sharedPimpl->gemcontext = createContext();
 	} catch (GemException&x) {
 	  sharedPimpl->gemcontext = NULL;
-	  error("creationg of shared gem::context failed: %s", x.what());
+	  error("creation of shared gem::context failed: %s", x.what());
 	}
       }
     }
