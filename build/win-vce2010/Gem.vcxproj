@@ -101,7 +101,7 @@
     <ClInclude Include="..\..\src\Utils\GemMath.h" />
     <ClInclude Include="..\..\src\Utils\GemString.h" />
     <ClInclude Include="..\..\src\Utils\GLUtil.h" />
-    <ClInclude Include="..\..\src\Utils\GLUtil_generated.h" />
+    <ClInclude Include="..\..\src\Utils\GLUtil_define_generated.h" />
     <ClInclude Include="..\..\src\Utils\Matrix.h" />
     <ClInclude Include="..\..\src\Utils\PixPete.h" />
     <ClInclude Include="..\..\src\Utils\plist.h" />
@@ -706,6 +706,7 @@
     <ClCompile Include="..\..\src\Utils\Functions.cpp" />
     <ClCompile Include="..\..\src\Utils\GemString.cpp" />
     <ClCompile Include="..\..\src\Utils\GLUtil.cpp" />
+    <ClCompile Include="..\..\src\Utils\GLUtil_define.cpp" />
     <ClCompile Include="..\..\src\Utils\Matrix.cpp" />
     <ClCompile Include="..\..\src\Utils\MSVCMinGW.cpp" />
     <ClCompile Include="..\..\src\Utils\plist.cpp" />
