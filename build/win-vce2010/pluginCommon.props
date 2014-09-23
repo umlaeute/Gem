@@ -10,5 +10,8 @@
     <Link>
       <OutputFile>$(OutDir)gem_$(ProjectName).dll</OutputFile>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
 </Project>
