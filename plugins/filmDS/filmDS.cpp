@@ -539,11 +539,6 @@ public:
     //printf("step 6\n");
     std::wstring filePathW = std::wstring(path.begin(), path.end());
 
-//#define USE_RENDERFILE
-#ifdef USE_RENDERFILE
-    //this is the easier way to connect the graph, but we have to remove the video window manually
-    hr = m_pGraph->RenderFile(filePathW.c_str(), NULL);
-#else
     //this is the more manual way to do it - its a pain though because the audio won't be connected by default
     hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile);
     if (FAILED(hr)){
@@ -558,7 +553,6 @@ public:
             tearDown();
             return false;
     }
-#endif
     //printf("step 7\n");
     if (SUCCEEDED(hr)) {
 
@@ -594,14 +588,13 @@ public:
         return false;
       }
 
-#ifndef USE_RENDERFILE
       hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
       if (FAILED(hr)){MARK_HR(hr);
               printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
               tearDown();
               return false;
       }
-#endif
+
       AM_MEDIA_TYPE mt;
       ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
 
@@ -619,63 +612,6 @@ public:
 
       videoSize = width * height * 4;
       //printf("video dimensions are %i %i\n", width, height);
-
-#ifdef USE_RENDERFILE
-      //we need to manually change the output from the renderer window to the null renderer
-      IBaseFilter * m_pVideoRenderer;
-      IPin* pinIn = 0;
-      IPin* pinOut = 0;
-
-      IBaseFilter * m_pColorSpace;
-
-      m_pGraph->FindFilterByName(L"Video Renderer", &m_pVideoRenderer);
-      if (FAILED(hr)) {
-        printf("failed to find the video renderer\n");
-        tearDown();
-        return false;
-      }
-
-      //we disconnect the video renderer window by finding the output pin of the sample grabber
-      hr = m_pGrabberF->FindPin(L"Out", &pinOut);
-      if (FAILED(hr)) {
-        printf("failed to find the sample grabber output pin\n");
-        tearDown();
-        return false;
-      }
-
-      hr = pinOut->Disconnect();
-      if (FAILED(hr)) {
-        printf("failed to disconnect grabber output pin\n");
-        tearDown();
-        return false;
-      }
-      //SaveGraphFile(m_pGraph, L"test1.grf");
-
-      //we have to remove it as well otherwise the graph builder will reconnect it
-      hr = m_pGraph->RemoveFilter(m_pVideoRenderer);
-      if (FAILED(hr)) {
-        printf("failed to remove the default renderer\n");
-        tearDown();
-        return false;
-      } else {
-        m_pVideoRenderer->Release();
-      }
-
-      //now connect the null renderer to the grabber output, if we don't do this not frames will be captured
-      hr = m_pNullRenderer->FindPin(L"In", &pinIn);
-      if (FAILED(hr)) {
-        printf("failed to find the input pin of the null renderer\n");
-        tearDown();
-        return false;
-      }
-
-      hr = pinOut->Connect(pinIn, NULL);
-      if (FAILED(hr)) {
-        printf("failed to connect the null renderer\n");
-        tearDown();
-        return false;
-      }
-#endif
 
       //printf("step 8\n");
       // Run the graph.
