@@ -31,6 +31,9 @@
 #endif
 #include <X11/cursorfont.h>
 
+// for printf() debugging
+#include <stdio.h>
+
 CPPEXTERN_NEW(gemglxwindow);
 
 #define EVENT_MASK                                                      \
