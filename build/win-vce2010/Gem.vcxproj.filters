@@ -69,7 +69,7 @@
     <ClInclude Include="..\..\src\Utils\GLUtil.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Utils\GLUtil_generated.h">
+    <ClInclude Include="..\..\src\Utils\GLUtil_define_generated.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Utils\Matrix.h">
@@ -1854,6 +1854,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Utils\GLUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utils\GLUtil_define.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Utils\Matrix.cpp">

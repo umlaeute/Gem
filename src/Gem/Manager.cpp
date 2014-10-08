@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2001-2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    Copyright (c) 2002 tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -18,7 +18,7 @@
 #include "Gem/GemConfig.h"
 
 #include "Gem/Manager.h"
-
+#include "Gem/RTE.h"
 
 #include "Gem/Settings.h"
 #include "Gem/GLStack.h"
@@ -59,6 +59,8 @@ static WindowInfo gfxInfo;
 static WindowInfo constInfo;
 #endif /* GEM_MULTICONTEXT */
 
+
+using namespace gem::utils::gl;
 
 static bool glewInitialized = false;
 

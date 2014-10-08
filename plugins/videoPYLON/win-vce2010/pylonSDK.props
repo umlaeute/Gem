@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <PYLON_ROOT>C:\Program Files\Basler\pylon 3.1</PYLON_ROOT>
+    <PYLON_SDK>$(PYLON_ROOT)\pylon</PYLON_SDK>
+    <GENICAM_SDK>$(PYLON_ROOT)\genicam\library\cpp</GENICAM_SDK>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>pylonSDK</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(GENICAM_SDK)\include;$(PYLON_SDK)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HAVE_LIBPYLONUTILITY;HAVE_PYLON;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(GENICAM_SDK)\lib\win32_i86;$(PYLON_SDK)/lib/$(ProcessorArchitectureAsPlatform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PylonBase_MD_VC100.lib;PylonBootstrapper.lib;PylonGigE_MD_VC100_TL.lib;PylonUtility_MD_VC100.lib;CLProtocol_MD_VC100_v2_3.lib;GCBase_MD_VC100_v2_3.lib;GenApi_MD_VC100_v2_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="PYLON_ROOT">
+      <Value>$(PYLON_ROOT)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PYLON_SDK">
+      <Value>$(PYLON_SDK)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GENICAM_SDK">
+      <Value>$(GENICAM_SDK)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

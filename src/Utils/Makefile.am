@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libUtils.la
@@ -48,8 +48,9 @@ libUtils_la_SOURCES=  \
 	Functions.cpp \
 	Functions.h \
 	GLUtil.cpp \
-	GLUtil_generated.h \
 	GLUtil.h \
+	GLUtil_define.cpp \
+	GLUtil_define_generated.h \
 	GemMath.h \
 	Matrix.cpp \
 	Matrix.h \

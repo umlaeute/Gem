@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = foreign subdir-objects
+
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
@@ -11,7 +13,7 @@ dist_gemhelp_DATA =
 
 if WINDOWS
 pkglib_LTLIBRARIES+= gem_videoVIDS.la
-dist_gemhelp_DATA +=DS-videoplugin.pd
+dist_gemhelp_DATA +=VIDS-videoplugin.pd
 endif
 
 gem_videoVIDS_la_CXXFLAGS =

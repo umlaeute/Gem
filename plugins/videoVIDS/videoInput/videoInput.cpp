@@ -749,7 +749,7 @@ void videoInput::setUseCallback(bool useCallback)
 //
 // ----------------------------------------------------------------------
 
-void videoInput::setIdealFramerate(int deviceNumber, int idealFramerate)
+void videoInput::setIdealFramerate(int deviceNumber, float idealFramerate)
 {
   if(deviceNumber >= VI_MAX_CAMERAS
       || VDList[deviceNumber]->readyToCapture) {
@@ -758,7 +758,7 @@ void videoInput::setIdealFramerate(int deviceNumber, int idealFramerate)
 
   if( idealFramerate > 0 ) {
     VDList[deviceNumber]->requestedFrameTime = (unsigned long)(
-          10000000 / idealFramerate);
+          10000000. / idealFramerate);
   }
 }
 
@@ -1442,8 +1442,10 @@ bool videoInput::setVideoSettingFilterPct(int deviceID, long Property,
     } else {
       rasterValue += stepAmnt - mod;
     }
-    printf("RASTER - pctValue is %f - value is %i - step is %i - mod is %i - rasterValue is %i\n",
-           pctValue, value, stepAmnt, mod, rasterValue);
+    if(verbose) {
+      printf("RASTER - pctValue is %f - value is %i - step is %i - mod is %i - rasterValue is %i\n",
+              pctValue, value, stepAmnt, mod, rasterValue);
+    }
   }
 
   return setVideoSettingFilter(deviceID, Property, rasterValue, Flags,

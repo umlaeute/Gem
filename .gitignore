@@ -45,3 +45,20 @@ Makefile
 !build/autoconf/Makefile
 ## OSX-byproducts
 .DS_Store
+
+# Microsoft Visual C++ Auto-generanted files and folders #
+##########################################################
+ReleaseDummy/
+Release/
+Debug/
+ipch/
+_UpgradeReport_Files/
+obj/
+*.user
+*.opensdf
+*.sdf
+*.exp
+*.lib
+*.obj
+*.tlog
+*.suo

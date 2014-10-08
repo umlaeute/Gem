@@ -61,6 +61,7 @@ class GEM_EXTERN glsl_geometry : public GemBase
   virtual bool openMessGL2(void);
   virtual bool openMessARB(void);
   virtual void openMess(t_symbol *filename);
+  virtual void loadShader(void);
 
 
   ////////
@@ -93,9 +94,9 @@ class GEM_EXTERN glsl_geometry : public GemBase
   t_symbol* m_shaderFilename;
 
   GLint			m_shaderID;
-
-
   t_outlet		*m_outShaderID;
+  gem::utils::gl::GLuintMap m_idmapper;
+  float                 m_idmapped;
 };
 
 #endif	// for header file

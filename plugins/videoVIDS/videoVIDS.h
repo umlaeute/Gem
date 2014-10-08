@@ -58,6 +58,7 @@ private:
   gem::Properties m_props;
   videoInput m_vi;
   int m_ID, m_wantID;
+  int m_width, m_height;
 };
 };
 }; // namespace

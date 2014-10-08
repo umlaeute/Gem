@@ -67,6 +67,7 @@ static const char *GEM_AUTHORS[] = {
 static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christoph Steiner, et al.";
 
+# include "m_pd.h"
 extern "C" {
 #if defined HAVE_S_STUFF_H
 # include "s_stuff.h"

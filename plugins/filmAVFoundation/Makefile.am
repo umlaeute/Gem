@@ -22,8 +22,8 @@ gem_filmAVFoundation_la_LIBADD   += -L$(top_builddir)
 #@GEM_EXTERNAL_LIBS@
 
 # Dependencies
-gem_filmAVFoundation_la_OBJCXXFLAGS += @GEM_FRAMEWORK_AVFOUNDATION@
-#gem_filmAVFoundation_la_LIBADD   += @GEM_FRAMEWORK_AVFOUNDATION@
+gem_filmAVFoundation_la_OBJCXXFLAGS += @GEM_FRAMEWORK_AVFOUNDATION_CFLAGS@
+#gem_filmAVFoundation_la_LIBADD   += @GEM_FRAMEWORK_AVFOUNDATION_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

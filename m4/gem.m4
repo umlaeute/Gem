@@ -112,10 +112,10 @@ AC_SUBST(GEM_LIB_[]NAME[]_LIBS)
 
 AC_ARG_WITH([Name],
              AC_HELP_STRING([--without-[]Name], [disable Name ($8)]))
-AC_ARG_WITH([]Name-cflags,
-             AC_HELP_STRING([--with-[]Name-cflags=-I/path/to/[]Name/include/], [compiler flags for Name]))
-AC_ARG_WITH([]Name-libs,
-             AC_HELP_STRING([--with-[]Name-libs="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
+AC_ARG_WITH([]Name-CFLAGS,
+             AC_HELP_STRING([--with-[]Name-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name]))
+AC_ARG_WITH([]Name-LIBS,
+             AC_HELP_STRING([--with-[]Name-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
 
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
   AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
@@ -131,22 +131,46 @@ AS_IF([ test x$with_[]Name = "xno" ],[
 ],[
   have_[]Name="no (needs check)"
 
-## -includes -> -cflags transition
-  AS_IF([test "x$with_[]Name[]_includes" != "x" ],[
-    AS_IF([test "x$with_[]Name[]_cflags" = "x" ],
-     [with_[]Name[]_cflags=$with_[]Name[]_includes],
-     [AC_MSG_ERROR([--with-[]Name[]-includes conflicts with --with-[]Name[]-cflags])]
-    )
-  ])
 
+## first check for conflicting flags:
+## - only one (1!) of _CFLAGS, _cflags and _includes must be present
+  AS_IF([test "x${with_[]Name[]_CFLAGS}${with_[]Name[]_cflags}${with_[]Name[]_includes}" != "x" ],[
+      AS_IF([test "x${with_[]Name[]_CFLAGS}" != "x" -a "x${with_[]Name[]_cflags}${with_[]Name[]_includes}" != "x" ],[
+             AC_MSG_ERROR([you_ can only use one (1!) of --with-[]Name[]-CFLAGS (preferred), --with-[]Name[]-cflags and --with-[]Name[]-includes])
+            ],[
+	    AS_IF([test "x${with_[]Name[]_cflags}" != "x" -a "x${with_[]Name[]_includes}" != "x" ],[
+                   AC_MSG_ERROR([you can only use one (1!) of --with-[]Name[]-CFLAGS (preferred), --with-[]Name[]-cflags and --with-[]Name[]-includes])
+                  ])
+            ])
+      ])
+## - only one (1!) of _LIBS and _libs must be present
+    AS_IF([test "x${with_[]Name[]_LIBS}" != "x" -a "x${with_[]Name[]_libs}" != "x" ],[
+           AC_MSG_ERROR([you can only use one (1!) of --with-[]Name[]-LIBS (preferred) and --with-[]Name[]-libs])
+          ])
+
+## then check for fallbacks
+### - _CFLAGS defaults to _cflags defaults to _includes
+  AS_IF([test "x${with_[]Name[]_CFLAGS}" = "x" ],[
+    AS_IF([test "x${with_[]Name[]_cflags}" = "x"],[
+           with_[]Name[]_CFLAGS=${with_[]Name[]_includes}
+          ],[
+           with_[]Name[]_CFLAGS=${with_[]Name[]_cflags}
+          ])
+        ])
+### - _LIBS defaults to _libs
+  AS_IF([test "x${with_[]Name[]_LIBS}" = "x" ],[
+         with_[]Name[]_LIBS=${with_[]Name[]_libs}
+        ])
+
+## check for directories (so we need to prefix -I or -L)
   tmp_gem_check_lib_extracflags=""
   tmp_gem_check_lib_extralibs=""
-  AS_IF([test -d "$with_[]Name[]_cflags" ],
-        [tmp_gem_check_lib_extracflags="-I$with_[]Name[]_cflags"],
-        [tmp_gem_check_lib_extracflags="$with_[]Name[]_cflags"])
-  AS_IF([test -d "$with_[]Name[]_libs" ],
-        [tmp_gem_check_lib_extralibs="-L$with_[]Name[]_libs"],
-        [tmp_gem_check_lib_extralibs="$with_[]Name[]_libs"])
+  AS_IF([test -d "$with_[]Name[]_CFLAGS" ],
+        [tmp_gem_check_lib_extracflags="-I$with_[]Name[]_CFLAGS"],
+        [tmp_gem_check_lib_extracflags="$with_[]Name[]_CFLAGS"])
+  AS_IF([test -d "$with_[]Name[]_LIBS" ],
+        [tmp_gem_check_lib_extralibs="-L$with_[]Name[]_LIBS"],
+        [tmp_gem_check_lib_extralibs="$with_[]Name[]_LIBS"])
 
   AS_IF([test "x$tmp_gem_check_lib_extracflags" != "x" ],[
     CFLAGS="$tmp_gem_check_lib_extracflags $CFLAGS"
@@ -295,11 +319,33 @@ AS_IF([ $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&
 #
 AC_DEFUN([GEM_CHECK_FRAMEWORK],
 [
+  define([Name],[translit([$1],[./-+], [____])])
   define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
                               [ABCDEFGHIJKLMNOPQRSTUVWXYZ____])])
-  AC_SUBST(GEM_FRAMEWORK_[]NAME[])
+  AC_SUBST(GEM_FRAMEWORK_[]NAME[]_CFLAGS)
+  AC_SUBST(GEM_FRAMEWORK_[]NAME[]_LIBS)
 
-  AC_MSG_CHECKING([for "$1"-framework])
+  AC_ARG_WITH([Name]-framework,
+             AC_HELP_STRING([--without-[]Name[]-framework], [disable Name-framework]))
+  AC_ARG_WITH([]Name[]-framework-CFLAGS,
+             AC_HELP_STRING([--with-[]Name[]-framework-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name-framework]))
+  AC_ARG_WITH([]Name[]-framework-LIBS,
+             AC_HELP_STRING([--with-[]Name[]-framework-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name-framework]))
+  AS_IF([ test "x$with_[]Name[]_framework" = "x" ], [ with_[]Name="$with_ALL" ])
+
+
+  AC_MSG_CHECKING([for $1-framework])
+
+AS_IF([ test x$with_[]Name[]_framework = "xno" ],[
+  have_[]Name="no (forced)"
+],[
+ AS_IF([ test "x${with_[]Name[]_framework_CFLAGS}${with_[]Name[]_framework_LIBS}" != "x" ], [
+## manually forced: yes
+    GEM_FRAMEWORK_[]NAME[]_CFLAGS=${with_[]Name[]_framework_CFLAGS}
+    GEM_FRAMEWORK_[]NAME[]_LIBS=${with_[]Name[]_framework_LIBS}
+    have_[]Name="yes"
+ ],[
+  have_[]Name="no (needs check)"
 
   gem_check_ldflags_org="${LDFLAGS}"
   LDFLAGS="-framework [$1] ${LDFLAGS}"
@@ -307,18 +353,25 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])], [gem_check_ldflags_success="yes"],[gem_check_ldflags_success="no"])
 
   AS_IF([ test "x${gem_check_ldflags_success}" = "xyes" ], [
-    AC_MSG_RESULT([yes])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [framework $1])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [framework $1])
-    GEM_FRAMEWORK_[]NAME[]="-framework [$1]"
+    have_[]Name="yes"
+    GEM_FRAMEWORK_[]NAME[]_CFLAGS=""
+    GEM_FRAMEWORK_[]NAME[]_LIBS="-framework [$1]"
     [$2]
   ],[
-    AC_MSG_RESULT([no])
+    have_[]Name="no"
     [$3]
   ])
   LDFLAGS="${gem_check_ldflags_org}"
-  AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x$gem_check_ldflags_success" = "xyes"])
+ ])
+])
+  AS_IF([ test "x${have_[]Name}" = "xyes" ],[
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$1), [1], [$1 framework])
+    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_GEM_FRAMEWORK_$1), [1], [$1 framework])
+  ])
+  AC_MSG_RESULT([${have_[]Name}])
+  AM_CONDITIONAL(HAVE_FRAMEWORK_[]NAME, [test "x${have_[]Name}" = "xyes"])
 undefine([NAME])
+undefine([Name])
 ])# GEM_CHECK_FRAMEWORK
 
 # GEM_CHECK_LDFLAGS(ADDITIONAL-LDFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)

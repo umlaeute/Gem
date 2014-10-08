@@ -17,6 +17,7 @@
 
 
 CPPEXTERN_NEW( GEMglReportError);
+using namespace gem::utils::gl;
 
 /////////////////////////////////////////////////////////
 //
