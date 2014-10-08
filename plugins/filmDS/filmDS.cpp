@@ -297,10 +297,8 @@ class gem::plugins::filmDS::DirectShowVideo : public ISampleGrabberCB
 public:
   IGraphBuilder *m_pGraph;          // Graph Builder interface
   IMediaControl *m_pControl;        // Media Control interface
-  IMediaEvent   *m_pEvent;          // Media Event interface
   IMediaSeeking *m_pSeek;           // Media Seeking interface
   IMediaPosition*m_pPosition;
-  IBasicAudio   *m_pAudio;          // Audio Settings interface
   ISampleGrabber*m_pGrabber;
   IBaseFilter   *m_pSourceFile;
   IBaseFilter   *m_pGrabberF;
@@ -331,10 +329,8 @@ public:
   DirectShowVideo()
     : m_pGraph(NULL)
     , m_pControl(NULL)
-    , m_pEvent(NULL)
     , m_pSeek(NULL)
     , m_pPosition(NULL)
-    , m_pAudio(NULL)
     , m_pGrabber(NULL)
     , m_pSourceFile(NULL)
     , m_pGrabberF(NULL)
@@ -376,14 +372,8 @@ public:
     if(m_pControl) {
       m_pControl->Release();
     }
-    if(m_pEvent) {
-      m_pEvent->Release();
-    }
     if(m_pSeek) {
       m_pSeek->Release();
-    }
-    if(m_pAudio) {
-      m_pAudio->Release();
     }
     if(m_pBasicVideo) {
       m_pBasicVideo->Release();
@@ -417,9 +407,7 @@ public:
   {
     m_pGraph = NULL;
     m_pControl = NULL;
-    m_pEvent = NULL;
     m_pSeek = NULL;
-    m_pAudio = NULL;
     m_pGrabber = NULL;
     m_pGrabberF = NULL;
     m_pBasicVideo = NULL;
@@ -529,20 +517,6 @@ public:
 
     hr = m_pGraph->QueryInterface(IID_IMediaPosition, (LPVOID *)&m_pPosition);
     if (FAILED(hr) || !m_pPosition) {
-      tearDown();
-      return false;
-    }
-    // FIXXME: do we need m_pAudio?
-    hr = m_pGraph->QueryInterface(IID_IBasicAudio,(void**)&m_pAudio);
-    if (FAILED(hr)) {
-      tearDown();
-      return false;
-    }
-
-    // And get the Media Event interface, too.
-    //printf("step 5\n");
-    hr = m_pGraph->QueryInterface(IID_IMediaEvent, (void **)&m_pEvent);
-    if (FAILED(hr)) {
       tearDown();
       return false;
     }
