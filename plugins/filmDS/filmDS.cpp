@@ -303,14 +303,7 @@ public:
   IBasicVideo   *m_pBasicVideo;
   IBaseFilter   *m_pNullRenderer;
 
-  REFERENCE_TIME timeNow;                                // Used for FF & REW of movie, current time
-  LONGLONG lPositionInSecs;                // Time in  seconds
-  LONGLONG lDurationInNanoSecs;                // Duration in nanoseconds
-  LONGLONG lTotalDuration;                // Total duration
   REFERENCE_TIME rtNew;                                // Reference time of movie
-  long lPosition;                                        // Desired position of movie used in FF & REW
-  long lvolume;                                        // The volume level in 1/100ths dB Valid values range from -10,000 (silence) to 0 (full volume), 0 = 0 dB -10000 = -100 dB
-  long evCode;                                        // event variable, used to in file to complete wait.
 
   long width, height;
   long videoSize;
@@ -405,14 +398,7 @@ public:
 
     rawBuffer = NULL;
 
-    timeNow = 0;
-    lPositionInSecs = 0;
-    lDurationInNanoSecs = 0;
-    lTotalDuration = 0;
     rtNew = 0;
-    lPosition = 0;
-    lvolume = -1000;
-    evCode = 0;
     width = height = 0;
     videoSize = 0;
     bVideoOpened = false;
