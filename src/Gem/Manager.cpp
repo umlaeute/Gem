@@ -33,11 +33,6 @@
 # include <X11/Xlib.h>
 #elif defined __APPLE__
 # include <time.h>
-#elif defined _WIN32
-# ifdef HAVE_QUICKTIME
-#  include <QTML.h>
-#  include <Movies.h>
-# endif
 #endif
 
 #include "Utils/SIMD.h"
