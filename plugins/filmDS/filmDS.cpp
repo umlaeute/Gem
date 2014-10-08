@@ -291,17 +291,17 @@ static void releaseCom()
 class gem::plugins::filmDS::DirectShowVideo : public ISampleGrabberCB
 {
 public:
-  IGraphBuilder *m_pGraph;                // Graph Builder interface
+  IGraphBuilder *m_pGraph;          // Graph Builder interface
   IMediaControl *m_pControl;        // Media Control interface
-  IMediaEvent   *m_pEvent;                // Media Event interface
-  IMediaSeeking *m_pSeek;                // Media Seeking interface
-  IMediaPosition * m_pPosition;
-  IBasicAudio   *m_pAudio;                // Audio Settings interface
-  ISampleGrabber * m_pGrabber;
-  IBaseFilter * m_pSourceFile;
-  IBaseFilter * m_pGrabberF;
-  IBasicVideo * m_pBasicVideo;
-  IBaseFilter * m_pNullRenderer;
+  IMediaEvent   *m_pEvent;          // Media Event interface
+  IMediaSeeking *m_pSeek;           // Media Seeking interface
+  IMediaPosition*m_pPosition;
+  IBasicAudio   *m_pAudio;          // Audio Settings interface
+  ISampleGrabber*m_pGrabber;
+  IBaseFilter   *m_pSourceFile;
+  IBaseFilter   *m_pGrabberF;
+  IBasicVideo   *m_pBasicVideo;
+  IBaseFilter   *m_pNullRenderer;
 
   REFERENCE_TIME timeNow;                                // Used for FF & REW of movie, current time
   LONGLONG lPositionInSecs;                // Time in  seconds
