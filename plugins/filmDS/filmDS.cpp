@@ -507,20 +507,20 @@ public:
     //printf("step 1\n");
     HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
                           IID_IGraphBuilder, (void **)&m_pGraph);
-    if (FAILED(hr)) {
+    if (FAILED(hr) || !m_pGraph) {
       tearDown();
       return false;
     }
 
     //printf("step 2\n");
     hr = m_pGraph->QueryInterface(IID_IMediaSeeking, (void**)&m_pSeek);
-    if (FAILED(hr)) {
+    if (FAILED(hr) || !m_pSeek) {
       tearDown();
       return false;
     }
 
     hr = m_pGraph->QueryInterface(IID_IMediaPosition, (LPVOID *)&m_pPosition);
-    if (FAILED(hr)) {
+    if (FAILED(hr) || !m_pPosition) {
       tearDown();
       return false;
     }
