@@ -229,8 +229,7 @@ void LocalDeleteMediaType(AM_MEDIA_TYPE *pmt)
 HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
 {
   const WCHAR wszStreamName[] = L"ActiveMovieGraph";
-  HRESULT hr;
-
+  HRESULT hr=0;
   IStorage *pStorage = NULL;
   hr = StgCreateDocfile(
          wszPath,
