@@ -291,6 +291,46 @@ static void releaseCom()
 class gem::plugins::filmDS::DirectShowVideo : public ISampleGrabberCB
 {
 public:
+  HRESULT hr;                                                        // COM return value
+  IGraphBuilder *m_pGraph;                // Graph Builder interface
+  IMediaControl *m_pControl;        // Media Control interface
+  IMediaEvent   *m_pEvent;                // Media Event interface
+  IMediaSeeking *m_pSeek;                // Media Seeking interface
+  IMediaPosition * m_pPosition;
+  IBasicAudio   *m_pAudio;                // Audio Settings interface
+  ISampleGrabber * m_pGrabber;
+  IBaseFilter * m_pSourceFile;
+  IBaseFilter * m_pGrabberF;
+  IBasicVideo * m_pBasicVideo;
+  IBaseFilter * m_pNullRenderer;
+
+  REFERENCE_TIME timeNow;                                // Used for FF & REW of movie, current time
+  LONGLONG lPositionInSecs;                // Time in  seconds
+  LONGLONG lDurationInNanoSecs;                // Duration in nanoseconds
+  LONGLONG lTotalDuration;                // Total duration
+  REFERENCE_TIME rtNew;                                // Reference time of movie
+  long lPosition;                                        // Desired position of movie used in FF & REW
+  long lvolume;                                        // The volume level in 1/100ths dB Valid values range from -10,000 (silence) to 0 (full volume), 0 = 0 dB -10000 = -100 dB
+  long evCode;                                        // event variable, used to in file to complete wait.
+
+  long width, height;
+  long videoSize;
+
+  double averageTimePerFrame;
+
+  bool bFrameNew;
+  bool bNewPixels;
+  bool bVideoOpened;
+  bool bPlaying;
+  bool bPaused;
+  bool bLoop;
+  bool bEndReached;
+  double movieRate;
+  int curMovieFrame;
+  int frameCount;
+
+  CRITICAL_SECTION critSection;
+  unsigned char * rawBuffer;
 
   DirectShowVideo()
   {
@@ -1019,49 +1059,6 @@ public:
   //                }
   //        }
   //}
-
-protected:
-
-  HRESULT hr;                                                        // COM return value
-  IGraphBuilder *m_pGraph;                // Graph Builder interface
-  IMediaControl *m_pControl;        // Media Control interface
-  IMediaEvent   *m_pEvent;                // Media Event interface
-  IMediaSeeking *m_pSeek;                // Media Seeking interface
-  IMediaPosition * m_pPosition;
-  IBasicAudio   *m_pAudio;                // Audio Settings interface
-  ISampleGrabber * m_pGrabber;
-  IBaseFilter * m_pSourceFile;
-  IBaseFilter * m_pGrabberF;
-  IBasicVideo * m_pBasicVideo;
-  IBaseFilter * m_pNullRenderer;
-
-  REFERENCE_TIME timeNow;                                // Used for FF & REW of movie, current time
-  LONGLONG lPositionInSecs;                // Time in  seconds
-  LONGLONG lDurationInNanoSecs;                // Duration in nanoseconds
-  LONGLONG lTotalDuration;                // Total duration
-  REFERENCE_TIME rtNew;                                // Reference time of movie
-  long lPosition;                                        // Desired position of movie used in FF & REW
-  long lvolume;                                        // The volume level in 1/100ths dB Valid values range from -10,000 (silence) to 0 (full volume), 0 = 0 dB -10000 = -100 dB
-  long evCode;                                        // event variable, used to in file to complete wait.
-
-  long width, height;
-  long videoSize;
-
-  double averageTimePerFrame;
-
-  bool bFrameNew;
-  bool bNewPixels;
-  bool bVideoOpened;
-  bool bPlaying;
-  bool bPaused;
-  bool bLoop;
-  bool bEndReached;
-  double movieRate;
-  int curMovieFrame;
-  int frameCount;
-
-  CRITICAL_SECTION critSection;
-  unsigned char * rawBuffer;
 };
 
 
