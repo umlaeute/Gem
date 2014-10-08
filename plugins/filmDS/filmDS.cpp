@@ -307,7 +307,7 @@ public:
   IBasicVideo   *m_pBasicVideo;
   IBaseFilter   *m_pNullRenderer;
 
-  REFERENCE_TIME rtNew;                                // Reference time of movie
+  REFERENCE_TIME rtNew;                    // Reference time of movie
 
   long width, height;
   long videoSize;
@@ -524,7 +524,7 @@ public:
       tearDown();
       return false;
     }
-
+    // FIXXME: do we need m_pAudio?
     hr = m_pGraph->QueryInterface(IID_IBasicAudio,(void**)&m_pAudio);
     if (FAILED(hr)) {
       tearDown();
