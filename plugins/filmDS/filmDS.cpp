@@ -226,7 +226,7 @@ void LocalDeleteMediaType(AM_MEDIA_TYPE *pmt)
 }
 
 
-HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath)
+HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
 {
   const WCHAR wszStreamName[] = L"ActiveMovieGraph";
   HRESULT hr;
@@ -261,7 +261,12 @@ HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath)
   pStorage->Release();
   return hr;
 }
-
+HRESULT SaveGraphFile(IGraphBuilder *pGraph, std::string path)
+{
+  std::wstring filePathW = std::wstring(path.begin(), path.end());
+  const WCHAR*wszPath=filePathW.c_str();
+  return SaveGraphFile(pGraph, wszPath);
+}
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 // DirectShowVideo - contains a simple directshow video player implementation
