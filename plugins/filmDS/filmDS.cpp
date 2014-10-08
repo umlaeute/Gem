@@ -330,6 +330,33 @@ public:
   unsigned char * rawBuffer;
 
   DirectShowVideo()
+    : m_pGraph(NULL)
+    , m_pControl(NULL)
+    , m_pEvent(NULL)
+    , m_pSeek(NULL)
+    , m_pPosition(NULL)
+    , m_pAudio(NULL)
+    , m_pGrabber(NULL)
+    , m_pSourceFile(NULL)
+    , m_pGrabberF(NULL)
+    , m_pBasicVideo(NULL)
+    , m_pNullRenderer(NULL)
+    , rtNew(0)
+    , width(0)
+    , height(0)
+    , videoSize(0)
+    , averageTimePerFrame(1.0/30.0)
+    , bFrameNew(false)
+    , bNewPixels(false)
+    , bVideoOpened(false)
+    , bPlaying(false)
+    , bPaused(false)
+    , bLoop(true)
+    , bEndReached(false)
+    , movieRate(1.0)
+    , curMovieFrame(-1)
+    , frameCount(-1)
+    , rawBuffer(NULL)
   {
     retainCom();
     clearValues();
