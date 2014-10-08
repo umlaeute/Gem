@@ -291,7 +291,6 @@ static void releaseCom()
 class gem::plugins::filmDS::DirectShowVideo : public ISampleGrabberCB
 {
 public:
-  HRESULT hr;                                                        // COM return value
   IGraphBuilder *m_pGraph;                // Graph Builder interface
   IMediaControl *m_pControl;        // Media Control interface
   IMediaEvent   *m_pEvent;                // Media Event interface
@@ -392,8 +391,6 @@ public:
 
   void clearValues()
   {
-    hr = 0;
-
     m_pGraph = NULL;
     m_pControl = NULL;
     m_pEvent = NULL;
@@ -491,7 +488,7 @@ public:
     // Create the Filter Graph Manager and query for interfaces.
 
     //printf("step 1\n");
-    hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
                           IID_IGraphBuilder, (void **)&m_pGraph);
     if (FAILED(hr)) {
       tearDown();
@@ -759,8 +756,11 @@ public:
       m_pSeek->GetDuration(&lDurationInNanoSecs);
 
       rtNew = ((float)lDurationInNanoSecs * pct);
-      hr = m_pSeek->SetPositions(&rtNew, AM_SEEKING_AbsolutePositioning,NULL,
-                                 AM_SEEKING_NoPositioning);
+      HRESULT hr = m_pSeek->SetPositions(&rtNew, AM_SEEKING_AbsolutePositioning,NULL,
+					 AM_SEEKING_NoPositioning);
+      if (FAILED(hr)) {
+	printf("seek failed\n");
+      }
     }
   }
 
@@ -894,8 +894,8 @@ public:
   {
     if( bVideoOpened ) {
       FILTER_STATE fs;
-      hr = m_pControl->GetState(4000, (OAFilterState*)&fs);
-      if(hr==S_OK) {
+      HRESULT hr = m_pControl->GetState(4000, (OAFilterState*)&fs);
+      if(!FAILED(S_OK)) {
         if( fs == State_Running ) {
           bPlaying = true;
           bPaused = false;
