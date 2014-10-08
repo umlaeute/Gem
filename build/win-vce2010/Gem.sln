@@ -8,7 +8,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "installer", "installer.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmAVI", "..\..\plugins\filmAVI\win-vce2010\filmAVI.vcxproj", "{F2368753-AF77-43B7-BE96-1292EC104941}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDS\win-vce2010\filmDS.vcxproj", "{6EA41ED7-ECCD-4A9A-BED0-E8E4B4BD77EB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDSATL\win-vce2010\filmDS.vcxproj", "{6EA41ED7-ECCD-4A9A-BED0-E8E4B4BD77EB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmQT", "..\..\plugins\filmQT\win-vce2010\filmQT.vcxproj", "{92E57A6D-B582-46F0-B02D-E0F29A594143}"
 EndProject
