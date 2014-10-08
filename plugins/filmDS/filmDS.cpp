@@ -512,6 +512,14 @@ public:
       return false;
     }
 
+    // Use IGraphBuilder::QueryInterface (inherited from IUnknown) to get the IMediaControl interface.
+    //printf("step 4\n");
+    hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
+    if (FAILED(hr) || !m_pControl) {
+      tearDown();
+      return false;
+    }
+
     //printf("step 2\n");
     hr = m_pGraph->QueryInterface(IID_IMediaSeeking, (void**)&m_pSeek);
     if (FAILED(hr) || !m_pSeek) {
@@ -526,14 +534,6 @@ public:
     }
     // FIXXME: do we need m_pAudio?
     hr = m_pGraph->QueryInterface(IID_IBasicAudio,(void**)&m_pAudio);
-    if (FAILED(hr)) {
-      tearDown();
-      return false;
-    }
-
-    // Use IGraphBuilder::QueryInterface (inherited from IUnknown) to get the IMediaControl interface.
-    //printf("step 4\n");
-    hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
     if (FAILED(hr)) {
       tearDown();
       return false;
