@@ -874,8 +874,10 @@ MARK();
         // If the video image has changed, copy it to the pixBlock buffer.
         if (pb.newimage) {
           hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
-          if(FAILED(hr)) {
+          if(FAILED(hr)) {MARK_HR(hr);
+	    printf("filmDS: GetCurrentBuffer(auto) failed: state=%d\n", State);
             pb.image.data = NULL; // FIXXME
+	    MARK();
             return false;
           } else {
             //pb.image.data = rawBuffer;
@@ -906,16 +908,16 @@ MARK();
                                  NULL, AM_SEEKING_NoPositioning);
       printf("new=%d\n", (int)frameSeek);
 
-      if (FAILED(hr)) {
+      if (FAILED(hr)) {MARK_HR(hr);
         printf("filmDS: SetPositions failed");
       }
 
 MARK();
       hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
 
-      if (FAILED(hr))  {
+      if (FAILED(hr))  {MARK_HR(hr);
         pb.image.data = NULL; // FIXXME
-        printf("filmDS: GetCurrentBuffer failed\n");
+        printf("filmDS: GetCurrentBuffer failed: state=%d\n", State);
         return false;
       }      else {
         //pb.image.data = rawBuffer;
