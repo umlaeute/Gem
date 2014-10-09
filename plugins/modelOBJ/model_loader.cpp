@@ -1992,7 +1992,7 @@ void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, G
       pt = &model->vertices[3 * triangle->vindices[0]];
       vec = std::vector<float>(pt, pt + 3);
       vertices.push_back(vec);
-      colors.push_back(color);
+      if(!color.empty()) colors.push_back(color);
 
       if (mode & GLM_SMOOTH) {
         //~glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
@@ -2010,7 +2010,7 @@ void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, G
       pt = &model->vertices[3 * triangle->vindices[1]];
       vec = std::vector<float>(pt, pt + 3);
       vertices.push_back(vec);
-      colors.push_back(color);
+      if(!color.empty()) colors.push_back(color);
 
       if (mode & GLM_SMOOTH) {
         //~glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
@@ -2028,7 +2028,7 @@ void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, G
       pt = &model->vertices[3 * triangle->vindices[2]];
       vec = std::vector<float>(pt, pt + 3);
       vertices.push_back(vec);
-      colors.push_back(color);
+      if(!color.empty()) colors.push_back(color);
     }
   }
 
