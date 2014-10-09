@@ -46,46 +46,46 @@
 // Due to a missing qedit.h in recent Platform SDKs, we've replicated the relevant contents here
 // #include <qedit.h>
 MIDL_INTERFACE("0579154A-2B53-4994-B0D0-E773148EFF85")
-  ISampleGrabberCB :
-  public IUnknown {
- public:
+ISampleGrabberCB :
+public IUnknown {
+public:
   virtual HRESULT STDMETHODCALLTYPE SampleCB(
-					     double SampleTime,
-					     IMediaSample *pSample) = 0;
+    double SampleTime,
+    IMediaSample *pSample) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE BufferCB(
-					     double SampleTime,
-					     BYTE *pBuffer,
-					     long BufferLen) = 0;
+    double SampleTime,
+    BYTE *pBuffer,
+    long BufferLen) = 0;
 
 };
 
 MIDL_INTERFACE("6B652FFF-11FE-4fce-92AD-0266B5D7C78F")
 ISampleGrabber :
-  public IUnknown {
- public:
+public IUnknown {
+public:
   virtual HRESULT STDMETHODCALLTYPE SetOneShot(
-					       BOOL OneShot) = 0;
+    BOOL OneShot) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE SetMediaType(
-						 const AM_MEDIA_TYPE *pType) = 0;
+    const AM_MEDIA_TYPE *pType) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType(
-							  AM_MEDIA_TYPE *pType) = 0;
+    AM_MEDIA_TYPE *pType) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE SetBufferSamples(
-						     BOOL BufferThem) = 0;
+    BOOL BufferThem) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer(
-						     /* [out][in] */ long *pBufferSize,
-						     /* [out] */ long *pBuffer) = 0;
+    /* [out][in] */ long *pBufferSize,
+    /* [out] */ long *pBuffer) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE GetCurrentSample(
-						     /* [retval][out] */ IMediaSample **ppSample) = 0;
+    /* [retval][out] */ IMediaSample **ppSample) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE SetCallback(
-						ISampleGrabberCB *pCallback,
-						long WhichMethodToCallback) = 0;
+    ISampleGrabberCB *pCallback,
+    long WhichMethodToCallback) = 0;
 
 };
 EXTERN_C const CLSID CLSID_SampleGrabber;
@@ -95,9 +95,9 @@ EXTERN_C const CLSID CLSID_NullRenderer;
 // GetUnconnectedPin
 //    Finds an unconnected pin on a filter in the desired direction
 HRESULT GetUnconnectedPin(
-			  IBaseFilter *pFilter,   // Pointer to the filter.
-			  PIN_DIRECTION PinDir,   // Direction of the pin to find.
-			  IPin **ppPin)           // Receives a pointer to the pin.
+  IBaseFilter *pFilter,   // Pointer to the filter.
+  PIN_DIRECTION PinDir,   // Direction of the pin to find.
+  IPin **ppPin)           // Receives a pointer to the pin.
 {
   *ppPin = 0;
   IEnumPins *pEnum = 0;
@@ -150,9 +150,9 @@ HRESULT DisconnectPins(IBaseFilter *pFilter)
 // ConnectFilters
 //    Connects a pin of an upstream filter to the pDest downstream filter
 HRESULT ConnectFilters(
-		       IGraphBuilder *pGraph, // Filter Graph Manager.
-		       IPin *pOut,            // Output pin on the upstream filter.
-		       IBaseFilter *pDest)    // Downstream filter.
+  IGraphBuilder *pGraph, // Filter Graph Manager.
+  IPin *pOut,            // Output pin on the upstream filter.
+  IBaseFilter *pDest)    // Downstream filter.
 {
   if ((pGraph == NULL) || (pOut == NULL) || (pDest == NULL)) {
     return E_POINTER;
@@ -180,9 +180,9 @@ HRESULT ConnectFilters(
 // ConnectFilters
 //    Connects two filters
 HRESULT ConnectFilters(
-		       IGraphBuilder *pGraph,
-		       IBaseFilter *pSrc,
-		       IBaseFilter *pDest)
+  IGraphBuilder *pGraph,
+  IBaseFilter *pSrc,
+  IBaseFilter *pDest)
 {
   if ((pGraph == NULL) || (pSrc == NULL) || (pDest == NULL)) {
     return E_POINTER;
@@ -233,18 +233,18 @@ HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
   HRESULT hr=0;
   IStorage *pStorage = NULL;
   hr = StgCreateDocfile(
-			wszPath,
-			STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
-			0, &pStorage);
+         wszPath,
+         STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+         0, &pStorage);
   if(FAILED(hr)) {
     return hr;
   }
 
   IStream *pStream;
   hr = pStorage->CreateStream(
-			      wszStreamName,
-			      STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
-			      0, 0, &pStream);
+         wszStreamName,
+         STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
+         0, 0, &pStream);
   if (FAILED(hr)) {
     pStorage->Release();
     return hr;
@@ -468,8 +468,9 @@ public:
     // Create the Filter Graph Manager and query for interfaces.
 
     //printf("step 1\n");
-    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-				  IID_IGraphBuilder, (void **)&m_pGraph);
+    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL,
+                                  CLSCTX_INPROC_SERVER,
+                                  IID_IGraphBuilder, (void **)&m_pGraph);
     if (FAILED(hr) || !m_pGraph) {
       printf("unable to create Filter Graph Manager: %d\n", hr);
       tearDown();
@@ -545,21 +546,24 @@ public:
     std::wstring filePathW = std::wstring(path.begin(), path.end());
 
     //this is the more manual way to do it - its a pain though because the audio won't be connected by default
-    hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile);
-    if (FAILED(hr)){
+    hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source",
+                                   &m_pSourceFile);
+    if (FAILED(hr)) {
       printf("could not add Source Filter: %d\n", hr);
       tearDown();
       return false;
     }
 
     hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
-    if (FAILED(hr)){MARK_HR(hr);
+    if (FAILED(hr)) {
+MARK_HR(hr);
       printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
       tearDown();
       return false;
     }
     //printf("step 7\n");
-    if(!SUCCEEDED(hr)) { // can this ever happen after we just checked for FAILED(hr)??
+    if(!SUCCEEDED(
+          hr)) { // can this ever happen after we just checked for FAILED(hr)??
       printf("Error occured while playing or pausing or opening the file\n");
       tearDown();
       return false;
@@ -583,7 +587,7 @@ public:
     //NULL RENDERER//
     //used to give the video stream somewhere to go to.
     hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
-			  IID_IBaseFilter, (void**)(&m_pNullRenderer));
+                          IID_IBaseFilter, (void**)(&m_pNullRenderer));
     if (FAILED(hr) || !m_pNullRenderer) {
       printf("null renderer error\n");
       tearDown();
@@ -598,7 +602,8 @@ public:
     }
 
     hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
-    if (FAILED(hr)){MARK_HR(hr);
+    if (FAILED(hr)) {
+MARK_HR(hr);
       printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
       tearDown();
       return false;
@@ -617,9 +622,9 @@ public:
       hr = m_pSeek->SetTimeFormat(&Guid);
 
       if (FAILED(hr)) {
-	printf("Unable to set video time format %d", hr);
-	tearDown();
-	return false;
+        printf("Unable to set video time format %d", hr);
+        tearDown();
+        return false;
       }
     }
 
@@ -701,14 +706,14 @@ public:
       // Get the state and ensure it's not in an intermediate state
       hr = m_pControl->GetState(0, &FilterState);
       if (FAILED(hr) && hr != VFW_S_STATE_INTERMEDIATE)  {
-	printf("Unable to run film %d", hr);
-	tearDown();
-	return false;
+        printf("Unable to run film %d", hr);
+        tearDown();
+        return false;
       }
 
       // Ensure the video is running
       if (SUCCEEDED(hr) && State_Running == FilterState) {
-	break;
+        break;
       }
     }
 
@@ -798,20 +803,23 @@ MARK();
   }
 
   //this is the non-callback approach
-  bool getPixels(unsigned char * dstBuffer){
+  bool getPixels(unsigned char * dstBuffer)
+  {
 MARK();
-    if(!bVideoOpened)
+    if(!bVideoOpened) {
       return false;
+    }
 
     long bufferSize = videoSize;
     HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
 
     if(FAILED(hr)) {
-      printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
+      printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n",
+             bufferSize);
       return false;
     }
 
-    if (videoSize != bufferSize){
+    if (videoSize != bufferSize) {
       printf("ERROR: GetPixels() - bufferSizes do not match!\n");
       return false;
     }
@@ -819,10 +827,12 @@ MARK();
     processPixels(rawBuffer, dstBuffer, width, height, true, true);
     return true;
   }
-  bool getFrame(pixBlock&pb){
+  bool getFrame(pixBlock&pb)
+  {
 MARK();
-    if(!bVideoOpened)
+    if(!bVideoOpened) {
       return false;
+    }
 
     long frameSize = width*height*4;
     HRESULT hr;
@@ -832,101 +842,108 @@ MARK();
     if(m_auto > 0.f) {
 MARK();
       //if the video is paused then start it running again
-      if (State != State_Running){
-	hr = m_pControl->Run();
-	hr = m_pControl->GetState(0, &State);
+      if (State != State_Running) {
+        hr = m_pControl->Run();
+        hr = m_pControl->GetState(0, &State);
       }
 
       //set the rate of the clip
       hr = m_pSeek->SetRate(m_auto);
 
       if (State == State_Running) {
-	// Get the current position of the video
-	LONGLONG CurrentPosition;
-	hr = m_pSeek->GetCurrentPosition(&CurrentPosition);
-	if (S_OK == hr)            {
-	  // If the current position is >= the duration, reset the position to the
-	  // beginning
-	  if (CurrentPosition >= m_numFrames)                {
-	    LONGLONG Current = 0;
-	    // Set the start position to 0, do not change the end position.
-	    hr = m_pSeek->SetPositions(&Current,
-				       AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
-				       NULL, AM_SEEKING_NoPositioning);
-	    pb.newimage = true;
-	  }
-	  // Indicate the the image has changed.
-	  else if (CurrentPosition > m_lastFrame)               {
-	    pb.newimage = true;
-	  }
-	}
+        // Get the current position of the video
+        LONGLONG CurrentPosition;
+        hr = m_pSeek->GetCurrentPosition(&CurrentPosition);
+        if (S_OK == hr)            {
+          // If the current position is >= the duration, reset the position to the
+          // beginning
+          if (CurrentPosition >= m_numFrames)                {
+            LONGLONG Current = 0;
+            // Set the start position to 0, do not change the end position.
+            hr = m_pSeek->SetPositions(&Current,
+                                       AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
+                                       NULL, AM_SEEKING_NoPositioning);
+            pb.newimage = true;
+          }
+          // Indicate the the image has changed.
+          else if (CurrentPosition > m_lastFrame)               {
+            pb.newimage = true;
+          }
+        }
 
-	// If the video image has changed, copy it to the pixBlock buffer.
-	if (pb.newimage) {
-	  hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
-	  if(FAILED(hr)) {
-	    pb.image.data = NULL; // FIXXME
-	    return false;
-	  } else {
-	    //pb.image.data = rawBuffer;
-	    processPixels(rawBuffer, pb.image.data, width, height, true, true);
-	  }
-	}
+        // If the video image has changed, copy it to the pixBlock buffer.
+        if (pb.newimage) {
+          hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
+          if(FAILED(hr)) {
+            pb.image.data = NULL; // FIXXME
+            return false;
+          } else {
+            //pb.image.data = rawBuffer;
+            processPixels(rawBuffer, pb.image.data, width, height, true, true);
+          }
+        }
       }
-    }else{
+    } else {
 MARK();
       LONGLONG frameSeek;
       frameSeek = (LONGLONG) m_wantFrame;
-      if (State == State_Running)
-	hr = m_pControl->Pause();
+      if (State == State_Running) {
+        hr = m_pControl->Pause();
+      }
 
       //check if the playback is 'Paused' and don't keep asking for the same frame
       hr = m_pSeek->GetCurrentPosition(&frameSeek);
-      printf("current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame, (int)m_wantFrame);
+      printf("current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
+             (int)m_wantFrame);
 
-      if (m_wantFrame == m_lastFrame){
-	pb.newimage = false;
-	return &pb;
+      if (m_wantFrame == m_lastFrame) {
+        pb.newimage = false;
+        return &pb;
       }
 
       hr = m_pSeek->SetPositions(&frameSeek,
-				 AM_SEEKING_AbsolutePositioning,
-				 NULL, AM_SEEKING_NoPositioning);
+                                 AM_SEEKING_AbsolutePositioning,
+                                 NULL, AM_SEEKING_NoPositioning);
       printf("new=%d\n", (int)frameSeek);
 
       if (FAILED(hr)) {
-	printf("filmDS: SetPositions failed");
+        printf("filmDS: SetPositions failed");
       }
 
 MARK();
       hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
 
       if (FAILED(hr))  {
-	pb.image.data = NULL; // FIXXME
-	printf("filmDS: GetCurrentBuffer failed\n");
-	return false;
+        pb.image.data = NULL; // FIXXME
+        printf("filmDS: GetCurrentBuffer failed\n");
+        return false;
       }      else {
-	//pb.image.data = rawBuffer;
-	processPixels(rawBuffer, pb.image.data, width, height, true, true);
+        //pb.image.data = rawBuffer;
+        processPixels(rawBuffer, pb.image.data, width, height, true, true);
 
-	pb.newimage = true;
-	//pb.image.fromBGR(m_frame);
-	//m_lastFrame = m_wantFrame;
-	m_lastFrame = frameSeek;
+        pb.newimage = true;
+        //pb.image.fromBGR(m_frame);
+        //m_lastFrame = m_wantFrame;
+        m_lastFrame = frameSeek;
       }
     }
     return true;
   }
 
-  void setSpeed(double speed) {
+  void setSpeed(double speed)
+  {
     m_auto=speed;
   }
-  bool seekFrame(int frame) {
-    if(frame>m_numFrames)return false;
+  bool seekFrame(int frame)
+  {
+    if(frame>m_numFrames) {
+      return false;
+    }
     m_wantFrame=frame;
     return true;
   }
-  bool isLoaded(void){
+  bool isLoaded(void)
+  {
     return bVideoOpened;
   }
 };
@@ -987,16 +1004,19 @@ MARK();
 pixBlock*filmDS::getFrame(void)
 {
 MARK();
-  if(!player)
+  if(!player) {
     return 0;
+  }
 MARK();
 #if 0
   //printf("getting frame...%p\n", player);
-  if(!player || !player->isLoaded())
+  if(!player || !player->isLoaded()) {
     return NULL;
+  }
 
-  if(player->isMovieDone())
+  if(player->isMovieDone()) {
     return NULL;
+  }
 #endif
   m_image.newfilm=false;
   m_image.newimage=false;
@@ -1024,17 +1044,19 @@ MARK_HR(res);
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
 {
 MARK();
-  if(!player)
+  if(!player) {
     return film::FAILURE;
+  }
 MARK();
-  if(player->seekFrame(imgNum))
+  if(player->seekFrame(imgNum)) {
     return film::SUCCESS;
+  }
 MARK();
   return film::FAILURE;
 }
 // Property handling
 bool filmDS::enumProperties(gem::Properties&readable,
-			    gem::Properties&writeable)
+                            gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();
@@ -1069,20 +1091,24 @@ void filmDS::getProperties(gem::Properties&props)
       std::string key=keys[i];
       props.erase(key);
       if("fps"==key) {
-	d=player->getFramesPerSecond();
-	value=d; props.set(key, value);
+        d=player->getFramesPerSecond();
+        value=d;
+        props.set(key, value);
       }
       if("frames"==key) {
-	d=player->m_numFrames;
-	value=(int)(d+0.5); props.set(key, value);
+        d=player->m_numFrames;
+        value=(int)(d+0.5);
+        props.set(key, value);
       }
       if("width"==key) {
-	d=player->width;
-	value=d; props.set(key, value);
+        d=player->width;
+        value=d;
+        props.set(key, value);
       }
       if("height"==key) {
-	d=player->height;
-	value=d; props.set(key, value);
+        d=player->height;
+        value=d;
+        props.set(key, value);
       }
     }
   }
