@@ -139,6 +139,11 @@ public:
     }
     return (NULL!=m_handle);
   }
+  std::vector<float> getVector(std::string vectorName) {
+    if (m_handle)
+      return m_handle->getVector(vectorName);
+    return std::vector<float>();
+  }
 
   virtual bool render(void) {
     if(m_handle)

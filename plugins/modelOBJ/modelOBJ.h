@@ -53,6 +53,7 @@ namespace gem { namespace plugins {
   virtual bool enumProperties(gem::Properties&, gem::Properties&);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
+  virtual std::vector<float> getVector(std::string vectorName);
 
 protected:
   virtual void destroy(void);

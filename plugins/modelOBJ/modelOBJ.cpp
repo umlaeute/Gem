@@ -74,6 +74,15 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   return true;
 }
 
+std::vector<float> modelOBJ :: getVector(std::string vectorName){
+  if ( vectorName == "vertices" ) return m_vertices;
+  if ( vectorName == "normals" ) return m_normals;
+  if ( vectorName == "texcoords" ) return m_texcoords;
+  if ( vectorName == "colors" ) return m_colors;
+  error("there is no \"%s\" vector !",vectorName.c_str());
+  return std::vector<float>();
+}
+
 bool modelOBJ :: render(void) {
   if(m_rebuild) {
     glmTexture(m_model, m_textype, 1,1);
