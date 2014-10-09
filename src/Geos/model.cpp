@@ -261,20 +261,21 @@ void model :: copyArray(std::string vectorName, VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
-  std::vector<float> tab = m_loader->getVector(vectorName);
+  std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
+  if ( tab.empty() ) return;
   size=tab.size();
-  if ( size == 0 ) return;
 
-  npts = size / vb.stride;
-  printf("array size : %d, npoints : %d\n",size,npts);
+  printf("array size : %d\n",size);
 
-  if(npts!=vb.size) {
-    vb.resize(npts);
+  if(size!=vb.size) {
+    vb.resize(size);
     m_size_change_flag=true;
   }
 
   for ( i = 0 ; i < size ; i++ )	{
-    vb.array[i] = tab[i];
+    for ( int j=0 ; j<vb.stride ; j++){
+      vb.array[i*vb.stride + j] = tab[i][j];
+    }
   }
   vb.dirty=true;
   vb.enabled=true;

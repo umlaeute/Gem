@@ -139,10 +139,11 @@ public:
     }
     return (NULL!=m_handle);
   }
-  std::vector<float> getVector(std::string vectorName) {
+
+  std::vector<std::vector<float> > getVector(std::string vectorName) {
     if (m_handle)
       return m_handle->getVector(vectorName);
-    return std::vector<float>();
+    return std::vector<std::vector<float> >();
   }
 
   virtual bool render(void) {
@@ -150,6 +151,7 @@ public:
       return m_handle->render();
     return false;
   }
+
   virtual bool compile(void) {
     if(m_handle)
       return m_handle->compile();
