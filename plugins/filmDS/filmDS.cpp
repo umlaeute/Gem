@@ -27,7 +27,8 @@
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-#define MARK_HR(hr)if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__);
+#define MARK_HR(hr)if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
+#define MARK() MARK_HR(0)
 
 #include <dshow.h>
 #pragma include_alias( "dxtrans.h", "qedit.h" )
@@ -45,46 +46,46 @@
 // Due to a missing qedit.h in recent Platform SDKs, we've replicated the relevant contents here
 // #include <qedit.h>
 MIDL_INTERFACE("0579154A-2B53-4994-B0D0-E773148EFF85")
-ISampleGrabberCB :
-public IUnknown {
-public:
+  ISampleGrabberCB :
+  public IUnknown {
+ public:
   virtual HRESULT STDMETHODCALLTYPE SampleCB(
-    double SampleTime,
-    IMediaSample *pSample) = 0;
+					     double SampleTime,
+					     IMediaSample *pSample) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE BufferCB(
-    double SampleTime,
-    BYTE *pBuffer,
-    long BufferLen) = 0;
+					     double SampleTime,
+					     BYTE *pBuffer,
+					     long BufferLen) = 0;
 
 };
 
 MIDL_INTERFACE("6B652FFF-11FE-4fce-92AD-0266B5D7C78F")
 ISampleGrabber :
-public IUnknown {
-public:
+  public IUnknown {
+ public:
   virtual HRESULT STDMETHODCALLTYPE SetOneShot(
-    BOOL OneShot) = 0;
+					       BOOL OneShot) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE SetMediaType(
-    const AM_MEDIA_TYPE *pType) = 0;
+						 const AM_MEDIA_TYPE *pType) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType(
-    AM_MEDIA_TYPE *pType) = 0;
+							  AM_MEDIA_TYPE *pType) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE SetBufferSamples(
-    BOOL BufferThem) = 0;
+						     BOOL BufferThem) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer(
-    /* [out][in] */ long *pBufferSize,
-    /* [out] */ long *pBuffer) = 0;
+						     /* [out][in] */ long *pBufferSize,
+						     /* [out] */ long *pBuffer) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE GetCurrentSample(
-    /* [retval][out] */ IMediaSample **ppSample) = 0;
+						     /* [retval][out] */ IMediaSample **ppSample) = 0;
 
   virtual HRESULT STDMETHODCALLTYPE SetCallback(
-    ISampleGrabberCB *pCallback,
-    long WhichMethodToCallback) = 0;
+						ISampleGrabberCB *pCallback,
+						long WhichMethodToCallback) = 0;
 
 };
 EXTERN_C const CLSID CLSID_SampleGrabber;
@@ -94,9 +95,9 @@ EXTERN_C const CLSID CLSID_NullRenderer;
 // GetUnconnectedPin
 //    Finds an unconnected pin on a filter in the desired direction
 HRESULT GetUnconnectedPin(
-  IBaseFilter *pFilter,   // Pointer to the filter.
-  PIN_DIRECTION PinDir,   // Direction of the pin to find.
-  IPin **ppPin)           // Receives a pointer to the pin.
+			  IBaseFilter *pFilter,   // Pointer to the filter.
+			  PIN_DIRECTION PinDir,   // Direction of the pin to find.
+			  IPin **ppPin)           // Receives a pointer to the pin.
 {
   *ppPin = 0;
   IEnumPins *pEnum = 0;
@@ -149,9 +150,9 @@ HRESULT DisconnectPins(IBaseFilter *pFilter)
 // ConnectFilters
 //    Connects a pin of an upstream filter to the pDest downstream filter
 HRESULT ConnectFilters(
-  IGraphBuilder *pGraph, // Filter Graph Manager.
-  IPin *pOut,            // Output pin on the upstream filter.
-  IBaseFilter *pDest)    // Downstream filter.
+		       IGraphBuilder *pGraph, // Filter Graph Manager.
+		       IPin *pOut,            // Output pin on the upstream filter.
+		       IBaseFilter *pDest)    // Downstream filter.
 {
   if ((pGraph == NULL) || (pOut == NULL) || (pDest == NULL)) {
     return E_POINTER;
@@ -179,9 +180,9 @@ HRESULT ConnectFilters(
 // ConnectFilters
 //    Connects two filters
 HRESULT ConnectFilters(
-  IGraphBuilder *pGraph,
-  IBaseFilter *pSrc,
-  IBaseFilter *pDest)
+		       IGraphBuilder *pGraph,
+		       IBaseFilter *pSrc,
+		       IBaseFilter *pDest)
 {
   if ((pGraph == NULL) || (pSrc == NULL) || (pDest == NULL)) {
     return E_POINTER;
@@ -232,18 +233,18 @@ HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
   HRESULT hr=0;
   IStorage *pStorage = NULL;
   hr = StgCreateDocfile(
-         wszPath,
-         STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
-         0, &pStorage);
+			wszPath,
+			STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+			0, &pStorage);
   if(FAILED(hr)) {
     return hr;
   }
 
   IStream *pStream;
   hr = pStorage->CreateStream(
-         wszStreamName,
-         STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
-         0, 0, &pStream);
+			      wszStreamName,
+			      STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
+			      0, 0, &pStream);
   if (FAILED(hr)) {
     pStorage->Release();
     return hr;
@@ -312,19 +313,20 @@ public:
 
   double averageTimePerFrame;
 
-  bool bFrameNew;
-  bool bNewPixels;
   bool bVideoOpened;
-  bool bPlaying;
-  bool bPaused;
-  bool bLoop;
-  bool bEndReached;
-  double movieRate;
-  int curMovieFrame;
-  int frameCount;
+#if 0
+  bool bNewPixels;
+#endif
+  LONGLONG m_Duration;
+  long m_numFrames;
+
+  LONGLONG m_lastFrame;
+  LONGLONG m_wantFrame;
 
   CRITICAL_SECTION critSection;
   unsigned char * rawBuffer;
+
+  double m_auto;
 
   DirectShowVideo()
     : m_pGraph(NULL)
@@ -341,17 +343,14 @@ public:
     , height(0)
     , videoSize(0)
     , averageTimePerFrame(1.0/30.0)
-    , bFrameNew(false)
+#if 0
     , bNewPixels(false)
     , bVideoOpened(false)
-    , bPlaying(false)
-    , bPaused(false)
-    , bLoop(true)
-    , bEndReached(false)
-    , movieRate(1.0)
-    , curMovieFrame(-1)
-    , frameCount(-1)
+#endif
+    , m_lastFrame(-1)
+    , m_wantFrame(0)
     , rawBuffer(NULL)
+    , m_auto(0.)
   {
     retainCom();
     clearValues();
@@ -414,24 +413,21 @@ public:
     m_pNullRenderer = NULL;
     m_pSourceFile = NULL;
     m_pPosition = NULL;
+    m_lastFrame=-1;
+    m_wantFrame=0;
 
     rawBuffer = NULL;
 
     rtNew = 0;
     width = height = 0;
     videoSize = 0;
-    bVideoOpened = false;
-    bLoop = true;
-    bPaused = false;
-    bPlaying = false;
-    bEndReached = false;
-    bNewPixels = false;
-    bFrameNew = false;
-    curMovieFrame = -1;
-    frameCount = -1;
 
-    movieRate = 1.0;
+    bVideoOpened = false;
+    //    bNewPixels = false;
+
     averageTimePerFrame = 1.0/30.0;
+    m_auto = 0.;
+
   }
 
   //------------------------------------------------
@@ -456,27 +452,7 @@ public:
   //------------------------------------------------
   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample)
   {
-
-    BYTE * ptrBuffer = NULL;
-    HRESULT hr = pSample->GetPointer(&ptrBuffer);
-
-    if(hr == S_OK) {
-      long latestBufferLength = pSample->GetActualDataLength();
-      if(latestBufferLength == videoSize ) {
-        EnterCriticalSection(&critSection);
-        memcpy(rawBuffer, ptrBuffer, latestBufferLength);
-        bNewPixels = true;
-
-        //this is just so we know if there is a new frame
-        frameCount++;
-
-        LeaveCriticalSection(&critSection);
-      } else {
-        printf("ERROR: SampleCB() - buffer sizes do not match\n");
-      }
-    }
-
-    return S_OK;
+    return E_NOTIMPL;
   }
 
   //This method is meant to have more overhead
@@ -489,13 +465,13 @@ public:
   {
     tearDown();
 
-
     // Create the Filter Graph Manager and query for interfaces.
 
     //printf("step 1\n");
     HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-                          IID_IGraphBuilder, (void **)&m_pGraph);
+				  IID_IGraphBuilder, (void **)&m_pGraph);
     if (FAILED(hr) || !m_pGraph) {
+      printf("unable to create Filter Graph Manager: %d\n", hr);
       tearDown();
       return false;
     }
@@ -504,6 +480,7 @@ public:
     //printf("step 4\n");
     hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
     if (FAILED(hr) || !m_pControl) {
+      printf("could not get MediaControl interface: %d\n", hr);
       tearDown();
       return false;
     }
@@ -511,12 +488,14 @@ public:
     //printf("step 2\n");
     hr = m_pGraph->QueryInterface(IID_IMediaSeeking, (void**)&m_pSeek);
     if (FAILED(hr) || !m_pSeek) {
+      printf("could not get MediaSeeking interface: %d\n", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGraph->QueryInterface(IID_IMediaPosition, (LPVOID *)&m_pPosition);
     if (FAILED(hr) || !m_pPosition) {
+      printf("could not get MediaPosition interface: %d\n", hr);
       tearDown();
       return false;
     }
@@ -526,40 +505,38 @@ public:
     hr = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER,
                           IID_IBaseFilter, (void**)&m_pGrabberF);
     if (FAILED(hr)) {
+      printf("could not create SampleGrabber: %d\n", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGraph->AddFilter(m_pGrabberF, L"Sample Grabber");
     if (FAILED(hr)) {
+      printf("could not add SampleGrabber filter: %d\n", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGrabberF->QueryInterface(IID_ISampleGrabber, (void**)&m_pGrabber);
     if (FAILED(hr)) {
-      tearDown();
-      return false;
-    }
-
-    m_pGrabber->SetCallback(this, 0);
-    if (FAILED(hr)) {
+      printf("could not get SampleGrabber interface: %d\n", hr);
       tearDown();
       return false;
     }
 
     //MEDIA CONVERSION
-    //Get video properties from the stream's mediatype and apply to the grabber (otherwise we don't get an RGB image)
+    //Get video properties from the stream's mediatype and apply to the grabber (otherwise we don't get an RGBA image)
     AM_MEDIA_TYPE mt;
     ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
 
     mt.majortype         = MEDIATYPE_Video;
     mt.subtype           = MEDIASUBTYPE_RGB32;
-    mt.formattype        = FORMAT_VideoInfo;
+    mt.formattype        = GUID_NULL;//FORMAT_VideoInfo;
 
     //printf("step 5.5\n");
     hr = m_pGrabber->SetMediaType(&mt);
     if (FAILED(hr)) {
+      printf("could not set MediaType: %d\n", hr);
       tearDown();
       return false;
     }
@@ -570,219 +547,185 @@ public:
     //this is the more manual way to do it - its a pain though because the audio won't be connected by default
     hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile);
     if (FAILED(hr)){
-        printf("unable to AddSourceFilter\n");
-        tearDown();
-        return false;
+      printf("could not add Source Filter: %d\n", hr);
+      tearDown();
+      return false;
     }
 
     hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
     if (FAILED(hr)){MARK_HR(hr);
-            printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
-            tearDown();
-            return false;
+      printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
+      tearDown();
+      return false;
     }
     //printf("step 7\n");
-    if (SUCCEEDED(hr)) {
-
-      //Set Params - One Shot should be false unless you want to capture just one buffer
-      hr = m_pGrabber->SetOneShot(FALSE);
-      if (FAILED(hr)) {
-        printf("unable to set one shot\n");
-        tearDown();
-        return false;
-      }
-
-      hr = m_pGrabber->SetBufferSamples(TRUE);
-      if (FAILED(hr)) {
-        printf("unable to set buffer samples\n");
-        tearDown();
-        return false;
-      }
-
-      //NULL RENDERER//
-      //used to give the video stream somewhere to go to.
-      hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
-                            IID_IBaseFilter, (void**)(&m_pNullRenderer));
-      if (FAILED(hr)) {
-        printf("null renderer error\n");
-        tearDown();
-        return false;
-      }
-
-      hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
-      if (FAILED(hr)) {
-        printf("unable to add null renderer\n");
-        tearDown();
-        return false;
-      }
-
-      hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
-      if (FAILED(hr)){MARK_HR(hr);
-              printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
-              tearDown();
-              return false;
-      }
-
-      AM_MEDIA_TYPE mt;
-      ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
-
-      m_pGrabber->GetConnectedMediaType(&mt);
-      if (FAILED(hr)) {
-        printf("unable to call GetConnectedMediaType\n");
-        tearDown();
-        return false;
-      }
-
-      VIDEOINFOHEADER * infoheader = (VIDEOINFOHEADER*)mt.pbFormat;
-      width = infoheader->bmiHeader.biWidth;
-      height = infoheader->bmiHeader.biHeight;
-      averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
-
-      videoSize = width * height * 4;
-      //printf("video dimensions are %i %i\n", width, height);
-
-      //printf("step 8\n");
-      // Run the graph.
-
-      //SaveGraphFile(m_pGraph, L"test2.grf");
-      hr = m_pControl->Run();
-      //SaveGraphFile(m_pGraph, L"test3.grf");
-
-      // Now pause the graph.
-      hr = m_pControl->Stop();
-      updatePlayState();
-
-      if( FAILED(hr) || width == 0 || height == 0 ) {
-        tearDown();
-        printf("Error occured while playing or pausing or opening the file\n");
-        return false;
-      } else {
-        rawBuffer = new unsigned char[videoSize];
-        //printf("success!\n");
-      }
-    } else {
-      tearDown();
+    if(!SUCCEEDED(hr)) { // can this ever happen after we just checked for FAILED(hr)??
       printf("Error occured while playing or pausing or opening the file\n");
+      tearDown();
       return false;
     }
 
+    //Set Params - One Shot should be false unless you want to capture just one buffer
+    hr = m_pGrabber->SetOneShot(FALSE);
+    if (FAILED(hr)) {
+      printf("unable to set one shot\n");
+      tearDown();
+      return false;
+    }
+
+    hr = m_pGrabber->SetBufferSamples(TRUE);
+    if (FAILED(hr)) {
+      printf("unable to set buffer samples\n");
+      tearDown();
+      return false;
+    }
+
+    //NULL RENDERER//
+    //used to give the video stream somewhere to go to.
+    hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
+			  IID_IBaseFilter, (void**)(&m_pNullRenderer));
+    if (FAILED(hr) || !m_pNullRenderer) {
+      printf("null renderer error\n");
+      tearDown();
+      return false;
+    }
+
+    hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
+    if (FAILED(hr)) {
+      printf("unable to add null renderer\n");
+      tearDown();
+      return false;
+    }
+
+    hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
+    if (FAILED(hr)){MARK_HR(hr);
+      printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
+      tearDown();
+      return false;
+    }
+
+    // Set the time format to frames
+    GUID Guid = TIME_FORMAT_FRAME;
+    bool bFrameTime = true;
+    hr = m_pSeek->SetTimeFormat(&Guid);
+
+    if (FAILED(hr)) {
+      // If frame time format not available, default to 100 nanosecond increments.
+      bFrameTime = false;
+      Guid = TIME_FORMAT_MEDIA_TIME;
+
+      hr = m_pSeek->SetTimeFormat(&Guid);
+
+      if (FAILED(hr)) {
+	printf("Unable to set video time format %d", hr);
+	tearDown();
+	return false;
+      }
+    }
+
+    // Get the duration of the video. Format will be in previously set time format. This is
+    // compatible with the value returned from GetCurrentPosition
+    hr = m_pSeek->GetDuration(&m_Duration);
+    if (FAILED(hr)) {
+      printf("Unable to get video duration %d", hr);
+      tearDown();
+      return false;
+    }
+    // Set the number of frames based on the time format used.
+    if (bFrameTime) {
+      m_numFrames = m_Duration;
+    } else {
+      LONGLONG OutFormat;
+      GUID     OutGuid = TIME_FORMAT_FRAME;
+      Guid = TIME_FORMAT_MEDIA_TIME;
+      //converts from 100 nanosecond format to number of frames
+      m_pSeek->ConvertTimeFormat(&OutFormat, &OutGuid, m_Duration, &Guid);
+
+      m_numFrames = OutFormat;
+    }
+
+    ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
+    m_pGrabber->GetConnectedMediaType(&mt);
+    if (FAILED(hr)) {
+      printf("unable to call GetConnectedMediaType %d\n", hr);
+      tearDown();
+      return false;
+    }
+
+    if(FORMAT_VideoInfo != mt.formattype || !mt.pbFormat) {
+      printf("invalid media type\n");
+      tearDown();
+      return false;
+    }
+
+    VIDEOINFOHEADER * infoheader = (VIDEOINFOHEADER*)mt.pbFormat;
+    width = infoheader->bmiHeader.biWidth;
+    height = infoheader->bmiHeader.biHeight;
+    averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
+
+    //printf("video dimensions are %i %i\n", width, height);
+    if( width == 0 || height == 0 ) {
+      printf("illegal frame size %dx%d\n", width, height);
+      tearDown();
+      return false;
+    }
+
+    videoSize = width * height * 4;
+    rawBuffer = new unsigned char[videoSize];
+    if(!rawBuffer) {
+      printf("unable to allocate memory for video buffer\n");
+      tearDown();
+      return false;
+    }
+    //FreeMediaType(mt); // FIXXME
+
+    // FIXXME: original code now does some special tricks for DV video
+
+    //printf("step 8\n");
+    // Run the graph.
+
+    std::string grfile="test_"__TIME__"_";
+    //SaveGraphFile(m_pGraph, grfile+"2.grf");
+    hr = m_pControl->Run();
+    //SaveGraphFile(m_pGraph, grfile+"3.grf");
+    if( FAILED(hr) ) {
+      printf("unable to start film\n", hr);
+      tearDown();
+      return false;
+    }
+
+    // Wait for the video to begin playing.
+    while(true) {
+      OAFilterState FilterState;
+
+      // Get the state and ensure it's not in an intermediate state
+      hr = m_pControl->GetState(0, &FilterState);
+      if (FAILED(hr) && hr != VFW_S_STATE_INTERMEDIATE)  {
+	printf("Unable to run film %d", hr);
+	tearDown();
+	return false;
+      }
+
+      // Ensure the video is running
+      if (SUCCEEDED(hr) && State_Running == FilterState) {
+	break;
+      }
+    }
+
+    // FIXXME: shall we register the filtergraph?
+
     bVideoOpened = true;
+    m_lastFrame=-1;
+    m_wantFrame=0;
     return true;
   }
 
-  void update()
-  {
-    if( bVideoOpened ) {
 
-      long eventCode = 0;
-      long ptrParam1 = 0;
-      long ptrParam2 = 0;
-      long timeoutMs = 2000;
-
-      if( curMovieFrame != frameCount ) {
-        bFrameNew = true;
-      } else {
-        bFrameNew = false;
-      }
-      curMovieFrame = frameCount;
-
-      while (S_OK == m_pEvent->GetEvent(&eventCode, &ptrParam1, &ptrParam2, 0)) {
-        if (eventCode == EC_COMPLETE ) {
-          if(bLoop) {
-            //printf("Restarting!\n");
-            setPosition(0.0);
-          } else {
-            bEndReached = true;
-            //printf("movie end reached!\n");
-            stop();
-            updatePlayState();
-          }
-        }
-        //printf("Event code: %#04x\n Params: %d, %d\n", eventCode, ptrParam1, ptrParam2);
-        m_pEvent->FreeEventParams(eventCode, ptrParam1, ptrParam2);
-      }
-    }
-  }
-
-  bool isLoaded()
-  {
-    return bVideoOpened;
-  }
-
-  double getDurationInSeconds()
-  {
-    if( isLoaded() ) {
-      long long lDurationInNanoSecs = 0;
-      m_pSeek->GetDuration(&lDurationInNanoSecs);
-      double timeInSeconds = (double)lDurationInNanoSecs/10000000.0;
-
-      return timeInSeconds;
-    }
-    return 0.0;
-  }
-
-  double getCurrentTimeInSeconds()
-  {
-    if( isLoaded() ) {
-      long long lCurrentTimeInNanoSecs = 0;
-      m_pSeek->GetCurrentPosition(&lCurrentTimeInNanoSecs);
-      double timeInSeconds = (double)lCurrentTimeInNanoSecs/10000000.0;
-
-      return timeInSeconds;
-    }
-    return 0.0;
-  }
-
-  void setPosition(float pct)
-  {
-    if( bVideoOpened ) {
-      if( pct < 0.0 ) {
-        pct = 0.0;
-      }
-      if( pct > 1.0 ) {
-        pct = 1.0;
-      }
-
-      long long lDurationInNanoSecs = 0;
-      m_pSeek->GetDuration(&lDurationInNanoSecs);
-
-      rtNew = ((float)lDurationInNanoSecs * pct);
-      HRESULT hr = m_pSeek->SetPositions(&rtNew, AM_SEEKING_AbsolutePositioning,NULL,
-					 AM_SEEKING_NoPositioning);
-      if (FAILED(hr)) {
-	printf("seek failed\n");
-      }
-    }
-  }
-
-  float getPosition()
-  {
-    if( bVideoOpened ) {
-      float timeDur = getDurationInSeconds();
-      if( timeDur > 0.0 ) {
-        return getCurrentTimeInSeconds() / timeDur;
-      }
-    }
-    return 0.0;
-  }
-
-  void setSpeed(float speed)
-  {
-    if( bVideoOpened ) {
-      m_pPosition->put_Rate(speed);
-      m_pPosition->get_Rate(&movieRate);
-    }
-  }
-
-  double getSpeed()
-  {
-    return movieRate;
-  }
 
   void processPixels(unsigned char * src, unsigned char * dst, int width,
                      int height, bool bRGB, bool bFlip)
   {
-
+MARK();
     int widthInBytes = width * 4;
     int numBytes = widthInBytes * height;
 
@@ -848,208 +791,144 @@ public:
     }
   }
 
-  void play()
-  {
-    if( bVideoOpened ) {
-      m_pControl->Run();
-      bEndReached = false;
-      updatePlayState();
-    }
-  }
-
-  void stop()
-  {
-    if( bVideoOpened ) {
-      if( isPlaying() ) {
-        setPosition(0.0);
-      }
-      m_pControl->Stop();
-      updatePlayState();
-    }
-  }
-
-  void setPaused(bool bPaused)
-  {
-    if( bVideoOpened ) {
-      if( bPaused ) {
-        m_pControl->Pause();
-      } else {
-        m_pControl->Run();
-      }
-      updatePlayState();
-    }
-
-  }
-
-  void updatePlayState()
-  {
-    if( bVideoOpened ) {
-      FILTER_STATE fs;
-      HRESULT hr = m_pControl->GetState(4000, (OAFilterState*)&fs);
-      if(!FAILED(S_OK)) {
-        if( fs == State_Running ) {
-          bPlaying = true;
-          bPaused = false;
-        } else if( fs == State_Paused ) {
-          bPlaying = false;
-          bPaused = true;
-        } else if( fs == State_Stopped ) {
-          bPlaying = false;
-          bPaused = false;
-        }
-      }
-    }
-  }
-
-  bool isPlaying()
-  {
-    return bPlaying;
-  }
-
-  bool isPaused()
-  {
-    return bPaused;
-  }
-
-  bool isLooping()
-  {
-    return bLoop;
-  }
-
-  void setLoop(bool loop)
-  {
-    bLoop = loop;
-  }
-
-  bool isMovieDone()
-  {
-    return bEndReached;
-  }
-
-  float getWidth()
-  {
-    return width;
-  }
-
-  float getHeight()
-  {
-    return height;
-  }
-
-  bool isFrameNew()
-  {
-    return bFrameNew;
-  }
-
-  void nextFrame()
-  {
-    //we have to do it like this as the frame based approach is not very accurate
-    if( bVideoOpened && ( isPlaying() || isPaused() ) ) {
-      int curFrame = getCurrentFrameNo();
-      float curFrameF = curFrame;
-      for(int i = 1; i < 20; i++) {
-        setApproximateFrameF( curFrameF + 0.3 * (float)i );
-        if( getCurrentFrameNo() >= curFrame + 1 ) {
-          break;
-        }
-      }
-    }
-  }
-
-  void preFrame()
-  {
-    //we have to do it like this as the frame based approach is not very accurate
-    if( bVideoOpened && ( isPlaying() || isPaused() ) ) {
-      int curFrame = getCurrentFrameNo();
-      float curFrameF = curFrame;
-      for(int i = 1; i < 20; i++) {
-        setApproximateFrameF( curFrameF - 0.3 * (float)i );
-        if( getCurrentFrameNo() <= curFrame + 1 ) {
-          break;
-        }
-      }
-    }
-  }
-
-  void setApproximateFrameF(float frameF)
-  {
-    if( bVideoOpened ) {
-      float pct = frameF / (float)getApproximateNoFrames();
-      if( pct > 1.0 ) {
-        pct = 1.0;
-      }
-      if( pct < 0.0 ) {
-        pct = 0.0;
-      }
-      setPosition(pct);
-    }
-  }
-
-  void setApproximateFrame(int frame)
-  {
-    if( bVideoOpened ) {
-      float pct = (float)frame / (float)getApproximateNoFrames();
-      if( pct > 1.0 ) {
-        pct = 1.0;
-      }
-      if( pct < 0.0 ) {
-        pct = 0.0;
-      }
-      setPosition(pct);
-    }
-  }
-
-  int getCurrentFrameNo()
-  {
-    if( bVideoOpened ) {
-      return getPosition() * (float) getApproximateNoFrames();
-    }
-    return 0;
-  }
-
-  double getApproximateNoFrames()
-  {
-    if( bVideoOpened && averageTimePerFrame > 0.0 ) {
-      double d=getDurationInSeconds() / averageTimePerFrame;
-      return d;
-    }
-    return 0;
-  }
   double getFramesPerSecond(void)
   {
+MARK();
     return 1. / averageTimePerFrame;
-  }
-  void getPixels(unsigned char * dstBuffer)
-  {
-
-    if(bVideoOpened && bNewPixels) {
-
-      EnterCriticalSection(&critSection);
-      processPixels(rawBuffer, dstBuffer, width, height, true, true);
-      bNewPixels = false;
-      LeaveCriticalSection(&critSection);
-
-    }
   }
 
   //this is the non-callback approach
-  //void getPixels(unsigned char * dstBuffer){
-  //
-  //        if(bVideoOpened && isFrameNew()){
-  //                long bufferSize = videoSize;
-  //                HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
-  //
-  //                if(hr==S_OK){
-  //                        if (videoSize == bufferSize){
-  //                                processPixels(rawBuffer, dstBuffer, width, height, true, true);
-  //                        }else{
-  //                                printf("ERROR: GetPixels() - bufferSizes do not match!\n");
-  //                        }
-  //                }else{
-  //                        printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
-  //                }
-  //        }
-  //}
+  bool getPixels(unsigned char * dstBuffer){
+MARK();
+    if(!bVideoOpened)
+      return false;
+
+    long bufferSize = videoSize;
+    HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
+
+    if(FAILED(hr)) {
+      printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
+      return false;
+    }
+
+    if (videoSize != bufferSize){
+      printf("ERROR: GetPixels() - bufferSizes do not match!\n");
+      return false;
+    }
+
+    processPixels(rawBuffer, dstBuffer, width, height, true, true);
+    return true;
+  }
+  bool getFrame(pixBlock&pb){
+MARK();
+    if(!bVideoOpened)
+      return false;
+
+    long frameSize = width*height*4;
+    HRESULT hr;
+    OAFilterState State;
+MARK();
+    hr=m_pControl->GetState(0, &State);
+    if(m_auto > 0.f) {
+MARK();
+      //if the video is paused then start it running again
+      if (State != State_Running){
+	hr = m_pControl->Run();
+	hr = m_pControl->GetState(0, &State);
+      }
+
+      //set the rate of the clip
+      hr = m_pSeek->SetRate(m_auto);
+
+      if (State == State_Running) {
+	// Get the current position of the video
+	LONGLONG CurrentPosition;
+	hr = m_pSeek->GetCurrentPosition(&CurrentPosition);
+	if (S_OK == hr)            {
+	  // If the current position is >= the duration, reset the position to the
+	  // beginning
+	  if (CurrentPosition >= m_numFrames)                {
+	    LONGLONG Current = 0;
+	    // Set the start position to 0, do not change the end position.
+	    hr = m_pSeek->SetPositions(&Current,
+				       AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
+				       NULL, AM_SEEKING_NoPositioning);
+	    pb.newimage = true;
+	  }
+	  // Indicate the the image has changed.
+	  else if (CurrentPosition > m_lastFrame)               {
+	    pb.newimage = true;
+	  }
+	}
+
+	// If the video image has changed, copy it to the pixBlock buffer.
+	if (pb.newimage) {
+	  hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
+	  if(FAILED(hr)) {
+	    pb.image.data = NULL; // FIXXME
+	    return false;
+	  } else {
+	    //pb.image.data = rawBuffer;
+	    processPixels(rawBuffer, pb.image.data, width, height, true, true);
+	  }
+	}
+      }
+    }else{
+MARK();
+      LONGLONG frameSeek;
+      frameSeek = (LONGLONG) m_wantFrame;
+      if (State == State_Running)
+	hr = m_pControl->Pause();
+
+      //check if the playback is 'Paused' and don't keep asking for the same frame
+      hr = m_pSeek->GetCurrentPosition(&frameSeek);
+      printf("current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame, (int)m_wantFrame);
+
+      if (m_wantFrame == m_lastFrame){
+	pb.newimage = false;
+	return &pb;
+      }
+
+      hr = m_pSeek->SetPositions(&frameSeek,
+				 AM_SEEKING_AbsolutePositioning,
+				 NULL, AM_SEEKING_NoPositioning);
+      printf("new=%d\n", (int)frameSeek);
+
+      if (FAILED(hr)) {
+	printf("filmDS: SetPositions failed");
+      }
+
+MARK();
+      hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
+
+      if (FAILED(hr))  {
+	pb.image.data = NULL; // FIXXME
+	printf("filmDS: GetCurrentBuffer failed\n");
+	return false;
+      }      else {
+	//pb.image.data = rawBuffer;
+	processPixels(rawBuffer, pb.image.data, width, height, true, true);
+
+	pb.newimage = true;
+	//pb.image.fromBGR(m_frame);
+	//m_lastFrame = m_wantFrame;
+	m_lastFrame = frameSeek;
+      }
+    }
+    return true;
+  }
+
+  void setSpeed(double speed) {
+    m_auto=speed;
+  }
+  bool seekFrame(int frame) {
+    if(frame>m_numFrames)return false;
+    m_wantFrame=frame;
+    return true;
+  }
+  bool isLoaded(void){
+    return bVideoOpened;
+  }
 };
 
 
@@ -1075,16 +954,21 @@ filmDS::~filmDS()
 
 bool filmDS::open(const std::string path, const gem::Properties&props)
 {
+MARK();
   close();
+MARK();
   player = new DirectShowVideo();
+MARK();
   bool res=player->loadMovie(path);
+MARK_HR(res);
   if(res) {
-    player->setPosition(0.0);
-    player->play();
-    double d;
+    player->seekFrame(0);
+    double d=0.;
     if(props.get("auto", d)) {
       player->setSpeed(d);
     }
+  } else {
+    close();
   }
 
   return res;
@@ -1092,8 +976,9 @@ bool filmDS::open(const std::string path, const gem::Properties&props)
 
 void filmDS::close()
 {
+MARK();
   if( player ) {
-    player->stop();
+MARK();
     delete player;
     player = NULL;
   }
@@ -1101,50 +986,53 @@ void filmDS::close()
 
 pixBlock*filmDS::getFrame(void)
 {
+MARK();
+  if(!player)
+    return 0;
+MARK();
+#if 0
   //printf("getting frame...%p\n", player);
   if(!player || !player->isLoaded())
     return NULL;
 
   if(player->isMovieDone())
     return NULL;
-
+#endif
   m_image.newfilm=false;
   m_image.newimage=false;
 
-  player->update();
-  if(player->isFrameNew()) {
-    //printf("getting new frame\n");
-    m_image.newimage=true;
-    int w=player->getWidth();
-    int h=player->getHeight();
-    if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
-      m_image.image.xsize=w;
-      m_image.image.ysize=h;
-      m_image.image.setCsizeByFormat(GL_RGBA);
-      m_image.image.reallocate();
+  int w=player->width;
+  int h=player->height;
+  if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
+    m_image.image.xsize=w;
+    m_image.image.ysize=h;
+    m_image.image.setCsizeByFormat(GL_RGBA);
+    m_image.image.reallocate();
 
-      m_image.newfilm=true;
-      //printf("getting new film\n");
-    }
-    player->getPixels(m_image.image.data);
+    m_image.newfilm=true;
+    //printf("getting new film\n");
   }
-  return&m_image;
+MARK();
+  bool res=player->getFrame(m_image);
+MARK_HR(res);
+  if(res) {
+    return &m_image;
+  }
+  return 0;
 }
 
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
 {
-  if( player && player->isLoaded() ) {
-    if(imgNum<0)
-      return FAILURE;
-
-    //frame = ofClamp(frame, 0, getTotalNumFrames());
-    //float frame=player->getCurrentFrameNo();
-    player->setApproximateFrame(imgNum);
-    return SUCCESS;
-  }
-  return FAILURE;
+MARK();
+  if(!player)
+    return film::FAILURE;
+MARK();
+  if(player->seekFrame(imgNum))
+    return film::SUCCESS;
+MARK();
+  return film::FAILURE;
 }
-  // Property handling
+// Property handling
 bool filmDS::enumProperties(gem::Properties&readable,
 			    gem::Properties&writeable)
 {
@@ -1165,7 +1053,7 @@ void filmDS::setProperties(gem::Properties&props)
 {
   double d;
   if(props.get("auto", d)) {
-    if(player && player->isLoaded()) {
+    if(player) {
       player->setSpeed(d);
     }
   }
@@ -1185,83 +1073,17 @@ void filmDS::getProperties(gem::Properties&props)
 	value=d; props.set(key, value);
       }
       if("frames"==key) {
-	d=player->getApproximateNoFrames();
+	d=player->m_numFrames;
 	value=(int)(d+0.5); props.set(key, value);
       }
       if("width"==key) {
-	d=player->getWidth();
+	d=player->width;
 	value=d; props.set(key, value);
       }
       if("height"==key) {
-	d=player->getHeight();
+	d=player->height;
 	value=d; props.set(key, value);
       }
     }
   }
 }
-
-#if 0
-void filmDS::play()
-{
-  if( player && player->isLoaded() ) {
-    player->play();
-  }
-}
-
-void filmDS::stop()
-{
-  if( player && player->isLoaded() ) {
-    player->stop();
-  }
-}
-
-bool filmDS::setPixelFormat(ofPixelFormat pixelFormat)
-{
-  return (pixelFormat == OF_PIXELS_RGB);
-}
-
-//should implement!
-float filmDS::getPosition()
-{
-  if( player && player->isLoaded() ) {
-    return player->getPosition();
-  }
-  return 0.0;
-}
-
-void filmDS::setPosition(float pct)
-{
-  if( player && player->isLoaded() ) {
-    player->setPosition(pct);
-  }
-}
-
-int filmDS::getCurrentFrame()
-{
-  if( player && player->isLoaded() ) {
-    return player->getCurrentFrameNo();
-  }
-  return 0;
-}
-
-int filmDS::getTotalNumFrames()
-{
-  if( player && player->isLoaded() ) {
-    return player->getApproximateNoFrames();
-  }
-  return 0;
-}
-
-void filmDS::setFrame(int frame)
-{
-  if( player && player->isLoaded() ) {
-    frame = ofClamp(frame, 0, getTotalNumFrames());
-    return player->setApproximateFrame(frame);
-  }
-}
-
-void filmDS::firstFrame()
-{
-  setPosition(0.0);
-}
-#endif
