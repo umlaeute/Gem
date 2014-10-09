@@ -17,6 +17,7 @@
 #include "model.h"
 #include "Gem/State.h"
 #include "plugins/modelloader.h"
+#include <algorithm> // std::min
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 
@@ -265,15 +266,13 @@ void model :: copyArray(std::string vectorName, VertexBuffer&vb)
   if ( tab.empty() ) return;
   size=tab.size();
 
-  printf("array size : %d\n",size);
-
   if(size!=vb.size) {
     vb.resize(size);
     m_size_change_flag=true;
   }
 
-  for ( i = 0 ; i < size ; i++ )	{
-    for ( int j=0 ; j<vb.stride ; j++){
+  for ( i = 0 ; i < size ; i++ ) {
+    for ( int j=0 ; j< std::min(vb.stride,(unsigned int)tab[i].size()) ; j++) {
       vb.array[i*vb.stride + j] = tab[i][j];
     }
   }
