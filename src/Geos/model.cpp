@@ -217,9 +217,10 @@ void model :: render(GemState *state)
     sizeList.push_back(m_normal.size);
   }
 
-  unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
-
-  glDrawArrays(GL_TRIANGLES, 0, npoints);
+  if ( sizeList.size() > 0 ) {
+    unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
+    glDrawArrays(GL_TRIANGLES, 0, npoints);
+  }
 
   if ( m_position.enabled ) {
     glDisableClientState(GL_VERTEX_ARRAY);
