@@ -17,7 +17,7 @@
 
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
-#include "VertexBuffer.h"
+#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

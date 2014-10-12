@@ -16,7 +16,7 @@
 #include "Gem/Image.h"
 #include "Gem/State.h"
 #include "Utils/GLUtil.h"
-#include "VertexBuffer.h"
+#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
