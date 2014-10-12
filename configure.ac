@@ -425,7 +425,22 @@ GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [vid
 
 # assimp
 GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
+## check whether this is assimp2 or assimp3
+have_assimp2="no"
+have_assimp3="no"
 
+old_cflags=${CFLAGS}
+old_cxxflags=${CXXFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
+LDFLAGS="${LDFLAGS}  ${GEM_LIB_ASSIMP_LIBS}"
+AC_CHECK_HEADERS([assimp.h], [have_assimp2="yes"])
+AC_CHECK_HEADERS([assimp/cimport.h], [have_assimp3="yes"])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
+
+AM_CONDITIONAL([HAVE_ASSIMP2], [test "x${have_assimp2}" = "xyes" ])
+AM_CONDITIONAL([HAVE_ASSIMP3], [test "x${have_assimp3}" = "xyes" ])
 
 ## text support
 AC_ARG_WITH([default-font],
