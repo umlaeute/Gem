@@ -24,6 +24,7 @@
 
 namespace gem { namespace plugins {
 
+  modelloader :: modelloader(void) : m_refresh(false){}
   modelloader :: ~modelloader(void) {}
   /* initialize the modelloader factory */
   static gem::PluginFactoryRegistrar::dummy<modelloader> fac_modelloaderdummy;
