@@ -53,13 +53,13 @@ namespace gem { namespace plugins {
   virtual bool enumProperties(gem::Properties&, gem::Properties&);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
+  std::vector<std::vector<float> > getVector(std::string vectorName);
 
 protected:
   virtual void destroy(void);
   bool    m_rebuild;
 
   GLMmodel *m_model;
-  GLint	  	m_dispList;
 
 	int       m_material;
 	int       m_flags;

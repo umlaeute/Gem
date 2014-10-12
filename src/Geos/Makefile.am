@@ -98,4 +98,6 @@ libGeos_la_SOURCES=  \
     triangle.cpp \
     triangle.h \
     tube.cpp \
-    tube.h
+    tube.h \
+    VertexBuffer.cpp \
+    VertexBuffer.h

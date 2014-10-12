@@ -92,8 +92,6 @@ typedef struct _GLMmodel {
   GLfloat* uvtexcoords;           /* array of texture coordinates */
 } GLMmodel;
 
-
-
 /* _GLMnode: general purpose node */
 typedef struct _GLMnode {
   GLuint         index;
@@ -101,6 +99,8 @@ typedef struct _GLMnode {
   struct _GLMnode* next;
 } GLMnode;
 
+/* fill the vector with model data */
+void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors);
 
 /* glmMax: returns the maximum of two floats */
 static GLfloat
@@ -132,6 +132,7 @@ _glmDot(GLfloat* u, GLfloat* v)
 
   return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
 }
+
 
 /* glmCross: compute the cross product of two vectors
  *
@@ -1884,7 +1885,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(const GLMmodel* model, GLuint mode)
+glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
   static GLMgroup* group;
@@ -1942,6 +1943,13 @@ glmDraw(const GLMmodel* model, GLuint mode)
 
   group = model->groups;
   while (group) {
+    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
+    group = group->next;
+  }
+}
+
+void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors){
+
     if (mode & GLM_MATERIAL) {
       material = &model->materials[group->material];
       glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
@@ -1950,41 +1958,79 @@ glmDraw(const GLMmodel* model, GLuint mode)
       glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
     }
 
+    std::vector<float> vec, color;
+    float* pt;
+    int i;
     if (mode & GLM_COLOR) {
-      glColor3fv(material->diffuse);
+      color.insert(color.end(),material->diffuse,material->diffuse + 3);
+      color.push_back(1.);
     }
 
-    glBegin(GL_TRIANGLES);
     for (i = 0; i < group->numtriangles; i++) {
       triangle = &T(group->triangles[i]);
+      if (mode & GLM_FLAT) {
+        pt = &model->facetnorms[3 * triangle->findex];
+        vec = std::vector<float>(pt, pt + 3);
+        for ( int j=0; j<3 ; j++){
+          normals.push_back(vec);
+        }
+      }
 
-      if (mode & GLM_FLAT)
-        glNormal3fv(&model->facetnorms[3 * triangle->findex]);
+      if (mode & GLM_SMOOTH) {
+        //~glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
+        pt = &model->normals[3 * triangle->nindices[0]];
+        vec = std::vector<float>(pt, pt + 3);
+        normals.push_back(vec);
+      }
+      if (mode & GLM_TEXTURE) {
+        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
+        pt =   &model->texcoords[2 * triangle->tindices[0]];
+        vec = std::vector<float>(pt, pt + 2);
+        texcoords.push_back(vec);
+      }
+      //~glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
+      pt = &model->vertices[3 * triangle->vindices[0]];
+      vec = std::vector<float>(pt, pt + 3);
+      vertices.push_back(vec);
+      if(!color.empty()) colors.push_back(color);
 
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
+      if (mode & GLM_SMOOTH) {
+        //~glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
+        pt = &model->normals[3 * triangle->nindices[1]];
+        vec = std::vector<float>(pt, pt + 3);
+        normals.push_back(vec);
+      }
+      if (mode & GLM_TEXTURE) {
+        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
+        pt =   &model->texcoords[2 * triangle->tindices[1]];
+        vec = std::vector<float>(pt, pt + 2);
+        texcoords.push_back(vec);
+      }
+      //~glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
+      pt = &model->vertices[3 * triangle->vindices[1]];
+      vec = std::vector<float>(pt, pt + 3);
+      vertices.push_back(vec);
+      if(!color.empty()) colors.push_back(color);
 
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
-
+      if (mode & GLM_SMOOTH) {
+        //~glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
+        pt = &model->normals[3 * triangle->nindices[2]];
+        vec = std::vector<float>(pt, pt + 3);
+        normals.push_back(vec);
+      }
+      if (mode & GLM_TEXTURE) {
+        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
+        pt =   &model->texcoords[2 * triangle->tindices[2]];
+        vec = std::vector<float>(pt, pt + 2);
+        texcoords.push_back(vec);
+      }
+      //~glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
+      pt = &model->vertices[3 * triangle->vindices[2]];
+      vec = std::vector<float>(pt, pt + 3);
+      vertices.push_back(vec);
+      if(!color.empty()) colors.push_back(color);
     }
-    glEnd();
-
-    group = group->next;
   }
-}
 
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
@@ -2001,13 +2047,13 @@ glmDraw(const GLMmodel* model, GLuint mode)
  * GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(const GLMmodel* model, GLuint mode)
+glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
   modList = glGenLists(1);
   glNewList(modList, GL_COMPILE);
-  glmDraw(model, mode);
+  glmDraw(model, mode, vertices, normals, texcoords, colors);
   glEndList();
 
   return modList;
@@ -2018,7 +2064,7 @@ glmList(const GLMmodel* model, GLuint mode)
  */
 
 GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber)
+glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
   static GLMgroup* group;
@@ -2091,60 +2137,18 @@ glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber)
       group = group->next;
       count++;
     }
-
-
-    if (mode & GLM_MATERIAL) {
-      material = &model->materials[group->material];
-      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
-      glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
-    }
-
-    if (mode & GLM_COLOR) {
-      glColor3fv(material->diffuse);
-    }
-
-    glBegin(GL_TRIANGLES);
-    for (i = 0; i < group->numtriangles; i++) {
-      triangle = &T(group->triangles[i]);
-
-      if (mode & GLM_FLAT)
-        glNormal3fv(&model->facetnorms[3 * triangle->findex]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
-
-    }
-    glEnd();
+    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
   }
-  // group = group->next;
-  //  }
 }
 
 GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber)
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
   modList = glGenLists(1);
   glNewList(modList, GL_COMPILE);
-  glmDrawGroup(model, mode,groupNumber);
+  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords, colors);
   glEndList();
 
   return modList;

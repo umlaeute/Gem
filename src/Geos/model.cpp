@@ -17,10 +17,11 @@
 #include "model.h"
 #include "Gem/State.h"
 #include "plugins/modelloader.h"
+#include <algorithm> // std::min
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // model
 //
@@ -30,7 +31,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 model :: model(t_symbol *filename) :
   m_loader(gem::plugins::modelloader::getInstance()),
-  m_loaded(false)
+  m_loaded(false),
+  m_position(256,3),
+  m_texture (256,2),
+  m_color   (256,4),
+  m_normal  (256,3)
 {
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) openMess(filename->s_name);
@@ -110,7 +115,7 @@ void model :: textureMess(int state)
 //
 /////////////////////////////////////////////////////////
 void model :: smoothMess(t_float fsmooth)
-{  
+{
   m_properties.set("smooth", fsmooth);
   applyProperties();
 }
@@ -169,6 +174,10 @@ void model :: openMess(const std::string&filename)
   }
 
   m_loaded=true;
+  copyArray("vertices", m_position);
+  copyArray("texcoords", m_texture);
+  copyArray("normals", m_normal);
+  copyArray("colors", m_color);
   setModified();
 }
 
@@ -179,32 +188,51 @@ void model :: openMess(const std::string&filename)
 void model :: render(GemState *state)
 {
   if(!m_loaded)return;
-  float scaleX=1.f, scaleY=1.f;
-  float transY=0.f;
 
-  if (state) {
-    bool upsidedown=true; 
-    TexCoord baseCoord(1., 1.);
-
-    state->get(GemState::_GL_TEX_ORIENTATION, upsidedown);
-    state->get(GemState::_GL_TEX_BASECOORD, baseCoord);
-
-    scaleX=baseCoord.s;
-    scaleY=(upsidedown?-1.f:1.f)*baseCoord.t;
-    transY=(upsidedown?-1.f:0.f);
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || m_size_change_flag ) {
+    createVBO();
+    m_size_change_flag = false;
   }
-
-  glMatrixMode(GL_TEXTURE);
-  glScalef(scaleX, scaleY, 1.f);
-  glTranslatef(0.f, transY, 0.f);
-  glMatrixMode(GL_MODELVIEW);
+  std::vector<unsigned int> sizeList;
 
   m_loader->render();
+  if(m_position.render()) {
+    glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    sizeList.push_back(m_position.size);
+  }
+  if(m_texture.render()) {
+    glTexCoordPointer(m_texture.stride, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    sizeList.push_back(m_texture.size);
+  }
+  if(m_color.render()) {
+    glColorPointer(m_color.stride, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_COLOR_ARRAY);
+    sizeList.push_back(m_color.size);
+  }
+  if(m_normal.render()) {
+    glNormalPointer(GL_FLOAT, 0, 0);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    sizeList.push_back(m_normal.size);
+  }
 
-  glMatrixMode(GL_TEXTURE);
-  glTranslatef(0.f, -transY, 0.f);
-  glScalef(1./scaleX, 1./scaleY, 1.f);
-  glMatrixMode(GL_MODELVIEW);
+  unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
+
+  glDrawArrays(GL_TRIANGLES, 0, npoints);
+
+  if ( m_position.enabled ) {
+    glDisableClientState(GL_VERTEX_ARRAY);
+  }
+  if ( m_color.enabled    ) {
+    glDisableClientState(GL_COLOR_ARRAY);
+  }
+  if ( m_texture.enabled  ) {
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
+  if ( m_normal.enabled   ) {
+    glDisableClientState(GL_NORMAL_ARRAY);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -220,4 +248,34 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
+}
+
+void model :: createVBO(void)
+{
+  m_position.create();
+  m_texture .create();
+  m_color   .create();
+  m_normal  .create();
+}
+
+void model :: copyArray(std::string vectorName, VertexBuffer&vb)
+{
+  unsigned int size(0), i(0), npts(0);
+
+  std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
+  if ( tab.empty() ) return;
+  size=tab.size();
+
+  if(size!=vb.size) {
+    vb.resize(size);
+    m_size_change_flag=true;
+  }
+
+  for ( i = 0 ; i < size ; i++ ) {
+    for ( int j=0 ; j< std::min(vb.stride,(unsigned int)tab[i].size()) ; j++) {
+      vb.array[i*vb.stride + j] = tab[i][j];
+    }
+  }
+  vb.dirty=true;
+  vb.enabled=true;
 }

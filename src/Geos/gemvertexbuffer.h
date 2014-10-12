@@ -16,6 +16,7 @@
 #include "Gem/Image.h"
 #include "Gem/State.h"
 #include "Utils/GLUtil.h"
+#include "VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -33,33 +34,6 @@
 class GEM_EXTERN gemvertexbuffer : public GemShape
 {
   CPPEXTERN_HEADER(gemvertexbuffer, GemShape);
-
-protected:
-  class VertexBuffer
-  {
-  public:
-    VertexBuffer();
-    VertexBuffer(unsigned int size, unsigned int stride);
-    VertexBuffer(const VertexBuffer&);
-    ~VertexBuffer(void);
-    void resize(unsigned int);
-    bool create(void);
-    bool render(void);
-    void destroy(void);
-
-    unsigned int size;
-    unsigned int stride;
-
-    GLuint vbo;
-    float*array;
-    bool dirty;
-    bool enabled;
-    GLuint attrib_index;
-    std::string attrib_name;
-    std::string attrib_array;
-    unsigned int offset;
-  };
-
 
 public:
   //////////

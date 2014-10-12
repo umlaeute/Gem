@@ -30,6 +30,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 #include <string>
+#include <vector>
 namespace gem {
   class Properties;
 }
@@ -133,6 +134,15 @@ class GEM_EXTERN modelloader
    *           "/camera/1/pos" (position of camera #1)
    */
   virtual void getProperties(gem::Properties&props) = 0;
+
+  /**
+   * get the named vector to pass it to VBO
+   */
+  virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
+
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
+  bool m_refresh;
+
 };
 
 };}; // namespace gem::plugins

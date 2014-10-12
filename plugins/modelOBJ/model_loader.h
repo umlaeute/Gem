@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 #include <assert.h>
 
 #ifdef __ppc__
@@ -223,7 +224,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(const GLMmodel* model, GLuint mode);
+glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
 
 
 /* glmDrawGroup: Renders a single group of model to the current OpenGL context using the
@@ -238,7 +239,7 @@ glmDraw(const GLMmodel* model, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber);
+glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
 
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
@@ -252,7 +253,7 @@ glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(const GLMmodel* model, GLuint mode);
+glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
 
 /* glmListGroup: Generates and returns a display list for the model group using
  * the mode specified.
@@ -266,7 +267,7 @@ glmList(const GLMmodel* model, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber);
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.
