@@ -2,21 +2,15 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file
 //
-//    Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2001-2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#if (defined HAVE_LIBASSIMP2) && (defined HAVE_ASSIMP_H)
-
 #include "modelASSIMP2.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
@@ -31,7 +25,6 @@
 using namespace gem::plugins;
 
 REGISTER_MODELLOADERFACTORY("ASSIMP2", modelASSIMP2);
-
 
 namespace {
 
@@ -416,4 +409,3 @@ void modelASSIMP2 :: destroy(void)  {
     aiReleaseImport(m_scene);
   m_scene=NULL;
 }
-#endif
