@@ -449,14 +449,6 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
 
-
-### make-depend flags
-if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
-    AC_SUBST(MAKEDEP_FLAGS, "-MM")
-else
-    AC_SUBST(MAKEDEP_FLAGS, "-M")
-fi
-
 # using pix_videoOS rather than pix_video
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
 
