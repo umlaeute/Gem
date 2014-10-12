@@ -83,11 +83,12 @@ std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName){
 }
 
 bool modelOBJ :: render(void) {
+  bool res = true;
   if(m_rebuild) {
     glmTexture(m_model, m_textype, 1,1);
-    compile();
+    res = compile();
   }
-  return true;
+  return res;
 }
 void modelOBJ :: close(void)  {
   destroy();
