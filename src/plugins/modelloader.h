@@ -39,6 +39,7 @@ class GEM_EXTERN modelloader
 {
  public:
 
+  modelloader(void);
   //////////
   // returns an instance wrapping all plugins or NULL
   // if NULL is returned, you might still try your luck with manually accessing the
