@@ -114,5 +114,7 @@ libGem_la_SOURCES += \
 	Setup.cpp \
 	State.cpp \
 	State.h \
+	VertexBuffer.cpp \
+	VertexBuffer.h \
 	Version.h
 
