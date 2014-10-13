@@ -59,8 +59,10 @@ namespace gem { namespace plugins {
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
   std::vector<std::vector<float> > getVector(std::string vectorName);
+  std::vector<VBOarray> getVBOarray();
   void unsetRefresh();
   bool needRefresh();
+  void fillVBOarray();
 
 protected:
   virtual void destroy(void);

@@ -16,6 +16,7 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 #include "Gem/Properties.h"
+#include "Gem/VertexBuffer.h"
 
 #include "Utils/Functions.h"
 
@@ -293,6 +294,10 @@ std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorNam
   return std::vector<std::vector<float> >();
 }
 
+std::vector<modelloader::VBOarray> modelASSIMP3 :: getVBOarray(){
+  return m_VBOarray;
+}
+
 void modelASSIMP3 :: unsetRefresh(){ m_refresh = false; }
 bool modelASSIMP3 :: needRefresh(){ return m_refresh; }
 
@@ -394,6 +399,27 @@ void modelASSIMP3 :: setProperties(gem::Properties&props) {
 void modelASSIMP3 :: getProperties(gem::Properties&props) {
 }
 
+void modelASSIMP3 :: fillVBOarray(){
+  m_VBOarray.clear();
+  VBOarray vboarray;
+
+  vboarray.data = &m_vertices;
+  vboarray.type = VertexBuffer::GEM_VBO_VERTICES;
+  m_VBOarray.push_back(vboarray);
+
+  vboarray.data = &m_normals;
+  vboarray.type = VertexBuffer::GEM_VBO_NORMALS;
+  m_VBOarray.push_back(vboarray);
+
+  vboarray.data = &m_texcoords;
+  vboarray.type = VertexBuffer::GEM_VBO_TEXCOORDS;
+  m_VBOarray.push_back(vboarray);
+
+  vboarray.data = &m_colors;
+  vboarray.type = VertexBuffer::GEM_VBO_COLORS;
+  m_VBOarray.push_back(vboarray);
+}
+
 bool modelASSIMP3 :: compile(void)  {
   if(!m_scene) return false;
 
@@ -410,6 +436,7 @@ bool modelASSIMP3 :: compile(void)  {
   m_texcoords.clear();
   m_colors.clear();
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors);
+  fillVBOarray();
   if(useColorMaterial)
     glEnable(GL_COLOR_MATERIAL);
 

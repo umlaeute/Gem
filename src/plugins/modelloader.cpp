@@ -147,6 +147,12 @@ public:
     return std::vector<std::vector<float> >();
   }
 
+  std::vector<VBOarray> getVBOarray() {
+    if (m_handle)
+      return m_handle->getVBOarray();
+    return std::vector<VBOarray>();
+  }
+
   virtual bool render(void) {
     if(m_handle)
       return m_handle->render();

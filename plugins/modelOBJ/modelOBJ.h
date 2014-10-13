@@ -15,6 +15,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/modelloader.h"
 #include "model_loader.h"
+#include "Gem/VertexBuffer.h"
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -54,6 +56,7 @@ namespace gem { namespace plugins {
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
   std::vector<std::vector<float> > getVector(std::string vectorName);
+  std::vector<VBOarray> getVBOarray();
   void unsetRefresh();
   bool needRefresh();
 

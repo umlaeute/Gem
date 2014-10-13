@@ -82,6 +82,10 @@ std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName){
   return std::vector<std::vector<float> >();
 }
 
+std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray(){
+  return m_VBOarray;
+}
+
 bool modelOBJ :: render(void) {
   bool res = true;
   if(m_rebuild) {
