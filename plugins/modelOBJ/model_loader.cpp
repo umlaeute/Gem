@@ -50,6 +50,14 @@ typedef struct _GLMgroup {
   GLuint*           triangles;      /* array of triangle indices */
   GLuint            material;       /* index to material for group */
   struct _GLMgroup* next;           /* pointer to next group in model */
+
+  _GLMgroup(std::string _name, struct _GLMgroup*_next=0)
+    : name(_name)
+    , numtriangles(0)
+    , triangles(0)
+    , material(0)
+    , next(_next)
+  {}
 } GLMgroup;
 
 /* GLMmodel: Structure that defines a model.
@@ -90,6 +98,27 @@ typedef struct _GLMmodel {
    */
   GLuint   numuvtexcoords;        /* number of texcoords in model */
   GLfloat* uvtexcoords;           /* array of texture coordinates */
+
+  _GLMmodel(void)
+    : pathname(std::string())
+    , mtllibname(std::string())
+    , numvertices(0)
+    , vertices(0)
+    , numnormals(0)
+    , normals(0)
+    , numtexcoords(0)
+    , texcoords(0)
+    , numfacetnorms(0)
+    , facetnorms(0)
+    , numtriangles(0)
+    , triangles(0)
+    , nummaterials(0)
+    , materials(0)
+    , numgroups(0)
+    , groups(0)
+    , numuvtexcoords(0)
+    , uvtexcoords(0)
+{position[0]=position[1]=position[2]=0.;}
 } GLMmodel;
 
 /* _GLMnode: general purpose node */
@@ -254,12 +283,7 @@ _glmAddGroup(GLMmodel* model, const std::string&name)
 
   group = _glmFindGroup(model, name);
   if (!group) {
-    group = new GLMgroup;
-    group->name = name;
-    group->material = 0;
-    group->numtriangles = 0;
-    group->triangles = NULL;
-    group->next = model->groups;
+    group = new GLMgroup(name, model->groups);
     model->groups = group;
     model->numgroups++;
   }
