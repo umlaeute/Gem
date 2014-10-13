@@ -94,6 +94,9 @@ void modelOBJ :: close(void)  {
   destroy();
 }
 
+void modelOBJ :: unsetRefresh(){ m_refresh = false; }
+bool modelOBJ :: needRefresh(){ return m_refresh; }
+
 bool modelOBJ :: enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
   readable.clear();

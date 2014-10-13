@@ -178,7 +178,8 @@ static void Color4f(const aiColor4D *color)
 }
 
 // ----------------------------------------------------------------------------
-static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd, const bool use_material)
+static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd, const bool use_material,
+      std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
 	int i;
 	unsigned int n = 0, t;
@@ -221,30 +222,49 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 				default: face_mode = GL_POLYGON; break;
 			}
 
-			glBegin(face_mode);
+			//~glBegin(face_mode);
+
+      float* pt;
+      std::vector<float> vec;
 
 			for(i = 0; i < face->mNumIndices; i++) {
 				int index = face->mIndices[i];
 
-				if(use_material && mesh->mColors[0] != NULL)
-					Color4f(&mesh->mColors[0][index]);
+				if(use_material && mesh->mColors[0] != NULL){
+					//~Color4f(&mesh->mColors[0][index]);
+          pt = (float*) &mesh->mColors[0][index];
+          vec = std::vector<float>(pt,pt+4);
+          colors.push_back(vec);
+        }
 
-				if(mesh->mNormals != NULL)
-					glNormal3fv(&mesh->mNormals[index].x);
+				if(mesh->mNormals != NULL){
+					//~glNormal3fv(&mesh->mNormals[index].x);
+          pt = &mesh->mNormals[index].x;
+          vec = std::vector<float>(pt,pt+3);
+          normals.push_back(vec);
+        }
 
-        if(mesh->HasTextureCoords(0))
-          glTexCoord2f(mesh->mTextureCoords[0][index].x, mesh->mTextureCoords[0][index].y);
+        if(mesh->HasTextureCoords(0)){
+          //~glTexCoord2f(mesh->mTextureCoords[0][index].x, mesh->mTextureCoords[0][index].y);
+          vec.clear();
+          vec.push_back(mesh->mTextureCoords[0][index].x);
+          vec.push_back(mesh->mTextureCoords[0][index].y);
+          texcoords.push_back(vec);
+        }
 
-				glVertex3fv(&mesh->mVertices[index].x);
+				//~glVertex3fv(&mesh->mVertices[index].x);
+        pt = &mesh->mVertices[index].x;
+        vec = std::vector<float>(pt,pt+3);
+        vertices.push_back(vec);
 			}
 
-			glEnd();
+			//~glEnd();
 		}
 	}
 
 	// draw all children
 	for (n = 0; n < nd->mNumChildren; ++n) {
-		recursive_render(scene, sc, nd->mChildren[n], use_material);
+		recursive_render(scene, sc, nd->mChildren[n], use_material, vertices, normals, texcoords, colors);
 	}
 
 	glPopMatrix();
@@ -273,6 +293,9 @@ std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorNam
   return std::vector<std::vector<float> >();
 }
 
+void modelASSIMP3 :: unsetRefresh(){ m_refresh = false; }
+bool modelASSIMP3 :: needRefresh(){ return m_refresh; }
+
 bool modelASSIMP3 :: open(const std::string&name, const gem::Properties&requestprops) {
   destroy();
 
@@ -299,6 +322,7 @@ bool modelASSIMP3 :: open(const std::string&name, const gem::Properties&requestp
   setProperties(props);
 
   m_rebuild=true;
+  compile();
   return true;
 }
 
@@ -372,7 +396,6 @@ void modelASSIMP3 :: getProperties(gem::Properties&props) {
 
 bool modelASSIMP3 :: compile(void)  {
   if(!m_scene) return false;
-  printf("try to compile\n");
 
   GLboolean useColorMaterial=GL_FALSE;
   glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
@@ -382,17 +405,19 @@ bool modelASSIMP3 :: compile(void)  {
   // now begin at the root node of the imported data and traverse
   // the scenegraph by multiplying subsequent local transforms
   // together on GL's matrix stack.
-  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial);
+  m_vertices.clear();
+  m_normals.clear();
+  m_texcoords.clear();
+  m_colors.clear();
+  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors);
   if(useColorMaterial)
     glEnable(GL_COLOR_MATERIAL);
-  glEndList();
 
   bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;
   }
-  printf("compile end\n");
   return res;
 }
 void modelASSIMP3 :: destroy(void)  {
