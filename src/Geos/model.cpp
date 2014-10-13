@@ -180,10 +180,10 @@ void model :: openMess(const std::string&filename)
 
 void model :: startRendering() {
   if (m_loaded){
-    copyArray("vertices", m_position);
-    copyArray("texcoords", m_texture);
-    copyArray("normals", m_normal);
-    copyArray("colors", m_color);
+    copyArray(m_loader->getVector("vertices"), m_position);
+    copyArray(m_loader->getVector("texcoords"), m_texture);
+    copyArray(m_loader->getVector("normals"), m_normal);
+    copyArray(m_loader->getVector("colors"), m_color);
   }
 }
 /////////////////////////////////////////////////////////
@@ -267,11 +267,11 @@ void model :: createVBO(void)
   m_normal  .create();
 }
 
-void model :: copyArray(std::string vectorName, VertexBuffer&vb)
+void model :: copyArray(const std::vector<std::vector<float> > tab, VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
-  std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
+  //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
   if ( tab.empty() ) return;
   size=tab.size();
 
@@ -291,10 +291,10 @@ void model :: copyArray(std::string vectorName, VertexBuffer&vb)
 
 void model :: copyAllArrays(){
   if (m_loader && m_loader->needRefresh()){
-    copyArray("vertices", m_position);
-    copyArray("texcoords", m_texture);
-    copyArray("normals", m_normal);
-    copyArray("colors", m_color);
+    copyArray(m_loader->getVector("vertices"), m_position);
+    copyArray(m_loader->getVector("texcoords"), m_texture);
+    copyArray(m_loader->getVector("normals"), m_normal);
+    copyArray(m_loader->getVector("colors"), m_color);
     m_loader->unsetRefresh();
   }
 }

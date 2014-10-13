@@ -81,7 +81,7 @@ class GEM_EXTERN model : public GemBase
   virtual void	render(GemState *state);
   virtual void	startRendering();
 
-  void copyArray(std::string vectorName, VertexBuffer&vb);
+  void copyArray(const std::vector<std::vector<float> > tab, VertexBuffer&vb);
   void copyAllArrays();
   void createVBO(void);
 
