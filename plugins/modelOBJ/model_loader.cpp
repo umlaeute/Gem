@@ -358,7 +358,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   /* count the number of materials in the file */
   nummaterials = 1;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -410,7 +411,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   /* now, read in the data */
   nummaterials = 0;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -559,7 +561,8 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   /* make a default group */
   group = _glmAddGroup(model, "default");
   numvertices = numnormals = numtexcoords = numtriangles = 0;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -630,8 +633,9 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       break;
     case 'f':               /* face */
       v = n = t = 0;
-      if(EOF != fscanf(file, "%s", buf)) {
+      if(EOF != fscanf(file, "%127s", buf)) {
       /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
+	 buf[127]=0;
          if (strstr(buf, "//")) {
            /* v//n */
 	   if(EOF == sscanf(buf, "%d//%d", &v, &n)) {
@@ -774,7 +778,8 @@ _glmSecondPass(GLMmodel* model, FILE* file)
   numvertices = numnormals = numtexcoords = 1;
   numtriangles = 0;
   material = 0;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -842,8 +847,9 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'f':               /* face */
       v = n = t = 0;
-      if(EOF != fscanf(file, "%s", buf)) {
+      if(EOF != fscanf(file, "%127s", buf)) {
       /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
+	 buf[127]=0;
          if (strstr(buf, "//")) {
            /* v//n */
 	   if(EOF != sscanf(buf, "%d//%d", &v, &n)) {
