@@ -11,6 +11,10 @@
   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
+
+#ifndef _INCLUDE__GEM_GEM_VERTEXBUFFER_H_
+#define _INCLUDE__GEM_GEM_VERTEXBUFFER_H_
+
 #include "Gem/GemGL.h"
 #include <string>
 
@@ -38,3 +42,5 @@ class VertexBuffer
     std::string attrib_array;
     unsigned int offset;
   };
+
+#endif // _INCLUDE__GEM_GEM_VERTEXBUFFER_H_
