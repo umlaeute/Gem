@@ -261,7 +261,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 static GLMgroup*
 _glmFindGroup(const GLMmodel* model, const std::string&name)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
 
   if (!(model))return NULL;
 
@@ -279,7 +279,7 @@ _glmFindGroup(const GLMmodel* model, const std::string&name)
 static GLMgroup*
 _glmAddGroup(GLMmodel* model, const std::string&name)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
 
   group = _glmFindGroup(model, name);
   if (!group) {
@@ -343,7 +343,7 @@ _glmDirName(const std::string&path)
 static GLint
 _glmReadMTL(GLMmodel* model, const std::string&name)
 {
-  FILE* file;
+  FILE* file=0;
   char    buf[128];
   GLuint nummaterials, i;
 
@@ -499,8 +499,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 static GLboolean
 _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtllibname)
 {
-  FILE* file;
-  GLMmaterial* material;
+  FILE* file=0;
+  GLMmaterial* material=0;
   GLuint i;
 
   std::string filename = _glmDirName(model->pathname);
@@ -553,13 +553,11 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   GLuint  numnormals;         /* number of normals in model */
   GLuint  numtexcoords;       /* number of texcoords in model */
   GLuint  numtriangles;       /* number of triangles in model */
-  GLMgroup* group;            /* current group */
+  GLMgroup* group=0;          /* current group */
   unsigned    v, n, t;
   char        buf[128];
-
   /* make a default group */
   group = _glmAddGroup(model, "default");
-
   numvertices = numnormals = numtexcoords = numtriangles = 0;
   while(fscanf(file, "%s", buf) != EOF) {
     switch(buf[0]) {
@@ -1229,11 +1227,11 @@ glmFacetNormals(GLMmodel* model)
 GLvoid
 glmVertexNormals(GLMmodel* model, GLfloat angle)
 {
-  GLMnode*    node;
-  GLMnode*    tail;
-  GLMnode** members;
-  GLfloat*    normals;
-  GLuint  numnormals;
+  GLMnode*    node=0;
+  GLMnode*    tail=0;
+  GLMnode** members=0;
+  GLfloat*    normals=0;
+  GLuint  numnormals=0;
   GLfloat average[3];
   GLfloat dot, cos_angle;
   GLuint  i, avg;
@@ -1383,7 +1381,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
 GLvoid
 glmUVTexture(GLMmodel* model, float h, float w)
 {
-  GLMgroup *group;
+  GLMgroup *group=0;
   GLuint i;
 
   if(!model)return;
@@ -1423,7 +1421,7 @@ glmUVTexture(GLMmodel* model, float h, float w)
 GLvoid
 glmLinearTexture(GLMmodel* model, float h, float w)
 {
-  GLMgroup *group;
+  GLMgroup *group=0;
   GLfloat dimensions[3];
   GLfloat x, y, scalefactor;
   GLuint i;
@@ -1475,7 +1473,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
 GLvoid
 glmSpheremapTexture(GLMmodel* model, float h, float w)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
   GLfloat theta, phi, rho, x, y, z, r;
   GLuint i;
 
@@ -1585,7 +1583,7 @@ glmGetNumGroups(GLMmodel *model){return (model && model->groups)?model->numgroup
 GLvoid
 glmDelete(GLMmodel* model)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
   GLuint i;
 
   if (!(model))return;
@@ -1627,8 +1625,8 @@ glmDelete(GLMmodel* model)
 GLMmodel*
 glmReadOBJ(const char* filename)
 {
-  GLMmodel* model;
-  FILE*   file;
+  GLMmodel* model=0;
+  FILE*   file=0;
 
   /* open the file */
   file = fopen(filename, "r");
@@ -1718,8 +1716,8 @@ GLint
 glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 {
   GLuint  i;
-  FILE*   file;
-  GLMgroup* group;
+  FILE*   file=0;
+  GLMgroup* group=0;
 
   if (!(model))return -1;
 
@@ -1912,9 +1910,9 @@ GLvoid
 glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
-  static GLMgroup* group;
-  static GLMtriangle* triangle;
-  static GLMmaterial* material;
+  static GLMgroup* group=0;
+  static GLMtriangle* triangle=0;
+  static GLMmaterial* material=0;
 
   if (!(model))return;
   if (!(model->vertices))return;
@@ -1983,7 +1981,7 @@ void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, G
     }
 
     std::vector<float> vec, color;
-    float* pt;
+    float* pt=0;
     int i;
     if (mode & GLM_COLOR) {
       color.insert(color.end(),material->diffuse,material->diffuse + 3);
@@ -2091,9 +2089,9 @@ GLvoid
 glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
-  static GLMgroup* group;
-  static GLMtriangle* triangle;
-  static GLMmaterial* material;
+  static GLMgroup* group=0;
+  static GLMtriangle* triangle=0;
+  static GLMmaterial* material=0;
 
   if (!(model))return;
   if (!(model->vertices))return;
@@ -2189,8 +2187,8 @@ glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<st
 GLvoid
 glmWeld(GLMmodel* model, GLfloat epsilon)
 {
-  GLfloat* vectors;
-  GLfloat* copies;
+  GLfloat* vectors=0;
+  GLfloat* copies=0;
   GLuint   numvectors;
   GLuint   i;
 
@@ -2255,9 +2253,9 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
 GLubyte*
 glmReadPPM(const char* filename, int* width, int* height)
 {
-  FILE* fp;
+  FILE* fp=0;
   int i, w, h, d;
-  unsigned char* image;
+  unsigned char* image=0;
   unsigned long imagesize=0;
   char head[70];          /* max line <= 70 in PPM (per spec). */
 
