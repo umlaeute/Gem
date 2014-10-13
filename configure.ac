@@ -41,6 +41,7 @@ AC_CONFIG_FILES([plugins/filmTEST/Makefile])
 
 AC_CONFIG_FILES([plugins/modelOBJ/Makefile])
 AC_CONFIG_FILES([plugins/modelASSIMP2/Makefile])
+AC_CONFIG_FILES([plugins/modelASSIMP3/Makefile])
 
 AC_CONFIG_FILES([plugins/recordQT/Makefile])
 AC_CONFIG_FILES([plugins/recordQT4L/Makefile])

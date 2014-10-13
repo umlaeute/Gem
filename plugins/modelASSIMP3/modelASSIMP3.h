@@ -10,16 +10,21 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEMPLUGIN__MODELOBJ_MODELOBJ_H_
-#define _INCLUDE__GEMPLUGIN__MODELOBJ_MODELOBJ_H_
+#ifndef _INCLUDE__GEMPLUGIN__MODELASSIMP2_MODELASSIMP2_H_
+#define _INCLUDE__GEMPLUGIN__MODELASSIMP2_MODELASSIMP2_H_
 
 #include "plugins/modelloader.h"
-#include "model_loader.h"
+
+#include <assimp/cimport.h>        // Plain-C interface
+#include <assimp/scene.h>          // Output data structure
+#include <assimp/postprocess.h>    // Post processing flags
+
+#include "Gem/GemGL.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  modelOBJ
+  modelASSIMP3
 
   loads an Alias WaveFront .obj file as an asset
 
@@ -29,12 +34,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 -----------------------------------------------------------------*/
 
 namespace gem { namespace plugins {
-    class GEM_EXPORT modelOBJ : public gem::plugins::modelloader {
+    class GEM_EXPORT modelASSIMP3 : public gem::plugins::modelloader {
  public:
   /////////
   // ctor/dtor
-  modelOBJ(void);
-  virtual ~modelOBJ(void);
+  modelASSIMP3(void);
+  virtual ~modelASSIMP3(void);
 
   virtual bool isThreadable(void) { return true; }
 
@@ -61,14 +66,14 @@ protected:
   virtual void destroy(void);
   bool    m_rebuild;
 
-  GLMmodel *m_model;
+  const aiScene *m_scene;
 
-	int       m_material;
-	int       m_flags;
-  int       m_group;
-  float		  m_currentH, m_currentW;
-  glmtexture_t m_textype;
-  bool      m_reverse;
+  float  m_scale;
+  aiVector3D m_offset;
+
+  aiVector3D m_min, m_max, m_center;
+
+  bool m_useMaterial;
 };
 };}; // namespace gem::plugins
 

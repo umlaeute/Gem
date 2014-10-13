@@ -39,6 +39,7 @@ class GEM_EXTERN modelloader
 {
  public:
 
+  modelloader(void);
   //////////
   // returns an instance wrapping all plugins or NULL
   // if NULL is returned, you might still try your luck with manually accessing the
@@ -139,6 +140,8 @@ class GEM_EXTERN modelloader
    * get the named vector to pass it to VBO
    */
   virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
+  virtual bool needRefresh() = 0;
+  virtual void unsetRefresh() = 0;
 
   std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
   bool m_refresh;

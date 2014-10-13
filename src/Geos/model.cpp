@@ -174,13 +174,18 @@ void model :: openMess(const std::string&filename)
   }
 
   m_loaded=true;
-  copyArray("vertices", m_position);
-  copyArray("texcoords", m_texture);
-  copyArray("normals", m_normal);
-  copyArray("colors", m_color);
+  copyAllArrays();
   setModified();
 }
 
+void model :: startRendering() {
+  if (m_loaded){
+    copyArray("vertices", m_position);
+    copyArray("texcoords", m_texture);
+    copyArray("normals", m_normal);
+    copyArray("colors", m_color);
+  }
+}
 /////////////////////////////////////////////////////////
 // render
 //
@@ -193,9 +198,12 @@ void model :: render(GemState *state)
     createVBO();
     m_size_change_flag = false;
   }
-  std::vector<unsigned int> sizeList;
 
   m_loader->render();
+  copyAllArrays();
+
+  std::vector<unsigned int> sizeList;
+
   if(m_position.render()) {
     glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -217,9 +225,10 @@ void model :: render(GemState *state)
     sizeList.push_back(m_normal.size);
   }
 
-  unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
-
-  glDrawArrays(GL_TRIANGLES, 0, npoints);
+  if ( sizeList.size() > 0 ) {
+    unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
+    glDrawArrays(GL_TRIANGLES, 0, npoints);
+  }
 
   if ( m_position.enabled ) {
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -278,4 +287,14 @@ void model :: copyArray(std::string vectorName, VertexBuffer&vb)
   }
   vb.dirty=true;
   vb.enabled=true;
+}
+
+void model :: copyAllArrays(){
+  if (m_loader && m_loader->needRefresh()){
+    copyArray("vertices", m_position);
+    copyArray("texcoords", m_texture);
+    copyArray("normals", m_normal);
+    copyArray("colors", m_color);
+    m_loader->unsetRefresh();
+  }
 }
