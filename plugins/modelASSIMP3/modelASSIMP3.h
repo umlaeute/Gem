@@ -59,6 +59,8 @@ namespace gem { namespace plugins {
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
   std::vector<std::vector<float> > getVector(std::string vectorName);
+  void unsetRefresh();
+  bool needRefresh();
 
 protected:
   virtual void destroy(void);
