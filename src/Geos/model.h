@@ -83,6 +83,7 @@ class GEM_EXTERN model : public GemBase
 
   void copyArray(const std::vector<std::vector<float> > tab, VertexBuffer&vb);
   void copyAllArrays();
+  void getVBOarray();
   void createVBO(void);
 
   gem::plugins::modelloader*m_loader;

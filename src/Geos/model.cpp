@@ -174,7 +174,7 @@ void model :: openMess(const std::string&filename)
   }
 
   m_loaded=true;
-  copyAllArrays();
+  getVBOarray();
   setModified();
 }
 
@@ -200,7 +200,7 @@ void model :: render(GemState *state)
   }
 
   m_loader->render();
-  copyAllArrays();
+  getVBOarray();
 
   std::vector<unsigned int> sizeList;
 
@@ -296,5 +296,35 @@ void model :: copyAllArrays(){
     copyArray(m_loader->getVector("normals"), m_normal);
     copyArray(m_loader->getVector("colors"), m_color);
     m_loader->unsetRefresh();
+  }
+}
+
+void model :: getVBOarray(){
+  if (m_loader && m_loader->needRefresh()){
+
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+
+    if ( vboArray.empty() ){
+      copyAllArrays();
+    } else {
+      for (int i = 0; i<vboArray.size(); i++){
+        switch (vboArray[i].type){
+          case VertexBuffer::GEM_VBO_VERTICES:
+            copyArray(*vboArray[i].data, m_position);
+            break;
+          case VertexBuffer::GEM_VBO_TEXCOORDS:
+            copyArray(*vboArray[i].data, m_texture);
+            break;
+          case VertexBuffer::GEM_VBO_NORMALS:
+            copyArray(*vboArray[i].data, m_normal);
+            break;
+          case VertexBuffer::GEM_VBO_COLORS:
+            copyArray(*vboArray[i].data, m_color);
+            break;
+          default:
+            error("VBO type %d not supported\n",vboArray[i].type);
+        }
+      }
+    }
   }
 }
