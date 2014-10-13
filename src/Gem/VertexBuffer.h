@@ -41,6 +41,18 @@ class VertexBuffer
     std::string attrib_name;
     std::string attrib_array;
     unsigned int offset;
+
+    enum Type { GEM_VBO_VERTICES=0,
+                    GEM_VBO_NORMALS,
+                    GEM_VBO_TEXCOORDS,
+                    GEM_VBO_COLORS,
+                    GEM_VBO_AMBIANT,
+                    GEM_VBO_DIFFUSE,
+                    GEM_VBO_SPECULAR,
+                    GEM_VBO_SHININESS };
+
+    Type type;
+
   };
 
 #endif // _INCLUDE__GEM_GEM_VERTEXBUFFER_H_
