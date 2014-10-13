@@ -282,7 +282,7 @@ _glmFindMaterial(const GLMmodel* model, const std::string&name)
 
   /* didn't find the name, so print a warning and return the default
      material (0). */
-  error("_glmFindMaterial():  can't find material \"%s\".", name.c_str());
+  verbose(0, "_glmFindMaterial():  can't find material \"%s\".", name.c_str());
   i = 0;
 
  found:
@@ -328,7 +328,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   file = fopen(filename.c_str(), "r");
   if (!file) {
-    error("_glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
+    verbose(0, "_glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
     return -1;
   }
 
@@ -344,11 +344,11 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmReadMTL() failed reading new material"); goto mtlread_failed;
+        verbose(0, "_glmReadMTL() failed reading new material"); goto mtlread_failed;
       }
       nummaterials++;
       if(EOF == sscanf(buf, "%s %s", buf, buf)) {
-        error("_glmReadMTL() failed reading material"); goto mtlread_failed;
+        verbose(0, "_glmReadMTL() failed reading material"); goto mtlread_failed;
       }
       break;
     default:
@@ -396,13 +396,13 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmReadMTL() really failed reading new material"); goto mtlread_failed;
+        verbose(0, "_glmReadMTL() really failed reading new material"); goto mtlread_failed;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
 	nummaterials++;
 	model->materials[nummaterials].name = std::string(buf);
       } else {
-	error("_glmReadMTL() failed reading material");
+	verbose(0, "_glmReadMTL() failed reading material");
       }
       break;
     case 'N':
@@ -411,7 +411,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 	model->materials[nummaterials].shininess /= 1000.0;
 	model->materials[nummaterials].shininess *= 128.0;
       } else {
-	error("_glmReadMTL() failed reading material shininess");
+	verbose(0, "_glmReadMTL() failed reading material shininess");
       }
       break;
     case 'K':
@@ -422,7 +422,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 			 &model->materials[nummaterials].diffuse[1],
 			 &model->materials[nummaterials].diffuse[2])) {
 	} else {
-	  error("_glmReadMTL() failed reading diffuse material");
+	  verbose(0, "_glmReadMTL() failed reading diffuse material");
 	}
         break;
       case 's':
@@ -431,7 +431,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 			 &model->materials[nummaterials].specular[1],
 			 &model->materials[nummaterials].specular[2])) {
 	} else {
-	  error("_glmReadMTL() failed reading specular material");
+	  verbose(0, "_glmReadMTL() failed reading specular material");
 	}
         break;
       case 'a':
@@ -440,7 +440,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 			 &model->materials[nummaterials].ambient[1],
 			 &model->materials[nummaterials].ambient[2])) {
 	} else {
-	  error("_glmReadMTL() failed reading ambient material");
+	  verbose(0, "_glmReadMTL() failed reading ambient material");
 	}
         break;
       default:
@@ -485,7 +485,7 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtl
   /* open the file */
   file = fopen(filename.c_str(), "w");
   if (!file) {
-    error("_glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
+    verbose(0, "_glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
     return GL_FALSE;
   }
 
@@ -550,38 +550,38 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass failed reading vertex"); return GL_FALSE;
+          verbose(0, "_glmFirstPass failed reading vertex"); return GL_FALSE;
         }
         numvertices++;
         break;
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass failed reading normals"); return GL_FALSE;
+          verbose(0, "_glmFirstPass failed reading normals"); return GL_FALSE;
         }
         numnormals++;
         break;
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass failed reading texcoords"); return GL_FALSE;
+          verbose(0, "_glmFirstPass failed reading texcoords"); return GL_FALSE;
         }
         numtexcoords++;
         break;
       default:
-        error("_glmFirstPass: Unknown token \"%s\".", buf);
+        verbose(0, "_glmFirstPass: Unknown token \"%s\".", buf);
         return GL_FALSE;
       }
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass failed reading material"); return GL_FALSE;
+        verbose(0, "_glmFirstPass failed reading material"); return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
 	model->mtllibname = buf;
 	_glmReadMTL(model, buf);
       } else {
-	error("glmFirstPass failed reading material lib");
+	verbose(0, "glmFirstPass failed reading material lib");
       }
       break;
     case 'u':
@@ -593,12 +593,12 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass failed reading groups"); return GL_FALSE;
+        verbose(0, "_glmFirstPass failed reading groups"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF != sscanf(buf, "%s", buf)) {
       } else {
-	error("_glmFirstPass failed reading single-string group name");
+	verbose(0, "_glmFirstPass failed reading single-string group name");
 	return GL_FALSE;
       }
 #else
@@ -795,22 +795,22 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'u':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmSecondPass() failed reading material"); return GL_FALSE;
+        verbose(0, "_glmSecondPass() failed reading material"); return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
 	group->material = material = _glmFindMaterial(model, buf);
       } else {
-        error("_glmSecondPass() failed finding material"); return GL_FALSE;
+        verbose(0, "_glmSecondPass() failed finding material"); return GL_FALSE;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmSecondPass() failed reading group"); return GL_FALSE;
+        verbose(0, "_glmSecondPass() failed reading group"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF == sscanf(buf, "%s", buf)) {
-	error("_glmSecondPass() failed reading single-string group name"); return GL_FALSE;
+	verbose(0, "_glmSecondPass() failed reading single-string group name"); return GL_FALSE;
       }
 #else
       buf[strlen(buf)-1] = '\0';  /* nuke '\n' */
@@ -828,19 +828,19 @@ _glmSecondPass(GLMmodel* model, FILE* file)
 	     T(numtriangles).vindices[0] = fixIndex(v,numvertices);
 	     T(numtriangles).nindices[0] = fixIndex(n,numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/n.");
+	     verbose(0, "_glmSecondPass() failed reading v/n.");
 	   }
            if(EOF != fscanf(file, "%d//%d", &v, &n)) {
 	     T(numtriangles).vindices[1] = fixIndex(v,numvertices);
 	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/n..");
+	     verbose(0, "_glmSecondPass() failed reading v/n..");
 	   }
            if(EOF != fscanf(file, "%d//%d", &v, &n)) {
 	     T(numtriangles).vindices[2] = fixIndex(v,numvertices);
 	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/n...");
+	     verbose(0, "_glmSecondPass() failed reading v/n...");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -864,14 +864,14 @@ _glmSecondPass(GLMmodel* model, FILE* file)
 	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
 	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t/n.");
+	     verbose(0, "_glmSecondPass() failed reading v/t/n.");
 	   }
            if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
 	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
 	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
 	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t/n..");
+	     verbose(0, "_glmSecondPass() failed reading v/t/n..");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -896,13 +896,13 @@ _glmSecondPass(GLMmodel* model, FILE* file)
 	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
 	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t.");
+	     verbose(0, "_glmSecondPass() failed reading v/t.");
 	   }
            if(EOF != fscanf(file, "%d/%d", &v, &t)) {
 	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
 	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t..");
+	     verbose(0, "_glmSecondPass() failed reading v/t..");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -921,17 +921,17 @@ _glmSecondPass(GLMmodel* model, FILE* file)
            if(EOF != sscanf(buf, "%d", &v)) {
 	     T(numtriangles).vindices[0] = fixIndex(v, numvertices);
 	   } else {
-	     error("_glmSecondPass() failed reading v.");
+	     verbose(0, "_glmSecondPass() failed reading v.");
 	   }
            if(EOF != fscanf(file, "%d", &v)) {
 	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
 	   } else {
-	     error("_glmSecondPass() failed reading v..");
+	     verbose(0, "_glmSecondPass() failed reading v..");
 	   }
            if(EOF != fscanf(file, "%d", &v)) {
 	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
 	   } else {
-	     error("_glmSecondPass() failed reading v...");
+	     verbose(0, "_glmSecondPass() failed reading v...");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -1259,7 +1259,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
        facet normal of every triangle this vertex is in */
     node = members[i];
     if (!node)
-      error("glmVertexNormals(): vertex w/o a triangle");
+      verbose(0, "glmVertexNormals(): vertex w/o a triangle");
     average[0] = 0.0; average[1] = 0.0; average[2] = 0.0;
     avg = 0;
     while (node) {
@@ -1609,7 +1609,7 @@ glmReadOBJ(const char* filename)
   /* open the file */
   file = fopen(filename, "r");
   if (!file) {
-    error("glmReadOBJ() failed: can't open data file \"%s\".", filename);
+    verbose(0, "glmReadOBJ() failed: can't open data file \"%s\".", filename);
     return NULL;
   }
 
@@ -1640,7 +1640,7 @@ glmReadOBJ(const char* filename)
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
   if(GL_FALSE==_glmFirstPass(model, file)){
-    error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "glmReadOBJ() failed: can't parse file \"%s\".", filename);
     goto readobj_failed;
   }
 
@@ -1658,7 +1658,7 @@ glmReadOBJ(const char* filename)
   rewind(file);
 
   if(GL_FALSE==_glmSecondPass(model, file)) {
-    error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "glmReadOBJ() failed: can't parse file \"%s\".", filename);
     goto readobj_failed;
   }
 
@@ -1740,7 +1740,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   /* open the file */
   file = fopen(filename, "w");
   if (!file) {
-    error("glmWriteOBJ() failed: can't open file \"%s\" to write.", filename);
+    verbose(0, "glmWriteOBJ() failed: can't open file \"%s\" to write.", filename);
     return -1;
   }
 
@@ -2246,10 +2246,10 @@ glmReadPPM(const char* filename, int* width, int* height)
   /* grab first two chars of the file and make sure that it has the
      correct magic cookie for a raw PPM file. */
   if(NULL==fgets(head, 70, fp)) {
-    error("_glmReadPPM() failed reading header"); return NULL;
+    verbose(0, "_glmReadPPM() failed reading header"); return NULL;
   }
   if (strncmp(head, "P6", 2)) {
-    error("%s: Not a raw PPM file", filename);
+    verbose(0, "%s: Not a raw PPM file", filename);
     return NULL;
   }
 
@@ -2257,7 +2257,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   i = 0;
   while(i < 3) {
     if(NULL==fgets(head, 70, fp)) {
-      error("_glmReadPPM() failed header info"); return NULL;
+      verbose(0, "_glmReadPPM() failed header info"); return NULL;
     }
     if (head[0] == '#')     /* skip comments. */
       continue;
@@ -2281,7 +2281,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
   if(count!=imagesize) {
-    error("_glmReadPPM failed to read all bytes");
+    verbose(0, "_glmReadPPM failed to read all bytes");
     *width=*height=0;
     delete[]image;
     image=NULL;
