@@ -174,13 +174,18 @@ void model :: openMess(const std::string&filename)
   }
 
   m_loaded=true;
-  copyArray("vertices", m_position);
-  copyArray("texcoords", m_texture);
-  copyArray("normals", m_normal);
-  copyArray("colors", m_color);
+  getVBOarray();
   setModified();
 }
 
+void model :: startRendering() {
+  if (m_loaded){
+    copyArray(m_loader->getVector("vertices"), m_position);
+    copyArray(m_loader->getVector("texcoords"), m_texture);
+    copyArray(m_loader->getVector("normals"), m_normal);
+    copyArray(m_loader->getVector("colors"), m_color);
+  }
+}
 /////////////////////////////////////////////////////////
 // render
 //
@@ -193,9 +198,12 @@ void model :: render(GemState *state)
     createVBO();
     m_size_change_flag = false;
   }
-  std::vector<unsigned int> sizeList;
 
   m_loader->render();
+  getVBOarray();
+
+  std::vector<unsigned int> sizeList;
+
   if(m_position.render()) {
     glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -217,9 +225,10 @@ void model :: render(GemState *state)
     sizeList.push_back(m_normal.size);
   }
 
-  unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
-
-  glDrawArrays(GL_TRIANGLES, 0, npoints);
+  if ( sizeList.size() > 0 ) {
+    unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
+    glDrawArrays(GL_TRIANGLES, 0, npoints);
+  }
 
   if ( m_position.enabled ) {
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -258,11 +267,11 @@ void model :: createVBO(void)
   m_normal  .create();
 }
 
-void model :: copyArray(std::string vectorName, VertexBuffer&vb)
+void model :: copyArray(const std::vector<std::vector<float> > tab, VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
-  std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
+  //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
   if ( tab.empty() ) return;
   size=tab.size();
 
@@ -278,4 +287,44 @@ void model :: copyArray(std::string vectorName, VertexBuffer&vb)
   }
   vb.dirty=true;
   vb.enabled=true;
+}
+
+void model :: copyAllArrays(){
+  if (m_loader && m_loader->needRefresh()){
+    copyArray(m_loader->getVector("vertices"), m_position);
+    copyArray(m_loader->getVector("texcoords"), m_texture);
+    copyArray(m_loader->getVector("normals"), m_normal);
+    copyArray(m_loader->getVector("colors"), m_color);
+    m_loader->unsetRefresh();
+  }
+}
+
+void model :: getVBOarray(){
+  if (m_loader && m_loader->needRefresh()){
+
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+
+    if ( vboArray.empty() ){
+      copyAllArrays();
+    } else {
+      for (int i = 0; i<vboArray.size(); i++){
+        switch (vboArray[i].type){
+          case VertexBuffer::GEM_VBO_VERTICES:
+            copyArray(*vboArray[i].data, m_position);
+            break;
+          case VertexBuffer::GEM_VBO_TEXCOORDS:
+            copyArray(*vboArray[i].data, m_texture);
+            break;
+          case VertexBuffer::GEM_VBO_NORMALS:
+            copyArray(*vboArray[i].data, m_normal);
+            break;
+          case VertexBuffer::GEM_VBO_COLORS:
+            copyArray(*vboArray[i].data, m_color);
+            break;
+          default:
+            error("VBO type %d not supported\n",vboArray[i].type);
+        }
+      }
+    }
+  }
 }

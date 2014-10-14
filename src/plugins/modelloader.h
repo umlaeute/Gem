@@ -15,6 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE__GEM_PLUGINS_MODELLOADER_H_
 
 #include "Gem/ExportDef.h"
+#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -39,6 +40,7 @@ class GEM_EXTERN modelloader
 {
  public:
 
+  modelloader(void);
   //////////
   // returns an instance wrapping all plugins or NULL
   // if NULL is returned, you might still try your luck with manually accessing the
@@ -139,8 +141,18 @@ class GEM_EXTERN modelloader
    * get the named vector to pass it to VBO
    */
   virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
+  virtual bool needRefresh() = 0;
+  virtual void unsetRefresh() = 0;
 
-  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors, m_ambiant, m_diffuse, m_specular, m_shininess;
+  class VBOarray {
+    public:
+    std::vector<std::vector<float> >* data;
+    VertexBuffer::Type type;
+  };
+  std::vector<VBOarray> m_VBOarray;
+  virtual std::vector<VBOarray> getVBOarray() = 0;
+
   bool m_refresh;
 
 };

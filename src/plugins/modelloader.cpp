@@ -24,6 +24,7 @@
 
 namespace gem { namespace plugins {
 
+  modelloader :: modelloader(void) : m_refresh(false){}
   modelloader :: ~modelloader(void) {}
   /* initialize the modelloader factory */
   static gem::PluginFactoryRegistrar::dummy<modelloader> fac_modelloaderdummy;
@@ -146,6 +147,12 @@ public:
     return std::vector<std::vector<float> >();
   }
 
+  std::vector<VBOarray> getVBOarray() {
+    if (m_handle)
+      return m_handle->getVBOarray();
+    return std::vector<VBOarray>();
+  }
+
   virtual bool render(void) {
     if(m_handle)
       return m_handle->render();
@@ -169,6 +176,17 @@ public:
       return m_handle->isThreadable();
 
     return m_canThread;
+  }
+
+  bool needRefresh(){
+    if (m_handle)
+      return m_handle->needRefresh();
+    return false;
+  }
+
+  void unsetRefresh(){
+     if (m_handle)
+      m_handle->unsetRefresh();
   }
 
   virtual bool enumProperties(gem::Properties&readable,
@@ -221,4 +239,3 @@ gem::plugins::modelloader*gem::plugins::modelloader::getInstance(void) {
   gem::plugins::modelloader*result=new modelloaderMeta();
   return result;
 }
-
