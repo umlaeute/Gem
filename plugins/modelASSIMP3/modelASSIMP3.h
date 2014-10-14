@@ -10,8 +10,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEMPLUGIN__MODELASSIMP2_MODELASSIMP2_H_
-#define _INCLUDE__GEMPLUGIN__MODELASSIMP2_MODELASSIMP2_H_
+#ifndef _INCLUDE__GEMPLUGIN__MODELASSIMP3_MODELASSIMP3_H_
+#define _INCLUDE__GEMPLUGIN__MODELASSIMP3_MODELASSIMP3_H_
 
 #include "plugins/modelloader.h"
 

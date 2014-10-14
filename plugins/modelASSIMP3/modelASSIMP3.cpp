@@ -25,7 +25,7 @@
 
 using namespace gem::plugins;
 
-REGISTER_MODELLOADERFACTORY("ASSIMP2", modelASSIMP3);
+REGISTER_MODELLOADERFACTORY("ASSIMP3", modelASSIMP3);
 
 namespace {
 
