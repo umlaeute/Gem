@@ -144,17 +144,12 @@ class GEM_EXTERN modelloader
   virtual bool needRefresh() = 0;
   virtual void unsetRefresh() = 0;
 
-  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors, m_ambiant, m_diffuse, m_specular, m_shininess;
   class VBOarray {
     public:
     std::vector<std::vector<float> >* data;
     VertexBuffer::Type type;
   };
-  std::vector<VBOarray> m_VBOarray;
   virtual std::vector<VBOarray> getVBOarray() = 0;
-
-  bool m_refresh;
-
 };
 
 };}; // namespace gem::plugins
