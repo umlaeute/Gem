@@ -76,6 +76,11 @@ protected:
   aiVector3D m_min, m_max, m_center;
 
   bool m_useMaterial;
+
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
+  std::vector<VBOarray> m_VBOarray;
+  bool m_refresh;
+
 };
 };}; // namespace gem::plugins
 

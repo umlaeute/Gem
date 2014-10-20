@@ -277,7 +277,8 @@ modelASSIMP3 :: modelASSIMP3(void) :
   m_rebuild(true),
   m_scene(NULL),
   m_scale(1.f),
-  m_useMaterial(false)
+  m_useMaterial(false),
+  m_refresh(false)
 {
 }
 

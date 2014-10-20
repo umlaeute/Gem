@@ -32,7 +32,8 @@ modelOBJ :: modelOBJ(void) :
   m_rebuild(false),
   m_currentH(1.f), m_currentW(1.f),
   m_textype(GLM_TEX_DEFAULT),
-  m_reverse(false)
+  m_reverse(false),
+  m_refresh(false)
 {
 }
 
