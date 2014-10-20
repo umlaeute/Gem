@@ -198,8 +198,6 @@ void model :: render(GemState *state)
     createVBO();
     m_size_change_flag = false;
   }
-
-  m_loader->render();
   getVBOarray();
 
   std::vector<unsigned int> sizeList;
