@@ -39,14 +39,13 @@ namespace gem { namespace plugins {
 class GEM_EXTERN modelloader
 {
  public:
-
-  modelloader(void);
   //////////
   // returns an instance wrapping all plugins or NULL
   // if NULL is returned, you might still try your luck with manually accessing the
   // PluginFactory
   static modelloader*getInstance(void);
 
+  modelloader(void);
   /////////
   // dtor must be virtual
   virtual ~modelloader(void);
@@ -110,7 +109,7 @@ class GEM_EXTERN modelloader
    *
    * examples: "/textures" (number of textures)
    *           "/animations" (number of animations)
-   *           "/camera/1/pos" (position of camera #1)
+     *           "/camera/1/pos" (position of camera #1)
    */
   virtual void getProperties(gem::Properties&props) = 0;
 

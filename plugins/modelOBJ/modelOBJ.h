@@ -30,15 +30,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-namespace gem { namespace plugins {
-    class GEM_EXPORT modelOBJ : public gem::plugins::modelloader {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT modelOBJ : public gem::plugins::modelloader
+{
+public:
   /////////
   // ctor/dtor
   modelOBJ(void);
   virtual ~modelOBJ(void);
 
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   //////////
   // open/close an asset
@@ -66,10 +73,10 @@ protected:
 
   GLMmodel *m_model;
 
-	int       m_material;
-	int       m_flags;
+  int       m_material;
+  int       m_flags;
   int       m_group;
-  float		  m_currentH, m_currentW;
+  float     m_currentH, m_currentW;
   glmtexture_t m_textype;
   bool      m_reverse;
 
@@ -77,6 +84,7 @@ protected:
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 };
-};}; // namespace gem::plugins
+};
+}; // namespace gem::plugins
 
-#endif	// for header file
+#endif // for header file
