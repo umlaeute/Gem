@@ -155,18 +155,6 @@ public:
     return std::vector<VBOarray>();
   }
 
-  virtual bool render(void) {
-    if(m_handle)
-      return m_handle->render();
-    return false;
-  }
-
-  virtual bool compile(void) {
-    if(m_handle)
-      return m_handle->compile();
-    return false;
-  }
-
   virtual void close(void)  {
     if(m_handle)
       m_handle->close();
