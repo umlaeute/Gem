@@ -114,18 +114,34 @@ class GEM_EXTERN modelloader
   virtual void getProperties(gem::Properties&props) = 0;
 
   /**
-   * get the named vector to pass it to VBO
+   * data array (e.g. vertices)
+   * TODO: rename to ArrayData (or similar)
    */
-  virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
-  virtual bool needRefresh() = 0;
-  virtual void unsetRefresh() = 0;
-
   class VBOarray {
     public:
     std::vector<std::vector<float> >* data;
     VertexBuffer::Type type;
   };
+
+  /**
+   * get a named vector (e.g. to pass it to VBO)
+   * TODO: return VBOarray
+   */
+  virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
+
+  /**
+   * get all vectors
+   * TODO: rename to getVectors()
+   */
   virtual std::vector<VBOarray> getVBOarray() = 0;
+
+  /* returns TRUE if the array data has changed (and the VBO needs refresh) */
+  virtual bool needRefresh() = 0;
+  /* signal the loader that we have updated our local copy of the data (clear the needRefresh() flag)
+     TODO: shouldn't this be automatically called when getVBOarray() got called? */
+   */
+  virtual void unsetRefresh() = 0;
+
 };
 
 };}; // namespace gem::plugins
