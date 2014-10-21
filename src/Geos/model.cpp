@@ -203,17 +203,17 @@ void model :: render(GemState *state)
   std::vector<unsigned int> sizeList;
 
   if(m_position.render()) {
-    glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
+    glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
     sizeList.push_back(m_position.size);
   }
   if(m_texture.render()) {
-    glTexCoordPointer(m_texture.stride, GL_FLOAT, 0, 0);
+    glTexCoordPointer(m_texture.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     sizeList.push_back(m_texture.size);
   }
   if(m_color.render()) {
-    glColorPointer(m_color.stride, GL_FLOAT, 0, 0);
+    glColorPointer(m_color.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_COLOR_ARRAY);
     sizeList.push_back(m_color.size);
   }
@@ -279,8 +279,8 @@ void model :: copyArray(const std::vector<std::vector<float> > tab, VertexBuffer
   }
 
   for ( i = 0 ; i < size ; i++ ) {
-    for ( int j=0 ; j< std::min(vb.stride,(unsigned int)tab[i].size()) ; j++) {
-      vb.array[i*vb.stride + j] = tab[i][j];
+    for ( int j=0 ; j< std::min(vb.dimen,(unsigned int)tab[i].size()) ; j++) {
+      vb.array[i*vb.dimen + j] = tab[i][j];
     }
   }
   vb.dirty=true;
