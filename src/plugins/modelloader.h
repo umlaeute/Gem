@@ -109,7 +109,7 @@ class GEM_EXTERN modelloader
    *
    * examples: "/textures" (number of textures)
    *           "/animations" (number of animations)
-     *           "/camera/1/pos" (position of camera #1)
+   *           "/camera/1/pos" (position of camera #1)
    */
   virtual void getProperties(gem::Properties&props) = 0;
 
@@ -138,7 +138,7 @@ class GEM_EXTERN modelloader
   /* returns TRUE if the array data has changed (and the VBO needs refresh) */
   virtual bool needRefresh() = 0;
   /* signal the loader that we have updated our local copy of the data (clear the needRefresh() flag)
-     TODO: shouldn't this be automatically called when getVBOarray() got called? */
+     TODO: shouldn't this be automatically called when getVBOarray() got called?
    */
   virtual void unsetRefresh() = 0;
 
