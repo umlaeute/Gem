@@ -22,7 +22,7 @@ class VertexBuffer
   {
   public:
     VertexBuffer();
-    VertexBuffer(unsigned int size, unsigned int stride);
+    VertexBuffer(unsigned int size, unsigned int dimen);
     VertexBuffer(const VertexBuffer&);
     ~VertexBuffer(void);
     void resize(unsigned int);
@@ -31,7 +31,7 @@ class VertexBuffer
     void destroy(void);
 
     unsigned int size;
-    unsigned int stride;
+    unsigned int dimen;
 
     GLuint vbo;
     float*array;
@@ -50,9 +50,7 @@ class VertexBuffer
                     GEM_VBO_DIFFUSE,
                     GEM_VBO_SPECULAR,
                     GEM_VBO_SHININESS };
-
     Type type;
-
   };
 
 #endif // _INCLUDE__GEM_GEM_VERTEXBUFFER_H_

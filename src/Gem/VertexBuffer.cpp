@@ -21,7 +21,7 @@
 
 VertexBuffer:: VertexBuffer() :
   size(0),
-  stride(0),
+  dimen(0),
   vbo(0),
   array(NULL),
   dirty(false),
@@ -33,9 +33,9 @@ VertexBuffer:: VertexBuffer() :
 {
 }
 VertexBuffer:: VertexBuffer (unsigned int size_,
-    unsigned int stride_) :
+    unsigned int dimen_) :
   size(0),
-  stride(stride_),
+  dimen(dimen_),
   vbo(0),
   array(NULL),
   dirty(false),
@@ -49,7 +49,7 @@ VertexBuffer:: VertexBuffer (unsigned int size_,
 }
 VertexBuffer:: VertexBuffer (const VertexBuffer&vb)
   :size(0)
-  ,stride(vb.stride)
+  ,dimen(vb.dimen)
   ,vbo(vb.vbo)
   ,array(NULL)
   ,dirty(false)
@@ -64,7 +64,7 @@ VertexBuffer:: VertexBuffer (const VertexBuffer&vb)
 
 VertexBuffer:: ~VertexBuffer (void)
 {
-  //::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
+  //::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, dimen, array);
   destroy();
 
   if(array) {
@@ -76,7 +76,7 @@ void VertexBuffer:: resize (unsigned int size_)
 {
   float*tmp=NULL;
   try {
-    tmp=new float[size_*stride];
+    tmp=new float[size_*dimen];
   } catch (std::bad_alloc& ba)  {
     ::error("vertexbuffer resize failed: %s ", ba.what());
     return;
@@ -89,7 +89,7 @@ void VertexBuffer:: resize (unsigned int size_)
   size=size_;
 
   unsigned int i;
-  for(i=0; i<size*stride; i++) {
+  for(i=0; i<size*dimen; i++) {
     array[i]=0;
   }
   dirty=true;
@@ -102,7 +102,7 @@ bool VertexBuffer:: create (void)
   }
   if(vbo) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array,
+    glBufferData(GL_ARRAY_BUFFER, size * dimen * sizeof(float), array,
                  GL_DYNAMIC_DRAW);
   }
   return (0!=vbo);
@@ -115,7 +115,7 @@ bool VertexBuffer:: render (void)
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     if ( dirty ) {
       //::post("push vertex %p\n", this);
-      glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array,
+      glBufferData(GL_ARRAY_BUFFER, size * dimen * sizeof(float), array,
                    GL_DYNAMIC_DRAW);
       dirty = false;
     }
