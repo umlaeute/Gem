@@ -265,7 +265,7 @@ void model :: createVBO(void)
   m_normal  .create();
 }
 
-void model :: copyArray(const std::vector<std::vector<float> > tab, VertexBuffer&vb)
+void model :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
@@ -307,16 +307,16 @@ void model :: getVBOarray(){
     } else {
       for (int i = 0; i<vboArray.size(); i++){
         switch (vboArray[i].type){
-          case VertexBuffer::GEM_VBO_VERTICES:
+          case gem::VertexBuffer::GEM_VBO_VERTICES:
             copyArray(*vboArray[i].data, m_position);
             break;
-          case VertexBuffer::GEM_VBO_TEXCOORDS:
+          case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
             copyArray(*vboArray[i].data, m_texture);
             break;
-          case VertexBuffer::GEM_VBO_NORMALS:
+          case gem::VertexBuffer::GEM_VBO_NORMALS:
             copyArray(*vboArray[i].data, m_normal);
             break;
-          case VertexBuffer::GEM_VBO_COLORS:
+          case gem::VertexBuffer::GEM_VBO_COLORS:
             copyArray(*vboArray[i].data, m_color);
             break;
           default:

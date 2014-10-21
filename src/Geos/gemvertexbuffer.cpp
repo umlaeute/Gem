@@ -195,7 +195,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0 (classPtr, "print_attributes" , printAttributes);
 }
 
-void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name,
+void gemvertexbuffer :: tableMess (gem::VertexBuffer&vb, std::string name,
                                    unsigned int argc, t_atom *argv)
 {
   int offset=0;
@@ -394,7 +394,7 @@ void gemvertexbuffer :: disableMess (t_symbol*s, int argc, t_atom *argv)
 
 
 void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
-                                VertexBuffer&array, unsigned int offset)
+                                gem::VertexBuffer&array, unsigned int offset)
 {
   int offset2 = 0;
   if ( argv[0].a_type != A_SYMBOL ) {
@@ -449,7 +449,7 @@ void gemvertexbuffer :: createVBO(void)
 }
 
 void gemvertexbuffer :: copyArray(const std::string&tab_name,
-                                  VertexBuffer&vb, unsigned int dimen, unsigned int offset)
+                                  gem::VertexBuffer&vb, unsigned int dimen, unsigned int offset)
 {
   t_garray *a;
   int npoints;
@@ -596,7 +596,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   tabname=std::string(atom_getsymbol(argv+1)->s_name);
   m_attribute.reserve(m_attribute.size()+1);
 
-  m_attribute.push_back(VertexBuffer(0, vbo_dimen));
+  m_attribute.push_back(gem::VertexBuffer(0, vbo_dimen));
   m_attribute.back().attrib_index = glsl_index;
   m_attribute.back().attrib_name = name;
   m_attribute.back().attrib_array = tabname;
@@ -615,7 +615,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
 
 void gemvertexbuffer :: resetAttributes(void)
 {
-  std::vector<VertexBuffer>().swap(m_attribute);
+  std::vector<gem::VertexBuffer>().swap(m_attribute);
 }
 
 void gemvertexbuffer :: printAttributes(void)

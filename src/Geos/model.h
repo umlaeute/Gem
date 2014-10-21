@@ -81,7 +81,7 @@ class GEM_EXTERN model : public GemBase
   virtual void	render(GemState *state);
   virtual void	startRendering();
 
-  void copyArray(const std::vector<std::vector<float> > tab, VertexBuffer&vb);
+  void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
   void copyAllArrays();
   void getVBOarray();
   void createVBO(void);
@@ -91,7 +91,7 @@ class GEM_EXTERN model : public GemBase
 
   gem::Properties m_properties;
 
-  VertexBuffer m_position, m_texture, m_color, m_normal;
+  gem::VertexBuffer m_position, m_texture, m_color, m_normal;
 
 };
 
