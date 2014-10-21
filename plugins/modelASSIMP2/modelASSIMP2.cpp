@@ -16,6 +16,7 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 #include "Gem/Properties.h"
+#include "Gem/VertexBuffer.h"
 
 #include "Utils/Functions.h"
 
@@ -32,9 +33,9 @@ namespace {
 #define aisgl_max(x,y) (y>x?y:x)
 
 // ----------------------------------------------------------------------------
-static void get_bounding_box_for_node (const struct aiScene*scene, const struct aiNode* nd, 
-	struct aiVector3D* min, 
-	struct aiVector3D* max, 
+static void get_bounding_box_for_node (const struct aiScene*scene, const struct aiNode* nd,
+	struct aiVector3D* min,
+	struct aiVector3D* max,
 	struct aiMatrix4x4* trafo
 ){
 	struct aiMatrix4x4 prev;
@@ -178,7 +179,8 @@ static void Color4f(const struct aiColor4D *color)
 }
 
 // ----------------------------------------------------------------------------
-static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd, const bool use_material)
+static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd, const bool use_material,
+      std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
 	int i;
 	unsigned int n = 0, t;
@@ -221,30 +223,41 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 				default: face_mode = GL_POLYGON; break;
 			}
 
-			glBegin(face_mode);
+			float* pt;
+			std::vector<float> vec;
 
 			for(i = 0; i < face->mNumIndices; i++) {
 				int index = face->mIndices[i];
-        
-				if(use_material && mesh->mColors[0] != NULL)
-					Color4f(&mesh->mColors[0][index]);
 
-				if(mesh->mNormals != NULL) 
-					glNormal3fv(&mesh->mNormals[index].x);
+				if(use_material && mesh->mColors[0] != NULL){
+				  pt = (float*) &mesh->mColors[0][index];
+				  vec = std::vector<float>(pt,pt+4);
+				  colors.push_back(vec);
+				}
 
-        if(mesh->HasTextureCoords(0))
-          glTexCoord2f(mesh->mTextureCoords[0][index].x, mesh->mTextureCoords[0][index].y);
+				if(mesh->mNormals != NULL){
+				  pt = &mesh->mNormals[index].x;
+				  vec = std::vector<float>(pt,pt+3);
+				  normals.push_back(vec);
+				}
 
-				glVertex3fv(&mesh->mVertices[index].x);
+				if(mesh->HasTextureCoords(0)){
+				  vec.clear();
+				  vec.push_back(mesh->mTextureCoords[0][index].x);
+				  vec.push_back(mesh->mTextureCoords[0][index].y);
+				  texcoords.push_back(vec);
+				}
+
+				pt = &mesh->mVertices[index].x;
+				vec = std::vector<float>(pt,pt+3);
+				vertices.push_back(vec);
 			}
-
-			glEnd();
 		}
 	}
 
 	// draw all children
 	for (n = 0; n < nd->mNumChildren; ++n) {
-		recursive_render(scene, sc, nd->mChildren[n], use_material);
+		recursive_render(scene, sc, nd->mChildren[n], use_material, vertices, normals, texcoords, colors);
 	}
 
 	glPopMatrix();
@@ -252,11 +265,12 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 
 };
 
-modelASSIMP2 :: modelASSIMP2(void) : 
+modelASSIMP2 :: modelASSIMP2(void) :
   m_rebuild(true),
-  m_scene(NULL), m_dispList(0),
+  m_scene(NULL),
   m_scale(1.f),
-  m_useMaterial(false)
+  m_useMaterial(false),
+  m_refresh(false)
 {
 }
 
@@ -264,12 +278,28 @@ modelASSIMP2 ::~modelASSIMP2(void) {
   destroy();
 }
 
+std::vector<std::vector<float> > modelASSIMP2 :: getVector(std::string vectorName){
+  if ( vectorName == "vertices" ) return m_vertices;
+  if ( vectorName == "normals" ) return m_normals;
+  if ( vectorName == "texcoords" ) return m_texcoords;
+  if ( vectorName == "colors" ) return m_colors;
+  error("there is no \"%s\" vector !",vectorName.c_str());
+  return std::vector<std::vector<float> >();
+}
+
+std::vector<modelloader::VBOarray> modelASSIMP2 :: getVBOarray(){
+  return m_VBOarray;
+}
+
+void modelASSIMP2 :: unsetRefresh(){ m_refresh = false; }
+bool modelASSIMP2 :: needRefresh(){ return m_refresh; }
+
 bool modelASSIMP2 :: open(const std::string&name, const gem::Properties&requestprops) {
   destroy();
 
-	m_scene = aiImportFile(name.c_str(), aiProcessPreset_TargetRealtime_Quality);
+  m_scene = aiImportFile(name.c_str(), aiProcessPreset_TargetRealtime_Quality);
   if(!m_scene)return false;
-  
+
   get_bounding_box(m_scene, &m_min,&m_max);
   m_center.x=(m_min.x+m_max.x)/2.f;
   m_center.y=(m_min.y+m_max.y)/2.f;
@@ -290,27 +320,17 @@ bool modelASSIMP2 :: open(const std::string&name, const gem::Properties&requestp
   setProperties(props);
 
   m_rebuild=true;
+  compile();
   return true;
 }
 
 bool modelASSIMP2 :: render(void) {
-  if(m_rebuild || 0==m_dispList)
-    compile();
-
-  if(m_dispList) {
-    glPushMatrix();
-
-    // scale the model
-    glScalef(m_scale, m_scale, m_scale);
-    // center the model
-    glTranslatef( m_offset.x, m_offset.y, m_offset.z );
-
-    glCallList(m_dispList);
-
-    glPopMatrix();
+  bool res=true;
+  if(m_rebuild){
+    res = compile();
   }
 
-  return (!m_dispList);
+  return res;
 }
 void modelASSIMP2 :: close(void)  {
   destroy();
@@ -363,48 +383,55 @@ void modelASSIMP2 :: setProperties(gem::Properties&props) {
 void modelASSIMP2 :: getProperties(gem::Properties&props) {
 }
 
+void modelASSIMP2 :: fillVBOarray(){
+  m_VBOarray.clear();
+  VBOarray vboarray;
+
+  vboarray.data = &m_vertices;
+  vboarray.type = VertexBuffer::GEM_VBO_VERTICES;
+  m_VBOarray.push_back(vboarray);
+
+  vboarray.data = &m_normals;
+  vboarray.type = VertexBuffer::GEM_VBO_NORMALS;
+  m_VBOarray.push_back(vboarray);
+
+  vboarray.data = &m_texcoords;
+  vboarray.type = VertexBuffer::GEM_VBO_TEXCOORDS;
+  m_VBOarray.push_back(vboarray);
+
+  vboarray.data = &m_colors;
+  vboarray.type = VertexBuffer::GEM_VBO_COLORS;
+  m_VBOarray.push_back(vboarray);
+}
+
 bool modelASSIMP2 :: compile(void)  {
   if(!m_scene) return false;
-  if(!(GLEW_VERSION_1_1)) {
-    //    verbose(1, "cannot build display-list now...do you have a window?");
-    return false;
+
+  GLboolean useColorMaterial=GL_FALSE;
+  glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
+
+  glDisable(GL_COLOR_MATERIAL);
+
+  // now begin at the root node of the imported data and traverse
+  // the scenegraph by multiplying subsequent local transforms
+  // together on GL's matrix stack.
+  m_vertices.clear();
+  m_normals.clear();
+  m_texcoords.clear();
+  m_colors.clear();
+  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors);
+  fillVBOarray();
+  if(useColorMaterial)
+    glEnable(GL_COLOR_MATERIAL);
+
+  bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
+  if(res) {
+    m_rebuild=false;
+    m_refresh=true;
   }
-  if (m_dispList) {
-    glDeleteLists(m_dispList, 1);
-    m_dispList=0;
-  }
-
-  m_dispList=glGenLists(1);
-
-  if(m_dispList) {
-    GLboolean useColorMaterial=GL_FALSE;
-    glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
-    glNewList(m_dispList, GL_COMPILE);
-
-    glDisable(GL_COLOR_MATERIAL);
-
-    // now begin at the root node of the imported data and traverse
-    // the scenegraph by multiplying subsequent local transforms
-    // together on GL's matrix stack.
-    recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial);
-    if(useColorMaterial)
-      glEnable(GL_COLOR_MATERIAL);
-    glEndList();
-
-  }
-
-  bool res = (0 != m_dispList);
-  if(res) m_rebuild=false;
   return res;
 }
 void modelASSIMP2 :: destroy(void)  {
-  /* LATER: check valid contexts (remove glDelete from here) */
-  if (m_dispList) {
-    // destroy display list
-    glDeleteLists(m_dispList, 1);
-    m_dispList = 0;
-  }
-
   if(m_scene)
     aiReleaseImport(m_scene);
   m_scene=NULL;
