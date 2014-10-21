@@ -18,6 +18,7 @@
 #include "Gem/GemGL.h"
 #include <string>
 
+namespace gem {
 class VertexBuffer
   {
   public:
@@ -52,5 +53,5 @@ class VertexBuffer
                     GEM_VBO_SHININESS };
     Type type;
   };
-
+}; /* namespace: gem */
 #endif // _INCLUDE__GEM_GEM_VERTEXBUFFER_H_

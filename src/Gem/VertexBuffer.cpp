@@ -19,7 +19,7 @@
 /* for post(), error(),... */
 #include "m_pd.h"
 
-VertexBuffer:: VertexBuffer() :
+gem::VertexBuffer:: VertexBuffer() :
   size(0),
   dimen(0),
   vbo(0),
@@ -32,7 +32,7 @@ VertexBuffer:: VertexBuffer() :
   offset(0)
 {
 }
-VertexBuffer:: VertexBuffer (unsigned int size_,
+gem::VertexBuffer:: VertexBuffer (unsigned int size_,
     unsigned int dimen_) :
   size(0),
   dimen(dimen_),
@@ -47,7 +47,7 @@ VertexBuffer:: VertexBuffer (unsigned int size_,
 {
   resize(size_);
 }
-VertexBuffer:: VertexBuffer (const VertexBuffer&vb)
+gem::VertexBuffer:: VertexBuffer (const gem::VertexBuffer&vb)
   :size(0)
   ,dimen(vb.dimen)
   ,vbo(vb.vbo)
@@ -62,7 +62,7 @@ VertexBuffer:: VertexBuffer (const VertexBuffer&vb)
   resize(vb.size);
 }
 
-VertexBuffer:: ~VertexBuffer (void)
+gem::VertexBuffer:: ~VertexBuffer (void)
 {
   //::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, dimen, array);
   destroy();
@@ -72,7 +72,7 @@ VertexBuffer:: ~VertexBuffer (void)
   }
   array=NULL;
 }
-void VertexBuffer:: resize (unsigned int size_)
+void gem::VertexBuffer:: resize (unsigned int size_)
 {
   float*tmp=NULL;
   try {
@@ -95,7 +95,7 @@ void VertexBuffer:: resize (unsigned int size_)
   dirty=true;
 }
 
-bool VertexBuffer:: create (void)
+bool gem::VertexBuffer:: create (void)
 {
   if(!vbo) {
     glGenBuffers(1, &vbo);
@@ -107,7 +107,7 @@ bool VertexBuffer:: create (void)
   }
   return (0!=vbo);
 }
-bool VertexBuffer:: render (void)
+bool gem::VertexBuffer:: render (void)
 {
   // render from the VBO
   //::post("VertexBuffer::render: %d?", enabled);
@@ -122,7 +122,7 @@ bool VertexBuffer:: render (void)
   }
   return enabled;
 }
-void VertexBuffer:: destroy (void)
+void gem::VertexBuffer:: destroy (void)
 {
   if ( vbo ) {
     glBindBuffer(1, vbo);
