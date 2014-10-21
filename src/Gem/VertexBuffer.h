@@ -26,9 +26,14 @@ class VertexBuffer
     VertexBuffer(unsigned int size, unsigned int dimen);
     VertexBuffer(const VertexBuffer&);
     ~VertexBuffer(void);
+
     void resize(unsigned int);
+
+    /* creates an openGL VBO (requires a valid context) */
     bool create(void);
+    /* renders an openGL VBO (requires a valid context) */
     bool render(void);
+    /* destroys an openGL VBO (requires a valid context) */
     void destroy(void);
 
     unsigned int size;
