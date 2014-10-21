@@ -591,6 +591,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
     break;
   default:
     error("illegal arguments to 'attribute': must be type 'float', 'vec2-4' or 'mat2-4'");
+    return;
   }
 
   tabname=std::string(atom_getsymbol(argv+1)->s_name);
