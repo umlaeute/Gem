@@ -4,7 +4,7 @@ SCRIPTPATH=${0%/*}
 ASTYLECONF=${SCRIPTPATH}/../../doc/astyle.rc
 
 do_indent() {
- astyle --options=${ASTYLECONF} $1
+ astyle -n --options=${ASTYLECONF} $1
 }
 
 for i in $@
