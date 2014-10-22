@@ -107,7 +107,7 @@ Bracing
 -------
 Try using the "One  True  Brace  Style" (aka 1TBS, a variant of the K&R style)
 
-  http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS)
+  http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS
 
 
 Tools
