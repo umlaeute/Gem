@@ -220,6 +220,7 @@ nobase_dist_gemexamples_DATA = \
 	13.recursion/xform-gui.pd \
 	14.multiple_windows/01_basic_example.pd \
 	14.multiple_windows/02_switch_context.pd \
+	14.multiple_windows/03_texture_sharing.pd \
 	99.games/puzzle.pd \
 	data/64shade.tif \
 	data/alea.mpg \
