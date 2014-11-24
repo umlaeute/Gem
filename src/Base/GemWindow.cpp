@@ -23,25 +23,27 @@
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
-                        mycontext(NULL),
-                        infoOut(NULL),
-                        dispatchClock(NULL),
+                        mycontext(0),
+                        infoOut(0), rejectOut(0),
+                        dispatchClock(0),
                         dispatchTime(10.),
-                        qClock(NULL)
+                        qClock(0)
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
     dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
   }
   ~PIMPL(void) {
-    if(qClock) clock_free (qClock);  qClock=NULL;
-    if(dispatchClock) clock_free (dispatchClock);  dispatchClock=NULL;
-    if(infoOut)outlet_free(infoOut); infoOut=NULL;
+    if(qClock) clock_free (qClock);  qClock=0;
+    if(dispatchClock) clock_free (dispatchClock);  dispatchClock=0;
+    if(infoOut)outlet_free(infoOut); infoOut=0;
+    if(rejectOut)outlet_free(rejectOut); rejectOut=0;
   }
 
   GemWindow*parent;
   gem::Context*mycontext;
 
   t_outlet*infoOut;
+  t_outlet*rejectOut;
 
   t_clock*dispatchClock;
   double dispatchTime;
@@ -79,8 +81,8 @@ public:
 
   void sendInfo(std::vector<t_atom>alist) {
     int argc=alist.size();
-    t_atom*ap=NULL;
-    t_atom*argv=NULL;
+    t_atom*ap=0;
+    t_atom*argv=0;
 #if 0
     argv=alist.data();
 #else
@@ -112,8 +114,6 @@ public:
   void requeue(void) {
     clock_delay(qClock, 0);
   }
-
-
 };
 
 
@@ -134,13 +134,14 @@ GemWindow :: GemWindow()
     m_title("Gem"),
     m_cursor(true),
     m_fsaa(0),
-    m_context(NULL)
+    m_context(0)
 {
   int i;
 
   i=m_width;  gem::Settings::get("window.width" , i), m_width =i;
   i=m_height; gem::Settings::get("window.height", i), m_height=i;
-  m_pimpl->infoOut = outlet_new(this->x_obj, 0);
+  m_pimpl->infoOut   = outlet_new(this->x_obj, 0);
+  m_pimpl->rejectOut = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -150,7 +151,7 @@ GemWindow :: ~GemWindow()
 {
   if(m_pimpl) {
     m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
-    delete m_pimpl; m_pimpl=NULL;
+    delete m_pimpl; m_pimpl=0;
   }
 }
 
@@ -162,7 +163,7 @@ void GemWindow::info(t_symbol*s, int argc, t_atom*argv) {
   m_pimpl->queue(s, argc, argv);
 }
 void GemWindow::info(std::string s) {
-  info(gensym(s.c_str()), 0, NULL);
+  info(gensym(s.c_str()), 0, 0);
 }
 void GemWindow::info(std::string s, int i) {
   info(s, (t_float)i);
@@ -190,40 +191,52 @@ void GemWindow :: bang(void)
 
 
 /* mouse movement */
-void GemWindow::motion(int x, int y)
+void GemWindow::motion(int devId, int x, int y)
 {
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("motion"));
-  SETFLOAT (ap+1, x);
-  SETFLOAT (ap+2, y);
+  t_atom ap[4];
+  SETFLOAT (ap+0, devId);
+  SETSYMBOL(ap+1, gensym("motion"));
+  SETFLOAT (ap+2, x);
+  SETFLOAT (ap+3, y);
 
-  info(gensym("mouse"), 3, ap);
+  info(gensym("mouse"), 4, ap);
 }
 /* mouse buttons */
-void GemWindow::button(int id, int state)
+void GemWindow::button(int devId, int id, int state)
+{
+  t_atom ap[4];
+  SETFLOAT (ap+0, devId);
+  SETSYMBOL(ap+1, gensym("button"));
+  SETFLOAT (ap+2, id);
+  SETFLOAT (ap+3, state);
+
+  info(gensym("mouse"), 4, ap);
+}
+/* mouse entering/leaving window */
+void GemWindow::entry(int devId, int state)
 {
   t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("button"));
-  SETFLOAT (ap+1, id);
+  SETFLOAT (ap+0, devId);
+  SETSYMBOL(ap+1, gensym("entry"));
   SETFLOAT (ap+2, state);
 
   info(gensym("mouse"), 3, ap);
 }
 
 /* keyboard buttons */
-void GemWindow::key(std::string sid, int iid, int state) {
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("key"));
-  SETFLOAT (ap+1, iid);
-  SETFLOAT (ap+2, state);
+void GemWindow::key(int devId, std::string sid, int iid, int state) {
+  t_atom ap[4];
+  SETFLOAT (ap+0, devId);
+  SETSYMBOL(ap+1, gensym("keyname"));
+  SETSYMBOL(ap+2, gensym(sid.c_str()));
+  SETFLOAT (ap+3, state);
+  info(gensym("keyboard"), 4, ap);
 
-  info(gensym("keyboard"), 3, ap);
-
-  SETSYMBOL(ap+0, gensym("keyname"));
-  SETSYMBOL(ap+1, gensym(sid.c_str()));
-  //  SETFLOAT (ap+2, state);
-
-  info(gensym("keyboard"), 3, ap);
+  //SETFLOAT (ap+0, devId);
+  SETSYMBOL(ap+1, gensym("key"));
+  SETFLOAT (ap+2, iid);
+  //SETFLOAT (ap+3, state);
+  info(gensym("keyboard"), 4, ap);
 }
 
 void GemWindow::dimension(unsigned int w, unsigned int h) {
@@ -251,7 +264,7 @@ gem::Context*GemWindow::createContext(void){
 }
 gem::Context*GemWindow::destroyContext(gem::Context*ctx){
   if(ctx)delete ctx;
-  ctx=NULL;
+  ctx=0;
   return ctx;
 }
 
@@ -359,6 +372,11 @@ void GemWindow::       printMess(void) {
   // nada
 }
 
+void GemWindow:: anyMess(t_symbol*s, int argc, t_atom*argv){
+  outlet_anything(m_pimpl->rejectOut, s, argc, argv);
+}
+
+
 void GemWindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", render);
@@ -373,6 +391,16 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
-
   //  CPPEXTERN_MSG0(classPtr, "print", printMess);
+
+  struct _CB_any {
+    static void callback(void*data, t_symbol*s, int argc, t_atom*argv){
+      GemWindow*gw=GetMyClass(data);
+      gw->anyMess(s, argc, argv);
+    }
+    _CB_any (struct _class*c) {
+      class_addanything(c, reinterpret_cast<t_method>(_CB_any::callback));
+    }
+  };
+  _CB_any CB_any (classPtr);
 }

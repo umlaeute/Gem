@@ -17,46 +17,31 @@
 # include "config.h"
 #endif
 
-
-#if defined __APPLE__
-# if !defined __x86_64__
-// with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
-// LATER make this a real check in configure
-#  define HAVE_CARBONQUICKTIME
-# elif defined HAVE_QUICKTIME
-#  undef HAVE_QUICKTIME
-# endif
-#endif
-
-#ifdef HAVE_QUICKTIME
-# ifdef HAVE_CARBONQUICKTIME
-  //
-# elif defined _WIN32
-  //
-# else
-#  undef HAVE_QUICKTIME
-# endif
-#endif
-
-#ifdef HAVE_QUICKTIME
-
-# include "Gem/RTE.h"
-# include "imageQT.h"
+#include "Gem/RTE.h"
+#include "imageQT.h"
 #include "plugins/PluginFactory.h"
 
-# ifdef HAVE_CARBONQUICKTIME
+#if defined __APPLE__
 #  include <Carbon/Carbon.h>
 #  include <QuickTime/QuickTime.h>
 #  include <QuickTime/ImageCompression.h>
 #  define IMAGEQT_RGBA_PIXELFORMAT k32ARGBPixelFormat
-# elif defined _WIN32
+#elif defined _WIN32
+# if defined __MINGW32__
+/* hack to avoid the use of microsofts non-standard extension (u)i64 instead of (U)LL */
+#  include <ConditionalMacros.h>
+#  undef TARGET_OS_WIN32
+#  include <Math64.h>
+#  define TARGET_OS_WIN32 1
+# endif /* MINGW */
+
 #  include <QTML.h>
 #  include <Movies.h>
 #  include <QuickTimeComponents.h>
 #  include "Gem/Exception.h"
 #  define OffsetRect MacOffsetRect
 #  define IMAGEQT_RGBA_PIXELFORMAT k32RGBAPixelFormat
-# endif
+#endif
 
 #ifdef _MSC_VER  /* This is only for Microsoft's compiler, not cygwin, e.g. */
 # define snprintf _snprintf
@@ -65,17 +50,12 @@
 
 #define QT_MAX_FILENAMELENGTH 256
 #include <stdio.h>
-# include <map>
-
-//# include <string.h>
-//# include <fcntl.h>
+#include <map>
 
 using namespace gem::plugins;
 
-
 REGISTER_IMAGELOADERFACTORY("QT", imageQT);
 REGISTER_IMAGESAVERFACTORY("QT", imageQT);
-
 
 #if defined __APPLE__
 static OSStatus
@@ -548,4 +528,3 @@ void imageQT::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Prop
   value=100.f;
   props.set("quality", value);
 }
-#endif /* have_quicktime */

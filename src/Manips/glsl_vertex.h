@@ -18,7 +18,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef _INCLUDE__GEM_MANIPS_GLSL_VERTEX_H_
 #define _INCLUDE__GEM_MANIPS_GLSL_VERTEX_H_
 
-#include "Manips/glsl_program.h"
+#include "Base/GemBase.h"
+#include "Utils/GLUtil.h"
 
 #define GEM_shader_none  0
 #define GEM_shader_GLSL  1
@@ -61,6 +62,7 @@ class GEM_EXTERN glsl_vertex : public GemBase
   virtual bool openMessGL2(void);
   virtual bool openMessARB(void);
   virtual void openMess(t_symbol *filename);
+  virtual void loadShader(void);
 
 
   ////////
@@ -93,9 +95,9 @@ class GEM_EXTERN glsl_vertex : public GemBase
   t_symbol* m_shaderFilename;
 
   GLint			m_shaderID;
-
-
   t_outlet		*m_outShaderID;
+  gem::utils::gl::GLuintMap m_idmapper;
+  float                 m_idmapped;
 };
 
 #endif	// for header file

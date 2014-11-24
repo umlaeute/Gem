@@ -11,6 +11,8 @@
 
 
 #include "pix_motionblur.h"
+#include "Utils/Functions.h"
+
 CPPEXTERN_NEW(pix_motionblur);
 
 /////////////////////////////////////////////////////////

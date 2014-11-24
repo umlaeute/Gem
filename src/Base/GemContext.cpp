@@ -41,7 +41,7 @@ public:
     xcontext(new GemGlewXContext),
 # endif /* GemGlewXContext */
 #else
-    context(NULL), xcontext(NULL),
+    context(NULL),
 #endif
     contextid(makeID())
   {
@@ -60,7 +60,7 @@ public:
     xcontext(new GemGlewXContext(*p.xcontext)),
 # endif /* GemGlewXContext */
 #else
-    context(NULL), xcontext(NULL),
+    context(NULL),
 #endif
     contextid(makeID())
   {

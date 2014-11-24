@@ -9,7 +9,7 @@ EXTRA_DIST += win-vs2008/ASSIMP2.vsprops
 
 pkglib_LTLIBRARIES=
 
-if HAVE_LIB_ASSIMP
+if HAVE_ASSIMP2
 pkglib_LTLIBRARIES += gem_modelASSIMP2.la
 endif
 

@@ -2,13 +2,13 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2013 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2001-2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -18,9 +18,9 @@
 #ifdef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Gem/GemGL.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <map>
 
 #include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
@@ -30,6 +30,9 @@
 #  include <X11/extensions/xf86vmode.h>
 #endif
 #include <X11/cursorfont.h>
+
+// for printf() debugging
+#include <stdio.h>
 
 CPPEXTERN_NEW(gemglxwindow);
 
@@ -152,8 +155,6 @@ static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 }
 
 
-
-
 struct gemglxwindow::PIMPL {
   int         fs;                 // FullScreen
 
@@ -161,7 +162,8 @@ struct gemglxwindow::PIMPL {
   Window      win;                // X Window
   int         screen;             // X Screen
   Colormap    cmap;               // X color map
-  GLXContext  context;            // OpenGL context
+  GLXContext  glxcontext;         // OpenGL context
+  gem::Context*gemcontext;        // Gem Context (for sharing)
 
   Atom        delete_atom;
 
@@ -183,11 +185,8 @@ struct gemglxwindow::PIMPL {
     win(0),
     screen(0),
     cmap(0),
-    context(NULL),
+    glxcontext(NULL), gemcontext(NULL),
     delete_atom(0),
-#ifdef HAVE_LIBXXF86VM
-    //    deskMode(0),
-#endif
     inputMethod(NULL),
     inputContext(NULL),
 
@@ -289,22 +288,23 @@ struct gemglxwindow::PIMPL {
     }
 
     if(vi->depth<24)
-      ::post("Only using %d color bits", vi->depth);
+      ::verbose(0, "Only using %d color bits", vi->depth);
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
       ::error("TrueColor visual required for this program (got %d)", vi->c_class);
       return false;
     }
     // create the rendering context
     try {
-      context = glXCreateContext(dpy, vi, masterContext, GL_TRUE);
-      // this masterContext should only be initialized once by a static PIMPL
-      // see below in gemglxwindow::create()
-      if(!masterContext)
-        masterContext=context;
+      // first check whether we have a shared context for 'display'
+      GLXContext sharedContext=0;
+      if(s_shared.count(display)>0) {
+	sharedContext=s_shared[display].glxcontext;;
+      }
+      glxcontext = glXCreateContext(dpy, vi, sharedContext, GL_TRUE);
     } catch(void*e){
-      context=NULL;
+      glxcontext=NULL;
     }
-    if (context == NULL) {
+    if (glxcontext == NULL) {
       throw(GemException("Could not create rendering context"));
       return false;
     }
@@ -429,7 +429,7 @@ struct gemglxwindow::PIMPL {
 
     try{
       xerr=0;
-      glXMakeCurrent(dpy, win, context);
+      glXMakeCurrent(dpy, win, glxcontext);
 
       if(xerr!=0) {
         /* seems like the error-handler was called; so something did not work the way it should
@@ -455,12 +455,11 @@ struct gemglxwindow::PIMPL {
     }
     return true;
   }
-
-  static GLXContext  masterContext;// The GLXcontext to share rendering with
-  static gem::Context*masterGemContext;
+  static std::map<std::string,gemglxwindow::PIMPL>s_shared;
 };
-GLXContext   gemglxwindow::PIMPL::masterContext=NULL;
-gem::Context*gemglxwindow::PIMPL::masterGemContext=NULL;
+std::map<std::string,gemglxwindow::PIMPL>gemglxwindow::PIMPL::s_shared;
+
+
 
 /////////////////////////////////////////////////////////
 //
@@ -490,11 +489,11 @@ gemglxwindow :: ~gemglxwindow()
 
 
 bool gemglxwindow :: makeCurrent(void){
-  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->context)
+  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->glxcontext)
     return false;
 
   xerr=0;
-  glXMakeCurrent(m_pimpl->dpy, m_pimpl->win, m_pimpl->context);
+  glXMakeCurrent(m_pimpl->dpy, m_pimpl->win, m_pimpl->glxcontext);
   if(xerr!=0) {
     return false;
   }
@@ -512,6 +511,7 @@ void gemglxwindow::dispatch(void) {
   XKeyEvent* kb  = (XKeyEvent*)&event;
   char keystring[2];
   KeySym keysym_return;
+  unsigned long devID=0;
 
   while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
                            StructureNotifyMask |
@@ -525,25 +525,25 @@ void gemglxwindow::dispatch(void) {
       switch (event.type)
         {
         case ButtonPress:
-          button(eb->button-1, 1);
-          motion(eb->x, eb->y);
+          button(devID, eb->button-1, 1);
+          motion(devID, eb->x, eb->y);
           break;
         case ButtonRelease:
-          button(eb->button-1, 0);
-          motion(eb->x, eb->y);
+          button(devID, eb->button-1, 0);
+          motion(devID, eb->x, eb->y);
           break;
         case MotionNotify:
-          motion(eb->x, eb->y);
+          motion(devID, eb->x, eb->y);
           if(!m_pimpl->have_border) {
             int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
             err=0;
           }
           break;
         case KeyPress:
-          key(m_pimpl->key2string(kb), kb->keycode, 1);
+          key(devID, m_pimpl->key2string(kb), kb->keycode, 1);
           break;
         case KeyRelease:
-          key(m_pimpl->key2string(kb), kb->keycode, 0);
+          key(devID, m_pimpl->key2string(kb), kb->keycode, 0);
           break;
         case ConfigureNotify:
           if ((event.xconfigure.width != m_width) ||
@@ -666,32 +666,37 @@ void gemglxwindow :: offsetMess(int x, int y)
 bool gemglxwindow :: create(void)
 {
   bool success=true;
+  /*
+   * hmm, this crashes when enabled
+   * when disabled, we don't get textures on two screens
+   */
+  //~#warning context-sharing disabled
+  bool context_sharing=true;
+  if(!m_context && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
 
-  static gemglxwindow::PIMPL*constPimpl=NULL;
-  if(!constPimpl) {
-    constPimpl=new PIMPL();
-
-    try {
-      int x=0, y=0;
-      unsigned int w=1, h=1;
-      success=constPimpl->create("", 2, false, false, x, y, w, h);
-      constPimpl->masterContext=constPimpl->context;
-    } catch (GemException&x) {
-      error("const context creation failed: %s", x.what());
-      verbose(0, "continuing at your own risk!");
-    }
-    if(!constPimpl->masterGemContext) {
+    gemglxwindow::PIMPL*sharedPimpl=&gemglxwindow::PIMPL::s_shared[m_display];
+    if(!sharedPimpl->glxcontext) {
       try {
-	constPimpl->masterGemContext = createContext();
+	int x=0, y=0;
+	unsigned int w=1, h=1;
+	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h);
       } catch (GemException&x) {
-	constPimpl->masterGemContext = NULL;
-	error("context creation failed: %s", x.what());
+	error("creation of shared glxcontext failed: %s", x.what());
+	verbose(0, "continuing at your own risk!");
+      }
+      if(!sharedPimpl->gemcontext) {
+	try {
+	  sharedPimpl->gemcontext = createContext();
+	} catch (GemException&x) {
+	  sharedPimpl->gemcontext = NULL;
+	  error("creation of shared gem::context failed: %s", x.what());
+	}
       }
     }
-  }
 
-  if(constPimpl->masterGemContext && !m_context) {
-    m_context=constPimpl->masterGemContext;
+    m_context=sharedPimpl->gemcontext;
+  } else { // no context sharing
+    /* creation of gem::Context is deferred until *after* window creation */
   }
 
   int modeNum=4;
@@ -715,11 +720,22 @@ bool gemglxwindow :: create(void)
   }
   if(!success)return false;
 
+  /* create a gem::context if we don't already have (a shared) one */
+  if(!m_context) {
+    try {
+      m_context = createContext();
+    } catch (GemException&x) {
+      m_context = NULL;
+      error("creationg of gem::context failed: %s", x.what());
+    }
+  }
+
+
   XMapRaised(m_pimpl->dpy, m_pimpl->win);
   //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
   XEvent report;
   XIfEvent(m_pimpl->dpy, &report, WaitForNotify, (char*)m_pimpl->win);
-  if (glXIsDirect(m_pimpl->dpy, m_pimpl->context))
+  if (glXIsDirect(m_pimpl->dpy, m_pimpl->glxcontext))
     post("Direct Rendering enabled!");
 
   cursorMess(m_cursor);
@@ -764,9 +780,9 @@ void gemglxwindow :: destroy(void)
 
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
     glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
-    if (m_pimpl->context) {
+    if (m_pimpl->glxcontext) {
       // this crashes sometimes on my laptop:
-      glXDestroyContext(m_pimpl->dpy, m_pimpl->context);
+      glXDestroyContext(m_pimpl->dpy, m_pimpl->glxcontext);
     }
 
     if (m_pimpl->win) {
@@ -783,7 +799,7 @@ void gemglxwindow :: destroy(void)
   m_pimpl->dpy = NULL;
   m_pimpl->win = 0;
   m_pimpl->cmap = 0;
-  m_pimpl->context = NULL;
+  m_pimpl->glxcontext = NULL;
   if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
 
   destroyGemWindow();

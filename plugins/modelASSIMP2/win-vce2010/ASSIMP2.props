@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <ASSIMP2_DIR>C:\Users\win7\Bibliothèques\assimp--2.0.863-sdk</ASSIMP2_DIR>
+    <ASSIMP2_INCDIR>$(ASSIMP2_DIR)\include</ASSIMP2_INCDIR>
+    <ASSIMP2_LIBDIR>$(ASSIMP2_DIR)\lib\assimp_release-dll_win32</ASSIMP2_LIBDIR>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="ASSIMP2_DIR">
+      <Value>$(ASSIMP2_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ASSIMP2_INCDIR">
+      <Value>$(ASSIMP2_INCDIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ASSIMP2_LIBDIR">
+      <Value>$(ASSIMP2_LIBDIR)</Value>
+    </BuildMacro>
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HAVE_LIBASSIMP;HAVE_ASSIMP_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ASSIMP2_LIBDIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

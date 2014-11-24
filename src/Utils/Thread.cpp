@@ -19,6 +19,7 @@
 #include "ThreadSemaphore.h"
 
 #ifdef _WIN32
+# include <winsock2.h>
 # include <windows.h>
 #endif
 
@@ -101,9 +102,6 @@ unsigned int  gem::thread::getCPUCount(void) {
 # include <unistd.h>
 # include <sys/time.h>
 #endif
-#ifdef _WIN32
-# include <winsock2.h>
-#endif
 
 void gem::thread::usleep(unsigned long usec) {
   struct timeval sleep;
@@ -127,10 +125,12 @@ class Thread::PIMPL { public:
   pthread_cond_t p_cond;
 
   PIMPL(Thread*x):
-    owner(x),
-    keeprunning(true),
-    isrunning(false),
-    p_thread(0)
+    owner(x)
+    , keeprunning(true)
+    , isrunning(false)
+#ifndef HAVE_PTW32_HANDLE_T
+    , p_thread(0)
+#endif
   {
     pthread_mutex_init(&p_mutex, 0);
     pthread_cond_init (&p_cond , 0);

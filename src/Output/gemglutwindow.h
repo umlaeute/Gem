@@ -109,26 +109,6 @@ class GEM_EXTERN gemglutwindow : public GemWindow
 
   /* the GLUT window id */
   int m_window;
-
-  //////////
-  // glut callbacks
-  static void displayCb(void);
-  static void visibleCb(int);
-  static void closeCb(void);
-  static void keyboardCb(unsigned char, int, int);
-  static void specialCb(int, int, int);
-  static void reshapeCb(int, int);
-  static void mouseCb(int,int,int,int);
-  static void motionCb(int,int);
-  static void passivemotionCb(int, int);
-  static void entryCb(int);
-  static void keyboardupCb(unsigned char, int, int);
-  static void specialupCb(int, int, int);
-  static void joystickCb(unsigned int, int, int, int);
-  static void menuCb(int);
-  static void menustateCb(int);
-  static void menustatusCb(int, int, int);
-  static void windowstatusCb(int);
 };
 
 #endif    // for header file

@@ -21,6 +21,8 @@
 
 CPPEXTERN_NEW(gemlist);
 
+using namespace gem;
+
 /////////////////////////////////////////////////////////
 //
 // gemlist
@@ -144,7 +146,7 @@ void gemlist :: drawMess(t_atom&arg)
       m_drawType = GL_POINT;
       break;
     default:
-      m_drawType = static_cast<GLenum>(getGLdefine(&arg));
+      m_drawType = static_cast<GLenum>(gem::utils::gl::getGLdefine(&arg));
     }
   }
   else m_drawType=atom_getint(&arg);

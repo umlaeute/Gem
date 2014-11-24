@@ -73,6 +73,7 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
     	//////////
     	// When a download is received
     	virtual void	downloadMess();
+	bool m_wantDownload;
 
     	//////////
     	// When a purge is received
@@ -88,17 +89,13 @@ class GEM_EXTERN pix_imageInPlace : public pix_multiimage
 
 	//////////
 	int				mInPreload;
-    GLuint          m_textureQuality, m_repeat;
+	GLuint          m_textureQuality, m_repeat;
 
     private:
 
     	//////////
     	// static member functions
     	static void 	preloadMessCallback(void *data, t_symbol *filename, t_float baseImage, t_float topImage, t_float skipRate);
-    	static void 	downloadImageCallback(void *data);
-    	static void 	purgeImageCallback(void *data);
-    	static void 	textureMessCallback(void *data, t_float type);
-    	static void 	repeatMessCallback(void *data, t_float type);
 };
 
 #endif	// for header file

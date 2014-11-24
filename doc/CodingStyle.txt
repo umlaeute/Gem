@@ -4,45 +4,13 @@ Coding Guidelines for Gem
 
 Questions
 =========
-read the entire CodingStyle guide.
-if you still have questions, please ask them on the gem-dev mailinglist:
+Read the entire CodingStyle guide.
+
+If you still have questions, please ask them on the gem-dev mailinglist:
    http://lists.puredata.info/listinfo/gem-dev
 
-Version Control System
-======================
-Gem uses `git` for source code management.
-the official public repository is on sourceforge:
-   git://git.code.sf.net/p/pd-gem/gem
-a secondary repository is on github:
-   https://github.com/umlaeute/Gem
-
-contributing
-------------
-if you want to contribute, please make sure that your changes can be
-applied to the latest HEAD (which might be slightly different from the one
-when you started working on your contribution).
-
-the preferred way for contributing is by forking the github repository
-and creating a pull request once your code is ready.
-
-
-git commits
------------
-avoid committing pd-patches and C++ code within the same
-commit. conflicts in C++-code can usually easily be resolved, whereas
-conflicts in Pd-patches are usually impossible to resolve (but for the
-most trivial cases).
-
-do not add binary data to the git repository (without a consens on gem-dev first)
-
-
-git branching
--------------
-try to avoid forking from branches other than master.
-esp. avoid branches on top of branches.
-before committing a pull rqeuest, make sure that your branch applies clean to
-current master.
-
+A general discussion about the "contribution workflow" in Gem can be found in the gem wiki:
+   https://github.com/umlaeute/Gem/wiki/Contributing
 
 
 Programming Language
@@ -131,11 +99,21 @@ $ cp .git/hooks/pre-commit.sample .git/hooks/pre-commit
 
 Indentation
 -----------
-TODO
+It seems that the most common indentation in Gem's code base is:
+- 2 spaces (yes, that's not much)
+- no tabs (use spaces instead)
+
+Bracing
+-------
+Try using the "One  True  Brace  Style" (aka 1TBS, a variant of the K&R style)
+
+  http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS
 
 
-
-
+Tools
+-----
+To re-indent a file you can use `astyle` tool with the options-file provided in `/doc/astyle.rc`.
+(or simply run the script `build/tools/indent.sh` and pass the files to re-indent as arguments)
 
 
 Filesystem layout

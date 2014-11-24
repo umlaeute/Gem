@@ -16,9 +16,8 @@ LOG
 #define _INCLUDE__GEM_GEOS_MESH_SQUARE_H_
 
 #include "Base/GemShape.h"
+#include <vector>
 
-
-#define MAXGRID 1000
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -66,7 +65,7 @@ class GEM_EXTERN mesh_square : public GemShape
 	float		xsize, xsize0, ysize, ysize0;
 	int 		alreadyInit;
 
-	float 		texCoords[MAXGRID][MAXGRID][2];
+	std::vector<std::vector<std::vector<float> > >		texCoords;
 };
 
 #endif	// for header file

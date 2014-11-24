@@ -5,7 +5,7 @@
 #X msg 55 33 destroy;
 #X obj 14 92 gemhead;
 #X text 220 17 A tutorial on recursion in Gem;
-#X text 220 37 (GPL) 2007 Claude Heiland-Allen <claudiusmaximus@goto10.org>
+#X text 220 37 (GPL) 2007 Claude Heiland-Allen <claude@mathr.co.uk>
 ;
 #X obj 30 273 r \$0-recurse;
 #X obj 14 301 t a a;

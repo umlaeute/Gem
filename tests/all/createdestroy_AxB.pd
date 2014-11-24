@@ -1,0 +1,16 @@
+#N canvas 275 552 450 403 10;
+#X obj 101 17 r object;
+#X msg 204 105 f;
+#X obj 124 145 objectmaker;
+#X msg 238 105 nonexistant;
+#X msg 101 61 \; pd quit;
+#X obj 124 193 gemwin;
+#X msg 124 170 create;
+#X obj 101 39 t b a b;
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 2 0 6 0;
+#X connect 3 0 2 0;
+#X connect 6 0 5 0;
+#X connect 7 0 4 0;
+#X connect 7 1 2 0;

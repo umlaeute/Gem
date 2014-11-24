@@ -399,6 +399,40 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
 #endif
 }
 
+void pix_film :: bangMess()
+{
+  if(!m_haveMovie)return;
+  if(!m_handle)return;
+
+  double width=-1;
+  double height=-1;
+  double frames=-1;
+  double fps=-1;
+  gem::Properties gotProps;
+  gotProps.set("width", 0);
+  gotProps.set("height", 0);
+  gotProps.set("frames", 0);
+  gotProps.set("fps", 0);
+
+  m_handle->getProperties(gotProps);
+
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
+  gotProps.get("width", width);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
+  gotProps.get("height", height);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
+  gotProps.get("frames", frames);
+  /* coverity[check_return]: props.get() defaults to nop if properties are missing */
+  gotProps.get("fps", fps);
+
+  t_atom ap[4];
+  SETFLOAT(ap, frames);
+  SETFLOAT(ap+1, width);
+  SETFLOAT(ap+2, height);
+  SETFLOAT(ap+3, fps);
+  outlet_list(m_outNumFrames, 0, 4, ap);
+}
+
 /////////////////////////////////////////////////////////
 // render
 //
@@ -603,6 +637,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
   CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
   CPPEXTERN_MSG (classPtr, "driver", backendMess);
+  CPPEXTERN_MSG0(classPtr, "bang", bangMess);
 }
 void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 {

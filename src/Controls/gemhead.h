@@ -59,6 +59,7 @@ class GEM_EXTERN gemhead : public gemreceive
   //////////
   // change the priority
   void	    	setMess(t_float priority);
+  void        setContext(std::string contextName);
 
   virtual void receive(t_symbol*s, int argc, t_atom*argv);
 

@@ -55,6 +55,7 @@ using namespace gem::plugins;
 /////////////////////////////////////////////////////////
 
 #include <sys/stat.h>
+#include <math.h>
 
 REGISTER_VIDEOFACTORY("unicap", videoUNICAP);
 

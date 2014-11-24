@@ -337,6 +337,10 @@ void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_f
 void vertex_program :: printInfo()
 {
   GLint bitnum = 0;
+  if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
 
   if(!GLEW_ARB_vertex_program) {
     post("no ARB vertex support!");

@@ -1,0 +1,26 @@
+#N canvas 100 193 568 531 10;
+#X text 60 39 videoVIDS - videoInput based grabber for DirectShow devices
+;
+#X text 40 149 For USB Capture Devices and Webcams;
+#X text 50 175 A lot of freeze issues where the camera stops working
+seem to be due to windows putting the usb ports in a power saving state.
+;
+#X text 50 223 Before using videoInput disable power management on
+your usb ports.;
+#X text 50 260 To do so follow these steps for all the USB Root Hub's
+listed in device manager:, f 60;
+#X text 80 299 #1 In Windows \, click on Start > Control Panel (or
+Start > Settings > Control Panel).;
+#X text 80 331 #2 Double-click on System \, then open the Hardware
+tab.;
+#X text 80 350 #3 Click Device Manager.;
+#X text 80 369 #4 Click the + at Universal Serial Bus Controllers.
+;
+#X text 80 385 #5 Right-click USB Root Hub and select Properties.;
+#X text 80 406 #6 Open the Power Management tab.;
+#X text 80 425 #7 Clear the checkmark from Allow the computer to turn
+off this device to save power.;
+#X text 80 453 #8 Click OK.;
+#X text 80 472 #9 Repeat this procedure for the USB 2 Hub.;
+#X text 40 83 most properties (except for width \, height \, fps) are
+normalized between 0..1, f 62;

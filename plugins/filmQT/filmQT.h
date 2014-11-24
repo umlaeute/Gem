@@ -6,7 +6,7 @@ Load an digital video (like AVI, Mpeg, Quicktime) into a pix block (Windus/Apple
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) 2002 James Tittle.  tigital@mac.com
-Copyright (c) 2011 IOhannes m zmölnig. zmoelnig@iem.at
+Copyright (c) 2011-2014 IOhannes m zmölnig. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
@@ -17,13 +17,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "plugins/film.h"
 #include "Gem/Image.h"
 
-#ifdef HAVE_CARBONQUICKTIME
+#if defined __APPLE__
 # include <Carbon/Carbon.h>
 # include <QuickTime/QuickTime.h>
-#else defined _WIN32
+#elif defined _WIN32
+
+# if defined __MINGW32__
+/* hack to avoid the use of microsofts non-standard extension (u)i64 instead of (U)LL */
+#  include <ConditionalMacros.h>
+#  undef TARGET_OS_WIN32
+#  include <Math64.h>
+#  define TARGET_OS_WIN32 1
+# endif /* MINGW */
+
 # include <QTML.h>
 # include <Movies.h>
-#endif
+#endif /* OS */
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

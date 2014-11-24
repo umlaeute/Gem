@@ -28,6 +28,7 @@
 #define INCLUDE_pix_mano_H_
 
 #include "Base/GemPixObj.h"
+#include "Utils/Functions.h"
 
 class GEM_EXPORT pix_mano : public GemPixObj
 {

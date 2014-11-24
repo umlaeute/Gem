@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_data.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_data);
 

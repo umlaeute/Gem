@@ -26,6 +26,7 @@
 
 #include <assert.h>
 #include "pix_multiblob.h"
+#include "Utils/Functions.h"
 #include "Utils/pstk.h"
 
 ////////////////////////
