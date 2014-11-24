@@ -14,6 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_kaleidoscope.h"
+#include "Utils/Functions.h"
 
 static double deg2rad=atan2(1.,1.)/45.0;
 

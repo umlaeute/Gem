@@ -106,6 +106,7 @@ class GEM_EXTERN GemBase : public CPPExtern
   static void 	real_obj_setupCallback(t_class *classPtr)
     { CPPExtern::real_obj_setupCallback(classPtr); GemBase::obj_setupCallback(classPtr); }
 
+  enum RenderState {INIT, ENABLED, DISABLED, RENDERING, MODIFIED};
 
  private:
 
@@ -123,8 +124,6 @@ class GEM_EXTERN GemBase : public CPPExtern
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
    */
   gem::ContextData<bool>m_enabled;
-
-  enum RenderState {INIT, ENABLED, DISABLED, RENDERING, MODIFIED};
   gem::ContextData<enum RenderState>m_state;
 
  protected:

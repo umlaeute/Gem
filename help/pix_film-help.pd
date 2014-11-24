@@ -1,20 +1,20 @@
-#N canvas 28 88 704 601 10;
+#N canvas 26 86 704 623 10;
 #X text 452 8 GEM object;
-#X obj 9 272 cnv 15 430 320 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 9 272 cnv 15 430 340 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 40 274 Inlets:;
-#X text 39 461 Outlets:;
+#X text 39 487 Outlets:;
 #X obj 9 239 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 18 238 Arguments:;
 #X obj 8 56 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 57 cnv 15 250 350 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 57 cnv 15 250 450 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 40 Example:;
-#X obj 594 340 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 594 440 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 0 450 300 gemwin 0;
+#N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -32,30 +32,30 @@
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 599 379 pd gemwin;
-#X msg 599 360 create;
-#X text 595 339 Create window:;
-#X obj 451 88 cnv 15 155 250 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 599 479 pd gemwin;
+#X msg 599 460 create;
+#X text 595 439 Create window:;
+#X obj 451 88 cnv 15 175 300 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 63 gemhead;
-#X text 17 477 Outlet 1: gemlist;
+#X text 17 503 Outlet 1: gemlist;
 #X text 18 288 Inlet 1: gemlist;
-#X obj 451 360 pix_texture;
+#X obj 451 410 pix_texture;
 #X obj 463 90 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #X text 505 57 open a supported;
 #X text 506 68 movie-clip;
-#X floatatom 466 312 5 0 0 3 length - -;
-#X floatatom 514 312 5 0 0 3 width - -;
-#X floatatom 565 312 5 0 0 3 height - -;
-#X obj 514 251 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X floatatom 466 342 5 0 0 3 length - -, f 5;
+#X floatatom 514 342 5 0 0 3 width - -, f 5;
+#X floatatom 565 342 5 0 0 3 height - -, f 5;
+#X obj 514 281 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
-#X floatatom 504 233 5 0 10000 1 frameNum - -;
+#X floatatom 504 263 5 0 10000 1 frameNum - -, f 5;
 #X text 71 31 Class: pix object (pix source);
 #X text 29 57 Description: load in a movie-file;
 #X obj 463 117 openpanel;
 #X msg 463 136 open \$1;
-#X obj 451 382 rectangle 4 3;
+#X obj 451 432 rectangle 4 3;
 #X text 50 12 Synopsis: [pix_film];
 #X text 15 78 [pix_film] loads in a preproducecd digital-video to be
 used aas a texture \, bitblit or something else.;
@@ -67,9 +67,9 @@ the movie <filename> and decodes it into the specified color-space.
 the current film into the specified colorspace.;
 #X text 18 375 Inlet 1: message : auto 1|0 : starts/stops automatic
 playback.;
-#X text 16 429 Inlet 2: float: <frame#> changes the frame to be decoded
+#X text 16 455 Inlet 2: float: <frame#> changes the frame to be decoded
 on rendering.;
-#X text 17 550 Outlet 3: bang: indicates that the last frame has been
+#X text 17 576 Outlet 3: bang: indicates that the last frame has been
 reached. (or: an illegal frame would have been decoded);
 #X msg 469 174 auto \$1;
 #X obj 469 156 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
@@ -78,7 +78,7 @@ reached. (or: an illegal frame would have been decoded);
 #X text 13 104 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
 the movie should be decoded (RGBA \, YUV or Grey).;
-#X text 17 494 Outlet 2: list: <length> <width> <height> <fps>: gets
+#X text 17 520 Outlet 2: list: <length> <width> <height> <fps>: gets
 the dimensions (in frames and pixels) of a film when it gets loaded.
 if length is not available (video-streams) -1 is returned.;
 #X text 14 144 Normally \, you will only get one specified (via the
@@ -152,13 +152,16 @@ files;
 #X text 260 210 (recommended plugins are highlighed);
 #X text 474 452 an alternative implementation of the QuickTime plugin
 for OS-X only;
-#X restore 485 464 pd :: FORMATS;
-#X obj 473 275 unpack 0 0 0 0;
-#X floatatom 581 276 5 0 0 3 fps - -;
-#X obj 451 251 pix_film;
+#X restore 455 484 pd :: FORMATS;
+#X obj 473 305 unpack 0 0 0 0;
+#X floatatom 581 306 5 0 0 3 fps - -, f 5;
+#X obj 451 281 pix_film;
 #X msg 486 212 driver foo;
 #X text 17 401 Inlet 1: message : driver <name>: open the film using
 only the specified backend(s);
+#X msg 489 237 bang;
+#X text 17 428 Inlet 1: message : bang: (re)send the l/w/h/fps info
+to the 2nd outlet;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 48 0;
@@ -178,3 +181,4 @@ only the specified backend(s);
 #X connect 48 1 46 0;
 #X connect 48 2 24 0;
 #X connect 49 0 48 0;
+#X connect 51 0 48 0;

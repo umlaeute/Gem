@@ -65,13 +65,13 @@ class GEM_EXTERN GemWindow : public CPPExtern
   void bang(void);
 
   /* mouse movement */
-  void motion(int x, int y);
+  void motion(int devId, int x, int y);
   /* mouse buttons */
-  void button(int id, int state);
+  void button(int devId, int id, int state);
+  /* mouse entering window */
+  void entry(int devId, int state);
   /* keyboard buttons */
-  //  void key(std::string id, int state);
-  //void key(int id, int state);
-  void key(std::string, int, int state);
+  void key(int devId, std::string, int, int state);
 
   /* window resize/move */
   void dimension(unsigned int, unsigned int);
@@ -184,6 +184,9 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
   /* print some info */
   virtual void        printMess(void);
+
+  /* fallback callback */
+  virtual void        anyMess(t_symbol*s, int argc, t_atom*argv);
 
  protected:
   unsigned int m_width, m_height;

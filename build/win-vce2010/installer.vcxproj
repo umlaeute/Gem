@@ -61,9 +61,8 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\extra\pix_artoolkit\win-vs2008\pix_artoolkit.vcxproj">
-      <Project>{ff21a158-2bde-483f-85c3-80c9df0a0abc}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\..\extra\pix_artoolkit\win-vce2010\pix_artoolkit.vcxproj">
+      <Project>{ca730e47-0015-4a4d-ba03-3680b0671ba3}</Project>
     </ProjectReference>
     <ProjectReference Include="Gem.vcxproj">
       <Project>{e6cfde67-c343-44d0-8584-5d82e396d594}</Project>

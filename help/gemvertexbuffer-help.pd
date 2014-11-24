@@ -1,4 +1,4 @@
-#N canvas 735 225 983 722 10;
+#N canvas 152 51 983 713 10;
 #N canvas 1 89 450 300 fps 0;
 #X obj 46 -61 gemhead;
 #X obj 46 -21 realtime;
@@ -20,7 +20,7 @@
 #X floatatom 466 172 5 0 0 1 fps - -, f 5;
 #X obj 6 76 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 7 236 cnv 15 450 300 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 236 cnv 15 450 375 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 7 181 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
 0;
@@ -65,19 +65,14 @@
 #X connect 13 1 12 0;
 #X connect 14 0 15 0;
 #X restore 467 115 pd gemwin;
-#X msg 467 96 destroy;
+#X msg 467 96 create;
 #X text 463 75 Create window:;
 #X text 6 80 Description: Renders a vertexbuffer.;
 #X text 11 179 Arguments:;
-#X text 57 190 number of vertex to be used. nuber in form of 2^n work
-better;
 #X text 9 241 Inlets:;
 #X text 27 253 Inlet 1: gemlist;
-#X text 9 505 Outlets:;
-#X text 21 518 Outlet 1: gemlist;
-#X text 27 409 Inlet 1: message: postion_enable float \, color_enable
-float \, texture_enable float \, normal_enable float : enable/disable
-the use of this data;
+#X text 9 580 Outlets:;
+#X text 21 593 Outlet 1: gemlist;
 #X obj 569 7 cnv 15 400 700 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 576 668 cnv 15 150 30 empty empty empty 20 12 0 14 -24198 -66577
@@ -106,7 +101,7 @@ the use of this data;
 #X obj 579 234 pix_texture;
 #X obj 593 153 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#N canvas 0 50 450 300 openpanel 0;
+#N canvas 1 51 450 300 openpanel 0;
 #X obj 114 62 inlet;
 #X obj 121 254 outlet;
 #X obj 114 125 openpanel;
@@ -120,17 +115,17 @@ the use of this data;
 #X restore 593 170 pd openpanel;
 #X msg 593 189;
 #X text 671 349 enable / disable specific VBO;
-#X obj 579 33 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 579 32 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X text 577 14 Example:;
-#X msg 816 661 resize 128;
+#X msg 816 658 resize 128;
 #X floatatom 636 96 5 0 0 0 - - -, f 5;
 #X obj 579 95 scale 3;
 #X msg 593 271 position blablax blablay blablaz;
 #X msg 604 290 color colorr colorg colorb colora;
 #X msg 614 310 texture colorr colorg;
 #X msg 627 331 normal colorr blablay blablaz;
-#X obj 740 170 bng 15 250 50 0 empty \$0-init100 empty 17 7 0 10 -262144
+#X obj 696 169 bng 15 250 50 0 empty \$0-init100 empty 17 7 0 10 -262144
 -1 -1;
 #X obj 841 56 cnv 15 120 160 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -670,7 +665,7 @@ performances if you wish to update point position at every frame;
 #X restore 849 184 pd wave;
 #X obj 849 162 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#N canvas 1290 231 654 435 oscillo~ 0;
+#N canvas 786 231 654 435 oscillo~ 0;
 #X obj 47 78 gemhead;
 #X obj 122 116 adc~;
 #X obj 218 63 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
@@ -767,7 +762,7 @@ update vertex normals from tables;
 colorA: update vertex colors from tables;
 #X text 27 267 Inlet 1: message: position / posX / posY / posZ: update
 vertex positions from tables;
-#N canvas 430 157 679 574 tabledata 0;
+#N canvas 428 155 679 574 tabledata 0;
 #X text 65 43 applying table data as vertex data;
 #X msg 30 100 position tabX tabY tabZ 0;
 #X msg 30 130 position tabXYZ 0;
@@ -805,14 +800,14 @@ at default offset=0);
 #X text 51 453 offset is always optional (default=0) \, and comes after
 the table names;
 #X text 50 507 unset table data is initialized to 0.f;
-#X restore 371 309 pd tabledata;
+#X restore 464 333 pd tabledata;
 #X text 27 384 Inlet 1: message: resize float : change the number of
 vertex to use;
 #X text 23 98 Vertex position \, color etc can be copy from pd table
 to the vertex buffer (VBO = Vertex Buffer Object). This object can
 draw lot's of points very efficiently.;
-#X obj 740 192 t b b b;
-#N canvas 1318 92 450 459 load_tables 0;
+#X obj 696 191 t b b b;
+#N canvas 990 92 450 459 load_tables 0;
 #X obj 31 71 noise~;
 #X obj 32 94 tabwrite~ colorr;
 #X obj 32 114 noise~;
@@ -856,65 +851,81 @@ draw lot's of points very efficiently.;
 #X connect 16 0 15 0;
 #X connect 17 0 15 0;
 #X connect 18 0 15 0;
-#X restore 797 222 pd load_tables;
+#X restore 735 222 pd load_tables;
 #X obj 579 675 gemvertexbuffer;
 #X msg 728 569 draw_range \$1 \$2;
 #X obj 728 549 pack 0 0;
 #X floatatom 728 507 5 0 0 0 - - -, f 5;
 #X floatatom 774 507 5 0 0 0 - - -, f 5;
 #X obj 774 526 t b f;
-#X text 27 449 Inlet 1: message: draw_range float float : set the range
+#X text 27 452 Inlet 1: message: draw_range float float : set the range
 for partial draw.;
 #X text 726 480 set start and end indexes to draw only a range of VBO
-, f 32;
+, f 33;
 #X text 668 458 as soon as they are updated;
 #X text 598 443 default : all VBO are disabled \, but they are enabled
 ;
 #X floatatom 699 135 5 1 64 0 - - -, f 5;
 #X floatatom 719 113 5 0 0 0 - - -, f 5;
+#X text 27 479 Inlet 1: message: program float : set the id for glsl
+program.;
+#X text 27 409 Inlet 1: message: postion_enable float \, color_enable
+float \, texture_enable float \, normal_enable float \, attribute_enable
+float : enable/disable the use of this data;
+#X text 27 507 Inlet 1: message: attribute name table (offset) : add
+attribute / update attribute from table;
+#X text 27 537 Inlet 1: message: reset_attributes : clear attribute
+data;
+#X text 27 552 Inlet 1: message: print_attributes : print active attributes
+;
+#X text 14 646 see examples/10.glsl/16.vertexbuffer_attributes.pd on
+how to;
+#X text 15 661 use attribute tables with the vertex buffer.;
+#X text 57 190 number of vertices to be used. if this is a power of
+two (2^n) \, you might have some performance gain.;
 #X connect 0 0 1 0;
 #X connect 9 0 10 0;
 #X connect 10 0 9 0;
-#X connect 22 0 71 0;
-#X connect 23 0 71 0;
-#X connect 24 0 71 0;
-#X connect 25 0 24 0;
-#X connect 26 0 38 0;
-#X connect 27 0 46 0;
-#X connect 28 0 48 0;
-#X connect 29 0 26 0;
-#X connect 30 0 28 0;
-#X connect 32 0 33 0;
-#X connect 33 0 71 0;
-#X connect 34 0 37 0;
-#X connect 35 0 36 0;
-#X connect 36 0 71 0;
-#X connect 37 0 71 0;
+#X connect 20 0 69 0;
+#X connect 21 0 69 0;
+#X connect 22 0 69 0;
+#X connect 23 0 22 0;
+#X connect 24 0 36 0;
+#X connect 25 0 44 0;
+#X connect 26 0 46 0;
+#X connect 27 0 24 0;
+#X connect 28 0 26 0;
+#X connect 30 0 31 0;
+#X connect 31 0 69 0;
+#X connect 32 0 35 0;
+#X connect 33 0 34 0;
+#X connect 34 0 69 0;
+#X connect 35 0 69 0;
+#X connect 36 0 37 0;
+#X connect 37 0 69 0;
 #X connect 38 0 39 0;
-#X connect 39 0 71 0;
-#X connect 40 0 41 0;
-#X connect 41 0 42 0;
-#X connect 42 0 38 0;
-#X connect 44 0 30 0;
-#X connect 46 0 71 0;
-#X connect 47 0 48 1;
-#X connect 48 0 29 0;
-#X connect 49 0 71 0;
-#X connect 50 0 71 0;
-#X connect 51 0 71 0;
-#X connect 52 0 71 0;
-#X connect 53 0 69 0;
+#X connect 39 0 40 0;
+#X connect 40 0 36 0;
+#X connect 42 0 28 0;
+#X connect 44 0 69 0;
+#X connect 45 0 46 1;
+#X connect 46 0 27 0;
+#X connect 47 0 69 0;
+#X connect 48 0 69 0;
+#X connect 49 0 69 0;
+#X connect 50 0 69 0;
+#X connect 51 0 67 0;
+#X connect 54 0 53 0;
 #X connect 56 0 55 0;
 #X connect 58 0 57 0;
-#X connect 60 0 59 0;
-#X connect 69 0 49 0;
-#X connect 69 1 50 0;
-#X connect 69 2 70 0;
+#X connect 67 0 47 0;
+#X connect 67 1 48 0;
+#X connect 67 2 68 0;
+#X connect 70 0 69 0;
+#X connect 71 0 70 0;
 #X connect 72 0 71 0;
-#X connect 73 0 72 0;
-#X connect 74 0 73 0;
-#X connect 75 0 76 0;
-#X connect 76 0 73 0;
-#X connect 76 1 73 1;
-#X connect 81 0 26 1;
-#X connect 82 0 29 3;
+#X connect 73 0 74 0;
+#X connect 74 0 71 0;
+#X connect 74 1 71 1;
+#X connect 79 0 24 1;
+#X connect 80 0 27 3;

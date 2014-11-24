@@ -14,7 +14,7 @@
 #X obj 256 263 outlet;
 #X text 311 265 count;
 #X obj 132 209 print nnrepeat-internal-error;
-#X text 23 295 nnrepeat.pd (GPL) <claudiusmaximus@goto10.org>;
+#X text 23 295 nnrepeat.pd (GPL) <claude@mathr.co.uk>;
 #X connect 0 0 6 0;
 #X connect 0 1 7 0;
 #X connect 1 0 0 1;

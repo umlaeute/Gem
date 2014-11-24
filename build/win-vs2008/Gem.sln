@@ -112,7 +112,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmAVI", "..\..\plugins\fi
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDS\win-vs2008\filmDS.vcproj", "{6EA41ED7-ECCD-4A9A-BED0-E8E4B4BD77EB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filmDS", "..\..\plugins\filmDSATL\win-vs2008\filmDS.vcproj", "{6EA41ED7-ECCD-4A9A-BED0-E8E4B4BD77EB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6CFDE67-C343-44D0-8584-5D82E396D594} = {E6CFDE67-C343-44D0-8584-5D82E396D594}
 	EndProjectSection

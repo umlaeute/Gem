@@ -33,6 +33,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg,
 /////////////////////////////////////////////////////////
 pix_imageInPlace :: pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
   : pix_multiimage(filename, baseImage, topImage, skipRate),
+    m_wantDownload(false),
     mInPreload(0),
     m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT)
 
@@ -64,6 +65,7 @@ bool pix_imageInPlace :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: render(GemState *state)
 {
+  if(m_wantDownload)downloadMess();
   // if we don't have an image, just return
   if (!m_numImages)
     return;
@@ -133,6 +135,12 @@ void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topI
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: downloadMess()
 {
+  if(getState()==INIT) {
+    m_wantDownload=true;
+    verbose(0, "deferring download until we have a valid context");
+    return;
+  }
+  m_wantDownload=false;
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
     error("cannot download now: do you have a window?");
     return;
@@ -210,7 +218,7 @@ void pix_imageInPlace :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else {
-    if(GLEW_EXT_texture_edge_clamp)
+    if(getState()!=INIT && GLEW_EXT_texture_edge_clamp)
       m_repeat = GL_CLAMP_TO_EDGE;
     else
       m_repeat = GL_CLAMP;
@@ -227,14 +235,10 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
 		  gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::downloadImageCallback),
-		  gensym("download"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::purgeImageCallback),
-		  gensym("purge"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::textureMessCallback),
-          gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::repeatMessCallback),
-          gensym("repeat"), A_FLOAT, A_NULL);
+  CPPEXTERN_MSG0(classPtr, "download", downloadMess);
+  CPPEXTERN_MSG0(classPtr, "purge", purgeMess);
+  CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
+  CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
 }
 
 void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_float baseImage,
@@ -249,20 +253,4 @@ void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_f
     }
   else
     GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
-}
-void pix_imageInPlace :: downloadImageCallback(void *data)
-{
-  GetMyClass(data)->downloadMess();
-}
-void pix_imageInPlace :: purgeImageCallback(void *data)
-{
-  GetMyClass(data)->purgeMess();
-}
-void pix_imageInPlace :: textureMessCallback(void *data, t_float quality)
-{
-  GetMyClass(data)->textureQuality((int)quality);
-}
-void pix_imageInPlace :: repeatMessCallback(void *data, t_float repeat)
-{
-  GetMyClass(data)->repeatMess((int)repeat);
 }

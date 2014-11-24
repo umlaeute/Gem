@@ -2,7 +2,7 @@
 #N canvas 22 516 450 300 1002-creator 0;
 #X restore 265 34 pd \$0-creator;
 #X obj 178 199 textfile;
-#X msg 213 156 read objects.txt \, rewind;
+#X msg 213 156 read objects.txt cr \, rewind;
 #X msg 152 149 bang;
 #X obj 152 171 until;
 #X msg 174 107 bang;

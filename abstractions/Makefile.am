@@ -9,6 +9,8 @@ nodist_gemabs_DATA = \
 
 dist_gemabs_DATA = \
 	gemhead.pd \
+	gemkeyboard.pd \
+	gemkeyname.pd \
 	gemmouse.pd \
 	gemorb.pd \
 	gemtablet.pd \

@@ -41,6 +41,7 @@ AC_CONFIG_FILES([plugins/filmTEST/Makefile])
 
 AC_CONFIG_FILES([plugins/modelOBJ/Makefile])
 AC_CONFIG_FILES([plugins/modelASSIMP2/Makefile])
+AC_CONFIG_FILES([plugins/modelASSIMP3/Makefile])
 
 AC_CONFIG_FILES([plugins/recordQT/Makefile])
 AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
@@ -57,6 +58,7 @@ AC_CONFIG_FILES([plugins/videoUNICAP/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L/Makefile])
 AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
+AC_CONFIG_FILES([plugins/videoVIDS/Makefile])
 AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 
 ## extra holds additional objects/libraries
@@ -147,7 +149,7 @@ AC_SUBST(GEM_EXTERNAL_CFLAGS)
 AC_SUBST(GEM_EXTERNAL_LIBS)
 
 
-GEM_CPPFLAGS="-DGEM_INTERNAL"
+GEM_CPPFLAGS=""
 
 if test "x$have_pddll" = "xyes"; then
  GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll"
@@ -173,6 +175,37 @@ GEM_TARGET(Particles)
 GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
+
+# checks for default headers
+IEM_CHECK_INCLUDES_DEFAULT([windows.h])
+
+# threading
+GEM_CHECK_THREADS
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
+AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
+
+AC_CHECK_HEADERS([wordexp.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+AC_CHECK_SIZEOF([unsigned int])
+AC_CHECK_SIZEOF([void *])
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_MMAP
+AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
 
 # Checks for libraries.
 
@@ -212,6 +245,7 @@ if test "x$with_x" != "xno"; then
 # AC_CHECK_LIB([X11],[main])
 # AC_CHECK_LIB([Xext],[main])
  AC_CHECK_LIB([Xxf86vm],[XF86VidModeGetAllModeLines])
+ AC_CHECK_HEADERS([X11/extensions/XInput2.h])
 fi
 
 IEM_CHECK_GL
@@ -247,12 +281,12 @@ if test "x${have_glew}" != "xyes"; then
   fi
 fi
 
-GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing], [yes])
+GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing])
 
 ## use GLFW windowing framework
-GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW windowing], [yes])
+GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW2 windowing])
 ## use GLFW3 windowing framework
-GEM_CHECK_LIB([glfw3], [glfw3],[GLFW/glfw3.h], [glfwGetPrimaryMonitor],,,,[GLFW windowing], [yes])
+GEM_CHECK_LIB([glfw3], [glfw3],[GLFW/glfw3.h], [glfwGetPrimaryMonitor],,,,[GLFW3 windowing])
 
 
 ## http://wiki.fifengine.de/Segfault_in_cxa_allocate_exception#Workaround_.231
@@ -297,7 +331,7 @@ GEM_CHECK_LIB([ImageMagick++],
 
 GEM_CHECK_LIB([MagickCore], 
               [Magick],[magick/MagickCore.h],
-              [main],
+              [IsMagickInstantiated],
               AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
    	          ,,[image loader])
 
@@ -392,10 +426,24 @@ GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [vid
 
 # assimp
 GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
+## check whether this is assimp2 or assimp3
+have_assimp2="no"
+have_assimp3="no"
 
+old_cflags=${CFLAGS}
+old_cxxflags=${CXXFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
+LDFLAGS="${LDFLAGS}  ${GEM_LIB_ASSIMP_LIBS}"
+AC_CHECK_HEADERS([assimp.h], [have_assimp2="yes"])
+AC_CHECK_HEADERS([assimp/cimport.h], [have_assimp3="yes"])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
 
+AM_CONDITIONAL([HAVE_ASSIMP2], [test "x${have_assimp2}" = "xyes" ])
+AM_CONDITIONAL([HAVE_ASSIMP3], [test "x${have_assimp3}" = "xyes" ])
 
-
+## text support
 AC_ARG_WITH([default-font],
             AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
            )
@@ -407,34 +455,6 @@ if test "x$with_default_font" != "x" && \
   AC_MSG_RESULT([using "${with_default_font}" as default font])
 fi
 
-# threading
-GEM_CHECK_THREADS
-
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
-AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
-AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
-
-AC_CHECK_HEADERS([wordexp.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-
-AC_CHECK_SIZEOF([unsigned int])
-AC_CHECK_SIZEOF([void *])
-
-# Checks for library functions.
-AC_FUNC_ERROR_AT_LINE
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_MMAP
-AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
-
 # enabling recording with quicktime4linux
 gem_tmp_lqt_libs="$LIBS"
 LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
@@ -444,13 +464,6 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
-
-### make-depend flags
-if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
-    AC_SUBST(MAKEDEP_FLAGS, "-MM")
-else
-    AC_SUBST(MAKEDEP_FLAGS, "-M")
-fi
 
 # using pix_videoOS rather than pix_video
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
@@ -671,11 +684,15 @@ if test "x$have_ieee1394" = "x"; then
 else
  have_ieee1394="yes (${have_ieee1394# })"
 fi
-
 if test "x${have_v4l}" = "x"; then have_v4l="no"; fi
 if test "x${have_v4l2}" = "x"; then have_v4l2="no"; fi
 if test "x${have_ieee1394}" = "x"; then have_ieee1394="no"; fi
 if test "x${have_libdv}" = "x"; then have_libdv="no"; fi
+if test "x${have_libdv}" != "xno"; then
+   if test "x${have_libiec61883}" != "xyes"; then have_libdv="no (missing libiec61883)"; fi
+   if test "x${have_libraw1394}" != "xyes"; then have_libdv="no (missing libraw1394)"; fi
+fi
+
 if test "x${have_unicap}" = "x"; then have_unicap="no"; fi
 if test "x${have_vfw32}" = "x"; then have_vfw32="no"; fi
 # TODO: have_ds

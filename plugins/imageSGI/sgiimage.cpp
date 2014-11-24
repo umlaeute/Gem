@@ -115,7 +115,8 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
 unsigned int32 *
 getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize)
 {
-  sizeofimage(textureFile, xsize, ysize, csize);
+  int size=sizeofimage(textureFile, xsize, ysize, csize);
+  if(size<1)return 0;
   return longimagedata(textureFile);
 }
 
@@ -182,9 +183,13 @@ static void readheader(FILE *inf, IMAGE *image)
   image->zsize = getshort(inf);
 }
 
-static int writeheader(FILE *outf, IMAGE *image)
+static int writeheader(FILE *outf, IMAGE *image, const char*name)
 {
   IMAGE t;
+  size_t namelen=0;
+  if(0==name)
+    name="no name";
+  namelen=strlen(name);
 
   memset(&t, 0, sizeof(IMAGE));
   fwrite(&t,sizeof(IMAGE),1,outf);
@@ -200,7 +205,16 @@ static int writeheader(FILE *outf, IMAGE *image)
   putlong(outf,image->min);
   putlong(outf,image->max);
   putlong(outf,0);
-  return fwrite("no name",8,1,outf);
+
+  // name can only be 80 characters (including terminating 0-byte) long
+  if(namelen>79){
+    unsigned char buf[1];
+    buf[0]=0;
+
+    fwrite(name, 79, 1, outf);
+    return fwrite(buf, 1, 1, outf);
+  }
+  return fwrite(name,namelen,1,outf);
 }
 
 static int writetab(FILE *outf, unsigned int32 *tab, int32 len)
@@ -445,7 +459,6 @@ unsigned int32 *longimagedata(const char *name)
   if(base)free(base);
   base=NULL;
  success:
-  if(lptr)free(lptr);
   if(rledat)free(rledat);
   if(verdat)free(verdat);
   if(starttab)free(starttab);
@@ -567,12 +580,13 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z)
  *	represents one pixel.  xsize and ysize specify the dimensions of
  *	the pixel array.  zsize specifies what kind of image file to
  *	write out.  if zsize is 1, the luminance of the pixels are
- *	calculated, and a sinlge channel black and white image is saved.
+ *	calculated, and a single channel black and white image is saved.
  *	If zsize is 3, an RGB image file is saved.  If zsize is 4, an
  *	RGBA image file is saved.
  *
  */
-int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, const char *name)
+int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
+		 const char *name, const char*imgname)
 {
   FILE *outf;
   IMAGE *image;
@@ -617,7 +631,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize, co
   image->zsize = static_cast<unsigned short>(zsize);
   image->min = 0;
   image->max = 255;
-  goodwrite *= writeheader(outf,image);
+  goodwrite *= writeheader(outf, image, imgname);
   if(fseek(outf,512+2*tablen,SEEK_SET) < 0) {
     printf("longstoimage: fseek failed\n");
     goto longstoimage_close;

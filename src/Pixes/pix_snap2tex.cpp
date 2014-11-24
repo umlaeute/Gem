@@ -145,6 +145,10 @@ void pix_snap2tex :: setTexCoords(float x, float y) {
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: snapMess(void)
 {
+ if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
 
   int width  = m_width;

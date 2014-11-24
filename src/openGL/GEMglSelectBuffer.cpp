@@ -23,9 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglSelectBuffer , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0){
-	len=-1;
-	buffer=0;
+GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0) :
+  size(0),
+  len(0), buffer(0)
+{
 	sizeMess(arg0);
 	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("size"));
 	m_bufout= outlet_new(this->x_obj, &s_list);
@@ -36,6 +37,7 @@ GEMglSelectBuffer :: GEMglSelectBuffer	(t_floatarg arg0){
 GEMglSelectBuffer :: ~GEMglSelectBuffer () {
   inlet_free(m_inlet);
   outlet_free(m_bufout);
+  delete[]buffer;
 }
 
 //////////////////
@@ -50,10 +52,12 @@ bool GEMglSelectBuffer :: isRunnable(void) {
 // Render
 //
 void GEMglSelectBuffer :: render(GemState *state) {
-  glSelectBuffer (size, buffer);
+  if(buffer)
+    glSelectBuffer (size, buffer);
 }
 
 void GEMglSelectBuffer :: postrender(GemState *state) {
+  if(!buffer)return;
   t_atom*ap=new t_atom[size];
   int i=0;
   for(i=0; i<size; i++) {

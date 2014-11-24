@@ -217,6 +217,18 @@ void gemhead :: setMess(t_float priority)
   gemreceive::nameMess(rcv);
 }
 
+void gemhead :: setContext(std::string contextName)
+{
+
+  std::string rcv="__gem_render"+contextName;
+  m_basename=rcv;
+
+  if(m_priority<0.f)
+    rcv+="_osd";
+
+  gemreceive::nameMess(rcv);
+}
+
 void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {
   if(m_renderOn && gensym("gem_state")==s) {
     if(1==argc && A_FLOAT==argv->a_type) {
@@ -281,4 +293,5 @@ void gemhead :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "float", renderOnOff, int);
   CPPEXTERN_MSG1(classPtr, "set", setMess, int);
+  CPPEXTERN_MSG1(classPtr, "context", setContext, std::string);
 }

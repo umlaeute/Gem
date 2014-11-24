@@ -244,19 +244,21 @@ AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_GENERIC],
  AS_IF([test "X$ax_check_gl_manual_libs_generic_extra_libs" = "X"],
        [AC_MSG_ERROR([AX_CHECK_GL_MANUAL_LIBS_GENERIC argument must no be empty])])
 
- AC_LANG_PUSH([C])
- _AX_CHECK_GL_SAVE_FLAGS()
- CFLAGS="${GL_CFLAGS} ${CFLAGS}"
- LIBS="${GL_LIBS} ${LIBS}"
- AC_SEARCH_LIBS([glBegin],[$ax_check_gl_manual_libs_generic_extra_libs],
-                [ax_check_gl_lib_opengl="yes"],
-                [ax_check_gl_lib_opengl="no"])
- AS_CASE([$ac_cv_search_glBegin],
-         ["none required"],[],
- 	 [no],[],
- 	 [GL_LIBS="${ac_cv_search_glBegin} ${GL_LIBS}"])
-  _AX_CHECK_GL_RESTORE_FLAGS()
-  AC_LANG_PUSH([C])
+ ax_check_gl_lib_opengl="no"
+ extralib=""
+ for extralibs in " " $ax_check_gl_manual_libs_generic_extra_libs; do
+       AC_LANG_PUSH([C])
+        _AX_CHECK_GL_SAVE_FLAGS()
+       AS_IF([test "X$extralibs" = "X "],[extralib=""],[extralib="-l$extralibs"])
+       LIBS="$extralib ${GL_LIBS} ${LIBS}"
+       AC_LINK_IFELSE([_AX_CHECK_GL_PROGRAM],
+                      [ax_check_gl_lib_opengl="yes"],
+                      [ax_check_gl_lib_opengl="no"])
+       _AX_CHECK_GL_RESTORE_FLAGS()
+       AC_LANG_POP([C])
+       AS_IF([test "X$ax_check_gl_lib_opengl" = "Xyes"],[break])
+ done
+ AS_IF([test "X$ax_check_gl_lib_opengl" = "Xyes"],[GL_LIBS="$extralib ${GL_LIBS}"])
 ])
 
 # dnl try to found lib under darwin

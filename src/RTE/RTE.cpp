@@ -102,7 +102,9 @@ RTE* RTE::getRuntimeEnvironment(void) {
 }
 
 typedef int (*close_t)(int fd);
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 std::string RTE::findFile(const std::string&f, const std::string&e, const void* ctx) const {
   char buf[MAXPDSTRING], buf2[MAXPDSTRING];
   char*bufptr=0;

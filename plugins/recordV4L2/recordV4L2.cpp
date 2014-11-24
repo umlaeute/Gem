@@ -22,6 +22,9 @@
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
+// for verbose():
+#include "Gem/RTE.h"
+
 #include "plugins/PluginFactory.h"
 
 using namespace gem::plugins;

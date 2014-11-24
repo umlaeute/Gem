@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_subtract.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_subtract);
 

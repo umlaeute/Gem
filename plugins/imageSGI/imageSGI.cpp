@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -27,7 +27,7 @@
 using namespace gem::plugins;
 
 REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
-
+REGISTER_IMAGESAVERFACTORY ("SGI", imageSGI);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,7 @@ REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-imageSGI :: imageSGI(void) 
+imageSGI :: imageSGI(void)
 {
   //post("imageSGI");
 }
@@ -54,7 +54,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
 {
   int32 xsize, ysize, csize;
   if (!sizeofimage(filename.c_str(), &xsize, &ysize, &csize) )
-    return(NULL);
+    return(false);
 
   ::verbose(2, "reading '%s' with SGI", filename.c_str());
 
@@ -70,7 +70,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
     return(false);
   }
   result.reallocate();
-   
+
   unsigned int32 *readData = longimagedata((char *)filename.c_str());
   if (!readData) {
     //error("GemImageLoad: error reading SGI image file: %s", filename.c_str());
@@ -127,13 +127,38 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
   }
 
   free(readData);
-   
+
   return true;
 }
 
 bool imageSGI::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  return false;
+  imageStruct img;
+  image.convertTo(&img, GL_RGBA);
+  unsigned int32*data=(unsigned int32*)img.data;
+
+  std::string name="Gem image";
+  props.get("imagename", name);
+
+  int result=0;
+  if(data)result=longstoimage(data, img.xsize, img.ysize, 4, filename.c_str(), name.c_str());
+
+  return (0!=result);
 }
 float imageSGI::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  return 0.;
+  float result=0;
+  if("image/sgi" == mimetype)result+=100;
+  else if ("image/x-rgb" == mimetype)result+=50;
+
+  if(gem::Properties::UNSET != props.type("imagename"))result+=1.;
+  return result;
+}
+void imageSGI::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+  mimetypes.clear();
+  props.clear();
+
+  mimetypes.push_back("image/sgi");
+  mimetypes.push_back("image/x-rgb"); // ??
+
+  gem::any value=std::string("");
+  props.set("imagename", value);
 }

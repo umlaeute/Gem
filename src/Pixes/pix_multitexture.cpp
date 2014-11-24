@@ -38,7 +38,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
-  : m_inlet(NULL),
+  : m_inlet(NULL), m_numInlets(0),
     m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D), m_mode(0),
     m_xRatio(1.f), m_yRatio(1.f), upsidedown(false), m_texSizeX(0), m_texSizeY(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
@@ -52,9 +52,10 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   m_textureType = GL_TEXTURE_RECTANGLE_EXT;
 #endif
 
-  m_inlet=new t_inlet*[m_reqTexUnits];
+  m_numInlets=m_reqTexUnits;
+  m_inlet=new t_inlet*[m_numInlets];
   char tempVt[5];
-  for(int i=0;i<m_reqTexUnits; i++){
+  for(int i=0;i<m_numInlets; i++){
     snprintf(tempVt, 5, "#%d", i);
     tempVt[4]=0;
     m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym(tempVt));
@@ -68,7 +69,7 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
 pix_multitexture :: ~pix_multitexture()
 {
   if(m_inlet){
-    for(int i=0;i<m_reqTexUnits; i++){
+    for(int i=0;i<m_numInlets; i++){
       inlet_free(m_inlet[i]);
     }
     delete[]m_inlet;

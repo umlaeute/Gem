@@ -50,6 +50,14 @@ typedef struct _GLMgroup {
   GLuint*           triangles;      /* array of triangle indices */
   GLuint            material;       /* index to material for group */
   struct _GLMgroup* next;           /* pointer to next group in model */
+
+  _GLMgroup(std::string _name, struct _GLMgroup*_next=0)
+    : name(_name)
+    , numtriangles(0)
+    , triangles(0)
+    , material(0)
+    , next(_next)
+  {}
 } GLMgroup;
 
 /* GLMmodel: Structure that defines a model.
@@ -90,9 +98,28 @@ typedef struct _GLMmodel {
    */
   GLuint   numuvtexcoords;        /* number of texcoords in model */
   GLfloat* uvtexcoords;           /* array of texture coordinates */
+
+  _GLMmodel(void)
+    : pathname(std::string())
+    , mtllibname(std::string())
+    , numvertices(0)
+    , vertices(0)
+    , numnormals(0)
+    , normals(0)
+    , numtexcoords(0)
+    , texcoords(0)
+    , numfacetnorms(0)
+    , facetnorms(0)
+    , numtriangles(0)
+    , triangles(0)
+    , nummaterials(0)
+    , materials(0)
+    , numgroups(0)
+    , groups(0)
+    , numuvtexcoords(0)
+    , uvtexcoords(0)
+{position[0]=position[1]=position[2]=0.;}
 } GLMmodel;
-
-
 
 /* _GLMnode: general purpose node */
 typedef struct _GLMnode {
@@ -101,6 +128,8 @@ typedef struct _GLMnode {
   struct _GLMnode* next;
 } GLMnode;
 
+/* fill the vector with model data */
+void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors);
 
 /* glmMax: returns the maximum of two floats */
 static GLfloat
@@ -132,6 +161,7 @@ _glmDot(GLfloat* u, GLfloat* v)
 
   return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
 }
+
 
 /* glmCross: compute the cross product of two vectors
  *
@@ -231,7 +261,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
 static GLMgroup*
 _glmFindGroup(const GLMmodel* model, const std::string&name)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
 
   if (!(model))return NULL;
 
@@ -249,16 +279,11 @@ _glmFindGroup(const GLMmodel* model, const std::string&name)
 static GLMgroup*
 _glmAddGroup(GLMmodel* model, const std::string&name)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
 
   group = _glmFindGroup(model, name);
   if (!group) {
-    group = new GLMgroup;
-    group->name = name;
-    group->material = 0;
-    group->numtriangles = 0;
-    group->triangles = NULL;
-    group->next = model->groups;
+    group = new GLMgroup(name, model->groups);
     model->groups = group;
     model->numgroups++;
   }
@@ -281,7 +306,7 @@ _glmFindMaterial(const GLMmodel* model, const std::string&name)
 
   /* didn't find the name, so print a warning and return the default
      material (0). */
-  error("_glmFindMaterial():  can't find material \"%s\".", name.c_str());
+  verbose(0, "_glmFindMaterial():  can't find material \"%s\".", name.c_str());
   i = 0;
 
  found:
@@ -318,7 +343,7 @@ _glmDirName(const std::string&path)
 static GLint
 _glmReadMTL(GLMmodel* model, const std::string&name)
 {
-  FILE* file;
+  FILE* file=0;
   char    buf[128];
   GLuint nummaterials, i;
 
@@ -327,13 +352,14 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   file = fopen(filename.c_str(), "r");
   if (!file) {
-    error("_glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
+    verbose(0, "_glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
     return -1;
   }
 
   /* count the number of materials in the file */
   nummaterials = 1;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -343,11 +369,11 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmReadMTL() failed reading new material"); goto mtlread_failed;
+        verbose(0, "_glmReadMTL() failed reading new material"); goto mtlread_failed;
       }
       nummaterials++;
       if(EOF == sscanf(buf, "%s %s", buf, buf)) {
-        error("_glmReadMTL() failed reading material"); goto mtlread_failed;
+        verbose(0, "_glmReadMTL() failed reading material"); goto mtlread_failed;
       }
       break;
     default:
@@ -385,7 +411,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   /* now, read in the data */
   nummaterials = 0;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -395,13 +422,13 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmReadMTL() really failed reading new material"); goto mtlread_failed;
+        verbose(0, "_glmReadMTL() really failed reading new material"); goto mtlread_failed;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
 	nummaterials++;
 	model->materials[nummaterials].name = std::string(buf);
       } else {
-	error("_glmReadMTL() failed reading material");
+	verbose(0, "_glmReadMTL() failed reading material");
       }
       break;
     case 'N':
@@ -410,7 +437,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 	model->materials[nummaterials].shininess /= 1000.0;
 	model->materials[nummaterials].shininess *= 128.0;
       } else {
-	error("_glmReadMTL() failed reading material shininess");
+	verbose(0, "_glmReadMTL() failed reading material shininess");
       }
       break;
     case 'K':
@@ -421,7 +448,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 			 &model->materials[nummaterials].diffuse[1],
 			 &model->materials[nummaterials].diffuse[2])) {
 	} else {
-	  error("_glmReadMTL() failed reading diffuse material");
+	  verbose(0, "_glmReadMTL() failed reading diffuse material");
 	}
         break;
       case 's':
@@ -430,7 +457,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 			 &model->materials[nummaterials].specular[1],
 			 &model->materials[nummaterials].specular[2])) {
 	} else {
-	  error("_glmReadMTL() failed reading specular material");
+	  verbose(0, "_glmReadMTL() failed reading specular material");
 	}
         break;
       case 'a':
@@ -439,7 +466,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 			 &model->materials[nummaterials].ambient[1],
 			 &model->materials[nummaterials].ambient[2])) {
 	} else {
-	  error("_glmReadMTL() failed reading ambient material");
+	  verbose(0, "_glmReadMTL() failed reading ambient material");
 	}
         break;
       default:
@@ -474,8 +501,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 static GLboolean
 _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtllibname)
 {
-  FILE* file;
-  GLMmaterial* material;
+  FILE* file=0;
+  GLMmaterial* material=0;
   GLuint i;
 
   std::string filename = _glmDirName(model->pathname);
@@ -484,7 +511,7 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtl
   /* open the file */
   file = fopen(filename.c_str(), "w");
   if (!file) {
-    error("_glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
+    verbose(0, "_glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
     return GL_FALSE;
   }
 
@@ -528,15 +555,14 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   GLuint  numnormals;         /* number of normals in model */
   GLuint  numtexcoords;       /* number of texcoords in model */
   GLuint  numtriangles;       /* number of triangles in model */
-  GLMgroup* group;            /* current group */
+  GLMgroup* group=0;          /* current group */
   unsigned    v, n, t;
   char        buf[128];
-
   /* make a default group */
   group = _glmAddGroup(model, "default");
-
   numvertices = numnormals = numtexcoords = numtriangles = 0;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -549,38 +575,38 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass failed reading vertex"); return GL_FALSE;
+          verbose(0, "_glmFirstPass failed reading vertex"); return GL_FALSE;
         }
         numvertices++;
         break;
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass failed reading normals"); return GL_FALSE;
+          verbose(0, "_glmFirstPass failed reading normals"); return GL_FALSE;
         }
         numnormals++;
         break;
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          error("_glmFirstPass failed reading texcoords"); return GL_FALSE;
+          verbose(0, "_glmFirstPass failed reading texcoords"); return GL_FALSE;
         }
         numtexcoords++;
         break;
       default:
-        error("_glmFirstPass: Unknown token \"%s\".", buf);
+        verbose(0, "_glmFirstPass: Unknown token \"%s\".", buf);
         return GL_FALSE;
       }
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass failed reading material"); return GL_FALSE;
+        verbose(0, "_glmFirstPass failed reading material"); return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
 	model->mtllibname = buf;
 	_glmReadMTL(model, buf);
       } else {
-	error("glmFirstPass failed reading material lib");
+	verbose(0, "glmFirstPass failed reading material lib");
       }
       break;
     case 'u':
@@ -592,12 +618,12 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmFirstPass failed reading groups"); return GL_FALSE;
+        verbose(0, "_glmFirstPass failed reading groups"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF != sscanf(buf, "%s", buf)) {
       } else {
-	error("_glmFirstPass failed reading single-string group name");
+	verbose(0, "_glmFirstPass failed reading single-string group name");
 	return GL_FALSE;
       }
 #else
@@ -607,8 +633,9 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       break;
     case 'f':               /* face */
       v = n = t = 0;
-      if(EOF != fscanf(file, "%s", buf)) {
+      if(EOF != fscanf(file, "%127s", buf)) {
       /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
+	 buf[127]=0;
          if (strstr(buf, "//")) {
            /* v//n */
 	   if(EOF == sscanf(buf, "%d//%d", &v, &n)) {
@@ -751,7 +778,8 @@ _glmSecondPass(GLMmodel* model, FILE* file)
   numvertices = numnormals = numtexcoords = 1;
   numtriangles = 0;
   material = 0;
-  while(fscanf(file, "%s", buf) != EOF) {
+  while(fscanf(file, "%127s", buf) != EOF) {
+    buf[127]=0;
     switch(buf[0]) {
     case '#':               /* comment */
       /* eat up rest of line */
@@ -794,22 +822,22 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'u':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmSecondPass() failed reading material"); return GL_FALSE;
+        verbose(0, "_glmSecondPass() failed reading material"); return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
 	group->material = material = _glmFindMaterial(model, buf);
       } else {
-        error("_glmSecondPass() failed finding material"); return GL_FALSE;
+        verbose(0, "_glmSecondPass() failed finding material"); return GL_FALSE;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        error("_glmSecondPass() failed reading group"); return GL_FALSE;
+        verbose(0, "_glmSecondPass() failed reading group"); return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF == sscanf(buf, "%s", buf)) {
-	error("_glmSecondPass() failed reading single-string group name"); return GL_FALSE;
+	verbose(0, "_glmSecondPass() failed reading single-string group name"); return GL_FALSE;
       }
 #else
       buf[strlen(buf)-1] = '\0';  /* nuke '\n' */
@@ -819,27 +847,28 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'f':               /* face */
       v = n = t = 0;
-      if(EOF != fscanf(file, "%s", buf)) {
+      if(EOF != fscanf(file, "%127s", buf)) {
       /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
+	 buf[127]=0;
          if (strstr(buf, "//")) {
            /* v//n */
 	   if(EOF != sscanf(buf, "%d//%d", &v, &n)) {
 	     T(numtriangles).vindices[0] = fixIndex(v,numvertices);
 	     T(numtriangles).nindices[0] = fixIndex(n,numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/n.");
+	     verbose(0, "_glmSecondPass() failed reading v/n.");
 	   }
            if(EOF != fscanf(file, "%d//%d", &v, &n)) {
 	     T(numtriangles).vindices[1] = fixIndex(v,numvertices);
 	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/n..");
+	     verbose(0, "_glmSecondPass() failed reading v/n..");
 	   }
            if(EOF != fscanf(file, "%d//%d", &v, &n)) {
 	     T(numtriangles).vindices[2] = fixIndex(v,numvertices);
 	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/n...");
+	     verbose(0, "_glmSecondPass() failed reading v/n...");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -863,14 +892,14 @@ _glmSecondPass(GLMmodel* model, FILE* file)
 	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
 	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t/n.");
+	     verbose(0, "_glmSecondPass() failed reading v/t/n.");
 	   }
            if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
 	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
 	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
 	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t/n..");
+	     verbose(0, "_glmSecondPass() failed reading v/t/n..");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -895,13 +924,13 @@ _glmSecondPass(GLMmodel* model, FILE* file)
 	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
 	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t.");
+	     verbose(0, "_glmSecondPass() failed reading v/t.");
 	   }
            if(EOF != fscanf(file, "%d/%d", &v, &t)) {
 	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
 	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
 	   } else {
-	     error("_glmSecondPass() failed reading v/t..");
+	     verbose(0, "_glmSecondPass() failed reading v/t..");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -920,17 +949,17 @@ _glmSecondPass(GLMmodel* model, FILE* file)
            if(EOF != sscanf(buf, "%d", &v)) {
 	     T(numtriangles).vindices[0] = fixIndex(v, numvertices);
 	   } else {
-	     error("_glmSecondPass() failed reading v.");
+	     verbose(0, "_glmSecondPass() failed reading v.");
 	   }
            if(EOF != fscanf(file, "%d", &v)) {
 	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
 	   } else {
-	     error("_glmSecondPass() failed reading v..");
+	     verbose(0, "_glmSecondPass() failed reading v..");
 	   }
            if(EOF != fscanf(file, "%d", &v)) {
 	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
 	   } else {
-	     error("_glmSecondPass() failed reading v...");
+	     verbose(0, "_glmSecondPass() failed reading v...");
 	   }
            group->triangles[group->numtriangles++] = numtriangles;
            numtriangles++;
@@ -1204,11 +1233,11 @@ glmFacetNormals(GLMmodel* model)
 GLvoid
 glmVertexNormals(GLMmodel* model, GLfloat angle)
 {
-  GLMnode*    node;
-  GLMnode*    tail;
-  GLMnode** members;
-  GLfloat*    normals;
-  GLuint  numnormals;
+  GLMnode*    node=0;
+  GLMnode*    tail=0;
+  GLMnode** members=0;
+  GLfloat*    normals=0;
+  GLuint  numnormals=0;
   GLfloat average[3];
   GLfloat dot, cos_angle;
   GLuint  i, avg;
@@ -1258,7 +1287,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
        facet normal of every triangle this vertex is in */
     node = members[i];
     if (!node)
-      error("glmVertexNormals(): vertex w/o a triangle");
+      verbose(0, "glmVertexNormals(): vertex w/o a triangle");
     average[0] = 0.0; average[1] = 0.0; average[2] = 0.0;
     avg = 0;
     while (node) {
@@ -1358,7 +1387,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
 GLvoid
 glmUVTexture(GLMmodel* model, float h, float w)
 {
-  GLMgroup *group;
+  GLMgroup *group=0;
   GLuint i;
 
   if(!model)return;
@@ -1398,7 +1427,7 @@ glmUVTexture(GLMmodel* model, float h, float w)
 GLvoid
 glmLinearTexture(GLMmodel* model, float h, float w)
 {
-  GLMgroup *group;
+  GLMgroup *group=0;
   GLfloat dimensions[3];
   GLfloat x, y, scalefactor;
   GLuint i;
@@ -1450,7 +1479,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
 GLvoid
 glmSpheremapTexture(GLMmodel* model, float h, float w)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
   GLfloat theta, phi, rho, x, y, z, r;
   GLuint i;
 
@@ -1560,7 +1589,7 @@ glmGetNumGroups(GLMmodel *model){return (model && model->groups)?model->numgroup
 GLvoid
 glmDelete(GLMmodel* model)
 {
-  GLMgroup* group;
+  GLMgroup* group=0;
   GLuint i;
 
   if (!(model))return;
@@ -1602,13 +1631,13 @@ glmDelete(GLMmodel* model)
 GLMmodel*
 glmReadOBJ(const char* filename)
 {
-  GLMmodel* model;
-  FILE*   file;
+  GLMmodel* model=0;
+  FILE*   file=0;
 
   /* open the file */
   file = fopen(filename, "r");
   if (!file) {
-    error("glmReadOBJ() failed: can't open data file \"%s\".", filename);
+    verbose(0, "glmReadOBJ() failed: can't open data file \"%s\".", filename);
     return NULL;
   }
 
@@ -1639,7 +1668,7 @@ glmReadOBJ(const char* filename)
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
   if(GL_FALSE==_glmFirstPass(model, file)){
-    error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "glmReadOBJ() failed: can't parse file \"%s\".", filename);
     goto readobj_failed;
   }
 
@@ -1657,7 +1686,7 @@ glmReadOBJ(const char* filename)
   rewind(file);
 
   if(GL_FALSE==_glmSecondPass(model, file)) {
-    error("glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "glmReadOBJ() failed: can't parse file \"%s\".", filename);
     goto readobj_failed;
   }
 
@@ -1693,8 +1722,8 @@ GLint
 glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 {
   GLuint  i;
-  FILE*   file;
-  GLMgroup* group;
+  FILE*   file=0;
+  GLMgroup* group=0;
 
   if (!(model))return -1;
 
@@ -1739,7 +1768,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   /* open the file */
   file = fopen(filename, "w");
   if (!file) {
-    error("glmWriteOBJ() failed: can't open file \"%s\" to write.", filename);
+    verbose(0, "glmWriteOBJ() failed: can't open file \"%s\" to write.", filename);
     return -1;
   }
 
@@ -1884,12 +1913,12 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(const GLMmodel* model, GLuint mode)
+glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
-  static GLMgroup* group;
-  static GLMtriangle* triangle;
-  static GLMmaterial* material;
+  static GLMgroup* group=0;
+  static GLMtriangle* triangle=0;
+  static GLMmaterial* material=0;
 
   if (!(model))return;
   if (!(model->vertices))return;
@@ -1942,6 +1971,13 @@ glmDraw(const GLMmodel* model, GLuint mode)
 
   group = model->groups;
   while (group) {
+    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
+    group = group->next;
+  }
+}
+
+void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors){
+
     if (mode & GLM_MATERIAL) {
       material = &model->materials[group->material];
       glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
@@ -1950,41 +1986,79 @@ glmDraw(const GLMmodel* model, GLuint mode)
       glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
     }
 
+    std::vector<float> vec, color;
+    float* pt=0;
+    int i;
     if (mode & GLM_COLOR) {
-      glColor3fv(material->diffuse);
+      color.insert(color.end(),material->diffuse,material->diffuse + 3);
+      color.push_back(1.);
     }
 
-    glBegin(GL_TRIANGLES);
     for (i = 0; i < group->numtriangles; i++) {
       triangle = &T(group->triangles[i]);
+      if (mode & GLM_FLAT) {
+        pt = &model->facetnorms[3 * triangle->findex];
+        vec = std::vector<float>(pt, pt + 3);
+        for ( int j=0; j<3 ; j++){
+          normals.push_back(vec);
+        }
+      }
 
-      if (mode & GLM_FLAT)
-        glNormal3fv(&model->facetnorms[3 * triangle->findex]);
+      if (mode & GLM_SMOOTH) {
+        //~glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
+        pt = &model->normals[3 * triangle->nindices[0]];
+        vec = std::vector<float>(pt, pt + 3);
+        normals.push_back(vec);
+      }
+      if (mode & GLM_TEXTURE) {
+        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
+        pt =   &model->texcoords[2 * triangle->tindices[0]];
+        vec = std::vector<float>(pt, pt + 2);
+        texcoords.push_back(vec);
+      }
+      //~glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
+      pt = &model->vertices[3 * triangle->vindices[0]];
+      vec = std::vector<float>(pt, pt + 3);
+      vertices.push_back(vec);
+      if(!color.empty()) colors.push_back(color);
 
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
+      if (mode & GLM_SMOOTH) {
+        //~glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
+        pt = &model->normals[3 * triangle->nindices[1]];
+        vec = std::vector<float>(pt, pt + 3);
+        normals.push_back(vec);
+      }
+      if (mode & GLM_TEXTURE) {
+        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
+        pt =   &model->texcoords[2 * triangle->tindices[1]];
+        vec = std::vector<float>(pt, pt + 2);
+        texcoords.push_back(vec);
+      }
+      //~glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
+      pt = &model->vertices[3 * triangle->vindices[1]];
+      vec = std::vector<float>(pt, pt + 3);
+      vertices.push_back(vec);
+      if(!color.empty()) colors.push_back(color);
 
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
-
+      if (mode & GLM_SMOOTH) {
+        //~glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
+        pt = &model->normals[3 * triangle->nindices[2]];
+        vec = std::vector<float>(pt, pt + 3);
+        normals.push_back(vec);
+      }
+      if (mode & GLM_TEXTURE) {
+        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
+        pt =   &model->texcoords[2 * triangle->tindices[2]];
+        vec = std::vector<float>(pt, pt + 2);
+        texcoords.push_back(vec);
+      }
+      //~glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
+      pt = &model->vertices[3 * triangle->vindices[2]];
+      vec = std::vector<float>(pt, pt + 3);
+      vertices.push_back(vec);
+      if(!color.empty()) colors.push_back(color);
     }
-    glEnd();
-
-    group = group->next;
   }
-}
 
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
@@ -2001,13 +2075,13 @@ glmDraw(const GLMmodel* model, GLuint mode)
  * GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(const GLMmodel* model, GLuint mode)
+glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
   modList = glGenLists(1);
   glNewList(modList, GL_COMPILE);
-  glmDraw(model, mode);
+  glmDraw(model, mode, vertices, normals, texcoords, colors);
   glEndList();
 
   return modList;
@@ -2018,12 +2092,12 @@ glmList(const GLMmodel* model, GLuint mode)
  */
 
 GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber)
+glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
-  static GLMgroup* group;
-  static GLMtriangle* triangle;
-  static GLMmaterial* material;
+  static GLMgroup* group=0;
+  static GLMtriangle* triangle=0;
+  static GLMmaterial* material=0;
 
   if (!(model))return;
   if (!(model->vertices))return;
@@ -2091,60 +2165,18 @@ glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber)
       group = group->next;
       count++;
     }
-
-
-    if (mode & GLM_MATERIAL) {
-      material = &model->materials[group->material];
-      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
-      glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
-    }
-
-    if (mode & GLM_COLOR) {
-      glColor3fv(material->diffuse);
-    }
-
-    glBegin(GL_TRIANGLES);
-    for (i = 0; i < group->numtriangles; i++) {
-      triangle = &T(group->triangles[i]);
-
-      if (mode & GLM_FLAT)
-        glNormal3fv(&model->facetnorms[3 * triangle->findex]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
-
-      if (mode & GLM_SMOOTH)
-        glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
-      if (mode & GLM_TEXTURE)
-        glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
-      glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
-
-    }
-    glEnd();
+    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
   }
-  // group = group->next;
-  //  }
 }
 
 GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber)
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
   modList = glGenLists(1);
   glNewList(modList, GL_COMPILE);
-  glmDrawGroup(model, mode,groupNumber);
+  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords, colors);
   glEndList();
 
   return modList;
@@ -2161,8 +2193,8 @@ glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber)
 GLvoid
 glmWeld(GLMmodel* model, GLfloat epsilon)
 {
-  GLfloat* vectors;
-  GLfloat* copies;
+  GLfloat* vectors=0;
+  GLfloat* copies=0;
   GLuint   numvectors;
   GLuint   i;
 
@@ -2227,9 +2259,9 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
 GLubyte*
 glmReadPPM(const char* filename, int* width, int* height)
 {
-  FILE* fp;
+  FILE* fp=0;
   int i, w, h, d;
-  unsigned char* image;
+  unsigned char* image=0;
   unsigned long imagesize=0;
   char head[70];          /* max line <= 70 in PPM (per spec). */
 
@@ -2242,10 +2274,10 @@ glmReadPPM(const char* filename, int* width, int* height)
   /* grab first two chars of the file and make sure that it has the
      correct magic cookie for a raw PPM file. */
   if(NULL==fgets(head, 70, fp)) {
-    error("_glmReadPPM() failed reading header"); return NULL;
+    verbose(0, "_glmReadPPM() failed reading header"); return NULL;
   }
   if (strncmp(head, "P6", 2)) {
-    error("%s: Not a raw PPM file", filename);
+    verbose(0, "%s: Not a raw PPM file", filename);
     return NULL;
   }
 
@@ -2253,7 +2285,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   i = 0;
   while(i < 3) {
     if(NULL==fgets(head, 70, fp)) {
-      error("_glmReadPPM() failed header info"); return NULL;
+      verbose(0, "_glmReadPPM() failed header info"); return NULL;
     }
     if (head[0] == '#')     /* skip comments. */
       continue;
@@ -2277,7 +2309,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
   if(count!=imagesize) {
-    error("_glmReadPPM failed to read all bytes");
+    verbose(0, "_glmReadPPM failed to read all bytes");
     *width=*height=0;
     delete[]image;
     image=NULL;

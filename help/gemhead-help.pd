@@ -1,10 +1,10 @@
-#N canvas 32 22 937 572 10;
+#N canvas 30 89 960 649 10;
 #X text 452 8 GEM object;
-#X obj 8 438 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 438 cnv 15 430 150 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 18 440 Inlets:;
-#X text 18 518 Outlets:;
-#X text 36 531 Outlet 1: gemlist;
+#X text 18 558 Outlets:;
+#X text 36 571 Outlet 1: gemlist;
 #X obj 8 393 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 398 Arguments:;
@@ -17,7 +17,7 @@
 0;
 #X msg 622 391 create;
 #X text 618 370 Create window:;
-#N canvas 0 22 450 300 gemwin 0;
+#N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -95,6 +95,8 @@ light).;
 #X obj 630 181 translateXYZ 0 2 0;
 #X obj 630 138 gemhead 50;
 #X obj 791 183 translateXYZ 2 0 0;
+#X text 42 520 Inlet 1: context <name> : change rendering context (for
+multiple windows).;
 #X connect 12 0 14 0;
 #X connect 14 0 12 0;
 #X connect 26 0 30 0;

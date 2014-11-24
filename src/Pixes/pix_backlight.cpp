@@ -14,6 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_backlight.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_backlight);
 

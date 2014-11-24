@@ -16,6 +16,7 @@
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME ( GEMglColorMaterial );
+using namespace gem::utils::gl;
 
 /////////////////////////////////////////////////////////
 //

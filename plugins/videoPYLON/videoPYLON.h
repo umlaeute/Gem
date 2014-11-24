@@ -99,7 +99,7 @@ namespace gem { namespace plugins {
   Pylon::CTlFactory*m_factory;
 
   Pylon::CBaslerGigECamera*m_camera;
-  Pylon::CBaslerGigEStreamGrabber*m_grabber;
+  Pylon::CPylonGigEStreamGrabber*m_grabber;
 
   class Converter;
   Converter*m_converter;

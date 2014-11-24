@@ -1,0 +1,10 @@
+## w32 build projects
+build/win-vs*/*
+plugins/*/win-vs*/*
+extra/*/win-vs*/*
+*.vcproj.*.*.user
+!*.dsw
+!*.dsp
+!*.sln
+!*.vcproj
+!*.vsprops
