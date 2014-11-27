@@ -2,5 +2,7 @@ os:
   - linux
   - osx
 
+before_install:
+  - ./build/travis-ci/depinstall.sh
 script:
   - ./build/travis-ci/build.sh
