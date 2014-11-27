@@ -6,9 +6,7 @@ cd "${DEPPATH}"
 
 PDDIR=/usr/include/pd
 doinstall() {
-  sudo apt-get update -qq
-  sudo apt-get build-dep gem -qq
-  sudo apt-get install libglfw-dev libglfw3-dev libsdl2-dev -qq
+  sudo ../depinstall-linux.sudo.sh
 
   #wget http://msp.ucsd.edu/Software/pd-0.46-2.src.tar.gz
   #tar -xvf pd-0.46-2.src.tar.gz
