@@ -1,0 +1,6 @@
+os:
+  - linux
+  - osx
+
+script:
+  - ./build/travis-ci/build.sh
