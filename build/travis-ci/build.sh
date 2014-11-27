@@ -1,3 +1,4 @@
+#!/bin/sh
 # this script is intended to be run by Travis
 # see https://travis-ci.org/umlaeute/Gem
 
@@ -6,6 +7,11 @@
 
 SCRIPTDIR=${0%/*}
 GEMDIR=$(readlink -f "${SCRIPTDIR}/../..")
+
+debug() {
+ echo "$@" 1>&2
+ $@
+}
 
 cd "${SCRIPTDIR}"
 
@@ -26,11 +32,11 @@ case "$TRAVIS_OS_NAME" in
   # tar -xvf pd-0.46-2.src.tar.gz
   # PDDIR=${SCRIPTDIR}/pd-0.46-2/src
 
-  ${GEMDIR}/autogen.sh  || exit 1
+  debug ${GEMDIR}/autogen.sh  || exit 1
 
   mkdir -p "${SCRIPTDIR}/${BUILDDIR}"
   cd "${SCRIPTDIR}/${BUILDDIR}"
-  "${GEMDIR}"/configure --without-ftgl --with-pd="${PDDIR}" && make
+  debug "${GEMDIR}"/configure --without-ftgl --with-pd="${PDDIR}" && make
  ;;
  osx)
   PDDIR=/usr/include/pd
