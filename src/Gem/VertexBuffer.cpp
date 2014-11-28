@@ -29,7 +29,8 @@ gem::VertexBuffer:: VertexBuffer() :
   attrib_index(0),
   attrib_name(""),
   attrib_array(""),
-  offset(0)
+  offset(0),
+  type(GEM_VBO_VERTICES)
 {
 }
 gem::VertexBuffer:: VertexBuffer (unsigned int size_,
@@ -43,7 +44,8 @@ gem::VertexBuffer:: VertexBuffer (unsigned int size_,
   attrib_index(0),
   attrib_name(""),
   attrib_array(""),
-  offset(0)
+  offset(0),
+  type(GEM_VBO_VERTICES)
 {
   resize(size_);
 }
@@ -58,8 +60,11 @@ gem::VertexBuffer:: VertexBuffer (const gem::VertexBuffer&vb)
   ,attrib_name(vb.attrib_name)
   ,attrib_array(vb.attrib_array)
   ,offset(vb.offset)
+  ,type(GEM_VBO_VERTICES)
+
 {
   resize(vb.size);
+  // TODO: shouldn't we copy the data from vb?
 }
 
 gem::VertexBuffer:: ~VertexBuffer (void)
