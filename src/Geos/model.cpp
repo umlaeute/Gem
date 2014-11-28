@@ -32,6 +32,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 model :: model(t_symbol *filename) :
   m_loader(gem::plugins::modelloader::getInstance()),
   m_loaded(false),
+  m_size_change_flag(false),
   m_position(256,3),
   m_texture (256,2),
   m_color   (256,4),
