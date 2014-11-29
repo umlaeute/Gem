@@ -8,9 +8,10 @@ env:
    # travis-ci?
    - secure: "apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw="
 
-os:
-  - linux
-  - osx
+## 'os' selection needs to be enabled manually by emailing travis-ci
+#os:
+#  - linux
+#  - osx
 
 before_install:
   - ./build/travis-ci/depinstall.sh
