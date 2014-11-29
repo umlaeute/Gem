@@ -24,6 +24,6 @@ addons:
       name: "umlaeute/Gem"
       description: "Build submitted via Travis CI"
     notification_email: dev@umlaeute.mur.at
-    build_command_prepend: "./configure; make clean"
+    build_command_prepend: "./autogen.sh && ./configure && make clean"
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
