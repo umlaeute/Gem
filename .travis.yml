@@ -1,12 +1,11 @@
 language: cpp
-
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   # LATER: shouldn't this be set via env-variable in the webinterface for
-   # travis-ci?
-   - secure: "apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw="
+  # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+  #   via the "travis encrypt" command using the project repo's public key
+  # LATER: shouldn't this be set via env-variable in the webinterface for
+  # travis-ci?
+  - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
 
 ## 'os' selection needs to be enabled manually by emailing travis-ci
 #os:
@@ -14,16 +13,17 @@ env:
 #  - osx
 
 before_install:
-  - ./build/travis-ci/depinstall.sh
+- "./build/travis-ci/depinstall.sh"
 script:
-  - ./build/travis-ci/build.sh
+- "./build/travis-ci/build.sh"
+
 
 addons:
   coverity_scan:
     project:
-      name: "umlaeute/Gem"
-      description: "Build submitted via Travis CI"
+      name: umlaeute/Gem
+      description: Build submitted via Travis CI
     notification_email: dev@umlaeute.mur.at
     build_command_prepend: "./autogen.sh && ./configure && make clean"
-    build_command:   "make -j 4"
+    build_command: make -j 4
     branch_pattern: coverity_scan
