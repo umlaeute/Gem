@@ -85,8 +85,7 @@ void slideSquares :: renderShape(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
     //glScalef( 1.f, 0.8f, 1.f );
     int curCoord = 0;
-    if (GemShape::m_texType && GemShape::m_texNum)
-    {
+    if (GemShape::m_texType && GemShape::m_texNum) {
       glBegin(m_drawType);
       for (i=0; i<= 31; i++){
 	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );
@@ -107,9 +106,7 @@ void slideSquares :: renderShape(GemState *state)
 	Slide( i );
       }
       glEnd();
-    }
-    else
-    {
+    } else {
         glBegin(m_drawType);
             for (i=0; i<= 31; i++){
 	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V );
