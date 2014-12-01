@@ -115,15 +115,15 @@ void slideSquares :: renderShape(GemState *state)
 	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V );
                 glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        if (GemShape::m_texNum > 1) curCoord = 1;
+	        //if (GemShape::m_texNum > 1) curCoord = 1;
                     glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        if (GemShape::m_texNum > 2) curCoord = 2;
+		//if (GemShape::m_texNum > 2) curCoord = 2;
                     glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
-	        if (GemShape::m_texNum > 3) curCoord = 3;
+		//if (GemShape::m_texNum > 3) curCoord = 3;
                     glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1);
                     glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
