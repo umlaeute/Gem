@@ -321,7 +321,7 @@ int ripple :: ripple_max_distance(int gx, int gy)
   if (temp_d > d)
     d = temp_d;
 
-  return (int)((d/m_gridX)*m_sizeX + RIPPLE_LENGTH/6);
+  return (int)((d/m_gridX)*m_sizeX + RIPPLE_LENGTH/6.);
 }
 /////////////////////////////////////////////////////////
 //	ripple_bang
