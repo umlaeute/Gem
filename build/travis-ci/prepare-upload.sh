@@ -27,4 +27,5 @@ cd "${BUILDDIR}"
 DESTDIR=$(mktemp -d /tmp/geminstall.XXXXXX)
 
 make install DESTDIR=${DESTDIR}
-cd "${DESTDIR}" && tar cvzf "${TRAVIS_BUILD_DIR}/Gem-${TRAVIS_COMMIT}.tgz"
+
+cd "/tmp/" && tar cvzf "${TRAVIS_BUILD_DIR}/Gem-${TRAVIS_COMMIT}.tgz" "${DESTDIR#/tmp/}"
