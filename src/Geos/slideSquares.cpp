@@ -140,7 +140,7 @@ void slideSquares :: slide_init(void)
         Sliders[i].Y = ourRand(1) -0.5;
         Sliders[i].V = (Sliders[i].Y/2 + 0.45);
         //Sliders[i].V = (Sliders[i].Y + 0.45);
-        Sliders[i].Speed = ourRand(1)/320 + 1/1600;
+        Sliders[i].Speed = ourRand(1)/320. + 1./1600.;
 
         /*post("sliders[%d].U = %f",i,Sliders[i].U);
         post("sliders[%d].X = %f",i,Sliders[i].X);
@@ -158,7 +158,7 @@ GLvoid slideSquares :: Slide( int i )
         Sliders[i].Y = ourRand(1) - 0.5;
         Sliders[i].V = Sliders[i].Y/2 + 0.45;
         //Sliders[i].V = (Sliders[i].Y + 0.45);
-        Sliders[i].Speed = ourRand(1)/320 + 1/1600;
+        Sliders[i].Speed = ourRand(1)/320. + 1./1600.;
     } else
         Sliders[i].X = Sliders[i].U*2 -1;
     /*
