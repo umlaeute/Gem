@@ -1,5 +1,6 @@
 #!/bin/sh
-SCRIPTDIR=${0%/*}
+test -r ${0%/*}/common.source && . ${0%/*}/common.source
+
 cd "${SCRIPTDIR}"
 INSTALLSCRIPT="./depinstall-${TRAVIS_OS_NAME}.sh"
 

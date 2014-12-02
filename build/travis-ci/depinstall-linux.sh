@@ -1,10 +1,11 @@
 #!/bin/sh
 
-DEPPATH=${0%/*}/deps
+test -r ${0%/*}/common.source && . ${0%/*}/common.source
+
+DEPPATH=${SCRIPTPATH}/deps
 mkdir -p "${DEPPATH}"
 cd "${DEPPATH}"
 
-PDDIR=/usr/include/pd
 doinstall() {
   sudo ../depinstall-linux.sudo.sh
 
