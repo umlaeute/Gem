@@ -113,10 +113,7 @@ public:
 		
      	    minNodeCount = 0x7FFF;
             minDepth = 0x7FFF;
-            while( !is.eof() ){
-
-                s.clear();
-                is >> s;
+            while( is >> s ){
                 const size_t siz=s.size();
 		if (siz < 1 || siz>0x7FFFFFFF ) {
 		  std::cout << "implausible data in tree file: " << file_name << std::endl;
@@ -160,6 +157,7 @@ public:
                     std::cout << "error inserting tree '" << s << "' into map\n";
                 }
 
+                s.clear();
 
             }
         }
