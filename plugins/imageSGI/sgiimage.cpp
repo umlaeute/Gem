@@ -281,7 +281,7 @@ unsigned int32 *longimagedata(const char *name)
   unsigned long tablen, xysize;
   unsigned short xsize, ysize, zsize;
   int bpp, rle, badorder;
-  unsigned int rlebuflen;
+  unsigned long rlebuflen;
   unsigned int cur;
 
   inf = fopen(name,"rb");
@@ -315,7 +315,7 @@ unsigned int32 *longimagedata(const char *name)
       tablen = (unsigned long)ysize*zsize*sizeof(int32);
       starttab = (unsigned int32 *)malloc(tablen);
       lengthtab = (unsigned int32 *)malloc(tablen);
-      rlebuflen = static_cast<unsigned int>(1.05*xsize)+10;
+      rlebuflen = static_cast<unsigned long>(1.05*xsize)+10;
       rledat = (unsigned char *)malloc(rlebuflen);
       if(fseek(inf,512,SEEK_SET)<0) {
 	printf("longimagedata: fseek returned 0\n");
@@ -367,7 +367,7 @@ unsigned int32 *longimagedata(const char *name)
                     }
                   if(lengthtab[y+z*ysize]>rlebuflen)
                     {
-                      printf("longimagedata: rlebuf(%d) is too small - bad poop : %d\n",rlebuflen, lengthtab[y+z*ysize]);
+                      printf("longimagedata: rlebuf(%ul) is too small - bad poop : %d\n",rlebuflen, lengthtab[y+z*ysize]);
 		      goto error;
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
@@ -594,7 +594,8 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   int32 *starttab, *lengthtab;
   unsigned char *rlebuf;
   unsigned int32 *lumbuf;
-  int rlebuflen, goodwrite=0;
+  unsigned long rlebuflen;
+  int goodwrite=0;
 
   switch(zsize) {
   case 4: case 3: case 1:
@@ -615,7 +616,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   image = (IMAGE *)malloc(sizeof(IMAGE));
   starttab = (int32 *)malloc(tablen);
   lengthtab = (int32 *)malloc(tablen);
-  rlebuflen = static_cast<int32>(1.05*xsize+10);
+  rlebuflen = static_cast<unsigned long>(1.05*xsize)+10;
   rlebuf = (unsigned char *)malloc(rlebuflen);
   lumbuf = (unsigned int32 *)malloc(xsize*sizeof(int32));
 
