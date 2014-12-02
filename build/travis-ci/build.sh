@@ -6,7 +6,6 @@
 # see https://travis-ci.org/avilleret/Gem
 
 SCRIPTDIR=${0%/*}
-GEMDIR=$(readlink -f "${SCRIPTDIR}/../..")
 ENVFILE=gem.env
 
 error() {
@@ -30,6 +29,7 @@ fi
 
 case "$TRAVIS_OS_NAME" in
  linux)
+  GEMDIR=$(readlink -f "${SCRIPTDIR}/../..")
   BUILDDIR="${SCRIPTDIR}/${TRAVIS_OS_NAME}-amd64"
 
   debug ${GEMDIR}/autogen.sh  || exit 1
@@ -41,6 +41,7 @@ case "$TRAVIS_OS_NAME" in
   && make
  ;;
  osx)
+  GEMDIR=$(greadlink -f "${SCRIPTDIR}/../..")
   PDDIR=/usr/include/pd
   BUILDDIR="${TRAVIS_OS_NAME}-amd64"
 
