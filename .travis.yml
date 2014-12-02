@@ -20,6 +20,9 @@ matrix:
   exclude:
    - os: linux
      env: ARCH=i386
+  allow_failures:
+   - os: linux
+     env: ARCH=i386
 
 before_install:
 - "./build/travis-ci/depinstall.sh"
