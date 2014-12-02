@@ -11,7 +11,7 @@ doinstall() {
   brew link gettext --force
   brew install imagemagick ftgl
   brew install sdl homebrew/versions/glfw2 homebrew/versions/glfw3
-  brew install sshpass
+  brew install coreutils
   
   ## and install pd
   wget http://msp.ucsd.edu/Software/pd-0.46-2.mac.tar.gz
