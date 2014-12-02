@@ -7,10 +7,9 @@ env:
   # travis-ci?
   - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
 
-## 'os' selection needs to be enabled manually by emailing travis-ci
-#os:
-#  - linux
-#  - osx
+os:
+  - linux
+  - osx
 
 before_install:
 - "./build/travis-ci/depinstall.sh"
@@ -26,14 +25,14 @@ script:
 #     secure: mW3u93mi2ZFXB3u32+/LWcePBPwhSE5k/MvrxVnM3i1bgwMK//+7V9enJAmL645LWQyBtUz5q7Jv5m2Vk1W4xd9j0j/hI/QchblPfok1Mo8TcCdnyCgbUvjIJwP+5X0d4ALscn7rYzPxxtEvLrXRLc6IXqYRpCl9tBjOOCM9ysY=
 #   file: Gem-${TRAVIS_COMMIT}.tgz
 #   on:
-#     repo: umlaeute/Gem
+#     repo: avilleret/Gem
 
 addons:
   coverity_scan:
     project:
-      name: umlaeute/Gem
+      name: avilleret/Gem
       description: Build submitted via Travis CI
-    notification_email: dev@umlaeute.mur.at
+    notification_email: antoine.villeret+dev@gmail.com
     build_command_prepend: "./autogen.sh && ./configure && make clean"
     build_command: make -j 4
     branch_pattern: coverity_scan
