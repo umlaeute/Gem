@@ -6,7 +6,7 @@ INSTALLSCRIPT="./depinstall-${TRAVIS_OS_NAME}.sh"
 
 if [ -x "${INSTALLSCRIPT}" ]; then
  envfile=$(${INSTALLSCRIPT})
- mv "${envfile}" gem.env
+ mv "${envfile}" "${ENVFILE}"
 else
  echo "no install-script found for: ${TRAVIS_OS_NAME}" 1>&2
  echo "assuming all is well" 1>&2
