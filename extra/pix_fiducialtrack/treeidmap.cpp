@@ -117,9 +117,8 @@ public:
 
                 s.clear();
                 is >> s;
-                if( s.empty() )
-                    continue;
-		if (s.size() < 1 || s.size()>0x7FFFFFFF ) {
+                const size_t siz=s.size();
+		if (siz < 1 || siz>0x7FFFFFFF ) {
 		  std::cout << "implausible data in tree file: " << file_name << std::endl;
 		  continue;
 		}
@@ -129,13 +128,13 @@ public:
                 // ensure that the depth sequence has a root colour prefix
                 // of 'w' (white) or 'b' (black). if not, prepend one.
                 if( s[0] == 'w' || s[0] == 'b' ){
-                    depthSequenceLength = (int)( s.size() - 1 );
+                    depthSequenceLength = (int)( siz - 1 );
                 }else{
-                    depthSequenceLength = (int)( s.size() );
+                    depthSequenceLength = (int)( siz );
                     s = 'w' + s;
                 }
 
-                char *ss = new char[ s.size() + 1 ];
+                char *ss = new char[ siz + 1 ];
                 strings_.push_back( ss );
                 strcpy( ss, s.c_str() );
                 std::pair<map_type::iterator, bool> i = treeIdMap_.insert( std::make_pair( ss, id++ ) );
