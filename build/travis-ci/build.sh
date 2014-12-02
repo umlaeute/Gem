@@ -7,6 +7,7 @@
 
 SCRIPTDIR=${0%/*}
 ENVFILE=gem.env
+PDPATH=/usr/include/pd
 
 error() {
  echo "$@" 1>&2
@@ -48,27 +49,27 @@ case "$TRAVIS_OS_NAME" in
   ${GEMDIR}/autogen.sh  || exit 1
 
   # 64bit build
-  BUILDDIR="${TRAVIS_OS_NAME}-amd64"
-  PDDIR=${SCRIPTDIR}/Pd-0.46-2-64bit.app/Contents/Resources/
-  mkdir -p "${SCRIPTDIR}/${BUILDDIR}"
-  cd "${SCRIPTDIR}/${BUILDDIR}"
+  BUILDDIR="${GEMDIR}"
+  PDPATH=${SCRIPTDIR}/Pd-0.46-2-64bit.app/Contents/Resources/
+  mkdir -p "${BUILDDIR}"
+  cd "${BUILDDIR}"
   "${GEMDIR}/configure" --with-pd="${PDPATH}" \
 	--without-ftgl \
 	--without-QuickTime-framework \
 	--without-Carbon-framework \
-  && make
+  && make clean && make
   EXIT64=$?
 
   # 32bit build
-  BUILDDIR="${TRAVIS_OS_NAME}-i386"
-  PDDIR=${SCRIPTDIR}/Pd-0.46-2.app/Contents/Resources/
-  mkdir -p "${SCRIPTDIR}/${BUILDDIR}"
-  cd "${SCRIPTDIR}/${BUILDDIR}"
+  BUILDDIR="${GEMDIR}"
+  PDPATH=${SCRIPTDIR}/Pd-0.46-2.app/Contents/Resources/
+  mkdir -p "${BUILDDIR}"
+  cd "${BUILDDIR}"
   "${GEMDIR}/configure" --with-pd=${PD32DIR}  --enable-fat-binary=i386 \
 	--without-ftgl \
 	--without-QuickTime-framework \
 	--without-Carbon-framework \
-  && make
+  && make clean && make
   EXIT32=$?
 
   exit $((EXIT64+EXIT32))

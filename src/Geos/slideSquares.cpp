@@ -85,8 +85,7 @@ void slideSquares :: renderShape(GemState *state)
     glNormal3f(0.0f, 0.0f, 1.0f);
     //glScalef( 1.f, 0.8f, 1.f );
     int curCoord = 0;
-    if (GemShape::m_texType && GemShape::m_texNum)
-    {
+    if (GemShape::m_texType && GemShape::m_texNum) {
       glBegin(m_drawType);
       for (i=0; i<= 31; i++){
 	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );
@@ -107,23 +106,21 @@ void slideSquares :: renderShape(GemState *state)
 	Slide( i );
       }
       glEnd();
-    }
-    else
-    {
+    } else {
         glBegin(m_drawType);
             for (i=0; i<= 31; i++){
 	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V );
                 glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        if (GemShape::m_texNum > 1) curCoord = 1;
+	        //if (GemShape::m_texNum > 1) curCoord = 1;
                     glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        if (GemShape::m_texNum > 2) curCoord = 2;
+		//if (GemShape::m_texNum > 2) curCoord = 2;
                     glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
-	        if (GemShape::m_texNum > 3) curCoord = 3;
+		//if (GemShape::m_texNum > 3) curCoord = 3;
                     glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1);
                     glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
@@ -140,7 +137,7 @@ void slideSquares :: slide_init(void)
         Sliders[i].Y = ourRand(1) -0.5;
         Sliders[i].V = (Sliders[i].Y/2 + 0.45);
         //Sliders[i].V = (Sliders[i].Y + 0.45);
-        Sliders[i].Speed = ourRand(1)/320 + 1/1600;
+        Sliders[i].Speed = ourRand(1)/320. + 1./1600.;
 
         /*post("sliders[%d].U = %f",i,Sliders[i].U);
         post("sliders[%d].X = %f",i,Sliders[i].X);
@@ -158,7 +155,7 @@ GLvoid slideSquares :: Slide( int i )
         Sliders[i].Y = ourRand(1) - 0.5;
         Sliders[i].V = Sliders[i].Y/2 + 0.45;
         //Sliders[i].V = (Sliders[i].Y + 0.45);
-        Sliders[i].Speed = ourRand(1)/320 + 1/1600;
+        Sliders[i].Speed = ourRand(1)/320. + 1./1600.;
     } else
         Sliders[i].X = Sliders[i].U*2 -1;
     /*

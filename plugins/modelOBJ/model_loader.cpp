@@ -2274,10 +2274,13 @@ glmReadPPM(const char* filename, int* width, int* height)
   /* grab first two chars of the file and make sure that it has the
      correct magic cookie for a raw PPM file. */
   if(NULL==fgets(head, 70, fp)) {
-    verbose(0, "_glmReadPPM() failed reading header"); return NULL;
+    verbose(0, "_glmReadPPM() failed reading header");
+    fclose(fp);
+    return NULL;
   }
   if (strncmp(head, "P6", 2)) {
     verbose(0, "%s: Not a raw PPM file", filename);
+    fclose(fp);
     return NULL;
   }
 
@@ -2285,7 +2288,9 @@ glmReadPPM(const char* filename, int* width, int* height)
   i = 0;
   while(i < 3) {
     if(NULL==fgets(head, 70, fp)) {
-      verbose(0, "_glmReadPPM() failed header info"); return NULL;
+      verbose(0, "_glmReadPPM() failed header info");
+      fclose(fp);
+      return NULL;
     }
     if (head[0] == '#')     /* skip comments. */
       continue;

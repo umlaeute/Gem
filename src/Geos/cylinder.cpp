@@ -182,23 +182,14 @@ void cylinder :: render(GemState *state)
           x = sin(i * da);
           y = cos(i * da);
         }
-        if (nsign == 1.0) {
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-          glVertex3f(x * r, y * r, z);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-          glVertex3f(x * (r + dr), y * (r + dr), z + dz);
-        }
-        else {
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-          glVertex3f(x * r, y * r, z);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-          glVertex3f(x * (r + dr), y * (r + dr), z + dz);
-        }
-        s += ds;
+	normal3f(x * nsign, y * nsign, nz * nsign);
+	if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+	glVertex3f(x * r, y * r, z);
+	normal3f(x * nsign, y * nsign, nz * nsign);
+	if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+	glVertex3f(x * (r + dr), y * (r + dr), z + dz);
+
+	s += ds;
       }			/* for slices */
       glEnd();
       r += dr;
