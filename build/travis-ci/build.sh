@@ -31,7 +31,7 @@ fi
 case "$TRAVIS_OS_NAME" in
  linux)
   GEMDIR=$(readlink -f "${SCRIPTDIR}/../..")
-  BUILDDIR="${SCRIPTDIR}/${TRAVIS_OS_NAME}-amd64"
+  BUILDDIR="${GEMDIR}"
 
   debug ${GEMDIR}/autogen.sh  || exit 1
 
@@ -44,7 +44,7 @@ case "$TRAVIS_OS_NAME" in
  osx)
   GEMDIR=$(greadlink -f "${SCRIPTDIR}/../..")
   PDDIR=/usr/include/pd
-  BUILDDIR="${TRAVIS_OS_NAME}-amd64"
+  BUILDDIR="${GEMDIR}"
 
   ${GEMDIR}/autogen.sh  || exit 1
 
