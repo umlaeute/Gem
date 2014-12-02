@@ -53,3 +53,4 @@ fi
 
 echo "SCRIPTDIR: ${SCRIPTDIR}"
 echo "GEMDIR: ${GEMDIR}"
+echo "ARCH: ${ARCH}"
