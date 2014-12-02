@@ -17,6 +17,10 @@ cd "${BUILDDIR}"
 
 case "$TRAVIS_OS_NAME" in
     linux)
+        if [ "x${ARCH}" != "x" -a "x${ARCH}" != "x$(uname -m)" ]; then
+          error "unable to cross-compile for architecture ${ARCH}"
+          exit 1
+        fi
 	CONFIGUREFLAGS="--without-ftgl"
 	;;
     osx)
