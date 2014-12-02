@@ -115,7 +115,7 @@ public:
             minDepth = 0x7FFF;
             while( is >> s ){
                 const size_t siz=s.size();
-		if (siz < 1 || siz>0x7FFFFFFF ) {
+		if (siz < 1 || siz>0x10000000 ) {
 		  std::cout << "implausible data in tree file: " << file_name << std::endl;
 		  continue;
 		}
