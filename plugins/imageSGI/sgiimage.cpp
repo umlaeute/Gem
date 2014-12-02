@@ -315,7 +315,7 @@ unsigned int32 *longimagedata(const char *name)
       tablen = (unsigned long)ysize*zsize*sizeof(int32);
       starttab = (unsigned int32 *)malloc(tablen);
       lengthtab = (unsigned int32 *)malloc(tablen);
-      rlebuflen = static_cast<int32>(1.05*xsize+10);
+      rlebuflen = static_cast<unsigned int>(1.05*xsize)+10;
       rledat = (unsigned char *)malloc(rlebuflen);
       if(fseek(inf,512,SEEK_SET)<0) {
 	printf("longimagedata: fseek returned 0\n");
