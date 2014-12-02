@@ -7,6 +7,6 @@ cd "${BUILDDIR}"
 
 DESTDIR=$(mktemp -d /tmp/geminstall.XXXXXX)
 
-make install DESTDIR=${DESTDIR}
+make install DESTDIR=${DESTDIR}/Gem pkglibdir=/ extradir=/ includedir=/develop/include pkgconfigdir=/develop/pkgconfig
 
-cd "/tmp/" && tar cvzf "${TRAVIS_BUILD_DIR}/Gem-${TRAVIS_COMMIT}.tgz" "${DESTDIR#/tmp/}"
+cd "${DESTDIR}" && tar cvzf "${TRAVIS_BUILD_DIR}/Gem-${TRAVIS_OS_NAME}${ARCH}-${TRAVIS_TAG}.tgz" Gem/
