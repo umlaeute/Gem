@@ -1,5 +1,8 @@
 language: cpp
 env:
+  matrix:
+  - ARCH=
+  - ARCH=i386
   global:
   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
   #   via the "travis encrypt" command using the project repo's public key
@@ -11,6 +14,12 @@ env:
 os:
   - linux
   - osx
+
+
+matrix:
+  exclude:
+   - os: linux
+     env: ARCH=i386
 
 before_install:
 - "./build/travis-ci/depinstall.sh"
