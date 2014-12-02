@@ -11,41 +11,24 @@ cd "${SCRIPTDIR}"
 
 error "building Gem for $TRAVIS_OS_NAME"
 
+debug ${GEMDIR}/autogen.sh  || exit 1
+mkdir -p "${BUILDDIR}"
+cd "${BUILDDIR}"
+
 case "$TRAVIS_OS_NAME" in
- linux)
-  debug ${GEMDIR}/autogen.sh  || exit 1
-
-  mkdir -p "${BUILDDIR}"
-  cd "${BUILDDIR}"
-  debug "${GEMDIR}/configure" --with-pd="${PDPATH}" \
-	--without-ftgl \
-  && make
- ;;
- osx)
-  debug ${GEMDIR}/autogen.sh  || exit 1
-
-  # 64bit build
-  mkdir -p "${BUILDDIR}"
-  cd "${BUILDDIR}"
-  debug "${GEMDIR}/configure" --with-pd="${PDPATH}" \
-	--without-ftgl \
-	--without-QuickTime-framework \
-	--without-Carbon-framework \
-  && make clean && make
-  EXIT64=$?
-
-  # 32bit build
-  mkdir -p "${BUILDDIR}"
-  cd "${BUILDDIR}"
-  "${GEMDIR}/configure" --with-pd=${PD32DIR}  --enable-fat-binary=i386 \
-	--without-ftgl \
-	--without-QuickTime-framework \
-	--without-Carbon-framework \
-  && make clean && make
-  EXIT32=$?
-
-  exit $((EXIT64+EXIT32))
- ;;
+    linux)
+	CONFIGUREFLAGS="--without-ftgl"
+	;;
+    osx)
+	CONFIGUREFLAGS="--without-ftgl \
+           --without-QuickTime-framework \
+           --without-Carbon-framework"
+	if [ "x${ARCH}" != "x" ]; then
+	    CONFIGUREFLAGS+=" --enable-fat-binary=${ARCH}"
+	fi
+	;;
 esac
 
+debug "${GEMDIR}/configure" --with-pd="${PDPATH}" ${CONFIGUREFLAGS} \
+      && make
 
