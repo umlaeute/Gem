@@ -5,34 +5,14 @@
 ## it's based on avilleret's work:
 # see https://travis-ci.org/avilleret/Gem
 
-SCRIPTDIR=${0%/*}
-GEMDIR=$(readlink -f "${SCRIPTDIR}/../..")
-ENVFILE=gem.env
-PDPATH=/usr/include/pd
-
-error() {
- echo "$@" 1>&2
-}
-debug() {
- error "$@"
- $@
-}
+test -r ${0%/*}/common.source && . ${0%/*}/common.source
 
 cd "${SCRIPTDIR}"
 
 error "building Gem for $TRAVIS_OS_NAME"
 
-if [ -e "${ENVFILE}" ]; then
- source "${ENVFILE}"
-else
- error "couldn't read env-file: ${ENVFILE}"
-fi
- 
-
 case "$TRAVIS_OS_NAME" in
  linux)
-  BUILDDIR="${GEMDIR}"
-
   debug ${GEMDIR}/autogen.sh  || exit 1
 
   mkdir -p "${BUILDDIR}"
@@ -42,17 +22,12 @@ case "$TRAVIS_OS_NAME" in
   && make
  ;;
  osx)
-  PDPATH=/usr/include/pd
-  BUILDDIR="${GEMDIR}"
-
-  ${GEMDIR}/autogen.sh  || exit 1
+  debug ${GEMDIR}/autogen.sh  || exit 1
 
   # 64bit build
-  BUILDDIR="${GEMDIR}"
-  PDPATH=${SCRIPTDIR}/Pd-0.46-2-64bit.app/Contents/Resources/
   mkdir -p "${BUILDDIR}"
   cd "${BUILDDIR}"
-  "${GEMDIR}/configure" --with-pd="${PDPATH}" \
+  debug "${GEMDIR}/configure" --with-pd="${PDPATH}" \
 	--without-ftgl \
 	--without-QuickTime-framework \
 	--without-Carbon-framework \
@@ -60,8 +35,6 @@ case "$TRAVIS_OS_NAME" in
   EXIT64=$?
 
   # 32bit build
-  BUILDDIR="${GEMDIR}"
-  PDPATH=${SCRIPTDIR}/Pd-0.46-2.app/Contents/Resources/
   mkdir -p "${BUILDDIR}"
   cd "${BUILDDIR}"
   "${GEMDIR}/configure" --with-pd=${PD32DIR}  --enable-fat-binary=i386 \
