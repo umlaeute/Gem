@@ -33,6 +33,6 @@ case "$TRAVIS_OS_NAME" in
 	;;
 esac
 
-debug "${GEMDIR}/configure" --with-pd="${PDPATH}" ${CONFIGUREFLAGS} \
+debug "${GEMDIR}/configure" --with-pd="${PDDIR}" ${CONFIGUREFLAGS} \
       && make
 

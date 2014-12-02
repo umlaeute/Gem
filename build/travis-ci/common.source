@@ -39,7 +39,7 @@ else
  GEMDIR=${SCRIPTDIR}/../..
 fi
 
-PDPATH=/usr/include/pd
+PDDIR=/usr/include/pd
 BUILDDIR=${GEMDIR}
 
 ENVFILE=${SCRIPTDIR}/gem.env

@@ -2,9 +2,9 @@
 
 test -r ${0%/*}/common.source && . ${0%/*}/common.source
 
-DEPPATH=${SCRIPTPATH}/deps
-mkdir -p "${DEPPATH}"
-cd "${DEPPATH}"
+DEPDIR=${SCRIPTDIR}/deps
+mkdir -p "${DEPDIR}"
+cd "${DEPDIR}"
 
 doinstall() {
   sudo ../depinstall-linux.sudo.sh
@@ -19,7 +19,7 @@ doinstall 1>&2
 ENVFILE=$(mktemp /tmp/gemenv.XXXXXX)
 
 cat > ${ENVFILE} << EOF
-PDPATH=${PDDIR}
+PDDIR=${PDDIR}
 EOF
 
 echo "${ENVFILE}"

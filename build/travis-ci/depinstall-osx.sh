@@ -1,10 +1,10 @@
 #!/bin/sh
 test -r ${0%/*}/common.source && . ${0%/*}/common.source
 
-DEPPATH=${SCRIPTPATH}/deps
+DEPDIR=${SCRIPTDIR}/deps
 
-mkdir -p "${DEPPATH}"
-cd "${DEPPATH}"
+mkdir -p "${DEPDIR}"
+cd "${DEPDIR}"
 
 doinstall() {
   brew update
@@ -19,11 +19,11 @@ doinstall() {
   if [ "x${ARCH}" = "xi386" ]; then
     wget http://msp.ucsd.edu/Software/pd-0.46-2.mac.tar.gz
     tar -xf pd-0.46-2.mac.tar.gz
-    PDPATH=$(pwd)/Pd-0.46-2.app/Contents/Resources/
+    PDDIR=$(pwd)/Pd-0.46-2.app/Contents/Resources/
   else
     wget http://msp.ucsd.edu/Software/pd-0.46-2-64bit.mac.tar.gz
     tar -xf pd-0.46-2-64bit.mac.tar.gz
-    PDPATH=$(pwd)/Pd-0.46-2-64bit.app/Contents/Resources/
+    PDDIR=$(pwd)/Pd-0.46-2-64bit.app/Contents/Resources/
   fi
   
 }
@@ -34,7 +34,7 @@ doinstall 1>&2
 ENVFILE=$(mktemp /tmp/gemenv.XXXXXX)
 
 cat > ${ENVFILE} << EOF
-PDPATH=${PDPATH}
+PDDIR=${PDDIR}
 EOF
 
 echo "${ENVFILE}"
