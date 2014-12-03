@@ -367,7 +367,7 @@ unsigned int32 *longimagedata(const char *name)
                     }
                   if(lengthtab[y+z*ysize]>rlebuflen)
                     {
-                      printf("longimagedata: rlebuf(%ul) is too small - bad poop : %d\n",rlebuflen, lengthtab[y+z*ysize]);
+                      printf("longimagedata: rlebuf(%lu) is too small - bad poop : %d\n", rlebuflen, lengthtab[y+z*ysize]);
 		      goto error;
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
