@@ -22,7 +22,11 @@ getbin() {
  done
 }
 
-READLINK=$(getbin readlink greadlink)
+READLINK=$(getbin greadlink readlink)
+
+if [ "x$(${READLINK} -f . 2>/dev/null)" = "x" ]; then
+ READLINK=""
+fi
 
 SCRIPTDIR=${0%/*}
 
