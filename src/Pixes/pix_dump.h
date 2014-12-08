@@ -67,6 +67,7 @@ protected:
 
 	//////////
 	void			trigger();
+	void			normalizeMess(t_float val);
 
 	//////////
 	// The color outlet
@@ -79,6 +80,9 @@ protected:
 	int           m_csize;
 	unsigned int  m_bufsize;
 	t_atom       *m_buffer;
+        // if we normalize output value (default 1)
+        int m_normalize;
+
 
 	int           oldimagex;
 	int           oldimagey;
@@ -97,6 +101,7 @@ private:
 	//////////
 	// Static member callbacks
 	static void		triggerMessCallback(void *dump);
+	static void		normalizeMessCallback(void *dump, t_float val);
 	static void		GREYMessCallback(void *dump);
 	static void		RGBAMessCallback(void *dump);
 	static void		RGBMessCallback(void *dump);
