@@ -67,7 +67,7 @@ protected:
 
 	//////////
 	void			trigger();
-	void			normalizeMess(t_float val);
+	void			bytemodeMess(t_float val);
 
         //////////
 	// Set to RGBA-mode
@@ -88,7 +88,7 @@ protected:
 	unsigned int  m_bufsize;
 	t_atom       *m_buffer;
         // if we normalize output value (default 1)
-        int m_normalize;
+        int m_bytemode;
 
 
 	int           oldimagex;
@@ -112,7 +112,7 @@ private:
 	//////////
 	// Static member callbacks
 	static void		triggerMessCallback(void *dump);
-	static void		normalizeMessCallback(void *dump, t_float val);
+	static void		bytemodeMessCallback(void *dump, t_float val);
 	static void		GREYMessCallback(void *dump);
 	static void		RGBAMessCallback(void *dump);
 	static void		RGBMessCallback(void *dump);

@@ -47,7 +47,7 @@ pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
     oldimagex(0), oldimagey(0),
     m_xstep(1), m_ystep(1),
     m_data(0),
-    m_normalize(1),
+    m_bytemode(0),
     m_mode(GL_RGBA)
 {
   xsize = static_cast<int>(fx);
@@ -161,7 +161,7 @@ void pix_dump :: trigger()
   case 4:
     while (n < m_ysize) {
       while (m < m_xsize) {
-      if (m_normalize) {
+      if (m_bytemode) {
       float r, g, b, a;
       r = static_cast<float>(data[chRed]) / 255.f;
       SETFLOAT(&m_buffer[i], r);
@@ -206,7 +206,7 @@ void pix_dump :: trigger()
   case 2:
     while (n < m_ysize) {
       while (m < m_xsize/2) {
-        if (m_normalize) {
+        if (m_bytemode) {
       float y,u,y1,v;
           u = static_cast<float>(data[0]) / 255.f;
           SETFLOAT(&m_buffer[i], u);
@@ -252,7 +252,7 @@ void pix_dump :: trigger()
     int leftover=m_xsize*m_ysize*m_csize-datasize*4;
     while (datasize--) {
       float v;
-      if ( m_normalize ) {
+      if ( m_bytemode ) {
         v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i], v);
         v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i+1], v);
         v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i+2], v);
@@ -299,9 +299,9 @@ void pix_dump :: RGBMess(void)
   m_mode = GL_RGB;
 }
 
-void pix_dump :: normalizeMess(t_float v)
+void pix_dump :: bytemodeMess(t_float v)
 {
-  m_normalize=v>0 ? 1 : 0;
+  m_bytemode=v>0 ? 1 : 0;
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -310,7 +310,7 @@ void pix_dump :: normalizeMess(t_float v)
 void pix_dump :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", trigger);
-  CPPEXTERN_MSG1(classPtr, "normalize", normalizeMess, int);
+  CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, int);
   CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "RGB" , RGBMess);
