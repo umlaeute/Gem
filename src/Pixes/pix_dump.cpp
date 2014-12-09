@@ -276,16 +276,12 @@ void pix_dump :: normalizeMess(t_float v)
 /////////////////////////////////////////////////////////
 void pix_dump :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_dump::triggerMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dump::normalizeMessCallback), gensym("normalize"), A_FLOAT, A_NULL);
 }
 
-void pix_dump :: triggerMessCallback(void *data)
 {
-  GetMyClass(data)->trigger();
 }
 
-void pix_dump :: normalizeMessCallback(void *data, t_float val)
 {
-  GetMyClass(data)->normalizeMess(val);
+  CPPEXTERN_MSG0(classPtr, "bang", trigger);
+  CPPEXTERN_MSG1(classPtr, "normalize", normalizeMess, int);
 }
