@@ -17,6 +17,7 @@ LOG
 
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
+#include "Gem/Rectangle.h"
 #include "stdlib.h"
 #include "string.h"
 #include "math.h"
@@ -105,6 +106,11 @@ class GEM_EXTERN GemPixObj : public GemBase
   //////////
   int             m_processOnOff;
   int             m_simd;
+
+  //////////
+  // handle ROI
+  gem::Rectangle m_roi;
+  int m_doROI;
 
   //////////
   // creation callback
