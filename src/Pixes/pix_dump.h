@@ -69,6 +69,13 @@ protected:
 	void			trigger();
 	void			normalizeMess(t_float val);
 
+        //////////
+	// Set to RGBA-mode
+	void	    	RGBAMess(void);
+	//////////
+	// Set to RGB-mode
+	void	    	RGBMess(void);
+
 	//////////
 	// The color outlet
 	t_outlet    	*m_dataOut;
@@ -95,6 +102,10 @@ protected:
 	/////////
 	// pointer to the image data
 	unsigned char *m_data;
+
+        ////////
+        // dump mode
+        int 	       m_mode;
 
 private:
 

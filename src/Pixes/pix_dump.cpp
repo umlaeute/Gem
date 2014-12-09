@@ -47,7 +47,8 @@ pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
     oldimagex(0), oldimagey(0),
     m_xstep(1), m_ystep(1),
     m_data(0),
-    m_normalize(1)
+    m_normalize(1),
+    m_mode(GL_RGBA)
 {
   xsize = static_cast<int>(fx);
   ysize = static_cast<int>(fy);
@@ -160,37 +161,41 @@ void pix_dump :: trigger()
   case 4:
     while (n < m_ysize) {
       while (m < m_xsize) {
-	    if (m_normalize) {
-		  float r, g, b, a;
-		  r = static_cast<float>(data[chRed]) / 255.f;
-		  SETFLOAT(&m_buffer[i], r);
-		  i++;
-		  g = static_cast<float>(data[chGreen]) / 255.f;
-		  SETFLOAT(&m_buffer[i], g);
-		  i++;
-		  b = static_cast<float>(data[chBlue]) / 255.f;
-		  SETFLOAT(&m_buffer[i], b);
-		  i++;
-		  a = static_cast<float>(data[chAlpha]) / 255.f;
-		  SETFLOAT(&m_buffer[i], a);
-		  i++;
-	    } else {
-			float r, g, b, a;
-		    r = static_cast<float>(data[chRed]);
-		    SETFLOAT(&m_buffer[i], r);
-		    i++;
-		    g = static_cast<float>(data[chGreen]);
-		    SETFLOAT(&m_buffer[i], g);
-		    i++;
-		    b = static_cast<float>(data[chBlue]);
-		    SETFLOAT(&m_buffer[i], b);
-		    i++;
-		    a = static_cast<float>(data[chAlpha]);
-		    SETFLOAT(&m_buffer[i], a);
-		    i++;
-	    }
-		m++;
-	    data = line + static_cast<int>(m_xstep * static_cast<float>(m));
+      if (m_normalize) {
+      float r, g, b, a;
+      r = static_cast<float>(data[chRed]) / 255.f;
+      SETFLOAT(&m_buffer[i], r);
+      i++;
+      g = static_cast<float>(data[chGreen]) / 255.f;
+      SETFLOAT(&m_buffer[i], g);
+      i++;
+      b = static_cast<float>(data[chBlue]) / 255.f;
+      SETFLOAT(&m_buffer[i], b);
+      i++;
+      if ( m_mode == GL_RGBA ) {
+      a = static_cast<float>(data[chAlpha]) / 255.f;
+      SETFLOAT(&m_buffer[i], a);
+      i++;
+      }
+      } else {
+          float r, g, b, a;
+          r = static_cast<float>(data[chRed]);
+      SETFLOAT(&m_buffer[i], r);
+      i++;
+      g = static_cast<float>(data[chGreen]);
+      SETFLOAT(&m_buffer[i], g);
+      i++;
+      b = static_cast<float>(data[chBlue]);
+      SETFLOAT(&m_buffer[i], b);
+      i++;
+      if ( m_mode == GL_RGBA ) {
+        a = static_cast<float>(data[chAlpha]);
+        SETFLOAT(&m_buffer[i], a);
+        i++;
+      }
+      }
+    m++;
+      data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
       m = 0;
       n++;
@@ -202,7 +207,7 @@ void pix_dump :: trigger()
     while (n < m_ysize) {
       while (m < m_xsize/2) {
         if (m_normalize) {
-		  float y,u,y1,v;
+      float y,u,y1,v;
           u = static_cast<float>(data[0]) / 255.f;
           SETFLOAT(&m_buffer[i], u);
           i++;
@@ -212,11 +217,13 @@ void pix_dump :: trigger()
           v = static_cast<float>(data[2]) / 255.f;
           SETFLOAT(&m_buffer[i], v);
           i++;
-          y1 = static_cast<float>(data[3]) / 255.f;
-          SETFLOAT(&m_buffer[i], y1);
-          i++;
-	    } else {
-		  float y,u,y1,v;
+          if ( m_mode == GL_RGBA ) {
+            y1 = static_cast<float>(data[3]) / 255.f;
+            SETFLOAT(&m_buffer[i], y1);
+            i++;
+      }
+      } else {
+      float y,u,y1,v;
           u = static_cast<float>(data[0]);
           SETFLOAT(&m_buffer[i], u);
           i++;
@@ -226,10 +233,12 @@ void pix_dump :: trigger()
           v = static_cast<float>(data[2]);
           SETFLOAT(&m_buffer[i], v);
           i++;
-          y1 = static_cast<float>(data[3]);
-          SETFLOAT(&m_buffer[i], y1);
-          i++;
-		}
+          if ( m_mode == GL_RGBA ) {
+            y1 = static_cast<float>(data[3]);
+            SETFLOAT(&m_buffer[i], y1);
+            i++;
+      }
+    }
         m++;
         data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
@@ -244,20 +253,27 @@ void pix_dump :: trigger()
     while (datasize--) {
       float v;
       if ( m_normalize ) {
-        v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
-        v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+1], v);
-        v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+2], v);
-        v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i+3], v);
-	  } else {
-		v = static_cast<float>(*data++);	  SETFLOAT(&m_buffer[i], v);
-        v = static_cast<float>(*data++);	  SETFLOAT(&m_buffer[i+1], v);
-        v = static_cast<float>(*data++);	  SETFLOAT(&m_buffer[i+2], v);
-        v = static_cast<float>(*data++);	  SETFLOAT(&m_buffer[i+3], v);
-	  }
-      i+=4;
+        v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i], v);
+        v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i+1], v);
+        v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i+2], v);
+        i+3;
+        if ( m_mode == GL_RGBA ) {
+      v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i+3], v);
+      i++;
+    }
+    } else {
+    v = static_cast<float>(*data++);    SETFLOAT(&m_buffer[i], v);
+        v = static_cast<float>(*data++);    SETFLOAT(&m_buffer[i+1], v);
+        v = static_cast<float>(*data++);    SETFLOAT(&m_buffer[i+2], v);
+        i+3;
+        if ( m_mode == GL_RGBA ) {
+      v = static_cast<float>(*data++);    SETFLOAT(&m_buffer[i+3], v);
+      i++;
+    }
+    }
     }
     while (leftover--) {
-      float v = static_cast<float>(*data++) / 255.f;	  SETFLOAT(&m_buffer[i], v);
+      float v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i], v);
       i++;
     }
 
@@ -266,9 +282,26 @@ void pix_dump :: trigger()
   outlet_list(m_dataOut, gensym("list"), i, m_buffer);
 }
 
+/////////////////////////////////////////////////////////
+// RGBAMess
+//
+/////////////////////////////////////////////////////////
+void pix_dump :: RGBAMess(void)
+{
+  m_mode = GL_RGBA;
+}
+/////////////////////////////////////////////////////////
+// RGBMess
+//
+/////////////////////////////////////////////////////////
+void pix_dump :: RGBMess(void)
+{
+  m_mode = GL_RGB;
+}
+
 void pix_dump :: normalizeMess(t_float v)
 {
-	m_normalize=v>0 ? 1 : 0;
+  m_normalize=v>0 ? 1 : 0;
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -276,12 +309,10 @@ void pix_dump :: normalizeMess(t_float v)
 /////////////////////////////////////////////////////////
 void pix_dump :: obj_setupCallback(t_class *classPtr)
 {
-}
-
-{
-}
-
-{
   CPPEXTERN_MSG0(classPtr, "bang", trigger);
   CPPEXTERN_MSG1(classPtr, "normalize", normalizeMess, int);
+  CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
+  CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
+  CPPEXTERN_MSG0(classPtr, "RGB" , RGBMess);
+  CPPEXTERN_MSG0(classPtr, "rgb" , RGBMess);
 }
