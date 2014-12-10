@@ -44,7 +44,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 /////////////////////////////////////////////////////////
 pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA),
-  m_pixels(NULL)
+  m_pixels(NULL),
+  m_inputScale(255)
 {
   if (xsize < 1) xsize = 256;
   if (ysize < 1) ysize = 256;
