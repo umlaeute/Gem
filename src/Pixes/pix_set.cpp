@@ -50,7 +50,7 @@ pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
 {
   if (xsize < 1) xsize = 256;
   if (ysize < 1) ysize = 256;
-  
+
   SETMess(xsize, ysize);
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("data"));
@@ -121,7 +121,7 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
    int roi_x2=pixels->image.xsize;
    int roi_y1=0;
    int roi_y2=pixels->image.ysize;
-   
+
    if (!m_doROI){
 	  // if no ROI is set, set whole image black before setting pixels values
 	  pixels->image.setBlack();
@@ -143,9 +143,9 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     n = argc/3;
     counter=(picturesize<n)?picturesize:n;
     while (counter--) {
-      buffer[chRed]   = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
-      buffer[chGreen] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
-      buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
+      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(&argv[0])); // red
+      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(&argv[1])); // green
+      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(&argv[2])); // blue
       buffer[chAlpha] = 0;					     // alpha
       argv+=3;
       if (m_doROI) {
@@ -158,15 +158,29 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     break;
   case GL_LUMINANCE:
     counter=(picturesize<argc)?picturesize:argc;
-    while (counter--) {
-      buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(255.*atom_getfloat(argv));	// rgb
-      buffer[chAlpha] = 0;									// alpha
-      argv++;
-      if (m_doROI) {
-        i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        buffer+=4;
+    if ( pixels->image.csize == 4 )
+    {
+      while (counter--) {
+        buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(m_inputScale*atom_getfloat(argv));	// rgb
+        buffer[chAlpha] = 0;									// alpha
+        argv++;
+        if (m_doROI) {
+          i++;
+          buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        } else {
+          buffer+=4;
+        }
+      }
+    } else if (pixels->image.csize == 1) {
+      while (counter--) {
+        buffer[0] = (unsigned char)(m_inputScale*atom_getfloat(argv));
+        argv++;
+        if (m_doROI) {
+          i++;
+          buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        } else {
+          buffer++;
+        }
       }
     }
     break;
@@ -177,11 +191,11 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     n = argc/4;
     counter=(picturesize<n)?picturesize:n;
     while (counter--) {
-      buffer[chRed]   = (unsigned char)(255.*atom_getfloat(&argv[0])); // red
-      buffer[chGreen] = (unsigned char)(255.*atom_getfloat(&argv[1])); // green
-      buffer[chBlue]  = (unsigned char)(255.*atom_getfloat(&argv[2])); // blue
-      buffer[chAlpha] = (unsigned char)(255.*atom_getfloat(&argv[3])); // alpha
-      argv+=4; 
+      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(&argv[0])); // red
+      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(&argv[1])); // green
+      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(&argv[2])); // blue
+      buffer[chAlpha] = (unsigned char)(m_inputScale*atom_getfloat(&argv[3])); // alpha
+      argv+=4;
       if (m_doROI) {
         i++;
         buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
@@ -242,16 +256,16 @@ void pix_set :: SETMess(int xsize, int ysize)
 void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 {
 	unsigned char 	*buffer;
-	unsigned char r,g,b,a;	
+	unsigned char r,g,b,a;
 	int i=0, picturesize;
-   
+
    pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
 
    int roi_x1=0;
    int roi_x2=pixels->image.xsize;
    int roi_y1=0;
    int roi_y2=pixels->image.ysize;
-   
+
 	if (!m_doROI){
 	  // if no ROI is set, set whole image black before setting pixels values
 	  pixels->image.setBlack();
@@ -267,22 +281,22 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 	 buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 	 picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
    }
-   
+
    	int counter = picturesize;
 
 	switch (m_mode) {
 	  case GL_RGB:
 		if ( argc==1 ) {
-			r=g=b=a=(unsigned char)(255.*atom_getfloat(&argv[0]));
+			r=g=b=a=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
 		} else if ( argc ==3 ) {
-			r=(unsigned char)(255.*atom_getfloat(&argv[0]));
-			g=(unsigned char)(255.*atom_getfloat(&argv[1]));
-			b=(unsigned char)(255.*atom_getfloat(&argv[2]));
+			r=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
+			g=(unsigned char)(m_inputScale*atom_getfloat(&argv[1]));
+			b=(unsigned char)(m_inputScale*atom_getfloat(&argv[2]));
 			a=0;
 		} else {
 		  error("fill need 1 or 3 float arg in RGB mode");
 		  return;
-		}	  
+		}
 		while (counter--) {
 		  buffer[chRed]   = r; // red
 		  buffer[chGreen] = g; // green
@@ -298,7 +312,7 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 		break;
 	  case GL_LUMINANCE:
 	    if ( argc>0 ) {
-			r=g=b=(unsigned char)(255.*atom_getfloat(&argv[0]));
+			r=g=b=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
 			a=0;
 		} else {
 			error("fill need 1 float arg in GREY mode");
@@ -314,7 +328,7 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 			buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
 		  } else {
 			buffer+=4;
-		  }		
+		  }
 		}
 		break;
 	  case GL_YCBCR_422_GEM:
@@ -322,16 +336,16 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 		break;
 	  default:
 	    if ( argc==1 ) {
-			r=g=b=a=(unsigned char)(255.*atom_getfloat(&argv[0]));
+			r=g=b=a=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
 		} else if ( argc == 4 ) {
-			r=(unsigned char)(255.*atom_getfloat(&argv[0]));
-			g=(unsigned char)(255.*atom_getfloat(&argv[1]));
-			b=(unsigned char)(255.*atom_getfloat(&argv[2]));
-			a=(unsigned char)(255.*atom_getfloat(&argv[3]));;
+			r=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
+			g=(unsigned char)(m_inputScale*atom_getfloat(&argv[1]));
+			b=(unsigned char)(m_inputScale*atom_getfloat(&argv[2]));
+			a=(unsigned char)(m_inputScale*atom_getfloat(&argv[3]));;
 		} else {
 		  error("fill need 1 or 4 float arg in RGBA mode");
 		  return;
-		}	  
+		}
 		while (counter--) {
 		  buffer[chRed]   = r; // red
 		  buffer[chGreen] = g; // green
@@ -354,6 +368,15 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
 void pix_set :: BANGMess(void)
 {
 	m_pixBlock.newimage = true;
+}
+
+/////////////////////////////////////////////////////////
+// bytemodeMess
+//
+/////////////////////////////////////////////////////////
+void pix_set :: bytemodeMess(t_float v)
+{
+  m_inputScale=v > 0. ? 1. : 255.;
 }
 
 /////////////////////////////////////////////////////////
@@ -388,4 +411,5 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
   CPPEXTERN_MSG (classPtr, "fill", FILLMess);
   CPPEXTERN_MSG0(classPtr, "bang", BANGMess);
+  CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, int);
 }
