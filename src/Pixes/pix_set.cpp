@@ -32,7 +32,6 @@
 
 #include "pix_set.h"
 #include "Gem/State.h"
-#include "Gem/Rectangle.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -45,7 +44,6 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFL
 /////////////////////////////////////////////////////////
 pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA),
-  m_doROI(false),
   m_pixels(NULL)
 {
   if (xsize < 1) xsize = 256;

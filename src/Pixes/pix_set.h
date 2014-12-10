@@ -28,7 +28,6 @@ pix_set
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
 #include "Gem/Cache.h"
-#include "Gem/Rectangle.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -116,9 +115,6 @@ protected:
 	//////////
 	// paint mode
 	int 	    	m_mode;
-	// size and offset to draw only on a ROI
-  gem::Rectangle m_roi;
-  bool           m_doROI;
         /////////
         // input data scaling
         float m_inputScale;
