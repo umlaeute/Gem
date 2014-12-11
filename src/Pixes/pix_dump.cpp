@@ -337,9 +337,9 @@ void pix_dump :: RGBMess(void)
   m_mode = GL_RGB;
 }
 
-void pix_dump :: bytemodeMess(t_float v)
+void pix_dump :: bytemodeMess(bool v)
 {
-  m_bytemode=v>0 ? 1 : 0;
+  m_bytemode=v;
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -348,7 +348,7 @@ void pix_dump :: bytemodeMess(t_float v)
 void pix_dump :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", trigger);
-  CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, int);
+  CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, bool);
   CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "RGB" , RGBMess);

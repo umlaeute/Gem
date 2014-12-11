@@ -67,7 +67,7 @@ protected:
 
 	//////////
 	void			trigger();
-	void			bytemodeMess(t_float val);
+	void			bytemodeMess(bool);
 
         //////////
 	// Set to RGBA-mode

@@ -105,7 +105,7 @@ protected:
 	void	    	DATAMess(t_symbol*s, int argc, t_atom *argv);
         //////////
         // set input data mode
-        void bytemodeMess(t_float v);
+        void bytemodeMess(bool);
 
 
 	//-----------------------------------

@@ -373,9 +373,9 @@ void pix_set :: BANGMess(void)
 // bytemodeMess
 //
 /////////////////////////////////////////////////////////
-void pix_set :: bytemodeMess(t_float v)
+void pix_set :: bytemodeMess(bool v)
 {
-  m_inputScale=v > 0. ? 1. : 255.;
+  m_inputScale=v ? 1. : 255.;
 }
 
 /////////////////////////////////////////////////////////
@@ -410,5 +410,5 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
   CPPEXTERN_MSG (classPtr, "fill", FILLMess);
   CPPEXTERN_MSG0(classPtr, "bang", BANGMess);
-  CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, int);
+  CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, bool);
 }
