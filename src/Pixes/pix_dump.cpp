@@ -47,7 +47,7 @@ pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
     oldimagex(0), oldimagey(0),
     m_xstep(1), m_ystep(1),
     m_data(0),
-    m_bytemode(0),
+    m_bytemode(false),
     m_mode(GL_RGBA)
 {
   xsize = static_cast<int>(fx);

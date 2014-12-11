@@ -110,7 +110,7 @@ class GEM_EXTERN GemPixObj : public GemBase
   //////////
   // handle ROI
   gem::Rectangle m_roi;
-  int m_doROI;
+  bool m_doROI;
 
   //////////
   // creation callback

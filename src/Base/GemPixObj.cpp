@@ -30,7 +30,7 @@ GemPixObj :: GemPixObj() :
   cachedPixBlock(pixBlock()),
   orgPixBlock(NULL), m_processOnOff(1),
   m_simd(GemSIMD::getCPU()),
-  m_doROI(0)
+  m_doROI(false)
 {
     cachedPixBlock.newimage=0;
     cachedPixBlock.newfilm =0;
