@@ -31,7 +31,8 @@ TSlider	Sliders[64];
 
 static inline float ourRand( float Max )
 {
-   return( (Max * rand()) / RAND_MAX );
+  /* coverity[dont_call] this is not crypto-science */
+  return(Max * drand48());
 }
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(slideSquares, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
