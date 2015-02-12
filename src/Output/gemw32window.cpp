@@ -46,7 +46,7 @@ static bool initGemWin(void) {
       return false;
     }
 	// Initialize QuickTime
-	EnterMovies();
+	err = EnterMovies();
 	if (err)
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
