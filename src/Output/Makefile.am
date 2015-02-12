@@ -227,6 +227,9 @@ gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 gemw32window_la_CXXFLAGS += @GL_CFLAGS@
 gemw32window_la_LIBADD   += @GL_LIBS@ 
 gemw32window_la_LDFLAGS  += @GL_LDFLAGS@
+## QuickTime support
+#gemw32window_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME_CFLAGS@
+#gemw32window_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME_LIBS@
 
 ## SOURCES
 gemw32window_la_SOURCES = \
