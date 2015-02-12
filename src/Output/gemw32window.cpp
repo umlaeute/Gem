@@ -15,6 +15,10 @@
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 #ifdef _WIN32
+// disable QuickTime support in here (where it is not used)
+// if a plugin requires QuickTime to be initialized, it has to do it itself...
+# undef HAVE_QUICKTIME
+
 # define GEMW32WINDOW_INTERNAL
 # include "gemw32window.h"
 
