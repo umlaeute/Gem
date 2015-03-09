@@ -60,6 +60,7 @@ AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 AC_CONFIG_FILES([plugins/videoVIDS/Makefile])
 AC_CONFIG_FILES([plugins/videoVLC/Makefile])
+AC_CONFIG_FILES([plugins/videoVNC/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
@@ -423,6 +424,9 @@ dnl GEM_CHECK_LIB([avicap32],[avicap32],,[main],,,,[video input])
 
 # VLC
 GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [video input])
+
+# VNC
+GEM_CHECK_LIB([libvncclient], [vncclient],[rfb/rfbclient.h], [rfbGetClient],,,, [video input])
 
 # assimp
 GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
