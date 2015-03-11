@@ -14,6 +14,9 @@ namespace gem { namespace plugins {
    std::string m_devname;
 
    std::string m_password;
+   struct _mouse {
+     int x, y, mask;
+   } m_mouse;
 
    pixBlock m_pixBlock;
    rfbClient*m_client;

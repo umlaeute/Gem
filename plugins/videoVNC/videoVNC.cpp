@@ -23,6 +23,7 @@ videoVNC::videoVNC(void)
   : m_name(std::string("vnc"))
   , m_client(0)
 {
+  m_mouse.x = -1; m_mouse.y = -1; m_mouse.mask=0;
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
@@ -108,6 +109,7 @@ bool videoVNC::setDevice(std::string device) {
 bool videoVNC::enumProperties(gem::Properties&readable,
 			       gem::Properties&writeable) {
   std::string dummy_s;
+  int dummy_i;
   readable.clear();
   writeable.clear();
 
@@ -116,15 +118,41 @@ bool videoVNC::enumProperties(gem::Properties&readable,
 
   writeable.set("password", dummy_s);
 
+  writeable.set("mouse.x", dummy_i);
+  writeable.set("mouse.y", dummy_i);
+  writeable.set("mouse.mask", dummy_i);
+
   return true;
 }
 void videoVNC::setProperties(gem::Properties&props) {
   m_props=props;
+
+  bool doMouse=false;
+
+  double num;
   std::string s;
   if(props.get("password", s)) {
     m_password=s;
   }
+  if(props.get("mouse.x", num)) {
+    doMouse=true;
+    m_mouse.x=num;
+  }
+  if(props.get("mouse.y", num)) {
+    doMouse=true;
+    m_mouse.y=num;
+  }
+  if(props.get("mouse.mask", num)) {
+    doMouse=true;
+    m_mouse.mask=num;
+  }
 
+  if(doMouse && m_client) {
+    if ((m_mouse.x != -1) && (m_mouse.y != -1)) {
+      SendPointerEvent 	(m_client, m_mouse.x, m_mouse.y, m_mouse.mask);
+      m_mouse.x = -1; m_mouse.y = -1;
+    }
+  }
 }
 void videoVNC::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
