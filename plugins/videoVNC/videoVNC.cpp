@@ -49,13 +49,20 @@ bool videoVNC::open(gem::Properties&props) {
   }
 
   if(true) {
-    int argc=1;
-    char*argv="localhost";
-    post("opening...");
-    if(!rfbInitClient(m_client, &argc, &argv))
+    char*devname=strdup(m_devname.c_str());
+    char*argv[]={
+      "gem", // fake program name
+	devname // the connection string
+    };
+    int argc=sizeof(argv)/sizeof(*argv);
+    rfbBool res=rfbInitClient(m_client, &argc, argv);
+    free(devname);
+    if(!res) {
+      // rfbInitClient() will call rfbClientCleanup() on failure automatically!
+      m_client=0;
       return false;
+    }
   }
-  post("done");
   return true;
 }
 
