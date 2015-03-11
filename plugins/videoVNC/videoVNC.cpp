@@ -100,7 +100,7 @@ bool videoVNC::setDevice(std::string device) {
   const std::string prefix="vnc://";
   if (!device.compare(0, prefix.size(), prefix)) {
     m_devname=device.substr(prefix.size());
-    post("VNC: device '%s'", m_devname.c_str());
+    //post("VNC: device '%s'", m_devname.c_str());
     return true;
   }
   return false;
@@ -111,8 +111,8 @@ bool videoVNC::enumProperties(gem::Properties&readable,
   readable.clear();
   writeable.clear();
 
-  readable.set("width", 64);
-  readable.set("height", 64);
+  readable.set("width", m_pixBlock.image.xsize);
+  readable.set("height", m_pixBlock.image.ysize);
 
   writeable.set("password", dummy_s);
 

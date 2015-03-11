@@ -4,6 +4,7 @@
 #include "plugins/video.h"
 #include "Gem/Image.h"
 
+
 #include <rfb/rfbclient.h>
 
 namespace gem { namespace plugins {
@@ -48,7 +49,7 @@ namespace gem { namespace plugins {
    // get a list of all provided devices
    virtual std::vector<std::string>provides(void);
 
-   // get's the name of the backend (e.g. "v4l")
+   // get's the name of the backend (e.g. "vnc")
    virtual const std::string getName(void);
 
    virtual bool isThreadable(void) {return false; return true;}
