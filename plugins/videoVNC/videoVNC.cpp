@@ -75,7 +75,7 @@ bool videoVNC::open(gem::Properties&props) {
 pixBlock*videoVNC::getFrame(void) {
   if(m_client) {
     // process all RFB-messages so far...
-    int w=WaitForMessage(m_client, 500);
+    int w=WaitForMessage(m_client, 5);
     if(w>0) {
       if(!HandleRFBServerMessage(m_client)) {
 	//return 0;
