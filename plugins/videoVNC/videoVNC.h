@@ -11,13 +11,18 @@ namespace gem { namespace plugins {
  private:
    std::string m_name; // 'vnc'
    std::string m_devname;
+
+   std::string m_password;
+
    pixBlock m_pixBlock;
    rfbClient*m_client;
    Properties m_props;
 
    void frameBufferCallback(rfbClient *client, int x, int y, int w, int h);
+   char*passwordCallback(void);
    // C-style static callbacks (ought to call the class-callbacks)
    static void frameBufferCB(rfbClient *client, int x, int y, int w, int h);
+   static char*passwordCB(rfbClient *client);
  public:
    videoVNC(void);
 

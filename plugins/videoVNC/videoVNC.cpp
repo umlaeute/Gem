@@ -49,6 +49,7 @@ bool videoVNC::open(gem::Properties&props) {
   }
 
   m_client->GotFrameBufferUpdate = frameBufferCB;
+  m_client->GetPassword          = passwordCB;
   rfbClientSetClientData(m_client, (void*)(rfb2gem), this);
 
   if(true) {
@@ -104,16 +105,24 @@ bool videoVNC::setDevice(std::string device) {
 }
 bool videoVNC::enumProperties(gem::Properties&readable,
 			       gem::Properties&writeable) {
+  std::string dummy_s;
   readable.clear();
   writeable.clear();
 
   readable.set("width", 64);
   readable.set("height", 64);
 
+  writeable.set("password", dummy_s);
+
   return true;
 }
 void videoVNC::setProperties(gem::Properties&props) {
   m_props=props;
+  std::string s;
+  if(props.get("password", s)) {
+    m_password=s;
+  }
+
 }
 void videoVNC::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
@@ -178,6 +187,13 @@ void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h
   }
   m_pixBlock.newimage = true;
 }
+char* videoVNC::passwordCallback() {
+  char*pwd=0;
+  if(!m_password.empty()) {
+    pwd=strdup(m_password.c_str());
+  }
+  return pwd;
+}
 
 
 void videoVNC::frameBufferCB(rfbClient *client, int x, int y, int w, int h) {
@@ -185,4 +201,9 @@ void videoVNC::frameBufferCB(rfbClient *client, int x, int y, int w, int h) {
   if(obj)
     obj->frameBufferCallback(client,x,y,w,h);
 }
+char*videoVNC::passwordCB(rfbClient*client) {
+  videoVNC*obj=rfb2gem(client);
+  if(obj)
+    return obj->passwordCallback();
+  return 0;
 }
