@@ -40,7 +40,9 @@ void videoVNC::close(void) {
   }
 }
 
+
 bool videoVNC::open(gem::Properties&props) {
+  if(m_devname.empty())return false;
   setProperties(props);
   if(m_client)close();
   m_client=rfbGetClient(8,3,4);
