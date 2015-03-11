@@ -52,7 +52,7 @@ namespace gem { namespace plugins {
    virtual bool	    	setColor(int) {return false;}
 
 
-   virtual void close(void) {};
+   virtual void close(void);
    virtual bool start(void) {return true;};
    virtual bool stop(void)  {return true;};
 };

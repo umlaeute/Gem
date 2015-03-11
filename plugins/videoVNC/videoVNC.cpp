@@ -21,14 +21,8 @@ static videoVNC*rfb2gem(rfbClient*client) {
 
 videoVNC::videoVNC(void)
   : m_name(std::string("vnc"))
+  , m_client(0)
 {
-  m_client=rfbGetClient(8,3,4);
-  if(m_client) {
-    m_client->GotFrameBufferUpdate = frameBufferCallback;
-    rfbClientSetClientData(m_client, (void*)(frameBufferCallback), this);
-    post("rfb client for %p", this);
-  }
-
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
@@ -36,14 +30,24 @@ videoVNC::videoVNC(void)
 }
 
 videoVNC::~videoVNC(void) {
-  if(m_client)
+  close();
+}
+
+void videoVNC::close(void) {
+  if(m_client) {
     rfbClientCleanup(m_client);
-  m_client=0;
+    m_client=0;
+  }
 }
 
 bool videoVNC::open(gem::Properties&props) {
   setProperties(props);
-  if(!m_client)return false;
+  if(m_client)close();
+  m_client=rfbGetClient(8,3,4);
+  if(!m_client) {
+    return false;
+  }
+
   if(true) {
     int argc=1;
     char*argv="localhost";
