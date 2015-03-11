@@ -48,6 +48,9 @@ bool videoVNC::open(gem::Properties&props) {
     return false;
   }
 
+  m_client->GotFrameBufferUpdate = frameBufferCB;
+  rfbClientSetClientData(m_client, (void*)(rfb2gem), this);
+
   if(true) {
     char*devname=strdup(m_devname.c_str());
     char*argv[]={
@@ -141,7 +144,7 @@ const std::string videoVNC::getName(void) {
   return m_name;
 }
 
-void videoVNC::frameBufferUpdated(rfbClient *client, int x, int y, int w, int h) {
+void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h) {
   int X,Y;
   int i,j;
   rfbPixelFormat* pf=&client->format;
@@ -176,7 +179,10 @@ void videoVNC::frameBufferUpdated(rfbClient *client, int x, int y, int w, int h)
   m_pixBlock.newimage = true;
 }
 
-void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h) {
-  videoVNC*obj=(videoVNC*)rfbClientGetClientData(client, (void*)(frameBufferCallback));
-  obj->frameBufferUpdated(client,x,y,w,h);
+
+void videoVNC::frameBufferCB(rfbClient *client, int x, int y, int w, int h) {
+  videoVNC*obj=rfb2gem(client);
+  if(obj)
+    obj->frameBufferCallback(client,x,y,w,h);
+}
 }

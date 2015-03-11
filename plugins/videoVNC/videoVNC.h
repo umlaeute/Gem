@@ -14,8 +14,10 @@ namespace gem { namespace plugins {
    pixBlock m_pixBlock;
    rfbClient*m_client;
    Properties m_props;
-   static void frameBufferCallback(rfbClient *client, int x, int y, int w, int h);
-   void frameBufferUpdated(rfbClient *client, int x, int y, int w, int h);
+
+   void frameBufferCallback(rfbClient *client, int x, int y, int w, int h);
+   // C-style static callbacks (ought to call the class-callbacks)
+   static void frameBufferCB(rfbClient *client, int x, int y, int w, int h);
  public:
    videoVNC(void);
 
