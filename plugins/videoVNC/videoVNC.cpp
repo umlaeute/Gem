@@ -13,6 +13,12 @@ static double getRandom(void) {
   return random_nextseed * (1./4294967296.);;
 }
 
+static videoVNC*rfb2gem(rfbClient*client) {
+  return (videoVNC*)rfbClientGetClientData(client, (void*)(rfb2gem));
+}
+
+
+
 videoVNC::videoVNC(void)
   : m_name(std::string("vnc"))
 {
