@@ -202,13 +202,16 @@ void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h
   for(j=0,Y=0;j<client->height*row_stride;j+=row_stride,Y++) {
     for(i=0,X=0;i<client->width*bpp;i+=bpp,X++) {
       unsigned char* p=client->frameBuffer+j+i;
-      unsigned int v;
-      if(bpp==4)
+      unsigned int v=*(unsigned char*)p;
+      switch(bpp) {
+      case 4:
 	v=*(unsigned int*)p;
-      else if(bpp==2)
+	break;
+      case 2:
 	v=*(unsigned short*)p;
-      else
-	v=*(unsigned char*)p;
+	break;
+      default:
+      }
 
       m_pixBlock.image.SetPixel(Y, X, chRed,  (v>>pf->redShift)  *256/(pf->redMax  +1));
       m_pixBlock.image.SetPixel(Y, X, chGreen,(v>>pf->greenShift)*256/(pf->greenMax+1));
