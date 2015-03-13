@@ -310,6 +310,8 @@ unsigned int32 *longimagedata(const char *name)
   xsize = image->xsize;
   ysize = image->ysize;
   zsize = image->zsize;
+  xysize=(unsigned long)xsize*(unsigned long)ysize;
+
   if(rle)
     {
       tablen = (unsigned long)ysize*zsize*sizeof(int32);
@@ -346,7 +348,6 @@ unsigned int32 *longimagedata(const char *name)
 	goto error;
       }
       cur = 512+2*tablen;
-      xysize=(unsigned long)xsize*(unsigned long)ysize;
       base = (unsigned int32 *)
         malloc((xysize+TAGLEN)*sizeof(int32));
       addlongimgtag(base,xsize,ysize);
