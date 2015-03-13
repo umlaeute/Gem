@@ -211,6 +211,7 @@ void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h
 	v=*(unsigned short*)p;
 	break;
       default:
+	break;
       }
 
       m_pixBlock.image.SetPixel(Y, X, chRed,  (v>>pf->redShift)  *256/(pf->redMax  +1));
