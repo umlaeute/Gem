@@ -11,6 +11,14 @@ cd "${SCRIPTDIR}"
 
 error "building Gem for $TRAVIS_OS_NAME"
 
+## coverity does a double build: 1x for coverity, 1x the ordinary build
+## let's suppress the 2nd one
+if [ "x${COVERITY_SCAN_BRANCH}" = "x1" ]; then
+  error "looks like we are running a coverity-scan build: stopping"
+  exit 0
+fi
+
+
 debug ${GEMDIR}/autogen.sh  || exit 1
 mkdir -p "${BUILDDIR}"
 cd "${BUILDDIR}"
