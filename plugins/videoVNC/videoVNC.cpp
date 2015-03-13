@@ -109,7 +109,7 @@ bool videoVNC::setDevice(std::string device) {
 bool videoVNC::enumProperties(gem::Properties&readable,
 			       gem::Properties&writeable) {
   std::string dummy_s;
-  int dummy_i;
+  int dummy_i=0;
   readable.clear();
   writeable.clear();
 
