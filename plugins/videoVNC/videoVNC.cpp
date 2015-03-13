@@ -59,7 +59,7 @@ bool videoVNC::open(gem::Properties&props) {
     char*devname=strdup(m_devname.c_str());
     char*argv[]={
       "gem", // fake program name
-	devname // the connection string
+      devname // the connection string
     };
     int argc=sizeof(argv)/sizeof(*argv);
     rfbBool res=rfbInitClient(m_client, &argc, argv);
