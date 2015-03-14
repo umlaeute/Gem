@@ -15,6 +15,7 @@ ssh-add "${KEYFILE}"
 ## make sure our remote host is known
 # (so we are not asked to accept it)
 GITDEPLOYHOST="${GITDEPLOYTARGET##*@}"
+GITDEPLOYHOST="${GITDEPLOYHOST%%/*}"
 ssh-keyscan -H ${GITDEPLOYHOST} >> ~/.ssh/known_hosts
 
 OS_NAME="${TRAVIS_OS_NAME}"
