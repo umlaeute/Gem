@@ -9,6 +9,7 @@ env:
   # LATER: shouldn't this be set via env-variable in the webinterface for
   # travis-ci?
   - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
+  - secure: KixF9uaREz5Xx1/qf+1v0nkgksjhY0ztRxN3Npgd8m3ClpoTUz4y6tBkbKBNBEgPU257rJuyEB2aMS55HAFp86id8IUcbw0S4iZ+obHp1wpJI3zamYM0IAFpC8Z19Jih+/28xmHbxNST2d/LJ9GD6vZjycWh4JSFST3kSmutECI=
 
 ## 'os' selection needs to be enabled manually by emailing travis-ci
 os:
