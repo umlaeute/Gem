@@ -12,6 +12,11 @@ KEYFILE=${0%/*}/travisci.pem
 chmod 600 "${KEYFILE}"
 ssh-add "${KEYFILE}"
 
+## make sure our remote host is known
+# (so we are not asked to accept it)
+GITDEPLOYHOST="${GITDEPLOYTARGET##*@}"
+ssh-keyscan -H ${GITDEPLOYHOST} >> ~/.ssh/known_hosts
+
 OS_NAME="${TRAVIS_OS_NAME}"
 if [ "x${OS_NAME}" = "x" ]; then OS_NAME=OS; fi
 if [ "x${ARCH}" = "x" ]; then ARCH=default; fi
