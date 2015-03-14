@@ -31,6 +31,9 @@ before_install:
 script:
 - "./build/travis-ci/build.sh"
 
+after_success:
+- "./build/travis-ci/deploy-git.sh"
+
 ## deploy disabled until i have fixed github/releases
 before_deploy:
 - "./build/travis-ci/prepare-upload.sh"
