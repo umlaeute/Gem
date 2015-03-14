@@ -8,6 +8,10 @@ if [ "x${GITDEPLOYTARGET}" = "x" ]; then
  exit 0
 fi
 
+KEYFILE=${0%/*}/travisci.pem
+chmod 600 "${KEYFILE}"
+ssh-add "${KEYFILE}"
+
 OS_NAME="${TRAVIS_OS_NAME}"
 if [ "x${OS_NAME}" = "x" ]; then OS_NAME=OS; fi
 if [ "x${ARCH}" = "x" ]; then ARCH=default; fi
