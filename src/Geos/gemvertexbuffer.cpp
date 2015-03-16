@@ -452,9 +452,11 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
                                   gem::VertexBuffer&vb, unsigned int dimen, unsigned int offset)
 {
   t_garray *a;
-  int npoints;
+  int npoints_;
+  unsigned int npoints;
   unsigned int i;
   t_word *vec;
+  const bool interleaved = (0==dimen);
 
   if(offset>vb.size) {
     error("offset %d is bigger than vertexbuffer size (%d)", offset, vb.size);
@@ -467,36 +469,44 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
     error("%s: no such array", tab_name.c_str());
     return;
   }
-  if (!garray_getfloatwords(a, &npoints, &vec)) {
+  if (!garray_getfloatwords(a, &npoints_, &vec)) {
     error("%s: bad template for tabLink", tab_name.c_str());
     return;
   }
-
-  if(((unsigned int)npoints)!=vb.size) {
-    vb.resize(npoints);
+  if(npoints_<0) {
+    error("%s: illegal number of elements %d", tab_name.c_str(), npoints_);
   }
+  npoints=npoints_;
+
+  unsigned int size=npoints;
+  if(interleaved) {
+    size=(npoints/vb.dimen);
+    npoints=size*vb.dimen;
+  }
+  if(size!=vb.size) {
+    vb.resize(size);
+  }
+
   float*array=vb.array;
 
   unsigned int npts=(unsigned int)npoints;
-  if(dimen) {  // single channel
 
-    if(npts>vb.size-offset) {
-      npts=vb.size-offset;
+  if(interleaved) { // interleaved channels
+    if(size>vb.size-offset) {
+      size=vb.size-offset;
     }
+    npoints=size*vb.dimen;
 
-    for ( i = 0 ; i < npts ; i++ )	{
-      array[offset + i*dimen] = vec[i].w_float;
-    }
-  } else {
-    // interleaved channels
-    npts=npts/vb.dimen;
-    if(npts>vb.size-offset) {
-      npts=vb.size-offset;
-    }
-    npts*=vb.dimen;
-
-    for ( i = 0 ; i < npts ; i++ ) {
+    for ( i = 0 ; i < npoints ; i++ ) {
       array[offset+i] = vec[i].w_float;
+    }
+  } else { // single channel
+    const unsigned int maxindex=vb.size*vb.dimen;
+
+    for ( i = 0 ; i < size ; i++ )	{
+      const unsigned int index=offset+i*dimen;
+      if(index>=maxindex)break;
+      array[index] = vec[i].w_float;
     }
   }
   vb.dirty=true;
