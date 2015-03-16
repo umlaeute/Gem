@@ -6,9 +6,10 @@
 //
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2011 Cyrille Henry
+//    Copyright (c) 2014 Antoine Villeret
+//    Copyright (c) 2014 jprtzk
+//    Copyright (c) 2012-2015 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
