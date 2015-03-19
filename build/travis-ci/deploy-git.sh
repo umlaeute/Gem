@@ -72,11 +72,15 @@ git config user.email "zmoelnig@travis-ci.umlaeute.mur.at"
 git config user.name "Travis CI"
 
 
-error "commiting Gem-${DEPLOY_BRANCH}"
-git add -A .
-git commit -m "Gem ${TRAVIS_COMMIT} ${DEPLOY_BRANCH}
+if [ -d "Gem" ]; then
+ error "commiting Gem-${DEPLOY_BRANCH}"
+ git add -A Gem
+ git commit -m "Gem ${TRAVIS_COMMIT} ${DEPLOY_BRANCH}
 
 built '${TRAVIS_BRANCH}:${TRAVIS_COMMIT}' for ${DEPLOY_BRANCH}"
-error "now pushing Gem from $(pwd)"
-git push --set-upstream origin "${DEPLOY_BRANCH}"
+ error "now pushing Gem from $(pwd)"
+ git push --set-upstream origin "${DEPLOY_BRANCH}"
+else
+ error "refusing to push non-existing Gem"
+fi
 error "$0 done."
