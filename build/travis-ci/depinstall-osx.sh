@@ -16,7 +16,7 @@ doinstall() {
   brew install coreutils
   
   ## and install pd
-  PDVERSION="0.46-2"
+  PDVERSION="0.46-5"
   if [ "x${ARCH}" = "xi386" ]; then
     wget http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
     tar -xf pd-${PDVERSION}.mac.tar.gz
