@@ -25,6 +25,7 @@ doinstall() {
     tar -xf pd-0.46-2-64bit.mac.tar.gz
     PDDIR=$(pwd)/Pd-0.46-2-64bit.app/Contents/Resources/
   fi
+  chmod -R u+rXw .
   
 }
 
