@@ -16,14 +16,15 @@ doinstall() {
   brew install coreutils
   
   ## and install pd
+  PDVERSION="0.46-2"
   if [ "x${ARCH}" = "xi386" ]; then
-    wget http://msp.ucsd.edu/Software/pd-0.46-2.mac.tar.gz
-    tar -xf pd-0.46-2.mac.tar.gz
-    PDDIR=$(pwd)/Pd-0.46-2.app/Contents/Resources/
+    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
+    tar -xf pd-${PDVERSION}.mac.tar.gz
+    PDDIR=$(pwd)/Pd-${PDVERSION}.app/Contents/Resources/
   else
-    wget http://msp.ucsd.edu/Software/pd-0.46-2-64bit.mac.tar.gz
-    tar -xf pd-0.46-2-64bit.mac.tar.gz
-    PDDIR=$(pwd)/Pd-0.46-2-64bit.app/Contents/Resources/
+    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}-64bit.mac.tar.gz
+    tar -xf pd-${PDVERSION}-64bit.mac.tar.gz
+    PDDIR=$(pwd)/Pd-${PDVERSION}-64bit.app/Contents/Resources/
   fi
   chmod -R u+rXw .
   
