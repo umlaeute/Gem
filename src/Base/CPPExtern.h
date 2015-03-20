@@ -148,6 +148,10 @@ class GEM_EXTERN CPPExtern
 	static bool checkGemVersion(const int major, const int minor);
   CPPExtern(const CPPExtern&);
   virtual CPPExtern&operator=(const CPPExtern&);
+
+ public:
+  /* send a message to this object */
+  virtual bool send(std::string, unsigned int argc, t_atom*argv);
 };
 
 ////////////////////////////////////////

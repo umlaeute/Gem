@@ -202,3 +202,14 @@ CPPExtern&CPPExtern::operator=(const CPPExtern&org) {
   m_endpost=true;
   return *this;
 }
+
+
+bool CPPExtern::send(std::string str, unsigned int argc, t_atom*argv) {
+  t_symbol*s=gensym(str.c_str());
+  t_gotfn fn=zgetfn(&x_obj->ob_pd, s);
+  if (0 == fn) {
+    return false;
+  }
+  pd_typedmess(&x_obj->ob_pd, s, argc, argv);
+  return true;
+}
