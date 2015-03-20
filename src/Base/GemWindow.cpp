@@ -20,6 +20,8 @@
 #include "GemContext.h"
 #include "Gem/Exception.h"
 
+#include <set>
+
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
@@ -114,8 +116,10 @@ public:
   void requeue(void) {
     clock_delay(qClock, 0);
   }
-};
 
+  static std::set<GemWindow*>s_contexts;
+}; /* GemWindow::PIMPL */
+std::set<GemWindow*>GemWindow::PIMPL::s_contexts;
 
 /////////////////////////////////////////////////////////
 //
@@ -142,6 +146,7 @@ GemWindow :: GemWindow()
   i=m_height; gem::Settings::get("window.height", i), m_height=i;
   m_pimpl->infoOut   = outlet_new(this->x_obj, 0);
   m_pimpl->rejectOut = outlet_new(this->x_obj, 0);
+  GemWindow::PIMPL::s_contexts.insert(this);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -153,6 +158,7 @@ GemWindow :: ~GemWindow()
     m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
     delete m_pimpl; m_pimpl=0;
   }
+  GemWindow::PIMPL::s_contexts.erase(this);
 }
 
 void GemWindow::info(std::vector<t_atom>l) {
