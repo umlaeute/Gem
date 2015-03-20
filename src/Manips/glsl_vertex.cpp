@@ -238,7 +238,7 @@ void glsl_vertex :: loadShader()
     openMessARB();
 
   verbose(1, "Loaded file: %s", buf);
-  m_shaderFilename=NULL;
+  //m_shaderFilename=NULL;
 }
 
 ////////////////////////////////////////////////////////
