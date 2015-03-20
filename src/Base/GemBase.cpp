@@ -218,6 +218,13 @@ enum GemBase::RenderState GemBase::getState(void) {
   return m_state;
 }
 
+#include "Base/GemWindow.h"
+void GemBase::beforeDeletion(void) {
+  //post("GemBase to be deleted");
+  GemWindow::stopInAllContexts(this);
+  CPPExtern::beforeDeletion();
+}
+
 
 
 
