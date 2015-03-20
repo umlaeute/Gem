@@ -202,3 +202,7 @@ CPPExtern&CPPExtern::operator=(const CPPExtern&org) {
   m_endpost=true;
   return *this;
 }
+
+void CPPExtern::beforeDeletion(void) {
+  //post("CPPExtern to be deleted");
+}
