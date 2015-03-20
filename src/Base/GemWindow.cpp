@@ -23,6 +23,18 @@
 
 #include <set>
 
+namespace {
+  bool sendContextDestroyedMsg(t_pd*x) {
+    if(!x)
+      return false;
+    t_symbol*s=gensym("__gem_context");
+    t_atom a[1];
+    SETFLOAT(a+0, 0);
+    pd_typedmess(x, s, 1, a);
+    return true;
+  }
+};
+
 class GemWindow::PIMPL {
 public:
   PIMPL(GemWindow*gc) : parent(gc),
@@ -278,14 +290,13 @@ gem::Context*GemWindow::destroyContext(gem::Context*ctx){
   return ctx;
 }
 void GemWindow::stopInAllContexts(GemBase*obj) {
-  t_atom a[1];
-  SETFLOAT(a+0, 0);
   for (std::set<GemWindow*>::iterator it = GemWindow::PIMPL::s_contexts.begin();
             it!=GemWindow::PIMPL::s_contexts.end();
             ++it) {
     GemWindow*w=(*it);
     w->makeCurrent();
-    bool res=obj->send("__gem_context", 1, a);
+    t_pd*x=&obj->x_obj->ob_pd;
+    sendContextDestroyedMsg(x);
   }
 }
 
