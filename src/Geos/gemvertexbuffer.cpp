@@ -219,20 +219,24 @@ void gemvertexbuffer :: tableMess (gem::VertexBuffer&vb, std::string name,
 
   if(argc==1 || (argc==2
                  && A_FLOAT == argv[1].a_type)) { // interleaved (+offset)
+    bool resize=true;
     if(argc>1) {
       offset=atom_getfloat(argv+1);
+      resize=false;
     }
     tabname=std::string(atom_getsymbol(argv)->s_name);
 
-    copyArray(tabname, vb, 0, offset*vb.dimen);
+    copyArray(tabname, vb, 0, offset*vb.dimen, resize);
     vb.enabled=true;
     return;
   }
 
   if (argc == vb.dimen || (argc == (vb.dimen+1))
       && A_FLOAT == argv[vb.dimen].a_type) {  // planar (+offset)
+    bool resize=true;
     if(((unsigned int)argc)>vb.dimen) {
       offset=atom_getfloat(argv+vb.dimen);
+      resize=false;
     }
     for(i=0; i<vb.dimen; i++) {
       if(A_SYMBOL!=argv[i].a_type) {
@@ -241,7 +245,7 @@ void gemvertexbuffer :: tableMess (gem::VertexBuffer&vb, std::string name,
     }
     for(i=0; i<vb.dimen; i++) {
       tabname=std::string(atom_getsymbol(argv+i)->s_name);
-      copyArray(tabname, vb, vb.dimen, offset*vb.dimen+i);
+      copyArray(tabname, vb, vb.dimen, offset*vb.dimen+i, resize);
     }
   } else {
     goto failed;
@@ -399,6 +403,7 @@ void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
                                 gem::VertexBuffer&array, unsigned int offset)
 {
   int offset2 = 0;
+  bool resize=true;
   if ( argv[0].a_type != A_SYMBOL ) {
     error("first arg must be symbol (table name)");
     return;
@@ -408,11 +413,12 @@ void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
       error("second arg must be float (offset)");
     } else {
       offset2 = argv[1].a_w.w_float;
+      resize=false;
     }
   }
   offset2 = offset2<0?0:offset2;
   std::string tab_name = atom_getsymbol(argv)->s_name;
-  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset);
+  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset, resize);
   array.enabled=true;
 }
 
@@ -451,7 +457,9 @@ void gemvertexbuffer :: createVBO(void)
 }
 
 void gemvertexbuffer :: copyArray(const std::string&tab_name,
-                                  gem::VertexBuffer&vb, unsigned int dimen, unsigned int offset)
+                                  gem::VertexBuffer&vb,
+				  unsigned int dimen, unsigned int offset,
+				  bool resize)
 {
   t_garray *a;
   int npoints_;
@@ -486,7 +494,8 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
     npoints=size*vb.dimen;
   }
   if(size!=vb.size) {
-    vb.resize(size);
+    if(resize)
+      vb.resize(size);
   }
 
   float*array=vb.array;
@@ -535,6 +544,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   std::string tabname;
   std::string name;
   const char* name_ch;
+  bool resize=true;
 
   if(glsl_program==0) {
     error("glsl_program has not been set");
@@ -549,6 +559,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   if(argc==3) {
     if(argv[2].a_type==A_FLOAT) {
       tab_offset=atom_getfloat(argv+2);
+      resize=false;
     } else {
       error("illegal arguments to 'attribute': must be <vbo_index> <attribute_name> <table> [<offset>]");
       return;
@@ -560,7 +571,8 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
     if(name.compare(m_attribute[i].attrib_name) == 0) {
       tabname=std::string(atom_getsymbol(argv+1)->s_name);
       copyArray(tabname, m_attribute[i], 1,
-                tab_offset*m_attribute[i].dimen);  // always interleaved
+                tab_offset*m_attribute[i].dimen,
+		resize);  // always interleaved
       m_attribute[i].attrib_array = tabname;
       m_attribute[i].offset = tab_offset;
       return;
@@ -621,7 +633,8 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   }
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     copyArray(m_attribute[i].attrib_array, m_attribute[i], 1,
-              m_attribute[i].offset*m_attribute[i].dimen);
+              m_attribute[i].offset*m_attribute[i].dimen,
+	      resize);
   }
   return;
 }

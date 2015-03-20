@@ -63,7 +63,7 @@ private :
   // GL functionality
   void createVBO(void);
   void copyArray(const std::string&tab_name, gem::VertexBuffer&array,
-                 unsigned int stride, unsigned int offset);
+                 unsigned int stride, unsigned int offset, bool resize);
 
   void tableMess (gem::VertexBuffer&vb, std::string name, unsigned int argc,
                   t_atom *argv);
