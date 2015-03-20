@@ -30,6 +30,7 @@ DESCRIPTION
 namespace gem {
   class Context;
 };
+class GemBase;
 
 class GEM_EXTERN GemWindow : public CPPExtern
 {
@@ -85,6 +86,12 @@ class GEM_EXTERN GemWindow : public CPPExtern
    * @returns  NULL
    */
   static gem::Context*destroyContext(gem::Context*);
+
+  /*
+   * call stopRendering() of a given objects for all valid contexts
+   * (this will make each context current, call obj->stopRendering and switch back to the original context)
+   */
+  static void stopInAllContexts(GemBase*obj);
 
   /* this MUST be called from the derived classes
    * as it will eventually establish a new GemContext (if m_context is non-NULL)

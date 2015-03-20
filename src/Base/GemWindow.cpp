@@ -19,6 +19,7 @@
 #include "Gem/Settings.h"
 #include "GemContext.h"
 #include "Gem/Exception.h"
+#include "GemBase.h"
 
 #include <set>
 
@@ -266,12 +267,26 @@ void GemWindow::dispatch() {
 }
 
 gem::Context*GemWindow::createContext(void){
-  return new gem::Context();
+  gem::Context*ctx=new gem::Context();
+  return ctx;
 }
 gem::Context*GemWindow::destroyContext(gem::Context*ctx){
-  if(ctx)delete ctx;
+  if(ctx){
+    delete ctx;
+  }
   ctx=0;
   return ctx;
+}
+void GemWindow::stopInAllContexts(GemBase*obj) {
+  t_atom a[1];
+  SETFLOAT(a+0, 0);
+  for (std::set<GemWindow*>::iterator it = GemWindow::PIMPL::s_contexts.begin();
+            it!=GemWindow::PIMPL::s_contexts.end();
+            ++it) {
+    GemWindow*w=(*it);
+    w->makeCurrent();
+    bool res=obj->send("__gem_context", 1, a);
+  }
 }
 
 bool GemWindow::createGemWindow(void){
