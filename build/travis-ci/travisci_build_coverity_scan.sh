@@ -23,6 +23,12 @@ if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then
   exit 0
 fi
 
+# Only run on the first job
+if [ "x${TRAVIS_JOB_NUMBER%.1}" = "x${TRAVIS_JOB_NUMBER}" ]; then
+  echo -e "\033[33;1mINFO: Skipping Coverity Analysis for non-first sub-job ${TRAVIS_JOB_NUMBER}.\033[0m"
+  exit 0
+fi
+
 # Verify this branch should run
 IS_COVERITY_SCAN_BRANCH=`ruby -e "puts '${TRAVIS_BRANCH}' =~ /\\A$COVERITY_SCAN_BRANCH_PATTERN\\z/ ? 1 : 0"`
 if [ "$IS_COVERITY_SCAN_BRANCH" = "1" ]; then
