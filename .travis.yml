@@ -54,6 +54,7 @@ addons:
     project:
       name: umlaeute/Gem
       description: Build submitted via Travis CI
+    build_script_url: https://raw.githubusercontent.com/umlaeute/Gem/coverity_scan/build/travis-ci/travisci_build_coverity_scan.sh
     notification_email: pd-gem-CVS@lists.sourceforge.net
     build_command_prepend: "./autogen.sh && ./configure && make clean"
     build_command: make -j 4
