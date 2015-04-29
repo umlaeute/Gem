@@ -10,7 +10,20 @@ fi
 GITDEPLOYHOST="${GITDEPLOYTARGET##*@}"
 GITDEPLOYHOST="${GITDEPLOYHOST%%/*}"
 
-KEYFILE=~/.ssh/id_rsa
+KEYFILE=${HOME}/.ssh/id_rsa
+
+# check if there is an ssh keyfile
+# if not, try to decrypt one; if that fails stop
+if [ ! -e "${KEYFILE}" ]; then
+ mkdir -p ${HOME}/.ssh
+ openssl aes-256-cbc -K $encrypted_a508a15bf9d3_key -iv $encrypted_a508a15bf9d3_iv -in ${0%/*}/travisci.enc -out "${KEYFILE}" -d
+fi
+if [ ! -e "${KEYFILE}" ]; then
+ error "couldn't find ${KEYFILE}; skipping deployment"
+ exit 0
+fi
+
+
 
 OS_NAME="${TRAVIS_OS_NAME}"
 if [ "x${OS_NAME}" = "x" ]; then OS_NAME=OS; fi
