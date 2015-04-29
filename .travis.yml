@@ -26,8 +26,6 @@ matrix:
      env: ARCH=i386
 
 before_install:
-- mkdir -p ~/.ssh
-- openssl aes-256-cbc -K $encrypted_a508a15bf9d3_key -iv $encrypted_a508a15bf9d3_iv -in build/travis-ci/travisci.enc -out ~/.ssh/id_rsa -d
 - "./build/travis-ci/depinstall.sh"
 script:
 - "./build/travis-ci/build.sh"
