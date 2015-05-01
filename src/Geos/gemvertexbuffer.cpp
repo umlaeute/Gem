@@ -587,10 +587,14 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
     return;
   }
 
+  GLsizei length;
+  GLint size;
+  GLchar glname;
+
   glGetActiveAttrib(glsl_program,
                     glsl_index,  /* GLuint program, GLuint index */
-                    0, NULL, NULL,          /* GLsizei maxLength, GLsizei* length, GLint* size */
-                    &attrib_type, NULL);       /* GLenum* type, GLchar* name */
+                    0, &length, &size,          /* GLsizei maxLength, GLsizei* length, GLint* size */
+                    &attrib_type, &glname);       /* GLenum* type, GLchar* name */
   switch(attrib_type) {
   case GL_FLOAT:
     vbo_dimen=1;
