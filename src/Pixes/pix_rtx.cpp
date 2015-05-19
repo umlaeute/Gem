@@ -38,6 +38,28 @@
 #include "pix_rtx.h"
 #include <string.h>
 
+/////////////////////////////////////////////////////////
+// CreateBuffer
+//
+/////////////////////////////////////////////////////////
+void refresh_buffer(const imageStruct&reference, imageStruct&buffer)
+{
+  // only 1 channel !!, to keep data-size handy
+  unsigned char*data = buffer.data;
+  size_t dataSize = buffer.xsize * buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char);
+  bool refresh=(buffer.xsize != buffer.xsize) || (buffer.ysize != buffer.ysize) || (buffer.csize != buffer.csize);
+
+  buffer.xsize = buffer.xsize;
+  buffer.ysize = buffer.ysize;
+  buffer.setCsizeByFormat(buffer.format);
+
+  if(data!=buffer.reallocate( dataSize ) || refresh) {
+    buffer.setBlack();
+  }
+}
+
+
+
 CPPEXTERN_NEW(pix_rtx);
 
 /////////////////////////////////////////////////////////
@@ -55,7 +77,7 @@ pix_rtx :: pix_rtx()
    image.xsize  = image.ysize = 64;
    image.setCsizeByFormat(GL_RGBA_GEM);
 
-   create_buffer(image);
+   refresh_buffer(image, buffer);
 
    bufcount  = 0;
    mode = true;
@@ -69,42 +91,8 @@ pix_rtx :: pix_rtx()
 /////////////////////////////////////////////////////////
 pix_rtx :: ~pix_rtx()
 {
-   // clean my buffer
-   delete_buffer();
-}
-
-/////////////////////////////////////////////////////////
-// CreateBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_rtx :: create_buffer(const imageStruct&image)
-{
-   size_t dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char); // only 1 channel !!, to keep data-size handy
-
-   buffer.xsize = image.xsize;
-   buffer.ysize = image.ysize;
-   buffer.setCsizeByFormat(image.format);
-   buffer.reallocate( dataSize );
-   memset(buffer.data, 0, dataSize);
-}
-
-/////////////////////////////////////////////////////////
-// DeleteBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_rtx :: delete_buffer()
-{
+  // clean my buffer
   buffer.clear();
-}
-
-
-/////////////////////////////////////////////////////////
-// ClearBuffer
-//
-/////////////////////////////////////////////////////////
-void pix_rtx :: clear_buffer()
-{
-  memset(buffer.data, 0, buffer.xsize * buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char));
 }
 
 /////////////////////////////////////////////////////////
@@ -223,7 +211,7 @@ void pix_rtx :: modeMessCallback(void *data, t_float newmode)
 }
 void pix_rtx :: clearMessCallback(void *data)
 {
-    GetMyClass(data)->clear_buffer();
+  GetMyClass(data)->buffer.setBlack();
 }
 void pix_rtx :: setMessCallback(void *data)
 {

@@ -58,18 +58,6 @@ protected:
 	virtual ~pix_rtx();
 
 	//////////
-	// create a buffer that fits to the current imageSize
-	virtual void   create_buffer(const imageStruct&image);
-
-	//////////
-	// delete the buffer
-	virtual void   delete_buffer();
-
-	//////////
-	// clear the buffer
-	virtual void   clear_buffer();
-
-	//////////
 	// Do the processing
 	virtual void 	processImage(imageStruct &image);
 
