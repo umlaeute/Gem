@@ -42,7 +42,7 @@
 // CreateBuffer
 //
 /////////////////////////////////////////////////////////
-void refresh_buffer(const imageStruct&reference, imageStruct&buffer)
+bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
 {
   // only 1 channel !!, to keep data-size handy
   unsigned char*data = buffer.data;
@@ -56,6 +56,7 @@ void refresh_buffer(const imageStruct&reference, imageStruct&buffer)
   if(data!=buffer.reallocate( dataSize ) || refresh) {
     buffer.setBlack();
   }
+  return (0!=buffer.data);
 }
 
 
