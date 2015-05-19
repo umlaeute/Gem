@@ -102,14 +102,9 @@ pix_rtx :: ~pix_rtx()
 /////////////////////////////////////////////////////////
 void pix_rtx :: processImage(imageStruct &image)
 {
-  // assume that the pix_size does not change !
-  if (image.xsize != buffer.xsize || image.ysize != buffer.ysize || image.csize != buffer.csize) {
-    size_t dataSize = image.xsize * image.xsize * image.ysize * image.csize * sizeof(unsigned char);
-    buffer.reallocate( dataSize );
-    buffer.xsize = image.xsize;
-    buffer.ysize = image.ysize;
-    buffer.csize = image.csize;
-    memset(buffer.data, 0, dataSize);
+  if (!refresh_buffer(image, buffer)) {
+    // ouch, couldn't allocate memory!
+    return;
   }
 
    size_t pixsize = image.ysize * image.xsize;
