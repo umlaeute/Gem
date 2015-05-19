@@ -373,6 +373,7 @@ void pix_sub(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
 GEM_EXTERN void imageStruct::setBlack(void) {
   size_t i = datasize;
   unsigned char* dummy=data;
+  if(!data)return;
   switch (format){
   case GL_YCBCR_422_GEM:
     i/=4;
@@ -389,6 +390,7 @@ GEM_EXTERN void imageStruct::setBlack(void) {
 GEM_EXTERN void imageStruct::setWhite(void) {
   size_t i = datasize;
   unsigned char* dummy=data;
+  if(!data)return;
   switch (format){
   case GL_YCBCR_422_GEM:
     i/=4;
