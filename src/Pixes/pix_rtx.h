@@ -76,9 +76,9 @@ protected:
 
 	//////////
 	// the methods
-	static void modeMessCallback(void *data, t_float newmode);
-	static void clearMessCallback(void *data);
-	static void setMessCallback(void *data);
+        void modeMess(int newmode);
+        void clearMess(void);
+        void setMess(void);
 
 };
 

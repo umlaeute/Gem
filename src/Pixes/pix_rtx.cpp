@@ -194,22 +194,19 @@ void pix_rtx :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::modeMessCallback),
-		  gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::clearMessCallback),
-		  gensym("clear"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rtx::setMessCallback),
-		  gensym("set"), A_NULL);
+  CPPEXTERN_MSG1(classPtr, "mode" , modeMess, int);
+  CPPEXTERN_MSG0(classPtr, "clear", clearMess);
+  CPPEXTERN_MSG0(classPtr, "set"  , setMess);
 }
-void pix_rtx :: modeMessCallback(void *data, t_float newmode)
+void pix_rtx :: modeMess(int newmode)
 {
-  GetMyClass(data)->mode=(newmode!=0);
+  mode=(newmode!=0);
 }
-void pix_rtx :: clearMessCallback(void *data)
+void pix_rtx :: clearMess()
 {
-  GetMyClass(data)->buffer.setBlack();
+  buffer.setBlack();
 }
-void pix_rtx :: setMessCallback(void *data)
+void pix_rtx :: setMess()
 {
-  GetMyClass(data)->set_buffer = true;
+  set_buffer = true;
 }
