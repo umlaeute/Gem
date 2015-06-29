@@ -20,5 +20,9 @@ AC_LANG(C++)
 
 
 dnl GEM_CHECK_DECKLINK
+GEM_CHECK_LIB([DeckLink],[], [DeckLinkAPI.h],[CreateDeckLinkIteratorInstance], ,,,[video input])
+AS_IF([test "x${PKG_DECKLINK_LIBS}" != "x" ],[],[
+ AC_DEFINE_UNQUOTED(AS_TR_CPP(MUST_DLOPEN_DECKLINKAPI),[1], [Define to 1 to open DeckLinkAPI via dlopen()])
+ ])
 
 AC_OUTPUT
