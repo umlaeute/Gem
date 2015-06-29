@@ -92,6 +92,9 @@ fi
 if test -d "$srcdir/plugins/videoPYLON"; then
   AC_CONFIG_SUBDIRS([plugins/videoPYLON])
 fi
+if test -d "$srcdir/plugins/videoDECKLINK"; then
+  AC_CONFIG_SUBDIRS([plugins/videoDECKLINK])
+fi
 
 
 AC_LANG(C++)

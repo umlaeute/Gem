@@ -23,7 +23,7 @@ SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP
 SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC videoVNC
 
 ## proprietary video capture plugins
-SUBDIRS += videoAVT videoHALCON videoPYLON
+SUBDIRS += videoAVT videoHALCON videoPYLON videoDECKLINK
 
 ## asset loading plugins
 SUBDIRS += modelOBJ modelASSIMP2 modelASSIMP3
