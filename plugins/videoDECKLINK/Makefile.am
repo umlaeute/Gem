@@ -9,7 +9,7 @@ plugindir=$(libdir)/Gem
 plugin_LTLIBRARIES=
 dist_plugin_DATA  =
 
-if HAVE_DECKLINK
+if HAVE_LIB_DECKLINK
 plugin_LTLIBRARIES+= gem_videoDECKLINK.la
 dist_plugin_DATA  += decklink-videoplugin.pd
 endif
@@ -29,8 +29,8 @@ gem_videoDECKLINK_la_LDFLAGS  += @GEM_RTE_LIBS@
 # #gem_videoDECKLINK_la @MOREFLAGS@
 
 # Dependencies
-gem_videoDECKLINK_la_CXXFLAGS += @GEM_DECKLINK_CXXFLAGS@
-gem_videoDECKLINK_la_LIBADD   += @GEM_DECKLINK_LIBS@
+gem_videoDECKLINK_la_CXXFLAGS += @GEM_LIB_DECKLINK_CFLAGS@
+gem_videoDECKLINK_la_LIBADD   += @GEM_LIB_DECKLINK_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
