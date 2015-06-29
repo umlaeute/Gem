@@ -24,9 +24,7 @@ REGISTER_VIDEOFACTORY("decklink", videoDECKLINK);
 
 videoDECKLINK::videoDECKLINK(void)
   : m_name(std::string("decklink"))
-  , m_client(0)
 {
-  m_mouse.x = -1; m_mouse.y = -1; m_mouse.mask=0;
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
@@ -38,10 +36,6 @@ videoDECKLINK::~videoDECKLINK(void) {
 }
 
 void videoDECKLINK::close(void) {
-  if(m_client) {
-    rfbClientCleanup(m_client);
-    m_client=0;
-  }
 }
 
 
