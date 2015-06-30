@@ -320,14 +320,22 @@ bool videoDECKLINK::open(gem::Properties&props) {
       while (m_dlIterator->Next(&m_dl) == S_OK) {
 	if(m_devnum == deviceCount)
 	  break;
-	char*deckLinkName = NULL;
-	HRESULT res = m_dl->GetModelName((const char**)&deckLinkName);
-	if (res == S_OK) {
-	  if (!m_devname.empty() && (m_devname == deckLinkName)) {
+	if(!m_devname.empty()) {
+	  char*deckLinkName = NULL;
+	  if(S_OK == m_dl->GetDisplayName((const char**)&deckLinkName)) {
+	    if (m_devname == deckLinkName) {
+	      free(deckLinkName);
+	      break;
+	    }
 	    free(deckLinkName);
-	    break;
 	  }
-	  free(deckLinkName);
+	  if(S_OK == m_dl->GetModelName((const char**)&deckLinkName)) {
+	    if (m_devname == deckLinkName) {
+	      free(deckLinkName);
+	      break;
+	    }
+	    free(deckLinkName);
+	  }
 	}
 	m_dl->Release();
 	m_dl=NULL;
