@@ -66,6 +66,7 @@ public:
     , m_cfg_pixelFormat(bmdFormat8BitYUV)
     , m_deckLinkInput(dli)
   {
+    m_deckLinkInput->AddRef();
     pthread_mutex_init(&m_mutex, NULL);
     m_deckLinkInput->SetCallback(this);
     //result = m_deckLinkInput->EnableVideoInput(displayMode->GetDisplayMode(), m_cfg_pixelFormat, m_cfg_inputFlags);
@@ -75,6 +76,7 @@ public:
 
   ~DeckLinkCaptureDelegate()
   {
+    m_deckLinkInput->Release();
     pthread_mutex_destroy(&m_mutex);
   }
   virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) { return E_NOINTERFACE; }
