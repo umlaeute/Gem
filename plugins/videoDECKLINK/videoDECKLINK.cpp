@@ -188,21 +188,20 @@ namespace {
   IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli, const std::string&formatname, int formatnum) {
     IDeckLinkDisplayModeIterator*dmi = NULL;
     IDeckLinkDisplayMode*displayMode = NULL;
-    const std::string name=(("auto"==formatname) || ("automatic" == formatname))?"":formatname;
     int count=formatnum;
     if(S_OK == dli->GetDisplayModeIterator(&dmi)) {
       while(S_OK == dmi->Next(&displayMode)) {
-	if (formatnum<0 && name.empty()) {
+	if (formatnum<0 && formatname.empty()) {
 	  // we don't care for the format; accept the first one
 	  break;
 	}
 
 	// if we have set the format name, check that
-	if(!name.empty()) {
+	if(!formatname.empty()) {
 	  char*dmn = NULL;
 	  if (S_OK == displayMode->GetName((const char**)dmn)) {
-	    bool found=(name == dmn);
-	    free(dmn);
+            bool found=(formatname == dmn);
+            free(dmn);
 	    if(found)break;
 	  }
 	}
@@ -288,6 +287,8 @@ void videoDECKLINK::close(void) {
 }
 
 bool videoDECKLINK::open(gem::Properties&props) {
+  const std::string formatname=(("auto"==m_formatname) || ("automatic" == m_formatname))?"":m_formatname;
+
   //if(m_devname.empty())return false;
   close();
 
@@ -301,7 +302,7 @@ bool videoDECKLINK::open(gem::Properties&props) {
 	m_dlInput=NULL;
 	if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
 	  // check whether this device supports the selected format
-	  m_displayMode=getDisplayMode(m_dlInput, m_formatname, m_formatnum);
+	  m_displayMode=getDisplayMode(m_dlInput, formatname, m_formatnum);
 	  if(m_displayMode) {
 	    // supported!
 	    break;
@@ -332,7 +333,7 @@ bool videoDECKLINK::open(gem::Properties&props) {
       if(m_dl) {
 	if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
 	  // check whether this device supports the selected format
-	  m_displayMode=getDisplayMode(m_dlInput, m_formatname, m_formatnum);
+	  m_displayMode=getDisplayMode(m_dlInput, formatname, m_formatnum);
 	} else m_dlInput=NULL;
       }
     }
