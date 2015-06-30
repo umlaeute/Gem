@@ -287,6 +287,8 @@ void videoDECKLINK::close(void) {
 }
 
 bool videoDECKLINK::open(gem::Properties&props) {
+  BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
+  BMDPixelFormat pixformat = bmdFormat8BitYUV;
   const std::string formatname=(("auto"==m_formatname) || ("automatic" == m_formatname))?"":m_formatname;
 
   //if(m_devname.empty())return false;
@@ -344,8 +346,8 @@ bool videoDECKLINK::open(gem::Properties&props) {
 
   BMDDisplayModeSupport displayModeSupported;
   if (S_OK != m_dlInput->DoesSupportVideoMode(m_displayMode->GetDisplayMode(),
-					 bmdFormat8BitYUV,
-					 bmdVideoInputFlagDefault,
+					 pixformat,
+					 flags,
 					 &displayModeSupported,
 					 NULL)) {
     goto bail;
@@ -360,7 +362,7 @@ bool videoDECKLINK::open(gem::Properties&props) {
   }
 
   m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
-  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), bmdFormat8BitYUV, bmdVideoInputFlagDefault))
+  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), pixformat, flags))
     goto bail;
 
   return true;
