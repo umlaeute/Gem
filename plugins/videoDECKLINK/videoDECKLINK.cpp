@@ -248,41 +248,53 @@ videoDECKLINK::~videoDECKLINK(void) {
 }
 
 void videoDECKLINK::close(void) {
+  stop();
+  if(m_displayMode)
+    m_displayMode->Release();
+  if(m_dlInput) {
+    m_dlInput->DisableAudioInput();
+    m_dlInput->DisableVideoInput();
+    m_dlInput->Release();
+  }
+  if(m_dl)
+    m_dl->Release();
+  if(m_dlIterator)
+    m_dlIterator->Release();
+  if(m_dlCallback)
+    m_dlCallback->Release();
 }
 
 
 bool videoDECKLINK::open(gem::Properties&props) {
   //if(m_devname.empty())return false;
-  IDeckLinkInput*dlin=NULL;
-  IDeckLink*deckLink = NULL;
-  IDeckLinkDisplayMode*dm=NULL;
+  close();
 
-  IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
-  if(dli) {
+  IDeckLinkIterator*m_dlIterator = CreateDeckLinkIteratorInstance();
+  if(m_dlIterator) {
     setProperties(props);
 
     if(m_devnum<0 && m_devname.empty()) {
       // TODO: automatic device detection, based on input and mode
-      while (dli->Next(&deckLink) == S_OK) {
-	dlin=NULL;
-	if (S_OK == deckLink->QueryInterface(IID_IDeckLinkInput, (void**)&dlin)) {
+      while (m_dlIterator->Next(&m_dl) == S_OK) {
+	m_dlInput=NULL;
+	if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
 	  // check whether this device supports the selected format
-	  dm=getDisplayMode(dlin, m_formatname, m_formatnum);
-	  if(dm) {
+	  m_displayMode=getDisplayMode(m_dlInput, m_formatname, m_formatnum);
+	  if(m_displayMode) {
 	    // supported!
 	    break;
 	  }
-	  dlin->Release();
+	  m_dlInput->Release();
 	}
-	dlin=NULL;
+	m_dlInput=NULL;
       }
     } else { // user requested device (via name or index)
       int deviceCount=0;
-      while (dli->Next(&deckLink) == S_OK) {
+      while (m_dlIterator->Next(&m_dl) == S_OK) {
 	if(m_devnum == deviceCount)
 	  break;
 	char*deckLinkName = NULL;
-	HRESULT res = deckLink->GetModelName((const char**)&deckLinkName);
+	HRESULT res = m_dl->GetModelName((const char**)&deckLinkName);
 	if (res == S_OK) {
 	  if (!m_devname.empty() && (m_devname == deckLinkName)) {
 	    free(deckLinkName);
@@ -290,25 +302,25 @@ bool videoDECKLINK::open(gem::Properties&props) {
 	  }
 	  free(deckLinkName);
 	}
-	deckLink->Release();
+	m_dl->Release();
 	++deviceCount;
-	deckLink=NULL;
+	m_dl=NULL;
       }
-      dlin=NULL;
-      if(deckLink) {
-	if (S_OK == deckLink->QueryInterface(IID_IDeckLinkInput, (void**)&dlin)) {
+      m_dlInput=NULL;
+      if(m_dl) {
+	if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
 	  // check whether this device supports the selected format
-	  dm=getDisplayMode(dlin, m_formatname, m_formatnum);
-	} else dlin=NULL;
+	  m_displayMode=getDisplayMode(m_dlInput, m_formatname, m_formatnum);
+	} else m_dlInput=NULL;
       }
     }
   }
-  if(!dm) {
+  if(!m_displayMode) {
     goto bail;
   }
 
   BMDDisplayModeSupport displayModeSupported;
-  if (S_OK != dlin->DoesSupportVideoMode(dm->GetDisplayMode(),
+  if (S_OK != m_dlInput->DoesSupportVideoMode(m_displayMode->GetDisplayMode(),
 					 bmdFormat8BitYUV,
 					 bmdVideoInputFlagDefault,
 					 &displayModeSupported,
@@ -318,17 +330,27 @@ bool videoDECKLINK::open(gem::Properties&props) {
   if (displayModeSupported == bmdDisplayModeNotSupported)
     goto bail;
 
+  m_dlCallback = new DeckLinkCaptureDelegate(m_dlInput);
+  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), bmdFormat8BitYUV, bmdVideoInputFlagDefault))
+    goto bail;
+
+  return true;
 
  bail:
-  if(dlin)
-    dlin->Release();
-  if(deckLink)
-    deckLink->Release();
-  if(dli)
-    dli->Release();
-
+  close();
   return false;
 }
+
+bool videoDECKLINK::start(void) {
+  return (m_dlInput && (S_OK == m_dlInput->StartStreams()));
+}
+bool videoDECKLINK::stop(void) {
+  if(m_dlInput) {
+    m_dlInput->StopStreams();
+  }
+  return true;
+}
+
 
 pixBlock*videoDECKLINK::getFrame(void) {
   return 0;

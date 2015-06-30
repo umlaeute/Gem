@@ -22,8 +22,11 @@ namespace gem { namespace plugins {
    pixBlock m_pixBlock;
    Properties m_props;
 
-   IDeckLinkInput* m_deckLinkInput;
-   IDeckLinkInputCallback*m_deckLinkCallback;
+   IDeckLinkDisplayMode*m_displayMode;
+   IDeckLink*m_dl;
+   IDeckLinkIterator*m_dlIterator;
+   IDeckLinkInput* m_dlInput;
+   IDeckLinkInputCallback*m_dlCallback;
 
  public:
    videoDECKLINK(void);
@@ -62,8 +65,8 @@ namespace gem { namespace plugins {
 
 
    virtual void close(void);
-   virtual bool start(void) {return true;};
-   virtual bool stop(void)  {return true;};
+   virtual bool start(void);
+   virtual bool stop(void);
 };
 };}; // namespace
 
