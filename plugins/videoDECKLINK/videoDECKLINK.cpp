@@ -57,14 +57,17 @@ public:
   BMDPixelFormat m_cfg_pixelFormat;
   IDeckLinkInput*m_deckLinkInput;
 
+  gem::plugins::videoDECKLINK*m_priv;
+
 public:
-  DeckLinkCaptureDelegate(IDeckLinkInput*dli)
+  DeckLinkCaptureDelegate(gem::plugins::videoDECKLINK*parent, IDeckLinkInput*dli)
     : IDeckLinkInputCallback()
     , m_refCount(0)
     , m_frameCount(0)
     , m_cfg_inputFlags(bmdVideoInputFlagDefault)
     , m_cfg_pixelFormat(bmdFormat8BitYUV)
     , m_deckLinkInput(dli)
+    , m_priv(parent)
   {
     m_deckLinkInput->AddRef();
     pthread_mutex_init(&m_mutex, NULL);
@@ -338,7 +341,7 @@ bool videoDECKLINK::open(gem::Properties&props) {
   if (displayModeSupported == bmdDisplayModeNotSupported)
     goto bail;
 
-  m_dlCallback = new DeckLinkCaptureDelegate(m_dlInput);
+  m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
   if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), bmdFormat8BitYUV, bmdVideoInputFlagDefault))
     goto bail;
 
