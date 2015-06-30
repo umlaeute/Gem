@@ -4,6 +4,7 @@
 #include "plugins/video.h"
 #include "Gem/Image.h"
 
+#include <DeckLinkAPI.h>
 
 namespace gem { namespace plugins {
     class GEM_EXPORT videoDECKLINK : public video {
@@ -13,6 +14,10 @@ namespace gem { namespace plugins {
 
    pixBlock m_pixBlock;
    Properties m_props;
+
+   IDeckLinkIterator*m_deckLinkIterator;
+   IDeckLinkInput* m_deckLinkInput;
+   IDeckLinkInputCallback*m_deckLinkCallback;
 
  public:
    videoDECKLINK(void);

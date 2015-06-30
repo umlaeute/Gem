@@ -17,6 +17,9 @@
 
 #include "videoDECKLINK.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/Exception.h"
+
+
 /* -LICENSE-START-
 ** Copyright (c) 2013 Blackmagic Design
 **
@@ -191,6 +194,11 @@ REGISTER_VIDEOFACTORY("decklink", videoDECKLINK);
 videoDECKLINK::videoDECKLINK(void)
   : m_name(std::string("decklink"))
 {
+  m_deckLinkIterator = CreateDeckLinkIteratorInstance();
+  if(m_deckLinkIterator) {
+    throw(GemException("DeckLink: unable to initialize Framework"));
+  }
+
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
   m_pixBlock.image.setCsizeByFormat(GL_RGBA);
