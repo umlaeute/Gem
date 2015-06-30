@@ -262,19 +262,20 @@ void videoDECKLINK::close(void) {
   stop();
   if(m_displayMode)
     m_displayMode->Release();
+  if(m_dlConfig)
+    m_dlConfig->Release();
   if(m_dlInput) {
     m_dlInput->DisableAudioInput();
     m_dlInput->DisableVideoInput();
     m_dlInput->Release();
   }
+  if(m_dlCallback)
+    m_dlCallback->Release();
   if(m_dl)
     m_dl->Release();
   if(m_dlIterator)
     m_dlIterator->Release();
-  if(m_dlCallback)
-    m_dlCallback->Release();
 }
-
 
 bool videoDECKLINK::open(gem::Properties&props) {
   //if(m_devname.empty())return false;
@@ -340,6 +341,12 @@ bool videoDECKLINK::open(gem::Properties&props) {
   }
   if (displayModeSupported == bmdDisplayModeNotSupported)
     goto bail;
+  if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration, (void**)&m_dlConfig))
+    m_dlConfig=NULL;
+
+  if(m_dlConfig) {
+    m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, m_connectionType);
+  }
 
   m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
   if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), bmdFormat8BitYUV, bmdVideoInputFlagDefault))
