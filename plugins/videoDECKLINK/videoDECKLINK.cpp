@@ -182,7 +182,41 @@ public:
 */
 
 
+namespace {
+  IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli, const std::string&formatname, int formatnum) {
+    IDeckLinkDisplayModeIterator*dmi = NULL;
+    IDeckLinkDisplayMode*displayMode = NULL;
+    const std::string name=(("auto"==formatname) || ("automatic" == formatname))?"":formatname;
+    int count=formatnum;
+    if(S_OK == dli->GetDisplayModeIterator(&dmi)) {
+      while(S_OK == dmi->Next(&displayMode)) {
+	if (formatnum<0 && name.empty()) {
+	  // we don't care for the format; accept the first one
+	  break;
+	}
 
+	// if we have set the format name, check that
+	if(!name.empty()) {
+	  char*dmn = NULL;
+	  if (S_OK == displayMode->GetName((const char**)dmn)) {
+	    bool found=(name == dmn);
+	    free(dmn);
+	    if(found)break;
+	  }
+	}
+	// else check the format index
+	if(formatnum>=0 && 0 == count)
+	  break;
+	--count;
+
+	displayMode->Release();
+	displayMode=NULL;
+      }
+      dmi->Release();
+    }
+    return displayMode;
+  }
+};
 
 
 
