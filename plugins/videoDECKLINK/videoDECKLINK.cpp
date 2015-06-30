@@ -124,7 +124,7 @@ public:
       if (threeDExtensions)
 	threeDExtensions->Release();
       if (videoFrame->GetFlags() & bmdFrameHasNoInputSource) {
-	  printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
+	//printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
       } else {
 	long w=videoFrame->GetWidth();
 	long h=videoFrame->GetHeight();
