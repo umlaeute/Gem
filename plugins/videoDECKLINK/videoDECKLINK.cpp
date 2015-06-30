@@ -374,6 +374,19 @@ pixBlock*videoDECKLINK::getFrame(void) {
   m_mutex.lock();
   return &m_pixBlock;
 }
+void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format, unsigned char*data)
+{
+  m_mutex.lock();
+  m_pixBlock.image.xsize=w;
+  m_pixBlock.image.ysize=h;
+  m_pixBlock.image.setCsizeByFormat(format);
+  m_pixBlock.image.reallocate();
+
+  m_pixBlock.image.fromUYVY(data);
+  m_pixBlock.newimage=true;
+
+  m_mutex.unlock();
+}
 
 void videoDECKLINK::releaseFrame(void) {
   m_pixBlock.newimage=false;

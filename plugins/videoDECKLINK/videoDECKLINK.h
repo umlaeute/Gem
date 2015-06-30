@@ -47,6 +47,8 @@ namespace gem { namespace plugins {
    virtual pixBlock *getFrame(void);
    virtual void releaseFrame(void);
 
+   /* to be called from the capturing thread */
+   void setFrame(unsigned int w, unsigned int h, GLenum format, unsigned char*data);
 
    virtual std::vector<std::string>enumerate(void);
    virtual bool	setDevice(int ID);
