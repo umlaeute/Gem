@@ -114,15 +114,17 @@ public:
 
     // Handle Video Frame
     if (videoFrame) {
+#if 0
       // If 3D mode is enabled we retreive the 3D extensions interface which gives.
       // us access to the right eye frame by calling GetFrameForRightEye() .
       if ( (videoFrame->QueryInterface(IID_IDeckLinkVideoFrame3DExtensions, (void **) &threeDExtensions) != S_OK) ||
 	   (threeDExtensions->GetFrameForRightEye(&rightEyeFrame) != S_OK)) {
 	rightEyeFrame = NULL;
       }
-
+#endif
       if (threeDExtensions)
 	threeDExtensions->Release();
+
       if (videoFrame->GetFlags() & bmdFrameHasNoInputSource) {
 	//printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
       } else {
