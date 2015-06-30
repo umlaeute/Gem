@@ -10,12 +10,18 @@ namespace gem { namespace plugins {
     class GEM_EXPORT videoDECKLINK : public video {
  private:
    std::string m_name; // 'decklink'
-   std::string m_devname;
+
+   /* device selection by name/number */
+   std::string m_devname; // "Mini Recorder #1"?
+   int m_devnum; // selected device number (or -1)
+
+   /* format selection by name/number */
+   std::string m_formatname;
+   int m_formatnum;
 
    pixBlock m_pixBlock;
    Properties m_props;
 
-   IDeckLinkIterator*m_deckLinkIterator;
    IDeckLinkInput* m_deckLinkInput;
    IDeckLinkInputCallback*m_deckLinkCallback;
 

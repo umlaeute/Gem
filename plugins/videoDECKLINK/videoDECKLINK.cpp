@@ -226,12 +226,16 @@ using namespace gem::plugins;
 REGISTER_VIDEOFACTORY("decklink", videoDECKLINK);
 
 videoDECKLINK::videoDECKLINK(void)
-  : m_name(std::string("decklink"))
+  : video()
+  , m_name(std::string("decklink"))
+  , m_devname   (std::string("")), m_devnum   (-1)
+  , m_formatname(std::string("")), m_formatnum(-1)
 {
-  m_deckLinkIterator = CreateDeckLinkIteratorInstance();
-  if(m_deckLinkIterator) {
+  IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
+  if(!dli) {
     throw(GemException("DeckLink: unable to initialize Framework"));
   }
+  dli->Release();
 
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
@@ -248,8 +252,81 @@ void videoDECKLINK::close(void) {
 
 
 bool videoDECKLINK::open(gem::Properties&props) {
-  if(m_devname.empty())return false;
-  setProperties(props);
+  //if(m_devname.empty())return false;
+  IDeckLinkInput*dlin=NULL;
+  IDeckLink*deckLink = NULL;
+  IDeckLinkDisplayMode*dm=NULL;
+
+  IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
+  if(dli) {
+    setProperties(props);
+
+    if(m_devnum<0 && m_devname.empty()) {
+      // TODO: automatic device detection, based on input and mode
+      while (dli->Next(&deckLink) == S_OK) {
+	dlin=NULL;
+	if (S_OK == deckLink->QueryInterface(IID_IDeckLinkInput, (void**)&dlin)) {
+	  // check whether this device supports the selected format
+	  dm=getDisplayMode(dlin, m_formatname, m_formatnum);
+	  if(dm) {
+	    // supported!
+	    break;
+	  }
+	  dlin->Release();
+	}
+	dlin=NULL;
+      }
+    } else { // user requested device (via name or index)
+      int deviceCount=0;
+      while (dli->Next(&deckLink) == S_OK) {
+	if(m_devnum == deviceCount)
+	  break;
+	char*deckLinkName = NULL;
+	HRESULT res = deckLink->GetModelName((const char**)&deckLinkName);
+	if (res == S_OK) {
+	  if (!m_devname.empty() && (m_devname == deckLinkName)) {
+	    free(deckLinkName);
+	    break;
+	  }
+	  free(deckLinkName);
+	}
+	deckLink->Release();
+	++deviceCount;
+	deckLink=NULL;
+      }
+      dlin=NULL;
+      if(deckLink) {
+	if (S_OK == deckLink->QueryInterface(IID_IDeckLinkInput, (void**)&dlin)) {
+	  // check whether this device supports the selected format
+	  dm=getDisplayMode(dlin, m_formatname, m_formatnum);
+	} else dlin=NULL;
+      }
+    }
+  }
+  if(!dm) {
+    goto bail;
+  }
+
+  BMDDisplayModeSupport displayModeSupported;
+  if (S_OK != dlin->DoesSupportVideoMode(dm->GetDisplayMode(),
+					 bmdFormat8BitYUV,
+					 bmdVideoInputFlagDefault,
+					 &displayModeSupported,
+					 NULL)) {
+    goto bail;
+  }
+  if (displayModeSupported == bmdDisplayModeNotSupported)
+    goto bail;
+
+
+ bail:
+  if(dlin)
+    dlin->Release();
+  if(deckLink)
+    deckLink->Release();
+  if(dli)
+    dli->Release();
+
   return false;
 }
 
@@ -260,15 +337,32 @@ pixBlock*videoDECKLINK::getFrame(void) {
 
 std::vector<std::string>videoDECKLINK::enumerate(void) {
   std::vector<std::string>result;
-  //result.push_back("decklink");
+  IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
+  if(dli) {
+    IDeckLink*deckLink = NULL;
+    while (dli->Next(&deckLink) == S_OK) {
+      char*deckLinkName = NULL;
+      HRESULT res = deckLink->GetModelName((const char**)&deckLinkName);
+      if (res == S_OK) {
+	result.push_back(std::string(deckLinkName));
+	free(deckLinkName);
+      }
+      deckLink->Release();
+    }
+    dli->Release();
+  }
   return result;
 }
 
 bool videoDECKLINK::setDevice(int ID) {
   m_devname.clear();
-  return false;
+  m_devnum=ID;
+  return true;
 }
 bool videoDECKLINK::setDevice(std::string device) {
+  m_devname=device;
+  return true;
+#if 0
   m_devname.clear();
   const std::string prefix="decklink://";
   if (!device.compare(0, prefix.size(), prefix)) {
@@ -276,9 +370,10 @@ bool videoDECKLINK::setDevice(std::string device) {
     return true;
   }
   return false;
+#endif
 }
 bool videoDECKLINK::enumProperties(gem::Properties&readable,
-			       gem::Properties&writeable) {
+	gem::Properties&writeable) {
   std::string dummy_s;
   int dummy_i=0;
   readable.clear();
@@ -287,16 +382,36 @@ bool videoDECKLINK::enumProperties(gem::Properties&readable,
   readable.set("width", m_pixBlock.image.xsize);
   readable.set("height", m_pixBlock.image.ysize);
 
-  //writeable.set("mouse.mask", dummy_i);
+  dummy_s="auto";
+  writeable.set("format", dummy_s);
 
   return true;
 }
 void videoDECKLINK::setProperties(gem::Properties&props) {
+  std::vector<std::string>keys=props.keys();
+  int i=0;
+  for(i=0; i<keys.size(); i++) {
+    const std::string key =keys[i];
+    if("format" == key) {
+      std::string s;
+      double d;
+      switch(props.type(key)) {
+        case gem::Properties::STRING:
+	  if(props.get(key, s)) {
+            m_formatnum =-1;
+	    m_formatname=s;
+          }
+	  break;
+        case gem::Properties::DOUBLE:
+	  if(props.get(key, d)) {
+            m_formatnum =(int)d;
+	    m_formatname="";
+          }
+	  break;
+      }
+    }
+  }
   m_props=props;
-
-  double num;
-  std::string s;
-
 }
 void videoDECKLINK::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
