@@ -424,6 +424,7 @@ bool videoDECKLINK::enumProperties(gem::Properties&readable,
 
   dummy_s="auto";
   writeable.set("format", dummy_s);
+  writeable.set("connection", dummy_s);
 
   return true;
 }
@@ -449,6 +450,53 @@ void videoDECKLINK::setProperties(gem::Properties&props) {
           }
 	  break;
       }
+    }
+    if("connection" == key) {
+      BMDVideoConnection vconn = m_connectionType;
+      std::string s;
+      double d;
+      switch(props.type(key)) {
+        case gem::Properties::STRING:
+	  if(props.get(key, s)) {
+	    if      ("SDI"        == s) vconn=bmdVideoConnectionSDI;
+	    else if ("HDMI"       == s) vconn=bmdVideoConnectionHDMI;
+	    else if ("OpticalSDI" == s) vconn=bmdVideoConnectionOpticalSDI;
+	    else if ("Component"  == s) vconn=bmdVideoConnectionComponent;
+	    else if ("Composite"  == s) vconn=bmdVideoConnectionComposite;
+	    else if ("SVideo"     == s) vconn=bmdVideoConnectionSVideo;
+	  }
+	  break;
+        case gem::Properties::DOUBLE:
+	  if(props.get(key, d)) {
+            int idx =(int)d;
+	    switch(idx) {
+	    default:
+	    case 0:
+	      vconn=bmdVideoConnectionSDI;
+	      break;
+	    case 1:
+	      vconn=bmdVideoConnectionHDMI;
+	      break;
+	    case 2:
+	      vconn=bmdVideoConnectionOpticalSDI;
+	      break;
+	    case 3:
+	      vconn=bmdVideoConnectionComponent;
+	      break;
+	    case 4:
+	      vconn=bmdVideoConnectionComposite;
+	      break;
+	    case 5:
+	      vconn=bmdVideoConnectionSVideo;
+	      break;
+	    }
+	  }
+	  break;
+      }
+      if(m_dlConfig && (m_connectionType != vconn)) {
+	m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, vconn);
+      }
+      m_connectionType = vconn;
     }
   }
   m_props=props;
