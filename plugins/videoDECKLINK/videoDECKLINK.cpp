@@ -257,21 +257,33 @@ videoDECKLINK::~videoDECKLINK(void) {
 
 void videoDECKLINK::close(void) {
   stop();
-  if(m_displayMode)
+  if(m_displayMode) {
     m_displayMode->Release();
-  if(m_dlConfig)
+    m_displayMode=0;
+  }
+  if(m_dlConfig) {
     m_dlConfig->Release();
+    m_dlConfig=0;
+  }
+
   if(m_dlInput) {
     m_dlInput->DisableAudioInput();
     m_dlInput->DisableVideoInput();
     m_dlInput->Release();
+    m_dlInput=0;
   }
-  if(m_dlCallback)
+  if(m_dlCallback) {
     m_dlCallback->Release();
-  if(m_dl)
+    m_dlCallback=0;
+  }
+  if(m_dl) {
     m_dl->Release();
-  if(m_dlIterator)
+    m_dl=0;
+  }
+  if(m_dlIterator) {
     m_dlIterator->Release();
+    m_dlIterator=0;
+  }
 }
 
 bool videoDECKLINK::open(gem::Properties&props) {
