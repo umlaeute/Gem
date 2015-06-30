@@ -125,17 +125,13 @@ public:
       if (videoFrame->GetFlags() & bmdFrameHasNoInputSource) {
 	//printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
       } else {
-#if 0
-	if (g_videoOutputFile != -1) {
-	    videoFrame->GetBytes(&frameBytes);
-	    write(g_videoOutputFile, frameBytes, videoFrame->GetRowBytes() * videoFrame->GetHeight());
-
-	    if (rightEyeFrame) {
-	      rightEyeFrame->GetBytes(&frameBytes);
-	      write(g_videoOutputFile, frameBytes, videoFrame->GetRowBytes() * videoFrame->GetHeight());
-	    }
-	  }
-#endif
+	long w=videoFrame->GetWidth();
+	long h=videoFrame->GetHeight();
+	videoFrame->GetBytes(&frameBytes);
+	m_priv->setFrame(videoFrame->GetWidth(),
+			 videoFrame->GetHeight(),
+			 GL_YUV422_GEM,
+			 (unsigned char*)frameBytes);
 	}
 
       if (rightEyeFrame)
