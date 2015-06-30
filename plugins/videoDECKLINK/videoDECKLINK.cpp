@@ -326,8 +326,8 @@ bool videoDECKLINK::open(gem::Properties&props) {
 	  free(deckLinkName);
 	}
 	m_dl->Release();
-	++deviceCount;
 	m_dl=NULL;
+	++deviceCount;
       }
       m_dlInput=NULL;
       if(m_dl) {
