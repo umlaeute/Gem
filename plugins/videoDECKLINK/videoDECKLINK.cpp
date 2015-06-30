@@ -429,7 +429,7 @@ std::vector<std::string>videoDECKLINK::enumerate(void) {
     IDeckLink*deckLink = NULL;
     while (dli->Next(&deckLink) == S_OK) {
       char*deckLinkName = NULL;
-      HRESULT res = deckLink->GetModelName((const char**)&deckLinkName);
+      HRESULT res = deckLink->GetDisplayName((const char**)&deckLinkName);
       if (res == S_OK) {
 	result.push_back(std::string(deckLinkName));
 	free(deckLinkName);
