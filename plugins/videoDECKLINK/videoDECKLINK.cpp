@@ -343,6 +343,19 @@ bool videoDECKLINK::open(gem::Properties&props) {
   if(!m_displayMode) {
     goto bail;
   }
+  if (m_formatnum<0 && formatname.empty()) {
+    // no format specified; try auto-detection
+    IDeckLinkAttributes*dlAttribs=0;
+    bool formatDetectionSupported = false;
+    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes, (void**)&dlAttribs)) {
+      if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection, &formatDetectionSupported)) {
+	if(formatDetectionSupported)
+	  flags|=bmdVideoInputEnableFormatDetection;
+      }
+    }
+    if(dlAttribs)
+      dlAttribs->Release();
+  }
 
   BMDDisplayModeSupport displayModeSupported;
   if (S_OK != m_dlInput->DoesSupportVideoMode(m_displayMode->GetDisplayMode(),
