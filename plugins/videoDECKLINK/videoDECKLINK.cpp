@@ -237,6 +237,7 @@ videoDECKLINK::videoDECKLINK(void)
   , m_displayMode(NULL)
   , m_dlConfig(NULL)
   , m_connectionType(bmdVideoConnectionSDI)
+  , m_dlCallback(NULL)
 {
   IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
   if(!dli) {

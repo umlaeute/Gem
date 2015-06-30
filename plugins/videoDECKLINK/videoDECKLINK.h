@@ -30,8 +30,8 @@ namespace gem { namespace plugins {
    IDeckLinkInput* m_dlInput;
    IDeckLinkDisplayMode*m_displayMode;
    IDeckLinkConfiguration *m_dlConfig;
-   IDeckLinkInputCallback*m_dlCallback;
    BMDVideoConnection m_connectionType;
+   IDeckLinkInputCallback*m_dlCallback;
 
  public:
    videoDECKLINK(void);
