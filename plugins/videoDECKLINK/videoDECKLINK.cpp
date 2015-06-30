@@ -19,6 +19,8 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/Exception.h"
 
+#include <stdio.h>
+#define MARK() printf("%s:%d\t%s\n", __FILE__, __LINE__, __FUNCTION__)
 
 /* -LICENSE-START-
 ** Copyright (c) 2013 Blackmagic Design
@@ -121,9 +123,8 @@ public:
 
       if (threeDExtensions)
 	threeDExtensions->Release();
-
       if (videoFrame->GetFlags() & bmdFrameHasNoInputSource) {
-	//printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
+	  printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
       } else {
 	long w=videoFrame->GetWidth();
 	long h=videoFrame->GetHeight();
