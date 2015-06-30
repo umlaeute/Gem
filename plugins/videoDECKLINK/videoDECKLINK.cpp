@@ -371,9 +371,15 @@ bool videoDECKLINK::stop(void) {
 
 
 pixBlock*videoDECKLINK::getFrame(void) {
-  return 0;
+  m_mutex.lock();
   return &m_pixBlock;
 }
+
+void videoDECKLINK::releaseFrame(void) {
+  m_pixBlock.newimage=false;
+  m_mutex.unlock();
+}
+
 
 std::vector<std::string>videoDECKLINK::enumerate(void) {
   std::vector<std::string>result;

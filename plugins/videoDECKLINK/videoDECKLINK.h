@@ -3,6 +3,7 @@
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
+#include "Utils/ThreadMutex.h"
 
 #include <DeckLinkAPI.h>
 
@@ -18,6 +19,8 @@ namespace gem { namespace plugins {
    /* format selection by name/number */
    std::string m_formatname;
    int m_formatnum;
+
+   gem::thread::Mutex m_mutex;
 
    pixBlock m_pixBlock;
    Properties m_props;
@@ -36,7 +39,14 @@ namespace gem { namespace plugins {
    virtual ~videoDECKLINK(void);
 
    virtual bool open(gem::Properties&props);
+   virtual void close(void);
+
+   virtual bool start(void);
+   virtual bool stop(void);
+
    virtual pixBlock *getFrame(void);
+   virtual void releaseFrame(void);
+
 
    virtual std::vector<std::string>enumerate(void);
    virtual bool	setDevice(int ID);
@@ -60,15 +70,9 @@ namespace gem { namespace plugins {
 
    virtual bool isThreadable(void) {return false; return true;}
    virtual bool reset(void) {return true;}
-   virtual void releaseFrame(void) {}
    virtual bool grabAsynchronous(bool) {return false; return true;}
    virtual bool	dialog(std::vector<std::string>names=std::vector<std::string>()) {return false;}
    virtual bool	    	setColor(int) {return false;}
-
-
-   virtual void close(void);
-   virtual bool start(void);
-   virtual bool stop(void);
 };
 };}; // namespace
 
