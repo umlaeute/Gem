@@ -22,11 +22,13 @@ namespace gem { namespace plugins {
    pixBlock m_pixBlock;
    Properties m_props;
 
-   IDeckLinkDisplayMode*m_displayMode;
-   IDeckLink*m_dl;
    IDeckLinkIterator*m_dlIterator;
+   IDeckLink*m_dl;
    IDeckLinkInput* m_dlInput;
+   IDeckLinkDisplayMode*m_displayMode;
+   IDeckLinkConfiguration *m_dlConfig;
    IDeckLinkInputCallback*m_dlCallback;
+   BMDVideoConnection m_connectionType;
 
  public:
    videoDECKLINK(void);

@@ -230,6 +230,12 @@ videoDECKLINK::videoDECKLINK(void)
   , m_name(std::string("decklink"))
   , m_devname   (std::string("")), m_devnum   (-1)
   , m_formatname(std::string("")), m_formatnum(-1)
+  , m_dlIterator(NULL)
+  , m_dl(NULL)
+  , m_dlInput(NULL)
+  , m_displayMode(NULL)
+  , m_dlConfig(NULL)
+  , m_connectionType(bmdVideoConnectionSDI)
 {
   IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
   if(!dli) {
