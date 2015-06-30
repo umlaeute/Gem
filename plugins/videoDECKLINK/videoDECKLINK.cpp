@@ -198,10 +198,10 @@ namespace {
 
 	// if we have set the format name, check that
 	if(!formatname.empty()) {
-	  char*dmn = NULL;
-	  if (S_OK == displayMode->GetName((const char**)dmn)) {
+	  const char*dmn = NULL;
+	  if (S_OK == displayMode->GetName(&dmn)) {
             bool found=(formatname == dmn);
-            free(dmn);
+            free((void*)dmn);
 	    if(found)break;
 	  }
 	}
