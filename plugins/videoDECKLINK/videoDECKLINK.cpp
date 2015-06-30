@@ -48,7 +48,7 @@
 */
 class DeckLinkCaptureDelegate : public IDeckLinkInputCallback
 {
-private:
+public:
   ULONG m_refCount;
   pthread_mutex_t m_mutex;
 
