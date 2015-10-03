@@ -56,7 +56,7 @@ videoVLC::videoVLC(void) :
   if(!m_instance) {
     throw(GemException("couldn't initialize libVLC"));
   }
-  resize(64,64,format_enum);
+  resize(64,64,0);
 }
 
 videoVLC::~videoVLC(void) {
@@ -144,7 +144,7 @@ bool videoVLC::open(gem::Properties&props) {
     }
 
   }
-  resize(w,h,format_enum);
+  resize(w,h,0);
   m_pixBlock.image.setWhite();
 
                    
