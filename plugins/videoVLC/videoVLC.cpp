@@ -78,6 +78,9 @@ void videoVLC::close(void) {
 
 bool videoVLC::open(gem::Properties&props) {
   if(m_mediaplayer)close();
+  m_pixBlock.image.xsize=0;
+  m_pixBlock.image.ysize=0;
+
   setProperties(props);
 
 
@@ -90,7 +93,6 @@ bool videoVLC::open(gem::Properties&props) {
 
   if(!media)
     return false;
-
 
   char buf[MAXVLCSTRING];
 
@@ -147,10 +149,6 @@ bool videoVLC::open(gem::Properties&props) {
   resize(w,h,0);
   m_pixBlock.image.setWhite();
 
-                   
-
-
-
   m_mediaplayer=libvlc_media_player_new_from_media(media);
   libvlc_media_release(media);
 
@@ -160,12 +158,11 @@ bool videoVLC::open(gem::Properties&props) {
                              NULL,
                              this);
 
-  libvlc_video_set_format(m_mediaplayer,
-                          format_string,
-                          m_pixBlock.image.xsize,
-                          m_pixBlock.image.ysize,
-                          m_pixBlock.image.xsize*m_pixBlock.image.csize);
 
+  libvlc_video_set_format_callbacks(m_mediaplayer,
+				    formatCB,
+				    NULL
+				    );
   return true;
 }
 
@@ -315,6 +312,36 @@ void videoVLC::unlockCB(void*opaque, void*picture, void*const*plane) {
 void videoVLC::displayCB(void*opaque, void*picture) {
   //  post("displayCB: %p -> %p", opaque, picture);
   videoVLC*obj=(videoVLC*)opaque;
+}
+unsigned videoVLC::formatCB(void**opaque, char *chroma, unsigned *width, unsigned *height, unsigned *pitches, unsigned *lines)
+{
+  videoVLC**objptr=(videoVLC**)opaque;
+  videoVLC*obj=*objptr;
+#if 0
+  post("chroma: %s", chroma);
+  post("dimen : %dx%d", *width, *height);
+  post("pitches: %d", *pitches);
+  post("lines: %d", *lines);
+#endif
+  memcpy(chroma, format_string, 4);
+
+  if(obj) {
+    int w, h;
+    if(obj->m_pixBlock.image.xsize == 0 || obj->m_pixBlock.image.ysize == 0 ) {
+      w=*width;
+      h=*height;
+      obj->resize(*width, *height, 0);
+    } else {
+      w =obj->m_pixBlock.image.xsize;
+      h =obj->m_pixBlock.image.ysize;
+      *width =w;
+      *height=h;
+    }
+    *pitches=w*obj->m_pixBlock.image.csize;
+    *lines=h;
+  }
+
+  return 1;
 }
 void videoVLC::resize(unsigned int width, unsigned int height, GLenum format) {
   bool do_convert = true;

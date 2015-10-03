@@ -68,13 +68,13 @@ namespace gem { namespace plugins {
 
    virtual void*  lockFrame(void**plane);
    virtual void unlockFrame(void*picture, void*const*plane);
-                  private:
 
+    private:
 
    static void  *lockCB(void*, void**plane);
    static void unlockCB(void*, void*picture, void*const*plane);
    static void displayCB(void*, void*picture);
-
+   static unsigned formatCB(void**, char*, unsigned*, unsigned*, unsigned*, unsigned*);
    libvlc_instance_t*m_instance;
    libvlc_media_player_t*m_mediaplayer;
 };
