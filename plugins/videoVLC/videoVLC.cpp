@@ -152,17 +152,52 @@ bool videoVLC::open(gem::Properties&props) {
   m_mediaplayer=libvlc_media_player_new_from_media(media);
   libvlc_media_release(media);
 
-  libvlc_video_set_callbacks(m_mediaplayer,
-                             lockCB,
-                             unlockCB,
-                             NULL,
-                             this);
+  /* helper classes to register callbacks */
+  struct _callbackObj {
+    static void*lock(void*opaque, void**plane ) {
+      videoVLC*obj=(videoVLC*)opaque;
+      if(obj)
+	return obj->lockFrame(plane);
+      return NULL;
+    }
+    static void unlock(void*opaque, void*picture, void*const*plane) {
+      //  post(" unlockCB: %p", opaque);
+      videoVLC*obj=(videoVLC*)opaque;
+      if(obj)
+	obj->unlockFrame(picture, plane);
+    }
+    static void display(void*opaque, void*picture) {
+      //  post("displayCB: %p -> %p", opaque, picture);
+      videoVLC*obj=(videoVLC*)opaque;
+    }
+    _callbackObj(videoVLC*data) {
+      libvlc_video_set_callbacks(data->m_mediaplayer,
+				 lock,
+				 unlock,
+				 NULL,
+				 data);
+    }
+  };
+  struct _formatCallbackObj {
+    static unsigned format(void**opaque, char *chroma, unsigned *width, unsigned *height, unsigned *pitches, unsigned *lines)
+    {
+      videoVLC**objptr=(videoVLC**)opaque;
+      if(objptr && *objptr)
+	return (*objptr)->setFormat(chroma, *width, *height, *pitches, *lines);
+      return 0;
+    }
+    _formatCallbackObj(videoVLC*data) {
+      libvlc_video_set_format_callbacks(data->m_mediaplayer,
+					format,
+					NULL
+					);
 
+    }
+  };
+  /* instantiate helper-classes (which registers callbacks) */
+  _callbackObj(this);
+  _formatCallbackObj(this);
 
-  libvlc_video_set_format_callbacks(m_mediaplayer,
-				    formatCB,
-				    NULL
-				    );
   return true;
 }
 
@@ -295,51 +330,25 @@ void videoVLC::unlockFrame(void*picture, void*const*plane) {
   m_pixBlock.image.upsidedown=true;
   UNLOCK(m_mutex);
 }
-void*videoVLC::lockCB(void*opaque, void**plane ) {
-  //  post("   lockCB: %p", opaque);
-  videoVLC*obj=(videoVLC*)opaque;
-  if(obj)
-    return obj->lockFrame(plane);
-  
-  return NULL;
-}
-void videoVLC::unlockCB(void*opaque, void*picture, void*const*plane) {
-  //  post(" unlockCB: %p", opaque);
-  videoVLC*obj=(videoVLC*)opaque;
-  if(obj)
-    obj->unlockFrame(picture, plane);
-}
-void videoVLC::displayCB(void*opaque, void*picture) {
-  //  post("displayCB: %p -> %p", opaque, picture);
-  videoVLC*obj=(videoVLC*)opaque;
-}
-unsigned videoVLC::formatCB(void**opaque, char *chroma, unsigned *width, unsigned *height, unsigned *pitches, unsigned *lines)
+
+unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines)
 {
-  videoVLC**objptr=(videoVLC**)opaque;
-  videoVLC*obj=*objptr;
 #if 0
   post("chroma: %s", chroma);
-  post("dimen : %dx%d", *width, *height);
-  post("pitches: %d", *pitches);
-  post("lines: %d", *lines);
+  post("dimen : %dx%d", width, height);
+  post("pitches: %d", pitches);
+  post("lines: %d", lines);
 #endif
   memcpy(chroma, format_string, 4);
 
-  if(obj) {
-    int w, h;
-    if(obj->m_pixBlock.image.xsize == 0 || obj->m_pixBlock.image.ysize == 0 ) {
-      w=*width;
-      h=*height;
-      obj->resize(*width, *height, 0);
-    } else {
-      w =obj->m_pixBlock.image.xsize;
-      h =obj->m_pixBlock.image.ysize;
-      *width =w;
-      *height=h;
-    }
-    *pitches=w*obj->m_pixBlock.image.csize;
-    *lines=h;
+  if(m_pixBlock.image.xsize == 0 || m_pixBlock.image.ysize == 0 ) {
+    resize(width, height, 0);
+  } else {
+    width  =m_pixBlock.image.xsize;
+    height =m_pixBlock.image.ysize;
   }
+  pitches=width*m_pixBlock.image.csize;
+  lines=height;
 
   return 1;
 }
