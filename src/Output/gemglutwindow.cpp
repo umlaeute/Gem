@@ -350,8 +350,6 @@ bool gemglutwindow :: create(void)
   m_window=glutCreateWindow(m_title.c_str());
   s_windowmap[m_window]=this;
 
-  glutDisplayFunc   (&displayCb);
-  glutVisibilityFunc(&visibleCb);
 
   glutCloseFunc     (&closeCb);
 
@@ -380,6 +378,9 @@ bool gemglutwindow :: create(void)
 #endif
 
   //  glutNameFunc(&nameCb);
+  glutDisplayFunc   (&displayCb);
+  glutVisibilityFunc(&visibleCb);
+
 
   if(!createGemWindow()) {
     destroyMess();
