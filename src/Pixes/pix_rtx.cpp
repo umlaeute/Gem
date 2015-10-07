@@ -46,12 +46,15 @@ bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
 {
   // only 1 channel !!, to keep data-size handy
   unsigned char*data = buffer.data;
-  size_t dataSize = buffer.xsize * buffer.xsize * buffer.ysize * buffer.csize * sizeof(unsigned char);
-  bool refresh=(buffer.xsize != buffer.xsize) || (buffer.ysize != buffer.ysize) || (buffer.csize != buffer.csize);
+  size_t dataSize = reference.xsize * reference.xsize * reference.ysize * reference.csize * sizeof(unsigned char);
+  bool refresh=
+    (reference.xsize != buffer.xsize) ||
+    (reference.ysize != buffer.ysize) ||
+    (reference.csize != buffer.csize);
 
-  buffer.xsize = buffer.xsize;
-  buffer.ysize = buffer.ysize;
-  buffer.setCsizeByFormat(buffer.format);
+  buffer.xsize = reference.xsize;
+  buffer.ysize = reference.ysize;
+  buffer.setCsizeByFormat(reference.format);
 
   if(data!=buffer.reallocate( dataSize ) || refresh) {
     buffer.setBlack();
