@@ -273,7 +273,10 @@ void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
   m_width = width;
   m_height = height;
   if(makeCurrent()){
-    glutReshapeWindow(m_width, m_height);
+    glutReshapeWindow(width, height);
+    glutHideWindow();glutShowWindow();
+    glutPositionWindow(m_xoffset, m_yoffset);
+    glutMainLoopEvent();
   }
 }
 /////////////////////////////////////////////////////////
