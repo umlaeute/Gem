@@ -49,7 +49,7 @@ BUILDDIR=${GEMDIR}
 ENVFILE=${SCRIPTDIR}/gem.env
 
 if [ -e "${ENVFILE}" ]; then
- source "${ENVFILE}"
+ . "${ENVFILE}"
 else
  error "couldn't read env-file ${ENVFILE}, continuing anyhow"
 fi
