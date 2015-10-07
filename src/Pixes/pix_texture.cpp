@@ -48,7 +48,7 @@ pix_texture :: pix_texture()
   : m_textureOnOff(1),
     m_textureMinQuality(GL_LINEAR), m_textureMagQuality(GL_LINEAR),
     m_wantMipmap(false), m_canMipmap(false), m_hasMipmap(false),
-    m_repeat(GL_REPEAT), m_doRepeat(GL_REPEAT),
+    m_repeat(GL_REPEAT),
     m_didTexture(false), m_rebuildList(false),
     m_textureObj(0),
     m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.), m_extType(GL_TEXTURE_2D),
@@ -62,7 +62,7 @@ pix_texture :: pix_texture()
     m_yuv(1),
     m_texunit(0),
     m_numTexUnits(0),
-    m_numPbo(0), m_curPbo(0), m_pbo(NULL),
+    m_numPbo(0), m_oldNumPbo(0), m_curPbo(0), m_pbo(NULL),
     m_upsidedown(false)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
@@ -111,7 +111,7 @@ pix_texture :: ~pix_texture()
 //
 /////////////////////////////////////////////////////////
 void pix_texture :: setUpTextureState() {
-  m_doRepeat=m_repeat;
+  GLuint doRepeat=m_repeat;
   if (m_rectangle && m_canRectangle){
     if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
       {
@@ -122,7 +122,7 @@ void pix_texture :: setUpTextureState() {
         //			otherwise, weird texturing occurs (looks similar to pix_refraction)
         // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
         // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
-        m_doRepeat = GL_CLAMP_TO_EDGE;
+        doRepeat = GL_CLAMP_TO_EDGE;
         debug("using rectangle texture");
       }
   }
@@ -139,8 +139,8 @@ void pix_texture :: setUpTextureState() {
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
 
   setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap));
-  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
-  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
+  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, doRepeat);
+  glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, doRepeat);
 }
 
 void pix_texture :: setTexFilters(bool mipmap) {
@@ -270,6 +270,13 @@ void pix_texture :: render(GemState *state) {
   int newfilm = 0;
   pixBlock*img=NULL;
 
+  if(m_pbo && (m_numPbo != m_oldNumPbo)) {
+    /* the PBO settings have changed, invalidate the old PBO */
+    GLuint*pbo=m_pbo;
+    glDeleteBuffersARB(m_numPbo, pbo);
+    delete[]pbo;
+    m_pbo=NULL;
+  }
 
   state->get(GemState::_PIX, img);
   if(img)
@@ -463,6 +470,7 @@ void pix_texture :: render(GemState *state) {
               pbo=NULL;
             }
             pbo=new GLuint[m_numPbo];
+	    m_oldNumPbo=m_numPbo;
 	    m_pbo=pbo;
             glGenBuffersARB(m_numPbo, pbo);
             int i=0;
@@ -477,7 +485,6 @@ void pix_texture :: render(GemState *state) {
           } else {
             verbose(1, "PBOs not supported! disabling");
             m_numPbo=0;
-
           }
         }
 
@@ -530,8 +537,7 @@ void pix_texture :: render(GemState *state) {
         glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 0, GL_STREAM_DRAW_ARB);
 
         GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
-        if(ptr)
-          {
+        if(ptr) {
             // update data off the mapped buffer
             memcpy(ptr, m_imagebuf.data,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
             glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
@@ -739,21 +745,19 @@ void pix_texture :: repeatMess(int type)
     else
       m_repeat = GL_CLAMP;
   }
-
+  GLuint doRepeat=m_repeat;
   if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
-    m_doRepeat=GL_CLAMP_TO_EDGE;
-  else
-    m_doRepeat=m_repeat;
+    doRepeat=GL_CLAMP_TO_EDGE;
 
   if (m_textureObj) {
     if(GLEW_VERSION_1_1) {
       glBindTexture(m_textureType, m_textureObj);
-      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
-      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
+      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, doRepeat);
+      glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, doRepeat);
     } else {
       glBindTextureEXT(m_textureType, m_textureObj);
-      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, m_doRepeat);
-      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, m_doRepeat);
+      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_S, doRepeat);
+      glTexParameteri(m_textureType, GL_TEXTURE_WRAP_T, doRepeat);
     }
   }
   setModified();
@@ -883,6 +887,4 @@ void pix_texture :: extTextureMess(t_symbol*s, int argc, t_atom*argv)
   }
   if(index)
     error("invalid type of argument #%d", index);
-
-
 }

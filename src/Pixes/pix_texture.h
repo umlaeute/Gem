@@ -105,6 +105,10 @@ class GEM_EXTERN pix_texture : public GemBase
 
 
  protected:
+  t_inlet    *m_inTexID;  /* inlet to receive external texture */
+  t_outlet   *m_outTexID; /* outlet to pass on our texture */
+
+  // USER requested data
 
   //////////
   // Turn on/off texture mapping
@@ -114,12 +118,36 @@ class GEM_EXTERN pix_texture : public GemBase
   // Set the texture quality
   GLuint      m_textureMinQuality, m_textureMagQuality;
   bool        m_wantMipmap;
-  gem::ContextData<bool>m_canMipmap, m_hasMipmap;
+
+  int m_rectangle; //rectangle or power of 2
 
   //////////
   // Set the texture quality
   // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
-  GLuint        m_repeat, m_doRepeat;
+  GLuint        m_repeat;
+
+  //////////
+  // texture environment mode
+  GLint		m_env; // GL_TEXTURE_ENV_MODE
+
+  /* using PBOs for (hopefully) optimized pixel transfers */
+  GLint m_numPbo; // user supplied
+
+  int		m_clientStorage; //for Apple's client storage extension
+  int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
+
+  GLint	m_texunit; // which texture unit to use
+
+  /* CAPABILITIES */
+
+  gem::ContextData<bool> m_canMipmap;    // (openGL caps)
+  gem::ContextData<int>  m_canRectangle; // (openGL caps & GemSettings)
+  gem::ContextData<GLint>m_numTexUnits;  // (openGL caps)
+
+
+
+  /* STATE */
+  gem::ContextData<bool>m_hasMipmap;
 
   //////////
   // did we really do texturing in render() ??
@@ -131,12 +159,20 @@ class GEM_EXTERN pix_texture : public GemBase
   gem::ContextData<GLboolean>           m_rebuildList;
 
   //////////
-  // The size of the texture (so we can use sub image)
-  int	        m_dataSize[3];
-
-  //////////
   // The texture object number
   gem::ContextData<GLuint>	    m_textureObj;
+
+  ////////
+  // the texture object we are creating and destroying
+  // we use it as our texture
+  gem::ContextData<GLuint> m_realTextureObj;
+
+
+  /* MISC */
+
+  //////////
+  // The size of the texture (so we can use sub image)
+  int	        m_dataSize[3];
 
   ////////
   // an external texture (as emitted through the 2nd outlet)
@@ -146,15 +182,6 @@ class GEM_EXTERN pix_texture : public GemBase
   gem::ContextData<GLfloat>   m_extWidth, m_extHeight;
   gem::ContextData<GLuint>    m_extType;
   gem::ContextData<GLboolean> m_extUpsidedown;
-
-  t_inlet    *m_inTexID;
-  t_outlet   *m_outTexID;
-
-
-  ////////
-  // the texture object we are creating and destroying
-  // we use it as our texture
-  gem::ContextData<GLuint> m_realTextureObj;
 
   //////////
   // The resizing buffer
@@ -180,22 +207,10 @@ class GEM_EXTERN pix_texture : public GemBase
 
   GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
 
-  int m_rectangle; //rectangle or power of 2
-  gem::ContextData<int> m_canRectangle; // openGL caps and GemSettings
-
-  //////////
-  // texture environment mode
-  GLint		m_env; // GL_TEXTURE_ENV_MODE
-
-  int		m_clientStorage; //for Apple's client storage extension
-  int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
-
-  GLint	m_texunit;
-  gem::ContextData<GLint> m_numTexUnits;
-
   /* using PBOs for (hopefully) optimized pixel transfers */
-  GLint m_numPbo; // user supplied
+  // FIXXME; m_pbo must be allocated per-context (*not* in pboMess callback)
   gem::ContextData<GLuint> m_curPbo;
+  gem::ContextData<GLuint> m_oldNumPbo;
   gem::ContextData<GLuint*>m_pbo;  // IDs of PBO
 
   /* upside down texture? */
