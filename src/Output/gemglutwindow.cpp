@@ -350,6 +350,8 @@ bool gemglutwindow :: create(void)
   m_window=glutCreateWindow(m_title.c_str());
   s_windowmap[m_window]=this;
 
+  glutReshapeWindow(m_width, m_height);
+  glutPositionWindow(m_xoffset, m_yoffset);
 
   glutCloseFunc     (&closeCb);
 
