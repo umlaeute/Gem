@@ -53,6 +53,7 @@ template<class ContextDataType = int>
 
     //////////
     // Constructor
+    /* coverity[uninit_member] we track the un-initialization ourselves */
     ContextData(void) : m_haveDefaultValue(false) {;}
 
     ContextData(ContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
