@@ -1,3 +1,12 @@
+## Travis-CI configuration for Gem
+
+# build on: linux(native=amd64), osx(amd64) and osx(i386)
+# deployment: the build artefacts are deployed using git
+# coverity: pushes to the 'coverity_scan' branch will run a single build (linux)
+#           and run that through coverity-scan
+
+
+
 language: cpp
 env:
   matrix:
