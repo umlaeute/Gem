@@ -10,6 +10,10 @@ env:
   # travis-ci?
   - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
   - secure: KixF9uaREz5Xx1/qf+1v0nkgksjhY0ztRxN3Npgd8m3ClpoTUz4y6tBkbKBNBEgPU257rJuyEB2aMS55HAFp86id8IUcbw0S4iZ+obHp1wpJI3zamYM0IAFpC8Z19Jih+/28xmHbxNST2d/LJ9GD6vZjycWh4JSFST3kSmutECI=
+  - COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
+  - COVERITY_SCAN_NOTIFICATION_EMAIL="pd-gem-CVS@lists.sourceforge.net"
+  - COVERITY_SCAN_BUILD_COMMAND="make"
+  - COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
 
 ## 'os' selection has been enabled manually by emailing travis-ci
 os:
@@ -27,6 +31,12 @@ matrix:
 
 before_install:
 - "./build/travis-ci/depinstall.sh"
+
+before_script:
+  # implement Coverity Scan with before_script instead of addons.coverity_scan
+  # to work around too-early quota check by the coverity_scan addon
+  - if [[ "x${TRAVIS_OS_NAME}${ARCH}" = "xlinux" ]] ; then curl -s 'https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh' | bash || true ; fi
+
 script:
 - "./build/travis-ci/build.sh"
 
@@ -36,6 +46,7 @@ after_success:
 ## deploy disabled until i have fixed github/releases
 before_deploy:
 - "./build/travis-ci/prepare-upload.sh"
+
 deploy:
   provider: releases
   api_key:
@@ -46,14 +57,3 @@ deploy:
     repo: umlaeute/Gem
     tags: true
     all_branches: true
-
-addons:
-  coverity_scan:
-    project:
-      name: umlaeute/Gem
-      description: Build submitted via Travis CI
-    build_script_url: https://raw.githubusercontent.com/umlaeute/Gem/coverity_scan/build/travis-ci/travisci_build_coverity_scan.sh
-    notification_email: pd-gem-CVS@lists.sourceforge.net
-    build_command_prepend: "./autogen.sh && ./configure && make clean"
-    build_command: make -j 4
-    branch_pattern: coverity_scan
