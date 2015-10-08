@@ -90,6 +90,7 @@ template<class ContextDataType = int>
        */
       if(INVALID_CONTEXT==getCurContext()) {
         doSetAll(value);
+        m_defaultValue=value; m_haveDefaultValue=true;
       }
 
       return (*getPtrToCur()=value);
