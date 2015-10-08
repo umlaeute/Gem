@@ -6,7 +6,6 @@
 #           and run that through coverity-scan
 
 
-
 language: cpp
 env:
   matrix:
@@ -49,10 +48,12 @@ before_script:
 script:
 - "./build/travis-ci/build.sh"
 
+## deploy all build artefacts to a private git-repository
 after_success:
 - "./build/travis-ci/deploy-git.sh"
 
-## deploy disabled until i have fixed github/releases
+
+## deploy tagged artefacts to github
 before_deploy:
 - "./build/travis-ci/prepare-upload.sh"
 
