@@ -67,9 +67,9 @@ template<class ContextDataType = int>
      *
      * @usage ContextData<GLenum>m_fun; m_fun=GL_FUNC_ADD;
      *
-     * @pre We are in a draw process.
+     * @pre We have a valid context.
      * @note Should only be called from the draw function.
-     *        Results are un-defined for other functions.
+     *        Results are un-defined if there is no valid context
      */
     virtual operator ContextDataType()
     {
@@ -79,14 +79,15 @@ template<class ContextDataType = int>
     /**
      * assigns a value to the correct context
      *
-     * @pre We are in a draw process.
+     * @pre We have a valid context.
      * @note Should only be called from the draw function.
-     *       Results are un-defined for other functions.
+     *       Results are un-defined if there is no valid context
      */
     virtual ContextDataType&operator = (ContextDataType value)
     {
       /* simplistic approach to handle out-of-context assignments:
        *  assign the value to all context instances
+       *  and use it as default value for future contexts
        */
       if(INVALID_CONTEXT==getCurContext()) {
         doSetAll(value);
@@ -122,7 +123,7 @@ template<class ContextDataType = int>
     /**
      * Returns a pointer to the correct data element in the current context.
      *
-     * @pre We are in the draw function.
+     * @pre We have a valid context.
      * @post Synchronized.
      * @note ASSERT: Same context is rendered by same thread each time.
      */
