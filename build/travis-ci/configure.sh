@@ -21,7 +21,8 @@ case "$TRAVIS_OS_NAME" in
           error "unable to cross-compile for architecture ${ARCH}"
           exit 1
         fi
-	CONFIGUREFLAGS="--without-ftgl"
+	CONFIGUREFLAGS=""
+	#CONFIGUREFLAGS="--without-ftgl"
 	;;
     osx)
 	CONFIGUREFLAGS="--without-ftgl \
