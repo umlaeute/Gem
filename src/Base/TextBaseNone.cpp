@@ -78,8 +78,15 @@ void TextBase::setJustification(JustifyWidth, JustifyHeight)
 { }
 void TextBase::setJustification(JustifyWidth, JustifyHeight, JustifyDepth)
 { }
-TextBase::Justification TextBase::justifyFont(float, float, float, float, float, float, float)
-{ }
+TextBase::Justification TextBase::justifyFont(float x1, float, float, float, float, float, float yo)
+{
+  TextBase::Justification result;
+  result.scale =1;
+  result.width =x1;
+  result.height=yo;
+  result.depth =0;
+  return result;
+}
 
 
 

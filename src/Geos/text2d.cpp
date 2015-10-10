@@ -130,6 +130,7 @@ void text2d :: renderLine(const wchar_t*line, float dist) {
 #else /* !FTGL */
 text2d :: text2d(int argc, t_atom *argv)
   : TextBase(argc, argv)
+  , m_antialias(true)
 {}
 text2d :: ~text2d()
 {}

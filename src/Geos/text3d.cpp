@@ -99,6 +99,7 @@ void text3d :: setFontSize(){
 
 text3d :: text3d(int argc, t_atom *argv)
   : TextBase(argc, argv)
+  , m_antialias(true)
 {}
 text3d :: ~text3d()
 {}
