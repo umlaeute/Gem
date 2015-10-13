@@ -5,8 +5,8 @@
 
 .PHONY: convenience-link clean-convenience-link
 
-convenience-link: $(pkglib_LTLIBRARIES)
-	  @for soname in `echo | $(EGREP) "^dlname=" $^ | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
+convenience-link: $(pkglib_LTLIBRARIES) $(plugin_LTLIBRARIES)
+	  @for soname in `echo | $(EGREP) -h "^dlname=" $^ | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
             echo "$$soname: creating convenience link from $(abs_builddir)/.libs to $(top_builddir)"; \
 	    rm -f $(top_builddir)/$$soname ; \
 	    test -e $(abs_builddir)/.libs/$$soname && \
@@ -15,7 +15,7 @@ convenience-link: $(pkglib_LTLIBRARIES)
 	  done 
 
 clean-convenience-link:
-	  @for soname in `echo | $(EGREP) "^dlname=" $(pkglib_LTLIBRARIES) | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
+	  @for soname in `echo | $(EGREP) -h "^dlname=" $(pkglib_LTLIBRARIES) $(plugin_LTLIBRARIES) | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
             echo "$$soname: cleaning convenience links"; \
             test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname || true; \
 	  done 

@@ -41,6 +41,7 @@ AC_CONFIG_FILES([plugins/filmTEST/Makefile])
 
 AC_CONFIG_FILES([plugins/modelOBJ/Makefile])
 AC_CONFIG_FILES([plugins/modelASSIMP2/Makefile])
+AC_CONFIG_FILES([plugins/modelASSIMP3/Makefile])
 
 AC_CONFIG_FILES([plugins/recordQT/Makefile])
 AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
@@ -59,6 +60,7 @@ AC_CONFIG_FILES([plugins/videoV4L2/Makefile])
 AC_CONFIG_FILES([plugins/videoVFW/Makefile])
 AC_CONFIG_FILES([plugins/videoVIDS/Makefile])
 AC_CONFIG_FILES([plugins/videoVLC/Makefile])
+AC_CONFIG_FILES([plugins/videoVNC/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
@@ -89,6 +91,9 @@ if test -d "$srcdir/plugins/videoHALCON"; then
 fi
 if test -d "$srcdir/plugins/videoPYLON"; then
   AC_CONFIG_SUBDIRS([plugins/videoPYLON])
+fi
+if test -d "$srcdir/plugins/videoDECKLINK"; then
+  AC_CONFIG_SUBDIRS([plugins/videoDECKLINK])
 fi
 
 
@@ -423,9 +428,27 @@ dnl GEM_CHECK_LIB([avicap32],[avicap32],,[main],,,,[video input])
 # VLC
 GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [video input])
 
+# VNC
+GEM_CHECK_LIB([libvncclient], [vncclient],[rfb/rfbclient.h], [rfbGetClient],,,, [video input])
+
 # assimp
 GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
+## check whether this is assimp2 or assimp3
+have_assimp2="no"
+have_assimp3="no"
 
+old_cflags=${CFLAGS}
+old_cxxflags=${CXXFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
+LDFLAGS="${LDFLAGS}  ${GEM_LIB_ASSIMP_LIBS}"
+AC_CHECK_HEADERS([assimp.h], [have_assimp2="yes"])
+AC_CHECK_HEADERS([assimp/cimport.h], [have_assimp3="yes"])
+CFLAGS=${old_cflags}
+LDFLAGS=${old_ldflags}
+
+AM_CONDITIONAL([HAVE_ASSIMP2], [test "x${have_assimp2}" = "xyes" ])
+AM_CONDITIONAL([HAVE_ASSIMP3], [test "x${have_assimp3}" = "xyes" ])
 
 ## text support
 AC_ARG_WITH([default-font],
@@ -448,14 +471,6 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
-
-
-### make-depend flags
-if test "x$ac_cv_c_compiler_gnu" = "xyes"; then
-    AC_SUBST(MAKEDEP_FLAGS, "-MM")
-else
-    AC_SUBST(MAKEDEP_FLAGS, "-M")
-fi
 
 # using pix_videoOS rather than pix_video
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))

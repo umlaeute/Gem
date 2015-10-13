@@ -99,11 +99,21 @@ $ cp .git/hooks/pre-commit.sample .git/hooks/pre-commit
 
 Indentation
 -----------
-TODO
+It seems that the most common indentation in Gem's code base is:
+- 2 spaces (yes, that's not much)
+- no tabs (use spaces instead)
+
+Bracing
+-------
+Try using the "One  True  Brace  Style" (aka 1TBS, a variant of the K&R style)
+
+  http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS
 
 
-
-
+Tools
+-----
+To re-indent a file you can use `astyle` tool with the options-file provided in `/doc/astyle.rc`.
+(or simply run the script `build/tools/indent.sh` and pass the files to re-indent as arguments)
 
 
 Filesystem layout

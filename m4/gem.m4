@@ -241,7 +241,9 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
    AS_IF([ test "x$ac_Lib" != "xyes" ],[
      AS_VAR_SET([ac_Lib], [yes])
      AS_IF([ test "x${PKG_[]NAME[]_LIBS}" = "x" ],[
-      AC_CHECK_LIB([$2],[$4],PKG_[]NAME[]_LIBS="-l$2",AS_VAR_SET([ac_Lib], [no]),[$7])
+      AS_IF([ test "x$2" != "x" ], [
+       AC_CHECK_LIB([$2],[$4],PKG_[]NAME[]_LIBS="-l$2",AS_VAR_SET([ac_Lib], [no]),[$7])
+      ])
      ])
      AS_IF([ test "x$3" != "x" && test "x${ac_Lib}" != "xno" ],[
       AC_CHECK_HEADERS([$3],,AS_VAR_SET([ac_Lib], [no]))
@@ -251,10 +253,15 @@ dnl  PKG_CHECK_MODULES(AS_TR_CPP(PKG_$1), $1,AS_VAR_SET(acLib)yes, AC_CHECK_LIB(
 
   AS_IF([test "x$ac_Lib" = "xyes"],
    [
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$8])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$8])
-    AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$4),[1], [Define to 1 if you have the `$4' function.])
-
+    AS_IF([ test "x$1" != "x" ], [
+     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1),[1], [$8])
+    ])
+    AS_IF([ test "x$2" != "x" ], [
+     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$2),[1], [$8])
+    ])
+    AS_IF([ test "x$4" != "x" ], [
+     AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$4),[1], [Define to 1 if you have the `$4' function.])
+    ])
     GEM_LIB_[]NAME[]_CFLAGS=${PKG_[]NAME[]_CFLAGS}
     GEM_LIB_[]NAME[]_LIBS=${PKG_[]NAME[]_LIBS}
     GEM_CHECK_LIB_CFLAGS="${GEM_LIB_[]NAME[]_CFLAGS} ${GEM_CHECK_LIB_CFLAGS}"
@@ -273,8 +280,12 @@ dnl turn of further checking for this package
    ])
    AS_VAR_POPDEF([ac_Lib])dnl
 
-   AC_CHECK_LIB([$2],[$4],,,[$7])
-   AC_CHECK_HEADERS([$3])
+   AS_IF([ test "x$2" != "x" ], [
+    AC_CHECK_LIB([$2],[$4],,,[$7])
+   ])
+   AS_IF([ test "x$3" != "x" ], [
+    AC_CHECK_HEADERS([$3])
+   ])
 ])
 
 AM_CONDITIONAL(HAVE_LIB_[]NAME, [test "x${have_[]Name}" = "xyes"])

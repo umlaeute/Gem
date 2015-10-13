@@ -58,18 +58,6 @@ protected:
 	virtual ~pix_rtx();
 
 	//////////
-	// create a buffer that fits to the current imageSize
-	virtual void   create_buffer(const imageStruct&image);
-
-	//////////
-	// delete the buffer
-	virtual void   delete_buffer();
-
-	//////////
-	// clear the buffer
-	virtual void   clear_buffer();
-
-	//////////
 	// Do the processing
 	virtual void 	processImage(imageStruct &image);
 
@@ -88,9 +76,9 @@ protected:
 
 	//////////
 	// the methods
-	static void modeMessCallback(void *data, t_float newmode);
-	static void clearMessCallback(void *data);
-	static void setMessCallback(void *data);
+        void modeMess(int newmode);
+        void clearMess(void);
+        void setMess(void);
 
 };
 

@@ -23,7 +23,9 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglFogfv );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglFogfv :: GEMglFogfv	(int argc, t_atom *argv) {
+GEMglFogfv :: GEMglFogfv	(int argc, t_atom *argv)
+  :pname(GL_FOG_START)
+{
 	int i=FOG_ARRAY_LENGTH;
 	while(i--)params[i]=0.0;
 

@@ -25,8 +25,6 @@ namespace gem {
       FriBidiChar*str_in  = new FriBidiChar[len2];
       FriBidiChar*str_out = new FriBidiChar[len2];
 
-      char*output=new char[len2];
-
       /* convert UTF8 to UTF32 */
       FriBidiStrIndex ulen = fribidi_charset_to_unicode(enc, instring.c_str(), instring.size(), str_in);
       /* reshape the UTF32 string */

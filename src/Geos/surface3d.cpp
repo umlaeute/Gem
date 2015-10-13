@@ -367,7 +367,6 @@ void surface3d :: renderShape(GemState *state){
 	for(m = 0; m < nb_pts_affich_Y+1; m++) {
 	  glBegin(GL_LINE_STRIP);
 	  for(n = 0; n  < nb_pts_affich_X+1; n++)  {
-	    glTexCoord2f(xsize*n/affich_X,ysize+ysizediff*m/affich_Y);
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	  glEnd();

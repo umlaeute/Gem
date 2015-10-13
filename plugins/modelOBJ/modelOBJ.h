@@ -15,6 +15,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/modelloader.h"
 #include "model_loader.h"
+#include "Gem/VertexBuffer.h"
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -28,15 +30,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-namespace gem { namespace plugins {
-    class GEM_EXPORT modelOBJ : public gem::plugins::modelloader {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT modelOBJ : public gem::plugins::modelloader
+{
+public:
   /////////
   // ctor/dtor
   modelOBJ(void);
   virtual ~modelOBJ(void);
 
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   //////////
   // open/close an asset
@@ -53,21 +62,29 @@ namespace gem { namespace plugins {
   virtual bool enumProperties(gem::Properties&, gem::Properties&);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
+  std::vector<std::vector<float> > getVector(std::string vectorName);
+  std::vector<VBOarray> getVBOarray();
+  void unsetRefresh();
+  bool needRefresh();
 
 protected:
   virtual void destroy(void);
   bool    m_rebuild;
 
   GLMmodel *m_model;
-  GLint	  	m_dispList;
 
-	int       m_material;
-	int       m_flags;
+  int       m_material;
+  int       m_flags;
   int       m_group;
-  float		  m_currentH, m_currentW;
+  float     m_currentH, m_currentW;
   glmtexture_t m_textype;
   bool      m_reverse;
-};
-};}; // namespace gem::plugins
 
-#endif	// for header file
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
+  std::vector<VBOarray> m_VBOarray;
+  bool m_refresh;
+};
+};
+}; // namespace gem::plugins
+
+#endif // for header file

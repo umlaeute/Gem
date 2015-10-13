@@ -53,7 +53,7 @@ recordV4L :: recordV4L(void):
   m_palette(0)
 {
   m_image.xsize=720;
-  m_image.xsize=576;
+  m_image.ysize=576;
   m_image.setCsizeByFormat(GL_YUV422_GEM);
   m_image.setCsizeByFormat(GL_RGBA);
   m_image.reallocate();

@@ -101,7 +101,11 @@ pix_video :: ~pix_video(){
 //
 /////////////////////////////////////////////////////////
 void pix_video :: render(GemState *state){
-  if (m_videoHandle)state->set(GemState::_PIX, m_videoHandle->getFrame());
+  if (m_videoHandle) {
+    pixBlock*frame=m_videoHandle->getFrame();
+    //post("got frame: %p", frame);
+    state->set(GemState::_PIX, frame);
+  }
 }
 
 /////////////////////////////////////////////////////////

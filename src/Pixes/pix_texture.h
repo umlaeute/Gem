@@ -105,6 +105,10 @@ class GEM_EXTERN pix_texture : public GemBase
 
 
  protected:
+  t_inlet    *m_inTexID;  /* inlet to receive external texture */
+  t_outlet   *m_outTexID; /* outlet to pass on our texture */
+
+  // USER requested data
 
   //////////
   // Turn on/off texture mapping
@@ -113,47 +117,71 @@ class GEM_EXTERN pix_texture : public GemBase
   //////////
   // Set the texture quality
   GLuint      m_textureMinQuality, m_textureMagQuality;
-  bool        m_wantMipmap, m_canMipmap, m_hasMipmap;
+  bool        m_wantMipmap;
+
+  int m_rectangle; //rectangle or power of 2
 
   //////////
   // Set the texture quality
   // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
-  GLuint        m_repeat, m_doRepeat;
+  GLuint        m_repeat;
+
+  //////////
+  // texture environment mode
+  GLint		m_env; // GL_TEXTURE_ENV_MODE
+
+  /* using PBOs for (hopefully) optimized pixel transfers */
+  GLint m_numPbo; // user supplied
+
+  int		m_clientStorage; //for Apple's client storage extension
+  int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
+
+  GLint	m_texunit; // which texture unit to use
+
+  /* CAPABILITIES */
+
+  gem::ContextData<bool> m_canMipmap;    // (openGL caps)
+  gem::ContextData<int>  m_canRectangle; // (openGL caps & GemSettings)
+  gem::ContextData<GLint>m_numTexUnits;  // (openGL caps)
+
+
+
+  /* STATE */
+  gem::ContextData<bool>m_hasMipmap;
 
   //////////
   // did we really do texturing in render() ??
   // good to know in the postrender()...
-  bool          m_didTexture;
+  gem::ContextData<bool>          m_didTexture;
 
   //////////
   // Do we need to rebuild the display List
   gem::ContextData<GLboolean>           m_rebuildList;
 
   //////////
-  // The size of the texture (so we can use sub image)
-  int	        m_dataSize[3];
+  // The texture object number
+  gem::ContextData<GLuint>	    m_textureObj;
+
+  ////////
+  // the texture object we are creating and destroying
+  // we use it as our texture
+  gem::ContextData<GLuint> m_realTextureObj;
+
+
+  /* MISC */
 
   //////////
-  // The texture object number
-  GLuint	    m_textureObj;
+  // The size of the texture (so we can use sub image)
+  int	        m_dataSize[3];
 
   ////////
   // an external texture (as emitted through the 2nd outlet)
   // if this is present and no image is upstream,
   // we use it as our texture
-  GLuint	    m_extTextureObj;
-  GLfloat     m_extWidth, m_extHeight;
-  GLuint      m_extType;
-  GLboolean   m_extUpsidedown;
-  t_inlet         *m_inTexID;
-
-  t_outlet	*m_outTexID;
-
-
-  ////////
-  // the texture object we are creating and destroying
-  // we use it as our texture
-  GLuint	    m_realTextureObj;
+  gem::ContextData<GLuint>    m_extTextureObj;
+  gem::ContextData<GLfloat>   m_extWidth, m_extHeight;
+  gem::ContextData<GLuint>    m_extType;
+  gem::ContextData<GLboolean> m_extUpsidedown;
 
   //////////
   // The resizing buffer
@@ -175,32 +203,18 @@ class GEM_EXTERN pix_texture : public GemBase
   TexCoord        m_oldBaseCoord;
   bool            m_oldOrientation;
 
-  int m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
+  gem::ContextData<int> m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 
   GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
 
-  int		m_rectangle; //rectangle or power of 2
-  int m_canRectangle; // openGL caps and GemSettings
-
-  //////////
-  // texture environment mode
-  GLint		m_env; // GL_TEXTURE_ENV_MODE
-
-  int		m_clientStorage; //for Apple's client storage extension
-  int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
-
-  GLint	m_texunit;
-  GLint m_numTexUnits;
-
-
   /* using PBOs for (hopefully) optimized pixel transfers */
-  GLint m_numPbo;
-  GLint m_curPbo;
-  GLuint *m_pbo;                   // IDs of PBO
-
+  // FIXXME; m_pbo must be allocated per-context (*not* in pboMess callback)
+  gem::ContextData<GLuint> m_curPbo;
+  gem::ContextData<GLuint> m_oldNumPbo;
+  gem::ContextData<GLuint*>m_pbo;  // IDs of PBO
 
   /* upside down texture? */
-  GLboolean m_upsidedown;
+  gem::ContextData<GLboolean> m_upsidedown;
 };
 
 #endif	// for header file

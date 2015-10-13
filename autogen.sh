@@ -1,4 +1,5 @@
 #!/bin/sh
+cd "${0%/*}"
 
 package=Gem
 
@@ -96,6 +97,7 @@ manual_autoreconf () {
 
   SUBDIRS="."
   SUBDIRS="${SUBDIRS} plugins/videoAVT plugins/videoHALCON plugins/videoPYLON"
+  SUBDIRS="${SUBDIRS} plugins/videoDECKLINK"
   SUBDIRS="${SUBDIRS} extra extra/pix_artoolkit"
  fi
 

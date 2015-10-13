@@ -245,8 +245,8 @@ void multimodel :: render(GemState *state)
     m_properties.set("texheight", m_currentH);
     applyProperties();
   }
-
-  m_loaders[m_curModel]->render();
+  #warning multimodel.render
+  //m_loaders[m_curModel]->render();
 }
 
 /////////////////////////////////////////////////////////

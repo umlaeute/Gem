@@ -246,7 +246,9 @@ bool gemglfw3window :: create(void)
     return false;
   }
   s_windowmap[m_window]=this;
-  makeCurrent();
+  if(!makeCurrent()){
+    error("couldn't switch to glfw3-context");
+  }
 
   // FIXXME: single/double buffering
 

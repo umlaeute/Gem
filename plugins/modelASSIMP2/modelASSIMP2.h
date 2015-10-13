@@ -15,9 +15,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/modelloader.h"
 
-#include "assimp.h"
-#include "aiPostProcess.h"
-#include "aiScene.h"
+#include <assimp.h>
+#include <aiPostProcess.h>
+#include <aiScene.h>
 
 #include "Gem/GemGL.h"
 
@@ -33,15 +33,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-namespace gem { namespace plugins {
-    class GEM_EXPORT modelASSIMP2 : public gem::plugins::modelloader {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT modelASSIMP2 : public gem::plugins::modelloader
+{
+public:
   /////////
   // ctor/dtor
   modelASSIMP2(void);
   virtual ~modelASSIMP2(void);
 
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   //////////
   // open/close an asset
@@ -58,13 +65,17 @@ namespace gem { namespace plugins {
   virtual bool enumProperties(gem::Properties&, gem::Properties&);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
+  std::vector<std::vector<float> > getVector(std::string vectorName);
+  std::vector<VBOarray> getVBOarray();
+  void unsetRefresh();
+  bool needRefresh();
+  void fillVBOarray();
 
 protected:
   virtual void destroy(void);
   bool    m_rebuild;
 
   const aiScene *m_scene;
-  GLint	   m_dispList;
 
   float  m_scale;
   struct aiVector3D m_offset;
@@ -72,7 +83,14 @@ protected:
   struct aiVector3D m_min, m_max, m_center;
 
   bool m_useMaterial;
+
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords,
+      m_colors;
+  std::vector<VBOarray> m_VBOarray;
+  bool m_refresh;
+
 };
-};}; // namespace gem::plugins
+};
+}; // namespace gem::plugins
 
 #endif	// for header file

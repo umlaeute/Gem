@@ -15,6 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE__GEM_PLUGINS_MODELLOADER_H_
 
 #include "Gem/ExportDef.h"
+#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -30,6 +31,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 #include <string>
+#include <vector>
 namespace gem {
   class Properties;
 }
@@ -37,13 +39,13 @@ namespace gem { namespace plugins {
 class GEM_EXTERN modelloader
 {
  public:
-
   //////////
   // returns an instance wrapping all plugins or NULL
   // if NULL is returned, you might still try your luck with manually accessing the
   // PluginFactory
   static modelloader*getInstance(void);
 
+  modelloader(void);
   /////////
   // dtor must be virtual
   virtual ~modelloader(void);
@@ -68,29 +70,6 @@ class GEM_EXTERN modelloader
   /* returns TRUE if loading was successful, FALSE otherwise */
   virtual bool open(const std::string&,
                     const gem::Properties&requestprops) = 0;
-
-  //////////
-  // render the model
-  /* this is the core-function of this class !!!!
-   * when called it renders the given asset
-   *
-   * this is the only time that guarantees a valid openGL context
-   * the plugin is free to compile a displaylist and use it
-   * in consecutive calls
-   *
-   * this may be called from multiple openGL contexts!
-   */
-  virtual bool render(void) = 0;
-
-  //////////
-  // prepare rendering of model
-  /* the host CAN call this with a valid openGL context, in order
-   * to allow the plugin to generate display-lists and the like
-   *
-   * nothing must be drawn when this gets called
-   */
-  virtual bool compile(void) = 0;
-
   //////////
   // close the asset file
   /* close the asset and clean up temporary things */
@@ -133,6 +112,36 @@ class GEM_EXTERN modelloader
    *           "/camera/1/pos" (position of camera #1)
    */
   virtual void getProperties(gem::Properties&props) = 0;
+
+  /**
+   * data array (e.g. vertices)
+   * TODO: rename to ArrayData (or similar)
+   */
+  class VBOarray {
+    public:
+    std::vector<std::vector<float> >* data;
+    VertexBuffer::Type type;
+  };
+
+  /**
+   * get a named vector (e.g. to pass it to VBO)
+   * TODO: return VBOarray
+   */
+  virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
+
+  /**
+   * get all vectors
+   * TODO: rename to getVectors()
+   */
+  virtual std::vector<VBOarray> getVBOarray() = 0;
+
+  /* returns TRUE if the array data has changed (and the VBO needs refresh) */
+  virtual bool needRefresh() = 0;
+  /* signal the loader that we have updated our local copy of the data (clear the needRefresh() flag)
+     TODO: shouldn't this be automatically called when getVBOarray() got called?
+   */
+  virtual void unsetRefresh() = 0;
+
 };
 
 };}; // namespace gem::plugins

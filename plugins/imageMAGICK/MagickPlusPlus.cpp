@@ -86,6 +86,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="RGBA";
 #endif
     break;
+  /* coverity[unterminated_default] */
   default:
     pImage=new imageStruct();
     pImage->convertFrom(img, GL_RGB);

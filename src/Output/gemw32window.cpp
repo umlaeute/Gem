@@ -15,6 +15,10 @@
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 #ifdef _WIN32
+// disable QuickTime support in here (where it is not used)
+// if a plugin requires QuickTime to be initialized, it has to do it itself...
+# undef HAVE_QUICKTIME
+
 # define GEMW32WINDOW_INTERNAL
 # include "gemw32window.h"
 
@@ -23,6 +27,15 @@
 # include <stdlib.h>
 
 # ifdef HAVE_QUICKTIME
+#  if defined __MINGW32__
+/* hack to avoid the use of microsofts non-standard extension (u)i64 instead of
+ * (U)LL */
+#   include <ConditionalMacros.h>
+#   undef TARGET_OS_WIN32
+#   include <Math64.h>
+#   define TARGET_OS_WIN32 1
+#  endif /* MINGW */
+
 #  include <QTML.h>
 #  include <Movies.h>
 # endif /* HAVE_QUICKTIME */
@@ -46,7 +59,7 @@ static bool initGemWin(void) {
       return false;
     }
 	// Initialize QuickTime
-	EnterMovies();
+	err = EnterMovies();
 	if (err)
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);

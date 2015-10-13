@@ -108,7 +108,7 @@ bool filmAVIPLAY :: open(const std::string filename, const gem::Properties&wantP
   m_readNext=true;
   m_newfilm = true;
   return true;
-  goto unsupported;
+
  unsupported:
   close();
   return false;

@@ -273,7 +273,10 @@ void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
   m_width = width;
   m_height = height;
   if(makeCurrent()){
-    glutReshapeWindow(m_width, m_height);
+    glutReshapeWindow(width, height);
+    glutHideWindow();glutShowWindow();
+    glutPositionWindow(m_xoffset, m_yoffset);
+    glutMainLoopEvent();
   }
 }
 /////////////////////////////////////////////////////////
@@ -338,16 +341,22 @@ bool gemglutwindow :: create(void)
 
   glutInitDisplayMode(mode);
 
+#ifdef FREEGLUT
+  //  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
+  glutSetOption(GLUT_INIT_WINDOW_X, m_xoffset);
+  glutSetOption(GLUT_INIT_WINDOW_Y, m_yoffset);
+  glutSetOption(GLUT_INIT_WINDOW_WIDTH, m_width);
+  glutSetOption(GLUT_INIT_WINDOW_HEIGHT, m_height);
+#endif
+
   m_window=glutCreateWindow(m_title.c_str());
   s_windowmap[m_window]=this;
 
-  glutDisplayFunc   (&displayCb);
-  glutVisibilityFunc(&visibleCb);
+  glutReshapeWindow(m_width, m_height);
+  glutPositionWindow(m_xoffset, m_yoffset);
 
   glutCloseFunc     (&closeCb);
-#ifdef FREEGLUT
-  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-#endif
 
   glutKeyboardFunc(&keyboardCb);
   glutSpecialFunc(&specialCb);
@@ -374,6 +383,9 @@ bool gemglutwindow :: create(void)
 #endif
 
   //  glutNameFunc(&nameCb);
+  glutDisplayFunc   (&displayCb);
+  glutVisibilityFunc(&visibleCb);
+
 
   if(!createGemWindow()) {
     destroyMess();

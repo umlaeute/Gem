@@ -128,6 +128,8 @@ class GEM_EXTERN GemBase : public CPPExtern
 
  protected:
   enum RenderState getState(void);
+
+  virtual void beforeDeletion(void);
 };
 
 #endif	// for header file

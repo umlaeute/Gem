@@ -18,6 +18,7 @@
 #include "GemPixObj.h"
 #include "Gem/Cache.h"
 #include "Gem/State.h"
+#include "Gem/Rectangle.h"
 #include "Utils/Functions.h"
 
 /////////////////////////////////////////////////////////
@@ -28,7 +29,8 @@
 GemPixObj :: GemPixObj() :
   cachedPixBlock(pixBlock()),
   orgPixBlock(NULL), m_processOnOff(1),
-  m_simd(GemSIMD::getCPU())
+  m_simd(GemSIMD::getCPU()),
+  m_doROI(false)
 {
     cachedPixBlock.newimage=0;
     cachedPixBlock.newfilm =0;
@@ -56,6 +58,14 @@ void GemPixObj :: render(GemState *state){
   // so that the objects can rely on their (buffered) images
   pixBlock*image=NULL;
   if (!state || !state->get(GemState::_PIX, image))return;
+  gem::Rectangle*roi=NULL;
+  state->get(GemState::getKey("pix.roi.rectangle"),roi);
+  if(roi) {
+    m_roi=*roi;
+    m_doROI=true;
+  } else {
+    m_doROI=false;
+  }
   if(!image ||
      !&image->image)  return;
   cachedPixBlock.newimage=image->newimage;

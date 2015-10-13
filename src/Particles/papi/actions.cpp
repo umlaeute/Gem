@@ -20,9 +20,18 @@
 // To offset [0 .. 1] vectors to [-.5 .. .5]
 static pVector vHalf(0.5, 0.5, 0.5);
 
+static inline double papirand_double() {
+  /* coverity[dont_call] this is not crypto-science */
+  return drand48();
+}
+static inline bool papirand_bool() {
+  /* coverity[dont_call] this is not crypto-science */
+  return (rand() & 0x1);
+}
+
 static inline pVector RandVec()
 {
-	return pVector(drand48(), drand48(), drand48());
+	return pVector(papirand_double(), papirand_double(), papirand_double());
 }
 
 // Return a random number with a normal distribution.
@@ -35,11 +44,11 @@ static inline float NRand(float sigma = 1.0f)
 	float y;
 	do
 	{
-		y = -logf(drand48());
+		y = -logf(papirand_double());
 	}
-	while(drand48() > expf(-fsqr(y - 1.0f)*0.5f));
+	while(papirand_double() > expf(-fsqr(y - 1.0f)*0.5f));
 
-	if(rand() & 0x1)
+	if(papirand_bool())
 		return y * sigma * ONE_OVER_SIGMA_EXP;
 	else
 		return -y * sigma * ONE_OVER_SIGMA_EXP;
@@ -1308,7 +1317,7 @@ void PASource::Execute(ParticleGroup *group)
 	int rate = int(floor(particle_rate * dt));
 
 	// Dither the fraction particle in time.
-	if(drand48() < particle_rate * dt - float(rate))
+	if(papirand_double() < particle_rate * dt - float(rate))
 		rate++;
 
 	// Don't emit more than it can hold.
@@ -1764,7 +1773,7 @@ bool pDomain::Within(const pVector &pos) const
 			pVector x(pos - p1);
 			// return exp(-0.5 * xSq * Sqr(oneOverSigma)) * ONEOVERSQRT2PI * oneOverSigma;
 			float Gx = expf(x.length2() * radius2Sqr) * radius2;
-			return (drand48() < Gx);
+			return (papirand_double() < Gx);
 		}
 	case PDPoint:
 	case PDLine:
@@ -1785,18 +1794,18 @@ void pDomain::Generate(pVector &pos) const
 		pos = p1;
 		break;
 	case PDLine:
-		pos = p1 + p2 * drand48();
+		pos = p1 + p2 * papirand_double();
 		break;
 	case PDBox:
 		// Scale and translate [0,1] random to fit box
-		pos.x = p1.x + (p2.x - p1.x) * drand48();
-		pos.y = p1.y + (p2.y - p1.y) * drand48();
-		pos.z = p1.z + (p2.z - p1.z) * drand48();
+		pos.x = p1.x + (p2.x - p1.x) * papirand_double();
+		pos.y = p1.y + (p2.y - p1.y) * papirand_double();
+		pos.z = p1.z + (p2.z - p1.z) * papirand_double();
 		break;
 	case PDTriangle:
 		{
-			float r1 = drand48();
-			float r2 = drand48();
+			float r1 = papirand_double();
+			float r2 = papirand_double();
 			if(r1 + r2 < 1.0f)
 				pos = p1 + u * r1 + v * r2;
 			else
@@ -1804,7 +1813,7 @@ void pDomain::Generate(pVector &pos) const
 		}
 		break;
 	case PDRectangle:
-		pos = p1 + u * drand48() + v * drand48();
+		pos = p1 + u * papirand_double() + v * papirand_double();
 		break;
 	case PDPlane: // How do I sensibly make a point on an infinite plane?
 		pos = p1;
@@ -1819,16 +1828,16 @@ void pDomain::Generate(pVector &pos) const
 		if(radius1 == radius2)
 			pos = p1 + pos * radius1;
 		else
-			pos = p1 + pos * (radius2 + drand48() * (radius1 - radius2));
+			pos = p1 + pos * (radius2 + papirand_double() * (radius1 - radius2));
 		break;
 	case PDCylinder:
 	case PDCone:
 		{
 			// For a cone, p2 is the apex of the cone.
-			float dist = drand48(); // Distance between base and tip
-			float theta = drand48() * 2.0f * float(M_PI); // Angle around axis
+			float dist = papirand_double(); // Distance between base and tip
+			float theta = papirand_double() * 2.0f * float(M_PI); // Angle around axis
 			// Distance from axis
-			float r = radius2 + drand48() * (radius1 - radius2);
+			float r = radius2 + papirand_double() * (radius1 - radius2);
 
 			float x = r * cosf(theta); // Weighting of each frame vector
 			float y = r * sinf(theta);
@@ -1851,9 +1860,9 @@ void pDomain::Generate(pVector &pos) const
 		break;
 	case PDDisc:
 		{
-			float theta = drand48() * 2.0f * float(M_PI); // Angle around normal
+			float theta = papirand_double() * 2.0f * float(M_PI); // Angle around normal
 			// Distance from center
-			float r = radius2 + drand48() * (radius1 - radius2);
+			float r = radius2 + papirand_double() * (radius1 - radius2);
 
 			float x = r * cosf(theta); // Weighting of each frame vector
 			float y = r * sinf(theta);

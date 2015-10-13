@@ -16,6 +16,7 @@
 #include "Gem/Image.h"
 #include "Gem/State.h"
 #include "Utils/GLUtil.h"
+#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -33,33 +34,6 @@
 class GEM_EXTERN gemvertexbuffer : public GemShape
 {
   CPPEXTERN_HEADER(gemvertexbuffer, GemShape);
-
-protected:
-  class VertexBuffer
-  {
-  public:
-    VertexBuffer();
-    VertexBuffer(unsigned int size, unsigned int stride);
-    VertexBuffer(const VertexBuffer&);
-    ~VertexBuffer(void);
-    void resize(unsigned int);
-    bool create(void);
-    bool render(void);
-    void destroy(void);
-
-    unsigned int size;
-    unsigned int stride;
-
-    GLuint vbo;
-    float*array;
-    bool dirty;
-    bool enabled;
-    GLuint attrib_index;
-    std::string attrib_name;
-    std::string attrib_array;
-    unsigned int offset;
-  };
-
 
 public:
   //////////
@@ -81,17 +55,17 @@ protected:
   // Do the rendering
   virtual void renderShape(GemState *state);
   //virtual void 	runKernel();
-  void tabMess(unsigned int argc, t_atom *argv, VertexBuffer&array,
+  void tabMess(unsigned int argc, t_atom *argv, gem::VertexBuffer&array,
                unsigned int offset);
   void resizeMess(float size);
 
 private :
   // GL functionality
   void createVBO(void);
-  void copyArray(const std::string&tab_name, VertexBuffer&array,
-                 unsigned int stride, unsigned int offset);
+  void copyArray(const std::string&tab_name, gem::VertexBuffer&array,
+                 unsigned int stride, unsigned int offset, bool resize);
 
-  void tableMess (VertexBuffer&vb, std::string name, unsigned int argc,
+  void tableMess (gem::VertexBuffer&vb, std::string name, unsigned int argc,
                   t_atom *argv);
   void positionMess(t_symbol*,int,t_atom*);
   void textureMess(t_symbol*,int,t_atom*);
@@ -129,8 +103,8 @@ private :
   unsigned int m_range[2];
   bool size_change_flag;
   unsigned int glsl_program;
-  VertexBuffer m_position, m_texture, m_color, m_normal;
-  std::vector <VertexBuffer> m_attribute;
+  gem::VertexBuffer m_position, m_texture, m_color, m_normal;
+  std::vector <gem::VertexBuffer> m_attribute;
 
   gem::utils::gl::GLuintMap m_idmapper;
 };

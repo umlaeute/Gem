@@ -46,11 +46,15 @@ namespace {
     drawtypes["lineloop"]=GL_LINE_LOOP;
     drawtypes["lines"]=GL_LINES;
     drawtypes["linestrip"]=GL_LINE_STRIP;
+    drawtypes["linesadj"]=GL_LINES_ADJACENCY;
+    drawtypes["linestripadj"]=GL_LINE_STRIP_ADJACENCY;
 
     drawtypes["tri"]=GL_TRIANGLES;
     drawtypes["triangle"]=GL_TRIANGLES;
     drawtypes["tristrip"]=GL_TRIANGLE_STRIP;
     drawtypes["trifan"]=GL_TRIANGLE_FAN;
+    drawtypes["triadj"]=GL_TRIANGLES_ADJACENCY;
+    drawtypes["tristripadj"]=GL_TRIANGLE_STRIP_ADJACENCY;
 
     drawtypes["quad"]=GL_QUADS;
     drawtypes["quads"]=GL_QUADS;

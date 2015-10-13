@@ -132,6 +132,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/13.panoramique.pd \
 	10.glsl/14.blur.pd \
 	10.glsl/15.bicubic_image_interpolation.pd \
+	10.glsl/16.vertexbuffer_attributes.pd \
 	10.glsl/bicubic_interpolation.frag \
 	10.glsl/bicubic_interpolation.vert \
 	10.glsl/blur.frag \
@@ -218,11 +219,16 @@ nobase_dist_gemexamples_DATA = \
 	13.recursion/stack-help.pd \
 	13.recursion/stack.pd \
 	13.recursion/xform-gui.pd \
+	14.multiple_windows/01.basic_example.pd \
+	14.multiple_windows/02.switch_context.pd \
+	14.multiple_windows/03.texture_sharing.pd \
 	99.games/puzzle.pd \
 	data/64shade.tif \
 	data/alea.mpg \
 	data/anim-1.mov \
 	data/bitmap_font_6x8.bmp \
+	data/brick.frag \
+	data/brick.vert \
 	data/blob0.tif \
 	data/blob1.tif \
 	data/blob2.tif \

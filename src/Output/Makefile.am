@@ -70,9 +70,9 @@ gemcocoawindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemcocoawindow_la @MOREFLAGS@
 
 # object specific libraries
-gemcocoawindow_la_CXXFLAGS += 
-gemcocoawindow_la_LIBADD   += 
-gemcocoawindow_la_LDFLAGS  += 
+gemcocoawindow_la_CXXFLAGS += @GEM_FRAMEWORK_COCOA_CFLAGS@
+gemcocoawindow_la_LIBADD   += @GEM_FRAMEWORK_COCOA_LIBS@
+gemcocoawindow_la_LDFLAGS  +=
 
 ## SOURCES
 nodist_EXTRA_gemcocoawindow_la_SOURCES=gemcocoawindow.cpp
@@ -227,6 +227,9 @@ gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 gemw32window_la_CXXFLAGS += @GL_CFLAGS@
 gemw32window_la_LIBADD   += @GL_LIBS@ 
 gemw32window_la_LDFLAGS  += @GL_LDFLAGS@
+## QuickTime support
+#gemw32window_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME_CFLAGS@
+#gemw32window_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME_LIBS@
 
 ## SOURCES
 gemw32window_la_SOURCES = \

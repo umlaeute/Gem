@@ -17,10 +17,11 @@
 #include "model.h"
 #include "Gem/State.h"
 #include "plugins/modelloader.h"
+#include <algorithm> // std::min
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // model
 //
@@ -30,7 +31,12 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 model :: model(t_symbol *filename) :
   m_loader(gem::plugins::modelloader::getInstance()),
-  m_loaded(false)
+  m_loaded(false),
+  m_size_change_flag(false),
+  m_position(256,3),
+  m_texture (256,2),
+  m_color   (256,4),
+  m_normal  (256,3)
 {
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) openMess(filename->s_name);
@@ -110,7 +116,7 @@ void model :: textureMess(int state)
 //
 /////////////////////////////////////////////////////////
 void model :: smoothMess(t_float fsmooth)
-{  
+{
   m_properties.set("smooth", fsmooth);
   applyProperties();
 }
@@ -169,9 +175,18 @@ void model :: openMess(const std::string&filename)
   }
 
   m_loaded=true;
+  getVBOarray();
   setModified();
 }
 
+void model :: startRendering() {
+  if (m_loaded){
+    copyArray(m_loader->getVector("vertices"), m_position);
+    copyArray(m_loader->getVector("texcoords"), m_texture);
+    copyArray(m_loader->getVector("normals"), m_normal);
+    copyArray(m_loader->getVector("colors"), m_color);
+  }
+}
 /////////////////////////////////////////////////////////
 // render
 //
@@ -179,32 +194,53 @@ void model :: openMess(const std::string&filename)
 void model :: render(GemState *state)
 {
   if(!m_loaded)return;
-  float scaleX=1.f, scaleY=1.f;
-  float transY=0.f;
 
-  if (state) {
-    bool upsidedown=true; 
-    TexCoord baseCoord(1., 1.);
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || m_size_change_flag ) {
+    createVBO();
+    m_size_change_flag = false;
+  }
+  getVBOarray();
 
-    state->get(GemState::_GL_TEX_ORIENTATION, upsidedown);
-    state->get(GemState::_GL_TEX_BASECOORD, baseCoord);
+  std::vector<unsigned int> sizeList;
 
-    scaleX=baseCoord.s;
-    scaleY=(upsidedown?-1.f:1.f)*baseCoord.t;
-    transY=(upsidedown?-1.f:0.f);
+  if(m_position.render()) {
+    glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    sizeList.push_back(m_position.size);
+  }
+  if(m_texture.render()) {
+    glTexCoordPointer(m_texture.dimen, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    sizeList.push_back(m_texture.size);
+  }
+  if(m_color.render()) {
+    glColorPointer(m_color.dimen, GL_FLOAT, 0, 0);
+    glEnableClientState(GL_COLOR_ARRAY);
+    sizeList.push_back(m_color.size);
+  }
+  if(m_normal.render()) {
+    glNormalPointer(GL_FLOAT, 0, 0);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    sizeList.push_back(m_normal.size);
   }
 
-  glMatrixMode(GL_TEXTURE);
-  glScalef(scaleX, scaleY, 1.f);
-  glTranslatef(0.f, transY, 0.f);
-  glMatrixMode(GL_MODELVIEW);
+  if ( sizeList.size() > 0 ) {
+    unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
+    glDrawArrays(GL_TRIANGLES, 0, npoints);
+  }
 
-  m_loader->render();
-
-  glMatrixMode(GL_TEXTURE);
-  glTranslatef(0.f, -transY, 0.f);
-  glScalef(1./scaleX, 1./scaleY, 1.f);
-  glMatrixMode(GL_MODELVIEW);
+  if ( m_position.enabled ) {
+    glDisableClientState(GL_VERTEX_ARRAY);
+  }
+  if ( m_color.enabled    ) {
+    glDisableClientState(GL_COLOR_ARRAY);
+  }
+  if ( m_texture.enabled  ) {
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
+  if ( m_normal.enabled   ) {
+    glDisableClientState(GL_NORMAL_ARRAY);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -220,4 +256,74 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
+}
+
+void model :: createVBO(void)
+{
+  m_position.create();
+  m_texture .create();
+  m_color   .create();
+  m_normal  .create();
+}
+
+void model :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb)
+{
+  unsigned int size(0), i(0), npts(0);
+
+  //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
+  if ( tab.empty() ) return;
+  size=tab.size();
+
+  if(size!=vb.size) {
+    vb.resize(size);
+    m_size_change_flag=true;
+  }
+
+  for ( i = 0 ; i < size ; i++ ) {
+    for ( int j=0 ; j< std::min(vb.dimen,(unsigned int)tab[i].size()) ; j++) {
+      vb.array[i*vb.dimen + j] = tab[i][j];
+    }
+  }
+  vb.dirty=true;
+  vb.enabled=true;
+}
+
+void model :: copyAllArrays(){
+  if (m_loader && m_loader->needRefresh()){
+    copyArray(m_loader->getVector("vertices"), m_position);
+    copyArray(m_loader->getVector("texcoords"), m_texture);
+    copyArray(m_loader->getVector("normals"), m_normal);
+    copyArray(m_loader->getVector("colors"), m_color);
+    m_loader->unsetRefresh();
+  }
+}
+
+void model :: getVBOarray(){
+  if (m_loader && m_loader->needRefresh()){
+
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+
+    if ( vboArray.empty() ){
+      copyAllArrays();
+    } else {
+      for (int i = 0; i<vboArray.size(); i++){
+        switch (vboArray[i].type){
+          case gem::VertexBuffer::GEM_VBO_VERTICES:
+            copyArray(*vboArray[i].data, m_position);
+            break;
+          case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
+            copyArray(*vboArray[i].data, m_texture);
+            break;
+          case gem::VertexBuffer::GEM_VBO_NORMALS:
+            copyArray(*vboArray[i].data, m_normal);
+            break;
+          case gem::VertexBuffer::GEM_VBO_COLORS:
+            copyArray(*vboArray[i].data, m_color);
+            break;
+          default:
+            error("VBO type %d not supported\n",vboArray[i].type);
+        }
+      }
+    }
+  }
 }

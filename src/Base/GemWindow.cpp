@@ -19,6 +19,21 @@
 #include "Gem/Settings.h"
 #include "GemContext.h"
 #include "Gem/Exception.h"
+#include "GemBase.h"
+
+#include <set>
+
+namespace {
+  bool sendContextDestroyedMsg(t_pd*x) {
+    if(!x)
+      return false;
+    t_symbol*s=gensym("__gem_context");
+    t_atom a[1];
+    SETFLOAT(a+0, 0);
+    pd_typedmess(x, s, 1, a);
+    return true;
+  }
+};
 
 class GemWindow::PIMPL {
 public:
@@ -114,8 +129,10 @@ public:
   void requeue(void) {
     clock_delay(qClock, 0);
   }
-};
 
+  static std::set<GemWindow*>s_contexts;
+}; /* GemWindow::PIMPL */
+std::set<GemWindow*>GemWindow::PIMPL::s_contexts;
 
 /////////////////////////////////////////////////////////
 //
@@ -142,6 +159,7 @@ GemWindow :: GemWindow()
   i=m_height; gem::Settings::get("window.height", i), m_height=i;
   m_pimpl->infoOut   = outlet_new(this->x_obj, 0);
   m_pimpl->rejectOut = outlet_new(this->x_obj, 0);
+  GemWindow::PIMPL::s_contexts.insert(this);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -153,6 +171,7 @@ GemWindow :: ~GemWindow()
     m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
     delete m_pimpl; m_pimpl=0;
   }
+  GemWindow::PIMPL::s_contexts.erase(this);
 }
 
 void GemWindow::info(std::vector<t_atom>l) {
@@ -260,12 +279,25 @@ void GemWindow::dispatch() {
 }
 
 gem::Context*GemWindow::createContext(void){
-  return new gem::Context();
+  gem::Context*ctx=new gem::Context();
+  return ctx;
 }
 gem::Context*GemWindow::destroyContext(gem::Context*ctx){
-  if(ctx)delete ctx;
+  if(ctx){
+    delete ctx;
+  }
   ctx=0;
   return ctx;
+}
+void GemWindow::stopInAllContexts(GemBase*obj) {
+  for (std::set<GemWindow*>::iterator it = GemWindow::PIMPL::s_contexts.begin();
+            it!=GemWindow::PIMPL::s_contexts.end();
+            ++it) {
+    GemWindow*w=(*it);
+    w->makeCurrent();
+    t_pd*x=&obj->x_obj->ob_pd;
+    sendContextDestroyedMsg(x);
+  }
 }
 
 bool GemWindow::createGemWindow(void){
@@ -290,6 +322,9 @@ bool GemWindow::createGemWindow(void){
 
 
 void GemWindow::destroyGemWindow(void){
+  // tell all objects that this context is vanishing
+  sendContextDestroyedMsg(gensym("__gemBase")->s_thing);
+  // do the rest
   m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
   m_pimpl->undispatch();
   m_context=m_pimpl->mycontext;

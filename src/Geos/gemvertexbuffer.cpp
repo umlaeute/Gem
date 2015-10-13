@@ -6,9 +6,10 @@
 //
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2011 Cyrille Henry
+//    Copyright (c) 2014 Antoine Villeret
+//    Copyright (c) 2014 jprtzk
+//    Copyright (c) 2012-2015 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -29,120 +30,7 @@
 # endif
 #endif
 
-
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
-
-gemvertexbuffer :: VertexBuffer:: VertexBuffer() :
-  size(0),
-  stride(0),
-  vbo(0),
-  array(NULL),
-  dirty(false),
-  enabled(false),
-  attrib_index(0),
-  attrib_name(""),
-  attrib_array(""),
-  offset(0)
-{
-}
-gemvertexbuffer :: VertexBuffer:: VertexBuffer (unsigned int size_,
-    unsigned int stride_) :
-  size(0),
-  stride(stride_),
-  vbo(0),
-  array(NULL),
-  dirty(false),
-  enabled(false),
-  attrib_index(0),
-  attrib_name(""),
-  attrib_array(""),
-  offset(0)
-{
-  resize(size_);
-}
-gemvertexbuffer :: VertexBuffer:: VertexBuffer (const VertexBuffer&vb)
-  :size(0)
-  ,stride(vb.stride)
-  ,vbo(vb.vbo)
-  ,array(NULL)
-  ,dirty(false)
-  ,enabled(vb.enabled)
-  ,attrib_index(vb.attrib_index)
-  ,attrib_name(vb.attrib_name)
-  ,attrib_array(vb.attrib_array)
-  ,offset(vb.offset)
-{
-  resize(vb.size);
-}
-
-gemvertexbuffer :: VertexBuffer:: ~VertexBuffer (void)
-{
-  //::post("destroying VertexBuffer[%p] with %dx%d elements at %p", this, size, stride, array);
-  destroy();
-
-  if(array) {
-    delete[]array;
-  }
-  array=NULL;
-}
-void gemvertexbuffer :: VertexBuffer:: resize (unsigned int size_)
-{
-  float*tmp=NULL;
-  try {
-    tmp=new float[size_*stride];
-  } catch (std::bad_alloc& ba)  {
-    ::error("vertexbuffer resize failed: %s ", ba.what());
-    return;
-  }
-  if(array) {
-    delete[]array;
-    array=0;
-  }
-  array=tmp;
-  size=size_;
-
-  unsigned int i;
-  for(i=0; i<size*stride; i++) {
-    array[i]=0;
-  }
-  dirty=true;
-}
-
-bool gemvertexbuffer :: VertexBuffer:: create (void)
-{
-  if(!vbo) {
-    glGenBuffers(1, &vbo);
-  }
-  if(vbo) {
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array,
-                 GL_DYNAMIC_DRAW);
-  }
-  return (0!=vbo);
-}
-bool gemvertexbuffer :: VertexBuffer:: render (void)
-{
-  // render from the VBO
-  //::post("VertexBuffer::render: %d?", enabled);
-  if ( enabled ) {
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    if ( dirty ) {
-      //::post("push vertex %p\n", this);
-      glBufferData(GL_ARRAY_BUFFER, size * stride * sizeof(float), array,
-                   GL_DYNAMIC_DRAW);
-      dirty = false;
-    }
-  }
-  return enabled;
-}
-void gemvertexbuffer :: VertexBuffer:: destroy (void)
-{
-  if ( vbo ) {
-    glBindBuffer(1, vbo);
-    glDeleteBuffers(1, &vbo);
-  }
-  vbo=0;
-}
 
 /////////////////////////////////////////////////////////
 //
@@ -199,20 +87,20 @@ void gemvertexbuffer :: renderShape(GemState *state)
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     if(m_attribute[i].render()) {
       glEnableVertexAttribArray(m_attribute[i].attrib_index);
-      glVertexAttribPointer(m_attribute[i].attrib_index, m_attribute[i].stride,
+      glVertexAttribPointer(m_attribute[i].attrib_index, m_attribute[i].dimen,
                             GL_FLOAT, GL_FALSE, 0, 0);
     }
   }
   if(m_position.render()) {
-    glVertexPointer(m_position.stride, GL_FLOAT, 0, 0);
+    glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
   }
   if(m_texture.render()) {
-    glTexCoordPointer(m_texture.stride, GL_FLOAT, 0, 0);
+    glTexCoordPointer(m_texture.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   }
   if(m_color.render()) {
-    glColorPointer(m_color.stride, GL_FLOAT, 0, 0);
+    glColorPointer(m_color.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_COLOR_ARRAY);
   }
   if(m_normal.render()) {
@@ -308,7 +196,7 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0 (classPtr, "print_attributes" , printAttributes);
 }
 
-void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name,
+void gemvertexbuffer :: tableMess (gem::VertexBuffer&vb, std::string name,
                                    unsigned int argc, t_atom *argv)
 {
   int offset=0;
@@ -317,7 +205,7 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name,
 
   /*
    * it's either interleaved data (1 tablename [+ offset])
-   * or separate data (<stride> tablenames [+ offset])
+   * or separate data (<dimen> tablenames [+ offset])
    */
 
   if(argc==0) {
@@ -331,28 +219,33 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name,
 
   if(argc==1 || (argc==2
                  && A_FLOAT == argv[1].a_type)) { // interleaved (+offset)
+    bool resize=true;
     if(argc>1) {
       offset=atom_getfloat(argv+1);
+      resize=false;
     }
     tabname=std::string(atom_getsymbol(argv)->s_name);
-    copyArray(tabname, vb, 1, offset*vb.stride);
+
+    copyArray(tabname, vb, 0, offset*vb.dimen, resize);
     vb.enabled=true;
     return;
   }
 
-  if (argc == vb.stride || (argc == (vb.stride+1))
-      && A_FLOAT == argv[vb.stride].a_type) {  // planar (+offset)
-    if(((unsigned int)argc)>vb.stride) {
-      offset=atom_getfloat(argv+vb.stride);
+  if (argc == vb.dimen || (argc == (vb.dimen+1))
+      && A_FLOAT == argv[vb.dimen].a_type) {  // planar (+offset)
+    bool resize=true;
+    if(((unsigned int)argc)>vb.dimen) {
+      offset=atom_getfloat(argv+vb.dimen);
+      resize=false;
     }
-    for(i=0; i<vb.stride; i++) {
+    for(i=0; i<vb.dimen; i++) {
       if(A_SYMBOL!=argv[i].a_type) {
         goto failed;
       }
     }
-    for(i=0; i<vb.stride; i++) {
+    for(i=0; i<vb.dimen; i++) {
       tabname=std::string(atom_getsymbol(argv+i)->s_name);
-      copyArray(tabname, vb, vb.stride, offset*vb.stride+i);
+      copyArray(tabname, vb, vb.dimen, offset*vb.dimen+i, resize);
     }
   } else {
     goto failed;
@@ -363,7 +256,7 @@ void gemvertexbuffer :: tableMess (VertexBuffer&vb, std::string name,
 
 failed:
   error("illegal arguments to '%s': must be <table[1..%d]> [<offset>]",
-        name.c_str(), vb.stride);
+        name.c_str(), vb.dimen);
   return;
 }
 void gemvertexbuffer :: positionMess (t_symbol*s, int argc, t_atom *argv)
@@ -507,9 +400,10 @@ void gemvertexbuffer :: disableMess (t_symbol*s, int argc, t_atom *argv)
 
 
 void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
-                                VertexBuffer&array, unsigned int offset)
+                                gem::VertexBuffer&array, unsigned int offset)
 {
   int offset2 = 0;
+  bool resize=true;
   if ( argv[0].a_type != A_SYMBOL ) {
     error("first arg must be symbol (table name)");
     return;
@@ -519,11 +413,12 @@ void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
       error("second arg must be float (offset)");
     } else {
       offset2 = argv[1].a_w.w_float;
+      resize=false;
     }
   }
   offset2 = offset2<0?0:offset2;
   std::string tab_name = atom_getsymbol(argv)->s_name;
-  copyArray(tab_name, array, array.stride, offset2 * array.stride + offset);
+  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset, resize);
   array.enabled=true;
 }
 
@@ -562,12 +457,16 @@ void gemvertexbuffer :: createVBO(void)
 }
 
 void gemvertexbuffer :: copyArray(const std::string&tab_name,
-                                  VertexBuffer&vb, unsigned int stride, unsigned int offset)
+                                  gem::VertexBuffer&vb,
+				  unsigned int dimen, unsigned int offset,
+				  bool resize)
 {
   t_garray *a;
-  int npoints;
+  int npoints_;
+  unsigned int npoints;
   unsigned int i;
   t_word *vec;
+  const bool interleaved = (0==dimen);
 
   if(offset>vb.size) {
     error("offset %d is bigger than vertexbuffer size (%d)", offset, vb.size);
@@ -580,36 +479,45 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
     error("%s: no such array", tab_name.c_str());
     return;
   }
-  if (!garray_getfloatwords(a, &npoints, &vec)) {
+  if (!garray_getfloatwords(a, &npoints_, &vec)) {
     error("%s: bad template for tabLink", tab_name.c_str());
     return;
   }
-
-  if(((unsigned int)npoints)!=vb.size) {
-    vb.resize(npoints);
+  if(npoints_<0) {
+    error("%s: illegal number of elements %d", tab_name.c_str(), npoints_);
   }
+  npoints=npoints_;
+
+  unsigned int size=npoints;
+  if(interleaved) {
+    size=(npoints/vb.dimen);
+    npoints=size*vb.dimen;
+  }
+  if(size!=vb.size) {
+    if(resize)
+      vb.resize(size);
+  }
+
   float*array=vb.array;
 
   unsigned int npts=(unsigned int)npoints;
-  if(stride) {  // single channel
 
-    if(npts>vb.size-offset) {
-      npts=vb.size-offset;
+  if(interleaved) { // interleaved channels
+    if(size>vb.size-offset) {
+      size=vb.size-offset;
     }
+    npoints=size*vb.dimen;
 
-    for ( i = 0 ; i < npts ; i++ )	{
-      array[offset + i*stride] = vec[i].w_float;
-    }
-  } else {
-    // interleaved channels
-    npts=npts/vb.stride;
-    if(npts>vb.size-offset) {
-      npts=vb.size-offset;
-    }
-    npts*=vb.stride;
-
-    for ( i = 0 ; i < npts ; i++ ) {
+    for ( i = 0 ; i < npoints ; i++ ) {
       array[offset+i] = vec[i].w_float;
+    }
+  } else { // single channel
+    const unsigned int maxindex=vb.size*vb.dimen;
+
+    for ( i = 0 ; i < size ; i++ )	{
+      const unsigned int index=offset+i*dimen;
+      if(index>=maxindex)break;
+      array[index] = vec[i].w_float;
     }
   }
   vb.dirty=true;
@@ -629,13 +537,14 @@ void gemvertexbuffer :: setProgramID(float ID)
 
 void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
 {
-  unsigned int vbo_stride=0;
+  unsigned int vbo_dimen=0;
   unsigned int tab_offset=0;
   int glsl_index =-1;
   GLenum attrib_type;
   std::string tabname;
   std::string name;
   const char* name_ch;
+  bool resize=true;
 
   if(glsl_program==0) {
     error("glsl_program has not been set");
@@ -650,6 +559,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   if(argc==3) {
     if(argv[2].a_type==A_FLOAT) {
       tab_offset=atom_getfloat(argv+2);
+      resize=false;
     } else {
       error("illegal arguments to 'attribute': must be <vbo_index> <attribute_name> <table> [<offset>]");
       return;
@@ -661,7 +571,8 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
     if(name.compare(m_attribute[i].attrib_name) == 0) {
       tabname=std::string(atom_getsymbol(argv+1)->s_name);
       copyArray(tabname, m_attribute[i], 1,
-                tab_offset*m_attribute[i].stride);  // always interleaved
+                tab_offset*m_attribute[i].dimen,
+		resize);  // always interleaved
       m_attribute[i].attrib_array = tabname;
       m_attribute[i].offset = tab_offset;
       return;
@@ -676,40 +587,45 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
     return;
   }
 
+  GLsizei length;
+  GLint size;
+  GLchar glname;
+
   glGetActiveAttrib(glsl_program,
                     glsl_index,  /* GLuint program, GLuint index */
-                    0, NULL, NULL,          /* GLsizei maxLength, GLsizei* length, GLint* size */
-                    &attrib_type, NULL);       /* GLenum* type, GLchar* name */
+                    0, &length, &size,          /* GLsizei maxLength, GLsizei* length, GLint* size */
+                    &attrib_type, &glname);       /* GLenum* type, GLchar* name */
   switch(attrib_type) {
   case GL_FLOAT:
-    vbo_stride=1;
+    vbo_dimen=1;
     break;
   case GL_FLOAT_VEC2:
-    vbo_stride=2;
+    vbo_dimen=2;
     break;
   case GL_FLOAT_VEC3:
-    vbo_stride=3;
+    vbo_dimen=3;
     break;
   case GL_FLOAT_VEC4:
-    vbo_stride=4;
+    vbo_dimen=4;
     break;
   case GL_FLOAT_MAT2:
-    vbo_stride=4;
+    vbo_dimen=4;
     break;
   case GL_FLOAT_MAT3:
-    vbo_stride=9;
+    vbo_dimen=9;
     break;
   case GL_FLOAT_MAT4:
-    vbo_stride=16;
+    vbo_dimen=16;
     break;
   default:
     error("illegal arguments to 'attribute': must be type 'float', 'vec2-4' or 'mat2-4'");
+    return;
   }
 
   tabname=std::string(atom_getsymbol(argv+1)->s_name);
   m_attribute.reserve(m_attribute.size()+1);
 
-  m_attribute.push_back(VertexBuffer(0, vbo_stride));
+  m_attribute.push_back(gem::VertexBuffer(0, vbo_dimen));
   m_attribute.back().attrib_index = glsl_index;
   m_attribute.back().attrib_name = name;
   m_attribute.back().attrib_array = tabname;
@@ -721,14 +637,15 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   }
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     copyArray(m_attribute[i].attrib_array, m_attribute[i], 1,
-              m_attribute[i].offset*m_attribute[i].stride);
+              m_attribute[i].offset*m_attribute[i].dimen,
+	      resize);
   }
   return;
 }
 
 void gemvertexbuffer :: resetAttributes(void)
 {
-  std::vector<VertexBuffer>().swap(m_attribute);
+  std::vector<gem::VertexBuffer>().swap(m_attribute);
 }
 
 void gemvertexbuffer :: printAttributes(void)
@@ -740,7 +657,7 @@ void gemvertexbuffer :: printAttributes(void)
     int j = i + 1;  // start counting at 1
     post("Attribute%d: %s", j, m_attribute[i].attrib_name.c_str());
     post("\tsize: %d", m_attribute[i].size);
-    post("\tstride: %d", m_attribute[i].stride);
+    post("\tdimen: %d", m_attribute[i].dimen);
     post("\tprogram_index: %d", m_attribute[i].attrib_index);
   }
 }
