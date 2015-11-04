@@ -205,13 +205,18 @@ namespace gem {
     namespace Settings{ void init(void); };
 };
 
+#ifndef BUILD_DATE
+# define BUILD_DATE " on " __DATE__;
+#endif
+
+
 namespace Gem {
   void setup()
   {
     // startup GEM
     post("GEM: Graphics Environment for Multimedia");
     verbose(-1, "GEM: ver: %s", GemVersion::versionString());
-    verbose(-1, "GEM: compiled: " __DATE__);
+    verbose(-1, "GEM: compiled " BUILD_DATE );
     verbose(-1, "GEM: maintained by %s", GEM_MAINTAINER);
     verbose(-1, "GEM: Authors :\tMark Danks (original version)");
     for(unsigned int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
