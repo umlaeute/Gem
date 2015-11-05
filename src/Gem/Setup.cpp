@@ -206,7 +206,7 @@ namespace gem {
 };
 
 #ifndef BUILD_DATE
-# define BUILD_DATE " on " __DATE__;
+# define BUILD_DATE " on " __DATE__
 #endif
 
 
