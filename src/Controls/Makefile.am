@@ -20,6 +20,8 @@ libControls_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 libControls_la_SOURCES=  \
     gemframebuffer.cpp \
     gemframebuffer.h \
+    gemcubeframebuffer.cpp \
+    gemcubeframebuffer.h \
     gemhead.cpp \
     gemhead.h \
     gemlist.cpp \
