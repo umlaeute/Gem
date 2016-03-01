@@ -524,7 +524,7 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
   return 0;
 }
-bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
+bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, const std::string path) {
   if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
   }
@@ -550,8 +550,8 @@ bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
   return false;
 }
 
-static int frei0r_loader(t_canvas *canvas, char *classname) {
-  return pix_frei0r::loader(canvas, classname);
+static int frei0r_loader(const t_canvas *canvas, const char *classname, const char *path) {
+  return pix_frei0r::loader(canvas, classname, path);
 }
 
 /////////////////////////////////////////////////////////
