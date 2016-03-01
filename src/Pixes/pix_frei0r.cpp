@@ -309,6 +309,7 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   std::string filename = pluginname;
   if(s_class2filename.find(s) != s_class2filename.end()) {
     filename=s_class2filename[s];
+    //::post("using cached filename %s", filename.c_str());
     try {
       m_plugin = new F0RPlugin(filename);
     } catch (GemException&e) {
@@ -546,7 +547,10 @@ bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, co
   std::string filename = pluginname;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
   if(rte) {
-    filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), canvas);
+    if (path.empty())
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), canvas);
+    else
+      filename=rte->findFile(path+"/"+pluginname, GemDylib::getDefaultExtension(), canvas);
   }
   pix_frei0r::F0RPlugin*plugin=NULL;
   try {
@@ -568,7 +572,7 @@ bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, co
 }
 
 static int frei0r_loader(const t_canvas *canvas, const char *classname, const char *path) {
-  return pix_frei0r::loader(canvas, classname, path);
+  return pix_frei0r::loader(canvas, classname, path?path:"");
 }
 
 /////////////////////////////////////////////////////////
