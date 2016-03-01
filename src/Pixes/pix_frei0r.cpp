@@ -24,6 +24,8 @@
 #include <iostream>
 #include <stdio.h>
 
+#include <map>
+
 #ifdef _WIN32
 # include <io.h>
 # include <windows.h>
@@ -278,6 +280,7 @@ typedef int (*t_f0r_deinit)(void);
   GemDylib m_dylib;
 };
 
+static std::map<const t_symbol*, std::string>s_class2filename;
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_frei0r,  t_symbol *, A_DEFSYM);
 
@@ -304,12 +307,23 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   }
   std::string pluginname = s->s_name;
   std::string filename = pluginname;
-  gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
-  if(rte) {
-    filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), getCanvas());
+  if(s_class2filename.find(s) != s_class2filename.end()) {
+    filename=s_class2filename[s];
+    try {
+      m_plugin = new F0RPlugin(filename);
+    } catch (GemException&e) {
+      // ignore the error, and keep trying
+      m_plugin = 0;
+    }
   }
+  if (0 == m_plugin) {
+    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+    if(rte) {
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), getCanvas());
+    }
 
-  m_plugin = new F0RPlugin(filename);
+    m_plugin = new F0RPlugin(filename);
+  }
 
   unsigned int numparams = m_plugin->m_parameterNames.size();
   char tempVt[5];
@@ -544,6 +558,9 @@ bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, co
 
   if(plugin!=NULL) {
     delete plugin;
+    /* cache the filename that loads this plugin */
+    s_class2filename[gensym(pluginname.c_str())]=filename;
+    /* register a new class */
     class_addcreator(reinterpret_cast<t_newmethod>(frei0r_loader_new), gensym(classname.c_str()), A_GIMME, 0);
     return true;
   }
