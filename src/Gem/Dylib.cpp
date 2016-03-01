@@ -95,14 +95,13 @@ public:
   static GemDylibHandle*open(const std::string filename) {
     GemDylibHandle*handle=new GemDylibHandle();
 
-    char buf[MAXPDSTRING];
     if(filename.empty()) {
       throw(GemException(std::string("No DyLib name given!")));
     }
 
-    sys_bashfilename(filename.c_str(), buf);
-
 #ifdef DL_OPEN
+    char buf[MAXPDSTRING];
+    sys_bashfilename(filename.c_str(), buf);
     handle->dlhandle=dlopen(filename.c_str(), RTLD_NOW);
     if(handle->dlhandle) {
       handle->fullname=filename;
