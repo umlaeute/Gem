@@ -297,12 +297,12 @@ private:
 
 #ifdef __APPLE__
     char buf3[MAXPDSTRING];
-#ifdef DL_OPEN
+# ifdef DL_OPEN
     snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", name.c_str(), name.c_str());
-#else
+# else
     // this can never work...
     snprintf(buf3, MAXPDSTRING, "%s.frf/%s", name.c_str(), name.c_str());
-#endif
+# endif
     buf3[MAXPDSTRING-1]=0;
     name=buf3;
 #endif
