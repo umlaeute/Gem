@@ -238,7 +238,9 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::s
   }
 
 GemDylib::GemDylib(const std::string filename, const std::string extension) throw (GemException) : m_handle(0) {
-  m_handle=GemDylibHandle::open(0,   filename, extension);
+  m_handle=GemDylibHandle::open(filename+extension);
+  if(NULL==m_handle)
+    m_handle=GemDylibHandle::open(filename+GemDylibHandle::defaultExtension);
   if(NULL==m_handle) {
     std::string err="unable to open '";
     err+=filename;
@@ -250,6 +252,7 @@ GemDylib::GemDylib(const std::string filename, const std::string extension) thro
     throw GemException(err);
   }
 }
+
 
 GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL) {
   std::string filename=org.m_handle->fullname;
