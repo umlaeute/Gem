@@ -274,7 +274,7 @@ void pix_dump :: trigger()
         v = static_cast<float>(*data) / 255.f;    SETFLOAT(&m_buffer[i], v);
         v = static_cast<float>(*data+1) / 255.f;    SETFLOAT(&m_buffer[i+1], v);
         v = static_cast<float>(*data+2) / 255.f;    SETFLOAT(&m_buffer[i+2], v);
-        i+3;
+        i+=3;
         if ( m_mode == GL_RGBA ) {
           v = static_cast<float>(*data+3) / 255.f;    SETFLOAT(&m_buffer[i+3], v);
           i++;
@@ -290,7 +290,7 @@ void pix_dump :: trigger()
         v = static_cast<unsigned char>(*data);    SETFLOAT(&m_buffer[i], v);
         v = static_cast<unsigned char>(*data+1);    SETFLOAT(&m_buffer[i+1], v);
         v = static_cast<unsigned char>(*data+2);    SETFLOAT(&m_buffer[i+2], v);
-        i+3;
+        i+=3;
         if ( m_mode == GL_RGBA ) {
           v = static_cast<unsigned char>(*data+3);    SETFLOAT(&m_buffer[i+3], v);
           i++;
