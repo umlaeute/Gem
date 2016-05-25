@@ -151,7 +151,7 @@ unsigned char class_red[] = {
 0,/*blue-green,*/
 170,/*purple-pink-lavender,*/
 255,/*purple-pink-magenta,*/
-0.5*255,/*gray,*/
+255>>1,/*gray,*/
 154,/*none ~ brownish for visualization only ~ skin color in the future*/
 };
 
@@ -165,7 +165,7 @@ unsigned char class_green[] = {
 235,/*blue-green,*/
 0,/*purple-pink-lavender,*/
 0,/*purple-pink-magenta,*/
-0.5*255,/*gray,*/
+255>>1,/*gray,*/
 115/*none*/
 };
 
@@ -179,7 +179,7 @@ unsigned char class_blue[] = {
 217,/*blue-green,*/
 255,/*purple-pink-lavender,*/
 255,/*purple-pink-magenta,*/
-0.5*255,/*gray,*/
+255>>1,/*gray,*/
 86/*none*/
 };
 
