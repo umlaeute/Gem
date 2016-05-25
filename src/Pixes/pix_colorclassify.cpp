@@ -45,80 +45,7 @@ typedef enum {
  GOOD_GUESS = 1,
  CERTAIN = 2} certainty;
 
-static void color_classify (float red, float green, float blue, color *result, color *second_guess, certainty *sure);
-static void print_color (color result, color second, certainty certainty_level);
-
-
-
-
-/////////////////////////////////////////////////////////
-//
-// pix_colorclassify
-//
-/////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////
-pix_colorclassify :: pix_colorclassify()
-{ }
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-pix_colorclassify :: ~pix_colorclassify()
-{ }
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void pix_colorclassify :: processRGBAImage(imageStruct &image)
-{
-  // post("processing RGBA Image");
-  extern unsigned char class_red[], class_green[], class_blue[];
-  unsigned i = image.xsize * image.ysize;
-
-  unsigned char *base = image.data;
-	while (i--) {
-      color result, second_guess;
-      certainty c;
-
-      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255.,
-          &result, &second_guess, &c);
-
-      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue],
-      //    result, second_guess, c);
-
-      if (c == CERTAIN) {
-        base[chRed] = class_red[result];
-        base[chGreen] = class_green[result];
-        base[chBlue] = class_blue[result];
-      } else {
-        base[chRed] = class_red[NONE];
-        base[chGreen] = class_green[NONE];
-        base[chBlue] = class_blue[NONE];
-      }
-      base += 4;
-  }
-  // post("done processing RGBA Image");
-}
-
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
-{
-}
-
-//---------------------------------------------------------------------------
-
-#include <stdio.h>
-
-static void rgb2hsv(float r, float g, float b, float *h, float *s, float *v);
-
-const char *color_name[num_colors]  = {
+const char *color_name[]  = {
   "black",
   "white",
   "red",
@@ -132,8 +59,7 @@ const char *color_name[num_colors]  = {
   "none"
 };
 
-
-const char *certainty_name[3] =  {
+const char *certainty_name[] =  {
   "unreliable",
   "good-guess",
   "certain"
@@ -184,14 +110,58 @@ unsigned char class_blue[] = {
 };
 
 
-void
+#include <stdio.h>
+
+// Code from AnImaL animal.sf.net
+// 0 <= r, g, b, h, s, v <= 1
+static void
+rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
+{
+   float max, min, delta;
+
+   if (r > g) {
+      max = r;
+      min = g;
+   } else  {
+      max = g;
+      min = r;
+   }
+
+   if (max < b)
+      max = b;
+   else if (min > b)
+      min = b;
+
+   delta = max - min;
+
+   *v = max;
+   if (max != 0.0)
+     *s = delta / max;
+   else
+     *s = 0.0;
+
+   if (*s == 0.0) *h = -1;
+   else {
+     if (r == max)
+       *h = (g - b) / delta;
+     else if (g == max)
+       *h = 2 + (b - r) / delta;
+     else // if (b == max)
+       *h = 4 + (r - g) / delta;
+     *h *= 60.0;
+     if (*h < 0) *h += 360.0;
+     *h /= 360.0;
+   }
+}
+
+static void
 color_classify (
-  float red,
-  float green,
-  float blue,
-  color *result,
-  color *second_guess,
-  certainty *certainty_level)
+		float red,
+		float green,
+		float blue,
+		color *result,
+		color *second_guess,
+		certainty *certainty_level)
 {
     float hue;
     float sat;
@@ -383,51 +353,7 @@ color_classify (
     return;
 }
 
-// Code from AnImaL animal.sf.net
-// 0 <= r, g, b, h, s, v <= 1
-void
-rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
-{
-   float max, min, delta;
-
-   if (r > g) {
-      max = r;
-      min = g;
-   } else  {
-      max = g;
-      min = r;
-   }
-
-   if (max < b)
-      max = b;
-   else if (min > b)
-      min = b;
-
-   delta = max - min;
-
-   *v = max;
-   if (max != 0.0)
-     *s = delta / max;
-   else
-     *s = 0.0;
-
-   if (*s == 0.0) *h = -1;
-   else {
-     if (r == max)
-       *h = (g - b) / delta;
-     else if (g == max)
-       *h = 2 + (b - r) / delta;
-     else // if (b == max)
-       *h = 4 + (r - g) / delta;
-     *h *= 60.0;
-     if (*h < 0) *h += 360.0;
-     *h /= 360.0;
-   }
-}
-
-
-
-void
+static void
 print_color (color result, color second, certainty certainty_level)
 {
   assert(result < num_colors);
@@ -441,4 +367,68 @@ print_color (color result, color second, certainty certainty_level)
 }
 
 
+
+
+/////////////////////////////////////////////////////////
+//
+// pix_colorclassify
+//
+/////////////////////////////////////////////////////////
+// Constructor
+//
+/////////////////////////////////////////////////////////
+pix_colorclassify :: pix_colorclassify()
+{ }
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+pix_colorclassify :: ~pix_colorclassify()
+{ }
+
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void pix_colorclassify :: processRGBAImage(imageStruct &image)
+{
+  // post("processing RGBA Image");
+  extern unsigned char class_red[], class_green[], class_blue[];
+  unsigned i = image.xsize * image.ysize;
+
+  unsigned char *base = image.data;
+	while (i--) {
+      color result, second_guess;
+      certainty c;
+
+      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255.,
+          &result, &second_guess, &c);
+
+      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue],
+      //    result, second_guess, c);
+
+      if (c == CERTAIN) {
+        base[chRed] = class_red[result];
+        base[chGreen] = class_green[result];
+        base[chBlue] = class_blue[result];
+      } else {
+        base[chRed] = class_red[NONE];
+        base[chGreen] = class_green[NONE];
+        base[chBlue] = class_blue[NONE];
+      }
+      base += 4;
+  }
+  // post("done processing RGBA Image");
+}
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
+{
+}
+
+//---------------------------------------------------------------------------
 
