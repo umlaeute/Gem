@@ -81,8 +81,6 @@ const char *certainty_name[] =  {
 
 
 
-#include <stdio.h>
-
 // Code from AnImaL animal.sf.net
 // 0 <= r, g, b, h, s, v <= 1
 // FIXXME replace this by a common Gem function
@@ -146,7 +144,7 @@ color_classify (
     rgb2hsv(red, green, blue, &hue, &sat, &val);
     hue *= 360;
 
-    //fprintf(stderr, "%g, %g, %g\n", hue, sat, val);
+    //post("%g, %g, %g", hue, sat, val);
 
     if (val < 0.3) {
         if (sat > 0.3 && val > 0.2) {
@@ -330,13 +328,13 @@ print_color (color result, color second, certainty certainty_level)
 {
   unsigned int num_colors = sizeof(color_class)/sizeof(*color_class);
   assert(result < num_colors);
-  printf("%s ", color_name[result]);
+  ::startpost("%s ", color_name[result]);
 
   assert(second < num_colors);
-  printf("%s ", color_name[second]);
+  ::startpost("%s ", color_name[second]);
 
   assert(certainty_level < 3);
-  printf("%s\n", certainty_name[certainty_level]);
+  ::post("%s\n", certainty_name[certainty_level]);
 }
 }
 
