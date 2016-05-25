@@ -24,8 +24,6 @@ CPPEXTERN_NEW(pix_colorclassify);
 //---------------------------------------------------------------------------
 #include <assert.h>
 
-
-#define num_colors 11
 namespace {
 typedef enum {
  BLACK = 0,
@@ -38,12 +36,23 @@ typedef enum {
  PURPLE_PINK_LAVENDER = 7,
  PURPLE_PINK_MAGENTA = 8,
  GRAY = 9,
- NONE} color;
+ NONE = 10} color;
 
-typedef enum {
- UNRELIABLE = 0,
- GOOD_GUESS = 1,
- CERTAIN = 2} certainty;
+// the rgb values for the pure representative of each class, mainly for
+// visualization purposes
+static unsigned char color_class[][3] = {
+  {  0,  0,  0,}, /* black */
+  {255,255,255,}, /* white */
+  {255,  0,  0,}, /* red */
+  {  0,255,  0,}, /* green */
+  {  0,  0,255,}, /* blue */
+  {255,255,  0,}, /* yellow */
+  {  0,235,217,}, /* blue-green */
+  {170,  0,255,}, /* purple-pink-lavender */
+  {255,  0,255,}, /* purple-pink-magenta */
+  {127,127,127,}, /* grey */
+  {154,115, 86,}, /* NONE ~ brownish for visualization only ~ skin color in the future */
+};
 
 const char *color_name[]  = {
   "black",
@@ -59,61 +68,24 @@ const char *color_name[]  = {
   "none"
 };
 
+typedef enum {
+ UNRELIABLE = 0,
+ GOOD_GUESS = 1,
+ CERTAIN = 2} certainty;
+
 const char *certainty_name[] =  {
   "unreliable",
   "good-guess",
   "certain"
 };
 
-// the rgb values for the pure representative of each class, mainly for
-// visualization purposes
-unsigned char class_red[] = {
-0,/*black,*/
-255,/*white,*/
-255,/*red,*/
-0,/*green,*/
-0,/*blue,*/
-255,/*yellow,*/
-0,/*blue-green,*/
-170,/*purple-pink-lavender,*/
-255,/*purple-pink-magenta,*/
-255>>1,/*gray,*/
-154,/*none ~ brownish for visualization only ~ skin color in the future*/
-};
-
-unsigned char class_green[] = {
-0,/*black,*/
-255,/*white,*/
-0,/*red,*/
-255,/*green,*/
-0,/*blue,*/
-255,/*yellow,*/
-235,/*blue-green,*/
-0,/*purple-pink-lavender,*/
-0,/*purple-pink-magenta,*/
-255>>1,/*gray,*/
-115/*none*/
-};
-
-unsigned char class_blue[] = {
-0,/*black,*/
-255,/*white,*/
-0,/*red,*/
-0,/*green,*/
-255,/*blue,*/
-0,/*yellow,*/
-217,/*blue-green,*/
-255,/*purple-pink-lavender,*/
-255,/*purple-pink-magenta,*/
-255>>1,/*gray,*/
-86/*none*/
-};
 
 
 #include <stdio.h>
 
 // Code from AnImaL animal.sf.net
 // 0 <= r, g, b, h, s, v <= 1
+// FIXXME replace this by a common Gem function
 static void
 rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
 {
@@ -356,6 +328,7 @@ color_classify (
 static void
 print_color (color result, color second, certainty certainty_level)
 {
+  unsigned int num_colors = sizeof(color_class)/sizeof(*color_class);
   assert(result < num_colors);
   printf("%s ", color_name[result]);
 
@@ -394,7 +367,6 @@ pix_colorclassify :: ~pix_colorclassify()
 void pix_colorclassify :: processRGBAImage(imageStruct &image)
 {
   // post("processing RGBA Image");
-  extern unsigned char class_red[], class_green[], class_blue[];
   unsigned i = image.xsize * image.ysize;
 
   unsigned char *base = image.data;
@@ -409,13 +381,13 @@ void pix_colorclassify :: processRGBAImage(imageStruct &image)
       //    result, second_guess, c);
 
       if (c == CERTAIN) {
-        base[chRed] = class_red[result];
-        base[chGreen] = class_green[result];
-        base[chBlue] = class_blue[result];
+        base[chRed]   = color_class[result][0];
+        base[chGreen] = color_class[result][1];
+        base[chBlue]  = color_class[result][2];
       } else {
-        base[chRed] = class_red[NONE];
-        base[chGreen] = class_green[NONE];
-        base[chBlue] = class_blue[NONE];
+        base[chRed]   = color_class[NONE][0];
+        base[chGreen] = color_class[NONE][1];
+        base[chBlue]  = color_class[NONE][2];
       }
       base += 4;
   }
