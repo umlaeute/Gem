@@ -26,7 +26,7 @@ CPPEXTERN_NEW(pix_colorclassify);
 
 
 #define num_colors 11
-
+namespace {
 typedef enum {
  BLACK = 0,
  WHITE = 1,
@@ -365,7 +365,7 @@ print_color (color result, color second, certainty certainty_level)
   assert(certainty_level < 3);
   printf("%s\n", certainty_name[certainty_level]);
 }
-
+}
 
 
 
