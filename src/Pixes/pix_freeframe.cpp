@@ -297,12 +297,12 @@ private:
 
 #ifdef __APPLE__
     char buf3[MAXPDSTRING];
-#ifdef DL_OPEN
+# ifdef DL_OPEN
     snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", name.c_str(), name.c_str());
-#else
+# else
     // this can never work...
     snprintf(buf3, MAXPDSTRING, "%s.frf/%s", name.c_str(), name.c_str());
-#endif
+# endif
     buf3[MAXPDSTRING-1]=0;
     name=buf3;
 #endif
@@ -985,7 +985,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
   return 0;
 }
-bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
+bool pix_freeframe :: loader(const t_canvas*canvas, const std::string classname, const std::string path) {
   if(strncmp("pix_", classname.c_str(), offset_pix_))
     return false;
   std::string pluginname = classname.substr(offset_pix_);
@@ -1005,8 +1005,8 @@ bool pix_freeframe :: loader(t_canvas*canvas, std::string classname) {
   return false;
 }
 
-static int freeframe_loader(t_canvas *canvas, char *classname) {
-  return pix_freeframe::loader(canvas, classname);
+static int freeframe_loader(const t_canvas *canvas, const char *classname, const char *path) {
+  return pix_freeframe::loader(canvas, classname, path);
 }
 
 /////////////////////////////////////////////////////////

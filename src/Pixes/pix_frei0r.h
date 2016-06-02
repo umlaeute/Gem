@@ -77,7 +77,7 @@ class GEM_EXTERN pix_frei0r : public GemPixObj
     static void openCallback(void *data, t_symbol*s);
 
  public:
-    static bool loader(t_canvas *canvas, const std::string classname);
+    static bool loader(const t_canvas *canvas, const std::string classname, const std::string path);
 };
 
 #endif	// for header file
