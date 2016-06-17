@@ -100,8 +100,6 @@ public:
     }
 
 #ifdef DL_OPEN
-    char buf[MAXPDSTRING];
-    sys_bashfilename(filename.c_str(), buf);
     handle->dlhandle=dlopen(filename.c_str(), RTLD_NOW);
     if(handle->dlhandle) {
       handle->fullname=filename;
@@ -109,6 +107,8 @@ public:
     }
 #endif
 #ifdef _WIN32
+    char buf[MAXPDSTRING];
+    sys_bashfilename(filename.c_str(), buf);
     UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
 	SetLastError(0);
     handle->w32handle=LoadLibrary(buf);
