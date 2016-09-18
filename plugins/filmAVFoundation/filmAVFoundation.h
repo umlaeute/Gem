@@ -62,7 +62,7 @@ class GEM_EXPORT filmAVFoundation : public film
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   // cannot be used within a threaded context
-  virtual bool isThreadable(void) { return false; }
+  virtual bool isThreadable(void) { return true; }
 
   // Property handling
   virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);

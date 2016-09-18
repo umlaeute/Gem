@@ -267,12 +267,12 @@ dnl some checks for osX
 GEM_CHECK_FRAMEWORK([Cocoa],
                         [have_cocoa_framework="yes"], 
                         [have_cocoa_framework="no"])
-#GEM_CHECK_FRAMEWORK([Carbon], 
-#                        [have_carbon_framework="yes"], 
-#                        [have_carbon_framework="no"])
-#GEM_CHECK_FRAMEWORK([QuickTime],
-#                        [have_quicktime_framework="yes"], 
-#                        [have_quicktime_framework="no"])
+GEM_CHECK_FRAMEWORK([Carbon], 
+                        [have_carbon_framework="yes"], 
+                        [have_carbon_framework="no"])
+GEM_CHECK_FRAMEWORK([QuickTime],
+                        [have_quicktime_framework="yes"], 
+                        [have_quicktime_framework="no"])
 GEM_CHECK_FRAMEWORK([AVFoundation],
                         [have_avfoundaiton_framework="yes"], 
                         [have_avfoundation_framework="no"])

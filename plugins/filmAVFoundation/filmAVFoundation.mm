@@ -95,11 +95,15 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
     error("filmAVFoundation: object not correctly initialized\n");
     return false;
   }
+
+
+  //Str255  pstrFilename;
+  //CopyCStringToPascal(filename.c_str(), pstrFilename);           // Convert to Pascal string
   
   // simple check to see if this is a URL
   bool isURL = false;
-  if ((filename.length() > 7 && filename.substr(0,8) == "https://") ||
-      (filename.length() > 6 && (filename.substr(0,7) == "http://" || filename.substr(0,7) == "rtsp://"))) {
+  if ((filename.length() > 7 && filename.substr(0,7) == "https://") ||
+      (filename.length() > 6 && (filename.substr(0,6) == "http://" || filename.substr(0,6) == "rtsp://"))) {
     isURL = true;
   }
 
@@ -107,10 +111,10 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
   m_moviePlayer.useTexture = false;
   m_moviePlayer.useAlpha = true;
   if(isURL) {
-    [m_moviePlayer loadFilePath:[NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding]];
+    [m_moviePlayer loadURLPath:[NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding]];
   }
   else {
-    [m_moviePlayer loadURLPath:[NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding]];
+    [m_moviePlayer loadFilePath:[NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding]];
   }
   if(m_moviePlayer.isLoaded) {
     //m_moviePlayer.synchronousSeek = true;//bSynchronousSeek;
@@ -124,10 +128,15 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
     //firstFrame(); // will load the first frame
   }
   else {
-    error("filmAVFoundation: Unable to open file: %s", filename.c_str());
-    //ofLogError("ofAVFoundationPlayer") << "loadMovie(): couldn't load \"" << movieFilePath << "\"";
-    m_moviePlayer = nil;
-    return false;
+    // error("filmAVFoundation: Unable to open file: %s", filename.c_str());
+    // //ofLogError("ofAVFoundationPlayer") << "loadMovie(): couldn't load \"" << movieFilePath << "\"";
+    // m_moviePlayer = nil;
+    // return false;
+
+    // while(m_moviePlayer.isLoading) {
+    //   post("loading");
+    //   sleep(1);
+    // }
   }
   m_image.newfilm = true;
 
@@ -141,6 +150,7 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
   else {
     m_numFrames = m_moviePlayer.totalFrames;
   }
+  post("# frames: %d", m_moviePlayer.totalFrames);
 
   m_frameDuration = m_moviePlayer.duration;
   if(m_frameDuration <= 0) {
@@ -149,7 +159,7 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
     m_numFrames = -1;
   }
   else {
-    m_fps = (float)m_numFrames/(float)m_frameDuration;
+    m_fps = m_moviePlayer.frameRate;//(float)m_numFrames/(float)m_frameDuration;
   }
 
   m_image.image.xsize = m_moviePlayer.width;
