@@ -20,8 +20,11 @@ namespace gem { namespace plugins {
    gem::thread::Mutex m_mutex;
 
    pixBlock m_pixBlock;
+   imageStruct*m_convertImg;
    Properties m_props;
    unsigned int m_type;
+
+   void resize(unsigned int width, unsigned int height, GLenum format=0);
 
   public:
    videoVLC(void);
@@ -65,13 +68,9 @@ namespace gem { namespace plugins {
 
    virtual void*  lockFrame(void**plane);
    virtual void unlockFrame(void*picture, void*const*plane);
-                  private:
+   virtual unsigned setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines);
 
-
-   static void  *lockCB(void*, void**plane);
-   static void unlockCB(void*, void*picture, void*const*plane);
-   static void displayCB(void*, void*picture);
-
+  private:
    libvlc_instance_t*m_instance;
    libvlc_media_player_t*m_mediaplayer;
 };

@@ -5,7 +5,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libRTE.la
@@ -21,6 +21,7 @@ libRTE_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libRTE_la_includedir = $(includedir)/Gem/RTE
 libRTE_la_include_HEADERS = \
+	RTE.h \
 	Array.h \
 	MessageCallbacks.h
 

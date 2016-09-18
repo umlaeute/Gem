@@ -48,6 +48,7 @@ filmMPEG3 :: filmMPEG3(void) :
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
+  m_curFrame(-1), m_curTrack(-1),
   m_readNext(false),
   m_newfilm(false),
   mpeg_file(NULL)
@@ -181,14 +182,17 @@ film::errCode filmMPEG3 :: changeImage(int imgNum, int trackNum){
   if (imgNum  ==-1)  imgNum=m_curFrame;
   if (m_numFrames>1 && imgNum>=m_numFrames)return film::FAILURE;
   if (trackNum==-1||trackNum>m_numTracks)trackNum=m_curTrack;
+
   int test;
   if ((test=mpeg3_set_frame(mpeg_file, imgNum, trackNum))) {
   }
-    m_curFrame=imgNum;
-    m_curTrack=trackNum;
-    return film::SUCCESS;
+  m_curFrame=imgNum;
+  m_curTrack=trackNum;
+  return film::SUCCESS;
+#if 0
   m_readNext=false;
   return film::FAILURE;
+#endif
 }
 
 

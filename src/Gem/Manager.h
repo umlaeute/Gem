@@ -23,6 +23,8 @@
 
 #include <string>
 
+struct _symbol;
+
 class gemhead;
 class GemState;
 class WindowInfo;
@@ -81,8 +83,8 @@ class GEM_EXTERN GemMan
   // Just send out one frame (if double buffered, will swap buffers)
   static void 	    render(void *);
 
-  static void	    renderChain(t_symbol *head, bool start);
-  static void	    renderChain(t_symbol *head, GemState *state);
+  static void	    renderChain(struct _symbol *head, bool start);
+  static void	    renderChain(struct _symbol *head, GemState *state);
 
 
   //////////
@@ -198,6 +200,7 @@ class GEM_EXTERN GemMan
   static int	   fsaa;
   static bool      pleaseDestroy;
 
+#ifndef GEM_MULTICONTEXT
   //////////
   // Changing these variables is likely to crash GEM
   // This is current rendering window information
@@ -210,6 +213,7 @@ class GEM_EXTERN GemMan
   // This is constant rendering window information
   // This window is always available (although not visible)
   static WindowInfo   &getConstWindowInfo(void);
+#endif /* GEM_MULTICONTEXT */
   static int 	    createConstWindow(char* disp = 0);
 
   // gemwin is allowed to modifying "global" window attributes

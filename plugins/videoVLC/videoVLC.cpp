@@ -40,34 +40,35 @@ using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("vlc", videoVLC);
 
+namespace {
+  static const char*  format_string="RV32";
+  static const GLenum format_enum  = GL_RGBA_GEM;
+};
+
 videoVLC::videoVLC(void) :
   m_name(std::string("vlc")),
+  m_convertImg(0),
   m_type(0),
   m_instance(NULL),
   m_mediaplayer(NULL)
 {
-  const char * const vlc_args[] = {
-    //    "--plugin-path=c:\\program files\\videolan\\vlc\\plugins",
-    "-I", "dummy", /* Don't use any interface */
-    "--ignore-config", /* Don't use VLC's config */
-    "--quiet",
-    //    "--sout=#transcode{vcodec=RV24,acodec=s16l}:smem",
-  };
-  m_instance=libvlc_new (sizeof(vlc_args) / sizeof(vlc_args[0]), vlc_args);
+  m_instance=libvlc_new (0, 0);
   if(!m_instance) {
     throw(GemException("couldn't initialize libVLC"));
   }
-
-  m_pixBlock.image.xsize = 64;
-  m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
+  resize(64,64,0);
 }
 
 videoVLC::~videoVLC(void) {
   if(m_instance)
     libvlc_release(m_instance);
 
+  if(&m_pixBlock.image == m_convertImg) {
+    m_convertImg=0;
+  } else if (m_convertImg) {
+    delete m_convertImg;
+    m_convertImg=0;
+  }
 }
 void videoVLC::close(void) {
   if(m_mediaplayer)
@@ -77,6 +78,9 @@ void videoVLC::close(void) {
 
 bool videoVLC::open(gem::Properties&props) {
   if(m_mediaplayer)close();
+  m_pixBlock.image.xsize=0;
+  m_pixBlock.image.ysize=0;
+
   setProperties(props);
 
 
@@ -89,7 +93,6 @@ bool videoVLC::open(gem::Properties&props) {
 
   if(!media)
     return false;
-
 
   char buf[MAXVLCSTRING];
 
@@ -143,32 +146,58 @@ bool videoVLC::open(gem::Properties&props) {
     }
 
   }
-
-  m_pixBlock.image.xsize = w;
-  m_pixBlock.image.ysize = h;
-
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.reallocate();
+  resize(w,h,0);
   m_pixBlock.image.setWhite();
-
-                   
-
-
 
   m_mediaplayer=libvlc_media_player_new_from_media(media);
   libvlc_media_release(media);
 
-  libvlc_video_set_callbacks(m_mediaplayer,
-                             lockCB,
-                             unlockCB,
-                             NULL,
-                             this);
+  /* helper classes to register callbacks */
+  struct _callbackObj {
+    static void*lock(void*opaque, void**plane ) {
+      videoVLC*obj=(videoVLC*)opaque;
+      if(obj)
+	return obj->lockFrame(plane);
+      return NULL;
+    }
+    static void unlock(void*opaque, void*picture, void*const*plane) {
+      //  post(" unlockCB: %p", opaque);
+      videoVLC*obj=(videoVLC*)opaque;
+      if(obj)
+	obj->unlockFrame(picture, plane);
+    }
+    static void display(void*opaque, void*picture) {
+      //  post("displayCB: %p -> %p", opaque, picture);
+      videoVLC*obj=(videoVLC*)opaque;
+    }
+    _callbackObj(videoVLC*data) {
+      libvlc_video_set_callbacks(data->m_mediaplayer,
+				 lock,
+				 unlock,
+				 NULL,
+				 data);
+    }
+  };
+  struct _formatCallbackObj {
+    static unsigned format(void**opaque, char *chroma, unsigned *width, unsigned *height, unsigned *pitches, unsigned *lines)
+    {
+      videoVLC**objptr=(videoVLC**)opaque;
+      if(objptr && *objptr)
+	return (*objptr)->setFormat(chroma, *width, *height, *pitches, *lines);
+      return 0;
+    }
+    _formatCallbackObj(videoVLC*data) {
+      libvlc_video_set_format_callbacks(data->m_mediaplayer,
+					format,
+					NULL
+					);
 
-  libvlc_video_set_format(m_mediaplayer,
-                          "RGBA",
-                          m_pixBlock.image.xsize,
-                          m_pixBlock.image.ysize,
-                          m_pixBlock.image.xsize*m_pixBlock.image.csize);
+    }
+  };
+  /* instantiate helper-classes (which registers callbacks) */
+  _callbackObj(this);
+  _formatCallbackObj(this);
+
   return true;
 }
 
@@ -280,34 +309,73 @@ bool videoVLC::stop (void) {
 
 void*videoVLC::lockFrame(void**plane ) {
   LOCK(m_mutex);
-  *plane=m_pixBlock.image.data;
+  *plane=m_convertImg->data;
   //  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
   return NULL;
 }
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
-  //  post("processFrame %p\t%p", picture, *plane);
+  //post("processFrame %p\t%p", picture, *plane);
+
+  if(&m_pixBlock.image != m_convertImg) {
+  // convert the image from the buffer
+#ifdef __APPLE__
+    m_pixBlock.image.fromARGB(m_convertImg->data);
+#else
+    m_pixBlock.image.fromBGRA(m_convertImg->data);
+#endif /* __APPLE__ */
+  }
+
   m_pixBlock.newimage=true;
   m_pixBlock.image.upsidedown=true;
   UNLOCK(m_mutex);
 }
-void*videoVLC::lockCB(void*opaque, void**plane ) {
-  //  post("   lockCB: %p", opaque);
-  videoVLC*obj=(videoVLC*)opaque;
-  if(obj)
-    return obj->lockFrame(plane);
-  
-  return NULL;
-}
-void videoVLC::unlockCB(void*opaque, void*picture, void*const*plane) {
-  //  post(" unlockCB: %p", opaque);
-  videoVLC*obj=(videoVLC*)opaque;
-  if(obj)
-    obj->unlockFrame(picture, plane);
-}
-void videoVLC::displayCB(void*opaque, void*picture) {
-  //  post("displayCB: %p -> %p", opaque, picture);
-  videoVLC*obj=(videoVLC*)opaque;
-}
 
+unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines)
+{
+#if 0
+  post("chroma: %s", chroma);
+  post("dimen : %dx%d", width, height);
+  post("pitches: %d", pitches);
+  post("lines: %d", lines);
+#endif
+  memcpy(chroma, format_string, 4);
+
+  if(m_pixBlock.image.xsize == 0 || m_pixBlock.image.ysize == 0 ) {
+    resize(width, height, 0);
+  } else {
+    width  =m_pixBlock.image.xsize;
+    height =m_pixBlock.image.ysize;
+  }
+  pitches=width*m_pixBlock.image.csize;
+  lines=height;
+
+  return 1;
+}
+void videoVLC::resize(unsigned int width, unsigned int height, GLenum format) {
+  bool do_convert = true;
+
+  if(0==format)
+    format=format_enum;
+
+  m_pixBlock.image.xsize = width;
+  m_pixBlock.image.ysize = height;
+  m_pixBlock.image.setCsizeByFormat(format);
+  m_pixBlock.image.reallocate();
+
+  if(&m_pixBlock.image == m_convertImg) {
+    m_convertImg=0;
+  } else if (m_convertImg) {
+    delete m_convertImg;
+    m_convertImg=0;
+  }
+
+  if(do_convert) {
+    m_convertImg=new imageStruct;
+    m_pixBlock.image.copy2ImageStruct(m_convertImg);
+    m_convertImg->allocate();
+  } else {
+    m_convertImg=&m_pixBlock.image;
+  }
+}
 #endif /* HAVE_LIBVLC */

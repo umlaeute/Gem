@@ -222,13 +222,13 @@ struct videoPYLON::Converter {
   static struct Pylon::SImageFormat getInFormat(const Pylon::GrabResult&Result) {
     using namespace Pylon;
     struct SImageFormat imageFormat;
-    const enum PixelType pixelType=Result.GetPixelType();
+    const enum PixelType pixelType= (PixelType) Result.GetPixelType();
     imageFormat.Width =Result.GetSizeX();
     imageFormat.Height=Result.GetSizeY();
-    imageFormat.PixelFormat=pixelType;
-    imageFormat.LinePitch=IsPacked(pixelType)?
+    imageFormat.PixelFormat= (Pylon::EPixelType) pixelType;
+    imageFormat.LinePitch=IsPacked((Pylon::EPixelType) pixelType)?
       0:
-      (7+Result.GetSizeX()*BitPerPixel(pixelType)) >>3;
+      (7+Result.GetSizeX()*BitPerPixel( (Pylon::EPixelType) pixelType)) >>3;
     
     return imageFormat;
   }
@@ -294,6 +294,7 @@ struct videoPYLON::Converter {
 
   bool convertTo(imageStruct&img) {
     img.convertFrom(&image);
+	return true;
   }
 };
 
@@ -440,7 +441,7 @@ bool videoPYLON :: openDevice(gem::Properties&props)
     uint32_t maxchannel=m_camera->GetNumStreamGrabberChannels();
     if(channel>maxchannel)channel=maxchannel;
 
-    m_grabber=new Pylon::CBaslerGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
+    m_grabber=new Pylon::CPylonGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
   } catch (GenICam::GenericException &e) {
     std::cerr << e.GetDescription() << std::endl;
     close();

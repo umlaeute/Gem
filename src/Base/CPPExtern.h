@@ -122,6 +122,12 @@ class GEM_EXTERN CPPExtern
     	// Creation callback
     	static void 	real_obj_setupCallback(t_class *) {}
 
+	///////////
+	// called directly before the destructor
+	// normally you should not override this (use the dtor!)
+	// if you do override this, make sure that you call the parent as well
+	virtual void beforeDeletion();
+
     private:
 
       //////////
@@ -157,7 +163,9 @@ class GEM_EXTERN CPPExtern
 #define CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)    	    	\
 public:     	    	    	    	    	    	    	\
 static void obj_freeCallback(void *data)    	    	    	\
-{ CPPExtern *mydata = ((Obj_header *)data)->data; delete mydata; \
+{ CPPExtern *mydata = ((Obj_header *)data)->data;		\
+  GetMyClass(data)->beforeDeletion();				\
+  delete mydata;						\
   ((Obj_header *)data)->Obj_header::~Obj_header(); }   	    	\
 static void real_obj_setupCallback(t_class *classPtr)  	    	\
 { PARENT_CLASS::real_obj_setupCallback(classPtr);    	    	\

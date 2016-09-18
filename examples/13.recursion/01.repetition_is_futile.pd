@@ -26,7 +26,7 @@
 #X obj 14 483 t a a;
 #X obj 59 483 circle;
 #X text 170 17 A tutorial on recursion in Gem;
-#X text 170 37 (GPL) 2007 Claude Heiland-Allen <claudiusmaximus@goto10.org>
+#X text 170 37 (GPL) 2007 Claude Heiland-Allen <claude@mathr.co.uk>
 ;
 #X text 170 77 The simplest and most obvious way of working with Gem
 is to create all the objects statically. That is \, the Gem chain (or

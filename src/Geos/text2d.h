@@ -44,20 +44,23 @@ class GEM_EXTERN text2d : public TextBase
     	// Destructor
     	virtual ~text2d();
 
-   	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-
 	//////
 	// anti aliasing (aka: pixmap instead of bitmap)
-	int m_antialias;
-  void aliasMess(int io);
+	bool m_antialias;
+	void aliasMess(int io);
 
 #ifdef FTGL
-	void            setFontSize(t_float size);
+	/////////
+	// Do the rendering
+	virtual void renderLine(const char*line,float dist);
+	virtual void renderLine(const wchar_t*line,float dist);
+
+	virtual void            setFontSize(void);
 
 	virtual FTFont*	makeFont(const char*fontname);
-	FTFont                  *m_afont;
+	virtual FTFont* selectFont(void);
+	FTGLPixmapFont *m_aafont;
+	FTGLBitmapFont *m_bmfont;
 #endif
 };
 

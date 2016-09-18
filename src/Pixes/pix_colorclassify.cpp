@@ -24,9 +24,7 @@ CPPEXTERN_NEW(pix_colorclassify);
 //---------------------------------------------------------------------------
 #include <assert.h>
 
-
-#define num_colors 11
-
+namespace {
 typedef enum {
  BLACK = 0,
  WHITE = 1,
@@ -38,87 +36,25 @@ typedef enum {
  PURPLE_PINK_LAVENDER = 7,
  PURPLE_PINK_MAGENTA = 8,
  GRAY = 9,
- NONE} color;
+ NONE = 10} color;
 
-typedef enum {
- UNRELIABLE = 0,
- GOOD_GUESS = 1,
- CERTAIN = 2} certainty;
+// the rgb values for the pure representative of each class, mainly for
+// visualization purposes
+static unsigned char color_class[][3] = {
+  {  0,  0,  0,}, /* black */
+  {255,255,255,}, /* white */
+  {255,  0,  0,}, /* red */
+  {  0,255,  0,}, /* green */
+  {  0,  0,255,}, /* blue */
+  {255,255,  0,}, /* yellow */
+  {  0,235,217,}, /* blue-green */
+  {170,  0,255,}, /* purple-pink-lavender */
+  {255,  0,255,}, /* purple-pink-magenta */
+  {127,127,127,}, /* grey */
+  {154,115, 86,}, /* NONE ~ brownish for visualization only ~ skin color in the future */
+};
 
-static void color_classify (float red, float green, float blue, color *result, color *second_guess, certainty *sure);
-static void print_color (color result, color second, certainty certainty_level);
-
-
-
-
-/////////////////////////////////////////////////////////
-//
-// pix_colorclassify
-//
-/////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////
-pix_colorclassify :: pix_colorclassify()
-{ }
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
-pix_colorclassify :: ~pix_colorclassify()
-{ }
-
-/////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void pix_colorclassify :: processRGBAImage(imageStruct &image)
-{
-  // post("processing RGBA Image");
-  extern unsigned char class_red[], class_green[], class_blue[];
-  unsigned i = image.xsize * image.ysize;
-
-  unsigned char *base = image.data;
-	while (i--) {
-      color result, second_guess;
-      certainty c;
-
-      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255.,
-          &result, &second_guess, &c);
-
-      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue],
-      //    result, second_guess, c);
-
-      if (c == CERTAIN) {
-        base[chRed] = class_red[result];
-        base[chGreen] = class_green[result];
-        base[chBlue] = class_blue[result];
-      } else {
-        base[chRed] = class_red[NONE];
-        base[chGreen] = class_green[NONE];
-        base[chBlue] = class_blue[NONE];
-      }
-      base += 4;
-  }
-  // post("done processing RGBA Image");
-}
-
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
-{
-}
-
-//---------------------------------------------------------------------------
-
-#include <stdio.h>
-
-static void rgb2hsv(float r, float g, float b, float *h, float *s, float *v);
-
-const char *color_name[num_colors]  = {
+const char *color_name[]  = {
   "black",
   "white",
   "red",
@@ -132,66 +68,70 @@ const char *color_name[num_colors]  = {
   "none"
 };
 
+typedef enum {
+ UNRELIABLE = 0,
+ GOOD_GUESS = 1,
+ CERTAIN = 2} certainty;
 
-const char *certainty_name[3] =  {
+const char *certainty_name[] =  {
   "unreliable",
   "good-guess",
   "certain"
 };
 
-// the rgb values for the pure representative of each class, mainly for
-// visualization purposes
-unsigned char class_red[] = {
-0,/*black,*/
-255,/*white,*/
-255,/*red,*/
-0,/*green,*/
-0,/*blue,*/
-255,/*yellow,*/
-0,/*blue-green,*/
-170,/*purple-pink-lavender,*/
-255,/*purple-pink-magenta,*/
-0.5*255,/*gray,*/
-154,/*none ~ brownish for visualization only ~ skin color in the future*/
-};
-
-unsigned char class_green[] = {
-0,/*black,*/
-255,/*white,*/
-0,/*red,*/
-255,/*green,*/
-0,/*blue,*/
-255,/*yellow,*/
-235,/*blue-green,*/
-0,/*purple-pink-lavender,*/
-0,/*purple-pink-magenta,*/
-0.5*255,/*gray,*/
-115/*none*/
-};
-
-unsigned char class_blue[] = {
-0,/*black,*/
-255,/*white,*/
-0,/*red,*/
-0,/*green,*/
-255,/*blue,*/
-0,/*yellow,*/
-217,/*blue-green,*/
-255,/*purple-pink-lavender,*/
-255,/*purple-pink-magenta,*/
-0.5*255,/*gray,*/
-86/*none*/
-};
 
 
-void
+// Code from AnImaL animal.sf.net
+// 0 <= r, g, b, h, s, v <= 1
+// FIXXME replace this by a common Gem function
+static void
+rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
+{
+   float max, min, delta;
+
+   if (r > g) {
+      max = r;
+      min = g;
+   } else  {
+      max = g;
+      min = r;
+   }
+
+   if (max < b)
+      max = b;
+   else if (min > b)
+      min = b;
+
+   delta = max - min;
+
+   *v = max;
+   if (max != 0.0)
+     *s = delta / max;
+   else
+     *s = 0.0;
+
+   if (*s == 0.0) *h = -1;
+   else {
+     if (r == max)
+       *h = (g - b) / delta;
+     else if (g == max)
+       *h = 2 + (b - r) / delta;
+     else // if (b == max)
+       *h = 4 + (r - g) / delta;
+     *h *= 60.0;
+     if (*h < 0) *h += 360.0;
+     *h /= 360.0;
+   }
+}
+
+static void
 color_classify (
-  float red,
-  float green,
-  float blue,
-  color *result,
-  color *second_guess,
-  certainty *certainty_level)
+		float red,
+		float green,
+		float blue,
+		color *result,
+		color *second_guess,
+		certainty *certainty_level)
 {
     float hue;
     float sat;
@@ -204,7 +144,7 @@ color_classify (
     rgb2hsv(red, green, blue, &hue, &sat, &val);
     hue *= 360;
 
-    //fprintf(stderr, "%g, %g, %g\n", hue, sat, val);
+    //post("%g, %g, %g", hue, sat, val);
 
     if (val < 0.3) {
         if (sat > 0.3 && val > 0.2) {
@@ -383,62 +323,82 @@ color_classify (
     return;
 }
 
-// Code from AnImaL animal.sf.net
-// 0 <= r, g, b, h, s, v <= 1
-void
-rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
-{
-   float max, min, delta;
-
-   if (r > g) {
-      max = r;
-      min = g;
-   } else  {
-      max = g;
-      min = r;
-   }
-
-   if (max < b)
-      max = b;
-   else if (min > b)
-      min = b;
-
-   delta = max - min;
-
-   *v = max;
-   if (max != 0.0)
-     *s = delta / max;
-   else
-     *s = 0.0;
-
-   if (*s == 0.0) *h = -1;
-   else {
-     if (r == max)
-       *h = (g - b) / delta;
-     else if (g == max)
-       *h = 2 + (b - r) / delta;
-     else // if (b == max)
-       *h = 4 + (r - g) / delta;
-     *h *= 60.0;
-     if (*h < 0) *h += 360.0;
-     *h /= 360.0;
-   }
-}
-
-
-
-void
+static void
 print_color (color result, color second, certainty certainty_level)
 {
+  unsigned int num_colors = sizeof(color_class)/sizeof(*color_class);
   assert(result < num_colors);
-  printf("%s ", color_name[result]);
+  ::startpost("%s ", color_name[result]);
 
   assert(second < num_colors);
-  printf("%s ", color_name[second]);
+  ::startpost("%s ", color_name[second]);
 
   assert(certainty_level < 3);
-  printf("%s\n", certainty_name[certainty_level]);
+  ::post("%s\n", certainty_name[certainty_level]);
+}
 }
 
 
+
+/////////////////////////////////////////////////////////
+//
+// pix_colorclassify
+//
+/////////////////////////////////////////////////////////
+// Constructor
+//
+/////////////////////////////////////////////////////////
+pix_colorclassify :: pix_colorclassify()
+{ }
+
+/////////////////////////////////////////////////////////
+// Destructor
+//
+/////////////////////////////////////////////////////////
+pix_colorclassify :: ~pix_colorclassify()
+{ }
+
+/////////////////////////////////////////////////////////
+// render
+//
+/////////////////////////////////////////////////////////
+void pix_colorclassify :: processRGBAImage(imageStruct &image)
+{
+  // post("processing RGBA Image");
+  unsigned i = image.xsize * image.ysize;
+
+  unsigned char *base = image.data;
+	while (i--) {
+      color result, second_guess;
+      certainty c;
+
+      color_classify( base[chRed]/255., base[chGreen]/255., base[chBlue]/255.,
+          &result, &second_guess, &c);
+
+      // post("color %u, %u, %u -> result %i, sec %i, cert %i", base[chRed], base[chGreen], base[chBlue],
+      //    result, second_guess, c);
+
+      if (c == CERTAIN) {
+        base[chRed]   = color_class[result][0];
+        base[chGreen] = color_class[result][1];
+        base[chBlue]  = color_class[result][2];
+      } else {
+        base[chRed]   = color_class[NONE][0];
+        base[chGreen] = color_class[NONE][1];
+        base[chBlue]  = color_class[NONE][2];
+      }
+      base += 4;
+  }
+  // post("done processing RGBA Image");
+}
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
+{
+}
+
+//---------------------------------------------------------------------------
 

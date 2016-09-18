@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libGem.la
@@ -26,6 +26,8 @@ else !ENABLE_MULTICONTEXT
 libGem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
 libGem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
 endif !ENABLE_MULTICONTEXT
+
+libGem_la_CFLAGS    = $(libGem_la_CXXFLAGS)
 
 libGem_la_includedir = $(includedir)/Gem/Gem
 libGem_la_include_HEADERS = \
@@ -112,5 +114,7 @@ libGem_la_SOURCES += \
 	Setup.cpp \
 	State.cpp \
 	State.h \
+	VertexBuffer.cpp \
+	VertexBuffer.h \
 	Version.h
 

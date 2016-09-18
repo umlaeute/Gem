@@ -113,25 +113,25 @@ public:
 		
      	    minNodeCount = 0x7FFF;
             minDepth = 0x7FFF;
-            while( !is.eof() ){
-
-                s.clear();
-                is >> s;
-                if( s.empty() )
-                    continue;
+            while( is >> s ){
+                const size_t siz=s.size();
+		if (siz < 1 || siz>0x10000000 ) {
+		  std::cout << "implausible data in tree file: " << file_name << std::endl;
+		  continue;
+		}
 
                 int depthSequenceLength;
 
                 // ensure that the depth sequence has a root colour prefix
                 // of 'w' (white) or 'b' (black). if not, prepend one.
                 if( s[0] == 'w' || s[0] == 'b' ){
-                    depthSequenceLength = (int)( s.size() - 1 );
+                    depthSequenceLength = (int)( siz - 1 );
                 }else{
-                    depthSequenceLength = (int)( s.size() );
+                    depthSequenceLength = (int)( siz );
                     s = 'w' + s;
                 }
 
-                char *ss = new char[ s.size() + 1 ];
+                char *ss = new char[ siz + 1 ];
                 strings_.push_back( ss );
                 strcpy( ss, s.c_str() );
                 std::pair<map_type::iterator, bool> i = treeIdMap_.insert( std::make_pair( ss, id++ ) );
@@ -157,6 +157,7 @@ public:
                     std::cout << "error inserting tree '" << s << "' into map\n";
                 }
 
+                s.clear();
 
             }
         }

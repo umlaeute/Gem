@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_threshold.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_threshold);
 
@@ -26,7 +27,8 @@ CPPEXTERN_NEW(pix_threshold);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_threshold :: pix_threshold()
+pix_threshold :: pix_threshold() :
+  m_Y(0)
 {
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_thresh"));

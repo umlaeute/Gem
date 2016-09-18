@@ -26,7 +26,9 @@
 #endif /* GEM_MULTICONTEXT */
 
 static GLEWContext*s_glewcontext=NULL;
+#ifdef GemGlewXContext
 static GemGlewXContext*s_glewxcontext=NULL;
+#endif /* GemGlewXContext */
 
 using namespace gem;
 
@@ -34,9 +36,12 @@ class Context::PIMPL {
 public:
   PIMPL(void) :
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext), xcontext(new GemGlewXContext),
+    context(new GLEWContext),
+# ifdef GemGlewXContext
+    xcontext(new GemGlewXContext),
+# endif /* GemGlewXContext */
 #else
-    context(NULL), xcontext(NULL),
+    context(NULL),
 #endif
     contextid(makeID())
   {
@@ -50,9 +55,12 @@ public:
 
   PIMPL(const PIMPL&p) :
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext(*p.context)), xcontext(new GemGlewXContext(*p.xcontext)),
+    context(new GLEWContext(*p.context)),
+# ifdef GemGlewXContext
+    xcontext(new GemGlewXContext(*p.xcontext)),
+# endif /* GemGlewXContext */
 #else
-    context(NULL), xcontext(NULL),
+    context(NULL),
 #endif
     contextid(makeID())
   {
@@ -67,14 +75,18 @@ public:
     freeID(contextid);
 #ifdef GEM_MULTICONTEXT
     if(context )delete context; context=NULL;
+# ifdef GemGlewXContext
     if(xcontext)delete xcontext; xcontext=0;
+# endif /* GemGlewXContext */
 #endif
   }
 
   GLint maxStackDepth[4];
 
   GLEWContext    *context;
+#ifdef GemGlewXContext
   GemGlewXContext*xcontext;
+#endif /* GemGlewXContext */
 
   unsigned int contextid;
 
@@ -100,11 +112,15 @@ public:
 
   static unsigned int s_contextid;
   static GLEWContext*s_context;
+#ifdef GemGlewXContext
   static GemGlewXContext*s_xcontext;
+#endif /* GemGlewXContext */
 };
 unsigned int    Context::PIMPL::s_contextid=0;
 GLEWContext*    Context::PIMPL::s_context=NULL;
+#ifdef GemGlewXContext
 GemGlewXContext*Context::PIMPL::s_xcontext=NULL;
+#endif /* GemGlewXContext */
 std::set<unsigned int>      Context::PIMPL::s_takenIDs;
 
 Context::Context(void)
@@ -180,7 +196,9 @@ bool Context::push(void) {
   GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
 
   m_pimpl->s_context=m_pimpl->context;
+#ifdef GemGlewXContext
   m_pimpl->s_xcontext=m_pimpl->xcontext;
+#endif /* GemGlewXContext */
   m_pimpl->s_contextid=m_pimpl->contextid;
   return true;
 }
@@ -199,11 +217,12 @@ unsigned int Context::getContextId(void) {
 GLEWContext*Context::getGlewContext(void) {
   return PIMPL::s_context;
 }
+GLEWContext*glewGetContext(void)     {return  gem::Context::getGlewContext();}
+
+#ifdef GemGlewXContext
 GemGlewXContext*Context::getGlewXContext(void) {
   return PIMPL::s_xcontext;
 }
-
-GLEWContext*glewGetContext(void)     {return  gem::Context::getGlewContext();}
 GemGlewXContext*wglewGetContext(void){return  gem::Context::getGlewXContext();}
 GemGlewXContext*glxewGetContext(void){return  gem::Context::getGlewXContext();}
-
+#endif /* GemGlewXContext */

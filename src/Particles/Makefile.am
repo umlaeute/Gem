@@ -2,8 +2,8 @@
 # Gem/Particles: objectlcasses for particle systems
 #####################################################################
 
-AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
+AUTOMAKE_OPTIONS = foreign subdir-objects
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libParticles.la libPAPI.la

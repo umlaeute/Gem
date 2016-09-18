@@ -16,6 +16,7 @@
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME ( GEMglGetIntegerv );
+using namespace gem::utils::gl;
 
 /////////////////////////////////////////////////////////
 //
@@ -24,7 +25,13 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGetIntegerv );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) {
+GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) :
+  pname(0),
+  m_inlet(0), m_outlet(0)
+{
+  unsigned int i;
+  unsigned int alistlen=sizeof(m_alist)/sizeof(*m_alist);
+  for(i=0; i<alistlen; i++)SETFLOAT(m_alist+i, 0.);
   if(1==argc)pnameMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
 
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));

@@ -65,7 +65,7 @@ void pix_clearblock :: render(GemState *state)
 void pix_clearblock :: postrender(GemState *state)
 {
 #ifdef __GNUC__
-# warning shant we reset to the original image?
+# warning shan't we reset to the original image?
 #endif
     state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
 }

@@ -36,8 +36,10 @@ GEMglFeedbackBuffer :: GEMglFeedbackBuffer	(t_floatarg arg0, t_floatarg arg1) :
 // Destructor
 //
 GEMglFeedbackBuffer :: ~GEMglFeedbackBuffer () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+
+  delete[]buffer;
 }
 //////////////////
 // extension check

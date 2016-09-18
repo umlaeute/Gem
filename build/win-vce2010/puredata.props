@@ -4,7 +4,7 @@
     <Import Project="w32.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <PD_DIR>C:\Users\win7\pd\pd-0.45.3</PD_DIR>
+    <PD_DIR>C:\Users\win7\pd\pd-0.46.0</PD_DIR>
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>

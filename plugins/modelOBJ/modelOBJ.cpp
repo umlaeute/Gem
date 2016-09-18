@@ -24,15 +24,16 @@ using namespace gem::plugins;
 
 REGISTER_MODELLOADERFACTORY("OBJ", modelOBJ);
 
-modelOBJ :: modelOBJ(void) : 
-  m_model(NULL), m_dispList(0),
+modelOBJ :: modelOBJ(void) :
+  m_model(NULL),
   m_material(0),
   m_flags(GLM_SMOOTH | GLM_TEXTURE),
   m_group(0),
   m_rebuild(false),
   m_currentH(1.f), m_currentW(1.f),
   m_textype(GLM_TEX_DEFAULT),
-  m_reverse(false)
+  m_reverse(false),
+  m_refresh(false)
 {
 }
 
@@ -50,7 +51,6 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
     post("key[%d]=%s", i, keys[i].c_str());
   }
 #endif
-
   m_model = glmReadOBJ(name.c_str());
   if (!m_model){
     return false;
@@ -60,7 +60,6 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   double d=1;
   requestprops.get("rescale", d);
   if(d)glmUnitize(m_model);
-
   glmFacetNormals (m_model);
 
   gem::Properties props=requestprops;
@@ -71,22 +70,37 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
 
   glmTexture(m_model, m_textype, 1,1);
   m_rebuild=true;
+  compile();
   return true;
 }
 
+std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName){
+  if ( vectorName == "vertices" ) return m_vertices;
+  if ( vectorName == "normals" ) return m_normals;
+  if ( vectorName == "texcoords" ) return m_texcoords;
+  if ( vectorName == "colors" ) return m_colors;
+  error("there is no \"%s\" vector !",vectorName.c_str());
+  return std::vector<std::vector<float> >();
+}
+
+std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray(){
+  return m_VBOarray;
+}
+
 bool modelOBJ :: render(void) {
+  bool res = true;
   if(m_rebuild) {
     glmTexture(m_model, m_textype, 1,1);
-    compile();
+    res = compile();
   }
-  if(m_dispList)
-    glCallList(m_dispList);
-
-  return (0!=m_dispList);
+  return res;
 }
 void modelOBJ :: close(void)  {
   destroy();
 }
+
+void modelOBJ :: unsetRefresh(){ m_refresh = false; }
+bool modelOBJ :: needRefresh(){ return m_refresh; }
 
 bool modelOBJ :: enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable) {
@@ -158,34 +172,26 @@ void modelOBJ :: getProperties(gem::Properties&props) {
   props.clear();
 }
 
-
 bool modelOBJ :: compile(void)  {
-  if(!m_model) return false;
-  if(!(GLEW_VERSION_1_1)) {
-    //    verbose(1, "cannot build display-list now...do you have a window?");
-    return false;
-  }
-  if (m_dispList) {
-    glDeleteLists(m_dispList, 1);
-    m_dispList=0;
-  }
-
+  m_vertices.clear();
+  m_normals.clear();
+  m_texcoords.clear();
+  m_colors.clear();
   if (!m_group){
-    m_dispList = glmList(m_model, m_flags);
+    glmDraw(m_model, m_flags, m_vertices, m_normals, m_texcoords, m_colors);
   } else {
-    m_dispList = glmListGroup(m_model, m_flags, m_group);
+    glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords, m_colors);
   }
-  bool res = (0 != m_dispList);
-  if(res) m_rebuild=false;
+  //~printf("size of vectrices : %ld\n", m_vertices.size());
+  bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
+  if(res) {
+    m_rebuild=false;
+    m_refresh=true;
+  }
   return res;
 }
+
 void modelOBJ :: destroy(void)  {
-  /* LATER: check valid contexts (remove glDelete from here) */
-  if (m_dispList) {
-    // destroy display list
-    glDeleteLists(m_dispList, 1);
-    m_dispList = 0;
-  }
   if(m_model) {
     glmDelete(m_model);
     m_model=NULL;

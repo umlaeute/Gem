@@ -58,7 +58,6 @@ class GEM_EXTERN pix_levels : public GemPixObj
 	imageStruct	myImage;
 	int		nHeight;
 	int		nWidth;
-	int		nCsize;
 	int		init;
 
 	U32*		pSource;

@@ -51,6 +51,7 @@
 
 #include "videoV4L.h"
 #include "plugins/PluginFactory.h"
+#include <string.h>
 using namespace gem::plugins;
 
 #include "Gem/RTE.h"
@@ -84,18 +85,27 @@ REGISTER_VIDEOFACTORY("v4l", videoV4L);
 
 
 videoV4L :: videoV4L() : videoBase("v4l")
-                       ,
-                         tvfd(0),
-                         frame(0),
-                         videobuf(NULL), 
-                         mytopmargin(0), mybottommargin(0), 
-                         myleftmargin(0), myrightmargin(0),
-                         m_gotFormat(0),m_colorConvert(false),
-                         m_norm(VIDEO_MODE_AUTO),
-                         m_channel(V4L_COMPOSITEIN),
-                         errorcount(0)
-			 
+  ,
+  tvfd(0),
+  frame(0),
+  videobuf(NULL),
+  mytopmargin(0), mybottommargin(0),
+  myleftmargin(0), myrightmargin(0),
+  m_gotFormat(0),m_colorConvert(false),
+  m_norm(VIDEO_MODE_AUTO),
+  m_channel(V4L_COMPOSITEIN),
+  errorcount(0)
 {
+  unsigned int i;
+  memset(&vtuner,   0, sizeof(vtuner));
+  memset(&vpicture, 0, sizeof(vpicture));
+  memset(&vcap,     0, sizeof(vcap));
+  memset(&vchannel, 0, sizeof(vchannel));
+  memset(&vmbuf,    0, sizeof(vmbuf));
+  for(i=0; i<V4L_NBUF; i++) {
+    memset(vmmap+i, 0, sizeof(vmmap[i]));
+  }
+
   if (!m_width)m_width=64;
   if (!m_height)m_height=64;
 
@@ -483,7 +493,7 @@ bool videoV4L::enumProperties(gem::Properties&readable,
     writeable.set(keys[i], type);
   }
   keys.clear();
-
+  return true;
 }
 void videoV4L::setProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
@@ -628,7 +638,7 @@ void videoV4L::setProperties(gem::Properties&props) {
 void videoV4L::getProperties(gem::Properties&props) {
 #define IOCTL_ONCE(x, y) if(!y##_done)if(v4l1_ioctl(tvfd, x, &y) < 0) {perror("v4l"#x"");} else y##_done=true
 
-  bool vpicture_done=false, vchannel_done, vcap_done=false;
+  bool vpicture_done=false, vchannel_done=false, vcap_done=false;
 
 
 

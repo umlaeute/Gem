@@ -53,9 +53,10 @@ class GEM_EXTERN pix_metaimage : public GemPixObj
         virtual void	processGrayImage(imageStruct &image);
 
 	imageStruct	myImage;
+	int		init;
+
 	int		nHeight;
 	int		nWidth;
-	int		init;
 
 	U32*		pSource;
 	U32*		pOutput;

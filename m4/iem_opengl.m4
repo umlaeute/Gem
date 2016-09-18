@@ -83,7 +83,7 @@ AM_CONDITIONAL(HAVE_AGL, [test "x$no_agl" != "xyes"])
 
 AC_DEFUN([IEM_CHECK_GLEW],
 [
-GEM_CHECK_LIB(glew, GLEW, glewInit,,no_glew=yes,,[OpenGL Extension Wrangler library], [no])
+GEM_CHECK_LIB(glew, GLEW,, glewInit,,no_glew=yes,,[OpenGL Extension Wrangler library], [no])
 AM_CONDITIONAL(HAVE_GLEW, [test "x$no_glew" != "xyes"])
 ])
 

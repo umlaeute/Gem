@@ -19,6 +19,7 @@ LOG
 #include "Base/GemPixObj.h"
 #include "Gem/Image.h"
 #include "Gem/PBuffer.h"
+#include "Utils/GemMath.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -70,7 +71,6 @@ class GEM_EXTERN pix_vpaint : public GemPixObj
 		void	init();
 		int		m_initialized;
 		int		maxPoints, numPoints, viewImage, useStrokes, drawEdges, moving, canDrawEdges;
-		int		mouseX, mouseY, lastX, lastY, sampleMenu, strokeMenu;
 
 		/*
 		* Point structure

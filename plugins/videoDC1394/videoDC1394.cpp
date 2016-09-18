@@ -206,8 +206,8 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
 
     if(mode>=0) {
       if(mode>=video_modes.num) {
-	error("requested channel %d/%d out of bounds", mode, video_modes.num);
-	mode=-1;
+        error("requested channel %d/%d out of bounds", mode, video_modes.num);
+        mode=-1;
       }
     }
 
@@ -215,38 +215,38 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     for (i=video_modes.num-1;i>=0;i--) {
       unsigned int w=0, h=0;
       if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_modes.modes[i], &w, &h)) {
-	verbose(1, "videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
+        verbose(1, "videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
       } else verbose(1, "videomode %d refused dimen: %d", i, video_modes.modes[i]);
 
       dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
       dc1394bool_t iscolor=DC1394_FALSE;
       if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
-	verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
+        verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
       }
 
       if(mode<0) {  // find a mode matching the user's needs
-	if(m_width==w && m_height==h) {
-	  // what about color?
-	  mode=i;
-	  break;
-	}
+        if(m_width==w && m_height==h) {
+          // what about color?
+          mode=i;
+          break;
+        }
       }
     }
 
     if(mode<0) {
       // select highest res mode:
       for (i=video_modes.num-1;i>=0;i--) {
-	if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
-	  dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
+        if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
+          dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
 
-	  video_mode=video_modes.modes[i];
-	  break;
-	}
+          video_mode=video_modes.modes[i];
+          break;
+        }
       }
       if (i < 0) {
-	error("Could not get a valid mode");
-	closeDevice();
-	return false;
+        error("Could not get a valid mode");
+        closeDevice();
+        return false;
       }
     } else {
       verbose(1, "using mode %d", mode);
@@ -261,7 +261,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
       dc1394_get_color_coding_from_video_mode(m_dccamera,video_mode, &coding);
       dc1394bool_t iscolor=DC1394_FALSE;
       if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
-	verbose(1, "videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
+        verbose(1, "videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
       }
     }
 
@@ -278,7 +278,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     while(operation_mode>=DC1394_OPERATION_MODE_MIN) {
       err=dc1394_video_set_operation_mode(m_dccamera, (dc1394operation_mode_t)operation_mode);
       if(DC1394_SUCCESS==err)
-	break;
+        break;
       verbose(1, "failed to set operation mode to %d", operation_mode);
       operation_mode--;
     }
@@ -296,7 +296,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     while(speed>=DC1394_ISO_SPEED_MIN) {
       err=dc1394_video_set_iso_speed(m_dccamera, (dc1394speed_t)speed);
       if(DC1394_SUCCESS==err)
-	break;
+        break;
       verbose(1, "failed to set ISO speed to %d", 100*(1<<speed));
 
       speed--;
@@ -399,7 +399,7 @@ bool videoDC1394 :: setColor(int format){
 }
 
 bool videoDC1394::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                                 gem::Properties&writeable) {
   /*
     framerate
     mode
@@ -471,14 +471,25 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
   if ( err ) return false;
 
   for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
-	  if ( feature_set.feature[i].available ) {
-		  // TODO remove space in feature name (eg. "Trigger Delay")
-		  key = dc1394_feature_get_string(feature_set.feature[i].id);
-		  type=0; // what is this ?
-		  dc1394_feature_is_readable(m_dccamera, feature_set.feature[i].id, &is_readable );
-		  if ( is_readable ) readable.set(key,type);
-		  writeable.set(key,type);
-		}
+    if ( feature_set.feature[i].available ) {
+      // TODO remove space in feature name (eg. "Trigger Delay")
+      key = dc1394_feature_get_string(feature_set.feature[i].id);
+      type=0; // what is this ?
+      dc1394_feature_is_readable(m_dccamera, feature_set.feature[i].id, &is_readable );
+      if ( is_readable ) readable.set(key,type);
+      writeable.set(key,type);
+      
+      dc1394feature_t feature = feature_set.feature[i].id;
+      dc1394feature_modes_t modes[3];
+      err=dc1394_feature_get_modes(m_dccamera, feature, modes);
+      if(err==DC1394_SUCCESS) {
+        key+="Mode"; type=std::string("");
+        if(modes->num>0) readable .set(key, type);
+        if(modes->num>1){
+          writeable.set(key, type);
+        }
+      }
+    }
   }
 
   return true;
@@ -493,12 +504,12 @@ void videoDC1394::getProperties(gem::Properties&props) {
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     dc1394error_t err=DC1394_SUCCESS;
-#define DC1394_TRYGET(x)					    \
-      if(DC1394_SUCCESS!=(err=dc1394_video_get_##x)) {			    \
-	error("videoDC1394: getting '%s' failed with '%s'", \
-	      key.c_str(),				    \
-	      dc1394_error_get_string(err));		    \
-	continue;					    \
+#define DC1394_TRYGET(x)                                    \
+      if(DC1394_SUCCESS!=(err=dc1394_video_get_##x)) {      \
+        error("videoDC1394: getting '%s' failed with '%s'", \
+        key.c_str(),                                        \
+        dc1394_error_get_string(err));                      \
+        continue;                                           \
       }
 
     if("framerate" == key) {
@@ -515,7 +526,7 @@ void videoDC1394::getProperties(gem::Properties&props) {
       case DC1394_FRAMERATE_120  : value=120    ; break;
       case DC1394_FRAMERATE_240  : value=240    ; break;
       default:
-	continue;
+        continue;
       }
       props.set(key, value);
     } else if("mode" == key) {
@@ -594,22 +605,35 @@ void videoDC1394::getProperties(gem::Properties&props) {
       props.set(key, value);
     } else
     {
-		dc1394featureset_t feature_set;
-		dc1394error_t err;
-		err = dc1394_feature_get_all(m_dccamera, &feature_set);
-		dc1394bool_t is_readable;
-		// if ( err ) return false;
+    dc1394featureset_t feature_set;
+    dc1394error_t err;
+    err = dc1394_feature_get_all(m_dccamera, &feature_set);
+    dc1394bool_t is_readable;
+    // if ( err ) return false;
 
-		uint32_t dc1394_value;
-		for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
-
-			if (feature_set.feature[i].available && key == dc1394_feature_get_string(feature_set.feature[i].id)) {
-				dc1394_feature_get_value(m_dccamera, feature_set.feature[i].id, &dc1394_value);
-				value = dc1394_value;
-				props.set(key, value);
-			}
-		}
-	}
+    uint32_t dc1394_value;
+    for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
+      dc1394feature_t feature=feature_set.feature[i].id;
+      std::string sfeature = dc1394_feature_get_string(feature);
+      if(feature_set.feature[i].available) {
+        if(key==dc1394_feature_get_string(feature)) {
+          dc1394_feature_get_value(m_dccamera, feature, &dc1394_value);
+          value = dc1394_value;
+          props.set(key, value);
+        } else if (feature_set.feature[i].available && key == sfeature + "Mode"){
+          dc1394feature_mode_t feature_mode;
+          dc1394_feature_get_mode(m_dccamera, feature, &feature_mode);
+          switch(feature_mode) {
+              case DC1394_FEATURE_MODE_MANUAL: svalue="MANUAL"; break;
+              case DC1394_FEATURE_MODE_AUTO : svalue="AUTO"; break;
+              case DC1394_FEATURE_MODE_ONE_PUSH_AUTO : svalue="ONE_PUSH"; break;
+              default: continue;
+          }
+          props.set(key, svalue);
+        }
+      }
+    }
+  }
   }
 }
 void videoDC1394::setProperties(gem::Properties&props) {
@@ -626,56 +650,56 @@ void videoDC1394::setProperties(gem::Properties&props) {
 
     if("framerate" == key) {
       if(props.get(key, value)) {
-	double d0=value/1.875;
-	unsigned short base=d0;
-	int r=DC1394_FRAMERATE_MIN;
-	while(base>>=1)
-	  r=r+1;
-	if(r>DC1394_FRAMERATE_MAX)r=DC1394_FRAMERATE_MAX;
-	dc1394framerate_t rate=(dc1394framerate_t)r;
-	err=dc1394_video_set_framerate(m_dccamera, rate);
+        double d0=value/1.875;
+        unsigned short base=d0;
+        int r=DC1394_FRAMERATE_MIN;
+        while(base>>=1)
+          r=r+1;
+        if(r>DC1394_FRAMERATE_MAX)r=DC1394_FRAMERATE_MAX;
+        dc1394framerate_t rate=(dc1394framerate_t)r;
+        err=dc1394_video_set_framerate(m_dccamera, rate);
       }
 
     } else if("mode" == key) {
       dc1394video_mode_t mode;
       if(props.get(key, svalue)) {
-	if("160x120_YUV444"==svalue) { mode=DC1394_VIDEO_MODE_160x120_YUV444;
-	} else if("320x240_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_320x240_YUV422;
-	} else if("640x480_YUV411"==svalue) { mode=DC1394_VIDEO_MODE_640x480_YUV411;
-	} else if("640x480_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_640x480_YUV422;
-	} else if("640x480_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_640x480_RGB8;
-	} else if("640x480_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_640x480_MONO8;
-	} else if("640x480_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_640x480_MONO16;
-	} else if("800x600_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_800x600_YUV422;
-	} else if("800x600_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_800x600_RGB8;
-	} else if("800x600_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_800x600_MONO8;
-	} else if("1024x768_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_YUV422;
-	} else if("1024x768_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_RGB8;
-	} else if("1024x768_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_MONO8;
-	} else if("800x600_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_800x600_MONO16;
-	} else if("1024x768_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_MONO16;
-	} else if("1280x960_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_YUV422;
-	} else if("1280x960_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_RGB8;
-	} else if("1280x960_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_MONO8;
-	} else if("1600x1200_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_YUV422;
-	} else if("1600x1200_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_RGB8;
-	} else if("1600x1200_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_MONO8;
-	} else if("1280x960_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_MONO16;
-	} else if("1600x1200_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_MONO16;
-	} else if("EXIF"==svalue) { mode=DC1394_VIDEO_MODE_EXIF;
-	} else if("FORMAT7_0"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_0;
-	} else if("FORMAT7_1"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_1;
-	} else if("FORMAT7_2"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_2;
-	} else if("FORMAT7_3"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_3;
-	} else if("FORMAT7_4"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_4;
-	} else if("FORMAT7_5"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_5;
-	} else if("FORMAT7_6"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_6;
-	} else if("FORMAT7_7"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_7;
-	} else continue;
+        if("160x120_YUV444"==svalue) { mode=DC1394_VIDEO_MODE_160x120_YUV444;
+        } else if("320x240_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_320x240_YUV422;
+        } else if("640x480_YUV411"==svalue) { mode=DC1394_VIDEO_MODE_640x480_YUV411;
+        } else if("640x480_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_640x480_YUV422;
+        } else if("640x480_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_640x480_RGB8;
+        } else if("640x480_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_640x480_MONO8;
+        } else if("640x480_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_640x480_MONO16;
+        } else if("800x600_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_800x600_YUV422;
+        } else if("800x600_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_800x600_RGB8;
+        } else if("800x600_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_800x600_MONO8;
+        } else if("1024x768_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_YUV422;
+        } else if("1024x768_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_RGB8;
+        } else if("1024x768_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_MONO8;
+        } else if("800x600_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_800x600_MONO16;
+        } else if("1024x768_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1024x768_MONO16;
+        } else if("1280x960_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_YUV422;
+        } else if("1280x960_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_RGB8;
+        } else if("1280x960_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_MONO8;
+        } else if("1600x1200_YUV422"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_YUV422;
+        } else if("1600x1200_RGB8"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_RGB8;
+        } else if("1600x1200_MONO8"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_MONO8;
+        } else if("1280x960_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1280x960_MONO16;
+        } else if("1600x1200_MONO16"==svalue) { mode=DC1394_VIDEO_MODE_1600x1200_MONO16;
+        } else if("EXIF"==svalue) { mode=DC1394_VIDEO_MODE_EXIF;
+        } else if("FORMAT7_0"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_0;
+        } else if("FORMAT7_1"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_1;
+        } else if("FORMAT7_2"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_2;
+        } else if("FORMAT7_3"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_3;
+        } else if("FORMAT7_4"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_4;
+        } else if("FORMAT7_5"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_5;
+        } else if("FORMAT7_6"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_6;
+        } else if("FORMAT7_7"==svalue) { mode=DC1394_VIDEO_MODE_FORMAT7_7;
+        } else continue;
       } else if (props.get(key, value)) {
-	int m=value;
-	if(m<DC1394_VIDEO_MODE_MIN || m>DC1394_VIDEO_MODE_MAX) continue;
-	mode=(dc1394video_mode_t)m;
+        int m=value;
+        if(m<DC1394_VIDEO_MODE_MIN || m>DC1394_VIDEO_MODE_MAX) continue;
+        mode=(dc1394video_mode_t)m;
       } else continue;
 
       err=dc1394_video_set_mode(m_dccamera, mode);
@@ -683,16 +707,16 @@ void videoDC1394::setProperties(gem::Properties&props) {
     } else if("operationmode" == key) {
       dc1394operation_mode_t mode;
       if(props.get(key, svalue)) {
-	if("1394a"==svalue || "1394A"==svalue || "legacy"==svalue)
-	  mode=DC1394_OPERATION_MODE_LEGACY;
-	else if("1394b"==svalue || "1394B"==svalue)
-	  mode=DC1394_OPERATION_MODE_1394B;
-	else continue;
+        if("1394a"==svalue || "1394A"==svalue || "legacy"==svalue)
+          mode=DC1394_OPERATION_MODE_LEGACY;
+        else if("1394b"==svalue || "1394B"==svalue)
+          mode=DC1394_OPERATION_MODE_1394B;
+        else continue;
       } else if (props.get(key, value)) {
-	if(value<=480)
-	  mode=DC1394_OPERATION_MODE_LEGACY;
-	else
-	  mode=DC1394_OPERATION_MODE_1394B;
+        if(value<=480)
+          mode=DC1394_OPERATION_MODE_LEGACY;
+        else
+          mode=DC1394_OPERATION_MODE_1394B;
       } else continue;
 
       err=dc1394_video_set_operation_mode(m_dccamera, mode);
@@ -701,90 +725,104 @@ void videoDC1394::setProperties(gem::Properties&props) {
       dc1394speed_t speed=DC1394_ISO_SPEED_MIN;
 
       if (props.get(key, value) && value>0) {
-	int s;
-	for(s=DC1394_ISO_SPEED_MIN; s<DC1394_ISO_SPEED_MAX; s++) {
-	  if(value>=(100*(1<<s)))
-	    speed=(dc1394speed_t)s;
-	}
-	err=dc1394_video_set_iso_speed(m_dccamera, speed);
+      int s;
+      for(s=DC1394_ISO_SPEED_MIN; s<DC1394_ISO_SPEED_MAX; s++) {
+        if(value>=(100*(1<<s)))
+      speed=(dc1394speed_t)s;
+      }
+        err=dc1394_video_set_iso_speed(m_dccamera, speed);
       }
 
     } else if("channel" == key) {
       if (props.get(key, value) && value>=0) {
-	uint32_t channel=value;
-	err=dc1394_video_set_iso_channel(m_dccamera, channel);
+        uint32_t channel=value;
+        err=dc1394_video_set_iso_channel(m_dccamera, channel);
       }
 
     } else if("transmission" == key) {
       if (props.get(key, value)) {
-	bool b=value;
-	dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
-	err=dc1394_video_set_transmission(m_dccamera, pwr);
+        bool b=value;
+        dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
+        err=dc1394_video_set_transmission(m_dccamera, pwr);
       }
-
     } else if("oneshot" == key) {
       if (props.get(key, value)) {
-	bool b=value;
-	dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
-	err=dc1394_video_set_one_shot(m_dccamera, pwr);
+        bool b=value;
+        dc1394switch_t pwr=(b?DC1394_ON:DC1394_OFF);
+        err=dc1394_video_set_one_shot(m_dccamera, pwr);
       }
     } else if("multishot" == key) {
       if (props.get(key, value)) {
-	dc1394switch_t pwr=DC1394_OFF;
-	uint32_t   numFrames=0;
-	if(value>0) {
-	  pwr=DC1394_ON;
-	  numFrames=value;
-	}
-	err=dc1394_video_set_multi_shot(m_dccamera, numFrames, pwr);
+        dc1394switch_t pwr=DC1394_OFF;
+        uint32_t   numFrames=0;
+        if(value>0) {
+          pwr=DC1394_ON;
+          numFrames=value;
+        }
+  err=dc1394_video_set_multi_shot(m_dccamera, numFrames, pwr);
       }
     } else if("reset_bus" == key) {
       if (props.get(key, value)) {
-	dc1394switch_t pwr=DC1394_OFF;
-	if(value>0) {
-	  props.set(key,0);
-	  err=dc1394_reset_bus( m_dccamera ) ;
-	}
+        dc1394switch_t pwr=DC1394_OFF;
+        if(value>0) {
+          props.set(key,0);
+          err=dc1394_reset_bus( m_dccamera ) ;
+        }
       }
     } else if("reset_camera" == key) {
       if (props.get(key, value)) {
-	dc1394switch_t pwr=DC1394_OFF;
-	if(value>0) {
-	  props.set(key,0);
-	  err=dc1394_camera_reset( m_dccamera );
-	}
+        dc1394switch_t pwr=DC1394_OFF;
+        if(value>0) {
+          props.set(key,0);
+          err=dc1394_camera_reset( m_dccamera );
+        }
       }
     } else if("power" == key) {
       if (props.get(key, value)) {
-	dc1394switch_t pwr=DC1394_OFF;
-	if(value>0) {
-	  pwr=DC1394_ON;
-	}
-	err=dc1394_camera_set_power(m_dccamera,pwr);
+        dc1394switch_t pwr=DC1394_OFF;
+        if(value>0) {
+          pwr=DC1394_ON;
+        }
+        err=dc1394_camera_set_power(m_dccamera,pwr);
       }
     }
     else {
-		dc1394featureset_t feature_set;
-		dc1394error_t err;
-		err = dc1394_feature_get_all(m_dccamera, &feature_set);
-		dc1394bool_t is_readable;
-		// if ( err ) return false;
+    dc1394featureset_t feature_set;
+    dc1394error_t err;
+    err = dc1394_feature_get_all(m_dccamera, &feature_set);
+    dc1394bool_t is_readable;
+    // if ( err ) return false;
 
-		uint32_t dc1394_value;
-		for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
-
-			if (feature_set.feature[i].available && key == dc1394_feature_get_string(feature_set.feature[i].id)) {
-				props.get(key, value);
-				dc1394_value = value;
-				dc1394_feature_set_value(m_dccamera, feature_set.feature[i].id, dc1394_value);
-				// TODO : limit to min / max value for each parametter
-			}
-		}
-	}
+    uint32_t dc1394_value;
+    for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
+      dc1394feature_t feature=feature_set.feature[i].id;
+      std::string sfeature=dc1394_feature_get_string(feature);
+      if(feature_set.feature[i].available){
+        if(key==sfeature){
+          if(props.get(key, value)){
+            dc1394_value = value;
+            dc1394_feature_set_value(m_dccamera, feature_set.feature[i].id, dc1394_value);
+            // TODO : limit to min / max value for each parameter
+          }
+        } else if(key==sfeature+"Mode"){
+          if(props.get(key, svalue)){
+            dc1394feature_mode_t mode = DC1394_FEATURE_MODE_MANUAL;
+            if ( "AUTO" == svalue ) {
+              mode = DC1394_FEATURE_MODE_AUTO;
+            } else if ( "ONE_PUSH" == svalue ){
+              mode = DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
+            }
+            err=dc1394_feature_set_mode(m_dccamera, feature, mode);
+            if (err!=DC1394_SUCCESS) error("can't set %s to %s",key.c_str(), svalue.c_str());
+          }
+        }
+      }
+    }
+  }
     if(DC1394_SUCCESS!=err) {
       error("videoDC1394: setting '%s' failed with '%s'",
-	    key.c_str(),
-	    dc1394_error_get_string(err));
+            key.c_str(),
+            dc1394_error_get_string(err));
     }
   }
 }

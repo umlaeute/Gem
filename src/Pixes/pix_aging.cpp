@@ -40,26 +40,25 @@ CPPEXTERN_NEW(pix_aging);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_aging :: pix_aging()
-{
-  m_coloraging=1;
-  m_scratching=1;
-  m_pits=1;
-  m_dusts=1;
-
-  m_scratchlines=20;
-  m_scratch = new t_scratch[m_scratchlines];
-  m_areascale=2;
-  m_pitinterval=10;
-  m_dustinterval = 0;
-}
-
+pix_aging :: pix_aging() :
+  m_coloraging(1),
+  m_scratching(1),
+  m_pits(1),
+  m_dusts(1),
+  m_scratchlines(20),
+  m_scratch(new t_scratch[m_scratchlines]),
+  m_pitinterval(10),
+  m_areascale(2),
+  m_dustinterval(0)
+{}
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
 pix_aging :: ~pix_aging()
-{ }
+{
+  delete[]m_scratch;
+}
 
 /////////////////////////////////////////////////////////
 // processImage

@@ -55,6 +55,7 @@ using namespace gem::plugins;
 /////////////////////////////////////////////////////////
 
 #include <sys/stat.h>
+#include <math.h>
 
 REGISTER_VIDEOFACTORY("unicap", videoUNICAP);
 
@@ -314,7 +315,7 @@ bool videoUNICAP :: start(void)
   unicap_format_t format_spec;
   unicap_void_format( &format_spec );
 
-  int default_format=0 ;
+  int default_format=-1;
   int default_size=0;
 
   unsigned int count_format=0;
@@ -625,7 +626,8 @@ void videoUNICAP :: getProperties(gem::Properties&props) {
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     unicap_property_t prop;
-    strncpy(prop.identifier, key.c_str(), 128);
+    strncpy(prop.identifier, key.c_str(), 127);
+    prop.identifier[127]=0;
 
     if("width"==key) {
       getwidth=true;
@@ -707,7 +709,8 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
     }
 
     unicap_property_t prop;
-    strncpy(prop.identifier, key.c_str(), 128);
+    strncpy(prop.identifier, key.c_str(), 127);
+    prop.identifier[127]=0;
     status=unicap_get_property(m_handle, &prop );
 
     if(SUCCESS(status)) {
@@ -725,11 +728,13 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
           if(d>=0 && d < prop.menu.menu_item_count) {
             int i=d;
             /* unfortunately we must use the symbolic value and cannot simply set using the index... */
-            strncpy(prop.menu_item, prop.menu.menu_items[i], 128);
+            strncpy(prop.menu_item, prop.menu.menu_items[i], 127);
+            prop.menu_item[127]=0;
             status= unicap_set_property(m_handle, &prop );
           }
         } else if (props.get(key, s)) {
-          strncpy(prop.menu_item, s.c_str(), 128);
+          strncpy(prop.menu_item, s.c_str(), 127);
+	  prop.menu_item[127]=0;
           status= unicap_set_property(m_handle, &prop );
         }
         break;

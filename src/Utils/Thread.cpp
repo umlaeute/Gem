@@ -19,6 +19,7 @@
 #include "ThreadSemaphore.h"
 
 #ifdef _WIN32
+# include <winsock2.h>
 # include <windows.h>
 #endif
 
@@ -101,9 +102,6 @@ unsigned int  gem::thread::getCPUCount(void) {
 # include <unistd.h>
 # include <sys/time.h>
 #endif
-#ifdef _WIN32
-# include <winsock2.h>
-#endif
 
 void gem::thread::usleep(unsigned long usec) {
   struct timeval sleep;
@@ -127,9 +125,12 @@ class Thread::PIMPL { public:
   pthread_cond_t p_cond;
 
   PIMPL(Thread*x):
-    owner(x),
-    keeprunning(true),
-    isrunning(false)
+    owner(x)
+    , keeprunning(true)
+    , isrunning(false)
+#ifndef HAVE_PTW32_HANDLE_T
+    , p_thread(0)
+#endif
   {
     pthread_mutex_init(&p_mutex, 0);
     pthread_cond_init (&p_cond , 0);
@@ -150,11 +151,18 @@ class Thread::PIMPL { public:
       if(!owner->process())
         break;
     }
+    pthread_mutex_lock  (&me->p_mutex);
     me->isrunning=false;
+    pthread_mutex_unlock(&me->p_mutex);
     return 0;
   }
   bool start(void) {
-    if(isrunning)return true;
+    pthread_mutex_lock  (&p_mutex);
+    if(isrunning) {
+      pthread_mutex_unlock(&p_mutex);
+      return true;
+    }
+    pthread_mutex_unlock(&p_mutex);
 
     keeprunning=true;
 
@@ -167,17 +175,33 @@ class Thread::PIMPL { public:
   }
 
   bool stop(unsigned int timeout) {
-      if(!isrunning)return true;
+      pthread_mutex_lock  (&p_mutex);
+      bool stopped=!isrunning;
+      pthread_mutex_unlock(&p_mutex);
+
+      if(stopped) {
+	return true;
+      }
+
       int timmy=(timeout/10); // we are sleeping for 10usec in each cycle
       bool checktimeout=(timeout>0);
 
       keeprunning=false;
 
+      pthread_mutex_lock(&p_mutex);
       while(isrunning) {
+	pthread_mutex_unlock(&p_mutex);
         usleep(10);
-        if(checktimeout && (timmy--<10))break;
+        if(checktimeout && (timmy--<10)){
+	  pthread_mutex_lock(&p_mutex);
+	  break;
+	}
+	pthread_mutex_lock(&p_mutex);
       }
-      return (!isrunning);
+
+      stopped=!isrunning;
+      pthread_mutex_unlock(&p_mutex);
+      return (stopped);
   }
 };
 

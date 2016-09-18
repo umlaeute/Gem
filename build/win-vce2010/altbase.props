@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <WINDDK_DIR>C:\WinDDK\7600.16385.1</WINDDK_DIR>
+    <WINDDK_INC>$(WINDDK_DIR)\inc\atl71</WINDDK_INC>
+    <WINDDK_LIB>$(WINDDK_DIR)\lib\ATL\i386</WINDDK_LIB>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(WINDDK_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(WINDDK_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="WINDDK_DIR">
+      <Value>$(WINDDK_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="WINDDK_INC">
+      <Value>$(WINDDK_INC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="WINDDK_LIB">
+      <Value>$(WINDDK_LIB)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

@@ -69,7 +69,7 @@
     <ClInclude Include="..\..\src\Utils\GLUtil.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Utils\GLUtil_generated.h">
+    <ClInclude Include="..\..\src\Utils\GLUtil_define_generated.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Utils\Matrix.h">
@@ -1856,6 +1856,9 @@
     <ClCompile Include="..\..\src\Utils\GLUtil.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Utils\GLUtil_define.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\Utils\Matrix.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -2028,9 +2031,6 @@
       <Filter>Objects\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Base\GemWindow.cpp">
-      <Filter>Objects\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Base\TextBase.cpp">
       <Filter>Objects\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Geos\circle.cpp">
@@ -3601,6 +3601,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Gem\glew.c">
       <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\TextBaseFTGL.cpp">
+      <Filter>Objects\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Base\TextBaseNone.cpp">
+      <Filter>Objects\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

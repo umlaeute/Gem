@@ -71,14 +71,6 @@ class GEM_EXTERN pix_histo : public GemPixObj
 
 
   //////////
-  // check for good arrays
-  t_float* checkarray(t_symbol *s, int *length);
-
-  //////////
-  // do we need to redraw the table ?
-  double updtime;
-
-  //////////
   // update graphs
   void update_graphs(void);
 

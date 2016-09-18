@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <AVT_GIGESDK>C:\Program Files\Allied Vision Technologies\GigESDK</AVT_GIGESDK>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(AVT_GIGESDK)/inc-pc</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(AVT_GIGESDK)/lib-pc</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PvAPI.lib;ImageLib.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="AVT_GIGESDK">
+      <Value>$(AVT_GIGESDK)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

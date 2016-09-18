@@ -17,6 +17,7 @@
 
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
+#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -78,13 +79,20 @@ class GEM_EXTERN model : public GemBase
 
   //////////
   virtual void	render(GemState *state);
+  virtual void	startRendering();
+
+  void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
+  void copyAllArrays();
+  void getVBOarray();
+  void createVBO(void);
 
   gem::plugins::modelloader*m_loader;
-  bool m_loaded;
+  bool m_loaded, m_size_change_flag;
 
   gem::Properties m_properties;
 
-  float m_currentH, m_currentW;
+  gem::VertexBuffer m_position, m_texture, m_color, m_normal;
+
 };
 
 #endif	// for header file

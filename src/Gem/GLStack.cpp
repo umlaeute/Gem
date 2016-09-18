@@ -30,6 +30,7 @@
 #define GLDEBUG if(glReportError())::startpost("glError @ %s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__), ::post
 
 using namespace gem;
+using namespace gem::utils::gl;
 
 namespace gem {
   class GLStack::Data {

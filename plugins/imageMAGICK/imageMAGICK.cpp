@@ -17,7 +17,7 @@
 # include "config.h"
 #endif
 
-#ifdef HAVE_LIBMAGICK
+#if defined HAVE_GEM_LIB_IMAGEMAGICK__  || defined HAVE_GEM_LIB_MAGICKCORE
 
 #include <string.h>
 #include "imageMAGICK.h"
@@ -35,10 +35,19 @@
 # ifdef _WIN64
 typedef __int64         ssize_t;
 # else
-typedef _w64 int        ssize_t;
+typedef _w64 long        ssize_t;
 # endif
 #endif
-#include <magick/MagickCore.h>
+
+#ifdef HAVE_MAGICK_MAGICKCORE_H
+# include <magick/MagickCore.h>
+#else
+# include <Magick++.h>
+#endif
+
+#ifndef HAVE_ISMAGICKINSTANTIATED
+# define USE_GRAPHICSMAGICK
+#endif
 
 // hmm, the GetMimeList() function has changed!
 //  ImageMagick-6.6.2-0: **GetMimeList(const char *,unsigned long *,ExceptionInfo *),
@@ -89,15 +98,19 @@ REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 
 imageMAGICK :: imageMAGICK(void)
 {
-  if(!IsMagickInstantiated())
-    MagickCoreGenesis(NULL,MagickTrue);
+#ifdef HAVE_ISMAGICKINSTANTIATED
+  if(!IsMagickInstantiated())MagickCoreGenesis(NULL,MagickTrue);
+#else
+  InitializeMagick(0);
+#endif
 
-  //post("imageMAGICK");
-  char**mimelist;
-  mimelistlength_t  length;
+  char**mimelist=0;
+  mimelistlength_t  length=0;
   ExceptionInfo exception;
   GetExceptionInfo(&exception);
+#ifndef USE_GRAPHICSMAGICK
   mimelist=GetMimeList("image/*", &length, &exception);
+#endif
   unsigned int i;
   for(i=0; i<length; i++) {
     m_mimetypes.push_back(mimelist[i]);

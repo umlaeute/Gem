@@ -8,7 +8,7 @@
 // Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) GÂžnther Geiger.
+//    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -45,7 +45,10 @@ glsl_geometry :: glsl_geometry() :
   m_compiled(0), m_size(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0)
+  m_shaderID(0),
+  m_outShaderID(0),
+  m_idmapper("glsl.shader"),
+  m_idmapped(0.)
 {
   // create an outlet to send shader object ID
   m_outShaderID = outlet_new(this->x_obj, &s_float);
@@ -57,7 +60,10 @@ glsl_geometry :: glsl_geometry(t_symbol *filename) :
   m_compiled(0), m_size(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0)
+  m_shaderID(0),
+  m_outShaderID(0),
+  m_idmapper("glsl.shader"),
+  m_idmapped(0.)
 {
   openMess(filename);
 
@@ -88,9 +94,7 @@ void glsl_geometry :: closeMess(void)
   if(m_shaderARB)
     glDeleteObjectARB( m_shaderARB );
 
-  gem::utils::glsl::delshader(m_shader);
-  gem::utils::glsl::delshader(m_shaderARB);
-
+  m_idmapper.del(m_idmapped);m_idmapped=0.;
 
   m_shader=0;
   m_shaderARB = 0;
@@ -106,7 +110,7 @@ bool glsl_geometry :: openMessGL2(void)
 {
   if (m_shader) {
     glDeleteShader( m_shader );
-    gem::utils::glsl::delshader(m_shader);
+    m_idmapper.del(m_idmapped);m_idmapped=0.;
   }
   m_shader = glCreateShader(m_shaderTarget);
 
@@ -131,6 +135,12 @@ bool glsl_geometry :: openMessGL2(void)
     free(log);
     return false;
   }
+  if(m_shader) {
+    t_atom a;
+    m_idmapped=m_idmapper.set(m_shader, m_idmapped);
+    SETFLOAT(&a, m_idmapped);
+    outlet_list(m_outShaderID, gensym("list"), 1, &a);
+  }
   return true;
 }
 
@@ -138,7 +148,7 @@ bool glsl_geometry :: openMessARB(void)
 {
   if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
-    gem::utils::glsl::delshader(m_shaderARB);
+    m_idmapper.del(m_idmapped);m_idmapped=0.;
   }
   m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
 
@@ -163,20 +173,32 @@ bool glsl_geometry :: openMessARB(void)
     free(log);
     return false;
   }
-
+  if(m_shaderARB) {
+    t_atom a;
+    m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
+    SETFLOAT(&a, m_idmapped);
+    outlet_list(m_outShaderID, gensym("list"), 1, &a);
+  }
   return true;
 }
+
+
+
 
 void glsl_geometry :: openMess(t_symbol *filename)
 {
   if(NULL==filename || NULL==filename->s_name)return;
   if(&s_==filename)return;
-  if( !GLEW_VERSION_1_1 ) { /* stupid check whether we have a valid context */
-    post("shader '%s' will be loaded when rendering is turned on (openGL context needed)", filename->s_name);
-    m_shaderFilename=filename;
-    return;
-  }
 
+  m_shaderFilename=filename;
+
+  if (getState()==RENDERING) loadShader();
+  return;
+}
+
+void glsl_geometry :: loadShader()
+{
+  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name)return;
   if(!isRunnable()) {
     return;
   }
@@ -184,7 +206,7 @@ void glsl_geometry :: openMess(t_symbol *filename)
   // Clean up any open files
   closeMess();
 
-  std::string fn = findFile(filename->s_name);
+  std::string fn = findFile(m_shaderFilename->s_name);
   const char*buf=fn.c_str();
 
   FILE *file = fopen(buf,"rb");
@@ -196,6 +218,7 @@ void glsl_geometry :: openMess(t_symbol *filename)
     memset(m_shaderString,0,size + 1);
     fseek(file,0,SEEK_SET);
     size_t count=fread(m_shaderString,1,size,file);
+    m_shaderString[size]='\0';
     int err=ferror(file);
     fclose(file);
     if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
@@ -217,15 +240,6 @@ void glsl_geometry :: openMess(t_symbol *filename)
 
   verbose(1, "Loaded file: %s", buf);
   m_shaderFilename=NULL;
-
-  if (m_shader || m_shaderARB)
-    {
-      t_atom a;
-      // send shaderID to outlet
-      gem::utils::glsl::atom_setshader(a, m_shader?m_shader:m_shaderARB);
-
-      outlet_list(m_outShaderID, gensym("list"), 1, &a);
-    }
 }
 
 ////////////////////////////////////////////////////////
@@ -251,14 +265,12 @@ bool glsl_geometry :: isRunnable() {
 /////////////////////////////////////////////////////////
 void glsl_geometry :: startRendering()
 {
-  if(NULL!=m_shaderFilename)
-    openMess(m_shaderFilename);
+  loadShader();
 
-  if (m_shaderString == NULL)
-    {
-      error("need to load a shader");
-      return;
-    }
+  if (m_shaderString == NULL) {
+    error("need to load a shader");
+    return;
+  }
 }
 
 ////////////////////////////////////////////////////////
@@ -283,6 +295,10 @@ void glsl_geometry :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_geometry :: printInfo()
 {
+  if(getState()==INIT) {
+    verbose(0, "not initialized yet with a valid context");
+    return;
+  }
   if(GLEW_EXT_geometry_shader4 || GLEW_ARB_geometry_shader4) {
     GLint bitnum = 0;
     post("glsl_geometry Hardware Info");

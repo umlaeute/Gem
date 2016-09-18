@@ -1,7 +1,4 @@
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-#ifndef HAVE_LIBGLEW
+#ifdef GLEW_BUILD
 
 /*
 ** The OpenGL Extension Wrangler Library

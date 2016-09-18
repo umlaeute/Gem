@@ -1,0 +1,60 @@
+## include this at the beginning of your travis-scripts
+## with something like
+##    test -r ${0%/*}/common.source && . ${0%/*}/common.source
+
+
+## helper functions
+error() {
+ echo "$@" 1>&2
+}
+debug() {
+ error "$@"
+ $@
+}
+getbin() {
+ for i in $@
+ do
+   if which "${i}" >/dev/null 2>&1
+   then
+      echo "${i}"
+      return
+   fi
+ done
+}
+
+READLINK=$(getbin greadlink readlink)
+
+if [ "x$(${READLINK} -f . 2>/dev/null)" = "x" ]; then
+ READLINK=""
+fi
+
+SCRIPTDIR=${0%/*}
+
+if [ "x${READLINK}" != "x" ]; then
+ SCRIPTDIR=$(${READLINK} -f "${SCRIPTDIR}")
+ GEMDIR=$(${READLINK} -f "${SCRIPTDIR}/../..")
+else
+## try to get full path of SCRIPTDIR
+# if SCRIPTDIR starts with a slash, it's an absolute path (leave it as it is)
+# else we append it to the current working directory
+ if [ "x${SCRIPTDIR#/}" = "x${SCRIPTDIR}" ]; then
+   SCRIPTDIR=$(pwd)/${SCRIPTDIR}
+ fi
+ GEMDIR=${SCRIPTDIR}/../..
+fi
+
+PDDIR=/usr/include/pd
+BUILDDIR=${GEMDIR}
+
+ENVFILE=${SCRIPTDIR}/gem.env
+
+if [ -e "${ENVFILE}" ]; then
+ . "${ENVFILE}"
+else
+ error "couldn't read env-file ${ENVFILE}, continuing anyhow"
+fi
+
+
+error "SCRIPTDIR: ${SCRIPTDIR}"
+error "GEMDIR: ${GEMDIR}"
+error "ARCH: ${ARCH}"

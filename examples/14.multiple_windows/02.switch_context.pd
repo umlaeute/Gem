@@ -1,0 +1,28 @@
+#N canvas 625 735 655 237 10;
+#X obj 33 129 gemwin 20 a;
+#X obj 396 181 square;
+#X obj 396 159 color 0 0 1 1;
+#X msg 33 87 title a \, create \, 1;
+#X obj 168 46 b;
+#X obj 168 26 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 168 129 gemwin 20 b;
+#X obj 396 137 gemhead a;
+#X msg 466 52 context b;
+#X msg 396 52 context a;
+#X text 185 24 1 create windows;
+#X text 411 24 2 switch between rendering context;
+#X msg 475 106 set \$1;
+#X floatatom 475 88 5 0 0 0 - - -, f 5;
+#X msg 168 87 title b \, create \, 1 \, view 1 1 6;
+#X connect 2 0 1 0;
+#X connect 3 0 0 0;
+#X connect 4 0 3 0;
+#X connect 4 0 14 0;
+#X connect 5 0 4 0;
+#X connect 7 0 2 0;
+#X connect 8 0 7 0;
+#X connect 9 0 7 0;
+#X connect 12 0 7 0;
+#X connect 13 0 12 0;
+#X connect 14 0 6 0;

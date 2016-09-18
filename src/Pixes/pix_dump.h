@@ -67,6 +67,14 @@ protected:
 
 	//////////
 	void			trigger();
+	void			bytemodeMess(bool);
+
+        //////////
+	// Set to RGBA-mode
+	void	    	RGBAMess(void);
+	//////////
+	// Set to RGB-mode
+	void	    	RGBMess(void);
 
 	//////////
 	// The color outlet
@@ -77,8 +85,11 @@ protected:
 	int           xsize, ysize;      // proposed x/y-sizes
 	int           m_xsize,  m_ysize;
 	int           m_csize;
+	unsigned int  m_bufsize;
 	t_atom       *m_buffer;
-	int           m_bufsize;
+        // whether we output byte values (0..255) or normalized values (0..1.f)
+	// defaults to FALSE
+        bool m_bytemode;
 
 	int           oldimagex;
 	int           oldimagey;
@@ -92,11 +103,16 @@ protected:
 	// pointer to the image data
 	unsigned char *m_data;
 
+        ////////
+        // dump mode
+        int 	       m_mode;
+
 private:
 
 	//////////
 	// Static member callbacks
 	static void		triggerMessCallback(void *dump);
+	static void		bytemodeMessCallback(void *dump, t_float val);
 	static void		GREYMessCallback(void *dump);
 	static void		RGBAMessCallback(void *dump);
 	static void		RGBMessCallback(void *dump);

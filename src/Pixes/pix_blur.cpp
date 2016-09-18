@@ -8,6 +8,8 @@
  */
 
 #include "pix_blur.h"
+#include "Utils/Functions.h"
+
 CPPEXTERN_NEW(pix_blur);
 
 /////////////////////////////////////////////////////////
@@ -18,14 +20,16 @@ CPPEXTERN_NEW(pix_blur);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_blur :: pix_blur(void)
+pix_blur :: pix_blur(void) :
+  saved(0),
+  m_blurf(0.f),
+  m_blurH(240), m_blurW(240),
+  m_blurSize(0), m_blurBpp(2),
+  inletBlur(0)
 {	long size,src,i;
 
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
 
-  m_blurH = 240;
-  m_blurW = 240;
-  m_blurBpp = 2;
   size = 320 * 240 * 4;
   saved = new unsigned int [size];
   src=0;

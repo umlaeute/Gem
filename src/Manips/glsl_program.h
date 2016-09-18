@@ -19,23 +19,10 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE__GEM_MANIPS_GLSL_PROGRAM_H_
 
 #include "Base/GemBase.h"
+#include "Utils/GLUtil.h"
 
 #define MAX_NUM_SHADERS 32
 
-
-namespace gem { namespace utils { namespace glsl {
-                    /* fill a Pd-atom so the shaderID <i> can be retrieved from that atom */
-                    GEM_EXTERN void atom_setshader(t_atom&ap, GLuint i);
-                    /* retrieve a shaderID from a Pd-atom filled with atom_setgluint() */
-                    GEM_EXTERN GLuint atom_getshader (t_atom&ap);
-                    /* once the shader is to be glDelete'd, call
-                     *   gem::utils::glsl::delshader(shaderID);
-                     * so we can free any internal resources
-                     * glDelete() must still be called explicitly!
-                     */
-                    GEM_EXTERN void delshader(GLuint i);
-                  }; };
-};
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -131,6 +118,10 @@ class GEM_EXTERN glsl_program : public GemBase
   int		  m_num;
 
   t_outlet	 *m_outProgramID;
+
+  gem::utils::gl::GLuintMap m_shadermapper, m_programmapper;
+  float                 m_programmapped;
+
 
   ////////
   // for geometry shaders we need a bit more...

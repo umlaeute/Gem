@@ -30,7 +30,7 @@
 # ifdef _WIN64
 typedef __int64         ssize_t;
 # else
-typedef _w64 int        ssize_t;
+typedef _w64 long        ssize_t;
 # endif
 #endif
 #include <magick/MagickCore.h>
@@ -91,13 +91,17 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 
   result.xsize=static_cast<GLint>(image->columns);
   result.ysize=static_cast<GLint>(image->rows);
-  result.setCsizeByFormat(GL_RGBA);
+  result.setCsizeByFormat(GL_RGBA_GEM);
   result.reallocate();
 
   result.upsidedown=true;
 
   ExportImagePixels(image, 0, 0, result.xsize, result.ysize,
+#ifdef __APPLE__
+                    "ARGB",
+#else
                     "RGBA",
+#endif
                     CharPixel,
                     reinterpret_cast<void*>(result.data),
                     exception);
@@ -107,6 +111,9 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
   success=true;
 
  cleanup:
+  if(image)
+    DestroyImage(image);
+  image=NULL;
   if(image_info)
     image_info=DestroyImageInfo(image_info);
   if(exception)
@@ -130,7 +137,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="K";
     break;
   case GL_RGBA:
+#ifdef __APPLE__
+    cs="ABGR";
+#else
     cs="RGBA";
+#endif
     break;
   default:
     pImage=new imageStruct();
@@ -139,7 +150,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     cs="RGB";
     break;
   case GL_BGRA_EXT:
+#ifdef __APPLE__
+    cs="ARGB";
+#else
     cs="BGRA";
+#endif
     break;
   }
 

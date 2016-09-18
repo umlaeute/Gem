@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libControls.la
@@ -22,22 +22,26 @@ libControls_la_SOURCES=  \
     gemframebuffer.h \
     gemhead.cpp \
     gemhead.h \
-    gemkeyboard.cpp \
-    gemkeyboard.h \
-    gemkeyname.cpp \
-    gemkeyname.h \
     gemlist.cpp \
     gemlist.h \
     gemlist_info.cpp \
     gemlist_info.h \
     gemlist_matrix.cpp \
     gemlist_matrix.h \
-    gemmouse.cpp \
-    gemmouse.h \
     gemreceive.cpp \
     gemreceive.h \
-    gemwin.cpp \
-    gemwin.h \
     render_trigger.cpp \
     render_trigger.h
 
+if ENABLE_MULTICONTEXT
+else !ENABLE_MULTICONTEXT
+libControls_la_SOURCES+=  \
+    gemkeyboard.cpp \
+    gemkeyboard.h \
+    gemkeyname.cpp \
+    gemkeyname.h \
+    gemmouse.cpp \
+    gemmouse.h \
+    gemwin.cpp \
+    gemwin.h
+endif !ENABLE_MULTICONTEXT

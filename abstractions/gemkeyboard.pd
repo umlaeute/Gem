@@ -1,0 +1,17 @@
+#N canvas 189 51 535 289 10;
+#X obj 104 31 r __gem;
+#X obj 104 83 list split 1;
+#X obj 104 52 route keyboard dimen;
+#X obj 138 205 outlet keynum;
+#X obj 138 104 list trim;
+#X obj 138 126 route key;
+#X obj 138 148 unpack 0 0;
+#X obj 138 170 spigot;
+#X connect 0 0 2 0;
+#X connect 1 1 4 0;
+#X connect 2 0 1 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 1 7 1;
+#X connect 7 0 3 0;

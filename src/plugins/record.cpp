@@ -20,6 +20,8 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
+#include <algorithm>
+
 gem::plugins::record :: ~record(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::record> fac_recorddummy;
@@ -121,7 +123,7 @@ namespace gem { namespace plugins {
           m_ids.push_back(key);
           m_allHandles.push_back(handle);
           count++;
-          verbose(2, "added backend#%d '%s'", m_allHandles.size()-1, key.c_str());
+          verbose(2, "added backend#%d '%s'", (int)(m_allHandles.size()-1), key.c_str());
         }
       }
       return (count>0);

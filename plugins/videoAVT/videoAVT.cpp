@@ -22,7 +22,12 @@
 
 #include <sys/types.h>
 #ifdef _WIN32
-# include <winsock.h>
+# if (_MSC_VER < 1600)
+#  include<WinSock.h>
+# else
+#  include <winsock2.h>
+#  include <WS2tcpip.h>
+# endif
 #else
 # include <sys/socket.h>
 # include <netdb.h>
@@ -182,7 +187,7 @@ void videoAVT::grabCB(tPvFrame*pFrame) {
   // if the frame was completed we re-enqueue it
   if(pFrame->Status != ePvErrUnplugged && pFrame->Status != ePvErrCancelled)
     {
-      PvCaptureQueueFrame(me->m_grabber, pFrame, grabCB);
+      PvCaptureQueueFrame(me->m_grabber, pFrame, (tPvFrameCallback) grabCB);
     }
 }
 
@@ -316,7 +321,7 @@ bool videoAVT :: startTransfer()
   if(!PvCommandRun(m_grabber,"AcquisitionStart")) {
     error("AVT::AcquistionStart failed");
   } else {
-    PvCaptureQueueFrame(m_grabber, &m_frames[0], grabCB);
+    PvCaptureQueueFrame(m_grabber, &m_frames[0], (tPvFrameCallback) grabCB);
   }
 
   return true;

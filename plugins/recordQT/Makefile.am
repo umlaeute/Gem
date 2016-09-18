@@ -26,8 +26,8 @@ gem_recordQT_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_recordQT_la @MOREFLAGS@
 
 # Dependencies
-gem_recordQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME@
-gem_recordQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME@
+gem_recordQT_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME_CFLAGS@
+gem_recordQT_la_LIBADD   += @GEM_FRAMEWORK_QUICKTIME_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

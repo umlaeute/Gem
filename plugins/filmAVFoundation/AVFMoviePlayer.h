@@ -14,7 +14,7 @@
 @interface AVFMoviePlayer : NSObject
 {
     BOOL _bTheFutureIsNow;
-    
+
     AVPlayer * _player;
     AVPlayerItem * _playerItem;
 
@@ -25,21 +25,21 @@
 
 	BOOL _useTexture;
     BOOL _useAlpha;
-    
+
     CGSize _videoSize;
-    
+
     CMTime _currentTime;
     CMTime _duration;
     double _frameRate;
     double _playbackRate;
     BOOL _bLoops;
-    
+
     BOOL _bLoading;
     BOOL _bLoaded;
     BOOL _bAudioLoaded;
     BOOL _bPaused;
     BOOL _bMovieDone;
-    	
+
     // audio stuff
     NSMutableData *_amplitudes;
     int _numAmplitudes;

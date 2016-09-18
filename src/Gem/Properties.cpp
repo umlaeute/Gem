@@ -40,13 +40,11 @@ namespace gem {
   }
 
   void Properties::set(const std::string&key, gem::any value) {
-    const std::type_info*typ=&value.get_type();
     PropertyType pt = UNKNOWN;
 
     double d=0;
     std::string s;
-
-#define ISTYPE(type) (*typ == typeid(type))
+#define ISTYPE(type) (value.compatible<type>())
 
     if (value.empty()) {
       pt = NONE;

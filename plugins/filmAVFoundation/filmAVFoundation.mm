@@ -96,7 +96,6 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
     return false;
   }
 
-
   //Str255  pstrFilename;
   //CopyCStringToPascal(filename.c_str(), pstrFilename);           // Convert to Pascal string
   
@@ -188,7 +187,7 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
   }
   m_image.image.setCsizeByFormat();
   m_image.image.allocate();
-  
+
   //?m_rowBytes = m_image.image.xsize * m_image.image.csize;
   m_moviePlayer.volume = 0; // mute
 
@@ -282,7 +281,7 @@ bool filmAVFoundation :: open(const std::string filename, const gem::Properties&
  //  // Get the bounds for the movie
  //  ::GetMovieBox(m_movie, &m_srcRect);
  //  // OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
- //  SetMovieBox(m_movie, &m_srcRect);	
+ //  SetMovieBox(m_movie, &m_srcRect);
  //  m_image.image.xsize = m_srcRect.right - m_srcRect.left;
  //  m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
 

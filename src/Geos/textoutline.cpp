@@ -54,12 +54,7 @@ FTFont *textoutline :: makeFont(const char*fontfile){
 
 textoutline :: textoutline(int argc, t_atom *argv)
   : TextBase(argc, argv)
-{ }
-
-/////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////
+{}
 textoutline :: ~textoutline()
 {}
 

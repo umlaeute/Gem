@@ -21,7 +21,7 @@ pkglib_LTLIBRARIES = Gem.la
 Gem_la_SOURCES = Version.cpp
 
 ## some default flags
-Gem_la_CXXFLAGS = -DHAVE_VERSION_H @GEM_CPPFLAGS@
+Gem_la_CXXFLAGS = -DHAVE_VERSION_H -DGEM_INTERNAL @GEM_CPPFLAGS@
 Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
 if WINDOWS
 Gem_la_LDFLAGS += -no-undefined
@@ -81,7 +81,7 @@ Gem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 # openGL
 Gem_la_CXXFLAGS += @GL_CFLAGS@ @GLU_CFLAGS@ @AGL_CFLAGS@ 
 Gem_la_LIBADD   += @GL_LIBS@   @GLU_LIBS@   @AGL_LIBS@
-Gem_la_LDFLAGS  += 
+Gem_la_LDFLAGS  += @GL_LDFLAGS@ @GLU_LDFLAGS@
 # and glew
 if ENABLE_MULTICONTEXT
 Gem_la_CXXFLAGS += @GEM_LIB_GLEWMX_CFLAGS@

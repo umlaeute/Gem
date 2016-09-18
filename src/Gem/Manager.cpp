@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2001-2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    Copyright (c) 2002 tigital
 //
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -18,7 +18,7 @@
 #include "Gem/GemConfig.h"
 
 #include "Gem/Manager.h"
-
+#include "Gem/RTE.h"
 
 #include "Gem/Settings.h"
 #include "Gem/GLStack.h"
@@ -26,23 +26,20 @@
 #include "Gem/Event.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef __unix__
 # include <sys/time.h>
 # include <X11/Xlib.h>
 #elif defined __APPLE__
-# include <string.h>
 # include <time.h>
-#elif defined _WIN32
-# ifdef HAVE_QUICKTIME
-#  include <QTML.h>
-#  include <Movies.h>
-# endif
 #endif
 
 #include "Utils/SIMD.h"
 
-#include "Base/GemWinCreate.h"
+#ifndef GEM_MULTICONTEXT
+# include "Base/GemWinCreate.h"
+#endif
 #include "Controls/gemhead.h"
 
 
@@ -52,9 +49,13 @@
 # define debug_post
 #endif
 
+#ifndef GEM_MULTICONTEXT
 static WindowInfo gfxInfo;
 static WindowInfo constInfo;
+#endif /* GEM_MULTICONTEXT */
 
+
+using namespace gem::utils::gl;
 
 static bool glewInitialized = false;
 
@@ -129,16 +130,19 @@ static int s_singleContext = 0;
 /////////////////////////////////////////////////////////
 void GemMan::dispatchWinmessCallback()
 {
+#ifndef GEM_MULTICONTEXT
   if (!s_windowRun)return;
 
   dispatchGemWindowMessages(GemMan::getWindowInfo());
 
   clock_delay(s_windowClock, s_windowDelTime);
+#endif /* GEM_MULTICONTEXT */
 }
 
 
 void GemMan::resizeCallback(int xSize, int ySize, void *)
 {
+#ifndef GEM_MULTICONTEXT
   if (ySize==0)ySize=1;
 
   float xDivy = (float)xSize / (float)ySize;
@@ -159,6 +163,7 @@ void GemMan::resizeCallback(int xSize, int ySize, void *)
   //  TODO:
   //    shouldn't this be called here?
   //  glLoadIdentity();
+#endif /* GEM_MULTICONTEXT */
 }
 
 void GemMan :: checkOpenGLExtensions(void)
@@ -278,8 +283,9 @@ void GemMan :: initGem()
   maxStackDepth[GemMan::STACKPROJECTION] = 2; // projection
 
   m_motionBlur = 0.f;
-
+#ifndef GEM_MULTICONTEXT
   initGemWin();
+#endif /* GEM_MULTICONTEXT */
 }
 
 /////////////////////////////////////////////////////////
@@ -501,6 +507,31 @@ void GemMan :: renderChain(t_symbol*s, GemState *state){
   }
 }
 
+namespace {
+typedef enum {
+  WHITE=0,
+  RED,
+  GREEN,
+  BLUE,
+} color_t;
+  static inline void setColorMask(color_t color) {
+    switch (color){
+    default: /* white */
+      glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+      break;
+    case RED: /* red */
+      glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
+      break;
+    case GREEN: /* green */
+      glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
+      break;
+    case BLUE: /* blue */
+      glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
+      break;
+    }
+  }
+};
+
 void GemMan :: render(void *)
 {
   int profiling=m_profile;
@@ -632,8 +663,8 @@ void GemMan :: render(void *)
       int ySize = m_h;
       float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
-      int left_color=0;  // RED
-      int right_color=1; // GREEN
+      color_t left_color=RED;
+      color_t right_color=GREEN;
 
       glClear(GL_COLOR_BUFFER_BIT & m_clear_mask);
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
@@ -641,17 +672,7 @@ void GemMan :: render(void *)
       glClear(GL_ACCUM_BUFFER_BIT & m_clear_mask);
 
       // setup the left viewpoint
-      switch (left_color){
-      case 1:
-        glColorMask(GL_FALSE,GL_TRUE,GL_FALSE,GL_TRUE);
-        break;
-      case 2:
-        glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-        break;
-      case 0:
-      default:
-        glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-      }
+      setColorMask(left_color);
 
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
@@ -675,17 +696,7 @@ void GemMan :: render(void *)
 
       // setup the right viewpoint
       glClear(GL_DEPTH_BUFFER_BIT & m_clear_mask);
-      switch (right_color){
-      case 0:
-        glColorMask(GL_TRUE,GL_FALSE,GL_FALSE,GL_TRUE);
-        break;
-      case 1:
-      default:
-        glColorMask(GL_FALSE,GL_TRUE,GL_FALSE, GL_TRUE);
-        break;
-      case 2:
-        glColorMask(GL_FALSE,GL_FALSE,GL_TRUE,GL_TRUE);
-      }
+      setColorMask(right_color);
 
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
@@ -897,7 +908,9 @@ void GemMan :: windowInit()
 
 #ifdef __APPLE__
   GLint swapInt = 1;
+# ifndef GEM_MULTICONTEXT
   aglSetInteger ( gfxInfo.context, AGL_SWAP_INTERVAL, &swapInt);
+# endif /* GEM_MULTICONTEXT */
 #endif
 
   /* i am not really sure whether it is a good idea to enable FSAA by default
@@ -930,6 +943,7 @@ int GemMan :: windowExists(void) {
 /////////////////////////////////////////////////////////
 int GemMan :: createWindow(char* disp)
 {
+#ifndef GEM_MULTICONTEXT
   if ( m_windowState ) return(s_singleContext);
   debug_post("GemMan: create window");
 
@@ -1003,7 +1017,7 @@ int GemMan :: createWindow(char* disp)
   clock_delay(s_windowClock, s_windowDelTime);
 
   s_windowRun = 1;
-
+#endif /* GEM_MULTICONTEXT */
   return(1);
 }
 
@@ -1019,6 +1033,7 @@ void GemMan :: destroyWindowSoon()
 }
 void GemMan :: destroyWindow()
 {
+#ifndef GEM_MULTICONTEXT
   GemMan::pleaseDestroy=false;
 
   // don't want to get rid of this
@@ -1046,6 +1061,7 @@ void GemMan :: destroyWindow()
   /* this crashes on linux with intel cards */
   gemWinMakeCurrent(constInfo);
   s_windowRun = 0;
+#endif /* GEM_MULTICONTEXT */
 }
 
 
@@ -1060,6 +1076,7 @@ int GemMan :: windowNumber(void) {
 /////////////////////////////////////////////////////////
 int GemMan::createConstWindow(char* disp)
 {
+#ifndef GEM_MULTICONTEXT
   // can we only have one context?
   if (s_singleContext)
     return(GemMan::createWindow(disp));
@@ -1090,7 +1107,7 @@ int GemMan::createConstWindow(char* disp)
     constInfo.have_constContext=1;
     gfxInfo.have_constContext=1;
   }
-
+#endif /* GEM_MULTICONTEXT */
   return(1);
 }
 
@@ -1100,8 +1117,10 @@ int GemMan::createConstWindow(char* disp)
 /////////////////////////////////////////////////////////
 void destroyConstWindow()
 {
+#ifndef GEM_MULTICONTEXT
   if (!s_singleContext)
     destroyGemWindow(constInfo);
+#endif /* GEM_MULTICONTEXT */
 }
 
 /////////////////////////////////////////////////////////
@@ -1110,6 +1129,7 @@ void destroyConstWindow()
 /////////////////////////////////////////////////////////
 void GemMan :: swapBuffers()
 {
+#ifndef GEM_MULTICONTEXT
   if (!m_windowState) return;
   if (GemMan::m_buffer == 2) {
     gemWinSwapBuffers(gfxInfo);
@@ -1146,6 +1166,7 @@ void GemMan :: swapBuffers()
       gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
                 m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
     }
+#endif /* GEM_MULTICONTEXT */
 }
 
 /////////////////////////////////////////////////////////
@@ -1164,9 +1185,11 @@ void GemMan :: lightingOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: cursorOnOff(int state)
 {
+#ifndef GEM_MULTICONTEXT
   if (m_windowState)
     cursorGemWindow(gfxInfo,state);
   m_cursor = state;
+#endif /* GEM_MULTICONTEXT */
 }
 
 /////////////////////////////////////////////////////////
@@ -1175,9 +1198,11 @@ void GemMan :: cursorOnOff(int state)
 /////////////////////////////////////////////////////////
 void GemMan :: topmostOnOff(int state)
 {
+#ifndef GEM_MULTICONTEXT
   if (m_windowState)
     topmostGemWindow(gfxInfo,state);
   m_topmost = state;
+#endif /* GEM_MULTICONTEXT */
 }
 
 /////////////////////////////////////////////////////////
@@ -1428,6 +1453,8 @@ void GemMan :: printInfo()
   gem::Settings::print();
 }
 
+
+#ifndef GEM_MULTICONTEXT
 /////////////////////////////////////////////////////////
 // getWindowInfo
 //
@@ -1445,3 +1472,4 @@ WindowInfo &GemMan :: getConstWindowInfo()
 {
   return(constInfo);
 }
+#endif /* GEM_MULTICONTEXT */

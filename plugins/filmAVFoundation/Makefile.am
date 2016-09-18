@@ -4,7 +4,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
 EXTRA_DIST =
 
-pkglib_LTLIBRARIES= 
+pkglib_LTLIBRARIES=
 if HAVE_FRAMEWORK_AVFOUNDATION
 pkglib_LTLIBRARIES += gem_filmAVFoundation.la
 endif
@@ -22,8 +22,8 @@ gem_filmAVFoundation_la_LIBADD   += -L$(top_builddir)
 #@GEM_EXTERNAL_LIBS@
 
 # Dependencies
-gem_filmAVFoundation_la_OBJCXXFLAGS += @GEM_FRAMEWORK_AVFOUNDATION@
-#gem_filmAVFoundation_la_LIBADD   += @GEM_FRAMEWORK_AVFOUNDATION@
+gem_filmAVFoundation_la_OBJCXXFLAGS += @GEM_FRAMEWORK_AVFOUNDATION_CFLAGS@
+#gem_filmAVFoundation_la_LIBADD   += @GEM_FRAMEWORK_AVFOUNDATION_LIBS@
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

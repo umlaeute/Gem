@@ -7,12 +7,12 @@ http://sourceforge.net/projects/pd-gem
 if you want to compile the newest (bleeding edge, and possibly unstable) source
 code yourself, you can get a copy from the public git repository on sourceforge:
 
- read-only  access: git://pd-gem.git.sourceforge.net/gitroot/pd-gem/Gem
- read-write access: ssh://pd-gem.git.sourceforge.net/gitroot/pd-gem/Gem
+ read-only  access: https://github.com/umlaeute/Gem.git
+ read-write access: ssh://git@github.com:umlaeute/Gem.git
 
 usually, you will only need the read-only repository, which you can get with
 
-$ git clone git://pd-gem.git.sourceforge.net/gitroot/pd-gem/Gem
+$ git clone https://github.com/umlaeute/Gem.git
 
 =============================================
 NEW:::

@@ -159,7 +159,10 @@
 				RelativePath="..\..\src\Utils\GLUtil.h">
 			</File>
 			<File
-				RelativePath="..\..\src\Utils\GLUtil_generated.h">
+				RelativePath="..\..\src\Utils\GLUtil_define.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\Utils\GLUtil_define_generated.h">
 			</File>
 			<File
 				RelativePath="..\..\src\Utils\Matrix.cpp">

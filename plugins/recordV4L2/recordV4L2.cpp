@@ -22,6 +22,9 @@
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
+// for verbose():
+#include "Gem/RTE.h"
+
 #include "plugins/PluginFactory.h"
 
 using namespace gem::plugins;
@@ -47,10 +50,12 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 /////////////////////////////////////////////////////////
 
 recordV4L2 :: recordV4L2(void): 
-  m_fd(-1)
+  m_fd(-1),
+  m_init(false),
+  m_palette(0)
 {
   m_image.xsize=720;
-  m_image.xsize=576;
+  m_image.ysize=576;
   m_image.setCsizeByFormat(GL_YUV422_GEM);
   //m_image.setCsizeByFormat(GL_RGBA); /* RGBA works with Gem, but not with GStreamer and xawtv */
   m_image.reallocate();
@@ -97,7 +102,7 @@ bool recordV4L2 :: start(const std::string filename, gem::Properties&props)
     return false;
   }
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
-    verbose(1, "device '%s' is not a video4linux2 output device");
+    verbose(1, "device '%s' is not a video4linux2 output device", filename.c_str());
     stop(); 
     return false;
   }

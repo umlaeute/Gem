@@ -19,7 +19,9 @@ CPPEXTERN_NEW(pix_posterize);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_posterize :: pix_posterize()
+pix_posterize :: pix_posterize() :
+  inletF(0), inletL(0),
+  factor(1.), limit(0)
 {
     inletF = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("factor"));
     inletL = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("limit"));
@@ -39,9 +41,9 @@ void pix_posterize :: factorMess(float f)
   setPixModified();
 }
 
-void pix_posterize :: limitMess(float l)
+void pix_posterize :: limitMess(int l)
 {
-  limit = static_cast<int>(l);
+  limit = l;
   setPixModified();
 }
 
@@ -127,20 +129,6 @@ void pix_posterize :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_posterize :: obj_setupCallback(t_class *classPtr)
 {
-class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::factorMessCallback),
-    	    gensym("factor"), A_FLOAT, A_NULL);
-
-class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_posterize::limitMessCallback),
-    	    gensym("limit"), A_FLOAT, A_NULL);
-
-}
-
-void pix_posterize :: factorMessCallback(void *data, t_float size)
-{
-    GetMyClass(data)->factorMess(size);
-}
-
-void pix_posterize :: limitMessCallback(void *data, t_float size)
-{
-    GetMyClass(data)->limitMess(size);
+  CPPEXTERN_MSG1(classPtr, "factor", factorMess, float);
+  CPPEXTERN_MSG1(classPtr, "limit",  limitMess,  int);
 }

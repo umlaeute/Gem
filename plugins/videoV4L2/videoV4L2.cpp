@@ -37,9 +37,9 @@ using namespace gem::plugins;
 
 
 /* debugging helpers  */
-#define debugPost
-#define debugThread
-#define debugIOCTL 
+#define debugPost(...)   do {} while (0)
+#define debugThread(...) do {} while (0)
+#define debugIOCTL(...)  do {} while (0)
 
 #if 0
 # undef debugPost
@@ -71,6 +71,7 @@ using namespace gem::plugins;
 #ifdef HAVE_VIDEO4LINUX2
 
 #include <sys/stat.h>
+#include <string.h>
 
 REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 
@@ -87,6 +88,7 @@ videoV4L2 :: videoV4L2() : videoBase("v4l2", 0)
                                      m_stopTransfer(false),
                                      m_frameSize(0)
 {
+  memset(&m_caps, 0, sizeof(m_caps));
   if (!m_width)m_width=320;
   if (!m_height)m_height=240;
   m_capturing=false;
@@ -274,10 +276,12 @@ void *videoV4L2 :: capturing(void)
 
     if (-1 == xioctl (m_tvfd, VIDIOC_DQBUF, &buf)) {
       switch (errno) {
+    /* coverity[unterminated_case] */
       case EAGAIN:
         perror("v4l2: VIDIOC_DQBUF: stopping capture thread!");
         m_stopTransfer=true;
         m_continue_thread=false;
+    /* coverity[unterminated_case] */
       case EIO:
         /* Could ignore EIO, see spec. */
         /* fall through */
@@ -385,7 +389,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
   if(devname.empty()) {
     devname="/dev/video";
     if(m_devicenum>=0) {
-      char buf[255];
+      char buf[256];
       snprintf(buf, 255, "%d", m_devicenum);
       buf[255]=0;
       devname+=buf;
@@ -1083,13 +1087,17 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	default:
 	  continue;
 	}
-	xioctl(m_tvfd, VIDIOC_S_STD, &stdid);
+	if(0 != xioctl(m_tvfd, VIDIOC_S_STD, &stdid)) {
+	  perror("v4l2: unable to set standard");
+	}
 
       } else if("channel" == key) {
 	double ch;
 	if(props.get("channel", ch)) {
 	  int channel=ch;
-	  xioctl(m_tvfd, VIDIOC_S_INPUT, &channel);
+	  if(0 != xioctl(m_tvfd, VIDIOC_S_INPUT, &channel)) {
+	    perror("v4l2: unable to set channel");
+	  }
 	}
       } else if("frequency" == key) {
       } else if("width" == key) {

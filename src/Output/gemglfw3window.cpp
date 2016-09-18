@@ -246,7 +246,9 @@ bool gemglfw3window :: create(void)
     return false;
   }
   s_windowmap[m_window]=this;
-  makeCurrent();
+  if(!makeCurrent()){
+    error("couldn't switch to glfw3-context");
+  }
 
   // FIXXME: single/double buffering
 
@@ -346,10 +348,12 @@ void gemglfw3window::charCallback(unsigned int character) {
   info(gensym("keyboard"), 3, ap);
 }
 void gemglfw3window::mousebuttonCallback(int button, int action, int mods) {
-  gemglfw3window:: button(button, action);
+  int devID=0;
+  gemglfw3window:: button(devID, button, action);
 }
 void gemglfw3window::mouseposCallback(float x, float y) {
-  motion(x, y);
+  int devID=0;
+  motion(devID, x, y);
 }
 #define WHEELUP   3
 #define WHEELDOWN 4
@@ -360,19 +364,19 @@ void gemglfw3window::mouseposCallback(float x, float y) {
 
 void gemglfw3window::scrollCallback(float x, float y) {
   int i, dir;
-
+  int devID=0;
   dir=(x>0)?WHEELUP:WHEELDOWN;
   if(x<0)x=-x;
   for(i=0; i<x; i++) {
-    button(dir, 1);
-    button(dir, 0);
+    button(devID, dir, 1);
+    button(devID, dir, 0);
   }
 
   dir=(y>0)?WHEELRIGHT:WHEELLEFT;
   if(y<0)y=-y;
   for(i=0; i<y; i++) {
-    button(dir, 1);
-    button(dir, 0);
+    button(devID, dir, 1);
+    button(devID, dir, 0);
   }
 }
 

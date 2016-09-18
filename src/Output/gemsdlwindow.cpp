@@ -30,7 +30,31 @@ CPPEXTERN_NEW(gemsdlwindow);
 
 namespace {
   static unsigned int sdl_count = 0;
-}
+};
+
+
+#ifdef __APPLE__
+#include <dlfcn.h>
+//This must be called before playing with SDL, else it won't work on osx.
+
+namespace {
+  static void pre_init()
+  {
+    void* cocoa_lib;
+
+    cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa", RTLD_LAZY );
+    if(!cocoa_lib)return;
+    void (*nsappload)(void);
+    nsappload = (void(*)()) dlsym( cocoa_lib, "NSApplicationLoad");
+    if(!nsappload)return;
+    nsappload();
+  }
+};
+#else /* __APPLE__ */
+namespace {
+  void pre_init() {;}
+};
+#endif /* __APPLE__ */
 
 /////////////////////////////////////////////////////////
 //
@@ -46,6 +70,7 @@ gemsdlwindow :: gemsdlwindow(void) :
   m_bpp(0)
 {
   if(!sdl_count) {
+    pre_init();
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
       throw(GemException("could not initialize SDL window infrastructure"));
     SDL_EnableUNICODE(1);
@@ -347,7 +372,7 @@ void gemsdlwindow :: dispatch()
   std::vector<t_atom>al;
   t_atom a;
   int state;
-
+  unsigned long devID=0;
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch(event.type) {
@@ -357,7 +382,7 @@ void gemsdlwindow :: dispatch()
     case SDL_ACTIVEEVENT: {
       state=event.active.gain;
       if(event.active.state & SDL_APPMOUSEFOCUS) {
-        info("entry", state);
+        entry(devID, state);
       }
       if(event.active.state & SDL_APPINPUTFOCUS) {
         info("inputentry", state);
@@ -369,15 +394,15 @@ void gemsdlwindow :: dispatch()
       break;
     case SDL_KEYUP:
     case SDL_KEYDOWN:
-      key(key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
+      key(event.key.which, key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
       break;
     case SDL_MOUSEMOTION:
-      motion(event.motion.x, event.motion.y);
+      motion(event.motion.which, event.motion.x, event.motion.y);
       break;
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
-      motion(event.button.x, event.button.y);
-      button(event.button.button, event.button.state==SDL_PRESSED);
+      motion(event.button.which, event.button.x, event.button.y);
+      button(event.button.which, event.button.button-SDL_BUTTON_LEFT, event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);

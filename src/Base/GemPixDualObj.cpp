@@ -20,9 +20,40 @@
 
 #include "Gem/Cache.h"
 #include "Gem/State.h"
+#include "Utils/Functions.h"
 
 #include <string.h>
 #include <stdio.h>
+
+#ifdef _MSC_VER
+
+#define snprintf c99_snprintf
+
+inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
+{
+    int count = -1;
+
+    if (size != 0)
+        count = _vsnprintf_s(str, size, _TRUNCATE, format, ap);
+    if (count == -1)
+        count = _vscprintf(format, ap);
+
+    return count;
+}
+
+inline int c99_snprintf(char* str, size_t size, const char* format, ...)
+{
+    int count;
+    va_list ap;
+
+    va_start(ap, format);
+    count = c99_vsnprintf(str, size, format, ap);
+    va_end(ap);
+
+    return count;
+}
+
+#endif // _MSC_VER
 
 /////////////////////////////////////////////////////////
 //
@@ -144,35 +175,31 @@ void GemPixDualObj :: processImage(imageStruct &image)
 // process
 //
 /////////////////////////////////////////////////////////
-
+namespace {
+std::string format2string(GLenum fmt) {
+  std::string result="unknown";
+  switch (fmt) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    result = "RGBA";break;
+  case GL_LUMINANCE:
+    result = "Gray";break;
+  case GL_YCBCR_422_GEM:
+    result = "YUV";break;
+  default: do {
+      char fmtstring[7];
+      snprintf(fmtstring, 6, "0x%04X", (unsigned int)fmt);
+      fmtstring[6]='\0';
+      result=fmtstring;
+    } while(0);
+  }
+ return result;
+}
+}
 void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
-  char *lformat, *rformat;
-  switch (left.format) {
-  case GL_RGBA:
-  case GL_BGRA_EXT:
-    lformat =(char*)"RGBA";break;
-  case GL_LUMINANCE:
-    lformat =(char*)"Gray";break;
-  case GL_YCBCR_422_GEM:
-    lformat =(char*)"YUV";break;
-  default:
-    lformat = new char[6];
-    sprintf(lformat,"0x%04X", (unsigned int)left.format);
-  }
-  switch (right.format) {
-  case GL_RGBA:
-  case GL_BGRA_EXT:
-    rformat =(char*)"RGBA";break;
-  case GL_LUMINANCE:
-    rformat =(char*)"Gray";break;
-  case GL_YCBCR_422_GEM:
-    rformat =(char*)"YUV";break;
-  default:
-    rformat = new char[6];
-    sprintf(rformat, "0x%04X", (unsigned int)left.format);
-  }
-
-  error("no method to combine (%s) and (%s)", lformat, rformat);
+  std::string lformat=format2string(left.format);
+  std::string rformat=format2string(right.format);
+  error("no method to combine (%s) and (%s)", lformat.c_str(), rformat.c_str());
 }
 
 /////////////////////////////////////////////////////////

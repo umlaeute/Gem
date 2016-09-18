@@ -20,7 +20,7 @@ public:
 		//x = ax; y = ay; z = az;
 	}
 
-	inline pVector() {}
+	inline pVector() : x(0.), y(0.), z(0.) {}
 
 	inline float length() const
 	{

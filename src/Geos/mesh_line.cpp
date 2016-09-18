@@ -29,9 +29,12 @@ CPPEXTERN_NEW_WITH_ONE_ARG(mesh_line, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 mesh_line :: mesh_line(t_floatarg sizeX)
-        : GemShape(1)
+  : GemShape(1),
+    xsize(0.), xsize0(0.),
+    alreadyInit(0)
 {
   int sizeXi=static_cast<int>(sizeX);
+
   setGrid(sizeXi);
 }
 
@@ -50,7 +53,7 @@ void mesh_line :: getTexCoords(void)
 {
     for ( int i = 0; i < gridX; ++i)
     {
-	  texCoords[i][0][0] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
+      texCoords[i] = ((xsize*(1.*i)/(gridX-1.)) + xsize0 );
             //post("texCoords[%d][%d] = %f\t%f",i,j,texCoords[i][j][0],texCoords[i][j][1]);
     }
 }
@@ -61,8 +64,10 @@ void mesh_line :: getTexCoords(void)
 /////////////////////////////////////////////////////////
 void mesh_line :: setGrid( int valueX)
 {
-	if(valueX>=1) gridX = valueX;
-	else gridX = 5;
+  if(valueX>=1) gridX = valueX;
+  else gridX = 5;
+
+  texCoords.resize(gridX);
 
     getTexCoords();
 }
@@ -73,58 +78,58 @@ void mesh_line :: setGrid( int valueX)
 /////////////////////////////////////////////////////////
 void mesh_line :: renderShape(GemState *state)
 {
-	int i;
-    GLfloat sizeX = 2. / (gridX-1.);
+  int i;
+  GLfloat sizeX = 2. / (gridX-1.);
 
-   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
+  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
 
-   glNormal3f(0.0f, 0.0f, 1.0f);
-   if (m_drawType == GL_LINE_LOOP)
-     m_drawType = GL_LINE_STRIP;
+  glNormal3f(0.0f, 0.0f, 1.0f);
+  if (m_drawType == GL_LINE_LOOP)
+  m_drawType = GL_LINE_STRIP;
 
-   glNormal3f( 0.0f, 0.0f, 1.0f);
+  glNormal3f( 0.0f, 0.0f, 1.0f);
 
-   if (GemShape::m_texType && GemShape::m_texNum>=3)
+  if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
-		if ((xsize0!= GemShape::m_texCoords[0].s) ||
-		(xsize != GemShape::m_texCoords[1].s-xsize0))
-		alreadyInit = 0;
+    if ((xsize0!= GemShape::m_texCoords[0].s) ||
+    (xsize != GemShape::m_texCoords[1].s-xsize0))
+    alreadyInit = 0;
 
-        if (!alreadyInit)
-        {
-			xsize0 = GemShape::m_texCoords[0].s;
-	    	xsize  = GemShape::m_texCoords[1].s-xsize0;
+      if (!alreadyInit)
+      {
+        xsize0 = GemShape::m_texCoords[0].s;
+        xsize  = GemShape::m_texCoords[1].s-xsize0;
 
-            setGrid(gridX);
-            alreadyInit = 1;
-        }
+        setGrid(gridX);
+        alreadyInit = 1;
+      }
 
 
-   		glBegin(m_drawType);
-        for (int i=0; i<=(gridX-1) ; i++)
-        {
-            glTexCoord2fv( texCoords[i][0] );
-            glVertex3f( m_size * (i*sizeX - 1),0 , 0);
-        }
-        glEnd();
-    }else
-    {
-        if (!alreadyInit)
-        {
-            xsize = 1;
-			xsize0= 0;
+      glBegin(m_drawType);
+      for (int i=0; i<=(gridX-1) ; i++)
+      {
+        glTexCoord2f( texCoords[i],0. );
+        glVertex3f( m_size * (i*sizeX - 1),0 , 0);
+      }
+      glEnd();
+      } else
+      {
+      if (!alreadyInit)
+      {
+        xsize = 1;
+        xsize0= 0;
 
-            setGrid( gridX);
-            alreadyInit = 1;
-        }
+        setGrid( gridX);
+        alreadyInit = 1;
+      }
 
-        glBegin(m_drawType);
-        for ( i = 0; i<=(gridX -1); i++)
-        {
-    		glTexCoord2fv( texCoords[i][0] );
-            glVertex3f( m_size * (i*sizeX -1), 0 , 0 );
-        }
-        glEnd();
+      glBegin(m_drawType);
+      for ( i = 0; i<=(gridX -1); i++)
+      {
+          glTexCoord2f( texCoords[i], 0. );
+          glVertex3f( m_size * (i*sizeX -1), 0 , 0 );
+      }
+      glEnd();
     }
 }
 

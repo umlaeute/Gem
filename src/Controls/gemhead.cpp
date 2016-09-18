@@ -157,11 +157,11 @@ void gemhead :: renderGL(GemState *state)
   ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(m_cache);  // the cache ?
   (ap+1)->a_type=A_POINTER;
   (ap+1)->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(state);
-  outlet_anything(this->m_outlet, gensym("gem_state"), 2, ap);
+  outlet_anything(m_outlet, gensym("gem_state"), 2, ap);
 
   m_cache->dirty = false;
   m_cache->vertexDirty=false;
-  state->get(GemState::_GL_STACKS, stacks);
+  if(state) state->get(GemState::_GL_STACKS, stacks);
   if(stacks)stacks->pop();
 }
 
@@ -217,6 +217,18 @@ void gemhead :: setMess(t_float priority)
   gemreceive::nameMess(rcv);
 }
 
+void gemhead :: setContext(std::string contextName)
+{
+
+  std::string rcv="__gem_render"+contextName;
+  m_basename=rcv;
+
+  if(m_priority<0.f)
+    rcv+="_osd";
+
+  gemreceive::nameMess(rcv);
+}
+
 void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {
   if(m_renderOn && gensym("gem_state")==s) {
     if(1==argc && A_FLOAT==argv->a_type) {
@@ -248,7 +260,7 @@ void gemhead :: outputRenderOnOff(int state)
   // continue sending out the cache message
   t_atom ap[1];
   SETFLOAT(ap, state);
-  outlet_anything(this->m_outlet, gensym("gem_state"), 1, ap);
+  outlet_anything(m_outlet, gensym("gem_state"), 1, ap);
 }
 
 /////////////////////////////////////////////////////////
@@ -281,4 +293,5 @@ void gemhead :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "float", renderOnOff, int);
   CPPEXTERN_MSG1(classPtr, "set", setMess, int);
+  CPPEXTERN_MSG1(classPtr, "context", setContext, std::string);
 }

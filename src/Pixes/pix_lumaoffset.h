@@ -51,12 +51,7 @@ class GEM_EXTERN pix_lumaoffset : public GemPixObj
 	virtual void	processGrayImage(imageStruct &image);
 
 	imageStruct	myImage;
-	int		nHeight;
-	int		nWidth;
 	int		init;
-
-	U32*		pSource;
-	U32*		pOutput;
 
 	float	m_OffsetScale;
 	float	m_LineGap;

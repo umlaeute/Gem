@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="libfidtrack">
+      <UniqueIdentifier>{196f2f50-35ce-44e4-9d06-5934fbdfa678}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\default_trees.h">
+      <Filter>libfidtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\fidtrackX.h">
+      <Filter>libfidtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\floatpoint.h">
+      <Filter>libfidtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\segment.h">
+      <Filter>libfidtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\treeidmap.h">
+      <Filter>libfidtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pix_fiducialtrack.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\fidtrackX.c">
+      <Filter>libfidtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\segment.c">
+      <Filter>libfidtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\treeidmap.cpp">
+      <Filter>libfidtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pix_fiducialtrack.cpp" />
+  </ItemGroup>
+</Project>

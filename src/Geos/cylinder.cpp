@@ -64,6 +64,7 @@ void cylinder :: render(GemState *state)
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;
   GLint i, j;
+  /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
   GLboolean orientation = false; /* true=INSIDE */
   GLfloat nsign = (orientation)?-1.0:1.0;
 
@@ -181,23 +182,14 @@ void cylinder :: render(GemState *state)
           x = sin(i * da);
           y = cos(i * da);
         }
-        if (nsign == 1.0) {
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-          glVertex3f(x * r, y * r, z);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-          glVertex3f(x * (r + dr), y * (r + dr), z + dz);
-        }
-        else {
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-          glVertex3f(x * r, y * r, z);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-          glVertex3f(x * (r + dr), y * (r + dr), z + dz);
-        }
-        s += ds;
+	normal3f(x * nsign, y * nsign, nz * nsign);
+	if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+	glVertex3f(x * r, y * r, z);
+	normal3f(x * nsign, y * nsign, nz * nsign);
+	if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+	glVertex3f(x * (r + dr), y * (r + dr), z + dz);
+
+	s += ds;
       }			/* for slices */
       glEnd();
       r += dr;

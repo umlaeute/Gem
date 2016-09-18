@@ -1,0 +1,70 @@
+## Travis-CI configuration for Gem
+
+# build on: linux(native=amd64), osx(amd64) and osx(i386)
+# deployment: the build artefacts are deployed using git
+# coverity: pushes to the 'coverity_scan' branch will run a single build (linux)
+#           and run that through coverity-scan
+
+
+language: cpp
+env:
+  matrix:
+  - ARCH=
+  - ARCH=i386
+  global:
+  # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+  #   via the "travis encrypt" command using the project repo's public key
+  # LATER: shouldn't this be set via env-variable in the webinterface for
+  # travis-ci?
+  - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
+  - secure: KixF9uaREz5Xx1/qf+1v0nkgksjhY0ztRxN3Npgd8m3ClpoTUz4y6tBkbKBNBEgPU257rJuyEB2aMS55HAFp86id8IUcbw0S4iZ+obHp1wpJI3zamYM0IAFpC8Z19Jih+/28xmHbxNST2d/LJ9GD6vZjycWh4JSFST3kSmutECI=
+  - COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
+  - COVERITY_SCAN_NOTIFICATION_EMAIL="pd-gem-CVS@lists.sourceforge.net"
+  - COVERITY_SCAN_BUILD_COMMAND="make"
+  - COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
+
+## 'os' selection has been enabled manually by emailing travis-ci
+os:
+  - linux
+  - osx
+
+
+matrix:
+  exclude:
+   - os: linux
+     env: ARCH=i386
+  allow_failures:
+   - os: linux
+     env: ARCH=i386
+
+before_install:
+- "./build/travis-ci/depinstall.sh"
+
+before_script:
+  - "./build/travis-ci/configure.sh"
+  # implement Coverity Scan with before_script instead of addons.coverity_scan
+  # to work around too-early quota check by the coverity_scan addon
+  - if [[ "x${TRAVIS_OS_NAME}${ARCH}" = "xlinux" ]] ; then curl -s 'https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh' | bash || true ; fi
+
+script:
+- "make"
+
+## deploy all build artefacts to a private git-repository
+after_success:
+- "./build/travis-ci/deploy-git.sh"
+
+
+## deploy tagged artefacts to github
+before_deploy:
+- "./build/travis-ci/prepare-upload.sh"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: mW3u93mi2ZFXB3u32+/LWcePBPwhSE5k/MvrxVnM3i1bgwMK//+7V9enJAmL645LWQyBtUz5q7Jv5m2Vk1W4xd9j0j/hI/QchblPfok1Mo8TcCdnyCgbUvjIJwP+5X0d4ALscn7rYzPxxtEvLrXRLc6IXqYRpCl9tBjOOCM9ysY=
+  file: Gem-${TRAVIS_OS_NAME}${ARCH}-${TRAVIS_TAG}.tgz"
+  skip_cleanup: true
+  on:
+    repo: umlaeute/Gem
+    tags: true
+    all_branches: true

@@ -16,6 +16,8 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_convolve.h"
+#include "Gem/Exception.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_convolve, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
@@ -27,27 +29,27 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_convolve, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol)
-  : m_imatrix(NULL)
+pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol) :
+  m_imatrix(NULL),
+  m_irange(255),
+  m_rows(0), m_cols(0),
+  m_chroma(0)
 {
   int row = static_cast<int>(fRow);
   int col = static_cast<int>(fCol);
 
     if (!row || !col )
     {
-    	error("matrix must have some dimension");
-    	return;
+      throw(GemException("matrix must have some dimension"));
     }
 
     if (!(row % 2) || !(col % 2) )
     {
-    	error("matrix must have odd dimensions");
-    	return;
+      throw(GemException("matrix must have odd dimensions"));
     }
 
     m_rows = row;
     m_cols = col;
-    m_irange = 255;
     m_imatrix = new signed short[m_rows * m_cols];
 
     // zero out the matrix

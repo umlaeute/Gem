@@ -15,6 +15,10 @@
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 #ifdef _WIN32
+// disable QuickTime support in here (where it is not used)
+// if a plugin requires QuickTime to be initialized, it has to do it itself...
+# undef HAVE_QUICKTIME
+
 # define GEMW32WINDOW_INTERNAL
 # include "gemw32window.h"
 
@@ -23,6 +27,15 @@
 # include <stdlib.h>
 
 # ifdef HAVE_QUICKTIME
+#  if defined __MINGW32__
+/* hack to avoid the use of microsofts non-standard extension (u)i64 instead of
+ * (U)LL */
+#   include <ConditionalMacros.h>
+#   undef TARGET_OS_WIN32
+#   include <Math64.h>
+#   define TARGET_OS_WIN32 1
+#  endif /* MINGW */
+
 #  include <QTML.h>
 #  include <Movies.h>
 # endif /* HAVE_QUICKTIME */
@@ -46,7 +59,7 @@ static bool initGemWin(void) {
       return false;
     }
 	// Initialize QuickTime
-	EnterMovies();
+	err = EnterMovies();
 	if (err)
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
@@ -519,33 +532,33 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	// assume that we handle the message
   long lRet = 0;
-
+  int devID=0;
   switch (uMsg)
     {
       // mouse motion
     case WM_MOUSEMOVE:
-      motion(LOWORD(lParam), HIWORD(lParam));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
 
       // left button up/down
     case WM_LBUTTONUP: case WM_LBUTTONDOWN:
-      button(0, (uMsg==WM_LBUTTONDOWN));
-      motion(LOWORD(lParam), HIWORD(lParam));
+      button(devID, 0, (uMsg==WM_LBUTTONDOWN));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
       // middle button up/down
     case WM_MBUTTONUP: case WM_MBUTTONDOWN:
-      button(1, (uMsg==WM_MBUTTONDOWN));
-      motion(LOWORD(lParam), HIWORD(lParam));
+      button(devID, 1, (uMsg==WM_MBUTTONDOWN));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
       // middle button up/down
     case WM_RBUTTONUP: case WM_RBUTTONDOWN:
-      button(2, (uMsg==WM_RBUTTONDOWN));
-      motion(LOWORD(lParam), HIWORD(lParam));
+      button(devID, 2, (uMsg==WM_RBUTTONDOWN));
+      motion(devID, LOWORD(lParam), HIWORD(lParam));
       break;
 
       // keyboard action
     case WM_KEYUP: case WM_KEYDOWN:
-        key((char*)&wParam, (int)wParam, (uMsg==WM_KEYDOWN));
+      key(devID, (char*)&wParam, (int)wParam, (uMsg==WM_KEYDOWN));
       break;
       // resize event
     case WM_SIZE:

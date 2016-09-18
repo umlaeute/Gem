@@ -15,8 +15,9 @@
 #include "plugins/video.h"
 #include "plugins/PluginFactory.h"
 
-gem::plugins::video :: ~video(void) {}
+#include <algorithm>
 
+gem::plugins::video :: ~video(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::video> fac_videodummy;
 
@@ -86,7 +87,7 @@ namespace gem { namespace plugins {
           m_ids.push_back(key);
           m_allHandles.push_back(handle);
           count++;
-          verbose(2, "Gem::video: added backend#%d '%s'", m_allHandles.size()-1, key.c_str());
+          verbose(2, "Gem::video: added backend#%d '%s'", (int)(m_allHandles.size()-1), key.c_str());
         }
       }
       return (count>0);

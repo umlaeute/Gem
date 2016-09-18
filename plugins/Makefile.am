@@ -10,6 +10,7 @@ SUBDIRS += imageMAGICK imageTIFF imageJPEG imageSGI imageQT
 ## film loading plugins
 SUBDIRS += filmAVFoundation filmAVI filmAVIPLAY filmDS filmDarwin filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
 if DISABLED
+SUBDIRS += filmDSATL
 SUBDIRS += filmTEST
 SUBDIRS += videoTEST
 endif
@@ -19,13 +20,13 @@ SUBDIRS += recordQT recordQT4L recordV4L recordV4L2
 
 ## video capture plugins
 SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP
-SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC
+SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC videoVNC
 
 ## proprietary video capture plugins
-SUBDIRS += videoAVT videoHALCON videoPYLON
+SUBDIRS += videoAVT videoHALCON videoPYLON videoDECKLINK
 
 ## asset loading plugins
-SUBDIRS += modelOBJ modelASSIMP2
+SUBDIRS += modelOBJ modelASSIMP2 modelASSIMP3
 
 
 ## filmTEST is not built by default, but we want to ship it

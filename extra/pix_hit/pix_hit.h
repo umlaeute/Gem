@@ -13,6 +13,7 @@
 #define _INCLUDE__GEM_PIXES_PIX_HIT_H_
 
 #include "Base/GemPixObj.h"
+#include "Utils/Functions.h"
 
 #include <stdio.h>
 
@@ -41,7 +42,7 @@ enum areaTypes
   line
 };
 
-// TODO: this should an union!
+// TODO: this should be a union!
 typedef struct _hitarea
 {
   areaTypes type;
@@ -49,6 +50,7 @@ typedef struct _hitarea
   float y;
   float width; // rectangle width or circle radius or second point x
   float height; // rectangle height or second point y
+  _hitarea(void);
 } t_hitarea;
 
 class GEM_EXPORT pix_hit : public GemPixObj

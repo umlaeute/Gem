@@ -8,6 +8,8 @@
  */
 
 #include "pix_compare.h"
+#include "Utils/Functions.h"
+
 CPPEXTERN_NEW(pix_compare);
 
 /////////////////////////////////////////////////////////
@@ -18,10 +20,9 @@ CPPEXTERN_NEW(pix_compare);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_compare :: pix_compare()
-{
-  //m_processOnOff=0;
-}
+pix_compare :: pix_compare() :
+  m_direction(0)
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor

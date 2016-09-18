@@ -14,6 +14,7 @@
 
 #include "Utils/PixPete.h"
 #include "pix_refraction.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW(pix_refraction);
 
@@ -25,15 +26,15 @@ CPPEXTERN_NEW(pix_refraction);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_refraction :: pix_refraction()
-{
-    m_Refraction = 2.0f;
-    m_CellWidth = 16.0f;
-    m_CellHeight = 16.0f;
-    m_DoAllowMagnification = 1.0f;
-
-    init =0;
-}
+pix_refraction :: pix_refraction() :
+  nHeight(0), nWidth(0),
+  init(0),
+  pSource(0), pOutput(0),
+  m_Refraction(2.0f),
+  m_CellWidth(16.0f),
+  m_CellHeight(16.0f),
+  m_DoAllowMagnification(1.0f)
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor

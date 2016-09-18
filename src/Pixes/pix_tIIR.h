@@ -76,6 +76,7 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
   int ff_count, fb_count;
 
   t_inlet **m_inlet;
+  unsigned int m_inletCount;
 
   //////////
   // the image-latches

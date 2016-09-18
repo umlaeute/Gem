@@ -27,8 +27,8 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_biquad.h"
+#include "Utils/Functions.h"
 #include <string.h>
-#include <math.h>
 
 CPPEXTERN_NEW_WITH_GIMME(pix_biquad);
 

@@ -54,7 +54,6 @@ class GEM_EXTERN newWave : public GemShape
   //////////
   // The height of the object
   int		gridX, gridY;
-  short		size, mode, speed;
   void	    heightMess(float size);
   void		modeMess(int mode);
   void		forceMess(float posX, float posY, float valforce);
@@ -68,24 +67,23 @@ class GEM_EXTERN newWave : public GemShape
 
   //////////
   // The height of the object
-  GLfloat	    	m_height;
+  GLfloat m_height;
 
   //////////
-  // The height inlet
-  t_inlet         *m_inletH;
-  t_inlet		*m_inletM;
+  // The height&mode inlet
+  t_inlet*m_inletH,*m_inletM;
 
   //////////
   // getStuff
-  void		getforce(void);
-  void 		getvelocity(void);
-  void 		getposition(void);
-  void 		savepos(void);
-  void 		getK(void);
-  void 		getdamp(void);
-  void 		noise(float);
-  void		getTexCoords(void);
-  void		setSize( int valueX, int valueY );
+  void	getforce(void);
+  void	getvelocity(void);
+  void	getposition(void);
+  void	savepos(void);
+  void	getK(void);
+  void	getdamp(void);
+  void	noise(float);
+  void	getTexCoords(void);
+  void	setSize( int valueX, int valueY );
 
   void 	setK1Mess(float K);
   void 	setD1Mess(float D);
@@ -94,8 +92,8 @@ class GEM_EXTERN newWave : public GemShape
   void 	setK3Mess(float K);
   void 	setD3Mess(float D);
 
-  void		position( float posX, float posY, float posZ );
-  void		setforce( float posX, float posY, float valforce);
+  void	position( float posX, float posY, float posZ );
+  void	setforce( float posX, float posY, float valforce);
 
   void copy( float vec0[3], float vec1[3]);
   void sub(float vec0[3], float vec1[3], float vec2[3]);
@@ -111,8 +109,8 @@ class GEM_EXTERN newWave : public GemShape
   void getVertNorms( void );
   void getFaceNormSegs( void );
 
-  float		xsize, xsize0, ysize, ysize0;
-  float		K1, D1, K2, D2, K3, D3;
+  float	xsize, xsize0, ysize, ysize0;
+  float	K1, D1, K2, D2, K3, D3;
 
   int alreadyInit;
   int m_textureMode; // how to texture...
@@ -127,8 +125,6 @@ class GEM_EXTERN newWave : public GemShape
       faceNormSegs[2][2][MAXGRID][MAXGRID][3];
 
   float texCoords[MAXGRID][MAXGRID][2];
-
-  bool m_upsidedown;
 };
 
 #endif	// for header file

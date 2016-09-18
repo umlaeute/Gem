@@ -95,12 +95,9 @@ public:
   static GemDylibHandle*open(const std::string filename) {
     GemDylibHandle*handle=new GemDylibHandle();
 
-    char buf[MAXPDSTRING];
     if(filename.empty()) {
       throw(GemException(std::string("No DyLib name given!")));
     }
-
-    sys_bashfilename(filename.c_str(), buf);
 
 #ifdef DL_OPEN
     handle->dlhandle=dlopen(filename.c_str(), RTLD_NOW);
@@ -110,6 +107,8 @@ public:
     }
 #endif
 #ifdef _WIN32
+    char buf[MAXPDSTRING];
+    sys_bashfilename(filename.c_str(), buf);
     UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
 	SetLastError(0);
     handle->w32handle=LoadLibrary(buf);
@@ -170,11 +169,11 @@ public:
   }
 
   static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension) {
-    const t_canvas*canvas=(obj)?(canvas=const_cast<CPPExtern*>(obj)->getCanvas()):0;
+    //const t_canvas*canvas=(obj)?(const_cast<CPPExtern*>(obj)->getCanvas()):0;
     const char*ext=extension.c_str();
 
-	//std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
-	std::string fullname=gem::files::getFullpath(filename+ext, obj);
+    //std::string fullname=getFullfilename(canvas, filename.c_str(), ext);
+    std::string fullname=gem::files::getFullpath(filename+ext, obj);
     if(fullname.empty()) {
       //fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
       fullname=gem::files::getFullpath(filename+GemDylibHandle::defaultExtension, obj);
@@ -239,7 +238,9 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::s
   }
 
 GemDylib::GemDylib(const std::string filename, const std::string extension) throw (GemException) : m_handle(0) {
-  m_handle=GemDylibHandle::open(0,   filename, extension);
+  m_handle=GemDylibHandle::open(filename+extension);
+  if(NULL==m_handle)
+    m_handle=GemDylibHandle::open(filename+GemDylibHandle::defaultExtension);
   if(NULL==m_handle) {
     std::string err="unable to open '";
     err+=filename;
@@ -251,6 +252,7 @@ GemDylib::GemDylib(const std::string filename, const std::string extension) thro
     throw GemException(err);
   }
 }
+
 
 GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL) {
   std::string filename=org.m_handle->fullname;

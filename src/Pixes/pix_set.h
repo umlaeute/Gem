@@ -28,7 +28,6 @@ pix_set
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
 #include "Gem/Cache.h"
-#include "Gem/Rectangle.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -104,6 +103,9 @@ protected:
 	//////////
 	// Pass the data
 	void	    	DATAMess(t_symbol*s, int argc, t_atom *argv);
+        //////////
+        // set input data mode
+        void bytemodeMess(bool);
 
 
 	//-----------------------------------
@@ -113,15 +115,14 @@ protected:
 	//////////
 	// paint mode
 	int 	    	m_mode;
-	
-	// size and offset to draw only on a ROI
-  gem::Rectangle m_roi;
-  bool           m_doROI;
+        /////////
+        // input data scaling
+        float m_inputScale;
 
 	//////////
 	// The pixBlock with the current image
 	pixBlock    	m_pixBlock;
-  pixBlock     *m_pixels;
+        pixBlock     *m_pixels;
 };
 
 #endif	// for header file

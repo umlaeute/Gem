@@ -23,6 +23,7 @@ nobase_dist_gemexamples_DATA = \
 	02.advanced/07.Snapshot1.pd \
 	02.advanced/08.Snapshot2.pd \
 	02.advanced/09.SnapshotSave.pd \
+	02.advanced/09.SnapshotSaveHD.pd \
 	02.advanced/10.LinearPath.pd \
 	02.advanced/11.SplinePath.pd \
 	02.advanced/12.Hsv.pd \
@@ -36,6 +37,8 @@ nobase_dist_gemexamples_DATA = \
 	02.advanced/20.double-gemhead_vs_repeat.pd \
 	02.advanced/21.basic_LSystem.pd \
 	02.advanced/22.double-iterative.pd \
+	02.advanced/23.SplitScreen.pd \
+	02.advanced/snapshotHD.pd \
 	03.lighting/01.world_light.pd \
 	03.lighting/02.light.pd \
 	03.lighting/03.controlLights.pd \
@@ -70,6 +73,7 @@ nobase_dist_gemexamples_DATA = \
 	04.pix/24.time-filtering.pd \
 	04.pix/25.buffer.pd \
 	04.pix/26.framebuffer_readback.pd \
+	04.pix/27.bitmap_font.pd \
 	04.video/00.SimpleVideo.pd \
 	04.video/01.VideoPaint.pd \
 	04.video/02.VideoSphere.pd \
@@ -128,6 +132,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/13.panoramique.pd \
 	10.glsl/14.blur.pd \
 	10.glsl/15.bicubic_image_interpolation.pd \
+	10.glsl/16.vertexbuffer_attributes.pd \
 	10.glsl/bicubic_interpolation.frag \
 	10.glsl/bicubic_interpolation.vert \
 	10.glsl/blur.frag \
@@ -214,10 +219,16 @@ nobase_dist_gemexamples_DATA = \
 	13.recursion/stack-help.pd \
 	13.recursion/stack.pd \
 	13.recursion/xform-gui.pd \
+	14.multiple_windows/01.basic_example.pd \
+	14.multiple_windows/02.switch_context.pd \
+	14.multiple_windows/03.texture_sharing.pd \
 	99.games/puzzle.pd \
 	data/64shade.tif \
 	data/alea.mpg \
 	data/anim-1.mov \
+	data/bitmap_font_6x8.bmp \
+	data/brick.frag \
+	data/brick.vert \
 	data/blob0.tif \
 	data/blob1.tif \
 	data/blob2.tif \

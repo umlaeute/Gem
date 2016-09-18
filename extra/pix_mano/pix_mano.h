@@ -28,6 +28,7 @@
 #define INCLUDE_pix_mano_H_
 
 #include "Base/GemPixObj.h"
+#include "Utils/Functions.h"
 
 class GEM_EXPORT pix_mano : public GemPixObj
 {
@@ -74,8 +75,7 @@ class GEM_EXPORT pix_mano : public GemPixObj
   unsigned int pixavg;
   float thresh, tip_scalar;
   float partialx_prev[10000], partialy_prev[10000];
-  unsigned int Xsize, Ysize;
-  int hop, prev_tip;
+  int prev_tip;
   float tp_i[50], tp_x[50], tp_y[50], tp_m[50], tp_a[50], tp_s[50];
 
  private:

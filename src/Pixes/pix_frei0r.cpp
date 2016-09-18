@@ -17,11 +17,14 @@
 #include "Gem/Loaders.h"
 
 #include "Gem/Dylib.h"
+#include "RTE/RTE.h"
 
 #include "Gem/Properties.h"
 
 #include <iostream>
 #include <stdio.h>
+
+#include <map>
 
 #ifdef _WIN32
 # include <io.h>
@@ -198,7 +201,7 @@ typedef int (*t_f0r_deinit)(void);
     }
   }
 
-  F0RPlugin(std::string name, const t_canvas*parent=NULL) :
+  F0RPlugin(std::string name) :
     m_width(0), m_height(0),
     m_instance(NULL),
     m_name(""), m_author(""),
@@ -255,7 +258,7 @@ typedef int (*t_f0r_deinit)(void);
   }
   bool set(unsigned int key, std::string s) {
     if(!m_instance)return false;
-    f0r_param_string*v=const_cast<f0r_param_string*>(s.c_str());
+    f0r_param_string v=const_cast<f0r_param_string>(s.c_str());
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
@@ -277,6 +280,7 @@ typedef int (*t_f0r_deinit)(void);
   GemDylib m_dylib;
 };
 
+static std::map<const t_symbol*, std::string>s_class2filename;
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_frei0r,  t_symbol *, A_DEFSYM);
 
@@ -301,9 +305,26 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
     m_canopen=true;
     return;
   }
-  char *pluginname = s->s_name;
+  std::string pluginname = s->s_name;
+  std::string filename = pluginname;
+  if(s_class2filename.find(s) != s_class2filename.end()) {
+    filename=s_class2filename[s];
+    //::post("using cached filename %s", filename.c_str());
+    try {
+      m_plugin = new F0RPlugin(filename);
+    } catch (GemException&e) {
+      // ignore the error, and keep trying
+      m_plugin = 0;
+    }
+  }
+  if (0 == m_plugin) {
+    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+    if(rte) {
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), getCanvas());
+    }
 
-  m_plugin = new F0RPlugin(pluginname, getCanvas());
+    m_plugin = new F0RPlugin(filename);
+  }
 
   unsigned int numparams = m_plugin->m_parameterNames.size();
   char tempVt[5];
@@ -365,12 +386,18 @@ void pix_frei0r :: openMess(t_symbol*s)
   }
 
   std::string pluginname = s->s_name;
+
   if(m_plugin) {
     delete m_plugin;
   }
   m_plugin=NULL;
   try {
-    m_plugin = new F0RPlugin(pluginname, getCanvas());
+    std::string filename = pluginname;
+    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+    if(rte) {
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), getCanvas());
+    }
+    m_plugin = new F0RPlugin(filename);
   } catch (GemException&x) {
     error("%s", x.what());
   }
@@ -492,8 +519,12 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
 static const int offset_pix_=strlen("pix_");
 
 static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
-  ::verbose(2, "frei0r_loader: %s",(s?(s->s_name):"<none>"));
-  try{	    	    	    	    	    	    	    	\
+  if(!s){
+    ::verbose(2, "frei0r_loader: no name given");
+    return 0;
+  }
+  ::verbose(2, "frei0r_loader: %s",s->s_name);
+  try{
     Obj_header *obj = new (pd_new(pix_frei0r_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;
@@ -503,33 +534,45 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
     CPPExtern::m_holdname=NULL;
     return(obj);
   } catch (GemException&e) {
-	  ::verbose(2, "frei0r_loader: failed! (%s)", e.what());
-    return NULL;
+    ::verbose(2, "frei0r_loader: failed! (%s)", e.what());
+    return 0;
   }
   return 0;
 }
-bool pix_frei0r :: loader(t_canvas*canvas, std::string classname) {
-  if(strncmp("pix_", classname.c_str(), offset_pix_))
+bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, const std::string path) {
+  if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
+  }
   std::string pluginname = classname.substr(offset_pix_);
+  std::string filename = pluginname;
+  gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+  if(rte) {
+    if (path.empty())
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), canvas);
+    else
+      filename=rte->findFile(path+"/"+pluginname, GemDylib::getDefaultExtension(), canvas);
+  }
   pix_frei0r::F0RPlugin*plugin=NULL;
   try {
-    plugin=new F0RPlugin(pluginname, canvas);
+    plugin=new F0RPlugin(filename);
   } catch (GemException&e) {
-	  ::verbose(2, "frei0r_loader: failed!! (%s)", e.what());
+    ::verbose(2, "frei0r_loader: failed!! (%s)", e.what());
     return false;
   }
 
   if(plugin!=NULL) {
     delete plugin;
+    /* cache the filename that loads this plugin */
+    s_class2filename[gensym(pluginname.c_str())]=filename;
+    /* register a new class */
     class_addcreator(reinterpret_cast<t_newmethod>(frei0r_loader_new), gensym(classname.c_str()), A_GIMME, 0);
     return true;
   }
   return false;
 }
 
-static int frei0r_loader(t_canvas *canvas, char *classname) {
-  return pix_frei0r::loader(canvas, classname);
+static int frei0r_loader(const t_canvas *canvas, const char *classname, const char *path) {
+  return pix_frei0r::loader(canvas, classname, path?path:"");
 }
 
 /////////////////////////////////////////////////////////

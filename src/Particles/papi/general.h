@@ -78,6 +78,9 @@ struct pDomain
 	// This constructor is used when default constructing a
 	// ParticleAction that has a pDomain.
 	inline pDomain()
+	  : type(PDPoint),
+	    radius1(0.f),     radius2(1.f),
+	    radius1Sqr(0.f),  radius2Sqr(1.f)
 	{
 	}
 

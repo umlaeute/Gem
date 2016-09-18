@@ -21,6 +21,7 @@
 #include "Gem/Properties.h"
 #include "imageloader.h"
 
+#include <algorithm>
 
 gem::plugins::film :: ~film(void) {}
 /* initialize the film factory */
@@ -127,7 +128,7 @@ namespace gem { namespace plugins {
           m_ids.push_back(key);
           m_handles.push_back(handle);
           count++;
-          verbose(2, "added backend#%d '%s'", m_handles.size()-1, key.c_str());
+          verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1), key.c_str());
         }
       }
       return (count>0);
@@ -193,6 +194,7 @@ namespace gem { namespace plugins {
         for(j=0; !m_handle && j<backends.size(); j++) {
           std::string id=backends[j];
           for(i=0; i<m_handles.size(); i++) {
+	    /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
             if(id==m_ids[i] && (tried=true) && m_handles[i]->open(name, requestprops)) {
               m_handle=m_handles[i];
               break;

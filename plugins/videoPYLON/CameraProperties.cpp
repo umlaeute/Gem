@@ -768,7 +768,7 @@ void   gem::pylon::cameraproperties::init() {
   enumap_PixelFormat["Mono10"]=PixelFormat_Mono10;
   enumap_PixelFormat["Mono12"]=PixelFormat_Mono12;
   enumap_PixelFormat["Mono16"]=PixelFormat_Mono16;
-  enumap_PixelFormat["Mono16Signed"]=PixelFormat_Mono16Signed;
+  //enumap_PixelFormat["Mono16Signed"]=PixelFormat_Mono16Signed;
   enumap_PixelFormat["Mono10Packed"]=PixelFormat_Mono10Packed;
   enumap_PixelFormat["Mono12Packed"]=PixelFormat_Mono12Packed;
   enumap_PixelFormat["BayerGR8"]=PixelFormat_BayerGR8;
@@ -917,10 +917,10 @@ void   gem::pylon::cameraproperties::init() {
   enumap_LineSelector["Line2"]=LineSelector_Line2;
   enumap_LineSelector["Line3"]=LineSelector_Line3;
   enumap_LineSelector["Line4"]=LineSelector_Line4;
-  enumap_LineSelector["In1"]=LineSelector_In1;
-  enumap_LineSelector["In2"]=LineSelector_In2;
-  enumap_LineSelector["In3"]=LineSelector_In3;
-  enumap_LineSelector["In4"]=LineSelector_In4;
+//  enumap_LineSelector["In1"]=LineSelector_In1;
+//  enumap_LineSelector["In2"]=LineSelector_In2;
+//  enumap_LineSelector["In3"]=LineSelector_In3;
+//  enumap_LineSelector["In4"]=LineSelector_In4;
   enumap_LineSelector["Out1"]=LineSelector_Out1;
   enumap_LineSelector["Out2"]=LineSelector_Out2;
   enumap_LineSelector["Out3"]=LineSelector_Out3;
@@ -1096,7 +1096,7 @@ void   gem::pylon::cameraproperties::init() {
   enumap_ChunkPixelFormat["RGB10Planar"]=ChunkPixelFormat_RGB10Planar;
   enumap_ChunkPixelFormat["RGB12Planar"]=ChunkPixelFormat_RGB12Planar;
   enumap_ChunkPixelFormat["RGB16Planar"]=ChunkPixelFormat_RGB16Planar;
-  enumap_ChunkPixelFormat["YUV422Packed_AlternateByteOrder"]=ChunkPixelFormat_YUV422Packed_AlternateByteOrder;
+  //enumap_ChunkPixelFormat["YUV422Packed_AlternateByteOrder"]=ChunkPixelFormat_YUV422Packed_AlternateByteOrder;
   enumap_ChunkPixelFormat["BayerGB12Packed"]=ChunkPixelFormat_BayerGB12Packed;
   enumap_ChunkPixelFormat["BayerGR12Packed"]=ChunkPixelFormat_BayerGR12Packed;
   enumap_ChunkPixelFormat["BayerRG12Packed"]=ChunkPixelFormat_BayerRG12Packed;

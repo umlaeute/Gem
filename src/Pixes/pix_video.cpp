@@ -25,6 +25,8 @@
 
 #include "RTE/Symbol.h"
 
+#include <algorithm>
+
 CPPEXTERN_NEW_WITH_GIMME(pix_video);
 
 
@@ -99,7 +101,11 @@ pix_video :: ~pix_video(){
 //
 /////////////////////////////////////////////////////////
 void pix_video :: render(GemState *state){
-  if (m_videoHandle)state->set(GemState::_PIX, m_videoHandle->getFrame());
+  if (m_videoHandle) {
+    pixBlock*frame=m_videoHandle->getFrame();
+    //post("got frame: %p", frame);
+    state->set(GemState::_PIX, frame);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -485,7 +491,7 @@ void pix_video :: dialogMess(int argc, t_atom*argv)
     std::vector<std::string>data;
     while(argc>0) {
       data.push_back(std::string(atom_getsymbol(argv)->s_name));
-      argv++;
+      argv++;argc--;
     }
 
     if(!m_videoHandle->dialog(data)) {

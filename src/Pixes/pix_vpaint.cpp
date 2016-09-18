@@ -30,6 +30,12 @@ GLfloat sumMatrix[] = {
 
 CPPEXTERN_NEW(pix_vpaint);
 
+static inline int modrand(int mod) {
+  /* coverity[dont_call] this is not crypto-science */
+  return rand() % mod;
+
+}
+
 /////////////////////////////////////////////////////////
 //
 // pix_vpaint
@@ -38,12 +44,16 @@ CPPEXTERN_NEW(pix_vpaint);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_vpaint :: pix_vpaint()
-    	  : m_initialized(0), maxPoints(2048), numPoints(0),
-		    viewImage(0), useStrokes(1), drawEdges(0), moving(0), m_banged(false)
+pix_vpaint :: pix_vpaint(void) :
+  m_initialized(0), maxPoints(2048), numPoints(0),
+  viewImage(0), useStrokes(1), drawEdges(0), moving(0), canDrawEdges(false),
+  points(0),
+  m_pbuffer(0),
+  m_x(0), m_y(0),
+  m_w(128), m_h(128),
+  m_banged(false),
+  m_sizinlet(0)
 {
-  m_w = m_h = 128;
-
   m_sizinlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
 }
 
@@ -53,11 +63,11 @@ pix_vpaint :: pix_vpaint()
 /////////////////////////////////////////////////////////
 pix_vpaint :: ~pix_vpaint()
 {
-	if (m_initialized)
-	{
-	  free(points);
-	}
-  if(m_sizinlet)inlet_free(m_sizinlet);
+  if(points)
+    delete[]points;
+
+  if(m_sizinlet)
+    inlet_free(m_sizinlet);
 }
 
 
@@ -97,23 +107,22 @@ void pix_vpaint :: makepoints(void)
 {
   GLubyte *bi = (GLubyte *) m_imageStruct.data;
   int i;
-  //free(points);
-  if (!m_initialized)
-    points = (cPoint *) malloc(maxPoints * sizeof(cPoint));
+  if(points)delete[]points;
+  points = new cPoint[maxPoints];
 
   numPoints = maxPoints;
   if (m_imageStruct.format == GL_YCBCR_422_GEM){
     for (i = 0; i < maxPoints; i++) {
-      points[i].x = rand() % m_w>>1;
-      points[i].y = rand() % m_h;
+      points[i].x = modrand(m_w)>>1;
+      points[i].y = modrand(m_h);
       points[i].r = bi[4 * (points[i].y * (m_w>>1) + points[i].x)];
       points[i].g = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 1];
       points[i].b = bi[4 * (points[i].y * (m_w>>1) + points[i].x) + 2];
     }
   }else{
     for (i = 0; i < maxPoints; i++) {
-      points[i].x = rand() % m_w;
-      points[i].y = rand() % m_h;
+      points[i].x = modrand(m_w);
+      points[i].y = modrand(m_h);
       points[i].r = bi[4 * (points[i].y * m_w + points[i].x) + chRed];
       points[i].g = bi[4 * (points[i].y * m_w + points[i].x) + chGreen];
       points[i].b = bi[4 * (points[i].y * m_w + points[i].x) + chBlue];
@@ -150,13 +159,12 @@ void pix_vpaint :: makecone(void)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: init()
 {
-	m_pbuffer = new PBuffer( m_w, m_h, PBuffer::GEM_PBUFLAG_RGBA | PBuffer::GEM_PBUFLAG_DEPTH );
-	m_pbuffer->enable();
+  m_pbuffer = new PBuffer( m_w, m_h, PBuffer::GEM_PBUFLAG_RGBA | PBuffer::GEM_PBUFLAG_DEPTH );
+  m_pbuffer->enable();
 
-    /*
-     * Points
-     */
-    points = (cPoint *) malloc(maxPoints * sizeof(cPoint));
+  /*
+   * Points
+   */
     makepoints();
     makecone();
 

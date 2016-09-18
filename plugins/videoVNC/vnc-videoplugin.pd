@@ -1,0 +1,17 @@
+#N canvas 344 334 656 389 10;
+#X obj 82 233 s \$1-ctl;
+#X text 19 72 1- select the backend;
+#X text 62 27 With VNC backend you can open a remote desktop using
+the VNC protocol;
+#X msg 43 89 driver vnc;
+#X msg 176 166 device vnc://localhost;
+#X msg 128 128 set password *****;
+#X text 134 112 2- set password (IF needed by VNC-server);
+#X text 190 149 3- open a VNC-URI;
+#X msg 179 242 setProps mouse.x 100 \, setProps mouse.y 100 \, setProps.
+mouse.mask 1 \, applyProps;
+#X text 179 219 X- move mouse pointer (x \, y \, button-mask);
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 8 0 0 0;

@@ -194,13 +194,11 @@ void pix_cubemap :: render(GemState *state) {
   if(!m_textureOnOff)return;
 
   /* here comes the work: a new image has to be transfered from main memory to GPU and attached to a texture object */
-  if(state) {
-    pixBlock*img=NULL;
-    state->get(GemState::_PIX, img);
-    if(img) {
-      if(img->newimage)
-        m_img[0]=&img->image;
-    }
+  pixBlock*img=NULL;
+  state->get(GemState::_PIX, img);
+  if(img) {
+    if(img->newimage)
+      m_img[0]=&img->image;
   }
 
 
@@ -359,7 +357,7 @@ void pix_cubemap :: repeatMess(int type)
   if (type)
     m_repeat = GL_REPEAT;
   else {
-    if(GLEW_EXT_texture_edge_clamp)
+    if((getState()!=INIT) && GLEW_EXT_texture_edge_clamp)
       m_repeat = GL_CLAMP_TO_EDGE;
     else
       m_repeat = GL_CLAMP;
@@ -449,7 +447,8 @@ void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
   if(gensym("gem_imageZ-")==s)id=5;
   if (argc==1 && argv->a_type==A_FLOAT){
   } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
+    if(id>=0)rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
+    else error("unknown message '%s'" ,s->s_name);
   } else {
     error("wrong righthand arguments...");
     ::error("post: %d", argc);

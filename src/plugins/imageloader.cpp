@@ -18,6 +18,8 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
+#include <algorithm>
+
 gem::plugins::imageloader :: ~imageloader(void) {}
 
 static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy;
@@ -92,7 +94,7 @@ namespace gem { namespace plugins {
           m_ids.push_back(key);
           m_loaders.push_back(loader);
           count++;
-          verbose(2, "added backend#%d '%s' @ 0x%x", m_loaders.size()-1, key.c_str(), loader);
+          verbose(2, "added backend#%d '%s' @ %p", (int)(m_loaders.size()-1), key.c_str(), loader);
         }
       }
       return (count>0);
