@@ -254,6 +254,7 @@ void pix_write :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "file", fileMess);
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
+  CPPEXTERN_MSG1(classPtr, "color_format", colorFormatMess, int);
 
   CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
   CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
@@ -266,4 +267,11 @@ void pix_write :: autoMess(bool on)
 void pix_write :: bangMess(void)
 {
   m_banged=true;
+}
+void pix_write :: colorFormatMess(int format){
+  m_color = format;
+  if (m_color != 1 && m_color != 3 && m_color != 4) {
+    error("color argument could be 1, 3 or 4");
+    m_color = 3;
+  }
 }

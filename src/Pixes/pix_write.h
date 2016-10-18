@@ -86,6 +86,7 @@ class GEM_EXTERN pix_write : public GemBase
 
       void autoMess(bool);
       void bangMess(void);
+      void colorFormatMess(int format);
 
     	//////////
     	// Clean up the image
