@@ -135,6 +135,10 @@ class GEM_EXTERN pix_write : public GemBase
     	// The height
     	int     	m_height;
 
+      /////////
+      // The color (1 = R, 3 = RGB, 4 = RGBA)
+      int m_color;
+
     	//////////
     	// canvas
     	t_canvas * m_canvas;

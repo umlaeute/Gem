@@ -42,10 +42,18 @@ CPPEXTERN_NEW_WITH_GIMME(pix_write);
 //
 /////////////////////////////////////////////////////////
 pix_write :: pix_write(int argc, t_atom *argv)
-  : m_originalImage(NULL)
+  : m_originalImage(NULL), m_color(3)
 {
   m_xoff = m_yoff = 0;
   m_width = m_height = 0;
+  if (argc == 5) {
+    m_color = atom_getint(&argv[4]);
+    if (m_color != 1 && m_color != 3 && m_color != 4) {
+      error("color argument could be 1, 3 or 4");
+      m_color = 3;
+    }
+    argc--;
+  }
   if (argc == 4) {
     m_xoff = atom_getint(&argv[0]);
     m_yoff = atom_getint(&argv[1]);
@@ -55,7 +63,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
   } else if (argc != 0){
-    error("needs 0, 2, or 4 values");
+    error("needs 0, 2, 4 or 5 values");
     m_xoff = m_yoff = 0;
     m_width = m_height = 128;
   }
@@ -73,7 +81,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_originalImage = new imageStruct();
   m_originalImage->xsize=m_width;
   m_originalImage->ysize=m_height;
-  m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
+  m_originalImage->setCsizeByFormat(m_color);
   m_originalImage->allocate();
 
 	// AV : i wanted to put thoses lines in fileMess() function but it crashes...
@@ -123,7 +131,7 @@ void pix_write :: doWrite(void)
   m_originalImage->ysize = height;
 
 #ifndef __APPLE__
-  m_originalImage->setCsizeByFormat(GL_RGB);
+  m_originalImage->setCsizeByFormat(m_color);
 #else
   m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
 #endif /* APPLE */
