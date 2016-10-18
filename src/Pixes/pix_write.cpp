@@ -84,12 +84,6 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_originalImage->setCsizeByFormat(m_color);
   m_originalImage->allocate();
 
-	// AV : i wanted to put thoses lines in fileMess() function but it crashes...
-	// we need to get patcher path each time we change the filename because the patcher may be saved as...
-	// and its directory could change without updating m_patcherPath
-	m_canvas = canvas_getcurrent();
-	m_patcherPath = canvas_getdir(m_canvas);
-
 }
 
 /////////////////////////////////////////////////////////

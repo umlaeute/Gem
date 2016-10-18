@@ -140,17 +140,6 @@ class GEM_EXTERN pix_write : public GemBase
       // The color (1 = R, 3 = RGB, 4 = RGBA)
       int m_color;
 
-    	//////////
-    	// canvas
-    	t_canvas * m_canvas;
-
-    	//////////
-    	// patcher path
-    	t_symbol * m_patcherPath;
-
-
-
-
     private:
 
     	//////////
