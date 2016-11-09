@@ -1,27 +1,26 @@
-#N canvas 23 49 795 602 10;
-#X obj 17 399 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
+#N canvas 536 123 795 620 10;
+#X obj 17 419 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 28 402 Inlets:;
-#X text 28 559 Outlets:;
-#X obj 17 364 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X text 28 422 Inlets:;
+#X text 28 579 Outlets:;
+#X obj 17 384 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 26 363 Arguments:;
-#X obj 17 69 cnv 15 430 290 empty empty empty 20 12 0 14 -233017 -66577
+#X text 26 383 Arguments:;
+#X obj 17 69 cnv 15 430 310 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 46 572 Outlet 1: gemlist;
-#X text 52 416 Inlet 1: gemlist;
+#X text 46 592 Outlet 1: gemlist;
+#X text 52 436 Inlet 1: gemlist;
 #X text 27 72 Description: Make a snapshot of the frame-buffer and
 write it to a file;
-#X text 72 374 list: [offsetX offsetY [dimX dimY]];
-#X text 52 502 Inlet 2: list: offsetX offsetY (in pixels \; default:
+#X text 52 522 Inlet 2: list: offsetX offsetY (in pixels \; default:
 0 0);
-#X text 52 528 Inlet 3: list: dimenX dimenY (in pixels \; default:
+#X text 52 548 Inlet 3: list: dimenX dimenY (in pixels \; default:
 window-size);
 #X text 466 15 GEM object;
-#X obj 459 77 cnv 15 250 300 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 459 77 cnv 15 250 370 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 463 60 Example:;
-#X obj 604 313 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 604 383 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 16 419 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -41,67 +40,72 @@ window-size);
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 609 352 pd gemwin;
-#X msg 609 333 create;
-#X text 605 312 Create window:;
-#X obj 460 106 cnv 15 240 190 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 609 422 pd gemwin;
+#X msg 609 403 create;
+#X text 605 382 Create window:;
+#X obj 460 106 cnv 15 240 230 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X msg 584 249 256 256;
-#X text 638 249 dimension;
-#X text 637 227 offset;
-#X msg 584 225 100 100;
+#X msg 584 289 256 256;
+#X text 638 289 dimension;
+#X text 637 267 offset;
+#X msg 584 265 100 100;
 #X obj 461 84 gemhead 51;
-#X obj 461 272 pix_write 0 0 500 500;
-#X msg 488 116 file pix_test 99;
+#X msg 470 116 file pix_test 99;
 #X text 600 138 type : jpg;
 #X text 600 127 name : pix_testXXXXX.jpg;
 #X text 600 151 quality : 99;
 #X text 600 115 set pix_write to:;
-#X msg 490 181 auto \$1;
-#X obj 490 162 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X msg 490 221 auto \$1;
+#X obj 490 202 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X obj 491 205 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X obj 491 245 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X text 510 204 WRITE! one file;
-#X obj 464 329 gemhead;
-#X obj 464 354 square;
-#X text 463 309 display something;
-#X obj 466 510 pix_snap;
-#X text 26 99 When banged [pix_write] will take a snapshot of the current
-frame buffer and saves it to a file. When a "bang" message is sent
-to [pix_write] \, that is the moment that something is captured from
-the current frame buffer. When grabbing \, be sure that something is
-in the rendering-buffer \, else you will get a black texture.;
-#X text 464 489 See also:;
-#X obj 466 534 pix_writer;
-#X text 26 240 BE CAREFUL with the filename \, depending on your OS
+#X text 510 244 WRITE! one file;
+#X obj 464 399 gemhead;
+#X obj 464 424 square;
+#X text 463 379 display something;
+#X obj 466 560 pix_snap;
+#X text 464 539 See also:;
+#X obj 466 584 pix_writer;
+#X text 26 260 BE CAREFUL with the filename \, depending on your OS
 \, relative names may be different. It start from the patch in Linux
 or from HD (/) in osx for example. DO NOT USE SPACES in the basefilename
 ;
 #X text 81 41 Class: pix object;
-#X text 27 187 With the "file" message you can specify a base-filename
+#X text 27 207 With the "file" message you can specify a base-filename
 and the type of image-files you want to create. The actual name of
 the file will be something like: "<basefilename><current#>.<ext>" (like
 "GEM00001.tif");
 #X text 60 22 Synopsis: [pix_write];
-#X text 26 299 Supported file-types are TIFF (quality=0) and JPEG (quality>0).
+#X text 26 319 Supported file-types are TIFF (quality=0) and JPEG (quality>0).
 TIFF-writing can be slow due to the large file size of uncompressed
 images! JPEG might be faster (but quality will be lower due to compression)
 ;
-#X text 543 181 activate/deactivate auto snapshot;
-#X text 52 453 Inlet 1: file <quality> : set type/quality (quality=0:TIFF
+#X text 543 221 activate/deactivate auto snapshot;
+#X text 52 473 Inlet 1: file <quality> : set type/quality (quality=0:TIFF
 \, quality>0:JPG);
-#X text 52 478 Inlet 1: file <basefilename> <quality> : set basefilename
+#X text 52 498 Inlet 1: file <basefilename> <quality> : set basefilename
 and type/quality;
-#X text 52 429 Inlet 1: file <basefilename> : set basefilename \, and
+#X text 52 449 Inlet 1: file <basefilename> : set basefilename \, and
 type=TIFF;
-#X connect 16 0 17 0;
-#X connect 17 0 16 0;
-#X connect 20 0 25 2;
-#X connect 23 0 25 1;
-#X connect 24 0 25 0;
-#X connect 26 0 25 0;
-#X connect 31 0 25 0;
-#X connect 32 0 31 0;
-#X connect 33 0 25 0;
-#X connect 35 0 36 0;
+#X obj 461 312 pix_write 0 0 500 500 3;
+#X text 71 394 list: [offsetX offsetY [dimX dimY [color_format]]];
+#X text 26 99 When banged [pix_write] will take a snapshot of the current
+frame buffer and saves it to a file. When a "bang" message is sent
+to [pix_write] \, that is the moment that something is captured from
+the current frame buffer. When grabbing \, be sure that something is
+in the rendering-buffer \, else you will get a black texture. color_mode
+let you grab 1 (only red channel) \, 3 (RGB) or 4 (RGBA) byte per pixel.
+RGBA mode is usefull with framebufer.;
+#X msg 480 182 color_format 4;
+#X connect 15 0 16 0;
+#X connect 16 0 15 0;
+#X connect 19 0 48 2;
+#X connect 22 0 48 1;
+#X connect 23 0 48 0;
+#X connect 24 0 48 0;
+#X connect 29 0 48 0;
+#X connect 30 0 29 0;
+#X connect 31 0 48 0;
+#X connect 33 0 34 0;
+#X connect 51 0 48 0;
