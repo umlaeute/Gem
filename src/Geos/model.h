@@ -78,6 +78,10 @@ class GEM_EXTERN model : public GemBase
   virtual void    groupMess(int group);
 
   //////////
+  // Set backend to use
+  virtual void  backendsMess(std::string ids);
+
+  //////////
   virtual void	render(GemState *state);
   virtual void	startRendering();
 

@@ -153,6 +153,16 @@ void model :: groupMess(int state)
   applyProperties();
 }
 
+/////////////////////////////////////////////////////////
+// backendsMess
+//
+/////////////////////////////////////////////////////////
+void model :: backendsMess(std::string ids)
+{
+  gem::any value=ids;
+  m_properties.set("backends", value);
+  applyProperties();
+}
 
 /////////////////////////////////////////////////////////
 // openMess
@@ -256,6 +266,7 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
+  CPPEXTERN_MSG1(classPtr, "backends", backendsMess, std::string);
 }
 
 void model :: createVBO(void)
