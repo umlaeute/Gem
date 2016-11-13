@@ -31,6 +31,10 @@
 #endif
 #include <X11/cursorfont.h>
 
+#ifdef HAVE_LIBXRENDER
+#include <X11/extensions/Xrender.h>
+#endif
+
 // for printf() debugging
 #include <stdio.h>
 
@@ -39,6 +43,136 @@ CPPEXTERN_NEW(gemglxwindow);
 #define EVENT_MASK                                                      \
   ExposureMask|StructureNotifyMask|PointerMotionMask|ButtonMotionMask | \
   ButtonReleaseMask | ButtonPressMask | KeyPressMask | KeyReleaseMask | DestroyNotify
+
+#ifdef HAVE_LIBXRENDER
+static int fbDbl32[] =       {GLX_RENDER_TYPE, GLX_RGBA_BIT,
+                              GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, True,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_ALPHA_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbDbl32Stereo[] = {GLX_RENDER_TYPE, GLX_RGBA_BIT,
+                              GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, True,
+                              GLX_STEREO, True,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_ALPHA_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbDbl24[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, True,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbDbl24Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, True,
+                              GLX_STEREO, True,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbDbl8[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, True,
+                              GLX_RED_SIZE, 3,
+                              GLX_GREEN_SIZE, 3,
+                              GLX_BLUE_SIZE, 2,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbDbl8Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, True,
+                              GLX_STEREO, True,
+                              GLX_RED_SIZE, 3,
+                              GLX_GREEN_SIZE, 3,
+                              GLX_BLUE_SIZE, 2,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int *dblBufFbCfg[] = {fbDbl32,
+  fbDbl32Stereo,
+  fbDbl24,
+  fbDbl24Stereo,
+  fbDbl8,
+  fbDbl8Stereo,
+  0
+};
+
+static int fbSngl32[] =       {GLX_RENDER_TYPE, GLX_RGBA_BIT,
+                              GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, False,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_ALPHA_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbSngl32Stereo[] = {GLX_RENDER_TYPE, GLX_RGBA_BIT,
+                              GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, False,
+                              GLX_STEREO, True,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_ALPHA_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbSngl24[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, False,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbSngl24Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, False,
+                              GLX_STEREO, True,
+                              GLX_RED_SIZE, 8,
+                              GLX_GREEN_SIZE, 8,
+                              GLX_BLUE_SIZE, 8,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+static int fbSngl8[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, False,
+                              GLX_RED_SIZE, 3,
+                              GLX_GREEN_SIZE, 3,
+                              GLX_BLUE_SIZE, 2,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int fbSngl8Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                              GLX_DOUBLEBUFFER, False,
+                              GLX_STEREO, True,
+                              GLX_RED_SIZE, 3,
+                              GLX_GREEN_SIZE, 3,
+                              GLX_BLUE_SIZE, 2,
+                              GLX_DEPTH_SIZE, 16,
+                              None};
+
+static int *snglBufFbCfg[] = {fbSngl32,
+  fbSngl32Stereo,
+  fbSngl24,
+  fbSngl24Stereo,
+  fbSngl8,
+  fbSngl8Stereo,
+  0
+};
+
+#endif // HAVE_LIBXRENDER
 
 // window creation variables
 static int snglBuf24[] = {GLX_RGBA,
@@ -263,7 +397,84 @@ struct gemglxwindow::PIMPL {
 #endif
       }
     }
+
     XVisualInfo *vi=0;
+
+#ifdef HAVE_LIBXRENDER
+
+    static GLXFBConfig *fbconfigs, fbconfig;
+    static int numfbconfigs;
+    XRenderPictFormat *pict_format;
+
+    // need to get some function pointer at runtime
+    typedef GLXFBConfig*(*glXChooseFBConfigProc)(Display* dpy, int screen, const int* attribList, int* nitems);
+    glXChooseFBConfigProc glXChooseFBConfigFn = (glXChooseFBConfigProc)glXGetProcAddress((const GLubyte*)"glXChooseFBConfig");
+
+    typedef XVisualInfo*(*glXGetVisualFromFBConfigProc)(Display* dpy,GLXFBConfig fbconfig);
+    glXGetVisualFromFBConfigProc glXGetVisualFromFBConfigFn = (glXGetVisualFromFBConfigProc)glXGetProcAddress((const GLubyte*)"glXGetVisualFromFBConfig");
+
+    if (glXChooseFBConfigFn && glXGetVisualFromFBConfigFn){
+      static int**fbbuf=0;
+      switch(buffer) {
+      default: ::error("only single/double buffer supported; defaulting to double");
+      case 2: fbbuf=dblBufFbCfg; break;
+      case 1: fbbuf=snglBufFbCfg; break;
+      }
+      bool breakme=false;
+      for(; *fbbuf; fbbuf++) {
+
+        fbconfigs =  glXChooseFBConfigFn(dpy, screen, *fbbuf, &numfbconfigs);
+
+        fbconfig = 0;
+        for(int i = 0; i<numfbconfigs; i++) {
+          vi = (XVisualInfo*) glXGetVisualFromFBConfigFn(dpy, fbconfigs[i]);
+          if(!vi)
+            continue;
+
+          pict_format = XRenderFindVisualFormat(dpy, vi->visual);
+          if(!pict_format)
+            continue;
+
+          fbconfig = fbconfigs[i];
+          if(pict_format->direct.alphaMask > 0) {
+            ::verbose(0,"choose fbconfig : %d", i);
+            breakme = true;
+            break;
+          }
+        }
+        if ( breakme ) break;
+      }
+
+      if(!fbconfig) {
+        ::error("Can't find valid framebuffer configuration, try again with legacy method.");
+      } else {
+        typedef void(*glXGetFBConfigAttribProc)(Display* dpy,GLXFBConfig fbconfig, int attr, int* val);
+        glXGetFBConfigAttribProc glXGetFBConfigAttribFn = (glXGetFBConfigAttribProc)glXGetProcAddress((const GLubyte*)"glXGetFBConfigAttrib");
+        if ( glXGetFBConfigAttribFn ) {
+          int doublebuffer;
+          int red_bits, green_bits, blue_bits, alpha_bits, depth_bits;
+
+          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DOUBLEBUFFER, &doublebuffer);
+          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_RED_SIZE, &red_bits);
+          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_GREEN_SIZE, &green_bits);
+          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_BLUE_SIZE, &blue_bits);
+          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_ALPHA_SIZE, &alpha_bits);
+          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DEPTH_SIZE, &depth_bits);
+
+          ::verbose(0, "FBConfig selected:\n"
+            "Doublebuffer: %s\n"
+            "Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d\n",
+            doublebuffer == True ? "Yes" : "No",
+            red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
+        } else {
+          ::error("can't get glXGetFBConfigAttrib function pointer");
+        }
+      }
+    }
+
+#endif // HAVE_LIBXRENDER
+
+  if (vi == NULL) { // if Xrender method doesn't work try legacy
     static int**buf=0;
     switch(buffer) {
     default: ::error("only single/double buffer supported; defaulting to double");
@@ -275,6 +486,8 @@ struct gemglxwindow::PIMPL {
       vi = glXChooseVisual(dpy, screen, *buf);
       if(vi)break;
     }
+  }
+
     if (vi == NULL) {
       std::string errstr="Unable to create ";
       switch(buffer) {
