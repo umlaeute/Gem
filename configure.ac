@@ -250,6 +250,8 @@ if test "x$with_x" != "xno"; then
 # AC_CHECK_LIB([Xext],[main])
  AC_CHECK_LIB([Xxf86vm],[XF86VidModeGetAllModeLines])
  AC_CHECK_HEADERS([X11/extensions/XInput2.h])
+ AC_CHECK_LIB([Xrender],[XRenderFindVisualFormat])
+ AC_CHECK_HEADERS([X11/extensions/Xrender.h])
 fi
 
 IEM_CHECK_GL
