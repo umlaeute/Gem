@@ -632,7 +632,7 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
         for(i=0; i<backends.size(); i++) {
           std::string id=backends[i];
           SETSYMBOL(ap+0, gensym(id.c_str()));
-          post("backend[%d] %s", i, id.c_str());
+          post("loader[%d] %s", i, id.c_str());
           outlet_anything(m_outEnd, gensym("loader"), 1, ap);
         }
       } else {
