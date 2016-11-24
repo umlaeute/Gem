@@ -385,6 +385,7 @@ void model :: getVBOarray(){
             error("VBO type %d not supported\n",vboArray[i].type);
         }
       }
+      m_loader->unsetRefresh();
     }
   }
 }
