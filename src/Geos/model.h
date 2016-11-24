@@ -18,6 +18,7 @@
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
 #include "Gem/VertexBuffer.h"
+#include "RTE/Outlet.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -97,6 +98,7 @@ class GEM_EXTERN model : public GemBase
 
   gem::VertexBuffer m_position, m_texture, m_color, m_normal;
 
+  gem::RTE::Outlet m_infoOut;
 };
 
 #endif	// for header file

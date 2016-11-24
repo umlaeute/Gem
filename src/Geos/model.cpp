@@ -36,7 +36,8 @@ model :: model(t_symbol *filename) :
   m_position(256,3),
   m_texture (256,2),
   m_color   (256,4),
-  m_normal  (256,3)
+  m_normal  (256,3),
+  m_infoOut(gem::RTE::Outlet(this))
 {
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) openMess(filename->s_name);
