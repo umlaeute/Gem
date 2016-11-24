@@ -29,6 +29,8 @@ dist_gem_DATA = \
 	ChangeLog \
 	COPYING.txt \
 	GnuGPL.LICENSE.txt \
-	README.txt
+	README.txt \
+	examples/data/vera.ttf \
+	$(nil)
 
 EXTRA_DIST = autogen.sh
