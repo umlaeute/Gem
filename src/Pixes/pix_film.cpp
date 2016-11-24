@@ -592,10 +592,50 @@ void pix_film :: autoMess(double speed)
 void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
 {
   int i;
-  m_backends.clear();
-  for(i=0; i<argc; i++) {
-    t_symbol *b=atom_getsymbol(argv+i);
-    m_backends.push_back(b->s_name);
+  if(argc) {
+    m_backends.clear();
+    for(i=0; i<argc; i++) {
+      if(A_SYMBOL == argv->a_type) {
+        t_symbol *b=atom_getsymbol(argv+i);
+        m_backends.push_back(b->s_name);
+      } else if (A_FLOAT == argv->a_type) {
+        int num = atom_getint(argv);
+        if (num>=0 && m_ids.size() > 0) {
+          m_backends.push_back(m_ids[num % m_ids.size()]);
+        } else {
+          error("%s out of range: %d < %d", s->s_name, num, m_ids);
+        }
+      } else {
+        error("%s must be symbolic or numeric", s->s_name);
+      }
+    }
+  } else {
+    /* no backend requested, just enumerate them */
+    if(m_handle) {
+      t_atom at;
+      t_atom*ap=&at;
+      gem::Properties props;
+      gem::any value;
+      std::vector<std::string> backends;
+      value=m_ids;
+      props.set("backends", value);
+      m_handle->getProperties(props);
+      if(props.type("backends")!=gem::Properties::UNSET) {
+        props.get("backends", backends);
+      }
+      SETFLOAT(ap+0, backends.size());
+      outlet_anything(m_outEnd, gensym("loaders"), 1, ap);
+      if(!backends.empty()) {
+        for(i=0; i<backends.size(); i++) {
+          std::string id=backends[i];
+          SETSYMBOL(ap+0, gensym(id.c_str()));
+          post("backend[%d] %s", i, id.c_str());
+          outlet_anything(m_outEnd, gensym("loader"), 1, ap);
+        }
+      } else {
+        post("no decoding backends found!");
+      }
+    }
   }
 }
 
