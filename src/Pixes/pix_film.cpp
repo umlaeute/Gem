@@ -595,8 +595,8 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
   if(gensym("loader") != s) {
     error("'%s' is deprecated; please use '%s' instead", s->s_name, "loader");
   }
+  m_backends.clear();
   if(argc) {
-    m_backends.clear();
     for(i=0; i<argc; i++) {
       if(A_SYMBOL == argv->a_type) {
         t_symbol *b=atom_getsymbol(argv+i);
