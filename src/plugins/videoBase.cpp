@@ -15,6 +15,7 @@
 
 #include "plugins/videoBase.h"
 #include "Gem/RTE.h"
+#include "Utils/nop.h"
 #ifdef HAVE_SYS_SELECT_H
 # include <sys/select.h>
 #endif
@@ -23,7 +24,7 @@
 #if 0
 # define debugPost post
 #else
-# define debugPost
+# define debugPost nop_post
 #endif
 
 #include <pthread.h>

@@ -13,11 +13,12 @@
 /////////////////////////////////////////////////////////
 
 #include "gemreceive.h"
+#include "Utils/nop.h"
 
 #if 0
 # define debug_post ::post
 #else
-# define debug_post
+# define debug_post nop_post
 #endif
 
 static t_class *gemreceive_proxy_class;
