@@ -179,17 +179,24 @@ static void Color4f(const aiColor4D *color)
 }
 
 // ----------------------------------------------------------------------------
-static void recursive_render (const struct aiScene*scene, const struct aiScene *sc, const struct aiNode* nd, const bool use_material,
-      std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+static void recursive_render (const struct aiScene*scene,
+                              const struct aiScene *sc, const struct aiNode* nd,
+                              const bool use_material,
+                              std::vector<std::vector<float> >& vertices,
+                              std::vector<std::vector<float> >& normals,
+                              std::vector<std::vector<float> >& texcoords,
+                              std::vector<std::vector<float> >& colors,
+                              aiMatrix4x4* trafo)
 {
 	int i;
 	unsigned int n = 0, t;
+        aiMatrix4x4 prev;
 	aiMatrix4x4 m = nd->mTransformation;
+        prev = *trafo;
+	aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
 	// update transform
 	aiTransposeMatrix4(&m);
-	glPushMatrix();
-	glMultMatrixf((float*)&m);
 
 	// draw all meshes assigned to this node
 	for (; n < nd->mNumMeshes; ++n) {
@@ -254,7 +261,10 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
         }
 
 				//~glVertex3fv(&mesh->mVertices[index].x);
-        pt = &mesh->mVertices[index].x;
+        aiVector3D tmp = mesh->mVertices[index];
+        aiTransformVecByMatrix4(&tmp,trafo);
+
+        pt = &tmp.x;
         vec = std::vector<float>(pt,pt+3);
         vertices.push_back(vec);
 			}
@@ -265,10 +275,10 @@ static void recursive_render (const struct aiScene*scene, const struct aiScene *
 
 	// draw all children
 	for (n = 0; n < nd->mNumChildren; ++n) {
-		recursive_render(scene, sc, nd->mChildren[n], use_material, vertices, normals, texcoords, colors);
+          recursive_render(scene, sc, nd->mChildren[n], use_material, vertices, normals, texcoords, colors, trafo);
 	}
 
-	glPopMatrix();
+        *trafo = prev;
 }
 
 };
@@ -436,7 +446,10 @@ bool modelASSIMP3 :: compile(void)  {
   m_normals.clear();
   m_texcoords.clear();
   m_colors.clear();
-  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors);
+
+  aiMatrix4x4 trafo;
+  aiIdentityMatrix4(&trafo);
+  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   fillVBOarray();
   if(useColorMaterial)
     glEnable(GL_COLOR_MATERIAL);
