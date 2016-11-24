@@ -447,8 +447,8 @@ bool modelASSIMP3 :: compile(void)  {
   m_texcoords.clear();
   m_colors.clear();
 
-  aiMatrix4x4 trafo;
-  aiIdentityMatrix4(&trafo);
+  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
+
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   fillVBOarray();
   if(useColorMaterial)
