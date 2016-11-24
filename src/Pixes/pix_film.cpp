@@ -592,6 +592,9 @@ void pix_film :: autoMess(double speed)
 void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
 {
   int i;
+  if(gensym("loader") != s) {
+    error("'%s' is deprecated; please use '%s' instead", s->s_name, "loader");
+  }
   if(argc) {
     m_backends.clear();
     for(i=0; i<argc; i++) {
@@ -676,6 +679,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
   CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
+  CPPEXTERN_MSG (classPtr, "loader", backendMess);
   CPPEXTERN_MSG (classPtr, "driver", backendMess);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
 }
