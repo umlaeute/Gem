@@ -606,7 +606,7 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
         if (num>=0 && m_ids.size() > 0) {
           m_backends.push_back(m_ids[num % m_ids.size()]);
         } else {
-          error("%s out of range: %d < %d", s->s_name, num, m_ids);
+          error("%s out of range: %d/%d", s->s_name, num, m_ids.size());
         }
       } else {
         error("%s must be symbolic or numeric", s->s_name);
