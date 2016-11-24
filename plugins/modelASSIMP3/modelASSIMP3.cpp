@@ -373,7 +373,6 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
 void modelASSIMP3 :: setProperties(gem::Properties&props) {
   double d;
 
-
 #if 0
   std::vector<std::string>keys=props.keys();
   unsigned int i;
@@ -395,6 +394,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props) {
       m_offset.y=-m_center.y;
       m_offset.z=-m_center.z;
     } else {
+      // FIXXME shouldn't this be the default???
       m_scale=1.;
       m_offset.x=m_offset.y=m_offset.z=0.f;
     }
