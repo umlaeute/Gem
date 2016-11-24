@@ -155,14 +155,57 @@ void model :: groupMess(int state)
 }
 
 /////////////////////////////////////////////////////////
-// backendsMess
+// backendMess
 //
 /////////////////////////////////////////////////////////
-void model :: backendsMess(std::string ids)
+void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
 {
+#if 0
   gem::any value=ids;
   m_properties.set("backends", value);
   applyProperties();
+#endif
+  int i;
+
+  m_backends.clear();
+  if(argc) {
+    for(i=0; i<argc; i++) {
+      if(A_SYMBOL == argv->a_type) {
+        t_symbol *b=atom_getsymbol(argv+i);
+        m_backends.push_back(b->s_name);
+      } else {
+        error("%s must be symbolic", s->s_name);
+      }
+    }
+  } else {
+    /* no backend requested, just enumerate them */
+    if(m_loader) {
+      std::vector<gem::any>atoms;
+      gem::any value;
+      t_atom at;
+      t_atom*ap=&at;
+      gem::Properties props;
+      std::vector<std::string> backends;
+      props.set("backends", value);
+      m_loader->getProperties(props);
+      if(props.type("backends")!=gem::Properties::UNSET) {
+        props.get("backends", backends);
+      }
+      atoms.clear();
+      atoms.push_back(value=(int)(backends.size()));
+      m_infoOut.send("loaders", atoms);
+      if(!backends.empty()) {
+        for(i=0; i<backends.size(); i++) {
+          atoms.clear();
+          atoms.push_back(value=backends[i]);
+          post("loader[%d] %s", i, backends[i].c_str());
+          m_infoOut.send("loader", atoms);
+        }
+      } else {
+        post("no model-loading backends found!");
+      }
+    }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -171,6 +214,8 @@ void model :: backendsMess(std::string ids)
 /////////////////////////////////////////////////////////
 void model :: openMess(const std::string&filename)
 {
+  gem::Properties wantProps = m_properties;
+
   if(!m_loader) {
     error("no model loader backends found");
     return;
@@ -178,9 +223,13 @@ void model :: openMess(const std::string&filename)
   m_loader->close();
   m_loaded=false;
 
+  if(!m_backends.empty()) {
+    wantProps.set("backends", m_backends);
+  }
+
   char buf[MAXPDSTRING];
   canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
-  if(!m_loader->open(buf, m_properties)) {
+  if(!m_loader->open(buf, wantProps)) {
       error("unable to read model '%s'", buf);
       return;
   }
@@ -267,7 +316,7 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
-  CPPEXTERN_MSG1(classPtr, "backends", backendsMess, std::string);
+  CPPEXTERN_MSG (classPtr, "loader", backendMess);
 }
 
 void model :: createVBO(void)

@@ -80,7 +80,7 @@ class GEM_EXTERN model : public GemBase
 
   //////////
   // Set backend to use
-  virtual void  backendsMess(std::string ids);
+  virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
 
   //////////
   virtual void	render(GemState *state);
@@ -99,6 +99,7 @@ class GEM_EXTERN model : public GemBase
   gem::VertexBuffer m_position, m_texture, m_color, m_normal;
 
   gem::RTE::Outlet m_infoOut;
+  std::vector<std::string> m_backends;
 };
 
 #endif	// for header file
