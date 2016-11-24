@@ -31,6 +31,7 @@ libUtils_la_include_HEADERS = \
 	GLUtil.h \
 	GemMath.h \
 	Matrix.h \
+	nop.h \
 	PixPete.h \
 	SIMD.h \
 	GemString.h \
