@@ -87,7 +87,6 @@ nobase_dist_gemexamples_DATA = \
 	05.text/01.Text.pd \
 	05.text/03.ChangeTextNoLoadBang.pd \
 	05.text/03.ChangeText.pd \
-	05.text/vera.ttf \
 	06.particle/01.simple.pd \
 	06.particle/02.fountain.pd \
 	06.particle/03.orbit.pd \
@@ -249,4 +248,5 @@ nobase_dist_gemexamples_DATA = \
 	data/valmotion.tab \
 	data/venus.mtl \
 	data/venus.obj \
-	data/vera.ttf
+	data/vera.ttf \
+	$(nil)
