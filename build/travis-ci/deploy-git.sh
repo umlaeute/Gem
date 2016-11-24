@@ -70,8 +70,8 @@ BUILDDIR=$(pwd)
 DESTDIR=$(mktemp -d /tmp/geminstall.XXXXXX)
 
 ## shallow clone of the repository (of the desired branch if possible)
-git clone -b "${DEPLOY_BRANCH}" -depth 1 ${GITDEPLOYTARGET} "${DESTDIR}" \
-|| git clone -depth 1 ${GITDEPLOYTARGET} "${DESTDIR}"
+git clone -b "${DEPLOY_BRANCH}" --depth 1 ${GITDEPLOYTARGET} "${DESTDIR}" \
+|| git clone --depth 1 ${GITDEPLOYTARGET} "${DESTDIR}"
 cd "${DESTDIR}"
 ## if the shallow clone (above) managed to clone the proper branch, the
 ## following is a nop.
