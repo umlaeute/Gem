@@ -198,13 +198,10 @@ namespace {
   {
     int i;
     unsigned int n = 0, t;
-    aiMatrix4x4 prev;
-    aiMatrix4x4 m = nd->mTransformation;
-    prev = *trafo;
-    aiMultiplyMatrix4(trafo,&nd->mTransformation);
+    aiMatrix4x4 prev = *trafo;
 
     // update transform
-    aiTransposeMatrix4(&m);
+    aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
     // draw all meshes assigned to this node
     for (; n < nd->mNumMeshes; ++n) {
