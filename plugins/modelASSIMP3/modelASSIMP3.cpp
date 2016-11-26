@@ -324,9 +324,7 @@ bool modelASSIMP3 :: open(const std::string&name, const gem::Properties&requestp
   tmp = aisgl_max(m_max.z - m_min.z,tmp);
   m_scale = 2.f / tmp;
 
-  m_offset.x=-m_center.x;
-  m_offset.y=-m_center.y;
-  m_offset.z=-m_center.z;
+  m_offset = m_center * (-m_scale);
 
   gem::Properties props=requestprops;
   setProperties(props);
