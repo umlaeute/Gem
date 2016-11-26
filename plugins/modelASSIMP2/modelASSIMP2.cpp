@@ -300,7 +300,9 @@ modelASSIMP2 :: modelASSIMP2(void) :
   m_scene(NULL),
   m_scale(1.f),
   m_useMaterial(false),
-  m_refresh(false)
+  m_refresh(false),
+  m_have_texcoords(false),
+  m_textype("")
 {
 }
 
@@ -403,7 +405,6 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
 {
   double d;
 
-
 #if 0
   std::vector<std::string>keys=props.keys();
   unsigned int i;
@@ -411,6 +412,19 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
     post("key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
   }
 #endif
+
+  std::string s;
+  if(props.get("textype", s)) {
+    // if there are NO texcoords, we only accept 'linear' and 'spheremap'
+    // else, we also allow 'UV'
+    // not-accepted textype, simply use the last one
+    if(m_have_texcoords && "UV" == s)
+      m_textype = "";
+    else
+    if(("linear" == s) || ("spheremap" == s))
+      m_textype = s;
+    m_rebuild = true;
+  }
 
   if(props.get("rescale", d)) {
     bool b=(bool)d;
@@ -486,6 +500,13 @@ bool modelASSIMP2 :: compile(void)
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
+
+  if (m_textype.empty() && m_have_texcoords) {;}
+  else if("spheremap" == m_textype)
+    modelutils::genTexture_Spheremap(m_texcoords, m_normals);
+  else
+    modelutils::genTexture_Linear(m_texcoords, m_vertices);
+
   fillVBOarray();
   if(useColorMaterial) {
     glEnable(GL_COLOR_MATERIAL);
