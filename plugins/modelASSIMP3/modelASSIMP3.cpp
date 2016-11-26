@@ -139,13 +139,11 @@ namespace {
     if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &ambient))
       color4_to_float4(&ambient, c);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
-    //post("ambient: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
     set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
     if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &emission))
       color4_to_float4(&emission, c);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
-    //  post("emission: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
     max = 1;
     ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
@@ -153,7 +151,6 @@ namespace {
     ret2 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH, &strength, &max);
     if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
       glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
-      //post("shininess: %gx%g=%g\t%g", shininess, strength, shininess*strength);
     }
     else {
       /* JMZ: in modelOBJ the default shininess is 65 */
@@ -235,8 +232,6 @@ namespace {
         default: face_mode = GL_POLYGON; break;
         }
 
-        //~glBegin(face_mode);
-
         float* pt;
         std::vector<float> vec;
 
@@ -244,28 +239,24 @@ namespace {
           int index = face->mIndices[i];
 
           if(use_material && mesh->mColors[0] != NULL){
-            //~Color4f(&mesh->mColors[0][index]);
             pt = (float*) &mesh->mColors[0][index];
             vec = std::vector<float>(pt,pt+4);
             colors.push_back(vec);
           }
 
           if(mesh->mNormals != NULL){
-            //~glNormal3fv(&mesh->mNormals[index].x);
             pt = &mesh->mNormals[index].x;
             vec = std::vector<float>(pt,pt+3);
             normals.push_back(vec);
           }
 
           if(mesh->HasTextureCoords(0)){
-            //~glTexCoord2f(mesh->mTextureCoords[0][index].x, mesh->mTextureCoords[0][index].y);
             vec.clear();
             vec.push_back(mesh->mTextureCoords[0][index].x);
             vec.push_back(mesh->mTextureCoords[0][index].y);
             texcoords.push_back(vec);
           }
 
-          //~glVertex3fv(&mesh->mVertices[index].x);
           aiVector3D tmp = mesh->mVertices[index];
           aiTransformVecByMatrix4(&tmp,trafo);
 
@@ -273,8 +264,6 @@ namespace {
           vec = std::vector<float>(pt,pt+3);
           vertices.push_back(vec);
         }
-
-        //~glEnd();
       }
     }
 
@@ -352,15 +341,6 @@ bool modelASSIMP3 :: render(void) {
   if(m_rebuild){
     res = compile();
   }
-
-  //~glPushMatrix();
-  //~
-  //~// scale the model
-  //~glScalef(m_scale, m_scale, m_scale);
-  //~// center the model
-  //~glTranslatef( m_offset.x, m_offset.y, m_offset.z );
-  //~
-  //~glPopMatrix();
 
   return res;
 }
