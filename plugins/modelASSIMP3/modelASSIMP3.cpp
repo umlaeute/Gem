@@ -329,7 +329,8 @@ modelASSIMP3 :: modelASSIMP3(void) :
   m_scene(NULL),
   m_scale(1.f),
   m_useMaterial(false),
-  m_refresh(false)
+  m_refresh(false),
+  m_textype("")
 {
 }
 
@@ -337,10 +338,22 @@ modelASSIMP3 ::~modelASSIMP3(void) {
   destroy();
 }
 
+std::vector<std::vector<float> >&modelASSIMP3 :: getTexCoords(void) {
+  if(m_textype.empty())
+    return m_texcoords.size()?m_texcoords:m_texcoords_linear;
+  if("spheremap" == m_textype)
+    return m_texcoords_spheremap;
+  /*
+  if("linear" == m_textype)
+    return m_texcoords_linear;
+  */
+  return m_texcoords_linear;
+}
+
 std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorName){
   if ( vectorName == "vertices" ) return m_vertices;
   if ( vectorName == "normals" ) return m_normals;
-  if ( vectorName == "texcoords" ) return m_texcoords;
+  if ( vectorName == "texcoords" ) return getTexCoords();
   if ( vectorName == "colors" ) return m_colors;
   error("there is no \"%s\" vector !",vectorName.c_str());
   return std::vector<std::vector<float> >();
@@ -373,10 +386,12 @@ bool modelASSIMP3 :: open(const std::string&name, const gem::Properties&requestp
 
   m_offset = m_center * (-m_scale);
 
+  m_rebuild=true;
+  m_refresh=true;
+
   gem::Properties props=requestprops;
   setProperties(props);
 
-  m_rebuild=true;
   compile();
   return true;
 }
@@ -386,7 +401,6 @@ bool modelASSIMP3 :: render(void) {
   if(m_rebuild){
     res = compile();
   }
-
   return res;
 }
 void modelASSIMP3 :: close(void)  {
@@ -410,6 +424,19 @@ void modelASSIMP3 :: setProperties(gem::Properties&props) {
     post("key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
   }
 #endif
+
+  std::string s;
+  if(props.get("textype", s)) {
+    // if there are NO texcoords, we only accept 'linear' and 'spheremap'
+    // else, we also allow 'UV'
+    // not-accepted textype, simply use the last one
+    if(!m_texcoords.empty() && "UV" == s)
+      m_textype = "";
+    else
+    if(("linear" == s) || ("spheremap" == s))
+      m_textype = s;
+    m_rebuild = true;
+  }
 
   if(props.get("rescale", d)) {
     bool b=(bool)d;
@@ -436,6 +463,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props) {
     m_useMaterial=useMaterial;
   }
 
+  render();
 }
 void modelASSIMP3 :: getProperties(gem::Properties&props) {
 }
@@ -452,7 +480,7 @@ void modelASSIMP3 :: fillVBOarray(){
   vboarray.type = VertexBuffer::GEM_VBO_NORMALS;
   m_VBOarray.push_back(vboarray);
 
-  vboarray.data = &m_texcoords;
+  vboarray.data = &getTexCoords();
   vboarray.type = VertexBuffer::GEM_VBO_TEXCOORDS;
   m_VBOarray.push_back(vboarray);
 
@@ -475,11 +503,18 @@ bool modelASSIMP3 :: compile(void)  {
   m_vertices.clear();
   m_normals.clear();
   m_texcoords.clear();
+  m_texcoords_linear.clear();
+  m_texcoords_spheremap.clear();
   m_colors.clear();
 
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
+  //  post("ASSIMP: *%f + (%f/%f/%f)", m_scale, m_offset.x, m_offset.y, m_offset.z);
+  //aiPrintMatrix("trafo", trafo);
 
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors, &trafo);
+  genTexture_Linear(m_texcoords_linear, m_vertices);
+  genTexture_Spheremap(m_texcoords_spheremap, m_normals);
+
   fillVBOarray();
   if(useColorMaterial)
     glEnable(GL_COLOR_MATERIAL);
