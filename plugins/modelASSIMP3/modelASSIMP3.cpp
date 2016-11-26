@@ -330,6 +330,7 @@ modelASSIMP3 :: modelASSIMP3(void) :
   m_scale(1.f),
   m_useMaterial(false),
   m_refresh(false),
+  m_have_texcoords(false),
   m_textype("")
 {
 }
@@ -338,22 +339,10 @@ modelASSIMP3 ::~modelASSIMP3(void) {
   destroy();
 }
 
-std::vector<std::vector<float> >&modelASSIMP3 :: getTexCoords(void) {
-  if(m_textype.empty())
-    return m_texcoords.size()?m_texcoords:m_texcoords_linear;
-  if("spheremap" == m_textype)
-    return m_texcoords_spheremap;
-  /*
-  if("linear" == m_textype)
-    return m_texcoords_linear;
-  */
-  return m_texcoords_linear;
-}
-
 std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorName){
   if ( vectorName == "vertices" ) return m_vertices;
   if ( vectorName == "normals" ) return m_normals;
-  if ( vectorName == "texcoords" ) return getTexCoords();
+  if ( vectorName == "texcoords" ) return m_texcoords;
   if ( vectorName == "colors" ) return m_colors;
   error("there is no \"%s\" vector !",vectorName.c_str());
   return std::vector<std::vector<float> >();
@@ -430,7 +419,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props) {
     // if there are NO texcoords, we only accept 'linear' and 'spheremap'
     // else, we also allow 'UV'
     // not-accepted textype, simply use the last one
-    if(!m_texcoords.empty() && "UV" == s)
+    if(m_have_texcoords && "UV" == s)
       m_textype = "";
     else
     if(("linear" == s) || ("spheremap" == s))
@@ -480,7 +469,7 @@ void modelASSIMP3 :: fillVBOarray(){
   vboarray.type = VertexBuffer::GEM_VBO_NORMALS;
   m_VBOarray.push_back(vboarray);
 
-  vboarray.data = &getTexCoords();
+  vboarray.data = &m_texcoords;
   vboarray.type = VertexBuffer::GEM_VBO_TEXCOORDS;
   m_VBOarray.push_back(vboarray);
 
@@ -503,8 +492,6 @@ bool modelASSIMP3 :: compile(void)  {
   m_vertices.clear();
   m_normals.clear();
   m_texcoords.clear();
-  m_texcoords_linear.clear();
-  m_texcoords_spheremap.clear();
   m_colors.clear();
 
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
@@ -512,8 +499,13 @@ bool modelASSIMP3 :: compile(void)  {
   //aiPrintMatrix("trafo", trafo);
 
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors, &trafo);
-  genTexture_Linear(m_texcoords_linear, m_vertices);
-  genTexture_Spheremap(m_texcoords_spheremap, m_normals);
+  m_have_texcoords = (m_texcoords.size() > 0);
+
+  if (m_textype.empty() && m_have_texcoords) {;}
+  else if("spheremap" == m_textype)
+    genTexture_Spheremap(m_texcoords, m_normals);
+  else
+    genTexture_Linear(m_texcoords, m_vertices);
 
   fillVBOarray();
   if(useColorMaterial)
