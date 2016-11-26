@@ -28,6 +28,53 @@ using namespace gem::plugins;
 REGISTER_MODELLOADERFACTORY("ASSIMP3", modelASSIMP3);
 
 namespace {
+#define vb_element(vb, offset) vb.array[i * vb.dimen + offset]
+  void genTexture_Linear(std::vector<std::vector<float> >& tex,
+                         const std::vector<std::vector<float> >& pos) {
+    tex.clear();
+    std::vector<float>vec;
+    unsigned int i;
+    for (i=0; i<pos.size(); i++) {
+      vec.clear();
+      vec.push_back((pos[i][0] + 1.0) / 2.0);
+      vec.push_back((pos[i][2] + 1.0) / 2.0);
+      tex.push_back(vec);
+    }
+  }
+  void genTexture_Spheremap(std::vector<std::vector<float> >& tex,
+                         const std::vector<std::vector<float> >& norm) {
+    //post("spherical: %dx%d\t-> %dx%d", norm.size, norm.dimen, tex.size, tex.dimen);
+    tex.clear();
+    std::vector<float>vec;
+    unsigned int i;
+    for (i=0; i<norm.size(); i++) {
+      vec.clear();
+      float z = norm[i][0];  /* re-arrange for pole distortion */
+      float y = norm[i][1];
+      float x = norm[i][2];
+      float r = (float)sqrt((x * x) + (y * y));
+      float rho = (float)sqrt((r * r) + (z * z));
+      float theta = 0.f, phi = 0.f;
+
+      if(r == 0.0) {
+        theta = 0.0f;
+        phi = 0.0f;
+      } else {
+        if(z == 0.0)
+          phi = M_PI / 2.0f;
+        else
+          phi = (float)acos(z / rho);
+
+        if(y == 0.0)
+          theta = M_PI / 2.0f;
+        else
+          theta = (float)asin(y / r) + (M_PI / 2.0f);
+      }
+      vec.push_back(theta / M_PI);
+      vec.push_back(phi   / M_PI);
+      tex.push_back(vec);
+    }
+  }
 
 #define aisgl_min(x,y) (x<y?x:y)
 #define aisgl_max(x,y) (y>x?y:x)
