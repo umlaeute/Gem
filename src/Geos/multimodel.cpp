@@ -19,6 +19,7 @@
 #include "plugins/modelloader.h"
 #include <algorithm> // std::min
 #include <string.h>
+#include <stdio.h>
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
