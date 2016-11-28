@@ -83,17 +83,12 @@ class GEM_EXTERN gemglxwindow : public GemWindow
 
   /* render context (pre creation) */
   virtual void  bufferMess(int buf);
-  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
   virtual void titleMess(std::string);
-  virtual void borderMess(bool on);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
-
-  virtual void    fullscreenMess(int on);
-  virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
   virtual void        createMess(std::string);
