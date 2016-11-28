@@ -1,7 +1,8 @@
 // Antoine Rousseau september 2015
+#version 120
 
 uniform samplerCube envMap;
-uniform float alpha = 1;
+uniform float alpha = 1.0;
 
 void main() {
   
