@@ -25,7 +25,7 @@
 #include "Base/CPPExtern.h"
 
 #include <string>
-#include <stdio.h>
+#include <algorithm>
 
 #if defined __linux__ || defined __APPLE__ || defined __FreeBSD_kernel__
 #include <unistd.h>
@@ -272,11 +272,8 @@ GemDylib::~GemDylib(void) {
   if(m_handle)
     delete m_handle;
   m_handle=NULL;
-  for (std::vector<GemDylib*>::iterator it = s_dylibs.begin() ; it != s_dylibs.end(); ++it) {
-    if ((*it) == this)
-      s_dylibs.erase(it);
-  }
 
+  s_dylibs.erase( std::remove(s_dylibs.begin(), s_dylibs.end(), this), s_dylibs.end() );
 }
 
 GemDylib& GemDylib::operator=(const GemDylib&org) {
