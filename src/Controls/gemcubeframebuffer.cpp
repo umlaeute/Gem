@@ -6,9 +6,9 @@
 //
 // Implementation file
 //
-//  gemcubeframebuffer 
+//  gemcubeframebuffer
 //  Antoine Rousseau (antoine AT metalu DOT net) september 2015
-//  
+//
 //  derived from gemframebuffer:
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -291,17 +291,17 @@ void gemcubeframebuffer :: initFBO()
   //glTexImage2D( m_texTarget, 0, m_internalformat, m_width, m_height, 0, m_format, m_type, NULL );
   // set textures
   for (int i = 0; i < 6; ++i)
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
       0, m_internalformat, m_width, m_height, 0, m_format, m_type, NULL );
-  
-  
+
+
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  
+
   /*// 2.13.2006
   // GL_LINEAR causes fallback to software shader
   // so switching back to GL_NEAREST

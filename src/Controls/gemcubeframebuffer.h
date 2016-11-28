@@ -4,9 +4,9 @@
 
   render to offscreen buffer and make texture
 
-  gemcubeframebuffer 
+  gemcubeframebuffer
   Antoine Rousseau (antoine AT metalu DOT net) september 2015
-  
+
   derived from gemframebuffer:
   created 11/27/2005
 
