@@ -520,13 +520,13 @@ AS_IF([ test "x${with_pd}" = "x" ],[
 
 AS_IF([ test -d "$with_pd"  ],[
  if test -d "${with_pd}/src" ; then
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/src")
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/src"
  elif test -d "${with_pd}/include/pd" ; then
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/include/pd")
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include/pd"
  elif test -d "${with_pd}/include" ; then
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/include")
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include"
  else
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}")
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}"
  fi
  AS_IF([ test -d "${with_pd}/bin"  ],[
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}/bin"
@@ -608,8 +608,7 @@ AS_IF([ test "x$enable_threads" != "xno" ],[
    ])
  ])
 
- GEM_THREADS_CFLAGS=""
- AC_LIB_APPENDTOVAR([GEM_THREADS_CFLAGS], "${PTHREAD_CFLAGS}")
+ GEM_THREADS_CFLAGS="${PTHREAD_CFLAGS}"
  GEM_THREADS_LIBS="${GEM_THREADS_LIBS}${GEM_THREADS_LIBS:+ }${PTHREAD_LIBS}"
 ])
 ])
