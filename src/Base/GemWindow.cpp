@@ -403,7 +403,6 @@ void GemWindow::       cursorMess(bool on) {
 }
 
 void GemWindow::       transparentMess(bool on) {
-  post("GemWindow::transparentMess");
   m_transparent=on;
 }
 
