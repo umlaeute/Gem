@@ -46,7 +46,7 @@
 
   "cursor" - whether we want a cursor or not
   "menubar" - hide notorious menubars
-  "topmost" - set the window to stay on topglBlendFunc
+  "topmost" - set the window to stay on top
 
   -----------------------------------------------------------------*/
 
