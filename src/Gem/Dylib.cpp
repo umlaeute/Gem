@@ -43,6 +43,8 @@
 
 #include <iostream>
 
+static std::vector<GemDylib*>s_dylibs;
+
 class GemDylibHandle {
 public:
   std::string fullname;
@@ -219,8 +221,6 @@ const std::string GemDylibHandle::defaultExtension =
   ;
 
 
-
-
 GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::string extension)
   throw (GemException) :
   m_handle(0) {
@@ -235,7 +235,8 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::s
       err+="'";
       throw GemException(err);
     }
-  }
+    s_dylibs.push_back(this);
+}
 
 GemDylib::GemDylib(const std::string filename, const std::string extension) throw (GemException) : m_handle(0) {
   m_handle=GemDylibHandle::open(filename+extension);
@@ -251,6 +252,7 @@ GemDylib::GemDylib(const std::string filename, const std::string extension) thro
     err+="'";
     throw GemException(err);
   }
+  s_dylibs.push_back(this);
 }
 
 
@@ -263,12 +265,18 @@ GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL) {
     err+="'";
     throw GemException(err);
   }
+  s_dylibs.push_back(this);
 }
 
 GemDylib::~GemDylib(void) {
   if(m_handle)
     delete m_handle;
   m_handle=NULL;
+  for (std::vector<GemDylib*>::iterator it = s_dylibs.begin() ; it != s_dylibs.end(); ++it) {
+    if ((*it) == this)
+      s_dylibs.erase(it);
+  }
+
 }
 
 GemDylib& GemDylib::operator=(const GemDylib&org) {
