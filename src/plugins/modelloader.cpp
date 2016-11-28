@@ -127,6 +127,7 @@ public:
         std::string id=backends[j];
 
         for(i=0; i<m_handles.size(); i++) {
+	    /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
           if(id==m_ids[i]&& (tried=true) && m_handles[i]->open(name, requestprops)) {
             m_handle=m_handles[i];
           }
