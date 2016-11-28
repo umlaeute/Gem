@@ -174,6 +174,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* render context (pre creation) */
   virtual void  bufferMess(int buf);
   virtual void    fsaaMess(int value);
+  virtual void    transparentMess(bool on);
 
   /* window decoration (pre creation) */
   virtual void titleMess(std::string);
@@ -208,6 +209,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   unsigned int m_buffer;
   std::string  m_title;
   bool         m_cursor;
+  bool         m_transparent;
   int          m_fsaa;
 
   gem::Context*  m_context;

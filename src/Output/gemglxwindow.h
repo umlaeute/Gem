@@ -84,6 +84,7 @@ class GEM_EXTERN gemglxwindow : public GemWindow
   /* render context (pre creation) */
   virtual void  bufferMess(int buf);
   virtual void    fsaaMess(int value);
+  virtual void  transparentMess(bool on); // whether the window should have an alpha channel or not.
 
   /* window decoration (pre creation) */
   virtual void titleMess(std::string);
