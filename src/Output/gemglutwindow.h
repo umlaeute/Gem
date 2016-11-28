@@ -82,7 +82,6 @@ class GEM_EXTERN gemglutwindow : public GemWindow
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
   virtual void    fullscreenMess(int on);
   virtual void        offsetMess(int x, int y);
-  virtual void   transparentMess(bool on);
 
   /* creation/destruction */
   virtual bool        create(void);

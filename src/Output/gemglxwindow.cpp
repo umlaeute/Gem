@@ -1021,19 +1021,6 @@ void gemglxwindow :: cursorMess(bool state)
 }
 
 /////////////////////////////////////////////////////////
-// cursorMess
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: transparentMess(bool on){
-  m_transparent = on;
-  post("gemglxwindow::transparentMess");
-  if(!m_pimpl->dpy || !m_pimpl->win){
-    post("Please destroy and create the window again to see effect of tranparent message.");
-  }
-
-}
-
-/////////////////////////////////////////////////////////
 // static member function
 //
 /////////////////////////////////////////////////////////
