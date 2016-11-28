@@ -22,16 +22,17 @@
 #include "Utils/Functions.h"
 #include <string.h>
 
-#ifdef debug
-# undef debug
+#ifdef debug_post
+# undef debug_post
 #endif
 
 //#define DEBUG_ME
 
 #ifdef DEBUG_ME
-# define debug post
+# define debug_post post
 #else
-# define debug
+# include "Utils/nop.h"
+# define debug_post nop_post
 #endif
 
 CPPEXTERN_NEW(pix_texture);
@@ -123,17 +124,17 @@ void pix_texture :: setUpTextureState() {
         // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
         // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
         doRepeat = GL_CLAMP_TO_EDGE;
-        debug("using rectangle texture");
+        debug_post("using rectangle texture");
       }
   }
 
   if (GLEW_APPLE_client_storage){
     if(m_clientStorage){
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
-      debug("using client storage");
+      debug_post("using client storage");
     } else {
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
-      debug("not using client storage");
+      debug_post("not using client storage");
     }
   } else
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
@@ -315,33 +316,33 @@ void pix_texture :: render(GemState *state) {
 
     normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
-    debug("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
+    debug_post("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
 
     switch(do_rectangle) {
     case 2:
       m_textureType = GL_TEXTURE_RECTANGLE_ARB;
-      debug("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
+      debug_post("using mode 1:GL_TEXTURE_RECTANGLE_ARB");
       normalized = 0;
       canMipmap = false;
       break;
     case 1:
       m_textureType = GL_TEXTURE_RECTANGLE_EXT;
-      debug("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
+      debug_post("using mode 1:GL_TEXTURE_RECTANGLE_EXT");
       normalized = 0;
       canMipmap = false;
       break;
     default:
       m_textureType = GL_TEXTURE_2D;
-      debug("using mode 0:GL_TEXTURE_2D");
+      debug_post("using mode 0:GL_TEXTURE_2D");
       normalized = 0;
       break;
     }
 
-    debug("normalized=%d", normalized);
+    debug_post("normalized=%d", normalized);
   }
 
   if (m_textureType!=texType){
-    debug("texType != m_textureType");
+    debug_post("texType != m_textureType");
     stopRendering();startRendering();
   }
 
@@ -359,7 +360,7 @@ void pix_texture :: render(GemState *state) {
           glTextureRangeAPPLE( m_textureType,
                                m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize,
                                m_imagebuf.data );
-          debug("using glTextureRangeAPPLE()");
+          debug_post("using glTextureRangeAPPLE()");
         }else{
           glTextureRangeAPPLE( m_textureType, 0, NULL );
         }
@@ -499,7 +500,7 @@ void pix_texture :: render(GemState *state) {
                         m_buffer.type,
                         m_buffer.data);
           m_hasMipmap = false;
-          debug("TexImage2D non rectangle");
+          debug_post("TexImage2D non rectangle");
         } else {//this deals with rectangle textures that are h*w
           glTexImage2D(m_textureType, 0,
                        //  m_buffer.csize,
@@ -510,7 +511,7 @@ void pix_texture :: render(GemState *state) {
                        m_imagebuf.type,
                        m_imagebuf.data);
           m_hasMipmap = false;
-          debug("TexImage2D  rectangle");
+          debug_post("TexImage2D  rectangle");
         }
 
         // just to make sure...
