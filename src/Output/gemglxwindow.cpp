@@ -364,7 +364,7 @@ struct gemglxwindow::PIMPL {
     return std::string(keystring);
   }
 
-  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h) {
+  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h, bool transparent) {
     int modeNum=4;
     int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
@@ -401,6 +401,7 @@ struct gemglxwindow::PIMPL {
     XVisualInfo *vi=0;
 
 #ifdef HAVE_LIBXRENDER
+  if (transparent){
 
     static GLXFBConfig *fbconfigs, fbconfig;
     static int numfbconfigs;
@@ -471,6 +472,7 @@ struct gemglxwindow::PIMPL {
         }
       }
     }
+   }
 
 #endif // HAVE_LIBXRENDER
 
@@ -857,7 +859,7 @@ bool gemglxwindow :: create(void)
       try {
 	int x=0, y=0;
 	unsigned int w=1, h=1;
-	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h);
+	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h, m_transparent);
       } catch (GemException&x) {
 	error("creation of shared glxcontext failed: %s", x.what());
 	verbose(0, "continuing at your own risk!");
@@ -891,7 +893,7 @@ bool gemglxwindow :: create(void)
 
 
   try {
-    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height);
+    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height, m_transparent);
   } catch (GemException&x) {
     x.report();
     success=false;
@@ -1016,6 +1018,19 @@ void gemglxwindow :: cursorMess(bool state)
   }
   else
     XUndefineCursor(m_pimpl->dpy, m_pimpl->win);
+}
+
+/////////////////////////////////////////////////////////
+// cursorMess
+//
+/////////////////////////////////////////////////////////
+void gemglxwindow :: transparentMess(bool on){
+  m_transparent = on;
+  post("gemglxwindow::transparentMess");
+  if(!m_pimpl->dpy || !m_pimpl->win){
+    post("Please destroy and create the window again to see effect of tranparent message.");
+  }
+
 }
 
 /////////////////////////////////////////////////////////
