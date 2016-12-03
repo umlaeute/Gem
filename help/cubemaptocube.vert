@@ -1,7 +1,7 @@
 // cubemap direction mapping
 #version 120
 
-varying out vec3 texcoords;
+varying vec3 texcoords;
 
 void main() {
   texcoords = vec3(gl_Vertex);
