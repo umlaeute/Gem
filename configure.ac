@@ -6,7 +6,6 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at],[Gem],[http://gem.iem.at])
 
 AM_INIT_AUTOMAKE([1.10 foreign])
 
-
 #
 AC_CONFIG_FILES([Makefile abstractions/Makefile])
 
@@ -743,13 +742,13 @@ Result:
 Configuration:
   Compiler               : ${CXX}
   CXXFLAGS               : ${CXXFLAGS} ${X_CFLAGS}
-			 : ${GEM_CHECK_LIB_CFLAGS}
-  DEFINES		 : ${DEFINES}
+                         : ${GEM_CHECK_LIB_CFLAGS}
+  DEFINES                : ${DEFINES}
 
   LIBS                   : ${LIBS}
-			 : ${GEM_CHECK_LIB_LIBS}
-  LDFLAGS		 : ${LDFLAGS}
-			 : ${X_LIBS}
+                         : ${GEM_CHECK_LIB_LIBS}
+  LDFLAGS                : ${LDFLAGS}
+                         : ${X_LIBS}
 
   Install path           : ${prefix}
 
@@ -770,7 +769,7 @@ Configuration:
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
-    use PLUGINS		 : ${use_film_plugins}
+    use PLUGINS          : ${use_film_plugins}
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
@@ -778,7 +777,7 @@ Configuration:
     use aviplay          : ${have_avifile}
     use gmerlin          : ${have_gmerlin_avdec}
   capture-support
-    use PLUGINS		 : ${use_video_plugins}
+    use PLUGINS          : ${use_video_plugins}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
     use ieee1394         : ${have_ieee1394}
