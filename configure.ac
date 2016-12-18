@@ -694,6 +694,7 @@ fi
 if test "x$have_avfoundation_framework" = "x"; then have_avfoundation_framework="no"; fi
 if test "x$have_avfoundation_framework" = "xyes"; then
  have_libavfoundation="yes (framework)"
+ GEM_FRAMEWORK_AVFOUNDATION_LIBS="$GEM_FRAMEWORK_AVFOUNDATION_LIBS -framework Accelerate -framework CoreMedia"
 fi
 
 have_ieee1394=""
