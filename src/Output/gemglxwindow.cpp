@@ -462,10 +462,9 @@ struct gemglxwindow::PIMPL {
           glXGetFBConfigAttribFn(dpy, fbconfig, GLX_ALPHA_SIZE, &alpha_bits);
           glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DEPTH_SIZE, &depth_bits);
 
-          ::verbose(0, "FBConfig selected:\n"
-            "Doublebuffer: %s\n"
-            "Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d\n",
-            doublebuffer == True ? "Yes" : "No",
+          ::verbose(0, "FBConfig selected:");
+          ::verbose(0, " Doublebuffer: %s", doublebuffer == True ? "Yes" : "No");
+          ::verbose(0, " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
             red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
         } else {
           ::error("can't get glXGetFBConfigAttrib function pointer");
