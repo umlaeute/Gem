@@ -45,10 +45,6 @@ typedef _w64 long        ssize_t;
 # include <Magick++.h>
 #endif
 
-#ifndef HAVE_ISMAGICKINSTANTIATED
-# define USE_GRAPHICSMAGICK
-#endif
-
 // hmm, the GetMimeList() function has changed!
 //  ImageMagick-6.6.2-0: **GetMimeList(const char *,unsigned long *,ExceptionInfo *),
 //  ImageMagick-6.6.2-1: **GetMimeList(const char *,size_t *,ExceptionInfo *),
@@ -62,6 +58,20 @@ typedef _w64 long        ssize_t;
 #ifndef MagickLibVersion
 # define MagickLibVersion 0
 #endif
+
+#ifndef HAVE_ISMAGICKINSTANTIATED
+# define USE_GRAPHICSMAGICK
+#else
+// IsMagickInstantiated() has been deprecated,
+// instead IsMagickCoreInstantiated() should be used
+// (available since MagickCore-6.8.8.2)
+# if (MagickLibInterface > 3) || (MagickLibVersion >= 0x688)
+// use IsMagickCoreInstantiated() directly
+# else
+#  define IsMagickCoreInstantiated IsMagickInstantiated
+# endif
+#endif
+
 
 // this won't catch ImageMagick>=6.6.2-0, but what can I do?
 // ubuntu/natty ships with 6.6.2-6!
@@ -99,7 +109,7 @@ REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 imageMAGICK :: imageMAGICK(void)
 {
 #ifdef HAVE_ISMAGICKINSTANTIATED
-  if(!IsMagickInstantiated())MagickCoreGenesis(NULL,MagickTrue);
+  if(!IsMagickCoreInstantiated())MagickCoreGenesis(NULL,MagickTrue);
 #else
   InitializeMagick(0);
 #endif
