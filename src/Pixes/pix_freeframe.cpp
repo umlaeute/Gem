@@ -1006,7 +1006,10 @@ bool pix_freeframe :: loader(const t_canvas*canvas, const std::string classname,
 }
 
 static int freeframe_loader(const t_canvas *canvas, const char *classname, const char *path) {
-  return pix_freeframe::loader(canvas, classname, path);
+  std::string nostring;
+  return pix_freeframe::loader(canvas,
+                               classname?std::string(classname):nostring,
+                               path?std::string(path):nostring);
 }
 
 /////////////////////////////////////////////////////////
