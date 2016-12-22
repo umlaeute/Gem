@@ -65,10 +65,10 @@ typedef _w64 long        ssize_t;
 // IsMagickInstantiated() has been deprecated,
 // instead IsMagickCoreInstantiated() should be used
 // (available since MagickCore-6.8.8.2)
-# if (MagickLibInterface > 3) || (MagickLibVersion >= 0x688)
+# if MagickLibVersion >= 0x688
 // use IsMagickCoreInstantiated() directly
 # else
-#  define IsMagickCoreInstantiated IsMagickInstantiated
+#  define IsMagickCoreInstantiated() IsMagickInstantiated()
 # endif
 #endif
 
