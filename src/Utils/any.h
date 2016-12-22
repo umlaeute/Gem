@@ -132,7 +132,7 @@ namespace gem
     template <typename T>
     any(const T& x) : table(NULL), object(NULL) {
       table = any_detail::get_table<T>::get();
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ >= 6
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wplacement-new"
 #endif
@@ -142,7 +142,7 @@ namespace gem
       else {
         object = new T(x);
       }
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ >= 6
 # pragma GCC diagnostic pop
 #endif
     }
@@ -188,7 +188,7 @@ namespace gem
       if (table == x_table) {
         // if so, we can avoid deallocating and resuse memory
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ >= 6
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wplacement-new"
 #endif
@@ -213,7 +213,7 @@ namespace gem
           object = new T(x);
           table = x_table;
         }
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ >= 6
 # pragma GCC diagnostic pop
 #endif
       }
