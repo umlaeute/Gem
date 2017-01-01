@@ -168,13 +168,9 @@ pixBlock* filmAVFoundation::getFrame(void) {
     uint8_t permuteMap[4] = {0, 1, 2, 3};
     err = vImagePermuteChannels_ARGB8888(&src, &dest, permuteMap, 0);
   }
-  else if(imageBufferPixelFormat == kCVPixelFormatType_32BGRA) {
-    uint8_t permuteMap[4] = {3, 2, 1, 0};
-    err = vImagePermuteChannels_ARGB8888(&src, &dest, permuteMap, 0);
-  }
   else {
     error("filmAVFoundation: Unable to convert frame pixels, "
-          "format %d is not 8bit YUV or RGB", (int)imageBufferPixelFormat);
+          "format %d is not 422 YUV or ARGB", (int)imageBufferPixelFormat);
   }
   
   // done, unlock buffer

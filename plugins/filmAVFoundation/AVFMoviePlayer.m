@@ -143,12 +143,14 @@
 - (void)close {
 
   // free
-  if(self.assetReader) {
-    [self.assetReader cancelReading];
-    self.assetReader = nil;
-  }
+  [self.assetReader cancelReading];
+  self.assetReader = nil;
   self.videoTrackOutput = nil;
   self.asset = nil;
+  if(videoSampleBuffer) {
+    CFRelease(videoSampleBuffer);
+    videoSampleBuffer = nil;
+  }
 
   // defaults
   self.isLoaded = NO;
@@ -215,11 +217,10 @@
 /////////////////////////////////////////////////////////
 - (BOOL)createAssetReaderWithTimeRange:(CMTimeRange)timeRange {
   
-  // safety
-  if(self.assetReader) {
-    [self.assetReader cancelReading];
-    self.assetReader = nil;
-  }
+  // clear
+  [self.assetReader cancelReading];
+  self.assetReader = nil;
+  self.videoTrackOutput = nil;
 
   // create new asset reader
   NSError *error = nil;
