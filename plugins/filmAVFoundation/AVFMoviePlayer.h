@@ -1,93 +1,64 @@
-//
-//  ofxAVFVideoRenderer.h
-//  AVFoundationTest
-//
-//  Created by Sam Kronick on 5/31/13.
-//
-//
+/*-----------------------------------------------------------------
 
-#import <Cocoa/Cocoa.h>
-#import <Quartz/Quartz.h>
+GEM - Graphics Environment for Multimedia
+
+Load a digital video (.mov, .mp4, etc) into a pix block on macOS 10.7+
+
+Copyright (c) 2016 Dan Wilcox. danomatika@gmail.com
+
+Adapted from the openFrameworks ofAVFoundationVideoPlayer class:
+Lukasz Karluk, Sam Kronick, James George, & Elie Zananiri 2014.
+
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+
+
+-----------------------------------------------------------------*/
 #import <AVFoundation/AVFoundation.h>
-#import <OpenGL/OpenGL.h>
+#import <Accelerate/Accelerate.h>
+#import <CoreMedia/CoreMedia.h>
 
-@interface AVFMoviePlayer : NSObject
-{
-    BOOL _bTheFutureIsNow;
+// AVFoundation asset reader wrapper
+@interface AVFMoviePlayer : NSObject {
+  
+  AVAsset *_asset;
+  AVAssetReader *_assetReader;
+  AVAssetReaderTrackOutput *_videoTrackOutput;
 
-    AVPlayer * _player;
-    AVPlayerItem * _playerItem;
-
-    id _playerItemVideoOutput;
-    CVOpenGLTextureCacheRef _textureCache;
-	CVOpenGLTextureRef _latestTextureFrame;
-	CVPixelBufferRef _latestPixelFrame;
-
-	BOOL _useTexture;
-    BOOL _useAlpha;
-
-    CGSize _videoSize;
-
-    CMTime _currentTime;
-    CMTime _duration;
-    double _frameRate;
-    double _playbackRate;
-    BOOL _bLoops;
-
-    BOOL _bLoading;
-    BOOL _bLoaded;
-    BOOL _bAudioLoaded;
-    BOOL _bPaused;
-    BOOL _bMovieDone;
-
-    // audio stuff
-    NSMutableData *_amplitudes;
-    int _numAmplitudes;
-    id _periodicTimeObserver;
+  BOOL _isLoaded;
+  int _numFrames;
+  
+  unsigned long _desiredPixelFormat;
+  CMSampleBufferRef videoSampleBuffer;
 }
 
-@property (nonatomic, retain) AVPlayer * player;
+// has a file been loaded?
+@property (nonatomic, readonly) BOOL isLoaded;
 
-@property (nonatomic, assign, readonly) double width;
-@property (nonatomic, assign, readonly) double height;
+// desired asset reader pixel format,
+// either kCVPixelFormatType_32ARGB or kCVPixelFormatType_422YpCbCr8 (default)
+@property (nonatomic) unsigned long desiredPixelFormat;
 
-@property (nonatomic, assign, readonly, getter = isLoading) BOOL bLoading;
-@property (nonatomic, assign, readonly, getter = isLoaded) BOOL bLoaded;
-@property (nonatomic, assign, readonly, getter = isAudioLoaded) BOOL bAudioLoaded;
-@property (nonatomic, assign, getter = isPaused, setter = setPaused:) BOOL bPaused;
-@property (nonatomic, assign, readonly, getter = isMovieDone) BOOL bMovieDone;
-@property (nonatomic, assign, readonly) BOOL isPlaying;
+// loaded file properties
+@property (nonatomic, readonly) int numFrames;
+@property (nonatomic, readonly) int numTracks;
+@property (nonatomic, readonly) int width;
+@property (nonatomic, readonly) int height;
+@property (nonatomic, readonly) float frameRate;
+@property (nonatomic, readonly) float duration;
 
-@property (nonatomic, assign) BOOL useAlpha;
-@property (nonatomic, assign) BOOL useTexture;
+// open a file at a given path, returns YES on success
+// set async = YES to open asynchronously
+- (BOOL)openFile:(NSString *)path async:(BOOL)async;
 
-@property (nonatomic, assign, readonly) BOOL textureAllocated;
-@property (nonatomic, assign, readonly) GLuint textureID;
-@property (nonatomic, assign, readonly) GLenum textureTarget;
+// close currently open file
+- (void)close;
 
-@property (nonatomic, assign, readonly) double frameRate;
-@property (nonatomic, assign, readonly) double duration;
-@property (nonatomic, assign, readonly) int totalFrames;
-@property (nonatomic, assign) double currentTime;
-@property (nonatomic, assign) int currentFrame;
-@property (nonatomic, assign) double position;
-@property (nonatomic, assign) double playbackRate;
-@property (nonatomic, assign, getter = loops, setter = setLoops:) BOOL bLoops;
-@property (nonatomic, assign) float volume;
+// set the current frame and track
+// set track = -1 keep current
+- (void)setFrame:(int)frame andTrack:(int)track;
 
-@property (nonatomic, retain, readonly) NSMutableData* amplitudes;
-@property (nonatomic, assign, readonly) int numAmplitudes;
-
-- (void)loadFilePath:(NSString *)filePath;
-- (void)loadURLPath:(NSString *)urlPath;
-- (void)loadURL:(NSURL *)url;
-
-- (void)play;
-- (void)stop;
-
-- (BOOL)update;
-- (void)bindTexture;
-- (void)unbindTexture;
-- (void)pixels:(unsigned char *)outbuf;
+// get the current frame data
+- (CVImageBufferRef)getFrame;
 
 @end

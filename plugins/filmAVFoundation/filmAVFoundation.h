@@ -2,24 +2,26 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block (Apple)
+Load a digital video (.mov, .mp4, etc) into a pix block on macOS 10.7+
 
-Copyright (c) 2014 Dan Wilcox. danomatika@gmail.com
-
-Ported from the OpenFrameworks (openframeworks.cc) QTKit video implementation
-by James George <james@jamesgeorge.org>, 2013-2014.
+Copyright (c) 2016 Dan Wilcox. danomatika@gmail.com
 
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
+
 -----------------------------------------------------------------*/
-#ifndef _INCLUDE_GEMPLUGIN__FILMQTKIT_FILMQTKIT_H_
-#define _INCLUDE_GEMPLUGIN__FILMQTKIT_FILMQTKIT_H_
-#include "plugins/film.h"
+#ifndef _INCLUDE_GEMPLUGIN__FILMAVF_FILMAVF_H_
+#define _INCLUDE_GEMPLUGIN__FILMAVF_FILMAVF_H_
+
+#include "plugins/filmBase.h"
 #include "Gem/Image.h"
 
+// forward declare PIMPL types, depending on the compiler
 #ifdef __OBJC__
- #import "AVFMoviePlayer.h"
+  @class AVFMoviePlayer;
+#else
+  typedef struct objc_object AVFMoviePlayer;
 #endif
 
 /*-----------------------------------------------------------------
@@ -27,7 +29,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
   filmAVFoundation
 
-  Loads in a film
+  Loads in a film on macOS using the AVFoundation framework
 
   KEYWORDS
   pix
@@ -36,19 +38,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmAVFoundation : public film
-{
- public:
+class GEM_EXPORT filmAVFoundation : public filmBase {
+
+public:
+
   //////////
   // Constructor
   filmAVFoundation(void);
+  
   //////////
   // Destructor
   virtual ~filmAVFoundation(void);
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string filename, const gem::Properties &props);
+  
   //////////
   // close the movie file
   virtual void close(void);
@@ -61,46 +66,11 @@ class GEM_EXPORT filmAVFoundation : public film
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
-  // cannot be used within a threaded context
-  virtual bool isThreadable(void) { return true; }
+protected:
 
-  // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
-  virtual void setProperties(gem::Properties&props);
-  virtual void getProperties(gem::Properties&props);
-
- protected:
-  GLenum m_wantedFormat; // the requested pixel format (in GL)
-  double m_fps; // the frame-rate
-  int m_numFrames;//, m_numTracks; // number of frames in video
-  int m_curFrame;//, m_curTrack;
-  pixBlock m_image; // output image
-  bool m_readNext;
-  float m_auto;
-
-  //-----------------------------------
-  // GROUP: Movie data
-  //-----------------------------------
-  // Movie       m_movie;
-  // GWorldPtr   m_srcGWorld;
-  // TimeValue   m_movieTime;
-  // Track       m_movieTrack;
-  // TimeValue   m_timeScale;
-  // TimeValue   m_frameDuration;
-  double m_movieTime;
-  double m_frameDuration;
-
-  // managed to initialize our Quicktime-Decoder
-  bool m_bInit;
-
-  // This #ifdef is so you can include this .h file in .cpp files
-  // and avoid ugly casts in the .mm file
-  #ifdef __OBJC__
-    AVFMoviePlayer* m_moviePlayer;
-  #else
-    void* m_moviePlayer;
-  #endif
+  // PIMPL pointer to the Obj-C object behind this class
+  AVFMoviePlayer* m_moviePlayer;
 
 };};};
 
-#endif  // for header file
+#endif // header guard
