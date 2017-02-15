@@ -36,6 +36,7 @@
 #endif
 
 #include "Utils/SIMD.h"
+#include "Utils/nop.h"
 
 #ifndef GEM_MULTICONTEXT
 # include "Base/GemWinCreate.h"
@@ -46,7 +47,7 @@
 #ifdef DEBUG
 # define debug_post post
 #else
-# define debug_post
+# define debug_post nop_post
 #endif
 
 #ifndef GEM_MULTICONTEXT

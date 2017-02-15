@@ -151,7 +151,8 @@ GemWindow :: GemWindow()
     m_title("Gem"),
     m_cursor(true),
     m_fsaa(0),
-    m_context(0)
+    m_context(0),
+    m_transparent(0)
 {
   int i;
 
@@ -401,7 +402,9 @@ void GemWindow::       cursorMess(bool on) {
   m_cursor=on;
 }
 
-
+void GemWindow::       transparentMess(bool on) {
+  m_transparent=on;
+}
 
 void GemWindow::       printMess(void) {
   // nada
@@ -426,6 +429,7 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
+  CPPEXTERN_MSG1(classPtr, "transparent", transparentMess, bool);
   //  CPPEXTERN_MSG0(classPtr, "print", printMess);
 
   struct _CB_any {

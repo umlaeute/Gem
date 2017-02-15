@@ -198,16 +198,15 @@ static void recursive_render (const struct aiScene*scene,
                               std::vector<std::vector<float> >& vertices,
                               std::vector<std::vector<float> >& normals,
                               std::vector<std::vector<float> >& texcoords,
-                              std::vector<std::vector<float> >& colors)
+                              std::vector<std::vector<float> >& colors,
+                              aiMatrix4x4* trafo)
 {
   int i;
   unsigned int n = 0, t;
-  struct aiMatrix4x4 m = nd->mTransformation;
+  aiMatrix4x4 prev = *trafo;
 
   // update transform
-  aiTransposeMatrix4(&m);
-  glPushMatrix();
-  glMultMatrixf((float*)&m);
+  aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
   // draw all meshes assigned to this node
   for (; n < nd->mNumMeshes; ++n) {
@@ -275,7 +274,10 @@ static void recursive_render (const struct aiScene*scene,
           texcoords.push_back(vec);
         }
 
-        pt = &mesh->mVertices[index].x;
+        aiVector3D tmp = mesh->mVertices[index];
+        aiTransformVecByMatrix4(&tmp,trafo);
+
+        pt = &tmp.x;
         vec = std::vector<float>(pt,pt+3);
         vertices.push_back(vec);
       }
@@ -285,10 +287,10 @@ static void recursive_render (const struct aiScene*scene,
   // draw all children
   for (n = 0; n < nd->mNumChildren; ++n) {
     recursive_render(scene, sc, nd->mChildren[n], use_material, vertices,
-                     normals, texcoords, colors);
+                     normals, texcoords, colors, trafo);
   }
 
-  glPopMatrix();
+  *trafo = prev;
 }
 
 };
@@ -298,7 +300,9 @@ modelASSIMP2 :: modelASSIMP2(void) :
   m_scene(NULL),
   m_scale(1.f),
   m_useMaterial(false),
-  m_refresh(false)
+  m_refresh(false),
+  m_have_texcoords(false),
+  m_textype("")
 {
 }
 
@@ -401,7 +405,6 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
 {
   double d;
 
-
 #if 0
   std::vector<std::string>keys=props.keys();
   unsigned int i;
@@ -409,6 +412,19 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
     post("key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
   }
 #endif
+
+  std::string s;
+  if(props.get("textype", s)) {
+    // if there are NO texcoords, we only accept 'linear' and 'spheremap'
+    // else, we also allow 'UV'
+    // not-accepted textype, simply use the last one
+    if(m_have_texcoords && "UV" == s)
+      m_textype = "";
+    else
+    if(("linear" == s) || ("spheremap" == s))
+      m_textype = s;
+    m_rebuild = true;
+  }
 
   if(props.get("rescale", d)) {
     bool b=(bool)d;
@@ -480,8 +496,17 @@ bool modelASSIMP2 :: compile(void)
   m_normals.clear();
   m_texcoords.clear();
   m_colors.clear();
+
+  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
-                   m_vertices, m_normals, m_texcoords, m_colors);
+                   m_vertices, m_normals, m_texcoords, m_colors, &trafo);
+
+  if (m_textype.empty() && m_have_texcoords) {;}
+  else if("spheremap" == m_textype)
+    modelutils::genTexture_Spheremap(m_texcoords, m_normals);
+  else
+    modelutils::genTexture_Linear(m_texcoords, m_vertices);
+
   fillVBOarray();
   if(useColorMaterial) {
     glEnable(GL_COLOR_MATERIAL);

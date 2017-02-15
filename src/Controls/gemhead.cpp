@@ -142,7 +142,14 @@ void gemhead :: renderGL(GemState *state)
     state->reset();
     // set the state dirty flag
     state->set(GemState::_DIRTY, m_cache->dirty);
+#ifdef __GNUC__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     state->VertexDirty=m_cache->vertexDirty;
+#ifdef __GNUC__
+# pragma GCC diagnostic pop
+#endif
 
     state->get(GemState::_GL_STACKS, stacks);
     if(stacks)stacks->push();

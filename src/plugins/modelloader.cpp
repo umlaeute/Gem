@@ -114,22 +114,30 @@ public:
   virtual bool open(const std::string&name, const gem::Properties&requestprops) {
     if(m_handle)close();
 
-    std::string ids;
+    std::vector<std::string> backends;
     if(requestprops.type("backends")!=gem::Properties::UNSET) {
-      requestprops.get("backends", ids);
+      requestprops.get("backends", backends);
     }
     //      requestprops.erase("backends");
 
-    if(!ids.empty()) {
-      // LATER: allow multiple IDs to be passed via 'backend'
-      unsigned int i=0;
-      for(i=0; i<m_handles.size(); i++) {
-        if(ids==m_ids[i] && m_handles[i]->open(name, requestprops)) {
-          m_handle=m_handles[i];
+    bool tried=false;
+    if(!backends.empty()) {
+      unsigned int i, j;
+      for(j=0; !m_handle && j<backends.size(); j++) {
+        std::string id=backends[j];
+
+        for(i=0; i<m_handles.size(); i++) {
+	    /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
+          if(id==m_ids[i]&& (tried=true) && m_handles[i]->open(name, requestprops)) {
+            m_handle=m_handles[i];
+          }
         }
       }
     }
-    if(!m_handle) {
+    if(!m_handle && !tried) {
+      if(!backends.empty() && !m_handles.empty()) {
+        verbose(2, "no available loader selected, falling back to valid ones");
+      }
       unsigned int i=0;
       for(i=0; i<m_handles.size(); i++) {
         if(m_handles[i] && m_handles[i]->open(name, requestprops)) {
@@ -200,13 +208,11 @@ public:
       m_handle->setProperties(props);
   }
   virtual void getProperties(gem::Properties&props) {
-    std::string ids;
+    std::vector<std::string> ids;
     if(props.type("backends")!=gem::Properties::UNSET) {
       unsigned int i;
       for(i=0; i<m_ids.size(); i++) {
-        if(!ids.empty())
-          ids+=" ";
-        ids=ids+m_ids[i];
+        ids.push_back(m_ids[i]);
       }
     }
     props.erase("backends");

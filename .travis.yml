@@ -22,12 +22,11 @@ env:
   - COVERITY_SCAN_NOTIFICATION_EMAIL="pd-gem-CVS@lists.sourceforge.net"
   - COVERITY_SCAN_BUILD_COMMAND="make"
   - COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
+  - SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
-## 'os' selection has been enabled manually by emailing travis-ci
 os:
   - linux
   - osx
-
 
 matrix:
   exclude:

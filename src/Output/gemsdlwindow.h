@@ -75,7 +75,6 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
 
   /* render context (pre creation) */
   void  bufferMess(int buf);
-  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
   virtual void titleMess(std::string s);
@@ -83,7 +82,6 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
   virtual void    fullscreenMess(int on);
-  virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
   virtual bool        create(void);
@@ -93,8 +91,6 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
   virtual void       destroyMess(void);
 
   /* post creation */
-  virtual void        cursorMess(bool on);
-
   void menuMess(void);
   void addMenuMess(t_symbol*, int, t_atom*);
 

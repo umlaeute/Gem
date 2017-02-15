@@ -126,5 +126,5 @@ namespace gem { namespace plugins {
 
 gem::plugins::imageloader*gem::plugins::imageloader::getInstance(void) {
   gem::plugins::imageloader*result=new imageloaderMeta();
- return result;
+  return result;
 }

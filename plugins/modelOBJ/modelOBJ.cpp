@@ -167,6 +167,8 @@ void modelOBJ :: setProperties(gem::Properties&props) {
     }
     m_reverse=reverse;
   }
+
+  render();
 }
 void modelOBJ :: getProperties(gem::Properties&props) {
   props.clear();

@@ -2,17 +2,17 @@
 // FreeFrame.h
 //
 // FreeFrame is an open-source cross-platform real-time video effects plugin system.
-// It provides a framework for developing video effects plugins and hosts on Windows, 
-// Linux and Mac OSX. 
-// 
+// It provides a framework for developing video effects plugins and hosts on Windows,
+// Linux and Mac OSX.
+//
 // Copyright (c) 2002, 2003, 2004, 2005, 2006 www.freeframe.org
-// All rights reserved. 
+// All rights reserved.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Redistribution and use in source and binary forms, with or without modification, 
+// Redistribution and use in source and binary forms, with or without modification,
 //	are permitted provided that the following conditions are met:
 //
 //  * Redistributions of source code must retain the above copyright
@@ -26,22 +26,22 @@
 //    from this software without specific prior written permission.
 //
 //
-//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-//	ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-//	WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-//	IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-//	INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
-//	BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-//	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY 
-//	OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
-//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
-//	OF THE POSSIBILITY OF SUCH DAMAGE. 
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+//	ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+//	WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//	IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+//	INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+//	BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+//	OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+//	OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// First version, Marcus Clements (marcus@freeframe.org) 
+// First version, Marcus Clements (marcus@freeframe.org)
 // www.freeframe.org
 //
 // FreeFrame 1.0 upgrade by Pete Warden
@@ -73,7 +73,7 @@
 # endif
 # include <windows.h>
 
-typedef unsigned __int32 FFUInt32; 
+typedef unsigned __int32 FFUInt32;
 typedef float FFFloat32;
 #else
 
@@ -120,8 +120,8 @@ typedef FFUInt32 FFResult;
 // Return values
 #define FF_TRUE						1
 #define FF_FALSE					0
-#define	FF_SUPPORTED				1 
-#define FF_UNSUPPORTED				0 
+#define	FF_SUPPORTED				1
+#define FF_UNSUPPORTED				0
 
 // Plugin types
 #define FF_EFFECT					0
@@ -143,9 +143,9 @@ typedef FFUInt32 FFResult;
 #define	FF_CAP_PREFER_BOTH			3
 
 // Parameter types
-#define FF_TYPE_BOOLEAN				0    
+#define FF_TYPE_BOOLEAN				0
 #define FF_TYPE_EVENT				1
-#define FF_TYPE_RED					2 
+#define FF_TYPE_RED					2
 #define FF_TYPE_GREEN				3
 #define FF_TYPE_BLUE				4
 #define FF_TYPE_XPOS				5
@@ -160,7 +160,7 @@ typedef FFUInt32 FFResult;
 // Image depth
 #define FF_DEPTH_16					0
 #define FF_DEPTH_24					1
-#define FF_DEPTH_32					2	
+#define FF_DEPTH_32					2
 
 // Image orientation
 #define FF_ORIENTATION_TL			1
@@ -180,7 +180,7 @@ typedef union FFMixed {
 } FFMixed;
 
 typedef void *FFInstanceID;
-	
+
 // PluginInfoStruct
 typedef struct PluginInfoStructTag {
 	FFUInt32	APIMajorVersion;
@@ -190,7 +190,7 @@ typedef struct PluginInfoStructTag {
 	FFUInt32	PluginType;				// Effect or source
 } PluginInfoStruct;
 
-// PluginExtendedInfoStruct   
+// PluginExtendedInfoStruct
 typedef struct PluginExtendedInfoStructTag {
 	FFUInt32	PluginMajorVersion;
 	FFUInt32	PluginMinorVersion;
@@ -205,7 +205,7 @@ typedef struct VideoInfoStructTag {
 	FFUInt32	FrameWidth;				// width of frame in pixels
 	FFUInt32	FrameHeight;				// height of frame in pixels
 	FFUInt32	BitDepth;					// enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
-	FFUInt32	Orientation;			
+	FFUInt32	Orientation;
 } VideoInfoStruct;
 
 // ProcessFrameCopyStruct
@@ -229,7 +229,7 @@ typedef struct SetParameterStructTag {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // plugMain - The one and only exposed function
-// parameters: 
+// parameters:
 //	functionCode - tells the plugin which function is being called
 //  pParam - 32-bit parameter or 32-bit pointer to parameter structure
 //
@@ -237,8 +237,8 @@ typedef struct SetParameterStructTag {
 //
 // All parameters are cast as 32-bit untyped pointers and cast to appropriate
 // types here
-// 
-// All return values are cast to 32-bit untyped pointers here before return to 
+//
+// All return values are cast to 32-bit untyped pointers here before return to
 // the host
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

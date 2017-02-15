@@ -132,12 +132,19 @@ namespace gem
     template <typename T>
     any(const T& x) : table(NULL), object(NULL) {
       table = any_detail::get_table<T>::get();
+#if defined(__GNUC__) && __GNUC__ >= 6
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wplacement-new"
+#endif
       if (sizeof(T) <= sizeof(void*)) {
         new(&object) T(x);
       }
       else {
         object = new T(x);
       }
+#if defined(__GNUC__) && __GNUC__ >= 6
+# pragma GCC diagnostic pop
+#endif
     }
 
     any(void) : table(NULL), object(NULL) {
@@ -181,14 +188,16 @@ namespace gem
       if (table == x_table) {
         // if so, we can avoid deallocating and resuse memory
 
+#if defined(__GNUC__) && __GNUC__ >= 6
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wplacement-new"
+#endif
         if (sizeof(T) <= sizeof(void*)) {
           // create copy on-top of object pointer itself
-
           new(&object) T(x);
         }
         else {
           // create copy on-top of old version
-
           new(object) T(x);
         }
       }
@@ -196,16 +205,17 @@ namespace gem
         reset();
         if (sizeof(T) <= sizeof(void*)) {
           // create copy on-top of object pointer itself
-
           new(&object) T(x);
           // update table pointer
-
           table = x_table;
         }
         else {
           object = new T(x);
           table = x_table;
         }
+#if defined(__GNUC__) && __GNUC__ >= 6
+# pragma GCC diagnostic pop
+#endif
       }
       return *this;
     }

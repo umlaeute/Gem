@@ -364,7 +364,7 @@ struct gemglxwindow::PIMPL {
     return std::string(keystring);
   }
 
-  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h) {
+  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h, bool transparent) {
     int modeNum=4;
     int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
@@ -401,6 +401,7 @@ struct gemglxwindow::PIMPL {
     XVisualInfo *vi=0;
 
 #ifdef HAVE_LIBXRENDER
+  if (transparent){
 
     static GLXFBConfig *fbconfigs, fbconfig;
     static int numfbconfigs;
@@ -461,16 +462,16 @@ struct gemglxwindow::PIMPL {
           glXGetFBConfigAttribFn(dpy, fbconfig, GLX_ALPHA_SIZE, &alpha_bits);
           glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DEPTH_SIZE, &depth_bits);
 
-          ::verbose(0, "FBConfig selected:\n"
-            "Doublebuffer: %s\n"
-            "Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d\n",
-            doublebuffer == True ? "Yes" : "No",
+          ::verbose(0, "FBConfig selected:");
+          ::verbose(0, " Doublebuffer: %s", doublebuffer == True ? "Yes" : "No");
+          ::verbose(0, " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
             red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
         } else {
           ::error("can't get glXGetFBConfigAttrib function pointer");
         }
       }
     }
+   }
 
 #endif // HAVE_LIBXRENDER
 
@@ -804,15 +805,6 @@ void gemglxwindow :: bufferMess(int buf)
 }
 
 /////////////////////////////////////////////////////////
-// fsaaMess
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: fsaaMess(int value)
-{
-  m_fsaa=value;
-}
-
-/////////////////////////////////////////////////////////
 // titleMess
 //
 /////////////////////////////////////////////////////////
@@ -825,14 +817,6 @@ void gemglxwindow :: titleMess(std::string s)
                            None, 0, 0, NULL);
   }
 
-}
-/////////////////////////////////////////////////////////
-// border
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: borderMess(bool setting)
-{
-  m_border=setting;
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
@@ -852,24 +836,6 @@ void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
 
   m_width=width;
   m_height=height;
-}
-/////////////////////////////////////////////////////////
-// fullscreenMess
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: fullscreenMess(int on)
-{
-  m_fullscreen = on;
-}
-
-/////////////////////////////////////////////////////////
-// offsetMess
-//
-/////////////////////////////////////////////////////////
-void gemglxwindow :: offsetMess(int x, int y)
-{
-  m_xoffset=x;
-  m_yoffset=y;
 }
 
 /////////////////////////////////////////////////////////
@@ -892,7 +858,7 @@ bool gemglxwindow :: create(void)
       try {
 	int x=0, y=0;
 	unsigned int w=1, h=1;
-	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h);
+	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h, m_transparent);
       } catch (GemException&x) {
 	error("creation of shared glxcontext failed: %s", x.what());
 	verbose(0, "continuing at your own risk!");
@@ -926,7 +892,7 @@ bool gemglxwindow :: create(void)
 
 
   try {
-    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height);
+    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height, m_transparent);
   } catch (GemException&x) {
     x.report();
     success=false;

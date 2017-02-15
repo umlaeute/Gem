@@ -18,6 +18,7 @@
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
 #include "Gem/VertexBuffer.h"
+#include "RTE/Outlet.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -78,6 +79,10 @@ class GEM_EXTERN model : public GemBase
   virtual void    groupMess(int group);
 
   //////////
+  // Set backend to use
+  virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
+
+  //////////
   virtual void	render(GemState *state);
   virtual void	startRendering();
 
@@ -93,6 +98,8 @@ class GEM_EXTERN model : public GemBase
 
   gem::VertexBuffer m_position, m_texture, m_color, m_normal;
 
+  gem::RTE::Outlet m_infoOut;
+  std::vector<std::string> m_backends;
 };
 
 #endif	// for header file

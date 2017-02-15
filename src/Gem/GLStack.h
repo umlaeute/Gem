@@ -65,7 +65,12 @@ class GEM_EXTERN GLStack {
 
  private:
   class Data;
+  // try using unique_ptr<> if it is supported
+#if  __cplusplus < 201103L
   std::auto_ptr<Data>data;
+#else
+  std::unique_ptr<Data>data;
+#endif
 };
 
 } /* namespace gem */

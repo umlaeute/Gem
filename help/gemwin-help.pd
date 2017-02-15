@@ -1,4 +1,4 @@
-#N canvas 129 98 676 689 10;
+#N canvas 126 111 676 689 10;
 #X text 452 8 GEM object;
 #X obj 7 193 cnv 15 430 480 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -328,7 +328,6 @@ some lights to see something \, such as:;
 #X restore 30 575 pd more lighting;
 #X obj 490 242 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X msg 490 261 color \$1 \$1 \$1;
 #X text 29 635 stereo 0|1|2|3 : set 3D stereo-mode to off(0) \, 2-screen-mode(1)
 \, Red/Green-mode(2);
 #N canvas 680 259 468 458 draw_geos 0;
@@ -378,7 +377,7 @@ some lights to see something \, such as:;
 #X connect 22 0 6 0;
 #X restore 455 378 pd draw_geos;
 #X msg 472 152 create \, 1;
-#N canvas 255 86 448 630 buffering 0;
+#N canvas 252 99 539 630 buffering 0;
 #X msg 63 127 buffer 1;
 #X msg 78 152 buffer 2;
 #X text 134 127 single buffering;
@@ -413,6 +412,11 @@ the gemhead each time you want to draw. like:;
 is created in order to take effect.;
 #X obj 176 494 t f f;
 #X obj 149 405 t b b;
+#X msg 279 142 transparent \$1;
+#X obj 279 123 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 299 108 use RGBA buffer to have an alpha channel and a transparent
+window, f 32;
 #X connect 0 0 11 0;
 #X connect 1 0 11 0;
 #X connect 4 0 11 0;
@@ -433,6 +437,8 @@ is created in order to take effect.;
 #X connect 28 1 20 1;
 #X connect 29 0 16 0;
 #X connect 29 1 20 0;
+#X connect 30 0 11 0;
+#X connect 31 0 30 0;
 #X restore 355 405 pd buffering;
 #N canvas 556 191 548 430 stereo-3D 0;
 #X text 32 18 messages to [gemwin] regarding stereoscopic appearance:
@@ -793,10 +799,11 @@ attributes of the window and controls the render-cycle. Multiple instances
 of this object can interact with separate windows.;
 #X text 30 177 2d argument : context name;
 #X text 443 457 see also examples/14.multiple_windows;
+#X msg 490 260 color \$1 \$1 \$1 \$1;
 #X connect 11 0 10 0;
 #X connect 12 0 10 0;
 #X connect 21 0 10 0;
-#X connect 34 0 35 0;
-#X connect 35 0 10 0;
-#X connect 38 0 10 0;
-#X connect 53 0 37 0;
+#X connect 34 0 63 0;
+#X connect 37 0 10 0;
+#X connect 52 0 36 0;
+#X connect 63 0 10 0;

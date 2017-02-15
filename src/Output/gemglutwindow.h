@@ -74,7 +74,6 @@ class GEM_EXTERN gemglutwindow : public GemWindow
 
   /* render context (pre creation) */
   virtual void  bufferMess(int buf);
-  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
   virtual void titleMess(std::string s);

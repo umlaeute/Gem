@@ -84,11 +84,12 @@ protected:
 
   bool m_useMaterial;
 
-  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords,
-      m_colors;
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 
+  bool m_have_texcoords;
+  std::string m_textype;
 };
 };
 }; // namespace gem::plugins

@@ -2,7 +2,7 @@
   LOG
   GEM - Graphics Environment for Multimedia
 
-  Load multiple images
+  read in a model file
 
   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
   Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -16,30 +16,31 @@
 #define _INCLUDE__GEM_GEOS_MULTIMODEL_H_
 
 #include "Base/GemBase.h"
-#include <string.h>
-#include "plugins/modelloader.h"
 #include "Gem/Properties.h"
-
+#include "Gem/VertexBuffer.h"
+#include "RTE/Outlet.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
   multimodel
 
-  Load multiple models
+  read in a model file
 
   DESCRIPTION
 
   Inlet for a list - "multimodel"
 
-  "open" - the multimodel to set the object to
+  "open" - the RGB model to set the object to
 
   -----------------------------------------------------------------*/
+namespace gem { namespace plugins { class modelloader; };};
+
 class GEM_EXTERN multimodel : public GemBase
 {
   CPPEXTERN_HEADER(multimodel, GemBase);
 
-    public:
+ public:
 
   //////////
   // Constructor
@@ -49,45 +50,71 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // Destructor
-  virtual ~multimodel();
+  virtual ~multimodel(void);
 
   //////////
   // When an open is received
-  virtual void	openMess(const std::string&filename, float baseModel, float topModel, float skipRate);
-  virtual void	open(const std::string&filename, int baseModel, int topModel, int skipRate);
-
-  //////////
-  virtual void	render(GemState *state);
+  virtual void  openMess(const std::string&filename, float baseModel, float topModel, float skipRate);
+  virtual void  open(const std::string&filename, int baseModel, int topModel, int skipRate);
 
   //////////
   // Change which model to display
-  void	    	changeModel(int modelNum);
+  void          changeModel(int modelNum);
 
+  void          close(void);
 
-  void	    	cleanMultimodel(void);
+  virtual void applyProperties(void);
 
+  //////////
+  // When a rescale is received
+  virtual void	rescaleMess(bool state);
+  //////////
+  // When a reverse is received
+  virtual void	reverseMess(bool state);
+  //////////
+  // Which texture type (linear, spheric)
+  virtual void	textureMess(int state);
+  //////////
+  // Set smoothing factor
+  virtual void	smoothMess(t_float fsmooth);
+  //////////
+  // Set material mode
+  virtual void  materialMess(int material);
 
-  //-----------------------------------
-  // GROUP:	Model data
-  //-----------------------------------
+  //////////
+  // Set groups to render
+  virtual void    groupMess(int group);
+
+  //////////
+  // Set backend to use
+  virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
+
+  //////////
+  virtual void	render(GemState *state);
+  virtual void	startRendering();
+
+  void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
+  void copyAllArrays();
+  void getVBOarray();
+  void createVBO(void);
 
   std::vector<gem::plugins::modelloader*>m_loaders;
-  int 	    	m_curModel;
+  gem::plugins::modelloader*m_loader;
 
-
-  virtual void  applyProperties(void);
-  virtual void	rescaleMess(bool state);
-  virtual void	textureMess(int state);
-  virtual void	smoothMess(float state);
-  float		m_currentH, m_currentW;
+  bool m_size_change_flag;
 
   gem::Properties m_properties;
+
+  gem::VertexBuffer m_position, m_texture, m_color, m_normal;
+
+  gem::RTE::Outlet m_infoOut;
+  std::vector<std::string> m_backends;
 
  private:
 
   //////////
   // static member functions
-  static void 	openMessCallback(void *data, t_symbol *filename, t_float baseModel, t_float topModel, t_float skipRate);
+  static void   openMessCallback(void *data, t_symbol *filename, t_float baseModel, t_float topModel, t_float skipRate);
 };
 
 #endif	// for header file
