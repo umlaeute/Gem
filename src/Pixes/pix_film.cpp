@@ -162,8 +162,8 @@ void *pix_film :: grabThread(void*you)
       me->m_curTrack=reqTrack;
 
       pthread_mutex_unlock(me->m_mutex);
-    }
-    gem::thread::usleep(100);
+      gem::thread::usleep(100);
+    } else gem::thread::usleep(5000);
   }
 
   pthread_mutex_lock  (me->m_mutex);
