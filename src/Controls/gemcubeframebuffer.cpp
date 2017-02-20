@@ -367,8 +367,6 @@ void gemcubeframebuffer :: initFBO()
 /////////////////////////////////////////////////////////
 void gemcubeframebuffer :: destroyFBO()
 {
-  if(!GLEW_EXT_framebuffer_object)
-    return;
   // Release all resources.
   if(m_depthBufferIndex) glDeleteRenderbuffersEXT(1, &m_depthBufferIndex);
   if(m_frameBufferIndex) glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
