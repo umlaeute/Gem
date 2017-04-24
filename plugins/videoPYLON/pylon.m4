@@ -26,13 +26,13 @@ if test "x$with_pylon" != "xno"; then
 
   tmp_pylon_includes=""
   if test -d "${PYLON_ROOT}/include" ; then
-   AC_LIB_APPENDTOVAR([tmp_pylon_includes], "-I${PYLON_ROOT}/include")
+   tmp_pylon_includes="${tmp_pylon_includes} -I${PYLON_ROOT}/include"
   fi
   if test -d "${GENICAM_ROOT_V1_1}/include" ; then
-   AC_LIB_APPENDTOVAR([tmp_pylon_includes], "-I${GENICAM_ROOT_V1_1}/include")
+   tmp_pylon_includes="${tmp_pylon_includes} -I${GENICAM_ROOT_V1_1}/include"
   fi
   if test -d "${GENICAM_ROOT_V1_1}/include/genicam" ; then
-   AC_LIB_APPENDTOVAR([tmp_pylon_includes], "-I${GENICAM_ROOT_V1_1}/include/genicam")
+   tmp_pylon_includes="${tmp_pylon_includes} -I${GENICAM_ROOT_V1_1}/include/genicam"
   fi
 
   if test -d "${PYLON_ROOT}/lib" ; then
