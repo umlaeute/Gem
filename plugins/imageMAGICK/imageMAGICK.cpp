@@ -40,7 +40,11 @@ typedef _w64 long        ssize_t;
 #endif
 
 #ifdef HAVE_MAGICK_MAGICKCORE_H
-# include <magick/MagickCore.h>
+# ifdef HAVE_MAGICK7
+#  include <MagickCore/MagickCore.h>
+# else
+#  include <magick/MagickCore.h>
+# endif
 #else
 # include <Magick++.h>
 #endif

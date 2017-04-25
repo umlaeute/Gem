@@ -33,7 +33,12 @@ typedef __int64         ssize_t;
 typedef _w64 long        ssize_t;
 # endif
 #endif
-#include <magick/MagickCore.h>
+
+#ifdef HAVE_MAGICK7
+# include <MagickCore/MagickCore.h>
+#else
+# include <magick/MagickCore.h>
+#endif
 
 using namespace gem::plugins;
 
