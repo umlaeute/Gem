@@ -120,9 +120,9 @@ imageMAGICK :: imageMAGICK(void)
 
   char**mimelist=0;
   mimelistlength_t  length=0;
+#ifndef USE_GRAPHICSMAGICK
   ExceptionInfo exception;
   GetExceptionInfo(&exception);
-#ifndef USE_GRAPHICSMAGICK
   mimelist=GetMimeList("image/*", &length, &exception);
 #endif
   unsigned int i;
