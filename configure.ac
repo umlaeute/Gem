@@ -6,6 +6,8 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at],[Gem],[http://gem.iem.at])
 
 AM_INIT_AUTOMAKE([1.10 foreign])
 
+PKG_INSTALLDIR(['${exec_prefix}/lib/pkgconfig'])
+
 
 #
 AC_CONFIG_FILES([Makefile abstractions/Makefile])
