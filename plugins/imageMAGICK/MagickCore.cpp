@@ -137,7 +137,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
 
   ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   Image*finalImage=NULL;
-  CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
+  CopyMagickString(image_info->filename, filename.c_str(), MaxTextExtent);
 
   std::string cs;
   switch(img->format) {
