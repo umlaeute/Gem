@@ -6,14 +6,18 @@ DEPDIR=${SCRIPTDIR}/deps
 mkdir -p "${DEPDIR}"
 cd "${DEPDIR}"
 
+brew-install() {
+  brew install "$@" || (brew upgrade "$@" && brew cleanup "$@")
+}
+
 doinstall() {
   brew update
-  brew install pkg-config gettext
-  brew install fribidi --universal
-  brew link gettext --force
-  brew install imagemagick ftgl
-  brew install sdl homebrew/versions/glfw2 homebrew/versions/glfw3
-  brew install coreutils
+  brew-install pkg-config gettext
+  brew-install fribidi --universal
+  brew-link gettext --force
+  brew-install imagemagick ftgl
+  brew-install sdl glfw glfw@2
+  brew-install coreutils
   
   ## and install pd
   PDVERSION="0.46-5"
