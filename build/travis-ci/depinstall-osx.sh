@@ -12,9 +12,9 @@ brewinstall() {
 
 doinstall() {
   brew update
-  brew-link gettext --force
   brewinstall pkg-config gettext
   brewinstall fribidi --universal
+  brew link gettext --force
   brewinstall imagemagick ftgl
   brewinstall sdl glfw glfw@2
   brewinstall coreutils
