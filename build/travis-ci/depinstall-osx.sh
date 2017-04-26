@@ -6,6 +6,13 @@ DEPDIR=${SCRIPTDIR}/deps
 mkdir -p "${DEPDIR}"
 cd "${DEPDIR}"
 
+## LATER: fetch the lastest GemDependencies package via
+github_list_releaseartifacts() {
+ # call as: github_list_releaseartifacts umlaeute/Gem-dependencies
+ curl -s https://api.github.com/repos/$1/releases/latest \
+	| jq -r ".assets[] | select(.name | test(\"${spruce_type}\")) | .browser_download_url"
+}
+
 brewinstall() {
   brew install "$@" || (brew upgrade "$@" && brew cleanup "$@")
 }
