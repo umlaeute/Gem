@@ -41,6 +41,7 @@ before_install:
 
 before_script:
   - "./build/travis-ci/configure.sh"
+  - cat src/config.h || true
   # implement Coverity Scan with before_script instead of addons.coverity_scan
   # to work around too-early quota check by the coverity_scan addon
   - if [[ "x${TRAVIS_OS_NAME}${ARCH}" = "xlinux" ]] ; then curl -s 'https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh' | bash || true ; fi
