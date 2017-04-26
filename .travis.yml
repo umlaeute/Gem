@@ -29,6 +29,7 @@ os:
   - osx
 
 matrix:
+  fast_finish: true
   exclude:
    - os: linux
      env: ARCH=i386
