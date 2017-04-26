@@ -331,35 +331,28 @@ if test "x$with_MagickCore" = "x"; then
  with_MagickCore="$with_ImageMagick"
 fi
 
-magick=no
-GEM_CHECK_LIB([ImageMagick++], 
-              [Magick++],[Magick++.h],
-              [main],
-               AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++])
-               magick=++
-              ,,,[image loader])
+magickpackage=
 
-GEM_CHECK_LIB([MagickCore], 
+GEM_CHECK_LIB([MagickCore],
               [Magick],[magick/MagickCore.h],
               [IsMagickInstantiated],
-               AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)])
-               magick=core
+              AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)])
+              magickpackage=MagickCore
               ,,,[image loader])
-
+GEM_CHECK_LIB([ImageMagick++],
+              [Magick++],[Magick++.h],
+              [main],
+              AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++])
+              magickpackage=ImageMagick++
+              ,,,[image loader])
 magick7=no
-if test "x$magick" != "xno"; then
-  PKG_CHECK_MODULES(MAGICK7, [ImageMagick++ >= 7.0],
-    magick7=7,
-    PKG_CHECK_MODULES(MAGICK7, [MagickCore >= 7.0],
-      magick7=7, true
-      )
-    )
+if test "x$magickpackage" != "x"; then
+  PKG_CHECK_MODULES([MAGICK7], $magickpackage > 7,
+    [AC_DEFINE([HAVE_MAGICK7], 1, [define if you have ImageMagick7 installed.])
+     magick7=7
+    ], [magick7=""])
 fi
-if test "x$magick7" = "xno"; then
- magick7=""
-else
- AC_DEFINE([HAVE_MAGICK7], 1, [define if you have ImageMagick7 installed.])
-fi
+
 
 GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
@@ -694,7 +687,6 @@ if test "x$have_ftgl" = "xyes"; then
   have_font=FTGL
 fi
 
-magick7
 if test "x$have_ImageMagick" = "xyes"; then
   have_ImageMagick="yes (Magick++${magick7})"
 else
