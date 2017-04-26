@@ -13,6 +13,9 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 /* this implements ImageMagick loading/saving using MagickCore */
 
