@@ -63,9 +63,13 @@ typedef _w64 long        ssize_t;
 # define MagickLibVersion 0
 #endif
 
-#ifndef HAVE_ISMAGICKINSTANTIATED
-# define USE_GRAPHICSMAGICK
-#else
+#ifndef HAVE_MAGICK7
+# ifndef HAVE_ISMAGICKINSTANTIATED
+#  define USE_GRAPHICSMAGICK
+# endif
+#endif
+
+#ifdef HAVE_ISMAGICKINSTANTIATED
 // IsMagickInstantiated() has been deprecated,
 // instead IsMagickCoreInstantiated() should be used
 // (available since MagickCore-6.8.8.2)

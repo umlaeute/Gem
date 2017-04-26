@@ -166,6 +166,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     break;
   }
 
+  ExceptionInfo*ex = 0;
   ExceptionInfo*exception=AcquireExceptionInfo();
   Image *mimage = ConstituteImage(pImage->xsize,pImage->ysize,
                                  cs.c_str(), CharPixel,
@@ -186,8 +187,14 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     //options->quality = quality;
   }
 
-  WriteImage(image_info,finalImage);
-  if(showException(&finalImage->exception, "magick writing problem"))
+  ex = exception;
+#ifdef HAVE_MAGICK7
+  WriteImage(image_info, finalImage, ex);
+#else
+  WriteImage(image_info, finalImage);
+  ex = &finalImage->exception;
+#endif
+  if(showException(ex, "magick writing problem"))
     goto cleanup;
 
   result=true;
