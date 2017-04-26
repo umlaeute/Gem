@@ -29,12 +29,12 @@ os:
   - osx
 
 matrix:
+  fast_finish: true
   exclude:
    - os: linux
      env: ARCH=i386
   allow_failures:
-   - os: linux
-     env: ARCH=i386
+   - env: ARCH=i386
 
 before_install:
 - "./build/travis-ci/depinstall.sh"
