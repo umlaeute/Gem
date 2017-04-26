@@ -120,11 +120,20 @@ imageMAGICK :: imageMAGICK(void)
 
   char**mimelist=0;
   mimelistlength_t  length=0;
-#ifndef USE_GRAPHICSMAGICK
-  ExceptionInfo exception;
-  GetExceptionInfo(&exception);
-  mimelist=GetMimeList("image/*", &length, &exception);
+
+  ExceptionInfo*exception;
+
+#ifdef USE_GRAPHICSMAGICK
+  exception = new ExceptionInfo;
+  GetExceptionInfo(exception);
+#else
+  exception = AcquireExceptionInfo();
 #endif
+
+  mimelist=GetMimeList("image/*", &length, exception);
+
+  DestroyExceptionInfo(exception);
+
   unsigned int i;
   for(i=0; i<length; i++) {
     m_mimetypes.push_back(mimelist[i]);
