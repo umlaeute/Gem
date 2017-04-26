@@ -334,7 +334,7 @@ fi
 magickpackage=
 
 GEM_CHECK_LIB([MagickCore],
-              [Magick],[magick/MagickCore.h],
+              [Magick],[magick/MagickCore.h MagickCore/MagickCore.h],
               [IsMagickInstantiated],
               AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)])
               magickpackage=MagickCore
