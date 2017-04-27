@@ -113,7 +113,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
     ver = yesx[hor];
     // find secondary peaks
     int spL_x[100], spL_y[100], spR_x[100], spR_y[100];
-    float *px=new float[right];
+    float *px=new float[right]();
     int spL, spR;
 
     for (i = left; i < hor; i++) L_area += yesx[i];
