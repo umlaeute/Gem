@@ -62,8 +62,8 @@ void pix_drum :: processGrayImage(imageStruct &image)
   unsigned char *base = image.data;
   int x2, y2, xcoord, ycoord, xcount, ycount;
   int i, j, n, totalyes, totalyesx, totalyesy, xval, yval;
-  int *yesx=new int[image.xsize];
-  int *yesy=new int[image.ysize];
+  int *yesx=new int[image.xsize]();
+  int *yesy=new int[image.ysize]();
   float c2f, L_area, R_area;
   int hor, ver, L_peakx, L_peaky, R_peakx, R_peaky;
   t_atom ap[4];
@@ -425,7 +425,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
   // MODE 2
   // #####################################################
   else if (mode == 2) {
-    int*yesx_s = new int[ysize];
+    int*yesx_s = new int[ysize]();
     // check bounds are within limits
     if (left	< 0)		left	= 0;
     if (right	> xsize)	right	= xsize;
@@ -465,7 +465,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
     ver = yesx[hor];
     // find secondary peaks
     int spL_x[100], spL_y[100], spR_x[100], spR_y[100];
-    float *px=new float[right];
+    float *px=new float[right]();
     int spL, spR;
 
     for (i = left; i < hor; i++) L_area += yesx[i];
