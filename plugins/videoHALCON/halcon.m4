@@ -28,10 +28,10 @@ if test "x$with_halcon" != "xno"; then
 
   tmp_halcon_includes=""
   if test -d "${HALCONROOT}/include" ; then
-   AC_LIB_APPENDTOVAR([tmp_halcon_includes], "-I${HALCONROOT}/include")
+   tmp_halcon_includes="${tmp_halcon_includes} -I${HALCONROOT}/include"
   fi
   if test -d "${HALCONROOT}/include/cpp" ; then
-   AC_LIB_APPENDTOVAR([tmp_halcon_includes], "-I${HALCONROOT}/include/cpp")
+   tmp_halcon_includes="${tmp_halcon_includes} -I${HALCONROOT}/include/cpp"
   fi
 
   if test -d "${HALCONROOT}/lib/${HALCONARCH}" ; then

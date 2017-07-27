@@ -407,8 +407,6 @@ void gemglutwindow :: destroy(void)
 void gemglutwindow :: destroyMess(void)
 {
   if(makeCurrent()) {
-    s_windowmap.erase(m_window);
-
     int window=m_window;
     m_window=0; // so that we no longer receive any event
     glutCloseFunc     (NULL);
@@ -416,6 +414,8 @@ void gemglutwindow :: destroyMess(void)
     glutMainLoopEvent();
     glutMainLoopEvent();
 
+    /* now that the window is destroyed, remove it from the list of available windows */
+    s_windowmap.erase(window);
   }
   destroy();
 }

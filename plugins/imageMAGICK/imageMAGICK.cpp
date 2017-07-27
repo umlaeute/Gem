@@ -40,7 +40,11 @@ typedef _w64 long        ssize_t;
 #endif
 
 #ifdef HAVE_MAGICK_MAGICKCORE_H
-# include <magick/MagickCore.h>
+# ifdef HAVE_MAGICK7
+#  include <MagickCore/MagickCore.h>
+# else
+#  include <magick/MagickCore.h>
+# endif
 #else
 # include <Magick++.h>
 #endif
@@ -59,9 +63,13 @@ typedef _w64 long        ssize_t;
 # define MagickLibVersion 0
 #endif
 
-#ifndef HAVE_ISMAGICKINSTANTIATED
-# define USE_GRAPHICSMAGICK
-#else
+#ifndef HAVE_MAGICK7
+# ifndef HAVE_ISMAGICKINSTANTIATED
+#  define USE_GRAPHICSMAGICK
+# endif
+#endif
+
+#ifdef HAVE_ISMAGICKINSTANTIATED
 // IsMagickInstantiated() has been deprecated,
 // instead IsMagickCoreInstantiated() should be used
 // (available since MagickCore-6.8.8.2)
@@ -116,11 +124,20 @@ imageMAGICK :: imageMAGICK(void)
 
   char**mimelist=0;
   mimelistlength_t  length=0;
-#ifndef USE_GRAPHICSMAGICK
-  ExceptionInfo exception;
-  GetExceptionInfo(&exception);
-  mimelist=GetMimeList("image/*", &length, &exception);
+
+  ExceptionInfo*exception;
+
+#ifdef USE_GRAPHICSMAGICK
+  exception = new ExceptionInfo;
+  GetExceptionInfo(exception);
+#else
+  exception = AcquireExceptionInfo();
 #endif
+
+  mimelist=GetMimeList("image/*", &length, exception);
+
+  DestroyExceptionInfo(exception);
+
   unsigned int i;
   for(i=0; i<length; i++) {
     m_mimetypes.push_back(mimelist[i]);

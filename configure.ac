@@ -6,6 +6,9 @@ AC_INIT([Gem],[0.93],[zmoelnig@iem.at],[Gem],[http://gem.iem.at])
 
 AM_INIT_AUTOMAKE([1.10 foreign])
 
+PKG_INSTALLDIR(['${exec_prefix}/lib/pkgconfig'])
+
+
 #
 AC_CONFIG_FILES([Makefile abstractions/Makefile])
 
@@ -328,23 +331,29 @@ if test "x$with_MagickCore" = "x"; then
  with_MagickCore="$with_ImageMagick"
 fi
 
-GEM_CHECK_LIB([ImageMagick++], 
+magickpackage=
+
+GEM_CHECK_LIB([MagickCore],
+              [Magick],[magick/MagickCore.h MagickCore/MagickCore.h],
+              [IsMagickInstantiated],
+              AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)])
+              magickpackage=MagickCore
+              ,,,[image loader])
+GEM_CHECK_LIB([ImageMagick++],
               [Magick++],[Magick++.h],
               [main],
-              AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++]),
-              ,,[image loader])
+              AC_DEFINE([HAVE_LIBMAGICKPLUSPLUS], [1], [image loading/saving with ImageMagick++])
+              magickpackage=ImageMagick++
+              ,,,[image loader])
+magick7=no
+if test "x$magickpackage" != "x"; then
+  PKG_CHECK_MODULES([MAGICK7], $magickpackage > 7,
+    [AC_DEFINE([HAVE_MAGICK7], 1, [define if you have ImageMagick7 installed.])
+     magick7=7
+    ], [magick7=""])
+fi
 
-GEM_CHECK_LIB([MagickCore], 
-              [Magick],[magick/MagickCore.h],
-              [IsMagickInstantiated],
-              AC_DEFINE([HAVE_LIBMAGICK], [1], [image loading/saving with ImageMagick (Core)]),
-   	          ,,[image loader])
 
-#if test "x${have_ImageMagick}" = "xyes"
-#then
-# with_tiff=no
-# with_jpeg=no
-#fi
 GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
 
@@ -679,10 +688,10 @@ if test "x$have_ftgl" = "xyes"; then
 fi
 
 if test "x$have_ImageMagick" = "xyes"; then
-  have_ImageMagick="yes (Magick++)"
+  have_ImageMagick="yes (Magick++${magick7})"
 else
   if test "x$have_MagickCore" = "xyes"; then
-    have_ImageMagick="yes (MagickCore)"
+    have_ImageMagick="yes (MagickCore${magick7})"
   fi
 fi
 

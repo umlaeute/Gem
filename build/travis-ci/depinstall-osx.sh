@@ -6,14 +6,25 @@ DEPDIR=${SCRIPTDIR}/deps
 mkdir -p "${DEPDIR}"
 cd "${DEPDIR}"
 
+## LATER: fetch the lastest GemDependencies package via
+github_list_releaseartifacts() {
+ # call as: github_list_releaseartifacts umlaeute/Gem-dependencies
+ curl -s https://api.github.com/repos/$1/releases/latest \
+	| jq -r ".assets[] | select(.name | test(\"${spruce_type}\")) | .browser_download_url"
+}
+
+brewinstall() {
+  brew install "$@" || (brew upgrade "$@" && brew cleanup "$@")
+}
+
 doinstall() {
   brew update
-  brew install pkg-config gettext
-  brew install fribidi --universal
+  brewinstall pkg-config gettext
+  brewinstall fribidi --universal
   brew link gettext --force
-  brew install imagemagick ftgl
-  brew install sdl homebrew/versions/glfw2 homebrew/versions/glfw3
-  brew install coreutils
+  brewinstall imagemagick ftgl
+  brewinstall sdl glfw glfw@2
+  brewinstall coreutils
   
   ## and install pd
   PDVERSION="0.46-5"
