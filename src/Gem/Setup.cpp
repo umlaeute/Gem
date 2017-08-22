@@ -71,23 +71,17 @@ static const char GEM_OTHERAUTHORS[] =
 extern "C" {
 #if defined HAVE_S_STUFF_H
 # include "s_stuff.h"
+# include "m_imp.h"
 
 # ifndef _WIN32
   /* MSVC/MinGW cannot really handle these exported symbols */
 #  define GEM_ADDPATH
-# endif
-  
+#  if PD_MAJOR_VERSION>0 || PD_MINOR_VERSION>47
+  /* gone from the headers, but still present for binary compat */
+extern t_namelist *sys_searchpath;
+#  endif /* PD-version */
+# endif /* _WIN32 */
 #endif /* HAVE_S_STUFF_H */
-  
-  /* this is ripped from m_imp.h */
-  struct _gemclass
-  {
-    t_symbol *c_name;                   /* name (mostly for error reporting) */
-    t_symbol *c_helpname;               /* name of help file */
-    t_symbol *c_externdir;              /* directory extern was loaded from */
-    /* ... */ /* the real t_class continues here... */
-  };
-# define t_gemclass struct _gemclass
 } // for extern "C"
 
 
@@ -151,6 +145,38 @@ namespace {
     return result;
   }
 
+  static bool _add_to_path(const char*mypath){
+    int major, minor, bugfix;
+    sys_getversion(&major, &minor, &bugfix);
+    if((major==0 && minor < 48)) {
+# ifndef GEM_ADDPATH
+      return false;
+# else
+      sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
+# endif
+    } else {
+      /* add the path via the new 'add-to-path' method;
+       * this requires some "escaping"
+       */
+      const char *inptr = mypath;
+      char encoded[MAXPDSTRING];
+      char*outptr = encoded;
+      t_atom ap[2];
+      *outptr++='+';
+      while(inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
+        *outptr++ = *inptr++;
+        if ('+'==inptr[-1])
+          *outptr++='+';
+      }
+      *outptr=0;
+
+      SETSYMBOL(ap+0, gensym(encoded));
+      SETFLOAT(ap+1, 0.f);
+      pd_typedmess(gensym("pd")->s_thing, gensym("add-to-path"), 2, ap);
+    }
+    return true;
+  }
+
   static void addownpath(const char*filename) {
     char buf[MAXPDSTRING];
     char*bufptr=NULL;
@@ -169,32 +195,33 @@ namespace {
     }
 
     char*mypath=0;
-    t_gemclass *c = (t_gemclass*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
+    t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
+#ifdef HAVE_S_STUFF_H
     mypath=c->c_externdir->s_name;
+#endif /* HAVE_S_STUFF_H */
 
-    /* check whether we can find the abstractions in Gem's own path */
-    snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
-    buf[MAXPDSTRING-1]=0;
-    if ((fd=_open(buf, flags))>=0){
-      _close(fd);
-    } else {
-      // can't find this abstraction...giving up
-      error("GEM: unable to find Gem's abstractions");
-      error("GEM: please add path to '%s' to your search-path!", filename);
-      return;
+    int success = 0;
+    if (mypath) {
+      /* check whether we can find the abstractions in Gem's own path */
+      snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
+      buf[MAXPDSTRING-1]=0;
+      if ((fd=_open(buf, flags))>=0){
+        _close(fd);
+        verbose(1, "GEM: trying to add Gem path '%s' to search-paths", mypath);
+        success = _add_to_path(mypath);
+      }
     }
-
-#ifdef GEM_ADDPATH
-    verbose(1, "GEM: eventually adding Gem's path '%s' to search-paths", mypath);
-    sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
-#else
-    error("GEM: unable to find Gem's abstractions!");
-    error("GEM: please manually add '%s' to your search-path", mypath);
-#ifndef HAVE_S_STUFF_H
-    verbose(2, "GEM: Gem cannot auto-add the search path,");
-    verbose(2, "GEM:   due to missing <s_stuff.h> during compilation");
-#endif
-#endif
+    if(!success) {
+      // can't find this abstraction...giving up
+      std::string qpath = std::string("");
+      if (mypath) {
+        qpath += " '";
+        qpath += mypath;
+        qpath += "'";
+      } else
+        error("GEM: unable to find Gem's abstractions");
+      error("GEM: please manually add Gem path%s to Pd's search path", qpath.c_str());
+    }
 
     checkVersion(mypath, filename, flags);
   }
