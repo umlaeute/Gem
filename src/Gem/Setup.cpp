@@ -224,9 +224,9 @@ namespace Gem {
     }
     verbose(-1, "GEM: with help by %s", GEM_OTHERAUTHORS);
     verbose(-1, "GEM: found a bug? miss a feature? please report it:");
-    verbose(-1, "GEM: \thomepage http://gem.iem.at/");
-    verbose(-1, "GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
-    verbose(-1, "GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
+    verbose(-1, "GEM: \thomepage https://gem.iem.at/");
+    verbose(-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
+    verbose(-1, "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
 
     gem::Settings::init();
     addownpath("Gem-meta.pd");
