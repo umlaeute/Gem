@@ -80,7 +80,7 @@ const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
   return std::string("");
 }
 
-void*RTE :: getFunction(const std::string&name) {
+void*RTE :: getFunction(const std::string&name) const {
 #ifdef DL_OPEN
   return (void*)dlsym(RTLD_DEFAULT, name.c_str());
 #elif defined _WIN32

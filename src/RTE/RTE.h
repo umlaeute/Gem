@@ -43,7 +43,7 @@ namespace gem {
        * resolve a function-name in the current RTE
        * @return pointer to the function named 'name', or NULL if it doesn't exist
        */
-      virtual void*getFunction(const std::string&name);
+      virtual void*getFunction(const std::string&name) const;
 
       /**
        * find a file in the given context(canvas), searching RTEs search paths
