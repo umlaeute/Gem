@@ -68,21 +68,13 @@ static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christoph Steiner, et al.";
 
 # include "m_pd.h"
-extern "C" {
-#if defined HAVE_S_STUFF_H
-# include "s_stuff.h"
-# include "m_imp.h"
+# include "RTE/RTE.h"
 
-# ifndef _WIN32
-  /* MSVC/MinGW cannot really handle these exported symbols */
-#  define GEM_ADDPATH
-#  if PD_MAJOR_VERSION>0 || PD_MINOR_VERSION>47
-  /* gone from the headers, but still present for binary compat */
-extern t_namelist *sys_searchpath;
-#  endif /* PD-version */
-# endif /* _WIN32 */
-#endif /* HAVE_S_STUFF_H */
+#if defined HAVE_M_IMP_H
+extern "C" {
+# include "m_imp.h"
 } // for extern "C"
+#endif /* HAVE_M_IMP_H */
 
 
 
@@ -145,38 +137,6 @@ namespace {
     return result;
   }
 
-  static bool _add_to_path(const char*mypath){
-    int major, minor, bugfix;
-    sys_getversion(&major, &minor, &bugfix);
-    if((major==0 && minor < 48)) {
-# ifndef GEM_ADDPATH
-      return false;
-# else
-      sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
-# endif
-    } else {
-      /* add the path via the new 'add-to-path' method;
-       * this requires some "escaping"
-       */
-      const char *inptr = mypath;
-      char encoded[MAXPDSTRING];
-      char*outptr = encoded;
-      t_atom ap[2];
-      *outptr++='+';
-      while(inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
-        *outptr++ = *inptr++;
-        if ('+'==inptr[-1])
-          *outptr++='+';
-      }
-      *outptr=0;
-
-      SETSYMBOL(ap+0, gensym(encoded));
-      SETFLOAT(ap+1, 0.f);
-      pd_typedmess(gensym("pd")->s_thing, gensym("add-to-path"), 2, ap);
-    }
-    return true;
-  }
-
   static void addownpath(const char*filename) {
     char buf[MAXPDSTRING];
     char*bufptr=NULL;
@@ -196,11 +156,12 @@ namespace {
 
     char*mypath=0;
     t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
-#ifdef HAVE_S_STUFF_H
+#ifdef HAVE_M_IMP_H
     mypath=c->c_externdir->s_name;
 #endif /* HAVE_S_STUFF_H */
 
     int success = 0;
+
     if (mypath) {
       /* check whether we can find the abstractions in Gem's own path */
       snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
@@ -208,7 +169,9 @@ namespace {
       if ((fd=_open(buf, flags))>=0){
         _close(fd);
         verbose(1, "GEM: trying to add Gem path '%s' to search-paths", mypath);
-        success = _add_to_path(mypath);
+        gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+        if(rte)
+          success = rte->addSearchPath(mypath, 0);
       }
     }
     if(!success) {
