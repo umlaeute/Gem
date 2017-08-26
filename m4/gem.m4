@@ -519,18 +519,26 @@ AS_IF([ test "x${with_pd}" = "x" ],[
 ])
 
 AS_IF([ test -d "$with_pd"  ],[
+ AC_MSG_CHECKING([include paths for Pd])
  if test -d "${with_pd}/src" ; then
+   AC_MSG_RESULT([${with_pd}/src])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/src"
  elif test -d "${with_pd}/include/pd" ; then
+   AC_MSG_RESULT([${with_pd}/include/pd])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include/pd"
  elif test -d "${with_pd}/include" ; then
+   AC_MSG_RESULT([${with_pd}/include])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include"
  else
+   AC_MSG_RESULT([${with_pd}])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}"
  fi
+ AC_MSG_CHECKING([library paths for Pd])
  AS_IF([ test -d "${with_pd}/bin"  ],[
+   AC_MSG_RESULT([${with_pd}/bin])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}/bin"
  ],[
+   AC_MSG_RESULT([${with_pd}])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
  ])
 
