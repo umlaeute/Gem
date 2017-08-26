@@ -59,10 +59,7 @@ typedef void (*rte_getversion_t)(int*major,int*minor,int*bugfix);
 const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
   static rte_getversion_t rte_getversion=NULL;
   if(NULL==rte_getversion) {
-    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
-    if(rte) {
-      rte_getversion=(rte_getversion_t)rte->getFunction("sys_getversion");
-    }
+    rte_getversion=(rte_getversion_t)this->getFunction("sys_getversion");
   }
 
   if(rte_getversion) {
@@ -123,10 +120,7 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
     static close_t rte_close=NULL;
     if(NULL==rte_close) {
-      RTE*rte=RTE::getRuntimeEnvironment();
-      if(rte) {
-	rte_close=(close_t)rte->getFunction("sys_close");
-      }
+      rte_close=(close_t)this->getFunction("sys_close");
       if(NULL==rte_close) {
 	rte_close=close;
       }
