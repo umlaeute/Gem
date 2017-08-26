@@ -501,6 +501,7 @@ GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
 GEM_RTE="Pure Data"
 
+have_pd=no
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
 
@@ -541,7 +542,10 @@ AS_IF([ test -d "$with_pd"  ],[
    AC_MSG_RESULT([${with_pd}])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
  ])
+ have_pd=yes
+])
 
+AS_IF([ test "x${have_pd}" = "xyes" ],[
  CPPFLAGS="$CPPFLAGS ${GEM_RTE_CFLAGS}"
  CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
  CXXFLAGS="$CXXFLAGS ${GEM_RTE_CFLAGS}"
