@@ -50,6 +50,12 @@ namespace gem {
        * @return expanded filename
        */
       virtual std::string findFile(const std::string&name, const std::string&ext, const void*context) const;
+
+      /**
+       * add 'path' to the search-paths (if context==NULL, to the global search path)
+       * @return expanded filename
+       */
+      virtual bool addSearchPath(const std::string&path, void*context);
     };
   };
 };

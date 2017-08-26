@@ -14,12 +14,21 @@
 // currently only numeric arrays
 //
 /////////////////////////////////////////////////////////
+#include "Gem/GemConfig.h"
+
 
 #include "RTE/RTE.h"
-
 #include "m_pd.h"
-#include <sstream>
+#if defined HAVE_S_STUFF_H
+extern "C" {
+# include "s_stuff.h"
+}
+#else
+# warning s_stuff.h missing
+#endif
 
+
+#include <sstream>
 
 #if defined __linux__ || defined __APPLE__
 # define DL_OPEN
@@ -140,4 +149,41 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
     }
   }
   return result;
+}
+
+
+bool RTE::addSearchPath(const std::string&path, void* ctx) {
+  static bool didit=false;
+  static t_namelist *rte_searchpath = 0;
+  static bool modern = true;
+  if(ctx)
+    return false;
+
+  if(!didit) {
+    unsigned int major = 0, minor = 0;
+    rte_searchpath=(t_namelist*)this->getFunction("sys_searchpath");
+    this->getVersion(major, minor);
+    modern = ((major>0) || (minor>47));
+  }
+  if(modern) {
+    t_atom ap[2];
+    const char *inptr = path.c_str();
+    char encoded[MAXPDSTRING];
+    char*outptr = encoded;
+    *outptr++='+';
+    while(inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
+      *outptr++ = *inptr++;
+      if ('+'==inptr[-1])
+        *outptr++='+';
+    }
+    *outptr=0;
+    SETSYMBOL(ap+0, gensym(encoded));
+    SETFLOAT (ap+1, 0.f);
+    pd_typedmess(gensym("pd")->s_thing, gensym("add-to-path"), 2, ap);
+  } else {
+    if(!rte_searchpath)
+      return false;
+    rte_searchpath = namelist_append(rte_searchpath, path.c_str(), 0);
+  }
+  return true;
 }
