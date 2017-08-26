@@ -565,6 +565,12 @@ AC_CHECK_HEADERS([s_stuff.h], [], [],
 # include "m_pd.h"
 #endif
 ])
+AC_CHECK_HEADERS([m_imp.h], [], [],
+[#ifdef HAVE_M_PD_H
+# define PD
+# include "m_pd.h"
+#endif
+])
 
 ### this should only be set if Pd has been found
 # the extension
