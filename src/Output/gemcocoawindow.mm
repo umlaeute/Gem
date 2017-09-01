@@ -366,7 +366,7 @@ bool gemcocoawindow :: create(void)
   attrvec.push_back(NSOpenGLPFADepthSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
   if(m_fullscreen) {
-    attrvec.push_back(NSOpenGLPFAFullScreen);
+    //attrvec.push_back(NSOpenGLPFAFullScreen);
   }
 
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
