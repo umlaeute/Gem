@@ -355,6 +355,7 @@ bool gemcocoawindow :: create(void)
   }
 	  styleMask:m_border?( 	
 		  NSWindowStyleMaskTitled |
+		  NSWindowStyleMaskResizable |
 		  NSWindowStyleMaskMiniaturizable |
 		  NSWindowStyleMaskClosable )
 		  :NSWindowStyleMaskBorderless 
