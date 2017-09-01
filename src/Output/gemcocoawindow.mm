@@ -353,6 +353,7 @@ bool gemcocoawindow :: create(void)
   if(m_fullscreen) {
     contentRect=screenRect;
   }
+  window = [[NSWindow alloc] initWithContentRect:contentRect 
 	  styleMask:m_border?( 	
 		  NSWindowStyleMaskTitled |
 		  NSWindowStyleMaskResizable |
