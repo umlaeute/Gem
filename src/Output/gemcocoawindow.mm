@@ -244,20 +244,21 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   int devID=0;
 
   switch(type) {
-  case(NSLeftMouseUp): 
-  case(NSRightMouseUp):
-  case(NSOtherMouseUp):
+  case(NSEventTypeLeftMouseUp): 
+  case(NSEventTypeRightMouseUp):
+  case(NSEventTypeOtherMouseUp):
     button(devID, [e buttonNumber], false);
     break;
-  case(NSLeftMouseDown): 
-  case(NSRightMouseDown):
-  case(NSOtherMouseDown):
+  //case(NSLeftMouseDown):
+  case(NSEventTypeLeftMouseDown):
+  case(NSEventTypeRightMouseDown):
+  case(NSEventTypeOtherMouseDown):
     button(devID, [e buttonNumber], [e pressure]);
     break;
-  case(NSMouseMoved):
-  case(NSLeftMouseDragged):
-  case(NSRightMouseDragged):
-  case(NSOtherMouseDragged):
+  case(NSEventTypeMouseMoved):
+  case(NSEventTypeLeftMouseDragged):
+  case(NSEventTypeRightMouseDragged):
+  case(NSEventTypeOtherMouseDragged):
     {
       NSPoint p=[e locationInWindow];
       motion(devID, static_cast<int>(p.x), static_cast<int>(p.y));
@@ -265,26 +266,26 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
     break;
     break;
     break;
-  case(NSMouseEntered):
+  case(NSEventTypeMouseEntered):
     info("mouse", "entered");
     break;
-  case(NSMouseExited):
+  case(NSEventTypeMouseExited):
     info("mouse", "left");
     break;
-  case(NSScrollWheel):
+  case(NSEventTypeScrollWheel):
     // TODO
     break;
 
-  case(NSKeyDown):
+  case(NSEventTypeKeyDown):
     if (![e isARepeat]) {
       // how to get names of special keys? e.g. PageUp
       key(devID, key2name([e characters], [e keyCode]), [e keyCode], true);
     }
     break;
-  case(NSKeyUp):
+  case(NSEventTypeKeyUp):
     key(devID, key2name([e characters], [e keyCode]), [e keyCode], false);
     break;
-  case(NSFlagsChanged):
+  case(NSEventTypeFlagsChanged):
     do {
       unsigned long newflags = [e modifierFlags];
       unsigned long oldflags = m_pimpl->modifierFlags;
@@ -304,10 +305,10 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
     } while(false);
     break;
 
-  case(NSTabletPoint):
+  case(NSEventTypeTabletPoint):
     // TODO (later)
     break;
-  case(NSTabletProximity):
+  case(NSEventTypeTabletProximity):
     // TODO (later)
     break;
 
@@ -336,10 +337,10 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
 /////////////////////////////////////////////////////////
 bool gemcocoawindow :: create(void)
 {
-  NSRect  screenRect = [[NSScreen mainScreen] frame];
+  NSRect screenRect = [[NSScreen mainScreen] frame];
 
   NSRect titleframe = NSMakeRect (0, 0, 100, 100);
-  NSRect notitleframe = [NSWindow contentRectForFrameRect: titleframe styleMask: NSTitledWindowMask];
+  NSRect notitleframe = [NSWindow contentRectForFrameRect: titleframe styleMask: NSWindowStyleMaskTitled];
   m_pimpl->titleBarHeight = (titleframe.size.height - notitleframe.size.height);
 
 
