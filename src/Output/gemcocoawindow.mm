@@ -353,7 +353,12 @@ bool gemcocoawindow :: create(void)
   if(m_fullscreen) {
     contentRect=screenRect;
   }
-  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+	  styleMask:m_border?( 	
+		  NSWindowStyleMaskTitled |
+		  NSWindowStyleMaskMiniaturizable |
+		  NSWindowStyleMaskClosable )
+		  :NSWindowStyleMaskBorderless 
+		  backing:NSBackingStoreBuffered defer:YES];
  
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
