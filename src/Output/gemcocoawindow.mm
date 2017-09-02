@@ -536,10 +536,11 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
 
   ProcessSerialNumber proc;
-  GetCurrentProcess(&proc);
+  GetCurrentProcess(&proc); // Depreciated ... now what?
   TransformProcessType(&proc, kProcessTransformToForegroundApplication);
+  //[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
   SetFrontProcess(&proc);
-
+  //[NSApp activateIgnoringOtherApps:YES]; // Seems to be able to replace SetFrontProcess
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
