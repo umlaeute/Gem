@@ -187,7 +187,7 @@ void gemcocoawindow :: render() {
 void gemcocoawindow :: dispatch() {
   NSEvent *e = NULL;
   if(!m_pimpl->window)return;
-  while (( e = [NSApp nextEventMatchingMask: NSAnyEventMask
+  while (( e = [NSApp nextEventMatchingMask: NSEventMaskAny
                       // untilDate: distantFuture // blocking
                       untilDate: distantPast      // nonblocking
                       inMode: NSDefaultRunLoopMode
@@ -293,14 +293,15 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
         unsigned long modified = newflags ^ oldflags;
         m_pimpl->modifierFlags = newflags;
 #define MODFLAGS2KEY(mask, name) if(modified & mask) key(devID, name, [e keyCode], static_cast<bool>(mask & newflags))
-        MODFLAGS2KEY(NSAlphaShiftKeyMask, "Caps_Lock"); // Caps_Lock
-        MODFLAGS2KEY(NSShiftKeyMask, "Shift_L");     // Shift_L
-        MODFLAGS2KEY(NSControlKeyMask, "Control_L"); // Control_L
-        MODFLAGS2KEY(NSCommandKeyMask, "Alt_L"); // Alt_L
-        MODFLAGS2KEY(NSNumericPadKeyMask, "NumPad");
-        MODFLAGS2KEY(NSHelpKeyMask, "Help");
-        MODFLAGS2KEY(NSFunctionKeyMask, "Function");
-        MODFLAGS2KEY(NSAlternateKeyMask, "Meta_L"); // Meta_L
+        MODFLAGS2KEY(NSEventModifierFlagCapsLock, "Caps_Lock"); // Caps_Lock
+        MODFLAGS2KEY(NSEventModifierFlagShift, "Shift");     // Shift_L
+        MODFLAGS2KEY(NSEventModifierFlagControl, "Control"); // Control_L
+		MODFLAGS2KEY(NSEventModifierFlagOption, "Option"); // Option
+        MODFLAGS2KEY(NSEventModifierFlagCommand, "Command"); // Command
+        MODFLAGS2KEY(NSEventModifierFlagNumericPad, "NumPad");
+        MODFLAGS2KEY(NSEventModifierFlagHelp, "Help");
+        MODFLAGS2KEY(NSEventModifierFlagFunction, "Function");
+        //MODFLAGS2KEY(NSEventModifierFlagDeviceIndependentFlagsMask, "Meta_L"); // Meta_L
       }
     } while(false);
     break;
