@@ -491,7 +491,7 @@ void gemcocoawindow :: fullscreenMess(int on) {
   m_fullscreen = on;
   if(m_pimpl->view) {
     if (m_fullscreen) {
-      [[m_pimpl->view openGLContext] setFullScreen];
+	   [[m_pimpl->view openGLContext] setFullScreen]; // replace depreciated setFullScreen with toggleFullScreen?
     } else {
       [[m_pimpl->view openGLContext] clearDrawable];
     }
