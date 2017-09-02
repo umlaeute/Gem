@@ -187,7 +187,7 @@ void gemcocoawindow :: render() {
 void gemcocoawindow :: dispatch() {
   NSEvent *e = NULL;
   if(!m_pimpl->window)return;
-  while (( e = [NSApp nextEventMatchingMask: NSAnyEventMask
+  while (( e = [NSApp nextEventMatchingMask: NSEventMaskAny
                       // untilDate: distantFuture // blocking
                       untilDate: distantPast      // nonblocking
                       inMode: NSDefaultRunLoopMode
@@ -244,20 +244,21 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   int devID=0;
 
   switch(type) {
-  case(NSLeftMouseUp): 
-  case(NSRightMouseUp):
-  case(NSOtherMouseUp):
+  case(NSEventTypeLeftMouseUp): 
+  case(NSEventTypeRightMouseUp):
+  case(NSEventTypeOtherMouseUp):
     button(devID, [e buttonNumber], false);
     break;
-  case(NSLeftMouseDown): 
-  case(NSRightMouseDown):
-  case(NSOtherMouseDown):
+  //case(NSLeftMouseDown):
+  case(NSEventTypeLeftMouseDown):
+  case(NSEventTypeRightMouseDown):
+  case(NSEventTypeOtherMouseDown):
     button(devID, [e buttonNumber], [e pressure]);
     break;
-  case(NSMouseMoved):
-  case(NSLeftMouseDragged):
-  case(NSRightMouseDragged):
-  case(NSOtherMouseDragged):
+  case(NSEventTypeMouseMoved):
+  case(NSEventTypeLeftMouseDragged):
+  case(NSEventTypeRightMouseDragged):
+  case(NSEventTypeOtherMouseDragged):
     {
       NSPoint p=[e locationInWindow];
       motion(devID, static_cast<int>(p.x), static_cast<int>(p.y));
@@ -265,26 +266,26 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
     break;
     break;
     break;
-  case(NSMouseEntered):
+  case(NSEventTypeMouseEntered):
     info("mouse", "entered");
     break;
-  case(NSMouseExited):
+  case(NSEventTypeMouseExited):
     info("mouse", "left");
     break;
-  case(NSScrollWheel):
+  case(NSEventTypeScrollWheel):
     // TODO
     break;
 
-  case(NSKeyDown):
+  case(NSEventTypeKeyDown):
     if (![e isARepeat]) {
       // how to get names of special keys? e.g. PageUp
       key(devID, key2name([e characters], [e keyCode]), [e keyCode], true);
     }
     break;
-  case(NSKeyUp):
+  case(NSEventTypeKeyUp):
     key(devID, key2name([e characters], [e keyCode]), [e keyCode], false);
     break;
-  case(NSFlagsChanged):
+  case(NSEventTypeFlagsChanged):
     do {
       unsigned long newflags = [e modifierFlags];
       unsigned long oldflags = m_pimpl->modifierFlags;
@@ -292,22 +293,23 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
         unsigned long modified = newflags ^ oldflags;
         m_pimpl->modifierFlags = newflags;
 #define MODFLAGS2KEY(mask, name) if(modified & mask) key(devID, name, [e keyCode], static_cast<bool>(mask & newflags))
-        MODFLAGS2KEY(NSAlphaShiftKeyMask, "Caps_Lock"); // Caps_Lock
-        MODFLAGS2KEY(NSShiftKeyMask, "Shift_L");     // Shift_L
-        MODFLAGS2KEY(NSControlKeyMask, "Control_L"); // Control_L
-        MODFLAGS2KEY(NSCommandKeyMask, "Alt_L"); // Alt_L
-        MODFLAGS2KEY(NSNumericPadKeyMask, "NumPad");
-        MODFLAGS2KEY(NSHelpKeyMask, "Help");
-        MODFLAGS2KEY(NSFunctionKeyMask, "Function");
-        MODFLAGS2KEY(NSAlternateKeyMask, "Meta_L"); // Meta_L
+        MODFLAGS2KEY(NSEventModifierFlagCapsLock, "Caps_Lock"); // Caps_Lock
+        MODFLAGS2KEY(NSEventModifierFlagShift, "Shift");     // Shift_L
+        MODFLAGS2KEY(NSEventModifierFlagControl, "Control"); // Control_L
+		MODFLAGS2KEY(NSEventModifierFlagOption, "Option"); // Option
+        MODFLAGS2KEY(NSEventModifierFlagCommand, "Command"); // Command
+        MODFLAGS2KEY(NSEventModifierFlagNumericPad, "NumPad");
+        MODFLAGS2KEY(NSEventModifierFlagHelp, "Help");
+        MODFLAGS2KEY(NSEventModifierFlagFunction, "Function");
+        //MODFLAGS2KEY(NSEventModifierFlagDeviceIndependentFlagsMask, "Meta_L"); // Meta_L
       }
     } while(false);
     break;
 
-  case(NSTabletPoint):
+  case(NSEventTypeTabletPoint):
     // TODO (later)
     break;
-  case(NSTabletProximity):
+  case(NSEventTypeTabletProximity):
     // TODO (later)
     break;
 
@@ -336,10 +338,10 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
 /////////////////////////////////////////////////////////
 bool gemcocoawindow :: create(void)
 {
-  NSRect  screenRect = [[NSScreen mainScreen] frame];
+  NSRect screenRect = [[NSScreen mainScreen] frame];
 
   NSRect titleframe = NSMakeRect (0, 0, 100, 100);
-  NSRect notitleframe = [NSWindow contentRectForFrameRect: titleframe styleMask: NSTitledWindowMask];
+  NSRect notitleframe = [NSWindow contentRectForFrameRect: titleframe styleMask: NSWindowStyleMaskTitled];
   m_pimpl->titleBarHeight = (titleframe.size.height - notitleframe.size.height);
 
 
@@ -352,20 +354,27 @@ bool gemcocoawindow :: create(void)
   if(m_fullscreen) {
     contentRect=screenRect;
   }
-  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+  window = [[NSWindow alloc] initWithContentRect:contentRect 
+	  styleMask:m_border?( 	
+		  NSWindowStyleMaskTitled |
+		  NSWindowStyleMaskResizable |
+		  NSWindowStyleMaskMiniaturizable |
+		  NSWindowStyleMaskClosable )
+		  :NSWindowStyleMaskBorderless 
+		  backing:NSBackingStoreBuffered defer:YES];
  
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 
   if(m_buffer==2)
-    attrvec.push_back(NSOpenGLPFADoubleBuffer);
+  attrvec.push_back(NSOpenGLPFADoubleBuffer);
   attrvec.push_back(NSOpenGLPFAAccelerated);
   attrvec.push_back(NSOpenGLPFAColorSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
   attrvec.push_back(NSOpenGLPFADepthSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
   if(m_fullscreen) {
-    attrvec.push_back(NSOpenGLPFAFullScreen);
+    //attrvec.push_back(NSOpenGLPFAFullScreen);
   }
 
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
@@ -482,7 +491,7 @@ void gemcocoawindow :: fullscreenMess(int on) {
   m_fullscreen = on;
   if(m_pimpl->view) {
     if (m_fullscreen) {
-      [[m_pimpl->view openGLContext] setFullScreen];
+	   [[m_pimpl->view openGLContext] setFullScreen]; // replace depreciated setFullScreen with toggleFullScreen?
     } else {
       [[m_pimpl->view openGLContext] clearDrawable];
     }
@@ -527,10 +536,11 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
 
   ProcessSerialNumber proc;
-  GetCurrentProcess(&proc);
+  GetCurrentProcess(&proc); // Depreciated ... now what?
   TransformProcessType(&proc, kProcessTransformToForegroundApplication);
+  //[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
   SetFrontProcess(&proc);
-
+  //[NSApp activateIgnoringOtherApps:YES]; // Seems to be able to replace SetFrontProcess
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
