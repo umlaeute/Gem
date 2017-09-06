@@ -397,6 +397,7 @@ bool gemcocoawindow :: create(void)
 #endif
   [window setAcceptsMouseMovedEvents:YES];
   [window makeKeyAndOrderFront:nil];
+  [window setLevel:NSMainMenuWindowLevel+1]; //Set the window level to be above the menu bar.:
 
   titleMess(m_title);
 
