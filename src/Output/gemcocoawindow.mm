@@ -534,13 +534,16 @@ void gemcocoawindow :: menubarMess(int state) {
 void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
-
-  ProcessSerialNumber proc;
-  GetCurrentProcess(&proc); // Depreciated ... now what?
-  TransformProcessType(&proc, kProcessTransformToForegroundApplication);
-  //[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
-  SetFrontProcess(&proc);
-  //[NSApp activateIgnoringOtherApps:YES]; // Seems to be able to replace SetFrontProcess
+  
+  // An attempt to replace depreciated SetFrontProcess
+  NSRunningApplication *proc = [NSRunningApplication currentApplication];
+  [proc  activateWithOptions: (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
+  
+  //ProcessSerialNumber proc;
+  //GetCurrentProcess(&proc); // Depreciated ... now what?
+  //TransformProcessType(&proc, kProcessTransformToForegroundApplication);
+  //SetFrontProcess(&proc); // Depreciated ... now what?
+  
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
