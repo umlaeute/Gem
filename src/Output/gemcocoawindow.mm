@@ -374,7 +374,7 @@ bool gemcocoawindow :: create(void)
   attrvec.push_back(NSOpenGLPFADepthSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
   if(m_fullscreen) {
-    //attrvec.push_back(NSOpenGLPFAFullScreen);
+	  //attrvec.push_back(NSOpenGLPFAFullScreen); // depreciated
   }
 
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
@@ -383,6 +383,7 @@ bool gemcocoawindow :: create(void)
   for(i=0; i<attrvec.size(); i++) {
     attr[i]=attrvec[i];
   }
+  
   NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
   m_pimpl->view = [[GemCocoaView alloc] initWithFrame:[contentView bounds] pixelFormat:nsglFormat];
   m_pimpl->view->parent=this;
@@ -491,7 +492,8 @@ void gemcocoawindow :: fullscreenMess(int on) {
   m_fullscreen = on;
   if(m_pimpl->view) {
     if (m_fullscreen) {
-	   [[m_pimpl->view openGLContext] setFullScreen]; // replace depreciated setFullScreen with toggleFullScreen?
+	  [[m_pimpl->view openGLContext] setFullScreen];  // replace depreciated setFullScreen with toggleFullScreen?
+	  
     } else {
       [[m_pimpl->view openGLContext] clearDrawable];
     }
