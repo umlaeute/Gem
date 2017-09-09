@@ -374,6 +374,7 @@ bool gemcocoawindow :: create(void)
   attrvec.push_back(NSOpenGLPFADepthSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
   if(m_fullscreen) {
+	  // [window setContentView: m_pimpl->view]; // maybe this? doesnt seem to work though
 	  //attrvec.push_back(NSOpenGLPFAFullScreen); // depreciated
   }
 
@@ -493,7 +494,8 @@ void gemcocoawindow :: fullscreenMess(int on) {
   m_fullscreen = on;
   if(m_pimpl->view) {
     if (m_fullscreen) {
-	  [[m_pimpl->view openGLContext] setFullScreen];  // replace depreciated setFullScreen with toggleFullScreen?
+		[[m_pimpl->view openGLContext] setFullScreen];  // replace depreciated setFullScreen with toggleFullScreen?
+	  //[[m_pimpl->view openGLContext] setView:[window contentView]];
 	  
     } else {
       [[m_pimpl->view openGLContext] clearDrawable];
