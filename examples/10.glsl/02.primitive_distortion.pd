@@ -41,7 +41,7 @@
 #X msg 292 277 0.1;
 #X obj 74 428 pix_image img3.jpg;
 #X text 69 627 this shader create a dirty pseudo random value \, and
-move all vertices separatly;
+move all vertices separately;
 #N canvas 87 154 247 179 Gem.init 0;
 #X obj 118 46 loadbang;
 #X msg 118 81 reset;

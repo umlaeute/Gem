@@ -13,7 +13,7 @@ on the fly;
 #X text 42 447 upper-picture;
 #X text 198 448 lower-picture;
 #X text 38 465 NO transformation;
-#X text 198 467 RTX-tranformed;
+#X text 198 467 RTX-transformed;
 #X text 46 24 =======;
 #X text 380 248 lock time on x-axis;
 #X text 376 272 lock x on x-axis;

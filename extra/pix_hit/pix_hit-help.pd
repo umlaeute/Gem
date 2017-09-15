@@ -62,7 +62,7 @@
 #X text 511 56 open a supported;
 #X text 512 67 movie-clip;
 #X text 529 93 macOS: quicktime;
-#X text 522 83 windos: *.AVI;
+#X text 522 83 MS Windows: *.AVI;
 #X text 529 103 linux: depends...;
 #X floatatom 469 166 3 0 100 2 threshold - -;
 #X obj 469 180 / 100;
@@ -92,7 +92,7 @@ whether blob is within rectangle at x/y with dimension w/h;
 #X text 24 381 Inlet 1: show <bool>: whether to mark hit blobs in the
 output image or not (default: 0);
 #X text 17 447 Outlet 2: hit info: "list <ID:int> <hit:bool>" that
-indicates which tests were successfull.;
+indicates which tests were successful.;
 #X text 12 71 [pix_hit] detects whether a "min" number of pixels is
 over a given "threshold" within a given test area. You can add up to
 256 (currently this is a hardcoded limit) test areas \, each of them

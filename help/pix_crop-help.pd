@@ -71,7 +71,7 @@
 #X floatatom 556 177 5 0 0 1 offY - -;
 #X text 29 77 Description: get a subimage of an image;
 #X text 12 91 [pix_crop]: only passes the selected rectangle further
-on. The slection is made by the dimension of the subimage in pixels
+on. The selection is made by the dimension of the subimage in pixels
 and the offset (in pixels) from the lower left corner.;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);

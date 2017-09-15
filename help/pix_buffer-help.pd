@@ -22,7 +22,7 @@ have a look at it's contents).;
 #X text 23 281 Inlet 1: bang: get the size of the buffer in frames
 ;
 #X text 12 123 The images stored in the [pix_buffer] can have different
-dimensions and coulorspaces. Memory is reserved on demand \, but you
+dimensions and colourspaces. Memory is reserved on demand \, but you
 can preallocate memory with the [allocate( message.;
 #X text 23 481 Outlet 1: int: size of the buffer;
 #X msg 464 128 bang;

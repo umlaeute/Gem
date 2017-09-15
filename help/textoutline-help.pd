@@ -54,7 +54,7 @@
 "vera.ttf" is searched in the paths. If it is not found you will not
 see anything unless you load a valid font via the "font"-message. The
 font-loader uses Pd's search-paths \, so you could specify your path
-aon the command-line and load fonts with just "font times.ttf".;
+on the command-line and load fonts with just "font times.ttf".;
 #X text 7 208 Justification:;
 #X text 32 223 horizontal justification can be one of "left" \, "right"
 \, "center"(default) and "base"(none);

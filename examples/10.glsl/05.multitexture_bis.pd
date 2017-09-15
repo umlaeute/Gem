@@ -59,7 +59,7 @@
 #X obj 907 285 loadbang;
 #X obj 919 379 loadbang;
 #X obj 890 220 gemhead 22;
-#X text 187 360 2) change shader texuinit;
+#X text 187 360 2) change shader texunit;
 #X msg 685 311 open img2.jpg;
 #X obj 666 340 pix_image img2.jpg;
 #X obj 890 337 pix_image img3.jpg;

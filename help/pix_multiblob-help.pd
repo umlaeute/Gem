@@ -76,7 +76,7 @@ minimum size of a blob that is needed to be detected.;
 #X text 511 56 open a supported;
 #X text 512 67 movie-clip;
 #X text 529 93 macOS: quicktime;
-#X text 522 83 windos: *.AVI;
+#X text 522 83 MS Windows: *.AVI;
 #X text 529 103 linux: depends...;
 #X floatatom 469 169 3 0 100 2 threshold - -;
 #X obj 469 186 / 100;

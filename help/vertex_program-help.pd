@@ -159,7 +159,7 @@ driver \, ...) has to support either (or both) the ARB shader extensions
 or the NV shader extensions in order to make use of this object.;
 #X text 10 176 Of course \, you also have to supply anything else needed
 for the shader to work (like textures \, ...);
-#X text 35 362 Inlet 1: messsage: open <filename> : vertex shader program
+#X text 35 362 Inlet 1: message: open <filename> : vertex shader program
 to load;
 #X obj 451 296 teapot;
 #X obj 453 422 fragment_program;

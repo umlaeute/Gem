@@ -1228,7 +1228,7 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 on other OS/hardware.;
 #X text 29 72 This patch is quite huge. the GPU compute the position
 of 64x92 masses \, and 64x92x12 links at 50x20 Hz. (about 7e+07 links/sec
-\, so about 100 time faster than what is curently possible with MSD
+\, so about 100 time faster than what is currently possible with MSD
 on a CPU) (My GPU is old \, this patch performs 10 to 50 times faster
 on a good GPU);
 #X obj 606 346 s qqt_noise;

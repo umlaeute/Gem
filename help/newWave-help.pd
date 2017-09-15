@@ -112,7 +112,7 @@ factors (defaults: K1=0.05 D1=0.1 K2=K3=D2=D3=0);
 #X msg 502 146 texture 0;
 #X msg 591 389 force 15 5 -0.5;
 #X obj 494 115 rotateXYZ 135 0 0;
-#X text 24 290 Inlet 1: message: force (X Y val): aply a force of value
+#X text 24 290 Inlet 1: message: force (X Y val): apply a force of value
 "val" onto the wave at position (X Y);
 #X text 63 159 1 : X grid-resolution \, default : 3;
 #X text 63 171 2 : Y grid resolution \, default : X value;

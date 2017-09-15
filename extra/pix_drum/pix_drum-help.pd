@@ -24,7 +24,7 @@
 #X obj 160 298 outlet;
 #X text 41 190 mode;
 #X text 169 14 first inlet takes the threshold value (0-1);
-#X text 240 190 min_wid;
+#X text 233 190 min_width;
 #X text 290 190 dist_ctr;
 #X msg 144 106 12;
 #X msg 222 108 0.12;
@@ -142,7 +142,7 @@
 #X connect 6 0 3 0;
 #X restore 409 52 pd presets;
 #X text 292 269 bottom \, top \, right \, left;
-#X text 57 83 mode: selescts mode of operation (0 \, 1 or 2);
+#X text 57 83 mode: selects mode of operation (0 \, 1 or 2);
 #X text 56 121 thresh: threshold for contrast (0-1);
 #X text 6 494 pix_drum looks for black pixels incoming from the top
 a video frame.;
@@ -162,7 +162,7 @@ graph \, values higher than this scaled height are part of a peak;
 than scaled height to report a peak;
 #X text 57 213 dist_ctr: minimum distance from primary peak to report
 a secondary peak.;
-#X text 265 257 INLET 2: defines the bounds of the anrea of analysis
+#X text 265 257 INLET 2: defines the bounds of the area of analysis
 ;
 #X text 56 68 INLET 1: Analysis Parameters;
 #X text 6 471 INFORMATION;
@@ -173,7 +173,7 @@ the primary peak.;
 #X text 9 660 where (x) is a deviation from the center (i). If the
 line is straight y=0 \, if it is concave or convex \, hey are negative
 or positive.;
-#X text 11 699 The results of this test are recroded in a graph. secondary
+#X text 11 699 The results of this test are recoded in a graph. secondary
 peaks are the point where two concave curves meet \, which therefore
 has a higher value for y in the concavity text.;
 #N canvas 0 0 450 300 print 0;
@@ -213,7 +213,7 @@ has a higher value for y in the concavity text.;
 #X text 188 337 outlet 1: primary peak information;
 #X text 211 368 Areas are normalized;
 #X text 189 383 outlet 2: secondary peak information;
-#X text 212 415 side: At which side of the 1ry preak is the secondary
+#X text 212 415 side: At which side of the primary peak is the secondary
 peak.;
 #X text 246 427 Left = 0 \, Right = 1;
 #X text 220 353 [x coord. \, y coord. \, Left Area \, Right Area];
@@ -225,7 +225,7 @@ peak.;
 #X text 249 837 joliverl-2010 v0.01;
 #X text 193 454 outlets 3 and 4 are currently not supported;
 #X text 12 756 This object was programmed as part of the Silent Percussion
-Proect \, for use in the Silent Drum Controller. For more infomation:
+Project \, for use in the Silent Drum Controller. For more information:
 http://www.jaimeoliver.pe/drum;
 #X connect 0 0 1 0;
 #X connect 0 1 29 0;

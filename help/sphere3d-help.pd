@@ -51,7 +51,7 @@
 #X text 27 318 Inlet 3: int: number of segments;
 #X text 33 14 Synopsis: [sphere3d];
 #X text 7 65 Description: Renders a sphere3d.;
-#X text 14 82 The sphere3d object renders a segemented sphere3d at
+#X text 14 82 The sphere3d object renders a segmented sphere3d at
 the current position with current color. The look of the sphere3d can
 be changed with the draw message \, its size can be changed via the
 second inlet.;

@@ -18,7 +18,7 @@ the gemchain like in this example.;
 to the computer.;
 #X text 306 93 This define the way screen are positioned in space to
 create a single image.;
-#X text 305 159 geometry screen and geometry computer can be diferents
+#X text 305 159 geometry screen and geometry computer can be different
 \, but should define the same number of screen.;
 #X connect 0 0 10 0;
 #X connect 1 0 5 0;

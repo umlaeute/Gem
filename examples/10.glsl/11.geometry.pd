@@ -27,7 +27,7 @@
 #X obj 44 576 circle;
 #X obj 182 176 t b b;
 #X text 184 7 geometry shader;
-#X text 48 28 The geometry shader is usefull to create new geometry
+#X text 48 28 The geometry shader is useful to create new geometry
 ;
 #X text 51 47 Here is an example where 40 circles are draw with 1 single
 primitive.;

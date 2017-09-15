@@ -177,7 +177,7 @@
 #X obj 276 164 loadbang;
 #X text 329 108 This is an example of how fexpr~ could be used for
 solving differential equations \, in this case the lorenz equations
-which generate chotic signals;
+which generate chaotic signals;
 #X text 577 390 Note the following shorthands:;
 #X text 576 406 $y1 -> $y1[-1] \, $y2 -> $y2[-1] \, .....;
 #X text 464 344 the 'set' commands sets the initial previous values
@@ -471,8 +471,8 @@ which generate chotic signals;
 #X obj 440 31 t b b b;
 #X text 162 619 color and position are updated at every frame. you
 just have to change array value....;
-#X text 156 504 replace this with iem_tab_* stuf in order to increase
-performances if you wish to update point position at every frame;
+#X text 156 504 replace this with iem_tab_* stuff in order to increase
+performance if you wish to update point positions at every frame;
 #X obj 36 -2 inlet;
 #X obj 123 122 f;
 #X obj 279 120 f;
@@ -869,7 +869,7 @@ for partial draw.;
 #X floatatom 719 113 5 0 0 0 - - -, f 5;
 #X text 27 479 Inlet 1: message: program float : set the id for glsl
 program.;
-#X text 27 409 Inlet 1: message: postion_enable float \, color_enable
+#X text 27 409 Inlet 1: message: position_enable float \, color_enable
 float \, texture_enable float \, normal_enable float \, attribute_enable
 float : enable/disable the use of this data;
 #X text 27 507 Inlet 1: message: attribute name table (offset) : add

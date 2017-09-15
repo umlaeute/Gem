@@ -58,7 +58,7 @@ if you don't mind parallel light rays.;
 #X msg 527 184 debug \$1;
 #X text 19 219 Keep in mind that the attributes have to be set before
 rendering the vertices \, so if you are trying for frame accurate rendering
-\, you will want to set the gemhead order to a low nuber so that all
+\, you will want to set the gemhead order to a low number so that all
 of the values of the light get set first.;
 #X obj 472 296 sphere;
 #X floatatom 563 78 5 0 0 0 - - -;

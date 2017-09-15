@@ -66,16 +66,16 @@
 #X floatatom 476 151 5 0 0 1 common - -;
 #X msg 527 179 1 0.5 0;
 #X msg 528 201 0 0.4 0.8 1;
-#X text 10 93 pix_gain applies a gain multipler to each pixel in a
+#X text 10 93 pix_gain applies a gain multiplier to each pixel in a
 pix. The float is a constant modifier applied to all color components.
-If you use just R G B \, it asumes an alpha of 1.0.;
+If you use just R G B \, it assumes an alpha of 1.0.;
 #X text 13 152 NOTE: while you can use this \, remember that you can
-often acchieve the very same thing using the [color]-object for coloring
+often achieve the very same thing using the [color]-object for coloring
 the Geo onto which the image data is textured \, which could be done
 on the gfx-card (very efficient!) \, while [pix_gain] is always(!)
 done on the CPU!!!;
-#X text 23 305 Inlet 1: <float>: multiplyer for all channels;
-#X text 23 321 Inlet 2: list: 3 (RGB) or 4 (RGBA) values as multiplyers
+#X text 23 305 Inlet 1: <float>: multiplier for all channels;
+#X text 23 321 Inlet 2: list: 3 (RGB) or 4 (RGBA) values as multipliers
 for each channels;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;

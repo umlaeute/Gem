@@ -15,7 +15,7 @@ the speed-message.;
 #X text 44 380 [part_head] takes the number of particles that can exist
 in one instance of time as a creation-argument. (default=1000);
 #X text 53 424 if your particles do not die (e.g.: because the are
-killed wiht [part_killold]) \, your particle source will stop emitting
+killed with [part_killold]) \, your particle source will stop emitting
 particles after some time.;
 #X connect 0 0 3 0;
 #X connect 3 0 2 0;

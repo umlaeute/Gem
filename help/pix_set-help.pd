@@ -49,7 +49,7 @@
 #X msg 460 140 RGB;
 #X text 63 296 <width> <height>;
 #X text 21 79 [pix_set] will allow you to set the image-data of a pixel
-with one long list of (m*n) Pixel-Tupel.;
+with one long list of (m*n) pixel-tuples.;
 #X text 22 109 The size of the image can be set with creation-arguments.
 It defaults to 64*64.;
 #X text 22 143 How the list is interpreted depends on the mode \, [pix_set]

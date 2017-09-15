@@ -138,7 +138,7 @@
 #X text 60 187 <none>;
 #X text 102 -1 Synopsis: [gemframebuffer];
 #X text 122 15 Class: framebuffer object;
-#X text 12 50 Description: Renders a scenne in a texture \, for later
+#X text 12 50 Description: Renders a scene in a texture \, for later
 use.;
 #X text 12 68 this example renders a scene (pqtorusknots) into a framebuffer
 \, which is then used as a texture onto a square.;
@@ -152,7 +152,7 @@ gfx-card;
 #X text 26 385 Inlet 1: message: rectangle [0|1];
 #X text 103 262 (type of the framebuffer data);
 #X text 102 330 (dimension of the framebuffer texture);
-#X text 106 465 (usefull only with shader);
+#X text 106 465 (useful only with shader);
 #X text 106 448 (change texunit of the texture);
 #X text 104 402 (texturing mode \; rectangle (1) or normalized (0))
 ;

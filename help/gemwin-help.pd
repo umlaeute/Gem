@@ -459,7 +459,7 @@ window, f 32;
 #X floatatom 66 234 5 0 0 0 - - -, f 5;
 #X obj 80 283 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text 174 297 turn the seperation-line between the 2 screens in stereo-mode
+#X text 174 297 turn the separation-line between the 2 screens in stereo-mode
 1 on/off;
 #X msg 79 344 0 \, destroy;
 #X msg 79 369 create \, 1;

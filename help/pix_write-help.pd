@@ -96,7 +96,7 @@ to [pix_write] \, that is the moment that something is captured from
 the current frame buffer. When grabbing \, be sure that something is
 in the rendering-buffer \, else you will get a black texture. color_mode
 let you grab 1 (only red channel) \, 3 (RGB) or 4 (RGBA) byte per pixel.
-RGBA mode is usefull with framebufer.;
+RGBA mode is useful with framebuffer.;
 #X msg 480 182 color_format 4;
 #X connect 15 0 16 0;
 #X connect 16 0 15 0;

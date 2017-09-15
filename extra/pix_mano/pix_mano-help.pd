@@ -322,7 +322,7 @@ as a hand;
 #X text 460 449 outlet 4: valleys found in the contour;
 #X text 460 491 outlet 5: contours found;
 #X text 461 542 outlet 6: end of algorithm report;
-#X text 457 148 inlet 2: defines the bounds of the anrea of analysis
+#X text 457 148 inlet 2: defines the bounds of the area of analysis
 ;
 #X text 484 160 bottom \, top \, right \, left;
 #X text 457 181 inlet 3: parameters of contour analysis;
@@ -342,20 +342,20 @@ pix_samp;
 (eg. hands) over a light absorbing background (eg. black cloth). Light
 reflecting objects need to enter the video frame from one of the sides
 to be recognized. For example \, a white circle in the center will
-not be recognized as there is no entry pount in the borders of the
+not be recognized as there is no entry point in the borders of the
 frame.;
 #X text 58 426 Roughly \, the object works by setting a threshold to
-discriminate bewteen black and white pixels. shapes formed of white
+discriminate between black and white pixels. shapes formed of white
 pixels are analyzed in the order of largest entry section.;
 #X text 581 628 support information in www.jaimeoliver.pe;
 #X text 59 483 For each object an analysis of its contour is achieved.
 (see graph option in outlet two while entering your hand into the frame).
 The contours formed by a hand are averaged for smoothing and sampled
 \, and then are plotted as x \, y coordinates and variation in angle
-with respect to the previous sampled point. Ana analysis of this contour
+with respect to the previous sampled point. An analysis of this contour
 provides tips (positive peaks) and valleys (negative peaks);
 #X text 76 576 This object was programmed as part of the Silent Percussion
-Proect \, for use in the MANO Controller. For more infomation: http://www.jaimeoliver.pe
+Project \, for use in the MANO Controller. For more information: http://www.jaimeoliver.pe
 ;
 #X obj 117 47 pack f f f f;
 #X text 695 642 jaime.oliver@gmail.com;
