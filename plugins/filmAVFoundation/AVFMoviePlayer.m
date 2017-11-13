@@ -126,12 +126,12 @@
 
   // wait for the done semaphore signal
   if(async) {
-    dispatch_release(done);
+    //dispatch_release(done);
     return YES;
   }
   else { // done
     dispatch_semaphore_wait(done, DISPATCH_TIME_FOREVER);
-    dispatch_release(done);
+    //dispatch_release(done);
     return self.isLoaded;
   }
 }

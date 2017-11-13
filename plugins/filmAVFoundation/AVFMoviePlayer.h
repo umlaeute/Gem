@@ -12,7 +12,6 @@ Lukasz Karluk, Sam Kronick, James George, & Elie Zananiri 2014.
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
-
 -----------------------------------------------------------------*/
 #import <AVFoundation/AVFoundation.h>
 #import <Accelerate/Accelerate.h>
