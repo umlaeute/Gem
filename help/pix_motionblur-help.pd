@@ -64,7 +64,7 @@
 #X text 505 77 open a supported;
 #X text 506 88 movie-clip;
 #X text 505 109 macOS: quicktime;
-#X text 498 99 windos: *.AVI;
+#X text 498 99 MS Windows: *.AVI;
 #X text 505 119 linux: depends...;
 #X obj 451 238 pix_motionblur;
 #X text 50 12 Synopsis: [pix_motionblur];

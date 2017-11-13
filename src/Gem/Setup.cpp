@@ -68,27 +68,13 @@ static const char GEM_OTHERAUTHORS[] =
   "Guenter Geiger, Daniel Heckenberg, James Tittle, Hans-Christoph Steiner, et al.";
 
 # include "m_pd.h"
-extern "C" {
-#if defined HAVE_S_STUFF_H
-# include "s_stuff.h"
+# include "RTE/RTE.h"
 
-# ifndef _WIN32
-  /* MSVC/MinGW cannot really handle these exported symbols */
-#  define GEM_ADDPATH
-# endif
-  
-#endif /* HAVE_S_STUFF_H */
-  
-  /* this is ripped from m_imp.h */
-  struct _gemclass
-  {
-    t_symbol *c_name;                   /* name (mostly for error reporting) */
-    t_symbol *c_helpname;               /* name of help file */
-    t_symbol *c_externdir;              /* directory extern was loaded from */
-    /* ... */ /* the real t_class continues here... */
-  };
-# define t_gemclass struct _gemclass
+#if defined HAVE_M_IMP_H
+extern "C" {
+# include "m_imp.h"
 } // for extern "C"
+#endif /* HAVE_M_IMP_H */
 
 
 
@@ -169,32 +155,36 @@ namespace {
     }
 
     char*mypath=0;
-    t_gemclass *c = (t_gemclass*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
+    t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
+#ifdef HAVE_M_IMP_H
     mypath=c->c_externdir->s_name;
+#endif /* HAVE_S_STUFF_H */
 
-    /* check whether we can find the abstractions in Gem's own path */
-    snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
-    buf[MAXPDSTRING-1]=0;
-    if ((fd=_open(buf, flags))>=0){
-      _close(fd);
-    } else {
-      // can't find this abstraction...giving up
-      error("GEM: unable to find Gem's abstractions");
-      error("GEM: please add path to '%s' to your search-path!", filename);
-      return;
+    int success = 0;
+
+    if (mypath) {
+      /* check whether we can find the abstractions in Gem's own path */
+      snprintf(buf, MAXPDSTRING-1, "%s/%s", mypath, filename);
+      buf[MAXPDSTRING-1]=0;
+      if ((fd=_open(buf, flags))>=0){
+        _close(fd);
+        verbose(1, "GEM: trying to add Gem path '%s' to search-paths", mypath);
+        gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
+        if(rte)
+          success = rte->addSearchPath(mypath, 0);
+      }
     }
-
-#ifdef GEM_ADDPATH
-    verbose(1, "GEM: eventually adding Gem's path '%s' to search-paths", mypath);
-    sys_searchpath = namelist_append(sys_searchpath, mypath, 0);
-#else
-    error("GEM: unable to find Gem's abstractions!");
-    error("GEM: please manually add '%s' to your search-path", mypath);
-#ifndef HAVE_S_STUFF_H
-    verbose(2, "GEM: Gem cannot auto-add the search path,");
-    verbose(2, "GEM:   due to missing <s_stuff.h> during compilation");
-#endif
-#endif
+    if(!success) {
+      // can't find this abstraction...giving up
+      std::string qpath = std::string("");
+      if (mypath) {
+        qpath += " '";
+        qpath += mypath;
+        qpath += "'";
+      } else
+        error("GEM: unable to find Gem's abstractions");
+      error("GEM: please manually add Gem path%s to Pd's search path", qpath.c_str());
+    }
 
     checkVersion(mypath, filename, flags);
   }
@@ -224,9 +214,9 @@ namespace Gem {
     }
     verbose(-1, "GEM: with help by %s", GEM_OTHERAUTHORS);
     verbose(-1, "GEM: found a bug? miss a feature? please report it:");
-    verbose(-1, "GEM: \thomepage http://gem.iem.at/");
-    verbose(-1, "GEM: \tbug-tracker http://sourceforge.net/projects/pd-gem/");
-    verbose(-1, "GEM: \tmailing-list http://lists.puredata.info/listinfo/gem-dev/");
+    verbose(-1, "GEM: \thomepage https://gem.iem.at/");
+    verbose(-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
+    verbose(-1, "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
 
     gem::Settings::init();
     addownpath("Gem-meta.pd");

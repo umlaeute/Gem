@@ -30,7 +30,7 @@
 #X obj 50 540 gemlist_info;
 #X obj 50 519 translateXYZ;
 #X obj 50 131 t a b;
-#X text 170 153 create new groupe;
+#X text 170 153 create new group;
 #X text 147 411 3rd vertex of the square;
 #X obj 104 498 * 2;
 #X obj 50 604 t b;

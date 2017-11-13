@@ -70,7 +70,7 @@
 1;
 #X msg 521 196 distance \$1;
 #X text 29 76 Description: display a pix by itself;
-#X text 49 12 Synopsis: [pix_metaimate];
+#X text 49 12 Synopsis: [pix_metaimage];
 #X text 22 103 The output image is composed of many smaller versions
 of the input image \, altered to match the colors of the area they
 cover in the original image.;

@@ -83,7 +83,7 @@ It defaults to 64*64. It can be dynamically changed by the set message.
 #X text 41 163 Each time you send a bang \, a new noise is generated.
 You can send an [auto 1( message to generate a noise for each render
 frame.;
-#X text 42 453 seed <int> : change the initalization of the random
+#X text 42 453 seed <int> : change the initialization of the random
 function;
 #X connect 8 0 9 0;
 #X connect 9 0 8 0;

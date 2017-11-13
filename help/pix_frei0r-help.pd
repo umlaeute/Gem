@@ -74,7 +74,7 @@ for abstractions \, ...!;
 #X text 505 77 open a supported;
 #X text 506 88 movie-clip;
 #X text 523 114 macOS: quicktime;
-#X text 516 104 windos: *.AVI;
+#X text 516 104 MS Windows: *.AVI;
 #X text 523 124 linux: depends...;
 #X obj 450 227 cnv 15 160 85 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -96,7 +96,7 @@ for abstractions \, ...!;
 [pix_frei0r bw0r] or [pix_bw0r] \, the plugin is fixed and you cannot
 change it (apart from deleting the object and creating a new one);
 #X text 13 163 However \, if you only create an object [pix_frei0r]
-(without specifying the pugin \, you will get a dynamic version \,
+(without specifying the plugin \, you will get a dynamic version \,
 where you can load in a plugin using the "load" message.;
 #X text 12 202 Most plugins have a number of parameters which you can
 use to change the behaviour of the effect while it runs. For each parameter

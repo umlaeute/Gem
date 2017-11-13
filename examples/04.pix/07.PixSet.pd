@@ -6,7 +6,7 @@
 #X obj 149 343 loadbang;
 #X text 101 487 maybe have a look at;
 #X text 101 24 pix_set;
-#X text 246 23 set the pixles of the image;
+#X text 246 23 set the pixels of the image;
 #X msg 279 165 rgb;
 #X msg 279 141 rgba;
 #X msg 279 189 grey;

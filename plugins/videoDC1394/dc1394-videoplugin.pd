@@ -4,7 +4,7 @@
 all the time.;
 #X text 56 79 in MANUAL mode \, the parameter's value is set with;
 #X text 55 18 if your device supports it \, you can change the mode
-of a paramter (aka feature) with the message;
+of a parameter (aka feature) with the message;
 #X msg 296 33 set featureMode mode;
 #X msg 357 79 set feature value;
 #X text 547 12 example :;

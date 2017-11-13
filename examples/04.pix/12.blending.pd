@@ -86,7 +86,7 @@
 #X text 26 39 pix1;
 #X text 176 269 pix2;
 #X obj 350 56 symbol;
-#X text 99 232 we need an alpha componenct for 'composite';
+#X text 99 232 we need an alpha component for 'composite';
 #X text 85 115 [pix_add] and friends will overwrite the original (left)
 image with the blend. [pix_buf] holds a local copy of the original
 image and will refresh the output when banged.;

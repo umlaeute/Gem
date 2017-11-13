@@ -54,7 +54,7 @@ similar to combining [separator] and [pix_separator]. (cc);
 #X obj 199 312 spigot 0;
 #X obj 278 276 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text 311 274 <- if you reset the random at the begining of each
+#X text 311 274 <- if you reset the random at the beginning of each
 frame \, then all frames look the same.;
 #X obj 21 101 scaleXYZ 1 1 1;
 #X floatatom 52 80 5 0 0 0 - - -;

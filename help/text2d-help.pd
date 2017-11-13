@@ -84,7 +84,7 @@ rendering ON before loading a font.;
 "vera.ttf" is searched in the paths. If it is not found you will not
 see anything unless you load a valid font via the "font"-message. The
 font-loader uses Pd's search-paths \, so you could specify your path
-aon the command-line and load fonts with just "font times.ttf".;
+on the command-line and load fonts with just "font times.ttf".;
 #X obj 538 420 text3d;
 #X text 468 419 see also:;
 #X obj 538 443 textextruded;

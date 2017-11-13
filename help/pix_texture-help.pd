@@ -131,7 +131,7 @@ color.;
 #X text 57 700 Outlet 2: texture info : <id> <width> <height> <type>
 <upsidedown flag>;
 #X text 32 576 Inlet 1: message: texunit <f>;
-#X text 112 611 (usefull only with shader);
+#X text 112 611 (useful only with shader);
 #X text 112 594 (change texunit of the texture);
 #X floatatom 463 286 5 0 0 0 - - -;
 #X msg 463 305 texunit \$1;

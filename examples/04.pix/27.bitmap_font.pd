@@ -60,7 +60,7 @@
 #X text 485 241 - space bar add a space...;
 #X text 485 251 - enter reset all;
 #X text 520 283 purpose :;
-#X text 495 299 - orginally design to drive a LED matrix;
+#X text 495 299 - originally design to drive a LED matrix;
 #X msg 260 298 roi \$1 \$2 \$3 \$4;
 #X obj 260 211 t f f;
 #X obj 260 253 pack 0 0 0 8;

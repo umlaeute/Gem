@@ -1590,7 +1590,7 @@
 #X connect 6 0 1 0;
 #X restore 214 484 pd pak f f f;
 #X floatatom 281 464 5 0 0 0 - - -;
-#X obj 214 532 s exemples_shape;
+#X obj 214 532 s examples_shape;
 #X obj 136 532 s curve3d;
 #X obj 57 532 s curve3d;
 #X text 13 68 Description: Renders a 3d bezier curve.;
@@ -1608,10 +1608,10 @@ the displayed curve (X Y are 2 int);
 #X text 53 349 This message can be use to set the position of a control
 point. (Mx \, My : position of the point in the matrix. X \, Y \, Z
 : position of this control point;
-#X text 21 447 exemples :;
+#X text 21 447 examples :;
 #X text 29 87 The curve3d object renders a curve at the current position
-with current color or texture. The shape of the curve is cotrolled
-from a matrix. Note that control points are not necessary part of the
+with current color or texture. The shape of the curve is controlled
+from a matrix. Note that control points are not necessarily part of the
 curve.;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;

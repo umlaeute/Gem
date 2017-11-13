@@ -54,7 +54,7 @@
 "vera.ttf" is searched in the paths. If it is not found you will not
 see anything unless you load a valid font via the "font"-message. The
 font-loader uses Pd's search-paths \, so you could specify your path
-aon the command-line and load fonts with just "font times.ttf".;
+on the command-line and load fonts with just "font times.ttf".;
 #X text 7 208 Justification:;
 #X text 32 223 horizontal justification can be one of "left" \, "right"
 \, "center"(default) and "base"(none);
@@ -88,7 +88,7 @@ the current color \, and all 3D-transformation;
 0;
 #X text 22 573 Note: GEM needs to be compiled with FTGL-support for
 this to work;
-#X text 472 418 siehe auch:;
+#X text 472 418 see also:;
 #X obj 545 418 text2d;
 #X obj 592 418 text3d;
 #X connect 3 0 4 0;

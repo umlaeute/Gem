@@ -65,7 +65,7 @@
 #X text 42 95 [pix_colorreduce] will reduce the number of colours in
 a pixImage \, based on statistical information of the image.;
 #X text 64 232 Inlet 2: float: number of colours;
-#X text 64 247 Inlet 3: float: perisistency of the palette;
+#X text 64 247 Inlet 3: float: persistency of the palette;
 #X text 64 262 Inlet 4: float: edge smoothing;
 #X floatatom 464 178 5 0 255 2 number - -;
 #X floatatom 516 178 5 0 1 2 persist - -;

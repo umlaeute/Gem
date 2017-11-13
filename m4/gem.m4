@@ -501,39 +501,57 @@ GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
 GEM_RTE="Pure Data"
 
+have_pd=no
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
-
 ## some default paths
 AS_IF([ test "x${with_pd}" = "x" ],[
- case $host_os in
- *darwin*)
+ AS_CASE([$host_os],
+ [*-darwin*], [
     AS_IF([ test -d "/Applications/Pd-extended.app/Contents/Resources" ], [ with_pd="/Applications/Pd-extended.app/Contents/Resources" ])
     AS_IF([ test -d "/Applications/Pd.app/Contents/Resources" ], [ with_pd="/Applications/Pd.app/Contents/Resources" ])
- ;;
- *mingw* | *cygwin*)
+    ],
+ [*mingw* | *cygwin*], [
     AS_IF([ test -d "${PROGRAMFILES}/Pd-extended" ], [ with_pd="${PROGRAMFILES}/Pd-extended" ])
     AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
- ;;
- esac
+],)])
+
+AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
+   PKG_CHECK_MODULES([PD], [pd], [have_pd="yes"])
+   GEM_RTE_CPPFLAGS="${GEM_RTE_CPPFLAGS} ${PD_CFLAGS}"
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} ${PD_CFLAGS}"
+   GEM_RTE_CXXFLAGS="${GEM_RTE_CXXFLAGS} ${PD_CFLAGS}"
+   GEM_RTE_LIBS="${GEM_RTE_LIBS} ${PD_LIBS}"
+   with_pd=""
 ])
 
 AS_IF([ test -d "$with_pd"  ],[
+ AC_MSG_CHECKING([include paths for Pd])
  if test -d "${with_pd}/src" ; then
+   AC_MSG_RESULT([${with_pd}/src])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/src"
  elif test -d "${with_pd}/include/pd" ; then
+   AC_MSG_RESULT([${with_pd}/include/pd])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include/pd"
  elif test -d "${with_pd}/include" ; then
+   AC_MSG_RESULT([${with_pd}/include])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include"
  else
+   AC_MSG_RESULT([${with_pd}])
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}"
  fi
+ AC_MSG_CHECKING([library paths for Pd])
  AS_IF([ test -d "${with_pd}/bin"  ],[
+   AC_MSG_RESULT([${with_pd}/bin])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}/bin"
  ],[
+   AC_MSG_RESULT([${with_pd}])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
  ])
+ have_pd=yes
+])
 
+AS_IF([ test "x${have_pd}" = "xyes" ],[
  CPPFLAGS="$CPPFLAGS ${GEM_RTE_CFLAGS}"
  CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
  CXXFLAGS="$CXXFLAGS ${GEM_RTE_CFLAGS}"
@@ -549,9 +567,14 @@ AS_IF([ test "x$have_pddll" = "xyes" ], [
 
 AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
 
-dnl LATER check why this doesn't use the --with-pd includes
 dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
 AC_CHECK_HEADERS([s_stuff.h], [], [],
+[#ifdef HAVE_M_PD_H
+# define PD
+# include "m_pd.h"
+#endif
+])
+AC_CHECK_HEADERS([m_imp.h], [], [],
 [#ifdef HAVE_M_PD_H
 # define PD
 # include "m_pd.h"

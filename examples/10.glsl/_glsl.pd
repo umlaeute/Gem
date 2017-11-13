@@ -31,7 +31,7 @@
 #X msg 287 598 0;
 #X obj 15 65 t b b b;
 #X obj 140 199 symbol \$1;
-#X text 270 193 This abstraction can be usefull to load shader. Shader
+#X text 270 193 This abstraction can be useful to load shader. Shader
 location is relative to this abstraction path.;
 #X connect 0 0 9 0;
 #X connect 0 1 6 0;

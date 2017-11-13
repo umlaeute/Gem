@@ -68,10 +68,10 @@
 rectangle: <x1> <y1> <x2> <y2>;
 #X msg 494 151 40 10 100 200;
 #X text 13 305 Inlet 3: list : 3(RGB) or 4(RGBA) float-values defining
-the color of the rectangle (defaut: 1 1 1 1);
+the color of the rectangle (default: 1 1 1 1);
 #X text 21 111 pix_rectangle renders a rectangle onto a pix-buffer.
 This means that you have to have an image already loaded to render
-into. Set the positione and size with the two corners of the rectangle.
+into. Set the position and size with the two corners of the rectangle.
 ;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;

@@ -36,7 +36,7 @@
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
 #X restore 373 156 pd init;
-#X text 6 4 first input \, render whatever in a frambuffer;
+#X text 6 4 first input \, render whatever in a framebuffer;
 #X obj 691 357 loadbang;
 #X obj 42 222 pix_image img1.jpg;
 #X obj 42 54 gemhead 11;
@@ -225,7 +225,7 @@
 #X msg 141 88 K1 \$1;
 #X text 183 69 change effect;
 #X text 347 1 second input : same as 1st.;
-#X text 7 22 put framebuffer as texunit 1 \, for futur use;
+#X text 7 22 put framebuffer as texunit 1 \, for future use;
 #X text 348 17 render an image in framebuffer.;
 #X text 350 31 put framebuffer in texunit 2;
 #X text 632 8 finally :;
@@ -235,7 +235,7 @@
 #X msg 449 98 K \$1;
 #X msg 449 58 0.1;
 #X text 161 433 <-------------------;
-#X text 569 442 draw the final frambuffer (without shader);
+#X text 569 442 draw the final framebuffer (without shader);
 #X obj 671 335 rotateXYZ -20 0 0;
 #N canvas 87 154 247 179 Gem.init 0;
 #X obj 58 46 loadbang;

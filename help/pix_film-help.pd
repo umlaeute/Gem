@@ -57,8 +57,8 @@
 #X msg 463 136 open \$1;
 #X obj 451 432 rectangle 4 3;
 #X text 50 12 Synopsis: [pix_film];
-#X text 15 78 [pix_film] loads in a preproducecd digital-video to be
-used aas a texture \, bitblit or something else.;
+#X text 15 78 [pix_film] loads in a preproduced digital-video to be
+used as a texture \, bitblit or something else.;
 #X text 64 249 symbol: file to load initially;
 #X text 18 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
 the movie <filename> and decodes it into the specified color-space.
@@ -90,7 +90,7 @@ to zero when the end of the film is reached.;
 #N canvas 18 78 928 614 :: 0;
 #X text 24 16 the format [pix_film] is able to decode depends on the
 system you are running Gem.;
-#X text 33 52 basically Gem's decoding capabailities are handled by
+#X text 33 52 basically Gem's decoding capabilities are handled by
 plugins. You should see \, which plugins are loaded \, when instantiating
 the first [pix_film] object: a line "[pix_film]: foo support" means
 \, that the 'foo' plugin has been loaded.;
@@ -149,7 +149,7 @@ to decode MPEG-streams;
 #X text 473 512 outputs test images rather than decoding real media
 files;
 #X text 270 194 available film decoding plugins;
-#X text 260 210 (recommended plugins are highlighed);
+#X text 260 210 (recommended plugins are highlighted);
 #X text 474 452 an alternative implementation of the QuickTime plugin
 for OS-X only;
 #X restore 455 484 pd :: FORMATS;

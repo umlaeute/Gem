@@ -23,7 +23,7 @@
 #X obj 55 488 gemlist_info;
 #X obj 55 467 translateXYZ;
 #X obj 55 131 t a b;
-#X text 171 155 create new groupe;
+#X text 171 155 create new group;
 #X msg 136 257 v \$1 \$2 \$3;
 #X msg 136 383 v \$1 \$2 \$3;
 #X msg 136 509 v \$1 \$2 \$3;

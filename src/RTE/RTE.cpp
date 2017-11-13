@@ -14,12 +14,21 @@
 // currently only numeric arrays
 //
 /////////////////////////////////////////////////////////
+#include "Gem/GemConfig.h"
+
 
 #include "RTE/RTE.h"
-
 #include "m_pd.h"
-#include <sstream>
+#if defined HAVE_S_STUFF_H
+extern "C" {
+# include "s_stuff.h"
+}
+#else
+# warning s_stuff.h missing
+#endif
 
+
+#include <sstream>
 
 #if defined __linux__ || defined __APPLE__
 # define DL_OPEN
@@ -59,10 +68,7 @@ typedef void (*rte_getversion_t)(int*major,int*minor,int*bugfix);
 const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
   static rte_getversion_t rte_getversion=NULL;
   if(NULL==rte_getversion) {
-    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
-    if(rte) {
-      rte_getversion=(rte_getversion_t)rte->getFunction("sys_getversion");
-    }
+    rte_getversion=(rte_getversion_t)this->getFunction("sys_getversion");
   }
 
   if(rte_getversion) {
@@ -80,7 +86,7 @@ const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
   return std::string("");
 }
 
-void*RTE :: getFunction(const std::string&name) {
+void*RTE :: getFunction(const std::string&name) const {
 #ifdef DL_OPEN
   return (void*)dlsym(RTLD_DEFAULT, name.c_str());
 #elif defined _WIN32
@@ -123,10 +129,7 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
                         buf2, &bufptr, MAXPDSTRING, 1))>=0){
     static close_t rte_close=NULL;
     if(NULL==rte_close) {
-      RTE*rte=RTE::getRuntimeEnvironment();
-      if(rte) {
-	rte_close=(close_t)rte->getFunction("sys_close");
-      }
+      rte_close=(close_t)this->getFunction("sys_close");
       if(NULL==rte_close) {
 	rte_close=close;
       }
@@ -146,4 +149,41 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
     }
   }
   return result;
+}
+
+
+bool RTE::addSearchPath(const std::string&path, void* ctx) {
+  static bool didit=false;
+  static t_namelist *rte_searchpath = 0;
+  static bool modern = true;
+  if(ctx)
+    return false;
+
+  if(!didit) {
+    unsigned int major = 0, minor = 0;
+    rte_searchpath=(t_namelist*)this->getFunction("sys_searchpath");
+    this->getVersion(major, minor);
+    modern = ((major>0) || (minor>47));
+  }
+  if(modern) {
+    t_atom ap[2];
+    const char *inptr = path.c_str();
+    char encoded[MAXPDSTRING];
+    char*outptr = encoded;
+    *outptr++='+';
+    while(inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
+      *outptr++ = *inptr++;
+      if ('+'==inptr[-1])
+        *outptr++='+';
+    }
+    *outptr=0;
+    SETSYMBOL(ap+0, gensym(encoded));
+    SETFLOAT (ap+1, 0.f);
+    pd_typedmess(gensym("pd")->s_thing, gensym("add-to-path"), 2, ap);
+  } else {
+    if(!rte_searchpath)
+      return false;
+    rte_searchpath = namelist_append(rte_searchpath, path.c_str(), 0);
+  }
+  return true;
 }

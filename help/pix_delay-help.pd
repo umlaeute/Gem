@@ -67,7 +67,7 @@
 #X text 505 77 open a supported;
 #X text 506 88 movie-clip;
 #X text 505 109 macOS: quicktime;
-#X text 498 99 windos: *.AVI;
+#X text 498 99 MS Windows: *.AVI;
 #X text 505 119 linux: depends...;
 #X text 528 198 scrub me!;
 #X text 64 195 int: max.number of delayed frames;

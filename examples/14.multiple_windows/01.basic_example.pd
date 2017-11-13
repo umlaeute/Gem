@@ -11,7 +11,7 @@
 #X obj 223 138 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X text 240 136 create window;
-#X text 405 85 You can have multiple window and display diffenrents
+#X text 405 85 You can have multiple window and display different
 things on each.;
 #X obj 268 241 gemwin 20 b;
 #X text 405 119 Basically \, use [gemwin fps context_name] to create

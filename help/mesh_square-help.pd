@@ -59,7 +59,7 @@
 #X obj 476 167 t a;
 #X text 7 69 Description: Renders a mesh;
 #X text 63 186 resolution of the mesh;
-#X text 27 247 Inlet 1: message: draw [line|defaulf|point];
+#X text 27 247 Inlet 1: message: draw [line|default|point];
 #X text 27 261 Inlet 1: list: grid float : change the grid resolution
 ;
 #X text 27 274 Inlet 1: list: gridX float : change the X grid resolution
@@ -68,7 +68,7 @@
 ;
 #X text 16 86 The [mesh_square] object renders a mesh in a square at
 the current position with current color. The size of the square can
-be changed via the second inlet. This object is usefull when working
+be changed via the second inlet. This object is useful when working
 with vertex_shader;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;

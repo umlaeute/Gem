@@ -54,7 +54,7 @@ buffer.;
 in the [pix_buffer] object \, starting at an (optional) bufferindex
 (defaults to 0). The film is read as fast as possible and the entire
 film is read \, so you might get clicks.;
-#X text 13 151 This object is meant to be used at initialzation time.
+#X text 13 151 This object is meant to be used at initialization time.
 ;
 #X text 26 280 Inlet 1: message: open <filename> <bufferindex>: read
 a filename into buffer starting at index.;

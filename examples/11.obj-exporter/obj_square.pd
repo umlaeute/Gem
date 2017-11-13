@@ -38,7 +38,7 @@
 #X obj 50 519 translateXYZ;
 #X obj 104 477 r \$0-size;
 #X obj 50 131 t a b;
-#X text 150 152 create new groupe;
+#X text 150 152 create new group;
 #X text 147 411 3rd vertex of the square;
 #X obj 104 498 * 2;
 #X obj 50 604 t b;

@@ -33,7 +33,7 @@
 #X text 201 238 (it change even after a new gemhead \, this is not
 very intuitive);
 #X text 323 283 <- continue the render chain. The gemhead did not start
-a new gemchain \, because it is banged during a frambuffer rendering
+a new gemchain \, because it is banged during a framebuffer rendering
 ;
 #X text 113 10 This example show how to draw multiples gemhead in a
 single framebuffer;

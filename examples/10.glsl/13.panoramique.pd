@@ -387,12 +387,12 @@
 #X obj 552 -4 scaleXYZ 4 4 1;
 #X obj 747 -5 scaleXYZ 4 4 1;
 #X text 21 548 This patch allow multiples images to be assembled in
-order to dreate a panoramic image.;
+order to create a panoramic image.;
 #X text 20 575 A shader distord the image to correct distance distortion
 \, and allow a fade between 2 images;
 #X text 17 602 "dz" depend on the angles between images.;
 #X text 462 579 copyright cyrille Henry and iem.;
-#X text 463 596 This developement was suported by the COMEDIA project
+#X text 463 596 This development was supported by the COMEDIA project
 ;
 #X floatatom 18 354 5 0 0 0 - - -;
 #X msg 18 373 dZ \$1;

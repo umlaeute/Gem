@@ -19,7 +19,7 @@ or less) native color-space. most of the times \, this will probably
 be not RGBA but RGB or BGR (on windows machines).;
 #X text 48 153 do not worry about this. however \, most of the pix-manips
 will only work correctly on RGBA-pixes. if this is the case and you
-send it a non-RGBA pixture it will say something like "pix_object cannot
+send it a non-RGBA picture it will say something like "pix_object cannot
 handle gray image".;
 #X text 49 226 to avoid this \, you can convert your pix-buff to RGBA
 using "pix_rgba". this will be a no-cost operation if the pix_buf already
@@ -80,7 +80,7 @@ very fast.;
 #X restore 25 93 pd gemwin;
 #X msg 25 69 create;
 #X text 21 49 Create window and render;
-#X text 358 91 linux \, os-X:;
+#X text 358 91 linux \, OSX:;
 #X text 363 140 linux \, ??:;
 #X obj 345 181 t a;
 #X msg 410 207 open \$1;
