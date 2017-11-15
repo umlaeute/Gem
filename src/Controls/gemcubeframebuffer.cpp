@@ -367,12 +367,13 @@ void gemcubeframebuffer :: initFBO()
 /////////////////////////////////////////////////////////
 void gemcubeframebuffer :: destroyFBO()
 {
-  if(!GLEW_EXT_framebuffer_object)
-    return;
   // Release all resources.
-  if(m_depthBufferIndex) glDeleteRenderbuffersEXT(1, &m_depthBufferIndex);
-  if(m_frameBufferIndex) glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
-  if(m_offScreenID) glDeleteTextures(1, &m_offScreenID);
+  if(m_depthBufferIndex && GLEW_EXT_framebuffer_object)
+    glDeleteRenderbuffersEXT(1, &m_depthBufferIndex);
+  if(m_frameBufferIndex && GLEW_EXT_framebuffer_object)
+    glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
+  if(m_offScreenID && GLEW_EXT_framebuffer_object)
+    glDeleteTextures(1, &m_offScreenID);
 
   m_haveinit = false;
 }
