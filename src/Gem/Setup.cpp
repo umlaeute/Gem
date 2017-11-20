@@ -228,6 +228,18 @@ namespace Gem {
   }
 }; // namespace
 
+namespace {
+  void caseinsensitive_error(const char*gem)
+  {
+    /* traditionally Gem can be loaded with wrong spelling on a case-insenstive platform
+     * starting with 0.94 we issue a fat warning.
+     * however, much of Gem's loading is done via CTORs and the Gem::setup() only finishes
+     * the init phase; so we probably can never get rid of wrongly-spelled libraries ever.
+     */
+    error("GEM: rejecting incorrect spelling '%s' for cross-platform reasons: use 'Gem'!", gem);
+  }
+};
+
 extern "C" {
   GEM_EXTERN void Gem_setup()
   {
@@ -236,12 +248,12 @@ extern "C" {
 
   GEM_EXTERN void gem_setup()
   {
-    Gem_setup();
+    caseinsensitive_error("gem");
   }
 
   GEM_EXTERN void GEM_setup()
   {
-    Gem_setup();
+    caseinsensitive_error("GEM");
   }
 
 }   // for extern"C"
