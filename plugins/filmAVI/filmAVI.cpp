@@ -143,7 +143,7 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
     m_pbmihDst->biSize = sizeof(BITMAPINFOHEADER);
 
     m_format = GL_LUMINANCE;
-			
+
     m_pbmihDst->biBitCount			= 8;
     m_pbmihDst->biClrUsed			= 256;
     m_pbmihDst->biClrImportant		= 256;
@@ -159,7 +159,7 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
     *m_pbmihDst = *m_pbmihRaw;
 
     m_format = GL_BGR_EXT;
-			
+
     m_pbmihDst->biBitCount	= 24;
     m_pbmihDst->biClrUsed	= 0;
     m_pbmihDst->biClrImportant	= 0;

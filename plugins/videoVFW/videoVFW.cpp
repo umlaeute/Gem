@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -45,7 +45,7 @@ REGISTER_VIDEOFACTORY("VFW", videoVFW);
 //
 /////////////////////////////////////////////////////////
 videoVFW :: videoVFW(void)
-  : videoBase("vfw", 0), 
+  : videoBase("vfw", 0),
     m_hWndC(NULL)
 {
   provide("dv");
@@ -83,16 +83,16 @@ bool videoVFW :: openDevice(gem::Properties&props)
     m_height=d;
 
   if(m_hWndC)closeDevice();
-  
+
   // Connect to the daemon
-  m_hWndC = capCreateCaptureWindow ((LPSTR) "GEM video",	// window name if pop-up 
+  m_hWndC = capCreateCaptureWindow ((LPSTR) "GEM video",	// window name if pop-up
 				    0,				// window style (not visible)
 				    0, 0, m_width, m_height,// window position and dimensions
 				    GetDesktopWindow(), 0);
   if (!m_hWndC) {
     verbose(0, "[GEM:videoVFW] Unable to create capture window");
     return false;
-  } 
+  }
 
   if (!capDriverConnect(m_hWndC, 0)) {
     verbose(0, "[GEM:videoVFW] Unable to connect to video driver");

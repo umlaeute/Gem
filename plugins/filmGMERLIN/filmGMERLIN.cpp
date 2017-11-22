@@ -242,7 +242,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
 #else
   finalformat->pixelformat=GAVL_RGBA_32;
 #endif
-	
+
   m_finalframe = gavl_video_frame_create_nopad(finalformat);
   m_doConvert= (gavl_video_converter_init (m_gconverter, gformat, finalformat)>0);
   m_image.image.xsize=gformat->frame_width;

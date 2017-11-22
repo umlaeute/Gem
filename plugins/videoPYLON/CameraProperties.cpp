@@ -268,7 +268,7 @@ namespace gem{namespace pylon{namespace cameraproperties{
 
   /* GenApi::IRegister */
   // skip this, it's too lowlevel
-  
+
   /* GenApi::IEnumerationT */
   // do this manually!
 
@@ -304,8 +304,8 @@ namespace gem{namespace pylon{namespace cameraproperties{
   typedef std::string (*t_getenum)(DEVICE*device);
   typedef void (*t_setenum)(DEVICE*device, const std::string);
   typedef void (*t_setenumi)(DEVICE*device, const int);
-  std::map<std::string, t_getenum>map_getenum; 
-  std::map<std::string, t_setenum>map_setenum; 
+  std::map<std::string, t_getenum>map_getenum;
+  std::map<std::string, t_setenum>map_setenum;
   std::map<std::string, t_setenumi>map_setenumi;
 
   GETSETENUMVAL(AcquisitionMode);
@@ -366,7 +366,7 @@ namespace gem{namespace pylon{namespace cameraproperties{
   GETSETENUMVAL(UserOutputSelector);
   GETSETENUMVAL(UserSetDefaultSelector);
   GETSETENUMVAL(UserSetSelector);
-  
+
 
 };};};
 
@@ -1239,7 +1239,7 @@ gem::Properties&gem::pylon::cameraproperties::setKeys(void) {
   return result;
 }
 
-void gem::pylon::cameraproperties::get(Pylon::CBaslerGigECamera*device, 
+void gem::pylon::cameraproperties::get(Pylon::CBaslerGigECamera*device,
                                        std::string key,
                                        gem::any&result)
 {
@@ -1289,7 +1289,7 @@ void gem::pylon::cameraproperties::get(Pylon::CBaslerGigECamera*device,
 }
 
 
-bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device, 
+bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device,
                                        std::string key,
                                        gem::Properties&props)
 {
@@ -1363,7 +1363,7 @@ bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device,
       std::map<std::string, t_setenumi>::iterator it_ei=map_setenumi.find(key);
       if(it_ei != map_setenumi.end()) {
         it_ei->second(device, d);
-      }   
+      }
     }
     return true;
   }

@@ -35,7 +35,7 @@ using namespace gem::plugins;
 #define debugThread
 
 #if 0
-# undef debugPost 
+# undef debugPost
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__), ::post
 #endif
 
@@ -64,7 +64,7 @@ namespace {
   static const std::string s_name = std::string("unicap");
 }
 
-videoUNICAP :: videoUNICAP(void) : 
+videoUNICAP :: videoUNICAP(void) :
   m_width(-1), m_height(-1),
   m_handle(NULL),
   m_devicenum(-1),
@@ -73,7 +73,7 @@ videoUNICAP :: videoUNICAP(void) :
 {
   enumerate();
 }
-  
+
 ////////////////////////////////////////////////////////
 // Destructor
 //
@@ -111,7 +111,7 @@ bool videoUNICAP :: open(gem::Properties&props) {
     unsigned int d=ds[i];
     status = unicap_enumerate_devices (NULL, &device, d); // (1)
     if(SUCCESS(status)) {
-      status = unicap_open (&m_handle, &device);  
+      status = unicap_open (&m_handle, &device);
       if(SUCCESS(status)) {
         continue;
       }
@@ -130,9 +130,9 @@ void videoUNICAP :: close(void) {
   }
 }
 
-void videoUNICAP::newFrameCB (unicap_event_t event, 
-                              unicap_handle_t handle, 
-                              unicap_data_buffer_t * buffer, 
+void videoUNICAP::newFrameCB (unicap_event_t event,
+                              unicap_handle_t handle,
+                              unicap_data_buffer_t * buffer,
                               void *usr_data)
 {
   videoUNICAP*v=(videoUNICAP*)usr_data;
@@ -144,8 +144,8 @@ void videoUNICAP::newFrameCB (unicap_event_t event,
 namespace {
   typedef enum {
     FIRST=0,
-    RGB, 
-    RGBA, 
+    RGB,
+    RGBA,
     BGR,
     BGRA,
     RGB16,
@@ -158,7 +158,7 @@ namespace {
     YVYU,
     YV12,
     YU12,
-  
+
     ILLEGAL
   } fourcc_t;
 
@@ -167,9 +167,9 @@ namespace {
 #endif
 
 
-#define FOURCC(a,b,c,d) (unsigned int)((((unsigned int)d)<<24)+(((unsigned int)c)<<16)+(((unsigned int)b)<<8)+a) 
+#define FOURCC(a,b,c,d) (unsigned int)((((unsigned int)d)<<24)+(((unsigned int)c)<<16)+(((unsigned int)b)<<8)+a)
   /*
-    #define FOURCC(a) (unsigned int) ( 
+    #define FOURCC(a) (unsigned int) (
     ((((unsigned char*)a)[0])<<24)+             \
     ((((unsigned char*)a)[1])<<16)+             \
     ((((unsigned char*)a)[2])<< 8)+             \
@@ -256,7 +256,7 @@ namespace {
 };
 
 
-void videoUNICAP::newFrame (unicap_handle_t handle, 
+void videoUNICAP::newFrame (unicap_handle_t handle,
                             unicap_data_buffer_t * buffer) {
   unicap_format_t*fmt=&(buffer->format);
   post_fmt(fmt);
@@ -367,8 +367,8 @@ bool videoUNICAP :: start(void)
         debugPost("current penalty=%f", penalty);
         for( unsigned size_index = 0; size_index < format.size_count; size_index++ ) {
           double p=dimension_penalty(w, h, format.sizes[size_index]);
-          debugPost("[%d/%d] penalty for (%dx%d) vs (%dx%d)=%f <> %f", format_index, size_index, 
-                    w, h, format.sizes[size_index].width, format.sizes[size_index].height, 
+          debugPost("[%d/%d] penalty for (%dx%d) vs (%dx%d)=%f <> %f", format_index, size_index,
+                    w, h, format.sizes[size_index].width, format.sizes[size_index].height,
                     p, penalty);
           if(p<penalty) { penalty=p;
             default_format=format_index;
@@ -381,7 +381,7 @@ bool videoUNICAP :: start(void)
     }
   }
 
-  
+
   unicap_void_format( &format_spec );
   if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format, default_format) ) )  {
     return false;
@@ -399,7 +399,7 @@ bool videoUNICAP :: start(void)
   format.size.width = format.sizes[default_size].width;
   format.size.height = format.sizes[default_size].height;
 
-  format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM; 
+  format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM;
   debugPost("setting format (%d/%d)", default_format, default_size);
   post_fmt(&format);
   if( !SUCCESS( unicap_set_format( m_handle, &format ) ) )  {
@@ -407,8 +407,8 @@ bool videoUNICAP :: start(void)
     return false;
   }
   unicap_unregister_callback(m_handle, UNICAP_EVENT_NEW_FRAME);
-  status=unicap_register_callback (m_handle, 
-                                   UNICAP_EVENT_NEW_FRAME, 
+  status=unicap_register_callback (m_handle,
+                                   UNICAP_EVENT_NEW_FRAME,
                                    (unicap_callback_t) newFrameCB,
                                    (void *) this);
   debugPost("registered callback: %x", status);
@@ -493,7 +493,7 @@ std::vector<std::string> videoUNICAP::enumerate(void) {
            device.vendor_name,
            device.device,
            device.cpi_layer);
-#endif   
+#endif
       m_devices.push_back(device);
 
       m_name2devices[device.identifier ].push_back(cur);
@@ -546,7 +546,7 @@ bool videoUNICAP :: defaultFormat(void) {
 
 #if 0
     if(count==1) {
-      
+
       status= unicap_set_format(m_handle, &format);
       return SUCCESS(status);
     }
@@ -577,7 +577,7 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
       if(!SUCCESS(status))
         continue;
 
-      debugPost("id='%s'\tcat='%s'\tunit='%s'\tflags=%d", 
+      debugPost("id='%s'\tcat='%s'\tunit='%s'\tflags=%d",
                 prop.identifier,
                 prop.category,
                 prop.unit,
@@ -585,19 +585,19 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
 
 
       switch(prop.type) {
-      case UNICAP_PROPERTY_TYPE_RANGE: 
+      case UNICAP_PROPERTY_TYPE_RANGE:
         debugPost("range %f-%f", prop.range.min, prop.range.min);
-        typ=prop.range.max; 
+        typ=prop.range.max;
         break;
-      case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
+      case UNICAP_PROPERTY_TYPE_VALUE_LIST:
         debugPost("value_list %d", prop.value_list.value_count);
         typ=prop.value_list.value_count;
         break;
-      case UNICAP_PROPERTY_TYPE_MENU: 
+      case UNICAP_PROPERTY_TYPE_MENU:
         debugPost("menu '%s' of %d", prop.menu_item, prop.menu.menu_item_count);
         typ=std::string(prop.menu_item);//prop.menu.menu_item_count;
         break;
-      case UNICAP_PROPERTY_TYPE_FLAGS: 
+      case UNICAP_PROPERTY_TYPE_FLAGS:
         debugPost("flags");
         break;
       default:
@@ -642,9 +642,9 @@ void videoUNICAP :: getProperties(gem::Properties&props) {
 
     if(SUCCESS(status)) {
       switch(prop.type) {
-      case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
-      case UNICAP_PROPERTY_TYPE_FLAGS: 
-      case UNICAP_PROPERTY_TYPE_RANGE: 
+      case UNICAP_PROPERTY_TYPE_VALUE_LIST:
+      case UNICAP_PROPERTY_TYPE_FLAGS:
+      case UNICAP_PROPERTY_TYPE_RANGE:
         props.set(key, prop.value);
         break;
       case UNICAP_PROPERTY_TYPE_MENU:
@@ -715,9 +715,9 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
 
     if(SUCCESS(status)) {
       switch(prop.type) {
-      case UNICAP_PROPERTY_TYPE_VALUE_LIST: 
-      case UNICAP_PROPERTY_TYPE_FLAGS: 
-      case UNICAP_PROPERTY_TYPE_RANGE: 
+      case UNICAP_PROPERTY_TYPE_VALUE_LIST:
+      case UNICAP_PROPERTY_TYPE_FLAGS:
+      case UNICAP_PROPERTY_TYPE_RANGE:
         if(props.get(key, d)) {
           prop.value=d;
           status= unicap_set_property(m_handle, &prop );
@@ -742,7 +742,7 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
         // ?
         break;
       }
-      
+
       if(!SUCCESS(status)) {
         verbose(1, "[GEM:videoUNICAP] could not set property '%s'", key.c_str());
 #if 0

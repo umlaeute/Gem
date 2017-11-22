@@ -89,7 +89,7 @@ static void MyHalconExceptionHandler(const Halcon::HException& except)
 {
   // the exception handler is needed in order to prevent halcon from crashing
   // we just pass on the exception to upstream...
-  throw except;	
+  throw except;
 }
 
 videoHALCON :: videoHALCON() : videoBase("halcon"),
@@ -337,7 +337,7 @@ bool videoHALCON :: openDevice(gem::Properties&props)
     if(m_device2backend.size()>0) {
       std::map<std::string, std::string>::iterator it( m_device2backend.begin() );
       std::advance( it, m_devicenum );
-      if(it != m_device2backend.end()) {  
+      if(it != m_device2backend.end()) {
         device=it->first;
         name=it->second;
       }

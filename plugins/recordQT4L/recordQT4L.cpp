@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -48,7 +48,7 @@ recordQT4L :: recordQT4L(void) :
 #if defined  GEM_USE_RECORDQT4L
   m_qtfile(NULL),
   m_codec(NULL), m_codecs(NULL),
-  m_codecname(std::string()), 
+  m_codecname(std::string()),
   m_qtbuffer(NULL),
   m_colormodel(0),
   m_width(-1), m_height(-1),
@@ -130,7 +130,7 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
       return qtformats[i].type;
     }
   }
-  
+
   verbose(0, "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
   return LQT_FILE_QT; /* should be save for now */
 }
@@ -158,7 +158,7 @@ bool recordQT4L :: start(const std::string filename, gem::Properties&props)
 //
 /////////////////////////////////////////////////////////
 
-static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec, 
+static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 			    gem::Properties&props) {
 
   if(NULL==file || NULL==codec)return;
@@ -186,7 +186,7 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 #else
       char* q_key=const_cast<char*>(key.c_str());
 #endif
-        
+
       double d;
       std::string s;
       switch(proptypes[key]) {
@@ -209,7 +209,7 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 	}
 	break;
       }
-      if(value) 
+      if(value)
 	lqt_set_video_parameter(file, track, q_key, value);
     }
 
@@ -224,7 +224,7 @@ static int try_colormodel(quicktime_t *   	 file,
     lqt_set_cmodel(file, track, colormodel);
     return colormodel;
   }
-  return 0;  
+  return 0;
 }
 static int try_colormodel(quicktime_t *   	 file,
 			  int  	track,
@@ -295,8 +295,8 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   if(!m_colormodel)
     return false;
 
-  /* make sure to allocate enough buffer; it sometimes crashes when i allocate the "right" size, 
-     so we just grab a multiple of what we actually want... 
+  /* make sure to allocate enough buffer; it sometimes crashes when i allocate the "right" size,
+     so we just grab a multiple of what we actually want...
   */
   /* but isn't this a memleak? it sure crashes if i try to lqt_rows_free() the qtbuffer */
   m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel, &rowspan, &rowspan_uv);
@@ -418,7 +418,7 @@ bool recordQT4L :: setCodec(const std::string name)
   m_codec=NULL;
 
   if(codecname.empty() && m_qtfile) {
-    /* LATER figure out automatically which codec to use */ 
+    /* LATER figure out automatically which codec to use */
     lqt_file_type_t type = lqt_get_file_type(m_qtfile);
     unsigned int i=0;
     for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
@@ -443,7 +443,7 @@ bool recordQT4L :: setCodec(const std::string name)
   return result;
 }
 
-bool recordQT4L :: enumProperties(gem::Properties&props) 
+bool recordQT4L :: enumProperties(gem::Properties&props)
 {
   props.clear();
   if(NULL==m_codec)

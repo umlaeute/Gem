@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -49,7 +49,7 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 //
 /////////////////////////////////////////////////////////
 
-recordV4L2 :: recordV4L2(void): 
+recordV4L2 :: recordV4L2(void):
   m_fd(-1),
   m_init(false),
   m_palette(0)
@@ -66,7 +66,7 @@ recordV4L2 :: recordV4L2(void):
   case GL_RGBA:       m_palette = V4L2_PIX_FMT_RGB32; break;
   default: throw(GemException("invalid colorspace"));
   }
-  
+
 
 }
 
@@ -98,12 +98,12 @@ bool recordV4L2 :: start(const std::string filename, gem::Properties&props)
 
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
     perror("[GEM:recordV4L2] VIDIOC_QUERYCAP");
-    stop(); 
+    stop();
     return false;
   }
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
     error("[GEM:recordV4L2] device '%s' is not a video4linux2 output device", filename.c_str());
-    stop(); 
+    stop();
     return false;
   }
   m_init=false;

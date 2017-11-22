@@ -478,7 +478,7 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
       dc1394_feature_is_readable(m_dccamera, feature_set.feature[i].id, &is_readable );
       if ( is_readable ) readable.set(key,type);
       writeable.set(key,type);
-      
+
       dc1394feature_t feature = feature_set.feature[i].id;
       dc1394feature_modes_t modes[3];
       err=dc1394_feature_get_modes(m_dccamera, feature, modes);

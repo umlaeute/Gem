@@ -209,7 +209,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
   // OffsetRect(&m_srcRect,  -m_srcRect.left,  -m_srcRect.top);
-  SetMovieBox(m_movie, &m_srcRect);	
+  SetMovieBox(m_movie, &m_srcRect);
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
 

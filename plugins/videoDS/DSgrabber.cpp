@@ -78,7 +78,7 @@ int g_cTemplates = sizeof(g_Templates)/sizeof(g_Templates[0]);
 
 /******************************Public*Routine******************************\
 *
-* Exported entry points for registration and unregistration (in this case 
+* Exported entry points for registration and unregistration (in this case
 * they only call through to default implmentations).
 *
 *\**************************************************************************/
@@ -97,7 +97,7 @@ DllUnregisterServer() {
 //
 // Provide the way for COM to create a CSampleGrabber object
 //
-CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr) 
+CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
     // assuming we don't want to modify the data
     CSampleGrabber *pNewObject = new CSampleGrabber(punk, phr, FALSE);
@@ -106,7 +106,7 @@ CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
         *phr = E_OUTOFMEMORY;
     }
 
-    return pNewObject;   
+    return pNewObject;
 } // CreateInstance
 
 
@@ -115,12 +115,12 @@ CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 //----------------------------------------------------------------------------
 
 CSampleGrabber::CSampleGrabber( IUnknown * pOuter, HRESULT * phr, BOOL ModifiesData )
-: CTransInPlaceFilter( TEXT("SampleGrabber"), (IUnknown*) pOuter, 
+: CTransInPlaceFilter( TEXT("SampleGrabber"), (IUnknown*) pOuter,
                        CLSID_GrabberSample, phr, (BOOL)ModifiesData )
 , m_callback( NULL )
 {
     // this is used to override the input pin with our own
-    
+
     m_pInput = (CTransInPlaceInputPin*) new CSampleGrabberInPin( this, phr );
     if( !m_pInput )
     {
@@ -128,9 +128,9 @@ CSampleGrabber::CSampleGrabber( IUnknown * pOuter, HRESULT * phr, BOOL ModifiesD
     }
 }
 
-STDMETHODIMP CSampleGrabber::NonDelegatingQueryInterface( REFIID riid, void ** ppv) 
+STDMETHODIMP CSampleGrabber::NonDelegatingQueryInterface( REFIID riid, void ** ppv)
 {
-    if(riid == IID_IGrabberSample) {                
+    if(riid == IID_IGrabberSample) {
         return GetInterface((IGrabberSample *) this, ppv);
     }
     else {
@@ -206,7 +206,7 @@ HRESULT CSampleGrabber::CheckInputType( const CMediaType * pmt )
 HRESULT CSampleGrabber::Receive( IMediaSample * pms )
 {
     AM_SAMPLE2_PROPERTIES * const pProps = m_pInput->SampleProps();
-    if (pProps->dwStreamId != AM_STREAM_MEDIA) 
+    if (pProps->dwStreamId != AM_STREAM_MEDIA)
     {
         if( m_pOutput->IsConnected() )
             return m_pOutput->Deliver(pms);
@@ -216,13 +216,13 @@ HRESULT CSampleGrabber::Receive( IMediaSample * pms )
 
     HRESULT hr;
 
-    if (UsingDifferentAllocators()) 
+    if (UsingDifferentAllocators())
     {
         // We have to copy the data.
 
         pms = Copy(pms);
 
-        if (pms==NULL) 
+        if (pms==NULL)
         {
             return E_UNEXPECTED;
         }
@@ -231,24 +231,24 @@ HRESULT CSampleGrabber::Receive( IMediaSample * pms )
     // have the derived class transform the data
     hr = Transform(pms);
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         DbgLog((LOG_TRACE, 1, TEXT("Error from TransInPlace")));
-        if (UsingDifferentAllocators()) 
+        if (UsingDifferentAllocators())
         {
             pms->Release();
         }
         return hr;
     }
 
-    if (hr == NOERROR) 
+    if (hr == NOERROR)
     {
         hr = m_pOutput->Deliver(pms);
     }
-    
+
     // release the output buffer. If the connected pin still needs it,
     // it will have addrefed it itself.
-    if (UsingDifferentAllocators()) 
+    if (UsingDifferentAllocators())
     {
         pms->Release();
     }
@@ -294,7 +294,7 @@ HRESULT CSampleGrabber::SetAcceptedMediaType( const CMediaType * pmt )
     if( !pmt )
     {
         m_mtAccept = CMediaType( );
-        return NOERROR;        
+        return NOERROR;
     }
 
     HRESULT hr;
@@ -334,7 +334,7 @@ HRESULT CSampleGrabber::SetCallback( SAMPLECALLBACK Callback, void* pUser )
 
 //----------------------------------------------------------------------------
 // inform the input pin of the allocator buffer we wish to use. See the
-// input pin's SetDeliverBuffer method for comments. 
+// input pin's SetDeliverBuffer method for comments.
 //----------------------------------------------------------------------------
 
 HRESULT CSampleGrabber::SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer )
@@ -372,7 +372,7 @@ HRESULT CSampleGrabberInPin::GetMediaType( int iPosition, CMediaType * pMediaTyp
 // override the CTransInPlaceInputPin's method, and return a new enumerator
 // if the input pin is disconnected. This will allow GetMediaType to be
 // called. If we didn't do this, EnumMediaTypes returns a failure code
-// and GetMediaType is never called. 
+// and GetMediaType is never called.
 //----------------------------------------------------------------------------
 
 STDMETHODIMP CSampleGrabberInPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
@@ -380,7 +380,7 @@ STDMETHODIMP CSampleGrabberInPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
     CheckPointer(ppEnum,E_POINTER);
     ValidateReadWritePtr(ppEnum,sizeof(IEnumMediaTypes *));
 
-    // if the output pin isn't connected yet, offer the possibly 
+    // if the output pin isn't connected yet, offer the possibly
     // partially specified media type that has been set by the user
 
     if( !((CSampleGrabber*)m_pTIPFilter)->OutputPin( )->IsConnected() )

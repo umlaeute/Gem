@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "LICENSE.txt" 
+//    WARRANTIES, see the file, "LICENSE.txt"
 //
 /////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
@@ -145,7 +145,7 @@ void videoAVT::grabbedFrame(const tPvFrame&pFrame) {
   case(ePvFmtRgba32): m_image.image.fromRGBA((unsigned char *)pFrame.ImageBuffer);break;
   case(ePvFmtBgra32): m_image.image.fromBGRA((unsigned char *)pFrame.ImageBuffer);break;
   case(ePvFmtBayer8):  case(ePvFmtBayer16): do {
-    unsigned char*data=m_image.image.data;    
+    unsigned char*data=m_image.image.data;
     // PixelPadding is most likely plain wrong; need to test what it really means
     PvUtilityColorInterpolate(&pFrame,
                               &data[chRed],
@@ -156,9 +156,9 @@ void videoAVT::grabbedFrame(const tPvFrame&pFrame) {
                               );
   } while(0);
     break;
-  case (ePvFmtRgb48):  
+  case (ePvFmtRgb48):
   case(ePvFmtMono12Packed): case(ePvFmtBayer12Packed):
-  case (ePvFmtYuv411):      case(ePvFmtYuv422):       case(ePvFmtYuv444): 
+  case (ePvFmtYuv411):      case(ePvFmtYuv422):       case(ePvFmtYuv444):
   default:
     // ouch
     success=false;
@@ -237,7 +237,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
       for(i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].SerialString && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
           break;
-        } 
+        }
       }
     }
     if(NULL==m_grabber) {
@@ -245,7 +245,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
       for(i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].DisplayName && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
           break;
-        } 
+        }
       }
     }
 
@@ -267,16 +267,16 @@ bool videoAVT :: openDevice(gem::Properties&props)
                   (IpAddr & 0x0FF0000)>>16,
                   (IpAddr & 0xFF000000)>>24
                   );
-          
+
           if(ePvErrSuccess == PvCameraOpenByAddr(IpAddr, ePvAccessMaster, &m_grabber)) {
             break;
           }
-          m_grabber=NULL;   
+          m_grabber=NULL;
         }
         freeaddrinfo(result);
       }
     }
-    
+
   }
 
   delete[]cameraList;
@@ -346,7 +346,7 @@ std::vector<std::string> videoAVT::enumerate() {
   for (i = 0; i < cameraNum; i++) {
     result.push_back(cameraList[i].DisplayName);
   }
-  
+
   delete[]cameraList;
   return result;
 }
@@ -401,7 +401,7 @@ bool videoAVT::enumProperties(gem::Properties&readable,
 	if((pInfo.Flags & ePvFlagRead) || (pInfo.Flags & ePvFlagConst))  {
 	  readable.set(name, type);
 	}
-	
+
 	if(pInfo.Flags & ePvFlagWrite) {
 	  writeable.set(name, type);
 	}
@@ -442,7 +442,7 @@ void videoAVT::setProperties(gem::Properties&props){
       if(props.get(key, s)) {
 	PvAttrEnumSet(m_grabber, key.c_str(), s.c_str());
       }
-#if 0 
+#if 0
       else if(props.get(key, d)) {
 	std::vector<std::string>sv;
 	int index=d;

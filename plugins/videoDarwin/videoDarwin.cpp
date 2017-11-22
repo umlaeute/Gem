@@ -48,7 +48,7 @@ static std::string pascal2str(const Str255 pstr) {
 
 REGISTER_VIDEOFACTORY("Darwin", videoDarwin);
 
-videoDarwin :: videoDarwin() 
+videoDarwin :: videoDarwin()
   : videoBase("darwin", 0),
     m_newFrame(false),
     m_srcGWorld(NULL),
@@ -102,7 +102,7 @@ bool videoDarwin :: openDevice(gem::Properties&props) {
     applyProperties(props);
   else
     destroySeqGrabber();
-  
+
   return success;
 }
 void videoDarwin :: closeDevice(void) {
@@ -451,17 +451,17 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
   VDIIDCFeatureSettings   settings;
   ComponentDescription    desc;
   ComponentResult         result = paramErr;
-    
+
   //IIDC stuff
   result = VDIIDCGetFeaturesForSpecifier(m_vdig, specifier, &atomContainer);
   if (noErr != result) {
     return false;
   }
-    
+
   featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                    vdIIDCAtomTypeFeature, 1, NULL);
   if (0 == featureAtom) return false;//error("[GEM:videoDarwin] featureAtom vdIIDCFeatureSaturation not found");
-    
+
   result = QTCopyAtomDataToPtr(atomContainer,
                                QTFindChildByID(atomContainer, featureAtom,
                                                vdIIDCAtomTypeFeatureSettings,
@@ -471,17 +471,17 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
   settings.state.flags = (vdIIDCFeatureFlagOn |
                           vdIIDCFeatureFlagManual |
                           vdIIDCFeatureFlagRawControl);
-    
+
   settings.state.value = value;
-    
+
   result = QTSetAtomData(atomContainer,
                          QTFindChildByID(atomContainer, featureAtom,
                                          vdIIDCAtomTypeFeatureSettings,
                                          vdIIDCAtomIDFeatureSettings, NULL),
                          sizeof(settings), &settings);
-    
+
   result = VDIIDCSetFeatures(m_vdig, atomContainer);
-    
+
   return true;
 }
 inline unsigned short d2us(double x)
@@ -551,7 +551,7 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
           break;
         }
         if(doit&&m_vc)
-          SGSetChannelPlayFlags(m_vc, m_quality); 
+          SGSetChannelPlayFlags(m_vc, m_quality);
       }
 #define PROPSET_IIDC_VD(NAME) \
       } else if (#NAME == key && props.get(key, value_d) && m_vdig) {   \
@@ -596,7 +596,7 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
         PROPSET_IIDC(Tilt);
         PROPSET_IIDC(OpticalFilter);
         PROPSET_IIDC(EdgeEnhancement);
-    }    
+    }
   }
   return restart;
 }
@@ -628,7 +628,7 @@ void videoDarwin::getProperties(gem::Properties&props) {
     if(0) {
 #define PROPGET_VD(NAME)                                                \
       } else if (#NAME == key && m_vdig && !iidc) {                              \
-      if(0==VDGet ## NAME (m_vdig,&value_us)) {props.set(key, us2d(value_us)); } value_d=0     
+      if(0==VDGet ## NAME (m_vdig,&value_us)) {props.set(key, us2d(value_us)); } value_d=0
     PROPGET_VD(Hue);
     PROPGET_VD(Sharpness);
     PROPGET_VD(Saturation);

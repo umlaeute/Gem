@@ -47,8 +47,8 @@ recordQT :: recordQT(void)
   : m_recordSetup(false),
     m_recordStart(false),
     m_recordStop(false),
-    m_width(-1), m_height(-1), 
-    m_prevWidth(0), m_prevHeight(0), 
+    m_width(-1), m_height(-1),
+    m_prevWidth(0), m_prevHeight(0),
     m_compressImage(NULL),
     seconds(0.f),
     m_ticks(20),
@@ -64,13 +64,13 @@ recordQT :: recordQT(void)
   m_filename[0] = 0;
 
   static bool firsttime=true;
-  if(firsttime) { 
+  if(firsttime) {
 #ifdef _WIN32
     // Initialize QuickTime Media Layer
     OSErr		err = noErr;
     if ((err = InitializeQTML(0))) {
       throw(GemException("unable to initialize QuickTime"));
-    }	
+    }
     // start QuickTime
     if (err = EnterMovies()) {
       throw(GemException("unable to initialize QuickTime/Movies"));
@@ -85,7 +85,7 @@ recordQT :: recordQT(void)
   CodecNameSpec	codecName;
   int	i;
   int count;
-	
+
   GetCodecNameList(&codecList,1);
   count=codecList->count;
   codecContainer=new codecListStorage[count];
@@ -156,7 +156,7 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
   ComponentResult			compErr = noErr;
 
   m_recordSetup = false; //if it fails then there is no setup
-	
+
   //this mess should create and open a file for QT to use
   //probably should be a separate function
 
@@ -194,7 +194,7 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
       error("[GEM:recordQT] error#%d in FSGetCatalogInfo()", err);
       return ;
     }
-    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, filename8, &theFSSpec);		
+    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, filename8, &theFSSpec);
     if (err != noErr && err != -37){ /* what is -37 */
       error("[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
       return;
@@ -206,7 +206,7 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
     char filename[QT_MAX_FILENAMELENGTH];
     UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     FILE*fil=NULL;
-    
+
     fil=fopen(m_filename, "a");
     if(NULL!=fil)fclose(fil);
 
@@ -238,14 +238,14 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
   m_srcRect.left = 0;
   m_srcRect.bottom = m_height;
   m_srcRect.right = m_width;
-	
+
   if (m_compressImage->format == GL_YUV422_GEM){
     verbose(0, "[GEM:recordQT] using YUV");
     colorspace = k422YpCbCr8CodecType;
   }
   if (m_compressImage->format == GL_BGRA){
     verbose(0, "[GEM:recordQT] using BGRA");
-    colorspace = k32ARGBPixelFormat; 
+    colorspace = k32ARGBPixelFormat;
   }
 #ifdef _WIN32
   colorspace = k32RGBAPixelFormat;
@@ -308,7 +308,7 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
   SpatialSettings.codec = m_codec;
   SpatialSettings.depth = m_depth;
   SpatialSettings.spatialQuality = m_spatialQuality;
-		
+
   TemporalSettings.temporalQuality = m_spatialQuality;
   TemporalSettings.frameRate = m_frameRate;
   TemporalSettings.keyFrameRate = m_keyFrameRate;
@@ -335,11 +335,11 @@ void recordQT :: setupQT(void) //this only needs to be done when codec info chan
 
   //this will show that everything is OK for recording
   m_recordSetup = true;
-	
+
   //set the previous dimensions for the sanity check during compression
   m_prevWidth = m_width;
   m_prevHeight = m_height;
-	
+
   //reset frame counter for new movie file
 }
 
@@ -351,7 +351,7 @@ void recordQT :: stop(void)
   ComponentResult			compErr = noErr;
   OSErr					err;
   m_recordStart = false; //just to be sure
-	
+
   err = EndMediaEdits(media);
 
   if (err != noErr) {
@@ -371,9 +371,9 @@ void recordQT :: stop(void)
   DisposeMovie(m_movie);
   DisposeGWorld(m_srcGWorld);
   m_srcGWorld = NULL;
-		
+
   compErr = SCCompressSequenceEnd(stdComponent);
-	
+
   if (compErr != noErr) error("[GEM:recordQT] SCCompressSequenceEnd failed with error %d", compErr);
 
   m_recordStop = false;
@@ -395,16 +395,16 @@ void recordQT :: compressFrame(void)
   //fakes the first run time
   if (m_firstRun){
     ::Microseconds(&startTime);
-    m_firstRun = 0;	
+    m_firstRun = 0;
   }
   ::Microseconds(&endTime);
 
   seconds = static_cast<float>(endTime.lo - startTime.lo) / 1000000.f;
   m_ticks = static_cast<int>(600 * seconds);
   if (m_ticks < 20) m_ticks = 20;
-	
+
 #endif //timers
-	
+
 #ifdef _WIN32
   static int firstTime = 1;
   static float countFreq = 0;
@@ -438,7 +438,7 @@ void recordQT :: compressFrame(void)
                                     &syncFlag);
 
   if (compErr != noErr) error("[GEM:recordQT] SCCompressSequenceFrame failed with error %d",compErr);
-										
+
   err = AddMediaSample(media,
                        compressedData,
                        0,
@@ -448,12 +448,12 @@ void recordQT :: compressFrame(void)
                        1,
                        syncFlag,
                        NULL);
-							
+
   if (err != noErr) error("[GEM:recordQT] AddMediaSample failed with error %d",err);
 
 #ifdef __APPLE__
-  ::Microseconds(&startTime);					
-#endif //timer		
+  ::Microseconds(&startTime);
+#endif //timer
 
 #ifdef _WIN32
   QueryPerformanceCounter(&startTime);
@@ -482,7 +482,7 @@ bool recordQT :: write(imageStruct*img)
 	return false;
       }
     }
-		
+
     //should check if the size has changed or else we will freak the compressor's trip out
     if (m_width == m_prevWidth && m_height == m_prevHeight) {
       //go ahead and grab a frame if everything is ready to go
@@ -495,7 +495,7 @@ bool recordQT :: write(imageStruct*img)
       m_prevHeight = m_height; //go ahead and change dimensions
     }
   }
-	
+
   //if recording is stopped and everything is setup then stop recording
   if (m_recordStop){
     //guard against someone not setting up QT beforehand
@@ -521,7 +521,7 @@ bool recordQT :: dialog(void)
 
     //open a new component from scratch
     stdComponent = OpenDefaultComponent(StandardCompressionType, StandardCompressionSubType);
-	
+
     if (stdComponent == NULL){
       error("[GEM:recordQT] failed to open compressor component");
       return false;
@@ -678,7 +678,7 @@ bool recordQT :: setCodec(const std::string codecName)
       break;
     }
   }
-	
+
   //no codec found
   return false;
 }

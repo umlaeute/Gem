@@ -129,4 +129,3 @@ namespace gem { namespace plugins {
 };};
 
 #endif	// for header file
-

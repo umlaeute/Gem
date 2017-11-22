@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -47,7 +47,7 @@ REGISTER_RECORDFACTORY("V4L", recordV4L);
 //
 /////////////////////////////////////////////////////////
 
-recordV4L :: recordV4L(void): 
+recordV4L :: recordV4L(void):
   m_fd(-1),
   m_init(false),
   m_palette(0)
@@ -64,7 +64,7 @@ recordV4L :: recordV4L(void):
   case GL_RGBA:       m_palette = VIDEO_PALETTE_RGB32; break;
   default: throw(GemException("invalid colorspace"));
   }
-  
+
 
 }
 
@@ -129,7 +129,7 @@ bool recordV4L::init(const imageStruct* dummyImage, const int framedur) {
   }
 
   vid_pic.palette = m_palette;
-  
+
   if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
     perror("[GEM:recordV4L] VIDIOCSPICT");
     stop(); return false;
@@ -139,7 +139,7 @@ bool recordV4L::init(const imageStruct* dummyImage, const int framedur) {
     perror("[GEM:recordV4L] ioctl (VIDIOCGWIN)");
     stop(); return false;
   }
-  
+
   vid_win.width  = w;
   vid_win.height = h;
   if (ioctl(m_fd, VIDIOCSWIN, &vid_win) == -1) {
@@ -242,11 +242,11 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
     vidcap->minheight = MIN_HEIGHT;
     return 0;
   }
- 
+
     /* channel info (rather limited */
   case VIDIOCGCHAN:	{
     struct video_channel *vidchan = arg;
-    
+
     if(vidchan->channel != 0)
       return EINVAL;
     vidchan->flags = 0;
@@ -257,7 +257,7 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
   }
     /* setting channel (we only have one) */
   case VIDIOCSCHAN:	{
-    int *v = arg; 
+    int *v = arg;
     if(v[0] != 0)
       return EINVAL;
     return 0;
@@ -266,7 +266,7 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
     /* getting picture properties */
   case VIDIOCGPICT:	{
     struct video_picture *vidpic = arg;
-    
+
     vidpic->colour = 0xffff;
     vidpic->hue = 0xffff;
     vidpic->brightness = 0xffff;
@@ -281,13 +281,13 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
     /* LATER: don't we have to set the vidpic to the "real" values? */
   case VIDIOCSPICT:	{
     struct video_picture *vidpic = arg;
-   
+
     return 0;
   }
 
   case VIDIOCGWIN:	{
     struct video_window *vidwin = arg;
-    
+
     vidwin->x = 0;
     vidwin->y = 0;
     vidwin->width = vloopback_width;
@@ -347,10 +347,10 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
     gbuf_unlock();
     return ret;
   }
-    
+
   case VIDIOCMCAPTURE: {
     struct video_mmap *vidmmap = arg;
-    
+
     if(vidmmap->width > MAX_WIDTH || vidmmap->height > MAX_HEIGHT) {
       fprintf(stderr, "[GEM:recordV4L] requested capture size is too big(%dx%d).\n",vidmmap->width, vidmmap->height);
       return EINVAL;
@@ -371,7 +371,7 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
       return EINVAL;
     vloopback_width = vidmmap->width;
     vloopback_height = vidmmap->height;
-    
+
     if(gbufstat[vidmmap->frame] != GBUFFER_UNUSED) {
       if(gbufqueue[0] == vidmmap->frame || gbufqueue[1] == vidmmap->frame) {
         return EBUSY;

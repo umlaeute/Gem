@@ -5,7 +5,7 @@
 // daniel@bogusfront.org
 // zmoelnig@iem.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 2003 Daniel Heckenberg.
 //    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
@@ -102,7 +102,7 @@ m_GraphRegister(0)
         m_pixBlockBuf[i].image.reallocate();
 
         m_pixBlockBuf[i].newimage = 0;
-        m_nPixDataSize[i] = 
+        m_nPixDataSize[i] =
             m_pixBlockBuf[i].image.xsize*
             m_pixBlockBuf[i].image.ysize*
             m_pixBlockBuf[i].image.csize;
@@ -217,7 +217,7 @@ bool videoDS :: openDevice(gem::Properties&props)
                 return false;
             }
 
-            // Set the SampleGrabber to copy the data to a buffer. This only set to FALSE when a 
+            // Set the SampleGrabber to copy the data to a buffer. This only set to FALSE when a
             // callback is used.
             hr	= SampleGrabber->SetBufferSamples(TRUE);
 
@@ -236,7 +236,7 @@ bool videoDS :: openDevice(gem::Properties&props)
             }
 
             // add the filters to the graph
-            if (FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"Capture Device")) || 
+            if (FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"Capture Device")) ||
                 FAILED(hr = m_pGB->AddFilter(SampleFilter, L"Sample Grabber")) ||
                 FAILED(hr = m_pGB->AddFilter(NullFilter, L"Null Renderer"))) {
                     verbose(0, "[GEM:videoDS] Could not add the filters to the graph, hr 0x%X", hr);
@@ -246,10 +246,10 @@ bool videoDS :: openDevice(gem::Properties&props)
                 // Automatically connect the Device filter to the NullFilter through the SampleFilter.
                 // Additional filters may be added.
                 // Try Interleaved Audio and Video first for DV input
-                if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Interleaved, 
+                if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Interleaved,
                     m_pCDbase, SampleFilter, NullFilter))) {
                         //try Video only for devices with no audio
-                        if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, 
+                        if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video,
                             m_pCDbase, SampleFilter, NullFilter))) {
                                 verbose(0, "[GEM:videoDS] Unable to connect to SampleGrabber.");
                                 return false;
@@ -294,7 +294,7 @@ bool videoDS :: openDevice(gem::Properties&props)
                     }
 #endif
                     // THIS KILLS FILE WRITING!! May improve latency on video preview/playback.
-                    // Turn off the reference clock. 
+                    // Turn off the reference clock.
                     //	if (FAILED(hr = m_pMF->SetSyncSource(NULL)))
                     //	{
                     //		verbose(0, "[GEM:videoDS] failed to turn off the reference clock  hr=0x%X", hr);
@@ -337,7 +337,7 @@ void videoDS :: closeDevice(void)
     COMRELEASE(m_pCG);
 
 #ifdef REGISTER_FILTERGRAPH
-    if (m_GraphRegister) {	
+    if (m_GraphRegister) {
         HRESULT hr;
         RemoveGraphFromRot(m_GraphRegister);
         m_GraphRegister = 0;
@@ -386,7 +386,7 @@ std::vector<std::string>videoDS :: enumerate(void)
             break;
         }
 
-        // If there are no enumerators for the requested type, then 
+        // If there are no enumerators for the requested type, then
         // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
         if (pClassEnum == NULL) {
             verbose(0, "[GEM:videoDS] No video capture devices found!");
@@ -457,7 +457,7 @@ pixBlock* videoDS :: getFrame(void)
 void videoDS :: copyBuffer(void)
 {
     HRESULT	hr;
-    long	SampleSize;	
+    long	SampleSize;
 
     // Get the media type
     AM_MEDIA_TYPE	pmt;
@@ -471,7 +471,7 @@ void videoDS :: copyBuffer(void)
         hr	= SampleGrabber->GetCurrentBuffer(&SampleSize, NULL);
 
         if (hr != S_OK) return;
-    }		
+    }
 
     // Check for a format change.
     if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&pmt))) {
@@ -486,7 +486,7 @@ void videoDS :: copyBuffer(void)
         m_width = pbmih->biWidth;
         m_height = pbmih->biHeight;
         m_format = GL_BGR_EXT;
-        FreeMediaType(pmt);	// is this necessary?!	
+        FreeMediaType(pmt);	// is this necessary?!
     }
 
     m_pixBlockBuf[m_writeIdx].image.xsize = m_width;
@@ -498,11 +498,11 @@ void videoDS :: copyBuffer(void)
 
     // Get the current buffer from the SampleGrabber.
     if (SampleGrabber != NULL) {
-        hr = SampleGrabber->GetCurrentBuffer(&SampleSize, 
+        hr = SampleGrabber->GetCurrentBuffer(&SampleSize,
             (long *)m_pixBlockBuf[m_readIdx].image.data);
         if (hr != S_OK) return;
         m_pixBlockBuf[m_writeIdx].newimage = 1;
-    }		
+    }
 
     m_lastwriteIdx = m_writeIdx;
 }
@@ -608,7 +608,7 @@ bool videoDS :: setDimen(int x, int y, int leftmargin, int rightmargin,
         if(pDV)
             pDV->Release();
 
-        start();      
+        start();
     }
 return true;
 }
@@ -629,7 +629,7 @@ bool videoDS :: setColor(int format)
 /////////////////////////////////////////////////////////
 bool videoDS :: dialog(std::vector<std::string>dlg)
 {
-    HRESULT hr;  
+    HRESULT hr;
     if (!m_haveVideo) return true;
 
     bool running=stop();
@@ -668,13 +668,13 @@ void videoDS :: startCapture(void)
     if (FALSE == m_recording && m_pCG != NULL && m_haveVideo) {
         // Convert filename to wide chars
         memset(&WideFileName, 0, MAXPDSTRING * 2);
-        if (0 == MultiByteToWideChar(CP_ACP, 0, m_filename, strlen(m_filename), WideFileName, 
+        if (0 == MultiByteToWideChar(CP_ACP, 0, m_filename, strlen(m_filename), WideFileName,
             MAXPDSTRING)) {
                 error("[GEM:videoDS] Unable to capture to %s", m_filename);
                 return;
             }
             // Set filename of output AVI. Returns pointer to a File Writer filter.
-            if (FAILED(hr = m_pCG->SetOutputFileName(&MEDIASUBTYPE_Avi, WideFileName, 
+            if (FAILED(hr = m_pCG->SetOutputFileName(&MEDIASUBTYPE_Avi, WideFileName,
                 &FileFilter, NULL))) {
                     error("[GEM:videoDS] Unable to set output filename.");
                     return;
@@ -684,11 +684,11 @@ void videoDS :: startCapture(void)
                     error("[GEM:videoDS] Unable to set avi options.");
                     return;
                 }
-                // Connect the Capture Device filter to the File Writer filter. Try using 
+                // Connect the Capture Device filter to the File Writer filter. Try using
                 //	MEDIATYPE_Interleaved first, else default to MEDIATYPE_Video.
-                if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved,  
+                if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Interleaved,
                     m_pCDbase, NULL, FileFilter))) {
-                        if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, 
+                        if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video,
                             m_pCDbase, NULL, FileFilter))) {
                                 error("[GEM:videoDS] Unable to record to avi.");
                                 return;
@@ -734,7 +734,7 @@ void videoDS :: recordMess(int state)
     }
 
     stopTransfer();
-    if (state) 
+    if (state)
         startCapture();
     else
         stopCapture();
@@ -774,7 +774,7 @@ float    -> captureOnOff
 //
 // But you probably want some UI to let the user play with all these settings.
 // For new WDM-style capture devices, we offer some default UI you can use.
-// The code below shows how to bring up all of the dialog boxes supported 
+// The code below shows how to bring up all of the dialog boxes supported
 // by any capture filters.
 //
 // The following code shows you how you can bring up all of the
@@ -796,7 +796,7 @@ float    -> captureOnOff
 //     FindInterface(&PIN_CATEGORY_CAPTURE, pACap, IID_IPin, &pX);
 // 6.  The crossbar connected to the video capture filter - get this by calling
 //     FindInterface(NULL, pVCap, IID_IAMCrossbar, &pX);
-// 7.  There is a possible second crossbar to control audio - get this by 
+// 7.  There is a possible second crossbar to control audio - get this by
 //     looking upstream of the first crossbar like this:
 //     FindInterface(&LOOK_UPSTREAM_ONLY, pX, IID_IAMCrossbar, &pX2);
 // 8.  The TV Tuner connected to the video capture filter - get this by calling
@@ -815,11 +815,11 @@ float    -> captureOnOff
 //     That would be confusing because if you select an input using dialog 6 or
 //     7 the input list here in #10 won't know about your choice.
 //
-// Your last choice for UI is to make your own pages, and use the results of 
+// Your last choice for UI is to make your own pages, and use the results of
 // your custom page to call the interfaces programmatically.
 
 
-void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase) 
+void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
 {
     HRESULT hr;
 

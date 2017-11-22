@@ -126,8 +126,8 @@ namespace gem{namespace pylon{namespace streamgrabberproperties{
   typedef std::string (*t_getenum)(DEVICE*device);
   typedef void (*t_setenum)(DEVICE*device, const std::string);
   typedef void (*t_setenumi)(DEVICE*device, const int);
-  std::map<std::string, t_getenum>map_getenum; 
-  std::map<std::string, t_setenum>map_setenum; 
+  std::map<std::string, t_getenum>map_getenum;
+  std::map<std::string, t_setenum>map_setenum;
   std::map<std::string, t_setenumi>map_setenumi;
 
   using namespace Basler_GigEStreamParams;
@@ -176,7 +176,7 @@ void gem::pylon::streamgrabberproperties::init() {
   MAP_GETSETBOOL(ReceiveThreadPriorityOverride);
 
   map_getint.clear();
-  map_setint.clear();  
+  map_setint.clear();
   MAP_GETSETINT(MaxNumBuffer);
   MAP_GETSETINT(MaxBufferSize);
   MAP_GETSETINT(PacketTimeout);
@@ -244,7 +244,7 @@ gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
   gem::Properties&result=readprops; result.clear();
 
   gem::pylon::streamgrabberproperties::init();
-  
+
   do {
     gem::any typevalue=1;
     std::map<std::string, t_getbool>::iterator it;
@@ -252,7 +252,7 @@ gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
       result.set(it->first, typevalue);
     }
   } while(0);
-  
+
   do {
     gem::any typevalue=0;
     std::map<std::string, t_getint>::iterator it;
@@ -260,7 +260,7 @@ gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
       result.set(it->first, typevalue);
     }
   } while(0);
-  
+
   do {
     gem::any typevalue=std::string("symbol");
     std::map<std::string, t_getstring>::iterator it;
@@ -268,7 +268,7 @@ gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
       result.set(it->first, typevalue);
     }
   } while(0);
-  
+
   /* enumeration */
   do {
     gem::any typevalue=std::string("symbol");
@@ -320,7 +320,7 @@ gem::Properties&gem::pylon::streamgrabberproperties::setKeys(void) {
   return result;
 }
 
-void gem::pylon::streamgrabberproperties::get(DEVICE*device, 
+void gem::pylon::streamgrabberproperties::get(DEVICE*device,
                                               std::string key,
                                               gem::any&result)
 {
@@ -349,7 +349,7 @@ void gem::pylon::streamgrabberproperties::get(DEVICE*device,
 }
 // set StreamGrabber attributes
 
-bool gem::pylon::streamgrabberproperties::set(DEVICE*device, 
+bool gem::pylon::streamgrabberproperties::set(DEVICE*device,
                                               std::string key,
                                               gem::Properties&props)
 {
@@ -396,7 +396,7 @@ bool gem::pylon::streamgrabberproperties::set(DEVICE*device,
       std::map<std::string, t_setenumi>::iterator it_ei=map_setenumi.find(key);
       if(it_ei != map_setenumi.end()) {
         it_ei->second(device, d);
-      }   
+      }
     }
     return true;
   }

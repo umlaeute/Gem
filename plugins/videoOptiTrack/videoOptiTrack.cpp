@@ -115,7 +115,7 @@ bool videoOptiTrack::open(gem::Properties&props) {
 	if(!m_camera) {
     return false;
 	}
-	m_pixBlock.image.xsize = m_camera->Width();	
+	m_pixBlock.image.xsize = m_camera->Width();
 	m_pixBlock.image.ysize = m_camera->Height();
 
 	m_camera->SetVideoType(MJPEGMode);
@@ -130,7 +130,7 @@ pixBlock*videoOptiTrack::getFrame(void) {
 
   //m_frame = m_camera->GetFrame();
   m_frame = m_camera->GetLatestFrame();
- 
+
   m_pixBlock.image.reallocate();
   if(m_resize) {
 	  m_pixBlock.image.setBlack();
@@ -187,7 +187,7 @@ bool videoOptiTrack::setDevice(const std::string device) {
   SetIRFilter(bool);
   SetMarkerOverlay(bool);
   SetTextOverlay(bool);
-  
+
   SetExposure(int);
   SetFrameDecimation(int);
   SetFrameRate(int);
@@ -282,7 +282,7 @@ void videoOptiTrack::setProperties(gem::Properties&props) {
   std::string s;
   m_props=props;
 
-  
+
   double d;
   bool resize=false;
   if(props.get("width", d)) {

@@ -50,7 +50,7 @@ REGISTER_VIDEOFACTORY("sgi", videoSGI);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoSGI :: videoSGI() 
+videoSGI :: videoSGI()
   : videoBase("sgi", 0),
     m_haveVideo(0), m_swap(1), m_colorSwap(0),
     m_svr(NULL), m_drn(NULL), m_src(NULL), m_path(NULL)
@@ -80,12 +80,12 @@ bool videoSGI :: openDevice()
     }
   // Set up a drain node in memory
   m_drn = vlGetNode(m_svr, VL_DRN, VL_MEM, VL_ANY);
-    
+
   // Set up a source node on any video source
   m_src = vlGetNode(m_svr, VL_SRC, VL_VIDEO, VL_ANY);
 
   // Create a path using the first device that will support it
-  m_path = vlCreatePath(m_svr, VL_ANY, m_src, m_drn); 
+  m_path = vlCreatePath(m_svr, VL_ANY, m_src, m_drn);
 
   // Set up the hardware for and define the usage of the path
   if ( (vlSetupPaths(m_svr, (VLPathList)&m_path, 1, VL_SHARE, VL_SHARE)) < 0 )
@@ -114,7 +114,7 @@ bool videoSGI :: openDevice()
       verbose(1, "[GEM:videoSGI] Video has to color swap (ABGR to RGBA)");
       m_colorSwap = 1;
     }
-    
+
   // Get the video size
 
   VLControlValue value;
@@ -123,7 +123,7 @@ bool videoSGI :: openDevice()
     value.xyVal.y = m_height;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
       vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
-    
+
       verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
       m_width =value.xyVal.x;
       m_height=value.xyVal.y;
@@ -195,7 +195,7 @@ pixBlock *videoSGI::getFrame(void) {
 bool videoSGI :: startTransfer()
 {
   if(NULL=m_svr || NULL=m_path || NULL==m_drn || NULL=m_src)return false;
-    
+
   // Create and register a buffer for 1 frame
   m_buffer = vlCreateBuffer(m_svr, m_path, m_drn, 1);
   if ( !m_buffer )
@@ -205,7 +205,7 @@ bool videoSGI :: startTransfer()
     }
 
   vlRegisterBuffer(m_svr, m_path, m_drn, m_buffer);
-    
+
   // Begin the data transfer
   if ( vlBeginTransfer(m_svr, m_path, 0, NULL) )
     {
@@ -231,7 +231,7 @@ bool videoSGI :: stopTransfer()
   vlDeregisterBuffer(m_svr, m_path, m_drn, m_buffer);
   vlDestroyBuffer(m_svr, m_buffer);
   m_buffer=NULL;
-    
+
   return true;
 }
 
@@ -247,9 +247,9 @@ void videoSGI :: offsetMess(int x, int y)
       verbose(1, "[GEM:videoSGI] Connect to video first");
       return;
     }
-    
+
   // stop the transfer and destroy the buffer
-  if ( !stopTransfer() ) 
+  if ( !stopTransfer() )
     {
       verbose(0, "[GEM:videoSGI] error stopping transfer");
       return;
@@ -266,7 +266,7 @@ void videoSGI :: offsetMess(int x, int y)
     }
 
   // start the transfer and rebuild the buffer
-  if ( !startTransfer() ) 
+  if ( !startTransfer() )
     {
       verbose(0, "[GEM:videoSGI] error starting transfer");
       return;
@@ -374,7 +374,7 @@ bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int top
 
   if(NULL=m_svr || NULL=m_path || NULL==m_drn || NULL=m_src)return false;
   if(!m_capturing)return false;
-  
+
   stopTransfer();
 
   VLControlValue value;
@@ -382,7 +382,7 @@ bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int top
   value.xyVal.y = m_height;
   if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
     vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
-    
+
     verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
     m_width =value.xyVal.x;
     m_height=value.xyVal.y;
@@ -391,7 +391,7 @@ bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int top
   m_pixBlock.image.xsize = m_width;
   m_pixBlock.image.ysize = m_height;
   m_pixBlock.image.reallocate();
-  
+
   start();
   return result;
 }

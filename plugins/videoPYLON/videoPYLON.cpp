@@ -71,7 +71,7 @@ public:
   uint8_t* GetBufferPointer(void) { return m_pBuffer; }
   Pylon::StreamBufferHandle GetBufferHandle(void) { return m_hBuffer; }
   void SetBufferHandle(Pylon::StreamBufferHandle hBuffer) { m_hBuffer = hBuffer; };
-  
+
 protected:
   uint8_t *m_pBuffer;
   Pylon::StreamBufferHandle m_hBuffer;
@@ -93,7 +93,7 @@ struct videoPYLON::Converter {
     : converter(NULL)
 #endif
   {
-    
+
   }
   ~Converter(void) {
     destroyConverter();
@@ -110,12 +110,12 @@ struct videoPYLON::Converter {
 
   void makeConverter(const struct Pylon::SImageFormat&format) {
     destroyConverter();
-    
+
     using namespace Pylon;
-    
+
     bool rgba_out=false;
     bool need_converter=true;
-    
+
 #ifdef HAVE_LIBPYLONUTILITY
     switch(format.PixelFormat) {
     case PixelType_Mono8:
@@ -145,7 +145,7 @@ struct videoPYLON::Converter {
       // converter= new	Pylon::CPixelFormatConverterTruncatePacked ();
       rgba_out=false;
       break;
-    
+
     case PixelType_BayerGR8:
     case PixelType_BayerRG8:
     case PixelType_BayerGB8:
@@ -229,14 +229,14 @@ struct videoPYLON::Converter {
     imageFormat.LinePitch=IsPacked((Pylon::EPixelType) pixelType)?
       0:
       (7+Result.GetSizeX()*BitPerPixel( (Pylon::EPixelType) pixelType)) >>3;
-    
+
     return imageFormat;
   }
 
   static struct Pylon::SOutputImageFormat getOutFormat(const imageStruct&img) {
     using namespace Pylon;
     struct SOutputImageFormat imageFormat;
-    
+
     switch(img.format) {
     case GL_RGBA:
       imageFormat.LinePitch=img.xsize*img.csize;
@@ -261,18 +261,18 @@ struct videoPYLON::Converter {
 #endif
 
     if(format!=inFormat)init=true;
-    
+
     if(init) {
       makeConverter(format);
-      inFormat=format;      
+      inFormat=format;
     }
 
 
     image.xsize=inFormat.Width;
     image.ysize=inFormat.Height;
     image.reallocate();
-    
-    if(0) {; 
+
+    if(0) {;
 #ifdef HAVE_LIBPYLONUTILITY
     } else if(converter) {
       const struct Pylon::SOutputImageFormat oformat=getOutFormat(image);
@@ -416,8 +416,8 @@ bool videoPYLON :: openDevice(gem::Properties&props)
       std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.begin();
       if(m_devicenum>=0) {
         std::advance( it, m_devicenum );
-      } 
-      if(it != m_id2device.end()) {  
+      }
+      if(it != m_id2device.end()) {
         device = m_factory->CreateDevice(it->second);
       }
     } else {

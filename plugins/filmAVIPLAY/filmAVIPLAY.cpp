@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -38,7 +38,7 @@ REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 //
 /////////////////////////////////////////////////////////
 
-filmAVIPLAY :: filmAVIPLAY(void) : 
+filmAVIPLAY :: filmAVIPLAY(void) :
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
@@ -87,7 +87,7 @@ bool filmAVIPLAY :: open(const std::string filename, const gem::Properties&wantP
   if (!(*m_avifile).IsValid())goto unsupported;
   m_numTracks = (*m_avifile).VideoStreamCount();
   if (m_numTracks<1)return false;
-  if (m_curTrack>=m_numTracks)m_curTrack = 0;   
+  if (m_curTrack>=m_numTracks)m_curTrack = 0;
   try {
     m_avistream=(*m_avifile).GetStream(m_curTrack, avm::IStream::StreamType(1));
   } catch (const char* string) {
@@ -135,7 +135,7 @@ pixBlock* filmAVIPLAY :: getFrame(){
     case IMG_FMT_RGB32: m_image.image.fromRGBA(m_rawdata); break;
     case IMG_FMT_BGR24: m_image.image.fromBGR (m_rawdata); break;
     case IMG_FMT_BGR32: m_image.image.fromBGRA(m_rawdata); break;
-    case IMG_FMT_Y800 : 
+    case IMG_FMT_Y800 :
     case IMG_FMT_Y8   : m_image.image.fromGray(m_rawdata); break;
     case IMG_FMT_UYVY : m_image.image.fromUYVY(m_rawdata); break;
     case IMG_FMT_YUY2 : m_image.image.fromYUY2(m_rawdata); break;

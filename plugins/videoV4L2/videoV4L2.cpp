@@ -52,7 +52,7 @@ using namespace gem::plugins;
 #endif
 
 #if 0
-# undef debugIOCTL 
+# undef debugIOCTL
 # define debugIOCTL ::post
 #endif
 
@@ -78,7 +78,7 @@ REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 videoV4L2 :: videoV4L2() : videoBase("v4l2", 0)
                                    , m_gotFormat(0), m_colorConvert(0),
                                      m_tvfd(0),
-                                     m_buffers(NULL), m_nbuffers(0), 
+                                     m_buffers(NULL), m_nbuffers(0),
                                      m_currentBuffer(NULL),
                                      m_frame(0), m_last_frame(0),
                                      m_maxwidth(844), m_minwidth(32),
@@ -96,7 +96,7 @@ videoV4L2 :: videoV4L2() : videoBase("v4l2", 0)
 
   provide("analog");
 }
-  
+
 ////////////////////////////////////////////////////////
 // Destructor
 //
@@ -228,7 +228,7 @@ void *videoV4L2 :: capturing(void)
 
   struct v4l2_buffer buf;
   int nbuf=m_nbuffers;
-  
+
   fd_set fds;
   struct timeval tv;
   int r;
@@ -240,7 +240,7 @@ void *videoV4L2 :: capturing(void)
 
   debugThread("V4L2: memset");
   memset(&(buf), 0, sizeof (buf));
-  
+
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   buf.memory = V4L2_MEMORY_MMAP;
 
@@ -254,7 +254,7 @@ void *videoV4L2 :: capturing(void)
     m_frame++;
     m_frame%=nbuf;
 
-    
+
     /* Timeout. */
     tv.tv_sec = 0;
     tv.tv_usec = 100;
@@ -270,7 +270,7 @@ void *videoV4L2 :: capturing(void)
 
     memset(&(buf), 0, sizeof (buf));
     debugThread("V4L2: memset...");
-  
+
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
 
@@ -303,7 +303,7 @@ void *videoV4L2 :: capturing(void)
     }
 
     debugThread("V4L2: dequeueued");
-    
+
     if(expectedSize==gotSize) {
       m_frame_ready = 1;
       m_last_frame=m_frame;
@@ -371,7 +371,7 @@ pixBlock *videoV4L2 :: getFrame(){
       m_image.image.notowned = true;
     }
     m_image.image.upsidedown=true;
-    
+
     m_image.newimage = 1;
     m_frame_ready = false;
   }
@@ -398,7 +398,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
 
 
   if (devname.at(0) != '/'){ // assuming all v4l2 device's paths starts with '/'
-	  
+
 	  std::vector<std::string> alldev = enumerate();
 	  int i;
 		for(i=0; i<alldev.size(); i++) {
@@ -425,12 +425,12 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
                   devname = "";
 		}
 	 }
-	 
+
 
   const char*dev_name=devname.c_str();
   debugPost("v4l2: device: %s", dev_name);
 
-  // try to open the device  
+  // try to open the device
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
   if (-1 == m_tvfd) {
@@ -438,7 +438,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
     closeDevice(); return false;
   }
 
-  struct stat st; 
+  struct stat st;
   if (-1 == fstat (m_tvfd, &st)) {
     verbose(0, "[GEM:videoV4L2] Cannot identify '%s': %d, %s", dev_name, errno, strerror (errno));
     closeDevice(); return false;
@@ -534,24 +534,24 @@ bool videoV4L2 :: startTransfer()
   }
 
   switch(m_reqFormat){
-  case GL_YCBCR_422_GEM: 
-    pixelformat = V4L2_PIX_FMT_UYVY; 
+  case GL_YCBCR_422_GEM:
+    pixelformat = V4L2_PIX_FMT_UYVY;
     break;
-  case GL_LUMINANCE: 
-    pixelformat = V4L2_PIX_FMT_GREY; 
+  case GL_LUMINANCE:
+    pixelformat = V4L2_PIX_FMT_GREY;
     break;
-  case GL_RGB: 
-    pixelformat = V4L2_PIX_FMT_RGB24; 
+  case GL_RGB:
+    pixelformat = V4L2_PIX_FMT_RGB24;
     break;
-  default: 
-    pixelformat = V4L2_PIX_FMT_RGB32; 
+  default:
+    pixelformat = V4L2_PIX_FMT_RGB32;
     m_reqFormat=GL_RGBA;
     break;
   }
 
   if(fmt.fmt.pix.pixelformat != pixelformat) {
     fmt.fmt.pix.pixelformat = pixelformat;
-  
+
     verbose(1, "[GEM:videoV4L2] want 0x%X == '%c%c%c%c' ", m_reqFormat,
             (char)(fmt.fmt.pix.pixelformat),
             (char)(fmt.fmt.pix.pixelformat>>8),
@@ -561,11 +561,11 @@ bool videoV4L2 :: startTransfer()
     if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
       perror("[GEM:videoV4L2] VIDIOC_S_FMT(fmt)");//exit
     }
-  
+
     // query back what we have set
-    /* in theory this should not be needed, 
+    /* in theory this should not be needed,
      * as S_FMT is supposed to return the actual data
-     * however, some buggy drivers seem to not do that, 
+     * however, some buggy drivers seem to not do that,
      * so we have to make sure...
      */
     if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
@@ -580,17 +580,17 @@ bool videoV4L2 :: startTransfer()
   case V4L2_PIX_FMT_UYVY:  debugPost("v4l2: YUV ");break;
   case V4L2_PIX_FMT_GREY:  debugPost("v4l2: gray");break;
   case V4L2_PIX_FMT_YUV420:debugPost("v4l2: YUV 4:2:0");break;
-  default: 
-    /* hmm, we don't know how to handle this 
+  default:
+    /* hmm, we don't know how to handle this
      * let's try formats that should be always supported by libv4l2
      */
     switch(m_reqFormat){
-    case GL_YCBCR_422_GEM: 
-    case GL_LUMINANCE: 
-      pixelformat = V4L2_PIX_FMT_YUV420; 
+    case GL_YCBCR_422_GEM:
+    case GL_LUMINANCE:
+      pixelformat = V4L2_PIX_FMT_YUV420;
       break;
-    default: 
-      pixelformat = V4L2_PIX_FMT_RGB24; 
+    default:
+      pixelformat = V4L2_PIX_FMT_RGB24;
       break;
     }
     fmt.fmt.pix.pixelformat = pixelformat;
@@ -607,10 +607,10 @@ bool videoV4L2 :: startTransfer()
 
   switch(m_gotFormat){
   case V4L2_PIX_FMT_RGB32: case V4L2_PIX_FMT_RGB24:
-  case V4L2_PIX_FMT_UYVY: case V4L2_PIX_FMT_YUV420: case V4L2_PIX_FMT_YUYV: 
-  case V4L2_PIX_FMT_GREY: 
+  case V4L2_PIX_FMT_UYVY: case V4L2_PIX_FMT_YUV420: case V4L2_PIX_FMT_YUYV:
+  case V4L2_PIX_FMT_GREY:
     break;
-  default: 
+  default:
     error("[GEM:videoV4L2] unknown format '%c%c%c%c'",
           (char)(m_gotFormat),
           (char)(m_gotFormat>>8),
@@ -619,7 +619,7 @@ bool videoV4L2 :: startTransfer()
     /* we should really return here! */
   }
 
-  verbose(1, "[GEM:videoV4L2] got '%c%c%c%c'", 
+  verbose(1, "[GEM:videoV4L2] got '%c%c%c%c'",
           (char)(m_gotFormat),
           (char)(m_gotFormat>>8),
           (char)(m_gotFormat>>16),
@@ -629,13 +629,13 @@ bool videoV4L2 :: startTransfer()
 
   for (i = 0; i < m_nbuffers; ++i) {
     struct v4l2_buffer buf;
-    
+
     memset (&(buf), 0, sizeof (buf));
-    
+
     buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory      = V4L2_MEMORY_MMAP;
     buf.index       = i;
-    
+
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
       perror("[GEM:videoV4L2] VIDIOC_QBUF");//exit
     }
@@ -647,15 +647,15 @@ bool videoV4L2 :: startTransfer()
   }
 
   m_frameSize=fmt.fmt.pix.sizeimage;
-  
+
   /* fill in image specifics for Gem pixel object.  Could we have
      just used RGB, I wonder? */
   m_image.image.xsize = fmt.fmt.pix.width;
   m_image.image.ysize = fmt.fmt.pix.height;
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
-  
-  debugPost("v4l2: format: %c%c%c%c -> 0x%X", 
+
+  debugPost("v4l2: format: %c%c%c%c -> 0x%X",
             (char)(m_gotFormat),
             (char)(m_gotFormat>>8),
             (char)(m_gotFormat>>16),
@@ -669,9 +669,9 @@ bool videoV4L2 :: startTransfer()
   case V4L2_PIX_FMT_YUV420: m_colorConvert=1; break;
   default: m_colorConvert=true;
   }
-  
+
   debugPost("v4l2: colorconvert=%d", m_colorConvert);
-  
+
   /* create thread */
   m_continue_thread = 1;
   m_frame_ready = 0;
@@ -680,11 +680,11 @@ bool videoV4L2 :: startTransfer()
     usleep(10);
     debugPost("v4l2: waiting for thread to come up");
   }
-  
+
   verbose(1, "[GEM:videoV4L2] Opened video connection 0x%X", m_tvfd);
-  
+
   return(1);
-  
+
  closit:
   debugPost("v4l2: closing it!");
   stopTransfer();
@@ -733,7 +733,7 @@ bool videoV4L2 :: stopTransfer()
       perror("[GEM:videoV4L2] VIDIOC_STREAMOFF");
     }
   }
-  
+
   debugPost("v4l2: de-requesting buffers");
   reqbufs(m_tvfd, 0);
 
@@ -773,14 +773,14 @@ std::vector<std::string> videoV4L2::enumerate() {
     memset (&cap, 0, sizeof (cap));
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
       if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) {
-        result.push_back(dev);      
+        result.push_back(dev);
       } else verbose(1, "[GEM:videoV4L2] %s is v4l2 but cannot capture", dev.c_str());
     } else {
       verbose(1, "[GEM:videoV4L2] %s is no v4l2 device", dev.c_str());
     }
     v4l2_close(fd);
   }
-  
+
   return result;
 }
 
@@ -811,7 +811,7 @@ void videoV4L2::addProperties(struct v4l2_queryctrl queryctrl,
   default:
     return;
   }
-  
+
   name=(const char*)(queryctrl.name);
 
   m_readprops[name]=queryctrl;
@@ -821,8 +821,8 @@ void videoV4L2::addProperties(struct v4l2_queryctrl queryctrl,
     m_writeprops[name]=queryctrl;
     writeable.set(name, typ);
   }
-  
-  
+
+
 }
 
 bool videoV4L2 :: enumProperties(gem::Properties&readable,
@@ -841,7 +841,7 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
   m_writeprops.clear();
 
   memset (&queryctrl, 0, sizeof (queryctrl));
-  
+
   for (id = V4L2_CID_BASE;
        id < V4L2_CID_LASTP1;
        id++) {
@@ -865,13 +865,13 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
 	break;
     }
   }
-  
+
   readable.set("channel",0);
   readable.set("frequency",0);
   readable.set("norm", dummy_s);
   readable.set("width",0);
   readable.set("height",0);
-  	
+
   writeable.set("channel",0);
   writeable.set("frequency",0);
   writeable.set("norm", dummy_s);
@@ -882,8 +882,8 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
     readable.set("driver", (char*) m_caps.driver);
     readable.set("card", (char*) m_caps.card);
     readable.set("bus_info", (char*) m_caps.bus_info);
-  }	
-			
+  }
+
   return true;
 }
 void videoV4L2 :: getProperties(gem::Properties&props) {
@@ -894,7 +894,7 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
     return;
   }
   std::vector<std::string>keys=props.keys();
-  int i=0; 
+  int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_readprops.find(key);
@@ -918,48 +918,48 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
 	  std::string std;
 	  switch(stdid) {
 	  default:
-	  case V4L2_STD_UNKNOWN: std="UNKNOWN"; break; 
-	  case V4L2_STD_ALL: std="ALL"; break; 
+	  case V4L2_STD_UNKNOWN: std="UNKNOWN"; break;
+	  case V4L2_STD_ALL: std="ALL"; break;
 
-	  case V4L2_STD_ATSC: std="ATSC"; break; 
-	  case V4L2_STD_625_50: std="625_50"; break; 
-	  case V4L2_STD_525_60: std="525_60"; break; 
-	  case V4L2_STD_SECAM: std="SECAM"; break; 
-	  case V4L2_STD_SECAM_DK: std="SECAM_DK"; break; 
-	  case V4L2_STD_NTSC: std="NTSC"; break; 
-	  case V4L2_STD_PAL: std="PAL"; break; 
-	  case V4L2_STD_PAL_DK: std="PAL_DK"; break; 
-	  case V4L2_STD_PAL_BG: std="PAL_BG"; break; 
-	  case V4L2_STD_DK: std="DK"; break; 
-	  case V4L2_STD_GH: std="GH"; break; 
-	  case V4L2_STD_B: std="B"; break; 
-	  case V4L2_STD_MN: std="MN"; break; 
-	  case V4L2_STD_ATSC_16_VSB: std="ATSC_16_VSB"; break; 
-	  case V4L2_STD_ATSC_8_VSB: std="ATSC_8_VSB"; break; 
-	  case V4L2_STD_SECAM_LC: std="SECAM_LC"; break; 
-	  case V4L2_STD_SECAM_L: std="SECAM_L"; break; 
-	  case V4L2_STD_SECAM_K1: std="SECAM_K1"; break; 
-	  case V4L2_STD_SECAM_K: std="SECAM_K"; break; 
-	  case V4L2_STD_SECAM_H: std="SECAM_H"; break; 
-	  case V4L2_STD_SECAM_G: std="SECAM_G"; break; 
-	  case V4L2_STD_SECAM_D: std="SECAM_D"; break; 
-	  case V4L2_STD_SECAM_B: std="SECAM_B"; break; 
-	  case V4L2_STD_NTSC_M_KR: std="NTSC_M_KR"; break; 
-	  case V4L2_STD_NTSC_443: std="NTSC_443"; break; 
-	  case V4L2_STD_NTSC_M_JP: std="NTSC_M_JP"; break; 
-	  case V4L2_STD_NTSC_M: std="NTSC_M"; break; 
-	  case V4L2_STD_PAL_60: std="PAL_60"; break; 
-	  case V4L2_STD_PAL_Nc: std="PAL_Nc"; break; 
-	  case V4L2_STD_PAL_N: std="PAL_N"; break; 
-	  case V4L2_STD_PAL_M: std="PAL_M"; break; 
-	  case V4L2_STD_PAL_K: std="PAL_K"; break; 
-	  case V4L2_STD_PAL_D1: std="PAL_D1"; break; 
-	  case V4L2_STD_PAL_D: std="PAL_D"; break; 
-	  case V4L2_STD_PAL_I: std="PAL_I"; break; 
-	  case V4L2_STD_PAL_H: std="PAL_H"; break; 
-	  case V4L2_STD_PAL_G: std="PAL_G"; break; 
-	  case V4L2_STD_PAL_B1: std="PAL_B1"; break; 
-	  case V4L2_STD_PAL_B: std="PAL_B"; break; 
+	  case V4L2_STD_ATSC: std="ATSC"; break;
+	  case V4L2_STD_625_50: std="625_50"; break;
+	  case V4L2_STD_525_60: std="525_60"; break;
+	  case V4L2_STD_SECAM: std="SECAM"; break;
+	  case V4L2_STD_SECAM_DK: std="SECAM_DK"; break;
+	  case V4L2_STD_NTSC: std="NTSC"; break;
+	  case V4L2_STD_PAL: std="PAL"; break;
+	  case V4L2_STD_PAL_DK: std="PAL_DK"; break;
+	  case V4L2_STD_PAL_BG: std="PAL_BG"; break;
+	  case V4L2_STD_DK: std="DK"; break;
+	  case V4L2_STD_GH: std="GH"; break;
+	  case V4L2_STD_B: std="B"; break;
+	  case V4L2_STD_MN: std="MN"; break;
+	  case V4L2_STD_ATSC_16_VSB: std="ATSC_16_VSB"; break;
+	  case V4L2_STD_ATSC_8_VSB: std="ATSC_8_VSB"; break;
+	  case V4L2_STD_SECAM_LC: std="SECAM_LC"; break;
+	  case V4L2_STD_SECAM_L: std="SECAM_L"; break;
+	  case V4L2_STD_SECAM_K1: std="SECAM_K1"; break;
+	  case V4L2_STD_SECAM_K: std="SECAM_K"; break;
+	  case V4L2_STD_SECAM_H: std="SECAM_H"; break;
+	  case V4L2_STD_SECAM_G: std="SECAM_G"; break;
+	  case V4L2_STD_SECAM_D: std="SECAM_D"; break;
+	  case V4L2_STD_SECAM_B: std="SECAM_B"; break;
+	  case V4L2_STD_NTSC_M_KR: std="NTSC_M_KR"; break;
+	  case V4L2_STD_NTSC_443: std="NTSC_443"; break;
+	  case V4L2_STD_NTSC_M_JP: std="NTSC_M_JP"; break;
+	  case V4L2_STD_NTSC_M: std="NTSC_M"; break;
+	  case V4L2_STD_PAL_60: std="PAL_60"; break;
+	  case V4L2_STD_PAL_Nc: std="PAL_Nc"; break;
+	  case V4L2_STD_PAL_N: std="PAL_N"; break;
+	  case V4L2_STD_PAL_M: std="PAL_M"; break;
+	  case V4L2_STD_PAL_K: std="PAL_K"; break;
+	  case V4L2_STD_PAL_D1: std="PAL_D1"; break;
+	  case V4L2_STD_PAL_D: std="PAL_D"; break;
+	  case V4L2_STD_PAL_I: std="PAL_I"; break;
+	  case V4L2_STD_PAL_H: std="PAL_H"; break;
+	  case V4L2_STD_PAL_G: std="PAL_G"; break;
+	  case V4L2_STD_PAL_B1: std="PAL_B1"; break;
+	  case V4L2_STD_PAL_B: std="PAL_B"; break;
 	  }
 	  props.set("norm", std);
 	}
@@ -985,7 +985,7 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
 		  props.set("card", (char*) m_caps.card);
 	  } else if("bus_info" == key) {
 		  props.set("bus_info", (char*) m_caps.bus_info);
-	  } else {		  
+	  } else {
 	  }
     }
   }
@@ -1015,7 +1015,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 
 
   std::vector<std::string>keys=props.keys();
-  int i=0; 
+  int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_writeprops.find(key);
@@ -1166,7 +1166,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
       struct v4l2_format fmt;
       memset (&(fmt), 0, sizeof (fmt));
       fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-      
+
       if (0 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)) {
 	double d;
         debugPost("current format %dx%d", fmt.fmt.pix.width, fmt.fmt.pix.height);

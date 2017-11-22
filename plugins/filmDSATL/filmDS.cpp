@@ -101,7 +101,7 @@ filmDS :: filmDS(void) :
       throwCtorError("Unable to create FilterGraph interface %d", RetVal);
       return;
     }
-	
+
   // Get the IMediaControl interface for Run, Stop, Pause and keeps control states
   RetVal	= FilterGraph->QueryInterface(IID_IMediaControl, (void **)&MediaControl);
 
@@ -110,7 +110,7 @@ filmDS :: filmDS(void) :
       throwCtorError("Unable to create MediaControl interface %d", RetVal);
       return;
     }
-	
+
   // Get the IMediaSeeking interface for rewinding video at loop point
   // and set time format to frames
   RetVal	= FilterGraph->QueryInterface(IID_IMediaSeeking, (void **)&MediaSeeking);
@@ -120,7 +120,7 @@ filmDS :: filmDS(void) :
       throwCtorError("Unable to create MediaSeeking interface %d", RetVal);
       return;
     }
-	
+
   // Get the IMediaPosition interface for getting the current position of the clip
   RetVal	= FilterGraph->QueryInterface(IID_IMediaPosition, (void **)&MediaPosition);
 
@@ -138,39 +138,39 @@ filmDS :: filmDS(void) :
 filmDS :: ~filmDS()
 {
   close();
-	
+
   // Release IMediaControl interface
   if (MediaControl != NULL)
     {
       MediaControl->Release();
-		
+
       MediaControl	= NULL;
     }
-	
+
   // Release IMediaSeeking interface
   if (MediaSeeking != NULL)
     {
       MediaSeeking->Release();
-		
+
       MediaSeeking	= NULL;
     }
-	
+
   // Release IMediaPosition interface
   if (MediaPosition != NULL)
     {
       MediaPosition->Release();
-		
+
       MediaPosition	= NULL;
     }
-	
+
   // Release base FilterGraph
   if (FilterGraph != NULL)
     {
       FilterGraph->Release();
-		
+
       FilterGraph	= NULL;
     }
-	
+
   // Release COM
   CoUninitialize();
 }
@@ -189,16 +189,16 @@ void filmDS :: close(void)
   if (SampleGrabber != NULL)
     {
       SampleGrabber->Release();
-		
+
       SampleGrabber	= NULL;
     }
-	
+
   // Remove and release SampleFilter (IBaseFilter) interface
   if (SampleFilter != NULL)
     {
       FilterGraph->RemoveFilter(SampleFilter);
       SampleFilter->Release();
-		
+
       SampleFilter	= NULL;
     }
 
@@ -207,7 +207,7 @@ void filmDS :: close(void)
     {
       FilterGraph->RemoveFilter(VideoFilter);
       VideoFilter->Release();
-		
+
       VideoFilter		= NULL;
     }
 
@@ -216,7 +216,7 @@ void filmDS :: close(void)
     {
       FilterGraph->RemoveFilter(NullFilter);
       NullFilter->Release();
-		
+
       NullFilter		= NULL;
     }
 
@@ -230,7 +230,7 @@ void filmDS :: close(void)
 
 #ifdef REGISTER_FILTERGRAPH
   if (m_GraphRegister)
-    {	
+    {
       HRESULT hr;
 
       filmRemoveGraphFromRot(m_GraphRegister);
@@ -251,12 +251,12 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   AM_MEDIA_TYPE	MediaType;
   BOOL			bFrameTime	= TRUE;
   GUID			Guid;
-		
+
   verbose(1, "Trying DirectShow");
 
   // Convert c-string to Wide string.
   memset(&WideFileName, 0, MAXPDSTRING * 2);
-	
+
   if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(), filename.length(), WideFileName,
                                MAXPDSTRING))
     {
@@ -266,7 +266,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   // Add a file source filter to the filter graph.
   RetVal	= FilterGraph->AddSourceFilter(WideFileName, L"SOURCE", &VideoFilter);
-	
+
   if (RetVal != S_OK || NULL == VideoFilter)
     {
       verbose(0, "[GEM:filmDS:legacy]Unable to render %s", filename.c_str());
@@ -319,7 +319,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   // Set the SampleGrabber to return continuous frames
   RetVal	= SampleGrabber->SetOneShot(FALSE);
-	
+
   if (RetVal != S_OK)
     {
       verbose(0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
@@ -329,7 +329,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   // Set the SampleGrabber to copy the data to a buffer. This only set to FALSE when a
   // callback is used.
   RetVal	= SampleGrabber->SetBufferSamples(TRUE);
-	
+
   if (RetVal != S_OK)
     {
       verbose(0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
@@ -377,61 +377,61 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       verbose(0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
       return false;
     }
-	
+
   // Set the time format to frames
   Guid	= TIME_FORMAT_FRAME;
-	
+
   RetVal	= MediaSeeking->SetTimeFormat(&Guid);
-	
+
   if (RetVal != S_OK)
     {
       // If frame time format not available, default to 100 nanosecond increments.
       bFrameTime	= FALSE;
-		
+
       Guid	= TIME_FORMAT_MEDIA_TIME;
-	
+
       RetVal	= MediaSeeking->SetTimeFormat(&Guid);
-	
+
       if (RetVal != S_OK)
         {
           verbose(0, "[GEM:filmDS:legacy]Unable to set video time format %d", RetVal);
           return false;
         }
     }
-	
+
   // Get the duration of the video. Format will be in previously set time format. This is
   // compatible with the value returned from GetCurrentPosition
   RetVal	= MediaSeeking->GetDuration(&m_Duration);
-	
+
   if (RetVal != S_OK)
     {
       verbose(0, "[GEM:filmDS:legacy]Unable to get video duration %d", RetVal);
       return false;
     }
-	
+
   // Set the number of frames based on the time format used.
   if (TRUE == bFrameTime)
     {
       m_numFrames	= m_Duration;
     }
-	
+
   else
     {
       LONGLONG	OutFormat;
       GUID		OutGuid;
-				
+
       OutGuid	= TIME_FORMAT_FRAME;
       Guid	= TIME_FORMAT_MEDIA_TIME;
-		
+
       //converts from 100 nanosecond format to number of frames
       MediaSeeking->ConvertTimeFormat(&OutFormat, &OutGuid, m_Duration, &Guid);
-		
+
       m_numFrames	= OutFormat;
     }
-	
+
   // Get the format of the connected media.
   RetVal	= SampleGrabber->GetConnectedMediaType(&MediaType);
-	
+
   if (RetVal != S_OK)
     {
       verbose(0, "[GEM:filmDS:legacy]Unable to get media type %d", RetVal);
@@ -443,20 +443,20 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
     {
       // Format returned is specific to the formattype.
       VIDEOINFOHEADER	*VideoInfo	= (VIDEOINFOHEADER *)MediaType.pbFormat;
-		
+
       // Get size of the image from the BitmapInfoHeader returned in the VIDEOINFOHEADER.
       m_xsize		= VideoInfo->bmiHeader.biWidth;
       m_ysize		= VideoInfo->bmiHeader.biHeight;
       //m_csize		= 3;
       m_csize		= 4;
     }
-	
+
   else
     {
       verbose(0, "[GEM:filmDS:legacy]Invalid media type returned %s", filename.c_str());
       return false;
     }
-	
+
   // Allocate video buffer if valid sizes returned.
   if (m_xsize > 0 && m_ysize > 0 && m_csize > 0)
     {
@@ -464,9 +464,9 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
         {
           delete [] m_frame;
         }
-		
+
       m_frame		= new BYTE[m_xsize * m_ysize * m_csize];
-		
+
       if (NULL == m_frame)
         {
           verbose(0, "[GEM:filmDS:legacy]Unable to allocate memory for the video buffer %s", filename.c_str());
@@ -476,24 +476,24 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   // Release the MediaType.pbFormat data
   FreeMediaType(MediaType);
-	
+
   IBaseFilter	*DVFilter;
-	
+
   // If DV video is used, set the quality to 720 x 480.
   RetVal	= FilterGraph->FindFilterByName(L"DV Video Decoder", &DVFilter);
-	
+
   if (S_OK == RetVal && DVFilter != NULL)
     {
       IIPDVDec	*IPDVDec;
-		
+
       // Find the IIPDVDec interface
       RetVal	= DVFilter->QueryInterface(IID_IIPDVDec, (void **)&IPDVDec);
-		
+
       if (S_OK == RetVal && IPDVDec != NULL)
         {
           // Set the property to DVRESOLUTION_FULL
           IPDVDec->put_IPDisplay(DVRESOLUTION_FULL);
-		
+
           // Release the interface
           IPDVDec->Release();
         }
@@ -501,7 +501,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
       // Release the interface
       DVFilter->Release();
     }
-	
+
   // Setup the pixBlock data based on the media type.
   // this is a guess at the fast past for pixels on Windows
   m_image.image.xsize	= m_xsize;
@@ -514,18 +514,18 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   // Start the video stream
   RetVal	= MediaControl->Run();
-	
+
   if (RetVal != S_OK && RetVal != S_FALSE)
     {
       verbose(0, "[GEM:filmDS:legacy]Unable to start video %d", RetVal);
 		      return false;
     }
-	
+
   // Wait for the video to begin playing.
   while (TRUE)
     {
       OAFilterState	FilterState;
-		
+
       // Get the state and ensure it's not in an intermediate state
       RetVal	= MediaControl->GetState(0, &FilterState);
 
@@ -541,14 +541,14 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
           break;
         }
     }
-	
+
   // Sets the tex coords
   //	prepareTexture();
 
   // Set the last frame to -1 so it will show the first frame.
   m_LastFrame	= -1;
-	
-  //	m_haveMovie	= TRUE;	
+
+  //	m_haveMovie	= TRUE;
 
 #ifdef REGISTER_FILTERGRAPH
   if (FAILED(RetVal = filmAddGraphToRot(FilterGraph, &m_GraphRegister))){
@@ -566,19 +566,19 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 pixBlock* filmDS :: getFrame(){
   long			frameSize	= m_ysize * m_xsize * m_csize;
   HRESULT			RetVal;
-  OAFilterState	State;	
+  OAFilterState	State;
  // LONGLONG	CurrentPosition;
  // LONGLONG	Current	= 0;
-	
+
   // Initially set the image as unchanged
   m_image.newimage	= FALSE;
-	
+
   // If the MediaControl interface is unavailable return.
   if (NULL == MediaControl)
     {
       return 0;
     }
-	
+
   // Ensure the video is running
   RetVal	= MediaControl->GetState(0, &State);
 
@@ -619,7 +619,7 @@ pixBlock* filmDS :: getFrame(){
 
                   m_image.newimage	= TRUE;
                 }
-			
+
               // Indicate the the image has changed.
               else if (CurrentPosition > m_LastFrame)
                 {
@@ -647,11 +647,11 @@ pixBlock* filmDS :: getFrame(){
     }
 
   }else{
-	
+
 	    LONGLONG frameSeek;
 
 		frameSeek = (LONGLONG) m_reqFrame;
-		
+
 		if (State == State_Running) RetVal	= MediaControl->Pause();
 
 		//check if the playback is 'Paused' and don't keep asking for the same frame
@@ -665,7 +665,7 @@ pixBlock* filmDS :: getFrame(){
 		RetVal	= MediaSeeking->SetPositions(&frameSeek,
                                                 AM_SEEKING_AbsolutePositioning,
                                                 NULL, AM_SEEKING_NoPositioning);
-		
+
 		if (RetVal != S_OK)
 		{
 			post("filmDS: SetPositions failed");
@@ -763,7 +763,7 @@ HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
 {
   IEnumPins  *pEnum;
   IPin       *pPin;
-	
+
   // Enumerate the pins on the filter
   pFilter->EnumPins(&pEnum);
 
@@ -776,31 +776,31 @@ HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
   while (pEnum->Next(1, &pPin, 0) == S_OK)
     {
       PIN_DIRECTION	PinDirThis;
-		
+
       // Get the direction of a pin
       pPin->QueryDirection(&PinDirThis);
-		
+
       // Check if pin is the same type of pin requested. Will only return the first pin
       // of a certain direction.
       if (PinDir == PinDirThis)
         {
           // Release the interface
           pEnum->Release();
-			
+
           // Return the pin, since it's the same direction as requested.
           *ppPin	= pPin;
 
           return	S_OK;
         }
-		
+
       // Release the pin, since it's not the correct direction.
       pPin->Release();
     }
-	
-	
+
+
   // Release the interface
   pEnum->Release();
-	
+
   return	E_FAIL;
 }
 
@@ -811,7 +811,7 @@ HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilt
 
   // Find the first output pin on the first filter
   HRESULT	RetVal	= filmGetPin(pFirst, PINDIR_OUTPUT, &pOut);
-	
+
   if (RetVal != S_OK)
     {
       return	RetVal;
@@ -838,10 +838,10 @@ HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilt
   if (RetVal != S_OK)
     {
       pOut->Release();
-		
+
       return	E_FAIL;
     }
-	
+
   // Attempt to connect the two pins.
   RetVal	= pGraph->Connect(pOut, pIn);
 
@@ -855,7 +855,7 @@ HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilt
   // Release the pins
   pIn->Release();
   pOut->Release();
-	
+
   return	RetVal;
 }
 

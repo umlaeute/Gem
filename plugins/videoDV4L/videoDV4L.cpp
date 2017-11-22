@@ -30,7 +30,7 @@ using namespace gem::plugins;
 #if 0
 # define DEBUG_WHERE post("%s:%d\t%s", __FILE__, __LINE__, __FUNCTION__)
 #else
-# define DEBUG_WHERE 
+# define DEBUG_WHERE
 #endif
 
 
@@ -105,7 +105,7 @@ bool videoDV4L :: grabFrame(){
 int videoDV4L::decodeFrame(unsigned char*data, int len) {
   DEBUG_WHERE;
   if(!m_parsed) {
-    dv_parse_header(m_decoder, data);  
+    dv_parse_header(m_decoder, data);
     if(NULL==m_frame[0]) {
       int w=m_decoder->width;
       int h=m_decoder->height;
@@ -125,7 +125,7 @@ int videoDV4L::decodeFrame(unsigned char*data, int len) {
                          e_dv_color_rgb,
                          m_frame,
                          m_pitches);
-    
+
     lock();
     m_image.newimage=true;
     m_image.image.fromRGB(m_frame[0]);
@@ -170,7 +170,7 @@ bool videoDV4L :: openDevice(gem::Properties&props){
 
   int num_pinf=MAX_PORTNUM;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
-  
+
   int ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
   verbose(1, "[GEM:videoDV4L] got %d ports", ports);
 
@@ -357,14 +357,14 @@ std::vector<std::string> videoDV4L::enumerate() {
 
   int num_pinf=MAX_PORTNUM;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
-  
+
   int ports = raw1394_get_port_info(handle, pinf, num_pinf);
   int i=0;
   for(i=0; i<ports; i++) {
     result.push_back(pinf[i].name);
   }
   delete[]pinf;
-  
+
   if(NULL==m_raw) {
     raw1394_destroy_handle(handle);
   }
@@ -383,7 +383,7 @@ bool videoDV4L::enumProperties(gem::Properties&readable,
   typ=DV_QUALITY_BEST;
   writeable.set("quality", typ);
 
-  typ=1; // readables are all boolean 
+  typ=1; // readables are all boolean
   readable.set("PAL", typ);
   readable.set("is_color", typ);
   readable.set("50_fields", typ);
@@ -460,10 +460,10 @@ void videoDV4L::getProperties(gem::Properties&props) {
         char dt_str[40];
         char*dtptr=dt_str;
         if(dv_get_recording_datetime (m_decoder, dtptr)>0) {
-          dt_str[39]=0; // just in case 
+          dt_str[39]=0; // just in case
           props.set(key, std::string(dt_str));
         }
-      } 
+      }
 
 
 

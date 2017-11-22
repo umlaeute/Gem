@@ -214,5 +214,3 @@ public:
     HRESULT SetCallback( SAMPLECALLBACK Callback, void* pUser );
     HRESULT SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer );
 };
-
-

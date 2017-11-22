@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -36,14 +36,14 @@ REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 //
 /////////////////////////////////////////////////////////
 
-filmMPEG1 :: filmMPEG1(void) : 
+filmMPEG1 :: filmMPEG1(void) :
   m_wantedFormat(GL_RGBA),
   m_fps(-1.0),
   m_curFrame(-1),
   m_newfilm(false),
   m_streamfile(NULL),
   m_reachedEnd(false),
-  m_data(NULL), 
+  m_data(NULL),
   m_length(0)
 {}
 
@@ -84,10 +84,10 @@ bool filmMPEG1 :: open(const std::string filename, int format)
   }
   if (OpenMPEG (m_streamfile, &m_streamVid)) { /* let's hope it's MPEG */
     m_curFrame = 0;
-    
+
     // Unfortunately there is no way to get the length of an MPEG-Stream
     m_fps = (double)m_streamVid.PictureRate; // ??
-    
+
     m_image.image.xsize  = m_streamVid.Width;
     m_image.image.ysize  = m_streamVid.Height;
     if (!(m_image.image.xsize*m_image.image.ysize))goto unsupported;

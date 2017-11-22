@@ -17,20 +17,20 @@
   this is an attempt at a Linux version of pix_video by Miller Puckette.
   Anyone conversant in c++ will probably howl at this.  I'm uncertain of
   several things.
-    
+
   First, the #includes I threw in pix_video.h may not all be necessary; I
   notice that far fewer are needed for the other OSes.
-    
+
   Second, shouldn't the os-dependent state variables be "private"?  I
   followed the lead of the other os-dependent state variables.  Also,
   I think the indentation is goofy but perhaps there's some reason for it.
 
   Third, I probably shouldn't be using sprintf to generate filenames; I
   don't know the "modern" c++ way to do this.
-    
-  Fourth, I don't know why some state variables 
+
+  Fourth, I don't know why some state variables
   show up as "arguments" in the pix_video :: pix_video().
-     
+
   This code is written with the "bttv" device in mind, which memory mapes
   images up to 24 bits per pixel.  So we request the whole 24 and don't
   settle for anything of lower quality (nor do we offer anything of higher
@@ -138,7 +138,7 @@ bool videoV4L :: grabFrame() {
 
   vmmap[frame].width = m_image.image.xsize + myleftmargin + myrightmargin;
   vmmap[frame].height = m_image.image.ysize + mytopmargin + mybottommargin;
-  
+
   /* syncing */
   if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
     {
@@ -151,7 +151,7 @@ bool videoV4L :: grabFrame() {
     {
       if (errno == EAGAIN)
 	error("[GEM:videoV4L] can't sync (no v4l source?)");
-      else 
+      else
 	perror("[GEM:videoV4L] VIDIOCMCAPTURE1");
 
       /* let's try again... */
@@ -169,7 +169,7 @@ bool videoV4L :: grabFrame() {
       return false;
     }
   }
-  
+
   lock();
   if (m_colorConvert){
     m_image.image.notowned = false;
@@ -179,7 +179,7 @@ bool videoV4L :: grabFrame() {
     case VIDEO_PALETTE_RGB32:   m_image.image.fromBGRA   (videobuf + vmbuf.offsets[frame]); break;
     case VIDEO_PALETTE_GREY:    m_image.image.fromGray   (videobuf + vmbuf.offsets[frame]); break;
     case VIDEO_PALETTE_YUV422:  m_image.image.fromYUV422 (videobuf + vmbuf.offsets[frame]); break;
-      
+
     default: // ? what should we do ?
       m_image.image.data=videobuf + vmbuf.offsets[frame];
       m_image.image.notowned = true;
@@ -189,7 +189,7 @@ bool videoV4L :: grabFrame() {
     m_image.image.notowned = true;
   }
   m_image.image.upsidedown=true;
-  
+
   m_image.newimage = 1;
   unlock();
   return true;
@@ -215,7 +215,7 @@ bool videoV4L :: openDevice(gem::Properties&props)
       buf[255]=0;
     }
   }
-  
+
   if ((tvfd = v4l1_open(buf, O_RDWR)) < 0) {
     error("[GEM:videoV4L] failed opening device: '%s'", buf);
     perror(buf);
@@ -331,7 +331,7 @@ bool videoV4L :: startTransfer()
    * what happened to the margins?
    */
 
-  width = (m_width  > vcap.minwidth ) ? m_width        : vcap.minwidth;   
+  width = (m_width  > vcap.minwidth ) ? m_width        : vcap.minwidth;
   width = (width    > vcap.maxwidth ) ? vcap.maxwidth  : width;
   height =(m_height > vcap.minheight) ? m_height       : vcap.minheight;
   height =(height   > vcap.maxheight) ? vcap.maxheight : height;
@@ -369,7 +369,7 @@ bool videoV4L :: startTransfer()
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       if (errno == EAGAIN)
         error("[GEM:videoV4L] can't sync (no video source?)");
-      else 
+      else
         perror("[GEM:videoV4L] VIDIOCMCAPTURE");
     }
   }
@@ -387,7 +387,7 @@ bool videoV4L :: startTransfer()
   case VIDEO_PALETTE_YUV422: m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM); break;
   default: m_colorConvert=true;
   }
-  
+
 #if 0
   myleftmargin = 0;
   myrightmargin = 0;
@@ -442,7 +442,7 @@ std::vector<std::string> videoV4L::enumerate() {
     if (ioctl(fd, VIDIOCGCAP, &vcap) >= 0)
     {
       if (vcap.type & VID_TYPE_CAPTURE) {
-        result.push_back(dev);  
+        result.push_back(dev);
       } else {
         verbose(1, "[GEM:videoV4L] %s is v4l1 but cannot capture", dev.c_str());
       }
@@ -452,7 +452,7 @@ std::vector<std::string> videoV4L::enumerate() {
 
     v4l1_close(fd);
   }
-  
+
   return result;
 }
 
@@ -693,17 +693,17 @@ void videoV4L::getProperties(gem::Properties&props) {
     } else if(key=="norm") {
       IOCTL_ONCE(VIDIOCGCHAN, vchannel);
       switch(vchannel.norm) {
-      case VIDEO_MODE_PAL:  
-	props.set(key, std::string("PAL")); 
+      case VIDEO_MODE_PAL:
+	props.set(key, std::string("PAL"));
 	break;
-      case VIDEO_MODE_NTSC: 
-	props.set(key, std::string("NTSC")); 
+      case VIDEO_MODE_NTSC:
+	props.set(key, std::string("NTSC"));
 	break;
       case VIDEO_MODE_SECAM:
-	props.set(key, std::string("SECAM")); 
+	props.set(key, std::string("SECAM"));
 	break;
-      case VIDEO_MODE_AUTO: 
-	props.set(key, std::string("AUTO")); 
+      case VIDEO_MODE_AUTO:
+	props.set(key, std::string("AUTO"));
 	break;
       default:
 	props.set(key, vchannel.norm);
