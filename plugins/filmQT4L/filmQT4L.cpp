@@ -156,7 +156,7 @@ pixBlock* filmQT4L :: getFrame(){
   m_lastFrame=m_curFrame;
 
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
-    printf("[GEM:filmQT4L] couldn't decode video!\n");
+    fprintf(stderr, "[GEM:filmQT4L] couldn't decode video!\n");
   }else {
     m_image.image.convertFrom(&m_qtimage);
     m_image.newimage=1; m_image.image.upsidedown=false;
