@@ -142,7 +142,7 @@ bool videoV4L :: grabFrame() {
   /* syncing */
   if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
     {
-      perror("v4l: VIDIOCSYNC");
+      perror("[GEM:videoV4L] VIDIOCSYNC");
       noerror=false;
     }
 
@@ -150,13 +150,13 @@ bool videoV4L :: grabFrame() {
   if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
     {
       if (errno == EAGAIN)
-	error("v4l: can't sync (no v4l source?)");
+	error("[GEM:videoV4L] can't sync (no v4l source?)");
       else 
-	perror("v4l: VIDIOCMCAPTURE1");
+	perror("[GEM:videoV4L] VIDIOCMCAPTURE1");
 
       /* let's try again... */
       if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
-	perror("v4l: VIDIOCMCAPTURE2");
+	perror("[GEM:videoV4L] VIDIOCMCAPTURE2");
 	noerror=false;
       }
     }
@@ -165,7 +165,7 @@ bool videoV4L :: grabFrame() {
   } else {
     errorcount++;
     if(errorcount>1000) {
-      error("v4L: %d capture errors in a row... I think I better stop now...", errorcount);
+      error("[GEM:videoV4L] %d capture errors in a row... I think I better stop now...", errorcount);
       return false;
     }
   }
@@ -217,28 +217,28 @@ bool videoV4L :: openDevice(gem::Properties&props)
   }
   
   if ((tvfd = v4l1_open(buf, O_RDWR)) < 0) {
-    error("v4l: failed opening device: '%s'", buf);
+    error("[GEM:videoV4L] failed opening device: '%s'", buf);
     perror(buf);
     goto closit;
   }
 
   /* get picture information */
   if (v4l1_ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0) {
-    perror("v4l: VIDIOCGPICT");
+    perror("[GEM:videoV4L] VIDIOCGPICT");
     goto closit;
   }
 
   /* get capabilities */
   if (v4l1_ioctl(tvfd, VIDIOCGCAP, &vcap) < 0) {
-    perror("v4l: VIDIOCGCAP");
+    perror("[GEM:videoV4L] VIDIOCGCAP");
     goto closit;
   }
 
   for (i = 0; i < vcap.channels; i++) {
     vchannel.channel = i;
-    verbose(2, "getting channel info for #%d", i);
+    verbose(1, "[GEM:videoV4L] getting channel info for #%d", i);
     if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)  {
-      perror("v4l: VIDIOCGCHAN");
+      perror("[GEM:videoV4L] VIDIOCGCHAN");
       goto closit;
     }
   }
@@ -279,7 +279,7 @@ bool videoV4L :: startTransfer()
 #if 0
   /* get picture information */
   if (v4l1_ioctl(tvfd, VIDIOCGPICT, &vpicture) < 0) {
-    perror("v4l: VIDIOCGPICT");
+    perror("[GEM:videoV4L] VIDIOCGPICT");
     return false;
   }
 
@@ -287,7 +287,7 @@ bool videoV4L :: startTransfer()
   for (i = 0; i < vcap.channels; i++) {
     vchannel.channel = i;
     if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
-      perror("v4l: VDIOCGCHAN");
+      perror("[GEM:videoV4L] VDIOCGCHAN");
       return false;
     }
   }
@@ -297,7 +297,7 @@ bool videoV4L :: startTransfer()
 
   /* hmm, what does this do? */
   if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
-    perror("v4l: VDIOCGCHAN");
+    perror("[GEM:videoV4L] VDIOCGCHAN");
     return false;
   }
 
@@ -306,7 +306,7 @@ bool videoV4L :: startTransfer()
 
   /* apply video-channel and -norm */
   if (v4l1_ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0) {
-    perror("v4l: VDIOCSCHAN");
+    perror("[GEM:videoV4L] VDIOCSCHAN");
     return false;
   }
 #endif
@@ -314,14 +314,14 @@ bool videoV4L :: startTransfer()
   /* get mmap numbers */
   if (v4l1_ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
     {
-      perror("v4l: VIDIOCGMBUF");
+      perror("[GEM:videoV4L] VIDIOCGMBUF");
       return false;
     }
 
   if (!(videobuf = (unsigned char *)
         v4l1_mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
     {
-      perror("v4l: mmap");
+      perror("[GEM:videoV4L] mmap");
       return false;
     }
 
@@ -368,9 +368,9 @@ bool videoV4L :: startTransfer()
     for (i = 0; i < V4L_NBUF; i++)vmmap[i].format = vpicture.palette;
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       if (errno == EAGAIN)
-        error("v4l: can't sync (no video source?)");
+        error("[GEM:videoV4L] can't sync (no video source?)");
       else 
-        perror("v4l: VIDIOCMCAPTURE");
+        perror("[GEM:videoV4L] VIDIOCMCAPTURE");
     }
   }
   /* fill in image specifics for Gem pixel object.  Could we have
@@ -397,7 +397,7 @@ bool videoV4L :: startTransfer()
 
   m_haveVideo = 1;
 
-  verbose(1, "v4l::startTransfer opened video connection %X", tvfd);
+  verbose(1, "[GEM:videoV4L] startTransfer opened video connection %X", tvfd);
   return true;
 }
 
@@ -435,19 +435,19 @@ std::vector<std::string> videoV4L::enumerate() {
 
   for(i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
-    verbose(2, "V4L: found possible device %s", dev.c_str());
+    verbose(1, "[GEM:videoV4L] found possible device %s", dev.c_str());
     int fd=v4l1_open(dev.c_str(), O_RDONLY | O_NONBLOCK);
-    verbose(2, "V4L: v4l1_open returned %d", fd);
+    verbose(1, "[GEM:videoV4L] v4l1_open returned %d", fd);
     if(fd<0)continue;
     if (ioctl(fd, VIDIOCGCAP, &vcap) >= 0)
     {
       if (vcap.type & VID_TYPE_CAPTURE) {
         result.push_back(dev);  
       } else {
-        verbose(1, "%s is v4l1 but cannot capture", dev.c_str());
+        verbose(1, "[GEM:videoV4L] %s is v4l1 but cannot capture", dev.c_str());
       }
     } else {
-      verbose(1, "%s is no v4l1 device", dev.c_str());
+      verbose(1, "[GEM:videoV4L] %s is no v4l1 device", dev.c_str());
     }
 
     v4l1_close(fd);
@@ -506,7 +506,7 @@ void videoV4L::setProperties(gem::Properties&props) {
   if(tvfd<0)return;
 
   if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
-    perror("v4l: VDIOCGCHAN");
+    perror("[GEM:videoV4L] VDIOCGCHAN");
   }
 
   for(i=0; i<keys.size(); i++) {
@@ -541,7 +541,7 @@ void videoV4L::setProperties(gem::Properties&props) {
       if(props.get(key, d)) {
 	int channel=d;
 	if(channel<0 || channel>(vcap.channels-1)) {
-	  error("channel %d out of range [0..%d]", channel, vcap.channels-1);
+	  error("[GEM:videoV4L] channel %d out of range [0..%d]", channel, vcap.channels-1);
 	  continue;
 	}
   m_channel=channel;
@@ -552,12 +552,12 @@ void videoV4L::setProperties(gem::Properties&props) {
     } else if (key=="frequency") {
       if(props.get(key, d)) {
 	if (v4l1_ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
-	  error("pix_video[v4l]: error setting frequency -- no tuner");
+	  error("[GEM:videoV4L] error setting frequency -- no tuner");
 	  continue;
 	}
 	unsigned long freq=d;
 	if (v4l1_ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
-	  error("pix_video[v4l]: error setting frequency");
+	  error("[GEM:videoV4L] error setting frequency");
 	}
       }
     } else if (key=="norm") {
@@ -573,16 +573,16 @@ void videoV4L::setProperties(gem::Properties&props) {
 	  i_norm=VIDEO_MODE_AUTO;
 
 	if(i_norm<0) {
-	  error("unknown norm '%s'", s.c_str());
+	  error("[GEM:videoV4L] unknown norm '%s'", s.c_str());
 	} else {
-    m_norm=i_norm;
+          m_norm=i_norm;
 	  vchannel.norm=i_norm;
 	  do_s_chan=true;
 	}
       } else if(props.get(key, d)) {
 	i_norm=d;
 	if(i_norm<0 || i_norm>VIDEO_MODE_AUTO) {
-	  error("unknown norm %d", i_norm);
+	  error("[GEM:videoV4L] unknown norm %d", i_norm);
 	} else {
 	  vchannel.norm=i_norm;
 	  do_s_chan=true;
@@ -620,15 +620,15 @@ void videoV4L::setProperties(gem::Properties&props) {
 
   /* do compound settings */
   if(do_s_chan) {
-    verbose(2, "calling VIDIOCSCHAN");
+    verbose(2, "[GEM:videoV4L] calling VIDIOCSCHAN");
     if (v4l1_ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0) {
-      perror("v4l: VDIOCSCHAN");
+      perror("[GEM:videoV4L] VDIOCSCHAN");
     }
   }
   if(do_s_pict) {
-    verbose(2, "calling VIDIOCSPICT");
+    verbose(2, "[GEM:videoV4L] calling VIDIOCSPICT");
     if (v4l1_ioctl(tvfd, VIDIOCSPICT, &vpicture) < 0) {
-      perror("v4l: VIDIOCSPICT");
+      perror("[GEM:videoV4L] VIDIOCSPICT");
     }
   }
 
@@ -636,7 +636,7 @@ void videoV4L::setProperties(gem::Properties&props) {
     restartTransfer();
 }
 void videoV4L::getProperties(gem::Properties&props) {
-#define IOCTL_ONCE(x, y) if(!y##_done)if(v4l1_ioctl(tvfd, x, &y) < 0) {perror("v4l"#x"");} else y##_done=true
+#define IOCTL_ONCE(x, y) if(!y##_done)if(v4l1_ioctl(tvfd, x, &y) < 0) {perror("[GEM:videoV4L] "#x"");} else y##_done=true
 
   bool vpicture_done=false, vchannel_done=false, vcap_done=false;
 

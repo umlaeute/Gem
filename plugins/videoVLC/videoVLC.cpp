@@ -140,7 +140,6 @@ bool videoVLC::open(gem::Properties&props) {
       }
       if(0!=buf[0]) {
         buf[MAXVLCSTRING-1]=0;
-        //post("vlc-option: '%s'", buf);
         libvlc_media_add_option(media,buf);
       }
     }
@@ -161,13 +160,11 @@ bool videoVLC::open(gem::Properties&props) {
       return NULL;
     }
     static void unlock(void*opaque, void*picture, void*const*plane) {
-      //  post(" unlockCB: %p", opaque);
       videoVLC*obj=(videoVLC*)opaque;
       if(obj)
 	obj->unlockFrame(picture, plane);
     }
     static void display(void*opaque, void*picture) {
-      //  post("displayCB: %p -> %p", opaque, picture);
       videoVLC*obj=(videoVLC*)opaque;
     }
     _callbackObj(videoVLC*data) {
@@ -207,7 +204,6 @@ pixBlock*videoVLC::getFrame(void) {
 }
 
 void videoVLC::releaseFrame(void) {
-  //  post("release frame");
   UNLOCK(m_mutex);
 }
 
@@ -310,13 +306,10 @@ bool videoVLC::stop (void) {
 void*videoVLC::lockFrame(void**plane ) {
   LOCK(m_mutex);
   *plane=m_convertImg->data;
-  //  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
   return NULL;
 }
 void videoVLC::unlockFrame(void*picture, void*const*plane) {
-  //post("processFrame %p\t%p", picture, *plane);
-
   if(&m_pixBlock.image != m_convertImg) {
   // convert the image from the buffer
 #ifdef __APPLE__
@@ -334,10 +327,10 @@ void videoVLC::unlockFrame(void*picture, void*const*plane) {
 unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines)
 {
 #if 0
-  post("chroma: %s", chroma);
-  post("dimen : %dx%d", width, height);
-  post("pitches: %d", pitches);
-  post("lines: %d", lines);
+  verbose(1, "[GEM:videoVLC] chroma: %s", chroma);
+  verbose(1, "[GEM:videoVLC] dimen : %dx%d", width, height);
+  verbose(1, "[GEM:videoVLC] pitches: %d", pitches);
+  verbose(1, "[GEM:videoVLC] lines: %d", lines);
 #endif
   memcpy(chroma, format_string, 4);
 

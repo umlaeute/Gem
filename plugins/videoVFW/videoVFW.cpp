@@ -72,7 +72,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
   char driverName[256];
   char driverDesc[256];
   if (capGetDriverDescription(0, driverName, 256, driverDesc, 256))
-    post("videoVFW: driver '%s'", driverName);
+    verbose(1, "[GEM:videoVFW] driver '%s'", driverName);
 
 
   double d;
@@ -90,19 +90,19 @@ bool videoVFW :: openDevice(gem::Properties&props)
 				    0, 0, m_width, m_height,// window position and dimensions
 				    GetDesktopWindow(), 0);
   if (!m_hWndC) {
-    error("Unable to create capture window");
+    verbose(0, "[GEM:videoVFW] Unable to create capture window");
     return false;
   } 
 
   if (!capDriverConnect(m_hWndC, 0)) {
-    error("Unable to connect to video driver");
+    verbose(0, "[GEM:videoVFW] Unable to connect to video driver");
     closeDevice();
     return false;
   }
 
   CAPTUREPARMS params;
   if (!capCaptureGetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {
-    error("Unable to get capture parameters");
+    verbose(0, "[GEM:videoVFW] Unable to get capture parameters");
     closeDevice();
     return false;
   }
@@ -117,20 +117,20 @@ bool videoVFW :: openDevice(gem::Properties&props)
   params.fAbortRightMouse = FALSE;
   if (!capCaptureSetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS)))
     {
-      error("Unable to set capture parameters");
+      verbose(0, "[GEM:videoVFW] Unable to set capture parameters");
       closeDevice();
       return false;
     }
 
   if (!capSetCallbackOnVideoStream(m_hWndC, videoVFW::videoFrameCallback))
     {
-      error("Unable to set frame callback");
+      verbose(0, "[GEM:videoVFW] Unable to set frame callback");
       closeDevice();
       return false;
     }
   if (!capSetUserData(m_hWndC, this))
     {
-      error("Unable to set user data");
+      verbose(0, "[GEM:videoVFW] Unable to set user data");
       closeDevice();
       return false;
     }
@@ -138,7 +138,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
   BITMAPINFO *videoFormat = (BITMAPINFO *)(new char[formSize]);
   if (!capGetVideoFormat(m_hWndC, videoFormat, formSize))
     {
-      error("Unable to get video format");
+      verbose(0, "[GEM:videoVFW] Unable to get video format");
       closeDevice();
       return false;
     }
@@ -151,18 +151,18 @@ bool videoVFW :: openDevice(gem::Properties&props)
   videoFormat->bmiHeader.biClrImportant = 0;
   videoFormat->bmiHeader.biSizeImage = 0;
   if (!capSetVideoFormat(m_hWndC, videoFormat, formSize)) {
-      error("Unable to set video format");
+      verbose(0, "[GEM:videoVFW] Unable to set video format");
       delete videoFormat;
       closeDevice();
       return false;
     }
   if (!capGetVideoFormat(m_hWndC, videoFormat, formSize)) {
-    error("Unable to get video format");
+    error("[GEM:videoVFW] Unable to get video format");
   }
   m_width=static_cast<int>(videoFormat->bmiHeader.biWidth);
   m_height=static_cast<int>(videoFormat->bmiHeader.biHeight);
 
-  verbose(1, "Connected with %dx%d @ %d",
+  verbose(1, "[GEM:videoVFW] Connected with %dx%d @ %d",
           m_width, m_height,
           static_cast<int>(videoFormat->bmiHeader.biBitCount));
 

@@ -136,11 +136,11 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
 
   err=dc1394_camera_enumerate (m_dc, &list); /* Find cameras */
   if(DC1394_SUCCESS!=err) {
-    error("videoDC1394: %s: failed to enumerate", dc1394_error_get_string(err));
+    verbose(0, "[GEM:videoDC1394] %s: failed to enumerate", dc1394_error_get_string(err));
     return false;
   }
   if (list->num < 1) {
-    error("videoDC1394: no cameras found");
+    verbose(0, "[GEM:videoDC1394] no cameras found");
     dc1394_camera_free_list (list);
     return false;
   }
@@ -172,16 +172,16 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
                                         list->ids[devicenum].unit);
   } else {
     m_dccamera=NULL;
-    error("videoDC1394: only found %d cameras but requested #%d!", list->num, devicenum);
+    verbose(0, "[GEM:videoDC1394] only found %d cameras but requested #%d!", list->num, devicenum);
   }
   dc1394_camera_free_list (list);
 
   if(!m_dccamera) {
-    error("videoDC1394: could not access camera!");
+    verbose(0, "[GEM:videoDC1394] could not access camera!");
     return false;
   }
 
-  verbose(1, "videoDC1394: using camera with GUID %s", guid2string(m_dccamera->guid, m_dccamera->unit).c_str());
+  verbose(1, "[GEM:videoDC1394] using camera with GUID %s", guid2string(m_dccamera->guid, m_dccamera->unit).c_str());
 
   setProperties(props);
 
@@ -193,7 +193,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
 
     err=dc1394_video_get_supported_modes(m_dccamera,&video_modes);
     if(DC1394_SUCCESS!=err) {
-      error("can't get video modes");
+      verbose(0, "[GEM:videoDC1394] can't get video modes");
       closeDevice();
       return false;
     }
@@ -202,11 +202,11 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     if(props.get("channel", d)) // this used to be 'channel' rather than 'isochannel'
       mode=d;
 
-    verbose(1, "trying mode %d", mode);
+    verbose(1, "[GEM:videoDC1394] trying mode %d", mode);
 
     if(mode>=0) {
       if(mode>=video_modes.num) {
-        error("requested channel %d/%d out of bounds", mode, video_modes.num);
+        verbose(0, "[GEM:videoDC1394] requested channel %d/%d out of bounds", mode, video_modes.num);
         mode=-1;
       }
     }
@@ -215,13 +215,13 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
     for (i=video_modes.num-1;i>=0;i--) {
       unsigned int w=0, h=0;
       if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_modes.modes[i], &w, &h)) {
-        verbose(1, "videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
-      } else verbose(1, "videomode %d refused dimen: %d", i, video_modes.modes[i]);
+        verbose(1, "[GEM:videoDC1394] videomode[%02d/%d]=%dx%d", i, video_modes.num, w, h);
+      } else verbose(1, "[GEM:videoDC1394] videomode %d refused dimen: %d", i, video_modes.modes[i]);
 
       dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i], &coding);
       dc1394bool_t iscolor=DC1394_FALSE;
       if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
-        verbose(1, "videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
+        verbose(1, "[GEM:videoDC1394] videomode[%02d/%d] %d is%scolor", i, video_modes.num, coding, (iscolor?" ":" NOT "));
       }
 
       if(mode<0) {  // find a mode matching the user's needs
@@ -244,30 +244,30 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
         }
       }
       if (i < 0) {
-        error("Could not get a valid mode");
+        verbose(0, "[GEM:videoDC1394] Could not get a valid mode");
         closeDevice();
         return false;
       }
     } else {
-      verbose(1, "using mode %d", mode);
+      verbose(1, "[GEM:videoDC1394] using mode %d", mode);
       video_mode=video_modes.modes[mode];
     }
 
     if(1) {
       unsigned int w=0, h=0;
       if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera, video_mode, &w, &h)) {
-      verbose(1, "videomode[%d]=%dx%d", video_mode, w, h);
+      verbose(1, "[GEM:videoDC1394] videomode[%d]=%dx%d", video_mode, w, h);
       }
       dc1394_get_color_coding_from_video_mode(m_dccamera,video_mode, &coding);
       dc1394bool_t iscolor=DC1394_FALSE;
       if(DC1394_SUCCESS==dc1394_is_color(coding, &iscolor)) {
-        verbose(1, "videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
+        verbose(1, "[GEM:videoDC1394] videomode %d is%scolor", coding, (iscolor?" ":" NOT "));
       }
     }
 
     err=dc1394_video_set_mode(m_dccamera, video_mode);
     if(DC1394_SUCCESS!=err) {
-      error("unable to set specified mode, using default");
+      verbose(0, "[GEM:videoDC1394] unable to set specified mode, using default");
     }
   }
 
@@ -279,11 +279,11 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
       err=dc1394_video_set_operation_mode(m_dccamera, (dc1394operation_mode_t)operation_mode);
       if(DC1394_SUCCESS==err)
         break;
-      verbose(1, "failed to set operation mode to %d", operation_mode);
+      verbose(1, "[GEM:videoDC1394] failed to set operation mode to %d", operation_mode);
       operation_mode--;
     }
     if(DC1394_SUCCESS!=err) {
-      error("unable to set operation mode...continuing anyhow");
+      verbose(0, "[GEM:videoDC1394] unable to set operation mode...continuing anyhow");
     }
   }
 
@@ -297,12 +297,12 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
       err=dc1394_video_set_iso_speed(m_dccamera, (dc1394speed_t)speed);
       if(DC1394_SUCCESS==err)
         break;
-      verbose(1, "failed to set ISO speed to %d", 100*(1<<speed));
+      verbose(1, "[GEM:videoDC1394] failed to set ISO speed to %d", 100*(1<<speed));
 
       speed--;
     }
     if(DC1394_SUCCESS!=err) {
-      error("unable to set ISO speed...trying to set to original (%d)", 100*(1<<orgspeed));
+      verbose(0, "[GEM:videoDC1394] unable to set ISO speed...trying to set to original (%d)", 100*(1<<orgspeed));
       dc1394_video_get_iso_speed(m_dccamera, &orgspeed);
     }
   }
@@ -321,7 +321,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
       err=dc1394_video_set_framerate(m_dccamera, framerate);
       float fr=0;
       dc1394_framerate_as_float(framerate, &fr);
-      verbose(1, "DC1394: set framerate to %g", fr);
+      verbose(1, "[GEM:videoDC1394] set framerate to %g", fr);
     }
   }
 
@@ -329,11 +329,11 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
                            4,  /* 4 DMA buffers */
                            DC1394_CAPTURE_FLAGS_DEFAULT);     /* Setup capture */
   if(DC1394_SUCCESS!=err) {
-    error("videoDC1394: %s: failed to enumerate", dc1394_error_get_string(err));
+    verbose(0, "[GEM:videoDC1394] %s: failed to enumerate", dc1394_error_get_string(err));
     return false;
   }
 
-  verbose(1, "DC1394: Successfully opened...");
+  verbose(1, "[GEM:videoDC1394] Successfully opened...");
   return true;
 }
 ////////////////////////////////////////////////////////
@@ -370,7 +370,7 @@ bool videoDC1394 :: stopTransfer()
   /* Stop transmission */
   dc1394error_t err=dc1394_video_set_transmission(m_dccamera, DC1394_OFF);
   if(DC1394_SUCCESS!=err) {
-    error("unable to stop transmission");
+    error("[GEM:videoDC1394] unable to stop transmission");
   }
   return true;
 }
@@ -386,7 +386,7 @@ std::vector<std::string>videoDC1394 :: enumerate(){
 
   int i=0;
   for(i=0; i<list->num; i++) {
-    //    post("IIDC#%02d: %"PRIx64"\t%x\t%s", i, list->ids[i].guid, list->ids[i].unit, buf);
+    //    verbose(1, "[GEM:videoDC1394] IIDC#%02d: %"PRIx64"\t%x\t%s", i, list->ids[i].guid, list->ids[i].unit, buf);
     result.push_back(guid2string(list->ids[i].guid, list->ids[i].unit));
   }
   return result;
@@ -506,7 +506,7 @@ void videoDC1394::getProperties(gem::Properties&props) {
     dc1394error_t err=DC1394_SUCCESS;
 #define DC1394_TRYGET(x)                                    \
       if(DC1394_SUCCESS!=(err=dc1394_video_get_##x)) {      \
-        error("videoDC1394: getting '%s' failed with '%s'", \
+        verbose(0, "[GEM:videoDC1394] getting '%s' failed with '%s'", \
         key.c_str(),                                        \
         dc1394_error_get_string(err));                      \
         continue;                                           \
@@ -813,14 +813,14 @@ void videoDC1394::setProperties(gem::Properties&props) {
               mode = DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
             }
             err=dc1394_feature_set_mode(m_dccamera, feature, mode);
-            if (err!=DC1394_SUCCESS) error("can't set %s to %s",key.c_str(), svalue.c_str());
+            if (err!=DC1394_SUCCESS) verbose(0, "[GEM:videoDC1394] can't set %s to %s",key.c_str(), svalue.c_str());
           }
         }
       }
     }
   }
     if(DC1394_SUCCESS!=err) {
-      error("videoDC1394: setting '%s' failed with '%s'",
+      verbose(0, "[GEM:videoDC1394] setting '%s' failed with '%s'",
             key.c_str(),
             dc1394_error_get_string(err));
     }

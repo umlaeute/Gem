@@ -154,7 +154,7 @@ bool videoDS :: openDevice(gem::Properties&props)
     do  {
         // Get the interface for DirectShow's GraphBuilder
         if (FAILED(hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void **)&m_pGB)))  {
-            error("Could not get DShow GraphBuilder, hr 0x%X", hr);
+            verbose(0, "[GEM:videoDS] Could not get DShow GraphBuilder, hr 0x%X", hr);
             break;
         }
 
@@ -171,13 +171,13 @@ bool videoDS :: openDevice(gem::Properties&props)
         // Get the interface for DirectShow's CaptureGraphBuilder2 which allows the use of capture devices instead of file sources
         if (	FAILED(hr = (CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER, IID_ICaptureGraphBuilder2, (void **)&m_pCG)))
             ||	FAILED(hr = m_pCG->SetFiltergraph(m_pGB))){
-                error("Could not get DShow GraphBuilder, hr 0x%X", hr);
+                verbose(0, "[GEM:videoDS] Could not get DShow GraphBuilder, hr 0x%X", hr);
                 break;
             }
 
             // Create the capture device.
             if (FAILED(hr = FindCaptureDevice(device, &m_pCDbase))) {
-                error("Could not open device: %d\n", device);
+                verbose(0, "[GEM:videoDS] Could not open device: %d\n", device);
                 break;
             }
 
@@ -186,7 +186,7 @@ bool videoDS :: openDevice(gem::Properties&props)
                 IID_IBaseFilter, (void**)&SampleFilter);
 
             if (hr != S_OK || NULL == SampleFilter) {
-                error("Unable to create SampleFilter interface %d", hr);
+                verbose(0, "[GEM:videoDS] Unable to create SampleFilter interface %d", hr);
                 return false;
             }
 
@@ -195,7 +195,7 @@ bool videoDS :: openDevice(gem::Properties&props)
             hr	= SampleFilter->QueryInterface(IID_ISampleGrabber, (void **)&SampleGrabber);
 
             if (hr != S_OK || NULL == SampleGrabber) {
-                error("Unable to create SampleGrabber interface %d", hr);
+                verbose(0, "[GEM:videoDS] Unable to create SampleGrabber interface %d", hr);
                 return false;
             }
 
@@ -213,7 +213,7 @@ bool videoDS :: openDevice(gem::Properties&props)
             hr	= SampleGrabber->SetOneShot(FALSE);
 
             if (hr != S_OK) {
-                error("Unable to setup sample grabber %d", hr);
+                verbose(0, "[GEM:videoDS] Unable to setup sample grabber %d", hr);
                 return false;
             }
 
@@ -222,7 +222,7 @@ bool videoDS :: openDevice(gem::Properties&props)
             hr	= SampleGrabber->SetBufferSamples(TRUE);
 
             if (hr != S_OK) {
-                error("Unable to setup sample grabber %d", hr);
+                verbose(0, "[GEM:videoDS] Unable to setup sample grabber %d", hr);
                 return false;
             }
 
@@ -231,7 +231,7 @@ bool videoDS :: openDevice(gem::Properties&props)
                 IID_IBaseFilter, (void**)&NullFilter);
 
             if (hr != S_OK || NULL == NullFilter) {
-                error("Unable to create NullFilter interface %d", hr);
+                verbose(0, "[GEM:videoDS] Unable to create NullFilter interface %d", hr);
                 return false;
             }
 
@@ -239,7 +239,7 @@ bool videoDS :: openDevice(gem::Properties&props)
             if (FAILED(hr = m_pGB->AddFilter(m_pCDbase, L"Capture Device")) || 
                 FAILED(hr = m_pGB->AddFilter(SampleFilter, L"Sample Grabber")) ||
                 FAILED(hr = m_pGB->AddFilter(NullFilter, L"Null Renderer"))) {
-                    error("Could not add the filters to the graph, hr 0x%X", hr);
+                    verbose(0, "[GEM:videoDS] Could not add the filters to the graph, hr 0x%X", hr);
                     break;
                 }
 
@@ -251,45 +251,45 @@ bool videoDS :: openDevice(gem::Properties&props)
                         //try Video only for devices with no audio
                         if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, 
                             m_pCDbase, SampleFilter, NullFilter))) {
-                                error("Unable to connect to SampleGrabber.");
+                                verbose(0, "[GEM:videoDS] Unable to connect to SampleGrabber.");
                                 return false;
                             }
                     }
 
                     // QueryInterface for DirectShow interfaces
                     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaFilter, (void **)&m_pMF)))) {
-                        error("Could not get media filter interface, hr 0x%X", hr);
+                        verbose(0, "[GEM:videoDS] Could not get media filter interface, hr 0x%X", hr);
                         break;
                     }
 
                     //MediaControl is used for Run, Stop, Pause and running state queries
                     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaControl, (void **)&m_pMC)))) {
-                        error("Could not get media control interface, hr 0x%X", hr);
+                        verbose(0, "[GEM:videoDS] Could not get media control interface, hr 0x%X", hr);
                         break;
                     }
 
                     //not used right now
                     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaEvent, (void **)&m_pME))))	{
-                        error("Could not get media event interface, hr 0x%X", hr);
+                        verbose(0, "[GEM:videoDS] Could not get media event interface, hr 0x%X", hr);
                         break;
                     }
 
                     //MediaSeeking for the end of a clip.  not really used here
                     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaSeeking, (void **)&m_pMS)))){
-                        error("Could not get media seeking interface, hr 0x%X", hr);
+                        verbose(0, "[GEM:videoDS] Could not get media seeking interface, hr 0x%X", hr);
                         break;
                     }
 
                     //for the position of a clip.  not really used for device capture
                     if (FAILED(hr = (m_pGB->QueryInterface(IID_IMediaPosition, (void **)&m_pMP)))){
-                        error("Could not get media position interface, hr 0x%X", hr);
+                        verbose(0, "[GEM:videoDS] Could not get media position interface, hr 0x%X", hr);
                         break;
                     }
 
                     // Expose the filter graph so we can view it using GraphEdit
 #ifdef REGISTER_FILTERGRAPH
                     if (FAILED(hr = AddGraphToRot(m_pGB, &m_GraphRegister))){
-                        error("failed to register filter graph with ROT!  hr=0x%X", hr);
+                        verbose(0, "[GEM:videoDS] failed to register filter graph with ROT!  hr=0x%X", hr);
                         m_GraphRegister = 0;
                     }
 #endif
@@ -297,7 +297,7 @@ bool videoDS :: openDevice(gem::Properties&props)
                     // Turn off the reference clock. 
                     //	if (FAILED(hr = m_pMF->SetSyncSource(NULL)))
                     //	{
-                    //		error("failed to turn off the reference clock  hr=0x%X", hr);
+                    //		verbose(0, "[GEM:videoDS] failed to turn off the reference clock  hr=0x%X", hr);
                     //		break;
                     //	}
 
@@ -375,21 +375,21 @@ std::vector<std::string>videoDS :: enumerate(void)
         hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
             IID_ICreateDevEnum, (void ** ) &pDevEnum);
         if (FAILED(hr)) {
-            error("Couldn't create system enumerator!");
+            verbose(0, "[GEM:videoDS] Couldn't create system enumerator!");
             break;
         }
 
         // Create an enumerator for the video capture devices
         hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
         if (FAILED(hr)) {
-            error("Couldn't create class enumerator!");
+            verbose(0, "[GEM:videoDS] Couldn't create class enumerator!");
             break;
         }
 
         // If there are no enumerators for the requested type, then 
         // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
         if (pClassEnum == NULL) {
-            error("No video capture devices found!");
+            verbose(0, "[GEM:videoDS] No video capture devices found!");
             break;
         }
 
@@ -408,7 +408,6 @@ std::vector<std::string>videoDS :: enumerate(void)
                 if (SUCCEEDED(hr)) {
                     std::string s=_bstr_t(varName.bstrVal);
                     result.push_back(s);
-                    //post("Dev %d: %S", devIndex, varName.bstrVal);
                 }
                 VariantClear(&varName);
 
@@ -476,7 +475,7 @@ void videoDS :: copyBuffer(void)
 
     // Check for a format change.
     if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&pmt))) {
-        error("could not get sample media type.");
+        error("[GEM:videoDS] could not get sample media type.");
         close();
         return;
     }
@@ -538,7 +537,7 @@ bool videoDS :: startTransfer(void)
     AM_MEDIA_TYPE mt;
     BITMAPINFOHEADER* pbmih;
     if (NULL == SampleGrabber || FAILED(hr = SampleGrabber->GetConnectedMediaType(&mt))) {
-        error("Could not get connect media type, hr 0x%X", hr);
+        error("[GEM:videoDS] Could not get connect media type, hr 0x%X", hr);
         return false;
     }
     GetBitmapInfoHdr(&mt, &pbmih);
@@ -548,7 +547,7 @@ bool videoDS :: startTransfer(void)
 
     //starts the graph rendering
     if (FAILED(hr = m_pMC->Run())) {
-        error("Could not start graph playback, hr 0x%X", hr);
+        error("[GEM:videoDS] Could not start graph playback, hr 0x%X", hr);
         return false;
     }
 
@@ -563,7 +562,7 @@ bool videoDS :: stopTransfer(void)
 {
     HRESULT hr;
     if (FAILED(hr = m_pMC->Stop())) {
-        error("Could not stop graph playback, hr 0x%X", hr);
+        error("[GEM:videoDS] Could not stop graph playback, hr 0x%X", hr);
         return false;
     }
     return true;
@@ -603,7 +602,7 @@ bool videoDS :: setDimen(int x, int y, int leftmargin, int rightmargin,
             hr = pDV->put_IPDisplay(resolution);
 
             if (FAILED(hr)) {
-                error("Could not set decoder resolution.");
+                error("[GEM:videoDS] Could not set decoder resolution.");
             }
         }
         if(pDV)
@@ -651,7 +650,7 @@ bool videoDS :: dialog(std::vector<std::string>dlg)
             else if(type=="crossbar")
                 dialogCrossbar(m_pCG, m_pCDbase);
             else
-                error ("dialog not known");
+              error("[GEM:videoDS] dialog '%s' not known", type.c_str());
         }
     }
 
@@ -671,18 +670,18 @@ void videoDS :: startCapture(void)
         memset(&WideFileName, 0, MAXPDSTRING * 2);
         if (0 == MultiByteToWideChar(CP_ACP, 0, m_filename, strlen(m_filename), WideFileName, 
             MAXPDSTRING)) {
-                error("Unable to capture to %s", m_filename);
+                error("[GEM:videoDS] Unable to capture to %s", m_filename);
                 return;
             }
             // Set filename of output AVI. Returns pointer to a File Writer filter.
             if (FAILED(hr = m_pCG->SetOutputFileName(&MEDIASUBTYPE_Avi, WideFileName, 
                 &FileFilter, NULL))) {
-                    error("Unable to set output filename.");
+                    error("[GEM:videoDS] Unable to set output filename.");
                     return;
                 }
                 // Set AVI output option for interleaving.
                 if (FAILED(hr = SetAviOptions(FileFilter, INTERLEAVE_NONE))) {
-                    error("Unable to set avi options.");
+                    error("[GEM:videoDS] Unable to set avi options.");
                     return;
                 }
                 // Connect the Capture Device filter to the File Writer filter. Try using 
@@ -691,7 +690,7 @@ void videoDS :: startCapture(void)
                     m_pCDbase, NULL, FileFilter))) {
                         if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video, 
                             m_pCDbase, NULL, FileFilter))) {
-                                error("Unable to record to avi.");
+                                error("[GEM:videoDS] Unable to record to avi.");
                                 return;
                             }
                     }
@@ -730,7 +729,7 @@ void videoDS :: fileMess(t_symbol *filename)
 void videoDS :: recordMess(int state)
 {
     if (NULL==m_filename || 0 == m_filename[0]) {
-        error("No filename passed");
+        error("[GEM:videoDS] No filename passed");
         return;
     }
 
@@ -829,13 +828,13 @@ void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
     if (SUCCEEDED(hr = (pCG->FindInterface(NULL, NULL, pCDbase, IID_IAMVfwCaptureDialogs, (void **)&pDlg)))) {
         if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
             if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL)))
-                error("Could not show VFW Capture Source Dialog");
+                error("[GEM:videoDS] Could not show VFW Capture Source Dialog");
         if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
             if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL)))
-                error("Could not show VFW Capture Format Dialog");
+                error("[GEM:videoDS] Could not show VFW Capture Format Dialog");
         if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
             if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))
-                error("Could not show VFW Capture Display Dialog");
+                error("[GEM:videoDS] Could not show VFW Capture Display Dialog");
         pDlg->Release();
     }
 
@@ -938,7 +937,7 @@ void dialogSource(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase) {
     if (pDlg) {
         if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source))) {
             if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL))) {
-                error("Could not show VFW Capture Source Dialog");
+                error("[GEM:videoDS] Could not show VFW Capture Source Dialog");
             }
         }
     } else {
@@ -966,7 +965,7 @@ void dialogFormat(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase) {
     if (pDlg)	{
         if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
             if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL))) {
-                error("Could not show VFW Capture Format Dialog");
+                error("[GEM:videoDS] Could not show VFW Capture Format Dialog");
             }
     } else {
         IAMStreamConfig *pSC;
@@ -1005,10 +1004,10 @@ void dialogDisplay(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase) {
     if (pDlg) {
         if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display))) {
             if (FAILED((hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))) {
-                error("Could not show VFW Capture Display Dialog");
+                error("[GEM:videoDS] Could not show VFW Capture Display Dialog");
             }
         } else
-            error("No display dialog for this device");
+            error("[GEM:videoDS] No display dialog for this device");
     }
 }
 
@@ -1082,7 +1081,7 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
         hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
             IID_ICreateDevEnum, (void ** ) &pDevEnum);
         if (FAILED(hr)) {
-            error("Couldn't create system enumerator!");
+            verbose(0, "[GEM:videoDS] Couldn't create system enumerator!");
             break;
         }
 
@@ -1090,14 +1089,14 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
 
         hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
         if (FAILED(hr)){
-            error("Couldn't create class enumerator!");
+            verbose(0, "[GEM:videoDS] Couldn't create class enumerator!");
             break;
         }
 
         // If there are no enumerators for the requested type, then
         // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
         if (pClassEnum == NULL) {
-            error("No video capture devices found!");
+            verbose(0, "[GEM:videoDS] No video capture devices found!");
             hr = E_FAIL;
             break;
         }
@@ -1113,7 +1112,7 @@ FindCaptureDevice(int device, IBaseFilter ** ppSrcFilter)
                     // Bind Moniker to a filter object
                     hr = pMoniker->BindToObject(0,0,IID_IBaseFilter, (void**)&pSrc);
                     if (FAILED(hr)) {
-                        error("Couldn't bind moniker to filter object!");
+                        verbose(0, "[GEM:videoDS] Couldn't bind moniker to filter object!");
                     }
                 }
                 COMRELEASE(pMoniker);
@@ -1160,7 +1159,7 @@ void GetBitmapInfoHdr(AM_MEDIA_TYPE* pmt, BITMAPINFOHEADER** ppbmih) {
             IsEqualGUID(pmt->formattype, FORMAT_VideoInfo2)) {
                 *ppbmih = &(((VIDEOINFOHEADER2 *) pmt->pbFormat)->bmiHeader);
             } else {
-                error("Unknown media format");
+                error("[GEM:videoDS] Unknown media format");
                 return;
             }
 }
@@ -1198,21 +1197,21 @@ HRESULT SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MODE)
 
     // QI for interface AVI Muxer
     if (FAILED(hr = ppf->QueryInterface(IID_IConfigAviMux, reinterpret_cast<PVOID *>(&pMux)))) {
-        error("IConfigAviMux failed.");
+        error("[GEM:videoDS] IConfigAviMux failed.");
     }
 
     if (FAILED(hr = pMux->SetOutputCompatibilityIndex(TRUE))) {
-        error("SetOutputCompatibilityIndex failed.");
+        error("[GEM:videoDS] SetOutputCompatibilityIndex failed.");
     }
 
     // QI for interface Interleaving
     if (FAILED(hr = ppf->QueryInterface(IID_IConfigInterleaving, reinterpret_cast<PVOID *>(&pInterleaving)))) {
-        error("IConfigInterleaving failed.");
+        error("[GEM:videoDS] IConfigInterleaving failed.");
     }
 
     // put the interleaving mode (full, none, half)
     if (FAILED(pInterleaving->put_Mode(INTERLEAVE_MODE))) {
-        error("put_Mode failed.");
+        error("[GEM:videoDS] put_Mode failed.");
     }
 
     return hr;

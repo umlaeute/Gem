@@ -154,23 +154,23 @@ int videoV4L2::init_mmap (void)
 
   if(count<0) {
     if (EINVAL == errno) {
-      error("%s does not support memory mapping", devname);
+      error("[GEM:videoV4L2] %s does not support memory mapping", devname);
       return 0;
     } else {
-      perror("v4l2: VIDIOC_REQBUFS");
+      perror("[GEM:videoV4L2] VIDIOC_REQBUFS");
       return 0;
     }
   }
 
   if (count < V4L2_NBUF) {
-    //error("Insufficient buffer memory on %s: %d", devname, count);
+    //error("[GEM:videoV4L2] Insufficient buffer memory on %s: %d", devname, count);
     //return(0);
   }
 
   m_buffers = (t_v4l2_buffer*)calloc (count, sizeof (*m_buffers));
 
   if (!m_buffers) {
-    perror("v4l2: out of memory");
+    perror("[GEM:videoV4L2] out of memory");
     return(0);
   }
 
@@ -185,7 +185,7 @@ int videoV4L2::init_mmap (void)
     debugPost("v4l2: buf.index==%d", buf.index);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QUERYBUF, &buf)){
-      perror("v4l2: VIDIOC_QUERYBUF");
+      perror("[GEM:videoV4L2] VIDIOC_QUERYBUF");
       return(0);
     }
 
@@ -198,7 +198,7 @@ int videoV4L2::init_mmap (void)
                  m_tvfd, buf.m.offset);
 
     if (MAP_FAILED == m_buffers[m_nbuffers].start){
-      perror("v4l2: mmap");
+      perror("[GEM:videoV4L2] mmap");
       return 0;
     }
   }
@@ -265,7 +265,7 @@ void *videoV4L2 :: capturing(void)
     if (-1 == r) {
       if (EINTR == errno)
         continue;
-      perror("v4l2: select");//exit
+      perror("[GEM:videoV4L2] select");//exit
     }
 
     memset(&(buf), 0, sizeof (buf));
@@ -278,7 +278,7 @@ void *videoV4L2 :: capturing(void)
       switch (errno) {
     /* coverity[unterminated_case] */
       case EAGAIN:
-        perror("v4l2: VIDIOC_DQBUF: stopping capture thread!");
+        perror("[GEM:videoV4L2] VIDIOC_DQBUF: stopping capture thread!");
         m_stopTransfer=true;
         m_continue_thread=false;
     /* coverity[unterminated_case] */
@@ -287,7 +287,7 @@ void *videoV4L2 :: capturing(void)
         /* fall through */
       default:
         captureerror=true;
-        perror("v4l2: VIDIOC_DQBUF");
+        perror("[GEM:videoV4L2] VIDIOC_DQBUF");
       }
     }
 
@@ -298,7 +298,7 @@ void *videoV4L2 :: capturing(void)
     //process_image (m_buffers[buf.index].start);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      perror("v4l2: VIDIOC_QBUF");
+      perror("[GEM:videoV4L2] VIDIOC_QBUF");
       captureerror=true;
     }
 
@@ -309,13 +309,13 @@ void *videoV4L2 :: capturing(void)
       m_last_frame=m_frame;
       m_currentBuffer=currentBuffer;
     } else {
-      post("oops, skipping incomplete capture %d of %d bytes", gotSize, expectedSize);
+      fprintf(stderr, "[GEM:videoV4L2] oops, skipping incomplete capture %d of %d bytes", gotSize, expectedSize);
     }
 
     if(captureerror) {
       errorcount++;
       if(errorcount>1000) {
-        error("v4L2: %d capture errors in a row... I think I better stop now...", errorcount);
+        error("[GEM:videoV4L2] %d capture errors in a row... I think I better stop now...", errorcount);
         m_continue_thread=false;
         m_stopTransfer=true;
       }
@@ -403,13 +403,12 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
 	  int i;
 		for(i=0; i<alldev.size(); i++) {
 			std::string dev=alldev[i];
-			verbose(2, "V4L2: found possible device %s", dev.c_str());
+			verbose(1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
 			int fd=v4l2_open(dev.c_str(), O_RDWR);
-			verbose(2, "V4L2: v4l2_open returned %d", fd);
+			verbose(1, "[GEM:videoV4L2] v4l2_open returned %d", fd);
 			if(fd<0)continue;
 			struct v4l2_capability cap;
 			if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
-				
 				std::string bus;
 				bus = (char*) cap.bus_info;
 			  if ( devname == bus ) {
@@ -417,13 +416,13 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
 					break;
 			  }
 			} else {
-			  verbose(1, "v4l2 : %s is no v4l2 device\n", dev.c_str());
+			  verbose(1, "[GEM:videoV4L2] %s is no v4l2 device\n", dev.c_str());
 			}
 			v4l2_close(fd);
 		}
 		if ( i >= alldev.size() ) {
-			error("v4l2 : no v4l2 input device on bus %s\n", devname.c_str());
-			devname = "";
+                  verbose(0, "[GEM:videoV4L2] no v4l2 input device on bus %s\n", devname.c_str());
+                  devname = "";
 		}
 	 }
 	 
@@ -435,18 +434,18 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
   if (-1 == m_tvfd) {
-    error("Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
+    verbose(0, "[GEM:videoV4L2] Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
     closeDevice(); return false;
   }
 
   struct stat st; 
   if (-1 == fstat (m_tvfd, &st)) {
-    error("Cannot identify '%s': %d, %s", dev_name, errno, strerror (errno));
+    verbose(0, "[GEM:videoV4L2] Cannot identify '%s': %d, %s", dev_name, errno, strerror (errno));
     closeDevice(); return false;
   }
 
   if (!S_ISCHR (st.st_mode)) {
-    error("%s is no device", dev_name);
+    verbose(0, "[GEM:videoV4L2] %s is no device", dev_name);
     closeDevice(); return false;
   }
 
@@ -455,32 +454,32 @@ bool videoV4L2 :: openDevice(gem::Properties&props) {
   struct v4l2_capability cap;
   if (-1 == xioctl (m_tvfd, VIDIOC_QUERYCAP, &cap)) {
     if (EINVAL == errno) {
-      error("%s is no V4L2 device",  dev_name);
+      verbose(0, "[GEM:videoV4L2] %s is no V4L2 device",  dev_name);
       closeDevice(); return false;
     } else {
-      perror("v4l2: VIDIOC_QUERYCAP");//exit
+      perror("[GEM:videoV4L2] VIDIOC_QUERYCAP");//exit
       closeDevice(); return false;
     }
   }
 
   if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
-    error("%s is no video capture device", dev_name);
+    verbose(0, "[GEM:videoV4L2] %s is no video capture device", dev_name);
     closeDevice(); return false;
   }
 
   if (!(cap.capabilities & V4L2_CAP_STREAMING)) {
-    error("%s does not support streaming i/o", dev_name);
+    verbose(0, "[GEM:videoV4L2] %s does not support streaming i/o", dev_name);
     closeDevice(); return false;
   }
 
-  verbose(1, "v4l2: successfully opened %s", dev_name);
+  verbose(1, "[GEM:videoV4L2] successfully opened %s", dev_name);
 
   setProperties(props);
 
   return true;
 }
 void videoV4L2 :: closeDevice() {
-  verbose(1, "v4l: closing device %d", m_tvfd);
+  verbose(1, "[GEM:videoV4L2] closing device %d", m_tvfd);
   if (m_tvfd>=0) v4l2_close(m_tvfd);
   m_tvfd=-1;
 }
@@ -514,7 +513,7 @@ bool videoV4L2 :: startTransfer()
   debugPost("v4l2: start transfer");
   m_stopTransfer=false;
   m_rendering=true;
-  //  verbose(1, "starting transfer");
+  verbose(1, "[GEM:videoV4L2] starting transfer");
   int i;
 
   __u32 pixelformat=0;
@@ -531,7 +530,7 @@ bool videoV4L2 :: startTransfer()
 
   /* initialize the format struct to what we currently have */
   if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-    perror("v4l2: VIDIOC_G_FMT");//exit
+    perror("[GEM:videoV4L2] VIDIOC_G_FMT");//exit
   }
 
   switch(m_reqFormat){
@@ -553,14 +552,14 @@ bool videoV4L2 :: startTransfer()
   if(fmt.fmt.pix.pixelformat != pixelformat) {
     fmt.fmt.pix.pixelformat = pixelformat;
   
-    verbose(1, "v4l2: want 0x%X == '%c%c%c%c' ", m_reqFormat, 
+    verbose(1, "[GEM:videoV4L2] want 0x%X == '%c%c%c%c' ", m_reqFormat,
             (char)(fmt.fmt.pix.pixelformat),
             (char)(fmt.fmt.pix.pixelformat>>8),
             (char)(fmt.fmt.pix.pixelformat>>16),
             (char)(fmt.fmt.pix.pixelformat>>24));
 
     if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-      perror("v4l2: VIDIOC_S_FMT(fmt)");//exit
+      perror("[GEM:videoV4L2] VIDIOC_S_FMT(fmt)");//exit
     }
   
     // query back what we have set
@@ -570,7 +569,7 @@ bool videoV4L2 :: startTransfer()
      * so we have to make sure...
      */
     if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-      perror("v4l2: VIDIOC_G_FMT");//exit
+      perror("[GEM:videoV4L2] VIDIOC_G_FMT");//exit
     }
   }
 
@@ -597,11 +596,11 @@ bool videoV4L2 :: startTransfer()
     fmt.fmt.pix.pixelformat = pixelformat;
 
     if (-1 == xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)){
-      perror("v4l2: VIDIOC_S_FMT(fmt2)");
+      perror("[GEM:videoV4L2] VIDIOC_S_FMT(fmt2)");
     }
     // query back what we have set
     if (-1 == xioctl (m_tvfd, VIDIOC_G_FMT, &fmt)){
-      perror("v4l2: VIDIOC_G_FMT(fmt2)");
+      perror("[GEM:videoV4L2] VIDIOC_G_FMT(fmt2)");
     }
     m_gotFormat=fmt.fmt.pix.pixelformat;
   }
@@ -612,7 +611,7 @@ bool videoV4L2 :: startTransfer()
   case V4L2_PIX_FMT_GREY: 
     break;
   default: 
-    error("unknown format '%c%c%c%c'",
+    error("[GEM:videoV4L2] unknown format '%c%c%c%c'",
           (char)(m_gotFormat),
           (char)(m_gotFormat>>8),
           (char)(m_gotFormat>>16),
@@ -620,7 +619,7 @@ bool videoV4L2 :: startTransfer()
     /* we should really return here! */
   }
 
-  verbose(1, "v4l2: got '%c%c%c%c'", 
+  verbose(1, "[GEM:videoV4L2] got '%c%c%c%c'", 
           (char)(m_gotFormat),
           (char)(m_gotFormat>>8),
           (char)(m_gotFormat>>16),
@@ -638,13 +637,13 @@ bool videoV4L2 :: startTransfer()
     buf.index       = i;
     
     if (-1 == xioctl (m_tvfd, VIDIOC_QBUF, &buf)){
-      perror("v4l2: VIDIOC_QBUF");//exit
+      perror("[GEM:videoV4L2] VIDIOC_QBUF");//exit
     }
   }
 
   type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   if (-1 == xioctl (m_tvfd, VIDIOC_STREAMON, &type)){
-    perror("v4l2: VIDIOC_STREAMON");//exit
+    perror("[GEM:videoV4L2] VIDIOC_STREAMON");//exit
   }
 
   m_frameSize=fmt.fmt.pix.sizeimage;
@@ -682,7 +681,7 @@ bool videoV4L2 :: startTransfer()
     debugPost("v4l2: waiting for thread to come up");
   }
   
-  post("v4l2: GEM: pix_video: Opened video connection 0x%X", m_tvfd);
+  verbose(1, "[GEM:videoV4L2] Opened video connection 0x%X", m_tvfd);
   
   return(1);
   
@@ -731,7 +730,7 @@ bool videoV4L2 :: stopTransfer()
   if(m_tvfd){
     enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (-1 == xioctl (m_tvfd, VIDIOC_STREAMOFF, &type)){
-      perror("v4l2: VIDIOC_STREAMOFF");
+      perror("[GEM:videoV4L2] VIDIOC_STREAMOFF");
     }
   }
   
@@ -766,18 +765,18 @@ std::vector<std::string> videoV4L2::enumerate() {
 
   for(i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
-    verbose(2, "V4L2: found possible device %s", dev.c_str());
+    verbose(1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
     int fd=v4l2_open(dev.c_str(), O_RDWR);
-    verbose(2, "V4L2: v4l2_open returned %d", fd);
+    verbose(1, "[GEM:videoV4L2]  v4l2_open returned %d", fd);
     if(fd<0)continue;
     struct v4l2_capability cap;
     memset (&cap, 0, sizeof (cap));
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
       if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) {
         result.push_back(dev);      
-      } else verbose(1, "%s is v4l2 but cannot capture", dev.c_str());
+      } else verbose(1, "[GEM:videoV4L2] %s is v4l2 but cannot capture", dev.c_str());
     } else {
-      verbose(1, "%s is no v4l2 device", dev.c_str());
+      verbose(1, "[GEM:videoV4L2] %s is no v4l2 device", dev.c_str());
     }
     v4l2_close(fd);
   }
@@ -1002,7 +1001,7 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
       if(getformat & HEIGHT_FLAG)
 	props.set("height", fmt.fmt.pix.height);
     } else {
-      perror("VIDIOC_G_FMT");
+      perror("[GEM:videoV4L2] VIDIOC_G_FMT");
     }
   }
 }
@@ -1088,7 +1087,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	  continue;
 	}
 	if(0 != xioctl(m_tvfd, VIDIOC_S_STD, &stdid)) {
-	  perror("v4l2: unable to set standard");
+	  perror("[GEM:videoV4L2] unable to set standard");
 	}
 
       } else if("channel" == key) {
@@ -1096,7 +1095,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	if(props.get("channel", ch)) {
 	  int channel=ch;
 	  if(0 != xioctl(m_tvfd, VIDIOC_S_INPUT, &channel)) {
-	    perror("v4l2: unable to set channel");
+	    perror("[GEM:videoV4L2] unable to set channel");
 	  }
 	}
       } else if("frequency" == key) {
@@ -1149,7 +1148,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 	crop.c = cropcap.defrect; /* reset to default */
 
 	if (-1 == xioctl (m_tvfd, VIDIOC_S_CROP, &crop)) {
-	  perror("v4l2: vidioc_s_crop");
+	  perror("[GEM:videoV4L2] vidioc_s_crop");
 	  switch (errno) {
 	  case EINVAL:
 	    /* Cropping not supported. */
@@ -1179,7 +1178,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 
         debugPost("want format %dx%d", fmt.fmt.pix.width, fmt.fmt.pix.height);
 	if(0 != xioctl (m_tvfd, VIDIOC_S_FMT, &fmt)) {
-	  perror("VIDIOC_S_FMT(dim)");
+	  perror("[GEM:videoV4L2] VIDIOC_S_FMT(dim)");
 	}
         debugPost("new format %dx%d", fmt.fmt.pix.width, fmt.fmt.pix.height);
       }

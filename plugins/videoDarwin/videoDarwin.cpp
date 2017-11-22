@@ -79,13 +79,13 @@ videoDarwin :: ~videoDarwin()
   close();
   if (m_vc) {
     if (::SGDisposeChannel(m_sg, m_vc)) {
-      error ("Unable to dispose a video channel");
+      verbose(0, "[GEM:videoDarwin] Unable to dispose a video channel");
     }
     m_vc = NULL;
   }
   if (m_sg) {
     if (::CloseComponent(m_sg)) {
-      error("Unable to dispose a sequence grabber component");
+      verbose(0, "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
     }
     m_sg = NULL;
     if (m_srcGWorld) {
@@ -120,22 +120,21 @@ bool videoDarwin :: grabFrame()
   err = SGIdle(m_sg);
 
   if (err != noErr){
-    error("SGIdle failed with error %d",err);
+    error("[GEM:videoDarwin] SGIdle failed with error#%d",err);
     m_haveVideo = 0;
     //    return false;
   } else {
     //this doesn't do anything so far
     //VDCompressDone(m_vdig,frameCount,data,size,similar,time);
     //err = SGGrabFrameComplete(m_vc,frameCount,done);
-    //if (err != noErr) error("SGGrabCompressComplete failed with error %d",err);
-    //post("SGGrabFramecomplete done %d framecount = %d",done[0],frameCount);
+    //if (err != noErr) error("[GEM:videoDarwin] SGGrabCompressComplete failed with error %d",err);
 
     m_haveVideo = 1;
     m_newFrame = true;
   }
   if (!m_haveVideo)
     {
-      post("no video yet");
+      verbose(0, "[GEM:videoDarwin] no video yet");
       return true;
     }
   m_image.newimage = m_newFrame;
@@ -168,7 +167,7 @@ bool videoDarwin :: stopTransfer()
 
   //might need SGPause or SGStop here
   err = SGStop(m_sg);
-  if (err != noErr)error("SGStop failed with error %d",err);
+  if (err != noErr)error("[GEM:videoDarwin] SGStop failed with error#%d",err);
   return true;
 }
 
@@ -181,30 +180,30 @@ bool videoDarwin :: initSeqGrabber()
 
   m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
   if(m_sg==NULL){
-    error("could not open default component");
+    verbose(0, "[GEM:videoDarwin] could not open default component");
     return false;
   }
   anErr = SGInitialize(m_sg);
   if(anErr!=noErr){
-    error("could not initialize SG error %d",anErr);
+    verbose(0, "[GEM:videoDarwin] could not initialize SG error %d",anErr);
     return false;
   }
 
   anErr = SGSetDataRef(m_sg, 0, 0, seqGrabDontMakeMovie);
   if (anErr != noErr){
-    error("dataref failed with error %d",anErr);
+    verbose(0, "[GEM:videoDarwin] dataref failed with error %d",anErr);
   }
 
   anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);
   if(anErr!=noErr){
-    error("could not make new SG channnel error %d",anErr);
+    verbose(0, "[GEM:videoDarwin] could not make new SG channnel error %d",anErr);
     return false;
   }
 
   enumerate();
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr){
-    error("could not get SG channnel Device List");
+    verbose(0, "[GEM:videoDarwin] could not get SG channnel Device List");
   }else{
     deviceCount = (*devices)->count;
     m_inputDevice = (*devices)->selectedIndex;
@@ -227,13 +226,13 @@ bool videoDarwin :: initSeqGrabber()
   //this call sets the input device
   if (m_inputDevice >= 0 && m_inputDevice < deviceCount) {//check that the device is not out of bounds
     std::string devname=pascal2str((*devices)->entry[m_inputDevice].name);
-    post("SGSetChannelDevice trying[%d] %s", m_inputDevice, devname.c_str());
+    verbose(1, "[GEM:videoDarwin] SGSetChannelDevice trying[%d] %s", m_inputDevice, devname.c_str());
   }
   anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
-  if(anErr!=noErr) error("SGSetChannelDevice returned error %d",anErr);
+  if(anErr!=noErr) verbose(0, "[GEM:videoDarwin] SGSetChannelDevice returned error %d",anErr);
 
   anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel);
-  if(anErr!=noErr) error("SGSetChannelDeviceInput returned error %d",anErr);
+  if(anErr!=noErr) verbose(0, "[GEM:videoDarwin] SGSetChannelDeviceInput returned error %d",anErr);
 
   //grab the VDIG info from the SGChannel
   m_vdig = SGGetVideoDigitizerComponent(m_vc);
@@ -242,28 +241,28 @@ bool videoDarwin :: initSeqGrabber()
   Str255    vdigName;
   memset(vdigName,0,255);
   vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
-  post("vdigName is %s",pascal2str(vdigName).c_str());
+  verbose(1, "[GEM:videoDarwin] vdigName is %s",pascal2str(vdigName).c_str());
 
   Rect vdRect;
   vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
-  post("digitizer rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+  verbose(1, "[GEM:videoDarwin] digitizer rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
 
   vdigErr = VDGetActiveSrcRect(m_vdig,0,&vdRect);
-  post("active src rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+  verbose(1, "[GEM:videoDarwin] active src rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
 
   anErr = SGSetChannelBounds(m_vc, &srcRect);
   if(anErr!=noErr){
-    error("could not set SG ChannelBounds ");
+    verbose(0, "[GEM:videoDarwin] could not set SG ChannelBounds ");
   }
 
   anErr = SGSetVideoRect(m_vc, &srcRect);
   if(anErr!=noErr){
-    error("could not set SG Rect ");
+    verbose(0, "[GEM:videoDarwin] could not set SG Rect ");
   }
 
   anErr = SGSetChannelUsage(m_vc, seqGrabPreview);
   if(anErr!=noErr){
-    error("could not set SG ChannelUsage ");
+    verbose(0, "[GEM:videoDarwin] could not set SG ChannelUsage ");
   }
   SGSetChannelPlayFlags(m_vc, m_quality);
   OSType pixelFormat=0;
@@ -274,12 +273,12 @@ bool videoDarwin :: initSeqGrabber()
     m_image.image.setCsizeByFormat(GL_RGBA_GEM);
     m_rowBytes = m_width*4;
     pixelFormat=k32ARGBPixelFormat;
-    post ("using RGB");
+    verbose(1, "[GEM:videoDarwin] using RGB");
   } else {
     m_image.image.setCsizeByFormat(GL_YCBCR_422_APPLE);
     m_rowBytes = m_width*2;
     pixelFormat=k422YpCbCr8PixelFormat;
-    post ("using YUV");
+    verbose(1, "[GEM:videoDarwin] using YUV");
   }
   m_image.image.reallocate();
   anErr = QTNewGWorldFromPtr (&m_srcGWorld,
@@ -292,11 +291,11 @@ bool videoDarwin :: initSeqGrabber()
                               m_rowBytes);
 
   if (anErr!= noErr) {
-    error("%d error at QTNewGWorldFromPtr", anErr);
+    verbose(0, "[GEM:videoDarwin] %d error at QTNewGWorldFromPtr", anErr);
     return false;
   }
   if (NULL == m_srcGWorld) {
-    error("could not allocate off screen");
+    verbose(0, "[GEM:videoDarwin] could not allocate off screen");
     return false;
   }
   SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
@@ -319,13 +318,13 @@ void videoDarwin :: destroySeqGrabber()
 {
   if (m_vc) {
     if (::SGDisposeChannel(m_sg, m_vc)) {
-      error ("Unable to dispose a video channel");
+      verbose(0, "[GEM:videoDarwin] Unable to dispose a video channel");
     }
     m_vc = NULL;
   }
   if (m_sg) {
     if (::CloseComponent(m_sg)) {
-      error("Unable to dispose a sequence grabber component");
+      verbose(0, "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
     }
     m_sg = NULL;
     if (m_srcGWorld) {
@@ -338,7 +337,7 @@ void videoDarwin :: destroySeqGrabber()
 void videoDarwin :: resetSeqGrabber()
 {
   OSErr anErr;
-  post ("starting reset");
+  verbose(1, "[GEM:videoDarwin] starting reset");
 
   destroySeqGrabber();
   initSeqGrabber();
@@ -461,7 +460,7 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value) {
     
   featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                    vdIIDCAtomTypeFeature, 1, NULL);
-  if (0 == featureAtom) return false;//error("featureAtom vdIIDCFeatureSaturation not found");
+  if (0 == featureAtom) return false;//error("[GEM:videoDarwin] featureAtom vdIIDCFeatureSaturation not found");
     
   result = QTCopyAtomDataToPtr(atomContainer,
                                QTFindChildByID(atomContainer, featureAtom,
@@ -555,17 +554,17 @@ bool videoDarwin::applyProperties(gem::Properties&props) {
           SGSetChannelPlayFlags(m_vc, m_quality); 
       }
 #define PROPSET_IIDC_VD(NAME) \
-      } else if (#NAME == key && props.get(key, value_d) && m_vdig) {  \
-      if(iidc){setIIDCProperty(vdIIDCFeature ## NAME, value_d);}        \
-      else {value_us = d2us(value_d);                                   \
-        VDSet ## NAME (m_vdig,&value_us); } value_d=0
+      } else if (#NAME == key && props.get(key, value_d) && m_vdig) {   \
+        if(iidc){setIIDCProperty(vdIIDCFeature ## NAME, value_d);}      \
+        else {value_us = d2us(value_d);                                 \
+          VDSet ## NAME (m_vdig,&value_us); } value_d=0
 #define PROPSET_VD(NAME)                                                \
-        } else if (#NAME == key && props.get(key, value_d) && m_vdig) { \
-      if(!iidc) {value_us = d2us(value_d);                            \
-        VDSet ## NAME (m_vdig,&value_us); } value_d=0
-#define PROPSET_IIDC(NAME)                                              \
-        } else if (#NAME == key && props.get(key, value_d) && iidc) {  \
-      setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
+      } else if (#NAME == key && props.get(key, value_d) && m_vdig) {   \
+        if(!iidc) {value_us = d2us(value_d);                            \
+          VDSet ## NAME (m_vdig,&value_us); } value_d=0
+#define PROPSET_IIDC(NAME)                                             \
+      } else if (#NAME == key && props.get(key, value_d) && iidc) {    \
+        setIIDCProperty(vdIIDCFeature ## NAME, value_d); value_d=0
 
         PROPSET_IIDC_VD(Hue);
         PROPSET_IIDC_VD(Sharpness);
@@ -656,17 +655,17 @@ std::vector<std::string> videoDarwin::enumerate() {
 
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr){
-    error("could not get SG channnel Device List");
+    verbose(0, "[GEM:videoDarwin] could not get SG channnel Device List");
   }else{
     short deviceCount = (*devices)->count;
     short deviceIndex = (*devices)->selectedIndex;
     short inputIndex;
-    post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+    verbose(1, "[GEM:videoDarwin] SG channnel Device List count %d index %d",deviceCount,deviceIndex);
     int i;
     m_devices.clear();
     for (i = 0; i < deviceCount; i++){
       m_devices.push_back(pascal2str((*devices)->entry[i].name));
-      post("SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
+      verbose(1, "[GEM:videoDarwin] SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
@@ -678,7 +677,7 @@ std::vector<std::string> videoDarwin::enumerate() {
     //walk through the list
     for (i = 0; i < inputIndex; i++){
       std::string input=pascal2str((*theSGInputList)->entry[i].name);
-      post("SG channnel Input Device List %d %s",
+      verbose(1, "[GEM:videoDarwin] SG channnel Input Device List %d %s",
            i, input.c_str());
     }
   }

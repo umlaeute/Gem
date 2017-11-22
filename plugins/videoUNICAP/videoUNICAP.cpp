@@ -263,7 +263,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
   fourcc_t format=fourcc2fmt(fmt->fourcc);
 
   if(ILLEGAL==format) {
-    verbose(1, "unsupported format '%s'", fmt->identifier);
+    verbose(1, "[GEM:videoUNICAP] unsupported format '%s'", fmt->identifier);
     return;
   }
 
@@ -293,7 +293,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
   case YV12: m_pix.image.fromYV12(data); break;
   case YU12: m_pix.image.fromYU12(data); break;
   default:
-    verbose(1, "cannot convert from given format");
+    verbose(1, "[GEM:videoUNICAP] cannot convert from given format");
     break;
   }
   m_pix.newimage=1;
@@ -353,7 +353,7 @@ bool videoUNICAP :: start(void)
     for(unsigned int formatid_index=0; formatid_index<formatid.size(); formatid_index++) {
       int format_index=formatid[formatid_index];
       if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format, format_index) ) )  {
-        post("Failed to get video format %d", format_index);
+        verbose(1, "[GEM:videoUNICAP] Failed to get video format %d", format_index);
         continue;
       }
 
@@ -388,7 +388,7 @@ bool videoUNICAP :: start(void)
   }
   post_fmt(&format);
   if(format.size_count<1 || format.sizes==NULL){
-    verbose(1, "can't get supported formats. Device might be busy.");
+    error("[GEM:videoUNICAP] can't get supported formats. Device might be busy.");
     return false;
   }
 
@@ -403,7 +403,7 @@ bool videoUNICAP :: start(void)
   debugPost("setting format (%d/%d)", default_format, default_size);
   post_fmt(&format);
   if( !SUCCESS( unicap_set_format( m_handle, &format ) ) )  {
-    verbose(1, "failed to set format");
+    error("[GEM:videoUNICAP]failed to set format");
     return false;
   }
   unicap_unregister_callback(m_handle, UNICAP_EVENT_NEW_FRAME);
@@ -487,7 +487,7 @@ std::vector<std::string> videoUNICAP::enumerate(void) {
     if(SUCCESS(status)) {
       const unsigned int cur=m_devices.size();
 #if 0
-      post("ID='%s'\tmodel='%s'\tvendor='%s'\tdevice='%s'\tCPI='%s'",
+      verbose(1, "[GEM:videoUNICAP] ID='%s'\tmodel='%s'\tvendor='%s'\tdevice='%s'\tCPI='%s'",
            device.identifier,
            device.model_name,
            device.vendor_name,
@@ -744,10 +744,10 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
       }
       
       if(!SUCCESS(status)) {
-        verbose(1, "could not set property '%s'", key.c_str());
+        verbose(1, "[GEM:videoUNICAP] could not set property '%s'", key.c_str());
 #if 0
       } else {
-        verbose(1, "successfully set property '%s'", key.c_str());
+        verbose(1, "[GEM:videoUNICAP] successfully set property '%s'", key.c_str());
 #endif
       }
     }

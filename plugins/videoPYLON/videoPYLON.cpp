@@ -206,7 +206,7 @@ struct videoPYLON::Converter {
     }
 
     if(NULL==converter && need_converter) {
-      error("PYLON: could not find a converter for given colorspace");
+      error("[GEM:videoPYLON] could not find a converter for given colorspace");
     }
     if(converter)
       converter->Init(format);
@@ -759,8 +759,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
       try {
         didit=gem::pylon::streamgrabberproperties::set(m_grabber, key, props);
       } catch (GenICam::GenericException &e) {
-        error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
-        //std::cerr << e.GetDescription() << std::endl;
+        verbose(0, "[GEM:videoPYLON] [%s] %s", key.c_str(), e.GetDescription());
         didit=false;
       }
     }
@@ -769,8 +768,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
       try {
         didit=gem::pylon::cameraproperties::set(m_camera, key, props);
       } catch (GenICam::GenericException &e) {
-        error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
-        //std::cerr << e.GetDescription() << std::endl;
+        verbose(0, "[GEM:videoPYLON] [%s] %s", key.c_str(), e.GetDescription());
         didit=false;
       }
 

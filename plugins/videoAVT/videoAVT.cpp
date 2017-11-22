@@ -39,12 +39,6 @@ using namespace gem::plugins;
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
-#if 0
-# define debug ::post
-#else
-# define debug
-#endif
-
 /////////////////////////////////////////////////////////
 //
 // videoAVT
@@ -65,7 +59,6 @@ struct PvApiInitClass {
  PvApiInitClass(void) {
    unsigned long major=0, minor=0;
    PvVersion(&major, &minor);
-   //   post("Prosilica AVT SDK %d.%d", major, minor);
 
    if(ePvErrResources==PvInitialize()) {
      throw(GemException("unable to initialization PvAPI"));
@@ -212,14 +205,14 @@ bool videoAVT :: openDevice(gem::Properties&props)
   tPvCameraInfo*cameraList=new tPvCameraInfo[cameraNum];
 
   if(m_devicenum>=0) {
-    verbose(1, "AVT trying to open #%d of %d devices", m_devicenum, cameraNum);
+    verbose(0, "[GEM:videoAVT] trying to open #%d of %d devices", m_devicenum, cameraNum);
     if(cameraNum>m_devicenum && (cameraList[m_devicenum].PermittedAccess == ePvAccessMaster)) {
       if (PvCameraOpen(cameraList[m_devicenum].UniqueId, ePvAccessMaster, &m_grabber) != ePvErrSuccess) {
         m_grabber=NULL;
       }
     }
   } else {
-    verbose(1, "AVT trying to open device '%s'", m_devicename.c_str());
+    verbose(0, "[GEM:videoAVT] trying to open device '%s'", m_devicename.c_str());
     /*
       cameraList[i].SerialString,
       cameraList[i].DisplayName,
@@ -231,7 +224,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
     const unsigned long uid=strtoul(m_devicename.c_str(), NULL, 0);
 
     if(NULL==m_grabber && 0==errno) {
-      verbose(1, "checking UniqueID: 0x% 8x", uid);
+      verbose(1, "[GEM:videoAVT] checking UniqueID: 0x% 8x", uid);
       for(i=0; i<cameraNum; i++) {
         if(uid==cameraList[i].UniqueId && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
           break;
@@ -240,7 +233,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
     }
 
     if(NULL==m_grabber) {
-      verbose(1, "checking SerialString: %s", m_devicename.c_str());
+      verbose(1, "[GEM:videoAVT] checking SerialString: %s", m_devicename.c_str());
       for(i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].SerialString && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
           break;
@@ -248,7 +241,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
       }
     }
     if(NULL==m_grabber) {
-      verbose(1, "checking DisplayName: %s", m_devicename.c_str());
+      verbose(1, "[GEM:videoAVT] checking DisplayName: %s", m_devicename.c_str());
       for(i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].DisplayName && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
           break;
@@ -268,7 +261,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
           unsigned long IpAddr=ipv4->sin_addr.s_addr ; // byte order??
           if(OldAddr==IpAddr)continue;
           OldAddr=IpAddr;
-          verbose(1, "AVT trying to connect to %3d.%3d.%3d.%3d", 
+          verbose(0, "[GEM:videoAVT] trying to connect to %3d.%3d.%3d.%3d",
                   (IpAddr & 0x0FF),
                   (IpAddr & 0x0FF00)>>8,
                   (IpAddr & 0x0FF0000)>>16,
@@ -319,7 +312,7 @@ bool videoAVT :: startTransfer()
 {
   PvCaptureStart(m_grabber);
   if(!PvCommandRun(m_grabber,"AcquisitionStart")) {
-    error("AVT::AcquistionStart failed");
+    error("[GEM:videoAVT] AcquistionStart failed");
   } else {
     PvCaptureQueueFrame(m_grabber, &m_frames[0], (tPvFrameCallback) grabCB);
   }
@@ -336,7 +329,7 @@ bool videoAVT :: stopTransfer()
   PvCaptureQueueClear(m_grabber);
 
   if(!PvCommandRun(m_grabber,"AcquisitionStop")) {
-    error("AVT::AcquistionStop failed");
+    error("[GEM:videoAVT] AcquistionStop failed");
   }
 
   PvCaptureEnd(m_grabber);

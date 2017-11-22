@@ -126,7 +126,6 @@ public:
 	threeDExtensions->Release();
 
       if (videoFrame->GetFlags() & bmdFrameHasNoInputSource) {
-	//printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
       } else {
 	long w=videoFrame->GetWidth();
 	long h=videoFrame->GetHeight();
@@ -160,7 +159,6 @@ public:
       return S_OK;
 
     mode->GetName((const char**)&displayModeName);
-    //printf("Video format changed to %s\n", displayModeName);
 
     if (displayModeName)
       free(displayModeName);
@@ -170,7 +168,6 @@ public:
 
       result = m_deckLinkInput->EnableVideoInput(mode->GetDisplayMode(), m_cfg_pixelFormat, m_cfg_inputFlags);
       if (result != S_OK) {
-	//fprintf(stderr, "Failed to switch video mode\n");
 	goto bail;
       }
 
@@ -203,6 +200,7 @@ namespace {
 	  const char*dmn = NULL;
 	  if (S_OK == displayMode->GetName(&dmn)) {
             bool found=(formatname == dmn);
+            verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmn);
             free((void*)dmn);
 	    if(found)break;
 	  }

@@ -103,7 +103,6 @@ bool videoVNC::setDevice(std::string device) {
   const std::string prefix="vnc://";
   if (!device.compare(0, prefix.size(), prefix)) {
     m_devname=device.substr(prefix.size());
-    //post("VNC: device '%s'", m_devname.c_str());
     return true;
   }
   return false;

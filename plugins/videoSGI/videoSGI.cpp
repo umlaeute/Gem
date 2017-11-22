@@ -75,8 +75,8 @@ bool videoSGI :: openDevice()
   // Connect to the daemon
   if ( !(m_svr = vlOpenVideo("")) )
     {
-    	error("GEM: videoSGI: Unable to open video");
-    	goto cleanup;
+      verbose(0, "[GEM:videoSGI] Unable to open video");
+      goto cleanup;
     }
   // Set up a drain node in memory
   m_drn = vlGetNode(m_svr, VL_DRN, VL_MEM, VL_ANY);
@@ -90,8 +90,8 @@ bool videoSGI :: openDevice()
   // Set up the hardware for and define the usage of the path
   if ( (vlSetupPaths(m_svr, (VLPathList)&m_path, 1, VL_SHARE, VL_SHARE)) < 0 )
     {
-    	error("GEM: videoSGI: Unable to setup video path");
-    	goto cleanup;
+      verbose(0, "[GEM:videoSGI] Unable to setup video path");
+      goto cleanup;
     }
 
   // Set the packing to RGBA
@@ -103,16 +103,16 @@ bool videoSGI :: openDevice()
   val.intVal = VL_PACKING_ABGR_8;
   if ( vlSetControl(m_svr, m_path, m_drn, VL_PACKING, &val) )
     {
-    	// nope, so try ABGR, and set the color swapping
-    	// according to vl.h, this is really ABGR (IrisGL format)
+      // nope, so try ABGR, and set the color swapping
+      // according to vl.h, this is really ABGR (IrisGL format)
       val.intVal = VL_PACKING_RGBA_8;
       if ( vlSetControl(m_svr, m_path, m_drn, VL_PACKING, &val) )
         {
-    	    post("GEM: videoSGI: Unable to set the video packing");
+          verbose(0, "[GEM:videoSGI] Unable to set the video packing");
           goto cleanup;
         }
-    	post("GEM: videoSGI: Video has to color swap (ABGR to RGBA)");
-    	m_colorSwap = 1;
+      verbose(1, "[GEM:videoSGI] Video has to color swap (ABGR to RGBA)");
+      m_colorSwap = 1;
     }
     
   // Get the video size
@@ -124,7 +124,7 @@ bool videoSGI :: openDevice()
     if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
       vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
     
-      post("GEM: videoSGI: dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
+      verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
       m_width =value.xyVal.x;
       m_height=value.xyVal.y;
     }
@@ -200,8 +200,8 @@ bool videoSGI :: startTransfer()
   m_buffer = vlCreateBuffer(m_svr, m_path, m_drn, 1);
   if ( !m_buffer )
     {
-    	error("GEM: videoSGI: Unable to allocate buffer");	
-    	return false;
+      error("[GEM:videoSGI] Unable to allocate buffer");
+      return false;
     }
 
   vlRegisterBuffer(m_svr, m_path, m_drn, m_buffer);
@@ -209,10 +209,10 @@ bool videoSGI :: startTransfer()
   // Begin the data transfer
   if ( vlBeginTransfer(m_svr, m_path, 0, NULL) )
     {
-    	error("GEM: videoSGI: Unable to start video transfer");
+      error("[GEM:videoSGI] Unable to start video transfer");
       vlDeregisterBuffer(m_svr, m_path, m_drn, m_buffer);
       vlDestroyBuffer(m_svr, m_buffer);
-    	return false;
+      return false;
     }
   return true;
 }
@@ -244,15 +244,15 @@ void videoSGI :: offsetMess(int x, int y)
 {
   if (!m_haveVideo)
     {
-    	post("GEM: videoSGI: Connect to video first");
-    	return;
+      verbose(1, "[GEM:videoSGI] Connect to video first");
+      return;
     }
     
   // stop the transfer and destroy the buffer
   if ( !stopTransfer() ) 
     {
-    	post("GEM: videoSGI: error stopping transfer");
-    	return;
+      verbose(0, "[GEM:videoSGI] error stopping transfer");
+      return;
     }
 
   VLControlValue value;
@@ -260,16 +260,16 @@ void videoSGI :: offsetMess(int x, int y)
   value.xyVal.y = y;
   if ( vlSetControl(m_svr, m_path, m_drn, VL_OFFSET, &value) )
     {
-    	post("GEM: videoSGI: offset error");
-    	startTransfer();
-    	return;
+      verbose(0, "[GEM:videoSGI] offset error");
+      startTransfer();
+      return;
     }
 
   // start the transfer and rebuild the buffer
   if ( !startTransfer() ) 
     {
-    	post("GEM: videoSGI: error starting transfer");
-    	return;
+      verbose(0, "[GEM:videoSGI] error starting transfer");
+      return;
     }
 }
 
@@ -282,14 +282,14 @@ void videoINDY :: zoomMess(int num, int denom)
 {
     if (!m_haveVideo)
     {
-    	error("Connect to video first");
-    	return;
+      verbose(1, "[GEM:videoSGI] Connect to video first");
+      return;
     }
     VLControlValue value;
     value.fractVal.numerator = num;
     value.fractVal.denominator = denom;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_ZOOM, &value) )
-    	error("zoom error");
+      error("[GEM:videoSGI] zoom error");
 }
 
 /////////////////////////////////////////////////////////
@@ -300,13 +300,13 @@ void videoINDY :: brightMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("Connect to video first");
-    	return;
+      verbose(1, "[GEM:videoSGI] Connect to video first");
+      return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_BRIGHTNESS, &value) )
-    	error("problem setting brightness");
+      error("[GEM:videoSGI] problem setting brightness");
 }
 
 /////////////////////////////////////////////////////////
@@ -317,13 +317,13 @@ void videoINDY :: contrastMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("Connect to video first");
-    	return;
+      verbose(1, "[GEM:videoSGI] Connect to video first");
+      return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_CONTRAST, &value) )
-    	error("problem setting contrast");
+      error("[GEM:videoSGI] problem setting contrast");
 }
 
 /////////////////////////////////////////////////////////
@@ -334,13 +334,13 @@ void videoINDY :: hueMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("Connect to video first");
-    	return;
+      verbose(1, "[GEM:videoSGI] Connect to video first");
+      return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_HUE, &value) )
-    	error("problem setting hue");
+      error("[GEM:videoSGI] problem setting hue");
 }
 
 /////////////////////////////////////////////////////////
@@ -351,13 +351,13 @@ void videoINDY :: satMess(int val)
 {
     if (!m_haveVideo)
     {
-    	error("Connect to video first");
-    	return;
+      verbose(1, "[GEM:videoSGI] Connect to video first");
+      return;
     }
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_src, VL_VINO_INDYCAM_SATURATION, &value) )
-    	error("problem setting saturation");
+      error("[GEM:videoSGI] problem setting saturation");
 }
 
 
@@ -383,7 +383,7 @@ bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int top
   if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
     vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
     
-    post("GEM: videoSGI: dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
+    verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
     m_width =value.xyVal.x;
     m_height=value.xyVal.y;
     result=false;
