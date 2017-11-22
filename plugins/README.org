@@ -49,9 +49,22 @@ The following is an attempt to define the apropriate logging levels
 | ~changeImage~    | ~error()~                                  |
 | ~getFrame~       | ~error()~, ~printf()~ if threaded          |
 
-
 **** imageloader
+| function       | max reporting state |
+|----------------+---------------------|
+| CTOR           | ~verbose(0)~        |
+| DTOR           | ~verbose(0)~        |
+| ~isThreadable~ | ~verbose(0)~        |
+| ~load~         | ~verbose(0)~        |
 **** imagesaver
+| function               | max reporting state |
+|------------------------+---------------------|
+| CTOR                   | ~verbose(0)~        |
+| DTOR                   | ~verbose(0)~        |
+| ~isThreadable~         | ~verbose(0)~        |
+| ~save~                 | ~verbose(0)~        |
+| ~estimateSave~         | ~verbose(0)~        |
+| ~getWriteCapabilities~ | ~verbose(0)~        |
 **** modelloader
 **** record
 **** video
