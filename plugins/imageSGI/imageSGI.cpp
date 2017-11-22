@@ -39,11 +39,9 @@ REGISTER_IMAGESAVERFACTORY ("SGI", imageSGI);
 /////////////////////////////////////////////////////////
 imageSGI :: imageSGI(void)
 {
-  //post("imageSGI");
 }
 imageSGI :: ~imageSGI(void)
 {
-  //post("~imageSGI");
 }
 
 /////////////////////////////////////////////////////////
@@ -56,8 +54,6 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
   if (!sizeofimage(filename.c_str(), &xsize, &ysize, &csize) )
     return(false);
 
-  ::verbose(2, "reading '%s' with SGI", filename.c_str());
-
   result.xsize=xsize;
   result.ysize=ysize;
 
@@ -66,14 +62,14 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
   } else if (csize == 1) {
     result.setCsizeByFormat(GL_LUMINANCE);
   } else {
-    //error("GemImageLoad(SGI): unknown color components in SGI file: %s", filename.c_str());
+    fprintf(stderr, "[GEM:imageSGI] unknown color components in SGI file: %s\n", filename.c_str());
     return(false);
   }
   result.reallocate();
 
   unsigned int32 *readData = longimagedata((char *)filename.c_str());
   if (!readData) {
-    //error("GemImageLoad: error reading SGI image file: %s", filename.c_str());
+    fprintf(stderr, "[GEM:imageSGI] error reading SGI image file: %s\n", filename.c_str());
     return false;
   }
 

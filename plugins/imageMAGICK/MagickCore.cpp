@@ -70,9 +70,9 @@ namespace {
       message += " (" + std::string(exception->description) + ")";
 
     if(iswarning) {
-      verbose(1, "%s", message.c_str());
+      verbose(0, "[GEM:imageMAGICK] %s", message.c_str());
     } else {
-      verbose(1, "%s", message.c_str());
+      verbose(0, "[GEM:imageMAGICK] %s", message.c_str());
     }
     return (!iswarning);
   }
@@ -86,13 +86,12 @@ namespace {
 bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
   bool success=false;
-  ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
   ExceptionInfo*exception=AcquireExceptionInfo();
   ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
   Image*image=ReadImage(image_info,exception);
-  if(showException(exception, "magick reading problem"))
+  if(showException(exception, "reading problem"))
     goto cleanup;
   if (image == (Image *) NULL)
     goto cleanup;
@@ -113,7 +112,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
                     CharPixel,
                     reinterpret_cast<void*>(result.data),
                     exception);
-  if(showException(exception, "magick decoding problem"))
+  if(showException(exception, "decoding problem"))
     goto cleanup;
 
   success=true;
@@ -167,11 +166,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
   Image *mimage = ConstituteImage(pImage->xsize, pImage->ysize,
                                  cs.c_str(), CharPixel,
                                  pImage->data, exception);
-  if(showException(exception, "magick conversion problem"))
+  if(showException(exception, "conversion problem"))
     goto cleanup;
 
   finalImage=(pImage->upsidedown)?mimage:FlipImage( mimage, exception );
-  if(showException(exception, "magick flipping problem"))
+  if(showException(exception, "flipping problem"))
     goto cleanup;
 
   finalImage->depth=8;
@@ -194,7 +193,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
   status = WriteImage(image_info, finalImage);
   ex = &finalImage->exception;
 #endif
-  if(showException(ex, "magick writing problem"))
+  if(showException(ex, "writing problem"))
     goto cleanup;
 
  cleanup:

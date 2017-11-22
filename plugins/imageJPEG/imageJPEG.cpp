@@ -94,11 +94,9 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo)
 
 imageJPEG :: imageJPEG(void)
 {
-  //post("imageJPEG");
 }
 imageJPEG :: ~imageJPEG(void)
 {
-  //post("~imageJPEG");
 }
 
 /////////////////////////////////////////////////////////
@@ -109,9 +107,8 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
 {
   // open up the file
   FILE * infile;
-  ::verbose(2, "reading '%s' with libJPEG", filename.c_str());
   if ((infile = fopen(filename.c_str(), "rb")) == NULL) {
-    //verbose(2, "GemImageLoad(JPEG): Unable to open image file: %s", filename.c_str());
+    fprintf(stderr, "[GEM:imageJPEG] Unable to open image file: %s\n", filename.c_str());
     return(false);
   }
 
@@ -242,7 +239,7 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
      quality=fquality;
 
   if(GL_YUV422_GEM==constimage.format) {
-    error("don't know how to write YUV-images with libJPEG");
+    fprintf(stderr, "[GEM:imageJPEG] don't know how to write YUV-images\n");
     return false;
   }
 
@@ -250,7 +247,7 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   jpeg_create_compress(&cinfo);
 
   if ((outfile = fopen(filename.c_str(), "wb")) == NULL) {
-    error("can't open %s\n", filename.c_str());
+    fprintf(stderr, "[GEM:imageJPEG] can't open %s\n", filename.c_str());
     return (false);
   }
   jpeg_stdio_dest(&cinfo, outfile);
@@ -282,7 +279,7 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
     row_pointer = & image_buffer[rowindex * row_stride];
 
     if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) <= 0){
-      error("GEM: could not write line %d to image %s", cinfo.next_scanline, filename.c_str());
+      fprintf(stderr, "[GEM:imageJPEG] could not write line %d to image %s\n", cinfo.next_scanline, filename.c_str());
       jpeg_finish_compress(&cinfo);
       fclose(outfile);
       jpeg_destroy_compress(&cinfo);

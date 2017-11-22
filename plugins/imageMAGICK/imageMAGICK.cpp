@@ -146,7 +146,6 @@ imageMAGICK :: imageMAGICK(void)
 }
 imageMAGICK :: ~imageMAGICK(void)
 {
-  //post("~imageMAGICK");
 }
 
 

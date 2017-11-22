@@ -99,7 +99,7 @@ FSPathMakeFSSpec(
     c2pstr(filename);
     OSErr err=FSMakeFSSpec (0, 0L, filename8, spec);
     if (err != noErr && err != -37){
-      error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
+      verbose(0, "[GEM:imageQT] error#%d in FSMakeFSSpec()", err);
     } else {
         err = noErr;
     }
@@ -224,15 +224,13 @@ imageQT :: imageQT(void)
     if (err = EnterMovies()) {
       throw(GemException("unable to initialize QuickTime/Movies"));
     }
-    verbose(1, "imageQT: QT init done");
+    verbose(1, "[GEM:imageQT] QT init done");
 #endif // WINDOWS
     firsttime=false;
   }
-  //post("imageQT");
 }
 imageQT :: ~imageQT(void)
 {
-  //post("~imageQT");
 }
 
 /////////////////////////////////////////////////////////
@@ -276,11 +274,9 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
   imageDescH = NULL;
   result.reallocate();
 
-#ifdef __DEBUG__
-  post("QuickTimeImage2mem() : allocate %d bytes", result.xsize*result.ysize*result.csize);
-#endif
+  verbose(1, "[GEM:imageQT] QuickTimeImage2mem() allocate %d bytes", result.xsize*result.ysize*result.csize);
   if (result.data == NULL) {
-    error("Can't allocate memory for an image.");
+    verbose(0, "[GEM:imageQT] Can't allocate memory for an image.");
     return false;
   }
 
@@ -295,7 +291,7 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
                                  result.data,
                                  static_cast<long>(result.xsize * result.csize));
   if (err) {
-    error("Can't create QTNewWorld");
+    verbose(0, "[GEM:imageQT] Can't create QTNewWorld");
   }
 
   ::GraphicsImportSetGWorld(inImporter, gw, NULL);
@@ -311,20 +307,20 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
   OSErr            err;
   GraphicsImportComponent    importer = NULL;
 
-  ::verbose(2, "reading '%s' with QuickTime", filename.c_str());
+  ::verbose(1, "[GEM:imageQT] reading '%s' with QuickTime", filename.c_str());
   std::string myfilename=filename;
   // does the file even exist?
   if (!filename.empty()) {
     FSSpec   spec;
     err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(myfilename.c_str()), &spec);
     if (err) {
-      error("GemImageLoad: Unable to find file: %s", filename.c_str());
-      error("parID : %d", spec.parID);
+      verbose(0, "[GEM:imageQT] Unable to find file: %s", filename.c_str());
+      verbose(1, "[GEM:imageQT] parID : %d", spec.parID);
       return false;
     }
     err = ::GetGraphicsImporterForFile(&spec, &importer);
     if (err) {
-      error("GemImageLoad: Unable to import image '%s'", filename.c_str());
+      verbose(0, "[GEM:imageQT] GemImageLoad: Unable to import image '%s'", filename.c_str());
       return false;
     }
   }
@@ -381,13 +377,13 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   }
 
   if (err != noErr) {
-    verbose(1, "ERROR: %d in FSPathMakeRef()", err);
+    verbose(1, "[GEM:imageQT] error#%d in FSPathMakeRef()", err);
   }
 
   err = ::FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &spec, NULL);
 
   if (err != noErr)  {
-    verbose(1, "ERROR: %d in FSGetCatalogInfo()", err);
+    verbose(1, "[GEM:imageQT] error#%d in FSGetCatalogInfo()", err);
   }
 
   err = FSMakeFSSpec(spec.vRefNum, spec.parID, filename8, &spec);  //this always gives an error -37 ???
@@ -397,12 +393,12 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   err = FSMakeFSSpec (0, 0L, filename8, &spec);
 #endif
   if (err != noErr && err != -37){
-    verbose(1, "GEM: imageQT: error %d in FSMakeFSSpec()", err);
+    verbose(1, "[GEM:imageQT] error#%d in FSMakeFSSpec()", err);
   }
 
   err = OpenADefaultComponent(GraphicsExporterComponentType, osFileType, &geComp);
   if (err != noErr)  {
-    error("ERROR: %d in OpenADefaultComponent()", err);
+    verbose(0, "[GEM:imageQT] error#%d in OpenADefaultComponent()", err);
     return false; // FIXME:
   }
 
@@ -434,7 +430,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   // i don't know, whether quicktime still needs the buffer...
 
   if (err != noErr) {
-    error("ERROR: %d in QTNewGWorldFromPtr()", err);
+    verbose(0, "[GEM:imageQT] error#%d in QTNewGWorldFromPtr()", err);
     if(data)delete[]data;
     return false; // FIXME:
   }
@@ -442,7 +438,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   // Set the input GWorld for the exporter
   cErr = GraphicsExportSetInputGWorld(geComp, img);
   if (cErr != noErr)  {
-    error("ERROR: %d in GraphicsExportSetInputGWorld()", cErr);
+    verbose(0, "[GEM:imageQT] error#%d in GraphicsExportSetInputGWorld()", cErr);
     if(data)delete[]data;
     return false; // FIXME:
   }
@@ -450,7 +446,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   // Set the output file to our FSSpec
   cErr = GraphicsExportSetOutputFile(geComp, &spec);
   if (cErr != noErr) {
-    error("ERROR: %i in GraphicsExportSetOutputFile()", cErr);
+    verbose(0, "[GEM:imageQT] error#%d in GraphicsExportSetOutputFile()", cErr);
     if(data)delete[]data;
     return false; // FIXME:
   }
@@ -486,7 +482,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   // Export it
   cErr = GraphicsExportDoExport(geComp, NULL);
   if (cErr != noErr) {
-    error("ERROR: %i in GraphicsExportDoExport()", cErr);
+    verbose(0, "[GEM:imageQT] ERROR: %i in GraphicsExportDoExport()", cErr);
     if(data)delete[]data;
     return false; // FIXME:
   }

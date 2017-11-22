@@ -47,18 +47,17 @@ REGISTER_IMAGESAVERFACTORY("tiff", imageTIFF);
 namespace {
  static void imageTIFF_verbosehandler(const int verbosity, const char*module, const char*fmt, va_list ap) {
    std::string result=module;
-   result+=": ";
    char buf[MAXPDSTRING];
    vsnprintf(buf, MAXPDSTRING, fmt, ap);
    buf[MAXPDSTRING-1]=0;
    result+=buf;
-   verbose(verbosity, "%s", result.c_str());
+   verbose(verbosity, "[GEM:imageTIFF] %s", result.c_str());
  }
  static void imageTIFF_errorhandler(const char*module, const char*fmt, va_list ap) {
-   imageTIFF_verbosehandler(2, module, fmt, ap);
+   imageTIFF_verbosehandler(-2, module, fmt, ap);
  }
  static void imageTIFF_warnhandler(const char*module, const char*fmt, va_list ap) {
-   imageTIFF_verbosehandler(3, module, fmt, ap);
+   imageTIFF_verbosehandler(0, module, fmt, ap);
  }
 };
 
@@ -73,7 +72,6 @@ namespace {
 
 imageTIFF :: imageTIFF(void)
 {
-  //post("imageTIFF");
  bool firsttime=true;
  if(firsttime) {
    TIFFSetErrorHandler(imageTIFF_errorhandler);
@@ -83,7 +81,6 @@ imageTIFF :: imageTIFF(void)
 }
 imageTIFF :: ~imageTIFF(void)
 {
-  //post("~imageTIFF");
 }
 
 /////////////////////////////////////////////////////////
@@ -92,7 +89,6 @@ imageTIFF :: ~imageTIFF(void)
 /////////////////////////////////////////////////////////
 bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties&props)
 {
-  ::verbose(2, "reading '%s' with libTIFF", filename.c_str());
   TIFF *tif = TIFFOpen(filename.c_str(), "r");
   if (tif == NULL) {
       return(NULL);
@@ -136,7 +132,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
   if (knownFormat) {
     unsigned char *buf = new unsigned char [TIFFScanlineSize(tif)];
     if (buf == NULL) {
-      error("GemImageLoad(TIFF): can't allocate memory for scanline buffer: %s", filename.c_str());
+      error("[GEM:imageTIFF] can't allocate memory for scanline buffer: %s", filename.c_str());
       TIFFClose(tif);
       return(false);
     }
@@ -148,7 +144,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
       {
 	unsigned char *pixels = dstLine;
 	if (TIFFReadScanline(tif, buf, row, 0) < 0) {
-	  error("GemImageLoad(TIFF): bad image data read on line: %d: %s", row, filename.c_str());
+	  verbose(1, "[GEM:imageTIFF] bad image data read on line: %d: %s", row, filename.c_str());
 	  TIFFClose(tif);
 	  return false;
 	}
@@ -186,20 +182,20 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     char emsg[1024];
     TIFFRGBAImage img;
     if (TIFFRGBAImageBegin(&img, tif, 0, emsg) == 0) {
-      //error("GemImageLoad(TIFF): Error reading in image file: %s : %s", filename, emsg);
+      verbose(0, "[GEM:imageTIFF] Error reading in image file: %s : %s", filename, emsg);
       TIFFClose(tif);
       return(false);
     }
 
     uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(uint32)));
     if (raster == NULL) {
-      error("GemImageLoad(TIFF): Unable to allocate memory for image: %s", filename.c_str());
+      error("[GEM:imageTIFF] Unable to allocate memory for image: %s", filename.c_str());
       TIFFClose(tif);
       return(false);
     }
 
     if (TIFFRGBAImageGet(&img, raster, width, height) == 0) {
-      //error("GemImageLoad(TIFF): Error getting image data in file: %s, %s", filename, emsg);
+      verbose(0, "[GEM:imageTIFF] Error getting image data in file: %s, %s", filename, emsg);
       _TIFFfree(raster);
       TIFFClose(tif);
       return(false);
@@ -261,7 +257,7 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
   TIFF *tif = NULL;
 
   if(GL_YUV422_GEM==constimage.format) {
-    error("don't know how to write YUV-images with libTIFF");
+    verbose(0, "[GEM:imageTIFF] don't know how to write YUV-images");
     return false;
   }
 
@@ -325,7 +321,7 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
     unsigned char *buf = srcLine;
     if (TIFFWriteScanline(tif, buf, row, 0) < 0)
       {
-        error("GEM: could not write line %d to image %s", row, filename.c_str());
+        verbose(0, "[GEM:imageTIFF] could not write line %d to image %s", row, filename.c_str());
         TIFFClose(tif);
         delete [] buf;
         return(false);

@@ -34,7 +34,6 @@
 #include <stdio.h>
 
 #include "Gem/RTE.h"
-//#include "m_pd.h"
 
 /*
  *	from image.h
@@ -140,7 +139,7 @@ static unsigned short getshort(FILE *inf)
 
   size_t count=fread(buf,2,1,inf);
 
-  if(count<1){error("error reading file"); return 0;}
+  if(count<1){fprintf(stderr, "[GEM:imageSGI] error reading file\n"); return 0;}
   return (buf[0]<<8)+(buf[1]<<0);
 }
 
@@ -148,7 +147,7 @@ static unsigned int32 getlong(FILE *inf)
 {
   unsigned char buf[4];
   size_t count = fread(buf,4,1,inf);
-  if(count<1){error("error reading file"); return 0;}
+  if(count<1){fprintf(stderr, "[GEM:imageSGI] error reading file\n"); return 0;}
   return (buf[0]<<24)+(buf[1]<<16)+(buf[2]<<8)+(buf[3]<<0);
 }
 
@@ -304,7 +303,7 @@ unsigned int32 *longimagedata(const char *name)
   bpp = BPP(image->type);
   if(bpp != 1 )
     {
-      printf("longimagedata: image must have 1 byte per pix chan\n");
+      fprintf(stderr, "[GEM:imageSGI] longimagedata: image must have 1 byte per pix chan\n");
       goto error;
     }
   xsize = image->xsize;
@@ -320,7 +319,7 @@ unsigned int32 *longimagedata(const char *name)
       rlebuflen = static_cast<unsigned long>(1.05*xsize)+10;
       rledat = (unsigned char *)malloc(rlebuflen);
       if(fseek(inf,512,SEEK_SET)<0) {
-	printf("longimagedata: fseek returned 0\n");
+	fprintf(stderr, "[GEM:imageSGI] longimagedata: fseek returned 0\n");
 	goto error;
       }
       readtab(inf,starttab,tablen);
@@ -368,12 +367,12 @@ unsigned int32 *longimagedata(const char *name)
                     }
                   if(lengthtab[y+z*ysize]>rlebuflen)
                     {
-                      printf("longimagedata: rlebuf(%lu) is too small - bad poop : %d\n", rlebuflen, lengthtab[y+z*ysize]);
+                      fprintf(stderr, "[GEM:imageSGI] longimagedata: rlebuf(%lu) is too small - bad poop : %d\n", rlebuflen, lengthtab[y+z*ysize]);
 		      goto error;
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
                   if(count<1){
-		    error("error reading file");
+		    fprintf(stderr, "[GEM:imageSGI] error reading file\n");
 		    goto error;
 		  }
 
@@ -403,7 +402,7 @@ unsigned int32 *longimagedata(const char *name)
                     }
                   size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
                   if(count<1){
-		    error("error reading file");
+		    fprintf(stderr, "[GEM:imageSGI] error reading file\n");
 		    goto error;
 		  }
 
@@ -438,7 +437,7 @@ unsigned int32 *longimagedata(const char *name)
             {
               size_t count = fread(verdat,xsize,1,inf);
               if(count<1){
-		error("error reading file");
+		fprintf(stderr, "[GEM:imageSGI] error reading file\n");
 		goto error;
 	      }
 
@@ -602,14 +601,14 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   case 4: case 3: case 1:
     break;
   default:
-    printf("longstoimage: invalid zsize %d (must be 1,3 or 4)\n", zsize);
+    fprintf(stderr, "[GEM:imageSGI] longstoimage: invalid zsize %d (must be 1,3 or 4)\n", zsize);
     return 0;
   }
 
   goodwrite = 1;
   outf = fopen(name,"wb");
   if(!outf) {
-    printf("longstoimage: can't open output file\n");
+    fprintf(stderr, "[GEM:imageSGI] longstoimage: can't open output file\n");
     return 0;
   }
   tablen = ysize*zsize*sizeof(int32);
@@ -635,7 +634,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   image->max = 255;
   goodwrite *= writeheader(outf, image, imgname);
   if(fseek(outf,512+2*tablen,SEEK_SET) < 0) {
-    printf("longstoimage: fseek failed\n");
+    fprintf(stderr, "[GEM:imageSGI] longstoimage: fseek failed\n");
     goto longstoimage_close;
   }
   pos = 512+2*tablen;
@@ -656,7 +655,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
 #endif
 	    }
 	    if(len>rlebuflen) {
-        printf("longstoimage: rlebuf is too small - bad poop\n");
+        fprintf(stderr, "[GEM:imageSGI] longstoimage: rlebuf is too small - bad poop\n");
         goodwrite=0;
         goto longstoimage_close;
 	    }
@@ -669,7 +668,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   }
 
   if(fseek(outf,512,SEEK_SET) < 0) {
-    printf("longstoimage: fseek failed...\n");
+    fprintf(stderr, "[GEM:imageSGI] longstoimage: fseek failed...\n");
     goodwrite=0;
     goto longstoimage_close;
   }
@@ -685,7 +684,7 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   if(goodwrite)
     return 1;
   else {
-    printf("longstoimage: not enough space for image!!\n");
+    fprintf(stderr, "[GEM:imageSGI] longstoimage: not enough space for image!!\n");
     return 0;
   }
 }
