@@ -94,18 +94,18 @@ bool recordV4L :: start(const std::string filename, gem::Properties&props)
 
   struct video_picture vid_pic;
   if (ioctl(m_fd, VIDIOCGPICT, &vid_pic) == -1) {
-    perror("VIDIOCGPICT");
+    perror("[GEM:recordV4L] VIDIOCGPICT");
     stop(); return false;
   }
   vid_pic.palette = m_palette;
   if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
-    perror("VIDIOCSPICT");
+    perror("[GEM:recordV4L] VIDIOCSPICT");
     stop(); return false;
   }
 
   struct video_window vid_win;
   if (ioctl(m_fd, VIDIOCGWIN, &vid_win) == -1) {
-    perror("(VIDIOCGWIN)");
+    perror("[GEM:recordV4L] (VIDIOCGWIN)");
     stop(); return false;
   }
 
@@ -124,26 +124,26 @@ bool recordV4L::init(const imageStruct* dummyImage, const int framedur) {
   struct video_window vid_win;
 
   if (ioctl(m_fd, VIDIOCGPICT, &vid_pic) == -1) {
-    perror("VIDIOCGPICT");
+    perror("[GEM:recordV4L] VIDIOCGPICT");
     stop(); return false;
   }
 
   vid_pic.palette = m_palette;
   
   if (ioctl(m_fd, VIDIOCSPICT, &vid_pic) == -1) {
-    perror("VIDIOCSPICT");
+    perror("[GEM:recordV4L] VIDIOCSPICT");
     stop(); return false;
   }
 
   if (ioctl(m_fd, VIDIOCGWIN, &vid_win) == -1) {
-    perror("ioctl (VIDIOCGWIN)");
+    perror("[GEM:recordV4L] ioctl (VIDIOCGWIN)");
     stop(); return false;
   }
   
   vid_win.width  = w;
   vid_win.height = h;
   if (ioctl(m_fd, VIDIOCSWIN, &vid_win) == -1) {
-    perror("ioctl (VIDIOCSWIN)");
+    perror("[GEM:recordV4L] ioctl (VIDIOCSWIN)");
     stop(); return false;
   }
 
@@ -352,17 +352,17 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
     struct video_mmap *vidmmap = arg;
     
     if(vidmmap->width > MAX_WIDTH || vidmmap->height > MAX_HEIGHT) {
-      fprintf(stderr, "vloopback: requested capture size is too big(%dx%d).\n",vidmmap->width, vidmmap->height);
+      fprintf(stderr, "[GEM:recordV4L] requested capture size is too big(%dx%d).\n",vidmmap->width, vidmmap->height);
       return EINVAL;
     }
     if(vidmmap->width < MIN_WIDTH || vidmmap->height < MIN_HEIGHT) {
-      fprintf(stderr, "vloopback: requested capture size is to small(%dx%d).\n",vidmmap->width, vidmmap->height);
+      fprintf(stderr, "[GEM:recordV4L] requested capture size is to small(%dx%d).\n",vidmmap->width, vidmmap->height);
       return EINVAL;
     }
     if(vidmmap->format != pixel_format) {
       converter = palette_get_supported_converter_fromRGB32(vidmmap->format);
       if(converter == NULL) {
-        fprintf(stderr, "vloopback: unsupported pixel format(%d) is requested.\n",vidmmap->format);
+        fprintf(stderr, "[GEM:recordV4L] unsupported pixel format(%d) is requested.\n",vidmmap->format);
         return EINVAL;
       }
       pixel_format = vidmmap->format;
@@ -409,7 +409,7 @@ static int signal_loop_init(void)
 {
 	outputfd = open(output_devname, O_RDWR);
 	if(outputfd < 0) {
-		fprintf(stderr, "vloopback: couldn't open output device file %s\n",output_devname);
+		fprintf(stderr, "[GEM:recordV4L] couldn't open output device file %s\n",output_devname);
 		return -1;
 	}
 	pixel_format = VIDEO_PALETTE_RGB32;
@@ -449,14 +449,14 @@ static void *signal_loop(void *arg)
 		ufds.revents = 0;
 		poll(&ufds, 1, 1000);
 		if(!ufds.revents & POLLIN) {
-			fprintf(stderr, "vloopback: received signal but got negative on poll.\n");
+			fprintf(stderr, "[GEM:recordV4L] received signal but got negative on poll.\n");
 			continue;
 		}
 		size = read(outputfd, ioctlbuf, MAXIOCTL);
 		if(size >= sizeof(unsigned long int)) {
 			memcpy(&cmd, ioctlbuf, sizeof(unsigned long int));
 			if(cmd == 0) {
-				fprintf(stderr, "vloopback: client closed device.\n");
+				fprintf(stderr, "[GEM:recordV4L] client closed device.\n");
 				gbuf_lock();
 				gbuf_clear();
 				gbuf_unlock();
@@ -467,11 +467,11 @@ static void *signal_loop(void *arg)
 				/* new vloopback patch supports a way to return EINVAL to
 				 * a client. */
 				memset(ioctlbuf+sizeof(unsigned long int), 0xff, MAXIOCTL-sizeof(unsigned long int));
-				fprintf(stderr, "vloopback: ioctl %lx unsuccessfully handled.\n", cmd);
+				fprintf(stderr, "[GEM:recordV4L] ioctl %lx unsuccessfully handled.\n", cmd);
 				ioctl(outputfd, VIDIOCSINVALID);
 			}
 			if(ioctl(outputfd, cmd, ioctlbuf+sizeof(unsigned long int))) {
-				fprintf(stderr, "vloopback: ioctl %lx unsuccessfull.\n", cmd);
+				fprintf(stderr, "[GEM:recordV4L] ioctl %lx unsuccessfull.\n", cmd);
 			}
 		}
 	}

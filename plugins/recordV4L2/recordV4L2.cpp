@@ -97,12 +97,12 @@ bool recordV4L2 :: start(const std::string filename, gem::Properties&props)
 
 
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
-    perror("VIDIOC_QUERYCAP");
+    perror("[GEM:recordV4L2] VIDIOC_QUERYCAP");
     stop(); 
     return false;
   }
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
-    verbose(1, "device '%s' is not a video4linux2 output device", filename.c_str());
+    error("[GEM:recordV4L2] device '%s' is not a video4linux2 output device", filename.c_str());
     stop(); 
     return false;
   }
@@ -119,7 +119,7 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 
 	struct v4l2_capability vid_caps;
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
-    perror("VIDIOC_QUERYCAP");
+    perror("[GEM:recordV4L2] VIDIOC_QUERYCAP");
     stop(); return false;
   }
 	struct v4l2_format vid_format;
@@ -137,17 +137,19 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 	vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
 
   int format= vid_format.fmt.pix.pixelformat;
-  verbose(1, "v4l2-output requested %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
+  verbose(1, "[GEM:recordV4L2] v4l2-output requested %dx%d @ '%c%c%c%c'",
+          vid_format.fmt.pix.width, vid_format.fmt.pix.height,
           (char)(format),
           (char)(format>>8),
           (char)(format>>16),
           (char)(format>>24));
   if(ioctl(m_fd, VIDIOC_S_FMT, &vid_format) == -1) {
-    perror("VIDIOC_S_FMT");
+    perror("[GEM:recordV4L2] VIDIOC_S_FMT");
     stop(); return false;
   }
 
-  verbose(1, "v4l2-output returned %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
+  verbose(1, "[GEM:recordV4L2] v4l2-output returned %dx%d @ '%c%c%c%c'",
+          vid_format.fmt.pix.width, vid_format.fmt.pix.height,
           (char)(format),
           (char)(format>>8),
           (char)(format>>16),

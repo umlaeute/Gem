@@ -62,7 +62,7 @@ recordQT4L :: recordQT4L(void) :
   std::vector<std::string>codecs=getCodecs();
   if(codecs.size()>0) {
     setCodec(codecs[0]);
-    verbose(1, "QT4L: default codec is: '%s'", m_codecname.c_str());
+    verbose(1, "[GEM:recordQT4L] default codec is: '%s'", m_codecname.c_str());
   }
 }
 #else
@@ -119,7 +119,7 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
   unsigned int i=0;
 
   if(!extension) {
-    error("no extension given: encoding will be QuickTime");
+    verbose(0, "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
     return LQT_FILE_QT;
   }
 
@@ -127,25 +127,23 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
 
   for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
     if(!strcasecmp(extension, qtformats[i].extension)) {
-      //      post("encoding as %s", qtformats[i].description);
       return qtformats[i].type;
     }
   }
   
-  error("unknown extension: encoding will be QuickTime");
+  verbose(0, "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
   return LQT_FILE_QT; /* should be save for now */
 }
 
 bool recordQT4L :: start(const std::string filename, gem::Properties&props)
 {
-  post("starting QT4LL %s", filename.c_str());
   stop();
 
   lqt_file_type_t type =  guess_qtformat(filename);
 
   m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL){
-    post("starting QT4L %s failed", filename.c_str());
+    error("[GEM:recordQT4L] starting to record to %s failed", filename.c_str());
     return false;
   }
 
@@ -257,7 +255,7 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
     setCodec(m_codecname);
   }
   if(NULL==m_codec) {
-    error("couldn't initialize codec");
+    error("[GEM:recordQT4L] couldn't initialize codec");
     return false;
   }
 
@@ -328,7 +326,7 @@ bool recordQT4L :: write(imageStruct*img)
     if(!init(img, framerate)) {
       /* something went wrong! */
       stop();
-      error("unable to initialize QT4L");
+      error("[GEM:recordQT4L] unable to initialize QT4L");
       return false;
     }
     m_restart=false;
@@ -353,7 +351,7 @@ bool recordQT4L :: write(imageStruct*img)
     m_image.convertFrom(img, GL_YUV422_GEM);
     break;
   default:
-    error("record: unsupported colormodel...");
+    error("[GEM:recordQT4L] unsupported colormodel...");
     return false;
   }
 
@@ -429,7 +427,7 @@ bool recordQT4L :: setCodec(const std::string name)
       }
     }
     if(codecname.empty()) {
-      error("couldn't find default codec for this format");
+      verbose(0, "[GEM:recordQT4L] couldn't find default codec for this format");
       return false;
     }
   }
