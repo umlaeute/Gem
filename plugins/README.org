@@ -67,4 +67,40 @@ The following is an attempt to define the apropriate logging levels
 | ~getWriteCapabilities~ | ~verbose(0)~        |
 **** modelloader
 **** record
+| function              | max reporting state |
+|-----------------------+---------------------|
+| CTOR                  | ~verbose(0)~        |
+| DTOR                  | ~verbose(0)~        |
+| ~isThreadable~        | ~verbose(0)~        |
+| ~getCodecs~           | ~verbose(0)~        |
+| ~getCodecDescription~ | ~verbose(0)~        |
+| ~setCodec~            | ~verbose(0)~        |
+| ~enumProperties~      | ~verbose(0)~        |
+| ~dialog~              | ~error()~           |
+| ~start~               | ~error()~           |
+| ~write~               | ~error()~           |
+| ~stop~                | ~error()~           |
+
 **** video
+| function           | max reporting state                            |
+|--------------------+------------------------------------------------|
+| CTOR               | ~verbose(0)~                                   |
+| DTOR               | ~verbose(0)~                                   |
+| ~isThreadable~     | ~verbose(0)~                                   |
+| ~enumerate~        | ~verbose(0)~                                   |
+| ~setDevice~        | ~verbose(0)~                                   |
+| ~open~             | ~verbose(0)~                                   |
+| ~start~            | ~error()~                                      |
+| ~getFrame~         | ~fprintf()~ for threaded; ~error()~ otherwise  |
+| ~stop~             | ~error()~                                      |
+| ~close~            | ~error()~                                      |
+| ~reset~            | ~error()~ (?)                                  |
+| ~enumProperties~   | ~error()~ (~verbose()~ for non-opened devices) |
+| ~getProperties~    | ~error()~ (~verbose()~ for non-opened devices) |
+| ~setProperties~    | ~error()~ (~verbose()~ for non-opened devices) |
+| ~dialog~           | ~error()~                                      |
+| ~dialogs~          | ~error()~ (~verbose()~ for non-opened devices) |
+| ~grabAsynchronous~ | ~verbose(0)~                                   |
+| ~setColor~         | ~verbose(0)~                                   |
+| ~provides~         | ~verbose(0)~                                   |
+| ~getName~          | ~verbose(0)~                                   |
