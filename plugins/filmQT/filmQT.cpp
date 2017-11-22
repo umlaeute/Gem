@@ -43,13 +43,13 @@ static bool filmQT_initQT(void) {
   // Initialize QuickTime Media Layer
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
-    error("[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
+    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
     return false;
   }
 
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    error("[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
+    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
     return false;
   }
   return true;
