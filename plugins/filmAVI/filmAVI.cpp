@@ -117,27 +117,27 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
     m_wantedFormat=d;
 
   if (AVIStreamOpenFromFile(&m_streamVid, filename.c_str(), streamtypeVIDEO, 0, OF_READ, NULL)) {
-    verbose(2, "[pix_film:AVI]: Unable to open file: %s", filename.c_str());
+    verbose(0, "[GEM:filmAVI] Unable to open file: %s", filename.c_str());
     goto unsupported;
   }
 
   if( AVIStreamInfo( m_streamVid, &streaminfo, sizeof(streaminfo)) ||
       AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), NULL, &lSize))  {
-    verbose(2, "[pix_film:AVI]: Unable to read file format: %s", filename.c_str());
+    verbose(0, "[GEM:filmAVI] Unable to read file format: %s", filename.c_str());
     goto unsupported;
   }
 
   m_pbmihRaw = (BITMAPINFOHEADER*) new char[lSize];
 
   if(AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), m_pbmihRaw, &lSize))	{
-    verbose(2, "[pix_film:AVI]: Unable to read file format: %s", filename.c_str());
+    verbose(0, "[GEM:filmAVI] Unable to read file format: %s", filename.c_str());
     goto unsupported;
   }
   if ((8 == m_pbmihRaw->biBitCount)
       || ((40 == m_pbmihRaw->biBitCount) && (mmioFOURCC('c','v','i','d') == m_pbmihRaw->biCompression))) {
     // HACK: attempt to decompress 8 bit films or BW cinepak films to greyscale
     m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER) + 256*3];
-    verbose(3, "[pix_film:AVI]: Loading as greyscale");
+    verbose(0, "[GEM:filmAVI] Loading as greyscale");
 
     *m_pbmihDst = *m_pbmihRaw;
     m_pbmihDst->biSize = sizeof(BITMAPINFOHEADER);
@@ -179,17 +179,17 @@ bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps
   m_image.image.reallocate();
 
   if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst, ICMODE_DECOMPRESS))){
-    verbose(2, "[pix_film:AVI]: Could not find decompressor: %s", filename.c_str());
+    verbose(0, "[GEM:filmAVI] Could not find decompressor: %s", filename.c_str());
     goto unsupported;
   }
   if (m_format==GL_LUMINANCE){
     if (ICERR_OK != ICDecompressSetPalette(m_hic, m_pbmihDst)){
-      verbose(2, "[pix_film:AVI]: Could not set palette: %s", filename.c_str());
+      verbose(0, "[GEM:filmAVI] Could not set palette: %s", filename.c_str());
     }
   }
 
   if (ICERR_OK != ICDecompressBegin(m_hic, m_pbmihRaw, m_pbmihDst)){
-    verbose(2, "[pix_film:AVI]: Could not begin decompression: %s", filename.c_str());
+    verbose(0, "[GEM:filmAVI] Could not begin decompression: %s", filename.c_str());
     goto unsupported;
   }
   //if (!m_pbmihRaw->biSizeImage)

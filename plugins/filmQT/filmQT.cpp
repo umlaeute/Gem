@@ -43,13 +43,13 @@ static bool filmQT_initQT(void) {
   // Initialize QuickTime Media Layer
   OSErr		err = noErr;
   if ((err = InitializeQTML(0))) {
-    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    error("[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
     return false;
   }
 
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    error("filmQT: Could not initialize quicktime: error %d\n", err);
+    error("[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
     return false;
   }
   return true;
@@ -138,7 +138,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (filename.empty())return false;
   if (!m_bInit){
-    error("filmQT: object not correctly initialized\n");
+    verbose(0, "[GEM:filmQT] QT object not correctly initialized\n");
     return false;
   }
   // Clean up any open files:  closeMess();
@@ -156,18 +156,18 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 #endif
 
   if (err != noErr) {
-    error("filmQT: Unable to find file: %s (%d)", filename.c_str(), err);
+    verbose(0, "[GEM:filmQT] Unable to find file: %s (%d)", filename.c_str(), err);
     //goto unsupported;
   }
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    error("filmQT: Couldn't open the movie file: %s (%d)", filename.c_str(), err);
+    verbose(0, "[GEM:filmQT] Couldn't open the movie file: %s (%d)", filename.c_str(), err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
   if (err) {
-    error("filmQT: Couldn't make a movie from file: %s (%d)", filename.c_str(), err);
+    verbose(0, "[GEM:filmQT] Couldn't make a movie from file: %s (%d)", filename.c_str(), err);
     if (refnum) ::CloseMovieFile(refnum);
     m_movie=NULL;
     goto unsupported;
@@ -238,7 +238,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
   SetMoviePlayHints(m_movie, hints, hints);
   err = SetMovieAudioMute(m_movie, true, 0);
   if(noErr!=err) {
-    error("filmQT: unable to mute movie...");
+    verbose(0, "[GEM:filmQT] unable to mute movie...");
   }
 
   err = QTNewGWorldFromPtr(	&m_srcGWorld,
@@ -250,7 +250,7 @@ bool filmQT :: open(const std::string filename, const gem::Properties&wantProps)
 				m_image.image.data,
 				m_rowBytes);
   if (err) {
-    error("filmQT: Couldn't make QTNewGWorldFromPtr %d", err);
+    verbose(0, "[GEM:filmQT] Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
 
@@ -393,10 +393,10 @@ void filmQT :: LoadRam(void){
     length = GetMovieDuration(m_movie);
     err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
     if (err) {
-      post("filmQT: LoadMovieIntoRam failed miserably");
+      error("[GEM:filmQT] LoadMovieIntoRam failed miserably");
     }
   }else{
-    post("filmQT: no movie to load into RAM!");
+    error("[GEM:filmQT] no movie to load into RAM!");
   }
 }
 #endif // LoadRAM

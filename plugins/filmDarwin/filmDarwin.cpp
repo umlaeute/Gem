@@ -99,14 +99,14 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
     if (err) {
-      //error("filmDarwin: Unable to find file: %s", filename.c_str());
+      verbose(0, "[GEM:filmDarwin] Unable to find file: %s", filename.c_str());
       goto unsupported;
     }
   }
 
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    //error("filmDarwin: Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    verbose(0, "[GEM:filmDarwin] Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
     if (refnum) ::CloseMovieFile(refnum);
     goto unsupported;
   }
@@ -118,14 +118,14 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   if(m_curFrame==-1)m_curFrame=-2;
   m_lastFrame=-1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
-  verbose(1, "filmDarwin:  m_numTracks = %d",(int)m_numTracks);
+  verbose(1, "[GEM:filmDarwin]  m_numTracks = %d",(int)m_numTracks);
 
   // Get the length of the movie
   long	movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
 
-  verbose(1, "Movie duration = %d timescale = %d timebase = %d",movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
+  verbose(1, "[GEM:filmDarwin] Movie duration = %d timescale = %d timebase = %d",movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
 
   movieTrack = GetMovieIndTrackType(m_movie,
                                     1,
@@ -141,7 +141,7 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
     m_fps=30.f;
     m_durationf=static_cast<double>(movieScale)/m_fps;
   }
-  verbose(1, "numFrames= %d...%f", (int)m_numFrames, (float)m_durationf);
+  verbose(1, "[GEM:filmDarwin] numFrames= %d...%f", (int)m_numFrames, (float)m_durationf);
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
@@ -149,9 +149,9 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
   SetMovieBox(m_movie, &m_srcRect);	
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
-  verbose(1, "rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
-  verbose(1, "rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-  verbose(1, "movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
+  verbose(1, "[GEM:filmDarwin] rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
+  verbose(1, "[GEM:filmDarwin] rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
+  verbose(1, "[GEM:filmDarwin] movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
 
   switch(m_wantedFormat) {
   case 0: // if no other format is requested, use YUV
@@ -180,7 +180,7 @@ bool filmDarwin :: open(const std::string filename, const gem::Properties&wantPr
                             m_image.image.data,
                             m_rowBytes);
   if (err) {
-    //error("filmDarwin: Couldn't make QTNewGWorldFromPtr %d", err);
+    verbose(0, "[GEM:filmDarwin] Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
   m_movieTime = 0;

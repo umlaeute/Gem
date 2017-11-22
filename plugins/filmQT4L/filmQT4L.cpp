@@ -91,7 +91,7 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
   char*cfilename=const_cast<char*>(filename.c_str());
   if (quicktime_check_sig(cfilename)){ /* ok, this is quicktime */
     if (!(m_quickfile = quicktime_open(filename.c_str(), 1, 0))){
-//      post("filmQT4L: Unable to open file: %s", filename.c_str());
+      verbose(0, "[GEM:filmQT4L] Unable to open file: %s", filename.c_str());
       return false;
     }
     m_curFrame = -1;
@@ -106,8 +106,8 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
     m_image.image.xsize = quicktime_video_width (m_quickfile, m_curTrack);
     m_image.image.ysize = quicktime_video_height(m_quickfile, m_curTrack);
     if (!quicktime_supported_video(m_quickfile, m_curTrack)){
-      //    char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
-      //    post("filmQT4L: unsupported CODEC '%s'!", codec);
+      char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
+      verbose(0, "[GEM:filmQT4L] unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
       m_quickfile=0;
       return false;
@@ -156,7 +156,7 @@ pixBlock* filmQT4L :: getFrame(){
   m_lastFrame=m_curFrame;
 
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
-    post("filmQT4L:: couldn't decode video !");
+    printf("[GEM:filmQT4L] couldn't decode video!\n");
   }else {
     m_image.image.convertFrom(&m_qtimage);
     m_image.newimage=1; m_image.image.upsidedown=false;

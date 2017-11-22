@@ -260,7 +260,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
   if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(), filename.length(), WideFileName,
                                MAXPDSTRING))
     {
-      error("filmDS: Unable to load %s", filename.c_str());
+      verbose(0, "[GEM:filmDS:legacy]Unable to load %s", filename.c_str());
       return false;
     }
 
@@ -269,7 +269,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   if (RetVal != S_OK || NULL == VideoFilter)
     {
-      error("filmDS: Unable to render %s", filename.c_str());
+      verbose(0, "[GEM:filmDS:legacy]Unable to render %s", filename.c_str());
       return false;
     }
 
@@ -280,7 +280,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK || NULL == SampleFilter)
     {
-      error("Unable to create SampleFilter interface %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to create SampleFilter interface %d", RetVal);
       return false;
     }
 
@@ -289,7 +289,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK)
     {
-      error("Unable to add SampleFilter %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to add SampleFilter %d", RetVal);
       return false;
     }
 
@@ -301,7 +301,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK || NULL == SampleGrabber)
     {
-      error("Unable to create SampleGrabber interface %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to create SampleGrabber interface %d", RetVal);
       return false;
     }
 
@@ -322,7 +322,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   if (RetVal != S_OK)
     {
-      error("Unable to setup sample grabber %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
       return false;
     }
 
@@ -332,7 +332,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   if (RetVal != S_OK)
     {
-      error("Unable to setup sample grabber %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
       return false;
     }
 
@@ -343,7 +343,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK || NULL == NullFilter)
     {
-      error("Unable to create NullFilter interface %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to create NullFilter interface %d", RetVal);
       return false;
     }
 
@@ -352,7 +352,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK)
     {
-      error("Unable to add NullFilter %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to add NullFilter %d", RetVal);
       return false;
     }
 
@@ -365,7 +365,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK)
     {
-      error("Unable to connect filters %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
       return false;
     }
 
@@ -374,7 +374,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
   if (RetVal != S_OK)
     {
-      error("Unable to connect filters %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
       return false;
     }
 	
@@ -394,7 +394,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
       if (RetVal != S_OK)
         {
-          error("Unable to set video time format %d", RetVal);
+          verbose(0, "[GEM:filmDS:legacy]Unable to set video time format %d", RetVal);
           return false;
         }
     }
@@ -405,7 +405,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   if (RetVal != S_OK)
     {
-      error("Unable to get video duration %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to get video duration %d", RetVal);
       return false;
     }
 	
@@ -434,7 +434,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   if (RetVal != S_OK)
     {
-      error("Unable to get media type %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to get media type %d", RetVal);
       return false;
     }
 
@@ -453,7 +453,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   else
     {
-      error("Invalid media type returned %s", filename.c_str());
+      verbose(0, "[GEM:filmDS:legacy]Invalid media type returned %s", filename.c_str());
       return false;
     }
 	
@@ -469,7 +469,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 		
       if (NULL == m_frame)
         {
-          error("Unable to allocate memory for the video buffer %s", filename.c_str());
+          verbose(0, "[GEM:filmDS:legacy]Unable to allocate memory for the video buffer %s", filename.c_str());
           return false;
         }
     }
@@ -517,7 +517,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 	
   if (RetVal != S_OK && RetVal != S_FALSE)
     {
-      error("Unable to start video %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to start video %d", RetVal);
 		      return false;
     }
 	
@@ -531,7 +531,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
       if (RetVal != S_OK && RetVal != VFW_S_STATE_INTERMEDIATE)
         {
-          error("Unable to run video %d", RetVal);
+          verbose(0, "[GEM:filmDS:legacy]Unable to run video %d", RetVal);
 		          return false;
         }
 
@@ -552,7 +552,7 @@ bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
 
 #ifdef REGISTER_FILTERGRAPH
   if (FAILED(RetVal = filmAddGraphToRot(FilterGraph, &m_GraphRegister))){
-    error("filmDS: failed to register filter graph with ROT!  hr=0x%X", RetVal);
+    verbose(0, "[GEM:filmDS:legacy]failed to register filter graph with ROT!  hr=0x%X", RetVal);
     m_GraphRegister = 0;
   }
 #endif
