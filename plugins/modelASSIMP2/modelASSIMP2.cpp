@@ -125,7 +125,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&diffuse, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
-  //post("diffuse: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR,
@@ -133,7 +132,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&specular, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
-  //post("specular: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT,
@@ -141,7 +139,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&ambient, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
-  //post("ambient: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE,
@@ -149,7 +146,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&emission, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
-  //  post("emission: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   max = 1;
   ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
@@ -158,7 +154,6 @@ static void apply_material(const struct aiMaterial *mtl)
                                  &strength, &max);
   if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
-    //post("shininess: %gx%g=%g\t%g", shininess, strength, shininess*strength);
   } else {
     /* JMZ: in modelOBJ the default shininess is 65 */
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 0.0f);
@@ -409,7 +404,7 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    post("key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
+    verbose(1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
   }
 #endif
 

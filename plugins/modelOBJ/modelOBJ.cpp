@@ -48,7 +48,7 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   std::vector<std::string>keys=requestprops.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    post("key[%d]=%s", i, keys[i].c_str());
+    verbose(1, "[GEM:modelOBJ] key[%d]=%s", i, keys[i].c_str());
   }
 #endif
   m_model = glmReadOBJ(name.c_str());
@@ -79,7 +79,7 @@ std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName){
   if ( vectorName == "normals" ) return m_normals;
   if ( vectorName == "texcoords" ) return m_texcoords;
   if ( vectorName == "colors" ) return m_colors;
-  error("there is no \"%s\" vector !",vectorName.c_str());
+  verbose(0, "[GEM:modelOBJ] there is no \"%s\" vector !",vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 
@@ -184,7 +184,6 @@ bool modelOBJ :: compile(void)  {
   } else {
     glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords, m_colors);
   }
-  //~printf("size of vectrices : %ld\n", m_vertices.size());
   bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
   if(res) {
     m_rebuild=false;

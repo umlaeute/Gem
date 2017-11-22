@@ -30,14 +30,6 @@ namespace {
 #define aisgl_min(x,y) (x<y?x:y)
 #define aisgl_max(x,y) (y>x?y:x)
 
-  static void aiPrintMatrix(const std::string&name, const aiMatrix4x4&mtx) {
-    post("matrix %s", name.c_str());
-    post("\t%f\t%f\t%f\t%f", mtx.a1, mtx.a2, mtx.a3, mtx.a4);
-    post("\t%f\t%f\t%f\t%f", mtx.b1, mtx.b2, mtx.b3, mtx.b4);
-    post("\t%f\t%f\t%f\t%f", mtx.c1, mtx.c2, mtx.c3, mtx.c4);
-    post("\t%f\t%f\t%f\t%f", mtx.d1, mtx.d2, mtx.d3, mtx.d4);
-  }
-
   // ----------------------------------------------------------------------------
   static void get_bounding_box_for_node (const struct aiScene*scene, const struct aiNode* nd,
                                          aiVector3D* min,
@@ -125,13 +117,11 @@ namespace {
     if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
       color4_to_float4(&diffuse, c);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
-    //post("diffuse: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
     set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
     if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &specular))
       color4_to_float4(&specular, c);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
-    //post("specular: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
     set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
     if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &ambient))
@@ -295,7 +285,7 @@ std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorNam
   if ( vectorName == "normals" ) return m_normals;
   if ( vectorName == "texcoords" ) return m_texcoords;
   if ( vectorName == "colors" ) return m_colors;
-  error("there is no \"%s\" vector !",vectorName.c_str());
+  verbose(0, "[GEM:modelASSIMP3] there is no \"%s\" vector !",vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 
@@ -361,7 +351,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    post("key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
+    verbose(1, "[GEM:modelASSIMP3] key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
   }
 #endif
 
@@ -446,8 +436,6 @@ bool modelASSIMP3 :: compile(void)  {
   m_colors.clear();
 
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
-  //  post("ASSIMP: *%f + (%f/%f/%f)", m_scale, m_offset.x, m_offset.y, m_offset.z);
-  //aiPrintMatrix("trafo", trafo);
 
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   m_have_texcoords = (m_texcoords.size() > 0);
