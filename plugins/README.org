@@ -15,30 +15,39 @@ errors that happen once a plugin has been selected, may be more load.
 reporting from (potentially) threaded callbacks, should avoid using Pd's
 post(),... functions and instead just printf() to the stderr.
 
-- LOG:fatal  : verbose(..-3)
-- LOG:error  : pd_error, error, verbose(..-2)
-- LOG:normal : post, verbose(..-1)
-- LOG:debug  : verbose(..0)
-- LOG:all    : verbose(..verbosity)
+| loglevel   | maximum visible verbosity      |
+|------------+--------------------------------|
+| LOG:fatal  | verbose(..-3)                  |
+| LOG:error  | pd_error, error, verbose(..-2) |
+| LOG:normal | post, verbose(..-1)            |
+| LOG:debug  | verbose(..0)                   |
+| LOG:all    | verbose(..verbosity)           |
 
-idea:
- -errors that must effect the user (because the current plugin is selected and there cannot be an alternative): error()
+***** namespace
+it would be nice if all plugins supported a common prefix, so people can know where the error comes from,
+e.g. "[GEM:filmAVI]"
+
+***** idea
+ - fatal errors that /must/ effect the user (because the current plugin is selected and there cannot be an alternative) ~error()~
+ - non-fatal errors effecting the user: ~verbose(0)~ (warning)
+ - errors that /might/ effect the user must be ~verbose(0)~
+ - debugging output should be done with ~verbose(1)~
 
 The following is an attempt to define the apropriate logging levels
 
 **** ~film~
-| function       | max reporting state                    |
-| -------------- | -------------------------------------- |
-| CTOR           | verbose(0)                             |
-| DTOR           | verbose(0)                             |
-| isThreadable   | verbose(0)                             |
-| enumProperties | verbose(0), error() for opened devices |
-| setProperties  | verbose(0), error() for opened devices |
-| getProperties  | verbose(0), error() for opened devices |
-| open           | verbose(0)                             |
-| close          | error(0)                               |
-| changeImage    | error(0)                               |
-| getFrame       | error(0), printf() if threaded         |
+| function         | max reporting state                        |
+|------------------+--------------------------------------------|
+| CTOR             | ~verbose(0)~                               |
+| DTOR             | ~verbose(0)~                               |
+| ~isThreadable~   | ~verbose(0)~                               |
+| ~enumProperties~ | ~verbose(0)~, ~error()~ for opened devices |
+| ~setProperties~  | ~verbose(0)~, ~error()~ for opened devices |
+| ~getProperties~  | ~verbose(0)~, ~error()~ for opened devices |
+| ~open~           | ~verbose(0)~                               |
+| ~close~          | ~error()~                                  |
+| ~changeImage~    | ~error()~                                  |
+| ~getFrame~       | ~error()~, ~printf()~ if threaded          |
 
 
 **** imageloader
