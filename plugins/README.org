@@ -1,0 +1,48 @@
+* plugins for Gem
+
+this is a collection of plugins, that allow Gem to accomplish input and output
+of media files in a platform-specific way.
+
+** Developer notes
+
+*** verbosity-levels
+when reporting errors, keep in mind that oftentimes the current plugin is only
+one in a long chain.
+e.g. when a film-plugin fails to open a movie file, the next plugin in the
+chain might succeed. therefore, to keep noise for the end user low, the
+reporting verbosity should be kept low; usually below post() level.
+errors that happen once a plugin has been selected, may be more load.
+reporting from (potentially) threaded callbacks, should avoid using Pd's
+post(),... functions and instead just printf() to the stderr.
+
+- LOG:fatal  : verbose(..-3)
+- LOG:error  : pd_error, error, verbose(..-2)
+- LOG:normal : post, verbose(..-1)
+- LOG:debug  : verbose(..0)
+- LOG:all    : verbose(..verbosity)
+
+idea:
+ -errors that must effect the user (because the current plugin is selected and there cannot be an alternative): error()
+
+The following is an attempt to define the apropriate logging levels
+
+**** ~film~
+| function       | max reporting state                    |
+| -------------- | -------------------------------------- |
+| CTOR           | verbose(0)                             |
+| DTOR           | verbose(0)                             |
+| isThreadable   | verbose(0)                             |
+| enumProperties | verbose(0), error() for opened devices |
+| setProperties  | verbose(0), error() for opened devices |
+| getProperties  | verbose(0), error() for opened devices |
+| open           | verbose(0)                             |
+| close          | error(0)                               |
+| changeImage    | error(0)                               |
+| getFrame       | error(0), printf() if threaded         |
+
+
+**** imageloader
+**** imagesaver
+**** modelloader
+**** record
+**** video
