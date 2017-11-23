@@ -189,7 +189,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
 
     uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(uint32)));
     if (raster == NULL) {
-      error("[GEM:imageTIFF] Unable to allocate memory for image: %s", filename.c_str());
+      error("[GEM:imageTIFF] Unable to allocate memory for image '%s'", filename.c_str());
       TIFFClose(tif);
       return(false);
     }
@@ -321,7 +321,7 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
     unsigned char *buf = srcLine;
     if (TIFFWriteScanline(tif, buf, row, 0) < 0)
       {
-        verbose(0, "[GEM:imageTIFF] could not write line %d to image %s", row, filename.c_str());
+        verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row, filename.c_str());
         TIFFClose(tif);
         delete [] buf;
         return(false);
