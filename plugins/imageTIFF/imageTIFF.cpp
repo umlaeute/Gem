@@ -182,7 +182,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     char emsg[1024];
     TIFFRGBAImage img;
     if (TIFFRGBAImageBegin(&img, tif, 0, emsg) == 0) {
-      verbose(0, "[GEM:imageTIFF] Error reading in image file: %s : %s", filename, emsg);
+      verbose(0, "[GEM:imageTIFF] Error reading in image file '%s': %s", filename.c_str(), emsg);
       TIFFClose(tif);
       return(false);
     }
@@ -195,7 +195,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     }
 
     if (TIFFRGBAImageGet(&img, raster, width, height) == 0) {
-      verbose(0, "[GEM:imageTIFF] Error getting image data in file: %s, %s", filename, emsg);
+      verbose(0, "[GEM:imageTIFF] Error getting image data in file '%s': %s", filename.c_str(), emsg);
       _TIFFfree(raster);
       TIFFClose(tif);
       return(false);
