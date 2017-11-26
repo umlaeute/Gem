@@ -206,7 +206,7 @@ bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&want
   if(numvstreams) {
     bgav_select_track(m_file, m_track);
   } else {
-    verbose(1, "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping");
+    verbose(1, "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping", m_track);
   }
 
   bgav_set_video_stream(m_file, m_stream, BGAV_STREAM_DECODE);
