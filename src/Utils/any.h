@@ -39,6 +39,8 @@ namespace gem
     virtual const char* what(void) const
 #if __cplusplus > 199711L
       noexcept
+#else
+      throw()
 #endif
     {
       return result.c_str();
