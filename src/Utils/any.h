@@ -35,6 +35,9 @@ namespace gem
       : result(std::string("bad cast (")+src.name() + "->" + dest.name()+")")
     { }
     virtual ~bad_any_cast(void)
+#if __cplusplus <= 199711L
+      throw()
+#endif
     { }
     virtual const char* what(void) const
 #if __cplusplus > 199711L
