@@ -36,7 +36,11 @@ namespace gem
     { }
     virtual ~bad_any_cast(void)
     { }
-    virtual const char* what(void) const {
+    virtual const char* what(void) const
+#if __cplusplus > 199711L
+      noexcept
+#endif
+    {
       return result.c_str();
     }
     const std::string result;
