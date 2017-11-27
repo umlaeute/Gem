@@ -45,7 +45,7 @@ GEM_EXTERN extern int           getGLbitfield(int argc, struct _atom *argv);
   public:
     GLuintMap(const std::string&name);
     virtual ~GLuintMap();
-    GLuint get(float) throw(GemException&);
+    GLuint get(float); // throws GemException
     /* map a GLuint to float; if float is 0, the new mapping is created,
      * else we just update an existing one
      * updating is especially useful with multiple contexts */

@@ -28,7 +28,8 @@ namespace gem {
     GEM_EXTERN std::wstring getVisualLine(const std::wstring&);
 
     /* convert a UTF-8 string to wchar */
-    GEM_EXTERN std::wstring toWstring(const char*str) throw(int);
+    // throws 'int', holding the position of the char that couldn't be converted
+    GEM_EXTERN std::wstring toWstring(const char*str);
   };
 };
 

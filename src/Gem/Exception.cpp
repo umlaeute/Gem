@@ -20,24 +20,24 @@
 #include "m_pd.h"
 
 
-GemException::GemException(const char *error) throw()
+GemException::GemException(const char *error)
   : ErrorString(error)
 {}
 
-GemException::GemException(const std::string error) throw()
+GemException::GemException(const std::string error)
   : ErrorString(error)
 {}
 
-GemException::GemException() throw()
+GemException::GemException()
   : ErrorString(std::string(""))
 {}
-GemException::~GemException() throw()
+GemException::~GemException()
 {}
-const char *GemException::what() const throw() {
+const char *GemException::what() const {
   return ErrorString.c_str();
 }
 
-void GemException::report(const char*origin) const throw() {
+void GemException::report(const char*origin) const {
   if(!(ErrorString.empty())) {
     if (NULL==origin)
       error("GemException: %s", ErrorString.c_str());

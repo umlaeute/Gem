@@ -81,7 +81,7 @@ GLuintMap::GLuintMap(const std::string&name)
 
 GLuintMap::~GLuintMap()
 {}
-GLuint GLuintMap::get(float f) throw(GemException&){
+GLuint GLuintMap::get(float f) {
   if(m_pimpl->idmap.count(f)>0) {
     GLuint i = m_pimpl->idmap[f];
     return i;

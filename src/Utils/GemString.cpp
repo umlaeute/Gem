@@ -105,7 +105,7 @@ static const uint8_t utf8d[] = {
 
 namespace gem {
   namespace string {
-    std::wstring toWstring(const char*str) throw(int){
+    std::wstring toWstring(const char*str) {
       std::wstring result;
 
       wchar_t unic = 0;

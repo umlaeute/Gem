@@ -34,9 +34,9 @@ namespace gem
     bad_any_cast(const std::type_info& src, const std::type_info& dest)
       : result(std::string("bad cast (")+src.name() + "->" + dest.name()+")")
     { }
-    virtual ~bad_any_cast(void) throw()
+    virtual ~bad_any_cast(void)
     { }
-    virtual const char* what(void) const throw() {
+    virtual const char* what(void) const {
       return result.c_str();
     }
     const std::string result;

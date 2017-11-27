@@ -28,10 +28,10 @@ class GEM_EXTERN GemDylib {
   GemDylib(const CPPExtern*obj,
 	   const std::string libname,
 	   const std::string extension=std::string("")
-	   ) throw(GemException);
+	   ); // throws GemException
   GemDylib(const std::string libname,
 	   const std::string extension=std::string("")
-	   ) throw(GemException);
+	   ); // throws GemException
 
   GemDylib(const GemDylib&);
 
