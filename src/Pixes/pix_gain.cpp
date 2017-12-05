@@ -192,7 +192,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
   short  B = static_cast<int>(256 * m_gain[chBlue]);
   short  A = static_cast<int>(256 * m_gain[chAlpha]);
 
-  if((R==256)&&(G==256)&&(B==256)&&(B==256)){
+  if((R==256)&&(G==256)&&(B==256)&&(A==256)){
     // nothing to do!
     return;
   }
