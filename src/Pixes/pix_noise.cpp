@@ -105,12 +105,11 @@ void pix_noise :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_noise :: initRandom(int seed)
 {
-	int i,randval;
+	int i;
 	m_rand_p = 0;
 	m_rand_k = 24;
-	randval = seed;
 	for (i=0; i<55; i++) {
-		m_rand[i] = seed = seed * 435898247 + 382842987;//random init
+		m_rand[i] = seed = seed * 435898247 + 382842987; //random init
 	}
 }
 

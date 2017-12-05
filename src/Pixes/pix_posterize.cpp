@@ -108,7 +108,6 @@ void pix_posterize :: processYUVImage(imageStruct &image)
 	    }
 	  }
 	  break;
-        break;
         default:
 	  for (h=0; h<image.ysize; h++){
 	    for(w=0; w<image.xsize/2; w++){
