@@ -20,24 +20,24 @@
 /////////////////////////////////////////////////////////
 /*                     Shoutouts
 
-Thanks to:
+                       Thanks to:
 
-		   Dillip Kumar Kara for crossbar code.
-		   Zachary Lieberman for getting me into this stuff
-		   and for being so generous with time and code.
-		   The guys at Potion Design for helping me with VC++
-		   Josh Fisher for being a serious C++ nerd :)
-		   Golan Levin for helping me debug the strangest
-		   and slowest bug in the world!
+                       Dillip Kumar Kara for crossbar code.
+                       Zachary Lieberman for getting me into this stuff
+                       and for being so generous with time and code.
+                       The guys at Potion Design for helping me with VC++
+                       Josh Fisher for being a serious C++ nerd :)
+                       Golan Levin for helping me debug the strangest
+                       and slowest bug in the world!
 
-		   And all the people using this library who send in
-		   bugs, suggestions and improvements who keep me working on
-		   the next version - yeah thanks a lot ;)
+                       And all the people using this library who send in
+                       bugs, suggestions and improvements who keep me working on
+                       the next version - yeah thanks a lot ;)
 
 */
 /////////////////////////////////////////////////////////
 
-
+#pragma comment(lib,"Strmiids.lib")
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -49,65 +49,65 @@ Thanks to:
 
 //this is for TryEnterCriticalSection
 #ifndef _WIN32_WINNT
-#   define _WIN32_WINNT 0x400
+#   define _WIN32_WINNT 0x501
 #endif
 #include <windows.h>
 
 
 //Example Usage
 /*
-	//create a videoInput object
-	videoInput VI;
+//create a videoInput object
+videoInput VI;
 
-	//Prints out a list of available devices and returns num of devices found
-	int numDevices = VI.listDevices();
+//Prints out a list of available devices and returns num of devices found
+int numDevices = VI.listDevices();
 
-	int device1 = 0;  //this could be any deviceID that shows up in listDevices
-	int device2 = 1;  //this could be any deviceID that shows up in listDevices
+int device1 = 0;  //this could be any deviceID that shows up in listDevices
+int device2 = 1;  //this could be any deviceID that shows up in listDevices
 
-	//if you want to capture at a different frame rate (default is 30)
-	//specify it here, you are not guaranteed to get this fps though.
-	//VI.setIdealFramerate(dev, 60);
+//if you want to capture at a different frame rate (default is 30)
+//specify it here, you are not guaranteed to get this fps though.
+//VI.setIdealFramerate(dev, 60);
 
-	//setup the first device - there are a number of options:
+//setup the first device - there are a number of options:
 
-	VI.setupDevice(device1); 						  //setup the first device with the default settings
-	//VI.setupDevice(device1, VI_COMPOSITE); 			  //or setup device with specific connection type
-	//VI.setupDevice(device1, 320, 240);				  //or setup device with specified video size
-	//VI.setupDevice(device1, 320, 240, VI_COMPOSITE);  //or setup device with video size and connection type
+VI.setupDevice(device1); 						  //setup the first device with the default settings
+//VI.setupDevice(device1, VI_COMPOSITE); 			  //or setup device with specific connection type
+//VI.setupDevice(device1, 320, 240);				  //or setup device with specified video size
+//VI.setupDevice(device1, 320, 240, VI_COMPOSITE);  //or setup device with video size and connection type
 
-	//VI.setFormat(device1, VI_NTSC_M);					//if your card doesn't remember what format it should be
-														//call this with the appropriate format listed above
-														//NOTE: must be called after setupDevice!
+//VI.setFormat(device1, VI_NTSC_M);					//if your card doesn't remember what format it should be
+//call this with the appropriate format listed above
+//NOTE: must be called after setupDevice!
 
-	//optionally setup a second (or third, fourth ...) device - same options as above
-	VI.setupDevice(device2);
+//optionally setup a second (or third, fourth ...) device - same options as above
+VI.setupDevice(device2);
 
-	//As requested width and height can not always be accomodated
-	//make sure to check the size once the device is setup
+//As requested width and height can not always be accomodated
+//make sure to check the size once the device is setup
 
-	int width 	= VI.getWidth(device1);
-	int height 	= VI.getHeight(device1);
-	int size	= VI.getSize(device1);
+int width 	= VI.getWidth(device1);
+int height 	= VI.getHeight(device1);
+int size	= VI.getSize(device1);
 
-	unsigned char * yourBuffer1 = new unsigned char[size];
-	unsigned char * yourBuffer2 = new unsigned char[size];
+unsigned char * yourBuffer1 = new unsigned char[size];
+unsigned char * yourBuffer2 = new unsigned char[size];
 
-	//to get the data from the device first check if the data is new
-	if(VI.isFrameNew(device1)){
-		VI.getPixels(device1, yourBuffer1, false, false);	//fills pixels as a BGR (for openCV) unsigned char array - no flipping
-		VI.getPixels(device1, yourBuffer2, true, true); 	//fills pixels as a RGB (for openGL) unsigned char array - flipping!
-	}
+//to get the data from the device first check if the data is new
+if(VI.isFrameNew(device1)){
+VI.getPixels(device1, yourBuffer1, false, false);	//fills pixels as a BGR (for openCV) unsigned char array - no flipping
+VI.getPixels(device1, yourBuffer2, true, true); 	//fills pixels as a RGB (for openGL) unsigned char array - flipping!
+}
 
-	//same applies to device2 etc
+//same applies to device2 etc
 
-	//to get a settings dialog for the device
-	VI.showSettingsWindow(device1);
+//to get a settings dialog for the device
+VI.showSettingsWindow(device1);
 
 
-	//Shut down devices properly
-	VI.stopDevice(device1);
-	VI.stopDevice(device2);
+//Shut down devices properly
+VI.stopDevice(device1);
+VI.stopDevice(device2);
 */
 
 
@@ -190,11 +190,10 @@ static int comInitCount = 0;
 
 ////////////////////////////////////////   VIDEO DEVICE   ///////////////////////////////////
 
-class videoDevice
-{
+class videoDevice{
 
 
-public:
+ public:
 
   videoDevice();
   void setSize(int w, int h);
@@ -254,10 +253,9 @@ public:
 
 
 
-class videoInput
-{
+class videoInput{
 
-public:
+ public:
   videoInput();
   ~videoInput();
 
@@ -274,28 +272,27 @@ public:
   static std::vector <std::string> getDeviceList();
 
   //needs to be called after listDevices - otherwise returns NULL
-  static char * getDeviceName(int deviceID);
-  static int getDeviceIDFromName(char * name);
+  static const char * getDeviceName(int deviceID);
+  static int getDeviceIDFromName(const char * name);
 
   //choose to use callback based capture - or single threaded
   void setUseCallback(bool useCallback);
 
   //call before setupDevice
   //directshow will try and get the closest possible framerate to what is requested
-  void setIdealFramerate(int deviceID, float idealFramerate);
+  void setIdealFramerate(int deviceID, int idealFramerate);
 
   //some devices will stop delivering frames after a while - this method gives you the option to try and reconnect
   //to a device if videoInput detects that a device has stopped delivering frames.
   //you MUST CALL isFrameNew every app loop for this to have any effect
-  void setAutoReconnectOnFreeze(int deviceNumber, bool doReconnect,
-                                int numMissedFramesBeforeReconnect);
+  void setAutoReconnectOnFreeze(int deviceNumber, bool doReconnect, int numMissedFramesBeforeReconnect);
 
   //Choose one of these four to setup your device
   bool setupDevice(int deviceID);
   bool setupDevice(int deviceID, int w, int h);
 
   //These two are only for capture cards
-  //USB and Firewire cameras shouldn't specify connection
+  //USB and Firewire cameras souldn't specify connection
   bool setupDevice(int deviceID, int connection);
   bool setupDevice(int deviceID, int w, int h, int connection);
 
@@ -313,12 +310,10 @@ public:
   bool isDeviceSetup(int deviceID);
 
   //Returns the pixels - flipRedAndBlue toggles RGB/BGR flipping - and you can flip the image too
-  unsigned char * getPixels(int deviceID, bool flipRedAndBlue = true,
-                            bool flipImage = false);
+  unsigned char * getPixels(int deviceID, bool flipRedAndBlue = true, bool flipImage = false);
 
   //Or pass in a buffer for getPixels to fill returns true if successful.
-  bool getPixels(int id, unsigned char * pixels, bool flipRedAndBlue = true,
-                 bool flipImage = false);
+  bool getPixels(int id, unsigned char * pixels, bool flipRedAndBlue = true, bool flipImage = false);
 
   //Launches a pop up settings window
   //For some reason in GLUT you have to call it twice each time.
@@ -326,21 +321,13 @@ public:
 
   //Manual control over settings thanks.....
   //These are experimental for now.
-  bool setVideoSettingFilter(int deviceID, long Property, long lValue,
-                             long Flags = NULL, bool useDefaultValue = false);
-  bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue,
-                                long Flags = NULL);
-  bool getVideoSettingFilter(int deviceID, long Property, long &min,
-                             long &max, long &SteppingDelta, long &currentValue, long &flags,
-                             long &defaultValue);
+  bool setVideoSettingFilter(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
+  bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue, long Flags = NULL);
+  bool getVideoSettingFilter(int deviceID, long Property, long &min, long &max, long &SteppingDelta, long &currentValue, long &flags, long &defaultValue);
 
-  bool setVideoSettingCamera(int deviceID, long Property, long lValue,
-                             long Flags = NULL, bool useDefaultValue = false);
-  bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue,
-                                long Flags = NULL);
-  bool getVideoSettingCamera(int deviceID, long Property, long &min,
-                             long &max, long &SteppingDelta, long &currentValue, long &flags,
-                             long &defaultValue);
+  bool setVideoSettingCamera(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
+  bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue, long Flags = NULL);
+  bool getVideoSettingCamera(int deviceID, long Property, long &min, long &max, long &SteppingDelta, long &currentValue, long &flags, long &defaultValue);
 
   //bool setVideoSettingCam(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
 
@@ -377,23 +364,20 @@ public:
   long propIris;
   long propFocus;
 
-private:
+ private:
 
   void setPhyCon(int deviceID, int conn);
   void setAttemptCaptureSize(int deviceID, int w, int h);
   bool setup(int deviceID);
-  void processPixels(unsigned char * src, unsigned char * dst, int width,
-                     int height, bool bRGB, bool bFlip);
+  void processPixels(unsigned char * src, unsigned char * dst, int width, int height, bool bRGB, bool bFlip);
   int  start(int deviceID, videoDevice * VD);
   int  getDeviceCount();
   void getMediaSubtypeAsString(GUID type, char * typeAsString);
 
-  HRESULT getDevice(IBaseFilter **pSrcFilter, int deviceID,
-                    WCHAR * wDeviceName, char * nDeviceName);
+  HRESULT getDevice(IBaseFilter **pSrcFilter, int deviceID, WCHAR * wDeviceName, char * nDeviceName);
   static HRESULT ShowFilterPropertyPages(IBaseFilter *pFilter);
   HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath);
-  HRESULT routeCrossbar(ICaptureGraphBuilder2 **ppBuild,
-                        IBaseFilter **pVidInFilter, int conType, GUID captureMode);
+  HRESULT routeCrossbar(ICaptureGraphBuilder2 **ppBuild, IBaseFilter **pVidInFilter, int conType, GUID captureMode);
 
   //don't touch
   static bool comInit();
