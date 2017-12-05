@@ -133,7 +133,7 @@ namespace gem { namespace plugins {
      * the default implementation (which you normally shouldn't need to override)
      * will simply set m_devicename and clear m_devicenum
      */
-    virtual bool	    	setDevice(const std::string);
+    virtual bool	    	setDevice(const std::string&);
 
     /**
      * list all properties the currently opened device supports
@@ -200,7 +200,7 @@ namespace gem { namespace plugins {
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
     //
-    videoBase(const std::string name);
+    videoBase(const std::string&name);
 
     //////////
     // Destructor
@@ -222,7 +222,7 @@ namespace gem { namespace plugins {
      * e.g. the DirectShow plugin will call: provide("analog"); provide("dv");
      * everything you add here, will be automaticalyl enumerated with the provides() methods
      */
-    void provide(const std::string);
+    void provide(const std::string&);
 
     //! grab a frame (work-horse)
     /* this will be run in a separate thread (if threading is enabled)
@@ -263,7 +263,7 @@ namespace gem { namespace plugins {
     // Constructor
     // if numlocks>0 we will use a thread to capture the image create <numlocks> mutexes
     //
-    videoBase(const std::string name, unsigned int numlocks);
+    videoBase(const std::string&name, unsigned int numlocks);
 
     /*
      * THREADING
@@ -295,7 +295,7 @@ namespace gem { namespace plugins {
   public:
     // for pix_video: query whether this backend provides access to this class of devices
     // (e.g. "dv")
-    virtual bool provides(const std::string);
+    virtual bool provides(const std::string&);
     // get a list of all provided devices
     virtual std::vector<std::string>provides(void);
 

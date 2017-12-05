@@ -80,7 +80,7 @@ class GEM_EXTERN film
    * anything about the internal cs of the decoder
    */
   /* returns TRUE if loading was successful, FALSE otherwise */
-  virtual bool open(const std::string,
+  virtual bool open(const std::string&,
 		    const gem::Properties&requestprops) = 0;
 
   /* some error codes */

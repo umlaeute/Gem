@@ -48,14 +48,14 @@ namespace gem { namespace plugins {
   /* open the record "filename" (think better about URIs ?)
    */
   /* returns TRUE if opening was successful, FALSE otherwise */
-  virtual bool open(const std::string filename);
+  virtual bool open(const std::string&filename);
   //////////
   // close the movie file
   /* stop recording, close the file and clean up temporary things */
   virtual void close(void);
 
 public:
-  virtual bool start(const std::string filename, gem::Properties&props);
+  virtual bool start(const std::string&filename, gem::Properties&props);
   virtual void stop (void);
   virtual bool write(imageStruct*);
 
@@ -71,11 +71,11 @@ public:
   /**
    * default implementation: return empty string
    */
-  virtual const std::string getCodecDescription(const std::string codecname);
+  virtual const std::string getCodecDescription(const std::string&codecname);
   /**
    * default implementation: return FALSE
    */
-  virtual bool setCodec(const std::string name);
+  virtual bool setCodec(const std::string&name);
   /**
    * default implementation: return empty propset
    */

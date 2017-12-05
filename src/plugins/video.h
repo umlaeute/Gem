@@ -71,7 +71,7 @@ namespace gem { namespace plugins {
        * the default implementation (which you normally shouldn't need to override)
        * will simply set m_devicename and clear m_devicenum
        */
-      virtual bool	    	setDevice(const std::string) = 0;
+      virtual bool	    	setDevice(const std::string&) = 0;
 
 
       //! open the device (calls openDevice())
@@ -194,7 +194,7 @@ namespace gem { namespace plugins {
 
       // for pix_video: query whether this backend provides access to this class of devices
       // (e.g. "dv")
-      virtual bool provides(const std::string) = 0;
+      virtual bool provides(const std::string&) = 0;
       // get a list of all provided devices
       virtual std::vector<std::string>provides(void) = 0;
 

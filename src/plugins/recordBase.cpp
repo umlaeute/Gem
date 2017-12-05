@@ -62,7 +62,7 @@ void recordBase :: close(void)
 // open a file !
 //
 /////////////////////////////////////////////////////////
-bool recordBase :: start(const std::string filename, gem::Properties&props)
+bool recordBase :: start(const std::string&filename, gem::Properties&props)
 {
   if(m_pimpl->running)close();
   m_pimpl->running=false;
@@ -89,7 +89,7 @@ bool recordBase::write(imageStruct*img) {
   return m_pimpl->running;
 }
 
-bool recordBase :: open(const std::string filename)
+bool recordBase :: open(const std::string&filename)
 {
   return false;
 }
@@ -113,7 +113,7 @@ std::vector<std::string>recordBase :: getCodecs()
   m_codecdescriptions.clear();
   return result;
 }
-const std::string recordBase :: getCodecDescription(const std::string name)
+const std::string recordBase :: getCodecDescription(const std::string&name)
 {
   std::map<std::string,std::string>::iterator it = m_codecdescriptions.find(name);
 
@@ -129,7 +129,7 @@ const std::string recordBase :: getCodecDescription(const std::string name)
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordBase :: setCodec(const std::string name)
+bool recordBase :: setCodec(const std::string&name)
 {
   return false;
 }

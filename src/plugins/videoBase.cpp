@@ -74,7 +74,7 @@ public:
 
   const std::string name;
 
-  PIMPL(const std::string name_, unsigned int locks_, unsigned int timeout_) :
+  PIMPL(const std::string&name_, unsigned int locks_, unsigned int timeout_) :
     threading(locks_>0),
 #ifndef HAVE_PTW32_HANDLE_T
     thread(0),
@@ -247,7 +247,7 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoBase :: videoBase(const std::string name, unsigned int locks) :
+videoBase :: videoBase(const std::string&name, unsigned int locks) :
   m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
   m_reqFormat(GL_RGBA_GEM),
@@ -258,7 +258,7 @@ videoBase :: videoBase(const std::string name, unsigned int locks) :
     provide(name);
   }
 }
-videoBase :: videoBase(const std::string name) :
+videoBase :: videoBase(const std::string&name) :
   m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
   m_reqFormat(GL_RGBA_GEM),
@@ -486,7 +486,7 @@ bool videoBase :: setDevice(int d)
   m_devicenum=d;
   return true;
 }
-bool videoBase :: setDevice(const std::string name)
+bool videoBase :: setDevice(const std::string&name)
 {
   m_devicenum=-1;
   m_devicename=name;
@@ -502,7 +502,7 @@ const std::string videoBase :: getName() {
 
 /////////////////////////////////////////////////////////
 // query whether this backend provides a certain type of video decoding, e.g. "dv"
-bool videoBase :: provides(const std::string name) {
+bool videoBase :: provides(const std::string&name) {
   if(!m_pimpl)return false;
   unsigned int i;
   for(i=0; i<m_pimpl->m_providers.size(); i++)
@@ -523,7 +523,7 @@ std::vector<std::string>videoBase :: provides() {
 
 /////////////////////////////////////////////////////////
 // remember that this backend provides a certain type of video decoding, e.g. "dv"
-void videoBase :: provide(const std::string name) {
+void videoBase :: provide(const std::string&name) {
   if(!m_pimpl)return;
   if(!provides(name)) {
     m_pimpl->m_providers.push_back(name);

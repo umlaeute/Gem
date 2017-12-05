@@ -35,7 +35,7 @@ namespace gem { namespace plugins {
     std::string m_codec; // currently selected codec
 
     struct codechandle {
-      codechandle(gem::plugins::video*h, const std::string c):handle(h), codec(c) {}
+      codechandle(gem::plugins::video*h, const std::string&c):handle(h), codec(c) {}
 
       gem::plugins::video*handle;
       std::string codec;
@@ -43,7 +43,7 @@ namespace gem { namespace plugins {
     std::map<std::string, std::vector<codechandle> >m_codechandle;
     std::vector<std::string>m_codecs;
 
-    void addCodecHandle(gem::plugins::video*handle, const std::string codec) {
+    void addCodecHandle(gem::plugins::video*handle, const std::string&codec) {
       /* FIXME: we should generate a unique codec-ID, e.g. "<handlename>:<codec>" */
       m_codechandle[codec].push_back(codechandle(handle, codec));
       m_codecs.push_back(codec);
@@ -151,7 +151,7 @@ namespace gem { namespace plugins {
 		  }
 		  return result;
 	  }
-	  virtual bool	    	setDevice(const std::string ID) {
+	  virtual bool	    	setDevice(const std::string&ID) {
       // compat
 		  bool result=false;
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
@@ -281,7 +281,7 @@ namespace gem { namespace plugins {
 		  }
 		  return result;
 	  }
-	  virtual bool provides(const std::string ID){
+	  virtual bool provides(const std::string&ID){
       // OK
 		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
 			  if(m_allHandles[i]->provides(ID))

@@ -54,11 +54,11 @@ public:
   /**
    * get a human readable description of the given codec (e.g. "Motion Jpeg A")
    */
-  virtual const std::string getCodecDescription(const std::string codecname) = 0;
+  virtual const std::string getCodecDescription(const std::string&codecname) = 0;
   /**
    * set the current codec
    */
-  virtual bool setCodec(const std::string name) = 0;
+  virtual bool setCodec(const std::string&name) = 0;
 
   /**
    * list all properties the currently selected codec supports
@@ -76,7 +76,7 @@ public:
   /*
    * returns TRUE if opening was successful, FALSE otherwise
    */
-  virtual bool start(const std::string filename, gem::Properties&props) = 0;
+  virtual bool start(const std::string&filename, gem::Properties&props) = 0;
 
   //////////
   // record a frame

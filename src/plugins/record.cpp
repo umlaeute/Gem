@@ -38,7 +38,7 @@ namespace gem { namespace plugins {
     std::string m_codec; // currently selected codec
 
     struct codechandle {
-      codechandle(gem::plugins::record*h, const std::string c):handle(h), codec(c) {}
+      codechandle(gem::plugins::record*h, const std::string&c):handle(h), codec(c) {}
 
       gem::plugins::record*handle;
       std::string codec;
@@ -46,7 +46,7 @@ namespace gem { namespace plugins {
     std::map<std::string, std::vector<codechandle> >m_codechandle;
     std::vector<std::string>m_codecs;
 
-    void addCodecHandle(gem::plugins::record*handle, const std::string codec) {
+    void addCodecHandle(gem::plugins::record*handle, const std::string&codec) {
 #ifdef __GNUC__
 # warning better handling of duplicate codecs
 #endif
@@ -150,7 +150,7 @@ namespace gem { namespace plugins {
       }
       return m_codecs;
     }
-    virtual const std::string getCodecDescription(const std::string codecname) {
+    virtual const std::string getCodecDescription(const std::string&codecname) {
       std::string descr;
       std::vector<codechandle>handles=m_codechandle[codecname];
       if(handles.size()>0)
@@ -164,7 +164,7 @@ namespace gem { namespace plugins {
     // that can handle the given codec
     // calling this method will eventually call the setCodec() method of all handles
     // specifying an empty codec, will select all handles
-    virtual bool setCodec(const std::string codecname) {
+    virtual bool setCodec(const std::string&codecname) {
       m_selectedHandles.clear();
       if(codecname.empty()) {
 	checkSelectedHandles();
@@ -239,7 +239,7 @@ namespace gem { namespace plugins {
     //
     // try all of the currently selected handles (selection through codec)
     // until one of them succeeds
-    virtual bool start(const std::string filename, gem::Properties&props) {
+    virtual bool start(const std::string&filename, gem::Properties&props) {
       stop();
       if(!checkSelectedHandles()) {
 	return false; // no selected codec available

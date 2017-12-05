@@ -43,7 +43,7 @@ namespace gem { namespace plugins {
     virtual ~filmIMAGE(void) {
       delete m_handle;
     }
-    virtual bool open(const std::string name, const gem::Properties&requestprops) {
+    virtual bool open(const std::string&name, const gem::Properties&requestprops) {
       gem::Properties props=requestprops;
       m_image.newfilm=true;
       return m_handle->load(name, m_image.image, props);
@@ -179,7 +179,7 @@ namespace gem { namespace plugins {
       }
     }
 
-    virtual bool open(const std::string name, const gem::Properties&requestprops) {
+    virtual bool open(const std::string&name, const gem::Properties&requestprops) {
       if(m_handle)close();
 
       std::vector<std::string> backends;
