@@ -50,7 +50,7 @@ class GEM_EXTERN cuboid : public GemShape
   void	    	heightMess(float sizey);
 
 	//////////
-  // The widht of the object
+  // The width of the object
   void	    	widthMess(float sizez);
 
   //////////

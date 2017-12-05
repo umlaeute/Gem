@@ -71,7 +71,7 @@ namespace gem { namespace thread {
       // you can use it to set a semaphore in the main thread, to fetch
       // the data
       // it get's called once after process() has been successful
-      // and will nott be called before dequeue has been called at least once
+      // and will not be called before dequeue has been called at least once
       //
       virtual void signal(void);
 

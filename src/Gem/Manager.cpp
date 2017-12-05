@@ -203,7 +203,7 @@ void GemMan :: createContext(char* disp)
   s_windowClock = clock_new(NULL, reinterpret_cast<t_method>(GemMan::dispatchWinmessCallback));
   if (!m_windowContext && !createConstWindow(disp))
     {
-      error("GEM: A serious error occured creating const Context");
+      error("GEM: A serious error occurred creating const Context");
       error("GEM: Continue at your own risk!");
       m_windowContext = 0;
     } else
@@ -1409,7 +1409,7 @@ void GemMan :: printInfo()
   if (glGetString(GL_EXTENSIONS)){
     char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
     strcpy(text,(char *)glGetString(GL_EXTENSIONS));
-    char *token = strtok(text, " ");	// Parse 'text' For Words, Seperated By " " (spaces)
+    char *token = strtok(text, " ");	// Parse 'text' For Words, Separated By " " (spaces)
     while(token != NULL) {		// While The Token Isn't NULL
       post("Extensions: %s", token);	// Print extension string
       token = strtok(NULL, " ");

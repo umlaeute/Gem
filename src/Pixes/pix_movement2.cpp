@@ -72,7 +72,7 @@ pix_movement2 :: ~pix_movement2(){
 /*------------------------------------------------------------
   processImage
   calculates the difference image between three frames
-  if the difference is greater than the threshhold, the concerning
+  if the difference is greater than the threshold, the concerning
   pixel is set to 255
   ------------------------------------------------------------*/
 void pix_movement2 :: processImage(imageStruct &image){
@@ -109,7 +109,7 @@ void pix_movement2 :: processImage(imageStruct &image){
     m_resetThreshold=false;
   }
 
-  // 1. store the current frame as gray-image in the apropriate buffer
+  // 1. store the current frame as gray-image in the appropriate buffer
   switch (image.format) {
   case GL_RGBA:         m_frame[m_frameIndex].fromRGBA(image.data); break;
   case GL_BGRA_EXT:     m_frame[m_frameIndex].fromBGRA(image.data); break;

@@ -123,7 +123,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
   int           m_auto;
 
   //////////
-  // frame infromation
+  // frame information
   int           m_numFrames;
   int 	    	m_reqFrame;
   int 	    	m_curFrame;

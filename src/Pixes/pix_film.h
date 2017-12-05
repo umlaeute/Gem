@@ -115,7 +115,7 @@ class GEM_EXTERN pix_film : public GemBase
   int           m_format;
 
   //////////
-  // frame infromation
+  // frame information
   int           m_numFrames;
   t_float   	m_reqFrame;
   int 	    	m_curFrame;

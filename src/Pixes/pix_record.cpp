@@ -431,7 +431,7 @@ void pix_record :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
   /* LATER let the record()-handles chose whether they accept an open request
    * and then try other handles (if available)
-   * this would allow to use this object for streaming, virtual output devices,...
+   * this would allow us to use this object for streaming, virtual output devices,...
    */
   if(argc) {
     m_filename=std::string(atom_getsymbol(argv)->s_name);

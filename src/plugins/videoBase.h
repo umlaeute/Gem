@@ -21,7 +21,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
 	video
 
-	a OS-indendent parent-class for grabbing video-frames
+	a OS-independent parent-class for grabbing video-frames
 
   KEYWORDS
 	pix, capture

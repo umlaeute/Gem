@@ -32,7 +32,7 @@
 
 const float tube::TWO_PI = 8.f * atan(1.);
 
-/* only gcc allows to allocate arrays of non-constant length, like:
+/* only gcc allows one to allocate arrays of non-constant length, like:
  *   int i;
  *   float array[i];
  * other compilers will need to know the array-size at runtime!

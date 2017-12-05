@@ -160,7 +160,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int           m_auto;
 
   //////////
-  // frame infromation
+  // frame information
   int           m_numFrames;
   int 	    	m_reqFrame;
   int 	    	m_curFrame;

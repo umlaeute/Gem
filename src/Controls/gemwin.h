@@ -105,7 +105,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   void		fogRangeMess(float start, float end);
   void 	    	fogColorMess(float red, float green, float blue, float alpha);
   void          cursorMess(float setting);
-  void		topmostMess(float settting);
+  void		topmostMess(float setting);
   void          blurMess(float setting);
   void          fpsMess();
   void          fsaaMess(int value);

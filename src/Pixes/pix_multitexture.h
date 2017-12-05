@@ -63,7 +63,7 @@ class GEM_EXTERN pix_multitexture : public GemBase
 	unsigned int m_numInlets;
 
 	int			m_reqTexUnits; // requested # of texture Units, defaults to m_max
-	GLint			m_max; // maximum # of texture units suppport by the specific card
+	GLint			m_max; // maximum # of texture units supported by the specific card
 	GLint			m_texID[MAX_MULTITEX_ID];
 	GLint			m_textureType;
 	int			m_mode; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D

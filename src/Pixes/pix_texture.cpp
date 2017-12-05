@@ -383,11 +383,11 @@ void pix_texture :: render(GemState *state) {
 
 
 
-  /* here comes the work: a new image has to be transfered from main memory to GPU and attached to a texture object */
+  /* here comes the work: a new image has to be transferred from main memory to GPU and attached to a texture object */
 
   if (m_rebuildList) {
     // if YUV is not supported on this platform, we have to convert it to RGB
-    //(skip Alpha since it isnt used)
+    //(skip Alpha since it isn't used)
     const bool do_yuv = m_yuv && GLEW_APPLE_ycbcr_422;
     if (!do_yuv && m_imagebuf.format == GL_YUV422_GEM){
       m_imagebuf.format=GL_RGB;

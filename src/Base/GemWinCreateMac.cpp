@@ -100,7 +100,7 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 // -------------------------------------------------------------------------------------------------------------
 // Takes device # and geometry request and tries to build best context and drawable
 // 	If requested device does not work, will start at first device and walk down devices
-//	 looking for first one that satisfies requirments
+//	 looking for first one that satisfies requirements
 //  Devices are numbered in order that DMGetFirstScreenDevice/DMGetNextScreenDevice returns,
 //	 fullscreen devices are numbered after this, but they will be searched first if fFullscreen == true,
 //	 they will not be searched in the non-fullscreen case
@@ -133,14 +133,14 @@ static Boolean CheckAllDeviceRenderers (long* pVRAM, long* pTextureRAM, GLint* p
 static Boolean CheckWindowExtents (GDHandle hGD, short width, short height);
 
 // Destroys drawable and context
-// Ouputs: *paglDraw, *paglContext and *pdspContext should be 0 on exit
+// Outputs: *paglDraw, *paglContext and *pdspContext should be 0 on exit
 
 OSStatus DestroyGL (AGLDrawable* paglDraw, AGLContext* paglContext, pstructGLInfo pcontextInfo);
 
 // same as above except that it takes a window as input and attempts to build requested conext on that
 OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructGLWindowInfo pcontextInfo, AGLContext aglShareContext);
 
-// same as above but destorys a context that was associated with an existing window, window is left intacted
+// same as above but destroys a context that was associated with an existing window, window is left intacted
 OSStatus DestroyGLFromWindow (AGLContext* paglContext, pstructGLWindowInfo pcontextInfo);
 
 // Handle reporting of agl errors, error code is passed through
@@ -639,7 +639,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
 #ifdef DEBUG
       post("MAC: BuildGLonWindow: fDraggable= false");
 #endif
-      if ((numDevices > 1) || (numDevices == 0)) // this window spans mulitple devices thus will be software only
+      if ((numDevices > 1) || (numDevices == 0)) // this window spans multiple devices thus will be software only
         {
 #ifdef DEBUG
 	  post("MAC: BuildGLonWindow: numDevices>1 || numDevices ==0");
@@ -681,7 +681,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
     }
 
   // do agl
-  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) // check for existance of OpenGL
+  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) // check for existence of OpenGL
     {
 #ifdef DEBUG
       post("MAC: BuildGLonWindow: OpenGL not installed");
@@ -747,7 +747,8 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
 // BuildGL
 
 // Takes device and geometry request and tries to build best context and drawable
-// if device does not work will walk down devices looking for first one that satisfies requirments
+// if device does not work will walk down devices looking for first one that
+// satisfies requirements
 
 // Inputs: 	*pnumDevice: 0 any device, # attempt that device first, then any device
 //			*pcontextInfo: request and requirements for cotext and drawable
@@ -848,7 +849,7 @@ OSStatus BuildGL (AGLDrawable* paglDraw, AGLContext* paglContext,
 // DestroyGL
 
 // Destroys drawable and context
-// Ouputs: *paglDraw, *paglContext and *pdspContext should be 0 on exit
+// Outputs: *paglDraw, *paglContext and *pdspContext should be 0 on exit
 
 OSStatus DestroyGL (AGLDrawable* paglDraw, AGLContext* paglContext, pstructGLInfo pcontextInfo)
 {
@@ -864,7 +865,7 @@ OSStatus DestroyGL (AGLDrawable* paglDraw, AGLContext* paglContext, pstructGLInf
 // DestroyGLFromWindow
 
 // Destroys context that waas allocated with BuildGLFromWindow
-// Ouputs: *paglContext should be NULL on exit
+// Outputs: *paglContext should be NULL on exit
 
 OSStatus DestroyGLFromWindow (AGLContext* paglContext, pstructGLWindowInfo pcontextInfo)
 {
@@ -977,7 +978,7 @@ void DumpCurrent (AGLDrawable* paglDraw, AGLContext* paglContext, pstructGLInfo 
     }
   pcontextInfo->fmt = 0;
 
-  if (*paglDraw && !(pcontextInfo->fFullscreen && CheckMacOSX ())) // do not destory a window on DSp if in Mac OS X
+  if (*paglDraw && !(pcontextInfo->fFullscreen && CheckMacOSX ())) // do not destroy a window on DSp if in Mac OS X
     // since there is no window built in X
     DisposeWindow (GetWindowFromPort (*paglDraw));
 
@@ -1206,7 +1207,7 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext,
 {
   OSStatus err = noErr;
 
-  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) // check for existance of OpenGL
+  if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) == reinterpret_cast<Ptr>(aglChoosePixelFormat)) // check for existence of OpenGL
     {
       post("OpenGL not installed");
       return noErr;

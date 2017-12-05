@@ -313,20 +313,20 @@ void pix_videoDarwin :: InitSeqGrabber()
 
     anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);
     if(anErr!=noErr){
-        error("could not make new SG channnel error %d",anErr);
+        error("could not make new SG channel error %d",anErr);
         return;
     }
 
      anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
     if(anErr!=noErr){
-        error("could not get SG channnel Device List");
+        error("could not get SG channel Device List");
     }else{
         deviceCount = (*devices)->count;
         deviceIndex = (*devices)->selectedIndex;
-        post("SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+        post("SG channel Device List count %d index %d",deviceCount,deviceIndex);
         int i;
         for (i = 0; i < deviceCount; i++){
-	  post("SG channnel Device List  %.*s",
+	  post("SG channel Device List  %.*s",
 	       (*devices)->entry[i].name[0],
 	       (*devices)->entry[i].name+1);
             }
@@ -341,7 +341,7 @@ void pix_videoDarwin :: InitSeqGrabber()
         //walk through the list
         //for (i = 0; i < deviceCount; i++){
         for (i = 0; i < inputIndex; i++){
-            post("SG channnel Input Device List %d %.*s",
+            post("SG channel Input Device List %d %.*s",
 		 i,
 		 (*theSGInputList)->entry[i].name[0],
 		 (*theSGInputList)->entry[i].name+1);

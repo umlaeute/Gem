@@ -176,7 +176,8 @@ void pix_blur :: processYUVImage(imageStruct &image)
   imageGain = static_cast<int>(255. - (m_blurf * 255.));
   hlength = image.xsize/2;
 
-  //unroll this, add register temps and schedule the ops better to remove the data depedencies
+  //unroll this, add register temps and schedule the ops better to remove the
+  //data dependencies
   for (h=0; h<image.ysize-1; h++){
     for(w=0; w<hlength; w++){
       //8bit  * 8bit = 16bit

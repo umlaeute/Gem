@@ -164,8 +164,6 @@ namespace gem { namespace plugins {
 
 
 
-
-
       /**
        * returns TRUE if the object can be used in a thread or FALSE otherwise
        * if a backend implements threading itself, it should return FALSE
@@ -177,7 +175,7 @@ namespace gem { namespace plugins {
       /** turn on/off "asynchronous"-grabbing
        * default is "true"
        * "asynchronous" means, that the device is constantly grabbing, and grabFrame() returns the current frame
-       * non-"continuous" means, that the device will only issue a new grab when a frame has read
+       * non-"asynchronous" means, that the device will only issue a new grab when a frame has read
        *   (thus potentially reducing the CPU-load to what is needed, at the cost of slightly outdated images
        * returns: the old state
        */

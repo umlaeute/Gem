@@ -158,7 +158,7 @@ Context::Context(void)
     throw(GemException(errstring));
   }
 
-  /* update the stack variables (late initalization) */
+  /* update the stack variables (late initialization) */
   push(); pop();
   GemMan::m_windowState++;
 }

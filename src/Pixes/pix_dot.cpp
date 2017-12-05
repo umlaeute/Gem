@@ -523,7 +523,7 @@ void pix_dot :: scaleMess(float state)
   }
   m_scale=state; /* used to be as (int)cast, but i have removed this...*/
   alreadyInit = 0;
-  //myImage.reallocate(dataSize);we dont need to reallocate the image, since nothing changed
+  //myImage.reallocate(dataSize);we don't need to reallocate the image, since nothing changed
   myImage.setBlack();
   free(sharedbuffer); sharedbuffer=NULL;
   free(pattern); pattern=NULL;

@@ -37,13 +37,13 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
                             1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
   vector unsigned char vPerm2 =
     static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
-                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                            0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
   vector unsigned char vPerm3 =
     static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
                             9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
   vector unsigned char vPerm4 =
     static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
-                           0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                           0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
   vector signed short vConst1 =
@@ -71,14 +71,14 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
 
   for ( i = 0; i < (RGB_size/sizeof(vector unsigned char)); i+=3 ) {
 
-    /* Load the 3 RGB input vectors and seperate into red,
+    /* Load the 3 RGB input vectors and separate into red,
        green and blue from the interleaved format. */
     tc0 = vec_perm( RGB_ptr[i], RGB_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
     tc1 = vec_perm( RGB_ptr[i], RGB_ptr[i+1], vPerm2 );   /* B0..B7          */
     tc2 = vec_perm( RGB_ptr[i+1], RGB_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
     tc3 = vec_perm( RGB_ptr[i+1], RGB_ptr[i+2], vPerm4 ); /* B8..B15         */
 
-    /* Unpack to 16 bit arithmatic for converstion. */
+    /* Unpack to 16 bit arithmetic for conversion. */
     tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  // tr0 = R0 .. R7
     tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  // tg0 = G0 .. G7
     tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  // tb0 = B0 .. B7
@@ -148,13 +148,13 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
                             1,  5,  9, 13, 17, 21, 25, 29  /* G0..G7    */);
   vector unsigned char vPerm2 =
     static_cast<vector unsigned char>( 2,  6, 10, 14, 18, 22, 26, 30, /* B0..B7    */
-                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                            0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
   vector unsigned char vPerm3 =
     static_cast<vector unsigned char>( 8, 12, 16, 20, 24, 28, 32, 36, /* R8..R15   */
                             9, 13, 17, 21, 25, 29, 33, 37  /* G8..G15   */);
   vector unsigned char vPerm4 =
     static_cast<vector unsigned char>(10, 14, 18, 22, 26, 30, 34, 38, /* B8..B15   */
-                           0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                           0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
   vector signed short vConst1 =
@@ -182,14 +182,14 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
 
   for ( i = 0; i < (RGBA_size/sizeof(vector unsigned char)); i+=3 ) {
 
-    /* Load the 3 RGB input vectors and seperate into red,
+    /* Load the 3 RGB input vectors and separate into red,
        green and blue from the interleaved format. */
     tc0 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
     tc1 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1], vPerm2 );   /* B0..B7          */
     tc2 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
     tc3 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm4 ); /* B8..B15         */
 
-    /* Unpack to 16 bit arithmatic for converstion. */
+    /* Unpack to 16 bit arithmetic for conversion. */
     tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  /* tr0 = R0 .. R7  */
     tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  /* tg0 = G0 .. G7  */
     tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  /* tb0 = B0 .. B7  */
@@ -260,13 +260,13 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
                             1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
   vector unsigned char vPerm2 =
     static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
-                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                            0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
   vector unsigned char vPerm3 =
     static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
                             9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
   vector unsigned char vPerm4 =
     static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
-                           0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                           0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
   vector signed short vConst1 =
@@ -294,14 +294,14 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
 
   for ( i = 0; i < (BGR_size/sizeof(vector unsigned char)); i+=3 ) {
 
-    /* Load the 3 RGB input vectors and seperate into red,
+    /* Load the 3 RGB input vectors and separate into red,
        green and blue from the interleaved format. */
     tc0 = vec_perm( BGR_ptr[i], BGR_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
     tc1 = vec_perm( BGR_ptr[i], BGR_ptr[i+1], vPerm2 );   /* B0..B7          */
     tc2 = vec_perm( BGR_ptr[i+1], BGR_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
     tc3 = vec_perm( BGR_ptr[i+1], BGR_ptr[i+2], vPerm4 ); /* B8..B15         */
 
-    /* Unpack to 16 bit arithmatic for converstion. */
+    /* Unpack to 16 bit arithmetic for conversion. */
     tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  /* tr0 = R0 .. R7  */
     tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  /* tg0 = G0 .. G7  */
     tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  /* tb0 = B0 .. B7  */
@@ -373,7 +373,7 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
                             2,  6, 10, 14, 18, 22, 26, 30  /* G0..G7    */);
   vector unsigned char vPerm2 =
     static_cast<vector unsigned char>( 1,  5,  9, 13, 17, 21, 25, 29, /* R0..R7    */
-                            0,  0,  0,  0,  0,  0,  0,  0  /* dont care */);
+                            0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
   vector signed short vConst1 =
@@ -413,7 +413,7 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
 
   for ( i = 0; i < (BGRA_size/sizeof(vector unsigned char)); i++ ) {
 
-    /* Load the 4 BGRA input vectors and seperate into red,
+    /* Load the 4 BGRA input vectors and separate into red,
        green and blue from the interleaved format. */
     const vector unsigned char *vec1 = BGRA_ptr++;
     const vector unsigned char *vec2 = BGRA_ptr++;
@@ -425,7 +425,7 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
     tc2 = vec_perm( *vec3, *vec4, vPerm1 ); // B8..B15 G8..G15
     tc3 = vec_perm( *vec3, *vec4, vPerm2 ); // R8..R15
 
-    /* Unpack to 16 bit arithmatic for conversion. */
+    /* Unpack to 16 bit arithmetic for conversion. */
     tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  /* tr0 = R0 .. R7  */
     tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  /* tg0 = G0 .. G7  */
     tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  /* tb0 = B0 .. B7  */

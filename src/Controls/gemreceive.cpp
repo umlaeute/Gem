@@ -104,8 +104,8 @@ void gemreceive::add_element(t_gemreceive_proxy*bind_list, t_bind_element*elemen
     elements=elements->next;
   }
 
-  debug_post("inserting after %x:%g", last,     (last    ?    (last->priority):0));
-  debug_post("inserting befor %x:%g", elements, (elements?(elements->priority):0));
+  debug_post("inserting after  %x:%g", last,     (last    ?    (last->priority):0));
+  debug_post("inserting before %x:%g", elements, (elements?(elements->priority):0));
 
   element->next=elements;
   if(last) {

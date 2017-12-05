@@ -184,7 +184,8 @@ void pix_motionblur :: processYUVImage(imageStruct &image)
   imageGain = m_blur0;
   hlength = image.xsize/2;
 
-  //unroll this, add register temps and schedule the ops better to remove the data depedencies
+  //unroll this, add register temps and schedule the ops better to remove the
+  //data dependencies
 
   // JMZ: i am not sure whether i really understand what is going on here
   for (h=0; h<image.ysize-1; h++){

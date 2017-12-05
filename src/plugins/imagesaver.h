@@ -106,7 +106,7 @@ namespace gem { namespace plugins {
        */
       virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) = 0;
 
-      /* returns TRUE, if it is save to use this backend from multple threads
+      /* returns TRUE, if it is save to use this backend from multiple threads
        */
       virtual bool isThreadable(void) = 0;
     };

@@ -45,7 +45,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
   WindowInfo
 
-  All of the relavent information about an OpenGL window
+  All of the relevant information about an OpenGL window
 
   DESCRIPTION
 

@@ -126,7 +126,7 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
     RGRG0 = _mm_unpacklo_epi64(RGRG_BABA0, RGRG_BABA1); /* R0 G0 R2 G2 R1 G1 R3 G3 */
     BABA0 = _mm_unpackhi_epi64(RGRG_BABA0, RGRG_BABA1); /* B0 A0 B2 A2 B1 A1 B3 A3 */
 
-    // get Y for the 1st 4 pixels (thats 32bit)
+    // get Y for the 1st 4 pixels (that's 32bit)
     // Y_RG32 = _mm_madd_epi16(RGRG0, RG2Y); /* R0*a+G0*b R2*a+G2*b R1*a+G1*b R3*a+G3*b */
     // Y_BA32 = _mm_madd_epi16(BABA0, BA2Y); /* B0*c+A0*d B2*c+A2*d B1*c+A1*d B3*c+A3*d */
     Y0    = _mm_add_epi32(_mm_madd_epi16(RGRG0, RG2Y), _mm_madd_epi16(BABA0, BA2Y));
@@ -143,7 +143,7 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
     RGRG1  = _mm_unpacklo_epi64(RGRG_BABA0, RGRG_BABA1); /* R4 G4 R6 G6 R5 G5 R7 G7 */
     BABA1  = _mm_unpackhi_epi64(RGRG_BABA0, RGRG_BABA1); /* B4 A4 B6 A6 B5 A5 B7 A7 */
 
-    // get Y for the 2nd 4 pixels (thats 32bit)
+    // get Y for the 2nd 4 pixels (that's 32bit)
     // Y_RG32 = _mm_madd_epi16(RGRG1, RG2Y); /* R4*a+G4*b R6*a+G6*b R5*a+G5*b R7*a+G7*b */
     // Y_BA32 = _mm_madd_epi16(BABA1, BA2Y); /* B4*c+A4*d B6*c+A6*d B5*c+A5*d B7*c+A7*d */
     Y1       = _mm_add_epi32(_mm_madd_epi16(RGRG1, RG2Y), _mm_madd_epi16(BABA1, BA2Y));
