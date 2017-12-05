@@ -25,24 +25,24 @@ GemException::GemException(const char *error)
 {}
 
 GemException::GemException(const std::string&error)
-  : ErrorString(error)
+  : ErrorString(error.c_str())
 {}
 
 GemException::GemException()
-  : ErrorString(std::string(""))
+  : ErrorString("")
 {}
 GemException::~GemException()
 {}
 const char *GemException::what() const {
-  return ErrorString.c_str();
+  return ErrorString;
 }
 
 void GemException::report(const char*origin) const {
-  if(!(ErrorString.empty())) {
+  if(ErrorString && *ErrorString) {
     if (NULL==origin)
-      error("GemException: %s", ErrorString.c_str());
+      error("GemException: %s", ErrorString);
     else
-      error("[%s]: %s", origin, ErrorString.c_str());
+      error("[%s]: %s", origin, ErrorString);
   }
 }
 

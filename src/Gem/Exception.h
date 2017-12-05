@@ -47,7 +47,7 @@ class GEM_EXTERN GemException
   virtual const char *what(void) const;
   virtual void report(const char*origin=0) const;
  private:
-  const std::string&ErrorString;
+  const char*ErrorString;
 };
 
 namespace gem {
