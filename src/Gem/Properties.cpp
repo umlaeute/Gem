@@ -126,7 +126,7 @@ namespace gem {
     return result;
   }
 
-  enum Properties::PropertyType Properties::type(std::string key) const {
+  enum Properties::PropertyType Properties::type(const std::string&key) const {
     std::map<std::string, enum Properties::PropertyType>::iterator it=pimpl->typemap.find(key);
     if(pimpl->typemap.end() == it)
       return UNSET;
@@ -134,7 +134,7 @@ namespace gem {
     return it->second;
   }
 
-  void Properties::erase(std::string key) {
+  void Properties::erase(const std::string&key) {
     pimpl->typemap.erase(key);
     pimpl->valuemap.erase(key);
   }

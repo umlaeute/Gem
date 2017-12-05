@@ -22,13 +22,13 @@ namespace gem { namespace Settings {
   void print(void);
   void save(void);
 
-  t_atom*get(const std::string key);
-  void set(const std::string key, t_atom*value=NULL);
+  t_atom*get(const std::string&key);
+  void set(const std::string&key, t_atom*value=NULL);
 
-  void get(const std::string key, int&value);
-  void get(const std::string key, float&value);
-  void get(const std::string key, double&value);
-  void get(const std::string key, std::string&value);
+  void get(const std::string&key, int&value);
+  void get(const std::string&key, float&value);
+  void get(const std::string&key, double&value);
+  void get(const std::string&key, std::string&value);
 
   std::vector<std::string> keys();
 }; };

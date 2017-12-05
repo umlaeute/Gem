@@ -97,7 +97,7 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // The font to use
-  virtual void  fontNameMess(const std::string filename);
+  virtual void  fontNameMess(const std::string&filename);
 
   //////////
   // set line distance

@@ -171,7 +171,7 @@ void CPPExtern :: error(const char*fmt,...) const
 
 typedef int (*close_t)(int fd);
 
-std::string CPPExtern::findFile(const std::string f, const std::string e) const {
+std::string CPPExtern::findFile(const std::string&f, const std::string&e) const {
   std::string result;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
   if(rte) {
@@ -180,7 +180,7 @@ std::string CPPExtern::findFile(const std::string f, const std::string e) const 
   return result;
 }
 
-std::string CPPExtern::findFile(const std::string file) const {
+std::string CPPExtern::findFile(const std::string&file) const {
   return findFile(file, "");
 
 }

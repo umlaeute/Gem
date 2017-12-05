@@ -20,13 +20,13 @@
  *      CPPEXTERN_MSG (classPtr, "foo", gimmeMess); // A_GIMME
  *      CPPEXTERN_MSG0(classPtr, "doit", bangMess); // no args
  *      CPPEXTERN_MSG1(classPtr, "name", nameMess, t_symbol*);  // 1 arg (A_SYMBOL)
- *      CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string); // 1 arg (A_SYMBOL)
+ *      CPPEXTERN_MSG1(classPtr, "title", titleMess, const std::string&); // 1 arg (A_SYMBOL)
  *      CPPEXTERN_MSG3(classPtr, "values", tripletMess, t_float, t_float, t_float);  // 3 args (A_FLOAT)
  *    }
  *    void myclass::gimmeMess  (t_symbol*s, int argc, t_atom*argv) {;}
  *    void myclass::bangMess   (void)                              {;}
  *    void myclass::nameMess   (t_symbol*s)                        {;}
- *    void myclass::titleMess  (std::string s)                     {;}
+ *    void myclass::titleMess  (const std::string&s)               {;}
  *    void myclass::tripletMess(t_float a, t_float b, t_float c)   {;}
  */
 #ifndef _INCLUDE__GEM_RTE_MESSAGECALLBACKS_H_

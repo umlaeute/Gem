@@ -24,7 +24,7 @@ GemException::GemException(const char *error)
   : ErrorString(error)
 {}
 
-GemException::GemException(const std::string error)
+GemException::GemException(const std::string&error)
   : ErrorString(error)
 {}
 

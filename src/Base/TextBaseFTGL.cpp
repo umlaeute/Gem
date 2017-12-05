@@ -147,7 +147,7 @@ void TextBase :: setPrecision(float prec)
 // fontNameMess
 //
 ////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const std::string filename){
+void TextBase :: fontNameMess(const std::string&filename){
   m_valid = 0;
   const char *bufptr=NULL;
   int fd=-1;

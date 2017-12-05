@@ -26,11 +26,11 @@ class GEM_EXTERN GemDylib {
 
  public:
   GemDylib(const CPPExtern*obj,
-	   const std::string libname,
-	   const std::string extension=std::string("")
+	   const std::string&libname,
+	   const std::string&extension=std::string("")
 	   ); // throws GemException
-  GemDylib(const std::string libname,
-	   const std::string extension=std::string("")
+  GemDylib(const std::string&libname,
+	   const std::string&extension=std::string("")
 	   ); // throws GemException
 
   GemDylib(const GemDylib&);
@@ -43,10 +43,10 @@ class GEM_EXTERN GemDylib {
 
   // if void<procname>(void) exists in dylib, run it and return "true"
   // else return false;
-  bool run(const std::string procname);
+  bool run(const std::string&procname);
 
   // if <procname> exists in dylib, return it, else return NULL
-  function_t proc(const std::string procname);
+  function_t proc(const std::string&procname);
 
   public:
   /**
@@ -54,9 +54,9 @@ class GEM_EXTERN GemDylib {
    * if "extension" is NULL, a platform-specific default is used
    * on success "true" is returned, else "false
    */
-  static bool LoadLib(const std::string procname,
-		      const std::string baselibname,
-		      const std::string fileext=std::string(""));
+  static bool LoadLib(const std::string&procname,
+		      const std::string&baselibname,
+		      const std::string&fileext=std::string(""));
 
 
   static const std::string getDefaultExtension(void);

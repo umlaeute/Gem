@@ -41,13 +41,13 @@ class GEM_EXTERN GemException
  public:
   GemException(void);
   GemException(const char*error);
-  GemException(const std::string error);
+  GemException(const std::string&error);
   virtual ~GemException(void);
 
   virtual const char *what(void) const;
   virtual void report(const char*origin=0) const;
  private:
-  const std::string ErrorString;
+  const std::string&ErrorString;
 };
 
 namespace gem {

@@ -48,7 +48,7 @@ namespace gem {
        * the loaded image is stored in 'img'
        * 'props' holds a list of additional image properties discovered during loading
        */
-      static bool sync(const std::string filename,
+      static bool sync(const std::string&filename,
 				  imageStruct&img,
 				  Properties&props);
 
@@ -97,7 +97,7 @@ namespace gem {
        */
       static bool async(callback cb,
 				   void*userdata,
-				   const std::string filename,
+				   const std::string&filename,
 				   id_t&ID
 				   );
 
@@ -113,7 +113,7 @@ namespace gem {
        */
       static bool sync(callback cb,
 				  void*userdata,
-				  const std::string filename,
+				  const std::string&filename,
 				  id_t&ID);
 
       /*

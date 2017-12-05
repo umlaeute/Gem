@@ -539,7 +539,7 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
   return 0;
 }
-bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, const std::string path) {
+bool pix_frei0r :: loader(const t_canvas*canvas, const std::string&classname, const std::string&path) {
   if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
   }

@@ -209,7 +209,7 @@ struct PIMPL {
 
   }
 
-  void setEnv(std::string key, const std::string env) {
+  void setEnv(std::string key, const std::string&env) {
     if(env.empty())return;
     if(key.empty())return;
 
@@ -266,35 +266,35 @@ void gem::Settings::save() {
 
 
 
-t_atom*gem::Settings::get(const std::string s) {
+t_atom*gem::Settings::get(const std::string&s) {
   if(NULL==settings) init();
   return settings->get(s.c_str());
 }
-void gem::Settings::set(const std::string s, t_atom*v) {
-  settings->set(s.c_str(), v);
+void gem::Settings::set(const std::string&key, t_atom*v) {
+  settings->set(key.c_str(), v);
 }
 
 
-void gem::Settings::get(const std::string key, int&value) {
+void gem::Settings::get(const std::string&key, int&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getint(a);
   }
 }
-void gem::Settings::get(const std::string key, float&value) {
+void gem::Settings::get(const std::string&key, float&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getfloat(a);
   }
 }
-void gem::Settings::get(const std::string key, double&value) {
+void gem::Settings::get(const std::string&key, double&value) {
   t_atom*a=get(key);
   if(a && A_FLOAT==a->a_type) {
     value=atom_getfloat(a);
   }
 }
 
-void gem::Settings::get(const std::string key, std::string&value) {
+void gem::Settings::get(const std::string&key, std::string&value) {
   t_atom*a=get(key);
   if(a) {
     value=atom_getsymbol(a)->s_name;

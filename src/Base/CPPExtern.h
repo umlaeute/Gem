@@ -146,8 +146,8 @@ class GEM_EXTERN CPPExtern
       // wraps open_via_path() and canvas_makefilename()
       // the full filename is returned
       // if the file does not exist, it is constructed
-      std::string findFile(const std::string filename, const std::string ext) const;
-      std::string findFile(const std::string filename) const;
+      std::string findFile(const std::string&filename, const std::string&ext) const;
+      std::string findFile(const std::string&filename) const;
 
  private:
 	mutable bool m_endpost; /* internal state for startpost/post/endpost */

@@ -94,7 +94,7 @@ public:
     return fullname_;
   }
 
-  static GemDylibHandle*open(const std::string filename) {
+  static GemDylibHandle*open(const std::string&filename) {
     GemDylibHandle*handle=new GemDylibHandle();
 
     if(filename.empty()) {
@@ -170,7 +170,7 @@ public:
     return NULL;
   }
 
-  static GemDylibHandle*open(const CPPExtern*obj, const std::string filename, const std::string extension) {
+  static GemDylibHandle*open(const CPPExtern*obj, const std::string&filename, const std::string&extension) {
     //const t_canvas*canvas=(obj)?(const_cast<CPPExtern*>(obj)->getCanvas()):0;
     const char*ext=extension.c_str();
 
@@ -221,7 +221,7 @@ const std::string GemDylibHandle::defaultExtension =
   ;
 
 
-GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::string extension)
+GemDylib::GemDylib(const CPPExtern*obj, const std::string&filename, const std::string&extension)
   : m_handle(0) {
     m_handle=GemDylibHandle::open(obj, filename, extension);
     if(NULL==m_handle) {
@@ -237,7 +237,7 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string filename, const std::s
     s_dylibs.push_back(this);
 }
 
-GemDylib::GemDylib(const std::string filename, const std::string extension)
+GemDylib::GemDylib(const std::string&filename, const std::string&extension)
   : m_handle(0) {
   m_handle=GemDylibHandle::open(filename+extension);
   if(NULL==m_handle)
@@ -287,7 +287,7 @@ GemDylib& GemDylib::operator=(const GemDylib&org) {
 }
 
 
-GemDylib::function_t GemDylib::proc(const std::string procname) {
+GemDylib::function_t GemDylib::proc(const std::string&procname) {
   function_t result=NULL;
   //  if(NULL==procname)return NULL;
 #ifdef DL_OPEN
@@ -305,7 +305,7 @@ GemDylib::function_t GemDylib::proc(const std::string procname) {
   return result;
 }
 
-bool GemDylib::run(const std::string procname) {
+bool GemDylib::run(const std::string&procname) {
   function_t runproc=proc(procname);
   if(runproc) {
     (runproc)();
@@ -314,7 +314,7 @@ bool GemDylib::run(const std::string procname) {
   return false;
 }
 
-bool GemDylib::LoadLib(const std::string basefilename, const std::string extension, const std::string procname) {
+bool GemDylib::LoadLib(const std::string&basefilename, const std::string&extension, const std::string&procname) {
   try {
     GemDylib*dylib=new GemDylib(basefilename, extension);
     if(NULL!=dylib) {

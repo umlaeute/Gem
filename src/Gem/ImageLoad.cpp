@@ -135,7 +135,7 @@ namespace gem { namespace image {
   const load::id_t load::IMMEDIATE= 0;
   const load::id_t load::INVALID  =~0;
 
-  bool load::sync(const std::string filename,
+  bool load::sync(const std::string&filename,
                   imageStruct&result,
                   gem::Properties&props) {
     if(!PixImageThreadLoader::s_imageloader)
@@ -150,7 +150,7 @@ namespace gem { namespace image {
 
   bool load::async(load::callback cb,
                    void*userdata,
-                   const std::string filename,
+                   const std::string&filename,
                    id_t&ID) {
     if(NULL==cb) {
       ID=INVALID;
@@ -169,7 +169,7 @@ namespace gem { namespace image {
 
   bool load::sync(load::callback cb,
                   void*userdata,
-                  const std::string filename,
+                  const std::string&filename,
                   id_t&ID) {
     if(NULL==cb) {
       ID=INVALID;

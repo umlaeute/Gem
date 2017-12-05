@@ -63,7 +63,7 @@ namespace gem
      * if the key was in the property-map, return the type of the property
      * if no key of the given value exists, return <code>PropertyType::UNSET</code>
      */
-    virtual enum PropertyType type(const std::string) const;
+    virtual enum PropertyType type(const std::string&) const;
 
     /* set a property
      *  e.g.: double w=640; prop.set("width", w);
@@ -92,7 +92,7 @@ namespace gem
     /*
      * delete a given key from the Properties
      */
-    virtual void erase(const std::string);
+    virtual void erase(const std::string&);
     /*
      * delete all keys from the Properties
      */
