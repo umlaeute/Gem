@@ -20,8 +20,10 @@ brewinstall() {
 doinstall() {
   brew update
   brewinstall pkg-config gettext
-  brewinstall fribidi --universal
   brew link gettext --force
+  if [ "x${ARCH}" != "xi386" ]; then
+    brewinstall fribidi
+  fi
   brewinstall imagemagick ftgl
   brewinstall sdl glfw glfw@2
   brewinstall coreutils
