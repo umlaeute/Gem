@@ -48,6 +48,8 @@ namespace {
  static void imageTIFF_verbosehandler(const int verbosity, const char*module, const char*fmt, va_list ap) {
    std::string result=module;
    char buf[MAXPDSTRING];
+   if(module)
+     result+=" ";
    vsnprintf(buf, MAXPDSTRING, fmt, ap);
    buf[MAXPDSTRING-1]=0;
    result+=buf;
