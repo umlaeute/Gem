@@ -166,7 +166,6 @@ void pix_rds :: processGrayImage(imageStruct &image)
     unsigned char *src = (unsigned char*)image.data;
     unsigned char *dest;
     unsigned char v;
-    unsigned char R, G, B;
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
@@ -188,8 +187,9 @@ void pix_rds :: processGrayImage(imageStruct &image)
 	  dest[x] = 0xff;
 
 	  while(x + stride/2 < image.xsize) {
+            unsigned char R=0, B=0;
 	    v = src[x + stride/2];
-	    R=v>>6; G=v>>6; B=v>>7;
+	    R=v>>6; B=v>>7;
 	    x += stride;
 	    x += R + R + B;
 	    if(x >= image.xsize) break;
@@ -198,8 +198,9 @@ void pix_rds :: processGrayImage(imageStruct &image)
 
 	  x = image.xsize / 2 + i;
 	  while(x - stride/2 >= 0) {
+            unsigned char R=0, B=0;
 	    v = src[x - stride/2];
-	    R=v>>6; G=v>>6; B=v>>7;
+	    R=v>>6; B=v>>7;
 	    x -= stride;
 	    x -= R + R + B;
 	    if(x < 0) break;
@@ -218,6 +219,7 @@ void pix_rds :: processGrayImage(imageStruct &image)
 	  dest[x] = 0xff;
 
 	  while(x + stride/2 < image.xsize) {
+            unsigned char R=0, B=0;
 	    v = src[x + stride/2];
 	    R=v>>6; B=v>>7;
 	    x += stride - R - R - B;
@@ -227,6 +229,7 @@ void pix_rds :: processGrayImage(imageStruct &image)
 
 	  x = image.xsize / 2 + i;
 	  while(x - stride/2 >= 0) {
+            unsigned char R=0, B=0;
 	    v = src[x - stride/2];
 	    R=v>>6; B=v>>7;
 	    x -= stride - R - R - B;

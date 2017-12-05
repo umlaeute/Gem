@@ -215,18 +215,11 @@ void ripple :: precalc_ripple_vector(void)
 void ripple :: precalc_ripple_amp(void)
 {
   int i;
-  double t;
-  double a;
-
-  for (i = 0; i < RIPPLE_LENGTH; i++)
-    {
-      t = 1.0 - i/(RIPPLE_LENGTH - 1.0);
-      a = (-cos(t*2.0*3.1428571*RIPPLE_CYCLES)*0.5 + 0.5)
-        *RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t;
-      if (i == 0)
-        a = 0.0;
-      m_rippleAmp[i].amplitude = a;
-    }
+  for (i = 0; i < RIPPLE_LENGTH; i++) {
+    double t = 1.0 - i/(RIPPLE_LENGTH - 1.0);
+    double a = i?((-cos(t*2.0*3.1428571*RIPPLE_CYCLES)*0.5 + 0.5)*RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t):0.;
+    m_rippleAmp[i].amplitude = a;
+  }
 }
 
 /////////////////////////////////////////////////////////

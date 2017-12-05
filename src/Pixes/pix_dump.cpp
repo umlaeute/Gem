@@ -197,7 +197,7 @@ void pix_dump :: trigger()
             i++;
           }
         } else {
-          unsigned char r, g, b, a;
+          unsigned char r, g, b;
           r = static_cast<unsigned char>(data[chRed]);
           SETFLOAT(&m_buffer[i], r);
           i++;
@@ -208,7 +208,7 @@ void pix_dump :: trigger()
           SETFLOAT(&m_buffer[i], b);
           i++;
           if ( m_mode == GL_RGBA ) {
-            a = static_cast<unsigned char>(data[chAlpha]);
+            unsigned char a = static_cast<unsigned char>(data[chAlpha]);
             SETFLOAT(&m_buffer[i], a);
             i++;
           }
@@ -225,7 +225,7 @@ void pix_dump :: trigger()
     while (n < m_ysize) {
       while (m < m_xsize/2) {
         if (!m_bytemode) {
-          float y,u,y1,v;
+          float y,u,v;
           u = static_cast<float>(data[0]) / 255.f;
           SETFLOAT(&m_buffer[i], u);
           i++;
@@ -236,12 +236,12 @@ void pix_dump :: trigger()
           SETFLOAT(&m_buffer[i], v);
           i++;
           if ( m_mode == GL_RGBA ) {
-            y1 = static_cast<float>(data[3]) / 255.f;
+            float y1 = static_cast<float>(data[3]) / 255.f;
             SETFLOAT(&m_buffer[i], y1);
             i++;
           }
         } else {
-          unsigned char y,u,y1,v;
+          unsigned char y,u,v;
           u = static_cast<unsigned char>(data[0]);
           SETFLOAT(&m_buffer[i], u);
           i++;
@@ -252,7 +252,7 @@ void pix_dump :: trigger()
           SETFLOAT(&m_buffer[i], v);
           i++;
           if ( m_mode == GL_RGBA ) {
-            y1 = static_cast<unsigned char>(data[3]);
+            unsigned char y1 = static_cast<unsigned char>(data[3]);
             SETFLOAT(&m_buffer[i], y1);
             i++;
           }
