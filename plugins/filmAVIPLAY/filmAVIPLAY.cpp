@@ -70,7 +70,7 @@ void filmAVIPLAY :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVIPLAY :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmAVIPLAY :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   double d;
   if(wantProps.get("colorspace", d) && d>0) {

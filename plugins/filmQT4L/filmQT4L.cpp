@@ -70,7 +70,7 @@ void filmQT4L :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmQT4L :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   int wantedFormat=GL_RGBA;
   double d;

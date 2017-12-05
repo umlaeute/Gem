@@ -48,7 +48,7 @@ filmTEST :: filmTEST(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmTEST :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmTEST :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   m_numFrames=100;
   m_fps=20;

@@ -98,7 +98,7 @@ bool videoVNC::setDevice(int ID) {
   m_devname.clear();
   return false;
 }
-bool videoVNC::setDevice(std::string device) {
+bool videoVNC::setDevice(const std::string&device) {
   m_devname.clear();
   const std::string prefix="vnc://";
   if (!device.compare(0, prefix.size(), prefix)) {
@@ -172,7 +172,7 @@ std::vector<std::string>videoVNC::dialogs(void) {
   std::vector<std::string>result;
   return result;
 }
-bool videoVNC::provides(const std::string name) {
+bool videoVNC::provides(const std::string&name) {
   return (name==m_name);
 }
 std::vector<std::string>videoVNC::provides(void) {

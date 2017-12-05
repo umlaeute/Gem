@@ -54,7 +54,7 @@ const std::string videoVIDS::getName(void)
 {
   return m_name;
 }
-bool videoVIDS::provides(const std::string name)
+bool videoVIDS::provides(const std::string&name)
 {
   return (name==m_name);
 }
@@ -77,7 +77,7 @@ bool videoVIDS::setDevice(int ID)
   m_wantID=ID;
   return true;
 }
-bool videoVIDS::setDevice(std::string device)
+bool videoVIDS::setDevice(const std::string&device)
 {
   if(m_vi.listDevices(true)) {
     std::vector<std::string>devs=m_vi.getDeviceList();

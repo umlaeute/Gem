@@ -98,7 +98,7 @@ bool videoTEST::setDevice(int ID) {
   m_open=(0==ID);
   return m_open;
 }
-bool videoTEST::setDevice(std::string device) {
+bool videoTEST::setDevice(const std::string&device) {
   m_open=("test"==device);
   return m_open;
 }
@@ -155,7 +155,7 @@ std::vector<std::string>videoTEST::dialogs(void) {
   std::vector<std::string>result;
   return result;
 }
-bool videoTEST::provides(const std::string name) {
+bool videoTEST::provides(const std::string&name) {
   return (name==m_name);
 }
 std::vector<std::string>videoTEST::provides(void) {

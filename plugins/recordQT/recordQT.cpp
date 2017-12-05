@@ -583,7 +583,7 @@ std::vector<std::string>recordQT::getCodecs(void) {
   }
   return result;
 }
-const std::string recordQT::getCodecDescription(const std::string codec) {
+const std::string recordQT::getCodecDescription(const std::string&codec) {
   return(codec);
 }
 bool recordQT::enumProperties(gem::Properties&props) {
@@ -604,7 +604,7 @@ bool recordQT :: setCodec(int num)
   m_codec     = codecContainer[num].codec;
   return true;
 }
-bool recordQT :: setCodec(const std::string codecName)
+bool recordQT :: setCodec(const std::string&codecName)
 {
   int	i;
   int requestedCodec=0;
@@ -683,7 +683,7 @@ bool recordQT :: setCodec(const std::string codecName)
   return false;
 }
 
-bool recordQT :: start(const std::string filename, gem::Properties&props)
+bool recordQT :: start(const std::string&filename, gem::Properties&props)
 {
   // if recording is going, do not accept a new file name
   // on OSX changing the name while recording won't have any effect

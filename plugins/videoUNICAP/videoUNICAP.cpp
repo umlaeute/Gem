@@ -520,7 +520,7 @@ bool videoUNICAP::setDevice(int ID) {
   m_devicenum=ID;
   return true;
 }
-bool videoUNICAP::setDevice(const std::string ID) {
+bool videoUNICAP::setDevice(const std::string&ID) {
   m_devicename=ID;
   m_devicenum=-1;
   return true;
@@ -761,12 +761,12 @@ void videoUNICAP :: setProperties(gem::Properties&props) {
   }
 }
 
-void videoUNICAP::provide(const std::string name) {
+void videoUNICAP::provide(const std::string&name) {
   if(!provides(name))
     m_providers.push_back(name);
 }
 
-bool videoUNICAP::provides(const std::string name) {
+bool videoUNICAP::provides(const std::string&name) {
   for(unsigned int i=0; i<m_providers.size(); i++) {
     if(name == m_providers[i])
       return true;

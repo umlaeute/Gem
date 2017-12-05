@@ -74,7 +74,7 @@ void filmMPEG3 :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmMPEG3 :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmMPEG3 :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   char*cfilename=const_cast<char*>(filename.c_str());
   if (mpeg3_check_sig(cfilename)){/* ok, this is mpeg(3) */

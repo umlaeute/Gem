@@ -244,7 +244,7 @@ void filmDS :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDS :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   WCHAR			WideFileName[MAXPDSTRING];
   HRESULT			RetVal;

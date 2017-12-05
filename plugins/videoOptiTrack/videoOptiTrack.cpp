@@ -172,7 +172,7 @@ bool videoOptiTrack::setDevice(int ID) {
   m_devnum=ID;
   return true;
 }
-bool videoOptiTrack::setDevice(const std::string device) {
+bool videoOptiTrack::setDevice(const std::string&device) {
   m_devname=device;
   return true;
 }
@@ -416,7 +416,7 @@ std::vector<std::string>videoOptiTrack::dialogs(void) {
   std::vector<std::string>result;
   return result;
 }
-bool videoOptiTrack::provides(const std::string name) {
+bool videoOptiTrack::provides(const std::string&name) {
   return (name==s_name);
 }
 std::vector<std::string>videoOptiTrack::provides(void) {

@@ -107,7 +107,7 @@ void filmAVI :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVI :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmAVI :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   AVISTREAMINFO streaminfo;
   long lSize = 0; // in bytes

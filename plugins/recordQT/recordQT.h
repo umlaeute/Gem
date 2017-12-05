@@ -69,7 +69,7 @@ namespace gem { namespace plugins {
   virtual ~recordQT(void);
 
   virtual void stop(void);
-  virtual bool start(const std::string filename, gem::Properties&);
+  virtual bool start(const std::string&filename, gem::Properties&);
 
   //////////
   // Do the rendering
@@ -81,11 +81,11 @@ namespace gem { namespace plugins {
   virtual int	getNumCodecs(void);
   virtual const char* getCodecName(int n);
   virtual bool	setCodec(int num);
-  virtual bool	setCodec(const std::string name);
+  virtual bool	setCodec(const std::string&name);
 
 
   virtual std::vector<std::string>getCodecs(void);
-  virtual const std::string getCodecDescription(const std::string codecname);
+  virtual const std::string getCodecDescription(const std::string&codecname);
   virtual bool enumProperties(gem::Properties&props);
 
  private:

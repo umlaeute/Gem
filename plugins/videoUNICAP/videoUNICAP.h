@@ -74,7 +74,7 @@ namespace gem { namespace plugins {
 
   virtual std::vector<std::string>enumerate(void);
   virtual bool	    	setDevice(int ID);
-  virtual bool	    	setDevice(const std::string);
+  virtual bool	    	setDevice(const std::string&);
 
 
   virtual bool enumProperties(gem::Properties&readable,
@@ -85,7 +85,7 @@ namespace gem { namespace plugins {
   virtual const std::string getName(void);
 
   virtual std::vector<std::string>provides(void);
-  virtual bool provides(const std::string);
+  virtual bool provides(const std::string&);
 
   virtual bool	    	dialog(std::vector<std::string>) { return false; }
   virtual std::vector<std::string>dialogs(void) { std::vector<std::string>result; return result; }
@@ -95,7 +95,7 @@ namespace gem { namespace plugins {
  protected:
   // list of backends we provide:
   std::vector<std::string>m_providers;
-  virtual void provide(const std::string);
+  virtual void provide(const std::string&);
 
   std::vector<unicap_device_t>m_devices;
   std::map<std::string, std::vector<unsigned int> >m_name2devices;

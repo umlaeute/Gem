@@ -283,7 +283,7 @@ namespace gem{namespace pylon{namespace cameraproperties{
       }                                                                 \
       return std::string("unknown");                                    \
     }                                                                   \
-    static void setS_##T (DEVICE*device, const std::string s) {         \
+    static void setS_##T (DEVICE*device, const std::string&s) {         \
       std::map<std::string, Basler_GigECameraParams:: T##Enums>::iterator it=enumap_##T.find(s); \
       if(it!=enumap_##T.end())                                          \
         device->T.SetValue(it->second);                                 \
@@ -302,7 +302,7 @@ namespace gem{namespace pylon{namespace cameraproperties{
     }
 
   typedef std::string (*t_getenum)(DEVICE*device);
-  typedef void (*t_setenum)(DEVICE*device, const std::string);
+  typedef void (*t_setenum)(DEVICE*device, const std::string&);
   typedef void (*t_setenumi)(DEVICE*device, const int);
   std::map<std::string, t_getenum>map_getenum;
   std::map<std::string, t_setenum>map_setenum;

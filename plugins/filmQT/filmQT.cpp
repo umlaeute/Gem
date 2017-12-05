@@ -121,7 +121,7 @@ void filmQT :: close(void)
   //	m_srcGWorld = NULL;
 }
 
-bool filmQT :: open(const std::string filename, const gem::Properties&wantProps) {
+bool filmQT :: open(const std::string&filename, const gem::Properties&wantProps) {
   FSSpec	theFSSpec;
   OSErr		err = noErr;
   Rect		m_srcRect;

@@ -41,7 +41,7 @@ class GEM_EXPORT filmTEST : public film {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
 
   virtual void close(void);
 

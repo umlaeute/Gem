@@ -452,7 +452,7 @@ bool videoDECKLINK::setDevice(int ID) {
   m_devnum=ID;
   return true;
 }
-bool videoDECKLINK::setDevice(std::string device) {
+bool videoDECKLINK::setDevice(const std::string&device) {
   m_devname=device;
   return true;
 #if 0
@@ -571,7 +571,7 @@ std::vector<std::string>videoDECKLINK::dialogs(void) {
   std::vector<std::string>result;
   return result;
 }
-bool videoDECKLINK::provides(const std::string name) {
+bool videoDECKLINK::provides(const std::string&name) {
   return (name==m_name);
 }
 std::vector<std::string>videoDECKLINK::provides(void) {

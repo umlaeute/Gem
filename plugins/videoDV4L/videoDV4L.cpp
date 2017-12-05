@@ -314,7 +314,7 @@ bool videoDV4L :: stopTransfer()
   return(1);
 }
 /*
-bool videoDV4L :: setDevice(const std::string name){
+bool videoDV4L :: setDevice(const std::string&name){
   // setting device by name not yet supported
   return false;
 }

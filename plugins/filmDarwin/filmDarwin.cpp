@@ -74,7 +74,7 @@ void filmDarwin :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDarwin :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantProps)
 {
   double d;
   if(wantProps.get("colorspace", d) && d>0) {

@@ -22,7 +22,7 @@ namespace gem { namespace plugins {
 
    virtual std::vector<std::string>enumerate(void);
    virtual bool	setDevice(int ID);
-   virtual bool	setDevice(const std::string);
+   virtual bool	setDevice(const std::string&);
 
 
    virtual bool enumProperties(gem::Properties&readable,
@@ -33,7 +33,7 @@ namespace gem { namespace plugins {
    virtual std::vector<std::string>dialogs(void);
    // for pix_video: query whether this backend provides access to this class of devices
    // (e.g. "dv")
-   virtual bool provides(const std::string);
+   virtual bool provides(const std::string&);
    // get a list of all provided devices
    virtual std::vector<std::string>provides(void);
 

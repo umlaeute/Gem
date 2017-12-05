@@ -113,7 +113,7 @@ static struct
   { "m4a",      LQT_FILE_M4A,       "m4a", "m4a (iTunes compatible)",      "yuv2"  }, /* ffmpeg_mpg4 */
 };
 /* guess the file-format by inspecting the extension */
-static lqt_file_type_t guess_qtformat(const std::string filename)
+static lqt_file_type_t guess_qtformat(const std::string&filename)
 {
   const char * extension = strrchr(filename.c_str(), '.');
   unsigned int i=0;
@@ -135,7 +135,7 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
   return LQT_FILE_QT; /* should be save for now */
 }
 
-bool recordQT4L :: start(const std::string filename, gem::Properties&props)
+bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
 
@@ -402,7 +402,7 @@ std::vector<std::string>recordQT4L::getCodecs(void) {
   return result;
 }
 
-const std::string recordQT4L::getCodecDescription(const std::string codecname) {
+const std::string recordQT4L::getCodecDescription(const std::string&codecname) {
   return m_codecdescriptions[codecname];
 }
 
@@ -410,7 +410,7 @@ const std::string recordQT4L::getCodecDescription(const std::string codecname) {
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(const std::string name)
+bool recordQT4L :: setCodec(const std::string&name)
 {
   std::string codecname=name;
   // stop();

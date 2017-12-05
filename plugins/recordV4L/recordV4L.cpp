@@ -85,7 +85,7 @@ void recordV4L :: stop(void)
 
 }
 
-bool recordV4L :: start(const std::string filename, gem::Properties&props)
+bool recordV4L :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
 
@@ -191,7 +191,7 @@ static const std::string s_codec_desc=std::string("v4l(1) loopback device");
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordV4L :: setCodec(const std::string name)
+bool recordV4L :: setCodec(const std::string&name)
 {
   if(name==s_codec_name)
     return true;
@@ -208,7 +208,7 @@ std::vector<std::string>recordV4L::getCodecs(void) {
   result.push_back(s_codec_name);
   return result;
 }
-const std::string recordV4L::getCodecDescription(const std::string codec) {
+const std::string recordV4L::getCodecDescription(const std::string&codec) {
   std::string result;
   if(codec==s_codec_name)
     result=s_codec_desc;

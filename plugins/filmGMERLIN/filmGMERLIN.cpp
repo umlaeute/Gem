@@ -119,7 +119,7 @@ bool filmGMERLIN :: isThreadable(void) {
 // really open the file !
 //
 /////////////////////////////////////////////////////////
-bool filmGMERLIN :: open(const std::string sfilename, const gem::Properties&wantProps)
+bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&wantProps)
 {
   close();
 

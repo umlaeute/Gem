@@ -217,7 +217,7 @@ bool videoVLC::setDevice(int ID) {
   m_devname.clear();
   return false;
 }
-bool videoVLC::setDevice(std::string device) {
+bool videoVLC::setDevice(const std::string&device) {
   m_devname=device;
   return true;
 }
@@ -276,7 +276,7 @@ std::vector<std::string>videoVLC::dialogs(void) {
   std::vector<std::string>result;
   return result;
 }
-bool videoVLC::provides(const std::string name) {
+bool videoVLC::provides(const std::string&name) {
   return (name==m_name);
 }
 std::vector<std::string>videoVLC::provides(void) {
