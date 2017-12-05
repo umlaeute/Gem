@@ -56,7 +56,7 @@ void TextBase :: textMess(int argc, t_atom *argv)
 { }
 void TextBase :: stringMess(int argc, t_atom *argv)
 { }
-void TextBase :: fontNameMess(std::string s)
+void TextBase :: fontNameMess(const std::string&s)
 { }
 void TextBase :: setPrecision(float prec)
 { }
