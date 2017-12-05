@@ -88,7 +88,7 @@ void filmAVFoundation :: close(void)
   //	m_srcGWorld = NULL;
 }
 
-bool filmAVFoundation :: open(const std::string filename, const gem::Properties&wantProps) {
+bool filmAVFoundation :: open(const std::string&filename, const gem::Properties&wantProps) {
 
   if (filename.empty()) return false;
   if (!m_bInit) {
