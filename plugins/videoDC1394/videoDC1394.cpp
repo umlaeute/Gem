@@ -317,11 +317,15 @@ bool videoDC1394 :: openDevice(gem::Properties&props){
 
     err=dc1394_video_get_supported_framerates(m_dccamera,video_mode,&framerates);
     if(DC1394_SUCCESS==err) {
+      float fr=0;
       framerate=framerates.framerates[framerates.num-1];
       err=dc1394_video_set_framerate(m_dccamera, framerate);
-      float fr=0;
       dc1394_framerate_as_float(framerate, &fr);
-      verbose(1, "[GEM:videoDC1394] set framerate to %g", fr);
+      if(DC1394_SUCCESS!=err) {
+        verbose(1, "[GEM:videoDC1394] setting framerate to %g failed", fr);
+      } else {
+        verbose(1, "[GEM:videoDC1394] set framerate to %g", fr);
+      }
     }
   }
 
