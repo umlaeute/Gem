@@ -39,8 +39,6 @@ libplugins_la_SOURCES+= \
         imageBase.h \
         filmBase.cpp \
         filmBase.h \
-        recordBase.cpp \
-        recordBase.h \
         videoBase.cpp \
         videoBase.h
 
