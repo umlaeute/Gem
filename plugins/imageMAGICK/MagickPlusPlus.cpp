@@ -40,7 +40,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
     // Read a file into image object
     try {
       image.read( filename );
-    } catch (Magick::Warning e) {
+    } catch (Magick::Warning&e) {
       verbose(0, "[GEM:imageMAGICK] loading problem: %s", e.what());
     }
 
@@ -60,10 +60,10 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 #endif
                   Magick::CharPixel,
                   reinterpret_cast<void*>(result.data));
-    } catch (Magick::Warning e) {
+    } catch (Magick::Warning&e) {
       verbose(0, "[GEM:imageMAGICK] decoding problem: %s", e.what());
     }
-  }catch( Magick::Exception e )  {
+  } catch (Magick::Exception&e)  {
     verbose(0, "[GEM:imageMAGICK] loading image failed with: %s", e.what());
     return false;
   }
@@ -117,11 +117,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     try {
       // finally convert and export
       mimage.write(filename);
-    } catch (Magick::Warning e) {
+    } catch (Magick::Warning&e) {
       verbose(0, "[GEM:imageMAGICK] saving problem: %s", e.what());
     }
 
-  } catch (Magick::Exception e){
+  } catch (Magick::Exception&e){
     verbose(0, "[GEM:imageMAGICK] %s", e.what());
     if(pImage!=&image)delete pImage; pImage=NULL;
     return false;
