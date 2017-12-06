@@ -61,7 +61,7 @@ class GEM_EXTERN WindowInfo
     win(NULL), dc(NULL), context(NULL),
 #elif defined __APPLE__
     pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
-    pixMap(NULL), rowBytes(0), baseAddr(NULL),
+    pixMap(NULL), rowBytes(0), baseAddr(NULL), fontList(0),
 #elif defined __linux__ || defined HAVE_GL_GLX_H
     dpy(NULL), win(0), screen(0), cmap(0), context(NULL), delete_atom(0), have_border(false),
 #else
