@@ -21,9 +21,6 @@
 #endif
 
 #include <stdio.h>
-#ifdef _MSC_VER
-# define snprintf _snprintf
-#endif
 
 #include "videoVIDS.h"
 #include "plugins/PluginFactory.h"
