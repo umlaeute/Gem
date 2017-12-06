@@ -112,12 +112,18 @@
  *
  ***************************************/
 
-
-#if 1
-# define debug
-#else
+#if 0
 # define debug post
 #endif
+
+#ifndef debug
+# if __cplusplus > 199711L
+#  define debug(...)
+# else
+#  define debug
+# endif
+#endif
+
 
 static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss(s);
