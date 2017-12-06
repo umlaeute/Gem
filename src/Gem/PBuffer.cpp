@@ -66,14 +66,14 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height),
   attrib.push_back(GLX_PBUFFER_BIT);
   if(flags & GEM_PBUFLAG_RGB || flags & GEM_PBUFLAG_RGBA) {
     attrib.push_back(GLX_RED_SIZE);
-    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+    attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     attrib.push_back(GLX_GREEN_SIZE);
-    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+    attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     attrib.push_back(GLX_BLUE_SIZE);
-    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+    attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     if(flags & GEM_PBUFLAG_RGBA) {
       attrib.push_back(GLX_ALPHA_SIZE);
-      attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+      attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     }
   }
   if(flags & GEM_PBUFLAG_DEPTH) {
@@ -92,7 +92,7 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height),
     attrib.push_back(GLX_SAMPLE_BUFFERS_ARB);
     attrib.push_back(true);
     attrib.push_back(GLX_SAMPLES_ARB);
-    attrib.push_back(flags & GEM_PBUFLAG_MULTISAMPLE_2 ? 2 : 4);
+    attrib.push_back((flags & GEM_PBUFLAG_MULTISAMPLE_2) ? 2 : 4);
   }
   attrib.push_back(0);
 
@@ -356,35 +356,35 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width), height(height) 
   attrib.push_back(true);
   attrib.push_back(WGL_SUPPORT_OPENGL_ARB);
   attrib.push_back(true);
-  if(flags & 	GEM_PBUFLAG_RGB || flags & GEM_PBUFLAG_RGBA) {
+  if(flags & GEM_PBUFLAG_RGB || flags & GEM_PBUFLAG_RGBA) {
     attrib.push_back(WGL_RED_BITS_ARB);
-    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+    attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     attrib.push_back(WGL_GREEN_BITS_ARB);
-    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
+    attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     attrib.push_back(WGL_BLUE_BITS_ARB);
-    attrib.push_back(flags & GEM_PBUFLAG_FLOAT ? 32 : 8);
-    if(flags & 	GEM_PBUFLAG_RGBA) {
+    attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
+    if(flags & GEM_PBUFLAG_RGBA) {
       attrib.push_back(WGL_ALPHA_BITS_ARB);
-      attrib.push_back(flags & 	GEM_PBUFLAG_FLOAT ? 32 : 8);
+      attrib.push_back((flags & GEM_PBUFLAG_FLOAT) ? 32 : 8);
     }
   }
-  if(flags & 	GEM_PBUFLAG_DEPTH) {
+  if(flags & GEM_PBUFLAG_DEPTH) {
     attrib.push_back(WGL_DEPTH_BITS_ARB);
     attrib.push_back(24);
   }
-  if(flags & 	GEM_PBUFLAG_STENCIL) {
+  if(flags & GEM_PBUFLAG_STENCIL) {
     attrib.push_back(WGL_STENCIL_BITS_ARB);
     attrib.push_back(8);
   }
-  if(flags & 	GEM_PBUFLAG_FLOAT) {
+  if(flags & GEM_PBUFLAG_FLOAT) {
     attrib.push_back(WGL_FLOAT_COMPONENTS_NV);
     attrib.push_back(true);
   }
-  if(flags & 	GEM_PBUFLAG_MULTISAMPLE_2 || flags & GEM_PBUFLAG_MULTISAMPLE_4) {
+  if(flags & GEM_PBUFLAG_MULTISAMPLE_2 || flags & GEM_PBUFLAG_MULTISAMPLE_4) {
     attrib.push_back(WGL_SAMPLE_BUFFERS_ARB);
     attrib.push_back(true);
     attrib.push_back(WGL_SAMPLES_ARB);
-    attrib.push_back(flags & 	GEM_PBUFLAG_MULTISAMPLE_2 ? 2 : 4);
+    attrib.push_back((flags & GEM_PBUFLAG_MULTISAMPLE_2) ? 2 : 4);
   }
   attrib.push_back(0);
 
