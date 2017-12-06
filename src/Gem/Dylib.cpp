@@ -316,9 +316,12 @@ bool GemDylib::run(const std::string&procname) {
   return false;
 }
 
-bool GemDylib::LoadLib(const std::string&basefilename, const std::string&extension, const std::string&procname) {
+bool GemDylib::LoadLib(const std::string&procname,
+                       const std::string&baselibname,
+                       const std::string&fileext
+                       ) {
   try {
-    GemDylib*dylib=new GemDylib(basefilename, extension);
+    GemDylib*dylib=new GemDylib(baselibname, fileext);
     if(NULL!=dylib) {
       dylib->run(procname);
       return true;
