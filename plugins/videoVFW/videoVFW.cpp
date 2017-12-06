@@ -166,7 +166,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
           m_width, m_height,
           static_cast<int>(videoFormat->bmiHeader.biBitCount));
 
-  delete videoFormat;
+  delete[]videoFormat;
 
   m_image.image.xsize = m_width;
   m_image.image.ysize = m_height;
