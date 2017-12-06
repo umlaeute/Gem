@@ -112,7 +112,7 @@ class GEM_EXTERN GemBase : public CPPExtern
 
   void	    	realStopRendering();
   void            gem_startstopMess(int state);
-  void            gem_renderMess(GemCache* state, GemState* state2);
+  void            gem_renderMess(GemCache* cache, GemState* state);
 
   static inline GemBase *GetMyClass(void *data) {return((GemBase *)((Obj_header *)data)->data);}
 
