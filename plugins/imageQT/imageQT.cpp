@@ -111,7 +111,7 @@ FSPathMakeFSSpec(
 // Simple memory allocation wrapper
 static void* MemAlloc(unsigned long memsize)
 {
-  if(memsize <= 0)
+  if(memsize < 1)
     return NULL;
   else
     return (malloc(memsize));
