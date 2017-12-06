@@ -46,14 +46,16 @@ REGISTER_IMAGESAVERFACTORY("tiff", imageTIFF);
 
 namespace {
  static void imageTIFF_verbosehandler(const int verbosity, const char*module, const char*fmt, va_list ap) {
-   std::string result=module;
+   std::string result = "[GEM:imageTIFF] ";
    char buf[MAXPDSTRING];
-   if(module)
+   if(module) {
+     result+=module;
      result+=" ";
+   }
    vsnprintf(buf, MAXPDSTRING, fmt, ap);
    buf[MAXPDSTRING-1]=0;
    result+=buf;
-   verbose(verbosity, "[GEM:imageTIFF] %s", result.c_str());
+   verbose(verbosity, "%s", result.c_str());
  }
  static void imageTIFF_errorhandler(const char*module, const char*fmt, va_list ap) {
    imageTIFF_verbosehandler(-2, module, fmt, ap);
