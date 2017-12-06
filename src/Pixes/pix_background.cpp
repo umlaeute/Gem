@@ -104,7 +104,7 @@ void pix_background :: processGrayImage(imageStruct &image)
 {
     int i;// h,w,hlength;
   long pixsize;
-  unsigned char newpix, oldpix, *npixes, *opixes;
+  unsigned char *npixes, *opixes;
 
   pixsize = image.xsize * image.ysize * image.csize;
   if(m_savedImage.xsize!=image.xsize ||
@@ -126,8 +126,8 @@ void pix_background :: processGrayImage(imageStruct &image)
   const unsigned char thresh=m_Urange;
   i=pixsize;
   while(i--){
-    newpix=*npixes++;
-    oldpix=*opixes++;
+    unsigned char newpix=*npixes++;
+    unsigned char oldpix=*opixes++;
     if((newpix>oldpix-thresh)&&(newpix<oldpix+thresh))npixes[-1]=0;
   }
   m_reset = 0;
@@ -216,7 +216,6 @@ void pix_background :: processRGBAMMX(imageStruct &image)
   const __m64 thresh=_mm_set_pi8(m_Yrange, m_Urange, m_Vrange, m_Arange,
 				m_Yrange, m_Urange, m_Vrange, m_Arange);
   const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
-  __m64 newpix, oldpix, m1;
 
   while(i--){
     /* 7ops, 3memops */
@@ -225,9 +224,9 @@ void pix_background :: processRGBAMMX(imageStruct &image)
      * i am equally slow as the generic code;
      * adding the other instruction does not change much
      */
-    newpix=*data;
-    oldpix=*saved++;
-    m1    = newpix;
+    __m64 newpix=*data;
+    __m64 oldpix=*saved++;
+    __m64 m1    = newpix;
     m1    = _mm_subs_pu8     (m1, oldpix);
     oldpix= _mm_subs_pu8     (oldpix, newpix);
     m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
@@ -278,12 +277,10 @@ void pix_background :: processYUVMMX(imageStruct &image)
 				 (unsigned char)0x00,
 				 (unsigned char)0x80);
 
-  __m64 newpix, oldpix, m1;
-
   while(i--){
-    newpix=*data;
-    oldpix=*saved++;
-    m1    = newpix;
+    __m64 newpix=*data;
+    __m64 oldpix=*saved++;
+    __m64 m1    = newpix;
     m1    = _mm_subs_pu8     (m1, oldpix);
     oldpix= _mm_subs_pu8     (oldpix, newpix);
     m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
@@ -324,7 +321,6 @@ void pix_background :: processGrayMMX(imageStruct &image){
 
   __m64*npixes=(__m64*)image.data;
   __m64*opixes=(__m64*)m_savedImage.data;
-  __m64 newpix, oldpix, m1;
 
   unsigned char thresh=m_Yrange-1;
   __m64 thresh8=_mm_set_pi8(thresh,thresh,thresh,thresh,
@@ -333,10 +329,10 @@ void pix_background :: processGrayMMX(imageStruct &image){
 
   i=pixsize/sizeof(__m64)+(pixsize%sizeof(__m64)!=0);
   while(i--){
-    newpix=npixes[i];
-    oldpix=opixes[i];
+    __m64 newpix=npixes[i];
+    __m64 oldpix=opixes[i];
 
-    m1    = _mm_subs_pu8 (newpix, oldpix);
+    __m64 m1    = _mm_subs_pu8 (newpix, oldpix);
     oldpix= _mm_subs_pu8 (oldpix, newpix);
     m1    = _mm_or_si64  (m1, oldpix); // |oldpix-newpix|
     m1    = _mm_subs_pu8 (m1, thresh8);

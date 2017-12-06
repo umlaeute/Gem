@@ -138,7 +138,6 @@ void newWave :: textureMess(int mode)
 /////////////////////////////////////////////////////////
 void newWave :: renderShape(GemState *state)
 {
-    int i, j;
     if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
 
     GLfloat sizeX = 2.*m_size / (gridX-1);
@@ -196,10 +195,10 @@ void newWave :: renderShape(GemState *state)
             alreadyInit = 1;
         }
 
-        for ( i = 0; i<gridX -1; ++i)
+        for (int i = 0; i<gridX -1; ++i)
         {
             glBegin(m_drawType);
-            for ( j = 0; j < gridY  ; ++j)
+            for (int j = 0; j < gridY  ; ++j)
             {
                 glNormal3fv( vertNorms[i][j] );
                 glTexCoord2fv( texCoords[i][j] );

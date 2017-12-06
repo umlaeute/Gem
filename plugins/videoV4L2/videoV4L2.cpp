@@ -231,10 +231,6 @@ void *videoV4L2 :: capturing(void)
 
   fd_set fds;
   struct timeval tv;
-  int r;
-
-  unsigned int i;
-
 
   m_capturing=true;
 
@@ -258,7 +254,7 @@ void *videoV4L2 :: capturing(void)
     /* Timeout. */
     tv.tv_sec = 0;
     tv.tv_usec = 100;
-    r = select(0,0,0,0,&tv);
+    int r = select(0,0,0,0,&tv);
     debugThread("V4L2: waited...");
 
 
@@ -700,7 +696,6 @@ bool videoV4L2 :: stopTransfer()
 {
   debugPost("v4l2: stoptransfer");
   if(!m_capturing)return false;
-  int i=0;
   /* close the v4l2 device and dealloc buffer */
   /* terminate thread if there is one */
   if(m_continue_thread){
@@ -716,7 +711,7 @@ bool videoV4L2 :: stopTransfer()
   // unmap the mmap
   debugPost("v4l2: unmapping %d buffers: %x", m_nbuffers, m_buffers);
   if(m_buffers){
-    for (i = 0; i < m_nbuffers; ++i)
+    for (int i = 0; i < m_nbuffers; ++i)
       if (-1 == v4l2_munmap (m_buffers[i].start, m_buffers[i].length)){
         // oops: couldn't unmap the memory
       }
@@ -754,16 +749,15 @@ bool videoV4L2 :: setColor(int format)
 std::vector<std::string> videoV4L2::enumerate() {
   std::vector<std::string> result;
   std::vector<std::string> glob, allglob;
-  int i=0;
   glob=gem::files::getFilenameListing("/dev/video*");
-  for(i=0; i<glob.size(); i++)
+  for(int i=0; i<glob.size(); i++)
     allglob.push_back(glob[i]);
 
   glob=gem::files::getFilenameListing("/dev/v4l/*");
-  for(i=0; i<glob.size(); i++)
+  for(int i=0; i<glob.size(); i++)
     allglob.push_back(glob[i]);
 
-  for(i=0; i<allglob.size(); i++) {
+  for(int i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
     verbose(1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
     int fd=v4l2_open(dev.c_str(), O_RDWR);
@@ -894,8 +888,7 @@ void videoV4L2 :: getProperties(gem::Properties&props) {
     return;
   }
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_readprops.find(key);
     if(it != m_readprops.end()) {
@@ -1015,8 +1008,7 @@ void videoV4L2 :: setProperties(gem::Properties&props) {
 
 
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_writeprops.find(key);
     if(it != m_writeprops.end()) {

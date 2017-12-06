@@ -46,8 +46,6 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
     m_posXYZ(NULL),
     compute_normal(true)
 {
-  int i, j, a;
-
   nb_pts_control_X = MAX(4, static_cast<int>(sizeX));
   nb_pts_control_Y = MAX(4, static_cast<int>(sizeY));
 
@@ -58,9 +56,9 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
     nb_pts_control_Y=0;
   }
 
-  for (i=0; i < nb_pts_control_X; i++)
-    for (j=0; j < nb_pts_control_Y; j++) {
-      a= i + j * nb_pts_control_X;
+  for (int i=0; i < nb_pts_control_X; i++)
+    for (int j=0; j < nb_pts_control_Y; j++) {
+      int a = i + j * nb_pts_control_X;
       m_posXYZ[a].x= static_cast<float>(i)/nb_pts_control_X;
       m_posXYZ[a].y= static_cast<float>(j)/nb_pts_control_Y;
       m_posXYZ[a].z= 0.0;
@@ -111,9 +109,6 @@ void surface3d :: setMess(int X, int Y, float posX, float posY, float posZ){
 //
 /////////////////////////////////////////////////////////
 void surface3d :: resolutionMess(int resolutionX, int resolutionY){
-  int x=0;
-  int y=0;
-
   nb_pts_control_X = (resolutionX < 4) ? 4 : resolutionX;
   nb_pts_control_Y = (resolutionY < 4) ? 4 : resolutionY;
   if(m_posXYZ)delete[]m_posXYZ;
@@ -122,8 +117,8 @@ void surface3d :: resolutionMess(int resolutionX, int resolutionY){
     nb_pts_control_X=0;
     nb_pts_control_Y=0;
   }
-  for (x=0; x < nb_pts_control_X; x++)
-    for (y=0; y < nb_pts_control_Y; y++) {
+  for (int x=0; x < nb_pts_control_X; x++)
+    for (int y=0; y < nb_pts_control_Y; y++) {
       int a= x + y * nb_pts_control_X;
       m_posXYZ[a].x= static_cast<float>(x)/nb_pts_control_X;
       m_posXYZ[a].y= static_cast<float>(y)/nb_pts_control_Y;
@@ -196,7 +191,6 @@ t_float3 surface3d :: bicubic3(t_float X, t_float Y)
 
 void surface3d :: interpolate(float X, float Y)
 {
-	t_float norm;
 	t_float3 interpol, dx, dy, dx2, dy2, normal;
 
 	interpol = bicubic3(X, Y);
@@ -217,7 +211,7 @@ void surface3d :: interpolate(float X, float Y)
 		normal.y = dx.z*dy.x - dx.x*dy.z;
 		normal.z = dx.x*dy.y - dx.y*dy.x;
 
-		norm = normal.x*normal.x + normal.y*normal.y + normal.z*normal.z;
+		float norm = normal.x*normal.x + normal.y*normal.y + normal.z*normal.z;
 		norm = sqrt(norm);
 		normal.x /=norm;
 		normal.y /=norm;
@@ -234,8 +228,6 @@ void surface3d :: interpolate(float X, float Y)
 /////////////////////////////////////////////////////////
 void surface3d :: renderShape(GemState *state){
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=FILL;
-  int n, m;
-  float norm[3];
 
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
@@ -262,33 +254,33 @@ void surface3d :: renderShape(GemState *state){
   switch (m_drawType){
   case LINE:    {
     if (GemShape::m_texType)	{
-      for (n = 0; n < nb_pts_affich_X+1; n++)   {
+      for (int n = 0; n < nb_pts_affich_X+1; n++)   {
 	glBegin(GL_LINE_STRIP);
-	for (m = 0; m  < nb_pts_affich_Y+1; m++){
+	for (int m = 0; m  < nb_pts_affich_Y+1; m++){
 	  glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	  interpolate(n/affich_X, m/affich_Y);
 	}
 	glEnd();
       }
-      for(m = 0; m < nb_pts_affich_Y+1; m++) {
+      for(int m = 0; m < nb_pts_affich_Y+1; m++) {
 	glBegin(GL_LINE_STRIP);
-	for(n = 0; n  < nb_pts_affich_X+1; n++){
+	for(int n = 0; n  < nb_pts_affich_X+1; n++){
 	  glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	  interpolate(n/affich_X, m/affich_Y);
 	}
 	glEnd();
       }
     }  else {
-	  for(n = 0; n < nb_pts_affich_X+1; n++)  {
+	  for(int n = 0; n < nb_pts_affich_X+1; n++)  {
 	    glBegin(GL_LINE_STRIP);
-	    for(m = 0; m  < nb_pts_affich_Y+1; m++){
+	    for(int m = 0; m  < nb_pts_affich_Y+1; m++){
 	      interpolate(n/affich_X, m/affich_Y);
 	    }
 	    glEnd();
 	  }
-	  for(m = 0; m < nb_pts_affich_Y+1; m++)  {
+	  for(int m = 0; m < nb_pts_affich_Y+1; m++)  {
 	    glBegin(GL_LINE_STRIP);
-	    for(n = 0; n  < nb_pts_affich_X+1; n++){
+	    for(int n = 0; n  < nb_pts_affich_X+1; n++){
 	      interpolate(n/affich_X, m/affich_Y);
 	    }
 	    glEnd();
@@ -299,9 +291,9 @@ void surface3d :: renderShape(GemState *state){
   case FILL:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X; n++) {
+	for(int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_TRIANGLE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++)   {
+	  for(int m = 0; m  < nb_pts_affich_Y+1; m++)   {
 	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	    interpolate(n/affich_X, m/affich_Y);
 	    glTexCoord2f(xsize*(n+1)/affich_X, ysize+ysizediff*m/affich_Y);
@@ -310,9 +302,9 @@ void surface3d :: renderShape(GemState *state){
 	  glEnd();
 	}
       else
-	for(n = 0; n < nb_pts_affich_X; n++) {
+	for(int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_TRIANGLE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++)  {
+	  for(int m = 0; m  < nb_pts_affich_Y+1; m++)  {
 	    interpolate(n/affich_X, m/affich_Y);
 	    interpolate((n+1)/affich_X, m/affich_Y);
 	  }
@@ -324,15 +316,15 @@ void surface3d :: renderShape(GemState *state){
     {
       glBegin(GL_POINTS);
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X+1; n++) {
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++) {
+	for(int n = 0; n < nb_pts_affich_X+1; n++) {
+	  for(int m = 0; m  < nb_pts_affich_Y+1; m++) {
 	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	}
       else
-	for(n = 0; n < nb_pts_affich_X+1; n++) {
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++)
+	for(int n = 0; n < nb_pts_affich_X+1; n++) {
+	  for(int m = 0; m  < nb_pts_affich_Y+1; m++)
 	    interpolate(n/affich_X, m/affich_Y);
 	}
       glEnd();
@@ -342,18 +334,18 @@ void surface3d :: renderShape(GemState *state){
   case LINE1:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X; n++) {
+	for(int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)  {
+	  for(int m = 0; m  < nb_pts_affich_Y; m++)  {
 	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	  glEnd();
 	}
       else
-	for(n = 0; n < nb_pts_affich_X; n++) {
+	for(int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)   {
+	  for(int m = 0; m  < nb_pts_affich_Y; m++)   {
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	  glEnd();
@@ -364,17 +356,17 @@ void surface3d :: renderShape(GemState *state){
   case LINE2:
     {
       if (GemShape::m_texType)
-	for(m = 0; m < nb_pts_affich_Y+1; m++) {
+	for(int m = 0; m < nb_pts_affich_Y+1; m++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_affich_X+1; n++)  {
+	  for(int n = 0; n  < nb_pts_affich_X+1; n++)  {
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	  glEnd();
 	}
       else
-	for(m = 0; m < nb_pts_affich_Y+1; m++) {
+	for(int m = 0; m < nb_pts_affich_Y+1; m++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_affich_X+1; n++)  {
+	  for(int n = 0; n  < nb_pts_affich_X+1; n++)  {
 	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
@@ -386,9 +378,9 @@ void surface3d :: renderShape(GemState *state){
   case LINE3:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X; n++) {
+	for(int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINES);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)
+	  for(int m = 0; m  < nb_pts_affich_Y; m++)
 	    {
 	      glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	      interpolate(n/affich_X, m/affich_Y);
@@ -396,9 +388,9 @@ void surface3d :: renderShape(GemState *state){
 	  glEnd();
 	}
       else
-	for(n = 0; n < nb_pts_affich_X; n++) {
+	for(int n = 0; n < nb_pts_affich_X; n++) {
 	  glBegin(GL_LINES);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)  {
+	  for(int m = 0; m  < nb_pts_affich_Y; m++)  {
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	  glEnd();
@@ -409,19 +401,19 @@ void surface3d :: renderShape(GemState *state){
   case LINE4:
     {
       if (GemShape::m_texType)
-	for(m = 0; m < nb_pts_affich_Y; m++)
+	for(int m = 0; m < nb_pts_affich_Y; m++)
 	  {
 	    glBegin(GL_LINES);
-	    for(n = 0; n  < nb_pts_affich_X; n++) {
+	    for(int n = 0; n  < nb_pts_affich_X; n++) {
 	      glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
 	      interpolate(n/affich_X, m/affich_Y);
 	    }
 	    glEnd();
 	  }
       else
-	for(m = 0; m < nb_pts_affich_Y; m++) {
+	for(int m = 0; m < nb_pts_affich_Y; m++) {
 	  glBegin(GL_LINES);
-	  for(n = 0; n  < nb_pts_affich_X; n++) {
+	  for(int n = 0; n  < nb_pts_affich_X; n++) {
 	    interpolate(n/affich_X, m/affich_Y);
 	  }
 	  glEnd();
@@ -432,8 +424,9 @@ void surface3d :: renderShape(GemState *state){
   case CONTROL_FILL:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_control_X-1; n++)
-	  for(m = 0; m  < nb_pts_control_Y-1; m++)   {
+	for(int n = 0; n < nb_pts_control_X-1; n++)
+	  for(int m = 0; m  < nb_pts_control_Y-1; m++)   {
+            float norm[3];
 	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
                                    (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
@@ -469,8 +462,9 @@ void surface3d :: renderShape(GemState *state){
 	    glEnd();
 	  }
       else
-	for(n = 0; n < nb_pts_control_X-1; n++)
-	  for(m = 0; m  < nb_pts_control_Y-1; m++)    {
+	for(int n = 0; n < nb_pts_control_X-1; n++)
+	  for(int m = 0; m  < nb_pts_control_Y-1; m++)    {
+            float norm[3];
 	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
                                    (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
@@ -500,8 +494,8 @@ void surface3d :: renderShape(GemState *state){
   case CONTROL_POINT:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_control_X; n++)
-	  for(m = 0; m  < nb_pts_control_Y; m++)   {
+	for(int n = 0; n < nb_pts_control_X; n++)
+	  for(int m = 0; m  < nb_pts_control_Y; m++)   {
 	    glBegin(GL_POINTS);
 	    glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
@@ -509,8 +503,8 @@ void surface3d :: renderShape(GemState *state){
 	    glEnd();
 	  }
       else
-	for(n = 0; n < nb_pts_control_X; n++)
-	  for(m = 0; m  < nb_pts_control_Y; m++) {
+	for(int n = 0; n < nb_pts_control_X; n++)
+	  for(int m = 0; m  < nb_pts_control_Y; m++) {
 	    glBegin(GL_POINTS);
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
 	    glEnd();
@@ -521,9 +515,9 @@ void surface3d :: renderShape(GemState *state){
   case CONTROL_LINE:
     {
       if (GemShape::m_texType){
-	for(n = 0; n < nb_pts_control_X; n++)   {
+	for(int n = 0; n < nb_pts_control_X; n++)   {
 	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++){
+	  for(int m = 0; m  < nb_pts_control_Y; m++){
 	    glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
@@ -531,9 +525,9 @@ void surface3d :: renderShape(GemState *state){
 	  glEnd();
 	}
 
-	for(m = 0; m < nb_pts_control_Y; m++)  {
+	for(int m = 0; m < nb_pts_control_Y; m++)  {
 	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++){
+	  for(int n = 0; n  < nb_pts_control_X; n++){
 	    glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
@@ -541,15 +535,15 @@ void surface3d :: renderShape(GemState *state){
 	  glEnd();
 	}
       }  else	{
-	for(n = 0; n < nb_pts_control_X; n++)  {
+	for(int n = 0; n < nb_pts_control_X; n++)  {
 	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++)
+	  for(int m = 0; m  < nb_pts_control_Y; m++)
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
 	  glEnd();
 	}
-	for(m = 0; m < nb_pts_control_Y; m++)  {
+	for(int m = 0; m < nb_pts_control_Y; m++)  {
 	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++)
+	  for(int n = 0; n  < nb_pts_control_X; n++)
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
 	  glEnd();
 	}
@@ -560,9 +554,9 @@ void surface3d :: renderShape(GemState *state){
   case CONTROL_LINE2:
     {
       if (GemShape::m_texType)
-	for(m = 0; m < nb_pts_control_Y; m++) {
+	for(int m = 0; m < nb_pts_control_Y; m++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++) {
+	  for(int n = 0; n  < nb_pts_control_X; n++) {
 	    glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
@@ -570,9 +564,9 @@ void surface3d :: renderShape(GemState *state){
 	  glEnd();
 	}
       else
-	for(m = 0; m < nb_pts_control_Y; m++) {
+	for(int m = 0; m < nb_pts_control_Y; m++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++)
+	  for(int n = 0; n  < nb_pts_control_X; n++)
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
 	  glEnd();
 	}
@@ -582,9 +576,9 @@ void surface3d :: renderShape(GemState *state){
   case CONTROL_LINE1:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_control_X; n++) {
+	for(int n = 0; n < nb_pts_control_X; n++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++)  {
+	  for(int m = 0; m  < nb_pts_control_Y; m++)  {
 	    glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
@@ -592,9 +586,9 @@ void surface3d :: renderShape(GemState *state){
 	  glEnd();
 	}
       else
-	for(n = 0; n < nb_pts_control_X; n++) {
+	for(int n = 0; n < nb_pts_control_X; n++) {
 	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++)
+	  for(int m = 0; m  < nb_pts_control_Y; m++)
 	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
 	  glEnd();
 	}

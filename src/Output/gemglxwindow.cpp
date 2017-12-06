@@ -366,7 +366,6 @@ struct gemglxwindow::PIMPL {
 
   bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h, bool transparent) {
     int modeNum=4;
-    int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
     XF86VidModeModeInfo **modes;
 #endif
@@ -405,7 +404,6 @@ struct gemglxwindow::PIMPL {
 
     static GLXFBConfig *fbconfigs, fbconfig;
     static int numfbconfigs;
-    XRenderPictFormat *pict_format;
 
     // need to get some function pointer at runtime
     typedef GLXFBConfig*(*glXChooseFBConfigProc)(Display* dpy, int screen, const int* attribList, int* nitems);
@@ -432,7 +430,7 @@ struct gemglxwindow::PIMPL {
           if(!vi)
             continue;
 
-          pict_format = XRenderFindVisualFormat(dpy, vi->visual);
+          XRenderPictFormat *pict_format = XRenderFindVisualFormat(dpy, vi->visual);
           if(!pict_format)
             continue;
 
@@ -539,6 +537,7 @@ struct gemglxwindow::PIMPL {
     int flags;
 #ifdef HAVE_LIBXXF86VM
     if (fullscreen){
+      int bestMode=0;
       /* look for mode with requested resolution */
       for (int i = 0; i < modeNum; i++) {
         if ((modes[i]->hdisplay == w) && (modes[i]->vdisplay == w)) {
@@ -598,9 +597,8 @@ struct gemglxwindow::PIMPL {
       /*
        * Select the best input style supported by both the IM and Tk.
        */
-      int i=0;
       if(stylePtr) {
-        for (i = 0; i < stylePtr->count_styles; i++) {
+        for (int i = 0; i < stylePtr->count_styles; i++) {
           XIMStyle thisStyle = stylePtr->supported_styles[i];
           if (thisStyle == (XIMPreeditPosition | XIMStatusNothing)) {
             style = thisStyle;
@@ -879,7 +877,6 @@ bool gemglxwindow :: create(void)
   }
 
   int modeNum=4;
-  int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo **modes;
 #endif

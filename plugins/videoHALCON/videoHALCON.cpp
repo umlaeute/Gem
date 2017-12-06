@@ -135,8 +135,8 @@ bool videoHALCON :: grabFrame() {
     error("[GEM:videoHALCON] GrabImage exception: '%s'", except.message);
     return false;
   }
-  Halcon::HTuple typ, W, H, pR, pG, pB;
-  long r, g, b,  h, w;
+  Halcon::HTuple pG, pB, typ, W, H;
+  long r;
 
   try {
     r = img.GetImagePointer3(&pG, &pB, &typ, &W, &H);
@@ -146,6 +146,7 @@ bool videoHALCON :: grabFrame() {
   }
 
   try {
+    long g,b,w,h;
 #if 0
 #define GETTUPLE(x, y) { try {x=y[0]; } catch (Halcon::HException& except) { error("HTuple exception @ %d: '%s'", __LINE__, except.message); } } while(0)
     GETTUPLE(g, pG);
@@ -570,12 +571,12 @@ void videoHALCON::setProperties(gem::Properties&props) {
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::string s;
-    double d;
 
     if(m_writeable.find(key) != m_writeable.end()) {
       try {
         const Halcon::HTuple Param=key.c_str();
         Halcon::HTuple Value;
+        double d=0.;
         switch(props.type(key)) {
         case gem::Properties::STRING:
           if(props.get(key, s)) {
@@ -609,7 +610,7 @@ void videoHALCON::setProperties(gem::Properties&props) {
       }
     } else {
       if("width" == key) {
-        double d=0;
+        double d=0.;
         if(props.get(key, d)) {
           try {
             m_grabber->SetFramegrabberParam("image_width", d);

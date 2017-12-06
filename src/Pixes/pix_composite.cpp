@@ -45,7 +45,6 @@ pix_composite :: ~pix_composite()
 void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
-  unsigned int alpha;
 
   // The src1, src2, dst is a little bit backwards.  This
   //	is because we want the image on the left inlet to be
@@ -55,7 +54,8 @@ void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   unsigned char *src2 = image.data;
 
   while(datasize--)    {
-    if ( (alpha = src2[chAlpha]) )      {
+    unsigned int alpha= src2[chAlpha];
+    if (alpha)      {
       if (alpha == 255)	{
 	dst[chRed]   = src2[chRed];
 	dst[chGreen] = src2[chGreen];
@@ -78,7 +78,6 @@ void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 void pix_composite :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
-  //  unsigned int alpha;
 
   // The src1, src2, dst is a little bit backwards.  This
   //	is because we want the image on the left inlet to be
@@ -89,7 +88,8 @@ void pix_composite :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 
   while(datasize--)    {
     int rightPix = *src1++;
-    if ( unsigned int alpha = src2[chAlpha] )      {
+    unsigned int alpha = src2[chAlpha];
+    if (alpha)      {
       if (alpha == 255)	{
 	dst[chRed]   = src2[chRed];
 	dst[chGreen] = src2[chGreen];

@@ -129,7 +129,6 @@ pixBlock* filmMPEG3 :: getFrame(void) {
   }
   m_readNext = false;
 
-  int i;
   int wantedFormat=m_wantedFormat;
 
   char*u=NULL,*y=NULL,*v=NULL;
@@ -142,7 +141,7 @@ pixBlock* filmMPEG3 :: getFrame(void) {
     // the mpeg3-YUV2RGB decoder works better than ours
     unsigned char **rows = new unsigned char* [m_image.image.ysize];
     unsigned char **dummy=rows;
-    i=m_image.image.ysize;
+    int i=m_image.image.ysize;
     while(i--)*dummy++=m_image.image.data+(i*m_image.image.xsize*m_image.image.csize);
     if (mpeg3_read_frame(mpeg_file, rows,
 			 0, 0,
@@ -225,10 +224,9 @@ void filmMPEG3::setProperties(gem::Properties&props) {
 
 void filmMPEG3::getProperties(gem::Properties&props) {
   std::vector<std::string> keys=props.keys();
-  gem::any value;
-  double d;
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned i=0; i<keys.size(); i++) {
+    gem::any value;
+    double d;
     std::string key=keys[i];
     props.erase(key);
     if("fps"==key) {

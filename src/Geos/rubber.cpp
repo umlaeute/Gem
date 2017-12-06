@@ -84,9 +84,7 @@ void rubber :: ctrYMess(float center)
 
 void rubber :: rubber_init(void)
 {
-  int i, j;
   int k;
-  int m;
 
   if (m_mass != NULL)delete[]m_mass;    m_mass=NULL;
 
@@ -97,8 +95,8 @@ void rubber :: rubber_init(void)
   }
 
   k = 0;
-  for (i = 0; i < m_grid_sizeX; i++)
-    for (j = 0; j < m_grid_sizeY; j++)
+  for (int i = 0; i < m_grid_sizeX; i++)
+    for (int j = 0; j < m_grid_sizeY; j++)
       {
         m_mass[k].nail = (i == 0 || j == 0 || i == m_grid_sizeX -1
                         || j == m_grid_sizeY - 1 );
@@ -127,20 +125,20 @@ void rubber :: rubber_init(void)
   }
 
   k = 0;
-  for (i = 1; i < m_grid_sizeX - 1; i++)
-    for (j = 0; j < m_grid_sizeY - 1; j++)
+  for (int i = 1; i < m_grid_sizeX - 1; i++)
+    for (int j = 0; j < m_grid_sizeY - 1; j++)
       {
-        m = m_grid_sizeY*i + j;
+        int m = m_grid_sizeY*i + j;
         m_spring[k].i = m;
         m_spring[k].j = m + 1;
         m_spring[k].r = 0;
         k++;
       }
 
-  for (j = 1; j < m_grid_sizeY - 1; j++)
-    for (i = 0; i < m_grid_sizeX - 1; i++)
+  for (int j = 1; j < m_grid_sizeY - 1; j++)
+    for (int i = 0; i < m_grid_sizeX - 1; i++)
       {
-        m = m_grid_sizeY*i + j;
+        int m = m_grid_sizeY*i + j;
         m_spring[k].i = m;
         m_spring[k].j = m + m_grid_sizeX;
         m_spring[k].r = 0.0;
@@ -240,31 +238,26 @@ void rubber :: renderShape(GemState *state)
 
 void rubber :: rubber_dynamics(void)
 {
-  int k;
-  float d[3];
-  int i, j;
-  float l;
-  float a;
-
   /* calculate all the spring forces acting on the mass points */
 
-  for (k = 0; k < m_spring_count; k++)
+  for (int k = 0; k < m_spring_count; k++)
     {
-      i = m_spring[k].i;
-      j = m_spring[k].j;
+      float d[3];
+      int i = m_spring[k].i;
+      int j = m_spring[k].j;
 
       d[0] = m_mass[i].x[0] - m_mass[j].x[0];
       d[1] = m_mass[i].x[1] - m_mass[j].x[1];
       d[2] = m_mass[i].x[2] - m_mass[j].x[2];
 
-      l = sqrt(d[0]*d[0] + d[1]*d[1] + d[2]*d[2]);
+      float l = sqrt(d[0]*d[0] + d[1]*d[1] + d[2]*d[2]);
       if (l != 0.0)
         {
           d[0] /= l;
           d[1] /= l;
           d[2] /= l;
 
-          a = l - m_spring[k].r;
+          float a = l - m_spring[k].r;
 
           m_mass[i].v[0] -= d[0]*a*m_springKS;
           m_mass[i].v[1] -= d[1]*a*m_springKS;
@@ -278,7 +271,7 @@ void rubber :: rubber_dynamics(void)
 
   /* update the state of the mass points */
 
-  for (k = 0; k < m_grid_sizeX*m_grid_sizeY; k++)
+  for (int k = 0; k < m_grid_sizeX*m_grid_sizeY; k++)
     if (!m_mass[k].nail)
       {
         m_mass[k].x[0] += m_mass[k].v[0];

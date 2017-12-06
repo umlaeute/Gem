@@ -405,11 +405,9 @@ bool videoDV4L::enumProperties(gem::Properties&readable,
 }
 void videoDV4L::getProperties(gem::Properties&props) {
   std::vector<std::string>keys=props.keys();
-  int i;
-
 #if 0
   /* get properties without decoder */
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if(0) {
     }
@@ -420,7 +418,7 @@ void videoDV4L::getProperties(gem::Properties&props) {
   /* get properties that need decoder */
   if(m_decoder) {
 
-    for(i=0; i<keys.size(); i++) {
+    for(int i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       if (0) {
       } else     if("quality"==key) {

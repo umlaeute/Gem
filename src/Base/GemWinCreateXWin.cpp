@@ -137,7 +137,6 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XF86VidModeModeInfo **modes;
 #endif
   int modeNum=4;
-  int bestMode=0;
   int fullscreen=hints.fullscreen;
 
   char svalue[3];
@@ -262,6 +261,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   int y = hints.y_offset;
 #ifdef HAVE_LIBXXF86VM
   if (fullscreen){
+    int bestMode=0;
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
       if ((modes[i]->hdisplay == hints.width) && (modes[i]->vdisplay == hints.height)) {

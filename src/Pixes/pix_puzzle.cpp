@@ -89,21 +89,19 @@ void pix_puzzle :: makePuzzleBlocks(int xsize, int ysize, int csize)
 
 void pix_puzzle :: shuffle()
 {
-  int i, a, b, c;
-
   if (!blockpos) return;
   if (blocknum == 1){
     blockpos[0]=0;
     return; /* nothing to be done for us here */
   }
 
-  for(i=0; i<20*blockw; i++) {
+  for(int i=0; i<20*blockw; i++) {
     /* the number of shuffling times is a rule of thumb. */
-    a = fastrand()%(blocknum-1);
-    b = fastrand()%(blocknum-1);
+    int a = fastrand()%(blocknum-1);
+    int b = fastrand()%(blocknum-1);
     if(a == b)
       b = (b+1)%(blocknum-1);
-    c = blockpos[a];
+    int c = blockpos[a];
     blockpos[a] = blockpos[b];
     blockpos[b] = c;
   }

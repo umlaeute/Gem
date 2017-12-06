@@ -174,7 +174,6 @@ struct PIMPL {
 
   PIMPL(void)
   {
-    int i=0;
 #ifdef GEM_DEFAULT_FONT
     set("font.face", GEM_DEFAULT_FONT);
 #endif
@@ -186,6 +185,7 @@ struct PIMPL {
       std::string s=atom_getsymbol(a)->s_name;
       open(gem::files::expandEnv(s.c_str(), true).c_str(), ".");
     } else {
+      int i=0;
       while(s_configdir[i]) {
 	open(GEM_SETTINGS_FILE, s_configdir[i]);
 	i++;

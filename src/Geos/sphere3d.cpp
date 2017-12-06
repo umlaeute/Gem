@@ -54,7 +54,6 @@ void sphere3d :: createSphere3d(void)
   GLint stacks=m_numStacks;
 
   GLfloat rho=90.f, drho=0.f, theta=0.f, dtheta=0.f;
-  GLint i, j;
 
   //  post("creating sphere %d %d", slices, stacks);
 
@@ -70,10 +69,10 @@ void sphere3d :: createSphere3d(void)
   setCartesian(0, 0, 0., 0., 1.);
 
   rho=90;
-  for(i=1; i<stacks; i++){
+  for(int i=1; i<stacks; i++){
     rho-=drho;
     theta=0.f;
-    for (j = 0; j < slices; j++) {
+    for (int j = 0; j < slices; j++) {
       theta+=dtheta;
       setSpherical(j, i, 1, theta, rho);
     }
@@ -170,8 +169,6 @@ void sphere3d :: render(GemState *state)
   GLint stacks=m_numStacks;
 
   GLfloat s, t, ds, dt;
-  GLint i, j;
-  int src=0;
 
   TexCoord*texCoords=NULL;
   int texType=0;
@@ -229,6 +226,7 @@ void sphere3d :: render(GemState *state)
     glNewList(m_displayList, GL_COMPILE_AND_EXECUTE);
 
     if (m_drawType == GL_FILL) {
+      int src;
       t = 1.0;
       s = 0.0;
       ds = 1.0 / slices;
@@ -238,7 +236,7 @@ void sphere3d :: render(GemState *state)
       glBegin(GL_QUAD_STRIP);
 
       src=1;
-      for (j = 0; j < slices; j++) {
+      for (int j = 0; j < slices; j++) {
         if(normals)glNormal3f(m_x[0], m_y[0], m_z[0]);
         if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
         glVertex3f(m_x[0], m_y[0], m_z[0]);
@@ -264,11 +262,11 @@ void sphere3d :: render(GemState *state)
 
       /* draw intermediate stacks as quad strips */
       src=1;
-      for (i = 0; i < stacks-2; i++) {
+      for (int i = 0; i < stacks-2; i++) {
         int src2=0;
         s = 0.0;
         glBegin(GL_QUAD_STRIP);
-        for (j = 0; j < slices; j++) {
+        for (int j = 0; j < slices; j++) {
           src2=src+slices;
 
           if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
@@ -302,7 +300,7 @@ void sphere3d :: render(GemState *state)
       src=(slices*(stacks-2)+1);
       const int last=slices*(stacks-1)+1;
       s=0.0;
-      for (j = 0; j < slices; j++) {
+      for (int j = 0; j < slices; j++) {
         if(normals)glNormal3f(m_x[src], m_y[src], m_z[src]);
         if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
         glVertex3f(m_x[src], m_y[src], m_z[src]);
@@ -328,10 +326,10 @@ void sphere3d :: render(GemState *state)
     }
     else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
 
-      src = 1;
-      for (i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here
+      int src = 1;
+      for (int i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here
         glBegin(GL_LINE_LOOP);
-        for (j = 0; j < slices; j++) {
+        for (int j = 0; j < slices; j++) {
 
           if (normals)
             glNormal3f(m_x[src], m_y[src], m_z[src]);
@@ -340,14 +338,14 @@ void sphere3d :: render(GemState *state)
         }
         glEnd();
       }
-      for (j = 0; j < slices; j++) {
+      for (int j = 0; j < slices; j++) {
         glBegin(GL_LINE_STRIP);
 
         if (normals)
           glNormal3f(m_x[0], m_y[0], m_z[0]);
         glVertex3f(m_x[0], m_y[0], m_z[0]);
 
-        for (i = 0; i < stacks-1; i++) {
+        for (int i = 0; i < stacks-1; i++) {
           src=i*slices+1+j;
           if (normals)
             glNormal3f(m_x[src], m_y[src], m_z[src]);
@@ -364,7 +362,7 @@ void sphere3d :: render(GemState *state)
 
     else if (m_drawType == GL_POINT) {
       /* top and bottom-most points */
-      src=0;
+      int src=0;
 
       glBegin(GL_POINTS);
 
@@ -373,8 +371,8 @@ void sphere3d :: render(GemState *state)
       glVertex3f(m_x[src], m_y[src], m_z[src]);
       src++;
 
-      for (i = 0; i < stacks-1; i++) {
-        for (j = 0; j < slices; j++) {
+      for (int i = 0; i < stacks-1; i++) {
+        for (int j = 0; j < slices; j++) {
           if (normals)
             glNormal3f(m_x[src], m_y[src], m_z[src]);
           glVertex3f(m_x[src], m_y[src], m_z[src]);

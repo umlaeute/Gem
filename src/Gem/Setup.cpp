@@ -108,11 +108,11 @@ namespace {
            A_FLOAT == ap[1].a_type &&
            A_FLOAT == ap[2].a_type
            ) {
-          char buf[MAXPDSTRING];
     
           if(A_SYMBOL==ap[4].a_type) {
             gotversion=std::string(atom_getsymbol(ap+4)->s_name);
           } else {
+            char buf[MAXPDSTRING];
             snprintf(buf, MAXPDSTRING-1, "%g", atom_getfloat(ap+4));
             gotversion=std::string(buf);
           }

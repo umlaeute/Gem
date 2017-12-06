@@ -616,9 +616,8 @@ GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata) {
     break;
   case GL_BGRA_EXT:
     if(pixels==rgbadata){
-      unsigned char dummy=0;
       while(pixelnum--){
-        dummy=pixels[2];
+        unsigned char dummy=pixels[2];
         pixels[2]=pixels[0];
         pixels[0]=dummy;
         pixels+=4;
@@ -762,9 +761,8 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata) {
   case GL_RGBA:
     if(bgradata==data){
       // in place conversion
-      unsigned char dummy=0;
       while(pixelnum--){
-        dummy    =pixels[2];
+        unsigned char dummy=pixels[2];
         pixels[2]=pixels[0];
         pixels[0]=dummy;
         pixels+=4;
@@ -857,9 +855,8 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
   case GL_BGRA_EXT:
     if(abgrdata==data){
       // in place conversion
-      unsigned char dummy=0;
       while(pixelnum--){
-	dummy     = pixels[0];
+        unsigned char dummy = pixels[0];
 	pixels[0] = pixels[1];
 	pixels[1] = pixels[2];
 	pixels[2] = pixels[3];
@@ -879,9 +876,8 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
   case GL_RGBA:
     if(abgrdata==data){
       // in place conversion
-      unsigned char dummy=0;
       while(pixelnum--){
-
+        unsigned char dummy;
         dummy    =pixels[3]; pixels[3]=pixels[0]; pixels[0]=dummy;
         dummy    =pixels[1]; pixels[1]=pixels[2]; pixels[2]=dummy;
         pixels+=4;
@@ -969,8 +965,8 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata) {
   case GL_BGRA_EXT:
     if(argbdata==data){
       // in place conversion
-      unsigned char dummy=0;
       while(pixelnum--){
+        unsigned char dummy;
 	dummy = pixels[0]; pixels[0] = pixels[3]; pixels[3]=dummy;
 	dummy = pixels[1]; pixels[1] = pixels[2]; pixels[2]=dummy;
         pixels+=4;
@@ -1159,14 +1155,13 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       const unsigned char*pv=(format==GL_BGR_EXT)?U:V;
       const unsigned char*pu=(format==GL_RGB)?U:V;
 
-      int y, u, v, yy;
-      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
+          int uv_r, uv_g, uv_b;
+          int y, u, v;
 	  u=*pu++ -UV_OFFSET;
 	  v=*pv++ -UV_OFFSET;
 	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1213,14 +1208,13 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       const unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
       const unsigned char*pu=(format==GL_RGBA)?V:U;
 
-      int y, u, v, yy;
-      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
+          int y, u, v;
+          int uv_r, uv_g, uv_b;
 	  u=*pu++-UV_OFFSET;
 	  v=*pv++-UV_OFFSET;
 	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1322,14 +1316,13 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       const short*pv=V;//(format==GL_BGR_EXT)?V:U;
       const short*pu=U;//(format==GL_RGB)?V:U;
 
-      int y, u, v, yy;
-      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
+          int y, u, v;
+          int uv_r, uv_g, uv_b;
 	  // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
 	  u=(*pu++)>>8;
 	  v=(*pv++)>>8;
@@ -1411,14 +1404,13 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       const short*pv=V;//(format==GL_BGRA_EXT)?U:V;
       const short*pu=U;//(format==GL_RGBA)?U:V;
 
-      int y, u, v, yy;
-      int uv_r, uv_g, uv_b;
       int row=ysize>>1;
       int cols=xsize>>1;
-      yy=128;
       while(row--){
 	int col=cols;
 	while(col--){
+          int y, u, v;
+          int uv_r, uv_g, uv_b;
 	  u=(*pu++)>>8;
 	  v=(*pv++)>>8;
 	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1531,8 +1523,6 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
   case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
       START_TIMING;
       switch(m_simd){
 #ifdef __SSE2__
@@ -1544,6 +1534,8 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
 	pixelnum>>=1;
 
 	while(pixelnum--){
+          int y, u, v;
+          int uv_r, uv_g, uv_b;
 	  u=yuvdata[0]-UV_OFFSET;
 	  v=yuvdata[2]-UV_OFFSET;
 	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1586,10 +1578,10 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
 #endif
       case GEM_SIMD_NONE: default:
 	unsigned char *pixels=data;
-	int y, u, v;
-	int uv_r, uv_g, uv_b;
 	pixelnum>>=1;
 	while(pixelnum--){
+          int y, u, v;
+          int uv_r, uv_g, uv_b;
 	  u=yuvdata[0]-UV_OFFSET;
 	  v=yuvdata[2]-UV_OFFSET;
 	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1651,11 +1643,11 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
   case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
       while(pixelnum--){
+        int y, u, v;
+        int uv_r, uv_g, uv_b;
 	u=yuvdata[1]-UV_OFFSET;
 	v=yuvdata[3]-UV_OFFSET;
 	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1683,10 +1675,10 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       unsigned char *pixels=data;
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
+        int y, u, v;
+        int uv_r, uv_g, uv_b;
 	u=yuvdata[1]-UV_OFFSET;
 	v=yuvdata[3]-UV_OFFSET;
 	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1746,11 +1738,11 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata) {
   case GL_RGB:  case GL_BGR:
     {
       unsigned char *pixels=data;
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
 
       while(pixelnum--){
+        int y, u, v;
+        int uv_r, uv_g, uv_b;
 	u=yuvdata[3]-UV_OFFSET;
 	v=yuvdata[1]-UV_OFFSET;
 	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1778,10 +1770,10 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata) {
   case GL_BGRA: /* ==GL_BGRA_EXT */
     {
       unsigned char *pixels=data;
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
       pixelnum>>=1;
       while(pixelnum--){
+        int y, u, v;
+        int uv_r, uv_g, uv_b;
 	u=yuvdata[3]-UV_OFFSET;
 	v=yuvdata[1]-UV_OFFSET;
 	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
@@ -1827,13 +1819,11 @@ GEM_EXTERN void imageStruct::fixUpDown(void) {
 
   int linewidth = xsize*csize;
   unsigned char*line = new unsigned char[linewidth];
-  unsigned char*line0, *line1;
 
-
-  int y0=0, y1=ysize-1;
-  for(y0=0; y0<ysize/2; y0++, y1--) {
-    line0=data+y0*linewidth;
-    line1=data+y1*linewidth;
+  int y1=ysize-1;
+  for(int y0=0; y0<ysize/2; y0++, y1--) {
+    unsigned char*line0=data+y0*linewidth;
+    unsigned char*line1=data+y1*linewidth;
     memcpy(line , line0, linewidth);
     memcpy(line0, line1, linewidth);
     memcpy(line1, line , linewidth);
@@ -1848,12 +1838,11 @@ GEM_EXTERN void imageStruct::fixUpDown(void) {
 GEM_EXTERN void imageStruct::swapRedBlue(void) {
   size_t pixelnum=xsize*ysize;
   unsigned char *pixels=data;
-  unsigned char dummy=0;
   switch (format){
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--){
-      dummy=pixels[chU];
+      unsigned char dummy=pixels[chU];
       pixels[chU]=pixels[chV]; // u
       pixels[chV]=dummy; // v
       pixels+=4;
@@ -1861,7 +1850,7 @@ GEM_EXTERN void imageStruct::swapRedBlue(void) {
     break;
   case GL_RGB:  case GL_BGR:
     while(pixelnum--){
-      dummy=pixels[chRed];
+      unsigned char dummy=pixels[chRed];
       pixels[chRed]=pixels[chBlue];
       pixels[chBlue]=dummy;
       pixels+=3;
@@ -1870,7 +1859,7 @@ GEM_EXTERN void imageStruct::swapRedBlue(void) {
   case GL_RGBA:
   case GL_BGRA: /* ==GL_BGRA_EXT */
     while(pixelnum--){
-      dummy=pixels[chRed];
+      unsigned char dummy=pixels[chRed];
       pixels[chRed]=pixels[chBlue];
       pixels[chBlue]=dummy;
       pixels+=4;

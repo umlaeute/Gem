@@ -208,11 +208,9 @@ void pix_write :: posMess(int x, int y)
 
 void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
-  char *extension = (char*)".tif";
-  char tmp[MAXPDSTRING];
-
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
+      char tmp[MAXPDSTRING];
       atom_string(argv++, tmp, MAXPDSTRING);
       argc--;
 

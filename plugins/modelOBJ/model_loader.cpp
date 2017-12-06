@@ -502,7 +502,6 @@ static GLboolean
 _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtllibname)
 {
   FILE* file=0;
-  GLMmaterial* material=0;
   GLuint i;
 
   std::string filename = _glmDirName(model->pathname);
@@ -526,7 +525,7 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtl
   fprintf(file, "#  \n\n");
 
   for (i = 0; i < model->nummaterials; i++) {
-    material = &model->materials[i];
+    GLMmaterial* material = &model->materials[i];
     fprintf(file, "newmtl %s\n", material->name.c_str());
     fprintf(file, "Ka %f %f %f\n",
             material->ambient[0], material->ambient[1], material->ambient[2]);
@@ -1589,7 +1588,6 @@ glmGetNumGroups(GLMmodel *model){return (model && model->groups)?model->numgroup
 GLvoid
 glmDelete(GLMmodel* model)
 {
-  GLMgroup* group=0;
   GLuint i;
 
   if (!(model))return;
@@ -1611,7 +1609,7 @@ glmDelete(GLMmodel* model)
   }
   delete[]model->materials;
   while(model->groups) {
-    group = model->groups;
+    GLMgroup* group = model->groups;
     model->groups = model->groups->next;
     //free(group->name);
     group->name.clear();
@@ -2150,7 +2148,6 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<s
 
   group = model->groups;
 
-  int count = 1;
   int numgroup;
 
   numgroup = model->numgroups-1;
@@ -2158,6 +2155,7 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<s
   verbose(1, "[GEM:modelOBJ] number of groups: %d",numgroup);
   //groupNumber-=1;
   if ( (!(groupNumber > numgroup)) && (groupNumber > 0)){
+    int count = 1;
     verbose(1, "[GEM:modelOBJ] model group requested is %d number of groups: %d",groupNumber,numgroup);
 
 

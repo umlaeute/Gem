@@ -61,12 +61,10 @@ void pix_mix :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
-  // int A,R,G,B;
 
-  int l, r;
   while(datasize--)    {
-    l = (leftPix [chRed]   * imageGain)>>8;
-    r = (rightPix[chRed]   * rightGain)>>8;
+    int l = (leftPix [chRed]   * imageGain)>>8;
+    int r = (rightPix[chRed]   * rightGain)>>8;
     leftPix[chRed] =   CLAMP_HIGH(l + r);
     l = (leftPix [chGreen] * imageGain)>>8;
     r = (rightPix[chGreen] * rightGain)>>8;
@@ -88,12 +86,10 @@ void pix_mix :: processGray_Gray(imageStruct &image, imageStruct &right)
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
-  // int A,R,G,B;
 
-  int l, r;
   while(datasize--)    {
-    l = ( leftPix[chGray] * imageGain)>>8;
-    r = (rightPix[chGray] * rightGain)>>8;
+    int l = ( leftPix[chGray] * imageGain)>>8;
+    int r = (rightPix[chGray] * rightGain)>>8;
     leftPix[chGray] = CLAMP_HIGH(l + r);
     leftPix ++;
     rightPix++;
@@ -104,16 +100,16 @@ void pix_mix :: processGray_Gray(imageStruct &image, imageStruct &right)
 //
 /////////////////////////////////////////////////////////
 void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right){
- int	y1,y2;
- int u,v,u1,v1;
- long width,h,w;
+ long width;
  long src =0;
 
  width = image.xsize/2;
 
  //format is U Y V Y
- for (h=0; h<image.ysize; h++){
-   for(w=0; w<width; w++){
+ for (long h=0; h<image.ysize; h++){
+   for(long w=0; w<width; w++){
+     int y1,y2;
+     int u,v,u1,v1;
      /*  u = (((image.data[src] - 128) * imageGain)>>8)+128;
          u1 = (((right.data[src] - 128) * rightGain)>>8)+128;
          u = u + ((2*u1) -255); */
@@ -154,8 +150,8 @@ void pix_mix :: processRGBA_MMX (imageStruct &image, imageStruct &right){
   __m64 lGain = _mm_set1_pi16((short)imageGain);
   __m64 null64 =   _mm_setzero_si64();
 
-  __m64 l1, r1, l2, r2;
   while (datasize--) {
+    __m64 l1, r1, l2, r2;
     l1=leftPix [datasize];
     r1=rightPix[datasize];
 
@@ -192,10 +188,9 @@ void pix_mix :: processGray_MMX (imageStruct &image, imageStruct &right){
 //needs fixing for better IQ
 void pix_mix :: processYUV_Altivec (imageStruct &image, imageStruct &right)
 {
-long h,w, width;
+  long width = image.xsize/8;
 
     /*altivec code starts */
-    width = image.xsize/8;
     union
     {
         //unsigned int	i;
@@ -298,8 +293,8 @@ long h,w, width;
 	vec_dst( inData, prefetchSize, 0 );
 	vec_dst( rightData, prefetchSize, 1 );
         #endif
-    for ( h=0; h<image.ysize; h++){
-        for (w=0; w<width; w++)
+    for (long h=0; h<image.ysize; h++){
+        for (long w=0; w<width; w++)
         {
         #ifndef PPC970
 	vec_dst( inData, prefetchSize, 0 );

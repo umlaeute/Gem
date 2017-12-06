@@ -85,8 +85,8 @@ void slideSquares :: renderShape(GemState *state)
     glColor4f( 0.5f, 0.5f, 0.5f, 0.75f );
     glNormal3f(0.0f, 0.0f, 1.0f);
     //glScalef( 1.f, 0.8f, 1.f );
-    int curCoord = 0;
     if (GemShape::m_texType && GemShape::m_texNum) {
+      int curCoord = 0;
       glBegin(m_drawType);
       for (i=0; i<= 31; i++){
 	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );

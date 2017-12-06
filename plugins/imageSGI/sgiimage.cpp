@@ -526,11 +526,10 @@ static void setalpha(unsigned char *lptr, size_t n)
 
 static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z)
 {
-  unsigned char pixel, count;
-
+  unsigned char count;
   optr += z;
   while(1) {
-    pixel = *iptr++;
+    unsigned char pixel = *iptr++;
     if ( !(count = (pixel & 0x7f)) )
 	    return;
     if(pixel & 0x80) {
@@ -703,24 +702,21 @@ static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, size_t n)
 
 static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int32 cnt)
 {
-  unsigned char *iptr, *ibufend, *sptr, *optr;
-  short todo, cc;
-  int32 count;
-
+  unsigned char *iptr, *ibufend, *optr;
   lbuf += z;
   iptr = lbuf;
   ibufend = iptr+cnt*4;
   optr = rlebuf;
 
   while(iptr<ibufend) {
-    sptr = iptr;
+    unsigned char *sptr = iptr;
     iptr += 8;
     while((iptr<ibufend)&& ((iptr[-8]!=iptr[-4])||(iptr[-4]!=iptr[0])))
 	    iptr+=4;
     iptr -= 8;
-    count = (iptr-sptr)/4;
+    int32 count = (iptr-sptr)/4;
     while(count) {
-	    todo = static_cast<short>((count > 126) ? 126 : count);
+	    short todo = static_cast<short>((count > 126) ? 126 : count);
 	    count -= todo;
 	    *optr++ = 0x80|todo;
 	    while(todo>8) {
@@ -742,13 +738,13 @@ static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int3
 	    }
     }
     sptr = iptr;
-    cc = *iptr;
+    short cc = *iptr;
     iptr += 4;
     while( (iptr<ibufend) && (*iptr == cc) )
 	    iptr += 4;
     count = (iptr-sptr)/4;
     while(count) {
-	    todo = static_cast<short>(count>126 ? 126:count);
+	    short todo = static_cast<short>(count>126 ? 126:count);
 	    count -= todo;
 	    *optr++ = static_cast<unsigned char>(todo);
 	    *optr++ = static_cast<unsigned char>(cc);

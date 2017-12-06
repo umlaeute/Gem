@@ -49,7 +49,7 @@ vertex_combine :: ~vertex_combine()
 /////////////////////////////////////////////////////////
 void vertex_combine :: render(GemState *state)
 {
-  int i,size,srcL,srcS,count,sizeR,ratio,remainder;
+    int size,srcL,srcS,count,sizeR,ratio,remainder;
     GLfloat *VertexArray;
     float blendL, blendR, ratiof;
 
@@ -77,7 +77,7 @@ void vertex_combine :: render(GemState *state)
         ratio = size / sizeR;
         remainder = size % sizeR;
        // post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
-        i = 0;
+        int i = 0;
         srcL = 0;
         srcS = 0;
         while (i < sizeR) {

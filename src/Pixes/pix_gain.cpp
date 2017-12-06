@@ -68,7 +68,7 @@ void pix_gain :: processRGBAImage(imageStruct &image)
   int datasize =  image.xsize * image.ysize;
   unsigned char *pixels = image.data;
   short R,G,B,A;
-  int red,green,blue,alpha;
+  int red,green,blue;
   R = static_cast<int>(256 * m_gain[chRed]);
   G = static_cast<int>(256 * m_gain[chGreen]);
   B = static_cast<int>(256 * m_gain[chBlue]);
@@ -83,7 +83,7 @@ void pix_gain :: processRGBAImage(imageStruct &image)
 	pixels[chGreen] = CLAMP(green);
 	blue =  (pixels[chBlue ] * B)>>8;
 	pixels[chBlue ] = CLAMP(blue);
-	alpha = (pixels[chAlpha] * A)>>8;
+	int alpha = (pixels[chAlpha] * A)>>8;
 	pixels[chAlpha] = CLAMP(alpha);
 	pixels += 4;
       }

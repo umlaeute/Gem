@@ -94,9 +94,8 @@ void pix_offset :: processGrayImage(imageStruct &image)
   unsigned char m_grey=m_offset[chRed];
 
   if(m_saturate) {
-    short grey;
     while(datasize--){
-      grey = *pixels + m_grey;
+      short grey = *pixels + m_grey;
       *pixels++ = CLAMP(grey);
     }
   } else
@@ -109,12 +108,11 @@ void pix_offset :: processGrayImage(imageStruct &image)
 ////////////////////////////////////////////////////////
 void pix_offset :: processYUVImage(imageStruct &image)
 {
-  int h,w;
   long src = 0;
 
   //format is U Y V Y
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
+  for (int h=0; h<image.ysize; h++){
+    for(int w=0; w<image.xsize/2; w++){
       image.data[src+chU ] = CLAMP( image.data[src+chU] + U );
       image.data[src+chY0] = CLAMP( image.data[src+chY0]+ Y );
       image.data[src+chV ] = CLAMP( image.data[src+chV] + V );

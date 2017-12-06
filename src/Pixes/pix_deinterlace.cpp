@@ -39,14 +39,11 @@ pix_deinterlace :: ~pix_deinterlace()
 
 void pix_deinterlace :: processRGBAImage(imageStruct &image)
 {
-int	row, col,field1,field2,field3;
-	int temp1, temp2,temp3;
-
 	unsigned char *pixels=image.data;
 
-	field1 = 0;
-	field2 = image.xsize*4;
-	field3 = image.xsize*8;
+	int field1 = 0;
+	int field2 = image.xsize*4;
+	int field3 = image.xsize*8;
 
 	if ((m_savedImage.xsize != image.xsize) || (m_savedImage.ysize != image.ysize)){
 		m_savedImage.xsize=image.xsize;
@@ -58,9 +55,9 @@ int	row, col,field1,field2,field3;
 
 	if (m_mode){
 
-	for (row = 0; row < (image.ysize/2)-1; row++){
+	for (int row = 0; row < (image.ysize/2)-1; row++){
+		for (int col = 0; col < image.xsize; col++){
 
-		for (col = 0; col < image.xsize; col++){
 
 
 				pixels[field2+chRed] = (pixels[field1+chRed] + pixels[field3+chRed]) / 2;
@@ -80,9 +77,10 @@ int	row, col,field1,field2,field3;
 
 	}
 	}else{
-	for (row = 0; row < (image.ysize/2)-1; row++){
+	for (int row = 0; row < (image.ysize/2)-1; row++){
 
-		for (col = 0; col < image.xsize; col++){
+		for (int col = 0; col < image.xsize; col++){
+                  int temp1, temp2,temp3;
 
 				//temp1 = abs((int)m_savedImage.data[field2 + chRed] - (int)pixels[field2 + chRed]);
 				//temp2 = abs((int)m_savedImage.data[field2 + chGreen] - (int)pixels[field2 + chGreen]);
@@ -214,15 +212,13 @@ int	field1,field2,field3;
 void pix_deinterlace :: processGrayImage(imageStruct &image)
 {
 
-  int	row, col,field1,field2,field3;
-  int temp1;
   unsigned char *pixels=image.data;
-  field1 = 0;
-  field2 = image.xsize;
-  field3 = image.xsize*2;
+  int field1 = 0;
+  int field2 = image.xsize;
+  int field3 = image.xsize*2;
   if (m_mode){
-    for (row = 0; row < image.ysize-1; row++){
-      for (col = 0; col < image.xsize; col++){
+    for (int row = 0; row < image.ysize-1; row++){
+      for (int col = 0; col < image.xsize; col++){
         pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
         field1++; field2++; field3++;
         pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
@@ -233,9 +229,9 @@ void pix_deinterlace :: processGrayImage(imageStruct &image)
       field3+=image.xsize; field3+=image.xsize;
     }
   }else{
-    for (row = 0; row < image.ysize-1; row++){
-      for (col = 0; col < image.xsize; col++){
-        temp1 = abs(pixels[field1] - pixels[field2]);
+    for (int row = 0; row < image.ysize-1; row++){
+      for (int col = 0; col < image.xsize; col++){
+        int temp1 = abs(pixels[field1] - pixels[field2]);
         if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
         field1++; field2++; field3++;
         temp1 = abs(pixels[field1] - pixels[field2]);

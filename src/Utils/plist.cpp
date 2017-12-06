@@ -109,9 +109,8 @@ print_list(list *p)
 void
 free_list(list **l)
 {
-   list *aux;
    while (isnt_empty_list(*l)) {
-      aux = *l;
+      list *aux = *l;
       *l = next_list_node(*l);
       free(aux);
    }

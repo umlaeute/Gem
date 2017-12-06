@@ -181,7 +181,7 @@ void pix_dump :: trigger()
   case 4:
     while (picturesize-- > 0) {
         if (!m_bytemode) {
-          float r, g, b, a;
+          float r, g, b;
           r = static_cast<float>(data[chRed]) / 255.f;
           SETFLOAT(&m_buffer[i], r);
           i++;
@@ -192,7 +192,7 @@ void pix_dump :: trigger()
           SETFLOAT(&m_buffer[i], b);
           i++;
           if ( m_mode == GL_RGBA ) {
-            a = static_cast<float>(data[chAlpha]) / 255.f;
+            float a = static_cast<float>(data[chAlpha]) / 255.f;
             SETFLOAT(&m_buffer[i], a);
             i++;
           }

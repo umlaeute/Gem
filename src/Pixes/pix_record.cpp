@@ -275,7 +275,6 @@ void pix_record :: enumPropertiesMess()
   if(!m_handle->enumProperties(props))
     return;
 
-  int ac=0;
   t_atom ap[3];
   std::vector<std::string>keys=props.keys();
 
@@ -284,7 +283,7 @@ void pix_record :: enumPropertiesMess()
 
   unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
-    ac=2;
+    int ac=2;
     std::string key=keys[i];
     SETSYMBOL(ap+0, gensym(key.c_str()));
     switch(props.type(key)) {

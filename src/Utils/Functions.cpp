@@ -163,9 +163,9 @@ GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots, float 
     knot += (span * numDimen);
 
     // Evaluate the span cubic at x using Horner's rule
-    float c0, c1, c2, c3;
     for (int i = 0; i < numDimen; i++)
     {
+      float c0, c1, c2, c3;
         c3 = CR00*knot[0 * numDimen]
            + CR01*knot[1 * numDimen]
            + CR02*knot[2 * numDimen]

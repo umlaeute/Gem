@@ -106,8 +106,6 @@ GemShape :: ~GemShape()
 /////////////////////////////////////////////////////////
 void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
 {
-	int i;
-
   TexCoord*texcoords=NULL;
   int numCoords = 0;
   int numUnits = 0;
@@ -122,7 +120,7 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, 
   }
 
   if (numUnits) {
-    for( i=0; i<numUnits; i++) {
+    for(int i=0; i<numUnits; i++) {
       glMultiTexCoord2fARB(GL_TEXTURE0+i, tx, ty);
     }
   } else { // no multitexturing!
@@ -135,14 +133,11 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
                            float s, float t, float r, float q,
                            int curCoord)
 {
-	int i;
   int numCoords = 0;
   int numUnits = 0;
 
   state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
   state->get(GemState::_GL_TEX_UNITS, numUnits);
-
-
 
   if (numCoords) {
     s*=state->texCoordX(curCoord);
@@ -150,7 +145,7 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
   }
 
   if (numUnits) {
-    for( i=0; i<numUnits; i++)
+    for(int i=0; i<numUnits; i++)
       glMultiTexCoord4fARB(GL_TEXTURE0+i, s, t, r, q);
   } else { // no multitexturing!
     glTexCoord4f(s, t, r, q);

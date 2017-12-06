@@ -78,7 +78,6 @@ void mesh_line :: setGrid( int valueX)
 /////////////////////////////////////////////////////////
 void mesh_line :: renderShape(GemState *state)
 {
-  int i;
   GLfloat sizeX = 2. / (gridX-1.);
 
   if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_LINE_STRIP;
@@ -124,7 +123,7 @@ void mesh_line :: renderShape(GemState *state)
       }
 
       glBegin(m_drawType);
-      for ( i = 0; i<=(gridX -1); i++)
+      for (int i = 0; i<=(gridX -1); i++)
       {
           glTexCoord2f( texCoords[i], 0. );
           glVertex3f( m_size * (i*sizeX -1), 0 , 0 );

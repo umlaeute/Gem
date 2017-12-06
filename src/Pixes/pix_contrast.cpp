@@ -252,15 +252,13 @@ int datasize = (image.xsize) * image.ysize;
 	unsigned char *pixels = image.data;
 	unsigned short c,s;
 
-	int y,u,v;
-
 	c = static_cast<short>(256. * m_contrast);
 	s = static_cast<short>(256. * m_saturation);
 
         if(256==s && 256==c)return;
 
 	while(datasize--){
-
+		int y,u,v;
 
 		u = (((pixels[chRed] * -38) +  (pixels[chGreen] * -74 ) + (pixels[chBlue] * 112))>>8)-0;
 		//u = CLAMP(((u * s) >> 8) + 0);
@@ -280,7 +278,6 @@ int datasize = (image.xsize) * image.ysize;
 
 		pixels+=4;
 	}
-
 }
 
 void pix_contrast :: processGrayImage(imageStruct &image)

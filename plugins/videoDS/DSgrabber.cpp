@@ -544,7 +544,6 @@ HRESULT CSampleGrabberAllocator::Alloc( )
     }
 
     LPBYTE pNext = m_pBuffer;
-    CMediaSample *pSample;
 
     ASSERT(m_lAllocated == 0);
 
@@ -553,8 +552,7 @@ HRESULT CSampleGrabberAllocator::Alloc( )
     // the memory after the prefix - so that GetPointer() will return a pointer
     // to m_lSize bytes.
     for (; m_lAllocated < m_lCount; m_lAllocated++, pNext += lAlignedSize) {
-
-        pSample = new CMediaSample(
+      CMediaSample *pSample = new CMediaSample(
                         NAME("Sample Grabber memory media sample"),
                         this,
                         &hr,
@@ -588,9 +586,8 @@ void CSampleGrabberAllocator::ReallyFree()
 
     /* Free up all the CMediaSamples */
 
-    CMediaSample *pSample;
     for (;;) {
-        pSample = m_lFree.RemoveHead();
+      CMediaSample *pSample = m_lFree.RemoveHead();
         if (pSample != NULL) {
             delete pSample;
         } else {

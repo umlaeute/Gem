@@ -354,17 +354,16 @@ void glsl_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 {
-  int i=0, j=0;
   if (m_program || m_programARB){
-    for(i=0; i<m_uniformCount; i++){
+    int i=0;
+    for(i=0; i<m_uniformCount; i++) {
       if(s==m_symname[i]){
         //      post("uniform parameters #%d", i);
         // don't know what to do with that...
         // sketch:
         //   copy the values into memory and add a flag that we have them for this parameter
         //   in the render cycle use it
-        for (j=0; j < argc; j++)
-	  {
+        for (int j=0; j < argc; j++) {
 	    m_param[i][j] = atom_getfloat(&argv[j]);
 	  }
         // tell the GL state that this variable has changed next render

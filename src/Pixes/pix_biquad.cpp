@@ -113,7 +113,6 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
   }else{
     // fast, because calculations are done in int !
     int ifb0,ifb1,ifb2,iff1,iff2,iff3;
-    int ioutput;
     ifb0 = static_cast<int>(256. * fb0);
     ifb1 = static_cast<int>(256. * fb1);
     ifb2 = static_cast<int>(256. * fb2);
@@ -124,7 +123,7 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
     int max=0;//JMZ
 
     while(pixsize--) {
-      ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
+      int ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
       if(max<ioutput)max=ioutput;//JMZ
       *this_p++    = (unsigned char)CLAMP(((iff1 * ioutput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
       *prev_p++	 = *last_p;
@@ -171,7 +170,6 @@ void pix_biquad :: processYUVImage(imageStruct &image)
 
         // fast, because calculations are done in int !
         int ifb0,ifb1,ifb2,iff1,iff2,iff3;
-        int Youtput,UVoutput,Youtput1,UVoutput1;
         ifb0 = static_cast<int>(256. * fb0);
         ifb1 = static_cast<int>(256. * fb1);
         ifb2 = static_cast<int>(256. * fb2);
@@ -183,6 +181,7 @@ void pix_biquad :: processYUVImage(imageStruct &image)
         //needs some manual scheduling...
 
         while(pixsize--) {
+          int Youtput,UVoutput,Youtput1,UVoutput1;
             UVoutput  = (((ifb0 * (*this_p-128)) + (ifb1 * (*last_p-128)) + (ifb2 * (*prev_p-128)))>>8);
             *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput) + (iff2 * (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
             *prev_p++ = *last_p;

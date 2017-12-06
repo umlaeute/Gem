@@ -40,7 +40,6 @@ polygon :: polygon(t_floatarg numInputs)
     m_numInputs(0),
     m_inlet(NULL)
 {
-  int i;
   int realNum = static_cast<int>(numInputs);
 
   // configure the inlets
@@ -52,7 +51,7 @@ polygon :: polygon(t_floatarg numInputs)
 
 		char tempVt[7];
 		// create the proper number of inputs
-		for (i = 0; i < realNum; i++) {
+		for (int i = 0; i < realNum; i++) {
 			sprintf(tempVt, "%d", i+1);
 			m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
 		}
@@ -72,8 +71,7 @@ polygon :: ~polygon(void)
   if(m_vertarray)
 		delete[]m_vertarray;
 	if(m_inlet) {
-		int i=0;
-		for(i=0; i<m_numInputs; i++) {
+		for(int i=0; i<m_numInputs; i++) {
 			inlet_free(m_inlet[i]);
 			m_inlet[i]=NULL;
 		}
@@ -91,16 +89,14 @@ void polygon :: createVertices(int num) {
 
 
 	if(num>0) {
-		int i=0;
-
 		m_numVertices = num;
 		m_vert = new float*[num];
 		m_vertarray = new float[num*3];
 
-		for (i = 0; i < num*3; i++)  {
+		for (int i = 0; i < num*3; i++)  {
 			m_vertarray[i]=0.0f;
 		}
-		for (i = 0; i < num; i++)  {
+		for (int i = 0; i < num; i++)  {
 			m_vert[i]=m_vertarray+3*i;
 		}
 	}
@@ -176,8 +172,7 @@ void polygon :: listMess(int argc, t_atom*argv) {
 	}
 
 	if(m_numVertices*3==argc) {
-		int i=0;
-		for(i=0; i<m_numVertices; i++) {
+		for(int i=0; i<m_numVertices; i++) {
 			setVert(i,
 							atom_getfloat(argv+0),
 							atom_getfloat(argv+1),

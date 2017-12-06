@@ -63,7 +63,6 @@ void pix_rectangle :: processRGBAImage(imageStruct &image)
   int pixelsize = image.csize;
   int rowsize  = image.xsize * pixelsize;
   unsigned char *pixels = image.data;
-  int col, row;
 
   unsigned char r=m_color[chRed];
   unsigned char g=m_color[chGreen];
@@ -76,10 +75,10 @@ void pix_rectangle :: processRGBAImage(imageStruct &image)
   if (m_upper_right[1] > image.ysize) m_upper_right[1] = image.ysize;
   if (m_lower_left[1] > image.ysize)  m_lower_left[1] = image.ysize;
 
-  row = (m_upper_right[1] - m_lower_left[1]);
+  int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--)	{
     pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
-    col = (m_upper_right[0] - m_lower_left[0]);
+    int col = (m_upper_right[0] - m_lower_left[0]);
     while (col--)		{
       pixels[chRed]   = r;
       pixels[chGreen] = g;
@@ -94,7 +93,6 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   int pixelsize = image.csize;
   int rowsize  = image.xsize * pixelsize;
   unsigned char *pixels = image.data;
-  int col, row;
 
   unsigned char y =((RGB2YUV_11*m_color[chRed]+RGB2YUV_12*m_color[chGreen]+RGB2YUV_13*m_color[chBlue])>>8)+ Y_OFFSET;
   unsigned char u =((RGB2YUV_21*m_color[chRed]+RGB2YUV_22*m_color[chGreen]+RGB2YUV_23*m_color[chBlue])>>8)+UV_OFFSET;
@@ -105,15 +103,13 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   if (m_upper_right[1] > image.ysize)  m_upper_right[1] = image.ysize;
   if (m_lower_left[1] > image.ysize)    m_lower_left[1] = image.ysize;
 
-  row = (m_upper_right[1] - m_lower_left[1]);
-
+  int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--)	{
     int offset=rowsize*(m_lower_left[1]+row) + m_lower_left[0] * pixelsize;
     offset-=(offset%4);
     pixels = image.data+offset;
 
-    col = (m_upper_right[0] - m_lower_left[0])/2;
-
+    int col = (m_upper_right[0] - m_lower_left[0])/2;
     while (col--)	{
       pixels[chY0]= y;
       pixels[chU] = u;
@@ -128,7 +124,6 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
   int pixelsize = image.csize;
   int rowsize  = image.xsize * pixelsize;
   unsigned char *pixels = image.data;
-  int col, row;
 
   if (m_upper_right[0] > image.xsize)m_upper_right[0] = image.xsize;
   if (m_lower_left[0]  > image.xsize)m_lower_left [0] = image.xsize;
@@ -138,11 +133,10 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
 
   unsigned char g=(m_color[chRed]*RGB2GRAY_RED+m_color[chGreen]*RGB2GRAY_GREEN+m_color[chBlue]*RGB2GRAY_BLUE)>>8;
 
-  row = (m_upper_right[1] - m_lower_left[1]);
-
+  int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--)    {
     pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
-    col = (m_upper_right[0] - m_lower_left[0]);
+    int col = (m_upper_right[0] - m_lower_left[0]);
     while (col--)        {
       pixels[chGray] = g;
       pixels++;

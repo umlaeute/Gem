@@ -205,17 +205,10 @@ void vertex_model :: openMess(t_symbol *filename)
 /////////////////////////////////////////////////////////
 void vertex_model :: render(GemState *state)
 {
-
-    int size,i,src,length;
-   
-    
     if (!m_haveModel) return;  
     //this will get the appropriate maximum texcoord size for use with the model
-    src = 0;
-    
-    
-        
-    size = m_vertcount * 4 * 4;
+    int src = 0;
+    int size = m_vertcount * 4 * 4;
    // post("m_vertcount %d",m_vertcount);
     memcpy(m_tempVA, m_VertexArray, size);
     memcpy(m_tempCA, m_ColorArray, size); 
@@ -241,7 +234,7 @@ void vertex_model :: render(GemState *state)
             post("m_tempTA[1] start %f",m_TexCoordArray[1]);
             post("m_tempTA[2] start %f",m_TexCoordArray[2]);
             post("m_tempTA[length] start %f",m_TexCoordArray[length]);
-            for(i=0; i < length; i++){
+            for(int i=0; i < length; i++){
                 m_TexCoordArray[src] = m_TexCoordArray[src] * maxX;
                 m_TexCoordArray[src+1] = m_TexCoordArray[src+1] * maxY;
                 src+=2;
@@ -257,7 +250,7 @@ void vertex_model :: render(GemState *state)
    // memcpy(m_tempTA, m_TexCoordArray, size); 
     
      if (state->numTexCoords) {
-    
+        int length;
         if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
          //   post("changing texcoords");
             
@@ -276,7 +269,7 @@ void vertex_model :: render(GemState *state)
         //    post("m_tempTA[2] start %f",m_tempTA[2]);
         //    post("m_tempTA[length] start %f",m_tempTA[length]);
         //can this be unrolled??
-            for(i=0; i < length; i++){
+            for(int i=0; i < length; i++){
                 m_tempTA[src] = m_TexCoordArray[src] * maxX;
                 m_tempTA[src+1] = m_TexCoordArray[src+1] * maxY;
                 src+=2;

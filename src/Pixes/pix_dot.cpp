@@ -74,27 +74,23 @@ pix_dot :: ~pix_dot()
 /////////////////////////////////////////////////////////
 void pix_dot :: makePattern(int format)
 {
-  int i, x, y, c;
-  int u, v;
-  double p, q, r;
-
   switch(format){
   default: // RGBA
     {
-      for (i=0; i<DOTMAX; i++)
+      for (int i=0; i<DOTMAX; i++)
 	{
 	  /* Generated pattern is a quadrant of a disk. */
 	  U32 *pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
-	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+	  double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
 	  r = r*r;
-	  for(y=0; y<dot_hsize; y++) {
-	    for(x=0; x<dot_hsize; x++) {
-	      c = 0;
-	      for(u=0; u<4; u++) {
-		p = static_cast<double>(u)/4.0 + y;
+	  for(int y=0; y<dot_hsize; y++) {
+	    for(int x=0; x<dot_hsize; x++) {
+	      int c = 0;
+	      for(int u=0; u<4; u++) {
+		double p = static_cast<double>(u)/4.0 + y;
 		p = p*p;
-		for(v=0; v<4; v++) {
-		  q = static_cast<double>(v)/4.0 + x;
+		for(int v=0; v<4; v++) {
+		  double q = static_cast<double>(v)/4.0 + x;
 		  if(p+q*q<r) {
 		    c++;
 		  }
@@ -110,21 +106,20 @@ void pix_dot :: makePattern(int format)
     break;
   case GL_LUMINANCE:
     {
-      unsigned char *pat;
-      for (i=0; i<DOTMAX; i++)
+      for (int i=0; i<DOTMAX; i++)
 	{
 	  /* Generated pattern is a quadrant of a disk. */
-	  pat = (reinterpret_cast<unsigned char*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
-	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+          unsigned char *pat = (reinterpret_cast<unsigned char*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
+	  double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
 	  r = r*r;
-	  for(y=0; y<dot_hsize; y++) {
-	    for(x=0; x<dot_hsize; x++) {
-	      c = 0;
-	      for(u=0; u<4; u++) {
-		p = static_cast<double>(u)/4.0 + y;
+	  for(int y=0; y<dot_hsize; y++) {
+	    for(int x=0; x<dot_hsize; x++) {
+	      int c = 0;
+	      for(int u=0; u<4; u++) {
+		double p = static_cast<double>(u)/4.0 + y;
 		p = p*p;
-		for(v=0; v<4; v++) {
-		  q = static_cast<double>(v)/4.0 + x;
+		for(int v=0; v<4; v++) {
+		  double q = static_cast<double>(v)/4.0 + x;
 		  if(p+q*q<r) {
 		    c++;
 		  }
@@ -140,23 +135,22 @@ void pix_dot :: makePattern(int format)
     break;
   case GL_YUV422_GEM:
       {
-      U16 *pat;
       const unsigned char chroma = 128;
 
-      for (i=0; i<DOTMAX; i++)
+      for (int i=0; i<DOTMAX; i++)
 	{
 	  /* Generated pattern is a quadrant of a disk. */
-	  pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
-	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+          U16 *pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
+	  double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
 	  r = r*r;
-	  for(y=0; y<dot_hsize; y++) {
-	    for(x=0; x<dot_hsize; x++) {
-	      c = 0;
-	      for(u=0; u<4; u++) {
-		p = static_cast<double>(u)/4.0 + y;
+	  for(int y=0; y<dot_hsize; y++) {
+	    for(int x=0; x<dot_hsize; x++) {
+	      int c = 0;
+	      for(int u=0; u<4; u++) {
+		double p = static_cast<double>(u)/4.0 + y;
 		p = p*p;
-		for(v=0; v<4; v++) {
-		  q = static_cast<double>(v)/4.0 + x;
+		for(int v=0; v<4; v++) {
+		  double q = static_cast<double>(v)/4.0 + x;
 		  if(p+q*q<r) {
 		    c++;
 		  }
@@ -184,30 +178,29 @@ void pix_dot :: makePattern(int format)
 
 void pix_dot :: drawDot(int xx, int yy, unsigned char c, U32 *dest)
 {
-  int x, y;
   U32 *pat;
 
   c = (c>>(8-DOTDEPTH));
   pat = pattern + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<dot_hsize; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
     pat += dot_hsize + 1;
   }
   pat -= dot_hsize*2;
-  for(y=0; y<dot_hsize-1; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize-1; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
@@ -217,30 +210,29 @@ void pix_dot :: drawDot(int xx, int yy, unsigned char c, U32 *dest)
 
 void pix_dot :: drawDotYUV(int xx, int yy, unsigned char c, U16 *dest)
 {
-  int x, y;
   U16 *pat;
 
   c = (c>>(8-DOTDEPTH));
   pat = (reinterpret_cast<U16*>(pattern)) + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<dot_hsize; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
     pat += dot_hsize + 1;
   }
   pat -= dot_hsize*2;
-  for(y=0; y<dot_hsize-1; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize-1; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
@@ -250,30 +242,29 @@ void pix_dot :: drawDotYUV(int xx, int yy, unsigned char c, U16 *dest)
 
 void pix_dot :: drawDotGray(int xx, int yy, unsigned char c, unsigned char *dest)
 {
-  int x, y;
   unsigned char *pat;
 
   c = (c>>(8-DOTDEPTH));
   pat = ((unsigned char*)pattern) + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<dot_hsize; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
     pat += dot_hsize + 1;
   }
   pat -= dot_hsize*2;
-  for(y=0; y<dot_hsize-1; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize-1; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
@@ -316,8 +307,6 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 {
   U32 *src = reinterpret_cast<U32*>(image.data);
   U32 *dest;
-
-  int x, y, sx, sy;
 
   if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
 
@@ -369,10 +358,10 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   }
 
   dest = reinterpret_cast<U32*>(myImage.data);
-  for ( y=0; y<dots_height; y++) {
-    sy = sampy[y];
-    for ( x=0; x<dots_width; x++){
-        sx = sampx[x];
+  for (int y=0; y<dots_height; y++) {
+    int sy = sampy[y];
+    for (int x=0; x<dots_width; x++){
+        int sx = sampx[x];
         drawDot(x, y, inline_RGB2Y( src[sy*image.xsize+sx]), dest);
     }
   }
@@ -388,9 +377,6 @@ void pix_dot :: processYUVImage(imageStruct &image)
 {
     U16 *dest;
     U16 *src = reinterpret_cast<U16*>(image.data);
-    int x, y, sx, sy;
-    int luma = 0;
-    int avgluma = 0;
 
     if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
 
@@ -436,11 +422,11 @@ void pix_dot :: processYUVImage(imageStruct &image)
 
     dest = reinterpret_cast<U16*>(myImage.data);
 
-    for ( y=0; y<dots_height; y++) {
-        sy = sampy[y];
-        for ( x=0; x<dots_width; x++){
-            sx = sampx[x];
-            luma  = ((src[sy*image.xsize+sx+1])>>SHIFT_Y1)&0xff;
+    for (int y=0; y<dots_height; y++) {
+        int sy = sampy[y];
+        for (int x=0; x<dots_width; x++){
+            int sx = sampx[x];
+            int luma  = ((src[sy*image.xsize+sx+1])>>SHIFT_Y1)&0xff;
             drawDotYUV(x, y, luma, dest);
         }
     }
@@ -455,7 +441,6 @@ void pix_dot :: processGrayImage(imageStruct &image)
 {
     unsigned char *dest;
     unsigned char *src = (unsigned char*)image.data;
-    int x, y, sx, sy;
 
     if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
 
@@ -500,10 +485,10 @@ void pix_dot :: processGrayImage(imageStruct &image)
 
     dest = (unsigned char*)myImage.data;
 
-    for ( y=0; y<dots_height; y++) {
-        sy = sampy[y];
-        for ( x=0; x<dots_width; x++){
-            sx = sampx[x];
+    for (int y=0; y<dots_height; y++) {
+        int sy = sampy[y];
+        for (int x=0; x<dots_width; x++){
+            int sx = sampx[x];
             const char luma  = src[sy*image.xsize+sx+1];
             drawDotGray(x, y, luma, dest);
         }

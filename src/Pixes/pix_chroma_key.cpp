@@ -468,11 +468,10 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 #ifdef __VEC__
 void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 {
-register int h,w,i,j,width;
+  int h,w;
 
     h = image.ysize;
     w = image.xsize/8;
-    width = image.xsize/8;
 
     //check to see if the buffer isn't 16byte aligned (highly unlikely)
     if (image.ysize*image.xsize % 16 != 0){
@@ -549,8 +548,8 @@ register int h,w,i,j,width;
     #endif
     if (m_direction) {
 
-    for ( i=0; i<h; i++){
-        for (j=0; j<w; j++)
+    for (int i=0; i<h; i++){
+        for (int j=0; j<w; j++)
         {
         #ifndef PPC970
         //this function is probably memory bound on most G4's -- what else is new?
