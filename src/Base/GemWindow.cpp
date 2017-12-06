@@ -182,20 +182,20 @@ void GemWindow::info(std::vector<t_atom>l) {
 void GemWindow::info(t_symbol*s, int argc, t_atom*argv) {
   m_pimpl->queue(s, argc, argv);
 }
-void GemWindow::info(std::string s) {
+void GemWindow::info(const std::string& s) {
   info(gensym(s.c_str()), 0, 0);
 }
-void GemWindow::info(std::string s, int i) {
+void GemWindow::info(const std::string& s, int i) {
   info(s, (t_float)i);
 }
 
-void GemWindow :: info(std::string s, t_float value)
+void GemWindow :: info(const std::string& s, t_float value)
 {
   t_atom atom;
   SETFLOAT(&atom, value);
   info(gensym(s.c_str()), 1, &atom);
 }
-void GemWindow :: info(std::string s, std::string value)
+void GemWindow :: info(const std::string& s, const std::string& value)
 {
   t_atom atom;
   SETSYMBOL(&atom, gensym(value.c_str()));
@@ -244,7 +244,7 @@ void GemWindow::entry(int devId, int state)
 }
 
 /* keyboard buttons */
-void GemWindow::key(int devId, std::string sid, int iid, int state) {
+void GemWindow::key(int devId, const std::string& sid, int iid, int state) {
   t_atom ap[4];
   SETFLOAT (ap+0, devId);
   SETSYMBOL(ap+1, gensym("keyname"));
