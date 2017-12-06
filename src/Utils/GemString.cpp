@@ -109,12 +109,12 @@ namespace gem {
       std::wstring result;
 
       wchar_t unic = 0;
-      uint8_t data, byte, stat = 9;
+      uint8_t byte, stat = 9;
 
       int len=0;
 
       while((byte=*str++)) {
-        data = utf8d[ byte ];
+        uint8_t data = utf8d[ byte ];
         stat = utf8d[ 256 + (stat << 4) + (data >> 4) ];
         byte = (byte ^ (uint8_t)(data << 4));
 

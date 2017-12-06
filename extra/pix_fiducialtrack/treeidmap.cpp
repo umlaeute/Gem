@@ -105,12 +105,12 @@ public:
 
         std::ifstream is( file_name );
         std::string s;
-        int id = 0;
 
         if( !is.good() ){
             std::cout << "error opening tree file: " << file_name << std::endl;
         }else{
-		
+            int id = 0;
+
      	    minNodeCount = 0x7FFF;
             minDepth = 0x7FFF;
             while( is >> s ){

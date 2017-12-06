@@ -55,9 +55,6 @@ imageVert :: ~imageVert()
 /////////////////////////////////////////////////////////
 void imageVert :: processRGBAPix(imageStruct &image, int texture)
 {
-  float red, green, blue, alpha;
-  float red2, green2, blue2, alpha2;
-
   const int ySize = image.ysize;
   const int xSize = image.xsize;
   const int yStride = xSize * image.csize;
@@ -84,6 +81,8 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
       int xCount = xSize;
       glBegin(GL_QUAD_STRIP);
       while(xCount--)   {
+        float red, green, blue;
+        float red2, green2, blue2;
 	unsigned char *oneDown = data - yStride;
 	red   = data[chRed] / 255.f;
 	green = data[chGreen] / 255.f;
@@ -116,6 +115,8 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
 
       glBegin(GL_QUAD_STRIP);
       while(xCount--) {
+        float red, green, blue, alpha;
+        float red2, green2, blue2, alpha2;
 	unsigned char *oneDown = data - yStride;
 	red   = data[chRed] / 255.f;
 	green = data[chGreen] / 255.f;

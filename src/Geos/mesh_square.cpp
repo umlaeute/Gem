@@ -104,7 +104,6 @@ void mesh_square :: setGridY( int valueY )
 /////////////////////////////////////////////////////////
 void mesh_square :: renderShape(GemState *state)
 {
-	int i,j;
     GLfloat sizeX = 2. / (gridX-1.);
     GLfloat sizeY = 2. / (gridY-1.);
 
@@ -160,10 +159,10 @@ void mesh_square :: renderShape(GemState *state)
             alreadyInit = 1;
         }
 
-        for ( i = 0; i<(gridX -1); i++)
+        for (int i = 0; i<(gridX -1); i++)
         {
             glBegin(m_drawType);
-            for ( j = 0; j < gridY  ; j++)
+            for (int j = 0; j < gridY  ; j++)
             {
                 glTexCoord2f( texCoords[i][j][0], texCoords[i][j][1]);
                 glVertex3f( m_size * (i*sizeX -1), m_size * (j*sizeY -1), 0 );

@@ -81,11 +81,10 @@ void pix_dot :: makePattern(int format)
   switch(format){
   default: // RGBA
     {
-      U32 *pat;
       for (i=0; i<DOTMAX; i++)
 	{
 	  /* Generated pattern is a quadrant of a disk. */
-	  pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
+	  U32 *pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
 	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
 	  r = r*r;
 	  for(y=0; y<dot_hsize; y++) {

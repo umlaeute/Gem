@@ -142,8 +142,7 @@ int	row, col,field1,field2,field3;
 void pix_deinterlace :: processYUVImage(imageStruct &image)
 {
 
-int	row, col,field1,field2,field3;
-	int temp1;
+int	field1,field2,field3;
 
 	unsigned char *pixels=image.data;
 
@@ -153,9 +152,9 @@ int	row, col,field1,field2,field3;
 
 	if (m_mode){
 
-	for (row = 0; row < (image.ysize/2)-1; row++){
+	for (int row = 0; row < (image.ysize/2)-1; row++){
 
-		for (col = 0; col < image.xsize; col++){
+		for (int col = 0; col < image.xsize; col++){
 
 
 				pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
@@ -178,9 +177,7 @@ int	row, col,field1,field2,field3;
 	for (row = 0; row < (image.ysize/2)-1; row++){
 
 		for (col = 0; col < image.xsize; col++){
-
-
-				temp1 = abs(pixels[field1] - pixels[field2]);
+				int temp1 = abs(pixels[field1] - pixels[field2]);
 
 				if (temp1 > 10) pixels[field2] = (pixels[field1] + pixels[field3]) / 2;
 

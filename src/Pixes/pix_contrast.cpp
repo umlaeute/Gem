@@ -221,13 +221,12 @@ void pix_contrast :: processYUVImage(imageStruct &image)
 	unsigned char *pixels = image.data;
 	unsigned short c,s;
 
-	int y0, y1,u,v;
-
 	c = static_cast<short>(256. * m_contrast);
 	s = static_cast<short>(256. * m_saturation);
         if(256==s && 256==c)return;
 
 	while(datasize--){
+                int y0, y1, u, v;
 
 		u = pixels[chU] -128;
 		pixels[chU] = CLAMP(((u * s) >> 8) + 128);
@@ -291,12 +290,11 @@ void pix_contrast :: processGrayImage(imageStruct &image)
   unsigned char *pixels = image.data;
   // we scale by 256, since "(x*256)>>8=x"
   short c = static_cast<short>(256. * m_contrast);
-  int g;
 
   if(256==c)return; // the effect would produce the same result...
 
   while(datasize--){
-    g=(((*pixels - 128) * c) >> 8) + 128;
+    int g=(((*pixels - 128) * c) >> 8) + 128;
     *pixels++ = CLAMP(g);
   }
 }
