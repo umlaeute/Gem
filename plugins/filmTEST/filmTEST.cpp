@@ -70,7 +70,7 @@ void filmTEST::getProperties(gem::Properties&props) {
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     props.erase(key);
-#define SETPROP(k, v) } else if(k == key) { double d=(double)v; props.set(key, v)
+#define SETPROP(k, v) } else if(k == key) { double d=(double)v; props.set(key, d)
     if(""==key) {
       SETPROP("fps", m_fps);
       SETPROP("frames", m_numFrames);
