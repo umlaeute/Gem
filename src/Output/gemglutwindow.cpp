@@ -253,12 +253,12 @@ void gemglutwindow :: titleMess(std::string s)
 /////////////////////////////////////////////////////////
 void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1 ) {
     error ("height must be greater than 0");
     return;
   }
@@ -318,6 +318,7 @@ bool gemglutwindow :: create(void)
   if(s_windowmap.size()>0) {
     std::map<int,gemglutwindow*>::iterator it = s_windowmap.begin();
     gemglutwindow*other=NULL;
+    // FIXXME: shouldn't we iterate over all the windows?
     other=it->second;
     if(other && other->makeCurrent()) {
       glutSetOption(GLUT_RENDERING_CONTEXT, GLUT_USE_CURRENT_CONTEXT );

@@ -824,12 +824,12 @@ void gemglxwindow :: titleMess(std::string s)
 /////////////////////////////////////////////////////////
 void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1) {
     error ("height must be greater than 0");
     return;
   }
@@ -974,6 +974,9 @@ void gemglxwindow :: destroy(void)
 
     XFlush( m_pimpl->dpy );
     err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
+    if(err) {
+      verbose(1, "XCloseDisplay returned %d", err);
+    }
   }
   m_pimpl->dpy = NULL;
   m_pimpl->win = 0;

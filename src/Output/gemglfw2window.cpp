@@ -123,12 +123,12 @@ void gemglfw2window :: titleMess(std::string s)
 /////////////////////////////////////////////////////////
 void gemglfw2window :: dimensionsMess(unsigned int width, unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1) {
     error ("height must be greater than 0");
     return;
   }
