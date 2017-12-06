@@ -20,7 +20,11 @@
 #if 0
 # define debug error
 #else
-# define debug
+# if __cplusplus > 199711L
+#  define debug(...)
+# else
+#  define debug
+# endif
 #endif
 
 #include "Gem/GemGL.h"
