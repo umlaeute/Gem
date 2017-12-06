@@ -51,7 +51,7 @@ void vertex_combine :: render(GemState *state)
 {
   int i,size,srcL,srcS,count,sizeR,ratio,remainder;
     GLfloat *VertexArray;
-    float blendL, blendR, ratiof,countf;
+    float blendL, blendR, ratiof;
 
     VertexArray =state->VertexArray;
     if (state->VertexArray == NULL || state->VertexArraySize <= 0){
@@ -80,7 +80,6 @@ void vertex_combine :: render(GemState *state)
         i = 0;
         srcL = 0;
         srcS = 0;
-        countf = 0.0;
         while (i < sizeR) {
             count = 0;
             while (count < ratio){

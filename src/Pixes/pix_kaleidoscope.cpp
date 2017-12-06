@@ -225,7 +225,6 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 
       float RowEndU;
       float RowEndV;
-      bool bDebugIsHalfLine;
 
       if (bIsFirstSpan) {
 	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
@@ -258,7 +257,6 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	}
 
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 	float Line1U;
 	float Line1V;
 	float Line2U;
@@ -323,7 +321,6 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
 	}
 
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 
 	float Line1U;
 	float Line1V;
@@ -351,7 +348,6 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
       } else {
 
 	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 
 	if (bIsHalfLine) {
 	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
@@ -658,7 +654,6 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
       float RowEndU;
       float RowEndV;
 
-      bool bDebugIsHalfLine;
       if (bIsFirstSpan) {
 	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
 	SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
@@ -692,7 +687,6 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 	}
 
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 	float Line1U;
 	float Line1V;
 	float Line2U;
@@ -762,7 +756,6 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
 
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 
 	float Line1U;
 	float Line1V;
@@ -791,7 +784,6 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
       } else {
 	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 
 	if (bIsHalfLine) {
 	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
@@ -1115,7 +1107,6 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
       float RowEndU;
       float RowEndV;
 
-      bool bDebugIsHalfLine;
       if (bIsFirstSpan) {
 	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
 	SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
@@ -1149,7 +1140,6 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 	}
 
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 	float Line1U;
 	float Line1V;
 	float Line2U;
@@ -1219,7 +1209,6 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 
 
 	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 
 	float Line1U;
 	float Line1V;
@@ -1248,7 +1237,6 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
 
       } else {
 	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
 
 	if (bIsHalfLine) {
 	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);

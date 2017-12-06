@@ -103,10 +103,9 @@ void pix_background :: processRGBAImage(imageStruct &image)
 void pix_background :: processGrayImage(imageStruct &image)
 {
     int i;// h,w,hlength;
-  long src,pixsize;
+  long pixsize;
   unsigned char newpix, oldpix, *npixes, *opixes;
 
-  src = 0;
   pixsize = image.xsize * image.ysize * image.csize;
   if(m_savedImage.xsize!=image.xsize ||
      m_savedImage.ysize!=image.ysize ||
@@ -351,11 +350,10 @@ void pix_background :: processGrayMMX(imageStruct &image){
 #ifdef __VEC__
 void pix_background :: processYUVAltivec(imageStruct &image)
 {
-register int h,w,i,j,width;
+register int h,w,i,j;
 int pixsize = image.xsize * image.ysize * image.csize;
     h = image.ysize;
     w = image.xsize/8;
-    width = image.xsize/8;
 
     //check to see if the buffer isn't 16byte aligned (highly unlikely)
     if (image.ysize*image.xsize % 16 != 0){

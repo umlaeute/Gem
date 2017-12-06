@@ -46,12 +46,10 @@ pix_chroma_key :: ~pix_chroma_key()
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-  long src;
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
   unsigned char Ghi,Glo,Bhi,Blo,Rhi,Rlo;
-  src =0;
 
   Rhi = CLAMP(m_Yvalue + m_Yrange);
   Rlo = CLAMP(m_Yvalue - m_Yrange);

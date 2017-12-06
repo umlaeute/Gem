@@ -623,12 +623,11 @@ void videoDarwin::getProperties(gem::Properties&props) {
   int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    double value_d=0.;
     unsigned short value_us=0;
     if(0) {
 #define PROPGET_VD(NAME)                                                \
-      } else if (#NAME == key && m_vdig && !iidc) {                              \
-      if(0==VDGet ## NAME (m_vdig,&value_us)) {props.set(key, us2d(value_us)); } value_d=0
+      } else if (#NAME == key && m_vdig && !iidc) {                     \
+        if(0==VDGet ## NAME (m_vdig,&value_us)) {props.set(key, us2d(value_us)); }
     PROPGET_VD(Hue);
     PROPGET_VD(Sharpness);
     PROPGET_VD(Saturation);

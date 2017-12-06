@@ -390,7 +390,6 @@ void pix_dot :: processYUVImage(imageStruct &image)
     U16 *src = reinterpret_cast<U16*>(image.data);
     int x, y, sx, sy;
     int luma = 0;
-    int luma2 = 0;
     int avgluma = 0;
 
     if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
