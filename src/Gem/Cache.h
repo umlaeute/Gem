@@ -36,9 +36,9 @@ class GEM_EXTERN GemCache
 
     	//////////
         // Constructor
-    	GemCache(gemhead *parent);
+      explicit GemCache(gemhead *parent);
 
-      GemCache(const GemCache&);
+      explicit GemCache(const GemCache&);
 
       //////////
       // Destructor

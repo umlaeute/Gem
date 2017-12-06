@@ -37,12 +37,14 @@ namespace {
 
 class GemWindow::PIMPL {
 public:
-  PIMPL(GemWindow*gc) : parent(gc),
-                        mycontext(0),
-                        infoOut(0), rejectOut(0),
-                        dispatchClock(0),
-                        dispatchTime(10.),
-                        qClock(0)
+  explicit PIMPL(GemWindow*gc)
+    : parent(gc)
+    , mycontext(0)
+    , infoOut(0)
+    , rejectOut(0)
+    , dispatchClock(0)
+    , dispatchTime(10.)
+    , qClock(0)
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
     dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
@@ -437,7 +439,7 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
       GemWindow*gw=GetMyClass(data);
       gw->anyMess(s, argc, argv);
     }
-    _CB_any (struct _class*c) {
+    explicit _CB_any (struct _class*c) {
       class_addanything(c, reinterpret_cast<t_method>(_CB_any::callback));
     }
   };

@@ -39,7 +39,7 @@ namespace gem { namespace image {
       void*userdata;
       imageStruct*img;
       gem::Properties props;
-      OutData(const InData&in) :
+      explicit OutData(const InData&in) :
         cb(in.cb),
         userdata(in.userdata),
         img(NULL) {

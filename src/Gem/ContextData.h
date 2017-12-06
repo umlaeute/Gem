@@ -56,7 +56,7 @@ template<class ContextDataType = int>
     /* coverity[uninit_member] we track the un-initialization ourselves */
     ContextData(void) : m_haveDefaultValue(false) {;}
 
-    ContextData(ContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
+    explicit ContextData(ContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
 
     virtual ~ContextData() {
       m_ContextDataVector.clear();

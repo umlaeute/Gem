@@ -40,8 +40,8 @@ class GEM_EXTERN GemException
 {
  public:
   GemException(void);
-  GemException(const char*error);
-  GemException(const std::string&error);
+  explicit GemException(const char*error);
+  explicit GemException(const std::string&error);
   virtual ~GemException(void);
 
   virtual const char *what(void) const;

@@ -21,7 +21,7 @@
 namespace gem {
 class GEM_EXTERN GLStack {
  public:
-  GLStack(bool haveValidContext=false);
+  explicit GLStack(bool haveValidContext=false);
   virtual ~GLStack(void);
 
   enum GemStackId { MODELVIEW, COLOR, TEXTURE, PROJECTION };

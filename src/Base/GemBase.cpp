@@ -249,7 +249,7 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
 	}
 	obj->gem_amRendering=(!state);
       }
-      _CallbackClass_gemContext (struct _class*c) {
+      explicit _CallbackClass_gemContext (struct _class*c) {
 	class_addmethod(c, reinterpret_cast<t_method>(callback), gensym("__gem_context"), A_FLOAT, A_NULL);
       }
     };
