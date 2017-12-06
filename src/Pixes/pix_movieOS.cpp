@@ -86,41 +86,40 @@ void pix_movieOS :: createBuffer()
 /////////////////////////////////////////////////////////
 void pix_movieOS :: prepareTexture()
 {
-  if (!GemMan::texture_rectangle_supported)
-    {
-      int neededXSize = m_pixBlock.image.xsize;
-      int neededYSize = m_pixBlock.image.ysize;
-      post("prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
+  if (!GemMan::texture_rectangle_supported) {
+    int neededXSize = m_pixBlock.image.xsize;
+    int neededYSize = m_pixBlock.image.ysize;
+    post("prepareTexture: x : %d, y : %d", neededXSize, neededYSize );
 
-      // ratio for the texture map coordinates
-      m_xRatio = (float)m_xsize / (float)neededXSize;
-      m_yRatio = (float)m_ysize / (float)neededYSize;
+    // ratio for the texture map coordinates
+    m_xRatio = (float)m_xsize / (float)neededXSize;
+    m_yRatio = (float)m_ysize / (float)neededYSize;
 #ifndef __APPLE__
-      m_coords[0].s = 0.f;
-      m_coords[0].t = 0.f;
+    m_coords[0].s = 0.f;
+    m_coords[0].t = 0.f;
 
-      m_coords[1].s = m_xRatio;
-      m_coords[1].t = 0.f;
+    m_coords[1].s = m_xRatio;
+    m_coords[1].t = 0.f;
 
-      m_coords[2].s = m_xRatio;
-      m_coords[2].t = m_yRatio;
+    m_coords[2].s = m_xRatio;
+    m_coords[2].t = m_yRatio;
 
-      m_coords[3].s = 0.f;
-      m_coords[3].t = m_yRatio;
+    m_coords[3].s = 0.f;
+    m_coords[3].t = m_yRatio;
 #else
-      m_coords[3].s = 0.f;
-      m_coords[3].t = 0.f;
+    m_coords[3].s = 0.f;
+    m_coords[3].t = 0.f;
 
-      m_coords[2].s = m_xRatio;
-      m_coords[2].t = 0.f;
+    m_coords[2].s = m_xRatio;
+    m_coords[2].t = 0.f;
 
-      m_coords[1].s = m_xRatio;
-      m_coords[1].t = m_yRatio;
+    m_coords[1].s = m_xRatio;
+    m_coords[1].t = m_yRatio;
 
-      m_coords[0].s = 0.f;
-      m_coords[0].t = m_yRatio;
+    m_coords[0].s = 0.f;
+    m_coords[0].t = m_yRatio;
 #endif
-    } else {
+  } else {
 #ifndef __APPLE__
     m_coords[0].s = 0.f;
     m_coords[0].t = 0.f;
@@ -165,11 +164,10 @@ void pix_movieOS :: texFrame(GemState *state, int doit)
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   // enable to texture binding
-  if (!GemMan::texture_rectangle_supported)     //tigital
-    {
-      glEnable(GL_TEXTURE_2D);
-      glBindTexture(GL_TEXTURE_2D, m_textureObj);
-    }else{
+  if (!GemMan::texture_rectangle_supported) {   //tigital
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_textureObj);
+  } else {
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
 
@@ -218,12 +216,13 @@ void pix_movieOS :: postrender(GemState *state)
   //  post("postrender");
   m_pixBlock.newimage = 0;
 
-  if ( !GemMan::texture_rectangle_supported)
+  if ( !GemMan::texture_rectangle_supported) {
     glDisable(GL_TEXTURE_2D);
-  else
+  } else {
     glDisable(GL_TEXTURE_RECTANGLE_EXT);
+  }
 
-  if (m_numFrames>0 && m_reqFrame>m_numFrames){
+  if (m_numFrames>0 && m_reqFrame>m_numFrames) {
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
@@ -237,10 +236,11 @@ void pix_movieOS :: postrender(GemState *state)
 void pix_movieOS :: startRendering()
 {
   glGenTextures(1, &m_textureObj);
-  if ( ! GemMan::texture_rectangle_supported )
+  if ( ! GemMan::texture_rectangle_supported ) {
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
-  else
+  } else {
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, m_textureObj);
+  }
 
   setUpTextureState();
 
@@ -254,7 +254,9 @@ void pix_movieOS :: startRendering()
 /////////////////////////////////////////////////////////
 void pix_movieOS :: stopRendering()
 {
-  if (m_textureObj) glDeleteTextures(1, &m_textureObj);
+  if (m_textureObj) {
+    glDeleteTextures(1, &m_textureObj);
+  }
   m_textureObj = 0;
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = 0;
 }
@@ -265,20 +267,20 @@ void pix_movieOS :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movieOS :: setUpTextureState()
 {
-  if ( !GemMan::texture_rectangle_supported )                         //tigital
-    {
-      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    } else {
+  if ( !GemMan::texture_rectangle_supported ) {                       //tigital
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  } else {
     glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
-    if (GLEW_APPLE_client_storage)
+    if (GLEW_APPLE_client_storage) {
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, 1);
-    else
+    } else {
       glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    }
 
     glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

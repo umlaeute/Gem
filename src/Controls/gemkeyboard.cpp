@@ -55,7 +55,9 @@ gemkeyboard :: ~gemkeyboard()
 /////////////////////////////////////////////////////////
 void gemkeyboard :: KeyBoardPressed(int val, int state)
 {
-  if (state==0)return;
+  if (state==0) {
+    return;
+  }
   outlet_float(m_outKeyVal, static_cast<t_float>(val));
 }
 

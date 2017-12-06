@@ -34,13 +34,13 @@ class GEM_EXTERN pix_emboss : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_emboss, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_emboss();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -50,7 +50,7 @@ class GEM_EXTERN pix_emboss : public GemPixObj
   // Do the YUV processing
   virtual void  processYUVImage(imageStruct &image);
 
- private:
+private:
 
   //////////
   // Static member functions

@@ -28,41 +28,45 @@
 //
 /////////////////////////////////////////////////////////
 
-namespace {
-  static char mytolower(char in){
-    if(in<='Z' && in>='A')
-      return in-('Z'-'z');
-    return in;
+namespace
+{
+static char mytolower(char in)
+{
+  if(in<='Z' && in>='A') {
+    return in-('Z'-'z');
   }
+  return in;
+}
 
-  static void initialize_drawtypes(std::map<std::string, GLenum>&drawtypes) {
-    drawtypes["default"]=GL_DEFAULT_GEM;
+static void initialize_drawtypes(std::map<std::string, GLenum>&drawtypes)
+{
+  drawtypes["default"]=GL_DEFAULT_GEM;
 
-    drawtypes["point"]=GL_POINTS;
-    drawtypes["points"]=GL_POINTS;
+  drawtypes["point"]=GL_POINTS;
+  drawtypes["points"]=GL_POINTS;
 
-    /* how about GL_LINE ?? */
-    drawtypes["line"]=GL_LINE_LOOP;
-    drawtypes["lineloop"]=GL_LINE_LOOP;
-    drawtypes["lines"]=GL_LINES;
-    drawtypes["linestrip"]=GL_LINE_STRIP;
-    drawtypes["linesadj"]=GL_LINES_ADJACENCY;
-    drawtypes["linestripadj"]=GL_LINE_STRIP_ADJACENCY;
+  /* how about GL_LINE ?? */
+  drawtypes["line"]=GL_LINE_LOOP;
+  drawtypes["lineloop"]=GL_LINE_LOOP;
+  drawtypes["lines"]=GL_LINES;
+  drawtypes["linestrip"]=GL_LINE_STRIP;
+  drawtypes["linesadj"]=GL_LINES_ADJACENCY;
+  drawtypes["linestripadj"]=GL_LINE_STRIP_ADJACENCY;
 
-    drawtypes["tri"]=GL_TRIANGLES;
-    drawtypes["triangle"]=GL_TRIANGLES;
-    drawtypes["tristrip"]=GL_TRIANGLE_STRIP;
-    drawtypes["trifan"]=GL_TRIANGLE_FAN;
-    drawtypes["triadj"]=GL_TRIANGLES_ADJACENCY;
-    drawtypes["tristripadj"]=GL_TRIANGLE_STRIP_ADJACENCY;
+  drawtypes["tri"]=GL_TRIANGLES;
+  drawtypes["triangle"]=GL_TRIANGLES;
+  drawtypes["tristrip"]=GL_TRIANGLE_STRIP;
+  drawtypes["trifan"]=GL_TRIANGLE_FAN;
+  drawtypes["triadj"]=GL_TRIANGLES_ADJACENCY;
+  drawtypes["tristripadj"]=GL_TRIANGLE_STRIP_ADJACENCY;
 
-    drawtypes["quad"]=GL_QUADS;
-    drawtypes["quads"]=GL_QUADS;
-    drawtypes["quadstrip"]=GL_QUAD_STRIP;
+  drawtypes["quad"]=GL_QUADS;
+  drawtypes["quads"]=GL_QUADS;
+  drawtypes["quadstrip"]=GL_QUAD_STRIP;
 
-    drawtypes["strip"]=GL_TRIANGLE_STRIP;
-    drawtypes["fill"]=GL_POLYGON;
-  }
+  drawtypes["strip"]=GL_TRIANGLE_STRIP;
+  drawtypes["fill"]=GL_POLYGON;
+}
 
 }
 
@@ -73,7 +77,9 @@ GemShape :: GemShape(t_floatarg size)
     m_texCoords(NULL),
     m_lighting(false)
 {
-  if (m_size == 0.f)m_size = 1.f;
+  if (m_size == 0.f) {
+    m_size = 1.f;
+  }
 
   // the size inlet
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
@@ -97,7 +103,9 @@ GemShape :: GemShape()
 /////////////////////////////////////////////////////////
 GemShape :: ~GemShape()
 {
-  if(m_inlet)inlet_free(m_inlet);
+  if(m_inlet) {
+    inlet_free(m_inlet);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -145,8 +153,9 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
   }
 
   if (numUnits) {
-    for(int i=0; i<numUnits; i++)
+    for(int i=0; i<numUnits; i++) {
       glMultiTexCoord4fARB(GL_TEXTURE0+i, s, t, r, q);
+    }
   } else { // no multitexturing!
     glTexCoord4f(s, t, r, q);
   }
@@ -215,8 +224,9 @@ void GemShape :: blendMess(float blend)
 
 void GemShape :: render(GemState *state)
 {
-  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES)
+  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES) {
     glLineWidth(m_linewidth);
+  }
 
   if (m_blend) {
     glEnable(GL_POLYGON_SMOOTH);
@@ -243,8 +253,9 @@ void GemShape :: render(GemState *state)
     glDisable(GL_BLEND);
   }
 
-  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES)
+  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES) {
     glLineWidth(1.0);
+  }
 }
 
 /////////////////////////////////////////////////////////

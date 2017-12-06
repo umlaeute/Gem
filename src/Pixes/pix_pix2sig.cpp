@@ -35,8 +35,9 @@ pix_pix2sig :: pix_pix2sig(void) :
   m_format(GL_RGBA_GEM)
 {
   int i=4;
-  while(i--)
+  while(i--) {
     o_col[i]=outlet_new(this->x_obj, &s_signal);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -46,7 +47,9 @@ pix_pix2sig :: pix_pix2sig(void) :
 pix_pix2sig :: ~pix_pix2sig()
 {
   int i=4;
-  while(i--)outlet_free(o_col[i]);
+  while(i--) {
+    outlet_free(o_col[i]);
+  }
   m_data = NULL;
   m_size = 0;
 }
@@ -83,29 +86,30 @@ t_int* pix_pix2sig :: perform(t_int* w)
   long int pix_size   = x->m_size;
   int n = (N<pix_size)?N:pix_size;
 
-  if (x->m_data){
+  if (x->m_data) {
     t_float scale0, scale1, scale2, scale3;
     scale0 = scale1 = scale2 = scale3 = 1./255.;
     int csize=x->m_csize;
-    switch (csize){
-      /* coverity[unterminated_default] */
+    switch (csize) {
+    /* coverity[unterminated_default] */
     default:
       scale3=1./255.;
-      /* coverity[unterminated_case] */
+    /* coverity[unterminated_case] */
     case 3:
       scale2=1./255.;
-      /* coverity[unterminated_case] */
+    /* coverity[unterminated_case] */
     case 2:
       scale1=1./255.;
-      /* coverity[unterminated_case] */
+    /* coverity[unterminated_case] */
     case 1:
       scale0=1./255.;
     case 0:
       break;
     }
-    switch(x->m_format){
-    case GL_RGBA: default:
-      while(n--){
+    switch(x->m_format) {
+    case GL_RGBA:
+    default:
+      while(n--) {
         *(out_red  ++) = data[chRed]  *scale0;
         *(out_green++) = data[chGreen]*scale1;
         *(out_blue ++) = data[chBlue] *scale2;
@@ -115,19 +119,20 @@ t_int* pix_pix2sig :: perform(t_int* w)
       break;
     case GL_YUV422_GEM:
       n/=2;
-      while(n--){
+      while(n--) {
         *(out_red  ++) = data[chY0]   *scale0;
         *(out_red  ++) = data[chY1]   *scale0;
         *(out_green++) = data[chU] *scale1;
         *(out_green++) = data[chU] *scale1;
         *(out_blue ++) = data[chV] *scale2;
         *(out_blue ++) = data[chV] *scale2;
-        *(out_alpha++) = 0; *(out_alpha++) = 0;
+        *(out_alpha++) = 0;
+        *(out_alpha++) = 0;
         data+=4;
       }
       break;
     case GL_LUMINANCE:
-      while(n--){
+      while(n--) {
         *(out_red  ++) = data[chGray]*scale0;
         *(out_green++) = 0;
         *(out_blue ++) = 0;
@@ -138,7 +143,9 @@ t_int* pix_pix2sig :: perform(t_int* w)
     }
   } else {
     n=N;
-    while (n--) *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
+    while (n--) {
+      *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
+    }
   }
 
 

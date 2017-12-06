@@ -45,13 +45,13 @@ class GEM_EXTERN pix_record : public GemBase
 {
   CPPEXTERN_HEADER(pix_record, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_record(int argc, t_atom *argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -110,7 +110,7 @@ class GEM_EXTERN pix_record : public GemBase
   virtual void  setPropertiesMess(t_symbol*,int argc, t_atom*argv);
   virtual void  clearPropertiesMess(void);
 
- private:
+private:
   bool m_recording;
   gem::plugins::record *m_handle;
   std::vector<std::string>m_ids;

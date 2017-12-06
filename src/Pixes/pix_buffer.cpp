@@ -27,7 +27,8 @@
 #include "RTE/Outlet.h"
 
 /* utilities */
-static gem::any atom2any(t_atom*ap) {
+static gem::any atom2any(t_atom*ap)
+{
   gem::any result;
   if(ap) {
     switch(ap->a_type) {
@@ -45,7 +46,9 @@ static gem::any atom2any(t_atom*ap) {
 }
 static void addProperties(gem::Properties&props, int argc, t_atom*argv)
 {
-  if(!argc)return;
+  if(!argc) {
+    return;
+  }
 
   if(argv->a_type != A_SYMBOL) {
     error("no key given...");
@@ -53,7 +56,8 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
   }
   std::string key=std::string(atom_getsymbol(argv)->s_name);
   std::vector<gem::any> values;
-  argc--; argv++;
+  argc--;
+  argv++;
   while(argc-->0) {
     values.push_back(atom2any(argv++));
   }
@@ -64,12 +68,11 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
   case 1:
     props.set(key, values[0]);
     break;
-  case 0:
-    {
-      gem::any dummy;
-      props.set(key, dummy);
-    }
-    break;
+  case 0: {
+    gem::any dummy;
+    props.set(key, dummy);
+  }
+  break;
   }
 }
 
@@ -92,7 +95,7 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
     m_handle(NULL),
     m_outlet(new gem::RTE::Outlet(this))
 {
-  if (s==&s_){
+  if (s==&s_) {
     static int buffercounter=0;
     char cbuf[16];
     buffercounter++;
@@ -102,7 +105,9 @@ pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
     s=gensym(cbuf);
   }
 
-  if (f<0)f=DEFAULT_NUM_FRAMES;
+  if (f<0) {
+    f=DEFAULT_NUM_FRAMES;
+  }
   m_bindname = s;
   m_numframes = (unsigned int)f;
   m_buffer = new imageStruct[m_numframes];
@@ -120,8 +125,14 @@ pix_buffer :: ~pix_buffer( void )
 {
   pd_unbind(&this->x_obj->ob_pd, m_bindname);
 
-  if(m_buffer)delete [] m_buffer; m_buffer=NULL;
-  if(m_handle)delete m_handle; m_handle=NULL;
+  if(m_buffer) {
+    delete [] m_buffer;
+  }
+  m_buffer=NULL;
+  if(m_handle) {
+    delete m_handle;
+  }
+  m_handle=NULL;
   delete m_outlet;
 }
 /////////////////////////////////////////////////////////
@@ -151,7 +162,7 @@ void pix_buffer :: allocateMess(unsigned int x, unsigned int y, unsigned int c)
     format=0;
   }
 
-  while(i--){
+  while(i--) {
     m_buffer[i].xsize=x;
     m_buffer[i].ysize=y;
     m_buffer[i].setCsizeByFormat(format);
@@ -175,8 +186,9 @@ void pix_buffer :: resizeMess(int newsize)
   }
 
   imageStruct*buffer = new imageStruct[newsize];
-  if(size>newsize)
+  if(size>newsize) {
     size=newsize;
+  }
 
   for(i=0; i<size; i++) {
     if(0!=m_buffer[i].data) {
@@ -213,9 +225,14 @@ unsigned int pix_buffer :: numFrames( void )
 // put an image into the buffer @ position <pos>
 //
 /////////////////////////////////////////////////////////
-bool pix_buffer :: putMess(imageStruct*img, unsigned int pos){
-  if (pos>=m_numframes)return false;
-  if(!img)return false;
+bool pix_buffer :: putMess(imageStruct*img, unsigned int pos)
+{
+  if (pos>=m_numframes) {
+    return false;
+  }
+  if(!img) {
+    return false;
+  }
   img->copy2Image(m_buffer+pos);
   return true;
 }
@@ -223,15 +240,19 @@ bool pix_buffer :: putMess(imageStruct*img, unsigned int pos){
 // get an image from the buffer @ position <pos>
 //
 /////////////////////////////////////////////////////////
-imageStruct*pix_buffer :: getMess(unsigned int pos){
+imageStruct*pix_buffer :: getMess(unsigned int pos)
+{
 
   //post("getting frame: %d", pos);
 
-  if (pos>=m_numframes)return 0;
+  if (pos>=m_numframes) {
+    return 0;
+  }
 
   /* just allocated but no image */
-  if(0==m_buffer[pos].format)
+  if(0==m_buffer[pos].format) {
     return 0;
+  }
 
   return (m_buffer+pos);
 }
@@ -249,19 +270,17 @@ void pix_buffer :: loadMess(std::string filename, int pos)
   imageStruct *image = NULL;
 
   // some checks
-  if (pos<0 || pos>=m_numframes)
-    {
-      error("index %d out of range (0..%d)!", pos, m_numframes);
-      return;
-    }
+  if (pos<0 || pos>=m_numframes) {
+    error("index %d out of range (0..%d)!", pos, m_numframes);
+    return;
+  }
   std::string file=findFile(filename);
 
   image = image2mem(file.c_str());
-  if(!image)
-    {
-      error("'%s' is no valid image!", file.c_str());
-      return;
-    }
+  if(!image) {
+    error("'%s' is no valid image!", file.c_str());
+    return;
+  }
 
   putMess(image,pos);
 
@@ -278,13 +297,13 @@ void pix_buffer :: saveMess(std::string filename, int pos)
   // save an image from mem
   imageStruct*img=NULL;
 
-  if(filename.empty()){
+  if(filename.empty()) {
     error("no filename given!");
     return;
   }
   img=getMess(pos);
 
-  if(img && img->data){
+  if(img && img->data) {
     std::string fullname=gem::files::getFullpath(filename);
     if(m_handle) {
       m_handle->save(*img, fullname, std::string(), m_writeprops);
@@ -367,7 +386,7 @@ void pix_buffer :: enumProperties(void)
         data.push_back(d);
       }
     }
-      break;
+    break;
     case gem::Properties::STRING: {
       data.push_back(std::string("symbol"));
       std::string s;
@@ -375,7 +394,7 @@ void pix_buffer :: enumProperties(void)
         data.push_back(s);
       }
     }
-      break;
+    break;
     default:
       data.push_back(std::string("unknown"));
       break;
@@ -430,10 +449,19 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     if(A_SYMBOL==ap->a_type) {
       char c0 =*atom_getsymbol(ap)->s_name;
 
-      switch (c0){
-      case 'g': case 'G': c=1; break;
-      case 'y': case 'Y': c=2; break;
-      case 'r': case 'R': c=4; break;
+      switch (c0) {
+      case 'g':
+      case 'G':
+        c=1;
+        break;
+      case 'y':
+      case 'Y':
+        c=2;
+        break;
+      case 'r':
+      case 'R':
+        c=4;
+        break;
       default:
         error("invalid format %s!", atom_getsymbol(ap)->s_name);
         return;
@@ -449,11 +477,17 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
   case 2:
     if((A_FLOAT==argv->a_type) && (A_FLOAT==(argv+1)->a_type)) {
       int i=atom_getint(argv);
-      if(i<0) { error("invalid dimenstions: x=%d < 0", i); return; }
+      if(i<0) {
+        error("invalid dimenstions: x=%d < 0", i);
+        return;
+      }
       x=(unsigned int)i;
 
       i=atom_getint(argv+1);
-      if(i<0) { error("invalid dimenstions: y=%d < 0", i); return; }
+      if(i<0) {
+        error("invalid dimenstions: y=%d < 0", i);
+        return;
+      }
       y=(unsigned int)i;
     } else {
       error("invalid dimensions!");
@@ -463,7 +497,10 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
   case 1:
     if(A_FLOAT==argv->a_type) {
       int i=atom_getint(argv);
-      if(i<0) { error("invalid dimenstions: x=%d < 0", i); return; }
+      if(i<0) {
+        error("invalid dimenstions: x=%d < 0", i);
+        return;
+      }
       x=(unsigned int)i;
       y=1;
       c=1;
@@ -477,11 +514,13 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     return;
   }
 
-  if (x<1 || y<1){
+  if (x<1 || y<1) {
     error("init-specs out of range");
     return;
   }
-  if (c==0)c=4;
+  if (c==0) {
+    c=4;
+  }
 
   allocateMess((int)x, (int)y, (int)c);
 }

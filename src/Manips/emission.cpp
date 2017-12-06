@@ -32,14 +32,14 @@ CPPEXTERN_NEW_WITH_GIMME(emission);
 emission :: emission(int argc, t_atom *argv)
 {
   if (argc == 4) emissionMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                              atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+                                atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
   else if (argc == 3) emissionMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                                   atom_getfloat(&argv[2]), 1.f);
-  else if (argc == 0) emissionMess(0.f, 0.f, 0.f, 1.f);
-  else
-    {
-      throw(GemException("needs 0, 3, or 4 arguments"));
-    }
+                                     atom_getfloat(&argv[2]), 1.f);
+  else if (argc == 0) {
+    emissionMess(0.f, 0.f, 0.f, 1.f);
+  } else {
+    throw(GemException("needs 0, 3, or 4 arguments"));
+  }
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("emission"));
@@ -96,7 +96,9 @@ void emission :: obj_setupCallback(t_class *classPtr)
 void emission :: emissionMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   float alpha = 1;
-  if (argc == 4) alpha = atom_getfloat(&argv[3]);
+  if (argc == 4) {
+    alpha = atom_getfloat(&argv[3]);
+  }
   GetMyClass(data)->emissionMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
                                  atom_getfloat(&argv[2]), alpha);
 }

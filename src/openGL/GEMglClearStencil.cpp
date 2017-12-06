@@ -14,7 +14,7 @@
 
 #include "GEMglClearStencil.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearStencil , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearStencil, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglClearStencil :: GEMglClearStencil  (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglClearStencil :: ~GEMglClearStencil () {
+GEMglClearStencil :: ~GEMglClearStencil ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglClearStencil :: render(GemState *state) {
+void GEMglClearStencil :: render(GemState *state)
+{
   glClearStencil (s);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglClearStencil :: sMess (t_float arg1) {        // FUN
+void GEMglClearStencil :: sMess (t_float arg1)          // FUN
+{
   s = static_cast<GLint>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglClearStencil :: sMess (t_float arg1) {        // FUN
 // static member functions
 //
 
-void GEMglClearStencil :: obj_setupCallback(t_class *classPtr) {
+void GEMglClearStencil :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearStencil::sMessCallback),       gensym("s"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClearStencil :: sMessCallback (void* data, t_float arg0){
+void GEMglClearStencil :: sMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }

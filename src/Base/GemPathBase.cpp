@@ -30,11 +30,14 @@ GemPathBase :: GemPathBase(int argc, t_atom *argv)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 
-  if (argc >= 2)
+  if (argc >= 2) {
     openMess(atom_getsymbol(&argv[1]));
+  }
   if (argc >= 1) {
     m_numDimens = (int)atom_getfloat(&argv[0]);
-    if (m_numDimens < 1) m_numDimens = 1;
+    if (m_numDimens < 1) {
+      m_numDimens = 1;
+    }
     if (m_numDimens > 64) {
       error("too many dimensions, must be below 64");
       m_numDimens = 64;
@@ -72,8 +75,9 @@ void GemPathBase :: floatMess(t_float val)
 
   int size;
   t_word *vec;
-  if (!garray_getfloatwords(m_array, &size, &vec))
+  if (!garray_getfloatwords(m_array, &size, &vec)) {
     return;
+  }
 
   if (size % m_numDimens) {
     error("size is not a mod of dimensions");
@@ -84,8 +88,9 @@ void GemPathBase :: floatMess(t_float val)
   lookupFunc(val, output, m_numDimens, size / m_numDimens, &(vec->w_float));
 
   t_atom argv[64];
-  for (int i = 0; i < m_numDimens; i++)
+  for (int i = 0; i < m_numDimens; i++) {
     SETFLOAT((&argv[i]), output[i]);
+  }
 
   outlet_list(m_out1, &s_list, m_numDimens, argv);
 }

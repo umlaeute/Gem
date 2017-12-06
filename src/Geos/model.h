@@ -34,19 +34,25 @@
   "open" - the RGB model to set the object to
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins { class modelloader; };};
+namespace gem
+{
+namespace plugins
+{
+class modelloader;
+};
+};
 
 class GEM_EXTERN model : public GemBase
 {
   CPPEXTERN_HEADER(model, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   model(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor

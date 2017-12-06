@@ -100,8 +100,12 @@ pix_texture :: pix_texture()
 /////////////////////////////////////////////////////////
 pix_texture :: ~pix_texture()
 {
-  if(m_inTexID) inlet_free (m_inTexID);
-  if(m_outTexID)outlet_free(m_outTexID);
+  if(m_inTexID) {
+    inlet_free (m_inTexID);
+  }
+  if(m_outTexID) {
+    outlet_free(m_outTexID);
+  }
 
   m_inTexID=NULL;
   m_outTexID=NULL;
@@ -111,40 +115,42 @@ pix_texture :: ~pix_texture()
 // setUpTextureState
 //
 /////////////////////////////////////////////////////////
-void pix_texture :: setUpTextureState() {
+void pix_texture :: setUpTextureState()
+{
   GLuint doRepeat=m_repeat;
-  if (m_rectangle && m_canRectangle){
-    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
-      {
-        glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
-        // JMZ: disabled the following, as rectangle-textures are clamped anyhow
-        // JMZ: and normalized ones, lose their setting
-        // TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
-        //                      otherwise, weird texturing occurs (looks similar to pix_refraction)
-        // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
-        // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
-        doRepeat = GL_CLAMP_TO_EDGE;
-        debug_post("using rectangle texture");
-      }
+  if (m_rectangle && m_canRectangle) {
+    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT) {
+      glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
+      // JMZ: disabled the following, as rectangle-textures are clamped anyhow
+      // JMZ: and normalized ones, lose their setting
+      // TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
+      //                      otherwise, weird texturing occurs (looks similar to pix_refraction)
+      // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
+      // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
+      doRepeat = GL_CLAMP_TO_EDGE;
+      debug_post("using rectangle texture");
+    }
   }
 
-  if (GLEW_APPLE_client_storage){
-    if(m_clientStorage){
+  if (GLEW_APPLE_client_storage) {
+    if(m_clientStorage) {
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
       debug_post("using client storage");
     } else {
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_FALSE);
       debug_post("not using client storage");
     }
-  } else
+  } else {
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
+  }
 
   setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap));
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, doRepeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, doRepeat);
 }
 
-void pix_texture :: setTexFilters(bool mipmap) {
+void pix_texture :: setTexFilters(bool mipmap)
+{
   glTexParameterf(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureMagQuality);
   if (mipmap) {
     glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureMinQuality);
@@ -160,8 +166,9 @@ void pix_texture :: setTexFilters(bool mipmap) {
 // use this when loading images...
 //
 /////////////////////////////////////////////////////////
-inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false){
-  if(!upsidedown){
+inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false)
+{
+  if(!upsidedown) {
     coords[0].s = 0.f;
     coords[0].t = 0.f;
     coords[1].s = xRatio;
@@ -182,7 +189,8 @@ inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean
   }
 }
 
-static inline void tex2state(GemState*state, TexCoord*coords, int size) {
+static inline void tex2state(GemState*state, TexCoord*coords, int size)
+{
   state->set(GemState::_GL_TEX_COORDS, coords);
   state->set(GemState::_GL_TEX_NUMCOORDS, size);
 }
@@ -192,7 +200,8 @@ static inline void tex2state(GemState*state, TexCoord*coords, int size) {
 // extension check
 //
 /////////////////////////////////////////////////////////
-bool pix_texture :: isRunnable(void) {
+bool pix_texture :: isRunnable(void)
+{
   /* for simplicity's sake, i have dropped support for very old openGL-versions */
   if(!GLEW_VERSION_1_1) {
     error("need at least openGL-1.1 for texturing! refusing to work");
@@ -200,8 +209,9 @@ bool pix_texture :: isRunnable(void) {
   }
 
   GLint numTexUnits=0;
-  if(GLEW_ARB_multitexture)
+  if(GLEW_ARB_multitexture) {
     glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &numTexUnits );
+  }
   m_numTexUnits=numTexUnits;
 
   int wantRectangle=1;
@@ -209,10 +219,11 @@ bool pix_texture :: isRunnable(void) {
 
   m_canRectangle=0;
   if(wantRectangle) {
-    if(GLEW_ARB_texture_rectangle)
+    if(GLEW_ARB_texture_rectangle) {
       m_canRectangle=2;
-    else if (GLEW_EXT_texture_rectangle)
+    } else if (GLEW_EXT_texture_rectangle) {
       m_canRectangle=1;
+    }
   }
 
   m_canMipmap=(GLEW_ARB_framebuffer_object!=0);
@@ -220,7 +231,8 @@ bool pix_texture :: isRunnable(void) {
   return true;
 }
 
-void pix_texture :: pushTexCoords(GemState*state) {
+void pix_texture :: pushTexCoords(GemState*state)
+{
   state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
@@ -228,7 +240,8 @@ void pix_texture :: pushTexCoords(GemState*state) {
   state->get(GemState::_GL_TEX_BASECOORD, m_oldBaseCoord);
 }
 
-void pix_texture :: popTexCoords(GemState*state) {
+void pix_texture :: popTexCoords(GemState*state)
+{
   tex2state(state, m_oldTexCoords, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
   state->set(GemState::_GL_TEX_ORIENTATION, m_oldOrientation);
@@ -236,9 +249,10 @@ void pix_texture :: popTexCoords(GemState*state) {
 }
 
 
-void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown) {
+void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown)
+{
   // send textureID to outlet
-  if(texobj){
+  if(texobj) {
     t_atom ap[5];
     SETFLOAT(ap, (t_float)texobj);
     SETFLOAT(ap+1, (t_float)xRatio);
@@ -253,11 +267,14 @@ void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_texture :: render(GemState *state) {
+void pix_texture :: render(GemState *state)
+{
   m_didTexture=false;
   pushTexCoords(state);
 
-  if(!m_textureOnOff)return;
+  if(!m_textureOnOff) {
+    return;
+  }
 
   bool upsidedown=false;
   bool normalized=true;
@@ -280,15 +297,18 @@ void pix_texture :: render(GemState *state) {
   }
 
   state->get(GemState::_PIX, img);
-  if(img)
+  if(img) {
     newfilm = img->newfilm;
+  }
 
-  if (!img || !img->image.data){
+  if (!img || !img->image.data) {
     if(m_extTextureObj>0) {
       useExternalTexture= true;
       m_rebuildList     = false;
       m_textureObj      = m_extTextureObj;
-      if(m_extType)m_textureType=m_extType;
+      if(m_extType) {
+        m_textureType=m_extType;
+      }
       texType=m_textureType;
       upsidedown=m_extUpsidedown;
       m_xRatio=m_extWidth;
@@ -296,13 +316,17 @@ void pix_texture :: render(GemState *state) {
       m_upsidedown=upsidedown;
     } else
       /* neither do we have an image nor an external texture */
+    {
       return;
+    }
   }
   tex2state(state, m_coords, 4);
 
-  if(!useExternalTexture){
+  if(!useExternalTexture) {
     upsidedown = img->image.upsidedown;
-    if (img->newimage) m_rebuildList = true;
+    if (img->newimage) {
+      m_rebuildList = true;
+    }
 
     m_imagebuf.xsize =img->image.xsize;
     m_imagebuf.ysize =img->image.ysize;
@@ -341,9 +365,10 @@ void pix_texture :: render(GemState *state) {
     debug_post("normalized=%d", normalized);
   }
 
-  if (m_textureType!=texType){
+  if (m_textureType!=texType) {
     debug_post("texType != m_textureType");
-    stopRendering();startRendering();
+    stopRendering();
+    startRendering();
   }
 
   if(GLEW_VERSION_1_3) {
@@ -352,16 +377,16 @@ void pix_texture :: render(GemState *state) {
   glEnable(m_textureType);
   glBindTexture(m_textureType, m_textureObj);
 
-  if ((!useExternalTexture)&&newfilm ){
+  if ((!useExternalTexture)&&newfilm ) {
     //  tigital:  shouldn't we also allow TEXTURE_2D here?
     if(NULL!=glTextureRangeAPPLE) {
-      if ( GLEW_APPLE_texture_range ){
+      if ( GLEW_APPLE_texture_range ) {
         if(glTextureRangeAPPLE == NULL) {
           glTextureRangeAPPLE( m_textureType,
                                m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize,
                                m_imagebuf.data );
           debug_post("using glTextureRangeAPPLE()");
-        }else{
+        } else {
           glTextureRangeAPPLE( m_textureType, 0, NULL );
         }
       }
@@ -373,12 +398,15 @@ void pix_texture :: render(GemState *state) {
      * according to http://developer.apple.com/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_texturedata/chapter_10_section_2.html
      * this seems to be a part of the texture_range extension, so we check for that!
      */
-    if(GLEW_APPLE_texture_range)
-       glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+    if(GLEW_APPLE_texture_range) {
+      glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+    }
     // GL_STORAGE_SHARED_APPLE -  AGP texture path
     // GL_STORAGE_CACHED_APPLE - VRAM texture path
     // GL_STORAGE_PRIVATE_APPLE - normal texture path
-    if(m_clientStorage) glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+    if(m_clientStorage) {
+      glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
+    }
   }
 
 
@@ -389,11 +417,13 @@ void pix_texture :: render(GemState *state) {
     // if YUV is not supported on this platform, we have to convert it to RGB
     //(skip Alpha since it isn't used)
     const bool do_yuv = m_yuv && GLEW_APPLE_ycbcr_422;
-    if (!do_yuv && m_imagebuf.format == GL_YUV422_GEM){
+    if (!do_yuv && m_imagebuf.format == GL_YUV422_GEM) {
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
-      if(img)m_imagebuf.fromYUV422(img->image.data);
+      if(img) {
+        m_imagebuf.fromYUV422(img->image.data);
+      }
     }
     if (normalized) {
       m_buffer.xsize = m_imagebuf.xsize;
@@ -409,7 +439,7 @@ void pix_texture :: render(GemState *state) {
       tex2state(state, m_coords, 4);
       if (m_buffer.csize != m_dataSize[0] ||
           m_buffer.xsize != m_dataSize[1] ||
-          m_buffer.ysize != m_dataSize[2]){
+          m_buffer.ysize != m_dataSize[2]) {
         m_dataSize[0] = m_buffer.csize;
         m_dataSize[1] = m_buffer.xsize;
         m_dataSize[2] = m_buffer.ysize;
@@ -447,7 +477,7 @@ void pix_texture :: render(GemState *state) {
 
       if (m_buffer.csize != m_dataSize[0] ||
           m_buffer.xsize != m_dataSize[1] ||
-          m_buffer.ysize != m_dataSize[2]){
+          m_buffer.ysize != m_dataSize[2]) {
         newfilm = 1;
 
       } //end of loop if size has changed
@@ -461,7 +491,9 @@ void pix_texture :: render(GemState *state) {
         m_dataSize[1] = m_buffer.xsize;
         m_dataSize[2] = m_buffer.ysize;
 
-        if (m_buffer.format == GL_YUV422_GEM && !m_rectangle)m_buffer.setBlack();
+        if (m_buffer.format == GL_YUV422_GEM && !m_rectangle) {
+          m_buffer.setBlack();
+        }
 
         if(m_numPbo>0) {
           if(GLEW_ARB_pixel_buffer_object) {
@@ -539,10 +571,10 @@ void pix_texture :: render(GemState *state) {
 
         GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
         if(ptr) {
-            // update data off the mapped buffer
-            memcpy(ptr, m_imagebuf.data,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
-            glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
-          }
+          // update data off the mapped buffer
+          memcpy(ptr, m_imagebuf.data,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
+          glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+        }
 
         /* unbind the current buffer */
         glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
@@ -599,10 +631,11 @@ void pix_texture :: render(GemState *state) {
 // postrender
 //
 /////////////////////////////////////////////////////////
-void pix_texture :: postrender(GemState *state){
+void pix_texture :: postrender(GemState *state)
+{
   popTexCoords(state);
 
-  if (m_didTexture){
+  if (m_didTexture) {
     if(GLEW_VERSION_1_3) {
       glActiveTexture(GL_TEXTURE0_ARB + m_texunit);  //needed?
     }
@@ -724,10 +757,11 @@ void pix_texture :: textureQuality(int type)
 void pix_texture :: textureRectangle(int rect)
 {
   m_rectangle=rect;
-  if (m_rectangle)
+  if (m_rectangle) {
     post("using mode 1: TEXTURE_RECTANGLE");
-  else
+  } else {
     post("using mode 0: TEXTURE_2D");
+  }
 
   setModified();
 }
@@ -738,17 +772,19 @@ void pix_texture :: textureRectangle(int rect)
 /////////////////////////////////////////////////////////
 void pix_texture :: repeatMess(int type)
 {
-  if (type)
+  if (type) {
     m_repeat = GL_REPEAT;
-  else {
-    if( (getState()!=INIT) && GLEW_EXT_texture_edge_clamp)
+  } else {
+    if( (getState()!=INIT) && GLEW_EXT_texture_edge_clamp) {
       m_repeat = GL_CLAMP_TO_EDGE;
-    else
+    } else {
       m_repeat = GL_CLAMP;
+    }
   }
   GLuint doRepeat=m_repeat;
-  if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT)
+  if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT) {
     doRepeat=GL_CLAMP_TO_EDGE;
+  }
 
   if (m_textureObj) {
     if(GLEW_VERSION_1_1) {
@@ -861,24 +897,34 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 void pix_texture :: extTextureMess(t_symbol*s, int argc, t_atom*argv)
 {
   int index=5;
-  switch(argc){
+  switch(argc) {
   case 5:
-    if(A_FLOAT!=argv[4].a_type)break;
+    if(A_FLOAT!=argv[4].a_type) {
+      break;
+    }
     m_extUpsidedown=atom_getint(argv+4);
   case 4:
     index=4;
-    if(A_FLOAT!=argv[3].a_type)break;
+    if(A_FLOAT!=argv[3].a_type) {
+      break;
+    }
     m_extType=atom_getint(argv+3);
   case 3:
     index=3;
-    if(A_FLOAT!=argv[2].a_type)break;
+    if(A_FLOAT!=argv[2].a_type) {
+      break;
+    }
     index=2;
-    if(A_FLOAT!=argv[1].a_type)break;
+    if(A_FLOAT!=argv[1].a_type) {
+      break;
+    }
     m_extWidth =atom_getfloat(argv+1);
     m_extHeight=atom_getfloat(argv+2);
   case 1:
     index=1;
-    if(A_FLOAT!=argv[0].a_type)break;
+    if(A_FLOAT!=argv[0].a_type) {
+      break;
+    }
     m_extTextureObj=atom_getint(argv+0);
     index=0;
     return;
@@ -886,6 +932,7 @@ void pix_texture :: extTextureMess(t_symbol*s, int argc, t_atom*argv)
     error("arguments: <texId> [<width> <height> [<type> [<upsidedown>]]]");
     return;
   }
-  if(index)
+  if(index) {
     error("invalid type of argument #%d", index);
+  }
 }

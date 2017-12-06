@@ -32,29 +32,29 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_gravity : public partlib_base
 {
-    CPPEXTERN_HEADER(part_gravity, partlib_base);
+  CPPEXTERN_HEADER(part_gravity, partlib_base);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        part_gravity(t_floatarg val1, t_floatarg val2, t_floatarg val3);
+  //////////
+  // Constructor
+  part_gravity(t_floatarg val1, t_floatarg val2, t_floatarg val3);
 
-        //////////
-        virtual void    renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~part_gravity(void);
+  //////////
+  // Destructor
+  virtual ~part_gravity(void);
 
-        //////////
-        // Vector changed
-        void            vectorMess(float x, float y, float z);
+  //////////
+  // Vector changed
+  void            vectorMess(float x, float y, float z);
 
-                //////////
-                float                   m_vector[3];
+  //////////
+  float                   m_vector[3];
 };
 
 #endif  // for header file

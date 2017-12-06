@@ -20,18 +20,19 @@ LOG
 class GemDylibHandle;
 class CPPExtern;
 
-class GEM_EXTERN GemDylib {
- private:
+class GEM_EXTERN GemDylib
+{
+private:
   GemDylibHandle*m_handle;
 
- public:
+public:
   GemDylib(const CPPExtern*obj,
            const std::string&libname,
            const std::string&extension=std::string("")
-           ); // throws GemException
+          ); // throws GemException
   GemDylib(const std::string&libname,
            const std::string&extension=std::string("")
-           ); // throws GemException
+          ); // throws GemException
 
   GemDylib(const GemDylib&);
 
@@ -48,7 +49,7 @@ class GEM_EXTERN GemDylib {
   // if <procname> exists in dylib, return it, else return NULL
   function_t proc(const std::string&procname);
 
-  public:
+public:
   /**
    * LoadLib(): convenience function that searches a library named <baselibname> and then runs <procname>()
    * if "extension" is NULL, a platform-specific default is used

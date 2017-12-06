@@ -14,7 +14,7 @@
 
 #include "GEMglPassThrough.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPassThrough , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPassThrough, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,14 +31,18 @@ GEMglPassThrough :: GEMglPassThrough    (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPassThrough :: ~GEMglPassThrough () {
+GEMglPassThrough :: ~GEMglPassThrough ()
+{
   inlet_free(m_inlet[0]);
 }
 
 //////////////////
 // extension check
-bool GEMglPassThrough :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglPassThrough :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -47,14 +51,16 @@ bool GEMglPassThrough :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPassThrough :: render(GemState *state) {
+void GEMglPassThrough :: render(GemState *state)
+{
   glPassThrough (token);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPassThrough :: tokenMess (t_float arg1) {     // FUN
+void GEMglPassThrough :: tokenMess (t_float arg1)       // FUN
+{
   token = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -64,10 +70,12 @@ void GEMglPassThrough :: tokenMess (t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglPassThrough :: obj_setupCallback(t_class *classPtr) {
+void GEMglPassThrough :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPassThrough::tokenMessCallback),    gensym("token"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglPassThrough :: tokenMessCallback (void* data, t_float arg0){
+void GEMglPassThrough :: tokenMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->tokenMess ( static_cast<t_float>(arg0));
 }

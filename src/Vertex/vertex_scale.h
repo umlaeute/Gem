@@ -34,13 +34,13 @@ class GEM_EXTERN vertex_scale : public GemBase
 {
   CPPEXTERN_HEADER(vertex_scale, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_scale(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -65,7 +65,7 @@ class GEM_EXTERN vertex_scale : public GemBase
 
   static void   paramMessCallback(void *data, t_symbol*, int, t_atom*);
 
- private:
+private:
 
   static void   modeMessCallback(void *data, t_symbol*, int, t_atom*);
   static void   vertexMessCallback(void *data, t_float num, t_float counter);

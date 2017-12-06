@@ -49,7 +49,8 @@ cylinder :: ~cylinder()
 // render
 //
 /////////////////////////////////////////////////////////
-void cylinder :: setupParameters(void){
+void cylinder :: setupParameters(void)
+{
   baseRadius=m_size;
   topRadius=m_size;
   height=m_size*2;
@@ -59,7 +60,9 @@ void cylinder :: setupParameters(void){
 void cylinder :: render(GemState *state)
 {
   setupParameters();
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_FILL;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_FILL;
+  }
 
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;
@@ -80,7 +83,7 @@ void cylinder :: render(GemState *state)
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(texType && texNum>=3){
+  if(texType && texNum>=3) {
     xsize0 = texCoords[0].s;
     xsize  = texCoords[1].s-xsize0;
     ysize0 = texCoords[1].t;
@@ -112,8 +115,7 @@ void cylinder :: render(GemState *state)
       }
     }
     glEnd();
-  }
-  else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
+  } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
     /* Draw rings */
     if (m_drawType == GL_LINE) {
       z = 0.0;
@@ -130,8 +132,7 @@ void cylinder :: render(GemState *state)
         z += dz;
         r += dr;
       }
-    }
-    else {
+    } else {
       /* draw one ring at each end */
       if (baseRadius != 0.0) {
         glBegin(GL_LINE_LOOP);
@@ -162,8 +163,7 @@ void cylinder :: render(GemState *state)
       glVertex3f(x * topRadius, y * topRadius, height);
     }
     glEnd();
-  }
-  else if (m_drawType == GL_FILL) {
+  } else if (m_drawType == GL_FILL) {
     GLfloat ds = 1.0 / slices;
     GLfloat dt = 1.0 / stacks;
     GLfloat t = 0.0;
@@ -177,16 +177,19 @@ void cylinder :: render(GemState *state)
         if (i == slices) {
           x = sin(0.0);
           y = cos(0.0);
-        }
-        else {
+        } else {
           x = sin(i * da);
           y = cos(i * da);
         }
         normal3f(x * nsign, y * nsign, nz * nsign);
-        if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        if(texType) {
+          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        }
         glVertex3f(x * r, y * r, z);
         normal3f(x * nsign, y * nsign, nz * nsign);
-        if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+        if(texType) {
+          glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+        }
         glVertex3f(x * (r + dr), y * (r + dr), z + dz);
 
         s += ds;

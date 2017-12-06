@@ -55,13 +55,13 @@ class GEM_EXTERN gemglfw3window : public GemWindow
 {
   CPPEXTERN_HEADER(gemglfw3window, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglfw3window(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -107,7 +107,7 @@ class GEM_EXTERN gemglfw3window : public GemWindow
   bool m_gles;
   GLFWwindow *m_window;
 
- private:
+private:
 
   //////////
   // glfw callbacks

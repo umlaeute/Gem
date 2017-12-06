@@ -55,13 +55,13 @@ class GEM_EXTERN gemglfw2window : public GemWindow
 {
   CPPEXTERN_HEADER(gemglfw2window, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglfw2window(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -103,7 +103,7 @@ class GEM_EXTERN gemglfw2window : public GemWindow
   void glprofileMess(int, int);
   unsigned int m_profile_major, m_profile_minor;
 
- private:
+private:
 
   //////////
   // glfw callbacks

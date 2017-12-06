@@ -62,14 +62,14 @@ class GEM_EXTERN TextBase : public GemBase
 {
   CPPEXTERN_HEADER(TextBase, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor with args
   TextBase(int argc, t_atom *argv);
 
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -87,13 +87,19 @@ class GEM_EXTERN TextBase : public GemBase
   //////////
   // Set the text string from an ASCII list
   virtual void  stringMess(int argc, t_atom *argv);
-  void stringMess(t_symbol*, int argc, t_atom*argv) { stringMess(argc, argv); }
+  void stringMess(t_symbol*, int argc, t_atom*argv)
+  {
+    stringMess(argc, argv);
+  }
   //-- /moocow
 
   //////////
   // Set the text string
   virtual void  textMess(int argc, t_atom *argv);
-  void  textMess(t_symbol*, int argc, t_atom*argv) { textMess(argc, argv); }
+  void  textMess(t_symbol*, int argc, t_atom*argv)
+  {
+    textMess(argc, argv);
+  }
 
   //////////
   // The font to use
@@ -227,7 +233,7 @@ class GEM_EXTERN TextBase : public GemBase
   virtual void renderLine(const wchar_t*line,float dist);
 #endif
 
- private:
+private:
 
   ///////////
   // helpers:

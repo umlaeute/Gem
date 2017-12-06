@@ -47,10 +47,12 @@ pix_a_2grey :: ~pix_a_2grey()
 /////////////////////////////////////////////////////////
 void pix_a_2grey :: alphaMess(float alphaval)
 {
-  if (alphaval > 1.f)
+  if (alphaval > 1.f) {
     alphaval =  1.f;
-  if (alphaval < -1.f)
+  }
+  if (alphaval < -1.f) {
     alphaval = -1.f;
+  }
 
   m_mode = static_cast<int>(alphaval*255.f);
 
@@ -63,23 +65,25 @@ void pix_a_2grey :: alphaMess(float alphaval)
 /////////////////////////////////////////////////////////
 void pix_a_2grey :: processRGBAImage(imageStruct &image)
 {
-  if (!m_mode)return;
+  if (!m_mode) {
+    return;
+  }
 
   unsigned char *pixels = image.data;
   int count  = image.ysize * image.xsize;
 
-  if (m_mode < 0){
+  if (m_mode < 0) {
     const int realVal = -m_mode;
     while (count--) {
-      if (pixels[chAlpha] < realVal){
+      if (pixels[chAlpha] < realVal) {
         const int grey = (pixels[chRed] * RGB2GRAY_RED + pixels[chGreen] * RGB2GRAY_GREEN + pixels[chBlue] * RGB2GRAY_BLUE)>>8;
         pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }
       pixels += 4;
     }
-  }else{
-    while (count--){
-      if (pixels[chAlpha] > m_mode){
+  } else {
+    while (count--) {
+      if (pixels[chAlpha] > m_mode) {
         const int grey = (pixels[chRed] * RGB2GRAY_RED + pixels[chGreen] * RGB2GRAY_GREEN + pixels[chBlue] * RGB2GRAY_BLUE)>>8;
         pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }

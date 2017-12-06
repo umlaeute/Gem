@@ -82,13 +82,24 @@ void sphere :: createSphere(GemState *state)
   state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
 
 
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_FILL;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_FILL;
+  }
 
-  if(m_x)delete[]m_x;m_x=NULL;
-  if(m_y)delete[]m_y;m_y=NULL;
-  if(m_z)delete[]m_z;m_z=NULL;
+  if(m_x) {
+    delete[]m_x;
+  }
+  m_x=NULL;
+  if(m_y) {
+    delete[]m_y;
+  }
+  m_y=NULL;
+  if(m_z) {
+    delete[]m_z;
+  }
+  m_z=NULL;
 
-  if(texType && texNum>=3){
+  if(texType && texNum>=3) {
     xsize0 = texCoords[0].s;
     xsize  = texCoords[1].s-xsize0;
     ysize0 = texCoords[1].t;
@@ -126,8 +137,7 @@ void sphere :: createSphere(GemState *state)
     if (texType) {
       imin = 0;
       imax = stacks;
-    }
-    else {
+    } else {
       imin = 1;
       imax = stacks - 1;
     }
@@ -165,8 +175,7 @@ void sphere :: createSphere(GemState *state)
       }
     }
 
-  }
-  else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
+  } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
 
     //allocate memory - this has twice the vertices as GL_POINT
     m_x = new float[slices * stacks * 2];
@@ -253,7 +262,7 @@ void sphere :: render(GemState *state)
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(texType && texNum>=3){
+  if(texType && texNum>=3) {
     xsize0 = texCoords[0].s;
     xsize  = texCoords[1].s-xsize0;
     ysize0 = texCoords[1].t;
@@ -269,7 +278,7 @@ void sphere :: render(GemState *state)
 
   //if anything changed then the geometry is rebuilt
   if (stacks != oldStacks || slices != oldSlices ||
-      m_drawType != oldDrawType || texType!=oldTexture){
+      m_drawType != oldDrawType || texType!=oldTexture) {
 
     //call the sphere creation function to fill the array
     createSphere(state);
@@ -288,8 +297,9 @@ void sphere :: render(GemState *state)
       glNormal3f(0.0, 0.0, 1.0);
       glVertex3f(0.0, 0.0, nsign * radius);
       for (j = 0; j <= slices; j++) {
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+        }
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
@@ -302,8 +312,7 @@ void sphere :: render(GemState *state)
     if (texType) {
       imin = 0;
       imax = stacks;
-    }
-    else {
+    } else {
       imin = 1;
       imax = stacks - 1;
     }
@@ -314,16 +323,20 @@ void sphere :: render(GemState *state)
       s = 0.0;
       for (j = 0; j <= slices; j++) {
 
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        if(texType)
+        }
+        if(texType) {
           glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        }
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        if(texType)
+        }
+        if(texType) {
           glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+        }
         s += ds;
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
@@ -340,16 +353,16 @@ void sphere :: render(GemState *state)
       s = 1.0;
       t = dt;
       for (j = slices; j >= 0; j--) {
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+        }
         s -= ds;
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
       glEnd();
     }
-  }
-  else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
+  } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
 
     src = 0;
 
@@ -357,8 +370,9 @@ void sphere :: render(GemState *state)
       glBegin(GL_LINE_LOOP);
       for (j = 0; j < slices; j++) {
 
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+        }
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
@@ -369,8 +383,9 @@ void sphere :: render(GemState *state)
       glBegin(GL_LINE_STRIP);
       for (i = 0; i <= stacks; i++) {
 
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+        }
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
@@ -381,11 +396,13 @@ void sphere :: render(GemState *state)
   else if (m_drawType == GL_POINT) {
     /* top and bottom-most points */
     glBegin(GL_POINTS);
-    if (lighting)
+    if (lighting) {
       glNormal3f(0.0, 0.0, nsign);
+    }
     glVertex3d(0.0, 0.0, radius);
-    if (lighting)
+    if (lighting) {
       glNormal3f(0.0, 0.0, -nsign);
+    }
     glVertex3d(0.0, 0.0, -radius);
 
     src = 0;
@@ -393,8 +410,9 @@ void sphere :: render(GemState *state)
     for (i = 1; i < stacks - 1; i++) {
       rho = i * drho;
       for (j = 0; j < slices; j++) {
-        if (lighting)
+        if (lighting) {
           glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+        }
         glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }

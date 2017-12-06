@@ -40,14 +40,14 @@ class GEM_EXTERN glsl_geometry : public GemBase
 {
   CPPEXTERN_HEADER(glsl_geometry, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   glsl_geometry(void);
   glsl_geometry(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor

@@ -40,7 +40,9 @@ pix_clearblock :: pix_clearblock()
 /////////////////////////////////////////////////////////
 pix_clearblock :: ~pix_clearblock()
 {
-  if (m_oldcache) stopRendering();
+  if (m_oldcache) {
+    stopRendering();
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ pix_clearblock :: ~pix_clearblock()
 void pix_clearblock :: render(GemState *state)
 {
   // the cache and image should have been set
-  if (!m_oldcache || m_oldcache->m_magic!=GEMCACHE_MAGIC){
+  if (!m_oldcache || m_oldcache->m_magic!=GEMCACHE_MAGIC) {
     // our cache has not been set or has been destroyed
     startRendering(); // i'm not sure, whether this breaks the default behaviour
     return;
@@ -78,13 +80,15 @@ void pix_clearblock :: startRendering()
 {
   stopRendering();
 
-  if (m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)
+  if (m_cache && m_cache->m_magic!=GEMCACHE_MAGIC) {
     m_cache=NULL;
+  }
 
   m_oldcache = m_cache;
 
-  if(m_oldcache)
+  if(m_oldcache) {
     m_cache = new GemCache(m_oldcache->m_parent);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -94,7 +98,9 @@ void pix_clearblock :: startRendering()
 void pix_clearblock :: stopRendering()
 {
   if(m_oldcache) {
-    if (m_cache) delete m_cache;
+    if (m_cache) {
+      delete m_cache;
+    }
     m_cache=NULL;
   }
   m_oldcache=NULL;

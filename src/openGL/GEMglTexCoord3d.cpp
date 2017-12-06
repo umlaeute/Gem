@@ -14,7 +14,7 @@
 
 #include "GEMglTexCoord3d.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexCoord3d , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexCoord3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglTexCoord3d :: GEMglTexCoord3d      (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTexCoord3d :: ~GEMglTexCoord3d () {
+GEMglTexCoord3d :: ~GEMglTexCoord3d ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglTexCoord3d :: ~GEMglTexCoord3d () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTexCoord3d :: render(GemState *state) {
+void GEMglTexCoord3d :: render(GemState *state)
+{
   glTexCoord3d (s, t, r);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTexCoord3d :: sMess (t_float arg1) {  // FUN
+void GEMglTexCoord3d :: sMess (t_float arg1)    // FUN
+{
   s = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglTexCoord3d :: tMess (t_float arg1) {  // FUN
+void GEMglTexCoord3d :: tMess (t_float arg1)    // FUN
+{
   t = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglTexCoord3d :: rMess (t_float arg1) {  // FUN
+void GEMglTexCoord3d :: rMess (t_float arg1)    // FUN
+{
   r = static_cast<GLdouble>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglTexCoord3d :: rMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglTexCoord3d :: obj_setupCallback(t_class *classPtr) {
+void GEMglTexCoord3d :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord3d::sMessCallback),         gensym("s"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord3d::tMessCallback),         gensym("t"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord3d::rMessCallback),         gensym("r"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexCoord3d :: sMessCallback (void* data, t_float arg0){
+void GEMglTexCoord3d :: sMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord3d :: tMessCallback (void* data, t_float arg0){
+void GEMglTexCoord3d :: tMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord3d :: rMessCallback (void* data, t_float arg0){
+void GEMglTexCoord3d :: rMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->rMess ( static_cast<t_float>(arg0));
 }

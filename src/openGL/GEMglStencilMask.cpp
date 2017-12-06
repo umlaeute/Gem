@@ -14,7 +14,7 @@
 
 #include "GEMglStencilMask.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglStencilMask , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglStencilMask, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglStencilMask :: GEMglStencilMask    (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglStencilMask :: ~GEMglStencilMask () {
+GEMglStencilMask :: ~GEMglStencilMask ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglStencilMask :: render(GemState *state) {
+void GEMglStencilMask :: render(GemState *state)
+{
   glStencilMask (mask);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglStencilMask :: maskMess (t_float arg1) {      // FUN
+void GEMglStencilMask :: maskMess (t_float arg1)        // FUN
+{
   mask = static_cast<GLuint>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglStencilMask :: maskMess (t_float arg1) {      // FUN
 // static member functions
 //
 
-void GEMglStencilMask :: obj_setupCallback(t_class *classPtr) {
+void GEMglStencilMask :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglStencilMask::maskMessCallback),     gensym("mask"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglStencilMask :: maskMessCallback (void* data, t_float arg0){
+void GEMglStencilMask :: maskMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

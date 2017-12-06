@@ -45,35 +45,40 @@ LOG
 /* Implementation of PluginFactory<Class>                                */
 
 template<class Class>
-  PluginFactory<Class>* PluginFactory<Class>::s_factory=NULL;
+PluginFactory<Class>* PluginFactory<Class>::s_factory=NULL;
 
 template<class Class>
-  PluginFactory<Class>* PluginFactory<Class>::getPluginFactory(void) {
+PluginFactory<Class>* PluginFactory<Class>::getPluginFactory(void)
+{
   if(NULL==s_factory) {
     s_factory=new PluginFactory<Class>;
   }
 #if GEM_PLUGFAC_DEBUG
-        std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
+  std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
 #endif /* GEM_PLUGFAC_DEBUG */
   return s_factory;
 }
 
 template<class Class>
-  void  PluginFactory<Class>::doRegisterClass(std::string id, ctor_t*c) {
+void  PluginFactory<Class>::doRegisterClass(std::string id, ctor_t*c)
+{
   set(id, (void*)c);
 }
 
 template<class Class>
-  Class*PluginFactory<Class>::doGetInstance(std::string id) {
+Class*PluginFactory<Class>::doGetInstance(std::string id)
+{
   ctor_t*ctor=(ctor_t*)get(id);
-  if(ctor)
+  if(ctor) {
     return ctor();
-  else
+  } else {
     return NULL;
+  }
 }
 
 template<class Class>
-void PluginFactory<Class>::registerClass(std::string id, ctor_t*c) {
+void PluginFactory<Class>::registerClass(std::string id, ctor_t*c)
+{
   PluginFactory<Class>*fac=getPluginFactory();
   if(NULL==fac) {
     std::cerr << "unable to get a factory!" << std::endl;
@@ -85,7 +90,8 @@ void PluginFactory<Class>::registerClass(std::string id, ctor_t*c) {
 }
 
 template<class Class>
-Class*PluginFactory<Class>::getInstance(std::string id) {
+Class*PluginFactory<Class>::getInstance(std::string id)
+{
   PluginFactory<Class>*fac=getPluginFactory();
 #if GEM_PLUGFAC_DEBUG
   std::cerr << "getting " << typeid(Class).name() << " instance '" << id << "' from factory: " << (void*)fac << std::endl;
@@ -97,7 +103,8 @@ Class*PluginFactory<Class>::getInstance(std::string id) {
 }
 
 template<class Class>
-  int PluginFactory<Class>::loadPlugins(std::string basename, std::string path) {
+int PluginFactory<Class>::loadPlugins(std::string basename, std::string path)
+{
   PluginFactory<Class>*fac=getPluginFactory();
 #if GEM_PLUGFAC_DEBUG
   std::cerr << "loading " << typeid(Class).name() << " plugins from factory: " << (void*)fac << std::endl;
@@ -109,12 +116,14 @@ template<class Class>
 }
 
 template<class Class>
-  std::vector<std::string>PluginFactory<Class>::doGetIDs() {
+std::vector<std::string>PluginFactory<Class>::doGetIDs()
+{
   return get();
 }
 
 template<class Class>
-  std::vector<std::string>PluginFactory<Class>::getIDs() {
+std::vector<std::string>PluginFactory<Class>::getIDs()
+{
   std::vector<std::string>result;
   PluginFactory<Class>*fac=getPluginFactory();
   if(fac) {
@@ -128,29 +137,33 @@ template<class Class>
 /* ********************************************************************* */
 /* Implementation of PluginFactoryRegistrar<ChildClass, BaseClass>       */
 
-namespace PluginFactoryRegistrar {
-  template<class ChildClass, class BaseClass>
-    BaseClass* allocator() {
-    ChildClass* res0 = new ChildClass();
-    BaseClass*  res1 = dynamic_cast<BaseClass*>(res0);
-    if(NULL==res1) {
-      /* if ChildClass is derived from BaseClass and we successfully allocated an object,
-       * this code cannot never be reached;
-       * the compiler can check this during template expansion, be we don't */
-      /* coverity[dead_error_line] FIXXME stackoverflow:23489764 */
-      delete res0;
-    }
-    return res1;
+namespace PluginFactoryRegistrar
+{
+template<class ChildClass, class BaseClass>
+BaseClass* allocator()
+{
+  ChildClass* res0 = new ChildClass();
+  BaseClass*  res1 = dynamic_cast<BaseClass*>(res0);
+  if(NULL==res1) {
+    /* if ChildClass is derived from BaseClass and we successfully allocated an object,
+     * this code cannot never be reached;
+     * the compiler can check this during template expansion, be we don't */
+    /* coverity[dead_error_line] FIXXME stackoverflow:23489764 */
+    delete res0;
   }
+  return res1;
+}
 
-  template<class ChildClass, class BaseClass>
-    registrar<ChildClass, BaseClass> :: registrar(std::string id) {
-    PluginFactory<BaseClass>::registerClass(id, allocator<ChildClass, BaseClass>);
-  }
-  template<class BaseClass>
-    dummy<BaseClass> :: dummy() {
-    std::string id; // default ID
-    PluginFactory<BaseClass>::registerClass(id, NULL);
-  }
+template<class ChildClass, class BaseClass>
+registrar<ChildClass, BaseClass> :: registrar(std::string id)
+{
+  PluginFactory<BaseClass>::registerClass(id, allocator<ChildClass, BaseClass>);
+}
+template<class BaseClass>
+dummy<BaseClass> :: dummy()
+{
+  std::string id; // default ID
+  PluginFactory<BaseClass>::registerClass(id, NULL);
+}
 
 };

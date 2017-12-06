@@ -33,21 +33,25 @@ GemException::GemException()
 {}
 GemException::~GemException()
 {}
-const char *GemException::what() const {
+const char *GemException::what() const
+{
   return ErrorString;
 }
 
-void GemException::report(const char*origin) const {
+void GemException::report(const char*origin) const
+{
   if(ErrorString && *ErrorString) {
-    if (NULL==origin)
+    if (NULL==origin) {
       error("GemException: %s", ErrorString);
-    else
+    } else {
       error("[%s]: %s", origin, ErrorString);
+    }
   }
 }
 
 
-void gem::catchGemException(const char*name, const t_object*obj) {
+void gem::catchGemException(const char*name, const t_object*obj)
+{
   try {
     throw;
   } catch (GemException&ex) {
@@ -57,10 +61,11 @@ void gem::catchGemException(const char*name, const t_object*obj) {
       t_object*o=(t_object*)obj;
       char*str=(char*)ex.what();
       if(NULL!=str) {
-        if (NULL==name)
+        if (NULL==name) {
           pd_error(o, "GemException: %s", str);
-        else
+        } else {
           pd_error(o, "[%s]: %s", name, str);
+        }
       }
     }
   }

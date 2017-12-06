@@ -56,13 +56,13 @@ class GEM_EXTERN rubber : public GemShape
 {
   CPPEXTERN_HEADER(rubber, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   rubber( t_floatarg width, t_floatarg height);
 
- protected:
+protected:
 
   //////////
   // Destructor

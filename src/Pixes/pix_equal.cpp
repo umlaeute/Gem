@@ -64,24 +64,26 @@ void pix_equal :: processRGBAImage(imageStruct &image)
   }
 }
 
-namespace {
-  static void setvec(const char*label, unsigned char*dest, int argc, t_atom*argv) {
-    switch(argc) {
-    case 4:
-      dest[chAlpha]=atom_getfloat(argv+3)*255.;
-    case 3:
-      dest[chRed  ]=atom_getfloat(argv+0)*255.;
-      dest[chGreen]=atom_getfloat(argv+1)*255.;
-      dest[chBlue ]=atom_getfloat(argv+2)*255.;
-      break;
-    case 1:
-      dest[chRed]=dest[chGreen]=dest[chBlue]=atom_getfloat(argv+0)*255.;
-      break;
-    default:
-      error("illegal number of arguments for %s, must be 1, 3 or 4", label);
-      break;
-    }
+namespace
+{
+static void setvec(const char*label, unsigned char*dest, int argc, t_atom*argv)
+{
+  switch(argc) {
+  case 4:
+    dest[chAlpha]=atom_getfloat(argv+3)*255.;
+  case 3:
+    dest[chRed  ]=atom_getfloat(argv+0)*255.;
+    dest[chGreen]=atom_getfloat(argv+1)*255.;
+    dest[chBlue ]=atom_getfloat(argv+2)*255.;
+    break;
+  case 1:
+    dest[chRed]=dest[chGreen]=dest[chBlue]=atom_getfloat(argv+0)*255.;
+    break;
+  default:
+    error("illegal number of arguments for %s, must be 1, 3 or 4", label);
+    break;
   }
+}
 };
 
 void pix_equal :: vecUpperBoundMess(t_symbol*s,int argc, t_atom *argv)

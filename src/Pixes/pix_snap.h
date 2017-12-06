@@ -42,7 +42,7 @@ class GEM_EXTERN pix_snap : public GemBase
 {
   CPPEXTERN_HEADER(pix_snap, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor

@@ -33,16 +33,25 @@ CPPEXTERN_NEW_WITH_GIMME(textextruded);
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 textextruded :: textextruded(int argc, t_atom *argv)
-  : TextBase(argc, argv) {
+  : TextBase(argc, argv)
+{
   fontNameMess(DEFAULT_FONT);
 }
-textextruded :: ~textextruded() {
-  if(m_font)delete m_font;m_font=NULL;
+textextruded :: ~textextruded()
+{
+  if(m_font) {
+    delete m_font;
+  }
+  m_font=NULL;
 }
-FTFont *textextruded :: makeFont(const char*fontfile){
-  if(m_font)delete m_font; m_font=NULL;
+FTFont *textextruded :: makeFont(const char*fontfile)
+{
+  if(m_font) {
+    delete m_font;
+  }
+  m_font=NULL;
   m_font =  new FTGLExtrdFont(fontfile);
-  if (m_font->Error()){
+  if (m_font->Error()) {
     delete m_font;
     m_font = NULL;
   }
@@ -56,7 +65,9 @@ FTFont *textextruded :: makeFont(const char*fontfile){
 void textextruded :: setDepth(float prec)
 {
   m_fontDepth = prec;
-  if(!m_font)return;
+  if(!m_font) {
+    return;
+  }
   m_font->Depth(m_fontDepth);
   setFontSize();
   setModified();

@@ -51,20 +51,21 @@ void pix_color :: processRGBAImage(imageStruct &image)
   int i = image.xsize * image.ysize;
 
   unsigned char *base = image.data;
-  while (i--)
-    {
-      base[chRed] = m_color[0];
-      base[chGreen] = m_color[1];
-      base[chBlue] = m_color[2];
-      base += 4;
-    }
+  while (i--) {
+    base[chRed] = m_color[0];
+    base[chGreen] = m_color[1];
+    base[chBlue] = m_color[2];
+    base += 4;
+  }
 }
 void pix_color :: processGrayImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize;
   unsigned char grey=(m_color[0]*RGB2GRAY_RED+m_color[1]*RGB2GRAY_GREEN+m_color[2]*RGB2GRAY_BLUE)>>8;
   unsigned char *base = image.data;
-  while (i--)*base++=grey;
+  while (i--) {
+    *base++=grey;
+  }
 }
 void pix_color :: processYUVImage(imageStruct &image)
 {
@@ -74,9 +75,11 @@ void pix_color :: processYUVImage(imageStruct &image)
   unsigned char v =(( RGB2YUV_31 * m_color[0] + RGB2YUV_32 * m_color[1] + RGB2YUV_33 * m_color[2])>>8) + UV_OFFSET;
 
   unsigned char *base = image.data;
-  while (i--){
-    base[chU]=u; base[chY0]=y;
-    base[chV]=v; base[chY1]=y;
+  while (i--) {
+    base[chU]=u;
+    base[chY0]=y;
+    base[chV]=v;
+    base[chY1]=y;
     base+=4;
   }
 }
@@ -108,9 +111,10 @@ void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*ar
 {
   float r=0.0, g=0.0, b=0.0;
   float a=1.0;
-  switch(argc){
+  switch(argc) {
   case 1:
-    r=g=b=atom_getfloat(argv); break;
+    r=g=b=atom_getfloat(argv);
+    break;
   case 4:
     a=atom_getfloat(argv+3);
   case 3:

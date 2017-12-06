@@ -64,34 +64,34 @@ void camera :: render(GemState *)
     // MoveCamera(-m_speed);
     distance = distance + (m_speed/100);
   }
-  if(left)
-    {
-      if (m_mode)
-        incHRot(m_speed);
-      else
-        decHRot(m_speed);
+  if(left) {
+    if (m_mode) {
+      incHRot(m_speed);
+    } else {
+      decHRot(m_speed);
     }
-  if(right)
-    {
-      if (m_mode)
-        decHRot(m_speed);
-      else
-        incHRot(m_speed);
+  }
+  if(right) {
+    if (m_mode) {
+      decHRot(m_speed);
+    } else {
+      incHRot(m_speed);
     }
-  if(up)
-    {
-      if (m_mode)
-        incVRot(m_speed);
-      else
-        decVRot(m_speed);
+  }
+  if(up) {
+    if (m_mode) {
+      incVRot(m_speed);
+    } else {
+      decVRot(m_speed);
     }
-  if(down)
-    {
-      if (m_mode)
-        decVRot(m_speed);
-      else
-        incVRot(m_speed);
+  }
+  if(down) {
+    if (m_mode) {
+      decVRot(m_speed);
+    } else {
+      incVRot(m_speed);
     }
+  }
 
   calcCameraVals();
   GemMan::m_lookat[0] = m_vPosition.x;
@@ -114,31 +114,35 @@ void camera :: resetState()
 
 void camera :: leftMess(bool val )
 {
-  if (m_mode)
+  if (m_mode) {
     incHRot(m_speed);
-  else
+  } else {
     decHRot(m_speed);
+  }
 }
 void camera :: rightMess(bool val )
 {
-  if (m_mode)
+  if (m_mode) {
     decHRot(m_speed);
-  else
+  } else {
     incHRot(m_speed);
+  }
 }
 void camera :: upMess(bool val )
 {
-  if (m_mode)
+  if (m_mode) {
     incVRot(m_speed);
-  else
+  } else {
     decVRot(m_speed);
+  }
 }
 void camera :: downMess(bool val )
 {
-  if (m_mode)
+  if (m_mode) {
     decVRot(m_speed);
-  else
+  } else {
     incVRot(m_speed);
+  }
 }
 
 void camera :: vAngleMess(float val)
@@ -184,8 +188,9 @@ void camera :: incHRot(float incVal)
 {
   hAngle += incVal;
 
-  if (hAngle > 360)
+  if (hAngle > 360) {
     hAngle -= 360;
+  }
 }
 
 /// Decrease Horizontal Rotation
@@ -193,8 +198,9 @@ void camera :: decHRot(float decVal)
 {
   hAngle -= decVal;
 
-  if (hAngle < 0)
+  if (hAngle < 0) {
     hAngle += 360;
+  }
 }
 
 /// Increase Vertical Rotation
@@ -202,8 +208,9 @@ void camera :: incVRot(float incVal)
 {
   vAngle += incVal;
 
-  if (vAngle > 360)
+  if (vAngle > 360) {
     vAngle -= 360;
+  }
 }
 
 /// Decrease Vertical Rotation
@@ -211,8 +218,9 @@ void camera :: decVRot(float decVal)
 {
   vAngle -= decVal;
 
-  if (vAngle < 0)
+  if (vAngle < 0) {
     vAngle += 360;
+  }
 }
 
 ///////////////////////////////// POSITION CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*

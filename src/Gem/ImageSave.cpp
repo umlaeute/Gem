@@ -22,15 +22,20 @@
 #include "plugins/imagesaver.h"
 #include "plugins/PluginFactory.h"
 
-namespace gem { namespace PixImageSaver {
-  static gem::plugins::imagesaver*s_instance=NULL;
-  static gem::plugins::imagesaver*getInstance(void) {
-    if(NULL==s_instance) {
-      s_instance=gem::plugins::imagesaver::getInstance();
-    }
-    return s_instance;
+namespace gem
+{
+namespace PixImageSaver
+{
+static gem::plugins::imagesaver*s_instance=NULL;
+static gem::plugins::imagesaver*getInstance(void)
+{
+  if(NULL==s_instance) {
+    s_instance=gem::plugins::imagesaver::getInstance();
   }
-}; };
+  return s_instance;
+}
+};
+};
 
 
 /***************************************************************************

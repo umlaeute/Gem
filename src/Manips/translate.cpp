@@ -30,19 +30,17 @@ CPPEXTERN_NEW_WITH_GIMME(translate);
 translate :: translate(int argc, t_atom *argv)
 {
   m_distance  = 0.0;
-  if (argc == 4)
-    {
-      m_distance = atom_getfloat(&argv[0]);
-      vectorMess(atom_getfloat(&argv[1]), atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-    }
-  else if (argc == 3) vectorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                                 atom_getfloat(&argv[2]));
+  if (argc == 4) {
+    m_distance = atom_getfloat(&argv[0]);
+    vectorMess(atom_getfloat(&argv[1]), atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+  } else if (argc == 3) vectorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+                                     atom_getfloat(&argv[2]));
 
-  else if (argc == 0) vectorMess(1, 0, 0);
-  else
-    {
-      throw(GemException("needs 0, 3, or 4 arguments"));
-    }
+  else if (argc == 0) {
+    vectorMess(1, 0, 0);
+  } else {
+    throw(GemException("needs 0, 3, or 4 arguments"));
+  }
 
   // create the new inlets
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));

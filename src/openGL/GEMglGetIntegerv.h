@@ -29,10 +29,10 @@ class GEM_EXTERN GEMglGetIntegerv : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglGetIntegerv, GemGLBase);
 
-    public:
+public:
   // Constructor
   GEMglGetIntegerv (int,t_atom*);       // CON
- protected:
+protected:
   // Destructor
   virtual ~GEMglGetIntegerv ();
   // check extensions
@@ -46,7 +46,7 @@ class GEM_EXTERN GEMglGetIntegerv : public GemGLBase
 
   t_atom m_alist[16];
 
- private:
+private:
   // we need one inlet
   t_inlet *m_inlet;
   // The outlet

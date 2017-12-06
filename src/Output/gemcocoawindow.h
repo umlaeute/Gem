@@ -21,7 +21,7 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemcocoawindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
@@ -51,7 +51,7 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
   void                   move(void); // apply dimen/offset to current window
   void                  moved(void); // window dimen/offset changed
 
- private:
+private:
   class PIMPL;
   PIMPL*m_pimpl;
   friend class PIMPL;

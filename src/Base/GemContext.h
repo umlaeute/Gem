@@ -28,13 +28,15 @@ typedef struct GLXEWContextStruct GLXEWContext;
 
 typedef struct GLEWContextStruct GLEWContext;
 
-namespace gem {
-class GEM_EXTERN Context {
- private:
+namespace gem
+{
+class GEM_EXTERN Context
+{
+private:
   class PIMPL;
   PIMPL*m_pimpl;
 
- public:
+public:
   Context(void);
   Context(const Context&);
   virtual ~Context(void);
@@ -47,7 +49,7 @@ class GEM_EXTERN Context {
   // make context uncurrent
   bool pop(void);
 
- public:
+public:
   static unsigned int getContextId(void);
   static GLEWContext*getGlewContext(void);
 #ifdef GemGlewXContext

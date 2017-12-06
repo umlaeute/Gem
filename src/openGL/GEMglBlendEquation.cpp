@@ -14,7 +14,7 @@
 
 #include "GEMglBlendEquation.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglBlendEquation, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,27 +31,33 @@ GEMglBlendEquation :: GEMglBlendEquation        (t_floatarg arg0) :
 ////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglBlendEquation :: ~GEMglBlendEquation () {
+GEMglBlendEquation :: ~GEMglBlendEquation ()
+{
   inlet_free(m_inlet[0]);
 }
 //////////////////
 // extension check
-bool GEMglBlendEquation :: isRunnable(void) {
-  if(GLEW_VERSION_1_4)return true;
+bool GEMglBlendEquation :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_4) {
+    return true;
+  }
   error("your system does not support OpenGL-1.4");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglBlendEquation :: render(GemState *state) {
+void GEMglBlendEquation :: render(GemState *state)
+{
   glBlendEquation (mode);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglBlendEquation :: modeMess (t_float arg1) {    // FUN
+void GEMglBlendEquation :: modeMess (t_float arg1)      // FUN
+{
   mode = static_cast<GLenum>(arg1);
   setModified();
 }
@@ -61,10 +67,12 @@ void GEMglBlendEquation :: modeMess (t_float arg1) {    // FUN
 // static member functions
 //
 
-void GEMglBlendEquation :: obj_setupCallback(t_class *classPtr) {
+void GEMglBlendEquation :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBlendEquation::modeMessCallback),          gensym("mode"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglBlendEquation :: modeMessCallback (void* data, t_float arg0){
+void GEMglBlendEquation :: modeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }

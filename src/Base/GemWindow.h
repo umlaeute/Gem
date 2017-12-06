@@ -27,20 +27,21 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-namespace gem {
-  class Context;
+namespace gem
+{
+class Context;
 };
 class GemBase;
 
 class GEM_EXTERN GemWindow : public CPPExtern
 {
- CPPEXTERN_HEADER(GemWindow, CPPExtern);
+  CPPEXTERN_HEADER(GemWindow, CPPExtern);
 
- private:
+private:
   class PIMPL;
   PIMPL*m_pimpl;
 
- public:
+public:
 
   //////////
   // Constructor
@@ -50,7 +51,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   // Destructor
   virtual ~GemWindow(void);
 
- public:
+public:
   /* OUTPUT */
 
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
@@ -196,7 +197,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* fallback callback */
   virtual void        anyMess(t_symbol*s, int argc, t_atom*argv);
 
- protected:
+protected:
   unsigned int m_width, m_height;
 
   // common properties of GemWindow's

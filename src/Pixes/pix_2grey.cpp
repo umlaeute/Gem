@@ -51,7 +51,7 @@ void pix_2grey :: processRGBAImage(imageStruct &image)
     int grey = (pixels[chRed  ] * RGB2GRAY_RED  +
                 pixels[chGreen] * RGB2GRAY_GREEN +
                 pixels[chBlue ] * RGB2GRAY_BLUE
-                ) >> 8;
+               ) >> 8;
     pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
     pixels += 4;
   }
@@ -63,7 +63,8 @@ void pix_2grey :: processYUVImage(imageStruct &image)
   int count = image.ysize * image.xsize / 2;
 
   while (count--)    {
-    pixels[chU]=0x80; pixels[chV]=0x80;
+    pixels[chU]=0x80;
+    pixels[chV]=0x80;
     pixels+=4;
   }
 }
@@ -71,7 +72,8 @@ void pix_2grey :: processYUVImage(imageStruct &image)
 #ifdef __MMX__
 # ifndef __APPLE__
 /* LATER: implement MMX code for GL_BGRA_EXT */
-void pix_2grey :: processRGBAMMX(imageStruct &image){
+void pix_2grey :: processRGBAMMX(imageStruct &image)
+{
   __m64*data      =(__m64*)image.data;
 
   register __m64 alpha_mask=_mm_setr_pi8((unsigned char)0x00,
@@ -86,7 +88,7 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
   register __m64 pixel, y1, y2, y1_2;
   register int pixsize = (image.ysize * image.xsize)>>1;
 
-  while(pixsize--){
+  while(pixsize--) {
     pixel=data[pixsize]; /* RGBARGBA */
 
     y1_2= _mm_setzero_si64 ();
@@ -124,7 +126,8 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
   _mm_empty();
 }
 # endif /* APPLE */
-void pix_2grey :: processYUVMMX(imageStruct &image){
+void pix_2grey :: processYUVMMX(imageStruct &image)
+{
   register int pixsize = (image.ysize * image.xsize)>>2;
 
   register __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
@@ -156,19 +159,20 @@ void pix_2grey :: processYUVMMX(imageStruct &image){
 }
 #endif
 #ifdef __SSE2__
-void pix_2grey :: processYUVSSE2(imageStruct &image){
+void pix_2grey :: processYUVSSE2(imageStruct &image)
+{
   register int pixsize = (image.ysize * image.xsize)>>3;
 
   register __m128i mask_128   = _mm_set_epi8(
-                                             (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                             (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                             (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                             (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
   register __m128i offset_128 = _mm_set_epi8(
-                                             (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                             (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                             (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                             (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
   __m128i *data_p= (__m128i*)image.data;
 
   register __m128i pixel;
@@ -184,15 +188,15 @@ void pix_2grey :: processYUVSSE2(imageStruct &image){
 void pix_2grey :: processRGBAAltivec(imageStruct &image)
 {
 
-  union{
+  union {
     unsigned char               c[16];
     vector unsigned char        v;
-  }charBuffer;
+  } charBuffer;
 
-  union{
+  union {
     unsigned short              s[8];
     vector unsigned short       v;
-  }shortBuffer;
+  } shortBuffer;
 
   vector unsigned char  factors;
   vector unsigned short oddS, evenS, one,lo,hi,lo1,hi1;
@@ -283,10 +287,10 @@ void pix_2grey :: processRGBAAltivec(imageStruct &image)
 
 void pix_2grey :: processYUVAltivec(imageStruct &image)
 {
-  union{
+  union {
     unsigned char               c[16];
     vector unsigned char        v;
-  }charBuffer;
+  } charBuffer;
 
   vector unsigned char *pixels = (vector unsigned char *)image.data;
   int count = image.ysize * image.xsize / 8;

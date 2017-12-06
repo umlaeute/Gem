@@ -14,7 +14,7 @@
 
 #include "GEMglDepthMask.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDepthMask , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDepthMask, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglDepthMask :: GEMglDepthMask        (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglDepthMask :: ~GEMglDepthMask () {
+GEMglDepthMask :: ~GEMglDepthMask ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglDepthMask :: render(GemState *state) {
+void GEMglDepthMask :: render(GemState *state)
+{
   glDepthMask (flag);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDepthMask :: flagMess (t_float arg1) {        // FUN
+void GEMglDepthMask :: flagMess (t_float arg1)          // FUN
+{
   flag = static_cast<GLboolean>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglDepthMask :: flagMess (t_float arg1) {        // FUN
 // static member functions
 //
 
-void GEMglDepthMask :: obj_setupCallback(t_class *classPtr) {
+void GEMglDepthMask :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthMask::flagMessCallback),       gensym("flag"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglDepthMask :: flagMessCallback (void* data, t_float arg0){
+void GEMglDepthMask :: flagMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->flagMess ( static_cast<t_float>(arg0));
 }

@@ -82,8 +82,9 @@ void pix_rds :: processRGBAImage(imageStruct &image)
   if(method) {
     for(y=0; y<image.ysize; y++) {
       for(i=0; i<stride; i++) {
-        if(inline_fastrand()&0xc0000000)
+        if(inline_fastrand()&0xc0000000) {
           continue;
+        }
 
         x = image.xsize / 2 + i;
         *(dest + x) = 0xffffffff;
@@ -94,7 +95,9 @@ void pix_rds :: processRGBAImage(imageStruct &image)
           G = (v&0xff00)>>(8+6);
           B = (v&0xff)>>7;
           x += stride + R + G + B;
-          if(x >= image.xsize) break;
+          if(x >= image.xsize) {
+            break;
+          }
           *(dest + x) = 0xffffffff;
         }
 
@@ -105,7 +108,9 @@ void pix_rds :: processRGBAImage(imageStruct &image)
           G = (v&0xff00)>>(8+6);
           B = (v&0xff)>>7;
           x -= stride + R + G + B;
-          if(x < 0) break;
+          if(x < 0) {
+            break;
+          }
           *(dest + x) = 0xffffffff;
         }
       }
@@ -115,8 +120,9 @@ void pix_rds :: processRGBAImage(imageStruct &image)
   } else {
     for(y=0; y<image.ysize; y++) {
       for(i=0; i<stride; i++) {
-        if(inline_fastrand()&0xc0000000)
+        if(inline_fastrand()&0xc0000000) {
           continue;
+        }
 
         x = image.xsize / 2 + i;
         *(dest + x) = 0xffffffff;
@@ -127,7 +133,9 @@ void pix_rds :: processRGBAImage(imageStruct &image)
           G = (v&0xff00)>>(8+6);
           B = (v&0xff)>>7;
           x += stride - R - G - B;
-          if(x >= image.xsize) break;
+          if(x >= image.xsize) {
+            break;
+          }
           *(dest + x) = 0xffffffff;
         }
 
@@ -138,7 +146,9 @@ void pix_rds :: processRGBAImage(imageStruct &image)
           G = (v&0xff00)>>(8+6);
           B = (v&0xff)>>7;
           x -= stride - R - G - B;
-          if(x < 0) break;
+          if(x < 0) {
+            break;
+          }
           *(dest + x) = 0xffffffff;
         }
       }
@@ -147,7 +157,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
     }
   }
 
-  if(doDots){
+  if(doDots) {
     target += image.xsize + (image.xsize - stride) / 2;
     for(y=0; y<4; y++) {
       for(x=0; x<4; x++) {
@@ -181,7 +191,9 @@ void pix_rds :: processGrayImage(imageStruct &image)
   if(method) {
     for(y=0; y<image.ysize; y++) {
       for(i=0; i<stride; i++) {
-        if(inline_fastrand()&0xc0000000) continue;
+        if(inline_fastrand()&0xc0000000) {
+          continue;
+        }
 
         x = image.xsize / 2 + i;
         dest[x] = 0xff;
@@ -189,10 +201,13 @@ void pix_rds :: processGrayImage(imageStruct &image)
         while(x + stride/2 < image.xsize) {
           unsigned char R=0, B=0;
           v = src[x + stride/2];
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x += stride;
           x += R + R + B;
-          if(x >= image.xsize) break;
+          if(x >= image.xsize) {
+            break;
+          }
           dest[x] = 0xff;
         }
 
@@ -200,10 +215,13 @@ void pix_rds :: processGrayImage(imageStruct &image)
         while(x - stride/2 >= 0) {
           unsigned char R=0, B=0;
           v = src[x - stride/2];
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x -= stride;
           x -= R + R + B;
-          if(x < 0) break;
+          if(x < 0) {
+            break;
+          }
           dest[x] = 0xff;
         }
       }
@@ -213,7 +231,9 @@ void pix_rds :: processGrayImage(imageStruct &image)
   } else {
     for(y=0; y<image.ysize; y++) {
       for(i=0; i<stride; i++) {
-        if(inline_fastrand()&0xc0000000) continue;
+        if(inline_fastrand()&0xc0000000) {
+          continue;
+        }
 
         x = image.xsize / 2 + i;
         dest[x] = 0xff;
@@ -221,9 +241,12 @@ void pix_rds :: processGrayImage(imageStruct &image)
         while(x + stride/2 < image.xsize) {
           unsigned char R=0, B=0;
           v = src[x + stride/2];
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x += stride - R - R - B;
-          if(x >= image.xsize) break;
+          if(x >= image.xsize) {
+            break;
+          }
           dest[x] = 0xff;
         }
 
@@ -231,9 +254,12 @@ void pix_rds :: processGrayImage(imageStruct &image)
         while(x - stride/2 >= 0) {
           unsigned char R=0, B=0;
           v = src[x - stride/2];
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x -= stride - R - R - B;
-          if(x < 0) break;
+          if(x < 0) {
+            break;
+          }
           dest[x] = 0xff;
         }
       }
@@ -242,7 +268,7 @@ void pix_rds :: processGrayImage(imageStruct &image)
     }
   }
 
-  if(doDots){
+  if(doDots) {
     target += image.xsize + (image.xsize - stride) / 2;
     for(y=0; y<4; y++) {
       for(x=0; x<4; x++) {
@@ -278,27 +304,35 @@ void pix_rds :: processYUVImage(imageStruct &image)
   if(method) {
     for(y=0; y<image.ysize; y++) {
       for(i=0; i<stride; i++) {
-        if(inline_fastrand()&0xc0000000) continue;
+        if(inline_fastrand()&0xc0000000) {
+          continue;
+        }
 
         x = image.xsize / 2 + i;
         dest[x] = 0xff;
 
         while(x + stride/2 < image.xsize) {
           v = src[x + stride/2] & 0x00ff; // UYVY, we only want Y
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x += stride;
           x += R + R + B;
-          if(x >= image.xsize) break;
+          if(x >= image.xsize) {
+            break;
+          }
           dest[x] = 0xff;
         }
 
         x = image.xsize / 2 + i;
         while(x - stride/2 >= 0) {
           v = src[x - stride/2] & 0x00ff; // UYVY, we only want Y
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x -= stride;
           x -= R + R + B;
-          if(x < 0) break;
+          if(x < 0) {
+            break;
+          }
           dest[x] = 0xff;
         }
       }
@@ -308,25 +342,33 @@ void pix_rds :: processYUVImage(imageStruct &image)
   } else {
     for(y=0; y<image.ysize; y++) {
       for(i=0; i<stride; i++) {
-        if(inline_fastrand()&0xc0000000) continue;
+        if(inline_fastrand()&0xc0000000) {
+          continue;
+        }
 
         x = image.xsize / 2 + i;
         dest[x] = 0xff;
 
         while(x + stride/2 < image.xsize) {
           v = src[x + stride/2] & 0x00ff;
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x += stride - R - R - B;
-          if(x >= image.xsize) break;
+          if(x >= image.xsize) {
+            break;
+          }
           dest[x] = 0xff;
         }
 
         x = image.xsize / 2 + i;
         while(x - stride/2 >= 0) {
           v = src[x - stride/2] & 0x00ff;
-          R=v>>6; B=v>>7;
+          R=v>>6;
+          B=v>>7;
           x -= stride - R - R - B;
-          if(x < 0) break;
+          if(x < 0) {
+            break;
+          }
           dest[x] = 0xff;
         }
       }
@@ -335,7 +377,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
     }
   }
 
-  if(doDots){
+  if(doDots) {
     target += image.xsize + (image.xsize - stride) / 2;
     for(y=0; y<4; y++) {
       for(x=0; x<4; x++) {
@@ -371,7 +413,7 @@ void pix_rds :: methMessCallback(void *data, t_float state)
 }
 void pix_rds :: strideMessCallback(void *data, t_float state)
 {
-  if(state<0.f){
+  if(state<0.f) {
     GetMyClass(data)->error("stride must be > 0!");
     return;
   }

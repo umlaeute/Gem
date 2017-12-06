@@ -72,8 +72,7 @@ void pix_bitmask :: processYUVImage(imageStruct &image)
       pixels[chV] &= m_mask[chBlue];
       pixels[chY1] &= m_mask[chRed];
       pixels += 4;
-    }
-  else
+    } else
     while(datasize--)   {
       pixels[chY0] &= m_mask[chRed];
       pixels[chY1] &= m_mask[chRed];
@@ -92,20 +91,22 @@ void pix_bitmask :: processGrayImage(imageStruct &image)
 }
 
 #ifdef __MMX__
-void pix_bitmask :: processRGBAMMX(imageStruct &image){
+void pix_bitmask :: processRGBAMMX(imageStruct &image)
+{
   int i = image.xsize * image.ysize/2;
   const int*mask_ip=reinterpret_cast<const int*>(m_mask);
   __m64 mask = _mm_set_pi32(*mask_ip, *mask_ip);
   __m64 *input = reinterpret_cast<__m64*>(image.data);
 
-  while(i--){
+  while(i--) {
     input[0]= _mm_and_si64(input[0], mask);
     input++;
   }
   _mm_empty();
 
 }
-void pix_bitmask :: processYUVMMX(imageStruct &image){
+void pix_bitmask :: processYUVMMX(imageStruct &image)
+{
   int i = image.xsize * image.ysize/4;
 
   const __m64 mask = _mm_set_pi8(m_mask[chRed],
@@ -118,20 +119,21 @@ void pix_bitmask :: processYUVMMX(imageStruct &image){
                                  m_mask[chGreen]);
   __m64 *input = (__m64*)image.data;
 
-  while(i--){
+  while(i--) {
     input[0]= _mm_and_si64(input[0], mask);
     input++;
   }
   _mm_empty();
 }
-void pix_bitmask :: processGrayMMX(imageStruct &image){
+void pix_bitmask :: processGrayMMX(imageStruct &image)
+{
   int i = image.xsize * image.ysize/8;
   const char grey=m_mask[chRed];
 
   const __m64 mask = _mm_set_pi8(grey, grey, grey, grey, grey, grey, grey, grey);
   __m64 *input = (__m64*)image.data;
 
-  while(i--){
+  while(i--) {
     input[0]= _mm_and_si64(input[0], mask);
     input++;
   }
@@ -145,13 +147,14 @@ void pix_bitmask :: processGrayMMX(imageStruct &image){
 /////////////////////////////////////////////////////////
 void pix_bitmask :: vecMaskMess(int argc, t_atom *argv)
 {
-  if (argc >= 4) m_mask[chAlpha] = atom_getint(&argv[3]);
-  else if (argc == 3) m_mask[chAlpha] = 255;
-  else
-    {
-      error("not enough mask values");
-      return;
-    }
+  if (argc >= 4) {
+    m_mask[chAlpha] = atom_getint(&argv[3]);
+  } else if (argc == 3) {
+    m_mask[chAlpha] = 255;
+  } else {
+    error("not enough mask values");
+    return;
+  }
   m_mask[chRed] = atom_getint(&argv[0]);
   m_mask[chGreen] = atom_getint(&argv[1]);
   m_mask[chBlue] = atom_getint(&argv[2]);

@@ -24,8 +24,9 @@ LOG
 class CPPExtern;
 
 /* forward declaration of a generic exception handler for GemExceptions */
-namespace gem {
-  GEM_EXTERN void catchGemException(const char*objname, const t_object*obj);
+namespace gem
+{
+GEM_EXTERN void catchGemException(const char*objname, const t_object*obj);
 };
 
 /*-----------------------------------------------------------------
@@ -43,15 +44,14 @@ DESCRIPTION
     the vtable.
 
 -----------------------------------------------------------------*/
-struct GEM_EXTERN Obj_header
-{
-        //////////
-        // The obligatory object header
-        t_object            pd_obj;
+struct GEM_EXTERN Obj_header {
+  //////////
+  // The obligatory object header
+  t_object            pd_obj;
 
-        //////////
-        // Our data structure
-        CPPExtern           *data;
+  //////////
+  // Our data structure
+  CPPExtern           *data;
 
   // This has a dummy arg so that NT won't complain
   void *operator new(size_t, void *location, void *dummy);
@@ -89,69 +89,72 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN CPPExtern
 {
-    public:
+public:
 
-        //////////
-        // Constructor
-        CPPExtern(void);
+  //////////
+  // Constructor
+  CPPExtern(void);
 
-        //////////
-        // The Pd header
-        t_object          *x_obj;
+  //////////
+  // The Pd header
+  t_object          *x_obj;
 
-        //////////
-        // Destructor
-        virtual ~CPPExtern(void) = 0;
+  //////////
+  // Destructor
+  virtual ~CPPExtern(void) = 0;
 
-        //////////
-        // Get the object's canvas
-        const t_canvas            *getCanvas(void) const       { return(m_canvas); }
+  //////////
+  // Get the object's canvas
+  const t_canvas            *getCanvas(void) const
+  {
+    return(m_canvas);
+  }
 
-        //////////
-        // This is a holder - don't touch it
-        static t_object     *m_holder;
+  //////////
+  // This is a holder - don't touch it
+  static t_object     *m_holder;
 
-        //////////
-        // my name
-        static char          *m_holdname;
-        t_symbol             *m_objectname;
+  //////////
+  // my name
+  static char          *m_holdname;
+  t_symbol             *m_objectname;
 
-    protected:
+protected:
 
-        //////////
-        // Creation callback
-        static void     real_obj_setupCallback(t_class *) {}
+  //////////
+  // Creation callback
+  static void     real_obj_setupCallback(t_class *) {}
 
-        ///////////
-        // called directly before the destructor
-        // normally you should not override this (use the dtor!)
-        // if you do override this, make sure that you call the parent as well
-        virtual void beforeDeletion();
+  ///////////
+  // called directly before the destructor
+  // normally you should not override this (use the dtor!)
+  // if you do override this, make sure that you call the parent as well
+  virtual void beforeDeletion();
 
-    private:
+private:
 
-      //////////
-      // The canvas that the object is in
-      t_canvas            *m_canvas;
+  //////////
+  // The canvas that the object is in
+  t_canvas            *m_canvas;
 
- public:
-      // these call pd's print-functions, and eventually prepend the object's name
-      void            startpost(const char*format, ...) const;
-      void            post(const char*format, ...) const;
-      void            endpost(void) const;
-      void            verbose(const int level, const char*format, ...) const;
-      void            error(const char*format, ...) const; /* internally uses pd_error() */
+public:
+  // these call pd's print-functions, and eventually prepend the object's name
+  void            startpost(const char*format, ...) const;
+  void            post(const char*format, ...) const;
+  void            endpost(void) const;
+  void            verbose(const int level, const char*format, ...) const;
+  void            error(const char*format, ...) const; /* internally uses pd_error() */
 
-      // searches for a file based on the parent abstraction's path
-      // wraps open_via_path() and canvas_makefilename()
-      // the full filename is returned
-      // if the file does not exist, it is constructed
-      std::string findFile(const std::string&filename, const std::string&ext) const;
-      std::string findFile(const std::string&filename) const;
+  // searches for a file based on the parent abstraction's path
+  // wraps open_via_path() and canvas_makefilename()
+  // the full filename is returned
+  // if the file does not exist, it is constructed
+  std::string findFile(const std::string&filename, const std::string&ext) const;
+  std::string findFile(const std::string&filename) const;
 
- private:
-        mutable bool m_endpost; /* internal state for startpost/post/endpost */
-        static bool checkGemVersion(const int major, const int minor);
+private:
+  mutable bool m_endpost; /* internal state for startpost/post/endpost */
+  static bool checkGemVersion(const int major, const int minor);
   CPPExtern(const CPPExtern&);
   virtual CPPExtern&operator=(const CPPExtern&);
 };

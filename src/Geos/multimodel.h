@@ -34,19 +34,25 @@
   "open" - the RGB model to set the object to
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins { class modelloader; };};
+namespace gem
+{
+namespace plugins
+{
+class modelloader;
+};
+};
 
 class GEM_EXTERN multimodel : public GemBase
 {
   CPPEXTERN_HEADER(multimodel, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -110,7 +116,7 @@ class GEM_EXTERN multimodel : public GemBase
   gem::RTE::Outlet m_infoOut;
   std::vector<std::string> m_backends;
 
- private:
+private:
 
   //////////
   // static member functions

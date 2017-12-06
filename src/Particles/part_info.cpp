@@ -64,11 +64,21 @@ part_info :: ~part_info()
   outlet_free(out_vel);
   outlet_free(out_siz);
   outlet_free(out_age);
-  if(m_pos)delete[]m_pos;
-  if(m_colors)delete[]m_colors;
-  if(m_velo)delete[]m_velo;
-  if(m_sizes)delete[]m_sizes;
-  if(m_ages)delete[]m_ages;
+  if(m_pos) {
+    delete[]m_pos;
+  }
+  if(m_colors) {
+    delete[]m_colors;
+  }
+  if(m_velo) {
+    delete[]m_velo;
+  }
+  if(m_sizes) {
+    delete[]m_sizes;
+  }
+  if(m_ages) {
+    delete[]m_ages;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -82,13 +92,25 @@ void part_info :: renderParticles(GemState *state)
   }
   //    pDrawGroupp();
   int cnt = pGetGroupCount();
-  if(cnt < 1)return;
-  if (cnt>m_number){
-    if(m_colors)delete[]m_colors;
-    if(m_sizes )delete[]m_sizes;
-    if(m_pos   )delete[]m_pos;
-    if(m_velo  )delete[]m_velo;
-    if(m_ages  )delete[]m_ages;
+  if(cnt < 1) {
+    return;
+  }
+  if (cnt>m_number) {
+    if(m_colors) {
+      delete[]m_colors;
+    }
+    if(m_sizes ) {
+      delete[]m_sizes;
+    }
+    if(m_pos   ) {
+      delete[]m_pos;
+    }
+    if(m_velo  ) {
+      delete[]m_velo;
+    }
+    if(m_ages  ) {
+      delete[]m_ages;
+    }
     m_number = cnt;
     m_pos    = new float[m_number * 3];
     m_colors = new float[m_number * 4];

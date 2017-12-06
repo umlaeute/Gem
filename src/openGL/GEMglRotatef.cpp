@@ -14,7 +14,7 @@
 
 #include "GEMglRotatef.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRotatef , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRotatef, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,8 @@ GEMglRotatef :: GEMglRotatef    (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglRotatef :: ~GEMglRotatef () {
+GEMglRotatef :: ~GEMglRotatef ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -47,29 +48,34 @@ GEMglRotatef :: ~GEMglRotatef () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglRotatef :: render(GemState *state) {
+void GEMglRotatef :: render(GemState *state)
+{
   glRotatef (angle, x, y, z);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglRotatef :: angleMess (t_float arg1) { // FUN
+void GEMglRotatef :: angleMess (t_float arg1)   // FUN
+{
   angle = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglRotatef :: xMess (t_float arg1) {     // FUN
+void GEMglRotatef :: xMess (t_float arg1)       // FUN
+{
   x = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglRotatef :: yMess (t_float arg1) {     // FUN
+void GEMglRotatef :: yMess (t_float arg1)       // FUN
+{
   y = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglRotatef :: zMess (t_float arg1) {     // FUN
+void GEMglRotatef :: zMess (t_float arg1)       // FUN
+{
   z = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -79,22 +85,27 @@ void GEMglRotatef :: zMess (t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglRotatef :: obj_setupCallback(t_class *classPtr) {
+void GEMglRotatef :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::angleMessCallback),        gensym("angle"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::xMessCallback),    gensym("x"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::yMessCallback),    gensym("y"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRotatef::zMessCallback),    gensym("z"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRotatef :: angleMessCallback (void* data, t_float arg0){
+void GEMglRotatef :: angleMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->angleMess ( static_cast<t_float>(arg0));
 }
-void GEMglRotatef :: xMessCallback (void* data, t_float arg0){
+void GEMglRotatef :: xMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglRotatef :: yMessCallback (void* data, t_float arg0){
+void GEMglRotatef :: yMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglRotatef :: zMessCallback (void* data, t_float arg0){
+void GEMglRotatef :: zMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

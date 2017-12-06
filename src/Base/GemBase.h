@@ -34,7 +34,7 @@ class GemState;
   -----------------------------------------------------------------*/
 class GEM_EXTERN GemBase : public CPPExtern
 {
- protected:
+protected:
 
   //////////
   // Constructor
@@ -59,7 +59,10 @@ class GEM_EXTERN GemBase : public CPPExtern
   // Called when rendering stops
 
 #if 1/*(jmz) this seems to be for gem2pdp*/
-  virtual void  stoprender()                    { realStopRendering(); }
+  virtual void  stoprender()
+  {
+    realStopRendering();
+  }
 #endif
 
   //////////
@@ -104,17 +107,23 @@ class GEM_EXTERN GemBase : public CPPExtern
   //////////
   // creation callback
   static void   real_obj_setupCallback(t_class *classPtr)
-    { CPPExtern::real_obj_setupCallback(classPtr); GemBase::obj_setupCallback(classPtr); }
+  {
+    CPPExtern::real_obj_setupCallback(classPtr);
+    GemBase::obj_setupCallback(classPtr);
+  }
 
   enum RenderState {INIT, ENABLED, DISABLED, RENDERING, MODIFIED};
 
- private:
+private:
 
   void          realStopRendering();
   void            gem_startstopMess(int state);
   void            gem_renderMess(GemCache* cache, GemState* state);
 
-  static inline GemBase *GetMyClass(void *data) {return((GemBase *)((Obj_header *)data)->data);}
+  static inline GemBase *GetMyClass(void *data)
+  {
+    return((GemBase *)((Obj_header *)data)->data);
+  }
 
   friend class    gemhead;
   static void   obj_setupCallback(t_class *classPtr);
@@ -126,7 +135,7 @@ class GEM_EXTERN GemBase : public CPPExtern
   gem::ContextData<bool>m_enabled;
   gem::ContextData<enum RenderState>m_state;
 
- protected:
+protected:
   enum RenderState getState(void);
 
   virtual void beforeDeletion(void);

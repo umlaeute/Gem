@@ -44,13 +44,13 @@ class GEM_EXTERN pix_video : public GemBase
 {
   CPPEXTERN_HEADER(pix_video, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_video(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -100,8 +100,8 @@ class GEM_EXTERN pix_video : public GemBase
 
   //////////
   // Set the video dimensions
-  virtual void  dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-                          int topmargin = 0 , int bottommargin = 0);
+  virtual void  dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0,
+                          int topmargin = 0, int bottommargin = 0);
   // Set the channel of the capturing device
   virtual void  channelMess(int channel, t_float freq=0);
   // Set the channel of the capturing device
@@ -136,7 +136,8 @@ class GEM_EXTERN pix_video : public GemBase
   enum runningState {
     UNKNOWN=-1,
     STOPPED=0,
-    STARTED=1};
+    STARTED=1
+  };
   runningState m_running;
   virtual void  runningMess(bool);
 
@@ -144,7 +145,7 @@ class GEM_EXTERN pix_video : public GemBase
   /* an outlet for status messages */
   t_outlet *m_infoOut;
 
- private:
+private:
 
   //////////
   // static member functions

@@ -38,7 +38,8 @@ GEMglTexSubImage1D :: GEMglTexSubImage1D(t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTexSubImage1D :: ~GEMglTexSubImage1D () {
+GEMglTexSubImage1D :: ~GEMglTexSubImage1D ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -46,8 +47,11 @@ GEMglTexSubImage1D :: ~GEMglTexSubImage1D () {
 
 //////////////////
 // extension check
-bool GEMglTexSubImage1D :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglTexSubImage1D :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -56,9 +60,16 @@ bool GEMglTexSubImage1D :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTexSubImage1D :: render(GemState *state) {
-  if (!state)return;
-  pixBlock*img=NULL;  state->get(GemState::_PIX, img);  if(!img || !&img->image)return;
+void GEMglTexSubImage1D :: render(GemState *state)
+{
+  if (!state) {
+    return;
+  }
+  pixBlock*img=NULL;
+  state->get(GemState::_PIX, img);
+  if(!img || !&img->image) {
+    return;
+  }
   target=GL_TEXTURE_1D;
   glTexSubImage1D (target, level, xoffset, width,
                    img->image.format,
@@ -69,21 +80,25 @@ void GEMglTexSubImage1D :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTexSubImage1D :: targetMess (t_float arg1) {  // FUN
+void GEMglTexSubImage1D :: targetMess (t_float arg1)    // FUN
+{
   error("target has to be GL_TEXTURE_1D");
 }
 
-void GEMglTexSubImage1D :: levelMess (t_float arg1) {   // FUN
+void GEMglTexSubImage1D :: levelMess (t_float arg1)     // FUN
+{
   level = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglTexSubImage1D :: xoffsetMess (t_float arg1) { // FUN
+void GEMglTexSubImage1D :: xoffsetMess (t_float arg1)   // FUN
+{
   xoffset = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglTexSubImage1D :: widthMess (t_float arg1) {   // FUN
+void GEMglTexSubImage1D :: widthMess (t_float arg1)     // FUN
+{
   width = static_cast<GLsizei>(arg1);
   setModified();
 }
@@ -92,22 +107,27 @@ void GEMglTexSubImage1D :: widthMess (t_float arg1) {   // FUN
 // static member functions
 //
 
-void GEMglTexSubImage1D :: obj_setupCallback(t_class *classPtr) {
+void GEMglTexSubImage1D :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::targetMessCallback),         gensym("target"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::levelMessCallback),          gensym("level"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::xoffsetMessCallback),        gensym("xoffset"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::widthMessCallback),          gensym("width"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglTexSubImage1D :: targetMessCallback (void* data, t_float arg0){
+void GEMglTexSubImage1D :: targetMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage1D :: levelMessCallback (void* data, t_float arg0){
+void GEMglTexSubImage1D :: levelMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage1D :: xoffsetMessCallback (void* data, t_float arg0){
+void GEMglTexSubImage1D :: xoffsetMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xoffsetMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexSubImage1D :: widthMessCallback (void* data, t_float arg0){
+void GEMglTexSubImage1D :: widthMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }

@@ -30,8 +30,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_killold, t_floatarg, A_DEFFLOAT);
 part_killold :: part_killold(t_floatarg num)
   : m_killAge(10.f)
 {
-  if (num > 0)
+  if (num > 0) {
     m_killAge = num;
+  }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("age"));
 }
 
@@ -48,10 +49,9 @@ part_killold :: ~part_killold(void)
 /////////////////////////////////////////////////////////
 void part_killold :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pKillOld(m_killAge);
-    }
+  if (m_tickTime > 0.f) {
+    pKillOld(m_killAge);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -62,6 +62,7 @@ void part_killold :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "age", ageMess, float);
 }
-void part_killold :: ageMess(float age) {
+void part_killold :: ageMess(float age)
+{
   m_killAge = age;
 }

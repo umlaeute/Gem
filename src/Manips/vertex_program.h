@@ -42,14 +42,14 @@ class GEM_EXTERN vertex_program : public GemBase
 {
   CPPEXTERN_HEADER(vertex_program, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_program(void);
   vertex_program(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor

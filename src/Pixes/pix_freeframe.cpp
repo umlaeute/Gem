@@ -53,10 +53,15 @@
 
 #ifndef HAVE_STRNLEN
 #define strnlen ff_strnlen
-static size_t ff_strnlen(const char* str, size_t maxlen) {
+static size_t ff_strnlen(const char* str, size_t maxlen)
+{
   size_t len=0;
-  if(NULL==str)return len;
-  while(*str++ && len<maxlen)len++;
+  if(NULL==str) {
+    return len;
+  }
+  while(*str++ && len<maxlen) {
+    len++;
+  }
 
   return len;
 }
@@ -65,23 +70,28 @@ static size_t ff_strnlen(const char* str, size_t maxlen) {
 #endif
 
 
-class pix_freeframe::FFPlugin {
+class pix_freeframe::FFPlugin
+{
 public:
-  static std::string nchar2str(const char*str, const unsigned int len) {
+  static std::string nchar2str(const char*str, const unsigned int len)
+  {
     std::string result;
     size_t l=strnlen(str, len);
     result.assign(str, l);
     return result;
   }
-  static std::string nchar2str(void*str, const unsigned int len) {
+  static std::string nchar2str(void*str, const unsigned int len)
+  {
     return nchar2str(reinterpret_cast<const char*>(str), len);
   }
 
 private:
-  class FFInstance {
+  class FFInstance
+  {
     FFInstanceID    m_instance;
     FF_Main_FuncPtr m_plugin;
-    static inline FFUInt32 csize2depth(unsigned int csize) {
+    static inline FFUInt32 csize2depth(unsigned int csize)
+    {
       switch(csize) {
       case(4):
         return FF_CAP_32BITVIDEO;
@@ -90,26 +100,30 @@ private:
       }
       return 0;
     }
-    static inline FFUInt32 updown2orientation(GLboolean updown) {
+    static inline FFUInt32 updown2orientation(GLboolean updown)
+    {
       return (updown?1:2);
     }
 
     unsigned int m_width, m_height, m_depth, m_orientation;
 
-    void create(VideoInfoStruct&vis) {
+    void create(VideoInfoStruct&vis)
+    {
       if(!m_plugin) {
         throw(GemException("no plugin loaded"));
       }
       FFMixed input;
       input.PointerValue = &vis;
       FFMixed result = m_plugin(FF_INSTANTIATE, input, m_instance);
-      if(FF_FAIL==result.UIntValue)
+      if(FF_FAIL==result.UIntValue) {
         throw(GemException("couldn't instaniate"));
+      }
 
       m_instance = result.PointerValue;
 
-      if(NULL==m_instance)
+      if(NULL==m_instance) {
         throw(GemException("could not instaniate"));
+      }
 
       m_width =vis.FrameWidth;
       m_height=vis.FrameHeight;
@@ -133,46 +147,55 @@ private:
       vis.FrameWidth =image.xsize;
       vis.FrameHeight=image.ysize;
       vis.BitDepth   = csize2depth(image.csize);
-      if(0==vis.BitDepth) throw(GemException("unsupported colorspace"));
+      if(0==vis.BitDepth) {
+        throw(GemException("unsupported colorspace"));
+      }
       vis.Orientation=updown2orientation(image.upsidedown);
       create(vis);
     }
-    virtual ~FFInstance(void) {
+    virtual ~FFInstance(void)
+    {
       call(FF_DEINSTANTIATE);
     }
 
-    FFMixed call(FFUInt32 funcode, FFMixed value) {
+    FFMixed call(FFUInt32 funcode, FFMixed value)
+    {
       FFMixed result;
       result=m_plugin(funcode, value, m_instance);
       return result;
     }
-    FFMixed call(FFUInt32 funcode, FFUInt32 value) {
+    FFMixed call(FFUInt32 funcode, FFUInt32 value)
+    {
       FFMixed mixed;
       mixed.UIntValue=value;
       return call(funcode, mixed);
     }
-    FFMixed call(FFUInt32 funcode, FFFloat32 value) {
+    FFMixed call(FFUInt32 funcode, FFFloat32 value)
+    {
       FFMixed mixed;
       mixed.FloatValue=value;
       return call(funcode, mixed);
     }
-    FFMixed call(FFUInt32 funcode, void* value) {
+    FFMixed call(FFUInt32 funcode, void* value)
+    {
       FFMixed mixed;
       mixed.PointerValue=value;
       return call(funcode, mixed);
     }
-    FFMixed call(FFUInt32 funcode) {
+    FFMixed call(FFUInt32 funcode)
+    {
       FFMixed mixed;
       return call(funcode, mixed);
     }
 
-    bool checkDimen(const imageStruct&img) {
+    bool checkDimen(const imageStruct&img)
+    {
       return (
-              (img.xsize == m_width ) &&
-              (img.ysize == m_height) &&
-              (csize2depth       (img.csize     ) == m_depth ) &&
-              (updown2orientation(img.upsidedown) == m_orientation)
-              );
+               (img.xsize == m_width ) &&
+               (img.ysize == m_height) &&
+               (csize2depth       (img.csize     ) == m_depth ) &&
+               (updown2orientation(img.upsidedown) == m_orientation)
+             );
     }
 
 
@@ -203,57 +226,90 @@ private:
   HINSTANCE       m_w32handle;
 #endif
 
-  FFMixed callInstance(FFUInt32 funcode, FFMixed value) {
-    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+  FFMixed callInstance(FFUInt32 funcode, FFMixed value)
+  {
+    if(!m_instance) {
+      FFMixed result;
+      result.UIntValue=FF_FAIL;
+      return result;
+    }
     return m_instance->call(funcode, value);
   }
-  FFMixed callInstance(FFUInt32 funcode, FFUInt32 value) {
-    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+  FFMixed callInstance(FFUInt32 funcode, FFUInt32 value)
+  {
+    if(!m_instance) {
+      FFMixed result;
+      result.UIntValue=FF_FAIL;
+      return result;
+    }
     return m_instance->call(funcode, value);
   }
-  FFMixed callInstance(FFUInt32 funcode, FFFloat32 value) {
-    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+  FFMixed callInstance(FFUInt32 funcode, FFFloat32 value)
+  {
+    if(!m_instance) {
+      FFMixed result;
+      result.UIntValue=FF_FAIL;
+      return result;
+    }
     return m_instance->call(funcode, value);
   }
-  FFMixed callInstance(FFUInt32 funcode, void* value) {
-    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+  FFMixed callInstance(FFUInt32 funcode, void* value)
+  {
+    if(!m_instance) {
+      FFMixed result;
+      result.UIntValue=FF_FAIL;
+      return result;
+    }
     return m_instance->call(funcode, value);
   }
-  FFMixed callInstance(FFUInt32 funcode) {
-    if(!m_instance) {FFMixed result; result.UIntValue=FF_FAIL; return result;}
+  FFMixed callInstance(FFUInt32 funcode)
+  {
+    if(!m_instance) {
+      FFMixed result;
+      result.UIntValue=FF_FAIL;
+      return result;
+    }
     return m_instance->call(funcode);
   }
 
-  FFMixed call(FFUInt32 funcode, FFMixed value, FFInstanceID id) {
+  FFMixed call(FFUInt32 funcode, FFMixed value, FFInstanceID id)
+  {
     return m_plugin(funcode, value, id);
   }
 
-  FFMixed callGlobal(FFUInt32 funcode, FFMixed value) {
+  FFMixed callGlobal(FFUInt32 funcode, FFMixed value)
+  {
     return call(funcode, value, NULL);
   }
-  FFMixed callGlobal(FFUInt32 funcode, FFUInt32 value) {
+  FFMixed callGlobal(FFUInt32 funcode, FFUInt32 value)
+  {
     FFMixed mixed;
     mixed.UIntValue=value;
     return callGlobal(funcode, mixed);
   }
-  FFMixed callGlobal(FFUInt32 funcode, FFFloat32 value) {
+  FFMixed callGlobal(FFUInt32 funcode, FFFloat32 value)
+  {
     FFMixed mixed;
     mixed.FloatValue=value;
     return callGlobal(funcode, mixed);
   }
-  FFMixed callGlobal(FFUInt32 funcode, void* value) {
+  FFMixed callGlobal(FFUInt32 funcode, void* value)
+  {
     FFMixed mixed;
     mixed.PointerValue=value;
     return callGlobal(funcode, mixed);
   }
-  FFMixed callGlobal(FFUInt32 funcode) {
+  FFMixed callGlobal(FFUInt32 funcode)
+  {
     FFMixed invalue;
     return call(funcode, invalue, NULL);
   }
 
-  void close(void) {
-    if(NULL==m_plugin)
+  void close(void)
+  {
+    if(NULL==m_plugin) {
       return;
+    }
 
     if(m_instance) {
       deinstantiate_();
@@ -262,23 +318,32 @@ private:
     deinitialize_();
 
 #ifdef DL_OPEN
-    if(m_dlhandle)dlclose(m_dlhandle);m_dlhandle=NULL;
+    if(m_dlhandle) {
+      dlclose(m_dlhandle);
+    }
+    m_dlhandle=NULL;
 #endif
 #ifdef __APPLE__
 #endif
 #ifdef _WIN32
-    if(m_w32handle)FreeLibrary(m_w32handle);m_w32handle=NULL;
+    if(m_w32handle) {
+      FreeLibrary(m_w32handle);
+    }
+    m_w32handle=NULL;
 #endif
   }
 
-  bool open(std::string name, const t_canvas*canvas) {
+  bool open(std::string name, const t_canvas*canvas)
+  {
     bool loud=false;
     const char*hookname="plugMain";
-    if(name.empty())
+    if(name.empty()) {
       return false;
+    }
 
-    if(m_plugin)
+    if(m_plugin) {
       close();
+    }
 
     FF_Main_FuncPtr plugmain = NULL;
 
@@ -290,9 +355,9 @@ private:
 #ifdef _WIN32
       ".dll";
 #elif defined __APPLE__
-    "";
+      "";
 #else
-    ".so";
+      ".so";
 #endif
 
 #ifdef __APPLE__
@@ -308,7 +373,7 @@ private:
 #endif
 
     int fd=-1;
-    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), name.c_str(), extension, buf2, &bufptr, MAXPDSTRING, 1))>=0){
+    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), name.c_str(), extension, buf2, &bufptr, MAXPDSTRING, 1))>=0) {
       ::close(fd);
 #if defined __APPLE__ && 0
       snprintf(buf, MAXPDSTRING, "%s", buf2);
@@ -320,20 +385,28 @@ private:
       if(canvas) {
         canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(name.c_str()), buf, MAXPDSTRING);
       } else {
-        if(loud)::error("pix_freeframe[%s]: unfindeable", name.c_str());
+        if(loud) {
+          ::error("pix_freeframe[%s]: unfindeable", name.c_str());
+        }
         return false;
       }
     }
     name=buf;
     std::string libname = name;
 
-    if(loud)::post("trying to load %s", buf);
+    if(loud) {
+      ::post("trying to load %s", buf);
+    }
 
 #ifdef DL_OPEN
-    if(loud)::post("dlopen %s", libname.c_str());
+    if(loud) {
+      ::post("dlopen %s", libname.c_str());
+    }
     m_dlhandle=dlopen(libname.c_str(), RTLD_NOW);
-    if(!m_dlhandle){
-      if(loud)::error("pix_freeframe[%s]: %s", libname.c_str(), dlerror());
+    if(!m_dlhandle) {
+      if(loud) {
+        ::error("pix_freeframe[%s]: %s", libname.c_str(), dlerror());
+      }
       return NULL;
     }
     dlerror();
@@ -344,33 +417,43 @@ private:
     CFURLRef bundleURL = NULL;
     CFBundleRef theBundle = NULL;
     CFStringRef plugin = CFStringCreateWithCString(NULL,
-                                                   libname.c_str(), kCFStringEncodingMacRoman);
+                         libname.c_str(), kCFStringEncodingMacRoman);
 
     bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
-                                               plugin,
-                                               kCFURLPOSIXPathStyle,
-                                               true );
+                plugin,
+                kCFURLPOSIXPathStyle,
+                true );
     theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
 
     // Get a pointer to the function.
-    if (theBundle){
+    if (theBundle) {
       plugmain = reinterpret_cast<FF_Main_FuncPtr>(CFBundleGetFunctionPointerForName(
-                                                                                     theBundle, CFSTR("plugMain") )
-                                                   );
-    }else{
-      if(loud)::post("%s: couldn't load", libname.c_str());
+                   theBundle, CFSTR("plugMain") )
+                                                  );
+    } else {
+      if(loud) {
+        ::post("%s: couldn't load", libname.c_str());
+      }
       return 0;
     }
-    if(bundleURL != NULL) CFRelease( bundleURL );
-    if(theBundle != NULL) CFRelease( theBundle );
-    if(plugin != NULL)    CFRelease( plugin );
+    if(bundleURL != NULL) {
+      CFRelease( bundleURL );
+    }
+    if(theBundle != NULL) {
+      CFRelease( theBundle );
+    }
+    if(plugin != NULL) {
+      CFRelease( plugin );
+    }
 #elif defined _WIN32
     char buffer[MAXPDSTRING];
     sys_bashfilename(libname.c_str(), buffer);
     libname=buffer;
     m_w32handle = LoadLibrary(libname.c_str());
     if (!m_w32handle) {
-      if(loud)::post("%s: couldn't load", libname.c_str());
+      if(loud) {
+        ::post("%s: couldn't load", libname.c_str());
+      }
       return false;
     }
     plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(m_w32handle, hookname));
@@ -383,19 +466,20 @@ private:
   }
 
 
- /* GLOBAL
-     0  getInfo         none    Pointer to a PluginInfoStruct
-     1  initialise      none    Success/error code
-     2  deInitialise    none    Success/error code
-     4  getNumParameters        none    NumParameters
-     5  getParameterName        ParameterNumber         Pointer to ParameterName
-     6  getParameterDefault     ParameterNumber         ParameterDefaultValue
-     10         getPluginCaps   PluginCapsIndex         Supported/unsupported/value
-     13         getExtendedInfo         none    Pointer to PluginExtendedInfoStruct
-     15         getParameterType        ParameterNumber         ParameterType
-  */
+  /* GLOBAL
+      0  getInfo         none    Pointer to a PluginInfoStruct
+      1  initialise      none    Success/error code
+      2  deInitialise    none    Success/error code
+      4  getNumParameters        none    NumParameters
+      5  getParameterName        ParameterNumber         Pointer to ParameterName
+      6  getParameterDefault     ParameterNumber         ParameterDefaultValue
+      10         getPluginCaps   PluginCapsIndex         Supported/unsupported/value
+      13         getExtendedInfo         none    Pointer to PluginExtendedInfoStruct
+      15         getParameterType        ParameterNumber         ParameterType
+   */
 
-  bool getInfo_(void) {
+  bool getInfo_(void)
+  {
     FFMixed result=callGlobal(FF_GETINFO);
     if(FF_FAIL==result.UIntValue) {
       std::cout << "getInfo failed" << std::endl;
@@ -413,11 +497,14 @@ private:
 
     return true;
   }
-  PluginExtendedInfoStruct*getExtendedInfo_(void) {
+  PluginExtendedInfoStruct*getExtendedInfo_(void)
+  {
     FFMixed result=callGlobal(FF_GETEXTENDEDINFO);
     m_description=m_about="";
     m_majorVersion = m_minorVersion = 0;
-    if(FF_FAIL==result.UIntValue)return NULL;
+    if(FF_FAIL==result.UIntValue) {
+      return NULL;
+    }
     PluginExtendedInfoStruct*pis=reinterpret_cast<PluginExtendedInfoStruct*>(result.PointerValue);
     m_description=pis->Description;
     m_about = pis->About;
@@ -426,11 +513,13 @@ private:
     return pis;
   }
 
-  bool initialize_(void) {
+  bool initialize_(void)
+  {
     FFMixed result=callGlobal(FF_INITIALISE);
     return (FF_SUCCESS==result.UIntValue);
   }
-  bool deinitialize_(void) {
+  bool deinitialize_(void)
+  {
     FFMixed result=callGlobal(FF_DEINITIALISE);
     m_plugin=NULL;
 
@@ -438,28 +527,34 @@ private:
 
     return (FF_SUCCESS==result.UIntValue);
   }
-  FFUInt32 getNumParameters_(void) {
+  FFUInt32 getNumParameters_(void)
+  {
     FFMixed result=callGlobal(FF_GETNUMPARAMETERS);
-    if(FF_FAIL == result.UIntValue)
+    if(FF_FAIL == result.UIntValue) {
       return 0;
+    }
     return result.UIntValue;
   }
-  std::string getParameterName_(FFUInt32 ParameterNumber) {
+  std::string getParameterName_(FFUInt32 ParameterNumber)
+  {
     FFMixed result=callGlobal(FF_GETPARAMETERNAME, ParameterNumber);
     std::string name = nchar2str(result.PointerValue, 16);
     return name;
   }
-  FFMixed getParameterDefault_(FFUInt32 ParameterNumber) {
+  FFMixed getParameterDefault_(FFUInt32 ParameterNumber)
+  {
     FFMixed result=callGlobal(FF_GETPARAMETERDEFAULT, ParameterNumber);
     return result;
   }
-  FFUInt32 getParameterType_(FFUInt32 ParameterNumber) {
+  FFUInt32 getParameterType_(FFUInt32 ParameterNumber)
+  {
     FFMixed result=callGlobal(FF_GETPARAMETERTYPE, ParameterNumber);
     return result.UIntValue;
   }
 
 
-  FFUInt32 getPluginCaps_(FFUInt32 PluginCapsIndex) {
+  FFUInt32 getPluginCaps_(FFUInt32 PluginCapsIndex)
+  {
     FFMixed result=callGlobal(FF_GETPLUGINCAPS, PluginCapsIndex);
     return result.UIntValue;
   }
@@ -474,14 +569,16 @@ private:
     14  processFrameCopy        Pointer to ProcessFrameCopyStruct       Success/error code
     16  getInputStatus  InputChannel    InputStatus
   */
-  bool processFrame_(imageStruct&img) {
+  bool processFrame_(imageStruct&img)
+  {
     // return true;
     FFMixed input;
     input.PointerValue = img.data;
     FFMixed result = callInstance(FF_PROCESSFRAME, input);
     return (FF_SUCCESS == result.UIntValue);
   }
-  std::string getParameterDisplay_(FFUInt32 ParameterNumber) {
+  std::string getParameterDisplay_(FFUInt32 ParameterNumber)
+  {
     std::string name;
     FFMixed result = callInstance(FF_GETPARAMETERDISPLAY, ParameterNumber);
     if(result.UIntValue != FF_FAIL) {
@@ -490,7 +587,8 @@ private:
 
     return name;
   }
-  bool setParameter_(FFUInt32 ParameterNumber, FFMixed ParameterValue) {
+  bool setParameter_(FFUInt32 ParameterNumber, FFMixed ParameterValue)
+  {
     SetParameterStruct sps = { ParameterNumber, ParameterValue};
     FFMixed input;
     input.PointerValue = &sps;
@@ -498,13 +596,16 @@ private:
 
     return (FF_SUCCESS == result.UIntValue);
   }
-  FFMixed getParameter_(FFUInt32 ParameterNumber) {
+  FFMixed getParameter_(FFUInt32 ParameterNumber)
+  {
     FFMixed result = callInstance(FF_GETPARAMETER, ParameterNumber);
     return result;
   }
-  bool instantiate_(VideoInfoStruct&vis) {
-    if(m_instance)
+  bool instantiate_(VideoInfoStruct&vis)
+  {
+    if(m_instance) {
       deinstantiate_();
+    }
 
     try {
       m_instance = new FFInstance(m_plugin, vis);
@@ -516,9 +617,11 @@ private:
 
     return true;
   }
-  bool instantiate_(imageStruct&img) {
-    if(m_instance)
+  bool instantiate_(imageStruct&img)
+  {
+    if(m_instance) {
       deinstantiate_();
+    }
 
     try {
       m_instance = new FFInstance(m_plugin, img);
@@ -531,21 +634,26 @@ private:
 
     return true;
   }
-  bool deinstantiate_(void) {
-    if(m_instance)
+  bool deinstantiate_(void)
+  {
+    if(m_instance) {
       delete m_instance;
+    }
     m_instance=NULL;
     return true;
   }
-  bool processFrameCopy_(ProcessFrameCopyStruct&pfcs) {
+  bool processFrameCopy_(ProcessFrameCopyStruct&pfcs)
+  {
     return false;
   }
-  bool getInputStatus_(FFUInt32 InputChannel) {
+  bool getInputStatus_(FFUInt32 InputChannel)
+  {
     FFMixed result = callInstance(FF_GETINPUTSTATUS, InputChannel);
     return (0!=result.UIntValue);
   }
 
-  bool initParameters_(void) {
+  bool initParameters_(void)
+  {
     m_parameterNames.clear();
     m_parameter.clear();
     unsigned int count=getNumParameters_();
@@ -575,7 +683,8 @@ private:
     return true;
   }
 
-  bool init_(void) {
+  bool init_(void)
+  {
     if(!initialize_()) {
       return false;
     }
@@ -621,40 +730,50 @@ public:
       throw(GemException(std::string("unable to initialize '"+name+"'")));
     }
   }
-  virtual ~FFPlugin(void) {
+  virtual ~FFPlugin(void)
+  {
     close();
   }
 
-  GLenum GLformat() {
+  GLenum GLformat()
+  {
     GLenum format = (m_rgba?GL_RGBA_GEM:GL_RGB);
     return format;
   }
 
-  FFUInt32 getNumParameters(void) {
+  FFUInt32 getNumParameters(void)
+  {
     //    return getNumParameters_();
     return m_parameterNames.size();
   }
-  std::string getParameterName(FFUInt32 ParameterNumber) {
-    if(ParameterNumber<m_parameterNames.size())
+  std::string getParameterName(FFUInt32 ParameterNumber)
+  {
+    if(ParameterNumber<m_parameterNames.size()) {
       return m_parameterNames[ParameterNumber];
+    }
     return std::string();
     //    return getParameterName_(ParameterNumber);
   }
-  FFMixed getParameterDefault(FFUInt32 ParameterNumber) {
+  FFMixed getParameterDefault(FFUInt32 ParameterNumber)
+  {
     return getParameterDefault_(ParameterNumber);
   }
-  FFUInt32 getParameterType(FFUInt32 ParameterNumber) {
+  FFUInt32 getParameterType(FFUInt32 ParameterNumber)
+  {
     return getParameterType_(ParameterNumber);
   }
 
 
-  FFUInt32 getPluginCaps(FFUInt32 PluginCapsIndex) {
+  FFUInt32 getPluginCaps(FFUInt32 PluginCapsIndex)
+  {
     return getPluginCaps_(PluginCapsIndex);
   }
 
-  bool processFrame(imageStruct&img) {
-    if(NULL==img.data)
+  bool processFrame(imageStruct&img)
+  {
+    if(NULL==img.data) {
       return true;
+    }
     if(!m_instance) {
       instantiate_(img);
     }
@@ -672,35 +791,43 @@ public:
     }
     return false;
   }
-  std::string getParameterDisplay(FFUInt32 ParameterNumber) {
+  std::string getParameterDisplay(FFUInt32 ParameterNumber)
+  {
     return getParameterDisplay_(ParameterNumber);
   }
-  bool setParameter(FFUInt32 ParameterNumber, FFMixed ParameterValue) {
+  bool setParameter(FFUInt32 ParameterNumber, FFMixed ParameterValue)
+  {
     return setParameter_(ParameterNumber, ParameterValue);
   }
-  FFMixed getParameter(FFUInt32 ParameterNumber) {
+  FFMixed getParameter(FFUInt32 ParameterNumber)
+  {
     return getParameter_( ParameterNumber);
   }
 
-  const gem::Properties&getParameters(void) {
+  const gem::Properties&getParameters(void)
+  {
     return m_parameter;
   }
-  bool setParameter(FFUInt32 ParameterNumber) {
+  bool setParameter(FFUInt32 ParameterNumber)
+  {
     FFMixed value;
     return setParameter_(ParameterNumber, value);
   }
-  bool setParameter(FFUInt32 ParameterNumber, double d) {
+  bool setParameter(FFUInt32 ParameterNumber, double d)
+  {
     FFMixed value;
     value.FloatValue=d;
     return setParameter_(ParameterNumber, value);
   }
-  bool setParameter(FFUInt32 ParameterNumber, std::string s) {
+  bool setParameter(FFUInt32 ParameterNumber, std::string s)
+  {
     FFMixed value;
     value.PointerValue=const_cast<char*>(s.c_str());
     return setParameter_(ParameterNumber, value);
   }
 
-  void setParameters(gem::Properties&parms) {
+  void setParameters(gem::Properties&parms)
+  {
     unsigned int i=0;
     for(i=0; i<m_parameterNames.size(); i++) {
       std::string key=m_parameterNames[i];
@@ -729,15 +856,18 @@ public:
           }
         }
         break;
-      default: break;
+      default:
+        break;
       }
     }
   }
 
-  bool processFrameCopy(ProcessFrameCopyStruct&pfcs) {
+  bool processFrameCopy(ProcessFrameCopyStruct&pfcs)
+  {
     return processFrameCopy_(pfcs);
   }
-  bool getInputStatus(FFUInt32 InputChannel) {
+  bool getInputStatus(FFUInt32 InputChannel)
+  {
     return getInputStatus_( InputChannel);
   }
 };
@@ -786,7 +916,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     unsigned int parmType=0;
     t_symbol*s_inletType;
     parmType=m_plugin->getParameterType(i);
-    switch(parmType){
+    switch(parmType) {
     case FF_TYPE_EVENT:
       s_inletType=&s_bang;
       break;
@@ -810,7 +940,9 @@ pix_freeframe :: ~pix_freeframe()
 #ifndef DONT_WANT_FREEFRAME
   while(!m_inlet.empty()) {
     t_inlet*in=m_inlet.back();
-    if(in)inlet_free(in);
+    if(in) {
+      inlet_free(in);
+    }
     m_inlet.pop_back();
   }
   closeMess();
@@ -820,7 +952,7 @@ pix_freeframe :: ~pix_freeframe()
 #ifndef DONT_WANT_FREEFRAME
 void pix_freeframe :: closeMess()
 {
-  if(m_plugin){
+  if(m_plugin) {
     delete m_plugin;
   }
   m_plugin=NULL;
@@ -862,11 +994,13 @@ void pix_freeframe :: processImage(imageStruct &image)
   unsigned int format=m_image.format;
   unsigned char*data=image.data;
 
-  if(m_plugin==NULL)return;
+  if(m_plugin==NULL) {
+    return;
+  }
 
   // convert the current image into a format that suits the FreeFrame-plugin
-  if(image.format!=format){
-    switch (image.format){
+  if(image.format!=format) {
+    switch (image.format) {
     case GL_RGBA:
       m_image.fromRGBA(image.data);
       break;
@@ -891,7 +1025,7 @@ void pix_freeframe :: processImage(imageStruct &image)
   if(image.data!=data)
     // it seems, like we did: convert it back
 
-  // just copied the code from [pix_rgba]
+    // just copied the code from [pix_rgba]
     switch(format) {
     case GL_RGBA:
       image.fromRGBA(m_image.data);
@@ -920,7 +1054,8 @@ void pix_freeframe :: processImage(imageStruct &image)
 }
 
 
-void pix_freeframe :: parmMess(std::string key, t_atom *value){
+void pix_freeframe :: parmMess(std::string key, t_atom *value)
+{
   if(!m_plugin) {
     error("no instance of plugin available");
     return;
@@ -949,7 +1084,8 @@ void pix_freeframe :: parmMess(std::string key, t_atom *value){
 }
 
 
-void pix_freeframe :: parmMess(int param, t_atom *value){
+void pix_freeframe :: parmMess(int param, t_atom *value)
+{
   if(!m_plugin) {
     error("no instance of plugin available");
     return;
@@ -961,14 +1097,16 @@ void pix_freeframe :: parmMess(int param, t_atom *value){
 
 static const int offset_pix_=strlen("pix_");
 
-static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
-  if(!s){
+static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
+{
+  if(!s) {
     ::verbose(2, "freeframe_loader: no name given");
     return 0;
   }
 
   ::verbose(2, "freeframe_loader: %s",s->s_name);
-  try{                                                          \
+  try {
+    \
     Obj_header *obj = new (pd_new(pix_freeframe_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;
@@ -983,9 +1121,11 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
   return 0;
 }
-bool pix_freeframe :: loader(const t_canvas*canvas, const std::string&classname, const std::string&path) {
-  if(strncmp("pix_", classname.c_str(), offset_pix_))
+bool pix_freeframe :: loader(const t_canvas*canvas, const std::string&classname, const std::string&path)
+{
+  if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
+  }
   std::string pluginname = classname.substr(offset_pix_);
 
   pix_freeframe::FFPlugin*plugin=NULL;
@@ -1003,7 +1143,8 @@ bool pix_freeframe :: loader(const t_canvas*canvas, const std::string&classname,
   return false;
 }
 
-static int freeframe_loader(const t_canvas *canvas, const char *classname, const char *path) {
+static int freeframe_loader(const t_canvas *canvas, const char *classname, const char *path)
+{
   std::string nostring;
   return pix_freeframe::loader(canvas,
                                classname?std::string(classname):nostring,
@@ -1023,7 +1164,8 @@ void pix_freeframe :: obj_setupCallback(t_class *classPtr)
   gem_register_loader(freeframe_loader);
 }
 
-void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
+void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+{
 #ifndef DONT_WANT_FREEFRAME
   if('#'==s->s_name[0]) {
     int i = atoi(s->s_name+1);
@@ -1035,7 +1177,8 @@ void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv
 }
 
 
-void pix_freeframe :: openCallback(void *data, t_symbol*name){
+void pix_freeframe :: openCallback(void *data, t_symbol*name)
+{
 #ifndef DONT_WANT_FREEFRAME
   GetMyClass(data)->openMess(name);
 #endif /* DONT_WANT_FREEFRAME */

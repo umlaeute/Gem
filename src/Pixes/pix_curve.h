@@ -43,13 +43,13 @@ class GEM_EXTERN pix_curve : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_curve, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_curve(int argc, t_atom *argv);
 
- protected:
+protected:
 
   //////////
   // Destructor

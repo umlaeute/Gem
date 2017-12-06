@@ -14,7 +14,7 @@
 
 #include "GEMglRasterPos4d.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRasterPos4d , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRasterPos4d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,8 @@ GEMglRasterPos4d :: GEMglRasterPos4d    (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglRasterPos4d :: ~GEMglRasterPos4d () {
+GEMglRasterPos4d :: ~GEMglRasterPos4d ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -47,29 +48,34 @@ GEMglRasterPos4d :: ~GEMglRasterPos4d () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglRasterPos4d :: render(GemState *state) {
+void GEMglRasterPos4d :: render(GemState *state)
+{
   glRasterPos4d (x, y, z, w);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglRasterPos4d :: xMess (t_float arg1) { // FUN
+void GEMglRasterPos4d :: xMess (t_float arg1)   // FUN
+{
   x = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglRasterPos4d :: yMess (t_float arg1) { // FUN
+void GEMglRasterPos4d :: yMess (t_float arg1)   // FUN
+{
   y = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglRasterPos4d :: zMess (t_float arg1) { // FUN
+void GEMglRasterPos4d :: zMess (t_float arg1)   // FUN
+{
   z = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglRasterPos4d :: wMess (t_float arg1) { // FUN
+void GEMglRasterPos4d :: wMess (t_float arg1)   // FUN
+{
   w = static_cast<GLdouble>(arg1);
   setModified();
 }
@@ -79,22 +85,27 @@ void GEMglRasterPos4d :: wMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglRasterPos4d :: obj_setupCallback(t_class *classPtr) {
+void GEMglRasterPos4d :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::xMessCallback),        gensym("x"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::yMessCallback),        gensym("y"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::zMessCallback),        gensym("z"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos4d::wMessCallback),        gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRasterPos4d :: xMessCallback (void* data, t_float arg0){
+void GEMglRasterPos4d :: xMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos4d :: yMessCallback (void* data, t_float arg0){
+void GEMglRasterPos4d :: yMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos4d :: zMessCallback (void* data, t_float arg0){
+void GEMglRasterPos4d :: zMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos4d :: wMessCallback (void* data, t_float arg0){
+void GEMglRasterPos4d :: wMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->wMess ( static_cast<t_float>(arg0));
 }

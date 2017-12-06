@@ -51,7 +51,8 @@ void part_vertex :: renderParticles(GemState *state)
   }
 }
 
-void part_vertex::posMess(t_float x, t_float y, t_float z)      {
+void part_vertex::posMess(t_float x, t_float y, t_float z)
+{
   m_x=x;
   m_y=y;
   m_z=z;

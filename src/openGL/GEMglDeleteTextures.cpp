@@ -32,32 +32,40 @@ GEMglDeleteTextures :: GEMglDeleteTextures      (int argc, t_atom* argv) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglDeleteTextures :: ~GEMglDeleteTextures () {
+GEMglDeleteTextures :: ~GEMglDeleteTextures ()
+{
   inlet_free(m_inlet);
 }
 //////////////////
 // extension check
-bool GEMglDeleteTextures :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglDeleteTextures :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglDeleteTextures :: render(GemState *state) {
+void GEMglDeleteTextures :: render(GemState *state)
+{
   glDeleteTextures (n, textures);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {      // FUN
+void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv)        // FUN
+{
   n=0;
   delete [] textures;
   textures = new GLuint[argc];
-  while(argc--){
-    if(argv->a_type == A_FLOAT)textures[n++] = static_cast<GLuint>(atom_getint(argv));
+  while(argc--) {
+    if(argv->a_type == A_FLOAT) {
+      textures[n++] = static_cast<GLuint>(atom_getint(argv));
+    }
     argv++;
   }
   setModified();
@@ -68,9 +76,11 @@ void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {      // FUN
 // static member functions
 //
 
-void GEMglDeleteTextures :: obj_setupCallback(t_class *classPtr) {
+void GEMglDeleteTextures :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDeleteTextures::texturesMessCallback),      gensym("textures"), A_GIMME, A_NULL);
 }
-void GEMglDeleteTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+void GEMglDeleteTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+{
   GetMyClass(data)->texturesMess (argc, argv);
 }

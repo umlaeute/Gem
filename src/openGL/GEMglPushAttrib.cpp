@@ -14,7 +14,7 @@
 
 #include "GEMglPushAttrib.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushAttrib , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushAttrib, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglPushAttrib :: GEMglPushAttrib      (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPushAttrib :: ~GEMglPushAttrib () {
+GEMglPushAttrib :: ~GEMglPushAttrib ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPushAttrib :: render(GemState *state) {
+void GEMglPushAttrib :: render(GemState *state)
+{
   glPushAttrib (mask);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPushAttrib :: maskMess (t_float arg1) {       // FUN
+void GEMglPushAttrib :: maskMess (t_float arg1)         // FUN
+{
   mask = static_cast<GLbitfield>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglPushAttrib :: maskMess (t_float arg1) {       // FUN
 // static member functions
 //
 
-void GEMglPushAttrib :: obj_setupCallback(t_class *classPtr) {
+void GEMglPushAttrib :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPushAttrib::maskMessCallback),      gensym("mask"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPushAttrib :: maskMessCallback (void* data, t_float arg0){
+void GEMglPushAttrib :: maskMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

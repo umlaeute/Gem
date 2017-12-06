@@ -27,10 +27,10 @@ class GEM_EXTERN gemlist_info : public GemBase
 {
   CPPEXTERN_HEADER(gemlist_info, GemBase);
 
-    public:
+public:
   // Constructor
   gemlist_info (t_floatarg);    // CON
- protected:
+protected:
   // Destructor
   virtual ~gemlist_info ();
   // Do the rendering
@@ -39,7 +39,7 @@ class GEM_EXTERN gemlist_info : public GemBase
   // extension checks
   virtual bool isRunnable();
 
- private:
+private:
   // The outlets
   t_outlet      *m_outletScale;
   t_outlet      *m_outletRotation;

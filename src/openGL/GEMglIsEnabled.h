@@ -1,14 +1,14 @@
- /* ------------------------------------------------------------------
-  * GEM - Graphics Environment for Multimedia
-  *
-  *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  *     zmoelnig@iem.kug.ac.at
-  *  For information on usage and redistribution, and for a DISCLAIMER
-  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
-  *
-  *  this file has been generated...
-  * ------------------------------------------------------------------
-  */
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+ *     zmoelnig@iem.kug.ac.at
+ *  For information on usage and redistribution, and for a DISCLAIMER
+ *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+ *
+ *  this file has been generated...
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_OPENGL_GEMGLISENABLED_H_
 #define _INCLUDE__GEM_OPENGL_GEMGLISENABLED_H_
@@ -29,15 +29,15 @@ class GEM_EXTERN GEMglIsEnabled : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglIsEnabled, GemGLBase);
 
-    public:
+public:
   // Constructor
   GEMglIsEnabled (int, t_atom*); // CON
 
- protected:
+protected:
   // Destructor
   virtual ~GEMglIsEnabled ();
-          // check extensions
-          virtual bool isRunnable(void);
+  // check extensions
+  virtual bool isRunnable(void);
 
   // Do the rendering
   virtual void  render (GemState *state);
@@ -50,7 +50,7 @@ class GEM_EXTERN GEMglIsEnabled : public GemGLBase
   t_inlet *m_inlet;
   t_outlet*m_outlet;
 
- private:
+private:
 
   // static member functions
   static void    capMessCallback (void*,t_symbol*,int,t_atom*);

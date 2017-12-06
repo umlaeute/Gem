@@ -35,13 +35,13 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_buffer_read, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_buffer_read(t_symbol *s);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -92,7 +92,7 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   bool m_needsupdate;
   virtual void update_image();
 
- private:
+private:
   //////////
   // static member functions
   static void setMessCallback  (void*data, t_symbol*s);

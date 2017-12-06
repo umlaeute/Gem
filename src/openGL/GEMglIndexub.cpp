@@ -14,7 +14,7 @@
 
 #include "GEMglIndexub.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexub , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexub, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,14 +31,18 @@ GEMglIndexub :: GEMglIndexub    (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglIndexub :: ~GEMglIndexub () {
+GEMglIndexub :: ~GEMglIndexub ()
+{
   inlet_free(m_inlet[0]);
 }
 
 //////////////////
 // extension check
-bool GEMglIndexub :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglIndexub :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -46,14 +50,16 @@ bool GEMglIndexub :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglIndexub :: render(GemState *state) {
+void GEMglIndexub :: render(GemState *state)
+{
   glIndexub (c);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglIndexub :: cMess (t_float arg1) {     // FUN
+void GEMglIndexub :: cMess (t_float arg1)       // FUN
+{
   c = static_cast<GLubyte>(arg1);
   setModified();
 }
@@ -63,10 +69,12 @@ void GEMglIndexub :: cMess (t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglIndexub :: obj_setupCallback(t_class *classPtr) {
+void GEMglIndexub :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexub::cMessCallback),    gensym("c"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglIndexub :: cMessCallback (void* data, t_float arg0){
+void GEMglIndexub :: cMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->cMess ( static_cast<t_float>(arg0));
 }

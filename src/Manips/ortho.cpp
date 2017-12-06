@@ -44,22 +44,21 @@ ortho :: ~ortho()
 /////////////////////////////////////////////////////////
 void ortho :: render(GemState *)
 {
-  if (m_state)
-    {
-      GLfloat aspect = 0;
-      int width=1, height=1;
-      GemMan::getDimen(&width, &height);
+  if (m_state) {
+    GLfloat aspect = 0;
+    int width=1, height=1;
+    GemMan::getDimen(&width, &height);
 
-      aspect = (m_compat)?1.f:static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
-      glPushAttrib(GL_VIEWPORT_BIT);
-      glViewport(0, 0, width, height);
-      glMatrixMode(GL_PROJECTION);
-      glPushMatrix();
-      glLoadIdentity();
-      //glOrtho(-4.f, 4.f, -4.f, 4.f, .1f, 100.f);
-      glOrtho(-4.f*aspect, 4.f*aspect, -4.f, 4.f, .1f, 100.f);
-      glMatrixMode(GL_MODELVIEW);
-    }
+    aspect = (m_compat)?1.f:static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
+    glPushAttrib(GL_VIEWPORT_BIT);
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(-4.f, 4.f, -4.f, 4.f, .1f, 100.f);
+    glOrtho(-4.f*aspect, 4.f*aspect, -4.f, 4.f, .1f, 100.f);
+    glMatrixMode(GL_MODELVIEW);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -68,13 +67,12 @@ void ortho :: render(GemState *)
 /////////////////////////////////////////////////////////
 void ortho :: postrender(GemState *)
 {
-  if (m_state)
-    {
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
-      glMatrixMode(GL_MODELVIEW);
-      glPopAttrib();
-    }
+  if (m_state) {
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopAttrib();
+  }
 }
 
 /////////////////////////////////////////////////////////

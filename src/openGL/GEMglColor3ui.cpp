@@ -14,7 +14,7 @@
 
 #include "GEMglColor3ui.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ui , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ui, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglColor3ui :: GEMglColor3ui  (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglColor3ui :: ~GEMglColor3ui () {
+GEMglColor3ui :: ~GEMglColor3ui ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglColor3ui :: ~GEMglColor3ui () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglColor3ui :: render(GemState *state) {
+void GEMglColor3ui :: render(GemState *state)
+{
   glColor3ui (red, green, blue);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglColor3ui :: redMess (t_float arg1) {  // FUN
+void GEMglColor3ui :: redMess (t_float arg1)    // FUN
+{
   red = static_cast<GLuint>(arg1);
   setModified();
 }
 
-void GEMglColor3ui :: greenMess (t_float arg1) {        // FUN
+void GEMglColor3ui :: greenMess (t_float arg1)          // FUN
+{
   green = static_cast<GLuint>(arg1);
   setModified();
 }
 
-void GEMglColor3ui :: blueMess (t_float arg1) { // FUN
+void GEMglColor3ui :: blueMess (t_float arg1)   // FUN
+{
   blue = static_cast<GLuint>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglColor3ui :: blueMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglColor3ui :: obj_setupCallback(t_class *classPtr) {
+void GEMglColor3ui :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3ui::redMessCallback),         gensym("red"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3ui::greenMessCallback),       gensym("green"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3ui::blueMessCallback),        gensym("blue"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglColor3ui :: redMessCallback (void* data, t_float arg0){
+void GEMglColor3ui :: redMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor3ui :: greenMessCallback (void* data, t_float arg0){
+void GEMglColor3ui :: greenMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor3ui :: blueMessCallback (void* data, t_float arg0){
+void GEMglColor3ui :: blueMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }

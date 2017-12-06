@@ -29,10 +29,10 @@ class GEM_EXTERN GEMglClipPlane : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglClipPlane, GemGLBase);
 
-    public:
+public:
   // Constructor
   GEMglClipPlane (t_float, t_float, t_float, t_float);  // CON
- protected:
+protected:
   // Destructor
   virtual ~GEMglClipPlane ();
   // Do the rendering
@@ -44,7 +44,7 @@ class GEM_EXTERN GEMglClipPlane : public GemGLBase
   virtual void  vMess(t_float, t_float, t_float, t_float);      // FUN
   virtual void  planeMess(t_float);     // FUN
 
- private:
+private:
 
   // we need one inlet
   t_inlet *m_inlet[2];

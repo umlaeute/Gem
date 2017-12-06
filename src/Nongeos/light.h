@@ -35,13 +35,13 @@ class GEM_EXTERN light : public world_light
 {
   CPPEXTERN_HEADER(light, world_light);
 
-    public:
+public:
 
   //////////
   // Constructor
   light(t_floatarg lightNum);
 
- protected:
+protected:
 
   //////////
   // Destructor

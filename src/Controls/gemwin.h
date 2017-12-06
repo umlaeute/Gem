@@ -70,13 +70,13 @@ class GEM_EXTERN gemwin : public CPPExtern
 {
   CPPEXTERN_HEADER(gemwin, CPPExtern);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemwin(t_floatarg framespersecond);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -112,7 +112,7 @@ class GEM_EXTERN gemwin : public CPPExtern
   t_outlet      *m_FrameRate;
 
 
- private:
+private:
 
   //////////
   // Static member functions

@@ -61,13 +61,13 @@ class GEMW32WINDOW_EXTERN gemw32window : public GemWindow
 {
   CPPEXTERN_HEADER(gemw32window, GemWindow);
 
- public:
+public:
 
   //////////
   // Constructor
   gemw32window(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -98,7 +98,7 @@ class GEMW32WINDOW_EXTERN gemw32window : public GemWindow
   virtual void        titleMess(const std::string&);
   virtual void        fullscreenMess(int);
 
- private:
+private:
   bool m_topmost;
   class Window;
   Window*m_win;

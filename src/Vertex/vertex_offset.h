@@ -34,13 +34,13 @@ class GEM_EXTERN vertex_offset : public vertex_scale
 {
   CPPEXTERN_HEADER(vertex_offset, vertex_scale);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_offset(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -53,7 +53,7 @@ class GEM_EXTERN vertex_offset : public vertex_scale
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);
 
- private:
+private:
   //static void         offsetMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 

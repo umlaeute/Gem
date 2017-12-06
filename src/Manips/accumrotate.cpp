@@ -31,18 +31,15 @@ accumrotate :: accumrotate(int argc, t_atom *argv)
 {
   m_rotMatrix.identity();
 
-  if (argc == 3)
-    {
-      m_rotMatrix.rotateX(atom_getfloat(&argv[0]));
-      m_rotMatrix.rotateY(atom_getfloat(&argv[1]));
-      m_rotMatrix.rotateZ(atom_getfloat(&argv[2]));
-    }
-  else if (argc == 0)
-    { }
-  else
-    {
-      throw(GemException("needs 0 or 3 arguments"));
-    }
+  if (argc == 3) {
+    m_rotMatrix.rotateX(atom_getfloat(&argv[0]));
+    m_rotMatrix.rotateY(atom_getfloat(&argv[1]));
+    m_rotMatrix.rotateZ(atom_getfloat(&argv[2]));
+  } else if (argc == 0)
+  { }
+  else {
+    throw(GemException("needs 0 or 3 arguments"));
+  }
 
   // create the new inlets
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xVal"));

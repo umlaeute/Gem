@@ -59,7 +59,8 @@ primTri :: primTri(t_floatarg size)
 
   m_drawTypes.clear();
   m_drawTypes["default"]=GL_TRIANGLES;
-  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["point"]=GL_POINTS;
+  m_drawTypes["points"]=GL_POINTS;
   m_drawTypes["line"]=GL_LINE_LOOP;
   m_drawTypes["fill"]=GL_TRIANGLES;
 }
@@ -77,53 +78,56 @@ primTri :: ~primTri(void)
 /////////////////////////////////////////////////////////
 void primTri :: renderShape(GemState *state)
 {
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLES;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_TRIANGLES;
+  }
   float norm[3];
   Matrix::generateNormal(mVectors[0], mVectors[1], mVectors[2], norm);
   glNormal3fv(norm);
-  if (!GemShape::m_lighting)
+  if (!GemShape::m_lighting) {
     glShadeModel(GL_SMOOTH);
+  }
 
-  if (GemShape::m_texType && GemShape::m_texNum)
-    {
-      int curCoord = 0;
-      glBegin(m_drawType);
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
-      glColor4fv(mColors[0]);
-      glVertex3fv(mVectors[0]);
+  if (GemShape::m_texType && GemShape::m_texNum) {
+    int curCoord = 0;
+    glBegin(m_drawType);
+    glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+    glColor4fv(mColors[0]);
+    glVertex3fv(mVectors[0]);
 
-      if (GemShape::m_texNum > 1)
-        curCoord = 1;
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
-      glColor4fv(mColors[1]);
-      glVertex3fv(mVectors[1]);
-
-      if (GemShape::m_texNum > 2)
-        curCoord = 2;
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
-      glColor4fv(mColors[2]);
-      glVertex3fv(mVectors[2]);
-      glEnd();
+    if (GemShape::m_texNum > 1) {
+      curCoord = 1;
     }
-  else
-    {
-      glBegin(m_drawType);
-      glTexCoord2f(0.f, 0.f);
-      glColor4fv(mColors[0]);
-      glVertex3fv(mVectors[0]);
+    glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+    glColor4fv(mColors[1]);
+    glVertex3fv(mVectors[1]);
 
-      glTexCoord2f(1.f, 0.f);
-      glColor4fv(mColors[1]);
-      glVertex3fv(mVectors[1]);
-
-      glTexCoord2f(.5f, 1.f);
-      glColor4fv(mColors[2]);
-      glVertex3fv(mVectors[2]);
-      glEnd();
+    if (GemShape::m_texNum > 2) {
+      curCoord = 2;
     }
+    glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+    glColor4fv(mColors[2]);
+    glVertex3fv(mVectors[2]);
+    glEnd();
+  } else {
+    glBegin(m_drawType);
+    glTexCoord2f(0.f, 0.f);
+    glColor4fv(mColors[0]);
+    glVertex3fv(mVectors[0]);
 
-  if (!GemShape::m_lighting)
+    glTexCoord2f(1.f, 0.f);
+    glColor4fv(mColors[1]);
+    glVertex3fv(mVectors[1]);
+
+    glTexCoord2f(.5f, 1.f);
+    glColor4fv(mColors[2]);
+    glVertex3fv(mVectors[2]);
+    glEnd();
+  }
+
+  if (!GemShape::m_lighting) {
     glShadeModel(GL_FLAT);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -162,24 +166,27 @@ void primTri :: vect3MessCallback(void *data, t_float x, t_float y, t_float z)
 void primTri :: col1MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   float alpha = 1.f;
-  if (argc == 4)
+  if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
+  }
   GetMyClass(data)->colMess(0, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }
 void primTri :: col2MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   float alpha = 1.f;
-  if (argc == 4)
+  if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
+  }
   GetMyClass(data)->colMess(1, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }
 void primTri :: col3MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   float alpha = 1.f;
-  if (argc == 4)
+  if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
+  }
   GetMyClass(data)->colMess(2, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }

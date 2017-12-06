@@ -56,13 +56,13 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemsdlwindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemsdlwindow(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -102,7 +102,7 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
   // dispatch events
   virtual void dispatch(void);
 
- private:
+private:
 
   /* the SDL surface */
   SDL_Surface*m_surface;

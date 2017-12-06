@@ -14,7 +14,7 @@
 
 #include "GEMglPixelTransferf.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferf , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferf, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglPixelTransferf :: GEMglPixelTransferf      (t_floatarg arg0, t_floatarg arg
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPixelTransferf :: ~GEMglPixelTransferf () {
+GEMglPixelTransferf :: ~GEMglPixelTransferf ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglPixelTransferf :: ~GEMglPixelTransferf () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPixelTransferf :: render(GemState *state) {
+void GEMglPixelTransferf :: render(GemState *state)
+{
   glPixelTransferf (pname, param);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPixelTransferf :: pnameMess (t_float arg1) {  // FUN
+void GEMglPixelTransferf :: pnameMess (t_float arg1)    // FUN
+{
   pname = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglPixelTransferf :: paramMess (t_float arg1) {  // FUN
+void GEMglPixelTransferf :: paramMess (t_float arg1)    // FUN
+{
   param = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglPixelTransferf :: paramMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglPixelTransferf :: obj_setupCallback(t_class *classPtr) {
+void GEMglPixelTransferf :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelTransferf::pnameMessCallback),         gensym("pname"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelTransferf::paramMessCallback),         gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPixelTransferf :: pnameMessCallback (void* data, t_float arg0){
+void GEMglPixelTransferf :: pnameMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglPixelTransferf :: paramMessCallback (void* data, t_float arg0){
+void GEMglPixelTransferf :: paramMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

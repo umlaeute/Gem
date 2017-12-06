@@ -14,7 +14,7 @@
 
 #include "GEMglPixelZoom.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglPixelZoom :: GEMglPixelZoom        (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPixelZoom :: ~GEMglPixelZoom () {
+GEMglPixelZoom :: ~GEMglPixelZoom ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglPixelZoom :: ~GEMglPixelZoom () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPixelZoom :: render(GemState *state) {
+void GEMglPixelZoom :: render(GemState *state)
+{
   glPixelZoom (xfactor, yfactor);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPixelZoom :: xfactorMess (t_float arg1) {     // FUN
+void GEMglPixelZoom :: xfactorMess (t_float arg1)       // FUN
+{
   xfactor = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglPixelZoom :: yfactorMess (t_float arg1) {     // FUN
+void GEMglPixelZoom :: yfactorMess (t_float arg1)       // FUN
+{
   yfactor = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglPixelZoom :: yfactorMess (t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglPixelZoom :: obj_setupCallback(t_class *classPtr) {
+void GEMglPixelZoom :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelZoom::xfactorMessCallback),    gensym("xfactor"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelZoom::yfactorMessCallback),    gensym("yfactor"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPixelZoom :: xfactorMessCallback (void* data, t_float arg0){
+void GEMglPixelZoom :: xfactorMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xfactorMess ( static_cast<t_float>(arg0));
 }
-void GEMglPixelZoom :: yfactorMessCallback (void* data, t_float arg0){
+void GEMglPixelZoom :: yfactorMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yfactorMess ( static_cast<t_float>(arg0));
 }

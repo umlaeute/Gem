@@ -63,8 +63,9 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
          &&
          (pixels[chBlue] >= m_lowThresh[2] &&  pixels[chBlue] <= m_highThresh[2] ) ) {
       pixels[chAlpha] = m_alpha;
+    } else {
+      pixels[chAlpha] = m_otheralpha;
     }
-    else pixels[chAlpha] = m_otheralpha;
     pixels += 4;
   }
 }

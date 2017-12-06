@@ -14,7 +14,7 @@
 
 #include "GEMglIndexsv.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexsv , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexsv, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,28 +23,32 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexsv , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglIndexsv :: GEMglIndexsv    (t_floatarg arg0) {
+GEMglIndexsv :: GEMglIndexsv    (t_floatarg arg0)
+{
   cMess(arg0);
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglIndexsv :: ~GEMglIndexsv () {
+GEMglIndexsv :: ~GEMglIndexsv ()
+{
   inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglIndexsv :: render(GemState *state) {
+void GEMglIndexsv :: render(GemState *state)
+{
   glIndexsv (c);
 }
 
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglIndexsv :: cMess (t_float arg0) {     // FUN
+void GEMglIndexsv :: cMess (t_float arg0)       // FUN
+{
   c[0]=static_cast<GLshort>(arg0);
   setModified();
 }
@@ -53,10 +57,12 @@ void GEMglIndexsv :: cMess (t_float arg0) {     // FUN
 // static member functions
 //
 
-void GEMglIndexsv :: obj_setupCallback(t_class *classPtr) {
+void GEMglIndexsv :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexsv::cMessCallback),   gensym("c"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglIndexsv :: cMessCallback (void* data, t_float arg0) {
+void GEMglIndexsv :: cMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->cMess (arg0);
 }

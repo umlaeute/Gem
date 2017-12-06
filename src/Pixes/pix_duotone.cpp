@@ -55,7 +55,7 @@ void pix_duotone :: processRGBAImage(imageStruct &image)
   unsigned char *pixels = image.data;
 
   while(datasize--) {
-    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])){
+    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])) {
       pixels[chRed]   = m_color1[0];
       pixels[chGreen] = m_color1[1];
       pixels[chBlue]  = m_color1[2];
@@ -78,7 +78,7 @@ void pix_duotone :: processRGBImage(imageStruct &image)
   unsigned char *pixels = image.data;
 
   while(datasize--) {
-    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])){
+    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])) {
       pixels[chRed]   = m_color1[0];
       pixels[chGreen] = m_color1[1];
       pixels[chBlue]  = m_color1[2];
@@ -119,15 +119,14 @@ void pix_duotone :: processYUVImage(imageStruct &image)
 
   src = 0;
 
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
-      if ((image.data[src] > m_thresh[1]) && (image.data[src+1] > m_thresh[0]) && (image.data[src+2] > m_thresh[2]))
-        {
-          image.data[src]   = m_color1[1];
-          image.data[src+1] = m_color1[0];
-          image.data[src+2] = m_color1[2];
-          image.data[src+3] = m_color1[0];
-        }else{
+  for (h=0; h<image.ysize; h++) {
+    for(w=0; w<image.xsize/2; w++) {
+      if ((image.data[src] > m_thresh[1]) && (image.data[src+1] > m_thresh[0]) && (image.data[src+2] > m_thresh[2])) {
+        image.data[src]   = m_color1[1];
+        image.data[src+1] = m_color1[0];
+        image.data[src+2] = m_color1[2];
+        image.data[src+3] = m_color1[0];
+      } else {
         image.data[src]   = m_color2[1];
         image.data[src+1] = m_color2[0];
         image.data[src+2] = m_color2[2];

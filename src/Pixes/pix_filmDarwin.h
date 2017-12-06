@@ -36,13 +36,13 @@ class GEM_EXTERN pix_filmDarwin : public pix_filmOS
 {
   CPPEXTERN_HEADER(pix_filmDarwin, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_filmDarwin(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -99,7 +99,7 @@ class GEM_EXTERN pix_filmDarwin : public pix_filmOS
   Fixed                 playRate;
   TimeValue             prevTime;
   TimeValue             curTime;
- // int                         newImage;
+// int                         newImage;
   int                   m_Task;
   float                 m_volume;
 
@@ -110,7 +110,7 @@ private:
   // GROUP:     Texturing
   //-----------------------------------
 
- protected:
+protected:
 
   //////////
   // static member functions

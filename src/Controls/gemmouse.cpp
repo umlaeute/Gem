@@ -40,7 +40,7 @@ gemmouse :: gemmouse(int argc, t_atom*argv) :
   m_outMBut = outlet_new(this->x_obj, 0);
   m_outRBut = outlet_new(this->x_obj, 0);
 
-  switch(argc){
+  switch(argc) {
   case 0:
     m_scaleX = m_scaleY = 0.f;
     break;
@@ -117,10 +117,16 @@ void gemmouse :: mouseMotion(int x, int y)
 /////////////////////////////////////////////////////////
 void gemmouse :: mouseButton(int which, int state, int x, int y)
 {
-  switch (which){
-  case 0: outlet_float(m_outLBut, static_cast<t_float>(state)); break;
-  case 1: outlet_float(m_outMBut, static_cast<t_float>(state)); break;
-  case 2: outlet_float(m_outRBut, static_cast<t_float>(state)); break;
+  switch (which) {
+  case 0:
+    outlet_float(m_outLBut, static_cast<t_float>(state));
+    break;
+  case 1:
+    outlet_float(m_outMBut, static_cast<t_float>(state));
+    break;
+  case 2:
+    outlet_float(m_outRBut, static_cast<t_float>(state));
+    break;
   }
 }
 

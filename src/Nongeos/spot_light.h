@@ -36,13 +36,13 @@ class GEM_EXTERN spot_light : public world_light
 {
   CPPEXTERN_HEADER(spot_light, world_light);
 
-    public:
+public:
 
   //////////
   // Constructor
   spot_light(t_floatarg lightNum);
 
- protected:
+protected:
 
   //////////
   // Destructor

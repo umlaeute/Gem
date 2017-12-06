@@ -38,13 +38,13 @@ class GEM_EXTERN pix_sig2pix : public GemBase
 {
   CPPEXTERN_HEADER(pix_sig2pix, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_sig2pix(t_floatarg width, t_floatarg height);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -91,7 +91,7 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   // which colorspace do we want ? currently only GL_RGBA
   GLint         m_reqFormat;
 
- private:
+private:
 
   //////////
   // static member functions

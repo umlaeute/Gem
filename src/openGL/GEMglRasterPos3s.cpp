@@ -14,7 +14,7 @@
 
 #include "GEMglRasterPos3s.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3s , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglRasterPos3s, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglRasterPos3s :: GEMglRasterPos3s    (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglRasterPos3s :: ~GEMglRasterPos3s () {
+GEMglRasterPos3s :: ~GEMglRasterPos3s ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglRasterPos3s :: ~GEMglRasterPos3s () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglRasterPos3s :: render(GemState *state) {
+void GEMglRasterPos3s :: render(GemState *state)
+{
   glRasterPos3s (x, y, z);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglRasterPos3s :: xMess (t_float arg1) { // FUN
+void GEMglRasterPos3s :: xMess (t_float arg1)   // FUN
+{
   x = static_cast<GLshort>(arg1);
   setModified();
 }
 
-void GEMglRasterPos3s :: yMess (t_float arg1) { // FUN
+void GEMglRasterPos3s :: yMess (t_float arg1)   // FUN
+{
   y = static_cast<GLshort>(arg1);
   setModified();
 }
 
-void GEMglRasterPos3s :: zMess (t_float arg1) { // FUN
+void GEMglRasterPos3s :: zMess (t_float arg1)   // FUN
+{
   z = static_cast<GLshort>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglRasterPos3s :: zMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglRasterPos3s :: obj_setupCallback(t_class *classPtr) {
+void GEMglRasterPos3s :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos3s::xMessCallback),        gensym("x"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos3s::yMessCallback),        gensym("y"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos3s::zMessCallback),        gensym("z"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRasterPos3s :: xMessCallback (void* data, t_float arg0){
+void GEMglRasterPos3s :: xMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos3s :: yMessCallback (void* data, t_float arg0){
+void GEMglRasterPos3s :: yMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos3s :: zMessCallback (void* data, t_float arg0){
+void GEMglRasterPos3s :: zMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

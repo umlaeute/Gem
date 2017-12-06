@@ -30,28 +30,28 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_follow : public partlib_base
 {
-    CPPEXTERN_HEADER(part_follow, partlib_base);
+  CPPEXTERN_HEADER(part_follow, partlib_base);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        part_follow(t_floatarg num);
+  //////////
+  // Constructor
+  part_follow(t_floatarg num);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~part_follow(void);
+  //////////
+  // Destructor
+  virtual ~part_follow(void);
 
-        //////////
-        virtual void    renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-      //////////
-      void                      accelMess(float);
+  //////////
+  void                      accelMess(float);
 
-      //////////
-      float                     m_accel;
+  //////////
+  float                     m_accel;
 
 };
 

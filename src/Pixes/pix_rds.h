@@ -40,13 +40,13 @@ class GEM_EXTERN pix_rds : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_rds, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_rds();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -64,7 +64,7 @@ class GEM_EXTERN pix_rds : public GemPixObj
   int   method;
   int   fastrand_val;
 
- private:
+private:
 
   //////////
   // static member functions

@@ -51,11 +51,11 @@ fragment_program :: ~fragment_program()
 /////////////////////////////////////////////////////////
 GLint fragment_program :: queryProgramtype(char*program)
 {
-  if(!strncmp(program,"!!ARBfp1.0",10)){
+  if(!strncmp(program,"!!ARBfp1.0",10)) {
     m_programTarget=GL_FRAGMENT_PROGRAM_ARB;
     return(GEM_PROGRAM_ARB);
   }
-  if(!strncmp(program,"!!FP1.0",7)){
+  if(!strncmp(program,"!!FP1.0",7)) {
     m_programTarget=GL_FRAGMENT_PROGRAM_NV;
     return(GEM_PROGRAM_NV);
   }
@@ -65,9 +65,11 @@ GLint fragment_program :: queryProgramtype(char*program)
 /////////////////////////////////////////////////////////
 // extension check
 //
-bool fragment_program :: isRunnable() {
-  if(GLEW_ARB_fragment_program || GLEW_NV_fragment_program)
+bool fragment_program :: isRunnable()
+{
+  if(GLEW_ARB_fragment_program || GLEW_NV_fragment_program) {
     return true;
+  }
 
   error("need ARB (or NV) fragment_program extension for shaders");
   return false;

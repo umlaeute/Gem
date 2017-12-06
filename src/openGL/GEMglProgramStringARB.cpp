@@ -58,8 +58,11 @@ GEMglProgramStringARB :: ~GEMglProgramStringARB ()
 }
 //////////////////
 // extension check
-bool GEMglProgramStringARB :: isRunnable(void) {
-  if(GLEW_ARB_vertex_program)return true;
+bool GEMglProgramStringARB :: isRunnable(void)
+{
+  if(GLEW_ARB_vertex_program) {
+    return true;
+  }
   error("your system does not support the ARB vertex_program extension");
   return false;
 }
@@ -75,22 +78,26 @@ void GEMglProgramStringARB :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglProgramStringARB :: targetMess (t_float arg1) {       // FUN
+void GEMglProgramStringARB :: targetMess (t_float arg1)         // FUN
+{
   target = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglProgramStringARB :: formatMess (t_float arg1) {       // FUN
+void GEMglProgramStringARB :: formatMess (t_float arg1)         // FUN
+{
   format = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglProgramStringARB :: lenMess (t_float arg1) {  // FUN
+void GEMglProgramStringARB :: lenMess (t_float arg1)    // FUN
+{
   len = static_cast<GLsizei>(arg1);
   setModified();
 }
 
-void GEMglProgramStringARB :: stringMess (t_symbol* arg1) {     // FUN
+void GEMglProgramStringARB :: stringMess (t_symbol* arg1)       // FUN
+{
   string = reinterpret_cast<GLvoid*>(arg1->s_name);
   setModified();
 }
@@ -100,7 +107,8 @@ void GEMglProgramStringARB :: stringMess (t_symbol* arg1) {     // FUN
 // static member functions
 //
 
-void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
+void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::targetMessCallback),
                   gensym("target"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::formatMessCallback),
@@ -111,15 +119,19 @@ void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr) {
                   gensym("string"), A_DEFSYMBOL, A_NULL);
 };
 
-void GEMglProgramStringARB :: targetMessCallback (void* data, t_float arg0){
+void GEMglProgramStringARB :: targetMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->targetMess ( arg0 );
 }
-void GEMglProgramStringARB :: formatMessCallback (void* data, t_float arg1){
+void GEMglProgramStringARB :: formatMessCallback (void* data, t_float arg1)
+{
   GetMyClass(data)->formatMess ( arg1 );
 }
-void GEMglProgramStringARB :: lenMessCallback (void* data, t_float arg2){
+void GEMglProgramStringARB :: lenMessCallback (void* data, t_float arg2)
+{
   GetMyClass(data)->lenMess ( arg2 );
 }
-void GEMglProgramStringARB :: stringMessCallback (void* data, t_symbol* arg3){
+void GEMglProgramStringARB :: stringMessCallback (void* data, t_symbol* arg3)
+{
   GetMyClass(data)->stringMess ( arg3 );
 }

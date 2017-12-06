@@ -40,16 +40,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 class GEM_EXTERN pix_movieDarwin : public GemBase
 {
 
-    CPPEXTERN_HEADER(pix_movieDarwin, GemBase);
+  CPPEXTERN_HEADER(pix_movieDarwin, GemBase);
 
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_movieDarwin(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -73,7 +73,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   // prepare for texturing (on open)
   virtual void prepareTexture();
 
-   //////////
+  //////////
   // Clear the dirty flag on the pixBlock
   virtual void postrender(GemState *state);
 
@@ -137,7 +137,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   bool    upsidedown;
   GLint   m_textureType;
 
-   //////////
+  //////////
   // the current file
   t_symbol *x_filename;
 
@@ -187,7 +187,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int           m_format;
   int           m_rectangle;
 
-    //-----------------------------------
+  //-----------------------------------
   // GROUP:     Movie data
   //-----------------------------------
 
@@ -210,7 +210,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
 private:
   Movie                 m_movie;
 
- protected:
+protected:
 
   //////////
   // static member functions

@@ -34,13 +34,13 @@ class GEM_EXTERN pix_buffer_write : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_buffer_write, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_buffer_write(t_symbol *s);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -58,7 +58,7 @@ class GEM_EXTERN pix_buffer_write : public GemPixObj
   int m_lastframe;
   t_symbol *m_bindname;
 
- private:
+private:
 
   //////////
   // static member functions

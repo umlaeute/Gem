@@ -17,8 +17,9 @@ LOG
 
 #include "Base/GemBase.h"
 
-class GEM_EXTERN GemVertex : public GemBase {
- protected:
+class GEM_EXTERN GemVertex : public GemBase
+{
+protected:
 
 
   //////////

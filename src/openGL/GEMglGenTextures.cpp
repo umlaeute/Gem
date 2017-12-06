@@ -26,7 +26,9 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGenTextures);
 GEMglGenTextures :: GEMglGenTextures    (int argc, t_atom*argv) :
   n(0), textures(NULL)
 {
-  if(argc)texturesMess(argc, argv);
+  if(argc) {
+    texturesMess(argc, argv);
+  }
 
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
 
@@ -34,14 +36,18 @@ GEMglGenTextures :: GEMglGenTextures    (int argc, t_atom*argv) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGenTextures :: ~GEMglGenTextures () {
+GEMglGenTextures :: ~GEMglGenTextures ()
+{
   inlet_free(m_inlet);
 }
 
 //////////////////
 // extension check
-bool GEMglGenTextures :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglGenTextures :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -49,23 +55,29 @@ bool GEMglGenTextures :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGenTextures :: render(GemState *state) {
+void GEMglGenTextures :: render(GemState *state)
+{
   glGenTextures (n, textures);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) { // FUN
+void GEMglGenTextures :: texturesMess (int argc, t_atom*argv)   // FUN
+{
   if(!argc) {
     error("no textures specified!");
     return;
   }
   n=0;
-  if(textures) delete [] textures;
+  if(textures) {
+    delete [] textures;
+  }
   textures = new GLuint[argc];
-  while(argc--){
-    if(argv->a_type == A_FLOAT)textures[n++] = static_cast<GLuint>(atom_getint(argv));
+  while(argc--) {
+    if(argv->a_type == A_FLOAT) {
+      textures[n++] = static_cast<GLuint>(atom_getint(argv));
+    }
     argv++;
   }
   setModified();
@@ -77,9 +89,11 @@ void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) { // FUN
 // static member functions
 //
 
-void GEMglGenTextures :: obj_setupCallback(t_class *classPtr) {
+void GEMglGenTextures :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenTextures::texturesMessCallback),         gensym("textures"), A_GIMME, A_NULL);
 }
-void GEMglGenTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+void GEMglGenTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+{
   GetMyClass(data)->texturesMess (argc,argv);
 }

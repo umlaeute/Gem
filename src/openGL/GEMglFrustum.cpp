@@ -26,12 +26,24 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglFrustum );
 GEMglFrustum :: GEMglFrustum    (int argc, t_atom* argv)
 {
   left=right=bottom=top=zNear=zFar=0.0;
-  if (argc>0)left  =atom_getfloat(argv);
-  if (argc>1)right =atom_getfloat(argv+1);
-  if (argc>2)bottom=atom_getfloat(argv+2);
-  if (argc>3)top   =atom_getfloat(argv+3);
-  if (argc>4)zNear =atom_getfloat(argv+4);
-  if (argc>5)zFar  =atom_getfloat(argv+5);
+  if (argc>0) {
+    left  =atom_getfloat(argv);
+  }
+  if (argc>1) {
+    right =atom_getfloat(argv+1);
+  }
+  if (argc>2) {
+    bottom=atom_getfloat(argv+2);
+  }
+  if (argc>3) {
+    top   =atom_getfloat(argv+3);
+  }
+  if (argc>4) {
+    zNear =atom_getfloat(argv+4);
+  }
+  if (argc>5) {
+    zFar  =atom_getfloat(argv+5);
+  }
 
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("left"));
   m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("right"));
@@ -43,7 +55,8 @@ GEMglFrustum :: GEMglFrustum    (int argc, t_atom* argv)
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglFrustum :: ~GEMglFrustum () {
+GEMglFrustum :: ~GEMglFrustum ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -55,39 +68,46 @@ GEMglFrustum :: ~GEMglFrustum () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglFrustum :: render(GemState *state) {
+void GEMglFrustum :: render(GemState *state)
+{
   glFrustum (left, right, bottom, top, zNear, zFar);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglFrustum :: leftMess (t_float arg1) {  // FUN
+void GEMglFrustum :: leftMess (t_float arg1)    // FUN
+{
   left = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglFrustum :: rightMess (t_float arg1) { // FUN
+void GEMglFrustum :: rightMess (t_float arg1)   // FUN
+{
   right = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglFrustum :: bottomMess (t_float arg1) {        // FUN
+void GEMglFrustum :: bottomMess (t_float arg1)          // FUN
+{
   bottom = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglFrustum :: topMess (t_float arg1) {   // FUN
+void GEMglFrustum :: topMess (t_float arg1)     // FUN
+{
   top = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglFrustum :: zNearMess (t_float arg1) { // FUN
+void GEMglFrustum :: zNearMess (t_float arg1)   // FUN
+{
   zNear = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglFrustum :: zFarMess (t_float arg1) {  // FUN
+void GEMglFrustum :: zFarMess (t_float arg1)    // FUN
+{
   zFar = static_cast<GLdouble>(arg1);
   setModified();
 }
@@ -97,7 +117,8 @@ void GEMglFrustum :: zFarMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglFrustum :: obj_setupCallback(t_class *classPtr) {
+void GEMglFrustum :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::leftMessCallback),         gensym("left"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::rightMessCallback),        gensym("right"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::bottomMessCallback),       gensym("bottom"), A_DEFFLOAT, A_NULL);
@@ -106,21 +127,27 @@ void GEMglFrustum :: obj_setupCallback(t_class *classPtr) {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::zFarMessCallback),         gensym("zFar"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglFrustum :: leftMessCallback (void* data, t_float arg0){
+void GEMglFrustum :: leftMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->leftMess ( static_cast<t_float>(arg0));
 }
-void GEMglFrustum :: rightMessCallback (void* data, t_float arg0){
+void GEMglFrustum :: rightMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->rightMess ( static_cast<t_float>(arg0));
 }
-void GEMglFrustum :: bottomMessCallback (void* data, t_float arg0){
+void GEMglFrustum :: bottomMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->bottomMess ( static_cast<t_float>(arg0));
 }
-void GEMglFrustum :: topMessCallback (void* data, t_float arg0){
+void GEMglFrustum :: topMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->topMess ( static_cast<t_float>(arg0));
 }
-void GEMglFrustum :: zNearMessCallback (void* data, t_float arg0){
+void GEMglFrustum :: zNearMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zNearMess ( static_cast<t_float>(arg0));
 }
-void GEMglFrustum :: zFarMessCallback (void* data, t_float arg0){
+void GEMglFrustum :: zFarMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zFarMess ( static_cast<t_float>(arg0));
 }

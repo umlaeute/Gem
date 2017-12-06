@@ -14,7 +14,7 @@
 
 #include "GEMglPushName.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushName , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushName, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,14 +31,18 @@ GEMglPushName :: GEMglPushName  (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPushName :: ~GEMglPushName () {
+GEMglPushName :: ~GEMglPushName ()
+{
   inlet_free(m_inlet[0]);
 }
 
 //////////////////
 // extension check
-bool GEMglPushName :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglPushName :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -47,14 +51,16 @@ bool GEMglPushName :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPushName :: render(GemState *state) {
+void GEMglPushName :: render(GemState *state)
+{
   glPushName (name);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPushName :: nameMess (t_float arg1) { // FUN
+void GEMglPushName :: nameMess (t_float arg1)   // FUN
+{
   name = static_cast<GLuint>(arg1);
   setModified();
 }
@@ -64,10 +70,12 @@ void GEMglPushName :: nameMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglPushName :: obj_setupCallback(t_class *classPtr) {
+void GEMglPushName :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPushName::nameMessCallback),        gensym("name"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglPushName :: nameMessCallback (void* data, t_float arg0){
+void GEMglPushName :: nameMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->nameMess ( static_cast<t_float>(arg0));
 }

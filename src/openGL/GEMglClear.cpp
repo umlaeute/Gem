@@ -14,7 +14,7 @@
 
 #include "GEMglClear.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClear , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClear, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglClear :: GEMglClear        (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglClear :: ~GEMglClear () {
+GEMglClear :: ~GEMglClear ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglClear :: render(GemState *state) {
+void GEMglClear :: render(GemState *state)
+{
   glClear (mask);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglClear :: maskMess (t_float arg1) {    // FUN
+void GEMglClear :: maskMess (t_float arg1)      // FUN
+{
   mask = static_cast<GLbitfield>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglClear :: maskMess (t_float arg1) {    // FUN
 // static member functions
 //
 
-void GEMglClear :: obj_setupCallback(t_class *classPtr) {
+void GEMglClear :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClear::maskMessCallback),   gensym("mask"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClear :: maskMessCallback (void* data, t_float arg0){
+void GEMglClear :: maskMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->maskMess ( static_cast<t_float>(arg0));
 }

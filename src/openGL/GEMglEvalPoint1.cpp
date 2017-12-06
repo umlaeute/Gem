@@ -14,7 +14,7 @@
 
 #include "GEMglEvalPoint1.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalPoint1 , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalPoint1, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,27 +31,33 @@ GEMglEvalPoint1 :: GEMglEvalPoint1      (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglEvalPoint1 :: ~GEMglEvalPoint1 () {
+GEMglEvalPoint1 :: ~GEMglEvalPoint1 ()
+{
   inlet_free(m_inlet[0]);
 }
 //////////////////
 // extension check
-bool GEMglEvalPoint1 :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglEvalPoint1 :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglEvalPoint1 :: render(GemState *state) {
+void GEMglEvalPoint1 :: render(GemState *state)
+{
   glEvalPoint1 (i);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglEvalPoint1 :: iMess (t_float arg1) {  // FUN
+void GEMglEvalPoint1 :: iMess (t_float arg1)    // FUN
+{
   i = static_cast<GLint>(arg1);
   setModified();
 }
@@ -61,10 +67,12 @@ void GEMglEvalPoint1 :: iMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglEvalPoint1 :: obj_setupCallback(t_class *classPtr) {
+void GEMglEvalPoint1 :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint1::iMessCallback),         gensym("i"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalPoint1 :: iMessCallback (void* data, t_float arg0){
+void GEMglEvalPoint1 :: iMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
 }

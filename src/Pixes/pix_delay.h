@@ -35,13 +35,13 @@ class GEM_EXTERN pix_delay : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_delay, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_delay(t_float &f);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -59,7 +59,7 @@ class GEM_EXTERN pix_delay : public GemPixObj
   int m_frame;
 
 
- private:
+private:
 
   //////////
   // static member functions

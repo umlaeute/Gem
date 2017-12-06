@@ -29,8 +29,9 @@ class gemhead;
 class GemState;
 class WindowInfo;
 
-namespace gem {
-  class Context;
+namespace gem
+{
+class Context;
 };
 
 /*-----------------------------------------------------------------
@@ -45,7 +46,7 @@ namespace gem {
   -----------------------------------------------------------------*/
 class GEM_EXTERN GemMan
 {
- public:
+public:
 
   //////////
   // Should only be called once (usually by GemSetup)
@@ -165,7 +166,7 @@ class GEM_EXTERN GemMan
   // LATER make this private (right now it is needed in gem2pdp)
   static int       m_buffer;            // single(1) or double(2)
 
- private:
+private:
 
   //////////
   // computer and window information
@@ -188,7 +189,7 @@ class GEM_EXTERN GemMan
 
   static float     m_fog;                       // fog density
   enum FOG_TYPE
-    { FOG_OFF = 0, FOG_LINEAR, FOG_EXP, FOG_EXP2 };
+  { FOG_OFF = 0, FOG_LINEAR, FOG_EXP, FOG_EXP2 };
   static FOG_TYPE  m_fogMode;           // what kind of fog we have
   static GLfloat   m_fogColor[4];       // colour of the fog
   static float     m_fogStart;          // start of the linear fog

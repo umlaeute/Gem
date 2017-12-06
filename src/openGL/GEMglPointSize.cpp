@@ -14,7 +14,7 @@
 
 #include "GEMglPointSize.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPointSize , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPointSize, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglPointSize :: GEMglPointSize        (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPointSize :: ~GEMglPointSize () {
+GEMglPointSize :: ~GEMglPointSize ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPointSize :: render(GemState *state) {
+void GEMglPointSize :: render(GemState *state)
+{
   glPointSize (size);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPointSize :: sizeMess (t_float arg1) {        // FUN
+void GEMglPointSize :: sizeMess (t_float arg1)          // FUN
+{
   size = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglPointSize :: sizeMess (t_float arg1) {        // FUN
 // static member functions
 //
 
-void GEMglPointSize :: obj_setupCallback(t_class *classPtr) {
+void GEMglPointSize :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPointSize::sizeMessCallback),       gensym("size"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPointSize :: sizeMessCallback (void* data, t_float arg0){
+void GEMglPointSize :: sizeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sizeMess ( static_cast<t_float>(arg0));
 }

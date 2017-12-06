@@ -1,14 +1,14 @@
- /* ------------------------------------------------------------------
-  * GEM - Graphics Environment for Multimedia
-  *
-  *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  *     zmoelnig@iem.kug.ac.at
-  *  For information on usage and redistribution, and for a DISCLAIMER
-  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
-  *
-  *  this file has been generated...
-  * ------------------------------------------------------------------
-  */
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+ *     zmoelnig@iem.kug.ac.at
+ *  For information on usage and redistribution, and for a DISCLAIMER
+ *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+ *
+ *  this file has been generated...
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_OPENGL_GEMGLGETSTRING_H_
 #define _INCLUDE__GEM_OPENGL_GEMGLGETSTRING_H_
@@ -29,11 +29,11 @@ class GEM_EXTERN GEMglGetString : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglGetString, GemGLBase);
 
-    public:
+public:
   // Constructor
   GEMglGetString (t_floatarg);  // CON
 
- protected:
+protected:
   // Destructor
   virtual ~GEMglGetString ();
   // Do the rendering
@@ -47,7 +47,7 @@ class GEM_EXTERN GEMglGetString : public GemGLBase
   t_inlet *m_inlet;
   t_outlet*m_outlet;
 
- private:
+private:
 
   // static member functions
   static void    nameMessCallback (void*, t_symbol*,int,t_atom*);

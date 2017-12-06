@@ -32,8 +32,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_head, t_floatarg, A_DEFFLOAT);
 part_head :: part_head(t_floatarg numParts)
   : m_speed(1.f)
 {
-  if (numParts <= 0)
+  if (numParts <= 0) {
     numParts = 1000.f;
+  }
   m_particleGroup = pGenParticleGroups(1, (int)numParts);
 }
 
@@ -43,8 +44,9 @@ part_head :: part_head(t_floatarg numParts)
 /////////////////////////////////////////////////////////
 part_head :: ~part_head(void)
 {
-  if (m_particleGroup < 0)
+  if (m_particleGroup < 0) {
     pDeleteParticleGroups(m_particleGroup, 1);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -53,8 +55,9 @@ part_head :: ~part_head(void)
 /////////////////////////////////////////////////////////
 void part_head :: renderParticles(GemState *state)
 {
-  if (m_particleGroup < 0)
+  if (m_particleGroup < 0) {
     return;
+  }
 
   // The original default was 50.f milliseconds (20 fps)
   pTimeStep((m_tickTime / 50.f) * m_speed);

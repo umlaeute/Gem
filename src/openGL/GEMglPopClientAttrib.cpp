@@ -23,7 +23,8 @@ CPPEXTERN_NEW ( GEMglPopClientAttrib);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPopClientAttrib :: GEMglPopClientAttrib    (){
+GEMglPopClientAttrib :: GEMglPopClientAttrib    ()
+{
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -32,8 +33,11 @@ GEMglPopClientAttrib :: ~GEMglPopClientAttrib () {}
 
 //////////////////
 // extension check
-bool GEMglPopClientAttrib :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglPopClientAttrib :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -42,7 +46,8 @@ bool GEMglPopClientAttrib :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPopClientAttrib :: render(GemState *state) {
+void GEMglPopClientAttrib :: render(GemState *state)
+{
   glPopClientAttrib ();
 }
 

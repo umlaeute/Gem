@@ -16,8 +16,7 @@
 //
 /////////////////////////////////////////////////////////
 
-struct t_float3
-{
+struct t_float3 {
   float x,y,z;
 };
 
@@ -51,7 +50,7 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
 
   m_posXYZ = new t_float3[nb_pts_control_X*nb_pts_control_Y];
 
-  if(!m_posXYZ){
+  if(!m_posXYZ) {
     nb_pts_control_X=0;
     nb_pts_control_Y=0;
   }
@@ -88,14 +87,17 @@ surface3d :: surface3d(t_floatarg sizeX,t_floatarg sizeY )
 /////////////////////////////////////////////////////////
 surface3d :: ~surface3d()
 {
-  if(m_posXYZ)delete[]m_posXYZ;
+  if(m_posXYZ) {
+    delete[]m_posXYZ;
+  }
 }
 
 //////////////////////////////////////////////////////////
 // setMess
 //
 /////////////////////////////////////////////////////////
-void surface3d :: setMess(int X, int Y, float posX, float posY, float posZ){
+void surface3d :: setMess(int X, int Y, float posX, float posY, float posZ)
+{
   if ((X>=0)&(X<nb_pts_control_X)&(Y>=0)&(Y<nb_pts_control_Y))    {
     m_posXYZ[X+Y*nb_pts_control_X].x=posX;
     m_posXYZ[X+Y*nb_pts_control_X].y=posY;
@@ -108,12 +110,15 @@ void surface3d :: setMess(int X, int Y, float posX, float posY, float posZ){
 // resolutionMess
 //
 /////////////////////////////////////////////////////////
-void surface3d :: resolutionMess(int resolutionX, int resolutionY){
+void surface3d :: resolutionMess(int resolutionX, int resolutionY)
+{
   nb_pts_control_X = (resolutionX < 4) ? 4 : resolutionX;
   nb_pts_control_Y = (resolutionY < 4) ? 4 : resolutionY;
-  if(m_posXYZ)delete[]m_posXYZ;
+  if(m_posXYZ) {
+    delete[]m_posXYZ;
+  }
   m_posXYZ = new t_float3[nb_pts_control_X*nb_pts_control_Y];
-  if(!m_posXYZ){
+  if(!m_posXYZ) {
     nb_pts_control_X=0;
     nb_pts_control_Y=0;
   }
@@ -132,7 +137,8 @@ void surface3d :: resolutionMess(int resolutionX, int resolutionY){
 // gridMess
 //
 /////////////////////////////////////////////////////////
-void surface3d :: gridMess(int gridX, int gridY){
+void surface3d :: gridMess(int gridX, int gridY)
+{
   nb_pts_affich_X = (gridX < 2) ? 2 : gridX;
   nb_pts_affich_Y = (gridY < 2) ? 2 : gridY;
   setModified();
@@ -142,7 +148,8 @@ void surface3d :: gridMess(int gridX, int gridY){
 // normal
 //
 /////////////////////////////////////////////////////////
-void surface3d :: normalMess(bool normal){
+void surface3d :: normalMess(bool normal)
+{
   compute_normal = normal;
 }
 
@@ -201,11 +208,15 @@ void surface3d :: interpolate(float X, float Y)
 
     dx  = bicubic3((X-0.01), Y );
     dx2 = bicubic3((X+0.01), Y );
-    dx.x -= dx2.x; dx.y -= dx2.y; dx.z -= dx2.z;
+    dx.x -= dx2.x;
+    dx.y -= dx2.y;
+    dx.z -= dx2.z;
 
     dy  = bicubic3( X,(Y-0.01));
     dy2 = bicubic3( X,(Y+0.01));
-    dy.x -= dy2.x; dy.y -= dy2.y; dy.z -= dy2.z;
+    dy.x -= dy2.x;
+    dy.y -= dy2.y;
+    dy.z -= dy2.z;
 
     normal.x = dx.y*dy.z - dx.z*dy.y;
     normal.y = dx.z*dy.x - dx.x*dy.z;
@@ -226,8 +237,11 @@ void surface3d :: interpolate(float X, float Y)
 // renderShape
 //
 /////////////////////////////////////////////////////////
-void surface3d :: renderShape(GemState *state){
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=FILL;
+void surface3d :: renderShape(GemState *state)
+{
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=FILL;
+  }
 
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
@@ -236,12 +250,11 @@ void surface3d :: renderShape(GemState *state){
   GLfloat ysize = 1.0f;
   GLfloat ysize0= 0.0f;
 
-  if (GemShape::m_texType && GemShape::m_texNum>=3)
-    {
-      xsize  = GemShape::m_texCoords[1].s;
-      ysize0 = GemShape::m_texCoords[2].t;
-      ysize  = GemShape::m_texCoords[1].t;
-    }
+  if (GemShape::m_texType && GemShape::m_texNum>=3) {
+    xsize  = GemShape::m_texCoords[1].s;
+    ysize0 = GemShape::m_texCoords[2].t;
+    ysize  = GemShape::m_texCoords[1].t;
+  }
   GLfloat ysizediff = ysize0 - ysize;
 
   GLfloat affich_X=static_cast<GLfloat>(nb_pts_affich_X);
@@ -251,12 +264,12 @@ void surface3d :: renderShape(GemState *state){
   GLfloat control_Y=static_cast<GLfloat>(nb_pts_control_Y);
 
 
-  switch (m_drawType){
+  switch (m_drawType) {
   case LINE:    {
     if (GemShape::m_texType)    {
       for (int n = 0; n < nb_pts_affich_X+1; n++)   {
         glBegin(GL_LINE_STRIP);
-        for (int m = 0; m  < nb_pts_affich_Y+1; m++){
+        for (int m = 0; m  < nb_pts_affich_Y+1; m++) {
           glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
           interpolate(n/affich_X, m/affich_Y);
         }
@@ -264,7 +277,7 @@ void surface3d :: renderShape(GemState *state){
       }
       for(int m = 0; m < nb_pts_affich_Y+1; m++) {
         glBegin(GL_LINE_STRIP);
-        for(int n = 0; n  < nb_pts_affich_X+1; n++){
+        for(int n = 0; n  < nb_pts_affich_X+1; n++) {
           glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
           interpolate(n/affich_X, m/affich_Y);
         }
@@ -273,327 +286,309 @@ void surface3d :: renderShape(GemState *state){
     }  else {
       for(int n = 0; n < nb_pts_affich_X+1; n++)  {
         glBegin(GL_LINE_STRIP);
-        for(int m = 0; m  < nb_pts_affich_Y+1; m++){
+        for(int m = 0; m  < nb_pts_affich_Y+1; m++) {
           interpolate(n/affich_X, m/affich_Y);
         }
         glEnd();
       }
       for(int m = 0; m < nb_pts_affich_Y+1; m++)  {
         glBegin(GL_LINE_STRIP);
-        for(int n = 0; n  < nb_pts_affich_X+1; n++){
+        for(int n = 0; n  < nb_pts_affich_X+1; n++) {
           interpolate(n/affich_X, m/affich_Y);
         }
         glEnd();
       }
     }
   }
-    break;
-  case FILL:
-    {
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_affich_X; n++) {
-          glBegin(GL_TRIANGLE_STRIP);
-          for(int m = 0; m  < nb_pts_affich_Y+1; m++)   {
-            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-            interpolate(n/affich_X, m/affich_Y);
-            glTexCoord2f(xsize*(n+1)/affich_X, ysize+ysizediff*m/affich_Y);
-            interpolate((n+1)/affich_X, m/affich_Y);
-          }
-          glEnd();
+  break;
+  case FILL: {
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_affich_X; n++) {
+        glBegin(GL_TRIANGLE_STRIP);
+        for(int m = 0; m  < nb_pts_affich_Y+1; m++)   {
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate(n/affich_X, m/affich_Y);
+          glTexCoord2f(xsize*(n+1)/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate((n+1)/affich_X, m/affich_Y);
         }
-      else
-        for(int n = 0; n < nb_pts_affich_X; n++) {
-          glBegin(GL_TRIANGLE_STRIP);
-          for(int m = 0; m  < nb_pts_affich_Y+1; m++)  {
-            interpolate(n/affich_X, m/affich_Y);
-            interpolate((n+1)/affich_X, m/affich_Y);
-          }
-          glEnd();
+        glEnd();
+      } else
+      for(int n = 0; n < nb_pts_affich_X; n++) {
+        glBegin(GL_TRIANGLE_STRIP);
+        for(int m = 0; m  < nb_pts_affich_Y+1; m++)  {
+          interpolate(n/affich_X, m/affich_Y);
+          interpolate((n+1)/affich_X, m/affich_Y);
         }
-    }
-    break;
-  case POINT:
-    {
-      glBegin(GL_POINTS);
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_affich_X+1; n++) {
-          for(int m = 0; m  < nb_pts_affich_Y+1; m++) {
-            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-            interpolate(n/affich_X, m/affich_Y);
-          }
+        glEnd();
+      }
+  }
+  break;
+  case POINT: {
+    glBegin(GL_POINTS);
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_affich_X+1; n++) {
+        for(int m = 0; m  < nb_pts_affich_Y+1; m++) {
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate(n/affich_X, m/affich_Y);
         }
-      else
-        for(int n = 0; n < nb_pts_affich_X+1; n++) {
-          for(int m = 0; m  < nb_pts_affich_Y+1; m++)
-            interpolate(n/affich_X, m/affich_Y);
-        }
-      glEnd();
-    }
-    break;
-
-  case LINE1:
-    {
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_affich_X; n++) {
-          glBegin(GL_LINE_STRIP);
-          for(int m = 0; m  < nb_pts_affich_Y; m++)  {
-            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-            interpolate(n/affich_X, m/affich_Y);
-          }
-          glEnd();
-        }
-      else
-        for(int n = 0; n < nb_pts_affich_X; n++) {
-          glBegin(GL_LINE_STRIP);
-          for(int m = 0; m  < nb_pts_affich_Y; m++)   {
-            interpolate(n/affich_X, m/affich_Y);
-          }
-          glEnd();
-        }
-    }
-    break;
-
-  case LINE2:
-    {
-      if (GemShape::m_texType)
-        for(int m = 0; m < nb_pts_affich_Y+1; m++) {
-          glBegin(GL_LINE_STRIP);
-          for(int n = 0; n  < nb_pts_affich_X+1; n++)  {
-            interpolate(n/affich_X, m/affich_Y);
-          }
-          glEnd();
-        }
-      else
-        for(int m = 0; m < nb_pts_affich_Y+1; m++) {
-          glBegin(GL_LINE_STRIP);
-          for(int n = 0; n  < nb_pts_affich_X+1; n++)  {
-            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-            interpolate(n/affich_X, m/affich_Y);
-          }
-          glEnd();
-        }
-    }
-    break;
-
-  case LINE3:
-    {
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_affich_X; n++) {
-          glBegin(GL_LINES);
-          for(int m = 0; m  < nb_pts_affich_Y; m++)
-            {
-              glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-              interpolate(n/affich_X, m/affich_Y);
-            }
-          glEnd();
-        }
-      else
-        for(int n = 0; n < nb_pts_affich_X; n++) {
-          glBegin(GL_LINES);
-          for(int m = 0; m  < nb_pts_affich_Y; m++)  {
-            interpolate(n/affich_X, m/affich_Y);
-          }
-          glEnd();
-        }
-    }
-    break;
-
-  case LINE4:
-    {
-      if (GemShape::m_texType)
-        for(int m = 0; m < nb_pts_affich_Y; m++)
-          {
-            glBegin(GL_LINES);
-            for(int n = 0; n  < nb_pts_affich_X; n++) {
-              glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-              interpolate(n/affich_X, m/affich_Y);
-            }
-            glEnd();
-          }
-      else
-        for(int m = 0; m < nb_pts_affich_Y; m++) {
-          glBegin(GL_LINES);
-          for(int n = 0; n  < nb_pts_affich_X; n++) {
-            interpolate(n/affich_X, m/affich_Y);
-          }
-          glEnd();
-        }
-    }
-    break;
-
-  case CONTROL_FILL:
-    {
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_control_X-1; n++)
-          for(int m = 0; m  < nb_pts_control_Y-1; m++)   {
-            float norm[3];
-            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
-                                   (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
-                                   (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
-                                   norm);
-            glNormal3fv(norm);
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-            glTexCoord2f(xsize*(n+1.)/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*(m+1.)/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-            glEnd();
-
-            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
-                                   (GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X],
-                                   (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X], norm);
-            glNormal3fv(norm);
-            glBegin(GL_TRIANGLE_STRIP);
-            glTexCoord2f(xsize*(n+1.)/(control_X-1.),
-                         ysize+ysizediff*(m+1)/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
-            glTexCoord2f(xsize*(n+1.)/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*(m+1.)/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-            glEnd();
-          }
-      else
-        for(int n = 0; n < nb_pts_control_X-1; n++)
-          for(int m = 0; m  < nb_pts_control_Y-1; m++)    {
-            float norm[3];
-            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
-                                   (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
-                                   (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
-                                   norm);
-            glNormal3fv(norm);
-
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-            glEnd();
-
-            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
-                                   (GLfloat*)&m_posXYZ[n+(1+m)*nb_pts_control_X],
-                                   (GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X],
-                                   norm);
-            glNormal3fv(norm);
-            glBegin(GL_TRIANGLE_STRIP);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
-            glEnd();
-          }
-    }
-    break;
-
-  case CONTROL_POINT:
-    {
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_control_X; n++)
-          for(int m = 0; m  < nb_pts_control_Y; m++)   {
-            glBegin(GL_POINTS);
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-            glEnd();
-          }
-      else
-        for(int n = 0; n < nb_pts_control_X; n++)
-          for(int m = 0; m  < nb_pts_control_Y; m++) {
-            glBegin(GL_POINTS);
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-            glEnd();
-          }
-    }
-    break;
-
-  case CONTROL_LINE:
-    {
-      if (GemShape::m_texType){
-        for(int n = 0; n < nb_pts_control_X; n++)   {
-          glBegin(GL_LINE_STRIP);
-          for(int m = 0; m  < nb_pts_control_Y; m++){
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          }
-          glEnd();
-        }
-
-        for(int m = 0; m < nb_pts_control_Y; m++)  {
-          glBegin(GL_LINE_STRIP);
-          for(int n = 0; n  < nb_pts_control_X; n++){
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          }
-          glEnd();
-        }
-      }  else   {
-        for(int n = 0; n < nb_pts_control_X; n++)  {
-          glBegin(GL_LINE_STRIP);
-          for(int m = 0; m  < nb_pts_control_Y; m++)
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          glEnd();
-        }
-        for(int m = 0; m < nb_pts_control_Y; m++)  {
-          glBegin(GL_LINE_STRIP);
-          for(int n = 0; n  < nb_pts_control_X; n++)
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          glEnd();
+      } else
+      for(int n = 0; n < nb_pts_affich_X+1; n++) {
+        for(int m = 0; m  < nb_pts_affich_Y+1; m++) {
+          interpolate(n/affich_X, m/affich_Y);
         }
       }
-    }
-    break;
+    glEnd();
+  }
+  break;
 
-  case CONTROL_LINE2:
-    {
-      if (GemShape::m_texType)
-        for(int m = 0; m < nb_pts_control_Y; m++) {
-          glBegin(GL_LINE_STRIP);
-          for(int n = 0; n  < nb_pts_control_X; n++) {
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          }
-          glEnd();
+  case LINE1: {
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_affich_X; n++) {
+        glBegin(GL_LINE_STRIP);
+        for(int m = 0; m  < nb_pts_affich_Y; m++)  {
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate(n/affich_X, m/affich_Y);
         }
-      else
-        for(int m = 0; m < nb_pts_control_Y; m++) {
-          glBegin(GL_LINE_STRIP);
-          for(int n = 0; n  < nb_pts_control_X; n++)
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          glEnd();
+        glEnd();
+      } else
+      for(int n = 0; n < nb_pts_affich_X; n++) {
+        glBegin(GL_LINE_STRIP);
+        for(int m = 0; m  < nb_pts_affich_Y; m++)   {
+          interpolate(n/affich_X, m/affich_Y);
         }
-    }
-    break;
+        glEnd();
+      }
+  }
+  break;
 
-  case CONTROL_LINE1:
-    {
-      if (GemShape::m_texType)
-        for(int n = 0; n < nb_pts_control_X; n++) {
-          glBegin(GL_LINE_STRIP);
-          for(int m = 0; m  < nb_pts_control_Y; m++)  {
-            glTexCoord2f(xsize*n/(control_X-1.),
-                         ysize+ysizediff*m/(control_Y-1.));
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-          }
+  case LINE2: {
+    if (GemShape::m_texType)
+      for(int m = 0; m < nb_pts_affich_Y+1; m++) {
+        glBegin(GL_LINE_STRIP);
+        for(int n = 0; n  < nb_pts_affich_X+1; n++)  {
+          interpolate(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      } else
+      for(int m = 0; m < nb_pts_affich_Y+1; m++) {
+        glBegin(GL_LINE_STRIP);
+        for(int n = 0; n  < nb_pts_affich_X+1; n++)  {
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      }
+  }
+  break;
+
+  case LINE3: {
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_affich_X; n++) {
+        glBegin(GL_LINES);
+        for(int m = 0; m  < nb_pts_affich_Y; m++) {
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      } else
+      for(int n = 0; n < nb_pts_affich_X; n++) {
+        glBegin(GL_LINES);
+        for(int m = 0; m  < nb_pts_affich_Y; m++)  {
+          interpolate(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      }
+  }
+  break;
+
+  case LINE4: {
+    if (GemShape::m_texType)
+      for(int m = 0; m < nb_pts_affich_Y; m++) {
+        glBegin(GL_LINES);
+        for(int n = 0; n  < nb_pts_affich_X; n++) {
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          interpolate(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      } else
+      for(int m = 0; m < nb_pts_affich_Y; m++) {
+        glBegin(GL_LINES);
+        for(int n = 0; n  < nb_pts_affich_X; n++) {
+          interpolate(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      }
+  }
+  break;
+
+  case CONTROL_FILL: {
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_control_X-1; n++)
+        for(int m = 0; m  < nb_pts_control_Y-1; m++)   {
+          float norm[3];
+          Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
+                                 (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
+                                 (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
+                                 norm);
+          glNormal3fv(norm);
+
+          glBegin(GL_TRIANGLE_STRIP);
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glTexCoord2f(xsize*(n+1.)/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*(m+1.)/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+          glEnd();
+
+          Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
+                                 (GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X],
+                                 (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X], norm);
+          glNormal3fv(norm);
+          glBegin(GL_TRIANGLE_STRIP);
+          glTexCoord2f(xsize*(n+1.)/(control_X-1.),
+                       ysize+ysizediff*(m+1)/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
+          glTexCoord2f(xsize*(n+1.)/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*(m+1.)/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+          glEnd();
+        } else
+      for(int n = 0; n < nb_pts_control_X-1; n++)
+        for(int m = 0; m  < nb_pts_control_Y-1; m++)    {
+          float norm[3];
+          Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
+                                 (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
+                                 (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
+                                 norm);
+          glNormal3fv(norm);
+
+          glBegin(GL_TRIANGLE_STRIP);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+          glEnd();
+
+          Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
+                                 (GLfloat*)&m_posXYZ[n+(1+m)*nb_pts_control_X],
+                                 (GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X],
+                                 norm);
+          glNormal3fv(norm);
+          glBegin(GL_TRIANGLE_STRIP);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
           glEnd();
         }
-      else
-        for(int n = 0; n < nb_pts_control_X; n++) {
-          glBegin(GL_LINE_STRIP);
-          for(int m = 0; m  < nb_pts_control_Y; m++)
-            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+  }
+  break;
+
+  case CONTROL_POINT: {
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_control_X; n++)
+        for(int m = 0; m  < nb_pts_control_Y; m++)   {
+          glBegin(GL_POINTS);
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glEnd();
+        } else
+      for(int n = 0; n < nb_pts_control_X; n++)
+        for(int m = 0; m  < nb_pts_control_Y; m++) {
+          glBegin(GL_POINTS);
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
           glEnd();
         }
+  }
+  break;
+
+  case CONTROL_LINE: {
+    if (GemShape::m_texType) {
+      for(int n = 0; n < nb_pts_control_X; n++)   {
+        glBegin(GL_LINE_STRIP);
+        for(int m = 0; m  < nb_pts_control_Y; m++) {
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      }
+
+      for(int m = 0; m < nb_pts_control_Y; m++)  {
+        glBegin(GL_LINE_STRIP);
+        for(int n = 0; n  < nb_pts_control_X; n++) {
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      }
+    }  else   {
+      for(int n = 0; n < nb_pts_control_X; n++)  {
+        glBegin(GL_LINE_STRIP);
+        for(int m = 0; m  < nb_pts_control_Y; m++) {
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      }
+      for(int m = 0; m < nb_pts_control_Y; m++)  {
+        glBegin(GL_LINE_STRIP);
+        for(int n = 0; n  < nb_pts_control_X; n++) {
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      }
     }
-    return;
+  }
+  break;
+
+  case CONTROL_LINE2: {
+    if (GemShape::m_texType)
+      for(int m = 0; m < nb_pts_control_Y; m++) {
+        glBegin(GL_LINE_STRIP);
+        for(int n = 0; n  < nb_pts_control_X; n++) {
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      } else
+      for(int m = 0; m < nb_pts_control_Y; m++) {
+        glBegin(GL_LINE_STRIP);
+        for(int n = 0; n  < nb_pts_control_X; n++) {
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      }
+  }
+  break;
+
+  case CONTROL_LINE1: {
+    if (GemShape::m_texType)
+      for(int n = 0; n < nb_pts_control_X; n++) {
+        glBegin(GL_LINE_STRIP);
+        for(int m = 0; m  < nb_pts_control_Y; m++)  {
+          glTexCoord2f(xsize*n/(control_X-1.),
+                       ysize+ysizediff*m/(control_Y-1.));
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      } else
+      for(int n = 0; n < nb_pts_control_X; n++) {
+        glBegin(GL_LINE_STRIP);
+        for(int m = 0; m  < nb_pts_control_Y; m++) {
+          glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+        }
+        glEnd();
+      }
+  }
+  return;
   }
 }
 
@@ -601,7 +596,8 @@ void surface3d :: renderShape(GemState *state){
 // static member function
 //
 /////////////////////////////////////////////////////////
-void surface3d :: obj_setupCallback(t_class *classPtr){
+void surface3d :: obj_setupCallback(t_class *classPtr)
+{
   CPPEXTERN_MSG2(classPtr, "res",  resolutionMess, int, int);
   CPPEXTERN_MSG2(classPtr, "grid", gridMess, int, int);
   CPPEXTERN_MSG5(classPtr, "set", setMess, int, int, float, float, float);

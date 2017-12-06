@@ -36,7 +36,7 @@
 class TexCoord;
 class GEM_EXTERN GemShape : public GemBase
 {
- public:
+public:
 
   //////////
   // Constructor
@@ -44,7 +44,7 @@ class GEM_EXTERN GemShape : public GemBase
   explicit GemShape(t_floatarg size);
   GemShape();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -120,17 +120,23 @@ class GEM_EXTERN GemShape : public GemBase
   //////////
   // creation callback
   static void   real_obj_setupCallback(t_class *classPtr)
-    { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
+  {
+    GemBase::real_obj_setupCallback(classPtr);
+    GemShape::obj_setupCallback(classPtr);
+  }
 
- private:
+private:
 
-  static inline GemShape *GetMyClass(void *data) {return((GemShape *)((Obj_header *)data)->data);}
+  static inline GemShape *GetMyClass(void *data)
+  {
+    return((GemShape *)((Obj_header *)data)->data);
+  }
 
   //////////
   // static member functions
   static void   obj_setupCallback(t_class *classPtr);
 
- protected:
+protected:
   int m_texType, m_texNum;
   TexCoord*m_texCoords;
   bool m_lighting;

@@ -14,7 +14,7 @@
 
 #include "GEMglRasterPos2s.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2s , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2s, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglRasterPos2s :: GEMglRasterPos2s    (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglRasterPos2s :: ~GEMglRasterPos2s () {
+GEMglRasterPos2s :: ~GEMglRasterPos2s ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglRasterPos2s :: ~GEMglRasterPos2s () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglRasterPos2s :: render(GemState *state) {
+void GEMglRasterPos2s :: render(GemState *state)
+{
   glRasterPos2s (x, y);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglRasterPos2s :: xMess (t_float arg1) { // FUN
+void GEMglRasterPos2s :: xMess (t_float arg1)   // FUN
+{
   x = static_cast<GLshort>(arg1);
   setModified();
 }
 
-void GEMglRasterPos2s :: yMess (t_float arg1) { // FUN
+void GEMglRasterPos2s :: yMess (t_float arg1)   // FUN
+{
   y = static_cast<GLshort>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglRasterPos2s :: yMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglRasterPos2s :: obj_setupCallback(t_class *classPtr) {
+void GEMglRasterPos2s :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2s::xMessCallback),        gensym("x"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2s::yMessCallback),        gensym("y"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRasterPos2s :: xMessCallback (void* data, t_float arg0){
+void GEMglRasterPos2s :: xMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglRasterPos2s :: yMessCallback (void* data, t_float arg0){
+void GEMglRasterPos2s :: yMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }

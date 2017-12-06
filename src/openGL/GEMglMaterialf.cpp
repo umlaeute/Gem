@@ -14,7 +14,7 @@
 
 #include "GEMglMaterialf.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMaterialf , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMaterialf, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglMaterialf :: GEMglMaterialf        (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglMaterialf :: ~GEMglMaterialf () {
+GEMglMaterialf :: ~GEMglMaterialf ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglMaterialf :: ~GEMglMaterialf () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglMaterialf :: render(GemState *state) {
+void GEMglMaterialf :: render(GemState *state)
+{
   glMaterialf (face, pname, param);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglMaterialf :: faceMess (t_float arg1) {        // FUN
+void GEMglMaterialf :: faceMess (t_float arg1)          // FUN
+{
   face = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglMaterialf :: pnameMess (t_float arg1) {       // FUN
+void GEMglMaterialf :: pnameMess (t_float arg1)         // FUN
+{
   pname = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglMaterialf :: paramMess (t_float arg1) {       // FUN
+void GEMglMaterialf :: paramMess (t_float arg1)         // FUN
+{
   param = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglMaterialf :: paramMess (t_float arg1) {       // FUN
 // static member functions
 //
 
-void GEMglMaterialf :: obj_setupCallback(t_class *classPtr) {
+void GEMglMaterialf :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialf::faceMessCallback),       gensym("face"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialf::pnameMessCallback),      gensym("pname"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialf::paramMessCallback),      gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglMaterialf :: faceMessCallback (void* data, t_float arg0){
+void GEMglMaterialf :: faceMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->faceMess ( static_cast<t_float>(arg0));
 }
-void GEMglMaterialf :: pnameMessCallback (void* data, t_float arg0){
+void GEMglMaterialf :: pnameMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglMaterialf :: paramMessCallback (void* data, t_float arg0){
+void GEMglMaterialf :: paramMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

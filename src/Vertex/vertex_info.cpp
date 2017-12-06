@@ -41,7 +41,9 @@ vertex_info :: vertex_info() : m_previousSize(0), m_vertNum(0), m_vertCount(0)
 /////////////////////////////////////////////////////////
 vertex_info :: ~vertex_info()
 {
-  if(m_Vsize)outlet_free(m_Vsize);
+  if(m_Vsize) {
+    outlet_free(m_Vsize);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -54,12 +56,12 @@ void vertex_info :: render(GemState *state)
   GLfloat *VertexArray;
 
   VertexArray =state->VertexArray;
-  if (state->VertexArray == NULL || state->VertexArraySize <= 0){
+  if (state->VertexArray == NULL || state->VertexArraySize <= 0) {
     error("no vertex array!");
     return;
   }
 
-  if (state->VertexArray == NULL ){
+  if (state->VertexArray == NULL ) {
     error("no color array!");
     return;
   }

@@ -14,7 +14,7 @@
 
 #include "GEMglTranslatef.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTranslatef , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTranslatef, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglTranslatef :: GEMglTranslatef      (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTranslatef :: ~GEMglTranslatef () {
+GEMglTranslatef :: ~GEMglTranslatef ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglTranslatef :: ~GEMglTranslatef () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTranslatef :: render(GemState *state) {
+void GEMglTranslatef :: render(GemState *state)
+{
   glTranslatef (x, y, z);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTranslatef :: xMess (t_float arg1) {  // FUN
+void GEMglTranslatef :: xMess (t_float arg1)    // FUN
+{
   x = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglTranslatef :: yMess (t_float arg1) {  // FUN
+void GEMglTranslatef :: yMess (t_float arg1)    // FUN
+{
   y = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglTranslatef :: zMess (t_float arg1) {  // FUN
+void GEMglTranslatef :: zMess (t_float arg1)    // FUN
+{
   z = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglTranslatef :: zMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglTranslatef :: obj_setupCallback(t_class *classPtr) {
+void GEMglTranslatef :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTranslatef::xMessCallback),         gensym("x"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTranslatef::yMessCallback),         gensym("y"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTranslatef::zMessCallback),         gensym("z"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTranslatef :: xMessCallback (void* data, t_float arg0){
+void GEMglTranslatef :: xMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglTranslatef :: yMessCallback (void* data, t_float arg0){
+void GEMglTranslatef :: yMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglTranslatef :: zMessCallback (void* data, t_float arg0){
+void GEMglTranslatef :: zMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }

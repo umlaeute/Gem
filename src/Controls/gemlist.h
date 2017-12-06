@@ -35,13 +35,13 @@ class GEM_EXTERN gemlist : public GemBase
 {
   CPPEXTERN_HEADER(gemlist, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   gemlist(void);
 
- protected:
+protected:
 
   //////////
   // Destructor

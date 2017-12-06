@@ -39,13 +39,13 @@ class GEM_EXTERN pix_test : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_test, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_test();
 
- protected:
+protected:
 
   //////////
   // Destructor

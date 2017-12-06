@@ -30,45 +30,45 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_color : public partlib_base
 {
-    CPPEXTERN_HEADER(part_color, partlib_base);
+  CPPEXTERN_HEADER(part_color, partlib_base);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        part_color();
+  //////////
+  // Constructor
+  part_color();
 
-        //////////
-        virtual void    renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~part_color();
+  //////////
+  // Destructor
+  virtual ~part_color();
 
-        //////////
-        // One end of the range
-        float                   m_color1[4];
+  //////////
+  // One end of the range
+  float                   m_color1[4];
 
-        //////////
-        // Other end of the range
-        float                   m_color2[4];
+  //////////
+  // Other end of the range
+  float                   m_color2[4];
 
-        //////////
-        // Color changed
-        void            color1Mess(float red, float green, float blue, float alpha);
+  //////////
+  // Color changed
+  void            color1Mess(float red, float green, float blue, float alpha);
 
-        //////////
-        // Color changed
-        void            color2Mess(float red, float green, float blue, float alpha);
+  //////////
+  // Color changed
+  void            color2Mess(float red, float green, float blue, float alpha);
 
-    private:
+private:
 
-        //////////
-        // static member functions
-        static void     color1MessCallback(void *data, t_symbol*,int,t_atom*);
-        static void     color2MessCallback(void *data, t_symbol*,int,t_atom*);
+  //////////
+  // static member functions
+  static void     color1MessCallback(void *data, t_symbol*,int,t_atom*);
+  static void     color2MessCallback(void *data, t_symbol*,int,t_atom*);
 };
 
 #endif  // for header file

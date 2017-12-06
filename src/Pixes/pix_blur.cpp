@@ -26,18 +26,19 @@ pix_blur :: pix_blur(void) :
   m_blurH(240), m_blurW(240),
   m_blurSize(0), m_blurBpp(2),
   inletBlur(0)
-{       long size,src,i;
+{
+  long size,src,i;
 
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
 
   size = 320 * 240 * 4;
   saved = new unsigned int [size];
   src=0;
-  for (i=0;i<size/2;i++) {
-      saved[src] = 128;
-      saved[src+1] = 0;
-      src += 2;
-    }
+  for (i=0; i<size/2; i++) {
+    saved[src] = 128;
+    saved[src+1] = 0;
+    src += 2;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -77,8 +78,8 @@ void pix_blur :: processRGBAImage(imageStruct &image)
   hlength = image.xsize;
 
 
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<hlength; w++){
+  for (h=0; h<image.ysize; h++) {
+    for(w=0; w<hlength; w++) {
       R = ((pixels[src+chRed] * imageGain)) + ((saved[src+chRed] * rightGain));
       saved[src+chRed] = (unsigned char)CLAMP(R>>8);
       pixels[src+chRed] = saved[src+chRed];
@@ -114,25 +115,28 @@ void pix_blur :: processGrayImage(imageStruct &image)
   rightGain = static_cast<int>(m_blurf * 255.);
   imageGain = static_cast<int>(255. - (m_blurf * 255.));
   src=m_blurH*m_blurW;
-  while(src--){
+  while(src--) {
     Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
-    pixels[src+chGray] = saved[src+chGray];src--;
+    pixels[src+chGray] = saved[src+chGray];
+    src--;
 
     Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
-    pixels[src+chGray] = saved[src+chGray];src--;
+    pixels[src+chGray] = saved[src+chGray];
+    src--;
 
     Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
-    pixels[src+chGray] = saved[src+chGray];src--;
+    pixels[src+chGray] = saved[src+chGray];
+    src--;
 
     Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray] = saved[src+chGray];
   }
   src=0;//m_blurH*m_blurW-4;
-  switch(m_blurH*m_blurW%4){
+  switch(m_blurH*m_blurW%4) {
   case 3:
     Grey = ((pixels[src+chGray+3] * imageGain)) + ((saved[src+chGray+3] * rightGain));
     saved[src+chGray+3] = (unsigned char)CLAMP(Grey>>8);
@@ -178,8 +182,8 @@ void pix_blur :: processYUVImage(imageStruct &image)
 
   //unroll this, add register temps and schedule the ops better to remove the
   //data dependencies
-  for (h=0; h<image.ysize-1; h++){
-    for(w=0; w<hlength; w++){
+  for (h=0; h<image.ysize-1; h++) {
+    for(w=0; w<hlength; w++) {
       //8bit  * 8bit = 16bit
       y1res = (((image.data[src+1] )  * imageGain) + ((saved[src+1] * rightGain)>>8));
       y2res = (((image.data[src+3]  ) * imageGain) + ((saved[src+3]  * rightGain)>>8) );
@@ -212,29 +216,26 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
   width = image.xsize/8;
   rightGain = (unsigned short)(255. * m_blurf);
   imageGain = (unsigned short) (255. - (255. * m_blurf));
-  union
-  {
+  union {
     //unsigned int      i;
     unsigned short      elements[8];
     //vector signed char v;
     vector      unsigned short v;
-  }shortBuffer;
+  } shortBuffer;
 
-  union
-  {
+  union {
     //unsigned int      i;
     unsigned int        elements[4];
     //vector signed char v;
     vector      unsigned int v;
-  }bitBuffer;
+  } bitBuffer;
 
-  union
-  {
+  union {
     //unsigned int      i;
     unsigned char       elements[16];
     //vector signed char v;
     vector      unsigned char v;
-  }charBuffer;
+  } charBuffer;
 
   register vector unsigned short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;
   vector unsigned char zero = vec_splat_u8(0);
@@ -310,64 +311,63 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
   gainAdd = (vector unsigned short)vec_splat((vector unsigned short)gainAdd,0);
 # ifndef PPC970
   UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-        vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
+  vec_dst( inData, prefetchSize, 0 );
+  vec_dst( rightData, prefetchSize, 1 );
 # endif /* PPC970 */
-  for ( h=0; h<image.ysize; h++){
-    for (w=0; w<width; w++)
-      {
+  for ( h=0; h<image.ysize; h++) {
+    for (w=0; w<width; w++) {
 # ifndef PPC970
-        vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
+      vec_dst( inData, prefetchSize, 0 );
+      vec_dst( rightData, prefetchSize, 1 );
 # endif /* PPC970 */
-        //interleaved U Y V Y chars
+      //interleaved U Y V Y chars
 
-        //expand the UInt8's to short's
-        hiImage = (vector unsigned short) vec_mergeh( zero, inData[0] );
-        loImage = (vector unsigned short) vec_mergel( zero, inData[0] );
+      //expand the UInt8's to short's
+      hiImage = (vector unsigned short) vec_mergeh( zero, inData[0] );
+      loImage = (vector unsigned short) vec_mergel( zero, inData[0] );
 
-        hiRight = (vector unsigned short) vec_mergeh( zero, rightData[0] );
-        loRight = (vector unsigned short) vec_mergel( zero, rightData[0] );
-
-
-        //now vec_mule the UV into two vector ints
-        UVhi = vec_mule(sone,hiImage);
-        UVlo = vec_mule(sone,loImage);
-
-        UVhiR = vec_mule(sone,hiRight);
-        UVloR = vec_mule(sone,loRight);
-
-        //now vec_mulo the Y into two vector ints
-        Yhi = vec_mulo(gain,hiImage);
-        Ylo = vec_mulo(gain,loImage);
-
-        YhiR = vec_mulo(gainR,hiRight);
-        YloR = vec_mulo(gainR,loRight);
+      hiRight = (vector unsigned short) vec_mergeh( zero, rightData[0] );
+      loRight = (vector unsigned short) vec_mergel( zero, rightData[0] );
 
 
-        Yhi = vec_adds(Yhi,YhiR);
-        Ylo = vec_adds(Ylo,YloR);
+      //now vec_mule the UV into two vector ints
+      UVhi = vec_mule(sone,hiImage);
+      UVlo = vec_mule(sone,loImage);
 
-        Yhi = vec_sra(Yhi,bitshift);
-        Ylo = vec_sra(Ylo,bitshift);
-        //pack the UV into a single short vector
-        UVImage =  vec_packsu(UVhi,UVlo);
+      UVhiR = vec_mule(sone,hiRight);
+      UVloR = vec_mule(sone,loRight);
 
-        //pack the Y into a single short vector
-        YImage =  vec_packsu(Yhi,Ylo);
+      //now vec_mulo the Y into two vector ints
+      Yhi = vec_mulo(gain,hiImage);
+      Ylo = vec_mulo(gain,loImage);
 
-        //vec_mergel + vec_mergeh Y and UV
-        hiImage =  vec_mergeh(UVImage,YImage);
-        loImage =  vec_mergel(UVImage,YImage);
+      YhiR = vec_mulo(gainR,hiRight);
+      YloR = vec_mulo(gainR,loRight);
 
 
-        //vec_mergel + vec_mergeh Y and UV
-        rightData[0] = vec_packsu(hiImage, loImage);
-        inData[0] = vec_packsu(hiImage, loImage);
+      Yhi = vec_adds(Yhi,YhiR);
+      Ylo = vec_adds(Ylo,YloR);
 
-        inData++;
-        rightData++;
-      }
+      Yhi = vec_sra(Yhi,bitshift);
+      Ylo = vec_sra(Ylo,bitshift);
+      //pack the UV into a single short vector
+      UVImage =  vec_packsu(UVhi,UVlo);
+
+      //pack the Y into a single short vector
+      YImage =  vec_packsu(Yhi,Ylo);
+
+      //vec_mergel + vec_mergeh Y and UV
+      hiImage =  vec_mergeh(UVImage,YImage);
+      loImage =  vec_mergel(UVImage,YImage);
+
+
+      //vec_mergel + vec_mergeh Y and UV
+      rightData[0] = vec_packsu(hiImage, loImage);
+      inData[0] = vec_packsu(hiImage, loImage);
+
+      inData++;
+      rightData++;
+    }
   }
 # ifndef PPC970
   //stop the cache streams

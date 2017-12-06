@@ -184,7 +184,9 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
   }
 
   U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
-  if (pSubImageData==NULL)return;
+  if (pSubImageData==NULL) {
+    return;
+  }
 
   U8 AverageColour = CreateSubImageGray((U8*)pSource,(U8*)pSubImageData,SubWidth,SubHeight);
 
@@ -197,7 +199,8 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
 // do the other processing here
 //
 /////////////////////////////////////////////////////////
-int pix_metaimage :: Pete_MetaImage_Init() {
+int pix_metaimage :: Pete_MetaImage_Init()
+{
 
   Pete_MetaImage_DeInit();
 
@@ -213,14 +216,16 @@ int pix_metaimage :: Pete_MetaImage_Init() {
 
 }
 
-void pix_metaimage :: Pete_MetaImage_DeInit() {
+void pix_metaimage :: Pete_MetaImage_DeInit()
+{
   if (hSubImage!=NULL) {
     Pete_FreeHandle(hSubImage);
     hSubImage=NULL;
   }
 }
 
-U32 pix_metaimage :: Pete_MetaImage_CreateSubImage(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight) {
+U32 pix_metaimage :: Pete_MetaImage_CreateSubImage(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight)
+{
   U32 AverageColour;
 
   if (m_DoCheapAndNasty>0.0f) {
@@ -233,7 +238,8 @@ U32 pix_metaimage :: Pete_MetaImage_CreateSubImage(U32* pInput,U32* pSubImage,fl
   return AverageColour;
 }
 
-void pix_metaimage :: Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight) {
+void pix_metaimage :: Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight)
+{
   const int nHalfWidth=nWidth/2;
   const int nHalfHeight=nHeight/2;
 
@@ -262,32 +268,33 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageCol
       const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
       U32 SubImageAverage=Pete_MetaImage_GetAreaAverage(
-                                                        pSource,
-                                                        nClippedLeftX,
-                                                        nClippedTopY,
-                                                        nClippedRightX,
-                                                        nClippedBottomY,
-                                                        4);
+                            pSource,
+                            nClippedLeftX,
+                            nClippedTopY,
+                            nClippedRightX,
+                            nClippedBottomY,
+                            4);
 
       Pete_MetaImage_DrawSubImage(
-                                  pSource,
-                                  pSubImage,
-                                  pOutput,
-                                  nLeftX,
-                                  nTopY,
-                                  nRightX,
-                                  nBottomY,
-                                  AverageColour,
-                                  nClippedLeftX,
-                                  nClippedTopY,
-                                  nClippedRightX,
-                                  nClippedBottomY,
-                                  SubImageAverage);
+        pSource,
+        pSubImage,
+        pOutput,
+        nLeftX,
+        nTopY,
+        nRightX,
+        nBottomY,
+        AverageColour,
+        nClippedLeftX,
+        nClippedTopY,
+        nClippedRightX,
+        nClippedBottomY,
+        SubImageAverage);
     }
   }
 }
 
-void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput,int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U32 SubImageAverage) {
+void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput,int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U32 SubImageAverage)
+{
   //const int nWidth=pInstanceData->nWidth;
   //const int nHeight=pInstanceData->nHeight;
   const int nSubRed=(SubImageAverage>>SHIFT_RED)&0xff;
@@ -309,7 +316,9 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
   const int nXDelta=nClippedRightX-nClippedLeftX;
   const int nYDelta=nClippedBottomY-nClippedTopY;
 
-  if ((nXDelta<=0)||(nYDelta<=0))return;
+  if ((nXDelta<=0)||(nYDelta<=0)) {
+    return;
+  }
 
   U32* pCurrentSource=pShrunkBuffer;
 
@@ -331,9 +340,9 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
       const U32 nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
       const U32 nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
-      const U32 nOutputRed  =clampFunc(static_cast<int>(nSourceRed  +nRedDelta)  ,0,255);
+      const U32 nOutputRed  =clampFunc(static_cast<int>(nSourceRed  +nRedDelta),0,255);
       const U32 nOutputGreen=clampFunc(static_cast<int>(nSourceGreen+nGreenDelta),0,255);
-      const U32 nOutputBlue =clampFunc(static_cast<int>(nSourceBlue +nBlueDelta) ,0,255);
+      const U32 nOutputBlue =clampFunc(static_cast<int>(nSourceBlue +nBlueDelta),0,255);
       const U32 nOutputAlpha=clampFunc(static_cast<int>(nSourceAlpha+nAlphaDelta),0,255);
 
       const U32 OutputColour=
@@ -353,7 +362,8 @@ void pix_metaimage :: Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuff
   }
 }
 
-U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride) {
+U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride)
+{
 
   //const int nWidth=pInstanceData->nWidth;
   //const int nHeight=pInstanceData->nHeight;
@@ -361,7 +371,9 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
   const int nXDelta=nRightX-nLeftX;
   const int nYDelta=nBottomY-nTopY;
 
-  if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
+  if ((nXDelta<=0)||(nYDelta<=0)) {
+    return 0x00000000;
+  }
 
   U32* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
   U32*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
@@ -398,7 +410,9 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
     pCurrentImage=pImageLineStart+(nStride*nWidth);
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const int nAverageRed=(nRedTotal/nSampleCount);
   const int nAverageGreen=(nGreenTotal/nSampleCount);
@@ -415,10 +429,15 @@ U32 pix_metaimage :: Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nT
   return Average;
 }
 
-U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
+U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
+{
 
-  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
-  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
+  if (SubWidth>static_cast<float>(nWidth)) {
+    SubWidth=static_cast<float>(nWidth);
+  }
+  if (SubHeight>static_cast<float>(nHeight)) {
+    SubHeight=static_cast<float>(nHeight);
+  }
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -470,7 +489,9 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const int nAverageRed=(nRedTotal/nSampleCount);
   const int nAverageGreen=(nGreenTotal/nSampleCount);
@@ -486,10 +507,15 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput
   return Average;
 }
 
-U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
+U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
+{
 
-  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
-  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
+  if (SubWidth>static_cast<float>(nWidth)) {
+    SubWidth=static_cast<float>(nWidth);
+  }
+  if (SubHeight>static_cast<float>(nHeight)) {
+    SubHeight=static_cast<float>(nHeight);
+  }
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -530,7 +556,9 @@ U32 pix_metaimage :: Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOu
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const int nAverageRed=(nRedTotal/nSampleCount);
   const int nAverageGreen=(nGreenTotal/nSampleCount);
@@ -593,27 +621,27 @@ void pix_metaimage :: DrawSubImagesYUV(U32* pSubImage,U32 AverageColour,float Su
       const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
       U32 SubImageAverage = GetAreaAverageYUV(
-                                              pSource,
-                                              nClippedLeftX,
-                                              nClippedTopY,
-                                              nClippedRightX,
-                                              nClippedBottomY,
-                                              4);
+                              pSource,
+                              nClippedLeftX,
+                              nClippedTopY,
+                              nClippedRightX,
+                              nClippedBottomY,
+                              4);
 
       DrawSubImageYUV(
-                      pSource,
-                      pSubImage,
-                      pOutput,
-                      nLeftX,
-                      nTopY,
-                      nRightX,
-                      nBottomY,
-                      AverageColour,
-                      nClippedLeftX,
-                      nClippedTopY,
-                      nClippedRightX,
-                      nClippedBottomY,
-                      SubImageAverage);
+        pSource,
+        pSubImage,
+        pOutput,
+        nLeftX,
+        nTopY,
+        nRightX,
+        nBottomY,
+        AverageColour,
+        nClippedLeftX,
+        nClippedTopY,
+        nClippedRightX,
+        nClippedBottomY,
+        SubImageAverage);
     }
   }
 }
@@ -642,7 +670,9 @@ void pix_metaimage :: DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOut
   const int nXDelta=nClippedRightX-nClippedLeftX;
   const int nYDelta=nClippedBottomY-nClippedTopY;
 
-  if ((nXDelta<=0)||(nYDelta<=0))return;
+  if ((nXDelta<=0)||(nYDelta<=0)) {
+    return;
+  }
 
   U32* pCurrentSource=pShrunkBuffer;
 
@@ -691,7 +721,9 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
   const int nXDelta=nRightX-nLeftX;
   const int nYDelta=nBottomY-nTopY;
 
-  if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
+  if ((nXDelta<=0)||(nYDelta<=0)) {
+    return 0x00000000;
+  }
 
   U32* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
   U32*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
@@ -727,7 +759,9 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
     pCurrentImage=pImageLineStart+(nStride*nWidth);
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const unsigned char nAverageU=(nUTotal/nSampleCount);
   const unsigned char nAverageV=(nVTotal/nSampleCount);
@@ -742,10 +776,15 @@ U32 pix_metaimage :: GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRig
   return Average;
 }
 
-U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight) {
+U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
+{
 
-  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
-  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
+  if (SubWidth>static_cast<float>(nWidth)) {
+    SubWidth=static_cast<float>(nWidth);
+  }
+  if (SubHeight>static_cast<float>(nHeight)) {
+    SubHeight=static_cast<float>(nHeight);
+  }
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -795,7 +834,9 @@ U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubW
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const int nAverageU=(nUTotal/nSampleCount);
   const int nAverageY=(nYTotal/(nSampleCount<<1));
@@ -813,8 +854,12 @@ U32 pix_metaimage :: ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubW
 
 U32 pix_metaimage :: ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight)
 {
-  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
-  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
+  if (SubWidth>static_cast<float>(nWidth)) {
+    SubWidth=static_cast<float>(nWidth);
+  }
+  if (SubHeight>static_cast<float>(nHeight)) {
+    SubHeight=static_cast<float>(nHeight);
+  }
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -854,7 +899,9 @@ U32 pix_metaimage :: ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float 
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const unsigned char nAverageY=(nYTotal/(nSampleCount<<1));
   const unsigned char nAverageU=(nUTotal/nSampleCount);
@@ -916,28 +963,28 @@ void pix_metaimage :: DrawSubImagesGray(U8* pSubImage,U8 AverageColour,float Sub
       const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
       U8 SubImageAverage = GetAreaAverageGray(
-                                              (U8*)pSource,
-                                              nClippedLeftX,
-                                              nClippedTopY,
-                                              nClippedRightX,
-                                              nClippedBottomY,
-                                              1);
+                             (U8*)pSource,
+                             nClippedLeftX,
+                             nClippedTopY,
+                             nClippedRightX,
+                             nClippedBottomY,
+                             1);
 
 
       DrawSubImageGray(
-                       (U8*)pSource,
-                       (U8*)pSubImage,
-                       (U8*)pOutput,
-                       nLeftX,
-                       nTopY,
-                       nRightX,
-                       nBottomY,
-                       AverageColour,
-                       nClippedLeftX,
-                       nClippedTopY,
-                       nClippedRightX,
-                       nClippedBottomY,
-                       SubImageAverage);
+        (U8*)pSource,
+        (U8*)pSubImage,
+        (U8*)pOutput,
+        nLeftX,
+        nTopY,
+        nRightX,
+        nBottomY,
+        AverageColour,
+        nClippedLeftX,
+        nClippedTopY,
+        nClippedRightX,
+        nClippedBottomY,
+        SubImageAverage);
     }
   }
 }
@@ -954,7 +1001,9 @@ void pix_metaimage :: DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutpu
   const int nXDelta=nClippedRightX-nClippedLeftX;
   const int nYDelta=nClippedBottomY-nClippedTopY;
 
-  if ((nXDelta<=0)||(nYDelta<=0))return;
+  if ((nXDelta<=0)||(nYDelta<=0)) {
+    return;
+  }
 
   U8*pCurrentSource=(U8*)pShrunkBuffer;
 
@@ -971,7 +1020,7 @@ void pix_metaimage :: DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutpu
 
     while (pCurrentOutput<pOutputLineEnd) {
       const U8 SourceColour=*pCurrentSource;
-      const U8 OutputColour =clampFunc(SourceColour+nUDelta ,0,255);
+      const U8 OutputColour =clampFunc(SourceColour+nUDelta,0,255);
       *pCurrentOutput=OutputColour;
 
       pCurrentOutput+=1;
@@ -988,7 +1037,9 @@ U8 pix_metaimage :: GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRigh
   const int nXDelta=nRightX-nLeftX;
   const int nYDelta=nBottomY-nTopY;
 
-  if ((nXDelta<=0)||(nYDelta<=0))return 0x00000000;
+  if ((nXDelta<=0)||(nYDelta<=0)) {
+    return 0x00000000;
+  }
 
   U8* pCurrentImage=pImage+(nTopY*nWidth)+nLeftX;
   U8*const pImageEnd=(pCurrentImage+(nYDelta*nWidth)+nXDelta);
@@ -1012,17 +1063,24 @@ U8 pix_metaimage :: GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRigh
     pCurrentImage=pImageLineStart+(nStride*nWidth);
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const U8 Average=nYTotal/nSampleCount;
 
   return Average;
 }
 
-U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight) {
+U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight)
+{
 
-  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
-  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
+  if (SubWidth>static_cast<float>(nWidth)) {
+    SubWidth=static_cast<float>(nWidth);
+  }
+  if (SubHeight>static_cast<float>(nHeight)) {
+    SubHeight=static_cast<float>(nHeight);
+  }
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -1062,7 +1120,9 @@ U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWid
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const U8 Average=nYTotal/nSampleCount;
 
@@ -1071,8 +1131,12 @@ U8 pix_metaimage :: ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWid
 
 U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight)
 {
-  if (SubWidth>static_cast<float>(nWidth))  SubWidth=static_cast<float>(nWidth);
-  if (SubHeight>static_cast<float>(nHeight))SubHeight=static_cast<float>(nHeight);
+  if (SubWidth>static_cast<float>(nWidth)) {
+    SubWidth=static_cast<float>(nWidth);
+  }
+  if (SubHeight>static_cast<float>(nHeight)) {
+    SubHeight=static_cast<float>(nHeight);
+  }
 
   const float SourceYInc=(nHeight/SubHeight);
   const float SourceXInc=(nWidth/SubWidth);
@@ -1103,7 +1167,9 @@ U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float Su
     pCurrentOutput=pOutputLineStart+nWidth;
   }
 
-  if(nSampleCount<1)return 0;
+  if(nSampleCount<1) {
+    return 0;
+  }
 
   const U8 Average=nYTotal/nSampleCount;
 

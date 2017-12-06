@@ -37,15 +37,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_movieOS : public pix_filmDarwin
 {
-    CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin);
+  CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_movieOS(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -99,7 +99,7 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   float         m_xRatio;
   float         m_yRatio;
 
- protected:
+protected:
 
   //////////
   // static member functions

@@ -16,10 +16,10 @@ class GEM_EXTERN pix_share_write : public GemBase
 {
   CPPEXTERN_HEADER(pix_share_write, GemBase);
 
-    public:
+public:
   pix_share_write(int, t_atom*);
 
- protected:
+protected:
   ~pix_share_write();
 
   void freeShm();

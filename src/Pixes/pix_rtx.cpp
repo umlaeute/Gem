@@ -137,7 +137,7 @@ void pix_rtx :: processImage(imageStruct &image)
   }
 
   // then copy the buffer rtx-transformed back to the pixels
-  switch(image.csize){
+  switch(image.csize) {
   case 1: // Grey
     while (c < cols) {
       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
@@ -197,9 +197,9 @@ void pix_rtx :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "mode" , modeMess, int);
+  CPPEXTERN_MSG1(classPtr, "mode", modeMess, int);
   CPPEXTERN_MSG0(classPtr, "clear", clearMess);
-  CPPEXTERN_MSG0(classPtr, "set"  , setMess);
+  CPPEXTERN_MSG0(classPtr, "set", setMess);
 }
 void pix_rtx :: modeMess(int newmode)
 {

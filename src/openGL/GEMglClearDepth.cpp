@@ -14,7 +14,7 @@
 
 #include "GEMglClearDepth.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearDepth , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearDepth, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,14 +31,16 @@ GEMglClearDepth :: GEMglClearDepth      (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglClearDepth :: ~GEMglClearDepth () {
+GEMglClearDepth :: ~GEMglClearDepth ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglClearDepth :: render(GemState *state) {
+void GEMglClearDepth :: render(GemState *state)
+{
 
   glClearDepth (static_cast<GLclampd>(depth));
 
@@ -47,7 +49,8 @@ void GEMglClearDepth :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglClearDepth :: depthMess (float arg1) {        // FUN
+void GEMglClearDepth :: depthMess (float arg1)          // FUN
+{
 
   depth = arg1;
   setModified();
@@ -58,10 +61,12 @@ void GEMglClearDepth :: depthMess (float arg1) {        // FUN
 // static member functions
 //
 
-void GEMglClearDepth :: obj_setupCallback(t_class *classPtr) {
+void GEMglClearDepth :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClearDepth::depthMessCallback),     gensym("depth"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglClearDepth :: depthMessCallback (void* data, t_float arg0){
+void GEMglClearDepth :: depthMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->depthMess ( arg0);
 }

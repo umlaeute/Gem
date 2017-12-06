@@ -33,13 +33,13 @@ class GEM_EXTERN pix_background : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_background, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_background(int argc, t_atom*argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -69,7 +69,7 @@ class GEM_EXTERN pix_background : public GemPixObj
   int           m_reset;
 
 
- private:
+private:
 
   //////////
   // Static member functions

@@ -48,7 +48,9 @@ void pix_flip :: processRGBAImage(imageStruct &image)
 {
   // eventually should do this inline, but in the interest of getting it done...
   imageStruct tempImg;
-  if (image.data==0)return;
+  if (image.data==0) {
+    return;
+  }
   image.copy2Image(&tempImg);
   int ySrcStride = image.xsize * image.csize;
   int yDstStride = image.xsize * image.csize;
@@ -60,53 +62,60 @@ void pix_flip :: processRGBAImage(imageStruct &image)
   FlipType flip=m_flip;
   if(!image.upsidedown) {
     switch(flip) {
-    case(HORIZONTAL) : flip=BOTH;break;
-    case(VERTICAL)   : flip=NONE;break;
-    case(BOTH)       : flip=HORIZONTAL;break;
-    case(NONE)       : flip=VERTICAL  ;break;
-    default   :break;
+    case(HORIZONTAL) :
+      flip=BOTH;
+      break;
+    case(VERTICAL)   :
+      flip=NONE;
+      break;
+    case(BOTH)       :
+      flip=HORIZONTAL;
+      break;
+    case(NONE)       :
+      flip=VERTICAL  ;
+      break;
+    default   :
+      break;
     }
   }
   image.upsidedown=true;
 
-  switch(flip)
-    {
-    case(HORIZONTAL):
-      srcLine = tempImg.data + ySrcStride - xSrcStride;
-      xSrcStride = -xSrcStride;
-      break;
-    case(VERTICAL):
-      srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
-      ySrcStride = -ySrcStride;
-      break;
-    case(BOTH):
-      srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
-      xSrcStride = -xSrcStride;
-      ySrcStride = -ySrcStride;
-      break;
-    default:
-      return;
-      // break;
-    }
+  switch(flip) {
+  case(HORIZONTAL):
+    srcLine = tempImg.data + ySrcStride - xSrcStride;
+    xSrcStride = -xSrcStride;
+    break;
+  case(VERTICAL):
+    srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
+    ySrcStride = -ySrcStride;
+    break;
+  case(BOTH):
+    srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
+    xSrcStride = -xSrcStride;
+    ySrcStride = -ySrcStride;
+    break;
+  default:
+    return;
+    // break;
+  }
   int ySize = image.ysize;
   int xHold = image.xsize;
 
-  while(ySize--)
-    {
-      unsigned char *srcPixels = srcLine;
-      unsigned char *dstPixels = dstLine;
-      int xSize = xHold;
-      while(xSize--)        {
-        dstPixels[chRed] = srcPixels[chRed];
-        dstPixels[chGreen] = srcPixels[chGreen];
-        dstPixels[chBlue] = srcPixels[chBlue];
-        dstPixels[chAlpha] = srcPixels[chAlpha];
-        dstPixels += xDstStride;
-        srcPixels += xSrcStride;
-      }
-      dstLine += yDstStride;
-      srcLine += ySrcStride;
+  while(ySize--) {
+    unsigned char *srcPixels = srcLine;
+    unsigned char *dstPixels = dstLine;
+    int xSize = xHold;
+    while(xSize--)        {
+      dstPixels[chRed] = srcPixels[chRed];
+      dstPixels[chGreen] = srcPixels[chGreen];
+      dstPixels[chBlue] = srcPixels[chBlue];
+      dstPixels[chAlpha] = srcPixels[chAlpha];
+      dstPixels += xDstStride;
+      srcPixels += xSrcStride;
     }
+    dstLine += yDstStride;
+    srcLine += ySrcStride;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -117,7 +126,9 @@ void pix_flip :: processYUVImage(imageStruct &image)
 {
   // eventually should do this inline, but in the interest of getting it done...
   imageStruct tempImg;
-  if (image.data==0)return;
+  if (image.data==0) {
+    return;
+  }
   image.copy2Image(&tempImg);
 
   int ySrcStride = image.xsize * image.csize;
@@ -130,34 +141,42 @@ void pix_flip :: processYUVImage(imageStruct &image)
   FlipType flip=m_flip;
   if(!image.upsidedown) {
     switch(flip) {
-    case(HORIZONTAL) : flip=BOTH;break;
-    case(VERTICAL)   : flip=NONE;break;
-    case(BOTH)       : flip=HORIZONTAL;break;
-    case(NONE)       : flip=VERTICAL  ;break;
-    default   :break;
+    case(HORIZONTAL) :
+      flip=BOTH;
+      break;
+    case(VERTICAL)   :
+      flip=NONE;
+      break;
+    case(BOTH)       :
+      flip=HORIZONTAL;
+      break;
+    case(NONE)       :
+      flip=VERTICAL  ;
+      break;
+    default   :
+      break;
     }
   }
   image.upsidedown=true;
 
-  switch(flip)
-    {
-    case(HORIZONTAL):
-      srcLine = tempImg.data + ySrcStride - xSrcStride;
-      xSrcStride = -xSrcStride;
-      break;
-    case(VERTICAL):
-      srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
-      ySrcStride = -ySrcStride;
-      break;
-    case(BOTH):
-      srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
-      xSrcStride = -xSrcStride;
-      ySrcStride = -ySrcStride;
-      break;
-    default:
-      return;
-      // break;
-    }
+  switch(flip) {
+  case(HORIZONTAL):
+    srcLine = tempImg.data + ySrcStride - xSrcStride;
+    xSrcStride = -xSrcStride;
+    break;
+  case(VERTICAL):
+    srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
+    ySrcStride = -ySrcStride;
+    break;
+  case(BOTH):
+    srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
+    xSrcStride = -xSrcStride;
+    ySrcStride = -ySrcStride;
+    break;
+  default:
+    return;
+    // break;
+  }
   int ySize = image.ysize;
   int xHold = image.xsize/2;
 
@@ -184,7 +203,9 @@ void pix_flip :: processGrayImage(imageStruct &image)
 {
   // eventually should do this inline, but in the interest of getting it done...
   imageStruct tempImg;
-  if (image.data==0)return;
+  if (image.data==0) {
+    return;
+  }
   image.copy2Image(&tempImg);
 
   int ySrcStride = image.xsize * image.csize;
@@ -197,50 +218,57 @@ void pix_flip :: processGrayImage(imageStruct &image)
   FlipType flip=m_flip;
   if(!image.upsidedown) {
     switch(flip) {
-    case(HORIZONTAL) : flip=BOTH;break;
-    case(VERTICAL)   : flip=NONE;break;
-    case(BOTH)       : flip=HORIZONTAL;break;
-    case(NONE)       : flip=VERTICAL  ;break;
-    default   :break;
+    case(HORIZONTAL) :
+      flip=BOTH;
+      break;
+    case(VERTICAL)   :
+      flip=NONE;
+      break;
+    case(BOTH)       :
+      flip=HORIZONTAL;
+      break;
+    case(NONE)       :
+      flip=VERTICAL  ;
+      break;
+    default   :
+      break;
     }
   }
   image.upsidedown=true;
 
-  switch(flip)
-    {
-    case(HORIZONTAL):
-      srcLine = tempImg.data + ySrcStride - xSrcStride;
-      xSrcStride = -xSrcStride;
-      break;
-    case(VERTICAL):
-      srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
-      ySrcStride = -ySrcStride;
-      break;
-    case(BOTH):
-      srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
-      xSrcStride = -xSrcStride;
-      ySrcStride = -ySrcStride;
-      break;
-    default:
-      return;
-      // break;
-    }
+  switch(flip) {
+  case(HORIZONTAL):
+    srcLine = tempImg.data + ySrcStride - xSrcStride;
+    xSrcStride = -xSrcStride;
+    break;
+  case(VERTICAL):
+    srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
+    ySrcStride = -ySrcStride;
+    break;
+  case(BOTH):
+    srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
+    xSrcStride = -xSrcStride;
+    ySrcStride = -ySrcStride;
+    break;
+  default:
+    return;
+    // break;
+  }
   int ySize = image.ysize;
   int xHold = image.xsize;
 
-  while(ySize--)
-    {
-      unsigned char *srcPixels = srcLine;
-      unsigned char *dstPixels = dstLine;
-      int xSize = xHold;
-      while(xSize--)        {
-        dstPixels[chGray] = srcPixels[chGray];
-        dstPixels += xDstStride;
-        srcPixels += xSrcStride;
-      }
-      dstLine += yDstStride;
-      srcLine += ySrcStride;
+  while(ySize--) {
+    unsigned char *srcPixels = srcLine;
+    unsigned char *dstPixels = dstLine;
+    int xSize = xHold;
+    while(xSize--)        {
+      dstPixels[chGray] = srcPixels[chGray];
+      dstPixels += xDstStride;
+      srcPixels += xSrcStride;
     }
+    dstLine += yDstStride;
+    srcLine += ySrcStride;
+  }
 }
 /////////////////////////////////////////////////////////
 // flipMess
@@ -288,10 +316,20 @@ void pix_flip :: noneMessCallback(void *data)
 void pix_flip :: flipMessCallback(void *data, t_symbol*s)
 {
   char c=*s->s_name;
-  switch(c){
-  case 'v': case 'V':  GetMyClass(data)->flipMess(VERTICAL); break;
-  case 'h': case 'H':  GetMyClass(data)->flipMess(HORIZONTAL); break;
-  case 'b': case 'B':  GetMyClass(data)->flipMess(BOTH); break;
-  default:  GetMyClass(data)->flipMess(NONE);
+  switch(c) {
+  case 'v':
+  case 'V':
+    GetMyClass(data)->flipMess(VERTICAL);
+    break;
+  case 'h':
+  case 'H':
+    GetMyClass(data)->flipMess(HORIZONTAL);
+    break;
+  case 'b':
+  case 'B':
+    GetMyClass(data)->flipMess(BOTH);
+    break;
+  default:
+    GetMyClass(data)->flipMess(NONE);
   }
 }

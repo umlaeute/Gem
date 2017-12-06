@@ -51,11 +51,10 @@ part_color :: ~part_color()
 /////////////////////////////////////////////////////////
 void part_color :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pColorD(1.0f, PDLine, m_color1[0], m_color1[1], m_color1[2],
-              m_color2[0], m_color2[1], m_color2[2]);
-    }
+  if (m_tickTime > 0.f) {
+    pColorD(1.0f, PDLine, m_color1[0], m_color1[1], m_color1[2],
+            m_color2[0], m_color2[1], m_color2[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////

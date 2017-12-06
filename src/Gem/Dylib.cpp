@@ -45,7 +45,8 @@
 
 static std::vector<GemDylib*>s_dylibs;
 
-class GemDylibHandle {
+class GemDylibHandle
+{
 public:
   std::string fullname;
 #ifdef DL_OPEN
@@ -68,17 +69,19 @@ public:
     dummy2(0)
   {;}
 
-  ~GemDylibHandle(void) {
+  ~GemDylibHandle(void)
+  {
     close();
   }
 
-  static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext) {
+  static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext)
+  {
     std::string fullname_;
 
     char buf[MAXPDSTRING];
     char*bufptr;
     int fd=0;
-    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0){
+    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0) {
       gem::files::close(fd);
       fullname_=buf;
       fullname_+="/";
@@ -94,7 +97,8 @@ public:
     return fullname_;
   }
 
-  static GemDylibHandle*open(const std::string&filename) {
+  static GemDylibHandle*open(const std::string&filename)
+  {
     GemDylibHandle*handle=new GemDylibHandle();
 
     if(filename.empty()) {
@@ -138,18 +142,18 @@ public:
     LPVOID lpErrorMessage=NULL;
     if(errorNumber) {
       FormatMessage(
-                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                    FORMAT_MESSAGE_FROM_SYSTEM,
-                    NULL,
-                    errorNumber,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                    (LPTSTR) &lpErrorMessage,
-                    0, NULL );
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,
+        errorNumber,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &lpErrorMessage,
+        0, NULL );
     }
     std::cerr << "GemDylib failed: #"<<errorNumber<<": ";
     if(lpErrorMessage) {
       std::cerr<<(const char*)lpErrorMessage;
-    }else {
+    } else {
       std::cerr<<"(unknown)";
     }
     std::cerr<<std::endl;
@@ -169,7 +173,8 @@ public:
     return NULL;
   }
 
-  static GemDylibHandle*open(const CPPExtern*obj, const std::string&filename, const std::string&extension) {
+  static GemDylibHandle*open(const CPPExtern*obj, const std::string&filename, const std::string&extension)
+  {
     //const t_canvas*canvas=(obj)?(const_cast<CPPExtern*>(obj)->getCanvas()):0;
     const char*ext=extension.c_str();
 
@@ -194,15 +199,18 @@ public:
 
   static const std::string defaultExtension;
 
-  void close(void) {
+  void close(void)
+  {
 #ifdef DL_OPEN
-    if(dlhandle)
+    if(dlhandle) {
       dlclose(dlhandle);
+    }
     dlhandle=NULL;
 #endif
 #ifdef _WIN32
-    if(w32handle)
+    if(w32handle) {
       FreeLibrary(w32handle);
+    }
     w32handle=NULL;
 #endif
   }
@@ -211,17 +219,18 @@ public:
 
 const std::string GemDylibHandle::defaultExtension =
 #ifdef _WIN32
-                                         std::string(".dll")
+  std::string(".dll")
 #elif defined DL_OPEN
-                                         std::string(".so")
+  std::string(".so")
 #else
-                                         std::string("")
+  std::string("")
 #endif
-                                         ;
+  ;
 
 
 GemDylib::GemDylib(const CPPExtern*obj, const std::string&filename, const std::string&extension)
-  : m_handle(0) {
+  : m_handle(0)
+{
   m_handle=GemDylibHandle::open(obj, filename, extension);
   if(NULL==m_handle) {
     std::string err="unable to open '";
@@ -237,10 +246,12 @@ GemDylib::GemDylib(const CPPExtern*obj, const std::string&filename, const std::s
 }
 
 GemDylib::GemDylib(const std::string&filename, const std::string&extension)
-  : m_handle(0) {
+  : m_handle(0)
+{
   m_handle=GemDylibHandle::open(filename+extension);
-  if(NULL==m_handle)
+  if(NULL==m_handle) {
     m_handle=GemDylibHandle::open(filename+GemDylibHandle::defaultExtension);
+  }
   if(NULL==m_handle) {
     std::string err="unable to open '";
     err+=filename;
@@ -255,7 +266,8 @@ GemDylib::GemDylib(const std::string&filename, const std::string&extension)
 }
 
 
-GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL) {
+GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL)
+{
   std::string filename=org.m_handle->fullname;
   m_handle=GemDylibHandle::open(filename);
   if(NULL==m_handle) {
@@ -267,19 +279,24 @@ GemDylib::GemDylib(const GemDylib&org) : m_handle(NULL) {
   s_dylibs.push_back(this);
 }
 
-GemDylib::~GemDylib(void) {
-  if(m_handle)
+GemDylib::~GemDylib(void)
+{
+  if(m_handle) {
     delete m_handle;
+  }
   m_handle=NULL;
 
   s_dylibs.erase( std::remove(s_dylibs.begin(), s_dylibs.end(), this), s_dylibs.end() );
 }
 
-GemDylib& GemDylib::operator=(const GemDylib&org) {
-  if(&org == this)
+GemDylib& GemDylib::operator=(const GemDylib&org)
+{
+  if(&org == this) {
     return *this;
-  if(m_handle)
+  }
+  if(m_handle) {
     delete m_handle;
+  }
   m_handle=NULL;
   if(org.m_handle) {
     m_handle=GemDylibHandle::open(org.m_handle->fullname);
@@ -288,25 +305,33 @@ GemDylib& GemDylib::operator=(const GemDylib&org) {
 }
 
 
-GemDylib::function_t GemDylib::proc(const std::string&procname) {
+GemDylib::function_t GemDylib::proc(const std::string&procname)
+{
   function_t result=NULL;
   //  if(NULL==procname)return NULL;
 #ifdef DL_OPEN
   dlerror();
-  if(m_handle->dlhandle)
+  if(m_handle->dlhandle) {
     result=(function_t)(dlsym(m_handle->dlhandle, procname.c_str()));
-  if(NULL!=result)return result;
+  }
+  if(NULL!=result) {
+    return result;
+  }
 #endif
 #ifdef _WIN32
-  if(m_handle->w32handle)
+  if(m_handle->w32handle) {
     result=(function_t)(GetProcAddress(m_handle->w32handle, procname.c_str()));
-  if(NULL!=result)return result;
+  }
+  if(NULL!=result) {
+    return result;
+  }
 #endif
 
   return result;
 }
 
-bool GemDylib::run(const std::string&procname) {
+bool GemDylib::run(const std::string&procname)
+{
   function_t runproc=proc(procname);
   if(runproc) {
     (runproc)();
@@ -318,7 +343,8 @@ bool GemDylib::run(const std::string&procname) {
 bool GemDylib::LoadLib(const std::string&procname,
                        const std::string&baselibname,
                        const std::string&fileext
-                       ) {
+                      )
+{
   try {
     GemDylib*dylib=new GemDylib(baselibname, fileext);
     if(NULL!=dylib) {
@@ -333,6 +359,7 @@ bool GemDylib::LoadLib(const std::string&procname,
 }
 
 
-const std::string GemDylib::getDefaultExtension(void) {
+const std::string GemDylib::getDefaultExtension(void)
+{
   return GemDylibHandle::defaultExtension;
 }

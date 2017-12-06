@@ -44,8 +44,12 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA_GEM),
   m_rand_p(0), m_rand_k(24)
 {
-  if (xsize < 1) xsize = 256;
-  if (ysize < 1) ysize = 256;
+  if (xsize < 1) {
+    xsize = 256;
+  }
+  if (ysize < 1) {
+    ysize = 256;
+  }
   int randInit = 307*1319;
   initRandom(randInit);
 
@@ -123,7 +127,7 @@ void pix_noise :: debug(void)
   post("mrand_k = %i",m_rand_k);
   post("mrand[p] = %i",m_rand[m_rand_p]);
   post("mrand[k] = %i",m_rand[m_rand_k]);
-  for (int i=0;i<55;i++) {
+  for (int i=0; i<55; i++) {
     post("m_rand[%i] = %i",i,m_rand[i]);
   }
 
@@ -140,8 +144,12 @@ unsigned char pix_noise :: random(void)
   // with p = 55, k = 24
 
   m_rand[m_rand_p] = m_rand[m_rand_p] + m_rand[m_rand_k];
-  if (++m_rand_p>54) m_rand_p = 0;
-  if (++m_rand_k>54) m_rand_k = 0;
+  if (++m_rand_p>54) {
+    m_rand_p = 0;
+  }
+  if (++m_rand_k>54) {
+    m_rand_k = 0;
+  }
   return (unsigned char)(m_rand[m_rand_p]);
 }
 
@@ -226,7 +234,9 @@ void pix_noise :: GREYMess(void)
 /////////////////////////////////////////////////////////
 void pix_noise :: SETMess(int xsize, int ysize)
 {
-  if ((xsize < 1) || (ysize < 1)) return;
+  if ((xsize < 1) || (ysize < 1)) {
+    return;
+  }
   m_pixBlock.image.clear();
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;

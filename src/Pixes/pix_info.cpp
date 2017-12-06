@@ -64,8 +64,10 @@ void pix_info :: render(GemState *state)
   // 0 0 0  6408  5121 1 1 0  0 9.59521e+08
   t_atom abuf[3];
   pixBlock*img=NULL;
-  if(state)state->get(GemState::_PIX, img);
-  if (!state || !img){ //no pixblock (or even no image!)!
+  if(state) {
+    state->get(GemState::_PIX, img);
+  }
+  if (!state || !img) { //no pixblock (or even no image!)!
     outlet_float(m_pixblock, (t_float)-1);
     outlet_float(m_misc,     (t_float)-1);
     outlet_float(m_format,   (t_float)-1);
@@ -76,7 +78,7 @@ void pix_info :: render(GemState *state)
   }
   SETFLOAT(  &abuf[0], (t_float)img->newimage);
   SETFLOAT(  &abuf[1], (t_float)img->newfilm);
-  if (!&img->image){ // we have a pixblock, but no image!
+  if (!&img->image) { // we have a pixblock, but no image!
     outlet_list(m_pixblock, gensym("list"), 2, abuf);
 
     outlet_float(m_misc,   (t_float)-1);
@@ -86,7 +88,7 @@ void pix_info :: render(GemState *state)
     outlet_float(m_x,      (t_float)-1);
     return;
   }
-  if(img->image.data){
+  if(img->image.data) {
     t_gpointer*gp=(t_gpointer*)img->image.data;
     SETPOINTER(&abuf[2], gp);
     outlet_anything(m_data, gensym("data"), 1, abuf+2);
@@ -103,5 +105,6 @@ void pix_info :: render(GemState *state)
   outlet_float(m_y, (t_float)img->image.ysize);
   outlet_float(m_x, (t_float)img->image.xsize);
 }
-void pix_info :: obj_setupCallback(t_class *classPtr){
+void pix_info :: obj_setupCallback(t_class *classPtr)
+{
 }

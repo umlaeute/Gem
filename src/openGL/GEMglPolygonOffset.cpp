@@ -14,7 +14,7 @@
 
 #include "GEMglPolygonOffset.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglPolygonOffset :: GEMglPolygonOffset        (t_floatarg arg0, t_floatarg arg
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPolygonOffset :: ~GEMglPolygonOffset () {
+GEMglPolygonOffset :: ~GEMglPolygonOffset ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglPolygonOffset :: ~GEMglPolygonOffset () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPolygonOffset :: render(GemState *state) {
+void GEMglPolygonOffset :: render(GemState *state)
+{
   glPolygonOffset (factor, units);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPolygonOffset :: factorMess (t_float arg1) {  // FUN
+void GEMglPolygonOffset :: factorMess (t_float arg1)    // FUN
+{
   factor = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglPolygonOffset :: unitsMess (t_float arg1) {   // FUN
+void GEMglPolygonOffset :: unitsMess (t_float arg1)     // FUN
+{
   units = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglPolygonOffset :: unitsMess (t_float arg1) {   // FUN
 // static member functions
 //
 
-void GEMglPolygonOffset :: obj_setupCallback(t_class *classPtr) {
+void GEMglPolygonOffset :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonOffset::factorMessCallback),         gensym("factor"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonOffset::unitsMessCallback),          gensym("units"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPolygonOffset :: factorMessCallback (void* data, t_float arg0){
+void GEMglPolygonOffset :: factorMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->factorMess ( static_cast<t_float>(arg0));
 }
-void GEMglPolygonOffset :: unitsMessCallback (void* data, t_float arg0){
+void GEMglPolygonOffset :: unitsMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->unitsMess ( static_cast<t_float>(arg0));
 }

@@ -33,13 +33,13 @@ class GEM_EXTERN pix_blur : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_blur, GemPixObj);
 
- public:
+public:
 
   //////////
   // Constructor
   pix_blur(void);
 
- protected:
+protected:
 
   //////////
   // Destructor

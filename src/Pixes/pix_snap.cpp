@@ -39,7 +39,7 @@ pix_snap :: pix_snap(int argc, t_atom *argv) :
 {
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data = NULL;
-  if (argc == 4){
+  if (argc == 4) {
     m_x = atom_getint(&argv[0]);
     m_y = atom_getint(&argv[1]);
     m_width = atom_getint(&argv[2]);
@@ -99,10 +99,13 @@ void pix_snap :: snapMess(void)
     verbose(0, "not initialized yet with a valid context");
     return;
   }
-  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
+    return;
+  }
 
-  if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
+  if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC) {
     m_cache=NULL;
+  }
 
   if (m_width <= 0 || m_height <= 0) {
     error("Illegal size");
@@ -138,10 +141,11 @@ void pix_snap :: snapMess(void)
   }
 
 
-  if(m_numPbo>0 && !m_pbo)
+  if(m_numPbo>0 && !m_pbo) {
     makePbo=true;
-  else if(m_numPbo<=0)
+  } else if(m_numPbo<=0) {
     makePbo=false;
+  }
 
   /* FIXXME */
   if(makePbo) {
@@ -199,8 +203,9 @@ void pix_snap :: snapMess(void)
     STOP_TIMING(-1);
   }
 
-  if (m_cache)
+  if (m_cache) {
     m_cache->resendImage = 1;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -210,16 +215,16 @@ void pix_snap :: snapMess(void)
 void pix_snap :: render(GemState *state)
 {
   // if we don't have an image, just return
-  if (!m_originalImage)
+  if (!m_originalImage) {
     return;
+  }
 
   // do we need to reload the image?
-  if (m_cache&&m_cache->resendImage)
-    {
-      m_originalImage->refreshImage(&m_pixBlock.image);
-      m_pixBlock.newimage = 1;
-      m_cache->resendImage = 0;
-    }
+  if (m_cache&&m_cache->resendImage) {
+    m_originalImage->refreshImage(&m_pixBlock.image);
+    m_pixBlock.newimage = 1;
+    m_cache->resendImage = 0;
+  }
 
   state->set(GemState::_PIX, &m_pixBlock);
 }
@@ -261,13 +266,12 @@ void pix_snap :: posMess(int x, int y)
 void pix_snap :: cleanImage(void)
 {
   // release previous data
-  if (m_originalImage)
-    {
-      delete m_originalImage;
-      m_originalImage = NULL;
+  if (m_originalImage) {
+    delete m_originalImage;
+    m_originalImage = NULL;
 
-      m_pixBlock.image.clear();
-    }
+    m_pixBlock.image.clear();
+  }
 }
 
 
@@ -303,7 +307,7 @@ void pix_snap :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", snapMess);
 
   CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
-  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess , int, int);
+  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
 
-  CPPEXTERN_MSG1(classPtr, "pbo",  pboMess , int);
+  CPPEXTERN_MSG1(classPtr, "pbo",  pboMess, int);
 }

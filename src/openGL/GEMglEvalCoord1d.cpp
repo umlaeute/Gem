@@ -14,7 +14,7 @@
 
 #include "GEMglEvalCoord1d.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1d , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1d, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,27 +31,33 @@ GEMglEvalCoord1d :: GEMglEvalCoord1d    (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglEvalCoord1d :: ~GEMglEvalCoord1d () {
+GEMglEvalCoord1d :: ~GEMglEvalCoord1d ()
+{
   inlet_free(m_inlet[0]);
 }
 //////////////////
 // extension check
-bool GEMglEvalCoord1d :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglEvalCoord1d :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglEvalCoord1d :: render(GemState *state) {
+void GEMglEvalCoord1d :: render(GemState *state)
+{
   glEvalCoord1d (u);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglEvalCoord1d :: uMess (t_float arg1) { // FUN
+void GEMglEvalCoord1d :: uMess (t_float arg1)   // FUN
+{
   u = static_cast<GLdouble>(arg1);
   setModified();
 }
@@ -61,10 +67,12 @@ void GEMglEvalCoord1d :: uMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglEvalCoord1d :: obj_setupCallback(t_class *classPtr) {
+void GEMglEvalCoord1d :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord1d::uMessCallback),        gensym("u"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalCoord1d :: uMessCallback (void* data, t_float arg0){
+void GEMglEvalCoord1d :: uMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->uMess ( static_cast<t_float>(arg0));
 }

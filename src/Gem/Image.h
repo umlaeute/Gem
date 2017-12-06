@@ -65,8 +65,7 @@ CLASS
 // there is a  new define here:
 #define IMAGE_CLASS
 
-struct GEM_EXTERN imageStruct
-{
+struct GEM_EXTERN imageStruct {
   imageStruct(void);
   imageStruct(const imageStruct&);
   virtual ~imageStruct(void);
@@ -118,7 +117,8 @@ struct GEM_EXTERN imageStruct
   // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C) const
   {
-    return(data[Y * xsize * csize + X * csize + C]); }
+    return(data[Y * xsize * csize + X * csize + C]);
+  }
 
   //////////
   // sets a pixel
@@ -129,7 +129,9 @@ struct GEM_EXTERN imageStruct
    * you must make sure that (0<=X<xsize) and (0<=Y<ysize)
    */
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
-  { data[Y * xsize * csize + X * csize + C] = VAL; }
+  {
+    data[Y * xsize * csize + X * csize + C] = VAL;
+  }
 
 
   /////////
@@ -213,23 +215,32 @@ struct GEM_EXTERN imageStruct
   virtual void fromYV12   (const short* orgdata);
 
   /* aliases */
-  virtual void fromYUV422 (const unsigned char* orgdata){fromUYVY(orgdata);}
-  virtual void fromYUV420P(const unsigned char* orgdata){fromYV12(orgdata);}
-  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,const unsigned char*V){fromYV12(Y,U,V);}
+  virtual void fromYUV422 (const unsigned char* orgdata)
+  {
+    fromUYVY(orgdata);
+  }
+  virtual void fromYUV420P(const unsigned char* orgdata)
+  {
+    fromYV12(orgdata);
+  }
+  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,const unsigned char*V)
+  {
+    fromYV12(Y,U,V);
+  }
 
   // "data" points to the image.
   // the memory could(!) be reserved by this class or someone else
   // "notowned" should be set to "1", if "data" points to foreign memory
   // "data" is not freed directly, when the destructor is called
   unsigned char   *data;    // the pointer to the data
-  private:
+private:
   // "pdata" is the private data, and is the memory reserved by this class
   // this data is freed when the destructor is called
   unsigned char   *pdata;
   // "datasize" is the size of data reserved at "pdata"
   size_t    datasize;
 
-  public:
+public:
   //////////
   // true if the image is flipped horizontally (origin is upper-left)
   // false if the image is openGL-conformant (origin is lower-left)
@@ -249,23 +260,22 @@ CLASS
     The pix block structure
 
 -----------------------------------------------------------------*/
-struct GEM_EXTERN pixBlock
-{
+struct GEM_EXTERN pixBlock {
   pixBlock();
 
-    //////////
-    // the block's image
-    imageStruct     image;
+  //////////
+  // the block's image
+  imageStruct     image;
 
-    //////////
-    // is this a newimage since last time?
-    //  ie, has it been refreshed
-    bool            newimage;
+  //////////
+  // is this a newimage since last time?
+  //  ie, has it been refreshed
+  bool            newimage;
 
-    //////////
-    // keeps track of when new films are loaded
-    //  useful for rectangle_textures on OSX
-    bool                    newfilm;
+  //////////
+  // keeps track of when new films are loaded
+  //  useful for rectangle_textures on OSX
+  bool                    newfilm;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

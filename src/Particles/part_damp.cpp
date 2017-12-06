@@ -49,10 +49,9 @@ part_damp :: ~part_damp(void)
 /////////////////////////////////////////////////////////
 void part_damp :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pDamping(m_vector[0], m_vector[1], m_vector[2]);
-    }
+  if (m_tickTime > 0.f) {
+    pDamping(m_vector[0], m_vector[1], m_vector[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////

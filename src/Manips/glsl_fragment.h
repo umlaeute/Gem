@@ -42,14 +42,14 @@ class GEM_EXTERN glsl_fragment : public glsl_vertex
 {
   CPPEXTERN_HEADER(glsl_fragment, glsl_vertex);
 
-    public:
+public:
 
   //////////
   // Constructor
   glsl_fragment(void);
   glsl_fragment(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor

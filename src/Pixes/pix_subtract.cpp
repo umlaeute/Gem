@@ -50,13 +50,17 @@ void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 
   while (datasize--) {
     SUB8_NOALPHA(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
     SUB8_NOALPHA(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
     SUB8_NOALPHA(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
     SUB8_NOALPHA(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
   }
 }
 
@@ -91,8 +95,8 @@ void pix_subtract :: processYUV_YUV(imageStruct &image, imageStruct &right)
   int u,v;
   src =0;
   //format is U Y V Y
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
+  for (h=0; h<image.ysize; h++) {
+    for(w=0; w<image.xsize/2; w++) {
 
       u = image.data[src] - ((2*right.data[src]) - 255);
       image.data[src] = CLAMP(u);
@@ -111,7 +115,8 @@ void pix_subtract :: processYUV_YUV(imageStruct &image, imageStruct &right)
 }
 
 #ifdef __MMX__
-void pix_subtract :: processRGBA_MMX(imageStruct &image, imageStruct &right){
+void pix_subtract :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+{
   int datasize =   image.xsize * image.ysize * image.csize;
   __m64*leftPix =  (__m64*)image.data;
   __m64*rightPix = (__m64*)right.data;
@@ -127,7 +132,8 @@ void pix_subtract :: processRGBA_MMX(imageStruct &image, imageStruct &right){
   }
   _mm_empty();
 }
-void pix_subtract :: processYUV_MMX (imageStruct &image, imageStruct &right){
+void pix_subtract :: processYUV_MMX (imageStruct &image, imageStruct &right)
+{
   int datasize =   image.xsize * image.ysize * image.csize;
   __m64*leftPix =  (__m64*)image.data;
   __m64*rightPix = (__m64*)right.data;
@@ -155,7 +161,8 @@ void pix_subtract :: processYUV_MMX (imageStruct &image, imageStruct &right){
   }
   _mm_empty();
 }
-void pix_subtract :: processGray_MMX(imageStruct &image, imageStruct &right){
+void pix_subtract :: processGray_MMX(imageStruct &image, imageStruct &right)
+{
   processRGBA_MMX(image, right);
 }
 #endif
@@ -175,19 +182,18 @@ void pix_subtract :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
 #endif
-  for ( h=0; h<image.ysize; h++){
-    for (w=0; w<width; w++)
-      {
+  for ( h=0; h<image.ysize; h++) {
+    for (w=0; w<width; w++) {
 #ifndef PPC970
-        vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
+      vec_dst( inData, prefetchSize, 0 );
+      vec_dst( rightData, prefetchSize, 1 );
 #endif
 
-        inData[0] = vec_subs(inData[0], rightData[0]);
+      inData[0] = vec_subs(inData[0], rightData[0]);
 
-        inData++;
-        rightData++;
-      }
+      inData++;
+      rightData++;
+    }
 #ifndef PPC970
     vec_dss( 0 );
     vec_dss( 1 );
@@ -201,21 +207,19 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 
   width = image.xsize/8;
   //format is U Y V Y
-  union
-  {
+  union {
     //unsigned int  i;
     short   elements[8];
     //vector signed char v;
     vector  short v;
-  }shortBuffer;
+  } shortBuffer;
 
-  union
-  {
+  union {
     //unsigned int  i;
     unsigned char   elements[16];
     //vector signed char v;
     vector  unsigned char v;
-  }charBuffer;
+  } charBuffer;
 
   //vector unsigned char c;
   vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
@@ -257,40 +261,39 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
   UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( inData, prefetchSize, 0 );
 #endif
-  for ( h=0; h<image.ysize; h++){
-    for (w=0; w<width; w++)
-      {
+  for ( h=0; h<image.ysize; h++) {
+    for (w=0; w<width; w++) {
 #ifndef PPC970
-        vec_dst( inData, prefetchSize, 0 );
+      vec_dst( inData, prefetchSize, 0 );
 #endif
-        //interleaved U Y V Y chars
+      //interleaved U Y V Y chars
 
-        //vec_mule UV * 2 to short vector U V U V shorts
-        UVImage = (vector signed short)vec_mule(one,inData[0]);
-        UVRight = (vector signed short)vec_mule(c,rightData[0]);
+      //vec_mule UV * 2 to short vector U V U V shorts
+      UVImage = (vector signed short)vec_mule(one,inData[0]);
+      UVRight = (vector signed short)vec_mule(c,rightData[0]);
 
-        //vec_mulo Y * 1 to short vector Y Y Y Y shorts
-        YImage = (vector signed short)vec_mulo(c,inData[0]);
-        YRight = (vector signed short)vec_mulo(c,rightData[0]);
+      //vec_mulo Y * 1 to short vector Y Y Y Y shorts
+      YImage = (vector signed short)vec_mulo(c,inData[0]);
+      YRight = (vector signed short)vec_mulo(c,rightData[0]);
 
-        //vel_subs UV - 255
-        UVRight = (vector signed short)vec_subs(UVRight, d);
+      //vel_subs UV - 255
+      UVRight = (vector signed short)vec_subs(UVRight, d);
 
-        //vec_adds UV
-        UVTemp = vec_subs(UVImage,UVRight);
+      //vec_adds UV
+      UVTemp = vec_subs(UVImage,UVRight);
 
-        //vec_adds Y
-        YTemp = vec_subs(YImage,YRight);
+      //vec_adds Y
+      YTemp = vec_subs(YImage,YRight);
 
-        hiImage = vec_mergeh(UVTemp,YTemp);
-        loImage = vec_mergel(UVTemp,YTemp);
+      hiImage = vec_mergeh(UVTemp,YTemp);
+      loImage = vec_mergel(UVTemp,YTemp);
 
-        //vec_mergel + vec_mergeh Y and UV
-        inData[0] = vec_packsu(hiImage, loImage);
+      //vec_mergel + vec_mergeh Y and UV
+      inData[0] = vec_packsu(hiImage, loImage);
 
-        inData++;
-        rightData++;
-      }
+      inData++;
+      rightData++;
+    }
 #ifndef PPC970
     vec_dss( 0 );
 #endif
@@ -298,8 +301,9 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 }
 #endif
 
-void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right){
-  if (image.format!=right.format){
+void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right)
+{
+  if (image.format!=right.format) {
     error("pix_add: no method to combine (0x%X) and (0x%X)", image.format, right.format);
     return;
   }
@@ -310,17 +314,22 @@ void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right){
 
   while (datasize--) {
     SUB8(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
     SUB8(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
     SUB8(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
     SUB8(leftPix,rightPix);
-    leftPix+=8;rightPix+=8;
+    leftPix+=8;
+    rightPix+=8;
   }
-  while(restsize--){
+  while(restsize--) {
     *leftPix = CLAMP_LOW(static_cast<int>(*leftPix - *rightPix));
-    leftPix++; rightPix++;
+    leftPix++;
+    rightPix++;
   }
 }
 

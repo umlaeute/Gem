@@ -52,14 +52,21 @@ void pix_threshold :: processRGBAImage(imageStruct &image)
 
   unsigned char *base = image.data;
 
-  while(datasize--)
-    {
-      if (base[chRed] < m_thresh[chRed]) base[chRed] = 0;
-      if (base[chGreen] < m_thresh[chGreen]) base[chGreen] = 0;
-      if (base[chBlue] < m_thresh[chBlue]) base[chBlue] = 0;
-      if (base[chAlpha] < m_thresh[chAlpha]) base[chAlpha] = 0;
-      base += 4;
+  while(datasize--) {
+    if (base[chRed] < m_thresh[chRed]) {
+      base[chRed] = 0;
     }
+    if (base[chGreen] < m_thresh[chGreen]) {
+      base[chGreen] = 0;
+    }
+    if (base[chBlue] < m_thresh[chBlue]) {
+      base[chBlue] = 0;
+    }
+    if (base[chAlpha] < m_thresh[chAlpha]) {
+      base[chAlpha] = 0;
+    }
+    base += 4;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -72,14 +79,17 @@ void pix_threshold :: processYUVImage(imageStruct &image)
 
   unsigned char *base = image.data;
 
-  while(datasize--)
-    {
-      //if (base[0] < m_thresh[1]) base[0] = 0; //u
-      if (base[1] < m_Y) base[1] = 0;//y1
-      //if (base[2] < m_thresh[2]) base[2] = 0;//v
-      if (base[3] < m_Y) base[3] = 0;//y2
-      base += 4;
+  while(datasize--) {
+    //if (base[0] < m_thresh[1]) base[0] = 0; //u
+    if (base[1] < m_Y) {
+      base[1] = 0;  //y1
     }
+    //if (base[2] < m_thresh[2]) base[2] = 0;//v
+    if (base[3] < m_Y) {
+      base[3] = 0;  //y2
+    }
+    base += 4;
+  }
 }
 
 #ifdef __VEC__
@@ -95,10 +105,10 @@ void pix_threshold :: processYUVAltivec(imageStruct &image)
   vector bool char        mask;
   unsigned char *base = image.data;
 
-  union{
+  union {
     unsigned char                   c[16];
     vector unsigned char    v;
-  }charBuf;
+  } charBuf;
 
   charBuf.c[0] = 0;
   charBuf.c[1] = m_Y;
@@ -119,20 +129,19 @@ void pix_threshold :: processYUVAltivec(imageStruct &image)
 
   thresh = charBuf.v;
 
-  while(datasize--)
-    {
-      //if (base[0] < m_thresh[1]) base[0] = 0; //u
-      //if (base[1] < m_Y) base[1] = 0;//y1
-      //if (base[2] < m_thresh[2]) base[2] = 0;//v
-      //if (base[3] < m_Y) base[3] = 0;//y2
-      //base += 4;
-      in = vec_ld(0,base);
-      mask = vec_cmpgt(in,thresh);
-      in = vec_and(in,mask);
-      vec_st(in,0,base);
+  while(datasize--) {
+    //if (base[0] < m_thresh[1]) base[0] = 0; //u
+    //if (base[1] < m_Y) base[1] = 0;//y1
+    //if (base[2] < m_thresh[2]) base[2] = 0;//v
+    //if (base[3] < m_Y) base[3] = 0;//y2
+    //base += 4;
+    in = vec_ld(0,base);
+    mask = vec_cmpgt(in,thresh);
+    in = vec_and(in,mask);
+    vec_st(in,0,base);
 
-      base += 16;
-    }
+    base += 16;
+  }
 }
 #endif //Altivec
 
@@ -146,11 +155,12 @@ void pix_threshold :: processGrayImage(imageStruct &image)
 
   unsigned char *base = image.data;
 
-  while(datasize--)
-    {
-      if (base[chGray] < m_thresh[chRed]) base[chGray] = 0;
-      base++;
+  while(datasize--) {
+    if (base[chGray] < m_thresh[chRed]) {
+      base[chGray] = 0;
     }
+    base++;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -159,16 +169,14 @@ void pix_threshold :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
 {
-  if (argc >= 4)
-    {
-      m_thresh[chAlpha] = CLAMP(atom_getfloat(&argv[3]) * 255);
-    }
-  else if (argc == 3) m_thresh[3] = 0;
-  else
-    {
-      error("not enough threshold values");
-      return;
-    }
+  if (argc >= 4) {
+    m_thresh[chAlpha] = CLAMP(atom_getfloat(&argv[3]) * 255);
+  } else if (argc == 3) {
+    m_thresh[3] = 0;
+  } else {
+    error("not enough threshold values");
+    return;
+  }
 
   m_thresh[chRed] = CLAMP(atom_getfloat(&argv[0]) * 255);
   m_thresh[chGreen] = CLAMP(atom_getfloat(&argv[1]) * 255);

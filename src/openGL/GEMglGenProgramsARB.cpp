@@ -32,32 +32,40 @@ GEMglGenProgramsARB :: GEMglGenProgramsARB      (int argc, t_atom*argv) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGenProgramsARB :: ~GEMglGenProgramsARB () {
+GEMglGenProgramsARB :: ~GEMglGenProgramsARB ()
+{
   inlet_free(m_inlet);
 }
 //////////////////
 // extension check
-bool GEMglGenProgramsARB :: isRunnable(void) {
-  if(GLEW_ARB_vertex_program)return true;
+bool GEMglGenProgramsARB :: isRunnable(void)
+{
+  if(GLEW_ARB_vertex_program) {
+    return true;
+  }
   error("your system does not support the ARB vertex_program extension");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGenProgramsARB :: render(GemState *state) {
+void GEMglGenProgramsARB :: render(GemState *state)
+{
   glGenProgramsARB (n, programs);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv) {      // FUN
+void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv)        // FUN
+{
   n=0;
   delete [] programs;
   programs = new GLuint[argc];
-  while(argc--){
-    if(argv->a_type == A_FLOAT)programs[n++] = static_cast<GLuint>(atom_getint(argv));
+  while(argc--) {
+    if(argv->a_type == A_FLOAT) {
+      programs[n++] = static_cast<GLuint>(atom_getint(argv));
+    }
     argv++;
   }
   setModified();
@@ -69,9 +77,11 @@ void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv) {      // FUN
 // static member functions
 //
 
-void GEMglGenProgramsARB :: obj_setupCallback(t_class *classPtr) {
+void GEMglGenProgramsARB :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenProgramsARB::programsMessCallback),      gensym("programs"), A_GIMME, A_NULL);
 }
-void GEMglGenProgramsARB :: programsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
+void GEMglGenProgramsARB :: programsMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+{
   GetMyClass(data)->programsMess (argc,argv);
 }

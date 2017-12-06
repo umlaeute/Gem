@@ -55,13 +55,13 @@ class GEM_EXTERN gemglutwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemglutwindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglutwindow(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -104,7 +104,7 @@ class GEM_EXTERN gemglutwindow : public GemWindow
   // dispatch events
   virtual void dispatch(void);
 
- private:
+private:
 
   /* the GLUT window id */
   int m_window;

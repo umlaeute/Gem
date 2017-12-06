@@ -38,8 +38,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYM);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1), m_bindname(NULL) {
-  if ((s)&&(&s_!=s)){
+pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1), m_bindname(NULL)
+{
+  if ((s)&&(&s_!=s)) {
     setMess(s);
   }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
@@ -49,7 +50,8 @@ pix_buffer_write :: pix_buffer_write(t_symbol *s) : m_frame(-2), m_lastframe(-1)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_write :: ~pix_buffer_write(){
+pix_buffer_write :: ~pix_buffer_write()
+{
 
 }
 
@@ -57,8 +59,9 @@ pix_buffer_write :: ~pix_buffer_write(){
 // setMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer_write :: setMess(t_symbol*s){
-  if (s!=&s_){
+void pix_buffer_write :: setMess(t_symbol*s)
+{
+  if (s!=&s_) {
     m_bindname = s;
   }
 }
@@ -66,8 +69,9 @@ void pix_buffer_write :: setMess(t_symbol*s){
 // frameMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer_write :: frameMess(int f){
-  if (f<0){
+void pix_buffer_write :: frameMess(int f)
+{
+  if (f<0) {
     error("frame# must not be less than zero (%d)", f);
   }
   m_frame=f;
@@ -77,24 +81,31 @@ void pix_buffer_write :: frameMess(int f){
 // and reset the position
 // (so we don't do a put in the next cycle)
 /////////////////////////////////////////////////////////
-void pix_buffer_write :: render(GemState*state){
-  if (m_frame<0)return;
-  if(!state)return;
+void pix_buffer_write :: render(GemState*state)
+{
+  if (m_frame<0) {
+    return;
+  }
+  if(!state) {
+    return;
+  }
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
-  if (state && img && &img->image){
-    if (img->newimage || m_frame!=m_lastframe){
-      if(m_bindname==NULL || m_bindname->s_name==NULL){
+  if (state && img && &img->image) {
+    if (img->newimage || m_frame!=m_lastframe) {
+      if(m_bindname==NULL || m_bindname->s_name==NULL) {
         error("cowardly refusing to write to no pix_buffer");
-        m_frame=-1; return;
+        m_frame=-1;
+        return;
       }
       Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
-      if(ohead==NULL){
+      if(ohead==NULL) {
         error("couldn't find pix_buffer '%s'", m_bindname->s_name);
-        m_frame=-1; return;
+        m_frame=-1;
+        return;
       }
       pix_buffer *buffer=(pix_buffer *)(ohead)->data;
-      if (buffer){
+      if (buffer) {
         buffer->putMess(&img->image,m_lastframe=m_frame);
         m_frame=-1;
       }

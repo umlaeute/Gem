@@ -83,8 +83,8 @@ extern "C" {
 # include <stdlib.h>
 # include <stdint.h>
 
-typedef uint32_t FFUInt32;
-typedef float    FFFloat32;
+  typedef uint32_t FFUInt32;
+  typedef float    FFFloat32;
 #endif
 
 
@@ -112,8 +112,8 @@ typedef float    FFFloat32;
 #define FF_GETINPUTSTATUS                       16
 
 enum {
-        FF_SUCCESS = 0,
-        FF_FAIL = 0xFFFFFFFF
+  FF_SUCCESS = 0,
+  FF_FAIL = 0xFFFFFFFF
 };
 typedef FFUInt32 FFResult;
 
@@ -174,51 +174,51 @@ typedef FFUInt32 FFResult;
 // Typedefs for Linux and MacOS - in Windows these are defined in files included by windows.h
 
 typedef union FFMixed {
-        FFUInt32    UIntValue;
+  FFUInt32    UIntValue;
   FFFloat32   FloatValue;
-        void*       PointerValue;
+  void*       PointerValue;
 } FFMixed;
 
 typedef void *FFInstanceID;
 
 // PluginInfoStruct
 typedef struct PluginInfoStructTag {
-        FFUInt32        APIMajorVersion;
-        FFUInt32        APIMinorVersion;
-        char            PluginUniqueID[4];              // 4 chars uniqueID - not null terminated
-        char            PluginName[16];                 // 16 chars plugin friendly name - not null terminated
-        FFUInt32        PluginType;                             // Effect or source
+  FFUInt32        APIMajorVersion;
+  FFUInt32        APIMinorVersion;
+  char            PluginUniqueID[4];              // 4 chars uniqueID - not null terminated
+  char            PluginName[16];                 // 16 chars plugin friendly name - not null terminated
+  FFUInt32        PluginType;                             // Effect or source
 } PluginInfoStruct;
 
 // PluginExtendedInfoStruct
 typedef struct PluginExtendedInfoStructTag {
-        FFUInt32        PluginMajorVersion;
-        FFUInt32        PluginMinorVersion;
-        char*           Description;
-        char*           About;
-        FFUInt32        FreeFrameExtendedDataSize;
-        void*           FreeFrameExtendedDataBlock;
+  FFUInt32        PluginMajorVersion;
+  FFUInt32        PluginMinorVersion;
+  char*           Description;
+  char*           About;
+  FFUInt32        FreeFrameExtendedDataSize;
+  void*           FreeFrameExtendedDataBlock;
 } PluginExtendedInfoStruct;
 
 // VideoInfoStruct
 typedef struct VideoInfoStructTag {
-        FFUInt32        FrameWidth;                             // width of frame in pixels
-        FFUInt32        FrameHeight;                            // height of frame in pixels
-        FFUInt32        BitDepth;                                       // enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
-        FFUInt32        Orientation;
+  FFUInt32        FrameWidth;                             // width of frame in pixels
+  FFUInt32        FrameHeight;                            // height of frame in pixels
+  FFUInt32        BitDepth;                                       // enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
+  FFUInt32        Orientation;
 } VideoInfoStruct;
 
 // ProcessFrameCopyStruct
 typedef struct ProcessFrameCopyStructTag {
-        FFUInt32        numInputFrames;
-        void**          ppInputFrames;
-        void*           pOutputFrame;
+  FFUInt32        numInputFrames;
+  void**          ppInputFrames;
+  void*           pOutputFrame;
 } ProcessFrameCopyStruct;
 
 // SetParameterStruct
 typedef struct SetParameterStructTag {
-        FFUInt32        ParameterNumber;
-        FFMixed         NewParameterValue;
+  FFUInt32        ParameterNumber;
+  FFMixed         NewParameterValue;
 } SetParameterStruct;
 
 

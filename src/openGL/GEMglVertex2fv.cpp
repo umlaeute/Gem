@@ -14,7 +14,7 @@
 
 #include "GEMglVertex2fv.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2fv , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2fv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,28 +23,32 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2fv , t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex2fv :: GEMglVertex2fv        (t_floatarg arg0, t_floatarg arg1) {
+GEMglVertex2fv :: GEMglVertex2fv        (t_floatarg arg0, t_floatarg arg1)
+{
   vMess(arg0, arg1);
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglVertex2fv :: ~GEMglVertex2fv () {
+GEMglVertex2fv :: ~GEMglVertex2fv ()
+{
   inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglVertex2fv :: render(GemState *state) {
+void GEMglVertex2fv :: render(GemState *state)
+{
   glVertex2fv (v);
 }
 
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglVertex2fv :: vMess (t_float arg0, t_float arg1) {     // FUN
+void GEMglVertex2fv :: vMess (t_float arg0, t_float arg1)       // FUN
+{
   v[0]=static_cast<GLfloat>(arg0);
   v[1]=static_cast<GLfloat>(arg1);
   setModified();
@@ -54,10 +58,12 @@ void GEMglVertex2fv :: vMess (t_float arg0, t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglVertex2fv :: obj_setupCallback(t_class *classPtr) {
+void GEMglVertex2fv :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex2fv::vMessCallback),          gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglVertex2fv :: vMessCallback (void* data, t_float arg0, t_float arg1) {
+void GEMglVertex2fv :: vMessCallback (void* data, t_float arg0, t_float arg1)
+{
   GetMyClass(data)->vMess ( arg0, arg1);
 }

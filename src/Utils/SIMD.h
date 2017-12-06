@@ -46,13 +46,13 @@ const int GEM_SIMD_ALTIVEC=3;
 #ifdef __SSE2__
 # include <emmintrin.h>
 // for icc this should be <dvec.h>
-typedef union{
+typedef union {
   unsigned char c[16];
   __m128i v;
 } vector_128;
 #elif defined __VEC__
 /* for AltiVec (PowerPC) */
-typedef union{
+typedef union {
   unsigned char c[16];
   vector unsigned char v;
 } vector_128;
@@ -61,8 +61,9 @@ typedef union{
 #if defined __MMX__
 # include <mmintrin.h>
 // for icc this should be <ivec.h>
-typedef union{
-  __m64 v; unsigned char c[8];
+typedef union {
+  __m64 v;
+  unsigned char c[8];
 } vector64i;
 
 #endif
@@ -71,8 +72,9 @@ typedef union{
 #ifdef __SSE__
 #include <xmmintrin.h>
 
-typedef union{
-  __m128 m; float f[4];
+typedef union {
+  __m128 m;
+  float f[4];
 } vector128f;
 #endif
 
@@ -89,8 +91,8 @@ typedef union{
  */
 class GEM_EXTERN GemSIMD
 {
- public:
-   GemSIMD(void);
+public:
+  GemSIMD(void);
   virtual ~GemSIMD(void);
 
   /* this gets the "cpuid" (something like GEM_SIMD_NONE) */
@@ -108,7 +110,7 @@ class GEM_EXTERN GemSIMD
    */
   static int simd_runtime_check(void);
 
- private:
+private:
   /* this is the maximum capability of the CPU */
   static int realcpuid;
   /* this is the current chosen capability (normally this equals realcpuid) */

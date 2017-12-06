@@ -42,13 +42,13 @@ class GEM_EXTERN pix_biquad : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_biquad, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_biquad(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor

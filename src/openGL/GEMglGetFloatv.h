@@ -29,10 +29,10 @@ class GEM_EXTERN GEMglGetFloatv : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglGetFloatv, GemGLBase);
 
-    public:
+public:
   // Constructor
   GEMglGetFloatv (int,t_atom*); // CON
- protected:
+protected:
   // Destructor
   virtual ~GEMglGetFloatv ();
   // check extensions
@@ -46,7 +46,7 @@ class GEM_EXTERN GEMglGetFloatv : public GemGLBase
 
   t_atom m_alist[16];
 
- private:
+private:
   // we need one inlet
   t_inlet *m_inlet;
   // The outlet

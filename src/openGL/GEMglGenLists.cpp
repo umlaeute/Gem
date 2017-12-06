@@ -14,7 +14,7 @@
 
 #include "GEMglGenLists.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGenLists , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGenLists, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -32,7 +32,8 @@ GEMglGenLists :: GEMglGenLists  (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGenLists :: ~GEMglGenLists () {
+GEMglGenLists :: ~GEMglGenLists ()
+{
   inlet_free(m_inlet);
   outlet_free(m_outlet);
 }
@@ -40,7 +41,8 @@ GEMglGenLists :: ~GEMglGenLists () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGenLists :: render(GemState *state) {
+void GEMglGenLists :: render(GemState *state)
+{
   GLuint i = glGenLists(range);
   outlet_float(m_outlet, static_cast<t_float>(i));
 }
@@ -48,7 +50,8 @@ void GEMglGenLists :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGenLists :: rangeMess (t_float arg1) {        // FUN
+void GEMglGenLists :: rangeMess (t_float arg1)          // FUN
+{
   range = static_cast<GLsizei>(arg1);
   setModified();
 }
@@ -58,10 +61,12 @@ void GEMglGenLists :: rangeMess (t_float arg1) {        // FUN
 // static member functions
 //
 
-void GEMglGenLists :: obj_setupCallback(t_class *classPtr) {
+void GEMglGenLists :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenLists::rangeMessCallback),       gensym("range"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglGenLists :: rangeMessCallback (void* data, t_float arg0){
+void GEMglGenLists :: rangeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->rangeMess (arg0);
 }

@@ -35,13 +35,13 @@ class GEM_EXTERN pix_hsv2rgb : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_hsv2rgb, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_hsv2rgb();
 
- protected:
+protected:
 
   //////////
   // Destructor

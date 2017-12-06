@@ -39,44 +39,60 @@ Blob::Blob() :
   m_ymin(0.), m_ymax(0.)
 {}
 
-double Blob:: xmin(){
+double Blob:: xmin()
+{
   return m_xmin;
 }
-double Blob:: xmax(){
+double Blob:: xmax()
+{
   return m_xmax;
 }
-double Blob:: ymin(){
+double Blob:: ymin()
+{
   return m_ymin;
 }
-double Blob:: ymax(){
+double Blob:: ymax()
+{
   return m_ymax;
 }
-double Blob:: xmid(){
+double Blob:: xmid()
+{
   return m_xaccum/m_xyaccum;
 }
-double Blob:: ymid(){
+double Blob:: ymid()
+{
   return m_yaccum/m_xyaccum;
 }
-double Blob:: diameter2(){
-  return (m_xmax-m_xmin)*(m_xmax-m_xmin)+(m_ymax-m_ymin)*(m_ymax-m_ymin);}
-double Blob:: diameter(){
+double Blob:: diameter2()
+{
+  return (m_xmax-m_xmin)*(m_xmax-m_xmin)+(m_ymax-m_ymin)*(m_ymax-m_ymin);
+}
+double Blob:: diameter()
+{
   return sqrt(diameter2());
 }
-double Blob:: distance2(Blob b){
+double Blob:: distance2(Blob b)
+{
   return (b.xmid()-xmid())*(b.xmid()-xmid())+(b.ymid()-ymid())*(b.ymid()-ymid());
 }
-double Blob:: distance(Blob b){
-  return sqrt(distance2(b));}
-void Blob:: xmin(double x){
+double Blob:: distance(Blob b)
+{
+  return sqrt(distance2(b));
+}
+void Blob:: xmin(double x)
+{
   m_xmin=x;
 }
-void Blob:: xmax(double x){
+void Blob:: xmax(double x)
+{
   m_xmax=x;
 }
-void Blob:: ymin(double y){
+void Blob:: ymin(double y)
+{
   m_ymin=y;
 }
-void Blob:: ymax(double y){
+void Blob:: ymax(double y)
+{
   m_ymax=y;
 }
 
@@ -111,7 +127,9 @@ pix_multiblob :: pix_multiblob(t_floatarg f) :
   m_infoOut = outlet_new(this->x_obj, &s_list);
 
   m_blobNumber = static_cast<int>(f);
-  if(m_blobNumber < 1)m_blobNumber = 6;
+  if(m_blobNumber < 1) {
+    m_blobNumber = 6;
+  }
   numBlobsMess(m_blobNumber);
 
 }
@@ -124,7 +142,9 @@ Destructor
 pix_multiblob :: ~pix_multiblob()
 {
   outlet_free(m_infoOut);
-  if(m_currentBlobs)delete[]m_currentBlobs;
+  if(m_currentBlobs) {
+    delete[]m_currentBlobs;
+  }
 }
 
 /*------------------------------------------------------------
@@ -136,7 +156,9 @@ by Ricardo Fabbri (labmacambira.sf.net)
 ------------------------------------------------------------*/
 void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
 {
-  if(!pb)return;
+  if(!pb) {
+    return;
+  }
 
   point *cp, np; // current pixel
   pstk_ptr current; // stack of current pixels
@@ -161,20 +183,28 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
     pb->m_20 += grey*x*x;
     pb->m_02 += grey*y*y;
 
-    if (cp->x < pb->xmin()) pb->xmin(cp->x);
-    if (cp->x > pb->xmax()) pb->xmax(cp->x);
-    if (cp->y < pb->ymin()) pb->ymin(cp->y);
-    if (cp->y > pb->ymax()) pb->ymax(cp->y);
+    if (cp->x < pb->xmin()) {
+      pb->xmin(cp->x);
+    }
+    if (cp->x > pb->xmax()) {
+      pb->xmax(cp->x);
+    }
+    if (cp->y < pb->ymin()) {
+      pb->ymin(cp->y);
+    }
+    if (cp->y > pb->ymax()) {
+      pb->ymax(cp->y);
+    }
 
     m_image.SetPixel(cp->y,cp->x,chGray,0);
-    for(int i = -1; i<= 1; i++){
-      for(int j = -1; j <= 1; j++){
+    for(int i = -1; i<= 1; i++) {
+      for(int j = -1; j <= 1; j++) {
         np.x = cp->x + j;
         np.y = cp->y + i;
 
         if(np.x >= 0 && np.y >= 0 &&
-          np.x < m_image.xsize && np.y < m_image.ysize &&
-          m_image.GetPixel(np.y, np.x, chGray) > m_threshold ) {
+            np.x < m_image.xsize && np.y < m_image.ysize &&
+            m_image.GetPixel(np.y, np.x, chGray) > m_threshold ) {
           ptpush(&current, &np);
         }
       }
@@ -197,11 +227,13 @@ void pix_multiblob :: addToBlobArray(Blob *pb, int blobNumber)
     int index=-1;
     int i = m_blobNumber;
     while(i--)
-      if (m_currentBlobs[i].area < min){
+      if (m_currentBlobs[i].area < min) {
         min = m_currentBlobs[i].area;
         index = i;
       }
-    if (index!=-1)m_currentBlobs[index] = *pb;
+    if (index!=-1) {
+      m_currentBlobs[index] = *pb;
+    }
   } else {
     m_currentBlobs[blobNumber] = *pb;
   }
@@ -225,7 +257,9 @@ void pix_multiblob :: doProcessing(void)
     for(int x = 0; x < m_image.xsize; x++) {
       if (m_image.GetPixel(y,x,0) > 0) {
         Blob *blob = new Blob();
-        if(0 == blob)continue;
+        if(0 == blob) {
+          continue;
+        }
         blob->xmin(m_image.xsize);
         blob->ymin(m_image.ysize);
 
@@ -242,7 +276,9 @@ void pix_multiblob :: doProcessing(void)
   // ok, we have found some blobs
 
   // since we can only handle m_blobNumber blobs, we might want to clip
-  if(blobNumber > m_blobNumber)blobNumber = m_blobNumber;
+  if(blobNumber > m_blobNumber) {
+    blobNumber = m_blobNumber;
+  }
 
   t_float scaleX = 1./m_image.xsize;
   t_float scaleY = 1./m_image.ysize;
@@ -274,7 +310,8 @@ void pix_multiblob :: doProcessing(void)
     // but it is the best thing i can think of for 2-dimensional arrays
     outlet_anything(m_infoOut, gensym("matrix"), 2+9*blobNumber, ap);
 
-    delete[]ap; ap=NULL;
+    delete[]ap;
+    ap=NULL;
   }
 }
 
@@ -286,7 +323,7 @@ void pix_multiblob :: processImage(imageStruct &image)
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
 
-  switch (image.format){
+  switch (image.format) {
   case GL_RGBA:
     m_image.fromRGBA(image.data);
     break;
@@ -316,11 +353,10 @@ blobSizeMess
 ------------------------------------------------------------*/
 void pix_multiblob :: blobSizeMess(t_float blobSize)
 {
-  if((blobSize < 0.0)||(blobSize > 1.0))
-    {
-      error("blobsize %f out of range (0..1)!", blobSize);
-      return;
-    }
+  if((blobSize < 0.0)||(blobSize > 1.0)) {
+    error("blobsize %f out of range (0..1)!", blobSize);
+    return;
+  }
   m_blobsize = blobSize/100.0;
 }
 
@@ -329,10 +365,9 @@ threshMess
 ------------------------------------------------------------*/
 void pix_multiblob :: threshMess(t_float thresh)
 {
-  if((thresh < 0.0)||(thresh > 1.0))
-    {
-      error("threshold %f out of range (0..1)!", thresh);
-    }
+  if((thresh < 0.0)||(thresh > 1.0)) {
+    error("threshold %f out of range (0..1)!", thresh);
+  }
   m_threshold = CLAMP(thresh*255);
 }
 
@@ -341,7 +376,9 @@ threshMess
 ------------------------------------------------------------*/
 void pix_multiblob :: numBlobsMess(unsigned int blobs)
 {
-  if(m_currentBlobs)delete[]m_currentBlobs;
+  if(m_currentBlobs) {
+    delete[]m_currentBlobs;
+  }
 
   // initialize blob-structures
   m_currentBlobs = new Blob[blobs];

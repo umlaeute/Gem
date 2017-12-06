@@ -33,7 +33,7 @@ class GEM_EXTERN part_source : public partlib_base
 {
   CPPEXTERN_HEADER(part_source, partlib_base);
 
-    public:
+public:
 
   //////////
   // Constructor
@@ -42,7 +42,7 @@ class GEM_EXTERN part_source : public partlib_base
   //////////
   virtual void  renderParticles(GemState *state);
 
- protected:
+protected:
 
   //////////
   // Destructor

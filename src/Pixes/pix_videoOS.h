@@ -44,13 +44,13 @@ class GEM_EXTERN pix_videoOS : public GemBase
 {
   CPPEXTERN_HEADER(pix_videoOS, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_videoOS(t_floatarg num = 0);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -66,8 +66,8 @@ class GEM_EXTERN pix_videoOS : public GemBase
 
   //////////
   // Set the video dimensions
-  virtual void  dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-                          int topmargin = 0 , int bottommargin = 0) {}
+  virtual void  dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0,
+                          int topmargin = 0, int bottommargin = 0) {}
 
   //////////
   // Set the video offset
@@ -119,7 +119,7 @@ class GEM_EXTERN pix_videoOS : public GemBase
   // Do we have to color swap?
   int           m_colorSwap;
 
- private:
+private:
 
   //////////
   // static member functions

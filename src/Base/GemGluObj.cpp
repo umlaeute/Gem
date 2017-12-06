@@ -38,8 +38,12 @@ GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
   m_drawTypes["points"]=GL_POINT;
 
   m_drawType = (GLenum) GL_FILL;
-  if(m_numSlices<=0)m_numSlices=10;
-  if(m_numStacks<=0)m_numStacks=m_numSlices;
+  if(m_numSlices<=0) {
+    m_numSlices=10;
+  }
+  if(m_numStacks<=0) {
+    m_numStacks=m_numSlices;
+  }
 
   // the number of slices
   m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numslices"));
@@ -83,7 +87,7 @@ void GemGluObj :: obj_setupCallback(t_class *classPtr)
 }
 void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-  switch(argc){
+  switch(argc) {
   case 1:
     GetMyClass(data)->numSlicesMess(atom_getint(argv));
     break;

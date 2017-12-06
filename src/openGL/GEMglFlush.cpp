@@ -23,7 +23,7 @@ CPPEXTERN_NEW ( GEMglFlush );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglFlush :: GEMglFlush        (){}
+GEMglFlush :: GEMglFlush        () {}
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -32,7 +32,8 @@ GEMglFlush :: ~GEMglFlush () {}
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglFlush :: render(GemState *state) {
+void GEMglFlush :: render(GemState *state)
+{
   glFlush ();
 }
 

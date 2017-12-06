@@ -23,7 +23,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglGetMapdv, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetMapdv :: GEMglGetMapdv  (t_floatarg arg0, t_floatarg arg1) {
+GEMglGetMapdv :: GEMglGetMapdv  (t_floatarg arg0, t_floatarg arg1)
+{
   targetMess(arg0);
   queryMess(arg1);
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
@@ -32,15 +33,19 @@ GEMglGetMapdv :: GEMglGetMapdv  (t_floatarg arg0, t_floatarg arg1) {
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGetMapdv :: ~GEMglGetMapdv () {
+GEMglGetMapdv :: ~GEMglGetMapdv ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
 
 //////////////////
 // extension check
-bool GEMglGetMapdv :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglGetMapdv :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -48,7 +53,8 @@ bool GEMglGetMapdv :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGetMapdv :: render(GemState *state) {
+void GEMglGetMapdv :: render(GemState *state)
+{
   glGetMapdv (target, query, v);
   post("not really implemented:: got data @ %X, what should i do with it", v);
 }
@@ -56,11 +62,13 @@ void GEMglGetMapdv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetMapdv :: targetMess (t_float arg0) {       // FUN
+void GEMglGetMapdv :: targetMess (t_float arg0)         // FUN
+{
   target=static_cast<GLenum>(arg0);
   setModified();
 }
-void GEMglGetMapdv :: queryMess (t_float arg0) {        // FUN
+void GEMglGetMapdv :: queryMess (t_float arg0)          // FUN
+{
   query=static_cast<GLenum>(arg0);
   setModified();
 }
@@ -68,14 +76,17 @@ void GEMglGetMapdv :: queryMess (t_float arg0) {        // FUN
 // static member functions
 //
 
-void GEMglGetMapdv :: obj_setupCallback(t_class *classPtr) {
+void GEMglGetMapdv :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapdv::targetMessCallback), gensym("target"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapdv::queryMessCallback), gensym("query"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglGetMapdv :: targetMessCallback (void* data, t_float arg0) {
+void GEMglGetMapdv :: targetMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->targetMess (arg0 );
 }
-void GEMglGetMapdv :: queryMessCallback (void* data, t_float arg0) {
+void GEMglGetMapdv :: queryMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->queryMess (arg0 );
 }

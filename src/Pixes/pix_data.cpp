@@ -59,8 +59,9 @@ pix_data :: ~pix_data()
 void pix_data :: trigger()
 {
   // if we don't have a "right hand" image, then just return
-  if (!m_pixRight || !m_pixRight->image.data)
+  if (!m_pixRight || !m_pixRight->image.data) {
     return;
+  }
 
   t_float red, green, blue, alpha, grey;
 
@@ -71,8 +72,18 @@ void pix_data :: trigger()
   t_float fxPos = m_position[0] * maxX;
   t_float fyPos = m_position[1] * maxY;
 
-  if(fxPos<0)fxPos=0; if(fxPos>=maxX-1)fxPos=maxX-1;
-  if(fyPos<0)fyPos=0; if(fyPos>=maxY-1)fyPos=maxY-1;
+  if(fxPos<0) {
+    fxPos=0;
+  }
+  if(fxPos>=maxX-1) {
+    fxPos=maxX-1;
+  }
+  if(fyPos<0) {
+    fyPos=0;
+  }
+  if(fyPos>=maxY-1) {
+    fyPos=maxY-1;
+  }
 
   int ixPos0 = 0+static_cast<int>(fxPos);
   int iyPos0 = 0+static_cast<int>(fyPos);
@@ -82,8 +93,12 @@ void pix_data :: trigger()
     int ixPos1 = 1+static_cast<int>(fxPos);
     int iyPos1 = 1+static_cast<int>(fyPos);
 
-    if(ixPos1>=maxX-1)ixPos1=ixPos0;
-    if(iyPos1>=maxY-1)iyPos1=iyPos0;
+    if(ixPos1>=maxX-1) {
+      ixPos1=ixPos0;
+    }
+    if(iyPos1>=maxY-1) {
+      iyPos1=iyPos0;
+    }
 
     t_float xFrac = fxPos - ixPos0;
     t_float yFrac = fyPos - iyPos0;
@@ -112,7 +127,7 @@ void pix_data :: trigger()
     alpha = BILIN4(a) / 255.;
     grey  = BILIN4(G) / 255.;
   }
-    break;
+  break;
   case 0: {
     unsigned char r, g, b, a, G;
     m_pixRight->image.getRGB(ixPos0, iyPos0, &r, &g, &b, &a);
@@ -125,7 +140,7 @@ void pix_data :: trigger()
     alpha = NONLIN(a) / 255.;
     grey  = NONLIN(G) / 255.;
   }
-    break;
+  break;
   }
 
   t_atom atom[4];
@@ -138,16 +153,21 @@ void pix_data :: trigger()
   outlet_list(m_colorOut, gensym("list"), 4, atom);
 }
 
-void pix_data :: xPos(t_float f) {
+void pix_data :: xPos(t_float f)
+{
   m_position[0]=FLOAT_CLAMP(f);
 }
-void pix_data :: yPos(t_float f) {
+void pix_data :: yPos(t_float f)
+{
   m_position[1]=FLOAT_CLAMP(f);
 }
-void pix_data :: qualityMess(int q) {
-  if(q>=0)
+void pix_data :: qualityMess(int q)
+{
+  if(q>=0) {
     m_quality=q;
-  else error("qualiy must be 0|1");
+  } else {
+    error("qualiy must be 0|1");
+  }
 
 }
 

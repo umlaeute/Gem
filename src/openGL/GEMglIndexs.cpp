@@ -14,7 +14,7 @@
 
 #include "GEMglIndexs.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexs , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexs, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglIndexs :: GEMglIndexs      (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglIndexs :: ~GEMglIndexs () {
+GEMglIndexs :: ~GEMglIndexs ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglIndexs :: render(GemState *state) {
+void GEMglIndexs :: render(GemState *state)
+{
   glIndexs (c);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglIndexs :: cMess (t_float arg1) {      // FUN
+void GEMglIndexs :: cMess (t_float arg1)        // FUN
+{
   c = static_cast<GLshort>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglIndexs :: cMess (t_float arg1) {      // FUN
 // static member functions
 //
 
-void GEMglIndexs :: obj_setupCallback(t_class *classPtr) {
+void GEMglIndexs :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexs::cMessCallback),     gensym("c"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglIndexs :: cMessCallback (void* data, t_float arg0){
+void GEMglIndexs :: cMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->cMess ( static_cast<t_float>(arg0));
 }

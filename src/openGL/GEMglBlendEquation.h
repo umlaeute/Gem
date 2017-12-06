@@ -29,15 +29,15 @@ class GEM_EXTERN GEMglBlendEquation : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglBlendEquation, GemGLBase);
 
-    public:
+public:
   // Constructor
   GEMglBlendEquation (t_float); // CON
 
- protected:
+protected:
   // Destructor
   virtual ~GEMglBlendEquation ();
-          // check extensions
-          virtual bool isRunnable(void);
+  // check extensions
+  virtual bool isRunnable(void);
 
   // Do the rendering
   virtual void  render (GemState *state);
@@ -47,7 +47,7 @@ class GEM_EXTERN GEMglBlendEquation : public GemGLBase
   virtual void  modeMess(t_float);      // FUN
 
 
- private:
+private:
 
   // we need some inlets
   t_inlet *m_inlet[1];

@@ -14,7 +14,7 @@
 
 #include "GEMglLineStipple.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglLineStipple , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglLineStipple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglLineStipple :: GEMglLineStipple    (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglLineStipple :: ~GEMglLineStipple () {
+GEMglLineStipple :: ~GEMglLineStipple ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglLineStipple :: ~GEMglLineStipple () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglLineStipple :: render(GemState *state) {
+void GEMglLineStipple :: render(GemState *state)
+{
   glLineStipple (factor, pattern);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglLineStipple :: factorMess (t_float arg1) {    // FUN
+void GEMglLineStipple :: factorMess (t_float arg1)      // FUN
+{
   factor = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglLineStipple :: patternMess (t_float arg1) {   // FUN
+void GEMglLineStipple :: patternMess (t_float arg1)     // FUN
+{
   pattern = static_cast<GLushort>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglLineStipple :: patternMess (t_float arg1) {   // FUN
 // static member functions
 //
 
-void GEMglLineStipple :: obj_setupCallback(t_class *classPtr) {
+void GEMglLineStipple :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLineStipple::factorMessCallback),   gensym("factor"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLineStipple::patternMessCallback),          gensym("pattern"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglLineStipple :: factorMessCallback (void* data, t_float arg0){
+void GEMglLineStipple :: factorMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->factorMess ( static_cast<t_float>(arg0));
 }
-void GEMglLineStipple :: patternMessCallback (void* data, t_float arg0){
+void GEMglLineStipple :: patternMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->patternMess ( static_cast<t_float>(arg0));
 }

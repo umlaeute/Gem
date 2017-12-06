@@ -30,28 +30,28 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_killslow : public partlib_base
 {
-    CPPEXTERN_HEADER(part_killslow, partlib_base);
+  CPPEXTERN_HEADER(part_killslow, partlib_base);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        part_killslow(t_floatarg num);
+  //////////
+  // Constructor
+  part_killslow(t_floatarg num);
 
-        //////////
-        virtual void    renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~part_killslow(void);
+  //////////
+  // Destructor
+  virtual ~part_killslow(void);
 
-      //////////
-      void                      speedMess(float num);
+  //////////
+  void                      speedMess(float num);
 
-      //////////
-      float                     m_killSpeed;
+  //////////
+  float                     m_killSpeed;
 };
 
 #endif  // for header file

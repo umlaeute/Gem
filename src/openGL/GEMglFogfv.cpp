@@ -27,10 +27,16 @@ GEMglFogfv :: GEMglFogfv        (int argc, t_atom *argv)
   :pname(GL_FOG_START)
 {
   int i=FOG_ARRAY_LENGTH;
-  while(i--)params[i]=0.0;
+  while(i--) {
+    params[i]=0.0;
+  }
 
-  if (argc>0)pnameMess(atom_getfloat(argv));
-  if (argc>0)paramsMess(argc-1, argv+1);
+  if (argc>0) {
+    pnameMess(atom_getfloat(argv));
+  }
+  if (argc>0) {
+    paramsMess(argc-1, argv+1);
+  }
 
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
   m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("params"));
@@ -38,15 +44,19 @@ GEMglFogfv :: GEMglFogfv        (int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglFogfv :: ~GEMglFogfv () {
+GEMglFogfv :: ~GEMglFogfv ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
 
 //////////////////
 // extension check
-bool GEMglFogfv :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglFogfv :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -54,20 +64,25 @@ bool GEMglFogfv :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglFogfv :: render(GemState *state) {
+void GEMglFogfv :: render(GemState *state)
+{
   glFogfv (pname, params);
 }
 
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglFogfv :: pnameMess (t_float arg0) {   // FUN
+void GEMglFogfv :: pnameMess (t_float arg0)     // FUN
+{
   pname=static_cast<GLenum>(arg0);
   setModified();
 }
-void GEMglFogfv :: paramsMess (int argc, t_atom*argv) { // FUN
+void GEMglFogfv :: paramsMess (int argc, t_atom*argv)   // FUN
+{
   int i = (argc<FOG_ARRAY_LENGTH)?argc:FOG_ARRAY_LENGTH;
-  while(i--)params[i]=atom_getfloat(argv+i);
+  while(i--) {
+    params[i]=atom_getfloat(argv+i);
+  }
   setModified();
 }
 
@@ -76,14 +91,17 @@ void GEMglFogfv :: paramsMess (int argc, t_atom*argv) { // FUN
 // static member functions
 //
 
-void GEMglFogfv :: obj_setupCallback(t_class *classPtr) {
+void GEMglFogfv :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogfv::pnameMessCallback),          gensym("pname"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogfv::paramsMessCallback),         gensym("params"), A_GIMME, A_NULL);
 }
 
-void GEMglFogfv :: pnameMessCallback (void* data, t_float arg0) {
+void GEMglFogfv :: pnameMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->pnameMess (arg0);
 }
-void GEMglFogfv :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv) {
+void GEMglFogfv :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv)
+{
   GetMyClass(data)->paramsMess (argc, argv);
 }

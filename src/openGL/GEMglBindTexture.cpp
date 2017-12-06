@@ -14,7 +14,7 @@
 
 #include "GEMglBindTexture.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,33 +33,40 @@ GEMglBindTexture :: GEMglBindTexture    (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglBindTexture :: ~GEMglBindTexture () {
+GEMglBindTexture :: ~GEMglBindTexture ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
 //////////////////
 // extension check
-bool GEMglBindTexture :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglBindTexture :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglBindTexture :: render(GemState *state) {
+void GEMglBindTexture :: render(GemState *state)
+{
   glBindTexture (target, texture);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglBindTexture :: targetMess (t_float arg1) {    // FUN
+void GEMglBindTexture :: targetMess (t_float arg1)      // FUN
+{
   target = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglBindTexture :: textureMess (t_float arg1) {   // FUN
+void GEMglBindTexture :: textureMess (t_float arg1)     // FUN
+{
   texture = static_cast<GLuint>(arg1);
   setModified();
 }
@@ -69,14 +76,17 @@ void GEMglBindTexture :: textureMess (t_float arg1) {   // FUN
 // static member functions
 //
 
-void GEMglBindTexture :: obj_setupCallback(t_class *classPtr) {
+void GEMglBindTexture :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindTexture::targetMessCallback),   gensym("target"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindTexture::textureMessCallback),          gensym("texture"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglBindTexture :: targetMessCallback (void* data, t_float arg0){
+void GEMglBindTexture :: targetMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglBindTexture :: textureMessCallback (void* data, t_float arg0){
+void GEMglBindTexture :: textureMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->textureMess ( static_cast<t_float>(arg0));
 }

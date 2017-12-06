@@ -71,13 +71,13 @@ class GEM_EXTERN ripple : public GemShape
 {
   CPPEXTERN_HEADER(ripple, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   ripple( t_floatarg width, t_floatarg height);
 
- protected:
+protected:
 
   //////////
   // Destructor

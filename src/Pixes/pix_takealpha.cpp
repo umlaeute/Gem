@@ -64,12 +64,11 @@ void pix_takealpha :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
 
-  while(datasize--)
-    {
-      leftPix[chAlpha] = rightPix[chGray];
-      leftPix += 4;
-      rightPix+= 1;
-    }
+  while(datasize--) {
+    leftPix[chAlpha] = rightPix[chGray];
+    leftPix += 4;
+    rightPix+= 1;
+  }
 }
 
 /////////////////////////////////////////////////////////

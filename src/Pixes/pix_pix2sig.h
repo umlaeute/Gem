@@ -38,13 +38,13 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_pix2sig, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_pix2sig();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -78,7 +78,7 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   // the outlets~
   t_outlet *o_col[4];
 
- private:
+private:
 
   //////////
   // static member functions

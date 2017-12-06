@@ -30,7 +30,7 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN partlib_base : public GemBase
 {
- public:
+public:
 
   //////////
   // Constructor
@@ -45,7 +45,7 @@ class GEM_EXTERN partlib_base : public GemBase
 
   virtual void renderParticles(GemState*)=0;
 
- protected:
+protected:
   float m_tickTime;
 
 };

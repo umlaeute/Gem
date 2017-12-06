@@ -94,12 +94,14 @@ void pix_offset :: processGrayImage(imageStruct &image)
   unsigned char m_grey=m_offset[chRed];
 
   if(m_saturate) {
-    while(datasize--){
+    while(datasize--) {
       short grey = *pixels + m_grey;
       *pixels++ = CLAMP(grey);
     }
   } else
-    while(datasize--)*pixels++ += m_grey;
+    while(datasize--) {
+      *pixels++ += m_grey;
+    }
 }
 
 ////////////////////////////////////////////////////////
@@ -111,8 +113,8 @@ void pix_offset :: processYUVImage(imageStruct &image)
   long src = 0;
 
   //format is U Y V Y
-  for (int h=0; h<image.ysize; h++){
-    for(int w=0; w<image.xsize/2; w++){
+  for (int h=0; h<image.ysize; h++) {
+    for(int w=0; w<image.xsize/2; w++) {
       image.data[src+chU ] = CLAMP( image.data[src+chU] + U );
       image.data[src+chY0] = CLAMP( image.data[src+chY0]+ Y );
       image.data[src+chV ] = CLAMP( image.data[src+chV] + V );
@@ -198,11 +200,10 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
   height = image.ysize;
   //format is U Y V Y
   // start of working altivec function
-  union
-  {
+  union {
     short       elements[8];
     vector      signed short v;
-  }transferBuffer;
+  } transferBuffer;
 
   register vector signed short c, hi, lo;
   register vector signed short hi1, lo1;
@@ -238,11 +239,12 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
   loadlo = (vector signed short) vec_mergel( zero, inData[0] );
 
   loadhi1 = (vector signed short) vec_mergeh( zero, inData[1] );
-  loadlo1 = (vector signed short) vec_mergel( zero, inData[1] );  \
+  loadlo1 = (vector signed short) vec_mergel( zero, inData[1] );
+  \
 
 
-  for ( h=0; h<height; h++){
-    for (w=0; w<width; w++){
+  for ( h=0; h<height; h++) {
+    for (w=0; w<width; w++) {
 
 #ifndef PPC970
       vec_dst( inData, prefetchSize, 0 );
@@ -311,13 +313,14 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_offset :: vecOffsetMess(int argc, t_atom *argv)
 {
-  if (argc >= 4) m_offset[chAlpha] = static_cast<int>(255.*atom_getfloat(&argv[3]));
-  else if (argc == 3) m_offset[chAlpha] = 0;
-  else
-    {
-      error("not enough offset values");
-      return;
-    }
+  if (argc >= 4) {
+    m_offset[chAlpha] = static_cast<int>(255.*atom_getfloat(&argv[3]));
+  } else if (argc == 3) {
+    m_offset[chAlpha] = 0;
+  } else {
+    error("not enough offset values");
+    return;
+  }
   m_offset[chRed]   = static_cast<int>(255*atom_getfloat(&argv[0]));
   m_offset[chGreen] = static_cast<int>(255*atom_getfloat(&argv[1]));
   m_offset[chBlue]  = static_cast<int>(255*atom_getfloat(&argv[2]));

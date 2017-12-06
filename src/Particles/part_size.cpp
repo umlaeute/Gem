@@ -47,7 +47,7 @@ part_size :: ~part_size()
 /////////////////////////////////////////////////////////
 void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
 {
-  switch(argc){
+  switch(argc) {
   case 1:
     m_size[0]=m_size[1]=m_size[2]=atom_getfloat(argv);
     break;
@@ -55,7 +55,8 @@ void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
     m_size[0]=atom_getfloat(argv++);
     m_size[1]=atom_getfloat(argv++);
     m_size[2]=atom_getfloat(argv++);
-  default:;
+  default:
+    ;
   }
 }
 /////////////////////////////////////////////////////////

@@ -105,8 +105,8 @@ void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
   int  y1,y2;
   src =0;
   //format is U Y V Y
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
+  for (h=0; h<image.ysize; h++) {
+    for(w=0; w<image.xsize/2; w++) {
       y1 = (image.data[src+chY0] * right.data[src+chY0]) >> 8;
       image.data[src+chY0] = CLAMP_Y(y1);
       y2 = (image.data[src+chY1] * right.data[src+chY1]) >> 8;

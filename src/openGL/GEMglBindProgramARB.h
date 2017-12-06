@@ -1,11 +1,11 @@
- /* ------------------------------------------------------------------
-  * GEM - Graphics Environment for Multimedia
-  *
-  *  Copyright (c) 2004 tigital@mac.com
-  *  For information on usage and redistribution, and for a DISCLAIMER
-  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
-  * ------------------------------------------------------------------
-  */
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ *  Copyright (c) 2004 tigital@mac.com
+ *  For information on usage and redistribution, and for a DISCLAIMER
+ *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_OPENGL_GEMGLBINDPROGRAMARB_H_
 #define _INCLUDE__GEM_OPENGL_GEMGLBINDPROGRAMARB_H_
@@ -24,36 +24,36 @@
 
 class GEM_EXTERN GEMglBindProgramARB : public GemGLBase
 {
-        CPPEXTERN_HEADER(GEMglBindProgramARB, GemGLBase);
+  CPPEXTERN_HEADER(GEMglBindProgramARB, GemGLBase);
 
-        public:
-          // Constructor
-          GEMglBindProgramARB (t_float, t_float);       // CON
+public:
+  // Constructor
+  GEMglBindProgramARB (t_float, t_float);       // CON
 
-        protected:
-          // Destructor
-          virtual ~GEMglBindProgramARB ();
-          // check extensions
-          virtual bool isRunnable(void);
+protected:
+  // Destructor
+  virtual ~GEMglBindProgramARB ();
+  // check extensions
+  virtual bool isRunnable(void);
 
-          // Do the rendering
-          virtual void  render (GemState *state);
+  // Do the rendering
+  virtual void  render (GemState *state);
 
-        // variables
-          GLenum        target;         // VAR
-          virtual void  targetMess(t_float);    // FUN
+  // variables
+  GLenum        target;         // VAR
+  virtual void  targetMess(t_float);    // FUN
 
-          GLuint        program;                // VAR
-          virtual void  programMess(t_float);   // FUN
+  GLuint        program;                // VAR
+  virtual void  programMess(t_float);   // FUN
 
 
-        private:
+private:
 
-        // we need some inlets
-          t_inlet *m_inlet[2];
+  // we need some inlets
+  t_inlet *m_inlet[2];
 
-        // static member functions
-          static void    targetMessCallback (void*, t_float);
-          static void    programMessCallback (void*, t_float);
+  // static member functions
+  static void    targetMessCallback (void*, t_float);
+  static void    programMessCallback (void*, t_float);
 };
 #endif // for header file

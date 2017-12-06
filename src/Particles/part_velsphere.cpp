@@ -53,18 +53,19 @@ part_velsphere :: ~part_velsphere(void)
 /////////////////////////////////////////////////////////
 void part_velsphere :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pVelocityD(PDSphere, m_pos[0], m_pos[1], m_pos[2], m_radius);
-    }
+  if (m_tickTime > 0.f) {
+    pVelocityD(PDSphere, m_pos[0], m_pos[1], m_pos[2], m_radius);
+  }
 }
 
-void part_velsphere::vectorMess(float val1, float val2, float val3){
+void part_velsphere::vectorMess(float val1, float val2, float val3)
+{
   m_pos[0] = val1;
   m_pos[1] = val2;
   m_pos[2] = val3;
 }
-void part_velsphere::velMess(float num) {
+void part_velsphere::velMess(float num)
+{
   m_radius = num;
 }
 

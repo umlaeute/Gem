@@ -14,7 +14,7 @@
 
 #include "GEMglSelectBuffer.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglSelectBuffer , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglSelectBuffer, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -34,7 +34,8 @@ GEMglSelectBuffer :: GEMglSelectBuffer  (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglSelectBuffer :: ~GEMglSelectBuffer () {
+GEMglSelectBuffer :: ~GEMglSelectBuffer ()
+{
   inlet_free(m_inlet);
   outlet_free(m_bufout);
   delete[]buffer;
@@ -42,8 +43,11 @@ GEMglSelectBuffer :: ~GEMglSelectBuffer () {
 
 //////////////////
 // extension check
-bool GEMglSelectBuffer :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglSelectBuffer :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -51,13 +55,18 @@ bool GEMglSelectBuffer :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglSelectBuffer :: render(GemState *state) {
-  if(buffer)
+void GEMglSelectBuffer :: render(GemState *state)
+{
+  if(buffer) {
     glSelectBuffer (size, buffer);
+  }
 }
 
-void GEMglSelectBuffer :: postrender(GemState *state) {
-  if(!buffer)return;
+void GEMglSelectBuffer :: postrender(GemState *state)
+{
+  if(!buffer) {
+    return;
+  }
   t_atom*ap=new t_atom[size];
   int i=0;
   for(i=0; i<size; i++) {
@@ -69,17 +78,21 @@ void GEMglSelectBuffer :: postrender(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglSelectBuffer :: sizeMess (t_float arg1) {     // FUN
+void GEMglSelectBuffer :: sizeMess (t_float arg1)       // FUN
+{
   int i;
-  if (arg1<1)return;
+  if (arg1<1) {
+    return;
+  }
   size = static_cast<GLsizei>(arg1);
-  if (len<size){
+  if (len<size) {
     len=size;
     delete[]buffer;
     buffer = new GLuint[len];
   }
-  for(i=0; i<len; i++)
+  for(i=0; i<len; i++) {
     buffer[i]=0;
+  }
 
   setModified();
 }
@@ -89,10 +102,12 @@ void GEMglSelectBuffer :: sizeMess (t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglSelectBuffer :: obj_setupCallback(t_class *classPtr) {
+void GEMglSelectBuffer :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglSelectBuffer::sizeMessCallback),    gensym("size"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglSelectBuffer :: sizeMessCallback (void* data, t_float arg0){
+void GEMglSelectBuffer :: sizeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sizeMess (arg0);
 }

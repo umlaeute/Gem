@@ -58,7 +58,7 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
     break;
-    /* coverity[unterminated_default] */
+  /* coverity[unterminated_default] */
   default:
     error("needs 0, 2, or 4 values");
   case 0:
@@ -95,8 +95,9 @@ void pix_snap2tex :: setUpTextureState(void)
   glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
   glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
 #if 0
-  if (m_rectangle && m_textureType !=  GL_TEXTURE_RECTANGLE_EXT)
+  if (m_rectangle && m_textureType !=  GL_TEXTURE_RECTANGLE_EXT) {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  }
 #endif
 }
 
@@ -105,7 +106,8 @@ void pix_snap2tex :: setUpTextureState(void)
 // extension checks
 //
 /////////////////////////////////////////////////////////
-bool pix_snap2tex :: isRunnable(void) {
+bool pix_snap2tex :: isRunnable(void)
+{
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
     error("your system lacks texture support");
     return false;
@@ -113,16 +115,18 @@ bool pix_snap2tex :: isRunnable(void) {
 
   /* check rectangle possibilities */
   m_canRectangle=GL_TEXTURE_2D;
-  if(GLEW_ARB_texture_rectangle)
+  if(GLEW_ARB_texture_rectangle) {
     m_canRectangle=GL_TEXTURE_RECTANGLE_ARB;
-  else if (GLEW_EXT_texture_rectangle)
+  } else if (GLEW_EXT_texture_rectangle) {
     m_canRectangle=GL_TEXTURE_RECTANGLE_EXT;
+  }
 
   return true;
 }
 
 
-void pix_snap2tex :: setTexCoords(float x, float y) {
+void pix_snap2tex :: setTexCoords(float x, float y)
+{
   m_xRatio = x;
   m_yRatio = y;
 
@@ -149,7 +153,9 @@ void pix_snap2tex :: snapMess(void)
     verbose(0, "not initialized yet with a valid context");
     return;
   }
-  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
+    return;
+  }
 
   int width  = m_width;
   int height = m_height;
@@ -157,11 +163,10 @@ void pix_snap2tex :: snapMess(void)
   GemMan::getDimen(((m_width >0)?NULL:&width ),
                    ((m_height>0)?NULL:&height));
 
-  if (width <= 0 || height <= 0)
-    {
-      error("Illegal size %dx%d", width, height);
-      return;
-    }
+  if (width <= 0 || height <= 0) {
+    error("Illegal size %dx%d", width, height);
+    return;
+  }
 
   if(GLEW_VERSION_1_3) {
     glActiveTexture(GL_TEXTURE0_ARB + m_texUnit);
@@ -230,7 +235,9 @@ void pix_snap2tex :: render(GemState *state)
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
 
-  if (!m_textureOnOff) return;
+  if (!m_textureOnOff) {
+    return;
+  }
 
   state->set(GemState::_GL_TEX_COORDS, static_cast<TexCoord*>(m_coords));
   state->set(GemState::_GL_TEX_NUMCOORDS, 4);
@@ -272,7 +279,7 @@ void pix_snap2tex :: postrender(GemState *state)
   state->set(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
 
-  if (m_didTexture){
+  if (m_didTexture) {
     if(GLEW_VERSION_1_3) {
       glActiveTexture(GL_TEXTURE0_ARB + m_texUnit);  //needed?
     }
@@ -391,28 +398,28 @@ void pix_snap2tex :: texUnitMess(int unit)
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: textureQuality(int type)
 {
-  if (type)
+  if (type) {
     m_textureQuality = GL_LINEAR;
-  else
+  } else {
     m_textureQuality = GL_NEAREST;
-  if (m_textureObj)
-    {
-      if(GLEW_VERSION_1_3) {
-        glActiveTexture(GL_TEXTURE0_ARB + m_texUnit);
-      }
-      if(GLEW_VERSION_1_1) {
-        glBindTexture(m_textureType, m_textureObj);
-        glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-        glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-      } else if (GLEW_EXT_texture_object) {
-        glBindTextureEXT(m_textureType, m_textureObj);
-        glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-        glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-      }
-      if(GLEW_VERSION_1_3) {
-        glActiveTexture(GL_TEXTURE0_ARB);
-      }
+  }
+  if (m_textureObj) {
+    if(GLEW_VERSION_1_3) {
+      glActiveTexture(GL_TEXTURE0_ARB + m_texUnit);
     }
+    if(GLEW_VERSION_1_1) {
+      glBindTexture(m_textureType, m_textureObj);
+      glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+      glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+    } else if (GLEW_EXT_texture_object) {
+      glBindTextureEXT(m_textureType, m_textureObj);
+      glTexParameteri(m_textureType, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+      glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+    }
+    if(GLEW_VERSION_1_3) {
+      glActiveTexture(GL_TEXTURE0_ARB);
+    }
+  }
   setModified();
 }
 
@@ -422,10 +429,11 @@ void pix_snap2tex :: textureQuality(int type)
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: repeatMess(int type)
 {
-  if (type)
+  if (type) {
     m_repeat = GL_REPEAT;
-  else
+  } else {
     m_repeat = GL_CLAMP_TO_EDGE;
+  }
 
   if (m_textureObj) {
     if(GLEW_VERSION_1_3) {
@@ -456,14 +464,14 @@ void pix_snap2tex :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "snap", snapMess);
   CPPEXTERN_MSG0(classPtr, "bang", snapMess);
 
-  CPPEXTERN_MSG1(classPtr, "float" , textureOnOff, bool);
+  CPPEXTERN_MSG1(classPtr, "float", textureOnOff, bool);
 
   CPPEXTERN_MSG2(classPtr, "size", sizeMess, int, int);
-  CPPEXTERN_MSG2(classPtr, "pos" , posMess , int, int);
+  CPPEXTERN_MSG2(classPtr, "pos", posMess, int, int);
 
-  CPPEXTERN_MSG1(classPtr, "quality" , textureQuality, int);
-  CPPEXTERN_MSG1(classPtr, "repeat" , repeatMess, int);
+  CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
+  CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
 
-  CPPEXTERN_MSG1(classPtr, "rectangle" , rectangleMess, int);
-  CPPEXTERN_MSG1(classPtr, "texunit" , texUnitMess, int);
+  CPPEXTERN_MSG1(classPtr, "rectangle", rectangleMess, int);
+  CPPEXTERN_MSG1(classPtr, "texunit", texUnitMess, int);
 }

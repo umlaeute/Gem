@@ -35,13 +35,13 @@ class GEM_EXTERN pix_clearblock : public GemBase
 {
   CPPEXTERN_HEADER(pix_clearblock, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_clearblock();
 
- protected:
+protected:
 
   //////////
   // Destructor

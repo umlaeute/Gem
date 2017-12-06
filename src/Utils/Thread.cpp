@@ -38,7 +38,8 @@
 # include <sys/sysctl.h>
 #endif
 
-unsigned int  gem::thread::getCPUCount(void) {
+unsigned int  gem::thread::getCPUCount(void)
+{
   // http://stackoverflow.com/questions/150355/programmatically-find-the-number-of-cores-on-a-machine
 
 #ifdef _OPENMP
@@ -77,7 +78,9 @@ unsigned int  gem::thread::getCPUCount(void) {
     mib[1] = HW_NCPU;
     sysctl( mib, 2, &count, &len, NULL, 0 );
 
-    if(count < 1 ) count = 1;
+    if(count < 1 ) {
+      count = 1;
+    }
   }
 
   return count;
@@ -103,7 +106,8 @@ unsigned int  gem::thread::getCPUCount(void) {
 # include <sys/time.h>
 #endif
 
-void gem::thread::usleep(unsigned long usec) {
+void gem::thread::usleep(unsigned long usec)
+{
   struct timeval sleep;
   long usec_ = usec%1000000;
   long sec_=0;
@@ -114,116 +118,133 @@ void gem::thread::usleep(unsigned long usec) {
 }
 
 
-namespace gem { namespace thread {
+namespace gem
+{
+namespace thread
+{
 
-    class Thread::PIMPL { public:
-      Thread*owner;
-      volatile bool keeprunning;
-      volatile bool isrunning;
-      pthread_t p_thread;
-      pthread_mutex_t p_mutex;
-      pthread_cond_t p_cond;
+class Thread::PIMPL
+{
+public:
+  Thread*owner;
+  volatile bool keeprunning;
+  volatile bool isrunning;
+  pthread_t p_thread;
+  pthread_mutex_t p_mutex;
+  pthread_cond_t p_cond;
 
-      PIMPL(Thread*x):
-        owner(x)
-        , keeprunning(true)
-        , isrunning(false)
+  PIMPL(Thread*x):
+    owner(x)
+    , keeprunning(true)
+    , isrunning(false)
 #ifndef HAVE_PTW32_HANDLE_T
-        , p_thread(0)
+    , p_thread(0)
 #endif
-      {
-        pthread_mutex_init(&p_mutex, 0);
-        pthread_cond_init (&p_cond , 0);
+  {
+    pthread_mutex_init(&p_mutex, 0);
+    pthread_cond_init (&p_cond, 0);
+  }
+  ~PIMPL(void)
+  {
+    stop(0);
+    pthread_cond_destroy (&p_cond );
+    pthread_mutex_destroy(&p_mutex);
+  }
+  static inline void*process(void*you)
+  {
+    PIMPL*me=reinterpret_cast<PIMPL*>(you);
+    Thread*owner=me->owner;
+    pthread_mutex_lock  (&me->p_mutex);
+    me->isrunning=true;
+    pthread_cond_signal (&me->p_cond );
+    pthread_mutex_unlock(&me->p_mutex);
+    while(me->keeprunning) {
+      if(!owner->process()) {
+        break;
       }
-      ~PIMPL(void) {
-        stop(0);
-        pthread_cond_destroy (&p_cond );
-        pthread_mutex_destroy(&p_mutex);
-      }
-      static inline void*process(void*you) {
-        PIMPL*me=reinterpret_cast<PIMPL*>(you);
-        Thread*owner=me->owner;
-        pthread_mutex_lock  (&me->p_mutex);
-        me->isrunning=true;
-        pthread_cond_signal (&me->p_cond );
-        pthread_mutex_unlock(&me->p_mutex);
-        while(me->keeprunning) {
-          if(!owner->process())
-            break;
-        }
-        pthread_mutex_lock  (&me->p_mutex);
-        me->isrunning=false;
-        pthread_mutex_unlock(&me->p_mutex);
-        return 0;
-      }
-      bool start(void) {
-        pthread_mutex_lock  (&p_mutex);
-        if(isrunning) {
-          pthread_mutex_unlock(&p_mutex);
-          return true;
-        }
-        pthread_mutex_unlock(&p_mutex);
+    }
+    pthread_mutex_lock  (&me->p_mutex);
+    me->isrunning=false;
+    pthread_mutex_unlock(&me->p_mutex);
+    return 0;
+  }
+  bool start(void)
+  {
+    pthread_mutex_lock  (&p_mutex);
+    if(isrunning) {
+      pthread_mutex_unlock(&p_mutex);
+      return true;
+    }
+    pthread_mutex_unlock(&p_mutex);
 
-        keeprunning=true;
+    keeprunning=true;
 
+    pthread_mutex_lock(&p_mutex);
+    pthread_create(&p_thread, 0, process, this);
+    pthread_cond_wait(&p_cond, &p_mutex);
+    pthread_mutex_unlock(&p_mutex);
+
+    return true;
+  }
+
+  bool stop(unsigned int timeout)
+  {
+    pthread_mutex_lock  (&p_mutex);
+    bool stopped=!isrunning;
+    pthread_mutex_unlock(&p_mutex);
+
+    if(stopped) {
+      return true;
+    }
+
+    int timmy=(timeout/10); // we are sleeping for 10usec in each cycle
+    bool checktimeout=(timeout>0);
+
+    keeprunning=false;
+
+    pthread_mutex_lock(&p_mutex);
+    while(isrunning) {
+      pthread_mutex_unlock(&p_mutex);
+      usleep(10);
+      if(checktimeout && (timmy--<10)) {
         pthread_mutex_lock(&p_mutex);
-        pthread_create(&p_thread, 0, process, this);
-        pthread_cond_wait(&p_cond, &p_mutex);
-        pthread_mutex_unlock(&p_mutex);
-
-        return true;
+        break;
       }
-
-      bool stop(unsigned int timeout) {
-        pthread_mutex_lock  (&p_mutex);
-        bool stopped=!isrunning;
-        pthread_mutex_unlock(&p_mutex);
-
-        if(stopped) {
-          return true;
-        }
-
-        int timmy=(timeout/10); // we are sleeping for 10usec in each cycle
-        bool checktimeout=(timeout>0);
-
-        keeprunning=false;
-
-        pthread_mutex_lock(&p_mutex);
-        while(isrunning) {
-          pthread_mutex_unlock(&p_mutex);
-          usleep(10);
-          if(checktimeout && (timmy--<10)){
-            pthread_mutex_lock(&p_mutex);
-            break;
-          }
-          pthread_mutex_lock(&p_mutex);
-        }
-
-        stopped=!isrunning;
-        pthread_mutex_unlock(&p_mutex);
-        return (stopped);
-      }
-    };
-
-    Thread::Thread(void) :
-      m_pimpl(new PIMPL(this)) {
-    }
-    Thread::~Thread(void) {
-      stop(true);
-      delete m_pimpl;
-      m_pimpl=0;
-    }
-    bool Thread::start(void) {
-      return m_pimpl->start();
-    }
-    bool Thread::stop(unsigned int timeout) {
-      return m_pimpl->stop(timeout);
-    }
-    /* _private_ dummy implementations */
-    Thread&Thread::operator=(const Thread&org) {
-      return (*this);
-    }
-    Thread::Thread(const Thread&org) : m_pimpl(new PIMPL(this)) {
+      pthread_mutex_lock(&p_mutex);
     }
 
-  };}; // namespace
+    stopped=!isrunning;
+    pthread_mutex_unlock(&p_mutex);
+    return (stopped);
+  }
+};
+
+Thread::Thread(void) :
+  m_pimpl(new PIMPL(this))
+{
+}
+Thread::~Thread(void)
+{
+  stop(true);
+  delete m_pimpl;
+  m_pimpl=0;
+}
+bool Thread::start(void)
+{
+  return m_pimpl->start();
+}
+bool Thread::stop(unsigned int timeout)
+{
+  return m_pimpl->stop(timeout);
+}
+/* _private_ dummy implementations */
+Thread&Thread::operator=(const Thread&org)
+{
+  return (*this);
+}
+Thread::Thread(const Thread&org) : m_pimpl(new PIMPL(this))
+{
+}
+
+};
+}; // namespace

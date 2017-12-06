@@ -44,16 +44,25 @@ separator :: separator(int argc, t_atom*argv)
 
     while(argc) {
       t_symbol*s=atom_getsymbol(argv);
-      if(gensym("model")==s) m_active[GLStack::MODELVIEW ]=true;
-      else if(gensym("modelview" )==s) m_active[GLStack::MODELVIEW ]=true;
-      else if(gensym("color"     )==s) m_active[GLStack::COLOR     ]=true;
-      else if(gensym("texture"   )==s) m_active[GLStack::TEXTURE   ]=true;
-      else if(gensym("projection")==s) m_active[GLStack::PROJECTION]=true;
-      else if(gensym("m")==s) m_active[GLStack::MODELVIEW ]=true;
-      else if(gensym("c")==s) m_active[GLStack::COLOR     ]=true;
-      else if(gensym("t")==s) m_active[GLStack::TEXTURE   ]=true;
-      else if(gensym("p")==s) m_active[GLStack::PROJECTION]=true;
-      else {
+      if(gensym("model")==s) {
+        m_active[GLStack::MODELVIEW ]=true;
+      } else if(gensym("modelview" )==s) {
+        m_active[GLStack::MODELVIEW ]=true;
+      } else if(gensym("color"     )==s) {
+        m_active[GLStack::COLOR     ]=true;
+      } else if(gensym("texture"   )==s) {
+        m_active[GLStack::TEXTURE   ]=true;
+      } else if(gensym("projection")==s) {
+        m_active[GLStack::PROJECTION]=true;
+      } else if(gensym("m")==s) {
+        m_active[GLStack::MODELVIEW ]=true;
+      } else if(gensym("c")==s) {
+        m_active[GLStack::COLOR     ]=true;
+      } else if(gensym("t")==s) {
+        m_active[GLStack::TEXTURE   ]=true;
+      } else if(gensym("p")==s) {
+        m_active[GLStack::PROJECTION]=true;
+      } else {
         throw(GemException("invalid separator mode"));
       }
 
@@ -78,8 +87,9 @@ separator :: ~separator()
 {
   TexCoord*tc=NULL;
   m_state.get(GemState::_GL_TEX_COORDS, tc);
-  if(tc)
+  if(tc) {
     delete [] tc;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -90,7 +100,9 @@ separator :: ~separator()
 
 void separator :: render(GemState *state)
 {
-  if(!state)return;
+  if(!state) {
+    return;
+  }
   using namespace gem;
   GLStack*stacks=NULL;
   state->get(GemState::_GL_STACKS, stacks);
@@ -124,7 +136,10 @@ void separator :: render(GemState *state)
 
 
   if(mynum != num) {
-    if(myCoords)delete [] myCoords; myCoords=NULL;
+    if(myCoords) {
+      delete [] myCoords;
+    }
+    myCoords=NULL;
     if(coords) {
       myCoords = new TexCoord[num];
     }
@@ -150,7 +165,9 @@ void separator :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void separator :: postrender(GemState *state)
 {
-  if(!state)return;
+  if(!state) {
+    return;
+  }
   using namespace gem;
   GLStack*stacks=NULL;
   state->get(GemState::_GL_STACKS, stacks);

@@ -14,7 +14,7 @@
 
 #include "GEMglMapGrid1f.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglMapGrid1f :: GEMglMapGrid1f        (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglMapGrid1f :: ~GEMglMapGrid1f () {
+GEMglMapGrid1f :: ~GEMglMapGrid1f ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -43,8 +44,11 @@ GEMglMapGrid1f :: ~GEMglMapGrid1f () {
 
 //////////////////
 // extension check
-bool GEMglMapGrid1f :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglMapGrid1f :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -52,24 +56,28 @@ bool GEMglMapGrid1f :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglMapGrid1f :: render(GemState *state) {
+void GEMglMapGrid1f :: render(GemState *state)
+{
   glMapGrid1f (un, u1, u2);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglMapGrid1f :: unMess (t_float arg1) {  // FUN
+void GEMglMapGrid1f :: unMess (t_float arg1)    // FUN
+{
   un = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglMapGrid1f :: u1Mess (t_float arg1) {  // FUN
+void GEMglMapGrid1f :: u1Mess (t_float arg1)    // FUN
+{
   u1 = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglMapGrid1f :: u2Mess (t_float arg1) {  // FUN
+void GEMglMapGrid1f :: u2Mess (t_float arg1)    // FUN
+{
   u2 = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -79,18 +87,22 @@ void GEMglMapGrid1f :: u2Mess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglMapGrid1f :: obj_setupCallback(t_class *classPtr) {
+void GEMglMapGrid1f :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1f::unMessCallback),         gensym("un"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1f::u1MessCallback),         gensym("u1"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1f::u2MessCallback),         gensym("u2"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglMapGrid1f :: unMessCallback (void* data, t_float arg0){
+void GEMglMapGrid1f :: unMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->unMess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid1f :: u1MessCallback (void* data, t_float arg0){
+void GEMglMapGrid1f :: u1MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->u1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglMapGrid1f :: u2MessCallback (void* data, t_float arg0){
+void GEMglMapGrid1f :: u2MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->u2Mess ( static_cast<t_float>(arg0));
 }

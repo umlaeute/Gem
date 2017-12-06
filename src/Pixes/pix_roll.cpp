@@ -26,7 +26,8 @@ pix_roll :: pix_roll() :
   m_vroll(0), m_axis(0),
   m_blurH(240), m_blurW(240), m_blurSize(0), m_blurBpp(2),
   inletBlur(0)
-{       long size;
+{
+  long size;
 
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("roll"));
 
@@ -40,7 +41,9 @@ pix_roll :: pix_roll() :
 /////////////////////////////////////////////////////////
 pix_roll :: ~pix_roll()
 {
-  if(saved)delete saved;
+  if(saved) {
+    delete saved;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -54,7 +57,9 @@ void pix_roll :: processRGBAImage(imageStruct &image)
     m_blurW    = image.xsize;
     m_blurBpp  = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    if(saved)delete saved;
+    if(saved) {
+      delete saved;
+    }
     saved = new unsigned char [m_blurSize];
   }
   if (!m_axis) {
@@ -64,7 +69,7 @@ void pix_roll :: processRGBAImage(imageStruct &image)
     long linelength=image.xsize*image.csize;
     memcpy(saved, image.data+linelength*m_vroll, linelength*(image.ysize-m_vroll));
     memcpy(saved+linelength*(image.ysize-m_vroll), image.data, linelength*m_vroll);
-  }else{
+  } else {
     m_vroll%=image.xsize;
     m_vroll+=image.xsize;
     m_vroll%=image.xsize;
@@ -72,10 +77,10 @@ void pix_roll :: processRGBAImage(imageStruct &image)
     //moved the rolled part of the data
     unsigned char *srcdata=image.data+rollstart;
     unsigned char *dstdata=saved;
-    for (int h=0; h<image.ysize; h++){ //fixed...we have to do every row
+    for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
       //      for(w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
       int w=((image.xsize-m_vroll)*image.csize)/4;
-      while(w--){
+      while(w--) {
         *dstdata++=*srcdata++;
         *dstdata++=*srcdata++;
         *dstdata++=*srcdata++;
@@ -87,10 +92,10 @@ void pix_roll :: processRGBAImage(imageStruct &image)
     //finish up
     srcdata=image.data;
     dstdata=saved+(image.xsize-m_vroll)*image.csize;
-    for (int h=0; h<image.ysize; h++){ //fixed...we have to do every row
+    for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
       //      for(w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
       int w=(m_vroll*image.csize)/4;
-      while(w--){
+      while(w--) {
         *dstdata++=*srcdata++;
         *dstdata++=*srcdata++;
         *dstdata++=*srcdata++;
@@ -110,7 +115,9 @@ void pix_roll :: processImage(imageStruct &image)
     m_blurW    = image.xsize;
     m_blurBpp  = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    if(saved)delete saved;
+    if(saved) {
+      delete saved;
+    }
     saved = new unsigned char [m_blurSize];
   }
   if (!m_axis) {
@@ -120,7 +127,7 @@ void pix_roll :: processImage(imageStruct &image)
     long linelength=image.xsize*image.csize;
     memcpy(saved, image.data+linelength*m_vroll, linelength*(image.ysize-m_vroll));
     memcpy(saved+linelength*(image.ysize-m_vroll), image.data, linelength*m_vroll);
-  }else{
+  } else {
     m_vroll%=image.xsize;
     m_vroll+=image.xsize;
     m_vroll%=image.xsize;
@@ -128,20 +135,24 @@ void pix_roll :: processImage(imageStruct &image)
     //moved the rolled part of the data
     unsigned char *srcdata=image.data+rollstart;
     unsigned char *dstdata=saved;
-    for (int h=0; h<image.ysize; h++){ //fixed...we have to do every row
+    for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
       //      for(w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
       int w=((image.xsize-m_vroll)*image.csize);
-      while(w--)*dstdata++=*srcdata++;
+      while(w--) {
+        *dstdata++=*srcdata++;
+      }
       srcdata+=rollstart;
       dstdata+=rollstart;
     }
     //finish up
     srcdata=image.data;
     dstdata=saved+(image.xsize-m_vroll)*image.csize;
-    for (int h=0; h<image.ysize; h++){ //fixed...we have to do every row
+    for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
       //      for(w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
       int w=(m_vroll*image.csize);
-      while(w--)*dstdata++=*srcdata++;
+      while(w--) {
+        *dstdata++=*srcdata++;
+      }
       srcdata+=(image.xsize*image.csize-rollstart);
       dstdata+=(image.xsize*image.csize-rollstart);
     }
@@ -163,7 +174,9 @@ void pix_roll :: processYUVImage(imageStruct &image)
     m_blurW = image.xsize;
     m_blurBpp = image.csize;
     m_blurSize = m_blurH * m_blurW * m_blurBpp;
-    if(saved)delete saved;
+    if(saved) {
+      delete saved;
+    }
     saved = new unsigned char [m_blurSize];
   }
   long pixsize = image.ysize * image.xsize * image.csize;
@@ -175,17 +188,19 @@ void pix_roll :: processYUVImage(imageStruct &image)
     m_vroll%=image.ysize;
     long rollstart = m_vroll * image.xsize * image.csize;
 
-    for (src = rollstart; src < pixsize;src++){
+    for (src = rollstart; src < pixsize; src++) {
       saved[dst] = image.data[src];
       dst++;
     }
     //finish the rest
-    for(src = 0;src<rollstart-1;src++){
+    for(src = 0; src<rollstart-1; src++) {
       saved[dst] = image.data[src];
       dst++;
     }
-  }else{
-    if (m_vroll % 2 ){m_vroll += 1;}//check for odd in YUV
+  } else {
+    if (m_vroll % 2 ) {
+      m_vroll += 1; //check for odd in YUV
+    }
     m_vroll%=image.ysize;
     m_vroll+=image.ysize;
     m_vroll%=image.ysize;
@@ -198,14 +213,15 @@ void pix_roll :: processYUVImage(imageStruct &image)
     src = rollstart;//offset source to start of roll
     dst = 0;
 
-    for (int h=0; h<image.ysize; h++){ //fixed...we have to do every row
+    for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
 
-      for(int w=m_vroll; w<image.xsize; w++){//from rollstart to the last column
+      for(int w=m_vroll; w<image.xsize; w++) { //from rollstart to the last column
 
         saved[dst] = image.data[src];
         saved[dst+1] = image.data[src+1];
 
-        src+=2;dst+=2;
+        src+=2;
+        dst+=2;
       }
       src+= rollstart;
       dst+= rollstart;
@@ -213,15 +229,16 @@ void pix_roll :: processYUVImage(imageStruct &image)
     //finish up
     src=0;
     dst=(image.xsize-m_vroll)*2;
-    for (int h=0; h<image.ysize; h++){ //fixed...we have to do every row
+    for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
 
-      for(int w=image.xsize-m_vroll; w<image.xsize; w++){//from rollstart to the last column
+      for(int w=image.xsize-m_vroll; w<image.xsize; w++) { //from rollstart to the last column
 
         saved[dst] = image.data[src];
         saved[dst+1] = image.data[src+1];
 
 
-        src+=2;dst+=2;
+        src+=2;
+        dst+=2;
       }
       src+= image.xsize*2-rollstart;
       dst+= image.xsize*2-rollstart;

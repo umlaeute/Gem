@@ -38,13 +38,13 @@ class GEM_EXTERN scopeXYZ : public GemShape
 {
   CPPEXTERN_HEADER(scopeXYZ, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   scopeXYZ(t_floatarg len=0);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -82,7 +82,7 @@ class GEM_EXTERN scopeXYZ : public GemShape
 
   void perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z);
 
- private:
+private:
 
   //////////
   // Static member functions

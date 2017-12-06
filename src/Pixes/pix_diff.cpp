@@ -71,8 +71,8 @@ void pix_diff :: processYUV_YUV(imageStruct &image, imageStruct &right)
   int u,v;
   src =0;
   //format is U Y V Y
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
+  for (h=0; h<image.ysize; h++) {
+    for(w=0; w<image.xsize/2; w++) {
 
       u = (image.data[src] - 128) - (right.data[src] - 128);
       image.data[src] = abs(u + 128);
@@ -98,18 +98,18 @@ void pix_diff :: processGray_Gray(imageStruct &image, imageStruct &right)
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
 
-  while(datasize--)
-    {
-      leftPix[chGray] =
-        abs(leftPix[chGray] - (int)rightPix[chGray]);
-      leftPix++;
-      rightPix++;
-    }
+  while(datasize--) {
+    leftPix[chGray] =
+      abs(leftPix[chGray] - (int)rightPix[chGray]);
+    leftPix++;
+    rightPix++;
+  }
 }
 
 
 #ifdef __MMX__
-void pix_diff :: processRGBA_MMX(imageStruct &image, imageStruct &right){
+void pix_diff :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+{
   int datasize = image.xsize * image.ysize * image.csize;
   __m64*leftPix  = (__m64*)image.data;
   __m64*rightPix = (__m64*)right.data;
@@ -117,7 +117,7 @@ void pix_diff :: processRGBA_MMX(imageStruct &image, imageStruct &right){
 
   __m64 l, r, b;
 
-  while(datasize--){
+  while(datasize--) {
     l =leftPix [datasize];
     r=rightPix[datasize];
 
@@ -130,7 +130,8 @@ void pix_diff :: processRGBA_MMX(imageStruct &image, imageStruct &right){
   }
   _mm_empty();
 }
-void pix_diff :: processYUV_MMX (imageStruct &image, imageStruct &right){
+void pix_diff :: processYUV_MMX (imageStruct &image, imageStruct &right)
+{
   int datasize =   image.xsize * image.ysize * image.csize;
   __m64*leftPix =  (__m64*)image.data;
   __m64*rightPix = (__m64*)right.data;
@@ -155,7 +156,8 @@ void pix_diff :: processYUV_MMX (imageStruct &image, imageStruct &right){
   }
   _mm_empty();
 }
-void pix_diff :: processGray_MMX(imageStruct &image, imageStruct &right){
+void pix_diff :: processGray_MMX(imageStruct &image, imageStruct &right)
+{
   processRGBA_MMX(image, right);
 }
 
@@ -203,8 +205,7 @@ void pix_diff :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 
     inData++;
     rightData++;
-  }
-  while (--datasize);
+  } while (--datasize);
 #ifndef PPC970
   vec_dss( 0 );
   vec_dss( 1 );
@@ -218,13 +219,12 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 
   width = image.xsize/8;
   //format is U Y V Y
-  union
-  {
+  union {
     //unsigned int  i;
     short   elements[8];
     //vector signed char v;
     vector  short v;
-  }shortBuffer;
+  } shortBuffer;
 
 
   vector signed short d, hiImage, loImage,hiRight, loRight;//, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
@@ -252,42 +252,41 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
 #endif
-  for ( h=0; h<image.ysize; h++){
-    for (w=0; w<width; w++)
-      {
+  for ( h=0; h<image.ysize; h++) {
+    for (w=0; w<width; w++) {
 #ifndef PPC970
-        vec_dst( inData, prefetchSize, 0 );
-        vec_dst( rightData, prefetchSize, 1 );
+      vec_dst( inData, prefetchSize, 0 );
+      vec_dst( rightData, prefetchSize, 1 );
 #endif
-        //interleaved U Y V Y chars
+      //interleaved U Y V Y chars
 
-        //break out to unsigned shorts
-        hiImage = (vector signed short) vec_mergeh( zero, inData[0] );
-        loImage = (vector signed short) vec_mergel( zero, inData[0] );
-        hiRight = (vector signed short) vec_mergeh( zero, rightData[0] );
-        loRight = (vector signed short) vec_mergel( zero, rightData[0] );
+      //break out to unsigned shorts
+      hiImage = (vector signed short) vec_mergeh( zero, inData[0] );
+      loImage = (vector signed short) vec_mergel( zero, inData[0] );
+      hiRight = (vector signed short) vec_mergeh( zero, rightData[0] );
+      loRight = (vector signed short) vec_mergel( zero, rightData[0] );
 
-        //subtract the 128 offset for UV
-        hiImage = vec_subs(hiImage,d);
-        loImage = vec_subs(loImage,d);
-        hiRight = vec_subs(hiRight,d);
-        loRight = vec_subs(loRight,d);
+      //subtract the 128 offset for UV
+      hiImage = vec_subs(hiImage,d);
+      loImage = vec_subs(loImage,d);
+      hiRight = vec_subs(hiRight,d);
+      loRight = vec_subs(loRight,d);
 
-        hiImage = vec_subs(hiImage,hiRight);
-        loImage = vec_subs(loImage,loRight);
+      hiImage = vec_subs(hiImage,hiRight);
+      loImage = vec_subs(loImage,loRight);
 
-        hiImage = vec_adds(hiImage,d);
-        loImage = vec_adds(loImage,d);
+      hiImage = vec_adds(hiImage,d);
+      loImage = vec_adds(loImage,d);
 
-        hiImage = vec_abs(hiImage);
-        loImage = vec_abs(loImage);
+      hiImage = vec_abs(hiImage);
+      loImage = vec_abs(loImage);
 
-        inData[0] = vec_packsu(hiImage, loImage);
+      inData[0] = vec_packsu(hiImage, loImage);
 
-        inData++;
-        rightData++;
+      inData++;
+      rightData++;
 
-      }
+    }
 #ifndef PPC970
     vec_dss( 0 );
     vec_dss( 1 );

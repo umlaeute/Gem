@@ -14,7 +14,7 @@
 
 #include "GEMglNormal3f.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3f , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3f, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglNormal3f :: GEMglNormal3f  (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglNormal3f :: ~GEMglNormal3f () {
+GEMglNormal3f :: ~GEMglNormal3f ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglNormal3f :: ~GEMglNormal3f () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglNormal3f :: render(GemState *state) {
+void GEMglNormal3f :: render(GemState *state)
+{
   glNormal3f (nx, ny, nz);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglNormal3f :: nxMess (t_float arg1) {   // FUN
+void GEMglNormal3f :: nxMess (t_float arg1)     // FUN
+{
   nx = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglNormal3f :: nyMess (t_float arg1) {   // FUN
+void GEMglNormal3f :: nyMess (t_float arg1)     // FUN
+{
   ny = static_cast<GLfloat>(arg1);
   setModified();
 }
 
-void GEMglNormal3f :: nzMess (t_float arg1) {   // FUN
+void GEMglNormal3f :: nzMess (t_float arg1)     // FUN
+{
   nz = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglNormal3f :: nzMess (t_float arg1) {   // FUN
 // static member functions
 //
 
-void GEMglNormal3f :: obj_setupCallback(t_class *classPtr) {
+void GEMglNormal3f :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3f::nxMessCallback),          gensym("nx"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3f::nyMessCallback),          gensym("ny"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3f::nzMessCallback),          gensym("nz"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglNormal3f :: nxMessCallback (void* data, t_float arg0){
+void GEMglNormal3f :: nxMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->nxMess ( static_cast<t_float>(arg0));
 }
-void GEMglNormal3f :: nyMessCallback (void* data, t_float arg0){
+void GEMglNormal3f :: nyMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->nyMess ( static_cast<t_float>(arg0));
 }
-void GEMglNormal3f :: nzMessCallback (void* data, t_float arg0){
+void GEMglNormal3f :: nzMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->nzMess ( static_cast<t_float>(arg0));
 }

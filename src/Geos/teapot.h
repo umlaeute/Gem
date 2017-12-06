@@ -33,26 +33,26 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN teapot : public GemGluObj
 {
-    CPPEXTERN_HEADER(teapot, GemGluObj);
+  CPPEXTERN_HEADER(teapot, GemGluObj);
 
-    public:
+public:
 
-            //////////
-            // Constructor
+  //////////
+  // Constructor
   teapot(t_floatarg size, t_floatarg slice);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~teapot();
+  //////////
+  // Destructor
+  virtual ~teapot();
 
-        //////////
-        // Do the rendering
-        virtual void    render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
 
-        GLfloat m_texCoords[4][2];
+  GLfloat m_texCoords[4][2];
 
 };
 

@@ -34,13 +34,13 @@ class GEM_EXTERN pix_dot : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_dot, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_dot();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -70,27 +70,27 @@ class GEM_EXTERN pix_dot : public GemPixObj
   // Make dots
 
   int m_xsize, m_ysize, m_csize;
-    unsigned char *sharedbuffer;
-    int sharedbuffer_length;
+  unsigned char *sharedbuffer;
+  int sharedbuffer_length;
 
-    int tail;
-    int alreadyInit;
-    int DOTDEPTH, DOTMAX;
-    int dots_width, dots_height;
-    int dot_size, dot_hsize;
-    int *sampx, *sampy;
-    int state;
-    t_float m_scale;
-    U32 *pattern;
-    U32 *heart_pattern;
-    int mode;
-    int R2Y[256];
-    int G2Y[256];
-    int B2Y[256];
+  int tail;
+  int alreadyInit;
+  int DOTDEPTH, DOTMAX;
+  int dots_width, dots_height;
+  int dot_size, dot_hsize;
+  int *sampx, *sampy;
+  int state;
+  t_float m_scale;
+  U32 *pattern;
+  U32 *heart_pattern;
+  int mode;
+  int R2Y[256];
+  int G2Y[256];
+  int B2Y[256];
 
-    bool m_useScale;
+  bool m_useScale;
 
- private:
+private:
 
   //////////
   // static member functions

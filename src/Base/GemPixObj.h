@@ -34,13 +34,13 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemPixObj : public GemBase
 {
-    public:
+public:
 
   //////////
   // Constructor
   GemPixObj();
 
-    protected:
+protected:
 
   //////////
   // Destructor
@@ -114,7 +114,8 @@ class GEM_EXTERN GemPixObj : public GemBase
 
   //////////
   // creation callback
-  static void   real_obj_setupCallback(t_class *classPtr) {
+  static void   real_obj_setupCallback(t_class *classPtr)
+  {
     GemBase::real_obj_setupCallback(classPtr);
     GemPixObj::obj_setupCallback(classPtr);
   }
@@ -128,20 +129,24 @@ class GEM_EXTERN GemPixObj : public GemBase
   // turn the pointer back to the old data after rendering
   virtual void postrender(GemState *state);
 
-  void startRendering(void) {
+  void startRendering(void)
+  {
     //post("start rendering");
     setPixModified();
   }
 
- private:
+private:
 
-  static inline GemPixObj *GetMyClass(void *data) {return((GemPixObj *)((Obj_header *)data)->data);}
+  static inline GemPixObj *GetMyClass(void *data)
+  {
+    return((GemPixObj *)((Obj_header *)data)->data);
+  }
 
   //////////
   // static member functions
   static void     obj_setupCallback(t_class *classPtr);
 
- protected:
+protected:
   virtual void SIMD(int);
 };
 

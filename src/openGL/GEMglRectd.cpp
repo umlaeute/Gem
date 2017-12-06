@@ -14,7 +14,7 @@
 
 #include "GEMglRectd.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRectd , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglRectd, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,8 @@ GEMglRectd :: GEMglRectd        (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglRectd :: ~GEMglRectd () {
+GEMglRectd :: ~GEMglRectd ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -47,29 +48,34 @@ GEMglRectd :: ~GEMglRectd () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglRectd :: render(GemState *state) {
+void GEMglRectd :: render(GemState *state)
+{
   glRectd (x1, y1, x2, y2);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglRectd :: x1Mess (t_float arg1) {      // FUN
+void GEMglRectd :: x1Mess (t_float arg1)        // FUN
+{
   x1 = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglRectd :: y1Mess (t_float arg1) {      // FUN
+void GEMglRectd :: y1Mess (t_float arg1)        // FUN
+{
   y1 = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglRectd :: x2Mess (t_float arg1) {      // FUN
+void GEMglRectd :: x2Mess (t_float arg1)        // FUN
+{
   x2 = static_cast<GLdouble>(arg1);
   setModified();
 }
 
-void GEMglRectd :: y2Mess (t_float arg1) {      // FUN
+void GEMglRectd :: y2Mess (t_float arg1)        // FUN
+{
   y2 = static_cast<GLdouble>(arg1);
   setModified();
 }
@@ -79,22 +85,27 @@ void GEMglRectd :: y2Mess (t_float arg1) {      // FUN
 // static member functions
 //
 
-void GEMglRectd :: obj_setupCallback(t_class *classPtr) {
+void GEMglRectd :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::x1MessCallback),     gensym("x1"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::y1MessCallback),     gensym("y1"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::x2MessCallback),     gensym("x2"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRectd::y2MessCallback),     gensym("y2"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglRectd :: x1MessCallback (void* data, t_float arg0){
+void GEMglRectd :: x1MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->x1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglRectd :: y1MessCallback (void* data, t_float arg0){
+void GEMglRectd :: y1MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->y1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglRectd :: x2MessCallback (void* data, t_float arg0){
+void GEMglRectd :: x2MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->x2Mess ( static_cast<t_float>(arg0));
 }
-void GEMglRectd :: y2MessCallback (void* data, t_float arg0){
+void GEMglRectd :: y2MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->y2Mess ( static_cast<t_float>(arg0));
 }

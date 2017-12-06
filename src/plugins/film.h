@@ -35,13 +35,17 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 
 struct pixBlock;
-namespace gem {
-  class Properties;
+namespace gem
+{
+class Properties;
 }
-namespace gem { namespace plugins {
+namespace gem
+{
+namespace plugins
+{
 class GEM_EXTERN film
 {
- public:
+public:
 
   //////////
   // returns an instance wrapping all plugins or NULL
@@ -86,7 +90,8 @@ class GEM_EXTERN film
   /* some error codes */
   enum errCode { SUCCESS = 0,
                  FAILURE = 1,
-                 DONTKNOW= 2 };
+                 DONTKNOW= 2
+               };
 
   //////////
   // Change which image to display
@@ -158,7 +163,8 @@ class GEM_EXTERN film
   virtual void getProperties(gem::Properties&props) = 0;
 };
 
-};}; // namespace gem::plugins
+};
+}; // namespace gem::plugins
 
 
 /**

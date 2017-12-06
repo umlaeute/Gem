@@ -23,7 +23,7 @@ CPPEXTERN_NEW ( GEMglPopMatrix );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPopMatrix :: GEMglPopMatrix        (){}
+GEMglPopMatrix :: GEMglPopMatrix        () {}
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -32,7 +32,8 @@ GEMglPopMatrix :: ~GEMglPopMatrix () {}
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPopMatrix :: render(GemState *state) {
+void GEMglPopMatrix :: render(GemState *state)
+{
   glPopMatrix ();
 }
 /////////////////////////////////////////////////////////

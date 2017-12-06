@@ -34,19 +34,22 @@ GLdefine :: GLdefine    (int argc, t_atom*argv) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GLdefine :: ~GLdefine () {
+GLdefine :: ~GLdefine ()
+{
   outlet_free(m_outlet);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GLdefine :: symMess (t_symbol *s) {        // FUN
+void GLdefine :: symMess (t_symbol *s)          // FUN
+{
   t_atom ap;
   SETSYMBOL(&ap, s);
   listMess(1, &ap);
 }
-void GLdefine :: bangMess () {
+void GLdefine :: bangMess ()
+{
   if(m_outlet) {
     switch (m_argc) {
     case 0:
@@ -62,11 +65,14 @@ void GLdefine :: bangMess () {
   }
 }
 
-void GLdefine :: listMess (int argc, t_atom*argv) {
+void GLdefine :: listMess (int argc, t_atom*argv)
+{
   int i=0;
 
   if(m_argc) {
-    if(m_argv)freebytes(m_argv, sizeof(t_atom)*m_argc);
+    if(m_argv) {
+      freebytes(m_argv, sizeof(t_atom)*m_argc);
+    }
     m_argv=NULL;
     m_argc=0;
   }
@@ -86,22 +92,27 @@ void GLdefine :: listMess (int argc, t_atom*argv) {
 // static member functions
 //
 
-void GLdefine :: obj_setupCallback(t_class *classPtr) {
+void GLdefine :: obj_setupCallback(t_class *classPtr)
+{
   class_addsymbol(classPtr, GLdefine::symMessCallback);
   class_addbang(classPtr, GLdefine::bangMessCallback);
   class_addlist(classPtr, GLdefine::listMessCallback);
   class_addanything(classPtr, GLdefine::anyMessCallback);
 };
 
-void GLdefine :: symMessCallback (void* data, t_symbol *arg0){
+void GLdefine :: symMessCallback (void* data, t_symbol *arg0)
+{
   GetMyClass(data)->symMess (arg0);
 }
-void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv){
+void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv)
+{
   GetMyClass(data)->symMess (arg0);
 }
-void GLdefine :: bangMessCallback (void* data){
+void GLdefine :: bangMessCallback (void* data)
+{
   GetMyClass(data)->bangMess ();
 }
-void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv){
+void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv)
+{
   GetMyClass(data)->listMess (argc, argv);
 }

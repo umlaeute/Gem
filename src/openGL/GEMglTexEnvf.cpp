@@ -14,7 +14,7 @@
 
 #include "GEMglTexEnvf.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexEnvf , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexEnvf, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglTexEnvf :: GEMglTexEnvf    (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTexEnvf :: ~GEMglTexEnvf () {
+GEMglTexEnvf :: ~GEMglTexEnvf ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -44,24 +45,28 @@ GEMglTexEnvf :: ~GEMglTexEnvf () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTexEnvf :: render(GemState *state) {
+void GEMglTexEnvf :: render(GemState *state)
+{
   glTexEnvf (target, pname, param);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTexEnvf :: targetMess (t_float arg1) {        // FUN
+void GEMglTexEnvf :: targetMess (t_float arg1)          // FUN
+{
   target = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglTexEnvf :: pnameMess (t_float arg1) { // FUN
+void GEMglTexEnvf :: pnameMess (t_float arg1)   // FUN
+{
   pname = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglTexEnvf :: paramMess (t_float arg1) { // FUN
+void GEMglTexEnvf :: paramMess (t_float arg1)   // FUN
+{
   param = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -71,18 +76,22 @@ void GEMglTexEnvf :: paramMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglTexEnvf :: obj_setupCallback(t_class *classPtr) {
+void GEMglTexEnvf :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexEnvf::targetMessCallback),       gensym("target"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexEnvf::pnameMessCallback),        gensym("pname"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexEnvf::paramMessCallback),        gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexEnvf :: targetMessCallback (void* data, t_float arg0){
+void GEMglTexEnvf :: targetMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexEnvf :: pnameMessCallback (void* data, t_float arg0){
+void GEMglTexEnvf :: pnameMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexEnvf :: paramMessCallback (void* data, t_float arg0){
+void GEMglTexEnvf :: paramMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

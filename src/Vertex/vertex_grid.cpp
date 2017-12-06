@@ -33,8 +33,12 @@ vertex_grid :: vertex_grid(t_floatarg f1, t_floatarg f2)
   m_x = 4;
   m_y = 4;
 
-  if(f1>=1.0)m_x=static_cast<int>(f1);
-  if(f2>=1.0)m_y=static_cast<int>(f1);
+  if(f1>=1.0) {
+    m_x=static_cast<int>(f1);
+  }
+  if(f2>=1.0) {
+    m_y=static_cast<int>(f1);
+  }
 
 
   maxX = 0;
@@ -69,13 +73,17 @@ void vertex_grid :: render(GemState *state)
   // m_spacex = 0.5f;
   // m_spacey = 0.5f;
 
-  if(m_x < 1)m_x = 1;
-  if(m_y < 1)m_y = 1;
+  if(m_x < 1) {
+    m_x = 1;
+  }
+  if(m_y < 1) {
+    m_y = 1;
+  }
 
   //texcoords s,t 0..state->texCoordX,texCoordY
   //ratios on OSX are on texcoord[1].s,t
   //
-  if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)){
+  if (maxX != state->texCoordX(1) || maxY != state->texCoordY(1)) {
     //get the maximum x,y texcoord values
     maxX = state->texCoordX(1); //bottom right of image
     maxY = state->texCoordY(1);
@@ -91,7 +99,7 @@ void vertex_grid :: render(GemState *state)
 
   ratioX = maxX / m_x;
   ratioY = maxY / m_y;
-  if (m_x != m_oldx || m_y != m_oldy){
+  if (m_x != m_oldx || m_y != m_oldy) {
 
     post("resizing arrays");
     m_x += 1; //to give the correct number of columns;
@@ -116,9 +124,9 @@ void vertex_grid :: render(GemState *state)
 
   //this could be put in a separate function and only done when the size changes
   //use memcpy() for render passes that don't change the size
-  for (h=0;h<m_y;h++){
+  for (h=0; h<m_y; h++) {
     // y = y *h;
-    for(w=0;w<m_x;w++){
+    for(w=0; w<m_x; w++) {
       m_VertexArray[src]= (w * m_spacex);
       m_VertexArray[src+1]= (h * m_spacey);
       m_VertexArray[src+2]= 0.f;
@@ -167,8 +175,9 @@ void vertex_grid :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 void vertex_grid :: obj_setupCallback(t_class *classPtr)
-{     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::sizeMessCallback),
-                      gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
+{
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::sizeMessCallback),
+                  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::spacingMessCallback),
                   gensym("spacing"), A_FLOAT, A_FLOAT, A_NULL);
 }

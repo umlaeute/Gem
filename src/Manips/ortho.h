@@ -33,40 +33,40 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN ortho : public GemBase
 {
-    CPPEXTERN_HEADER(ortho, GemBase);
+  CPPEXTERN_HEADER(ortho, GemBase);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        ortho();
+  //////////
+  // Constructor
+  ortho();
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~ortho();
+  //////////
+  // Destructor
+  virtual ~ortho();
 
-        //////////
-        // Do the rendering
-        virtual void    render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-        //////////
-        // Turn back on depth test
-        virtual void    postrender(GemState *state);
+  //////////
+  // Turn back on depth test
+  virtual void    postrender(GemState *state);
 
-        //////////
-        // Ortho state
-        int                     m_state;
+  //////////
+  // Ortho state
+  int                     m_state;
 
-        //////////
-        // Ortho changed
-        void            orthoMess(int state);
+  //////////
+  // Ortho changed
+  void            orthoMess(int state);
 
-        //////////
-        // Compatibility
-        int                     m_compat;
-        void            compatMess(int state);
+  //////////
+  // Compatibility
+  int                     m_compat;
+  void            compatMess(int state);
 };
 
 #endif  // for header file

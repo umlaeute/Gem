@@ -39,13 +39,13 @@ class GEM_EXTERN newWave : public GemShape
 {
   CPPEXTERN_HEADER(newWave, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   newWave( int, t_atom* );
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -117,12 +117,12 @@ class GEM_EXTERN newWave : public GemShape
 
 
   float force[MAXGRID][MAXGRID],
-      veloc[MAXGRID][MAXGRID],
-      posit[MAXGRID][MAXGRID],
-      positold[MAXGRID][MAXGRID],
-      vertNorms[MAXGRID][MAXGRID][3],
-      faceNorms[2][MAXGRID][MAXGRID][3],
-      faceNormSegs[2][2][MAXGRID][MAXGRID][3];
+        veloc[MAXGRID][MAXGRID],
+        posit[MAXGRID][MAXGRID],
+        positold[MAXGRID][MAXGRID],
+        vertNorms[MAXGRID][MAXGRID][3],
+        faceNorms[2][MAXGRID][MAXGRID][3],
+        faceNormSegs[2][2][MAXGRID][MAXGRID][3];
 
   float texCoords[MAXGRID][MAXGRID][2];
 };

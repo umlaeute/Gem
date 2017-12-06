@@ -14,7 +14,7 @@
 
 #include "GEMglTexCoord1f.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglTexCoord1f , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglTexCoord1f, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,21 +31,24 @@ GEMglTexCoord1f :: GEMglTexCoord1f      (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTexCoord1f :: ~GEMglTexCoord1f () {
+GEMglTexCoord1f :: ~GEMglTexCoord1f ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTexCoord1f :: render(GemState *state) {
+void GEMglTexCoord1f :: render(GemState *state)
+{
   glTexCoord1f (s);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTexCoord1f :: sMess (t_float arg1) {  // FUN
+void GEMglTexCoord1f :: sMess (t_float arg1)    // FUN
+{
   s = static_cast<GLfloat>(arg1);
   setModified();
 }
@@ -55,10 +58,12 @@ void GEMglTexCoord1f :: sMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglTexCoord1f :: obj_setupCallback(t_class *classPtr) {
+void GEMglTexCoord1f :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord1f::sMessCallback),         gensym("s"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexCoord1f :: sMessCallback (void* data, t_float arg0){
+void GEMglTexCoord1f :: sMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }

@@ -41,14 +41,14 @@ class GEM_EXTERN tube : public GemShape
 {
   CPPEXTERN_HEADER(tube, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   tube(t_floatarg size, t_floatarg size2, t_floatarg high, t_floatarg order);
   //////////
 
- protected:
+protected:
 
   //////////
   // Destructor

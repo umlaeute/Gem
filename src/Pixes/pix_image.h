@@ -42,13 +42,13 @@ class GEM_EXTERN pix_image : public GemBase
 {
   CPPEXTERN_HEADER(pix_image, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   pix_image(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -80,12 +80,12 @@ class GEM_EXTERN pix_image : public GemBase
   //////////
   // do we want threaded reading (default: yes);
   virtual void  threadMess(bool onoff);
-        bool m_wantThread;
+  bool m_wantThread;
 
   //////////
   // the full filename of the image
-        std::string            m_filename;
-        gem::image::load::id_t m_id;
+  std::string            m_filename;
+  gem::image::load::id_t m_id;
 
   //////////
   // The original image
@@ -95,18 +95,18 @@ class GEM_EXTERN pix_image : public GemBase
   // The pixBlock with the current image
   pixBlock      m_pixBlock;
 
-        void     loaded(const gem::image::load::id_t ID,
+  void     loaded(const gem::image::load::id_t ID,
                   imageStruct*img,
                   const gem::Properties&props);
 
 
   gem::RTE::Outlet m_infoOut;
 
- private:
+private:
 
   //////////
   // static member functions
-        static void     loadCallback(void*data,
+  static void     loadCallback(void*data,
                                gem::image::load::id_t ID,
                                imageStruct*img,
                                const gem::Properties&props);

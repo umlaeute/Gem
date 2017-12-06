@@ -49,7 +49,9 @@ pix_delay :: ~pix_delay()
 /////////////////////////////////////////////////////////
 void pix_delay :: delayMess(int frame)
 {
-  if (frame>=0)m_frame=(frame<m_maxframes)?frame:m_maxframes;
+  if (frame>=0) {
+    m_frame=(frame<m_maxframes)?frame:m_maxframes;
+  }
 }
 
 
@@ -65,7 +67,7 @@ void pix_delay :: processImage(imageStruct &image)
   unsigned int dataSize = image.xsize * image.ysize * image.csize;
   int readframe;
 
-  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
+  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize) {
     myImage.reallocate(dataSize*m_maxframes);
     m_curframe=0;
   }

@@ -210,7 +210,7 @@
 #define INCLUDED_FREI0R_H
 
 #ifdef _MSC_VER
- // typedef unsigned long uint32_t;
+// typedef unsigned long uint32_t;
 #else
 # include <inttypes.h>
 #endif
@@ -342,8 +342,7 @@ void f0r_deinit();
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_plugin_info
-{
+typedef struct f0r_plugin_info {
   const char* name;    /**< The (short) name of the plugin                   */
   const char* author;  /**< The plugin author                                */
   /** The plugin type
@@ -417,8 +416,7 @@ typedef double f0r_param_double;
 /**
  * The color type. All three color components are in the range [0, 1].
  */
-typedef struct f0r_param_color
-{
+typedef struct f0r_param_color {
   float r; /**< red color component */
   float g; /**< green color component */
   float b; /**< blue color component */
@@ -427,8 +425,7 @@ typedef struct f0r_param_color
 /**
  * The position type. Both position coordinates are in the range [0, 1].
  */
-typedef struct f0r_param_position
-{
+typedef struct f0r_param_position {
   double x; /**< x coordinate */
   double y; /**< y coordinate */
 } f0r_param_position_t;
@@ -449,8 +446,7 @@ typedef char* f0r_param_string;
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_param_info
-{
+typedef struct f0r_param_info {
   const char* name;         /**<The (short) name of the param */
   int type;                 /**<The type (see the F0R_PARAM_* defines) */
   const char* explanation;  /**<Optional explanation (can be 0) */

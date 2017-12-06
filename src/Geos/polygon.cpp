@@ -66,10 +66,12 @@ polygon :: polygon(t_floatarg numInputs)
 /////////////////////////////////////////////////////////
 polygon :: ~polygon(void)
 {
-  if(m_vert)
+  if(m_vert) {
     delete[]m_vert;
-  if(m_vertarray)
+  }
+  if(m_vertarray) {
     delete[]m_vertarray;
+  }
   if(m_inlet) {
     for(int i=0; i<m_numInputs; i++) {
       inlet_free(m_inlet[i]);
@@ -80,11 +82,14 @@ polygon :: ~polygon(void)
 }
 
 
-void polygon :: createVertices(int num) {
-  if(m_vert)
+void polygon :: createVertices(int num)
+{
+  if(m_vert) {
     delete[]m_vert;
-  if(m_vertarray)
+  }
+  if(m_vertarray) {
     delete[]m_vertarray;
+  }
   m_numVertices=0;
 
 
@@ -108,61 +113,55 @@ void polygon :: createVertices(int num) {
 /////////////////////////////////////////////////////////
 void polygon :: renderShape(GemState *state)
 {
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_POLYGON;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_POLYGON;
+  }
 
   glNormal3f(0.0f, 0.0f, 1.0f);
-  if (GemShape::m_texType && GemShape::m_texNum)
-    {
-      glBegin(m_drawType);
-      for (int i = 0; i < m_numVertices; i++)
-        {
-          if (GemShape::m_texNum < i)
-            glTexCoord2f(GemShape::m_texCoords[GemShape::m_texNum - 1].s,
-                         GemShape::m_texCoords[GemShape::m_texNum - 1].t);
-          else
-            glTexCoord2f(GemShape::m_texCoords[i].s,
-                         GemShape::m_texCoords[i].t);
-          glVertex3fv(m_vert[i]);
-        }
-      glEnd();
+  if (GemShape::m_texType && GemShape::m_texNum) {
+    glBegin(m_drawType);
+    for (int i = 0; i < m_numVertices; i++) {
+      if (GemShape::m_texNum < i)
+        glTexCoord2f(GemShape::m_texCoords[GemShape::m_texNum - 1].s,
+                     GemShape::m_texCoords[GemShape::m_texNum - 1].t);
+      else
+        glTexCoord2f(GemShape::m_texCoords[i].s,
+                     GemShape::m_texCoords[i].t);
+      glVertex3fv(m_vert[i]);
     }
-  else
-    {
-      float maxVal[2];
-      maxVal[0] = maxVal[1] = 0;
-      if (GemShape::m_texType)
-        {
-          for (int i = 0; i < m_numVertices; i++)
-            {
-              for (int j = 0; j < 2; j++)
-                {
-                  if (m_vert[i][j] < 0)
-                    {
-                      if (-m_vert[i][j] > maxVal[j])
-                        maxVal[j] = -m_vert[i][j];
-                    }
-                  else
-                    {
-                      if (m_vert[i][j] > maxVal[j])
-                        maxVal[j] = m_vert[i][j];
-                    }
-                }
+    glEnd();
+  } else {
+    float maxVal[2];
+    maxVal[0] = maxVal[1] = 0;
+    if (GemShape::m_texType) {
+      for (int i = 0; i < m_numVertices; i++) {
+        for (int j = 0; j < 2; j++) {
+          if (m_vert[i][j] < 0) {
+            if (-m_vert[i][j] > maxVal[j]) {
+              maxVal[j] = -m_vert[i][j];
             }
+          } else {
+            if (m_vert[i][j] > maxVal[j]) {
+              maxVal[j] = m_vert[i][j];
+            }
+          }
         }
-      glBegin(m_drawType);
-      for(int n=0; n < m_numVertices; n++)
-        {
-          if (GemShape::m_texType)
-            glTexCoord2f(m_vert[n][0] / maxVal[0],
-                         m_vert[n][1] / maxVal[1]);
-          glVertex3fv(m_vert[n]);
-        }
-      glEnd();
+      }
     }
+    glBegin(m_drawType);
+    for(int n=0; n < m_numVertices; n++) {
+      if (GemShape::m_texType)
+        glTexCoord2f(m_vert[n][0] / maxVal[0],
+                     m_vert[n][1] / maxVal[1]);
+      glVertex3fv(m_vert[n]);
+    }
+    glEnd();
+  }
 }
 
 
-void polygon :: listMess(int argc, t_atom*argv) {
+void polygon :: listMess(int argc, t_atom*argv)
+{
   if(0==m_numInputs) {
     if(argc%3) {
       error("list must contain 3 elements for each vertex!");
@@ -177,7 +176,7 @@ void polygon :: listMess(int argc, t_atom*argv) {
               atom_getfloat(argv+0),
               atom_getfloat(argv+1),
               atom_getfloat(argv+2)
-              );
+             );
       argv+=3;
     }
   } else {
@@ -220,7 +219,7 @@ void polygon :: listCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   int i = atoi(s->s_name);
-  if (i>0 && argc==3){
+  if (i>0 && argc==3) {
     GetMyClass(data)->setVert(i-1, atom_getfloat(argv), atom_getfloat(argv+1), atom_getfloat(argv+2));
   }
 }

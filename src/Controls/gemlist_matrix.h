@@ -27,10 +27,10 @@ class GEM_EXTERN gemlist_matrix : public GemBase
 {
   CPPEXTERN_HEADER(gemlist_matrix, GemBase);
 
-    public:
+public:
   // Constructor
   gemlist_matrix (t_floatarg);  // CON
- protected:
+protected:
   // Destructor
   virtual ~gemlist_matrix ();
   // Do the rendering
@@ -38,7 +38,7 @@ class GEM_EXTERN gemlist_matrix : public GemBase
   // extension checks
   virtual bool isRunnable();
 
- private:
+private:
   // The outlets
   t_outlet      *m_outletMatrice;
 };

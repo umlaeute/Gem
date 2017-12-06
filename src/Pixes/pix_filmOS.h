@@ -45,14 +45,14 @@ class GEM_EXTERN pix_filmOS : public GemBase
 {
   CPPEXTERN_HEADER(pix_filmOS, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_filmOS(t_symbol *filename);
   //  pix_filmOS();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -65,7 +65,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
 
   //////////
   // close the movie file
-  virtual void closeMess(void){}
+  virtual void closeMess(void) {}
   //////////
   // open a movie up
   virtual void openMess(t_symbol *filename, int colorspace=0);
@@ -158,7 +158,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
 
- protected:
+protected:
 
   //////////
   // static member functions

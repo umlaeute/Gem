@@ -16,24 +16,27 @@ LOG
 
 #include "Gem/ExportDef.h"
 
-namespace gem {
-  namespace thread {
-    class GEM_EXTERN Semaphore {
-    private:
-      class PIMPL;
-      PIMPL*m_pimpl;
-    public:
-      Semaphore(void);
-      virtual ~Semaphore(void);
-      Semaphore(const Semaphore&);
+namespace gem
+{
+namespace thread
+{
+class GEM_EXTERN Semaphore
+{
+private:
+  class PIMPL;
+  PIMPL*m_pimpl;
+public:
+  Semaphore(void);
+  virtual ~Semaphore(void);
+  Semaphore(const Semaphore&);
 
-      /** block the current thread until the Semaphore is thaw()ed again */
-      void freeze (void);
-      /** unblock any waiting threads */
-      void thaw   (void);
+  /** block the current thread until the Semaphore is thaw()ed again */
+  void freeze (void);
+  /** unblock any waiting threads */
+  void thaw   (void);
 
-      virtual Semaphore&operator=(const Semaphore&);
-    };
-  };
+  virtual Semaphore&operator=(const Semaphore&);
+};
+};
 };
 #endif /* _INCLUDE__GEM_GEM_THREADSEMAPHORE_H_ */

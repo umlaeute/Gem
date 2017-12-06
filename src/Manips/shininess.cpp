@@ -31,12 +31,13 @@ CPPEXTERN_NEW_WITH_GIMME(shininess);
 /////////////////////////////////////////////////////////
 shininess :: shininess(int argc, t_atom *argv)
 {
-  if (argc == 1) shininessMess(atom_getfloat(&argv[0]));
-  else if (argc == 0)  shininessMess(0.f);
-  else
-    {
-      throw(GemException("needs 0 or 1 arguments"));
-    }
+  if (argc == 1) {
+    shininessMess(atom_getfloat(&argv[0]));
+  } else if (argc == 0) {
+    shininessMess(0.f);
+  } else {
+    throw(GemException("needs 0 or 1 arguments"));
+  }
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("shininess"));
@@ -75,10 +76,11 @@ void shininess :: render(GemState *)
 void shininess :: shininessMess(float val)
 {
   m_shininess = val;
-  if (m_shininess < 0.f)
+  if (m_shininess < 0.f) {
     m_shininess = 0.f;
-  else if (m_shininess > 128.f)
+  } else if (m_shininess > 128.f) {
     m_shininess = 128.f;
+  }
 
   setModified();
 }

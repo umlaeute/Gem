@@ -53,8 +53,9 @@ void alpha :: render(GemState *)
   if (m_alphaState)    {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, m_function);
-    if (!m_depthtest)
+    if (!m_depthtest) {
       glDepthMask(GL_FALSE);  // turn off depth test for transparent objects
+    }
 
     if (m_alphaTest)            {
       glEnable(GL_ALPHA_TEST);
@@ -69,15 +70,16 @@ void alpha :: render(GemState *)
 /////////////////////////////////////////////////////////
 void alpha :: postrender(GemState *)
 {
-  if (m_alphaState)
-    {
-      glDisable(GL_BLEND);
-      if (!m_depthtest)
-        glDepthMask(GL_TRUE);
-
-      if (m_alphaTest)
-        glDisable(GL_ALPHA_TEST);
+  if (m_alphaState) {
+    glDisable(GL_BLEND);
+    if (!m_depthtest) {
+      glDepthMask(GL_TRUE);
     }
+
+    if (m_alphaTest) {
+      glDisable(GL_ALPHA_TEST);
+    }
+  }
 
 }
 /////////////////////////////////////////////////////////
@@ -95,7 +97,7 @@ void alpha :: alphaMess(int alphaState)
 /////////////////////////////////////////////////////////
 void alpha :: funMess(int fun)
 {
-  switch(fun){
+  switch(fun) {
   case 1:
     m_function=GL_ONE;
     break;
@@ -183,8 +185,8 @@ void alpha :: depthtestMess(int i)
 /////////////////////////////////////////////////////////
 void alpha :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "float"   , alphaMess    , int);
-  CPPEXTERN_MSG1(classPtr, "test"    , testMess     , int);
-  CPPEXTERN_MSG1(classPtr, "function", funMess      , int);
-  CPPEXTERN_MSG1(classPtr, "auto"    , depthtestMess, int);
+  CPPEXTERN_MSG1(classPtr, "float", alphaMess, int);
+  CPPEXTERN_MSG1(classPtr, "test", testMess, int);
+  CPPEXTERN_MSG1(classPtr, "function", funMess, int);
+  CPPEXTERN_MSG1(classPtr, "auto", depthtestMess, int);
 }

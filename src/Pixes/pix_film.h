@@ -41,12 +41,12 @@ class GEM_EXTERN pix_film : public GemBase
 {
   CPPEXTERN_HEADER(pix_film, GemBase);
 
-    public:
+public:
   //////////
   // Constructor
   pix_film(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -135,8 +135,8 @@ class GEM_EXTERN pix_film : public GemBase
   t_outlet     *m_outEnd;
 
 
- protected:
- /* grab-thread */
+protected:
+  /* grab-thread */
 #ifdef HAVE_PTHREADS
   pthread_t m_thread_id;
   pthread_mutex_t *m_mutex;

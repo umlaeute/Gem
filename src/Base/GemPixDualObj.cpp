@@ -33,10 +33,12 @@ inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
 {
   int count = -1;
 
-  if (size != 0)
+  if (size != 0) {
     count = _vsnprintf_s(str, size, _TRUNCATE, format, ap);
-  if (count == -1)
+  }
+  if (count == -1) {
     count = _vscprintf(format, ap);
+  }
 
   return count;
 }
@@ -126,13 +128,15 @@ void GemPixDualObj :: render(GemState *state)
 
 void GemPixDualObj :: processImage(imageStruct &image)
 {
-  if (!m_cacheRight || m_cacheRight->m_magic!=GEMCACHE_MAGIC){
+  if (!m_cacheRight || m_cacheRight->m_magic!=GEMCACHE_MAGIC) {
     m_cacheRight=NULL;
     return;
   }
 
   //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
-  if (!m_pixRightValid || !&image || !&m_pixRight || !&m_pixRight->image) return;
+  if (!m_pixRightValid || !&image || !&m_pixRight || !&m_pixRight->image) {
+    return;
+  }
 
   if (image.xsize != m_pixRight->image.xsize ||
       image.ysize != m_pixRight->image.ysize)    {
@@ -166,37 +170,47 @@ void GemPixDualObj :: processImage(imageStruct &image)
                        PROCESS_DUALIMAGE_SIMD(YUV),
                        PROCESS_DUALIMAGE(YUV, Gray));
     break;
-  default: break;
+  default:
+    break;
   }
-  if (!found)processDualImage(image, m_pixRight->image);
+  if (!found) {
+    processDualImage(image, m_pixRight->image);
+  }
 }
 
 /////////////////////////////////////////////////////////
 // process
 //
 /////////////////////////////////////////////////////////
-namespace {
-  std::string format2string(GLenum fmt) {
-    std::string result="unknown";
-    switch (fmt) {
-    case GL_RGBA:
-    case GL_BGRA_EXT:
-      result = "RGBA";break;
-    case GL_LUMINANCE:
-      result = "Gray";break;
-    case GL_YCBCR_422_GEM:
-      result = "YUV";break;
-    default: do {
-        char fmtstring[7];
-        snprintf(fmtstring, 6, "0x%04X", (unsigned int)fmt);
-        fmtstring[6]='\0';
-        result=fmtstring;
-      } while(0);
-    }
-    return result;
+namespace
+{
+std::string format2string(GLenum fmt)
+{
+  std::string result="unknown";
+  switch (fmt) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    result = "RGBA";
+    break;
+  case GL_LUMINANCE:
+    result = "Gray";
+    break;
+  case GL_YCBCR_422_GEM:
+    result = "YUV";
+    break;
+  default:
+    do {
+      char fmtstring[7];
+      snprintf(fmtstring, 6, "0x%04X", (unsigned int)fmt);
+      fmtstring[6]='\0';
+      result=fmtstring;
+    } while(0);
   }
+  return result;
 }
-void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
+}
+void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right)
+{
   std::string lformat=format2string(left.format);
   std::string rformat=format2string(right.format);
   error("no method to combine (%s) and (%s)", lformat.c_str(), rformat.c_str());
@@ -208,7 +222,9 @@ void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right){
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: postrender(GemState *state)
 {
-  if (org_pixRightValid != m_pixRightValid)setPixModified();
+  if (org_pixRightValid != m_pixRightValid) {
+    setPixModified();
+  }
 
   org_pixRightValid = m_pixRightValid;
 
@@ -237,7 +253,9 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
   }
 
   m_pixRightValid = 1;
-  if (m_pixRight->newimage)setPixModified(); // force the left arm to create a new image
+  if (m_pixRight->newimage) {
+    setPixModified();  // force the left arm to create a new image
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -251,9 +269,11 @@ void GemPixDualObj :: obj_setupCallback(t_class *classPtr)
 }
 void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
-  if (argc==1 && argv->a_type==A_FLOAT){
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
+  if (argc==1 && argv->a_type==A_FLOAT) {
+  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
     GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
     GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
-  } else GetMyClass(data)->error("wrong righthand arguments....");
+  } else {
+    GetMyClass(data)->error("wrong righthand arguments....");
+  }
 }

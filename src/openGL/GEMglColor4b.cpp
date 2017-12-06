@@ -14,7 +14,7 @@
 
 #include "GEMglColor4b.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4b , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4b, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,8 @@ GEMglColor4b :: GEMglColor4b    (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglColor4b :: ~GEMglColor4b () {
+GEMglColor4b :: ~GEMglColor4b ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -47,29 +48,34 @@ GEMglColor4b :: ~GEMglColor4b () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglColor4b :: render(GemState *state) {
+void GEMglColor4b :: render(GemState *state)
+{
   glColor4b (red, green, blue, alpha);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglColor4b :: redMess (t_float arg1) {   // FUN
+void GEMglColor4b :: redMess (t_float arg1)     // FUN
+{
   red = static_cast<GLbyte>(arg1);
   setModified();
 }
 
-void GEMglColor4b :: greenMess (t_float arg1) { // FUN
+void GEMglColor4b :: greenMess (t_float arg1)   // FUN
+{
   green = static_cast<GLbyte>(arg1);
   setModified();
 }
 
-void GEMglColor4b :: blueMess (t_float arg1) {  // FUN
+void GEMglColor4b :: blueMess (t_float arg1)    // FUN
+{
   blue = static_cast<GLbyte>(arg1);
   setModified();
 }
 
-void GEMglColor4b :: alphaMess (t_float arg1) { // FUN
+void GEMglColor4b :: alphaMess (t_float arg1)   // FUN
+{
   alpha = static_cast<GLbyte>(arg1);
   setModified();
 }
@@ -79,22 +85,27 @@ void GEMglColor4b :: alphaMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglColor4b :: obj_setupCallback(t_class *classPtr) {
+void GEMglColor4b :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4b::redMessCallback),          gensym("red"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4b::greenMessCallback),        gensym("green"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4b::blueMessCallback),         gensym("blue"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4b::alphaMessCallback),        gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglColor4b :: redMessCallback (void* data, t_float arg0){
+void GEMglColor4b :: redMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->redMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor4b :: greenMessCallback (void* data, t_float arg0){
+void GEMglColor4b :: greenMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->greenMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor4b :: blueMessCallback (void* data, t_float arg0){
+void GEMglColor4b :: blueMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->blueMess ( static_cast<t_float>(arg0));
 }
-void GEMglColor4b :: alphaMessCallback (void* data, t_float arg0){
+void GEMglColor4b :: alphaMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->alphaMess ( static_cast<t_float>(arg0));
 }

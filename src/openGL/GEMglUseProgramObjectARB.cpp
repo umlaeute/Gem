@@ -29,14 +29,18 @@ GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB()
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglUseProgramObjectARB :: ~GEMglUseProgramObjectARB () {
+GEMglUseProgramObjectARB :: ~GEMglUseProgramObjectARB ()
+{
   inlet_free(m_inlet);
 }
 
 //////////////////
 // extension check
-bool GEMglUseProgramObjectARB :: isRunnable(void) {
-  if(GLEW_ARB_shader_objects)return true;
+bool GEMglUseProgramObjectARB :: isRunnable(void)
+{
+  if(GLEW_ARB_shader_objects) {
+    return true;
+  }
   error("ARB shader_objects not supported by this system");
   return false;
 }
@@ -45,21 +49,24 @@ bool GEMglUseProgramObjectARB :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglUseProgramObjectARB :: render(GemState *state) {
+void GEMglUseProgramObjectARB :: render(GemState *state)
+{
   glUseProgramObjectARB ( m_program );
 }
 
 /////////////////////////////////////////////////////////
 // postrender
 //
-void GEMglUseProgramObjectARB :: postrender(GemState *state) {
+void GEMglUseProgramObjectARB :: postrender(GemState *state)
+{
   glUseProgramObjectARB (0);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglUseProgramObjectARB :: programMess (int program) {    // FUN
+void GEMglUseProgramObjectARB :: programMess (int program)      // FUN
+{
   m_program = static_cast<GLhandleARB>(program);
   setModified();
 }
@@ -74,6 +81,7 @@ void GEMglUseProgramObjectARB :: obj_setupCallback(t_class *classPtr)
                   gensym("program"), A_FLOAT, A_NULL);
 }
 
-void GEMglUseProgramObjectARB :: programMessCallback (void* data, t_float program){
+void GEMglUseProgramObjectARB :: programMessCallback (void* data, t_float program)
+{
   GetMyClass(data)->programMess (static_cast<int>(program));
 }

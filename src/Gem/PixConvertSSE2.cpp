@@ -40,30 +40,36 @@
 /* just some debugging stuff ... */
 
 #define PRINT_MASK "%03d "
-static void print_char(__m128i m){
+static void print_char(__m128i m)
+{
   _mm_pause();
   unsigned char*s=(unsigned char*)&m;
   int i=0;
-  for(i=0; i<(sizeof(__m128i)/sizeof(unsigned char)); i++){
-    startpost(PRINT_MASK, *s);s++;
+  for(i=0; i<(sizeof(__m128i)/sizeof(unsigned char)); i++) {
+    startpost(PRINT_MASK, *s);
+    s++;
   }
   endpost();
 }
-static void print_short(__m128i m){
+static void print_short(__m128i m)
+{
   _mm_pause();
   signed short*s=(signed short*)&m;
   int i=0;
-  for(i=0; i<(sizeof(__m128i)/sizeof(signed short)); i++){
-    startpost(PRINT_MASK, *s);s++;
+  for(i=0; i<(sizeof(__m128i)/sizeof(signed short)); i++) {
+    startpost(PRINT_MASK, *s);
+    s++;
   }
   endpost();
 }
-static void print_int(__m128i m){
+static void print_int(__m128i m)
+{
   _mm_pause();
   signed int*s=(signed int*)&m;
   int i=0;
-  for(i=0; i<(sizeof(__m128i)/sizeof(signed int)); i++){
-    startpost(PRINT_MASK, *s);s++;
+  for(i=0; i<(sizeof(__m128i)/sizeof(signed int)); i++) {
+    startpost(PRINT_MASK, *s);
+    s++;
   }
   endpost();
 }
@@ -112,7 +118,7 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
   const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
 
   int i=size>>3; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
-  while(i-->0){
+  while(i-->0) {
     rgba0=*rgba_p++; /* r0 g0 b0 a0 r1 g1 ... b3 a3 */
     rgba1=*rgba_p++; /* r4 g4 b4 a4 r5 g5 ... b7 a7 */
 
@@ -181,9 +187,9 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
     // (or just take the 3rd 8bit-tuple)
 
     Y0 = _mm_srai_epi32(Y0, 8);
-    U  = _mm_srai_epi32(U , 8);
+    U  = _mm_srai_epi32(U, 8);
     Y1 = _mm_srai_epi32(Y1, 8);
-    V  = _mm_srai_epi32(V , 8);
+    V  = _mm_srai_epi32(V, 8);
 
     UV = _mm_packs_epi32(U, V);
     YY = _mm_packs_epi32(Y0, Y1);
@@ -236,7 +242,7 @@ void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
   const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
 
   int i=size>>3; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
-  while(i-->0){
+  while(i-->0) {
     uyvy=*yuv_p++; /* u0 y0 v0 z0 u1 y1 v1 z1 u2 y2 v2 z2 u3 y3 v3 z3 */
 
     UYVY0 = _mm_unpacklo_epi8(uyvy, _mm_setzero_si128()); /* U0 Y0 V0 Z0 U1 Y1 V1 Z1 */
@@ -301,8 +307,8 @@ void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
 
 /* convert RGB24 to YUV422 */
 void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
-                       size_t size,
-                       unsigned char *rgbdata)
+                      size_t size,
+                      unsigned char *rgbdata)
 {
   const __m128i *yuv_p  = (const __m128i*)yuvdata;  /* 4*2 YUV pixels */
 
@@ -335,7 +341,7 @@ void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
   const int shuffle =  _MM_SHUFFLE(3, 1, 2, 0);
 
   int i=size>>3; /* we do 2*128bit per cycle: this is 2*4*32bit == 8 pixels */
-  while(i-->0){
+  while(i-->0) {
     uyvy=*yuv_p++; /* u0 y0 v0 z0 u1 y1 v1 z1 u2 y2 v2 z2 u3 y3 v3 z3 */
 
     UYVY0 = _mm_unpacklo_epi8(uyvy, _mm_setzero_si128()); /* U0 Y0 V0 Z0 U1 Y1 V1 Z1 */

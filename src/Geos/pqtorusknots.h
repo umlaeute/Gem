@@ -40,12 +40,12 @@ class GEM_EXTERN pqtorusknots : public GemShape
 {
   CPPEXTERN_HEADER(pqtorusknots, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   pqtorusknots(t_floatarg m_P, t_floatarg m_Q);
- protected:
+protected:
 
   //////////
   // Destructor

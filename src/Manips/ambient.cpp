@@ -30,14 +30,14 @@ CPPEXTERN_NEW_WITH_GIMME(ambient);
 ambient :: ambient(int argc, t_atom *argv)
 {
   if (argc == 4) ambientMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                             atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+                               atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
   else if (argc == 3) ambientMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                                  atom_getfloat(&argv[2]), 1.f);
-  else if (argc == 0) ambientMess(0.2f, 0.2f, 0.2f, 1.f);
-  else
-    {
-      throw(GemException("needs 0, 3, or 4 arguments"));
-    }
+                                    atom_getfloat(&argv[2]), 1.f);
+  else if (argc == 0) {
+    ambientMess(0.2f, 0.2f, 0.2f, 1.f);
+  } else {
+    throw(GemException("needs 0, 3, or 4 arguments"));
+  }
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("ambient"));
@@ -94,7 +94,9 @@ void ambient :: obj_setupCallback(t_class *classPtr)
 void ambient :: ambientMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
   float alpha = 1.0;
-  if (argc == 4) alpha = atom_getfloat(&argv[3]);
+  if (argc == 4) {
+    alpha = atom_getfloat(&argv[3]);
+  }
   GetMyClass(data)->ambientMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
                                 atom_getfloat(&argv[2]), alpha);
 }

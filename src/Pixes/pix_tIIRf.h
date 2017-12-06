@@ -30,13 +30,13 @@ class GEM_EXTERN pix_tIIRf : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_tIIRf, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_tIIRf(t_floatarg,t_floatarg);
 
- protected:
+protected:
 
   //////////
   // Destructor

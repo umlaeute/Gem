@@ -55,9 +55,9 @@ Matrix :: Matrix()
 void Matrix :: identity()
 {
   mat[0][1] = mat[0][2] = mat[0][3] =
-    mat[1][0] = mat[1][2] = mat[1][3] =
-    mat[2][0] = mat[2][1] = mat[2][3] =
-    mat[3][0] = mat[3][1] = mat[3][2] = 0.0f;
+                            mat[1][0] = mat[1][2] = mat[1][3] =
+                                          mat[2][0] = mat[2][1] = mat[2][3] =
+                                              mat[3][0] = mat[3][1] = mat[3][2] = 0.0f;
 
   mat[0][0] = mat[1][1] = mat[2][2] = mat[3][3] = 1.0f;
 }
@@ -204,11 +204,10 @@ void Matrix :: generateNormal(const float *v1, const float *v2, const float *v3,
 {
   float v1v2[3];
   float v2v3[3];
-  for (int i = 0; i < 3; i++)
-    {
-      v1v2[i] = v1[i] - v2[i];
-      v2v3[i] = v2[i] - v3[i];
-    }
+  for (int i = 0; i < 3; i++) {
+    v1v2[i] = v1[i] - v2[i];
+    v2v3[i] = v2[i] - v3[i];
+  }
 
   // cross product
   dst[0] = (v1v2[1] * v2v3[2]) - (v1v2[2] * v2v3[1]);
@@ -218,10 +217,9 @@ void Matrix :: generateNormal(const float *v1, const float *v2, const float *v3,
   // normalize
   float mag = (float)sqrt(dst[0] * dst[0] + dst[1] * dst[1] + dst[2] * dst[2]);
   //assert( mag != 0.0f );
-  if ( mag != 0.0f )
-    {
-      dst[0] *= 1.f/mag;
-      dst[1] *= 1.f/mag;
-      dst[2] *= 1.f/mag;
-    }
+  if ( mag != 0.0f ) {
+    dst[0] *= 1.f/mag;
+    dst[1] *= 1.f/mag;
+    dst[2] *= 1.f/mag;
+  }
 }

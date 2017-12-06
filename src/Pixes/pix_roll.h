@@ -33,13 +33,13 @@ class GEM_EXTERN pix_roll : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_roll, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_roll();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -59,7 +59,7 @@ class GEM_EXTERN pix_roll : public GemPixObj
   int           m_blurH,m_blurW,m_blurSize,m_blurBpp;
   t_inlet         *inletBlur;
 
- private:
+private:
 
   //////////
   // Static member functions

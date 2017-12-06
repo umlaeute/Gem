@@ -14,7 +14,7 @@
 
 #include "GEMglFeedbackBuffer.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,7 +35,8 @@ GEMglFeedbackBuffer :: GEMglFeedbackBuffer      (t_floatarg arg0, t_floatarg arg
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglFeedbackBuffer :: ~GEMglFeedbackBuffer () {
+GEMglFeedbackBuffer :: ~GEMglFeedbackBuffer ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 
@@ -43,15 +44,19 @@ GEMglFeedbackBuffer :: ~GEMglFeedbackBuffer () {
 }
 //////////////////
 // extension check
-bool GEMglFeedbackBuffer :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglFeedbackBuffer :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglFeedbackBuffer :: render(GemState *state) {
+void GEMglFeedbackBuffer :: render(GemState *state)
+{
   glFeedbackBuffer (size, type, buffer);
   error("i got data @ %X, but i don't know what to do with it!", buffer);
 }
@@ -59,9 +64,10 @@ void GEMglFeedbackBuffer :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglFeedbackBuffer :: sizeMess (t_float arg1) {   // FUN
+void GEMglFeedbackBuffer :: sizeMess (t_float arg1)     // FUN
+{
   size = static_cast<GLsizei>(arg1);
-  if (size>len){
+  if (size>len) {
     len=size;
     delete[]buffer;
     buffer = new float[len];
@@ -69,7 +75,8 @@ void GEMglFeedbackBuffer :: sizeMess (t_float arg1) {   // FUN
   setModified();
 }
 
-void GEMglFeedbackBuffer :: typeMess (t_float arg1) {   // FUN
+void GEMglFeedbackBuffer :: typeMess (t_float arg1)     // FUN
+{
   type = static_cast<GLenum>(arg1);
   setModified();
 }
@@ -78,14 +85,17 @@ void GEMglFeedbackBuffer :: typeMess (t_float arg1) {   // FUN
 // static member functions
 //
 
-void GEMglFeedbackBuffer :: obj_setupCallback(t_class *classPtr) {
+void GEMglFeedbackBuffer :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFeedbackBuffer::sizeMessCallback),          gensym("size"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFeedbackBuffer::typeMessCallback),          gensym("type"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglFeedbackBuffer :: sizeMessCallback (void* data, t_float arg0){
+void GEMglFeedbackBuffer :: sizeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sizeMess ( static_cast<t_float>(arg0));
 }
-void GEMglFeedbackBuffer :: typeMessCallback (void* data, t_float arg0){
+void GEMglFeedbackBuffer :: typeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->typeMess ( static_cast<t_float>(arg0));
 }

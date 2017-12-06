@@ -14,7 +14,7 @@
 
 #include "GEMglVertex4i.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4i , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4i, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +37,8 @@ GEMglVertex4i :: GEMglVertex4i  (t_floatarg arg0, t_floatarg arg1, t_floatarg ar
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglVertex4i :: ~GEMglVertex4i () {
+GEMglVertex4i :: ~GEMglVertex4i ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
@@ -47,29 +48,34 @@ GEMglVertex4i :: ~GEMglVertex4i () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglVertex4i :: render(GemState *state) {
+void GEMglVertex4i :: render(GemState *state)
+{
   glVertex4i (x, y, z, w);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglVertex4i :: xMess (t_float arg1) {    // FUN
+void GEMglVertex4i :: xMess (t_float arg1)      // FUN
+{
   x = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglVertex4i :: yMess (t_float arg1) {    // FUN
+void GEMglVertex4i :: yMess (t_float arg1)      // FUN
+{
   y = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglVertex4i :: zMess (t_float arg1) {    // FUN
+void GEMglVertex4i :: zMess (t_float arg1)      // FUN
+{
   z = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglVertex4i :: wMess (t_float arg1) {    // FUN
+void GEMglVertex4i :: wMess (t_float arg1)      // FUN
+{
   w = static_cast<GLint>(arg1);
   setModified();
 }
@@ -79,22 +85,27 @@ void GEMglVertex4i :: wMess (t_float arg1) {    // FUN
 // static member functions
 //
 
-void GEMglVertex4i :: obj_setupCallback(t_class *classPtr) {
+void GEMglVertex4i :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::xMessCallback),   gensym("x"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::yMessCallback),   gensym("y"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::zMessCallback),   gensym("z"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4i::wMessCallback),   gensym("w"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglVertex4i :: xMessCallback (void* data, t_float arg0){
+void GEMglVertex4i :: xMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->xMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex4i :: yMessCallback (void* data, t_float arg0){
+void GEMglVertex4i :: yMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->yMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex4i :: zMessCallback (void* data, t_float arg0){
+void GEMglVertex4i :: zMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->zMess ( static_cast<t_float>(arg0));
 }
-void GEMglVertex4i :: wMessCallback (void* data, t_float arg0){
+void GEMglVertex4i :: wMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->wMess ( static_cast<t_float>(arg0));
 }

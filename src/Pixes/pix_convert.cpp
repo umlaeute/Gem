@@ -51,17 +51,31 @@ pix_convert :: ~pix_convert()
 /////////////////////////////////////////////////////////
 void pix_convert :: processImage(imageStruct &image)
 {
-  if (image.format==m_image.format)return;
+  if (image.format==m_image.format) {
+    return;
+  }
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
 
-  switch(image.format){
-  case GL_RGB:       m_image.fromRGB      (image.data); break;
-  case GL_BGR:       m_image.fromBGR      (image.data); break;
-  case GL_BGRA:      m_image.fromBGRA     (image.data); break;
-  case GL_RGBA:      m_image.fromRGBA     (image.data); break;
-  case GL_YUV422_GEM:m_image.fromYUV422   (image.data); break;
-  case GL_LUMINANCE: m_image.fromGray     (image.data); break;
+  switch(image.format) {
+  case GL_RGB:
+    m_image.fromRGB      (image.data);
+    break;
+  case GL_BGR:
+    m_image.fromBGR      (image.data);
+    break;
+  case GL_BGRA:
+    m_image.fromBGRA     (image.data);
+    break;
+  case GL_RGBA:
+    m_image.fromRGBA     (image.data);
+    break;
+  case GL_YUV422_GEM:
+    m_image.fromYUV422   (image.data);
+    break;
+  case GL_LUMINANCE:
+    m_image.fromGray     (image.data);
+    break;
   default:
     post("no method for this format !!!");
     post("if you know how to convert this format (0x%X) to (0x%X),\n"
@@ -86,6 +100,8 @@ void pix_convert :: obj_setupCallback(t_class *classPtr)
 void pix_convert :: colorMessCallback(void *data, t_symbol*s)
 {
   int fo = getPixFormat(s->s_name);
-  if(fo)GetMyClass(data)->m_image.setCsizeByFormat(fo);
+  if(fo) {
+    GetMyClass(data)->m_image.setCsizeByFormat(fo);
+  }
   GetMyClass(data)->setPixModified();
 }

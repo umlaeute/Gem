@@ -75,15 +75,15 @@ void pix_aging :: processImage(imageStruct &image)
 
   int n;
 
-  if (m_coloraging){
+  if (m_coloraging) {
     n=count;
-    while(n--){
+    while(n--) {
       a = (*pixes & 0xfc)>>2;
       //      *pixes++ += 0x18 + ((fastrand()>>8)&0x10) - a;
       *pixes++ += 0x28 + fastrand()%8 - a;
     }
   }
-  if (m_scratching){
+  if (m_scratching) {
     int i, y, y1, y2;
     for(i=0; i<m_scratchlines; i++) {
       if(m_scratch[i].life) {
@@ -133,11 +133,11 @@ void pix_aging :: processImage(imageStruct &image)
           m_scratch[i].init = (fastrand() % (height-1))+1;
         }
       }
-    break_scratch:
+break_scratch:
       ;
     }
   }
-  if (m_pits){ /* PROBLEMS here */
+  if (m_pits) { /* PROBLEMS here */
     int i, j;
     int pnum, size, pnumscale;
     int x, y;
@@ -159,16 +159,20 @@ void pix_aging :: processImage(imageStruct &image)
       for(j=0; j<size; j++) {
         x = x + fastrand()%3-1;
         y = y + fastrand()%3-1;
-        if(x<=0 || x>=(width-1)) goto break_pit;
-        if(y<=0 || y>=(height-1)) goto  break_pit;
+        if(x<=0 || x>=(width-1)) {
+          goto break_pit;
+        }
+        if(y<=0 || y>=(height-1)) {
+          goto  break_pit;
+        }
         p = pixes + y*width + x;
         p[chRed]=p[chGreen]=p[chBlue]=0xc0;
       }
-    break_pit:
+break_pit:
       ;
     }
   }
-  if (m_dusts){
+  if (m_dusts) {
     int i, j;
     int dnum;
     int d, len;
@@ -192,12 +196,16 @@ void pix_aging :: processImage(imageStruct &image)
         d = (d + fastrand()%3 - 1) & 7;
         y += dy[d];
         x += dx[d];
-        if(x<=0 || x>=(width-1)) goto break_dust;
-        if(y<=0 || y>=(height-1)) goto break_dust;
+        if(x<=0 || x>=(width-1)) {
+          goto break_dust;
+        }
+        if(y<=0 || y>=(height-1)) {
+          goto break_dust;
+        }
         p = pixes + y*width + x;
         p[chRed]=p[chGreen]=p[chBlue]=0x10;
       }
-    break_dust:
+break_dust:
       ;
     }
     m_dustinterval--;
@@ -206,12 +214,16 @@ void pix_aging :: processImage(imageStruct &image)
 
 void pix_aging :: scratchMess(int scratchlines)
 {
-  if (scratchlines>0){
+  if (scratchlines>0) {
     m_scratching=1;
     m_scratchlines=scratchlines;
-    if(m_scratch)delete [] m_scratch;
+    if(m_scratch) {
+      delete [] m_scratch;
+    }
     m_scratch = new t_scratch[m_scratchlines];
-  } else m_scratching=0;
+  } else {
+    m_scratching=0;
+  }
 }
 
 /////////////////////////////////////////////////////////

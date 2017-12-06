@@ -29,15 +29,17 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(part_targetsize, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 part_targetsize :: part_targetsize(t_floatarg size, t_floatarg scale)
 {
-  if (size != 0.f)
+  if (size != 0.f) {
     sizeMess(size, size, size);
-  else
+  } else {
     sizeMess(1.f, 1.f, 1.f);
+  }
 
-  if (scale != 0.f)
+  if (scale != 0.f) {
     scaleMess(scale, scale, scale);
-  else
+  } else {
     scaleMess(.05f, 0.05f, 0.05f);
+  }
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
@@ -57,11 +59,10 @@ part_targetsize :: ~part_targetsize()
 /////////////////////////////////////////////////////////
 void part_targetsize :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pTargetSize(m_size[0], m_size[1], m_size[2],
-                  m_scale[0], m_scale[1], m_scale[2]);
-    }
+  if (m_tickTime > 0.f) {
+    pTargetSize(m_size[0], m_size[1], m_size[2],
+                m_scale[0], m_scale[1], m_scale[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -102,7 +103,7 @@ void part_targetsize :: obj_setupCallback(t_class *classPtr)
 void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom *argv)
 {
   t_float size=1.0, sizeX=1.0, sizeY=1.0, sizeZ=1.0;
-  switch (argc){
+  switch (argc) {
   case 1:
     size=atom_getfloat(argv++);
     GetMyClass(data)->sizeMess(size, size, size);
@@ -118,7 +119,7 @@ void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc, t_ato
 void part_targetsize :: scaleMessCallback(void *data, t_symbol*s, int argc, t_atom *argv)
 {
   t_float scale=1.0, scaleX=1.0, scaleY=1.0, scaleZ=1.0;
-  switch (argc){
+  switch (argc) {
   case 1:
     scale=atom_getfloat(argv++);
     GetMyClass(data)->scaleMess(scale, scale, scale);

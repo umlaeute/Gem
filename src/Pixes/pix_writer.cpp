@@ -61,7 +61,9 @@ void pix_writer :: processImage(imageStruct &image)
 {
   if (m_automatic || m_banged) {
     char *extension;
-    if (m_filetype<0)m_filetype=0;
+    if (m_filetype<0) {
+      m_filetype=0;
+    }
     if (m_filetype==0) {
       extension=(char*)"tif";
     } else {
@@ -87,8 +89,9 @@ void pix_writer :: fileMess(int argc, t_atom *argv)
       argc--;
       snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s.%s", m_pathname, extension);
     }
-    if (argc>0)
+    if (argc>0) {
       m_filetype = atom_getint(argv);
+    }
   }
 
   m_autocount = 0;

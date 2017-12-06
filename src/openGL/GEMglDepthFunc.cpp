@@ -28,27 +28,34 @@ using namespace gem::utils::gl;
 GEMglDepthFunc :: GEMglDepthFunc (int argc, t_atom*argv) :
   func(0)
 {
-  if(1==argc)funcMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
+  if(1==argc) {
+    funcMess(argv[0]);
+  } else if(argc) {
+    throw(GemException("invalid number of arguments"));
+  }
   m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglDepthFunc :: ~GEMglDepthFunc () {
+GEMglDepthFunc :: ~GEMglDepthFunc ()
+{
   inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglDepthFunc :: render(GemState *state) {
+void GEMglDepthFunc :: render(GemState *state)
+{
   glDepthFunc (func);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDepthFunc :: funcMess (t_atom arg) {  // FUN
+void GEMglDepthFunc :: funcMess (t_atom arg)    // FUN
+{
   func = static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
@@ -58,10 +65,14 @@ void GEMglDepthFunc :: funcMess (t_atom arg) {  // FUN
 // static member functions
 //
 
-void GEMglDepthFunc :: obj_setupCallback(t_class *classPtr) {
+void GEMglDepthFunc :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthFunc::funcMessCallback),       gensym("func"), A_GIMME, A_NULL);
 };
 
-void GEMglDepthFunc :: funcMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-  if(argc==1)GetMyClass(data)->funcMess ( argv[0]);
+void GEMglDepthFunc :: funcMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+{
+  if(argc==1) {
+    GetMyClass(data)->funcMess ( argv[0]);
+  }
 }

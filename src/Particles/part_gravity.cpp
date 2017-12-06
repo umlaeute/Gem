@@ -49,10 +49,9 @@ part_gravity :: ~part_gravity()
 /////////////////////////////////////////////////////////
 void part_gravity :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pGravity(m_vector[0], m_vector[1], m_vector[2]);
-    }
+  if (m_tickTime > 0.f) {
+    pGravity(m_vector[0], m_vector[1], m_vector[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////

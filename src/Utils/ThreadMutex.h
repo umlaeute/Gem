@@ -16,23 +16,26 @@ LOG
 
 #include "Gem/ExportDef.h"
 
-namespace gem {
-  namespace thread {
-    class GEM_EXTERN Mutex {
-    private:
-      class PIMPL;
-      PIMPL*m_pimpl;
-    public:
-      Mutex(void);
-      virtual ~Mutex(void);
+namespace gem
+{
+namespace thread
+{
+class GEM_EXTERN Mutex
+{
+private:
+  class PIMPL;
+  PIMPL*m_pimpl;
+public:
+  Mutex(void);
+  virtual ~Mutex(void);
 
-      Mutex(const Mutex&);
-      Mutex&operator=(const Mutex&);
+  Mutex(const Mutex&);
+  Mutex&operator=(const Mutex&);
 
-      void lock   (void);
-      void unlock (void);
-      bool trylock(void);
-    };
-  };
+  void lock   (void);
+  void unlock (void);
+  bool trylock(void);
+};
+};
 };
 #endif /* _INCLUDE__GEM_GEM_THREADMUTEX_H_ */

@@ -29,7 +29,7 @@ TextBase :: TextBase(int argc, t_atom *argv) :
   m_infoOut(gem::RTE::Outlet(this))
 {
   static bool first_time=true;
-  if (first_time){
+  if (first_time) {
     post("Gem has been compiled without FONT-support !");
     first_time=false;
   }
@@ -47,9 +47,12 @@ void TextBase :: render(GemState*)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-TextBase :: ~TextBase(){
+TextBase :: ~TextBase()
+{
   /* textbase deletion */
-  if(m_inlet)inlet_free(m_inlet);
+  if(m_inlet) {
+    inlet_free(m_inlet);
+  }
 }
 
 void TextBase :: textMess(int argc, t_atom *argv)

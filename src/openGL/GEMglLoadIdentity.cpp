@@ -23,7 +23,7 @@ CPPEXTERN_NEW ( GEMglLoadIdentity );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLoadIdentity :: GEMglLoadIdentity  (){}
+GEMglLoadIdentity :: GEMglLoadIdentity  () {}
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -32,7 +32,8 @@ GEMglLoadIdentity :: ~GEMglLoadIdentity () {}
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglLoadIdentity :: render(GemState *state) {
+void GEMglLoadIdentity :: render(GemState *state)
+{
   glLoadIdentity ();
 }
 /////////////////////////////////////////////////////////

@@ -23,7 +23,7 @@ CPPEXTERN_NEW ( GEMglPopAttrib );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPopAttrib :: GEMglPopAttrib        (){}
+GEMglPopAttrib :: GEMglPopAttrib        () {}
 /////////////////////////////////////////////////////////
 // Destructor
 //
@@ -32,7 +32,8 @@ GEMglPopAttrib :: ~GEMglPopAttrib () {}
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPopAttrib :: render(GemState *state) {
+void GEMglPopAttrib :: render(GemState *state)
+{
   glPopAttrib ();
 }
 /////////////////////////////////////////////////////////

@@ -39,13 +39,13 @@ class GEM_EXTERN gemcubeframebuffer : public GemBase
 {
   CPPEXTERN_HEADER(gemcubeframebuffer, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemcubeframebuffer(t_symbol *format, t_symbol *type);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -87,7 +87,7 @@ class GEM_EXTERN gemcubeframebuffer : public GemBase
   virtual void fixFormat(GLenum wantedFormat);
   virtual void printInfo(void);
 
- private:
+private:
   GLboolean             m_haveinit, m_wantinit;
   GLuint      m_frameBufferIndex;
   GLuint      m_depthBufferIndex;

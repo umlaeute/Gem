@@ -30,14 +30,14 @@ CPPEXTERN_NEW_WITH_GIMME(color);
 color :: color(int argc, t_atom *argv)
 {
   if (argc == 4) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                           atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+                             atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
   else if (argc == 3) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                                atom_getfloat(&argv[2]), 1.f);
-  else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
-  else
-    {
-      throw(GemException("needs 0, 3, or 4 arguments"));
-    }
+                                  atom_getfloat(&argv[2]), 1.f);
+  else if (argc == 0) {
+    colorMess(1.f, 1.f, 1.f, 1.f);
+  } else {
+    throw(GemException("needs 0, 3, or 4 arguments"));
+  }
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("color"));

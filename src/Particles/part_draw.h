@@ -30,29 +30,29 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_draw : public partlib_base
 {
-    CPPEXTERN_HEADER(part_draw, partlib_base);
+  CPPEXTERN_HEADER(part_draw, partlib_base);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        part_draw(void);
+  //////////
+  // Constructor
+  part_draw(void);
 
-        //////////
-        virtual void    renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-        //////////
-        // Destructor
-        virtual ~part_draw(void);
+  //////////
+  // Destructor
+  virtual ~part_draw(void);
 
-        //////////
-        // How the object should be drawn
-      void                      typeMess(t_symbol*,int,t_atom*);
+  //////////
+  // How the object should be drawn
+  void                      typeMess(t_symbol*,int,t_atom*);
 
- protected:
+protected:
 
-      //////////
-      int                               m_drawType;
+  //////////
+  int                               m_drawType;
 };
 
 #endif  // for header file

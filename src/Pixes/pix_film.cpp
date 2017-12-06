@@ -125,19 +125,21 @@
 #endif
 
 
-static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while(std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
+static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems)
+{
+  std::stringstream ss(s);
+  std::string item;
+  while(std::getline(ss, item, delim)) {
+    elems.push_back(item);
+  }
+  return elems;
 }
 
 
-static std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    return split(s, delim, elems);
+static std::vector<std::string> split(const std::string &s, char delim)
+{
+  std::vector<std::string> elems;
+  return split(s, delim, elems);
 }
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
@@ -153,23 +155,27 @@ void *pix_film :: grabThread(void*you)
   pthread_mutex_unlock( me->m_mutex);
 
   //me->post("using pthreads");
-  while(me->m_thread_continue){
+  while(me->m_thread_continue) {
     int reqFrame=static_cast<int>(me->m_reqFrame);
     int reqTrack=static_cast<int>(me->m_reqTrack);
 
-    if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack){
+    if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack) {
 
       pthread_mutex_lock(me->m_mutex);
-      if (gem::plugins::film::FAILURE!=me->m_handle->changeImage(reqFrame, reqTrack)){
+      if (gem::plugins::film::FAILURE!=me->m_handle->changeImage(reqFrame, reqTrack)) {
         me->m_frame=me->m_handle->getFrame();
-      } else me->m_frame=0;
+      } else {
+        me->m_frame=0;
+      }
 
       me->m_curFrame=reqFrame;
       me->m_curTrack=reqTrack;
 
       pthread_mutex_unlock(me->m_mutex);
       gem::thread::usleep(100);
-    } else gem::thread::usleep(5000);
+    } else {
+      gem::thread::usleep(5000);
+    }
   }
 
   pthread_mutex_lock  (me->m_mutex);
@@ -261,34 +267,33 @@ pix_film :: ~pix_film()
 // closeMess
 //
 /////////////////////////////////////////////////////////
-void pix_film :: closeMess(void){
+void pix_film :: closeMess(void)
+{
 
 #ifdef HAVE_PTHREADS
-  if(m_thread_running)
-    {
-      void *dummy=0;
-      int counter=0;
-      m_thread_continue = false;
-      pthread_join (m_thread_id, &dummy);
-      while(m_thread_running)
-        {
-          counter++;
-        }
+  if(m_thread_running) {
+    void *dummy=0;
+    int counter=0;
+    m_thread_continue = false;
+    pthread_join (m_thread_id, &dummy);
+    while(m_thread_running) {
+      counter++;
     }
+  }
 #ifndef _WIN32
   m_thread_id=0;
 #endif
 
-  if ( m_mutex )
-    {
-      pthread_mutex_destroy(m_mutex);
-      free(m_mutex);
-      m_mutex=NULL;
-    }
+  if ( m_mutex ) {
+    pthread_mutex_destroy(m_mutex);
+    free(m_mutex);
+    m_mutex=NULL;
+  }
 #endif
 
-  if(m_handle)
+  if(m_handle) {
     m_handle->close();
+  }
 
   m_haveMovie=0;
 }
@@ -297,10 +302,12 @@ void pix_film :: closeMess(void){
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_film :: openMess(std::string filename, int format, unsigned int backendNum) {
+void pix_film :: openMess(std::string filename, int format, unsigned int backendNum)
+{
   std::string backend;
-  if(m_ids.size()>0)
+  if(m_ids.size()>0) {
     backend=m_ids[backendNum%m_ids.size()];
+  }
 
   openMess(filename, format, backend);
 }
@@ -322,7 +329,9 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
   }
 
 
-  if (format==0)format=m_format;
+  if (format==0) {
+    format=m_format;
+  }
   double d=(double)format;
   wantProps.set("colorspace", format);
 
@@ -384,7 +393,7 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
 
 #ifdef HAVE_PTHREADS
   bool canThread=m_handle->isThreadable();
-  if(canThread && m_wantThread){
+  if(canThread && m_wantThread) {
     debug("creating thread");
     m_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     if ( pthread_mutex_init(m_mutex, NULL) < 0 ) {
@@ -406,8 +415,12 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
 
 void pix_film :: bangMess()
 {
-  if(!m_haveMovie)return;
-  if(!m_handle)return;
+  if(!m_haveMovie) {
+    return;
+  }
+  if(!m_handle) {
+    return;
+  }
 
   double width=-1;
   double height=-1;
@@ -446,7 +459,9 @@ void pix_film :: render(GemState *state)
 {
   int frame=-1;
   /* get the current frame from the file */
-  if (!m_handle || m_haveMovie==0)return;
+  if (!m_handle || m_haveMovie==0) {
+    return;
+  }
 
 #ifdef HAVE_PTHREADS
   if(m_thread_running) {
@@ -460,21 +475,20 @@ void pix_film :: render(GemState *state)
   state->get(GemState::_PIX, img);
 
   // someone wants to process the image downstream, so make sure they get it
-  if (m_cache&&m_cache->resendImage&&img)
-    {
-      img->newimage=true;
-      m_cache->resendImage = 0;
-    }
+  if (m_cache&&m_cache->resendImage&&img) {
+    img->newimage=true;
+    m_cache->resendImage = 0;
+  }
 
   frame=static_cast<int>(m_reqFrame);
-  if (NULL==img){
+  if (NULL==img) {
     outlet_float(m_outEnd,(m_numFrames>0 && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
 
-    if(frame!=static_cast<int>(m_reqFrame)){
+    if(frame!=static_cast<int>(m_reqFrame)) {
       // someone responded immediately to the outlet_float and changed the requested frame
       // so get the newly requested frame:
 
-      if(m_thread_running){
+      if(m_thread_running) {
         /* if we are threaded (currently locked!), we change the frame# and grab the frame immediately
          * (if we are not threaded, the frame# is already changed and the grabbing is always immediately)
          */
@@ -492,16 +506,19 @@ void pix_film :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_film :: postrender(GemState *state)
 {
-  if (!m_handle || m_haveMovie==0)return;
+  if (!m_handle || m_haveMovie==0) {
+    return;
+  }
   if (state) {
     pixBlock*img=NULL;
     state->get(GemState::_PIX, img);
-    if(img)
+    if(img) {
       img->newimage = false;
+    }
   }
 
 #ifdef HAVE_PTHREADS
-  if(m_thread_running){
+  if(m_thread_running) {
     pthread_mutex_unlock(m_mutex);
   }
 #endif /* PTHREADS */
@@ -509,8 +526,8 @@ void pix_film :: postrender(GemState *state)
   // automatic proceeding
   m_reqFrame+=m_auto;
 
-  if (m_auto!=0 && !m_thread_running){
-    if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))){
+  if (m_auto!=0 && !m_thread_running) {
+    if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))) {
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }
@@ -523,19 +540,19 @@ void pix_film :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_film :: changeImage(int imgNum, int trackNum)
 {
-  if (imgNum < 0){
+  if (imgNum < 0) {
     error("selection number must be > 0");
     imgNum=0;
   }
 #if 0
-  if (trackNum < 0){
+  if (trackNum < 0) {
     error("track number must be > 0");
     trackNum=0;
   }
 #endif
-  if (m_handle){
-    if(!m_thread_running){
-      if (gem::plugins::film::FAILURE==m_handle->changeImage(imgNum, trackNum)){
+  if (m_handle) {
+    if(!m_thread_running) {
+      if (gem::plugins::film::FAILURE==m_handle->changeImage(imgNum, trackNum)) {
         outlet_bang(m_outEnd);
       }
     }
@@ -550,14 +567,22 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 void pix_film :: csMess(t_symbol *s, bool immediately)
 {
   char c =*s->s_name;
-  switch (c){
-  case 'g': case 'G': m_format=GL_LUMINANCE; break;
-  case 'y': case 'Y': m_format=GL_YCBCR_422_GEM; break;
-  case 'r': case 'R':
-    if(gensym("RGB")==s||gensym("rgb")==s)
+  switch (c) {
+  case 'g':
+  case 'G':
+    m_format=GL_LUMINANCE;
+    break;
+  case 'y':
+  case 'Y':
+    m_format=GL_YCBCR_422_GEM;
+    break;
+  case 'r':
+  case 'R':
+    if(gensym("RGB")==s||gensym("rgb")==s) {
       m_format=GL_RGB;
-    else
+    } else {
       m_format=GL_RGBA_GEM;
+    }
     break;
   default:
     error("colorspace must be 'RGBA', 'YUV' or 'Gray'");
@@ -567,8 +592,9 @@ void pix_film :: csMess(t_symbol *s, bool immediately)
   double d=(double)m_format;
   gem::any value=d;
   props.set("colorspace", value);
-  if(immediately && m_handle)
+  if(immediately && m_handle) {
     m_handle->setProperties(props);
+  }
 }
 /////////////////////////////////////////////////////////
 // threading
@@ -590,8 +616,9 @@ void pix_film :: autoMess(double speed)
   gem::Properties props;
   gem::any value=speed;
   props.set("auto", value);
-  if(m_handle)
+  if(m_handle) {
     m_handle->setProperties(props);
+  }
 }
 
 void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
@@ -656,8 +683,9 @@ void pix_film :: backendMess(const std::string&backend)
 void pix_film :: backendMess(int backendNum)
 {
   std::string backend;
-  if(backendNum>=0 && m_ids.size()>0)
+  if(backendNum>=0 && m_ids.size()>0) {
     backend=m_ids[backendNum%m_ids.size()];
+  }
   backendMess(backend);
 }
 
@@ -701,15 +729,20 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
   int backendID=-1;
   std::string backend;
 
-  if (!argc || argc>3)goto illegal_openmess;
-  if (argv[0].a_type != A_SYMBOL)goto illegal_openmess;
+  if (!argc || argc>3) {
+    goto illegal_openmess;
+  }
+  if (argv[0].a_type != A_SYMBOL) {
+    goto illegal_openmess;
+  }
 
-  if (argc==2){
-    if (argv[1].a_type == A_SYMBOL)
+  if (argc==2) {
+    if (argv[1].a_type == A_SYMBOL) {
       GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
-    else if (argv[1].a_type == A_FLOAT)
+    } else if (argv[1].a_type == A_FLOAT) {
       backendID=atom_getint(argv+1);
-  } else if (argc==3){
+    }
+  } else if (argc==3) {
     if ((argv[1].a_type == A_SYMBOL) && (argv[2].a_type == A_FLOAT)) {
       GetMyClass(data)->csMess(atom_getsymbol(argv+1), false);
       backendID=atom_getint(argv+2);
@@ -722,19 +755,21 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
       backend=atom_getsymbol(argv+2)->s_name;
     }
   }
-  if(backendID>=0)
+  if(backendID>=0) {
     GetMyClass(data)->openMess(atom_getsymbol(argv)->s_name, 0, backendID);
-  else
+  } else {
     GetMyClass(data)->openMess(atom_getsymbol(argv)->s_name, 0, backend);
+  }
 
   return;
- illegal_openmess:
+illegal_openmess:
   GetMyClass(data)->error("open <filename> [<format>] [<preferred backend>]");
   return;
 
 }
 
-void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv){
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+{
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 #endif /*OS-specific GEM_FILMBACKEND */

@@ -41,13 +41,13 @@ class GEM_EXTERN glsl_program : public GemBase
 {
   CPPEXTERN_HEADER(glsl_program, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   glsl_program(void);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -75,7 +75,10 @@ class GEM_EXTERN glsl_program : public GemBase
   //////////
   // shader message
   virtual void  shaderMess(int argc, t_atom *argv);
-  void  shaderMess(t_symbol*, int argc, t_atom *argv) { shaderMess(argc, argv); }
+  void  shaderMess(t_symbol*, int argc, t_atom *argv)
+  {
+    shaderMess(argc, argv);
+  }
   virtual void  linkMess(t_symbol*, int, t_atom *);
 
   //////////
@@ -133,7 +136,7 @@ class GEM_EXTERN glsl_program : public GemBase
   GLint  m_geoOutVertices;
 
 
- private:
+private:
 
   //////////
   // static member functions

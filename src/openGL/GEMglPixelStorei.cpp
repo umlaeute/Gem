@@ -14,7 +14,7 @@
 
 #include "GEMglPixelStorei.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelStorei , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelStorei, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglPixelStorei :: GEMglPixelStorei    (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglPixelStorei :: ~GEMglPixelStorei () {
+GEMglPixelStorei :: ~GEMglPixelStorei ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglPixelStorei :: ~GEMglPixelStorei () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglPixelStorei :: render(GemState *state) {
+void GEMglPixelStorei :: render(GemState *state)
+{
   glPixelStorei (pname, param);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPixelStorei :: pnameMess (t_float arg1) {     // FUN
+void GEMglPixelStorei :: pnameMess (t_float arg1)       // FUN
+{
   pname = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglPixelStorei :: paramMess (t_float arg1) {     // FUN
+void GEMglPixelStorei :: paramMess (t_float arg1)       // FUN
+{
   param = static_cast<GLint>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglPixelStorei :: paramMess (t_float arg1) {     // FUN
 // static member functions
 //
 
-void GEMglPixelStorei :: obj_setupCallback(t_class *classPtr) {
+void GEMglPixelStorei :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelStorei::pnameMessCallback),    gensym("pname"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelStorei::paramMessCallback),    gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglPixelStorei :: pnameMessCallback (void* data, t_float arg0){
+void GEMglPixelStorei :: pnameMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglPixelStorei :: paramMessCallback (void* data, t_float arg0){
+void GEMglPixelStorei :: paramMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->paramMess ( static_cast<t_float>(arg0));
 }

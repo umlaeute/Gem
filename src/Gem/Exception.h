@@ -38,7 +38,7 @@ typedef struct _text t_object;
 
 class GEM_EXTERN GemException
 {
- public:
+public:
   GemException(void);
   explicit GemException(const char*error);
   explicit GemException(const std::string&error);
@@ -46,12 +46,13 @@ class GEM_EXTERN GemException
 
   virtual const char *what(void) const;
   virtual void report(const char*origin=0) const;
- private:
+private:
   const char*ErrorString;
 };
 
-namespace gem {
-  GEM_EXTERN void catchGemException(const char*name=NULL, const t_object*obj=NULL);
+namespace gem
+{
+GEM_EXTERN void catchGemException(const char*name=NULL, const t_object*obj=NULL);
 };
 
 

@@ -41,7 +41,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   CPPEXTERN_HEADER(pix_texture, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
@@ -104,7 +104,7 @@ class GEM_EXTERN pix_texture : public GemBase
   void extTextureMess(t_symbol*, int, t_atom*);
 
 
- protected:
+protected:
   t_inlet    *m_inTexID;  /* inlet to receive external texture */
   t_outlet   *m_outTexID; /* outlet to pass on our texture */
 

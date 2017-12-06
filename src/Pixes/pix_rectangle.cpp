@@ -69,11 +69,19 @@ void pix_rectangle :: processRGBAImage(imageStruct &image)
   unsigned char b=m_color[chBlue];
   unsigned char a=m_color[chAlpha];
 
-  if (m_upper_right[0] > image.xsize) m_upper_right[0] = image.xsize;
-  if (m_lower_left[0] > image.xsize)  m_lower_left[0] = image.xsize;
+  if (m_upper_right[0] > image.xsize) {
+    m_upper_right[0] = image.xsize;
+  }
+  if (m_lower_left[0] > image.xsize) {
+    m_lower_left[0] = image.xsize;
+  }
 
-  if (m_upper_right[1] > image.ysize) m_upper_right[1] = image.ysize;
-  if (m_lower_left[1] > image.ysize)  m_lower_left[1] = image.ysize;
+  if (m_upper_right[1] > image.ysize) {
+    m_upper_right[1] = image.ysize;
+  }
+  if (m_lower_left[1] > image.ysize) {
+    m_lower_left[1] = image.ysize;
+  }
 
   int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--) {
@@ -98,10 +106,18 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   unsigned char u =((RGB2YUV_21*m_color[chRed]+RGB2YUV_22*m_color[chGreen]+RGB2YUV_23*m_color[chBlue])>>8)+UV_OFFSET;
   unsigned char v =((RGB2YUV_31*m_color[chRed]+RGB2YUV_32*m_color[chGreen]+RGB2YUV_33*m_color[chBlue])>>8)+UV_OFFSET;
 
-  if (m_upper_right[0] > image.xsize)  m_upper_right[0] = image.xsize;
-  if (m_lower_left[0]  > image.xsize)   m_lower_left[0] = image.xsize;
-  if (m_upper_right[1] > image.ysize)  m_upper_right[1] = image.ysize;
-  if (m_lower_left[1] > image.ysize)    m_lower_left[1] = image.ysize;
+  if (m_upper_right[0] > image.xsize) {
+    m_upper_right[0] = image.xsize;
+  }
+  if (m_lower_left[0]  > image.xsize) {
+    m_lower_left[0] = image.xsize;
+  }
+  if (m_upper_right[1] > image.ysize) {
+    m_upper_right[1] = image.ysize;
+  }
+  if (m_lower_left[1] > image.ysize) {
+    m_lower_left[1] = image.ysize;
+  }
 
   int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--) {
@@ -125,11 +141,19 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
   int rowsize  = image.xsize * pixelsize;
   unsigned char *pixels = image.data;
 
-  if (m_upper_right[0] > image.xsize)m_upper_right[0] = image.xsize;
-  if (m_lower_left[0]  > image.xsize)m_lower_left [0] = image.xsize;
+  if (m_upper_right[0] > image.xsize) {
+    m_upper_right[0] = image.xsize;
+  }
+  if (m_lower_left[0]  > image.xsize) {
+    m_lower_left [0] = image.xsize;
+  }
 
-  if (m_upper_right[1] > image.ysize)m_upper_right[1] = image.ysize;
-  if (m_lower_left[1]  > image.ysize)m_lower_left [1] = image.ysize;
+  if (m_upper_right[1] > image.ysize) {
+    m_upper_right[1] = image.ysize;
+  }
+  if (m_lower_left[1]  > image.ysize) {
+    m_lower_left [1] = image.ysize;
+  }
 
   unsigned char g=(m_color[chRed]*RGB2GRAY_RED+m_color[chGreen]*RGB2GRAY_GREEN+m_color[chBlue]*RGB2GRAY_BLUE)>>8;
 
@@ -152,9 +176,11 @@ void pix_rectangle :: vecColorMess(int argc, t_atom *argv)
 {
   float alpha, red, green, blue;
 
-  if (argc >= 4)alpha = atom_getfloat(&argv[3]);
-  else if (argc == 3)   alpha = 1.f;
-  else    {
+  if (argc >= 4) {
+    alpha = atom_getfloat(&argv[3]);
+  } else if (argc == 3) {
+    alpha = 1.f;
+  } else    {
     error("not enough color values");
     return;
   }
@@ -188,10 +214,18 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
   Y2 = atom_getint(&argv[3]);
 
   // check if within range
-  if (X1 < 0)X1 = 0;
-  if (X2 < 0)X2 = 0;
-  if (Y1 < 0)Y1 = 0;
-  if (Y2 < 0)Y2 = 0;
+  if (X1 < 0) {
+    X1 = 0;
+  }
+  if (X2 < 0) {
+    X2 = 0;
+  }
+  if (Y1 < 0) {
+    Y1 = 0;
+  }
+  if (Y2 < 0) {
+    Y2 = 0;
+  }
 
   // set
   m_lower_left [0] = (X1<X2)?X1:X2;

@@ -14,7 +14,7 @@
 
 #include "GEMglAlphaFunc.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglAlphaFunc :: GEMglAlphaFunc        (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglAlphaFunc :: ~GEMglAlphaFunc () {
+GEMglAlphaFunc :: ~GEMglAlphaFunc ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglAlphaFunc :: ~GEMglAlphaFunc () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglAlphaFunc :: render(GemState *state) {
+void GEMglAlphaFunc :: render(GemState *state)
+{
   glAlphaFunc (func, ref);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglAlphaFunc :: funcMess (t_float arg1) {        // FUN
+void GEMglAlphaFunc :: funcMess (t_float arg1)          // FUN
+{
   func = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglAlphaFunc :: refMess (t_float arg1) { // FUN
+void GEMglAlphaFunc :: refMess (t_float arg1)   // FUN
+{
   ref = static_cast<GLclampf>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglAlphaFunc :: refMess (t_float arg1) { // FUN
 // static member functions
 //
 
-void GEMglAlphaFunc :: obj_setupCallback(t_class *classPtr) {
+void GEMglAlphaFunc :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAlphaFunc::funcMessCallback),       gensym("func"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAlphaFunc::refMessCallback),        gensym("ref"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglAlphaFunc :: funcMessCallback (void* data, t_float arg0){
+void GEMglAlphaFunc :: funcMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->funcMess ( static_cast<t_float>(arg0));
 }
-void GEMglAlphaFunc :: refMessCallback (void* data, t_float arg0){
+void GEMglAlphaFunc :: refMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->refMess ( static_cast<t_float>(arg0));
 }

@@ -28,28 +28,28 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_size : public partlib_base
 {
-    CPPEXTERN_HEADER(part_size, partlib_base);
+  CPPEXTERN_HEADER(part_size, partlib_base);
 
-    public:
+public:
 
-            //////////
-            // Constructor
-        part_size(int,t_atom*);
+  //////////
+  // Constructor
+  part_size(int,t_atom*);
 
-        //////////
-        virtual void    renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~part_size(void);
+  //////////
+  // Destructor
+  virtual ~part_size(void);
 
-      //////////
-      void              sizeMess(t_symbol*,int,t_atom*);
+  //////////
+  void              sizeMess(t_symbol*,int,t_atom*);
 
-      //////////
-      float             m_size[3];
+  //////////
+  float             m_size[3];
 };
 
 #endif  // for header file

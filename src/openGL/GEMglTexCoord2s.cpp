@@ -14,7 +14,7 @@
 
 #include "GEMglTexCoord2s.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglTexCoord2s , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglTexCoord2s, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +33,8 @@ GEMglTexCoord2s :: GEMglTexCoord2s      (t_floatarg arg0, t_floatarg arg1) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglTexCoord2s :: ~GEMglTexCoord2s () {
+GEMglTexCoord2s :: ~GEMglTexCoord2s ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
 }
@@ -41,19 +42,22 @@ GEMglTexCoord2s :: ~GEMglTexCoord2s () {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglTexCoord2s :: render(GemState *state) {
+void GEMglTexCoord2s :: render(GemState *state)
+{
   glTexCoord2s (s, t);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglTexCoord2s :: sMess (t_float arg1) {  // FUN
+void GEMglTexCoord2s :: sMess (t_float arg1)    // FUN
+{
   s = static_cast<GLshort>(arg1);
   setModified();
 }
 
-void GEMglTexCoord2s :: tMess (t_float arg1) {  // FUN
+void GEMglTexCoord2s :: tMess (t_float arg1)    // FUN
+{
   t = static_cast<GLshort>(arg1);
   setModified();
 }
@@ -63,14 +67,17 @@ void GEMglTexCoord2s :: tMess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglTexCoord2s :: obj_setupCallback(t_class *classPtr) {
+void GEMglTexCoord2s :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord2s::sMessCallback),         gensym("s"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexCoord2s::tMessCallback),         gensym("t"), A_DEFFLOAT, A_NULL);
 };
 
-void GEMglTexCoord2s :: sMessCallback (void* data, t_float arg0){
+void GEMglTexCoord2s :: sMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->sMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexCoord2s :: tMessCallback (void* data, t_float arg0){
+void GEMglTexCoord2s :: tMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->tMess ( static_cast<t_float>(arg0));
 }

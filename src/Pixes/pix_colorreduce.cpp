@@ -58,14 +58,17 @@ pix_colorreduce :: pix_colorreduce() :
 /////////////////////////////////////////////////////////
 pix_colorreduce :: ~pix_colorreduce()
 {
-  if(init) Pete_ColorReduce_DeInit();
+  if(init) {
+    Pete_ColorReduce_DeInit();
+  }
 }
 
 /////////////////////////////////////////////////////////
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_colorreduce :: processYUVImage(imageStruct &image){
+void pix_colorreduce :: processYUVImage(imageStruct &image)
+{
 
   tempImage.xsize=image.xsize;
   tempImage.ysize=image.ysize;
@@ -76,7 +79,8 @@ void pix_colorreduce :: processYUVImage(imageStruct &image){
   image.fromRGBA(tempImage.data);
 }
 
-void pix_colorreduce :: processGrayImage(imageStruct &image){
+void pix_colorreduce :: processGrayImage(imageStruct &image)
+{
   tempImage.xsize=image.xsize;
   tempImage.ysize=image.ysize;
   tempImage.fromGray(image.data);
@@ -157,7 +161,8 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 // do other processing here
 //
 /////////////////////////////////////////////////////////
-int pix_colorreduce :: Pete_ColorReduce_Init() {
+int pix_colorreduce :: Pete_ColorReduce_Init()
+{
 
   Pete_ColorReduce_DeInit();
 
@@ -185,7 +190,8 @@ int pix_colorreduce :: Pete_ColorReduce_Init() {
   return 1;
 }
 
-void pix_colorreduce :: Pete_ColorReduce_DeInit() {
+void pix_colorreduce :: Pete_ColorReduce_DeInit()
+{
   if (hRGBHistogram!=NULL) {
     Pete_FreeHandle(hRGBHistogram);
     hRGBHistogram=NULL;
@@ -203,7 +209,8 @@ void pix_colorreduce :: Pete_ColorReduce_DeInit() {
 
 }
 
-inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,float BoundarySmoothing) {
+inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,float BoundarySmoothing)
+{
 
   const int nRed=(Color>>SHIFT_RED)&0xff;
   const int nGreen=(Color>>SHIFT_GREEN)&0xff;
@@ -274,16 +281,16 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
     const float OneMinusLerpValue=(1.0f-WeightedLerpValue);
 
     const int nSmoothedRed=static_cast<int>(
-                                            (nClosestRed*WeightedLerpValue)+
-                                            (nNextClosestRed*OneMinusLerpValue));
+                             (nClosestRed*WeightedLerpValue)+
+                             (nNextClosestRed*OneMinusLerpValue));
 
     const int nSmoothedGreen=static_cast<int>(
-                                              (nClosestGreen*WeightedLerpValue)+
-                                              (nNextClosestGreen*OneMinusLerpValue));
+                               (nClosestGreen*WeightedLerpValue)+
+                               (nNextClosestGreen*OneMinusLerpValue));
 
     const int nSmoothedBlue=static_cast<int>(
-                                             (nClosestBlue*WeightedLerpValue)+
-                                             (nNextClosestBlue*OneMinusLerpValue));
+                              (nClosestBlue*WeightedLerpValue)+
+                              (nNextClosestBlue*OneMinusLerpValue));
 
     const U32 SmoothedColor=
       (nSmoothedRed<<SHIFT_RED)|
@@ -295,9 +302,10 @@ inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_C
   }
 }
 void pix_colorreduce :: Pete_ColorReduce_CalcHistogram(
-                                                       int nSampleSpacing,
-                                                       int* pHistogram,
-                                                       float PalettePersistence) {
+  int nSampleSpacing,
+  int* pHistogram,
+  float PalettePersistence)
+{
 
   const int nHistogramMult=
     static_cast<int>((1<<8)*PalettePersistence);
@@ -355,7 +363,8 @@ void pix_colorreduce :: Pete_ColorReduce_CalcHistogram(
 
 }
 
-extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const void* pElem2) {
+extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const void* pElem2)
+{
 
   int** ppFirstElement=(int**)pElem1;
   int** ppSecondElement=(int**)pElem2;
@@ -373,7 +382,8 @@ extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const v
 
 }
 
-void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSortedColors) {
+void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSortedColors)
+{
 
   int nCount;
   for (nCount=0; nCount<cnGridCellCount; nCount+=1) {
@@ -386,7 +396,8 @@ void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSort
 
 }
 
-void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColors,int nColors,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,int* pHistogram) {
+void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColors,int nColors,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,int* pHistogram)
+{
 
   int *nSortedRed  = new int[cnGridCellCount];
   int *nSortedGreen= new int[cnGridCellCount];
@@ -484,9 +495,15 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColo
       }
     }
   }
-  if(nSortedRed  )delete[]nSortedRed;
-  if(nSortedGreen)delete[]nSortedGreen;
-  if(nSortedBlue )delete[]nSortedBlue;
+  if(nSortedRed  ) {
+    delete[]nSortedRed;
+  }
+  if(nSortedGreen) {
+    delete[]nSortedGreen;
+  }
+  if(nSortedBlue ) {
+    delete[]nSortedBlue;
+  }
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -505,16 +522,24 @@ void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 }
 void pix_colorreduce :: countCallback(void *data, t_float m_TargetColorCount)
 {
-  if(m_TargetColorCount>255)m_TargetColorCount=255.f;
-  if(m_TargetColorCount<0)m_TargetColorCount=0.f;
+  if(m_TargetColorCount>255) {
+    m_TargetColorCount=255.f;
+  }
+  if(m_TargetColorCount<0) {
+    m_TargetColorCount=0.f;
+  }
   GetMyClass(data)->m_TargetColorCount=(m_TargetColorCount);
   GetMyClass(data)->setPixModified();
 }
 
 void pix_colorreduce :: persistCallback(void *data, t_float m_PalettePersistence)
 {
-  if(m_PalettePersistence>255)m_PalettePersistence=255.f;
-  if(m_PalettePersistence<0)m_PalettePersistence=0.f;
+  if(m_PalettePersistence>255) {
+    m_PalettePersistence=255.f;
+  }
+  if(m_PalettePersistence<0) {
+    m_PalettePersistence=0.f;
+  }
   GetMyClass(data)->m_PalettePersistence=(m_PalettePersistence);
   GetMyClass(data)->setPixModified();
 }

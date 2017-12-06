@@ -14,7 +14,7 @@
 
 #include "GEMglEvalMesh1.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1 , t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,39 +35,47 @@ GEMglEvalMesh1 :: GEMglEvalMesh1        (t_floatarg arg0, t_floatarg arg1, t_flo
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglEvalMesh1 :: ~GEMglEvalMesh1 () {
+GEMglEvalMesh1 :: ~GEMglEvalMesh1 ()
+{
   inlet_free(m_inlet[0]);
   inlet_free(m_inlet[1]);
   inlet_free(m_inlet[2]);
 }
 //////////////////
 // extension check
-bool GEMglEvalMesh1 :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglEvalMesh1 :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglEvalMesh1 :: render(GemState *state) {
+void GEMglEvalMesh1 :: render(GemState *state)
+{
   glEvalMesh1 (mode, i1, i2);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglEvalMesh1 :: modeMess (t_float arg1) {        // FUN
+void GEMglEvalMesh1 :: modeMess (t_float arg1)          // FUN
+{
   mode = static_cast<GLenum>(arg1);
   setModified();
 }
 
-void GEMglEvalMesh1 :: i1Mess (t_float arg1) {  // FUN
+void GEMglEvalMesh1 :: i1Mess (t_float arg1)    // FUN
+{
   i1 = static_cast<GLint>(arg1);
   setModified();
 }
 
-void GEMglEvalMesh1 :: i2Mess (t_float arg1) {  // FUN
+void GEMglEvalMesh1 :: i2Mess (t_float arg1)    // FUN
+{
   i2 = static_cast<GLint>(arg1);
   setModified();
 }
@@ -77,18 +85,22 @@ void GEMglEvalMesh1 :: i2Mess (t_float arg1) {  // FUN
 // static member functions
 //
 
-void GEMglEvalMesh1 :: obj_setupCallback(t_class *classPtr) {
+void GEMglEvalMesh1 :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::modeMessCallback),       gensym("mode"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i1MessCallback),         gensym("i1"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i2MessCallback),         gensym("i2"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalMesh1 :: modeMessCallback (void* data, t_float arg0){
+void GEMglEvalMesh1 :: modeMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->modeMess ( static_cast<t_float>(arg0));
 }
-void GEMglEvalMesh1 :: i1MessCallback (void* data, t_float arg0){
+void GEMglEvalMesh1 :: i1MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->i1Mess ( static_cast<t_float>(arg0));
 }
-void GEMglEvalMesh1 :: i2MessCallback (void* data, t_float arg0){
+void GEMglEvalMesh1 :: i2MessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->i2Mess ( static_cast<t_float>(arg0));
 }

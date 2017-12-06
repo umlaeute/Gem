@@ -40,9 +40,14 @@ CPPEXTERN_NEW_WITH_GIMME(pix_blob);
 pix_blob :: pix_blob(int argc, t_atom *argv)
 {
   if (argc) {
-    if (argc==1) this->ChannelMess(atom_getint(argv));
-    else this->GainMess(argc, argv);
-  } else m_method = 0;
+    if (argc==1) {
+      this->ChannelMess(atom_getint(argv));
+    } else {
+      this->GainMess(argc, argv);
+    }
+  } else {
+    m_method = 0;
+  }
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("channel"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("gain"));
@@ -93,11 +98,14 @@ void pix_blob :: processRGBAImage(imageStruct &image)
   case 4:
     channel = chAlpha;
     break;
-    /* coverity[unterminated_default] */
+  /* coverity[unterminated_default] */
   default:
     error("no method %d: using GREY", m_method);
   case 0:
-    gain_r = 0.3086; gain_g = 0.6094; gain_b = 0.082; gain_a = 0.0;
+    gain_r = 0.3086;
+    gain_g = 0.6094;
+    gain_b = 0.082;
+    gain_a = 0.0;
     break;
   case -1:
     gain_r = m_gain[chRed];
@@ -106,12 +114,12 @@ void pix_blob :: processRGBAImage(imageStruct &image)
     gain_a = m_gain[chAlpha];
   }
 
-  if (channel==-1){
+  if (channel==-1) {
     while (rows--) {
       int cols = image.xsize;
       while (cols--) {
         float val  = gain_r * pixels[chRed] + gain_g * pixels[chGreen] +
-          gain_b * pixels[chBlue] + gain_a * pixels[chAlpha];
+                     gain_b * pixels[chBlue] + gain_a * pixels[chAlpha];
         sum   += val;
         sum_y += rows * val;
         sum_x += cols * val;
@@ -212,12 +220,14 @@ void pix_blob :: GainMess(int argc, t_atom *argv)
   switch (argc) {
   case 1:
     gain = atom_getfloat(argv);
-    if (gain<=0) gain=1.0;
+    if (gain<=0) {
+      gain=1.0;
+    }
     m_gain[chRed]=m_gain[chGreen]=m_gain[chBlue]=gain;
     break;
   case 3:
   case 4:
-    for (i=0; i<argc; i++){
+    for (i=0; i<argc; i++) {
       gain = atom_getfloat(argv++);
       m_gain[i]=(gain<0.)?0.:gain;
     }

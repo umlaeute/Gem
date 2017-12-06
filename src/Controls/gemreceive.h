@@ -44,13 +44,13 @@ class GEM_EXTERN gemreceive : public CPPExtern
 {
   CPPEXTERN_HEADER(gemreceive, CPPExtern);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemreceive(t_symbol*s, t_floatarg f=50.f);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -79,7 +79,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
   t_inlet*m_fltin;
 
 
- private:
+private:
 
   //////////
   // Static member functions
@@ -92,7 +92,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
   static t_gemreceive_proxy*proxy_list;
 
 
- public:
+public:
   static void bind(gemreceive*x, t_symbol*name, t_float priority);
   static void unbind(gemreceive*x, t_symbol*name);
 

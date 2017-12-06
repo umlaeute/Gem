@@ -41,8 +41,12 @@ pix_threshold_bernsen :: pix_threshold_bernsen():
 /////////////////////////////////////////////////////////
 pix_threshold_bernsen :: ~pix_threshold_bernsen()
 {
-  if(m_minVals) delete[]m_minVals;
-  if(m_maxVals) delete[]m_maxVals;
+  if(m_minVals) {
+    delete[]m_minVals;
+  }
+  if(m_maxVals) {
+    delete[]m_maxVals;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -50,29 +54,40 @@ pix_threshold_bernsen :: ~pix_threshold_bernsen()
 //
 /////////////////////////////////////////////////////////
 void pix_threshold_bernsen :: processGraySub_getMinMax(imageStruct&image,
-                                                       int fromX, int toX,
-                                                       int fromY, int toY,
-                                                       unsigned char*resultMin,
-                                                       unsigned char*resultMax)
+    int fromX, int toX,
+    int fromY, int toY,
+    unsigned char*resultMin,
+    unsigned char*resultMax)
 {
   int min=255;
   int max=0;
   int x, y;
   int linelength = image.xsize*image.csize;
 
-  if(fromX<0)fromX=0;
-  if(toX>image.xsize)toX=image.xsize;
-  if(fromY<0)fromY=0;
-  if(toY>image.ysize)toY=image.ysize;
+  if(fromX<0) {
+    fromX=0;
+  }
+  if(toX>image.xsize) {
+    toX=image.xsize;
+  }
+  if(fromY<0) {
+    fromY=0;
+  }
+  if(toY>image.ysize) {
+    toY=image.ysize;
+  }
 
-  for(y=fromY; y<toY; y++){
+  for(y=fromY; y<toY; y++) {
     // set base to the beginning of the line
     unsigned char* base=image.data + y*linelength + fromX;
     max=min=*base;
-    for(x=fromX; x<toX; x++){
+    for(x=fromX; x<toX; x++) {
       unsigned char value=*base++;
-      if(value<min)value=min;
-      else if(value>max)value=max;
+      if(value<min) {
+        value=min;
+      } else if(value>max) {
+        value=max;
+      }
     }
   }
   *resultMin=min;
@@ -86,14 +101,22 @@ inline void processGraySub_threshold(imageStruct&image,
   int x, y;
   int linelength = image.xsize*image.csize;
 
-  if(fromX<0)fromX=0;
-  if(toX>image.xsize)toX=image.xsize;
-  if(fromY<0)fromY=0;
-  if(toY>image.ysize)toY=image.ysize;
-  for(y=fromY; y<toY; y++){
+  if(fromX<0) {
+    fromX=0;
+  }
+  if(toX>image.xsize) {
+    toX=image.xsize;
+  }
+  if(fromY<0) {
+    fromY=0;
+  }
+  if(toY>image.ysize) {
+    toY=image.ysize;
+  }
+  for(y=fromY; y<toY; y++) {
     // set base to the beginning of the line
     unsigned char* base=image.data + y*linelength + fromX;
-    for(x=fromX; x<toX; x++){
+    for(x=fromX; x<toX; x++) {
       unsigned char value=*base;
       *base++=(value>thresh)*255;
     }
@@ -112,9 +135,9 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
   int x, y;
 
   // get the minimum & maximum of each quarter-sized tile
-  for (y=0; y<m_ytiles*2; y++){
+  for (y=0; y<m_ytiles*2; y++) {
     int fromY=image.ysize*y/(m_ytiles*2);
-    for (x=0; x<m_xtiles*2; x++){
+    for (x=0; x<m_xtiles*2; x++) {
       int fromX=image.xsize*x/(m_xtiles*2);
       int offset=(2*m_xtiles)*y+x;
       processGraySub_getMinMax(image,
@@ -126,45 +149,59 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
   }
   // get the thresholds for each tile (based on 16 quarter-sized tiles)
 #if 0
-  for (y=0; y<m_ytiles*2; y++){
-    for (x=0; x<m_xtiles*2; x++){
+  for (y=0; y<m_ytiles*2; y++) {
+    for (x=0; x<m_xtiles*2; x++) {
       int offset=(2*m_xtiles)*y+x;
     }
   }
 #endif
 
 
-  for(y=0; y<m_ytiles; y++){
+  for(y=0; y<m_ytiles; y++) {
     int fromY=2*y-1;
     int toY  =2*y+3;
     unsigned char mean = 127;
 
-    if(fromY<0)fromY=0;
-    if(toY>2*m_ytiles)toY=2*m_ytiles;
+    if(fromY<0) {
+      fromY=0;
+    }
+    if(toY>2*m_ytiles) {
+      toY=2*m_ytiles;
+    }
 
-    for (x=0; x<m_xtiles; x++){
+    for (x=0; x<m_xtiles; x++) {
       int fromX=2*x-1;
       int toX  =2*x+3;
       int i,j;
 
       unsigned char min=255, max=0;
 
-      if(fromX<0)fromX=0;
-      if(toX>2*m_xtiles)toX=2*m_xtiles;
+      if(fromX<0) {
+        fromX=0;
+      }
+      if(toX>2*m_xtiles) {
+        toX=2*m_xtiles;
+      }
 
-      for(i=fromY; i<toY; i++){
-        for(j=fromX; j<toX; j++){
+      for(i=fromY; i<toY; i++) {
+        for(j=fromX; j<toX; j++) {
           int offset=(2*m_xtiles)*i+j;
 
           unsigned char min_=m_minVals[offset];
           unsigned char max_=m_maxVals[offset];
-          if(min>min_)min=min_;
-          if(max<max_)max=max_;
+          if(min>min_) {
+            min=min_;
+          }
+          if(max<max_) {
+            max=max_;
+          }
         }
       }
-      if((max-min)>m_contrast)
+      if((max-min)>m_contrast) {
         mean=(min+max)/2;
-      else mean=255;
+      } else {
+        mean=255;
+      }
 
       processGraySub_threshold(image,
                                x*tile_xsize,(x+1)*tile_xsize,
@@ -180,11 +217,19 @@ void pix_threshold_bernsen :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_threshold_bernsen :: tilesMess(int w, int h)
 {
-  if(m_minVals) delete[]m_minVals;
-  if(m_maxVals) delete[]m_maxVals;
+  if(m_minVals) {
+    delete[]m_minVals;
+  }
+  if(m_maxVals) {
+    delete[]m_maxVals;
+  }
 
-  if(w>0)m_xtiles=w;
-  if(h>0)m_ytiles=h;
+  if(w>0) {
+    m_xtiles=w;
+  }
+  if(h>0) {
+    m_ytiles=h;
+  }
 
   m_minVals=new unsigned char[4*m_xtiles*m_ytiles];
   m_maxVals=new unsigned char[4*m_xtiles*m_ytiles];

@@ -34,13 +34,13 @@ class GEM_EXTERN vertex_set : public vertex_scale
 {
   CPPEXTERN_HEADER(vertex_set, vertex_scale);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_set(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor

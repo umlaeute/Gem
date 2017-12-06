@@ -33,13 +33,13 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_puzzle, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_puzzle();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -71,7 +71,7 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   // anyone wants to play the famous puzzle game ?
   int m_game;
 
- private:
+private:
 
   //////////
   // static member functions

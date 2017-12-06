@@ -32,8 +32,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXTERN record
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXTERN record
 {
 public:
 
@@ -86,8 +89,9 @@ public:
   // stop recording
   virtual void stop (void) = 0;
 
- };
-}; };
+};
+};
+};
 
 
 

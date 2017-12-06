@@ -47,19 +47,24 @@ pix_buf :: ~pix_buf()
 /////////////////////////////////////////////////////////
 void pix_buf :: render(GemState *state)
 {
-  if(!state)return;
+  if(!state) {
+    return;
+  }
   bool doit=m_banged;
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
   orgPixBlock = img;
 
-  if (!img || !img->image.data) return;
+  if (!img || !img->image.data) {
+    return;
+  }
 
   doit|=m_auto;
   doit|=img->newimage;
 
-  if (m_cache&&m_cache->resendImage)
+  if (m_cache&&m_cache->resendImage) {
     doit=true;
+  }
 
   cachedPixBlock.newimage = 0;
   if (doit) {

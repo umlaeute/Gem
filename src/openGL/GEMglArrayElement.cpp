@@ -14,7 +14,7 @@
 
 #include "GEMglArrayElement.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglArrayElement , t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglArrayElement, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,27 +31,33 @@ GEMglArrayElement :: GEMglArrayElement  (t_floatarg arg0) :
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglArrayElement :: ~GEMglArrayElement () {
+GEMglArrayElement :: ~GEMglArrayElement ()
+{
   inlet_free(m_inlet[0]);
 }
 //////////////////
 // extension check
-bool GEMglArrayElement :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglArrayElement :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglArrayElement :: render(GemState *state) {
+void GEMglArrayElement :: render(GemState *state)
+{
   glArrayElement (i);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglArrayElement :: iMess (t_float arg1) {        // FUN
+void GEMglArrayElement :: iMess (t_float arg1)          // FUN
+{
   i = static_cast<GLint>(arg1);
   setModified();
 }
@@ -61,10 +67,12 @@ void GEMglArrayElement :: iMess (t_float arg1) {        // FUN
 // static member functions
 //
 
-void GEMglArrayElement :: obj_setupCallback(t_class *classPtr) {
+void GEMglArrayElement :: obj_setupCallback(t_class *classPtr)
+{
   class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglArrayElement::iMessCallback),       gensym("i"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglArrayElement :: iMessCallback (void* data, t_float arg0){
+void GEMglArrayElement :: iMessCallback (void* data, t_float arg0)
+{
   GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
 }

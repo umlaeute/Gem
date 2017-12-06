@@ -8,13 +8,16 @@
 
 using namespace gem;
 
-class gem::BasePluginFactory::Pimpl {
+class gem::BasePluginFactory::Pimpl
+{
   friend class BasePluginFactory;
-  Pimpl(void) {
+  Pimpl(void)
+  {
 
   }
 
-  ~Pimpl(void) {
+  ~Pimpl(void)
+  {
 
   }
 
@@ -24,14 +27,18 @@ class gem::BasePluginFactory::Pimpl {
 };
 
 
-gem::BasePluginFactory::BasePluginFactory(void) : m_pimpl(new Pimpl) {
+gem::BasePluginFactory::BasePluginFactory(void) : m_pimpl(new Pimpl)
+{
 
 }
-gem::BasePluginFactory::~BasePluginFactory(void) {
-  delete m_pimpl;  m_pimpl=NULL;
+gem::BasePluginFactory::~BasePluginFactory(void)
+{
+  delete m_pimpl;
+  m_pimpl=NULL;
 }
 
-int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std::string&path_) {
+int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std::string&path_)
+{
   int already=m_pimpl->p_loaded.size();
   if(already>0) {
     int once=1;
@@ -47,10 +54,10 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
     }
   }
   std::string path = path_;
-  if(path.empty()){
+  if(path.empty()) {
     gem::Settings::get("gem.path", path);
   }
-  if(!path.empty()){
+  if(!path.empty()) {
     path=path+std::string("/");
   }
   std::cerr << "load plugins '" << basename << "' in '" << path << "'" << std::endl;
@@ -76,7 +83,9 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
         std::cerr << "not reloading '"<<f<<"'"<<std::endl;
         break;
       }
-    if(alreadyloaded)continue;
+    if(alreadyloaded) {
+      continue;
+    }
 
     std::cerr << "dylib loading file '" << f << "'!" << std::endl;
     dll=NULL;
@@ -100,7 +109,7 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
         dll=NULL;
       }
     }
-    if(dll){ // loading succeeded
+    if(dll) { // loading succeeded
       try {
         m_pimpl->p_loaded.push_back(f);
         count++;
@@ -114,28 +123,34 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
   return count;
 }
 
-std::vector<std::string>gem::BasePluginFactory::get() {
+std::vector<std::string>gem::BasePluginFactory::get()
+{
   std::vector<std::string>result;
   if(m_pimpl) {
     std::map<std::string, void*>::iterator iter = m_pimpl->p_ctors.begin();
     for(; iter != m_pimpl->p_ctors.end(); ++iter) {
-      if(NULL!=iter->second)
+      if(NULL!=iter->second) {
         result.push_back(iter->first);
+      }
     }
   }
   return result;
 }
 
-void*gem::BasePluginFactory::get(std::string id) {
+void*gem::BasePluginFactory::get(std::string id)
+{
   void*ctor=NULL;
-  if(m_pimpl)
+  if(m_pimpl) {
     ctor=m_pimpl->p_ctors[id];
+  }
   return ctor;
 }
 
-void gem::BasePluginFactory::set(std::string id, void*ptr) {
-  if(m_pimpl)
+void gem::BasePluginFactory::set(std::string id, void*ptr)
+{
+  if(m_pimpl) {
     m_pimpl->p_ctors[id]=ptr;
+  }
 }
 
 
@@ -148,31 +163,39 @@ void gem::BasePluginFactory::set(std::string id, void*ptr) {
 #include "video.h"
 
 
-namespace {
-  static bool default_true (const char*name, int global, int local) {
-    bool res = true;
-    if(local<0)
-      res=(0!=global);
-    else
-      res=(0!=local);
-    return res;
+namespace
+{
+static bool default_true (const char*name, int global, int local)
+{
+  bool res = true;
+  if(local<0) {
+    res=(0!=global);
+  } else {
+    res=(0!=local);
   }
+  return res;
+}
 
 }
 #define PLUGIN_INIT(x) s=-1; gem::Settings::get("gem.plugins."#x".startup", s); \
   if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
 
-namespace gem { namespace plugins {
-    void init(void) {
-      int s, s0=1;
-      gem::Settings::get("gem.plugins.startup", s0);
-      using namespace gem::plugins;
+namespace gem
+{
+namespace plugins
+{
+void init(void)
+{
+  int s, s0=1;
+  gem::Settings::get("gem.plugins.startup", s0);
+  using namespace gem::plugins;
 
-      PLUGIN_INIT(film);
-      PLUGIN_INIT(imageloader);
-      PLUGIN_INIT(imagesaver);
-      PLUGIN_INIT(modelloader);
-      PLUGIN_INIT(record);
-      PLUGIN_INIT(video);
-    }
-  }; };
+  PLUGIN_INIT(film);
+  PLUGIN_INIT(imageloader);
+  PLUGIN_INIT(imagesaver);
+  PLUGIN_INIT(modelloader);
+  PLUGIN_INIT(record);
+  PLUGIN_INIT(video);
+}
+};
+};

@@ -46,13 +46,13 @@ class pix_snap2tex : public GemBase
 {
   CPPEXTERN_HEADER(pix_snap2tex, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   pix_snap2tex(int argc, t_atom *argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -83,18 +83,18 @@ class pix_snap2tex : public GemBase
   // When a snap is received
   virtual void  snapMess(void);
   GLuint m_textureObj;
-        GLint   m_textureType;
-        bool m_didTexture; // used in postrender() to check whether render() did texture
-        bool m_init;
+  GLint   m_textureType;
+  bool m_didTexture; // used in postrender() to check whether render() did texture
+  bool m_init;
 
   //////////
   // Turn on/off texture mapping
   void textureOnOff(bool on);
   bool             m_textureOnOff;
 
-        //////////
-        // Set up the texture state
-        void setUpTextureState(void);
+  //////////
+  // Set up the texture state
+  void setUpTextureState(void);
 
   //////////
   // Set the texture quality
@@ -102,16 +102,16 @@ class pix_snap2tex : public GemBase
   void      textureQuality(int type);
   GLuint                        m_textureQuality;
 
-        //////////
-        // Set the texture quality
-        // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
-        void                    repeatMess(int type);
-        GLuint                  m_repeat;
+  //////////
+  // Set the texture quality
+  // [in] type - if == 1, then GL_REPEAT, else GL_CLAMP_TO_EDGE
+  void                    repeatMess(int type);
+  GLuint                  m_repeat;
 
-        void                    rectangleMess(int);
-        int                             m_rectangle, m_canRectangle;
+  void                    rectangleMess(int);
+  int                             m_rectangle, m_canRectangle;
 
-        void                    texUnitMess(int unit);
+  void                    texUnitMess(int unit);
   GLuint    m_texUnit;
 
   //////////
@@ -126,19 +126,19 @@ class pix_snap2tex : public GemBase
   int           m_texWidth, m_texHeight;
 
   void setTexCoords(float x, float y);
-        // The texture coordinates
-        TexCoord        m_coords[4];
+  // The texture coordinates
+  TexCoord        m_coords[4];
   float m_xRatio, m_yRatio;
 
-        //////////
-        // this is what we get from upstream
-        TexCoord        *m_oldTexCoords;
-        int             m_oldNumCoords;
-        int             m_oldTexture;
+  //////////
+  // this is what we get from upstream
+  TexCoord        *m_oldTexCoords;
+  int             m_oldNumCoords;
+  int             m_oldTexture;
 
   //////////
   // outlet for texture-infor
-        t_outlet        *m_outTexInfo;
+  t_outlet        *m_outTexInfo;
 };
 
 #endif  // for header file

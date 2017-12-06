@@ -45,10 +45,13 @@ square :: ~square()
 /////////////////////////////////////////////////////////
 void square :: renderShape(GemState *state)
 {
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_QUADS;
+  }
   glNormal3f(0.0f, 0.0f, 1.0f);
-  if (m_drawType == GL_LINE_LOOP)
+  if (m_drawType == GL_LINE_LOOP) {
     glLineWidth(m_linewidth);
+  }
 
   glBegin(m_drawType);
 
@@ -60,4 +63,4 @@ void square :: renderShape(GemState *state)
   glEnd();
 }
 
-void square :: obj_setupCallback(t_class *classPtr){}
+void square :: obj_setupCallback(t_class *classPtr) {}

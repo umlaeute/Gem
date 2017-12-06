@@ -23,20 +23,23 @@ CPPEXTERN_NEW ( GEMglGetError );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetError :: GEMglGetError  () {
+GEMglGetError :: GEMglGetError  ()
+{
   m_outlet = outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGetError :: ~GEMglGetError () {
+GEMglGetError :: ~GEMglGetError ()
+{
   outlet_free(m_outlet);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGetError :: render(GemState *state) {
+void GEMglGetError :: render(GemState *state)
+{
   GLenum i=glGetError();
   outlet_float(m_outlet, static_cast<t_float>(i));
 }

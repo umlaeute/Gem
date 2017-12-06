@@ -33,8 +33,9 @@ part_orbitpoint :: part_orbitpoint(t_floatarg xpos, t_floatarg ypos, t_floatarg 
   m_pos[0] = xpos;
   m_pos[1] = ypos;
   m_pos[2] = zpos;
-  if (grav)
+  if (grav) {
     m_grav = grav;
+  }
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("grav"));
@@ -53,10 +54,9 @@ part_orbitpoint :: ~part_orbitpoint(void)
 /////////////////////////////////////////////////////////
 void part_orbitpoint :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pOrbitPoint(m_pos[0], m_pos[1], m_pos[2], m_grav);
-    }
+  if (m_tickTime > 0.f) {
+    pOrbitPoint(m_pos[0], m_pos[1], m_pos[2], m_grav);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -70,11 +70,13 @@ void part_orbitpoint :: obj_setupCallback(t_class *classPtr)
 }
 
 //////////
-void    part_orbitpoint :: vectorMess(float val1, float val2, float val3) {
+void    part_orbitpoint :: vectorMess(float val1, float val2, float val3)
+{
   m_pos[0] = val1;
   m_pos[1] = val2;
   m_pos[2] = val3;
 }
-void    part_orbitpoint :: gravMess(float grav) {
+void    part_orbitpoint :: gravMess(float grav)
+{
   m_grav = grav;
 }

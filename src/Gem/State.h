@@ -35,11 +35,11 @@ class TexCoord;
   -----------------------------------------------------------------*/
 class GEM_EXTERN TexCoord
 {
- public:
+public:
   TexCoord() : s(0.f), t(0.f) { }
-    TexCoord(float s_, float t_) : s(s_), t(t_) { }
-      float         s;
-      float         t;
+  TexCoord(float s_, float t_) : s(s_), t(t_) { }
+  float         s;
+  float         t;
 };
 
 
@@ -57,7 +57,7 @@ class GEM_EXTERN TexCoord
 class GemStateData;
 class GEM_EXTERN GemState
 {
- public:
+public:
   typedef enum {
     _ILLEGAL=-1,
     _DIRTY, /* "dirty" */
@@ -199,7 +199,8 @@ class GEM_EXTERN GemState
   virtual bool get(const key_t key, gem::any&value);
 
   template<class T>
-    bool get(const key_t key, T&value) {
+  bool get(const key_t key, T&value)
+  {
     try {
       gem::any val;
       if(!get(key,val)) {
@@ -224,7 +225,7 @@ class GEM_EXTERN GemState
 
   static const key_t getKey(const std::string&);
 
- protected:
+protected:
   GemStateData*data;
 };
 

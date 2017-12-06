@@ -37,7 +37,7 @@ class GEM_EXTERN gemhead : public gemreceive
 {
   CPPEXTERN_HEADER(gemhead, CPPExtern);
 
- public:
+public:
 
   //////////
   // Constructor
@@ -63,7 +63,7 @@ class GEM_EXTERN gemhead : public gemreceive
 
   virtual void receive(t_symbol*s, int argc, t_atom*argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -71,7 +71,7 @@ class GEM_EXTERN gemhead : public gemreceive
 
   std::string m_basename;
 
- private:
+private:
 
   GemCache      *m_cache;                   // The cache information
 

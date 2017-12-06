@@ -52,7 +52,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN WindowInfo
 {
- public:
+public:
 
   // Constructor
   WindowInfo() :
@@ -67,15 +67,15 @@ class GEM_EXTERN WindowInfo
 #else
 #endif
     have_constContext(0)
-    {
+  {
 #if defined _WIN32
 #elif defined __APPLE__
 #elif defined __linux__ || defined HAVE_GL_GLX_H
 # ifdef HAVE_LIBXXF86VM
-      memset(&deskMode, 0, sizeof(deskMode));
+    memset(&deskMode, 0, sizeof(deskMode));
 # endif
 #endif
-    }
+  }
   int         fs;                 // FullScreen
 
 #if defined _WIN32
@@ -86,15 +86,15 @@ class GEM_EXTERN WindowInfo
 
 #elif defined __APPLE__
 
-    WindowPtr           pWind;          // GEM window reference for gemwin
-    AGLContext          context;        // OpenGL context
-    GWorldPtr           offscreen;      // Macintosh offscreen buffer
-    long                pixelSize;      //
-    Rect                r;              //
-    PixMapHandle        pixMap;         // PixMap Handle
-    long                rowBytes;       //
-    void                *baseAddr;      //
-    short               fontList;       // Font
+  WindowPtr           pWind;          // GEM window reference for gemwin
+  AGLContext          context;        // OpenGL context
+  GWorldPtr           offscreen;      // Macintosh offscreen buffer
+  long                pixelSize;      //
+  Rect                r;              //
+  PixMapHandle        pixMap;         // PixMap Handle
+  long                rowBytes;       //
+  void                *baseAddr;      //
+  short               fontList;       // Font
 
 #elif defined __linux__ || defined HAVE_GL_GLX_H
 
@@ -130,7 +130,7 @@ class GEM_EXTERN WindowInfo
   -----------------------------------------------------------------*/
 class GEM_EXTERN WindowHints
 {
- public:
+public:
 
   //////////
   // Should the window be realized
@@ -184,11 +184,11 @@ class GEM_EXTERN WindowHints
   //////////
   // The GLXcontext to share rendering with
 #if defined _WIN32
-    HGLRC       shared;
+  HGLRC       shared;
 #elif defined __APPLE__
-    AGLContext  shared;
+  AGLContext  shared;
 #elif defined __linux__ || defined HAVE_GL_GLX_H
-    GLXContext  shared;
+  GLXContext  shared;
 #else
 #error Define OS specific OpenGL context
 #endif

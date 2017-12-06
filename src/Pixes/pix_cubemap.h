@@ -37,13 +37,13 @@ class GEM_EXTERN pix_cubemap : public GemBase
 {
   CPPEXTERN_HEADER(pix_cubemap, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_cubemap();
 
- protected:
+protected:
 
   //////////
   // Destructor

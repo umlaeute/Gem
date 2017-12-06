@@ -54,7 +54,8 @@ GemCache :: ~GemCache(void)
   m_parent=NULL;
 }
 
-GemCache&GemCache::operator=(const GemCache&org) {
+GemCache&GemCache::operator=(const GemCache&org)
+{
   dirty=org.dirty;
   resendImage=org.resendImage;
   vertexDirty=org.vertexDirty;
