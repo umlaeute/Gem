@@ -55,10 +55,10 @@ namespace gem { namespace plugins {
    // get's the name of the backend (e.g. "vnc")
    virtual const std::string getName(void);
 
-   virtual bool isThreadable(void) {return false; return true;}
+   virtual bool isThreadable(void) {return false;}
    virtual bool reset(void) {return true;}
    virtual void releaseFrame(void) {}
-   virtual bool grabAsynchronous(bool) {return false; return true;}
+   virtual bool grabAsynchronous(bool) {return false;}
    virtual bool	dialog(std::vector<std::string>names=std::vector<std::string>()) {return false;}
    virtual bool	    	setColor(int) {return false;}
 

@@ -615,12 +615,10 @@ public:
   {
     if(!open(name, canvas)) {
       throw(GemException(std::string("unable to open '"+name+"'")));
-      return;
     }
 
     if(!init_()) {
       throw(GemException(std::string("unable to initialize '"+name+"'")));
-      return;
     }
   }
   virtual ~FFPlugin(void) {

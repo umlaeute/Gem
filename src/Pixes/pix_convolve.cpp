@@ -372,8 +372,6 @@ if (m_chroma){
   //messed up looking on x86
 i=xsize+2;
 
-length = size /2;
-
 	  for (k=1;k<ysize;k++) {
         for (j=1;j<xsize;j++) {
   //load furthest value first...the rest should be in cache

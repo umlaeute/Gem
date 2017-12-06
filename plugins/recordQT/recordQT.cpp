@@ -406,7 +406,6 @@ void recordQT :: compressFrame(void)
 #endif //timers
 
 #ifdef _WIN32
-  static int firstTime = 1;
   static float countFreq = 0;
   if (m_firstRun)
     {
