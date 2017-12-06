@@ -33,8 +33,8 @@ CPPEXTERN_NEW_WITH_GIMME(text3d);
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 text3d :: text3d(int argc, t_atom *argv)
-: TextBase(argc, argv), m_antialias(true),
-  m_aafont(NULL), m_pyfont(NULL)
+  : TextBase(argc, argv), m_antialias(true),
+    m_aafont(NULL), m_pyfont(NULL)
 {
   fontNameMess(DEFAULT_FONT);
 }

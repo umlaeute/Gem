@@ -52,10 +52,10 @@ part_velcone :: ~part_velcone()
 /////////////////////////////////////////////////////////
 void part_velcone :: renderParticles(GemState *state)
 {
-        if (m_tickTime > 0.f)
-        {
-                pVelocityD(PDCone, 0.f, 0.f, 0.f, m_pos[0], m_pos[1], m_pos[2], m_radius);
-        }
+  if (m_tickTime > 0.f)
+    {
+      pVelocityD(PDCone, 0.f, 0.f, 0.f, m_pos[0], m_pos[1], m_pos[2], m_radius);
+    }
 }
 
 /////////////////////////////////////////////////////////

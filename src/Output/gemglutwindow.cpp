@@ -74,73 +74,73 @@ namespace {
     return std::string("<unknown>");
   }
 
-/* callbacks */
+  /* callbacks */
 #define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
 
 
-void displayCb(void) {
-  CALLBACK4WIN ->bang(); // fixme??
-}
-void visibleCb(int state) {
-  CALLBACK4WIN->info("visible", state);
-}
-void closeCb(void) {
-  CALLBACK4WIN->info("window", "destroy");
-}
-void keyboardCb(unsigned char c, int x, int y) {
-  CALLBACK4WIN->motion( 0,x,y);
-  ggw->key( 0,key2symbol(c), c, 1);
-}
-void keyboardupCb(unsigned char c, int x, int y) {
-  CALLBACK4WIN->motion( 0,x,y);
-  ggw->key( 0,key2symbol(c), c, 0);
-}
-void specialCb(int c, int x, int y) {
-  CALLBACK4WIN->motion(0,x,y);
-  ggw->key(0,key2symbol(c), c, 1);
-}
-void specialupCb(int c, int x, int y) {
-  CALLBACK4WIN->motion(0,x,y);
-  ggw->key(0,key2symbol(c), c, 0);
-}
-void reshapeCb(int x, int y) {
-  CALLBACK4WIN->dimension(x, y);
-}
-void mouseCb(int button, int state, int x, int y) {
-  CALLBACK4WIN->motion(0,x,y);
-  ggw->button(0,button, !state);
-}
-void motionCb(int x, int y) {
-  CALLBACK4WIN->motion(0,x,y);
-}
-void passivemotionCb(int x, int y) {
-  CALLBACK4WIN->motion(0,x,y);
-}
-void entryCb(int state) {
-  CALLBACK4WIN->entry(0, state);
-}
-void joystickCb(unsigned int a, int x, int y, int z) {
-}
-void menuCb(int menu) {
-  CALLBACK4WIN->info("menu", menu);
-}
-void menustateCb(int value) {
-}
-void menustatusCb(int x, int y, int z) {
-}
-void windowstatusCb(int value) {
-  std::string s;
-
-  switch(value) {
-  case GLUT_HIDDEN: s=std::string("hidden"); break;
-  case GLUT_FULLY_RETAINED: s=std::string("full"); break;
-  case GLUT_PARTIALLY_RETAINED: s=std::string("partial"); break;
-  case GLUT_FULLY_COVERED: s=std::string("covered"); break;
-  default:
-    s=std::string("unknown");
+  void displayCb(void) {
+    CALLBACK4WIN ->bang(); // fixme??
   }
-  CALLBACK4WIN->info("window", s);
-}
+  void visibleCb(int state) {
+    CALLBACK4WIN->info("visible", state);
+  }
+  void closeCb(void) {
+    CALLBACK4WIN->info("window", "destroy");
+  }
+  void keyboardCb(unsigned char c, int x, int y) {
+    CALLBACK4WIN->motion( 0,x,y);
+    ggw->key( 0,key2symbol(c), c, 1);
+  }
+  void keyboardupCb(unsigned char c, int x, int y) {
+    CALLBACK4WIN->motion( 0,x,y);
+    ggw->key( 0,key2symbol(c), c, 0);
+  }
+  void specialCb(int c, int x, int y) {
+    CALLBACK4WIN->motion(0,x,y);
+    ggw->key(0,key2symbol(c), c, 1);
+  }
+  void specialupCb(int c, int x, int y) {
+    CALLBACK4WIN->motion(0,x,y);
+    ggw->key(0,key2symbol(c), c, 0);
+  }
+  void reshapeCb(int x, int y) {
+    CALLBACK4WIN->dimension(x, y);
+  }
+  void mouseCb(int button, int state, int x, int y) {
+    CALLBACK4WIN->motion(0,x,y);
+    ggw->button(0,button, !state);
+  }
+  void motionCb(int x, int y) {
+    CALLBACK4WIN->motion(0,x,y);
+  }
+  void passivemotionCb(int x, int y) {
+    CALLBACK4WIN->motion(0,x,y);
+  }
+  void entryCb(int state) {
+    CALLBACK4WIN->entry(0, state);
+  }
+  void joystickCb(unsigned int a, int x, int y, int z) {
+  }
+  void menuCb(int menu) {
+    CALLBACK4WIN->info("menu", menu);
+  }
+  void menustateCb(int value) {
+  }
+  void menustatusCb(int x, int y, int z) {
+  }
+  void windowstatusCb(int value) {
+    std::string s;
+
+    switch(value) {
+    case GLUT_HIDDEN: s=std::string("hidden"); break;
+    case GLUT_FULLY_RETAINED: s=std::string("full"); break;
+    case GLUT_PARTIALLY_RETAINED: s=std::string("partial"); break;
+    case GLUT_FULLY_COVERED: s=std::string("covered"); break;
+    default:
+      s=std::string("unknown");
+    }
+    CALLBACK4WIN->info("window", s);
+  }
 #if (defined GLUT_HAS_MULTI) && (GLUT_HAS_MULTI > 0)
   void multiButtonCb(int id, int x, int y, int button, int state) {
     CALLBACK4WIN->motion(id,x,y);
@@ -185,7 +185,7 @@ gemglutwindow :: ~gemglutwindow()
 
 bool gemglutwindow :: makeCurrent(void){
   if(!m_window)return false;
-    glutSetWindow(m_window);
+  glutSetWindow(m_window);
 
   return(true);
 }

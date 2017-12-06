@@ -19,7 +19,7 @@
 
 CPPEXTERN_NEW_WITH_GIMME(part_sink);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // part_sink
 //
@@ -89,7 +89,7 @@ void part_sink :: renderParticles(GemState *state)
 {
   if (m_tickTime > 0.f) {
     pSink(m_kill, m_domain,
-            m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
+          m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
   }
 }
 

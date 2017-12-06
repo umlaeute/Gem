@@ -41,7 +41,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_filmDarwin, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 
 pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
-        pix_filmOS(filename),
+  pix_filmOS(filename),
   m_srcGWorld(NULL),
   m_hiquality(1),
   m_play(0),
@@ -96,14 +96,14 @@ void pix_filmDarwin :: realOpen(char *filename)
   OSErr         err = noErr;
   FSRef         ref;
 
-        Track           movieTrack, audioTrack;
-        Media           trackMedia;
+  Track           movieTrack, audioTrack;
+  Media           trackMedia;
 
-        long            sampleCount;
+  long            sampleCount;
 
   long          m_rowBytes;
 
-        MatrixRecord    matrix;
+  MatrixRecord    matrix;
 
   if (!filename[0]) {
     error("no filename passed");
@@ -163,67 +163,67 @@ void pix_filmDarwin :: realOpen(char *filename)
   m_xsize = m_srcRect.right - m_srcRect.left;
   m_ysize = m_srcRect.bottom - m_srcRect.top;
 
-        //long  index;
+  //long  index;
 
-        //special code for trapping HD formats which have pixel dimensions which are different from what QT reports
-        //this is undocumented anywhere by Apple - thanks to Marc Van Olmen for helping sort this out
+  //special code for trapping HD formats which have pixel dimensions which are different from what QT reports
+  //this is undocumented anywhere by Apple - thanks to Marc Van Olmen for helping sort this out
 
-        ImageDescriptionHandle desc = NULL;
+  ImageDescriptionHandle desc = NULL;
 
-        desc = reinterpret_cast<ImageDescriptionHandle>(NewHandle(0));
+  desc = reinterpret_cast<ImageDescriptionHandle>(NewHandle(0));
 
-        GetMediaSampleDescription(trackMedia,1,reinterpret_cast<SampleDescriptionHandle>(desc));
+  GetMediaSampleDescription(trackMedia,1,reinterpret_cast<SampleDescriptionHandle>(desc));
 # ifdef kDVCPROHD720pCodecType
-        //DVCPRO720p
-        if ((*desc)->cType == kDVCPROHD720pCodecType){
+  //DVCPRO720p
+  if ((*desc)->cType == kDVCPROHD720pCodecType){
 
-                post("kDVCPROHD720pCodecType");
+    post("kDVCPROHD720pCodecType");
 
-                m_xsize = 960;
-                SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
-                SetMovieBox(m_movie, &m_srcRect);
-                ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+    m_xsize = 960;
+    SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
+    SetMovieBox(m_movie, &m_srcRect);
+    ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
 
-                SetMovieMatrix(m_movie,&matrix);
-        }
+    SetMovieMatrix(m_movie,&matrix);
+  }
 
 
-        //DVCPRO 1080i60
-        if ((*desc)->cType == kDVCPROHD1080i60CodecType){
+  //DVCPRO 1080i60
+  if ((*desc)->cType == kDVCPROHD1080i60CodecType){
 
-                post("kDVCPROHD1080i60CodecType");
-                m_hiquality = 0;
+    post("kDVCPROHD1080i60CodecType");
+    m_hiquality = 0;
 
-                m_xsize = 1280;
-                SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
+    m_xsize = 1280;
+    SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
 
-                ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
-                SetMovieBox(m_movie, &m_srcRect);
-                SetMovieMatrix(m_movie,&matrix);
+    ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+    SetMovieBox(m_movie, &m_srcRect);
+    SetMovieMatrix(m_movie,&matrix);
 
-        }
+  }
 
 # endif
-        //DVCPRO 1080i
+  //DVCPRO 1080i
 
-        //HDV
+  //HDV
 
-        //post("image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
+  //post("image description width %d heigh %d hRes %d vRes %d",(*desc)->width,(*desc)->height,Fix2Long((*desc)->hRes),Fix2Long((*desc)->vRes));
 
-        // We will use a YUV GWorld/Texture to get the fastest performance
-        // 16 bits per pixel for 4:2:2
-        // RowBytes should be a multiple of 32 for GL_STORAGE_SHARED_APPLE to work
-        // This means movie width for 16bits need to be a multiple of 16
-        //   (and for rgba/32bits width needs to be a multiple of 32)
-        // we pad out to that. The texture coords ensure we do not use the extra bytes.
-        int bpp;
-        if (m_colorspace == GL_RGBA_GEM)
-                bpp = 32;
-        else
-                bpp = 16;
+  // We will use a YUV GWorld/Texture to get the fastest performance
+  // 16 bits per pixel for 4:2:2
+  // RowBytes should be a multiple of 32 for GL_STORAGE_SHARED_APPLE to work
+  // This means movie width for 16bits need to be a multiple of 16
+  //   (and for rgba/32bits width needs to be a multiple of 32)
+  // we pad out to that. The texture coords ensure we do not use the extra bytes.
+  int bpp;
+  if (m_colorspace == GL_RGBA_GEM)
+    bpp = 32;
+  else
+    bpp = 16;
 
-        UInt32 thePadOffset = m_xsize % bpp;
-        if( thePadOffset != 0 )
+  UInt32 thePadOffset = m_xsize % bpp;
+  if( thePadOffset != 0 )
     {
       m_xsize += (bpp - thePadOffset);
       SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
@@ -236,13 +236,13 @@ void pix_filmDarwin :: realOpen(char *filename)
     m_rowBytes = m_xsize * 4;
     if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality, hintsHighQuality);
     err = QTNewGWorldFromPtr(   &m_srcGWorld,
-                              k32ARGBPixelFormat,       // gives noErr
-                              &m_srcRect,
-                              NULL,
-                              NULL,
-                              0,
-                              m_pixBlock.image.data,
-                              m_rowBytes);
+                                k32ARGBPixelFormat,       // gives noErr
+                                &m_srcRect,
+                                NULL,
+                                NULL,
+                                0,
+                                m_pixBlock.image.data,
+                                m_rowBytes);
 
   }else{
     m_format=GL_YUV422_GEM;
@@ -251,13 +251,13 @@ void pix_filmDarwin :: realOpen(char *filename)
     m_rowBytes = m_xsize * 2;
     if (m_hiquality) SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
     err = QTNewGWorldFromPtr(   &m_srcGWorld,
-                              k422YpCbCr8CodecType,
-                              &m_srcRect,
-                              NULL,
-                              NULL,
-                              0,
-                              m_pixBlock.image.data,
-                              m_rowBytes);
+                                k422YpCbCr8CodecType,
+                                &m_srcRect,
+                                NULL,
+                                NULL,
+                                0,
+                                m_pixBlock.image.data,
+                                m_rowBytes);
   }
   if (err) {
     error("couldn't make QTNewGWorldFromPtr %d", err);
@@ -283,7 +283,7 @@ void pix_filmDarwin :: realOpen(char *filename)
     SetMovieRate(m_movie,X2Fix(0.0));
   }
 
-        SetMovieVolume(m_movie,FloatToFixed(m_volume));
+  SetMovieVolume(m_movie,FloatToFixed(m_volume));
   ::MoviesTask(m_movie, 0);     // *** this does the actual drawing into the GWorld ***
   curTime = GetMovieTime(m_movie,NULL);
   prevTime = 0;
@@ -456,14 +456,14 @@ void pix_filmDarwin :: postrender(GemState *state)
 
 void pix_filmDarwin :: startRendering()
 {
-        //bit of a hack related to stopRendering()
-        if (m_auto && m_haveMovie) SetMovieVolume(m_movie, static_cast<short>(m_volume * 255.f));
+  //bit of a hack related to stopRendering()
+  if (m_auto && m_haveMovie) SetMovieVolume(m_movie, static_cast<short>(m_volume * 255.f));
 }
 
 void pix_filmDarwin :: stopRendering()
 {
-        //bit of a hack to keep the sound from playing after rendering stops
-        if (m_auto && m_haveMovie) SetMovieVolume(m_movie, kNoVolume);
+  //bit of a hack to keep the sound from playing after rendering stops
+  if (m_auto && m_haveMovie) SetMovieVolume(m_movie, kNoVolume);
 }
 
 void pix_filmDarwin :: LoadRam()
@@ -534,7 +534,7 @@ void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
                   gensym("rate"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::debugCallback),
                   gensym("debug"),  A_NULL);
-        class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::volumeCallback),
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::volumeCallback),
                   gensym("volume"), A_DEFFLOAT, A_NULL);
 
 }

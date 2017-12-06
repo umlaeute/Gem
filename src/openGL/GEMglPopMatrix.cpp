@@ -33,7 +33,7 @@ GEMglPopMatrix :: ~GEMglPopMatrix () {}
 // Render
 //
 void GEMglPopMatrix :: render(GemState *state) {
-        glPopMatrix ();
+  glPopMatrix ();
 }
 /////////////////////////////////////////////////////////
 // static member function

@@ -115,10 +115,10 @@ void gemwin :: intMess(int state)
 /////////////////////////////////////////////////////////
 void gemwin :: renderMess()
 {
-        if (GemMan::getRenderState())
-                GemMan::render(NULL);
-        else
-                error("not in render mode");
+  if (GemMan::getRenderState())
+    GemMan::render(NULL);
+  else
+    error("not in render mode");
 }
 /////////////////////////////////////////////////////////
 // titleMess
@@ -191,7 +191,7 @@ void gemwin :: stereoMess(int mode)
 /////////////////////////////////////////////////////////
 void gemwin :: fullscreenMess(int on)
 {
-    GemMan::m_fullscreen = on;
+  GemMan::m_fullscreen = on;
 }
 
 /////////////////////////////////////////////////////////
@@ -204,9 +204,9 @@ void gemwin :: menuBarMess(int on)
 #ifdef __APPLE__
   if (on == 0) {
     SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu |
-                                                                           kUIOptionDisableProcessSwitch |
-                                                                           kUIOptionDisableSessionTerminate |
-                                                                           kUIOptionDisableForceQuit );
+                     kUIOptionDisableProcessSwitch |
+                     kUIOptionDisableSessionTerminate |
+                     kUIOptionDisableForceQuit );
   }else if (on > 0) {
     SetSystemUIMode( kUIModeNormal, 0 );
   }else if (on < 0) {
@@ -413,7 +413,7 @@ void gemwin :: blurMess(float setting)
 /////////////////////////////////////////////////////////
 void gemwin :: fpsMess()
 {
-    outlet_float(m_FrameRate,GemMan :: fps);
+  outlet_float(m_FrameRate,GemMan :: fps);
 }
 
 /////////////////////////////////////////////////////////
@@ -422,12 +422,12 @@ void gemwin :: fpsMess()
 /////////////////////////////////////////////////////////
 void gemwin :: fsaaMess(int value)
 {
-    if (value == 2 || value == 4 || value == 8){
-        GemMan :: fsaa = value;
-    }
-    else{
-        GemMan :: fsaa = value;
-    }
+  if (value == 2 || value == 4 || value == 8){
+    GemMan :: fsaa = value;
+  }
+  else{
+    GemMan :: fsaa = value;
+  }
 }
 
 

@@ -167,12 +167,12 @@ void separator :: postrender(GemState *state)
   SEPARATOR_STATEASSIGN(&m_state, state, int, GemState::_GL_TEX_TYPE);
   SEPARATOR_STATEASSIGN(&m_state, state, pixBlock*, GemState::_PIX);
 
-//this is a partial fix for the separator memory leak
-//
-//if the texcoords are of equal number, which they almost always are
-//then just copy them in a loop without delete and new being done
-//
-//when texcoords are not equal the memory leak happens as usual
+  //this is a partial fix for the separator memory leak
+  //
+  //if the texcoords are of equal number, which they almost always are
+  //then just copy them in a loop without delete and new being done
+  //
+  //when texcoords are not equal the memory leak happens as usual
   TexCoord *myCoords=NULL, *stateCoords=NULL;
   int mynum=0, num=0;
 

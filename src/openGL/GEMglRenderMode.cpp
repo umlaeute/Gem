@@ -37,8 +37,8 @@ GEMglRenderMode :: GEMglRenderMode      (int argc, t_atom*argv) :
 // Destructor
 //
 GEMglRenderMode :: ~GEMglRenderMode () {
-   inlet_free(m_inlet);
-   outlet_free(m_outlet);
+  inlet_free(m_inlet);
+  outlet_free(m_outlet);
 }
 
 /////////////////////////////////////////////////////////
@@ -67,5 +67,5 @@ void GEMglRenderMode :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglRenderMode :: modeMessCallback (void* data, t_symbol*s, int argc, t_atom*argv){
-        if(1==argc)GetMyClass(data)->modeMess (argv[0]);
+  if(1==argc)GetMyClass(data)->modeMess (argv[0]);
 }

@@ -84,7 +84,7 @@ void pix_aging :: processImage(imageStruct &image)
     }
   }
   if (m_scratching){
-   int i, y, y1, y2;
+    int i, y, y1, y2;
     for(i=0; i<m_scratchlines; i++) {
       if(m_scratch[i].life) {
         m_scratch[i].x = m_scratch[i].x + m_scratch[i].dx*image.csize;
@@ -221,11 +221,11 @@ void pix_aging :: scratchMess(int scratchlines)
 void pix_aging :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::colorMessCallback),
-                   gensym("coloraging"), A_FLOAT, A_NULL);
+                  gensym("coloraging"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::scratchMessCallback),
                   gensym("scratch"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::dustMessCallback),
-                   gensym("dust"), A_FLOAT, A_NULL);
+                  gensym("dust"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_aging::pitsMessCallback),
                   gensym("pits"), A_FLOAT, A_NULL);
 }

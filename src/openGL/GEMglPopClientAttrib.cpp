@@ -43,7 +43,7 @@ bool GEMglPopClientAttrib :: isRunnable(void) {
 // Render
 //
 void GEMglPopClientAttrib :: render(GemState *state) {
-        glPopClientAttrib ();
+  glPopClientAttrib ();
 }
 
 

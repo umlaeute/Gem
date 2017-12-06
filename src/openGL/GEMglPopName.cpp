@@ -43,7 +43,7 @@ bool GEMglPopName :: isRunnable(void) {
 // Render
 //
 void GEMglPopName :: render(GemState *state) {
-        glPopName ();
+  glPopName ();
 }
 
 /////////////////////////////////////////////////////////

@@ -79,16 +79,16 @@ void pix_duotone :: processRGBImage(imageStruct &image)
 
   while(datasize--) {
     if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])){
-    pixels[chRed]   = m_color1[0];
-    pixels[chGreen] = m_color1[1];
-    pixels[chBlue]  = m_color1[2];
+      pixels[chRed]   = m_color1[0];
+      pixels[chGreen] = m_color1[1];
+      pixels[chBlue]  = m_color1[2];
 
-  } else {
-    pixels[chRed]   = m_color2[0];
-    pixels[chGreen] = m_color2[1];
-    pixels[chBlue]  = m_color2[2];
-  }
-  pixels += 3;
+    } else {
+      pixels[chRed]   = m_color2[0];
+      pixels[chGreen] = m_color2[1];
+      pixels[chBlue]  = m_color2[2];
+    }
+    pixels += 3;
   }
 }
 
@@ -128,11 +128,11 @@ void pix_duotone :: processYUVImage(imageStruct &image)
           image.data[src+2] = m_color1[2];
           image.data[src+3] = m_color1[0];
         }else{
-          image.data[src]   = m_color2[1];
-          image.data[src+1] = m_color2[0];
-          image.data[src+2] = m_color2[2];
-          image.data[src+3] = m_color2[0];
-        }
+        image.data[src]   = m_color2[1];
+        image.data[src+1] = m_color2[0];
+        image.data[src+2] = m_color2[2];
+        image.data[src+3] = m_color2[0];
+      }
       src+=4;
     }
   }
@@ -145,32 +145,32 @@ void pix_duotone :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_duotone :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color1MessCallback),
-            gensym("color1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color2MessCallback),
-            gensym("color2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::threshMessCallback),
-            gensym("thresh"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color1MessCallback),
+                  gensym("color1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color2MessCallback),
+                  gensym("color2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::threshMessCallback),
+                  gensym("thresh"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_duotone :: color1MessCallback(void *data, t_float value1, t_float value2, t_float value3)
 {
-    GetMyClass(data)->m_color1[0]=(unsigned char)(value1*255);
-    GetMyClass(data)->m_color1[1]=(unsigned char)(value2*255);
-    GetMyClass(data)->m_color1[2]=(unsigned char)(value3*255);
-    GetMyClass(data)->setPixModified();
+  GetMyClass(data)->m_color1[0]=(unsigned char)(value1*255);
+  GetMyClass(data)->m_color1[1]=(unsigned char)(value2*255);
+  GetMyClass(data)->m_color1[2]=(unsigned char)(value3*255);
+  GetMyClass(data)->setPixModified();
 }
 void pix_duotone :: color2MessCallback(void *data, t_float value1, t_float value2, t_float value3)
 {
-    GetMyClass(data)->m_color2[0]=(unsigned char)(value1*255);
-    GetMyClass(data)->m_color2[1]=(unsigned char)(value2*255);
-    GetMyClass(data)->m_color2[2]=(unsigned char)(value3*255);
-    GetMyClass(data)->setPixModified();
+  GetMyClass(data)->m_color2[0]=(unsigned char)(value1*255);
+  GetMyClass(data)->m_color2[1]=(unsigned char)(value2*255);
+  GetMyClass(data)->m_color2[2]=(unsigned char)(value3*255);
+  GetMyClass(data)->setPixModified();
 }
 
 void pix_duotone :: threshMessCallback(void *data, t_float value1, t_float value2, t_float value3)
 {
-    GetMyClass(data)->m_thresh[0]=(unsigned char)(value1*255);
-    GetMyClass(data)->m_thresh[1]=(unsigned char)(value2*255);
-    GetMyClass(data)->m_thresh[2]=(unsigned char)(value3*255);
-    GetMyClass(data)->setPixModified();
+  GetMyClass(data)->m_thresh[0]=(unsigned char)(value1*255);
+  GetMyClass(data)->m_thresh[1]=(unsigned char)(value2*255);
+  GetMyClass(data)->m_thresh[2]=(unsigned char)(value3*255);
+  GetMyClass(data)->setPixModified();
 }

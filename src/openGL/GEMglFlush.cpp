@@ -33,7 +33,7 @@ GEMglFlush :: ~GEMglFlush () {}
 // Render
 //
 void GEMglFlush :: render(GemState *state) {
-        glFlush ();
+  glFlush ();
 }
 
 /////////////////////////////////////////////////////////

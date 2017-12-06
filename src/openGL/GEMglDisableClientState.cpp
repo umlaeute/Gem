@@ -26,16 +26,16 @@ using namespace gem::utils::gl;
 // Constructor
 //
 GEMglDisableClientState :: GEMglDisableClientState (int argc, t_atom*argv) :
-                array(0)
+  array(0)
 {
   if(1==argc)arrayMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("array"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("array"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglDisableClientState :: ~GEMglDisableClientState () {
-inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[0]);
 }
 //////////////////
 // extension check
@@ -48,15 +48,15 @@ bool GEMglDisableClientState :: isRunnable(void) {
 // Render
 //
 void GEMglDisableClientState :: render(GemState *state) {
-        glDisableClientState (array);
+  glDisableClientState (array);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglDisableClientState :: arrayMess (t_atom arg) {        // FUN
-        array = static_cast<GLenum>(getGLdefine(&arg));
-        setModified();
+  array = static_cast<GLenum>(getGLdefine(&arg));
+  setModified();
 }
 
 
@@ -65,9 +65,9 @@ void GEMglDisableClientState :: arrayMess (t_atom arg) {        // FUN
 //
 
 void GEMglDisableClientState :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDisableClientState::arrayMessCallback),     gensym("array"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDisableClientState::arrayMessCallback),     gensym("array"), A_GIMME, A_NULL);
 }
 
 void GEMglDisableClientState :: arrayMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-        if(argc==1)GetMyClass(data)->arrayMess ( argv[0]);
+  if(argc==1)GetMyClass(data)->arrayMess ( argv[0]);
 }

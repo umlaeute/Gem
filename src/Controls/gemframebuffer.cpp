@@ -446,7 +446,7 @@ void gemframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
 /* needs to be called with a valid context */
 void gemframebuffer :: fixFormat(GLenum wantFormat)
 {
-   m_type = GL_UNSIGNED_BYTE;
+  m_type = GL_UNSIGNED_BYTE;
 
   if(wantFormat == GL_RGB_FLOAT32_ATI && !GLEW_ATI_texture_float) {
     wantFormat =  GL_RGB;
@@ -480,8 +480,8 @@ void gemframebuffer :: fixFormat(GLenum wantFormat)
 #ifdef __APPLE__
   switch(wantFormat) {
   case  GL_RGB_FLOAT32_ATI:
-  m_format = GL_BGR;
-  break;
+    m_format = GL_BGR;
+    break;
   case GL_RGBA:
     m_format = GL_BGRA;
     break;
@@ -505,9 +505,9 @@ void gemframebuffer :: formatMess(std::string format)
   } else if ("RGBA"==format) {
     tmp_format = GL_RGBA;
   } else if ("RGB32"==format) {
-      tmp_format =  GL_RGB_FLOAT32_ATI;
+    tmp_format =  GL_RGB_FLOAT32_ATI;
   } else if ("RGBA32F"==format) {
-      tmp_format =  GL_RGBA32F;
+    tmp_format =  GL_RGBA32F;
   }
 
   if(tmp_format)

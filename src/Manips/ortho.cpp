@@ -68,13 +68,13 @@ void ortho :: render(GemState *)
 /////////////////////////////////////////////////////////
 void ortho :: postrender(GemState *)
 {
-    if (m_state)
-        {
-                glMatrixMode(GL_PROJECTION);
-                glPopMatrix();
-                glMatrixMode(GL_MODELVIEW);
-                glPopAttrib();
-        }
+  if (m_state)
+    {
+      glMatrixMode(GL_PROJECTION);
+      glPopMatrix();
+      glMatrixMode(GL_MODELVIEW);
+      glPopAttrib();
+    }
 }
 
 /////////////////////////////////////////////////////////
@@ -83,8 +83,8 @@ void ortho :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void ortho :: orthoMess(int state)
 {
-    m_state = state;
-    setModified();
+  m_state = state;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -93,8 +93,8 @@ void ortho :: orthoMess(int state)
 /////////////////////////////////////////////////////////
 void ortho :: compatMess(int state)
 {
-    m_compat = state;
-    setModified();
+  m_compat = state;
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // static member function

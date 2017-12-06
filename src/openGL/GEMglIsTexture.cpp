@@ -57,9 +57,9 @@ void GEMglIsTexture :: textureMess (t_float arg1) {     // FUN
 //
 
 void GEMglIsTexture :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIsTexture::textureMessCallback),    gensym("texture"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIsTexture::textureMessCallback),    gensym("texture"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglIsTexture :: textureMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->textureMess (arg0);
+  GetMyClass(data)->textureMess (arg0);
 }

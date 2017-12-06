@@ -112,9 +112,9 @@ public:
     char buf[MAXPDSTRING];
     sys_bashfilename(filename.c_str(), buf);
     UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
-        SetLastError(0);
+    SetLastError(0);
     handle->w32handle=LoadLibrary(buf);
-        DWORD errorNumber = GetLastError();
+    DWORD errorNumber = GetLastError();
     errorboxflags=SetErrorMode(errorboxflags);
     if(handle->w32handle) {
       handle->fullname=filename;
@@ -136,34 +136,34 @@ public:
 #endif
 #ifdef _WIN32
     LPVOID lpErrorMessage=NULL;
-        if(errorNumber) {
-                FormatMessage(
-                  FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                  FORMAT_MESSAGE_FROM_SYSTEM,
-                  NULL,
-                  errorNumber,
-                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                  (LPTSTR) &lpErrorMessage,
-                  0, NULL );
-        }
-        std::cerr << "GemDylib failed: #"<<errorNumber<<": ";
-        if(lpErrorMessage) {
-                std::cerr<<(const char*)lpErrorMessage;
-        }else {
-                std::cerr<<"(unknown)";
-        }
-        std::cerr<<std::endl;
+    if(errorNumber) {
+      FormatMessage(
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                    FORMAT_MESSAGE_FROM_SYSTEM,
+                    NULL,
+                    errorNumber,
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                    (LPTSTR) &lpErrorMessage,
+                    0, NULL );
+    }
+    std::cerr << "GemDylib failed: #"<<errorNumber<<": ";
+    if(lpErrorMessage) {
+      std::cerr<<(const char*)lpErrorMessage;
+    }else {
+      std::cerr<<"(unknown)";
+    }
+    std::cerr<<std::endl;
     std::string error = "DLLerror(";
     char errbuf[10];
     snprintf(errbuf, 10, "0x%x", errorNumber);
     errbuf[10-1]=0;
     error+=errbuf;
-        error+=")";
-        if(lpErrorMessage) {
-                error+=(const char*)lpErrorMessage;
-        }
-        std::cerr << "GemDylib throwing: "<< error << std::endl;
-        throw(GemException(std::string(error)));
+    error+=")";
+    if(lpErrorMessage) {
+      error+=(const char*)lpErrorMessage;
+    }
+    std::cerr << "GemDylib throwing: "<< error << std::endl;
+    throw(GemException(std::string(error)));
 #endif
 
     return NULL;
@@ -211,29 +211,29 @@ public:
 
 const std::string GemDylibHandle::defaultExtension =
 #ifdef _WIN32
-                               std::string(".dll")
+                                         std::string(".dll")
 #elif defined DL_OPEN
-                               std::string(".so")
+                                         std::string(".so")
 #else
-                               std::string("")
+                                         std::string("")
 #endif
-  ;
+                                         ;
 
 
 GemDylib::GemDylib(const CPPExtern*obj, const std::string&filename, const std::string&extension)
   : m_handle(0) {
-    m_handle=GemDylibHandle::open(obj, filename, extension);
-    if(NULL==m_handle) {
-      std::string err="unable to open '";
-      err+=filename;
-      if(!extension.empty()) {
-        err+=".";
-        err+=extension;
-      }
-      err+="'";
-      throw GemException(err);
+  m_handle=GemDylibHandle::open(obj, filename, extension);
+  if(NULL==m_handle) {
+    std::string err="unable to open '";
+    err+=filename;
+    if(!extension.empty()) {
+      err+=".";
+      err+=extension;
     }
-    s_dylibs.push_back(this);
+    err+="'";
+    throw GemException(err);
+  }
+  s_dylibs.push_back(this);
 }
 
 GemDylib::GemDylib(const std::string&filename, const std::string&extension)

@@ -47,30 +47,30 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
 {
   if(!argc)return;
 
-    if(argv->a_type != A_SYMBOL) {
-      error("no key given...");
-      return;
+  if(argv->a_type != A_SYMBOL) {
+    error("no key given...");
+    return;
+  }
+  std::string key=std::string(atom_getsymbol(argv)->s_name);
+  std::vector<gem::any> values;
+  argc--; argv++;
+  while(argc-->0) {
+    values.push_back(atom2any(argv++));
+  }
+  switch(values.size()) {
+  default:
+    props.set(key, values);
+    break;
+  case 1:
+    props.set(key, values[0]);
+    break;
+  case 0:
+    {
+      gem::any dummy;
+      props.set(key, dummy);
     }
-    std::string key=std::string(atom_getsymbol(argv)->s_name);
-    std::vector<gem::any> values;
-    argc--; argv++;
-    while(argc-->0) {
-      values.push_back(atom2any(argv++));
-    }
-    switch(values.size()) {
-    default:
-      props.set(key, values);
-      break;
-    case 1:
-      props.set(key, values[0]);
-      break;
-    case 0:
-      {
-        gem::any dummy;
-        props.set(key, dummy);
-      }
-      break;
-    }
+    break;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -250,18 +250,18 @@ void pix_buffer :: loadMess(std::string filename, int pos)
 
   // some checks
   if (pos<0 || pos>=m_numframes)
-  {
-    error("index %d out of range (0..%d)!", pos, m_numframes);
-    return;
-  }
+    {
+      error("index %d out of range (0..%d)!", pos, m_numframes);
+      return;
+    }
   std::string file=findFile(filename);
 
   image = image2mem(file.c_str());
   if(!image)
-  {
-    error("'%s' is no valid image!", file.c_str());
-    return;
-  }
+    {
+      error("'%s' is no valid image!", file.c_str());
+      return;
+    }
 
   putMess(image,pos);
 

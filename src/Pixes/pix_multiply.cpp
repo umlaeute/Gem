@@ -83,16 +83,16 @@ void pix_multiply :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
 
-    while(datasize--)   {
-      unsigned int alpha = rightPix[chGray];
-      leftPix[chGray] = INT_MULT(leftPix[chGray], alpha);
-      leftPix++;
-      rightPix++;
-    }
+  while(datasize--)   {
+    unsigned int alpha = rightPix[chGray];
+    leftPix[chGray] = INT_MULT(leftPix[chGray], alpha);
+    leftPix++;
+    rightPix++;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -101,20 +101,20 @@ void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
-   long src,h,w;
-   int  y1,y2;
-   src =0;
-   //format is U Y V Y
-   for (h=0; h<image.ysize; h++){
+  long src,h,w;
+  int  y1,y2;
+  src =0;
+  //format is U Y V Y
+  for (h=0; h<image.ysize; h++){
     for(w=0; w<image.xsize/2; w++){
-       y1 = (image.data[src+chY0] * right.data[src+chY0]) >> 8;
-       image.data[src+chY0] = CLAMP_Y(y1);
-       y2 = (image.data[src+chY1] * right.data[src+chY1]) >> 8;
-       image.data[src+chY1] = CLAMP_Y(y2);
+      y1 = (image.data[src+chY0] * right.data[src+chY0]) >> 8;
+      image.data[src+chY0] = CLAMP_Y(y1);
+      y2 = (image.data[src+chY1] * right.data[src+chY1]) >> 8;
+      image.data[src+chY1] = CLAMP_Y(y2);
 
-       src+=4;
+      src+=4;
     }
-   }
+  }
 }
 
 #ifdef __MMX__

@@ -33,7 +33,7 @@ GEMglPopAttrib :: ~GEMglPopAttrib () {}
 // Render
 //
 void GEMglPopAttrib :: render(GemState *state) {
-        glPopAttrib ();
+  glPopAttrib ();
 }
 /////////////////////////////////////////////////////////
 // static member function

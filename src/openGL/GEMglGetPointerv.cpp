@@ -24,14 +24,14 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetPointerv , t_floatarg, A_DEFFLOAT );
 // Constructor
 //
 GEMglGetPointerv :: GEMglGetPointerv    (t_floatarg arg0) {
-        pnameMess(arg0);
-        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  pnameMess(arg0);
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglGetPointerv :: ~GEMglGetPointerv () {
-        inlet_free(m_inlet);
+  inlet_free(m_inlet);
 }
 
 //////////////////
@@ -67,5 +67,5 @@ void GEMglGetPointerv :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglGetPointerv :: pnameMessCallback (void* data, t_float arg0) {
-        GetMyClass(data)->pnameMess ( arg0 );
+  GetMyClass(data)->pnameMess ( arg0 );
 }

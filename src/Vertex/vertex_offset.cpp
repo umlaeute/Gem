@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_offset);
 //
 /////////////////////////////////////////////////////////
 vertex_offset :: vertex_offset(int argc, t_atom*argv) : vertex_scale(argc, argv),
-                                                      m_x(0.f), m_y(0.f), m_z(0.f), m_w(0.f)
+                                                        m_x(0.f), m_y(0.f), m_z(0.f), m_w(0.f)
 {}
 
 /////////////////////////////////////////////////////////

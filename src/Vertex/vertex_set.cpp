@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_set);
 //
 /////////////////////////////////////////////////////////
 vertex_set :: vertex_set(int argc, t_atom*argv) : vertex_scale(argc, argv),
-                                                      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f)
+                                                  m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f)
 {}
 
 /////////////////////////////////////////////////////////

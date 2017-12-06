@@ -69,7 +69,7 @@ scale :: ~scale()
 /////////////////////////////////////////////////////////
 void scale :: render(GemState *)
 {
-    glScalef(m_vector[0] * m_distance, m_vector[1] * m_distance, m_vector[2] * m_distance);
+  glScalef(m_vector[0] * m_distance, m_vector[1] * m_distance, m_vector[2] * m_distance);
 }
 
 /////////////////////////////////////////////////////////
@@ -78,8 +78,8 @@ void scale :: render(GemState *)
 /////////////////////////////////////////////////////////
 void scale :: distanceMess(float distance)
 {
-    m_distance = distance;
-    setModified();
+  m_distance = distance;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -88,10 +88,10 @@ void scale :: distanceMess(float distance)
 /////////////////////////////////////////////////////////
 void scale :: vectorMess(float x, float y, float z)
 {
-    m_vector[0] = x;
-    m_vector[1] = y;
-    m_vector[2] = z;
-    setModified();
+  m_vector[0] = x;
+  m_vector[1] = y;
+  m_vector[2] = z;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

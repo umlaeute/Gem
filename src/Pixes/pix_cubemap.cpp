@@ -44,18 +44,18 @@ CPPEXTERN_NEW(pix_cubemap);
 //
 /////////////////////////////////////////////////////////
 pix_cubemap :: pix_cubemap()
-: m_textureOnOff(1),
-  m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-  m_didTexture(false), m_rebuildList(0),
-  m_textureObj(0),
-  m_realTextureObj(0),
-  m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
-  m_textureType(GL_TEXTURE_CUBE_MAP),
-  m_xRatio(1.), m_yRatio(1.),
-  m_env(GL_MODULATE),
-  m_texunit(0),
-  m_numTexUnits(0),
-  m_map(0)
+  : m_textureOnOff(1),
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
+    m_didTexture(false), m_rebuildList(0),
+    m_textureObj(0),
+    m_realTextureObj(0),
+    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
+    m_textureType(GL_TEXTURE_CUBE_MAP),
+    m_xRatio(1.), m_yRatio(1.),
+    m_env(GL_MODULATE),
+    m_texunit(0),
+    m_numTexUnits(0),
+    m_map(0)
 {
   error("this object is likely to vanish! do not use!!");
 
@@ -212,7 +212,7 @@ void pix_cubemap :: render(GemState *state) {
   for(i=0; i<6; i++) {
     applyTex(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, m_img[i]);
     m_img[i]=NULL;
-    }
+  }
 
   int mode = GL_NORMAL_MAP;
   switch(m_map) {

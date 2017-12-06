@@ -21,7 +21,7 @@
 CPPEXTERN_NEW_WITH_GIMME(spline_path);
 
 spline_path :: spline_path(int argc, t_atom *argv)
-             : GemPathBase(argc, argv)
+  : GemPathBase(argc, argv)
 { }
 spline_path :: ~spline_path()
 { }
@@ -32,7 +32,7 @@ spline_path :: ~spline_path()
 /////////////////////////////////////////////////////////
 void spline_path :: lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts)
 {
-    splineFunc(x, ret, numDimen, npnts, pnts);
+  splineFunc(x, ret, numDimen, npnts, pnts);
 }
 
 void spline_path :: obj_setupCallback(t_class *)

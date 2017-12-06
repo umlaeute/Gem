@@ -24,16 +24,16 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGenProgramsARB);
 GEMglGenProgramsARB :: GEMglGenProgramsARB      (int argc, t_atom*argv) :
   n(0), programs(NULL)
 {
-        programsMess(argc, argv);
+  programsMess(argc, argv);
 
-        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("programs"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("programs"));
 
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglGenProgramsARB :: ~GEMglGenProgramsARB () {
-inlet_free(m_inlet);
+  inlet_free(m_inlet);
 }
 //////////////////
 // extension check
@@ -46,7 +46,7 @@ bool GEMglGenProgramsARB :: isRunnable(void) {
 // Render
 //
 void GEMglGenProgramsARB :: render(GemState *state) {
-        glGenProgramsARB (n, programs);
+  glGenProgramsARB (n, programs);
 }
 
 /////////////////////////////////////////////////////////
@@ -70,8 +70,8 @@ void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv) {      // FUN
 //
 
 void GEMglGenProgramsARB :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenProgramsARB::programsMessCallback),      gensym("programs"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenProgramsARB::programsMessCallback),      gensym("programs"), A_GIMME, A_NULL);
 }
 void GEMglGenProgramsARB :: programsMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-        GetMyClass(data)->programsMess (argc,argv);
+  GetMyClass(data)->programsMess (argc,argv);
 }

@@ -153,11 +153,11 @@ void pix_imageInPlace :: downloadMess()
 
       for (int i = 0; i < m_numImages; ++i)
         {
-    if(GLEW_VERSION_1_1) {
-          glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
-    } else {
-          glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
-    }
+          if(GLEW_VERSION_1_1) {
+            glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+          } else {
+            glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+          }
 
           glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

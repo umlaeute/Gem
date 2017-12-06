@@ -35,7 +35,7 @@ pix_metaimage :: pix_metaimage() :
   m_DoCheapAndNasty(0.0f),
   hSubImage(NULL)
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ pix_metaimage :: pix_metaimage() :
 /////////////////////////////////////////////////////////
 pix_metaimage :: ~pix_metaimage()
 {
-    Pete_MetaImage_DeInit();
+  Pete_MetaImage_DeInit();
 }
 
 /////////////////////////////////////////////////////////
@@ -53,48 +53,48 @@ pix_metaimage :: ~pix_metaimage()
 /////////////////////////////////////////////////////////
 void pix_metaimage :: processRGBAImage(imageStruct &image)
 {
-    nWidth = image.xsize;
-    nHeight = image.ysize;
-    if (!init) {
-        Pete_MetaImage_Init();
-        init = 1;
-    }
-    pSource = reinterpret_cast<U32*>(image.data);
+  nWidth = image.xsize;
+  nHeight = image.ysize;
+  if (!init) {
+    Pete_MetaImage_Init();
+    init = 1;
+  }
+  pSource = reinterpret_cast<U32*>(image.data);
 
-    myImage.xsize = image.xsize;
-    myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
-    myImage.reallocate();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+  myImage.xsize = image.xsize;
+  myImage.ysize = image.ysize;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
+  pOutput = reinterpret_cast<U32*>(myImage.data);
 
-    float SubWidth;
-    float SubHeight;
+  float SubWidth;
+  float SubHeight;
 
-    m_Size = clampFunc(m_Size,0.0f,1.0f);
+  m_Size = clampFunc(m_Size,0.0f,1.0f);
 
-    if (m_DoDistanceBased>0.0f) {
+  if (m_DoDistanceBased>0.0f) {
 
-                const float Distance=1.0f+(m_Size*(nHeight-1.0f));
+    const float Distance=1.0f+(m_Size*(nHeight-1.0f));
 
-                SubWidth=nWidth/Distance;
-                SubHeight=nHeight/Distance;
+    SubWidth=nWidth/Distance;
+    SubHeight=nHeight/Distance;
 
-    } else {
+  } else {
 
-                SubWidth=1+(m_Size*(nWidth-1));
-                SubHeight=1+(m_Size*(nHeight-1));
-    }
+    SubWidth=1+(m_Size*(nWidth-1));
+    SubHeight=1+(m_Size*(nHeight-1));
+  }
 
-    U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
-    if (pSubImageData==NULL) {
-                return;
-    }
+  U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
+  if (pSubImageData==NULL) {
+    return;
+  }
 
-    U32 AverageColour=Pete_MetaImage_CreateSubImage(pSource,pSubImageData,SubWidth,SubHeight);
+  U32 AverageColour=Pete_MetaImage_CreateSubImage(pSource,pSubImageData,SubWidth,SubHeight);
 
-    Pete_MetaImage_DrawSubImages(pSubImageData,AverageColour,SubWidth,SubHeight);
+  Pete_MetaImage_DrawSubImages(pSubImageData,AverageColour,SubWidth,SubHeight);
 
-    image.data = myImage.data;
+  image.data = myImage.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -103,49 +103,49 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_metaimage :: processYUVImage(imageStruct &image)
 {
-    nWidth = image.xsize/2;
-    nHeight = image.ysize;
-    if (!init) {
-        Pete_MetaImage_Init();
-        init = 1;
-    }
-    pSource = reinterpret_cast<U32*>(image.data);
+  nWidth = image.xsize/2;
+  nHeight = image.ysize;
+  if (!init) {
+    Pete_MetaImage_Init();
+    init = 1;
+  }
+  pSource = reinterpret_cast<U32*>(image.data);
 
-    myImage.xsize = image.xsize;
-    myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
-    myImage.reallocate();
-    //    myImage.setBlack();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+  myImage.xsize = image.xsize;
+  myImage.ysize = image.ysize;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
+  //    myImage.setBlack();
+  pOutput = reinterpret_cast<U32*>(myImage.data);
 
-    float SubWidth;
-    float SubHeight;
+  float SubWidth;
+  float SubHeight;
 
-    m_Size = clampFunc(m_Size,0.0f,1.0f);
+  m_Size = clampFunc(m_Size,0.0f,1.0f);
 
-    if (m_DoDistanceBased>0.0f) {
+  if (m_DoDistanceBased>0.0f) {
 
-                const float Distance=1.0f+(m_Size*(nHeight-1.0f));
+    const float Distance=1.0f+(m_Size*(nHeight-1.0f));
 
-                SubWidth=nWidth/Distance;
-                SubHeight=nHeight/Distance;
+    SubWidth=nWidth/Distance;
+    SubHeight=nHeight/Distance;
 
-    } else {
+  } else {
 
-                SubWidth=1+(m_Size*(nWidth-1));
-                SubHeight=1+(m_Size*(nHeight-1));
-    }
+    SubWidth=1+(m_Size*(nWidth-1));
+    SubHeight=1+(m_Size*(nHeight-1));
+  }
 
-    U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
-    if (pSubImageData==NULL) {
-                return;
-    }
+  U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
+  if (pSubImageData==NULL) {
+    return;
+  }
 
-    U32 AverageColour = CreateSubImageYUV(pSource,pSubImageData,SubWidth,SubHeight);
+  U32 AverageColour = CreateSubImageYUV(pSource,pSubImageData,SubWidth,SubHeight);
 
-    DrawSubImagesYUV(pSubImageData,AverageColour,SubWidth,SubHeight);
+  DrawSubImagesYUV(pSubImageData,AverageColour,SubWidth,SubHeight);
 
-    image.data = myImage.data;
+  image.data = myImage.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -154,43 +154,43 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_metaimage :: processGrayImage(imageStruct &image)
 {
-    nWidth = image.xsize;
-    nHeight = image.ysize;
-    if (!init) {
-        Pete_MetaImage_Init();
-        init = 1;
-    }
-    pSource = reinterpret_cast<U32*>(image.data);
+  nWidth = image.xsize;
+  nHeight = image.ysize;
+  if (!init) {
+    Pete_MetaImage_Init();
+    init = 1;
+  }
+  pSource = reinterpret_cast<U32*>(image.data);
 
-    myImage.xsize = image.xsize;
-    myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
-    myImage.reallocate();
-    //    myImage.setBlack();
-    pOutput = reinterpret_cast<U32*>(myImage.data);
+  myImage.xsize = image.xsize;
+  myImage.ysize = image.ysize;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
+  //    myImage.setBlack();
+  pOutput = reinterpret_cast<U32*>(myImage.data);
 
-    float SubWidth;
-    float SubHeight;
+  float SubWidth;
+  float SubHeight;
 
-    m_Size = clampFunc(m_Size,0.0f,1.0f);
+  m_Size = clampFunc(m_Size,0.0f,1.0f);
 
-    if (m_DoDistanceBased>0.0f) {
-      const float Distance=1.0f+(m_Size*(nHeight-1.0f));
-      SubWidth=nWidth/Distance;
-      SubHeight=nHeight/Distance;
-    } else {
-      SubWidth=1+(m_Size*(nWidth-1));
-      SubHeight=1+(m_Size*(nHeight-1));
-    }
+  if (m_DoDistanceBased>0.0f) {
+    const float Distance=1.0f+(m_Size*(nHeight-1.0f));
+    SubWidth=nWidth/Distance;
+    SubHeight=nHeight/Distance;
+  } else {
+    SubWidth=1+(m_Size*(nWidth-1));
+    SubHeight=1+(m_Size*(nHeight-1));
+  }
 
-    U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
-    if (pSubImageData==NULL)return;
+  U32* pSubImageData=static_cast<U32*>(Pete_LockHandle(hSubImage));
+  if (pSubImageData==NULL)return;
 
-    U8 AverageColour = CreateSubImageGray((U8*)pSource,(U8*)pSubImageData,SubWidth,SubHeight);
+  U8 AverageColour = CreateSubImageGray((U8*)pSource,(U8*)pSubImageData,SubWidth,SubHeight);
 
-    DrawSubImagesGray((U8*)pSubImageData,AverageColour,SubWidth,SubHeight);
+  DrawSubImagesGray((U8*)pSubImageData,AverageColour,SubWidth,SubHeight);
 
-    image.data = myImage.data;
+  image.data = myImage.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -199,17 +199,17 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 int pix_metaimage :: Pete_MetaImage_Init() {
 
-        Pete_MetaImage_DeInit();
+  Pete_MetaImage_DeInit();
 
-        const int nNumPixels=(nWidth*nHeight);
-        const int nNumBytes=(nNumPixels*sizeof(U32));
-        hSubImage = Pete_NewHandle(nNumBytes);
-        if (hSubImage==NULL) {
-                Pete_MetaImage_DeInit();
-                return 0;
-        }
+  const int nNumPixels=(nWidth*nHeight);
+  const int nNumBytes=(nNumPixels*sizeof(U32));
+  hSubImage = Pete_NewHandle(nNumBytes);
+  if (hSubImage==NULL) {
+    Pete_MetaImage_DeInit();
+    return 0;
+  }
 
-        return 1;
+  return 1;
 
 }
 
@@ -593,35 +593,35 @@ void pix_metaimage :: DrawSubImagesYUV(U32* pSubImage,U32 AverageColour,float Su
       const int nClippedBottomY=clampFunc(nBottomY,0,(nHeight-1));
 
       U32 SubImageAverage = GetAreaAverageYUV(
-                                                        pSource,
-                                                        nClippedLeftX,
-                                                        nClippedTopY,
-                                                        nClippedRightX,
-                                                        nClippedBottomY,
-                                                        4);
+                                              pSource,
+                                              nClippedLeftX,
+                                              nClippedTopY,
+                                              nClippedRightX,
+                                              nClippedBottomY,
+                                              4);
 
       DrawSubImageYUV(
-                                  pSource,
-                                  pSubImage,
-                                  pOutput,
-                                  nLeftX,
-                                  nTopY,
-                                  nRightX,
-                                  nBottomY,
-                                  AverageColour,
-                                  nClippedLeftX,
-                                  nClippedTopY,
-                                  nClippedRightX,
-                                  nClippedBottomY,
-                                  SubImageAverage);
+                      pSource,
+                      pSubImage,
+                      pOutput,
+                      nLeftX,
+                      nTopY,
+                      nRightX,
+                      nBottomY,
+                      AverageColour,
+                      nClippedLeftX,
+                      nClippedTopY,
+                      nClippedRightX,
+                      nClippedBottomY,
+                      SubImageAverage);
     }
   }
 }
 
 void pix_metaimage :: DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOutput,
-                                       int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,
-                                       int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
-                                       U32 SubImageAverage)
+                                      int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,
+                                      int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
+                                      U32 SubImageAverage)
 {
   const int nSubU =(SubImageAverage>>SHIFT_U)&0xff;
   const int nSubY1=(SubImageAverage>>SHIFT_Y1)&0xff;
@@ -1117,11 +1117,11 @@ U8 pix_metaimage :: ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float Su
 /////////////////////////////////////////////////////////
 void pix_metaimage :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::sizeCallback),
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::sizeCallback),
                   gensym("size"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::distanceCallback),
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::distanceCallback),
                   gensym("distance"), A_DEFFLOAT, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::cheapCallback),
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_metaimage::cheapCallback),
                   gensym("cheap"), A_DEFFLOAT, A_NULL);
 }
 void pix_metaimage :: sizeCallback(void *data, t_float sz)

@@ -46,13 +46,13 @@ pix_resize :: ~pix_resize()
 /////////////////////////////////////////////////////////
 void pix_resize :: processImage(imageStruct &image)
 {
-    // do we need to resize the image?
-    // need to check if dimensions are a power of two
+  // do we need to resize the image?
+  // need to check if dimensions are a power of two
 
-    int wN = (m_width>0)?m_width:powerOfTwo(image.xsize);
-    int hN = (m_height>0)?m_height:powerOfTwo(image.ysize);
+  int wN = (m_width>0)?m_width:powerOfTwo(image.xsize);
+  int hN = (m_height>0)?m_height:powerOfTwo(image.ysize);
 
-    if (wN != image.xsize || hN != image.ysize)
+  if (wN != image.xsize || hN != image.ysize)
     {
       GLint gluError;
       m_image.xsize=wN;

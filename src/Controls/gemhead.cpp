@@ -107,10 +107,10 @@ gemhead :: gemhead(int argc, t_atom*argv) :
 /////////////////////////////////////////////////////////
 gemhead :: ~gemhead()
 {
-    if (m_cache)
-        stopRendering();
-    if(m_cache)delete m_cache;
-    m_cache=NULL;
+  if (m_cache)
+    stopRendering();
+  if(m_cache)delete m_cache;
+  m_cache=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -138,26 +138,26 @@ void gemhead :: renderGL(GemState *state)
 
   gem::GLStack*stacks=NULL;
   if(state)
-  {
-    state->reset();
-    // set the state dirty flag
-    state->set(GemState::_DIRTY, m_cache->dirty);
+    {
+      state->reset();
+      // set the state dirty flag
+      state->set(GemState::_DIRTY, m_cache->dirty);
 #ifdef __GNUC__
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-    state->VertexDirty=m_cache->vertexDirty;
+      state->VertexDirty=m_cache->vertexDirty;
 #ifdef __GNUC__
 # pragma GCC diagnostic pop
 #endif
 
-    state->get(GemState::_GL_STACKS, stacks);
-    if(stacks)stacks->push();
-  }
+      state->get(GemState::_GL_STACKS, stacks);
+      if(stacks)stacks->push();
+    }
 
   // are we profiling and need to send new images?
   if (GemMan::getProfileLevel() >= 2)
-        m_cache->resendImage = 1;
+    m_cache->resendImage = 1;
 
   t_atom ap[2];
   ap->a_type=A_POINTER;
@@ -179,19 +179,19 @@ void gemhead :: renderGL(GemState *state)
 /////////////////////////////////////////////////////////
 void gemhead :: bangMess()
 {
-    int renderon = m_renderOn;
-    // make sure that the window and the cache exist
-    if ( !GemMan::windowExists() || !m_cache )
-                return;
+  int renderon = m_renderOn;
+  // make sure that the window and the cache exist
+  if ( !GemMan::windowExists() || !m_cache )
+    return;
 
-    // make a dummy GemState
-    GemState tempState;
-    GemMan::fillGemState(tempState);
+  // make a dummy GemState
+  GemState tempState;
+  GemMan::fillGemState(tempState);
 
-    m_renderOn = 1;
-    renderGL(&tempState);
-    m_renderOn = renderon;
-    glFlush();
+  m_renderOn = 1;
+  renderGL(&tempState);
+  m_renderOn = renderon;
+  glFlush();
 }
 
 /////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ void gemhead :: bangMess()
 /////////////////////////////////////////////////////////
 void gemhead :: renderOnOff(int state)
 {
-    m_renderOn = state;
+  m_renderOn = state;
 }
 
 /////////////////////////////////////////////////////////

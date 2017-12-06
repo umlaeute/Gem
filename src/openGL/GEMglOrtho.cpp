@@ -33,63 +33,63 @@ GEMglOrtho :: GEMglOrtho        (int argc, t_atom*argv)
   if (argc>4)zNear =atom_getfloat(argv+4);
   if (argc>5)zFar  =atom_getfloat(argv+5);
 
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("left"));
-        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("right"));
-        m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bottom"));
-        m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("top"));
-        m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zNear"));
-        m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zFar"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("left"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("right"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bottom"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("top"));
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zNear"));
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zFar"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglOrtho :: ~GEMglOrtho () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
-inlet_free(m_inlet[2]);
-inlet_free(m_inlet[3]);
-inlet_free(m_inlet[4]);
-inlet_free(m_inlet[5]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[2]);
+  inlet_free(m_inlet[3]);
+  inlet_free(m_inlet[4]);
+  inlet_free(m_inlet[5]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglOrtho :: render(GemState *state) {
-        glOrtho (left, right, bottom, top, zNear, zFar);
+  glOrtho (left, right, bottom, top, zNear, zFar);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglOrtho :: leftMess (t_float arg1) {    // FUN
-        left = static_cast<GLdouble>(arg1);
-        setModified();
+  left = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 void GEMglOrtho :: rightMess (t_float arg1) {   // FUN
-        right = static_cast<GLdouble>(arg1);
-        setModified();
+  right = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 void GEMglOrtho :: bottomMess (t_float arg1) {  // FUN
-        bottom = static_cast<GLdouble>(arg1);
-        setModified();
+  bottom = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 void GEMglOrtho :: topMess (t_float arg1) {     // FUN
-        top = static_cast<GLdouble>(arg1);
-        setModified();
+  top = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 void GEMglOrtho :: zNearMess (t_float arg1) {   // FUN
-        zNear = static_cast<GLdouble>(arg1);
-        setModified();
+  zNear = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 void GEMglOrtho :: zFarMess (t_float arg1) {    // FUN
-        zFar = static_cast<GLdouble>(arg1);
-        setModified();
+  zFar = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 
@@ -98,29 +98,29 @@ void GEMglOrtho :: zFarMess (t_float arg1) {    // FUN
 //
 
 void GEMglOrtho :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::leftMessCallback),   gensym("left"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::rightMessCallback),          gensym("right"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::bottomMessCallback),         gensym("bottom"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::topMessCallback),    gensym("top"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zNearMessCallback),          gensym("zNear"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zFarMessCallback),   gensym("zFar"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::leftMessCallback),   gensym("left"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::rightMessCallback),          gensym("right"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::bottomMessCallback),         gensym("bottom"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::topMessCallback),    gensym("top"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zNearMessCallback),          gensym("zNear"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglOrtho::zFarMessCallback),   gensym("zFar"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglOrtho :: leftMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->leftMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->leftMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: rightMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->rightMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->rightMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: bottomMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->bottomMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->bottomMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: topMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->topMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->topMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: zNearMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->zNearMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->zNearMess ( static_cast<t_float>(arg0));
 }
 void GEMglOrtho :: zFarMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->zFarMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->zFarMess ( static_cast<t_float>(arg0));
 }

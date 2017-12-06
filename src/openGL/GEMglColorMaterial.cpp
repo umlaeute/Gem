@@ -26,40 +26,40 @@ using namespace gem::utils::gl;
 // Constructor
 //
 GEMglColorMaterial :: GEMglColorMaterial (int argc, t_atom*argv) :
-                face(0),
-                mode(0)
+  face(0),
+  mode(0)
 {
   if(2==argc){faceMess(argv[0]); modeMess(argv[1]);} else if (argc) throw(GemException("invalid number of arguments"));
 
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
-        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglColorMaterial :: ~GEMglColorMaterial () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglColorMaterial :: render(GemState *state) {
-        glColorMaterial (face, mode);
+  glColorMaterial (face, mode);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglColorMaterial :: faceMess (t_atom arg) {      // FUN
-        face = static_cast<GLenum>(getGLdefine(&arg));
-        setModified();
+  face = static_cast<GLenum>(getGLdefine(&arg));
+  setModified();
 }
 
 void GEMglColorMaterial :: modeMess (t_atom arg) {      // FUN
-        mode = static_cast<GLenum>(getGLdefine(&arg));
-        setModified();
+  mode = static_cast<GLenum>(getGLdefine(&arg));
+  setModified();
 }
 
 
@@ -68,13 +68,13 @@ void GEMglColorMaterial :: modeMess (t_atom arg) {      // FUN
 //
 
 void GEMglColorMaterial :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMaterial::faceMessCallback),   gensym("face"), A_GIMME, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMaterial::modeMessCallback),   gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMaterial::faceMessCallback),   gensym("face"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMaterial::modeMessCallback),   gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglColorMaterial :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-        if(argc==1)GetMyClass(data)->faceMess ( argv[0]);
+  if(argc==1)GetMyClass(data)->faceMess ( argv[0]);
 }
 void GEMglColorMaterial :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-        if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
+  if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
 }

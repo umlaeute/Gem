@@ -100,5 +100,5 @@ void GEMglGetFloatv :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglGetFloatv :: pnameMessCallback (void* data, t_symbol*s,int argc, t_atom*argv) {
-        if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
+  if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
 }

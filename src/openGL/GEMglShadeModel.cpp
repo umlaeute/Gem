@@ -26,32 +26,32 @@ using namespace gem::utils::gl;
 // Constructor
 //
 GEMglShadeModel :: GEMglShadeModel      (int argc, t_atom*argv) :
-                mode(0)
+  mode(0)
 {
   if(1==argc)modeMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
 
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglShadeModel :: ~GEMglShadeModel () {
-inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglShadeModel :: render(GemState *state) {
-        glShadeModel (mode);
+  glShadeModel (mode);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglShadeModel :: modeMess (t_atom arg) { // FUN
-        mode = static_cast<GLenum>(getGLdefine(&arg));
-        setModified();
+  mode = static_cast<GLenum>(getGLdefine(&arg));
+  setModified();
 }
 
 
@@ -60,9 +60,9 @@ void GEMglShadeModel :: modeMess (t_atom arg) { // FUN
 //
 
 void GEMglShadeModel :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglShadeModel::modeMessCallback),      gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglShadeModel::modeMessCallback),      gensym("mode"), A_GIMME, A_NULL);
 };
 
 void GEMglShadeModel :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-        if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
+  if(argc==1)GetMyClass(data)->modeMess ( argv[0]);
 }

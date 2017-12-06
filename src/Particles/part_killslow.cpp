@@ -28,11 +28,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_killslow, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 part_killslow :: part_killslow(t_floatarg num)
-                           : m_killSpeed(.01f)
+  : m_killSpeed(.01f)
 {
-        if (num > 0)
-                m_killSpeed = num;
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("speed"));
+  if (num > 0)
+    m_killSpeed = num;
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("speed"));
 }
 
 /////////////////////////////////////////////////////////
@@ -48,10 +48,10 @@ part_killslow :: ~part_killslow()
 /////////////////////////////////////////////////////////
 void part_killslow :: renderParticles(GemState *state)
 {
-        if (m_tickTime > 0.f)
-        {
-                pKillSlow(m_killSpeed);
-        }
+  if (m_tickTime > 0.f)
+    {
+      pKillSlow(m_killSpeed);
+    }
 }
 
 /////////////////////////////////////////////////////////

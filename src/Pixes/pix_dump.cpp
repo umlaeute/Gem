@@ -30,25 +30,25 @@
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
-  /////////////////////////////////////////////////////////
-  //
-  // pix_dump
-  //
-  /////////////////////////////////////////////////////////
-  // Constructor
-  //
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+//
+// pix_dump
+//
+/////////////////////////////////////////////////////////
+// Constructor
+//
+/////////////////////////////////////////////////////////
 pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
-    m_dataOut(0),
-    xsize(0), ysize(0),
-    m_xsize(0), m_ysize(0), m_csize(3),
-    m_buffer(0),
-    m_bufsize(0),
-    oldimagex(0), oldimagey(0),
-    m_xstep(1), m_ystep(1),
-    m_data(0),
-    m_bytemode(false),
-    m_mode(GL_RGBA)
+  m_dataOut(0),
+  xsize(0), ysize(0),
+  m_xsize(0), m_ysize(0), m_csize(3),
+  m_buffer(0),
+  m_bufsize(0),
+  oldimagex(0), oldimagey(0),
+  m_xstep(1), m_ystep(1),
+  m_data(0),
+  m_bytemode(false),
+  m_mode(GL_RGBA)
 {
   xsize = static_cast<int>(fx);
   ysize = static_cast<int>(fy);
@@ -117,7 +117,7 @@ void pix_dump :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_dump :: processYUVImage(imageStruct &image)
 {
-    int x = m_xsize, y = m_ysize, c = m_csize;
+  int x = m_xsize, y = m_ysize, c = m_csize;
 
   if (image.xsize != oldimagex) {
     oldimagex = image.xsize;
@@ -162,12 +162,12 @@ void pix_dump :: trigger()
   unsigned char *buffer = m_data;
 
   if ( m_doROI ) {
-     roi_x1=m_roi.x1*(0.5+m_xsize);
-     roi_x2=m_roi.x2*(0.5+m_xsize);
-     roi_y1=m_roi.y1*(0.5+m_ysize);
-     roi_y2=m_roi.y2*(0.5+m_ysize);
+    roi_x1=m_roi.x1*(0.5+m_xsize);
+    roi_x2=m_roi.x2*(0.5+m_xsize);
+    roi_y1=m_roi.y1*(0.5+m_ysize);
+    roi_y2=m_roi.y2*(0.5+m_ysize);
 
-           buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (i % (roi_x2-roi_x1)) + roi_x1);
+    buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (i % (roi_x2-roi_x1)) + roi_x1);
   }
   n=roi_x1;
   m=roi_y1;
@@ -180,45 +180,45 @@ void pix_dump :: trigger()
   switch(m_csize){
   case 4:
     while (picturesize-- > 0) {
-        if (!m_bytemode) {
-          float r, g, b;
-          r = static_cast<float>(data[chRed]) / 255.f;
-          SETFLOAT(&m_buffer[i], r);
+      if (!m_bytemode) {
+        float r, g, b;
+        r = static_cast<float>(data[chRed]) / 255.f;
+        SETFLOAT(&m_buffer[i], r);
+        i++;
+        g = static_cast<float>(data[chGreen]) / 255.f;
+        SETFLOAT(&m_buffer[i], g);
+        i++;
+        b = static_cast<float>(data[chBlue]) / 255.f;
+        SETFLOAT(&m_buffer[i], b);
+        i++;
+        if ( m_mode == GL_RGBA ) {
+          float a = static_cast<float>(data[chAlpha]) / 255.f;
+          SETFLOAT(&m_buffer[i], a);
           i++;
-          g = static_cast<float>(data[chGreen]) / 255.f;
-          SETFLOAT(&m_buffer[i], g);
-          i++;
-          b = static_cast<float>(data[chBlue]) / 255.f;
-          SETFLOAT(&m_buffer[i], b);
-          i++;
-          if ( m_mode == GL_RGBA ) {
-            float a = static_cast<float>(data[chAlpha]) / 255.f;
-            SETFLOAT(&m_buffer[i], a);
-            i++;
-          }
-        } else {
-          unsigned char r, g, b;
-          r = static_cast<unsigned char>(data[chRed]);
-          SETFLOAT(&m_buffer[i], r);
-          i++;
-          g = static_cast<unsigned char>(data[chGreen]);
-          SETFLOAT(&m_buffer[i], g);
-          i++;
-          b = static_cast<unsigned char>(data[chBlue]);
-          SETFLOAT(&m_buffer[i], b);
-          i++;
-          if ( m_mode == GL_RGBA ) {
-            unsigned char a = static_cast<unsigned char>(data[chAlpha]);
-            SETFLOAT(&m_buffer[i], a);
-            i++;
-          }
         }
-        j++;
-        if ( m_doROI ) {
-          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (j % (roi_x2-roi_x1)) + roi_x1) ;
-        } else {
-          data+=4;
+      } else {
+        unsigned char r, g, b;
+        r = static_cast<unsigned char>(data[chRed]);
+        SETFLOAT(&m_buffer[i], r);
+        i++;
+        g = static_cast<unsigned char>(data[chGreen]);
+        SETFLOAT(&m_buffer[i], g);
+        i++;
+        b = static_cast<unsigned char>(data[chBlue]);
+        SETFLOAT(&m_buffer[i], b);
+        i++;
+        if ( m_mode == GL_RGBA ) {
+          unsigned char a = static_cast<unsigned char>(data[chAlpha]);
+          SETFLOAT(&m_buffer[i], a);
+          i++;
         }
+      }
+      j++;
+      if ( m_doROI ) {
+        data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (j % (roi_x2-roi_x1)) + roi_x1) ;
+      } else {
+        data+=4;
+      }
     }
     break;
   case 2:
@@ -305,12 +305,12 @@ void pix_dump :: trigger()
     }
 
     if ( !m_bytemode )
-    {
-      while (leftover--) {
-        float v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i], v);
-        i++;
-      }
-    } else {
+      {
+        while (leftover--) {
+          float v = static_cast<float>(*data++) / 255.f;    SETFLOAT(&m_buffer[i], v);
+          i++;
+        }
+      } else {
       while (leftover--) {
         unsigned char v = static_cast<unsigned char>(*data++);    SETFLOAT(&m_buffer[i], v);
         i++;

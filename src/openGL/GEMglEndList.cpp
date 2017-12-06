@@ -33,7 +33,7 @@ GEMglEndList :: ~GEMglEndList () {}
 // Render
 //
 void GEMglEndList :: render(GemState *state) {
-        glEndList ();
+  glEndList ();
 }
 /////////////////////////////////////////////////////////
 // static member function

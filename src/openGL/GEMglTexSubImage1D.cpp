@@ -74,18 +74,18 @@ void GEMglTexSubImage1D :: targetMess (t_float arg1) {  // FUN
 }
 
 void GEMglTexSubImage1D :: levelMess (t_float arg1) {   // FUN
-        level = static_cast<GLint>(arg1);
-        setModified();
+  level = static_cast<GLint>(arg1);
+  setModified();
 }
 
 void GEMglTexSubImage1D :: xoffsetMess (t_float arg1) { // FUN
-        xoffset = static_cast<GLint>(arg1);
-        setModified();
+  xoffset = static_cast<GLint>(arg1);
+  setModified();
 }
 
 void GEMglTexSubImage1D :: widthMess (t_float arg1) {   // FUN
-        width = static_cast<GLsizei>(arg1);
-        setModified();
+  width = static_cast<GLsizei>(arg1);
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -93,21 +93,21 @@ void GEMglTexSubImage1D :: widthMess (t_float arg1) {   // FUN
 //
 
 void GEMglTexSubImage1D :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::targetMessCallback),         gensym("target"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::levelMessCallback),          gensym("level"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::xoffsetMessCallback),        gensym("xoffset"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::widthMessCallback),          gensym("width"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::targetMessCallback),         gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::levelMessCallback),          gensym("level"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::xoffsetMessCallback),        gensym("xoffset"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexSubImage1D::widthMessCallback),          gensym("width"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglTexSubImage1D :: targetMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexSubImage1D :: levelMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexSubImage1D :: xoffsetMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->xoffsetMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->xoffsetMess ( static_cast<t_float>(arg0));
 }
 void GEMglTexSubImage1D :: widthMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->widthMess ( static_cast<t_float>(arg0));
 }

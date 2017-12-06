@@ -26,14 +26,14 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglDeleteTextures );
 GEMglDeleteTextures :: GEMglDeleteTextures      (int argc, t_atom* argv) :
   n(0), textures(NULL), m_inlet(NULL)
 {
-        texturesMess(argc, argv);
-        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
+  texturesMess(argc, argv);
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglDeleteTextures :: ~GEMglDeleteTextures () {
-inlet_free(m_inlet);
+  inlet_free(m_inlet);
 }
 //////////////////
 // extension check
@@ -46,7 +46,7 @@ bool GEMglDeleteTextures :: isRunnable(void) {
 // Render
 //
 void GEMglDeleteTextures :: render(GemState *state) {
-        glDeleteTextures (n, textures);
+  glDeleteTextures (n, textures);
 }
 
 /////////////////////////////////////////////////////////
@@ -69,8 +69,8 @@ void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {      // FUN
 //
 
 void GEMglDeleteTextures :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDeleteTextures::texturesMessCallback),      gensym("textures"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDeleteTextures::texturesMessCallback),      gensym("textures"), A_GIMME, A_NULL);
 }
 void GEMglDeleteTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-        GetMyClass(data)->texturesMess (argc, argv);
+  GetMyClass(data)->texturesMess (argc, argv);
 }

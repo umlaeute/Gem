@@ -29,13 +29,13 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 // Constructor
 //
 /////////////////////////////////////////////////////////
-  cylinder :: cylinder(t_floatarg size,t_floatarg slize)
-    : GemGluObj(size,slize),
-      baseRadius(size),
-      topRadius(size),
-      height(size*2),
-      slices(slize),
-      stacks(slize)
+cylinder :: cylinder(t_floatarg size,t_floatarg slize)
+  : GemGluObj(size,slize),
+    baseRadius(size),
+    topRadius(size),
+    height(size*2),
+    slices(slize),
+    stacks(slize)
 { }
 
 ////////////////////////////////////////////////////////

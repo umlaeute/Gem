@@ -40,11 +40,11 @@ CPPEXTERN_NEW(pix_rectangle);
 /////////////////////////////////////////////////////////
 pix_rectangle :: pix_rectangle()
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("coord"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("coord"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
 
-    m_color[chRed] = m_color[chGreen] = m_color[chBlue] = m_color[chAlpha] = 255;
-    m_lower_left[0] = m_lower_left[1] = m_upper_right[0] = m_upper_right[1] = 0;
+  m_color[chRed] = m_color[chGreen] = m_color[chBlue] = m_color[chAlpha] = 255;
+  m_lower_left[0] = m_lower_left[1] = m_upper_right[0] = m_upper_right[1] = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -209,17 +209,17 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_rectangle :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecCoordMessCallback),
-            gensym("coord"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecColorMessCallback),
-            gensym("color"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecCoordMessCallback),
+                  gensym("coord"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecColorMessCallback),
+                  gensym("color"), A_GIMME, A_NULL);
 
 }
 void pix_rectangle :: vecCoordMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
-    GetMyClass(data)->vecCoordMess(argc, argv);
+  GetMyClass(data)->vecCoordMess(argc, argv);
 }
 void pix_rectangle :: vecColorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
-    GetMyClass(data)->vecColorMess(argc, argv);
+  GetMyClass(data)->vecColorMess(argc, argv);
 }

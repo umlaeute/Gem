@@ -53,12 +53,12 @@ CPPExtern :: CPPExtern()
     m_canvas(NULL),
     m_endpost(true)
 {
-    m_canvas = canvas_getcurrent();
-    if(m_holdname) {
-      m_objectname=gensym(m_holdname);
-    } else {
-      m_objectname=gensym("unknown Gem object");
-    }
+  m_canvas = canvas_getcurrent();
+  if(m_holdname) {
+    m_objectname=gensym(m_holdname);
+  } else {
+    m_objectname=gensym("unknown Gem object");
+  }
 }
 CPPExtern :: CPPExtern(const CPPExtern&org) :
   x_obj(org.x_obj),
@@ -189,7 +189,7 @@ bool CPPExtern :: checkGemVersion(const int major, const int minor) {
     ::error("GEM version mismatch: compiled for %d.%d but we are running %s",
             major, minor,
             GemVersion::versionString());
-        return false;
+    return false;
   }
   return true;
 }

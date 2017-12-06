@@ -77,7 +77,7 @@ void pix_rgba :: processImage(imageStruct &image)
   default:
     error("no method for this format !!!");
     error("if you know how to convert this format (%X),\n"
-         "please contact the authors of this software", image.format);
+          "please contact the authors of this software", image.format);
     return;
   }
 

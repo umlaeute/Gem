@@ -24,21 +24,21 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexdv , t_floatarg, A_DEFFLOAT);
 // Constructor
 //
 GEMglIndexdv :: GEMglIndexdv    (t_floatarg arg0) {
-        cMess(arg0);
-        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  cMess(arg0);
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglIndexdv :: ~GEMglIndexdv () {
-        inlet_free(m_inlet);
+  inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglIndexdv :: render(GemState *state) {
-        glIndexdv (c);
+  glIndexdv (c);
 }
 
 /////////////////////////////////////////////////////////
@@ -58,5 +58,5 @@ void GEMglIndexdv :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglIndexdv :: cMessCallback (void* data, t_float arg0) {
-        GetMyClass(data)->cMess (arg0);
+  GetMyClass(data)->cMess (arg0);
 }

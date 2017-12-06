@@ -31,15 +31,15 @@ CPPEXTERN_NEW(pix_data);
 pix_data :: pix_data() :
   m_quality(0)
 {
-    // create the new inlet for the X position
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("xPos"));
-    // create the new inlet for the Y position
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("yPos"));
+  // create the new inlet for the X position
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("xPos"));
+  // create the new inlet for the Y position
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("yPos"));
 
-    m_colorOut = outlet_new(this->x_obj, 0);
-    m_grayOut = outlet_new(this->x_obj, 0);
+  m_colorOut = outlet_new(this->x_obj, 0);
+  m_grayOut = outlet_new(this->x_obj, 0);
 
-    m_position[0] = m_position[1] = 0.f;
+  m_position[0] = m_position[1] = 0.f;
 }
 
 /////////////////////////////////////////////////////////
@@ -48,8 +48,8 @@ pix_data :: pix_data() :
 /////////////////////////////////////////////////////////
 pix_data :: ~pix_data()
 {
-        outlet_free(m_colorOut);
-        outlet_free(m_grayOut);
+  outlet_free(m_colorOut);
+  outlet_free(m_grayOut);
 }
 
 /////////////////////////////////////////////////////////

@@ -27,7 +27,7 @@ CPPEXTERN_NEW(polygon_smooth);
 //
 /////////////////////////////////////////////////////////
 polygon_smooth :: polygon_smooth()
-       : m_polygon_smoothState(1)
+  : m_polygon_smoothState(1)
 {}
 
 /////////////////////////////////////////////////////////
@@ -69,8 +69,8 @@ void polygon_smooth :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void polygon_smooth :: polygon_smoothMess(int polygon_smoothState)
 {
-    m_polygon_smoothState = polygon_smoothState;
-    setModified();
+  m_polygon_smoothState = polygon_smoothState;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

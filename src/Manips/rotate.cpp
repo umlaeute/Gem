@@ -62,7 +62,7 @@ rotate :: ~rotate()
 /////////////////////////////////////////////////////////
 void rotate :: render(GemState *)
 {
-    glRotatef(m_angle, m_vector[0], m_vector[1], m_vector[2]);
+  glRotatef(m_angle, m_vector[0], m_vector[1], m_vector[2]);
 }
 
 /////////////////////////////////////////////////////////
@@ -71,16 +71,16 @@ void rotate :: render(GemState *)
 /////////////////////////////////////////////////////////
 void rotate :: angleMess(float angle)
 {
-    if ( angle > 0)
+  if ( angle > 0)
     {
-        while (angle >= 360.0) angle -= 360.;
+      while (angle >= 360.0) angle -= 360.;
     }
-    else if ( angle < 0)
+  else if ( angle < 0)
     {
-        while (angle <= -360.0) angle += 360.;
+      while (angle <= -360.0) angle += 360.;
     }
-    m_angle = angle;
-    setModified();
+  m_angle = angle;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -89,10 +89,10 @@ void rotate :: angleMess(float angle)
 /////////////////////////////////////////////////////////
 void rotate :: vectorMess(float x, float y, float z)
 {
-    m_vector[0] = x;
-    m_vector[1] = y;
-    m_vector[2] = z;
-    setModified();
+  m_vector[0] = x;
+  m_vector[1] = y;
+  m_vector[2] = z;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

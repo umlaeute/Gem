@@ -19,7 +19,7 @@
 
 CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velsphere, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // part_velsphere
 //

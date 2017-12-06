@@ -487,20 +487,20 @@ void multimodel :: getVBOarray(){
     } else {
       for (int i = 0; i<vboArray.size(); i++){
         switch (vboArray[i].type){
-          case gem::VertexBuffer::GEM_VBO_VERTICES:
-            copyArray(*vboArray[i].data, m_position);
-            break;
-          case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
-            copyArray(*vboArray[i].data, m_texture);
-            break;
-          case gem::VertexBuffer::GEM_VBO_NORMALS:
-            copyArray(*vboArray[i].data, m_normal);
-            break;
-          case gem::VertexBuffer::GEM_VBO_COLORS:
-            copyArray(*vboArray[i].data, m_color);
-            break;
-          default:
-            error("VBO type %d not supported\n",vboArray[i].type);
+        case gem::VertexBuffer::GEM_VBO_VERTICES:
+          copyArray(*vboArray[i].data, m_position);
+          break;
+        case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
+          copyArray(*vboArray[i].data, m_texture);
+          break;
+        case gem::VertexBuffer::GEM_VBO_NORMALS:
+          copyArray(*vboArray[i].data, m_normal);
+          break;
+        case gem::VertexBuffer::GEM_VBO_COLORS:
+          copyArray(*vboArray[i].data, m_color);
+          break;
+        default:
+          error("VBO type %d not supported\n",vboArray[i].type);
         }
       }
       m_loader->unsetRefresh();

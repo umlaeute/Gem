@@ -50,9 +50,9 @@ void GEMglReportError :: render(GemState *state) {
 //
 
 void GEMglReportError :: obj_setupCallback(t_class *classPtr) {
-         class_addanything(classPtr, GEMglReportError::bangMessCallback);
+  class_addanything(classPtr, GEMglReportError::bangMessCallback);
 
 };
 void GEMglReportError :: bangMessCallback (void* data){
-        GetMyClass(data)->render(NULL);
+  GetMyClass(data)->render(NULL);
 }

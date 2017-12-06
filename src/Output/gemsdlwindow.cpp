@@ -483,7 +483,7 @@ void gemsdlwindow :: fullscreenMess(int on)
   if(m_surface) {
     if(( m_fullscreen && !(m_surface->flags & SDL_FULLSCREEN)) ||
        (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN)))
-        toggle=true;
+      toggle=true;
   }
   if(toggle && makeCurrent()){
     SDL_WM_ToggleFullScreen( m_surface );

@@ -44,18 +44,18 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   m_mode(GL_RGBA_GEM),
   m_rand_p(0), m_rand_k(24)
 {
-        if (xsize < 1) xsize = 256;
-        if (ysize < 1) ysize = 256;
-        int randInit = 307*1319;
-        initRandom(randInit);
+  if (xsize < 1) xsize = 256;
+  if (ysize < 1) ysize = 256;
+  int randInit = 307*1319;
+  initRandom(randInit);
 
   //    m_pixBlock.image = m_imageStruct;
-        m_pixBlock.image.xsize = (int)xsize;
-        m_pixBlock.image.ysize = (int)ysize;
-        m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
-        m_pixBlock.image.allocate();
+  m_pixBlock.image.xsize = (int)xsize;
+  m_pixBlock.image.ysize = (int)ysize;
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pixBlock.image.allocate();
 
-        generateNoise();
+  generateNoise();
 }
 
 ////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
 /////////////////////////////////////////////////////////
 pix_noise :: ~pix_noise(void)
 {
-        cleanPixBlock();
+  cleanPixBlock();
 }
 
 /////////////////////////////////////////////////////////
@@ -73,11 +73,11 @@ pix_noise :: ~pix_noise(void)
 /////////////////////////////////////////////////////////
 void pix_noise :: render(GemState *state)
 {
-        if (m_automatic || m_banged) {
-                m_banged = false;
-                generateNoise();
-        }
-        state->set(GemState::_PIX,&m_pixBlock);
+  if (m_automatic || m_banged) {
+    m_banged = false;
+    generateNoise();
+  }
+  state->set(GemState::_PIX,&m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////
@@ -105,12 +105,12 @@ void pix_noise :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_noise :: initRandom(int seed)
 {
-        int i;
-        m_rand_p = 0;
-        m_rand_k = 24;
-        for (i=0; i<55; i++) {
-                m_rand[i] = seed = seed * 435898247 + 382842987; //random init
-        }
+  int i;
+  m_rand_p = 0;
+  m_rand_k = 24;
+  for (i=0; i<55; i++) {
+    m_rand[i] = seed = seed * 435898247 + 382842987; //random init
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -119,13 +119,13 @@ void pix_noise :: initRandom(int seed)
 /////////////////////////////////////////////////////////
 void pix_noise :: debug(void)
 {
-        post("mrand_p = %i",m_rand_p);
-        post("mrand_k = %i",m_rand_k);
-        post("mrand[p] = %i",m_rand[m_rand_p]);
-        post("mrand[k] = %i",m_rand[m_rand_k]);
-        for (int i=0;i<55;i++) {
-                post("m_rand[%i] = %i",i,m_rand[i]);
-        }
+  post("mrand_p = %i",m_rand_p);
+  post("mrand_k = %i",m_rand_k);
+  post("mrand[p] = %i",m_rand[m_rand_p]);
+  post("mrand[k] = %i",m_rand[m_rand_k]);
+  for (int i=0;i<55;i++) {
+    post("m_rand[%i] = %i",i,m_rand[i]);
+  }
 
 }
 
@@ -135,14 +135,14 @@ void pix_noise :: debug(void)
 /////////////////////////////////////////////////////////
 unsigned char pix_noise :: random(void)
 {
-        // Lagged Fibonacci Generator
-        // S[n] = S[n-p]+S[n-k]
-        // with p = 55, k = 24
+  // Lagged Fibonacci Generator
+  // S[n] = S[n-p]+S[n-k]
+  // with p = 55, k = 24
 
-        m_rand[m_rand_p] = m_rand[m_rand_p] + m_rand[m_rand_k];
-        if (++m_rand_p>54) m_rand_p = 0;
-        if (++m_rand_k>54) m_rand_k = 0;
-        return (unsigned char)(m_rand[m_rand_p]);
+  m_rand[m_rand_p] = m_rand[m_rand_p] + m_rand[m_rand_k];
+  if (++m_rand_p>54) m_rand_p = 0;
+  if (++m_rand_k>54) m_rand_k = 0;
+  return (unsigned char)(m_rand[m_rand_p]);
 }
 
 /////////////////////////////////////////////////////////
@@ -151,11 +151,11 @@ unsigned char pix_noise :: random(void)
 /////////////////////////////////////////////////////////
 void pix_noise :: generateNoise(void)
 {
-        int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
-        unsigned char *buffer = m_pixBlock.image.data;
+  int picturesize = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
+  unsigned char *buffer = m_pixBlock.image.data;
 
   int counter=picturesize;
-        switch (m_mode) {
+  switch (m_mode) {
   case GL_RGB:
     while (counter-->0) {
       buffer[chRed]   = random(); // red
@@ -180,8 +180,8 @@ void pix_noise :: generateNoise(void)
       buffer[chAlpha] = random(); // alpha
       buffer+=4;
     }
-        }
-        m_pixBlock.newimage = true;
+  }
+  m_pixBlock.newimage = true;
 }
 void pix_noise :: seed(int seedval)
 {
@@ -207,17 +207,17 @@ void pix_noise :: autoMess(bool automatic)
 /////////////////////////////////////////////////////////
 void pix_noise :: RGBAMess(void)
 {
-        m_mode = GL_RGBA;
+  m_mode = GL_RGBA;
   bang();
 }
 void pix_noise :: RGBMess(void)
 {
-        m_mode = GL_RGB;
+  m_mode = GL_RGB;
   bang();
 }
 void pix_noise :: GREYMess(void)
 {
-        m_mode = GL_LUMINANCE;
+  m_mode = GL_LUMINANCE;
   bang();
 }
 /////////////////////////////////////////////////////////
@@ -226,12 +226,12 @@ void pix_noise :: GREYMess(void)
 /////////////////////////////////////////////////////////
 void pix_noise :: SETMess(int xsize, int ysize)
 {
-        if ((xsize < 1) || (ysize < 1)) return;
-        m_pixBlock.image.clear();
-        m_pixBlock.image.xsize = (int)xsize;
-        m_pixBlock.image.ysize = (int)ysize;
-        m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
-        m_pixBlock.image.reallocate();
+  if ((xsize < 1) || (ysize < 1)) return;
+  m_pixBlock.image.clear();
+  m_pixBlock.image.xsize = (int)xsize;
+  m_pixBlock.image.ysize = (int)ysize;
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pixBlock.image.reallocate();
 
   generateNoise();
 }
@@ -242,8 +242,8 @@ void pix_noise :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 void pix_noise :: cleanPixBlock(void)
 {
-        m_pixBlock.image.clear();
-        m_pixBlock.image.data = NULL;
+  m_pixBlock.image.clear();
+  m_pixBlock.image.data = NULL;
 }
 
 /////////////////////////////////////////////////////////

@@ -364,8 +364,8 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
         //   copy the values into memory and add a flag that we have them for this parameter
         //   in the render cycle use it
         for (int j=0; j < argc; j++) {
-            m_param[i][j] = atom_getfloat(&argv[j]);
-          }
+          m_param[i][j] = atom_getfloat(&argv[j]);
+        }
         // tell the GL state that this variable has changed next render
         m_flag[i] = 1;
         setModified();

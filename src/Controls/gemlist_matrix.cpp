@@ -68,9 +68,9 @@ void gemlist_matrix :: render(GemState *state) {
   glGetFloatv(GL_MODELVIEW_MATRIX,mi);
 
   for (i=0;i<16;i++)
-  {
-    SETFLOAT(alist+i, mi[i]);
-  }
+    {
+      SETFLOAT(alist+i, mi[i]);
+    }
   outlet_list (m_outletMatrice, &s_list, 16, alist);
 }
 

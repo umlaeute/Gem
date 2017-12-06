@@ -87,21 +87,21 @@ void GLdefine :: listMess (int argc, t_atom*argv) {
 //
 
 void GLdefine :: obj_setupCallback(t_class *classPtr) {
-         class_addsymbol(classPtr, GLdefine::symMessCallback);
-         class_addbang(classPtr, GLdefine::bangMessCallback);
-         class_addlist(classPtr, GLdefine::listMessCallback);
-         class_addanything(classPtr, GLdefine::anyMessCallback);
+  class_addsymbol(classPtr, GLdefine::symMessCallback);
+  class_addbang(classPtr, GLdefine::bangMessCallback);
+  class_addlist(classPtr, GLdefine::listMessCallback);
+  class_addanything(classPtr, GLdefine::anyMessCallback);
 };
 
 void GLdefine :: symMessCallback (void* data, t_symbol *arg0){
-        GetMyClass(data)->symMess (arg0);
+  GetMyClass(data)->symMess (arg0);
 }
 void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv){
-        GetMyClass(data)->symMess (arg0);
+  GetMyClass(data)->symMess (arg0);
 }
 void GLdefine :: bangMessCallback (void* data){
-        GetMyClass(data)->bangMess ();
+  GetMyClass(data)->bangMess ();
 }
 void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv){
-        GetMyClass(data)->listMess (argc, argv);
+  GetMyClass(data)->listMess (argc, argv);
 }

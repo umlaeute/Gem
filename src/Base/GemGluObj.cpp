@@ -51,8 +51,8 @@ GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
 /////////////////////////////////////////////////////////
 GemGluObj :: ~GemGluObj()
 {
-    // in case we are deleted while still running
-    inlet_free(m_sliceInlet);
+  // in case we are deleted while still running
+  inlet_free(m_sliceInlet);
 }
 
 /////////////////////////////////////////////////////////
@@ -61,15 +61,15 @@ GemGluObj :: ~GemGluObj()
 /////////////////////////////////////////////////////////
 void GemGluObj :: numSlicesMess(int numSlices)
 {
-    m_numSlices = (numSlices < 2) ? 2 : numSlices;
-    m_numStacks = m_numSlices;
-    setModified();
+  m_numSlices = (numSlices < 2) ? 2 : numSlices;
+  m_numStacks = m_numSlices;
+  setModified();
 }
 void GemGluObj :: numSlicesMess(int numSlices, int numStacks)
 {
-    m_numSlices = (numSlices < 2) ? 2 : numSlices;
-    m_numStacks = (numStacks < 2) ? 2 : numStacks;
-    setModified();
+  m_numSlices = (numSlices < 2) ? 2 : numSlices;
+  m_numStacks = (numStacks < 2) ? 2 : numStacks;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -78,8 +78,8 @@ void GemGluObj :: numSlicesMess(int numSlices, int numStacks)
 /////////////////////////////////////////////////////////
 void GemGluObj :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemGluObj::numSlicesMessCallback),
-            gensym("numslices"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GemGluObj::numSlicesMessCallback),
+                  gensym("numslices"), A_GIMME, A_NULL);
 }
 void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {

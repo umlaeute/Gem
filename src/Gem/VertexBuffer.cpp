@@ -34,7 +34,7 @@ gem::VertexBuffer:: VertexBuffer() :
 {
 }
 gem::VertexBuffer:: VertexBuffer (unsigned int size_,
-    unsigned int dimen_) :
+                                  unsigned int dimen_) :
   size(0),
   dimen(dimen_),
   vbo(0),

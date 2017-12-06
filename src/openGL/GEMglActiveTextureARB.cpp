@@ -22,15 +22,15 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglActiveTextureARB , t_floatarg, A_DEFFLOAT);
 // Constructor
 //
 GEMglActiveTextureARB :: GEMglActiveTextureARB  (t_floatarg arg0) :
-                texUnit(static_cast<GLenum>(arg0))
+  texUnit(static_cast<GLenum>(arg0))
 {
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texUnit"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texUnit"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglActiveTextureARB :: ~GEMglActiveTextureARB () {
-        inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[0]);
 }
 //////////////////
 // extension check
@@ -43,15 +43,15 @@ bool GEMglActiveTextureARB :: isRunnable(void) {
 // Render
 //
 void GEMglActiveTextureARB :: render(GemState *state) {
-        glActiveTextureARB (texUnit);
+  glActiveTextureARB (texUnit);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglActiveTextureARB :: texUnitMess (t_float arg1) {      // FUN
-        texUnit = static_cast<GLenum>(arg1);
-        setModified();
+  texUnit = static_cast<GLenum>(arg1);
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -59,10 +59,10 @@ void GEMglActiveTextureARB :: texUnitMess (t_float arg1) {      // FUN
 //
 
 void GEMglActiveTextureARB :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglActiveTextureARB::texUnitMessCallback),
-                                                                        gensym("texUnit"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglActiveTextureARB::texUnitMessCallback),
+                  gensym("texUnit"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglActiveTextureARB :: texUnitMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
 }

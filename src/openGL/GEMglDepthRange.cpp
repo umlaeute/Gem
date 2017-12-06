@@ -24,38 +24,38 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglDepthRange , t_floatarg, A_DEFFLOAT, t_floata
 // Constructor
 //
 GEMglDepthRange :: GEMglDepthRange      (t_floatarg arg0, t_floatarg arg1) :
-                near_val(static_cast<GLclampd>(arg0)),
-                far_val(static_cast<GLclampd>(arg1))
+  near_val(static_cast<GLclampd>(arg0)),
+  far_val(static_cast<GLclampd>(arg1))
 {
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("near_val"));
-        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("far_val"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("near_val"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("far_val"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglDepthRange :: ~GEMglDepthRange () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglDepthRange :: render(GemState *state) {
-        glDepthRange (near_val, far_val);
+  glDepthRange (near_val, far_val);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglDepthRange :: near_valMess (GLclampd arg1) {  // FUN
-        near_val = static_cast<GLclampd>(arg1);
-        setModified();
+  near_val = static_cast<GLclampd>(arg1);
+  setModified();
 }
 
 void GEMglDepthRange :: far_valMess (GLclampd arg1) {   // FUN
-        far_val = static_cast<GLclampd>(arg1);
-        setModified();
+  far_val = static_cast<GLclampd>(arg1);
+  setModified();
 }
 
 
@@ -64,13 +64,13 @@ void GEMglDepthRange :: far_valMess (GLclampd arg1) {   // FUN
 //
 
 void GEMglDepthRange :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthRange::near_valMessCallback),          gensym("near_val"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthRange::far_valMessCallback),   gensym("far_val"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthRange::near_valMessCallback),          gensym("near_val"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthRange::far_valMessCallback),   gensym("far_val"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglDepthRange :: near_valMessCallback (void* data, GLclampd arg0){
-        GetMyClass(data)->near_valMess ( static_cast<GLclampd>(arg0));
+  GetMyClass(data)->near_valMess ( static_cast<GLclampd>(arg0));
 }
 void GEMglDepthRange :: far_valMessCallback (void* data, GLclampd arg0){
-        GetMyClass(data)->far_valMess ( static_cast<GLclampd>(arg0));
+  GetMyClass(data)->far_valMess ( static_cast<GLclampd>(arg0));
 }

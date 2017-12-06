@@ -27,9 +27,9 @@ GEMglSelectBuffer :: GEMglSelectBuffer  (t_floatarg arg0) :
   size(0),
   len(0), buffer(0)
 {
-        sizeMess(arg0);
-        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("size"));
-        m_bufout= outlet_new(this->x_obj, &s_list);
+  sizeMess(arg0);
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("size"));
+  m_bufout= outlet_new(this->x_obj, &s_list);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -90,9 +90,9 @@ void GEMglSelectBuffer :: sizeMess (t_float arg1) {     // FUN
 //
 
 void GEMglSelectBuffer :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglSelectBuffer::sizeMessCallback),    gensym("size"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglSelectBuffer::sizeMessCallback),    gensym("size"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglSelectBuffer :: sizeMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->sizeMess (arg0);
+  GetMyClass(data)->sizeMess (arg0);
 }

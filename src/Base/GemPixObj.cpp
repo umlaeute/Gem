@@ -32,8 +32,8 @@ GemPixObj :: GemPixObj() :
   m_simd(GemSIMD::getCPU()),
   m_doROI(false)
 {
-    cachedPixBlock.newimage=0;
-    cachedPixBlock.newfilm =0;
+  cachedPixBlock.newimage=0;
+  cachedPixBlock.newfilm =0;
 }
 
 
@@ -157,7 +157,7 @@ void GemPixObj :: processImage(imageStruct &image)
   case GL_RGB:
   case GL_BGR_EXT:
     error("cannot handle RGB image");
-        break;
+    break;
   case GL_LUMINANCE:
     error("cannot handle Grey image");
     break;
@@ -212,8 +212,8 @@ void GemPixObj :: processYUVAltivec (imageStruct &image)
 /////////////////////////////////////////////////////////
 void GemPixObj :: processOnOff(int on)
 {
-    m_processOnOff = on;
-    setPixModified();
+  m_processOnOff = on;
+  setPixModified();
 }
 
 /////////////////////////////////////////////////////////

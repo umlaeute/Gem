@@ -88,16 +88,16 @@ t_int* pix_pix2sig :: perform(t_int* w)
     scale0 = scale1 = scale2 = scale3 = 1./255.;
     int csize=x->m_csize;
     switch (csize){
-    /* coverity[unterminated_default] */
+      /* coverity[unterminated_default] */
     default:
       scale3=1./255.;
-    /* coverity[unterminated_case] */
+      /* coverity[unterminated_case] */
     case 3:
       scale2=1./255.;
-    /* coverity[unterminated_case] */
+      /* coverity[unterminated_case] */
     case 2:
       scale1=1./255.;
-    /* coverity[unterminated_case] */
+      /* coverity[unterminated_case] */
     case 1:
       scale0=1./255.;
     case 0:

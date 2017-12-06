@@ -29,11 +29,11 @@ CPPEXTERN_NEW(pix_bitmask);
 /////////////////////////////////////////////////////////
 pix_bitmask :: pix_bitmask()
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_mask"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_mask"));
 
-    m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = m_mask[chAlpha] = 255;
-    m_mode=0;
+  m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = m_mask[chAlpha] = 255;
+  m_mode=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -145,18 +145,18 @@ void pix_bitmask :: processGrayMMX(imageStruct &image){
 /////////////////////////////////////////////////////////
 void pix_bitmask :: vecMaskMess(int argc, t_atom *argv)
 {
-    if (argc >= 4) m_mask[chAlpha] = atom_getint(&argv[3]);
-    else if (argc == 3) m_mask[chAlpha] = 255;
-    else
+  if (argc >= 4) m_mask[chAlpha] = atom_getint(&argv[3]);
+  else if (argc == 3) m_mask[chAlpha] = 255;
+  else
     {
-        error("not enough mask values");
-        return;
+      error("not enough mask values");
+      return;
     }
-    m_mask[chRed] = atom_getint(&argv[0]);
-    m_mask[chGreen] = atom_getint(&argv[1]);
-    m_mask[chBlue] = atom_getint(&argv[2]);
-    setPixModified();
-    m_mode=1;
+  m_mask[chRed] = atom_getint(&argv[0]);
+  m_mask[chGreen] = atom_getint(&argv[1]);
+  m_mask[chBlue] = atom_getint(&argv[2]);
+  setPixModified();
+  m_mode=1;
 }
 
 /////////////////////////////////////////////////////////
@@ -165,11 +165,11 @@ void pix_bitmask :: vecMaskMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_bitmask :: intMaskMess(int mask)
 {
-    // assumption that the alpha should be 255
-    m_mask[chAlpha] = 255;
-    m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = mask;
-    setPixModified();
-    m_mode=0;
+  // assumption that the alpha should be 255
+  m_mask[chAlpha] = 255;
+  m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = mask;
+  setPixModified();
+  m_mode=0;
 }
 
 /////////////////////////////////////////////////////////
@@ -178,16 +178,16 @@ void pix_bitmask :: intMaskMess(int mask)
 /////////////////////////////////////////////////////////
 void pix_bitmask :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::vecMaskMessCallback),
-            gensym("vec_mask"), A_GIMME, A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::floatMaskMessCallback),
-            gensym("ft1"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::vecMaskMessCallback),
+                  gensym("vec_mask"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::floatMaskMessCallback),
+                  gensym("ft1"), A_FLOAT, A_NULL);
 }
 void pix_bitmask :: vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
-    GetMyClass(data)->vecMaskMess(argc, argv);
+  GetMyClass(data)->vecMaskMess(argc, argv);
 }
 void pix_bitmask :: floatMaskMessCallback(void *data, t_float mask)
 {
-    GetMyClass(data)->intMaskMess((int)mask);
+  GetMyClass(data)->intMaskMess((int)mask);
 }

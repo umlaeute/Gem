@@ -68,12 +68,12 @@ float CVector3::operator*(CVector3 vVector) const
 // cross-multiplication
 CVector3 CVector3::cross(CVector3 vVector) const
 {
-    CVector3 vCross;                                // The vector to hold the cross product
-    vCross.x = ((y * vVector.z) - (z * vVector.y)); // Get the X value
-    vCross.y = ((z * vVector.x) - (x * vVector.z)); // Get the Y value
-    vCross.z = ((x * vVector.y) - (y * vVector.x)); // Get the Z value
+  CVector3 vCross;                                // The vector to hold the cross product
+  vCross.x = ((y * vVector.z) - (z * vVector.y)); // Get the X value
+  vCross.y = ((z * vVector.x) - (x * vVector.z)); // Get the Y value
+  vCross.z = ((x * vVector.y) - (y * vVector.x)); // Get the Z value
 
-    return vCross;                              // Return the cross product
+  return vCross;                              // Return the cross product
 }
 
 

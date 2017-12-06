@@ -29,10 +29,10 @@ CPPEXTERN_NEW(pix_equal);
 /////////////////////////////////////////////////////////
 pix_equal :: pix_equal()
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_lower"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_upper"));
-    m_upper[0] = m_upper[1] = m_upper[2] = m_upper[3] = 255;
-    m_lower[0] = m_lower[1] = m_lower[2] = m_lower[3] = 0;
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_lower"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_upper"));
+  m_upper[0] = m_upper[1] = m_upper[2] = m_upper[3] = 255;
+  m_lower[0] = m_lower[1] = m_lower[2] = m_lower[3] = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -48,20 +48,20 @@ pix_equal :: ~pix_equal()
 /////////////////////////////////////////////////////////
 void pix_equal :: processRGBAImage(imageStruct &image)
 {
-    int datasize = image.xsize * image.ysize;
+  int datasize = image.xsize * image.ysize;
 
-    unsigned char *base = image.data;
+  unsigned char *base = image.data;
 
-    while(datasize--) {
-      unsigned char pixval =
-        (base[chRed] <= m_upper[chRed] && base[chRed] >= m_lower[chRed] &&
-        base[chGreen] <= m_upper[chGreen] && base[chGreen] >= m_lower[chGreen] &&
-        base[chBlue] <= m_upper[chBlue] && base[chBlue] >= m_lower[chBlue])*255;
+  while(datasize--) {
+    unsigned char pixval =
+      (base[chRed] <= m_upper[chRed] && base[chRed] >= m_lower[chRed] &&
+       base[chGreen] <= m_upper[chGreen] && base[chGreen] >= m_lower[chGreen] &&
+       base[chBlue] <= m_upper[chBlue] && base[chBlue] >= m_lower[chBlue])*255;
 
-      base[chRed] = base[chGreen] = base[chBlue] = pixval;
-      base[chAlpha] = 255;
-      base += 4;
-    }
+    base[chRed] = base[chGreen] = base[chBlue] = pixval;
+    base[chAlpha] = 255;
+    base += 4;
+  }
 }
 
 namespace {

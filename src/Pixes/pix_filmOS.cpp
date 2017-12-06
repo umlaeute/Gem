@@ -41,18 +41,18 @@ pix_filmOS :: pix_filmOS(t_symbol *filename) :
   m_newFilm(0),
   m_colorspace(GL_RGBA_GEM), m_format(GL_RGBA_GEM)
 {
- // setting the current frame
- inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
- // create an outlet to send out how many frames are in the movie + bang when we reached the end
- m_outNumFrames = outlet_new(this->x_obj, 0);
- m_outEnd       = outlet_new(this->x_obj, 0);
+  // setting the current frame
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  // create an outlet to send out how many frames are in the movie + bang when we reached the end
+  m_outNumFrames = outlet_new(this->x_obj, 0);
+  m_outEnd       = outlet_new(this->x_obj, 0);
 
- // initialize the pix block data
- m_pixBlock.image=m_imageStruct;
- m_pixBlock.image.setCsizeByFormat(m_format);
+  // initialize the pix block data
+  m_pixBlock.image=m_imageStruct;
+  m_pixBlock.image.setCsizeByFormat(m_format);
 
- // make sure that there are some characters
- x_filename=gensym("");
+  // make sure that there are some characters
+  x_filename=gensym("");
 }
 
 /////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ void pix_filmOS :: createBuffer()
   oldx = 0;
   oldy = 0;
 
-    if (neededXSize != oldx || neededYSize != oldy)
+  if (neededXSize != oldx || neededYSize != oldy)
     {
       m_pixBlock.image.setCsizeByFormat(m_format);
       m_pixBlock.image.xsize = neededXSize;
@@ -106,7 +106,7 @@ void pix_filmOS :: createBuffer()
       oldx = m_pixBlock.image.xsize;
       oldy = m_pixBlock.image.ysize;
     }
-    //post("created buffer @ %x", m_data);
+  //post("created buffer @ %x", m_data);
 }
 
 /////////////////////////////////////////////////////////
@@ -174,9 +174,9 @@ void pix_filmOS :: render(GemState *state)
     if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
   }
   else
-  {
-  newImage = 0;
-  }
+    {
+      newImage = 0;
+    }
 
   if (m_newFilm){
     m_pixBlock.newfilm = 1;
@@ -192,12 +192,12 @@ void pix_filmOS :: render(GemState *state)
 #ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
 
-      //  ::MoviesTask(NULL, 0);
+    //  ::MoviesTask(NULL, 0);
 #endif
 
 
-  /* texture it, if needed */
-  texFrame(state, newImage);
+    /* texture it, if needed */
+    texFrame(state, newImage);
   m_pixBlock.newimage = newImage;
   // automatic proceeding
   if (m_auto)m_reqFrame++;
@@ -268,10 +268,10 @@ void pix_filmOS :: changeImage(int imgNum, int trackNum)
 //
 /////////////////////////////////////////////////////////
 void pix_filmOS :: csMess(int format){
-        if(format && format != m_colorspace){
-                m_colorspace=format;
-                post("colorspace change will take effect the next time you load a film");
-        }
+  if(format && format != m_colorspace){
+    m_colorspace=format;
+    post("colorspace change will take effect the next time you load a film");
+  }
 }
 
 
@@ -296,21 +296,21 @@ void pix_filmOS :: obj_setupCallback(t_class *classPtr)
 }
 void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-        int format=0;
-        switch(argc){
-        case 2:
-                format=getPixFormat(atom_getsymbol(argv+1)->s_name);
-        case 1:
-            GetMyClass(data)->openMess(atom_getsymbol(argv), format);
-                break;
-        default:
-          GetMyClass(data)->error("open <filename> [<format>]");
-        }
+  int format=0;
+  switch(argc){
+  case 2:
+    format=getPixFormat(atom_getsymbol(argv+1)->s_name);
+  case 1:
+    GetMyClass(data)->openMess(atom_getsymbol(argv), format);
+    break;
+  default:
+    GetMyClass(data)->error("open <filename> [<format>]");
+  }
 }
 
 void pix_filmOS :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_filmOS :: autoCallback(void *data, t_float state)

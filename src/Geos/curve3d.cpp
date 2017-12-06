@@ -193,20 +193,20 @@ void curve3d :: renderShape(GemState *state){
         glEnd();
       }
     }  else {
-          for(n = 0; n < nb_pts_affich_X+1; n++)  {
-            glBegin(GL_LINE_STRIP);
-            for(m = 0; m  < nb_pts_affich_Y+1; m++){
-              glEvalCoord2f(n/affich_X, m/affich_Y);
-            }
-            glEnd();
-          }
-          for(m = 0; m < nb_pts_affich_Y+1; m++)  {
-            glBegin(GL_LINE_STRIP);
-            for(n = 0; n  < nb_pts_affich_X+1; n++){
-              glEvalCoord2f(n/affich_X, m/affich_Y);
-            }
-            glEnd();
-          }
+      for(n = 0; n < nb_pts_affich_X+1; n++)  {
+        glBegin(GL_LINE_STRIP);
+        for(m = 0; m  < nb_pts_affich_Y+1; m++){
+          glEvalCoord2f(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      }
+      for(m = 0; m < nb_pts_affich_Y+1; m++)  {
+        glBegin(GL_LINE_STRIP);
+        for(n = 0; n  < nb_pts_affich_X+1; n++){
+          glEvalCoord2f(n/affich_X, m/affich_Y);
+        }
+        glEnd();
+      }
     }
   }
     break;

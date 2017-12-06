@@ -31,7 +31,7 @@ CPPEXTERN_NEW(pix_clearblock);
 //
 /////////////////////////////////////////////////////////
 pix_clearblock :: pix_clearblock()
-                : m_oldcache(NULL)
+  : m_oldcache(NULL)
 { }
 
 /////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ pix_clearblock :: pix_clearblock()
 /////////////////////////////////////////////////////////
 pix_clearblock :: ~pix_clearblock()
 {
-    if (m_oldcache) stopRendering();
+  if (m_oldcache) stopRendering();
 }
 
 /////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ void pix_clearblock :: postrender(GemState *state)
 #ifdef __GNUC__
 # warning should we not reset to the original image?
 #endif
-    state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
+  state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
 }
 
 /////////////////////////////////////////////////////////

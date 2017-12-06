@@ -24,30 +24,30 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2dv , t_floatarg, A_DEFFLOAT, t_floa
 // Constructor
 //
 GEMglRasterPos2dv :: GEMglRasterPos2dv  (t_floatarg arg0, t_floatarg arg1) {
-vMess(arg0, arg1);
-        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  vMess(arg0, arg1);
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglRasterPos2dv :: ~GEMglRasterPos2dv () {
-        inlet_free(m_inlet);
+  inlet_free(m_inlet);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglRasterPos2dv :: render(GemState *state) {
-        glRasterPos2dv (v);
+  glRasterPos2dv (v);
 }
 
 /////////////////////////////////////////////////////////
 // variable
 //
 void GEMglRasterPos2dv :: vMess (t_float arg0, t_float arg1) {  // FUN
-        v[0]=static_cast<GLdouble>(arg0);
-        v[1]=static_cast<GLdouble>(arg1);
-        setModified();
+  v[0]=static_cast<GLdouble>(arg0);
+  v[1]=static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -55,9 +55,9 @@ void GEMglRasterPos2dv :: vMess (t_float arg0, t_float arg1) {  // FUN
 //
 
 void GEMglRasterPos2dv :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2dv::vMessCallback),       gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2dv::vMessCallback),       gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
 void GEMglRasterPos2dv :: vMessCallback (void* data, t_float arg0, t_float arg1) {
-        GetMyClass(data)->vMess ( arg0, arg1);
+  GetMyClass(data)->vMess ( arg0, arg1);
 }

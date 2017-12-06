@@ -294,8 +294,8 @@ gem::Context*GemWindow::destroyContext(gem::Context*ctx){
 }
 void GemWindow::stopInAllContexts(GemBase*obj) {
   for (std::set<GemWindow*>::iterator it = GemWindow::PIMPL::s_contexts.begin();
-            it!=GemWindow::PIMPL::s_contexts.end();
-            ++it) {
+       it!=GemWindow::PIMPL::s_contexts.end();
+       ++it) {
     GemWindow*w=(*it);
     w->makeCurrent();
     t_pd*x=&obj->x_obj->ob_pd;

@@ -35,7 +35,7 @@ CPPEXTERN_NEW_WITH_GIMME(torus);
 //
 /////////////////////////////////////////////////////////
 torus :: torus(int argc, t_atom *argv)
-      : GemGluObj(1.f)
+  : GemGluObj(1.f)
 {
   float size = 1.f;
   int numSlices = 10;
@@ -77,8 +77,8 @@ torus :: ~torus(void)
 /////////////////////////////////////////////////////////
 void torus :: innerRadius(float radius)
 {
-    m_innerRadius = radius;
-    setModified();
+  m_innerRadius = radius;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

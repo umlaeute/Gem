@@ -27,9 +27,9 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 alpha :: alpha(t_floatarg fun)
-       : m_alphaState(1),
-         m_alphaTest(1),
-         m_depthtest(1)
+  : m_alphaState(1),
+    m_alphaTest(1),
+    m_depthtest(1)
 {
   funMess(static_cast<int>(fun));
   m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
@@ -86,8 +86,8 @@ void alpha :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void alpha :: alphaMess(int alphaState)
 {
-    m_alphaState = alphaState;
-    setModified();
+  m_alphaState = alphaState;
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // funMess
@@ -153,8 +153,8 @@ void alpha :: funMess(int fun)
   case 19:
     m_function=GL_ONE_MINUS_SRC1_ALPHA;
     break;
-   default:
-     m_function=GL_ONE_MINUS_SRC_ALPHA;
+  default:
+    m_function=GL_ONE_MINUS_SRC_ALPHA;
   }
   setModified();
 }
@@ -164,8 +164,8 @@ void alpha :: funMess(int fun)
 /////////////////////////////////////////////////////////
 void alpha :: testMess(int alphaTest)
 {
-    m_alphaTest = alphaTest;
-    setModified();
+  m_alphaTest = alphaTest;
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // depthtestMess
@@ -173,8 +173,8 @@ void alpha :: testMess(int alphaTest)
 /////////////////////////////////////////////////////////
 void alpha :: depthtestMess(int i)
 {
-    m_depthtest = i;
-    setModified();
+  m_depthtest = i;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

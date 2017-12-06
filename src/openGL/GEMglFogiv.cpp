@@ -24,21 +24,21 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglFogiv );
 // Constructor
 //
 GEMglFogiv :: GEMglFogiv        (int argc, t_atom *argv) {
-        int i=FOG_ARRAY_LENGTH;
-        while(i--)params[i]=0;
+  int i=FOG_ARRAY_LENGTH;
+  while(i--)params[i]=0;
 
-        pnameMess(atom_getfloat(argv));
-        if (argc>0)paramsMess(argc-1, argv+1);
+  pnameMess(atom_getfloat(argv));
+  if (argc>0)paramsMess(argc-1, argv+1);
 
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("params"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("params"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglFogiv :: ~GEMglFogiv () {
-        inlet_free(m_inlet[0]);
-        inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
 }
 
 //////////////////
@@ -53,7 +53,7 @@ bool GEMglFogiv :: isRunnable(void) {
 // Render
 //
 void GEMglFogiv :: render(GemState *state) {
-        glFogiv (pname, params);
+  glFogiv (pname, params);
 }
 
 /////////////////////////////////////////////////////////
@@ -74,13 +74,13 @@ void GEMglFogiv :: paramsMess (int argc, t_atom*argv) { // FUN
 //
 
 void GEMglFogiv :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogiv::pnameMessCallback),          gensym("pname"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogiv::paramsMessCallback),         gensym("params"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogiv::pnameMessCallback),          gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogiv::paramsMessCallback),         gensym("params"), A_GIMME, A_NULL);
 }
 
 void GEMglFogiv :: pnameMessCallback (void* data, t_float arg0) {
-        GetMyClass(data)->pnameMess (arg0);
+  GetMyClass(data)->pnameMess (arg0);
 }
 void GEMglFogiv :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv) {
-        GetMyClass(data)->paramsMess (argc, argv);
+  GetMyClass(data)->paramsMess (argc, argv);
 }

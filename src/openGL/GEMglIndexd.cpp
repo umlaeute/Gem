@@ -24,30 +24,30 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexd , t_floatarg, A_DEFFLOAT);
 // Constructor
 //
 GEMglIndexd :: GEMglIndexd      (t_floatarg arg0) :
-                c(static_cast<GLdouble>(arg0))
+  c(static_cast<GLdouble>(arg0))
 {
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("c"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("c"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglIndexd :: ~GEMglIndexd () {
-inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[0]);
 }
 
 /////////////////////////////////////////////////////////
 // Render
 //
 void GEMglIndexd :: render(GemState *state) {
-        glIndexd (c);
+  glIndexd (c);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglIndexd :: cMess (t_float arg1) {      // FUN
-        c = static_cast<GLdouble>(arg1);
-        setModified();
+  c = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 
@@ -56,9 +56,9 @@ void GEMglIndexd :: cMess (t_float arg1) {      // FUN
 //
 
 void GEMglIndexd :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexd::cMessCallback),     gensym("c"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexd::cMessCallback),     gensym("c"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglIndexd :: cMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->cMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->cMess ( static_cast<t_float>(arg0));
 }

@@ -24,15 +24,15 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPushName , t_floatarg, A_DEFFLOAT);
 // Constructor
 //
 GEMglPushName :: GEMglPushName  (t_floatarg arg0) :
-                name(static_cast<GLuint>(arg0))
+  name(static_cast<GLuint>(arg0))
 {
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglPushName :: ~GEMglPushName () {
-inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[0]);
 }
 
 //////////////////
@@ -48,15 +48,15 @@ bool GEMglPushName :: isRunnable(void) {
 // Render
 //
 void GEMglPushName :: render(GemState *state) {
-        glPushName (name);
+  glPushName (name);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglPushName :: nameMess (t_float arg1) { // FUN
-        name = static_cast<GLuint>(arg1);
-        setModified();
+  name = static_cast<GLuint>(arg1);
+  setModified();
 }
 
 
@@ -65,9 +65,9 @@ void GEMglPushName :: nameMess (t_float arg1) { // FUN
 //
 
 void GEMglPushName :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPushName::nameMessCallback),        gensym("name"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPushName::nameMessCallback),        gensym("name"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglPushName :: nameMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->nameMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->nameMess ( static_cast<t_float>(arg0));
 }

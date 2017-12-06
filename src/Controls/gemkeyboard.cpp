@@ -30,10 +30,10 @@ CPPEXTERN_NEW(gemkeyboard);
 /////////////////////////////////////////////////////////
 gemkeyboard :: gemkeyboard()
 {
-    m_outKeyVal = outlet_new(this->x_obj, 0);
+  m_outKeyVal = outlet_new(this->x_obj, 0);
 
-    // register event callback
-    setKeyboardCallback(&gemkeyboard::keyboardCallback, this);
+  // register event callback
+  setKeyboardCallback(&gemkeyboard::keyboardCallback, this);
 }
 
 /////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@ gemkeyboard :: gemkeyboard()
 /////////////////////////////////////////////////////////
 gemkeyboard :: ~gemkeyboard()
 {
-    // remove event callback
-    removeKeyboardCallback(&gemkeyboard::keyboardCallback, this);
+  // remove event callback
+  removeKeyboardCallback(&gemkeyboard::keyboardCallback, this);
 
-    outlet_free(m_outKeyVal);
+  outlet_free(m_outKeyVal);
 }
 
 

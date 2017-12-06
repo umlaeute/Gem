@@ -42,7 +42,7 @@ bool GEMglInitNames :: isRunnable(void) {
 // Render
 //
 void GEMglInitNames :: render(GemState *state) {
-        glInitNames ();
+  glInitNames ();
 }
 
 /////////////////////////////////////////////////////////

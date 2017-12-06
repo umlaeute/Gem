@@ -33,38 +33,38 @@ GEM_EXTERN void gemAbortRendering();
 /////////////////////////////////////////////////////////
 BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 {
-    PIXELFORMATDESCRIPTOR pfd;
+  PIXELFORMATDESCRIPTOR pfd;
 
-        // clean out the descriptor
-    memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+  // clean out the descriptor
+  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
 
-    pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-    pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
-    if (hints.buffer == 2)
-        pfd.dwFlags = pfd.dwFlags | PFD_DOUBLEBUFFER;
-    pfd.dwLayerMask = PFD_MAIN_PLANE;
-    pfd.iPixelType = PFD_TYPE_RGBA;
-    pfd.cColorBits = 24;
-    pfd.cRedBits = 8;
-    pfd.cBlueBits = 8;
-    pfd.cGreenBits = 8;
-    pfd.cDepthBits = 16;
-    pfd.cAccumBits = 0;
-    pfd.cStencilBits = 8;
+  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+  pfd.nVersion = 1;
+  pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+  if (hints.buffer == 2)
+    pfd.dwFlags = pfd.dwFlags | PFD_DOUBLEBUFFER;
+  pfd.dwLayerMask = PFD_MAIN_PLANE;
+  pfd.iPixelType = PFD_TYPE_RGBA;
+  pfd.cColorBits = 24;
+  pfd.cRedBits = 8;
+  pfd.cBlueBits = 8;
+  pfd.cGreenBits = 8;
+  pfd.cDepthBits = 16;
+  pfd.cAccumBits = 0;
+  pfd.cStencilBits = 8;
 
-    int pixelformat;
-    if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
+  int pixelformat;
+  if ( (pixelformat = ChoosePixelFormat(hdc, &pfd)) == 0 )
     {
-        post("GEM: ChoosePixelFormat failed");
-        return(FALSE);
+      post("GEM: ChoosePixelFormat failed");
+      return(FALSE);
     }
-    if (SetPixelFormat(hdc, pixelformat, &pfd) == FALSE)
+  if (SetPixelFormat(hdc, pixelformat, &pfd) == FALSE)
     {
-        post("GEM: SetPixelFormat failed");
-        return(FALSE);
+      post("GEM: SetPixelFormat failed");
+      return(FALSE);
     }
-    return(TRUE);
+  return(TRUE);
 }
 
 /////////////////////////////////////////////////////////
@@ -73,64 +73,64 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 /////////////////////////////////////////////////////////
 LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-        static RECT rcClient;
-        static int ctrlKeyDown = 0;
+  static RECT rcClient;
+  static int ctrlKeyDown = 0;
 
-        // assume that we handle the message
-    long lRet = 0;
+  // assume that we handle the message
+  long lRet = 0;
 
-    switch (uMsg)
+  switch (uMsg)
     {
-        // mouse motion
-        case WM_MOUSEMOVE:
-            triggerMotionEvent(LOWORD(lParam), HIWORD(lParam));
-            break;
+      // mouse motion
+    case WM_MOUSEMOVE:
+      triggerMotionEvent(LOWORD(lParam), HIWORD(lParam));
+      break;
 
-        // left button up
-        case WM_LBUTTONUP:
-            triggerButtonEvent(0, 0, LOWORD(lParam), HIWORD(lParam));
-            break;
+      // left button up
+    case WM_LBUTTONUP:
+      triggerButtonEvent(0, 0, LOWORD(lParam), HIWORD(lParam));
+      break;
 
-        // left button down
-        case WM_LBUTTONDOWN:
-            triggerButtonEvent(0, 1, LOWORD(lParam), HIWORD(lParam));
-            break;
+      // left button down
+    case WM_LBUTTONDOWN:
+      triggerButtonEvent(0, 1, LOWORD(lParam), HIWORD(lParam));
+      break;
 
-        // middle button up
-        case WM_MBUTTONUP:
-            triggerButtonEvent(1, 0, LOWORD(lParam), HIWORD(lParam));
-            break;
+      // middle button up
+    case WM_MBUTTONUP:
+      triggerButtonEvent(1, 0, LOWORD(lParam), HIWORD(lParam));
+      break;
 
-        // middle button down
-        case WM_MBUTTONDOWN:
-            triggerButtonEvent(1, 1, LOWORD(lParam), HIWORD(lParam));
-            break;
+      // middle button down
+    case WM_MBUTTONDOWN:
+      triggerButtonEvent(1, 1, LOWORD(lParam), HIWORD(lParam));
+      break;
 
-        // right button up
-        case WM_RBUTTONUP:
-            triggerButtonEvent(2, 0, LOWORD(lParam), HIWORD(lParam));
-            break;
+      // right button up
+    case WM_RBUTTONUP:
+      triggerButtonEvent(2, 0, LOWORD(lParam), HIWORD(lParam));
+      break;
 
-        // right button down
-        case WM_RBUTTONDOWN:
-            triggerButtonEvent(2, 1, LOWORD(lParam), HIWORD(lParam));
-            break;
-        // keyboard action
-        case WM_KEYUP:
-                        if ((int)wParam == VK_CONTROL)
-                                ctrlKeyDown = 0;
+      // right button down
+    case WM_RBUTTONDOWN:
+      triggerButtonEvent(2, 1, LOWORD(lParam), HIWORD(lParam));
+      break;
+      // keyboard action
+    case WM_KEYUP:
+      if ((int)wParam == VK_CONTROL)
+        ctrlKeyDown = 0;
 
-            triggerKeyboardEvent((char*)&wParam, (int)wParam, 1);
-            break;
+      triggerKeyboardEvent((char*)&wParam, (int)wParam, 1);
+      break;
 
-            // keyboard action
+      // keyboard action
     case WM_KEYDOWN:
-                        if ((int)wParam == VK_CONTROL)
-                                ctrlKeyDown = 1;
-                        else if (ctrlKeyDown && (int)wParam == 'R')
+      if ((int)wParam == VK_CONTROL)
+        ctrlKeyDown = 1;
+      else if (ctrlKeyDown && (int)wParam == 'R')
         gemAbortRendering();
-                        else
-                                triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
+      else
+        triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
       break;
 
       // resize event
@@ -154,7 +154,7 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       lRet = DefWindowProc (hWnd, uMsg, wParam, lParam);
       break;
     }
-    return(lRet);
+  return(lRet);
 }
 
 /////////////////////////////////////////////////////////
@@ -258,12 +258,12 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
   AdjustWindowRectEx(&newSize, style, FALSE, dwExStyle); // no menu
 
   if (newSize.left<0 && x>=0){
-          newSize.right-=newSize.left;
-          newSize.left=0;
+    newSize.right-=newSize.left;
+    newSize.left=0;
   }
   if (newSize.top<0 && y>=0){
-          newSize.bottom-=newSize.top;
-          newSize.top=0;
+    newSize.bottom-=newSize.top;
+    newSize.top=0;
   }
 
   // Create the window
@@ -282,42 +282,42 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
                              NULL);
 
   if (!info.win)  {
-      error("GEM: Unable to create window");
-      return(0);
-    }
+    error("GEM: Unable to create window");
+    return(0);
+  }
 
   // create the device context
   info.dc = GetDC(info.win);
   if (!info.dc)  {
-      error("GEM: Unable to create device context");
-      destroyGemWindow(info);
-      return(0);
-    }
+    error("GEM: Unable to create device context");
+    destroyGemWindow(info);
+    return(0);
+  }
 
   // set the pixel format for the window
   if (!bSetupPixelFormat(info.dc, hints))  {
-      error("GEM: Unable to set window pixel format");
-      destroyGemWindow(info);
-      return(0);
-    }
+    error("GEM: Unable to set window pixel format");
+    destroyGemWindow(info);
+    return(0);
+  }
 
   // create the OpenGL context
   info.context = wglCreateContext(info.dc);
   if (!info.context)  {
-      error("GEM: Unable to create OpenGL context");
-      destroyGemWindow(info);
-      return(0);
-    }
+    error("GEM: Unable to create OpenGL context");
+    destroyGemWindow(info);
+    return(0);
+  }
 
   // do we share display lists?
   if (hints.shared) wglShareLists(hints.shared, info.context);
 
   // make the context the current rendering context
   if (!wglMakeCurrent(info.dc, info.context))   {
-      error("GEM: Unable to make OpenGL context current");
-      destroyGemWindow(info);
-      return(0);
-    }
+    error("GEM: Unable to make OpenGL context current");
+    destroyGemWindow(info);
+    return(0);
+  }
 
   if (!hints.actuallyDisplay) return(1);
 
@@ -379,9 +379,9 @@ int topmostGemWindow(WindowInfo &info, int state)
   static int topmost_state = 0;
   state=!(!state);
   if (state)
-        SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+    SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   else
-        SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+    SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   topmost_state = state;
   return topmost_state;
 }

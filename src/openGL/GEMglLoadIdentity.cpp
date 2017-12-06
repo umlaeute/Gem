@@ -33,7 +33,7 @@ GEMglLoadIdentity :: ~GEMglLoadIdentity () {}
 // Render
 //
 void GEMglLoadIdentity :: render(GemState *state) {
-        glLoadIdentity ();
+  glLoadIdentity ();
 }
 /////////////////////////////////////////////////////////
 // static member function

@@ -31,8 +31,8 @@ CPPEXTERN_NEW(pix_color);
 /////////////////////////////////////////////////////////
 pix_color :: pix_color()
 {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("vec_gain"));
-    m_color[0] = m_color[1] = m_color[2] = 255;
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("vec_gain"));
+  m_color[0] = m_color[1] = m_color[2] = 255;
 }
 
 /////////////////////////////////////////////////////////
@@ -48,10 +48,10 @@ pix_color :: ~pix_color()
 /////////////////////////////////////////////////////////
 void pix_color :: processRGBAImage(imageStruct &image)
 {
-    int i = image.xsize * image.ysize;
+  int i = image.xsize * image.ysize;
 
-    unsigned char *base = image.data;
-        while (i--)
+  unsigned char *base = image.data;
+  while (i--)
     {
       base[chRed] = m_color[0];
       base[chGreen] = m_color[1];
@@ -86,11 +86,11 @@ void pix_color :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_color :: vecGainMess(float red, float green, float blue, float alpha)
 {
-    m_color[0] = CLAMP(red   * 255);
-    m_color[1] = CLAMP(green * 255);
-    m_color[2] = CLAMP(blue  * 255);
-    m_color[3] = CLAMP(alpha * 255);
-   setPixModified();
+  m_color[0] = CLAMP(red   * 255);
+  m_color[1] = CLAMP(green * 255);
+  m_color[2] = CLAMP(blue  * 255);
+  m_color[3] = CLAMP(alpha * 255);
+  setPixModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -101,8 +101,8 @@ void pix_color :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_color),
                    gensym("pix_colour"), A_NULL);
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
-            gensym("vec_gain"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
+                  gensym("vec_gain"), A_GIMME, A_NULL);
 }
 void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {

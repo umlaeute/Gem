@@ -65,8 +65,8 @@ void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
 void part_size :: renderParticles(GemState *state)
 {
   if (m_tickTime > 0.f)    {
-      pSize(m_size[0], m_size[1], m_size[2]);
-    }
+    pSize(m_size[0], m_size[1], m_size[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////

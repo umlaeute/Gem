@@ -33,7 +33,7 @@ GEMglFinish :: ~GEMglFinish () {}
 // Render
 //
 void GEMglFinish :: render(GemState *state) {
-        glFinish ();
+  glFinish ();
 }
 
 /////////////////////////////////////////////////////////

@@ -33,7 +33,7 @@ GEMglPushMatrix :: ~GEMglPushMatrix () {}
 // Render
 //
 void GEMglPushMatrix :: render(GemState *state) {
-        glPushMatrix ();
+  glPushMatrix ();
 }
 /////////////////////////////////////////////////////////
 // static member function

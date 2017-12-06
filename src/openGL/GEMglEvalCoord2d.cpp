@@ -24,18 +24,18 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalCoord2d , t_floatarg, A_DEFFLOAT, t_float
 // Constructor
 //
 GEMglEvalCoord2d :: GEMglEvalCoord2d    (t_floatarg arg0, t_floatarg arg1) :
-                u(static_cast<GLdouble>(arg0)),
-                v(static_cast<GLdouble>(arg1))
+  u(static_cast<GLdouble>(arg0)),
+  v(static_cast<GLdouble>(arg1))
 {
-        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u"));
-        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglEvalCoord2d :: ~GEMglEvalCoord2d () {
-inlet_free(m_inlet[0]);
-inlet_free(m_inlet[1]);
+  inlet_free(m_inlet[0]);
+  inlet_free(m_inlet[1]);
 }
 //////////////////
 // extension check
@@ -48,20 +48,20 @@ bool GEMglEvalCoord2d :: isRunnable(void) {
 // Render
 //
 void GEMglEvalCoord2d :: render(GemState *state) {
-        glEvalCoord2d (u, v);
+  glEvalCoord2d (u, v);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
 void GEMglEvalCoord2d :: uMess (t_float arg1) { // FUN
-        u = static_cast<GLdouble>(arg1);
-        setModified();
+  u = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 void GEMglEvalCoord2d :: vMess (t_float arg1) { // FUN
-        v = static_cast<GLdouble>(arg1);
-        setModified();
+  v = static_cast<GLdouble>(arg1);
+  setModified();
 }
 
 
@@ -70,13 +70,13 @@ void GEMglEvalCoord2d :: vMess (t_float arg1) { // FUN
 //
 
 void GEMglEvalCoord2d :: obj_setupCallback(t_class *classPtr) {
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord2d::uMessCallback),        gensym("u"), A_DEFFLOAT, A_NULL);
-         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord2d::vMessCallback),        gensym("v"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord2d::uMessCallback),        gensym("u"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord2d::vMessCallback),        gensym("v"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalCoord2d :: uMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->uMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->uMess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalCoord2d :: vMessCallback (void* data, t_float arg0){
-        GetMyClass(data)->vMess ( static_cast<t_float>(arg0));
+  GetMyClass(data)->vMess ( static_cast<t_float>(arg0));
 }

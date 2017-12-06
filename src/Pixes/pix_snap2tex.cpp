@@ -33,18 +33,18 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap2tex);
 
 pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
   :
-    m_textureObj(0), m_textureType(GL_TEXTURE_2D),
-    m_didTexture(false), m_init(false),
+  m_textureObj(0), m_textureType(GL_TEXTURE_2D),
+  m_didTexture(false), m_init(false),
 
-    m_textureOnOff(true),
-    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-    m_rectangle(0), m_canRectangle(0),
-    m_texUnit(0),
-    m_x(0), m_y(0), m_width(-1), m_height(-1),
-    m_texWidth(-1), m_texHeight(-1),
-    m_xRatio(1.), m_yRatio(1.),
-    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
-    m_outTexInfo(NULL)
+  m_textureOnOff(true),
+  m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
+  m_rectangle(0), m_canRectangle(0),
+  m_texUnit(0),
+  m_x(0), m_y(0), m_width(-1), m_height(-1),
+  m_texWidth(-1), m_texHeight(-1),
+  m_xRatio(1.), m_yRatio(1.),
+  m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
+  m_outTexInfo(NULL)
 {
   switch(argc) {
   case 4:
@@ -145,7 +145,7 @@ void pix_snap2tex :: setTexCoords(float x, float y) {
 /////////////////////////////////////////////////////////
 void pix_snap2tex :: snapMess(void)
 {
- if(getState()==INIT) {
+  if(getState()==INIT) {
     verbose(0, "not initialized yet with a valid context");
     return;
   }

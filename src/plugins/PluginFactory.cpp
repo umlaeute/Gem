@@ -83,30 +83,30 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
     try {
       dll=new GemDylib(f, "");
     } catch (GemException&x) {
-        // oops, on w32 this might simply be because getFilenameListing() stripped the path
-        // so let's try again, with Path added...
-        if(f.find(path) == f.npos) {
-            try {
-                std::string f1=path;
-                f1+=f;
-                dll=new GemDylib(f1, "");
-            } catch (GemException&x1) {
-                // giving up
-                std::cerr << "library loading returned: " << x1.what() << std::endl;
-                dll=NULL;
-            }
-        } else {
-            std::cerr << "library loading returned: " << x.what() << std::endl;
-            dll=NULL;
+      // oops, on w32 this might simply be because getFilenameListing() stripped the path
+      // so let's try again, with Path added...
+      if(f.find(path) == f.npos) {
+        try {
+          std::string f1=path;
+          f1+=f;
+          dll=new GemDylib(f1, "");
+        } catch (GemException&x1) {
+          // giving up
+          std::cerr << "library loading returned: " << x1.what() << std::endl;
+          dll=NULL;
         }
+      } else {
+        std::cerr << "library loading returned: " << x.what() << std::endl;
+        dll=NULL;
+      }
     }
     if(dll){ // loading succeeded
-        try {
-            m_pimpl->p_loaded.push_back(f);
-            count++;
-        } catch (GemException&x) {
-            std::cerr << "plugin loading returned: " << x.what() << std::endl;
-        }
+      try {
+        m_pimpl->p_loaded.push_back(f);
+        count++;
+      } catch (GemException&x) {
+        std::cerr << "plugin loading returned: " << x.what() << std::endl;
+      }
     }
 
   }
@@ -160,19 +160,19 @@ namespace {
 
 }
 #define PLUGIN_INIT(x) s=-1; gem::Settings::get("gem.plugins."#x".startup", s); \
-        if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
+  if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
 
 namespace gem { namespace plugins {
-void init(void) {
-    int s, s0=1;
-    gem::Settings::get("gem.plugins.startup", s0);
-    using namespace gem::plugins;
+    void init(void) {
+      int s, s0=1;
+      gem::Settings::get("gem.plugins.startup", s0);
+      using namespace gem::plugins;
 
-    PLUGIN_INIT(film);
-    PLUGIN_INIT(imageloader);
-    PLUGIN_INIT(imagesaver);
-    PLUGIN_INIT(modelloader);
-    PLUGIN_INIT(record);
-    PLUGIN_INIT(video);
-}
-}; };
+      PLUGIN_INIT(film);
+      PLUGIN_INIT(imageloader);
+      PLUGIN_INIT(imagesaver);
+      PLUGIN_INIT(modelloader);
+      PLUGIN_INIT(record);
+      PLUGIN_INIT(video);
+    }
+  }; };

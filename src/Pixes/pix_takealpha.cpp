@@ -43,15 +43,15 @@ pix_takealpha :: ~pix_takealpha()
 /////////////////////////////////////////////////////////
 void pix_takealpha :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
 
-    while(datasize--)    {
-      leftPix[chAlpha] =rightPix[chAlpha];
-      leftPix += 4;
-      rightPix += 4;
-    }
+  while(datasize--)    {
+    leftPix[chAlpha] =rightPix[chAlpha];
+    leftPix += 4;
+    rightPix += 4;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -60,11 +60,11 @@ void pix_takealpha :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_takealpha :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 {
-    int datasize = image.xsize * image.ysize;
-    unsigned char *leftPix = image.data;
-    unsigned char *rightPix = right.data;
+  int datasize = image.xsize * image.ysize;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
 
-    while(datasize--)
+  while(datasize--)
     {
       leftPix[chAlpha] = rightPix[chGray];
       leftPix += 4;

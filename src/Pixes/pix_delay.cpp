@@ -31,7 +31,7 @@ pix_delay :: pix_delay(t_float &f)
   myImage.allocate(1*m_maxframes);
   m_curframe = m_frame = 0;
 
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("delay"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("delay"));
 }
 
 /////////////////////////////////////////////////////////

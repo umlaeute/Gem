@@ -50,23 +50,23 @@ vertex_info :: ~vertex_info()
 /////////////////////////////////////////////////////////
 void vertex_info :: render(GemState *state)
 {
-    int size;
-    GLfloat *VertexArray;
+  int size;
+  GLfloat *VertexArray;
 
-    VertexArray =state->VertexArray;
-    if (state->VertexArray == NULL || state->VertexArraySize <= 0){
-        error("no vertex array!");
-        return;
-    }
+  VertexArray =state->VertexArray;
+  if (state->VertexArray == NULL || state->VertexArraySize <= 0){
+    error("no vertex array!");
+    return;
+  }
 
-    if (state->VertexArray == NULL ){
-        error("no color array!");
-        return;
-    }
+  if (state->VertexArray == NULL ){
+    error("no color array!");
+    return;
+  }
 
-    size = state->VertexArraySize;
+  size = state->VertexArraySize;
 
-    outlet_float(m_Vsize, (t_float)size);
+  outlet_float(m_Vsize, (t_float)size);
 }
 
 /////////////////////////////////////////////////////////
@@ -75,8 +75,8 @@ void vertex_info :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_info :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_info::vertexMessCallback),
-            gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_info::vertexMessCallback),
+                  gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
 void vertex_info :: vertexMessCallback(void *data,  t_float num, t_float counter)

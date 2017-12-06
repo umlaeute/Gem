@@ -33,7 +33,7 @@
 
 CPPEXTERN_NEW_WITH_GIMME(pix_write);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_write
 //
@@ -92,7 +92,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_write :: ~pix_write(void)
 {
-        cleanImage();
+  cleanImage();
 }
 
 
@@ -142,19 +142,19 @@ void pix_write :: doWrite(void)
                m_originalImage->format, m_originalImage->type, m_originalImage->data);
 
 #if 0 // asynchronous texture fetching idea sketch
-/* Enable AGP storage hints */
-        glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
-        glTextureRangeAPPLE(...);
-        glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+  /* Enable AGP storage hints */
+  glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
+  glTextureRangeAPPLE(...);
+  glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
 
-        /* Copy from Frame Buffer */
-        glCopyTexSubImage2d(...);
+  /* Copy from Frame Buffer */
+  glCopyTexSubImage2d(...);
 
-        /* Flush into AGP */
-        glFlush(...);
+  /* Flush into AGP */
+  glFlush(...);
 
-        /* Pull out of AGP */
-        glGetTexImage(...);
+  /* Pull out of AGP */
+  glGetTexImage(...);
 #endif
 
 
