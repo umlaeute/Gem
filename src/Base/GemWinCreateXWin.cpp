@@ -402,7 +402,9 @@ void destroyGemWindow(WindowInfo &info)
       }
 #endif
 
-      err=XCloseDisplay(info.dpy); /* this crashes if no window is there */
+      if(XCloseDisplay(info.dpy)) { /* this crashes if no window is there */
+        verbose(1, "XCloseDisplay returned %d", err);
+      }
     }
   info.dpy = NULL;
   info.win = 0;
@@ -465,8 +467,9 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
         case MotionNotify:
           triggerMotionEvent(eb->x, eb->y);
           if(!win.have_border) {
-            int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
-            err=0;
+            if(XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime)) {
+              break;
+            }
           }
           break;
         case KeyPress:
