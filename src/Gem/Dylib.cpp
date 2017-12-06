@@ -125,9 +125,8 @@ public:
     delete handle;
     handle=NULL;
 
-    std::string errormsg;
 #ifdef DL_OPEN
-    errormsg=dlerror();
+    std::string errormsg=dlerror();
     if(!errormsg.empty()) {
       std::string error="dlerror '";
       error+=errormsg;
