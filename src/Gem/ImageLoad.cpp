@@ -27,7 +27,7 @@ namespace gem { namespace image {
       load::callback cb;
       void*userdata;
       std::string filename;
-      InData(load::callback cb_, void*data_, std::string fname) :
+      InData(load::callback cb_, void*data_, const std::string&fname) :
         cb(cb_),
         userdata(data_),
         filename(fname) {

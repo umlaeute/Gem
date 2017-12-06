@@ -60,13 +60,13 @@ struct PIMPL {
   // dictionary for setting values
   std::map <std::string, t_atom> data;
 
-  virtual t_atom*get(std::string name) {
+  virtual t_atom*get(const std::string&name) {
     std::map<std::string, t_atom>::iterator it=data.find(name);
     if(it==data.end())
       return NULL;
     return &it->second;
   }
-  virtual void set(std::string name, t_atom*value) {
+  virtual void set(const std::string&name, t_atom*value) {
     // LATER: we should expand envvariables
     if(value) {
       data[name]= *value;
@@ -75,22 +75,22 @@ struct PIMPL {
     }
   }
 
-  void set(std::string name, int i) {
+  void set(const std::string&name, int i) {
     t_atom a;
     SETFLOAT(&a, i);
     set(name, &a);
   }
-  void set(std::string name, float f) {
+  void set(const std::string&name, float f) {
     t_atom a;
     SETFLOAT(&a, f);
     set(name, &a);
   }
-  void set(std::string name, double f) {
+  void set(const std::string&name, double f) {
     t_atom a;
     SETFLOAT(&a, f);
     set(name, &a);
   }
-  void set(std::string name, std::string s) {
+  void set(const std::string&name, const std::string&s) {
     t_atom a;
     SETSYMBOL(&a, gensym(s.c_str()));
     set(name, &a);
