@@ -127,7 +127,7 @@ namespace {
       return;
     if(max==min)return;
     double d=((double)(cur-min))/((double)(max-min));
-    printf("gotV '%s' to %f (%d in %d..%d)\n", propName.c_str(), d, cur, min, max);
+    verbose(1, "[GEM::videoVIDS] gotV '%s' to %f (%d in %d..%d)", propName.c_str(), d, (int)cur, (int)min, (int)max);
     props.set(propName, d);
   }
   static inline void getVideoCamera(videoInput&vi, int device,
@@ -147,7 +147,7 @@ namespace {
       return;
     if(max==min)return;
     double d=((double)(cur-min))/((double)(max-min));
-    printf("gotC '%s' to %f (%d in %d..%d)\n", propName.c_str(), d, cur, min, max);
+    verbose(1, "[GEM::videoVIDS] gotC '%s' to %f (%d in %d..%d)\n", propName.c_str(), d, (int)cur, (int)min, (int)max);
     props.set(propName, d);
   }
 };
