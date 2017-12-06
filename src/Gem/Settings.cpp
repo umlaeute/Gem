@@ -179,8 +179,7 @@ struct PIMPL {
 #endif
 
     setEnv("settings.file", "GEM_SETTINGS");
-    t_atom*a=NULL;
-    a=get("settings.file");
+    t_atom*a=get("settings.file");
     if(a) {
       std::string s=atom_getsymbol(a)->s_name;
       open(gem::files::expandEnv(s.c_str(), true).c_str(), ".");

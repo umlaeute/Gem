@@ -155,8 +155,8 @@ namespace {
     }
 
     char*mypath=0;
-    t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
 #ifdef HAVE_M_IMP_H
+    t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
     mypath=c->c_externdir->s_name;
 #endif /* HAVE_S_STUFF_H */
 

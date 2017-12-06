@@ -150,7 +150,6 @@ void TextBase :: setPrecision(float prec)
 void TextBase :: fontNameMess(const std::string&filename){
   m_valid = 0;
   const char *bufptr=NULL;
-  int fd=-1;
 
   if(filename.empty()){
     error("no font-file specified");

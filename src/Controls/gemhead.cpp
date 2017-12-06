@@ -248,7 +248,7 @@ void gemhead :: receive(t_symbol*s, int argc, t_atom*argv) {
         startRendering();
       }
     } else if (2==argc && A_POINTER==argv[0].a_type && A_POINTER==argv[1].a_type) {
-      GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
+      //GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
       GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
       renderGL(state);
     }

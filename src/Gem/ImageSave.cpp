@@ -42,7 +42,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int typ
 {
   gem::plugins::imagesaver*piximagesaver=gem::PixImageSaver::getInstance();
   if(piximagesaver) {
-    std::string fname=filename;
     std::string mimetype;
     gem::Properties props;
     if(type>0) {
