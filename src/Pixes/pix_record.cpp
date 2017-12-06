@@ -21,7 +21,7 @@ public:
   ~PIMPL(void) {};
 
   struct codechandle {
-    codechandle(gem::plugins::record*h, const std::string c):handle(h), codec(c) {}
+    codechandle(gem::plugins::record*h, const std::string&c):handle(h), codec(c) {}
 
     gem::plugins::record*handle;
     std::string codec;
@@ -29,7 +29,7 @@ public:
   std::map<std::string, std::vector<codechandle> >m_codechandle;
   std::vector<std::string>m_codecs;
 
-  void addCodecHandle(gem::plugins::record*handle, const std::string codec) {
+  void addCodecHandle(gem::plugins::record*handle, const std::string&codec) {
 #ifdef __GNUC__
 # warning better handling of duplicate codecs
 #endif

@@ -31,7 +31,7 @@ gem::BasePluginFactory::~BasePluginFactory(void) {
   delete m_pimpl;  m_pimpl=NULL;
 }
 
-int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path) {
+int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std::string&path_) {
   int already=m_pimpl->p_loaded.size();
   if(already>0) {
     int once=1;
@@ -46,6 +46,7 @@ int gem::BasePluginFactory::doLoadPlugins(std::string basename, std::string path
       return 0;
     }
   }
+  std::string path = path_;
   if(path.empty()){
     gem::Settings::get("gem.path", path);
   }

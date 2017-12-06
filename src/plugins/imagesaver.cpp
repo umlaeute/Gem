@@ -144,7 +144,7 @@ namespace gem { namespace plugins {
       //e2m["xwd"]="image/x-xwindowdump";
     }
 
-    static const std::string imgName2Mime(const std::string filename) {
+    static const std::string imgName2Mime(const std::string&filename) {
       std::string empty;
       if(NULL==s_extension2mime) {
 	build_extension2mime();

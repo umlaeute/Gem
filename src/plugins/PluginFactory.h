@@ -15,7 +15,7 @@ namespace gem {
 
   class GEM_EXTERN BasePluginFactory {
   protected:
-    int doLoadPlugins(std::string basename, std::string path);
+    int doLoadPlugins(const std::string&basename, const std::string&path);
     BasePluginFactory(void);
     virtual ~BasePluginFactory(void);
 
