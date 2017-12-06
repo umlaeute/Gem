@@ -102,8 +102,8 @@ void pix_rds :: processRGBAImage(imageStruct &image)
                 while(x - stride/2 >= 0) {
                     v = *(src + x - stride/2);
                     R = (v&0xff0000)>>(16+6);
-		    G = (v&0xff00)>>(8+6);
-		    B = (v&0xff)>>7;
+                    G = (v&0xff00)>>(8+6);
+                    B = (v&0xff)>>7;
                     x -= stride + R + G + B;
                     if(x < 0) break;
                     *(dest + x) = 0xffffffff;
@@ -151,8 +151,8 @@ void pix_rds :: processRGBAImage(imageStruct &image)
       target += image.xsize + (image.xsize - stride) / 2;
       for(y=0; y<4; y++) {
         for(x=0; x<4; x++) {
-	  target[x] = 0xffff0000;
-	  target[x+stride] = 0xffff0000;
+          target[x] = 0xffff0000;
+          target[x+stride] = 0xffff0000;
         }
         target += image.xsize;
       }
@@ -180,76 +180,76 @@ void pix_rds :: processGrayImage(imageStruct &image)
 
     if(method) {
       for(y=0; y<image.ysize; y++) {
-	for(i=0; i<stride; i++) {
-	  if(inline_fastrand()&0xc0000000) continue;
+        for(i=0; i<stride; i++) {
+          if(inline_fastrand()&0xc0000000) continue;
 
-	  x = image.xsize / 2 + i;
-	  dest[x] = 0xff;
+          x = image.xsize / 2 + i;
+          dest[x] = 0xff;
 
-	  while(x + stride/2 < image.xsize) {
+          while(x + stride/2 < image.xsize) {
             unsigned char R=0, B=0;
-	    v = src[x + stride/2];
-	    R=v>>6; B=v>>7;
-	    x += stride;
-	    x += R + R + B;
-	    if(x >= image.xsize) break;
-	    dest[x] = 0xff;
-	  }
+            v = src[x + stride/2];
+            R=v>>6; B=v>>7;
+            x += stride;
+            x += R + R + B;
+            if(x >= image.xsize) break;
+            dest[x] = 0xff;
+          }
 
-	  x = image.xsize / 2 + i;
-	  while(x - stride/2 >= 0) {
+          x = image.xsize / 2 + i;
+          while(x - stride/2 >= 0) {
             unsigned char R=0, B=0;
-	    v = src[x - stride/2];
-	    R=v>>6; B=v>>7;
-	    x -= stride;
-	    x -= R + R + B;
-	    if(x < 0) break;
-	    dest[x] = 0xff;
-	  }
-	}
-	src += image.xsize;
-	dest += image.xsize;
+            v = src[x - stride/2];
+            R=v>>6; B=v>>7;
+            x -= stride;
+            x -= R + R + B;
+            if(x < 0) break;
+            dest[x] = 0xff;
+          }
+        }
+        src += image.xsize;
+        dest += image.xsize;
       }
     } else {
       for(y=0; y<image.ysize; y++) {
-	for(i=0; i<stride; i++) {
-	  if(inline_fastrand()&0xc0000000) continue;
+        for(i=0; i<stride; i++) {
+          if(inline_fastrand()&0xc0000000) continue;
 
-	  x = image.xsize / 2 + i;
-	  dest[x] = 0xff;
+          x = image.xsize / 2 + i;
+          dest[x] = 0xff;
 
-	  while(x + stride/2 < image.xsize) {
+          while(x + stride/2 < image.xsize) {
             unsigned char R=0, B=0;
-	    v = src[x + stride/2];
-	    R=v>>6; B=v>>7;
-	    x += stride - R - R - B;
-	    if(x >= image.xsize) break;
-	    dest[x] = 0xff;
-	  }
+            v = src[x + stride/2];
+            R=v>>6; B=v>>7;
+            x += stride - R - R - B;
+            if(x >= image.xsize) break;
+            dest[x] = 0xff;
+          }
 
-	  x = image.xsize / 2 + i;
-	  while(x - stride/2 >= 0) {
+          x = image.xsize / 2 + i;
+          while(x - stride/2 >= 0) {
             unsigned char R=0, B=0;
-	    v = src[x - stride/2];
-	    R=v>>6; B=v>>7;
-	    x -= stride - R - R - B;
-	    if(x < 0) break;
-	    dest[x] = 0xff;
-	  }
-	}
-	src += image.xsize;
-	dest += image.xsize;
+            v = src[x - stride/2];
+            R=v>>6; B=v>>7;
+            x -= stride - R - R - B;
+            if(x < 0) break;
+            dest[x] = 0xff;
+          }
+        }
+        src += image.xsize;
+        dest += image.xsize;
       }
     }
 
     if(doDots){
       target += image.xsize + (image.xsize - stride) / 2;
       for(y=0; y<4; y++) {
-	for(x=0; x<4; x++) {
-	  target[x] = 0xff    ;
-	  target[x+stride] = 0xff    ;
-	}
-	target += image.xsize;
+        for(x=0; x<4; x++) {
+          target[x] = 0xff    ;
+          target[x+stride] = 0xff    ;
+        }
+        target += image.xsize;
       }
     }
     image.data = myImage.data;
@@ -277,72 +277,72 @@ void pix_rds :: processYUVImage(imageStruct &image)
 
     if(method) {
       for(y=0; y<image.ysize; y++) {
-	for(i=0; i<stride; i++) {
-	  if(inline_fastrand()&0xc0000000) continue;
+        for(i=0; i<stride; i++) {
+          if(inline_fastrand()&0xc0000000) continue;
 
-	  x = image.xsize / 2 + i;
-	  dest[x] = 0xff;
+          x = image.xsize / 2 + i;
+          dest[x] = 0xff;
 
-	  while(x + stride/2 < image.xsize) {
-	    v = src[x + stride/2] & 0x00ff; // UYVY, we only want Y
-	    R=v>>6; B=v>>7;
-	    x += stride;
-	    x += R + R + B;
-	    if(x >= image.xsize) break;
-	    dest[x] = 0xff;
-	  }
+          while(x + stride/2 < image.xsize) {
+            v = src[x + stride/2] & 0x00ff; // UYVY, we only want Y
+            R=v>>6; B=v>>7;
+            x += stride;
+            x += R + R + B;
+            if(x >= image.xsize) break;
+            dest[x] = 0xff;
+          }
 
-	  x = image.xsize / 2 + i;
-	  while(x - stride/2 >= 0) {
-	    v = src[x - stride/2] & 0x00ff; // UYVY, we only want Y
-	    R=v>>6; B=v>>7;
-	    x -= stride;
-	    x -= R + R + B;
-	    if(x < 0) break;
-	    dest[x] = 0xff;
-	  }
-	}
-	src += image.xsize;
-	dest += image.xsize;
+          x = image.xsize / 2 + i;
+          while(x - stride/2 >= 0) {
+            v = src[x - stride/2] & 0x00ff; // UYVY, we only want Y
+            R=v>>6; B=v>>7;
+            x -= stride;
+            x -= R + R + B;
+            if(x < 0) break;
+            dest[x] = 0xff;
+          }
+        }
+        src += image.xsize;
+        dest += image.xsize;
       }
     } else {
       for(y=0; y<image.ysize; y++) {
-	for(i=0; i<stride; i++) {
-	  if(inline_fastrand()&0xc0000000) continue;
+        for(i=0; i<stride; i++) {
+          if(inline_fastrand()&0xc0000000) continue;
 
-	  x = image.xsize / 2 + i;
-	  dest[x] = 0xff;
+          x = image.xsize / 2 + i;
+          dest[x] = 0xff;
 
-	  while(x + stride/2 < image.xsize) {
-	    v = src[x + stride/2] & 0x00ff;
-	    R=v>>6; B=v>>7;
-	    x += stride - R - R - B;
-	    if(x >= image.xsize) break;
-	    dest[x] = 0xff;
-	  }
+          while(x + stride/2 < image.xsize) {
+            v = src[x + stride/2] & 0x00ff;
+            R=v>>6; B=v>>7;
+            x += stride - R - R - B;
+            if(x >= image.xsize) break;
+            dest[x] = 0xff;
+          }
 
-	  x = image.xsize / 2 + i;
-	  while(x - stride/2 >= 0) {
-	    v = src[x - stride/2] & 0x00ff;
-	    R=v>>6; B=v>>7;
-	    x -= stride - R - R - B;
-	    if(x < 0) break;
-	    dest[x] = 0xff;
-	  }
-	}
-	src += image.xsize;
-	dest += image.xsize;
+          x = image.xsize / 2 + i;
+          while(x - stride/2 >= 0) {
+            v = src[x - stride/2] & 0x00ff;
+            R=v>>6; B=v>>7;
+            x -= stride - R - R - B;
+            if(x < 0) break;
+            dest[x] = 0xff;
+          }
+        }
+        src += image.xsize;
+        dest += image.xsize;
       }
     }
 
     if(doDots){
       target += image.xsize + (image.xsize - stride) / 2;
       for(y=0; y<4; y++) {
-	for(x=0; x<4; x++) {
-	  target[x] = 0xff    ;
-	  target[x+stride] = 0xff    ;
-	}
-	target += image.xsize;
+        for(x=0; x<4; x++) {
+          target[x] = 0xff    ;
+          target[x+stride] = 0xff    ;
+        }
+        target += image.xsize;
       }
     }
     image.fromGray(myImage.data);
@@ -357,11 +357,11 @@ void pix_rds :: obj_setupCallback(t_class *classPtr)
 {
   //  class_addfloat(classPtr, reinterpret_cast<t_method>(&pix_rds::methMessCallback));
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rds::methMessCallback),
-		  gensym("method"), A_FLOAT, A_NULL);
+                  gensym("method"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rds::strideMessCallback),
-		  gensym("stride"), A_FLOAT, A_NULL);
+                  gensym("stride"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rds::seedMessCallback),
-		  gensym("seed"), A_FLOAT, A_NULL);
+                  gensym("seed"), A_FLOAT, A_NULL);
 }
 
 void pix_rds :: methMessCallback(void *data, t_float state)

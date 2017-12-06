@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -25,7 +25,7 @@ using namespace gem::utils::gl;
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) :
+GEMglGetIntegerv :: GEMglGetIntegerv    (int argc, t_atom*argv) :
   pname(0),
   m_inlet(0), m_outlet(0)
 {
@@ -85,7 +85,7 @@ void GEMglGetIntegerv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
+void GEMglGetIntegerv :: pnameMess (t_atom arg) {       // FUN
   pname=static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
@@ -95,7 +95,7 @@ void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
 //
 
 void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),  	gensym("pname"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),   gensym("pname"), A_GIMME, A_NULL);
 }
 
 void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv) {

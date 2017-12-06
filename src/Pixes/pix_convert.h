@@ -52,11 +52,11 @@ class GEM_EXTERN pix_convert : public GemPixObj
 
     //////////
     // Do the processing
-    void 	processImage(imageStruct &image);
+    void        processImage(imageStruct &image);
 
     imageStruct m_image;
  private:
     static void colorMessCallback(void *data, t_symbol*s);
 };
 
-#endif	// for header file
+#endif  // for header file

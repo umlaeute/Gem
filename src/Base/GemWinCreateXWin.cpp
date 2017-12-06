@@ -54,7 +54,7 @@ static int snglBuf24Stereo[] = {GLX_RGBA,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
-								  GLX_STEREO,
+                                                                  GLX_STEREO,
                           None};
 static int dblBuf24[] =  {GLX_RGBA,
                           GLX_RED_SIZE, 4,
@@ -77,7 +77,7 @@ static int dblBuf24Stereo[] =  {GLX_RGBA,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           GLX_DOUBLEBUFFER,
-								  GLX_STEREO,
+                                                                  GLX_STEREO,
                           None};
 static int snglBuf8[] =  {GLX_RGBA,
                           GLX_RED_SIZE, 3,
@@ -90,7 +90,7 @@ static int snglBuf8Stereo[] =  {GLX_RGBA,
                           GLX_GREEN_SIZE, 3,
                           GLX_BLUE_SIZE, 2,
                           GLX_DEPTH_SIZE, 16,
-								  GLX_STEREO,
+                                                                  GLX_STEREO,
                           None};
 static int dblBuf8[] =   {GLX_RGBA,
                           GLX_RED_SIZE, 1,
@@ -106,7 +106,7 @@ static int dblBuf8Stereo[] =   {GLX_RGBA,
                           GLX_BLUE_SIZE, 1,
                           GLX_DEPTH_SIZE, 16,
                           GLX_DOUBLEBUFFER,
-								  GLX_STEREO,
+                                                                  GLX_STEREO,
                           None};
 
 static int xerr=0;
@@ -186,17 +186,17 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   if (hints.buffer == 2) {
     // try for a double-buffered on 24bit machine (try stereo first)
     vi = glXChooseVisual(info.dpy, info.screen, dblBuf24Stereo);
-	 if (vi == NULL)
-		 vi = glXChooseVisual(info.dpy, info.screen, dblBuf24);
+         if (vi == NULL)
+                 vi = glXChooseVisual(info.dpy, info.screen, dblBuf24);
     if (vi == NULL) {
       // try for a double buffered on a 8bit machine (try stereo first)
       vi = glXChooseVisual(info.dpy, info.screen, dblBuf8Stereo);
-		if(vi == NULL)
-			vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
+                if(vi == NULL)
+                        vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
       if (vi == NULL) {
-	error("GEM: Unable to create double buffer window");
-	destroyGemWindow(info);
-	return(0);
+        error("GEM: Unable to create double buffer window");
+        destroyGemWindow(info);
+        return(0);
       }
       post("GEM: Only using 8 color bits");
     }
@@ -205,17 +205,17 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   else {
     // try for a single buffered on a 24bit machine (try stereo first)
     vi = glXChooseVisual(info.dpy, info.screen, snglBuf24Stereo);
-	 if (vi == NULL)
-		 vi = glXChooseVisual(info.dpy, info.screen, snglBuf24);
+         if (vi == NULL)
+                 vi = glXChooseVisual(info.dpy, info.screen, snglBuf24);
     if (vi == NULL) {
       // try for a single buffered on a 8bit machine (try stereo first)
       vi = glXChooseVisual(info.dpy, info.screen, snglBuf8Stereo);
-		if (vi == NULL)
-			vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
+                if (vi == NULL)
+                        vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
       if (vi == NULL) {
-	error("GEM: Unable to create single buffer window");
-	destroyGemWindow(info);
-	return(0);
+        error("GEM: Unable to create single buffer window");
+        destroyGemWindow(info);
+        return(0);
       }
       post("GEM: Only using 8 color bits");
     }
@@ -240,7 +240,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
   // create the X color map
   info.cmap = XCreateColormap(info.dpy, RootWindow(info.dpy, vi->screen),
-			      vi->visual, AllocNone);
+                              vi->visual, AllocNone);
   if (!info.cmap) {
     error("GEM: Could not create X colormap");
     destroyGemWindow(info);
@@ -265,7 +265,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
       if ((modes[i]->hdisplay == hints.width) && (modes[i]->vdisplay == hints.height)) {
-	bestMode = i;
+        bestMode = i;
       }
     }
 
@@ -293,9 +293,9 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   info.fs = fullscreen;
   info.win = XCreateWindow(info.dpy, RootWindow(info.dpy, vi->screen),
-			   x, y, hints.real_w, hints.real_h,
-			   0, vi->depth, InputOutput,
-			   vi->visual, flags, &swa);
+                           x, y, hints.real_w, hints.real_h,
+                           0, vi->depth, InputOutput,
+                           vi->visual, flags, &swa);
   if (!info.win)
     {
       error("GEM: Could not create X window");
@@ -314,8 +314,8 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     XSetWMProtocols(info.dpy, info.win, &info.delete_atom,1);
 
   XSetStandardProperties(info.dpy, info.win,
-			 hints.title, "gem",
-			 None, 0, 0, NULL);
+                         hints.title, "gem",
+                         None, 0, 0, NULL);
   try{
     xerr=0;
     glXMakeCurrent(info.dpy, info.win, info.context);
@@ -356,10 +356,10 @@ int cursorGemWindow(WindowInfo &info, int state)
     XColor dummy;
 
     blank = XCreateBitmapFromData(info.dpy, info.win,
-				  data, 1, 1);
+                                  data, 1, 1);
 
     cursor = XCreatePixmapCursor(info.dpy, blank, blank,
-				 &dummy, &dummy, 0, 0);
+                                 &dummy, &dummy, 0, 0);
     XFreePixmap(info.dpy, blank);
     XDefineCursor(info.dpy, info.win,cursor);
   }
@@ -386,19 +386,19 @@ void destroyGemWindow(WindowInfo &info)
       glXMakeCurrent(info.dpy, None, NULL); /* this crashes if no window is there! */
 
       if (info.win)
-	err=XDestroyWindow(info.dpy, info.win);
+        err=XDestroyWindow(info.dpy, info.win);
       if (info.have_constContext && info.context) {
         // this crashes sometimes on my laptop:
-	glXDestroyContext(info.dpy, info.context);
+        glXDestroyContext(info.dpy, info.context);
       }
       if (info.cmap)
-	err=XFreeColormap(info.dpy, info.cmap);
+        err=XFreeColormap(info.dpy, info.cmap);
 
 #ifdef HAVE_LIBXXF86VM
       if (info.fs){
-	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
-	XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
-	info.fs=0;
+        XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
+        XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
+        info.fs=0;
       }
 #endif
 

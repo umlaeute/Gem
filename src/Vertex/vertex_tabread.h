@@ -42,34 +42,34 @@ class GEM_EXTERN vertex_tabread : public GemVertex
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_tabread(void);
+        //////////
+        // Destructor
+        virtual ~vertex_tabread(void);
 
-        GLfloat	*m_VertexArray;
-        GLfloat	*m_ColorArray;
-		GLfloat *m_NormalArray;
-        GLfloat	*m_TexCoordArray;
-		int		 m_size;
+        GLfloat *m_VertexArray;
+        GLfloat *m_ColorArray;
+                GLfloat *m_NormalArray;
+        GLfloat *m_TexCoordArray;
+                int              m_size;
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 
-		//////////
-		// set the dirty flag
-		bool m_doit;
-		void bangMess(void);
+                //////////
+                // set the dirty flag
+                bool m_doit;
+                void bangMess(void);
 
-	//////////
-	// set the tables that hold the interleaved data (vertex, color, ...)
-	virtual void tableMess(int,t_atom*);
-	t_symbol *m_Vtable, *m_Ctable, *m_Ttable, *m_Ntable;
+        //////////
+        // set the tables that hold the interleaved data (vertex, color, ...)
+        virtual void tableMess(int,t_atom*);
+        t_symbol *m_Vtable, *m_Ctable, *m_Ttable, *m_Ntable;
 
  private:
-        static void 	tableMessCallback(void *data, t_symbol*,int,t_atom*);
-		static void     bangMessCallback(void*data);
+        static void     tableMessCallback(void *data, t_symbol*,int,t_atom*);
+                static void     bangMessCallback(void*data);
 
 };
 
-#endif	// for header file
+#endif  // for header file

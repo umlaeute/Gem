@@ -26,24 +26,24 @@
 
 #define DEBUGPOST ::startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__ ), ::post
 
-#define PIXEL_SIZE	32		// 16 or 32
-#define DEPTH_SIZE	16
+#define PIXEL_SIZE      32              // 16 or 32
+#define DEPTH_SIZE      16
 
 struct structGLInfo // storage for setup info
 {
-  SInt16 width;		// input: width of drawable (screen width in full screen mode), return: actual width allocated
-  SInt16 height;		// input: height of drawable (screen height in full screen mode), return: actual height allocated
-  UInt32 pixelDepth;		// input: requested pixel depth
-  Boolean fDepthMust;		// input: pixel depth must be set (if false then current depth will be used if able)
-  Boolean fFullscreen;	// input: use DSp to get fullscreen? (or find full screen renderer)
+  SInt16 width;         // input: width of drawable (screen width in full screen mode), return: actual width allocated
+  SInt16 height;                // input: height of drawable (screen height in full screen mode), return: actual height allocated
+  UInt32 pixelDepth;            // input: requested pixel depth
+  Boolean fDepthMust;           // input: pixel depth must be set (if false then current depth will be used if able)
+  Boolean fFullscreen;  // input: use DSp to get fullscreen? (or find full screen renderer)
   // if fFullscreen, will search for full screen renderers first then use DSp for others
   //  unless a device is specified, in which case we will try there first
-  Boolean fAcceleratedMust; 	// input: must renderer be accelerated?
-  GLint aglAttributes[64]; 	// input: pixel format attributes always required (reset to what was actually allocated)
-  SInt32 VRAM;		// input: minimum VRAM; output: actual (if successful otherwise input)
-  SInt32 textureRAM;		// input: amount of texture RAM required on card; output: same (used in allcoation to ensure enough texture
-  AGLPixelFormat	fmt;	// input: none; output pixel format...
-  SInt32 freq;		// input: frequency request for display; output: actual
+  Boolean fAcceleratedMust;     // input: must renderer be accelerated?
+  GLint aglAttributes[64];      // input: pixel format attributes always required (reset to what was actually allocated)
+  SInt32 VRAM;          // input: minimum VRAM; output: actual (if successful otherwise input)
+  SInt32 textureRAM;            // input: amount of texture RAM required on card; output: same (used in allcoation to ensure enough texture
+  AGLPixelFormat        fmt;    // input: none; output pixel format...
+  SInt32 freq;          // input: frequency request for display; output: actual
 };
 typedef struct structGLInfo structGLInfo;
 typedef struct structGLInfo * pstructGLInfo;
@@ -51,12 +51,12 @@ typedef struct structGLInfo * pstructGLInfo;
 // structure for creating a context from a window
 struct structGLWindowInfo // storage for setup info
 {
-  Boolean fAcceleratedMust; 	// input: must renderer be accelerated?
-  GLint aglAttributes[64]; 	// input: pixel format attributes always required (reset to what was actually allocated)
-  SInt32 VRAM;		// input: minimum VRAM; output: actual (if successful otherwise input)
-  SInt32 textureRAM;		// input: amount of texture RAM required on card; output: same (used in allcoation to ensure enough texture
-  AGLPixelFormat	fmt;	// input: none; output pixel format...
-  Boolean fDraggable;		// input: is window going to be dragable,
+  Boolean fAcceleratedMust;     // input: must renderer be accelerated?
+  GLint aglAttributes[64];      // input: pixel format attributes always required (reset to what was actually allocated)
+  SInt32 VRAM;          // input: minimum VRAM; output: actual (if successful otherwise input)
+  SInt32 textureRAM;            // input: amount of texture RAM required on card; output: same (used in allcoation to ensure enough texture
+  AGLPixelFormat        fmt;    // input: none; output pixel format...
+  Boolean fDraggable;           // input: is window going to be dragable,
   //        if so renderer check (accel, VRAM, textureRAM) will look at all renderers vice just the current one
   //        if window is not dragable renderer check will either check the single device or short
   //            circuit to software if window spans multiple devices
@@ -70,21 +70,21 @@ AGLContext masterContext = NULL;
 
 // globals (internal/private) -----------------------------------------------
 
-const RGBColor		rgbBlack = { 0x0000, 0x0000, 0x0000 };
+const RGBColor          rgbBlack = { 0x0000, 0x0000, 0x0000 };
 
 const short kWindowType = kWindowDocumentProc;
 
 // GL stuff
 Boolean gfHasPackedPixels = false;
-structGLWindowInfo	glWInfo;
-AGLDrawable 		gaglDraw = NULL;
-AGLContext			gaglContext = 0;
-GLuint				gFontList = 0;
-char				gInfoString [512] = "";
+structGLWindowInfo      glWInfo;
+AGLDrawable             gaglDraw = NULL;
+AGLContext                      gaglContext = 0;
+GLuint                          gFontList = 0;
+char                            gInfoString [512] = "";
 
-EventHandlerUPP		gEvtHandler;
-EventHandlerRef		ref;
-ProcessSerialNumber	psn = {0, kCurrentProcess };
+EventHandlerUPP         gEvtHandler;
+EventHandlerRef         ref;
+ProcessSerialNumber     psn = {0, kCurrentProcess };
 static pascal OSStatus evtHandler(EventHandlerCallRef myHandler, EventRef event, void* userData);
 
 AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight);
@@ -92,23 +92,23 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 // Prototypes
 // -------------------------------------------------------------------------------------------------------------
 // Takes device # and geometry request and tries to build best context and drawable
-// 	If requested device does not work, will start at first device and walk down devices
-//	 looking for first one that satisfies requirements
+//      If requested device does not work, will start at first device and walk down devices
+//       looking for first one that satisfies requirements
 //  Devices are numbered in order that DMGetFirstScreenDevice/DMGetNextScreenDevice returns,
-//	 fullscreen devices are numbered after this, but they will be searched first if fFullscreen == true,
-//	 they will not be searched in the non-fullscreen case
+//       fullscreen devices are numbered after this, but they will be searched first if fFullscreen == true,
+//       they will not be searched in the non-fullscreen case
 
-// Inputs: 	*pnumDevice: -1: main device, 0: any device, other #: attempt that device first, then any device
-//			*pcontextInfo: request and requirements for cotext and drawable
+// Inputs:      *pnumDevice: -1: main device, 0: any device, other #: attempt that device first, then any device
+//                      *pcontextInfo: request and requirements for cotext and drawable
 
 // Outputs: *paglDraw, *paglContext and *pdspContext as allocated
-//			*pnumDevice to device number in list that was used
-//			*pcontextInfo:  allocated parameters
+//                      *pnumDevice to device number in list that was used
+//                      *pcontextInfo:  allocated parameters
 
 // If fail to build context: paglDraw, paglContext and pdspContext will be NULL
 // If fatal error: will return error and paglDraw, paglContext and pdspContext will be NULL
 // Note: Errors can be generated internally when a specific device fails, this is normal and these
-//		  will not be returned is a subsequent device succeeds
+//                will not be returned is a subsequent device succeeds
 
 OSStatus BuildGL (AGLDrawable* paglDraw, AGLContext* paglContext,
                   short* pnumDevice, pstructGLInfo pcontextInfo, AGLContext aglShareContext);
@@ -160,9 +160,9 @@ GEM_EXTERN void gemAbortRendering();
 //-----------------------------------------------------------------------------------------------------------------------
 AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight)
 {
-  GLint		attrib[64];
-  AGLPixelFormat 	fmt;
-  AGLContext     	ctx;
+  GLint         attrib[64];
+  AGLPixelFormat        fmt;
+  AGLContext            ctx;
 
   // different possible pixel format choices for different renderers
   // basics requirements are RGBA and double buffer
@@ -220,11 +220,11 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 
 // Takes window in the form of an AGLDrawable and geometry request and tries to build best context
 
-// Inputs: 	aglDraw: a valid AGLDrawable (i.e., a WindowPtr)
-//			*pcontextInfo: request and requirements for cotext and drawable
+// Inputs:      aglDraw: a valid AGLDrawable (i.e., a WindowPtr)
+//                      *pcontextInfo: request and requirements for cotext and drawable
 
 // Outputs: *paglContext as allocated
-//			*pcontextInfo:  allocated parameters
+//                      *pcontextInfo:  allocated parameters
 
 // if fail to allocate: paglContext will be NULL
 // if error: will return error and paglContext will be NULL
@@ -243,11 +243,11 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth, short * pHeight
 
 // Takes a drawable and tries to build on it
 
-// Inputs: 	aglDraw: a valid AGLDrawable
-//			*pcontextInfo: request and requirements for cotext and drawable
+// Inputs:      aglDraw: a valid AGLDrawable
+//                      *pcontextInfo: request and requirements for cotext and drawable
 
 // Outputs: *paglContext as allocated
-//			*pcontextInfo:  allocated parameters
+//                      *pcontextInfo:  allocated parameters
 
 // if fail to allocate: paglContext will be NULL
 // if error: will return error and paglContext will be NULL
@@ -271,7 +271,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
 
   // check renderer VRAM and acceleration
   numDevices = FindGDHandleFromWindow (pWindow, &hGD);
-  if (!pcontextInfo->fDraggable) 	// if numDevices > 1 then we will only be using the software renderer otherwise check only window device
+  if (!pcontextInfo->fDraggable)        // if numDevices > 1 then we will only be using the software renderer otherwise check only window device
     {
       verbose(2,"MAC: BuildGLonWindow: fDraggable= false");
       if ((numDevices > 1) || (numDevices == 0)) // this window spans multiple devices thus will be software only
@@ -359,12 +359,12 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext, pstructG
 // Takes device and geometry request and tries to build best context and drawable
 // if device does not work will walk down devices looking for first one that satisfies requirements
 
-// Inputs: 	*pnumDevice: 0 any device, # attempt that device first, then any device
-//			*pcontextInfo: request and requirements for cotext and drawable
+// Inputs:      *pnumDevice: 0 any device, # attempt that device first, then any device
+//                      *pcontextInfo: request and requirements for cotext and drawable
 
 // Outputs: *paglDraw, *paglContext and *pdspContext as allocated
-//			*pnumDevice to device number in list that was used
-//			*pcontextInfo:  allocated parameters
+//                      *pnumDevice to device number in list that was used
+//                      *pcontextInfo:  allocated parameters
 
 // if fail to allocate: paglDraw, paglContext and pdspContext will be NULL
 // if error: will return error and paglDraw, paglContext and pdspContext will be NULL
@@ -441,7 +441,7 @@ OSStatus BuildGL (AGLDrawable* paglDraw, AGLContext* paglContext,
         {
           (*pnumDevice)++;
           err = BuildGLonDevice (paglDraw, paglContext, hGD, pcontextInfo, aglShareContext);
-          if ((err != noErr) || (*paglDraw == NULL) || (*paglContext == 0))	// reset hGD only if we are not done
+          if ((err != noErr) || (*paglDraw == NULL) || (*paglContext == 0))     // reset hGD only if we are not done
             {
               hGD = DMGetNextScreenDevice (hGD, true);
               DumpCurrent (paglDraw, paglContext, pcontextInfo); // dump what ever partial solution we might have
@@ -506,11 +506,11 @@ OSStatus DestroyGLFromWindow (AGLContext* paglContext, pstructGLWindowInfo pcont
 
 // Takes device single device and tries to build on it
 
-// Inputs: 	hGD: GDHandle to device to look at
-//			*pcontextInfo: request and requirements for cotext and drawable
+// Inputs:      hGD: GDHandle to device to look at
+//                      *pcontextInfo: request and requirements for cotext and drawable
 
 // Outputs: *paglDraw, *paglContext and *pdspContext as allocated
-//			*pcontextInfo:  allocated parameters
+//                      *pcontextInfo:  allocated parameters
 
 // if fail to allocate: paglDraw, paglContext and pdspContext will be NULL
 // if error: will return error and paglDraw, paglContext and pdspContext will be NULL
@@ -524,13 +524,13 @@ static OSStatus BuildGLonDevice (AGLDrawable* paglDraw, AGLContext* paglContext,
   Boolean fCheckRenderer = false;
   verbose(1, "WinCreateMac:BuildGLonDevice: no fullscreen");
   {
-    if (pcontextInfo->pixelDepth == 0)	// default
+    if (pcontextInfo->pixelDepth == 0)  // default
       {
         pcontextInfo->pixelDepth = (**(**hGD).gdPMap).pixelSize;
         if (16 > pcontextInfo->pixelDepth)
           pcontextInfo->pixelDepth = 16;
       }
-    if (pcontextInfo->fDepthMust && (static_cast<int>(pcontextInfo->pixelDepth) != (**(**hGD).gdPMap).pixelSize))	// device depth must match and does not
+    if (pcontextInfo->fDepthMust && (static_cast<int>(pcontextInfo->pixelDepth) != (**(**hGD).gdPMap).pixelSize))       // device depth must match and does not
       {
         error("Pixel Depth does not match device in windowed mode.");
         return err;
@@ -565,7 +565,7 @@ static OSStatus BuildGLonDevice (AGLDrawable* paglDraw, AGLContext* paglContext,
 // Kills currently allocated context
 // does not care about being pretty (assumes display is likely faded)
 
-// Inputs: 	paglDraw, paglContext, pdspContext: things to be destroyed
+// Inputs:      paglDraw, paglContext, pdspContext: things to be destroyed
 
 void DumpCurrent (AGLDrawable* paglDraw, AGLContext* paglContext, pstructGLInfo pcontextInfo)
 {
@@ -597,10 +597,10 @@ void DumpCurrent (AGLDrawable* paglDraw, AGLContext* paglContext, pstructGLInfo 
 
 // looks at renderer attributes it has at least the VRAM is accelerated
 
-// Inputs: 	hGD: GDHandle to device to look at
-//			pVRAM: pointer to VRAM in bytes required; out is actual VRAM if a renderer was found, otherwise it is the input parameter
-//			pTextureRAM:  pointer to texture RAM in bytes required; out is same (implementation assume VRAM returned by card is total so we add texture and VRAM)
-//			fAccelMust: do we check for acceleration
+// Inputs:      hGD: GDHandle to device to look at
+//                      pVRAM: pointer to VRAM in bytes required; out is actual VRAM if a renderer was found, otherwise it is the input parameter
+//                      pTextureRAM:  pointer to texture RAM in bytes required; out is same (implementation assume VRAM returned by card is total so we add texture and VRAM)
+//                      fAccelMust: do we check for acceleration
 
 // Returns: true if renderer for the requested device complies, false otherwise
 
@@ -645,13 +645,13 @@ static Boolean CheckRenderer (GDHandle hGD, long* pVRAM, long* pTextureRAM, GLin
           // how about compliant renderers???
           if ((canAccel && dAccel) || (!canAccel && (!fAccelMust || dAccel)))
             {
-              aglDescribeRenderer (info, AGL_VIDEO_MEMORY, &dVRAM);	// we assume that VRAM returned is total thus add texture and VRAM required
+              aglDescribeRenderer (info, AGL_VIDEO_MEMORY, &dVRAM);     // we assume that VRAM returned is total thus add texture and VRAM required
               aglReportError ();
               if (dVRAM >= (*pVRAM + *pTextureRAM))
                 {
                   if (dVRAM >= dMaxVRAM) // find card with max VRAM
                     {
-                      aglDescribeRenderer (info, AGL_DEPTH_MODES, pDepthSizeSupport);	// which depth buffer modes are supported
+                      aglDescribeRenderer (info, AGL_DEPTH_MODES, pDepthSizeSupport);   // which depth buffer modes are supported
                       aglReportError ();
                       dMaxVRAM = dVRAM; // store max
                       found = true;
@@ -679,9 +679,9 @@ static Boolean CheckRenderer (GDHandle hGD, long* pVRAM, long* pTextureRAM, GLin
 
 // looks at renderer attributes and each device must have at least one renderer that fits the profile
 
-// Inputs: 	pVRAM: pointer to VRAM in bytes required; out is actual min VRAM of all renderers found, otherwise it is the input parameter
-//			pTextureRAM:  pointer to texture RAM in bytes required; out is same (implementation assume VRAM returned by card is total so we add texture and VRAM)
-//			fAccelMust: do we check fro acceleration
+// Inputs:      pVRAM: pointer to VRAM in bytes required; out is actual min VRAM of all renderers found, otherwise it is the input parameter
+//                      pTextureRAM:  pointer to texture RAM in bytes required; out is same (implementation assume VRAM returned by card is total so we add texture and VRAM)
+//                      fAccelMust: do we check fro acceleration
 
 // Returns: true if any renderer for on each device complies (not necessarily the same renderer), false otherwise
 
@@ -730,13 +730,13 @@ static Boolean CheckAllDeviceRenderers (long* pVRAM, long* pTextureRAM, GLint* p
               // how about compliant renderers???
               if ((canAccel && dAccel) || (!canAccel && (!fAccelMust || dAccel)))
                 {
-                  aglDescribeRenderer(info, AGL_VIDEO_MEMORY, &dVRAM);	// we assume that VRAM returned is total thus add texture and VRAM required
+                  aglDescribeRenderer(info, AGL_VIDEO_MEMORY, &dVRAM);  // we assume that VRAM returned is total thus add texture and VRAM required
                   aglReportError ();
                   if (dVRAM >= (*pVRAM + *pTextureRAM))
                     {
                       if (dVRAM >= dMaxVRAM) // find card with max VRAM
                         {
-                          aglDescribeRenderer(info, AGL_DEPTH_MODES, pDepthSizeSupport);	// which depth buffer modes are supported
+                          aglDescribeRenderer(info, AGL_DEPTH_MODES, pDepthSizeSupport);        // which depth buffer modes are supported
                           aglReportError ();
                           dMaxVRAM = dVRAM; // store max
                           found = true;
@@ -771,8 +771,8 @@ static Boolean CheckAllDeviceRenderers (long* pVRAM, long* pTextureRAM, GLint* p
 
 // checks to see window fits on screen completely
 
-// Inputs: 	hGD: GDHandle to device to look at
-//			width/height: requested width and height of window
+// Inputs:      hGD: GDHandle to device to look at
+//                      width/height: requested width and height of window
 
 // Returns: true if window and borders fit, false otherwise
 
@@ -802,11 +802,11 @@ static Boolean CheckWindowExtents (GDHandle hGD, short width, short height)
 
 // Builds OpenGL context
 
-// Inputs: 	hGD: GDHandle to device to look at
-//			pcontextInfo: request and requirements for context and drawable
+// Inputs:      hGD: GDHandle to device to look at
+//                      pcontextInfo: request and requirements for context and drawable
 
 // Outputs: paglContext as allocated
-//			pcontextInfo:  allocated parameters
+//                      pcontextInfo:  allocated parameters
 
 // if fail to allocate: paglContext will be NULL
 // if error: will return error paglContext will be NULL
@@ -866,15 +866,15 @@ static OSStatus BuildGLContext (AGLDrawable* paglDraw, AGLContext* paglContext,
         error("Could not build drawable");
         return err;
       }
-    if (!aglSetDrawable (*paglContext, *paglDraw))		// attach the CGrafPtr to the context
+    if (!aglSetDrawable (*paglContext, *paglDraw))              // attach the CGrafPtr to the context
       return aglReportError ();
   }
-  if(!aglSetCurrentContext (*paglContext))			// make the context the current context
+  if(!aglSetCurrentContext (*paglContext))                      // make the context the current context
     return aglReportError ();
 
   // set swap interval to sync with vbl
   /*
-    GLint	swapinterval = 1;
+    GLint       swapinterval = 1;
     if (!aglSetInteger(*paglContext, AGL_SWAP_INTERVAL, &swapinterval))
     return aglReportError();
   */
@@ -902,9 +902,9 @@ UInt32 CheckMacOSX (void)
 
 // GetWindowDevice
 
-// Inputs:	a valid WindowPtr
+// Inputs:      a valid WindowPtr
 
-// Outputs:	the GDHandle that that window is mostly on
+// Outputs:     the GDHandle that that window is mostly on
 
 // returns the number of devices that the windows content touches
 
@@ -926,7 +926,7 @@ short FindGDHandleFromWindow (WindowPtr pWindow, GDHandle * phgdOnThisDevice)
 
   GetWindowPortBounds (pWindow, &rectWind);
 
-  LocalToGlobal (reinterpret_cast<Point*>(& rectWind.top));	// convert to global coordinates
+  LocalToGlobal (reinterpret_cast<Point*>(& rectWind.top));     // convert to global coordinates
   LocalToGlobal (reinterpret_cast<Point*>(& rectWind.bottom));
   hgdNthDevice = GetDeviceList ();
   greatestArea = 0;
@@ -965,11 +965,11 @@ short FindGDHandleFromWindow (WindowPtr pWindow, GDHandle * phgdOnThisDevice)
 
 // Builds window to be used as drawable
 
-// Inputs: 	hGD: GDHandle to device to look at
-//			pcontextInfo: request and requirements for cotext and drawable
+// Inputs:      hGD: GDHandle to device to look at
+//                      pcontextInfo: request and requirements for cotext and drawable
 
 // Outputs: paglDraw as allocated
-//			pcontextInfo:  allocated parameters
+//                      pcontextInfo:  allocated parameters
 
 // if fail to allocate: paglDraw will be NULL
 // if error: will return error paglDraw will be NULL
@@ -984,7 +984,7 @@ static OSStatus BuildDrawable (AGLDrawable* paglDraw, GDHandle hGD, pstructGLInf
   // center window in our context's gdevice
   rectWin.top  = static_cast<short> ((**hGD).gdRect.top + ((**hGD).gdRect.bottom - (**hGD).gdRect.top) / 2); // v center
   rectWin.top  -= pcontextInfo->height / 2;
-  rectWin.left  = static_cast<short> ((**hGD).gdRect.left + ((**hGD).gdRect.right - (**hGD).gdRect.left) / 2);	// h center
+  rectWin.left  = static_cast<short> ((**hGD).gdRect.left + ((**hGD).gdRect.right - (**hGD).gdRect.left) / 2);  // h center
   rectWin.left  -= pcontextInfo->width / 2;
   rectWin.right = static_cast<short> (rectWin.left + pcontextInfo->width);
   rectWin.bottom = static_cast<short> (rectWin.top + pcontextInfo->height);
@@ -1031,7 +1031,7 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler, EventRef event
 
 bool gemmacwindow::init(void) {
   // Check QuickTime installed
-  long	QDfeature;
+  long  QDfeature;
   if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
     ::error("GEM: QuickTime is not installed : %d", err);
     return false;
@@ -1094,15 +1094,15 @@ struct gemmacwindow::Info {
   {}
   ~Info(void) {
   }
-  WindowPtr		pWind;		// GEM window reference for gemwin
-  AGLContext		context;	// OpenGL context
-  GWorldPtr		offscreen;	// Macintosh offscreen buffer
-  long		pixelSize;	//
-  Rect		r;		//
-  PixMapHandle	pixMap;		// PixMap Handle
-  long		rowBytes;	//
-  void 		*baseAddr;	//
-  short		fontList;	// Font
+  WindowPtr             pWind;          // GEM window reference for gemwin
+  AGLContext            context;        // OpenGL context
+  GWorldPtr             offscreen;      // Macintosh offscreen buffer
+  long          pixelSize;      //
+  Rect          r;              //
+  PixMapHandle  pixMap;         // PixMap Handle
+  long          rowBytes;       //
+  void          *baseAddr;      //
+  short         fontList;       // Font
   EventHandlerRef ehr;
 };
 
@@ -1137,12 +1137,12 @@ void gemmacwindow::swapBuffers(void)
 }
 
 bool gemmacwindow::create(void) {
-  OSStatus	err;
+  OSStatus      err;
   GDHandle hGD;
   short numDevices = 0;
   short whichDevice = 1; // number of device to try (0 = 1st device, 1 = 2nd/external device)
   verbose(2,"MAC: createGemWindow()");
-  EventTypeSpec	list[] = {		//{ kEventClassWindow, kEventWindowActivated },
+  EventTypeSpec list[] = {              //{ kEventClassWindow, kEventWindowActivated },
     //{ kEventClassWindow, kEventWindowGetClickActivation },
     { kEventClassWindow, kEventWindowClosed },
     { kEventClassMouse, kEventMouseDown },
@@ -1289,11 +1289,11 @@ DEBUGPOST("");
                        GetEventTypeCount( list ), list,
                        this, &m_info->ehr );
 
-  glWInfo.fAcceleratedMust = true; 		// must renderer be accelerated?
-  glWInfo.VRAM = 0 * 1048576;			// minimum VRAM (if not zero this is always required)
-  glWInfo.textureRAM = 0 * 1048576;		// minimum texture RAM (if not zero this is always required)
-  glWInfo.fDraggable = false; 		// desired vertical refresh frquency in Hz (0 = any)
-  glWInfo.fmt = 0;				// output pixel format
+  glWInfo.fAcceleratedMust = true;              // must renderer be accelerated?
+  glWInfo.VRAM = 0 * 1048576;                   // minimum VRAM (if not zero this is always required)
+  glWInfo.textureRAM = 0 * 1048576;             // minimum texture RAM (if not zero this is always required)
+  glWInfo.fDraggable = false;           // desired vertical refresh frquency in Hz (0 = any)
+  glWInfo.fmt = 0;                              // output pixel format
 
   i = 0;
   glWInfo.aglAttributes [i++] = AGL_RGBA;
@@ -1316,11 +1316,11 @@ DEBUGPOST("");
   }
 
   glWInfo.aglAttributes [i++] = AGL_ACCELERATED;
-  glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY; 	// should be used whenever packed pixels is used to
+  glWInfo.aglAttributes [i++] = AGL_NO_RECOVERY;        // should be used whenever packed pixels is used to
   glWInfo.aglAttributes [i++] = AGL_NONE;
 //  BuildGLFromWindow ( m_info->pWind, &m_info->context, &glWInfo, m_shared);
   BuildGLFromWindow ( m_info->pWind, &m_info->context, &glWInfo, m_info->context);
-  //		AGL_MACRO_DECLARE_VARIABLES()
+  //            AGL_MACRO_DECLARE_VARIABLES()
   // }// end of window creation on main device - this is the old fullscreen code
 
   if (!m_info->context){
@@ -1387,7 +1387,7 @@ void gemmacwindow::destroy(void) {
   return destroyGemWindow();
 }
 void gemmacwindow::dispatch(void) {
-  EventRef	theEvent;
+  EventRef      theEvent;
   EventTargetRef theTarget;
 
   theTarget = GetEventDispatcherTarget();
@@ -1405,14 +1405,14 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
   OSStatus result = eventNotHandledErr;
   UInt32 evtClass = GetEventClass (event);
   UInt32 kind = GetEventKind (event);
-  WindowRef			winRef;
-  UInt32				keyCode=0;
-  char				macKeyCode[2];
-  Point				location;
-  EventMouseButton	buttonid = 0;
-  //MouseWheelAxis	axis = 0;
-  UInt32				modifiers = 0;
-  long				wheelDelta = 0;
+  WindowRef                     winRef;
+  UInt32                                keyCode=0;
+  char                          macKeyCode[2];
+  Point                         location;
+  EventMouseButton      buttonid = 0;
+  //MouseWheelAxis      axis = 0;
+  UInt32                                modifiers = 0;
+  long                          wheelDelta = 0;
   unsigned long devID=0;
 
   if (eventNotHandledErr == result)

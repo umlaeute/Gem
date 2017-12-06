@@ -205,4 +205,4 @@ namespace modelutils {
  */
 #define REGISTER_MODELLOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::modelloader> fac_modelloader_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

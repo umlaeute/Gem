@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,12 +23,12 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglGenTextures);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGenTextures :: GEMglGenTextures	(int argc, t_atom*argv) :
+GEMglGenTextures :: GEMglGenTextures    (int argc, t_atom*argv) :
   n(0), textures(NULL)
 {
-	if(argc)texturesMess(argc, argv);
+        if(argc)texturesMess(argc, argv);
 
-	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
+        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
 
 }
 /////////////////////////////////////////////////////////
@@ -50,13 +50,13 @@ bool GEMglGenTextures :: isRunnable(void) {
 // Render
 //
 void GEMglGenTextures :: render(GemState *state) {
-	glGenTextures (n, textures);
+        glGenTextures (n, textures);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
+void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) { // FUN
   if(!argc) {
     error("no textures specified!");
     return;
@@ -78,8 +78,8 @@ void GEMglGenTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglGenTextures :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenTextures::texturesMessCallback),  	gensym("textures"), A_GIMME, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenTextures::texturesMessCallback),         gensym("textures"), A_GIMME, A_NULL);
 }
 void GEMglGenTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-	GetMyClass(data)->texturesMess (argc,argv);
+        GetMyClass(data)->texturesMess (argc,argv);
 }

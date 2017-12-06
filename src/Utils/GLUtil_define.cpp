@@ -38,13 +38,13 @@ int gem::utils::gl::getGLbitfield(int argc, t_atom *argv){
       char c=*argv->a_w.w_symbol->s_name;
       switch (c) {
       case '|':
-	mode = 0;
-	break;
+        mode = 0;
+        break;
       case '&':
-	mode=1;
-	break;
+        mode=1;
+        break;
       default:
-	return _GL_UNDEFINED;
+        return _GL_UNDEFINED;
       }
       argv++;
     } else {

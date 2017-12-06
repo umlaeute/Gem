@@ -77,7 +77,7 @@ emissionRGB :: ~emissionRGB()
 /////////////////////////////////////////////////////////
 void emissionRGB :: postrender(GemState *)
 {
-	glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_COLOR_MATERIAL);
 }
 
 /////////////////////////////////////////////////////////
@@ -86,8 +86,8 @@ void emissionRGB :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void emissionRGB :: render(GemState *)
 {
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, m_vector);
+        glDisable(GL_COLOR_MATERIAL);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, m_vector);
 }
 
 /////////////////////////////////////////////////////////

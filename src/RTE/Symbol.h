@@ -43,11 +43,11 @@ namespace gem {
       virtual struct _symbol*getRTESymbol(void) const;
 
       virtual operator std::string(void) {
-	return getString();
+        return getString();
       }
 
       virtual operator struct _symbol*(void) {
-	return getRTESymbol();
+        return getRTESymbol();
       }
     };
   };

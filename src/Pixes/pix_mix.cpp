@@ -193,26 +193,26 @@ void pix_mix :: processYUV_Altivec (imageStruct &image, imageStruct &right)
     /*altivec code starts */
     union
     {
-        //unsigned int	i;
-        short	elements[8];
+        //unsigned int  i;
+        short   elements[8];
         //vector signed char v;
-        vector	signed short v;
+        vector  signed short v;
     }shortBuffer;
 
         union
     {
-        //unsigned int	i;
-        unsigned long	elements[8];
+        //unsigned int  i;
+        unsigned long   elements[8];
         //vector signed char v;
-        vector	unsigned int v;
+        vector  unsigned int v;
     }bitBuffer;
 
         union
     {
-        //unsigned int	i;
-        unsigned char	elements[16];
+        //unsigned int  i;
+        unsigned char   elements[16];
         //vector signed char v;
-        vector	unsigned char v;
+        vector  unsigned char v;
     }charBuffer;
 
     //vector unsigned char c;
@@ -289,15 +289,15 @@ void pix_mix :: processYUV_Altivec (imageStruct &image, imageStruct &right)
     gainAdd = shortBuffer.v;
     gainAdd = (vector signed short)vec_splat((vector signed short)gainAdd,0);
     #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
-	vec_dst( rightData, prefetchSize, 1 );
+        UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
         #endif
     for (long h=0; h<image.ysize; h++){
         for (long w=0; w<width; w++)
         {
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
             //interleaved U Y V Y chars
@@ -430,7 +430,7 @@ void pix_mix :: gainMess (float X, float Y)
 void pix_mix :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_mix::gainCallback),
-		  gensym("gain"), A_GIMME, A_NULL);//A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("gain"), A_GIMME, A_NULL);//A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
 //void pix_mix :: gainCallback(void *data, t_float X, t_float Y)

@@ -115,8 +115,8 @@ void pix_rtx :: processImage(imageStruct &image)
    int rows=image.ysize, r=0;
 
    unsigned char *pixels = image.data;
-   unsigned char *wp;			// write pointer
-   unsigned char *rp;			// read pointer
+   unsigned char *wp;                   // write pointer
+   unsigned char *rp;                   // read pointer
 
    // first copy the pixels into our buffer
    if (!set_buffer) {
@@ -128,11 +128,11 @@ void pix_rtx :: processImage(imageStruct &image)
      // "set" message
      c=cols;
      size_t imagesize=pixsize * buffer.csize * sizeof(unsigned char);
-	 while (c--) {
+         while (c--) {
        wp = buffer.data + imagesize * c;
        memcpy(wp, pixels, imagesize);
      }
-	 c = 0;
+         c = 0;
      set_buffer=false;
    }
 
@@ -142,11 +142,11 @@ void pix_rtx :: processImage(imageStruct &image)
      while (c < cols) {
        c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
        while (r < rows) {
-	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+         rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
-	 *pixels   = *rp;
-	 r++;
+         *pixels   = *rp;
+         r++;
        }
        r=0;
        c++;
@@ -156,12 +156,12 @@ void pix_rtx :: processImage(imageStruct &image)
      while (c < cols) {
        c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
        while (r < rows) {
-	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+         rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
-	 pixels[0]  = rp[0];
-	 pixels[1]  = rp[1];
-	 r++;
+         pixels[0]  = rp[0];
+         pixels[1]  = rp[1];
+         r++;
        }
        r=0;
        c++;
@@ -171,15 +171,15 @@ void pix_rtx :: processImage(imageStruct &image)
      while (c < cols) {
        c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
        while (r < rows) {
-	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+         rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
-	 pixels[chRed]   = rp[chRed];
-	 pixels[chBlue]  = rp[chBlue];
-	 pixels[chGreen] = rp[chGreen];
-	 pixels[chAlpha] = rp[chAlpha];
+         pixels[chRed]   = rp[chRed];
+         pixels[chBlue]  = rp[chBlue];
+         pixels[chGreen] = rp[chGreen];
+         pixels[chAlpha] = rp[chAlpha];
 
-	 r++;
+         r++;
        }
        r=0;
        c++;

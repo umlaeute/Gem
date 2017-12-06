@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Apply damping to particles
+        Apply damping to particles
 
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -23,9 +23,9 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_damp
+        part_damp
 
-	Apply damping to particles
+        Apply damping to particles
 
 DESCRIPTION
 
@@ -36,25 +36,25 @@ class GEM_EXTERN part_damp : public partlib_base
 
     public:
 
-	    //////////
-	    // Constructor
-    	part_damp(t_floatarg val1, t_floatarg val2, t_floatarg val3);
+            //////////
+            // Constructor
+        part_damp(t_floatarg val1, t_floatarg val2, t_floatarg val3);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+        //////////
+        virtual void    renderParticles(GemState *state);
 
-    	//////////
-    	// Destructor
-    	virtual ~part_damp(void);
+        //////////
+        // Destructor
+        virtual ~part_damp(void);
 
-    	//////////
-    	// Vector changed
-    	void	    	vectorMess(float x, float y, float z);
+        //////////
+        // Vector changed
+        void            vectorMess(float x, float y, float z);
 
  protected:
 
       //////////
-      float			m_vector[3];
+      float                     m_vector[3];
 };
 
-#endif	// for header file
+#endif  // for header file

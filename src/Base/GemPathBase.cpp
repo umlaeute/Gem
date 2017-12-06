@@ -36,9 +36,9 @@ GemPathBase :: GemPathBase(int argc, t_atom *argv)
       m_numDimens = (int)atom_getfloat(&argv[0]);
       if (m_numDimens < 1) m_numDimens = 1;
       if (m_numDimens > 64) {
-	  error("too many dimensions, must be below 64");
-	  m_numDimens = 64;
-	}
+          error("too many dimensions, must be below 64");
+          m_numDimens = 64;
+        }
     }
 }
 

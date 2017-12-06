@@ -81,12 +81,12 @@ class GEM_EXTERN film
    */
   /* returns TRUE if loading was successful, FALSE otherwise */
   virtual bool open(const std::string&,
-		    const gem::Properties&requestprops) = 0;
+                    const gem::Properties&requestprops) = 0;
 
   /* some error codes */
   enum errCode { SUCCESS = 0,
-		 FAILURE = 1,
-		 DONTKNOW= 2 };
+                 FAILURE = 1,
+                 DONTKNOW= 2 };
 
   //////////
   // Change which image to display
@@ -132,7 +132,7 @@ class GEM_EXTERN film
    */
 
   virtual bool enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) = 0;
+                              gem::Properties&writeable) = 0;
 
   /**
    * set a number of properties (as defined by "props")
@@ -170,4 +170,4 @@ class GEM_EXTERN film
  */
 #define REGISTER_FILMFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::film> fac_film_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

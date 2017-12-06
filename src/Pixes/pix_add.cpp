@@ -86,7 +86,7 @@ void pix_add :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 void pix_add :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w;
-   int	y0,y1;
+   int  y0,y1;
    int u,v;
    src =0;
    //format is U Y V Y
@@ -130,7 +130,7 @@ void pix_add :: processYUV_MMX (imageStruct &image, imageStruct &right){
 
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
   __m64 mask = _mm_setr_pi8(0x40, 0x00, 0x40, 0x00,
-			    0x40, 0x00, 0x40, 0x00);
+                            0x40, 0x00, 0x40, 0x00);
   __m64 l, r;
   while (datasize--) {
     l=leftPix[datasize];
@@ -157,18 +157,18 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
    //format is U Y V Y
     union
     {
-        //unsigned int	i;
-        short	elements[8];
+        //unsigned int  i;
+        short   elements[8];
         //vector signed char v;
-        vector	signed short v;
+        vector  signed short v;
     }shortBuffer;
 
         union
     {
-        //unsigned int	i;
-        unsigned char	elements[16];
+        //unsigned int  i;
+        unsigned char   elements[16];
         //vector signed char v;
-        vector	unsigned char v;
+        vector  unsigned char v;
     }charBuffer;
 
     //vector unsigned char c;
@@ -209,7 +209,7 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
     d = shortBuffer.v;
     d = static_cast<vector signed short>(vec_splat(static_cast<vector signed short>(d),0));
 #ifndef PPC970
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+    UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     vec_dst( inData, prefetchSize, 0 );
     vec_dst( rightData, prefetchSize, 1 );
 #endif
@@ -217,36 +217,36 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
       for (w=0; w<width; w++)
         {
 #ifndef PPC970
-	  vec_dst( inData, prefetchSize, 0 );
-	  vec_dst( rightData, prefetchSize, 1 );
+          vec_dst( inData, prefetchSize, 0 );
+          vec_dst( rightData, prefetchSize, 1 );
 #endif
-	  //interleaved U Y V Y chars
+          //interleaved U Y V Y chars
 
-	  //vec_mule UV * 2 to short vector U V U V shorts
-	  UVImage = static_cast<vector signed short>(vec_mule(one,inData[0]));
-	  UVRight = static_cast<vector signed short>(vec_mule(c,rightData[0]));
+          //vec_mule UV * 2 to short vector U V U V shorts
+          UVImage = static_cast<vector signed short>(vec_mule(one,inData[0]));
+          UVRight = static_cast<vector signed short>(vec_mule(c,rightData[0]));
 
-	  //vec_mulo Y * 1 to short vector Y Y Y Y shorts
-	  YImage = static_cast<vector signed short>(vec_mulo(c,inData[0]));
-	  YRight = static_cast<vector signed short>(vec_mulo(c,rightData[0]));
+          //vec_mulo Y * 1 to short vector Y Y Y Y shorts
+          YImage = static_cast<vector signed short>(vec_mulo(c,inData[0]));
+          YRight = static_cast<vector signed short>(vec_mulo(c,rightData[0]));
 
-	  //vel_subs UV - 255
-	  UVRight = static_cast<vector signed short>(vec_subs(UVRight, d));
+          //vel_subs UV - 255
+          UVRight = static_cast<vector signed short>(vec_subs(UVRight, d));
 
-	  //vec_adds UV
-	  UVTemp = vec_adds(UVImage,UVRight);
+          //vec_adds UV
+          UVTemp = vec_adds(UVImage,UVRight);
 
-	  //vec_adds Y
-	  YTemp = vec_adds(YImage,YRight);
+          //vec_adds Y
+          YTemp = vec_adds(YImage,YRight);
 
-	  hiImage = vec_mergeh(UVTemp,YTemp);
-	  loImage = vec_mergel(UVTemp,YTemp);
+          hiImage = vec_mergeh(UVTemp,YTemp);
+          loImage = vec_mergel(UVTemp,YTemp);
 
-	  //vec_mergel + vec_mergeh Y and UV
-	  inData[0] = vec_packsu(hiImage, loImage);
+          //vec_mergel + vec_mergeh Y and UV
+          inData[0] = vec_packsu(hiImage, loImage);
 
-	  inData++;
-	  rightData++;
+          inData++;
+          rightData++;
         }
 #ifndef PPC970
         vec_dss( 0 );
@@ -264,15 +264,15 @@ void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
     vector unsigned char *rightData = (vector unsigned char*) right.data;
 
         #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
+        UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
 

@@ -86,15 +86,15 @@ class GEM_EXTERN WindowInfo
 
 #elif defined __APPLE__
 
-    WindowPtr		pWind;		// GEM window reference for gemwin
-    AGLContext		context;	// OpenGL context
-    GWorldPtr		offscreen;	// Macintosh offscreen buffer
-    long		pixelSize;	//
-    Rect		r;		//
-    PixMapHandle	pixMap;		// PixMap Handle
-    long		rowBytes;	//
-    void 		*baseAddr;	//
-    short		fontList;	// Font
+    WindowPtr           pWind;          // GEM window reference for gemwin
+    AGLContext          context;        // OpenGL context
+    GWorldPtr           offscreen;      // Macintosh offscreen buffer
+    long                pixelSize;      //
+    Rect                r;              //
+    PixMapHandle        pixMap;         // PixMap Handle
+    long                rowBytes;       //
+    void                *baseAddr;      //
+    short               fontList;       // Font
 
 #elif defined __linux__ || defined HAVE_GL_GLX_H
 
@@ -160,15 +160,15 @@ class GEM_EXTERN WindowHints
 
   //////////
   // Should we do fullscreen ?
-  int			fullscreen;
+  int                   fullscreen;
 
   //////////
   // Is there a second screen ?
-  int			secondscreen;
+  int                   secondscreen;
 
   //////////
   // Should there be a window border?
-  int			border;
+  int                   border;
 
   //////////
   // mode for full-screen antialiasing
@@ -186,7 +186,7 @@ class GEM_EXTERN WindowHints
 #if defined _WIN32
     HGLRC       shared;
 #elif defined __APPLE__
-    AGLContext	shared;
+    AGLContext  shared;
 #elif defined __linux__ || defined HAVE_GL_GLX_H
     GLXContext  shared;
 #else

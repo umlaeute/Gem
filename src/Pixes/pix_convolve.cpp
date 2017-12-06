@@ -159,32 +159,32 @@ void pix_convolve :: processRGBAImage(imageStruct &image)
         int realY = y * xTimesc;
         int offsetY = realY - initOffset;
 
-    	for (int x = initX; x < maxX; x++)
-    	{
-    	    int realPos = x * csize + realY;
+        for (int x = initX; x < maxX; x++)
+        {
+            int realPos = x * csize + realY;
             int offsetXY = x * csize + offsetY;
 
-    	    // skip the alpha value
-	    for (int c = 1; c < csize; c++)
-    	    {
-    		    int new_val = 0;
-		    int offsetXYC = offsetXY + c;
-    		    for (int matY = 0; matY < m_cols; matY++)
-    		    {
-    		        int offsetXYCMat = matY * xTimesc + offsetXYC;
-    		        int realMatY = matY * m_rows;
-    	    	    for (int matX = 0; matX < m_rows; matX++)
-    	    	    {
+            // skip the alpha value
+            for (int c = 1; c < csize; c++)
+            {
+                    int new_val = 0;
+                    int offsetXYC = offsetXY + c;
+                    for (int matY = 0; matY < m_cols; matY++)
+                    {
+                        int offsetXYCMat = matY * xTimesc + offsetXYC;
+                        int realMatY = matY * m_rows;
+                    for (int matX = 0; matX < m_rows; matX++)
+                    {
                         new_val += (tempImg.data[offsetXYCMat + matX * csize] *
                                         m_imatrix[realMatY + matX])>>8;
-    	    	    }
-    		    }
+                    }
+                    }
                     image.data[realPos + c] = CLAMP(new_val);
-		    //removes insult from injury ??
-		    // we do not use the m_irange anymore ...  remove it ??
+                    //removes insult from injury ??
+                    // we do not use the m_irange anymore ...  remove it ??
 
-    	    }
-    	}
+            }
+        }
     }
 
 }
@@ -204,22 +204,22 @@ void pix_convolve :: processGrayImage(imageStruct &image)
       int realY = y * xTimesc;
       int offsetY = realY - initOffset;
 
-      for (int x = initX; x < maxX; x++)    	{
-	int offsetXY = x + offsetY;
+      for (int x = initX; x < maxX; x++)        {
+        int offsetXY = x + offsetY;
 
-	int new_val = 0;
-	int offsetXYC = offsetXY;
-	for (int matY = 0; matY < m_cols; matY++)   {
-	  int offsetXYCMat = matY * xTimesc + offsetXYC;
-	  int realMatY = matY * m_rows;
-	  for (int matX = 0; matX < m_rows; matX++)     {
-	    new_val += (tempImg.data[offsetXYCMat + matX] *
-			m_imatrix[realMatY + matX])>>8;
-	  }
-	}
-	image.data[x+realY] = CLAMP(new_val);
-	//removes insult from injury ??
-	// we do not use the m_irange anymore ...  remove it ??
+        int new_val = 0;
+        int offsetXYC = offsetXY;
+        for (int matY = 0; matY < m_cols; matY++)   {
+          int offsetXYCMat = matY * xTimesc + offsetXYC;
+          int realMatY = matY * m_rows;
+          for (int matX = 0; matX < m_rows; matX++)     {
+            new_val += (tempImg.data[offsetXYCMat + matX] *
+                        m_imatrix[realMatY + matX])>>8;
+          }
+        }
+        image.data[x+realY] = CLAMP(new_val);
+        //removes insult from injury ??
+        // we do not use the m_irange anymore ...  remove it ??
       }
     }
 }
@@ -249,30 +249,30 @@ void pix_convolve :: processYUVImage(imageStruct &image)
         int realY = y * xTimesc;
         int offsetY = realY - initOffset;
 
-    	for (int x = initX; x < maxX; x++)
-    	{
-    	    int realPos = x * tempImg.csize + realY;
+        for (int x = initX; x < maxX; x++)
+        {
+            int realPos = x * tempImg.csize + realY;
             int offsetXY = x * tempImg.csize + offsetY;
 
-    	    // skip the UV
-    	    for (int c = 1; c < 3; c+=2)
-    	    {
-    		    int new_val = 0;
+            // skip the UV
+            for (int c = 1; c < 3; c+=2)
+            {
+                    int new_val = 0;
                 int offsetXYC = offsetXY + c;
-    		    for (int matY = 0; matY < m_cols; matY++)
-    		    {
-    		        int offsetXYCMat = matY * xTimesc + offsetXYC;
-    		        int realMatY = matY * m_rows;
-    	    	    for (int matX = 0; matX < m_rows; matX++)
-    	    	    {
+                    for (int matY = 0; matY < m_cols; matY++)
+                    {
+                        int offsetXYCMat = matY * xTimesc + offsetXYC;
+                        int realMatY = matY * m_rows;
+                    for (int matX = 0; matX < m_rows; matX++)
+                    {
                       new_val += (tempImg.data[offsetXYCMat + matX * tempImg.csize] *
                                         m_imatrix[realMatY + matX])>>8;
-    	    	    }
-    		    }
+                    }
+                    }
                    image.data[realPos + c] = CLAMP(new_val);
                    // image.data[realPos + c-1] = 128;  //remove the U+V
-    	    }
-    	}
+            }
+        }
     }
     }else{
     for (int y = initY; y < maxY; y++)
@@ -280,30 +280,30 @@ void pix_convolve :: processYUVImage(imageStruct &image)
         int realY = y * xTimesc;
         int offsetY = realY - initOffset;
 
-    	for (int x = initX; x < maxX; x++)
-    	{
-    	    int realPos = x * tempImg.csize + realY;
+        for (int x = initX; x < maxX; x++)
+        {
+            int realPos = x * tempImg.csize + realY;
             int offsetXY = x * tempImg.csize + offsetY;
 
-    	    // skip the UV
-    	    for (int c = 1; c < 3; c+=2)
-    	    {
-    		    int new_val = 0;
+            // skip the UV
+            for (int c = 1; c < 3; c+=2)
+            {
+                    int new_val = 0;
                 int offsetXYC = offsetXY + c;
-    		    for (int matY = 0; matY < m_cols; matY++)
-    		    {
-    		        int offsetXYCMat = matY * xTimesc + offsetXYC;
-    		        int realMatY = matY * m_rows;
-    	    	    for (int matX = 0; matX < m_rows; matX++)
-    	    	    {
+                    for (int matY = 0; matY < m_cols; matY++)
+                    {
+                        int offsetXYCMat = matY * xTimesc + offsetXYC;
+                        int realMatY = matY * m_rows;
+                    for (int matX = 0; matX < m_rows; matX++)
+                    {
                       new_val += (tempImg.data[offsetXYCMat + matX * tempImg.csize] *
                                         m_imatrix[realMatY + matX])>>8;
-    	    	    }
-    		    }
+                    }
+                    }
                    image.data[realPos + c] = CLAMP(new_val);
                     image.data[realPos + c-1] = 128;  //remove the U+V
-    	    }
-    	}
+            }
+        }
     }
     }
 
@@ -372,7 +372,7 @@ if (m_chroma){
   //messed up looking on x86
 i=xsize+2;
 
-	  for (k=1;k<ysize;k++) {
+          for (k=1;k<ysize;k++) {
         for (j=1;j<xsize;j++) {
   //load furthest value first...the rest should be in cache
 
@@ -498,14 +498,14 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
 
     union
     {
-        short	elements[8];
-        vector	signed short v;
+        short   elements[8];
+        vector  signed short v;
     }shortBuffer;
 
     union
     {
-        unsigned int	elements[4];
-        vector	unsigned int v;
+        unsigned int    elements[4];
+        vector  unsigned int v;
     }intBuffer;
 
     vector unsigned char one;
@@ -577,7 +577,7 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
     uv128 = shortBuffer.v;
     uv128 = (vector signed short)vec_splat((vector signed short)uv128,0);
     #ifndef PPC970
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+    UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     vec_dst( src, prefetchSize, 0 );
     vec_dst( dst, prefetchSize, 0 );
       #endif
@@ -712,8 +712,8 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
 {
     if (argc != m_cols * m_rows)
     {
-    	error("matrix size not correct");
-    	return;
+        error("matrix size not correct");
+        return;
     }
 
     int i;
@@ -730,11 +730,11 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
 void pix_convolve :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::matrixMessCallback),
-    	    gensym("matrix"), A_GIMME, A_NULL);
+            gensym("matrix"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::rangeMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
+            gensym("ft1"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::chromaMessCallback),
-    	    gensym("chroma"), A_FLOAT, A_NULL);
+            gensym("chroma"), A_FLOAT, A_NULL);
 }
 void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

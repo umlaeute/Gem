@@ -44,11 +44,11 @@ pix_snap :: pix_snap(int argc, t_atom *argv) :
     m_y = atom_getint(&argv[1]);
     m_width = atom_getint(&argv[2]);
     m_height = atom_getint(&argv[3]);
-  } else if (argc == 2)	{
+  } else if (argc == 2) {
     m_x = m_y = 0;
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
-  } else if (argc == 0)	{
+  } else if (argc == 0) {
     m_x = m_y = 0;
     m_width = m_height = 128;
   } else {
@@ -80,7 +80,7 @@ pix_snap :: ~pix_snap(void)
   timeval startTime, endTime;             \
   gettimeofday(&startTime, 0)
 # define STOP_TIMING(x) gettimeofday(&endTime, 0);       \
-  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +	\
+  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 + \
     (endTime.tv_usec - startTime.tv_usec) * 0.001;      \
   post("%d PBO time = %f ms", x, mseconds)
 
@@ -104,35 +104,35 @@ void pix_snap :: snapMess(void)
   if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
     m_cache=NULL;
 
-	if (m_width <= 0 || m_height <= 0) {
-		error("Illegal size");
-		return;
-	}
-	// do we need to remake the data?
-	bool makeNew = false;
+        if (m_width <= 0 || m_height <= 0) {
+                error("Illegal size");
+                return;
+        }
+        // do we need to remake the data?
+        bool makeNew = false;
   bool makePbo = false;
 
   // release previous data
   if (m_originalImage)  {
-		if (m_originalImage->xsize != m_width ||
+                if (m_originalImage->xsize != m_width ||
         m_originalImage->ysize != m_height) {
-			m_originalImage->clear();
-			delete m_originalImage;
-			m_originalImage = NULL;
-			makeNew = true;
-		}
-	}	else {
-		makeNew = true;
+                        m_originalImage->clear();
+                        delete m_originalImage;
+                        m_originalImage = NULL;
+                        makeNew = true;
+                }
+        }       else {
+                makeNew = true;
   }
   if (makeNew) {
-		m_originalImage = new imageStruct;
-		m_originalImage->xsize = m_width;
-		m_originalImage->ysize = m_height;
+                m_originalImage = new imageStruct;
+                m_originalImage->xsize = m_width;
+                m_originalImage->ysize = m_height;
     m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 
-		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
+                m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
 
     makePbo=true;
   }
@@ -200,7 +200,7 @@ void pix_snap :: snapMess(void)
   }
 
   if (m_cache)
-		m_cache->resendImage = 1;
+                m_cache->resendImage = 1;
 }
 
 /////////////////////////////////////////////////////////
@@ -217,8 +217,8 @@ void pix_snap :: render(GemState *state)
     if (m_cache&&m_cache->resendImage)
     {
       m_originalImage->refreshImage(&m_pixBlock.image);
-    	m_pixBlock.newimage = 1;
-    	m_cache->resendImage = 0;
+        m_pixBlock.newimage = 1;
+        m_cache->resendImage = 0;
     }
 
     state->set(GemState::_PIX, &m_pixBlock);
@@ -240,7 +240,7 @@ void pix_snap :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_snap :: sizeMess(int width, int height)
 {
-	m_width = width;
+        m_width = width;
     m_height = height;
 }
 

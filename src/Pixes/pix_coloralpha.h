@@ -37,19 +37,19 @@ class GEM_EXTERN pix_coloralpha : public GemPixObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_coloralpha();
+            //////////
+            // Constructor
+        pix_coloralpha();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_coloralpha();
+        //////////
+        // Destructor
+        virtual ~pix_coloralpha();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
+        //////////
+        // Do the processing
+        virtual void    processRGBAImage(imageStruct &image);
 };
 
-#endif	// for header file
+#endif  // for header file

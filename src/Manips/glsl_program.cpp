@@ -134,89 +134,89 @@ void glsl_program :: renderGL2()
     for(int i=0; i<m_uniformCount; i++)
       {
         if(m_flag[i])
-	  {
-	    switch (m_type[i])
+          {
+            switch (m_type[i])
               {
-		/* float vectors */
+                /* float vectors */
               case GL_FLOAT:
                 glUniform1f( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
-		break;
+                break;
               case GL_FLOAT_VEC2:
                 glUniform2f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
-		break;
+                break;
               case GL_FLOAT_VEC3:
                 glUniform3f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
-			     static_cast<GLfloat>(m_param[i][2]) );
-		break;
+                             static_cast<GLfloat>(m_param[i][2]) );
+                break;
               case GL_FLOAT_VEC4:
                 glUniform4f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
-			     static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
-		break;
-		/* int vectors */
+                             static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
+                break;
+                /* int vectors */
               case GL_INT:
                 glUniform1i( m_loc[i], static_cast<GLint>(m_param[i][0]) );
-		break;
+                break;
               case GL_INT_VEC2:
                 glUniform2i( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]) );
-		break;
+                break;
               case GL_INT_VEC3:
                 glUniform3i(m_loc[i],
-			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), static_cast<GLint>(m_param[i][2]) );
-		break;
+                            static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]), static_cast<GLint>(m_param[i][2]) );
+                break;
               case GL_INT_VEC4:
                 glUniform4i(m_loc[i],
-			    static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
-			    static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
-		break;
-		/* bool vectors */
+                            static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
+                            static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
+                break;
+                /* bool vectors */
               case GL_BOOL:
                 glUniform1f( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
-		break;
+                break;
               case GL_BOOL_VEC2:
                 glUniform2f( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
-		break;
+                break;
               case GL_BOOL_VEC3:
                 glUniform3f( m_loc[i],
-			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
-			     static_cast<GLfloat>(m_param[i][2]) );
-		break;
+                             static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
+                             static_cast<GLfloat>(m_param[i][2]) );
+                break;
               case GL_BOOL_VEC4:
                 glUniform4f( m_loc[i],
-			     static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
-			     static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
-		break;
+                             static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
+                             static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
+                break;
 
-		/* float matrices */
+                /* float matrices */
               case GL_FLOAT_MAT2:
                 // GL_TRUE = row major order, GL_FALSE = column major
                 glUniformMatrix2fv( m_loc[i], 1, GL_FALSE, m_param[i] );
-		break;
+                break;
               case GL_FLOAT_MAT3:
                 glUniformMatrix3fv( m_loc[i], 1, GL_FALSE, m_param[i] );
-		break;
+                break;
               case GL_FLOAT_MAT4:
                 glUniformMatrix4fv( m_loc[i], 1, GL_FALSE, m_param[i] );
-		break;
+                break;
 
-		/* textures */
-	      case GL_SAMPLER_1D: break;
-	      case GL_SAMPLER_2D:
-		glUniform1i(m_loc[i], m_param[i][0]);
-		break;
-	      case GL_SAMPLER_3D: break;
-	      case GL_SAMPLER_CUBE: break;
-	      case GL_SAMPLER_1D_SHADOW: break;
-	      case GL_SAMPLER_2D_SHADOW: break;
-	      case GL_SAMPLER_2D_RECT_ARB:
-		glUniform1i(m_loc[i], static_cast<GLint>(m_param[i][0]));
-		break;
+                /* textures */
+              case GL_SAMPLER_1D: break;
+              case GL_SAMPLER_2D:
+                glUniform1i(m_loc[i], m_param[i][0]);
+                break;
+              case GL_SAMPLER_3D: break;
+              case GL_SAMPLER_CUBE: break;
+              case GL_SAMPLER_1D_SHADOW: break;
+              case GL_SAMPLER_2D_SHADOW: break;
+              case GL_SAMPLER_2D_RECT_ARB:
+                glUniform1i(m_loc[i], static_cast<GLint>(m_param[i][0]));
+                break;
               default:
-		;
+                ;
               }
             // remove flag because the value is in GL's state now...
             m_flag[i]=0;
 
-	  }
+          }
       }
     // glUniform1i(glGetUniformLocation(m_program, "MyTex1"), 1);
   } else {
@@ -232,87 +232,87 @@ void glsl_program :: renderARB()
     for(int i=0; i<m_uniformCount; i++)
       {
         if(m_flag[i])
-	  {
-	    switch (m_type[i])
+          {
+            switch (m_type[i])
               {
-		/* float vectors */
+                /* float vectors */
               case GL_FLOAT:
                 glUniform1fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
-		break;
+                break;
               case GL_FLOAT_VEC2_ARB:
                 glUniform2fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
-		break;
+                break;
               case GL_FLOAT_VEC3_ARB:
                 glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]) );
-		break;
+                break;
               case GL_FLOAT_VEC4_ARB:
                 glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
-		break;
+                break;
 
-		/* int vectors */
+                /* int vectors */
               case GL_INT:
                 glUniform1iARB( m_loc[i], static_cast<GLint>(m_param[i][0]) );
-		break;
+                break;
               case GL_INT_VEC2_ARB:
                 glUniform2iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]) );
-		break;
+                break;
               case GL_INT_VEC3_ARB:
                 glUniform3iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
                                 static_cast<GLint>(m_param[i][2]) );
-		break;
+                break;
               case GL_INT_VEC4_ARB:
                 glUniform4iARB( m_loc[i], static_cast<GLint>(m_param[i][0]), static_cast<GLint>(m_param[i][1]),
                                 static_cast<GLint>(m_param[i][2]), static_cast<GLint>(m_param[i][3]) );
-		break;
+                break;
 
-		/* bool vectors */
-	      case GL_BOOL_ARB:
+                /* bool vectors */
+              case GL_BOOL_ARB:
                 glUniform1fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]) );
-		break;
+                break;
               case GL_BOOL_VEC2_ARB:
                 glUniform2fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]) );
-		break;
+                break;
               case GL_BOOL_VEC3_ARB:
                 glUniform3fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]) );
-		break;
+                break;
               case GL_BOOL_VEC4_ARB:
                 glUniform4fARB( m_loc[i], static_cast<GLfloat>(m_param[i][0]), static_cast<GLfloat>(m_param[i][1]),
                                 static_cast<GLfloat>(m_param[i][2]), static_cast<GLfloat>(m_param[i][3]) );
-		break;
+                break;
 
-		/* float matrices */
+                /* float matrices */
               case GL_FLOAT_MAT2_ARB:
                 // GL_TRUE = row major order, GL_FALSE = column major
                 glUniformMatrix2fvARB( m_loc[i], 1, GL_FALSE, m_param[i] );
-		break;
+                break;
               case GL_FLOAT_MAT3_ARB:
                 glUniformMatrix3fvARB( m_loc[i], 1, GL_FALSE, m_param[i] );
-		break;
+                break;
               case GL_FLOAT_MAT4_ARB:
                 glUniformMatrix4fvARB( m_loc[i], 1, GL_FALSE, m_param[i] );
-		break;
+                break;
 
-		/* textures */
-	      case GL_SAMPLER_1D_ARB: break;
-	      case GL_SAMPLER_2D_ARB:
-		glUniform1iARB(m_loc[i], m_param[i][0]);
-		break;
-	      case GL_SAMPLER_3D_ARB: break;
-	      case GL_SAMPLER_CUBE_ARB: break;
-	      case GL_SAMPLER_1D_SHADOW_ARB: break;
-	      case GL_SAMPLER_2D_SHADOW_ARB: break;
-	      case GL_SAMPLER_2D_RECT_ARB:
-		glUniform1iARB(m_loc[i], m_param[i][0]);
-		break;
+                /* textures */
+              case GL_SAMPLER_1D_ARB: break;
+              case GL_SAMPLER_2D_ARB:
+                glUniform1iARB(m_loc[i], m_param[i][0]);
+                break;
+              case GL_SAMPLER_3D_ARB: break;
+              case GL_SAMPLER_CUBE_ARB: break;
+              case GL_SAMPLER_1D_SHADOW_ARB: break;
+              case GL_SAMPLER_2D_SHADOW_ARB: break;
+              case GL_SAMPLER_2D_RECT_ARB:
+                glUniform1iARB(m_loc[i], m_param[i][0]);
+                break;
               default:
-		;
+                ;
               }
             // remove flag because the value is in GL's state now...
             m_flag[i]=0;
-	  }
+          }
       }
     //  glUniform1iARB(glGetUniformLocationARB(program_object, "MyTex1"), 1);
   } else {
@@ -364,8 +364,8 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
         //   copy the values into memory and add a flag that we have them for this parameter
         //   in the render cycle use it
         for (int j=0; j < argc; j++) {
-	    m_param[i][j] = atom_getfloat(&argv[j]);
-	  }
+            m_param[i][j] = atom_getfloat(&argv[j]);
+          }
         // tell the GL state that this variable has changed next render
         m_flag[i] = 1;
         setModified();
@@ -673,64 +673,64 @@ void glsl_program :: printInfo()
 #define SWITCHPOST(label) case label: post("%s", #label); break
       switch (m_type[i])
         {
-	  SWITCHPOST(GL_FLOAT);
-	  SWITCHPOST(GL_FLOAT_VEC2);
-	  SWITCHPOST(GL_FLOAT_VEC3);
-	  SWITCHPOST(GL_FLOAT_VEC4);
+          SWITCHPOST(GL_FLOAT);
+          SWITCHPOST(GL_FLOAT_VEC2);
+          SWITCHPOST(GL_FLOAT_VEC3);
+          SWITCHPOST(GL_FLOAT_VEC4);
 
-	  SWITCHPOST(GL_INT);
-	  SWITCHPOST(GL_INT_VEC2);
-	  SWITCHPOST(GL_INT_VEC3);
-	  SWITCHPOST(GL_INT_VEC4);
+          SWITCHPOST(GL_INT);
+          SWITCHPOST(GL_INT_VEC2);
+          SWITCHPOST(GL_INT_VEC3);
+          SWITCHPOST(GL_INT_VEC4);
 
-	  SWITCHPOST(GL_BOOL);
-	  SWITCHPOST(GL_BOOL_VEC2);
-	  SWITCHPOST(GL_BOOL_VEC3);
-	  SWITCHPOST(GL_BOOL_VEC4);
+          SWITCHPOST(GL_BOOL);
+          SWITCHPOST(GL_BOOL_VEC2);
+          SWITCHPOST(GL_BOOL_VEC3);
+          SWITCHPOST(GL_BOOL_VEC4);
 
-	  SWITCHPOST(GL_FLOAT_MAT2);
-	  SWITCHPOST(GL_FLOAT_MAT3);
-	  SWITCHPOST(GL_FLOAT_MAT4);
+          SWITCHPOST(GL_FLOAT_MAT2);
+          SWITCHPOST(GL_FLOAT_MAT3);
+          SWITCHPOST(GL_FLOAT_MAT4);
 
-	  SWITCHPOST(GL_SAMPLER_1D);
-	  SWITCHPOST(GL_SAMPLER_2D);
-	  SWITCHPOST(GL_SAMPLER_3D);
-	  SWITCHPOST(GL_SAMPLER_CUBE);
-	  SWITCHPOST(GL_SAMPLER_1D_SHADOW);
-	  SWITCHPOST(GL_SAMPLER_2D_SHADOW);
-	  //	  SWITCHPOST(GL_SAMPLER_2D_RECT);
+          SWITCHPOST(GL_SAMPLER_1D);
+          SWITCHPOST(GL_SAMPLER_2D);
+          SWITCHPOST(GL_SAMPLER_3D);
+          SWITCHPOST(GL_SAMPLER_CUBE);
+          SWITCHPOST(GL_SAMPLER_1D_SHADOW);
+          SWITCHPOST(GL_SAMPLER_2D_SHADOW);
+          //      SWITCHPOST(GL_SAMPLER_2D_RECT);
         default:
-	  switch(m_type[i]) {
-	    //	  SWITCHPOST(GL_FLOAT_ARB);
-	    SWITCHPOST(GL_FLOAT_VEC2_ARB);
-	    SWITCHPOST(GL_FLOAT_VEC3_ARB);
-	    SWITCHPOST(GL_FLOAT_VEC4_ARB);
+          switch(m_type[i]) {
+            //    SWITCHPOST(GL_FLOAT_ARB);
+            SWITCHPOST(GL_FLOAT_VEC2_ARB);
+            SWITCHPOST(GL_FLOAT_VEC3_ARB);
+            SWITCHPOST(GL_FLOAT_VEC4_ARB);
 
-	    //	  SWITCHPOST(GL_INT_ARB);
-	    SWITCHPOST(GL_INT_VEC2_ARB);
-	    SWITCHPOST(GL_INT_VEC3_ARB);
-	    SWITCHPOST(GL_INT_VEC4_ARB);
+            //    SWITCHPOST(GL_INT_ARB);
+            SWITCHPOST(GL_INT_VEC2_ARB);
+            SWITCHPOST(GL_INT_VEC3_ARB);
+            SWITCHPOST(GL_INT_VEC4_ARB);
 
-	    SWITCHPOST(GL_BOOL_ARB);
-	    SWITCHPOST(GL_BOOL_VEC2_ARB);
-	    SWITCHPOST(GL_BOOL_VEC3_ARB);
-	    SWITCHPOST(GL_BOOL_VEC4_ARB);
+            SWITCHPOST(GL_BOOL_ARB);
+            SWITCHPOST(GL_BOOL_VEC2_ARB);
+            SWITCHPOST(GL_BOOL_VEC3_ARB);
+            SWITCHPOST(GL_BOOL_VEC4_ARB);
 
-	    SWITCHPOST(GL_FLOAT_MAT2_ARB);
-	    SWITCHPOST(GL_FLOAT_MAT3_ARB);
-	    SWITCHPOST(GL_FLOAT_MAT4_ARB);
+            SWITCHPOST(GL_FLOAT_MAT2_ARB);
+            SWITCHPOST(GL_FLOAT_MAT3_ARB);
+            SWITCHPOST(GL_FLOAT_MAT4_ARB);
 
-	    SWITCHPOST(GL_SAMPLER_1D_ARB);
-	    SWITCHPOST(GL_SAMPLER_2D_ARB);
-	    SWITCHPOST(GL_SAMPLER_3D_ARB);
-	    SWITCHPOST(GL_SAMPLER_CUBE_ARB);
-	    SWITCHPOST(GL_SAMPLER_1D_SHADOW_ARB);
-	    SWITCHPOST(GL_SAMPLER_2D_SHADOW_ARB);
-	    SWITCHPOST(GL_SAMPLER_2D_RECT_ARB);
-	  default:
-	    post("unknown (0x%X)", m_type[i]);
-	    break;
-	  }
+            SWITCHPOST(GL_SAMPLER_1D_ARB);
+            SWITCHPOST(GL_SAMPLER_2D_ARB);
+            SWITCHPOST(GL_SAMPLER_3D_ARB);
+            SWITCHPOST(GL_SAMPLER_CUBE_ARB);
+            SWITCHPOST(GL_SAMPLER_1D_SHADOW_ARB);
+            SWITCHPOST(GL_SAMPLER_2D_SHADOW_ARB);
+            SWITCHPOST(GL_SAMPLER_2D_RECT_ARB);
+          default:
+            post("unknown (0x%X)", m_type[i]);
+            break;
+          }
           break;
         }
     }

@@ -64,4 +64,4 @@ class GEM_EXTERN glsl_fragment : public glsl_vertex
   virtual void printInfo();
 };
 
-#endif	// for header file
+#endif  // for header file

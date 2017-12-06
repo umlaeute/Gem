@@ -326,9 +326,9 @@ void pix_videoDarwin :: InitSeqGrabber()
         post("SG channel Device List count %d index %d",deviceCount,deviceIndex);
         int i;
         for (i = 0; i < deviceCount; i++){
-	  post("SG channel Device List  %.*s",
-	       (*devices)->entry[i].name[0],
-	       (*devices)->entry[i].name+1);
+          post("SG channel Device List  %.*s",
+               (*devices)->entry[i].name[0],
+               (*devices)->entry[i].name+1);
             }
         SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
@@ -342,9 +342,9 @@ void pix_videoDarwin :: InitSeqGrabber()
         //for (i = 0; i < deviceCount; i++){
         for (i = 0; i < inputIndex; i++){
             post("SG channel Input Device List %d %.*s",
-		 i,
-		 (*theSGInputList)->entry[i].name[0],
-		 (*theSGInputList)->entry[i].name+1);
+                 i,
+                 (*theSGInputList)->entry[i].name[0],
+                 (*theSGInputList)->entry[i].name+1);
         }
 
 
@@ -354,8 +354,8 @@ void pix_videoDarwin :: InitSeqGrabber()
     if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
         //anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice);
         post("SGSetChannelDevice trying %s",
-	     (*devices)->entry[m_inputDevice].name[0],
-	     (*devices)->entry[m_inputDevice].name+1);
+             (*devices)->entry[m_inputDevice].name[0],
+             (*devices)->entry[m_inputDevice].name+1);
         anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
 
         if(anErr!=noErr) error("SGSetChannelDevice returned error %d",anErr);

@@ -77,4 +77,3 @@ void part_size :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG (classPtr, "size", sizeMess);
 }
-

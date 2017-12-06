@@ -81,7 +81,7 @@ std::map <std::string, int> GemStateData::keys;
 //
 /////////////////////////////////////////////////////////
 GemState :: GemState()
-		  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
+                  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
         image(0), texCoords(0), numTexCoords(0), multiTexUnits(0),
         tickTime(50.f), drawType(0),
         VertexDirty(0),

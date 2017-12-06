@@ -66,8 +66,8 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
       break;
     case 0:
       {
-	gem::any dummy;
-	props.set(key, dummy);
+        gem::any dummy;
+        props.set(key, dummy);
       }
       break;
     }
@@ -364,7 +364,7 @@ void pix_buffer :: enumProperties(void)
       data.push_back(std::string("float"));
       /* LATER: get and show ranges */
       if(props.get(key, d)) {
-	data.push_back(d);
+        data.push_back(d);
       }
     }
       break;
@@ -372,7 +372,7 @@ void pix_buffer :: enumProperties(void)
       data.push_back(std::string("symbol"));
       std::string s;
       if(props.get(key, s)) {
-	data.push_back(s);
+        data.push_back(s);
       }
     }
       break;
@@ -380,7 +380,7 @@ void pix_buffer :: enumProperties(void)
       data.push_back(std::string("unknown"));
       break;
     }
-    
+
     m_outlet->send("proplist", data);
   }
 }
@@ -436,7 +436,7 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
       case 'r': case 'R': c=4; break;
       default:
         error("invalid format %s!", atom_getsymbol(ap)->s_name);
-	return;
+        return;
       }
     } else if(A_FLOAT==ap->a_type) {
 
@@ -449,11 +449,11 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
   case 2:
     if((A_FLOAT==argv->a_type) && (A_FLOAT==(argv+1)->a_type)) {
       int i=atom_getint(argv);
-      if(i<0) {	error("invalid dimenstions: x=%d < 0", i); return; }
+      if(i<0) { error("invalid dimenstions: x=%d < 0", i); return; }
       x=(unsigned int)i;
 
       i=atom_getint(argv+1);
-      if(i<0) {	error("invalid dimenstions: y=%d < 0", i); return; }
+      if(i<0) { error("invalid dimenstions: y=%d < 0", i); return; }
       y=(unsigned int)i;
     } else {
       error("invalid dimensions!");
@@ -463,7 +463,7 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
   case 1:
     if(A_FLOAT==argv->a_type) {
       int i=atom_getint(argv);
-      if(i<0) {	error("invalid dimenstions: x=%d < 0", i); return; }
+      if(i<0) { error("invalid dimenstions: x=%d < 0", i); return; }
       x=(unsigned int)i;
       y=1;
       c=1;

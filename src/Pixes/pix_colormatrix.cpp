@@ -54,7 +54,7 @@ pix_colormatrix :: ~pix_colormatrix()
 void pix_colormatrix :: processRGBAImage(imageStruct &image)
 {
     unsigned char *base = image.data;
-	int count = image.ysize * image.xsize;
+        int count = image.ysize * image.xsize;
 
     while (count--)
     {
@@ -63,16 +63,16 @@ void pix_colormatrix :: processRGBAImage(imageStruct &image)
         float blue  = base[chBlue];
         float alpha = base[chAlpha];
 
-    	float r = m_matrix[0] * red + m_matrix[4] * green + m_matrix[8] * blue + m_matrix[12] * alpha;
-    	float g = m_matrix[1] * red + m_matrix[5] * green + m_matrix[9] * blue + m_matrix[13] * alpha;
-    	float b = m_matrix[2] * red + m_matrix[6] * green + m_matrix[10] * blue + m_matrix[14] * alpha;
-    	float a = m_matrix[3] * red + m_matrix[7] * green + m_matrix[11] * blue + m_matrix[15] * alpha;
-    	base[chRed] = CLAMP(r);
-    	base[chGreen] = CLAMP(g);
-    	base[chBlue] = CLAMP(b);
-    	base[chAlpha] = CLAMP(a);
-		base += 4;
-	}
+        float r = m_matrix[0] * red + m_matrix[4] * green + m_matrix[8] * blue + m_matrix[12] * alpha;
+        float g = m_matrix[1] * red + m_matrix[5] * green + m_matrix[9] * blue + m_matrix[13] * alpha;
+        float b = m_matrix[2] * red + m_matrix[6] * green + m_matrix[10] * blue + m_matrix[14] * alpha;
+        float a = m_matrix[3] * red + m_matrix[7] * green + m_matrix[11] * blue + m_matrix[15] * alpha;
+        base[chRed] = CLAMP(r);
+        base[chGreen] = CLAMP(g);
+        base[chBlue] = CLAMP(b);
+        base[chAlpha] = CLAMP(a);
+                base += 4;
+        }
 }
 
 /////////////////////////////////////////////////////////
@@ -102,8 +102,8 @@ void pix_colormatrix :: matrixMess(int argc, t_atom *argv)
     }
     else
     {
-    	error("GEM: color matrix size not correct");
-    	return;
+        error("GEM: color matrix size not correct");
+        return;
     }
 
     setPixModified();
@@ -116,9 +116,9 @@ void pix_colormatrix :: matrixMess(int argc, t_atom *argv)
 void pix_colormatrix :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colormatrix),
-		   gensym("pix_colourmatrix"), A_NULL);
+                   gensym("pix_colourmatrix"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colormatrix::matrixMessCallback),
-    	    gensym("matrix"), A_GIMME, A_NULL);
+            gensym("matrix"), A_GIMME, A_NULL);
 }
 void pix_colormatrix :: matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

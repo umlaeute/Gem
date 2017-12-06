@@ -52,7 +52,7 @@ void pix_bitmask :: processRGBAImage(imageStruct &image)
   int datasize = image.xsize * image.ysize;
   unsigned char *pixels = image.data;
 
-  while(datasize--)	{
+  while(datasize--)     {
     pixels[chRed] &= m_mask[chRed];
     pixels[chGreen] &= m_mask[chGreen];
     pixels[chBlue] &= m_mask[chBlue];
@@ -66,7 +66,7 @@ void pix_bitmask :: processYUVImage(imageStruct &image)
   unsigned char *pixels = image.data;
 
   if (m_mode)
-    while(datasize--)	{
+    while(datasize--)   {
       pixels[chU] &= m_mask[chGreen];
       pixels[chY0] &= m_mask[chRed];
       pixels[chV] &= m_mask[chBlue];
@@ -74,7 +74,7 @@ void pix_bitmask :: processYUVImage(imageStruct &image)
       pixels += 4;
     }
   else
-    while(datasize--)	{
+    while(datasize--)   {
       pixels[chY0] &= m_mask[chRed];
       pixels[chY1] &= m_mask[chRed];
       pixels += 4;
@@ -85,7 +85,7 @@ void pix_bitmask :: processGrayImage(imageStruct &image)
   int datasize = image.xsize * image.ysize;
   unsigned char *pixels = image.data;
 
-  while(datasize--)	{
+  while(datasize--)     {
     pixels[chGray] &= m_mask[chRed];
     pixels++;
   }
@@ -109,13 +109,13 @@ void pix_bitmask :: processYUVMMX(imageStruct &image){
   int i = image.xsize * image.ysize/4;
 
   const __m64 mask = _mm_set_pi8(m_mask[chRed],
-				 m_mask[chBlue],
-				 m_mask[chRed],
-				 m_mask[chGreen],
-				 m_mask[chRed],
-				 m_mask[chBlue],
-				 m_mask[chRed],
-				 m_mask[chGreen]);
+                                 m_mask[chBlue],
+                                 m_mask[chRed],
+                                 m_mask[chGreen],
+                                 m_mask[chRed],
+                                 m_mask[chBlue],
+                                 m_mask[chRed],
+                                 m_mask[chGreen]);
   __m64 *input = (__m64*)image.data;
 
   while(i--){
@@ -149,8 +149,8 @@ void pix_bitmask :: vecMaskMess(int argc, t_atom *argv)
     else if (argc == 3) m_mask[chAlpha] = 255;
     else
     {
-    	error("not enough mask values");
-    	return;
+        error("not enough mask values");
+        return;
     }
     m_mask[chRed] = atom_getint(&argv[0]);
     m_mask[chGreen] = atom_getint(&argv[1]);
@@ -179,9 +179,9 @@ void pix_bitmask :: intMaskMess(int mask)
 void pix_bitmask :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::vecMaskMessCallback),
-    	    gensym("vec_mask"), A_GIMME, A_NULL);
+            gensym("vec_mask"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::floatMaskMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
+            gensym("ft1"), A_FLOAT, A_NULL);
 }
 void pix_bitmask :: vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

@@ -123,4 +123,4 @@ namespace gem { namespace plugins {
  */
 #define REGISTER_IMAGESAVERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imagesaver> fac_imagesaver_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

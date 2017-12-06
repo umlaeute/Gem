@@ -530,7 +530,7 @@ typedef void* f0r_param_t;
  * \see f0r_get_param_value
  */
 void f0r_set_param_value(f0r_instance_t instance,
-			 f0r_param_t param, int param_index);
+                         f0r_param_t param, int param_index);
 
 /**
  * This function allows the application to query the parameter values of an
@@ -550,7 +550,7 @@ void f0r_set_param_value(f0r_instance_t instance,
   * \see f0r_set_param_value
  */
 void f0r_get_param_value(f0r_instance_t instance,
-			 f0r_param_t param, int param_index);
+                         f0r_param_t param, int param_index);
 
 //---------------------------------------------------------------------------
 
@@ -580,7 +580,7 @@ void f0r_get_param_value(f0r_instance_t instance,
  * \see f0r_update2
  */
 void f0r_update(f0r_instance_t instance,
-		double time, const uint32_t* inframe, uint32_t* outframe);
+                double time, const uint32_t* inframe, uint32_t* outframe);
 
 //---------------------------------------------------------------------------
 
@@ -606,11 +606,11 @@ void f0r_update(f0r_instance_t instance,
  * \see f0r_update
  */
 void f0r_update2(f0r_instance_t instance,
-		 double time,
-		 const uint32_t* inframe1,
-		 const uint32_t* inframe2,
-		 const uint32_t* inframe3,
-		 uint32_t* outframe);
+                 double time,
+                 const uint32_t* inframe1,
+                 const uint32_t* inframe2,
+                 const uint32_t* inframe3,
+                 uint32_t* outframe);
 //---------------------------------------------------------------------------
 
 #endif

@@ -75,7 +75,7 @@ ambientRGB :: ~ambientRGB()
 /////////////////////////////////////////////////////////
 void ambientRGB :: postrender(GemState *)
 {
-	glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_COLOR_MATERIAL);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,8 +84,8 @@ void ambientRGB :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void ambientRGB :: render(GemState *)
 {
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_vector);
+        glDisable(GL_COLOR_MATERIAL);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_vector);
 }
 
 /////////////////////////////////////////////////////////

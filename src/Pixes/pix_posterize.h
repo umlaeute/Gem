@@ -33,28 +33,27 @@ CPPEXTERN_HEADER(pix_posterize, GemPixObj);
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_posterize();
+            //////////
+            // Constructor
+        pix_posterize();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_posterize();
+        //////////
+        // Destructor
+        virtual ~pix_posterize();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processYUVImage(imageStruct &image);
+        //////////
+        // Do the processing
+        virtual void    processYUVImage(imageStruct &image);
 
-        void	    	factorMess(float f);
-        void	    	limitMess(int l);
+        void            factorMess(float f);
+        void            limitMess(int l);
 
         t_inlet         *inletF;
         t_inlet         *inletL;
-        int		factor; // 0..1 (was 0..255) /* jmz */
-        int		limit; // 0,1,2,3,4
+        int             factor; // 0..1 (was 0..255) /* jmz */
+        int             limit; // 0,1,2,3,4
 };
 
 #endif
-

@@ -47,13 +47,13 @@ public:
     if(ap) {
       switch(ap->a_type) {
       case A_FLOAT:
-	result=atom_getfloat(ap);
-	break;
+        result=atom_getfloat(ap);
+        break;
       case A_SYMBOL:
-	result=atom_getsymbol(ap)->s_name;
-	break;
+        result=atom_getsymbol(ap)->s_name;
+        break;
       default:
-	result=ap->a_w.w_gpointer;
+        result=ap->a_w.w_gpointer;
       }
     }
     return result;
@@ -81,8 +81,8 @@ public:
       break;
     case 0:
       {
-	gem::any dummy;
-	props.set(key, dummy);
+        gem::any dummy;
+        props.set(key, dummy);
       }
       break;
     }
@@ -295,8 +295,8 @@ void pix_record :: enumPropertiesMess()
       SETSYMBOL(ap+1, gensym("Float"));
       /* LATER: get and show ranges */
       if(props.get(key, d)) {
-	ac=3;
-	SETFLOAT(ap+2, d);
+        ac=3;
+        SETFLOAT(ap+2, d);
       }
     }
       break;
@@ -304,8 +304,8 @@ void pix_record :: enumPropertiesMess()
       SETSYMBOL(ap+1, gensym("Symbol"));
       std::string s;
       if(props.get(key, s)) {
-	ac=3;
-	SETSYMBOL(ap+2, gensym(s.c_str()));
+        ac=3;
+        SETSYMBOL(ap+2, gensym(s.c_str()));
       }
     }
       break;
@@ -451,7 +451,7 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
   CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codecMessCallback),
-		  gensym("codec"), A_GIMME, A_NULL);
+                  gensym("codec"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
   CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertiesMess);

@@ -187,8 +187,8 @@ void newWave :: renderShape(GemState *state)
         {
             xsize = 1;
             ysize = 1;
-	    ysize0= 0;
-	    xsize0= 0;
+            ysize0= 0;
+            xsize0= 0;
             setSize( gridX, gridY);
             setOther(m_textureMode );
             reset( resetMode );
@@ -241,50 +241,50 @@ void newWave :: getforce(void)
     // this noise does propagate thrus the all structure.
     force[2][2]= 2e-20 * (double)random2() * (1. / 2147483648.) - 1e-20;
 
-		if (K1 != 0)
-	{
-		for ( i=1; i<gridX; i++)
-			for (int j=1;j<gridY; j++)
-			{
-				d = K1 * (posit[i][j] - posit[i][j-1]);
-				force[i][j] -= d;
-				force[i][j-1] += d;
+                if (K1 != 0)
+        {
+                for ( i=1; i<gridX; i++)
+                        for (int j=1;j<gridY; j++)
+                        {
+                                d = K1 * (posit[i][j] - posit[i][j-1]);
+                                force[i][j] -= d;
+                                force[i][j-1] += d;
 
 
-				d = K1 * (posit[i][j] - posit[i-1][j]);
-				force[i][j] -= d;
-				force[i-1][j] += d;
-			}
+                                d = K1 * (posit[i][j] - posit[i-1][j]);
+                                force[i][j] -= d;
+                                force[i-1][j] += d;
+                        }
     }
 
-	if (K2 != 0)
-	{
-		for ( i=1; i<gridX; i++)
-			for (int j=1;j<gridY; j++)
-			{
-				d = K2 * (posit[i][j] - posit[i-1][j-1]);
-				force[i][j] -= d;
-				force[i-1][j-1] += d;
+        if (K2 != 0)
+        {
+                for ( i=1; i<gridX; i++)
+                        for (int j=1;j<gridY; j++)
+                        {
+                                d = K2 * (posit[i][j] - posit[i-1][j-1]);
+                                force[i][j] -= d;
+                                force[i-1][j-1] += d;
 
-			}
+                        }
 
-		for ( i=0; i<gridX-1; i++)
-			for (int j=1;j<gridY; j++)
-			{
-				d = K2 * (posit[i][j] - posit[i+1][j-1]);
-				force[i][j] -= d;
-				force[i+1][j-1] += d;
-			}
+                for ( i=0; i<gridX-1; i++)
+                        for (int j=1;j<gridY; j++)
+                        {
+                                d = K2 * (posit[i][j] - posit[i+1][j-1]);
+                                force[i][j] -= d;
+                                force[i+1][j-1] += d;
+                        }
     }
 
-	if (K3 != 0)
-	{
-		for ( i=1; i<gridX-1; i++)
-			for (int j=1;j<gridY-1; j++)
-			{
-				d = K3 * posit[i][j];
-			    force[i][j] -= d;
-			}
+        if (K3 != 0)
+        {
+                for ( i=1; i<gridX-1; i++)
+                        for (int j=1;j<gridY-1; j++)
+                        {
+                                d = K3 * posit[i][j];
+                            force[i][j] -= d;
+                        }
     }
 
 }
@@ -422,8 +422,8 @@ void newWave :: getposition(void)
 {
     for ( int i=1; i<gridX-1; i++)
         for ( int j=1;j<gridY-1; j++)
-	  //            posit[i][j] += veloc[i][j];
-			posit[i][j] = MAX(-1e20f, MIN(1e20f, posit[i][j]+veloc[i][j]));
+          //            posit[i][j] += veloc[i][j];
+                        posit[i][j] = MAX(-1e20f, MIN(1e20f, posit[i][j]+veloc[i][j]));
 }
 
 /////////////////////////////////////////////////////////
@@ -436,8 +436,8 @@ void newWave :: getTexCoords(void)
     {
         for ( int j = 0; j < gridY; ++j)
         {
-	  texCoords[i][j][0] = (((xsize*1.*i)/(gridX-1)) + xsize0 );
-	  texCoords[i][j][1] = (((ysize*1.*j)/(gridY-1)) + ysize0 );
+          texCoords[i][j][0] = (((xsize*1.*i)/(gridX-1)) + xsize0 );
+          texCoords[i][j][1] = (((ysize*1.*j)/(gridY-1)) + ysize0 );
         }
     }
 }
@@ -463,16 +463,16 @@ void newWave :: setSize( int valueX, int valueY )
 void newWave :: bangMess(void)
 {
 
-		savepos();
+                savepos();
 
-		getvelocity();
-		getposition();
+                getvelocity();
+                getposition();
 
-		getFaceNorms();
+                getFaceNorms();
         getVertNorms();
 
         getforce();
-		getdamp();
+                getdamp();
 
 }
 
@@ -661,7 +661,7 @@ void newWave :: reset(int value)
                 posit[i][j] = 0.0;
                 break;
             case SPIKE:
-	      posit[i][j]= (i == gridX/2 && j == gridY/2) ? gridX*1.5 : 0.0;
+              posit[i][j]= (i == gridX/2 && j == gridY/2) ? gridX*1.5 : 0.0;
                 break;
             case HOLE:
                 posit[i][j]= (!((i > gridX/3 && j > gridY/3)&&(i < gridX*2/3 && j < gridY*2/3))) ? gridX/4 : 0.0;
@@ -683,14 +683,14 @@ void newWave :: reset(int value)
                 break;
             case HILL:
                 posit[i][j]=
-		  (sin(M_PI * ((1.*i)/gridX)) +
-		   sin(M_PI * ((1.*j)/gridY)))* gridX/6.0;
-				break;
+                  (sin(M_PI * ((1.*i)/gridX)) +
+                   sin(M_PI * ((1.*j)/gridY)))* gridX/6.0;
+                                break;
             case HILLFOUR:
                 posit[i][j]=
-		  (sin(M_PI*2.* ((1.*i)/gridX)) +
-		   sin(M_PI*2.* ((1.*j)/gridY)))* gridX/6.0;
-				break;
+                  (sin(M_PI*2.* ((1.*i)/gridX)) +
+                   sin(M_PI*2.* ((1.*j)/gridY)))* gridX/6.0;
+                                break;
             }
             if (i==0||j==0||i==gridX-1||j==gridY-1) posit[i][j]=0.0;
         }

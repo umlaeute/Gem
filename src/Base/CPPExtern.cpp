@@ -187,8 +187,8 @@ std::string CPPExtern::findFile(const std::string&file) const {
 bool CPPExtern :: checkGemVersion(const int major, const int minor) {
   if(!GemVersion::versionCheck(major, minor)) {
     ::error("GEM version mismatch: compiled for %d.%d but we are running %s",
-	    major, minor,
-	    GemVersion::versionString());
+            major, minor,
+            GemVersion::versionString());
         return false;
   }
   return true;

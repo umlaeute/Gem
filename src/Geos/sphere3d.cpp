@@ -327,7 +327,7 @@ void sphere3d :: render(GemState *state)
     else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
 
       int src = 1;
-      for (int i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here
+      for (int i = 1; i < stacks; i++) {        // stack line at i==stacks-1 was missing here
         glBegin(GL_LINE_LOOP);
         for (int j = 0; j < slices; j++) {
 

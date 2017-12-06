@@ -26,4 +26,3 @@ static inline void gem__nop_post(const char*fmt, ...) { ; }
 #define nop_post gem__nop_post
 
 #endif  // for header file
-

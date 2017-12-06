@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -34,7 +34,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-gemlist_info :: gemlist_info	(t_floatarg) {
+gemlist_info :: gemlist_info    (t_floatarg) {
   m_outletRotation = outlet_new(this->x_obj, 0);
   m_outletShear = outlet_new(this->x_obj, 0);
   m_outletScale = outlet_new(this->x_obj, 0);
@@ -78,7 +78,7 @@ void gemlist_info :: render(GemState *state) {
   // test de syngularité a effectuer
 
   // normalisation
-  //	for (i=0; i<16; i++) mi[i] /= mi[15];
+  //    for (i=0; i<16; i++) mi[i] /= mi[15];
   // not useful because I never saw mi[15]!=1; if this change, un-comment this normalisation procedure
   ScaleX = sqrt (mi[0] * mi[0] + mi[4] * mi[4] + mi[8] * mi[8]);
   mi[0] /= ScaleX; // Normalise X

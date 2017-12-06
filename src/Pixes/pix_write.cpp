@@ -92,7 +92,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_write :: ~pix_write(void)
 {
-	cleanImage();
+        cleanImage();
 }
 
 
@@ -119,7 +119,7 @@ void pix_write :: doWrite(void)
   int height = m_height;
 
   GemMan::getDimen(((m_width >0)?NULL:&width ),
-		   ((m_height>0)?NULL:&height));
+                   ((m_height>0)?NULL:&height));
 
   m_originalImage->xsize = width;
   m_originalImage->ysize = height;
@@ -143,18 +143,18 @@ void pix_write :: doWrite(void)
 
 #if 0 // asynchronous texture fetching idea sketch
 /* Enable AGP storage hints */
-	glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
-	glTextureRangeAPPLE(...);
-	glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+        glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
+        glTextureRangeAPPLE(...);
+        glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
 
-	/* Copy from Frame Buffer */
-	glCopyTexSubImage2d(...);
+        /* Copy from Frame Buffer */
+        glCopyTexSubImage2d(...);
 
-	/* Flush into AGP */
-	glFlush(...);
+        /* Flush into AGP */
+        glFlush(...);
 
-	/* Pull out of AGP */
-	glGetTexImage(...);
+        /* Pull out of AGP */
+        glGetTexImage(...);
 #endif
 
 

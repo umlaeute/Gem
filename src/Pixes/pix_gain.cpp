@@ -77,24 +77,24 @@ void pix_gain :: processRGBAImage(imageStruct &image)
   if(m_saturate) {
     while(datasize--)
       {
-	red =   (pixels[chRed  ] * R)>>8;
-	pixels[chRed  ] = CLAMP(red);
-	green = (pixels[chGreen] * G)>>8;
-	pixels[chGreen] = CLAMP(green);
-	blue =  (pixels[chBlue ] * B)>>8;
-	pixels[chBlue ] = CLAMP(blue);
-	int alpha = (pixels[chAlpha] * A)>>8;
-	pixels[chAlpha] = CLAMP(alpha);
-	pixels += 4;
+        red =   (pixels[chRed  ] * R)>>8;
+        pixels[chRed  ] = CLAMP(red);
+        green = (pixels[chGreen] * G)>>8;
+        pixels[chGreen] = CLAMP(green);
+        blue =  (pixels[chBlue ] * B)>>8;
+        pixels[chBlue ] = CLAMP(blue);
+        int alpha = (pixels[chAlpha] * A)>>8;
+        pixels[chAlpha] = CLAMP(alpha);
+        pixels += 4;
       }
   } else {
     while(datasize--)
       {
-	pixels[chRed  ] = (pixels[chRed  ] * R)>>8;
-	pixels[chGreen] = (pixels[chGreen] * G)>>8;
-	pixels[chBlue ] = (pixels[chBlue ] * B)>>8;
-	pixels[chAlpha] = (pixels[chAlpha] * A)>>8;
-	pixels += 4;
+        pixels[chRed  ] = (pixels[chRed  ] * R)>>8;
+        pixels[chGreen] = (pixels[chGreen] * G)>>8;
+        pixels[chBlue ] = (pixels[chBlue ] * B)>>8;
+        pixels[chAlpha] = (pixels[chAlpha] * A)>>8;
+        pixels += 4;
       }
   }
 }
@@ -110,15 +110,15 @@ void pix_gain :: processGrayImage(imageStruct &image)
   if(m_saturate) {
     while (datasize--)
       {
-	int gray = static_cast<int>(pixels[chGray] * m_gain[chRed]);
-	pixels[chGray] = CLAMP(gray);
-	pixels++;
+        int gray = static_cast<int>(pixels[chGray] * m_gain[chRed]);
+        pixels[chGray] = CLAMP(gray);
+        pixels++;
       }
   } else {
     while (datasize--)
       {
-	pixels[chGray] = static_cast<int>(pixels[chGray] * m_gain[chRed]);
-	pixels++;
+        pixels[chGray] = static_cast<int>(pixels[chGray] * m_gain[chRed]);
+        pixels++;
       }
   }
 }
@@ -141,38 +141,38 @@ void pix_gain :: processYUVImage(imageStruct &image)
     for (h=0; h<image.ysize; h++){
       for(w=0; w<width; w++){
 
-	u = (((image.data[src] - 128) * U)>>8)+128;
-	image.data[src] = static_cast<unsigned char>(CLAMP(u));
+        u = (((image.data[src] - 128) * U)>>8)+128;
+        image.data[src] = static_cast<unsigned char>(CLAMP(u));
 
-	y1 = (image.data[src+1] * Y)>>8;
-	image.data[src+1] = static_cast<unsigned char>(CLAMP(y1));
+        y1 = (image.data[src+1] * Y)>>8;
+        image.data[src+1] = static_cast<unsigned char>(CLAMP(y1));
 
-	v = (((image.data[src+2] - 128) * V)>>8)+128;
-	image.data[src+2] = static_cast<unsigned char>(CLAMP(v));
+        v = (((image.data[src+2] - 128) * V)>>8)+128;
+        image.data[src+2] = static_cast<unsigned char>(CLAMP(v));
 
-	y2 = (image.data[src+3] * Y)>>8;
-	image.data[src+3] = static_cast<unsigned char>(CLAMP(y2));
+        y2 = (image.data[src+3] * Y)>>8;
+        image.data[src+3] = static_cast<unsigned char>(CLAMP(y2));
 
-	src+=4;
+        src+=4;
       }
     }
   } else {
     for (h=0; h<image.ysize; h++){
       for(w=0; w<width; w++){
 
-	u = (((image.data[src] - 128) * U)>>8)+128;
-	image.data[src] = static_cast<unsigned char>(u);
+        u = (((image.data[src] - 128) * U)>>8)+128;
+        image.data[src] = static_cast<unsigned char>(u);
 
-	y1 = (image.data[src+1] * Y)>>8;
-	image.data[src+1] = static_cast<unsigned char>(y1);
+        y1 = (image.data[src+1] * Y)>>8;
+        image.data[src+1] = static_cast<unsigned char>(y1);
 
-	v = (((image.data[src+2] - 128) * V)>>8)+128;
-	image.data[src+2] = static_cast<unsigned char>(v);
+        v = (((image.data[src+2] - 128) * V)>>8)+128;
+        image.data[src+2] = static_cast<unsigned char>(v);
 
-	y2 = (image.data[src+3] * Y)>>8;
-	image.data[src+3] = static_cast<unsigned char>(y2);
+        y2 = (image.data[src+3] * Y)>>8;
+        image.data[src+3] = static_cast<unsigned char>(y2);
 
-	src+=4;
+        src+=4;
       }
     }
   }
@@ -245,14 +245,14 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
   height = image.ysize;
   union
   {
-    short	elements[8];
-    vector	signed short v;
+    short       elements[8];
+    vector      signed short v;
   }shortBuffer;
 
   union
   {
-    unsigned long	elements[8];
-    vector	unsigned int v;
+    unsigned long       elements[8];
+    vector      unsigned int v;
   }bitBuffer;
 
 
@@ -293,7 +293,7 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
   d = (vector signed short)vec_splat((vector signed short)d,0);
 
 #ifndef PPC970
-  UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( inData, prefetchSize, 0 );
 #endif
 
@@ -400,11 +400,11 @@ void pix_gain :: saturateMess(int sat)
 void pix_gain :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::vecGainMessCallback),
-		  gensym("vec_gain"), A_GIMME, A_NULL);
+                  gensym("vec_gain"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::floatGainMessCallback),
-		  gensym("ft1"), A_FLOAT, A_NULL);
+                  gensym("ft1"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::saturateMessCallback),
-		  gensym("saturate"), A_FLOAT, A_NULL);
+                  gensym("saturate"), A_FLOAT, A_NULL);
 }
 void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {

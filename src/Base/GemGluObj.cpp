@@ -79,7 +79,7 @@ void GemGluObj :: numSlicesMess(int numSlices, int numStacks)
 void GemGluObj :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&GemGluObj::numSlicesMessCallback),
-    	    gensym("numslices"), A_GIMME, A_NULL);
+            gensym("numslices"), A_GIMME, A_NULL);
 }
 void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {

@@ -35,17 +35,17 @@ class GEM_EXTERN linear_path : public GemPathBase
 
         //////////
         // Constructor
-    	linear_path(int argc, t_atom *argv);
+        linear_path(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~linear_path();
+        //////////
+        // Destructor
+        virtual ~linear_path();
 
         //////////
         // When a float val is received
-	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
+        virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
 };
 
-#endif	// for header file
+#endif  // for header file

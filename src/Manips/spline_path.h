@@ -35,17 +35,17 @@ class GEM_EXTERN spline_path : public GemPathBase
 
         //////////
         // Constructor
-    	spline_path(int argc, t_atom *argv);
+        spline_path(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~spline_path();
+        //////////
+        // Destructor
+        virtual ~spline_path();
 
         //////////
         // When a float val is received
-	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
+        virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
 };
 
-#endif	// for header file
+#endif  // for header file

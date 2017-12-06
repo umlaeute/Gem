@@ -69,7 +69,7 @@ void gemlist :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: postrender(GemState *)
 {
-  //	m_validState=false;
+  //    m_validState=false;
 
   // this is to early to reset the m_validState
   // when should we call this???
@@ -80,7 +80,7 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
 {
   if  ( !GemMan::windowExists() ) {
     // LATER: shouldn't this test for a valid context rather than an existing window??
-    //	error("you should not bang the gemlist now");
+    //  error("you should not bang the gemlist now");
     return;
   }
 

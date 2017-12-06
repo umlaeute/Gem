@@ -73,11 +73,11 @@ void rotate :: angleMess(float angle)
 {
     if ( angle > 0)
     {
-    	while (angle >= 360.0) angle -= 360.;
+        while (angle >= 360.0) angle -= 360.;
     }
     else if ( angle < 0)
     {
-    	while (angle <= -360.0) angle += 360.;
+        while (angle <= -360.0) angle += 360.;
     }
     m_angle = angle;
     setModified();
@@ -104,4 +104,3 @@ void rotate :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "ft1", angleMess, float);
   CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
 }
-

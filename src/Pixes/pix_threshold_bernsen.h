@@ -45,27 +45,27 @@ class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
 
         //////////
         // Constructor
-    	pix_threshold_bernsen();
+        pix_threshold_bernsen();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_threshold_bernsen();
+        //////////
+        // Destructor
+        virtual ~pix_threshold_bernsen();
 
-    	//////////
-    	// Do the processing
+        //////////
+        // Do the processing
         static void processGraySub_getMinMax(imageStruct&image,
                                       int fromX, int toX,
                                       int fromY, int toY,
                                       unsigned char*resultMin,
                                       unsigned char*resultMax);
-    	virtual void 	processGrayImage(imageStruct &image);
+        virtual void    processGrayImage(imageStruct &image);
 
-    	//////////
-    	// set the number of tiles
-    	void	    	tilesMess(int w, int h);
-    	void	    	contrastMess(int c);
+        //////////
+        // set the number of tiles
+        void            tilesMess(int w, int h);
+        void            contrastMess(int c);
 
         int m_xtiles, m_ytiles;
 
@@ -77,10 +77,10 @@ class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
 
     private:
 
-    	//////////
-    	// Static member functions
-    	static void 	tilesMessCallback(void *data, t_float w, t_float h);
-    	static void 	contrastMessCallback(void *data, t_float c);
+        //////////
+        // Static member functions
+        static void     tilesMessCallback(void *data, t_float w, t_float h);
+        static void     contrastMessCallback(void *data, t_float c);
 };
 
-#endif	// for header file
+#endif  // for header file

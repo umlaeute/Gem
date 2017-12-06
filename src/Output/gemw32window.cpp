@@ -49,23 +49,23 @@
 
 static bool initGemWin(void) {
 # ifdef HAVE_QUICKTIME
-	OSErr		err = noErr;
+        OSErr           err = noErr;
 
-	// Initialize QuickTime Media Layer
-	err = InitializeQTML(0);
-	if (err)
+        // Initialize QuickTime Media Layer
+        err = InitializeQTML(0);
+        if (err)
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
       return false;
     }
-	// Initialize QuickTime
-	err = EnterMovies();
-	if (err)
+        // Initialize QuickTime
+        err = EnterMovies();
+        if (err)
     {
       error("GEM Man: Could not initialize quicktime: error %d\n", err);
       return false;
     }
-	verbose(1, "Gem Man: QT init OK");
+        verbose(1, "Gem Man: QT init OK");
 # endif /* HAVE_QUICKTIME */
   return true;
 }
@@ -136,7 +136,7 @@ private:
     DWORD style;
 
     if (fullscreen){
-        DEVMODE dmScreenSettings;								// Device Mode
+        DEVMODE dmScreenSettings;                                                               // Device Mode
 
         if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
             ::error("GEM: couldn't get screen capabilities!");
@@ -147,16 +147,16 @@ private:
 
         x=y=0;
 
-        memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
-        dmScreenSettings.dmSize=sizeof(dmScreenSettings);		// Size Of The Devmode Structure
-        dmScreenSettings.dmPelsWidth	= w;			// Selected Screen Width
-        dmScreenSettings.dmPelsHeight	= h;			// Selected Screen Height
-        dmScreenSettings.dmBitsPerPel	= 32;					// Selected Bits Per Pixel
+        memset(&dmScreenSettings,0,sizeof(dmScreenSettings));   // Makes Sure Memory's Cleared
+        dmScreenSettings.dmSize=sizeof(dmScreenSettings);               // Size Of The Devmode Structure
+        dmScreenSettings.dmPelsWidth    = w;                    // Selected Screen Width
+        dmScreenSettings.dmPelsHeight   = h;                    // Selected Screen Height
+        dmScreenSettings.dmBitsPerPel   = 32;                                   // Selected Bits Per Pixel
         dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
         // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
         if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-          dmScreenSettings.dmPelsWidth	= w;
-          dmScreenSettings.dmPelsHeight	= h;
+          dmScreenSettings.dmPelsWidth  = w;
+          dmScreenSettings.dmPelsHeight = h;
           if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
               ::error("couldn't switch to fullscreen");
             fullscreen=false;
@@ -165,7 +165,7 @@ private:
       }
 
       // Since Windows uses some of the window for the border, etc,
-      //		we have to ask how big the window should really be
+      //                we have to ask how big the window should really be
       RECT newSize = getRealRect(x, y, w, h,
                           border, fullscreen,
                           style, dwExStyle);
@@ -357,8 +357,8 @@ bool gemw32window:: create(void)
   }
   // show and update main window
   if (m_fullscreen){
-    ShowWindow(m_win->win,SW_SHOW);				// Show The Window
-    SetForegroundWindow(m_win->win);				// Slightly Higher Priority
+    ShowWindow(m_win->win,SW_SHOW);                             // Show The Window
+    SetForegroundWindow(m_win->win);                            // Slightly Higher Priority
     SetFocus(m_win->win);
   } else  {
     ShowWindow(m_win->win, SW_SHOWNORMAL);
@@ -388,7 +388,7 @@ void gemw32window:: createMess(const std::string&s) {
 void gemw32window:: destroy(void)
 {
   if (m_fullscreen)
-    ChangeDisplaySettings(NULL,0);	// Switch Back To The Desktop
+    ChangeDisplaySettings(NULL,0);      // Switch Back To The Desktop
 
   if(m_win)
     delete m_win;
@@ -432,8 +432,8 @@ void gemw32window::fullscreenMess(int state) {
         m_win=tmpwin;
         // show and update main window
         if (m_fullscreen){
-            ShowWindow(m_win->win,SW_SHOW);				// Show The Window
-            SetForegroundWindow(m_win->win);				// Slightly Higher Priority
+            ShowWindow(m_win->win,SW_SHOW);                             // Show The Window
+            SetForegroundWindow(m_win->win);                            // Slightly Higher Priority
             SetFocus(m_win->win);
         } else  {
             ShowWindow(m_win->win, SW_SHOWNORMAL);
@@ -527,10 +527,10 @@ void gemw32window::dispatch(void)
 }
 LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
-	static RECT rcClient;
-	static int ctrlKeyDown = 0;
+        static RECT rcClient;
+        static int ctrlKeyDown = 0;
 
-	// assume that we handle the message
+        // assume that we handle the message
   long lRet = 0;
   int devID=0;
   switch (uMsg)

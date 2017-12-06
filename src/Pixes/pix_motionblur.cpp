@@ -327,14 +327,14 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
 
   union
   {
-    signed short	elements[8];
-    vector	signed short v;
+    signed short        elements[8];
+    vector      signed short v;
   }shortBuffer;
 
   union
   {
-    unsigned int	elements[4];
-    vector	unsigned int v;
+    unsigned int        elements[4];
+    vector      unsigned int v;
   }bitBuffer;
 
   register vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;
@@ -381,7 +381,7 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
   gainAdd = (vector signed short)vec_splat((vector signed short)gainAdd,0);
 
 # ifndef PPC970
-  UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
   vec_dst( inData+32, prefetchSize, 2 );

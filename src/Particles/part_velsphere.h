@@ -41,7 +41,7 @@ class GEM_EXTERN part_velsphere : public partlib_base
   part_velsphere(t_floatarg val1, t_floatarg val2, t_floatarg val, t_floatarg radius);
 
   //////////
-  virtual void 	renderParticles(GemState *state);
+  virtual void  renderParticles(GemState *state);
 
  protected:
 
@@ -50,13 +50,13 @@ class GEM_EXTERN part_velsphere : public partlib_base
   virtual ~part_velsphere(void);
 
   //////////
-  void			vectorMess(float val1, float val2, float val3);
-  void			velMess   (float num);
+  void                  vectorMess(float val1, float val2, float val3);
+  void                  velMess   (float num);
 
   //////////
-  float			m_pos[3];
+  float                 m_pos[3];
   //////////
-  float			m_radius;
+  float                 m_radius;
 };
 
-#endif	// for header file
+#endif  // for header file

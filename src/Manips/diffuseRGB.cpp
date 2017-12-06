@@ -75,7 +75,7 @@ diffuseRGB :: ~diffuseRGB()
 /////////////////////////////////////////////////////////
 void diffuseRGB :: postrender(GemState *)
 {
-	glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_COLOR_MATERIAL);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,8 +84,8 @@ void diffuseRGB :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void diffuseRGB :: render(GemState *)
 {
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m_vector);
+        glDisable(GL_COLOR_MATERIAL);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m_vector);
 }
 
 /////////////////////////////////////////////////////////

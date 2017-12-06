@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_set);
 //
 /////////////////////////////////////////////////////////
 vertex_set :: vertex_set(int argc, t_atom*argv) : vertex_scale(argc, argv),
-						      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f)
+                                                      m_x(1.f), m_y(1.f), m_z(1.f), m_w(1.f)
 {}
 
 /////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ void vertex_set :: vertexProcess(int size, GLfloat*array){
 void vertex_set :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_set::paramMessCallback),
-		  gensym("set"), A_GIMME, A_NULL);
+                  gensym("set"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_set::paramMessCallback),
-		  gensym("param"), A_GIMME, A_NULL);
+                  gensym("param"), A_GIMME, A_NULL);
 }

@@ -72,9 +72,9 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
     unsigned int j;
     for(j=0; j<m_pimpl->p_loaded.size(); j++)
       if(f == m_pimpl->p_loaded[j]) {
-	alreadyloaded=true;
-	std::cerr << "not reloading '"<<f<<"'"<<std::endl;
-	break;
+        alreadyloaded=true;
+        std::cerr << "not reloading '"<<f<<"'"<<std::endl;
+        break;
       }
     if(alreadyloaded)continue;
 
@@ -160,7 +160,7 @@ namespace {
 
 }
 #define PLUGIN_INIT(x) s=-1; gem::Settings::get("gem.plugins."#x".startup", s); \
-	if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
+        if(default_true("gem.plugins."#x".startup", s0,s))delete x::getInstance()
 
 namespace gem { namespace plugins {
 void init(void) {
@@ -176,4 +176,3 @@ void init(void) {
     PLUGIN_INIT(video);
 }
 }; };
-

@@ -3,7 +3,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	- template implementation for PluginFactory
+        - template implementation for PluginFactory
 
     Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -53,7 +53,7 @@ template<class Class>
     s_factory=new PluginFactory<Class>;
   }
 #if GEM_PLUGFAC_DEBUG
-	std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
+        std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
 #endif /* GEM_PLUGFAC_DEBUG */
   return s_factory;
 }
@@ -154,4 +154,3 @@ namespace PluginFactoryRegistrar {
   }
 
 };
-

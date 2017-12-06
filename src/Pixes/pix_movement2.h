@@ -40,4 +40,4 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
 };
 
 
-#endif 	// for header file
+#endif  // for header file

@@ -31,20 +31,20 @@ LOG
 /* RGBA */
 
 #if GL_RGBA_GEM == GL_RGBA
-const int chRed		= 0;
-const int chGreen	= 1;
-const int chBlue	= 2;
-const int chAlpha	= 3;
+const int chRed         = 0;
+const int chGreen       = 1;
+const int chBlue        = 2;
+const int chAlpha       = 3;
 #else
-const int chAlpha	= 0;
-const int chRed		= 1;
-const int chGreen	= 2;
-const int chBlue	= 3;
+const int chAlpha       = 0;
+const int chRed         = 1;
+const int chGreen       = 2;
+const int chBlue        = 3;
 #endif
 
 
 /* Gray */
-const int chGray	= 0;
+const int chGray        = 0;
 
 /* YUV422 */
 const int chU           = 0;
@@ -88,11 +88,11 @@ struct GEM_EXTERN imageStruct
   //////////
   // dimensions of the image
   GLint         xsize;
-  GLint   	    ysize;
+  GLint             ysize;
 
   //////////
   // (average) width of 1 pixel (LUMINANCE = 1, RGBA = 4, YUV = 2)
-  GLint   	    csize;
+  GLint             csize;
 
   //////////
   // data type - always GL_UNSIGNED_BYTE (except for OS X)
@@ -259,13 +259,13 @@ struct GEM_EXTERN pixBlock
 
     //////////
     // is this a newimage since last time?
-    //	ie, has it been refreshed
-    bool     	    newimage;
+    //  ie, has it been refreshed
+    bool            newimage;
 
     //////////
     // keeps track of when new films are loaded
-    //	useful for rectangle_textures on OSX
-    bool		    newfilm;
+    //  useful for rectangle_textures on OSX
+    bool                    newfilm;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

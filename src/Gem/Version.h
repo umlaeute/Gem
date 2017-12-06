@@ -9,11 +9,10 @@
 namespace gem {
 class GEM_EXTERN Version {
   public:
-	const static char* versionString(void);
-	static bool versionCheck(int major, int minor);
+        const static char* versionString(void);
+        static bool versionCheck(int major, int minor);
 }; };
 
 #define GemVersion gem::Version
 
 #endif
-

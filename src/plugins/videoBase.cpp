@@ -531,7 +531,7 @@ void videoBase :: provide(const std::string&name) {
 }
 
 bool videoBase :: enumProperties(gem::Properties&readable,
-			     gem::Properties&writeable)
+                             gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();
@@ -582,4 +582,3 @@ bool videoBase :: grabAsynchronous(bool fast) {
 bool videoBase :: isThreadable(void) {
   return (m_pimpl->numlocks>0);
 }
-

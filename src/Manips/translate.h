@@ -41,33 +41,33 @@ class GEM_EXTERN translate : public GemBase
 
         //////////
         // Constructor
-    	translate(int argc, t_atom *argv);
+        translate(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~translate();
+        //////////
+        // Destructor
+        virtual ~translate();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+        //////////
+        // When rendering occurs
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// The translation vector (x, y, z)
-    	float	    	m_vector[3];
+        //////////
+        // The translation vector (x, y, z)
+        float           m_vector[3];
 
-    	//////////
-    	// The translation distance
-    	float	    	m_distance;
+        //////////
+        // The translation distance
+        float           m_distance;
 
-    	//////////
-    	// Distance changed
-    	void	    	distanceMess(float distance);
+        //////////
+        // Distance changed
+        void            distanceMess(float distance);
 
-    	//////////
-    	// Vector changed
-    	void	    	vectorMess(float x, float y, float z);
+        //////////
+        // Vector changed
+        void            vectorMess(float x, float y, float z);
 };
 
-#endif	// for header file
+#endif  // for header file

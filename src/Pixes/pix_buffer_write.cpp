@@ -85,18 +85,18 @@ void pix_buffer_write :: render(GemState*state){
   if (state && img && &img->image){
     if (img->newimage || m_frame!=m_lastframe){
       if(m_bindname==NULL || m_bindname->s_name==NULL){
-	error("cowardly refusing to write to no pix_buffer");
-	m_frame=-1; return;
+        error("cowardly refusing to write to no pix_buffer");
+        m_frame=-1; return;
       }
       Obj_header*ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
       if(ohead==NULL){
-	error("couldn't find pix_buffer '%s'", m_bindname->s_name);
-	m_frame=-1; return;
+        error("couldn't find pix_buffer '%s'", m_bindname->s_name);
+        m_frame=-1; return;
       }
       pix_buffer *buffer=(pix_buffer *)(ohead)->data;
       if (buffer){
-	buffer->putMess(&img->image,m_lastframe=m_frame);
-	m_frame=-1;
+        buffer->putMess(&img->image,m_lastframe=m_frame);
+        m_frame=-1;
       }
     }
   }
@@ -111,9 +111,9 @@ void pix_buffer_write :: obj_setupCallback(t_class *classPtr)
                    gensym("pix_put"),
                    A_DEFSYM, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_write::setMessCallback),
-  		  gensym("set"), A_SYMBOL, A_NULL);
+                  gensym("set"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_write::frameMessCallback),
-  		  gensym("frame"), A_FLOAT, A_NULL);
+                  gensym("frame"), A_FLOAT, A_NULL);
 }
 void pix_buffer_write :: setMessCallback(void *data, t_symbol*s)
 {

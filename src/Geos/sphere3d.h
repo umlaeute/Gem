@@ -42,15 +42,15 @@ class GEM_EXTERN sphere3d : public GemGluObj
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~sphere3d(void);
+        //////////
+        // Destructor
+        virtual ~sphere3d(void);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 
-        virtual void  	createSphere3d(void);
+        virtual void    createSphere3d(void);
 
         virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y, GLfloat z);
         virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth, GLfloat elevation);
@@ -58,13 +58,13 @@ class GEM_EXTERN sphere3d : public GemGluObj
         virtual void    print(int slice, int stack);
         virtual void    print(void);
 
-        GLfloat		*m_x;
-        GLfloat		*m_y;
-        GLfloat		*m_z;
-        int 		oldStacks, oldSlices;
-        GLenum		oldDrawType;
+        GLfloat         *m_x;
+        GLfloat         *m_y;
+        GLfloat         *m_z;
+        int             oldStacks, oldSlices;
+        GLenum          oldDrawType;
         int             oldTexture;
 
         GLuint          m_displayList;
 };
-#endif	// for header file
+#endif  // for header file

@@ -97,7 +97,7 @@ void pix_delay :: processImage(imageStruct &image)
 void pix_delay :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_delay::delayMessCallback),
-  		  gensym("delay"), A_FLOAT, A_NULL);
+                  gensym("delay"), A_FLOAT, A_NULL);
 }
 
 

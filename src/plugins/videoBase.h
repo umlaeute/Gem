@@ -19,12 +19,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-	video
+        video
 
-	a OS-independent parent-class for grabbing video-frames
+        a OS-independent parent-class for grabbing video-frames
 
   KEYWORDS
-	pix, capture
+        pix, capture
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
@@ -64,20 +64,20 @@ namespace gem { namespace plugins {
      * Start up the video device (called on startRendering)
      * \return FALSE is something failed, TRUE otherwise
      */
-    virtual bool	    	startTransfer(void) = 0;
+    virtual bool                startTransfer(void) = 0;
 
     /**
      * Stop the video device (called on stopRendering)
      * \return TRUE if a transfer was going on, FALSE if the transfer was already stopped
      */
-    virtual bool	   	stopTransfer(void) = 0;
+    virtual bool                stopTransfer(void) = 0;
 
 
     /**
      * Stops the video device and if it was running restarts it
      * \return the return code of startTransfer()
      */
-    virtual bool	   	restartTransfer(void);
+    virtual bool                restartTransfer(void);
 
  public:
     /**
@@ -122,7 +122,7 @@ namespace gem { namespace plugins {
      * the default implementation (which you normally shouldn't need to override)
      * will simply set m_devicenum and clear m_devicename
      */
-    virtual bool	    	setDevice(int ID);
+    virtual bool                setDevice(int ID);
 
     /**
      * set the device to be opened next time
@@ -133,7 +133,7 @@ namespace gem { namespace plugins {
      * the default implementation (which you normally shouldn't need to override)
      * will simply set m_devicename and clear m_devicenum
      */
-    virtual bool	    	setDevice(const std::string&);
+    virtual bool                setDevice(const std::string&);
 
     /**
      * list all properties the currently opened device supports
@@ -155,7 +155,7 @@ namespace gem { namespace plugins {
      *    "quality"          "quality" message (float)
      */
     virtual bool enumProperties(gem::Properties&readable,
-				gem::Properties&writeable);
+                                gem::Properties&writeable);
 
     /**
      * set a number of properties (as defined by "props")
@@ -184,7 +184,7 @@ namespace gem { namespace plugins {
      * if the system does support dialogs and the user has specified which one they want,
      * return TRUE if at least one dialog could be handled
      */
-    virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>());
+    virtual bool                dialog(std::vector<std::string>names=std::vector<std::string>());
     /**
      * enumerate list of possible dialogs (if any)
      */
@@ -194,7 +194,7 @@ namespace gem { namespace plugins {
      * Set the preferred colorspace (of the frames returned by getFrame()
      * \return FALSE if the colorspace cannot be set (e.g. while grabbing is active)
      */
-    virtual bool	    	setColor(int);
+    virtual bool                setColor(int);
 
     //////////
     // Constructor
@@ -309,4 +309,4 @@ namespace gem { namespace plugins {
 };
 };}; // namespace
 
-#endif	// for header file
+#endif  // for header file

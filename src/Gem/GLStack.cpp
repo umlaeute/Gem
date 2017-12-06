@@ -180,7 +180,7 @@ int GLStack::reset(enum GemStackId id) {
 
   if(maxdepth && depth) {
     /* hmm, some ati-cards (with fglrx) report GLEW_ARB_imaging support but fail the 'depth' test for COLOR */
-    
+
     glGetIntegerv(maxdepth, data->maxDepth+id);
     if(firsttime && glReportError())s_id2maxdepth[id]=0;
 

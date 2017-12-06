@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,17 +23,17 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPrioritizeTextures :: GEMglPrioritizeTextures	(t_floatarg arg0) :
-		n(static_cast<GLsizei>(arg0)) {
-	if (n>0) t_len=p_len=n;
-	else t_len=p_len=16;
+GEMglPrioritizeTextures :: GEMglPrioritizeTextures      (t_floatarg arg0) :
+                n(static_cast<GLsizei>(arg0)) {
+        if (n>0) t_len=p_len=n;
+        else t_len=p_len=16;
 
-	textures=new GLuint[t_len];
-	priorities=new GLclampf[p_len];
+        textures=new GLuint[t_len];
+        priorities=new GLclampf[p_len];
 
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("n"));
-	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
-	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("priorities"));
+        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("n"));
+        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
+        m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("priorities"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -68,12 +68,12 @@ void GEMglPrioritizeTextures :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPrioritizeTextures :: nMess (t_float arg1) {	// FUN
-	n = static_cast<GLsizei>(arg1);
-	setModified();
+void GEMglPrioritizeTextures :: nMess (t_float arg1) {  // FUN
+        n = static_cast<GLsizei>(arg1);
+        setModified();
 }
 
-void GEMglPrioritizeTextures :: texturesMess (int argc,t_atom*argv) {	// FUN
+void GEMglPrioritizeTextures :: texturesMess (int argc,t_atom*argv) {   // FUN
   if (argc>t_len){
     t_len=argc;
     delete [] textures;
@@ -83,7 +83,7 @@ void GEMglPrioritizeTextures :: texturesMess (int argc,t_atom*argv) {	// FUN
   setModified();
 }
 
-void GEMglPrioritizeTextures :: prioritiesMess (int argc, t_atom*argv) {	// FUN
+void GEMglPrioritizeTextures :: prioritiesMess (int argc, t_atom*argv) {        // FUN
   if (argc>p_len){
     p_len=argc;
     delete [] priorities;
@@ -99,17 +99,17 @@ void GEMglPrioritizeTextures :: prioritiesMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglPrioritizeTextures :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::nMessCallback),  	gensym("n"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::texturesMessCallback),  	gensym("textures"), A_GIMME, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::prioritiesMessCallback),  	gensym("priorities"), A_GIMME, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::nMessCallback),         gensym("n"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::texturesMessCallback),          gensym("textures"), A_GIMME, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::prioritiesMessCallback),        gensym("priorities"), A_GIMME, A_NULL);
 }
 
 void GEMglPrioritizeTextures :: nMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->nMess (arg0);
+        GetMyClass(data)->nMess (arg0);
 }
 void GEMglPrioritizeTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-	GetMyClass(data)->texturesMess (argc,argv);
+        GetMyClass(data)->texturesMess (argc,argv);
 }
 void GEMglPrioritizeTextures :: prioritiesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-	GetMyClass(data)->prioritiesMess (argc,argv);
+        GetMyClass(data)->prioritiesMess (argc,argv);
 }

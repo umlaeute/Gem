@@ -39,9 +39,9 @@ class GEM_EXTERN gemkeyboard : public CPPExtern
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~gemkeyboard();
+        //////////
+        // Destructor
+        virtual ~gemkeyboard();
 
         //////////
         // keyboard-button
@@ -49,7 +49,7 @@ class GEM_EXTERN gemkeyboard : public CPPExtern
 
         //////////
         // The key-val outlet
-        t_outlet    	*m_outKeyVal;
+        t_outlet        *m_outKeyVal;
 
     private:
 

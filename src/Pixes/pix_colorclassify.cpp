@@ -126,12 +126,12 @@ rgb2hsv(float r, float g, float b, float *h, float *s, float *v)
 
 static void
 color_classify (
-		float red,
-		float green,
-		float blue,
-		color *result,
-		color *second_guess,
-		certainty *certainty_level)
+                float red,
+                float green,
+                float blue,
+                color *result,
+                color *second_guess,
+                certainty *certainty_level)
 {
     float hue;
     float sat;
@@ -368,7 +368,7 @@ void pix_colorclassify :: processRGBAImage(imageStruct &image)
   unsigned i = image.xsize * image.ysize;
 
   unsigned char *base = image.data;
-	while (i--) {
+        while (i--) {
       color result, second_guess;
       certainty c;
 
@@ -401,4 +401,3 @@ void pix_colorclassify :: obj_setupCallback(t_class *classPtr)
 }
 
 //---------------------------------------------------------------------------
-

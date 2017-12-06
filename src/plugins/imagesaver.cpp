@@ -30,13 +30,13 @@ namespace gem { namespace plugins {
     static std::map<std::string, std::string>*s_extension2mime;
     static void build_extension2mime(void) {
       if(NULL==s_extension2mime)
-	s_extension2mime = new  std::map<std::string, std::string>;
+        s_extension2mime = new  std::map<std::string, std::string>;
       std::map<std::string, std::string>&e2m=*s_extension2mime;
 
       // avoid the use of '*/x-*' mimetypes as the "x-" is actually private
       // if a file-extension matches multiple mimetypes, chose the most obvious
       /* this is generated with something like:
-	 $  cat mimetypes.txt | while read mime exts; do for ext in $exts; do echo "e2m[\"${ext}\"]=\"${mime}\";"; done; done | sort
+         $  cat mimetypes.txt | while read mime exts; do for ext in $exts; do echo "e2m[\"${ext}\"]=\"${mime}\";"; done; done | sort
       */
 
       e2m["art"]="image/x-jg";
@@ -147,13 +147,13 @@ namespace gem { namespace plugins {
     static const std::string imgName2Mime(const std::string&filename) {
       std::string empty;
       if(NULL==s_extension2mime) {
-	build_extension2mime();
+        build_extension2mime();
       }
       if(s_extension2mime) {
-	std::map<std::string, std::string>::iterator it=s_extension2mime->find(gem::files::getExtension(filename, true));
-	if(s_extension2mime->end() != it) {
-	  return it->second;
-	}
+        std::map<std::string, std::string>::iterator it=s_extension2mime->find(gem::files::getExtension(filename, true));
+        if(s_extension2mime->end() != it) {
+          return it->second;
+        }
       }
       return empty;
     }
@@ -184,10 +184,10 @@ namespace gem { namespace plugins {
 
       unsigned int i;
       for(i=0; i<m_savers.size(); i++) {
-	if(!m_savers[i]->isThreadable()) {
-	  m_threadable=false;
-	  break;
-	}
+        if(!m_savers[i]->isThreadable()) {
+          m_threadable=false;
+          break;
+        }
       }
     }
     bool addSaver( std::vector<std::string>available, std::string ID=std::string(""))
@@ -196,38 +196,38 @@ namespace gem { namespace plugins {
 
       std::vector<std::string>id;
       if(!ID.empty()) {
-	// if requested 'cid' is in 'available' add it to the list of 'id's
-	if(std::find(available.begin(), available.end(), ID)!=available.end()) {
-	  id.push_back(ID);
-	} else {
-	  // request for an unavailable ID
-	  verbose(2, "backend '%s' unavailable", ID.c_str());
-	  return false;
-	}
+        // if requested 'cid' is in 'available' add it to the list of 'id's
+        if(std::find(available.begin(), available.end(), ID)!=available.end()) {
+          id.push_back(ID);
+        } else {
+          // request for an unavailable ID
+          verbose(2, "backend '%s' unavailable", ID.c_str());
+          return false;
+        }
       } else {
-	// no 'ID' given: add all available IDs
-	id=available;
+        // no 'ID' given: add all available IDs
+        id=available;
       }
 
       unsigned int i=0;
       for(i=0; i<id.size(); i++) {
-	std::string key=id[i];
-	verbose(2, "trying to add '%s' as backend", key.c_str());
-	if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
-	  // not yet added, do so now!
-	  imagesaver*saver=NULL;
+        std::string key=id[i];
+        verbose(2, "trying to add '%s' as backend", key.c_str());
+        if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
+          // not yet added, do so now!
+          imagesaver*saver=NULL;
     try {
-	    saver=gem::PluginFactory<imagesaver>::getInstance(key);
+            saver=gem::PluginFactory<imagesaver>::getInstance(key);
     } catch(GemException&x) {
       saver=NULL;
       verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());
     }
-	  if(NULL==saver)continue;
-	  m_ids.push_back(key);
-	  m_savers.push_back(saver);
-	  count++;
-	  verbose(2, "added backend#%d '%s' @ %p", (int)(m_savers.size()-1), key.c_str(), saver);
-	}
+          if(NULL==saver)continue;
+          m_ids.push_back(key);
+          m_savers.push_back(saver);
+          count++;
+          verbose(2, "added backend#%d '%s' @ %p", (int)(m_savers.size()-1), key.c_str(), saver);
+        }
       }
       return (count>0);
     }
@@ -235,8 +235,8 @@ namespace gem { namespace plugins {
     virtual ~imagesaverMeta(void) {
       unsigned int i;
       for(i=0; i<m_savers.size(); i++) {
-	delete m_savers[i];
-	m_savers[i]=NULL;
+        delete m_savers[i];
+        m_savers[i]=NULL;
       }
     }
 
@@ -248,16 +248,16 @@ namespace gem { namespace plugins {
       std::string mimetype=(mimetype_c.empty())?imgName2Mime(filename):mimetype_c;
 
       for(i=0; i<m_savers.size(); i++) {
-	float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);
-	priorities.insert( std::multimap<float, int>::value_type(prio, i));
+        float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);
+        priorities.insert( std::multimap<float, int>::value_type(prio, i));
       }
 
       for(rit=priorities.rbegin(); rit != priorities.rend(); rit++) {
-	float prio=rit->first;
-	int index=rit->second;
-	verbose(2, "trying saver[%d]=%s / %f", index, m_ids[index].c_str(), prio);
-	if(m_savers[index]->save(img, filename, mimetype, props))
-	  return true;
+        float prio=rit->first;
+        int index=rit->second;
+        verbose(2, "trying saver[%d]=%s / %f", index, m_ids[index].c_str(), prio);
+        if(m_savers[index]->save(img, filename, mimetype, props))
+          return true;
       }
 
       return false;
@@ -272,22 +272,22 @@ namespace gem { namespace plugins {
 
       unsigned int i;
       for(i=0; i<m_savers.size(); i++) {
-	unsigned int j;
+        unsigned int j;
 
-	std::vector<std::string>mimetypes_;
-	gem::Properties props_;
-	m_savers[i]->getWriteCapabilities(mimetypes_, props_);
+        std::vector<std::string>mimetypes_;
+        gem::Properties props_;
+        m_savers[i]->getWriteCapabilities(mimetypes_, props_);
 
-	for(j=0; j<mimetypes_.size(); j++) {
-	  const std::string&mimetype=mimetypes_[j];
-	  if(std::find(mimetypes.begin(), mimetypes.end(), mimetype)==mimetypes.end()) {
-	    mimetypes.push_back(mimetypes_[j]);
-	  }
-	}
-	std::vector<std::string>keys=props_.keys();
-	for(j=0; j<keys.size(); j++) {
-	  props.set(keys[j], props_.get(keys[j]));
-	}
+        for(j=0; j<mimetypes_.size(); j++) {
+          const std::string&mimetype=mimetypes_[j];
+          if(std::find(mimetypes.begin(), mimetypes.end(), mimetype)==mimetypes.end()) {
+            mimetypes.push_back(mimetypes_[j]);
+          }
+        }
+        std::vector<std::string>keys=props_.keys();
+        for(j=0; j<keys.size(); j++) {
+          props.set(keys[j], props_.get(keys[j]));
+        }
       }
     }
     virtual bool isThreadable(void) {

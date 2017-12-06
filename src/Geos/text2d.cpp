@@ -153,4 +153,3 @@ void text2d :: aliasMess(int io)
   m_font=selectFont();
 #endif
 }
-

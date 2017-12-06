@@ -76,10 +76,10 @@ void pix_rectangle :: processRGBAImage(imageStruct &image)
   if (m_lower_left[1] > image.ysize)  m_lower_left[1] = image.ysize;
 
   int row = (m_upper_right[1] - m_lower_left[1]);
-  while (row--)	{
+  while (row--) {
     pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
     int col = (m_upper_right[0] - m_lower_left[0]);
-    while (col--)		{
+    while (col--)               {
       pixels[chRed]   = r;
       pixels[chGreen] = g;
       pixels[chBlue]  = b;
@@ -104,13 +104,13 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   if (m_lower_left[1] > image.ysize)    m_lower_left[1] = image.ysize;
 
   int row = (m_upper_right[1] - m_lower_left[1]);
-  while (row--)	{
+  while (row--) {
     int offset=rowsize*(m_lower_left[1]+row) + m_lower_left[0] * pixelsize;
     offset-=(offset%4);
     pixels = image.data+offset;
 
     int col = (m_upper_right[0] - m_lower_left[0])/2;
-    while (col--)	{
+    while (col--)       {
       pixels[chY0]= y;
       pixels[chU] = u;
       pixels[chY1]= y;
@@ -153,7 +153,7 @@ void pix_rectangle :: vecColorMess(int argc, t_atom *argv)
   float alpha, red, green, blue;
 
   if (argc >= 4)alpha = atom_getfloat(&argv[3]);
-  else if (argc == 3)	alpha = 1.f;
+  else if (argc == 3)   alpha = 1.f;
   else    {
     error("not enough color values");
     return;
@@ -210,9 +210,9 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
 void pix_rectangle :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecCoordMessCallback),
-    	    gensym("coord"), A_GIMME, A_NULL);
+            gensym("coord"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecColorMessCallback),
-    	    gensym("color"), A_GIMME, A_NULL);
+            gensym("color"), A_GIMME, A_NULL);
 
 }
 void pix_rectangle :: vecCoordMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

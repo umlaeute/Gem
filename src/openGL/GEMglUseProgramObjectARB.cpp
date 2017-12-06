@@ -24,13 +24,13 @@ CPPEXTERN_NEW ( GEMglUseProgramObjectARB );
 GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB()
   : m_program(0)
 {
-	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
+        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglUseProgramObjectARB :: ~GEMglUseProgramObjectARB () {
-	inlet_free(m_inlet);
+        inlet_free(m_inlet);
 }
 
 //////////////////
@@ -46,22 +46,22 @@ bool GEMglUseProgramObjectARB :: isRunnable(void) {
 // Render
 //
 void GEMglUseProgramObjectARB :: render(GemState *state) {
-	glUseProgramObjectARB ( m_program );
+        glUseProgramObjectARB ( m_program );
 }
 
 /////////////////////////////////////////////////////////
 // postrender
 //
 void GEMglUseProgramObjectARB :: postrender(GemState *state) {
-	glUseProgramObjectARB (0);
+        glUseProgramObjectARB (0);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglUseProgramObjectARB :: programMess (int program) {	// FUN
-	m_program = static_cast<GLhandleARB>(program);
-	setModified();
+void GEMglUseProgramObjectARB :: programMess (int program) {    // FUN
+        m_program = static_cast<GLhandleARB>(program);
+        setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -70,10 +70,10 @@ void GEMglUseProgramObjectARB :: programMess (int program) {	// FUN
 
 void GEMglUseProgramObjectARB :: obj_setupCallback(t_class *classPtr)
 {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUseProgramObjectARB::programMessCallback),
-									gensym("program"), A_FLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUseProgramObjectARB::programMessCallback),
+                                                                        gensym("program"), A_FLOAT, A_NULL);
 }
 
 void GEMglUseProgramObjectARB :: programMessCallback (void* data, t_float program){
-	GetMyClass(data)->programMess (static_cast<int>(program));
+        GetMyClass(data)->programMess (static_cast<int>(program));
 }

@@ -53,8 +53,8 @@ namespace gem { namespace plugins {
        */
       /* returns TRUE if loading was successful, FALSE otherwise */
       virtual bool load(std::string filename,
-			imageStruct&result,
-			gem::Properties&props) = 0;
+                        imageStruct&result,
+                        gem::Properties&props) = 0;
 
       /* returns TRUE if this object can be used from within a thread */
       virtual bool isThreadable(void) = 0;
@@ -72,4 +72,4 @@ namespace gem { namespace plugins {
  */
 #define REGISTER_IMAGELOADERFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::imageloader> fac_imageloader_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

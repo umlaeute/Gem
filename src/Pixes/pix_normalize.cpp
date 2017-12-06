@@ -133,4 +133,3 @@ void pix_normalize :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_normalize :: obj_setupCallback(t_class *classPtr)
 {}
-

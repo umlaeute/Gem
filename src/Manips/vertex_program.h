@@ -98,14 +98,14 @@ class GEM_EXTERN vertex_program : public GemBase
   //
   GLuint    m_programType;
 
-  GLuint 	m_programTarget;
+  GLuint        m_programTarget;
   GLuint        m_programID;
-  char*		m_programString;
-  size_t	m_size;
+  char*         m_programString;
+  size_t        m_size;
   std::string   m_buf;
 
-  float		m_param[4];
-  int	        m_envNum;
+  float         m_param[4];
+  int           m_envNum;
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -57,9 +57,9 @@ class GEM_EXTERN pix_histo : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processGrayImage(imageStruct &image);
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processGrayImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
 
   //////////
   // tables to hold the curves
@@ -76,7 +76,7 @@ class GEM_EXTERN pix_histo : public GemPixObj
 
   //////////
   // Set new arrays
-  void	setMess(int argc, t_atom *argv);
+  void  setMess(int argc, t_atom *argv);
 
   //////////
   // the methods
@@ -84,4 +84,4 @@ class GEM_EXTERN pix_histo : public GemPixObj
 
 };
 
-#endif	// for header file
+#endif  // for header file

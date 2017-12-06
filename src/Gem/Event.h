@@ -101,4 +101,3 @@ GEM_EXTERN extern void triggerKeyboardEvent(char *string, int value, int state);
 GEM_EXTERN extern void triggerResizeEvent(int xSize, int ySize);
 
 #endif  // for header file
-

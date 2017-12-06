@@ -188,5 +188,3 @@ void torus :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "inner", innerRadius, float);
 }
-
-

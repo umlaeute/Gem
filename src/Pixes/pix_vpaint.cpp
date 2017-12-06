@@ -145,9 +145,9 @@ void pix_vpaint :: makecone(void)
   glBegin(GL_TRIANGLE_FAN);
   glVertex3f(0.f, 0.f, 1.f);
   for (i = 0; i <= SIDES; i++) {
-	float s = sinf((2.f * M_PI * i) / SIDES) * 25;
-	float c = cosf((2.f * M_PI * i) / SIDES) * 25;
-	glVertex3f(s, c, -4.0);
+        float s = sinf((2.f * M_PI * i) / SIDES) * 25;
+        float c = cosf((2.f * M_PI * i) / SIDES) * 25;
+        glVertex3f(s, c, -4.0);
   }
   glEnd();
   glEndList();
@@ -205,7 +205,7 @@ void pix_vpaint :: init()
      */
     table[0] = 1.0;
     for (i = 1; i < 256; i++)
-	    table[i] = 0.0;
+            table[i] = 0.0;
     glPixelMapfv(GL_PIXEL_MAP_R_TO_R, 256, table);
     glPixelMapfv(GL_PIXEL_MAP_G_TO_G, 256, table);
     glPixelMapfv(GL_PIXEL_MAP_B_TO_B, 256, table);
@@ -241,95 +241,95 @@ void pix_vpaint :: processImage(imageStruct &image)
   m_pbuffer->enable();
 
   if (viewImage) {
-	glReadBuffer(GL_FRONT);
-	glDrawBuffer(GL_FRONT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glReadBuffer(GL_FRONT);
+        glDrawBuffer(GL_FRONT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glDrawPixels(m_w, m_h, image.format, GL_UNSIGNED_BYTE, (GLubyte *) m_imageStruct.data);
+        glDrawPixels(m_w, m_h, image.format, GL_UNSIGNED_BYTE, (GLubyte *) m_imageStruct.data);
   } else if (!drawEdges) {
-	glDrawBuffer(useStrokes ? GL_BACK : GL_FRONT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawBuffer(useStrokes ? GL_BACK : GL_FRONT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	/*
-	 * Just draw the voronoi regions
-	 */
-	for (int i = 0; i < numPoints; i++) {
-	    glPushMatrix();
-	    glTranslatef(points[i].x, points[i].y, 0.f);
-	    glColor3ub(points[i].r, points[i].g, points[i].b);
-	    glCallList(1);
-	    glColor3f(0.f, 0.f, 0.f);
-	    glPopMatrix();
-	}
+        /*
+         * Just draw the voronoi regions
+         */
+        for (int i = 0; i < numPoints; i++) {
+            glPushMatrix();
+            glTranslatef(points[i].x, points[i].y, 0.f);
+            glColor3ub(points[i].r, points[i].g, points[i].b);
+            glCallList(1);
+            glColor3f(0.f, 0.f, 0.f);
+            glPopMatrix();
+        }
 
-	if (!useStrokes)
-	{
+        if (!useStrokes)
+        {
       glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT);
-	  glReadBuffer(GL_BACK);
-	  glDrawBuffer(GL_BACK);
+          glReadBuffer(GL_BACK);
+          glDrawBuffer(GL_BACK);
 
-	  for (int y = 0; y < 3; y++) {
-	    for (int x = 0; x < 3; x++) {
-		  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		  glPushMatrix();
-		  glTranslatef(x - 1, y - 1, 0.0);
+          for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                  glPushMatrix();
+                  glTranslatef(x - 1, y - 1, 0.0);
 
-		  for (int i = 0; i < numPoints; i++) {
-		    glPushMatrix();
-		    glTranslatef(points[i].x, points[i].y, 0.f);
-		    glColor3ub(points[i].r, points[i].g, points[i].b);
-		    glCallList(1);
-		    glPopMatrix();
-		  }
-		  glPopMatrix();
+                  for (int i = 0; i < numPoints; i++) {
+                    glPushMatrix();
+                    glTranslatef(points[i].x, points[i].y, 0.f);
+                    glColor3ub(points[i].r, points[i].g, points[i].b);
+                    glCallList(1);
+                    glPopMatrix();
+                  }
+                  glPopMatrix();
 
-		  glAccum(GL_ACCUM, edgeKernel[3 * y + x]);
-	    }
+                  glAccum(GL_ACCUM, edgeKernel[3 * y + x]);
+            }
       }
-	  glAccum(GL_RETURN, 0.5);
+          glAccum(GL_RETURN, 0.5);
 
-	  /*
-	   * Convert to grayscale
-	   */
-	  glMatrixMode(GL_COLOR);
-	  glLoadMatrixf(sumMatrix);
-	  glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
-	  glLoadIdentity();
-	  glMatrixMode(GL_MODELVIEW);
+          /*
+           * Convert to grayscale
+           */
+          glMatrixMode(GL_COLOR);
+          glLoadMatrixf(sumMatrix);
+          glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
+          glLoadIdentity();
+          glMatrixMode(GL_MODELVIEW);
 
-	  /*
-	   * Threshold
-	   */
-	  glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
-	  glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
-	  glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
+          /*
+           * Threshold
+           */
+          glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
+          glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
+          glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
 
-	  /*
-	   * Draw the voronoi regions in the front buffer
-	   */
-	  glDrawBuffer(GL_FRONT);
-	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	  for (int i = 0; i < numPoints; i++) {
-	    glPushMatrix();
-	    glTranslatef(points[i].x, points[i].y, 0.f);
-	    glColor3ub(points[i].r, points[i].g, points[i].b);
-	    glCallList(1);
-	    glColor3f(0.f, 0.f, 0.f);
-	    glPopMatrix();
-	  }
+          /*
+           * Draw the voronoi regions in the front buffer
+           */
+          glDrawBuffer(GL_FRONT);
+          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+          for (int i = 0; i < numPoints; i++) {
+            glPushMatrix();
+            glTranslatef(points[i].x, points[i].y, 0.f);
+            glColor3ub(points[i].r, points[i].g, points[i].b);
+            glCallList(1);
+            glColor3f(0.f, 0.f, 0.f);
+            glPopMatrix();
+          }
 
-	  /*
-	   * Blend in the edge lines
-	   */
-	  glClear(GL_DEPTH_BUFFER_BIT);
+          /*
+           * Blend in the edge lines
+           */
+          glClear(GL_DEPTH_BUFFER_BIT);
 
     if(GL_EXT_blend_minmax)
       glBlendEquationEXT(GL_MIN_EXT);
 
-	  glEnable(GL_BLEND);
+          glEnable(GL_BLEND);
 
-	  glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
-	  glDisable(GL_BLEND);
+          glCopyPixels(0, 0, m_w, m_h, GL_COLOR);
+          glDisable(GL_BLEND);
     }
   }
 //  glFlush();
@@ -343,7 +343,7 @@ void pix_vpaint :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: sizeMess(int width, int height)
 {
-	m_w = width;
+        m_w = width;
   m_h = height;
 }
 
@@ -355,7 +355,7 @@ void pix_vpaint :: obj_setupCallback(t_class *classPtr)
 {
     class_addbang(classPtr, reinterpret_cast<t_method>(&pix_vpaint::bangMessCallback));
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_vpaint::sizeMessCallback),
-    	    gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
+            gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_vpaint :: sizeMessCallback(void *data, t_float width, t_float height)
 {

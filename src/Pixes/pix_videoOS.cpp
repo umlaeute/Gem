@@ -59,7 +59,7 @@ CPPEXTERN_NEW(pix_videoOS);
 //
 /////////////////////////////////////////////////////////
 pix_videoOS :: pix_videoOS(t_floatarg num)
-    	   : m_haveVideo(0), m_swap(1), m_colorSwap(0)
+           : m_haveVideo(0), m_swap(1), m_colorSwap(0)
 {
   m_pixBlock.image = m_imageStruct;
   m_haveVideo = 0;
@@ -94,7 +94,7 @@ int pix_videoOS :: startTransfer()
 {
   post("no video available for this OS");
     if (!m_haveVideo)
-    	return(0);
+        return(0);
 
     return(1);
 }
@@ -106,7 +106,7 @@ int pix_videoOS :: startTransfer()
 int pix_videoOS :: stopTransfer()
 {
     if ( !m_haveVideo )
-    	return(0);
+        return(0);
 
     return(1);
 }
@@ -175,26 +175,26 @@ void pix_videoOS :: dialogMess(int argc, t_atom*argv)
 void pix_videoOS :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::dimenMessCallback),
-    	    gensym("dimen"), A_GIMME, A_NULL);
+            gensym("dimen"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::offsetMessCallback),
-    	    gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
+            gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::swapMessCallback),
-    	    gensym("swap"), A_FLOAT, A_NULL);
+            gensym("swap"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::enumerateMessCallback),
-    	    gensym("enumerate"), A_NULL);
+            gensym("enumerate"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::csMessCallback),
-    	    gensym("colorspace"), A_DEFSYMBOL, A_NULL);
+            gensym("colorspace"), A_DEFSYMBOL, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoOS::dialogMessCallback),
-    	    gensym("dialog"), A_GIMME, A_NULL);
+            gensym("dialog"), A_GIMME, A_NULL);
 }
 void pix_videoOS :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
   GetMyClass(data)->dimenMess(static_cast<int>(atom_getfloatarg(0, ac, av)),
-			      static_cast<int>(atom_getfloatarg(1, ac, av)),
-			      static_cast<int>(atom_getfloatarg(2, ac, av)),
-			      static_cast<int>(atom_getfloatarg(3, ac, av)),
-			      static_cast<int>(atom_getfloatarg(4, ac, av)),
-			      static_cast<int>(atom_getfloatarg(5, ac, av)) );
+                              static_cast<int>(atom_getfloatarg(1, ac, av)),
+                              static_cast<int>(atom_getfloatarg(2, ac, av)),
+                              static_cast<int>(atom_getfloatarg(3, ac, av)),
+                              static_cast<int>(atom_getfloatarg(4, ac, av)),
+                              static_cast<int>(atom_getfloatarg(5, ac, av)) );
 }
 void pix_videoOS :: offsetMessCallback(void *data, t_float x, t_float y)
 {

@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,7 +23,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsTexture , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglIsTexture :: GEMglIsTexture	(t_floatarg arg0) : texture(static_cast<GLuint>(arg0)) {
+GEMglIsTexture :: GEMglIsTexture        (t_floatarg arg0) : texture(static_cast<GLuint>(arg0)) {
   m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texture"));
   m_outlet=outlet_new(this->x_obj, 0);
 }
@@ -46,7 +46,7 @@ void GEMglIsTexture :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglIsTexture :: textureMess (t_float arg1) {	// FUN
+void GEMglIsTexture :: textureMess (t_float arg1) {     // FUN
   texture = static_cast<GLuint>(arg1);
   setModified();
 }
@@ -57,9 +57,9 @@ void GEMglIsTexture :: textureMess (t_float arg1) {	// FUN
 //
 
 void GEMglIsTexture :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIsTexture::textureMessCallback),  	gensym("texture"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIsTexture::textureMessCallback),    gensym("texture"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglIsTexture :: textureMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->textureMess (arg0);
+        GetMyClass(data)->textureMess (arg0);
 }

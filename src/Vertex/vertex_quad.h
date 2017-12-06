@@ -38,25 +38,25 @@ class GEM_EXTERN vertex_quad : public GemBase
 
         //////////
         // Constructor
-    	vertex_quad(void);
+        vertex_quad(void);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_quad(void);
+        //////////
+        // Destructor
+        virtual ~vertex_quad(void);
 
-        int	m_blend;
-        float	*m_ColorArray;
-        float	*m_VertexArray;
-        float	*m_NormalArray;
-        float	*m_TexCoordArray;
+        int     m_blend;
+        float   *m_ColorArray;
+        float   *m_VertexArray;
+        float   *m_NormalArray;
+        float   *m_TexCoordArray;
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-        static void 	blendMessCallback(void *data, t_float size);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
+        static void     blendMessCallback(void *data, t_float size);
 
 };
 
-#endif	// for header file
+#endif  // for header file

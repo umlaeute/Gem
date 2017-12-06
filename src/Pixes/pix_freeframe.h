@@ -74,7 +74,7 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
 
     //////////
     // Do the processing
-    void 	processImage(imageStruct &image);
+    void        processImage(imageStruct &image);
 
     imageStruct m_image;
     class FFPlugin;
@@ -98,4 +98,4 @@ class GEM_EXTERN pix_freeframe : public GemPixObj
     static bool loader(const t_canvas *canvas, const std::string&classname, const std::string&path);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -107,8 +107,8 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
       float output;
       output = fb0 * *this_p + fb1 * *last_p + fb2 * *prev_p;
       *this_p++    = (unsigned char)(ff1 * output + ff2 * *last_p + ff3 * *prev_p);
-      *prev_p++	 = *last_p;
-      *last_p++	 = (unsigned char)output;
+      *prev_p++  = *last_p;
+      *last_p++  = (unsigned char)output;
     }
   }else{
     // fast, because calculations are done in int !
@@ -126,8 +126,8 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
       int ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
       if(max<ioutput)max=ioutput;//JMZ
       *this_p++    = (unsigned char)CLAMP(((iff1 * ioutput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
-      *prev_p++	 = *last_p;
-      *last_p++	 = (unsigned char)CLAMP(ioutput);
+      *prev_p++  = *last_p;
+      *last_p++  = (unsigned char)CLAMP(ioutput);
     }
     //post("maxval=%d", max);//JMZ
   }
@@ -269,8 +269,8 @@ void pix_biquad :: processRGBAMMX(imageStruct &image)
   /*
     float output = fb0 * *this_p + fb1 * *last_p + fb2 * *prev_p;
     *this_p++    = (unsigned char)(ff1 * output + ff2 * *last_p + ff3 * *prev_p);
-    *prev_p++	 = *last_p;
-    *last_p++	 = (unsigned char)output;
+    *prev_p++    = *last_p;
+    *last_p++    = (unsigned char)output;
     */
 
   while(pixsize--) {
@@ -375,18 +375,18 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
 
     /*
     union {
-        unsigned char		c[16];
-        vector unsigned char 	v;
+        unsigned char           c[16];
+        vector unsigned char    v;
     }charBuffer;
 */
     union {
-        signed short		s[8];
-        vector signed short 	v;
+        signed short            s[8];
+        vector signed short     v;
     }shortBuffer;
 
     union {
-        signed int		i[4];
-        vector signed int 	v;
+        signed int              i[4];
+        vector signed int       v;
     }intBuffer;
 
     //unroll 4x
@@ -443,7 +443,7 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
     //setup the cache prefetch -- A MUST!!!
     //this gave a 30-40% speedup - the gain so far is about 450%
 #ifndef PPC970
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+    UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     vec_dst( this_p, prefetchSize, 0 );
     vec_dst( last_p, prefetchSize, 1 );
     vec_dst( prev_p, prefetchSize, 2 );

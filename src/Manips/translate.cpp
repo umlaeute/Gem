@@ -96,4 +96,3 @@ void translate :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "ft1", distanceMess, float);
   CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
 }
-

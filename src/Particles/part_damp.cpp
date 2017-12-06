@@ -29,9 +29,9 @@ CPPEXTERN_NEW_WITH_THREE_ARGS(part_damp, t_floatarg, A_DEFFLOAT, t_floatarg, A_D
 /////////////////////////////////////////////////////////
 part_damp :: part_damp(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos)
 {
-	m_vector[0] = xpos;
-	m_vector[1] = ypos;
-	m_vector[2] = zpos;
+        m_vector[0] = xpos;
+        m_vector[1] = ypos;
+        m_vector[2] = zpos;
 
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
 }
@@ -49,10 +49,10 @@ part_damp :: ~part_damp(void)
 /////////////////////////////////////////////////////////
 void part_damp :: renderParticles(GemState *state)
 {
-	if (m_tickTime > 0.f)
-	{
-		pDamping(m_vector[0], m_vector[1], m_vector[2]);
-	}
+        if (m_tickTime > 0.f)
+        {
+                pDamping(m_vector[0], m_vector[1], m_vector[2]);
+        }
 }
 
 /////////////////////////////////////////////////////////

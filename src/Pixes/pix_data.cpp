@@ -48,8 +48,8 @@ pix_data :: pix_data() :
 /////////////////////////////////////////////////////////
 pix_data :: ~pix_data()
 {
-	outlet_free(m_colorOut);
-	outlet_free(m_grayOut);
+        outlet_free(m_colorOut);
+        outlet_free(m_grayOut);
 }
 
 /////////////////////////////////////////////////////////

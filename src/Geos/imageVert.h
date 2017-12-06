@@ -27,9 +27,9 @@ CLASS
 
 DESCRIPTION
 
-	Notice that even though imageVert is derived from GemPixObj, we
-		still override a lot of the virtual functions...including
-		render.
+        Notice that even though imageVert is derived from GemPixObj, we
+                still override a lot of the virtual functions...including
+                render.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN imageVert : public GemPixObj
@@ -38,41 +38,41 @@ class GEM_EXTERN imageVert : public GemPixObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	imageVert();
+            //////////
+            // Constructor
+        imageVert();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~imageVert();
+        //////////
+        // Destructor
+        virtual ~imageVert();
 
-    	//////////
-    	// This is a dummy function for us
-    	virtual void 	processImage(imageStruct &) { }
+        //////////
+        // This is a dummy function for us
+        virtual void    processImage(imageStruct &) { }
 
-    	//////////
-    	// Do the processing for an RGBA image
-		// [in] image - The image to use
-		// [in] texture - Is texture mapping turned on?
-    	virtual void 	processRGBAPix(imageStruct &image, int texture);
+        //////////
+        // Do the processing for an RGBA image
+                // [in] image - The image to use
+                // [in] texture - Is texture mapping turned on?
+        virtual void    processRGBAPix(imageStruct &image, int texture);
 
-    	//////////
-    	// Do the processing for gray8 image
-		// [in] image - The image to use
-		// [in] texture - Is texture mapping turned on?
-    	virtual void 	processGrayPix(imageStruct &image, int texture);
+        //////////
+        // Do the processing for gray8 image
+                // [in] image - The image to use
+                // [in] texture - Is texture mapping turned on?
+        virtual void    processGrayPix(imageStruct &image, int texture);
 
-    	//////////
-    	// Do the processing for YUV image
-		// [in] image - The image to use
-		// [in] texture - Is texture mapping turned on?
-    	virtual void 	processYUVPix(imageStruct &image, int texture);
+        //////////
+        // Do the processing for YUV image
+                // [in] image - The image to use
+                // [in] texture - Is texture mapping turned on?
+        virtual void    processYUVPix(imageStruct &image, int texture);
 
-    	//////////
-    	// Do the rendering.
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering.
+        virtual void    render(GemState *state);
 
         //////////
         // The display list
@@ -83,4 +83,4 @@ class GEM_EXTERN imageVert : public GemPixObj
         int             m_rebuildList;
 };
 
-#endif	// for header file
+#endif  // for header file

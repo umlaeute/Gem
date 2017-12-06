@@ -48,8 +48,8 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
   virtual void         fullscreenMess(int on);
   virtual void             cursorMess(bool on);
   virtual void            menubarMess(int value);
-  void		         move(void); // apply dimen/offset to current window
-  void		        moved(void); // window dimen/offset changed
+  void                   move(void); // apply dimen/offset to current window
+  void                  moved(void); // window dimen/offset changed
 
  private:
   class PIMPL;

@@ -57,7 +57,7 @@ class GEM_EXTERN pix_frei0r : public GemPixObj
 
     //////////
     // Do the processing
-    void 	processRGBAImage(imageStruct &image);
+    void        processRGBAImage(imageStruct &image);
 
     imageStruct m_image;
     class F0RPlugin;
@@ -80,4 +80,4 @@ class GEM_EXTERN pix_frei0r : public GemPixObj
     static bool loader(const t_canvas *canvas, const std::string&classname, const std::string&path);
 };
 
-#endif	// for header file
+#endif  // for header file

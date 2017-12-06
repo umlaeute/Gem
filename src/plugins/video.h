@@ -60,7 +60,7 @@ namespace gem { namespace plugins {
        * the default implementation (which you normally shouldn't need to override)
        * will simply set m_devicenum and clear m_devicename
        */
-      virtual bool	    	setDevice(int ID) = 0;
+      virtual bool              setDevice(int ID) = 0;
 
       /**
        * set the device to be opened next time
@@ -71,7 +71,7 @@ namespace gem { namespace plugins {
        * the default implementation (which you normally shouldn't need to override)
        * will simply set m_devicename and clear m_devicenum
        */
-      virtual bool	    	setDevice(const std::string&) = 0;
+      virtual bool              setDevice(const std::string&) = 0;
 
 
       //! open the device (calls openDevice())
@@ -127,7 +127,7 @@ namespace gem { namespace plugins {
        *    "quality"          "quality" message (float)
        */
       virtual bool enumProperties(gem::Properties&readable,
-				  gem::Properties&writeable) = 0;
+                                  gem::Properties&writeable) = 0;
 
       /**
        * set a number of properties (as defined by "props")
@@ -156,7 +156,7 @@ namespace gem { namespace plugins {
        * if the system does support dialogs and the user has specified which one they want,
        * return TRUE if at least one dialog could be handled
        */
-      virtual bool	    	dialog(std::vector<std::string>names=std::vector<std::string>()) = 0;
+      virtual bool              dialog(std::vector<std::string>names=std::vector<std::string>()) = 0;
       /**
        * enumerate list of possible dialogs (if any)
        */
@@ -216,4 +216,4 @@ namespace gem { namespace plugins {
  */
 #define REGISTER_VIDEOFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::video> fac_video_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

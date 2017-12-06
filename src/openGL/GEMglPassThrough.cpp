@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,10 +23,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPassThrough , t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPassThrough :: GEMglPassThrough	(t_floatarg arg0) :
-		token(static_cast<GLfloat>(arg0))
+GEMglPassThrough :: GEMglPassThrough    (t_floatarg arg0) :
+                token(static_cast<GLfloat>(arg0))
 {
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("token"));
+        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("token"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -48,15 +48,15 @@ bool GEMglPassThrough :: isRunnable(void) {
 // Render
 //
 void GEMglPassThrough :: render(GemState *state) {
-	glPassThrough (token);
+        glPassThrough (token);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglPassThrough :: tokenMess (t_float arg1) {	// FUN
-	token = static_cast<GLfloat>(arg1);
-	setModified();
+void GEMglPassThrough :: tokenMess (t_float arg1) {     // FUN
+        token = static_cast<GLfloat>(arg1);
+        setModified();
 }
 
 
@@ -65,9 +65,9 @@ void GEMglPassThrough :: tokenMess (t_float arg1) {	// FUN
 //
 
 void GEMglPassThrough :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPassThrough::tokenMessCallback),  	gensym("token"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPassThrough::tokenMessCallback),    gensym("token"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglPassThrough :: tokenMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->tokenMess ( static_cast<t_float>(arg0));
+        GetMyClass(data)->tokenMess ( static_cast<t_float>(arg0));
 }

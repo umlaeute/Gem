@@ -186,8 +186,8 @@ struct PIMPL {
     } else {
       int i=0;
       while(s_configdir[i]) {
-	open(GEM_SETTINGS_FILE, s_configdir[i]);
-	i++;
+        open(GEM_SETTINGS_FILE, s_configdir[i]);
+        i++;
       }
       open(GEM_SETTINGS_FILE, ".");
     }

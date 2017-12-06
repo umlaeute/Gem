@@ -78,59 +78,59 @@ void pix_dot :: makePattern(int format)
   default: // RGBA
     {
       for (int i=0; i<DOTMAX; i++)
-	{
-	  /* Generated pattern is a quadrant of a disk. */
-	  U32 *pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
-	  double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
-	  r = r*r;
-	  for(int y=0; y<dot_hsize; y++) {
-	    for(int x=0; x<dot_hsize; x++) {
-	      int c = 0;
-	      for(int u=0; u<4; u++) {
-		double p = static_cast<double>(u)/4.0 + y;
-		p = p*p;
-		for(int v=0; v<4; v++) {
-		  double q = static_cast<double>(v)/4.0 + x;
-		  if(p+q*q<r) {
-		    c++;
-		  }
-		}
-	      }
-	      c = (c>15)?15:c;
-	      c<<=4;
-	      *pat-- = (c<<SHIFT_RED)|(c<<SHIFT_GREEN)|(c<<SHIFT_BLUE);
-	    }
-	  }
-	}
+        {
+          /* Generated pattern is a quadrant of a disk. */
+          U32 *pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
+          double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+          r = r*r;
+          for(int y=0; y<dot_hsize; y++) {
+            for(int x=0; x<dot_hsize; x++) {
+              int c = 0;
+              for(int u=0; u<4; u++) {
+                double p = static_cast<double>(u)/4.0 + y;
+                p = p*p;
+                for(int v=0; v<4; v++) {
+                  double q = static_cast<double>(v)/4.0 + x;
+                  if(p+q*q<r) {
+                    c++;
+                  }
+                }
+              }
+              c = (c>15)?15:c;
+              c<<=4;
+              *pat-- = (c<<SHIFT_RED)|(c<<SHIFT_GREEN)|(c<<SHIFT_BLUE);
+            }
+          }
+        }
     }
     break;
   case GL_LUMINANCE:
     {
       for (int i=0; i<DOTMAX; i++)
-	{
-	  /* Generated pattern is a quadrant of a disk. */
+        {
+          /* Generated pattern is a quadrant of a disk. */
           unsigned char *pat = (reinterpret_cast<unsigned char*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
-	  double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
-	  r = r*r;
-	  for(int y=0; y<dot_hsize; y++) {
-	    for(int x=0; x<dot_hsize; x++) {
-	      int c = 0;
-	      for(int u=0; u<4; u++) {
-		double p = static_cast<double>(u)/4.0 + y;
-		p = p*p;
-		for(int v=0; v<4; v++) {
-		  double q = static_cast<double>(v)/4.0 + x;
-		  if(p+q*q<r) {
-		    c++;
-		  }
-		}
-	      }
-	      c = (c>15)?15:c;
-	      c<<=4;
-	      *pat-- = c;
-	    }
-	  }
-	}
+          double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+          r = r*r;
+          for(int y=0; y<dot_hsize; y++) {
+            for(int x=0; x<dot_hsize; x++) {
+              int c = 0;
+              for(int u=0; u<4; u++) {
+                double p = static_cast<double>(u)/4.0 + y;
+                p = p*p;
+                for(int v=0; v<4; v++) {
+                  double q = static_cast<double>(v)/4.0 + x;
+                  if(p+q*q<r) {
+                    c++;
+                  }
+                }
+              }
+              c = (c>15)?15:c;
+              c<<=4;
+              *pat-- = c;
+            }
+          }
+        }
     }
     break;
   case GL_YUV422_GEM:
@@ -138,36 +138,36 @@ void pix_dot :: makePattern(int format)
       const unsigned char chroma = 128;
 
       for (int i=0; i<DOTMAX; i++)
-	{
-	  /* Generated pattern is a quadrant of a disk. */
+        {
+          /* Generated pattern is a quadrant of a disk. */
           U16 *pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
-	  double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
-	  r = r*r;
-	  for(int y=0; y<dot_hsize; y++) {
-	    for(int x=0; x<dot_hsize; x++) {
-	      int c = 0;
-	      for(int u=0; u<4; u++) {
-		double p = static_cast<double>(u)/4.0 + y;
-		p = p*p;
-		for(int v=0; v<4; v++) {
-		  double q = static_cast<double>(v)/4.0 + x;
-		  if(p+q*q<r) {
-		    c++;
-		  }
-		}
-	      }
-	      c = (c>15)?15:c;
-	      c<<=4;
+          double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+          r = r*r;
+          for(int y=0; y<dot_hsize; y++) {
+            for(int x=0; x<dot_hsize; x++) {
+              int c = 0;
+              for(int u=0; u<4; u++) {
+                double p = static_cast<double>(u)/4.0 + y;
+                p = p*p;
+                for(int v=0; v<4; v++) {
+                  double q = static_cast<double>(v)/4.0 + x;
+                  if(p+q*q<r) {
+                    c++;
+                  }
+                }
+              }
+              c = (c>15)?15:c;
+              c<<=4;
 #ifdef __APPLE__
 /* LATER fix the defines in GemPixPete.h instead of the code here ...*/
 /* (the same goes for pix_halftone.cpp) */
-	      *pat-- = (chroma<<SHIFT_V)|((c&0xff)<<SHIFT_Y2);
+              *pat-- = (chroma<<SHIFT_V)|((c&0xff)<<SHIFT_Y2);
 #else
-	      *pat-- = (chroma<<SHIFT_U)|((c&0xff)<<SHIFT_Y1);
+              *pat-- = (chroma<<SHIFT_U)|((c&0xff)<<SHIFT_Y1);
 #endif
-	    }
-	  }
-	}
+            }
+          }
+        }
     }
     break;
   }
@@ -291,12 +291,12 @@ void pix_dot :: sizeMess(int width, int height)
 
 unsigned char pix_dot :: inline_RGB2Y(int rgb)
 {
-	int i;
+        int i;
 
-	i = R2Y[(rgb>>16)&0xff];
-	i += G2Y[(rgb>>8)&0xff];
-	i += B2Y[rgb&0xff];
-	return i;
+        i = R2Y[(rgb>>16)&0xff];
+        i += G2Y[(rgb>>8)&0xff];
+        i += B2Y[rgb&0xff];
+        return i;
 }
 
 /////////////////////////////////////////////////////////
@@ -313,23 +313,23 @@ void pix_dot :: processRGBAImage(imageStruct &image)
     if (!alreadyInit)    {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-	m_csize = image.csize;
+        m_csize = image.csize;
 
-	if(m_useScale){
-	  dot_hsize =(static_cast<int>(8 * m_scale)) >> 1;
-	  if(dot_hsize<1)dot_hsize=1;
-	  dot_size = dot_hsize * 2;
-	  dots_width = m_xsize / dot_size;
-	  dots_height = m_ysize / dot_size;
-	} else {
-	  dot_size=m_xsize / dots_width;
-	  if(dot_size==0){
-	    dot_size=2;
-	    dots_width  = m_xsize / dot_size;
-	    dots_height = m_ysize / dot_size;
-	  }
-	}
-	dot_hsize = dot_size / 2;
+        if(m_useScale){
+          dot_hsize =(static_cast<int>(8 * m_scale)) >> 1;
+          if(dot_hsize<1)dot_hsize=1;
+          dot_size = dot_hsize * 2;
+          dots_width = m_xsize / dot_size;
+          dots_height = m_ysize / dot_size;
+        } else {
+          dot_size=m_xsize / dots_width;
+          if(dot_size==0){
+            dot_size=2;
+            dots_width  = m_xsize / dot_size;
+            dots_height = m_ysize / dot_size;
+          }
+        }
+        dot_hsize = dot_size / 2;
 
         pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
         if (pattern == NULL) {
@@ -384,7 +384,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
     {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-	m_csize = image.csize;
+        m_csize = image.csize;
 
         dot_hsize = (static_cast<int>(8 * m_scale)) >> 1;
         if(dot_hsize<1)dot_hsize=1;
@@ -448,7 +448,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
     {
         m_xsize = image.xsize;
         m_ysize = image.ysize;
-	m_csize = image.csize;
+        m_csize = image.csize;
 
         dot_hsize = static_cast<int>(8 * m_scale) >> 1;
         if(dot_hsize<1)dot_hsize=1;
@@ -538,13 +538,13 @@ void pix_dot :: yuv_init()
     if(!initialized) {
         for(i=20; i<256; i++) {
 #if 0
-	  R2Y[i] =  static_cast<int>(0.257f*i);
-	  G2Y[i] =  static_cast<int>(0.504f*i);
-	  B2Y[i] =  static_cast<int>(0.098f*i);
+          R2Y[i] =  static_cast<int>(0.257f*i);
+          G2Y[i] =  static_cast<int>(0.504f*i);
+          B2Y[i] =  static_cast<int>(0.098f*i);
 #else
-	  R2Y[i] =  static_cast<int>(RGB2GRAY_RED  *i)>>8;
-	  G2Y[i] =  static_cast<int>(RGB2GRAY_GREEN*i)>>8;
-	  B2Y[i] =  static_cast<int>(RGB2GRAY_BLUE *i)>>8;
+          R2Y[i] =  static_cast<int>(RGB2GRAY_RED  *i)>>8;
+          G2Y[i] =  static_cast<int>(RGB2GRAY_GREEN*i)>>8;
+          B2Y[i] =  static_cast<int>(RGB2GRAY_BLUE *i)>>8;
 #endif
         }
         initialized = 1;
@@ -557,14 +557,14 @@ void pix_dot :: yuv_init()
 /////////////////////////////////////////////////////////
 int pix_dot :: sharedbuffer_init()
 {
-	/* maximum size of the frame buffer is for screen size x 2 */
-	sharedbuffer_length = m_xsize * m_ysize * sizeof(U32) * 2;
+        /* maximum size of the frame buffer is for screen size x 2 */
+        sharedbuffer_length = m_xsize * m_ysize * sizeof(U32) * 2;
 
-	sharedbuffer = (unsigned char *)malloc(sharedbuffer_length);
-	if(sharedbuffer == NULL)
-		return -1;
-	else
-		return 0;
+        sharedbuffer = (unsigned char *)malloc(sharedbuffer_length);
+        if(sharedbuffer == NULL)
+                return -1;
+        else
+                return 0;
 }
 
 /* The effects uses shared buffer must call this function at first in
@@ -572,7 +572,7 @@ int pix_dot :: sharedbuffer_init()
  */
 void pix_dot :: sharedbuffer_reset()
 {
-	tail = 0;
+        tail = 0;
 }
 
 /* Allocates size bytes memory in shared buffer and returns a pointer to the
@@ -580,16 +580,16 @@ void pix_dot :: sharedbuffer_reset()
  */
 unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 {
-	unsigned char *head;
+        unsigned char *head;
 
-	if(sharedbuffer_length - tail < size) {
-		return NULL;
-	}
+        if(sharedbuffer_length - tail < size) {
+                return NULL;
+        }
 
-	head = sharedbuffer + tail;
-	tail += size;
+        head = sharedbuffer + tail;
+        tail += size;
 
-	return head;
+        return head;
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -598,7 +598,7 @@ unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 void pix_dot :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
-  		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
+                  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
                     gensym("scale"), A_FLOAT, A_NULL);
 }

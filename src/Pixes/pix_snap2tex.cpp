@@ -187,7 +187,7 @@ void pix_snap2tex :: snapMess(void)
       m_texHeight = y_2;
       setTexCoords((float)width / (float)x_2, (float)height / (float)y_2);
 
-      glCopyTexImage2D(	m_textureType, 0,
+      glCopyTexImage2D( m_textureType, 0,
                         GL_RGBA16,
                         m_x, m_y,
                         m_texWidth, m_texHeight,
@@ -196,7 +196,7 @@ void pix_snap2tex :: snapMess(void)
       setTexCoords(width, height);
       m_texWidth  = width;
       m_texHeight = height;
-      glCopyTexImage2D(	m_textureType, 0,
+      glCopyTexImage2D( m_textureType, 0,
                         GL_RGBA16,
                         m_x, m_y,
                         m_texWidth, m_texHeight,
@@ -209,7 +209,7 @@ void pix_snap2tex :: snapMess(void)
 
   glCopyTexSubImage2D(m_textureType, 0,
                       0, 0,
-                      m_x, m_y,		// position
+                      m_x, m_y,         // position
                       m_texWidth, m_texHeight);
 
   glDisable(m_textureType);
@@ -313,7 +313,7 @@ void pix_snap2tex :: startRendering(void)
   m_texWidth = m_texHeight = -1;
   m_init=true;
 
-  if (!m_textureObj)	{
+  if (!m_textureObj)    {
     error("Unable to allocate texture object");
     return;
   }

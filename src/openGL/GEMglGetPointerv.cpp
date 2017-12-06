@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,15 +23,15 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetPointerv , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetPointerv :: GEMglGetPointerv	(t_floatarg arg0) {
-	pnameMess(arg0);
-	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+GEMglGetPointerv :: GEMglGetPointerv    (t_floatarg arg0) {
+        pnameMess(arg0);
+        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglGetPointerv :: ~GEMglGetPointerv () {
-	inlet_free(m_inlet);
+        inlet_free(m_inlet);
 }
 
 //////////////////
@@ -53,7 +53,7 @@ void GEMglGetPointerv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetPointerv :: pnameMess (t_float arg0) {	// FUN
+void GEMglGetPointerv :: pnameMess (t_float arg0) {     // FUN
   pname=static_cast<GLenum>(arg0);
   setModified();
 }
@@ -63,9 +63,9 @@ void GEMglGetPointerv :: pnameMess (t_float arg0) {	// FUN
 //
 
 void GEMglGetPointerv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetPointerv::pnameMessCallback),  	gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetPointerv::pnameMessCallback),   gensym("pname"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglGetPointerv :: pnameMessCallback (void* data, t_float arg0) {
-	GetMyClass(data)->pnameMess ( arg0 );
+        GetMyClass(data)->pnameMess ( arg0 );
 }

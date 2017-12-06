@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -26,7 +26,7 @@ using namespace gem::utils::gl;
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglReportError :: GEMglReportError	(void) {
+GEMglReportError :: GEMglReportError    (void) {
   m_outlet = outlet_new(this->x_obj, &s_float);
 }
 /////////////////////////////////////////////////////////
@@ -50,9 +50,9 @@ void GEMglReportError :: render(GemState *state) {
 //
 
 void GEMglReportError :: obj_setupCallback(t_class *classPtr) {
-	 class_addanything(classPtr, GEMglReportError::bangMessCallback);
+         class_addanything(classPtr, GEMglReportError::bangMessCallback);
 
 };
 void GEMglReportError :: bangMessCallback (void* data){
-	GetMyClass(data)->render(NULL);
+        GetMyClass(data)->render(NULL);
 }

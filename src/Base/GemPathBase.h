@@ -35,25 +35,25 @@ class GEM_EXTERN GemPathBase : public CPPExtern
 
         //////////
         // Constructor
-    	GemPathBase(int argc, t_atom *argv);
+        GemPathBase(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~GemPathBase();
+        //////////
+        // Destructor
+        virtual ~GemPathBase();
 
-    	//////////
-    	// When an open is received
-    	virtual void	openMess(t_symbol *arrayname);
+        //////////
+        // When an open is received
+        virtual void    openMess(t_symbol *arrayname);
 
         //////////
         // When a float val is received
         virtual void    floatMess(t_float val);
 
-	///////////
-	// do the actual interpolation
-	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts) = 0;
+        ///////////
+        // do the actual interpolation
+        virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts) = 0;
 
         //////////
         // The number of dimensions
@@ -68,4 +68,4 @@ class GEM_EXTERN GemPathBase : public CPPExtern
         t_outlet        *m_out1;
 };
 
-#endif	// for header file
+#endif  // for header file

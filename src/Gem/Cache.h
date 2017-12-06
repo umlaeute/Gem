@@ -34,7 +34,7 @@ class GEM_EXTERN GemCache
 {
     public:
 
-    	//////////
+        //////////
         // Constructor
       explicit GemCache(gemhead *parent);
 
@@ -47,28 +47,28 @@ class GEM_EXTERN GemCache
 
       virtual GemCache& operator=(const GemCache&);
 
-    	//////////
-    	// Was a modification made which will void a display list?
-    	bool 	    	    dirty;
+        //////////
+        // Was a modification made which will void a display list?
+        bool                dirty;
 
-    	//////////
-    	// Should the image be resent?
-    	bool 	    	    resendImage;
+        //////////
+        // Should the image be resent?
+        bool                resendImage;
 
-    	//////////
-    	// has the Vertex-Array changed?
-    	bool 	    	    vertexDirty;
+        //////////
+        // has the Vertex-Array changed?
+        bool                vertexDirty;
 
-		//////////
-		// re-set (like creation, but without instantiating
-		void reset(gemhead*parent);
+                //////////
+                // re-set (like creation, but without instantiating
+                void reset(gemhead*parent);
 
     //////////
-    gemhead     	    *m_parent;
+    gemhead                 *m_parent;
 
     //////////
     // indicates a valid cache
     int m_magic;
 };
 
-#endif	// for header file
+#endif  // for header file

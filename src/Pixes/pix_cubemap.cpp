@@ -165,12 +165,12 @@ void pix_cubemap :: applyTex(GLint textype, imageStruct*img) {
   //if the texture is a power of two in size then there is no need to subtexture
   if(img) {
     glTexImage2D(textype, 0,
-		 img->csize, img->xsize, img->ysize,
-		 0, img->format, img->type, img->data);
+                 img->csize, img->xsize, img->ysize,
+                 0, img->format, img->type, img->data);
     verbose(1, "tex:%d\timg=%d %d %d %d %d %d %d %x",
-	    textype, 0,
-	    GL_RGBA8, img->xsize, img->ysize,
-	    0, img->format, img->type, img->data);
+            textype, 0,
+            GL_RGBA8, img->xsize, img->ysize,
+            0, img->format, img->type, img->data);
     switch(textype) {
     case(GL_TEXTURE_CUBE_MAP_POSITIVE_X): post("X+"); break;
     case(GL_TEXTURE_CUBE_MAP_NEGATIVE_X): post("X-"); break;
@@ -296,7 +296,7 @@ void pix_cubemap :: startRendering()
 
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 
-  if (!m_realTextureObj)	{
+  if (!m_realTextureObj)        {
     error("Unable to allocate texture object");
     return;
   }

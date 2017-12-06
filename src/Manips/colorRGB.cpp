@@ -125,7 +125,7 @@ void colorRGB :: aMess(float val)
 void colorRGB :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_colorRGB),
-		   gensym("colourRGB"), A_GIMME, A_NULL);
+                   gensym("colourRGB"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "rVal", rMess, float);
   CPPEXTERN_MSG1(classPtr, "gVal", gMess, float);
   CPPEXTERN_MSG1(classPtr, "bVal", bMess, float);

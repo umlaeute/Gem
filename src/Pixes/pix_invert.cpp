@@ -189,14 +189,14 @@ int h,w,width;
     offset = charBuffer.v;
     offset = (vector unsigned char) vec_splat(offset,0);
     #ifndef PPC970
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
+    UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
        #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
         #endif
         inData[0]=vec_subs(offset,inData[0]);
         inData++;

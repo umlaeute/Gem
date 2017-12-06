@@ -94,7 +94,7 @@ void cylinder :: render(GemState *state)
   da = 2.0 * M_PI / slices;
   dr = (topRadius - baseRadius) / stacks;
   dz = height / stacks;
-  nz = (baseRadius - topRadius) / height;	/* Z component of normal vectors */
+  nz = (baseRadius - topRadius) / height;       /* Z component of normal vectors */
 
   if (m_drawType == GL_POINT) {
     glBegin(GL_POINTS);
@@ -182,20 +182,20 @@ void cylinder :: render(GemState *state)
           x = sin(i * da);
           y = cos(i * da);
         }
-	normal3f(x * nsign, y * nsign, nz * nsign);
-	if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-	glVertex3f(x * r, y * r, z);
-	normal3f(x * nsign, y * nsign, nz * nsign);
-	if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-	glVertex3f(x * (r + dr), y * (r + dr), z + dz);
+        normal3f(x * nsign, y * nsign, nz * nsign);
+        if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        glVertex3f(x * r, y * r, z);
+        normal3f(x * nsign, y * nsign, nz * nsign);
+        if(texType)glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+        glVertex3f(x * (r + dr), y * (r + dr), z + dz);
 
-	s += ds;
-      }			/* for slices */
+        s += ds;
+      }                 /* for slices */
       glEnd();
       r += dr;
       t += dt;
       z += dz;
-    }				/* for stacks */
+    }                           /* for stacks */
   }
   glPopMatrix();
 }

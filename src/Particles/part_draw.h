@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Draw a particle group
+        Draw a particle group
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,9 +21,9 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_draw
+        part_draw
 
-	Draw a particle group
+        Draw a particle group
 
 DESCRIPTION
 
@@ -34,25 +34,25 @@ class GEM_EXTERN part_draw : public partlib_base
 
     public:
 
-	    //////////
-	    // Constructor
-    	part_draw(void);
+            //////////
+            // Constructor
+        part_draw(void);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+        //////////
+        virtual void    renderParticles(GemState *state);
 
-    	//////////
-    	// Destructor
-    	virtual ~part_draw(void);
+        //////////
+        // Destructor
+        virtual ~part_draw(void);
 
-    	//////////
-    	// How the object should be drawn
-      void			typeMess(t_symbol*,int,t_atom*);
+        //////////
+        // How the object should be drawn
+      void                      typeMess(t_symbol*,int,t_atom*);
 
  protected:
 
       //////////
-      int				m_drawType;
+      int                               m_drawType;
 };
 
-#endif	// for header file
+#endif  // for header file

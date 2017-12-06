@@ -235,22 +235,22 @@ void GemBase::beforeDeletion(void) {
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
-    	    gensym("gem_state"), A_GIMME, A_NULL);
+            gensym("gem_state"), A_GIMME, A_NULL);
     struct _CallbackClass_gemContext {
       static void callback(void*data, t_float v0) {
-	GemBase*obj=GetMyClass(data);
-	bool state=(bool)v0;
-	if(!state && obj->gem_amRendering) {
-	  if(obj->m_enabled) {
-	    //obj->post("stop rendering");
-	    obj->stopRendering();
-	    obj->m_state=obj->ENABLED;
-	  }
-	}
-	obj->gem_amRendering=(!state);
+        GemBase*obj=GetMyClass(data);
+        bool state=(bool)v0;
+        if(!state && obj->gem_amRendering) {
+          if(obj->m_enabled) {
+            //obj->post("stop rendering");
+            obj->stopRendering();
+            obj->m_state=obj->ENABLED;
+          }
+        }
+        obj->gem_amRendering=(!state);
       }
       explicit _CallbackClass_gemContext (struct _class*c) {
-	class_addmethod(c, reinterpret_cast<t_method>(callback), gensym("__gem_context"), A_FLOAT, A_NULL);
+        class_addmethod(c, reinterpret_cast<t_method>(callback), gensym("__gem_context"), A_FLOAT, A_NULL);
       }
     };
     _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);

@@ -45,19 +45,19 @@
 # ifdef __linux__
 #  include <sys/time.h>
 
-#  define START_TIMING float mseconds=0.f;	\
-  timeval startTime, endTime;			\
+#  define START_TIMING float mseconds=0.f;      \
+  timeval startTime, endTime;                   \
   gettimeofday(&startTime, 0)
-#  define STOP_TIMING(x) gettimeofday(&endTime, 0);	\
-  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +	\
-    (endTime.tv_usec - startTime.tv_usec) * 0.001;	\
+#  define STOP_TIMING(x) gettimeofday(&endTime, 0);     \
+  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 + \
+    (endTime.tv_usec - startTime.tv_usec) * 0.001;      \
   post("%s frame time = %f ms", x, mseconds)
 # elif defined __APPLE__
-#  define START_TIMING float mseconds=0.f;	\
-  UnsignedWide start, end;			\
+#  define START_TIMING float mseconds=0.f;      \
+  UnsignedWide start, end;                      \
   Microseconds(&start)
-#  define STOP_TIMING(x) Microseconds(&end);			\
-  mseconds = static_cast<float>((end.lo - start.lo) / 1000.f);	\
+#  define STOP_TIMING(x) Microseconds(&end);                    \
+  mseconds = static_cast<float>((end.lo - start.lo) / 1000.f);  \
   post("%s frame time = %f ms", x, mseconds)
 # else
 #  define START_TIMING
@@ -193,11 +193,11 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to) const
   }
 
   // copy the information over
-  to->xsize 	= xsize;
-  to->ysize 	= ysize;
-  to->csize 	= csize;
-  to->format 	= format;
-  to->type 	= type;
+  to->xsize     = xsize;
+  to->ysize     = ysize;
+  to->csize     = csize;
+  to->format    = format;
+  to->type      = type;
   to->data    = data;
   /* from SIMD-branch: datasize refers to the private pdata
    * thus we shouldn't set it to something else, in order to not break
@@ -221,11 +221,11 @@ static bool copy_imagestruct2imagestruct(const imageStruct*from, imageStruct*to)
   }
 
   /* copy without new allocation if possible (speedup in convolve ..) */
-  to->xsize 	= from->xsize;
-  to->ysize 	= from->ysize;
-  to->csize 	= from->csize;
-  to->format 	= from->format;
-  to->type   	= from->type;
+  to->xsize     = from->xsize;
+  to->ysize     = from->ysize;
+  to->csize     = from->csize;
+  to->format    = from->format;
+  to->type      = from->type;
   to->reallocate();
   to->upsidedown = from->upsidedown;
 
@@ -655,19 +655,19 @@ GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata) {
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
       while(pixelnum--){
-	*pixels++=((RGB2YUV_21*rgbadata[chRed]+
-		    RGB2YUV_22*rgbadata[chGreen]+
-		    RGB2YUV_23*rgbadata[chBlue])>>8)+UV_OFFSET; // U
-	*pixels++=((RGB2YUV_11*rgbadata[chRed]+
-		    RGB2YUV_12*rgbadata[chGreen]+
-		    RGB2YUV_13*rgbadata[chBlue])>>8)+ Y_OFFSET; // Y
-	*pixels++=((RGB2YUV_31*rgbadata[chRed]+
-		    RGB2YUV_32*rgbadata[chGreen]+
-		    RGB2YUV_33*rgbadata[chBlue])>>8)+UV_OFFSET; // V
-	*pixels++=((RGB2YUV_11*rgbadata[4+chRed]+
-		    RGB2YUV_12*rgbadata[4+chGreen]+
-		    RGB2YUV_13*rgbadata[4+chBlue])>>8)+ Y_OFFSET; // Y
-	rgbadata+=8;
+        *pixels++=((RGB2YUV_21*rgbadata[chRed]+
+                    RGB2YUV_22*rgbadata[chGreen]+
+                    RGB2YUV_23*rgbadata[chBlue])>>8)+UV_OFFSET; // U
+        *pixels++=((RGB2YUV_11*rgbadata[chRed]+
+                    RGB2YUV_12*rgbadata[chGreen]+
+                    RGB2YUV_13*rgbadata[chBlue])>>8)+ Y_OFFSET; // Y
+        *pixels++=((RGB2YUV_31*rgbadata[chRed]+
+                    RGB2YUV_32*rgbadata[chGreen]+
+                    RGB2YUV_33*rgbadata[chBlue])>>8)+UV_OFFSET; // V
+        *pixels++=((RGB2YUV_11*rgbadata[4+chRed]+
+                    RGB2YUV_12*rgbadata[4+chGreen]+
+                    RGB2YUV_13*rgbadata[4+chBlue])>>8)+ Y_OFFSET; // Y
+        rgbadata+=8;
       }
     }
     STOP_TIMING("RGBA to UYVY");
@@ -803,19 +803,19 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata) {
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
       while(pixelnum--){
-	*pixels++=((RGB2YUV_21*bgradata[chRed]+
-		    RGB2YUV_22*bgradata[chGreen]+
-		    RGB2YUV_23*bgradata[chBlue])>>8)+UV_OFFSET; // U
-	*pixels++=((RGB2YUV_11*bgradata[chRed]+
-		    RGB2YUV_12*bgradata[chGreen]+
-		    RGB2YUV_13*bgradata[chBlue])>>8)+ Y_OFFSET; // Y
-	*pixels++=((RGB2YUV_31*bgradata[chRed]+
-		    RGB2YUV_32*bgradata[chGreen]+
-		    RGB2YUV_33*bgradata[chBlue])>>8)+UV_OFFSET; // V
-	*pixels++=((RGB2YUV_11*bgradata[4+chRed]+
-		    RGB2YUV_12*bgradata[4+chGreen]+
-		    RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
-	bgradata+=8;
+        *pixels++=((RGB2YUV_21*bgradata[chRed]+
+                    RGB2YUV_22*bgradata[chGreen]+
+                    RGB2YUV_23*bgradata[chBlue])>>8)+UV_OFFSET; // U
+        *pixels++=((RGB2YUV_11*bgradata[chRed]+
+                    RGB2YUV_12*bgradata[chGreen]+
+                    RGB2YUV_13*bgradata[chBlue])>>8)+ Y_OFFSET; // Y
+        *pixels++=((RGB2YUV_31*bgradata[chRed]+
+                    RGB2YUV_32*bgradata[chGreen]+
+                    RGB2YUV_33*bgradata[chBlue])>>8)+UV_OFFSET; // V
+        *pixels++=((RGB2YUV_11*bgradata[4+chRed]+
+                    RGB2YUV_12*bgradata[4+chGreen]+
+                    RGB2YUV_13*bgradata[4+chBlue])>>8)+ Y_OFFSET; // Y
+        bgradata+=8;
       }
     }
     STOP_TIMING("BGRA_to_YCbCr");
@@ -857,10 +857,10 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
       // in place conversion
       while(pixelnum--){
         unsigned char dummy = pixels[0];
-	pixels[0] = pixels[1];
-	pixels[1] = pixels[2];
-	pixels[2] = pixels[3];
-	pixels[3] = dummy;
+        pixels[0] = pixels[1];
+        pixels[1] = pixels[2];
+        pixels[2] = pixels[3];
+        pixels[3] = dummy;
         pixels+=4;
       }
     } else {
@@ -913,19 +913,19 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata) {
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
       while(pixelnum--){
-	*pixels++=((RGB2YUV_21*abgrdata[chAlpha]+
-		    RGB2YUV_22*abgrdata[chBlue]+
-		    RGB2YUV_23*abgrdata[chGreen])>>8)+UV_OFFSET; // U
-	*pixels++=((RGB2YUV_11*abgrdata[chAlpha]+
-		    RGB2YUV_12*abgrdata[chBlue]+
-		    RGB2YUV_13*abgrdata[chGreen])>>8)+ Y_OFFSET; // Y
-	*pixels++=((RGB2YUV_31*abgrdata[chAlpha]+
-		    RGB2YUV_32*abgrdata[chBlue]+
-		    RGB2YUV_33*abgrdata[chGreen])>>8)+UV_OFFSET; // V
-	*pixels++=((RGB2YUV_11*abgrdata[4+chAlpha]+
-		    RGB2YUV_12*abgrdata[4+chBlue]+
-		    RGB2YUV_13*abgrdata[4+chGreen])>>8)+ Y_OFFSET; // Y
-	abgrdata+=8;
+        *pixels++=((RGB2YUV_21*abgrdata[chAlpha]+
+                    RGB2YUV_22*abgrdata[chBlue]+
+                    RGB2YUV_23*abgrdata[chGreen])>>8)+UV_OFFSET; // U
+        *pixels++=((RGB2YUV_11*abgrdata[chAlpha]+
+                    RGB2YUV_12*abgrdata[chBlue]+
+                    RGB2YUV_13*abgrdata[chGreen])>>8)+ Y_OFFSET; // Y
+        *pixels++=((RGB2YUV_31*abgrdata[chAlpha]+
+                    RGB2YUV_32*abgrdata[chBlue]+
+                    RGB2YUV_33*abgrdata[chGreen])>>8)+UV_OFFSET; // V
+        *pixels++=((RGB2YUV_11*abgrdata[4+chAlpha]+
+                    RGB2YUV_12*abgrdata[4+chBlue]+
+                    RGB2YUV_13*abgrdata[4+chGreen])>>8)+ Y_OFFSET; // Y
+        abgrdata+=8;
       }
     }
     STOP_TIMING("ABGR_to_YCbCr");
@@ -967,8 +967,8 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata) {
       // in place conversion
       while(pixelnum--){
         unsigned char dummy;
-	dummy = pixels[0]; pixels[0] = pixels[3]; pixels[3]=dummy;
-	dummy = pixels[1]; pixels[1] = pixels[2]; pixels[2]=dummy;
+        dummy = pixels[0]; pixels[0] = pixels[3]; pixels[3]=dummy;
+        dummy = pixels[1]; pixels[1] = pixels[2]; pixels[2]=dummy;
         pixels+=4;
       }
     } else {
@@ -1011,20 +1011,20 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata) {
     case GEM_SIMD_NONE: default:
       pixelnum>>=1;
       while(pixelnum--){
-	*pixels++=((RGB2YUV_21*argbdata[chGreen]+ // R
-		    RGB2YUV_22*argbdata[chBlue]+  // G
-		    RGB2YUV_23*argbdata[chAlpha]  // B
-		    )>>8)+UV_OFFSET; // U
-	*pixels++=((RGB2YUV_11*argbdata[chGreen]+
-		    RGB2YUV_12*argbdata[chBlue]+
-		    RGB2YUV_13*argbdata[chAlpha])>>8)+ Y_OFFSET; // Y
-	*pixels++=((RGB2YUV_31*argbdata[chGreen]+
-		    RGB2YUV_32*argbdata[chBlue]+
-		    RGB2YUV_33*argbdata[chAlpha])>>8)+UV_OFFSET; // V
-	*pixels++=((RGB2YUV_11*argbdata[4+chGreen]+
-		    RGB2YUV_12*argbdata[4+chBlue]+
-		    RGB2YUV_13*argbdata[4+chAlpha])>>8)+ Y_OFFSET; // Y
-	argbdata+=8;
+        *pixels++=((RGB2YUV_21*argbdata[chGreen]+ // R
+                    RGB2YUV_22*argbdata[chBlue]+  // G
+                    RGB2YUV_23*argbdata[chAlpha]  // B
+                    )>>8)+UV_OFFSET; // U
+        *pixels++=((RGB2YUV_11*argbdata[chGreen]+
+                    RGB2YUV_12*argbdata[chBlue]+
+                    RGB2YUV_13*argbdata[chAlpha])>>8)+ Y_OFFSET; // Y
+        *pixels++=((RGB2YUV_31*argbdata[chGreen]+
+                    RGB2YUV_32*argbdata[chBlue]+
+                    RGB2YUV_33*argbdata[chAlpha])>>8)+UV_OFFSET; // V
+        *pixels++=((RGB2YUV_11*argbdata[4+chGreen]+
+                    RGB2YUV_12*argbdata[4+chBlue]+
+                    RGB2YUV_13*argbdata[4+chAlpha])>>8)+ Y_OFFSET; // Y
+        argbdata+=8;
       }
     }
     STOP_TIMING("ARGB_to_YCbCr");
@@ -1158,42 +1158,42 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       int row=ysize>>1;
       int cols=xsize>>1;
       while(row--){
-	int col=cols;
-	while(col--){
+        int col=cols;
+        while(col--){
           int uv_r, uv_g, uv_b;
           int y, u, v;
-	  u=*pu++ -UV_OFFSET;
-	  v=*pv++ -UV_OFFSET;
-	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+          u=*pu++ -UV_OFFSET;
+          v=*pv++ -UV_OFFSET;
+          uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+          uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+          uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	  // 1st row - 1st pixel
-	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
+          // 1st row - 1st pixel
+          y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+          *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels1++ = CLAMP((y + uv_r) >> 8); // r
 
-	  // 1st row - 2nd pixel
-	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
+          // 1st row - 2nd pixel
+          y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+          *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels1++ = CLAMP((y + uv_r) >> 8); // r
 
-	  // 2nd row - 1st pixel
-	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
+          // 2nd row - 1st pixel
+          y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+          *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels2++ = CLAMP((y + uv_r) >> 8); // r
 
-	  // 2nd row - 2nd pixel
-	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-	}
-	pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	py1+=xsize*1;	py2+=xsize*1;
+          // 2nd row - 2nd pixel
+          y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+          *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels2++ = CLAMP((y + uv_r) >> 8); // r
+        }
+        pixels1+=xsize*csize;   pixels2+=xsize*csize;
+        py1+=xsize*1;   py2+=xsize*1;
       }
     }
     break;
@@ -1211,46 +1211,46 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       int row=ysize>>1;
       int cols=xsize>>1;
       while(row--){
-	int col=cols;
-	while(col--){
+        int col=cols;
+        while(col--){
           int y, u, v;
           int uv_r, uv_g, uv_b;
-	  u=*pu++-UV_OFFSET;
-	  v=*pv++-UV_OFFSET;
-	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+          u=*pu++-UV_OFFSET;
+          v=*pv++-UV_OFFSET;
+          uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+          uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+          uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	  // 1st row - 1st pixel
-	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
-	  *pixels1++ = 255; // a
+          // 1st row - 1st pixel
+          y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+          *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels1++ = CLAMP((y + uv_r) >> 8); // r
+          *pixels1++ = 255; // a
 
-	  // 1st row - 2nd pixel
-	  y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-	  *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels1++ = CLAMP((y + uv_r) >> 8); // r
-	  *pixels1++ = 255; // a
+          // 1st row - 2nd pixel
+          y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+          *pixels1++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels1++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels1++ = CLAMP((y + uv_r) >> 8); // r
+          *pixels1++ = 255; // a
 
-	  // 2nd row - 1st pixel
-	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-	  *pixels2++ = 255; // a
+          // 2nd row - 1st pixel
+          y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+          *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels2++ = CLAMP((y + uv_r) >> 8); // r
+          *pixels2++ = 255; // a
 
-	  // 2nd row - 2nd pixel
-	  y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-	  *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-	  *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-	  *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-	  *pixels2++ = 255; // a
-	}
-	pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	py1+=xsize*1;	py2+=xsize*1;
+          // 2nd row - 2nd pixel
+          y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+          *pixels2++ = CLAMP((y + uv_b) >> 8); // b
+          *pixels2++ = CLAMP((y + uv_g) >> 8); // g
+          *pixels2++ = CLAMP((y + uv_r) >> 8); // r
+          *pixels2++ = 255; // a
+        }
+        pixels1+=xsize*csize;   pixels2+=xsize*csize;
+        py1+=xsize*1;   py2+=xsize*1;
       }
     }
     break;
@@ -1267,21 +1267,21 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
       unsigned char u, v;
       /* this is only re-ordering of the data */
       while(row--){
-	int col=cols;
-	while(col--){
-	  // yuv422 is U Y0 V Y1
-	  u=*pu++;	  v=*pv++;
-	  *pixels1++=u;
-	  *pixels1++=*py1++;
-	  *pixels1++=v;
-	  *pixels1++=*py1++;
-	  *pixels2++=u;
-	  *pixels2++=*py2++;
-	  *pixels2++=v;
-	  *pixels2++=*py2++;
-	}
-	pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	py1+=xsize*1;	py2+=xsize*1;
+        int col=cols;
+        while(col--){
+          // yuv422 is U Y0 V Y1
+          u=*pu++;        v=*pv++;
+          *pixels1++=u;
+          *pixels1++=*py1++;
+          *pixels1++=v;
+          *pixels1++=*py1++;
+          *pixels2++=u;
+          *pixels2++=*py2++;
+          *pixels2++=v;
+          *pixels2++=*py2++;
+        }
+        pixels1+=xsize*csize;   pixels2+=xsize*csize;
+        py1+=xsize*1;   py2+=xsize*1;
       }
     }
     break;
@@ -1319,77 +1319,77 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       int row=ysize>>1;
       int cols=xsize>>1;
       while(row--){
-	int col=cols;
-	while(col--){
+        int col=cols;
+        while(col--){
           int y, u, v;
           int uv_r, uv_g, uv_b;
-	  // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-	  u=(*pu++)>>8;
-	  v=(*pv++)>>8;
-	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+          // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
+          u=(*pu++)>>8;
+          v=(*pv++)>>8;
+          uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+          uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+          uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	  // 1st row - 1st pixel
-	  y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
+          // 1st row - 1st pixel
+          y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
 #ifndef __APPLE__
-	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels1+=3;
+          pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels1+=3;
 
-	  // 1st row - 2nd pixel
-	  y=YUV2RGB_11*((*py1++)>>7);
-	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels1+=3;
+          // 1st row - 2nd pixel
+          y=YUV2RGB_11*((*py1++)>>7);
+          pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels1+=3;
 
-	  // 2nd row - 1st pixel
-	  y=YUV2RGB_11*((*py2++)>>7);
-	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels2+=3;
+          // 2nd row - 1st pixel
+          y=YUV2RGB_11*((*py2++)>>7);
+          pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels2+=3;
 
-	  // 2nd row - 2nd pixel
-	  y=YUV2RGB_11*((*py2++)>>7);
-	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels2+=3;
+          // 2nd row - 2nd pixel
+          y=YUV2RGB_11*((*py2++)>>7);
+          pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels2+=3;
 
 #else
-	  pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels1[1] = CLAMP((y + uv_g) >> 8); // g
-	  pixels1[0] = CLAMP((y + uv_b) >> 8); // b
-	  pixels1+=3;
+          pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
+          pixels1[1] = CLAMP((y + uv_g) >> 8); // g
+          pixels1[0] = CLAMP((y + uv_b) >> 8); // b
+          pixels1+=3;
 
-	  // 1st row - 2nd pixel
-	  y=YUV2RGB_11*((*py1++)>>7);
-	  pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels1[1] = CLAMP((y + uv_g) >> 8); // g
-	  pixels1[0] = CLAMP((y + uv_b) >> 8); // b
-	  pixels1+=3;
+          // 1st row - 2nd pixel
+          y=YUV2RGB_11*((*py1++)>>7);
+          pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
+          pixels1[1] = CLAMP((y + uv_g) >> 8); // g
+          pixels1[0] = CLAMP((y + uv_b) >> 8); // b
+          pixels1+=3;
 
-	  // 2nd row - 1st pixel
-	  y=YUV2RGB_11*((*py2++)>>7);
-	  pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels2[1] = CLAMP((y + uv_g) >> 8); // g
-	  pixels2[0 ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels2+=3;
+          // 2nd row - 1st pixel
+          y=YUV2RGB_11*((*py2++)>>7);
+          pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
+          pixels2[1] = CLAMP((y + uv_g) >> 8); // g
+          pixels2[0 ] = CLAMP((y + uv_b) >> 8); // b
+          pixels2+=3;
 
-	  // 2nd row - 2nd pixel
-	  y=YUV2RGB_11*((*py2++)>>7);
-	  pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels2[1] = CLAMP((y + uv_g) >> 8); // g
-	  pixels2[0] = CLAMP((y + uv_b) >> 8); // b
-	  pixels2+=3;
+          // 2nd row - 2nd pixel
+          y=YUV2RGB_11*((*py2++)>>7);
+          pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
+          pixels2[1] = CLAMP((y + uv_g) >> 8); // g
+          pixels2[0] = CLAMP((y + uv_b) >> 8); // b
+          pixels2+=3;
 #endif
 
-	}
-	pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	py1+=xsize*1;	py2+=xsize*1;
+        }
+        pixels1+=xsize*csize;   pixels2+=xsize*csize;
+        py1+=xsize*1;   py2+=xsize*1;
       }
     }
     break;
@@ -1407,50 +1407,50 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       int row=ysize>>1;
       int cols=xsize>>1;
       while(row--){
-	int col=cols;
-	while(col--){
+        int col=cols;
+        while(col--){
           int y, u, v;
           int uv_r, uv_g, uv_b;
-	  u=(*pu++)>>8;
-	  v=(*pv++)>>8;
-	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+          u=(*pu++)>>8;
+          v=(*pv++)>>8;
+          uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+          uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+          uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	  // 1st row - 1st pixel
-	  y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
-	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels1[chAlpha] = 255; // a
-	  pixels1+=4;
+          // 1st row - 1st pixel
+          y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
+          pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels1[chAlpha] = 255; // a
+          pixels1+=4;
 
-	  // 1st row - 2nd pixel
-	  y=YUV2RGB_11*((*py1++)>>7);
-	  pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels1[chAlpha] = 255; // a
-	  pixels1+=4;
+          // 1st row - 2nd pixel
+          y=YUV2RGB_11*((*py1++)>>7);
+          pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels1[chAlpha] = 255; // a
+          pixels1+=4;
 
-	  // 2nd row - 1st pixel
-	  y=YUV2RGB_11*((*py2++)>>7);
-	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels2[chAlpha] = 255; // a
-	  pixels2+=4;
+          // 2nd row - 1st pixel
+          y=YUV2RGB_11*((*py2++)>>7);
+          pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels2[chAlpha] = 255; // a
+          pixels2+=4;
 
-	  // 2nd row - 2nd pixel
-	  y=YUV2RGB_11*((*py2++)>>7);
-	  pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-	  pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-	  pixels2[chAlpha] = 255; // a
-	  pixels2+=4;
-	}
-	pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	py1+=xsize*1;	py2+=xsize*1;
+          // 2nd row - 2nd pixel
+          y=YUV2RGB_11*((*py2++)>>7);
+          pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
+          pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
+          pixels2[chAlpha] = 255; // a
+          pixels2+=4;
+        }
+        pixels1+=xsize*csize;   pixels2+=xsize*csize;
+        py1+=xsize*1;   py2+=xsize*1;
       }
     }
 
@@ -1461,37 +1461,37 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*
       switch(m_simd){
 #ifdef __VEC__
       case GEM_SIMD_ALTIVEC:
-	YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
-	break;
+        YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
+        break;
 #endif
       case GEM_SIMD_NONE: default:
-	unsigned char *pixels1=data;
-	unsigned char *pixels2=data+xsize*csize;
-	const short*py1=Y;
-	const short*py2=Y+xsize; // plane_1 is luminance (csize==1)
-	const short*pu=U;
-	const short*pv=V;
-	int row=ysize>>1;
-	int cols=xsize>>1;
-	unsigned char u, v;
-	/* this is only re-ordering of the data */
-	while(row--){
-	  int col=cols;
-	  while(col--){
-	    // yuv422 is U Y0 V Y1
-	    u=((*pu++)>>8)+128;	  v=((*pv++)>>8)+128;
-	    *pixels1++=u;
-	    *pixels1++=(*py1++)>>7;
-	    *pixels1++=v;
-	    *pixels1++=(*py1++)>>7;
-	    *pixels2++=u;
-	    *pixels2++=(*py2++)>>7;
-	    *pixels2++=v;
-	    *pixels2++=(*py2++)>>7;
-	  }
-	  pixels1+=xsize*csize;	pixels2+=xsize*csize;
-	  py1+=xsize*1;	py2+=xsize*1;
-	}
+        unsigned char *pixels1=data;
+        unsigned char *pixels2=data+xsize*csize;
+        const short*py1=Y;
+        const short*py2=Y+xsize; // plane_1 is luminance (csize==1)
+        const short*pu=U;
+        const short*pv=V;
+        int row=ysize>>1;
+        int cols=xsize>>1;
+        unsigned char u, v;
+        /* this is only re-ordering of the data */
+        while(row--){
+          int col=cols;
+          while(col--){
+            // yuv422 is U Y0 V Y1
+            u=((*pu++)>>8)+128;   v=((*pv++)>>8)+128;
+            *pixels1++=u;
+            *pixels1++=(*py1++)>>7;
+            *pixels1++=v;
+            *pixels1++=(*py1++)>>7;
+            *pixels2++=u;
+            *pixels2++=(*py2++)>>7;
+            *pixels2++=v;
+            *pixels2++=(*py2++)>>7;
+          }
+          pixels1+=xsize*csize; pixels2+=xsize*csize;
+          py1+=xsize*1; py2+=xsize*1;
+        }
       }
       STOP_TIMING("YV12_to_YUV422");
     }
@@ -1527,36 +1527,36 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
       switch(m_simd){
 #ifdef __SSE2__
       case GEM_SIMD_SSE2:
-	UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
-	break;
+        UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
+        break;
 #endif
       case GEM_SIMD_NONE: default:
-	pixelnum>>=1;
+        pixelnum>>=1;
 
-	while(pixelnum--){
+        while(pixelnum--){
           int y, u, v;
           int uv_r, uv_g, uv_b;
-	  u=yuvdata[0]-UV_OFFSET;
-	  v=yuvdata[2]-UV_OFFSET;
-	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+          u=yuvdata[0]-UV_OFFSET;
+          v=yuvdata[2]-UV_OFFSET;
+          uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+          uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+          uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	  // 1st pixel
-	  y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	  pixels+=3;
-	  // 2nd pixel
-	  y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	  pixels+=3;
+          // 1st pixel
+          y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+          pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+          pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+          pixels+=3;
+          // 2nd pixel
+          y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+          pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+          pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+          pixels+=3;
 
-	  yuvdata+=4;
-	}
+          yuvdata+=4;
+        }
       }
       STOP_TIMING("YUV2RGB");
     }
@@ -1568,44 +1568,44 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata) {
       switch(m_simd){
 #ifdef __VEC__
       case GEM_SIMD_ALTIVEC:
-	YUV422_to_BGRA_altivec( yuvdata, pixelnum*2, data);
-	break;
+        YUV422_to_BGRA_altivec( yuvdata, pixelnum*2, data);
+        break;
 #endif
 #ifdef __SSE2__
       case GEM_SIMD_SSE2:
-	UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
-	break;
+        UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
+        break;
 #endif
       case GEM_SIMD_NONE: default:
-	unsigned char *pixels=data;
-	pixelnum>>=1;
-	while(pixelnum--){
+        unsigned char *pixels=data;
+        pixelnum>>=1;
+        while(pixelnum--){
           int y, u, v;
           int uv_r, uv_g, uv_b;
-	  u=yuvdata[0]-UV_OFFSET;
-	  v=yuvdata[2]-UV_OFFSET;
-	  uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	  uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	  uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+          u=yuvdata[0]-UV_OFFSET;
+          v=yuvdata[2]-UV_OFFSET;
+          uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+          uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+          uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	  // 1st pixel
-	  y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	  pixels[chAlpha] = 255;
-	  pixels+=4;
-	  // 2nd pixel
-	  y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-	  pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	  pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	  pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	  pixels[chAlpha] = 255;
-	  pixels+=4;
+          // 1st pixel
+          y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
+          pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+          pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+          pixels[chAlpha] = 255;
+          pixels+=4;
+          // 2nd pixel
+          y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
+          pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+          pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+          pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+          pixels[chAlpha] = 255;
+          pixels+=4;
 
-	  yuvdata+=4;
-	}
-	STOP_TIMING("UYVY_to_RGBA/BGRA");
+          yuvdata+=4;
+        }
+        STOP_TIMING("UYVY_to_RGBA/BGRA");
       }
     }
     break;
@@ -1648,26 +1648,26 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
       while(pixelnum--){
         int y, u, v;
         int uv_r, uv_g, uv_b;
-	u=yuvdata[1]-UV_OFFSET;
-	v=yuvdata[3]-UV_OFFSET;
-	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+        u=yuvdata[1]-UV_OFFSET;
+        v=yuvdata[3]-UV_OFFSET;
+        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	// 1st pixel
-	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels+=3;
-	// 2nd pixel
-	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels+=3;
+        // 1st pixel
+        y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels+=3;
+        // 2nd pixel
+        y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels+=3;
 
-	yuvdata+=4;
+        yuvdata+=4;
       }
     }
     break;
@@ -1679,28 +1679,28 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata) { // YUYV
       while(pixelnum--){
         int y, u, v;
         int uv_r, uv_g, uv_b;
-	u=yuvdata[1]-UV_OFFSET;
-	v=yuvdata[3]-UV_OFFSET;
-	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+        u=yuvdata[1]-UV_OFFSET;
+        v=yuvdata[3]-UV_OFFSET;
+        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	// 1st pixel
-	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels[chAlpha] = 255;
-	pixels+=4;
-	// 2nd pixel
-	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels[chAlpha] = 255;
-	pixels+=4;
+        // 1st pixel
+        y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels[chAlpha] = 255;
+        pixels+=4;
+        // 2nd pixel
+        y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels[chAlpha] = 255;
+        pixels+=4;
 
-	yuvdata+=4;
+        yuvdata+=4;
       }
     }
     break;
@@ -1743,26 +1743,26 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata) {
       while(pixelnum--){
         int y, u, v;
         int uv_r, uv_g, uv_b;
-	u=yuvdata[3]-UV_OFFSET;
-	v=yuvdata[1]-UV_OFFSET;
-	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+        u=yuvdata[3]-UV_OFFSET;
+        v=yuvdata[1]-UV_OFFSET;
+        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	// 1st pixel
-	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels+=3;
-	// 2nd pixel
-	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels+=3;
+        // 1st pixel
+        y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels+=3;
+        // 2nd pixel
+        y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels+=3;
 
-	yuvdata+=4;
+        yuvdata+=4;
       }
     }
     break;
@@ -1774,28 +1774,28 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata) {
       while(pixelnum--){
         int y, u, v;
         int uv_r, uv_g, uv_b;
-	u=yuvdata[3]-UV_OFFSET;
-	v=yuvdata[1]-UV_OFFSET;
-	uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-	uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-	uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+        u=yuvdata[3]-UV_OFFSET;
+        v=yuvdata[1]-UV_OFFSET;
+        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
 
-	// 1st pixel
-	y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels[chAlpha] = 255;
-	pixels+=4;
-	// 2nd pixel
-	y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-	pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-	pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-	pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-	pixels[chAlpha] = 255;
-	pixels+=4;
+        // 1st pixel
+        y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels[chAlpha] = 255;
+        pixels+=4;
+        // 2nd pixel
+        y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
+        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
+        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
+        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
+        pixels[chAlpha] = 255;
+        pixels+=4;
 
-	yuvdata+=4;
+        yuvdata+=4;
       }
     }
     break;

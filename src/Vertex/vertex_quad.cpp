@@ -50,24 +50,24 @@ vertex_quad :: ~vertex_quad()
 void vertex_quad :: render(GemState *state)
 {
 
-   static GLfloat	quad[16]= {-1.,-1.,0.,1.,
+   static GLfloat       quad[16]= {-1.,-1.,0.,1.,
                         1.,-1.,0.,1.,
                         1.,1.,0.,1.,
                         -1.,1.,0.,1.};
 
-    static GLfloat	color[16]=   {1.,1.,1.,1.,
+    static GLfloat      color[16]=   {1.,1.,1.,1.,
                             1.,1.,1.,1.,
                             1.,1.,1.,1.,
                             1.,1.,1.,1.};
 
-    GLfloat		texcoord[8] = {	0.0,1.0,
+    GLfloat             texcoord[8] = { 0.0,1.0,
                                          1.0,1.0,
                                         1.0,0.0,
                                         0.0,0.0
                                         };
    /*
-   coords[3].s = 0.f;		// switched the order of coords on __APPLE__
-      coords[3].t = 0.f;		// otherwise we'd be upside down!
+   coords[3].s = 0.f;           // switched the order of coords on __APPLE__
+      coords[3].t = 0.f;                // otherwise we'd be upside down!
       coords[2].s = xRatio;
       coords[2].t = 0.f;
       coords[1].s = xRatio;
@@ -123,7 +123,7 @@ void vertex_quad :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_quad :: obj_setupCallback(t_class *classPtr)
 {     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_quad::blendMessCallback),
-    	    gensym("blend"), A_FLOAT, A_NULL);
+            gensym("blend"), A_FLOAT, A_NULL);
 }
 
 void vertex_quad :: blendMessCallback(void *data, t_float size)

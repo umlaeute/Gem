@@ -25,8 +25,7 @@ class GEM_EXTERN pix_share_read : public pix_share_write
 
   virtual void render(GemState *state);
 
-  pixBlock	pix;
+  pixBlock      pix;
 };
 
 #endif
-

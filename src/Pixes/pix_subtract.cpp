@@ -87,7 +87,7 @@ void pix_subtract :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 void pix_subtract :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w;
-   int	y1,y2;
+   int  y1,y2;
    int u,v;
    src =0;
    //format is U Y V Y
@@ -171,15 +171,15 @@ void pix_subtract :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
     vector unsigned char *rightData = (vector unsigned char*) right.data;
 
         #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
+        UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         #endif
 
@@ -203,18 +203,18 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
    //format is U Y V Y
     union
     {
-        //unsigned int	i;
-        short	elements[8];
+        //unsigned int  i;
+        short   elements[8];
         //vector signed char v;
-        vector	short v;
+        vector  short v;
     }shortBuffer;
 
         union
     {
-        //unsigned int	i;
-        unsigned char	elements[16];
+        //unsigned int  i;
+        unsigned char   elements[16];
         //vector signed char v;
-        vector	unsigned char v;
+        vector  unsigned char v;
     }charBuffer;
 
     //vector unsigned char c;
@@ -254,14 +254,14 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
     d = shortBuffer.v;
     d = (vector signed short)vec_splat((vector signed short)d,0);
 #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
+        UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
     #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
            #endif
             //interleaved U Y V Y chars
 

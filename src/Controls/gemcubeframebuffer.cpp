@@ -211,14 +211,14 @@ void gemcubeframebuffer :: postrender(GemState *state)
   // now that the render is done,
 
   if(m_face == 0) {
-	  // send textureID, w, h, textureTarget to outlet
-	  t_atom ap[5];
-	  SETFLOAT(ap+0, static_cast<t_float>(m_offScreenID));
-	  SETFLOAT(ap+1, w);
-	  SETFLOAT(ap+2, h);
-	  SETFLOAT(ap+3, m_texTarget);
-	  SETFLOAT(ap+4, static_cast<t_float>(0.));
-	  outlet_list(m_outTexInfo, 0, 5, ap);
+          // send textureID, w, h, textureTarget to outlet
+          t_atom ap[5];
+          SETFLOAT(ap+0, static_cast<t_float>(m_offScreenID));
+          SETFLOAT(ap+1, w);
+          SETFLOAT(ap+2, h);
+          SETFLOAT(ap+3, m_texTarget);
+          SETFLOAT(ap+4, static_cast<t_float>(0.));
+          outlet_list(m_outTexInfo, 0, 5, ap);
   }
 }
 

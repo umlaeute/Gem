@@ -52,10 +52,10 @@ class GEM_EXTERN pix_rgba : public GemPixObj
 
     //////////
     // Do the processing
-    void 	processImage(imageStruct &image);
+    void        processImage(imageStruct &image);
 
     imageStruct m_image;
  private:
 };
 
-#endif	// for header file
+#endif  // for header file

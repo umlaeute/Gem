@@ -43,9 +43,9 @@ class GEM_EXTERN gemmouse : public CPPExtern
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~gemmouse();
+        //////////
+        // Destructor
+        virtual ~gemmouse();
 
         //////////
         // mouse motion
@@ -57,27 +57,27 @@ class GEM_EXTERN gemmouse : public CPPExtern
 
         //////////
         // mouse button
-        void		mouseWheel(int axis, int value);
+        void            mouseWheel(int axis, int value);
 
         //////////
         // The xpos outlet
-        t_outlet    	*m_outXPos;
+        t_outlet        *m_outXPos;
 
         //////////
         // The ypos outlet
-        t_outlet    	*m_outYPos;
+        t_outlet        *m_outYPos;
 
         //////////
         // The left button outlet
-        t_outlet    	*m_outLBut;
+        t_outlet        *m_outLBut;
 
         //////////
         // The middle outlet
-        t_outlet    	*m_outMBut;
+        t_outlet        *m_outMBut;
 
         //////////
         // The right outlet
-        t_outlet    	*m_outRBut;
+        t_outlet        *m_outRBut;
 
         //////////
         // coordinate-scales
@@ -95,7 +95,7 @@ class GEM_EXTERN gemmouse : public CPPExtern
         // Static member functions
         static void     mouseMotionCallback(int x, int y, void *data);
         static void     mouseButtonCallback(int which, int state, int x, int y, void *data);
-        static void	mouseWheelCallback(int axis, int value, void *data);
+        static void     mouseWheelCallback(int axis, int value, void *data);
 };
 
 #endif  // for header file

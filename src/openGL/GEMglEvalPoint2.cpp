@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,12 +23,12 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2 , t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglEvalPoint2 :: GEMglEvalPoint2	(t_floatarg arg0, t_floatarg arg1) :
-		i(static_cast<GLint>(arg0)),
-		j(static_cast<GLint>(arg1))
+GEMglEvalPoint2 :: GEMglEvalPoint2      (t_floatarg arg0, t_floatarg arg1) :
+                i(static_cast<GLint>(arg0)),
+                j(static_cast<GLint>(arg1))
 {
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
-	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("j"));
+        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
+        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("j"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -48,20 +48,20 @@ bool GEMglEvalPoint2 :: isRunnable(void) {
 // Render
 //
 void GEMglEvalPoint2 :: render(GemState *state) {
-	glEvalPoint2 (i, j);
+        glEvalPoint2 (i, j);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglEvalPoint2 :: iMess (t_float arg1) {	// FUN
-	i = static_cast<GLint>(arg1);
-	setModified();
+void GEMglEvalPoint2 :: iMess (t_float arg1) {  // FUN
+        i = static_cast<GLint>(arg1);
+        setModified();
 }
 
-void GEMglEvalPoint2 :: jMess (t_float arg1) {	// FUN
-	j = static_cast<GLint>(arg1);
-	setModified();
+void GEMglEvalPoint2 :: jMess (t_float arg1) {  // FUN
+        j = static_cast<GLint>(arg1);
+        setModified();
 }
 
 
@@ -70,13 +70,13 @@ void GEMglEvalPoint2 :: jMess (t_float arg1) {	// FUN
 //
 
 void GEMglEvalPoint2 :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::iMessCallback),  	gensym("i"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::jMessCallback),  	gensym("j"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::iMessCallback),         gensym("i"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::jMessCallback),         gensym("j"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalPoint2 :: iMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
+        GetMyClass(data)->iMess ( static_cast<t_float>(arg0));
 }
 void GEMglEvalPoint2 :: jMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->jMess ( static_cast<t_float>(arg0));
+        GetMyClass(data)->jMess ( static_cast<t_float>(arg0));
 }

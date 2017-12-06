@@ -43,13 +43,13 @@ inline int powerOfTwo(int value)
 // optimization from "Hacker's Delight"
 // - above loop executes in 4n+3 instructions, where n is the power of 2 of returned int
 // - below code is branch-free and only 12 instructions!
-	value = value - 1;
-	value = value | (value >> 1);
-	value = value | (value >> 2);
-	value = value | (value >> 4);
-	value = value | (value >> 8);
-	value = value | (value >> 16);
-	return (value + 1);
+        value = value - 1;
+        value = value | (value >> 1);
+        value = value | (value >> 2);
+        value = value | (value >> 4);
+        value = value | (value >> 8);
+        value = value | (value >> 16);
+        return (value + 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,12 +85,12 @@ inline T TRI_MIN(T v1, T v2, T v3){
 //////////
 // Clamp a value high
 inline unsigned char CLAMP_HIGH(int x)
-	{ return((unsigned char )((x > 255) ? 255 : x)); }
+        { return((unsigned char )((x > 255) ? 255 : x)); }
 
 //////////
 // Clamp a value low
 inline unsigned char CLAMP_LOW(int x)
-	{ return((unsigned char )((x < 0) ? 0 : x)); }
+        { return((unsigned char )((x < 0) ? 0 : x)); }
 
 //////////
 // Clamp an int to the range of an unsigned char
@@ -123,7 +123,7 @@ inline unsigned char CLAMP_Y(int x)
 // This avoids a float value (important on Intel...)
 // From Alvy Ray Smith paper
 inline unsigned char INT_MULT(unsigned int a, unsigned int b)
-	{ int t = (unsigned int)a * (unsigned int)b + 0x80;
+        { int t = (unsigned int)a * (unsigned int)b + 0x80;
       return((unsigned char)(((t >> 8) + t) >> 8)); }
 
 //////////
@@ -131,13 +131,13 @@ inline unsigned char INT_MULT(unsigned int a, unsigned int b)
 // This avoids a float value (important on Intel...)
 // From Alvy Ray Smith paper
 inline unsigned char INT_LERP(unsigned int p, unsigned int q, unsigned int a)
-	{ return((unsigned char)(p + INT_MULT(a, q - p))); }
+        { return((unsigned char)(p + INT_MULT(a, q - p))); }
 
 //////////
 // Floating point LERP
 template <class T>
 inline T FLOAT_LERP(T p, T q, T a)
-	{ return( a * (q - p) + p); }
+        { return( a * (q - p) + p); }
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,28 +205,28 @@ inline int GetMirrored(int inValue,const int nMax) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 static inline void Get2dTangent(float inX,float inY,float* poutX,float* poutY) {
-	*poutX=inY;
-	*poutY=-inX;
+        *poutX=inY;
+        *poutY=-inX;
 }
 ///////////////////////////////////////////////////////////////////////////////
 // 2D-dot product
 ///////////////////////////////////////////////////////////////////////////////
 static inline float Dot2d(float Ax,float Ay,float Bx,float By) {
-	return ((Ax*Bx)+(Ay*By));
+        return ((Ax*Bx)+(Ay*By));
 }
 ///////////////////////////////////////////////////////////////////////////////
 // 2D-vector normalization
 ///////////////////////////////////////////////////////////////////////////////
 static inline void Normalise2d(float* pX,float* pY) {
-	const float MagSqr=Dot2d(*pX,*pY,*pX,*pY);
-	float Magnitude=(float)sqrt(MagSqr);
-	if (Magnitude<=0.0f) {
-		Magnitude=0.001f;
-	}
-	const float RecipMag=1.0f/Magnitude;
+        const float MagSqr=Dot2d(*pX,*pY,*pX,*pY);
+        float Magnitude=(float)sqrt(MagSqr);
+        if (Magnitude<=0.0f) {
+                Magnitude=0.001f;
+        }
+        const float RecipMag=1.0f/Magnitude;
 
-	*pX*=RecipMag;
-	*pY*=RecipMag;
+        *pX*=RecipMag;
+        *pY*=RecipMag;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -348,10 +348,9 @@ GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nkn
 
 inline uint32_t GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
 {
-	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
+        return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
 }
 #endif
 
 
 #endif  // for header file
-

@@ -94,10 +94,10 @@ Constructor
 initializes the pixBlocks and pixBlobs
 
 ------------------------------------------------------------*/
-pix_multiblob :: pix_multiblob(t_floatarg f) : 
+pix_multiblob :: pix_multiblob(t_floatarg f) :
   m_blobNumber(0),
   m_currentBlobs(NULL),
-  m_blobsize(0.001), 
+  m_blobsize(0.001),
   m_threshold(10),
   m_infoOut(NULL)
 {
@@ -156,12 +156,12 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
     double y = static_cast<t_float>(cp->y);
     pb->m_xaccum  += grey*x;
     pb->m_yaccum  += grey*y;
-    pb->m_xyaccum += grey;                     
+    pb->m_xyaccum += grey;
     pb->m_11 += grey*x*y;
     pb->m_20 += grey*x*x;
     pb->m_02 += grey*y*y;
-                                              
-    if (cp->x < pb->xmin()) pb->xmin(cp->x);          
+
+    if (cp->x < pb->xmin()) pb->xmin(cp->x);
     if (cp->x > pb->xmax()) pb->xmax(cp->x);
     if (cp->y < pb->ymin()) pb->ymin(cp->y);
     if (cp->y > pb->ymax()) pb->ymax(cp->y);
@@ -225,16 +225,16 @@ void pix_multiblob :: doProcessing(void)
     for(int x = 0; x < m_image.xsize; x++) {
       if (m_image.GetPixel(y,x,0) > 0) {
         Blob *blob = new Blob();
-	if(0 == blob)continue;
-	blob->xmin(m_image.xsize);
-	blob->ymin(m_image.ysize);
+        if(0 == blob)continue;
+        blob->xmin(m_image.xsize);
+        blob->ymin(m_image.ysize);
 
-	makeBlob(blob, x, y);
-	if(blob->area > blobsize) {
-	  addToBlobArray(blob, blobNumber);
-	  blobNumber++;
-	}
-	delete blob;
+        makeBlob(blob, x, y);
+        if(blob->area > blobsize) {
+          addToBlobArray(blob, blobNumber);
+          blobNumber++;
+        }
+        delete blob;
       }
     }
   }

@@ -35,7 +35,7 @@ pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
 //
 /////////////////////////////////////////////////////////
 pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
-    	    	: m_numImages(0), m_curImage(-1), m_loadedCache(NULL)
+                : m_numImages(0), m_curImage(-1), m_loadedCache(NULL)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
   m_pixBlock.image = m_imageStruct;
@@ -44,9 +44,9 @@ pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage, t_flo
   if (filename->s_name[0]) {
     if (skipRate == 0)  {
       if (topImage == 0)
-	openMess(filename, 0, (int)baseImage, 1);
+        openMess(filename, 0, (int)baseImage, 1);
       else
-	openMess(filename, (int)baseImage, (int)topImage, 1);
+        openMess(filename, (int)baseImage, (int)topImage, 1);
     }else openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
   }
 }
@@ -73,7 +73,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     /*
     if (!topImage)
     {
-    	error("requires an int for number of images");
+        error("requires an int for number of images");
         return;
     }
     */
@@ -118,14 +118,14 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     char *strPtr = filename->s_name;
     while (strPtr[i] && strPtr[i] != '*')
     {
-    	preName[i] = strPtr[i];
-    	i++;
+        preName[i] = strPtr[i];
+        i++;
     }
 
     if (!strPtr[i])
     {
-    	error("Unable to find * in file name");
-    	return;
+        error("Unable to find * in file name");
+        return;
     }
 
     preName[i] = '\0';
@@ -153,16 +153,16 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
     for (i = 0; i < m_numImages; i++, realNum += skipRate)
     {
         char newName[MAXPDSTRING];
-	    sprintf(newName, "%s%d%s", bufName, realNum, postName);
-		newCache->textBind[i] = 0;
+            sprintf(newName, "%s%d%s", bufName, realNum, postName);
+                newCache->textBind[i] = 0;
         if ( !(newCache->images[i] = image2mem(newName)) )
-	    {
+            {
             // a load failed, blow away the cache
             newCache->numImages = i;
             delete newCache;
-    	    m_numImages = 0;
-	        return;
-	    }
+            m_numImages = 0;
+                return;
+            }
     }
 
     m_curImage = 0;
@@ -200,8 +200,8 @@ void pix_multiimage :: render(GemState *state)
     if (m_cache->resendImage)
     {
       m_loadedCache->images[m_curImage]->refreshImage(&m_pixBlock.image);
-    	m_pixBlock.newimage = 1;
-    	m_cache->resendImage = 0;
+        m_pixBlock.newimage = 1;
+        m_cache->resendImage = 0;
     }
 
     state->set(GemState::_PIX, &m_pixBlock);
@@ -240,8 +240,8 @@ void pix_multiimage :: changeImage(int imgNum)
 
     if (imgNum >= m_numImages)
     {
-    	error("selection number too high: %d (max num is %d)", imgNum, m_numImages);
-    	return;
+        error("selection number too high: %d (max num is %d)", imgNum, m_numImages);
+        return;
     }
     else if (imgNum < 0)
     {
@@ -287,9 +287,9 @@ void pix_multiimage :: cleanImages()
             }
         }
 
-	    m_loadedCache = NULL;
-    	m_numImages = 0;
-    	m_pixBlock.image.clear();
+            m_loadedCache = NULL;
+        m_numImages = 0;
+        m_pixBlock.image.clear();
         m_pixBlock.image.data = NULL;
     }
 }
@@ -301,9 +301,9 @@ void pix_multiimage :: cleanImages()
 void pix_multiimage :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::openMessCallback),
-    	    gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+            gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::changeImageCallback),
-    	    gensym("img_num"), A_FLOAT, A_NULL);
+            gensym("img_num"), A_FLOAT, A_NULL);
 }
 void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_float baseImage,
                                         t_floatarg topImage, t_floatarg skipRate)
@@ -311,12 +311,12 @@ void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_float 
     if ((int)skipRate == 0)
     {
         if ((int)topImage == 0)
-			GetMyClass(data)->openMess(filename, 0, (int)baseImage, 0);
+                        GetMyClass(data)->openMess(filename, 0, (int)baseImage, 0);
         else
-			GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, 0);
+                        GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, 0);
     }
     else
-		GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
+                GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
 }
 void pix_multiimage :: changeImageCallback(void *data, t_float imgNum)
 {

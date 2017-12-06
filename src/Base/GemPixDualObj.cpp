@@ -97,31 +97,31 @@ void GemPixDualObj :: render(GemState *state)
 //
 /////////////////////////////////////////////////////////
 #define PROCESS_DUALIMAGE_SIMD(CS) \
-  switch(m_simd){		   \
-  case (GEM_SIMD_MMX):				\
-    process##CS ##_MMX(image, m_pixRight->image);	\
-    break;					\
-  case(GEM_SIMD_SSE2):				\
-    process##CS ##_SSE2(image, m_pixRight->image);	\
-    break;					\
-  case(GEM_SIMD_ALTIVEC):				\
-    process##CS ##_Altivec(image, m_pixRight->image);		\
-    break;						\
-  default:						\
-    process##CS ##_##CS(image, m_pixRight->image);		\
+  switch(m_simd){                  \
+  case (GEM_SIMD_MMX):                          \
+    process##CS ##_MMX(image, m_pixRight->image);       \
+    break;                                      \
+  case(GEM_SIMD_SSE2):                          \
+    process##CS ##_SSE2(image, m_pixRight->image);      \
+    break;                                      \
+  case(GEM_SIMD_ALTIVEC):                               \
+    process##CS ##_Altivec(image, m_pixRight->image);           \
+    break;                                              \
+  default:                                              \
+    process##CS ##_##CS(image, m_pixRight->image);              \
   }
 
 #define PROCESS_DUALIMAGE(CS1, CS2) \
   process##CS1 ##_##CS2 (image, m_pixRight->image);
 
-#define PROCESS_COLORSPACE(FUN_RGBA, FUN_YUV, FUN_GRAY)			\
-  switch (m_pixRight->image.format) {					\
-  case GL_RGBA: case GL_BGRA_EXT:					\
-    found=true; FUN_RGBA; break;		\
-  case GL_LUMINANCE:							\
-    found=true; FUN_GRAY; break;		\
-  case GL_YCBCR_422_GEM:						\
-    found=true; FUN_YUV ; break;		\
+#define PROCESS_COLORSPACE(FUN_RGBA, FUN_YUV, FUN_GRAY)                 \
+  switch (m_pixRight->image.format) {                                   \
+  case GL_RGBA: case GL_BGRA_EXT:                                       \
+    found=true; FUN_RGBA; break;                \
+  case GL_LUMINANCE:                                                    \
+    found=true; FUN_GRAY; break;                \
+  case GL_YCBCR_422_GEM:                                                \
+    found=true; FUN_YUV ; break;                \
   default:break;}
 
 void GemPixDualObj :: processImage(imageStruct &image)
@@ -135,12 +135,12 @@ void GemPixDualObj :: processImage(imageStruct &image)
   if (!m_pixRightValid || !&image || !&m_pixRight || !&m_pixRight->image) return;
 
     if (image.xsize != m_pixRight->image.xsize ||
-    	image.ysize != m_pixRight->image.ysize)    {
+        image.ysize != m_pixRight->image.ysize)    {
       error("two images do not have equal dimensions (%dx%d != %dx%d)",
-	    image.xsize, image.ysize,
-	    m_pixRight->image.xsize, m_pixRight->image.ysize);
+            image.xsize, image.ysize,
+            m_pixRight->image.xsize, m_pixRight->image.ysize);
       m_pixRightValid = 0;
-    	return;
+        return;
     }
 
     if(image.upsidedown != m_pixRight->image.upsidedown) {
@@ -153,18 +153,18 @@ void GemPixDualObj :: processImage(imageStruct &image)
     case GL_RGBA:
     case GL_BGRA_EXT:
       PROCESS_COLORSPACE(PROCESS_DUALIMAGE_SIMD(RGBA),
-			 PROCESS_DUALIMAGE(RGBA, YUV),
-			 PROCESS_DUALIMAGE(RGBA, Gray));
+                         PROCESS_DUALIMAGE(RGBA, YUV),
+                         PROCESS_DUALIMAGE(RGBA, Gray));
       break;
     case GL_LUMINANCE:
       PROCESS_COLORSPACE(PROCESS_DUALIMAGE(Gray, RGBA),
-			 PROCESS_DUALIMAGE(Gray, YUV),
-			 PROCESS_DUALIMAGE_SIMD(Gray));
+                         PROCESS_DUALIMAGE(Gray, YUV),
+                         PROCESS_DUALIMAGE_SIMD(Gray));
       break;
     case GL_YCBCR_422_GEM:
       PROCESS_COLORSPACE(PROCESS_DUALIMAGE(YUV, RGBA),
-			 PROCESS_DUALIMAGE_SIMD(YUV),
-			 PROCESS_DUALIMAGE(YUV, Gray));
+                         PROCESS_DUALIMAGE_SIMD(YUV),
+                         PROCESS_DUALIMAGE(YUV, Gray));
       break;
     default: break;
     }
@@ -247,7 +247,7 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
 void GemPixDualObj :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPixDualObj::gem_rightMessCallback),
-    	    gensym("gem_right"), A_GIMME, A_NULL);
+            gensym("gem_right"), A_GIMME, A_NULL);
 }
 void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {

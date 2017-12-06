@@ -35,31 +35,31 @@ CPPEXTERN_HEADER(pix_scanline, GemPixObj);
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_scanline();
+            //////////
+            // Constructor
+        pix_scanline();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_scanline();
+        //////////
+        // Destructor
+        virtual ~pix_scanline();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
-   	virtual void 	processYUVImage(imageStruct &image);
-    //    virtual void 	processYUVAltivec(imageStruct &image);
+        //////////
+        // Do the processing
+        virtual void    processImage(imageStruct &image);
+        virtual void    processYUVImage(imageStruct &image);
+    //    virtual void  processYUVAltivec(imageStruct &image);
 
         unsigned char  *saved;
-        int		m_interlace,m_mode;
+        int             m_interlace,m_mode;
         t_inlet         *inletScanline;
 
 
     private:
 
-    	//////////
-    	// Static member functions
+        //////////
+        // Static member functions
 
         static void rollCallback       (void *data, t_float value);
         static void modeCallback       (void *data, t_float value);
@@ -68,4 +68,3 @@ CPPEXTERN_HEADER(pix_scanline, GemPixObj);
 };
 
 #endif
-

@@ -510,7 +510,7 @@ struct gemglxwindow::PIMPL {
       // first check whether we have a shared context for 'display'
       GLXContext sharedContext=0;
       if(s_shared.count(display)>0) {
-	sharedContext=s_shared[display].glxcontext;;
+        sharedContext=s_shared[display].glxcontext;;
       }
       glxcontext = glXCreateContext(dpy, vi, sharedContext, GL_TRUE);
     } catch(void*e){
@@ -854,20 +854,20 @@ bool gemglxwindow :: create(void)
     gemglxwindow::PIMPL*sharedPimpl=&gemglxwindow::PIMPL::s_shared[m_display];
     if(!sharedPimpl->glxcontext) {
       try {
-	int x=0, y=0;
-	unsigned int w=1, h=1;
-	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h, m_transparent);
+        int x=0, y=0;
+        unsigned int w=1, h=1;
+        success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h, m_transparent);
       } catch (GemException&x) {
-	error("creation of shared glxcontext failed: %s", x.what());
-	verbose(0, "continuing at your own risk!");
+        error("creation of shared glxcontext failed: %s", x.what());
+        verbose(0, "continuing at your own risk!");
       }
       if(!sharedPimpl->gemcontext) {
-	try {
-	  sharedPimpl->gemcontext = createContext();
-	} catch (GemException&x) {
-	  sharedPimpl->gemcontext = NULL;
-	  error("creation of shared gem::context failed: %s", x.what());
-	}
+        try {
+          sharedPimpl->gemcontext = createContext();
+        } catch (GemException&x) {
+          sharedPimpl->gemcontext = NULL;
+          error("creation of shared gem::context failed: %s", x.what());
+        }
       }
     }
 
@@ -1009,9 +1009,9 @@ void gemglxwindow :: cursorMess(bool state)
     XColor dummy;
 
     Pixmap blank = XCreateBitmapFromData(m_pimpl->dpy, m_pimpl->win,
-				  data, 1, 1);
+                                  data, 1, 1);
     Cursor cursor = XCreatePixmapCursor(m_pimpl->dpy, blank, blank,
-				 &dummy, &dummy, 0, 0);
+                                 &dummy, &dummy, 0, 0);
     XFreePixmap(m_pimpl->dpy, blank);
     XDefineCursor(m_pimpl->dpy, m_pimpl->win, cursor);
   }

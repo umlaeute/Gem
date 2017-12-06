@@ -85,4 +85,4 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   gem::RTE::Outlet*m_outlet;
 };
 
-#endif	// for header file
+#endif  // for header file

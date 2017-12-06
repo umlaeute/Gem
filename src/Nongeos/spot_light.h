@@ -50,17 +50,17 @@ class GEM_EXTERN spot_light : public world_light
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
-  virtual void 	renderDebug();
+  virtual void  renderDebug();
 
 
   //////////
   // Set the light's parameters (linear attunation, cone angle, decay exponent
-  void 		lightParamMess(float linAtt, float cutoff, float exponent);
+  void          lightParamMess(float linAtt, float cutoff, float exponent);
 
   //-----------------------------------
-  // GROUP:	Member variables
+  // GROUP:     Member variables
   //-----------------------------------
 
   // global lighting parameters
@@ -77,4 +77,4 @@ class GEM_EXTERN spot_light : public world_light
 
 // Define constant position and direction
 
-#endif	// for header file
+#endif  // for header file

@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_background);
 pix_background :: pix_background(int argc, t_atom*argv) :
   m_Yrange(0), m_Urange(0), m_Vrange(0), m_Arange(0), m_reset(1)
 {
-	inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
+        inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
 
     m_savedImage.xsize=320;
     m_savedImage.ysize=240;
@@ -81,19 +81,19 @@ void pix_background :: processRGBAImage(imageStruct &image)
   for (h=0; h<image.ysize; h++){
     for(w=0; w<hlength; w++){
       if (((data[src+chRed  ] > saved[src+chRed  ] - m_Yrange)&&
-	   (data[src+chRed  ] < saved[src+chRed  ] + m_Yrange))&&
-	  ((data[src+chGreen] > saved[src+chGreen] - m_Urange)&&
-	   (data[src+chGreen] < saved[src+chGreen] + m_Urange))&&
-	  ((data[src+chBlue ] > saved[src+chBlue ] - m_Vrange)&&
-	   (data[src+chBlue ] < saved[src+chBlue ] + m_Vrange))&&
-	  ((data[src+chAlpha] > saved[src+chAlpha] - m_Arange)&&
-	   (data[src+chAlpha] < saved[src+chAlpha] + m_Arange)))
-	{
-	  data[src+chRed] = 0;
-	  data[src+chGreen] = 0;
-	  data[src+chBlue] = 0;
-	  data[src+chAlpha] = 0;
-	}
+           (data[src+chRed  ] < saved[src+chRed  ] + m_Yrange))&&
+          ((data[src+chGreen] > saved[src+chGreen] - m_Urange)&&
+           (data[src+chGreen] < saved[src+chGreen] + m_Urange))&&
+          ((data[src+chBlue ] > saved[src+chBlue ] - m_Vrange)&&
+           (data[src+chBlue ] < saved[src+chBlue ] + m_Vrange))&&
+          ((data[src+chAlpha] > saved[src+chAlpha] - m_Arange)&&
+           (data[src+chAlpha] < saved[src+chAlpha] + m_Arange)))
+        {
+          data[src+chRed] = 0;
+          data[src+chGreen] = 0;
+          data[src+chBlue] = 0;
+          data[src+chAlpha] = 0;
+        }
       src+=4;
     }
   }
@@ -169,14 +169,14 @@ void pix_background :: processYUVImage(imageStruct &image)
     for(w=0; w<hlength; w++){
 
       if (((data[src] > saved[src] - m_Urange)&&(data[src] < saved[src] + m_Urange))&&
-	  ((data[src+1] > saved[src+1] - m_Yrange)&&(data[src+1] < saved[src+1] + m_Yrange))&&
-	  ((data[src+2] > saved[src+2] - m_Vrange)&&(data[src+2] < saved[src+2] + m_Vrange)))
-	{
-	  data[src]   = 128;
-	  data[src+1] = 0;
-	  data[src+2] = 128;
-	  data[src+3] = 0;
-	}
+          ((data[src+1] > saved[src+1] - m_Yrange)&&(data[src+1] < saved[src+1] + m_Yrange))&&
+          ((data[src+2] > saved[src+2] - m_Vrange)&&(data[src+2] < saved[src+2] + m_Vrange)))
+        {
+          data[src]   = 128;
+          data[src+1] = 0;
+          data[src+2] = 128;
+          data[src+3] = 0;
+        }
       src+=4;
     }
   }
@@ -214,7 +214,7 @@ void pix_background :: processRGBAMMX(imageStruct &image)
   __m64*saved=(__m64*)m_savedImage.data;
 
   const __m64 thresh=_mm_set_pi8(m_Yrange, m_Urange, m_Vrange, m_Arange,
-				m_Yrange, m_Urange, m_Vrange, m_Arange);
+                                m_Yrange, m_Urange, m_Vrange, m_Arange);
   const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
 
   while(i--){
@@ -266,16 +266,16 @@ void pix_background :: processYUVMMX(imageStruct &image)
   __m64*saved=(__m64*)m_savedImage.data;
 
   const __m64 thresh=_mm_set_pi8(m_Urange, m_Yrange, m_Vrange, m_Yrange,
-			  m_Urange, m_Yrange, m_Vrange, m_Yrange);
+                          m_Urange, m_Yrange, m_Vrange, m_Yrange);
   const __m64 offset=_mm_set_pi8(1, 1, 1, 1, 1, 1, 1, 1);
   const __m64 black =_mm_set_pi8((unsigned char)0x00,
-				 (unsigned char)0x80,
-				 (unsigned char)0x00,
-				 (unsigned char)0x80,
-				 (unsigned char)0x00,
-				 (unsigned char)0x80,
-				 (unsigned char)0x00,
-				 (unsigned char)0x80);
+                                 (unsigned char)0x80,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x80,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x80,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x80);
 
   while(i--){
     __m64 newpix=*data;
@@ -324,7 +324,7 @@ void pix_background :: processGrayMMX(imageStruct &image){
 
   unsigned char thresh=m_Yrange-1;
   __m64 thresh8=_mm_set_pi8(thresh,thresh,thresh,thresh,
-			  thresh,thresh,thresh,thresh);
+                          thresh,thresh,thresh,thresh);
 
 
   i=pixsize/sizeof(__m64)+(pixsize%sizeof(__m64)!=0);
@@ -358,8 +358,8 @@ int pixsize = image.xsize * image.ysize * image.csize;
         }
 
     union{
-        unsigned short		s[8];
-        vector unsigned short	v;
+        unsigned short          s[8];
+        vector unsigned short   v;
     }shortBuffer;
 
     if(m_savedImage.xsize!=image.xsize ||
@@ -376,18 +376,18 @@ int pixsize = image.xsize * image.ysize * image.csize;
     m_reset = 0;
     }
 
-    register vector unsigned short	UVres1, Yres1, UVres2, Yres2;//interleave;
-    register vector unsigned short	hiImage, loImage;
-    register vector unsigned short	Yrange, UVrange, Yblank,UVblank,blank;
-    register vector bool short		Ymasklo,Ymaskhi,  UVmaskhi;
-    register vector unsigned short	Yhi,Ylo,UVhi,UVlo;
-    register vector unsigned char	one = vec_splat_u8(1);
-    register vector unsigned short	sone = vec_splat_u16(1);
-    register vector unsigned int			Uhi, Ulo, Vhi, Vlo,Ures,Vres;
-    register vector bool int 			Umasklo, Umaskhi, Vmaskhi, Vmasklo;
+    register vector unsigned short      UVres1, Yres1, UVres2, Yres2;//interleave;
+    register vector unsigned short      hiImage, loImage;
+    register vector unsigned short      Yrange, UVrange, Yblank,UVblank,blank;
+    register vector bool short          Ymasklo,Ymaskhi,  UVmaskhi;
+    register vector unsigned short      Yhi,Ylo,UVhi,UVlo;
+    register vector unsigned char       one = vec_splat_u8(1);
+    register vector unsigned short      sone = vec_splat_u16(1);
+    register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,Ures,Vres;
+    register vector bool int                    Umasklo, Umaskhi, Vmaskhi, Vmasklo;
 
-    vector unsigned char	*inData = (vector unsigned char*) image.data;
-    vector unsigned char	*rightData = (vector unsigned char*) m_savedImage.data;
+    vector unsigned char        *inData = (vector unsigned char*) image.data;
+    vector unsigned char        *rightData = (vector unsigned char*) m_savedImage.data;
 
     shortBuffer.s[0] =  m_Yrange;
     Yrange = shortBuffer.v;
@@ -423,7 +423,7 @@ int pixsize = image.xsize * image.ysize * image.csize;
 
 
     //setup the cache prefetch -- A MUST!!!
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+    UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     #ifndef PPC970
     vec_dst( inData, prefetchSize, 0 );
     vec_dst( rightData, prefetchSize, 1 );
@@ -552,11 +552,11 @@ void pix_background :: obj_setupCallback(t_class *classPtr)
 {
   class_addbang(classPtr, reinterpret_cast<t_method>(&pix_background::resetCallback));
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::rangeNCallback),
-		  gensym("range_n"), A_GIMME, A_NULL);
+                  gensym("range_n"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::rangeCallback),
-		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::resetCallback),
-		  gensym("reset"), A_NULL);
+                  gensym("reset"), A_NULL);
 }
 
 

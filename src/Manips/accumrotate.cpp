@@ -117,5 +117,3 @@ void accumrotate :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "zVal", zMess, float);
   CPPEXTERN_MSG0(classPtr, "reset", reset);
 }
-
-

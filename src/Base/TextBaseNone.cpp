@@ -109,6 +109,6 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "linedist", linedistMess, float);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
-		  gensym("justify"), A_GIMME, A_NULL);
+                  gensym("justify"), A_GIMME, A_NULL);
 }
 #endif

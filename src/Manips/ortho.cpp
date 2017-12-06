@@ -69,12 +69,12 @@ void ortho :: render(GemState *)
 void ortho :: postrender(GemState *)
 {
     if (m_state)
-	{
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopAttrib();
-	}
+        {
+                glMatrixMode(GL_PROJECTION);
+                glPopMatrix();
+                glMatrixMode(GL_MODELVIEW);
+                glPopAttrib();
+        }
 }
 
 /////////////////////////////////////////////////////////

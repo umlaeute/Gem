@@ -157,7 +157,7 @@ void GemPixObj :: processImage(imageStruct &image)
   case GL_RGB:
   case GL_BGR_EXT:
     error("cannot handle RGB image");
-	break;
+        break;
   case GL_LUMINANCE:
     error("cannot handle Grey image");
     break;

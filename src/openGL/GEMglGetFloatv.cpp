@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -25,7 +25,7 @@ using namespace gem::utils::gl;
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetFloatv :: GEMglGetFloatv	(int argc, t_atom*argv) :
+GEMglGetFloatv :: GEMglGetFloatv        (int argc, t_atom*argv) :
   pname(0),
   m_inlet(0), m_outlet(0)
 {
@@ -86,7 +86,7 @@ void GEMglGetFloatv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
+void GEMglGetFloatv :: pnameMess (t_atom arg) { // FUN
   pname=static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
@@ -96,9 +96,9 @@ void GEMglGetFloatv :: pnameMess (t_atom arg) {	// FUN
 //
 
 void GEMglGetFloatv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetFloatv::pnameMessCallback),  	gensym("pname"), A_GIMME, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetFloatv::pnameMessCallback),     gensym("pname"), A_GIMME, A_NULL);
 }
 
 void GEMglGetFloatv :: pnameMessCallback (void* data, t_symbol*s,int argc, t_atom*argv) {
-	if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
+        if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
 }

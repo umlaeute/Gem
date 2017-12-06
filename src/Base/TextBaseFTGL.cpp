@@ -232,7 +232,7 @@ void TextBase :: setJustification(JustifyWidth wType)
 
 
 void TextBase :: getBBox(float&x0,float&y0,float&z0,
-			 float&x1,float&y1,float&z1) {
+                         float&x1,float&y1,float&z1) {
 
 }
 void TextBase :: fontInfo(void) {
@@ -269,7 +269,7 @@ void TextBase :: fontInfo(void) {
 }
 
 TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
-						float x2, float y2, float z2, float y_offset)
+                                                float x2, float y2, float z2, float y_offset)
 {
   float width  = 0.f;
   float height = 0.f;
@@ -506,7 +506,7 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "linedist", linedistMess, float);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
-		  gensym("justify"), A_GIMME, A_NULL);
+                  gensym("justify"), A_GIMME, A_NULL);
 }
 
 void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
@@ -526,7 +526,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 'l': case 'L': case 'n': case 'N': dType = HALFWAY; break;
     default:
       GetMyClass(data)->error("invalid depth justification: %s (must be: front|back|halfway|base)",
-	    atom_getsymbol(argv+2)->s_name);
+            atom_getsymbol(argv+2)->s_name);
       return;
     }
   case 2:
@@ -538,7 +538,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 's': case 'S': hType = BASEH; break;
     default:
       GetMyClass(data)->error("invalid height justification: %s (must be bottom|top|middle|base)",
-	    atom_getsymbol(argv+1)->s_name);
+            atom_getsymbol(argv+1)->s_name);
       return;
     }
   case 1:
@@ -550,7 +550,7 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
     case 's': case 'S': wType = BASEW; break;
     default:
       GetMyClass(data)->error("invalid width justification: %s (must be left|right|center|base)",
-	    atom_getsymbol(argv+0)->s_name);
+            atom_getsymbol(argv+0)->s_name);
       return;
     }
     break;

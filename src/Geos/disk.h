@@ -26,7 +26,7 @@ LOG
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	disk
+        disk
 
     Creates a disk
 
@@ -42,27 +42,27 @@ class GEM_EXTERN disk : public GemGluObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	disk(int argc, t_atom *argv);
+            //////////
+            // Constructor
+        disk(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~disk(void);
+        //////////
+        // Destructor
+        virtual ~disk(void);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 
-    	//////////
+        //////////
       // Set the inner radius
-      void			innerRadius(float radius);
+      void                      innerRadius(float radius);
 
-    	//////////
+        //////////
       // Inner radius of the disk
-      float			m_innerRadius;
+      float                     m_innerRadius;
 };
 
-#endif	// for header file
+#endif  // for header file

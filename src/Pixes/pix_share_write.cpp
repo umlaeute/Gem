@@ -155,9 +155,9 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   if ( shm_addr ) UnmapViewOfFile( shm_addr );
   if ( m_MapFile ) CloseHandle( m_MapFile );
   if(A_FLOAT==argv->a_type){
-	snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%g", atom_getfloat(argv));
+        snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%g", atom_getfloat(argv));
   } else if (A_SYMBOL==argv->a_type){
-	snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%s", atom_getsymbol(argv)->s_name);
+        snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%s", atom_getsymbol(argv)->s_name);
   }
 
 #else
@@ -253,7 +253,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
 
 #ifdef _WIN32
   int segmentSize=m_size+sizeof(t_pixshare_header);
-  
+
   m_MapFile = CreateFileMapping(
                INVALID_HANDLE_VALUE,    // use paging file
                NULL,                    // default security
@@ -298,8 +298,8 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     if(id>0){ /* yea, we got it! */
       t_pixshare_header*h=(t_pixshare_header*)shmat(id,NULL,0666);
       if (!shm_addr || shm_addr==(void *)-1){
-	shm_addr=NULL;
-	return 8;
+        shm_addr=NULL;
+        return 8;
       }
       /* read the size of the blob from the shared segment */
       if(h&&h->size){
@@ -386,7 +386,7 @@ void pix_share_write :: render(GemState *state)
 void pix_share_write :: obj_setupCallback(t_class *classPtr)
 {
    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_share_write::setMessCallback),
-		  gensym("set"), A_GIMME, A_NULL);
+                  gensym("set"), A_GIMME, A_NULL);
 }
 
 void pix_share_write :: setMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)

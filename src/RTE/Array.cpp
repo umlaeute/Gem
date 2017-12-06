@@ -123,7 +123,7 @@ bool gem::RTE::Array :: resize(const size_t newsize) {
     if(false==rte_resize_checked) {
       gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
       if(rte) {
-	rte_resize=(rte_resize_t)rte->getFunction("garray_resize_long");
+        rte_resize=(rte_resize_t)rte->getFunction("garray_resize_long");
       }
     }
     rte_resize_checked=true;

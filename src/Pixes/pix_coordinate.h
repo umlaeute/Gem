@@ -41,50 +41,50 @@ class GEM_EXTERN pix_coordinate : public GemBase
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_coordinate();
+            //////////
+            // Constructor
+        pix_coordinate();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_coordinate();
+        //////////
+        // Destructor
+        virtual ~pix_coordinate();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// Turn back off texture mapping
-    	virtual void 	postrender(GemState *state);
+        //////////
+        // Turn back off texture mapping
+        virtual void    postrender(GemState *state);
 
-    	//////////
-    	// The texture coordinates
-    	TexCoord    	*m_coords;
-	// a place-holder, in case we want to scale the coords (for rectangle textures)
-	TexCoord        *m_rectcoords;
+        //////////
+        // The texture coordinates
+        TexCoord        *m_coords;
+        // a place-holder, in case we want to scale the coords (for rectangle textures)
+        TexCoord        *m_rectcoords;
 
-    	//////////
-    	// The number
-    	int 	    	m_numCoords;
+        //////////
+        // The number
+        int             m_numCoords;
 
-    	int 	    	m_oldTexType;
+        int             m_oldTexType;
 
-	//////////
-	// this is what we get from upstream
-	TexCoord        *m_oldTexCoords;
-	int             m_oldNumCoords;
+        //////////
+        // this is what we get from upstream
+        TexCoord        *m_oldTexCoords;
+        int             m_oldNumCoords;
 
-    	//////////
-    	// Set the texture coordinates
-    	void	    	coordsMess(int argc, t_atom *argv);
+        //////////
+        // Set the texture coordinates
+        void            coordsMess(int argc, t_atom *argv);
 
     private:
 
-    	//////////
-    	// Static member functions
-    	static void 	coordsMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+        //////////
+        // Static member functions
+        static void     coordsMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

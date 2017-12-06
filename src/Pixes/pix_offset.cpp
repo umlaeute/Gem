@@ -30,7 +30,7 @@ CPPEXTERN_NEW(pix_offset);
 /////////////////////////////////////////////////////////
 pix_offset :: pix_offset()
   : Y(0), U(0), V(0),
-	m_saturate(true)
+        m_saturate(true)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_offset"));
@@ -200,8 +200,8 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
   // start of working altivec function
   union
   {
-    short	elements[8];
-    vector	signed short v;
+    short       elements[8];
+    vector      signed short v;
   }transferBuffer;
 
   register vector signed short c, hi, lo;
@@ -226,7 +226,7 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
 
 
 #ifndef PPC970
-  UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( inData+16, prefetchSize, 1 );
   vec_dst( inData+32, prefetchSize, 2 );

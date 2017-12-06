@@ -30,10 +30,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(rectangle, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEF
 //
 /////////////////////////////////////////////////////////
 rectangle :: rectangle(t_floatarg width, t_floatarg height)
-		   : GemShape(width), m_height(height)
+                   : GemShape(width), m_height(height)
 {
     if (m_height == 0.f)
-		m_height = 1.f;
+                m_height = 1.f;
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
@@ -69,26 +69,26 @@ void rectangle :: renderShape(GemState *state)
   glNormal3f(0.0f, 0.0f, 1.0f);
 
   if (GemShape::m_texType && GemShape::m_texNum)
-		{
-			glBegin(m_drawType);
-			SetVertex(state, -m_size,  -m_height, 0.0f,0.,0.,0);
-			SetVertex(state, m_size,  -m_height, 0.0f,1.,0.,1);
-			SetVertex(state, m_size,  m_height, 0.0f,1.,1.,2);
-			SetVertex(state, -m_size,  m_height, 0.0f,0.,1.,3);
-			glEnd();
-		}
+                {
+                        glBegin(m_drawType);
+                        SetVertex(state, -m_size,  -m_height, 0.0f,0.,0.,0);
+                        SetVertex(state, m_size,  -m_height, 0.0f,1.,0.,1);
+                        SetVertex(state, m_size,  m_height, 0.0f,1.,1.,2);
+                        SetVertex(state, -m_size,  m_height, 0.0f,0.,1.,3);
+                        glEnd();
+                }
   else
     {
-	    glBegin(m_drawType);
-	        glTexCoord2f(0.0f, 0.0f);
+            glBegin(m_drawType);
+                glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(-m_size, -m_height, 0.0f);
-	        glTexCoord2f(1.0f, 0.0f);
+                glTexCoord2f(1.0f, 0.0f);
                 glVertex3f( m_size, -m_height, 0.0f);
-	        glTexCoord2f(1.0f, 1.0f);
+                glTexCoord2f(1.0f, 1.0f);
                 glVertex3f( m_size,  m_height, 0.0f);
-	        glTexCoord2f(0.0f, 1.0f);
+                glTexCoord2f(0.0f, 1.0f);
                 glVertex3f(-m_size,  m_height, 0.0f);
-	    glEnd();
+            glEnd();
     }
 }
 
@@ -110,4 +110,3 @@ void rectangle :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "ft2", heightMess, float);
 }
-

@@ -39,33 +39,33 @@ class GEM_EXTERN scaleXYZ : public GemBase
 
         //////////
         // Constructor
-    	scaleXYZ(int argc, t_atom *argv);
+        scaleXYZ(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~scaleXYZ();
+        //////////
+        // Destructor
+        virtual ~scaleXYZ();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+        //////////
+        // When rendering occurs
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// The scale vector (x, y, z)
-    	float	    	m_vector[3];
+        //////////
+        // The scale vector (x, y, z)
+        float           m_vector[3];
 
-    	//////////
-    	// X value changed
-    	void	    	xMess(float val);
+        //////////
+        // X value changed
+        void            xMess(float val);
 
-    	//////////
-    	// Y value changed
-    	void	    	yMess(float val);
+        //////////
+        // Y value changed
+        void            yMess(float val);
 
-    	//////////
-    	// Z value changed
-    	void	    	zMess(float val);
+        //////////
+        // Z value changed
+        void            zMess(float val);
 };
 
-#endif	// for header file
+#endif  // for header file

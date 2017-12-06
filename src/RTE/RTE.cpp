@@ -131,7 +131,7 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
     if(NULL==rte_close) {
       rte_close=(close_t)this->getFunction("sys_close");
       if(NULL==rte_close) {
-	rte_close=close;
+        rte_close=close;
       }
     }
     rte_close(fd);

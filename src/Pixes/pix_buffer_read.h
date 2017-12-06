@@ -64,7 +64,7 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
 
   //////////
   // update buffer at startRendering
-  virtual void	startRendering();
+  virtual void  startRendering();
 
   //////////
   // the frame to read in the next render-cycle
@@ -101,4 +101,4 @@ class GEM_EXTERN pix_buffer_read : public GemPixObj
   static void loopMessCallback(void*data, t_float  f);
 };
 
-#endif	// for header file
+#endif  // for header file

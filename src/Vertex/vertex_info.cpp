@@ -76,7 +76,7 @@ void vertex_info :: render(GemState *state)
 void vertex_info :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_info::vertexMessCallback),
-    	    gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
+            gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
 void vertex_info :: vertexMessCallback(void *data,  t_float num, t_float counter)

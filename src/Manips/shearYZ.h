@@ -38,25 +38,25 @@ class GEM_EXTERN shearYZ : public GemBase
 
         //////////
         // Constructor
-    	shearYZ(int argc, t_atom *argv);
+        shearYZ(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~shearYZ();
+        //////////
+        // Destructor
+        virtual ~shearYZ();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+        //////////
+        // When rendering occurs
+        virtual void    render(GemState *state);
 
 
-    	//////////
-    	// X value changed
-    	void	    	shearMess(float val);
+        //////////
+        // X value changed
+        void            shearMess(float val);
 
-	//shear value
-	float			shear;
+        //shear value
+        float                   shear;
 };
 
-#endif	// for header file
+#endif  // for header file

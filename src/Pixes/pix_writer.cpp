@@ -103,9 +103,9 @@ void pix_writer :: obj_setupCallback(t_class *classPtr)
   class_addbang(classPtr, reinterpret_cast<t_method>(&pix_writer::bangMessCallback));
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_writer::fileMessCallback),
-		  gensym("file"), A_GIMME, A_NULL);
+                  gensym("file"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_writer::autoMessCallback),
-		  gensym("auto"), A_FLOAT, A_NULL);
+                  gensym("auto"), A_FLOAT, A_NULL);
 }
 
 void pix_writer :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
@@ -120,4 +120,3 @@ void pix_writer :: bangMessCallback(void *data)
 {
   GetMyClass(data)->m_banged=true;
 }
-

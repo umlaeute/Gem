@@ -42,13 +42,13 @@ class GEM_EXTERN vertex_mul : public vertex_add
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_mul(void);
+        //////////
+        // Destructor
+        virtual ~vertex_mul(void);
 
-    	//////////
-    	// Do the rendering
-	virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
+        //////////
+        // Do the rendering
+        virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
 };
 
-#endif	// for header file
+#endif  // for header file

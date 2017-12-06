@@ -59,10 +59,10 @@ class GEM_EXTERN pix_rds : public GemPixObj
   virtual void processYUVImage(imageStruct &image);
 
   imageStruct    myImage;
-  int 	doDots;
-  int 	stride;
-  int	method;
-  int	fastrand_val;
+  int   doDots;
+  int   stride;
+  int   method;
+  int   fastrand_val;
 
  private:
 
@@ -73,4 +73,4 @@ class GEM_EXTERN pix_rds : public GemPixObj
   static void seedMessCallback(void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

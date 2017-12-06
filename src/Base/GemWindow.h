@@ -217,4 +217,4 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
 
 
-#endif	// for header file
+#endif  // for header file

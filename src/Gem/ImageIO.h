@@ -29,7 +29,7 @@ struct imageStruct;
 //       NULL = failure
 //
 //       format:
-//    	  returns either GL_LUMINANCE or GL_RGBA
+//        returns either GL_LUMINANCE or GL_RGBA
 //
 //   automatically allocates the memory for the user
 //
@@ -49,8 +49,8 @@ namespace gem {
        * 'props' holds a list of additional image properties discovered during loading
        */
       static bool sync(const std::string&filename,
-				  imageStruct&img,
-				  Properties&props);
+                                  imageStruct&img,
+                                  Properties&props);
 
 
 
@@ -76,9 +76,9 @@ namespace gem {
        * is IMMEDIATE
        */
       typedef void (*callback)(void *userdata,
-			       id_t ID,
-			       imageStruct*img,
-			       const Properties&props);
+                               id_t ID,
+                               imageStruct*img,
+                               const Properties&props);
 
       /* loads an image (given as 'filename') asynchronously
        * image loading is done in a separate thread (if possible);
@@ -96,10 +96,10 @@ namespace gem {
        *
        */
       static bool async(callback cb,
-				   void*userdata,
-				   const std::string&filename,
-				   id_t&ID
-				   );
+                                   void*userdata,
+                                   const std::string&filename,
+                                   id_t&ID
+                                   );
 
       /* cancels asynchronous loading of an image
        * removes the given ID (as returned by loadAsync()) from the loader queue
@@ -112,9 +112,9 @@ namespace gem {
       /* load an image in a synchronous way (that is argument compatible with async())
        */
       static bool sync(callback cb,
-				  void*userdata,
-				  const std::string&filename,
-				  id_t&ID);
+                                  void*userdata,
+                                  const std::string&filename,
+                                  id_t&ID);
 
       /*
        * deliver all loaded images not delivered yet
@@ -140,7 +140,7 @@ GEM_EXTERN extern imageStruct *image2mem(const char *filename);
 //       NULL = failure
 //
 //       format:
-//    	  returns either GL_LUMINANCE or GL_RGBA
+//        returns either GL_LUMINANCE or GL_RGBA
 //
 //   automatically allocates the memory for the user
 //

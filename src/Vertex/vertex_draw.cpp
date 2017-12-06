@@ -72,14 +72,14 @@ vertex_draw :: vertex_draw():
 vertex_draw :: ~vertex_draw()
 {
 #ifdef __VBO
-	if (m_nVBOVertices)
-		glDeleteBuffersARB( 1, &m_nVBOVertices );
-	if (m_nVBOColor)
-		glDeleteBuffersARB( 1, &m_nVBOColor );
-	if (m_nVBOTexCoords)
-		glDeleteBuffersARB( 1, &m_nVBOTexCoords );
-	if (m_nVBONormals)
-		glDeleteBuffersARB( 1, &m_nVBONormals );
+        if (m_nVBOVertices)
+                glDeleteBuffersARB( 1, &m_nVBOVertices );
+        if (m_nVBOColor)
+                glDeleteBuffersARB( 1, &m_nVBOColor );
+        if (m_nVBOTexCoords)
+                glDeleteBuffersARB( 1, &m_nVBOTexCoords );
+        if (m_nVBONormals)
+                glDeleteBuffersARB( 1, &m_nVBONormals );
 #endif
 }
 
@@ -107,7 +107,7 @@ void vertex_draw :: render(GemState *state)
   bool texcoord=m_texcoord;
   if (texcoord && (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0))
   {
-	post("no Texture Coordinate array!");
+        post("no Texture Coordinate array!");
     texcoord = 0;
   }
 
@@ -127,8 +127,8 @@ void vertex_draw :: render(GemState *state)
 
 # ifdef __APPLE__
   if (m_vao){
-	if (!glIsVertexArrayAPPLE(1)) post("vertex draw: not using VAO");
-	glBindVertexArrayAPPLE(1);
+        if (!glIsVertexArrayAPPLE(1)) post("vertex draw: not using VAO");
+        glBindVertexArrayAPPLE(1);
   }
 # endif
 
@@ -136,10 +136,10 @@ void vertex_draw :: render(GemState *state)
 
   if(color && (state->ColorArray != NULL || state->HaveColorArray == 0) )
   {
-	glEnableClientState(GL_COLOR_ARRAY);
-	glColorPointer(4,GL_FLOAT,0,state->ColorArray);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glColorPointer(4,GL_FLOAT,0,state->ColorArray);
   }else{
-	glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
   }
 
   if(texcoord)
@@ -153,22 +153,22 @@ void vertex_draw :: render(GemState *state)
 
   if(state->HaveNormalArray || state->NormalArray!=NULL)
   {
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glNormalPointer(GL_FLOAT,0,state->NormalArray);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glNormalPointer(GL_FLOAT,0,state->NormalArray);
 //      glNormalPointer(GL_FLOAT,16,state->NormalArray);
   }
 
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(4,GL_FLOAT,0,
-		  reinterpret_cast<GLfloat *>(state->VertexArray));
+                  reinterpret_cast<GLfloat *>(state->VertexArray));
 
 #if defined GL_VERTEX_ARRAY_RANGE_APPLE
   glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
   glVertexArrayRangeAPPLE( size,
-			   reinterpret_cast<GLvoid *>(state->VertexArray));
+                           reinterpret_cast<GLvoid *>(state->VertexArray));
   glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
   glFlushVertexArrayRangeAPPLE( size,
-				reinterpret_cast<GLvoid *>(state->VertexArray));
+                                reinterpret_cast<GLvoid *>(state->VertexArray));
 #endif
 
   glDrawArrays(m_drawType,0,size);
@@ -185,25 +185,25 @@ void vertex_draw :: render(GemState *state)
 
   glDisable(GL_BLEND);
 
-#else	/* YES, we want VBO ! */
+#else   /* YES, we want VBO ! */
 
   // set-up the VertexArray
   if (m_vao)
   {
     if (rebuild || !m_nVBOVertices )
-	{
-	  if(!m_nVBOVertices) glGenBuffersARB( 1, &m_nVBOVertices );
+        {
+          if(!m_nVBOVertices) glGenBuffersARB( 1, &m_nVBOVertices );
 
-	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
-	  glBufferDataARB( GL_ARRAY_BUFFER_ARB,
-						size * state->VertexArrayStride * sizeof(float),
-						state->VertexArray, GL_DYNAMIC_DRAW_ARB );
-	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
-	}else{
-	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
-	  glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
-	}
-	glEnableClientState( GL_VERTEX_ARRAY );
+          glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
+          glBufferDataARB( GL_ARRAY_BUFFER_ARB,
+                                                size * state->VertexArrayStride * sizeof(float),
+                                                state->VertexArray, GL_DYNAMIC_DRAW_ARB );
+          glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
+        }else{
+          glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
+          glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
+        }
+        glEnableClientState( GL_VERTEX_ARRAY );
   }
 
   // setup the ColorArray
@@ -211,35 +211,35 @@ void vertex_draw :: render(GemState *state)
   {
     glEnableClientState(GL_COLOR_ARRAY);
     if (rebuild || !m_nVBOColor )
-	{
+        {
       if(!m_nVBOColor) glGenBuffersARB( 1, &m_nVBOColor );
 
-	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
+          glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
       glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*4*sizeof(float),
-						state->ColorArray, GL_DYNAMIC_DRAW_ARB );
-	  glColorPointer(4,GL_FLOAT,0,reinterpret_cast<char*>(NULL));
-	}else{
-	  glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
-	  glColorPointer(4,GL_FLOAT,0,reinterpret_cast<char*>(NULL));
-	}
+                                                state->ColorArray, GL_DYNAMIC_DRAW_ARB );
+          glColorPointer(4,GL_FLOAT,0,reinterpret_cast<char*>(NULL));
+        }else{
+          glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOColor);
+          glColorPointer(4,GL_FLOAT,0,reinterpret_cast<char*>(NULL));
+        }
   }else{
-	glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
   }
 
   // setup the TexCoordArray
   if ( state->HaveTexCoordArray || state->TexCoordArray != NULL )
   {
     if (rebuild || !m_nVBOTexCoords )
-	{
+        {
       if(!m_nVBOTexCoords) glGenBuffersARB( 1, &m_nVBOTexCoords );
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
       glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*2*sizeof(float),
-						state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
-	  glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<char *>(NULL));
-	}else{
-	  glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
-	  glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<char *>(NULL));
-	}
+                                                state->TexCoordArray, GL_DYNAMIC_DRAW_ARB );
+          glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<char *>(NULL));
+        }else{
+          glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBOTexCoords);
+          glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<char *>(NULL));
+        }
   }
 
   // setup the NormalArray
@@ -247,16 +247,16 @@ void vertex_draw :: render(GemState *state)
   {
     glEnableClientState(GL_NORMAL_ARRAY);
     if (rebuild || !m_nVBONormals )
-	{
+        {
       if(!m_nVBONormals) glGenBuffersARB( 1, &m_nVBONormals );
       glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
       glBufferDataARB( GL_ARRAY_BUFFER_ARB, size*1*sizeof(float),
-						state->NormalArray, GL_DYNAMIC_DRAW_ARB );
-	  glNormalPointer(GL_FLOAT,0, reinterpret_cast<char *>(NULL));
-	}else{
-	  glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
-	  glNormalPointer(GL_FLOAT,0, reinterpret_cast<char *>(NULL));
-	}
+                                                state->NormalArray, GL_DYNAMIC_DRAW_ARB );
+          glNormalPointer(GL_FLOAT,0, reinterpret_cast<char *>(NULL));
+        }else{
+          glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_nVBONormals );
+          glNormalPointer(GL_FLOAT,0, reinterpret_cast<char *>(NULL));
+        }
   }
 
 //  glEnableClientState(GL_VERTEX_ARRAY);
@@ -314,14 +314,14 @@ void vertex_draw :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void vertex_draw :: obj_setupCallback(t_class *classPtr)
 {
-	class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::defaultMessCallback),
-    	    gensym("default"), A_FLOAT, A_NULL);
+        class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::defaultMessCallback),
+            gensym("default"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::colorMessCallback),
-    	    gensym("color"), A_FLOAT, A_NULL);
+            gensym("color"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::texcoordMessCallback),
-    	    gensym("texcoord"), A_FLOAT, A_NULL);
+            gensym("texcoord"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::typeMessCallback),
-    	    gensym("draw"), A_SYMBOL, A_NULL);
+            gensym("draw"), A_SYMBOL, A_NULL);
 }
 
 void vertex_draw :: defaultMessCallback(void *data, t_float size)

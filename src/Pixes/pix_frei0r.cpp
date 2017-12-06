@@ -162,11 +162,11 @@ public:
 
   std::string m_name;
   std::string m_author;
-  int 	m_type;
-  int 	m_color;
-  int 	m_frei0rVersion;
-  int 	m_majorVersion;
-  int 	m_minorVersion;
+  int   m_type;
+  int   m_color;
+  int   m_frei0rVersion;
+  int   m_majorVersion;
+  int   m_minorVersion;
   std::string m_explanation;
 
   gem::Properties m_parameter;
@@ -275,8 +275,8 @@ typedef int (*t_f0r_deinit)(void);
     if(!m_instance)return false;
 
     f0r_update(m_instance, time,
-	       reinterpret_cast<const uint32_t*>(input.data),
-	       reinterpret_cast<uint32_t*>(output.data));
+               reinterpret_cast<const uint32_t*>(input.data),
+               reinterpret_cast<uint32_t*>(output.data));
 
     return true;
   }

@@ -58,35 +58,35 @@ void pix_scanline :: processImage(imageStruct &image)
   if (m_mode == 0){
     for (h =0; h<length;h++){
       for (i = 0; i < interlace - 1; i++){
-	dstline += width;
-	for (w = 0; w < width;w++){
-	  image.data[dstline+w] = image.data[srcline+w];
-	}
+        dstline += width;
+        for (w = 0; w < width;w++){
+          image.data[dstline+w] = image.data[srcline+w];
+        }
       }
       srcline+= width * interlace;
       dstline += width;
     }
     if (cleanup) {
       for (i = 0; i < cleanup - 1; i++){
-	dstline += width;
-	for (w = 0; w < width;w++){
-	  image.data[dstline+w] = image.data[srcline+w];
-	}
+        dstline += width;
+        for (w = 0; w < width;w++){
+          image.data[dstline+w] = image.data[srcline+w];
+        }
       }
     }
   }else{
     for (h =0; h<length;h++){
       for (i = 0; i < interlace - 1; i++){
-	dstline += width;
-	for (w = 0; w < width;w++) image.data[dstline+w] = 0;
+        dstline += width;
+        for (w = 0; w < width;w++) image.data[dstline+w] = 0;
       }
       srcline+= width * interlace;
       dstline += width;
     }
     if (cleanup) {
       for (i = 0; i < cleanup - 1; i++){
-	dstline += width;
-	for (w = 0; w < width;w++)image.data[dstline+w] = 0;
+        dstline += width;
+        for (w = 0; w < width;w++)image.data[dstline+w] = 0;
       }
     }
   }
@@ -166,9 +166,9 @@ void pix_scanline :: obj_setupCallback(t_class *classPtr)
 {
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_scanline::rollCallback),
-		  gensym("interlace"), A_DEFFLOAT, A_NULL);
+                  gensym("interlace"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_scanline::modeCallback),
-		  gensym("mode"), A_DEFFLOAT, A_NULL);
+                  gensym("mode"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_scanline :: rollCallback(void *data, t_float value)
@@ -182,4 +182,3 @@ void pix_scanline :: modeCallback(void *data, t_float value)
   GetMyClass(data)->m_mode=((long)value);
   GetMyClass(data)->setPixModified();
 }
-

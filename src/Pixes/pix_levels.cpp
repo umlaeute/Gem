@@ -142,13 +142,13 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
       int nOutputDelta=static_cast<int>(m_UniformOutputCeiling-m_UniformOutputFloor);
       // avoid the possibility of divide-by-zeros
       if (m_DoAllowInversion) {
-	if (nInputDelta==0) nInputDelta=1;
-	if (nOutputDelta==0)nOutputDelta=1;
-	nInputDelta=clampFunc(nInputDelta,-255,255);
-	nOutputDelta=clampFunc(nOutputDelta,-255,255);
+        if (nInputDelta==0) nInputDelta=1;
+        if (nOutputDelta==0)nOutputDelta=1;
+        nInputDelta=clampFunc(nInputDelta,-255,255);
+        nOutputDelta=clampFunc(nOutputDelta,-255,255);
       } else {
-	nInputDelta=clampFunc(nInputDelta,1,255);
-	nOutputDelta=clampFunc(nOutputDelta,1,255);
+        nInputDelta=clampFunc(nInputDelta,1,255);
+        nOutputDelta=clampFunc(nOutputDelta,1,255);
       }
 
       const int nRecipInputDelta=cnFixedOne/nInputDelta;
@@ -160,372 +160,372 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
 
       int nCount;
       for (nCount=0; nCount<256; nCount+=1) {
-	const int nSourceRed  =nCount;
-	const int nSourceGreen=nCount;
-	const int nSourceBlue =nCount;
-	const int nSourceAlpha=nCount;
+        const int nSourceRed  =nCount;
+        const int nSourceGreen=nCount;
+        const int nSourceBlue =nCount;
+        const int nSourceAlpha=nCount;
 
-	const int nTempRed=  (((nSourceRed  -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-	const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-	const int nTempBlue= (((nSourceBlue -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-	const int nTempAlpha=(((nSourceAlpha-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+        const int nTempRed=  (((nSourceRed  -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+        const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+        const int nTempBlue= (((nSourceBlue -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+        const int nTempAlpha=(((nSourceAlpha-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
 
-	int nOutputRed  =((nTempRed  *nOutputDelta)/256)+nOutputLow;
-	int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
-	int nOutputBlue =((nTempBlue *nOutputDelta)/256)+nOutputLow;
-	int nOutputAlpha=((nTempAlpha*nOutputDelta)/256)+nOutputLow;
+        int nOutputRed  =((nTempRed  *nOutputDelta)/256)+nOutputLow;
+        int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
+        int nOutputBlue =((nTempBlue *nOutputDelta)/256)+nOutputLow;
+        int nOutputAlpha=((nTempAlpha*nOutputDelta)/256)+nOutputLow;
 
-	nOutputRed  =clampFunc(nOutputRed  ,0,255);
-	nOutputGreen=clampFunc(nOutputGreen,0,255);
-	nOutputBlue =clampFunc(nOutputBlue ,0,255);
-	nOutputAlpha=clampFunc(nOutputAlpha,0,255);
+        nOutputRed  =clampFunc(nOutputRed  ,0,255);
+        nOutputGreen=clampFunc(nOutputGreen,0,255);
+        nOutputBlue =clampFunc(nOutputBlue ,0,255);
+        nOutputAlpha=clampFunc(nOutputAlpha,0,255);
 
-	pRedTable  [nCount]=(nOutputRed);
-	pGreenTable[nCount]=(nOutputGreen);
-	pBlueTable [nCount]=(nOutputBlue);
-	pAlphaTable[nCount]=(nOutputAlpha);
+        pRedTable  [nCount]=(nOutputRed);
+        pGreenTable[nCount]=(nOutputGreen);
+        pBlueTable [nCount]=(nOutputBlue);
+        pAlphaTable[nCount]=(nOutputAlpha);
       }
     } else { // !m_doUniform
-	  const int nRedInputLow=static_cast<int>(m_RedInputFloor);
-	  int nRedInputDelta=static_cast<int>(m_RedInputCeiling-m_RedInputFloor);
-	  const int nRedOutputLow=static_cast<int>(m_RedOutputFloor);
-	  int nRedOutputDelta=static_cast<int>(m_RedOutputCeiling-m_RedOutputFloor);
+          const int nRedInputLow=static_cast<int>(m_RedInputFloor);
+          int nRedInputDelta=static_cast<int>(m_RedInputCeiling-m_RedInputFloor);
+          const int nRedOutputLow=static_cast<int>(m_RedOutputFloor);
+          int nRedOutputDelta=static_cast<int>(m_RedOutputCeiling-m_RedOutputFloor);
 
-	  const int nGreenInputLow=static_cast<int>(m_GreenInputFloor);
-	  int nGreenInputDelta=static_cast<int>(m_GreenInputCeiling-m_GreenInputFloor);
-	  const int nGreenOutputLow=static_cast<int>(m_GreenOutputFloor);
-	  int nGreenOutputDelta=static_cast<int>(m_GreenOutputCeiling-m_GreenOutputFloor);
+          const int nGreenInputLow=static_cast<int>(m_GreenInputFloor);
+          int nGreenInputDelta=static_cast<int>(m_GreenInputCeiling-m_GreenInputFloor);
+          const int nGreenOutputLow=static_cast<int>(m_GreenOutputFloor);
+          int nGreenOutputDelta=static_cast<int>(m_GreenOutputCeiling-m_GreenOutputFloor);
 
-	  const int nBlueInputLow=static_cast<int>(m_BlueInputFloor);
-	  int nBlueInputDelta=static_cast<int>(m_BlueInputCeiling-m_BlueInputFloor);
-	  const int nBlueOutputLow=static_cast<int>(m_BlueOutputFloor);
-	  int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling-m_BlueOutputFloor);
+          const int nBlueInputLow=static_cast<int>(m_BlueInputFloor);
+          int nBlueInputDelta=static_cast<int>(m_BlueInputCeiling-m_BlueInputFloor);
+          const int nBlueOutputLow=static_cast<int>(m_BlueOutputFloor);
+          int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling-m_BlueOutputFloor);
 
-	  const int nAlphaInputLow=static_cast<int>(m_AlphaInputFloor);
-	  int nAlphaInputDelta=static_cast<int>(m_AlphaInputCeiling-m_AlphaInputFloor);
-	  const int nAlphaOutputLow=static_cast<int>(m_AlphaOutputFloor);
-	  int nAlphaOutputDelta=static_cast<int>(m_AlphaOutputCeiling-m_AlphaOutputFloor);
+          const int nAlphaInputLow=static_cast<int>(m_AlphaInputFloor);
+          int nAlphaInputDelta=static_cast<int>(m_AlphaInputCeiling-m_AlphaInputFloor);
+          const int nAlphaOutputLow=static_cast<int>(m_AlphaOutputFloor);
+          int nAlphaOutputDelta=static_cast<int>(m_AlphaOutputCeiling-m_AlphaOutputFloor);
 
-	  // avoid the possibility of divide-by-zeros
-	  if (m_DoAllowInversion) {
-	    if (nRedInputDelta==0)   nRedInputDelta=1;
-	    if (nRedOutputDelta==0)	 nRedOutputDelta=1;
-	    if (nGreenInputDelta==0) nGreenInputDelta=1;
-	    if (nGreenOutputDelta==0)nGreenOutputDelta=1;
-	    if (nBlueInputDelta==0)	 nBlueInputDelta=1;
-	    if (nBlueOutputDelta==0)  nBlueOutputDelta=1;
-	    if (nAlphaInputDelta==0)	 nAlphaInputDelta=1;
-	    if (nAlphaOutputDelta==0)  nAlphaOutputDelta=1;
+          // avoid the possibility of divide-by-zeros
+          if (m_DoAllowInversion) {
+            if (nRedInputDelta==0)   nRedInputDelta=1;
+            if (nRedOutputDelta==0)      nRedOutputDelta=1;
+            if (nGreenInputDelta==0) nGreenInputDelta=1;
+            if (nGreenOutputDelta==0)nGreenOutputDelta=1;
+            if (nBlueInputDelta==0)      nBlueInputDelta=1;
+            if (nBlueOutputDelta==0)  nBlueOutputDelta=1;
+            if (nAlphaInputDelta==0)     nAlphaInputDelta=1;
+            if (nAlphaOutputDelta==0)  nAlphaOutputDelta=1;
 
-	    nRedInputDelta=clampFunc(nRedInputDelta,-255,255);
-	    nRedOutputDelta=clampFunc(nRedOutputDelta,-255,255);
+            nRedInputDelta=clampFunc(nRedInputDelta,-255,255);
+            nRedOutputDelta=clampFunc(nRedOutputDelta,-255,255);
 
-	    nGreenInputDelta=clampFunc(nGreenInputDelta,-255,255);
-	    nGreenOutputDelta=clampFunc(nGreenOutputDelta,-255,255);
+            nGreenInputDelta=clampFunc(nGreenInputDelta,-255,255);
+            nGreenOutputDelta=clampFunc(nGreenOutputDelta,-255,255);
 
-	    nBlueInputDelta=clampFunc(nBlueInputDelta,-255,255);
-	    nBlueOutputDelta=clampFunc(nBlueOutputDelta,-255,255);
+            nBlueInputDelta=clampFunc(nBlueInputDelta,-255,255);
+            nBlueOutputDelta=clampFunc(nBlueOutputDelta,-255,255);
 
-	    nAlphaInputDelta=clampFunc(nAlphaInputDelta,-255,255);
-	    nAlphaOutputDelta=clampFunc(nAlphaOutputDelta,-255,255);
-	  } else {
-	    nRedInputDelta=clampFunc(nRedInputDelta,1,255);
-	    nRedOutputDelta=clampFunc(nRedOutputDelta,1,255);
+            nAlphaInputDelta=clampFunc(nAlphaInputDelta,-255,255);
+            nAlphaOutputDelta=clampFunc(nAlphaOutputDelta,-255,255);
+          } else {
+            nRedInputDelta=clampFunc(nRedInputDelta,1,255);
+            nRedOutputDelta=clampFunc(nRedOutputDelta,1,255);
 
-	    nGreenInputDelta=clampFunc(nGreenInputDelta,1,255);
-	    nGreenOutputDelta=clampFunc(nGreenOutputDelta,1,255);
+            nGreenInputDelta=clampFunc(nGreenInputDelta,1,255);
+            nGreenOutputDelta=clampFunc(nGreenOutputDelta,1,255);
 
-	    nBlueInputDelta=clampFunc(nBlueInputDelta,1,255);
-	    nBlueOutputDelta=clampFunc(nBlueOutputDelta,1,255);
+            nBlueInputDelta=clampFunc(nBlueInputDelta,1,255);
+            nBlueOutputDelta=clampFunc(nBlueOutputDelta,1,255);
 
-	    nAlphaInputDelta=clampFunc(nAlphaInputDelta,1,255);
-	    nAlphaOutputDelta=clampFunc(nAlphaOutputDelta,1,255);
-	  }
+            nAlphaInputDelta=clampFunc(nAlphaInputDelta,1,255);
+            nAlphaOutputDelta=clampFunc(nAlphaOutputDelta,1,255);
+          }
 
-	  const int nRedRecipInputDelta=cnFixedOne/nRedInputDelta;
-	  const int nGreenRecipInputDelta=cnFixedOne/nGreenInputDelta;
-	  const int nBlueRecipInputDelta=cnFixedOne/nBlueInputDelta;
-	  const int nAlphaRecipInputDelta=cnFixedOne/nAlphaInputDelta;
+          const int nRedRecipInputDelta=cnFixedOne/nRedInputDelta;
+          const int nGreenRecipInputDelta=cnFixedOne/nGreenInputDelta;
+          const int nBlueRecipInputDelta=cnFixedOne/nBlueInputDelta;
+          const int nAlphaRecipInputDelta=cnFixedOne/nAlphaInputDelta;
 
-	  int*const pRedTable=&(m_nRedTable[0]);
-	  int*const pGreenTable=&(m_nGreenTable[0]);
-	  int*const pBlueTable=&(m_nBlueTable[0]);
-	  int*const pAlphaTable=&(m_nAlphaTable[0]);
+          int*const pRedTable=&(m_nRedTable[0]);
+          int*const pGreenTable=&(m_nGreenTable[0]);
+          int*const pBlueTable=&(m_nBlueTable[0]);
+          int*const pAlphaTable=&(m_nAlphaTable[0]);
 
-	  int nCount;
-	  for (nCount=0; nCount<256; nCount+=1) {
-	    const int nSourceRed  =nCount;
-	    const int nSourceGreen=nCount;
-	    const int nSourceBlue =nCount;
-	    const int nSourceAlpha=nCount;
+          int nCount;
+          for (nCount=0; nCount<256; nCount+=1) {
+            const int nSourceRed  =nCount;
+            const int nSourceGreen=nCount;
+            const int nSourceBlue =nCount;
+            const int nSourceAlpha=nCount;
 
-	    const int nTempRed=  (((nSourceRed  -nRedInputLow  )*256)*nRedRecipInputDelta  )>>cnFixedShift;
-	    const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
-	    const int nTempBlue= (((nSourceBlue -nBlueInputLow )*256)*nBlueRecipInputDelta )>>cnFixedShift;
-	    const int nTempAlpha=(((nSourceAlpha-nAlphaInputLow)*256)*nAlphaRecipInputDelta)>>cnFixedShift;
+            const int nTempRed=  (((nSourceRed  -nRedInputLow  )*256)*nRedRecipInputDelta  )>>cnFixedShift;
+            const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
+            const int nTempBlue= (((nSourceBlue -nBlueInputLow )*256)*nBlueRecipInputDelta )>>cnFixedShift;
+            const int nTempAlpha=(((nSourceAlpha-nAlphaInputLow)*256)*nAlphaRecipInputDelta)>>cnFixedShift;
 
-	    int nOutputRed  =((nTempRed  *nRedOutputDelta  )/256)+nRedOutputLow;
-	    int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
-	    int nOutputBlue =((nTempBlue *nBlueOutputDelta )/256)+nBlueOutputLow;
-	    int nOutputAlpha=((nTempAlpha*nAlphaOutputDelta)/256)+nAlphaOutputLow;
+            int nOutputRed  =((nTempRed  *nRedOutputDelta  )/256)+nRedOutputLow;
+            int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
+            int nOutputBlue =((nTempBlue *nBlueOutputDelta )/256)+nBlueOutputLow;
+            int nOutputAlpha=((nTempAlpha*nAlphaOutputDelta)/256)+nAlphaOutputLow;
 
-	    nOutputRed  =clampFunc(nOutputRed  ,0,255);
-	    nOutputGreen=clampFunc(nOutputGreen,0,255);
-	    nOutputBlue =clampFunc(nOutputBlue ,0,255);
-	    nOutputAlpha=clampFunc(nOutputAlpha,0,255);
+            nOutputRed  =clampFunc(nOutputRed  ,0,255);
+            nOutputGreen=clampFunc(nOutputGreen,0,255);
+            nOutputBlue =clampFunc(nOutputBlue ,0,255);
+            nOutputAlpha=clampFunc(nOutputAlpha,0,255);
 
-	    pRedTable  [nCount]=(nOutputRed);
-	    pGreenTable[nCount]=(nOutputGreen);
-	    pBlueTable [nCount]=(nOutputBlue);
-	    pAlphaTable[nCount]=(nOutputAlpha);
-	  }
+            pRedTable  [nCount]=(nOutputRed);
+            pGreenTable[nCount]=(nOutputGreen);
+            pBlueTable [nCount]=(nOutputBlue);
+            pAlphaTable[nCount]=(nOutputAlpha);
+          }
     }
 }
 
 void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour) {
-	int	nRedHistogram[256];
-	int	nGreenHistogram[256];
-	int	nBlueHistogram[256];
-	int	nAlphaHistogram[256];
+        int     nRedHistogram[256];
+        int     nGreenHistogram[256];
+        int     nBlueHistogram[256];
+        int     nAlphaHistogram[256];
 
-	Pete_ZeroMemory(&nRedHistogram[0],256*sizeof(int));
-	Pete_ZeroMemory(&nGreenHistogram[0],256*sizeof(int));
-	Pete_ZeroMemory(&nBlueHistogram[0],256*sizeof(int));
-	Pete_ZeroMemory(&nAlphaHistogram[0],256*sizeof(int));
+        Pete_ZeroMemory(&nRedHistogram[0],256*sizeof(int));
+        Pete_ZeroMemory(&nGreenHistogram[0],256*sizeof(int));
+        Pete_ZeroMemory(&nBlueHistogram[0],256*sizeof(int));
+        Pete_ZeroMemory(&nAlphaHistogram[0],256*sizeof(int));
 
-	const int nNumPixels = nWidth*nHeight;
+        const int nNumPixels = nWidth*nHeight;
 
-	U32* pCurrentSource=pSource;
-	const U32* pSourceEnd=(pSource+nNumPixels);
+        U32* pCurrentSource=pSource;
+        const U32* pSourceEnd=(pSource+nNumPixels);
 
-	const int nSampleSpacing=8;
+        const int nSampleSpacing=8;
 
-	while (pCurrentSource<pSourceEnd) {
-		U32* pSourceLineStart=pCurrentSource;
-		const U32* pSourceLineEnd=pCurrentSource+nWidth;
+        while (pCurrentSource<pSourceEnd) {
+                U32* pSourceLineStart=pCurrentSource;
+                const U32* pSourceLineEnd=pCurrentSource+nWidth;
 
-		while (pCurrentSource<pSourceLineEnd) {
+                while (pCurrentSource<pSourceLineEnd) {
 
-			U32 SourceColour=*pCurrentSource;
+                        U32 SourceColour=*pCurrentSource;
 
-			const int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
-			const int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
-			const int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
-			const int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
+                        const int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
+                        const int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
+                        const int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
+                        const int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
 
-			switch(colour){
-			default:
-			  nRedHistogram[nSourceRed]+=1;
-			  nGreenHistogram[nSourceGreen]+=1;
-			  nBlueHistogram[nSourceBlue]+=1;
-			  nAlphaHistogram[nSourceAlpha]+=1;
-			  break;
-			case (GL_LUMINANCE):
-			  nRedHistogram  [nSourceRed] +=1;nRedHistogram  [nSourceGreen]+=1;
-			  nRedHistogram  [nSourceBlue]+=1;nRedHistogram  [nSourceAlpha]+=1;
-			  nGreenHistogram[nSourceRed] +=1;nGreenHistogram[nSourceGreen]+=1;
-			  nGreenHistogram[nSourceBlue]+=1;nGreenHistogram[nSourceAlpha]+=1;
-			  nBlueHistogram [nSourceRed] +=1;nBlueHistogram [nSourceGreen]+=1;
-			  nBlueHistogram [nSourceBlue]+=1;nBlueHistogram [nSourceAlpha]+=1;
-			  nAlphaHistogram[nSourceRed] +=1;nAlphaHistogram[nSourceGreen]+=1;
-			  nAlphaHistogram[nSourceBlue]+=1;nAlphaHistogram[nSourceAlpha]+=1;
-			  break;
-			case (GL_YUV422_GEM):
-			  nRedHistogram[nSourceRed]+=1; // U
-			  nGreenHistogram[nSourceGreen]+=1; // Y0
-			  nAlphaHistogram[nSourceGreen]+=1; // Y0
- 			  nBlueHistogram[nSourceBlue]+=1; // V
-			  nGreenHistogram[nSourceAlpha]+=1; // Y1
-			  nAlphaHistogram[nSourceAlpha]+=1; // Y1
-			  break;
-			}
+                        switch(colour){
+                        default:
+                          nRedHistogram[nSourceRed]+=1;
+                          nGreenHistogram[nSourceGreen]+=1;
+                          nBlueHistogram[nSourceBlue]+=1;
+                          nAlphaHistogram[nSourceAlpha]+=1;
+                          break;
+                        case (GL_LUMINANCE):
+                          nRedHistogram  [nSourceRed] +=1;nRedHistogram  [nSourceGreen]+=1;
+                          nRedHistogram  [nSourceBlue]+=1;nRedHistogram  [nSourceAlpha]+=1;
+                          nGreenHistogram[nSourceRed] +=1;nGreenHistogram[nSourceGreen]+=1;
+                          nGreenHistogram[nSourceBlue]+=1;nGreenHistogram[nSourceAlpha]+=1;
+                          nBlueHistogram [nSourceRed] +=1;nBlueHistogram [nSourceGreen]+=1;
+                          nBlueHistogram [nSourceBlue]+=1;nBlueHistogram [nSourceAlpha]+=1;
+                          nAlphaHistogram[nSourceRed] +=1;nAlphaHistogram[nSourceGreen]+=1;
+                          nAlphaHistogram[nSourceBlue]+=1;nAlphaHistogram[nSourceAlpha]+=1;
+                          break;
+                        case (GL_YUV422_GEM):
+                          nRedHistogram[nSourceRed]+=1; // U
+                          nGreenHistogram[nSourceGreen]+=1; // Y0
+                          nAlphaHistogram[nSourceGreen]+=1; // Y0
+                          nBlueHistogram[nSourceBlue]+=1; // V
+                          nGreenHistogram[nSourceAlpha]+=1; // Y1
+                          nAlphaHistogram[nSourceAlpha]+=1; // Y1
+                          break;
+                        }
 
 
-			pCurrentSource+=nSampleSpacing;
-		}
-		pCurrentSource=	pSourceLineStart+(nSampleSpacing*nWidth);
-	}
+                        pCurrentSource+=nSampleSpacing;
+                }
+                pCurrentSource= pSourceLineStart+(nSampleSpacing*nWidth);
+        }
 
-	const int nSampleCount=	(nWidth/nSampleSpacing)*(nHeight/nSampleSpacing);
+        const int nSampleCount= (nWidth/nSampleSpacing)*(nHeight/nSampleSpacing);
 
-	const int nStartThreshold=static_cast<int>((m_LowPercentile*nSampleCount)/100.0f);
-	const int nEndThreshold=static_cast<int>((m_HighPercentile*nSampleCount)/100.0f);
+        const int nStartThreshold=static_cast<int>((m_LowPercentile*nSampleCount)/100.0f);
+        const int nEndThreshold=static_cast<int>((m_HighPercentile*nSampleCount)/100.0f);
 
-	int nCurrentRedTotal;
-	int nCurrentGreenTotal;
-	int nCurrentBlueTotal;
-	int nCurrentAlphaTotal;
+        int nCurrentRedTotal;
+        int nCurrentGreenTotal;
+        int nCurrentBlueTotal;
+        int nCurrentAlphaTotal;
 
-	int nCurrentSlot;
+        int nCurrentSlot;
 
-	nCurrentRedTotal=0;
-	nCurrentSlot=0;
-	while ((nCurrentRedTotal<nStartThreshold)&&(nCurrentSlot<256)) {
-		nCurrentRedTotal+=nRedHistogram[nCurrentSlot];
-		nCurrentSlot+=1;
-	}
+        nCurrentRedTotal=0;
+        nCurrentSlot=0;
+        while ((nCurrentRedTotal<nStartThreshold)&&(nCurrentSlot<256)) {
+                nCurrentRedTotal+=nRedHistogram[nCurrentSlot];
+                nCurrentSlot+=1;
+        }
 
-	const int nRedLow=(nCurrentSlot-1);
+        const int nRedLow=(nCurrentSlot-1);
 
-	nCurrentRedTotal=nSampleCount;
-	nCurrentSlot=255;
-	while ((nCurrentRedTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
-		nCurrentRedTotal-=nRedHistogram[nCurrentSlot];
-		nCurrentSlot-=1;
-	}
+        nCurrentRedTotal=nSampleCount;
+        nCurrentSlot=255;
+        while ((nCurrentRedTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
+                nCurrentRedTotal-=nRedHistogram[nCurrentSlot];
+                nCurrentSlot-=1;
+        }
 
-	const int nRedHigh=(nCurrentSlot+1);
+        const int nRedHigh=(nCurrentSlot+1);
 
-	nCurrentGreenTotal=0;
-	nCurrentSlot=0;
-	while ((nCurrentGreenTotal<nStartThreshold)&&(nCurrentSlot<256)) {
-		nCurrentGreenTotal+=nGreenHistogram[nCurrentSlot];
-		nCurrentSlot+=1;
-	}
+        nCurrentGreenTotal=0;
+        nCurrentSlot=0;
+        while ((nCurrentGreenTotal<nStartThreshold)&&(nCurrentSlot<256)) {
+                nCurrentGreenTotal+=nGreenHistogram[nCurrentSlot];
+                nCurrentSlot+=1;
+        }
 
-	const int nGreenLow=(nCurrentSlot-1);
+        const int nGreenLow=(nCurrentSlot-1);
 
-	nCurrentGreenTotal=nSampleCount;
-	nCurrentSlot=255;
-	while ((nCurrentGreenTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
-		nCurrentGreenTotal-=nGreenHistogram[nCurrentSlot];
-		nCurrentSlot-=1;
-	}
+        nCurrentGreenTotal=nSampleCount;
+        nCurrentSlot=255;
+        while ((nCurrentGreenTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
+                nCurrentGreenTotal-=nGreenHistogram[nCurrentSlot];
+                nCurrentSlot-=1;
+        }
 
-	const int nGreenHigh=(nCurrentSlot+1);
+        const int nGreenHigh=(nCurrentSlot+1);
 
-	nCurrentBlueTotal=0;
-	nCurrentSlot=0;
-	while ((nCurrentBlueTotal<nStartThreshold)&&(nCurrentSlot<256)) {
-		nCurrentBlueTotal+=nBlueHistogram[nCurrentSlot];
-		nCurrentSlot+=1;
-	}
+        nCurrentBlueTotal=0;
+        nCurrentSlot=0;
+        while ((nCurrentBlueTotal<nStartThreshold)&&(nCurrentSlot<256)) {
+                nCurrentBlueTotal+=nBlueHistogram[nCurrentSlot];
+                nCurrentSlot+=1;
+        }
 
-	const int nBlueLow=(nCurrentSlot-1);
+        const int nBlueLow=(nCurrentSlot-1);
 
-	nCurrentBlueTotal=nSampleCount;
-	nCurrentSlot=255;
-	while ((nCurrentBlueTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
-		nCurrentBlueTotal-=nBlueHistogram[nCurrentSlot];
-		nCurrentSlot-=1;
-	}
+        nCurrentBlueTotal=nSampleCount;
+        nCurrentSlot=255;
+        while ((nCurrentBlueTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
+                nCurrentBlueTotal-=nBlueHistogram[nCurrentSlot];
+                nCurrentSlot-=1;
+        }
 
-	const int nBlueHigh=(nCurrentSlot+1);
+        const int nBlueHigh=(nCurrentSlot+1);
 
-	nCurrentAlphaTotal=0;
-	nCurrentSlot=0;
-	while ((nCurrentAlphaTotal<nStartThreshold)&&(nCurrentSlot<256)) {
-		nCurrentAlphaTotal+=nAlphaHistogram[nCurrentSlot];
-		nCurrentSlot+=1;
-	}
+        nCurrentAlphaTotal=0;
+        nCurrentSlot=0;
+        while ((nCurrentAlphaTotal<nStartThreshold)&&(nCurrentSlot<256)) {
+                nCurrentAlphaTotal+=nAlphaHistogram[nCurrentSlot];
+                nCurrentSlot+=1;
+        }
 
-	const int nAlphaLow=(nCurrentSlot-1);
+        const int nAlphaLow=(nCurrentSlot-1);
 
-	nCurrentAlphaTotal=nSampleCount;
-	nCurrentSlot=255;
-	while ((nCurrentAlphaTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
-		nCurrentAlphaTotal-=nAlphaHistogram[nCurrentSlot];
-		nCurrentSlot-=1;
-	}
+        nCurrentAlphaTotal=nSampleCount;
+        nCurrentSlot=255;
+        while ((nCurrentAlphaTotal>nEndThreshold)&&(nCurrentSlot>=0)) {
+                nCurrentAlphaTotal-=nAlphaHistogram[nCurrentSlot];
+                nCurrentSlot-=1;
+        }
 
-	const int nAlphaHigh=(nCurrentSlot+1);
+        const int nAlphaHigh=(nCurrentSlot+1);
 
-	m_RedInputFloor=static_cast<float>(nRedLow);
-	if (nRedLow!=nRedHigh){
-		m_RedInputCeiling=static_cast<float>(nRedHigh);
-	} else if (nRedHigh<255) {
-		m_RedInputCeiling=static_cast<float>(nRedHigh+1);
-	} else {
-		m_RedInputCeiling=static_cast<float>(nRedHigh-1);
-	}
+        m_RedInputFloor=static_cast<float>(nRedLow);
+        if (nRedLow!=nRedHigh){
+                m_RedInputCeiling=static_cast<float>(nRedHigh);
+        } else if (nRedHigh<255) {
+                m_RedInputCeiling=static_cast<float>(nRedHigh+1);
+        } else {
+                m_RedInputCeiling=static_cast<float>(nRedHigh-1);
+        }
 
-	m_GreenInputFloor=static_cast<float>(nGreenLow);
-	if (nGreenLow!=nGreenHigh){
-		m_GreenInputCeiling=static_cast<float>(nGreenHigh);
-	} else if (nGreenHigh<255) {
-		m_GreenInputCeiling=static_cast<float>(nGreenHigh+1);
-	} else {
-		m_GreenInputCeiling=static_cast<float>(nGreenHigh-1);
-	}
+        m_GreenInputFloor=static_cast<float>(nGreenLow);
+        if (nGreenLow!=nGreenHigh){
+                m_GreenInputCeiling=static_cast<float>(nGreenHigh);
+        } else if (nGreenHigh<255) {
+                m_GreenInputCeiling=static_cast<float>(nGreenHigh+1);
+        } else {
+                m_GreenInputCeiling=static_cast<float>(nGreenHigh-1);
+        }
 
-	m_BlueInputFloor=static_cast<float>(nBlueLow);
-	if (nBlueLow!=nBlueHigh){
-		m_BlueInputCeiling=static_cast<float>(nBlueHigh);
-	} else if (nBlueHigh<255) {
-		m_BlueInputCeiling=static_cast<float>(nBlueHigh+1);
-	} else {
-		m_BlueInputCeiling=static_cast<float>(nBlueHigh-1);
-	}
+        m_BlueInputFloor=static_cast<float>(nBlueLow);
+        if (nBlueLow!=nBlueHigh){
+                m_BlueInputCeiling=static_cast<float>(nBlueHigh);
+        } else if (nBlueHigh<255) {
+                m_BlueInputCeiling=static_cast<float>(nBlueHigh+1);
+        } else {
+                m_BlueInputCeiling=static_cast<float>(nBlueHigh-1);
+        }
 
-	m_AlphaInputFloor=static_cast<float>(nAlphaLow);
-	if (nAlphaLow!=nAlphaHigh){
-		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh);
-	} else if (nAlphaHigh<255) {
-		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh+1);
-	} else {
-		m_AlphaInputCeiling=static_cast<float>(nAlphaHigh-1);
-	}
+        m_AlphaInputFloor=static_cast<float>(nAlphaLow);
+        if (nAlphaLow!=nAlphaHigh){
+                m_AlphaInputCeiling=static_cast<float>(nAlphaHigh);
+        } else if (nAlphaHigh<255) {
+                m_AlphaInputCeiling=static_cast<float>(nAlphaHigh+1);
+        } else {
+                m_AlphaInputCeiling=static_cast<float>(nAlphaHigh-1);
+        }
 
-	int nLowLuminance =
-		((90 * nRedLow)+
-		(115 * nGreenLow)+
-		(51 * nBlueLow))/256;
+        int nLowLuminance =
+                ((90 * nRedLow)+
+                (115 * nGreenLow)+
+                (51 * nBlueLow))/256;
 
-	int nHighLuminance =
-		((90 * nRedHigh)+
-		(115 * nGreenHigh)+
-		(51 * nBlueHigh))/256;
+        int nHighLuminance =
+                ((90 * nRedHigh)+
+                (115 * nGreenHigh)+
+                (51 * nBlueHigh))/256;
 
-	if (nStartThreshold<nEndThreshold) {
-		if (nLowLuminance>=nHighLuminance) {
-			nLowLuminance=clampFunc(nHighLuminance-1,0,255);
-		}
-	}
-	m_UniformInputFloor=static_cast<float>(nLowLuminance);
-	m_UniformInputCeiling=static_cast<float>(nHighLuminance);
+        if (nStartThreshold<nEndThreshold) {
+                if (nLowLuminance>=nHighLuminance) {
+                        nLowLuminance=clampFunc(nHighLuminance-1,0,255);
+                }
+        }
+        m_UniformInputFloor=static_cast<float>(nLowLuminance);
+        m_UniformInputCeiling=static_cast<float>(nHighLuminance);
 }
 
 void pix_levels :: Pete_ChannelFunction_Render() {
 
-	const int*const pRedTable=m_nRedTable;
-	const int*const pGreenTable=m_nGreenTable;
-	const int*const pBlueTable=m_nBlueTable;
-	const int*const pAlphaTable=m_nAlphaTable;
+        const int*const pRedTable=m_nRedTable;
+        const int*const pGreenTable=m_nGreenTable;
+        const int*const pBlueTable=m_nBlueTable;
+        const int*const pAlphaTable=m_nAlphaTable;
 
-	const int nNumPixels = nWidth*nHeight;
+        const int nNumPixels = nWidth*nHeight;
 
-	U32* pCurrentSource=pSource;
-	U32* pCurrentOutput=pOutput;
-	const U32* pSourceEnd=(pSource+nNumPixels);
-	while (pCurrentSource!=pSourceEnd) {
-		const U32 SourceColour=*pCurrentSource;
-		const unsigned int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
-		const unsigned int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
-		const unsigned int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
-		//		const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
-		const unsigned int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
-		//const unsigned int nSourceAlpha0=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+        U32* pCurrentSource=pSource;
+        U32* pCurrentOutput=pOutput;
+        const U32* pSourceEnd=(pSource+nNumPixels);
+        while (pCurrentSource!=pSourceEnd) {
+                const U32 SourceColour=*pCurrentSource;
+                const unsigned int nSourceRed=(SourceColour>>SHIFT_RED)&0xff;
+                const unsigned int nSourceGreen=(SourceColour>>SHIFT_GREEN)&0xff;
+                const unsigned int nSourceBlue=(SourceColour>>SHIFT_BLUE)&0xff;
+                //              const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+                const unsigned int nSourceAlpha=(SourceColour>>SHIFT_ALPHA)&0xff;
+                //const unsigned int nSourceAlpha0=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
 
 
-		const int nOutputRed=pRedTable[nSourceRed];
-		const int nOutputGreen=pGreenTable[nSourceGreen];
-		const int nOutputBlue=pBlueTable[nSourceBlue];
-		const int nOutputAlpha=pAlphaTable[nSourceAlpha];
-		/*
-		post("IN  %d %d %d %d", (nSourceRed&0xff), (nSourceGreen&0xff), (nSourceBlue&0xff), (nSourceAlpha&0xff));
+                const int nOutputRed=pRedTable[nSourceRed];
+                const int nOutputGreen=pGreenTable[nSourceGreen];
+                const int nOutputBlue=pBlueTable[nSourceBlue];
+                const int nOutputAlpha=pAlphaTable[nSourceAlpha];
+                /*
+                post("IN  %d %d %d %d", (nSourceRed&0xff), (nSourceGreen&0xff), (nSourceBlue&0xff), (nSourceAlpha&0xff));
 
-		post("OUT %d %d %d %d", (nOutputRed&0xff), (nOutputGreen&0xff), (nOutputBlue&0xff), (nOutputAlpha&0xff));
-		*/
-		const U32 OutputColour=
-		  ((nOutputRed&0xff)<<SHIFT_RED)|
-		  ((nOutputGreen&0xff)<<SHIFT_GREEN)|
-		  ((nOutputBlue&0xff)<<SHIFT_BLUE)|
-		  ((nOutputAlpha&0xff)<<SHIFT_ALPHA);
+                post("OUT %d %d %d %d", (nOutputRed&0xff), (nOutputGreen&0xff), (nOutputBlue&0xff), (nOutputAlpha&0xff));
+                */
+                const U32 OutputColour=
+                  ((nOutputRed&0xff)<<SHIFT_RED)|
+                  ((nOutputGreen&0xff)<<SHIFT_GREEN)|
+                  ((nOutputBlue&0xff)<<SHIFT_BLUE)|
+                  ((nOutputAlpha&0xff)<<SHIFT_ALPHA);
 
-		*pCurrentOutput=OutputColour;
-		pCurrentSource+=1;
-		pCurrentOutput+=1;
-	}
+                *pCurrentOutput=OutputColour;
+                pCurrentSource+=1;
+                pCurrentOutput+=1;
+        }
 }
 
 
@@ -546,7 +546,7 @@ void pix_levels :: Pete_ChannelFunction_RenderYUV() {
         const unsigned int nSourceU=(SourceColour>>SHIFT_U)&0xff;
         const unsigned int nSourceY1=(SourceColour>>SHIFT_Y1)&0xff;
         const unsigned int nSourceV=(SourceColour>>SHIFT_V)&0xff;
-        //		const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
+        //              const unsigned int nSourceAlpha=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
         const unsigned int nSourceY2=(SourceColour>>SHIFT_Y2)&0xff;
         //const unsigned int nSourceAlpha0=(SourceColour&(((U32)0xff)<<SHIFT_ALPHA));
 
@@ -581,23 +581,23 @@ void pix_levels :: Pete_ChannelFunction_RenderYUV() {
 void pix_levels :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::autoCallback),
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
+                  gensym("auto"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::uniCallback),
-		  gensym("uni"), A_DEFFLOAT, A_NULL);
+                  gensym("uni"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::invCallback),
-		  gensym("inv"), A_DEFFLOAT, A_NULL);
+                  gensym("inv"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::uniformCallback),
-		  gensym("uniform"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("uniform"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::redCallback),
-		  gensym("red"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("red"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::greenCallback),
-		  gensym("green"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("green"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::blueCallback),
-		  gensym("blue"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("blue"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::lowPCallback),
-		  gensym("lowP"), A_DEFFLOAT, A_NULL);
+                  gensym("lowP"), A_DEFFLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::hiPCallback),
-		  gensym("hiP"), A_DEFFLOAT, A_NULL);
+                  gensym("hiP"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_levels :: autoCallback(void *data, t_float m_DoAuto)

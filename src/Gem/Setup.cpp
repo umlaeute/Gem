@@ -15,7 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
-/* OLDNAMES.lib pd.lib opengl32.lib glu32.lib freetype235mt.lib FTGL_static.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib 
+/* OLDNAMES.lib pd.lib opengl32.lib glu32.lib freetype235mt.lib FTGL_static.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib
  * pd.lib freetype235mt.lib FTGL_static.lib opengl32.lib glu32.lib ws2_32.lib pthreadVC.lib (?)
 
  * OLDNAMES.lib: _close, _open, _strdup
@@ -102,13 +102,13 @@ namespace {
     for(i=0; i<argc; i++) {
       if(A_SYMBOL!=argv[i].a_type)continue;
       if((_X==atom_getsymbol(argv+i)) && (i+6<argc)) {
-        t_atom*ap=argv+i+1;     
+        t_atom*ap=argv+i+1;
         if(_text   ==atom_getsymbol(ap+0) &&
            _version==atom_getsymbol(ap+3) &&
            A_FLOAT == ap[1].a_type &&
            A_FLOAT == ap[2].a_type
            ) {
-    
+
           if(A_SYMBOL==ap[4].a_type) {
             gotversion=std::string(atom_getsymbol(ap+4)->s_name);
           } else {
@@ -133,7 +133,7 @@ namespace {
       verbose(0, "GEM: This usually means that you have a path to another version of Gem stored in your startup preferences");
       verbose(0, "GEM: Consider removing the wrong path!");
     }
-    
+
     return result;
   }
 
@@ -190,7 +190,7 @@ namespace {
   }
 }; // namespace
 
-namespace gem { 
+namespace gem {
     namespace plugins { void init(void); };
     namespace Settings{ void init(void); };
 };

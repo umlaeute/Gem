@@ -208,13 +208,13 @@ void pix_buffer_read :: obj_setupCallback(t_class *classPtr)
                    gensym("pix_get"),
                    A_DEFSYM, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::setMessCallback),
-  		  gensym("set"), A_SYMBOL, A_NULL);
+                  gensym("set"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::frameMessCallback),
-  		  gensym("frame"), A_FLOAT, A_NULL);
+                  gensym("frame"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::autoMessCallback),
-  		  gensym("auto"), A_FLOAT, A_NULL);
+                  gensym("auto"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::loopMessCallback),
-  		  gensym("loop"), A_FLOAT, A_NULL);
+                  gensym("loop"), A_FLOAT, A_NULL);
 }
 void pix_buffer_read :: setMessCallback(void *data, t_symbol*s)
 {

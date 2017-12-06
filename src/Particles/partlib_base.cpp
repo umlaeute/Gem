@@ -52,4 +52,3 @@ void partlib_base :: render(GemState *state)
 
   renderParticles(state);
 }
-

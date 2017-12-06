@@ -37,26 +37,26 @@ class GEM_EXTERN pix_mask : public GemPixDualObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_mask();
+            //////////
+            // Constructor
+        pix_mask();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_mask();
+        //////////
+        // Destructor
+        virtual ~pix_mask();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
+        //////////
+        // Do the processing
+        virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
 
-    	//////////
-    	//  This is called whenever a new image comes through.
-        //	The left image is an RGBA, the right is a gray8
-    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+        //////////
+        //  This is called whenever a new image comes through.
+        //      The left image is an RGBA, the right is a gray8
+        virtual void    processRGBA_Gray(imageStruct &image, imageStruct &right);
 
-    	virtual void 	processRGBA_YUV(imageStruct &image, imageStruct &right);
+        virtual void    processRGBA_YUV(imageStruct &image, imageStruct &right);
 };
 
-#endif	// for header file
+#endif  // for header file

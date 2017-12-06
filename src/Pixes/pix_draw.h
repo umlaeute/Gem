@@ -36,19 +36,19 @@ class GEM_EXTERN pix_draw : public GemBase
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_draw();
+            //////////
+            // Constructor
+        pix_draw();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_draw();
+        //////////
+        // Destructor
+        virtual ~pix_draw();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

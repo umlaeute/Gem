@@ -29,9 +29,9 @@ camera :: camera(int argc, t_atom *argv)
     lookX(0.0), lookY(0.0), lookZ(0.0), m_speed( 0.03f ),
     hAngle(90.0f), vAngle(0.0f), distance(4.0f), slideLeft(0), slideRight(0)
 {
-  m_vPosition    = CVector3(0.0, 0.0, 0.0);	// Init the position to zero
-  m_vView        = CVector3(0.0, 0.0, 0.0);	// Init the view to a std starting view
-  m_vUpVector    = CVector3(0.0, 1.0, 0.0);	// Init the UpVector
+  m_vPosition    = CVector3(0.0, 0.0, 0.0);     // Init the position to zero
+  m_vView        = CVector3(0.0, 0.0, 0.0);     // Init the view to a std starting view
+  m_vUpVector    = CVector3(0.0, 1.0, 0.0);     // Init the UpVector
   //  Position     View         Up Vector
   PositionCamera(0, 0.0, 4,   0, 0.0, 0,   0, 1, 0 );
 }
@@ -67,30 +67,30 @@ void camera :: render(GemState *)
   if(left)
     {
       if (m_mode)
-	incHRot(m_speed);
+        incHRot(m_speed);
       else
-	decHRot(m_speed);
+        decHRot(m_speed);
     }
   if(right)
     {
       if (m_mode)
-	decHRot(m_speed);
+        decHRot(m_speed);
       else
-	incHRot(m_speed);
+        incHRot(m_speed);
     }
   if(up)
     {
       if (m_mode)
-	incVRot(m_speed);
+        incVRot(m_speed);
       else
-	decVRot(m_speed);
+        decVRot(m_speed);
     }
   if(down)
     {
       if (m_mode)
-	decVRot(m_speed);
+        decVRot(m_speed);
       else
-	incVRot(m_speed);
+        incVRot(m_speed);
     }
 
   calcCameraVals();
@@ -221,9 +221,9 @@ void camera :: decVRot(float decVal)
 /////
 ///////////////////////////////// POSITION CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void camera :: PositionCamera(	float positionX, float positionY, float positionZ,
-				float viewX,     float viewY,     float viewZ,
-				float upVectorX, float upVectorY, float upVectorZ)
+void camera :: PositionCamera(  float positionX, float positionY, float positionZ,
+                                float viewX,     float viewY,     float viewZ,
+                                float upVectorX, float upVectorY, float upVectorZ)
 {
   CVector3 vPosition    = CVector3(positionX, positionY, positionZ);
   CVector3 vView        = CVector3(viewX, viewY, viewZ);
@@ -318,35 +318,35 @@ void camera :: SlideCamera(float speed)
 void camera :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::hAngleMessCallback),
-		  gensym("hAngle"), A_FLOAT, A_NULL);
+                  gensym("hAngle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::vAngleMessCallback),
-		  gensym("vAngle"), A_FLOAT, A_NULL);
+                  gensym("vAngle"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::distanceMessCallback),
-		  gensym("distance"), A_FLOAT, A_NULL);
+                  gensym("distance"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::speedMessCallback),
-		  gensym("speed"), A_FLOAT, A_NULL);
+                  gensym("speed"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::forwardMessCallback),
-		  gensym("forward"), A_FLOAT, A_NULL);
+                  gensym("forward"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::reverseMessCallback),
-		  gensym("reverse"), A_FLOAT, A_NULL);
+                  gensym("reverse"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::leftMessCallback),
-		  gensym("left"), A_FLOAT, A_NULL);
+                  gensym("left"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::rightMessCallback),
-		  gensym("right"), A_FLOAT, A_NULL);
+                  gensym("right"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::upMessCallback),
-		  gensym("up"), A_FLOAT, A_NULL);
+                  gensym("up"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::downMessCallback),
-		  gensym("down"), A_FLOAT, A_NULL);
+                  gensym("down"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::resetMessCallback),
-		  gensym("reset"), A_NULL);
+                  gensym("reset"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::modeMessCallback),
-		  gensym("mode"), A_FLOAT, A_NULL);
+                  gensym("mode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookXMessCallback),
-		  gensym("lookX"), A_FLOAT, A_NULL);
+                  gensym("lookX"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookYMessCallback),
-		  gensym("lookY"), A_FLOAT, A_NULL);
+                  gensym("lookY"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookZMessCallback),
-		  gensym("lookZ"), A_FLOAT, A_NULL);
+                  gensym("lookZ"), A_FLOAT, A_NULL);
 }
 void camera :: hAngleMessCallback(void *data, t_float val)
 {

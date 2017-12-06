@@ -148,11 +148,11 @@ void curve3d :: renderShape(GemState *state){
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
   glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3,
-	  static_cast<GLint>(nb_pts_control_X),
-	  0,1,
-	  static_cast<GLint>(3*nb_pts_control_X),
-	  static_cast<GLint>(nb_pts_control_Y),
-	  &(m_posXYZ[0].x));
+          static_cast<GLint>(nb_pts_control_X),
+          0,1,
+          static_cast<GLint>(3*nb_pts_control_X),
+          static_cast<GLint>(nb_pts_control_Y),
+          &(m_posXYZ[0].x));
   glEnable(GL_MAP2_VERTEX_3);
 
   GLfloat xsize = 1.0f;
@@ -175,80 +175,80 @@ void curve3d :: renderShape(GemState *state){
 
   switch (m_drawType){
   case LINE:    {
-    if (GemShape::m_texType)	{
+    if (GemShape::m_texType)    {
       for (n = 0; n < nb_pts_affich_X+1; n++)   {
-	glBegin(GL_LINE_STRIP);
-	for (m = 0; m  < nb_pts_affich_Y+1; m++){
-	  glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	  glEvalCoord2f(n/affich_X, m/affich_Y);
-	}
-	glEnd();
+        glBegin(GL_LINE_STRIP);
+        for (m = 0; m  < nb_pts_affich_Y+1; m++){
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          glEvalCoord2f(n/affich_X, m/affich_Y);
+        }
+        glEnd();
       }
       for(m = 0; m < nb_pts_affich_Y+1; m++) {
-	glBegin(GL_LINE_STRIP);
-	for(n = 0; n  < nb_pts_affich_X+1; n++){
-	  glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	  glEvalCoord2f(n/affich_X, m/affich_Y);
-	}
-	glEnd();
+        glBegin(GL_LINE_STRIP);
+        for(n = 0; n  < nb_pts_affich_X+1; n++){
+          glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+          glEvalCoord2f(n/affich_X, m/affich_Y);
+        }
+        glEnd();
       }
     }  else {
-	  for(n = 0; n < nb_pts_affich_X+1; n++)  {
-	    glBegin(GL_LINE_STRIP);
-	    for(m = 0; m  < nb_pts_affich_Y+1; m++){
-	      glEvalCoord2f(n/affich_X, m/affich_Y);
-	    }
-	    glEnd();
-	  }
-	  for(m = 0; m < nb_pts_affich_Y+1; m++)  {
-	    glBegin(GL_LINE_STRIP);
-	    for(n = 0; n  < nb_pts_affich_X+1; n++){
-	      glEvalCoord2f(n/affich_X, m/affich_Y);
-	    }
-	    glEnd();
-	  }
+          for(n = 0; n < nb_pts_affich_X+1; n++)  {
+            glBegin(GL_LINE_STRIP);
+            for(m = 0; m  < nb_pts_affich_Y+1; m++){
+              glEvalCoord2f(n/affich_X, m/affich_Y);
+            }
+            glEnd();
+          }
+          for(m = 0; m < nb_pts_affich_Y+1; m++)  {
+            glBegin(GL_LINE_STRIP);
+            for(n = 0; n  < nb_pts_affich_X+1; n++){
+              glEvalCoord2f(n/affich_X, m/affich_Y);
+            }
+            glEnd();
+          }
     }
   }
     break;
   case FILL:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X; n++) {
-	  glBegin(GL_TRIANGLE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++)   {
-	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	    glTexCoord2f(xsize*(n+1)/affich_X, ysize+ysizediff*m/affich_Y);
-	    glEvalCoord2f((n+1)/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_affich_X; n++) {
+          glBegin(GL_TRIANGLE_STRIP);
+          for(m = 0; m  < nb_pts_affich_Y+1; m++)   {
+            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+            glTexCoord2f(xsize*(n+1)/affich_X, ysize+ysizediff*m/affich_Y);
+            glEvalCoord2f((n+1)/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
       else
-	for(n = 0; n < nb_pts_affich_X; n++) {
-	  glBegin(GL_TRIANGLE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++)  {
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	    glEvalCoord2f((n+1)/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_affich_X; n++) {
+          glBegin(GL_TRIANGLE_STRIP);
+          for(m = 0; m  < nb_pts_affich_Y+1; m++)  {
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+            glEvalCoord2f((n+1)/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
     }
     break;
   case POINT:
     {
       glBegin(GL_POINTS);
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X+1; n++) {
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++) {
-	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	}
+        for(n = 0; n < nb_pts_affich_X+1; n++) {
+          for(m = 0; m  < nb_pts_affich_Y+1; m++) {
+            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+        }
       else
-	for(n = 0; n < nb_pts_affich_X+1; n++) {
-	  for(m = 0; m  < nb_pts_affich_Y+1; m++)
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	}
+        for(n = 0; n < nb_pts_affich_X+1; n++) {
+          for(m = 0; m  < nb_pts_affich_Y+1; m++)
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+        }
       glEnd();
     }
     break;
@@ -256,217 +256,217 @@ void curve3d :: renderShape(GemState *state){
   case LINE1:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X; n++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)  {
-	    glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_affich_X; n++) {
+          glBegin(GL_LINE_STRIP);
+          for(m = 0; m  < nb_pts_affich_Y; m++)  {
+            glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
       else
-	for(n = 0; n < nb_pts_affich_X; n++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)   {
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_affich_X; n++) {
+          glBegin(GL_LINE_STRIP);
+          for(m = 0; m  < nb_pts_affich_Y; m++)   {
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
     }
     break;
 
   case LINE2:
     {
       if (GemShape::m_texType)
-	for(m = 0; m < nb_pts_affich_Y+1; m++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_affich_X+1; n++)  {
-	    glTexCoord2f(xsize*n/affich_X,ysize+ysizediff*m/affich_Y);
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(m = 0; m < nb_pts_affich_Y+1; m++) {
+          glBegin(GL_LINE_STRIP);
+          for(n = 0; n  < nb_pts_affich_X+1; n++)  {
+            glTexCoord2f(xsize*n/affich_X,ysize+ysizediff*m/affich_Y);
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
       else
-	for(m = 0; m < nb_pts_affich_Y+1; m++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_affich_X+1; n++)  {
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(m = 0; m < nb_pts_affich_Y+1; m++) {
+          glBegin(GL_LINE_STRIP);
+          for(n = 0; n  < nb_pts_affich_X+1; n++)  {
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
     }
     break;
 
   case LINE3:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_affich_X; n++) {
-	  glBegin(GL_LINES);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)
-	    {
-	      glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	      glEvalCoord2f(n/affich_X, m/affich_Y);
-	    }
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_affich_X; n++) {
+          glBegin(GL_LINES);
+          for(m = 0; m  < nb_pts_affich_Y; m++)
+            {
+              glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+              glEvalCoord2f(n/affich_X, m/affich_Y);
+            }
+          glEnd();
+        }
       else
-	for(n = 0; n < nb_pts_affich_X; n++) {
-	  glBegin(GL_LINES);
-	  for(m = 0; m  < nb_pts_affich_Y; m++)  {
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_affich_X; n++) {
+          glBegin(GL_LINES);
+          for(m = 0; m  < nb_pts_affich_Y; m++)  {
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
     }
     break;
 
   case LINE4:
     {
       if (GemShape::m_texType)
-	for(m = 0; m < nb_pts_affich_Y; m++)
-	  {
-	    glBegin(GL_LINES);
-	    for(n = 0; n  < nb_pts_affich_X; n++) {
-	      glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
-	      glEvalCoord2f(n/affich_X, m/affich_Y);
-	    }
-	    glEnd();
-	  }
+        for(m = 0; m < nb_pts_affich_Y; m++)
+          {
+            glBegin(GL_LINES);
+            for(n = 0; n  < nb_pts_affich_X; n++) {
+              glTexCoord2f(xsize*n/affich_X, ysize+ysizediff*m/affich_Y);
+              glEvalCoord2f(n/affich_X, m/affich_Y);
+            }
+            glEnd();
+          }
       else
-	for(m = 0; m < nb_pts_affich_Y; m++) {
-	  glBegin(GL_LINES);
-	  for(n = 0; n  < nb_pts_affich_X; n++) {
-	    glEvalCoord2f(n/affich_X, m/affich_Y);
-	  }
-	  glEnd();
-	}
+        for(m = 0; m < nb_pts_affich_Y; m++) {
+          glBegin(GL_LINES);
+          for(n = 0; n  < nb_pts_affich_X; n++) {
+            glEvalCoord2f(n/affich_X, m/affich_Y);
+          }
+          glEnd();
+        }
     }
     break;
 
   case CONTROL_FILL:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_control_X-1; n++)
-	  for(m = 0; m  < nb_pts_control_Y-1; m++)   {
-	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
+        for(n = 0; n < nb_pts_control_X-1; n++)
+          for(m = 0; m  < nb_pts_control_Y-1; m++)   {
+            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
                                    (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
                                    norm);
-	    glNormal3fv(norm);
+            glNormal3fv(norm);
 
-	    glBegin(GL_TRIANGLE_STRIP);
-	    glTexCoord2f(xsize*n/(control_X-1.),
+            glBegin(GL_TRIANGLE_STRIP);
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	    glTexCoord2f(xsize*(n+1.)/(control_X-1.),
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+            glTexCoord2f(xsize*(n+1.)/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
-	    glTexCoord2f(xsize*n/(control_X-1.),
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*(m+1.)/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-	    glEnd();
+            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+            glEnd();
 
-	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
+            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X], norm);
-	    glNormal3fv(norm);
-	    glBegin(GL_TRIANGLE_STRIP);
-	    glTexCoord2f(xsize*(n+1.)/(control_X-1.),
+            glNormal3fv(norm);
+            glBegin(GL_TRIANGLE_STRIP);
+            glTexCoord2f(xsize*(n+1.)/(control_X-1.),
                          ysize+ysizediff*(m+1)/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
-	    glTexCoord2f(xsize*(n+1.)/(control_X-1.),
+            glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
+            glTexCoord2f(xsize*(n+1.)/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
-	    glTexCoord2f(xsize*n/(control_X-1.),
+            glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*(m+1.)/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-	    glEnd();
-	  }
+            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+            glEnd();
+          }
       else
-	for(n = 0; n < nb_pts_control_X-1; n++)
-	  for(m = 0; m  < nb_pts_control_Y-1; m++)    {
-	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
+        for(n = 0; n < nb_pts_control_X-1; n++)
+          for(m = 0; m  < nb_pts_control_Y-1; m++)    {
+            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1],
                                    (GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X],
                                    norm);
-	    glNormal3fv(norm);
+            glNormal3fv(norm);
 
-	    glBegin(GL_TRIANGLE_STRIP);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-	    glEnd();
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X+1]);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+            glEnd();
 
-	    Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
+            Matrix::generateNormal((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+(1+m)*nb_pts_control_X],
                                    (GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X],
                                    norm);
-	    glNormal3fv(norm);
-	    glBegin(GL_TRIANGLE_STRIP);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
-	    glEnd();
-	  }
+            glNormal3fv(norm);
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+1+(m+1)*nb_pts_control_X]);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+(m+1)*nb_pts_control_X]);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+1+m*nb_pts_control_X]);
+            glEnd();
+          }
     }
     break;
 
   case CONTROL_POINT:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_control_X; n++)
-	  for(m = 0; m  < nb_pts_control_Y; m++)   {
-	    glBegin(GL_POINTS);
-	    glTexCoord2f(xsize*n/(control_X-1.),
+        for(n = 0; n < nb_pts_control_X; n++)
+          for(m = 0; m  < nb_pts_control_Y; m++)   {
+            glBegin(GL_POINTS);
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	    glEnd();
-	  }
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+            glEnd();
+          }
       else
-	for(n = 0; n < nb_pts_control_X; n++)
-	  for(m = 0; m  < nb_pts_control_Y; m++) {
-	    glBegin(GL_POINTS);
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	    glEnd();
-	  }
+        for(n = 0; n < nb_pts_control_X; n++)
+          for(m = 0; m  < nb_pts_control_Y; m++) {
+            glBegin(GL_POINTS);
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+            glEnd();
+          }
     }
     break;
 
   case CONTROL_LINE:
     {
       if (GemShape::m_texType){
-	for(n = 0; n < nb_pts_control_X; n++)   {
-	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++){
-	    glTexCoord2f(xsize*n/(control_X-1.),
+        for(n = 0; n < nb_pts_control_X; n++)   {
+          glBegin(GL_LINE_STRIP);
+          for(m = 0; m  < nb_pts_control_Y; m++){
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  }
-	  glEnd();
-	}
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          }
+          glEnd();
+        }
 
-	for(m = 0; m < nb_pts_control_Y; m++)  {
-	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++){
-	    glTexCoord2f(xsize*n/(control_X-1.),
+        for(m = 0; m < nb_pts_control_Y; m++)  {
+          glBegin(GL_LINE_STRIP);
+          for(n = 0; n  < nb_pts_control_X; n++){
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  }
-	  glEnd();
-	}
-      }  else	{
-	for(n = 0; n < nb_pts_control_X; n++)  {
-	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++)
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  glEnd();
-	}
-	for(m = 0; m < nb_pts_control_Y; m++)  {
-	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++)
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  glEnd();
-	}
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          }
+          glEnd();
+        }
+      }  else   {
+        for(n = 0; n < nb_pts_control_X; n++)  {
+          glBegin(GL_LINE_STRIP);
+          for(m = 0; m  < nb_pts_control_Y; m++)
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glEnd();
+        }
+        for(m = 0; m < nb_pts_control_Y; m++)  {
+          glBegin(GL_LINE_STRIP);
+          for(n = 0; n  < nb_pts_control_X; n++)
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glEnd();
+        }
       }
     }
     break;
@@ -474,44 +474,44 @@ void curve3d :: renderShape(GemState *state){
   case CONTROL_LINE2:
     {
       if (GemShape::m_texType)
-	for(m = 0; m < nb_pts_control_Y; m++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++) {
-	    glTexCoord2f(xsize*n/(control_X-1.),
+        for(m = 0; m < nb_pts_control_Y; m++) {
+          glBegin(GL_LINE_STRIP);
+          for(n = 0; n  < nb_pts_control_X; n++) {
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  }
-	  glEnd();
-	}
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          }
+          glEnd();
+        }
       else
-	for(m = 0; m < nb_pts_control_Y; m++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(n = 0; n  < nb_pts_control_X; n++)
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  glEnd();
-	}
+        for(m = 0; m < nb_pts_control_Y; m++) {
+          glBegin(GL_LINE_STRIP);
+          for(n = 0; n  < nb_pts_control_X; n++)
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glEnd();
+        }
     }
     break;
 
   case CONTROL_LINE1:
     {
       if (GemShape::m_texType)
-	for(n = 0; n < nb_pts_control_X; n++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++)  {
-	    glTexCoord2f(xsize*n/(control_X-1.),
+        for(n = 0; n < nb_pts_control_X; n++) {
+          glBegin(GL_LINE_STRIP);
+          for(m = 0; m  < nb_pts_control_Y; m++)  {
+            glTexCoord2f(xsize*n/(control_X-1.),
                          ysize+ysizediff*m/(control_Y-1.));
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  }
-	  glEnd();
-	}
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          }
+          glEnd();
+        }
       else
-	for(n = 0; n < nb_pts_control_X; n++) {
-	  glBegin(GL_LINE_STRIP);
-	  for(m = 0; m  < nb_pts_control_Y; m++)
-	    glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
-	  glEnd();
-	}
+        for(n = 0; n < nb_pts_control_X; n++) {
+          glBegin(GL_LINE_STRIP);
+          for(m = 0; m  < nb_pts_control_Y; m++)
+            glVertex3fv((GLfloat*)&m_posXYZ[n+m*nb_pts_control_X]);
+          glEnd();
+        }
     }
     return;
   }
@@ -526,4 +526,3 @@ void curve3d :: obj_setupCallback(t_class *classPtr){
   CPPEXTERN_MSG2(classPtr, "grid", gridMess, int, int);
   CPPEXTERN_MSG5(classPtr, "set", setMess, int, int, float, float, float);
 }
-

@@ -7,7 +7,7 @@
 
 extern "C"  {
 GEM_EXTERN
-int _get_output_format( void ) { 
-	return 1; 
+int _get_output_format( void ) {
+        return 1;
 }
 }

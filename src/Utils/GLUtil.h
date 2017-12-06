@@ -31,7 +31,7 @@ struct _symbol;
 
 
 namespace gem {namespace utils {namespace gl {
-GEM_EXTERN extern GLenum	glReportError (bool verbose=true);
+GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
 GEM_EXTERN extern int           getGLdefine(const char *name);
 GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
 GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
@@ -80,7 +80,7 @@ GEM_EXTERN extern int           getGLbitfield(int argc, struct _atom *argv);
          progF=mapper.set(prog, progF);
          print(prog,progF); // "6" "3.1415"
 
-	 // ...somewhere else
+         // ...somewhere else
          mapper=GLuintMap("glsl_program");
          prog=mapper.get(progF);
          print(prog,progF); // "3" "3.1415"
@@ -97,4 +97,3 @@ GEM_EXTERN extern int           getGLbitfield(int argc, struct _atom *argv);
 };};}; /* namespace */
 
 #endif  // for header file
-

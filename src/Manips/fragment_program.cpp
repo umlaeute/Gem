@@ -215,7 +215,7 @@ void fragment_program :: printInfo()
   glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &bitnum);
   post("PROGRAM_NATIVE_TEX_INDIRECTIONS: %d", bitnum);
 
-	post("");
+        post("");
 }
 
 /////////////////////////////////////////////////////////

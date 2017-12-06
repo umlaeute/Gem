@@ -48,7 +48,7 @@ class GEM_EXTERN circle : public GemShape
 
         //////////
         // Do the renderShapeing
-        virtual void 	renderShape(GemState *state);
+        virtual void    renderShape(GemState *state);
 
         //////////
         // cos lookup table
@@ -59,4 +59,4 @@ class GEM_EXTERN circle : public GemShape
         static GLfloat *m_sin;
 };
 
-#endif	// for header file
+#endif  // for header file

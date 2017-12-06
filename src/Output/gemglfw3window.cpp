@@ -228,9 +228,9 @@ bool gemglfw3window :: create(void)
   }
 
   m_window=glfwCreateWindow(m_width, m_height,
-			    m_title.c_str(),
-			    monitor,
-			    NULL);
+                            m_title.c_str(),
+                            monitor,
+                            NULL);
 
   if (!m_window){
     error("glfw couldn't create window");

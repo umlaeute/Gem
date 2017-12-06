@@ -47,11 +47,11 @@ class GEM_EXTERN vertex_set : public vertex_scale
   virtual ~vertex_set(void);
 
   virtual void paramMess(int,t_atom*);
-  float	m_x,m_y,m_z,m_w;
+  float m_x,m_y,m_z,m_w;
 
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);
 };
 
-#endif	// for header file
+#endif  // for header file

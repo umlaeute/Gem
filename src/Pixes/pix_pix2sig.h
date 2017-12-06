@@ -63,12 +63,12 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   virtual void  dspMess(void *data, t_signal** sp);
 
   //-----------------------------------
-  // GROUP:	Image data
+  // GROUP:     Image data
   //-----------------------------------
 
   //////////
   // The pixBlock with the current image
-  //  pixBlock    	m_pixBlock;
+  //  pixBlock          m_pixBlock;
   unsigned char *m_data;
   long int       m_size;
   int            m_csize;
@@ -85,4 +85,4 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   static void   dspMessCallback(void* data,t_signal** sp);
 };
 
-#endif	// for header file
+#endif  // for header file

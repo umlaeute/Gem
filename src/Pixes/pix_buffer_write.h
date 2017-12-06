@@ -66,4 +66,4 @@ class GEM_EXTERN pix_buffer_write : public GemPixObj
   static void frameMessCallback(void*data, t_float  f);
 };
 
-#endif	// for header file
+#endif  // for header file

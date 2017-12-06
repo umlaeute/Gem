@@ -45,12 +45,12 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 struct GEM_EXTERN Obj_header
 {
-    	//////////
-    	// The obligatory object header
-    	t_object    	    pd_obj;
+        //////////
+        // The obligatory object header
+        t_object            pd_obj;
 
-    	//////////
-    	// Our data structure
+        //////////
+        // Our data structure
         CPPExtern           *data;
 
   // This has a dummy arg so that NT won't complain
@@ -93,15 +93,15 @@ class GEM_EXTERN CPPExtern
 
         //////////
         // Constructor
-    	CPPExtern(void);
+        CPPExtern(void);
 
         //////////
         // The Pd header
         t_object          *x_obj;
 
-    	//////////
-    	// Destructor
-    	virtual ~CPPExtern(void) = 0;
+        //////////
+        // Destructor
+        virtual ~CPPExtern(void) = 0;
 
         //////////
         // Get the object's canvas
@@ -118,15 +118,15 @@ class GEM_EXTERN CPPExtern
 
     protected:
 
-    	//////////
-    	// Creation callback
-    	static void 	real_obj_setupCallback(t_class *) {}
+        //////////
+        // Creation callback
+        static void     real_obj_setupCallback(t_class *) {}
 
-	///////////
-	// called directly before the destructor
-	// normally you should not override this (use the dtor!)
-	// if you do override this, make sure that you call the parent as well
-	virtual void beforeDeletion();
+        ///////////
+        // called directly before the destructor
+        // normally you should not override this (use the dtor!)
+        // if you do override this, make sure that you call the parent as well
+        virtual void beforeDeletion();
 
     private:
 
@@ -150,8 +150,8 @@ class GEM_EXTERN CPPExtern
       std::string findFile(const std::string&filename) const;
 
  private:
-	mutable bool m_endpost; /* internal state for startpost/post/endpost */
-	static bool checkGemVersion(const int major, const int minor);
+        mutable bool m_endpost; /* internal state for startpost/post/endpost */
+        static bool checkGemVersion(const int major, const int minor);
   CPPExtern(const CPPExtern&);
   virtual CPPExtern&operator=(const CPPExtern&);
 };
@@ -160,17 +160,17 @@ class GEM_EXTERN CPPExtern
 // This should be used in the header
 ////////////////////////////////////////
 
-#define CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)    	    	\
-public:     	    	    	    	    	    	    	\
-static void obj_freeCallback(void *data)    	    	    	\
-{ CPPExtern *mydata = ((Obj_header *)data)->data;		\
-  GetMyClass(data)->beforeDeletion();				\
-  delete mydata;						\
-  ((Obj_header *)data)->Obj_header::~Obj_header(); }   	    	\
-static void real_obj_setupCallback(t_class *classPtr)  	    	\
-{ PARENT_CLASS::real_obj_setupCallback(classPtr);    	    	\
-  NEW_CLASS::obj_setupCallback(classPtr); }  	    	    	\
-private:    	    	    	    	    	    	    	\
+#define CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)               \
+public:                                                         \
+static void obj_freeCallback(void *data)                        \
+{ CPPExtern *mydata = ((Obj_header *)data)->data;               \
+  GetMyClass(data)->beforeDeletion();                           \
+  delete mydata;                                                \
+  ((Obj_header *)data)->Obj_header::~Obj_header(); }            \
+static void real_obj_setupCallback(t_class *classPtr)           \
+{ PARENT_CLASS::real_obj_setupCallback(classPtr);               \
+  NEW_CLASS::obj_setupCallback(classPtr); }                     \
+private:                                                        \
 static inline NEW_CLASS *GetMyClass(void *data) {return((NEW_CLASS *)((Obj_header *)data)->data);} \
 static void obj_setupCallback(t_class *classPtr);
 
@@ -182,7 +182,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // NO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW(NEW_CLASS)    	    	     \
+#define CPPEXTERN_NEW(NEW_CLASS)                     \
   REAL_NEW__CLASS(NEW_CLASS);                    \
   static void* create_ ## NEW_CLASS (void)       \
     REAL_NEW__CREATE1(NEW_CLASS)                 \
@@ -207,7 +207,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // GIMME ARGUMENT
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)  	    	    	\
+#define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)                     \
   REAL_NEW__CLASS(NEW_CLASS);                    \
   static void* create_ ## NEW_CLASS (t_symbol*s, int argc, t_atom*argv) \
     REAL_NEW__CREATE1(NEW_CLASS)                 \
@@ -220,7 +220,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // TWO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)	\
+#define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)     \
   REAL_NEW__CLASS(NEW_CLASS);                     \
   static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2) \
     REAL_NEW__CREATE1(NEW_CLASS)           \
@@ -233,7 +233,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // THREE ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE)	\
+#define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE) \
   REAL_NEW__CLASS(NEW_CLASS);                        \
   static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3)  \
     REAL_NEW__CREATE1(NEW_CLASS)                    \
@@ -338,11 +338,11 @@ static void obj_setupCallback(t_class *classPtr);
 # else
 #  define POST_AUTOREGISTER(NEW_CLASS)
 # endif
-# define AUTO_REGISTER_CLASS(NEW_CLASS)			\
-  class NEW_CLASS ## _cppclass {					\
-  public:								\
+# define AUTO_REGISTER_CLASS(NEW_CLASS)                 \
+  class NEW_CLASS ## _cppclass {                                        \
+  public:                                                               \
   NEW_CLASS ## _cppclass(void) {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## _setup(); } \
-};									\
+};                                                                      \
   static NEW_CLASS ## _cppclass NEW_CLASS ## _instance
 #endif
 
@@ -358,7 +358,7 @@ static void obj_setupCallback(t_class *classPtr);
 #  define SET_HELPSYMBOL(NEW_CLASS)                                     \
   class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE #NEW_CLASS))
 # else
-#  define SET_HELPSYMBOL(NEW_CLASS)				\
+#  define SET_HELPSYMBOL(NEW_CLASS)                             \
     class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE HELPSYMBOL))
 # endif
 
@@ -376,4 +376,4 @@ static void obj_setupCallback(t_class *classPtr);
 // macros for boilerplate code to object messages
 #include "RTE/MessageCallbacks.h"
 
-#endif	// for header file
+#endif  // for header file

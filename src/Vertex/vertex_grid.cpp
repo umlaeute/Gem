@@ -97,7 +97,7 @@ void vertex_grid :: render(GemState *state)
         m_x += 1; //to give the correct number of columns;
         delete [] m_VertexArray;
         delete [] m_ColorArray;
-	delete [] m_TexCoordArray;
+        delete [] m_TexCoordArray;
         m_VertexArray = new float [m_x * m_y * 4 * 2];
         m_ColorArray = new float [m_x * m_y * 4 * 2];
         m_TexCoordArray = new float [m_x * m_y * 2 * 2];
@@ -168,9 +168,9 @@ void vertex_grid :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_grid :: obj_setupCallback(t_class *classPtr)
 {     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::sizeMessCallback),
-    	    gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
+            gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_grid::spacingMessCallback),
-    	    gensym("spacing"), A_FLOAT, A_FLOAT, A_NULL);
+            gensym("spacing"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
 void vertex_grid :: sizeMessCallback(void *data, t_float x, t_float y)

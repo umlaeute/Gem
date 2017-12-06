@@ -68,11 +68,11 @@ void mesh_square :: getTexCoords(void)
 /////////////////////////////////////////////////////////
 void mesh_square :: setSize( int valueX, int valueY )
 {
-	if(valueX>1) gridX = valueX;
-	else gridX = 5;
+        if(valueX>1) gridX = valueX;
+        else gridX = 5;
 
-	if(valueY>1) gridY = valueY;
-	else gridY = gridX;
+        if(valueY>1) gridY = valueY;
+        else gridY = gridX;
   texCoords.resize(gridX);
   for ( int i = 0; i < gridX; ++i){
     texCoords[i].resize(gridY);
@@ -117,11 +117,11 @@ void mesh_square :: renderShape(GemState *state)
 
    if (GemShape::m_texType && GemShape::m_texNum>=3)
     {
-		if ((xsize0!= GemShape::m_texCoords[0].s) ||
-		(xsize != GemShape::m_texCoords[1].s-xsize0) ||
-		(ysize0!= GemShape::m_texCoords[1].t) ||
-		(ysize != GemShape::m_texCoords[2].t-ysize0))
-		alreadyInit = 0;
+                if ((xsize0!= GemShape::m_texCoords[0].s) ||
+                (xsize != GemShape::m_texCoords[1].s-xsize0) ||
+                (ysize0!= GemShape::m_texCoords[1].t) ||
+                (ysize != GemShape::m_texCoords[2].t-ysize0))
+                alreadyInit = 0;
 
         if (!alreadyInit)
         {
@@ -186,6 +186,3 @@ void mesh_square :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "gridX", setGridX, int);
   CPPEXTERN_MSG1(classPtr, "gridY", setGridY, int);
 }
-
-
-

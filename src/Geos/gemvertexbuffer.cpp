@@ -458,8 +458,8 @@ void gemvertexbuffer :: createVBO(void)
 
 void gemvertexbuffer :: copyArray(const std::string&tab_name,
                                   gem::VertexBuffer&vb,
-				  unsigned int dimen, unsigned int offset,
-				  bool resize)
+                                  unsigned int dimen, unsigned int offset,
+                                  bool resize)
 {
   t_garray *a;
   int npoints_;
@@ -514,7 +514,7 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
   } else { // single channel
     const unsigned int maxindex=vb.size*vb.dimen;
 
-    for ( i = 0 ; i < size ; i++ )	{
+    for ( i = 0 ; i < size ; i++ )      {
       const unsigned int index=offset+i*dimen;
       if(index>=maxindex)break;
       array[index] = vec[i].w_float;
@@ -572,7 +572,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
       tabname=std::string(atom_getsymbol(argv+1)->s_name);
       copyArray(tabname, m_attribute[i], 1,
                 tab_offset*m_attribute[i].dimen,
-		resize);  // always interleaved
+                resize);  // always interleaved
       m_attribute[i].attrib_array = tabname;
       m_attribute[i].offset = tab_offset;
       return;
@@ -638,7 +638,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     copyArray(m_attribute[i].attrib_array, m_attribute[i], 1,
               m_attribute[i].offset*m_attribute[i].dimen,
-	      resize);
+              resize);
   }
   return;
 }

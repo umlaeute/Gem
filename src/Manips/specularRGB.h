@@ -41,41 +41,41 @@ class GEM_EXTERN specularRGB : public GemBase
 
         //////////
         // Constructor
-    	specularRGB(int argc, t_atom *argv);
+        specularRGB(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~specularRGB();
+        //////////
+        // Destructor
+        virtual ~specularRGB();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+        //////////
+        // Turn back on the color material
+        virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+        //////////
+        // When rendering occurs
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// The translation vector (r, g, b, a)
-    	float	    	m_vector[4];
+        //////////
+        // The translation vector (r, g, b, a)
+        float           m_vector[4];
 
-    	//////////
-    	// R value changed
-    	void	    	rMess(float val);
+        //////////
+        // R value changed
+        void            rMess(float val);
 
-    	//////////
-    	// G value changed
-    	void	    	gMess(float val);
+        //////////
+        // G value changed
+        void            gMess(float val);
 
-    	//////////
-    	// B value changed
-    	void	    	bMess(float val);
+        //////////
+        // B value changed
+        void            bMess(float val);
 
-    	//////////
-    	// A value changed
-    	void	    	aMess(float val);
+        //////////
+        // A value changed
+        void            aMess(float val);
 };
 
-#endif	// for header file
+#endif  // for header file

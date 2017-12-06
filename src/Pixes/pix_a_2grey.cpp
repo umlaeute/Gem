@@ -30,7 +30,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_a_2grey, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 pix_a_2grey :: pix_a_2grey(t_floatarg alpha)
 {
-	m_mode = static_cast<int>(alpha * 255.f);
+        m_mode = static_cast<int>(alpha * 255.f);
     inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
 
@@ -47,14 +47,14 @@ pix_a_2grey :: ~pix_a_2grey()
 /////////////////////////////////////////////////////////
 void pix_a_2grey :: alphaMess(float alphaval)
 {
-	if (alphaval > 1.f)
-		alphaval =  1.f;
-	if (alphaval < -1.f)
-		alphaval = -1.f;
+        if (alphaval > 1.f)
+                alphaval =  1.f;
+        if (alphaval < -1.f)
+                alphaval = -1.f;
 
-	m_mode = static_cast<int>(alphaval*255.f);
+        m_mode = static_cast<int>(alphaval*255.f);
 
-	setPixModified();
+        setPixModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -72,8 +72,8 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
     const int realVal = -m_mode;
     while (count--) {
       if (pixels[chAlpha] < realVal){
-	const int grey = (pixels[chRed] * RGB2GRAY_RED + pixels[chGreen] * RGB2GRAY_GREEN + pixels[chBlue] * RGB2GRAY_BLUE)>>8;
-	pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
+        const int grey = (pixels[chRed] * RGB2GRAY_RED + pixels[chGreen] * RGB2GRAY_GREEN + pixels[chBlue] * RGB2GRAY_BLUE)>>8;
+        pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
       }
       pixels += 4;
     }
@@ -95,11 +95,11 @@ void pix_a_2grey :: processRGBAImage(imageStruct &image)
 void pix_a_2grey :: obj_setupCallback(t_class *classPtr)
 {
    class_addcreator(reinterpret_cast<t_newmethod>(create_pix_a_2grey),
-		   gensym("pix_a_2gray"), A_NULL);
+                   gensym("pix_a_2gray"), A_NULL);
    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_a_2grey::alphaMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
+            gensym("ft1"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_a_2grey::alphaMessCallback),
-    	    gensym("alpha"), A_FLOAT, A_NULL);
+            gensym("alpha"), A_FLOAT, A_NULL);
 }
 
 void pix_a_2grey :: alphaMessCallback(void *data, t_float alphaval)

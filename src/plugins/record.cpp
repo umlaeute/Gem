@@ -81,9 +81,9 @@ namespace gem { namespace plugins {
       unsigned int i;
       for(i=0; i<m_allHandles.size(); i++) {
         //if(!m_allHandles[i]->isThreadable()) {
-	if(1) {
+        if(1) {
           m_canThread=false;
-	  break;
+          break;
         }
       }
 #endif
@@ -142,11 +142,11 @@ namespace gem { namespace plugins {
       clearCodecHandle();
       unsigned int i;
       for(i=0; i<m_allHandles.size(); i++) {
-	std::vector<std::string>c=m_allHandles[i]->getCodecs();
-	unsigned int j;
-	for(j=0; j<c.size(); j++) {
-	  addCodecHandle(m_allHandles[i], c[j]);
-	}
+        std::vector<std::string>c=m_allHandles[i]->getCodecs();
+        unsigned int j;
+        for(j=0; j<c.size(); j++) {
+          addCodecHandle(m_allHandles[i], c[j]);
+        }
       }
       return m_codecs;
     }
@@ -154,7 +154,7 @@ namespace gem { namespace plugins {
       std::string descr;
       std::vector<codechandle>handles=m_codechandle[codecname];
       if(handles.size()>0)
-	return handles[0].handle->getCodecDescription(codecname);
+        return handles[0].handle->getCodecDescription(codecname);
 
       return descr;
     }
@@ -167,51 +167,51 @@ namespace gem { namespace plugins {
     virtual bool setCodec(const std::string&codecname) {
       m_selectedHandles.clear();
       if(codecname.empty()) {
-	checkSelectedHandles();
-	return true;
+        checkSelectedHandles();
+        return true;
       }
       std::vector<codechandle>handles=m_codechandle[codecname];
 
       if(handles.size()==0)
-	return false;
+        return false;
 
       unsigned int i;
       for(i=0; i<handles.size(); i++) {
-	gem::plugins::record*handle=handles[i].handle;
-	std::string codec=handles[i].codec;
-	if(handle->setCodec(codec)) {
-	  m_codec=codecname;
-	  m_selectedHandles.push_back(handle);
-	}
+        gem::plugins::record*handle=handles[i].handle;
+        std::string codec=handles[i].codec;
+        if(handle->setCodec(codec)) {
+          m_codec=codecname;
+          m_selectedHandles.push_back(handle);
+        }
       }
       return (m_selectedHandles.size()>0);
     }
 
     bool checkSelectedHandles(void) {
       if(m_selectedHandles.size()==0 && m_codec.empty())
-	m_selectedHandles=m_allHandles;
+        m_selectedHandles=m_allHandles;
       return (m_selectedHandles.size()>0);
     }
 
     //
     virtual bool dialog(void) {
       if(m_handle)
-	return m_handle->dialog();
+        return m_handle->dialog();
       checkSelectedHandles();
 
       unsigned int i;
       gem::plugins::record*handle=NULL;
       for(i=0; i<m_selectedHandles.size(); i++) {
-	handle=m_selectedHandles[i];
-	if(handle->dialog()) {
-	  break;
-	}
-	handle=NULL;
+        handle=m_selectedHandles[i];
+        if(handle->dialog()) {
+          break;
+        }
+        handle=NULL;
       }
       if(handle) {
-	m_selectedHandles.clear();
-	m_selectedHandles.push_back(handle);
-	return true;
+        m_selectedHandles.clear();
+        m_selectedHandles.push_back(handle);
+        return true;
       }
       return false;
     }
@@ -222,13 +222,13 @@ namespace gem { namespace plugins {
 #endif
 // shouldn't this return a merge of the properties of all selectedHandles?
       if(!checkSelectedHandles())
-	return false;
+        return false;
 
       unsigned int i;
       for(i=0; i<m_selectedHandles.size(); i++) {
-	props.clear();
-	if(m_selectedHandles[i]->enumProperties(props))
-	  return true;
+        props.clear();
+        if(m_selectedHandles[i]->enumProperties(props))
+          return true;
       }
 
       return false;
@@ -242,15 +242,15 @@ namespace gem { namespace plugins {
     virtual bool start(const std::string&filename, gem::Properties&props) {
       stop();
       if(!checkSelectedHandles()) {
-	return false; // no selected codec available
+        return false; // no selected codec available
       }
 
       unsigned int i;
       for(i=0; i<m_selectedHandles.size(); i++) {
-	if(m_selectedHandles[i]->start(filename, props)) {
-	  m_handle=m_selectedHandles[i];
-	  return true;
-	}
+        if(m_selectedHandles[i]->start(filename, props)) {
+          m_handle=m_selectedHandles[i];
+          return true;
+        }
       }
       m_handle=NULL;
       return false;
@@ -265,7 +265,7 @@ namespace gem { namespace plugins {
       if(!img)return true;
       bool result=m_handle->write(img);
       if(!result)
-	stop();
+        stop();
 
       return result;
     }

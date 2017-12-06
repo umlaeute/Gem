@@ -102,7 +102,7 @@ void rubber :: rubber_init(void)
                         || j == m_grid_sizeY - 1 );
         m_mass[k].x[0] = ((i/(m_grid_sizeX-1.0)) - 0.5);
         m_mass[k].x[1] = ((j/(m_grid_sizeY-1.0)) - 0.5);
-		m_mass[k].x[2] = 0;
+                m_mass[k].x[2] = 0;
 
         m_mass[k].v[0] = 0.0;
         m_mass[k].v[1] = 0.0;
@@ -181,12 +181,12 @@ void rubber :: renderShape(GemState *state)
         glVertex3f( m_mass[k + 1].x[0]*m_size, m_mass[k + 1].x[1]*m_size, m_mass[k + 1].x[2] );
         glTexCoord2fv( m_mass[k + m_grid_sizeY + 1].t );
         glVertex3f( m_mass[k + m_grid_sizeY + 1].x[0]*m_size,
-					m_mass[k + m_grid_sizeY + 1].x[1]*m_size,
-					m_mass[k + m_grid_sizeY + 1].x[2] );
+                                        m_mass[k + m_grid_sizeY + 1].x[1]*m_size,
+                                        m_mass[k + m_grid_sizeY + 1].x[2] );
         glTexCoord2fv( m_mass[k + m_grid_sizeY].t );
         glVertex3f( m_mass[k + m_grid_sizeY].x[0]*m_size,
-					m_mass[k + m_grid_sizeY].x[1]*m_size,
-					m_mass[k + m_grid_sizeY].x[2] );
+                                        m_mass[k + m_grid_sizeY].x[1]*m_size,
+                                        m_mass[k + m_grid_sizeY].x[2] );
         glEnd();
         k++;
       }
@@ -209,12 +209,12 @@ void rubber :: renderShape(GemState *state)
         glVertex3f( m_mass[k + 1].x[0]*m_size, m_mass[k + 1].x[1]*m_size, m_mass[k + 1].x[2] );
         glTexCoord2fv( m_mass[k + m_grid_sizeY + 1].t );
         glVertex3f( m_mass[k + m_grid_sizeY + 1].x[0]*m_size,
-					m_mass[k + m_grid_sizeY + 1].x[1]*m_size,
-					m_mass[k + m_grid_sizeY + 1].x[2] );
+                                        m_mass[k + m_grid_sizeY + 1].x[1]*m_size,
+                                        m_mass[k + m_grid_sizeY + 1].x[2] );
         glTexCoord2fv( m_mass[k + m_grid_sizeY].t );
         glVertex3f( m_mass[k + m_grid_sizeY].x[0]*m_size,
-					m_mass[k + m_grid_sizeY].x[1]*m_size,
-					m_mass[k + m_grid_sizeY].x[2] );
+                                        m_mass[k + m_grid_sizeY].x[1]*m_size,
+                                        m_mass[k + m_grid_sizeY].x[2] );
         glEnd();
         k++;
       }
@@ -289,7 +289,7 @@ void rubber :: rubber_dynamics(void)
     {
       m_mass[m_grab].x[0] = ctrX;
       m_mass[m_grab].x[1] = ctrY;
-	  m_mass[m_grab].x[2] = m_height;
+          m_mass[m_grab].x[2] = m_height;
     }
 }
 

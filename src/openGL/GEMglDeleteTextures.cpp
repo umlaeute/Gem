@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,11 +23,11 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglDeleteTextures );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDeleteTextures :: GEMglDeleteTextures	(int argc, t_atom* argv) :
+GEMglDeleteTextures :: GEMglDeleteTextures      (int argc, t_atom* argv) :
   n(0), textures(NULL), m_inlet(NULL)
 {
-	texturesMess(argc, argv);
-	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
+        texturesMess(argc, argv);
+        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -46,13 +46,13 @@ bool GEMglDeleteTextures :: isRunnable(void) {
 // Render
 //
 void GEMglDeleteTextures :: render(GemState *state) {
-	glDeleteTextures (n, textures);
+        glDeleteTextures (n, textures);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
+void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {      // FUN
   n=0;
   delete [] textures;
   textures = new GLuint[argc];
@@ -69,8 +69,8 @@ void GEMglDeleteTextures :: texturesMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglDeleteTextures :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDeleteTextures::texturesMessCallback),  	gensym("textures"), A_GIMME, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDeleteTextures::texturesMessCallback),      gensym("textures"), A_GIMME, A_NULL);
 }
 void GEMglDeleteTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-	GetMyClass(data)->texturesMess (argc, argv);
+        GetMyClass(data)->texturesMess (argc, argv);
 }

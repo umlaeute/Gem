@@ -62,4 +62,4 @@ class GEM_EXTERN fragment_program : public vertex_program
   virtual bool isRunnable(void);
 };
 
-#endif	// for header file
+#endif  // for header file

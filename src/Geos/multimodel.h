@@ -67,16 +67,16 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // When a rescale is received
-  virtual void	rescaleMess(bool state);
+  virtual void  rescaleMess(bool state);
   //////////
   // When a reverse is received
-  virtual void	reverseMess(bool state);
+  virtual void  reverseMess(bool state);
   //////////
   // Which texture type (linear, spheric)
-  virtual void	textureMess(int state);
+  virtual void  textureMess(int state);
   //////////
   // Set smoothing factor
-  virtual void	smoothMess(t_float fsmooth);
+  virtual void  smoothMess(t_float fsmooth);
   //////////
   // Set material mode
   virtual void  materialMess(int material);
@@ -90,8 +90,8 @@ class GEM_EXTERN multimodel : public GemBase
   virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
 
   //////////
-  virtual void	render(GemState *state);
-  virtual void	startRendering();
+  virtual void  render(GemState *state);
+  virtual void  startRendering();
 
   void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
   void copyAllArrays();
@@ -117,4 +117,4 @@ class GEM_EXTERN multimodel : public GemBase
   static void   openMessCallback(void *data, t_symbol *filename, t_float baseModel, t_float topModel, t_float skipRate);
 };
 
-#endif	// for header file
+#endif  // for header file

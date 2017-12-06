@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Draw a partlib_base group
+        Draw a partlib_base group
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,9 +21,9 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	partlib_base
+        partlib_base
 
-	Base class of all the part_* objects
+        Base class of all the part_* objects
 
 DESCRIPTION
 
@@ -41,7 +41,7 @@ class GEM_EXTERN partlib_base : public GemBase
   virtual ~partlib_base();
 
   //////////
-  virtual void 	render(GemState *);
+  virtual void  render(GemState *);
 
   virtual void renderParticles(GemState*)=0;
 
@@ -50,4 +50,4 @@ class GEM_EXTERN partlib_base : public GemBase
 
 };
 
-#endif	// for header file
+#endif  // for header file

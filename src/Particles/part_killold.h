@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Kill particles that are past a certain time
+        Kill particles that are past a certain time
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,9 +21,9 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_killold
+        part_killold
 
-	Kill particles that are past a certain time
+        Kill particles that are past a certain time
 
 DESCRIPTION
 
@@ -34,24 +34,24 @@ class GEM_EXTERN part_killold : public partlib_base
 
     public:
 
-	    //////////
-	    // Constructor
-    	part_killold(t_floatarg num);
+            //////////
+            // Constructor
+        part_killold(t_floatarg num);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+        //////////
+        virtual void    renderParticles(GemState *state);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~part_killold(void);
+        //////////
+        // Destructor
+        virtual ~part_killold(void);
 
       //////////
-      void			ageMess(float age);
+      void                      ageMess(float age);
 
       //////////
-      float			m_killAge;
+      float                     m_killAge;
 };
 
-#endif	// for header file
+#endif  // for header file

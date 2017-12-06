@@ -425,7 +425,7 @@ static void dequeueEvents(void) {
           theList = theList->next;
         }
       break;
-	default: break;
+        default: break;
     }
 
     gem_event_queue_item_t*old = events;

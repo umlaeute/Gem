@@ -48,7 +48,7 @@ class GEM_EXTERN pix_tIIRf : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
 
   //////////
   // set-flag
@@ -82,4 +82,4 @@ class GEM_EXTERN pix_tIIRf : public GemPixObj
 
 };
 
-#endif	// for header file
+#endif  // for header file

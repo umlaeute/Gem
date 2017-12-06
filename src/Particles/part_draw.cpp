@@ -30,7 +30,7 @@ CPPEXTERN_NEW(part_draw);
 //
 /////////////////////////////////////////////////////////
 part_draw :: part_draw(void)
-		   : m_drawType(GL_LINES)
+                   : m_drawType(GL_LINES)
 { }
 
 /////////////////////////////////////////////////////////
@@ -48,16 +48,16 @@ void part_draw :: renderParticles(GemState *state)
 {
   bool lighting=false;
   state->get(GemState::_GL_LIGHTING, lighting);
-	if (lighting)	{
-		glDisable(GL_LIGHTING);
-	}
-	if (m_tickTime > 0.f)	{
-		pMove();
-	}
-	pDrawGroupp(m_drawType);
-	if (lighting) {
-		glEnable(GL_LIGHTING);
-	}
+        if (lighting)   {
+                glDisable(GL_LIGHTING);
+        }
+        if (m_tickTime > 0.f)   {
+                pMove();
+        }
+        pDrawGroupp(m_drawType);
+        if (lighting) {
+                glEnable(GL_LIGHTING);
+        }
 }
 
 /////////////////////////////////////////////////////////
@@ -89,5 +89,3 @@ void part_draw :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG (classPtr, "draw", typeMess);
 }
-
-

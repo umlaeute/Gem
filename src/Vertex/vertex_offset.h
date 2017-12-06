@@ -47,14 +47,14 @@ class GEM_EXTERN vertex_offset : public vertex_scale
   virtual ~vertex_offset(void);
 
   virtual void paramMess(int,t_atom*);
-  float	m_x,m_y,m_z,m_w;
+  float m_x,m_y,m_z,m_w;
 
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);
 
  private:
-  //static void 	offsetMessCallback(void *data, t_symbol*, int, t_atom*);
+  //static void         offsetMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

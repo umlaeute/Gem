@@ -67,7 +67,7 @@ void pix_multiply :: processRGBA_Gray(imageStruct &image, imageStruct &right)
   unsigned char *leftPix = image.data;
   unsigned char *rightPix = right.data;
 
-  while(datasize--)	{
+  while(datasize--)     {
     unsigned int alpha = rightPix[chGray];
     leftPix[chRed] = INT_MULT(leftPix[chRed], alpha);
     leftPix[chGreen] = INT_MULT(leftPix[chGreen], alpha);
@@ -87,7 +87,7 @@ void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
     unsigned char *leftPix = image.data;
     unsigned char *rightPix = right.data;
 
-    while(datasize--)	{
+    while(datasize--)   {
       unsigned int alpha = rightPix[chGray];
       leftPix[chGray] = INT_MULT(leftPix[chGray], alpha);
       leftPix++;
@@ -102,7 +102,7 @@ void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
 void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w;
-   int	y1,y2;
+   int  y1,y2;
    src =0;
    //format is U Y V Y
    for (h=0; h<image.ysize; h++){
@@ -157,37 +157,37 @@ void pix_multiply :: processYUV_MMX(imageStruct &image, imageStruct &right)
 
   __m64 l0, r0, l1, r1;
   __m64 mask= _mm_setr_pi8((unsigned char)0xFF,
-			   (unsigned char)0x00,
-			   (unsigned char)0xFF,
-			   (unsigned char)0x00,
-			   (unsigned char)0xFF,
-			   (unsigned char)0x00,
-			   (unsigned char)0xFF,
-			   (unsigned char)0x00);
+                           (unsigned char)0x00,
+                           (unsigned char)0xFF,
+                           (unsigned char)0x00,
+                           (unsigned char)0xFF,
+                           (unsigned char)0x00,
+                           (unsigned char)0xFF,
+                           (unsigned char)0x00);
   __m64 yuvclamp0 = _mm_setr_pi8((unsigned char)0x00,
-				 (unsigned char)0x10,
-				 (unsigned char)0x00,
-				 (unsigned char)0x10,
-				 (unsigned char)0x00,
-				 (unsigned char)0x10,
-				 (unsigned char)0x00,
-				 (unsigned char)0x10);
+                                 (unsigned char)0x10,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x10,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x10,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x10);
   __m64 yuvclamp1 = _mm_setr_pi8((unsigned char)0x00,
-				 (unsigned char)0x24,
-				 (unsigned char)0x00,
-				 (unsigned char)0x24,
-				 (unsigned char)0x00,
-				 (unsigned char)0x24,
-				 (unsigned char)0x00,
-				 (unsigned char)0x24);
+                                 (unsigned char)0x24,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x24,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x24,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x24);
   __m64 yuvclamp2 = _mm_setr_pi8((unsigned char)0x00,
-				 (unsigned char)0x14,
-				 (unsigned char)0x00,
-				 (unsigned char)0x14,
-				 (unsigned char)0x00,
-				 (unsigned char)0x14,
-				 (unsigned char)0x00,
-				 (unsigned char)0x14);
+                                 (unsigned char)0x14,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x14,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x14,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x14);
 
   __m64 null64 = _mm_setzero_si64();
   while(datasize--)    {

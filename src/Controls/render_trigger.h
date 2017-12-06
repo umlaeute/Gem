@@ -37,27 +37,27 @@ class GEM_EXTERN render_trigger : public GemBase
 
         //////////
         // Constructor
-    	render_trigger();
+        render_trigger();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~render_trigger();
+        //////////
+        // Destructor
+        virtual ~render_trigger();
 
-    	//////////
-    	// Push the current state
-    	virtual void 	render(GemState *state);
+        //////////
+        // Push the current state
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// Pop the state
-    	virtual void 	postrender(GemState *state);
+        //////////
+        // Pop the state
+        virtual void    postrender(GemState *state);
 
-    	//////////
-        t_outlet        *m_preOut;	    // bang for the pre render
+        //////////
+        t_outlet        *m_preOut;          // bang for the pre render
 
-    	//////////
-        t_outlet        *m_postOut;	    // bang for the post render
+        //////////
+        t_outlet        *m_postOut;         // bang for the post render
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -77,7 +77,7 @@ specularRGB :: ~specularRGB()
 /////////////////////////////////////////////////////////
 void specularRGB :: postrender(GemState *)
 {
-	glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_COLOR_MATERIAL);
 }
 
 /////////////////////////////////////////////////////////
@@ -86,8 +86,8 @@ void specularRGB :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void specularRGB :: render(GemState *)
 {
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m_vector);
+        glDisable(GL_COLOR_MATERIAL);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m_vector);
 }
 
 /////////////////////////////////////////////////////////

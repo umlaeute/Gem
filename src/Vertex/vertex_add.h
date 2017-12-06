@@ -42,39 +42,39 @@ class GEM_EXTERN vertex_add : public GemBase
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_add(void);
+        //////////
+        // Destructor
+        virtual ~vertex_add(void);
 
-	// which left-hand array to process
-	int m_leftType;
+        // which left-hand array to process
+        int m_leftType;
 
-	// which right-hand array to process
-	int m_rightType;
+        // which right-hand array to process
+        int m_rightType;
 
-	// the right-hand array
-        int	m_rightSize;
-        float	*m_rightVertexArray;
-        float	*m_rightColorArray;
-	float   *m_rightTexCoordArray;
-	float   *m_rightNormalArray;
+        // the right-hand array
+        int     m_rightSize;
+        float   *m_rightVertexArray;
+        float   *m_rightColorArray;
+        float   *m_rightTexCoordArray;
+        float   *m_rightNormalArray;
 
         t_inlet *m_inlet;
 
-	//////////
-	// set the types
-	void typeMess(int, t_atom*);
+        //////////
+        // set the types
+        void typeMess(int, t_atom*);
 
-    	//////////
-    	// Do the rendering
-	virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
-    	virtual void 	render(GemState *state);
-        virtual void 	postrender(GemState *state);
-        virtual void 	rightRender(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
+        virtual void    render(GemState *state);
+        virtual void    postrender(GemState *state);
+        virtual void    rightRender(GemState *state);
 
         //private:
-        static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
-        static void	typeMessCallback(void *data, t_symbol*s,int, t_atom*);
+        static void     gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
+        static void     typeMessCallback(void *data, t_symbol*s,int, t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

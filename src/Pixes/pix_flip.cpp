@@ -71,22 +71,22 @@ void pix_flip :: processRGBAImage(imageStruct &image)
 
     switch(flip)
     {
-    	case(HORIZONTAL):
+        case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
             xSrcStride = -xSrcStride;
-    	    break;
-    	case(VERTICAL):
+            break;
+        case(VERTICAL):
             srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
             ySrcStride = -ySrcStride;
-    	    break;
-    	case(BOTH):
+            break;
+        case(BOTH):
             srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
             xSrcStride = -xSrcStride;
             ySrcStride = -ySrcStride;
-    	    break;
-    	default:
+            break;
+        default:
             return;
-    	    // break;
+            // break;
     }
     int ySize = image.ysize;
     int xHold = image.xsize;
@@ -97,12 +97,12 @@ void pix_flip :: processRGBAImage(imageStruct &image)
       unsigned char *dstPixels = dstLine;
       int xSize = xHold;
       while(xSize--)        {
-	dstPixels[chRed] = srcPixels[chRed];
-	dstPixels[chGreen] = srcPixels[chGreen];
-	dstPixels[chBlue] = srcPixels[chBlue];
-	dstPixels[chAlpha] = srcPixels[chAlpha];
-	dstPixels += xDstStride;
-	srcPixels += xSrcStride;
+        dstPixels[chRed] = srcPixels[chRed];
+        dstPixels[chGreen] = srcPixels[chGreen];
+        dstPixels[chBlue] = srcPixels[chBlue];
+        dstPixels[chAlpha] = srcPixels[chAlpha];
+        dstPixels += xDstStride;
+        srcPixels += xSrcStride;
       }
       dstLine += yDstStride;
       srcLine += ySrcStride;
@@ -141,22 +141,22 @@ void pix_flip :: processYUVImage(imageStruct &image)
 
     switch(flip)
     {
-    	case(HORIZONTAL):
+        case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
             xSrcStride = -xSrcStride;
-    	    break;
-    	case(VERTICAL):
+            break;
+        case(VERTICAL):
             srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
             ySrcStride = -ySrcStride;
-    	    break;
-    	case(BOTH):
+            break;
+        case(BOTH):
             srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
             xSrcStride = -xSrcStride;
             ySrcStride = -ySrcStride;
-    	    break;
-    	default:
+            break;
+        default:
             return;
-    	    // break;
+            // break;
     }
     int ySize = image.ysize;
     int xHold = image.xsize/2;
@@ -169,12 +169,12 @@ void pix_flip :: processYUVImage(imageStruct &image)
       unsigned char *dstPixels = dstLine;
       int xSize = xHold;
       while(xSize--)        {
-	dstPixels[chU] = srcPixels[chU];
-	dstPixels[chY0] = srcPixels[chY0x];
-	dstPixels[chV] = srcPixels[chV];
-	dstPixels[chY1] = srcPixels[chY1x];
-	dstPixels += xDstStride;
-	srcPixels += xSrcStride;
+        dstPixels[chU] = srcPixels[chU];
+        dstPixels[chY0] = srcPixels[chY0x];
+        dstPixels[chV] = srcPixels[chV];
+        dstPixels[chY1] = srcPixels[chY1x];
+        dstPixels += xDstStride;
+        srcPixels += xSrcStride;
       }
       dstLine += yDstStride;
       srcLine += ySrcStride;
@@ -208,22 +208,22 @@ void pix_flip :: processGrayImage(imageStruct &image)
 
     switch(flip)
     {
-    	case(HORIZONTAL):
+        case(HORIZONTAL):
             srcLine = tempImg.data + ySrcStride - xSrcStride;
             xSrcStride = -xSrcStride;
-    	    break;
-    	case(VERTICAL):
+            break;
+        case(VERTICAL):
             srcLine = tempImg.data + ySrcStride * image.ysize - ySrcStride;
             ySrcStride = -ySrcStride;
-    	    break;
-    	case(BOTH):
+            break;
+        case(BOTH):
             srcLine = tempImg.data + ySrcStride * image.ysize - xSrcStride;
             xSrcStride = -xSrcStride;
             ySrcStride = -ySrcStride;
-    	    break;
-    	default:
+            break;
+        default:
             return;
-    	    // break;
+            // break;
     }
     int ySize = image.ysize;
     int xHold = image.xsize;
@@ -234,9 +234,9 @@ void pix_flip :: processGrayImage(imageStruct &image)
       unsigned char *dstPixels = dstLine;
       int xSize = xHold;
       while(xSize--)        {
-	dstPixels[chGray] = srcPixels[chGray];
-	dstPixels += xDstStride;
-	srcPixels += xSrcStride;
+        dstPixels[chGray] = srcPixels[chGray];
+        dstPixels += xDstStride;
+        srcPixels += xSrcStride;
       }
       dstLine += yDstStride;
       srcLine += ySrcStride;
@@ -259,15 +259,15 @@ void pix_flip :: flipMess(FlipType type)
 void pix_flip :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::horMessCallback),
-    	    gensym("horizontal"), A_NULL);
+            gensym("horizontal"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::vertMessCallback),
-    	    gensym("vertical"), A_NULL);
+            gensym("vertical"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::bothMessCallback),
-    	    gensym("both"), A_NULL);
+            gensym("both"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::noneMessCallback),
-    	    gensym("none"), A_NULL);
+            gensym("none"), A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::flipMessCallback),
-    	    gensym("flip"), A_SYMBOL, A_NULL);
+            gensym("flip"), A_SYMBOL, A_NULL);
 }
 void pix_flip :: horMessCallback(void *data)
 {

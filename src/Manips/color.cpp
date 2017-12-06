@@ -30,9 +30,9 @@ CPPEXTERN_NEW_WITH_GIMME(color);
 color :: color(int argc, t_atom *argv)
 {
     if (argc == 4) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-    	    	    	     atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+                             atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
     else if (argc == 3) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-    	    	    	          atom_getfloat(&argv[2]), 1.f);
+                                  atom_getfloat(&argv[2]), 1.f);
     else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
     else
     {
@@ -79,9 +79,9 @@ void color :: colorMess(float red, float green, float blue, float alpha)
 void color :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_color),
-		   gensym("colour"), A_GIMME, A_NULL);
+                   gensym("colour"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&color::colorMessCallback),
-    	    gensym("color"), A_GIMME, A_NULL);
+            gensym("color"), A_GIMME, A_NULL);
 }
 void color :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -91,7 +91,7 @@ void color :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
      alpha = atom_getfloat(&argv[3]);
     case(3):
      GetMyClass(data)->colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-    	    	    	       atom_getfloat(&argv[2]), alpha);
+                               atom_getfloat(&argv[2]), alpha);
      break;
     case(1):
      alpha = atom_getfloat(argv);
@@ -102,4 +102,3 @@ void color :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
       break;
     }
 }
-

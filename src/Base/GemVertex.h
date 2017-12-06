@@ -30,7 +30,7 @@ class GEM_EXTERN GemVertex : public GemBase {
   //////////
   // If anything in the object has changed
   // especially, if the vertex-array has changed
-  virtual void  	setModified();
+  virtual void          setModified();
 };
 
 

@@ -35,27 +35,27 @@ class GEM_EXTERN text3d : public TextBase
 
     public:
 
-		//////////
-		// Constructor
-    	text3d(int argc, t_atom *argv);
+                //////////
+                // Constructor
+        text3d(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~text3d();
+        //////////
+        // Destructor
+        virtual ~text3d();
 
 #ifdef FTGL
-	virtual void setFontSize(void);
-	virtual FTFont* selectFont(void);
-	virtual FTFont*makeFont(const char*fontname);
-	FTGLTextureFont*m_aafont;
-	FTGLPolygonFont*m_pyfont;
+        virtual void setFontSize(void);
+        virtual FTFont* selectFont(void);
+        virtual FTFont*makeFont(const char*fontname);
+        FTGLTextureFont*m_aafont;
+        FTGLPolygonFont*m_pyfont;
 #endif
-	//////
-	// anti aliasing (aka: pixmap instead of bitmap)
-	bool m_antialias;
-	void aliasMess(int io);
+        //////
+        // anti aliasing (aka: pixmap instead of bitmap)
+        bool m_antialias;
+        void aliasMess(int io);
 };
 
-#endif	// for header file
+#endif  // for header file

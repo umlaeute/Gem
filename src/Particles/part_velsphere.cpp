@@ -64,7 +64,7 @@ void part_velsphere::vectorMess(float val1, float val2, float val3){
   m_pos[1] = val2;
   m_pos[2] = val3;
 }
-void part_velsphere::velMess(float num)	{
+void part_velsphere::velMess(float num) {
   m_radius = num;
 }
 
@@ -77,4 +77,3 @@ void part_velsphere :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG3(classPtr, "vector", vectorMess, float, float, float);
   CPPEXTERN_MSG1(classPtr, "vel", velMess, float);
 }
-

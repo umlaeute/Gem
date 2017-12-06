@@ -38,18 +38,18 @@ class GEM_EXTERN square : public GemShape
 
         //////////
         // Constructor
-    	square(t_floatarg size);
+        square(t_floatarg size);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~square();
+        //////////
+        // Destructor
+        virtual ~square();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	renderShape(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    renderShape(GemState *state);
 
 };
 
-#endif	// for header file
+#endif  // for header file

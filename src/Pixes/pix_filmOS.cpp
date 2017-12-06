@@ -83,7 +83,7 @@ void pix_filmOS :: createBuffer()
 {
   const int neededXSize = m_xsize;
   const int neededYSize = m_ysize;
-  int	oldx, oldy;
+  int   oldx, oldy;
 
   oldx = 0;
   oldy = 0;
@@ -268,10 +268,10 @@ void pix_filmOS :: changeImage(int imgNum, int trackNum)
 //
 /////////////////////////////////////////////////////////
 void pix_filmOS :: csMess(int format){
-	if(format && format != m_colorspace){
-		m_colorspace=format;
-		post("colorspace change will take effect the next time you load a film");
-	}
+        if(format && format != m_colorspace){
+                m_colorspace=format;
+                post("colorspace change will take effect the next time you load a film");
+        }
 }
 
 
@@ -284,28 +284,28 @@ void pix_filmOS :: csMess(int format){
 void pix_filmOS :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::openMessCallback),
-		  gensym("open"), A_GIMME, A_NULL);
+                  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::changeImageCallback),
-		  gensym("img_num"), A_GIMME, A_NULL);
+                  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::autoCallback),
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
+                  gensym("auto"), A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
-		  gensym("colorspace"), A_SYMBOL, A_NULL);
+                  gensym("colorspace"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
-		  gensym("colourspace"), A_SYMBOL, A_NULL);
+                  gensym("colourspace"), A_SYMBOL, A_NULL);
 }
 void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
-	int format=0;
-	switch(argc){
-	case 2:
-		format=getPixFormat(atom_getsymbol(argv+1)->s_name);
-	case 1:
-	    GetMyClass(data)->openMess(atom_getsymbol(argv), format);
-		break;
-	default:
-	  GetMyClass(data)->error("open <filename> [<format>]");
-	}
+        int format=0;
+        switch(argc){
+        case 2:
+                format=getPixFormat(atom_getsymbol(argv+1)->s_name);
+        case 1:
+            GetMyClass(data)->openMess(atom_getsymbol(argv), format);
+                break;
+        default:
+          GetMyClass(data)->error("open <filename> [<format>]");
+        }
 }
 
 void pix_filmOS :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
@@ -322,4 +322,3 @@ void pix_filmOS :: colorspaceCallback(void *data, t_symbol *state)
 {
   GetMyClass(data)->csMess(getPixFormat(state->s_name));
 }
-

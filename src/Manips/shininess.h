@@ -37,31 +37,31 @@ class GEM_EXTERN shininess : public GemBase
 
     public:
 
-	    //////////
-	    // Constructor
-    	shininess(int argc, t_atom *argv);
+            //////////
+            // Constructor
+        shininess(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~shininess();
+        //////////
+        // Destructor
+        virtual ~shininess();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+        //////////
+        // Turn back on the color material
+        virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+        //////////
+        // When a gem message is received
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// the shininess
-    	float	    	m_shininess;
+        //////////
+        // the shininess
+        float           m_shininess;
 
-    	//////////
-    	// shininess changed
-    	void	    	shininessMess(float val);
+        //////////
+        // shininess changed
+        void            shininessMess(float val);
 };
 
-#endif	// for header file
+#endif  // for header file

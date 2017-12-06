@@ -82,32 +82,32 @@ class GEM_EXTERN pix_filmDarwin : public pix_filmOS
   virtual void doDebug();
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
 
-  GWorldPtr		m_srcGWorld;
-  Rect			m_srcRect;
-  TimeValue		m_movieTime;
-  Track			m_movieTrack;
-  TimeValue		m_timeScale;
-  TimeValue		duration;
-  float			durationf;
-  long			movieDur, movieScale;
-  int			m_hiquality;
-  int			m_play;
-  float			m_rate;
-  Fixed			playRate;
-  TimeValue 		prevTime;
-  TimeValue		curTime;
- // int 			newImage;
-  int			m_Task;
-  float			m_volume;
+  GWorldPtr             m_srcGWorld;
+  Rect                  m_srcRect;
+  TimeValue             m_movieTime;
+  Track                 m_movieTrack;
+  TimeValue             m_timeScale;
+  TimeValue             duration;
+  float                 durationf;
+  long                  movieDur, movieScale;
+  int                   m_hiquality;
+  int                   m_play;
+  float                 m_rate;
+  Fixed                 playRate;
+  TimeValue             prevTime;
+  TimeValue             curTime;
+ // int                         newImage;
+  int                   m_Task;
+  float                 m_volume;
 
 private:
-  Movie			m_movie;
+  Movie                 m_movie;
 
   //-----------------------------------
-  // GROUP:	Texturing
+  // GROUP:     Texturing
   //-----------------------------------
 
  protected:
@@ -123,4 +123,4 @@ private:
 
 };
 
-#endif	// for header file
+#endif  // for header file

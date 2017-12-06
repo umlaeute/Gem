@@ -152,28 +152,28 @@ void pix_imageInPlace :: downloadMess()
       glGenTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
 
       for (int i = 0; i < m_numImages; ++i)
-	{
+        {
     if(GLEW_VERSION_1_1) {
-	  glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+          glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
     } else {
-	  glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+          glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
     }
 
-	  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+          glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_repeat);
-	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_repeat);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-	  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	  glTexImage2D(GL_TEXTURE_2D, 0,
-		       m_loadedCache->images[i]->csize,
-		       m_loadedCache->images[i]->xsize,
-		       m_loadedCache->images[i]->ysize, 0,
-		       m_loadedCache->images[i]->format,
-		       m_loadedCache->images[i]->type,
-		       m_loadedCache->images[i]->data);
-	}
+          glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_repeat);
+          glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_repeat);
+          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+          glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+          glTexImage2D(GL_TEXTURE_2D, 0,
+                       m_loadedCache->images[i]->csize,
+                       m_loadedCache->images[i]->xsize,
+                       m_loadedCache->images[i]->ysize, 0,
+                       m_loadedCache->images[i]->format,
+                       m_loadedCache->images[i]->type,
+                       m_loadedCache->images[i]->data);
+        }
     }
 }
 
@@ -190,9 +190,9 @@ void pix_imageInPlace :: purgeMess()
     {
       glDeleteTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
       for (int i = 0; i < m_numImages; ++i)
-	{
-	  m_loadedCache->textBind[i] = 0;
-	}
+        {
+          m_loadedCache->textBind[i] = 0;
+        }
     }
 }
 
@@ -234,7 +234,7 @@ void pix_imageInPlace :: repeatMess(int type)
 void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
-		  gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   CPPEXTERN_MSG0(classPtr, "download", downloadMess);
   CPPEXTERN_MSG0(classPtr, "purge", purgeMess);
   CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
@@ -242,14 +242,14 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 }
 
 void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_float baseImage,
-					     t_floatarg topImage, t_floatarg skipRate)
+                                             t_floatarg topImage, t_floatarg skipRate)
 {
   if ((int)skipRate == 0)
     {
       if ((int)topImage == 0)
-	GetMyClass(data)->preloadMess(filename, 0, (int)baseImage, 0);
+        GetMyClass(data)->preloadMess(filename, 0, (int)baseImage, 0);
       else
-	GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, 0);
+        GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, 0);
     }
   else
     GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, (int)skipRate);

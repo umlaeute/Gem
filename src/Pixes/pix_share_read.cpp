@@ -52,8 +52,8 @@ void pix_share_read :: render(GemState *state)
     else{
       error("no shmaddr");
       t_atom atom;
-	  SETFLOAT(&atom, -1);
-	  outlet_anything(m_outlet, gensym("error"), 1, &atom);
+          SETFLOAT(&atom, -1);
+          outlet_anything(m_outlet, gensym("error"), 1, &atom);
     }
   }
 }

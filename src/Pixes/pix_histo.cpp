@@ -313,7 +313,7 @@ void pix_histo :: processGrayImage(imageStruct &image)
 void pix_histo :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_histo::setMessCallback),
-		  gensym("set"), A_GIMME,0);
+                  gensym("set"), A_GIMME,0);
 }
 
 void pix_histo :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)

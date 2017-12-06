@@ -19,7 +19,7 @@ LOG
 
 namespace gem { namespace thread {
     class GEM_EXTERN SynchedWorkerThread : public WorkerThread {
-		  private:
+                  private:
       class PIMPL;
       PIMPL*m_pimpl;
       friend class PIMPL;
@@ -27,7 +27,7 @@ namespace gem { namespace thread {
       SynchedWorkerThread(const SynchedWorkerThread&);
       SynchedWorkerThread&operator=(const SynchedWorkerThread&);
 
-		  public:
+                  public:
       SynchedWorkerThread(bool autostart=true);
       virtual ~SynchedWorkerThread(void);
 
@@ -50,7 +50,7 @@ namespace gem { namespace thread {
        */
       virtual unsigned int dequeue(void);
 
-		  protected:
+                  protected:
       // this get's called from the main thread(!) with each
       // finished data chunk
       virtual void done(id_t ID, void*data) = 0;

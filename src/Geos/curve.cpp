@@ -27,7 +27,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(curve, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 curve :: curve(t_floatarg numInputs)
-	   : polygon(numInputs)
+           : polygon(numInputs)
 {
     m_drawType = GL_LINE_STRIP;
     m_resolution = 30;
@@ -111,4 +111,3 @@ void curve :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "res", resolutionMess, int);
 }
-

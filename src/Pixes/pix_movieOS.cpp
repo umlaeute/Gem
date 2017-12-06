@@ -165,7 +165,7 @@ void pix_movieOS :: texFrame(GemState *state, int doit)
   state->texCoords = m_coords;
   state->numTexCoords = 4;
   // enable to texture binding
-  if (!GemMan::texture_rectangle_supported)	//tigital
+  if (!GemMan::texture_rectangle_supported)     //tigital
   {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_textureObj);
@@ -194,12 +194,12 @@ void pix_movieOS :: texFrame(GemState *state, int doit)
     }
     // okay, load in the actual pixel data
     glTexSubImage2D(target, 0,
-                    0, 0,			// position
-                    m_xsize,			// the x size of the data
-                    m_ysize,			// the y size of the data
-                    m_pixBlock.image.format,	// the format
-                    m_pixBlock.image.type,	// the type
-                    m_frame);		// the data + header offset
+                    0, 0,                       // position
+                    m_xsize,                    // the x size of the data
+                    m_ysize,                    // the y size of the data
+                    m_pixBlock.image.format,    // the format
+                    m_pixBlock.image.type,      // the type
+                    m_frame);           // the data + header offset
   }
 }
 
@@ -265,7 +265,7 @@ void pix_movieOS :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movieOS :: setUpTextureState()
 {
-    if ( !GemMan::texture_rectangle_supported )				//tigital
+    if ( !GemMan::texture_rectangle_supported )                         //tigital
     {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -295,11 +295,11 @@ void pix_movieOS :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieOS), gensym("pix_movie"), A_DEFSYM, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::openMessCallback),
-		  gensym("open"), A_SYMBOL, A_NULL);
+                  gensym("open"), A_SYMBOL, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::changeImageCallback),
-		  gensym("img_num"), A_GIMME, A_NULL);
+                  gensym("img_num"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::autoCallback),
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
+                  gensym("auto"), A_DEFFLOAT, A_NULL);
 }
 
 void pix_movieOS :: openMessCallback(void *data, t_symbol *filename)

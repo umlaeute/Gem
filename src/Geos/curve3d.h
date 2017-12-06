@@ -50,7 +50,7 @@ class GEM_EXTERN curve3d : public GemShape
 
   //////////
   // Do the renderShapeing
-  virtual void 	renderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
 
 
   typedef struct {
@@ -70,7 +70,7 @@ class GEM_EXTERN curve3d : public GemShape
                    CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2};
 
 
-  t_float3		*m_posXYZ; // attention, valeur critique
+  t_float3              *m_posXYZ; // attention, valeur critique
 };
 
-#endif	// for header file
+#endif  // for header file

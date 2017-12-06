@@ -105,20 +105,20 @@ class GEM_EXTERN pix_film : public GemBase
 
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
 
   //////////
   // If a movie was loaded and what kind of Movie this is
-  int 	    	m_haveMovie;
+  int           m_haveMovie;
   t_float       m_auto;
   int           m_format;
 
   //////////
   // frame information
   int           m_numFrames;
-  t_float   	m_reqFrame;
-  int 	    	m_curFrame;
+  t_float       m_reqFrame;
+  int           m_curFrame;
 
   //////////
   // track information
@@ -159,4 +159,4 @@ class GEM_EXTERN pix_film : public GemBase
   static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

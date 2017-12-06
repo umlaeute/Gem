@@ -38,25 +38,25 @@ class GEM_EXTERN vertex_info : public GemBase
 
         //////////
         // Constructor
-    	vertex_info(void);
+        vertex_info(void);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_info(void);
+        //////////
+        // Destructor
+        virtual ~vertex_info(void);
 
-        int 		m_previousSize;
-        int		m_vertNum,m_vertCount;
-        t_outlet	*m_Vsize;
+        int             m_previousSize;
+        int             m_vertNum,m_vertCount;
+        t_outlet        *m_Vsize;
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 
  private:
-        static void 	vertexMessCallback(void *data, t_float num, t_float counter);
+        static void     vertexMessCallback(void *data, t_float num, t_float counter);
 
 };
 
-#endif	// for header file
+#endif  // for header file

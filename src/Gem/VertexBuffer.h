@@ -49,13 +49,13 @@ class VertexBuffer
     unsigned int offset;
 
     enum Type { GEM_VBO_VERTICES=0,
-		GEM_VBO_NORMALS,
-		GEM_VBO_TEXCOORDS,
-		GEM_VBO_COLORS,
-		GEM_VBO_AMBIENT,
-		GEM_VBO_DIFFUSE,
-		GEM_VBO_SPECULAR,
-		GEM_VBO_SHININESS };
+                GEM_VBO_NORMALS,
+                GEM_VBO_TEXCOORDS,
+                GEM_VBO_COLORS,
+                GEM_VBO_AMBIENT,
+                GEM_VBO_DIFFUSE,
+                GEM_VBO_SPECULAR,
+                GEM_VBO_SHININESS };
     Type type;
   };
 }; /* namespace: gem */

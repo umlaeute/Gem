@@ -110,23 +110,23 @@ void pix_blob :: processRGBAImage(imageStruct &image)
     while (rows--) {
       int cols = image.xsize;
       while (cols--) {
-	float val  = gain_r * pixels[chRed] + gain_g * pixels[chGreen] +
-	  gain_b * pixels[chBlue] + gain_a * pixels[chAlpha];
-	sum   += val;
-	sum_y += rows * val;
-	sum_x += cols * val;
-	pixels+=4;
+        float val  = gain_r * pixels[chRed] + gain_g * pixels[chGreen] +
+          gain_b * pixels[chBlue] + gain_a * pixels[chAlpha];
+        sum   += val;
+        sum_y += rows * val;
+        sum_x += cols * val;
+        pixels+=4;
       }
     }
   } else
     while (rows--) {
       int cols = image.xsize;
       while (cols--) {
-	int val  = pixels[channel];
-	sum   += val;
-	sum_y += rows * val;
-	sum_x += cols * val;
-	pixels+=4;
+        int val  = pixels[channel];
+        sum   += val;
+        sum_y += rows * val;
+        sum_x += cols * val;
+        pixels+=4;
       }
     }
 
@@ -238,9 +238,9 @@ void pix_blob :: obj_setupCallback(t_class *classPtr)
 {
   //  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_blob::triggerMessCallback));
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_blob::channelMessCallback),
-		  gensym("channel"), A_FLOAT, A_NULL);
+                  gensym("channel"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_blob::gainMessCallback),
-		  gensym("gain"), A_GIMME, A_NULL);
+                  gensym("gain"), A_GIMME, A_NULL);
 }
 
 void pix_blob :: gainMessCallback(void *data, t_symbol *, int argc, t_atom *argv)

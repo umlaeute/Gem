@@ -78,12 +78,12 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   virtual void setUpTextureState();
 
   //-----------------------------------
-  // GROUP:	Texture data
+  // GROUP:     Texture data
   //-----------------------------------
 
   //////////
   // The texture coordinates
-  TexCoord    	m_coords[4];
+  TexCoord      m_coords[4];
 
   //////////
   // this is what we get from upstream
@@ -93,11 +93,11 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
 
   //////////
   // The size of the texture (so we can use sub image)
-  int		m_dataSize[3];
+  int           m_dataSize[3];
 
-  GLuint	m_textureObj;
-  float		m_xRatio;
-  float		m_yRatio;
+  GLuint        m_textureObj;
+  float         m_xRatio;
+  float         m_yRatio;
 
  protected:
 
@@ -108,4 +108,4 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   static void autoCallback       (void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

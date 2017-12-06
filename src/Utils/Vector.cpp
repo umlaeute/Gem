@@ -115,6 +115,6 @@ CVector3 CVector3::normalize() const
 bool CVector3::equals(CVector3 vVector, float epsilon) const
 {
   return (fabsf(x - vVector.x) < epsilon &&
-	  fabsf(y - vVector.y) < epsilon &&
-	  fabsf(z - vVector.z) < epsilon);
+          fabsf(y - vVector.y) < epsilon &&
+          fabsf(z - vVector.z) < epsilon);
 }

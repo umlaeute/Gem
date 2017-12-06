@@ -36,7 +36,7 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height) : m_reqFormat(GL
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data=NULL;
 
-  dimenMess((int)width, (int)height);	//tigital
+  dimenMess((int)width, (int)height);   //tigital
 
   int i;
   for (i=0; i<3; i++)
@@ -179,11 +179,11 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
-		  gensym("dsp"), A_NULL);
+                  gensym("dsp"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
-		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+                  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
-		  gensym("colorspace"), A_DEFSYMBOL, A_NULL);
+                  gensym("colorspace"), A_DEFSYMBOL, A_NULL);
 }
 
 

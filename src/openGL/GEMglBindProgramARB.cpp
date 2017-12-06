@@ -21,12 +21,12 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindProgramARB , t_floatarg, A_DEFFLOAT, t_fl
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBindProgramARB :: GEMglBindProgramARB	(t_floatarg arg0, t_floatarg arg1) :
-		target(static_cast<GLenum>(arg0)),
-		program(static_cast<GLuint>(arg1))
+GEMglBindProgramARB :: GEMglBindProgramARB      (t_floatarg arg0, t_floatarg arg1) :
+                target(static_cast<GLenum>(arg0)),
+                program(static_cast<GLuint>(arg1))
 {
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
+        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
+        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -46,20 +46,20 @@ bool GEMglBindProgramARB :: isRunnable(void) {
 // Render
 //
 void GEMglBindProgramARB :: render(GemState *state) {
-	glBindProgramARB (target, program);
+        glBindProgramARB (target, program);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglBindProgramARB :: targetMess (t_float arg1) {	// FUN
-	target = static_cast<GLenum>(arg1);
-	setModified();
+void GEMglBindProgramARB :: targetMess (t_float arg1) { // FUN
+        target = static_cast<GLenum>(arg1);
+        setModified();
 }
 
-void GEMglBindProgramARB :: programMess (t_float arg1) {	// FUN
-	program = static_cast<GLuint>(arg1);
-	setModified();
+void GEMglBindProgramARB :: programMess (t_float arg1) {        // FUN
+        program = static_cast<GLuint>(arg1);
+        setModified();
 }
 
 
@@ -68,13 +68,13 @@ void GEMglBindProgramARB :: programMess (t_float arg1) {	// FUN
 //
 
 void GEMglBindProgramARB :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindProgramARB::targetMessCallback),  	gensym("target"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindProgramARB::programMessCallback),  	gensym("program"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindProgramARB::targetMessCallback),        gensym("target"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindProgramARB::programMessCallback),       gensym("program"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglBindProgramARB :: targetMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
+        GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
 void GEMglBindProgramARB :: programMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->programMess ( static_cast<t_float>(arg0));
+        GetMyClass(data)->programMess ( static_cast<t_float>(arg0));
 }

@@ -56,16 +56,16 @@ class GEM_EXTERN pix_normalize : public GemPixObj
 
     //////////
     // Do the processing
-    virtual void 	processRGBAImage(imageStruct &image);
-    virtual void 	processGrayImage(imageStruct &image);
-    virtual void 	processYUVImage(imageStruct &image);
+    virtual void        processRGBAImage(imageStruct &image);
+    virtual void        processGrayImage(imageStruct &image);
+    virtual void        processYUVImage(imageStruct &image);
 
  private:
 
     //////////
     // Static member functions
-    static void 	vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    static void 	floatMaskMessCallback(void *data, t_float gain);
+    static void         vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+    static void         floatMaskMessCallback(void *data, t_float gain);
 };
 
-#endif	// for header file
+#endif  // for header file

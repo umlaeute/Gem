@@ -34,19 +34,19 @@ class GEM_EXTERN textoutline : public TextBase
 
     public:
 
-		//////////
-		// Constructor
-    	textoutline(int argc, t_atom *argv);
+                //////////
+                // Constructor
+        textoutline(int argc, t_atom *argv);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~textoutline();
+        //////////
+        // Destructor
+        virtual ~textoutline();
 
 #ifdef FTGL
-	virtual FTFont*makeFont(const char*fontname);
+        virtual FTFont*makeFont(const char*fontname);
 #endif
 };
 
-#endif	// for header file
+#endif  // for header file

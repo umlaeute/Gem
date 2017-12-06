@@ -29,15 +29,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(part_targetsize, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 part_targetsize :: part_targetsize(t_floatarg size, t_floatarg scale)
 {
- 	if (size != 0.f)
-		sizeMess(size, size, size);
-	else
-		sizeMess(1.f, 1.f, 1.f);
+        if (size != 0.f)
+                sizeMess(size, size, size);
+        else
+                sizeMess(1.f, 1.f, 1.f);
 
- 	if (scale != 0.f)
-		scaleMess(scale, scale, scale);
-	else
-		scaleMess(.05f, 0.05f, 0.05f);
+        if (scale != 0.f)
+                scaleMess(scale, scale, scale);
+        else
+                scaleMess(.05f, 0.05f, 0.05f);
 
     // create the new inlet
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
@@ -58,10 +58,10 @@ part_targetsize :: ~part_targetsize()
 void part_targetsize :: renderParticles(GemState *state)
 {
   if (m_tickTime > 0.f)
-	{
-		pTargetSize(m_size[0], m_size[1], m_size[2],
-			    m_scale[0], m_scale[1], m_scale[2]);
-	}
+        {
+                pTargetSize(m_size[0], m_size[1], m_size[2],
+                            m_scale[0], m_scale[1], m_scale[2]);
+        }
 }
 
 /////////////////////////////////////////////////////////
@@ -95,9 +95,9 @@ void part_targetsize :: scaleMess(float scaleX,float scaleY,float scaleZ)
 void part_targetsize :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetsize::sizeMessCallback),
-		    gensym("ft1"), A_GIMME, A_NULL);
+                    gensym("ft1"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetsize::scaleMessCallback),
-		    gensym("ft2"), A_GIMME, A_NULL);
+                    gensym("ft2"), A_GIMME, A_NULL);
 }
 void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom *argv)
 {

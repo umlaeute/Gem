@@ -167,7 +167,7 @@ void pix_dump :: trigger()
      roi_y1=m_roi.y1*(0.5+m_ysize);
      roi_y2=m_roi.y2*(0.5+m_ysize);
 
-	   buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (i % (roi_x2-roi_x1)) + roi_x1);
+           buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (i % (roi_x2-roi_x1)) + roi_x1);
   }
   n=roi_x1;
   m=roi_y1;

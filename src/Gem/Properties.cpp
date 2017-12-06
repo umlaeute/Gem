@@ -130,7 +130,7 @@ namespace gem {
     std::map<std::string, enum Properties::PropertyType>::iterator it=pimpl->typemap.find(key);
     if(pimpl->typemap.end() == it)
       return UNSET;
-   
+
     return it->second;
   }
 

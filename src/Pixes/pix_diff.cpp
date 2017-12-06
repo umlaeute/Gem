@@ -49,11 +49,11 @@ void pix_diff :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 
     while(datasize--)    {
       leftPix[chRed] =
-	abs(leftPix[chRed] - (int)rightPix[chRed]);
+        abs(leftPix[chRed] - (int)rightPix[chRed]);
       leftPix[chGreen] =
-	abs(leftPix[chGreen] - (int)rightPix[chGreen]);
+        abs(leftPix[chGreen] - (int)rightPix[chGreen]);
       leftPix[chBlue] =
-	abs((int)leftPix[chBlue] - (int)rightPix[chBlue]);
+        abs((int)leftPix[chBlue] - (int)rightPix[chBlue]);
       leftPix += 4;
       rightPix += 4;
     }
@@ -67,7 +67,7 @@ void pix_diff :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 void pix_diff :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w;
-   int	y1,y2;
+   int  y1,y2;
    int u,v;
    src =0;
    //format is U Y V Y
@@ -101,7 +101,7 @@ void pix_diff :: processGray_Gray(imageStruct &image, imageStruct &right)
   while(datasize--)
     {
       leftPix[chGray] =
-	abs(leftPix[chGray] - (int)rightPix[chGray]);
+        abs(leftPix[chGray] - (int)rightPix[chGray]);
       leftPix++;
       rightPix++;
     }
@@ -137,7 +137,7 @@ void pix_diff :: processYUV_MMX (imageStruct &image, imageStruct &right){
 
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
   __m64 mask = _mm_setr_pi8(0x40, 0x00, 0x40, 0x00,
-			    0x40, 0x00, 0x40, 0x00);
+                            0x40, 0x00, 0x40, 0x00);
   __m64 l, r, b;
   while (datasize--) {
     l=leftPix[datasize];
@@ -172,8 +172,8 @@ void pix_diff :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
     vector unsigned char *rightData = (vector unsigned char *)right.data;
 
     #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
+        UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         vec_dst( inData+256, prefetchSize, 2 );
         vec_dst( rightData+256, prefetchSize, 3 );
@@ -182,7 +182,7 @@ void pix_diff :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
     do {
 
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
         vec_dst( inData+256, prefetchSize, 2 );
         vec_dst( rightData+256, prefetchSize, 3 );
@@ -220,10 +220,10 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
    //format is U Y V Y
     union
     {
-        //unsigned int	i;
-        short	elements[8];
+        //unsigned int  i;
+        short   elements[8];
         //vector signed char v;
-        vector	short v;
+        vector  short v;
     }shortBuffer;
 
 
@@ -248,15 +248,15 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 
 
 #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
+        UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
     #endif
     for ( h=0; h<image.ysize; h++){
         for (w=0; w<width; w++)
         {
         #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
+        vec_dst( inData, prefetchSize, 0 );
         vec_dst( rightData, prefetchSize, 1 );
            #endif
             //interleaved U Y V Y chars

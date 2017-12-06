@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -25,7 +25,7 @@ using namespace gem::utils::gl;
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRenderMode :: GEMglRenderMode	(int argc, t_atom*argv) :
+GEMglRenderMode :: GEMglRenderMode      (int argc, t_atom*argv) :
   mode(0)
 {
   if(1==argc)modeMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
@@ -52,7 +52,7 @@ void GEMglRenderMode :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglRenderMode :: modeMess (t_atom arg) {	// FUN
+void GEMglRenderMode :: modeMess (t_atom arg) { // FUN
   mode = static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
@@ -67,5 +67,5 @@ void GEMglRenderMode :: obj_setupCallback(t_class *classPtr) {
 }
 
 void GEMglRenderMode :: modeMessCallback (void* data, t_symbol*s, int argc, t_atom*argv){
-	if(1==argc)GetMyClass(data)->modeMess (argv[0]);
+        if(1==argc)GetMyClass(data)->modeMess (argv[0]);
 }

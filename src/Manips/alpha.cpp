@@ -28,8 +28,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 alpha :: alpha(t_floatarg fun)
        : m_alphaState(1),
-	 m_alphaTest(1),
-	 m_depthtest(1)
+         m_alphaTest(1),
+         m_depthtest(1)
 {
   funMess(static_cast<int>(fun));
   m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
@@ -56,7 +56,7 @@ void alpha :: render(GemState *)
     if (!m_depthtest)
       glDepthMask(GL_FALSE);  // turn off depth test for transparent objects
 
-    if (m_alphaTest)		{
+    if (m_alphaTest)            {
       glEnable(GL_ALPHA_TEST);
       glAlphaFunc(GL_GREATER, 0.f);
     }
@@ -73,10 +73,10 @@ void alpha :: postrender(GemState *)
     {
       glDisable(GL_BLEND);
       if (!m_depthtest)
-	glDepthMask(GL_TRUE);
+        glDepthMask(GL_TRUE);
 
       if (m_alphaTest)
-	glDisable(GL_ALPHA_TEST);
+        glDisable(GL_ALPHA_TEST);
     }
 
 }

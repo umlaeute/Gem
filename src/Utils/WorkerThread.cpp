@@ -74,12 +74,12 @@ namespace gem { namespace thread {
     pthread_cond_t  p_runcond;
 
     PIMPL(WorkerThread*x) : owner(x), ID(0)
-			  , keeprunning(true), isrunning(false)
-			  , m_todo(Mutex()), m_done(Mutex())
-			  , s_newdata(Semaphore())
-			  , processingID(WorkerThread::INVALID)
+                          , keeprunning(true), isrunning(false)
+                          , m_todo(Mutex()), m_done(Mutex())
+                          , s_newdata(Semaphore())
+                          , processingID(WorkerThread::INVALID)
 #ifndef HAVE_PTW32_HANDLE_T
-			  , p_thread(0)
+                          , p_thread(0)
 #endif
     {
       pthread_mutex_init(&p_runmutex, 0);
@@ -243,7 +243,7 @@ namespace gem { namespace thread {
       QUEUE< std::pair<WorkerThread::id_t, void*> > :: iterator it;
       //std::cerr << "cancelling "<< (int)ID <<" from TODO" << std::endl;
       m_pimpl->m_todo.lock();
-      
+
       for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); ++it) {
         if(it->first == ID) {
           m_pimpl->q_todo.erase(it);

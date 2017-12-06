@@ -38,17 +38,17 @@ class GEM_EXTERN triangle : public GemShape
 
         //////////
         // Constructor
-    	triangle(t_floatarg size);
+        triangle(t_floatarg size);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~triangle();
+        //////////
+        // Destructor
+        virtual ~triangle();
 
-    	//////////
-    	// Do the renderShapeing
-    	virtual void 	renderShape(GemState *state);
+        //////////
+        // Do the renderShapeing
+        virtual void    renderShape(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -39,9 +39,9 @@ class GEM_EXTERN gemkeyname : public CPPExtern
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~gemkeyname();
+        //////////
+        // Destructor
+        virtual ~gemkeyname();
 
         //////////
         // keyname-button
@@ -49,11 +49,11 @@ class GEM_EXTERN gemkeyname : public CPPExtern
 
         //////////
         // The key-val outlet
-        t_outlet    	*m_outKeyVal;
+        t_outlet        *m_outKeyVal;
 
         //////////
         // The key-state outlet
-        t_outlet    	*m_outKeyState;
+        t_outlet        *m_outKeyState;
 
 
     private:

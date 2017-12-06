@@ -25,7 +25,7 @@ CLASS
 
     pix_info
 
-	Get image information
+        Get image information
 
 KEYWORDS
     pix
@@ -41,34 +41,34 @@ class GEM_EXTERN pix_info : public GemBase
 
     public:
 
-	    //////////
-    	// Constructor
-    	pix_info();
+            //////////
+        // Constructor
+        pix_info();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_info();
+        //////////
+        // Destructor
+        virtual ~pix_info();
 
-    	//////////
-    	// All we want is the pixel information, so this is a complete override.
-	//  	virtual void 	render(GemState *state);
+        //////////
+        // All we want is the pixel information, so this is a complete override.
+        //      virtual void    render(GemState *state);
 
-    	//////////
-        virtual void 	render(GemState*);
+        //////////
+        virtual void    render(GemState*);
 
 
         //////////
-        void		trigger();
+        void            trigger();
 
         //////////
         // The color outlet
-        t_outlet    	*m_x, *m_y, *m_c; // xsize; ysize; csize
-	t_outlet        *m_format;        // format
-	t_outlet        *m_misc;          // type, upsidedown, notowned
-	t_outlet        *m_pixblock;      // newimage, newfilm
-	t_outlet        *m_data;          // data
+        t_outlet        *m_x, *m_y, *m_c; // xsize; ysize; csize
+        t_outlet        *m_format;        // format
+        t_outlet        *m_misc;          // type, upsidedown, notowned
+        t_outlet        *m_pixblock;      // newimage, newfilm
+        t_outlet        *m_data;          // data
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Generate particles
+        Generate particles
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,9 +21,9 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_vertex
+        part_vertex
 
-	Generate particles
+        Generate particles
 
 DESCRIPTION
 
@@ -39,7 +39,7 @@ class GEM_EXTERN part_vertex : public partlib_base
   part_vertex(t_floatarg x=0, t_floatarg y=0, t_floatarg z=0);
 
   //////////
-  virtual void 	renderParticles(GemState *state);
+  virtual void  renderParticles(GemState *state);
 
  protected:
 
@@ -47,9 +47,9 @@ class GEM_EXTERN part_vertex : public partlib_base
   // Destructor
   virtual ~part_vertex(void);
   //////////
-  void		posMess(t_float x, t_float y, t_float z);
+  void          posMess(t_float x, t_float y, t_float z);
 
   t_float m_x, m_y, m_z;
 };
 
-#endif	// for header file
+#endif  // for header file

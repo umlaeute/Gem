@@ -55,7 +55,7 @@ sphere :: ~sphere()
 
 /////////////////////////////////////////////////////////
 // createSphere
-//	actually calculates the values of the vertices
+//      actually calculates the values of the vertices
 //
 /////////////////////////////////////////////////////////
 void sphere :: createSphere(GemState *state)
@@ -122,7 +122,7 @@ void sphere :: createSphere(GemState *state)
 
         ds = 1.0 / slices;
         dt = 1.0 / stacks;
-        t = 1.0;			/* because loop now runs from 0 */
+        t = 1.0;                        /* because loop now runs from 0 */
         if (texType) {
             imin = 0;
             imax = stacks;
@@ -176,7 +176,7 @@ void sphere :: createSphere(GemState *state)
         src = 0;
 
         /* draw stack lines */
-        for (i = 1; i < stacks; i++) {	/* stack line at i==stacks-1 was missing here */
+        for (i = 1; i < stacks; i++) {  /* stack line at i==stacks-1 was missing here */
             rho = i * drho;
             for (j = 0; j < slices; j++) {
                 theta = j * dtheta;
@@ -288,17 +288,17 @@ void sphere :: render(GemState *state)
       glNormal3f(0.0, 0.0, 1.0);
       glVertex3f(0.0, 0.0, nsign * radius);
       for (j = 0; j <= slices; j++) {
-			if (lighting)
-				glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-			glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-			src++;
+                        if (lighting)
+                                glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+                        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+                        src++;
       }
       glEnd();
     }
 
     ds = 1.0 / slices;
     dt = 1.0 / stacks;
-    t = 1.0;			/* because loop now runs from 0 */
+    t = 1.0;                    /* because loop now runs from 0 */
     if (texType) {
       imin = 0;
       imax = stacks;
@@ -314,18 +314,18 @@ void sphere :: render(GemState *state)
       s = 0.0;
       for (j = 0; j <= slices; j++) {
 
-		if (lighting)
-			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-		if(texType)
-			glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-		src++;
-		if (lighting)
-			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-		if(texType)
-			glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
-		s += ds;
-		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+                if (lighting)
+                        glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+                if(texType)
+                        glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+                glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+                src++;
+                if (lighting)
+                        glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+                if(texType)
+                        glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+                s += ds;
+                glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
       glEnd();
@@ -340,10 +340,10 @@ void sphere :: render(GemState *state)
       s = 1.0;
       t = dt;
       for (j = slices; j >= 0; j--) {
-		if (lighting)
-			glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-		s -= ds;
-		glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+                if (lighting)
+                        glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+                s -= ds;
+                glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
         src++;
       }
       glEnd();
@@ -353,7 +353,7 @@ void sphere :: render(GemState *state)
 
       src = 0;
 
-      for (i = 1; i < stacks; i++) {	// stack line at i==stacks-1 was missing here
+      for (i = 1; i < stacks; i++) {    // stack line at i==stacks-1 was missing here
           glBegin(GL_LINE_LOOP);
           for (j = 0; j < slices; j++) {
 
@@ -408,4 +408,3 @@ void sphere :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void sphere :: obj_setupCallback(t_class *)
 { }
-

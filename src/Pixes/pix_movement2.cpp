@@ -141,12 +141,12 @@ void pix_movement2 :: processImage(imageStruct &image){
   for(i=0; i<size; i++){
 
     if ((abs(cur[i]-old1[i]) > thresh[i]) &&
-	(abs(cur[i]-old2[i]) > thresh[i])){
+        (abs(cur[i]-old2[i]) > thresh[i])){
       out[i] = 255;
     } else {
       out[i] = 0;
       if(abs(cur[i]-back[i])>thresh[i]){
-	out[i] = 255;
+        out[i] = 255;
       }
 
       if(thresh[i] < m_lowthresh)thresh[i] = m_lowthresh;
@@ -196,9 +196,9 @@ static member functions
 ------------------------------------------------------------*/
 void pix_movement2 :: obj_setupCallback(t_class*classPtr){
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement2::lowThreshMessCallback),
-		  gensym("low_thresh"), A_FLOAT, A_NULL);
+                  gensym("low_thresh"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement2::threshMessCallback),
-		  gensym("hi_thresh"), A_FLOAT, A_NULL);
+                  gensym("hi_thresh"), A_FLOAT, A_NULL);
   class_addbang(classPtr, reinterpret_cast<t_method>(&pix_movement2::bangMessCallback));
 }
 

@@ -120,4 +120,4 @@ protected:
   t_outlet        *m_infoOut;
 };
 
-#endif 	// for header file
+#endif  // for header file

@@ -62,15 +62,15 @@ void pix_resize :: processImage(imageStruct &image)
       m_image.reallocate(wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
 
       gluError = gluScaleImage(image.format,
-			       image.xsize, image.ysize,
-			       image.type, image.data,
-			       wN, hN,
-			       image.type, m_image.data);
+                               image.xsize, image.ysize,
+                               image.type, image.data,
+                               wN, hN,
+                               image.type, m_image.data);
       if ( gluError )
-	{
-	  post("gluError %d: unable to resize image", gluError);
-	  return;
-	}
+        {
+          post("gluError %d: unable to resize image", gluError);
+          return;
+        }
       //      image.clear();
       image.data  = m_image.data;
       image.xsize = m_image.xsize;
@@ -97,7 +97,7 @@ void pix_resize :: dimenMess(int width, int height) {
 void pix_resize :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(pix_resize::dimenMessCallback),
-		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+                  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
 }
 
 void pix_resize ::dimenMessCallback(void *data, t_float w, t_float h)

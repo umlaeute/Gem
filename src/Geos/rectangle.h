@@ -38,29 +38,29 @@ class GEM_EXTERN rectangle : public GemShape
 
         //////////
         // Constructor
-		rectangle(t_floatarg width, t_floatarg height);
+                rectangle(t_floatarg width, t_floatarg height);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~rectangle(void);
+        //////////
+        // Destructor
+        virtual ~rectangle(void);
 
-    	//////////
-    	// The height of the object
-    	void	    	heightMess(float size);
+        //////////
+        // The height of the object
+        void            heightMess(float size);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	renderShape(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    renderShape(GemState *state);
 
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+        //////////
+        // The height of the object
+        GLfloat         m_height;
 
         //////////
         // The height inlet
         t_inlet         *m_inletH;
 };
 
-#endif	// for header file
+#endif  // for header file

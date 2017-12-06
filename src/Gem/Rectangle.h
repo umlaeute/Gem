@@ -41,4 +41,4 @@ namespace gem {
   };
 };
 
-#endif	// for header file
+#endif  // for header file

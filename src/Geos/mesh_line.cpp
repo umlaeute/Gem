@@ -141,7 +141,3 @@ void mesh_line :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "grid", setGrid, int);
 }
-
-
-
-

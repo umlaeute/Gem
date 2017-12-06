@@ -15,51 +15,50 @@
 
 /*
  CLASS
-	GEMglMultiTexCoord2fARB
+        GEMglMultiTexCoord2fARB
  KEYWORDS
-	openGL	0
+        openGL  0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glMultiTexCoord2fARB( GLenum texUnit, GLfloat s, GLfloat t )"
+        wrapper for the openGL-function
+        "glMultiTexCoord2fARB( GLenum texUnit, GLfloat s, GLfloat t )"
  */
 
 class GEM_EXTERN GEMglMultiTexCoord2fARB : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglMultiTexCoord2fARB, GemGLBase);
+        CPPEXTERN_HEADER(GEMglMultiTexCoord2fARB, GemGLBase);
 
-	public:
-	  // Constructor
-	  GEMglMultiTexCoord2fARB (t_float, t_float, t_float);	// CON
+        public:
+          // Constructor
+          GEMglMultiTexCoord2fARB (t_float, t_float, t_float);  // CON
 
-	protected:
-	  // Destructor
-	  virtual ~GEMglMultiTexCoord2fARB ();
+        protected:
+          // Destructor
+          virtual ~GEMglMultiTexCoord2fARB ();
           // check extensions
           virtual bool isRunnable(void);
 
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+          // Do the rendering
+          virtual void  render (GemState *state);
 
-	// variables
-	  GLenum	texUnit;		// VAR
-	  virtual void	texUnitMess(t_float);	// FUN
+        // variables
+          GLenum        texUnit;                // VAR
+          virtual void  texUnitMess(t_float);   // FUN
 
-	  GLfloat	s;		// VAR
-	  virtual void	sMess(t_float);	// FUN
+          GLfloat       s;              // VAR
+          virtual void  sMess(t_float); // FUN
 
-	  GLfloat	t;		// VAR
-	  virtual void	tMess(t_float);	// FUN
+          GLfloat       t;              // VAR
+          virtual void  tMess(t_float); // FUN
 
 
-	private:
+        private:
 
-	// we need some inlets
-	  t_inlet *m_inlet[3];
+        // we need some inlets
+          t_inlet *m_inlet[3];
 
-	// static member functions
-	  static void	 texUnitMessCallback (void*, t_float);
-	  static void	 sMessCallback (void*, t_float);
-	  static void	 tMessCallback (void*, t_float);
+        // static member functions
+          static void    texUnitMessCallback (void*, t_float);
+          static void    sMessCallback (void*, t_float);
+          static void    tMessCallback (void*, t_float);
 };
 #endif // for header file
-

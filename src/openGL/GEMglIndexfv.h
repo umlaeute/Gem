@@ -2,7 +2,7 @@
   * GEM - Graphics Environment for Multimedia
   *
   *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  *	zmoelnig@iem.kug.ac.at
+  *     zmoelnig@iem.kug.ac.at
   *  For information on usage and redistribution, and for a DISCLAIMER
   *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
   *
@@ -17,37 +17,37 @@
 
 /*
  CLASS
-	GEMglIndexfv
+        GEMglIndexfv
  KEYWORDS
-	openGL	0
+        openGL  0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glIndexfv( GLfloat *c )"
+        wrapper for the openGL-function
+        "glIndexfv( GLfloat *c )"
  */
 
 class GEM_EXTERN GEMglIndexfv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglIndexfv, GemGLBase);
+        CPPEXTERN_HEADER(GEMglIndexfv, GemGLBase);
 
-	public:
-	  // Constructor
-	  GEMglIndexfv (t_floatarg);	// CON
-	protected:
-	  // Destructor
-	  virtual ~GEMglIndexfv ();
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+        public:
+          // Constructor
+          GEMglIndexfv (t_floatarg);    // CON
+        protected:
+          // Destructor
+          virtual ~GEMglIndexfv ();
+          // Do the rendering
+          virtual void  render (GemState *state);
 
-	// variable
-	GLfloat c[1];		// VAR
-	virtual void	cMess(t_float);	// FUN
+        // variable
+        GLfloat c[1];           // VAR
+        virtual void    cMess(t_float); // FUN
 
-	private:
+        private:
 
-	// we need one inlet
-	  t_inlet *m_inlet;
+        // we need one inlet
+          t_inlet *m_inlet;
 
-	// static member functions
+        // static member functions
          static void    cMessCallback (void*, t_float);
 };
 #endif // for header file

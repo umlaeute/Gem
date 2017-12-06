@@ -19,15 +19,15 @@
 #include "Utils/Functions.h"
 
 typedef struct {
-            GLfloat	X;
-            GLfloat	Y;
-            GLfloat	U;
-            GLfloat	V;
-            GLfloat	Speed;
+            GLfloat     X;
+            GLfloat     Y;
+            GLfloat     U;
+            GLfloat     V;
+            GLfloat     Speed;
 } TSlider;
 
-TSlider	Sliders[64];
-//int	init = 0;
+TSlider Sliders[64];
+//int   init = 0;
 
 static inline float ourRand( float Max )
 {
@@ -46,10 +46,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(slideSquares, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 //
 /////////////////////////////////////////////////////////
 slideSquares :: slideSquares(t_floatarg width, t_floatarg height)
-		   : GemShape(width), m_height(height)
+                   : GemShape(width), m_height(height)
 {
     if (m_height == 0.f)
-		m_height = 1.f;
+                m_height = 1.f;
 
     // the height inlet
     m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
@@ -89,39 +89,39 @@ void slideSquares :: renderShape(GemState *state)
       int curCoord = 0;
       glBegin(m_drawType);
       for (i=0; i<= 31; i++){
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );
-	glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+        glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );
+        glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	if (GemShape::m_texNum > 1) curCoord = 1;
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1), GemShape::m_texCoords[curCoord].t*Sliders[i].V );
-	glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+        if (GemShape::m_texNum > 1) curCoord = 1;
+        glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1), GemShape::m_texCoords[curCoord].t*Sliders[i].V );
+        glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	if (GemShape::m_texNum > 2) curCoord = 2;
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
-	glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+        if (GemShape::m_texNum > 2) curCoord = 2;
+        glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
+        glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
-	if (GemShape::m_texNum > 3) curCoord = 3;
-	glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U,GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
-	glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+        if (GemShape::m_texNum > 3) curCoord = 3;
+        glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U,GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
+        glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
-	Slide( i );
+        Slide( i );
       }
       glEnd();
     } else {
         glBegin(m_drawType);
             for (i=0; i<= 31; i++){
-	    	glTexCoord2f(Sliders[i].U,     Sliders[i].V );
+                glTexCoord2f(Sliders[i].U,     Sliders[i].V );
                 glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-	        //if (GemShape::m_texNum > 1) curCoord = 1;
+                //if (GemShape::m_texNum > 1) curCoord = 1;
                     glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
 
-		//if (GemShape::m_texNum > 2) curCoord = 2;
+                //if (GemShape::m_texNum > 2) curCoord = 2;
                     glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 );
                     glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 
-		//if (GemShape::m_texNum > 3) curCoord = 3;
+                //if (GemShape::m_texNum > 3) curCoord = 3;
                     glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1);
                     glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
 

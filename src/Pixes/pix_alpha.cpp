@@ -58,11 +58,11 @@ void pix_alpha :: processRGBAImage(imageStruct &image)
 
     while(count--) {
       if ( (pixels[chRed] >= m_lowThresh[0] &&  pixels[chRed] <= m_highThresh[0] )
-	   &&
-	   (pixels[chGreen] >= m_lowThresh[1] &&  pixels[chGreen] <= m_highThresh[1] )
-	   &&
-	   (pixels[chBlue] >= m_lowThresh[2] &&  pixels[chBlue] <= m_highThresh[2] ) ) {
-	pixels[chAlpha] = m_alpha;
+           &&
+           (pixels[chGreen] >= m_lowThresh[1] &&  pixels[chGreen] <= m_highThresh[1] )
+           &&
+           (pixels[chBlue] >= m_lowThresh[2] &&  pixels[chBlue] <= m_highThresh[2] ) ) {
+        pixels[chAlpha] = m_alpha;
       }
       else pixels[chAlpha] = m_otheralpha;
       pixels += 4;
@@ -121,14 +121,14 @@ void pix_alpha :: otheralphaMess(float alpha)
 void pix_alpha :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_alpha::alphaMessCallback),
-    	    gensym("ft1"), A_FLOAT, A_NULL);
+            gensym("ft1"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_alpha::otheralphaMessCallback),
-    	    gensym("ft2"), A_FLOAT, A_NULL);
+            gensym("ft2"), A_FLOAT, A_NULL);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_alpha::highThreshMessCallback),
-    	    gensym("high_val"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+            gensym("high_val"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_alpha::lowThreshMessCallback),
-    	    gensym("low_val"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+            gensym("low_val"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_alpha :: highThreshMessCallback(void *data, t_float red, t_float green, t_float blue)
 {

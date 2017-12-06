@@ -142,11 +142,11 @@ void ripple :: renderShape(GemState *state)
 }
 /////////////////////////////////////////////////////////
 //
-//	ripple_init
-//	Initialize ripple location and age information.
+//      ripple_init
+//      Initialize ripple location and age information.
 //
-//	Also, precompute the vertex coordinates and the default texture
-//	coordinates assigned to them.
+//      Also, precompute the vertex coordinates and the default texture
+//      coordinates assigned to them.
 /////////////////////////////////////////////////////////
 
 void ripple :: ripple_init(void)
@@ -175,7 +175,7 @@ void ripple :: ripple_init(void)
 }
 
 /////////////////////////////////////////////////////////
-//	Precompute ripple displacement vectors.
+//      Precompute ripple displacement vectors.
 /////////////////////////////////////////////////////////
 
 void ripple :: precalc_ripple_vector(void)
@@ -209,7 +209,7 @@ void ripple :: precalc_ripple_vector(void)
 }
 
 /////////////////////////////////////////////////////////
-//	Precompute ripple amplitude decay.
+//      Precompute ripple amplitude decay.
 /////////////////////////////////////////////////////////
 
 void ripple :: precalc_ripple_amp(void)
@@ -224,9 +224,9 @@ void ripple :: precalc_ripple_amp(void)
 
 /////////////////////////////////////////////////////////
 //
-//	ripple_dynamics
-//	Advance one time step and compute new texture coordinates
-//	for the next frame of animation.
+//      ripple_dynamics
+//      Advance one time step and compute new texture coordinates
+//      for the next frame of animation.
 /////////////////////////////////////////////////////////
 
 void ripple :: ripple_dynamics(void)
@@ -259,9 +259,9 @@ void ripple :: ripple_dynamics(void)
           sy = 1.0;
         mi = x;
         mj = y;
-	/* coverity[dead_error_line] <0 is a safety check (even if it never triggers) */
+        /* coverity[dead_error_line] <0 is a safety check (even if it never triggers) */
         if(mi<0)mi=0;if(mi>=m_gridX)mi=m_gridX-1;
-	/* coverity[dead_error_line] <0 is a safety check (see above) */
+        /* coverity[dead_error_line] <0 is a safety check (see above) */
         if(mj<0)mj=0;if(mj>=m_gridY)mj=m_gridY-1;
 
         r = m_t[k] - m_rippleVector[mi][mj].r;
@@ -281,9 +281,9 @@ void ripple :: ripple_dynamics(void)
 }
 /////////////////////////////////////////////////////////
 //
-//	ripple_distance
+//      ripple_distance
 //
-//	Calculate the distance between two points.
+//      Calculate the distance between two points.
 //
 /////////////////////////////////////////////////////////
 float ripple :: ripple_distance(int gx, int gy, int cx, int cy)
@@ -293,10 +293,10 @@ float ripple :: ripple_distance(int gx, int gy, int cx, int cy)
 
 /////////////////////////////////////////////////////////
 //
-//	ripple_max_distance
+//      ripple_max_distance
 //
-//	Compute the distance of the given window coordinate
-//	to the nearest window corner, in pixels.
+//      Compute the distance of the given window coordinate
+//      to the nearest window corner, in pixels.
 /////////////////////////////////////////////////////////
 int ripple :: ripple_max_distance(int gx, int gy)
 {
@@ -317,11 +317,11 @@ int ripple :: ripple_max_distance(int gx, int gy)
   return (int)((d/m_gridX)*m_sizeX + RIPPLE_LENGTH/6.);
 }
 /////////////////////////////////////////////////////////
-//	ripple_bang
+//      ripple_bang
 //
-//	Generate a new ripple when the mouse is pressed.  There's
-//	a limit on the number of ripples that can be simultaneously
-//	generated.
+//      Generate a new ripple when the mouse is pressed.  There's
+//      a limit on the number of ripples that can be simultaneously
+//      generated.
 /////////////////////////////////////////////////////////
 void ripple :: ripple_bang(void)
 {

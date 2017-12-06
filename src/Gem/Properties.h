@@ -78,9 +78,9 @@ namespace gem
     template<class Class>
       bool get(const std::string&key, Class&value) const {
        try {
-	 value=gem::any_cast<Class>(get(key));
+         value=gem::any_cast<Class>(get(key));
       } catch (gem::bad_any_cast&e) {
-	return false;
+        return false;
       }
       return true;
     };

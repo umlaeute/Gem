@@ -56,34 +56,34 @@ static unsigned char bars_YUV[][3] = {
     row0=0; row1=rows*2/3;
     for(r=row0; r<row1; r++) {
       for(c=0; c<cols; c++) {
-	unsigned int idx=c*7/cols;
-	data[chRed  ]=bars_RGBA[idx][0]*scale;
-	data[chGreen]=bars_RGBA[idx][1]*scale;
-	data[chBlue ]=bars_RGBA[idx][2]*scale;
-	data[chAlpha]=0xFF;
-	data+=4;
+        unsigned int idx=c*7/cols;
+        data[chRed  ]=bars_RGBA[idx][0]*scale;
+        data[chGreen]=bars_RGBA[idx][1]*scale;
+        data[chBlue ]=bars_RGBA[idx][2]*scale;
+        data[chAlpha]=0xFF;
+        data+=4;
       }
     }
     row0=r; row1=rows*3/4;
     for(r=row0; r<row1; r++) {
       for(c=0; c<cols; c++) {
-	unsigned int grey=c*255/cols;
-	data[chRed  ]=grey;
-	data[chGreen]=grey;
-	data[chBlue ]=grey;
-	data[chAlpha]=0xFF;
-	data+=4;
+        unsigned int grey=c*255/cols;
+        data[chRed  ]=grey;
+        data[chGreen]=grey;
+        data[chBlue ]=grey;
+        data[chAlpha]=0xFF;
+        data+=4;
       }
     }
     row0=r; row1=rows*5/6;
     for(r=row0;r<row1; r++) {
       for(c=0; c<cols; c++) {
-	unsigned int grey=255-c*255/cols;
-	data[chRed  ]=grey;
-	data[chGreen]=grey;
-	data[chBlue ]=grey;
-	data[chAlpha]=0xFF;
-	data+=4;
+        unsigned int grey=255-c*255/cols;
+        data[chRed  ]=grey;
+        data[chGreen]=grey;
+        data[chBlue ]=grey;
+        data[chAlpha]=0xFF;
+        data+=4;
       }
     }
     row0=r; row1=rows;
@@ -93,7 +93,7 @@ static unsigned char bars_YUV[][3] = {
       data[chGreen]=grey;
       data[chBlue ]=grey;
       data[chAlpha]=0xFF;
-	data+=4;
+        data+=4;
     }
   }
   void makeSMPTE_YUV(unsigned int rows, unsigned int cols, unsigned char*DATA, float scale) {
@@ -106,31 +106,31 @@ static unsigned char bars_YUV[][3] = {
     for(r=row0; r<row1; r++) {
       data=DATA+r*cols*2;
       for(c=0; c<halfcols; c++) {
-	unsigned int idx=c*7/halfcols;
-	data[chY0]=data[chY1]=bars_YUV[idx][0]*scale;
-	data[chU ]=bars_YUV[idx][1];
-	data[chV ]=bars_YUV[idx][2];
-	data+=4;
+        unsigned int idx=c*7/halfcols;
+        data[chY0]=data[chY1]=bars_YUV[idx][0]*scale;
+        data[chU ]=bars_YUV[idx][1];
+        data[chV ]=bars_YUV[idx][2];
+        data+=4;
       }
     }
     row0=r; row1=rows*3/4;
     for(r=row0; r<row1; r++) {
       data=DATA+r*cols*2;
       for(c=0; c<cols; c++) {
-	unsigned int grey=c*255/cols;
-	data[chY0]=grey;
-	data[chU ]=0x80;
-	data+=2;
+        unsigned int grey=c*255/cols;
+        data[chY0]=grey;
+        data[chU ]=0x80;
+        data+=2;
       }
     }
     row0=r; row1=rows*5/6;
     for(r=row0;r<row1; r++) {
       data=DATA+r*cols*2;
       for(c=0; c<cols; c++) {
-	unsigned int grey=255-c*255/cols;
-	data[chY0]=grey;
-	data[chU ]=0x80;
-	data+=2;
+        unsigned int grey=255-c*255/cols;
+        data[chY0]=grey;
+        data[chU ]=0x80;
+        data+=2;
       }
     }
     row0=r; row1=rows;
@@ -149,19 +149,19 @@ static unsigned char bars_YUV[][3] = {
     row0=0; row1=rows*2/3;
     for(r=row0; r<row1; r++) {
       for(c=0; c<cols; c++) {
-	*data++=bars_YUV[c*7/cols][0]*scale;
+        *data++=bars_YUV[c*7/cols][0]*scale;
       }
     }
     row0=r; row1=rows*3/4;
     for(r=row0; r<row1; r++) {
       for(c=0; c<cols; c++) {
-	*data++=c*255/cols;
+        *data++=c*255/cols;
       }
     }
     row0=r; row1=rows*5/6;
     for(r=row0;r<row1; r++) {
       for(c=0; c<cols; c++) {
-	*data++=255-c*255/cols;
+        *data++=255-c*255/cols;
       }
     }
     row0=r; row1=rows;

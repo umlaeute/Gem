@@ -15,42 +15,42 @@
 
 /*
  CLASS
-	GEMglLoadTransposeMatrixd
+        GEMglLoadTransposeMatrixd
  KEYWORDS
-	openGL	0
+        openGL  0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glLoadTransposeMatrixd( GLdouble matrix)"
+        wrapper for the openGL-function
+        "glLoadTransposeMatrixd( GLdouble matrix)"
  */
 
 class GEM_EXTERN GEMglLoadTransposeMatrixd : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglLoadTransposeMatrixd, GemGLBase);
+        CPPEXTERN_HEADER(GEMglLoadTransposeMatrixd, GemGLBase);
 
-	public:
-	  // Constructor
-	  GEMglLoadTransposeMatrixd (t_float);	// CON
+        public:
+          // Constructor
+          GEMglLoadTransposeMatrixd (t_float);  // CON
 
-	protected:
-	  // Destructor
-	  virtual ~GEMglLoadTransposeMatrixd ();
+        protected:
+          // Destructor
+          virtual ~GEMglLoadTransposeMatrixd ();
           // check extensions
           virtual bool isRunnable(void);
 
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+          // Do the rendering
+          virtual void  render (GemState *state);
 
-	// variables
-	  GLdouble	m_matrix[16];		// VAR
-	  virtual void	matrixMess(int argc, t_atom*argv);	// FUN
+        // variables
+          GLdouble      m_matrix[16];           // VAR
+          virtual void  matrixMess(int argc, t_atom*argv);      // FUN
 
 
-	private:
+        private:
 
-	// we need some inlets
-	  t_inlet *m_inlet;
+        // we need some inlets
+          t_inlet *m_inlet;
 
-	// static member functions
-	  static void	 matrixMessCallback (void*, t_symbol*,int,t_atom*);
+        // static member functions
+          static void    matrixMessCallback (void*, t_symbol*,int,t_atom*);
 };
 #endif // for header file

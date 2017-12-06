@@ -26,7 +26,7 @@ pix_blur :: pix_blur(void) :
   m_blurH(240), m_blurW(240),
   m_blurSize(0), m_blurBpp(2),
   inletBlur(0)
-{	long size,src,i;
+{       long size,src,i;
 
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
 
@@ -214,26 +214,26 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
   imageGain = (unsigned short) (255. - (255. * m_blurf));
   union
   {
-    //unsigned int	i;
-    unsigned short	elements[8];
+    //unsigned int      i;
+    unsigned short      elements[8];
     //vector signed char v;
-    vector	unsigned short v;
+    vector      unsigned short v;
   }shortBuffer;
 
   union
   {
-    //unsigned int	i;
-    unsigned int	elements[4];
+    //unsigned int      i;
+    unsigned int        elements[4];
     //vector signed char v;
-    vector	unsigned int v;
+    vector      unsigned int v;
   }bitBuffer;
 
   union
   {
-    //unsigned int	i;
-    unsigned char	elements[16];
+    //unsigned int      i;
+    unsigned char       elements[16];
     //vector signed char v;
-    vector	unsigned char v;
+    vector      unsigned char v;
   }charBuffer;
 
   register vector unsigned short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;
@@ -309,9 +309,9 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
   gainAdd = shortBuffer.v;
   gainAdd = (vector unsigned short)vec_splat((vector unsigned short)gainAdd,0);
 # ifndef PPC970
-  UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
-	vec_dst( rightData, prefetchSize, 1 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+        vec_dst( inData, prefetchSize, 0 );
+        vec_dst( rightData, prefetchSize, 1 );
 # endif /* PPC970 */
   for ( h=0; h<image.ysize; h++){
     for (w=0; w<width; w++)
@@ -393,4 +393,3 @@ void pix_blur :: blurMess(float value)
   m_blurf=value;
   setPixModified();
 }
-

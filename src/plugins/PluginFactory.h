@@ -92,7 +92,7 @@ namespace gem {
      */
     template<class BaseClass>
       struct dummy {
-	dummy(void);
+        dummy(void);
       };
   };
 

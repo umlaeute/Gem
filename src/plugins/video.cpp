@@ -127,7 +127,7 @@ namespace gem { namespace plugins {
         m_allHandles[i]=NULL;
       }
     }
-    virtual std::vector<std::string>enumerate(void){ 
+    virtual std::vector<std::string>enumerate(void){
       // almost compat
       // LATER: the consumer should know which device corresponds to which backend/driver
       /* maybe something like
@@ -135,100 +135,100 @@ namespace gem { namespace plugins {
        */
       std::vector<std::string>result;
       for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  std::vector<std::string>res=m_allHandles[i]->enumerate();
-			  for(unsigned int j=0; j<res.size(); j++) {
-				  result.push_back(res[j]);
-			  }
-		  }
-		  return result;
+                          std::vector<std::string>res=m_allHandles[i]->enumerate();
+                          for(unsigned int j=0; j<res.size(); j++) {
+                                  result.push_back(res[j]);
+                          }
+                  }
+                  return result;
     }
-	  virtual bool setDevice(int ID){
+          virtual bool setDevice(int ID){
       // compat
-		  bool result=false;
-		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  if(m_allHandles[i]->setDevice(ID))
-				  result=true;
-		  }
-		  return result;
-	  }
-	  virtual bool	    	setDevice(const std::string&ID) {
+                  bool result=false;
+                  for(unsigned int i=0; i<m_allHandles.size(); i++) {
+                          if(m_allHandles[i]->setDevice(ID))
+                                  result=true;
+                  }
+                  return result;
+          }
+          virtual bool          setDevice(const std::string&ID) {
       // compat
-		  bool result=false;
-		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  if(m_allHandles[i]->setDevice(ID))
-				  result=true;
-		  }
-		  return result;
-	  }
-	  virtual bool open(gem::Properties&props) {
+                  bool result=false;
+                  for(unsigned int i=0; i<m_allHandles.size(); i++) {
+                          if(m_allHandles[i]->setDevice(ID))
+                                  result=true;
+                  }
+                  return result;
+          }
+          virtual bool open(gem::Properties&props) {
       // LATER: driver-selection
       /* e.g. add a reserved "_backend" property and use that to select the correct driver
        * available backends could be queried with "_backends"
        */
-		  if(m_handle)close();
-		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  if(m_allHandles[i]->open(props)) {
-				  m_handle=m_allHandles[i];
-				  return true;
-			  }
-		  }
-		  return false;
-	  }
-	  virtual bool start(void) {
+                  if(m_handle)close();
+                  for(unsigned int i=0; i<m_allHandles.size(); i++) {
+                          if(m_allHandles[i]->open(props)) {
+                                  m_handle=m_allHandles[i];
+                                  return true;
+                          }
+                  }
+                  return false;
+          }
+          virtual bool start(void) {
       // OK
-		  if(m_handle)
-			  return m_handle->start();
-		  return false;
-	  }
-	  virtual pixBlock *getFrame(void) {
+                  if(m_handle)
+                          return m_handle->start();
+                  return false;
+          }
+          virtual pixBlock *getFrame(void) {
       // OK
-		  if(m_handle)return m_handle->getFrame();
-		  return NULL;
-	  }
+                  if(m_handle)return m_handle->getFrame();
+                  return NULL;
+          }
     virtual void releaseFrame(void) {
       // OK
-		  if(m_handle)m_handle->releaseFrame();
-	  }
-	  virtual bool stop(void) {
+                  if(m_handle)m_handle->releaseFrame();
+          }
+          virtual bool stop(void) {
       // OK
-		  if(m_handle)
-			  return m_handle->stop();
-		  return false;
-	  }
-	  virtual void close(void) {
+                  if(m_handle)
+                          return m_handle->stop();
+                  return false;
+          }
+          virtual void close(void) {
       // OK
-		  if(m_handle)
-			  m_handle->close();
-		  m_handle=NULL;
-	  }
-	  virtual bool reset(void) {
+                  if(m_handle)
+                          m_handle->close();
+                  m_handle=NULL;
+          }
+          virtual bool reset(void) {
       // OK
-		  if(m_handle)
-			  return m_handle->reset();
+                  if(m_handle)
+                          return m_handle->reset();
 
-	  bool result=false;
-		for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			if(m_allHandles[i]->reset())
-				result=true;
-		}
-		return result;
-	  }
-	  virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable) {
+          bool result=false;
+                for(unsigned int i=0; i<m_allHandles.size(); i++) {
+                        if(m_allHandles[i]->reset())
+                                result=true;
+                }
+                return result;
+          }
+          virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable) {
       // OK
-		  if(m_handle)
-			  return m_handle->enumProperties(readable, writeable);
-		  return false;
-	  }
+                  if(m_handle)
+                          return m_handle->enumProperties(readable, writeable);
+                  return false;
+          }
     virtual void setProperties(gem::Properties&props) {
       // OK
-		  if(m_handle)
-			  m_handle->setProperties(props);
-	  }
+                  if(m_handle)
+                          m_handle->setProperties(props);
+          }
     virtual void getProperties(gem::Properties&props) {
       // OK
-		  if(m_handle)
-			  m_handle->getProperties(props);
-	  }
+                  if(m_handle)
+                          m_handle->getProperties(props);
+          }
     virtual bool dialog(std::vector<std::string>names) {
       // OK
       /* LATER: what if no device is currently opened?
@@ -237,39 +237,39 @@ namespace gem { namespace plugins {
        *  try all available backends, until one returns true
        *  filter backends based on "_backend" selection?
        */
-		  if(m_handle)
-			  return m_handle->dialog(names);
-		  return false;
-	  }
+                  if(m_handle)
+                          return m_handle->dialog(names);
+                  return false;
+          }
     virtual std::vector<std::string>dialogs(void) {
       // OK
-		  if(m_handle)
-			  return m_handle->dialogs();
+                  if(m_handle)
+                          return m_handle->dialogs();
 
-		  std::vector<std::string>result;
+                  std::vector<std::string>result;
       for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  std::vector<std::string>res=m_allHandles[i]->dialogs();
-			  for(unsigned int j=0; j<res.size(); j++) {
-				  result.push_back(res[j]);
-			  }
-		  }
-		  return result;
-	  }
-	  virtual bool isThreadable(void) {
+                          std::vector<std::string>res=m_allHandles[i]->dialogs();
+                          for(unsigned int j=0; j<res.size(); j++) {
+                                  result.push_back(res[j]);
+                          }
+                  }
+                  return result;
+          }
+          virtual bool isThreadable(void) {
       // OK
       // LATER properly set m_canThread in ctor
-		  if(m_handle)
-			  return m_handle->isThreadable();
-		  return m_canThread;
-	  }
-	  virtual bool grabAsynchronous(bool state) {
+                  if(m_handle)
+                          return m_handle->isThreadable();
+                  return m_canThread;
+          }
+          virtual bool grabAsynchronous(bool state) {
       // OK
       // LATER get rid of that entirely?
-		  if(m_handle)
-			  return m_handle->grabAsynchronous(state);
-		  return false;
-	  }
-	  virtual bool setColor(int color){
+                  if(m_handle)
+                          return m_handle->grabAsynchronous(state);
+                  return false;
+          }
+          virtual bool setColor(int color){
       // OK
       // LATER get rid of that!
       // think about the return value...
@@ -278,30 +278,30 @@ namespace gem { namespace plugins {
         if(!m_allHandles[i]->setColor(color)) {
           result=false;
         }
-		  }
-		  return result;
-	  }
-	  virtual bool provides(const std::string&ID){
+                  }
+                  return result;
+          }
+          virtual bool provides(const std::string&ID){
       // OK
-		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  if(m_allHandles[i]->provides(ID))
-				  return true;
-		  }
-		  return false;
-	  }
-	  virtual std::vector<std::string>provides(void){
+                  for(unsigned int i=0; i<m_allHandles.size(); i++) {
+                          if(m_allHandles[i]->provides(ID))
+                                  return true;
+                  }
+                  return false;
+          }
+          virtual std::vector<std::string>provides(void){
       // OK
       // LATER: remove dupes
-		  std::vector<std::string>result;
-		  for(unsigned int i=0; i<m_allHandles.size(); i++) {
-			  std::vector<std::string>res=m_allHandles[i]->provides();
-			  for(unsigned int j=0; j<res.size(); j++) {
-				  result.push_back(res[i]);
-			  }
-		  }
-		  return result;
-	  }
-	  virtual const std::string getName(void) {
+                  std::vector<std::string>result;
+                  for(unsigned int i=0; i<m_allHandles.size(); i++) {
+                          std::vector<std::string>res=m_allHandles[i]->provides();
+                          for(unsigned int j=0; j<res.size(); j++) {
+                                  result.push_back(res[i]);
+                          }
+                  }
+                  return result;
+          }
+          virtual const std::string getName(void) {
       // OK
       // LATER: special handling of empty names in host(!)
       return std::string("");
@@ -312,5 +312,5 @@ namespace gem { namespace plugins {
 
 gem::plugins::video*gem::plugins::video::getInstance(void) {
   video*result=new videoMeta();
-	return result;
+        return result;
 }

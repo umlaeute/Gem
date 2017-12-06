@@ -36,19 +36,19 @@ class GEM_EXTERN cone : public cylinder
 
     public:
 
-	    //////////
-	    // Constructor
+            //////////
+            // Constructor
   cone(t_floatarg size,t_floatarg slice);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~cone();
+        //////////
+        // Destructor
+        virtual ~cone();
 
-    	//////////
-    	// Do the rendering
-	virtual void setupParameters(void);
+        //////////
+        // Do the rendering
+        virtual void setupParameters(void);
 };
 
-#endif	// for header file
+#endif  // for header file

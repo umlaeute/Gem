@@ -194,11 +194,11 @@ void PBuffer::disable() {
 */
 
 struct PBuffer_data {
-  CGLPBufferObj		pbuffer;
-  CGLContextObj		context;
+  CGLPBufferObj         pbuffer;
+  CGLContextObj         context;
 
-  CGLContextObj		old_context;
-  CGLPixelFormatObj	pixfmt;
+  CGLContextObj         old_context;
+  CGLPixelFormatObj     pixfmt;
 };
 
 #pragma mark ---- Error Reporting ----
@@ -231,7 +231,7 @@ OSStatus cglReportError (CGLError err)
 PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
 {
   OSStatus err = noErr;
-  CGLPixelFormatAttribute		*att,attrib[64];
+  CGLPixelFormatAttribute               *att,attrib[64];
   GemCGLint vs, npf;
 
   // setup offscreen context
@@ -239,7 +239,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   *att++=kCGLPFANoRecovery;
   *att++=kCGLPFAAccelerated;
   *att++=kCGLPFAWindow;
-  //	*att++=kCGLPFAPBuffer;
+  //    *att++=kCGLPFAPBuffer;
   *att++=kCGLPFAColorSize;
   *att++=(CGLPixelFormatAttribute)32;
 
@@ -253,12 +253,12 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
     *att++=(CGLPixelFormatAttribute)8;
   }
   if (flag & GEM_PBUFLAG_FLOAT){
-    //		*att++=kCGLPFADepthSize;
-    //		*att++=(CGLPixelFormatAttribute)8;
+    //          *att++=kCGLPFADepthSize;
+    //          *att++=(CGLPixelFormatAttribute)8;
   }
   //*att++=kCGLPFADoubleBuffer;
-  //	*att++=kCGLPFADisplayMask;
-  //	*att++=kCGLPFAAllRenderers;
+  //    *att++=kCGLPFADisplayMask;
+  //    *att++=kCGLPFAAllRenderers;
 
   *att=(CGLPixelFormatAttribute)0;
 
@@ -271,7 +271,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width), height(height)
   cglReportError(CGLCreateContext (data->pixfmt, data->old_context, &(data->context)));
   verbose (2, "pBuffer Context (0x%X) Renderer: %s\n",data->context, glGetString (GL_RENDERER));
 
-  /*	if (float_buffer)
+  /*    if (float_buffer)
     cglReportError( CGLCreatePBuffer ( width, height, GL_TEXTURE_2D, GL_FLOAT, 0, &(data->pbuffer) ) );
     else
        */

@@ -38,33 +38,33 @@ class GEM_EXTERN slideSquares : public GemShape
 
         //////////
         // Constructor
-		slideSquares(t_floatarg width, t_floatarg height);
+                slideSquares(t_floatarg width, t_floatarg height);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~slideSquares(void);
+        //////////
+        // Destructor
+        virtual ~slideSquares(void);
 
-    	//////////
-    	// The height of the object
-    	void	    	heightMess(float size);
+        //////////
+        // The height of the object
+        void            heightMess(float size);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	renderShape(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    renderShape(GemState *state);
 
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+        //////////
+        // The height of the object
+        GLfloat         m_height;
 
         //////////
         // The height inlet
         t_inlet         *m_inletH;
 
 
-        GLvoid 	Slide( int i );
-        void	slide_init(void);
+        GLvoid  Slide( int i );
+        void    slide_init(void);
 };
 
-#endif	// for header file
+#endif  // for header file

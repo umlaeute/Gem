@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	- registers a loader with Pd
+        - registers a loader with Pd
 
     Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -26,12 +26,12 @@ class GEM_EXTERN GemDylib {
 
  public:
   GemDylib(const CPPExtern*obj,
-	   const std::string&libname,
-	   const std::string&extension=std::string("")
-	   ); // throws GemException
+           const std::string&libname,
+           const std::string&extension=std::string("")
+           ); // throws GemException
   GemDylib(const std::string&libname,
-	   const std::string&extension=std::string("")
-	   ); // throws GemException
+           const std::string&extension=std::string("")
+           ); // throws GemException
 
   GemDylib(const GemDylib&);
 
@@ -55,8 +55,8 @@ class GEM_EXTERN GemDylib {
    * on success "true" is returned, else "false
    */
   static bool LoadLib(const std::string&procname,
-		      const std::string&baselibname,
-		      const std::string&fileext=std::string(""));
+                      const std::string&baselibname,
+                      const std::string&fileext=std::string(""));
 
 
   static const std::string getDefaultExtension(void);

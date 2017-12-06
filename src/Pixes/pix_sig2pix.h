@@ -57,14 +57,14 @@ class GEM_EXTERN pix_sig2pix : public GemBase
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Clear the dirty flag on the pixBlock
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
-  virtual void	startRendering();
+  virtual void  startRendering();
 
   //////////
   // setting dimension and colourspace
@@ -76,12 +76,12 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   virtual void  dspMess(void *data, t_signal** sp);
 
   //-----------------------------------
-  // GROUP:	Image data
+  // GROUP:     Image data
   //-----------------------------------
 
   //////////
   // The pixBlock with the current image
-  pixBlock    	m_pixBlock;
+  pixBlock      m_pixBlock;
   imageStruct   m_imageStruct;
   int           m_pixsize;
 
@@ -100,4 +100,4 @@ class GEM_EXTERN pix_sig2pix : public GemBase
   static void   csMessCallback(void *data, t_symbol*s);
 };
 
-#endif	// for header file
+#endif  // for header file

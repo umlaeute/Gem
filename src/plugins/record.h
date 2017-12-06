@@ -105,4 +105,4 @@ public:
  */
 #define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::record> fac_record_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

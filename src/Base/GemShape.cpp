@@ -125,7 +125,7 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, 
     }
   } else { // no multitexturing!
     glTexCoord2f(tx, ty);
-	}
+        }
   glVertex3f( x, y, z );
 }
 
@@ -149,7 +149,7 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
       glMultiTexCoord4fARB(GL_TEXTURE0+i, s, t, r, q);
   } else { // no multitexturing!
     glTexCoord4f(s, t, r, q);
-	}
+        }
 
   glVertex3f( x, y, z );
 }

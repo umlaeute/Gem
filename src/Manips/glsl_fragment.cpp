@@ -111,4 +111,3 @@ void glsl_fragment :: printInfo()
 void glsl_fragment :: obj_setupCallback(t_class *classPtr)
 {
 }
-

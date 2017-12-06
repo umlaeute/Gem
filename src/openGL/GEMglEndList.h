@@ -2,7 +2,7 @@
   * GEM - Graphics Environment for Multimedia
   *
   *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  *	zmoelnig@iem.kug.ac.at
+  *     zmoelnig@iem.kug.ac.at
   *  For information on usage and redistribution, and for a DISCLAIMER
   *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
   *
@@ -17,26 +17,26 @@
 
 /*
  CLASS
-	GEMglEndList
+        GEMglEndList
  KEYWORDS
-	openGL	0
+        openGL  0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glEndList()"
+        wrapper for the openGL-function
+        "glEndList()"
  */
 
 class GEM_EXTERN GEMglEndList : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEndList, GemGLBase);
+        CPPEXTERN_HEADER(GEMglEndList, GemGLBase);
 
-	public:
-	  // Constructor
-	  GEMglEndList ();	// CON
+        public:
+          // Constructor
+          GEMglEndList ();      // CON
 
-	protected:
-	  // Destructor
-	  virtual ~GEMglEndList ();
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+        protected:
+          // Destructor
+          virtual ~GEMglEndList ();
+          // Do the rendering
+          virtual void  render (GemState *state);
 };
 #endif // for header file

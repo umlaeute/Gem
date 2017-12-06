@@ -26,7 +26,7 @@ pix_roll :: pix_roll() :
   m_vroll(0), m_axis(0),
   m_blurH(240), m_blurW(240), m_blurSize(0), m_blurBpp(2),
   inletBlur(0)
-{	long size;
+{       long size;
 
   inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("roll"));
 
@@ -256,4 +256,3 @@ void pix_roll :: axisCallback(void *data, t_float value)
   GetMyClass(data)->m_axis=((long)value);
   GetMyClass(data)->setPixModified();
 }
-

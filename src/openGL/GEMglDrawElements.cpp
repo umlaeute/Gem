@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -23,21 +23,21 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawElements , t_floatarg, A_DEFFLOAT, t_fl
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDrawElements :: GEMglDrawElements	(t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglDrawElements :: GEMglDrawElements  (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
   mode(static_cast<GLenum>(arg0)), // ub, us, ui
   count(static_cast<GLsizei>(arg1)),
   type(static_cast<GLenum>(arg2))
 {
-	m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
-	m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("count"));
-	m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("type"));
-	m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list , gensym("indices"));
+        m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+        m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("count"));
+        m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("type"));
+        m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list , gensym("indices"));
 
-	len=(count>0)?count:16;
+        len=(count>0)?count:16;
 
-	indices_ui=new GLuint  [len];
-	indices_us=new GLushort[len];
-	indices_ub=new GLubyte [len];
+        indices_ui=new GLuint  [len];
+        indices_us=new GLushort[len];
+        indices_ub=new GLubyte [len];
 
 }
 /////////////////////////////////////////////////////////
@@ -81,22 +81,22 @@ void GEMglDrawElements :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglDrawElements :: modeMess (t_float arg1) {	// FUN
-	mode = static_cast<GLenum>(arg1);
-	setModified();
+void GEMglDrawElements :: modeMess (t_float arg1) {     // FUN
+        mode = static_cast<GLenum>(arg1);
+        setModified();
 }
 
-void GEMglDrawElements :: countMess (t_float arg1) {	// FUN
-	count = static_cast<GLsizei>(arg1);
-	setModified();
+void GEMglDrawElements :: countMess (t_float arg1) {    // FUN
+        count = static_cast<GLsizei>(arg1);
+        setModified();
 }
 
-void GEMglDrawElements :: typeMess (t_float arg1) {	// FUN
-	type = static_cast<GLenum>(arg1);
-	setModified();
+void GEMglDrawElements :: typeMess (t_float arg1) {     // FUN
+        type = static_cast<GLenum>(arg1);
+        setModified();
 }
 
-void GEMglDrawElements :: indicesMess (int argc, t_atom*argv) {	// FUN
+void GEMglDrawElements :: indicesMess (int argc, t_atom*argv) { // FUN
   if (argc>len){
     len=argc;
     delete [] indices_ui; indices_ui = new GLuint  [len];
@@ -118,21 +118,21 @@ void GEMglDrawElements :: indicesMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglDrawElements :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::modeMessCallback),  	gensym("mode"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::countMessCallback),  	gensym("count"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::typeMessCallback),  	gensym("type"), A_DEFFLOAT, A_NULL);
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::indicesMessCallback),  	gensym("indices"), A_GIMME, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::modeMessCallback),    gensym("mode"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::countMessCallback),   gensym("count"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::typeMessCallback),    gensym("type"), A_DEFFLOAT, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::indicesMessCallback),         gensym("indices"), A_GIMME, A_NULL);
 }
 
 void GEMglDrawElements :: modeMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->modeMess (arg0);
+        GetMyClass(data)->modeMess (arg0);
 }
 void GEMglDrawElements :: countMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->countMess (arg0);
+        GetMyClass(data)->countMess (arg0);
 }
 void GEMglDrawElements :: typeMessCallback (void* data, t_float arg0){
-	GetMyClass(data)->typeMess (arg0);
+        GetMyClass(data)->typeMess (arg0);
 }
 void GEMglDrawElements :: indicesMessCallback (void* data, t_symbol*, int argc, t_atom*argv){
-	GetMyClass(data)->indicesMess ( argc, argv );
+        GetMyClass(data)->indicesMess ( argc, argv );
 }

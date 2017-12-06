@@ -82,10 +82,10 @@ void pix_movie :: render(GemState *state)
       // someone responded immediately to the outlet_float and changed the requested frame
       // so try to get the newly requested frame:
       if(m_thread_running){
-	/* the grabbing-thread is currently locked
-	 * we do the grabbing ourselfes
-	 */
-	m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
+        /* the grabbing-thread is currently locked
+         * we do the grabbing ourselfes
+         */
+        m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
       }
       state->set(GemState::_PIX, m_handle->getFrame());
     }
@@ -153,13 +153,13 @@ void pix_movie :: stopRendering()
 void pix_movie :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::textureMessCallback),
-		  gensym("quality"), A_FLOAT, A_NULL);
+                  gensym("quality"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::repeatMessCallback),
-		  gensym("repeat"), A_FLOAT, A_NULL);
+                  gensym("repeat"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::modeCallback),
-		  gensym("mode"), A_FLOAT, A_NULL);
+                  gensym("mode"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::rectangleCallback),
-		  gensym("rectangle"), A_FLOAT, A_NULL);
+                  gensym("rectangle"), A_FLOAT, A_NULL);
 }
 
 void pix_movie :: textureMessCallback(void *data, t_float quality)
@@ -173,7 +173,7 @@ void pix_movie :: repeatMessCallback(void *data, t_float quality)
 
 void pix_movie :: modeCallback(void *data, t_float quality)
 {
-	GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
+        GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
     GetMyClass(data)->modeMess(static_cast<int>(quality));
 }
 

@@ -35,7 +35,7 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 {
     PIXELFORMATDESCRIPTOR pfd;
 
-	// clean out the descriptor
+        // clean out the descriptor
     memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
 
     pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -73,10 +73,10 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 /////////////////////////////////////////////////////////
 LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static RECT rcClient;
-	static int ctrlKeyDown = 0;
+        static RECT rcClient;
+        static int ctrlKeyDown = 0;
 
-	// assume that we handle the message
+        // assume that we handle the message
     long lRet = 0;
 
     switch (uMsg)
@@ -117,20 +117,20 @@ LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
         // keyboard action
         case WM_KEYUP:
-			if ((int)wParam == VK_CONTROL)
-				ctrlKeyDown = 0;
+                        if ((int)wParam == VK_CONTROL)
+                                ctrlKeyDown = 0;
 
             triggerKeyboardEvent((char*)&wParam, (int)wParam, 1);
             break;
 
             // keyboard action
     case WM_KEYDOWN:
-			if ((int)wParam == VK_CONTROL)
-				ctrlKeyDown = 1;
-			else if (ctrlKeyDown && (int)wParam == 'R')
+                        if ((int)wParam == VK_CONTROL)
+                                ctrlKeyDown = 1;
+                        else if (ctrlKeyDown && (int)wParam == 'R')
         gemAbortRendering();
-			else
-				triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
+                        else
+                                triggerKeyboardEvent((char*)&wParam, (int)wParam, 0);
       break;
 
       // resize event
@@ -188,8 +188,8 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
       if (!RegisterClass(&wndclass) )
         {
-	  error("GEM: Unable to register window class");
-	  return(0);
+          error("GEM: Unable to register window class");
+          return(0);
         }
       firstTime = 0;
     }
@@ -205,7 +205,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   bool fullscreen=(hints.fullscreen!=0);
   if (fullscreen){
-    DEVMODE dmScreenSettings;								// Device Mode
+    DEVMODE dmScreenSettings;                                                           // Device Mode
 
     if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)){
       error("GEM: couldn't get screen capabilities!");
@@ -215,22 +215,22 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
     x=y=0;
 
-    memset(&dmScreenSettings,0,sizeof(dmScreenSettings));	// Makes Sure Memory's Cleared
-    dmScreenSettings.dmSize=sizeof(dmScreenSettings);		// Size Of The Devmode Structure
-    dmScreenSettings.dmPelsWidth	= hints.width;			// Selected Screen Width
-    dmScreenSettings.dmPelsHeight	= hints.height;			// Selected Screen Height
-    dmScreenSettings.dmBitsPerPel	= 32;					// Selected Bits Per Pixel
+    memset(&dmScreenSettings,0,sizeof(dmScreenSettings));       // Makes Sure Memory's Cleared
+    dmScreenSettings.dmSize=sizeof(dmScreenSettings);           // Size Of The Devmode Structure
+    dmScreenSettings.dmPelsWidth        = hints.width;                  // Selected Screen Width
+    dmScreenSettings.dmPelsHeight       = hints.height;                 // Selected Screen Height
+    dmScreenSettings.dmBitsPerPel       = 32;                                   // Selected Bits Per Pixel
     dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
     // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
     if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-      dmScreenSettings.dmPelsWidth	= w;
-      dmScreenSettings.dmPelsHeight	= h;
+      dmScreenSettings.dmPelsWidth      = w;
+      dmScreenSettings.dmPelsHeight     = h;
       if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-	error("GEM: couldn't switch to fullscreen");
-	fullscreen=false;
+        error("GEM: couldn't switch to fullscreen");
+        fullscreen=false;
       } else {
-	hints.real_h=h;
-	hints.real_w=w;
+        hints.real_h=h;
+        hints.real_w=w;
       }
     }
   }
@@ -248,7 +248,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
   info.fs = fullscreen;//hints.fullscreen;
 
   // Since Windows uses some of the window for the border, etc,
-  //		we have to ask how big the window should really be
+  //            we have to ask how big the window should really be
   RECT newSize;
   newSize.left = x;
   newSize.top = y;
@@ -258,28 +258,28 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
   AdjustWindowRectEx(&newSize, style, FALSE, dwExStyle); // no menu
 
   if (newSize.left<0 && x>=0){
-	  newSize.right-=newSize.left;
-	  newSize.left=0;
+          newSize.right-=newSize.left;
+          newSize.left=0;
   }
   if (newSize.top<0 && y>=0){
-	  newSize.bottom-=newSize.top;
-	  newSize.top=0;
+          newSize.bottom-=newSize.top;
+          newSize.top=0;
   }
 
   // Create the window
   info.win = CreateWindowEx (
-			     dwExStyle,
-			     "GEM",
-			     hints.title,
-			     style,
-			     newSize.left,
-			     newSize.top,
-			     newSize.right - newSize.left,
-			     newSize.bottom - newSize.top,
-			     NULL,
-			     NULL,
-			     hInstance,
-			     NULL);
+                             dwExStyle,
+                             "GEM",
+                             hints.title,
+                             style,
+                             newSize.left,
+                             newSize.top,
+                             newSize.right - newSize.left,
+                             newSize.bottom - newSize.top,
+                             NULL,
+                             NULL,
+                             hInstance,
+                             NULL);
 
   if (!info.win)  {
       error("GEM: Unable to create window");
@@ -323,8 +323,8 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   // show and update main window
   if (fullscreen){
-    ShowWindow(info.win,SW_SHOW);				// Show The Window
-    SetForegroundWindow(info.win);				// Slightly Higher Priority
+    ShowWindow(info.win,SW_SHOW);                               // Show The Window
+    SetForegroundWindow(info.win);                              // Slightly Higher Priority
     SetFocus(info.win);
   } else  ShowWindow(info.win, SW_SHOWNORMAL);
 
@@ -339,12 +339,12 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 /////////////////////////////////////////////////////////
 GEM_EXTERN void destroyGemWindow(WindowInfo &info)
 {
-  if (info.fs) ChangeDisplaySettings(NULL,0);	// Switch Back To The Desktop
+  if (info.fs) ChangeDisplaySettings(NULL,0);   // Switch Back To The Desktop
 
   if (info.win) {
     if (info.dc) {
       if (info.context) {
-	wglDeleteContext(info.context);
+        wglDeleteContext(info.context);
       }
       ReleaseDC(info.win, info.dc);
     }
@@ -379,9 +379,9 @@ int topmostGemWindow(WindowInfo &info, int state)
   static int topmost_state = 0;
   state=!(!state);
   if (state)
-	SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   else
-	SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   topmost_state = state;
   return topmost_state;
 }

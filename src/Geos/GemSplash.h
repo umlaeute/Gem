@@ -38,17 +38,17 @@ class GEM_EXTERN GemSplash : public GemBase
 
         //////////
         // Constructor
-    	GemSplash();
+        GemSplash();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~GemSplash();
+        //////////
+        // Destructor
+        virtual ~GemSplash();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

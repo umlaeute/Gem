@@ -48,7 +48,7 @@ class GEM_EXTERN pix_emboss : public GemPixObj
 
   //////////
   // Do the YUV processing
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
 
  private:
 
@@ -57,4 +57,3 @@ class GEM_EXTERN pix_emboss : public GemPixObj
 };
 
 #endif
-

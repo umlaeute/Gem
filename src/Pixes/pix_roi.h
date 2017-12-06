@@ -54,4 +54,4 @@ class GEM_EXTERN pix_roi : public GemPixObj
     static int s_ID; /* the key to retrieve the ROI from the GemState */
 };
 
-#endif	// for header file
+#endif  // for header file

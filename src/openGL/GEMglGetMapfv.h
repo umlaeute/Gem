@@ -2,7 +2,7 @@
   * GEM - Graphics Environment for Multimedia
   *
   *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  *	zmoelnig@iem.kug.ac.at
+  *     zmoelnig@iem.kug.ac.at
   *  For information on usage and redistribution, and for a DISCLAIMER
   *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
   *
@@ -17,45 +17,45 @@
 
 /*
  CLASS
-	GEMglGetMapfv
+        GEMglGetMapfv
  KEYWORDS
-	openGL	0
+        openGL  0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glGetMapfv( GLenum target, GLenum query, GLfloat *v)"
+        wrapper for the openGL-function
+        "glGetMapfv( GLenum target, GLenum query, GLfloat *v)"
  */
 
 class GEM_EXTERN GEMglGetMapfv : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglGetMapfv, GemGLBase);
+        CPPEXTERN_HEADER(GEMglGetMapfv, GemGLBase);
 
-	public:
-	  // Constructor
-	  GEMglGetMapfv (t_floatarg, t_floatarg);	// CON
-	protected:
-	  // Destructor
-	  virtual ~GEMglGetMapfv ();
+        public:
+          // Constructor
+          GEMglGetMapfv (t_floatarg, t_floatarg);       // CON
+        protected:
+          // Destructor
+          virtual ~GEMglGetMapfv ();
           // check extensions
           virtual bool isRunnable(void);
 
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+          // Do the rendering
+          virtual void  render (GemState *state);
 
-	// variable
-	GLenum target;
-	virtual void	targetMess(t_float);	// FUN
+        // variable
+        GLenum target;
+        virtual void    targetMess(t_float);    // FUN
 
-	GLenum query;
-	virtual void	queryMess(t_float);	// FUN
+        GLenum query;
+        virtual void    queryMess(t_float);     // FUN
 
-	GLfloat v[4];
+        GLfloat v[4];
 
-	private:
+        private:
 
-	// we need one inlet
-	t_inlet *m_inlet[2];
+        // we need one inlet
+        t_inlet *m_inlet[2];
 
-	// static member functions
+        // static member functions
          static void    targetMessCallback(void*, t_float);
          static void    queryMessCallback (void*, t_float);
 };

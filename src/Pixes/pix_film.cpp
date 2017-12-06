@@ -677,9 +677,9 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   }
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::openMessCallback),
-		  gensym("open"), A_GIMME, A_NULL);
+                  gensym("open"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::changeImageCallback),
-		  gensym("img_num"), A_GIMME, A_NULL);
+                  gensym("img_num"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
@@ -738,4 +738,3 @@ void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *a
     GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
 }
 #endif /*OS-specific GEM_FILMBACKEND */
-

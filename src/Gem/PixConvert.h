@@ -135,13 +135,13 @@ LOG
 
 
   void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
-							unsigned char *pixels);
+                                                        unsigned char *pixels);
   void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
-							 unsigned char *pixels);
+                                                         unsigned char *pixels);
   void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
-							unsigned char *pixels);
+                                                        unsigned char *pixels);
   void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
-							 unsigned char *pixels);
+                                                         unsigned char *pixels);
   void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, size_t pixelnum,
                               unsigned char *pixels);
   void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,

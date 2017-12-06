@@ -49,7 +49,7 @@ class GEM_EXTERN pix_delay : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
 
   imageStruct    myImage;
 
@@ -66,4 +66,4 @@ class GEM_EXTERN pix_delay : public GemPixObj
   static void delayMessCallback(void *data, t_float);
 };
 
-#endif	// for header file
+#endif  // for header file

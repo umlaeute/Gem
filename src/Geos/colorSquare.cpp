@@ -68,43 +68,43 @@ void colorSquare :: renderShape(GemState *state)
     {
         int curCoord = 0;
 
-	    glBegin(m_drawType);
-	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+            glBegin(m_drawType);
+                glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[0]);
                 glVertex3f(-m_size, -m_size, 0.0f);
 
-	        if (GemShape::m_texNum > 1) curCoord = 1;
-	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+                if (GemShape::m_texNum > 1) curCoord = 1;
+                glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[1]);
                 glVertex3f( m_size, -m_size, 0.0f);
 
-	        if (GemShape::m_texNum > 2) curCoord = 2;
-	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+                if (GemShape::m_texNum > 2) curCoord = 2;
+                glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[2]);
                 glVertex3f( m_size,  m_size, 0.0f);
 
-	        if (GemShape::m_texNum > 3) curCoord = 3;
-	    	glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+                if (GemShape::m_texNum > 3) curCoord = 3;
+                glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
             glColor3fv(m_color[3]);
                 glVertex3f(-m_size,  m_size, 0.0f);
-	    glEnd();
+            glEnd();
     }
     else
     {
-	    glBegin(m_drawType);
+            glBegin(m_drawType);
             glColor3fv(m_color[0]);
-	        glTexCoord2f(0.0f, 0.0f);
+                glTexCoord2f(0.0f, 0.0f);
                 glVertex3f(-m_size, -m_size, 0.0f);
             glColor3fv(m_color[1]);
-	        glTexCoord2f(1.0f, 0.0f);
+                glTexCoord2f(1.0f, 0.0f);
                 glVertex3f( m_size, -m_size, 0.0f);
             glColor3fv(m_color[2]);
-	        glTexCoord2f(1.0f, 1.0f);
+                glTexCoord2f(1.0f, 1.0f);
                 glVertex3f( m_size,  m_size, 0.0f);
             glColor3fv(m_color[3]);
-	        glTexCoord2f(0.0f, 1.0f);
+                glTexCoord2f(0.0f, 1.0f);
                 glVertex3f(-m_size,  m_size, 0.0f);
-	    glEnd();
+            glEnd();
     }
 }
 
@@ -135,13 +135,13 @@ void colorSquare :: vertColorMess(int whichVert, float r, float g, float b)
 void colorSquare :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert0MessCallback),
-    	    gensym("vert0"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+            gensym("vert0"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert1MessCallback),
-    	    gensym("vert1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+            gensym("vert1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert2MessCallback),
-    	    gensym("vert2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+            gensym("vert2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&colorSquare::vert3MessCallback),
-    	    gensym("vert3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
+            gensym("vert3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
 void colorSquare :: vert0MessCallback(void *data, t_float r, t_float g, t_float b)
 {

@@ -180,7 +180,7 @@ class Thread::PIMPL { public:
       pthread_mutex_unlock(&p_mutex);
 
       if(stopped) {
-	return true;
+        return true;
       }
 
       int timmy=(timeout/10); // we are sleeping for 10usec in each cycle
@@ -190,13 +190,13 @@ class Thread::PIMPL { public:
 
       pthread_mutex_lock(&p_mutex);
       while(isrunning) {
-	pthread_mutex_unlock(&p_mutex);
+        pthread_mutex_unlock(&p_mutex);
         usleep(10);
         if(checktimeout && (timmy--<10)){
-	  pthread_mutex_lock(&p_mutex);
-	  break;
-	}
-	pthread_mutex_lock(&p_mutex);
+          pthread_mutex_lock(&p_mutex);
+          break;
+        }
+        pthread_mutex_lock(&p_mutex);
       }
 
       stopped=!isrunning;

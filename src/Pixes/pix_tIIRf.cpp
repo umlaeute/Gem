@@ -102,8 +102,8 @@ static inline size_t imgSize(const imageStruct*img) {
 
 static inline bool imgCompare(const imageStruct&img1, const imageStruct&img2) {
   return ((img1.xsize==img2.xsize) &&
-	  (img1.ysize==img2.ysize) &&
-	  (img1.csize==img2.csize));
+          (img1.ysize==img2.ysize) &&
+          (img1.csize==img2.csize));
 }
 
 // allocate ff+fb buffers that can hold "img" like images
@@ -221,24 +221,24 @@ void pix_tIIRf :: processImage(imageStruct &image)
     // w[n] += w[n-J]*ffJ
     const unsigned int index=getIndex(m_counter, -j, m_bufnum-1);
     weightAdd(m_buffer[index],
-	      m_buffer[m_counter],
-	      m_fb[j],
-	      imagesize);
+              m_buffer[m_counter],
+              m_fb[j],
+              imagesize);
   }
 
   // feed-forward
   //  y[n] = ff0*w[n] + ff1*w[n-1] + ... + ffM*w[n-M]
   weightSet(m_buffer[m_counter],
-	    m_buffer[m_bufnum-1],
-	    m_ff[0],
-	    imagesize);
+            m_buffer[m_bufnum-1],
+            m_ff[0],
+            imagesize);
 
   for(j=1; j<m_ffnum; j++) {
     const unsigned int index=getIndex(m_counter, -j, m_bufnum-1);
     weightAdd(m_buffer[index],
-	      m_buffer[m_bufnum-1],
-	      m_ff[j],
-	      imagesize);
+              m_buffer[m_bufnum-1],
+              m_ff[j],
+              imagesize);
   }
 
   buf2img(m_buffer[m_bufnum-1], &image);

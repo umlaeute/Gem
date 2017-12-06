@@ -57,33 +57,33 @@ class GEM_EXTERN pix_record : public GemBase
   // Destructor
   virtual ~pix_record();
 
-  virtual void	stopRecording();
-  virtual void	startRecording();
+  virtual void  stopRecording();
+  virtual void  startRecording();
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Clear the dirty flag on the pixBlock
-  virtual void 	postrender(GemState *state) {};
+  virtual void  postrender(GemState *state) {};
 
   //////////
   // Set the filename and filetype
   std::string m_filename;
-  virtual void	fileMess(t_symbol*s,int argc, t_atom *argv);
+  virtual void  fileMess(t_symbol*s,int argc, t_atom *argv);
 
   //////////
   // turn recording on/off
-  virtual void	recordMess(bool on);
+  virtual void  recordMess(bool on);
 
   ////////
   // call up compression dialog
-  virtual void	dialogMess();
+  virtual void  dialogMess();
 
-  virtual void	getCodecList();
+  virtual void  getCodecList();
   std::string m_codec;
-  virtual void	codecMess(t_atom *argv);
+  virtual void  codecMess(t_atom *argv);
 
   //////////
   // Manual writing
@@ -106,9 +106,9 @@ class GEM_EXTERN pix_record : public GemBase
   int m_maxFrames;
 
   gem::Properties m_props;
-  virtual void	enumPropertiesMess(void);
-  virtual void	setPropertiesMess(t_symbol*,int argc, t_atom*argv);
-  virtual void	clearPropertiesMess(void);
+  virtual void  enumPropertiesMess(void);
+  virtual void  setPropertiesMess(t_symbol*,int argc, t_atom*argv);
+  virtual void  clearPropertiesMess(void);
 
  private:
   bool m_recording;
@@ -119,15 +119,15 @@ class GEM_EXTERN pix_record : public GemBase
   virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
   //////////
   // static member functions
-  void 	autoMess(bool on);
-  void 	bangMess();
-  static void 	codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  void  autoMess(bool on);
+  void  bangMess();
+  static void   codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
 
-  static void 	minMessCallback(void *data, t_float min);
-  static void 	maxMessCallback(void *data, t_float max);
+  static void   minMessCallback(void *data, t_float min);
+  static void   maxMessCallback(void *data, t_float max);
 
   class PIMPL;
   PIMPL*m_pimpl;
 };
-#endif	// for header file
+#endif  // for header file
 #endif //removes pix_record

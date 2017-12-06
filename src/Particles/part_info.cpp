@@ -80,7 +80,7 @@ void part_info :: renderParticles(GemState *state)
   if (m_tickTime > 0.f)    {
     pMove();
   }
-  //	pDrawGroupp();
+  //    pDrawGroupp();
   int cnt = pGetGroupCount();
   if(cnt < 1)return;
   if (cnt>m_number){
@@ -102,7 +102,7 @@ void part_info :: renderParticles(GemState *state)
   float *size     = m_sizes;
   float *age      = m_ages;
   pGetParticles(0, cnt, position, color, velo, size, age);
-  for(int i = 0; i < cnt; i++)	{
+  for(int i = 0; i < cnt; i++)  {
     SETFLOAT(m_alist+0, position[0]);
     SETFLOAT(m_alist+1, position[1]);
     SETFLOAT(m_alist+2, position[2]);

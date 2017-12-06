@@ -61,13 +61,13 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   if (m_direction) {
     while(datasize--){
       if ((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
-	  (leftPix[chRed]  < Rhi)&&(leftPix[chRed]  > Rlo)&&
-	  (leftPix[chGreen]< Ghi)&&(leftPix[chGreen]> Glo))
-	{
-	  leftPix[chRed]   = rightPix[chRed];
-	  leftPix[chGreen] = rightPix[chGreen];
-	  leftPix[chBlue]  = rightPix[chBlue];
-	}
+          (leftPix[chRed]  < Rhi)&&(leftPix[chRed]  > Rlo)&&
+          (leftPix[chGreen]< Ghi)&&(leftPix[chGreen]> Glo))
+        {
+          leftPix[chRed]   = rightPix[chRed];
+          leftPix[chGreen] = rightPix[chGreen];
+          leftPix[chBlue]  = rightPix[chBlue];
+        }
       leftPix+=4;
       rightPix+=4;
     }
@@ -76,11 +76,11 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
       if (!((leftPix[chBlue] < Bhi)&&(leftPix[chBlue] > Blo)&&
             (leftPix[chRed]  < Rhi)&&(leftPix[chRed]  > Rlo)&&
             (leftPix[chGreen]< Ghi)&&(leftPix[chGreen]> Glo)))
-	{
-	  leftPix[chRed]   = rightPix[chRed];
-	  leftPix[chGreen] = rightPix[chGreen];
-	  leftPix[chBlue]  = rightPix[chBlue];
-	}
+        {
+          leftPix[chRed]   = rightPix[chRed];
+          leftPix[chGreen] = rightPix[chGreen];
+          leftPix[chBlue]  = rightPix[chBlue];
+        }
       leftPix+=4;
       rightPix+=4;
     }
@@ -110,11 +110,11 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
    if (m_mode){
      if (m_direction) {
        for (h=0; h<image.ysize; h++){
-	 for(w=0; w<xsize; w++){
-	   /*   if (
-		((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
-		((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)||(image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))&&
-		((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
+         for(w=0; w<xsize; w++){
+           /*   if (
+                ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
+                ((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)||(image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))&&
+                ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
                 {
                 image.data[src] = right.data[src];
                 image.data[src+1] = right.data[src+1];
@@ -122,41 +122,41 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
                 image.data[src+2] = right.data[src+2];
                 image.data[src+3] = right.data[src+3];
                 } */
-	   if (
-	       ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
-	       ((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))&&
-	       ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))
-	       )
-	     {
-	       image.data[src] = right.data[src];
-	       image.data[src+1] = right.data[src+1];
-	     }
-	   if (
-	       ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
-	       ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))&&
-	       ((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))
-	       )
-	     {
-	       image.data[src+2] = right.data[src+2];
-	       image.data[src+3] = right.data[src+3];
-	     }
-	   src+=4;
-	 }
+           if (
+               ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
+               ((image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))&&
+               ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))
+               )
+             {
+               image.data[src] = right.data[src];
+               image.data[src+1] = right.data[src+1];
+             }
+           if (
+               ((image.data[src] < Uhi)&&(image.data[src] > Ulo))&&
+               ((image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))&&
+               ((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo))
+               )
+             {
+               image.data[src+2] = right.data[src+2];
+               image.data[src+3] = right.data[src+3];
+             }
+           src+=4;
+         }
        }
      } else { //this needs help
        for (h=0; h<image.ysize; h++){
-	 for(w=0; w<xsize; w++){
-	   if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-		 (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
-		 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
-	     {
-	       image.data[src] = right.data[src];
-	       image.data[src+1] = right.data[src+1];
-	       image.data[src+2] = right.data[src+2];
-	       image.data[src+3] = right.data[src+3];
-	     }
-	   src+=4;
-	 }
+         for(w=0; w<xsize; w++){
+           if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+                 (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
+                 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)))
+             {
+               image.data[src] = right.data[src];
+               image.data[src+1] = right.data[src+1];
+               image.data[src+2] = right.data[src+2];
+               image.data[src+3] = right.data[src+3];
+             }
+           src+=4;
+         }
        }
      }
    }else{
@@ -165,88 +165,88 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
      // could this also be done even if both lie in the range too??
      if (m_direction) {
        for (h=0; h<image.ysize; h++){
-	 for(w=0; w<image.xsize/4; w++){
-	   change1 = 0;
-	   change2 = 0;
-	   change3 = 0;
-	   change4 = 0;
-	   if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-	       (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
-	       (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
-	     change1 = 1;
-	   }
+         for(w=0; w<image.xsize/4; w++){
+           change1 = 0;
+           change2 = 0;
+           change3 = 0;
+           change4 = 0;
+           if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+               (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo)&&
+               (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
+             change1 = 1;
+           }
 
-	   if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-	       (image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
-	       (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
-	     change2 = 1;
-	   }
+           if ((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+               (image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
+               (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo)){
+             change2 = 1;
+           }
 
-	   if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
-	       (image.data[src+5] < Yhi)&&(image.data[src+5] > Ylo)&&
-	       (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
-	     change3 = 1;
-	   }
+           if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
+               (image.data[src+5] < Yhi)&&(image.data[src+5] > Ylo)&&
+               (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
+             change3 = 1;
+           }
 
-	   if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
-	       (image.data[src+7] < Yhi)&&(image.data[src+7] > Ylo)&&
-	       (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
-	     change4 = 1;
-	   }
+           if ((image.data[src+4] < Uhi)&&(image.data[src+4] > Ulo)&&
+               (image.data[src+7] < Yhi)&&(image.data[src+7] > Ylo)&&
+               (image.data[src+6] < Vhi)&&(image.data[src+6] > Vlo)){
+             change4 = 1;
+           }
 
-	   if (change1 && change2 && change3 && change4){
-	     image.data[src] = right.data[src];
-	     image.data[src+1] = right.data[src+1];
-	     image.data[src+2] = right.data[src+2];
-	     image.data[src+3] = right.data[src+3];
-	     image.data[src+4] = right.data[src+4];
-	     image.data[src+5] = right.data[src+5];
-	     image.data[src+6] = right.data[src+6];
-	     image.data[src+7] = right.data[src+7];
-	   }else{
-	     if(change1 || change2 || change3 || change4){
-	       int temp1,temp2;
-	       image.data[src] = right.data[src];
-	       temp1 = ((image.data[src+1] * 32) + (image.data[src+3] * 32) + (image.data[src+5] * 32) + (image.data[src+7] * 32))>>8;
-	       temp2 = ((right.data[src+1] * 32) + (right.data[src+3] * 32)+ (right.data[src+5] * 32) + (right.data[src+7] * 32))>>8;
+           if (change1 && change2 && change3 && change4){
+             image.data[src] = right.data[src];
+             image.data[src+1] = right.data[src+1];
+             image.data[src+2] = right.data[src+2];
+             image.data[src+3] = right.data[src+3];
+             image.data[src+4] = right.data[src+4];
+             image.data[src+5] = right.data[src+5];
+             image.data[src+6] = right.data[src+6];
+             image.data[src+7] = right.data[src+7];
+           }else{
+             if(change1 || change2 || change3 || change4){
+               int temp1,temp2;
+               image.data[src] = right.data[src];
+               temp1 = ((image.data[src+1] * 32) + (image.data[src+3] * 32) + (image.data[src+5] * 32) + (image.data[src+7] * 32))>>8;
+               temp2 = ((right.data[src+1] * 32) + (right.data[src+3] * 32)+ (right.data[src+5] * 32) + (right.data[src+7] * 32))>>8;
 
-	       //   temp1 = ((image.data[src+1] * 255) + (right.data[src+1] * 0))>>8;
-	       image.data[src+1] = CLAMP(temp1 + temp2) ;
-	       image.data[src+2] = right.data[src+2];
+               //   temp1 = ((image.data[src+1] * 255) + (right.data[src+1] * 0))>>8;
+               image.data[src+1] = CLAMP(temp1 + temp2) ;
+               image.data[src+2] = right.data[src+2];
 
-	       //  temp2 = ((image.data[src+3] * 192) + (right.data[src+3] * 64))>>8;
-	       image.data[src+3] = CLAMP(temp1 + temp2);
-	       image.data[src+4] = right.data[src+4];
+               //  temp2 = ((image.data[src+3] * 192) + (right.data[src+3] * 64))>>8;
+               image.data[src+3] = CLAMP(temp1 + temp2);
+               image.data[src+4] = right.data[src+4];
 
-	       //  temp1 = ((image.data[src+5] * 128) + (right.data[src+5] * 128))>>8;
-	       image.data[src+5] = CLAMP(temp1 + temp2);
-	       image.data[src+6] = right.data[src+6];
+               //  temp1 = ((image.data[src+5] * 128) + (right.data[src+5] * 128))>>8;
+               image.data[src+5] = CLAMP(temp1 + temp2);
+               image.data[src+6] = right.data[src+6];
 
-	       //  temp2 = ((image.data[src+7] * 64) + (right.data[src+7] * 192))>>8;
-	       image.data[src+7] = CLAMP(temp1 + temp2);
-	       change1 = 0; change2 = 0;change3 = 0; change4 = 0;
-	     }
-	     //  }else{
-	     // }
-	   }
-	   src+=8;
-	 }
+               //  temp2 = ((image.data[src+7] * 64) + (right.data[src+7] * 192))>>8;
+               image.data[src+7] = CLAMP(temp1 + temp2);
+               change1 = 0; change2 = 0;change3 = 0; change4 = 0;
+             }
+             //  }else{
+             // }
+           }
+           src+=8;
+         }
        }
      }else{
        for (h=0; h<image.ysize; h++){
-	 for(w=0; w<image.xsize/2; w++){
-	   if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
-		 (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))){
-	     image.data[src] = right.data[src];
-	     image.data[src+1] = right.data[src+1];
-	   }
-	   if (!((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
-		 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))){
-	     image.data[src+2] = right.data[src+2];
-	     image.data[src+3] = right.data[src+3];
-	   }
-	   src+=4;
-	 }
+         for(w=0; w<image.xsize/2; w++){
+           if (!((image.data[src] < Uhi)&&(image.data[src] > Ulo)&&
+                 (image.data[src+1] < Yhi)&&(image.data[src+1] > Ylo))){
+             image.data[src] = right.data[src];
+             image.data[src+1] = right.data[src+1];
+           }
+           if (!((image.data[src+3] < Yhi)&&(image.data[src+3] > Ylo)&&
+                 (image.data[src+2] < Vhi)&&(image.data[src+2] > Vlo))){
+             image.data[src+2] = right.data[src+2];
+             image.data[src+3] = right.data[src+3];
+           }
+           src+=4;
+         }
        }
      }
    }
@@ -263,21 +263,21 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
 
 
   const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange),
-			CLAMP(m_Uvalue + m_Urange),
-			CLAMP(m_Vvalue + m_Vrange),
-			(unsigned char)0xFF,
-			CLAMP(m_Yvalue + m_Yrange),
-			CLAMP(m_Uvalue + m_Urange),
-			CLAMP(m_Vvalue + m_Vrange),
-			(unsigned char)0xFF);
+                        CLAMP(m_Uvalue + m_Urange),
+                        CLAMP(m_Vvalue + m_Vrange),
+                        (unsigned char)0xFF,
+                        CLAMP(m_Yvalue + m_Yrange),
+                        CLAMP(m_Uvalue + m_Urange),
+                        CLAMP(m_Vvalue + m_Vrange),
+                        (unsigned char)0xFF);
   const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange),
-			CLAMP(m_Uvalue - m_Urange),
-			CLAMP(m_Vvalue - m_Vrange),
-			(unsigned char)0x00,
-			CLAMP(m_Yvalue - m_Yrange),
-			CLAMP(m_Uvalue - m_Urange),
-			CLAMP(m_Vvalue - m_Vrange),
-			(unsigned char)0x00);
+                        CLAMP(m_Uvalue - m_Urange),
+                        CLAMP(m_Vvalue - m_Vrange),
+                        (unsigned char)0x00,
+                        CLAMP(m_Yvalue - m_Yrange),
+                        CLAMP(m_Uvalue - m_Urange),
+                        CLAMP(m_Vvalue - m_Vrange),
+                        (unsigned char)0x00);
 
   const __m64 null64=_mm_setzero_si64();
 
@@ -332,21 +332,21 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
   // no m_mode yet (does it make any sense at all ?)
 
   const __m64 hi=_mm_setr_pi8(CLAMP(m_Uvalue + m_Urange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Vvalue + m_Vrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Uvalue + m_Urange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Vvalue + m_Vrange),
-			      CLAMP(m_Yvalue + m_Yrange));
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Vvalue + m_Vrange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Uvalue + m_Urange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Vvalue + m_Vrange),
+                              CLAMP(m_Yvalue + m_Yrange));
   const __m64 lo=_mm_setr_pi8(CLAMP(m_Uvalue - m_Urange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Vvalue - m_Vrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Uvalue - m_Urange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Vvalue - m_Vrange),
-			      CLAMP(m_Yvalue - m_Yrange));
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Vvalue - m_Vrange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Uvalue - m_Urange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Vvalue - m_Vrange),
+                              CLAMP(m_Yvalue - m_Yrange));
 
   const __m64 null64=_mm_setzero_si64();
 
@@ -401,21 +401,21 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
   // no m_mode yet (does it make any sense at all ?)
 
   const __m64 hi=_mm_setr_pi8(CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange),
-			      CLAMP(m_Yvalue + m_Yrange));
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Yvalue + m_Yrange),
+                              CLAMP(m_Yvalue + m_Yrange));
   const __m64 lo=_mm_setr_pi8(CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange),
-			      CLAMP(m_Yvalue - m_Yrange));
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Yvalue - m_Yrange),
+                              CLAMP(m_Yvalue - m_Yrange));
 
   const __m64 null64=_mm_setzero_si64();
 
@@ -480,26 +480,26 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
         }
 
     union{
-        unsigned short		s[8];
-        vector unsigned short	v;
+        unsigned short          s[8];
+        vector unsigned short   v;
     }shortBuffer;
 
     union{
-        unsigned int		i[4];
-        vector unsigned int	v;
+        unsigned int            i[4];
+        vector unsigned int     v;
     }longBuffer;
 
-    register vector unsigned short	UVres1, Yres1, UVres2, Yres2;//interleave;
-    register vector unsigned short	hiImage, loImage;
-    register vector bool short		Ymasklo,Ymaskhi, UVmaskhi;//UVmasklo, Vmaskhi, Vmasklo;
-    register vector unsigned short	Yhi,Ylo;//UVhi,UVlo;Vhi,Vlo;
-    register vector unsigned char	one = vec_splat_u8(1);
-    register vector unsigned short	sone = vec_splat_u16(1);
-    register vector unsigned int			Uhi, Ulo, Vhi, Vlo,Ures,Vres;
-    register vector bool int 			Umasklo, Umaskhi, Vmaskhi, Vmasklo;
+    register vector unsigned short      UVres1, Yres1, UVres2, Yres2;//interleave;
+    register vector unsigned short      hiImage, loImage;
+    register vector bool short          Ymasklo,Ymaskhi, UVmaskhi;//UVmasklo, Vmaskhi, Vmasklo;
+    register vector unsigned short      Yhi,Ylo;//UVhi,UVlo;Vhi,Vlo;
+    register vector unsigned char       one = vec_splat_u8(1);
+    register vector unsigned short      sone = vec_splat_u16(1);
+    register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,Ures,Vres;
+    register vector bool int                    Umasklo, Umaskhi, Vmaskhi, Vmasklo;
 
-    vector unsigned char	*inData = (vector unsigned char*) image.data;
-    vector unsigned char	*rightData = (vector unsigned char*) right.data;
+    vector unsigned char        *inData = (vector unsigned char*) image.data;
+    vector unsigned char        *rightData = (vector unsigned char*) right.data;
 
     shortBuffer.s[0] = CLAMP(m_Yvalue + m_Yrange);
     Yhi = shortBuffer.v;
@@ -542,7 +542,7 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
     Vlo = longBuffer.v;
     #ifndef PPC970
     //setup the cache prefetch -- A MUST!!!
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+    UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
     vec_dst( inData, prefetchSize, 0 );
     vec_dst( rightData, prefetchSize, 1 );
     #endif
@@ -660,7 +660,7 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
         }
         vec_dss(1);
         vec_dss(0);
-	}
+        }
     */
     }
 }
@@ -674,16 +674,16 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
 void pix_chroma_key :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::directionCallback),
-		  gensym("direction"), A_DEFFLOAT, A_NULL);
+                  gensym("direction"), A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::modeCallback),
-		  gensym("mode"), A_DEFFLOAT, A_NULL);
+                  gensym("mode"), A_DEFFLOAT, A_NULL);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::rangeCallback),
-		  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::valueCallback),
-		  gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                  gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
 void pix_chroma_key :: directionCallback(void *data, t_float state)

@@ -110,7 +110,7 @@ namespace gem { namespace thread {
   SynchedWorkerThread::SynchedWorkerThread(bool autostart) :
     m_pimpl(new PIMPL(this)) {
     if(autostart)
-	start();
+        start();
   }
 
   SynchedWorkerThread::~SynchedWorkerThread(void) {

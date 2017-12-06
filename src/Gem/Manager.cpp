@@ -98,14 +98,14 @@ GLfloat GemMan::m_fogColor[4];
 float GemMan::m_fogStart;
 float GemMan::m_fogEnd;
 float GemMan::m_motionBlur=0.f;
-int GemMan::texture_rectangle_supported = 0;	//tigital
+int GemMan::texture_rectangle_supported = 0;    //tigital
 GLint GemMan::maxStackDepth[4];
 float GemMan::fps;
 int GemMan::fsaa = 0;
 bool GemMan::pleaseDestroy=false;
 
 // static data
-static const int NUM_LIGHTS = 8;   	// the maximum number of lights
+static const int NUM_LIGHTS = 8;        // the maximum number of lights
 static int s_lightState = 0;        // is lighting on or off
 static int s_lights[NUM_LIGHTS];    // the lighting array
 
@@ -156,9 +156,9 @@ void GemMan::resizeCallback(int xSize, int ySize, void *)
   // setup the matrices
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-            GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-            GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+  glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,       // left, right
+            GemMan::m_perspect[2], GemMan::m_perspect[3],                       // bottom, top
+            GemMan::m_perspect[4], GemMan::m_perspect[5]);                      // front, back
 
   glMatrixMode(GL_MODELVIEW);
   //  TODO:
@@ -253,29 +253,29 @@ void GemMan :: initGem()
   GemSIMD simd_init;
 
   // setup the perspective values
-  m_perspect[0] = -1.f;	// left
-  m_perspect[1] =  1.f;	// right
-  m_perspect[2] = -1.f;	// bottom
-  m_perspect[3] =  1.f;	// top
-  m_perspect[4] =  1.f;	// front
-  m_perspect[5] = 20.f;	// back
+  m_perspect[0] = -1.f; // left
+  m_perspect[1] =  1.f; // right
+  m_perspect[2] = -1.f; // bottom
+  m_perspect[3] =  1.f; // top
+  m_perspect[4] =  1.f; // front
+  m_perspect[5] = 20.f; // back
 
   // setup the lookat values
-  m_lookat[0] = 0.f;	// eye:		x
-  m_lookat[1] = 0.f;	//		y
-  m_lookat[2] = 4.f;	//		z
-  m_lookat[3] = 0.f;	// center :	x
-  m_lookat[4] = 0.f;	//		y
-  m_lookat[5] = 0.f;	//		z
-  m_lookat[6] = 0.f;	// up::		x
-  m_lookat[7] = 1.f;	//		y
-  m_lookat[8] = 0.f;	//		z
+  m_lookat[0] = 0.f;    // eye:         x
+  m_lookat[1] = 0.f;    //              y
+  m_lookat[2] = 4.f;    //              z
+  m_lookat[3] = 0.f;    // center :     x
+  m_lookat[4] = 0.f;    //              y
+  m_lookat[5] = 0.f;    //              z
+  m_lookat[6] = 0.f;    // up::         x
+  m_lookat[7] = 1.f;    //              y
+  m_lookat[8] = 0.f;    //              z
 
   // setup the fog
-  m_fogMode	= FOG_OFF;
-  m_fogStart	= 1.f;
-  m_fogEnd	= 20.f;
-  m_fog		= 0.5f;
+  m_fogMode     = FOG_OFF;
+  m_fogStart    = 1.f;
+  m_fogEnd      = 20.f;
+  m_fog         = 0.5f;
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
 
   maxStackDepth[GemMan::STACKMODELVIEW] = 16; // model
@@ -334,9 +334,9 @@ void GemMan :: resetValues()
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-            m_perspect[2], m_perspect[3],				// bottom, top
-            m_perspect[4], m_perspect[5]);				// front, back
+  glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,       // left, right
+            m_perspect[2], m_perspect[3],                               // bottom, top
+            m_perspect[4], m_perspect[5]);                              // front, back
 
   glMatrixMode(GL_MODELVIEW);
   // TODO:
@@ -450,29 +450,29 @@ void GemMan :: resetState()
   m_stereoLine = true;
 
   // setup the perspective values
-  m_perspect[0] = -1.f;	// left
-  m_perspect[1] =  1.f;	// right
-  m_perspect[2] = -1.f;	// bottom
-  m_perspect[3] =  1.f;	// top
-  m_perspect[4] =  1.f;	// front
-  m_perspect[5] = 20.f;	// back
+  m_perspect[0] = -1.f; // left
+  m_perspect[1] =  1.f; // right
+  m_perspect[2] = -1.f; // bottom
+  m_perspect[3] =  1.f; // top
+  m_perspect[4] =  1.f; // front
+  m_perspect[5] = 20.f; // back
 
   // setup the lookat values
-  m_lookat[0] = 0.f;	// eye:	x
-  m_lookat[1] = 0.f;	//		y
-  m_lookat[2] = 4.f;	//		z
-  m_lookat[3] = 0.f;	// center :	x
-  m_lookat[4] = 0.f;	//		y
-  m_lookat[5] = 0.f;	//		z
-  m_lookat[6] = 0.f;	// up::	        x
-  m_lookat[7] = 1.f;	//		y
-  m_lookat[8] = 0.f;	//		z
+  m_lookat[0] = 0.f;    // eye: x
+  m_lookat[1] = 0.f;    //              y
+  m_lookat[2] = 4.f;    //              z
+  m_lookat[3] = 0.f;    // center :     x
+  m_lookat[4] = 0.f;    //              y
+  m_lookat[5] = 0.f;    //              z
+  m_lookat[6] = 0.f;    // up::         x
+  m_lookat[7] = 1.f;    //              y
+  m_lookat[8] = 0.f;    //              z
 
   // setup the fog
-  m_fogMode	= FOG_OFF;
-  m_fogStart	= 1.f;
-  m_fogEnd	= 20.f;
-  m_fog		= 0.5f;
+  m_fogMode     = FOG_OFF;
+  m_fogStart    = 1.f;
+  m_fogEnd      = 20.f;
+  m_fog         = 0.5f;
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
 
   // turn on the cursor
@@ -543,7 +543,7 @@ void GemMan :: render(void *)
 
   // are we profiling?
   double starttime=sys_getrealtime();
-	double stoptime=0;
+        double stoptime=0;
 
   s_hit = 0;
   resetValues();
@@ -589,9 +589,9 @@ void GemMan :: render(void *)
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
+                GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -613,9 +613,9 @@ void GemMan :: render(void *)
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
+                GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -678,9 +678,9 @@ void GemMan :: render(void *)
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
+                GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -702,9 +702,9 @@ void GemMan :: render(void *)
       // setup the matrices
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,	// left, right
-                GemMan::m_perspect[2], GemMan::m_perspect[3],			// bottom, top
-                GemMan::m_perspect[4], GemMan::m_perspect[5]);			// front, back
+      glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
+                GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
+                GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -803,7 +803,7 @@ void GemMan :: render(void *)
   swapBuffers();
 
   // are we profiling?
-	stoptime=sys_getrealtime();
+        stoptime=sys_getrealtime();
   if (profiling>0) {
     double seconds =  stoptime-starttime;
     if(seconds>0.f) {
@@ -814,22 +814,22 @@ void GemMan :: render(void *)
   }
 
   // only keep going if no one set the s_hit (could be hit if scheduler gets
-  //	    ahold of a stopRendering command)
-	double deltime=s_deltime;
-	if(profiling<0) {
-		float spent=(stoptime-starttime)*1000;
-		if(profiling<-1) {
-			deltime-=spent;
-		} else if(spent<deltime && spent>0.f) {
-			deltime-=spent;
-		} else {
-			post("unable to annihiliate %f ms", spent);
-		}
-		if(deltime<0.){
-			verbose(1, "negative delay time: %f", deltime);
-			deltime=1.f;
-		}
-	}
+  //        ahold of a stopRendering command)
+        double deltime=s_deltime;
+        if(profiling<0) {
+                float spent=(stoptime-starttime)*1000;
+                if(profiling<-1) {
+                        deltime-=spent;
+                } else if(spent<deltime && spent>0.f) {
+                        deltime-=spent;
+                } else {
+                        post("unable to annihiliate %f ms", spent);
+                }
+                if(deltime<0.){
+                        verbose(1, "negative delay time: %f", deltime);
+                        deltime=1.f;
+                }
+        }
 
   if (!s_hit && (0.0 != deltime))
     clock_delay(s_clock, deltime);
@@ -1156,14 +1156,14 @@ void GemMan :: swapBuffers()
 
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,	// left, right
-                m_perspect[2], m_perspect[3],			// bottom, top
-                m_perspect[4], m_perspect[5]);			// front, back
+      glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,   // left, right
+                m_perspect[2], m_perspect[3],                   // bottom, top
+                m_perspect[4], m_perspect[5]);                  // front, back
 
       glMatrixMode(GL_MODELVIEW);
       // TODO:
       // shouldn't this be called here?
-      //	  glLoadIdentity();
+      //          glLoadIdentity();
       gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
                 m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
     }
@@ -1409,9 +1409,9 @@ void GemMan :: printInfo()
   if (glGetString(GL_EXTENSIONS)){
     char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
     strcpy(text,(char *)glGetString(GL_EXTENSIONS));
-    char *token = strtok(text, " ");	// Parse 'text' For Words, Separated By " " (spaces)
-    while(token != NULL) {		// While The Token Isn't NULL
-      post("Extensions: %s", token);	// Print extension string
+    char *token = strtok(text, " ");    // Parse 'text' For Words, Separated By " " (spaces)
+    while(token != NULL) {              // While The Token Isn't NULL
+      post("Extensions: %s", token);    // Print extension string
       token = strtok(NULL, " ");
     }
     delete [] text;

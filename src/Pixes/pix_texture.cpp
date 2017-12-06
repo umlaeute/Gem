@@ -120,7 +120,7 @@ void pix_texture :: setUpTextureState() {
         // JMZ: disabled the following, as rectangle-textures are clamped anyhow
         // JMZ: and normalized ones, lose their setting
         // TIGITAL: this is necessary on osx, at least with non-powerof2 textures!
-        //			otherwise, weird texturing occurs (looks similar to pix_refraction)
+        //                      otherwise, weird texturing occurs (looks similar to pix_refraction)
         // NPOT: GL_CLAMP, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
         // POT:  above plus GL_REPEAT, GL_MIRRORED_REPEAT
         doRepeat = GL_CLAMP_TO_EDGE;
@@ -465,14 +465,14 @@ void pix_texture :: render(GemState *state) {
 
         if(m_numPbo>0) {
           if(GLEW_ARB_pixel_buffer_object) {
-	    GLuint*pbo=m_pbo;
+            GLuint*pbo=m_pbo;
             if(pbo) {
               delete[]pbo;
               pbo=NULL;
             }
             pbo=new GLuint[m_numPbo];
-	    m_oldNumPbo=m_numPbo;
-	    m_pbo=pbo;
+            m_oldNumPbo=m_numPbo;
+            m_pbo=pbo;
             glGenBuffersARB(m_numPbo, pbo);
             int i=0;
             for(i=0; i<m_numPbo; i++) {
@@ -491,7 +491,7 @@ void pix_texture :: render(GemState *state) {
 
         //this is for dealing with power of 2 textures which need a buffer that's 2^n
         if ( !do_rectangle ) {
-          glTexImage2D(	m_textureType, 0,
+          glTexImage2D( m_textureType, 0,
                         //m_buffer.csize,
                         GL_RGBA,
                         m_buffer.xsize,
@@ -519,7 +519,7 @@ void pix_texture :: render(GemState *state) {
       }
 
       if(m_pbo && m_numPbo) {
-	GLuint*pbo=m_pbo;
+        GLuint*pbo=m_pbo;
         m_curPbo=(m_curPbo+1)%m_numPbo;
         GLuint index=m_curPbo;
         GLuint nextIndex=(m_curPbo+1)%m_numPbo;
@@ -549,7 +549,7 @@ void pix_texture :: render(GemState *state) {
 
       } else {
         glTexSubImage2D(m_textureType, 0,
-                        0, 0,				// position
+                        0, 0,                           // position
                         m_imagebuf.xsize,
                         m_imagebuf.ysize,
                         m_imagebuf.format,
@@ -586,7 +586,7 @@ void pix_texture :: render(GemState *state) {
   } else {
     state->set(GemState::_GL_TEX_TYPE, 1);
   }
-  
+
   m_baseCoord.s=m_xRatio;
   m_baseCoord.t=m_yRatio;
   state->set(GemState::_GL_TEX_BASECOORD, m_baseCoord);
@@ -636,7 +636,7 @@ void pix_texture :: startRendering()
 
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 
-  if (!m_realTextureObj)	{
+  if (!m_realTextureObj)        {
     error("Unable to allocate texture object");
     return;
   }

@@ -128,18 +128,18 @@ void pix_multitexture :: render(GemState *state)
 
   state->get(GemState::_GL_TEX_UNITS, m_reqTexUnits);
 
-	if (m_textureType == GL_TEXTURE_2D)
-	{
-	  m_xRatio = 1.0;
-	  m_yRatio = 1.0;
-	  textype = 1;
-	}else{
-	  m_xRatio = m_texSizeX;
-	  m_yRatio = m_texSizeY;
-	  textype = 2;
-	}
+        if (m_textureType == GL_TEXTURE_2D)
+        {
+          m_xRatio = 1.0;
+          m_yRatio = 1.0;
+          textype = 1;
+        }else{
+          m_xRatio = m_texSizeX;
+          m_yRatio = m_texSizeY;
+          textype = 2;
+        }
 
-	setTexCoords(m_coords, m_xRatio, m_yRatio, true);
+        setTexCoords(m_coords, m_xRatio, m_yRatio, true);
 
   TexCoord*tc=m_coords;
   state->set(GemState::_GL_TEX_COORDS, tc);
@@ -147,21 +147,21 @@ void pix_multitexture :: render(GemState *state)
   state->set(GemState::_GL_TEX_TYPE, textype);
 
 
-	for ( int i=0; i< m_reqTexUnits; i++ )
-	{
+        for ( int i=0; i< m_reqTexUnits; i++ )
+        {
     if(GLEW_VERSION_1_3) {
       glActiveTexture( GL_TEXTURE0 + i );
     } else {
       glActiveTextureARB( GL_TEXTURE0_ARB + i );
     }
 
-		glEnable( m_textureType );
-		glBindTexture( m_textureType, m_texID[i] );
-		glTexParameteri( m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-		glTexParameteri( m_textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-		glTexParameteri( m_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-		glTexParameteri( m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	}
+                glEnable( m_textureType );
+                glBindTexture( m_textureType, m_texID[i] );
+                glTexParameteri( m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+                glTexParameteri( m_textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+                glTexParameteri( m_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                glTexParameteri( m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        }
 }
 
 /////////////////////////////////////////////////////////

@@ -53,7 +53,7 @@ void pix_equal :: processRGBAImage(imageStruct &image)
     unsigned char *base = image.data;
 
     while(datasize--) {
-      unsigned char pixval = 
+      unsigned char pixval =
         (base[chRed] <= m_upper[chRed] && base[chRed] >= m_lower[chRed] &&
         base[chGreen] <= m_upper[chGreen] && base[chGreen] >= m_lower[chGreen] &&
         base[chBlue] <= m_upper[chBlue] && base[chBlue] >= m_lower[chBlue])*255;

@@ -142,35 +142,35 @@ void disk :: render(GemState *state)
        */
       GLint l;
       for (l = 0; l < loops; l++) {
-	GLfloat r2 = r1 + dr;
-	if (!orientation) {
-	  GLint s;
-	  glBegin(GL_QUAD_STRIP);
-	  for (s = 0; s <= m_numSlices; s++) {
-	    GLfloat a=(s == m_numSlices)?0.0:(s * da);
-	    sa = sin(a);
-	    ca = cos(a);
-	    if(texType)glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
-	    glVertex2f(r2 * sa, r2 * ca);
-	    if(texType)glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
-	    glVertex2f(r1 * sa, r1 * ca);
-	  }
-	  glEnd();
-	} else {
-	  GLint s;
-	  glBegin(GL_QUAD_STRIP);
-	  for (s = m_numSlices; s >= 0; s--) {
-	    GLfloat a=(s==m_numSlices)?0.0:s * da;
-	    sa = sin(a);
-	    ca = cos(a);
-	    if(texType)glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
-	    glVertex2f(r2 * sa, r2 * ca);
-	    if(texType)glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
-	    glVertex2f(r1 * sa, r1 * ca);
-	  }
-	  glEnd();
-	}
-	r1 = r2;
+        GLfloat r2 = r1 + dr;
+        if (!orientation) {
+          GLint s;
+          glBegin(GL_QUAD_STRIP);
+          for (s = 0; s <= m_numSlices; s++) {
+            GLfloat a=(s == m_numSlices)?0.0:(s * da);
+            sa = sin(a);
+            ca = cos(a);
+            if(texType)glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
+            glVertex2f(r2 * sa, r2 * ca);
+            if(texType)glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
+            glVertex2f(r1 * sa, r1 * ca);
+          }
+          glEnd();
+        } else {
+          GLint s;
+          glBegin(GL_QUAD_STRIP);
+          for (s = m_numSlices; s >= 0; s--) {
+            GLfloat a=(s==m_numSlices)?0.0:s * da;
+            sa = sin(a);
+            ca = cos(a);
+            if(texType)glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
+            glVertex2f(r2 * sa, r2 * ca);
+            if(texType)glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
+            glVertex2f(r1 * sa, r1 * ca);
+          }
+          glEnd();
+        }
+        r1 = r2;
       }
       break;
     }
@@ -179,27 +179,27 @@ void disk :: render(GemState *state)
       GLint l, s;
       /* draw loops */
       for (l = 0; l <= loops; l++) {
-	GLfloat r = m_innerRadius + l * dr;
-	glBegin(GL_LINE_LOOP);
-	for (s = 0; s < m_numSlices; s++) {
-	  GLfloat a = s * da;
-	  if(texType)glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0, (0.5+r*cos(a)/dtc)*ysize+ysize0);
-	  glVertex2f(r * sin(a), r * cos(a));
-	}
-	glEnd();
+        GLfloat r = m_innerRadius + l * dr;
+        glBegin(GL_LINE_LOOP);
+        for (s = 0; s < m_numSlices; s++) {
+          GLfloat a = s * da;
+          if(texType)glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0, (0.5+r*cos(a)/dtc)*ysize+ysize0);
+          glVertex2f(r * sin(a), r * cos(a));
+        }
+        glEnd();
       }
       /* draw spokes */
       for (s = 0; s < m_numSlices; s++) {
-	GLfloat a = s * da;
-	GLfloat x = sin(a);
-	GLfloat y = cos(a);
-	glBegin(GL_LINE_STRIP);
-	for (l = 0; l <= loops; l++) {
-	  GLfloat r = m_innerRadius + l * dr;
-	  if(texType)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
-	  glVertex2f(r * x, r * y);
-	}
-	glEnd();
+        GLfloat a = s * da;
+        GLfloat x = sin(a);
+        GLfloat y = cos(a);
+        glBegin(GL_LINE_STRIP);
+        for (l = 0; l <= loops; l++) {
+          GLfloat r = m_innerRadius + l * dr;
+          if(texType)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
+          glVertex2f(r * x, r * y);
+        }
+        glEnd();
       }
       break;
     }
@@ -208,15 +208,15 @@ void disk :: render(GemState *state)
       GLint s;
       glBegin(GL_POINTS);
       for (s = 0; s < m_numSlices; s++) {
-	GLfloat a = s * da;
-	GLfloat x = sin(a);
-	GLfloat y = cos(a);
-	GLint l;
-	for (l = 0; l <= loops; l++) {
-	  GLfloat r = m_innerRadius * l * dr;
-	  glVertex2f(r * x, r * y);
-	  if(texType)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
-	}
+        GLfloat a = s * da;
+        GLfloat x = sin(a);
+        GLfloat y = cos(a);
+        GLint l;
+        for (l = 0; l <= loops; l++) {
+          GLfloat r = m_innerRadius * l * dr;
+          glVertex2f(r * x, r * y);
+          if(texType)glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
+        }
       }
       glEnd();
       break;
@@ -224,24 +224,24 @@ void disk :: render(GemState *state)
   case GLU_SILHOUETTE:
     {
       if (m_innerRadius != 0.0) {
-	GLfloat a;
-	glBegin(GL_LINE_LOOP);
-	for (a = 0.0; a < 2.0 * M_PI; a += da) {
-	  GLfloat x = m_innerRadius * sin(a);
-	  GLfloat y = m_innerRadius * cos(a);
-	  glVertex2f(x, y);
-	}
-	glEnd();
+        GLfloat a;
+        glBegin(GL_LINE_LOOP);
+        for (a = 0.0; a < 2.0 * M_PI; a += da) {
+          GLfloat x = m_innerRadius * sin(a);
+          GLfloat y = m_innerRadius * cos(a);
+          glVertex2f(x, y);
+        }
+        glEnd();
       }
       {
-	GLfloat a;
-	glBegin(GL_LINE_LOOP);
-	for (a = 0; a < 2.0 * M_PI; a += da) {
-	  GLfloat x = m_size * sin(a);
-	  GLfloat y = m_size * cos(a);
-	  glVertex2f(x, y);
-	}
-	glEnd();
+        GLfloat a;
+        glBegin(GL_LINE_LOOP);
+        for (a = 0; a < 2.0 * M_PI; a += da) {
+          GLfloat x = m_size * sin(a);
+          GLfloat y = m_size * cos(a);
+          glVertex2f(x, y);
+        }
+        glEnd();
       }
       break;
     }
@@ -256,5 +256,3 @@ void disk :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "inner", innerRadius, float);
 }
-
-

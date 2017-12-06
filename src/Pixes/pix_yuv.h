@@ -40,11 +40,11 @@ class GEM_EXTERN pix_yuv : public pix_rgba
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_yuv();
+            //////////
+            // Constructor
+        pix_yuv();
 
     protected:
 };
 
-#endif	// for header file
+#endif  // for header file

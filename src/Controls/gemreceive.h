@@ -72,7 +72,7 @@ class GEM_EXTERN gemreceive : public CPPExtern
 
   //////////
   // The receive outlet
-  t_outlet    	*m_outlet;
+  t_outlet      *m_outlet;
 
   //////////
   // inlet for priority

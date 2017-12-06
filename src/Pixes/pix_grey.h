@@ -47,4 +47,4 @@ class GEM_EXTERN pix_grey : public pix_rgba
    protected:
 };
 
-#endif	// for header file
+#endif  // for header file

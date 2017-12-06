@@ -177,10 +177,10 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
   }
 
   for(i=0; i<id.size(); i++) {
-	  MARK;
+          MARK;
     std::string key=id[i];
     verbose(2, "trying to add '%s' as backend (%d)", key.c_str(), id.size());
-	MARK;
+        MARK;
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
       gem::plugins::video         *handle=NULL;
@@ -188,7 +188,7 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       try {
         handle=gem::PluginFactory<gem::plugins::video>::getInstance(key);
       } catch (GemException&) {
-		  handle=NULL;
+                  handle=NULL;
       }
       if(NULL==handle) {
         post("<--- DISABLED");
@@ -207,11 +207,11 @@ bool pix_video :: addHandle( std::vector<std::string>available, std::string ID)
       m_ids.push_back(key);
       m_videoHandles.push_back(handle);
       count++;
-	  MARK;
+          MARK;
       verbose(2, "added backend#%d '%s' @ 0x%x", m_videoHandles.size()-1, key.c_str(), handle);
-	  MARK;
-	}
-	MARK;
+          MARK;
+        }
+        MARK;
   }
 MARK;
   return (count>0);
@@ -248,7 +248,7 @@ bool pix_video::restart(void) {
     if(m_videoHandle->open(m_writeprops)) {
       enumPropertyMess();
       if(STARTED==m_running)
-	m_videoHandle->start();
+        m_videoHandle->start();
       return true;
     }
   }
@@ -286,10 +286,10 @@ void pix_video :: driverMess(int dev)
 {
   if(dev>=0) {
     unsigned int udev=(unsigned int)dev;
-	if(udev>=m_videoHandles.size()){
-		error("driverID (%d) must not exceed %d", udev, m_videoHandles.size());
-		return;
-	}
+        if(udev>=m_videoHandles.size()){
+                error("driverID (%d) must not exceed %d", udev, m_videoHandles.size());
+                return;
+        }
 
     if(m_videoHandle){
       m_videoHandle->stop();
@@ -300,7 +300,7 @@ void pix_video :: driverMess(int dev)
       if(m_videoHandle->open(m_writeprops)) {
         enumPropertyMess();
         if(STARTED==m_running)
-	       m_videoHandle->start();
+               m_videoHandle->start();
       }
     }
   } else {
@@ -347,7 +347,7 @@ void pix_video :: driverMess() {
       }
       if(j==0)startpost("<nothing>");
       endpost();
-      
+
       outlet_anything(m_infoOut, gensym("driver"), asize, ap);
       delete[]ap;ap =NULL;
       asize=0;
@@ -384,7 +384,7 @@ void pix_video :: closeMess()
 //
 /////////////////////////////////////////////////////////
 void pix_video :: dimenMess(int x, int y, int leftmargin, int rightmargin,
-			       int topmargin, int bottommargin)
+                               int topmargin, int bottommargin)
 {
   m_writeprops.set("width", x);
   m_writeprops.set("height", y);
@@ -548,8 +548,8 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
       break;
     case 0:
       {
-	gem::any dummy;
-	props.set(key, dummy);
+        gem::any dummy;
+        props.set(key, dummy);
       }
       break;
     }
@@ -776,7 +776,7 @@ void pix_video :: resetMess(void) {
   if(m_videoHandle)
     m_videoHandle->reset();
   else
-	    WITH_VIDEOHANDLES_DO(reset());
+            WITH_VIDEOHANDLES_DO(reset());
 }
 
 
@@ -805,29 +805,29 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
     CPPEXTERN_MSG0(classPtr, "enumerate", enumerateMess);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::driverMessCallback),
-    	    gensym("driver"), A_GIMME, A_NULL);
+            gensym("driver"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::deviceMessCallback),
-    	    gensym("device"), A_GIMME, A_NULL);
+            gensym("device"), A_GIMME, A_NULL);
 
     CPPEXTERN_MSG0(classPtr, "close", closeMess);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::openMessCallback),
-	    gensym("open"), A_GIMME, A_NULL);
+            gensym("open"), A_GIMME, A_NULL);
 
     CPPEXTERN_MSG1(classPtr, "float", runningMess, bool);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dialogMessCallback),
-    	    gensym("dialog"), A_GIMME, A_NULL);
+            gensym("dialog"), A_GIMME, A_NULL);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::setPropertyMessCallback),
-    	    gensym("set"), A_GIMME, A_NULL);
+            gensym("set"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::getPropertyMessCallback),
-    	    gensym("get"), A_GIMME, A_NULL);
+            gensym("get"), A_GIMME, A_NULL);
 
     CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertyMess);
     class_addmethod(classPtr,
-		    reinterpret_cast<t_method>(&pix_video::  setPropertiesMessCallback),
-		    gensym("setProps"), A_GIMME, A_NULL);
+                    reinterpret_cast<t_method>(&pix_video::  setPropertiesMessCallback),
+                    gensym("setProps"), A_GIMME, A_NULL);
     CPPEXTERN_MSG0(classPtr, "applyProps", applyPropertiesMess);
     CPPEXTERN_MSG0(classPtr, "clearProps", clearPropertiesMess);
 
@@ -835,31 +835,31 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
-    	    gensym("colorspace"), A_GIMME, A_NULL);
+            gensym("colorspace"), A_GIMME, A_NULL);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::dimenMessCallback),
-    	    gensym("dimen"), A_GIMME, A_NULL);
+            gensym("dimen"), A_GIMME, A_NULL);
     CPPEXTERN_MSG1(classPtr, "norm", normMess, std::string);
 
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::channelMessCallback),
-    	    gensym("channel"), A_GIMME, A_NULL);
+            gensym("channel"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::modeMessCallback),
-    	    gensym("mode"), A_GIMME, A_NULL);
+            gensym("mode"), A_GIMME, A_NULL);
     class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_video::colorMessCallback),
-    	    gensym("color"), A_GIMME, A_NULL);
+            gensym("color"), A_GIMME, A_NULL);
     CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
 
-	CPPEXTERN_MSG0(classPtr, "reset", resetMess);
+        CPPEXTERN_MSG0(classPtr, "reset", resetMess);
 
 }
 void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av)
 {
   GetMyClass(data)->dimenMess(static_cast<int>(atom_getfloatarg(0, ac, av)),
-			      static_cast<int>(atom_getfloatarg(1, ac, av)),
-			      static_cast<int>(atom_getfloatarg(2, ac, av)),
-			      static_cast<int>(atom_getfloatarg(3, ac, av)),
-			      static_cast<int>(atom_getfloatarg(4, ac, av)),
-			      static_cast<int>(atom_getfloatarg(5, ac, av)) );
+                              static_cast<int>(atom_getfloatarg(1, ac, av)),
+                              static_cast<int>(atom_getfloatarg(2, ac, av)),
+                              static_cast<int>(atom_getfloatarg(3, ac, av)),
+                              static_cast<int>(atom_getfloatarg(4, ac, av)),
+                              static_cast<int>(atom_getfloatarg(5, ac, av)) );
 }
 void pix_video :: channelMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {

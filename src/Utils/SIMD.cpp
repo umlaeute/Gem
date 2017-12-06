@@ -105,36 +105,36 @@ int GemSIMD :: simd_runtime_check(void)
     unsigned int eax=0, edx=0;
 
 #if defined(_WIN32) && defined(_MSC_VER)
-	unsigned int	feature;
-	#define _MMX_FEATURE_BIT        0x00800000
+        unsigned int    feature;
+        #define _MMX_FEATURE_BIT        0x00800000
     /* on w32 we assume that there is only x86 */
     /* _MSC_VER and __GNUC__ are different in how you inline assember */
     __asm
       {
-		push ebx
-		push ecx
-		push edx
-		xor	eax,eax
-		cpuid
+                push ebx
+                push ecx
+                push edx
+                xor     eax,eax
+                cpuid
 
-		mov   eax, 1
-		cpuid
+                mov   eax, 1
+                cpuid
 
-		mov      feature,edx
+                mov      feature,edx
 
-		pop     ebx
-		pop		ecx
-		pop     edx
+                pop     ebx
+                pop             ecx
+                pop     edx
        }
 
-		if(feature & 1<<26) {
-				realcpuid=GEM_SIMD_SSE2;
-				return realcpuid;
-		  }
-		if(feature & 1<<23) {
-				realcpuid=GEM_SIMD_MMX;
-				return realcpuid;
-		  }
+                if(feature & 1<<26) {
+                                realcpuid=GEM_SIMD_SSE2;
+                                return realcpuid;
+                  }
+                if(feature & 1<<23) {
+                                realcpuid=GEM_SIMD_MMX;
+                                return realcpuid;
+                  }
 
 #elif defined (__GNUC__)
 
@@ -152,16 +152,16 @@ int GemSIMD :: simd_runtime_check(void)
     __asm__("push %%ebx \n" /* ebx might be used as PIC register  :-(  */
             "cpuid      \n"
             "pop  %%ebx \n"
-	    : "=a"(eax),"=d"(edx) : "a" (1): "cx");
+            : "=a"(eax),"=d"(edx) : "a" (1): "cx");
 # elif defined (__x86_64__)
 /* for x86_64 */
 #  if 0
     __asm__("mov  %%bx, %%si \n"
             "cpuid           \n"
             "xchg %%bx, %%si \n"
-	    : "=a"(eax),"=d"(edx)
-	    : "a" (1)
-	    : "cx", "si");
+            : "=a"(eax),"=d"(edx)
+            : "a" (1)
+            : "cx", "si");
 #  else
     // x86_64 always supports MMX and SSE2
     edx |= (1<<23); // MMX
@@ -226,4 +226,3 @@ unsigned int OGPProcessorHasAltivec(void)
 
 
 #endif
-

@@ -51,52 +51,52 @@ class GEM_EXTERN GemShape : public GemBase
   virtual ~GemShape();
 
   //-----------------------------------
-  // GROUP:	Access functions
+  // GROUP:     Access functions
   //-----------------------------------
 
   //////////
   // The width of the lines in line draw mode
-  void	    	linewidthMess(float linewidth);
+  void          linewidthMess(float linewidth);
 
   //////////
   // The size of the object
-  void	    	sizeMess(float size);
+  void          sizeMess(float size);
 
   //////////
   // How the object should be drawn
-  virtual void	typeMess(t_symbol *type);
+  virtual void  typeMess(t_symbol *type);
 
   //-----------------------------------
-  // GROUP:	Utility functions
+  // GROUP:     Utility functions
   //-----------------------------------
 
   void SetVertex(GemState* state,float x, float y, float z,
-		 float tx, float ty,
-		 int curCoord);
+                 float tx, float ty,
+                 int curCoord);
 
   void SetVertex(GemState* state,float x, float y, float z,
-		 float s, float t, float r, float q,
-		 int curCoord);
+                 float s, float t, float r, float q,
+                 int curCoord);
 
   //-----------------------------------
-  // GROUP:	Member variables
+  // GROUP:     Member variables
   //-----------------------------------
 
   //////////
   // The line width for GL_LINE mode
-  GLfloat	    	m_linewidth;
+  GLfloat               m_linewidth;
 
   //////////
   // The size of the object
-  GLfloat	    	m_size;
+  GLfloat               m_size;
 
   //////////
   // The drawing style (GL_LINE, GL_POLYGON, etc)
-  GLenum	    	m_drawType;
+  GLenum                m_drawType;
 
   //////////
   // do we want blending?
-  GLboolean	    	m_blend;
+  GLboolean             m_blend;
   void  blendMess(float blend);
 
 
@@ -114,12 +114,12 @@ class GEM_EXTERN GemShape : public GemBase
   t_inlet         *m_inlet;
 
   //-----------------------------------
-  // GROUP:	Setup functions
+  // GROUP:     Setup functions
   //-----------------------------------
 
   //////////
   // creation callback
-  static void 	real_obj_setupCallback(t_class *classPtr)
+  static void   real_obj_setupCallback(t_class *classPtr)
     { GemBase::real_obj_setupCallback(classPtr); GemShape::obj_setupCallback(classPtr); }
 
  private:
@@ -128,7 +128,7 @@ class GEM_EXTERN GemShape : public GemBase
 
   //////////
   // static member functions
-  static void 	obj_setupCallback(t_class *classPtr);
+  static void   obj_setupCallback(t_class *classPtr);
 
  protected:
   int m_texType, m_texNum;
@@ -138,4 +138,4 @@ class GEM_EXTERN GemShape : public GemBase
   std::map<std::string, GLenum>m_drawTypes;
 };
 
-#endif	// for header file
+#endif  // for header file

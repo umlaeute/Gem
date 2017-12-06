@@ -384,15 +384,15 @@ private:
 
 
  /* GLOBAL
-     0 	getInfo 	none 	Pointer to a PluginInfoStruct
-     1 	initialise 	none 	Success/error code
-     2 	deInitialise 	none 	Success/error code
-     4 	getNumParameters 	none 	NumParameters
-     5 	getParameterName 	ParameterNumber 	Pointer to ParameterName
-     6 	getParameterDefault 	ParameterNumber 	ParameterDefaultValue
-     10 	getPluginCaps 	PluginCapsIndex 	Supported/unsupported/value
-     13 	getExtendedInfo 	none 	Pointer to PluginExtendedInfoStruct
-     15 	getParameterType 	ParameterNumber 	ParameterType
+     0  getInfo         none    Pointer to a PluginInfoStruct
+     1  initialise      none    Success/error code
+     2  deInitialise    none    Success/error code
+     4  getNumParameters        none    NumParameters
+     5  getParameterName        ParameterNumber         Pointer to ParameterName
+     6  getParameterDefault     ParameterNumber         ParameterDefaultValue
+     10         getPluginCaps   PluginCapsIndex         Supported/unsupported/value
+     13         getExtendedInfo         none    Pointer to PluginExtendedInfoStruct
+     15         getParameterType        ParameterNumber         ParameterType
   */
 
   bool getInfo_(void) {
@@ -465,14 +465,14 @@ private:
   }
 
   /* INSTANCE SPECIFIC
-    3  	processFrame  	Pointer to a frame of video  	Success/error code
-    7 	getParameterDisplay 	ParameterNumber 	Pointer to ParameterDisplayValue
-    8 	setParameter 	Pointer to SetParameterStruct 	Success/error code
-    9 	getParameter 	ParameterNumber 	ParameterValue
-    11 	instantiate 	Pointer to VideoInfoStruct 	InstanceIdentifier
-    12 	deInstantiate 	none 	Success/error code
-    14 	processFrameCopy 	Pointer to ProcessFrameCopyStruct 	Success/error code
-    16 	getInputStatus 	InputChannel 	InputStatus
+    3   processFrame    Pointer to a frame of video     Success/error code
+    7   getParameterDisplay     ParameterNumber         Pointer to ParameterDisplayValue
+    8   setParameter    Pointer to SetParameterStruct   Success/error code
+    9   getParameter    ParameterNumber         ParameterValue
+    11  instantiate     Pointer to VideoInfoStruct      InstanceIdentifier
+    12  deInstantiate   none    Success/error code
+    14  processFrameCopy        Pointer to ProcessFrameCopyStruct       Success/error code
+    16  getInputStatus  InputChannel    InputStatus
   */
   bool processFrame_(imageStruct&img) {
     // return true;
@@ -968,7 +968,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
 
   ::verbose(2, "freeframe_loader: %s",s->s_name);
-  try{	    	    	    	    	    	    	    	\
+  try{                                                          \
     Obj_header *obj = new (pd_new(pix_freeframe_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;

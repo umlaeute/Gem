@@ -98,22 +98,22 @@ void vertex_tabread :: render(GemState *state)
     if(m_Ctable){
       dummy=checkarray(m_Ctable, length);
       if(dummy && length==size){
-	state->ColorArray = dummy;
-	state->HaveColorArray = 1;
+        state->ColorArray = dummy;
+        state->HaveColorArray = 1;
       }
     }
     if(m_Ntable){
       dummy=checkarray(m_Ntable, length);
       if(dummy && length==size){
-	state->NormalArray = dummy;
-	state->HaveNormalArray = 1;
+        state->NormalArray = dummy;
+        state->HaveNormalArray = 1;
       }
     }
     if(m_Ttable){
       dummy=checkarray(m_Ttable, length);
       if(dummy && length==size){
-	state->TexCoordArray = dummy;
-	state->HaveTexCoordArray = 1;
+        state->TexCoordArray = dummy;
+        state->HaveTexCoordArray = 1;
       }
     }
   }
@@ -181,7 +181,7 @@ void vertex_tabread :: bangMess()
 void vertex_tabread :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_tabread::tableMessCallback),
-		  gensym("table"), A_GIMME, A_NULL);
+                  gensym("table"), A_GIMME, A_NULL);
   class_addbang(classPtr, reinterpret_cast<t_method>(&vertex_tabread::bangMessCallback));
 }
 

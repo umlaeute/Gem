@@ -157,7 +157,7 @@ void gemhead :: renderGL(GemState *state)
 
   // are we profiling and need to send new images?
   if (GemMan::getProfileLevel() >= 2)
-	m_cache->resendImage = 1;
+        m_cache->resendImage = 1;
 
   t_atom ap[2];
   ap->a_type=A_POINTER;
@@ -182,7 +182,7 @@ void gemhead :: bangMess()
     int renderon = m_renderOn;
     // make sure that the window and the cache exist
     if ( !GemMan::windowExists() || !m_cache )
-		return;
+                return;
 
     // make a dummy GemState
     GemState tempState;

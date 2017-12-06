@@ -62,23 +62,23 @@ class pix_colorclassify : public GemPixObj
 
     public:
 
-	    //////////
-	    // Constructor
-    	pix_colorclassify();
+            //////////
+            // Constructor
+        pix_colorclassify();
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_colorclassify();
+        //////////
+        // Destructor
+        virtual ~pix_colorclassify();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-      // virtual void 	processGrayImage(imageStruct &image);
-    	// virtual void 	processYUVImage(imageStruct &image);
+        //////////
+        // Do the processing
+        virtual void    processRGBAImage(imageStruct &image);
+      // virtual void   processGrayImage(imageStruct &image);
+        // virtual void         processYUVImage(imageStruct &image);
 
     private:
 };
 
-#endif	// for header file
+#endif  // for header file

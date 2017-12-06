@@ -122,8 +122,8 @@ void pix_image :: openMess(std::string filename)
 
 
 void    pix_image:: loaded(const gem::image::load::id_t ID,
-			   imageStruct*img,
-			   const gem::Properties&props) {
+                           imageStruct*img,
+                           const gem::Properties&props) {
   std::vector<gem::any>atoms;
   gem::any value;
 
@@ -153,9 +153,9 @@ void    pix_image:: loaded(const gem::image::load::id_t ID,
   }
 }
 void    pix_image:: loadCallback(void*data,
-				 gem::image::load::id_t ID,
-				 imageStruct*img,
-				 const gem::Properties&props) {
+                                 gem::image::load::id_t ID,
+                                 imageStruct*img,
+                                 const gem::Properties&props) {
   pix_image*me=reinterpret_cast<pix_image*>(data);
   me->loaded(ID, img, props);
 }

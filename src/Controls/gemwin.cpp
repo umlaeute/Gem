@@ -115,10 +115,10 @@ void gemwin :: intMess(int state)
 /////////////////////////////////////////////////////////
 void gemwin :: renderMess()
 {
-	if (GemMan::getRenderState())
-		GemMan::render(NULL);
-	else
-		error("not in render mode");
+        if (GemMan::getRenderState())
+                GemMan::render(NULL);
+        else
+                error("not in render mode");
 }
 /////////////////////////////////////////////////////////
 // titleMess
@@ -195,8 +195,8 @@ void gemwin :: fullscreenMess(int on)
 }
 
 /////////////////////////////////////////////////////////
-// menuBarMess		1 = show	-1 = hide, but autoshow
-//					0 = hide, but neverShow
+// menuBarMess          1 = show        -1 = hide, but autoshow
+//                                      0 = hide, but neverShow
 /////////////////////////////////////////////////////////
 void gemwin :: menuBarMess(int on)
 {
@@ -204,9 +204,9 @@ void gemwin :: menuBarMess(int on)
 #ifdef __APPLE__
   if (on == 0) {
     SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu |
-									   kUIOptionDisableProcessSwitch |
-									   kUIOptionDisableSessionTerminate |
-									   kUIOptionDisableForceQuit );
+                                                                           kUIOptionDisableProcessSwitch |
+                                                                           kUIOptionDisableSessionTerminate |
+                                                                           kUIOptionDisableForceQuit );
   }else if (on > 0) {
     SetSystemUIMode( kUIModeNormal, 0 );
   }else if (on < 0) {
@@ -441,13 +441,13 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "float", intMess, int);
   CPPEXTERN_MSG0(classPtr, "render", renderMess);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::titleMessCallback),
-		  gensym("title"), A_DEFSYM ,A_NULL);
+                  gensym("title"), A_DEFSYM ,A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createMessCallback),
-		  gensym("create"), A_DEFSYM ,A_NULL);
+                  gensym("create"), A_DEFSYM ,A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
-		  gensym("createStereo"), A_NULL);
+                  gensym("createStereo"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
-		  gensym("createstereo"), A_NULL);
+                  gensym("createstereo"), A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
@@ -458,23 +458,23 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::colorMessCallback),
-		  gensym("color"), A_GIMME, A_NULL);
+                  gensym("color"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "clearmask", clearmaskMess, float);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::perspectiveMessCallback),
-		  gensym("perspec"), A_GIMME, A_NULL);
+                  gensym("perspec"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::viewMessCallback),
-		  gensym("view"), A_GIMME, A_NULL);
+                  gensym("view"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogMessCallback),
-		  gensym("fog"), A_GIMME, A_NULL);
+                  gensym("fog"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogColorMessCallback),
-		  gensym("fogcolor"), A_GIMME, A_NULL);
+                  gensym("fogcolor"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "fogmode", fogModeMess, int);
 
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::ambientMessCallback),
-		  gensym("ambient"), A_GIMME, A_NULL);
+                  gensym("ambient"), A_GIMME, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::specularMessCallback),
-		  gensym("specular"), A_GIMME, A_NULL);
+                  gensym("specular"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "shininess", shininessMess, float);
 
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, float);
@@ -482,33 +482,33 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
 
   // just call GemMan directly
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::resetMessCallback),
-		  gensym("reset"), A_NULL);
+                  gensym("reset"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::destroyMessCallback),
-		  gensym("destroy"), A_NULL);
+                  gensym("destroy"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::printMessCallback),
-		  gensym("print"), A_NULL);
+                  gensym("print"), A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::profileMessCallback),
-		  gensym("profile"), A_FLOAT, A_NULL);
+                  gensym("profile"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::lightingMessCallback),
-		  gensym("lighting"), A_FLOAT, A_NULL);
+                  gensym("lighting"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoMessCallback),
-		  gensym("stereo"), A_FLOAT, A_NULL);
+                  gensym("stereo"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
-		  gensym("stereoSep"), A_FLOAT, A_NULL);
+                  gensym("stereoSep"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
-		  gensym("stereoFoc"), A_FLOAT, A_NULL);
+                  gensym("stereoFoc"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
-		  gensym("stereosep"), A_FLOAT, A_NULL);
+                  gensym("stereosep"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
-		  gensym("stereofoc"), A_FLOAT, A_NULL);
+                  gensym("stereofoc"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
-		  gensym("stereoLine"), A_FLOAT, A_NULL);
+                  gensym("stereoLine"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
-		  gensym("stereoline"), A_FLOAT, A_NULL);
+                  gensym("stereoline"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::borderMessCallback),
-		  gensym("border"), A_FLOAT, A_NULL);
+                  gensym("border"), A_FLOAT, A_NULL);
   class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::frameMessCallback),
-		  gensym("frame"), A_FLOAT, A_NULL);
+                  gensym("frame"), A_FLOAT, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "fps", fpsMess);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
@@ -600,12 +600,12 @@ void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc, t_atom 
       GetMyClass(data)->error("perspec message needs 6 arguments");
       return;
     }
-  GemMan::m_perspect[0] = atom_getfloat(&argv[0]);	// left
-  GemMan::m_perspect[1] = atom_getfloat(&argv[1]);	// right
-  GemMan::m_perspect[2] = atom_getfloat(&argv[2]);	// bottom
-  GemMan::m_perspect[3] = atom_getfloat(&argv[3]);	// top
-  GemMan::m_perspect[4] = atom_getfloat(&argv[4]);	// front
-  GemMan::m_perspect[5] = atom_getfloat(&argv[5]);	// back
+  GemMan::m_perspect[0] = atom_getfloat(&argv[0]);      // left
+  GemMan::m_perspect[1] = atom_getfloat(&argv[1]);      // right
+  GemMan::m_perspect[2] = atom_getfloat(&argv[2]);      // bottom
+  GemMan::m_perspect[3] = atom_getfloat(&argv[3]);      // top
+  GemMan::m_perspect[4] = atom_getfloat(&argv[4]);      // front
+  GemMan::m_perspect[5] = atom_getfloat(&argv[5]);      // back
 }
 void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
 {
@@ -623,19 +623,19 @@ void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
     {
       // setting all lookat values directly
     case 9 :
-      GemMan::m_lookat[0] = atom_getfloat(&argv[0]);	// eyex
-      GemMan::m_lookat[1] = atom_getfloat(&argv[1]);	// eyey
-      GemMan::m_lookat[2] = atom_getfloat(&argv[2]);	// eyez
-      GemMan::m_lookat[3] = atom_getfloat(&argv[3]);	// centerx
-      GemMan::m_lookat[4] = atom_getfloat(&argv[4]);	// centery
-      GemMan::m_lookat[5] = atom_getfloat(&argv[5]);	// centerz
-      GemMan::m_lookat[6] = atom_getfloat(&argv[6]);	// upx
-      GemMan::m_lookat[7] = atom_getfloat(&argv[7]);	// upy
-      GemMan::m_lookat[8] = atom_getfloat(&argv[8]);	// upz
+      GemMan::m_lookat[0] = atom_getfloat(&argv[0]);    // eyex
+      GemMan::m_lookat[1] = atom_getfloat(&argv[1]);    // eyey
+      GemMan::m_lookat[2] = atom_getfloat(&argv[2]);    // eyez
+      GemMan::m_lookat[3] = atom_getfloat(&argv[3]);    // centerx
+      GemMan::m_lookat[4] = atom_getfloat(&argv[4]);    // centery
+      GemMan::m_lookat[5] = atom_getfloat(&argv[5]);    // centerz
+      GemMan::m_lookat[6] = atom_getfloat(&argv[6]);    // upx
+      GemMan::m_lookat[7] = atom_getfloat(&argv[7]);    // upy
+      GemMan::m_lookat[8] = atom_getfloat(&argv[8]);    // upz
       break;
 
     case 5 :
-      theta	= static_cast<float>(DEG2RAD) * atom_getfloat(&argv[4]);
+      theta     = static_cast<float>(DEG2RAD) * atom_getfloat(&argv[4]);
 
     case 4 :
       azimuth = static_cast<float>(DEG2RAD) * atom_getfloat(&argv[3]);
@@ -643,19 +643,19 @@ void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
       // just have position
     case 3 :
       {
-	const float dx =  static_cast<float>(cos(theta) * sinf(azimuth));
-	const float dy =  static_cast<float>(sin(theta));
-	const float dz = -static_cast<float>(cos(theta) * cosf(azimuth));
+        const float dx =  static_cast<float>(cos(theta) * sinf(azimuth));
+        const float dy =  static_cast<float>(sin(theta));
+        const float dz = -static_cast<float>(cos(theta) * cosf(azimuth));
 
-	GemMan::m_lookat[0] = atom_getfloat(&argv[0]);		// eyex
-	GemMan::m_lookat[1] = atom_getfloat(&argv[1]);		// eyey
-	GemMan::m_lookat[2] = atom_getfloat(&argv[2]);		// eyez
-	GemMan::m_lookat[3] = GemMan::m_lookat[0] + dx * distance;	// centerx
-	GemMan::m_lookat[4] = GemMan::m_lookat[1] + dy * distance;	// centery
-	GemMan::m_lookat[5] = GemMan::m_lookat[2] + dz * distance;	// centery
-	GemMan::m_lookat[6] = -dx*dy;					// upx
-	GemMan::m_lookat[7] = dx*dx+dz*dz;				// upy
-	GemMan::m_lookat[8] = -dy*dz;					// upz
+        GemMan::m_lookat[0] = atom_getfloat(&argv[0]);          // eyex
+        GemMan::m_lookat[1] = atom_getfloat(&argv[1]);          // eyey
+        GemMan::m_lookat[2] = atom_getfloat(&argv[2]);          // eyez
+        GemMan::m_lookat[3] = GemMan::m_lookat[0] + dx * distance;      // centerx
+        GemMan::m_lookat[4] = GemMan::m_lookat[1] + dy * distance;      // centery
+        GemMan::m_lookat[5] = GemMan::m_lookat[2] + dz * distance;      // centery
+        GemMan::m_lookat[6] = -dx*dy;                                   // upx
+        GemMan::m_lookat[7] = dx*dx+dz*dz;                              // upy
+        GemMan::m_lookat[8] = -dy*dz;                                   // upz
       }
       break;
 

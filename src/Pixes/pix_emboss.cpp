@@ -45,7 +45,7 @@ void pix_emboss :: processYUVImage(imageStruct &image)
    src =1;
    //   src=w;
    for (r=0; r < height; r++) {
-	for (c=0; c < width; c++) {
+        for (c=0; c < width; c++) {
             image.data[src] = ( image.data[ src-w-2 ] -
                                 image.data[ src-w ] -
                                 image.data[ src-w+2 ] +
@@ -59,22 +59,22 @@ void pix_emboss :: processYUVImage(imageStruct &image)
         }
     }
         /*
-	for (r=0; r < (width*height); r+= width) {
-		for (c=0; c < width; c++) {
+        for (r=0; r < (width*height); r+= width) {
+                for (c=0; c < width; c++) {
 
-			image.data[src+1] =(image.data[ r-1 + c-2 ] -
-				      image.data[ r-1 + c ] -
-				      image.data[ r-1 + c+2 ]+
-				      image.data[ r+c -2 ] +
-				      image.data[r+c] -
-				      image.data[r+c+2] -
-				      image.data[r+1+c-2] -
-				      image.data[r+1+c] -
-				      image.data[r+1+c+2]
-				      )/9;
+                        image.data[src+1] =(image.data[ r-1 + c-2 ] -
+                                      image.data[ r-1 + c ] -
+                                      image.data[ r-1 + c+2 ]+
+                                      image.data[ r+c -2 ] +
+                                      image.data[r+c] -
+                                      image.data[r+c+2] -
+                                      image.data[r+1+c-2] -
+                                      image.data[r+1+c] -
+                                      image.data[r+1+c+2]
+                                      )/9;
                                       src+=2;
-		}
-	}*/
+                }
+        }*/
    //post("chars:%d",src);
    //post("r:%d",r);
    //post("c:%d",c);

@@ -58,7 +58,7 @@ void part_render :: renderParticles(GemState *state)
   if (m_tickTime > 0.f)    {
     pMove();
   }
-  //	pDrawGroupp();
+  //    pDrawGroupp();
   int cnt = pGetGroupCount();
   if(cnt < 1)return;
   if (cnt>m_number){
@@ -75,7 +75,7 @@ void part_render :: renderParticles(GemState *state)
   GLfloat *color = m_colorize ?  m_colors : NULL;
   GLfloat *size = m_sizing ? m_sizes : NULL;
   pGetParticles(0, cnt, position, color, NULL, size);
-  for(int i = 0; i < cnt; i++)	{
+  for(int i = 0; i < cnt; i++)  {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(position[0], position[1], position[2]);

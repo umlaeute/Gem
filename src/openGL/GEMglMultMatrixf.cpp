@@ -21,15 +21,15 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultMatrixf , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMultMatrixf :: GEMglMultMatrixf	(t_floatarg arg0)
+GEMglMultMatrixf :: GEMglMultMatrixf    (t_floatarg arg0)
 {
-	m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("list"));
+        m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("list"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
 GEMglMultMatrixf :: ~GEMglMultMatrixf () {
-	inlet_free(m_inlet);
+        inlet_free(m_inlet);
 }
 
 //////////////////
@@ -45,22 +45,22 @@ bool GEMglMultMatrixf :: isRunnable(void) {
 // Render
 //
 void GEMglMultMatrixf :: render(GemState *state) {
-	glMultMatrixf (m_matrix);
+        glMultMatrixf (m_matrix);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglMultMatrixf :: matrixMess (int argc, t_atom*argv) {	// FUN
-	if(argc!=16){
-		error("need 16 (4x4) elements");
-		return;
-		}
-	int i;
-	for (i=0;i<16;i++) {
-	  m_matrix[i]=static_cast<GLfloat>(atom_getfloat(argv+i));
-	}
-	setModified();
+void GEMglMultMatrixf :: matrixMess (int argc, t_atom*argv) {   // FUN
+        if(argc!=16){
+                error("need 16 (4x4) elements");
+                return;
+                }
+        int i;
+        for (i=0;i<16;i++) {
+          m_matrix[i]=static_cast<GLfloat>(atom_getfloat(argv+i));
+        }
+        setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -68,10 +68,10 @@ void GEMglMultMatrixf :: matrixMess (int argc, t_atom*argv) {	// FUN
 //
 
 void GEMglMultMatrixf :: obj_setupCallback(t_class *classPtr) {
-	 class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultMatrixf::matrixMessCallback),
-										gensym("list"), A_GIMME, A_NULL);
+         class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultMatrixf::matrixMessCallback),
+                                                                                gensym("list"), A_GIMME, A_NULL);
 }
 
 void GEMglMultMatrixf :: matrixMessCallback (void* data, t_symbol*,int argc, t_atom*argv){
-	GetMyClass(data)->matrixMess ( argc, argv);
+        GetMyClass(data)->matrixMess ( argc, argv);
 }

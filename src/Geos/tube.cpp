@@ -8,11 +8,11 @@
 //
 // object by cyrille.henry@la-kitchen.fr
 // This primitive create a kind of cilender with paramettre :
-//		Diameter of the 1st circle (1st base of the object)
-//		Diameter of the 2nd circle
-//		X, Y, Z displacement between the 2 circle
-//		X, Y rotation of the 1st circle
-//		X, Y rotation of the 2nd circle
+//              Diameter of the 1st circle (1st base of the object)
+//              Diameter of the 2nd circle
+//              X, Y, Z displacement between the 2 circle
+//              X, Y rotation of the 1st circle
+//              X, Y rotation of the 2nd circle
 //
 // Implementation file
 //
@@ -195,7 +195,7 @@ void tube :: renderShape(GemState *state){
       ysize1 = GemShape::m_texCoords[1].t;
     }
 
-    for (n = 1; n < order + 2 ; n++)	{
+    for (n = 1; n < order + 2 ; n++)    {
       Matrix::generateNormal(vectors1[n-1], vectors2[n], vectors1[n+1], normal);
       glNormal3fv(normal);
       glTexCoord2f( 1.*xsize*(n-1)/order, ysize0 );

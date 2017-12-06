@@ -52,10 +52,10 @@ part_velcone :: ~part_velcone()
 /////////////////////////////////////////////////////////
 void part_velcone :: renderParticles(GemState *state)
 {
-	if (m_tickTime > 0.f)
-	{
-		pVelocityD(PDCone, 0.f, 0.f, 0.f, m_pos[0], m_pos[1], m_pos[2], m_radius);
-	}
+        if (m_tickTime > 0.f)
+        {
+                pVelocityD(PDCone, 0.f, 0.f, 0.f, m_pos[0], m_pos[1], m_pos[2], m_radius);
+        }
 }
 
 /////////////////////////////////////////////////////////
@@ -68,10 +68,10 @@ void part_velcone :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "vel", velMess, float);
 }
 void part_velcone :: vectorMess(float val1, float val2, float val3) {
-  m_pos[0] = val1; 
-  m_pos[1] = val2; 
+  m_pos[0] = val1;
+  m_pos[1] = val2;
   m_pos[2] = val3;
 }
-void	part_velcone :: velMess(float num)	{ 
+void    part_velcone :: velMess(float num)      {
   m_radius = num;
 }

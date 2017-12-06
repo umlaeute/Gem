@@ -51,10 +51,10 @@ namespace gem { namespace image {
       SynchedWorkerThread(false)
     {
       if(NULL==s_imageloader) {
-	s_imageloader=gem::plugins::imageloader::getInstance();
+        s_imageloader=gem::plugins::imageloader::getInstance();
       }
       if(!s_imageloader)
-	throw(40);
+        throw(40);
 
       if(!s_imageloader->isThreadable())
         throw(42);
@@ -143,7 +143,7 @@ namespace gem { namespace image {
     if((PixImageThreadLoader::s_imageloader) &&
        (PixImageThreadLoader::s_imageloader->load(filename, result, props)))
       {
-	return true;
+        return true;
       }
     return false;
   }

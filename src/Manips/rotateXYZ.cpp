@@ -110,4 +110,3 @@ void rotateXYZ :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "yVal", yMess, float);
   CPPEXTERN_MSG1(classPtr, "zVal", zMess, float);
 }
-

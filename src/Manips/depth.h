@@ -37,31 +37,31 @@ class GEM_EXTERN depth : public GemBase
 
     public:
 
-	    //////////
-	    // Constructor
+            //////////
+            // Constructor
   depth(int, t_atom*);
 
     protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~depth();
+        //////////
+        // Destructor
+        virtual ~depth();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+        //////////
+        // Do the rendering
+        virtual void    render(GemState *state);
 
-    	//////////
-    	// Turn back on depth test
-    	virtual void 	postrender(GemState *state);
+        //////////
+        // Turn back on depth test
+        virtual void    postrender(GemState *state);
 
-    	//////////
-    	// Depth state
-    	int	    		m_state;
+        //////////
+        // Depth state
+        int                     m_state;
 
-    	//////////
-    	// Depth changed
-    	void	    	depthMess(int state);
+        //////////
+        // Depth changed
+        void            depthMess(int state);
 };
 
-#endif	// for header file
+#endif  // for header file
