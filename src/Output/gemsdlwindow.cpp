@@ -441,7 +441,7 @@ void gemsdlwindow :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemsdlwindow :: titleMess(std::string s)
+void gemsdlwindow :: titleMess(const std::string&s)
 {
   m_title = s;
   if(m_surface) {
@@ -555,7 +555,7 @@ bool gemsdlwindow :: create(void)
   dispatch();
   return true;
 }
-void gemsdlwindow :: createMess(std::string) {
+void gemsdlwindow :: createMess(const std::string&) {
   create();
 }
 

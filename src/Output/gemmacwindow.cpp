@@ -1527,7 +1527,7 @@ OSStatus gemmacwindow::eventHandler (EventRef event)
 // Messages
 //
 /////////////////////////////////////////////////////////
-void gemmacwindow :: createMess(std::string s) {
+void gemmacwindow :: createMess(const std::string&s) {
   if(!create()) {
     destroyMess();
     return;

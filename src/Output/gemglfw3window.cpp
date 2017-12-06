@@ -117,7 +117,7 @@ void gemglfw3window :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglfw3window :: titleMess(std::string s)
+void gemglfw3window :: titleMess(const std::string&s)
 {
   m_title = s;
   if(makeCurrent()){
@@ -263,7 +263,7 @@ bool gemglfw3window :: create(void)
   dispatch();
   return (0!=m_window);
 }
-void gemglfw3window :: createMess(std::string) {
+void gemglfw3window :: createMess(const std::string&) {
   create();
 }
 

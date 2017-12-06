@@ -239,7 +239,7 @@ void gemglutwindow :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: titleMess(std::string s)
+void gemglutwindow :: titleMess(const std::string&s)
 {
   m_title = s;
   if(makeCurrent()){
@@ -390,7 +390,7 @@ bool gemglutwindow :: create(void)
   dispatch();
   return true;
 }
-void gemglutwindow :: createMess(std::string) {
+void gemglutwindow :: createMess(const std::string&) {
   create();
 }
 

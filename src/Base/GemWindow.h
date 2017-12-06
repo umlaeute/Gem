@@ -177,14 +177,14 @@ class GEM_EXTERN GemWindow : public CPPExtern
   virtual void    transparentMess(bool on);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string);
+  virtual void titleMess(const std::string&);
   virtual void borderMess(bool on);
 
   virtual void    fullscreenMess(int on);
   virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */

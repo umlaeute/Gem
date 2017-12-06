@@ -369,7 +369,7 @@ bool gemw32window:: create(void)
   position(x, y);
   return createGemWindow();
 }
-void gemw32window:: createMess(std::string s) {
+void gemw32window:: createMess(const std::string&s) {
     if(m_win) {
         error("window already made");
         return;
@@ -498,7 +498,7 @@ void gemw32window::move(void) {
     }
 }
 
-void gemw32window:: titleMess(std::string s) {
+void gemw32window:: titleMess(const std::string&s) {
     m_title=s;
     if(m_win)
         SetWindowText(m_win->win, s.c_str());

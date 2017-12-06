@@ -393,7 +393,7 @@ bool gemcocoawindow :: create(void)
   bool cgw=  createGemWindow(); 
   return cgw;
 }
-void gemcocoawindow :: createMess(std::string s) {
+void gemcocoawindow :: createMess(const std::string&s) {
   if(m_pimpl->view) {
     error("window already made!");
     return;
@@ -419,7 +419,7 @@ void gemcocoawindow :: destroyMess(void)
 
 /////////////////////////////////////////////////////////
 // messages
-void gemcocoawindow :: titleMess(std::string s) {
+void gemcocoawindow :: titleMess(const std::string&s) {
   m_title = s;
   if(m_pimpl->window) {
     [m_pimpl->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];

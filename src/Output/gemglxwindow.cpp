@@ -806,7 +806,7 @@ void gemglxwindow :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: titleMess(std::string s)
+void gemglxwindow :: titleMess(const std::string&s)
 {
   m_title=s;
   if(m_pimpl->dpy && m_pimpl->win) {
@@ -918,7 +918,7 @@ bool gemglxwindow :: create(void)
   titleMess(m_title);
   return createGemWindow();
 }
-void gemglxwindow :: createMess(std::string display)
+void gemglxwindow :: createMess(const std::string&display)
 {
   if(m_pimpl->win) {
     error("window already made");

@@ -83,7 +83,7 @@ class GEM_EXTERN gemmacwindow : public GemWindow
   virtual void dispatch(void);
 
    /* creation/destruction */
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* decoration,... */

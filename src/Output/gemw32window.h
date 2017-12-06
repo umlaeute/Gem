@@ -90,12 +90,12 @@ class GEMW32WINDOW_EXTERN gemw32window : public GemWindow
   LONG WINAPI event(UINT uMsg, WPARAM wParam, LPARAM lParam);
   void  move(void);
 
-  virtual void createMess(std::string);
+  virtual void createMess(const std::string&);
   virtual void        dimensionsMess(unsigned int, unsigned int);
   virtual void        offsetMess(int, int);
   virtual void        cursorMess(bool);
   virtual void        topmostMess(bool);
-  virtual void        titleMess(std::string);
+  virtual void        titleMess(const std::string&);
   virtual void        fullscreenMess(int);
 
  private:

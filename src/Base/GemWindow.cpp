@@ -376,7 +376,7 @@ void GemWindow::   fsaaMess(int value) {
   m_fsaa=value;
 }
 
-void GemWindow::titleMess(std::string s) {
+void GemWindow::titleMess(const std::string& s) {
   m_title=s;
 }
 void GemWindow::borderMess(bool on) {
@@ -391,7 +391,7 @@ void GemWindow::       offsetMess(int x, int y) {
   m_yoffset=y;
 }
 
-void GemWindow::       createMess(std::string) {
+void GemWindow::       createMess(const std::string&) {
   create();
 }
 void GemWindow::      destroyMess(void) {
