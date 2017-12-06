@@ -78,6 +78,10 @@ public:
 
     if(f0r_init)
       err=f0r_init();
+    if (err<0) {
+      ::error("[pix_frei0r] failed to initialize plugin");
+      return false;
+    }
 
     f0r_plugin_info_t info;
     f0r_get_plugin_info(&info);
