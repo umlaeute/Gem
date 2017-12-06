@@ -259,7 +259,9 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
 void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
 {
   if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->gem_renderMess((GemCache *)argv->a_w.w_gpointer, (GemState *)(argv+1)->a_w.w_gpointer);
+    GetMyClass(data)->gem_renderMess(
+                                     reinterpret_cast<GemCache *>(argv->a_w.w_gpointer),
+                                     reinterpret_cast<GemState *>((argv+1)->a_w.w_gpointer));
 #if 1
   } else if (argc==1 && argv->a_type==A_FLOAT){
     GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
