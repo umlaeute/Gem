@@ -244,7 +244,7 @@ namespace gem { namespace thread {
       //std::cerr << "cancelling "<< (int)ID <<" from TODO" << std::endl;
       m_pimpl->m_todo.lock();
       
-      for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); it++) {
+      for(it=m_pimpl->q_todo.begin(); it!=m_pimpl->q_todo.end(); ++it) {
         if(it->first == ID) {
           m_pimpl->q_todo.erase(it);
           success=true;
