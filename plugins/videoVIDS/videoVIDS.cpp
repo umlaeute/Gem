@@ -400,7 +400,7 @@ bool videoVIDS::reset()
 
 pixBlock*videoVIDS::getFrame(void)
 {
-  if(m_ID<0)return NULL;
+  if(m_ID<0)return 0;
   if(m_vi.isFrameNew(m_ID)){
     m_width=m_vi.getWidth(m_ID);
     m_height=m_vi.getHeight(m_ID);

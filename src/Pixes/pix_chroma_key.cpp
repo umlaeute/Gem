@@ -96,8 +96,8 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 {
    long src,h,w,xsize;
    unsigned char Uhi,Ulo,Vhi,Vlo,Yhi,Ylo;
-   src =0;
    bool change1,change2,change3,change4;
+   src =0;
 
    Yhi = CLAMP(m_Yvalue + m_Yrange);
    Ylo = CLAMP(m_Yvalue - m_Yrange);
