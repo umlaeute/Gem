@@ -964,10 +964,17 @@ void gemglxwindow :: destroy(void)
     if (m_pimpl->win) {
       XUnmapWindow      (m_pimpl->dpy, m_pimpl->win);
       err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
+      if(err) {
+        verbose(1, "XDestroyWindow returned %d", err);
+      }
     }
 
-    if (m_pimpl->cmap)
+    if (m_pimpl->cmap) {
       err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
+      if(err) {
+        verbose(1, "XFreeColormap returned %d", err);
+      }
+    }
 
     XFlush( m_pimpl->dpy );
     err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
