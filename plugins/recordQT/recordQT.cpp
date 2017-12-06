@@ -104,7 +104,7 @@ recordQT :: recordQT(void)
       name[namelength]=0;
       t_symbol*s=gensym(name);
       codecContainer[i].name = s->s_name;
-      delete name;
+      delete[]name;
     } else {
       codecContainer[i].name = NULL;
     }
