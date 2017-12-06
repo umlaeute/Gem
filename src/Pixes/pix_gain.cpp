@@ -199,7 +199,7 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
   /* the MMX code goes easily into clipping,
    * since we are using (short) instead of (int)
    */
-  if((R>256)||(G>256)||(B>256)||(B>256)){
+  if((R>256)||(G>256)||(B>256)||(A>256)){
     processRGBAImage(image);
     return;
   }
