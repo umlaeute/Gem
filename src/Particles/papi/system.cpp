@@ -387,7 +387,8 @@ void _pAddActionToList(ParticleAction *S, int size)
 		memcpy(new_alist, alist, alist->count * sizeof(PAHeader));
 
 		delete [] alist;
-		_ps.alist_list[_ps.list_id] = _ps.pact = alist = new_alist;
+                alist = new_alist;
+		_ps.alist_list[_ps.list_id] = _ps.pact = alist;
 
 		alist->actions_allocated = new_alloc;
 	}
