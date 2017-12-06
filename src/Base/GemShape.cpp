@@ -195,7 +195,7 @@ void GemShape :: typeMess(t_symbol *type)
     it=m_drawTypes.begin();
     while(m_drawTypes.end() != it) {
       error("\t %s", it->first.c_str());
-      it++;
+      ++it;
     }
     return;
   }
