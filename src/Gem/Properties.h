@@ -79,7 +79,7 @@ namespace gem
       bool get(const std::string&key, Class&value) const {
        try {
 	 value=gem::any_cast<Class>(get(key));
-      } catch (gem::bad_any_cast e) {
+      } catch (gem::bad_any_cast&e) {
 	return false;
       }
       return true;

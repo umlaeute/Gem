@@ -331,7 +331,7 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
   return ret;
 }
 
-static bool touch(std::string filename) {
+static bool touch(const std::string&filename) {
 #ifdef __APPLE__
   int fd;
   fd = open(filename.c_str(), O_CREAT | O_RDWR, 0600);

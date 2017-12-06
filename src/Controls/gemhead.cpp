@@ -224,7 +224,7 @@ void gemhead :: setMess(t_float priority)
   gemreceive::nameMess(rcv);
 }
 
-void gemhead :: setContext(std::string contextName)
+void gemhead :: setContext(const std::string&contextName)
 {
 
   std::string rcv="__gem_render"+contextName;
