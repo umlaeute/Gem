@@ -277,6 +277,8 @@ GemDylib::~GemDylib(void) {
 }
 
 GemDylib& GemDylib::operator=(const GemDylib&org) {
+  if(&org == this)
+    return *this;
   if(m_handle)
     delete m_handle;
   m_handle=NULL;
