@@ -30,9 +30,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT imageJPEG : public gem::plugins::imageloader, public gem::plugins::imagesaver {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT imageJPEG : public gem::plugins::imageloader, public gem::plugins::imagesaver
+{
+public:
 
   //////////
   // Constructor
@@ -55,8 +59,12 @@ class GEM_EXPORT imageJPEG : public gem::plugins::imageloader, public gem::plugi
 
   ////////
   // can be used from threaded contexts
-  virtual bool isThreadable(void) {return true;}
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

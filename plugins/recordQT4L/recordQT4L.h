@@ -47,9 +47,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT recordQT4L : public record {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT recordQT4L : public record
+{
+public:
 
   //////////
   // Constructor
@@ -115,9 +119,12 @@ namespace gem { namespace plugins {
    */
   virtual bool enumProperties(gem::Properties&props);
 
-  virtual bool dialog(void) {return false;}
+  virtual bool dialog(void)
+  {
+    return false;
+  }
 
- private:
+private:
   quicktime_t *m_qtfile;
 
   imageStruct m_image;
@@ -151,7 +158,8 @@ namespace gem { namespace plugins {
 
   size_t m_curFrame;
 #endif /* QT */
- };
-};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

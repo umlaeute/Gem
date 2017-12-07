@@ -30,9 +30,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT videoOptiTrack : public video {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoOptiTrack : public video
+{
+public:
   //////////
   // Constructor
   videoOptiTrack(void);
@@ -63,18 +67,30 @@ class GEM_EXPORT videoOptiTrack : public video {
   // get's the name of the backend (e.g. "v4l")
   virtual const std::string getName(void);
 
-  virtual bool isThreadable(void) {return true;}
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
   virtual bool reset(void);
   virtual void releaseFrame(void);
-  virtual bool grabAsynchronous(bool) {return true;}
-  virtual bool dialog(std::vector<std::string>names=std::vector<std::string>()) {return false;}
-  virtual bool setColor(int) {return false;}
+  virtual bool grabAsynchronous(bool)
+  {
+    return true;
+  }
+  virtual bool dialog(std::vector<std::string>names=std::vector<std::string>())
+  {
+    return false;
+  }
+  virtual bool setColor(int)
+  {
+    return false;
+  }
 
   virtual void close(void);
   virtual bool start(void);
   virtual bool stop(void);
 
- protected:
+protected:
   gem::Properties m_props;
   std::string m_devname;
   int m_devnum;
@@ -87,7 +103,8 @@ class GEM_EXPORT videoOptiTrack : public video {
   pixBlock m_pixBlock;
 
 };
-};};
+};
+};
 
 
-#endif	// for header file
+#endif  // for header file

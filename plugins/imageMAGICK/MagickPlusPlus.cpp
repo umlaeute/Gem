@@ -69,7 +69,8 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
   }
   return true;
 }
-bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+{
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
 
@@ -100,7 +101,7 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
 #endif
     break;
   }
-  try{
+  try {
     Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel, pImage->data);
     // since openGL is upside down
     if(!pImage->upsidedown) {
@@ -121,14 +122,20 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
       verbose(0, "[GEM:imageMAGICK] saving problem: %s", e.what());
     }
 
-  } catch (Magick::Exception&e){
+  } catch (Magick::Exception&e) {
     verbose(0, "[GEM:imageMAGICK] %s", e.what());
-    if(pImage!=&image)delete pImage; pImage=NULL;
+    if(pImage!=&image) {
+      delete pImage;
+    }
+    pImage=NULL;
     return false;
   } catch (...) {
     verbose(0, "[GEM:imageMAGICK] uncaught exception!");
     return false;
   }
-  if(pImage!=&image)delete pImage; pImage=NULL;
+  if(pImage!=&image) {
+    delete pImage;
+  }
+  pImage=NULL;
   return true;
 }

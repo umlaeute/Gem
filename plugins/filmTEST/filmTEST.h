@@ -31,9 +31,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmTEST : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmTEST : public film
+{
+public:
 
   //////////
   // Constructor
@@ -64,6 +68,8 @@ class GEM_EXPORT filmTEST : public film {
   pixBlock m_image;
   double m_fps;
   unsigned int m_numFrames;
-};};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

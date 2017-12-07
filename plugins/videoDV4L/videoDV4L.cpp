@@ -46,12 +46,12 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 /////////////////////////////////////////////////////////
 
 videoDV4L :: videoDV4L() : videoBase("dv4l"),
-                           m_dvfd(-1),
-                           m_raw(NULL),
-                           m_iec(NULL),
-                           m_decoder(NULL),
-                           m_parsed(false),
-                           m_quality(DV_QUALITY_BEST)
+  m_dvfd(-1),
+  m_raw(NULL),
+  m_iec(NULL),
+  m_decoder(NULL),
+  m_parsed(false),
+  m_quality(DV_QUALITY_BEST)
 {
   m_devicenum  = -1;
 
@@ -70,23 +70,32 @@ videoDV4L :: videoDV4L() : videoBase("dv4l"),
 // Destructor
 //
 /////////////////////////////////////////////////////////
-videoDV4L :: ~videoDV4L(){
+videoDV4L :: ~videoDV4L()
+{
   close();
-  if(m_haveVideo)stopTransfer();
-  if(m_decoder!=NULL)dv_decoder_free(m_decoder);
+  if(m_haveVideo) {
+    stopTransfer();
+  }
+  if(m_decoder!=NULL) {
+    dv_decoder_free(m_decoder);
+  }
 
   dv_cleanup(); // singleton?
 }
 
 
-bool videoDV4L :: grabFrame(){
+bool videoDV4L :: grabFrame()
+{
   /* this actually only transports the raw1394 stream
    * libiec will issue a callback when a frame is ready
    */
   fd_set rfds;
-  if(m_dvfd<0)return false;
+  if(m_dvfd<0) {
+    return false;
+  }
   struct timeval sleep;
-  sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+  sleep.tv_sec=0;
+  sleep.tv_usec=10; /* 10us */
 
   FD_ZERO(&rfds);
   FD_SET(m_dvfd, &rfds);
@@ -102,7 +111,8 @@ bool videoDV4L :: grabFrame(){
   return true;
 }
 
-int videoDV4L::decodeFrame(unsigned char*data, int len) {
+int videoDV4L::decodeFrame(unsigned char*data, int len)
+{
   DEBUG_WHERE;
   if(!m_parsed) {
     dv_parse_header(m_decoder, data);
@@ -137,11 +147,11 @@ int videoDV4L::decodeFrame(unsigned char*data, int len) {
 }
 
 int videoDV4L::iec_frame(
-                          unsigned char *data,
-                          int len,
-                          int complete,
-                          void *arg
-                          )
+  unsigned char *data,
+  int len,
+  int complete,
+  void *arg
+)
 {
   DEBUG_WHERE;
   if(complete) {
@@ -155,9 +165,12 @@ int videoDV4L::iec_frame(
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool videoDV4L :: openDevice(gem::Properties&props){
+bool videoDV4L :: openDevice(gem::Properties&props)
+{
   DEBUG_WHERE;
-  if(m_raw)closeDevice();
+  if(m_raw) {
+    closeDevice();
+  }
 
   // LATER think about multithreading issues
   // according to the manual: "it is not allowed to use the same handle in multiple threads"
@@ -175,8 +188,9 @@ bool videoDV4L :: openDevice(gem::Properties&props){
   verbose(1, "[GEM:videoDV4L] got %d ports", ports);
 
   int devnum=m_devicenum;
-  if (!m_devicename.empty())
+  if (!m_devicename.empty()) {
     devnum=-1;
+  }
 
   int i=0;
   for(i=0; i<ports; i++) {
@@ -192,13 +206,13 @@ bool videoDV4L :: openDevice(gem::Properties&props){
   int nodes=raw1394_get_nodecount(m_raw);
   verbose(1, "[GEM:videoDV4L] got %d nodes", nodes);
 
-  if(devnum>=ports){
+  if(devnum>=ports) {
     closeDevice();
     return false;
   }
 
   if(devnum<0) {
-    if (!m_devicename.empty()){
+    if (!m_devicename.empty()) {
       /* bad devicename given */
       closeDevice();
       return false;
@@ -232,10 +246,17 @@ bool videoDV4L :: openDevice(gem::Properties&props){
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoDV4L :: closeDevice(void){
+void videoDV4L :: closeDevice(void)
+{
   DEBUG_WHERE;
-  if(m_dvfd>=0)      ::close(m_dvfd);m_dvfd=-1;
-  if(m_raw)          raw1394_destroy_handle(m_raw);m_raw=NULL;
+  if(m_dvfd>=0) {
+    ::close(m_dvfd);
+  }
+  m_dvfd=-1;
+  if(m_raw) {
+    raw1394_destroy_handle(m_raw);
+  }
+  m_raw=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -252,13 +273,18 @@ bool videoDV4L :: startTransfer()
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
 
-  if(NULL==m_raw)return false;
+  if(NULL==m_raw) {
+    return false;
+  }
 
   m_parsed=false;
 
-  if(m_decoder!=NULL)dv_decoder_free(m_decoder);m_decoder=NULL;
+  if(m_decoder!=NULL) {
+    dv_decoder_free(m_decoder);
+  }
+  m_decoder=NULL;
 
-  if (!(m_decoder=dv_decoder_new(true, true, true))){
+  if (!(m_decoder=dv_decoder_new(true, true, true))) {
     error("[GEM:videoDV4L] unable to create DV-decoder...closing");
     return false;
   }
@@ -307,7 +333,10 @@ bool videoDV4L :: stopTransfer()
 
   int i=0;
   for(i=0; i<3; i++) {
-    if(m_frame[i]) delete[]m_frame[i]; m_frame[i] = NULL;
+    if(m_frame[i]) {
+      delete[]m_frame[i];
+    }
+    m_frame[i] = NULL;
     m_pitches[i] = 0;
   }
 
@@ -320,8 +349,11 @@ bool videoDV4L :: setDevice(const std::string&name){
 }
 */
 
-bool videoDV4L :: setColor(int format){
-  if (format<=0)return false;
+bool videoDV4L :: setColor(int format)
+{
+  if (format<=0) {
+    return false;
+  }
   m_reqFormat=format;
   lock();
   m_image.image.setCsizeByFormat(m_reqFormat);
@@ -334,9 +366,14 @@ bool videoDV4L :: setColor(int format){
 // Set the quality for DV decoding
 //
 /////////////////////////////////////////
-bool videoDV4L :: setQuality(int quality){
-  if (quality<DV_QUALITY_FASTEST)return -1;
-  if (quality>DV_QUALITY_BEST)return -1;
+bool videoDV4L :: setQuality(int quality)
+{
+  if (quality<DV_QUALITY_FASTEST) {
+    return -1;
+  }
+  if (quality>DV_QUALITY_BEST) {
+    return -1;
+  }
   m_quality=quality;
 
   if(m_decoder) {
@@ -345,7 +382,8 @@ bool videoDV4L :: setQuality(int quality){
   return true;
 }
 
-std::vector<std::string> videoDV4L::enumerate() {
+std::vector<std::string> videoDV4L::enumerate()
+{
   std::vector<std::string> result;
 
   raw1394handle_t handle=m_raw;
@@ -353,7 +391,9 @@ std::vector<std::string> videoDV4L::enumerate() {
     handle=raw1394_new_handle();
   }
 
-  if(NULL==handle)return result;
+  if(NULL==handle) {
+    return result;
+  }
 
   int num_pinf=MAX_PORTNUM;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
@@ -374,7 +414,8 @@ std::vector<std::string> videoDV4L::enumerate() {
 
 
 bool videoDV4L::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                               gem::Properties&writeable)
+{
   gem::any typ;
 
   readable.clear();
@@ -403,7 +444,8 @@ bool videoDV4L::enumProperties(gem::Properties&readable,
 
   return true;
 }
-void videoDV4L::getProperties(gem::Properties&props) {
+void videoDV4L::getProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
 #if 0
   /* get properties without decoder */
@@ -469,7 +511,8 @@ void videoDV4L::getProperties(gem::Properties&props) {
   }
 
 }
-void videoDV4L::setProperties(gem::Properties&props) {
+void videoDV4L::setProperties(gem::Properties&props)
+{
   double d;
   if(props.get("quality", d)) {
     int quality=static_cast<int>(d);

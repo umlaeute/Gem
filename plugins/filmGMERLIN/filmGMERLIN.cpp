@@ -69,14 +69,23 @@ filmGMERLIN :: filmGMERLIN(void) :
 filmGMERLIN :: ~filmGMERLIN(void)
 {
   close();
-  if(m_gconverter)gavl_video_converter_destroy(m_gconverter);m_gconverter=NULL;
+  if(m_gconverter) {
+    gavl_video_converter_destroy(m_gconverter);
+  }
+  m_gconverter=NULL;
 }
 
 void filmGMERLIN :: close(void)
 {
-  if(m_file)bgav_close(m_file);m_file=NULL;
+  if(m_file) {
+    bgav_close(m_file);
+  }
+  m_file=NULL;
 #ifdef USE_FRAMETABLE
-  if(m_frametable)gavl_frame_table_destroy(m_frametable); m_frametable=NULL;
+  if(m_frametable) {
+    gavl_frame_table_destroy(m_frametable);
+  }
+  m_frametable=NULL;
 #endif
   /* LATER: free frame buffers */
 
@@ -101,7 +110,8 @@ void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char
   case BGAV_LOG_ERROR:
     error("[GEM:filmGMERLIN:%s!] %s", log_domain, message);
     break;
-  default:break;
+  default:
+    break;
   }
 }
 void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *log_domain, const char *message)
@@ -109,9 +119,11 @@ void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *
   ((filmGMERLIN*)(data))->log(level, log_domain, message);
 }
 
-bool filmGMERLIN :: isThreadable(void) {
-  if(m_numFrames<0)
+bool filmGMERLIN :: isThreadable(void)
+{
+  if(m_numFrames<0) {
     return false;
+  }
   return true;
 }
 
@@ -126,9 +138,13 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
   m_track=0;
 
   m_file = bgav_create();
-  if(!m_file) return false;
+  if(!m_file) {
+    return false;
+  }
   m_opt = bgav_get_options(m_file);
-  if(!m_opt) return false;
+  if(!m_opt) {
+    return false;
+  }
 
   /*
     bgav_options_set_connect_timeout(m_opt,   connect_timeout);
@@ -144,31 +160,22 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
 
   const char*filename=sfilename.c_str();
 
-  if(!strncmp(filename, "vcd://", 6))
-    {
-      if(!bgav_open_vcd(m_file, filename + 5))
-        {
-          verbose(0, "[GEM:filmGMERLIN] Could not open VCD Device %s",  filename + 5);
-          return false;
-        }
+  if(!strncmp(filename, "vcd://", 6)) {
+    if(!bgav_open_vcd(m_file, filename + 5)) {
+      verbose(0, "[GEM:filmGMERLIN] Could not open VCD Device %s",  filename + 5);
+      return false;
     }
-  else if(!strncmp(filename, "dvd://", 6))
-    {
-      if(!bgav_open_dvd(m_file, filename + 5))
-        {
-          verbose(0, "[GEM:filmGMERLIN] Could not open DVD Device %s", filename + 5);
-          return false;
-        }
+  } else if(!strncmp(filename, "dvd://", 6)) {
+    if(!bgav_open_dvd(m_file, filename + 5)) {
+      verbose(0, "[GEM:filmGMERLIN] Could not open DVD Device %s", filename + 5);
+      return false;
     }
-  else if(!strncmp(filename, "dvb://", 6))
-    {
-      if(!bgav_open_dvb(m_file, filename + 6))
-        {
-          verbose(0, "[GEM:filmGMERLIN] Could not open DVB Device %s", filename + 6);
-          return false;
-        }
+  } else if(!strncmp(filename, "dvb://", 6)) {
+    if(!bgav_open_dvb(m_file, filename + 6)) {
+      verbose(0, "[GEM:filmGMERLIN] Could not open DVB Device %s", filename + 6);
+      return false;
     }
-  else {
+  } else {
     if(!bgav_open(m_file, filename)) {
       verbose(0, "[GEM:filmGMERLIN] Could not open file %s", filename);
       close();
@@ -176,25 +183,23 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
       return false;
     }
   }
-  if(bgav_is_redirector(m_file))
-    {
-      int i=0;
-      int num_urls=bgav_redirector_get_num_urls(m_file);
-      verbose(1, "[GEM:filmGMERLIN] Found redirector:");
-      for(i = 0; i < num_urls; i++)
-        {
-          verbose(1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i, bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
-        }
-      for(i = 0; i < num_urls; i++) {
-        filename=(char*)bgav_redirector_get_url(m_file, i);
-        close();
-        if (open(filename, wantProps)) {
-          return true;
-        }
-      }
-      /* couldn't open a redirected stream */
-      return false;
+  if(bgav_is_redirector(m_file)) {
+    int i=0;
+    int num_urls=bgav_redirector_get_num_urls(m_file);
+    verbose(1, "[GEM:filmGMERLIN] Found redirector:");
+    for(i = 0; i < num_urls; i++) {
+      verbose(1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i, bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
     }
+    for(i = 0; i < num_urls; i++) {
+      filename=(char*)bgav_redirector_get_url(m_file, i);
+      close();
+      if (open(filename, wantProps)) {
+        return true;
+      }
+    }
+    /* couldn't open a redirected stream */
+    return false;
+  }
 
   /*
    * ok, we have been able to open the "file"
@@ -268,16 +273,17 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
   m_numFrames=-1;
 #ifdef USE_FRAMETABLE
   m_frametable=bgav_get_frame_table(m_file, m_track);
-  if(m_frametable)
+  if(m_frametable) {
     m_numFrames=gavl_frame_table_num_frames (m_frametable);
+  }
 #endif
 
   gavl_time_t dur=bgav_get_duration (m_file, m_track);
   if(m_numFrames<0)
     if(dur!=GAVL_TIME_UNDEFINED)
       m_numFrames = gavl_time_to_frames(m_fps_num,
-					m_fps_denum,
-					dur);
+                                        m_fps_denum,
+                                        dur);
 
   return true;
 }
@@ -286,8 +292,11 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmGMERLIN :: getFrame(void){
-  if(!m_file)return NULL;
+pixBlock* filmGMERLIN :: getFrame(void)
+{
+  if(!m_file) {
+    return NULL;
+  }
   bgav_read_video(m_file, m_gframe, m_stream);
   if(m_doConvert) {
     gavl_video_convert (m_gconverter, m_gframe, m_finalframe);
@@ -307,13 +316,16 @@ pixBlock* filmGMERLIN :: getFrame(void){
 // changeFrame
 //
 /////////////////////////////////////////////////////////
-film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
+film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
+{
   if(trackNum<0) {
     /* just automatically proceed to the next frame: this might speed up things for linear decoding */
     return film::SUCCESS;
   }
 
-  if(!m_file)return film::FAILURE;
+  if(!m_file) {
+    return film::FAILURE;
+  }
 
 #if GEM_FILMGMERLIN_TRACKSWITCH
   // LATER implement track-switching
@@ -339,7 +351,9 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
   }
 #endif /* GEM_FILMGMERLIN_TRACKSWITCH */
 
-  if(imgNum>=m_numFrames || imgNum<0)return film::FAILURE;
+  if(imgNum>=m_numFrames || imgNum<0) {
+    return film::FAILURE;
+  }
 
   if(bgav_can_seek(m_file)) {
     if(0) {
@@ -372,8 +386,9 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
 #endif
 
       bgav_seek_scaled(m_file, &seekpos, m_fps_num);
-      if(seekposOrg == seekpos)
+      if(seekposOrg == seekpos) {
         return film::SUCCESS;
+      }
       /* never mind: always return success... */
       return film::SUCCESS;
     }
@@ -384,7 +399,8 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum){
 ///////////////////////////////
 // Properties
 bool filmGMERLIN::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                                 gem::Properties&writeable)
+{
   readable.clear();
   writeable.clear();
 
@@ -398,10 +414,12 @@ bool filmGMERLIN::enumProperties(gem::Properties&readable,
   return false;
 }
 
-void filmGMERLIN::setProperties(gem::Properties&props) {
+void filmGMERLIN::setProperties(gem::Properties&props)
+{
 }
 
-void filmGMERLIN::getProperties(gem::Properties&props) {
+void filmGMERLIN::getProperties(gem::Properties&props)
+{
   std::vector<std::string> keys=props.keys();
   gem::any value;
   double d;
@@ -411,23 +429,28 @@ void filmGMERLIN::getProperties(gem::Properties&props) {
     props.erase(key);
     if("fps"==key) {
       d=m_fps;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("frames"==key && m_numFrames>=0) {
       d=m_numFrames;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("tracks"==key && m_numTracks>=0) {
       d=m_numTracks;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("width"==key) {
       d=m_image.image.xsize;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("height"==key) {
       d=m_image.image.ysize;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
   }
 }

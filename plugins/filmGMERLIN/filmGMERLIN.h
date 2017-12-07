@@ -49,9 +49,13 @@ extern "C" {
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmGMERLIN : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmGMERLIN : public film
+{
+public:
 
   //////////
   // Constructor
@@ -84,13 +88,13 @@ class GEM_EXPORT filmGMERLIN : public film {
   virtual void getProperties(gem::Properties&props);
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
- protected:
+protected:
   pixBlock m_image; // output image
   int m_numFrames, m_numTracks; // number of frames in video
 
-  bgav_t*   	 m_file;
+  bgav_t*        m_file;
   bgav_options_t * m_opt;
   int m_track, m_stream;
   gavl_video_frame_t*m_gframe,*m_finalframe;
@@ -109,9 +113,11 @@ class GEM_EXPORT filmGMERLIN : public film {
 
 
   virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
- private:
+private:
   static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
 
-};};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

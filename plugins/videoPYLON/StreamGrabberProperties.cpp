@@ -22,10 +22,15 @@
 #include "StreamGrabberProperties.h"
 #include "map"
 
-namespace gem{namespace pylon{namespace streamgrabberproperties{
-  static gem::Properties writeprops, readprops;
+namespace gem
+{
+namespace pylon
+{
+namespace streamgrabberproperties
+{
+static gem::Properties writeprops, readprops;
 
-  typedef Pylon::CPylonGigEStreamGrabber DEVICE;
+typedef Pylon::CPylonGigEStreamGrabber DEVICE;
 
 #define GETSETBOOL(T)                                                   \
   static bool get##T(DEVICE*device) { return device->T.GetValue(); }    \
@@ -76,72 +81,77 @@ namespace gem{namespace pylon{namespace streamgrabberproperties{
       }                                                                 \
     }
 
-  typedef bool (*t_getbool)(DEVICE*device);
-  std::map<std::string, t_getbool>map_getbool;
+typedef bool (*t_getbool)(DEVICE*device);
+std::map<std::string, t_getbool>map_getbool;
 
-  typedef void (*t_setbool)(DEVICE*device, const bool);
-  std::map<std::string, t_setbool>map_setbool;
+typedef void (*t_setbool)(DEVICE*device, const bool);
+std::map<std::string, t_setbool>map_setbool;
 
-  GETSETBOOL(EnableResend);
-  GETSETBOOL(ReceiveThreadPriorityOverride);
-
-
-  typedef int64_t (*t_getint)(DEVICE*device);
-  std::map<std::string, t_getint>map_getint;
-  typedef void (*t_setint)(DEVICE*device, const int64_t);
-  std::map<std::string, t_setint>map_setint;
-
-  GETSETINT(MaxNumBuffer);
-  GETSETINT(MaxBufferSize);
-  GETSETINT(PacketTimeout);
-  GETSETINT(ReceiveWindowSize);
-  GETSETINT(ResendRequestThreshold);
-  GETSETINT(ResendRequestBatching);
-  GETSETINT(ResendTimeout);
-  GETSETINT(ResendRequestResponseTimeout);
-  GETSETINT(MaximumNumberResendRequests);
-  GETSETINT(FrameRetention);
-  GETSETINT(ReceiveThreadPriority);
-  GETSETINT(SocketBufferSize);
-  GETSETINT(TypeIsWindowsIntelPerformanceDriverAvailable);
-  GETSETINT(TypeIsWindowsFilterDriverAvailable);
-  GETSETINT(TypeIsSocketDriverAvailable);
-  GETSETINT(Statistic_Total_Buffer_Count);
-  GETSETINT(Statistic_Failed_Buffer_Count);
-  GETSETINT(Statistic_Buffer_Underrun_Count);
-  GETSETINT(Statistic_Total_Packet_Count);
-  GETSETINT(Statistic_Failed_Packet_Count);
-  GETSETINT(Statistic_Resend_Request_Count);
-  GETSETINT(Statistic_Resend_Packet_Count);
-  GETSETINT(DestinationPort);
+GETSETBOOL(EnableResend);
+GETSETBOOL(ReceiveThreadPriorityOverride);
 
 
-  typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
-  std::map<std::string, t_getstring>map_getstring;
-  typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
-  std::map<std::string, t_setstring>map_setstring;
-  GETSETSTRING(DestinationAddr);
+typedef int64_t (*t_getint)(DEVICE*device);
+std::map<std::string, t_getint>map_getint;
+typedef void (*t_setint)(DEVICE*device, const int64_t);
+std::map<std::string, t_setint>map_setint;
+
+GETSETINT(MaxNumBuffer);
+GETSETINT(MaxBufferSize);
+GETSETINT(PacketTimeout);
+GETSETINT(ReceiveWindowSize);
+GETSETINT(ResendRequestThreshold);
+GETSETINT(ResendRequestBatching);
+GETSETINT(ResendTimeout);
+GETSETINT(ResendRequestResponseTimeout);
+GETSETINT(MaximumNumberResendRequests);
+GETSETINT(FrameRetention);
+GETSETINT(ReceiveThreadPriority);
+GETSETINT(SocketBufferSize);
+GETSETINT(TypeIsWindowsIntelPerformanceDriverAvailable);
+GETSETINT(TypeIsWindowsFilterDriverAvailable);
+GETSETINT(TypeIsSocketDriverAvailable);
+GETSETINT(Statistic_Total_Buffer_Count);
+GETSETINT(Statistic_Failed_Buffer_Count);
+GETSETINT(Statistic_Buffer_Underrun_Count);
+GETSETINT(Statistic_Total_Packet_Count);
+GETSETINT(Statistic_Failed_Packet_Count);
+GETSETINT(Statistic_Resend_Request_Count);
+GETSETINT(Statistic_Resend_Packet_Count);
+GETSETINT(DestinationPort);
 
 
-  typedef std::string (*t_getenum)(DEVICE*device);
-  typedef void (*t_setenum)(DEVICE*device, const std::string&);
-  typedef void (*t_setenumi)(DEVICE*device, const int);
-  std::map<std::string, t_getenum>map_getenum;
-  std::map<std::string, t_setenum>map_setenum;
-  std::map<std::string, t_setenumi>map_setenumi;
-
-  using namespace Basler_GigEStreamParams;
-
-  GETSETENUM(Status);
-  GETSETENUM(AccessMode);
-  GETSETENUM(TransmissionType);
-};};};
+typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
+std::map<std::string, t_getstring>map_getstring;
+typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
+std::map<std::string, t_setstring>map_setstring;
+GETSETSTRING(DestinationAddr);
 
 
+typedef std::string (*t_getenum)(DEVICE*device);
+typedef void (*t_setenum)(DEVICE*device, const std::string&);
+typedef void (*t_setenumi)(DEVICE*device, const int);
+std::map<std::string, t_getenum>map_getenum;
+std::map<std::string, t_setenum>map_setenum;
+std::map<std::string, t_setenumi>map_setenumi;
 
-void gem::pylon::streamgrabberproperties::init() {
+using namespace Basler_GigEStreamParams;
+
+GETSETENUM(Status);
+GETSETENUM(AccessMode);
+GETSETENUM(TransmissionType);
+};
+};
+};
+
+
+
+void gem::pylon::streamgrabberproperties::init()
+{
   static bool initialized=false;
-  if(initialized)return;
+  if(initialized) {
+    return;
+  }
   initialized=true;
 
 
@@ -240,8 +250,10 @@ void gem::pylon::streamgrabberproperties::init() {
 }
 
 
-gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
-  gem::Properties&result=readprops; result.clear();
+gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void)
+{
+  gem::Properties&result=readprops;
+  result.clear();
 
   gem::pylon::streamgrabberproperties::init();
 
@@ -280,8 +292,10 @@ gem::Properties&gem::pylon::streamgrabberproperties::getKeys(void) {
 
   return result;
 }
-gem::Properties&gem::pylon::streamgrabberproperties::setKeys(void) {
-  gem::Properties&result=writeprops; result.clear();
+gem::Properties&gem::pylon::streamgrabberproperties::setKeys(void)
+{
+  gem::Properties&result=writeprops;
+  result.clear();
   gem::pylon::streamgrabberproperties::init();
 
   do {
@@ -321,8 +335,8 @@ gem::Properties&gem::pylon::streamgrabberproperties::setKeys(void) {
 }
 
 void gem::pylon::streamgrabberproperties::get(DEVICE*device,
-                                              std::string key,
-                                              gem::any&result)
+    std::string key,
+    gem::any&result)
 {
   gem::pylon::streamgrabberproperties::init();
 
@@ -350,8 +364,8 @@ void gem::pylon::streamgrabberproperties::get(DEVICE*device,
 // set StreamGrabber attributes
 
 bool gem::pylon::streamgrabberproperties::set(DEVICE*device,
-                                              std::string key,
-                                              gem::Properties&props)
+    std::string key,
+    gem::Properties&props)
 {
   double d;
   std::string s;

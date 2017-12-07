@@ -35,8 +35,8 @@ public:
   virtual void releaseFrame(void);
 
   virtual std::vector<std::string>enumerate(void);
-  virtual bool	setDevice(int ID);
-  virtual bool	setDevice(const std::string&);
+  virtual bool  setDevice(int ID);
+  virtual bool  setDevice(const std::string&);
 
   virtual bool enumProperties(gem::Properties&readable,
                               gem::Properties&writeable);
@@ -50,7 +50,7 @@ public:
   virtual bool dialog(std::vector<std::string>names=
                         std::vector<std::string>());
 
-  virtual bool	    	setColor(int);
+  virtual bool          setColor(int);
 
 private:
   std::string m_name;
@@ -63,4 +63,4 @@ private:
 };
 }; // namespace
 
-#endif	// for header file
+#endif  // for header file

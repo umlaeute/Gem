@@ -106,8 +106,12 @@ videoV4L :: videoV4L() : videoBase("v4l")
     memset(vmmap+i, 0, sizeof(vmmap[i]));
   }
 
-  if (!m_width)m_width=64;
-  if (!m_height)m_height=64;
+  if (!m_width) {
+    m_width=64;
+  }
+  if (!m_height) {
+    m_height=64;
+  }
 
   m_capturing=false;
 
@@ -130,7 +134,8 @@ videoV4L :: ~videoV4L()
 // frame grabber
 //
 /////////////////////////////////////////////////////////
-bool videoV4L :: grabFrame() {
+bool videoV4L :: grabFrame()
+{
   bool noerror=true;
 
   frame++;
@@ -140,27 +145,26 @@ bool videoV4L :: grabFrame() {
   vmmap[frame].height = m_image.image.ysize + mytopmargin + mybottommargin;
 
   /* syncing */
-  if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0)
-    {
-      perror("[GEM:videoV4L] VIDIOCSYNC");
-      noerror=false;
-    }
+  if (v4l1_ioctl(tvfd, VIDIOCSYNC, &vmmap[frame].frame) < 0) {
+    perror("[GEM:videoV4L] VIDIOCSYNC");
+    noerror=false;
+  }
 
   /* capturing */
-  if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)
-    {
-      if (errno == EAGAIN)
-	error("[GEM:videoV4L] can't sync (no v4l source?)");
-      else
-	perror("[GEM:videoV4L] VIDIOCMCAPTURE1");
-
-      /* let's try again... */
-      if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
-	perror("[GEM:videoV4L] VIDIOCMCAPTURE2");
-	noerror=false;
-      }
+  if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
+    if (errno == EAGAIN) {
+      error("[GEM:videoV4L] can't sync (no v4l source?)");
+    } else {
+      perror("[GEM:videoV4L] VIDIOCMCAPTURE1");
     }
-  if(noerror){
+
+    /* let's try again... */
+    if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
+      perror("[GEM:videoV4L] VIDIOCMCAPTURE2");
+      noerror=false;
+    }
+  }
+  if(noerror) {
     errorcount=0;
   } else {
     errorcount++;
@@ -171,14 +175,24 @@ bool videoV4L :: grabFrame() {
   }
 
   lock();
-  if (m_colorConvert){
+  if (m_colorConvert) {
     m_image.image.notowned = false;
-    switch(m_gotFormat){
-    case VIDEO_PALETTE_YUV420P: m_image.image.fromYUV420P(videobuf + vmbuf.offsets[frame]); break;
-    case VIDEO_PALETTE_RGB24:   m_image.image.fromBGR    (videobuf + vmbuf.offsets[frame]); break;
-    case VIDEO_PALETTE_RGB32:   m_image.image.fromBGRA   (videobuf + vmbuf.offsets[frame]); break;
-    case VIDEO_PALETTE_GREY:    m_image.image.fromGray   (videobuf + vmbuf.offsets[frame]); break;
-    case VIDEO_PALETTE_YUV422:  m_image.image.fromYUV422 (videobuf + vmbuf.offsets[frame]); break;
+    switch(m_gotFormat) {
+    case VIDEO_PALETTE_YUV420P:
+      m_image.image.fromYUV420P(videobuf + vmbuf.offsets[frame]);
+      break;
+    case VIDEO_PALETTE_RGB24:
+      m_image.image.fromBGR    (videobuf + vmbuf.offsets[frame]);
+      break;
+    case VIDEO_PALETTE_RGB32:
+      m_image.image.fromBGRA   (videobuf + vmbuf.offsets[frame]);
+      break;
+    case VIDEO_PALETTE_GREY:
+      m_image.image.fromGray   (videobuf + vmbuf.offsets[frame]);
+      break;
+    case VIDEO_PALETTE_YUV422:
+      m_image.image.fromYUV422 (videobuf + vmbuf.offsets[frame]);
+      break;
 
     default: // ? what should we do ?
       m_image.image.data=videobuf + vmbuf.offsets[frame];
@@ -204,11 +218,11 @@ bool videoV4L :: openDevice(gem::Properties&props)
   char buf[256];
   int i;
 
-  if(!m_devicename.empty()){
+  if(!m_devicename.empty()) {
     snprintf(buf,256,"%s", m_devicename.c_str());
     buf[255]=0;
   } else {
-    if (m_devicenum<0){
+    if (m_devicenum<0) {
       sprintf(buf, "/dev/video");
     } else {
       snprintf(buf, 256, "/dev/video%d", m_devicenum);
@@ -247,7 +261,7 @@ bool videoV4L :: openDevice(gem::Properties&props)
 
   return true;
 
- closit:
+closit:
   closeDevice();
   return false;
 }
@@ -255,8 +269,11 @@ bool videoV4L :: openDevice(gem::Properties&props)
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoV4L :: closeDevice() {
-  if (tvfd>=0) v4l1_close(tvfd);
+void videoV4L :: closeDevice()
+{
+  if (tvfd>=0) {
+    v4l1_close(tvfd);
+  }
   tvfd = -1;
 }
 
@@ -267,7 +284,9 @@ void videoV4L :: closeDevice() {
 /////////////////////////////////////////////////////////
 bool videoV4L :: startTransfer()
 {
-  if(tvfd<0)return false;
+  if(tvfd<0) {
+    return false;
+  }
   int i;
   int width, height;
 
@@ -312,18 +331,16 @@ bool videoV4L :: startTransfer()
 #endif
 
   /* get mmap numbers */
-  if (v4l1_ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0)
-    {
-      perror("[GEM:videoV4L] VIDIOCGMBUF");
-      return false;
-    }
+  if (v4l1_ioctl(tvfd, VIDIOCGMBUF, &vmbuf) < 0) {
+    perror("[GEM:videoV4L] VIDIOCGMBUF");
+    return false;
+  }
 
   if (!(videobuf = (unsigned char *)
-        v4l1_mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0)))
-    {
-      perror("[GEM:videoV4L] mmap");
-      return false;
-    }
+                   v4l1_mmap(0, vmbuf.size, PROT_READ|PROT_WRITE, MAP_SHARED, tvfd, 0))) {
+    perror("[GEM:videoV4L] mmap");
+    return false;
+  }
 
 
   /* dimension settings
@@ -337,26 +354,26 @@ bool videoV4L :: startTransfer()
   height =(height   > vcap.maxheight) ? vcap.maxheight : height;
 
   for (i = 0; i < V4L_NBUF; i++)    {
-    switch(m_reqFormat){
+    switch(m_reqFormat) {
     case GL_LUMINANCE:
-    	vmmap[i].format = VIDEO_PALETTE_GREY;
+      vmmap[i].format = VIDEO_PALETTE_GREY;
       break;
     case GL_RGBA:
     case GL_BGRA:
-    	vmmap[i].format = VIDEO_PALETTE_RGB24;
+      vmmap[i].format = VIDEO_PALETTE_RGB24;
       break;
     case GL_YCBCR_422_GEM:
-        /* this is very unfortunate:
-         * PALETTE_YUV422 obviously is something different than ours
-         * although our yuv422 reads uyvy it is
-         * not PALETTE_UYVY either !
-         */
-        vmmap[i].format = VIDEO_PALETTE_YUV420P;
+      /* this is very unfortunate:
+       * PALETTE_YUV422 obviously is something different than ours
+       * although our yuv422 reads uyvy it is
+       * not PALETTE_UYVY either !
+       */
+      vmmap[i].format = VIDEO_PALETTE_YUV420P;
       break;
     default:
     case GL_RGB:
     case GL_BGR:
-    	vmmap[i].format = VIDEO_PALETTE_RGB24;
+      vmmap[i].format = VIDEO_PALETTE_RGB24;
     }
 
     vmmap[i].width = width;
@@ -365,12 +382,15 @@ bool videoV4L :: startTransfer()
   }
 
   if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
-    for (i = 0; i < V4L_NBUF; i++)vmmap[i].format = vpicture.palette;
+    for (i = 0; i < V4L_NBUF; i++) {
+      vmmap[i].format = vpicture.palette;
+    }
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
-      if (errno == EAGAIN)
+      if (errno == EAGAIN) {
         error("[GEM:videoV4L] can't sync (no video source?)");
-      else
+      } else {
         perror("[GEM:videoV4L] VIDIOCMCAPTURE");
+      }
     }
   }
   /* fill in image specifics for Gem pixel object.  Could we have
@@ -380,12 +400,21 @@ bool videoV4L :: startTransfer()
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
 
-  switch((m_gotFormat=vmmap[frame].format)){
-  case VIDEO_PALETTE_GREY  : m_colorConvert=(m_reqFormat!=GL_LUMINANCE); break;
-  case VIDEO_PALETTE_RGB24 : m_colorConvert=(m_reqFormat!=GL_BGR); break;
-  case VIDEO_PALETTE_RGB32 : m_colorConvert=(m_reqFormat!=GL_BGRA); break;
-  case VIDEO_PALETTE_YUV422: m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM); break;
-  default: m_colorConvert=true;
+  switch((m_gotFormat=vmmap[frame].format)) {
+  case VIDEO_PALETTE_GREY  :
+    m_colorConvert=(m_reqFormat!=GL_LUMINANCE);
+    break;
+  case VIDEO_PALETTE_RGB24 :
+    m_colorConvert=(m_reqFormat!=GL_BGR);
+    break;
+  case VIDEO_PALETTE_RGB32 :
+    m_colorConvert=(m_reqFormat!=GL_BGRA);
+    break;
+  case VIDEO_PALETTE_YUV422:
+    m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM);
+    break;
+  default:
+    m_colorConvert=true;
   }
 
 #if 0
@@ -407,7 +436,9 @@ bool videoV4L :: startTransfer()
 /////////////////////////////////////////////////////////
 bool videoV4L :: stopTransfer()
 {
-  if(!m_capturing)return false;
+  if(!m_capturing) {
+    return false;
+  }
   v4l1_munmap(videobuf, vmbuf.size);
   m_capturing=false;
   return true;
@@ -415,32 +446,38 @@ bool videoV4L :: stopTransfer()
 
 bool videoV4L :: setColor(int format)
 {
-  if (format<=0 || format==m_reqFormat)return -1;
+  if (format<=0 || format==m_reqFormat) {
+    return -1;
+  }
   m_reqFormat=format;
   restartTransfer();
   return 0;
 }
 
-std::vector<std::string> videoV4L::enumerate() {
+std::vector<std::string> videoV4L::enumerate()
+{
   std::vector<std::string> result;
   std::vector<std::string> glob, allglob;
   int i=0;
   glob=gem::files::getFilenameListing("/dev/video*");
-  for(i=0; i<glob.size(); i++)
+  for(i=0; i<glob.size(); i++) {
     allglob.push_back(glob[i]);
+  }
 
   glob=gem::files::getFilenameListing("/dev/v4l/video*");
-  for(i=0; i<glob.size(); i++)
+  for(i=0; i<glob.size(); i++) {
     allglob.push_back(glob[i]);
+  }
 
   for(i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
     verbose(1, "[GEM:videoV4L] found possible device %s", dev.c_str());
     int fd=v4l1_open(dev.c_str(), O_RDONLY | O_NONBLOCK);
     verbose(1, "[GEM:videoV4L] v4l1_open returned %d", fd);
-    if(fd<0)continue;
-    if (ioctl(fd, VIDIOCGCAP, &vcap) >= 0)
-    {
+    if(fd<0) {
+      continue;
+    }
+    if (ioctl(fd, VIDIOCGCAP, &vcap) >= 0) {
       if (vcap.type & VID_TYPE_CAPTURE) {
         result.push_back(dev);
       } else {
@@ -457,7 +494,8 @@ std::vector<std::string> videoV4L::enumerate() {
 }
 
 bool videoV4L::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                              gem::Properties&writeable)
+{
   int i=0;
   std::vector<std::string>keys;
   gem::any type;
@@ -495,7 +533,8 @@ bool videoV4L::enumProperties(gem::Properties&readable,
   keys.clear();
   return true;
 }
-void videoV4L::setProperties(gem::Properties&props) {
+void videoV4L::setProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
   bool restart=false;
   bool do_s_chan=false, do_s_pict=false;
@@ -503,7 +542,9 @@ void videoV4L::setProperties(gem::Properties&props) {
   double d;
   std::string s;
 
-  if(tvfd<0)return;
+  if(tvfd<0) {
+    return;
+  }
 
   if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
     perror("[GEM:videoV4L] VDIOCGCHAN");
@@ -511,107 +552,109 @@ void videoV4L::setProperties(gem::Properties&props) {
 
   for(i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
-    if(0){;
+    if(0) {
+      ;
 #define RESTART_WITH_CHANGED_UINT(x) do { unsigned int ui=d; restart=(x!=ui); x=ui; } while(0)
     } else if (key=="width") {
       if(props.get(key, d)) {
-	RESTART_WITH_CHANGED_UINT(m_width);
+        RESTART_WITH_CHANGED_UINT(m_width);
       }
     } else if (key=="height") {
       if(props.get(key, d)) {
-	RESTART_WITH_CHANGED_UINT(m_height);
+        RESTART_WITH_CHANGED_UINT(m_height);
       }
     } else if (key=="leftmargin") {
       if(props.get(key, d)) {
-	RESTART_WITH_CHANGED_UINT(myleftmargin);
+        RESTART_WITH_CHANGED_UINT(myleftmargin);
       }
     } else if (key=="rightmargin") {
       if(props.get(key, d)) {
-	RESTART_WITH_CHANGED_UINT(myrightmargin);
+        RESTART_WITH_CHANGED_UINT(myrightmargin);
       }
     } else if (key=="topmargin") {
       if(props.get(key, d)) {
-	RESTART_WITH_CHANGED_UINT(mytopmargin);
+        RESTART_WITH_CHANGED_UINT(mytopmargin);
       }
     } else if (key=="bottommargin") {
       if(props.get(key, d)) {
-	RESTART_WITH_CHANGED_UINT(mybottommargin);
+        RESTART_WITH_CHANGED_UINT(mybottommargin);
       }
     } else if (key=="channel") {
       if(props.get(key, d)) {
-	int channel=d;
-	if(channel<0 || channel>(vcap.channels-1)) {
-	  error("[GEM:videoV4L] channel %d out of range [0..%d]", channel, vcap.channels-1);
-	  continue;
-	}
-  m_channel=channel;
-	vchannel.channel=channel;
+        int channel=d;
+        if(channel<0 || channel>(vcap.channels-1)) {
+          error("[GEM:videoV4L] channel %d out of range [0..%d]", channel, vcap.channels-1);
+          continue;
+        }
+        m_channel=channel;
+        vchannel.channel=channel;
 
-	do_s_chan=true;
+        do_s_chan=true;
       }
     } else if (key=="frequency") {
       if(props.get(key, d)) {
-	if (v4l1_ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
-	  error("[GEM:videoV4L] error setting frequency -- no tuner");
-	  continue;
-	}
-	unsigned long freq=d;
-	if (v4l1_ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
-	  error("[GEM:videoV4L] error setting frequency");
-	}
+        if (v4l1_ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
+          error("[GEM:videoV4L] error setting frequency -- no tuner");
+          continue;
+        }
+        unsigned long freq=d;
+        if (v4l1_ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
+          error("[GEM:videoV4L] error setting frequency");
+        }
       }
     } else if (key=="norm") {
       int i_norm=-1;
       if(props.get(key, s)) {
-	if("PAL"==s || "pal"==s)
-	  i_norm=VIDEO_MODE_PAL;
-	else if("NTSC"==s || "ntsc"==s)
-	  i_norm=VIDEO_MODE_NTSC;
-	else if("SECAM"==s || "secam"==s)
-	  i_norm=VIDEO_MODE_SECAM;
-	else if("AUTO"==s || "auto"==s)
-	  i_norm=VIDEO_MODE_AUTO;
+        if("PAL"==s || "pal"==s) {
+          i_norm=VIDEO_MODE_PAL;
+        } else if("NTSC"==s || "ntsc"==s) {
+          i_norm=VIDEO_MODE_NTSC;
+        } else if("SECAM"==s || "secam"==s) {
+          i_norm=VIDEO_MODE_SECAM;
+        } else if("AUTO"==s || "auto"==s) {
+          i_norm=VIDEO_MODE_AUTO;
+        }
 
-	if(i_norm<0) {
-	  error("[GEM:videoV4L] unknown norm '%s'", s.c_str());
-	} else {
+        if(i_norm<0) {
+          error("[GEM:videoV4L] unknown norm '%s'", s.c_str());
+        } else {
           m_norm=i_norm;
-	  vchannel.norm=i_norm;
-	  do_s_chan=true;
-	}
+          vchannel.norm=i_norm;
+          do_s_chan=true;
+        }
       } else if(props.get(key, d)) {
-	i_norm=d;
-	if(i_norm<0 || i_norm>VIDEO_MODE_AUTO) {
-	  error("[GEM:videoV4L] unknown norm %d", i_norm);
-	} else {
-	  vchannel.norm=i_norm;
-	  do_s_chan=true;
-	}
+        i_norm=d;
+        if(i_norm<0 || i_norm>VIDEO_MODE_AUTO) {
+          error("[GEM:videoV4L] unknown norm %d", i_norm);
+        } else {
+          vchannel.norm=i_norm;
+          do_s_chan=true;
+        }
       }
     } else if (key=="Brightness") {
       if(props.get(key, d)) {
-	vpicture.brightness=d;
-	do_s_pict=true;
+        vpicture.brightness=d;
+        do_s_pict=true;
       }
     } else if (key=="Hue") {
       if(props.get(key, d)) {
-	vpicture.hue=d;
-	do_s_pict=true;
+        vpicture.hue=d;
+        do_s_pict=true;
       }
     } else if (key=="Colour" || key=="Color") {
       if(props.get(key, d)) {
-	vpicture.colour=d;
-	do_s_pict=true;
+        vpicture.colour=d;
+        do_s_pict=true;
       }
     } else if (key=="Contrast") {
       if(props.get(key, d)) {
-	vpicture.contrast=d;
-	do_s_pict=true;
+        vpicture.contrast=d;
+        do_s_pict=true;
       }
     } else if (key=="Whiteness") {
       if(props.get(key, d)) {
-	vpicture.whiteness=d;
-	do_s_pict=true;
+        vpicture.whiteness=d;
+        do_s_pict=true;
       }
 
 
@@ -632,10 +675,12 @@ void videoV4L::setProperties(gem::Properties&props) {
     }
   }
 
-  if(restart)
+  if(restart) {
     restartTransfer();
+  }
 }
-void videoV4L::getProperties(gem::Properties&props) {
+void videoV4L::getProperties(gem::Properties&props)
+{
 #define IOCTL_ONCE(x, y) if(!y##_done)if(v4l1_ioctl(tvfd, x, &y) < 0) {perror("[GEM:videoV4L] "#x"");} else y##_done=true
 
   bool vpicture_done=false, vchannel_done=false, vcap_done=false;
@@ -643,7 +688,7 @@ void videoV4L::getProperties(gem::Properties&props) {
 
 
   std::vector<std::string>keys=props.keys();
-  if(tvfd<0){
+  if(tvfd<0) {
     props.clear();
     return;
   }
@@ -681,8 +726,8 @@ void videoV4L::getProperties(gem::Properties&props) {
     } else if(key=="frequency") {
       unsigned long freq=0;
       if (v4l1_ioctl(tvfd,VIDIOCGFREQ,&freq) >= 0) {
-	double d=freq;
-	props.set(key, d);
+        double d=freq;
+        props.set(key, d);
       }
 
       /* channel data */
@@ -694,19 +739,19 @@ void videoV4L::getProperties(gem::Properties&props) {
       IOCTL_ONCE(VIDIOCGCHAN, vchannel);
       switch(vchannel.norm) {
       case VIDEO_MODE_PAL:
-	props.set(key, std::string("PAL"));
-	break;
+        props.set(key, std::string("PAL"));
+        break;
       case VIDEO_MODE_NTSC:
-	props.set(key, std::string("NTSC"));
-	break;
+        props.set(key, std::string("NTSC"));
+        break;
       case VIDEO_MODE_SECAM:
-	props.set(key, std::string("SECAM"));
-	break;
+        props.set(key, std::string("SECAM"));
+        break;
       case VIDEO_MODE_AUTO:
-	props.set(key, std::string("AUTO"));
-	break;
+        props.set(key, std::string("AUTO"));
+        break;
       default:
-	props.set(key, vchannel.norm);
+        props.set(key, vchannel.norm);
       }
     } /* else if key */
   } /* key loop */

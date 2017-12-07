@@ -36,7 +36,7 @@ typedef Pylon::CBaslerGigECamera Camera_t;
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	pix_video
+        pix_video
 
     Loads in a video
 
@@ -53,46 +53,50 @@ DESCRIPTION
     "sat" (int) - the saturation
 
 -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoPYLON : public videoBase {
-    public:
-    //////////
-    // Constructor
-    videoPYLON(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoPYLON : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoPYLON(void);
 
-    //////////
-    // Destructor
-    virtual ~videoPYLON(void);
+  //////////
+  // Destructor
+  virtual ~videoPYLON(void);
 
-    ////////
-    // open the video-device
-    virtual bool           openDevice(gem::Properties&writeprops);
-    virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&writeprops);
+  virtual void          closeDevice(void);
 
-    //////////
-    // Start up the video device
-    // [out] bool - returns FALSE if bad
-    bool	    	startTransfer(void);
-    //////////
-    // Stop the video device
-    // [out] bool - returns FALSE if bad
-    bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] bool - returns FALSE if bad
+  bool                startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] bool - returns FALSE if bad
+  bool                stopTransfer(void);
 
-    //////////
-    // get the next frame
-    bool grabFrame(void);
+  //////////
+  // get the next frame
+  bool grabFrame(void);
 
-    virtual std::vector<std::string>enumerate(void);
+  virtual std::vector<std::string>enumerate(void);
 
 
 
   virtual bool enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable);
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
 
-  protected:
+protected:
   class CGrabBuffer;
 
   Pylon::PylonAutoInitTerm autoInitTerm;
@@ -108,6 +112,7 @@ namespace gem { namespace plugins {
   std::vector<CGrabBuffer*> m_buffers;
   std::map<std::string, Pylon::CDeviceInfo>m_id2device;
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

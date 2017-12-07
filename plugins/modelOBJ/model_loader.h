@@ -44,11 +44,10 @@ extern "C" {
 #define GLM_COLOR    (1 << 3)       /* render with colors */
 #define GLM_MATERIAL (1 << 4)       /* render with materials */
 
-  /*
-   * types of texturing the model
-   */
-typedef enum
-{
+/*
+ * types of texturing the model
+ */
+typedef enum {
   GLM_TEX_DEFAULT,
   GLM_TEX_UV,
   GLM_TEX_LINEAR,

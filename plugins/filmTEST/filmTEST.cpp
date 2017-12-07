@@ -59,12 +59,17 @@ bool filmTEST :: open(const std::string&filename, const gem::Properties&wantProp
 }
 
 void filmTEST::close(void) {}
-bool filmTEST::isThreadable(void) {return true;}
-
-void filmTEST::setProperties(gem::Properties&props) {
+bool filmTEST::isThreadable(void)
+{
+  return true;
 }
 
-void filmTEST::getProperties(gem::Properties&props) {
+void filmTEST::setProperties(gem::Properties&props)
+{
+}
+
+void filmTEST::getProperties(gem::Properties&props)
+{
   std::vector<std::string> keys=props.keys();
   unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
@@ -85,11 +90,13 @@ void filmTEST::getProperties(gem::Properties&props) {
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmTEST :: getFrame(){
+pixBlock* filmTEST :: getFrame()
+{
   return &m_image;
 }
 
-film::errCode filmTEST :: changeImage(int imgNum, int trackNum){
+film::errCode filmTEST :: changeImage(int imgNum, int trackNum)
+{
   unsigned char*data=m_image.image.data;
   unsigned int size=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
 
@@ -106,7 +113,8 @@ film::errCode filmTEST :: changeImage(int imgNum, int trackNum){
 }
 
 
-bool filmTEST::enumProperties(gem::Properties&readprops, gem::Properties&writeprops) {
+bool filmTEST::enumProperties(gem::Properties&readprops, gem::Properties&writeprops)
+{
   readprops.clear();
   writeprops.clear();
 

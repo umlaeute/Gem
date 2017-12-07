@@ -30,9 +30,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugins::imagesaver {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugins::imagesaver
+{
+public:
 
   //////////
   // Constructor
@@ -51,11 +55,15 @@ class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugin
 
 
   // this is always threadable
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
   virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
 
 
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

@@ -165,7 +165,7 @@ static void apply_material(const struct aiMaterial *mtl)
   if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME,
       &wireframe, &max)) {
     fill_mode = wireframe ? GL_LINE : GL_FILL;
-  }	else {
+  }     else {
     fill_mode = GL_FILL;
   }
   glPolygonMode(GL_FRONT_AND_BACK, fill_mode);
@@ -413,11 +413,11 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
     // if there are NO texcoords, we only accept 'linear' and 'spheremap'
     // else, we also allow 'UV'
     // not-accepted textype, simply use the last one
-    if(m_have_texcoords && "UV" == s)
+    if(m_have_texcoords && "UV" == s) {
       m_textype = "";
-    else
-    if(("linear" == s) || ("spheremap" == s))
+    } else if(("linear" == s) || ("spheremap" == s)) {
       m_textype = s;
+    }
     m_rebuild = true;
   }
 
@@ -497,10 +497,11 @@ bool modelASSIMP2 :: compile(void)
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
 
   if (m_textype.empty() && m_have_texcoords) {;}
-  else if("spheremap" == m_textype)
+  else if("spheremap" == m_textype) {
     modelutils::genTexture_Spheremap(m_texcoords, m_normals);
-  else
+  } else {
     modelutils::genTexture_Linear(m_texcoords, m_vertices);
+  }
 
   fillVBOarray();
   if(useColorMaterial) {

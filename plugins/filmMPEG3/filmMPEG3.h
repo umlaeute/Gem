@@ -35,9 +35,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmMPEG3 : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmMPEG3 : public film
+{
+public:
 
   //////////
   // Constructor
@@ -64,7 +68,10 @@ class GEM_EXPORT filmMPEG3 : public film {
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   // cannot be used within a threaded context
-  virtual bool isThreadable(void) { return false; }
+  virtual bool isThreadable(void)
+  {
+    return false;
+  }
 
   // Property handling
   virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
@@ -72,9 +79,9 @@ class GEM_EXPORT filmMPEG3 : public film {
   virtual void getProperties(gem::Properties&props);
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
- protected:
+protected:
   GLenum  m_wantedFormat; // format requested by the user
   double m_fps;  // the frame-rate
   int m_numFrames, m_numTracks; // number of frames in video
@@ -85,6 +92,8 @@ class GEM_EXPORT filmMPEG3 : public film {
 
   mpeg3_t      *mpeg_file;
 #endif
-};};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

@@ -7,20 +7,27 @@
 #include <string>
 #include "Gem/Properties.h"
 
-namespace gem { namespace pylon { namespace cameraproperties {
-                    void init(void);
+namespace gem
+{
+namespace pylon
+{
+namespace cameraproperties
+{
+void init(void);
 
-                    gem::Properties&getKeys(void);
-                    gem::Properties&setKeys(void);
+gem::Properties&getKeys(void);
+gem::Properties&setKeys(void);
 
-                    void get(Pylon::CBaslerGigECamera*device,
-                             std::string key,
-                             gem::any&result);
+void get(Pylon::CBaslerGigECamera*device,
+         std::string key,
+         gem::any&result);
 
-                    bool set(Pylon::CBaslerGigECamera*device,
-                             std::string key,
-                             gem::Properties&props);
+bool set(Pylon::CBaslerGigECamera*device,
+         std::string key,
+         gem::Properties&props);
 
-                  };};};
+};
+};
+};
 
 #endif /* _INCLUDE_GEMPLUGIN__VIDEOPYLON_CAMERAPROPERTIES_H_ */

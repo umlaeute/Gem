@@ -82,9 +82,13 @@ struct t_v4l2_buffer {
   "sat" (int) - the saturation
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoV4L2 : public videoBase {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoV4L2 : public videoBase
+{
+public:
   //////////
   // Constructor
   videoV4L2(void);
@@ -102,11 +106,11 @@ namespace gem { namespace plugins {
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
-  virtual bool	    	startTransfer(void);
+  virtual bool          startTransfer(void);
   //////////
   // Stop the video device
   // [out] int - returns 0 if bad
-  virtual bool	   	stopTransfer(void);
+  virtual bool          stopTransfer(void);
 
   //////////////////
   // restart the transfer if it is currently running
@@ -119,19 +123,19 @@ namespace gem { namespace plugins {
 
   //////////
   // Set the video properties
-  virtual bool	    	setColor(int);
+  virtual bool          setColor(int);
 
   virtual std::vector<std::string>enumerate(void);
 
   virtual bool enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable);
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
- protected:
+protected:
 
   //-----------------------------------
-  // GROUP:	Linux specific video data
+  // GROUP:     Linux specific video data
   //-----------------------------------
 
 
@@ -179,15 +183,16 @@ namespace gem { namespace plugins {
 
   /* internal housekeeping of properties */
   void addProperties(struct v4l2_queryctrl queryctrl,
-		     gem::Properties&readable,
-		     gem::Properties&writeable);
+                     gem::Properties&readable,
+                     gem::Properties&writeable);
   std::map<std::string, struct v4l2_queryctrl>m_readprops, m_writeprops;
   struct v4l2_capability m_caps;
 
   __u32 m_frameSize; // the size of a v4l2 frame
 
 #endif /* HAVE_VIDEO4LINUX2 */
-  };
-};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

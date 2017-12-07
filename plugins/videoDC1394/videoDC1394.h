@@ -31,7 +31,7 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	pix_video
+        pix_video
 
     Loads in a video
 
@@ -41,50 +41,54 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoDC1394 : public videoBase {
-    public:
-        //////////
-        // Constructor
-    	videoDC1394(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoDC1394 : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoDC1394(void);
 
-    	//////////
-    	// Destructor
-    	virtual ~videoDC1394(void);
+  //////////
+  // Destructor
+  virtual ~videoDC1394(void);
 #ifdef HAVE_LIBDC1394
-	////////
-	// open the video-device
-	virtual bool           openDevice(gem::Properties&);
-	virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&);
+  virtual void          closeDevice(void);
 
-    	//////////
-    	// Start up the video device
-    	// [out] int - returns 0 if bad
-    	bool	    	startTransfer(void);
-	//////////
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  bool            startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  bool            stopTransfer(void);
 
-	//////////
-	// get the next frame
-	bool    grabFrame(void);
+  //////////
+  // get the next frame
+  bool    grabFrame(void);
 
-	//////////
-	// Set the video dimensions
-	virtual bool	    	setColor(int);
-	virtual bool       enumProperties(gem::Properties&, gem::Properties&);
-	virtual void        getProperties(gem::Properties&);
-	virtual void        setProperties(gem::Properties&);
+  //////////
+  // Set the video dimensions
+  virtual bool            setColor(int);
+  virtual bool       enumProperties(gem::Properties&, gem::Properties&);
+  virtual void        getProperties(gem::Properties&);
+  virtual void        setProperties(gem::Properties&);
 
-	//////////
-	// get available devices
-	virtual std::vector<std::string>enumerate(void);
+  //////////
+  // get available devices
+  virtual std::vector<std::string>enumerate(void);
 
- protected:
+protected:
 
   //-----------------------------------
-  // GROUP:	Linux specific video data
+  // GROUP:     Linux specific video data
   //-----------------------------------
 
   dc1394camera_t * m_dccamera;
@@ -96,6 +100,7 @@ namespace gem { namespace plugins {
 
 #endif /* HAVE_LIBDC1394 */
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

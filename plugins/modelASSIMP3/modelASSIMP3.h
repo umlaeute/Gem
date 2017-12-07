@@ -33,15 +33,22 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 
-namespace gem { namespace plugins {
-    class GEM_EXPORT modelASSIMP3 : public gem::plugins::modelloader {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT modelASSIMP3 : public gem::plugins::modelloader
+{
+public:
   /////////
   // ctor/dtor
   modelASSIMP3(void);
   virtual ~modelASSIMP3(void);
 
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   //////////
   // open/close an asset
@@ -84,6 +91,7 @@ protected:
   bool m_have_texcoords;
   std::string m_textype;
 };
-};}; // namespace gem::plugins
+};
+}; // namespace gem::plugins
 
-#endif	// for header file
+#endif  // for header file

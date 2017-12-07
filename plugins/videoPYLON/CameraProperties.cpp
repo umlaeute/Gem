@@ -24,253 +24,258 @@
 #include <map>
 #include <sstream>
 
-namespace gem{namespace pylon{namespace cameraproperties{
-  static gem::Properties writeprops, readprops;
+namespace gem
+{
+namespace pylon
+{
+namespace cameraproperties
+{
+static gem::Properties writeprops, readprops;
 
-  typedef Pylon::CBaslerGigECamera DEVICE;
+typedef Pylon::CBaslerGigECamera DEVICE;
 
 
-  /* GenApi::IBoolean */
-  typedef bool (*t_getbool)(DEVICE*device);
-  std::map<std::string, t_getbool>map_getbool;
-  typedef void (*t_setbool)(DEVICE*device, const bool);
-  std::map<std::string, t_setbool>map_setbool;
+/* GenApi::IBoolean */
+typedef bool (*t_getbool)(DEVICE*device);
+std::map<std::string, t_getbool>map_getbool;
+typedef void (*t_setbool)(DEVICE*device, const bool);
+std::map<std::string, t_setbool>map_setbool;
 #define GETSETBOOL(T)                                                   \
   static bool get##T(DEVICE*device) { return device->T.GetValue(); }    \
     static void set##T(DEVICE*device, const bool v) { device->T.SetValue(v); }
 
-  GETSETBOOL(GammaEnable);
-  GETSETBOOL(ExposureTimeBaseAbsEnable);
-  GETSETBOOL(AcquisitionFrameRateEnable);
-  GETSETBOOL(LineInverter);
-  GETSETBOOL(LineTermination);
-  GETSETBOOL(LineStatus);
-  GETSETBOOL(UserOutputValue);
-  GETSETBOOL(TimerSequenceEnable);
-  GETSETBOOL(TimerSequenceTimerEnable);
-  GETSETBOOL(TimerSequenceTimerInverter);
-  GETSETBOOL(LUTEnable);
-  GETSETBOOL(ShadingEnable);
-  GETSETBOOL(RemoveLimits);
-  GETSETBOOL(ExpertFeatureEnable);
-  GETSETBOOL(PixelStepCorrectionEnable);
-  GETSETBOOL(ChunkModeActive);
-  GETSETBOOL(ChunkEnable);
-  GETSETBOOL(GevDeviceModeIsBigEndian);
-  GETSETBOOL(GevSupportedIPConfigurationLLA);
-  GETSETBOOL(GevSupportedIPConfigurationDHCP);
-  GETSETBOOL(GevSupportedIPConfigurationPersistentIP);
-  GETSETBOOL(GevSupportedOptionalCommandsEVENTDATA);
-  GETSETBOOL(GevSupportedOptionalCommandsEVENT);
-  GETSETBOOL(GevSupportedOptionalCommandsPACKETRESEND);
-  GETSETBOOL(GevSupportedOptionalCommandsWRITEMEM);
-  GETSETBOOL(GevSupportedOptionalCommandsConcatenation);
+GETSETBOOL(GammaEnable);
+GETSETBOOL(ExposureTimeBaseAbsEnable);
+GETSETBOOL(AcquisitionFrameRateEnable);
+GETSETBOOL(LineInverter);
+GETSETBOOL(LineTermination);
+GETSETBOOL(LineStatus);
+GETSETBOOL(UserOutputValue);
+GETSETBOOL(TimerSequenceEnable);
+GETSETBOOL(TimerSequenceTimerEnable);
+GETSETBOOL(TimerSequenceTimerInverter);
+GETSETBOOL(LUTEnable);
+GETSETBOOL(ShadingEnable);
+GETSETBOOL(RemoveLimits);
+GETSETBOOL(ExpertFeatureEnable);
+GETSETBOOL(PixelStepCorrectionEnable);
+GETSETBOOL(ChunkModeActive);
+GETSETBOOL(ChunkEnable);
+GETSETBOOL(GevDeviceModeIsBigEndian);
+GETSETBOOL(GevSupportedIPConfigurationLLA);
+GETSETBOOL(GevSupportedIPConfigurationDHCP);
+GETSETBOOL(GevSupportedIPConfigurationPersistentIP);
+GETSETBOOL(GevSupportedOptionalCommandsEVENTDATA);
+GETSETBOOL(GevSupportedOptionalCommandsEVENT);
+GETSETBOOL(GevSupportedOptionalCommandsPACKETRESEND);
+GETSETBOOL(GevSupportedOptionalCommandsWRITEMEM);
+GETSETBOOL(GevSupportedOptionalCommandsConcatenation);
 
 
 
 
-  /* GenApi::IInteger */
-  typedef int64_t (*t_getint)(DEVICE*device);
-  std::map<std::string, t_getint>map_getint;
-  typedef void (*t_setint)(DEVICE*device, const int64_t);
-  std::map<std::string, t_setint>map_setint;
+/* GenApi::IInteger */
+typedef int64_t (*t_getint)(DEVICE*device);
+std::map<std::string, t_getint>map_getint;
+typedef void (*t_setint)(DEVICE*device, const int64_t);
+std::map<std::string, t_setint>map_setint;
 
 
 #define GETSETINT(T)                                                    \
   static int64_t get##T(DEVICE*device) { return device->T.GetValue(); } \
     static void set##T(DEVICE*device, const int64_t v) { device->T.SetValue(v); }
 
-  GETSETINT(GainRaw);
-  GETSETINT(BlackLevelRaw);
-  GETSETINT(BalanceRatioRaw);
-  GETSETINT(DigitalShift);
-  GETSETINT(PixelDynamicRangeMin);
-  GETSETINT(PixelDynamicRangeMax);
-  GETSETINT(SpatialCorrection);
-  GETSETINT(SpatialCorrectionAmount);
-  GETSETINT(Width);
-  GETSETINT(Height);
-  GETSETINT(OffsetX);
-  GETSETINT(OffsetY);
-  GETSETINT(BinningVertical);
-  GETSETINT(BinningHorizontal);
-  GETSETINT(ExposureTimeRaw);
-  GETSETINT(AveragingNumberOfFrames);
-  GETSETINT(LineDebouncerTimeRaw);
-  GETSETINT(LineStatusAll);
-  GETSETINT(UserOutputValueAll);
-  GETSETINT(UserOutputValueAllMask);
-  GETSETINT(ShaftEncoderModuleCounter);
-  GETSETINT(ShaftEncoderModuleCounterMax);
-  GETSETINT(ShaftEncoderModuleReverseCounterMax);
-  GETSETINT(TimerDelayRaw);
-  GETSETINT(TimerDurationRaw);
-  GETSETINT(TimerSequenceLastEntryIndex);
-  GETSETINT(TimerSequenceCurrentEntryIndex);
-  GETSETINT(TimerSequenceTimerDelayRaw);
-  GETSETINT(TimerSequenceTimerDurationRaw);
-  GETSETINT(LUTIndex);
-  GETSETINT(LUTValue);
-  GETSETINT(AutoTargetValue);
-  GETSETINT(AutoGainRawLowerLimit);
-  GETSETINT(AutoGainRawUpperLimit);
-  GETSETINT(AutoFunctionAOIWidth);
-  GETSETINT(AutoFunctionAOIHeight);
-  GETSETINT(AutoFunctionAOIOffsetX);
-  GETSETINT(AutoFunctionAOIOffsetY);
-  GETSETINT(UserDefinedValue);
-  GETSETINT(SensorWidth);
-  GETSETINT(SensorHeight);
-  GETSETINT(WidthMax);
-  GETSETINT(HeightMax);
-  GETSETINT(ExpertFeatureAccessKey);
-  GETSETINT(PixelStepCorrectionValueRaw);
-  GETSETINT(PixelStepCorrectionBusy);
-  GETSETINT(ChunkStride);
-  GETSETINT(ChunkOffsetX);
-  GETSETINT(ChunkOffsetY);
-  GETSETINT(ChunkWidth);
-  GETSETINT(ChunkHeight);
-  GETSETINT(ChunkDynamicRangeMin);
-  GETSETINT(ChunkDynamicRangeMax);
-  GETSETINT(ChunkTimestamp);
-  GETSETINT(ChunkFramecounter);
-  GETSETINT(ChunkLineStatusAll);
-  GETSETINT(ChunkTriggerinputcounter);
-  GETSETINT(ChunkLineTriggerIgnoredCounter);
-  GETSETINT(ChunkFrameTriggerIgnoredCounter);
-  GETSETINT(ChunkFrameTriggerCounter);
-  GETSETINT(ChunkFramesPerTriggerCounter);
-  GETSETINT(ChunkLineTriggerEndToEndCounter);
-  GETSETINT(ChunkPayloadCRC16);
-  GETSETINT(ExposureEndEventStreamChannelIndex);
-  GETSETINT(ExposureEndEventFrameID);
-  GETSETINT(ExposureEndEventTimestamp);
-  GETSETINT(LineStartOvertriggerEventStreamChannelIndex);
-  GETSETINT(LineStartOvertriggerEventTimestamp);
-  GETSETINT(FrameStartOvertriggerEventStreamChannelIndex);
-  GETSETINT(FrameStartOvertriggerEventTimestamp);
-  GETSETINT(EventOverrunEventStreamChannelIndex);
-  GETSETINT(EventOverrunEventFrameID);
-  GETSETINT(EventOverrunEventTimestamp);
-  GETSETINT(FileAccessOffset);
-  GETSETINT(FileAccessLength);
-  GETSETINT(FileOperationResult);
-  GETSETINT(FileSize);
-  GETSETINT(PayloadSize);
-  GETSETINT(GevVersionMajor);
-  GETSETINT(GevVersionMinor);
-  GETSETINT(GevDeviceModeCharacterSet);
-  GETSETINT(GevMACAddress);
-  GETSETINT(GevCurrentIPConfiguration);
-  GETSETINT(GevCurrentIPAddress);
-  GETSETINT(GevCurrentSubnetMask);
-  GETSETINT(GevCurrentDefaultGateway);
-  GETSETINT(GevPersistentIPAddress);
-  GETSETINT(GevPersistentSubnetMask);
-  GETSETINT(GevPersistentDefaultGateway);
-  GETSETINT(GevLinkSpeed);
-  GETSETINT(GevNumberOfInterfaces);
-  GETSETINT(GevMessageChannelCount);
-  GETSETINT(GevStreamChannelCount);
-  GETSETINT(GevHeartbeatTimeout);
-  GETSETINT(GevTimestampTickFrequency);
-  GETSETINT(GevTimestampValue);
-  GETSETINT(GevSCPInterfaceIndex);
-  GETSETINT(GevSCDA);
-  GETSETINT(GevSCPHostPort);
-  GETSETINT(GevSCPSPacketSize);
-  GETSETINT(GevSCPD);
-  GETSETINT(GevSCFTD);
-  GETSETINT(GevSCBWR);
-  GETSETINT(GevSCBWRA);
-  GETSETINT(GevSCBWA);
-  GETSETINT(GevSCDMT);
-  GETSETINT(GevSCDCT);
-  GETSETINT(GevSCFJM);
-  GETSETINT(TLParamsLocked);
+GETSETINT(GainRaw);
+GETSETINT(BlackLevelRaw);
+GETSETINT(BalanceRatioRaw);
+GETSETINT(DigitalShift);
+GETSETINT(PixelDynamicRangeMin);
+GETSETINT(PixelDynamicRangeMax);
+GETSETINT(SpatialCorrection);
+GETSETINT(SpatialCorrectionAmount);
+GETSETINT(Width);
+GETSETINT(Height);
+GETSETINT(OffsetX);
+GETSETINT(OffsetY);
+GETSETINT(BinningVertical);
+GETSETINT(BinningHorizontal);
+GETSETINT(ExposureTimeRaw);
+GETSETINT(AveragingNumberOfFrames);
+GETSETINT(LineDebouncerTimeRaw);
+GETSETINT(LineStatusAll);
+GETSETINT(UserOutputValueAll);
+GETSETINT(UserOutputValueAllMask);
+GETSETINT(ShaftEncoderModuleCounter);
+GETSETINT(ShaftEncoderModuleCounterMax);
+GETSETINT(ShaftEncoderModuleReverseCounterMax);
+GETSETINT(TimerDelayRaw);
+GETSETINT(TimerDurationRaw);
+GETSETINT(TimerSequenceLastEntryIndex);
+GETSETINT(TimerSequenceCurrentEntryIndex);
+GETSETINT(TimerSequenceTimerDelayRaw);
+GETSETINT(TimerSequenceTimerDurationRaw);
+GETSETINT(LUTIndex);
+GETSETINT(LUTValue);
+GETSETINT(AutoTargetValue);
+GETSETINT(AutoGainRawLowerLimit);
+GETSETINT(AutoGainRawUpperLimit);
+GETSETINT(AutoFunctionAOIWidth);
+GETSETINT(AutoFunctionAOIHeight);
+GETSETINT(AutoFunctionAOIOffsetX);
+GETSETINT(AutoFunctionAOIOffsetY);
+GETSETINT(UserDefinedValue);
+GETSETINT(SensorWidth);
+GETSETINT(SensorHeight);
+GETSETINT(WidthMax);
+GETSETINT(HeightMax);
+GETSETINT(ExpertFeatureAccessKey);
+GETSETINT(PixelStepCorrectionValueRaw);
+GETSETINT(PixelStepCorrectionBusy);
+GETSETINT(ChunkStride);
+GETSETINT(ChunkOffsetX);
+GETSETINT(ChunkOffsetY);
+GETSETINT(ChunkWidth);
+GETSETINT(ChunkHeight);
+GETSETINT(ChunkDynamicRangeMin);
+GETSETINT(ChunkDynamicRangeMax);
+GETSETINT(ChunkTimestamp);
+GETSETINT(ChunkFramecounter);
+GETSETINT(ChunkLineStatusAll);
+GETSETINT(ChunkTriggerinputcounter);
+GETSETINT(ChunkLineTriggerIgnoredCounter);
+GETSETINT(ChunkFrameTriggerIgnoredCounter);
+GETSETINT(ChunkFrameTriggerCounter);
+GETSETINT(ChunkFramesPerTriggerCounter);
+GETSETINT(ChunkLineTriggerEndToEndCounter);
+GETSETINT(ChunkPayloadCRC16);
+GETSETINT(ExposureEndEventStreamChannelIndex);
+GETSETINT(ExposureEndEventFrameID);
+GETSETINT(ExposureEndEventTimestamp);
+GETSETINT(LineStartOvertriggerEventStreamChannelIndex);
+GETSETINT(LineStartOvertriggerEventTimestamp);
+GETSETINT(FrameStartOvertriggerEventStreamChannelIndex);
+GETSETINT(FrameStartOvertriggerEventTimestamp);
+GETSETINT(EventOverrunEventStreamChannelIndex);
+GETSETINT(EventOverrunEventFrameID);
+GETSETINT(EventOverrunEventTimestamp);
+GETSETINT(FileAccessOffset);
+GETSETINT(FileAccessLength);
+GETSETINT(FileOperationResult);
+GETSETINT(FileSize);
+GETSETINT(PayloadSize);
+GETSETINT(GevVersionMajor);
+GETSETINT(GevVersionMinor);
+GETSETINT(GevDeviceModeCharacterSet);
+GETSETINT(GevMACAddress);
+GETSETINT(GevCurrentIPConfiguration);
+GETSETINT(GevCurrentIPAddress);
+GETSETINT(GevCurrentSubnetMask);
+GETSETINT(GevCurrentDefaultGateway);
+GETSETINT(GevPersistentIPAddress);
+GETSETINT(GevPersistentSubnetMask);
+GETSETINT(GevPersistentDefaultGateway);
+GETSETINT(GevLinkSpeed);
+GETSETINT(GevNumberOfInterfaces);
+GETSETINT(GevMessageChannelCount);
+GETSETINT(GevStreamChannelCount);
+GETSETINT(GevHeartbeatTimeout);
+GETSETINT(GevTimestampTickFrequency);
+GETSETINT(GevTimestampValue);
+GETSETINT(GevSCPInterfaceIndex);
+GETSETINT(GevSCDA);
+GETSETINT(GevSCPHostPort);
+GETSETINT(GevSCPSPacketSize);
+GETSETINT(GevSCPD);
+GETSETINT(GevSCFTD);
+GETSETINT(GevSCBWR);
+GETSETINT(GevSCBWRA);
+GETSETINT(GevSCBWA);
+GETSETINT(GevSCDMT);
+GETSETINT(GevSCDCT);
+GETSETINT(GevSCFJM);
+GETSETINT(TLParamsLocked);
 
 
 
-  /* GenApi::IFloat */
-  typedef double (*t_getfloat)(DEVICE*device);
-  std::map<std::string, t_getfloat>map_getfloat;
-  typedef void (*t_setfloat)(DEVICE*device, const double);
-  std::map<std::string, t_setfloat>map_setfloat;
+/* GenApi::IFloat */
+typedef double (*t_getfloat)(DEVICE*device);
+std::map<std::string, t_getfloat>map_getfloat;
+typedef void (*t_setfloat)(DEVICE*device, const double);
+std::map<std::string, t_setfloat>map_setfloat;
 
 #define GETSETFLOAT(T)                                                  \
   static double get##T(DEVICE*device) { return device->T.GetValue(); }  \
     static void set##T(DEVICE*device, const double v) { device->T.SetValue(v); }
 
-  GETSETFLOAT(GainAbs);
-  GETSETFLOAT(BlackLevelAbs);
-  GETSETFLOAT(BalanceRatioAbs);
-  GETSETFLOAT(Gamma);
-  GETSETFLOAT(ExposureTimeAbs);
-  GETSETFLOAT(ExposureTimeBaseAbs);
-  GETSETFLOAT(AcquisitionLineRateAbs);
-  GETSETFLOAT(ResultingLineRateAbs);
-  GETSETFLOAT(AcquisitionFrameRateAbs);
-  GETSETFLOAT(ResultingFrameRateAbs);
-  GETSETFLOAT(LineDebouncerTimeAbs);
-  GETSETFLOAT(TimerDelayTimebaseAbs);
-  GETSETFLOAT(TimerDurationTimebaseAbs);
-  GETSETFLOAT(TimerDelayAbs);
-  GETSETFLOAT(TimerDurationAbs);
-  GETSETFLOAT(AutoExposureTimeAbsLowerLimit);
-  GETSETFLOAT(AutoExposureTimeAbsUpperLimit);
-  GETSETFLOAT(TemperatureAbs);
-  GETSETFLOAT(PixelStepCorrectionValueAbs);
+GETSETFLOAT(GainAbs);
+GETSETFLOAT(BlackLevelAbs);
+GETSETFLOAT(BalanceRatioAbs);
+GETSETFLOAT(Gamma);
+GETSETFLOAT(ExposureTimeAbs);
+GETSETFLOAT(ExposureTimeBaseAbs);
+GETSETFLOAT(AcquisitionLineRateAbs);
+GETSETFLOAT(ResultingLineRateAbs);
+GETSETFLOAT(AcquisitionFrameRateAbs);
+GETSETFLOAT(ResultingFrameRateAbs);
+GETSETFLOAT(LineDebouncerTimeAbs);
+GETSETFLOAT(TimerDelayTimebaseAbs);
+GETSETFLOAT(TimerDurationTimebaseAbs);
+GETSETFLOAT(TimerDelayAbs);
+GETSETFLOAT(TimerDurationAbs);
+GETSETFLOAT(AutoExposureTimeAbsLowerLimit);
+GETSETFLOAT(AutoExposureTimeAbsUpperLimit);
+GETSETFLOAT(TemperatureAbs);
+GETSETFLOAT(PixelStepCorrectionValueAbs);
 
-  /* GenApi::IString */
-  typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
-  std::map<std::string, t_getstring>map_getstring;
-  typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
-  std::map<std::string, t_setstring>map_setstring;
+/* GenApi::IString */
+typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
+std::map<std::string, t_getstring>map_getstring;
+typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
+std::map<std::string, t_setstring>map_setstring;
 #define GETSETSTRING(T)                                                 \
   static void set##T(DEVICE*device, const GenICam::gcstring v) { device->T.SetValue(v); } \
     static GenICam::gcstring get##T(DEVICE*device) { return device->T.GetValue(); }
 
-  GETSETSTRING(DeviceVendorName);
-  GETSETSTRING(DeviceModelName);
-  GETSETSTRING(DeviceManufacturerInfo);
-  GETSETSTRING(DeviceVersion);
-  GETSETSTRING(DeviceFirmwareVersion);
-  GETSETSTRING(DeviceID);
-  GETSETSTRING(DeviceUserID);
-  GETSETSTRING(GevFirstURL);
-  GETSETSTRING(GevSecondURL);
+GETSETSTRING(DeviceVendorName);
+GETSETSTRING(DeviceModelName);
+GETSETSTRING(DeviceManufacturerInfo);
+GETSETSTRING(DeviceVersion);
+GETSETSTRING(DeviceFirmwareVersion);
+GETSETSTRING(DeviceID);
+GETSETSTRING(DeviceUserID);
+GETSETSTRING(GevFirstURL);
+GETSETSTRING(GevSecondURL);
 
 
-  /* GenApi::ICommand */
-  // only setting(=calling), no getting
-  typedef void (*t_setcommand)(DEVICE*device);
-  std::map<std::string, t_setcommand>map_setcommand;
+/* GenApi::ICommand */
+// only setting(=calling), no getting
+typedef void (*t_setcommand)(DEVICE*device);
+std::map<std::string, t_setcommand>map_setcommand;
 #define GETSETCOMMAND(T)                                      \
   static void set##T(DEVICE*device) { device->T.Execute(); }
-  GETSETCOMMAND(AcquisitionStart);
-  GETSETCOMMAND(AcquisitionStop);
-  GETSETCOMMAND(AcquisitionAbort);
-  GETSETCOMMAND(TriggerSoftware);
-  GETSETCOMMAND(ShaftEncoderModuleCounterReset);
-  GETSETCOMMAND(ShaftEncoderModuleReverseCounterReset);
-  GETSETCOMMAND(UserSetLoad);
-  GETSETCOMMAND(UserSetSave);
-  GETSETCOMMAND(ShadingSetActivate);
-  GETSETCOMMAND(ShadingSetCreate);
-  GETSETCOMMAND(DeviceReset);
-  GETSETCOMMAND(SavePixelStepCorrection);
-  GETSETCOMMAND(CreatePixelStepCorrection);
-  GETSETCOMMAND(FileOperationExecute);
-  GETSETCOMMAND(GevTimestampControlLatch);
-  GETSETCOMMAND(GevTimestampControlReset);
-  GETSETCOMMAND(GevTimestampControlLatchReset);
+GETSETCOMMAND(AcquisitionStart);
+GETSETCOMMAND(AcquisitionStop);
+GETSETCOMMAND(AcquisitionAbort);
+GETSETCOMMAND(TriggerSoftware);
+GETSETCOMMAND(ShaftEncoderModuleCounterReset);
+GETSETCOMMAND(ShaftEncoderModuleReverseCounterReset);
+GETSETCOMMAND(UserSetLoad);
+GETSETCOMMAND(UserSetSave);
+GETSETCOMMAND(ShadingSetActivate);
+GETSETCOMMAND(ShadingSetCreate);
+GETSETCOMMAND(DeviceReset);
+GETSETCOMMAND(SavePixelStepCorrection);
+GETSETCOMMAND(CreatePixelStepCorrection);
+GETSETCOMMAND(FileOperationExecute);
+GETSETCOMMAND(GevTimestampControlLatch);
+GETSETCOMMAND(GevTimestampControlReset);
+GETSETCOMMAND(GevTimestampControlLatchReset);
 
-  /* GenApi::IRegister */
-  // skip this, it's too lowlevel
+/* GenApi::IRegister */
+// skip this, it's too lowlevel
 
-  /* GenApi::IEnumerationT */
-  // do this manually!
+/* GenApi::IEnumerationT */
+// do this manually!
 
 #define GETSETENUMVAL(T)                                                \
   std::map<std::string, enum Basler_GigECameraParams::T##Enums> enumap_##T; \
@@ -301,74 +306,76 @@ namespace gem{namespace pylon{namespace cameraproperties{
       }                                                                 \
     }
 
-  typedef std::string (*t_getenum)(DEVICE*device);
-  typedef void (*t_setenum)(DEVICE*device, const std::string&);
-  typedef void (*t_setenumi)(DEVICE*device, const int);
-  std::map<std::string, t_getenum>map_getenum;
-  std::map<std::string, t_setenum>map_setenum;
-  std::map<std::string, t_setenumi>map_setenumi;
+typedef std::string (*t_getenum)(DEVICE*device);
+typedef void (*t_setenum)(DEVICE*device, const std::string&);
+typedef void (*t_setenumi)(DEVICE*device, const int);
+std::map<std::string, t_getenum>map_getenum;
+std::map<std::string, t_setenum>map_setenum;
+std::map<std::string, t_setenumi>map_setenumi;
 
-  GETSETENUMVAL(AcquisitionMode);
-  GETSETENUMVAL(AutoFunctionAOISelector);
-  GETSETENUMVAL(BalanceRatioSelector);
-  GETSETENUMVAL(BalanceWhiteAuto);
-  GETSETENUMVAL(BlackLevelSelector);
-  GETSETENUMVAL(ChunkPixelFormat);
-  GETSETENUMVAL(ChunkSelector);
-  GETSETENUMVAL(DeviceScanType);
-  GETSETENUMVAL(EventNotification);
-  GETSETENUMVAL(EventSelector);
-  GETSETENUMVAL(ExpertFeatureAccessSelector);
-  GETSETENUMVAL(ExposureAuto);
-  GETSETENUMVAL(ExposureMode);
-  GETSETENUMVAL(FileOpenMode);
-  GETSETENUMVAL(FileOperationSelector);
-  GETSETENUMVAL(FileOperationStatus);
-  GETSETENUMVAL(FileSelector);
-  GETSETENUMVAL(GainAuto);
-  GETSETENUMVAL(GainSelector);
-  GETSETENUMVAL(GevCCP);
-  GETSETENUMVAL(GevInterfaceSelector);
-  GETSETENUMVAL(GevStreamChannelSelector);
-  GETSETENUMVAL(LegacyBinningVertical);
-  GETSETENUMVAL(LineFormat);
-  GETSETENUMVAL(LineMode);
-  GETSETENUMVAL(LineSelector);
-  GETSETENUMVAL(LineSource);
-  GETSETENUMVAL(LUTSelector);
-  GETSETENUMVAL(ParameterSelector);
-  GETSETENUMVAL(PixelCoding);
-  GETSETENUMVAL(PixelColorFilter);
-  GETSETENUMVAL(PixelFormat);
-  GETSETENUMVAL(PixelSize);
-  GETSETENUMVAL(PixelStepCorrectionSelector);
-  GETSETENUMVAL(ShadingSelector);
-  GETSETENUMVAL(ShadingSetDefaultSelector);
-  GETSETENUMVAL(ShadingSetSelector);
-  GETSETENUMVAL(ShadingStatus);
-  GETSETENUMVAL(ShaftEncoderModuleCounterMode);
-  GETSETENUMVAL(ShaftEncoderModuleLineSelector);
-  GETSETENUMVAL(ShaftEncoderModuleLineSource);
-  GETSETENUMVAL(ShaftEncoderModuleMode);
-  GETSETENUMVAL(SpatialCorrectionStartingLine);
-  GETSETENUMVAL(TemperatureSelector);
-  GETSETENUMVAL(TestImageSelector);
-  GETSETENUMVAL(TimerSelector);
-  GETSETENUMVAL(TimerSequenceEntrySelector);
-  GETSETENUMVAL(TimerSequenceTimerSelector);
-  GETSETENUMVAL(TimerTriggerActivation);
-  GETSETENUMVAL(TimerTriggerSource);
-  GETSETENUMVAL(TriggerActivation);
-  GETSETENUMVAL(TriggerMode);
-  GETSETENUMVAL(TriggerSelector);
-  GETSETENUMVAL(TriggerSource);
-  GETSETENUMVAL(UserDefinedValueSelector);
-  GETSETENUMVAL(UserOutputSelector);
-  GETSETENUMVAL(UserSetDefaultSelector);
-  GETSETENUMVAL(UserSetSelector);
+GETSETENUMVAL(AcquisitionMode);
+GETSETENUMVAL(AutoFunctionAOISelector);
+GETSETENUMVAL(BalanceRatioSelector);
+GETSETENUMVAL(BalanceWhiteAuto);
+GETSETENUMVAL(BlackLevelSelector);
+GETSETENUMVAL(ChunkPixelFormat);
+GETSETENUMVAL(ChunkSelector);
+GETSETENUMVAL(DeviceScanType);
+GETSETENUMVAL(EventNotification);
+GETSETENUMVAL(EventSelector);
+GETSETENUMVAL(ExpertFeatureAccessSelector);
+GETSETENUMVAL(ExposureAuto);
+GETSETENUMVAL(ExposureMode);
+GETSETENUMVAL(FileOpenMode);
+GETSETENUMVAL(FileOperationSelector);
+GETSETENUMVAL(FileOperationStatus);
+GETSETENUMVAL(FileSelector);
+GETSETENUMVAL(GainAuto);
+GETSETENUMVAL(GainSelector);
+GETSETENUMVAL(GevCCP);
+GETSETENUMVAL(GevInterfaceSelector);
+GETSETENUMVAL(GevStreamChannelSelector);
+GETSETENUMVAL(LegacyBinningVertical);
+GETSETENUMVAL(LineFormat);
+GETSETENUMVAL(LineMode);
+GETSETENUMVAL(LineSelector);
+GETSETENUMVAL(LineSource);
+GETSETENUMVAL(LUTSelector);
+GETSETENUMVAL(ParameterSelector);
+GETSETENUMVAL(PixelCoding);
+GETSETENUMVAL(PixelColorFilter);
+GETSETENUMVAL(PixelFormat);
+GETSETENUMVAL(PixelSize);
+GETSETENUMVAL(PixelStepCorrectionSelector);
+GETSETENUMVAL(ShadingSelector);
+GETSETENUMVAL(ShadingSetDefaultSelector);
+GETSETENUMVAL(ShadingSetSelector);
+GETSETENUMVAL(ShadingStatus);
+GETSETENUMVAL(ShaftEncoderModuleCounterMode);
+GETSETENUMVAL(ShaftEncoderModuleLineSelector);
+GETSETENUMVAL(ShaftEncoderModuleLineSource);
+GETSETENUMVAL(ShaftEncoderModuleMode);
+GETSETENUMVAL(SpatialCorrectionStartingLine);
+GETSETENUMVAL(TemperatureSelector);
+GETSETENUMVAL(TestImageSelector);
+GETSETENUMVAL(TimerSelector);
+GETSETENUMVAL(TimerSequenceEntrySelector);
+GETSETENUMVAL(TimerSequenceTimerSelector);
+GETSETENUMVAL(TimerTriggerActivation);
+GETSETENUMVAL(TimerTriggerSource);
+GETSETENUMVAL(TriggerActivation);
+GETSETENUMVAL(TriggerMode);
+GETSETENUMVAL(TriggerSelector);
+GETSETENUMVAL(TriggerSource);
+GETSETENUMVAL(UserDefinedValueSelector);
+GETSETENUMVAL(UserOutputSelector);
+GETSETENUMVAL(UserSetDefaultSelector);
+GETSETENUMVAL(UserSetSelector);
 
 
-};};};
+};
+};
+};
 
 using namespace gem::pylon::cameraproperties;
 
@@ -382,8 +389,14 @@ typedef GenApi::IInteger& bla_t;
 
 static std::map<std::string, GenApi::IInteger&>s_intfun;
 
-void   gem::pylon::cameraproperties::init() {
-  static bool initialized=false;  if(initialized){return;} else {initialized=true;}
+void   gem::pylon::cameraproperties::init()
+{
+  static bool initialized=false;
+  if(initialized) {
+    return;
+  } else {
+    initialized=true;
+  }
 
 #define MAP_GETSETBOOL(T)                       \
   map_getbool[ #T ]=get##T;                     \
@@ -1128,8 +1141,10 @@ void   gem::pylon::cameraproperties::init() {
   enumap_GevStreamChannelSelector["StreamChannel0"]=GevStreamChannelSelector_StreamChannel0;
 
 }
-gem::Properties&gem::pylon::cameraproperties::getKeys(void) {
-  gem::Properties&result=readprops; result.clear();
+gem::Properties&gem::pylon::cameraproperties::getKeys(void)
+{
+  gem::Properties&result=readprops;
+  result.clear();
   gem::pylon::cameraproperties::init();
 
   do {
@@ -1184,8 +1199,10 @@ gem::Properties&gem::pylon::cameraproperties::getKeys(void) {
 
   return result;
 }
-gem::Properties&gem::pylon::cameraproperties::setKeys(void) {
-  gem::Properties&result=writeprops; result.clear();
+gem::Properties&gem::pylon::cameraproperties::setKeys(void)
+{
+  gem::Properties&result=writeprops;
+  result.clear();
   gem::pylon::cameraproperties::init();
 
   do {

@@ -41,9 +41,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 #if defined HAVE_VIDEO4LINUX2
 
-namespace gem { namespace plugins {
- class GEM_EXPORT recordV4L2 : public record {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT recordV4L2 : public record
+{
+public:
 
   //////////
   // Constructor
@@ -93,16 +97,20 @@ namespace gem { namespace plugins {
   virtual const std::string getCodecDescription(const std::string&);
   virtual bool enumProperties(gem::Properties&);
 
-  virtual bool dialog(void) {return false;}
+  virtual bool dialog(void)
+  {
+    return false;
+  }
 
 
- private:
+private:
   int m_fd;
   imageStruct m_image;
   bool m_init;
   int m_palette;
- };
-};};
+};
+};
+};
 #endif /* V4L2 */
 
-#endif	// for header file
+#endif  // for header file
