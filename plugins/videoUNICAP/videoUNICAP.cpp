@@ -31,23 +31,25 @@ using namespace gem::plugins;
 #include "Gem/RTE.h"
 
 /* debugging helpers  */
-#undef debugPost
-#undef debugThread
-#if __cplusplus > 199711L
-#  define debugPost(...)
-#  define debugThread(...)
-#else
-#  define debugPost
-#  define debugThread
+#ifdef debugPost
+# undef debugPost
+#endif
+#ifdef debugThread
+# undef debugThread
 #endif
 
 #if 0
-# undef debugPost
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__), ::post
+#else
+# include "Utils/nop.h"
+# define debugPost nop_post
 #endif
+
 #if 0
-# undef debugThread
 # define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__), ::post
+#else
+# include "Utils/nop.h"
+# define debugThread nop_post
 #endif
 
 

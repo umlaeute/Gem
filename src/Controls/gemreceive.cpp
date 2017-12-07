@@ -13,11 +13,11 @@
 /////////////////////////////////////////////////////////
 
 #include "gemreceive.h"
-#include "Utils/nop.h"
 
 #if 0
 # define debug_post ::post
 #else
+# include "Utils/nop.h"
 # define debug_post nop_post
 #endif
 

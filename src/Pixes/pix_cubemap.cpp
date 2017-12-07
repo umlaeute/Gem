@@ -21,16 +21,16 @@
 #include "Gem/Image.h"
 #include <string.h>
 
+//#define DEBUG_ME
+
 #ifdef debug
 # undef debug
 #endif
-
-//#define DEBUG_ME
-
 #ifdef DEBUG_ME
 # define debug post
 #else
-# define debug
+# include "Utils/nop.h"
+# define debug nop_post
 #endif
 
 CPPEXTERN_NEW(pix_cubemap);

@@ -37,23 +37,29 @@ using namespace gem::plugins;
 
 
 /* debugging helpers  */
-#define debugPost(...)   do {} while (0)
-#define debugThread(...) do {} while (0)
-#define debugIOCTL(...)  do {} while (0)
+#undef debugPost
+#undef debugThread
+#undef debugIOCTL
 
 #if 0
-# undef debugPost
 # define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+#else
+# include "Utils/nop.h"
+# define debugPost nop_post
 #endif
 
 #if 0
-# undef debugThread
 # define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+#else
+# include "Utils/nop.h"
+# define debugThread nop_post
 #endif
 
 #if 0
-# undef debugIOCTL
 # define debugIOCTL ::post
+#else
+# include "Utils/nop.h"
+# define debugIOCTL nop_post
 #endif
 
 

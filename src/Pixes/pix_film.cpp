@@ -114,16 +114,10 @@
 
 #if 0
 # define debug post
+#else
+# include "Utils/nop.h"
+# define debug nop_post
 #endif
-
-#ifndef debug
-# if __cplusplus > 199711L
-#  define debug(...)
-# else
-#  define debug
-# endif
-#endif
-
 
 static std::vector<std::string> &split(const std::string &s, char delim,
                                        std::vector<std::string> &elems)

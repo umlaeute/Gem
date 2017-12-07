@@ -20,11 +20,8 @@
 #if 0
 # define debug error
 #else
-# if __cplusplus > 199711L
-#  define debug(...)
-# else
-#  define debug
-# endif
+# include "Utils/nop.h"
+# define debug nop_post
 #endif
 
 #include "Gem/GemGL.h"

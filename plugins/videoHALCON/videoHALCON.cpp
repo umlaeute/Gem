@@ -30,7 +30,8 @@ using namespace gem::plugins;
 #if 0
 # define debug ::post
 #else
-# define debug
+# include "Utils/nop.h"
+# define debug nop_post
 #endif
 
 /////////////////////////////////////////////////////////
