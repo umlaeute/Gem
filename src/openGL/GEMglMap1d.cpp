@@ -44,12 +44,18 @@ GEMglMap1d :: GEMglMap1d        (int argc, t_atom*argv) :
     order =static_cast<GLint>(atom_getint(argv+4));
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u1"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u2"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("stride"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("order"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("points"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("u1"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("u2"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("stride"));
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("order"));
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("points"));
 
   len=128;
   points = new GLdouble[len];
@@ -141,12 +147,24 @@ void GEMglMap1d :: pointsMess (int argc, t_atom*argv)   // FUN
 
 void GEMglMap1d :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::targetMessCallback),         gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::u1MessCallback),     gensym("u1"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::u2MessCallback),     gensym("u2"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::strideMessCallback),         gensym("stride"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::orderMessCallback),          gensym("order"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMap1d::pointsMessCallback),         gensym("points"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMap1d::targetMessCallback),
+                  gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMap1d::u1MessCallback),     gensym("u1"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMap1d::u2MessCallback),     gensym("u2"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMap1d::strideMessCallback),
+                  gensym("stride"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMap1d::orderMessCallback),
+                  gensym("order"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMap1d::pointsMessCallback),
+                  gensym("points"), A_GIMME, A_NULL);
 }
 
 void GEMglMap1d :: targetMessCallback (void* data, t_float arg0)
@@ -169,7 +187,8 @@ void GEMglMap1d :: orderMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->orderMess (arg0);
 }
-void GEMglMap1d :: pointsMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglMap1d :: pointsMessCallback (void* data, t_symbol*, int argc,
+                                       t_atom*argv)
 {
   GetMyClass(data)->pointsMess (argc, argv);
 }

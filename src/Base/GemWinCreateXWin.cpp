@@ -237,7 +237,8 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
 
   if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-    error("GEM: TrueColor visual required for this program (got %d)", vi->c_class);
+    error("GEM: TrueColor visual required for this program (got %d)",
+          vi->c_class);
     destroyGemWindow(info);
     return(0);
   }
@@ -278,7 +279,8 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     int bestMode=0;
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
-      if ((modes[i]->hdisplay == hints.width) && (modes[i]->vdisplay == hints.height)) {
+      if ((modes[i]->hdisplay == hints.width)
+          && (modes[i]->vdisplay == hints.height)) {
         bestMode = i;
       }
     }
@@ -402,7 +404,8 @@ void destroyGemWindow(WindowInfo &info)
   if (info.dpy) {
     int err=0;
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
-    glXMakeCurrent(info.dpy, None, NULL); /* this crashes if no window is there! */
+    glXMakeCurrent(info.dpy, None,
+                   NULL); /* this crashes if no window is there! */
 
     if (info.win) {
       err=XDestroyWindow(info.dpy, info.win);

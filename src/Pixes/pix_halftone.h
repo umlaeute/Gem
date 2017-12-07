@@ -91,9 +91,12 @@ protected:
   int PSDiamondDotFunc(float X,float Y, float scale);
   int Init(int nWidth, int nHeight);
   void Pete_HalfTone_DeInit();
-  void Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point* poutPoint,float Angle);
-  void Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,int nCellSize,int nStyle, float scale);
-  void Pete_HalfTone_CalcCorners(int nWidth,int nHeight,float AngleRadians,int nCellSize,
+  void Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point* poutPoint,
+              float Angle);
+  void Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,
+                                      int nCellSize,int nStyle, float scale);
+  void Pete_HalfTone_CalcCorners(int nWidth,int nHeight,float AngleRadians,
+                                 int nCellSize,
                                  SPete_HalfTone_Point* poutLeft,
                                  SPete_HalfTone_Point* poutRight,
                                  SPete_HalfTone_Point* poutTop,
@@ -140,16 +143,24 @@ protected:
     SPete_HalfTone_Vertex* poutRight,
     SPete_HalfTone_Vertex* poutTop,
     SPete_HalfTone_Vertex* poutBottom);
-  int Pete_HalfTone_GetLowestVertex(SPete_HalfTone_Vertex* pVertices,int nVertexCount);
-  void Pete_HalfTone_RotateMultipleVertices(SPete_HalfTone_Vertex* pinVertices,
+  int Pete_HalfTone_GetLowestVertex(SPete_HalfTone_Vertex* pVertices,
+                                    int nVertexCount);
+  void Pete_HalfTone_RotateMultipleVertices(SPete_HalfTone_Vertex*
+      pinVertices,
       SPete_HalfTone_Vertex* poutVertices,
       int nVertexCount,
       float Angle);
-  void Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,int nSmoothingThreshold);
-  void YUV_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,int nSmoothingThreshold);
-  U32     Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight);
-  U32     GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight);
-  unsigned char   Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight);
+  void Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,
+                                        int nSmoothingThreshold);
+  void YUV_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,
+                              int nSmoothingThreshold);
+  U32     Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,
+                                   int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight);
+  U32     GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,
+                                  int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight);
+  unsigned char   Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,
+      int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,
+      int nImageHeight);
 
 private:
   //////////

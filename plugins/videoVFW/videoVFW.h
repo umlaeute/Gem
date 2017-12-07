@@ -67,7 +67,8 @@ public:
   // Set the video dimensions
   virtual bool                setColor(int);
 
-  virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
 

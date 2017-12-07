@@ -136,9 +136,11 @@ struct GEM_EXTERN imageStruct {
 
   /////////
   // gets the color of a pixel
-  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a=NULL) const;
+  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g,
+                      unsigned char*b, unsigned char*a=NULL) const;
   virtual void getGrey(int X, int Y, unsigned char*g) const;
-  virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
+  virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u,
+                      unsigned char*v) const;
 
   /* following will set the whole image-data to either black or white
    * the size of the image-data is NOT xsize*ysize*csize but datasize
@@ -165,7 +167,8 @@ struct GEM_EXTERN imageStruct {
    * into a new imageStruct
    */
   virtual void copy2Image(imageStruct *to) const;
-  virtual void copy2ImageStruct(imageStruct *to) const; // copy the imageStruct (but not the actual data)
+  virtual void copy2ImageStruct(imageStruct *to)
+  const; // copy the imageStruct (but not the actual data)
   /* this is a sort of better copy2Image,
    * which only copies the imageStruct-data if it is needed
    */
@@ -205,7 +208,8 @@ struct GEM_EXTERN imageStruct {
   virtual void fromYUY2   (const unsigned char* orgdata); // YUYV
   virtual void fromYVYU   (const unsigned char* orgdata);
   /* planar YUV420: this is rather generic and not really YV12 only */
-  virtual void fromYV12   (const unsigned char* Y, const unsigned char*U, const unsigned char*V);
+  virtual void fromYV12   (const unsigned char* Y, const unsigned char*U,
+                           const unsigned char*V);
   /* assume that the planes are near each other: YVU */
   virtual void fromYV12   (const unsigned char* orgdata);
   /* assume that the planes are near each other: YVU */
@@ -223,7 +227,8 @@ struct GEM_EXTERN imageStruct {
   {
     fromYV12(orgdata);
   }
-  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,const unsigned char*V)
+  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,
+                           const unsigned char*V)
   {
     fromYV12(Y,U,V);
   }

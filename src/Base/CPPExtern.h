@@ -143,13 +143,15 @@ public:
   void            post(const char*format, ...) const;
   void            endpost(void) const;
   void            verbose(const int level, const char*format, ...) const;
-  void            error(const char*format, ...) const; /* internally uses pd_error() */
+  void            error(const char*format,
+                        ...) const; /* internally uses pd_error() */
 
   // searches for a file based on the parent abstraction's path
   // wraps open_via_path() and canvas_makefilename()
   // the full filename is returned
   // if the file does not exist, it is constructed
-  std::string findFile(const std::string&filename, const std::string&ext) const;
+  std::string findFile(const std::string&filename,
+                       const std::string&ext) const;
   std::string findFile(const std::string&filename) const;
 
 private:

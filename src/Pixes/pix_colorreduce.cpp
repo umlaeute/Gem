@@ -43,9 +43,12 @@ pix_colorreduce :: pix_colorreduce() :
   cnBiggestSignedInt(0x7fffffff),
   pInvColorMapEntry(0)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("count"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("persist"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smooth"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("count"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("persist"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("smooth"));
 
   tempImage.xsize=0;
   tempImage.ysize=0;
@@ -129,11 +132,13 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 
   const int nSampleSpacing=4;
 
-  Pete_ColorReduce_CalcHistogram(nSampleSpacing,pHistogram,PalettePersistence);
+  Pete_ColorReduce_CalcHistogram(nSampleSpacing,pHistogram,
+                                 PalettePersistence);
 
   Pete_ColorReduce_SortColors(pHistogram,ppSortedColors);
 
-  Pete_ColorReduce_SetupInverseColorMap(ppSortedColors,nColors,pInverseColorMap,pHistogram);
+  Pete_ColorReduce_SetupInverseColorMap(ppSortedColors,nColors,
+                                        pInverseColorMap,pHistogram);
 
   const int nNumPixels=(nWidth*nHeight);
 
@@ -144,7 +149,8 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 
   while (pCurrentSource<pSourceEnd) {
 
-    *pCurrentOutput=Pete_ColorReduce_GetClosestColor(*pCurrentSource,pInverseColorMap,BoundarySmoothing);
+    *pCurrentOutput=Pete_ColorReduce_GetClosestColor(*pCurrentSource,
+                    pInverseColorMap,BoundarySmoothing);
 
     pCurrentSource+=1;
     pCurrentOutput+=1;
@@ -171,7 +177,8 @@ int pix_colorreduce :: Pete_ColorReduce_Init()
     Pete_ColorReduce_DeInit();
     return 0;
   }
-  Pete_ZeroMemory((char*)Pete_LockHandle(hRGBHistogram),cnGridCellCount*sizeof(int));
+  Pete_ZeroMemory((char*)Pete_LockHandle(hRGBHistogram),
+                  cnGridCellCount*sizeof(int));
 
   hSortedColors=Pete_NewHandle(cnGridCellCount*sizeof(int*));
   if (hSortedColors==NULL) {
@@ -209,7 +216,9 @@ void pix_colorreduce :: Pete_ColorReduce_DeInit()
 
 }
 
-inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,float BoundarySmoothing)
+inline U32 pix_colorreduce :: Pete_ColorReduce_GetClosestColor(U32 Color,
+    SPete_ColorReduce_InverseMapEntry* pInverseColorMap,
+    float BoundarySmoothing)
 {
 
   const int nRed=(Color>>SHIFT_RED)&0xff;
@@ -363,7 +372,8 @@ void pix_colorreduce :: Pete_ColorReduce_CalcHistogram(
 
 }
 
-extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const void* pElem2)
+extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,
+    const void* pElem2)
 {
 
   int** ppFirstElement=(int**)pElem1;
@@ -382,7 +392,8 @@ extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const v
 
 }
 
-void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSortedColors)
+void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,
+    int** ppSortedColors)
 {
 
   int nCount;
@@ -392,11 +403,14 @@ void pix_colorreduce :: Pete_ColorReduce_SortColors(int* pHistogram,int** ppSort
 
   }
 
-  qsort((void*)ppSortedColors,cnGridCellCount,sizeof(int*),&Pete_ColorReduce_HistogramSortFunction);
+  qsort((void*)ppSortedColors,cnGridCellCount,sizeof(int*),
+        &Pete_ColorReduce_HistogramSortFunction);
 
 }
 
-void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColors,int nColors,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,int* pHistogram)
+void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(
+  int** ppSortedColors,int nColors,
+  SPete_ColorReduce_InverseMapEntry* pInverseColorMap,int* pHistogram)
 {
 
   int *nSortedRed  = new int[cnGridCellCount];
@@ -513,14 +527,18 @@ void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorreduce),
                    gensym("pix_colourreduce"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::countCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_colorreduce::countCallback),
                   gensym("count"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::persistCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_colorreduce::persistCallback),
                   gensym("persist"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_colorreduce::smoothCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_colorreduce::smoothCallback),
                   gensym("smooth"), A_DEFFLOAT, A_NULL);
 }
-void pix_colorreduce :: countCallback(void *data, t_float m_TargetColorCount)
+void pix_colorreduce :: countCallback(void *data,
+                                      t_float m_TargetColorCount)
 {
   if(m_TargetColorCount>255) {
     m_TargetColorCount=255.f;
@@ -532,7 +550,8 @@ void pix_colorreduce :: countCallback(void *data, t_float m_TargetColorCount)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_colorreduce :: persistCallback(void *data, t_float m_PalettePersistence)
+void pix_colorreduce :: persistCallback(void *data,
+                                        t_float m_PalettePersistence)
 {
   if(m_PalettePersistence>255) {
     m_PalettePersistence=255.f;
@@ -544,8 +563,10 @@ void pix_colorreduce :: persistCallback(void *data, t_float m_PalettePersistence
   GetMyClass(data)->setPixModified();
 }
 
-void pix_colorreduce :: smoothCallback(void *data, t_float m_BoundarySmoothing)
+void pix_colorreduce :: smoothCallback(void *data,
+                                       t_float m_BoundarySmoothing)
 {
-  GetMyClass(data)->m_BoundarySmoothing=!(!static_cast<int>(m_BoundarySmoothing));
+  GetMyClass(data)->m_BoundarySmoothing=!(!static_cast<int>
+                                          (m_BoundarySmoothing));
   GetMyClass(data)->setPixModified();
 }

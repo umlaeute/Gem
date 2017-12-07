@@ -57,7 +57,8 @@ public:
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
-  virtual bool enumProperties(gem::Properties&readprops, gem::Properties&writeprops);
+  virtual bool enumProperties(gem::Properties&readprops,
+                              gem::Properties&writeprops);
 
   virtual void getProperties(gem::Properties&props);
   virtual void setProperties(gem::Properties&props);

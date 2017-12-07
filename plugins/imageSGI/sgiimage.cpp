@@ -101,8 +101,10 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z);
 static void setalpha(unsigned char *lptr, size_t n);
 static void copybw(int32 *lptr, size_t n);
 static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, size_t n);
-static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int32 cnt);
-static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int32 n);
+static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z,
+                       int32 cnt);
+static void interleaverow(unsigned char *lptr, unsigned char *cptr,
+                          int32 z, int32 n);
 
 #define TAGLEN  (5UL)
 
@@ -112,7 +114,8 @@ static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int
  *
  */
 unsigned int32 *
-getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize)
+getLongImage(const char *textureFile, int32 *xsize, int32 *ysize,
+             int32 *csize)
 {
   int size=sizeofimage(textureFile, xsize, ysize, csize);
   if(size<1) {
@@ -310,7 +313,8 @@ unsigned int32 *longimagedata(const char *name)
   rle = ISRLE(image->type);
   bpp = BPP(image->type);
   if(bpp != 1 ) {
-    fprintf(stderr, "[GEM:imageSGI] longimagedata: image must have 1 byte per pix chan\n");
+    fprintf(stderr,
+            "[GEM:imageSGI] longimagedata: image must have 1 byte per pix chan\n");
     goto error;
   }
   xsize = image->xsize;
@@ -366,7 +370,9 @@ unsigned int32 *longimagedata(const char *name)
             cur = starttab[y+z*ysize];
           }
           if(lengthtab[y+z*ysize]>rlebuflen) {
-            fprintf(stderr, "[GEM:imageSGI] longimagedata: rlebuf(%lu) is too small - bad poop : %d\n", rlebuflen, lengthtab[y+z*ysize]);
+            fprintf(stderr,
+                    "[GEM:imageSGI] longimagedata: rlebuf(%lu) is too small - bad poop : %d\n",
+                    rlebuflen, lengthtab[y+z*ysize]);
             goto error;
           }
           size_t count=fread(rledat,lengthtab[y+z*ysize],1,inf);
@@ -480,7 +486,8 @@ success:
 
 /* static utility functions for longimagedata */
 
-static void interleaverow(unsigned char *lptr, unsigned char *cptr, int32 z, int32 n)
+static void interleaverow(unsigned char *lptr, unsigned char *cptr,
+                          int32 z, int32 n)
 {
   lptr += z;
   while(n--) {
@@ -593,7 +600,8 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int32 z)
  *      RGBA image file is saved.
  *
  */
-int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
+int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize,
+                 int32 zsize,
                  const char *name, const char*imgname)
 {
   FILE *outf;
@@ -611,7 +619,9 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
   case 1:
     break;
   default:
-    fprintf(stderr, "[GEM:imageSGI] longstoimage: invalid zsize %d (must be 1,3 or 4)\n", zsize);
+    fprintf(stderr,
+            "[GEM:imageSGI] longstoimage: invalid zsize %d (must be 1,3 or 4)\n",
+            zsize);
     return 0;
   }
 
@@ -666,7 +676,8 @@ int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
 #endif
       }
       if(len>rlebuflen) {
-        fprintf(stderr, "[GEM:imageSGI] longstoimage: rlebuf is too small - bad poop\n");
+        fprintf(stderr,
+                "[GEM:imageSGI] longstoimage: rlebuf is too small - bad poop\n");
         goodwrite=0;
         goto longstoimage_close;
       }
@@ -695,7 +706,8 @@ longstoimage_close:
   if(goodwrite) {
     return 1;
   } else {
-    fprintf(stderr, "[GEM:imageSGI] longstoimage: not enough space for image!!\n");
+    fprintf(stderr,
+            "[GEM:imageSGI] longstoimage: not enough space for image!!\n");
     return 0;
   }
 }
@@ -712,7 +724,8 @@ static void lumrow(unsigned char *rgbptr, unsigned char *lumptr, size_t n)
   }
 }
 
-static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z, int32 cnt)
+static int compressrow(unsigned char *lbuf, unsigned char *rlebuf, int32 z,
+                       int32 cnt)
 {
   unsigned char *iptr, *ibufend, *optr;
   lbuf += z;

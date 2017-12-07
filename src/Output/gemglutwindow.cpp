@@ -312,7 +312,8 @@ void gemglutwindow :: titleMess(const std::string&s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglutwindow :: dimensionsMess(unsigned int width,
+                                     unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");

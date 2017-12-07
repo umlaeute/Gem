@@ -66,7 +66,8 @@ protected:
 
   //////////
   // Set the light's color
-  void            lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+  void            lightColorMess(GLfloat red, GLfloat green, GLfloat blue,
+                                 GLfloat alpha);
   void            lightColorMess(t_symbol*, int, t_atom*);
 
   //////////

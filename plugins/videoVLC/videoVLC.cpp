@@ -96,7 +96,8 @@ bool videoVLC::open(gem::Properties&props)
     return false;
   }
 
-  libvlc_media_t*media = libvlc_media_new_location (m_instance, m_devname.c_str());
+  libvlc_media_t*media = libvlc_media_new_location (m_instance,
+                         m_devname.c_str());
   if(!media) {
     media = libvlc_media_new_path (m_instance, m_devname.c_str());
   }
@@ -195,7 +196,8 @@ bool videoVLC::open(gem::Properties&props)
     }
   };
   struct _formatCallbackObj {
-    static unsigned format(void**opaque, char *chroma, unsigned *width, unsigned *height, unsigned *pitches, unsigned *lines)
+    static unsigned format(void**opaque, char *chroma, unsigned *width,
+                           unsigned *height, unsigned *pitches, unsigned *lines)
     {
       videoVLC**objptr=(videoVLC**)opaque;
       if(objptr && *objptr) {
@@ -368,7 +370,8 @@ void videoVLC::unlockFrame(void*picture, void*const*plane)
   UNLOCK(m_mutex);
 }
 
-unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines)
+unsigned videoVLC::setFormat(char chroma[4], unsigned &width,
+                             unsigned &height, unsigned &pitches, unsigned &lines)
 {
 #if 0
   verbose(1, "[GEM:videoVLC] chroma: %s", chroma);
@@ -389,7 +392,8 @@ unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, 
 
   return 1;
 }
-void videoVLC::resize(unsigned int width, unsigned int height, GLenum format)
+void videoVLC::resize(unsigned int width, unsigned int height,
+                      GLenum format)
 {
   bool do_convert = true;
 

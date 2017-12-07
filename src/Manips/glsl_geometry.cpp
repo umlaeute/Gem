@@ -165,11 +165,13 @@ bool glsl_geometry :: openMessARB(void)
   const char * vs = m_shaderString;
   glShaderSourceARB( m_shaderARB, 1, &vs, NULL );
   glCompileShaderARB( m_shaderARB );
-  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB, &m_compiled );
+  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB,
+                             &m_compiled );
   if (!m_compiled) {
     GLint       length;
     GLcharARB* log;
-    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length );
+    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
+                               &length );
     log = (GLcharARB*)malloc( length * sizeof(GLcharARB) );
     glGetInfoLogARB( m_shaderARB, length, NULL, log );
     post("compile Info_log:");

@@ -116,7 +116,8 @@ struct PIMPL {
 
 
     if(dirname) {
-      r=binbuf_read(bb, (char*)filename, const_cast<char*>(gem::files::expandEnv(dirname, true).c_str()), 1);
+      r=binbuf_read(bb, (char*)filename,
+                    const_cast<char*>(gem::files::expandEnv(dirname, true).c_str()), 1);
       if(0==r) {
         verbose(1, "found Gem-settings '%s' in '%s'", filename, dirname);
       }
@@ -207,7 +208,8 @@ struct PIMPL {
 
     /* legacy settings via environmental variables */
     setEnv("texture.rectangle", "GEM_RECTANGLE_TEXTURE");
-    setEnv("singlecontext", "GEM_SINGLE_CONTEXT"); // hmm, what's a better new name for this?
+    setEnv("singlecontext",
+           "GEM_SINGLE_CONTEXT"); // hmm, what's a better new name for this?
     setEnv("font.face", "GEM_DEFAULT_FONT");
 
 

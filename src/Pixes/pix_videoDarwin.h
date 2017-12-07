@@ -134,11 +134,14 @@ protected:
   short                           m_pixelDepth;   //
   int                                     m_vidXSize;             //
   int                                     m_vidYSize;             //
-  Rect                            m_srcRect;              // Capture Rectangle
+  Rect
+  m_srcRect;              // Capture Rectangle
   GWorldPtr                       m_srcGWorld;    // Capture Destination
   PixMapHandle            m_pixMap;       // PixMap Handle for capture image
-  Ptr                                     m_baseAddr;             // Base address of pixel Data
-  long                            m_rowBytes;             // Row bytes in a row
+  Ptr
+  m_baseAddr;             // Base address of pixel Data
+  long
+  m_rowBytes;             // Row bytes in a row
   int                                     m_quality;
   int                                     m_colorspace;
 
@@ -183,7 +186,8 @@ private:
   static void whiteBalanceCallback(void *data, t_float U,t_float V);
   static void bangMessCallback(void *data);
   static void autoCallback(void *data, t_float X);
-  static void fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  static void fileMessCallback(void *data, t_symbol *s, int argc,
+                               t_atom *argv);
   static void recordCallback(void *data, t_float X);
   static void inputCallback(void *data, t_float X);
 };

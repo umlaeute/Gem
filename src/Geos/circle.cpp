@@ -69,7 +69,8 @@ void circle :: renderShape(GemState *state)
       ysize  = GemShape::m_texCoords[1].t;
     }
     for (int n = 0; n < NUM_PNTS; n++) {
-      glTexCoord2f(xsize*(m_cos[n] + 1) / 2.f, (ysize0-ysize)*(m_sin[n] + 1) / 2.f+ysize);
+      glTexCoord2f(xsize*(m_cos[n] + 1) / 2.f,
+                   (ysize0-ysize)*(m_sin[n] + 1) / 2.f+ysize);
       glVertex3f(m_cos[n] * m_size,
                  m_sin[n] * m_size,
                  0.0);

@@ -155,11 +155,13 @@ void SynchedWorkerThread::signal(void)
 }
 
 /* _private_ dummy implementations */
-SynchedWorkerThread&SynchedWorkerThread::operator=(const SynchedWorkerThread&org)
+SynchedWorkerThread&SynchedWorkerThread::operator=(const
+    SynchedWorkerThread&org)
 {
   return (*this);
 }
-SynchedWorkerThread::SynchedWorkerThread(const SynchedWorkerThread&org) : m_pimpl(new PIMPL(this))
+SynchedWorkerThread::SynchedWorkerThread(const SynchedWorkerThread&org) :
+  m_pimpl(new PIMPL(this))
 {
 }
 

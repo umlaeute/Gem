@@ -14,7 +14,8 @@
 
 #include "GEMglColor4d.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4d, t_floatarg, A_DEFFLOAT,
+                               t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,16 +24,21 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColor4d, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColor4d :: GEMglColor4d    (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
+GEMglColor4d :: GEMglColor4d    (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2, t_floatarg arg3) :
   red(static_cast<GLdouble>(arg0)),
   green(static_cast<GLdouble>(arg1)),
   blue(static_cast<GLdouble>(arg2)),
   alpha(static_cast<GLdouble>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blue"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("alpha"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("red"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("green"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("blue"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("alpha"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,10 +93,18 @@ void GEMglColor4d :: alphaMess (t_float arg1)   // FUN
 
 void GEMglColor4d :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4d::redMessCallback),          gensym("red"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4d::greenMessCallback),        gensym("green"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4d::blueMessCallback),         gensym("blue"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor4d::alphaMessCallback),        gensym("alpha"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor4d::redMessCallback),
+                  gensym("red"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor4d::greenMessCallback),
+                  gensym("green"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor4d::blueMessCallback),
+                  gensym("blue"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor4d::alphaMessCallback),
+                  gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglColor4d :: redMessCallback (void* data, t_float arg0)

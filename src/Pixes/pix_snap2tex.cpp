@@ -68,7 +68,8 @@ pix_snap2tex :: pix_snap2tex(int argc, t_atom *argv)
   }
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("size"));
 
   // create an outlet to send texture info
   m_outTexInfo = outlet_new(this->x_obj, 0);

@@ -52,7 +52,8 @@ public:
 gem::thread::Mutex::Mutex(void) : m_pimpl(new PIMPL())
 {
 }
-gem::thread::Mutex::Mutex(const gem::thread::Mutex&org) : m_pimpl(new PIMPL(*org.m_pimpl))
+gem::thread::Mutex::Mutex(const gem::thread::Mutex&org) : m_pimpl(
+    new PIMPL(*org.m_pimpl))
 {
 }
 
@@ -78,7 +79,8 @@ bool gem::thread::Mutex::trylock(void)
   return (0!=pthread_mutex_trylock(m_pimpl->mutex));
 }
 
-gem::thread::Mutex&gem::thread::Mutex::operator=(const gem::thread::Mutex&org)
+gem::thread::Mutex&gem::thread::Mutex::operator=(const
+    gem::thread::Mutex&org)
 {
   if(this!=&org && m_pimpl->mutex != org.m_pimpl->mutex) {
     PIMPL*pimpl=new PIMPL(*org.m_pimpl);

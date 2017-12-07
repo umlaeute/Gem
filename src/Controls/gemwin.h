@@ -97,13 +97,15 @@ private:
   void          colorMess(float red, float green, float blue, float alpha);
   void          clearmaskMess(float bitmask);
   void          ambientMess(float red, float green, float blue, float alpha);
-  void          specularMess(float red, float green, float blue, float alpha);
+  void          specularMess(float red, float green, float blue,
+                             float alpha);
   void          shininessMess(float val);
 
   void          fogModeMess(int mode);
   void          fogDensityMess(float val);
   void          fogRangeMess(float start, float end);
-  void          fogColorMess(float red, float green, float blue, float alpha);
+  void          fogColorMess(float red, float green, float blue,
+                             float alpha);
   void          cursorMess(float setting);
   void          topmostMess(float setting);
   void          blurMess(float setting);
@@ -133,7 +135,8 @@ private:
   static void   lightingMessCallback(void *, t_float state);
   static void   borderMessCallback(void *, t_float state);
   static void   frameMessCallback(void *, t_float framesPerSecond);
-  static void   perspectiveMessCallback(void *, t_symbol *, int argc, t_atom *argv);
+  static void   perspectiveMessCallback(void *, t_symbol *, int argc,
+                                        t_atom *argv);
   static void   viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
   static void   stereoMessCallback(void *data, t_float state);
   static void   stereoFocMessCallback(void *, t_float state);

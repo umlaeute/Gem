@@ -14,7 +14,8 @@
 
 #include "GEMglViewport.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglViewport, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglViewport, t_floatarg, A_DEFFLOAT,
+                               t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,16 +24,21 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglViewport, t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglViewport :: GEMglViewport  (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
+GEMglViewport :: GEMglViewport  (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2, t_floatarg arg3) :
   x(static_cast<GLint>(arg0)),
   y(static_cast<GLint>(arg1)),
   width(static_cast<GLsizei>(arg2)),
   height(static_cast<GLsizei>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("width"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("height"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("width"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("height"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,10 +93,18 @@ void GEMglViewport :: heightMess (t_float arg1)         // FUN
 
 void GEMglViewport :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglViewport::xMessCallback),   gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglViewport::yMessCallback),   gensym("y"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglViewport::widthMessCallback),       gensym("width"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglViewport::heightMessCallback),      gensym("height"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglViewport::xMessCallback),   gensym("x"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglViewport::yMessCallback),   gensym("y"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglViewport::widthMessCallback),
+                  gensym("width"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglViewport::heightMessCallback),
+                  gensym("height"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglViewport :: xMessCallback (void* data, t_float arg0)

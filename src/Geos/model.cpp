@@ -231,7 +231,8 @@ void model :: openMess(const std::string&filename)
   }
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()),
+                      const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
   if(!m_loader->open(buf, wantProps)) {
     error("unable to read model '%s'", buf);
     return;
@@ -261,7 +262,8 @@ void model :: render(GemState *state)
     return;
   }
 
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || m_size_change_flag ) {
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo
+       || m_size_change_flag ) {
     createVBO();
     m_size_change_flag = false;
   }
@@ -333,7 +335,8 @@ void model :: createVBO(void)
   m_normal  .create();
 }
 
-void model :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb)
+void model :: copyArray(const std::vector<std::vector<float> > tab,
+                        gem::VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
@@ -372,7 +375,8 @@ void model :: getVBOarray()
 {
   if (m_loader && m_loader->needRefresh()) {
 
-    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray =
+      m_loader->getVBOarray();
 
     if ( vboArray.empty() ) {
       copyAllArrays();

@@ -14,7 +14,8 @@
 
 #include "GEMglClipPlane.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglClipPlane, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglClipPlane, t_floatarg, A_DEFFLOAT,
+                               t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,11 +24,14 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglClipPlane, t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglClipPlane :: GEMglClipPlane        (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3)
+GEMglClipPlane :: GEMglClipPlane        (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2, t_floatarg arg3)
 {
   vMess(arg0, arg1, arg2, arg3);
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("plane"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("plane"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -49,7 +53,8 @@ void GEMglClipPlane :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglClipPlane :: vMess (t_float arg0, t_float arg1, t_float arg2, t_float arg3)   // FUN
+void GEMglClipPlane :: vMess (t_float arg0, t_float arg1, t_float arg2,
+                              t_float arg3)   // FUN
 {
   v[0]=static_cast<GLdouble>(arg0);
   v[1]=static_cast<GLdouble>(arg1);
@@ -70,11 +75,16 @@ void GEMglClipPlane :: planeMess (t_float arg0)         // FUN
 
 void GEMglClipPlane :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClipPlane::vMessCallback),         gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglClipPlane::planeMessCallback),     gensym("plane"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglClipPlane::vMessCallback),
+                  gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglClipPlane::planeMessCallback),
+                  gensym("plane"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglClipPlane :: vMessCallback (void* data, t_float arg0, t_float arg1, t_float arg2, t_float arg3)
+void GEMglClipPlane :: vMessCallback (void* data, t_float arg0,
+                                      t_float arg1, t_float arg2, t_float arg3)
 {
   GetMyClass(data)->vMess ( arg0, arg1, arg2, arg3);
 }

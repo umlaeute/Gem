@@ -102,12 +102,14 @@ imageJPEG :: ~imageJPEG(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageJPEG :: load(std::string filename, imageStruct&result,
+                       gem::Properties&props)
 {
   // open up the file
   FILE * infile;
   if ((infile = fopen(filename.c_str(), "rb")) == NULL) {
-    fprintf(stderr, "[GEM:imageJPEG] Unable to open image file: %s\n", filename.c_str());
+    fprintf(stderr, "[GEM:imageJPEG] Unable to open image file: %s\n",
+            filename.c_str());
     return(false);
   }
 
@@ -208,7 +210,9 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
 
   return true;
 }
-bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+bool imageJPEG::save(const imageStruct&constimage,
+                     const std::string&filename, const std::string&mimetype,
+                     const gem::Properties&props)
 {
   struct jpeg_compress_struct cinfo;
 
@@ -259,16 +263,19 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;
 
-  cinfo.image_width = image.xsize;      /* image width and height, in pixels */
+  cinfo.image_width =
+    image.xsize;      /* image width and height, in pixels */
   cinfo.image_height = image.ysize;
   cinfo.input_components = 3;           /* # of color components per pixel */
   cinfo.in_color_space = JCS_RGB;       /* colorspace of input image */
 
   jpeg_set_defaults(&cinfo);
-  jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
+  jpeg_set_quality(&cinfo, quality,
+                   TRUE /* limit to baseline-JPEG values */);
   jpeg_start_compress(&cinfo, TRUE);
 
-  row_stride = image.xsize * image.csize;       /* JSAMPLEs per row in image_buffer */
+  row_stride = image.xsize *
+               image.csize;       /* JSAMPLEs per row in image_buffer */
 
   while (cinfo.next_scanline < cinfo.image_height) {
     /* jpeg_write_scanlines expects an array of pointers to scanlines.
@@ -282,7 +289,8 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
     row_pointer = & image_buffer[rowindex * row_stride];
 
     if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) <= 0) {
-      fprintf(stderr, "[GEM:imageJPEG] could not write line %d to image %s\n", cinfo.next_scanline, filename.c_str());
+      fprintf(stderr, "[GEM:imageJPEG] could not write line %d to image %s\n",
+              cinfo.next_scanline, filename.c_str());
       jpeg_finish_compress(&cinfo);
       fclose(outfile);
       jpeg_destroy_compress(&cinfo);
@@ -297,7 +305,9 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   return true;
 }
 
-float imageJPEG::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+float imageJPEG::estimateSave(const imageStruct&img,
+                              const std::string&filename, const std::string&mimetype,
+                              const gem::Properties&props)
 {
   float result=0.;
   if(mimetype == "image/jpeg") { // || mimetype == "image/pjpeg")
@@ -312,7 +322,8 @@ float imageJPEG::estimateSave(const imageStruct&img, const std::string&filename,
   return result;
 }
 
-void imageJPEG::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props)
+void imageJPEG::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                     gem::Properties&props)
 {
   mimetypes.clear();
   props.clear();

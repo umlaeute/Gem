@@ -28,7 +28,8 @@ CPPEXTERN_NEW(vertex_info);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_info :: vertex_info() : m_previousSize(0), m_vertNum(0), m_vertCount(0)
+vertex_info :: vertex_info() : m_previousSize(0), m_vertNum(0),
+  m_vertCount(0)
 {
   m_Vsize = outlet_new(this->x_obj, 0);
   //m_Csize = outlet_new(this->x_obj, 0);
@@ -77,11 +78,13 @@ void vertex_info :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_info :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_info::vertexMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_info::vertexMessCallback),
                   gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
 }
 
-void vertex_info :: vertexMessCallback(void *data,  t_float num, t_float counter)
+void vertex_info :: vertexMessCallback(void *data,  t_float num,
+                                       t_float counter)
 {
   GetMyClass(data)->m_vertNum=(static_cast<int>(num));
   GetMyClass(data)->m_vertCount=(static_cast<int>(counter));

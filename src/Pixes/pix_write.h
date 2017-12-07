@@ -144,10 +144,12 @@ private:
 
   //////////
   // static member functions
-  static void     fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  static void     fileMessCallback(void *data, t_symbol *s, int argc,
+                                   t_atom *argv);
   static void     autoMessCallback(void *data, t_float on);
   static void     bangMessCallback(void *data);
-  static void     sizeMessCallback(void *data, t_float width, t_float height );
+  static void     sizeMessCallback(void *data, t_float width,
+                                   t_float height );
   static void     posMessCallback(void *data, t_float x, t_float y);
 };
 

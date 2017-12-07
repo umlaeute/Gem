@@ -61,7 +61,8 @@ protected:
 #endif
 
 #ifdef __VEC__
-  virtual void    processRGBA_Altivec(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_Altivec(imageStruct &image,
+                                      imageStruct &right);
   virtual void    processYUV_Altivec(imageStruct &image, imageStruct &right);
 #endif
 };

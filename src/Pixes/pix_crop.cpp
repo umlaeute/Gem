@@ -14,7 +14,8 @@
 
 #include "pix_crop.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float,
+                             A_DEFFLOAT, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -24,7 +25,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_crop, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT, t
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_crop :: pix_crop(t_floatarg x, t_floatarg y, t_floatarg w, t_floatarg h) :
+pix_crop :: pix_crop(t_floatarg x, t_floatarg y, t_floatarg w,
+                     t_floatarg h) :
   m_data(0), m_size(0),
   sizeX(0), sizeY(0), sizeC(0),
   offsetX(0), offsetY(0),
@@ -37,10 +39,14 @@ pix_crop :: pix_crop(t_floatarg x, t_floatarg y, t_floatarg w, t_floatarg h) :
   offsetMess((int)x,(int)y);
   dimenMess((int)w,(int)h);
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("dimenX"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("dimenY"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offsetX"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offsetY"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("dimenX"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("dimenY"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("offsetX"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("offsetY"));
 }
 
 /////////////////////////////////////////////////////////
@@ -90,7 +96,8 @@ void pix_crop :: processImage(imageStruct &image)
   int i=0;
   // FIXXXME make upsidedown the default
   while(i<y) {
-    int oldrow=image.upsidedown?(image.ysize-((offY+i)%image.ysize)-1):(offY+i)%image.ysize;
+    int oldrow=image.upsidedown?(image.ysize-((offY+i)%image.ysize)-1):
+               (offY+i)%image.ysize;
     unsigned char *newdata = m_data+(x*i)*csize;
     unsigned char *olddata = image.data+(offX+image.xsize*oldrow)*csize;
     int j=x*csize;
@@ -160,17 +167,23 @@ void pix_crop :: offsetMess(int x, int y)
 /////////////////////////////////////////////////////////
 void pix_crop :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimenMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_crop::dimenMessCallback),
                   gensym("dimen"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offsetMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_crop::offsetMessCallback),
                   gensym("offset"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimXMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_crop::dimXMessCallback),
                   gensym("dimenX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::dimYMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_crop::dimYMessCallback),
                   gensym("dimenY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offXMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_crop::offXMessCallback),
                   gensym("offsetX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_crop::offYMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_crop::offYMessCallback),
                   gensym("offsetY"), A_FLOAT, A_NULL);
 }
 

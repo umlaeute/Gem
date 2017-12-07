@@ -49,7 +49,8 @@ world_light :: world_light(t_floatarg lightNum)
   m_change = 1;
 
   // create the color inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("color"));
 }
 
 ////////////////////////////////////////////////////////
@@ -95,7 +96,8 @@ void world_light :: debugMess(int state)
 // lightColorMess
 //
 ////////////////////////////////////////////////////////
-void world_light :: lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+void world_light :: lightColorMess(GLfloat red, GLfloat green,
+                                   GLfloat blue, GLfloat alpha)
 {
   m_color[0] = red;
   m_color[1] = green;

@@ -52,7 +52,8 @@ GEM_EXTERN int smoothStep(int x, int a, int b)
   float result = temp*temp * (3.f - 2.f*temp);
   return(static_cast<int>(result));
 }
-GEM_EXTERN unsigned char smoothStep(unsigned char x, unsigned char a, unsigned char b)
+GEM_EXTERN unsigned char smoothStep(unsigned char x, unsigned char a,
+                                    unsigned char b)
 {
   if (x < a) {
     return(0);
@@ -101,7 +102,8 @@ GEM_EXTERN float gainFunc(float x, float a)
 // Linear function
 //
 ///////////////////////////////////////////////////////////////////////////////
-GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts, float *pnts)
+GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts,
+                           float *pnts)
 {
   int nspans = npnts - 1;
   if (nspans < 1) {        // illegal
@@ -122,7 +124,8 @@ GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts, float *
     pnts++;     // advance to the next dimension
   }
 }
-GEM_EXTERN void linearFunc(double x, double *ret, int numDimen, int npnts, double *pnts)
+GEM_EXTERN void linearFunc(double x, double *ret, int numDimen, int npnts,
+                           double *pnts)
 {
   int nspans = npnts - 1;
   if (nspans < 1) {        // illegal
@@ -165,7 +168,8 @@ const float CR31 =  1.0f;
 const float CR32 =  0.0f;
 const float CR33 =  0.0f;
 
-GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots, float *knot)
+GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots,
+                           float *knot)
 {
   int nspans = nknots - 4;
   if (nspans < 0) {       // illegal case
@@ -206,7 +210,8 @@ GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots, float 
   }
 }
 
-GEM_EXTERN void splineFunc(double x, double *ret, int numDimen, int nknots, double *knot)
+GEM_EXTERN void splineFunc(double x, double *ret, int numDimen, int nknots,
+                           double *knot)
 {
   int nspans = nknots - 4;
   if (nspans < 0) {       // illegal case

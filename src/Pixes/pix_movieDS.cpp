@@ -40,7 +40,8 @@ pix_movieDS :: pix_movieDS(t_symbol *filename) :
   CoInitialize(NULL);
 
   // Create the base object of a filter graph
-  RetVal      = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+  RetVal      = CoCreateInstance(CLSID_FilterGraph, NULL,
+                                 CLSCTX_INPROC_SERVER,
                                  IID_IGraphBuilder, (void **)&FilterGraph);
 
   if (RetVal != S_OK || NULL == FilterGraph) {
@@ -50,7 +51,8 @@ pix_movieDS :: pix_movieDS(t_symbol *filename) :
   }
 
   // Get the IMediaControl interface for Run, Stop, Pause and keeps control states
-  RetVal  = FilterGraph->QueryInterface(IID_IMediaControl, (void **)&MediaControl);
+  RetVal  = FilterGraph->QueryInterface(IID_IMediaControl,
+                                        (void **)&MediaControl);
 
   if (RetVal != S_OK || NULL == MediaControl) {
     error("Unable to create MediaControl interface %d", RetVal);
@@ -60,7 +62,8 @@ pix_movieDS :: pix_movieDS(t_symbol *filename) :
 
   // Get the IMediaSeeking interface for rewinding video at loop point
   // and set time format to frames
-  RetVal  = FilterGraph->QueryInterface(IID_IMediaSeeking, (void **)&MediaSeeking);
+  RetVal  = FilterGraph->QueryInterface(IID_IMediaSeeking,
+                                        (void **)&MediaSeeking);
 
   if (RetVal != S_OK || NULL == MediaSeeking) {
     error("Unable to create MediaSeeking interface %d", RetVal);
@@ -69,7 +72,8 @@ pix_movieDS :: pix_movieDS(t_symbol *filename) :
   }
 
   // Get the IMediaPosition interface for getting the current position of the clip
-  RetVal  = FilterGraph->QueryInterface(IID_IMediaPosition, (void **)&MediaPosition);
+  RetVal  = FilterGraph->QueryInterface(IID_IMediaPosition,
+                                        (void **)&MediaPosition);
 
   if (RetVal != S_OK || NULL == MediaPosition) {
     error("Unable to create MediaPosition interface %d", RetVal);
@@ -230,7 +234,8 @@ void pix_movieDS::realOpen(char *filename)
   // Convert c-string to Wide string.
   memset(&WideFileName, 0, MAXPDSTRING * 2);
 
-  if (0 == MultiByteToWideChar(CP_ACP, 0, filename, strlen(filename), WideFileName,
+  if (0 == MultiByteToWideChar(CP_ACP, 0, filename, strlen(filename),
+                               WideFileName,
                                MAXPDSTRING)) {
     error("Unable to load %s", filename);
 
@@ -238,7 +243,8 @@ void pix_movieDS::realOpen(char *filename)
   }
 
   // Add a file source filter to the filter graph.
-  RetVal  = FilterGraph->AddSourceFilter(WideFileName, L"SOURCE", &VideoFilter);
+  RetVal  = FilterGraph->AddSourceFilter(WideFileName, L"SOURCE",
+                                         &VideoFilter);
 
   if (RetVal != S_OK || NULL == VideoFilter) {
     error("Unable to render %s", filename);
@@ -270,7 +276,8 @@ void pix_movieDS::realOpen(char *filename)
   // SampleGrabber allows frames to be grabbed from the filter. SetBufferSamples(TRUE)
   // tells the SampleGrabber to buffer the frames. SetOneShot(FALSE) tells the
   // SampleGrabber to continuously grab frames.  has GetCurrentBuffer() method
-  RetVal  = SampleFilter->QueryInterface(IID_ISampleGrabber, (void **)&SampleGrabber);
+  RetVal  = SampleFilter->QueryInterface(IID_ISampleGrabber,
+                                         (void **)&SampleGrabber);
 
   if (RetVal != S_OK || NULL == SampleGrabber) {
     error("Unable to create SampleGrabber interface %d", RetVal);
@@ -286,7 +293,8 @@ void pix_movieDS::realOpen(char *filename)
   MediaType.majortype             = MEDIATYPE_Video;
   MediaType.subtype               = MEDIASUBTYPE_RGB24;
   MediaType.formattype    = GUID_NULL;
-  RetVal                                  = SampleGrabber->SetMediaType(&MediaType);
+  RetVal                                  = SampleGrabber->SetMediaType(
+        &MediaType);
 
   // Set the SampleGrabber to return continuous frames
   RetVal  = SampleGrabber->SetOneShot(FALSE);
@@ -407,7 +415,8 @@ void pix_movieDS::realOpen(char *filename)
   }
 
   // The SampleGrabber will only return video of the the 'FORMAT_VideoInfo' type.
-  if (FORMAT_VideoInfo == MediaType.formattype && MediaType.pbFormat != NULL) {
+  if (FORMAT_VideoInfo == MediaType.formattype
+      && MediaType.pbFormat != NULL) {
     // Format returned is specific to the formattype.
     VIDEOINFOHEADER *VideoInfo      = (VIDEOINFOHEADER *)MediaType.pbFormat;
 
@@ -613,10 +622,14 @@ void pix_movieDS::prepareTexture()
 void pix_movieDS::setUpTextureState()
 {
   glTexParameterf(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_PRIORITY, 0.0);
-  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER,
+                  GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER,
+                  GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S,
+                  GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T,
+                  GL_CLAMP_TO_EDGE);
 }
 
 /////////////////////////////////////////////////////////
@@ -722,18 +735,23 @@ void pix_movieDS::changeImage(int imgNum, int trackNum)
 /////////////////////////////////////////////////////////
 void pix_movieDS::obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieDS,gensym("pix_movieDS"),A_DEFSYM,A_NULL));
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieDS,
+                   gensym("pix_movieDS"),A_DEFSYM,A_NULL));
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDS::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::changeImageCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDS::changeImageCallback),
                   gensym("img_num"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::autoCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDS::autoCallback),
                   gensym("auto"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDS::rateCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDS::rateCallback),
                   gensym("rate"), A_DEFFLOAT, A_NULL);
 }
 
@@ -742,10 +760,12 @@ void pix_movieDS::openMessCallback(void *data, t_symbol *filename)
   GetMyClass(data)->openMess(filename,0);
 }
 
-void pix_movieDS::changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_movieDS::changeImageCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv)
 {
   //  GetMyClass(data)->changeImage((int)imgNum);
-  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
+                                (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_movieDS::autoCallback(void *data, t_float state)
@@ -763,7 +783,8 @@ void pix_movieDS::rectangleCallback(void *data, t_float state)
   GetMyClass(data)->m_rectangle=(int)state;
 }
 
-HRESULT movieGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
+HRESULT movieGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir,
+                    IPin **ppPin)
 {
   IEnumPins  *pEnum;
   IPin       *pPin;
@@ -805,7 +826,8 @@ HRESULT movieGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
   return  E_FAIL;
 }
 
-HRESULT movieConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond)
+HRESULT movieConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst,
+                            IBaseFilter *pSecond)
 {
   IPin    *pOut   = NULL;
   IPin    *pIn    = NULL;

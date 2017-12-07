@@ -28,21 +28,27 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
 
-  const vector unsigned char    *RGB_ptr = reinterpret_cast<const vector unsigned char*>( rgbdata);
-  vector unsigned char  *YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
+  const vector unsigned char    *RGB_ptr =
+    reinterpret_cast<const vector unsigned char*>( rgbdata);
+  vector unsigned char  *YCC_ptr = reinterpret_cast<vector unsigned char*>
+                                   ( pixels);
 
   /* Permutation vector is used to extract the interleaved RGB. */
   vector unsigned char vPerm1 =
-    static_cast<vector unsigned char>( 0,  3,  6,  9, 12, 15, 18, 21, /* R0..R7    */
+    static_cast<vector unsigned char>( 0,  3,  6,  9, 12, 15, 18,
+                                       21, /* R0..R7    */
                                        1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
   vector unsigned char vPerm2 =
-    static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
+    static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20,
+                                       23, /* B0..B7    */
                                        0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
   vector unsigned char vPerm3 =
-    static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
+    static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26,
+                                       29, /* R8..R15   */
                                        9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
   vector unsigned char vPerm4 =
-    static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
+    static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28,
+                                      31, /* B8..B15   */
                                       0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
@@ -79,12 +85,18 @@ void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
     tc3 = vec_perm( RGB_ptr[i+1], RGB_ptr[i+2], vPerm4 ); /* B8..B15         */
 
     /* Unpack to 16 bit arithmetic for conversion. */
-    tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  // tr0 = R0 .. R7
-    tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  // tg0 = G0 .. G7
-    tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  // tb0 = B0 .. B7
-    tr1 = static_cast<vector signed short>(vec_mergeh( z0, tc2 ));  // tr0 = R8 .. R15
-    tg1 = static_cast<vector signed short>(vec_mergel( z0, tc2 ));  // tg0 = G8 .. G15
-    tb1 = static_cast<vector signed short>(vec_mergeh( z0, tc3 ));  // tb0 = B8 .. B15
+    tr0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc0 ));  // tr0 = R0 .. R7
+    tg0 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc0 ));  // tg0 = G0 .. G7
+    tb0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc1 ));  // tb0 = B0 .. B7
+    tr1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc2 ));  // tr0 = R8 .. R15
+    tg1 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc2 ));  // tg0 = G8 .. G15
+    tb1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc3 ));  // tb0 = B8 .. B15
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -139,21 +151,27 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
 
-  const vector unsigned char    *RGBA_ptr = reinterpret_cast<const vector unsigned char*>( rgbadata);
-  vector unsigned char  *YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
+  const vector unsigned char    *RGBA_ptr =
+    reinterpret_cast<const vector unsigned char*>( rgbadata);
+  vector unsigned char  *YCC_ptr = reinterpret_cast<vector unsigned char*>
+                                   ( pixels);
 
   /* Permutation vector is used to extract the interleaved RGBA. */
   vector unsigned char vPerm1 =
-    static_cast<vector unsigned char>( 0,  4,  8, 12, 16, 20, 24, 28, /* R0..R7    */
+    static_cast<vector unsigned char>( 0,  4,  8, 12, 16, 20, 24,
+                                       28, /* R0..R7    */
                                        1,  5,  9, 13, 17, 21, 25, 29  /* G0..G7    */);
   vector unsigned char vPerm2 =
-    static_cast<vector unsigned char>( 2,  6, 10, 14, 18, 22, 26, 30, /* B0..B7    */
+    static_cast<vector unsigned char>( 2,  6, 10, 14, 18, 22, 26,
+                                       30, /* B0..B7    */
                                        0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
   vector unsigned char vPerm3 =
-    static_cast<vector unsigned char>( 8, 12, 16, 20, 24, 28, 32, 36, /* R8..R15   */
+    static_cast<vector unsigned char>( 8, 12, 16, 20, 24, 28, 32,
+                                       36, /* R8..R15   */
                                        9, 13, 17, 21, 25, 29, 33, 37  /* G8..G15   */);
   vector unsigned char vPerm4 =
-    static_cast<vector unsigned char>(10, 14, 18, 22, 26, 30, 34, 38, /* B8..B15   */
+    static_cast<vector unsigned char>(10, 14, 18, 22, 26, 30, 34,
+                                      38, /* B8..B15   */
                                       0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
@@ -184,18 +202,28 @@ void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
 
     /* Load the 3 RGB input vectors and separate into red,
        green and blue from the interleaved format. */
-    tc0 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1], vPerm1 );   /* R0..R7  G0..G7  */
-    tc1 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1], vPerm2 );   /* B0..B7          */
-    tc2 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm3 ); /* R8..R15 G8..G15 */
-    tc3 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2], vPerm4 ); /* B8..B15         */
+    tc0 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1],
+                    vPerm1 );   /* R0..R7  G0..G7  */
+    tc1 = vec_perm( RGBA_ptr[i], RGBA_ptr[i+1],
+                    vPerm2 );   /* B0..B7          */
+    tc2 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2],
+                    vPerm3 ); /* R8..R15 G8..G15 */
+    tc3 = vec_perm( RGBA_ptr[i+1], RGBA_ptr[i+2],
+                    vPerm4 ); /* B8..B15         */
 
     /* Unpack to 16 bit arithmetic for conversion. */
-    tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  /* tr0 = R0 .. R7  */
-    tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  /* tg0 = G0 .. G7  */
-    tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  /* tb0 = B0 .. B7  */
-    tr1 = static_cast<vector signed short>(vec_mergeh( z0, tc2 ));  /* tr0 = R8 .. R15 */
-    tg1 = static_cast<vector signed short>(vec_mergel( z0, tc2 ));  /* tg0 = G8 .. G15 */
-    tb1 = static_cast<vector signed short>(vec_mergeh( z0, tc3 ));  /* tb0 = B8 .. B15 */
+    tr0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc0 ));  /* tr0 = R0 .. R7  */
+    tg0 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc0 ));  /* tg0 = G0 .. G7  */
+    tb0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc1 ));  /* tb0 = B0 .. B7  */
+    tr1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc2 ));  /* tr0 = R8 .. R15 */
+    tg1 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc2 ));  /* tg0 = G8 .. G15 */
+    tb1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc3 ));  /* tb0 = B8 .. B15 */
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -251,21 +279,27 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
   vector signed short t0, t1, t2, t3, t4, t5;
   unsigned int i;
 
-  const vector unsigned char    *BGR_ptr = reinterpret_cast<const vector unsigned char*>( bgrdata);
-  vector unsigned char  *YCC_ptr = reinterpret_cast<vector unsigned char*>( pixels);
+  const vector unsigned char    *BGR_ptr =
+    reinterpret_cast<const vector unsigned char*>( bgrdata);
+  vector unsigned char  *YCC_ptr = reinterpret_cast<vector unsigned char*>
+                                   ( pixels);
 
   /* Permutation vector is used to extract the interleaved RGB. */
   vector unsigned char vPerm1 =
-    static_cast<vector unsigned char>( 0,  3,  6,  9, 12, 15, 18, 21, /* R0..R7    */
+    static_cast<vector unsigned char>( 0,  3,  6,  9, 12, 15, 18,
+                                       21, /* R0..R7    */
                                        1,  4,  7, 10, 13, 16, 19, 22  /* G0..G7    */);
   vector unsigned char vPerm2 =
-    static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20, 23, /* B0..B7    */
+    static_cast<vector unsigned char>( 2,  5,  8, 11, 14, 17, 20,
+                                       23, /* B0..B7    */
                                        0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
   vector unsigned char vPerm3 =
-    static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26, 29, /* R8..R15   */
+    static_cast<vector unsigned char>( 8, 11, 14, 17, 20, 23, 26,
+                                       29, /* R8..R15   */
                                        9, 12, 15, 18, 21, 24, 27, 30  /* G8..G15   */);
   vector unsigned char vPerm4 =
-    static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28, 31, /* B8..B15   */
+    static_cast<vector unsigned char>(10, 13, 16, 19, 22, 25, 28,
+                                      31, /* B8..B15   */
                                       0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
@@ -302,12 +336,18 @@ void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
     tc3 = vec_perm( BGR_ptr[i+1], BGR_ptr[i+2], vPerm4 ); /* B8..B15         */
 
     /* Unpack to 16 bit arithmetic for conversion. */
-    tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  /* tr0 = R0 .. R7  */
-    tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  /* tg0 = G0 .. G7  */
-    tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  /* tb0 = B0 .. B7  */
-    tr1 = static_cast<vector signed short>(vec_mergeh( z0, tc2 ));  /* tr0 = R8 .. R15 */
-    tg1 = static_cast<vector signed short>(vec_mergel( z0, tc2 ));  /* tg0 = G8 .. G15 */
-    tb1 = static_cast<vector signed short>(vec_mergeh( z0, tc3 ));  /* tb0 = B8 .. B15 */
+    tr0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc0 ));  /* tr0 = R0 .. R7  */
+    tg0 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc0 ));  /* tg0 = G0 .. G7  */
+    tb0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc1 ));  /* tb0 = B0 .. B7  */
+    tr1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc2 ));  /* tr0 = R8 .. R15 */
+    tg1 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc2 ));  /* tg0 = G8 .. G15 */
+    tb1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc3 ));  /* tb0 = B8 .. B15 */
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -361,18 +401,22 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
   vector unsigned char z0, tc0, tc1, tc2, tc3;
   vector signed short tr0, tr1, tg0, tg1, tb0, tb1;
   vector signed short t0, t1, t2, t3, t4, t5;
-  vector signed short u1, u2, uAvg, v1, v2, vAvg, out1, out2, out3, out4, uv1, uv2;
+  vector signed short u1, u2, uAvg, v1, v2, vAvg, out1, out2, out3, out4,
+         uv1, uv2;
   unsigned int i;
 
-  const vector unsigned char    *BGRA_ptr = reinterpret_cast<const vector unsigned char*>( bgradata);
-  vector unsigned char  *UYVY_ptr = reinterpret_cast<vector unsigned char*>( pixels);
+  const vector unsigned char    *BGRA_ptr =
+    reinterpret_cast<const vector unsigned char*>( bgradata);
+  vector unsigned char  *UYVY_ptr = reinterpret_cast<vector unsigned char*>
+                                    ( pixels);
 
   /* Permutation vector is used to extract the interleaved BGRA. */
   vector unsigned char vPerm1 =
     static_cast<vector unsigned char>( 3,  7, 11, 15, 19, 23, 27, 31, // B0..B7
                                        2,  6, 10, 14, 18, 22, 26, 30  /* G0..G7    */);
   vector unsigned char vPerm2 =
-    static_cast<vector unsigned char>( 1,  5,  9, 13, 17, 21, 25, 29, /* R0..R7    */
+    static_cast<vector unsigned char>( 1,  5,  9, 13, 17, 21, 25,
+                                       29, /* R0..R7    */
                                        0,  0,  0,  0,  0,  0,  0,  0  /* don't care */);
 
   /* Load the equation constants. */
@@ -426,12 +470,18 @@ void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
     tc3 = vec_perm( *vec3, *vec4, vPerm2 ); // R8..R15
 
     /* Unpack to 16 bit arithmetic for conversion. */
-    tr0 = static_cast<vector signed short>(vec_mergeh( z0, tc0 ));  /* tr0 = R0 .. R7  */
-    tg0 = static_cast<vector signed short>(vec_mergel( z0, tc0 ));  /* tg0 = G0 .. G7  */
-    tb0 = static_cast<vector signed short>(vec_mergeh( z0, tc1 ));  /* tb0 = B0 .. B7  */
-    tr1 = static_cast<vector signed short>(vec_mergeh( z0, tc2 ));  /* tr0 = R8 .. R15 */
-    tg1 = static_cast<vector signed short>(vec_mergel( z0, tc2 ));  /* tg0 = G8 .. G15 */
-    tb1 = static_cast<vector signed short>(vec_mergeh( z0, tc3 ));  /* tb0 = B8 .. B15 */
+    tr0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc0 ));  /* tr0 = R0 .. R7  */
+    tg0 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc0 ));  /* tg0 = G0 .. G7  */
+    tb0 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc1 ));  /* tb0 = B0 .. B7  */
+    tr1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc2 ));  /* tr0 = R8 .. R15 */
+    tg1 = static_cast<vector signed short>(vec_mergel( z0,
+                                           tc2 ));  /* tg0 = G8 .. G15 */
+    tb1 = static_cast<vector signed short>(vec_mergeh( z0,
+                                           tc3 ));  /* tb0 = B8 .. B15 */
 
     /* Convert the first three input vectors.  Note that
        only the top 17 bits of the 32 bit product are
@@ -496,17 +546,27 @@ void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
 {
   // from geowar@apple.com, 3/15/2005
   // #1. Don't use the pointers. Use vec_ld with an index that you increment (by 16) instead.
-  vector unsigned char *pixels1=reinterpret_cast<vector unsigned char *>(data);
-  vector unsigned char *pixels2=reinterpret_cast<vector unsigned char *>(data+(xsize*2));
-  const vector unsigned short *py1 = reinterpret_cast<const vector unsigned short *>(Y);
-  const vector unsigned short *py2 = reinterpret_cast<const vector unsigned short *>(Y + xsize );
-  const vector unsigned short *pu = reinterpret_cast<const vector unsigned short *>(U);
-  const vector unsigned short *pv = reinterpret_cast<const vector unsigned short *>(V);
-  vector unsigned short uvAdd = static_cast<vector unsigned short>( 128, 128, 128, 128,
+  vector unsigned char *pixels1=reinterpret_cast<vector unsigned char *>
+                                (data);
+  vector unsigned char *pixels2=reinterpret_cast<vector unsigned char *>
+                                (data+(xsize*2));
+  const vector unsigned short *py1 =
+    reinterpret_cast<const vector unsigned short *>(Y);
+  const vector unsigned short *py2 =
+    reinterpret_cast<const vector unsigned short *>(Y + xsize );
+  const vector unsigned short *pu =
+    reinterpret_cast<const vector unsigned short *>(U);
+  const vector unsigned short *pv =
+    reinterpret_cast<const vector unsigned short *>(V);
+  vector unsigned short uvAdd = static_cast<vector unsigned short>( 128, 128,
+                                128, 128,
                                 128, 128, 128, 128 );
-  vector unsigned short yShift = static_cast<vector unsigned short>( 7, 7, 7, 7, 7, 7, 7, 7 );
-  vector unsigned short uvShift = static_cast<vector unsigned short>( 8, 8, 8, 8, 8, 8, 8, 8 );
-  vector unsigned short tempU, tempV, doneU, doneV, tempY1, tempY2, tempY3, tempY4,
+  vector unsigned short yShift = static_cast<vector unsigned short>( 7, 7, 7,
+                                 7, 7, 7, 7, 7 );
+  vector unsigned short uvShift = static_cast<vector unsigned short>( 8, 8,
+                                  8, 8, 8, 8, 8, 8 );
+  vector unsigned short tempU, tempV, doneU, doneV, tempY1, tempY2, tempY3,
+         tempY4,
          uv1, uv2, out1, out2, out3, out4, out5, out6, out7, out8;
   vector unsigned char Perm1 =
     static_cast<vector unsigned char>( 0, 1, 16, 17, 2, 3, 18, 19,
@@ -578,8 +638,10 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
                             const unsigned char *gem_image, int xsize, int ysize)
 {
   // UYVY UYVY UYVY UYVY
-  const vector unsigned char *pixels1=reinterpret_cast<const vector unsigned char *>(gem_image);
-  const vector unsigned char *pixels2=reinterpret_cast<const vector unsigned char *>(gem_image+(xsize*2));
+  const vector unsigned char *pixels1=
+    reinterpret_cast<const vector unsigned char *>(gem_image);
+  const vector unsigned char *pixels2=
+    reinterpret_cast<const vector unsigned char *>(gem_image+(xsize*2));
   // PDP packet to be filled:
   // first Y plane
   vector signed short *py1 = reinterpret_cast<vector signed short *>(pY);
@@ -589,23 +651,30 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
   vector signed short *pCr = reinterpret_cast<vector signed short *>(pU);
   // V plane
   vector signed short *pCb = reinterpret_cast<vector signed short *>(pV);
-  vector signed short uvSub = static_cast<vector signed short>( 128, 128, 128, 128,
+  vector signed short uvSub = static_cast<vector signed short>( 128, 128,
+                              128, 128,
                               128, 128, 128, 128 );
-  vector unsigned short yShift = static_cast<vector unsigned short>( 7, 7, 7, 7, 7, 7, 7, 7 );
-  vector unsigned short uvShift = static_cast<vector unsigned short>( 8, 8, 8, 8, 8, 8, 8, 8 );
+  vector unsigned short yShift = static_cast<vector unsigned short>( 7, 7, 7,
+                                 7, 7, 7, 7, 7 );
+  vector unsigned short uvShift = static_cast<vector unsigned short>( 8, 8,
+                                  8, 8, 8, 8, 8, 8 );
 
   vector signed short tempY1, tempY2, tempY3, tempY4,
          tempUV1, tempUV2, tempUV3, tempUV4, tempUV5, tempUV6;
 
-  vector unsigned char uvPerm = static_cast<vector unsigned char>( 16, 0, 17, 4, 18,  8, 19, 12,   // u0..u3
+  vector unsigned char uvPerm = static_cast<vector unsigned char>( 16, 0, 17,
+                                4, 18,  8, 19, 12,   // u0..u3
                                 20, 2, 21, 6, 22, 10, 23, 14 ); // v0..v3
 
-  vector unsigned char uPerm = static_cast<vector unsigned char>( 0, 1, 2, 3, 4, 5, 6, 7,
+  vector unsigned char uPerm = static_cast<vector unsigned char>( 0, 1, 2, 3,
+                               4, 5, 6, 7,
                                16,17,18,19,20,21,22,23);
-  vector unsigned char vPerm = static_cast<vector unsigned char>( 8, 9, 10,11,12,13,14,15,
+  vector unsigned char vPerm = static_cast<vector unsigned char>( 8, 9, 10,
+                               11,12,13,14,15,
                                24,25,26,27,28,29,30,31);
 
-  vector unsigned char yPerm = static_cast<vector unsigned char>( 16, 1, 17,  3, 18,  5, 19,  7, // y0..y3
+  vector unsigned char yPerm = static_cast<vector unsigned char>( 16, 1, 17,
+                               3, 18,  5, 19,  7, // y0..y3
                                20, 9, 21, 11, 23, 13, 25, 15);// y4..y7
   vector unsigned char zeroVec = static_cast<vector unsigned char>(0);
 
@@ -628,15 +697,21 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
       vec_dst( );
 # endif
 #endif
-      tempUV1 = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, uvPerm));
-      tempY1  = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, yPerm));
-      tempY2  = static_cast<vector signed short>(vec_perm( *pixels2, zeroVec, yPerm));
+      tempUV1 = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec,
+                uvPerm));
+      tempY1  = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec,
+                yPerm));
+      tempY2  = static_cast<vector signed short>(vec_perm( *pixels2, zeroVec,
+                yPerm));
       pixels1++;
       pixels2++;
 
-      tempUV2 = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, uvPerm));
-      tempY3  = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec, yPerm));
-      tempY4  = static_cast<vector signed short>(vec_perm( *pixels2, zeroVec, yPerm));
+      tempUV2 = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec,
+                uvPerm));
+      tempY3  = static_cast<vector signed short>(vec_perm( *pixels1, zeroVec,
+                yPerm));
+      tempY4  = static_cast<vector signed short>(vec_perm( *pixels2, zeroVec,
+                yPerm));
       pixels1++;
       pixels2++;
 
@@ -669,8 +744,10 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
 void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
                             size_t pixelnum, unsigned char *output)
 {
-  const vector unsigned char *UYVY_ptr=reinterpret_cast<const vector unsigned char *>(yuvdata);
-  vector unsigned char *BGRA_ptr=reinterpret_cast<vector unsigned char *>(output);
+  const vector unsigned char *UYVY_ptr=
+    reinterpret_cast<const vector unsigned char *>(yuvdata);
+  vector unsigned char *BGRA_ptr=reinterpret_cast<vector unsigned char *>
+                                 (output);
 
   vector unsigned int vShift;
   vector signed short tempU, tempV, tempY, tempUV, out1, out2, out3, out4;
@@ -730,7 +807,8 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
   v16    = vec_splat( vConst, 3 ); //  16
   v128   = vec_splat( vConst, 4 ); // 128
 
-  for ( unsigned int i = 0; i < (pixelnum/sizeof(vector unsigned char)); i++ ) {
+  for ( unsigned int i = 0; i < (pixelnum/sizeof(vector unsigned char));
+        i++ ) {
 
     // Load UYUV input vector
     const vector unsigned char *vec1 = UYVY_ptr++;
@@ -739,8 +817,10 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
     hiImage = static_cast<vector signed short>(vec_mergeh( zero, *vec1 ));
     loImage = static_cast<vector signed short>(vec_mergel( zero, *vec1 ));
 
-    tempUV = static_cast<vector signed short>(vec_perm( hiImage, loImage, uvPerm ));
-    tempY  = static_cast<vector signed short>(vec_perm( hiImage, loImage, vPermY ));
+    tempUV = static_cast<vector signed short>(vec_perm( hiImage, loImage,
+             uvPerm ));
+    tempY  = static_cast<vector signed short>(vec_perm( hiImage, loImage,
+             vPermY ));
 
     // subtract UV_OFFSET from UV's  (should this be saturated?)
     tempUV = static_cast<vector signed short>(vec_sub( tempUV, v128 ));

@@ -75,7 +75,8 @@ public:
 
   const std::string name;
 
-  PIMPL(const std::string&name_, unsigned int locks_, unsigned int timeout_) :
+  PIMPL(const std::string&name_, unsigned int locks_,
+        unsigned int timeout_) :
     threading(locks_>0),
 #ifndef HAVE_PTW32_HANDLE_T
     thread(0),
@@ -347,7 +348,8 @@ bool videoBase :: start()
 }
 bool videoBase :: stop()
 {
-  debugPost("stop(%d): %d -> %d", m_pimpl->shouldrun, m_capturing, m_haveVideo);
+  debugPost("stop(%d): %d -> %d", m_pimpl->shouldrun, m_capturing,
+            m_haveVideo);
   bool running=m_pimpl->shouldrun;
   m_pimpl->shouldrun=false;
   if(!m_haveVideo) {

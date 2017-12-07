@@ -95,7 +95,8 @@ private:
   static void openCallback(void *data, t_symbol*s);
 
 public:
-  static bool loader(const t_canvas *canvas, const std::string&classname, const std::string&path);
+  static bool loader(const t_canvas *canvas, const std::string&classname,
+                     const std::string&path);
 };
 
 #endif  // for header file

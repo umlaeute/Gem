@@ -26,7 +26,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexubv, t_floatarg, A_DEFFLOAT);
 GEMglIndexubv :: GEMglIndexubv  (t_floatarg arg0)
 {
   cMess(arg0);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -70,7 +71,9 @@ void GEMglIndexubv :: cMess (t_float arg0)      // FUN
 
 void GEMglIndexubv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIndexubv::cMessCallback),          gensym("c"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglIndexubv::cMessCallback),
+                  gensym("c"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglIndexubv :: cMessCallback (void* data, t_float arg0)

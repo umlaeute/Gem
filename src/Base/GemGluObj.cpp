@@ -25,7 +25,8 @@
 // Constructor
 //
 /////////////////////////////////////////////////////////
-GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
+GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices,
+                       t_floatarg stacks)
   : GemShape(size),
     m_numSlices((int)slices),m_numStacks((int)stacks),
     m_sliceInlet(NULL)
@@ -46,7 +47,8 @@ GemGluObj :: GemGluObj(t_floatarg size, t_floatarg slices, t_floatarg stacks)
   }
 
   // the number of slices
-  m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numslices"));
+  m_sliceInlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                           gensym("numslices"));
 }
 
 /////////////////////////////////////////////////////////
@@ -82,10 +84,12 @@ void GemGluObj :: numSlicesMess(int numSlices, int numStacks)
 /////////////////////////////////////////////////////////
 void GemGluObj :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GemGluObj::numSlicesMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GemGluObj::numSlicesMessCallback),
                   gensym("numslices"), A_GIMME, A_NULL);
 }
-void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc,
+                                        t_atom*argv)
 {
   switch(argc) {
   case 1:
@@ -95,6 +99,7 @@ void GemGluObj :: numSlicesMessCallback(void *data, t_symbol*, int argc, t_atom*
     GetMyClass(data)->numSlicesMess(atom_getint(argv), atom_getint(argv+1));
     break;
   default:
-    GetMyClass(data)->error("only 1 or 2 arguments for \"slices [stacks]\" allowed!");
+    GetMyClass(
+      data)->error("only 1 or 2 arguments for \"slices [stacks]\" allowed!");
   }
 }

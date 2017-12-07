@@ -112,7 +112,8 @@ void pix_filmDarwin :: realOpen(char *filename)
   } else {
     UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     err = ::FSPathMakeRef(filename8, &ref, NULL);
-    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec,
+                             NULL);
 
     if (err) {
       error("unable to find file: %s", filename);
@@ -142,7 +143,8 @@ void pix_filmDarwin :: realOpen(char *filename)
   m_curFrame = -1;
   m_numTracks = static_cast<int>(GetMovieTrackCount(m_movie));
 
-  movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,movieTrackMediaType);  //get first video track
+  movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,
+                                    movieTrackMediaType);  //get first video track
 
   trackMedia = GetTrackMedia(movieTrack);
 
@@ -150,7 +152,8 @@ void pix_filmDarwin :: realOpen(char *filename)
 
   m_numFrames = sampleCount;
 
-  audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
+  audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,
+                                    movieTrackMediaType);
 
   SetTrackEnabled(audioTrack, FALSE);
 
@@ -178,7 +181,8 @@ void pix_filmDarwin :: realOpen(char *filename)
 
   desc = reinterpret_cast<ImageDescriptionHandle>(NewHandle(0));
 
-  GetMediaSampleDescription(trackMedia,1,reinterpret_cast<SampleDescriptionHandle>(desc));
+  GetMediaSampleDescription(trackMedia,1,
+                            reinterpret_cast<SampleDescriptionHandle>(desc));
 # ifdef kDVCPROHD720pCodecType
   //DVCPRO720p
   if ((*desc)->cType == kDVCPROHD720pCodecType) {
@@ -188,7 +192,8 @@ void pix_filmDarwin :: realOpen(char *filename)
     m_xsize = 960;
     SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
     SetMovieBox(m_movie, &m_srcRect);
-    ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+    ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),
+                FloatToFixed(1.));
 
     SetMovieMatrix(m_movie,&matrix);
   }
@@ -203,7 +208,8 @@ void pix_filmDarwin :: realOpen(char *filename)
     m_xsize = 1280;
     SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
 
-    ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+    ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),
+                FloatToFixed(1.),FloatToFixed(1.));
     SetMovieBox(m_movie, &m_srcRect);
     SetMovieMatrix(m_movie,&matrix);
 
@@ -258,7 +264,8 @@ void pix_filmDarwin :: realOpen(char *filename)
     // prepareTexture();
     m_rowBytes = m_xsize * 2;
     if (m_hiquality) {
-      SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
+      SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields,
+                        hintsHighQuality | hintsDeinterlaceFields);
     }
     err = QTNewGWorldFromPtr(   &m_srcGWorld,
                                 k422YpCbCr8CodecType,
@@ -293,7 +300,8 @@ void pix_filmDarwin :: realOpen(char *filename)
   }
 
   SetMovieVolume(m_movie,FloatToFixed(m_volume));
-  ::MoviesTask(m_movie, 0);     // *** this does the actual drawing into the GWorld ***
+  ::MoviesTask(m_movie,
+               0);     // *** this does the actual drawing into the GWorld ***
   curTime = GetMovieTime(m_movie,NULL);
   prevTime = 0;
   newImage = 1;
@@ -353,7 +361,8 @@ void pix_filmDarwin :: getFrame()
       }
 
       m_Task = 1;
-      MoviesTask(m_movie, 0);   // *** this does the actual drawing into the GWorld ***
+      MoviesTask(m_movie,
+                 0);   // *** this does the actual drawing into the GWorld ***
       curTime = GetMovieTime(m_movie,NULL);
 
       //check to see if the current position is past our next frame
@@ -397,7 +406,8 @@ void pix_filmDarwin :: getFrame()
       } else {
 
         m_Task = 1;
-        MoviesTask(m_movie, 0); // *** this does the actual drawing into the GWorld ***
+        MoviesTask(m_movie,
+                   0); // *** this does the actual drawing into the GWorld ***
         curTime = GetMovieTime(m_movie,NULL);
 
         if (prevTime >= curTime) {
@@ -420,7 +430,8 @@ void pix_filmDarwin :: getFrame()
     }
     if (m_newFilm) {
       newImage = 1;
-      MoviesTask(m_movie, 0); // *** this does the actual drawing into the GWorld ***
+      MoviesTask(m_movie,
+                 0); // *** this does the actual drawing into the GWorld ***
       // curTime = GetMovieTime(m_movie,NULL);
     }
 
@@ -436,7 +447,8 @@ void pix_filmDarwin :: getFrame()
     } else {
 
       m_movieTime = m_reqFrame * duration;
-      m_movieTime = static_cast<long>(static_cast<double>(m_reqFrame) * durationf);
+      m_movieTime = static_cast<long>(static_cast<double>(m_reqFrame) *
+                                      durationf);
 
       m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
       ::GetMovieNextInterestingTime(  m_movie,
@@ -515,7 +527,8 @@ void pix_filmDarwin :: doDebug()
 {
   post("---------- pix_filmDarwin doDebug start----------");
   post("m_numTracks = %d",m_numTracks);
-  post("Movie duration = %d timescale = %d timebase = %d", movieDur, movieScale, reinterpret_cast<long>(GetMovieTimeBase(m_movie)));
+  post("Movie duration = %d timescale = %d timebase = %d", movieDur,
+       movieScale, reinterpret_cast<long>(GetMovieTimeBase(m_movie)));
   post("rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
   post("rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
   post("movie size x:%d y:%d", m_xsize, m_ysize);
@@ -524,7 +537,8 @@ void pix_filmDarwin :: doDebug()
   } else {
     post("color space YUV");
   }
-  post("Preferred rate fixed: %d int: %d float %f", playRate, Fix2Long(playRate),static_cast<float>(Fix2X(playRate)));
+  post("Preferred rate fixed: %d int: %d float %f", playRate,
+       Fix2Long(playRate),static_cast<float>(Fix2X(playRate)));
 
   post("---------- pix_filmDarwin doDebug end----------");
 }
@@ -535,20 +549,27 @@ void pix_filmDarwin :: doDebug()
 /////////////////////////////////////////////////////////
 void pix_filmDarwin :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_filmDarwin), gensym("pix_film"), A_DEFSYM, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_filmDarwin),
+                   gensym("pix_film"), A_DEFSYM, A_NULL);
   pix_filmOS::real_obj_setupCallback(classPtr);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmDarwin::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::ramCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmDarwin::ramCallback),
                   gensym("ram"),  A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::hiqualityCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmDarwin::hiqualityCallback),
                   gensym("hiquality"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::rateCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmDarwin::rateCallback),
                   gensym("rate"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::debugCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmDarwin::debugCallback),
                   gensym("debug"),  A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmDarwin::volumeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmDarwin::volumeCallback),
                   gensym("volume"), A_DEFFLOAT, A_NULL);
 
 }

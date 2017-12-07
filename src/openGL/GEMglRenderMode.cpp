@@ -34,7 +34,8 @@ GEMglRenderMode :: GEMglRenderMode      (int argc, t_atom*argv) :
     throw(GemException("invalid number of arguments"));
   }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("mode"));
   m_outlet=outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
@@ -71,10 +72,13 @@ void GEMglRenderMode :: modeMess (t_atom arg)   // FUN
 
 void GEMglRenderMode :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRenderMode::modeMessCallback), gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglRenderMode::modeMessCallback),
+                  gensym("mode"), A_GIMME, A_NULL);
 }
 
-void GEMglRenderMode :: modeMessCallback (void* data, t_symbol*s, int argc, t_atom*argv)
+void GEMglRenderMode :: modeMessCallback (void* data, t_symbol*s, int argc,
+    t_atom*argv)
 {
   if(1==argc) {
     GetMyClass(data)->modeMess (argv[0]);

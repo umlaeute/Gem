@@ -17,7 +17,8 @@
 #include "part_velcone.h"
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velcone, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velcone, t_floatarg, A_DEFFLOAT,
+                             t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,7 +28,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(part_velcone, t_floatarg, A_DEFFLOAT, t_floatarg, A
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_velcone :: part_velcone(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos, t_floatarg rad)
+part_velcone :: part_velcone(t_floatarg xpos, t_floatarg ypos,
+                             t_floatarg zpos, t_floatarg rad)
   : m_radius(rad)
 {
   error("this is obsolete, use [part_velocity cone <x> <y> <z> <r>] instead");
@@ -35,8 +37,10 @@ part_velcone :: part_velcone(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos, 
   m_pos[1] = ypos;
   m_pos[2] = zpos;
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("vel"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vector"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("vel"));
 }
 
 /////////////////////////////////////////////////////////

@@ -404,7 +404,8 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    verbose(1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
+    verbose(1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(),
+            props.type(keys[i]));
   }
 #endif
 
@@ -492,7 +493,8 @@ bool modelASSIMP2 :: compile(void)
   m_texcoords.clear();
   m_colors.clear();
 
-  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
+  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale),
+                                  aiQuaterniont<float>(), m_offset);
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
 

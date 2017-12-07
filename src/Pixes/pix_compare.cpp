@@ -35,15 +35,18 @@ pix_compare :: ~pix_compare()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
+void pix_compare :: processRGBA_RGBA(imageStruct &image,
+                                     imageStruct &right)
 {
   long src,h,w;
   src =0;
   if (m_direction) {
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize; w++) {
-        if ((90*image.data[src+chRed]+115*image.data[src+chGreen]+51*image.data[src+chBlue]) <
-            (90*right.data[src+chRed]+115*right.data[src+chGreen]+51*right.data[src+chBlue])) {
+        if ((90*image.data[src+chRed]+115*image.data[src+chGreen]+51*image.data[src
+             +chBlue]) <
+            (90*right.data[src+chRed]+115*right.data[src+chGreen]+51*right.data[src
+                +chBlue])) {
           image.data[src+chRed] = right.data[src+chRed];
           image.data[src+chBlue] = right.data[src+chBlue];
           image.data[src+chGreen] = right.data[src+chGreen];
@@ -54,8 +57,10 @@ void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
   } else {
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize; w++) {
-        if ((90*image.data[src+chRed]+115*image.data[src+chGreen]+51*image.data[src+chBlue]) >
-            (90*right.data[src+chRed]+115*right.data[src+chGreen]+51*right.data[src+chBlue])) {
+        if ((90*image.data[src+chRed]+115*image.data[src+chGreen]+51*image.data[src
+             +chBlue]) >
+            (90*right.data[src+chRed]+115*right.data[src+chGreen]+51*right.data[src
+                +chBlue])) {
           image.data[src+chRed] = right.data[src+chRed];
           image.data[src+chBlue] = right.data[src+chBlue];
           image.data[src+chGreen] = right.data[src+chGreen];
@@ -70,7 +75,8 @@ void pix_compare :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_compare :: processGray_Gray(imageStruct &image, imageStruct &right)
+void pix_compare :: processGray_Gray(imageStruct &image,
+                                     imageStruct &right)
 {
   long src,h,w;
   src =0;
@@ -108,7 +114,8 @@ void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
   if (m_direction) {
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        if ((image.data[src+1] < right.data[src+1])&&(image.data[src+3] < right.data[src+3])) {
+        if ((image.data[src+1] < right.data[src+1])
+            &&(image.data[src+3] < right.data[src+3])) {
           image.data[src] = right.data[src];
           image.data[src+1] = right.data[src+1];
           image.data[src+2] = right.data[src+2];
@@ -120,7 +127,8 @@ void pix_compare :: processYUV_YUV(imageStruct &image, imageStruct &right)
   } else {
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        if ((image.data[src+1] > right.data[src+1])&&(image.data[src+3] > right.data[src+3])) {
+        if ((image.data[src+1] > right.data[src+1])
+            &&(image.data[src+3] > right.data[src+3])) {
           image.data[src] = right.data[src];
           image.data[src+1] = right.data[src+1];
           image.data[src+2] = right.data[src+2];
@@ -223,7 +231,8 @@ void pix_compare :: processYUV_MMX(imageStruct &image, imageStruct &right)
 //
 /////////////////////////////////////////////////////////
 #ifdef __VEC__
-void pix_compare :: processYUV_Altivec(imageStruct &image, imageStruct &right)
+void pix_compare :: processYUV_Altivec(imageStruct &image,
+                                       imageStruct &right)
 {
   register int h,w,i,j,width;
 
@@ -237,17 +246,20 @@ void pix_compare :: processYUV_Altivec(imageStruct &image, imageStruct &right)
     return;
   }
 
-  register vector unsigned short      UVres1, Yres1, UVres2, Yres2;//interleave;
+  register vector unsigned short      UVres1, Yres1, UVres2,
+           Yres2;//interleave;
   register vector unsigned short      hiImage, loImage;
   register vector bool short          Ymask1;
   register vector unsigned char       one = vec_splat_u8(1);
 
   vector unsigned char        *inData = (vector unsigned char*) image.data;
-  vector unsigned char        *rightData = (vector unsigned char*) right.data;
+  vector unsigned char        *rightData = (vector unsigned char*)
+      right.data;
 
 #ifndef PPC970
   //setup the cache prefetch -- A MUST!!!
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
 #endif
@@ -340,7 +352,8 @@ void pix_compare :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 /////////////////////////////////////////////////////////
 void pix_compare :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_compare::directionCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_compare::directionCallback),
                   gensym("direction"), A_DEFFLOAT, A_NULL);
 }
 

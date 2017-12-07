@@ -22,7 +22,8 @@
 #include "Gem/State.h"
 #include "string.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS(cuboid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT );
+CPPEXTERN_NEW_WITH_THREE_ARGS(cuboid, t_floatarg, A_DEFFLOAT, t_floatarg,
+                              A_DEFFLOAT, t_floatarg, A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //
@@ -42,8 +43,10 @@ cuboid :: cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez)
     m_sizez = 0.f;
   }
 
-  m_inletY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
-  m_inletZ = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft3"));
+  m_inletY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("ft2"));
+  m_inletZ = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("ft3"));
 }
 
 /////////////////////////////////////////////////////////
@@ -82,10 +85,14 @@ void cuboid :: renderShape(GemState *state)
     for (int i = 0; i < 6; i++) {
       glBegin(m_drawType);
       glNormal3f(0.0f, 0.0f, 1.0f);
-      glVertex3d(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey, v[faces[i][0]][2] * m_sizez);
-      glVertex3d(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey, v[faces[i][1]][2] * m_sizez);
-      glVertex3d(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey, v[faces[i][2]][2] * m_sizez);
-      glVertex3d(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_sizey, v[faces[i][3]][2] * m_sizez);
+      glVertex3d(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey,
+                 v[faces[i][0]][2] * m_sizez);
+      glVertex3d(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey,
+                 v[faces[i][1]][2] * m_sizez);
+      glVertex3d(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey,
+                 v[faces[i][2]][2] * m_sizez);
+      glVertex3d(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_sizey,
+                 v[faces[i][3]][2] * m_sizez);
       glEnd();
     }
     glLineWidth(1.0);
@@ -94,30 +101,38 @@ void cuboid :: renderShape(GemState *state)
     for (int i = 0; i < 6; i++) {
       int curCoord = 0;
       glNormal3fv(&n[i][0]);
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                   GemShape::m_texCoords[curCoord].t);
       //              glTexCoord2f(0.0, 0.0);
-      glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey, v[faces[i][0]][2] * m_sizez);
+      glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey,
+                 v[faces[i][0]][2] * m_sizez);
 
       if (GemShape::m_texNum > 1) {
         curCoord = 1;
       }
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                   GemShape::m_texCoords[curCoord].t);
       //              glTexCoord2f(1.0, 0.0);
-      glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey, v[faces[i][1]][2] * m_sizez);
+      glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey,
+                 v[faces[i][1]][2] * m_sizez);
 
       if (GemShape::m_texNum > 2) {
         curCoord = 2;
       }
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                   GemShape::m_texCoords[curCoord].t);
       //              glTexCoord2f(1.0, 1.0);
-      glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey, v[faces[i][2]][2] * m_sizez);
+      glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey,
+                 v[faces[i][2]][2] * m_sizez);
 
       if (GemShape::m_texNum > 3) {
         curCoord = 3;
       }
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                   GemShape::m_texCoords[curCoord].t);
       //              glTexCoord2f(0.0, 1.0);
-      glVertex3f(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_sizey, v[faces[i][3]][2] * m_sizez);
+      glVertex3f(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_sizey,
+                 v[faces[i][3]][2] * m_sizez);
     }
     glEnd();
   } else {
@@ -125,13 +140,17 @@ void cuboid :: renderShape(GemState *state)
     for (int i = 0; i < 6; i++) {
       glNormal3fv(&n[i][0]);
       glTexCoord2f(0.0, 0.0);
-      glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey, v[faces[i][0]][2] * m_sizez);
+      glVertex3f(v[faces[i][0]][0] * m_size, v[faces[i][0]][1] * m_sizey,
+                 v[faces[i][0]][2] * m_sizez);
       glTexCoord2f(1.0, 0.0);
-      glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey, v[faces[i][1]][2] * m_sizez);
+      glVertex3f(v[faces[i][1]][0] * m_size, v[faces[i][1]][1] * m_sizey,
+                 v[faces[i][1]][2] * m_sizez);
       glTexCoord2f(1.0, 1.0);
-      glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey, v[faces[i][2]][2] * m_sizez);
+      glVertex3f(v[faces[i][2]][0] * m_size, v[faces[i][2]][1] * m_sizey,
+                 v[faces[i][2]][2] * m_sizez);
       glTexCoord2f(0.0, 1.0);
-      glVertex3f(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_sizey, v[faces[i][3]][2] * m_sizez);
+      glVertex3f(v[faces[i][3]][0] * m_size, v[faces[i][3]][1] * m_sizey,
+                 v[faces[i][3]][2] * m_sizez);
     }
     glEnd();
   }

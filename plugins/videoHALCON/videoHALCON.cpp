@@ -52,11 +52,14 @@ static std::vector<std::string>getBackends(void)
     return s_backends;
   }
 #ifdef _WIN32
-  std::string path = gem::files::expandEnv("%HALCONROOT%/bin/%HALCONARCH%/hAcq", true);
+  std::string path =
+    gem::files::expandEnv("%HALCONROOT%/bin/%HALCONARCH%/hAcq", true);
 #else
-  std::string path = gem::files::expandEnv("$HALCONROOT/lib/$HALCONARCH/hAcq", true);
+  std::string path =
+    gem::files::expandEnv("$HALCONROOT/lib/$HALCONARCH/hAcq", true);
 #endif
-  std::string pattern = path+std::string("*") +GemDylib::getDefaultExtension();
+  std::string pattern = path+std::string("*")
+                        +GemDylib::getDefaultExtension();
 
   std::vector<std::string>listing=gem::files::getFilenameListing(pattern);
   int i=0;
@@ -66,7 +69,8 @@ static std::vector<std::string>getBackends(void)
 
     if(std::string::npos != found) {
       const size_t start=found+needle.length();
-      const size_t stop =listing[i].rfind(GemDylib::getDefaultExtension()) - start;
+      const size_t stop =listing[i].rfind(GemDylib::getDefaultExtension()) -
+                         start;
       std::string backend=listing[i].substr(start, stop);
       try {
         Halcon::HTuple Information;
@@ -78,7 +82,9 @@ static std::vector<std::string>getBackends(void)
           s_backends.push_back(backend);
         }
       } catch (Halcon::HException &except) {
-        verbose(1, "[GEM::videoHALCON] trying to get framegraber info returned: %s", except.message);
+        verbose(1,
+                "[GEM::videoHALCON] trying to get framegraber info returned: %s",
+                except.message);
       }
     }
   }
@@ -200,7 +206,8 @@ bool videoHALCON :: grabFrame()
 /**
  * device name parser
  */
-static std::vector<std::string> &split(const std::string&s, char delim, std::vector<std::string> &elems)
+static std::vector<std::string> &split(const std::string&s, char delim,
+                                       std::vector<std::string> &elems)
 {
   std::stringstream ss(s);
   std::string item;
@@ -215,7 +222,8 @@ static std::vector<std::string> split(const std::string&s, char delim)
   return split(s, delim, elems);
 }
 
-static std::string parsedevicename(std::string devicename, std::string&cameratype, std::string&device)
+static std::string parsedevicename(std::string devicename,
+                                   std::string&cameratype, std::string&device)
 {
   std::string name;
   if(devicename.empty()) {
@@ -292,7 +300,8 @@ static void printinfo(std::string name, std::string value)
     printtuple(ValueList);
     std::cerr << std::endl;
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] printinfo['%s'] %s", name.c_str(), except.message);
+    verbose(0, "[GEM:videoHALCON] printinfo['%s'] %s", name.c_str(),
+            except.message);
   }
 }
 
@@ -304,7 +313,8 @@ static void getparam(Halcon::HFramegrabber*grabber, std::string name)
     std::cerr << "got parm for "<<name<<std::endl;
     printtuple(result);
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] getparam['%s']: %s", name.c_str(), except.message);
+    verbose(0, "[GEM:videoHALCON] getparam['%s']: %s", name.c_str(),
+            except.message);
   }
 }
 
@@ -356,7 +366,8 @@ bool videoHALCON :: openDevice(gem::Properties&props)
 
   if(m_devicename.empty()) {
     if(m_device2backend.size()>0) {
-      std::map<std::string, std::string>::iterator it( m_device2backend.begin() );
+      std::map<std::string, std::string>::iterator it(
+        m_device2backend.begin() );
       std::advance( it, m_devicenum );
       if(it != m_device2backend.end()) {
         device=it->first;
@@ -364,7 +375,8 @@ bool videoHALCON :: openDevice(gem::Properties&props)
       }
     }
   } else {
-    std::map<std::string,  std::string>::iterator it = m_device2backend.find(m_devicename);
+    std::map<std::string,  std::string>::iterator it = m_device2backend.find(
+          m_devicename);
     if(it != m_device2backend.end()) {
       device=it->first;
       name=it->second;
@@ -614,7 +626,8 @@ void videoHALCON::setProperties(gem::Properties&props)
             try {
               m_grabber->SetFramegrabberParam(Param, s.c_str());
             } catch (Halcon::HException& except) {
-              error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
+              error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
+                    key.c_str(), except.message);
             }
           }
           break;
@@ -627,17 +640,20 @@ void videoHALCON::setProperties(gem::Properties&props)
                 long l=d;
                 m_grabber->SetFramegrabberParam(Param, l);
               } catch (Halcon::HException& except) {
-                error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
+                error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
+                      key.c_str(), except.message);
               }
             }
           }
           break;
         default:
-          error("[GEM:videoHALCON] SetFramegrabberParam(%s): invalid type", key.c_str());
+          error("[GEM:videoHALCON] SetFramegrabberParam(%s): invalid type",
+                key.c_str());
           break;
         }
       } catch (Halcon::HException& except) {
-        error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'", key.c_str(), except.message);
+        error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
+              key.c_str(), except.message);
       }
     } else {
       if("width" == key) {
@@ -650,7 +666,8 @@ void videoHALCON::setProperties(gem::Properties&props)
               long l=d;
               m_grabber->SetFramegrabberParam("image_width", l);
             } catch (Halcon::HException& except) {
-              error("[GEM:videoHALCON] SetFramegrabberParam(width) exception: '%s'", except.message);
+              error("[GEM:videoHALCON] SetFramegrabberParam(width) exception: '%s'",
+                    except.message);
             }
           }
           m_width=d;
@@ -665,7 +682,8 @@ void videoHALCON::setProperties(gem::Properties&props)
               long l=d;
               m_grabber->SetFramegrabberParam("image_height", l);
             } catch (Halcon::HException& except) {
-              error("[GEM:videoHALCON] SetFramegrabberParam(height) exception: '%s'", except.message);
+              error("[GEM:videoHALCON] SetFramegrabberParam(height) exception: '%s'",
+                    except.message);
             }
           }
           m_height=d;
@@ -707,7 +725,8 @@ void videoHALCON::getProperties(gem::Properties&props)
           }
         }
       } catch (Halcon::HException& except) {
-        error("[GEM:videoHALCON] GetFramegrabberParam exception: '%s'", except.message);
+        error("[GEM:videoHALCON] GetFramegrabberParam exception: '%s'",
+              except.message);
       }
     }
   }

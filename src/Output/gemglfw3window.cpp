@@ -135,7 +135,8 @@ void gemglfw3window :: titleMess(const std::string&s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglfw3window :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglfw3window :: dimensionsMess(unsigned int width,
+                                      unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");
@@ -310,7 +311,8 @@ void gemglfw3window :: cursorMess(bool setting)
 {
   m_cursor=setting;
   if(m_window) {
-    glfwSetInputMode(m_window, GLFW_CURSOR, m_cursor?GLFW_CURSOR_NORMAL:GLFW_CURSOR_HIDDEN); /* GLFW_CURSOR_DISABLED */
+    glfwSetInputMode(m_window, GLFW_CURSOR,
+                     m_cursor?GLFW_CURSOR_NORMAL:GLFW_CURSOR_HIDDEN); /* GLFW_CURSOR_DISABLED */
   }
 }
 
@@ -328,7 +330,8 @@ void gemglfw3window::windowrefreshCallback()
 {
   info("window", "exposed");
 }
-void gemglfw3window::keyCallback(int key, int scancode, int action, int mods)
+void gemglfw3window::keyCallback(int key, int scancode, int action,
+                                 int mods)
 {
   t_atom ap[3];
   SETSYMBOL(ap+0, gensym("key"));
@@ -421,7 +424,8 @@ void gemglfw3window::windowrefreshCb(GLFWwindow *win)
 {
   CALLBACK(windowrefreshCallback());
 }
-void gemglfw3window::keyCb(GLFWwindow *win, int key, int scancode, int action, int mods)
+void gemglfw3window::keyCb(GLFWwindow *win, int key, int scancode,
+                           int action, int mods)
 {
   CALLBACK(keyCallback(key, scancode, action, mods));
 }
@@ -429,7 +433,8 @@ void gemglfw3window::charCb(GLFWwindow *win, unsigned int character)
 {
   CALLBACK(charCallback(character));
 }
-void gemglfw3window::mousebuttonCb(GLFWwindow *win, int button, int action, int mods)
+void gemglfw3window::mousebuttonCb(GLFWwindow *win, int button, int action,
+                                   int mods)
 {
   CALLBACK(mousebuttonCallback(button, action, mods));
 }

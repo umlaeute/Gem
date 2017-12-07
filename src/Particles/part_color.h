@@ -57,11 +57,13 @@ protected:
 
   //////////
   // Color changed
-  void            color1Mess(float red, float green, float blue, float alpha);
+  void            color1Mess(float red, float green, float blue,
+                             float alpha);
 
   //////////
   // Color changed
-  void            color2Mess(float red, float green, float blue, float alpha);
+  void            color2Mess(float red, float green, float blue,
+                             float alpha);
 
 private:
 

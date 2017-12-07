@@ -29,7 +29,8 @@ pix_blur :: pix_blur(void) :
 {
   long size,src,i;
 
-  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blur"));
+  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                        gensym("blur"));
 
   size = 320 * 240 * 4;
   saved = new unsigned int [size];
@@ -64,7 +65,8 @@ void pix_blur :: processRGBAImage(imageStruct &image)
 
   src = 0;
 
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  if (m_blurH != image.ysize || m_blurW != image.xsize
+      || m_blurBpp != image.csize) {
     m_blurH = image.ysize;
     m_blurW = image.xsize;
     m_blurBpp = image.csize;
@@ -84,7 +86,8 @@ void pix_blur :: processRGBAImage(imageStruct &image)
       saved[src+chRed] = (unsigned char)CLAMP(R>>8);
       pixels[src+chRed] = saved[src+chRed];
 
-      G = ((pixels[src+chGreen] * imageGain)) + ((saved[src+chGreen] * rightGain));
+      G = ((pixels[src+chGreen] * imageGain)) + ((saved[src+chGreen] *
+          rightGain));
       saved[src+chGreen] = (unsigned char)CLAMP(G>>8);
       pixels[src+chGreen] = saved[src+chGreen];
 
@@ -103,7 +106,8 @@ void pix_blur :: processGrayImage(imageStruct &image)
   int rightGain,imageGain;
   unsigned char *pixels=image.data;
 
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  if (m_blurH != image.ysize || m_blurW != image.xsize
+      || m_blurBpp != image.csize) {
     m_blurH = image.ysize;
     m_blurW = image.xsize;
     m_blurBpp = image.csize;
@@ -116,37 +120,44 @@ void pix_blur :: processGrayImage(imageStruct &image)
   imageGain = static_cast<int>(255. - (m_blurf * 255.));
   src=m_blurH*m_blurW;
   while(src--) {
-    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] *
+           rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray] = saved[src+chGray];
     src--;
 
-    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] *
+           rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray] = saved[src+chGray];
     src--;
 
-    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] *
+           rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray] = saved[src+chGray];
     src--;
 
-    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] * rightGain));
+    Grey = ((pixels[src+chGray] * imageGain)) + ((saved[src+chGray] *
+           rightGain));
     saved[src+chGray] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray] = saved[src+chGray];
   }
   src=0;//m_blurH*m_blurW-4;
   switch(m_blurH*m_blurW%4) {
   case 3:
-    Grey = ((pixels[src+chGray+3] * imageGain)) + ((saved[src+chGray+3] * rightGain));
+    Grey = ((pixels[src+chGray+3] * imageGain)) + ((saved[src+chGray+3] *
+           rightGain));
     saved[src+chGray+3] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray+3] = saved[src+chGray+3];
   case 2:
-    Grey = ((pixels[src+chGray+2] * imageGain)) + ((saved[src+chGray+2] * rightGain));
+    Grey = ((pixels[src+chGray+2] * imageGain)) + ((saved[src+chGray+2] *
+           rightGain));
     saved[src+chGray+2] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray+2] = saved[src+chGray+2];
   case 1:
-    Grey = ((pixels[src+chGray+1] * imageGain)) + ((saved[src+chGray+1] * rightGain));
+    Grey = ((pixels[src+chGray+1] * imageGain)) + ((saved[src+chGray+1] *
+           rightGain));
     saved[src+chGray+1] = (unsigned char)CLAMP(Grey>>8);
     pixels[src+chGray+1] = saved[src+chGray+1];
   default:
@@ -160,7 +171,8 @@ void pix_blur :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_blur :: processYUVImage(imageStruct &image)
 {
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  if (m_blurH != image.ysize || m_blurW != image.xsize
+      || m_blurBpp != image.csize) {
 
     m_blurH = image.ysize;
     m_blurW = image.xsize;
@@ -185,8 +197,10 @@ void pix_blur :: processYUVImage(imageStruct &image)
   for (h=0; h<image.ysize-1; h++) {
     for(w=0; w<hlength; w++) {
       //8bit  * 8bit = 16bit
-      y1res = (((image.data[src+1] )  * imageGain) + ((saved[src+1] * rightGain)>>8));
-      y2res = (((image.data[src+3]  ) * imageGain) + ((saved[src+3]  * rightGain)>>8) );
+      y1res = (((image.data[src+1] )  * imageGain) + ((saved[src+1] * rightGain)
+               >>8));
+      y2res = (((image.data[src+3]  ) * imageGain) + ((saved[src+3]  * rightGain)
+               >>8) );
 
       saved[src+1] = y1res;
       y1res = y1res >> 8; //shift to 16bit to store?
@@ -237,7 +251,8 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
     vector      unsigned char v;
   } charBuffer;
 
-  register vector unsigned short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;
+  register vector unsigned short gainAdd, hiImage, loImage,hiRight,loRight,
+           YImage, UVImage;
   vector unsigned char zero = vec_splat_u8(0);
   vector unsigned short sone = vec_splat_u16(1);
   register vector unsigned char c,one;
@@ -308,9 +323,11 @@ void pix_blur :: processYUVAltivec(imageStruct &image)
 
   //Load it into the vector unit
   gainAdd = shortBuffer.v;
-  gainAdd = (vector unsigned short)vec_splat((vector unsigned short)gainAdd,0);
+  gainAdd = (vector unsigned short)vec_splat((vector unsigned short)gainAdd,
+            0);
 # ifndef PPC970
-  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
 # endif /* PPC970 */

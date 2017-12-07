@@ -125,7 +125,8 @@
 #endif
 
 
-static std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems)
+static std::vector<std::string> &split(const std::string &s, char delim,
+                                       std::vector<std::string> &elems)
 {
   std::stringstream ss(s);
   std::string item;
@@ -162,7 +163,8 @@ void *pix_film :: grabThread(void*you)
     if(reqFrame!=me->m_curFrame || reqTrack!=me->m_curTrack) {
 
       pthread_mutex_lock(me->m_mutex);
-      if (gem::plugins::film::FAILURE!=me->m_handle->changeImage(reqFrame, reqTrack)) {
+      if (gem::plugins::film::FAILURE!=me->m_handle->changeImage(reqFrame,
+          reqTrack)) {
         me->m_frame=me->m_handle->getFrame();
       } else {
         me->m_frame=0;
@@ -216,7 +218,8 @@ pix_film :: pix_film(t_symbol *filename) :
   m_handle = gem::plugins::film::getInstance();
 
   // setting the current frame
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("img_num"));
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
@@ -302,7 +305,8 @@ void pix_film :: closeMess(void)
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_film :: openMess(std::string filename, int format, unsigned int backendNum)
+void pix_film :: openMess(std::string filename, int format,
+                          unsigned int backendNum)
 {
   std::string backend;
   if(m_ids.size()>0) {
@@ -312,7 +316,8 @@ void pix_film :: openMess(std::string filename, int format, unsigned int backend
   openMess(filename, format, backend);
 }
 
-void pix_film :: openMess(std::string filename, int format, std::string backend)
+void pix_film :: openMess(std::string filename, int format,
+                          std::string backend)
 {
   gem::Properties wantProps, gotProps;
   std::vector<std::string>backends;
@@ -322,7 +327,8 @@ void pix_film :: openMess(std::string filename, int format, std::string backend)
   std::string fname=filename;
   // we first try to find the file-to-open with canvas_makefilename
   // if this fails, we just pass the given filename (could be a stream)
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buff, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()),
+                      const_cast<char*>(filename.c_str()), buff, MAXPDSTRING);
   if (FILE*fd=fopen(buff, "r")) {
     fname=buff;
     fclose(fd);
@@ -482,7 +488,8 @@ void pix_film :: render(GemState *state)
 
   frame=static_cast<int>(m_reqFrame);
   if (NULL==img) {
-    outlet_float(m_outEnd,(m_numFrames>0 && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
+    outlet_float(m_outEnd,(m_numFrames>0
+                           && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
 
     if(frame!=static_cast<int>(m_reqFrame)) {
       // someone responded immediately to the outlet_float and changed the requested frame
@@ -527,7 +534,8 @@ void pix_film :: postrender(GemState *state)
   m_reqFrame+=m_auto;
 
   if (m_auto!=0 && !m_thread_running) {
-    if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>(m_reqFrame+=m_auto))) {
+    if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>
+        (m_reqFrame+=m_auto))) {
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }
@@ -698,15 +706,20 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   /* really: Pd shouldn't bail out,
    * if a selector is bound to the same method of a class a 2nd time
    */
-  if(pd_objectmaker && reinterpret_cast<t_gotfn>(create_pix_film)==zgetfn(&pd_objectmaker, gensym("pix_filmQT"))) {
+  if(pd_objectmaker
+      && reinterpret_cast<t_gotfn>(create_pix_film)==zgetfn(&pd_objectmaker,
+          gensym("pix_filmQT"))) {
     ::verbose(2, "not registering [pix_filmQT] again...");
   } else {
-    class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film), gensym("pix_filmQT"), A_DEFSYM, A_NULL);
+    class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film),
+                     gensym("pix_filmQT"), A_DEFSYM, A_NULL);
   }
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_film::openMessCallback),
                   gensym("open"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_film::changeImageCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_film::changeImageCallback),
                   gensym("img_num"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
@@ -716,7 +729,8 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "driver", backendMess);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
 }
-void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
+void pix_film :: openMessCallback(void *data, t_symbol*s,int argc,
+                                  t_atom*argv)
 {
   // possible messages:
   //  's:filename'
@@ -763,13 +777,16 @@ void pix_film :: openMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
 
   return;
 illegal_openmess:
-  GetMyClass(data)->error("open <filename> [<format>] [<preferred backend>]");
+  GetMyClass(
+    data)->error("open <filename> [<format>] [<preferred backend>]");
   return;
 
 }
 
-void pix_film :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_film :: changeImageCallback(void *data, t_symbol *, int argc,
+                                     t_atom *argv)
 {
-  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
+                                (argc<2)?0:atom_getint(argv+1));
 }
 #endif /*OS-specific GEM_FILMBACKEND */

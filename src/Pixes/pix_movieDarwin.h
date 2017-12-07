@@ -215,7 +215,8 @@ protected:
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
   static void autoCallback       (void *data, t_float state);
   static void rateCallback       (void *data, t_float state);
   static void ramCallback(void *data);

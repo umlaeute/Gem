@@ -50,7 +50,8 @@ public:
 
   //////////
   // Constructor
-  multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
+  multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel,
+             t_floatarg skipRate);
 
 protected:
 
@@ -60,8 +61,10 @@ protected:
 
   //////////
   // When an open is received
-  virtual void  openMess(const std::string&filename, float baseModel, float topModel, float skipRate);
-  virtual void  open(const std::string&filename, int baseModel, int topModel, int skipRate);
+  virtual void  openMess(const std::string&filename, float baseModel,
+                         float topModel, float skipRate);
+  virtual void  open(const std::string&filename, int baseModel, int topModel,
+                     int skipRate);
 
   //////////
   // Change which model to display
@@ -99,7 +102,8 @@ protected:
   virtual void  render(GemState *state);
   virtual void  startRendering();
 
-  void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
+  void copyArray(const std::vector<std::vector<float> > tab,
+                 gem::VertexBuffer&vb);
   void copyAllArrays();
   void getVBOarray();
   void createVBO(void);
@@ -120,7 +124,8 @@ private:
 
   //////////
   // static member functions
-  static void   openMessCallback(void *data, t_symbol *filename, t_float baseModel, t_float topModel, t_float skipRate);
+  static void   openMessCallback(void *data, t_symbol *filename,
+                                 t_float baseModel, t_float topModel, t_float skipRate);
 };
 
 #endif  // for header file

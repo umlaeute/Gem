@@ -30,7 +30,8 @@ camera :: camera(int argc, t_atom *argv)
     hAngle(90.0f), vAngle(0.0f), distance(4.0f), slideLeft(0), slideRight(0)
 {
   m_vPosition    = CVector3(0.0, 0.0, 0.0);     // Init the position to zero
-  m_vView        = CVector3(0.0, 0.0, 0.0);     // Init the view to a std starting view
+  m_vView        = CVector3(0.0, 0.0,
+                            0.0);     // Init the view to a std starting view
   m_vUpVector    = CVector3(0.0, 1.0, 0.0);     // Init the UpVector
   //  Position     View         Up Vector
   PositionCamera(0, 0.0, 4,   0, 0.0, 0,   0, 1, 0 );
@@ -229,7 +230,8 @@ void camera :: decVRot(float decVal)
 /////
 ///////////////////////////////// POSITION CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void camera :: PositionCamera(  float positionX, float positionY, float positionZ,
+void camera :: PositionCamera(  float positionX, float positionY,
+                                float positionZ,
                                 float viewX,     float viewY,     float viewZ,
                                 float upVectorX, float upVectorY, float upVectorZ)
 {
@@ -292,13 +294,17 @@ void camera :: MoveCamera(float speed)
   // Get our view vector (The direction we are facing)
   CVector3 vVector = (m_vView - m_vPosition).normalize();
 
-  m_vPosition.x += vVector.x * speed;        // Add our acceleration to our position's X
+  m_vPosition.x += vVector.x *
+                   speed;        // Add our acceleration to our position's X
   //m_vPosition.y += vVector.y * speed;
-  m_vPosition.z += vVector.z * speed;        // Add our acceleration to our position's Z
+  m_vPosition.z += vVector.z *
+                   speed;        // Add our acceleration to our position's Z
 
-  m_vView.x += vVector.x * speed;            // Add our acceleration to our view's X
+  m_vView.x += vVector.x *
+               speed;            // Add our acceleration to our view's X
   //m_vView.y += vVector.y * speed;
-  m_vView.z += vVector.z * speed;            // Add our acceleration to our view's Z
+  m_vView.z += vVector.z *
+               speed;            // Add our acceleration to our view's Z
 
 }
 
@@ -325,35 +331,50 @@ void camera :: SlideCamera(float speed)
 /////////////////////////////////////////////////////////
 void camera :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::hAngleMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::hAngleMessCallback),
                   gensym("hAngle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::vAngleMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::vAngleMessCallback),
                   gensym("vAngle"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::distanceMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::distanceMessCallback),
                   gensym("distance"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::speedMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::speedMessCallback),
                   gensym("speed"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::forwardMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::forwardMessCallback),
                   gensym("forward"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::reverseMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::reverseMessCallback),
                   gensym("reverse"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::leftMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::leftMessCallback),
                   gensym("left"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::rightMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::rightMessCallback),
                   gensym("right"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::upMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::upMessCallback),
                   gensym("up"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::downMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::downMessCallback),
                   gensym("down"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::resetMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::resetMessCallback),
                   gensym("reset"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::modeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::modeMessCallback),
                   gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookXMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::lookXMessCallback),
                   gensym("lookX"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookYMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::lookYMessCallback),
                   gensym("lookY"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&camera::lookZMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&camera::lookZMessCallback),
                   gensym("lookZ"), A_FLOAT, A_NULL);
 }
 void camera :: hAngleMessCallback(void *data, t_float val)

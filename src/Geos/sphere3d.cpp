@@ -17,7 +17,8 @@
 #include "sphere3d.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS(sphere3d, t_floatarg, A_DEFFLOAT, t_floatarg,
+                              A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 #define DEG2RAD(x) ((x)*M_PI/180)
 
@@ -109,14 +110,16 @@ void sphere3d :: print(int i, int j)
   }
 
 
-  post("[%3d|%3d]=%4d: %g %g %g", i, j, index, m_x[index], m_y[index], m_z[index]);
+  post("[%3d|%3d]=%4d: %g %g %g", i, j, index, m_x[index], m_y[index],
+       m_z[index]);
 }
 
 void sphere3d :: print(void)
 {
   int i=0, j=0;
 
-  post("%d lines of longitude and %d lines of lattitude and %d poles", m_numSlices, m_numStacks-1, 2);
+  post("%d lines of longitude and %d lines of lattitude and %d poles",
+       m_numSlices, m_numStacks-1, 2);
 
   print(i, j);
   for(j=1; j<m_numStacks; j++) {
@@ -395,7 +398,8 @@ void sphere3d :: render(GemState *state)
     } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
 
       int src = 1;
-      for (int i = 1; i < stacks; i++) {        // stack line at i==stacks-1 was missing here
+      for (int i = 1; i < stacks;
+           i++) {        // stack line at i==stacks-1 was missing here
         glBegin(GL_LINE_LOOP);
         for (int j = 0; j < slices; j++) {
 
@@ -475,10 +479,14 @@ void sphere3d :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void sphere3d :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG5(classPtr, "set", setCartesian, int, int, float, float, float);
-  CPPEXTERN_MSG5(classPtr, "setCartesian", setCartesian, int, int, float, float, float);
-  CPPEXTERN_MSG5(classPtr, "setSpherical", setSpherical, int, int, float, float, float);
-  CPPEXTERN_MSG5(classPtr, "setSph", setSpherical, int, int, float, float, float);
+  CPPEXTERN_MSG5(classPtr, "set", setCartesian, int, int, float, float,
+                 float);
+  CPPEXTERN_MSG5(classPtr, "setCartesian", setCartesian, int, int, float,
+                 float, float);
+  CPPEXTERN_MSG5(classPtr, "setSpherical", setSpherical, int, int, float,
+                 float, float);
+  CPPEXTERN_MSG5(classPtr, "setSph", setSpherical, int, int, float, float,
+                 float);
 
   CPPEXTERN_MSG0(classPtr, "print", print);
 }

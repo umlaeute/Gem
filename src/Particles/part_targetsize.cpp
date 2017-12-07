@@ -17,7 +17,8 @@
 
 #include "papi/papi.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(part_targetsize, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(part_targetsize, t_floatarg, A_DEFFLOAT,
+                            t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -95,12 +96,15 @@ void part_targetsize :: scaleMess(float scaleX,float scaleY,float scaleZ)
 /////////////////////////////////////////////////////////
 void part_targetsize :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetsize::sizeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&part_targetsize::sizeMessCallback),
                   gensym("ft1"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetsize::scaleMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&part_targetsize::scaleMessCallback),
                   gensym("ft2"), A_GIMME, A_NULL);
 }
-void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc, t_atom *argv)
+void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc,
+    t_atom *argv)
 {
   t_float size=1.0, sizeX=1.0, sizeY=1.0, sizeZ=1.0;
   switch (argc) {
@@ -116,7 +120,8 @@ void part_targetsize :: sizeMessCallback(void *data, t_symbol*s, int argc, t_ato
     break;
   }
 }
-void part_targetsize :: scaleMessCallback(void *data, t_symbol*s, int argc, t_atom *argv)
+void part_targetsize :: scaleMessCallback(void *data, t_symbol*s, int argc,
+    t_atom *argv)
 {
   t_float scale=1.0, scaleX=1.0, scaleY=1.0, scaleZ=1.0;
   switch (argc) {

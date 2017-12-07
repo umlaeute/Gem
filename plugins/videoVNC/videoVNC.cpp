@@ -207,7 +207,8 @@ const std::string videoVNC::getName(void)
   return m_name;
 }
 
-void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h)
+void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w,
+                                   int h)
 {
   int X,Y;
   int i,j;
@@ -241,9 +242,12 @@ void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w, int h
         break;
       }
 
-      m_pixBlock.image.SetPixel(Y, X, chRed,  (v>>pf->redShift)  *256/(pf->redMax  +1));
-      m_pixBlock.image.SetPixel(Y, X, chGreen,(v>>pf->greenShift)*256/(pf->greenMax+1));
-      m_pixBlock.image.SetPixel(Y, X, chBlue, (v>>pf->blueShift) *256/(pf->blueMax+1));
+      m_pixBlock.image.SetPixel(Y, X, chRed,
+                                (v>>pf->redShift)  *256/(pf->redMax  +1));
+      m_pixBlock.image.SetPixel(Y, X, chGreen,
+                                (v>>pf->greenShift)*256/(pf->greenMax+1));
+      m_pixBlock.image.SetPixel(Y, X, chBlue,
+                                (v>>pf->blueShift) *256/(pf->blueMax+1));
     }
   }
   m_pixBlock.newimage = true;

@@ -32,7 +32,8 @@ part_follow :: part_follow(t_floatarg num)
   if (num != 0) {
     m_accel = num;
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("accel"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("accel"));
 }
 
 /////////////////////////////////////////////////////////

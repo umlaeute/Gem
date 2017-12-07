@@ -418,7 +418,8 @@ void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
   }
   offset2 = offset2<0?0:offset2;
   std::string tab_name = atom_getsymbol(argv)->s_name;
-  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset, resize);
+  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset,
+            resize);
   array.enabled=true;
 }
 
@@ -596,7 +597,8 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
 
   glGetActiveAttrib(glsl_program,
                     glsl_index,  /* GLuint program, GLuint index */
-                    0, &length, &size,          /* GLsizei maxLength, GLsizei* length, GLint* size */
+                    0, &length,
+                    &size,          /* GLsizei maxLength, GLsizei* length, GLint* size */
                     &attrib_type, &glname);       /* GLenum* type, GLchar* name */
   switch(attrib_type) {
   case GL_FLOAT:

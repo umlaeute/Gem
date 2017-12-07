@@ -204,7 +204,8 @@ void pix_histo :: processRGBAImage(imageStruct &image)
       const unsigned int index=(n_R*grey)>>8;
       tabR[index]+=incr;
 #else
-      float grey = (base[chRed] * 0.3086f + base[chGreen] * 0.6094f + base[chBlue] * 0.0820f)/255.f;
+      float grey = (base[chRed] * 0.3086f + base[chGreen] * 0.6094f +
+                    base[chBlue] * 0.0820f)/255.f;
       tabR[static_cast<int>(n_R*grey)]+=incr;
 #endif
       base+=4;
@@ -337,11 +338,13 @@ void pix_histo :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_histo :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_histo::setMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_histo::setMessCallback),
                   gensym("set"), A_GIMME,0);
 }
 
-void pix_histo :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)
+void pix_histo :: setMessCallback(void *data, t_symbol *s, int argc,
+                                  t_atom* argv)
 {
   GetMyClass(data)->setMess(argc, argv);
 }

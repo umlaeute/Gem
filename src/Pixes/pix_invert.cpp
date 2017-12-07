@@ -189,7 +189,8 @@ void pix_invert :: processYUVAltivec(imageStruct &image)
   offset = charBuffer.v;
   offset = (vector unsigned char) vec_splat(offset,0);
 #ifndef PPC970
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
 #endif
   for ( h=0; h<image.ysize; h++) {

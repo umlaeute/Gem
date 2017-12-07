@@ -121,14 +121,16 @@ static inline void getVideoFilter(videoInput&vi, int device,
 
   props.erase(propName);
 
-  if(!vi.getVideoSettingFilter(device, propValue, min, max, step, cur, flags, def)) {
+  if(!vi.getVideoSettingFilter(device, propValue, min, max, step, cur, flags,
+                               def)) {
     return;
   }
   if(max==min) {
     return;
   }
   double d=((double)(cur-min))/((double)(max-min));
-  verbose(1, "[GEM::videoVIDS] gotV '%s' to %f (%d in %d..%d)", propName.c_str(), d, (int)cur, (int)min, (int)max);
+  verbose(1, "[GEM::videoVIDS] gotV '%s' to %f (%d in %d..%d)",
+          propName.c_str(), d, (int)cur, (int)min, (int)max);
   props.set(propName, d);
 }
 static inline void getVideoCamera(videoInput&vi, int device,
@@ -144,14 +146,16 @@ static inline void getVideoCamera(videoInput&vi, int device,
 
   props.erase(propName);
 
-  if(!vi.getVideoSettingCamera(device, propValue, min, max, step, cur, flags, def)) {
+  if(!vi.getVideoSettingCamera(device, propValue, min, max, step, cur, flags,
+                               def)) {
     return;
   }
   if(max==min) {
     return;
   }
   double d=((double)(cur-min))/((double)(max-min));
-  verbose(1, "[GEM::videoVIDS] gotC '%s' to %f (%d in %d..%d)\n", propName.c_str(), d, (int)cur, (int)min, (int)max);
+  verbose(1, "[GEM::videoVIDS] gotC '%s' to %f (%d in %d..%d)\n",
+          propName.c_str(), d, (int)cur, (int)min, (int)max);
   props.set(propName, d);
 }
 };

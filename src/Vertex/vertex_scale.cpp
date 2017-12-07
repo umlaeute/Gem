@@ -34,8 +34,10 @@ vertex_scale :: vertex_scale(int argc, t_atom*argv) : GemBase(),
   m_vertex(false), m_color(false),
   m_normal(false), m_texture(false)
 {
-  m_vertIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("vertex"));
-  m_parmIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
+  m_vertIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                     gensym("vertex"));
+  m_parmIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                     gensym("param"));
 
   modeMess(argc, argv);
   if(!argc) {
@@ -185,28 +187,35 @@ void vertex_scale :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_scale :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::modeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_scale::modeMessCallback),
                   gensym("mode"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::vertexMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_scale::vertexMessCallback),
                   gensym("vertex"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::paramMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_scale::paramMessCallback),
                   gensym("param"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_scale::paramMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_scale::paramMessCallback),
                   gensym("scale"), A_GIMME, A_NULL);
 }
 
-void vertex_scale :: paramMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void vertex_scale :: paramMessCallback(void *data, t_symbol*, int argc,
+                                       t_atom*argv)
 {
   GetMyClass(data)->paramMess(argc, argv);
 }
 
-void vertex_scale :: vertexMessCallback(void *data,  t_float num, t_float counter)
+void vertex_scale :: vertexMessCallback(void *data,  t_float num,
+                                        t_float counter)
 {
   GetMyClass(data)->vertexMess(static_cast<int>(num),
                                static_cast<int>(counter));
 }
-void vertex_scale :: modeMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void vertex_scale :: modeMessCallback(void *data, t_symbol*, int argc,
+                                      t_atom*argv)
 {
   GetMyClass(data)->modeMess(argc, argv);
 }

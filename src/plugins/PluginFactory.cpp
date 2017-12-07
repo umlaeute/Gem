@@ -37,7 +37,8 @@ gem::BasePluginFactory::~BasePluginFactory(void)
   m_pimpl=NULL;
 }
 
-int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std::string&path_)
+int gem::BasePluginFactory::doLoadPlugins(const std::string&basename,
+    const std::string&path_)
 {
   int already=m_pimpl->p_loaded.size();
   if(already>0) {
@@ -49,7 +50,8 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
     gem::Settings::get(key, once);
 
     if(0!=once) {
-      std::cerr << "not reloading '" << basename << "' plugins (already "<<already<<" loaded)" << std::endl;
+      std::cerr << "not reloading '" << basename <<
+                "' plugins (already "<<already<<" loaded)" << std::endl;
       return 0;
     }
   }
@@ -60,9 +62,11 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename, const std:
   if(!path.empty()) {
     path=path+std::string("/");
   }
-  std::cerr << "load plugins '" << basename << "' in '" << path << "'" << std::endl;
+  std::cerr << "load plugins '" << basename << "' in '" << path << "'" <<
+            std::endl;
 
-  std::string pattern = path+std::string("gem_") + basename+std::string("*")+GemDylib::getDefaultExtension();
+  std::string pattern = path+std::string("gem_") + basename+std::string("*")
+                        +GemDylib::getDefaultExtension();
   std::cerr << "pattern : " << pattern << std::endl;
 
   unsigned int count=0;

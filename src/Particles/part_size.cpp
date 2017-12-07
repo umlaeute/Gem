@@ -31,7 +31,8 @@ part_size :: part_size(int argc, t_atom*argv)
 {
   m_size[0]=m_size[1]=m_size[2]=1.0f;
   sizeMess(0, argc,argv);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("size"));
 }
 
 /////////////////////////////////////////////////////////

@@ -52,7 +52,8 @@ public:
   virtual void releaseFrame(void);
 
   /* to be called from the capturing thread */
-  void setFrame(unsigned int w, unsigned int h, GLenum format, unsigned char*data);
+  void setFrame(unsigned int w, unsigned int h, GLenum format,
+                unsigned char*data);
 
   virtual std::vector<std::string>enumerate(void);
   virtual bool setDevice(int ID);
@@ -88,7 +89,8 @@ public:
     return false;
     return true;
   }
-  virtual bool dialog(std::vector<std::string>names=std::vector<std::string>())
+  virtual bool dialog(std::vector<std::string>names=
+                        std::vector<std::string>())
   {
     return false;
   }

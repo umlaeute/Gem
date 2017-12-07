@@ -17,10 +17,13 @@
 #define int32 int
 
 
-extern unsigned int32 *getLongImage(const char *textureFile, int32 *xsize, int32 *ysize, int32 *csize);
-extern int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize, int32 zsize,
+extern unsigned int32 *getLongImage(const char *textureFile, int32 *xsize,
+                                    int32 *ysize, int32 *csize);
+extern int longstoimage(unsigned int32 *lptr, int32 xsize, int32 ysize,
+                        int32 zsize,
                         const char *filename, const char*name);
 extern unsigned int32 *longimagedata(const char *name);
-extern int sizeofimage(const char *name, int32 *xsize, int32 *ysize, int32 *csize);
+extern int sizeofimage(const char *name, int32 *xsize, int32 *ysize,
+                       int32 *csize);
 
 #endif  /* __SGIIMAGE_H__ */

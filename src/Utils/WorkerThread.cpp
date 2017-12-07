@@ -71,7 +71,8 @@ public:
   Mutex m_done;
   Semaphore s_newdata;
 
-  WorkerThread::id_t processingID; /* the ID currently processed or INVALID: must only be written in the thread! */
+  WorkerThread::id_t
+  processingID; /* the ID currently processed or INVALID: must only be written in the thread! */
 
   pthread_t p_thread;
   pthread_mutex_t p_runmutex;
@@ -221,7 +222,8 @@ WorkerThread&WorkerThread::operator=(const WorkerThread&org)
 {
   return (*this);
 }
-WorkerThread::WorkerThread(const WorkerThread&org) : m_pimpl(new PIMPL(this))
+WorkerThread::WorkerThread(const WorkerThread&org) : m_pimpl(new PIMPL(
+        this))
 {
 }
 

@@ -82,12 +82,18 @@ private:
 
   //////////
   // static member functions
-  static void     vect1MessCallback(void *data, t_float x, t_float y, t_float z);
-  static void     vect2MessCallback(void *data, t_float x, t_float y, t_float z);
-  static void     vect3MessCallback(void *data, t_float x, t_float y, t_float z);
-  static void     col1MessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void     col2MessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void     col3MessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     vect1MessCallback(void *data, t_float x, t_float y,
+                                    t_float z);
+  static void     vect2MessCallback(void *data, t_float x, t_float y,
+                                    t_float z);
+  static void     vect3MessCallback(void *data, t_float x, t_float y,
+                                    t_float z);
+  static void     col1MessCallback(void *data, t_symbol *, int argc,
+                                   t_atom *argv);
+  static void     col2MessCallback(void *data, t_symbol *, int argc,
+                                   t_atom *argv);
+  static void     col3MessCallback(void *data, t_symbol *, int argc,
+                                   t_atom *argv);
 };
 
 #endif  // for header file

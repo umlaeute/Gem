@@ -45,12 +45,18 @@ GEMglFrustum :: GEMglFrustum    (int argc, t_atom* argv)
     zFar  =atom_getfloat(argv+5);
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("left"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("right"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bottom"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("top"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zNear"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zFar"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("left"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("right"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("bottom"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("top"));
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("zNear"));
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("zFar"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -119,12 +125,24 @@ void GEMglFrustum :: zFarMess (t_float arg1)    // FUN
 
 void GEMglFrustum :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::leftMessCallback),         gensym("left"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::rightMessCallback),        gensym("right"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::bottomMessCallback),       gensym("bottom"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::topMessCallback),          gensym("top"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::zNearMessCallback),        gensym("zNear"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFrustum::zFarMessCallback),         gensym("zFar"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFrustum::leftMessCallback),
+                  gensym("left"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFrustum::rightMessCallback),
+                  gensym("right"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFrustum::bottomMessCallback),
+                  gensym("bottom"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFrustum::topMessCallback),
+                  gensym("top"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFrustum::zNearMessCallback),
+                  gensym("zNear"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFrustum::zFarMessCallback),
+                  gensym("zFar"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglFrustum :: leftMessCallback (void* data, t_float arg0)

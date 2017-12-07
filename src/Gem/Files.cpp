@@ -164,7 +164,8 @@ std::string getFullpath(const std::string&path, const CPPExtern*obj)
     t_canvas*canvas=const_cast<t_canvas*>(obj->getCanvas());
 
     if(canvas) {
-      canvas_makefilename(canvas, const_cast<char*>(result.c_str()), buf, MAXPDSTRING);
+      canvas_makefilename(canvas, const_cast<char*>(result.c_str()), buf,
+                          MAXPDSTRING);
       result=buf;
     }
   }

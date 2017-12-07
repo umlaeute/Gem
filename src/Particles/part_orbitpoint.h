@@ -34,7 +34,8 @@ public:
 
   //////////
   // Constructor
-  part_orbitpoint(t_floatarg val1, t_floatarg val2, t_floatarg val3, t_floatarg grav);
+  part_orbitpoint(t_floatarg val1, t_floatarg val2, t_floatarg val3,
+                  t_floatarg grav);
 
   //////////
   virtual void    renderParticles(GemState *state);

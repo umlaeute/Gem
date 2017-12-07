@@ -33,7 +33,8 @@ GEMglMatrixMode :: GEMglMatrixMode      (int argc, t_atom*argv) :
   } else if(argc) {
     throw(GemException("invalid number of arguments"));
   }
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("mode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -67,10 +68,13 @@ void GEMglMatrixMode :: modeMess (t_atom arg)   // FUN
 
 void GEMglMatrixMode :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMatrixMode::modeMessCallback),      gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMatrixMode::modeMessCallback),
+                  gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglMatrixMode :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglMatrixMode :: modeMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(1==argc) {
     GetMyClass(data)->modeMess (argv[0]);

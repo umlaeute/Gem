@@ -14,7 +14,8 @@
 
 #include "GEMglVertex4d.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4d, t_floatarg, A_DEFFLOAT,
+                               t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,16 +24,21 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglVertex4d, t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglVertex4d :: GEMglVertex4d  (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
+GEMglVertex4d :: GEMglVertex4d  (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2, t_floatarg arg3) :
   x(static_cast<GLdouble>(arg0)),
   y(static_cast<GLdouble>(arg1)),
   z(static_cast<GLdouble>(arg2)),
   w(static_cast<GLdouble>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("z"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("w"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("z"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("w"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,10 +93,18 @@ void GEMglVertex4d :: wMess (t_float arg1)      // FUN
 
 void GEMglVertex4d :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4d::xMessCallback),   gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4d::yMessCallback),   gensym("y"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4d::zMessCallback),   gensym("z"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex4d::wMessCallback),   gensym("w"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglVertex4d::xMessCallback),   gensym("x"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglVertex4d::yMessCallback),   gensym("y"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglVertex4d::zMessCallback),   gensym("z"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglVertex4d::wMessCallback),   gensym("w"),
+                  A_DEFFLOAT, A_NULL);
 };
 
 void GEMglVertex4d :: xMessCallback (void* data, t_float arg0)

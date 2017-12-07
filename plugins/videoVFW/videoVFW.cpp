@@ -90,7 +90,8 @@ bool videoVFW :: openDevice(gem::Properties&props)
   }
 
   // Connect to the daemon
-  m_hWndC = capCreateCaptureWindow ((LPSTR) "GEM video",        // window name if pop-up
+  m_hWndC = capCreateCaptureWindow ((LPSTR)
+                                    "GEM video",        // window name if pop-up
                                     0,                          // window style (not visible)
                                     0, 0, m_width, m_height,// window position and dimensions
                                     GetDesktopWindow(), 0);
@@ -265,7 +266,8 @@ bool videoVFW :: setColor(int format)
 
 
 
-bool videoVFW :: enumProperties(gem::Properties&readable, gem::Properties&writeable)
+bool videoVFW :: enumProperties(gem::Properties&readable,
+                                gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();

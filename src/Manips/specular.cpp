@@ -31,9 +31,11 @@ CPPEXTERN_NEW_WITH_GIMME(specular);
 /////////////////////////////////////////////////////////
 specular :: specular(int argc, t_atom *argv)
 {
-  if (argc == 4) specularMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  if (argc == 4) specularMess(atom_getfloat(&argv[0]),
+                                atom_getfloat(&argv[1]),
                                 atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-  else if (argc == 3) specularMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  else if (argc == 3) specularMess(atom_getfloat(&argv[0]),
+                                     atom_getfloat(&argv[1]),
                                      atom_getfloat(&argv[2]), 1.f);
   else if (argc == 0) {
     specularMess(0.f, 0.f, 0.f, 1.f);
@@ -75,7 +77,8 @@ void specular :: render(GemState *)
 // specularMess
 //
 /////////////////////////////////////////////////////////
-void specular :: specularMess(float red, float green, float blue, float alpha)
+void specular :: specularMess(float red, float green, float blue,
+                              float alpha)
 {
   m_specular[0] = red;
   m_specular[1] = green;
@@ -90,15 +93,18 @@ void specular :: specularMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void specular :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&specular::specularMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&specular::specularMessCallback),
                   gensym("specular"), A_GIMME, A_NULL);
 }
-void specular :: specularMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void specular :: specularMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv)
 {
   float alpha = 1;
   if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
   }
-  GetMyClass(data)->specularMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  GetMyClass(data)->specularMess(atom_getfloat(&argv[0]),
+                                 atom_getfloat(&argv[1]),
                                  atom_getfloat(&argv[2]), alpha);
 }

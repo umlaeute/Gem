@@ -61,7 +61,8 @@ torus :: torus(int argc, t_atom *argv)
 
   sizeMess(size);
   numSlicesMess(numSlices);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("inner"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("inner"));
 }
 
 /////////////////////////////////////////////////////////

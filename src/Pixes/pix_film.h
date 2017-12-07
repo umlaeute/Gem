@@ -58,7 +58,8 @@ protected:
   //////////
   // open a movie up (with a given format and a preferred codec)
   virtual void openMess(std::string filename, int format, std::string codec);
-  virtual void openMess(std::string filename, int format, unsigned int codec);
+  virtual void openMess(std::string filename, int format,
+                        unsigned int codec);
 
   //////////
   // prepare for texturing (on open)
@@ -156,7 +157,8 @@ protected:
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
 };
 
 #endif  // for header file

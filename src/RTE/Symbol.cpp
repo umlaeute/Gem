@@ -87,7 +87,8 @@ gem::RTE::Symbol&gem::RTE::Symbol::operator=(const t_symbol*name)
   m_pimpl->sym=name;
   return (*this);
 }
-gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_atom*argv)
+gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc,
+    const t_atom*argv)
 {
   char buf[MAXPDSTRING];
   std::string name;

@@ -343,8 +343,10 @@ void f0r_deinit();
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
 typedef struct f0r_plugin_info {
-  const char* name;    /**< The (short) name of the plugin                   */
-  const char* author;  /**< The plugin author                                */
+  const char*
+  name;    /**< The (short) name of the plugin                   */
+  const char*
+  author;  /**< The plugin author                                */
   /** The plugin type
    * \see PLUGIN_TYPE
    */
@@ -354,7 +356,8 @@ typedef struct f0r_plugin_info {
   int major_version;   /**< The major version of the plugin                  */
   int minor_version;   /**< The minor version of the plugin                  */
   int num_params;      /**< The number of parameters of the plugin           */
-  const char* explanation; /**< An optional explanation string               */
+  const char*
+  explanation; /**< An optional explanation string               */
 } f0r_plugin_info_t;
 
 

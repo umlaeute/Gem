@@ -45,7 +45,8 @@ CPPEXTERN_NEW_WITH_GIMME(newWave);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY )
+newWave :: newWave( int argc,
+                    t_atom*argv)//t_floatarg widthX, t_floatarg widthY )
   : GemShape(MEDIUM),
     gridX(0), gridY(0),
     m_height(1.0),
@@ -83,8 +84,10 @@ newWave :: newWave( int argc, t_atom*argv)//t_floatarg widthX, t_floatarg widthY
   gridY = MAX( 3,     gridY);
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("height"));
-  m_inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("height"));
+  m_inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("mode"));
 
   m_drawTypes.clear();
   m_drawTypes["default"]=GL_DEFAULT_GEM;
@@ -310,11 +313,13 @@ void newWave :: getdamp(void)
   if (D1 != 0) {
     for ( i=1; i<gridX; i++) {
       for (j=1; j<gridY; j++) {
-        d = D1 * ((posit[i][j] - posit[i][j-1])-(positold[i][j] - positold[i][j-1]));
+        d = D1 * ((posit[i][j] - posit[i][j-1])-(positold[i][j] - positold[i][j
+                  -1]));
         force[i][j] -= d;
         force[i][j-1] += d;
 
-        d = D1 * ((posit[i][j] - posit[i-1][j])-(positold[i][j] - positold[i-1][j]));
+        d = D1 * ((posit[i][j] - posit[i-1][j])-(positold[i][j] - positold[i
+                  -1][j]));
         force[i][j] -= d;
         force[i-1][j] += d;
       }
@@ -324,14 +329,16 @@ void newWave :: getdamp(void)
   if (D2 != 0) {
     for ( i=1; i<gridX; i++)
       for (j=1; j<gridY; j++) {
-        d = D2 * ((posit[i][j] - posit[i-1][j-1])-(positold[i][j] - positold[i-1][j-1]));
+        d = D2 * ((posit[i][j] - posit[i-1][j-1])-(positold[i][j] - positold[i-1][j
+                  -1]));
         force[i][j] -= d;
         force[i-1][j-1] += d;
       }
 
     for ( i=0; i<gridX-1; i++)
       for (j=1; j<gridY; j++) {
-        d = D2 * ((posit[i][j] - posit[i+1][j-1])-(positold[i][j] - positold[i+1][j-1]));
+        d = D2 * ((posit[i][j] - posit[i+1][j-1])-(positold[i][j] - positold[i+1][j
+                  -1]));
         force[i][j] -= d;
         force[i+1][j-1] += d;
       }
@@ -357,7 +364,8 @@ void newWave :: setforce(float posX, float posY, float valforce)
 {
   int posXi=static_cast<int>(posX);
   int posYi=static_cast<int>(posY);
-  if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) & (posYi < gridY - 1) ) {
+  if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) &
+       (posYi < gridY - 1) ) {
     force[posXi][posYi] += valforce;
   }
 }
@@ -370,7 +378,8 @@ void newWave :: position(float posX, float posY, float posZ)
 {
   int posXi=static_cast<int>(posX);
   int posYi=static_cast<int>(posY);
-  if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) & (posYi < gridY - 1) ) {
+  if ( (posXi > 0) & (posXi < gridX - 1) & (posYi > 0) &
+       (posYi < gridY - 1) ) {
     posit[posXi][posYi] = posZ;
   }
 }
@@ -660,7 +669,8 @@ void newWave :: reset(int value)
         posit[i][j]= (i == gridX/2 && j == gridY/2) ? gridX*1.5 : 0.0;
         break;
       case HOLE:
-        posit[i][j]= (!((i > gridX/3 && j > gridY/3)&&(i < gridX*2/3 && j < gridY*2/3))) ? gridX/4 : 0.0;
+        posit[i][j]= (!((i > gridX/3 && j > gridY/3)&&(i < gridX*2/3
+                        && j < gridY*2/3))) ? gridX/4 : 0.0;
         break;
       case DIAGONALWALL:
         posit[i][j]= (((gridX-i)-j<3) && ((gridX-i)-j>0)) ? gridX/6 : 0.0;
@@ -672,7 +682,8 @@ void newWave :: reset(int value)
         posit[i][j]= ((gridX-i)-j<3) ? gridX/6 : 0.0;
         break;
       case MIDDLEBLOCK:
-        posit[i][j]= ((i > gridX/3 && j > gridY/3)&&(i < gridX*2/3 && j < gridY*2/3)) ? gridX/4 : 0.0;
+        posit[i][j]= ((i > gridX/3 && j > gridY/3)&&(i < gridX*2/3
+                      && j < gridY*2/3)) ? gridX/4 : 0.0;
         break;
       case CORNERBLOCK:
         posit[i][j]= ((i > gridX*3/4 && j > gridY*3/4)) ? gridX/4 : 0.0;

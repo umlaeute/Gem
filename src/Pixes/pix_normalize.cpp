@@ -50,7 +50,8 @@ void pix_normalize :: processRGBAImage(imageStruct &image)
 
   while(n--) {
     // think about this more carefully, to allow normalization for single channels...
-    unsigned char red=pixels[chRed], green=pixels[chGreen], blue=pixels[chBlue];
+    unsigned char red=pixels[chRed], green=pixels[chGreen],
+                  blue=pixels[chBlue];
     if (min>red) {
       min=red;
     }

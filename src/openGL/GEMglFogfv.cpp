@@ -38,8 +38,10 @@ GEMglFogfv :: GEMglFogfv        (int argc, t_atom *argv)
     paramsMess(argc-1, argv+1);
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("params"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+                         gensym("params"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -93,15 +95,20 @@ void GEMglFogfv :: paramsMess (int argc, t_atom*argv)   // FUN
 
 void GEMglFogfv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogfv::pnameMessCallback),          gensym("pname"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogfv::paramsMessCallback),         gensym("params"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFogfv::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFogfv::paramsMessCallback),
+                  gensym("params"), A_GIMME, A_NULL);
 }
 
 void GEMglFogfv :: pnameMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->pnameMess (arg0);
 }
-void GEMglFogfv :: paramsMessCallback (void* data, t_symbol*, int argc, t_atom* argv)
+void GEMglFogfv :: paramsMessCallback (void* data, t_symbol*, int argc,
+                                       t_atom* argv)
 {
   GetMyClass(data)->paramsMess (argc, argv);
 }

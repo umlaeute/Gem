@@ -143,7 +143,8 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
     return NULL;
   }
 
-  size_t alignment = (reinterpret_cast<size_t>(pdata))&(GEM_VECTORALIGNMENT/8-1);
+  size_t alignment = (reinterpret_cast<size_t>(pdata))&
+                     (GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   data = pdata+offset;
   datasize=array_size-offset;
@@ -163,7 +164,8 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
   if (size>datasize) {
     return allocate(size);
   }
-  size_t alignment = (reinterpret_cast<size_t>(pdata))&(GEM_VECTORALIGNMENT/8-1);
+  size_t alignment = (reinterpret_cast<size_t>(pdata))&
+                     (GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
   notowned=false;
   data=pdata+offset;
@@ -217,7 +219,8 @@ GEM_EXTERN void imageStruct::info(void)
        format, type, notowned);
 }
 
-static bool copy_imagestruct2imagestruct(const imageStruct*from, imageStruct*to)
+static bool copy_imagestruct2imagestruct(const imageStruct*from,
+    imageStruct*to)
 {
 
   if(!from || !to) {
@@ -361,20 +364,24 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(void)
   return setCsizeByFormat(format);
 }
 
-void pix_addsat(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
+void pix_addsat(unsigned char *leftPix, unsigned char *rightPix,
+                size_t datasize)
 {
   while(datasize--) {
-    *leftPix = CLAMP_HIGH(static_cast<int>(*leftPix) + static_cast<int>(*rightPix));
+    *leftPix = CLAMP_HIGH(static_cast<int>(*leftPix) + static_cast<int>
+                          (*rightPix));
     leftPix++;
     rightPix++;
   }
 }
 
 
-void pix_sub(unsigned char *leftPix, unsigned char *rightPix, size_t datasize)
+void pix_sub(unsigned char *leftPix, unsigned char *rightPix,
+             size_t datasize)
 {
   while(datasize--) {
-    *leftPix = CLAMP_LOW(static_cast<int>(*leftPix) - static_cast<int>(*rightPix++));
+    *leftPix = CLAMP_LOW(static_cast<int>(*leftPix) - static_cast<int>
+                         (*rightPix++));
     leftPix++;
   }
 }
@@ -423,7 +430,8 @@ GEM_EXTERN void imageStruct::setWhite(void)
     break;
   }
 }
-GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from, GLenum to_format)
+GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from,
+    GLenum to_format)
 {
   if (!from || !this || !from->data) {
     error("GEM: Someone sent a bogus pointer to convert");
@@ -554,7 +562,8 @@ GEM_EXTERN void imageStruct::fromRGB(const unsigned char *rgbdata)
     break;
   case GL_LUMINANCE:
     while(pixelnum--) {
-      *pixels++=(rgbdata[0]*RGB2GRAY_RED+rgbdata[1]*RGB2GRAY_GREEN+rgbdata[2]*RGB2GRAY_BLUE)>>8;
+      *pixels++=(rgbdata[0]*RGB2GRAY_RED+rgbdata[1]*RGB2GRAY_GREEN
+                 +rgbdata[2]*RGB2GRAY_BLUE)>>8;
       rgbdata+=3;
     }
     break;
@@ -564,10 +573,14 @@ GEM_EXTERN void imageStruct::fromRGB(const unsigned char *rgbdata)
 #else
     pixelnum>>=1;
     while(pixelnum--) {
-      *pixels++=((RGB2YUV_21*rgbdata[0]+RGB2YUV_22*rgbdata[1]+RGB2YUV_23*rgbdata[2])>>8)+UV_OFFSET; // U
-      *pixels++=((RGB2YUV_11*rgbdata[0]+RGB2YUV_12*rgbdata[1]+RGB2YUV_13*rgbdata[2])>>8)+ Y_OFFSET; // Y
-      *pixels++=((RGB2YUV_31*rgbdata[0]+RGB2YUV_32*rgbdata[1]+RGB2YUV_33*rgbdata[2])>>8)+UV_OFFSET; // V
-      *pixels++=((RGB2YUV_11*rgbdata[3]+RGB2YUV_12*rgbdata[4]+RGB2YUV_13*rgbdata[5])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_21*rgbdata[0]+RGB2YUV_22*rgbdata[1]
+                  +RGB2YUV_23*rgbdata[2])>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*rgbdata[0]+RGB2YUV_12*rgbdata[1]
+                  +RGB2YUV_13*rgbdata[2])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_31*rgbdata[0]+RGB2YUV_32*rgbdata[1]
+                  +RGB2YUV_33*rgbdata[2])>>8)+UV_OFFSET; // V
+      *pixels++=((RGB2YUV_11*rgbdata[3]+RGB2YUV_12*rgbdata[4]
+                  +RGB2YUV_13*rgbdata[5])>>8)+ Y_OFFSET; // Y
       rgbdata+=6;
     }
 #endif
@@ -605,7 +618,8 @@ GEM_EXTERN void imageStruct::fromRGB16(const unsigned char *rgb16data)
   case GL_LUMINANCE:
     while(pixelnum--) {
       rgb=*rgbdata++;
-      *pixels++=(((rgb>>8)&0xF8)*RGB2GRAY_RED+((rgb>>3)&0xFC)*RGB2GRAY_GREEN+((rgb<<3)&0xF8)*RGB2GRAY_BLUE)>>8;
+      *pixels++=(((rgb>>8)&0xF8)*RGB2GRAY_RED+((rgb>>3)&0xFC)*RGB2GRAY_GREEN+((
+                   rgb<<3)&0xF8)*RGB2GRAY_BLUE)>>8;
     }
     break;
   case GL_YUV422_GEM:
@@ -683,7 +697,8 @@ GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata)
     break;
   case GL_LUMINANCE:
     while(pixelnum--) {
-      *pixels++=(rgbadata[0]*RGB2GRAY_RED+rgbadata[1]*RGB2GRAY_GREEN+rgbadata[2]*RGB2GRAY_BLUE)>>8;
+      *pixels++=(rgbadata[0]*RGB2GRAY_RED+rgbadata[1]*RGB2GRAY_GREEN
+                 +rgbadata[2]*RGB2GRAY_BLUE)>>8;
 
       rgbadata+=4;
     }
@@ -771,17 +786,22 @@ GEM_EXTERN void imageStruct::fromBGR(const unsigned char *bgrdata)
     break;
   case GL_LUMINANCE:
     while(pixelnum--) {
-      *pixels++=(bgrdata[2]*RGB2GRAY_RED+bgrdata[1]*RGB2GRAY_GREEN+bgrdata[0]*RGB2GRAY_BLUE)>>8;
+      *pixels++=(bgrdata[2]*RGB2GRAY_RED+bgrdata[1]*RGB2GRAY_GREEN
+                 +bgrdata[0]*RGB2GRAY_BLUE)>>8;
       bgrdata+=3;
     }
     break;
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--) {
-      *pixels++=((RGB2YUV_21*bgrdata[2]+RGB2YUV_22*bgrdata[1]+RGB2YUV_23*bgrdata[0])>>8)+UV_OFFSET; // U
-      *pixels++=((RGB2YUV_11*bgrdata[2]+RGB2YUV_12*bgrdata[1]+RGB2YUV_13*bgrdata[0])>>8)+ Y_OFFSET; // Y
-      *pixels++=((RGB2YUV_31*bgrdata[2]+RGB2YUV_32*bgrdata[1]+RGB2YUV_33*bgrdata[0])>>8)+UV_OFFSET; // V
-      *pixels++=((RGB2YUV_11*bgrdata[5]+RGB2YUV_12*bgrdata[4]+RGB2YUV_13*bgrdata[3])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_21*bgrdata[2]+RGB2YUV_22*bgrdata[1]
+                  +RGB2YUV_23*bgrdata[0])>>8)+UV_OFFSET; // U
+      *pixels++=((RGB2YUV_11*bgrdata[2]+RGB2YUV_12*bgrdata[1]
+                  +RGB2YUV_13*bgrdata[0])>>8)+ Y_OFFSET; // Y
+      *pixels++=((RGB2YUV_31*bgrdata[2]+RGB2YUV_32*bgrdata[1]
+                  +RGB2YUV_33*bgrdata[0])>>8)+UV_OFFSET; // V
+      *pixels++=((RGB2YUV_11*bgrdata[5]+RGB2YUV_12*bgrdata[4]
+                  +RGB2YUV_13*bgrdata[3])>>8)+ Y_OFFSET; // Y
       bgrdata+=6;
     }
     break;
@@ -852,7 +872,8 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata)
       const int G=1;
       const int B=0;
 #endif
-      *pixels++=(bgradata[R]*RGB2GRAY_RED+bgradata[G]*RGB2GRAY_GREEN+bgradata[B]*RGB2GRAY_BLUE)>>8;
+      *pixels++=(bgradata[R]*RGB2GRAY_RED+bgradata[G]*RGB2GRAY_GREEN
+                 +bgradata[B]*RGB2GRAY_BLUE)>>8;
       bgradata+=4;
     }
     break;
@@ -980,7 +1001,8 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata)
       const int G=2;
       const int B=1;
 #endif
-      *pixels++=(abgrdata[R]*RGB2GRAY_RED+abgrdata[G]*RGB2GRAY_GREEN+abgrdata[B]*RGB2GRAY_BLUE)>>8;
+      *pixels++=(abgrdata[R]*RGB2GRAY_RED+abgrdata[G]*RGB2GRAY_GREEN
+                 +abgrdata[B]*RGB2GRAY_BLUE)>>8;
       abgrdata+=4;
     }
     break;
@@ -1091,7 +1113,8 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata)
       const int G=2;
       const int B=3;
 #endif
-      *pixels++=(argbdata[R]*RGB2GRAY_RED+argbdata[G]*RGB2GRAY_GREEN+argbdata[B]*RGB2GRAY_BLUE)>>8;
+      *pixels++=(argbdata[R]*RGB2GRAY_RED+argbdata[G]*RGB2GRAY_GREEN
+                 +argbdata[B]*RGB2GRAY_BLUE)>>8;
       argbdata+=4;
     }
     break;
@@ -1239,7 +1262,8 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*yuvdata)
   size_t pixelnum=xsize*ysize;
   fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
 }
-GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char*U, const unsigned char*V)
+GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y,
+                                      const unsigned char*U, const unsigned char*V)
 {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
   if(!U && !V) {
@@ -1319,7 +1343,8 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y, const unsigned char
     unsigned char *pixels2=data+xsize*4;
 
     const unsigned char*py1=Y;//yuvdata;
-    const unsigned char*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
+    const unsigned char*py2=Y
+                            +xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
     const unsigned char*pv=(format==GL_BGRA_EXT)?V:U;
     const unsigned char*pu=(format==GL_RGBA)?V:U;
 
@@ -1415,7 +1440,8 @@ GEM_EXTERN void imageStruct::fromYV12(const short*yuvdata)
   int pixelnum=xsize*ysize;
   fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
 }
-GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U, const short*V)
+GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U,
+                                      const short*V)
 {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
   if(!U && !V) {
@@ -1752,7 +1778,8 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata)
   }
 }
 
-GEM_EXTERN void imageStruct::fromYUY2(const unsigned char *yuvdata)   // YUYV
+GEM_EXTERN void imageStruct::fromYUY2(const unsigned char
+                                      *yuvdata)   // YUYV
 {
   if(!yuvdata) {
     return;
@@ -2025,7 +2052,8 @@ GEM_EXTERN void imageStruct::swapRedBlue(void)
 }
 
 
-GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a) const
+GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r,
+                                    unsigned char*g, unsigned char*b, unsigned char*a) const
 {
   unsigned char red=0, green=0, blue=0, alpha=255;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
@@ -2106,16 +2134,20 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
     grey=pixels[0];
     break;
   case GL_RGB:
-    grey=(pixels[0]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[2]*RGB2GRAY_BLUE)>>8;
+    grey=(pixels[0]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN
+          +pixels[2]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_BGR_EXT:
-    grey=(pixels[2]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[0]*RGB2GRAY_BLUE)>>8;
+    grey=(pixels[2]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN
+          +pixels[0]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_RGBA:
-    grey=(pixels[0]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[2]*RGB2GRAY_BLUE)>>8;
+    grey=(pixels[0]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN
+          +pixels[2]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_BGRA_EXT:
-    grey=(pixels[2]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN+pixels[0]*RGB2GRAY_BLUE)>>8;
+    grey=(pixels[2]*RGB2GRAY_RED+pixels[1]*RGB2GRAY_GREEN
+          +pixels[0]*RGB2GRAY_BLUE)>>8;
     break;
   case GL_YUV422_GEM: {
     position = (((X+(upsidedown?(ysize-Y-1):Y)*xsize)>>1)<<1);
@@ -2130,7 +2162,8 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
     *g=grey;
   }
 }
-GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const
+GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y,
+                                    unsigned char*u, unsigned char*v) const
 {
   unsigned char luma=0, chromaU=128, chromaV=128;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);

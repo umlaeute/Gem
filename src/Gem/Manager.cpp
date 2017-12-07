@@ -77,7 +77,8 @@ int GemMan::m_buffer = 2;
 int GemMan::m_profile = 0;
 int GemMan::m_rendering = 0;
 GLfloat GemMan::m_clear_color[4];
-GLbitfield GemMan::m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
+GLbitfield GemMan::m_clear_mask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
+                                  | GL_STENCIL_BUFFER_BIT;
 GLfloat GemMan::m_mat_ambient[4];
 GLfloat GemMan::m_mat_specular[4];
 GLfloat GemMan::m_mat_shininess;
@@ -160,9 +161,12 @@ void GemMan::resizeCallback(int xSize, int ySize, void *)
   // setup the matrices
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,       // left, right
-            GemMan::m_perspect[2], GemMan::m_perspect[3],                       // bottom, top
-            GemMan::m_perspect[4], GemMan::m_perspect[5]);                      // front, back
+  glFrustum(GemMan::m_perspect[0] * xDivy,
+            GemMan::m_perspect[1] * xDivy,       // left, right
+            GemMan::m_perspect[2],
+            GemMan::m_perspect[3],                       // bottom, top
+            GemMan::m_perspect[4],
+            GemMan::m_perspect[5]);                      // front, back
 
   glMatrixMode(GL_MODELVIEW);
   //  TODO:
@@ -207,7 +211,8 @@ void GemMan :: createContext(char* disp)
     */
   }
 
-  s_windowClock = clock_new(NULL, reinterpret_cast<t_method>(GemMan::dispatchWinmessCallback));
+  s_windowClock = clock_new(NULL,
+                            reinterpret_cast<t_method>(GemMan::dispatchWinmessCallback));
   if (!m_windowContext && !createConstWindow(disp)) {
     error("GEM: A serious error occurred creating const Context");
     error("GEM: Continue at your own risk!");
@@ -289,7 +294,8 @@ void GemMan :: initGem()
   m_fogColor[0] = m_fogColor[1] = m_fogColor[2] = m_fogColor[3] = 1.f;
 
   maxStackDepth[GemMan::STACKMODELVIEW] = 16; // model
-  maxStackDepth[GemMan::STACKCOLOR] = 0; // color (defaults to 0, in case GL_ARB_imaging is not supported
+  maxStackDepth[GemMan::STACKCOLOR] =
+    0; // color (defaults to 0, in case GL_ARB_imaging is not supported
   maxStackDepth[GemMan::STACKTEXTURE] = 2; // texture
   maxStackDepth[GemMan::STACKPROJECTION] = 2; // projection
 
@@ -341,7 +347,8 @@ void GemMan :: resetValues()
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  glFrustum(m_perspect[0] * xDivy, m_perspect[1] * xDivy,       // left, right
+  glFrustum(m_perspect[0] * xDivy,
+            m_perspect[1] * xDivy,       // left, right
             m_perspect[2], m_perspect[3],                               // bottom, top
             m_perspect[4], m_perspect[5]);                              // front, back
 
@@ -606,13 +613,17 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
-              GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
-              GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
+    glFrustum(GemMan::m_perspect[0] * xDivy,
+              GemMan::m_perspect[1] * xDivy,   // left, right
+              GemMan::m_perspect[2],
+              GemMan::m_perspect[3],                   // bottom, top
+              GemMan::m_perspect[4],
+              GemMan::m_perspect[5]);                  // front, back
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+              m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render left view
@@ -630,13 +641,17 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
-              GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
-              GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
+    glFrustum(GemMan::m_perspect[0] * xDivy,
+              GemMan::m_perspect[1] * xDivy,   // left, right
+              GemMan::m_perspect[2],
+              GemMan::m_perspect[3],                   // bottom, top
+              GemMan::m_perspect[4],
+              GemMan::m_perspect[5]);                  // front, back
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+              m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render right view
@@ -694,13 +709,17 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
-              GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
-              GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
+    glFrustum(GemMan::m_perspect[0] * xDivy,
+              GemMan::m_perspect[1] * xDivy,   // left, right
+              GemMan::m_perspect[2],
+              GemMan::m_perspect[3],                   // bottom, top
+              GemMan::m_perspect[4],
+              GemMan::m_perspect[5]);                  // front, back
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+              m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render left view
@@ -718,13 +737,17 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy,   // left, right
-              GemMan::m_perspect[2], GemMan::m_perspect[3],                   // bottom, top
-              GemMan::m_perspect[4], GemMan::m_perspect[5]);                  // front, back
+    glFrustum(GemMan::m_perspect[0] * xDivy,
+              GemMan::m_perspect[1] * xDivy,   // left, right
+              GemMan::m_perspect[2],
+              GemMan::m_perspect[3],                   // bottom, top
+              GemMan::m_perspect[4],
+              GemMan::m_perspect[5]);                  // front, back
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+              m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render right view
@@ -751,7 +774,8 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy, // left, right
+    glFrustum(GemMan::m_perspect[0] * xDivy,
+              GemMan::m_perspect[1] * xDivy, // left, right
               GemMan::m_perspect[2], GemMan::m_perspect[3],     // bottom, top
               GemMan::m_perspect[4], GemMan::m_perspect[5]);      // front, back
 
@@ -760,7 +784,8 @@ void GemMan :: render(void *)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+              m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render left view
@@ -777,7 +802,8 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(GemMan::m_perspect[0] * xDivy, GemMan::m_perspect[1] * xDivy, // left, right
+    glFrustum(GemMan::m_perspect[0] * xDivy,
+              GemMan::m_perspect[1] * xDivy, // left, right
               GemMan::m_perspect[2], GemMan::m_perspect[3],     // bottom, top
               GemMan::m_perspect[4], GemMan::m_perspect[5]);      // front, back
 
@@ -786,7 +812,8 @@ void GemMan :: render(void *)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+              m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render right view
@@ -924,7 +951,8 @@ void GemMan :: windowInit()
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);
-  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2], m_clear_color[3]);
+  glClearColor(m_clear_color[0], m_clear_color[1], m_clear_color[2],
+               m_clear_color[3]);
 
 #ifdef __APPLE__
   GLint swapInt = 1;
@@ -1030,7 +1058,8 @@ int GemMan :: createWindow(char* disp)
     glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+STACKCOLOR);
   }
   glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH, maxStackDepth+STACKTEXTURE);
-  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, maxStackDepth+STACKPROJECTION);
+  glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
+                maxStackDepth+STACKPROJECTION);
 
   m_w=myHints.real_w;
   m_h=myHints.real_h;
@@ -1451,7 +1480,8 @@ void GemMan :: printInfo()
   if (glGetString(GL_EXTENSIONS)) {
     char *text = new char [strlen((char *)glGetString(GL_EXTENSIONS)) + 1];
     strcpy(text,(char *)glGetString(GL_EXTENSIONS));
-    char *token = strtok(text, " ");    // Parse 'text' For Words, Separated By " " (spaces)
+    char *token = strtok(text,
+                         " ");    // Parse 'text' For Words, Separated By " " (spaces)
     while(token != NULL) {              // While The Token Isn't NULL
       post("Extensions: %s", token);    // Print extension string
       token = strtok(NULL, " ");

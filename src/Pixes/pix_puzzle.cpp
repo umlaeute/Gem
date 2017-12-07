@@ -206,7 +206,9 @@ void pix_puzzle :: processImage(imageStruct &image)
   int x, y, xx, yy, i;
   unsigned char *p, *q;
 
-  if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)) {
+  if (m_force
+      || (myImage.xsize*myImage.ysize*myImage.csize !=
+          image.xsize*image.ysize*image.csize)) {
     myImage.clear();
     m_force = false;
 
@@ -231,7 +233,8 @@ void pix_puzzle :: processImage(imageStruct &image)
     for(x=0; x<blockw; x++) {
       p = &src[blockoffset[blockpos[i]]];
       q = &dest[blockoffset[i]];
-      if(m_game && spacepos == i) { // leave one rectangle blank (for the puzzle game)
+      if(m_game && spacepos ==
+          i) { // leave one rectangle blank (for the puzzle game)
         for(yy=0; yy<blockysize; yy++) {
           for(xx=0; xx<blockxsize*image.csize; xx++) {
             q[xx] = 0;
@@ -285,7 +288,9 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
   int x, y, xx, yy, i;
   unsigned char *p, *q;
 
-  if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)) {
+  if (m_force
+      || (myImage.xsize*myImage.ysize*myImage.csize !=
+          image.xsize*image.ysize*image.csize)) {
     myImage.clear();
     m_force = false;
 
@@ -309,7 +314,8 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
     for(x=0; x<blockw; x++) {
       p = &src[blockoffset[blockpos[i]]];
       q = &dest[blockoffset[i]];
-      if(m_game && spacepos == i) { // leave one rectangle blank (for the puzzle game)
+      if(m_game && spacepos ==
+          i) { // leave one rectangle blank (for the puzzle game)
         for(yy=0; yy<blockysize; yy++) {
           for(xx=0; xx<blockxsize*image.csize; xx++) {
             q[xx] = 0;
@@ -357,11 +363,14 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_puzzle :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_puzzle::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_puzzle::bangMessCallback));
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_puzzle::sizeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_puzzle::sizeMessCallback),
                   gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_puzzle::moveMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_puzzle::moveMessCallback),
                   gensym("move"), A_FLOAT, A_NULL);
 }
 
@@ -370,7 +379,8 @@ void pix_puzzle :: bangMessCallback(void *data)
   GetMyClass(data)->shuffle();
 }
 
-void pix_puzzle :: sizeMessCallback(void *data, t_float width, t_float height)
+void pix_puzzle :: sizeMessCallback(void *data, t_float width,
+                                    t_float height)
 {
   GetMyClass(data)->sizeMess((int)width, (int)height);
 }

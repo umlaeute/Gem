@@ -133,7 +133,8 @@ public:
    * get a named vector (e.g. to pass it to VBO)
    * TODO: return VBOarray
    */
-  virtual std::vector<std::vector<float> > getVector(std::string vectorName) = 0;
+  virtual std::vector<std::vector<float> > getVector(std::string vectorName)
+    = 0;
 
   /**
    * get all vectors

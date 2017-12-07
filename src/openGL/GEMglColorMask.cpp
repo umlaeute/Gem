@@ -14,7 +14,8 @@
 
 #include "GEMglColorMask.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColorMask, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColorMask, t_floatarg, A_DEFFLOAT,
+                               t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,16 +24,21 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglColorMask, t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColorMask :: GEMglColorMask        (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2, t_floatarg arg3) :
+GEMglColorMask :: GEMglColorMask        (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2, t_floatarg arg3) :
   red(static_cast<GLboolean>(arg0)),
   green(static_cast<GLboolean>(arg1)),
   blue(static_cast<GLboolean>(arg2)),
   alpha(static_cast<GLboolean>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blue"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("alpha"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("red"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("green"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("blue"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("alpha"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,10 +93,18 @@ void GEMglColorMask :: alphaMess (t_float arg1)         // FUN
 
 void GEMglColorMask :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMask::redMessCallback),        gensym("red"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMask::greenMessCallback),      gensym("green"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMask::blueMessCallback),       gensym("blue"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColorMask::alphaMessCallback),      gensym("alpha"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColorMask::redMessCallback),
+                  gensym("red"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColorMask::greenMessCallback),
+                  gensym("green"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColorMask::blueMessCallback),
+                  gensym("blue"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColorMask::alphaMessCallback),
+                  gensym("alpha"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglColorMask :: redMessCallback (void* data, t_float arg0)

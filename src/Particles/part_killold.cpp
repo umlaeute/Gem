@@ -33,7 +33,8 @@ part_killold :: part_killold(t_floatarg num)
   if (num > 0) {
     m_killAge = num;
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("age"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("age"));
 }
 
 /////////////////////////////////////////////////////////

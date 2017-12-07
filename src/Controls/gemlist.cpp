@@ -40,7 +40,8 @@ gemlist :: gemlist(void)
     m_inlet(NULL)
 {
   // create the cold inlet
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"),
+                      gensym("gem_right"));
 }
 
 ////////////////////////////////////////////////////////
@@ -206,7 +207,8 @@ void gemlist::rightMess(t_symbol *s, int argc, t_atom *argv)
   GemState*state=NULL;
   if (argc==1 && argv->a_type==A_FLOAT) {
     rightRender(cache, state);
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
     cache=reinterpret_cast<GemCache*>(argv->a_w.w_gpointer);
     state=reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer);
     rightRender( cache, state );

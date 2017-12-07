@@ -100,7 +100,8 @@ void curve :: render(GemState *state)
     }
 
     glEnable(GL_MAP1_TEXTURE_COORD_2);
-    glMap1f(GL_MAP1_TEXTURE_COORD_2, 0,   1,   2, m_numVertices, &m_texCoords[0][0]);
+    glMap1f(GL_MAP1_TEXTURE_COORD_2, 0,   1,   2, m_numVertices,
+            &m_texCoords[0][0]);
   }
   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, m_numVertices, &(m_vert[0][0]));
   glEnable(GL_MAP1_VERTEX_3);

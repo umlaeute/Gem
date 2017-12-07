@@ -32,8 +32,10 @@ rotate :: rotate(int argc, t_atom *argv)
   m_angle = 0.0;
   if (argc == 4) {
     m_angle = atom_getfloat(&argv[0]);
-    vectorMess(atom_getfloat(&argv[1]), atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-  } else if (argc == 3) vectorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+    vectorMess(atom_getfloat(&argv[1]), atom_getfloat(&argv[2]),
+               atom_getfloat(&argv[3]));
+  } else if (argc == 3) vectorMess(atom_getfloat(&argv[0]),
+                                     atom_getfloat(&argv[1]),
                                      atom_getfloat(&argv[2]));
 
   else if (argc == 0) {

@@ -17,7 +17,8 @@
 #define GRID_SIZE_X  32
 #define GRID_SIZE_Y  32
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(rubber, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(rubber, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -46,9 +47,12 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
   m_grid_sizeY = (gridYi>0)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
-  inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
-  inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("Ht"));
+  inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("cX"));
+  inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("cY"));
 
   m_drawType = GL_POLYGON;
 
@@ -182,7 +186,8 @@ void rubber :: renderShape(GemState *state)
         glTexCoord2fv( m_mass[k].t);
         glVertex3f( m_mass[k].x[0]*m_size, m_mass[k].x[1]*m_size, m_mass[k].x[2] );
         glTexCoord2fv( m_mass[k + 1].t );
-        glVertex3f( m_mass[k + 1].x[0]*m_size, m_mass[k + 1].x[1]*m_size, m_mass[k + 1].x[2] );
+        glVertex3f( m_mass[k + 1].x[0]*m_size, m_mass[k + 1].x[1]*m_size,
+                    m_mass[k + 1].x[2] );
         glTexCoord2fv( m_mass[k + m_grid_sizeY + 1].t );
         glVertex3f( m_mass[k + m_grid_sizeY + 1].x[0]*m_size,
                     m_mass[k + m_grid_sizeY + 1].x[1]*m_size,
@@ -210,7 +215,8 @@ void rubber :: renderShape(GemState *state)
         glTexCoord2fv( m_mass[k].t );
         glVertex3f( m_mass[k].x[0]*m_size, m_mass[k].x[1]*m_size, m_mass[k].x[2] );
         glTexCoord2fv( m_mass[k + 1].t );
-        glVertex3f( m_mass[k + 1].x[0]*m_size, m_mass[k + 1].x[1]*m_size, m_mass[k + 1].x[2] );
+        glVertex3f( m_mass[k + 1].x[0]*m_size, m_mass[k + 1].x[1]*m_size,
+                    m_mass[k + 1].x[2] );
         glTexCoord2fv( m_mass[k + m_grid_sizeY + 1].t );
         glVertex3f( m_mass[k + m_grid_sizeY + 1].x[0]*m_size,
                     m_mass[k + m_grid_sizeY + 1].x[1]*m_size,

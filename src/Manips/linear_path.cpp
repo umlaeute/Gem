@@ -30,7 +30,8 @@ linear_path :: ~linear_path()
 // floatMess
 //
 /////////////////////////////////////////////////////////
-void linear_path :: lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts)
+void linear_path :: lookupFunc(t_float x, t_float *ret, int numDimen,
+                               int npnts, t_float *pnts)
 {
   linearFunc(x, ret, numDimen, npnts, pnts);
 }

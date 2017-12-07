@@ -19,7 +19,8 @@
 #include "Gem/State.h"
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(rectangle, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(rectangle, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -37,7 +38,8 @@ rectangle :: rectangle(t_floatarg width, t_floatarg height)
   }
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("ft2"));
 
   m_drawTypes.clear();
   m_drawTypes["default"]=GL_DEFAULT_GEM;

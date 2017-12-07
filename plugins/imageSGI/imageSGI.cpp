@@ -48,7 +48,8 @@ imageSGI :: ~imageSGI(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageSGI :: load(std::string filename, imageStruct&result,
+                      gem::Properties&props)
 {
   int32 xsize, ysize, csize;
   if (!sizeofimage(filename.c_str(), &xsize, &ysize, &csize) ) {
@@ -63,14 +64,17 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
   } else if (csize == 1) {
     result.setCsizeByFormat(GL_LUMINANCE);
   } else {
-    fprintf(stderr, "[GEM:imageSGI] unknown color components in SGI file: %s\n", filename.c_str());
+    fprintf(stderr,
+            "[GEM:imageSGI] unknown color components in SGI file: %s\n",
+            filename.c_str());
     return(false);
   }
   result.reallocate();
 
   unsigned int32 *readData = longimagedata((char *)filename.c_str());
   if (!readData) {
-    fprintf(stderr, "[GEM:imageSGI] error reading SGI image file: %s\n", filename.c_str());
+    fprintf(stderr, "[GEM:imageSGI] error reading SGI image file: %s\n",
+            filename.c_str());
     return false;
   }
 
@@ -127,7 +131,8 @@ bool imageSGI :: load(std::string filename, imageStruct&result, gem::Properties&
   return true;
 }
 
-bool imageSGI::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+bool imageSGI::save(const imageStruct&image, const std::string&filename,
+                    const std::string&mimetype, const gem::Properties&props)
 {
   imageStruct img;
   image.convertTo(&img, GL_RGBA);
@@ -140,12 +145,15 @@ bool imageSGI::save(const imageStruct&image, const std::string&filename, const s
 
   int result=0;
   if(data) {
-    result=longstoimage(data, img.xsize, img.ysize, 4, filename.c_str(), name.c_str());
+    result=longstoimage(data, img.xsize, img.ysize, 4, filename.c_str(),
+                        name.c_str());
   }
 
   return (0!=result);
 }
-float imageSGI::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+float imageSGI::estimateSave(const imageStruct&img,
+                             const std::string&filename, const std::string&mimetype,
+                             const gem::Properties&props)
 {
   float result=0;
   if("image/sgi" == mimetype) {
@@ -159,7 +167,8 @@ float imageSGI::estimateSave(const imageStruct&img, const std::string&filename, 
   }
   return result;
 }
-void imageSGI::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props)
+void imageSGI::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                    gem::Properties&props)
 {
   mimetypes.clear();
   props.clear();

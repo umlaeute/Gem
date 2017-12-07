@@ -63,7 +63,8 @@ public:
   void rotateZ(float degrees);
 
   //////////
-  void transform(float srcX, float srcY, float srcZ, float *dstX, float *dstY, float *dstZ) const;
+  void transform(float srcX, float srcY, float srcZ, float *dstX,
+                 float *dstY, float *dstZ) const;
 
   //////////
   // The actual matrix values
@@ -71,7 +72,8 @@ public:
 
   //////////
   // Utility functions
-  static void generateNormal(const float *v1, const float *v2, const float *v3, float *dst);
+  static void generateNormal(const float *v1, const float *v2,
+                             const float *v3, float *dst);
 };
 
 

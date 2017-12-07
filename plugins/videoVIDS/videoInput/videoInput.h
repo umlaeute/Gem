@@ -190,10 +190,11 @@ static int comInitCount = 0;
 
 ////////////////////////////////////////   VIDEO DEVICE   ///////////////////////////////////
 
-class videoDevice{
+class videoDevice
+{
 
 
- public:
+public:
 
   videoDevice();
   void setSize(int w, int h);
@@ -253,9 +254,10 @@ class videoDevice{
 
 
 
-class videoInput{
+class videoInput
+{
 
- public:
+public:
   videoInput();
   ~videoInput();
 
@@ -285,7 +287,8 @@ class videoInput{
   //some devices will stop delivering frames after a while - this method gives you the option to try and reconnect
   //to a device if videoInput detects that a device has stopped delivering frames.
   //you MUST CALL isFrameNew every app loop for this to have any effect
-  void setAutoReconnectOnFreeze(int deviceNumber, bool doReconnect, int numMissedFramesBeforeReconnect);
+  void setAutoReconnectOnFreeze(int deviceNumber, bool doReconnect,
+                                int numMissedFramesBeforeReconnect);
 
   //Choose one of these four to setup your device
   bool setupDevice(int deviceID);
@@ -310,10 +313,12 @@ class videoInput{
   bool isDeviceSetup(int deviceID);
 
   //Returns the pixels - flipRedAndBlue toggles RGB/BGR flipping - and you can flip the image too
-  unsigned char * getPixels(int deviceID, bool flipRedAndBlue = true, bool flipImage = false);
+  unsigned char * getPixels(int deviceID, bool flipRedAndBlue = true,
+                            bool flipImage = false);
 
   //Or pass in a buffer for getPixels to fill returns true if successful.
-  bool getPixels(int id, unsigned char * pixels, bool flipRedAndBlue = true, bool flipImage = false);
+  bool getPixels(int id, unsigned char * pixels, bool flipRedAndBlue = true,
+                 bool flipImage = false);
 
   //Launches a pop up settings window
   //For some reason in GLUT you have to call it twice each time.
@@ -321,13 +326,21 @@ class videoInput{
 
   //Manual control over settings thanks.....
   //These are experimental for now.
-  bool setVideoSettingFilter(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
-  bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue, long Flags = NULL);
-  bool getVideoSettingFilter(int deviceID, long Property, long &min, long &max, long &SteppingDelta, long &currentValue, long &flags, long &defaultValue);
+  bool setVideoSettingFilter(int deviceID, long Property, long lValue,
+                             long Flags = NULL, bool useDefaultValue = false);
+  bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue,
+                                long Flags = NULL);
+  bool getVideoSettingFilter(int deviceID, long Property, long &min,
+                             long &max, long &SteppingDelta, long &currentValue, long &flags,
+                             long &defaultValue);
 
-  bool setVideoSettingCamera(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
-  bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue, long Flags = NULL);
-  bool getVideoSettingCamera(int deviceID, long Property, long &min, long &max, long &SteppingDelta, long &currentValue, long &flags, long &defaultValue);
+  bool setVideoSettingCamera(int deviceID, long Property, long lValue,
+                             long Flags = NULL, bool useDefaultValue = false);
+  bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue,
+                                long Flags = NULL);
+  bool getVideoSettingCamera(int deviceID, long Property, long &min,
+                             long &max, long &SteppingDelta, long &currentValue, long &flags,
+                             long &defaultValue);
 
   //bool setVideoSettingCam(int deviceID, long Property, long lValue, long Flags = NULL, bool useDefaultValue = false);
 
@@ -364,20 +377,23 @@ class videoInput{
   long propIris;
   long propFocus;
 
- private:
+private:
 
   void setPhyCon(int deviceID, int conn);
   void setAttemptCaptureSize(int deviceID, int w, int h);
   bool setup(int deviceID);
-  void processPixels(unsigned char * src, unsigned char * dst, int width, int height, bool bRGB, bool bFlip);
+  void processPixels(unsigned char * src, unsigned char * dst, int width,
+                     int height, bool bRGB, bool bFlip);
   int  start(int deviceID, videoDevice * VD);
   int  getDeviceCount();
   void getMediaSubtypeAsString(GUID type, char * typeAsString);
 
-  HRESULT getDevice(IBaseFilter **pSrcFilter, int deviceID, WCHAR * wDeviceName, char * nDeviceName);
+  HRESULT getDevice(IBaseFilter **pSrcFilter, int deviceID,
+                    WCHAR * wDeviceName, char * nDeviceName);
   static HRESULT ShowFilterPropertyPages(IBaseFilter *pFilter);
   HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath);
-  HRESULT routeCrossbar(ICaptureGraphBuilder2 **ppBuild, IBaseFilter **pVidInFilter, int conType, GUID captureMode);
+  HRESULT routeCrossbar(ICaptureGraphBuilder2 **ppBuild,
+                        IBaseFilter **pVidInFilter, int conType, GUID captureMode);
 
   //don't touch
   static bool comInit();

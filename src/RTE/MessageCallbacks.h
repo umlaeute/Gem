@@ -82,7 +82,8 @@ struct TypeTemplate<int> : TypeTemplateCore<t_float, int> {
   }
 };
 template<>
-struct TypeTemplate<unsigned int> : TypeTemplateCore<t_float, unsigned int> {
+struct TypeTemplate<unsigned int> :
+  TypeTemplateCore<t_float, unsigned int> {
   static t_atomtype atomtype_id(void)
   {
     return A_FLOAT;
@@ -111,7 +112,8 @@ struct TypeTemplate<t_symbol*> : TypeTemplateCore<t_symbol*> {
   }
 };
 template<>
-struct TypeTemplate<std::string> : TypeTemplateCore<t_symbol*, std::string> {
+struct TypeTemplate<std::string> :
+  TypeTemplateCore<t_symbol*, std::string> {
   static t_atomtype atomtype_id(void)
   {
     return A_DEFSYMBOL;

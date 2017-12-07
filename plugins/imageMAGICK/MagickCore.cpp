@@ -47,7 +47,8 @@ using namespace gem::plugins;
 
 namespace
 {
-static bool showException(ExceptionInfo*exception, const std::string&prefix=std::string())
+static bool showException(ExceptionInfo*exception,
+                          const std::string&prefix=std::string())
 {
   if(!exception) {
     return true;
@@ -90,7 +91,8 @@ static bool showException(ExceptionInfo*exception, const std::string&prefix=std:
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageMAGICK :: load(std::string filename, imageStruct&result,
+                         gem::Properties&props)
 {
   bool success=false;
   ExceptionInfo*exception=AcquireExceptionInfo();
@@ -140,7 +142,8 @@ cleanup:
   }
   return success;
 }
-bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
+                       const std::string&mimetype, const gem::Properties&props)
 {
   MagickBooleanType status = MagickFalse;
   imageStruct*img=const_cast<imageStruct*>(&image);

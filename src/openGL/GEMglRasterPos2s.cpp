@@ -14,7 +14,8 @@
 
 #include "GEMglRasterPos2s.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2s, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2s, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2s, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglRasterPos2s :: GEMglRasterPos2s    (t_floatarg arg0, t_floatarg arg1) :
+GEMglRasterPos2s :: GEMglRasterPos2s    (t_floatarg arg0,
+    t_floatarg arg1) :
   x(static_cast<GLshort>(arg0)),
   y(static_cast<GLshort>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +73,12 @@ void GEMglRasterPos2s :: yMess (t_float arg1)   // FUN
 
 void GEMglRasterPos2s :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2s::xMessCallback),        gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglRasterPos2s::yMessCallback),        gensym("y"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglRasterPos2s::xMessCallback),
+                  gensym("x"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglRasterPos2s::yMessCallback),
+                  gensym("y"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglRasterPos2s :: xMessCallback (void* data, t_float arg0)

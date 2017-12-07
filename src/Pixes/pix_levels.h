@@ -113,10 +113,18 @@ private:
   static void     autoCallback(void *data, t_float m_DoAuto);
   static void     uniCallback(void *data, t_float m_DoUniform);
   static void     invCallback(void *data, t_float m_DoAllowInversion);
-  static void     uniformCallback(void *data, t_float m_UniformInputFloor, t_float m_UniformInputCeiling, t_float m_UniformOutputFloor, t_float m_UniformOutputCeiling);
-  static void     redCallback(void *data, t_float m_RedInputFloor, t_float m_RedInputCeiling, t_float m_RedOutputFloor, t_float m_RedOutputCeiling);
-  static void     greenCallback(void *data, t_float m_GreenInputFloor,t_float m_GreenInputCeiling, t_float m_GreenOutputFloor, t_float m_GreenOutputCeiling);
-  static void     blueCallback(void *data, t_float m_BlueInputFloor, t_float m_BlueInputCeiling, t_float m_BlueOutputFloor, t_float m_BlueOutputCeiling);
+  static void     uniformCallback(void *data, t_float m_UniformInputFloor,
+                                  t_float m_UniformInputCeiling, t_float m_UniformOutputFloor,
+                                  t_float m_UniformOutputCeiling);
+  static void     redCallback(void *data, t_float m_RedInputFloor,
+                              t_float m_RedInputCeiling, t_float m_RedOutputFloor,
+                              t_float m_RedOutputCeiling);
+  static void     greenCallback(void *data, t_float m_GreenInputFloor,
+                                t_float m_GreenInputCeiling, t_float m_GreenOutputFloor,
+                                t_float m_GreenOutputCeiling);
+  static void     blueCallback(void *data, t_float m_BlueInputFloor,
+                               t_float m_BlueInputCeiling, t_float m_BlueOutputFloor,
+                               t_float m_BlueOutputCeiling);
   static void     lowPCallback(void *data, t_float m_LowPercentile);
   static void     hiPCallback(void *data, t_float m_HighPercentile);
 };

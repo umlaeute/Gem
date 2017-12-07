@@ -36,8 +36,10 @@ GEMglPolygonMode :: GEMglPolygonMode    (int argc, t_atom*argv) :
     throw(GemException("invalid number of arguments"));
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("face"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("mode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,17 +80,23 @@ void GEMglPolygonMode :: modeMess (t_atom arg)          // FUN
 
 void GEMglPolygonMode :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonMode::faceMessCallback),     gensym("face"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonMode::modeMessCallback),     gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPolygonMode::faceMessCallback),
+                  gensym("face"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPolygonMode::modeMessCallback),
+                  gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglPolygonMode :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglPolygonMode :: faceMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->faceMess ( argv[0]);
   }
 }
-void GEMglPolygonMode :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglPolygonMode :: modeMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->modeMess ( argv[0]);

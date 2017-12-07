@@ -70,7 +70,8 @@ BOOL bSetupPixelFormat(HDC hdc, const WindowHints &hints)
 // MainWndProc
 //
 /////////////////////////////////////////////////////////
-LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
+                         LPARAM lParam)
 {
   static RECT rcClient;
   static int ctrlKeyDown = 0;
@@ -211,17 +212,24 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
     x=y=0;
 
-    memset(&dmScreenSettings,0,sizeof(dmScreenSettings));       // Makes Sure Memory's Cleared
-    dmScreenSettings.dmSize=sizeof(dmScreenSettings);           // Size Of The Devmode Structure
-    dmScreenSettings.dmPelsWidth        = hints.width;                  // Selected Screen Width
-    dmScreenSettings.dmPelsHeight       = hints.height;                 // Selected Screen Height
-    dmScreenSettings.dmBitsPerPel       = 32;                                   // Selected Bits Per Pixel
+    memset(&dmScreenSettings,0,
+           sizeof(dmScreenSettings));       // Makes Sure Memory's Cleared
+    dmScreenSettings.dmSize=sizeof(
+                              dmScreenSettings);           // Size Of The Devmode Structure
+    dmScreenSettings.dmPelsWidth        =
+      hints.width;                  // Selected Screen Width
+    dmScreenSettings.dmPelsHeight       =
+      hints.height;                 // Selected Screen Height
+    dmScreenSettings.dmBitsPerPel       =
+      32;                                   // Selected Bits Per Pixel
     dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
     // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
-    if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
+    if (ChangeDisplaySettings(&dmScreenSettings,
+                              CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
       dmScreenSettings.dmPelsWidth      = w;
       dmScreenSettings.dmPelsHeight     = h;
-      if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
+      if (ChangeDisplaySettings(&dmScreenSettings,
+                                CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
         error("GEM: couldn't switch to fullscreen");
         fullscreen=false;
       } else {
@@ -324,8 +332,10 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   // show and update main window
   if (fullscreen) {
-    ShowWindow(info.win,SW_SHOW);                               // Show The Window
-    SetForegroundWindow(info.win);                              // Slightly Higher Priority
+    ShowWindow(info.win,
+               SW_SHOW);                               // Show The Window
+    SetForegroundWindow(
+      info.win);                              // Slightly Higher Priority
     SetFocus(info.win);
   } else {
     ShowWindow(info.win, SW_SHOWNORMAL);
@@ -386,7 +396,8 @@ int topmostGemWindow(WindowInfo &info, int state)
   if (state) {
     SetWindowPos(info.win, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   } else {
-    SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+    SetWindowPos(info.win, HWND_NOTOPMOST, 0, 0, 0, 0,
+                 SWP_NOSIZE | SWP_NOMOVE);
   }
   topmost_state = state;
   return topmost_state;

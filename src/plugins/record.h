@@ -57,7 +57,8 @@ public:
   /**
    * get a human readable description of the given codec (e.g. "Motion Jpeg A")
    */
-  virtual const std::string getCodecDescription(const std::string&codecname) = 0;
+  virtual const std::string getCodecDescription(const std::string&codecname)
+    = 0;
   /**
    * set the current codec
    */

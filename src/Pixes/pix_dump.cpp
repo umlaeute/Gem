@@ -28,7 +28,8 @@
 
 #include "pix_dump.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -112,8 +113,10 @@ void pix_dump :: processImage(imageStruct &image)
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
 
-    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>(m_xsize));
-    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>(m_ysize)) * image.xsize;
+    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>
+                         (m_xsize));
+    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>
+                         (m_ysize)) * image.xsize;
   }
 
   m_data = image.data;
@@ -148,8 +151,10 @@ void pix_dump :: processYUVImage(imageStruct &image)
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
 
-    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>(m_xsize));
-    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>(m_ysize)) * image.xsize;
+    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>
+                         (m_xsize));
+    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>
+                         (m_ysize)) * image.xsize;
   }
 
   m_data = image.data;
@@ -181,7 +186,8 @@ void pix_dump :: trigger()
     roi_y1=m_roi.y1*(0.5+m_ysize);
     roi_y2=m_roi.y2*(0.5+m_ysize);
 
-    buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (i % (roi_x2-roi_x1)) + roi_x1);
+    buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
+                               (i % (roi_x2-roi_x1)) + roi_x1);
   }
   n=roi_x1;
   m=roi_y1;
@@ -229,7 +235,8 @@ void pix_dump :: trigger()
       }
       j++;
       if ( m_doROI ) {
-        data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (j % (roi_x2-roi_x1)) + roi_x1) ;
+        data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
+                                 (j % (roi_x2-roi_x1)) + roi_x1) ;
       } else {
         data+=4;
       }
@@ -300,7 +307,8 @@ void pix_dump :: trigger()
         }
         if ( m_doROI ) {
           j++;
-          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (j % (roi_x2-roi_x1)) + roi_x1) ;
+          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
+                                   (j % (roi_x2-roi_x1)) + roi_x1) ;
         } else {
           data+=4;
         }
@@ -320,7 +328,8 @@ void pix_dump :: trigger()
         }
         if ( m_doROI ) {
           j++;
-          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize + (j % (roi_x2-roi_x1)) + roi_x1) ;
+          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
+                                   (j % (roi_x2-roi_x1)) + roi_x1) ;
         } else {
           data+=4;
         }

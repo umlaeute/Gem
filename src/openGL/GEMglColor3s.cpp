@@ -14,7 +14,8 @@
 
 #include "GEMglColor3s.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3s, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3s, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,18 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3s, t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColor3s :: GEMglColor3s    (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglColor3s :: GEMglColor3s    (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2) :
   red(static_cast<GLshort>(arg0)),
   green(static_cast<GLshort>(arg1)),
   blue(static_cast<GLshort>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("red"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("green"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("blue"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("red"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("green"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("blue"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,9 +83,15 @@ void GEMglColor3s :: blueMess (t_float arg1)    // FUN
 
 void GEMglColor3s :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3s::redMessCallback),          gensym("red"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3s::greenMessCallback),        gensym("green"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3s::blueMessCallback),         gensym("blue"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor3s::redMessCallback),
+                  gensym("red"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor3s::greenMessCallback),
+                  gensym("green"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor3s::blueMessCallback),
+                  gensym("blue"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglColor3s :: redMessCallback (void* data, t_float arg0)

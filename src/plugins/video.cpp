@@ -19,7 +19,8 @@
 
 gem::plugins::video :: ~video(void) {}
 
-static gem::PluginFactoryRegistrar::dummy<gem::plugins::video> fac_videodummy;
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::video>
+fac_videodummy;
 
 #include "Gem/Exception.h"
 #include "Gem/RTE.h"
@@ -39,7 +40,8 @@ private:
   std::string m_codec; // currently selected codec
 
   struct codechandle {
-    codechandle(gem::plugins::video*h, const std::string&c):handle(h), codec(c) {}
+    codechandle(gem::plugins::video*h, const std::string&c):handle(h),
+      codec(c) {}
 
     gem::plugins::video*handle;
     std::string codec;
@@ -58,7 +60,8 @@ private:
     m_codecs.clear();
     m_codechandle.clear();
   }
-  bool addPlugin( std::vector<std::string>available, std::string ID=std::string(""))
+  bool addPlugin( std::vector<std::string>available,
+                  std::string ID=std::string(""))
   {
     int count=0;
 
@@ -88,7 +91,8 @@ private:
           handle=gem::PluginFactory<gem::plugins::video>::getInstance(key);
         } catch(GemException&x) {
           handle=NULL;
-          verbose(1, "Gem::video: cannot use video plugin '%s': %s", key.c_str(), x.what());
+          verbose(1, "Gem::video: cannot use video plugin '%s': %s", key.c_str(),
+                  x.what());
         }
         if(NULL==handle) {
           continue;
@@ -96,7 +100,8 @@ private:
         m_ids.push_back(key);
         m_allHandles.push_back(handle);
         count++;
-        verbose(2, "Gem::video: added backend#%d '%s'", (int)(m_allHandles.size()-1), key.c_str());
+        verbose(2, "Gem::video: added backend#%d '%s'",
+                (int)(m_allHandles.size()-1), key.c_str());
       }
     }
     return (count>0);
@@ -112,7 +117,8 @@ public:
   {
     // compat
     gem::PluginFactory<gem::plugins::video>::loadPlugins("video");
-    std::vector<std::string>ids=gem::PluginFactory<gem::plugins::video>::getIDs();
+    std::vector<std::string>ids=
+      gem::PluginFactory<gem::plugins::video>::getIDs();
 
     // LATER: also add w32 & osx default backends
     addPlugin(ids, "v4l2");
@@ -246,7 +252,8 @@ public:
     }
     return result;
   }
-  virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable)
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable)
   {
     // OK
     if(m_handle) {

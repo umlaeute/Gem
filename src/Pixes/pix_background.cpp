@@ -24,7 +24,8 @@ CPPEXTERN_NEW_WITH_GIMME(pix_background);
 pix_background :: pix_background(int argc, t_atom*argv) :
   m_Yrange(0), m_Urange(0), m_Vrange(0), m_Arange(0), m_reset(1)
 {
-  inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("range_n"));
+  inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("range_n"));
 
   m_savedImage.xsize=320;
   m_savedImage.ysize=240;
@@ -180,9 +181,12 @@ void pix_background :: processYUVImage(imageStruct &image)
   for (h=0; h<image.ysize; h++) {
     for(w=0; w<hlength; w++) {
 
-      if (((data[src] > saved[src] - m_Urange)&&(data[src] < saved[src] + m_Urange))&&
-          ((data[src+1] > saved[src+1] - m_Yrange)&&(data[src+1] < saved[src+1] + m_Yrange))&&
-          ((data[src+2] > saved[src+2] - m_Vrange)&&(data[src+2] < saved[src+2] + m_Vrange))) {
+      if (((data[src] > saved[src] - m_Urange)
+           &&(data[src] < saved[src] + m_Urange))&&
+          ((data[src+1] > saved[src+1] - m_Yrange)
+           &&(data[src+1] < saved[src+1] + m_Yrange))&&
+          ((data[src+2] > saved[src+2] - m_Vrange)
+           &&(data[src+2] < saved[src+2] + m_Vrange))) {
         data[src]   = 128;
         data[src+1] = 0;
         data[src+2] = 128;
@@ -245,7 +249,8 @@ void pix_background :: processRGBAMMX(imageStruct &image)
     m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
     m1    = _mm_adds_pu8     (m1, offset);
     m1    = _mm_subs_pu8     (m1, thresh);
-    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
+    m1    = _mm_cmpeq_pi32   (m1,
+                              _mm_setzero_si64()); // |oldpix-newpix|>thresh
     m1    = _mm_andnot_si64(m1, newpix);
 
     *data++ = m1;
@@ -301,7 +306,8 @@ void pix_background :: processYUVMMX(imageStruct &image)
     m1    = _mm_or_si64      (m1, oldpix); // |oldpix-newpix|
     m1    = _mm_adds_pu8     (m1, offset); // to make thresh=0 work correctly
     m1    = _mm_subs_pu8     (m1, thresh);  // m1>thresh -> saturation -> 0
-    m1    = _mm_cmpeq_pi32   (m1, _mm_setzero_si64()); // |oldpix-newpix|>thresh
+    m1    = _mm_cmpeq_pi32   (m1,
+                              _mm_setzero_si64()); // |oldpix-newpix|>thresh
 
     oldpix= black;
     oldpix= _mm_and_si64     (oldpix, m1);
@@ -398,18 +404,22 @@ void pix_background :: processYUVAltivec(imageStruct &image)
     m_reset = 0;
   }
 
-  register vector unsigned short      UVres1, Yres1, UVres2, Yres2;//interleave;
+  register vector unsigned short      UVres1, Yres1, UVres2,
+           Yres2;//interleave;
   register vector unsigned short      hiImage, loImage;
   register vector unsigned short      Yrange, UVrange, Yblank,UVblank,blank;
   register vector bool short          Ymasklo,Ymaskhi,  UVmaskhi;
   register vector unsigned short      Yhi,Ylo,UVhi,UVlo;
   register vector unsigned char       one = vec_splat_u8(1);
   register vector unsigned short      sone = vec_splat_u16(1);
-  register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,Ures,Vres;
-  register vector bool int                    Umasklo, Umaskhi, Vmaskhi, Vmasklo;
+  register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,
+           Ures,Vres;
+  register vector bool int                    Umasklo, Umaskhi, Vmaskhi,
+           Vmasklo;
 
   vector unsigned char        *inData = (vector unsigned char*) image.data;
-  vector unsigned char        *rightData = (vector unsigned char*) m_savedImage.data;
+  vector unsigned char        *rightData = (vector unsigned char*)
+      m_savedImage.data;
 
   shortBuffer.s[0] =  m_Yrange;
   Yrange = shortBuffer.v;
@@ -445,7 +455,8 @@ void pix_background :: processYUVAltivec(imageStruct &image)
 
 
   //setup the cache prefetch -- A MUST!!!
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
 #ifndef PPC970
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
@@ -572,17 +583,22 @@ void pix_background :: rangeNMess(int argc, t_atom*argv)
 /////////////////////////////////////////////////////////
 void pix_background :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_background::resetCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::rangeNCallback),
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_background::resetCallback));
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_background::rangeNCallback),
                   gensym("range_n"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::rangeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_background::rangeCallback),
                   gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_background::resetCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_background::resetCallback),
                   gensym("reset"), A_NULL);
 }
 
 
-void pix_background :: rangeCallback(void *data, t_float Y, t_float U, t_float V)
+void pix_background :: rangeCallback(void *data, t_float Y, t_float U,
+                                     t_float V)
 {
   GetMyClass(data)->m_Yrange=((int)Y);
   GetMyClass(data)->m_Urange=((int)U);
@@ -595,7 +611,8 @@ void pix_background :: resetCallback(void *data)
   GetMyClass(data)->m_reset=1;
 }
 
-void pix_background :: rangeNCallback(void *data, t_symbol*,int argc, t_atom*argv)
+void pix_background :: rangeNCallback(void *data, t_symbol*,int argc,
+                                      t_atom*argv)
 {
   /* normalized values (float)0..1 instead of (int)0..255 */
   GetMyClass(data)->rangeNMess(argc, argv);

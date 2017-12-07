@@ -51,7 +51,8 @@ public:
     , qClock(0)
   {
     qClock=clock_new(this, reinterpret_cast<t_method>(qCallBack));
-    dispatchClock=clock_new(this, reinterpret_cast<t_method>(dispatchCallBack));
+    dispatchClock=clock_new(this,
+                            reinterpret_cast<t_method>(dispatchCallBack));
   }
   ~PIMPL(void)
   {
@@ -335,7 +336,8 @@ gem::Context*GemWindow::destroyContext(gem::Context*ctx)
 }
 void GemWindow::stopInAllContexts(GemBase*obj)
 {
-  for (std::set<GemWindow*>::iterator it = GemWindow::PIMPL::s_contexts.begin();
+  for (std::set<GemWindow*>::iterator it =
+         GemWindow::PIMPL::s_contexts.begin();
        it!=GemWindow::PIMPL::s_contexts.end();
        ++it) {
     GemWindow*w=(*it);
@@ -490,7 +492,8 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
   CPPEXTERN_MSG1(classPtr, "FSAA", fsaaMess, int);
   CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string);
-  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int, unsigned int);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, unsigned int,
+                 unsigned int);
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
   CPPEXTERN_MSG1(classPtr, "fullscreen", fullscreenMess, int);
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);

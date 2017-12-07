@@ -97,7 +97,8 @@ protected:
 
   //////////
   // frame data
-  unsigned char   *m_frame;  /* this points to the main texture (might be black) */
+  unsigned char
+  *m_frame;  /* this points to the main texture (might be black) */
   unsigned char   *m_data;   /* this points always to the real data */
 
 
@@ -153,29 +154,41 @@ protected:
 //      TimeValue               curTime;
 
 private:
-  IBaseFilter                             *VideoFilter;           // Base Filter for video
-  IBaseFilter                             *SampleFilter;          // Sample filter
-  IBaseFilter                             *NullFilter;            // Null render base Filter for video
+  IBaseFilter
+  *VideoFilter;           // Base Filter for video
+  IBaseFilter
+  *SampleFilter;          // Sample filter
+  IBaseFilter
+  *NullFilter;            // Null render base Filter for video
   ISampleGrabber                  *SampleGrabber;         // Sample grabber
-  IGraphBuilder                   *FilterGraph;           // Filter Graph for movie playback
+  IGraphBuilder
+  *FilterGraph;           // Filter Graph for movie playback
   ISampleGrabber                  *VideoGrabber;          // Video grabber
-  IMediaControl                   *MediaControl;          // MediaControl interface
-  IMediaSeeking                   *MediaSeeking;          // MediaSeeking interface
-  IMediaPosition                  *MediaPosition;         // MediaPosition interface
-  LONGLONG                                m_Duration;                     // Duration of video
-  LONGLONG                                m_LastFrame;            // Last frame
+  IMediaControl
+  *MediaControl;          // MediaControl interface
+  IMediaSeeking
+  *MediaSeeking;          // MediaSeeking interface
+  IMediaPosition
+  *MediaPosition;         // MediaPosition interface
+  LONGLONG
+  m_Duration;                     // Duration of video
+  LONGLONG
+  m_LastFrame;            // Last frame
 
 protected:
   //////////
   // static member functions
   static void openMessCallback(void *data, t_symbol *filename);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
   static void autoCallback(void *data, t_float state);
   static void rateCallback(void *data, t_float state);
   static void rectangleCallback(void *data, t_float state);
 };
 
-HRESULT movieGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);
-HRESULT movieConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond);
+HRESULT movieGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir,
+                    IPin **ppPin);
+HRESULT movieConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst,
+                            IBaseFilter *pSecond);
 
 #endif

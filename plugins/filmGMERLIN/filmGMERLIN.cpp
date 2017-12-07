@@ -95,7 +95,8 @@ void filmGMERLIN :: close(void)
 // logging
 //
 /////////////////////////////////////////////////////////
-void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char *message)
+void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain,
+                      const char *message)
 {
   switch(level) {
   case BGAV_LOG_DEBUG:
@@ -114,7 +115,8 @@ void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain, const char
     break;
   }
 }
-void filmGMERLIN::log_callback (void *data, bgav_log_level_t level, const char *log_domain, const char *message)
+void filmGMERLIN::log_callback (void *data, bgav_log_level_t level,
+                                const char *log_domain, const char *message)
 {
   ((filmGMERLIN*)(data))->log(level, log_domain, message);
 }
@@ -131,7 +133,8 @@ bool filmGMERLIN :: isThreadable(void)
 // really open the file !
 //
 /////////////////////////////////////////////////////////
-bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&wantProps)
+bool filmGMERLIN :: open(const std::string&sfilename,
+                         const gem::Properties&wantProps)
 {
   close();
 
@@ -162,7 +165,8 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
 
   if(!strncmp(filename, "vcd://", 6)) {
     if(!bgav_open_vcd(m_file, filename + 5)) {
-      verbose(0, "[GEM:filmGMERLIN] Could not open VCD Device %s",  filename + 5);
+      verbose(0, "[GEM:filmGMERLIN] Could not open VCD Device %s",
+              filename + 5);
       return false;
     }
   } else if(!strncmp(filename, "dvd://", 6)) {
@@ -188,7 +192,8 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
     int num_urls=bgav_redirector_get_num_urls(m_file);
     verbose(1, "[GEM:filmGMERLIN] Found redirector:");
     for(i = 0; i < num_urls; i++) {
-      verbose(1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i, bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
+      verbose(1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i,
+              bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
     }
     for(i = 0; i < num_urls; i++) {
       filename=(char*)bgav_redirector_get_url(m_file, i);
@@ -211,7 +216,9 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
   if(numvstreams) {
     bgav_select_track(m_file, m_track);
   } else {
-    verbose(1, "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping", m_track);
+    verbose(1,
+            "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping",
+            m_track);
   }
 
   bgav_set_video_stream(m_file, m_stream, BGAV_STREAM_DECODE);
@@ -221,7 +228,8 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
   }
   m_next_timestamp=bgav_video_start_time(m_file, m_track);
 
-  gavl_video_format_t*gformat = (gavl_video_format_t*)bgav_get_video_format (m_file, m_stream);
+  gavl_video_format_t*gformat = (gavl_video_format_t*)bgav_get_video_format (
+                                  m_file, m_stream);
   m_gframe = gavl_video_frame_create_nopad(gformat);
 
 
@@ -249,7 +257,8 @@ bool filmGMERLIN :: open(const std::string&sfilename, const gem::Properties&want
 #endif
 
   m_finalframe = gavl_video_frame_create_nopad(finalformat);
-  m_doConvert= (gavl_video_converter_init (m_gconverter, gformat, finalformat)>0);
+  m_doConvert= (gavl_video_converter_init (m_gconverter, gformat,
+                finalformat)>0);
   m_image.image.xsize=gformat->frame_width;
   m_image.image.ysize=gformat->frame_height;
 #ifdef __APPLE__
@@ -332,10 +341,12 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
   // this really shares a lot of code with open() so it should go into a separate function
   if(trackNum) {
     if(m_numTracks>trackNum || trackNum<0) {
-      error("[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum, m_numTracks);
+      error("[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum,
+            m_numTracks);
     } else {
       int numvstreams=bgav_num_video_streams (m_file, m_track);
-      verbose(1, "[GEM:filmGMERLIN] track %d contains %d video streams", m_track, numvstreams);
+      verbose(1, "[GEM:filmGMERLIN] track %d contains %d video streams", m_track,
+              numvstreams);
       if(numvstreams) {
         bgav_select_track(m_file, m_track);
 #ifdef USE_FRAMETABLE
@@ -360,7 +371,8 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
 #ifdef USE_FRAMETABLE
     } else if(m_frametable) {
       //  no assumptions about fixed framerate
-      int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum, NULL);
+      int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum,
+                        NULL);
       bgav_seek_video(m_file, m_track, seekpos);
       return film::SUCCESS;
 #endif

@@ -282,10 +282,14 @@ void pix_movieOS :: setUpTextureState()
       glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     }
 
-    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER,
+                    GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER,
+                    GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S,
+                    GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T,
+                    GL_CLAMP_TO_EDGE);
   }
 }
 
@@ -295,12 +299,16 @@ void pix_movieOS :: setUpTextureState()
 /////////////////////////////////////////////////////////
 void pix_movieOS :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieOS), gensym("pix_movie"), A_DEFSYM, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::openMessCallback),
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieOS),
+                   gensym("pix_movie"), A_DEFSYM, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieOS::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::changeImageCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieOS::changeImageCallback),
                   gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieOS::autoCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieOS::autoCallback),
                   gensym("auto"), A_DEFFLOAT, A_NULL);
 }
 
@@ -309,10 +317,12 @@ void pix_movieOS :: openMessCallback(void *data, t_symbol *filename)
   GetMyClass(data)->openMess(filename);
 }
 
-void pix_movieOS :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_movieOS :: changeImageCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv)
 {
   //  GetMyClass(data)->changeImage((int)imgNum);
-  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
+                                (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_movieOS :: autoCallback(void *data, t_float state)

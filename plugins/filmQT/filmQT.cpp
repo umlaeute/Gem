@@ -50,13 +50,15 @@ static bool filmQT_initQT(void)
   // Initialize QuickTime Media Layer
   OSErr         err = noErr;
   if ((err = InitializeQTML(0))) {
-    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
+    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+            err);
     return false;
   }
 
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n", err);
+    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+            err);
     return false;
   }
   return true;
@@ -129,7 +131,8 @@ void filmQT :: close(void)
   //    m_srcGWorld = NULL;
 }
 
-bool filmQT :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmQT :: open(const std::string&filename,
+                    const gem::Properties&wantProps)
 {
   FSSpec        theFSSpec;
   OSErr         err = noErr;
@@ -155,32 +158,39 @@ bool filmQT :: open(const std::string&filename, const gem::Properties&wantProps)
   // Clean up any open files:  closeMess();
 
   Str255        pstrFilename;
-  CopyCStringToPascal(filename.c_str(), pstrFilename);           // Convert to Pascal string
+  CopyCStringToPascal(filename.c_str(),
+                      pstrFilename);           // Convert to Pascal string
 
-  err = FSMakeFSSpec (0, 0L, pstrFilename, &theFSSpec);  // Make specification record
+  err = FSMakeFSSpec (0, 0L, pstrFilename,
+                      &theFSSpec);  // Make specification record
 #ifdef __APPLE__
   if (err != noErr) {
     FSRef               ref;
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
-    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec,
+                             NULL);
   }
 #endif
 
   if (err != noErr) {
-    verbose(0, "[GEM:filmQT] Unable to find file: %s (%d)", filename.c_str(), err);
+    verbose(0, "[GEM:filmQT] Unable to find file: %s (%d)", filename.c_str(),
+            err);
     //goto unsupported;
   }
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    verbose(0, "[GEM:filmQT] Couldn't open the movie file: %s (%d)", filename.c_str(), err);
+    verbose(0, "[GEM:filmQT] Couldn't open the movie file: %s (%d)",
+            filename.c_str(), err);
     if (refnum) {
       ::CloseMovieFile(refnum);
     }
     goto unsupported;
   }
-  err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive, NULL);
+  err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive,
+                           NULL);
   if (err) {
-    verbose(0, "[GEM:filmQT] Couldn't make a movie from file: %s (%d)", filename.c_str(), err);
+    verbose(0, "[GEM:filmQT] Couldn't make a movie from file: %s (%d)",
+            filename.c_str(), err);
     if (refnum) {
       ::CloseMovieFile(refnum);
     }
@@ -285,7 +295,8 @@ bool filmQT :: open(const std::string&filename, const gem::Properties&wantProps)
     SetMovieRate(m_movie,X2Fix(1.f));
   }
 
-  ::MoviesTask(m_movie, 0);     // *** this does the actual drawing into the GWorld ***
+  ::MoviesTask(m_movie,
+               0);     // *** this does the actual drawing into the GWorld ***
 
   m_readNext=true;
 
@@ -314,7 +325,8 @@ pixBlock* filmQT :: getFrame(void)
   if(m_frameDuration>0) {
     SetMovieTimeValue(m_movie, m_movieTime);
   }
-  MoviesTask(m_movie, 0);       // *** this does the actual drawing into the GWorld ***
+  MoviesTask(m_movie,
+             0);       // *** this does the actual drawing into the GWorld ***
   m_image.newimage = m_readNext;
 
   m_image.image.upsidedown=true;

@@ -36,7 +36,8 @@
 #include <string.h>
 #include <stdio.h>
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 // Constructor
@@ -56,7 +57,8 @@ pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
 
   SETMess(xsize, ysize);
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("data"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("data"));
 }
 
 /////////////////////////////////////////////////////////
@@ -137,7 +139,9 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
     roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
 
-    buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+    buffer = pixels->image.data + pixels->image.csize*(( i /
+             (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                 (roi_x2-roi_x1)) + roi_x1) ;
     picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
   }
 
@@ -146,14 +150,19 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     n = argc/3;
     counter=(picturesize<n)?picturesize:n;
     while (counter--) {
-      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(&argv[0])); // red
-      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(&argv[1])); // green
-      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(&argv[2])); // blue
+      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[0])); // red
+      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[1])); // green
+      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[2])); // blue
       buffer[chAlpha] = 0;                                           // alpha
       argv+=3;
       if (m_doROI) {
         i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        buffer = pixels->image.data + pixels->image.csize*(( i /
+                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                     (roi_x2-roi_x1)) + roi_x1) ;
       } else {
         buffer+=4;
       }
@@ -163,12 +172,16 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     counter=(picturesize<argc)?picturesize:argc;
     if ( pixels->image.csize == 4 ) {
       while (counter--) {
-        buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(m_inputScale*atom_getfloat(argv));   // rgb
-        buffer[chAlpha] = 0;                                                                    // alpha
+        buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(
+                                            m_inputScale*atom_getfloat(argv));   // rgb
+        buffer[chAlpha] =
+          0;                                                                    // alpha
         argv++;
         if (m_doROI) {
           i++;
-          buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+          buffer = pixels->image.data + pixels->image.csize*(( i /
+                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                       (roi_x2-roi_x1)) + roi_x1) ;
         } else {
           buffer+=4;
         }
@@ -179,7 +192,9 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
         argv++;
         if (m_doROI) {
           i++;
-          buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+          buffer = pixels->image.data + pixels->image.csize*(( i /
+                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                       (roi_x2-roi_x1)) + roi_x1) ;
         } else {
           buffer++;
         }
@@ -193,14 +208,20 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
     n = argc/4;
     counter=(picturesize<n)?picturesize:n;
     while (counter--) {
-      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(&argv[0])); // red
-      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(&argv[1])); // green
-      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(&argv[2])); // blue
-      buffer[chAlpha] = (unsigned char)(m_inputScale*atom_getfloat(&argv[3])); // alpha
+      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[0])); // red
+      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[1])); // green
+      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[2])); // blue
+      buffer[chAlpha] = (unsigned char)(m_inputScale*atom_getfloat(
+                                          &argv[3])); // alpha
       argv+=4;
       if (m_doROI) {
         i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        buffer = pixels->image.data + pixels->image.csize*(( i /
+                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                     (roi_x2-roi_x1)) + roi_x1) ;
       } else {
         buffer+=4;
       }
@@ -282,7 +303,9 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
     roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
     roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
 
-    buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+    buffer = pixels->image.data + pixels->image.csize*(( i /
+             (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                 (roi_x2-roi_x1)) + roi_x1) ;
     picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
   }
 
@@ -308,7 +331,9 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chAlpha] = a; // alpha
       if (m_doROI) {
         i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        buffer = pixels->image.data + pixels->image.csize*(( i /
+                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                     (roi_x2-roi_x1)) + roi_x1) ;
       } else {
         buffer+=4;
       }
@@ -329,7 +354,9 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chAlpha] = a;
       if (m_doROI) {
         i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        buffer = pixels->image.data + pixels->image.csize*(( i /
+                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                     (roi_x2-roi_x1)) + roi_x1) ;
       } else {
         buffer+=4;
       }
@@ -357,7 +384,9 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
       buffer[chAlpha] = a; // alpha
       if (m_doROI) {
         i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i % (roi_x2-roi_x1)) + roi_x1) ;
+        buffer = pixels->image.data + pixels->image.csize*(( i /
+                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+                     (roi_x2-roi_x1)) + roi_x1) ;
       } else {
         buffer+=4;
       }

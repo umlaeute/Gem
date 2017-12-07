@@ -33,7 +33,8 @@
 #include <stdio.h>
 #include <fcntl.h> /* JMZ thinks that _this_ is needed for open() */
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_videoDarwin, t_floatarg, A_DEFFLOAT,
+                            t_floatarg, A_DEFFLOAT);
 
 #define DEFAULT_WIDTH        320
 #define DEFAULT_HEIGHT        240
@@ -336,9 +337,11 @@ void pix_videoDarwin :: InitSeqGrabber()
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
-    showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
+    showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) &
+                          sgDeviceNameFlagShowInputsAsDevices;
 
-    theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
+    theSGInputList = ((SGDeviceName *)(&((
+                                           *devices)->entry[deviceIndex])))->inputs; //fugly
 
     //we should have device names in big ass undocumented structs
 
@@ -355,7 +358,8 @@ void pix_videoDarwin :: InitSeqGrabber()
   }
 
   //this call sets the input device
-  if (m_inputDevice > 0 && m_inputDevice < deviceCount) //check that the device is not out of bounds
+  if (m_inputDevice > 0
+      && m_inputDevice < deviceCount) //check that the device is not out of bounds
     //anErr = SGSetChannelDeviceInput(m_vc,m_inputDevice);
     post("SGSetChannelDevice trying %s",
          (*devices)->entry[m_inputDevice].name[0],
@@ -391,7 +395,8 @@ void pix_videoDarwin :: InitSeqGrabber()
 
   //grab the VDIG info from the SGChannel
   m_vdig = SGGetVideoDigitizerComponent(m_vc);
-  vdigErr = VDGetDigitizerInfo(m_vdig,&m_vdigInfo); //not sure if this is useful
+  vdigErr = VDGetDigitizerInfo(m_vdig,
+                               &m_vdigInfo); //not sure if this is useful
 
   Str255    vdigName;
   memset(vdigName,0,255);
@@ -400,10 +405,12 @@ void pix_videoDarwin :: InitSeqGrabber()
 
   Rect vdRect;
   vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
-  post("digitizer rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+  post("digitizer rect is top %d bottom %d left %d right %d",vdRect.top,
+       vdRect.bottom,vdRect.left,vdRect.right);
 
   vdigErr = VDGetActiveSrcRect(m_vdig,0,&vdRect);
-  post("active src rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+  post("active src rect is top %d bottom %d left %d right %d",vdRect.top,
+       vdRect.bottom,vdRect.left,vdRect.right);
 
   anErr = SGSetChannelBounds(m_vc, &m_srcRect);
   if(anErr!=noErr) {
@@ -673,7 +680,8 @@ void pix_videoDarwin :: derSwizzler(imageStruct &image)
 // dimenMess
 //
 /////////////////////////////////////////////////////////
-void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin, int rightmargin,
+void pix_videoDarwin :: dimenMess(int x, int y, int leftmargin,
+                                  int rightmargin,
                                   int topmargin, int bottommargin)
 {
   if (x > 0 ) {
@@ -797,7 +805,8 @@ void pix_videoDarwin :: fileMess(int argc, t_atom *argv)
     }
 
     //err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
-    err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
+    err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec,
+                           NULL);
 
     if (err != noErr) {
       error("error %d in FSGetCatalogInfo()", err);
@@ -849,7 +858,8 @@ void pix_videoDarwin :: brightnessMess(float X)
     //these things are as stubborn as they are stupid - find one that conforms to spec!
 
     //vdIIDCFeatureBrightness
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureBrightness, &atomContainer);
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureBrightness,
+                                           &atomContainer);
     if (noErr != result) {
       error("VDIIDCGetFeaturesForSpecifier returned %d",result);
     }
@@ -904,9 +914,11 @@ void pix_videoDarwin :: saturationMess(float X)
   } else {
     //IIDC stuff
     //vdIIDCFeatureSaturation
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureSaturation, &atomContainer);
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureSaturation,
+                                           &atomContainer);
     if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureSaturation returned %d",result);
+      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureSaturation returned %d",
+            result);
     }
 
     featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
@@ -963,9 +975,11 @@ void pix_videoDarwin :: exposureMess(float X)
 
     //IIDC stuff
     //vdIIDCFeatureExposure
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureExposure, &atomContainer);
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureExposure,
+                                           &atomContainer);
     if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",
+            result);
     }
 
     featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
@@ -1012,9 +1026,11 @@ void pix_videoDarwin :: gainMess(float X)
 
     //IIDC stuff
     //vdIIDCFeatureGain
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU,
+                                           &atomContainer);
     if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",
+            result);
     }
 
     featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
@@ -1061,9 +1077,11 @@ void pix_videoDarwin :: whiteBalanceMess(float U, float V)
 
     //IIDC stuff
     //vdIIDCFeatureWhiteBalanceU
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU, &atomContainer);
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceU,
+                                           &atomContainer);
     if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",
+            result);
     }
 
     featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
@@ -1093,9 +1111,11 @@ void pix_videoDarwin :: whiteBalanceMess(float U, float V)
     result = VDIIDCSetFeatures(m_vdig, atomContainer);
 
     //vdIIDCFeatureWhiteBalanceV
-    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceV, &atomContainer);
+    result = VDIIDCGetFeaturesForSpecifier(m_vdig, vdIIDCFeatureWhiteBalanceV,
+                                           &atomContainer);
     if (noErr != result) {
-      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",result);
+      error("VDIIDCGetFeaturesForSpecifier vdIIDCFeatureExposure returned %d",
+            result);
     }
 
     featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
@@ -1145,34 +1165,48 @@ void pix_videoDarwin :: obj_setupCallback(t_class *classPtr)
 
   pix_videoOS::real_obj_setupCallback(classPtr);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::qualityCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::qualityCallback),
                   gensym("quality"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::resetCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::resetCallback),
                   gensym("reset"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::autoCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::autoCallback),
                   gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::deviceCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::deviceCallback),
                   gensym("device"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::brightnessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::brightnessCallback),
                   gensym("brightness"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::saturationCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::saturationCallback),
                   gensym("saturation"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::contrastCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::contrastCallback),
                   gensym("contrast"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::exposureCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::exposureCallback),
                   gensym("exposure"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::gainCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::gainCallback),
                   gensym("gain"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::whiteBalanceCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::whiteBalanceCallback),
                   gensym("whitebalance"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::fileMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::fileMessCallback),
                   gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::recordCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::recordCallback),
                   gensym("record"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_videoDarwin::inputCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_videoDarwin::inputCallback),
                   gensym("input"), A_DEFFLOAT, A_NULL);
 
-  class_addbang(classPtr,reinterpret_cast<t_method>(&pix_videoDarwin::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_videoDarwin::bangMessCallback));
 }
 
 void pix_videoDarwin :: qualityCallback(void *data, t_float X)
@@ -1237,12 +1271,14 @@ void pix_videoDarwin :: gainCallback(void *data, t_float X)
   GetMyClass(data)->gainMess(X);
 }
 
-void pix_videoDarwin :: whiteBalanceCallback(void *data, t_float U, t_float V)
+void pix_videoDarwin :: whiteBalanceCallback(void *data, t_float U,
+    t_float V)
 {
   GetMyClass(data)->whiteBalanceMess(U,V);
 }
 
-void pix_videoDarwin :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_videoDarwin :: fileMessCallback(void *data, t_symbol *s, int argc,
+    t_atom *argv)
 {
   GetMyClass(data)->fileMess(argc, argv);
 }

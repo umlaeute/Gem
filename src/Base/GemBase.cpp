@@ -123,7 +123,8 @@ void GemBase :: gem_startstopMess(int state)
   SETFLOAT(ap, state);
   outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
 #else
-  post("gem_startstopMess(%d) called...please report this to the upstream developers", state);
+  post("gem_startstopMess(%d) called...please report this to the upstream developers",
+       state);
 #endif
 }
 
@@ -245,7 +246,8 @@ void GemBase::beforeDeletion(void)
 /////////////////////////////////////////////////////////
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
                   gensym("gem_state"), A_GIMME, A_NULL);
   struct _CallbackClass_gemContext {
     static void callback(void*data, t_float v0)
@@ -263,13 +265,15 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
     }
     explicit _CallbackClass_gemContext (struct _class*c)
     {
-      class_addmethod(c, reinterpret_cast<t_method>(callback), gensym("__gem_context"), A_FLOAT, A_NULL);
+      class_addmethod(c, reinterpret_cast<t_method>(callback),
+                      gensym("__gem_context"), A_FLOAT, A_NULL);
     }
   };
   _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);
 
 }
-void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc,
+                                 t_atom *argv)
 {
   if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
     GetMyClass(data)->gem_renderMess(
@@ -277,7 +281,8 @@ void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv
       reinterpret_cast<GemState *>((argv+1)->a_w.w_gpointer));
 #if 1
   } else if (argc==1 && argv->a_type==A_FLOAT) {
-    GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
+    GetMyClass(data)->gem_startstopMess(atom_getint(
+                                          argv));  // start rendering (forget this !?)
 #endif
   } else {
     GetMyClass(data)->error("wrong arguments in GemTrigger...");

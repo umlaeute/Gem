@@ -154,7 +154,8 @@ t_int* pix_pix2sig :: perform(t_int* w)
 
 void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 {
-  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[0]->s_n);
+  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+          sp[3]->s_vec, sp[0]->s_n);
 }
 
 /////////////////////////////////////////////////////////
@@ -164,8 +165,10 @@ void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 
 void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_pix2sig), gensym("pix_pix2sig~"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_pix2sig),
+                   gensym("pix_pix2sig~"), A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
                   gensym("dsp"), A_NULL);
 }
 

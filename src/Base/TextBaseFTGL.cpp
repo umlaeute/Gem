@@ -67,7 +67,8 @@ TextBase :: TextBase(int argc, t_atom *argv)
     textMess(argc, argv);
   }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                      gensym("ft1"));
 }
 
 void TextBase :: startRendering(void)
@@ -124,7 +125,8 @@ void TextBase :: render(GemState *)
   }
   // step through the lines
   for(i=0; i<m_theText.size(); i++) {
-    renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize*m_dist*m_precision);
+    renderLine(m_theText[i].c_str(),
+               m_lineDist[i]*m_fontSize*m_dist*m_precision);
   }
   fontInfo();
 }
@@ -229,7 +231,8 @@ void TextBase :: setFontSize()
 // setJustification
 //
 /////////////////////////////////////////////////////////
-void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType)
+void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType,
+                                  JustifyDepth dType)
 {
   m_widthJus = wType;
   m_heightJus = hType;
@@ -294,7 +297,8 @@ void TextBase :: fontInfo(void)
   }
 }
 
-TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
+TextBase::Justification TextBase :: justifyFont(float x1, float y1,
+    float z1,
     float x2, float y2, float z2, float y_offset)
 {
   float width  = 0.f;
@@ -538,11 +542,13 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "precision", setPrecision, float);
   CPPEXTERN_MSG1(classPtr, "linedist", linedistMess, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
                   gensym("justify"), A_GIMME, A_NULL);
 }
 
-void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
+void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc,
+                                     t_atom*argv)
 {
   JustifyWidth  wType=CENTER;
   JustifyHeight hType=MIDDLE;
@@ -572,8 +578,9 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
       dType = HALFWAY;
       break;
     default:
-      GetMyClass(data)->error("invalid depth justification: %s (must be: front|back|halfway|base)",
-                              atom_getsymbol(argv+2)->s_name);
+      GetMyClass(
+        data)->error("invalid depth justification: %s (must be: front|back|halfway|base)",
+                     atom_getsymbol(argv+2)->s_name);
       return;
     }
   case 2:
@@ -598,8 +605,9 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
       hType = BASEH;
       break;
     default:
-      GetMyClass(data)->error("invalid height justification: %s (must be bottom|top|middle|base)",
-                              atom_getsymbol(argv+1)->s_name);
+      GetMyClass(
+        data)->error("invalid height justification: %s (must be bottom|top|middle|base)",
+                     atom_getsymbol(argv+1)->s_name);
       return;
     }
   case 1:
@@ -622,13 +630,15 @@ void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*a
       wType = BASEW;
       break;
     default:
-      GetMyClass(data)->error("invalid width justification: %s (must be left|right|center|base)",
-                              atom_getsymbol(argv+0)->s_name);
+      GetMyClass(
+        data)->error("invalid width justification: %s (must be left|right|center|base)",
+                     atom_getsymbol(argv+0)->s_name);
       return;
     }
     break;
   default:
-    GetMyClass(data)->error("justification most be \"width [height [depth]]\"");
+    GetMyClass(
+      data)->error("justification most be \"width [height [depth]]\"");
     return;
   }
 

@@ -14,7 +14,8 @@
 
 #include "GEMglEvalCoord2dv.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalCoord2dv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalCoord2dv, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -26,7 +27,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalCoord2dv, t_floatarg, A_DEFFLOAT, t_float
 GEMglEvalCoord2dv :: GEMglEvalCoord2dv  (t_floatarg arg0, t_floatarg arg1)
 {
   vMess(arg0, arg1);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,10 +71,13 @@ void GEMglEvalCoord2dv :: vMess (t_float arg0, t_float arg1)    // FUN
 
 void GEMglEvalCoord2dv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord2dv::vMessCallback),       gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalCoord2dv::vMessCallback),
+                  gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglEvalCoord2dv :: vMessCallback (void* data, t_float arg0, t_float arg1)
+void GEMglEvalCoord2dv :: vMessCallback (void* data, t_float arg0,
+    t_float arg1)
 {
   GetMyClass(data)->vMess ( arg0, arg1);
 }

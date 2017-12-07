@@ -310,13 +310,16 @@ void *videoV4L2 :: capturing(void)
       m_last_frame=m_frame;
       m_currentBuffer=currentBuffer;
     } else {
-      fprintf(stderr, "[GEM:videoV4L2] oops, skipping incomplete capture %d of %d bytes", gotSize, expectedSize);
+      fprintf(stderr,
+              "[GEM:videoV4L2] oops, skipping incomplete capture %d of %d bytes",
+              gotSize, expectedSize);
     }
 
     if(captureerror) {
       errorcount++;
       if(errorcount>1000) {
-        error("[GEM:videoV4L2] %d capture errors in a row... I think I better stop now...", errorcount);
+        error("[GEM:videoV4L2] %d capture errors in a row... I think I better stop now...",
+              errorcount);
         m_continue_thread=false;
         m_stopTransfer=true;
       }
@@ -417,7 +420,8 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
   }
 
 
-  if (devname.at(0) != '/') { // assuming all v4l2 device's paths starts with '/'
+  if (devname.at(0) !=
+      '/') { // assuming all v4l2 device's paths starts with '/'
 
     std::vector<std::string> alldev = enumerate();
     int i;
@@ -443,7 +447,8 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
       v4l2_close(fd);
     }
     if ( i >= alldev.size() ) {
-      verbose(0, "[GEM:videoV4L2] no v4l2 input device on bus %s\n", devname.c_str());
+      verbose(0, "[GEM:videoV4L2] no v4l2 input device on bus %s\n",
+              devname.c_str());
       devname = "";
     }
   }
@@ -456,14 +461,16 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
   if (-1 == m_tvfd) {
-    verbose(0, "[GEM:videoV4L2] Cannot open '%s': %d, %s", dev_name, errno, strerror (errno));
+    verbose(0, "[GEM:videoV4L2] Cannot open '%s': %d, %s", dev_name, errno,
+            strerror (errno));
     closeDevice();
     return false;
   }
 
   struct stat st;
   if (-1 == fstat (m_tvfd, &st)) {
-    verbose(0, "[GEM:videoV4L2] Cannot identify '%s': %d, %s", dev_name, errno, strerror (errno));
+    verbose(0, "[GEM:videoV4L2] Cannot identify '%s': %d, %s", dev_name, errno,
+            strerror (errno));
     closeDevice();
     return false;
   }
@@ -978,7 +985,8 @@ void videoV4L2 :: getProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_readprops.find(key);
+    std::map<std::string,  struct v4l2_queryctrl>::iterator it =
+      m_readprops.find(key);
     if(it != m_readprops.end()) {
       struct v4l2_queryctrl qc=it->second;
       struct v4l2_control vc;
@@ -1184,7 +1192,8 @@ void videoV4L2 :: setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    std::map<std::string,  struct v4l2_queryctrl>::iterator it = m_writeprops.find(key);
+    std::map<std::string,  struct v4l2_queryctrl>::iterator it =
+      m_writeprops.find(key);
     if(it != m_writeprops.end()) {
       double d=0;
       struct v4l2_queryctrl qc=it->second;

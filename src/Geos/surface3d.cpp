@@ -27,7 +27,8 @@ struct t_float3 {
 #include "Utils/Functions.h"
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(surface3d, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(surface3d, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 
 /////////////////////////////////////////////////////////
@@ -157,7 +158,8 @@ void surface3d :: normalMess(bool normal)
 // interpolate
 //
 /////////////////////////////////////////////////////////
-t_float surface3d :: cubic(t_float X0, t_float X1, t_float X2, t_float X3, t_float fract)
+t_float surface3d :: cubic(t_float X0, t_float X1, t_float X2, t_float X3,
+                           t_float fract)
 {
   t_float a0, a1, a2;
   t_float fract2 = fract * fract;
@@ -169,7 +171,8 @@ t_float surface3d :: cubic(t_float X0, t_float X1, t_float X2, t_float X3, t_flo
   return(a0*fract3+a1*fract2+a2*fract+X1);
 }
 
-t_float3 surface3d :: cubic3(t_float3 X0, t_float3 X1, t_float3 X2, t_float3 X3, t_float fract)
+t_float3 surface3d :: cubic3(t_float3 X0, t_float3 X1, t_float3 X2,
+                             t_float3 X3, t_float fract)
 {
   t_float3 out;
   out.x = cubic(X0.x,X1.x,X2.x,X3.x,fract);
@@ -188,10 +191,22 @@ t_float3 surface3d :: bicubic3(t_float X, t_float Y)
   fractX -= intX;
   fractY -= intY;
 
-  t_float3 interpol0 = cubic3(m_posXYZ[(intX-1)+(intY-1)*nb_pts_control_X], m_posXYZ[intX+(intY-1)*nb_pts_control_X], m_posXYZ[(intX+1)+(intY-1)*nb_pts_control_X], m_posXYZ[(intX+2)+(intY-1)*nb_pts_control_X], fractX);
-  t_float3 interpol1 = cubic3(m_posXYZ[(intX-1)+(intY  )*nb_pts_control_X], m_posXYZ[intX+(intY  )*nb_pts_control_X], m_posXYZ[(intX+1)+(intY  )*nb_pts_control_X], m_posXYZ[(intX+2)+(intY  )*nb_pts_control_X], fractX);
-  t_float3 interpol2 = cubic3(m_posXYZ[(intX-1)+(intY+1)*nb_pts_control_X], m_posXYZ[intX+(intY+1)*nb_pts_control_X], m_posXYZ[(intX+1)+(intY+1)*nb_pts_control_X], m_posXYZ[(intX+2)+(intY+1)*nb_pts_control_X], fractX);
-  t_float3 interpol3 = cubic3(m_posXYZ[(intX-1)+(intY+2)*nb_pts_control_X], m_posXYZ[intX+(intY+2)*nb_pts_control_X], m_posXYZ[(intX+1)+(intY+2)*nb_pts_control_X], m_posXYZ[(intX+2)+(intY+2)*nb_pts_control_X], fractX);
+  t_float3 interpol0 = cubic3(m_posXYZ[(intX-1)+(intY-1)*nb_pts_control_X],
+                              m_posXYZ[intX+(intY-1)*nb_pts_control_X],
+                              m_posXYZ[(intX+1)+(intY-1)*nb_pts_control_X],
+                              m_posXYZ[(intX+2)+(intY-1)*nb_pts_control_X], fractX);
+  t_float3 interpol1 = cubic3(m_posXYZ[(intX-1)+(intY  )*nb_pts_control_X],
+                              m_posXYZ[intX+(intY  )*nb_pts_control_X],
+                              m_posXYZ[(intX+1)+(intY  )*nb_pts_control_X],
+                              m_posXYZ[(intX+2)+(intY  )*nb_pts_control_X], fractX);
+  t_float3 interpol2 = cubic3(m_posXYZ[(intX-1)+(intY+1)*nb_pts_control_X],
+                              m_posXYZ[intX+(intY+1)*nb_pts_control_X],
+                              m_posXYZ[(intX+1)+(intY+1)*nb_pts_control_X],
+                              m_posXYZ[(intX+2)+(intY+1)*nb_pts_control_X], fractX);
+  t_float3 interpol3 = cubic3(m_posXYZ[(intX-1)+(intY+2)*nb_pts_control_X],
+                              m_posXYZ[intX+(intY+2)*nb_pts_control_X],
+                              m_posXYZ[(intX+1)+(intY+2)*nb_pts_control_X],
+                              m_posXYZ[(intX+2)+(intY+2)*nb_pts_control_X], fractX);
   return (cubic3(interpol0, interpol1, interpol2, interpol3, fractY));
 }
 

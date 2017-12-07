@@ -19,7 +19,8 @@
 #include "Gem/Exception.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_convolve, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_convolve, t_floatarg, A_DEFFLOAT,
+                            t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -58,8 +59,10 @@ pix_convolve :: pix_convolve(t_floatarg fRow, t_floatarg fCol) :
   // insert a one for the default center value (identity matrix)
   m_imatrix[ ((m_cols / 2 + 1) * m_rows) + (m_rows / 2 + 1) ] = 255;
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("matrix"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("matrix"));
 }
 
 /////////////////////////////////////////////////////////
@@ -77,7 +80,8 @@ pix_convolve :: ~pix_convolve()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
+void pix_convolve :: calculateRGBA3x3(imageStruct &image,
+                                      imageStruct &tempImg)
 {
   int i;
   int j;
@@ -123,15 +127,24 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,imageStruct &tempImg)
 #endif
     {
       //      res =  m_imatrix[0]*(int)((unsigned char*)val1)[j];
-      res =  m_imatrix[0]*static_cast<int>(reinterpret_cast<unsigned char*>(val1)[j]);
-      res += m_imatrix[1]*static_cast<int>(reinterpret_cast<unsigned char*>(val2)[j]);
-      res += m_imatrix[2]*static_cast<int>(reinterpret_cast<unsigned char*>(val3)[j]);
-      res += m_imatrix[3]*static_cast<int>(reinterpret_cast<unsigned char*>(val4)[j]);
-      res += m_imatrix[4]*static_cast<int>(reinterpret_cast<unsigned char*>(val5)[j]);
-      res += m_imatrix[5]*static_cast<int>(reinterpret_cast<unsigned char*>(val6)[j]);
-      res += m_imatrix[6]*static_cast<int>(reinterpret_cast<unsigned char*>(val7)[j]);
-      res += m_imatrix[7]*static_cast<int>(reinterpret_cast<unsigned char*>(val8)[j]);
-      res += m_imatrix[8]*static_cast<int>(reinterpret_cast<unsigned char*>(val9)[j]);
+      res =  m_imatrix[0]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val1)[j]);
+      res += m_imatrix[1]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val2)[j]);
+      res += m_imatrix[2]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val3)[j]);
+      res += m_imatrix[3]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val4)[j]);
+      res += m_imatrix[4]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val5)[j]);
+      res += m_imatrix[5]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val6)[j]);
+      res += m_imatrix[6]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val7)[j]);
+      res += m_imatrix[7]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val8)[j]);
+      res += m_imatrix[8]*static_cast<int>(reinterpret_cast<unsigned char*>
+                                           (val9)[j]);
       res*=m_irange;
       res>>=16;
       ((unsigned char*)dest)[i*csize+j] = CLAMP(res);
@@ -300,7 +313,8 @@ void pix_convolve :: processYUVImage(imageStruct &image)
 }
 
 //make two functions - one for chroma one without
-void pix_convolve :: calculate3x3YUV(imageStruct &image,imageStruct &tempImg)
+void pix_convolve :: calculate3x3YUV(imageStruct &image,
+                                     imageStruct &tempImg)
 {
 
 #ifdef __VEC__
@@ -440,11 +454,11 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,imageStruct &tempImg)
         val9 = src+i+xsize+1;
 
         /* if (i%xsize == 0 || i%xsize == xsize-1) continue;
- #ifndef __APPLE__
+#ifndef __APPLE__
          for (j=0;j<3;j++)
- #else
+#else
          for (j=1;j<3;j+=2)
- #endif
+#endif
          { */
 
         res1 = mat1*static_cast<int>(reinterpret_cast<unsigned char*>(val1)[j]);
@@ -477,7 +491,8 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,imageStruct &tempImg)
 }
 
 //too many temps for all the registers - reuse some
-void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &tempImg)
+void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,
+    imageStruct &tempImg)
 {
 #ifdef __VEC__
   int h,w,width,i;
@@ -501,9 +516,11 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
   vector unsigned char  val1,val2,val3,val4,val5,val6,val7,val8,val9;
   register vector signed int  res1,res2,res3,res4,res5,res6,res7,res8,res9;
   vector signed int  yhi,ylo;
-  register vector signed int  res1a,res2a,res3a,res4a,res5a,res6a,res7a,res8a,res9a;
+  register vector signed int  res1a,res2a,res3a,res4a,res5a,res6a,res7a,
+           res8a,res9a;
   vector unsigned int bitshift;
-  register vector signed short y1,y2,y3,y4,y5,y6,y7,y8,y9,yres,uvres,hiImage,loImage;
+  register vector signed short y1,y2,y3,y4,y5,y6,y7,y8,y9,yres,uvres,hiImage,
+           loImage;
   vector signed short range,uvnone,uv128;
   unsigned char *dst =  (unsigned char*) image.data;
   unsigned char *src =  (unsigned char*) tempImg.data;
@@ -565,7 +582,8 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
   uv128 = shortBuffer.v;
   uv128 = (vector signed short)vec_splat((vector signed short)uv128,0);
 #ifndef PPC970
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( src, prefetchSize, 0 );
   vec_dst( dst, prefetchSize, 0 );
 #endif
@@ -595,17 +613,27 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,imageStruct &temp
       val9 = vec_ld(0,src+(i+xsize+2));
 
       //extract the Y for processing
-      y1 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val1);
-      y2 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val2);
-      y3 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val3);
-      y4 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val4);
-      y5 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val5);
-      y6 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val6);
-      y7 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val7);
-      y8 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val8);
-      y9 = (vector signed short)vec_mulo((vector unsigned char)one,(vector unsigned char)val9);
+      y1 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val1);
+      y2 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val2);
+      y3 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val3);
+      y4 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val4);
+      y5 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val5);
+      y6 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val6);
+      y7 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val7);
+      y8 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val8);
+      y9 = (vector signed short)vec_mulo((vector unsigned char)one,
+                                         (vector unsigned char)val9);
 
-      uvres = (vector signed short)vec_mule((vector unsigned char)one,(vector unsigned char)val5);
+      uvres = (vector signed short)vec_mule((vector unsigned char)one,
+                                            (vector unsigned char)val5);
 
       //mult the Y by the matrix coefficient
       res1 = vec_mulo(mat1,y1);
@@ -717,14 +745,18 @@ void pix_convolve :: matrixMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_convolve :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::matrixMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_convolve::matrixMessCallback),
                   gensym("matrix"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::rangeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_convolve::rangeMessCallback),
                   gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convolve::chromaMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_convolve::chromaMessCallback),
                   gensym("chroma"), A_FLOAT, A_NULL);
 }
-void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv)
 {
   GetMyClass(data)->matrixMess(argc, argv);
 }

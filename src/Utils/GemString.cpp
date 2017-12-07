@@ -29,9 +29,11 @@ std::wstring getVisualLine(const std::string&instring)
   FriBidiChar*str_out = new FriBidiChar[len2];
 
   /* convert UTF8 to UTF32 */
-  FriBidiStrIndex ulen = fribidi_charset_to_unicode(enc, instring.c_str(), instring.size(), str_in);
+  FriBidiStrIndex ulen = fribidi_charset_to_unicode(enc, instring.c_str(),
+                         instring.size(), str_in);
   /* reshape the UTF32 string */
-  FriBidiLevel lvl = fribidi_log2vis(str_in, ulen, &direction, str_out, 0, 0, 0);
+  FriBidiLevel lvl = fribidi_log2vis(str_in, ulen, &direction, str_out, 0, 0,
+                                     0);
   if(lvl) {
     outstring=std::wstring((wchar_t*)str_out);
   } else {
@@ -54,7 +56,8 @@ std::wstring getVisualLine(const std::wstring&instring)
   FriBidiChar*str_out = new FriBidiChar[len2];
 
   /* reshape the UTF32 string */
-  FriBidiLevel lvl = fribidi_log2vis(str_in, instring.size(), &direction, str_out, 0, 0, 0);
+  FriBidiLevel lvl = fribidi_log2vis(str_in, instring.size(), &direction,
+                                     str_out, 0, 0, 0);
   if(lvl) {
     wchar_t*output=(wchar_t*)str_out;
     outstring=std::wstring(output, instring.size());

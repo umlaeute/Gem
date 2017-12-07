@@ -30,7 +30,8 @@ CPPEXTERN_NEW(pix_chroma_key);
 pix_chroma_key :: pix_chroma_key() :
   m_direction(1),
   m_mode(1),
-  m_Yrange(0), m_Urange(0), m_Vrange(0), m_Yvalue(0), m_Uvalue(0), m_Vvalue(0)
+  m_Yrange(0), m_Urange(0), m_Vrange(0), m_Yvalue(0), m_Uvalue(0),
+  m_Vvalue(0)
 {}
 
 /////////////////////////////////////////////////////////
@@ -44,7 +45,8 @@ pix_chroma_key :: ~pix_chroma_key()
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
+void pix_chroma_key :: processRGBA_RGBA(imageStruct &image,
+                                        imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
@@ -90,7 +92,8 @@ void pix_chroma_key :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 // do the YUV processing here
 //
 /////////////////////////////////////////////////////////
-void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
+void pix_chroma_key :: processYUV_YUV(imageStruct &image,
+                                      imageStruct &right)
 {
   long src,h,w,xsize;
   unsigned char Uhi,Ulo,Vhi,Vlo,Yhi,Ylo;
@@ -202,8 +205,10 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
             if(change1 || change2 || change3 || change4) {
               int temp1,temp2;
               image.data[src] = right.data[src];
-              temp1 = ((image.data[src+1] * 32) + (image.data[src+3] * 32) + (image.data[src+5] * 32) + (image.data[src+7] * 32))>>8;
-              temp2 = ((right.data[src+1] * 32) + (right.data[src+3] * 32)+ (right.data[src+5] * 32) + (right.data[src+7] * 32))>>8;
+              temp1 = ((image.data[src+1] * 32) + (image.data[src+3] * 32) +
+                       (image.data[src+5] * 32) + (image.data[src+7] * 32))>>8;
+              temp2 = ((right.data[src+1] * 32) + (right.data[src+3] * 32)+
+                       (right.data[src+5] * 32) + (right.data[src+7] * 32))>>8;
 
               //   temp1 = ((image.data[src+1] * 255) + (right.data[src+1] * 0))>>8;
               image.data[src+1] = CLAMP(temp1 + temp2) ;
@@ -251,7 +256,8 @@ void pix_chroma_key :: processYUV_YUV(imageStruct &image, imageStruct &right)
 }
 
 #ifdef __MMX__
-void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+void pix_chroma_key :: processRGBA_MMX(imageStruct &image,
+                                       imageStruct &right)
 {
   int datasize = image.xsize * image.ysize * image.csize;
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
@@ -319,7 +325,8 @@ void pix_chroma_key :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   _mm_empty();
 }
 
-void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
+void pix_chroma_key :: processYUV_MMX(imageStruct &image,
+                                      imageStruct &right)
 {
   int datasize = image.xsize * image.ysize * image.csize;
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
@@ -388,7 +395,8 @@ void pix_chroma_key :: processYUV_MMX(imageStruct &image, imageStruct &right)
   _mm_empty();
 }
 
-void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
+void pix_chroma_key :: processGray_MMX(imageStruct &image,
+                                       imageStruct &right)
 {
   int datasize = image.xsize * image.ysize * image.csize;
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);
@@ -464,7 +472,8 @@ void pix_chroma_key :: processGray_MMX(imageStruct &image, imageStruct &right)
 //
 /////////////////////////////////////////////////////////
 #ifdef __VEC__
-void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right)
+void pix_chroma_key :: processYUV_Altivec(imageStruct &image,
+    imageStruct &right)
 {
   int h,w;
 
@@ -487,17 +496,22 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
     vector unsigned int     v;
   } longBuffer;
 
-  register vector unsigned short      UVres1, Yres1, UVres2, Yres2;//interleave;
+  register vector unsigned short      UVres1, Yres1, UVres2,
+           Yres2;//interleave;
   register vector unsigned short      hiImage, loImage;
-  register vector bool short          Ymasklo,Ymaskhi, UVmaskhi;//UVmasklo, Vmaskhi, Vmasklo;
+  register vector bool short          Ymasklo,Ymaskhi,
+           UVmaskhi;//UVmasklo, Vmaskhi, Vmasklo;
   register vector unsigned short      Yhi,Ylo;//UVhi,UVlo;Vhi,Vlo;
   register vector unsigned char       one = vec_splat_u8(1);
   register vector unsigned short      sone = vec_splat_u16(1);
-  register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,Ures,Vres;
-  register vector bool int                    Umasklo, Umaskhi, Vmaskhi, Vmasklo;
+  register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,
+           Ures,Vres;
+  register vector bool int                    Umasklo, Umaskhi, Vmaskhi,
+           Vmasklo;
 
   vector unsigned char        *inData = (vector unsigned char*) image.data;
-  vector unsigned char        *rightData = (vector unsigned char*) right.data;
+  vector unsigned char        *rightData = (vector unsigned char*)
+      right.data;
 
   shortBuffer.s[0] = CLAMP(m_Yvalue + m_Yrange);
   Yhi = shortBuffer.v;
@@ -540,7 +554,8 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
   Vlo = longBuffer.v;
 #ifndef PPC970
   //setup the cache prefetch -- A MUST!!!
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
 #endif
@@ -670,16 +685,20 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image, imageStruct &right
 /////////////////////////////////////////////////////////
 void pix_chroma_key :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::directionCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_chroma_key::directionCallback),
                   gensym("direction"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::modeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_chroma_key::modeCallback),
                   gensym("mode"), A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::rangeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_chroma_key::rangeCallback),
                   gensym("range"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_chroma_key::valueCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_chroma_key::valueCallback),
                   gensym("value"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
@@ -694,28 +713,32 @@ void pix_chroma_key :: modeCallback(void *data, t_float state)
 }
 
 //make separate ranges for Y U V
-void pix_chroma_key :: rangeCallback(void *data, t_float Yval, t_float Uval,t_float Vval)
+void pix_chroma_key :: rangeCallback(void *data, t_float Yval,
+                                     t_float Uval,t_float Vval)
 {
   if(fabs(Yval)<=1.0 && fabs(Uval)<=1.0 && fabs(Vval)<=1.0) {
     GetMyClass(data)->m_Yrange=((unsigned char)255*Yval);
     GetMyClass(data)->m_Urange=((unsigned char)255*Uval);
     GetMyClass(data)->m_Vrange=((unsigned char)255*Vval);
   } else {
-    GetMyClass(data)->post("using deprecated un-normalized ranges (0..255): consider using (0..1) instead!");
+    GetMyClass(
+      data)->post("using deprecated un-normalized ranges (0..255): consider using (0..1) instead!");
     GetMyClass(data)->m_Yrange=((unsigned char)Yval);
     GetMyClass(data)->m_Urange=((unsigned char)Uval);
     GetMyClass(data)->m_Vrange=((unsigned char)Vval);
   }
 }
 
-void pix_chroma_key :: valueCallback(void *data, t_float Yval, t_float Uval, t_float Vval)
+void pix_chroma_key :: valueCallback(void *data, t_float Yval,
+                                     t_float Uval, t_float Vval)
 {
   if(fabs(Yval)<=1.0 && fabs(Uval)<=1.0 && fabs(Vval)<=1.0) {
     GetMyClass(data)->m_Yvalue=((unsigned char)255*Yval);
     GetMyClass(data)->m_Uvalue=((unsigned char)255*Uval);
     GetMyClass(data)->m_Vvalue=((unsigned char)255*Vval);
   } else {
-    GetMyClass(data)->post("using deprecated un-normalized values (0..255): consider using (0..1) instead!");
+    GetMyClass(
+      data)->post("using deprecated un-normalized values (0..255): consider using (0..1) instead!");
     GetMyClass(data)->m_Yvalue=((unsigned char)Yval);
     GetMyClass(data)->m_Uvalue=((unsigned char)Uval);
     GetMyClass(data)->m_Vvalue=((unsigned char)Vval);

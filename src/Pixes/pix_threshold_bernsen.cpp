@@ -30,8 +30,10 @@ pix_threshold_bernsen :: pix_threshold_bernsen():
   m_xtiles(16), m_ytiles(16), m_contrast(10),
   m_minVals(NULL), m_maxVals(NULL)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("tiles"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("contrast"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("tiles"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("contrast"));
   tilesMess(m_xtiles, m_ytiles);
 }
 
@@ -249,12 +251,15 @@ void pix_threshold_bernsen :: contrastMess(int c)
 /////////////////////////////////////////////////////////
 void pix_threshold_bernsen :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_threshold_bernsen::tilesMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_threshold_bernsen::tilesMessCallback),
                   gensym("tiles"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_threshold_bernsen::contrastMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_threshold_bernsen::contrastMessCallback),
                   gensym("contrast"), A_FLOAT, A_NULL);
 }
-void pix_threshold_bernsen :: tilesMessCallback(void *data, t_float w, t_float h)
+void pix_threshold_bernsen :: tilesMessCallback(void *data, t_float w,
+    t_float h)
 {
   GetMyClass(data)->tilesMess(static_cast<int>(w), static_cast<int>(h));
 }

@@ -104,7 +104,8 @@ void GLdefine :: symMessCallback (void* data, t_symbol *arg0)
 {
   GetMyClass(data)->symMess (arg0);
 }
-void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv)
+void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc,
+                                  t_atom*argv)
 {
   GetMyClass(data)->symMess (arg0);
 }
@@ -112,7 +113,8 @@ void GLdefine :: bangMessCallback (void* data)
 {
   GetMyClass(data)->bangMess ();
 }
-void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc, t_atom*argv)
+void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc,
+                                   t_atom*argv)
 {
   GetMyClass(data)->listMess (argc, argv);
 }

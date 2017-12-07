@@ -14,7 +14,8 @@
 
 #include "GEMglFeedbackBuffer.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,17 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFeedbackBuffer, t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglFeedbackBuffer :: GEMglFeedbackBuffer      (t_floatarg arg0, t_floatarg arg1) :
+GEMglFeedbackBuffer :: GEMglFeedbackBuffer      (t_floatarg arg0,
+    t_floatarg arg1) :
   size(static_cast<GLsizei>(arg0)), type(static_cast<GLenum>(arg1))
 {
   len=(size>0)?size:128;
   buffer = new float[len];
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("size"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("type"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("size"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("type"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,8 +91,12 @@ void GEMglFeedbackBuffer :: typeMess (t_float arg1)     // FUN
 
 void GEMglFeedbackBuffer :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFeedbackBuffer::sizeMessCallback),          gensym("size"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFeedbackBuffer::typeMessCallback),          gensym("type"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFeedbackBuffer::sizeMessCallback),
+                  gensym("size"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFeedbackBuffer::typeMessCallback),
+                  gensym("type"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglFeedbackBuffer :: sizeMessCallback (void* data, t_float arg0)

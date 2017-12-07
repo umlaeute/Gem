@@ -240,11 +240,14 @@ void gem::pylon::streamgrabberproperties::init()
   enumap_AccessMode["Control"]=AccessMode_Control;
   enumap_AccessMode["Exclusive"]=AccessMode_Exclusive;
 
-  enumap_TransmissionType["UseCameraConfig"]=TransmissionType_UseCameraConfig;
+  enumap_TransmissionType["UseCameraConfig"]=
+    TransmissionType_UseCameraConfig;
   enumap_TransmissionType["Unicast"]=TransmissionType_Unicast;
   enumap_TransmissionType["Multicast"]=TransmissionType_Multicast;
-  enumap_TransmissionType["LimitedBroadcast"]=TransmissionType_LimitedBroadcast;
-  enumap_TransmissionType["SubnetDirectedBroadcast"]=TransmissionType_SubnetDirectedBroadcast;
+  enumap_TransmissionType["LimitedBroadcast"]=
+    TransmissionType_LimitedBroadcast;
+  enumap_TransmissionType["SubnetDirectedBroadcast"]=
+    TransmissionType_SubnetDirectedBroadcast;
 
 
 }

@@ -34,7 +34,8 @@ GEMglShadeModel :: GEMglShadeModel      (int argc, t_atom*argv) :
     throw(GemException("invalid number of arguments"));
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("mode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -68,10 +69,13 @@ void GEMglShadeModel :: modeMess (t_atom arg)   // FUN
 
 void GEMglShadeModel :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglShadeModel::modeMessCallback),      gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglShadeModel::modeMessCallback),
+                  gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglShadeModel :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglShadeModel :: modeMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->modeMess ( argv[0]);

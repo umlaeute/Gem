@@ -105,7 +105,8 @@ struct PixImageThreadLoader : public gem::thread::SynchedWorkerThread {
     }
   };
 
-  virtual bool queue(id_t&ID, load::callback cb, void*userdata, std::string filename)
+  virtual bool queue(id_t&ID, load::callback cb, void*userdata,
+                     std::string filename)
   {
     InData *in = new InData(cb, userdata, filename);
     return SynchedWorkerThread::queue(ID, reinterpret_cast<void*>(in));
@@ -154,7 +155,8 @@ bool load::sync(const std::string&filename,
                 gem::Properties&props)
 {
   if(!PixImageThreadLoader::s_imageloader) {
-    PixImageThreadLoader::s_imageloader=gem::plugins::imageloader::getInstance();
+    PixImageThreadLoader::s_imageloader=
+      gem::plugins::imageloader::getInstance();
   }
   if((PixImageThreadLoader::s_imageloader) &&
       (PixImageThreadLoader::s_imageloader->load(filename, result, props))) {

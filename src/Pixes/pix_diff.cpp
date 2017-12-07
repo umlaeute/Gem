@@ -164,7 +164,8 @@ void pix_diff :: processGray_MMX(imageStruct &image, imageStruct &right)
 #endif
 
 #ifdef __VEC__
-void pix_diff :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
+void pix_diff :: processRGBA_Altivec(imageStruct &image,
+                                     imageStruct &right)
 {
 
   int datasize = image.xsize * image.ysize / 4;
@@ -227,7 +228,8 @@ void pix_diff :: processYUV_Altivec(imageStruct &image, imageStruct &right)
   } shortBuffer;
 
 
-  vector signed short d, hiImage, loImage,hiRight, loRight;//, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
+  vector signed short d, hiImage, loImage,hiRight,
+         loRight;//, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
   vector unsigned char zero = vec_splat_u8(0);
   vector unsigned char *inData = (vector unsigned char*) image.data;
   vector unsigned char *rightData = (vector unsigned char*) right.data;

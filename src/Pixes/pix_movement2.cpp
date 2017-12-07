@@ -18,7 +18,8 @@
 #include <string.h>
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_movement2, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_movement2, t_float,A_DEFFLOAT,t_float,
+                            A_DEFFLOAT);
 
 /*------------------------------------------------------------
   Constructor
@@ -64,8 +65,10 @@ pix_movement2 :: pix_movement2(t_float lothresh, t_float hithresh):
     m_lowthresh = 100;
   */
 
-  m_lowthreshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("low_thresh"));
-  m_threshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("hi_thresh"));
+  m_lowthreshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                             gensym("float"), gensym("low_thresh"));
+  m_threshInlet=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                          gensym("hi_thresh"));
 }
 
 pix_movement2 :: ~pix_movement2()
@@ -89,7 +92,8 @@ void pix_movement2 :: processImage(imageStruct &image)
   int size = image.xsize * image.ysize;
   int i;
   // 0. check if we have a new dimension
-  bool firstTime = ((image.xsize!=m_frame[0].xsize) || (image.ysize!=m_frame[0].ysize));
+  bool firstTime = ((image.xsize!=m_frame[0].xsize)
+                    || (image.ysize!=m_frame[0].ysize));
   if (firstTime) {
     m_storeBackground=true;
     m_resetThreshold=true;
@@ -192,7 +196,8 @@ void pix_movement2 :: processImage(imageStruct &image)
 void pix_movement2 :: threshMess(int thresh)
 {
   if(thresh < static_cast<int>(m_lowthresh)) {
-    error("high threshold (%d) must not be less than low threshold(%d)", thresh, m_lowthresh);
+    error("high threshold (%d) must not be less than low threshold(%d)",
+          thresh, m_lowthresh);
     return;
   }
   m_thresh = CLAMP(thresh);
@@ -205,7 +210,8 @@ void pix_movement2 :: threshMess(int thresh)
 void pix_movement2 :: lowThreshMess(int thresh)
 {
   if(thresh > static_cast<int>(m_thresh)) {
-    error("low threshold (%d) must not be be greater than high threshold(%d)", thresh, m_thresh);
+    error("low threshold (%d) must not be be greater than high threshold(%d)",
+          thresh, m_thresh);
     return;
   }
   m_lowthresh = CLAMP(thresh);
@@ -226,11 +232,14 @@ static member functions
 ------------------------------------------------------------*/
 void pix_movement2 :: obj_setupCallback(t_class*classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement2::lowThreshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movement2::lowThreshMessCallback),
                   gensym("low_thresh"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement2::threshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movement2::threshMessCallback),
                   gensym("hi_thresh"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_movement2::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_movement2::bangMessCallback));
 }
 
 /*------------------------------------------------------------

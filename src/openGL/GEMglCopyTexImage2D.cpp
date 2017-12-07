@@ -57,14 +57,22 @@ GEMglCopyTexImage2D :: GEMglCopyTexImage2D      (int argc,t_atom*argv) :
   }
 
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("level"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("internalFormat"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("width"));
-  m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("height"));
-  m_inlet[7] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("border"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("level"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("internalFormat"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("width"));
+  m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("height"));
+  m_inlet[7] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("border"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -95,7 +103,8 @@ bool GEMglCopyTexImage2D :: isRunnable(void)
 //
 void GEMglCopyTexImage2D :: render(GemState *state)
 {
-  glCopyTexImage2D (target, level, internalFormat, x, y, width, height, border);
+  glCopyTexImage2D (target, level, internalFormat, x, y, width, height,
+                    border);
 }
 
 /////////////////////////////////////////////////////////
@@ -156,14 +165,31 @@ void GEMglCopyTexImage2D :: borderMess (t_float arg1)   // FUN
 
 void GEMglCopyTexImage2D :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::targetMessCallback),        gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::levelMessCallback),         gensym("level"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::internalFormatMessCallback),        gensym("internalFormat"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::xMessCallback),     gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::yMessCallback),     gensym("y"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::widthMessCallback),         gensym("width"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::heightMessCallback),        gensym("height"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexImage2D::borderMessCallback),        gensym("border"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::targetMessCallback),
+                  gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::levelMessCallback),
+                  gensym("level"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>
+                  (&GEMglCopyTexImage2D::internalFormatMessCallback),
+                  gensym("internalFormat"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::xMessCallback),
+                  gensym("x"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::yMessCallback),
+                  gensym("y"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::widthMessCallback),
+                  gensym("width"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::heightMessCallback),
+                  gensym("height"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexImage2D::borderMessCallback),
+                  gensym("border"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglCopyTexImage2D :: targetMessCallback (void* data, t_float arg0)
@@ -174,7 +200,8 @@ void GEMglCopyTexImage2D :: levelMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexImage2D :: internalFormatMessCallback (void* data, t_float arg0)
+void GEMglCopyTexImage2D :: internalFormatMessCallback (void* data,
+    t_float arg0)
 {
   GetMyClass(data)->internalFormatMess ( static_cast<t_float>(arg0));
 }

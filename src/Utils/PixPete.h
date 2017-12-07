@@ -84,7 +84,8 @@ typedef U32             PETE_PIXELDATA24;
 typedef U16             PETE_PIXELDATA16;
 #define SIZEOF_PETE_PIXELDATA16 (2)
 
-static inline void Pete_CopyAndConvert24BitTo32Bit(PETE_PIXELDATA24* pSource,PETE_PIXELDATA32* pOutput,int nPixelCount)
+static inline void Pete_CopyAndConvert24BitTo32Bit(PETE_PIXELDATA24*
+    pSource,PETE_PIXELDATA32* pOutput,int nPixelCount)
 {
 
   char* pSourceEnd=((char*)pSource)+(nPixelCount*SIZEOF_PETE_PIXELDATA24);
@@ -100,7 +101,8 @@ static inline void Pete_CopyAndConvert24BitTo32Bit(PETE_PIXELDATA24* pSource,PET
   }
 }
 
-static inline void Pete_CopyAndConvert32BitTo24Bit(PETE_PIXELDATA32* pSource,PETE_PIXELDATA24* pOutput,int nPixelCount)
+static inline void Pete_CopyAndConvert32BitTo24Bit(PETE_PIXELDATA32*
+    pSource,PETE_PIXELDATA24* pOutput,int nPixelCount)
 {
 
   char* pSourceEnd=((char*)pSource)+(nPixelCount*SIZEOF_PETE_PIXELDATA32);
@@ -116,12 +118,15 @@ static inline void Pete_CopyAndConvert32BitTo24Bit(PETE_PIXELDATA32* pSource,PET
   }
 }
 
-static inline void Pete_InPlaceConvert24BitTo32Bit(PETE_PIXELDATA24* pBuffer,int nPixelCount)
+static inline void Pete_InPlaceConvert24BitTo32Bit(PETE_PIXELDATA24*
+    pBuffer,int nPixelCount)
 {
   char* pBufferStart=(char*)pBuffer;
 
-  char* pBuffer32Current=(pBufferStart+((nPixelCount-1)*SIZEOF_PETE_PIXELDATA32));
-  char* pBuffer24Current=(pBufferStart+((nPixelCount-1)*SIZEOF_PETE_PIXELDATA24));
+  char* pBuffer32Current=(pBufferStart+((nPixelCount-1)
+                                        *SIZEOF_PETE_PIXELDATA32));
+  char* pBuffer24Current=(pBufferStart+((nPixelCount-1)
+                                        *SIZEOF_PETE_PIXELDATA24));
 
   while (pBuffer32Current>=pBufferStart) {
 
@@ -133,7 +138,8 @@ static inline void Pete_InPlaceConvert24BitTo32Bit(PETE_PIXELDATA24* pBuffer,int
   }
 }
 
-static inline void Pete_CopyAndConvert16Bit565To32Bit(PETE_PIXELDATA16* pSource,PETE_PIXELDATA32* pOutput,int nPixelCount)
+static inline void Pete_CopyAndConvert16Bit565To32Bit(
+  PETE_PIXELDATA16* pSource,PETE_PIXELDATA32* pOutput,int nPixelCount)
 {
 
   char* pSourceEnd=((char*)pSource)+(nPixelCount*SIZEOF_PETE_PIXELDATA16);
@@ -167,7 +173,8 @@ static inline void Pete_CopyAndConvert16Bit565To32Bit(PETE_PIXELDATA16* pSource,
 
 }
 
-static inline void Pete_CopyAndConvert32BitTo16Bit565(PETE_PIXELDATA32* pSource,PETE_PIXELDATA16* pOutput,int nPixelCount)
+static inline void Pete_CopyAndConvert32BitTo16Bit565(
+  PETE_PIXELDATA32* pSource,PETE_PIXELDATA16* pOutput,int nPixelCount)
 {
 
   char* pSourceEnd=((char*)pSource)+(nPixelCount*SIZEOF_PETE_PIXELDATA32);

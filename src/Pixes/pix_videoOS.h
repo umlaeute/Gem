@@ -66,7 +66,8 @@ protected:
 
   //////////
   // Set the video dimensions
-  virtual void  dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0,
+  virtual void  dimenMess(int x, int y, int leftmargin = 0,
+                          int rightmargin = 0,
                           int topmargin = 0, int bottommargin = 0) {}
 
   //////////

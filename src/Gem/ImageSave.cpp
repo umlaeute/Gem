@@ -43,7 +43,8 @@ static gem::plugins::imagesaver*getInstance(void)
  * mem2image - Save an image to a file
  *
  ***************************************************************************/
-GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int type)
+GEM_EXTERN int mem2image(imageStruct* image, const char *filename,
+                         const int type)
 {
   gem::plugins::imagesaver*piximagesaver=gem::PixImageSaver::getInstance();
   if(piximagesaver) {

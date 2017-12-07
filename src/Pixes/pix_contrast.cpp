@@ -16,8 +16,10 @@ CPPEXTERN_NEW(pix_contrast);
 pix_contrast :: pix_contrast():
   m_contrast(1.f), m_saturation(1.f)
 {
-  m_inCon=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("contrast"));
-  m_inSat=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("saturation"));
+  m_inCon=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("contrast"));
+  m_inSat=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("saturation"));
 }
 
 pix_contrast :: ~pix_contrast()
@@ -265,15 +267,18 @@ void pix_contrast :: processRGBAImage(imageStruct &image)
   while(datasize--) {
     int y,u,v;
 
-    u = (((pixels[chRed] * -38) +  (pixels[chGreen] * -74 ) + (pixels[chBlue] * 112))>>8)-0;
+    u = (((pixels[chRed] * -38) +  (pixels[chGreen] * -74 ) +
+          (pixels[chBlue] * 112))>>8)-0;
     //u = CLAMP(((u * s) >> 8) + 0);
     u = (((u * s) >> 8) + 0);
 
-    y = (((pixels[chRed] * 66) +  (pixels[chGreen] * 129 ) + (pixels[chBlue] * 25))>>8)-128;
+    y = (((pixels[chRed] * 66) +  (pixels[chGreen] * 129 ) +
+          (pixels[chBlue] * 25))>>8)-128;
     //y = CLAMP(((y * c) >> 8) + 128);
     y = (((y * c) >> 8) + 128);
 
-    v = (((pixels[chRed] * 112) +  (pixels[chGreen] * -94 ) + (pixels[chBlue] * -18))>>8)-0;
+    v = (((pixels[chRed] * 112) +  (pixels[chGreen] * -94 ) +
+          (pixels[chBlue] * -18))>>8)-0;
     //v = CLAMP(((v * s) >> 8) + 0);
     v = (((v * s) >> 8) + 0);
 
@@ -318,8 +323,12 @@ void pix_contrast :: saturationMess(float saturation)
 void pix_contrast :: obj_setupCallback(t_class *classPtr)
 {
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_contrast::contrastMessCallback), gensym("contrast"),A_FLOAT,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_contrast::saturationMessCallback), gensym("saturation"),A_FLOAT,A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_contrast::contrastMessCallback),
+                  gensym("contrast"),A_FLOAT,A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_contrast::saturationMessCallback),
+                  gensym("saturation"),A_FLOAT,A_NULL);
 
 }
 

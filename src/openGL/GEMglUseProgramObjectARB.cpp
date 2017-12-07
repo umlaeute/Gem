@@ -24,7 +24,8 @@ CPPEXTERN_NEW ( GEMglUseProgramObjectARB );
 GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB()
   : m_program(0)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("program"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("program"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -77,11 +78,13 @@ void GEMglUseProgramObjectARB :: programMess (int program)      // FUN
 
 void GEMglUseProgramObjectARB :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUseProgramObjectARB::programMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglUseProgramObjectARB::programMessCallback),
                   gensym("program"), A_FLOAT, A_NULL);
 }
 
-void GEMglUseProgramObjectARB :: programMessCallback (void* data, t_float program)
+void GEMglUseProgramObjectARB :: programMessCallback (void* data,
+    t_float program)
 {
   GetMyClass(data)->programMess (static_cast<int>(program));
 }

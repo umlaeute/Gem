@@ -32,7 +32,8 @@ GemCache :: GemCache(gemhead *parent)
 {
 }
 GemCache :: GemCache(const GemCache&org)
-  : dirty(org.dirty), resendImage(org.resendImage), vertexDirty(org.vertexDirty),
+  : dirty(org.dirty), resendImage(org.resendImage),
+    vertexDirty(org.vertexDirty),
     m_parent(org.m_parent), m_magic(GEMCACHE_MAGIC)
 {
 }

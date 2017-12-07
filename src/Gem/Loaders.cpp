@@ -44,15 +44,18 @@ extern "C" {
   typedef void (*loader_registrar_t)(gem_loader_t loader);
 }
 
-static int gem_loader(const t_canvas *canvas, const char *classname, const char* path)
+static int gem_loader(const t_canvas *canvas, const char *classname,
+                      const char* path)
 {
   if(path) {
-    for (std::vector<gem_loader_t>::iterator it = loaders_path.begin() ; it != loaders_path.end(); ++it)
+    for (std::vector<gem_loader_t>::iterator it = loaders_path.begin() ;
+         it != loaders_path.end(); ++it)
       if((*it)(canvas, classname, path)) {
         return true;
       }
   } else {
-    for (std::vector<gem_loader_t>::iterator it = loaders_nopath.begin() ; it != loaders_nopath.end(); ++it)
+    for (std::vector<gem_loader_t>::iterator it = loaders_nopath.begin() ;
+         it != loaders_nopath.end(); ++it)
       if((*it)(canvas, classname, path)) {
         return true;
       }
@@ -61,7 +64,8 @@ static int gem_loader(const t_canvas *canvas, const char *classname, const char*
 }
 static int gem_loader_legacy(const t_canvas *canvas, const char *classname)
 {
-  for (std::vector<gem_loader_t>::iterator it = loaders.begin() ; it != loaders.end(); ++it)
+  for (std::vector<gem_loader_t>::iterator it = loaders.begin() ;
+       it != loaders.end(); ++it)
     if((*it)(canvas, classname, 0)) {
       return true;
     }
@@ -77,7 +81,8 @@ static bool check_rte_loader(void)
   }
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
   if(rte) {
-    rte_register_loader=(loader_registrar_t)rte->getFunction("sys_register_loader");
+    rte_register_loader=(loader_registrar_t)
+                        rte->getFunction("sys_register_loader");
   }
   if(rte_register_loader) {
     unsigned int major=0, minor=0;

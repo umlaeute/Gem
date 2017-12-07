@@ -171,7 +171,8 @@ color_classify (
       *result = BLACK;
       return;
     }
-  } else if ((val > 0.8 && sat < 0.2) || (val > 0.7 && sat < 0.1) || (val > 0.6 && sat < 0.05)) {
+  } else if ((val > 0.8 && sat < 0.2) || (val > 0.7 && sat < 0.1)
+             || (val > 0.6 && sat < 0.05)) {
     *result = WHITE;
     if (sat > 0.1) {
       // light baby colors; could be white with offset colorbalance.
@@ -188,7 +189,8 @@ color_classify (
     }
   } else if ((val < 0.65 && sat < 0.15) ||
              (val < 0.7 && sat < 0.1) ||
-             (val < 0.5 && sat < 0.3 && (hue < 40 && hue > 10))) { // heuristica ~ marrons
+             (val < 0.5 && sat < 0.3 && (hue < 40
+                                         && hue > 10))) { // heuristica ~ marrons
     if (val < 0.50) {
       *result = BLACK;
       *certainty_level = GOOD_GUESS;

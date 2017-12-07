@@ -35,7 +35,8 @@ public:
   /**
    * get the Runtime Environemnt's version
    */
-  virtual const std::string getVersion(unsigned int&major, unsigned int&minor);
+  virtual const std::string getVersion(unsigned int&major,
+                                       unsigned int&minor);
 
   /**
    * get the Runtime Environemnt's name
@@ -52,7 +53,8 @@ public:
    * find a file in the given context(canvas), searching RTEs search paths
    * @return expanded filename
    */
-  virtual std::string findFile(const std::string&name, const std::string&ext, const void*context) const;
+  virtual std::string findFile(const std::string&name, const std::string&ext,
+                               const void*context) const;
 
   /**
    * add 'path' to the search-paths (if context==NULL, to the global search path)

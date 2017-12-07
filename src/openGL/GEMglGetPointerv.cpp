@@ -26,7 +26,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGetPointerv, t_floatarg, A_DEFFLOAT );
 GEMglGetPointerv :: GEMglGetPointerv    (t_floatarg arg0)
 {
   pnameMess(arg0);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -53,7 +54,8 @@ bool GEMglGetPointerv :: isRunnable(void)
 void GEMglGetPointerv :: render(GemState *state)
 {
   glGetPointerv (pname,params);
-  post("not really implemented:: got data @ %X, what should i do with it?", params);
+  post("not really implemented:: got data @ %X, what should i do with it?",
+       params);
 }
 
 /////////////////////////////////////////////////////////
@@ -71,7 +73,9 @@ void GEMglGetPointerv :: pnameMess (t_float arg0)       // FUN
 
 void GEMglGetPointerv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetPointerv::pnameMessCallback),   gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetPointerv::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglGetPointerv :: pnameMessCallback (void* data, t_float arg0)

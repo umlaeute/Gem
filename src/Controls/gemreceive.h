@@ -83,7 +83,8 @@ private:
 
   //////////
   // Static member functions
-  static void     proxyCallback(t_gemreceive_proxy*, t_symbol*s, int argc, t_atom*argv);
+  static void     proxyCallback(t_gemreceive_proxy*, t_symbol*s, int argc,
+                                t_atom*argv);
 
   static t_gemreceive_proxy*find_key(t_symbol*);
   static t_gemreceive_proxy*add_key(t_symbol*);

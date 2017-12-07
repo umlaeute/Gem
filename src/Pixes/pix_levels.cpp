@@ -62,12 +62,17 @@ pix_levels :: pix_levels() :
   m_LowPercentile(5.0f),
   m_HighPercentile(95.0f)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("uniform"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("uniform"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("red"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("green"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("blue"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("lowP"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("hiP"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("green"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("blue"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("lowP"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("hiP"));
 }
 
 /////////////////////////////////////////////////////////
@@ -140,10 +145,12 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
   const int cnFixedOne=1*cnFixedMult;
   if (m_DoUniform) {
     const int nInputLow=static_cast<int>(m_UniformInputFloor);
-    int nInputDelta=static_cast<int>(m_UniformInputCeiling-m_UniformInputFloor);
+    int nInputDelta=static_cast<int>(m_UniformInputCeiling
+                                     -m_UniformInputFloor);
 
     const int nOutputLow=static_cast<int>(m_UniformOutputFloor);
-    int nOutputDelta=static_cast<int>(m_UniformOutputCeiling-m_UniformOutputFloor);
+    int nOutputDelta=static_cast<int>(m_UniformOutputCeiling
+                                      -m_UniformOutputFloor);
     // avoid the possibility of divide-by-zeros
     if (m_DoAllowInversion) {
       if (nInputDelta==0) {
@@ -173,10 +180,14 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
       const int nSourceBlue =nCount;
       const int nSourceAlpha=nCount;
 
-      const int nTempRed=  (((nSourceRed  -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-      const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-      const int nTempBlue= (((nSourceBlue -nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
-      const int nTempAlpha=(((nSourceAlpha-nInputLow)*256)*nRecipInputDelta)>>cnFixedShift;
+      const int nTempRed=  (((nSourceRed  -nInputLow)*256)*nRecipInputDelta)
+                           >>cnFixedShift;
+      const int nTempGreen=(((nSourceGreen-nInputLow)*256)*nRecipInputDelta)
+                           >>cnFixedShift;
+      const int nTempBlue= (((nSourceBlue -nInputLow)*256)*nRecipInputDelta)
+                           >>cnFixedShift;
+      const int nTempAlpha=(((nSourceAlpha-nInputLow)*256)*nRecipInputDelta)
+                           >>cnFixedShift;
 
       int nOutputRed  =((nTempRed  *nOutputDelta)/256)+nOutputLow;
       int nOutputGreen=((nTempGreen*nOutputDelta)/256)+nOutputLow;
@@ -200,19 +211,24 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
     int nRedOutputDelta=static_cast<int>(m_RedOutputCeiling-m_RedOutputFloor);
 
     const int nGreenInputLow=static_cast<int>(m_GreenInputFloor);
-    int nGreenInputDelta=static_cast<int>(m_GreenInputCeiling-m_GreenInputFloor);
+    int nGreenInputDelta=static_cast<int>(m_GreenInputCeiling
+                                          -m_GreenInputFloor);
     const int nGreenOutputLow=static_cast<int>(m_GreenOutputFloor);
-    int nGreenOutputDelta=static_cast<int>(m_GreenOutputCeiling-m_GreenOutputFloor);
+    int nGreenOutputDelta=static_cast<int>(m_GreenOutputCeiling
+                                           -m_GreenOutputFloor);
 
     const int nBlueInputLow=static_cast<int>(m_BlueInputFloor);
     int nBlueInputDelta=static_cast<int>(m_BlueInputCeiling-m_BlueInputFloor);
     const int nBlueOutputLow=static_cast<int>(m_BlueOutputFloor);
-    int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling-m_BlueOutputFloor);
+    int nBlueOutputDelta=static_cast<int>(m_BlueOutputCeiling
+                                          -m_BlueOutputFloor);
 
     const int nAlphaInputLow=static_cast<int>(m_AlphaInputFloor);
-    int nAlphaInputDelta=static_cast<int>(m_AlphaInputCeiling-m_AlphaInputFloor);
+    int nAlphaInputDelta=static_cast<int>(m_AlphaInputCeiling
+                                          -m_AlphaInputFloor);
     const int nAlphaOutputLow=static_cast<int>(m_AlphaOutputFloor);
-    int nAlphaOutputDelta=static_cast<int>(m_AlphaOutputCeiling-m_AlphaOutputFloor);
+    int nAlphaOutputDelta=static_cast<int>(m_AlphaOutputCeiling
+                                           -m_AlphaOutputFloor);
 
     // avoid the possibility of divide-by-zeros
     if (m_DoAllowInversion) {
@@ -283,10 +299,14 @@ void pix_levels :: Pete_Levels_SetupCFSettings(int colour)
       const int nSourceBlue =nCount;
       const int nSourceAlpha=nCount;
 
-      const int nTempRed=  (((nSourceRed  -nRedInputLow  )*256)*nRedRecipInputDelta  )>>cnFixedShift;
-      const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)*nGreenRecipInputDelta)>>cnFixedShift;
-      const int nTempBlue= (((nSourceBlue -nBlueInputLow )*256)*nBlueRecipInputDelta )>>cnFixedShift;
-      const int nTempAlpha=(((nSourceAlpha-nAlphaInputLow)*256)*nAlphaRecipInputDelta)>>cnFixedShift;
+      const int nTempRed=  (((nSourceRed  -nRedInputLow  )*256)
+                            *nRedRecipInputDelta  )>>cnFixedShift;
+      const int nTempGreen=(((nSourceGreen-nGreenInputLow)*256)
+                            *nGreenRecipInputDelta)>>cnFixedShift;
+      const int nTempBlue= (((nSourceBlue -nBlueInputLow )*256)
+                            *nBlueRecipInputDelta )>>cnFixedShift;
+      const int nTempAlpha=(((nSourceAlpha-nAlphaInputLow)*256)
+                            *nAlphaRecipInputDelta)>>cnFixedShift;
 
       int nOutputRed  =((nTempRed  *nRedOutputDelta  )/256)+nRedOutputLow;
       int nOutputGreen=((nTempGreen*nGreenOutputDelta)/256)+nGreenOutputLow;
@@ -381,8 +401,10 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour)
 
   const int nSampleCount= (nWidth/nSampleSpacing)*(nHeight/nSampleSpacing);
 
-  const int nStartThreshold=static_cast<int>((m_LowPercentile*nSampleCount)/100.0f);
-  const int nEndThreshold=static_cast<int>((m_HighPercentile*nSampleCount)/100.0f);
+  const int nStartThreshold=static_cast<int>((
+                              m_LowPercentile*nSampleCount)/100.0f);
+  const int nEndThreshold=static_cast<int>((
+                            m_HighPercentile*nSampleCount)/100.0f);
 
   int nCurrentRedTotal;
   int nCurrentGreenTotal;
@@ -615,23 +637,32 @@ void pix_levels :: Pete_ChannelFunction_RenderYUV()
 /////////////////////////////////////////////////////////
 void pix_levels :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::autoCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::autoCallback),
                   gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::uniCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::uniCallback),
                   gensym("uni"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::invCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::invCallback),
                   gensym("inv"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::uniformCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::uniformCallback),
                   gensym("uniform"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::redCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::redCallback),
                   gensym("red"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::greenCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::greenCallback),
                   gensym("green"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::blueCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::blueCallback),
                   gensym("blue"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::lowPCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::lowPCallback),
                   gensym("lowP"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_levels::hiPCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_levels::hiPCallback),
                   gensym("hiP"), A_DEFFLOAT, A_NULL);
 }
 
@@ -663,7 +694,9 @@ void pix_levels :: hiPCallback(void *data, t_float m_HighPercentile)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_levels :: uniformCallback(void *data, t_float m_UniformInputFloor, t_float m_UniformInputCeiling, t_float m_UniformOutputFloor, t_float m_UniformOutputCeiling)
+void pix_levels :: uniformCallback(void *data, t_float m_UniformInputFloor,
+                                   t_float m_UniformInputCeiling, t_float m_UniformOutputFloor,
+                                   t_float m_UniformOutputCeiling)
 {
   GetMyClass(data)->m_UniformInputFloor=(m_UniformInputFloor*255.);
   GetMyClass(data)->m_UniformInputCeiling=(m_UniformInputCeiling*255.);
@@ -671,7 +704,9 @@ void pix_levels :: uniformCallback(void *data, t_float m_UniformInputFloor, t_fl
   GetMyClass(data)->m_UniformOutputCeiling=(m_UniformOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: redCallback(void *data, t_float m_RedInputFloor, t_float m_RedInputCeiling, t_float m_RedOutputFloor, t_float m_RedOutputCeiling)
+void pix_levels :: redCallback(void *data, t_float m_RedInputFloor,
+                               t_float m_RedInputCeiling, t_float m_RedOutputFloor,
+                               t_float m_RedOutputCeiling)
 {
   GetMyClass(data)->m_RedInputFloor=(m_RedInputFloor*255.);
   GetMyClass(data)->m_RedInputCeiling=(m_RedInputCeiling*255.);
@@ -679,7 +714,9 @@ void pix_levels :: redCallback(void *data, t_float m_RedInputFloor, t_float m_Re
   GetMyClass(data)->m_RedOutputCeiling=(m_RedOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: greenCallback(void *data, t_float m_GreenInputFloor, t_float m_GreenInputCeiling, t_float m_GreenOutputFloor, t_float m_GreenOutputCeiling)
+void pix_levels :: greenCallback(void *data, t_float m_GreenInputFloor,
+                                 t_float m_GreenInputCeiling, t_float m_GreenOutputFloor,
+                                 t_float m_GreenOutputCeiling)
 {
   GetMyClass(data)->m_GreenInputFloor=(m_GreenInputFloor*255.);
   GetMyClass(data)->m_GreenInputCeiling=(m_GreenInputCeiling*255.);
@@ -687,7 +724,9 @@ void pix_levels :: greenCallback(void *data, t_float m_GreenInputFloor, t_float 
   GetMyClass(data)->m_GreenOutputCeiling=(m_GreenOutputCeiling*255.);
   GetMyClass(data)->setPixModified();
 }
-void pix_levels :: blueCallback(void *data, t_float m_BlueInputFloor, t_float m_BlueInputCeiling, t_float m_BlueOutputFloor, t_float m_BlueOutputCeiling)
+void pix_levels :: blueCallback(void *data, t_float m_BlueInputFloor,
+                                t_float m_BlueInputCeiling, t_float m_BlueOutputFloor,
+                                t_float m_BlueOutputCeiling)
 {
   GetMyClass(data)->m_BlueInputFloor=(m_BlueInputFloor*255.);
   GetMyClass(data)->m_BlueInputCeiling=(m_BlueInputCeiling*255.);

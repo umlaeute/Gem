@@ -33,7 +33,8 @@ vertex_combine :: vertex_combine()
 {
   m_blend = 0.f;
   //hopefully this gets us a right inlet that accepts another gem state
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd,gensym("gem_state"), gensym("gem_right"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd,gensym("gem_state"),
+                      gensym("gem_right"));
 }
 
 /////////////////////////////////////////////////////////
@@ -83,10 +84,14 @@ void vertex_combine :: render(GemState *state)
     while (i < sizeR) {
       count = 0;
       while (count < ratio) {
-        VertexArray[srcL] = (VertexArray[srcL] * blendL) + (m_rightVertexArray[srcS] * blendR);
-        VertexArray[srcL+1] = (VertexArray[srcL+1] * blendL) + (m_rightVertexArray[srcS+1] * blendR);
-        VertexArray[srcL+2] = (VertexArray[srcL+2] * blendL) + (m_rightVertexArray[srcS+2] * blendR);
-        VertexArray[srcL+3] = (VertexArray[srcL+3] * blendL )+ (m_rightVertexArray[srcS+3] * blendR);
+        VertexArray[srcL] = (VertexArray[srcL] * blendL) +
+                            (m_rightVertexArray[srcS] * blendR);
+        VertexArray[srcL+1] = (VertexArray[srcL+1] * blendL) +
+                              (m_rightVertexArray[srcS+1] * blendR);
+        VertexArray[srcL+2] = (VertexArray[srcL+2] * blendL) +
+                              (m_rightVertexArray[srcS+2] * blendR);
+        VertexArray[srcL+3] = (VertexArray[srcL+3] * blendL )+
+                              (m_rightVertexArray[srcS+3] * blendR);
         srcL+=4;
         count++;
       }
@@ -98,7 +103,8 @@ void vertex_combine :: render(GemState *state)
     ratiof = static_cast<float>(sizeR)/size;
     ratio = sizeR / size;
     remainder = sizeR % size;
-    post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,remainder);
+    post("float ratio %f:1 int ratio %d:1 remainder %d",ratiof,ratio,
+         remainder);
   }
 
   /* -- this almost works - good for fast and dirty integer ratios
@@ -174,18 +180,24 @@ void vertex_combine :: rightRender(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_combine :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_combine::gem_rightMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_combine::gem_rightMessCallback),
                   gensym("gem_right"), A_GIMME, A_NULL);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_combine::blendCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_combine::blendCallback),
                   gensym("blend"), A_FLOAT, A_NULL);
 }
-void vertex_combine :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void vertex_combine :: gem_rightMessCallback(void *data, t_symbol *s,
+    int argc, t_atom *argv)
 {
   if (argc==1 && argv->a_type==A_FLOAT) {
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
-    GetMyClass(data)->m_cacheRight = reinterpret_cast<GemCache*>(argv->a_w.w_gpointer);
-    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer));
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
+    GetMyClass(data)->m_cacheRight = reinterpret_cast<GemCache*>
+                                     (argv->a_w.w_gpointer);
+    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((
+                                    argv+1)->a_w.w_gpointer));
   } else {
     GetMyClass(data)->error("wrong righthand arguments....");
   }

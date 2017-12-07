@@ -61,7 +61,8 @@ disk :: disk(int argc, t_atom *argv)
 
   sizeMess(size);
   numSlicesMess(numSlices);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("inner"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("inner"));
 }
 
 /////////////////////////////////////////////////////////
@@ -155,11 +156,13 @@ void disk :: render(GemState *state)
           sa = sin(a);
           ca = cos(a);
           if(texType) {
-            glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
+            glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0,
+                         (0.5 + ca * r2 / dtc)*ysize+ysize0);
           }
           glVertex2f(r2 * sa, r2 * ca);
           if(texType) {
-            glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
+            glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0,
+                         (0.5 + ca * r1 / dtc)*ysize+ysize0);
           }
           glVertex2f(r1 * sa, r1 * ca);
         }
@@ -172,11 +175,13 @@ void disk :: render(GemState *state)
           sa = sin(a);
           ca = cos(a);
           if(texType) {
-            glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0, (0.5 + ca * r2 / dtc)*ysize+ysize0);
+            glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0,
+                         (0.5 + ca * r2 / dtc)*ysize+ysize0);
           }
           glVertex2f(r2 * sa, r2 * ca);
           if(texType) {
-            glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0, (0.5 + ca * r1 / dtc)*ysize+ysize0);
+            glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0,
+                         (0.5 + ca * r1 / dtc)*ysize+ysize0);
           }
           glVertex2f(r1 * sa, r1 * ca);
         }
@@ -195,7 +200,8 @@ void disk :: render(GemState *state)
       for (s = 0; s < m_numSlices; s++) {
         GLfloat a = s * da;
         if(texType) {
-          glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0, (0.5+r*cos(a)/dtc)*ysize+ysize0);
+          glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0,
+                       (0.5+r*cos(a)/dtc)*ysize+ysize0);
         }
         glVertex2f(r * sin(a), r * cos(a));
       }

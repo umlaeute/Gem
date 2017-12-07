@@ -97,8 +97,10 @@ private:
 
   //////////
   // Static member functions
-  static void     highThreshMessCallback(void *data, t_float red, t_float green, t_float blue);
-  static void     lowThreshMessCallback(void *data, t_float red, t_float green, t_float blue);
+  static void     highThreshMessCallback(void *data, t_float red,
+                                         t_float green, t_float blue);
+  static void     lowThreshMessCallback(void *data, t_float red,
+                                        t_float green, t_float blue);
   static void     alphaMessCallback(void *data, t_float alpha);
   static void     otheralphaMessCallback(void *data, t_float alpha);
 };

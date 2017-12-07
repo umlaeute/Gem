@@ -59,7 +59,8 @@ t_gemreceive_proxy* gemreceive::find_key(t_symbol*key)
 t_gemreceive_proxy*gemreceive::add_key(t_symbol*key)
 {
   t_gemreceive_proxy*bind_list=0;
-  bind_list=reinterpret_cast<t_gemreceive_proxy*>(pd_new(gemreceive_proxy_class));
+  bind_list=reinterpret_cast<t_gemreceive_proxy*>(pd_new(
+              gemreceive_proxy_class));
   bind_list->key=key;
   bind_list->elements=0;
   bind_list->next=0;
@@ -81,7 +82,8 @@ t_gemreceive_proxy*gemreceive::add_key(t_symbol*key)
   return bind_list;
 }
 
-void gemreceive::add_element(t_gemreceive_proxy*bind_list, t_bind_element*element)
+void gemreceive::add_element(t_gemreceive_proxy*bind_list,
+                             t_bind_element*element)
 {
   /* insert the object according to it's priority
    * this is already the right queue
@@ -100,13 +102,16 @@ void gemreceive::add_element(t_gemreceive_proxy*bind_list, t_bind_element*elemen
 
   debug_post("trying %x:%g", elements, elements->priority);
   while(elements && elements->priority < priority) {
-    debug_post("skipping %x:%g to %x", elements, elements->priority, elements->next);
+    debug_post("skipping %x:%g to %x", elements, elements->priority,
+               elements->next);
     last=elements;
     elements=elements->next;
   }
 
-  debug_post("inserting after  %x:%g", last,     (last    ?    (last->priority):0));
-  debug_post("inserting before %x:%g", elements, (elements?(elements->priority):0));
+  debug_post("inserting after  %x:%g", last,
+             (last    ?    (last->priority):0));
+  debug_post("inserting before %x:%g", elements,
+             (elements?(elements->priority):0));
 
   element->next=elements;
   if(last) {
@@ -121,7 +126,8 @@ void gemreceive::bind(gemreceive*x, t_symbol*key, t_float priority)
 {
   t_gemreceive_proxy*bind_list=0;
   t_bind_element*element=0;
-  debug_post("trying to bind 0x%X:: '%s':%g via %x", x, key->s_name, priority, proxy_list);
+  debug_post("trying to bind 0x%X:: '%s':%g via %x", x, key->s_name,
+             priority, proxy_list);
 
   bind_list=find_key(key);
   if(!bind_list) {
@@ -147,7 +153,8 @@ void gemreceive::unbind(gemreceive*x, t_symbol*key)
   t_gemreceive_proxy*list=0, *last=0;
   t_bind_element*elements=0, *lastlmn=0;
 
-  debug_post("trying to unbind 0x%X:: '%s' from %x", x, key->s_name, proxy_list);
+  debug_post("trying to unbind 0x%X:: '%s' from %x", x, key->s_name,
+             proxy_list);
 
   for(list=proxy_list; list && list->key!=key; list=list->next) {
     last=list;
@@ -156,7 +163,8 @@ void gemreceive::unbind(gemreceive*x, t_symbol*key)
     return;
   }
 
-  for(elements=list->elements; elements && elements->object != x; elements=elements->next) {
+  for(elements=list->elements; elements
+      && elements->object != x; elements=elements->next) {
     lastlmn=elements;
   }
 
@@ -199,7 +207,8 @@ void gemreceive::unbind(gemreceive*x, t_symbol*key)
 
 
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemreceive, t_symbol*, A_DEFSYMBOL, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemreceive, t_symbol*, A_DEFSYMBOL, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -216,7 +225,8 @@ gemreceive :: gemreceive(t_symbol*s,t_floatarg f) :
   debug_post("hi, i am gemreceive 0x%X", this);
 
 
-  m_fltin = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,  gensym(""));
+  m_fltin = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym(""));
   m_outlet = outlet_new(this->x_obj, 0);
 
   bind(this, m_name, m_priority);
@@ -284,10 +294,12 @@ void gemreceive :: obj_setupCallback(t_class *classPtr)
                                      sizeof(t_gemreceive_proxy),
                                      CLASS_NOINLET | CLASS_PD,
                                      A_NULL);
-  class_addanything(gemreceive_proxy_class, reinterpret_cast<t_method>(gemreceive::proxyCallback));
+  class_addanything(gemreceive_proxy_class,
+                    reinterpret_cast<t_method>(gemreceive::proxyCallback));
 }
 
-void gemreceive :: proxyCallback(t_gemreceive_proxy*p, t_symbol*s, int argc, t_atom*argv)
+void gemreceive :: proxyCallback(t_gemreceive_proxy*p, t_symbol*s,
+                                 int argc, t_atom*argv)
 {
   t_bind_element*elements=p->elements;
 

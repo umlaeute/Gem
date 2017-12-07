@@ -160,7 +160,8 @@ public:
    * if the system does support dialogs and the user has specified which one they want,
    * return TRUE if at least one dialog could be handled
    */
-  virtual bool              dialog(std::vector<std::string>names=std::vector<std::string>()) = 0;
+  virtual bool              dialog(std::vector<std::string>names=
+                                     std::vector<std::string>()) = 0;
   /**
    * enumerate list of possible dialogs (if any)
    */

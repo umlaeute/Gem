@@ -61,13 +61,15 @@ protected:
 
   //////////
   // diffuse changed
-  void            diffuseMess(float red, float green, float blue, float alpha);
+  void            diffuseMess(float red, float green, float blue,
+                              float alpha);
 
 private:
 
   //////////
   // static member functions
-  static void     diffuseMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     diffuseMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv);
 };
 
 #endif  // for header file

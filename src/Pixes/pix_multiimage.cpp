@@ -22,7 +22,8 @@
 #include "Gem/State.h"
 #include "Gem/ImageIO.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYM,
+                             t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
 
@@ -34,10 +35,12 @@ pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
+pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage,
+                                 t_floatarg topImage, t_floatarg skipRate)
   : m_numImages(0), m_curImage(-1), m_loadedCache(NULL)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("img_num"));
   m_pixBlock.image = m_imageStruct;
 
   // make sure that there are some characters
@@ -67,7 +70,8 @@ pix_multiimage :: ~pix_multiimage()
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage, int skipRate)
+void pix_multiimage :: openMess(t_symbol *filename, int baseImage,
+                                int topImage, int skipRate)
 {
   cleanImages();
 
@@ -151,7 +155,8 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage, int topImage,
 
   int realNum = baseImage;
   char bufName[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName,
+                      MAXPDSTRING);
 
   // allocate texture bindings for OpenGL
   newCache->textBind = new unsigned int[m_numImages];
@@ -251,7 +256,8 @@ void pix_multiimage :: changeImage(int imgNum)
   }
 
   if (imgNum >= m_numImages) {
-    error("selection number too high: %d (max num is %d)", imgNum, m_numImages);
+    error("selection number too high: %d (max num is %d)", imgNum,
+          m_numImages);
     return;
   } else if (imgNum < 0) {
     error("selection number must be > 0");
@@ -308,12 +314,15 @@ void pix_multiimage :: cleanImages()
 /////////////////////////////////////////////////////////
 void pix_multiimage :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_multiimage::openMessCallback),
                   gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_multiimage::changeImageCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_multiimage::changeImageCallback),
                   gensym("img_num"), A_FLOAT, A_NULL);
 }
-void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_float baseImage,
+void pix_multiimage :: openMessCallback(void *data, t_symbol *filename,
+                                        t_float baseImage,
                                         t_floatarg topImage, t_floatarg skipRate)
 {
   if ((int)skipRate == 0) {
@@ -323,7 +332,8 @@ void pix_multiimage :: openMessCallback(void *data, t_symbol *filename, t_float 
       GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, 0);
     }
   } else {
-    GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
+    GetMyClass(data)->openMess(filename, (int)baseImage, (int)topImage,
+                               (int)skipRate);
   }
 }
 void pix_multiimage :: changeImageCallback(void *data, t_float imgNum)

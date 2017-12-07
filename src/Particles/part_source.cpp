@@ -39,9 +39,12 @@ part_source :: part_source(t_floatarg num)
     m_numberToAdd = num;
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("numToAdd"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"), gensym("domain"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("numToAdd"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"),
+            gensym("domain"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vector"));
 }
 
 /////////////////////////////////////////////////////////
@@ -99,7 +102,8 @@ void part_source :: renderParticles(GemState *state)
 {
   if (m_tickTime > 0.f) {
     pSource((float)m_numberToAdd, m_domain,
-            m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],m_arg[8]);
+            m_arg[0],m_arg[1],m_arg[2],m_arg[3],m_arg[4],m_arg[5],m_arg[6],m_arg[7],
+            m_arg[8]);
   }
 }
 

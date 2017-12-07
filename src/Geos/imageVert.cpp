@@ -348,7 +348,8 @@ void imageVert :: render(GemState *state)
   // can we build a display list?
   if (!dl && m_rebuildList) {
     glNewList(m_dispList, GL_COMPILE_AND_EXECUTE);
-    if (img->image.format == GL_RGBA || img->image.format == GL_BGRA_EXT) {   //tigital
+    if (img->image.format == GL_RGBA
+        || img->image.format == GL_BGRA_EXT) {   //tigital
       processRGBAPix(img->image, texType);
     } else {
       processGrayPix(img->image, texType);
@@ -358,7 +359,8 @@ void imageVert :: render(GemState *state)
   }
   // nope, but our current one isn't valid
   else if (m_rebuildList) {
-    if (img->image.format == GL_RGBA || img->image.format == GL_BGRA_EXT) {     //tigital
+    if (img->image.format == GL_RGBA
+        || img->image.format == GL_BGRA_EXT) {     //tigital
       processRGBAPix(img->image, texType);
     } else {
       processGrayPix(img->image, texType);

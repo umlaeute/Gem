@@ -14,7 +14,8 @@
 
 #include "GEMglEvalPoint2.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglEvalPoint2, t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglEvalPoint2 :: GEMglEvalPoint2      (t_floatarg arg0, t_floatarg arg1) :
+GEMglEvalPoint2 :: GEMglEvalPoint2      (t_floatarg arg0,
+    t_floatarg arg1) :
   i(static_cast<GLint>(arg0)),
   j(static_cast<GLint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("j"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("i"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("j"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,8 +82,12 @@ void GEMglEvalPoint2 :: jMess (t_float arg1)    // FUN
 
 void GEMglEvalPoint2 :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::iMessCallback),         gensym("i"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint2::jMessCallback),         gensym("j"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalPoint2::iMessCallback),
+                  gensym("i"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalPoint2::jMessCallback),
+                  gensym("j"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalPoint2 :: iMessCallback (void* data, t_float arg0)

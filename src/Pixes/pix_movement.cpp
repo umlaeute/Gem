@@ -53,7 +53,8 @@ pix_movement :: pix_movement(t_floatarg f)
     f=1.0;
   }
   threshold = (unsigned char)(255*f);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("thresh"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("thresh"));
 }
 
 /////////////////////////////////////////////////////////
@@ -88,7 +89,8 @@ void pix_movement :: processRGBAImage(imageStruct &image)
   while(pixsize--) {
     //    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
     //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>threshold);
-    unsigned char grey = (rp[chRed]*RGB2GRAY_RED+rp[chGreen]*RGB2GRAY_GREEN+rp[chBlue]*RGB2GRAY_BLUE)>>8;
+    unsigned char grey = (rp[chRed]*RGB2GRAY_RED+rp[chGreen]*RGB2GRAY_GREEN
+                          +rp[chBlue]*RGB2GRAY_BLUE)>>8;
     rp[chAlpha] = 255*(abs(grey-*wp)>threshold);
     *wp++=(unsigned char)grey;
     rp+=4;
@@ -167,8 +169,10 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
   thresh = shortBuffer.v;
   thresh = (vector signed short)vec_splat(thresh,0);
 
-  vector unsigned char *rp = (vector unsigned char *) image.data; // read pointer
-  vector unsigned char *wp = (vector unsigned char *) buffer.data; // write pointer to the copy
+  vector unsigned char *rp = (vector unsigned char *)
+                             image.data; // read pointer
+  vector unsigned char *wp = (vector unsigned char *)
+                             buffer.data; // write pointer to the copy
   vector unsigned char grey0,grey1;
   vector unsigned char one = vec_splat_u8(1);
   vector unsigned short Y0,Ywp0,hiImage0,loImage0;
@@ -177,8 +181,10 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
   vector signed short temp0,temp1;
 
   ushortBuffer.c[0]=127;
-  vector unsigned short UV0= (vector unsigned short)vec_splat(ushortBuffer.v, 0);
-  vector unsigned short UV1= (vector unsigned short)vec_splat(ushortBuffer.v, 0);
+  vector unsigned short UV0= (vector unsigned short)vec_splat(ushortBuffer.v,
+                             0);
+  vector unsigned short UV1= (vector unsigned short)vec_splat(ushortBuffer.v,
+                             0);
 
 #ifndef PPC970
   //setup the cache prefetch -- A MUST!!!
@@ -226,10 +232,12 @@ void pix_movement :: processYUVAltivec(imageStruct &image)
     wp[0]=grey1;
     wp++;
 
-    temp0 = vec_abs(vec_sub((vector signed short)Y0,(vector signed short)Ywp0));
+    temp0 = vec_abs(vec_sub((vector signed short)Y0,
+                            (vector signed short)Ywp0));
     Y0 = (vector unsigned short)vec_cmpgt(temp0,thresh);
 
-    temp1 = vec_abs(vec_sub((vector signed short)Y1,(vector signed short)Ywp1));
+    temp1 = vec_abs(vec_sub((vector signed short)Y1,
+                            (vector signed short)Ywp1));
     Y1 = (vector unsigned short)vec_cmpgt(temp1,thresh);
 
     hiImage0 = vec_mergeh(UV0,Y0);
@@ -354,9 +362,11 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
                   gensym("threshold"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
                   gensym("thresh"), A_FLOAT, A_NULL);
 }
 void pix_movement :: threshMessCallback(void *data, t_float newmode)

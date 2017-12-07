@@ -42,7 +42,8 @@ pix_filmOS :: pix_filmOS(t_symbol *filename) :
   m_colorspace(GL_RGBA_GEM), m_format(GL_RGBA_GEM)
 {
   // setting the current frame
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("img_num"));
   // create an outlet to send out how many frames are in the movie + bang when we reached the end
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
@@ -93,7 +94,8 @@ void pix_filmOS :: createBuffer()
     m_pixBlock.image.xsize = neededXSize;
     m_pixBlock.image.ysize = neededYSize;
 
-    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
+    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
+                   m_pixBlock.image.csize+4; /* +4 from MPEG */
 
     m_data = new unsigned char[dataSize];
     // memset(m_data, 0, dataSize);
@@ -122,7 +124,8 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
   }
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name,
+                      buf, MAXPDSTRING);
 
   // Clean up any open files
   closeMess();
@@ -144,7 +147,8 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
   SETFLOAT(ap+2, m_ysize);
 
   m_newFilm = 1;
-  post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize,
+       m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
@@ -301,18 +305,24 @@ void pix_filmOS :: csMess(int format)
 /////////////////////////////////////////////////////////
 void pix_filmOS :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::openMessCallback),
                   gensym("open"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::changeImageCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::changeImageCallback),
                   gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::autoCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::autoCallback),
                   gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
                   gensym("colorspace"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
                   gensym("colourspace"), A_SYMBOL, A_NULL);
 }
-void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc,
+                                    t_atom*argv)
 {
   int format=0;
   switch(argc) {
@@ -326,9 +336,11 @@ void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv
   }
 }
 
-void pix_filmOS :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_filmOS :: changeImageCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv)
 {
-  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
+                                (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_filmOS :: autoCallback(void *data, t_float state)

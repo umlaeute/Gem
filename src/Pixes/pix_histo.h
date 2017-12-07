@@ -80,7 +80,8 @@ protected:
 
   //////////
   // the methods
-  static void setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv);
+  static void setMessCallback(void *data, t_symbol *s, int argc,
+                              t_atom* argv);
 
 };
 

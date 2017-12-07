@@ -283,7 +283,8 @@ typedef struct _gem_event_queue_t {
 
 gem_event_queue_t*event_queue = NULL;
 
-static gem_event_queue_item_t* createEvent(gem_event_t type, char*string, int x, int y, int state, int axis, int value, int which)
+static gem_event_queue_item_t* createEvent(gem_event_t type, char*string,
+    int x, int y, int state, int axis, int value, int which)
 {
   gem_event_queue_item_t*ret=new gem_event_queue_item_t;
   ret->type=type;
@@ -323,7 +324,8 @@ static void deleteEvent( gem_event_queue_item_t* event)
 
 static void eventClock(void *x);
 
-static void addEvent(gem_event_t type, char*string, int x, int y, int state, int axis, int value, int which)
+static void addEvent(gem_event_t type, char*string, int x, int y,
+                     int state, int axis, int value, int which)
 {
   if (NULL==event_queue) {
     event_queue=new gem_event_queue_t;
@@ -331,7 +333,8 @@ static void addEvent(gem_event_t type, char*string, int x, int y, int state, int
     event_queue->last =NULL;
     event_queue->clock=clock_new(NULL, reinterpret_cast<t_method>(eventClock));
   }
-  gem_event_queue_item_t*item=createEvent(type, string, x, y, state, axis, value, which);
+  gem_event_queue_item_t*item=createEvent(type, string, x, y, state, axis,
+                                          value, which);
   if(NULL==event_queue->first) {
     event_queue->first=item;
   }
@@ -370,7 +373,8 @@ static void dequeueEvents(void)
       theList = s_buttonList;
       while(theList) {
         BUTTON_CB callback = (BUTTON_CB)theList->func;
-        (*callback)(events->which, events->state, events->x, events->y, theList->data);
+        (*callback)(events->which, events->state, events->x, events->y,
+                    theList->data);
         theList = theList->next;
       }
       break;

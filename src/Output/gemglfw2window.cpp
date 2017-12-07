@@ -127,7 +127,8 @@ void gemglfw2window :: titleMess(const std::string&s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglfw2window :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglfw2window :: dimensionsMess(unsigned int width,
+                                      unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");
@@ -206,9 +207,11 @@ bool gemglfw2window :: create(void)
 
 
   if(m_profile_major) {
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, m_profile_major); // We want OpenGL 3.3
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR,
+                       m_profile_major); // We want OpenGL 3.3
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, m_profile_minor);
-    glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
+    glfwOpenWindowHint(GLFW_OPENGL_PROFILE,
+                       GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
   }
 
   if (!glfwOpenWindow(m_width, m_height,

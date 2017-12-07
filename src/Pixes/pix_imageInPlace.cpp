@@ -21,7 +21,8 @@
 #include "Gem/State.h"
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM,
+                             t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,7 +32,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_imageInPlace :: pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
+pix_imageInPlace :: pix_imageInPlace(t_symbol *filename,
+                                     t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
   : pix_multiimage(filename, baseImage, topImage, skipRate),
     m_wantDownload(false),
     mInPreload(0),
@@ -132,7 +134,8 @@ void pix_imageInPlace :: stopRendering()
 // preloadMess
 //
 /////////////////////////////////////////////////////////
-void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topImage, int skipRate)
+void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage,
+                                     int topImage, int skipRate)
 {
   openMess(filename, baseImage, topImage, skipRate);
   if (m_loadedCache) {
@@ -201,7 +204,8 @@ void pix_imageInPlace :: purgeMess()
   }
 
   if (m_loadedCache->textBind[0]) {
-    glDeleteTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
+    glDeleteTextures(m_numImages,
+                     (GLuint *)m_loadedCache->textBind);//__APPLE__
     for (int i = 0; i < m_numImages; ++i) {
       m_loadedCache->textBind[i] = 0;
     }
@@ -247,7 +251,8 @@ void pix_imageInPlace :: repeatMess(int type)
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
                   gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   CPPEXTERN_MSG0(classPtr, "download", downloadMess);
   CPPEXTERN_MSG0(classPtr, "purge", purgeMess);
@@ -255,7 +260,8 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
 }
 
-void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_float baseImage,
+void pix_imageInPlace :: preloadMessCallback(void *data,
+    t_symbol *filename, t_float baseImage,
     t_floatarg topImage, t_floatarg skipRate)
 {
   if ((int)skipRate == 0) {
@@ -265,6 +271,7 @@ void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_f
       GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, 0);
     }
   } else {
-    GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
+    GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage,
+                                  (int)skipRate);
   }
 }

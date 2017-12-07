@@ -23,13 +23,15 @@ public:
   pthread_mutex_t*mutex;
   pthread_cond_t *cond;
   unsigned int *refcount;
-  PIMPL(void) : mutex(new pthread_mutex_t), cond(new pthread_cond_t), refcount(new unsigned int)
+  PIMPL(void) : mutex(new pthread_mutex_t), cond(new pthread_cond_t),
+    refcount(new unsigned int)
   {
     pthread_mutex_init(mutex, NULL);
     pthread_cond_init (cond, NULL);
     *refcount=1;
   }
-  PIMPL(const PIMPL&org) : mutex(org.mutex), cond(org.cond), refcount(org.refcount)
+  PIMPL(const PIMPL&org) : mutex(org.mutex), cond(org.cond),
+    refcount(org.refcount)
   {
     (*refcount)++;
   }
@@ -69,7 +71,8 @@ public:
 gem::thread::Semaphore::Semaphore(void) : m_pimpl(new PIMPL())
 {
 }
-gem::thread::Semaphore::Semaphore(const gem::thread::Semaphore&org) : m_pimpl(new PIMPL(*org.m_pimpl))
+gem::thread::Semaphore::Semaphore(const gem::thread::Semaphore&org) :
+  m_pimpl(new PIMPL(*org.m_pimpl))
 {
 }
 gem::thread::Semaphore::~Semaphore(void)
@@ -90,7 +93,8 @@ void gem::thread::Semaphore::thaw(void)
 }
 
 
-gem::thread::Semaphore&gem::thread::Semaphore::operator=(const gem::thread::Semaphore&org)
+gem::thread::Semaphore&gem::thread::Semaphore::operator=
+(const gem::thread::Semaphore&org)
 {
   if(this!=&org && m_pimpl->refcount != org.m_pimpl->refcount) {
     PIMPL*pimpl=new PIMPL(*org.m_pimpl);

@@ -33,7 +33,8 @@ GEMglEnableClientState :: GEMglEnableClientState (int argc, t_atom*argv) :
   } else if(argc) {
     throw(GemException("invalid number of arguments"));
   }
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("array"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("array"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -76,10 +77,13 @@ void GEMglEnableClientState :: arrayMess (t_atom arg)   // FUN
 
 void GEMglEnableClientState :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEnableClientState::arrayMessCallback),      gensym("array"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEnableClientState::arrayMessCallback),
+                  gensym("array"), A_GIMME, A_NULL);
 }
 
-void GEMglEnableClientState :: arrayMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglEnableClientState :: arrayMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->arrayMess ( argv[0]);

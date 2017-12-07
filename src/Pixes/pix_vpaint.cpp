@@ -57,7 +57,8 @@ pix_vpaint :: pix_vpaint(void) :
   m_banged(false),
   m_sizinlet(0)
 {
-  m_sizinlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  m_sizinlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+                         gensym("vert_size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -167,7 +168,8 @@ void pix_vpaint :: makecone(void)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: init()
 {
-  m_pbuffer = new PBuffer( m_w, m_h, PBuffer::GEM_PBUFLAG_RGBA | PBuffer::GEM_PBUFLAG_DEPTH );
+  m_pbuffer = new PBuffer( m_w, m_h,
+                           PBuffer::GEM_PBUFLAG_RGBA | PBuffer::GEM_PBUFLAG_DEPTH );
   m_pbuffer->enable();
 
   /*
@@ -242,7 +244,8 @@ void pix_vpaint :: processImage(imageStruct &image)
   if (!m_initialized) {
     init();
   }
-  if ( (m_banged) || ((m_w != m_imageStruct.xsize) && (m_h != m_imageStruct.ysize)) ) {
+  if ( (m_banged) || ((m_w != m_imageStruct.xsize)
+                      && (m_h != m_imageStruct.ysize)) ) {
     makepoints();
     m_banged=false;
   }
@@ -253,7 +256,8 @@ void pix_vpaint :: processImage(imageStruct &image)
     glDrawBuffer(GL_FRONT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glDrawPixels(m_w, m_h, image.format, GL_UNSIGNED_BYTE, (GLubyte *) m_imageStruct.data);
+    glDrawPixels(m_w, m_h, image.format, GL_UNSIGNED_BYTE,
+                 (GLubyte *) m_imageStruct.data);
   } else if (!drawEdges) {
     glDrawBuffer(useStrokes ? GL_BACK : GL_FRONT);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -361,11 +365,14 @@ void pix_vpaint :: sizeMess(int width, int height)
 /////////////////////////////////////////////////////////
 void pix_vpaint :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_vpaint::bangMessCallback));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_vpaint::sizeMessCallback),
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_vpaint::bangMessCallback));
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_vpaint::sizeMessCallback),
                   gensym("vert_size"), A_FLOAT, A_FLOAT, A_NULL);
 }
-void pix_vpaint :: sizeMessCallback(void *data, t_float width, t_float height)
+void pix_vpaint :: sizeMessCallback(void *data, t_float width,
+                                    t_float height)
 {
   GetMyClass(data)->sizeMess((int)width, (int)height);
 }

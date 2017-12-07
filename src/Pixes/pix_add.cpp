@@ -177,7 +177,8 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
   } charBuffer;
 
   //vector unsigned char c;
-  register vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
+  register vector signed short d, hiImage, loImage, YRight, UVRight, YImage,
+           UVImage, UVTemp, YTemp;
   // vector unsigned char zero = vec_splat_u8(0);
   register vector unsigned char c,one;
   //  vector signed short zshort = vec_splat_s16(0);
@@ -212,9 +213,11 @@ void pix_add :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 
   //Load it into the vector unit
   d = shortBuffer.v;
-  d = static_cast<vector signed short>(vec_splat(static_cast<vector signed short>(d),0));
+  d = static_cast<vector signed short>(vec_splat(
+                                         static_cast<vector signed short>(d),0));
 #ifndef PPC970
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
 #endif
@@ -295,7 +298,8 @@ void pix_add :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
 void pix_add :: processDualImage(imageStruct &image, imageStruct &right)
 {
   if (image.format!=right.format) {
-    error("no method to combine (0x%X) and (0x%X)", image.format, right.format);
+    error("no method to combine (0x%X) and (0x%X)", image.format,
+          right.format);
     return;
   }
   int datasize = (image.xsize * image.ysize * image.csize)>>5;

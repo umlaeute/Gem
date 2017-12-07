@@ -32,7 +32,8 @@ modelloader :: modelloader(void)
 {}
 modelloader :: ~modelloader(void) {}
 /* initialize the modelloader factory */
-static gem::PluginFactoryRegistrar::dummy<modelloader> fac_modelloaderdummy;
+static gem::PluginFactoryRegistrar::dummy<modelloader>
+fac_modelloaderdummy;
 
 
 
@@ -46,7 +47,8 @@ private:
   // set to TRUE if we can use the current handle in another thread
   bool m_canThread;
 
-  bool addPlugin( std::vector<std::string>available, std::string ID=std::string(""))
+  bool addPlugin( std::vector<std::string>available,
+                  std::string ID=std::string(""))
   {
     int count=0;
 
@@ -76,7 +78,8 @@ private:
           handle=gem::PluginFactory<gem::plugins::modelloader>::getInstance(key);
         } catch(GemException&x) {
           handle=NULL;
-          verbose(1, "cannot use modelloader plugin '%s': %s", key.c_str(), x.what());
+          verbose(1, "cannot use modelloader plugin '%s': %s", key.c_str(),
+                  x.what());
         }
         if(NULL==handle) {
           continue;
@@ -84,7 +87,8 @@ private:
         m_ids.push_back(key);
         m_handles.push_back(handle);
         count++;
-        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1), key.c_str());
+        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1),
+                key.c_str());
       }
     }
     return (count>0);
@@ -96,7 +100,8 @@ public:
     m_canThread(true)
   {
     gem::PluginFactory<gem::plugins::modelloader>::loadPlugins("model");
-    std::vector<std::string>ids=gem::PluginFactory<gem::plugins::modelloader>::getIDs();
+    std::vector<std::string>ids=
+      gem::PluginFactory<gem::plugins::modelloader>::getIDs();
 
     //addPlugin(ids, "MPEG1");
     addPlugin(ids);
@@ -119,7 +124,8 @@ public:
     }
   }
 
-  virtual bool open(const std::string&name, const gem::Properties&requestprops)
+  virtual bool open(const std::string&name,
+                    const gem::Properties&requestprops)
   {
     if(m_handle) {
       close();

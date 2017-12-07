@@ -74,21 +74,24 @@ public:
     close();
   }
 
-  static std::string getFullfilename(const t_canvas*canvas, const char*filename, const char*ext)
+  static std::string getFullfilename(const t_canvas*canvas,
+                                     const char*filename, const char*ext)
   {
     std::string fullname_;
 
     char buf[MAXPDSTRING];
     char*bufptr;
     int fd=0;
-    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf, &bufptr, MAXPDSTRING, 1))>=0) {
+    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), filename, ext, buf,
+                        &bufptr, MAXPDSTRING, 1))>=0) {
       gem::files::close(fd);
       fullname_=buf;
       fullname_+="/";
       fullname_+=bufptr;
     } else {
       if(canvas) {
-        canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(filename), buf, MAXPDSTRING);
+        canvas_makefilename(const_cast<t_canvas*>(canvas),
+                            const_cast<char*>(filename), buf, MAXPDSTRING);
         fullname_=buf;
       } else {
         return std::string("");
@@ -173,7 +176,8 @@ public:
     return NULL;
   }
 
-  static GemDylibHandle*open(const CPPExtern*obj, const std::string&filename, const std::string&extension)
+  static GemDylibHandle*open(const CPPExtern*obj, const std::string&filename,
+                             const std::string&extension)
   {
     //const t_canvas*canvas=(obj)?(const_cast<CPPExtern*>(obj)->getCanvas()):0;
     const char*ext=extension.c_str();
@@ -182,7 +186,8 @@ public:
     std::string fullname=gem::files::getFullpath(filename+ext, obj);
     if(fullname.empty()) {
       //fullname=getFullfilename(canvas, filename.c_str(), GemDylibHandle::defaultExtension.c_str());
-      fullname=gem::files::getFullpath(filename+GemDylibHandle::defaultExtension, obj);
+      fullname=gem::files::getFullpath(filename+GemDylibHandle::defaultExtension,
+                                       obj);
     }
 
     if(fullname.empty()) {
@@ -228,7 +233,8 @@ const std::string GemDylibHandle::defaultExtension =
   ;
 
 
-GemDylib::GemDylib(const CPPExtern*obj, const std::string&filename, const std::string&extension)
+GemDylib::GemDylib(const CPPExtern*obj, const std::string&filename,
+                   const std::string&extension)
   : m_handle(0)
 {
   m_handle=GemDylibHandle::open(obj, filename, extension);
@@ -286,7 +292,8 @@ GemDylib::~GemDylib(void)
   }
   m_handle=NULL;
 
-  s_dylibs.erase( std::remove(s_dylibs.begin(), s_dylibs.end(), this), s_dylibs.end() );
+  s_dylibs.erase( std::remove(s_dylibs.begin(), s_dylibs.end(), this),
+                  s_dylibs.end() );
 }
 
 GemDylib& GemDylib::operator=(const GemDylib&org)

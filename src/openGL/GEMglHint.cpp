@@ -35,8 +35,10 @@ GEMglHint :: GEMglHint (int argc, t_atom*argv) :
   } else if (argc) {
     throw(GemException("invalid number of arguments"));
   }
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("mode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -77,17 +79,23 @@ void GEMglHint :: modeMess (t_atom arg)         // FUN
 
 void GEMglHint :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglHint::targetMessCallback),          gensym("target"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglHint::modeMessCallback),    gensym("mode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglHint::targetMessCallback),
+                  gensym("target"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglHint::modeMessCallback),
+                  gensym("mode"), A_GIMME, A_NULL);
 };
 
-void GEMglHint :: targetMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglHint :: targetMessCallback (void* data, t_symbol*, int argc,
+                                      t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->targetMess ( argv[0]);
   }
 }
-void GEMglHint :: modeMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglHint :: modeMessCallback (void* data, t_symbol*, int argc,
+                                    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->modeMess ( argv[0]);

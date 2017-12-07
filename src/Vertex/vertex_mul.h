@@ -48,7 +48,8 @@ protected:
 
   //////////
   // Do the rendering
-  virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
+  virtual void    vertexProcess(int lsize, float*larray, int rsize,
+                                float*rarray);
 };
 
 #endif  // for header file

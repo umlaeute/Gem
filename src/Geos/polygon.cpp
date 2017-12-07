@@ -53,7 +53,8 @@ polygon :: polygon(t_floatarg numInputs)
     // create the proper number of inputs
     for (int i = 0; i < realNum; i++) {
       sprintf(tempVt, "%d", i+1);
-      m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym(tempVt) );
+      m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+                           gensym(tempVt) );
     }
   } else {
     verbose(1, "variable number of vertices");
@@ -207,8 +208,10 @@ void polygon :: setVert(int whichOne, float x, float y, float z)
 void polygon :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG4(classPtr, "vertex", setVert, int, float, float, float);
-  class_addlist(classPtr, reinterpret_cast<t_method>(&polygon::listCallback));
-  class_addanything(classPtr, reinterpret_cast<t_method>(&polygon::vertCallback));
+  class_addlist(classPtr,
+                reinterpret_cast<t_method>(&polygon::listCallback));
+  class_addanything(classPtr,
+                    reinterpret_cast<t_method>(&polygon::vertCallback));
 }
 
 void polygon :: listCallback(void *data, t_symbol*s, int argc, t_atom*argv)
@@ -220,6 +223,7 @@ void polygon :: vertCallback(void *data, t_symbol*s, int argc, t_atom*argv)
 {
   int i = atoi(s->s_name);
   if (i>0 && argc==3) {
-    GetMyClass(data)->setVert(i-1, atom_getfloat(argv), atom_getfloat(argv+1), atom_getfloat(argv+2));
+    GetMyClass(data)->setVert(i-1, atom_getfloat(argv), atom_getfloat(argv+1),
+                              atom_getfloat(argv+2));
   }
 }

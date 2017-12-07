@@ -14,7 +14,8 @@
 
 #include "GEMglEvalMesh1.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,18 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglEvalMesh1, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglEvalMesh1 :: GEMglEvalMesh1        (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglEvalMesh1 :: GEMglEvalMesh1        (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2) :
   mode(static_cast<GLenum>(arg0)),
   i1(static_cast<GLint>(arg1)),
   i2(static_cast<GLint>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i1"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i2"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("mode"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("i1"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("i2"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,9 +92,15 @@ void GEMglEvalMesh1 :: i2Mess (t_float arg1)    // FUN
 
 void GEMglEvalMesh1 :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::modeMessCallback),       gensym("mode"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i1MessCallback),         gensym("i1"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalMesh1::i2MessCallback),         gensym("i2"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalMesh1::modeMessCallback),
+                  gensym("mode"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalMesh1::i1MessCallback),
+                  gensym("i1"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalMesh1::i2MessCallback),
+                  gensym("i2"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalMesh1 :: modeMessCallback (void* data, t_float arg0)

@@ -40,11 +40,15 @@ CPPEXTERN_NEW(pix_rectangle);
 /////////////////////////////////////////////////////////
 pix_rectangle :: pix_rectangle()
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("coord"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("coord"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("color"));
 
-  m_color[chRed] = m_color[chGreen] = m_color[chBlue] = m_color[chAlpha] = 255;
-  m_lower_left[0] = m_lower_left[1] = m_upper_right[0] = m_upper_right[1] = 0;
+  m_color[chRed] = m_color[chGreen] = m_color[chBlue] = m_color[chAlpha] =
+                                        255;
+  m_lower_left[0] = m_lower_left[1] = m_upper_right[0] = m_upper_right[1] =
+                                        0;
 }
 
 /////////////////////////////////////////////////////////
@@ -85,7 +89,8 @@ void pix_rectangle :: processRGBAImage(imageStruct &image)
 
   int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--) {
-    pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
+    pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] *
+             pixelsize;
     int col = (m_upper_right[0] - m_lower_left[0]);
     while (col--)               {
       pixels[chRed]   = r;
@@ -102,9 +107,12 @@ void pix_rectangle :: processYUVImage(imageStruct &image)
   int rowsize  = image.xsize * pixelsize;
   unsigned char *pixels = image.data;
 
-  unsigned char y =((RGB2YUV_11*m_color[chRed]+RGB2YUV_12*m_color[chGreen]+RGB2YUV_13*m_color[chBlue])>>8)+ Y_OFFSET;
-  unsigned char u =((RGB2YUV_21*m_color[chRed]+RGB2YUV_22*m_color[chGreen]+RGB2YUV_23*m_color[chBlue])>>8)+UV_OFFSET;
-  unsigned char v =((RGB2YUV_31*m_color[chRed]+RGB2YUV_32*m_color[chGreen]+RGB2YUV_33*m_color[chBlue])>>8)+UV_OFFSET;
+  unsigned char y =((RGB2YUV_11*m_color[chRed]+RGB2YUV_12*m_color[chGreen]
+                     +RGB2YUV_13*m_color[chBlue])>>8)+ Y_OFFSET;
+  unsigned char u =((RGB2YUV_21*m_color[chRed]+RGB2YUV_22*m_color[chGreen]
+                     +RGB2YUV_23*m_color[chBlue])>>8)+UV_OFFSET;
+  unsigned char v =((RGB2YUV_31*m_color[chRed]+RGB2YUV_32*m_color[chGreen]
+                     +RGB2YUV_33*m_color[chBlue])>>8)+UV_OFFSET;
 
   if (m_upper_right[0] > image.xsize) {
     m_upper_right[0] = image.xsize;
@@ -155,11 +163,13 @@ void pix_rectangle :: processGrayImage(imageStruct &image)
     m_lower_left [1] = image.ysize;
   }
 
-  unsigned char g=(m_color[chRed]*RGB2GRAY_RED+m_color[chGreen]*RGB2GRAY_GREEN+m_color[chBlue]*RGB2GRAY_BLUE)>>8;
+  unsigned char g=(m_color[chRed]*RGB2GRAY_RED
+                   +m_color[chGreen]*RGB2GRAY_GREEN+m_color[chBlue]*RGB2GRAY_BLUE)>>8;
 
   int row = (m_upper_right[1] - m_lower_left[1]);
   while (row--)    {
-    pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] * pixelsize;
+    pixels = image.data + rowsize * (m_lower_left[1] + row) + m_lower_left[0] *
+             pixelsize;
     int col = (m_upper_right[0] - m_lower_left[0]);
     while (col--)        {
       pixels[chGray] = g;
@@ -243,17 +253,21 @@ void pix_rectangle :: vecCoordMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_rectangle :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecCoordMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_rectangle::vecCoordMessCallback),
                   gensym("coord"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_rectangle::vecColorMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_rectangle::vecColorMessCallback),
                   gensym("color"), A_GIMME, A_NULL);
 
 }
-void pix_rectangle :: vecCoordMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_rectangle :: vecCoordMessCallback(void *data, t_symbol *,
+    int argc, t_atom *argv)
 {
   GetMyClass(data)->vecCoordMess(argc, argv);
 }
-void pix_rectangle :: vecColorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_rectangle :: vecColorMessCallback(void *data, t_symbol *,
+    int argc, t_atom *argv)
 {
   GetMyClass(data)->vecColorMess(argc, argv);
 }

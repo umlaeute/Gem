@@ -403,7 +403,8 @@ bool videoUNICAP :: start(void)
 
   std::string s;
   if(m_props.get("format", s)) {
-    for( unsigned i = 0; SUCCESS( unicap_enumerate_formats( m_handle, NULL, &format, i ) ); i++) {
+    for( unsigned i = 0;
+         SUCCESS( unicap_enumerate_formats( m_handle, NULL, &format, i ) ); i++) {
       count_format++;
       if(s == format.identifier) {
         default_format=i;
@@ -435,10 +436,13 @@ bool videoUNICAP :: start(void)
   debugPost("dimensions: %dx%d\t%f", w, h, penalty);
   if ((w>0 || h>0)) {
     /* try to find a format that matches the desired width/height best */
-    for(unsigned int formatid_index=0; formatid_index<formatid.size(); formatid_index++) {
+    for(unsigned int formatid_index=0; formatid_index<formatid.size();
+        formatid_index++) {
       int format_index=formatid[formatid_index];
-      if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format, format_index) ) )  {
-        verbose(1, "[GEM:videoUNICAP] Failed to get video format %d", format_index);
+      if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format,
+                                              format_index) ) )  {
+        verbose(1, "[GEM:videoUNICAP] Failed to get video format %d",
+                format_index);
         continue;
       }
 
@@ -450,9 +454,11 @@ bool videoUNICAP :: start(void)
           default_size=0;
         }
         debugPost("current penalty=%f", penalty);
-        for( unsigned size_index = 0; size_index < format.size_count; size_index++ ) {
+        for( unsigned size_index = 0; size_index < format.size_count;
+             size_index++ ) {
           double p=dimension_penalty(w, h, format.sizes[size_index]);
-          debugPost("[%d/%d] penalty for (%dx%d) vs (%dx%d)=%f <> %f", format_index, size_index,
+          debugPost("[%d/%d] penalty for (%dx%d) vs (%dx%d)=%f <> %f", format_index,
+                    size_index,
                     w, h, format.sizes[size_index].width, format.sizes[size_index].height,
                     p, penalty);
           if(p<penalty) {
@@ -469,7 +475,8 @@ bool videoUNICAP :: start(void)
 
 
   unicap_void_format( &format_spec );
-  if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format, default_format) ) )  {
+  if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format,
+                                          default_format) ) )  {
     return false;
   }
   post_fmt(&format);
@@ -580,7 +587,8 @@ std::vector<std::string> videoUNICAP::enumerate(void)
     if(SUCCESS(status)) {
       const unsigned int cur=m_devices.size();
 #if 0
-      verbose(1, "[GEM:videoUNICAP] ID='%s'\tmodel='%s'\tvendor='%s'\tdevice='%s'\tCPI='%s'",
+      verbose(1,
+              "[GEM:videoUNICAP] ID='%s'\tmodel='%s'\tvendor='%s'\tdevice='%s'\tCPI='%s'",
               device.identifier,
               device.model_name,
               device.vendor_name,
@@ -863,7 +871,8 @@ void videoUNICAP :: setProperties(gem::Properties&props)
         verbose(1, "[GEM:videoUNICAP] could not set property '%s'", key.c_str());
 #if 0
       } else {
-        verbose(1, "[GEM:videoUNICAP] successfully set property '%s'", key.c_str());
+        verbose(1, "[GEM:videoUNICAP] successfully set property '%s'",
+                key.c_str());
 #endif
       }
     }

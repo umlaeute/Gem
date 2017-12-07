@@ -40,7 +40,8 @@ GEMglGetIntegerv :: GEMglGetIntegerv    (int argc, t_atom*argv) :
     throw(GemException("invalid number of arguments"));
   }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("pname"));
   m_outlet = outlet_new(this->x_obj, 0);
 
 }
@@ -108,10 +109,13 @@ void GEMglGetIntegerv :: pnameMess (t_atom arg)         // FUN
 
 void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),   gensym("pname"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),
+                  gensym("pname"), A_GIMME, A_NULL);
 }
 
-void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->pnameMess ( argv[0]);

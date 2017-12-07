@@ -84,7 +84,8 @@ void CPPExtern :: post(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname) {
+  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name
+      && &s_ != m_objectname) {
     ::post("[%s]: %s", m_objectname->s_name, buf);
   } else {
     ::post("%s", buf);
@@ -98,7 +99,8 @@ void CPPExtern :: startpost(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname) {
+  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name
+      && &s_ != m_objectname) {
     ::startpost("[%s]: %s", m_objectname->s_name, buf);
   } else {
     ::startpost("%s", buf);
@@ -131,13 +133,15 @@ void CPPExtern :: verbose(const int level, const char*fmt,...) const
 
   /* only pd>=0.39(?) supports ::verbose() */
   if(rte_verbose) {
-    if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname) {
+    if(NULL!=m_objectname && NULL!=m_objectname->s_name
+        && &s_ != m_objectname) {
       rte_verbose(level, "[%s]: %s", m_objectname->s_name, buf);
     } else {
       rte_verbose(level, "%s", buf);
     }
   } else {
-    if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname) {
+    if(NULL!=m_objectname && NULL!=m_objectname->s_name
+        && &s_ != m_objectname) {
       ::post("[%s]: %s", m_objectname->s_name, buf);
     } else {
       ::post("%s", buf);
@@ -152,7 +156,8 @@ void CPPExtern :: error(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname) {
+  if(NULL!=m_objectname && NULL!=m_objectname->s_name
+      && &s_ != m_objectname) {
     char*objname=m_objectname->s_name;
     if(x_obj) {
       pd_error(x_obj, "[%s]: %s", objname, buf);
@@ -174,7 +179,8 @@ void CPPExtern :: error(const char*fmt,...) const
 
 typedef int (*close_t)(int fd);
 
-std::string CPPExtern::findFile(const std::string&f, const std::string&e) const
+std::string CPPExtern::findFile(const std::string&f,
+                                const std::string&e) const
 {
   std::string result;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();

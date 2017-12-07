@@ -31,7 +31,8 @@ CPPEXTERN_NEW(pix_color);
 /////////////////////////////////////////////////////////
 pix_color :: pix_color()
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("vec_gain"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("vec_gain"));
   m_color[0] = m_color[1] = m_color[2] = 255;
 }
 
@@ -61,7 +62,8 @@ void pix_color :: processRGBAImage(imageStruct &image)
 void pix_color :: processGrayImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize;
-  unsigned char grey=(m_color[0]*RGB2GRAY_RED+m_color[1]*RGB2GRAY_GREEN+m_color[2]*RGB2GRAY_BLUE)>>8;
+  unsigned char grey=(m_color[0]*RGB2GRAY_RED+m_color[1]*RGB2GRAY_GREEN
+                      +m_color[2]*RGB2GRAY_BLUE)>>8;
   unsigned char *base = image.data;
   while (i--) {
     *base++=grey;
@@ -70,9 +72,12 @@ void pix_color :: processGrayImage(imageStruct &image)
 void pix_color :: processYUVImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize / 2;
-  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] + RGB2YUV_13 * m_color[2])>>8) +  Y_OFFSET;
-  unsigned char u =(( RGB2YUV_21 * m_color[0] + RGB2YUV_22 * m_color[1] + RGB2YUV_23 * m_color[2])>>8) + UV_OFFSET;
-  unsigned char v =(( RGB2YUV_31 * m_color[0] + RGB2YUV_32 * m_color[1] + RGB2YUV_33 * m_color[2])>>8) + UV_OFFSET;
+  unsigned char y =(( RGB2YUV_11 * m_color[0] + RGB2YUV_12 * m_color[1] +
+                      RGB2YUV_13 * m_color[2])>>8) +  Y_OFFSET;
+  unsigned char u =(( RGB2YUV_21 * m_color[0] + RGB2YUV_22 * m_color[1] +
+                      RGB2YUV_23 * m_color[2])>>8) + UV_OFFSET;
+  unsigned char v =(( RGB2YUV_31 * m_color[0] + RGB2YUV_32 * m_color[1] +
+                      RGB2YUV_33 * m_color[2])>>8) + UV_OFFSET;
 
   unsigned char *base = image.data;
   while (i--) {
@@ -87,7 +92,8 @@ void pix_color :: processYUVImage(imageStruct &image)
 // vecGainMess
 //
 /////////////////////////////////////////////////////////
-void pix_color :: vecGainMess(float red, float green, float blue, float alpha)
+void pix_color :: vecGainMess(float red, float green, float blue,
+                              float alpha)
 {
   m_color[0] = CLAMP(red   * 255);
   m_color[1] = CLAMP(green * 255);
@@ -104,10 +110,12 @@ void pix_color :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_color),
                    gensym("pix_colour"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_color::vecGainMessCallback),
                   gensym("vec_gain"), A_GIMME, A_NULL);
 }
-void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void pix_color :: vecGainMessCallback(void *data, t_symbol*, int argc,
+                                      t_atom*argv)
 {
   float r=0.0, g=0.0, b=0.0;
   float a=1.0;

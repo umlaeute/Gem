@@ -29,8 +29,10 @@ CPPEXTERN_NEW(pix_equal);
 /////////////////////////////////////////////////////////
 pix_equal :: pix_equal()
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_lower"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_upper"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vec_lower"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vec_upper"));
   m_upper[0] = m_upper[1] = m_upper[2] = m_upper[3] = 255;
   m_lower[0] = m_lower[1] = m_lower[2] = m_lower[3] = 0;
 }
@@ -66,7 +68,8 @@ void pix_equal :: processRGBAImage(imageStruct &image)
 
 namespace
 {
-static void setvec(const char*label, unsigned char*dest, int argc, t_atom*argv)
+static void setvec(const char*label, unsigned char*dest, int argc,
+                   t_atom*argv)
 {
   switch(argc) {
   case 4:

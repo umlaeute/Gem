@@ -41,7 +41,8 @@ pix_takealpha :: ~pix_takealpha()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_takealpha :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
+void pix_takealpha :: processRGBA_RGBA(imageStruct &image,
+                                       imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
@@ -58,7 +59,8 @@ void pix_takealpha :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_takealpha :: processRGBA_Gray(imageStruct &image, imageStruct &right)
+void pix_takealpha :: processRGBA_Gray(imageStruct &image,
+                                       imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;

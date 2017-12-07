@@ -70,7 +70,8 @@ void pix_writer :: processImage(imageStruct &image)
       extension=(char*)"jpg";
     }
 
-    snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname, m_autocount, extension);
+    snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s%05d.%s", m_pathname,
+             m_autocount, extension);
 
     mem2image(&image, m_filename, m_filetype);
 
@@ -87,7 +88,8 @@ void pix_writer :: fileMess(int argc, t_atom *argv)
     if (argv->a_type == A_SYMBOL) {
       atom_string(argv++, m_pathname, MAXPDSTRING);
       argc--;
-      snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s.%s", m_pathname, extension);
+      snprintf(m_filename, (size_t)(MAXPDSTRING+10), "%s.%s", m_pathname,
+               extension);
     }
     if (argc>0) {
       m_filetype = atom_getint(argv);
@@ -103,15 +105,19 @@ void pix_writer :: fileMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_writer :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_writer::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_writer::bangMessCallback));
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_writer::fileMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_writer::fileMessCallback),
                   gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_writer::autoMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_writer::autoMessCallback),
                   gensym("auto"), A_FLOAT, A_NULL);
 }
 
-void pix_writer :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_writer :: fileMessCallback(void *data, t_symbol *s, int argc,
+                                    t_atom *argv)
 {
   GetMyClass(data)->fileMess(argc, argv);
 }

@@ -25,7 +25,8 @@ GEMglLoadMatrixf :: GEMglLoadMatrixf    (t_floatarg arg0) //:
 //matrix(static_cast<GLfloat>(arg0))
 {
   //m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("matrix"));
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("list"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+                      gensym("list"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -77,11 +78,13 @@ void GEMglLoadMatrixf :: matrixMess (int argc, t_atom*argv)     // FUN
 void GEMglLoadMatrixf :: obj_setupCallback(t_class *classPtr)
 {
   //class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadMatrixf::matrixMessCallback),         gensym("matrix"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLoadMatrixf::matrixMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglLoadMatrixf::matrixMessCallback),
                   gensym("list"), A_GIMME, A_NULL);
 }
 
-void GEMglLoadMatrixf :: matrixMessCallback (void* data, t_symbol*,int argc, t_atom*argv)
+void GEMglLoadMatrixf :: matrixMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
 {
   GetMyClass(data)->matrixMess ( argc, argv );
 }

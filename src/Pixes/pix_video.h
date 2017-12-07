@@ -100,7 +100,8 @@ protected:
 
   //////////
   // Set the video dimensions
-  virtual void  dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0,
+  virtual void  dimenMess(int x, int y, int leftmargin = 0,
+                          int rightmargin = 0,
                           int topmargin = 0, int bottommargin = 0);
   // Set the channel of the capturing device
   virtual void  channelMess(int channel, t_float freq=0);
@@ -129,7 +130,8 @@ protected:
   std::vector<std::string>m_ids;
   std::vector<gem::plugins::video*>m_videoHandles;
 
-  virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
+  virtual bool addHandle(std::vector<std::string>available_ids,
+                         std::string id=std::string(""));
 
   int    m_driver;
 

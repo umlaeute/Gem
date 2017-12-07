@@ -146,7 +146,8 @@ void gem::RTE::Outlet :: send(double f)
 {
   outlet_float(m_pimpl->outlet, f);
 }
-void gem::RTE::Outlet :: send(std::string selector, std::vector<gem::any>data)
+void gem::RTE::Outlet :: send(std::string selector,
+                              std::vector<gem::any>data)
 {
   t_atom*atomlist=new t_atom[data.size()];
   unsigned int count=0;
@@ -157,7 +158,8 @@ void gem::RTE::Outlet :: send(std::string selector, std::vector<gem::any>data)
     }
   }
 
-  outlet_anything(m_pimpl->outlet, gensym(selector.c_str()), count, atomlist);
+  outlet_anything(m_pimpl->outlet, gensym(selector.c_str()), count,
+                  atomlist);
   delete[]atomlist;
 }
 gem::RTE::Outlet& gem::RTE::Outlet::operator=(const gem::RTE::Outlet&org)
@@ -167,5 +169,6 @@ gem::RTE::Outlet& gem::RTE::Outlet::operator=(const gem::RTE::Outlet&org)
   return (*this);
 }
 
-gem::RTE::Outlet :: Outlet (const gem::RTE::Outlet&org) : m_pimpl(new PIMPL(org.m_pimpl->parent_))
+gem::RTE::Outlet :: Outlet (const gem::RTE::Outlet&org) : m_pimpl(
+    new PIMPL(org.m_pimpl->parent_))
 { }

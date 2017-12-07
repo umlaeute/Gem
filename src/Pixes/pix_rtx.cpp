@@ -46,7 +46,8 @@ bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
 {
   // only 1 channel !!, to keep data-size handy
   unsigned char*data = buffer.data;
-  size_t dataSize = reference.xsize * reference.xsize * reference.ysize * reference.csize * sizeof(unsigned char);
+  size_t dataSize = reference.xsize * reference.xsize * reference.ysize *
+                    reference.csize * sizeof(unsigned char);
   bool refresh=
     (reference.xsize != buffer.xsize) ||
     (reference.ysize != buffer.ysize) ||
@@ -142,7 +143,8 @@ void pix_rtx :: processImage(imageStruct &image)
     while (c < cols) {
       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
       while (r < rows) {
-        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
+                                           buffer.xsize * r + (bufcount - c + cols) % cols );
         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
         *pixels   = *rp;
@@ -156,7 +158,8 @@ void pix_rtx :: processImage(imageStruct &image)
     while (c < cols) {
       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
       while (r < rows) {
-        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
+                                           buffer.xsize * r + (bufcount - c + cols) % cols );
         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
         pixels[0]  = rp[0];
@@ -171,7 +174,8 @@ void pix_rtx :: processImage(imageStruct &image)
     while (c < cols) {
       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
       while (r < rows) {
-        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
+        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
+                                           buffer.xsize * r + (bufcount - c + cols) % cols );
         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
         pixels[chRed]   = rp[chRed];

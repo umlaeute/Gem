@@ -42,7 +42,8 @@ modelOBJ ::~modelOBJ(void)
   destroy();
 }
 
-bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops)
+bool modelOBJ :: open(const std::string&name,
+                      const gem::Properties&requestprops)
 {
   destroy();
 
@@ -67,7 +68,8 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   glmFacetNormals (m_model);
 
   gem::Properties props=requestprops;
-  if(gem::Properties::UNSET==requestprops.type("smooth") && 0==glmGetNumNormals(m_model)) {
+  if(gem::Properties::UNSET==requestprops.type("smooth")
+      && 0==glmGetNumNormals(m_model)) {
     props.set("smooth", 0.5);
   }
   setProperties(props);
@@ -78,7 +80,8 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   return true;
 }
 
-std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName)
+std::vector<std::vector<float> > modelOBJ :: getVector(
+  std::string vectorName)
 {
   if ( vectorName == "vertices" ) {
     return m_vertices;
@@ -92,7 +95,8 @@ std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName)
   if ( vectorName == "colors" ) {
     return m_colors;
   }
-  verbose(0, "[GEM:modelOBJ] there is no \"%s\" vector !",vectorName.c_str());
+  verbose(0, "[GEM:modelOBJ] there is no \"%s\" vector !",
+          vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 
@@ -218,9 +222,11 @@ bool modelOBJ :: compile(void)
   if (!m_group) {
     glmDraw(m_model, m_flags, m_vertices, m_normals, m_texcoords, m_colors);
   } else {
-    glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords, m_colors);
+    glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords,
+                 m_colors);
   }
-  bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
+  bool res = !(m_vertices.empty() && m_normals.empty()
+               && m_texcoords.empty() && m_colors.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;

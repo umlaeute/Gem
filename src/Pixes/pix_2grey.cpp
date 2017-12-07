@@ -84,7 +84,8 @@ void pix_2grey :: processRGBAMMX(imageStruct &image)
                                          (unsigned char)0x00,
                                          (unsigned char)0x00,
                                          (unsigned char)0xFF);
-  register __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN, RGB2GRAY_BLUE, 0);
+  register __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN,
+                                          RGB2GRAY_BLUE, 0);
   register __m64 pixel, y1, y2, y1_2;
   register int pixsize = (image.ysize * image.xsize)>>1;
 

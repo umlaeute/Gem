@@ -59,8 +59,10 @@ pix_snap :: pix_snap(int argc, t_atom *argv) :
 
   gem::Settings::get("snap.pbo", m_numPbo);
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -135,7 +137,8 @@ void pix_snap :: snapMess(void)
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 
-    m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
+    m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize *
+                              m_originalImage->csize);
 
     makePbo=true;
   }
@@ -183,10 +186,12 @@ void pix_snap :: snapMess(void)
 
 
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[nextIndex]);
-    GLubyte* src = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+    GLubyte* src = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB,
+                                            GL_READ_ONLY_ARB);
     if(src) {
       m_originalImage->fromRGBA(src);
-      glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);     // release pointer to the mapped buffer
+      glUnmapBufferARB(
+        GL_PIXEL_PACK_BUFFER_ARB);     // release pointer to the mapped buffer
     }
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
     STOP_TIMING(m_numPbo);

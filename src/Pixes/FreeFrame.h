@@ -185,8 +185,10 @@ typedef void *FFInstanceID;
 typedef struct PluginInfoStructTag {
   FFUInt32        APIMajorVersion;
   FFUInt32        APIMinorVersion;
-  char            PluginUniqueID[4];              // 4 chars uniqueID - not null terminated
-  char            PluginName[16];                 // 16 chars plugin friendly name - not null terminated
+  char
+  PluginUniqueID[4];              // 4 chars uniqueID - not null terminated
+  char
+  PluginName[16];                 // 16 chars plugin friendly name - not null terminated
   FFUInt32        PluginType;                             // Effect or source
 } PluginInfoStruct;
 
@@ -202,9 +204,12 @@ typedef struct PluginExtendedInfoStructTag {
 
 // VideoInfoStruct
 typedef struct VideoInfoStructTag {
-  FFUInt32        FrameWidth;                             // width of frame in pixels
-  FFUInt32        FrameHeight;                            // height of frame in pixels
-  FFUInt32        BitDepth;                                       // enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
+  FFUInt32
+  FrameWidth;                             // width of frame in pixels
+  FFUInt32
+  FrameHeight;                            // height of frame in pixels
+  FFUInt32
+  BitDepth;                                       // enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
   FFUInt32        Orientation;
 } VideoInfoStruct;
 
@@ -244,16 +249,21 @@ typedef struct SetParameterStructTag {
 
 #ifdef _WIN32
 
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved);
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call,
+                      LPVOID lpReserved);
 
-__declspec(dllexport) FFMixed __stdcall plugMain(FFUInt32 functionCode, FFMixed inputValue, FFInstanceID instanceID);
-typedef __declspec(dllimport) FFMixed (__stdcall *FF_Main_FuncPtr)(FFUInt32, FFMixed, FFInstanceID);
+__declspec(dllexport) FFMixed __stdcall plugMain(FFUInt32 functionCode,
+    FFMixed inputValue, FFInstanceID instanceID);
+typedef __declspec(dllimport) FFMixed (__stdcall *FF_Main_FuncPtr)(
+  FFUInt32, FFMixed, FFInstanceID);
 
 #else
 
 //linux and Mac OSX share these
-FFMixed plugMain(FFUInt32 functionCode, FFMixed inputValue, FFInstanceID instanceID);
-typedef FFMixed (*FF_Main_FuncPtr)(FFUInt32 funcCode, FFMixed inputVal, FFInstanceID instanceID);
+FFMixed plugMain(FFUInt32 functionCode, FFMixed inputValue,
+                 FFInstanceID instanceID);
+typedef FFMixed (*FF_Main_FuncPtr)(FFUInt32 funcCode, FFMixed inputVal,
+                                   FFInstanceID instanceID);
 
 #endif
 

@@ -31,12 +31,14 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_add);
 vertex_add :: vertex_add(int argc, t_atom*argv) :
   m_leftType(0), m_rightType(0),
   m_rightSize(0),
-  m_rightVertexArray(NULL), m_rightColorArray(NULL), m_rightTexCoordArray(NULL), m_rightNormalArray(NULL)
+  m_rightVertexArray(NULL), m_rightColorArray(NULL),
+  m_rightTexCoordArray(NULL), m_rightNormalArray(NULL)
 {
   if(argc) {
     typeMess(argc, argv);
   }
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd,gensym("gem_state"), gensym("gem_right"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd,gensym("gem_state"),
+                      gensym("gem_right"));
 }
 
 /////////////////////////////////////////////////////////
@@ -79,7 +81,8 @@ void vertex_add::typeMess(int argc, t_atom*argv)
       m_rightType=3;
       break;
     default:
-      error("vertex_operator: invalid type '%s'! skipping", atom_getsymbol(argv+1)->s_name);
+      error("vertex_operator: invalid type '%s'! skipping",
+            atom_getsymbol(argv+1)->s_name);
       return;
     }
   case 1:
@@ -102,7 +105,8 @@ void vertex_add::typeMess(int argc, t_atom*argv)
       m_leftType=3;
       break;
     default:
-      error("vertex_operator: invalid type '%s'! skipping", atom_getsymbol(argv)->s_name);
+      error("vertex_operator: invalid type '%s'! skipping",
+            atom_getsymbol(argv)->s_name);
       return;
     }
     if(argc==1) {
@@ -119,10 +123,12 @@ void vertex_add::typeMess(int argc, t_atom*argv)
 // we assume that "lsize" and "rsize" are >0
 // we assume that "larray" and "larray" point somewhere
 // checking is done in render()
-void vertex_add :: vertexProcess(int lsize, float*larray, int rsize, float*rarray)
+void vertex_add :: vertexProcess(int lsize, float*larray, int rsize,
+                                 float*rarray)
 {
   float indR=0.f; // the right-hand index
-  float incR=static_cast<float>(rsize)/static_cast<float>(lsize); // the right-hand increment
+  float incR=static_cast<float>(rsize)/static_cast<float>
+             (lsize); // the right-hand increment
 
   for(int i=0; i<lsize; i++) {
     const int I=4*i;
@@ -213,21 +219,27 @@ void vertex_add :: rightRender(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_add :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_add::gem_rightMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_add::gem_rightMessCallback),
                   gensym("gem_right"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_add::typeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_add::typeMessCallback),
                   gensym("type"), A_GIMME, A_NULL);
 }
-void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc,
+    t_atom *argv)
 {
   if (argc==1 && argv->a_type==A_FLOAT) {
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
-    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer));
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
+    GetMyClass(data)->rightRender(reinterpret_cast<GemState*>((
+                                    argv+1)->a_w.w_gpointer));
   } else {
     GetMyClass(data)->error("wrong righthand arguments....");
   }
 }
-void vertex_add :: typeMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void vertex_add :: typeMessCallback(void *data, t_symbol *s, int argc,
+                                    t_atom *argv)
 {
   GetMyClass(data)->typeMess(argc, argv);
 }

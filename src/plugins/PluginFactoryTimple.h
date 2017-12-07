@@ -54,7 +54,8 @@ PluginFactory<Class>* PluginFactory<Class>::getPluginFactory(void)
     s_factory=new PluginFactory<Class>;
   }
 #if GEM_PLUGFAC_DEBUG
-  std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(s_factory).name() << std::endl;
+  std::cerr << "factory @ " << (void*)s_factory << " --> " << typeid(
+              s_factory).name() << std::endl;
 #endif /* GEM_PLUGFAC_DEBUG */
   return s_factory;
 }
@@ -84,7 +85,8 @@ void PluginFactory<Class>::registerClass(std::string id, ctor_t*c)
     std::cerr << "unable to get a factory!" << std::endl;
   }
 #if GEM_PLUGFAC_DEBUG
-  std::cerr << "register " << typeid(Class).name() << " @ factory: " << (void*)fac << std::endl;
+  std::cerr << "register " << typeid(Class).name() << " @ factory: " <<
+            (void*)fac << std::endl;
 #endif /* GEM_PLUGFAC_DEBUG */
   fac->doRegisterClass(id, c);
 }
@@ -94,7 +96,8 @@ Class*PluginFactory<Class>::getInstance(std::string id)
 {
   PluginFactory<Class>*fac=getPluginFactory();
 #if GEM_PLUGFAC_DEBUG
-  std::cerr << "getting " << typeid(Class).name() << " instance '" << id << "' from factory: " << (void*)fac << std::endl;
+  std::cerr << "getting " << typeid(Class).name() << " instance '" << id <<
+            "' from factory: " << (void*)fac << std::endl;
 #endif /* GEM_PLUGFAC_DEBUG */
   if(NULL==fac) {
     return NULL;
@@ -103,11 +106,13 @@ Class*PluginFactory<Class>::getInstance(std::string id)
 }
 
 template<class Class>
-int PluginFactory<Class>::loadPlugins(std::string basename, std::string path)
+int PluginFactory<Class>::loadPlugins(std::string basename,
+                                      std::string path)
 {
   PluginFactory<Class>*fac=getPluginFactory();
 #if GEM_PLUGFAC_DEBUG
-  std::cerr << "loading " << typeid(Class).name() << " plugins from factory: " << (void*)fac << std::endl;
+  std::cerr << "loading " << typeid(Class).name() <<
+            " plugins from factory: " << (void*)fac << std::endl;
 #endif /* GEM_PLUGFAC_DEBUG */
   if(NULL==fac) {
     return 0;
@@ -157,7 +162,8 @@ BaseClass* allocator()
 template<class ChildClass, class BaseClass>
 registrar<ChildClass, BaseClass> :: registrar(std::string id)
 {
-  PluginFactory<BaseClass>::registerClass(id, allocator<ChildClass, BaseClass>);
+  PluginFactory<BaseClass>::registerClass(id,
+                                          allocator<ChildClass, BaseClass>);
 }
 template<class BaseClass>
 dummy<BaseClass> :: dummy()

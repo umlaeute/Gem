@@ -71,7 +71,8 @@ public:
   {
     return true;
   }
-  virtual bool dialog(std::vector<std::string>names=std::vector<std::string>())
+  virtual bool dialog(std::vector<std::string>names=
+                        std::vector<std::string>())
   {
     return false;
   }
@@ -87,7 +88,8 @@ public:
 
   virtual void*  lockFrame(void**plane);
   virtual void unlockFrame(void*picture, void*const*plane);
-  virtual unsigned setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines);
+  virtual unsigned setFormat(char chroma[4], unsigned &width,
+                             unsigned &height, unsigned &pitches, unsigned &lines);
 
 private:
   libvlc_instance_t*m_instance;

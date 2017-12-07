@@ -67,7 +67,8 @@ void pix_delay :: processImage(imageStruct &image)
   unsigned int dataSize = image.xsize * image.ysize * image.csize;
   int readframe;
 
-  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize) {
+  if (myImage.xsize*myImage.ysize*myImage.csize !=
+      image.xsize*image.ysize*image.csize) {
     myImage.reallocate(dataSize*m_maxframes);
     m_curframe=0;
   }
@@ -98,7 +99,8 @@ void pix_delay :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_delay :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_delay::delayMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_delay::delayMessCallback),
                   gensym("delay"), A_FLOAT, A_NULL);
 }
 

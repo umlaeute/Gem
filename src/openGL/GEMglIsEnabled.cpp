@@ -33,7 +33,8 @@ GEMglIsEnabled :: GEMglIsEnabled (int argc, t_atom*argv) :
   } else if(argc) {
     throw(GemException("invalid number of arguments"));
   }
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cap"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("cap"));
   m_outlet=outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
@@ -80,10 +81,13 @@ void GEMglIsEnabled :: capMess (t_atom arg)     // FUN
 //
 void GEMglIsEnabled :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglIsEnabled::capMessCallback), gensym("cap"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglIsEnabled::capMessCallback),
+                  gensym("cap"), A_GIMME, A_NULL);
 }
 
-void GEMglIsEnabled :: capMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglIsEnabled :: capMessCallback (void* data, t_symbol*, int argc,
+                                        t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->capMess ( argv[0]);

@@ -94,7 +94,8 @@ private:
   //////////
   // Static member functions
   static void     mouseMotionCallback(int x, int y, void *data);
-  static void     mouseButtonCallback(int which, int state, int x, int y, void *data);
+  static void     mouseButtonCallback(int which, int state, int x, int y,
+                                      void *data);
   static void     mouseWheelCallback(int axis, int value, void *data);
 };
 

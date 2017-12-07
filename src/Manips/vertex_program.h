@@ -88,7 +88,8 @@ protected:
 
   //////////
   // set 1 parameter of the program
-  virtual void paramMess(int envNum, t_float param1, t_float param2, t_float param3, t_float param4);
+  virtual void paramMess(int envNum, t_float param1, t_float param2,
+                         t_float param3, t_float param4);
 
   //////////
   // Print Info about Hardware limits

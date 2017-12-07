@@ -31,7 +31,8 @@ pix_zoom :: pix_zoom()
   zoomMess(1, 1);
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("zoom"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("zoom"));
 }
 
 /////////////////////////////////////////////////////////
@@ -76,7 +77,8 @@ void pix_zoom :: zoomMess(float xZoom, float yZoom)
 /////////////////////////////////////////////////////////
 void pix_zoom :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_zoom::zoomMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_zoom::zoomMessCallback),
                   gensym("zoom"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_zoom :: zoomMessCallback(void *data, t_float xMag, t_float yMag)

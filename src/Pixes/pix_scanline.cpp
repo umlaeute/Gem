@@ -21,7 +21,8 @@ CPPEXTERN_NEW(pix_scanline);
 pix_scanline :: pix_scanline()
 {
 
-  inletScanline = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("interlace"));
+  inletScanline = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                            gensym("interlace"));
 
   m_interlace = 0;
   m_mode = 0;
@@ -175,9 +176,11 @@ void pix_scanline :: processYUVImage(imageStruct &image)
 void pix_scanline :: obj_setupCallback(t_class *classPtr)
 {
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_scanline::rollCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_scanline::rollCallback),
                   gensym("interlace"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_scanline::modeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_scanline::modeCallback),
                   gensym("mode"), A_DEFFLOAT, A_NULL);
 }
 

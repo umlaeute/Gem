@@ -73,13 +73,18 @@ pix_cubemap :: pix_cubemap()
 
   // create an inlet to receive external texture IDs
   //  m_imgIn[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageX+"));
-  m_imgIn[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageX-"));
+  m_imgIn[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageX-"));
 
-  m_imgIn[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageY+"));
-  m_imgIn[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageY-"));
+  m_imgIn[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageY+"));
+  m_imgIn[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageY-"));
 
-  m_imgIn[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageZ+"));
-  m_imgIn[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageZ-"));
+  m_imgIn[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageZ+"));
+  m_imgIn[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageZ-"));
 
   // create an outlet to send texture ID
   m_outTexID = outlet_new(this->x_obj, &s_float);
@@ -156,7 +161,8 @@ void pix_cubemap :: popTexCoords(GemState*state)
 }
 
 
-void pix_cubemap :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown)
+void pix_cubemap :: sendExtTexture(GLuint texobj, GLfloat xRatio,
+                                   GLfloat yRatio, GLint texType, GLboolean upsidedown)
 {
   // send textureID to outlet
   if(texobj) {
@@ -498,7 +504,8 @@ void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
     id=5;
   }
   if (argc==1 && argv->a_type==A_FLOAT) {
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
     if(id>=0) {
       rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
     } else {

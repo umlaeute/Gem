@@ -16,7 +16,8 @@
 
 #include "sphere.h"
 #include "Gem/State.h"
-CPPEXTERN_NEW_WITH_TWO_ARGS(sphere, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(sphere, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -185,7 +186,8 @@ void sphere :: createSphere(GemState *state)
     src = 0;
 
     /* draw stack lines */
-    for (i = 1; i < stacks; i++) {  /* stack line at i==stacks-1 was missing here */
+    for (i = 1; i < stacks;
+         i++) {  /* stack line at i==stacks-1 was missing here */
       rho = i * drho;
       for (j = 0; j < slices; j++) {
         theta = j * dtheta;
@@ -366,7 +368,8 @@ void sphere :: render(GemState *state)
 
     src = 0;
 
-    for (i = 1; i < stacks; i++) {    // stack line at i==stacks-1 was missing here
+    for (i = 1; i < stacks;
+         i++) {    // stack line at i==stacks-1 was missing here
       glBegin(GL_LINE_LOOP);
       for (j = 0; j < slices; j++) {
 

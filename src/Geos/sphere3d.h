@@ -52,8 +52,10 @@ protected:
 
   virtual void    createSphere3d(void);
 
-  virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y, GLfloat z);
-  virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth, GLfloat elevation);
+  virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y,
+                               GLfloat z);
+  virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth,
+                               GLfloat elevation);
 
   virtual void    print(int slice, int stack);
   virtual void    print(void);

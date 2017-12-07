@@ -14,7 +14,8 @@
 
 #include "GEMglMapGrid1f.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,18 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglMapGrid1f, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglMapGrid1f :: GEMglMapGrid1f        (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglMapGrid1f :: GEMglMapGrid1f        (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2) :
   un(static_cast<GLint>(arg0)),
   u1(static_cast<GLfloat>(arg1)),
   u2(static_cast<GLfloat>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("un"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u1"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("u2"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("un"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("u1"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("u2"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -89,9 +94,15 @@ void GEMglMapGrid1f :: u2Mess (t_float arg1)    // FUN
 
 void GEMglMapGrid1f :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1f::unMessCallback),         gensym("un"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1f::u1MessCallback),         gensym("u1"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMapGrid1f::u2MessCallback),         gensym("u2"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMapGrid1f::unMessCallback),
+                  gensym("un"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMapGrid1f::u1MessCallback),
+                  gensym("u1"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMapGrid1f::u2MessCallback),
+                  gensym("u2"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglMapGrid1f :: unMessCallback (void* data, t_float arg0)

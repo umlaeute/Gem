@@ -19,7 +19,8 @@ LOG
 #define sqrt fast_sqrtf
 #endif
 
-extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,const void* pElem2);
+extern "C" int Pete_ColorReduce_HistogramSortFunction(const void* pElem1,
+    const void* pElem2);
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -97,9 +98,14 @@ protected:
   void Pete_ColorReduce_DeInit();
 
   void Pete_ColorReduce_SortColors(int* pHistogram,int** ppSortedColors);
-  void Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColors,int nColors,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,int* pHistogram);
-  void Pete_ColorReduce_CalcHistogram(int nSampleSpacing,int* pHistogram,float PalettePersistence);
-  inline U32 Pete_ColorReduce_GetClosestColor(U32 Color,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,float BoundarySmoothing);
+  void Pete_ColorReduce_SetupInverseColorMap(int** ppSortedColors,
+      int nColors,SPete_ColorReduce_InverseMapEntry* pInverseColorMap,
+      int* pHistogram);
+  void Pete_ColorReduce_CalcHistogram(int nSampleSpacing,int* pHistogram,
+                                      float PalettePersistence);
+  inline U32 Pete_ColorReduce_GetClosestColor(U32 Color,
+      SPete_ColorReduce_InverseMapEntry* pInverseColorMap,
+      float BoundarySmoothing);
 
 private:
 

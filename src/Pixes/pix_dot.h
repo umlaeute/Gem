@@ -53,7 +53,8 @@ protected:
   virtual void  processGrayImage( imageStruct &image );
   virtual void  drawDot( int xx, int yy, unsigned char c, U32 *dest );
   virtual void  drawDotYUV( int xx, int yy, unsigned char c, U16 *dest );
-  virtual void  drawDotGray( int xx, int yy, unsigned char c, unsigned char *dest );
+  virtual void  drawDotGray( int xx, int yy, unsigned char c,
+                             unsigned char *dest );
   virtual void  sampxy_table_init();
   virtual void  yuv_init();
   virtual void  makePattern(int format=GL_RGBA);

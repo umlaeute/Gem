@@ -130,7 +130,12 @@ typedef struct _GLMnode {
 } GLMnode;
 
 /* fill the vector with model data */
-void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors);
+void fillVector(const GLMmodel* model, GLMgroup* group,
+                GLMtriangle* triangle, GLMmaterial* material, GLuint mode,
+                std::vector<std::vector<float> >& vertices,
+                std::vector<std::vector<float> >& normals,
+                std::vector<std::vector<float> >& texcoords,
+                std::vector<std::vector<float> >& colors);
 
 /* glmMax: returns the maximum of two floats */
 static GLfloat
@@ -324,7 +329,9 @@ _glmFindMaterial(const GLMmodel* model, const std::string&name)
 
   /* didn't find the name, so print a warning and return the default
      material (0). */
-  verbose(0, "[GEM:modelOBJ] _glmFindMaterial():  can't find material \"%s\".", name.c_str());
+  verbose(0,
+          "[GEM:modelOBJ] _glmFindMaterial():  can't find material \"%s\".",
+          name.c_str());
   i = 0;
 
 found:
@@ -371,7 +378,9 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   file = fopen(filename.c_str(), "r");
   if (!file) {
-    verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
+    verbose(0,
+            "[GEM:modelOBJ] _glmReadMTL() failed: can't open material file \"%s\".",
+            filename.c_str());
     return -1;
   }
 
@@ -446,7 +455,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "[GEM:modelOBJ] _glmReadMTL() really failed reading new material");
+        verbose(0,
+                "[GEM:modelOBJ] _glmReadMTL() really failed reading new material");
         goto mtlread_failed;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
@@ -462,7 +472,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
         model->materials[nummaterials].shininess /= 1000.0;
         model->materials[nummaterials].shininess *= 128.0;
       } else {
-        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading material shininess");
+        verbose(0,
+                "[GEM:modelOBJ] _glmReadMTL() failed reading material shininess");
       }
       break;
     case 'K':
@@ -482,7 +493,8 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
                          &model->materials[nummaterials].specular[1],
                          &model->materials[nummaterials].specular[2])) {
         } else {
-          verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading specular material");
+          verbose(0,
+                  "[GEM:modelOBJ] _glmReadMTL() failed reading specular material");
         }
         break;
       case 'a':
@@ -530,7 +542,8 @@ mtlread_failed:
  * mtllibname - name of the material library to be written
  */
 static GLboolean
-_glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtllibname)
+_glmWriteMTL(const GLMmodel* model, const char* modelpath,
+             const std::string&mtllibname)
 {
   FILE* file=0;
   GLuint i;
@@ -541,7 +554,8 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtl
   /* open the file */
   file = fopen(filename.c_str(), "w");
   if (!file) {
-    verbose(0, "[GEM:modelOBJ] _glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
+    verbose(0, "[GEM:modelOBJ] _glmWriteMTL() failed: can't open file \"%s\".",
+            filename.c_str());
     return GL_FALSE;
   }
 
@@ -660,7 +674,8 @@ _glmFirstPass(GLMmodel* model, FILE* file)
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF != sscanf(buf, "%s", buf)) {
       } else {
-        verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading single-string group name");
+        verbose(0,
+                "[GEM:modelOBJ] _glmFirstPass failed reading single-string group name");
         return GL_FALSE;
       }
 #else
@@ -781,7 +796,8 @@ static GLuint fixIndex(GLint current, GLuint baseindex)
   if(idx>0) {
     return (GLuint)idx;
   } else {
-    verbose(1, "[GEM:modelOBJ] unable to fix negative index %d @ %d", current, baseindex);
+    verbose(1, "[GEM:modelOBJ] unable to fix negative index %d @ %d", current,
+            baseindex);
     return baseindex;
   }
 }
@@ -837,7 +853,8 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                          &vertices[3 * numvertices + 2])) {
           numvertices++;
         } else {
-          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading vertex %d", numvertices);
+          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading vertex %d",
+                  numvertices);
         }
         break;
       case 'n':           /* normal */
@@ -847,7 +864,8 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                          &normals[3 * numnormals + 2])) {
           numnormals++;
         } else {
-          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading normal %d", numnormals);
+          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading normal %d",
+                  numnormals);
         }
         break;
       case 't':           /* texcoord */
@@ -856,7 +874,8 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                          &texcoords[2 * numtexcoords + 1])) {
           numtexcoords++;
         } else {
-          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading texcoord %d", numtexcoords);
+          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading texcoord %d",
+                  numtexcoords);
         }
         break;
       }
@@ -881,7 +900,8 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF == sscanf(buf, "%s", buf)) {
-        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading single-string group name");
+        verbose(0,
+                "[GEM:modelOBJ] _glmSecondPass() failed reading single-string group name");
         return GL_FALSE;
       }
 #else
@@ -1507,7 +1527,9 @@ glmUVTexture(GLMmodel* model, float h, float w)
     }
     group = group->next;
   }
-  verbose(1, "[GEM:modelOBJ] glmUVTexture(): generated %d UV texture coordinates", model->numtexcoords);
+  verbose(1,
+          "[GEM:modelOBJ] glmUVTexture(): generated %d UV texture coordinates",
+          model->numtexcoords);
 }
 
 /* glmLinearTexture: Generates texture coordinates according to a
@@ -1557,7 +1579,9 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     group = group->next;
   }
 
-  verbose(1, "[GEM:modelOBJ] glmLinearTexture(): generated %d linear texture coordinates", model->numtexcoords);
+  verbose(1,
+          "[GEM:modelOBJ] glmLinearTexture(): generated %d linear texture coordinates",
+          model->numtexcoords);
 }
 
 /* glmSpheremapTexture: Generates texture coordinates according to a
@@ -1630,7 +1654,9 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     group = group->next;
   }
 
-  verbose(1, "[GEM:modelOBJ] glmSpheremapTexture(): generated %d spheremap texture coordinates", model->numtexcoords);
+  verbose(1,
+          "[GEM:modelOBJ] glmSpheremapTexture(): generated %d spheremap texture coordinates",
+          model->numtexcoords);
 }
 
 GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
@@ -1782,7 +1808,9 @@ glmReadOBJ(const char* filename)
   /* open the file */
   file = fopen(filename, "r");
   if (!file) {
-    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't open data file \"%s\".", filename);
+    verbose(0,
+            "[GEM:modelOBJ] glmReadOBJ() failed: can't open data file \"%s\".",
+            filename);
     return NULL;
   }
 
@@ -1813,7 +1841,8 @@ glmReadOBJ(const char* filename)
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
   if(GL_FALSE==_glmFirstPass(model, file)) {
-    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
+            filename);
     goto readobj_failed;
   }
 
@@ -1831,7 +1860,8 @@ glmReadOBJ(const char* filename)
   rewind(file);
 
   if(GL_FALSE==_glmSecondPass(model, file)) {
-    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
+            filename);
     goto readobj_failed;
   }
 
@@ -1878,22 +1908,26 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 
   /* do a bit of warning */
   if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
             "with no facet normals defined.");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: smooth normal output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: smooth normal output requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: texture coordinate output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: texture coordinate output requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
             "and smooth normal output requested (using smooth).");
     mode &= ~GLM_FLAT;
   }
@@ -1903,12 +1937,14 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: material output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: material output requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: color and material output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: color and material output requested "
             "outputting only materials.");
     mode &= ~GLM_COLOR;
   }
@@ -1917,7 +1953,9 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   /* open the file */
   file = fopen(filename, "w");
   if (!file) {
-    verbose(0, "[GEM:modelOBJ] glmWriteOBJ() failed: can't open file \"%s\" to write.", filename);
+    verbose(0,
+            "[GEM:modelOBJ] glmWriteOBJ() failed: can't open file \"%s\" to write.",
+            filename);
     return -1;
   }
 
@@ -1987,7 +2025,8 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   while(group) {
     fprintf(file, "g %s\n", group->name.c_str());
     if (mode & GLM_MATERIAL) {
-      fprintf(file, "usemtl %s\n", model->materials[group->material].name.c_str());
+      fprintf(file, "usemtl %s\n",
+              model->materials[group->material].name.c_str());
     }
     for (i = 0; i < group->numtriangles; i++) {
       if (mode & GLM_SMOOTH && mode & GLM_TEXTURE) {
@@ -2063,7 +2102,11 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmDraw(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
   static GLMgroup* group=0;
@@ -2084,12 +2127,14 @@ glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
@@ -2104,12 +2149,14 @@ glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
             "using only material mode.");
     mode &= ~GLM_COLOR;
   }
@@ -2126,12 +2173,18 @@ glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
 
   group = model->groups;
   while (group) {
-    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
+    fillVector(model, group, triangle, material, mode, vertices, normals,
+               texcoords, colors);
     group = group->next;
   }
 }
 
-void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+void fillVector(const GLMmodel* model, GLMgroup* group,
+                GLMtriangle* triangle, GLMmaterial* material, GLuint mode,
+                std::vector<std::vector<float> >& vertices,
+                std::vector<std::vector<float> >& normals,
+                std::vector<std::vector<float> >& texcoords,
+                std::vector<std::vector<float> >& colors)
 {
 
   if (mode & GLM_MATERIAL) {
@@ -2237,7 +2290,11 @@ void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, G
  * GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmList(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
@@ -2254,7 +2311,11 @@ glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
  */
 
 GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,
+             std::vector<std::vector<float> >& vertices,
+             std::vector<std::vector<float> >& normals,
+             std::vector<std::vector<float> >& texcoords,
+             std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
   static GLMgroup* group=0;
@@ -2275,12 +2336,14 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<s
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
@@ -2295,12 +2358,14 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<s
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
             "using only material mode.");
     mode &= ~GLM_COLOR;
   }
@@ -2325,25 +2390,33 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<s
   //groupNumber-=1;
   if ( (!(groupNumber > numgroup)) && (groupNumber > 0)) {
     int count = 1;
-    verbose(1, "[GEM:modelOBJ] model group requested is %d number of groups: %d",groupNumber,numgroup);
+    verbose(1,
+            "[GEM:modelOBJ] model group requested is %d number of groups: %d",
+            groupNumber,numgroup);
 
 
     while (count < groupNumber) {
       group = group->next;
       count++;
     }
-    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
+    fillVector(model, group, triangle, material, mode, vertices, normals,
+               texcoords, colors);
   }
 }
 
 GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber,
+             std::vector<std::vector<float> >& vertices,
+             std::vector<std::vector<float> >& normals,
+             std::vector<std::vector<float> >& texcoords,
+             std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
   modList = glGenLists(1);
   glNewList(modList, GL_COMPILE);
-  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords, colors);
+  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords,
+               colors);
   glEndList();
 
   return modList;
@@ -2370,7 +2443,8 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
   vectors  = model->vertices;
   copies = _glmWeldVectors(vectors, &numvectors, epsilon);
 
-  verbose(1, "[GEM:modelOBJ] glmWeld(): %d redundant vertices.", model->numvertices - numvectors - 1);
+  verbose(1, "[GEM:modelOBJ] glmWeld(): %d redundant vertices.",
+          model->numvertices - numvectors - 1);
 
   for (i = 0; i < model->numtriangles; i++) {
     T(i).vindices[0] = static_cast<GLuint>(vectors[3 * T(i).vindices[0] + 0]);

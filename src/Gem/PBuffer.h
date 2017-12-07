@@ -36,7 +36,8 @@ public:
     GEM_PBUFLAG_MULTISAMPLE_4 = 1 << 6
   };
 
-  PBuffer(int width,int height,int flags = GEM_PBUFLAG_RGBA | GEM_PBUFLAG_DEPTH | GEM_PBUFLAG_STENCIL);
+  PBuffer(int width,int height,
+          int flags = GEM_PBUFLAG_RGBA | GEM_PBUFLAG_DEPTH | GEM_PBUFLAG_STENCIL);
   ~PBuffer(void);
 
   void enable(void);

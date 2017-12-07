@@ -30,7 +30,8 @@ CPPEXTERN_NEW(pix_flip);
 pix_flip :: pix_flip()
   : m_flip(NONE)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"), gensym("flip"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"),
+            gensym("flip"));
 }
 
 /////////////////////////////////////////////////////////
@@ -286,15 +287,20 @@ void pix_flip :: flipMess(FlipType type)
 /////////////////////////////////////////////////////////
 void pix_flip :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::horMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_flip::horMessCallback),
                   gensym("horizontal"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::vertMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_flip::vertMessCallback),
                   gensym("vertical"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::bothMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_flip::bothMessCallback),
                   gensym("both"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::noneMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_flip::noneMessCallback),
                   gensym("none"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_flip::flipMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_flip::flipMessCallback),
                   gensym("flip"), A_SYMBOL, A_NULL);
 }
 void pix_flip :: horMessCallback(void *data)

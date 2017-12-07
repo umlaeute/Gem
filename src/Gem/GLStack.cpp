@@ -215,8 +215,11 @@ int GLStack::reset(enum GemStackId id)
 
 void GLStack::print()
 {
-  post("MODELVIEW: %02d/%02d",  data->stackDepth[MODELVIEW], data->maxDepth[MODELVIEW]);
-  post("PROJECTION: %02d/%02d",  data->stackDepth[PROJECTION], data->maxDepth[PROJECTION]);
-  post("TEXTURE: %02d/%02d",  data->stackDepth[TEXTURE], data->maxDepth[TEXTURE]);
+  post("MODELVIEW: %02d/%02d",  data->stackDepth[MODELVIEW],
+       data->maxDepth[MODELVIEW]);
+  post("PROJECTION: %02d/%02d",  data->stackDepth[PROJECTION],
+       data->maxDepth[PROJECTION]);
+  post("TEXTURE: %02d/%02d",  data->stackDepth[TEXTURE],
+       data->maxDepth[TEXTURE]);
   post("COLOR: %02d/%02d",  data->stackDepth[COLOR], data->maxDepth[COLOR]);
 }

@@ -29,7 +29,8 @@
 #include "pix_tIIR.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -115,7 +116,8 @@ void pix_tIIR :: processImage(imageStruct &image)
   // if (oldsize<newsize){}
   m_buffer.reallocate(image.xsize*image.ysize*image.csize*m_bufnum);
 
-  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize || m_buffer.format!=image.format) {
+  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize
+      || m_buffer.format!=image.format) {
     m_buffer.xsize=image.xsize;
     m_buffer.ysize=image.ysize;
     m_buffer.csize=image.csize;
@@ -219,7 +221,8 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
 
   // assume that the pix_size does not change !
   // if (oldsize<newsize){}
-  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize || m_buffer.format!=image.format) {
+  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize
+      || m_buffer.format!=image.format) {
     m_buffer.xsize=image.xsize;
     m_buffer.ysize=image.ysize;
     m_buffer.setCsizeByFormat(image.format);
@@ -274,7 +277,8 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   j=fb_count;
   while(j--) {
     if (s_fb[j+1]!=0) {
-      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-(j+1))%m_bufnum);
+      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-
+             (j+1))%m_bufnum);
       dest=  ((__m64*)m_buffer.data)+m_counter*imagesize;
       factor =_mm_set1_pi16(s_fb[j+1]);
       null_64=_mm_setzero_si64();
@@ -331,7 +335,8 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   while(j--) {
     if (s_ff[j+1]!=0) {
       dest=(__m64*)image.data;
-      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
+      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-j-1)
+             %m_bufnum);
       factor =_mm_set1_pi16(s_ff[j+1]);
       null_64=_mm_setzero_si64();
       i=imagesize;

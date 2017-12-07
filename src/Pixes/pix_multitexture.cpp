@@ -39,8 +39,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   : m_inlet(NULL), m_numInlets(0),
-    m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D), m_mode(0),
-    m_xRatio(1.f), m_yRatio(1.f), upsidedown(false), m_texSizeX(0), m_texSizeY(0),
+    m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D),
+    m_mode(0),
+    m_xRatio(1.f), m_yRatio(1.f), upsidedown(false), m_texSizeX(0),
+    m_texSizeY(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0)
 {
   if (m_reqTexUnits<=0) {
@@ -58,7 +60,8 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   for(int i=0; i<m_numInlets; i++) {
     snprintf(tempVt, 5, "#%d", i);
     tempVt[4]=0;
-    m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym(tempVt));
+    m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                         gensym(tempVt));
   }
 }
 
@@ -96,7 +99,8 @@ bool pix_multitexture :: isRunnable(void)
 // use this when loading images...
 //
 /////////////////////////////////////////////////////////
-inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false)
+inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio,
+                         GLboolean upsidedown=false)
 {
   if(!upsidedown) {
     coords[0].s = 0.f;
@@ -204,7 +208,8 @@ void pix_multitexture :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "mode",rectangleMess,   bool);
 
   // generic inlets for texUnit
-  class_addanything(classPtr, reinterpret_cast<t_method>(&pix_multitexture::parmCallback));
+  class_addanything(classPtr,
+                    reinterpret_cast<t_method>(&pix_multitexture::parmCallback));
 }
 void pix_multitexture :: texUnitMess(int n, int texID)
 {
@@ -234,7 +239,8 @@ void pix_multitexture :: rectangleMess(bool wantrect)
   setModified();
 }
 
-void pix_multitexture :: parmCallback(void*data, t_symbol*s, int argc, t_atom*argv)
+void pix_multitexture :: parmCallback(void*data, t_symbol*s, int argc,
+                                      t_atom*argv)
 {
   if(argc>0&&argv->a_type==A_FLOAT&&('#'==*s->s_name)) {
     int i = atoi(s->s_name+1);

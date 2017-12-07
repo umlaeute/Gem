@@ -93,7 +93,8 @@ private:
 
   //////////
   // Static member functions
-  static void     vecOffsetMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     vecOffsetMessCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv);
   static void     floatOffsetMessCallback(void *data, t_float offset);
   static void     saturateMessCallback(void *data, t_float saturate);
 };

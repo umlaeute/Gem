@@ -80,7 +80,8 @@ void pix_movie :: render(GemState *state)
 
   frame=static_cast<int>(m_reqFrame);
   if (img==0) {
-    outlet_float(m_outEnd,(m_numFrames>0 && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
+    outlet_float(m_outEnd,(m_numFrames>0
+                           && static_cast<int>(m_reqFrame)<0)?(m_numFrames-1):0);
 
     if(frame!=static_cast<int>(m_reqFrame)) {
       // someone responded immediately to the outlet_float and changed the requested frame
@@ -125,7 +126,8 @@ void pix_movie :: postrender(GemState *state)
   if (m_auto!=0) {
     if(m_thread_running) {
       m_reqFrame+=m_auto;
-    } else if (gem::plugins::film::FAILURE==m_handle->changeImage((int)(m_reqFrame+=m_auto))) {
+    } else if (gem::plugins::film::FAILURE==m_handle->changeImage((int)(
+                 m_reqFrame+=m_auto))) {
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }
@@ -160,13 +162,17 @@ void pix_movie :: stopRendering()
 /////////////////////////////////////////////////////////
 void pix_movie :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::textureMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movie::textureMessCallback),
                   gensym("quality"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::repeatMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movie::repeatMessCallback),
                   gensym("repeat"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::modeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movie::modeCallback),
                   gensym("mode"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movie::rectangleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movie::rectangleCallback),
                   gensym("rectangle"), A_FLOAT, A_NULL);
 }
 
@@ -181,7 +187,8 @@ void pix_movie :: repeatMessCallback(void *data, t_float quality)
 
 void pix_movie :: modeCallback(void *data, t_float quality)
 {
-  GetMyClass(data)->error("'mode' message is deprecated; please use 'rectangle' instead");
+  GetMyClass(
+    data)->error("'mode' message is deprecated; please use 'rectangle' instead");
   GetMyClass(data)->modeMess(static_cast<int>(quality));
 }
 

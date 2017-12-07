@@ -83,7 +83,8 @@ public:
   virtual bool isThreadable(void);
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
@@ -112,9 +113,11 @@ protected:
   bool m_doConvert;
 
 
-  virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
+  virtual void log(bgav_log_level_t level, const char *log_domain,
+                   const char *message);
 private:
-  static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
+  static void log_callback(void *data, bgav_log_level_t level,
+                           const char *log_domain, const char *message);
 
 };
 };

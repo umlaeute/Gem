@@ -42,7 +42,8 @@ pix_multiply :: ~pix_multiply()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
+void pix_multiply :: processRGBA_RGBA(imageStruct &image,
+                                      imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
@@ -61,7 +62,8 @@ void pix_multiply :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processRGBA_Gray(imageStruct &image, imageStruct &right)
+void pix_multiply :: processRGBA_Gray(imageStruct &image,
+                                      imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
@@ -81,7 +83,8 @@ void pix_multiply :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 // processDualGray
 //
 /////////////////////////////////////////////////////////
-void pix_multiply :: processGray_Gray(imageStruct &image, imageStruct &right)
+void pix_multiply :: processGray_Gray(imageStruct &image,
+                                      imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
@@ -118,7 +121,8 @@ void pix_multiply :: processYUV_YUV(imageStruct &image, imageStruct &right)
 }
 
 #ifdef __MMX__
-void pix_multiply :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+void pix_multiply :: processRGBA_MMX(imageStruct &image,
+                                     imageStruct &right)
 {
   int datasize =   image.xsize * image.ysize * image.csize;
   __m64*leftPix =  (__m64*)image.data;
@@ -219,7 +223,8 @@ void pix_multiply :: processYUV_MMX(imageStruct &image, imageStruct &right)
   _mm_empty();
 }
 
-void pix_multiply :: processGray_MMX(imageStruct &image, imageStruct &right)
+void pix_multiply :: processGray_MMX(imageStruct &image,
+                                     imageStruct &right)
 {
   processRGBA_MMX(image, right);
 }

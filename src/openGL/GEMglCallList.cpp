@@ -23,9 +23,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglCallList, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglCallList :: GEMglCallList  (t_floatarg arg0) : list(static_cast<GLuint>(arg0))
+GEMglCallList :: GEMglCallList  (t_floatarg arg0) : list(
+    static_cast<GLuint>(arg0))
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gllist"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("gllist"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -59,7 +61,9 @@ void GEMglCallList :: listMess (t_float arg1)   // FUN
 
 void GEMglCallList :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCallList::listMessCallback),        gensym("gllist"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCallList::listMessCallback),
+                  gensym("gllist"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglCallList :: listMessCallback (void* data, t_float arg0)

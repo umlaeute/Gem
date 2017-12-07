@@ -13,7 +13,8 @@
 
 #include "GEMglTexGenfv.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexGenfv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexGenfv, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -22,13 +23,17 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglTexGenfv, t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglTexGenfv :: GEMglTexGenfv  (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglTexGenfv :: GEMglTexGenfv  (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2) :
   coord(static_cast<GLenum>(arg0)),
   pname(static_cast<GLenum>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("coord"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("params"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("coord"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("params"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -83,9 +88,15 @@ void GEMglTexGenfv :: paramsMess (int argc, t_atom*argv)        // FUN
 
 void GEMglTexGenfv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGenfv::coordMessCallback),       gensym("coord"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGenfv::pnameMessCallback),       gensym("pname"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglTexGenfv::paramsMessCallback),      gensym("params"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglTexGenfv::coordMessCallback),
+                  gensym("coord"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglTexGenfv::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglTexGenfv::paramsMessCallback),
+                  gensym("params"), A_GIMME, A_NULL);
 };
 
 void GEMglTexGenfv :: coordMessCallback (void* data, t_float arg0)
@@ -96,7 +107,8 @@ void GEMglTexGenfv :: pnameMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->pnameMess ( static_cast<t_float>(arg0));
 }
-void GEMglTexGenfv :: paramsMessCallback (void* data, t_symbol*,int argc, t_atom*argv)
+void GEMglTexGenfv :: paramsMessCallback (void* data, t_symbol*,int argc,
+    t_atom*argv)
 {
   GetMyClass(data)->paramsMess ( argc, argv );
 }

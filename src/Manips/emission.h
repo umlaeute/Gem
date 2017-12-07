@@ -61,13 +61,15 @@ protected:
 
   //////////
   // emission changed
-  void            emissionMess(float red, float green, float blue, float alpha);
+  void            emissionMess(float red, float green, float blue,
+                               float alpha);
 
 private:
 
   //////////
   // static member functions
-  static void     emissionMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     emissionMessCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv);
 };
 
 #endif  // for header file

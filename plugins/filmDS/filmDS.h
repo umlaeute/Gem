@@ -76,7 +76,8 @@ public:
   }
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
@@ -97,15 +98,24 @@ protected:
 
 
 private:
-  IBaseFilter                                *VideoFilter;           // Base Filter for video
-  IBaseFilter                                *SampleFilter;          // Sample filter
-  IBaseFilter                                *NullFilter;            // Null render base Filter for video
-  ISampleGrabber                     *SampleGrabber;         // Sample grabber
-  IGraphBuilder                      *FilterGraph;           // Filter Graph for movie playback
-  IMediaControl                      *MediaControl;          // MediaControl interface
-  IMediaSeeking                      *MediaSeeking;          // MediaSeeking interface
-  IMediaPosition                     *MediaPosition;         // MediaPosition interface
-  LONGLONG                           m_Duration;                     // Duration of video
+  IBaseFilter
+  *VideoFilter;           // Base Filter for video
+  IBaseFilter
+  *SampleFilter;          // Sample filter
+  IBaseFilter
+  *NullFilter;            // Null render base Filter for video
+  ISampleGrabber
+  *SampleGrabber;         // Sample grabber
+  IGraphBuilder
+  *FilterGraph;           // Filter Graph for movie playback
+  IMediaControl
+  *MediaControl;          // MediaControl interface
+  IMediaSeeking
+  *MediaSeeking;          // MediaSeeking interface
+  IMediaPosition
+  *MediaPosition;         // MediaPosition interface
+  LONGLONG
+  m_Duration;                     // Duration of video
   LONGLONG                           m_LastFrame;            // Last frame
 
   unsigned long              m_GraphRegister;

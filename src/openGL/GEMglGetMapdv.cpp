@@ -14,7 +14,8 @@
 
 #include "GEMglGetMapdv.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglGetMapdv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglGetMapdv, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,8 +28,10 @@ GEMglGetMapdv :: GEMglGetMapdv  (t_floatarg arg0, t_floatarg arg1)
 {
   targetMess(arg0);
   queryMess(arg1);
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("query"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("query"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -56,7 +59,8 @@ bool GEMglGetMapdv :: isRunnable(void)
 void GEMglGetMapdv :: render(GemState *state)
 {
   glGetMapdv (target, query, v);
-  post("not really implemented:: got data @ %X, what should i do with it", v);
+  post("not really implemented:: got data @ %X, what should i do with it",
+       v);
 }
 
 /////////////////////////////////////////////////////////
@@ -78,8 +82,12 @@ void GEMglGetMapdv :: queryMess (t_float arg0)          // FUN
 
 void GEMglGetMapdv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapdv::targetMessCallback), gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapdv::queryMessCallback), gensym("query"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetMapdv::targetMessCallback),
+                  gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetMapdv::queryMessCallback),
+                  gensym("query"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglGetMapdv :: targetMessCallback (void* data, t_float arg0)

@@ -17,7 +17,8 @@
 
 #include "papi/papi.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(part_orbitpoint, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(part_orbitpoint, t_floatarg, A_DEFFLOAT,
+                             t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,7 +28,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(part_orbitpoint, t_floatarg, A_DEFFLOAT, t_floatarg
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_orbitpoint :: part_orbitpoint(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos, t_floatarg grav)
+part_orbitpoint :: part_orbitpoint(t_floatarg xpos, t_floatarg ypos,
+                                   t_floatarg zpos, t_floatarg grav)
   : m_grav(1.f)
 {
   m_pos[0] = xpos;
@@ -37,8 +39,10 @@ part_orbitpoint :: part_orbitpoint(t_floatarg xpos, t_floatarg ypos, t_floatarg 
     m_grav = grav;
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("grav"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vector"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("grav"));
 }
 
 /////////////////////////////////////////////////////////

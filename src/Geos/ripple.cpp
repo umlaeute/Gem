@@ -14,7 +14,8 @@
 #include "ripple.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -40,9 +41,12 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
   m_gridY=(gridYi>0&&gridXi<GRID_MAX_Y)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
-  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
-  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("Ht"));
+  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                        gensym("cX"));
+  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                        gensym("cY"));
 
   m_drawType = GL_POLYGON;
   precalc_ripple_amp();
@@ -168,7 +172,8 @@ void ripple :: ripple_init(void)
       m_rippleVertex[i][j].x[0] = (i/(m_gridX - 1.0 ))-0.5;
       m_rippleVertex[i][j].x[1] = (j/(m_gridY - 1.0 ))-0.5;
       m_rippleVertex[i][j].dt[0] = m_sizeX*(i/(m_gridX - 1.0 ));
-      m_rippleVertex[i][j].dt[1] = (m_sizeY0-m_sizeY)*(j/(m_gridY - 1.0 ))+m_sizeY;
+      m_rippleVertex[i][j].dt[1] = (m_sizeY0-m_sizeY)*(j/(m_gridY - 1.0 ))
+                                   +m_sizeY;
     }
 }
 
@@ -210,7 +215,8 @@ void ripple :: precalc_ripple_amp(void)
   int i;
   for (i = 0; i < RIPPLE_LENGTH; i++) {
     double t = 1.0 - i/(RIPPLE_LENGTH - 1.0);
-    double a = i?((-cos(t*2.0*3.1428571*RIPPLE_CYCLES)*0.5 + 0.5)*RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t):0.;
+    double a = i?((-cos(t*2.0*3.1428571*RIPPLE_CYCLES)*0.5 + 0.5)
+                  *RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t):0.;
     m_rippleAmp[i].amplitude = a;
   }
 }

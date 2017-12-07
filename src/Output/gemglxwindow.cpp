@@ -363,7 +363,8 @@ struct gemglxwindow::PIMPL {
     int len=0;
 
     if(inputContext) {
-      len=Xutf8LookupString(inputContext, kb,keystring,KEYSTRING_SIZE,&keysym_return,NULL);
+      len=Xutf8LookupString(inputContext, kb,keystring,KEYSTRING_SIZE,
+                            &keysym_return,NULL);
     }
     if(len<1) {
       len=XLookupString(kb,keystring,2,&keysym_return,NULL);
@@ -386,7 +387,8 @@ struct gemglxwindow::PIMPL {
     return std::string(keystring);
   }
 
-  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h, bool transparent)
+  bool create(std::string display, int buffer, bool fullscreen, bool border,
+              int&x, int&y, unsigned int&w, unsigned int&h, bool transparent)
   {
     int modeNum=4;
 #ifdef HAVE_LIBXXF86VM
@@ -429,11 +431,16 @@ struct gemglxwindow::PIMPL {
       static int numfbconfigs;
 
       // need to get some function pointer at runtime
-      typedef GLXFBConfig*(*glXChooseFBConfigProc)(Display* dpy, int screen, const int* attribList, int* nitems);
-      glXChooseFBConfigProc glXChooseFBConfigFn = (glXChooseFBConfigProc)glXGetProcAddress((const GLubyte*)"glXChooseFBConfig");
+      typedef GLXFBConfig*(*glXChooseFBConfigProc)(Display* dpy, int screen,
+          const int* attribList, int* nitems);
+      glXChooseFBConfigProc glXChooseFBConfigFn = (glXChooseFBConfigProc)
+          glXGetProcAddress((const GLubyte*)"glXChooseFBConfig");
 
-      typedef XVisualInfo*(*glXGetVisualFromFBConfigProc)(Display* dpy,GLXFBConfig fbconfig);
-      glXGetVisualFromFBConfigProc glXGetVisualFromFBConfigFn = (glXGetVisualFromFBConfigProc)glXGetProcAddress((const GLubyte*)"glXGetVisualFromFBConfig");
+      typedef XVisualInfo*(*glXGetVisualFromFBConfigProc)(Display* dpy,
+          GLXFBConfig fbconfig);
+      glXGetVisualFromFBConfigProc glXGetVisualFromFBConfigFn =
+        (glXGetVisualFromFBConfigProc)glXGetProcAddress((const GLubyte*)
+            "glXGetVisualFromFBConfig");
 
       if (glXChooseFBConfigFn && glXGetVisualFromFBConfigFn) {
         static int**fbbuf=0;
@@ -478,8 +485,11 @@ struct gemglxwindow::PIMPL {
         if(!fbconfig) {
           ::error("Can't find valid framebuffer configuration, try again with legacy method.");
         } else {
-          typedef void(*glXGetFBConfigAttribProc)(Display* dpy,GLXFBConfig fbconfig, int attr, int* val);
-          glXGetFBConfigAttribProc glXGetFBConfigAttribFn = (glXGetFBConfigAttribProc)glXGetProcAddress((const GLubyte*)"glXGetFBConfigAttrib");
+          typedef void(*glXGetFBConfigAttribProc)(Display* dpy,GLXFBConfig fbconfig,
+                                                  int attr, int* val);
+          glXGetFBConfigAttribProc glXGetFBConfigAttribFn =
+            (glXGetFBConfigAttribProc)glXGetProcAddress((const GLubyte*)
+                "glXGetFBConfigAttrib");
           if ( glXGetFBConfigAttribFn ) {
             int doublebuffer;
             int red_bits, green_bits, blue_bits, alpha_bits, depth_bits;
@@ -493,7 +503,8 @@ struct gemglxwindow::PIMPL {
 
             ::verbose(0, "FBConfig selected:");
             ::verbose(0, " Doublebuffer: %s", doublebuffer == True ? "Yes" : "No");
-            ::verbose(0, " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
+            ::verbose(0,
+                      " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
                       red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
           } else {
             ::error("can't get glXGetFBConfigAttrib function pointer");
@@ -546,7 +557,8 @@ struct gemglxwindow::PIMPL {
       ::verbose(0, "Only using %d color bits", vi->depth);
     }
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-      ::error("TrueColor visual required for this program (got %d)", vi->c_class);
+      ::error("TrueColor visual required for this program (got %d)",
+              vi->c_class);
       return false;
     }
     // create the rendering context
@@ -634,7 +646,8 @@ struct gemglxwindow::PIMPL {
       const char *preedit_attname = NULL;
       XVaNestedList preedit_attlist = NULL;
 
-      if ((XGetIMValues(inputMethod, XNQueryInputStyle, &stylePtr, NULL) != NULL)) {
+      if ((XGetIMValues(inputMethod, XNQueryInputStyle, &stylePtr,
+                        NULL) != NULL)) {
         stylePtr=NULL;
       }
 
@@ -798,7 +811,8 @@ void gemglxwindow::dispatch(void)
     case MotionNotify:
       motion(devID, eb->x, eb->y);
       if(!m_pimpl->have_border) {
-        int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
+        int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent,
+                               CurrentTime);
         err=0;
       }
       break;
@@ -872,7 +886,8 @@ void gemglxwindow :: titleMess(const std::string&s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglxwindow :: dimensionsMess(unsigned int width,
+                                    unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");
@@ -901,14 +916,16 @@ bool gemglxwindow :: create(void)
    */
   //~#warning context-sharing disabled
   bool context_sharing=true;
-  if(!m_context && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
+  if(!m_context
+      && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
 
     gemglxwindow::PIMPL*sharedPimpl=&gemglxwindow::PIMPL::s_shared[m_display];
     if(!sharedPimpl->glxcontext) {
       try {
         int x=0, y=0;
         unsigned int w=1, h=1;
-        success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h, m_transparent);
+        success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h,
+                                    m_transparent);
       } catch (GemException&x) {
         error("creation of shared glxcontext failed: %s", x.what());
         verbose(0, "continuing at your own risk!");
@@ -943,7 +960,8 @@ bool gemglxwindow :: create(void)
 
 
   try {
-    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height, m_transparent);
+    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border,
+                            m_xoffset, m_yoffset, m_width, m_height, m_transparent);
   } catch (GemException&x) {
     x.report();
     success=false;
@@ -1012,7 +1030,8 @@ void gemglxwindow :: destroy(void)
 #endif
 
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
-    glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
+    glXMakeCurrent(m_pimpl->dpy, None,
+                   NULL); /* this crashes if no window is there! */
     if (m_pimpl->glxcontext) {
       // this crashes sometimes on my laptop:
       glXDestroyContext(m_pimpl->dpy, m_pimpl->glxcontext);

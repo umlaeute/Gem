@@ -14,7 +14,8 @@
 
 #include "GEMglFogi.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFogi, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglFogi, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,8 +28,10 @@ GEMglFogi :: GEMglFogi  (t_floatarg arg0, t_floatarg arg1) :
   pname(static_cast<GLenum>(arg0)),
   param(static_cast<GLint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("param"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -80,8 +83,12 @@ void GEMglFogi :: paramMess (t_float arg1)      // FUN
 
 void GEMglFogi :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogi::pnameMessCallback),   gensym("pname"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglFogi::paramMessCallback),   gensym("param"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFogi::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglFogi::paramMessCallback),
+                  gensym("param"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglFogi :: pnameMessCallback (void* data, t_float arg0)

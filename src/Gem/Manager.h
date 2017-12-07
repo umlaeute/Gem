@@ -172,11 +172,13 @@ private:
   // computer and window information
   static std::string m_title;             // title to be displayed
   static int       m_fullscreen;        // fullscreen (1) or not (0!)
-  static int       m_menuBar;           // hide (0), show(1), hide but autoshow(-1)
+  static int
+  m_menuBar;           // hide (0), show(1), hide but autoshow(-1)
   static int       m_secondscreen;      // set the second screen
   static int       m_height;            // window height
   static int       m_width;             // window width
-  static int       m_w;                 // the real window width (reported by gemCreateWindow())
+  static int
+  m_w;                 // the real window width (reported by gemCreateWindow())
   static int       m_h;                 // the real window height
   static int       m_xoffset;           // window offset (x)
   static int       m_yoffset;           // window offset (y)
@@ -184,7 +186,8 @@ private:
   static int       m_border;            // window border
   static int       m_stereo;            // stereoscopic
 
-  static int       m_profile;           // off(0), on(1), w/o image caching(2)
+  static int
+  m_profile;           // off(0), on(1), w/o image caching(2)
   static int       m_rendering;
 
   static float     m_fog;                       // fog density
@@ -195,7 +198,8 @@ private:
   static float     m_fogStart;          // start of the linear fog
   static float     m_fogEnd;            // start of the linear fog
 
-  static float     m_motionBlur;        // motion-blur factor in double-buffer mode
+  static float
+  m_motionBlur;        // motion-blur factor in double-buffer mode
 
   static float     fps;
   static int       fsaa;
@@ -229,9 +233,11 @@ private:
 
   static GLfloat    m_stereoSep;                // stereo separation
   static GLfloat    m_stereoFocal;              // distance to focal point
-  static bool       m_stereoLine;               // draw a line between 2 stereo-screens
+  static bool
+  m_stereoLine;               // draw a line between 2 stereo-screens
 
-  static double     m_lastRenderTime;   // the time of the last rendered frame
+  static double
+  m_lastRenderTime;   // the time of the last rendered frame
 
   // gemwin should not touch the following member variables and member functions
   static int        m_windowState;

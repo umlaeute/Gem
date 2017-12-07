@@ -36,9 +36,12 @@ pix_backlight :: pix_backlight() :
   m_SpikeFloor(0.0f),
   m_SpikeCeiling(255.0f)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("scale"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("floor"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ceiling"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("scale"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("floor"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("ceiling"));
 }
 
 /////////////////////////////////////////////////////////
@@ -716,11 +719,14 @@ void pix_backlight :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_backlight :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::scaleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_backlight::scaleCallback),
                   gensym("scale"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::floorCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_backlight::floorCallback),
                   gensym("floor"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_backlight::ceilingCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_backlight::ceilingCallback),
                   gensym("ceiling"), A_DEFFLOAT, A_NULL);
 }
 void pix_backlight :: scaleCallback(void *data, t_float m_SpikeScale)

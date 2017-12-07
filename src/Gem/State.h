@@ -151,7 +151,8 @@ public:
   ////////////
   //vertex-array data
   // deprecated: use property 'vertex.dirty' instead
-  GEM_DEPRECATED  int                 VertexDirty; // the vertex-arrays has changed
+  GEM_DEPRECATED  int
+  VertexDirty; // the vertex-arrays has changed
   // deprecated: use property 'vertex.array.vertex' instead
   GEM_DEPRECATED  GLfloat                               *VertexArray;
   // deprecated: use property 'vertex.array.vertex' instead
@@ -210,7 +211,8 @@ public:
       value=gem::any_cast<T>(val);
       return true;
     } catch (gem::bad_any_cast&x) {
-      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key, x.what());
+      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key,
+                x.what());
       // type problem
     }
     return false;

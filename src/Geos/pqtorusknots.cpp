@@ -16,7 +16,8 @@
 #include "Gem/State.h"
 #define PI2 3.1415926535897932384626433832795f*2
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pqtorusknots, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT );
+CPPEXTERN_NEW_WITH_TWO_ARGS(pqtorusknots, t_floatarg, A_DEFFLOAT,
+                            t_floatarg, A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //
@@ -29,7 +30,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pqtorusknots, t_floatarg, A_DEFFLOAT, t_floatarg, A_
 pqtorusknots :: pqtorusknots(t_floatarg width, t_floatarg q)
   :
   GemShape(width), m_steps(256), m_facets(16), m_scale(1), m_thickness(0.2),
-  m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4), m_vScale(64),
+  m_clumps(12), m_clumpOffset(0), m_clumpScale(0.5), m_uScale(4),
+  m_vScale(64),
   m_P(2), m_Q(q),
   m_Vertex(NULL), m_Normal(NULL), m_texcoords(NULL), m_Index(NULL),
   m_Indices(0), m_Vertices(0),
@@ -185,8 +187,10 @@ void pqtorusknots :: genVert()
     N[2] /= length;
 
     for (j = 0; j < m_facets; j++) {
-      float pointx = sin(j * PI2 / m_facets) * thickness * ((sin(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
-      float pointy = cos(j * PI2 / m_facets) * thickness * ((cos(m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
+      float pointx = sin(j * PI2 / m_facets) * thickness * ((sin(
+                       m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
+      float pointy = cos(j * PI2 / m_facets) * thickness * ((cos(
+                       m_clumpOffset + m_clumps * i * PI2 / m_steps) * m_clumpScale) + 1);
       int offset3j= 3 * (i * (m_facets + 1) + j);
       int offset2j= 2 * (i * (m_facets + 1) + j);
 
@@ -344,7 +348,8 @@ void pqtorusknots :: thickMess(float size)
 // clumpMess
 //
 /////////////////////////////////////////////////////////
-void pqtorusknots :: clumpMess(float clump, float clumpOffset, float clumpScale)
+void pqtorusknots :: clumpMess(float clump, float clumpOffset,
+                               float clumpScale)
 {
   m_clumps = clump;
   m_clumpOffset = clumpOffset;

@@ -22,7 +22,8 @@ public:
   ~PIMPL(void) {};
 
   struct codechandle {
-    codechandle(gem::plugins::record*h, const std::string&c):handle(h), codec(c) {}
+    codechandle(gem::plugins::record*h, const std::string&c):handle(h),
+      codec(c) {}
 
     gem::plugins::record*handle;
     std::string codec;
@@ -146,7 +147,8 @@ pix_record :: ~pix_record()
 // add backends
 //
 /////////////////////////////////////////////////////////
-bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
+bool pix_record :: addHandle( std::vector<std::string>available,
+                              std::string ID)
 {
   unsigned int i=0;
   int count=0;
@@ -188,7 +190,8 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
       m_ids.push_back(key);
       m_allhandles.push_back(handle);
       count++;
-      verbose(2, "added backend#%d '%s' @ 0x%x", m_allhandles.size()-1, key.c_str(), handle);
+      verbose(2, "added backend#%d '%s' @ 0x%x", m_allhandles.size()-1,
+              key.c_str(), handle);
     }
   }
 
@@ -394,7 +397,8 @@ void pix_record :: getCodecList()
     const std::string descr=m_handle->getCodecDescription(codecname);
     t_atom ap[3];
 
-    verbose(2, "codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
+    verbose(2, "codec%d: '%s': %s", i, codecname.c_str(),
+            (descr.empty()?"":descr.c_str()));
     SETFLOAT (ap+0, static_cast<t_float>(i));
     SETSYMBOL(ap+1, gensym(codecname.c_str()));
     SETSYMBOL(ap+2, gensym(descr.c_str()));
@@ -477,7 +481,8 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "record", recordMess, bool);
   CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
   CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codecMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_record::codecMessCallback),
                   gensym("codec"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
@@ -497,7 +502,8 @@ void pix_record :: autoMess(bool on)
   m_automatic=on;
 }
 
-void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc,
+                                     t_atom *argv)
 {
   if(argc) {
     GetMyClass(data)->codecMess(argv);

@@ -62,7 +62,8 @@ public:
   gem::plugins::videoDECKLINK*m_priv;
 
 public:
-  DeckLinkCaptureDelegate(gem::plugins::videoDECKLINK*parent, IDeckLinkInput*dli)
+  DeckLinkCaptureDelegate(gem::plugins::videoDECKLINK*parent,
+                          IDeckLinkInput*dli)
     : IDeckLinkInputCallback()
     , m_refCount(0)
     , m_frameCount(0)
@@ -109,7 +110,8 @@ public:
 
     return (ULONG)m_refCount;
   }
-  virtual HRESULT STDMETHODCALLTYPE VideoInputFrameArrived(IDeckLinkVideoInputFrame*videoFrame, IDeckLinkAudioInputPacket*audioFrame)
+  virtual HRESULT STDMETHODCALLTYPE VideoInputFrameArrived(
+    IDeckLinkVideoInputFrame*videoFrame, IDeckLinkAudioInputPacket*audioFrame)
   {
     IDeckLinkVideoFrame*rightEyeFrame = NULL;
     IDeckLinkVideoFrame3DExtensions*    threeDExtensions = NULL;
@@ -121,7 +123,8 @@ public:
 #if 0
       // If 3D mode is enabled we retreive the 3D extensions interface which gives.
       // us access to the right eye frame by calling GetFrameForRightEye() .
-      if ( (videoFrame->QueryInterface(IID_IDeckLinkVideoFrame3DExtensions, (void **) &threeDExtensions) != S_OK) ||
+      if ( (videoFrame->QueryInterface(IID_IDeckLinkVideoFrame3DExtensions,
+                                       (void **) &threeDExtensions) != S_OK) ||
            (threeDExtensions->GetFrameForRightEye(&rightEyeFrame) != S_OK)) {
         rightEyeFrame = NULL;
       }
@@ -174,7 +177,8 @@ public:
     if (m_deckLinkInput) {
       m_deckLinkInput->StopStreams();
 
-      result = m_deckLinkInput->EnableVideoInput(mode->GetDisplayMode(), m_cfg_pixelFormat, m_cfg_inputFlags);
+      result = m_deckLinkInput->EnableVideoInput(mode->GetDisplayMode(),
+               m_cfg_pixelFormat, m_cfg_inputFlags);
       if (result != S_OK) {
         goto bail;
       }
@@ -193,7 +197,8 @@ bail:
 
 namespace
 {
-IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli, const std::string&formatname, int formatnum)
+IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,
+                                    const std::string&formatname, int formatnum)
 {
   IDeckLinkDisplayModeIterator*dmi = NULL;
   IDeckLinkDisplayMode*displayMode = NULL;
@@ -305,7 +310,8 @@ bool videoDECKLINK::open(gem::Properties&props)
 {
   BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
   BMDPixelFormat pixformat = bmdFormat8BitYUV;
-  const std::string formatname=(("auto"==m_formatname) || ("automatic" == m_formatname))?"":m_formatname;
+  const std::string formatname=(("auto"==m_formatname)
+                                || ("automatic" == m_formatname))?"":m_formatname;
 
   //if(m_devname.empty())return false;
   close();
@@ -374,8 +380,10 @@ bool videoDECKLINK::open(gem::Properties&props)
     // no format specified; try auto-detection
     IDeckLinkAttributes*dlAttribs=0;
     bool formatDetectionSupported = false;
-    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes, (void**)&dlAttribs)) {
-      if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection, &formatDetectionSupported)) {
+    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes,
+                                     (void**)&dlAttribs)) {
+      if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection,
+                                     &formatDetectionSupported)) {
         if(formatDetectionSupported) {
           flags|=bmdVideoInputEnableFormatDetection;
         }
@@ -387,26 +395,30 @@ bool videoDECKLINK::open(gem::Properties&props)
   }
 
   BMDDisplayModeSupport displayModeSupported;
-  if (S_OK != m_dlInput->DoesSupportVideoMode(m_displayMode->GetDisplayMode(),
-      pixformat,
-      flags,
-      &displayModeSupported,
-      NULL)) {
+  if (S_OK != m_dlInput->DoesSupportVideoMode(
+        m_displayMode->GetDisplayMode(),
+        pixformat,
+        flags,
+        &displayModeSupported,
+        NULL)) {
     goto bail;
   }
   if (displayModeSupported == bmdDisplayModeNotSupported) {
     goto bail;
   }
-  if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration, (void**)&m_dlConfig)) {
+  if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration,
+                                   (void**)&m_dlConfig)) {
     m_dlConfig=NULL;
   }
 
   if(m_dlConfig) {
-    m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, m_connectionType);
+    m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection,
+                       m_connectionType);
   }
 
   m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
-  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), pixformat, flags)) {
+  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(),
+                                         pixformat, flags)) {
     goto bail;
   }
 
@@ -435,7 +447,8 @@ pixBlock*videoDECKLINK::getFrame(void)
   m_mutex.lock();
   return &m_pixBlock;
 }
-void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format, unsigned char*data)
+void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format,
+                             unsigned char*data)
 {
   m_mutex.lock();
   m_pixBlock.image.xsize=w;

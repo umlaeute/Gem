@@ -23,7 +23,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultMatrixf, t_floatarg, A_DEFFLOAT );
 //
 GEMglMultMatrixf :: GEMglMultMatrixf    (t_floatarg arg0)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("list"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("list"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -75,11 +76,13 @@ void GEMglMultMatrixf :: matrixMess (int argc, t_atom*argv)     // FUN
 
 void GEMglMultMatrixf :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultMatrixf::matrixMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMultMatrixf::matrixMessCallback),
                   gensym("list"), A_GIMME, A_NULL);
 }
 
-void GEMglMultMatrixf :: matrixMessCallback (void* data, t_symbol*,int argc, t_atom*argv)
+void GEMglMultMatrixf :: matrixMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
 {
   GetMyClass(data)->matrixMess ( argc, argv);
 }

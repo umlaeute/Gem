@@ -74,7 +74,8 @@ private:
   //////////
   // Static member functions
 
-  static void rangeCallback       (void *data, t_float Y, t_float U, t_float V);
+  static void rangeCallback       (void *data, t_float Y, t_float U,
+                                   t_float V);
   //  static void rangeNCallback      (void *data, t_float Y, t_float U, t_float V);
   static void rangeNCallback      (void *data, t_symbol*,int,t_atom*);
   static void resetCallback       (void *data);

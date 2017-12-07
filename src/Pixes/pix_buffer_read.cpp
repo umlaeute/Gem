@@ -50,7 +50,8 @@ pix_buffer_read :: pix_buffer_read(t_symbol *s) :
   if ((s)&&(&s_!=s)) {
     setMess(s);
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("frame"));
 }
 
 /////////////////////////////////////////////////////////
@@ -216,13 +217,17 @@ void pix_buffer_read :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer_read),
                    gensym("pix_get"),
                    A_DEFSYM, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::setMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::setMessCallback),
                   gensym("set"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::frameMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::frameMessCallback),
                   gensym("frame"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::autoMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::autoMessCallback),
                   gensym("auto"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::loopMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::loopMessCallback),
                   gensym("loop"), A_FLOAT, A_NULL);
 }
 void pix_buffer_read :: setMessCallback(void *data, t_symbol*s)

@@ -108,7 +108,8 @@ void vertex_draw :: render(GemState *state)
   }
 
   bool texcoord=m_texcoord;
-  if (texcoord && (state->TexCoordArray == NULL || state->HaveTexCoordArray == 0)) {
+  if (texcoord && (state->TexCoordArray == NULL
+                   || state->HaveTexCoordArray == 0)) {
     post("no Texture Coordinate array!");
     texcoord = 0;
   }
@@ -163,7 +164,8 @@ void vertex_draw :: render(GemState *state)
                   reinterpret_cast<GLfloat *>(state->VertexArray));
 
 #if defined GL_VERTEX_ARRAY_RANGE_APPLE
-  glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE);
+  glVertexArrayParameteriAPPLE(GL_VERTEX_ARRAY_STORAGE_HINT_APPLE,
+                               GL_STORAGE_SHARED_APPLE);
   glVertexArrayRangeAPPLE( size,
                            reinterpret_cast<GLvoid *>(state->VertexArray));
   glEnableClientState( GL_VERTEX_ARRAY_RANGE_APPLE );
@@ -200,10 +202,12 @@ void vertex_draw :: render(GemState *state)
       glBufferDataARB( GL_ARRAY_BUFFER_ARB,
                        size * state->VertexArrayStride * sizeof(float),
                        state->VertexArray, GL_DYNAMIC_DRAW_ARB );
-      glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
+      glVertexPointer( state->VertexArrayStride, GL_FLOAT,0,
+                       reinterpret_cast<char*>(NULL));
     } else {
       glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_nVBOVertices);
-      glVertexPointer( state->VertexArrayStride, GL_FLOAT,0, reinterpret_cast<char*>(NULL));
+      glVertexPointer( state->VertexArrayStride, GL_FLOAT,0,
+                       reinterpret_cast<char*>(NULL));
     }
     glEnableClientState( GL_VERTEX_ARRAY );
   }
@@ -324,13 +328,17 @@ void vertex_draw :: typeMess(t_symbol *type)
 /////////////////////////////////////////////////////////
 void vertex_draw :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::defaultMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_draw::defaultMessCallback),
                   gensym("default"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::colorMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_draw::colorMessCallback),
                   gensym("color"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::texcoordMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_draw::texcoordMessCallback),
                   gensym("texcoord"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_draw::typeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_draw::typeMessCallback),
                   gensym("draw"), A_SYMBOL, A_NULL);
 }
 

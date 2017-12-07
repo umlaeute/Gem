@@ -49,9 +49,12 @@ GEMglMaterialfv :: GEMglMaterialfv      (int argc, t_atom*argv) :
   }
 
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("face"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("face"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("param"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -102,24 +105,33 @@ void GEMglMaterialfv :: paramMess (int argc, t_atom*argv)       // FUN
 
 void GEMglMaterialfv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialfv::faceMessCallback),      gensym("face"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialfv::pnameMessCallback),     gensym("pname"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMaterialfv::paramMessCallback),     gensym("param"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMaterialfv::faceMessCallback),
+                  gensym("face"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMaterialfv::pnameMessCallback),
+                  gensym("pname"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMaterialfv::paramMessCallback),
+                  gensym("param"), A_GIMME, A_NULL);
 };
 
-void GEMglMaterialfv :: faceMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglMaterialfv :: faceMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->faceMess (*argv);
   }
 }
-void GEMglMaterialfv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglMaterialfv :: pnameMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->pnameMess (*argv);
   }
 }
-void GEMglMaterialfv :: paramMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglMaterialfv :: paramMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   GetMyClass(data)->paramMess (argc, argv);
 }

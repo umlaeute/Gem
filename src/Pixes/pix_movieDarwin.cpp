@@ -45,7 +45,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movieDarwin, t_symbol *, A_DEFSYM);
 /////////////////////////////////////////////////////////
 pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
   m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0), m_oldImage(NULL),
-  m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f), upsidedown(true), m_textureType(GL_TEXTURE_RECTANGLE_EXT),
+  m_textureObj(0), m_xRatio(1.f), m_yRatio(1.f), upsidedown(true),
+  m_textureType(GL_TEXTURE_RECTANGLE_EXT),
   x_filename(NULL),
   m_frame(NULL), m_data(NULL),
   m_haveMovie(0), m_auto(0),
@@ -60,7 +61,8 @@ pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
   curTime = 0;
 
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("img_num"));
 
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outEnd       = outlet_new(this->x_obj, 0);
@@ -121,7 +123,8 @@ void pix_movieDarwin :: createBuffer()
     m_pixBlock.image.csize = m_csize;
     m_pixBlock.image.format= m_format;
 
-    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize;
+    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
+                   m_pixBlock.image.csize;
 
     m_data = new unsigned char[dataSize];
 
@@ -200,7 +203,8 @@ void pix_movieDarwin :: openMess(t_symbol *filename, int format)
 
   m_newFilm = 1;
   //outlet_float(m_outNumFrames, ((float)) *([a-zA-Z0-9._]));
-  post("Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  post("Loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize,
+       m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
@@ -228,7 +232,8 @@ void pix_movieDarwin :: realOpen(char *filename)
   } else {
     UInt8*filename8=reinterpret_cast<UInt8*>(filename);
     err = ::FSPathMakeRef(filename8, &ref, NULL);
-    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec,
+                             NULL);
 
     if (err) {
       error("Unable to find file: %s", filename);
@@ -258,7 +263,8 @@ void pix_movieDarwin :: realOpen(char *filename)
 
   // Get the length of the movie
 
-  movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,movieTrackMediaType);  //get first video track
+  movieTrack = GetMovieIndTrackType(m_movie,1,VideoMediaType,
+                                    movieTrackMediaType);  //get first video track
 
   trackMedia = GetTrackMedia(movieTrack);
 
@@ -266,7 +272,8 @@ void pix_movieDarwin :: realOpen(char *filename)
 
   m_numFrames = sampleCount;
 
-  audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,movieTrackMediaType);
+  audioTrack = GetMovieIndTrackType(m_movie,1,SoundMediaType,
+                                    movieTrackMediaType);
 
   SetTrackEnabled(audioTrack, FALSE);
 
@@ -323,7 +330,8 @@ void pix_movieDarwin :: realOpen(char *filename)
     m_xsize = 960;
     SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
 
-    ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+    ScaleMatrix(&matrix,FloatToFixed(0.75),FloatToFixed(1.),FloatToFixed(1.),
+                FloatToFixed(1.));
     SetMovieBox(m_movie, &m_srcRect);
     SetMovieMatrix(m_movie,&matrix);
 
@@ -342,13 +350,15 @@ void pix_movieDarwin :: realOpen(char *filename)
     //kICMImageDescriptionPropertyID_CleanApertureClipRect
 
     SInt32 clap;
-    ICMImageDescriptionGetProperty(desc,kQTPropertyClass_ImageDescription,kICMImageDescriptionPropertyID_CleanAperture,
+    ICMImageDescriptionGetProperty(desc,kQTPropertyClass_ImageDescription,
+                                   kICMImageDescriptionPropertyID_CleanAperture,
                                    sizeof(clap),&clap,NULL);
 
     m_xsize = 1280;
     SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
 
-    ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),FloatToFixed(1.),FloatToFixed(1.));
+    ScaleMatrix(&matrix,FloatToFixed(2.f/3.f),FloatToFixed(1.),
+                FloatToFixed(1.),FloatToFixed(1.));
     SetMovieBox(m_movie, &m_srcRect);
     SetMovieMatrix(m_movie,&matrix);
 
@@ -379,7 +389,8 @@ void pix_movieDarwin :: realOpen(char *filename)
     prepareTexture();
     m_rowBytes = m_xsize * 4;
     if (m_hiquality) {
-      SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
+      SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields,
+                        hintsHighQuality | hintsDeinterlaceFields);
     }
     err = QTNewGWorldFromPtr(   &m_srcGWorld,
                                 k32ARGBPixelFormat,
@@ -404,7 +415,8 @@ void pix_movieDarwin :: realOpen(char *filename)
     prepareTexture();
     m_rowBytes = m_xsize * 2;
     if (m_hiquality) {
-      SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields, hintsHighQuality | hintsDeinterlaceFields);
+      SetMoviePlayHints(m_movie, hintsHighQuality | hintsDeinterlaceFields,
+                        hintsHighQuality | hintsDeinterlaceFields);
     }
     err = QTNewGWorldFromPtr(   &m_srcGWorld,
                                 k422YpCbCr8CodecType,
@@ -438,7 +450,8 @@ void pix_movieDarwin :: realOpen(char *filename)
   }
 
   SetMovieVolume(m_movie,FloatToFixed(m_volume));
-  ::MoviesTask(m_movie, 0);     // *** this does the actual drawing into the GWorld ***
+  ::MoviesTask(m_movie,
+               0);     // *** this does the actual drawing into the GWorld ***
   curTime = GetMovieTime(m_movie,NULL);
   prevTime = 0;
   newImage = 1;
@@ -493,7 +506,8 @@ void pix_movieDarwin :: getFrame()
         flags |= nextTimeEdgeOK;
       }
 
-      MoviesTask(m_movie, 0);   // *** this does the actual drawing into the GWorld ***
+      MoviesTask(m_movie,
+                 0);   // *** this does the actual drawing into the GWorld ***
       curTime = GetMovieTime(m_movie,NULL);
 
       //check to see if the current position is past our next frame
@@ -535,7 +549,8 @@ void pix_movieDarwin :: getFrame()
 
       } else {
 
-        MoviesTask(m_movie, 0); // *** this does the actual drawing into the GWorld ***
+        MoviesTask(m_movie,
+                   0); // *** this does the actual drawing into the GWorld ***
         curTime = GetMovieTime(m_movie,NULL);
 
         if (prevTime >= curTime) {
@@ -571,7 +586,8 @@ void pix_movieDarwin :: getFrame()
     }
 
     //m_movieTime = m_reqFrame * duration;
-    m_movieTime = static_cast<long>(static_cast<float>(m_reqFrame) * durationf);
+    m_movieTime = static_cast<long>(static_cast<float>(m_reqFrame) *
+                                    durationf);
 
     m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
     ::GetMovieNextInterestingTime(    m_movie,
@@ -605,7 +621,8 @@ void pix_movieDarwin :: render(GemState *state)
     SETFLOAT(ap+1, (t_float)m_xRatio);   // constructor
     SETFLOAT(ap+2, (t_float)m_yRatio);   // constructor
     SETFLOAT(ap+3, (t_float)m_textureType);
-    SETFLOAT(ap+4, (t_float)upsidedown);    // always TRUE on Darwin (with QT backend)
+    SETFLOAT(ap+4, (t_float)
+             upsidedown);    // always TRUE on Darwin (with QT backend)
     outlet_list(m_outTex, &s_list, 5, ap);
   }
 }
@@ -738,7 +755,8 @@ void pix_movieDarwin :: texFrame(GemState *state, int doit)
                            m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize,
                            m_pixBlock.image.data );
 
-      glTexParameteri(m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+      glTexParameteri(m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE,
+                      GL_STORAGE_SHARED_APPLE );
 
       glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
 
@@ -908,21 +926,29 @@ void pix_movieDarwin :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_movieDarwin),
                    gensym("pix_movie"),
                    A_DEFSYM,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::changeImageCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::changeImageCallback),
                   gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::autoCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::autoCallback),
                   gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::rateCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::rateCallback),
                   gensym("rate"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::ramCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::ramCallback),
                   gensym("ram"),  A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::hiqualityCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::hiqualityCallback),
                   gensym("hiquality"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::rectangleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::rectangleCallback),
                   gensym("rectangle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movieDarwin::volumeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movieDarwin::volumeCallback),
                   gensym("volume"), A_DEFFLOAT, A_NULL);
 }
 
@@ -931,10 +957,12 @@ void pix_movieDarwin :: openMessCallback(void *data, t_symbol *filename)
   GetMyClass(data)->openMess(filename,0);
 }
 
-void pix_movieDarwin :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_movieDarwin :: changeImageCallback(void *data, t_symbol *,
+    int argc, t_atom *argv)
 {
   //  GetMyClass(data)->changeImage(static_cast<int>imgNum);
-  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
+                                (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_movieDarwin :: autoCallback(void *data, t_float state)

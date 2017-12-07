@@ -46,7 +46,8 @@ REGISTER_IMAGESAVERFACTORY("tiff", imageTIFF);
 
 namespace
 {
-static void imageTIFF_verbosehandler(const int verbosity, const char*module, const char*fmt, va_list ap)
+static void imageTIFF_verbosehandler(const int verbosity,
+                                     const char*module, const char*fmt, va_list ap)
 {
   std::string result = "[GEM:imageTIFF] ";
   char buf[MAXPDSTRING];
@@ -59,11 +60,13 @@ static void imageTIFF_verbosehandler(const int verbosity, const char*module, con
   result+=buf;
   verbose(verbosity, "%s", result.c_str());
 }
-static void imageTIFF_errorhandler(const char*module, const char*fmt, va_list ap)
+static void imageTIFF_errorhandler(const char*module, const char*fmt,
+                                   va_list ap)
 {
   imageTIFF_verbosehandler(-2, module, fmt, ap);
 }
-static void imageTIFF_warnhandler(const char*module, const char*fmt, va_list ap)
+static void imageTIFF_warnhandler(const char*module, const char*fmt,
+                                  va_list ap)
 {
   imageTIFF_verbosehandler(0, module, fmt, ap);
 }
@@ -95,7 +98,8 @@ imageTIFF :: ~imageTIFF(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageTIFF :: load(std::string filename, imageStruct&result,
+                       gem::Properties&props)
 {
   TIFF *tif = TIFFOpen(filename.c_str(), "r");
   if (tif == NULL) {
@@ -137,7 +141,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
   if (knownFormat) {
     unsigned char *buf = new unsigned char [TIFFScanlineSize(tif)];
     if (buf == NULL) {
-      error("[GEM:imageTIFF] can't allocate memory for scanline buffer: %s", filename.c_str());
+      error("[GEM:imageTIFF] can't allocate memory for scanline buffer: %s",
+            filename.c_str());
       TIFFClose(tif);
       return(false);
     }
@@ -148,7 +153,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     for (uint32 row = 0; row < height; row++) {
       unsigned char *pixels = dstLine;
       if (TIFFReadScanline(tif, buf, row, 0) < 0) {
-        verbose(1, "[GEM:imageTIFF] bad image data read on line: %d: %s", row, filename.c_str());
+        verbose(1, "[GEM:imageTIFF] bad image data read on line: %d: %s", row,
+                filename.c_str());
         TIFFClose(tif);
         return false;
       }
@@ -185,20 +191,24 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
     char emsg[1024];
     TIFFRGBAImage img;
     if (TIFFRGBAImageBegin(&img, tif, 0, emsg) == 0) {
-      verbose(0, "[GEM:imageTIFF] Error reading in image file '%s': %s", filename.c_str(), emsg);
+      verbose(0, "[GEM:imageTIFF] Error reading in image file '%s': %s",
+              filename.c_str(), emsg);
       TIFFClose(tif);
       return(false);
     }
 
-    uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(uint32)));
+    uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(
+                      uint32)));
     if (raster == NULL) {
-      error("[GEM:imageTIFF] Unable to allocate memory for image '%s'", filename.c_str());
+      error("[GEM:imageTIFF] Unable to allocate memory for image '%s'",
+            filename.c_str());
       TIFFClose(tif);
       return(false);
     }
 
     if (TIFFRGBAImageGet(&img, raster, width, height) == 0) {
-      verbose(0, "[GEM:imageTIFF] Error getting image data in file '%s': %s", filename.c_str(), emsg);
+      verbose(0, "[GEM:imageTIFF] Error getting image data in file '%s': %s",
+              filename.c_str(), emsg);
       _TIFFfree(raster);
       TIFFClose(tif);
       return(false);
@@ -268,7 +278,9 @@ bool imageTIFF :: load(std::string filename, imageStruct&result, gem::Properties
   TIFFClose(tif);
   return true;
 }
-bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+bool imageTIFF::save(const imageStruct&constimage,
+                     const std::string&filename, const std::string&mimetype,
+                     const gem::Properties&props)
 {
   TIFF *tif = NULL;
 
@@ -300,7 +312,8 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
   props.get("yresolution", yresolution);
   std::string resunit_s;
   if(props.get("resolutionunit", resunit_s)) {
-    if(("inch"==resunit_s) || ("english"==resunit_s) || ("imperial"==resunit_s)) {
+    if(("inch"==resunit_s) || ("english"==resunit_s)
+        || ("imperial"==resunit_s)) {
       resunit=RESUNIT_INCH;
     } else if(("centimeter"==resunit_s) || ("metric"==resunit_s)) {
       resunit=RESUNIT_CENTIMETER;
@@ -341,7 +354,8 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
   for (uint32 row = 0; row < height; row++) {
     unsigned char *buf = srcLine;
     if (TIFFWriteScanline(tif, buf, row, 0) < 0) {
-      verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row, filename.c_str());
+      verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row,
+              filename.c_str());
       TIFFClose(tif);
       delete [] buf;
       return(false);
@@ -354,7 +368,9 @@ bool imageTIFF::save(const imageStruct&constimage, const std::string&filename, c
 }
 
 
-float imageTIFF::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+float imageTIFF::estimateSave(const imageStruct&img,
+                              const std::string&filename, const std::string&mimetype,
+                              const gem::Properties&props)
 {
   float result=0;
   if(mimetype == "image/tiff" || mimetype == "image/x-tiff") {
@@ -384,7 +400,8 @@ float imageTIFF::estimateSave(const imageStruct&img, const std::string&filename,
 }
 
 
-void imageTIFF::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props)
+void imageTIFF::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                     gem::Properties&props)
 {
   mimetypes.clear();
   props.clear();

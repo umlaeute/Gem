@@ -49,7 +49,8 @@ spot_light :: spot_light(t_floatarg lightNum)
   spotExponent = 2.5;
 
   // create the parameters inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("paramlist"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("paramlist"));
 }
 
 ////////////////////////////////////////////////////////
@@ -65,7 +66,8 @@ spot_light :: ~spot_light()
 // lightParamMess
 //
 ////////////////////////////////////////////////////////
-void spot_light :: lightParamMess(float linAtt, float cutoff, float exponent)
+void spot_light :: lightParamMess(float linAtt, float cutoff,
+                                  float exponent)
 {
   // convert from spherical coordinates
   // needs to be positive?

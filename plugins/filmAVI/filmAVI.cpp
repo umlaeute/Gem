@@ -107,7 +107,8 @@ void filmAVI :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVI :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmAVI :: open(const std::string&filename,
+                     const gem::Properties&wantProps)
 {
   AVISTREAMINFO streaminfo;
   long lSize = 0; // in bytes
@@ -117,27 +118,34 @@ bool filmAVI :: open(const std::string&filename, const gem::Properties&wantProps
     m_wantedFormat=d;
   }
 
-  if (AVIStreamOpenFromFile(&m_streamVid, filename.c_str(), streamtypeVIDEO, 0, OF_READ, NULL)) {
+  if (AVIStreamOpenFromFile(&m_streamVid, filename.c_str(), streamtypeVIDEO,
+                            0, OF_READ, NULL)) {
     verbose(0, "[GEM:filmAVI] Unable to open file: %s", filename.c_str());
     goto unsupported;
   }
 
   if( AVIStreamInfo( m_streamVid, &streaminfo, sizeof(streaminfo)) ||
-      AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), NULL, &lSize))  {
-    verbose(0, "[GEM:filmAVI] Unable to read file format: %s", filename.c_str());
+      AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), NULL,
+                          &lSize))  {
+    verbose(0, "[GEM:filmAVI] Unable to read file format: %s",
+            filename.c_str());
     goto unsupported;
   }
 
   m_pbmihRaw = (BITMAPINFOHEADER*) new char[lSize];
 
-  if(AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid), m_pbmihRaw, &lSize)) {
-    verbose(0, "[GEM:filmAVI] Unable to read file format: %s", filename.c_str());
+  if(AVIStreamReadFormat(m_streamVid, AVIStreamStart(m_streamVid),
+                         m_pbmihRaw, &lSize)) {
+    verbose(0, "[GEM:filmAVI] Unable to read file format: %s",
+            filename.c_str());
     goto unsupported;
   }
   if ((8 == m_pbmihRaw->biBitCount)
-      || ((40 == m_pbmihRaw->biBitCount) && (mmioFOURCC('c','v','i','d') == m_pbmihRaw->biCompression))) {
+      || ((40 == m_pbmihRaw->biBitCount)
+          && (mmioFOURCC('c','v','i','d') == m_pbmihRaw->biCompression))) {
     // HACK: attempt to decompress 8 bit films or BW cinepak films to greyscale
-    m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER) + 256*3];
+    m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER) +
+                                          256*3];
     verbose(0, "[GEM:filmAVI] Loading as greyscale");
 
     *m_pbmihDst = *m_pbmihRaw;
@@ -179,8 +187,10 @@ bool filmAVI :: open(const std::string&filename, const gem::Properties&wantProps
   m_image.image.setCsizeByFormat(m_wantedFormat);
   m_image.image.reallocate();
 
-  if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst, ICMODE_DECOMPRESS))) {
-    verbose(0, "[GEM:filmAVI] Could not find decompressor: %s", filename.c_str());
+  if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst,
+                         ICMODE_DECOMPRESS))) {
+    verbose(0, "[GEM:filmAVI] Could not find decompressor: %s",
+            filename.c_str());
     goto unsupported;
   }
   if (m_format==GL_LUMINANCE) {
@@ -190,13 +200,15 @@ bool filmAVI :: open(const std::string&filename, const gem::Properties&wantProps
   }
 
   if (ICERR_OK != ICDecompressBegin(m_hic, m_pbmihRaw, m_pbmihDst)) {
-    verbose(0, "[GEM:filmAVI] Could not begin decompression: %s", filename.c_str());
+    verbose(0, "[GEM:filmAVI] Could not begin decompression: %s",
+            filename.c_str());
     goto unsupported;
   }
   //if (!m_pbmihRaw->biSizeImage)
   //    m_pbmihRaw->biSizeImage = m_xsize * m_ysize * m_csize;
   //m_nRawBuffSize = MIN(streaminfo.dwSuggestedBufferSize, m_pbmihRaw->biSizeImage);
-  m_nRawBuffSize = MAX(static_cast<int>(streaminfo.dwSuggestedBufferSize), static_cast<int>(m_pbmihRaw->biSizeImage));
+  m_nRawBuffSize = MAX(static_cast<int>(streaminfo.dwSuggestedBufferSize),
+                       static_cast<int>(m_pbmihRaw->biSizeImage));
   if(!m_nRawBuffSize) {
     m_nRawBuffSize = m_image.image.xsize * m_image.image.ysize * 3;
   }

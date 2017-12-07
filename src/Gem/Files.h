@@ -26,13 +26,17 @@ namespace gem
 namespace files
 {
 
-GEM_EXTERN std::vector<std::string>getFilenameListing(const std::string&pattern);
-GEM_EXTERN std::string expandEnv(const std::string&, bool bashfilename=false);
+GEM_EXTERN std::vector<std::string>getFilenameListing(
+  const std::string&pattern);
+GEM_EXTERN std::string expandEnv(const std::string&,
+                                 bool bashfilename=false);
 
-GEM_EXTERN std::string getExtension(const std::string&filename, bool make_lowercase=false);
+GEM_EXTERN std::string getExtension(const std::string&filename,
+                                    bool make_lowercase=false);
 
 
-GEM_EXTERN std::string getFullpath(const std::string&, const CPPExtern*obj=NULL);
+GEM_EXTERN std::string getFullpath(const std::string&,
+                                   const CPPExtern*obj=NULL);
 
 GEM_EXTERN void close(int fd);
 };

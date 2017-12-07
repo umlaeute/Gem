@@ -20,7 +20,8 @@
 #include "Gem/State.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -30,7 +31,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height) : m_reqFormat(GL_RGBA_GEM)
+pix_sig2pix :: pix_sig2pix(t_floatarg width,
+                           t_floatarg height) : m_reqFormat(GL_RGBA_GEM)
 {
 
   m_pixBlock.image = m_imageStruct;
@@ -40,7 +42,8 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height) : m_reqFormat(GL
 
   int i;
   for (i=0; i<3; i++) {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal);  /* channels inlet */
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal,
+              &s_signal);  /* channels inlet */
   }
 }
 
@@ -183,7 +186,8 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
     m_height= 0;
   }
   m_pixBlock.image.setBlack();
-  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[0]->s_n);
+  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+          sp[3]->s_vec, sp[0]->s_n);
 }
 
 /////////////////////////////////////////////////////////
@@ -193,14 +197,18 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 
 void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix), gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix),
+                   gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
                   gensym("dsp"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
                   gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
                   gensym("colorspace"), A_DEFSYMBOL, A_NULL);
 }
 

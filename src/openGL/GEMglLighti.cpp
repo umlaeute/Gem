@@ -14,7 +14,8 @@
 
 #include "GEMglLighti.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglLighti, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglLighti, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,18 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglLighti, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglLighti :: GEMglLighti      (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglLighti :: GEMglLighti      (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2) :
   light(static_cast<GLenum>(arg0)),
   pname(static_cast<GLenum>(arg1)),
   param(static_cast<GLint>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("light"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("light"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("param"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,9 +83,15 @@ void GEMglLighti :: paramMess (t_float arg1)    // FUN
 
 void GEMglLighti :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLighti::lightMessCallback),         gensym("light"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLighti::pnameMessCallback),         gensym("pname"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLighti::paramMessCallback),         gensym("param"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglLighti::lightMessCallback),
+                  gensym("light"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglLighti::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglLighti::paramMessCallback),
+                  gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglLighti :: lightMessCallback (void* data, t_float arg0)

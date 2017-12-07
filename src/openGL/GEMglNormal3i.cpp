@@ -14,7 +14,8 @@
 
 #include "GEMglNormal3i.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3i, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3i, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,18 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3i, t_floatarg, A_DEFFLOAT, t_floatar
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglNormal3i :: GEMglNormal3i  (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglNormal3i :: GEMglNormal3i  (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2) :
   nx(static_cast<GLint>(arg0)),
   ny(static_cast<GLint>(arg1)),
   nz(static_cast<GLint>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("nx"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ny"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("nz"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("nx"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("ny"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("nz"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,9 +83,15 @@ void GEMglNormal3i :: nzMess (t_float arg1)     // FUN
 
 void GEMglNormal3i :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3i::nxMessCallback),          gensym("nx"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3i::nyMessCallback),          gensym("ny"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3i::nzMessCallback),          gensym("nz"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglNormal3i::nxMessCallback),
+                  gensym("nx"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglNormal3i::nyMessCallback),
+                  gensym("ny"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglNormal3i::nzMessCallback),
+                  gensym("nz"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglNormal3i :: nxMessCallback (void* data, t_float arg0)

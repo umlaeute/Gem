@@ -29,8 +29,10 @@ CPPEXTERN_NEW(pix_bitmask);
 /////////////////////////////////////////////////////////
 pix_bitmask :: pix_bitmask()
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_mask"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vec_mask"));
 
   m_mask[chRed] = m_mask[chGreen] = m_mask[chBlue] = m_mask[chAlpha] = 255;
   m_mode=0;
@@ -130,7 +132,8 @@ void pix_bitmask :: processGrayMMX(imageStruct &image)
   int i = image.xsize * image.ysize/8;
   const char grey=m_mask[chRed];
 
-  const __m64 mask = _mm_set_pi8(grey, grey, grey, grey, grey, grey, grey, grey);
+  const __m64 mask = _mm_set_pi8(grey, grey, grey, grey, grey, grey, grey,
+                                 grey);
   __m64 *input = (__m64*)image.data;
 
   while(i--) {
@@ -181,12 +184,15 @@ void pix_bitmask :: intMaskMess(int mask)
 /////////////////////////////////////////////////////////
 void pix_bitmask :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::vecMaskMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_bitmask::vecMaskMessCallback),
                   gensym("vec_mask"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_bitmask::floatMaskMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_bitmask::floatMaskMessCallback),
                   gensym("ft1"), A_FLOAT, A_NULL);
 }
-void pix_bitmask :: vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_bitmask :: vecMaskMessCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv)
 {
   GetMyClass(data)->vecMaskMess(argc, argv);
 }

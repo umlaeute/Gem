@@ -160,7 +160,8 @@ inline unsigned char INT_MULT(unsigned int a, unsigned int b)
 // Exactly LERPs two values
 // This avoids a float value (important on Intel...)
 // From Alvy Ray Smith paper
-inline unsigned char INT_LERP(unsigned int p, unsigned int q, unsigned int a)
+inline unsigned char INT_LERP(unsigned int p, unsigned int q,
+                              unsigned int a)
 {
   return((unsigned char)(p + INT_MULT(a, q - p)));
 }
@@ -256,7 +257,8 @@ inline int GetMirrored(int inValue,const int nMax)
 // 2D-algebra
 //
 ///////////////////////////////////////////////////////////////////////////////
-static inline void Get2dTangent(float inX,float inY,float* poutX,float* poutY)
+static inline void Get2dTangent(float inX,float inY,float* poutX,
+                                float* poutY)
 {
   *poutX=inY;
   *poutY=-inX;
@@ -300,7 +302,8 @@ inline float GetRandomFloat(void)
 ///////////////////////////////////////////////////////////////////////////////
 GEM_EXTERN extern float         smoothStep(float x, float a, float b);
 GEM_EXTERN extern int           smoothStep(int x, int a, int b);
-GEM_EXTERN extern unsigned char smoothStep(unsigned char x, unsigned char a, unsigned char b);
+GEM_EXTERN extern unsigned char smoothStep(unsigned char x,
+    unsigned char a, unsigned char b);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Bias function
@@ -329,8 +332,10 @@ GEM_EXTERN extern float gainFunc(float x, float a);
 // npnts is the number of points per dimension.
 //
 ///////////////////////////////////////////////////////////////////////////////
-GEM_EXTERN extern void linearFunc(float val, float *ret, int numDimen, int npnts, float *pnts);
-GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen, int npnts, double *pnts);
+GEM_EXTERN extern void linearFunc(float val, float *ret, int numDimen,
+                                  int npnts, float *pnts);
+GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen,
+                                  int npnts, double *pnts);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Spline function
@@ -346,8 +351,10 @@ GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen, int npn
 //      _Texturing and Modeling: A Procedural Approach_
 //          David S. Ebert, Ed.
 ///////////////////////////////////////////////////////////////////////////////
-GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen, int nknots, float *knot);
-GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nknots, double *knot);
+GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen,
+                                  int nknots, float *knot);
+GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen,
+                                  int nknots, double *knot);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -402,9 +409,11 @@ GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nkn
 //Ian Ollman's function to determine the cache prefetch for altivec vec_dst()
 #include <inttypes.h>
 
-inline uint32_t GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
+inline uint32_t GetPrefetchConstant( int blockSizeInVectors,
+                                     int blockCount, int blockStride )
 {
-  return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
+  return ((blockSizeInVectors << 24) & 0x1F000000) | ((
+           blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
 }
 #endif
 

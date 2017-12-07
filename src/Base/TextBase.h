@@ -128,7 +128,8 @@ protected:
   // Set the justification
   virtual void setJustification(JustifyWidth wType);
   virtual void setJustification(JustifyWidth wType, JustifyHeight hType);
-  virtual void setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType);
+  virtual void setJustification(JustifyWidth wType, JustifyHeight hType,
+                                JustifyDepth dType);
 
   typedef struct Justification_ {
     float width;

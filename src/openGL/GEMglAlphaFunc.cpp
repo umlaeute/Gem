@@ -14,7 +14,8 @@
 
 #include "GEMglAlphaFunc.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglAlphaFunc, t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglAlphaFunc :: GEMglAlphaFunc        (t_floatarg arg0, t_floatarg arg1) :
+GEMglAlphaFunc :: GEMglAlphaFunc        (t_floatarg arg0,
+    t_floatarg arg1) :
   func(static_cast<GLenum>(arg0)),
   ref(static_cast<GLclampf>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("func"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ref"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("func"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("ref"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +73,12 @@ void GEMglAlphaFunc :: refMess (t_float arg1)   // FUN
 
 void GEMglAlphaFunc :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAlphaFunc::funcMessCallback),       gensym("func"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAlphaFunc::refMessCallback),        gensym("ref"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglAlphaFunc::funcMessCallback),
+                  gensym("func"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglAlphaFunc::refMessCallback),
+                  gensym("ref"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglAlphaFunc :: funcMessCallback (void* data, t_float arg0)

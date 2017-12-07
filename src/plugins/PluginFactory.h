@@ -57,7 +57,8 @@ public:
   /**
    * load more plugins
    */
-  static int loadPlugins(std::string basename, std::string path=std::string(""));
+  static int loadPlugins(std::string basename,
+                         std::string path=std::string(""));
 
 private:
   static PluginFactory<Class>*s_factory;

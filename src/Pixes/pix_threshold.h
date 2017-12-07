@@ -87,7 +87,8 @@ private:
 
   //////////
   // Static member functions
-  static void     vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     vecThreshMessCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv);
   static void     floatThreshMessCallback(void *data, t_float thresh);
 };
 

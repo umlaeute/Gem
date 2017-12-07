@@ -109,7 +109,8 @@ protected:
   GLuint            m_textureObj;
 
   /* send out our texture through the 2nd outlet to be used by others */
-  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
+  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio,
+                      GLint texType, GLboolean upsidedown);
   t_outlet      *m_outTexID;
 
   ////////

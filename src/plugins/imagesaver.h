@@ -53,7 +53,8 @@ public:
   /* save the image 'img' under the filename 'filename', respecting as many 'props' as possible
    *
    * returns TRUE if saving was successful, FALSE otherwise */
-  virtual bool save(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) = 0;
+  virtual bool save(const imageStruct&img, const std::string&filename,
+                    const std::string&mimetype, const gem::Properties&props) = 0;
 
   /* estimate how 'well' we could save the 'img'
    *  this is used to rate the different backends for a given image
@@ -97,7 +98,9 @@ public:
    *            JPG knows how to handle the 'quality' property, but not the 'mimetype', so it scores 1 point
    *            TIFF knows how to handle the 'mimetype' but not the 'quality', so it scores 100 points
    */
-  virtual float estimateSave( const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) = 0;
+  virtual float estimateSave( const imageStruct&img,
+                              const std::string&filename, const std::string&mimetype,
+                              const gem::Properties&props) = 0;
 
   /**
    * get writing capabilities of this backend (informative)
@@ -107,7 +110,8 @@ public:
    * if only some properties/mimetypes are explicitly known (but it is likely that more are supported),
    * it is generally better, to list the few rather than nothing
    */
-  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) = 0;
+  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                    gem::Properties&props) = 0;
 
   /* returns TRUE, if it is save to use this backend from multiple threads
    */

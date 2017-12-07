@@ -72,7 +72,8 @@ public:
   {
     return false;
   }
-  virtual bool dialog(std::vector<std::string>names=std::vector<std::string>())
+  virtual bool dialog(std::vector<std::string>names=
+                        std::vector<std::string>())
   {
     return false;
   }

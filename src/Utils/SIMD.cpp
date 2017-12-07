@@ -80,10 +80,12 @@ GemSIMD :: ~GemSIMD()
 
 int GemSIMD :: requestCPU(int req_cpuid)
 {
-  if(GEM_SIMD_ALTIVEC==realcpuid && (GEM_SIMD_SSE2==req_cpuid || GEM_SIMD_MMX==req_cpuid)) { // invalid selection
+  if(GEM_SIMD_ALTIVEC==realcpuid && (GEM_SIMD_SSE2==req_cpuid
+                                     || GEM_SIMD_MMX==req_cpuid)) { // invalid selection
     return cpuid;
   }
-  if(GEM_SIMD_ALTIVEC==req_cpuid && (GEM_SIMD_SSE2==realcpuid || GEM_SIMD_MMX==realcpuid)) { // invalid selection
+  if(GEM_SIMD_ALTIVEC==req_cpuid && (GEM_SIMD_SSE2==realcpuid
+                                     || GEM_SIMD_MMX==realcpuid)) { // invalid selection
     return cpuid;
   }
 

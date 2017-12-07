@@ -201,7 +201,8 @@ void videoAVT::grabCB(tPvFrame*pFrame)
   }
 
   // if the frame was completed we re-enqueue it
-  if(pFrame->Status != ePvErrUnplugged && pFrame->Status != ePvErrCancelled) {
+  if(pFrame->Status != ePvErrUnplugged
+      && pFrame->Status != ePvErrCancelled) {
     PvCaptureQueueFrame(me->m_grabber, pFrame, (tPvFrameCallback) grabCB);
   }
 }
@@ -232,14 +233,18 @@ bool videoAVT :: openDevice(gem::Properties&props)
   tPvCameraInfo*cameraList=new tPvCameraInfo[cameraNum];
 
   if(m_devicenum>=0) {
-    verbose(0, "[GEM:videoAVT] trying to open #%d of %d devices", m_devicenum, cameraNum);
-    if(cameraNum>m_devicenum && (cameraList[m_devicenum].PermittedAccess == ePvAccessMaster)) {
-      if (PvCameraOpen(cameraList[m_devicenum].UniqueId, ePvAccessMaster, &m_grabber) != ePvErrSuccess) {
+    verbose(0, "[GEM:videoAVT] trying to open #%d of %d devices", m_devicenum,
+            cameraNum);
+    if(cameraNum>m_devicenum
+        && (cameraList[m_devicenum].PermittedAccess == ePvAccessMaster)) {
+      if (PvCameraOpen(cameraList[m_devicenum].UniqueId, ePvAccessMaster,
+                       &m_grabber) != ePvErrSuccess) {
         m_grabber=NULL;
       }
     }
   } else {
-    verbose(0, "[GEM:videoAVT] trying to open device '%s'", m_devicename.c_str());
+    verbose(0, "[GEM:videoAVT] trying to open device '%s'",
+            m_devicename.c_str());
     /*
       cameraList[i].SerialString,
       cameraList[i].DisplayName,
@@ -253,24 +258,32 @@ bool videoAVT :: openDevice(gem::Properties&props)
     if(NULL==m_grabber && 0==errno) {
       verbose(1, "[GEM:videoAVT] checking UniqueID: 0x% 8x", uid);
       for(i=0; i<cameraNum; i++) {
-        if(uid==cameraList[i].UniqueId && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
+        if(uid==cameraList[i].UniqueId
+            && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
+                            &m_grabber) == ePvErrSuccess) {
           break;
         }
       }
     }
 
     if(NULL==m_grabber) {
-      verbose(1, "[GEM:videoAVT] checking SerialString: %s", m_devicename.c_str());
+      verbose(1, "[GEM:videoAVT] checking SerialString: %s",
+              m_devicename.c_str());
       for(i=0; i<cameraNum; i++) {
-        if(m_devicename==cameraList[i].SerialString && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
+        if(m_devicename==cameraList[i].SerialString
+            && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
+                            &m_grabber) == ePvErrSuccess) {
           break;
         }
       }
     }
     if(NULL==m_grabber) {
-      verbose(1, "[GEM:videoAVT] checking DisplayName: %s", m_devicename.c_str());
+      verbose(1, "[GEM:videoAVT] checking DisplayName: %s",
+              m_devicename.c_str());
       for(i=0; i<cameraNum; i++) {
-        if(m_devicename==cameraList[i].DisplayName && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
+        if(m_devicename==cameraList[i].DisplayName
+            && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
+                            &m_grabber) == ePvErrSuccess) {
           break;
         }
       }
@@ -297,7 +310,8 @@ bool videoAVT :: openDevice(gem::Properties&props)
                   (IpAddr & 0xFF000000)>>24
                  );
 
-          if(ePvErrSuccess == PvCameraOpenByAddr(IpAddr, ePvAccessMaster, &m_grabber)) {
+          if(ePvErrSuccess == PvCameraOpenByAddr(IpAddr, ePvAccessMaster,
+                                                 &m_grabber)) {
             break;
           }
           m_grabber=NULL;
@@ -552,13 +566,15 @@ void videoAVT::setProperties(gem::Properties&props)
       default:
         continue;
       case ePvDatatypeString:
-        if (ePvErrSuccess==PvAttrStringGet(m_grabber, key.c_str(), svalue, MAXPDSTRING, &size)) {
+        if (ePvErrSuccess==PvAttrStringGet(m_grabber, key.c_str(), svalue,
+                                           MAXPDSTRING, &size)) {
           s=svalue;
           props.set(key, s);
         }
         break;
       case ePvDatatypeEnum:
-        if (ePvErrSuccess==PvAttrEnumGet(m_grabber, key.c_str(), svalue, MAXPDSTRING, &size)) {
+        if (ePvErrSuccess==PvAttrEnumGet(m_grabber, key.c_str(), svalue,
+                                         MAXPDSTRING, &size)) {
           s=svalue;
           props.set(key, s);
         }

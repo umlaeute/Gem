@@ -127,7 +127,8 @@ GLint vertex_program :: queryProgramtype(char*program)
 
 void vertex_program :: openMess(t_symbol *filename)
 {
-  if(NULL==filename || NULL==filename->s_name || &s_==filename || 0==*filename->s_name) {
+  if(NULL==filename || NULL==filename->s_name || &s_==filename
+      || 0==*filename->s_name) {
     return;
   }
 
@@ -208,7 +209,8 @@ void vertex_program :: LoadProgram(void)
       glEnable(m_programTarget);
       glGenProgramsNV(1, &m_programID);
       glBindProgramNV(m_programTarget, m_programID);
-      glLoadProgramNV(m_programTarget, m_programID, m_size, (GLubyte*)m_programString);
+      glLoadProgramNV(m_programTarget, m_programID, m_size,
+                      (GLubyte*)m_programString);
       glGetIntegerv(GL_PROGRAM_ERROR_POSITION_NV, &err);
     } else {
       glEnable(m_programTarget);
@@ -221,7 +223,8 @@ void vertex_program :: LoadProgram(void)
       glEnable(m_programTarget);
       glGenProgramsARB(1, &m_programID);
       glBindProgramARB( m_programTarget, m_programID);
-      glProgramStringARB( m_programTarget, GL_PROGRAM_FORMAT_ASCII_ARB, m_size, m_programString);
+      glProgramStringARB( m_programTarget, GL_PROGRAM_FORMAT_ASCII_ARB, m_size,
+                          m_programString);
       glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &err);
     } else {
       glEnable(m_programTarget);
@@ -253,7 +256,8 @@ void vertex_program :: LoadProgram(void)
 
   if(GLEW_ARB_vertex_program) {
     GLint isUnderNativeLimits;
-    glGetProgramivARB( m_programTarget, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB, &isUnderNativeLimits);
+    glGetProgramivARB( m_programTarget, GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB,
+                       &isUnderNativeLimits);
 
     // If the program is over the hardware's limits, print out some information
     if (isUnderNativeLimits!=1) {
@@ -261,38 +265,53 @@ void vertex_program :: LoadProgram(void)
       error("is beyond hardware limits");
 
       GLint aluInstructions, maxAluInstructions;
-      glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &aluInstructions);
-      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &maxAluInstructions);
+      glGetProgramivARB(m_programTarget, GL_PROGRAM_ALU_INSTRUCTIONS_ARB,
+                        &aluInstructions);
+      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB,
+                        &maxAluInstructions);
       if (aluInstructions>maxAluInstructions) {
-        post("[%s]: Compiles to too many ALU instructions (%d, limit is %d)\n", m_buf.c_str(), aluInstructions, maxAluInstructions);
+        post("[%s]: Compiles to too many ALU instructions (%d, limit is %d)\n",
+             m_buf.c_str(), aluInstructions, maxAluInstructions);
       }
 
       GLint textureInstructions, maxTextureInstructions;
-      glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &textureInstructions);
-      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &maxTextureInstructions);
+      glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INSTRUCTIONS_ARB,
+                        &textureInstructions);
+      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB,
+                        &maxTextureInstructions);
       if (textureInstructions>maxTextureInstructions) {
-        post("[%s]: Compiles to too many texture instructions (%d, limit is %d)\n", m_buf.c_str(), textureInstructions, maxTextureInstructions);
+        post("[%s]: Compiles to too many texture instructions (%d, limit is %d)\n",
+             m_buf.c_str(), textureInstructions, maxTextureInstructions);
       }
 
       GLint textureIndirections, maxTextureIndirections;
-      glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INDIRECTIONS_ARB, &textureIndirections);
-      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &maxTextureIndirections);
+      glGetProgramivARB(m_programTarget, GL_PROGRAM_TEX_INDIRECTIONS_ARB,
+                        &textureIndirections);
+      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB,
+                        &maxTextureIndirections);
       if (textureIndirections>maxTextureIndirections) {
-        post("[%s]: Compiles to too many texture indirections (%d, limit is %d)\n", m_buf.c_str(), textureIndirections, maxTextureIndirections);
+        post("[%s]: Compiles to too many texture indirections (%d, limit is %d)\n",
+             m_buf.c_str(), textureIndirections, maxTextureIndirections);
       }
 
       GLint nativeTextureIndirections, maxNativeTextureIndirections;
-      glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &nativeTextureIndirections);
-      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &maxNativeTextureIndirections);
+      glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB,
+                        &nativeTextureIndirections);
+      glGetProgramivARB(m_programTarget,
+                        GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &maxNativeTextureIndirections);
       if (nativeTextureIndirections>maxNativeTextureIndirections) {
-        post("[%s]: Compiles to too many native texture indirections (%d, limit is %d)\n", m_buf.c_str(), nativeTextureIndirections, maxNativeTextureIndirections);
+        post("[%s]: Compiles to too many native texture indirections (%d, limit is %d)\n",
+             m_buf.c_str(), nativeTextureIndirections, maxNativeTextureIndirections);
       }
 
       GLint nativeAluInstructions, maxNativeAluInstructions;
-      glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &nativeAluInstructions);
-      glGetProgramivARB(m_programTarget, GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &maxNativeAluInstructions);
+      glGetProgramivARB(m_programTarget, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB,
+                        &nativeAluInstructions);
+      glGetProgramivARB(m_programTarget,
+                        GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &maxNativeAluInstructions);
       if (nativeAluInstructions>maxNativeAluInstructions) {
-        post("[%s]: Compiles to too many native ALU instructions (%d, limit is %d)\n", m_buf.c_str(), nativeAluInstructions, maxNativeAluInstructions);
+        post("[%s]: Compiles to too many native ALU instructions (%d, limit is %d)\n",
+             m_buf.c_str(), nativeAluInstructions, maxNativeAluInstructions);
       }
     }
   }
@@ -340,7 +359,8 @@ void vertex_program :: postrender(GemState *state)
   }
 }
 
-void vertex_program :: paramMess(int envNum, t_float param1, t_float param2, t_float param3, t_float param4)
+void vertex_program :: paramMess(int envNum, t_float param1,
+                                 t_float param2, t_float param3, t_float param4)
 {
   if(envNum>=0) {
     //float param[4] = {param1, param2, param3, param4};
@@ -381,51 +401,72 @@ void vertex_program :: printInfo()
   glGetIntegerv( GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB, &bitnum );
   post("MAX_PROGRAM_MATRIX_STACK_DEPTH: %d", bitnum);
 
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_TEMPORARIES_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_TEMPORARIES: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_PARAMETERS_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_PARAMETERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_ATTRIBS_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_ATTRIBS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
   post("MAX_PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB, &bitnum);
   post("MAX_PROGRAM_LOCAL_PARAMETERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
   post("MAX_PROGRAM_ENV_PARAMETERS: %d", bitnum);
   post("");
 
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB,
+                     &bitnum);
   post("PROGRAM_INSTRUCTIONS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
   post("PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_TEMPORARIES_ARB,
+                     &bitnum);
   post("PROGRAM_TEMPORARIES: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
   post("PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_PARAMETERS_ARB,
+                     &bitnum);
   post("PROGRAM_PARAMETERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_PARAMETERS_ARB,
+                     &bitnum);
   post("PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
   glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_ATTRIBS_ARB, &bitnum);
   post("PROGRAM_ATTRIBS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB,
+                     &bitnum);
   post("PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_ADDRESS_REGISTERS_ARB,
+                     &bitnum);
   post("PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
-  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB, GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_VERTEX_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
   post("PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
 }
 
@@ -437,6 +478,8 @@ void vertex_program :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
   CPPEXTERN_MSG0(classPtr, "print", printInfo);
-  CPPEXTERN_MSG5(classPtr, "param", paramMess, int, t_float, t_float, t_float, t_float);
-  CPPEXTERN_MSG5(classPtr, "parameter", paramMess, int, t_float, t_float, t_float, t_float);
+  CPPEXTERN_MSG5(classPtr, "param", paramMess, int, t_float, t_float,
+                 t_float, t_float);
+  CPPEXTERN_MSG5(classPtr, "parameter", paramMess, int, t_float, t_float,
+                 t_float, t_float);
 }

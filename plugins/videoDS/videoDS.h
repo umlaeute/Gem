@@ -68,7 +68,8 @@ public:
 
   //////////
   // Set the video dimensions
-  virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+  virtual bool setDimen(int x, int y, int leftmargin, int rightmargin,
+                        int topmargin, int bottommargin);
   virtual bool setColor(int d);
   virtual bool dialog(std::vector<std::string>);
   virtual std::vector<std::string>dialogs(void);
@@ -105,8 +106,10 @@ protected:
   IMediaSeeking*      m_pMS;
   IMediaPosition*     m_pMP;
   IBaseFilter         *SampleFilter;          // Sample filter
-  IBaseFilter         *NullFilter;            // Null render base Filter for video
-  IBaseFilter         *FileFilter;            // File filter for writing video
+  IBaseFilter
+  *NullFilter;            // Null render base Filter for video
+  IBaseFilter
+  *FileFilter;            // File filter for writing video
   ISampleGrabber      *SampleGrabber;         // Sample grabber
 #ifdef DIRECTSHOW_LOGGING
   HFILE                 LogFileHandle;

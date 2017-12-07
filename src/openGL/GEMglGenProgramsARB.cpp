@@ -26,7 +26,8 @@ GEMglGenProgramsARB :: GEMglGenProgramsARB      (int argc, t_atom*argv) :
 {
   programsMess(argc, argv);
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("programs"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("programs"));
 
 }
 /////////////////////////////////////////////////////////
@@ -57,7 +58,8 @@ void GEMglGenProgramsARB :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv)        // FUN
+void GEMglGenProgramsARB :: programsMess (int argc,
+    t_atom*argv)        // FUN
 {
   n=0;
   delete [] programs;
@@ -79,9 +81,12 @@ void GEMglGenProgramsARB :: programsMess (int argc, t_atom*argv)        // FUN
 
 void GEMglGenProgramsARB :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGenProgramsARB::programsMessCallback),      gensym("programs"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGenProgramsARB::programsMessCallback),
+                  gensym("programs"), A_GIMME, A_NULL);
 }
-void GEMglGenProgramsARB :: programsMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglGenProgramsARB :: programsMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
 {
   GetMyClass(data)->programsMess (argc,argv);
 }

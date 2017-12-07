@@ -104,7 +104,8 @@ DllUnregisterServer()
 //
 // Provide the way for COM to create a CSampleGrabber object
 //
-CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
+CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk,
+    HRESULT *phr)
 {
   // assuming we don't want to modify the data
   CSampleGrabber *pNewObject = new CSampleGrabber(punk, phr, FALSE);
@@ -121,7 +122,8 @@ CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 //
 //----------------------------------------------------------------------------
 
-CSampleGrabber::CSampleGrabber( IUnknown * pOuter, HRESULT * phr, BOOL ModifiesData )
+CSampleGrabber::CSampleGrabber( IUnknown * pOuter, HRESULT * phr,
+                                BOOL ModifiesData )
   : CTransInPlaceFilter( TEXT("SampleGrabber"), (IUnknown*) pOuter,
                          CLSID_GrabberSample, phr, (BOOL)ModifiesData )
   , m_callback( NULL )
@@ -134,7 +136,8 @@ CSampleGrabber::CSampleGrabber( IUnknown * pOuter, HRESULT * phr, BOOL ModifiesD
   }
 }
 
-STDMETHODIMP CSampleGrabber::NonDelegatingQueryInterface( REFIID riid, void ** ppv)
+STDMETHODIMP CSampleGrabber::NonDelegatingQueryInterface( REFIID riid,
+    void ** ppv)
 {
   if(riid == IID_IGrabberSample) {
     return GetInterface((IGrabberSample *) this, ppv);
@@ -263,9 +266,11 @@ HRESULT CSampleGrabber::Transform( IMediaSample * pms )
     StartTime += m_pInput->CurrentStartTime( );
     StopTime += m_pInput->CurrentStartTime( );
 
-    BOOL * pTypeChanged = &((CSampleGrabberInPin*)m_pInput)->m_bMediaTypeChanged;
+    BOOL * pTypeChanged = &((CSampleGrabberInPin*)
+                            m_pInput)->m_bMediaTypeChanged;
 
-    HRESULT hr = m_callback( m_pUser, pms, &StartTime, &StopTime, *pTypeChanged );
+    HRESULT hr = m_callback( m_pUser, pms, &StartTime, &StopTime,
+                             *pTypeChanged );
 
     *pTypeChanged = FALSE; // now that we notified user, we can clear it
 
@@ -328,14 +333,16 @@ HRESULT CSampleGrabber::SetCallback( SAMPLECALLBACK Callback, void* pUser )
 // input pin's SetDeliverBuffer method for comments.
 //----------------------------------------------------------------------------
 
-HRESULT CSampleGrabber::SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer )
+HRESULT CSampleGrabber::SetDeliveryBuffer( ALLOCATOR_PROPERTIES props,
+    BYTE * m_pBuffer )
 {
   // they can't be connected if we're going to be changing delivery buffers
   //
   if( InputPin( )->IsConnected( ) || OutputPin( )->IsConnected( ) ) {
     return E_INVALIDARG;
   }
-  return ((CSampleGrabberInPin*)m_pInput)->SetDeliveryBuffer( props, m_pBuffer );
+  return ((CSampleGrabberInPin*)m_pInput)->SetDeliveryBuffer( props,
+         m_pBuffer );
 }
 
 //----------------------------------------------------------------------------
@@ -344,7 +351,8 @@ HRESULT CSampleGrabber::SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * m_
 // anything BUT a major type, some codecs written improperly will crash
 //----------------------------------------------------------------------------
 
-HRESULT CSampleGrabberInPin::GetMediaType( int iPosition, CMediaType * pMediaType )
+HRESULT CSampleGrabberInPin::GetMediaType( int iPosition,
+    CMediaType * pMediaType )
 {
   if (iPosition < 0) {
     return E_INVALIDARG;
@@ -365,7 +373,8 @@ HRESULT CSampleGrabberInPin::GetMediaType( int iPosition, CMediaType * pMediaTyp
 // and GetMediaType is never called.
 //----------------------------------------------------------------------------
 
-STDMETHODIMP CSampleGrabberInPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
+STDMETHODIMP CSampleGrabberInPin::EnumMediaTypes( IEnumMediaTypes
+    **ppEnum )
 {
   CheckPointer(ppEnum,E_POINTER);
   ValidateReadWritePtr(ppEnum,sizeof(IEnumMediaTypes *));
@@ -383,7 +392,8 @@ STDMETHODIMP CSampleGrabberInPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
 
   // if the output pin is connected, offer it's fully qualified media type
 
-  return ((CSampleGrabber*)m_pTIPFilter)->OutputPin( )->GetConnected()->EnumMediaTypes( ppEnum );
+  return ((CSampleGrabber*)
+          m_pTIPFilter)->OutputPin( )->GetConnected()->EnumMediaTypes( ppEnum );
 
 }
 
@@ -391,7 +401,8 @@ STDMETHODIMP CSampleGrabberInPin::EnumMediaTypes( IEnumMediaTypes **ppEnum )
 //
 //----------------------------------------------------------------------------
 
-STDMETHODIMP CSampleGrabberInPin::NotifyAllocator( IMemAllocator *pAllocator, BOOL bReadOnly )
+STDMETHODIMP CSampleGrabberInPin::NotifyAllocator( IMemAllocator
+    *pAllocator, BOOL bReadOnly )
 {
   if( m_pPrivateAllocator ) {
     if( pAllocator != m_pPrivateAllocator ) {
@@ -412,7 +423,8 @@ STDMETHODIMP CSampleGrabberInPin::NotifyAllocator( IMemAllocator *pAllocator, BO
 //
 //----------------------------------------------------------------------------
 
-STDMETHODIMP CSampleGrabberInPin::GetAllocator( IMemAllocator **ppAllocator )
+STDMETHODIMP CSampleGrabberInPin::GetAllocator( IMemAllocator
+    **ppAllocator )
 {
   if( m_pPrivateAllocator ) {
     *ppAllocator = m_pPrivateAllocator;
@@ -427,7 +439,8 @@ STDMETHODIMP CSampleGrabberInPin::GetAllocator( IMemAllocator **ppAllocator )
 //
 //----------------------------------------------------------------------------
 
-HRESULT CSampleGrabberInPin::SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * pBuffer )
+HRESULT CSampleGrabberInPin::SetDeliveryBuffer( ALLOCATOR_PROPERTIES props,
+    BYTE * pBuffer )
 {
   // don't allow more than one buffer
 
@@ -465,7 +478,8 @@ HRESULT CSampleGrabberInPin::SetMediaType( const CMediaType *pmt )
 // ask for the allocator props. this can hardly go wrong
 //----------------------------------------------------------------------------
 
-HRESULT CSampleGrabberAllocator::GetAllocatorRequirements( ALLOCATOR_PROPERTIES *pProps )
+HRESULT CSampleGrabberAllocator::GetAllocatorRequirements(
+  ALLOCATOR_PROPERTIES *pProps )
 {
   *pProps = m_pPin->m_allocprops;
   return NOERROR;

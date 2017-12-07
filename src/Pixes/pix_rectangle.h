@@ -89,8 +89,10 @@ protected:
 private:
   //////////
   // Static member functions
-  static void     vecColorMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-  static void     vecCoordMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     vecColorMessCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv);
+  static void     vecCoordMessCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv);
 };
 
 #endif  // for header file

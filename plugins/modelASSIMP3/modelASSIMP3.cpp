@@ -32,7 +32,8 @@ namespace
 #define aisgl_max(x,y) (y>x?y:x)
 
 // ----------------------------------------------------------------------------
-static void get_bounding_box_for_node (const struct aiScene*scene, const struct aiNode* nd,
+static void get_bounding_box_for_node (const struct aiScene*scene,
+                                       const struct aiNode* nd,
                                        aiVector3D* min,
                                        aiVector3D* max,
                                        aiMatrix4x4* trafo
@@ -69,7 +70,8 @@ static void get_bounding_box_for_node (const struct aiScene*scene, const struct 
 
 // ----------------------------------------------------------------------------
 
-static void get_bounding_box (const aiScene*scene, aiVector3D* min, aiVector3D* max)
+static void get_bounding_box (const aiScene*scene, aiVector3D* min,
+                              aiVector3D* max)
 {
   aiMatrix4x4 trafo;
   aiIdentityMatrix4(&trafo);
@@ -116,25 +118,29 @@ static void apply_material(const struct aiMaterial *mtl)
   unsigned int max;
 
   set_float4(c, 0.8f, 0.8f, 0.8f, 1.0f);
-  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &diffuse)) {
+  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE,
+                                      &diffuse)) {
     color4_to_float4(&diffuse, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
-  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &specular)) {
+  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR,
+                                      &specular)) {
     color4_to_float4(&specular, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
 
   set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
-  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT, &ambient)) {
+  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT,
+                                      &ambient)) {
     color4_to_float4(&ambient, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
-  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &emission)) {
+  if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE,
+                                      &emission)) {
     color4_to_float4(&emission, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
@@ -142,7 +148,8 @@ static void apply_material(const struct aiMaterial *mtl)
   max = 1;
   ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
   max = 1;
-  ret2 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH, &strength, &max);
+  ret2 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH,
+                                 &strength, &max);
   if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
   } else {
@@ -153,7 +160,8 @@ static void apply_material(const struct aiMaterial *mtl)
   }
 
   max = 1;
-  if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME, &wireframe, &max)) {
+  if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME,
+      &wireframe, &max)) {
     fill_mode = wireframe ? GL_LINE : GL_FILL;
   }   else {
     fill_mode = GL_FILL;
@@ -161,7 +169,8 @@ static void apply_material(const struct aiMaterial *mtl)
   glPolygonMode(GL_FRONT_AND_BACK, fill_mode);
 
   max = 1;
-  if((AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_TWOSIDED, &two_sided, &max)) && two_sided) {
+  if((AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_TWOSIDED,
+      &two_sided, &max)) && two_sided) {
     glEnable(GL_CULL_FACE);
   } else {
     glDisable(GL_CULL_FACE);
@@ -271,7 +280,8 @@ static void recursive_render (const struct aiScene*scene,
 
   // draw all children
   for (n = 0; n < nd->mNumChildren; ++n) {
-    recursive_render(scene, sc, nd->mChildren[n], use_material, vertices, normals, texcoords, colors, trafo);
+    recursive_render(scene, sc, nd->mChildren[n], use_material, vertices,
+                     normals, texcoords, colors, trafo);
   }
 
   *trafo = prev;
@@ -295,7 +305,8 @@ modelASSIMP3 ::~modelASSIMP3(void)
   destroy();
 }
 
-std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorName)
+std::vector<std::vector<float> > modelASSIMP3 :: getVector(
+  std::string vectorName)
 {
   if ( vectorName == "vertices" ) {
     return m_vertices;
@@ -309,7 +320,8 @@ std::vector<std::vector<float> > modelASSIMP3 :: getVector(std::string vectorNam
   if ( vectorName == "colors" ) {
     return m_colors;
   }
-  verbose(0, "[GEM:modelASSIMP3] there is no \"%s\" vector !",vectorName.c_str());
+  verbose(0, "[GEM:modelASSIMP3] there is no \"%s\" vector !",
+          vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 
@@ -327,11 +339,13 @@ bool modelASSIMP3 :: needRefresh()
   return m_refresh;
 }
 
-bool modelASSIMP3 :: open(const std::string&name, const gem::Properties&requestprops)
+bool modelASSIMP3 :: open(const std::string&name,
+                          const gem::Properties&requestprops)
 {
   destroy();
 
-  m_scene = aiImportFile(name.c_str(), aiProcessPreset_TargetRealtime_Quality);
+  m_scene = aiImportFile(name.c_str(),
+                         aiProcessPreset_TargetRealtime_Quality);
   if(!m_scene) {
     return false;
   }
@@ -389,7 +403,8 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    verbose(1, "[GEM:modelASSIMP3] key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
+    verbose(1, "[GEM:modelASSIMP3] key[%d]=%s ... %d", i, keys[i].c_str(),
+            props.type(keys[i]));
   }
 #endif
 
@@ -479,9 +494,11 @@ bool modelASSIMP3 :: compile(void)
   m_texcoords.clear();
   m_colors.clear();
 
-  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
+  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale),
+                                  aiQuaterniont<float>(), m_offset);
 
-  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial, m_vertices, m_normals, m_texcoords, m_colors, &trafo);
+  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
+                   m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   m_have_texcoords = (m_texcoords.size() > 0);
 
   if (m_textype.empty() && m_have_texcoords) {;}
@@ -496,7 +513,8 @@ bool modelASSIMP3 :: compile(void)
     glEnable(GL_COLOR_MATERIAL);
   }
 
-  bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
+  bool res = !(m_vertices.empty() && m_normals.empty()
+               && m_texcoords.empty() && m_colors.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;

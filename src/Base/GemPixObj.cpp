@@ -83,7 +83,8 @@ void GemPixObj :: render(GemState *state)
   } else {
     orgPixBlock = image;
     cachedPixBlock.newimage = image->newimage;
-    cachedPixBlock.newfilm = image->newfilm; //added for newfilm copy from cache cgc 6-21-03
+    cachedPixBlock.newfilm =
+      image->newfilm; //added for newfilm copy from cache cgc 6-21-03
     image->image.copy2ImageStruct(&cachedPixBlock.image);
     image = &cachedPixBlock;
     if (m_processOnOff) {

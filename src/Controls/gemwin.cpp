@@ -303,7 +303,8 @@ void gemwin :: ambientMess(float red, float green, float blue, float alpha)
 // specularMess
 //
 /////////////////////////////////////////////////////////
-void gemwin :: specularMess(float red, float green, float blue, float alpha)
+void gemwin :: specularMess(float red, float green, float blue,
+                            float alpha)
 {
   GemMan::m_mat_specular[0] = red;
   GemMan::m_mat_specular[1] = green;
@@ -356,7 +357,8 @@ void gemwin :: fogRangeMess(float start, float end)
 // fogColorMess
 //
 /////////////////////////////////////////////////////////
-void gemwin :: fogColorMess(float red, float green, float blue, float alpha)
+void gemwin :: fogColorMess(float red, float green, float blue,
+                            float alpha)
 {
   GemMan::m_fogColor[0] = red;
   GemMan::m_fogColor[1] = green;
@@ -455,13 +457,17 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "float", intMess, int);
   CPPEXTERN_MSG0(classPtr, "render", renderMess);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::titleMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::titleMessCallback),
                   gensym("title"), A_DEFSYM,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::createMessCallback),
                   gensym("create"), A_DEFSYM,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
                   gensym("createStereo"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
                   gensym("createstereo"), A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "buffer", bufferMess, int);
@@ -472,23 +478,30 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "dimen", dimensionsMess, int, int);
   CPPEXTERN_MSG2(classPtr, "offset", offsetMess, int, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::colorMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::colorMessCallback),
                   gensym("color"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "clearmask", clearmaskMess, float);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::perspectiveMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::perspectiveMessCallback),
                   gensym("perspec"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::viewMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::viewMessCallback),
                   gensym("view"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::fogMessCallback),
                   gensym("fog"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::fogColorMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::fogColorMessCallback),
                   gensym("fogcolor"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "fogmode", fogModeMess, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::ambientMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::ambientMessCallback),
                   gensym("ambient"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::specularMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::specularMessCallback),
                   gensym("specular"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "shininess", shininessMess, float);
 
@@ -496,33 +509,47 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "blur", blurMess, float);
 
   // just call GemMan directly
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::resetMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::resetMessCallback),
                   gensym("reset"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::destroyMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::destroyMessCallback),
                   gensym("destroy"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::printMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::printMessCallback),
                   gensym("print"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::profileMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::profileMessCallback),
                   gensym("profile"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::lightingMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::lightingMessCallback),
                   gensym("lighting"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoMessCallback),
                   gensym("stereo"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
                   gensym("stereoSep"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
                   gensym("stereoFoc"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoSepMessCallback),
                   gensym("stereosep"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoFocMessCallback),
                   gensym("stereofoc"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
                   gensym("stereoLine"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::stereoLineMessCallback),
                   gensym("stereoline"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::borderMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::borderMessCallback),
                   gensym("border"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&gemwin::frameMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&gemwin::frameMessCallback),
                   gensym("frame"), A_FLOAT, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "fps", fpsMess);
@@ -540,20 +567,23 @@ void gemwin :: lightingMessCallback(void *, t_float state)
 {
   GemMan::lightingOnOff(static_cast<int>(state));
 }
-void gemwin :: fogMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void gemwin :: fogMessCallback(void *data, t_symbol *, int argc,
+                               t_atom *argv)
 {
   switch (argc) {
   case (1):
     GetMyClass(data)->fogDensityMess(atom_getfloat(&argv[0]));
     break;
   case (2):
-    GetMyClass(data)->fogRangeMess(atom_getfloat(&argv[0]),atom_getfloat(&argv[1]));
+    GetMyClass(data)->fogRangeMess(atom_getfloat(&argv[0]),
+                                   atom_getfloat(&argv[1]));
     break;
   default:
     GetMyClass(data)->error("fog message needs 1 or 2 arguments");
   }
 }
-void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
+void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc,
+                                    t_atom*argv)
 {
   float red, green, blue, alpha=1.f;
   switch(argc) {
@@ -563,7 +593,9 @@ void gemwin :: fogColorMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->fogColorMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
+    GetMyClass(data)->fogColorMess(static_cast<float>(red),
+                                   static_cast<float>(green), static_cast<float>(blue),
+                                   static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"fogcolor\" expects 3 or 4 values");
@@ -607,7 +639,8 @@ void gemwin :: frameMessCallback(void *, t_float rate)
 {
   GemMan::frameRate(static_cast<float>(rate));
 }
-void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv)
 {
   if (argc != 6) {
     GetMyClass(data)->error("perspec message needs 6 arguments");
@@ -620,7 +653,8 @@ void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc, t_atom 
   GemMan::m_perspect[4] = atom_getfloat(&argv[4]);      // front
   GemMan::m_perspect[5] = atom_getfloat(&argv[5]);      // back
 }
-void gemwin :: viewMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void gemwin :: viewMessCallback(void *data, t_symbol *, int argc,
+                                t_atom *argv)
 {
   const float DEG2RAD = 0.01745329251994f;
   float azimuth = 0.f;
@@ -685,10 +719,12 @@ void gemwin :: createMessCallback(void *data, t_symbol* disp)
 }
 void gemwin :: createStereoMessCallback(void *data)
 {
-  GetMyClass(data)->error("'createStereo' is deprecated and does not work any more");
+  GetMyClass(
+    data)->error("'createStereo' is deprecated and does not work any more");
   GetMyClass(data)->error("use 'stereo 1' + 'create' instead");
 }
-void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc,
+                                 t_atom*argv)
 {
   float red, green, blue, alpha=0.f;
   switch(argc) {
@@ -698,13 +734,16 @@ void gemwin :: colorMessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->colorMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
+    GetMyClass(data)->colorMess(static_cast<float>(red),
+                                static_cast<float>(green), static_cast<float>(blue),
+                                static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"color\" expects 3 or 4 values");
   }
 }
-void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
+void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc,
+                                   t_atom*argv)
 {
   float red, green, blue, alpha=1.f;
   switch(argc) {
@@ -714,13 +753,16 @@ void gemwin :: ambientMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->ambientMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
+    GetMyClass(data)->ambientMess(static_cast<float>(red),
+                                  static_cast<float>(green), static_cast<float>(blue),
+                                  static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"ambient\" expects 3 or 4 values");
   }
 }
-void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv)
+void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc,
+                                    t_atom*argv)
 {
   float red, green, blue, alpha=1.f;
   switch(argc) {
@@ -730,7 +772,9 @@ void gemwin :: specularMessCallback(void *data, t_symbol*s,int argc, t_atom*argv
     red=  atom_getfloat(argv);
     green=atom_getfloat(argv+1);
     blue= atom_getfloat(argv+2);
-    GetMyClass(data)->specularMess(static_cast<float>(red), static_cast<float>(green), static_cast<float>(blue), static_cast<float>(alpha));
+    GetMyClass(data)->specularMess(static_cast<float>(red),
+                                   static_cast<float>(green), static_cast<float>(blue),
+                                   static_cast<float>(alpha));
     break;
   default:
     GetMyClass(data)->error("\"specular\" expects 3 or 4 values");

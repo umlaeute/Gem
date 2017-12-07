@@ -52,7 +52,8 @@ private:
 
 namespace gem
 {
-GEM_EXTERN void catchGemException(const char*name=NULL, const t_object*obj=NULL);
+GEM_EXTERN void catchGemException(const char*name=NULL,
+                                  const t_object*obj=NULL);
 };
 
 

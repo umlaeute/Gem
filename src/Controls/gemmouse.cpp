@@ -148,7 +148,8 @@ void gemmouse :: mouseMotionCallback(int x, int y, void *data)
 {
   (reinterpret_cast<gemmouse*>(data))->mouseMotion(x, y);
 }
-void gemmouse :: mouseButtonCallback(int which, int state, int x, int y, void *data)
+void gemmouse :: mouseButtonCallback(int which, int state, int x, int y,
+                                     void *data)
 {
   (reinterpret_cast<gemmouse*>(data))->mouseButton(which, state, x, y);
 }

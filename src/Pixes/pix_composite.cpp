@@ -42,7 +42,8 @@ pix_composite :: ~pix_composite()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
+void pix_composite :: processRGBA_RGBA(imageStruct &image,
+                                       imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
 
@@ -75,7 +76,8 @@ void pix_composite :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
     dst += 4;
   }
 }
-void pix_composite :: processRGBA_Gray(imageStruct &image, imageStruct &right)
+void pix_composite :: processRGBA_Gray(imageStruct &image,
+                                       imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
 
@@ -110,7 +112,8 @@ void pix_composite :: processRGBA_Gray(imageStruct &image, imageStruct &right)
 }
 
 #ifdef __MMX__
-void pix_composite :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+void pix_composite :: processRGBA_MMX(imageStruct &image,
+                                      imageStruct &right)
 {
   int datasize = image.xsize * image.ysize * image.csize;
   datasize=datasize/sizeof(__m64)+(datasize%sizeof(__m64)!=0);

@@ -33,9 +33,12 @@ pix_duotone :: pix_duotone()
   m_color2[0]=m_color2[1]=m_color2[2]=000;
   m_thresh[0]=m_thresh[1]=m_thresh[2]=127;
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),gensym("thresh"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("thresh"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("color1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("color2"));
 }
 
 /////////////////////////////////////////////////////////
@@ -55,7 +58,8 @@ void pix_duotone :: processRGBAImage(imageStruct &image)
   unsigned char *pixels = image.data;
 
   while(datasize--) {
-    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])) {
+    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1])
+        && (pixels[chBlue] > m_thresh[2])) {
       pixels[chRed]   = m_color1[0];
       pixels[chGreen] = m_color1[1];
       pixels[chBlue]  = m_color1[2];
@@ -78,7 +82,8 @@ void pix_duotone :: processRGBImage(imageStruct &image)
   unsigned char *pixels = image.data;
 
   while(datasize--) {
-    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1]) && (pixels[chBlue] > m_thresh[2])) {
+    if ((pixels[chRed] > m_thresh[0]) && (pixels[chGreen] > m_thresh[1])
+        && (pixels[chBlue] > m_thresh[2])) {
       pixels[chRed]   = m_color1[0];
       pixels[chGreen] = m_color1[1];
       pixels[chBlue]  = m_color1[2];
@@ -121,7 +126,8 @@ void pix_duotone :: processYUVImage(imageStruct &image)
 
   for (h=0; h<image.ysize; h++) {
     for(w=0; w<image.xsize/2; w++) {
-      if ((image.data[src] > m_thresh[1]) && (image.data[src+1] > m_thresh[0]) && (image.data[src+2] > m_thresh[2])) {
+      if ((image.data[src] > m_thresh[1]) && (image.data[src+1] > m_thresh[0])
+          && (image.data[src+2] > m_thresh[2])) {
         image.data[src]   = m_color1[1];
         image.data[src+1] = m_color1[0];
         image.data[src+2] = m_color1[2];
@@ -144,21 +150,26 @@ void pix_duotone :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_duotone :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color1MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_duotone::color1MessCallback),
                   gensym("color1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::color2MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_duotone::color2MessCallback),
                   gensym("color2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_duotone::threshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_duotone::threshMessCallback),
                   gensym("thresh"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
 }
-void pix_duotone :: color1MessCallback(void *data, t_float value1, t_float value2, t_float value3)
+void pix_duotone :: color1MessCallback(void *data, t_float value1,
+                                       t_float value2, t_float value3)
 {
   GetMyClass(data)->m_color1[0]=(unsigned char)(value1*255);
   GetMyClass(data)->m_color1[1]=(unsigned char)(value2*255);
   GetMyClass(data)->m_color1[2]=(unsigned char)(value3*255);
   GetMyClass(data)->setPixModified();
 }
-void pix_duotone :: color2MessCallback(void *data, t_float value1, t_float value2, t_float value3)
+void pix_duotone :: color2MessCallback(void *data, t_float value1,
+                                       t_float value2, t_float value3)
 {
   GetMyClass(data)->m_color2[0]=(unsigned char)(value1*255);
   GetMyClass(data)->m_color2[1]=(unsigned char)(value2*255);
@@ -166,7 +177,8 @@ void pix_duotone :: color2MessCallback(void *data, t_float value1, t_float value
   GetMyClass(data)->setPixModified();
 }
 
-void pix_duotone :: threshMessCallback(void *data, t_float value1, t_float value2, t_float value3)
+void pix_duotone :: threshMessCallback(void *data, t_float value1,
+                                       t_float value2, t_float value3)
 {
   GetMyClass(data)->m_thresh[0]=(unsigned char)(value1*255);
   GetMyClass(data)->m_thresh[1]=(unsigned char)(value2*255);

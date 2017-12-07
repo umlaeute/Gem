@@ -23,7 +23,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglAreTexturesResident );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglAreTexturesResident :: GEMglAreTexturesResident    (int argc, t_atom*argv)
+GEMglAreTexturesResident :: GEMglAreTexturesResident    (int argc,
+    t_atom*argv)
 {
   len=32;
   textures  =new GLuint   [len];
@@ -31,7 +32,8 @@ GEMglAreTexturesResident :: GEMglAreTexturesResident    (int argc, t_atom*argv)
   m_buffer  =new t_atom   [len];
   texturesMess(argc, argv);
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("textures"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+                      gensym("textures"));
   m_out1 = outlet_new(this->x_obj, 0);
   m_out2 = outlet_new(this->x_obj, 0);
 }
@@ -96,9 +98,13 @@ void GEMglAreTexturesResident :: texturesMess (int argc, t_atom*argv)
 
 void GEMglAreTexturesResident :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglAreTexturesResident::texturesMessCallback),         gensym("textures"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>
+                  (&GEMglAreTexturesResident::texturesMessCallback),
+                  gensym("textures"), A_GIMME, A_NULL);
 }
-void GEMglAreTexturesResident :: texturesMessCallback (void* data, t_symbol*,int argc, t_atom*argv)
+void GEMglAreTexturesResident :: texturesMessCallback (void* data,
+    t_symbol*,int argc, t_atom*argv)
 {
   GetMyClass(data)->texturesMess (argc,argv);
 }

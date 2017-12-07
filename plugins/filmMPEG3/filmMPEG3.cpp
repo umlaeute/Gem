@@ -76,7 +76,8 @@ void filmMPEG3 :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmMPEG3 :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmMPEG3 :: open(const std::string&filename,
+                       const gem::Properties&wantProps)
 {
   char*cfilename=const_cast<char*>(filename.c_str());
   if (mpeg3_check_sig(cfilename)) { /* ok, this is mpeg(3) */
@@ -88,11 +89,15 @@ bool filmMPEG3 :: open(const std::string&filename, const gem::Properties&wantPro
     mpeg_file= mpeg3_open(cfilename);
 #endif
     if(!mpeg_file) {
-      verbose(0, "[GEM:filmMPEG3] this file %s does not seem to hold any video data", filename.c_str());
+      verbose(0,
+              "[GEM:filmMPEG3] this file %s does not seem to hold any video data",
+              filename.c_str());
       goto unsupported;
     }
     if (!mpeg3_has_video(mpeg_file)) {
-      verbose(0, "[GEM:filmMPEG3] this file %s does not seem to hold any video data", filename.c_str());
+      verbose(0,
+              "[GEM:filmMPEG3] this file %s does not seem to hold any video data",
+              filename.c_str());
       goto unsupported;
     }
     m_numTracks = mpeg3_total_vstreams(mpeg_file);
@@ -176,7 +181,8 @@ pixBlock* filmMPEG3 :: getFrame(void)
       error("[GEM:filmMPEG3]: could not read yuv-frame ! %d", m_curFrame);
       return 0;
     }
-    m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u, (unsigned char*)v);
+    m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u,
+                           (unsigned char*)v);
     m_image.image.upsidedown=true;
   }
   if(m_newfilm) {

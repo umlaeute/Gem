@@ -68,13 +68,20 @@ pix_kaleidoscope :: pix_kaleidoscope() :
   m_inOAngle(0), m_inOCtr(0), m_inRlp(0),
   m_inSap(0)
 {
-  m_inDiv=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("div"));
-  m_inSAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("sourceAngle"));
-  m_inSCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("sourceCtr"));
-  m_inOAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("outputAngle"));
-  m_inOCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("outputCtr"));
-  m_inRlp=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("rlp"));
-  m_inSap=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("sap"));
+  m_inDiv=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("div"));
+  m_inSAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                       gensym("sourceAngle"));
+  m_inSCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+                       gensym("sourceCtr"));
+  m_inOAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                       gensym("outputAngle"));
+  m_inOCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+                       gensym("outputCtr"));
+  m_inRlp=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("rlp"));
+  m_inSap=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("sap"));
 }
 
 /////////////////////////////////////////////////////////
@@ -139,7 +146,8 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -592,7 +600,8 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -1045,7 +1054,8 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -1530,7 +1540,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_DeInit()
 void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable()
 {
 
-  SPete_AngleTable_Entry* pTableStart=reinterpret_cast<SPete_AngleTable_Entry*>(Pete_LockHandle(hAngleTable));
+  SPete_AngleTable_Entry* pTableStart=
+    reinterpret_cast<SPete_AngleTable_Entry*>(Pete_LockHandle(hAngleTable));
   if (pTableStart==NULL) {
     return;
   }
@@ -1614,7 +1625,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount)
 
   const int nLinesCount=(nDivisionsInt*2);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -1623,7 +1635,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount)
   SPete_Kaleidoscope_Line* pCurrentLine=pLinesStart;
 
   int nCurrentDivision;
-  for (nCurrentDivision=0; nCurrentDivision<nDivisionsInt; nCurrentDivision+=1) {
+  for (nCurrentDivision=0; nCurrentDivision<nDivisionsInt;
+       nCurrentDivision+=1) {
 
     float StartAngle=
       AnglePreIncrement+(nCurrentDivision*AngleInterval);
@@ -1650,7 +1663,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount)
 
 }
 
-extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2)
+extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,
+    const void* pElem2)
 {
 
   const SPete_Kaleidoscope_Line* pFirstLine;
@@ -1686,7 +1700,9 @@ extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Line* pLinesStart,int nLinesCount,SPete_Kaleidoscope_PartitionData* poutPartitionData)
+void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(
+  SPete_Kaleidoscope_Line* pLinesStart,int nLinesCount,
+  SPete_Kaleidoscope_PartitionData* poutPartitionData)
 {
 
   qsort(reinterpret_cast<void*>(pLinesStart),
@@ -1710,7 +1726,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Lin
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* pTransforms)
+void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(
+  SPete_2dMatrix* pTransforms)
 {
 
   int nDivisionCount=static_cast<int>(m_Divisions);
@@ -1728,19 +1745,22 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* p
   const float OriginY=m_SourceCentreY;
 
   SPete_2dMatrix PanTransform;
-  Pete_2dMatrix_SetToTranslation(-(OriginX*nWidth),-(OriginY*nHeight),&PanTransform);
+  Pete_2dMatrix_SetToTranslation(-(OriginX*nWidth),-(OriginY*nHeight),
+                                 &PanTransform);
 
   const float ScaleNormalX=cos(-DivisionAngle);
   const float ScaleNormalY=sin(-DivisionAngle);
 
   SPete_2dMatrix DirectionalScaleTransform;
-  Pete_2dMatrix_SetToDirectionalScale(ScaleNormalX,ScaleNormalY,-1.0f,&DirectionalScaleTransform);
+  Pete_2dMatrix_SetToDirectionalScale(ScaleNormalX,ScaleNormalY,-1.0f,
+                                      &DirectionalScaleTransform);
 
   SPete_2dMatrix WorldToScreen;
   Pete_2dMatrix_SetToTranslation(HalfWidth,HalfHeight,&WorldToScreen);
 
   int nCurrentDivision;
-  for (nCurrentDivision=0; nCurrentDivision<nDivisionCount; nCurrentDivision+=1) {
+  for (nCurrentDivision=0; nCurrentDivision<nDivisionCount;
+       nCurrentDivision+=1) {
 
     SPete_2dMatrix* pCurrentTransform=&pTransforms[nCurrentDivision];
 
@@ -1758,17 +1778,22 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* p
 
     Pete_2dMatrix_SetToIdentity(pCurrentTransform);
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&ScreenToWorld,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&ScreenToWorld,
+                              pCurrentTransform);
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&RotationTransform,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&RotationTransform,
+                              pCurrentTransform);
 
     if (bIsMirroredDivision) {
-      Pete_2dMatrix_Concatenate(pCurrentTransform,&DirectionalScaleTransform,pCurrentTransform);
+      Pete_2dMatrix_Concatenate(pCurrentTransform,&DirectionalScaleTransform,
+                                pCurrentTransform);
     }
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&PanTransform,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&PanTransform,
+                              pCurrentTransform);
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&WorldToScreen,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&WorldToScreen,
+                              pCurrentTransform);
 
   }
 
@@ -1861,7 +1886,8 @@ inline int pix_kaleidoscope :: GetMirrored(int inValue,const int nMax)
   return nOutValue;
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatrix* poutResult)
+void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,
+    SPete_2dMatrix* poutResult)
 {
 
   const float CosRotation=cos(Rotation);
@@ -1880,7 +1906,8 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatr
   poutResult->m[2][2]=1.0f;
 
 }
-void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult)
+void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix*
+    pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult)
 {
 
   SPete_2dMatrix TempResult;
@@ -1903,7 +1930,8 @@ void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPet
   *poutResult=TempResult;
 
 }
-void pix_kaleidoscope :: Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix)
+void pix_kaleidoscope :: Pete_2dMatrix_SetToIdentity(
+  SPete_2dMatrix* pMatrix)
 {
 
   pMatrix->m[0][0]=1.0f;
@@ -1920,7 +1948,8 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix)
 
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_SetToDirectionalScale(float NormalX,float NormalY,float Scale,SPete_2dMatrix* poutResult)
+void pix_kaleidoscope :: Pete_2dMatrix_SetToDirectionalScale(float NormalX,
+    float NormalY,float Scale,SPete_2dMatrix* poutResult)
 {
 
   const float ScaleMinusOne=(Scale-1.0f);
@@ -2034,7 +2063,8 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render()
   }
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,float TranslationY,SPete_2dMatrix* poutResult)
+void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,
+    float TranslationY,SPete_2dMatrix* poutResult)
 {
 
   poutResult->m[0][0]=1.0f;
@@ -2051,7 +2081,9 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,float
 
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,SPete_2dVector* poutResult)
+void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(
+  SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,
+  SPete_2dVector* poutResult)
 {
 
   SPete_2dVector Result;
@@ -2076,23 +2108,32 @@ void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector
 /////////////////////////////////////////////////////////
 void pix_kaleidoscope :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceCtrCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sourceCtrCallback),
                   gensym("sourceCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputCtrCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::outputCtrCallback),
                   gensym("outputCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngCallback),
                   gensym("outputAng"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngCallback),
                   gensym("sourceAng"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngleCallback),
                   gensym("outputAngle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngleCallback),
                   gensym("sourceAngle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::divCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::divCallback),
                   gensym("div"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sapCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sapCallback),
                   gensym("sap"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::rlpCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::rlpCallback),
                   gensym("rlp"), A_DEFFLOAT, A_NULL);
 }
 void pix_kaleidoscope :: divCallback(void *data, t_float m_Divisions)
@@ -2101,46 +2142,56 @@ void pix_kaleidoscope :: divCallback(void *data, t_float m_Divisions)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: outputAngCallback(void *data, t_float m_OutputAnglePreIncrement)
+void pix_kaleidoscope :: outputAngCallback(void *data,
+    t_float m_OutputAnglePreIncrement)
 {
   GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceAngCallback(void *data, t_float m_SourceAnglePreIncrement)
+void pix_kaleidoscope :: sourceAngCallback(void *data,
+    t_float m_SourceAnglePreIncrement)
 {
   GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: outputAngleCallback(void *data, t_float m_OutputAnglePreIncrement)
+void pix_kaleidoscope :: outputAngleCallback(void *data,
+    t_float m_OutputAnglePreIncrement)
 {
-  GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement*deg2rad);
+  GetMyClass(data)->m_OutputAnglePreIncrement=
+    (m_OutputAnglePreIncrement*deg2rad);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceAngleCallback(void *data, t_float m_SourceAnglePreIncrement)
+void pix_kaleidoscope :: sourceAngleCallback(void *data,
+    t_float m_SourceAnglePreIncrement)
 {
-  GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement*deg2rad);
+  GetMyClass(data)->m_SourceAnglePreIncrement=
+    (m_SourceAnglePreIncrement*deg2rad);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceCtrCallback(void *data, t_float m_SourceCentreX, t_float m_SourceCentreY)
+void pix_kaleidoscope :: sourceCtrCallback(void *data,
+    t_float m_SourceCentreX, t_float m_SourceCentreY)
 {
   GetMyClass(data)->m_SourceCentreX=(m_SourceCentreX);
   GetMyClass(data)->m_SourceCentreY=(m_SourceCentreY);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: outputCtrCallback(void *data, t_float m_OutputCentreX, t_float m_OutputCentreY)
+void pix_kaleidoscope :: outputCtrCallback(void *data,
+    t_float m_OutputCentreX, t_float m_OutputCentreY)
 {
   GetMyClass(data)->m_OutputCentreX=(m_OutputCentreX);
   GetMyClass(data)->m_OutputCentreY=(m_OutputCentreY);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: rlpCallback(void *data, t_float m_ReflectionLineProportion)
+void pix_kaleidoscope :: rlpCallback(void *data,
+                                     t_float m_ReflectionLineProportion)
 {
   GetMyClass(data)->m_ReflectionLineProportion=(m_ReflectionLineProportion);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: sapCallback(void *data, t_float m_SourceAngleProportion)
+void pix_kaleidoscope :: sapCallback(void *data,
+                                     t_float m_SourceAngleProportion)
 {
   GetMyClass(data)->m_SourceAngleProportion=(m_SourceAngleProportion);
   GetMyClass(data)->setPixModified();

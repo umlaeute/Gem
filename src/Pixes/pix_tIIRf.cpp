@@ -15,7 +15,8 @@
 #include "pix_tIIRf.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIRf, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIRf, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -113,7 +114,8 @@ static inline size_t imgSize(const imageStruct*img)
   return (img->xsize*img->ysize*img->csize);
 }
 
-static inline bool imgCompare(const imageStruct&img1, const imageStruct&img2)
+static inline bool imgCompare(const imageStruct&img1,
+                              const imageStruct&img2)
 {
   return ((img1.xsize==img2.xsize) &&
           (img1.ysize==img2.ysize) &&
@@ -150,7 +152,8 @@ void pix_tIIRf ::deallocate(void)
 }
 
 // store the given image in the buffer (doing a conversion to float)
-static void img2buf(imageStruct*img, t_float*fbuffer, const t_float factor=1.)
+static void img2buf(imageStruct*img, t_float*fbuffer,
+                    const t_float factor=1.)
 {
   const t_float f=factor/255.;
   unsigned char*bbuffer=img->data;
@@ -173,14 +176,16 @@ static void buf2img(t_float*fbuffer, imageStruct*img)
   }
 }
 
-static void weightAdd(t_float*src, t_float*dest, const t_float weight, size_t len)
+static void weightAdd(t_float*src, t_float*dest, const t_float weight,
+                      size_t len)
 {
   size_t i;
   for(i=0; i<len; i++) {
     *dest++ += weight* (*src++);
   }
 }
-static void weightSet(t_float*src, t_float*dest, const t_float weight, size_t len)
+static void weightSet(t_float*src, t_float*dest, const t_float weight,
+                      size_t len)
 {
   size_t i;
   for(i=0; i<len; i++) {
@@ -203,7 +208,8 @@ void pix_tIIRf ::set(imageStruct*img)
   }
 }
 
-static inline unsigned int getIndex(unsigned int current, int index, unsigned int size)
+static inline unsigned int getIndex(unsigned int current, int index,
+                                    unsigned int size)
 {
   // adding size to avoid negative numbers
   return (size+current+index)%size;

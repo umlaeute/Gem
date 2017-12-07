@@ -29,7 +29,8 @@ pix_roll :: pix_roll() :
 {
   long size;
 
-  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("roll"));
+  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                        gensym("roll"));
 
   size = 320 * 240 * 4;
   saved = new unsigned char [size];
@@ -52,7 +53,8 @@ pix_roll :: ~pix_roll()
 /////////////////////////////////////////////////////////
 void pix_roll :: processRGBAImage(imageStruct &image)
 {
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  if (m_blurH != image.ysize || m_blurW != image.xsize
+      || m_blurBpp != image.csize) {
     m_blurH    = image.ysize;
     m_blurW    = image.xsize;
     m_blurBpp  = image.csize;
@@ -67,8 +69,10 @@ void pix_roll :: processRGBAImage(imageStruct &image)
     m_vroll+=image.ysize;
     m_vroll%=image.ysize;
     long linelength=image.xsize*image.csize;
-    memcpy(saved, image.data+linelength*m_vroll, linelength*(image.ysize-m_vroll));
-    memcpy(saved+linelength*(image.ysize-m_vroll), image.data, linelength*m_vroll);
+    memcpy(saved, image.data+linelength*m_vroll,
+           linelength*(image.ysize-m_vroll));
+    memcpy(saved+linelength*(image.ysize-m_vroll), image.data,
+           linelength*m_vroll);
   } else {
     m_vroll%=image.xsize;
     m_vroll+=image.xsize;
@@ -110,7 +114,8 @@ void pix_roll :: processRGBAImage(imageStruct &image)
 }
 void pix_roll :: processImage(imageStruct &image)
 {
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  if (m_blurH != image.ysize || m_blurW != image.xsize
+      || m_blurBpp != image.csize) {
     m_blurH    = image.ysize;
     m_blurW    = image.xsize;
     m_blurBpp  = image.csize;
@@ -125,8 +130,10 @@ void pix_roll :: processImage(imageStruct &image)
     m_vroll+=image.ysize;
     m_vroll%=image.ysize;
     long linelength=image.xsize*image.csize;
-    memcpy(saved, image.data+linelength*m_vroll, linelength*(image.ysize-m_vroll));
-    memcpy(saved+linelength*(image.ysize-m_vroll), image.data, linelength*m_vroll);
+    memcpy(saved, image.data+linelength*m_vroll,
+           linelength*(image.ysize-m_vroll));
+    memcpy(saved+linelength*(image.ysize-m_vroll), image.data,
+           linelength*m_vroll);
   } else {
     m_vroll%=image.xsize;
     m_vroll+=image.xsize;
@@ -168,7 +175,8 @@ void pix_roll :: processYUVImage(imageStruct &image)
 {
   long src,dst;
 
-  if (m_blurH != image.ysize || m_blurW != image.xsize || m_blurBpp != image.csize) {
+  if (m_blurH != image.ysize || m_blurW != image.xsize
+      || m_blurBpp != image.csize) {
 
     m_blurH = image.ysize;
     m_blurW = image.xsize;
@@ -215,7 +223,8 @@ void pix_roll :: processYUVImage(imageStruct &image)
 
     for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
 
-      for(int w=m_vroll; w<image.xsize; w++) { //from rollstart to the last column
+      for(int w=m_vroll; w<image.xsize;
+          w++) { //from rollstart to the last column
 
         saved[dst] = image.data[src];
         saved[dst+1] = image.data[src+1];
@@ -231,7 +240,8 @@ void pix_roll :: processYUVImage(imageStruct &image)
     dst=(image.xsize-m_vroll)*2;
     for (int h=0; h<image.ysize; h++) { //fixed...we have to do every row
 
-      for(int w=image.xsize-m_vroll; w<image.xsize; w++) { //from rollstart to the last column
+      for(int w=image.xsize-m_vroll; w<image.xsize;
+          w++) { //from rollstart to the last column
 
         saved[dst] = image.data[src];
         saved[dst+1] = image.data[src+1];
@@ -256,9 +266,11 @@ void pix_roll :: processYUVImage(imageStruct &image)
 void pix_roll :: obj_setupCallback(t_class *classPtr)
 {
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_roll::rollCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_roll::rollCallback),
                   gensym("roll"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_roll::axisCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_roll::axisCallback),
                   gensym("axis"), A_DEFFLOAT, A_NULL);
 }
 

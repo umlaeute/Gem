@@ -78,7 +78,9 @@ public:
   HGLRC context;
 
   static HGLRC sharedContext;
-  Window(gemw32window*parent, HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h) :
+  Window(gemw32window*parent, HINSTANCE hInstance, int buffer,
+         bool fullscreen, bool border, std::string title, int &x, int &y,
+         unsigned int &w, unsigned int &h) :
     win(NULL),
     dc(NULL),
     context(NULL)
@@ -136,7 +138,8 @@ public:
 
 private:
   static std::map<HWND, gemw32window*>s_winmap;
-  void create(HINSTANCE hInstance, int buffer, bool fullscreen, bool border, std::string title, int &x, int &y, unsigned int &w, unsigned int &h)
+  void create(HINSTANCE hInstance, int buffer, bool fullscreen, bool border,
+              std::string title, int &x, int &y, unsigned int &w, unsigned int &h)
   {
     DWORD dwExStyle;
     DWORD style;
@@ -153,17 +156,24 @@ private:
 
       x=y=0;
 
-      memset(&dmScreenSettings,0,sizeof(dmScreenSettings));   // Makes Sure Memory's Cleared
-      dmScreenSettings.dmSize=sizeof(dmScreenSettings);               // Size Of The Devmode Structure
-      dmScreenSettings.dmPelsWidth    = w;                    // Selected Screen Width
-      dmScreenSettings.dmPelsHeight   = h;                    // Selected Screen Height
-      dmScreenSettings.dmBitsPerPel   = 32;                                   // Selected Bits Per Pixel
+      memset(&dmScreenSettings,0,
+             sizeof(dmScreenSettings));   // Makes Sure Memory's Cleared
+      dmScreenSettings.dmSize=sizeof(
+                                dmScreenSettings);               // Size Of The Devmode Structure
+      dmScreenSettings.dmPelsWidth    =
+        w;                    // Selected Screen Width
+      dmScreenSettings.dmPelsHeight   =
+        h;                    // Selected Screen Height
+      dmScreenSettings.dmBitsPerPel   =
+        32;                                   // Selected Bits Per Pixel
       dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
       // Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
-      if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
+      if (ChangeDisplaySettings(&dmScreenSettings,
+                                CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
         dmScreenSettings.dmPelsWidth  = w;
         dmScreenSettings.dmPelsHeight = h;
-        if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
+        if (ChangeDisplaySettings(&dmScreenSettings,
+                                  CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
           ::error("couldn't switch to fullscreen");
           fullscreen=false;
         }
@@ -279,7 +289,8 @@ private:
   //
   /////////////////////////////////////////////////////////
 public:
-  static LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+  static LONG WINAPI MainWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
+                                  LPARAM lParam)
   {
     gemw32window*obj=s_winmap[hWnd];
     if(obj) {
@@ -361,7 +372,8 @@ bool gemw32window:: create(void)
   }
   m_win=NULL;
   try {
-    m_win=new Window(this, hInstance, m_buffer, m_fullscreen>0, m_border, m_title,
+    m_win=new Window(this, hInstance, m_buffer, m_fullscreen>0, m_border,
+                     m_title,
                      x, y, w, h);
   } catch (GemException&x) {
     error("%s", x.what());
@@ -369,8 +381,10 @@ bool gemw32window:: create(void)
   }
   // show and update main window
   if (m_fullscreen) {
-    ShowWindow(m_win->win,SW_SHOW);                             // Show The Window
-    SetForegroundWindow(m_win->win);                            // Slightly Higher Priority
+    ShowWindow(m_win->win,
+               SW_SHOW);                             // Show The Window
+    SetForegroundWindow(
+      m_win->win);                            // Slightly Higher Priority
     SetFocus(m_win->win);
   } else  {
     ShowWindow(m_win->win, SW_SHOWNORMAL);
@@ -439,7 +453,8 @@ void gemw32window::fullscreenMess(int state)
   }
   Window*tmpwin=NULL;
   try {
-    tmpwin=new Window(this, hInstance, m_buffer, m_fullscreen>0, m_border, m_title,
+    tmpwin=new Window(this, hInstance, m_buffer, m_fullscreen>0, m_border,
+                      m_title,
                       x, y,
                       w, h);
   } catch (GemException&x) {
@@ -450,8 +465,10 @@ void gemw32window::fullscreenMess(int state)
     m_win=tmpwin;
     // show and update main window
     if (m_fullscreen) {
-      ShowWindow(m_win->win,SW_SHOW);                             // Show The Window
-      SetForegroundWindow(m_win->win);                            // Slightly Higher Priority
+      ShowWindow(m_win->win,
+                 SW_SHOW);                             // Show The Window
+      SetForegroundWindow(
+        m_win->win);                            // Slightly Higher Priority
       SetFocus(m_win->win);
     } else  {
       ShowWindow(m_win->win, SW_SHOWNORMAL);
@@ -471,14 +488,16 @@ void gemw32window::topmostMess(bool state)
   m_topmost=state;
 
   if(m_win) {
-    SetWindowPos(m_win->win, (state?HWND_TOPMOST:HWND_NOTOPMOST), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+    SetWindowPos(m_win->win, (state?HWND_TOPMOST:HWND_NOTOPMOST), 0, 0, 0, 0,
+                 SWP_NOSIZE | SWP_NOMOVE);
   }
 }
 /////////////////////////////////////////////////////////
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemw32window :: dimensionsMess(unsigned int width, unsigned int height)
+void gemw32window :: dimensionsMess(unsigned int width,
+                                    unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");

@@ -71,7 +71,8 @@ static void initialize_drawtypes(std::map<std::string, GLenum>&drawtypes)
 }
 
 GemShape :: GemShape(t_floatarg size)
-  : m_linewidth(1.0f), m_size((float)size), m_drawType(GL_DEFAULT_GEM), m_blend(0),
+  : m_linewidth(1.0f), m_size((float)size), m_drawType(GL_DEFAULT_GEM),
+    m_blend(0),
     m_inlet(NULL),
     m_texType(0), m_texNum(0),
     m_texCoords(NULL),
@@ -82,7 +83,8 @@ GemShape :: GemShape(t_floatarg size)
   }
 
   // the size inlet
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("ft1"));
 
   initialize_drawtypes(m_drawTypes);
 }
@@ -112,7 +114,8 @@ GemShape :: ~GemShape()
 // SetVertex
 // set up the texture-coordinates
 /////////////////////////////////////////////////////////
-void GemShape :: SetVertex(GemState* state,float x, float y, float z, float tx, float ty,int curCoord)
+void GemShape :: SetVertex(GemState* state,float x, float y, float z,
+                           float tx, float ty,int curCoord)
 {
   TexCoord*texcoords=NULL;
   int numCoords = 0;
@@ -224,7 +227,8 @@ void GemShape :: blendMess(float blend)
 
 void GemShape :: render(GemState *state)
 {
-  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES) {
+  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP
+      || m_drawType == GL_LINES) {
     glLineWidth(m_linewidth);
   }
 
@@ -253,7 +257,8 @@ void GemShape :: render(GemState *state)
     glDisable(GL_BLEND);
   }
 
-  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP || m_drawType == GL_LINES) {
+  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP
+      || m_drawType == GL_LINES) {
     glLineWidth(1.0);
   }
 }

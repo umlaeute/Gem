@@ -32,9 +32,12 @@ pix_offset :: pix_offset()
   : Y(0), U(0), V(0),
     m_saturate(true)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_offset"));
-  m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = m_offset[chAlpha] = 0;
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vec_offset"));
+  m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = m_offset[chAlpha]
+                                        = 0;
 }
 
 ////////////////////////////////////////////////////////
@@ -52,7 +55,8 @@ void pix_offset :: processRGBAImage(imageStruct &image)
 {
   int datasize =  image.xsize * image.ysize;
   unsigned char *pixels = image.data;
-  unsigned char o_red=m_offset[chRed], o_green=m_offset[chGreen], o_blue=m_offset[chBlue], o_alpha=m_offset[chAlpha];
+  unsigned char o_red=m_offset[chRed], o_green=m_offset[chGreen],
+                o_blue=m_offset[chBlue], o_alpha=m_offset[chAlpha];
 
   if(m_saturate) {
 
@@ -227,7 +231,8 @@ void pix_offset :: processYUVAltivec(imageStruct &image)
 
 
 #ifndef PPC970
-  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( inData+16, prefetchSize, 1 );
   vec_dst( inData+32, prefetchSize, 2 );
@@ -338,7 +343,8 @@ void pix_offset :: floatOffsetMess(float foffset)
 {
   // assumption that the alpha should be one
   m_offset[chAlpha] = 0;
-  m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = static_cast<int>(255*foffset);
+  m_offset[chRed] = m_offset[chGreen] = m_offset[chBlue] = static_cast<int>
+                                        (255*foffset);
   Y = U = V = static_cast<short>(255*foffset);
   setPixModified();
 }
@@ -359,14 +365,18 @@ void pix_offset :: saturateMess(int sat)
 /////////////////////////////////////////////////////////
 void pix_offset :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_offset::vecOffsetMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_offset::vecOffsetMessCallback),
                   gensym("vec_offset"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_offset::floatOffsetMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_offset::floatOffsetMessCallback),
                   gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_offset::saturateMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_offset::saturateMessCallback),
                   gensym("saturate"), A_FLOAT, A_NULL);
 }
-void pix_offset :: vecOffsetMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_offset :: vecOffsetMessCallback(void *data, t_symbol *, int argc,
+    t_atom *argv)
 {
   GetMyClass(data)->vecOffsetMess(argc, argv);
 }

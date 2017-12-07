@@ -49,7 +49,8 @@ void ortho :: render(GemState *)
     int width=1, height=1;
     GemMan::getDimen(&width, &height);
 
-    aspect = (m_compat)?1.f:static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
+    aspect = (m_compat)?1.f:static_cast<GLfloat>(width) / static_cast<GLfloat>
+             (height);
     glPushAttrib(GL_VIEWPORT_BIT);
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);

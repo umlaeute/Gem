@@ -38,9 +38,12 @@ pix_halftone :: pix_halftone() :
   m_Smoothing(128),
   init(0)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("angleDEG"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("smoothN"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("angleDEG"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("smoothN"));
 
 }
 
@@ -80,7 +83,8 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 
   unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
 
-  Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle, 255.0f);
+  Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle,
+                                 255.0f);
 
   unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
 
@@ -90,7 +94,8 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
   SPete_HalfTone_Point Right;
   SPete_HalfTone_Point Top;
   SPete_HalfTone_Point Bottom;
-  Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,&Right,&Top,&Bottom);
+  Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,
+                            &Right,&Top,&Bottom);
 
   //U32 TestColour=0x00ffffff;
   int nCurrentV;
@@ -103,7 +108,8 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
 
     int nLeftU;
     int nRightU;
-    Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,&nRightU);
+    Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,
+                               &nRightU);
 
     int nCurrentU;
     for (nCurrentU=nLeftU; nCurrentU<nRightU; nCurrentU+=nCellSizeFP) {
@@ -160,7 +166,8 @@ void pix_halftone :: processRGBAImage(imageStruct &image)
       nLuminance+=256;
 
       int nCurrentYFP;
-      for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY; nCurrentYFP+=nFPMult) {
+      for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY;
+           nCurrentYFP+=nFPMult) {
         if (nCurrentYFP<0) {
           continue;
         }
@@ -263,7 +270,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
   unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
 
-  Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle, 235.0f);
+  Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle,
+                                 235.0f);
 
   unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
 
@@ -274,7 +282,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
   SPete_HalfTone_Point Right;
   SPete_HalfTone_Point Top;
   SPete_HalfTone_Point Bottom;
-  Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,&Right,&Top,&Bottom);
+  Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,
+                            &Right,&Top,&Bottom);
 
   int nCurrentV;
   for (nCurrentV=Bottom.nY; nCurrentV<Top.nY; nCurrentV+=nCellSizeFP) {
@@ -286,7 +295,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
 
     int nLeftU;
     int nRightU;
-    Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,&nRightU);
+    Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,
+                               &nRightU);
 
     int nCurrentU;
     for (nCurrentU=nLeftU; nCurrentU<nRightU; nCurrentU+=nCellSizeFP) {
@@ -338,7 +348,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
       //nLuminance+=256;
 
       int nCurrentYFP;
-      for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY; nCurrentYFP+=nFPMult) {
+      for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY;
+           nCurrentYFP+=nFPMult) {
         if (nCurrentYFP<0) {
           continue;
         }
@@ -362,8 +373,10 @@ void pix_halftone :: processYUVImage(imageStruct &image)
           nLengthX=1;
         }
 
-        const int nGradientU = (SpanEnd.TexCoords.nX-SpanStart.TexCoords.nX)/nLengthX;
-        const int nGradientV = (SpanEnd.TexCoords.nY-SpanStart.TexCoords.nY)/nLengthX;
+        const int nGradientU = (SpanEnd.TexCoords.nX
+                                -SpanStart.TexCoords.nX)/nLengthX;
+        const int nGradientV = (SpanEnd.TexCoords.nY
+                                -SpanStart.TexCoords.nY)/nLengthX;
 
         int nTexU=SpanStart.TexCoords.nX;
         int nTexV=SpanStart.TexCoords.nY;
@@ -382,7 +395,8 @@ void pix_halftone :: processYUVImage(imageStruct &image)
           int nTexUInt=(nTexU>>nFPShift);
           int nTexVInt=(nTexV>>nFPShift);
 
-          unsigned char* pCurrentDotFunc = pDotFuncTableStart+(nTexVInt*nCellSize)+nTexUInt;
+          unsigned char* pCurrentDotFunc = pDotFuncTableStart+(nTexVInt*nCellSize)
+                                           +nTexUInt;
 
           int nDotFuncResult=*pCurrentDotFunc;
           const int nDiff = nLuminance - nDotFuncResult;
@@ -462,7 +476,8 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 
   unsigned char* pDotFuncTableStart=&g_pDotFuncTable[0];
 
-  Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle, 255.0f);
+  Pete_HalfTone_MakeDotFuncTable(pDotFuncTableStart,nCellSize,nStyle,
+                                 255.0f);
 
   unsigned char* pGreyScaleTableStart=&g_pGreyScaleTable[0];
 
@@ -472,7 +487,8 @@ void pix_halftone :: processGrayImage(imageStruct &image)
   SPete_HalfTone_Point Right;
   SPete_HalfTone_Point Top;
   SPete_HalfTone_Point Bottom;
-  Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,&Right,&Top,&Bottom);
+  Pete_HalfTone_CalcCorners(nWidth,nHeight,AngleRadians,nCellSize,&Left,
+                            &Right,&Top,&Bottom);
 
   int nCurrentV;
   for (nCurrentV=Bottom.nY; nCurrentV<Top.nY; nCurrentV+=nCellSizeFP) {
@@ -484,7 +500,8 @@ void pix_halftone :: processGrayImage(imageStruct &image)
 
     int nLeftU;
     int nRightU;
-    Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,&nRightU);
+    Pete_HalfTone_CalcSpanEnds(&Left,&Right,&Top,&Bottom,nSnappedV,&nLeftU,
+                               &nRightU);
 
     int nCurrentU;
     for (nCurrentU=nLeftU; nCurrentU<nRightU; nCurrentU+=nCellSizeFP) {
@@ -534,7 +551,8 @@ void pix_halftone :: processGrayImage(imageStruct &image)
       nLuminance+=256;
 
       int nCurrentYFP;
-      for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY; nCurrentYFP+=nFPMult) {
+      for (nCurrentYFP=CellBottom.Pos.nY; nCurrentYFP<=CellTop.Pos.nY;
+           nCurrentYFP+=nFPMult) {
         if (nCurrentYFP<0) {
           continue;
         }
@@ -671,7 +689,8 @@ int pix_halftone :: PSDiamondDotFunc(float X,float Y, float scale)
   return static_cast<int>(Result*scale);
 }
 
-void pix_halftone :: Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point* poutPoint,float Angle)
+void pix_halftone :: Rotate(SPete_HalfTone_Point* pinPoint,
+                            SPete_HalfTone_Point* poutPoint,float Angle)
 {
   const int CosFP=static_cast<int>(cos(Angle)*nFPMult);
   const int SinFP=static_cast<int>(sin(Angle)*nFPMult);
@@ -685,7 +704,8 @@ void pix_halftone :: Rotate(SPete_HalfTone_Point* pinPoint,SPete_HalfTone_Point*
     (SinFP*(pinPoint->nX>>nFPShift));
 }
 
-void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTableStart,int nCellSize,int nStyle,
+void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char*
+    pDotFuncTableStart,int nCellSize,int nStyle,
     float scale)
 {
   const int nHalfCellSize=(nCellSize/2);
@@ -729,7 +749,8 @@ void pix_halftone :: Pete_HalfTone_MakeDotFuncTable(unsigned char* pDotFuncTable
   }
 }
 
-void pix_halftone :: Pete_HalfTone_CalcCorners(int cWidth,int nHeight,float AngleRadians,int nCellSize,
+void pix_halftone :: Pete_HalfTone_CalcCorners(int cWidth,int nHeight,
+    float AngleRadians,int nCellSize,
     SPete_HalfTone_Point* poutLeft,
     SPete_HalfTone_Point* poutRight,
     SPete_HalfTone_Point* poutTop,
@@ -788,7 +809,8 @@ void pix_halftone :: GetRasterizationPoints(
   }
 }
 
-void pix_halftone :: HeightSortPoints(SPete_HalfTone_Point* pPoints,int nPointCount)
+void pix_halftone :: HeightSortPoints(SPete_HalfTone_Point* pPoints,
+                                      int nPointCount)
 {
   int nCount;
   for (nCount=0; nCount<nPointCount; nCount+=1) {
@@ -887,7 +909,8 @@ void pix_halftone :: Pete_HalfTone_CalcSpanEnds_Vertex(
 {
 
   Pete_HalfTone_LerpAlongEdges_Vertex(pinBottom,pinLeft,pinTop,nY,poutLeft);
-  Pete_HalfTone_LerpAlongEdges_Vertex(pinBottom,pinRight,pinTop,nY,poutRight);
+  Pete_HalfTone_LerpAlongEdges_Vertex(pinBottom,pinRight,pinTop,nY,
+                                      poutRight);
 }
 
 void pix_halftone :: Pete_HalfTone_LerpAlongEdges_Vertex(
@@ -1025,7 +1048,8 @@ void pix_halftone :: Pete_HalfTone_GetRasterizationVertices(
 //      }
 }
 
-int pix_halftone :: Pete_HalfTone_GetLowestVertex(SPete_HalfTone_Vertex* pVertices,int nVertexCount)
+int pix_halftone :: Pete_HalfTone_GetLowestVertex(SPete_HalfTone_Vertex*
+    pVertices,int nVertexCount)
 {
 
   //    int nCount;
@@ -1054,10 +1078,11 @@ int pix_halftone :: Pete_HalfTone_GetLowestVertex(SPete_HalfTone_Vertex* pVertic
   return nLowestIndex;
 }
 
-void pix_halftone :: Pete_HalfTone_RotateMultipleVertices(SPete_HalfTone_Vertex* pinVertices,
-    SPete_HalfTone_Vertex* poutVertices,
-    int nVertexCount,
-    float Angle)
+void pix_halftone :: Pete_HalfTone_RotateMultipleVertices(
+  SPete_HalfTone_Vertex* pinVertices,
+  SPete_HalfTone_Vertex* poutVertices,
+  int nVertexCount,
+  float Angle)
 {
 
   const int CosFP=static_cast<int>(cos(Angle)*nFPMult);
@@ -1077,7 +1102,8 @@ void pix_halftone :: Pete_HalfTone_RotateMultipleVertices(SPete_HalfTone_Vertex*
   }
 }
 
-void pix_halftone :: Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,int nSmoothingThreshold)
+void pix_halftone :: Pete_HalfTone_MakeGreyScaleTable(
+  unsigned char* pGreyScaleTableStart,int nSmoothingThreshold)
 {
 
   if (nSmoothingThreshold<=0) {
@@ -1105,7 +1131,8 @@ void pix_halftone :: Pete_HalfTone_MakeGreyScaleTable(unsigned char* pGreyScaleT
   init=1;
 }
 
-void pix_halftone :: YUV_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,int nSmoothingThreshold)
+void pix_halftone :: YUV_MakeGreyScaleTable(unsigned char*
+    pGreyScaleTableStart,int nSmoothingThreshold)
 {
 
   if (nSmoothingThreshold<=0) {
@@ -1133,7 +1160,8 @@ void pix_halftone :: YUV_MakeGreyScaleTable(unsigned char* pGreyScaleTableStart,
   init=1;
 }
 
-U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight)
+U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,
+    int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight)
 {
 
   if (nLeftX<0) {
@@ -1194,10 +1222,12 @@ U32 pix_halftone :: Pete_GetImageAreaAverage(int nLeftX,int nTopY,int nDeltaX,in
   const int nBlueAverage=(nBlueTotal/nTotalSamples);
   const int nAlphaAverage=(nAlphaTotal/nTotalSamples);
 
-  return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|(nBlueAverage<<SHIFT_BLUE)|(nAlphaAverage<<SHIFT_ALPHA);
+  return (nRedAverage<<SHIFT_RED)|(nGreenAverage<<SHIFT_GREEN)|
+         (nBlueAverage<<SHIFT_BLUE)|(nAlphaAverage<<SHIFT_ALPHA);
 }
 
-U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight)
+U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,
+    int nDeltaX,int nDeltaY,U32* pImageData,int nImageWidth,int nImageHeight)
 {
 
   if (nLeftX<0) {
@@ -1260,7 +1290,9 @@ U32 pix_halftone :: GetImageAreaAverageLuma(int nLeftX,int nTopY,int nDeltaX,int
   return (nLumaAverage);
 }
 
-unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,int nImageWidth,int nImageHeight)
+unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,
+    int nTopY,int nDeltaX,int nDeltaY,unsigned char* pImageData,
+    int nImageWidth,int nImageHeight)
 {
   /* grey-scale images: jmz */
   if (nLeftX<0) {
@@ -1314,17 +1346,23 @@ unsigned char pix_halftone :: Pete_GetImageAreaAverageGray(int nLeftX,int nTopY,
 /////////////////////////////////////////////////////////
 void pix_halftone :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::sizeCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_halftone::sizeCallback),
                   gensym("size"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::styleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_halftone::styleCallback),
                   gensym("style"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::smoothCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_halftone::smoothCallback),
                   gensym("smooth"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::smoothNCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_halftone::smoothNCallback),
                   gensym("smoothN"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::angleCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_halftone::angleCallback),
                   gensym("angle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_halftone::angleDEGCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_halftone::angleDEGCallback),
                   gensym("angleDEG"), A_DEFFLOAT, A_NULL);
 }
 

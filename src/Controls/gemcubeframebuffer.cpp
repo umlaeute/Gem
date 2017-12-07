@@ -27,7 +27,8 @@
 #include "Gem/State.h"
 #include "Gem/GLStack.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL,
+                            t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -38,7 +39,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL, t_symbo
 //
 /////////////////////////////////////////////////////////
 gemcubeframebuffer :: gemcubeframebuffer(t_symbol *format, t_symbol *type)
-  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
+  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0),
+    m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0), m_face(0),
     m_width(256), m_height(256),
     m_rectangle(false), m_canRectangle(0),
@@ -168,7 +170,8 @@ void gemcubeframebuffer :: render(GemState *state)
     stacks->push(gem::GLStack::PROJECTION);
   }
   glLoadIdentity();
-  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3], m_perspect[4], m_perspect[5]);
+  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3],
+             m_perspect[4], m_perspect[5]);
 
   if(stacks) {
     stacks->push(gem::GLStack::MODELVIEW);
@@ -300,7 +303,8 @@ void gemcubeframebuffer :: printInfo()
 
   verbose(0, "size: %dx%d", m_width, m_height);
   //verbose(0, "rectangle: %d -> %s", m_rectangle, rectangle.c_str());
-  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(), m_format, m_internalformat);
+  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(),
+          m_format, m_internalformat);
   verbose(0, "type: %s [%d]", type.c_str(), m_type);
   verbose(0, "texunit: %d", m_texunit);
 }
@@ -316,7 +320,8 @@ void gemcubeframebuffer :: initFBO()
     destroyFBO();
   }
 
-  m_texTarget = GL_TEXTURE_CUBE_MAP;//(m_rectangle?m_canRectangle:GL_TEXTURE_2D);
+  m_texTarget =
+    GL_TEXTURE_CUBE_MAP;//(m_rectangle?m_canRectangle:GL_TEXTURE_2D);
   /* check supported formats */
   fixFormat(m_wantFormat);
 
@@ -355,7 +360,8 @@ void gemcubeframebuffer :: initFBO()
 
   // Initialize the render buffer.
   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_depthBufferIndex);
-  glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, m_width, m_height);
+  glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24,
+                           m_width, m_height);
 
   // Make sure we have not errors.
   GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT) ;
@@ -487,7 +493,8 @@ void gemcubeframebuffer :: colorMess(t_symbol*s,int argc, t_atom*argv)
   //  setModified();
 }
 
-void gemcubeframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
+void gemcubeframebuffer :: perspectiveMess(t_symbol*s,int argc,
+    t_atom*argv)
 {
   switch(argc) {
   case 6:

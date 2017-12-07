@@ -12,7 +12,8 @@
 
 #include "GEMglMultTransposeMatrixf.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultTransposeMatrixf, t_floatarg, A_DEFFLOAT );
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultTransposeMatrixf, t_floatarg,
+                             A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //
@@ -23,7 +24,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultTransposeMatrixf, t_floatarg, A_DEFFLOAT )
 //
 GEMglMultTransposeMatrixf :: GEMglMultTransposeMatrixf  (t_floatarg arg0)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("matrix"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("matrix"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -56,7 +58,8 @@ void GEMglMultTransposeMatrixf :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglMultTransposeMatrixf :: matrixMess (int argc, t_atom* argv)   // FUN
+void GEMglMultTransposeMatrixf :: matrixMess (int argc,
+    t_atom* argv)   // FUN
 {
   if(argc!=16) {
     error("need 16 (4x4) elements");
@@ -75,11 +78,13 @@ void GEMglMultTransposeMatrixf :: matrixMess (int argc, t_atom* argv)   // FUN
 
 void GEMglMultTransposeMatrixf :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglMultTransposeMatrixf::matrixMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglMultTransposeMatrixf::matrixMessCallback),
                   gensym("matrix"), A_GIMME, A_NULL);
 }
 
-void GEMglMultTransposeMatrixf :: matrixMessCallback (void* data, t_symbol*,int argc, t_atom*argv)
+void GEMglMultTransposeMatrixf :: matrixMessCallback (void* data,
+    t_symbol*,int argc, t_atom*argv)
 {
   GetMyClass(data)->matrixMess ( argc, argv);
 }

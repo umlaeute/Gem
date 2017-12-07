@@ -45,7 +45,8 @@ void pix_deinterlace :: processRGBAImage(imageStruct &image)
   int field2 = image.xsize*4;
   int field3 = image.xsize*8;
 
-  if ((m_savedImage.xsize != image.xsize) || (m_savedImage.ysize != image.ysize)) {
+  if ((m_savedImage.xsize != image.xsize)
+      || (m_savedImage.ysize != image.ysize)) {
     m_savedImage.xsize=image.xsize;
     m_savedImage.ysize=image.ysize;
     m_savedImage.setCsizeByFormat(image.format);
@@ -62,9 +63,11 @@ void pix_deinterlace :: processRGBAImage(imageStruct &image)
 
         pixels[field2+chRed] = (pixels[field1+chRed] + pixels[field3+chRed]) / 2;
 
-        pixels[field2+chGreen] = (pixels[field1+chGreen] + pixels[field3+chGreen]) / 2;
+        pixels[field2+chGreen] = (pixels[field1+chGreen] + pixels[field3
+                                  +chGreen]) / 2;
 
-        pixels[field2+chBlue] = (pixels[field1+chBlue] + pixels[field3+chBlue]) / 2;
+        pixels[field2+chBlue] = (pixels[field1+chBlue] + pixels[field3+chBlue]) /
+                                2;
 
         field1+=4;
         field2+=4;
@@ -100,17 +103,20 @@ void pix_deinterlace :: processRGBAImage(imageStruct &image)
           //      pixels[field2 + chRed] = 255;
           //      pixels[field2 + chGreen] = 255;
           //      pixels[field2 + chBlue] = 255;
-          pixels[field2 + chRed] = (      (pixels[field1 + chRed] * 85 + pixels[field3 + chRed] * 85) +
+          pixels[field2 + chRed] = (      (pixels[field1 + chRed] * 85 +
+                                           pixels[field3 + chRed] * 85) +
                                           (pixels[field1 - 4 + chRed] * 85 + pixels[field3 -4 + chRed] * 85)+
                                           (pixels[field1 + 4 + chRed] * 85 + pixels[field3 + 4 + chRed] * 85)
                                    ) / 512;
 
-          pixels[field2 + chGreen] = ((pixels[field1 + chGreen] * 85 + pixels[field3 + chGreen] * 85) +
+          pixels[field2 + chGreen] = ((pixels[field1 + chGreen] * 85 + pixels[field3
+                                       + chGreen] * 85) +
                                       (pixels[field1 - 4 + chGreen] * 85 + pixels[field3 -4 + chGreen] * 85) +
                                       (pixels[field1 + 4 + chGreen] * 85 + pixels[field3 + 4 + chGreen] * 85)
                                      ) / 512;
 
-          pixels[field2 + chBlue] = (     (pixels[field1 + chBlue] * 85 + pixels[field3 + chBlue] * 85) +
+          pixels[field2 + chBlue] = (     (pixels[field1 + chBlue] * 85 +
+                                           pixels[field3 + chBlue] * 85) +
                                           (pixels[field1 - 4 + chBlue] * 85 + pixels[field3 -4 + chBlue] * 85) +
                                           (pixels[field1 + 4 + chBlue] * 85 + pixels[field3 + 4 + chBlue] * 85)
                                     ) / 512;
@@ -361,8 +367,12 @@ void pix_deinterlace :: processYUVAltivec(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_deinterlace :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_deinterlace::modeMessCallback), gensym("mode"),A_FLOAT,A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_deinterlace::adaptiveMessCallback), gensym("adaptive"),A_FLOAT,A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_deinterlace::modeMessCallback),
+                  gensym("mode"),A_FLOAT,A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_deinterlace::adaptiveMessCallback),
+                  gensym("adaptive"),A_FLOAT,A_NULL);
 }
 
 void pix_deinterlace :: modeMessCallback(void *data,t_float mode)

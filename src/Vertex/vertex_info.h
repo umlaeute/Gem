@@ -55,7 +55,8 @@ protected:
   virtual void    render(GemState *state);
 
 private:
-  static void     vertexMessCallback(void *data, t_float num, t_float counter);
+  static void     vertexMessCallback(void *data, t_float num,
+                                     t_float counter);
 
 };
 

@@ -79,7 +79,8 @@ void pix_convert :: processImage(imageStruct &image)
   default:
     post("no method for this format !!!");
     post("if you know how to convert this format (0x%X) to (0x%X),\n"
-         "please contact the authors of this software", image.format, m_image.format);
+         "please contact the authors of this software", image.format,
+         m_image.format);
     return;
   }
   image.data  =m_image.data;
@@ -94,7 +95,8 @@ void pix_convert :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_convert :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_convert::colorMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_convert::colorMessCallback),
                   gensym("color"), A_SYMBOL, A_NULL);
 }
 void pix_convert :: colorMessCallback(void *data, t_symbol*s)

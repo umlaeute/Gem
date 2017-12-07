@@ -53,7 +53,8 @@ protected:
 
   ///////////
   // do the actual interpolation
-  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts) = 0;
+  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts,
+                          t_float *pnts) = 0;
 
   //////////
   // The number of dimensions

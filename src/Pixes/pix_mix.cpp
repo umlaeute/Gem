@@ -119,7 +119,8 @@ void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right)
       u = ((u + u1)>>8) + 128;
       image.data[src] = (unsigned char)CLAMP(u);
 
-      y1 = ((image.data[src+1] * imageGain) + (right.data[src+1] * rightGain))>>8;
+      y1 = ((image.data[src+1] * imageGain) + (right.data[src+1] * rightGain))
+           >>8;
       image.data[src+1] = (unsigned char)CLAMP(y1);
 
       /*v = (((image.data[src+2] - 128) * imageGain)>>8)+128;
@@ -132,7 +133,8 @@ void pix_mix :: processYUV_YUV(imageStruct &image, imageStruct &right)
 
       image.data[src+2] = (unsigned char)CLAMP(v);
 
-      y2 = ((image.data[src+3] * imageGain) + (right.data[src+3] * rightGain))>>8;
+      y2 = ((image.data[src+3] * imageGain) + (right.data[src+3] * rightGain))
+           >>8;
       image.data[src+3] = (unsigned char)CLAMP(y2);
 
       src += 4;
@@ -217,7 +219,8 @@ void pix_mix :: processYUV_Altivec (imageStruct &image, imageStruct &right)
   } charBuffer;
 
   //vector unsigned char c;
-  register vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage, UVRight, UVTemp, YTemp;
+  register vector signed short gainAdd, hiImage, loImage,hiRight,loRight,
+           YImage, UVImage, UVRight, UVTemp, YTemp;
   register vector unsigned char zero = vec_splat_u8(0);
   //vector signed short szero = vec_splat_s16(0);
   register vector unsigned char c,one;
@@ -429,7 +432,8 @@ void pix_mix :: gainMess (float X, float Y)
 /////////////////////////////////////////////////////////
 void pix_mix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_mix::gainCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_mix::gainCallback),
                   gensym("gain"), A_GIMME, A_NULL);//A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 

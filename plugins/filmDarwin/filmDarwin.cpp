@@ -74,7 +74,8 @@ void filmDarwin :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmDarwin :: open(const std::string&filename,
+                        const gem::Properties&wantProps)
 {
   double d;
   if(wantProps.get("colorspace", d) && d>0) {
@@ -97,7 +98,8 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
     goto unsupported;
   } else {
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
-    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec, NULL);
+    err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec,
+                             NULL);
     if (err) {
       verbose(0, "[GEM:filmDarwin] Unable to find file: %s", filename.c_str());
       goto unsupported;
@@ -106,7 +108,8 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
 
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    verbose(0, "[GEM:filmDarwin] Couldn't open the movie file: %#s (%d)", theFSSpec.name, err);
+    verbose(0, "[GEM:filmDarwin] Couldn't open the movie file: %#s (%d)",
+            theFSSpec.name, err);
     if (refnum) {
       ::CloseMovieFile(refnum);
     }
@@ -131,7 +134,9 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
 
-  verbose(1, "[GEM:filmDarwin] Movie duration = %d timescale = %d timebase = %d",movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
+  verbose(1,
+          "[GEM:filmDarwin] Movie duration = %d timescale = %d timebase = %d",
+          movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
 
   movieTrack = GetMovieIndTrackType(m_movie,
                                     1,
@@ -140,14 +145,17 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
   trackMedia = GetTrackMedia(movieTrack);
   m_numFrames= GetMediaSampleCount(trackMedia);
   if(m_numFrames>0) {
-    m_durationf = static_cast<double>(movieDur)/static_cast<double>(m_numFrames);
-    m_fps=static_cast<double>(m_numFrames)*static_cast<double>(movieScale)/static_cast<double>(movieDur);
+    m_durationf = static_cast<double>(movieDur)/static_cast<double>
+                  (m_numFrames);
+    m_fps=static_cast<double>(m_numFrames)*static_cast<double>
+          (movieScale)/static_cast<double>(movieDur);
   } else {
     m_numFrames=-1;
     m_fps=30.f;
     m_durationf=static_cast<double>(movieScale)/m_fps;
   }
-  verbose(1, "[GEM:filmDarwin] numFrames= %d...%f", (int)m_numFrames, (float)m_durationf);
+  verbose(1, "[GEM:filmDarwin] numFrames= %d...%f", (int)m_numFrames,
+          (float)m_durationf);
 
   // Get the bounds for the movie
   ::GetMovieBox(m_movie, &m_srcRect);
@@ -155,9 +163,12 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
   SetMovieBox(m_movie, &m_srcRect);
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
-  verbose(1, "[GEM:filmDarwin] rect rt:%d lt:%d", m_srcRect.right, m_srcRect.left);
-  verbose(1, "[GEM:filmDarwin] rect top:%d bottom:%d", m_srcRect.top, m_srcRect.bottom);
-  verbose(1, "[GEM:filmDarwin] movie size x:%d y:%d", m_image.image.xsize, m_image.image.ysize);
+  verbose(1, "[GEM:filmDarwin] rect rt:%d lt:%d", m_srcRect.right,
+          m_srcRect.left);
+  verbose(1, "[GEM:filmDarwin] rect top:%d bottom:%d", m_srcRect.top,
+          m_srcRect.bottom);
+  verbose(1, "[GEM:filmDarwin] movie size x:%d y:%d", m_image.image.xsize,
+          m_image.image.ysize);
 
   switch(m_wantedFormat) {
   case 0: // if no other format is requested, use YUV
@@ -174,7 +185,8 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
   }
   m_image.image.setCsizeByFormat();
 
-  m_image.image.data = new unsigned char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize];
+  m_image.image.data = new unsigned
+  char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize];
   m_rowBytes = m_image.image.xsize * m_image.image.csize;
   SetMoviePlayHints(m_movie, hints, hints);
   err = QTNewGWorldFromPtr(     &m_srcGWorld,
@@ -192,7 +204,8 @@ bool filmDarwin :: open(const std::string&filename, const gem::Properties&wantPr
   m_movieTime = 0;
   // *** set the graphics world for displaying the movie ***
   ::SetMovieGWorld(m_movie, m_srcGWorld, GetGWorldDevice(m_srcGWorld));
-  ::MoviesTask(m_movie, 0);     // *** this does the actual drawing into the GWorld ***
+  ::MoviesTask(m_movie,
+               0);     // *** this does the actual drawing into the GWorld ***
   return true;
 
 unsupported:
@@ -250,7 +263,8 @@ pixBlock* filmDarwin :: getFrame(void)
       SetMovieRate(m_movie,X2Fix(0.0));
     }
 
-    MoviesTask(m_movie, 0);     // *** this does the actual drawing into the GWorld ***
+    MoviesTask(m_movie,
+               0);     // *** this does the actual drawing into the GWorld ***
     m_lastFrame=m_curFrame;
 
     return &m_image;
@@ -262,7 +276,8 @@ pixBlock* filmDarwin :: getFrame(void)
     m_curFrame = 0;
     m_movieTime = 0;
   }
-  m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) * m_durationf);
+  m_movieTime = static_cast<long>(static_cast<double>(m_curFrame) *
+                                  m_durationf);
   m_movieTime-=9; //total hack!! subtract an arbitrary amount and have nextinterestingtime find the exact place
 
   //check for -1
@@ -293,7 +308,8 @@ pixBlock* filmDarwin :: getFrame(void)
 
   // set the time for the frame and give time to the movie toolbox
   SetMovieTimeValue(m_movie, m_movieTime);
-  MoviesTask(m_movie, 0);       // *** this does the actual drawing into the GWorld ***
+  MoviesTask(m_movie,
+             0);       // *** this does the actual drawing into the GWorld ***
 
   m_image.newimage=(m_lastFrame != m_curFrame);
   m_lastFrame=m_curFrame;

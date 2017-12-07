@@ -47,9 +47,12 @@ public:
     contextid(makeID())
   {
     /* check the stack-sizes */
-    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    maxStackDepth+GemMan::STACKMODELVIEW);
-    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      maxStackDepth+GemMan::STACKTEXTURE);
-    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   maxStackDepth+GemMan::STACKPROJECTION);
+    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKMODELVIEW);
+    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKTEXTURE);
+    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKPROJECTION);
 
     maxStackDepth[GemMan::STACKCOLOR]=0;
   }
@@ -66,10 +69,14 @@ public:
     contextid(makeID())
   {
     /* check the stack-sizes */
-    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,    maxStackDepth+GemMan::STACKMODELVIEW);
-    glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, maxStackDepth+GemMan::STACKCOLOR);
-    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,      maxStackDepth+GemMan::STACKTEXTURE);
-    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,   maxStackDepth+GemMan::STACKPROJECTION);
+    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKMODELVIEW);
+    glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKCOLOR);
+    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKTEXTURE);
+    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
+                  maxStackDepth+GemMan::STACKPROJECTION);
   }
 
   ~PIMPL(void)
@@ -144,7 +151,8 @@ Context::Context(void)
 
   if (GLEW_OK != err) {
     if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
-      errstring="failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!";
+      errstring=
+        "failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!";
     } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
       errstring="failed to init GLEW: your system only supports openGL-1.0";
     } else {
@@ -211,10 +219,14 @@ Context::~Context(void)
 
 bool Context::push(void)
 {
-  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]= m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
-  GemMan::maxStackDepth[GemMan::STACKCOLOR]=     m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
-  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=   m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
-  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
+  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=
+    m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
+  GemMan::maxStackDepth[GemMan::STACKCOLOR]=
+    m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
+  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=
+    m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
+  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=
+    m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
 
   m_pimpl->s_context=m_pimpl->context;
 #ifdef GemGlewXContext

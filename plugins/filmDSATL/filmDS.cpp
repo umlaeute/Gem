@@ -50,8 +50,10 @@ REGISTER_FILMFACTORY("DirectShow", filmDS);
 
 #include <strsafe.h>
 
-HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin);
-HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond);
+HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir,
+                   IPin **ppPin);
+HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst,
+                           IBaseFilter *pSecond);
 HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) ;
 void filmRemoveGraphFromRot(DWORD pdwRegister);
 /////////////////////////////////////////////////////////
@@ -94,7 +96,8 @@ filmDS :: filmDS(void) :
   CoInitialize(NULL);
 
   // Create the base object of a filter graph
-  RetVal        = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+  RetVal        = CoCreateInstance(CLSID_FilterGraph, NULL,
+                                   CLSCTX_INPROC_SERVER,
                                    IID_IGraphBuilder, (void **)&FilterGraph);
 
   if (RetVal != S_OK || NULL == FilterGraph) {
@@ -103,7 +106,8 @@ filmDS :: filmDS(void) :
   }
 
   // Get the IMediaControl interface for Run, Stop, Pause and keeps control states
-  RetVal        = FilterGraph->QueryInterface(IID_IMediaControl, (void **)&MediaControl);
+  RetVal        = FilterGraph->QueryInterface(IID_IMediaControl,
+                  (void **)&MediaControl);
 
   if (RetVal != S_OK || NULL == MediaControl) {
     throwCtorError("Unable to create MediaControl interface %d", RetVal);
@@ -112,7 +116,8 @@ filmDS :: filmDS(void) :
 
   // Get the IMediaSeeking interface for rewinding video at loop point
   // and set time format to frames
-  RetVal        = FilterGraph->QueryInterface(IID_IMediaSeeking, (void **)&MediaSeeking);
+  RetVal        = FilterGraph->QueryInterface(IID_IMediaSeeking,
+                  (void **)&MediaSeeking);
 
   if (RetVal != S_OK || NULL == MediaSeeking) {
     throwCtorError("Unable to create MediaSeeking interface %d", RetVal);
@@ -120,7 +125,8 @@ filmDS :: filmDS(void) :
   }
 
   // Get the IMediaPosition interface for getting the current position of the clip
-  RetVal        = FilterGraph->QueryInterface(IID_IMediaPosition, (void **)&MediaPosition);
+  RetVal        = FilterGraph->QueryInterface(IID_IMediaPosition,
+                  (void **)&MediaPosition);
 
   if (RetVal != S_OK || NULL == MediaPosition) {
     throwCtorError("Unable to create MediaPosition interface %d", RetVal);
@@ -230,7 +236,8 @@ void filmDS :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmDS :: open(const std::string&filename,
+                    const gem::Properties&wantProps)
 {
   WCHAR                 WideFileName[MAXPDSTRING];
   HRESULT                       RetVal;
@@ -243,14 +250,16 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
   // Convert c-string to Wide string.
   memset(&WideFileName, 0, MAXPDSTRING * 2);
 
-  if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(), filename.length(), WideFileName,
+  if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(),
+                               filename.length(), WideFileName,
                                MAXPDSTRING)) {
     verbose(0, "[GEM:filmDS:legacy]Unable to load %s", filename.c_str());
     return false;
   }
 
   // Add a file source filter to the filter graph.
-  RetVal        = FilterGraph->AddSourceFilter(WideFileName, L"SOURCE", &VideoFilter);
+  RetVal        = FilterGraph->AddSourceFilter(WideFileName, L"SOURCE",
+                  &VideoFilter);
 
   if (RetVal != S_OK || NULL == VideoFilter) {
     verbose(0, "[GEM:filmDS:legacy]Unable to render %s", filename.c_str());
@@ -259,11 +268,13 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
 
   // Create an instance of the sample grabber filter. The filter allows frames to be
   // buffered from a video source.
-  RetVal        = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER,
+  RetVal        = CoCreateInstance(CLSID_SampleGrabber, NULL,
+                                   CLSCTX_INPROC_SERVER,
                                    IID_IBaseFilter, (void**)&SampleFilter);
 
   if (RetVal != S_OK || NULL == SampleFilter) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to create SampleFilter interface %d", RetVal);
+    verbose(0, "[GEM:filmDS:legacy]Unable to create SampleFilter interface %d",
+            RetVal);
     return false;
   }
 
@@ -279,10 +290,12 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
   // SampleGrabber allows frames to be grabbed from the filter. SetBufferSamples(TRUE)
   // tells the SampleGrabber to buffer the frames. SetOneShot(FALSE) tells the
   // SampleGrabber to continuously grab frames.  has GetCurrentBuffer() method
-  RetVal        = SampleFilter->QueryInterface(IID_ISampleGrabber, (void **)&SampleGrabber);
+  RetVal        = SampleFilter->QueryInterface(IID_ISampleGrabber,
+                  (void **)&SampleGrabber);
 
   if (RetVal != S_OK || NULL == SampleGrabber) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to create SampleGrabber interface %d", RetVal);
+    verbose(0,
+            "[GEM:filmDS:legacy]Unable to create SampleGrabber interface %d", RetVal);
     return false;
   }
 
@@ -296,7 +309,8 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
   //MediaType.subtype           = MEDIASUBTYPE_RGB24;
   //MediaType.subtype           = MEDIASUBTYPE_UYVY;
   MediaType.formattype  = GUID_NULL;
-  RetVal                                        = SampleGrabber->SetMediaType(&MediaType);
+  RetVal                                        =
+    SampleGrabber->SetMediaType(&MediaType);
 
   // Set the SampleGrabber to return continuous frames
   RetVal        = SampleGrabber->SetOneShot(FALSE);
@@ -317,11 +331,13 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
 
   // Create the Null Renderer interface. The Null Renderer is used to disable rendering of a
   // video stream to a window.
-  RetVal        = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
+  RetVal        = CoCreateInstance(CLSID_NullRenderer, NULL,
+                                   CLSCTX_INPROC_SERVER,
                                    IID_IBaseFilter, (void**)&NullFilter);
 
   if (RetVal != S_OK || NULL == NullFilter) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to create NullFilter interface %d", RetVal);
+    verbose(0, "[GEM:filmDS:legacy]Unable to create NullFilter interface %d",
+            RetVal);
     return false;
   }
 
@@ -367,7 +383,8 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
     RetVal    = MediaSeeking->SetTimeFormat(&Guid);
 
     if (RetVal != S_OK) {
-      verbose(0, "[GEM:filmDS:legacy]Unable to set video time format %d", RetVal);
+      verbose(0, "[GEM:filmDS:legacy]Unable to set video time format %d",
+              RetVal);
       return false;
     }
   }
@@ -408,7 +425,8 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
   }
 
   // The SampleGrabber will only return video of the the 'FORMAT_VideoInfo' type.
-  if (FORMAT_VideoInfo == MediaType.formattype && MediaType.pbFormat != NULL) {
+  if (FORMAT_VideoInfo == MediaType.formattype
+      && MediaType.pbFormat != NULL) {
     // Format returned is specific to the formattype.
     VIDEOINFOHEADER   *VideoInfo      = (VIDEOINFOHEADER *)MediaType.pbFormat;
 
@@ -420,7 +438,8 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
   }
 
   else {
-    verbose(0, "[GEM:filmDS:legacy]Invalid media type returned %s", filename.c_str());
+    verbose(0, "[GEM:filmDS:legacy]Invalid media type returned %s",
+            filename.c_str());
     return false;
   }
 
@@ -433,7 +452,9 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
     m_frame           = new BYTE[m_xsize * m_ysize * m_csize];
 
     if (NULL == m_frame) {
-      verbose(0, "[GEM:filmDS:legacy]Unable to allocate memory for the video buffer %s", filename.c_str());
+      verbose(0,
+              "[GEM:filmDS:legacy]Unable to allocate memory for the video buffer %s",
+              filename.c_str());
       return false;
     }
   }
@@ -444,7 +465,8 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
   IBaseFilter   *DVFilter;
 
   // If DV video is used, set the quality to 720 x 480.
-  RetVal        = FilterGraph->FindFilterByName(L"DV Video Decoder", &DVFilter);
+  RetVal        = FilterGraph->FindFilterByName(L"DV Video Decoder",
+                  &DVFilter);
 
   if (S_OK == RetVal && DVFilter != NULL) {
     IIPDVDec  *IPDVDec;
@@ -514,7 +536,9 @@ bool filmDS :: open(const std::string&filename, const gem::Properties&wantProps)
 
 #ifdef REGISTER_FILTERGRAPH
   if (FAILED(RetVal = filmAddGraphToRot(FilterGraph, &m_GraphRegister))) {
-    verbose(0, "[GEM:filmDS:legacy]failed to register filter graph with ROT!  hr=0x%X", RetVal);
+    verbose(0,
+            "[GEM:filmDS:legacy]failed to register filter graph with ROT!  hr=0x%X",
+            RetVal);
     m_GraphRegister = 0;
   }
 #endif
@@ -586,7 +610,8 @@ pixBlock* filmDS :: getFrame()
 
       // If the video image has changed, copy it to the pixBlock buffer.
       if (TRUE == m_image.newimage) {
-        RetVal        = SampleGrabber->GetCurrentBuffer(&frameSize, (long *)m_frame);
+        RetVal        = SampleGrabber->GetCurrentBuffer(&frameSize,
+                        (long *)m_frame);
 
         if (RetVal != S_OK) {
           m_image.image.data        = NULL;
@@ -659,7 +684,8 @@ film::errCode filmDS :: changeImage(int imgNum, int trackNum)
 
 ///////////////////////////////
 // Properties
-bool filmDS::enumProperties(gem::Properties&readable, gem::Properties&writeable)
+bool filmDS::enumProperties(gem::Properties&readable,
+                            gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();
@@ -719,7 +745,8 @@ void filmDS::getProperties(gem::Properties&props)
 
 
 
-HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
+HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir,
+                   IPin **ppPin)
 {
   IEnumPins  *pEnum;
   IPin       *pPin;
@@ -761,7 +788,8 @@ HRESULT filmGetPin(IBaseFilter *pFilter, PIN_DIRECTION PinDir, IPin **ppPin)
   return        E_FAIL;
 }
 
-HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst, IBaseFilter *pSecond)
+HRESULT filmConnectFilters(IGraphBuilder *pGraph, IBaseFilter *pFirst,
+                           IBaseFilter *pSecond)
 {
   IPin  *pOut   = NULL;
   IPin  *pIn    = NULL;
@@ -819,7 +847,8 @@ HRESULT filmAddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister)
   }
 
   WCHAR wsz[128];
-  StringCchPrintfW(wsz, 128, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph,
+  StringCchPrintfW(wsz, 128, L"FilterGraph %08x pid %08x",
+                   (DWORD_PTR)pUnkGraph,
                    GetCurrentProcessId());
 
   HRESULT hr = CreateItemMoniker(L"!", wsz, &pMoniker);

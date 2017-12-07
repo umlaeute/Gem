@@ -52,7 +52,8 @@ pix_texture :: pix_texture()
     m_repeat(GL_REPEAT),
     m_didTexture(false), m_rebuildList(false),
     m_textureObj(0),
-    m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.), m_extType(GL_TEXTURE_2D),
+    m_extTextureObj(0), m_extWidth(1.), m_extHeight(1.),
+    m_extType(GL_TEXTURE_2D),
     m_extUpsidedown(false),
     m_realTextureObj(0),
     m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
@@ -88,7 +89,8 @@ pix_texture :: pix_texture()
   gem::Settings::get("texture.pbo", m_numPbo);
 
   // create an inlet to receive external texture IDs
-  m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("extTexture"));
+  m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("extTexture"));
 
   // create an outlet to send texture ID
   m_outTexID = outlet_new(this->x_obj, &s_float);
@@ -119,7 +121,8 @@ void pix_texture :: setUpTextureState()
 {
   GLuint doRepeat=m_repeat;
   if (m_rectangle && m_canRectangle) {
-    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT) {
+    if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB
+         || m_textureType == GL_TEXTURE_RECTANGLE_EXT) {
       glTexParameterf(m_textureType, GL_TEXTURE_PRIORITY, 0.0f);
       // JMZ: disabled the following, as rectangle-textures are clamped anyhow
       // JMZ: and normalized ones, lose their setting
@@ -144,7 +147,8 @@ void pix_texture :: setUpTextureState()
     glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
   }
 
-  setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap));
+  setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR
+                || (m_wantMipmap && m_canMipmap));
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_S, doRepeat);
   glTexParameterf(m_textureType, GL_TEXTURE_WRAP_T, doRepeat);
 }
@@ -166,7 +170,8 @@ void pix_texture :: setTexFilters(bool mipmap)
 // use this when loading images...
 //
 /////////////////////////////////////////////////////////
-inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio, GLboolean upsidedown=false)
+inline void setTexCoords(TexCoord *coords, float xRatio, float yRatio,
+                         GLboolean upsidedown=false)
 {
   if(!upsidedown) {
     coords[0].s = 0.f;
@@ -249,7 +254,8 @@ void pix_texture :: popTexCoords(GemState*state)
 }
 
 
-void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown)
+void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio,
+                                   GLfloat yRatio, GLint texType, GLboolean upsidedown)
 {
   // send textureID to outlet
   if(texobj) {
@@ -340,7 +346,8 @@ void pix_texture :: render(GemState *state)
 
     normalized = ((m_imagebuf.xsize==x_2) && (m_imagebuf.ysize==y_2));
 
-    debug_post("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize, x_2, m_imagebuf.ysize, y_2);
+    debug_post("normalized=%d\t%d - %d\t%d - %d", normalized, m_imagebuf.xsize,
+               x_2, m_imagebuf.ysize, y_2);
 
     switch(do_rectangle) {
     case 2:
@@ -399,7 +406,8 @@ void pix_texture :: render(GemState *state)
      * this seems to be a part of the texture_range extension, so we check for that!
      */
     if(GLEW_APPLE_texture_range) {
-      glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+      glTexParameteri( m_textureType, GL_TEXTURE_STORAGE_HINT_APPLE,
+                       GL_STORAGE_SHARED_APPLE );
     }
     // GL_STORAGE_SHARED_APPLE -  AGP texture path
     // GL_STORAGE_CACHED_APPLE - VRAM texture path
@@ -567,13 +575,18 @@ void pix_texture :: render(GemState *state)
         m_hasMipmap = false;
 
         glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pbo[nextIndex]);
-        glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 0, GL_STREAM_DRAW_ARB);
+        glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB,
+                        m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize, 0,
+                        GL_STREAM_DRAW_ARB);
 
-        GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+        GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB,
+                                                GL_WRITE_ONLY_ARB);
         if(ptr) {
           // update data off the mapped buffer
-          memcpy(ptr, m_imagebuf.data,  m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
-          glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
+          memcpy(ptr, m_imagebuf.data,
+                 m_imagebuf.xsize * m_imagebuf.ysize * m_imagebuf.csize);
+          glUnmapBufferARB(
+            GL_PIXEL_UNPACK_BUFFER_ARB); // release pointer to mapping buffer
         }
 
         /* unbind the current buffer */
@@ -596,7 +609,8 @@ void pix_texture :: render(GemState *state)
     glGenerateMipmap(m_textureType);
     m_hasMipmap = true;
   }
-  setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && canMipmap));
+  setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR
+                || (m_wantMipmap && canMipmap));
 
   setTexCoords(m_coords, m_xRatio, m_yRatio, m_upsidedown);
 
@@ -613,7 +627,8 @@ void pix_texture :: render(GemState *state)
   // (this is important for things like [pix_coordinate]
 
   // we don't use switch/case as _ARB and _EXT might be the same...
-  if(m_textureType==GL_TEXTURE_RECTANGLE_ARB || m_textureType==GL_TEXTURE_RECTANGLE_EXT) {
+  if(m_textureType==GL_TEXTURE_RECTANGLE_ARB
+      || m_textureType==GL_TEXTURE_RECTANGLE_EXT) {
     state->set(GemState::_GL_TEX_TYPE, 2);
   } else {
     state->set(GemState::_GL_TEX_TYPE, 1);
@@ -624,7 +639,8 @@ void pix_texture :: render(GemState *state)
   state->set(GemState::_GL_TEX_BASECOORD, m_baseCoord);
   state->set(GemState::_GL_TEX_ORIENTATION, upsidedown);
 
-  sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
+  sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType,
+                 upsidedown);
 }
 
 ////////////////////////////////////////////////////////
@@ -745,7 +761,8 @@ void pix_texture :: textureQuality(int type)
       glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
     }
     glBindTexture(m_textureType, m_textureObj);
-    setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR || (m_wantMipmap && m_canMipmap));
+    setTexFilters(m_textureMinQuality != GL_LINEAR_MIPMAP_LINEAR
+                  || (m_wantMipmap && m_canMipmap));
   }
   setModified();
 }
@@ -782,7 +799,8 @@ void pix_texture :: repeatMess(int type)
     }
   }
   GLuint doRepeat=m_repeat;
-  if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB || m_textureType == GL_TEXTURE_RECTANGLE_EXT) {
+  if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB
+       || m_textureType == GL_TEXTURE_RECTANGLE_EXT) {
     doRepeat=GL_CLAMP_TO_EDGE;
   }
 
@@ -891,7 +909,8 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG (classPtr, "extTexture", extTextureMess);
 
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_texture), gensym("pix_texture2"), A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_texture),
+                   gensym("pix_texture2"), A_NULL);
 }
 
 void pix_texture :: extTextureMess(t_symbol*s, int argc, t_atom*argv)

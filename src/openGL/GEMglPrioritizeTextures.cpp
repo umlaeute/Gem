@@ -14,7 +14,8 @@
 
 #include "GEMglPrioritizeTextures.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglPrioritizeTextures, t_floatarg,
+                             A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -35,9 +36,12 @@ GEMglPrioritizeTextures :: GEMglPrioritizeTextures      (t_floatarg arg0) :
   textures=new GLuint[t_len];
   priorities=new GLclampf[p_len];
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("n"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("textures"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("priorities"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("n"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("textures"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("priorities"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -87,7 +91,8 @@ void GEMglPrioritizeTextures :: nMess (t_float arg1)    // FUN
   setModified();
 }
 
-void GEMglPrioritizeTextures :: texturesMess (int argc,t_atom*argv)     // FUN
+void GEMglPrioritizeTextures :: texturesMess (int argc,
+    t_atom*argv)     // FUN
 {
   if (argc>t_len) {
     t_len=argc;
@@ -100,7 +105,8 @@ void GEMglPrioritizeTextures :: texturesMess (int argc,t_atom*argv)     // FUN
   setModified();
 }
 
-void GEMglPrioritizeTextures :: prioritiesMess (int argc, t_atom*argv)          // FUN
+void GEMglPrioritizeTextures :: prioritiesMess (int argc,
+    t_atom*argv)          // FUN
 {
   if (argc>p_len) {
     p_len=argc;
@@ -120,20 +126,29 @@ void GEMglPrioritizeTextures :: prioritiesMess (int argc, t_atom*argv)          
 
 void GEMglPrioritizeTextures :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::nMessCallback),         gensym("n"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::texturesMessCallback),          gensym("textures"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPrioritizeTextures::prioritiesMessCallback),        gensym("priorities"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPrioritizeTextures::nMessCallback),
+                  gensym("n"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPrioritizeTextures::texturesMessCallback),
+                  gensym("textures"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>
+                  (&GEMglPrioritizeTextures::prioritiesMessCallback),
+                  gensym("priorities"), A_GIMME, A_NULL);
 }
 
 void GEMglPrioritizeTextures :: nMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->nMess (arg0);
 }
-void GEMglPrioritizeTextures :: texturesMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglPrioritizeTextures :: texturesMessCallback (void* data,
+    t_symbol*, int argc, t_atom*argv)
 {
   GetMyClass(data)->texturesMess (argc,argv);
 }
-void GEMglPrioritizeTextures :: prioritiesMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglPrioritizeTextures :: prioritiesMessCallback (void* data,
+    t_symbol*, int argc, t_atom*argv)
 {
   GetMyClass(data)->prioritiesMess (argc,argv);
 }

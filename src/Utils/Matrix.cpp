@@ -91,25 +91,57 @@ void Matrix :: multiply(Matrix *matrix)
 
   tmp = *this;
 
-  mat[0][0] = tmp.mat[0][0] * matrix->mat[0][0] + tmp.mat[0][1] * matrix->mat[1][0] + tmp.mat[0][2] * matrix->mat[2][0] + tmp.mat[0][3] * matrix->mat[3][0];
-  mat[1][0] = tmp.mat[1][0] * matrix->mat[0][0] + tmp.mat[1][1] * matrix->mat[1][0] + tmp.mat[1][2] * matrix->mat[2][0] + tmp.mat[1][3] * matrix->mat[3][0];
-  mat[2][0] = tmp.mat[2][0] * matrix->mat[0][0] + tmp.mat[2][1] * matrix->mat[1][0] + tmp.mat[2][2] * matrix->mat[2][0] + tmp.mat[2][3] * matrix->mat[3][0];
-  mat[3][0] = tmp.mat[3][0] * matrix->mat[0][0] + tmp.mat[3][1] * matrix->mat[1][0] + tmp.mat[3][2] * matrix->mat[2][0] + tmp.mat[3][3] * matrix->mat[3][0];
+  mat[0][0] = tmp.mat[0][0] * matrix->mat[0][0] + tmp.mat[0][1] *
+              matrix->mat[1][0] + tmp.mat[0][2] * matrix->mat[2][0] + tmp.mat[0][3] *
+              matrix->mat[3][0];
+  mat[1][0] = tmp.mat[1][0] * matrix->mat[0][0] + tmp.mat[1][1] *
+              matrix->mat[1][0] + tmp.mat[1][2] * matrix->mat[2][0] + tmp.mat[1][3] *
+              matrix->mat[3][0];
+  mat[2][0] = tmp.mat[2][0] * matrix->mat[0][0] + tmp.mat[2][1] *
+              matrix->mat[1][0] + tmp.mat[2][2] * matrix->mat[2][0] + tmp.mat[2][3] *
+              matrix->mat[3][0];
+  mat[3][0] = tmp.mat[3][0] * matrix->mat[0][0] + tmp.mat[3][1] *
+              matrix->mat[1][0] + tmp.mat[3][2] * matrix->mat[2][0] + tmp.mat[3][3] *
+              matrix->mat[3][0];
 
-  mat[0][1] = tmp.mat[0][0] * matrix->mat[0][1] + tmp.mat[0][1] * matrix->mat[1][1] + tmp.mat[0][2] * matrix->mat[2][1] + tmp.mat[0][3] * matrix->mat[3][1];
-  mat[1][1] = tmp.mat[1][0] * matrix->mat[0][1] + tmp.mat[1][1] * matrix->mat[1][1] + tmp.mat[1][2] * matrix->mat[2][1] + tmp.mat[1][3] * matrix->mat[3][1];
-  mat[2][1] = tmp.mat[2][0] * matrix->mat[0][1] + tmp.mat[2][1] * matrix->mat[1][1] + tmp.mat[2][2] * matrix->mat[2][1] + tmp.mat[2][3] * matrix->mat[3][1];
-  mat[3][1] = tmp.mat[3][0] * matrix->mat[0][1] + tmp.mat[3][1] * matrix->mat[1][1] + tmp.mat[3][2] * matrix->mat[2][1] + tmp.mat[3][3] * matrix->mat[3][1];
+  mat[0][1] = tmp.mat[0][0] * matrix->mat[0][1] + tmp.mat[0][1] *
+              matrix->mat[1][1] + tmp.mat[0][2] * matrix->mat[2][1] + tmp.mat[0][3] *
+              matrix->mat[3][1];
+  mat[1][1] = tmp.mat[1][0] * matrix->mat[0][1] + tmp.mat[1][1] *
+              matrix->mat[1][1] + tmp.mat[1][2] * matrix->mat[2][1] + tmp.mat[1][3] *
+              matrix->mat[3][1];
+  mat[2][1] = tmp.mat[2][0] * matrix->mat[0][1] + tmp.mat[2][1] *
+              matrix->mat[1][1] + tmp.mat[2][2] * matrix->mat[2][1] + tmp.mat[2][3] *
+              matrix->mat[3][1];
+  mat[3][1] = tmp.mat[3][0] * matrix->mat[0][1] + tmp.mat[3][1] *
+              matrix->mat[1][1] + tmp.mat[3][2] * matrix->mat[2][1] + tmp.mat[3][3] *
+              matrix->mat[3][1];
 
-  mat[0][2] = tmp.mat[0][0] * matrix->mat[0][2] + tmp.mat[0][1] * matrix->mat[1][2] + tmp.mat[0][2] * matrix->mat[2][2] + tmp.mat[0][3] * matrix->mat[3][2];
-  mat[1][2] = tmp.mat[1][0] * matrix->mat[0][2] + tmp.mat[1][1] * matrix->mat[1][2] + tmp.mat[1][2] * matrix->mat[2][2] + tmp.mat[1][3] * matrix->mat[3][2];
-  mat[2][2] = tmp.mat[2][0] * matrix->mat[0][2] + tmp.mat[2][1] * matrix->mat[1][2] + tmp.mat[2][2] * matrix->mat[2][2] + tmp.mat[2][3] * matrix->mat[3][2];
-  mat[3][2] = tmp.mat[3][0] * matrix->mat[0][2] + tmp.mat[3][1] * matrix->mat[1][2] + tmp.mat[3][2] * matrix->mat[2][2] + tmp.mat[3][3] * matrix->mat[3][2];
+  mat[0][2] = tmp.mat[0][0] * matrix->mat[0][2] + tmp.mat[0][1] *
+              matrix->mat[1][2] + tmp.mat[0][2] * matrix->mat[2][2] + tmp.mat[0][3] *
+              matrix->mat[3][2];
+  mat[1][2] = tmp.mat[1][0] * matrix->mat[0][2] + tmp.mat[1][1] *
+              matrix->mat[1][2] + tmp.mat[1][2] * matrix->mat[2][2] + tmp.mat[1][3] *
+              matrix->mat[3][2];
+  mat[2][2] = tmp.mat[2][0] * matrix->mat[0][2] + tmp.mat[2][1] *
+              matrix->mat[1][2] + tmp.mat[2][2] * matrix->mat[2][2] + tmp.mat[2][3] *
+              matrix->mat[3][2];
+  mat[3][2] = tmp.mat[3][0] * matrix->mat[0][2] + tmp.mat[3][1] *
+              matrix->mat[1][2] + tmp.mat[3][2] * matrix->mat[2][2] + tmp.mat[3][3] *
+              matrix->mat[3][2];
 
-  mat[0][3] = tmp.mat[0][0] * matrix->mat[0][3] + tmp.mat[0][1] * matrix->mat[1][3] + tmp.mat[0][2] * matrix->mat[2][3] + tmp.mat[0][3] * matrix->mat[3][3];
-  mat[1][3] = tmp.mat[1][0] * matrix->mat[0][3] + tmp.mat[1][1] * matrix->mat[1][3] + tmp.mat[1][2] * matrix->mat[2][3] + tmp.mat[1][3] * matrix->mat[3][3];
-  mat[2][3] = tmp.mat[2][0] * matrix->mat[0][3] + tmp.mat[2][1] * matrix->mat[1][3] + tmp.mat[2][2] * matrix->mat[2][3] + tmp.mat[2][3] * matrix->mat[3][3];
-  mat[3][3] = tmp.mat[3][0] * matrix->mat[0][3] + tmp.mat[3][1] * matrix->mat[1][3] + tmp.mat[3][2] * matrix->mat[2][3] + tmp.mat[3][3] * matrix->mat[3][3];
+  mat[0][3] = tmp.mat[0][0] * matrix->mat[0][3] + tmp.mat[0][1] *
+              matrix->mat[1][3] + tmp.mat[0][2] * matrix->mat[2][3] + tmp.mat[0][3] *
+              matrix->mat[3][3];
+  mat[1][3] = tmp.mat[1][0] * matrix->mat[0][3] + tmp.mat[1][1] *
+              matrix->mat[1][3] + tmp.mat[1][2] * matrix->mat[2][3] + tmp.mat[1][3] *
+              matrix->mat[3][3];
+  mat[2][3] = tmp.mat[2][0] * matrix->mat[0][3] + tmp.mat[2][1] *
+              matrix->mat[1][3] + tmp.mat[2][2] * matrix->mat[2][3] + tmp.mat[2][3] *
+              matrix->mat[3][3];
+  mat[3][3] = tmp.mat[3][0] * matrix->mat[0][3] + tmp.mat[3][1] *
+              matrix->mat[1][3] + tmp.mat[3][2] * matrix->mat[2][3] + tmp.mat[3][3] *
+              matrix->mat[3][3];
 }
 
 /////////////////////////////////////////////////////////
@@ -189,7 +221,8 @@ void Matrix :: rotateZ(float degrees)
 // transform
 //
 /////////////////////////////////////////////////////////
-void Matrix::transform(float srcX, float srcY, float srcZ, float *dstX, float *dstY, float *dstZ) const
+void Matrix::transform(float srcX, float srcY, float srcZ, float *dstX,
+                       float *dstY, float *dstZ) const
 {
   *dstX = srcX * mat[0][0] + srcY * mat[0][1] + srcZ * mat[0][2] + mat[0][3];
   *dstY = srcX * mat[1][0] + srcY * mat[1][1] + srcZ * mat[1][2] + mat[1][3];
@@ -200,7 +233,8 @@ void Matrix::transform(float srcX, float srcY, float srcZ, float *dstX, float *d
 // generateNormal
 //
 /////////////////////////////////////////////////////////
-void Matrix :: generateNormal(const float *v1, const float *v2, const float *v3, float *dst)
+void Matrix :: generateNormal(const float *v1, const float *v2,
+                              const float *v3, float *dst)
 {
   float v1v2[3];
   float v2v3[3];
@@ -215,7 +249,8 @@ void Matrix :: generateNormal(const float *v1, const float *v2, const float *v3,
   dst[2] = (v1v2[0] * v2v3[1]) - (v1v2[1] * v2v3[0]);
 
   // normalize
-  float mag = (float)sqrt(dst[0] * dst[0] + dst[1] * dst[1] + dst[2] * dst[2]);
+  float mag = (float)sqrt(dst[0] * dst[0] + dst[1] * dst[1] + dst[2] *
+                          dst[2]);
   //assert( mag != 0.0f );
   if ( mag != 0.0f ) {
     dst[0] *= 1.f/mag;

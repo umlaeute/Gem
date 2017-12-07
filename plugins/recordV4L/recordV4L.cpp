@@ -208,7 +208,8 @@ bool recordV4L :: write(imageStruct*img)
 /////////////////////////////////////////////////////////
 
 static const std::string s_codec_name=std::string("v4l");
-static const std::string s_codec_desc=std::string("v4l(1) loopback device");
+static const std::string s_codec_desc=
+  std::string("v4l(1) loopback device");
 
 /////////////////////////////////////////////////////////
 // set codec by name
@@ -386,17 +387,23 @@ static int v4l_ioctlhandler(unsigned long int cmd, void *arg)
     struct video_mmap *vidmmap = arg;
 
     if(vidmmap->width > MAX_WIDTH || vidmmap->height > MAX_HEIGHT) {
-      fprintf(stderr, "[GEM:recordV4L] requested capture size is too big(%dx%d).\n",vidmmap->width, vidmmap->height);
+      fprintf(stderr,
+              "[GEM:recordV4L] requested capture size is too big(%dx%d).\n",
+              vidmmap->width, vidmmap->height);
       return EINVAL;
     }
     if(vidmmap->width < MIN_WIDTH || vidmmap->height < MIN_HEIGHT) {
-      fprintf(stderr, "[GEM:recordV4L] requested capture size is to small(%dx%d).\n",vidmmap->width, vidmmap->height);
+      fprintf(stderr,
+              "[GEM:recordV4L] requested capture size is to small(%dx%d).\n",
+              vidmmap->width, vidmmap->height);
       return EINVAL;
     }
     if(vidmmap->format != pixel_format) {
       converter = palette_get_supported_converter_fromRGB32(vidmmap->format);
       if(converter == NULL) {
-        fprintf(stderr, "[GEM:recordV4L] unsupported pixel format(%d) is requested.\n",vidmmap->format);
+        fprintf(stderr,
+                "[GEM:recordV4L] unsupported pixel format(%d) is requested.\n",
+                vidmmap->format);
         return EINVAL;
       }
       pixel_format = vidmmap->format;
@@ -443,7 +450,8 @@ static int signal_loop_init(void)
 {
   outputfd = open(output_devname, O_RDWR);
   if(outputfd < 0) {
-    fprintf(stderr, "[GEM:recordV4L] couldn't open output device file %s\n",output_devname);
+    fprintf(stderr, "[GEM:recordV4L] couldn't open output device file %s\n",
+            output_devname);
     return -1;
   }
   pixel_format = VIDEO_PALETTE_RGB32;
@@ -484,7 +492,8 @@ static void *signal_loop(void *arg)
     ufds.revents = 0;
     poll(&ufds, 1, 1000);
     if(!ufds.revents & POLLIN) {
-      fprintf(stderr, "[GEM:recordV4L] received signal but got negative on poll.\n");
+      fprintf(stderr,
+              "[GEM:recordV4L] received signal but got negative on poll.\n");
       continue;
     }
     size = read(outputfd, ioctlbuf, MAXIOCTL);
@@ -501,8 +510,10 @@ static void *signal_loop(void *arg)
       if(ret) {
         /* new vloopback patch supports a way to return EINVAL to
          * a client. */
-        memset(ioctlbuf+sizeof(unsigned long int), 0xff, MAXIOCTL-sizeof(unsigned long int));
-        fprintf(stderr, "[GEM:recordV4L] ioctl %lx unsuccessfully handled.\n", cmd);
+        memset(ioctlbuf+sizeof(unsigned long int), 0xff,
+               MAXIOCTL-sizeof(unsigned long int));
+        fprintf(stderr, "[GEM:recordV4L] ioctl %lx unsuccessfully handled.\n",
+                cmd);
         ioctl(outputfd, VIDIOCSINVALID);
       }
       if(ioctl(outputfd, cmd, ioctlbuf+sizeof(unsigned long int))) {

@@ -23,8 +23,10 @@ pix_posterize :: pix_posterize() :
   inletF(0), inletL(0),
   factor(1.), limit(0)
 {
-  inletF = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("factor"));
-  inletL = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("limit"));
+  inletF = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                     gensym("factor"));
+  inletL = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                     gensym("limit"));
 }
 
 /////////////////////////////////////////////////////////
@@ -65,8 +67,10 @@ void pix_posterize :: processYUVImage(imageStruct &image)
   case 1:
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        image.data[src+1] = image.data[src+1] - ( image.data[src+1] % (256/factor));
-        image.data[src+3] = image.data[src+3] - ( image.data[src+3] % (256/factor));
+        image.data[src+1] = image.data[src+1] - ( image.data[src+1] %
+                            (256/factor));
+        image.data[src+3] = image.data[src+3] - ( image.data[src+3] %
+                            (256/factor));
         if ( image.data[src+1] > 100 && image.data[src+1] < 150) {
           image.data[src+1]=235;
         }
@@ -74,7 +78,8 @@ void pix_posterize :: processYUVImage(imageStruct &image)
           image.data[src+3]=235;
         }
         image.data[src] = image.data[src] - ( image.data[src] % (256/factor));
-        image.data[src+2] = image.data[src+2] - ( image.data[src+2] % (256/factor));
+        image.data[src+2] = image.data[src+2] - ( image.data[src+2] %
+                            (256/factor));
         src += 4;
       }
     }
@@ -82,8 +87,10 @@ void pix_posterize :: processYUVImage(imageStruct &image)
   case 2:
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        image.data[src+1] = image.data[src+1] - ( image.data[src+1] % (256/factor));
-        image.data[src+3] = image.data[src+3] - ( image.data[src+3] % (256/factor));
+        image.data[src+1] = image.data[src+1] - ( image.data[src+1] %
+                            (256/factor));
+        image.data[src+3] = image.data[src+3] - ( image.data[src+3] %
+                            (256/factor));
         if ( image.data[src+1] > 100 && image.data[src+1] < 150) {
           image.data[src+1]=235;
         }
@@ -97,15 +104,18 @@ void pix_posterize :: processYUVImage(imageStruct &image)
   case 3:
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        image.data[src+1] = image.data[src+1] - ( image.data[src+1] % (256/factor));
-        image.data[src+3] = image.data[src+3] - ( image.data[src+3] % (256/factor));
+        image.data[src+1] = image.data[src+1] - ( image.data[src+1] %
+                            (256/factor));
+        image.data[src+3] = image.data[src+3] - ( image.data[src+3] %
+                            (256/factor));
         if ( image.data[src+1] > 100 && image.data[src+1] < 150) {
           image.data[src+1]=235;
         }
         if ( image.data[src+3] > 100 && image.data[src+3] < 150) {
           image.data[src+3]=235;
         }
-        image.data[src+3] = image.data[src+3] - ( image.data[src+3] % (256/factor));
+        image.data[src+3] = image.data[src+3] - ( image.data[src+3] %
+                            (256/factor));
         src += 4;
       }
     }
@@ -113,8 +123,10 @@ void pix_posterize :: processYUVImage(imageStruct &image)
   case 4:
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        image.data[src+1] = image.data[src+1] - ( image.data[src+1] % (256/factor));
-        image.data[src+3] = image.data[src+3] - ( image.data[src+3] % (256/factor));
+        image.data[src+1] = image.data[src+1] - ( image.data[src+1] %
+                            (256/factor));
+        image.data[src+3] = image.data[src+3] - ( image.data[src+3] %
+                            (256/factor));
         if ( image.data[src+1] > 100 && image.data[src+1] < 150) {
           image.data[src+1]=235;
         }
@@ -129,8 +141,10 @@ void pix_posterize :: processYUVImage(imageStruct &image)
   default:
     for (h=0; h<image.ysize; h++) {
       for(w=0; w<image.xsize/2; w++) {
-        image.data[src+1] = image.data[src+1] - ( image.data[src+1] % (256/factor));
-        image.data[src+3] = image.data[src+3] - ( image.data[src+3] % (256/factor));
+        image.data[src+1] = image.data[src+1] - ( image.data[src+1] %
+                            (256/factor));
+        image.data[src+3] = image.data[src+3] - ( image.data[src+3] %
+                            (256/factor));
         if ( image.data[src+1] > 100 && image.data[src+1] < 150) {
           image.data[src+1]=235;
         }

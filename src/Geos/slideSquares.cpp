@@ -35,7 +35,8 @@ static inline float ourRand( float Max )
   return(Max * drand48());
 }
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(slideSquares, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(slideSquares, t_floatarg, A_DEFFLOAT,
+                            t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -53,7 +54,8 @@ slideSquares :: slideSquares(t_floatarg width, t_floatarg height)
   }
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("Ht"));
   slide_init();
 
   m_drawTypes.clear();
@@ -93,26 +95,34 @@ void slideSquares :: renderShape(GemState *state)
     int curCoord = 0;
     glBegin(m_drawType);
     for (i=0; i<= 31; i++) {
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U, GemShape::m_texCoords[curCoord].t*Sliders[i].V );
-      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U,
+                   GemShape::m_texCoords[curCoord].t*Sliders[i].V );
+      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),
+                 0.0);
 
       if (GemShape::m_texNum > 1) {
         curCoord = 1;
       }
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1), GemShape::m_texCoords[curCoord].t*Sliders[i].V );
-      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),
+                   GemShape::m_texCoords[curCoord].t*Sliders[i].V );
+      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),
+                 0.0);
 
       if (GemShape::m_texNum > 2) {
         curCoord = 2;
       }
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
-      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s*(Sliders[i].U+0.1),
+                   GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
+      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),
+                 0.0);
 
       if (GemShape::m_texNum > 3) {
         curCoord = 3;
       }
-      glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U,GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
-      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+      glTexCoord2f(GemShape::m_texCoords[curCoord].s*Sliders[i].U,
+                   GemShape::m_texCoords[curCoord].t*(Sliders[i].V+0.1));
+      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),
+                 0.0);
 
       Slide( i );
     }
@@ -121,19 +131,23 @@ void slideSquares :: renderShape(GemState *state)
     glBegin(m_drawType);
     for (i=0; i<= 31; i++) {
       glTexCoord2f(Sliders[i].U,     Sliders[i].V );
-      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y - 0.1),
+                 0.0);
 
       //if (GemShape::m_texNum > 1) curCoord = 1;
       glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V    );
-      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),  0.0);
+      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y - 0.1),
+                 0.0);
 
       //if (GemShape::m_texNum > 2) curCoord = 2;
       glTexCoord2f( Sliders[i].U+0.1, Sliders[i].V+0.1 );
-      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+      glVertex3f(m_size*(Sliders[i].X + 0.1), m_height*(Sliders[i].Y + 0.1),
+                 0.0);
 
       //if (GemShape::m_texNum > 3) curCoord = 3;
       glTexCoord2f(Sliders[i].U,     Sliders[i].V+0.1);
-      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),  0.0);
+      glVertex3f(m_size*(Sliders[i].X - 0.1), m_height*(Sliders[i].Y + 0.1),
+                 0.0);
 
       Slide( i );
     }

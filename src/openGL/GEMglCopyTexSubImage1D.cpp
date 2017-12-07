@@ -23,7 +23,8 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyTexSubImage1D );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglCopyTexSubImage1D :: GEMglCopyTexSubImage1D        (int argc, t_atom* argv)
+GEMglCopyTexSubImage1D :: GEMglCopyTexSubImage1D        (int argc,
+    t_atom* argv)
 {
   target=0;
   level=0;
@@ -48,12 +49,18 @@ GEMglCopyTexSubImage1D :: GEMglCopyTexSubImage1D        (int argc, t_atom* argv)
     width         =atom_getint(argv+5);
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("level"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xoffset"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("width"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("level"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("xoffset"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("width"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -131,15 +138,28 @@ void GEMglCopyTexSubImage1D :: widthMess (t_float arg1)         // FUN
 
 void GEMglCopyTexSubImage1D :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::targetMessCallback),     gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::levelMessCallback),      gensym("level"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::xoffsetMessCallback),    gensym("xoffset"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::xMessCallback),          gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::yMessCallback),          gensym("y"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::widthMessCallback),      gensym("width"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::targetMessCallback),
+                  gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::levelMessCallback),
+                  gensym("level"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::xoffsetMessCallback),
+                  gensym("xoffset"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::xMessCallback),
+                  gensym("x"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::yMessCallback),
+                  gensym("y"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglCopyTexSubImage1D::widthMessCallback),
+                  gensym("width"), A_DEFFLOAT, A_NULL);
 }
 
-void GEMglCopyTexSubImage1D :: targetMessCallback (void* data, t_float arg0)
+void GEMglCopyTexSubImage1D :: targetMessCallback (void* data,
+    t_float arg0)
 {
   GetMyClass(data)->targetMess ( static_cast<t_float>(arg0));
 }
@@ -147,7 +167,8 @@ void GEMglCopyTexSubImage1D :: levelMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->levelMess ( static_cast<t_float>(arg0));
 }
-void GEMglCopyTexSubImage1D :: xoffsetMessCallback (void* data, t_float arg0)
+void GEMglCopyTexSubImage1D :: xoffsetMessCallback (void* data,
+    t_float arg0)
 {
   GetMyClass(data)->xoffsetMess ( static_cast<t_float>(arg0));
 }

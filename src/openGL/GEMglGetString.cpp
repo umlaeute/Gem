@@ -27,7 +27,8 @@ using namespace gem::utils::gl;
 GEMglGetString :: GEMglGetString        (t_floatarg arg0) :
   name(static_cast<GLenum>(arg0))
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("name"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("name"));
   m_outlet=outlet_new(this->x_obj, 0);
 }
 /////////////////////////////////////////////////////////
@@ -64,10 +65,13 @@ void GEMglGetString :: nameMess (t_atom arg)    // FUN
 //
 void GEMglGetString :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetString::nameMessCallback), gensym("name"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetString::nameMessCallback),
+                  gensym("name"), A_GIMME, A_NULL);
 }
 
-void GEMglGetString :: nameMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglGetString :: nameMessCallback (void* data, t_symbol*, int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->nameMess ( argv[0]);

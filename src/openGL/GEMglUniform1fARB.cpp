@@ -13,7 +13,8 @@
 
 #include "GEMglUniform1fARB.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -22,12 +23,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglUniform1fARB, t_floatarg, A_DEFFLOAT, t_float
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglUniform1fARB :: GEMglUniform1fARB  (t_floatarg arg0, t_floatarg arg1) :
+GEMglUniform1fARB :: GEMglUniform1fARB  (t_floatarg arg0,
+    t_floatarg arg1) :
   location(static_cast<GLint>(arg0)),
   val(static_cast<GLfloat>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("location"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("val"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("location"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("val"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -79,9 +83,11 @@ void GEMglUniform1fARB :: valMess (t_float arg1)        // FUN
 
 void GEMglUniform1fARB :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUniform1fARB::locMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglUniform1fARB::locMessCallback),
                   gensym("location"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglUniform1fARB::valMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglUniform1fARB::valMessCallback),
                   gensym("val"), A_DEFFLOAT, A_NULL);
 };
 

@@ -26,7 +26,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalPoint1, t_floatarg, A_DEFFLOAT);
 GEMglEvalPoint1 :: GEMglEvalPoint1      (t_floatarg arg0) :
   i(static_cast<GLint>(arg0))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("i"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("i"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,7 +70,9 @@ void GEMglEvalPoint1 :: iMess (t_float arg1)    // FUN
 
 void GEMglEvalPoint1 :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalPoint1::iMessCallback),         gensym("i"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalPoint1::iMessCallback),
+                  gensym("i"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalPoint1 :: iMessCallback (void* data, t_float arg0)

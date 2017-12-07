@@ -20,7 +20,8 @@
 #include "Gem/State.h"
 #include "Gem/GLStack.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL,
+                            t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,7 +32,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *,
 //
 /////////////////////////////////////////////////////////
 gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
-  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
+  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0),
+    m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
     m_width(256), m_height(256),
     m_rectangle(false), m_canRectangle(0),
@@ -161,7 +163,8 @@ void gemframebuffer :: render(GemState *state)
     stacks->push(gem::GLStack::PROJECTION);
   }
   glLoadIdentity();
-  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3], m_perspect[4], m_perspect[5]);
+  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3],
+             m_perspect[4], m_perspect[5]);
 
   if(stacks) {
     stacks->push(gem::GLStack::MODELVIEW);
@@ -291,7 +294,8 @@ void gemframebuffer :: printInfo()
 
   verbose(0, "size: %dx%d", m_width, m_height);
   verbose(0, "rectangle: %d -> %s", m_rectangle, rectangle.c_str());
-  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(), m_format, m_internalformat);
+  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(),
+          m_format, m_internalformat);
   verbose(0, "type: %s [%d]", type.c_str(), m_type);
   verbose(0, "texunit: %d", m_texunit);
 }
@@ -319,7 +323,8 @@ void gemframebuffer :: initFBO()
   glGenTextures(1, &m_offScreenID);
   glBindTexture(m_texTarget, m_offScreenID);
 
-  glTexImage2D( m_texTarget, 0, m_internalformat, m_width, m_height, 0, m_format, m_type, NULL );
+  glTexImage2D( m_texTarget, 0, m_internalformat, m_width, m_height, 0,
+                m_format, m_type, NULL );
   // 2.13.2006
   // GL_LINEAR causes fallback to software shader
   // so switching back to GL_NEAREST
@@ -333,7 +338,8 @@ void gemframebuffer :: initFBO()
 
   // Initialize the render buffer.
   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_depthBufferIndex);
-  glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, m_width, m_height);
+  glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24,
+                           m_width, m_height);
 
   // Make sure we have not errors.
   GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT) ;

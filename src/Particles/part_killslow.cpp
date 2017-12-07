@@ -33,7 +33,8 @@ part_killslow :: part_killslow(t_floatarg num)
   if (num > 0) {
     m_killSpeed = num;
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("speed"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("speed"));
 }
 
 /////////////////////////////////////////////////////////

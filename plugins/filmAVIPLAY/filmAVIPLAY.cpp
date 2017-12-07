@@ -74,7 +74,8 @@ void filmAVIPLAY :: close(void)
 // open the file
 //
 /////////////////////////////////////////////////////////
-bool filmAVIPLAY :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmAVIPLAY :: open(const std::string&filename,
+                         const gem::Properties&wantProps)
 {
   double d;
   if(wantProps.get("colorspace", d) && d>0) {
@@ -101,7 +102,8 @@ bool filmAVIPLAY :: open(const std::string&filename, const gem::Properties&wantP
     m_curTrack = 0;
   }
   try {
-    m_avistream=(*m_avifile).GetStream(m_curTrack, avm::IStream::StreamType(1));
+    m_avistream=(*m_avifile).GetStream(m_curTrack,
+                                       avm::IStream::StreamType(1));
   } catch (const char* string) {
     m_avistream = 0;
   }
@@ -150,7 +152,8 @@ pixBlock* filmAVIPLAY :: getFrame()
   /* for MPEGs ReadFrame() will return 0 only when errors occur
    * other formats return 0 all the time (and -1 on file end)
    */
-  m_aviimage = (*m_avistream).GetFrame(true); // this might crash sometimes...
+  m_aviimage = (*m_avistream).GetFrame(
+                 true); // this might crash sometimes...
   if (m_aviimage) {
     int format = (*m_aviimage).Format();
     m_rawdata=(*m_aviimage).Data();

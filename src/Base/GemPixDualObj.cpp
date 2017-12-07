@@ -29,7 +29,8 @@
 
 #define snprintf c99_snprintf
 
-inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
+inline int c99_vsnprintf(char* str, size_t size, const char* format,
+                         va_list ap)
 {
   int count = -1;
 
@@ -72,7 +73,8 @@ GemPixDualObj :: GemPixDualObj()
     org_pixRightValid(-1),
     m_inlet(NULL)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"),
+                      gensym("gem_right"));
   memset(&m_pixRight, 0, sizeof(m_pixRight));
 }
 
@@ -209,11 +211,13 @@ std::string format2string(GLenum fmt)
   return result;
 }
 }
-void GemPixDualObj :: processDualImage(imageStruct &left, imageStruct &right)
+void GemPixDualObj :: processDualImage(imageStruct &left,
+                                       imageStruct &right)
 {
   std::string lformat=format2string(left.format);
   std::string rformat=format2string(right.format);
-  error("no method to combine (%s) and (%s)", lformat.c_str(), rformat.c_str());
+  error("no method to combine (%s) and (%s)", lformat.c_str(),
+        rformat.c_str());
 }
 
 /////////////////////////////////////////////////////////
@@ -246,7 +250,8 @@ void GemPixDualObj :: stopRendering()
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: rightRender(GemState *statePtr)
 {
-  if (!statePtr || !statePtr->get(GemState::_PIX, m_pixRight) || !m_pixRight) {
+  if (!statePtr || !statePtr->get(GemState::_PIX, m_pixRight)
+      || !m_pixRight) {
     m_pixRightValid = 0;
     m_pixRight = 0;
     return;
@@ -264,13 +269,16 @@ void GemPixDualObj :: rightRender(GemState *statePtr)
 /////////////////////////////////////////////////////////
 void GemPixDualObj :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GemPixDualObj::gem_rightMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GemPixDualObj::gem_rightMessCallback),
                   gensym("gem_right"), A_GIMME, A_NULL);
 }
-void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s,
+    int argc, t_atom *argv)
 {
   if (argc==1 && argv->a_type==A_FLOAT) {
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
     GetMyClass(data)->m_cacheRight = (GemCache*)argv->a_w.w_gpointer;
     GetMyClass(data)->rightRender((GemState *)(argv+1)->a_w.w_gpointer);
   } else {

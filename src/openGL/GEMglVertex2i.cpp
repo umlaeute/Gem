@@ -14,7 +14,8 @@
 
 #include "GEMglVertex2i.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2i, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglVertex2i, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,8 +28,10 @@ GEMglVertex2i :: GEMglVertex2i  (t_floatarg arg0, t_floatarg arg1) :
   x(static_cast<GLint>(arg0)),
   y(static_cast<GLint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +72,12 @@ void GEMglVertex2i :: yMess (t_float arg1)      // FUN
 
 void GEMglVertex2i :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex2i::xMessCallback),   gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglVertex2i::yMessCallback),   gensym("y"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglVertex2i::xMessCallback),   gensym("x"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglVertex2i::yMessCallback),   gensym("y"),
+                  A_DEFFLOAT, A_NULL);
 };
 
 void GEMglVertex2i :: xMessCallback (void* data, t_float arg0)

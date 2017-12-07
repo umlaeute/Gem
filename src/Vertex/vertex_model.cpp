@@ -76,7 +76,8 @@ void vertex_model :: openMess(t_symbol *filename)
   //cleanModel();
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name,
+                      buf, MAXPDSTRING);
   // read the object in
   m_model = glmReadOBJ(buf);
 
@@ -100,7 +101,8 @@ void vertex_model :: openMess(t_symbol *filename)
   post("model->numnormals %d",m_model->numnormals);
   post("model->numtexcoords %d",m_model->numtexcoords);
 
-  numvertices = static_cast<int>(m_model->numtriangles * m_model->numgroups * 3);
+  numvertices = static_cast<int>(m_model->numtriangles * m_model->numgroups *
+                                 3);
   m_vertcount = numvertices;
 
   // would it be a bad idea to make all arrays equally sized ?
@@ -309,7 +311,8 @@ void vertex_model :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void vertex_model :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_model::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_model::openMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
 }
 

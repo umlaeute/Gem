@@ -77,7 +77,8 @@ public:
   virtual void   setModified(void);
 
   /* send out our texture through the 2nd outlet to be used by others */
-  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
+  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio,
+                      GLint texType, GLboolean upsidedown);
 
 
   //////////
@@ -89,7 +90,8 @@ public:
 
 
   void textureOnOff(int on);
-  void textureQuality(int type);   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
+  void textureQuality(int
+                      type);   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
   void repeatMess(int type);
   void textureRectangle(int mode);
   void modeMess(int mode);
@@ -134,7 +136,8 @@ protected:
   GLint m_numPbo; // user supplied
 
   int           m_clientStorage; //for Apple's client storage extension
-  int           m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
+  int
+  m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
 
   GLint m_texunit; // which texture unit to use
 
@@ -203,7 +206,8 @@ protected:
   TexCoord        m_oldBaseCoord;
   bool            m_oldOrientation;
 
-  gem::ContextData<int> m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
+  gem::ContextData<int>
+  m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 
   GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
 

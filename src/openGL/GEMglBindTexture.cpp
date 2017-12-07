@@ -14,7 +14,8 @@
 
 #include "GEMglBindTexture.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglBindTexture, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBindTexture :: GEMglBindTexture    (t_floatarg arg0, t_floatarg arg1) :
+GEMglBindTexture :: GEMglBindTexture    (t_floatarg arg0,
+    t_floatarg arg1) :
   target(static_cast<GLenum>(arg0)),
   texture(static_cast<GLuint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("texture"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("texture"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,8 +82,12 @@ void GEMglBindTexture :: textureMess (t_float arg1)     // FUN
 
 void GEMglBindTexture :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindTexture::targetMessCallback),   gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBindTexture::textureMessCallback),          gensym("texture"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglBindTexture::targetMessCallback),
+                  gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglBindTexture::textureMessCallback),
+                  gensym("texture"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglBindTexture :: targetMessCallback (void* data, t_float arg0)

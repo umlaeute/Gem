@@ -29,7 +29,8 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_tabread);
 //
 /////////////////////////////////////////////////////////
 vertex_tabread :: vertex_tabread(int argc, t_atom*argv) :
-  m_VertexArray(NULL),  m_ColorArray(NULL),  m_NormalArray(NULL),  m_TexCoordArray(NULL),
+  m_VertexArray(NULL),  m_ColorArray(NULL),  m_NormalArray(NULL),
+  m_TexCoordArray(NULL),
   m_size(0), m_doit(false),
   m_Vtable(NULL), m_Ctable(NULL), m_Ttable(NULL), m_Ntable(NULL)
 {
@@ -60,7 +61,8 @@ static t_float* checkarray(t_symbol *s, int &length)
   t_word  *fp;
   length = 0;
 
-  if (!(a = reinterpret_cast<t_garray*>(pd_findbyclass(s, garray_class))))    {
+  if (!(a = reinterpret_cast<t_garray*>(pd_findbyclass(s,
+                                        garray_class))))    {
     if (*s->s_name) {
       error("vertex_tabread: %s: no such array", s->s_name);
     }
@@ -189,12 +191,15 @@ void vertex_tabread :: bangMess()
 /////////////////////////////////////////////////////////
 void vertex_tabread :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_tabread::tableMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_tabread::tableMessCallback),
                   gensym("table"), A_GIMME, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&vertex_tabread::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&vertex_tabread::bangMessCallback));
 }
 
-void vertex_tabread :: tableMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void vertex_tabread :: tableMessCallback(void *data, t_symbol*, int argc,
+    t_atom*argv)
 {
   GetMyClass(data)->tableMess(argc, argv);
 }

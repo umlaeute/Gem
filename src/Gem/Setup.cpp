@@ -80,10 +80,12 @@ extern "C" {
 
 namespace
 {
-static bool checkVersion(const char*dirname, const char*filename, int flags)
+static bool checkVersion(const char*dirname, const char*filename,
+                         int flags)
 {
   t_binbuf*bb=binbuf_new();
-  if(binbuf_read(bb, const_cast<char*>(filename), const_cast<char*>(dirname), flags)) {
+  if(binbuf_read(bb, const_cast<char*>(filename), const_cast<char*>(dirname),
+                 flags)) {
     /* couldn't find the file */
     return true;
   }
@@ -133,8 +135,10 @@ static bool checkVersion(const char*dirname, const char*filename, int flags)
   if(!result) {
     error("GEM: binary/abstractions version mismatch!");
     error("GEM:   continue at your own risk...");
-    verbose(0, "GEM: binary is %d.%d, but Gem abstractions are %s", GEM_VERSION_MAJOR, GEM_VERSION_MINOR, gotversion.c_str());
-    verbose(0, "GEM: This usually means that you have a path to another version of Gem stored in your startup preferences");
+    verbose(0, "GEM: binary is %d.%d, but Gem abstractions are %s",
+            GEM_VERSION_MAJOR, GEM_VERSION_MINOR, gotversion.c_str());
+    verbose(0,
+            "GEM: This usually means that you have a path to another version of Gem stored in your startup preferences");
     verbose(0, "GEM: Consider removing the wrong path!");
   }
 
@@ -153,7 +157,8 @@ static void addownpath(const char*filename)
 #endif
 
   /* check whether we can find the abstractions (because they are already in Pd's path) */
-  if ((fd=canvas_open(NULL, filename, "", buf, &bufptr, MAXPDSTRING, 1))>=0) {
+  if ((fd=canvas_open(NULL, filename, "", buf, &bufptr, MAXPDSTRING,
+                      1))>=0) {
     gem::files::close(fd);
     checkVersion(buf, filename, flags);
     return;
@@ -190,7 +195,8 @@ static void addownpath(const char*filename)
     } else {
       error("GEM: unable to find Gem's abstractions");
     }
-    error("GEM: please manually add Gem path%s to Pd's search path", qpath.c_str());
+    error("GEM: please manually add Gem path%s to Pd's search path",
+          qpath.c_str());
   }
 
   checkVersion(mypath, filename, flags);
@@ -231,7 +237,8 @@ void setup()
   verbose(-1, "GEM: found a bug? miss a feature? please report it:");
   verbose(-1, "GEM: \thomepage https://gem.iem.at/");
   verbose(-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
-  verbose(-1, "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
+  verbose(-1,
+          "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
 
   gem::Settings::init();
   addownpath("Gem-meta.pd");
@@ -252,7 +259,8 @@ void caseinsensitive_error(const char*gem)
    * however, much of Gem's loading is done via CTORs and the Gem::setup() only finishes
    * the init phase; so we probably can never get rid of wrongly-spelled libraries ever.
    */
-  error("GEM: rejecting incorrect spelling '%s' for cross-platform reasons: use 'Gem'!", gem);
+  error("GEM: rejecting incorrect spelling '%s' for cross-platform reasons: use 'Gem'!",
+        gem);
 }
 };
 

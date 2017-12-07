@@ -70,26 +70,50 @@ protected:
   int Pete_MetaImage_Init();
   void Pete_MetaImage_DeInit();
 
-  U32 Pete_MetaImage_CreateSubImage(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight);
-  void Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight);
-  void Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuffer,U32* pOutput, int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U32 SubImageAverage);
-  U32 Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride);
-  U32 Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
-  U32 Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
+  U32 Pete_MetaImage_CreateSubImage(U32* pInput,U32* pSubImage,
+                                    float SubWidth,float SubHeight);
+  void Pete_MetaImage_DrawSubImages(U32* pSubImage,U32 AverageColour,
+                                    float SubWidth,float SubHeight);
+  void Pete_MetaImage_DrawSubImage(U32* pSource, U32* pShrunkBuffer,
+                                   U32* pOutput, int nLeftX,int nTopY,int nRightX,int nBottomY,
+                                   U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,
+                                   int nClippedRightX,int nClippedBottomY,U32 SubImageAverage);
+  U32 Pete_MetaImage_GetAreaAverage(U32* pImage,int nLeftX,int nTopY,
+                                    int nRightX,int nBottomY,int nStride);
+  U32 Pete_MetaImage_ShrinkSourceImage(U32* pSource, U32* pOutput,
+                                       float SubWidth,float SubHeight);
+  U32 Pete_MetaImage_ShrinkSourceImageFast(U32* pSource, U32* pOutput,
+      float SubWidth,float SubHeight);
 
-  U32  CreateSubImageYUV(U32* pInput,U32* pSubImage,float SubWidth,float SubHeight);
-  void DrawSubImagesYUV(U32* pSubImage,U32 AverageColour,float SubWidth,float SubHeight);
-  void DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOutput, int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U32 SubImageAverage);
-  U32  GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride);
-  U32  ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
-  U32  ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float SubWidth,float SubHeight);
+  U32  CreateSubImageYUV(U32* pInput,U32* pSubImage,float SubWidth,
+                         float SubHeight);
+  void DrawSubImagesYUV(U32* pSubImage,U32 AverageColour,float SubWidth,
+                        float SubHeight);
+  void DrawSubImageYUV(U32* pSource, U32* pShrunkBuffer,U32* pOutput,
+                       int nLeftX,int nTopY,int nRightX,int nBottomY,U32 WholeImageAverage,
+                       int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
+                       U32 SubImageAverage);
+  U32  GetAreaAverageYUV(U32* pImage,int nLeftX,int nTopY,int nRightX,
+                         int nBottomY,int nStride);
+  U32  ShrinkSourceImageYUV(U32* pSource, U32* pOutput, float SubWidth,
+                            float SubHeight);
+  U32  ShrinkSourceImageFastYUV(U32* pSource, U32* pOutput, float SubWidth,
+                                float SubHeight);
 
-  U8  CreateSubImageGray(U8* pInput,U8* pSubImage,float SubWidth,float SubHeight);
-  void DrawSubImagesGray(U8* pSubImage,U8 AverageColour,float SubWidth,float SubHeight);
-  void DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutput, int nLeftX,int nTopY,int nRightX,int nBottomY,U8 WholeImageAverage,int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,U8 SubImageAverage);
-  U8  GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRightX,int nBottomY,int nStride);
-  U8  ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight);
-  U8  ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float SubWidth,float SubHeight);
+  U8  CreateSubImageGray(U8* pInput,U8* pSubImage,float SubWidth,
+                         float SubHeight);
+  void DrawSubImagesGray(U8* pSubImage,U8 AverageColour,float SubWidth,
+                         float SubHeight);
+  void DrawSubImageGray(U8* pSource, U8* pShrunkBuffer,U8* pOutput,
+                        int nLeftX,int nTopY,int nRightX,int nBottomY,U8 WholeImageAverage,
+                        int nClippedLeftX,int nClippedTopY,int nClippedRightX,int nClippedBottomY,
+                        U8 SubImageAverage);
+  U8  GetAreaAverageGray(U8* pImage,int nLeftX,int nTopY,int nRightX,
+                         int nBottomY,int nStride);
+  U8  ShrinkSourceImageGray(U8* pSource, U8* pOutput, float SubWidth,
+                            float SubHeight);
+  U8  ShrinkSourceImageFastGray(U8* pSource, U8* pOutput, float SubWidth,
+                                float SubHeight);
 
 
 private:

@@ -14,7 +14,8 @@
 
 #include "GEMglNormal3sv.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3sv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3sv, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,10 +24,12 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglNormal3sv, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglNormal3sv :: GEMglNormal3sv        (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2)
+GEMglNormal3sv :: GEMglNormal3sv        (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2)
 {
   vMess(arg0, arg1, arg2);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -47,7 +50,8 @@ void GEMglNormal3sv :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglNormal3sv :: vMess (t_float arg0, t_float arg1, t_float arg2)         // FUN
+void GEMglNormal3sv :: vMess (t_float arg0, t_float arg1,
+                              t_float arg2)         // FUN
 {
   v[0]=static_cast<GLshort>(arg0);
   v[1]=static_cast<GLshort>(arg1);
@@ -61,10 +65,13 @@ void GEMglNormal3sv :: vMess (t_float arg0, t_float arg1, t_float arg2)         
 
 void GEMglNormal3sv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglNormal3sv::vMessCallback),          gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglNormal3sv::vMessCallback),
+                  gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglNormal3sv :: vMessCallback (void* data, t_float arg0, t_float arg1, t_float arg2)
+void GEMglNormal3sv :: vMessCallback (void* data, t_float arg0,
+                                      t_float arg1, t_float arg2)
 {
   GetMyClass(data)->vMess ( arg0, arg1, arg2);
 }

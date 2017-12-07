@@ -70,7 +70,8 @@ protected:
   void    makecone();
   void    init();
   int             m_initialized;
-  int             maxPoints, numPoints, viewImage, useStrokes, drawEdges, moving, canDrawEdges;
+  int             maxPoints, numPoints, viewImage, useStrokes, drawEdges,
+                  moving, canDrawEdges;
 
   /*
   * Point structure
@@ -114,7 +115,8 @@ private:
   //////////
   // static member functions
   static void     bangMessCallback(void *data);
-  static void         sizeMessCallback(void *data, t_float width, t_float height );
+  static void         sizeMessCallback(void *data, t_float width,
+                                       t_float height );
 };
 
 #endif  // for header file

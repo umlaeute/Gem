@@ -41,7 +41,8 @@ const float tube::TWO_PI = 8.f * atan(1.);
 # define TUBE_NUMPTS 80
 #endif
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg,
+                             A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -51,7 +52,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOA
 // Constructor
 //
 /////////////////////////////////////////////////////////
-tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg order_in)
+tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height,
+             t_floatarg order_in)
   : GemShape(size),
     m_cos(NULL), m_sin(NULL),
     m_size2(size2), m_inlet2(NULL),
@@ -147,12 +149,16 @@ void tube :: renderShape(GemState *state)
     vectors2[n][2] = 0.0;
 
     // rotation des vecteurs en x
-    vectors_tmp    = cos_rotX1 * vectors1[n][1]; // - sin(m_rotX1) * vectors1[n][2];
-    vectors1[n][2] = sin_rotX1 * vectors1[n][1]; // + cos(m_rotX1) * vectors1[n][2];
+    vectors_tmp    = cos_rotX1 *
+                     vectors1[n][1]; // - sin(m_rotX1) * vectors1[n][2];
+    vectors1[n][2] = sin_rotX1 *
+                     vectors1[n][1]; // + cos(m_rotX1) * vectors1[n][2];
     vectors1[n][1] = vectors_tmp;
 
-    vectors_tmp    = cos_rotX2 * vectors2[n][1]; // - sin(m_rotX2) * vectors2[n][2];
-    vectors2[n][2] = sin_rotX2 * vectors2[n][1]; // + cos(m_rotX2) * vectors2[n][2];
+    vectors_tmp    = cos_rotX2 *
+                     vectors2[n][1]; // - sin(m_rotX2) * vectors2[n][2];
+    vectors2[n][2] = sin_rotX2 *
+                     vectors2[n][1]; // + cos(m_rotX2) * vectors2[n][2];
     vectors2[n][1] = vectors_tmp;
 
     // rotation des vecteurs en y

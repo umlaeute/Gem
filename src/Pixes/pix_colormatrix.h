@@ -67,7 +67,8 @@ private:
 
   //////////
   // Static member functions
-  static void     matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     matrixMessCallback(void *data, t_symbol *, int argc,
+                                     t_atom *argv);
 };
 
 #endif  // for header file

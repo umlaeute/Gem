@@ -73,7 +73,8 @@ double Blob:: diameter()
 }
 double Blob:: distance2(Blob b)
 {
-  return (b.xmid()-xmid())*(b.xmid()-xmid())+(b.ymid()-ymid())*(b.ymid()-ymid());
+  return (b.xmid()-xmid())*(b.xmid()-xmid())+(b.ymid()-ymid())*
+         (b.ymid()-ymid());
 }
 double Blob:: distance(Blob b)
 {
@@ -173,7 +174,8 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
     assert(cp);
 
     pb->area++;
-    t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x, chGray))/255.0);
+    t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x,
+                                       chGray))/255.0);
     double x = static_cast<t_float>(cp->x);
     double y = static_cast<t_float>(cp->y);
     pb->m_xaccum  += grey*x;
@@ -247,7 +249,8 @@ render
 void pix_multiblob :: doProcessing(void)
 {
   int blobNumber = 0;
-  int blobsize = static_cast<int>(m_blobsize * m_image.xsize * m_image.ysize);
+  int blobsize = static_cast<int>(m_blobsize * m_image.xsize *
+                                  m_image.ysize);
 
   // reset the currentblobs array
 
@@ -303,7 +306,8 @@ void pix_multiblob :: doProcessing(void)
       SETFLOAT(ap+bn*9+8, m_currentBlobs[bn].ymax()*scaleY); // maxY
 
       SETFLOAT(ap+bn*9+9, m_currentBlobs[bn].area*scaleXY);  // unweighted Area
-      SETFLOAT(ap+bn*9+10, m_currentBlobs[bn].angle());      // weighted orientation
+      SETFLOAT(ap+bn*9+10,
+               m_currentBlobs[bn].angle());      // weighted orientation
     }
 
     // i admit that it is naughty to use "matrix" from zexy/iemmatrix

@@ -33,8 +33,10 @@ CPPEXTERN_NEW_WITH_GIMME(pix_gain);
 pix_gain :: pix_gain(int argc, t_atom *argv)
   : m_saturate(true)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_gain"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vec_gain"));
   m_gain[chRed] = m_gain[chGreen] = m_gain[chBlue] = m_gain[chAlpha] = 1.0f;
 
   switch(argc) {
@@ -287,7 +289,8 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
   d = (vector signed short)vec_splat((vector signed short)d,0);
 
 #ifndef PPC970
-  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
 #endif
 
@@ -357,7 +360,8 @@ void pix_gain :: vecGainMess(int argc, t_atom *argv)
   } else if (argc == 3) {
     m_gain[chAlpha] = 1.0;
   } else if (argc == 1) {
-    m_gain[chRed] = m_gain[chGreen] = m_gain[chBlue] = m_gain[chAlpha] = atom_getfloat(argv);
+    m_gain[chRed] = m_gain[chGreen] = m_gain[chBlue] = m_gain[chAlpha] =
+                                        atom_getfloat(argv);
   } else {
     error("not enough gain values");
     return;
@@ -396,14 +400,18 @@ void pix_gain :: saturateMess(int sat)
 /////////////////////////////////////////////////////////
 void pix_gain :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::vecGainMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_gain::vecGainMessCallback),
                   gensym("vec_gain"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::floatGainMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_gain::floatGainMessCallback),
                   gensym("ft1"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_gain::saturateMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_gain::saturateMessCallback),
                   gensym("saturate"), A_FLOAT, A_NULL);
 }
-void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc,
+                                     t_atom *argv)
 {
   GetMyClass(data)->vecGainMess(argc, argv);
 }

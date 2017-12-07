@@ -48,7 +48,8 @@ public:
 
 protected:
   gem::Rectangle m_rectangle; /* the ROI as given from the user */
-  gem::Rectangle m_staterect; /* this is the (normalized) rectangle we pass to state */
+  gem::Rectangle
+  m_staterect; /* this is the (normalized) rectangle we pass to state */
   gem::Rectangle*m_oldrect;   /* the rectangle we retrieved from upstream (to be restored on postrender */
 
   static int s_ID; /* the key to retrieve the ROI from the GemState */

@@ -76,7 +76,8 @@ pix_biquad :: ~pix_biquad()
 void pix_biquad :: processRGBAImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
-  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
+  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize
+                 || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
   prev.setCsizeByFormat(image.format);
@@ -108,7 +109,8 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
     while(pixsize--) {
       float output;
       output = fb0 * *this_p + fb1 * *last_p + fb2 * *prev_p;
-      *this_p++    = (unsigned char)(ff1 * output + ff2 * *last_p + ff3 * *prev_p);
+      *this_p++    = (unsigned char)(ff1 * output + ff2 * *last_p + ff3 *
+                                     *prev_p);
       *prev_p++  = *last_p;
       *last_p++  = (unsigned char)output;
     }
@@ -125,11 +127,13 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
     int max=0;//JMZ
 
     while(pixsize--) {
-      int ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
+      int ioutput = (((ifb0 * *this_p) + (ifb1 * *last_p) +
+                      (ifb2 * *prev_p))>>8);
       if(max<ioutput) {
         max=ioutput;  //JMZ
       }
-      *this_p++    = (unsigned char)CLAMP(((iff1 * ioutput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
+      *this_p++    = (unsigned char)CLAMP(((iff1 * ioutput) +
+                                           (iff2 * *last_p) + (iff3 * *prev_p))>>8);
       *prev_p++  = *last_p;
       *last_p++  = (unsigned char)CLAMP(ioutput);
     }
@@ -145,7 +149,8 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
 void pix_biquad :: processYUVImage(imageStruct &image)
 {
   // assume that the pix_size does not change !
-  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
+  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize
+                 || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
   prev.setCsizeByFormat(image.format);
@@ -186,23 +191,29 @@ void pix_biquad :: processYUVImage(imageStruct &image)
 
   while(pixsize--) {
     int Youtput,UVoutput,Youtput1,UVoutput1;
-    UVoutput  = (((ifb0 * (*this_p-128)) + (ifb1 * (*last_p-128)) + (ifb2 * (*prev_p-128)))>>8);
-    *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput) + (iff2 * (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
+    UVoutput  = (((ifb0 * (*this_p-128)) + (ifb1 * (*last_p-128)) + (ifb2 *
+                  (*prev_p-128)))>>8);
+    *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput) + (iff2 *
+                                         (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
     *prev_p++ = *last_p;
     *last_p++ = (unsigned char)CLAMP_Y(UVoutput+128);
 
     Youtput   = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
-    *this_p++ = (unsigned char)CLAMP_Y(((iff1 * Youtput) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
+    *this_p++ = (unsigned char)CLAMP_Y(((iff1 * Youtput) + (iff2 * *last_p) +
+                                        (iff3 * *prev_p))>>8);
     *prev_p++ = *last_p;
     *last_p++ = (unsigned char)CLAMP_Y(Youtput);
 
-    UVoutput1  = (((ifb0 * (*this_p-128)) + (ifb1 * (*last_p-128)) + (ifb2 * (*prev_p-128)))>>8);
-    *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput1) + (iff2 * (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
+    UVoutput1  = (((ifb0 * (*this_p-128)) + (ifb1 * (*last_p-128)) + (ifb2 *
+                   (*prev_p-128)))>>8);
+    *this_p++ = (unsigned char)CLAMP_Y((((iff1 * UVoutput1) + (iff2 *
+                                         (*last_p-128)) + (iff3 * (*prev_p-128)))>>8)+128);
     *prev_p++ = *last_p;
     *last_p++ = (unsigned char)CLAMP_Y(UVoutput1+128);
 
     Youtput1   = (((ifb0 * *this_p) + (ifb1 * *last_p) + (ifb2 * *prev_p))>>8);
-    *this_p++ = (unsigned char)CLAMP_Y(((iff1 * Youtput1) + (iff2 * *last_p) + (iff3 * *prev_p))>>8);
+    *this_p++ = (unsigned char)CLAMP_Y(((iff1 * Youtput1) +
+                                        (iff2 * *last_p) + (iff3 * *prev_p))>>8);
     *prev_p++ = *last_p;
     *last_p++ = (unsigned char)CLAMP_Y(Youtput1);
   }
@@ -216,7 +227,8 @@ void pix_biquad :: processYUVImage(imageStruct &image)
 void pix_biquad :: processRGBAMMX(imageStruct &image)
 {
   // assume that the pix_size does not change !
-  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
+  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize
+                 || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
   prev.setCsizeByFormat(image.format);
@@ -362,7 +374,8 @@ void pix_biquad :: processGrayMMX(imageStruct &image)
 void pix_biquad :: processYUVAltivec(imageStruct &image)
 {
   // assume that the pix_size does not change !
-  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize || image.csize!=prev.csize);
+  bool do_blank=(image.xsize!=prev.xsize || image.ysize!=prev.ysize
+                 || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
   prev.setCsizeByFormat(image.format);
@@ -407,7 +420,8 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
   vector unsigned char one = vec_splat_u8(1),output;
   vector signed short UVoffset;
   vector signed short Ythis, UVthis, Ylast, UVlast, Yprev, UVprev;
-  vector signed int  Yt0, Yt1, UVt0, UVt1, Yl0, Yl1, UVl0, UVl1, Yp0, Yp1, UVp0, UVp1,intOffset;
+  vector signed int  Yt0, Yt1, UVt0, UVt1, Yl0, Yl1, UVl0, UVl1, Yp0, Yp1,
+         UVp0, UVp1,intOffset;
   vector signed short ifb0, ifb1, ifb2, iff1, iff2, iff3;
   vector unsigned int shift;
   vector signed int loImage, hiImage;
@@ -451,7 +465,8 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
   //setup the cache prefetch -- A MUST!!!
   //this gave a 30-40% speedup - the gain so far is about 450%
 #ifndef PPC970
-  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( this_p, prefetchSize, 0 );
   vec_dst( last_p, prefetchSize, 1 );
   vec_dst( prev_p, prefetchSize, 2 );
@@ -588,7 +603,8 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
 
     UVthis = vec_packs(hiImage,loImage);
 
-    this_p[0] = vec_packsu((vector signed short) vec_mergeh(UVthis,Ythis), (vector signed short) vec_mergel(UVthis,Ythis));
+    this_p[0] = vec_packsu((vector signed short) vec_mergeh(UVthis,Ythis),
+                           (vector signed short) vec_mergel(UVthis,Ythis));
 
     prev_p[0] = last_p[0];
     last_p[0] = output;

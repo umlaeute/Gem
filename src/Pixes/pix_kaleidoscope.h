@@ -29,7 +29,8 @@ typedef struct _SPete_Kaleidoscope_Line {
   float Y;
   U32 Flags;
 } SPete_Kaleidoscope_Line;
-extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2);
+extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,
+    const void* pElem2);
 
 #ifdef _WIN32
 # define NO_HACK
@@ -148,44 +149,55 @@ protected:
   void Pete_Kaleidoscope_SetupAngleTable();
   void Pete_Kaleidoscope_SetupCosTable();
   void Pete_Kaleidoscope_SetupLines(int* poutLinesCount);
-  void Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Line* pLinesStart,int nLinesCount,SPete_Kaleidoscope_PartitionData* poutPartitionData);
+  void Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Line* pLinesStart,
+                                        int nLinesCount,SPete_Kaleidoscope_PartitionData* poutPartitionData);
   void Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* pTransforms);
   void Pete_Kaleidoscope_Dev();
   inline int GetMirrored(int inValue,const int nMax);
 
-  inline void Pete_2dVector_Add(SPete_2dVector* pinA,SPete_2dVector* pinB,SPete_2dVector* poutResult)
+  inline void Pete_2dVector_Add(SPete_2dVector* pinA,SPete_2dVector* pinB,
+                                SPete_2dVector* poutResult)
   {
     poutResult->x=(pinA->x+pinB->x);
     poutResult->y=(pinA->y+pinB->y);
   }
-  inline void Pete_2dVector_Scale(SPete_2dVector* pinA,float Scale,SPete_2dVector* poutResult)
+  inline void Pete_2dVector_Scale(SPete_2dVector* pinA,float Scale,
+                                  SPete_2dVector* poutResult)
   {
     poutResult->x=(pinA->x*Scale);
     poutResult->y=(pinA->y*Scale);
   }
-  inline float Pete_2dVector_DotProduct(SPete_2dVector* pinA,SPete_2dVector* pinB)
+  inline float Pete_2dVector_DotProduct(SPete_2dVector* pinA,
+                                        SPete_2dVector* pinB)
   {
     return (pinA->x*pinB->x)+(pinA->y*pinB->y);
   }
 
-  inline void Pete_2dVector_Subtract(SPete_2dVector* pinA,SPete_2dVector* pinB,SPete_2dVector* poutResult)
+  inline void Pete_2dVector_Subtract(SPete_2dVector* pinA,
+                                     SPete_2dVector* pinB,SPete_2dVector* poutResult)
   {
     poutResult->x=(pinA->x-pinB->x);
     poutResult->y=(pinA->y-pinB->y);
   }
 
   void Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix);
-  void Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatrix* poutResult);
-  void Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult);
-  void Pete_2dMatrix_SetToDirectionalScale(float NormalX,float NormalY,float Scale,SPete_2dMatrix* poutResult);
-  void Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,SPete_2dVector* poutResult);
-  void Pete_2dMatrix_SetToTranslation(float TranslationX,float TranslationY,SPete_2dMatrix* poutResult);
+  void Pete_2dMatrix_SetToRotation(float Rotation,
+                                   SPete_2dMatrix* poutResult);
+  void Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,
+                                 SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult);
+  void Pete_2dMatrix_SetToDirectionalScale(float NormalX,float NormalY,
+      float Scale,SPete_2dMatrix* poutResult);
+  void Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector,
+                                     SPete_2dMatrix* pinMatrix,SPete_2dVector* poutResult);
+  void Pete_2dMatrix_SetToTranslation(float TranslationX,float TranslationY,
+                                      SPete_2dMatrix* poutResult);
   void Pete_SimpleMirror_Render();
 
 #ifdef NO_HACK
   int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections
 #else
-  static int* g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections
+  static int*
+  g_pCurrentCosTable; // Pete- Hack to avoid accessing this table via 2 indirections
 #endif
 
   /* inlets for parameters */
@@ -201,15 +213,22 @@ private:
 
   //////////
   // Static member functions
-  static void     sourceCtrCallback(void *data, t_float m_SourceCentreX, t_float m_SourceCentreY);
-  static void     outputCtrCallback(void *data, t_float m_OutputCentreX, t_float m_SourceCentreY);
-  static void     outputAngCallback(void *data, t_float m_OutputAnglePreIncrement);
-  static void     sourceAngCallback(void *data, t_float m_SourceAnglePreIncrement);
-  static void     outputAngleCallback(void *data, t_float m_OutputAnglePreIncrement);
-  static void     sourceAngleCallback(void *data, t_float m_SourceAnglePreIncrement);
+  static void     sourceCtrCallback(void *data, t_float m_SourceCentreX,
+                                    t_float m_SourceCentreY);
+  static void     outputCtrCallback(void *data, t_float m_OutputCentreX,
+                                    t_float m_SourceCentreY);
+  static void     outputAngCallback(void *data,
+                                    t_float m_OutputAnglePreIncrement);
+  static void     sourceAngCallback(void *data,
+                                    t_float m_SourceAnglePreIncrement);
+  static void     outputAngleCallback(void *data,
+                                      t_float m_OutputAnglePreIncrement);
+  static void     sourceAngleCallback(void *data,
+                                      t_float m_SourceAnglePreIncrement);
   static void     divCallback(void *data, t_float m_Divisions);
   static void     sapCallback(void *data, t_float m_SourceAngleProportion);
-  static void     rlpCallback(void *data, t_float m_ReflectionLineProportion);
+  static void     rlpCallback(void *data,
+                              t_float m_ReflectionLineProportion);
 };
 
 #endif  // for header file

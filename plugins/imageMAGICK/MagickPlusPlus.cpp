@@ -33,7 +33,8 @@ using namespace MagickLib;
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageMAGICK :: load(std::string filename, imageStruct&result,
+                         gem::Properties&props)
 {
   Magick::Image image;
   try {
@@ -69,7 +70,8 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
   }
   return true;
 }
-bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
+                       const std::string&mimetype, const gem::Properties&props)
 {
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
@@ -102,7 +104,8 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     break;
   }
   try {
-    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel, pImage->data);
+    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel,
+                         pImage->data);
     // since openGL is upside down
     if(!pImage->upsidedown) {
       mimage.flip();

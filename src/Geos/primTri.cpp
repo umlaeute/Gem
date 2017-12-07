@@ -91,21 +91,24 @@ void primTri :: renderShape(GemState *state)
   if (GemShape::m_texType && GemShape::m_texNum) {
     int curCoord = 0;
     glBegin(m_drawType);
-    glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+    glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                 GemShape::m_texCoords[curCoord].t);
     glColor4fv(mColors[0]);
     glVertex3fv(mVectors[0]);
 
     if (GemShape::m_texNum > 1) {
       curCoord = 1;
     }
-    glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+    glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                 GemShape::m_texCoords[curCoord].t);
     glColor4fv(mColors[1]);
     glVertex3fv(mVectors[1]);
 
     if (GemShape::m_texNum > 2) {
       curCoord = 2;
     }
-    glTexCoord2f(GemShape::m_texCoords[curCoord].s, GemShape::m_texCoords[curCoord].t);
+    glTexCoord2f(GemShape::m_texCoords[curCoord].s,
+                 GemShape::m_texCoords[curCoord].t);
     glColor4fv(mColors[2]);
     glVertex3fv(mVectors[2]);
     glEnd();
@@ -136,57 +139,72 @@ void primTri :: renderShape(GemState *state)
 /////////////////////////////////////////////////////////
 void primTri :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect1MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&primTri::vect1MessCallback),
                   gensym("vect1"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect2MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&primTri::vect2MessCallback),
                   gensym("vect2"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::vect3MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&primTri::vect3MessCallback),
                   gensym("vect3"), A_FLOAT, A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col1MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&primTri::col1MessCallback),
                   gensym("col1"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col2MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&primTri::col2MessCallback),
                   gensym("col2"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&primTri::col3MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&primTri::col3MessCallback),
                   gensym("col3"), A_GIMME, A_NULL);
 }
 
-void primTri :: vect1MessCallback(void *data, t_float x, t_float y, t_float z)
+void primTri :: vect1MessCallback(void *data, t_float x, t_float y,
+                                  t_float z)
 {
   GetMyClass(data)->vectMess(0, x, y, z);
 }
-void primTri :: vect2MessCallback(void *data, t_float x, t_float y, t_float z)
+void primTri :: vect2MessCallback(void *data, t_float x, t_float y,
+                                  t_float z)
 {
   GetMyClass(data)->vectMess(1, x, y, z);
 }
-void primTri :: vect3MessCallback(void *data, t_float x, t_float y, t_float z)
+void primTri :: vect3MessCallback(void *data, t_float x, t_float y,
+                                  t_float z)
 {
   GetMyClass(data)->vectMess(2, x, y, z);
 }
 
-void primTri :: col1MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void primTri :: col1MessCallback(void *data, t_symbol *, int argc,
+                                 t_atom *argv)
 {
   float alpha = 1.f;
   if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
   }
-  GetMyClass(data)->colMess(0, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  GetMyClass(data)->colMess(0, atom_getfloat(&argv[0]),
+                            atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }
-void primTri :: col2MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void primTri :: col2MessCallback(void *data, t_symbol *, int argc,
+                                 t_atom *argv)
 {
   float alpha = 1.f;
   if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
   }
-  GetMyClass(data)->colMess(1, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  GetMyClass(data)->colMess(1, atom_getfloat(&argv[0]),
+                            atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }
-void primTri :: col3MessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void primTri :: col3MessCallback(void *data, t_symbol *, int argc,
+                                 t_atom *argv)
 {
   float alpha = 1.f;
   if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
   }
-  GetMyClass(data)->colMess(2, atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  GetMyClass(data)->colMess(2, atom_getfloat(&argv[0]),
+                            atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }

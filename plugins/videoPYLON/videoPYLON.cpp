@@ -58,7 +58,8 @@ public:
     buffercount++;
     m_pBuffer = new uint8_t[ ImageSize ];
     if (NULL == m_pBuffer) {
-      GenICam::GenericException e("Not enough memory to allocate image buffer", __FILE__, __LINE__);
+      GenICam::GenericException e("Not enough memory to allocate image buffer",
+                                  __FILE__, __LINE__);
       throw e;
     }
   }
@@ -235,7 +236,8 @@ struct videoPYLON::Converter {
   }
 
 
-  static struct Pylon::SImageFormat getInFormat(const Pylon::GrabResult&Result)
+  static struct Pylon::SImageFormat getInFormat(const
+      Pylon::GrabResult&Result)
   {
     using namespace Pylon;
     struct SImageFormat imageFormat;
@@ -458,7 +460,8 @@ bool videoPYLON :: openDevice(gem::Properties&props)
         device = m_factory->CreateDevice(it->second);
       }
     } else {
-      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(m_devicename);
+      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(
+            m_devicename);
       if(it!=m_id2device.end()) {
         device = m_factory->CreateDevice(it->second);
       } else {
@@ -482,7 +485,8 @@ bool videoPYLON :: openDevice(gem::Properties&props)
       channel=maxchannel;
     }
 
-    m_grabber=new Pylon::CPylonGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
+    m_grabber=new Pylon::CPylonGigEStreamGrabber(m_camera->GetStreamGrabber(
+          channel));
   } catch (GenICam::GenericException &e) {
     std::cerr << e.GetDescription() << std::endl;
     close();
@@ -651,7 +655,8 @@ std::vector<std::string> videoPYLON::enumerate()
 
     try {
       /* darn, this doesn't seem to work..., it would be great though */
-      Pylon::CBaslerGigEDeviceInfo&gdevice=dynamic_cast< Pylon::CBaslerGigEDeviceInfo&>(device);
+      Pylon::CBaslerGigEDeviceInfo&gdevice=
+        dynamic_cast< Pylon::CBaslerGigEDeviceInfo&>(device);
 
       name=gdevice.GetAddress ();
       if(!name.empty()) {

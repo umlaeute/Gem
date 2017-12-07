@@ -35,7 +35,8 @@ pix_coordinate :: pix_coordinate()
     m_oldTexCoords(NULL), m_oldNumCoords(0)
 {
   // the size inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("coords"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("coords"));
 }
 
 /////////////////////////////////////////////////////////
@@ -140,10 +141,12 @@ void pix_coordinate :: coordsMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_coordinate :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_coordinate::coordsMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_coordinate::coordsMessCallback),
                   gensym("coords"), A_GIMME, A_NULL);
 }
-void pix_coordinate :: coordsMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_coordinate :: coordsMessCallback(void *data, t_symbol *, int argc,
+    t_atom *argv)
 {
   GetMyClass(data)->coordsMess(argc, argv);
 }

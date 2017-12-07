@@ -122,7 +122,8 @@ private:
   static void windowsizeCb(GLFWwindow*, int width, int height);
   static void windowcloseCb(GLFWwindow*);
   static void windowrefreshCb(GLFWwindow*);
-  static void keyCb(GLFWwindow*, int key, int scancode, int action, int mods);
+  static void keyCb(GLFWwindow*, int key, int scancode, int action,
+                    int mods);
   static void charCb(GLFWwindow*, unsigned int character);
   static void mousebuttonCb(GLFWwindow*, int button, int action, int mods);
   static void mouseposCb(GLFWwindow*, double x, double y);

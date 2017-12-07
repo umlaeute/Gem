@@ -14,7 +14,8 @@
 
 #include "GEMglPixelTransferi.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferi, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferi, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelTransferi, t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPixelTransferi :: GEMglPixelTransferi      (t_floatarg arg0, t_floatarg arg1) :
+GEMglPixelTransferi :: GEMglPixelTransferi      (t_floatarg arg0,
+    t_floatarg arg1) :
   pname(static_cast<GLenum>(arg0)),
   param(static_cast<GLint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("param"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +73,12 @@ void GEMglPixelTransferi :: paramMess (t_float arg1)    // FUN
 
 void GEMglPixelTransferi :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelTransferi::pnameMessCallback),         gensym("pname"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelTransferi::paramMessCallback),         gensym("param"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPixelTransferi::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPixelTransferi::paramMessCallback),
+                  gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglPixelTransferi :: pnameMessCallback (void* data, t_float arg0)

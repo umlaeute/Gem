@@ -91,7 +91,8 @@ private:
 
   //////////
   // static member functions
-  static void     fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  static void     fileMessCallback(void *data, t_symbol *s, int argc,
+                                   t_atom *argv);
   static void     autoMessCallback(void *data, t_float on);
   static void     bangMessCallback(void *data);
 };

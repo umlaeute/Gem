@@ -21,7 +21,8 @@
 #include <string.h>
 #include <stdio.h>
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg,
+                             A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -249,7 +250,8 @@ void multimodel :: openMess(const std::string&filename,
     open(filename, baseModeli, topModeli, skipRatei);
   }
 }
-void multimodel :: open(const std::string&filename, int baseModel, int topModel, int skipRate)
+void multimodel :: open(const std::string&filename, int baseModel,
+                        int topModel, int skipRate)
 {
   gem::Properties wantProps = m_properties;
   if(!m_backends.empty()) {
@@ -292,7 +294,8 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
 
   int realNum = baseModel;
   char bufName[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName,
+                      MAXPDSTRING);
 
   char newName[MAXPDSTRING];
   newName[0]=0;
@@ -317,7 +320,8 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
 
   if(loaders.size()!=numModels) {
     /* ouch, something went wrong! */
-    error("failed to load model#%d of %d (%s)...resetting to original models", i, numModels, newName);
+    error("failed to load model#%d of %d (%s)...resetting to original models",
+          i, numModels, newName);
     unsigned int ui;
     for(ui=0; ui<loaders.size(); ui++) {
       if(loaders[ui]) {
@@ -377,7 +381,8 @@ void multimodel :: render(GemState *state)
     return;
   }
 
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || m_size_change_flag ) {
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo
+       || m_size_change_flag ) {
     createVBO();
     m_size_change_flag = false;
   }
@@ -431,7 +436,8 @@ void multimodel :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void multimodel :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&multimodel::openMessCallback),
                   gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   CPPEXTERN_MSG1(classPtr, "mdl_num", changeModel, int);
 
@@ -443,10 +449,12 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
 }
-void multimodel :: openMessCallback(void *data, t_symbol *filesymbol, t_float baseModel,
+void multimodel :: openMessCallback(void *data, t_symbol *filesymbol,
+                                    t_float baseModel,
                                     t_floatarg topModel, t_floatarg skipRate)
 {
-  GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel, skipRate);
+  GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel,
+                             skipRate);
 }
 
 
@@ -458,7 +466,8 @@ void multimodel :: createVBO(void)
   m_normal  .create();
 }
 
-void multimodel :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb)
+void multimodel :: copyArray(const std::vector<std::vector<float> > tab,
+                             gem::VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
@@ -497,7 +506,8 @@ void multimodel :: getVBOarray()
 {
   if (m_loader && m_loader->needRefresh()) {
 
-    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray =
+      m_loader->getVBOarray();
 
     if ( vboArray.empty() ) {
       copyAllArrays();

@@ -72,7 +72,8 @@ void filmQT4L :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmQT4L :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmQT4L :: open(const std::string&filename,
+                      const gem::Properties&wantProps)
 {
   int wantedFormat=GL_RGBA;
   double d;
@@ -154,7 +155,8 @@ pixBlock* filmQT4L :: getFrame()
   pixBlock* pimage = 0;
   unsigned char **rows = new unsigned char*[m_image.image.ysize];
   while(i--) {
-    rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*(m_qtimage.ysize-i-1);
+    rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*
+            (m_qtimage.ysize-i-1);
   }
 
   m_lastFrame=m_curFrame;
@@ -191,7 +193,8 @@ film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
 #ifdef HAVE_QUICKTIME_SEEK_VIDEO
   lqt_seek_video        (m_quickfile, m_curTrack, m_curFrame, m_curTrack);
 #else
-  if ((i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack))) {  }
+  if ((i=quicktime_set_video_position(m_quickfile, m_curFrame,
+                                      m_curTrack))) {  }
 #endif
   return film::SUCCESS;
 }

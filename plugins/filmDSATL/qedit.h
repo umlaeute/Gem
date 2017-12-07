@@ -15,8 +15,10 @@ interface
   :
   public IUnknown
 {
-  virtual STDMETHODIMP SampleCB( double SampleTime, IMediaSample *pSample ) = 0;
-  virtual STDMETHODIMP BufferCB( double SampleTime, BYTE *pBuffer, long BufferLen ) = 0;
+  virtual STDMETHODIMP SampleCB( double SampleTime,
+                                 IMediaSample *pSample ) = 0;
+  virtual STDMETHODIMP BufferCB( double SampleTime, BYTE *pBuffer,
+                                 long BufferLen ) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -33,12 +35,17 @@ interface
   public IUnknown
 {
   virtual HRESULT STDMETHODCALLTYPE SetOneShot( BOOL OneShot ) = 0;
-  virtual HRESULT STDMETHODCALLTYPE SetMediaType( const AM_MEDIA_TYPE *pType ) = 0;
-  virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType( AM_MEDIA_TYPE *pType ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE SetMediaType( const AM_MEDIA_TYPE
+      *pType ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType(
+    AM_MEDIA_TYPE *pType ) = 0;
   virtual HRESULT STDMETHODCALLTYPE SetBufferSamples( BOOL BufferThem ) = 0;
-  virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer( long *pBufferSize, long *pBuffer ) = 0;
-  virtual HRESULT STDMETHODCALLTYPE GetCurrentSample( IMediaSample **ppSample ) = 0;
-  virtual HRESULT STDMETHODCALLTYPE SetCallback( ISampleGrabberCB *pCallback, long WhichMethodToCallback ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer( long *pBufferSize,
+      long *pBuffer ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE GetCurrentSample( IMediaSample
+      **ppSample ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE SetCallback( ISampleGrabberCB *pCallback,
+      long WhichMethodToCallback ) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////

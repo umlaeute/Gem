@@ -58,7 +58,8 @@ public:
   /* coverity[uninit_member] we track the un-initialization ourselves */
   ContextData(void) : m_haveDefaultValue(false) {;}
 
-  explicit ContextData(ContextDataType v) : m_haveDefaultValue(true), m_defaultValue(v) {;}
+  explicit ContextData(ContextDataType v) : m_haveDefaultValue(true),
+    m_defaultValue(v) {;}
 
   virtual ~ContextData()
   {
@@ -112,7 +113,8 @@ private:
   {
     if(requiredSize > m_ContextDataVector.size()) {
       m_ContextDataVector.reserve(requiredSize);          // Resize smartly
-      while(m_ContextDataVector.size() < requiredSize) {  // Add any new items needed
+      while(m_ContextDataVector.size() <
+            requiredSize) {  // Add any new items needed
         if(m_haveDefaultValue) {
           m_ContextDataVector.push_back(new ContextDataType(m_defaultValue));
         } else {
@@ -134,7 +136,8 @@ private:
     // Get current context
     int context_id = getCurContext();
     // Cache ref for better performance
-    checkSize(context_id+1);     // Make sure we are large enough (+1 since we have index)
+    checkSize(context_id
+              +1);     // Make sure we are large enough (+1 since we have index)
 
     return m_ContextDataVector[context_id];
   }

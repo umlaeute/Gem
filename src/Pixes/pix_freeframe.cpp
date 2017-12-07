@@ -363,7 +363,8 @@ private:
 #ifdef __APPLE__
     char buf3[MAXPDSTRING];
 # ifdef DL_OPEN
-    snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", name.c_str(), name.c_str());
+    snprintf(buf3, MAXPDSTRING, "%s.frf/Contents/MacOS/%s", name.c_str(),
+             name.c_str());
 # else
     // this can never work...
     snprintf(buf3, MAXPDSTRING, "%s.frf/%s", name.c_str(), name.c_str());
@@ -373,7 +374,8 @@ private:
 #endif
 
     int fd=-1;
-    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), name.c_str(), extension, buf2, &bufptr, MAXPDSTRING, 1))>=0) {
+    if ((fd=canvas_open(const_cast<t_canvas*>(canvas), name.c_str(), extension,
+                        buf2, &bufptr, MAXPDSTRING, 1))>=0) {
       ::close(fd);
 #if defined __APPLE__ && 0
       snprintf(buf, MAXPDSTRING, "%s", buf2);
@@ -383,7 +385,8 @@ private:
       buf[MAXPDSTRING-1]=0;
     } else {
       if(canvas) {
-        canvas_makefilename(const_cast<t_canvas*>(canvas), const_cast<char*>(name.c_str()), buf, MAXPDSTRING);
+        canvas_makefilename(const_cast<t_canvas*>(canvas),
+                            const_cast<char*>(name.c_str()), buf, MAXPDSTRING);
       } else {
         if(loud) {
           ::error("pix_freeframe[%s]: unfindeable", name.c_str());
@@ -427,9 +430,10 @@ private:
 
     // Get a pointer to the function.
     if (theBundle) {
-      plugmain = reinterpret_cast<FF_Main_FuncPtr>(CFBundleGetFunctionPointerForName(
-                   theBundle, CFSTR("plugMain") )
-                                                  );
+      plugmain = reinterpret_cast<FF_Main_FuncPtr>
+                 (CFBundleGetFunctionPointerForName(
+                    theBundle, CFSTR("plugMain") )
+                 );
     } else {
       if(loud) {
         ::post("%s: couldn't load", libname.c_str());
@@ -456,7 +460,8 @@ private:
       }
       return false;
     }
-    plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(m_w32handle, hookname));
+    plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(m_w32handle,
+               hookname));
 #else
 # error no way to load dynamic linked libraries on this OS
 #endif
@@ -485,7 +490,8 @@ private:
       std::cout << "getInfo failed" << std::endl;
       return false;
     }
-    PluginInfoStruct*pis=reinterpret_cast<PluginInfoStruct*>(result.PointerValue);
+    PluginInfoStruct*pis=reinterpret_cast<PluginInfoStruct*>
+                         (result.PointerValue);
 #ifdef __GNUC__
 # warning check whether the API is supported by us
 #endif
@@ -493,7 +499,8 @@ private:
     m_id = nchar2str(pis->PluginUniqueID, 4);
     m_type = pis->PluginType;
 
-    std::cout << "FF-API: "<<pis->APIMajorVersion<<"."<<pis->APIMinorVersion<<std::endl;
+    std::cout <<
+              "FF-API: "<<pis->APIMajorVersion<<"."<<pis->APIMinorVersion<<std::endl;
 
     return true;
   }
@@ -505,7 +512,8 @@ private:
     if(FF_FAIL==result.UIntValue) {
       return NULL;
     }
-    PluginExtendedInfoStruct*pis=reinterpret_cast<PluginExtendedInfoStruct*>(result.PointerValue);
+    PluginExtendedInfoStruct*pis=reinterpret_cast<PluginExtendedInfoStruct*>
+                                 (result.PointerValue);
     m_description=pis->Description;
     m_about = pis->About;
     m_majorVersion = pis -> PluginMajorVersion;
@@ -926,7 +934,8 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     default:
       s_inletType=&s_float;
     }
-    m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt)));
+    m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType,
+                                gensym(tempVt)));
   }
 #endif /* DONT_WANT_FREEFRAME */
 }
@@ -1107,7 +1116,8 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
   ::verbose(2, "freeframe_loader: %s",s->s_name);
   try {
     \
-    Obj_header *obj = new (pd_new(pix_freeframe_class),(void *)NULL) Obj_header;
+    Obj_header *obj = new (pd_new(pix_freeframe_class),
+                           (void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;
     CPPExtern::m_holdname=s->s_name;
@@ -1121,7 +1131,8 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
   }
   return 0;
 }
-bool pix_freeframe :: loader(const t_canvas*canvas, const std::string&classname, const std::string&path)
+bool pix_freeframe :: loader(const t_canvas*canvas,
+                             const std::string&classname, const std::string&path)
 {
   if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
@@ -1137,13 +1148,15 @@ bool pix_freeframe :: loader(const t_canvas*canvas, const std::string&classname,
   }
   if(plugin!=NULL) {
     delete plugin;
-    class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new), gensym(classname.c_str()), A_GIMME, 0);
+    class_addcreator(reinterpret_cast<t_newmethod>(freeframe_loader_new),
+                     gensym(classname.c_str()), A_GIMME, 0);
     return true;
   }
   return false;
 }
 
-static int freeframe_loader(const t_canvas *canvas, const char *classname, const char *path)
+static int freeframe_loader(const t_canvas *canvas, const char *classname,
+                            const char *path)
 {
   std::string nostring;
   return pix_freeframe::loader(canvas,
@@ -1159,12 +1172,16 @@ static int freeframe_loader(const t_canvas *canvas, const char *classname, const
 
 void pix_freeframe :: obj_setupCallback(t_class *classPtr)
 {
-  class_addanything(classPtr, reinterpret_cast<t_method>(&pix_freeframe::parmCallback));
-  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("load"), A_SYMBOL, A_NULL);
+  class_addanything(classPtr,
+                    reinterpret_cast<t_method>(&pix_freeframe::parmCallback));
+  class_addmethod  (classPtr,
+                    reinterpret_cast<t_method>(&pix_freeframe::openCallback), gensym("load"),
+                    A_SYMBOL, A_NULL);
   gem_register_loader(freeframe_loader);
 }
 
-void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+void pix_freeframe :: parmCallback(void *data, t_symbol*s, int argc,
+                                   t_atom*argv)
 {
 #ifndef DONT_WANT_FREEFRAME
   if('#'==s->s_name[0]) {

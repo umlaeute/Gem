@@ -169,7 +169,8 @@ bool videoV4L :: grabFrame()
   } else {
     errorcount++;
     if(errorcount>1000) {
-      error("[GEM:videoV4L] %d capture errors in a row... I think I better stop now...", errorcount);
+      error("[GEM:videoV4L] %d capture errors in a row... I think I better stop now...",
+            errorcount);
       return false;
     }
   }
@@ -312,7 +313,8 @@ bool videoV4L :: startTransfer()
   }
 
   /* select a channel (takes effect in next VIDIOCSCHAN call */
-  vchannel.channel = ((vcap.channels-1)<m_channel)?(vcap.channels-1):m_channel;
+  vchannel.channel = ((vcap.channels-1)<m_channel)?(vcap.channels-1):
+                     m_channel;
 
   /* hmm, what does this do? */
   if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
@@ -426,7 +428,8 @@ bool videoV4L :: startTransfer()
 
   m_haveVideo = 1;
 
-  verbose(1, "[GEM:videoV4L] startTransfer opened video connection %X", tvfd);
+  verbose(1, "[GEM:videoV4L] startTransfer opened video connection %X",
+          tvfd);
   return true;
 }
 
@@ -583,7 +586,8 @@ void videoV4L::setProperties(gem::Properties&props)
       if(props.get(key, d)) {
         int channel=d;
         if(channel<0 || channel>(vcap.channels-1)) {
-          error("[GEM:videoV4L] channel %d out of range [0..%d]", channel, vcap.channels-1);
+          error("[GEM:videoV4L] channel %d out of range [0..%d]", channel,
+                vcap.channels-1);
           continue;
         }
         m_channel=channel;

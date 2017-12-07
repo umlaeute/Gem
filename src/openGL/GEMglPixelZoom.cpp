@@ -14,7 +14,8 @@
 
 #include "GEMglPixelZoom.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelZoom, t_floatarg, A_DEFFLOAT, t_floatarg
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPixelZoom :: GEMglPixelZoom        (t_floatarg arg0, t_floatarg arg1) :
+GEMglPixelZoom :: GEMglPixelZoom        (t_floatarg arg0,
+    t_floatarg arg1) :
   xfactor(static_cast<GLfloat>(arg0)),
   yfactor(static_cast<GLfloat>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xfactor"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yfactor"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("xfactor"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("yfactor"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +73,12 @@ void GEMglPixelZoom :: yfactorMess (t_float arg1)       // FUN
 
 void GEMglPixelZoom :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelZoom::xfactorMessCallback),    gensym("xfactor"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelZoom::yfactorMessCallback),    gensym("yfactor"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPixelZoom::xfactorMessCallback),
+                  gensym("xfactor"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPixelZoom::yfactorMessCallback),
+                  gensym("yfactor"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglPixelZoom :: xfactorMessCallback (void* data, t_float arg0)

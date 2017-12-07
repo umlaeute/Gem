@@ -61,7 +61,8 @@ protected:
   //////////
   // altivec
   virtual void    processYUV_Altivec(imageStruct &image, imageStruct &right);
-  virtual void    processRGBA_Altivec(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_Altivec(imageStruct &image,
+                                      imageStruct &right);
 #endif
 
   virtual void    processDualImage(imageStruct &image, imageStruct &right);

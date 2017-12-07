@@ -136,7 +136,8 @@ std::vector<std::string>Properties::keys() const
 
 enum Properties::PropertyType Properties::type(const std::string&key) const
 {
-  std::map<std::string, enum Properties::PropertyType>::iterator it=pimpl->typemap.find(key);
+  std::map<std::string, enum Properties::PropertyType>::iterator it=
+    pimpl->typemap.find(key);
   if(pimpl->typemap.end() == it) {
     return UNSET;
   }

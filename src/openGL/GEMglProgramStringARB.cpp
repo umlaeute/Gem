@@ -41,10 +41,14 @@ GEMglProgramStringARB :: GEMglProgramStringARB  (int argc, t_atom*argv) :
     break;
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("format"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("len"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_symbol, gensym("string"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("format"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("len"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_symbol,
+                         gensym("string"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -109,13 +113,17 @@ void GEMglProgramStringARB :: stringMess (t_symbol* arg1)       // FUN
 
 void GEMglProgramStringARB :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::targetMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglProgramStringARB::targetMessCallback),
                   gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::formatMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglProgramStringARB::formatMessCallback),
                   gensym("format"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::lenMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglProgramStringARB::lenMessCallback),
                   gensym("len"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglProgramStringARB::stringMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglProgramStringARB::stringMessCallback),
                   gensym("string"), A_DEFSYMBOL, A_NULL);
 };
 
@@ -131,7 +139,8 @@ void GEMglProgramStringARB :: lenMessCallback (void* data, t_float arg2)
 {
   GetMyClass(data)->lenMess ( arg2 );
 }
-void GEMglProgramStringARB :: stringMessCallback (void* data, t_symbol* arg3)
+void GEMglProgramStringARB :: stringMessCallback (void* data,
+    t_symbol* arg3)
 {
   GetMyClass(data)->stringMess ( arg3 );
 }

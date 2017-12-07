@@ -63,7 +63,8 @@ public:
     pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
     pixMap(NULL), rowBytes(0), baseAddr(NULL), fontList(0),
 #elif defined __linux__ || defined HAVE_GL_GLX_H
-    dpy(NULL), win(0), screen(0), cmap(0), context(NULL), delete_atom(0), have_border(false),
+    dpy(NULL), win(0), screen(0), cmap(0), context(NULL), delete_atom(0),
+    have_border(false),
 #else
 #endif
     have_constContext(0)
@@ -196,7 +197,8 @@ public:
 
 //////////
 // Create a new window
-GEM_EXTERN extern int createGemWindow(WindowInfo &info, WindowHints &hints);
+GEM_EXTERN extern int createGemWindow(WindowInfo &info,
+                                      WindowHints &hints);
 
 //////////
 // Destroy a window
@@ -223,7 +225,8 @@ GEM_EXTERN extern bool initGemWin(void);
 
 /////////
 // prepare a WindowInfo for context-sharing
-GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints);
+GEM_EXTERN void initWin_sharedContext(WindowInfo &info,
+                                      WindowHints &hints);
 
 
 

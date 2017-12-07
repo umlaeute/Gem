@@ -61,7 +61,8 @@ protected:
   // The derived class HAS override this.
   // This is called whenever a new image comes through and
   //              both of the image structs are RGBA
-  virtual void    processDualImage(imageStruct &image, imageStruct &right) = 0;
+  virtual void    processDualImage(imageStruct &image,
+                                   imageStruct &right) = 0;
 
   //////////
   // The derived class CAN override this.
@@ -191,6 +192,7 @@ private:
   //////////
   // Static member functions
   static void     obj_setupCallback(t_class *classPtr);
-  static void     gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
+  static void     gem_rightMessCallback(void *x, t_symbol *s, int argc,
+                                        t_atom *argv);
 };
 #endif  // for header file

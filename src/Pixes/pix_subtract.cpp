@@ -42,7 +42,8 @@ pix_subtract :: ~pix_subtract()
 // processDualImage
 //
 /////////////////////////////////////////////////////////
-void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
+void pix_subtract :: processRGBA_RGBA(imageStruct &image,
+                                      imageStruct &right)
 {
   register int datasize = (image.xsize * image.ysize)>>3;
   register unsigned char *leftPix = image.data;
@@ -68,7 +69,8 @@ void pix_subtract :: processRGBA_RGBA(imageStruct &image, imageStruct &right)
 // processRightGray
 //
 /////////////////////////////////////////////////////////
-void pix_subtract :: processRGBA_Gray(imageStruct &image, imageStruct &right)
+void pix_subtract :: processRGBA_Gray(imageStruct &image,
+                                      imageStruct &right)
 {
   int datasize = image.xsize * image.ysize;
   unsigned char *leftPix = image.data;
@@ -115,7 +117,8 @@ void pix_subtract :: processYUV_YUV(imageStruct &image, imageStruct &right)
 }
 
 #ifdef __MMX__
-void pix_subtract :: processRGBA_MMX(imageStruct &image, imageStruct &right)
+void pix_subtract :: processRGBA_MMX(imageStruct &image,
+                                     imageStruct &right)
 {
   int datasize =   image.xsize * image.ysize * image.csize;
   __m64*leftPix =  (__m64*)image.data;
@@ -132,7 +135,8 @@ void pix_subtract :: processRGBA_MMX(imageStruct &image, imageStruct &right)
   }
   _mm_empty();
 }
-void pix_subtract :: processYUV_MMX (imageStruct &image, imageStruct &right)
+void pix_subtract :: processYUV_MMX (imageStruct &image,
+                                     imageStruct &right)
 {
   int datasize =   image.xsize * image.ysize * image.csize;
   __m64*leftPix =  (__m64*)image.data;
@@ -161,14 +165,16 @@ void pix_subtract :: processYUV_MMX (imageStruct &image, imageStruct &right)
   }
   _mm_empty();
 }
-void pix_subtract :: processGray_MMX(imageStruct &image, imageStruct &right)
+void pix_subtract :: processGray_MMX(imageStruct &image,
+                                     imageStruct &right)
 {
   processRGBA_MMX(image, right);
 }
 #endif
 
 #ifdef __VEC__
-void pix_subtract :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
+void pix_subtract :: processRGBA_Altivec(imageStruct &image,
+    imageStruct &right)
 {
   int h,w,width;
   width = image.xsize/4;
@@ -201,7 +207,8 @@ void pix_subtract :: processRGBA_Altivec(imageStruct &image, imageStruct &right)
   }  /*end of working altivec function */
 }
 
-void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
+void pix_subtract :: processYUV_Altivec(imageStruct &image,
+                                        imageStruct &right)
 {
   long h,w,width;
 
@@ -222,7 +229,8 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
   } charBuffer;
 
   //vector unsigned char c;
-  vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage, UVTemp, YTemp;
+  vector signed short d, hiImage, loImage, YRight, UVRight, YImage, UVImage,
+         UVTemp, YTemp;
   //  vector unsigned char zero = vec_splat_u8(0);
   vector unsigned char c,one;
   // vector signed short zshort = vec_splat_s16(0);
@@ -301,10 +309,12 @@ void pix_subtract :: processYUV_Altivec(imageStruct &image, imageStruct &right)
 }
 #endif
 
-void pix_subtract :: processDualImage(imageStruct &image, imageStruct &right)
+void pix_subtract :: processDualImage(imageStruct &image,
+                                      imageStruct &right)
 {
   if (image.format!=right.format) {
-    error("pix_add: no method to combine (0x%X) and (0x%X)", image.format, right.format);
+    error("pix_add: no method to combine (0x%X) and (0x%X)", image.format,
+          right.format);
     return;
   }
   int datasize = (image.xsize * image.ysize * image.csize)>>5;

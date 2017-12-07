@@ -55,8 +55,10 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
 
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("size"));
 
   m_outNumFrames = outlet_new(this->x_obj, 0);
 
@@ -144,7 +146,8 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_ticks = 20;
 
 // post("anyCodec %d bestSpeedCodec %d bestFidelityCodec %d bestCompressionCodec %d",anyCodec,bestSpeedCodec,bestFidelityCodec,bestCompressionCodec);
-  stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
+  stdComponent = OpenDefaultComponent(StandardCompressionType,
+                                      StandardCompressionSubType);
 
   if (stdComponent == NULL) {
     post("failed to open compressor component");
@@ -192,7 +195,8 @@ pix_recordQT :: ~pix_recordQT()
 // Prepares QT for recording
 //
 /////////////////////////////////////////////////////////
-void pix_recordQT :: setupQT() //this only needs to be done when codec info changes
+void pix_recordQT ::
+setupQT() //this only needs to be done when codec info changes
 {
   FSSpec          theFSSpec;
   OSErr               err = noErr;
@@ -236,7 +240,8 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
     }
 
     //err = ::FSsetCatalogInfo(&ref, kFSCatInfoSettableInfo, NULL);
-    err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec, NULL);
+    err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec,
+                           NULL);
 
     if (err != noErr) {
       error("error %d in FSGetCatalogInfo()", err);
@@ -244,7 +249,8 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
     }
 
 
-    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename, &theFSSpec);
+    err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, (UInt8*)m_filename,
+                       &theFSSpec);
 
     if (err != noErr && err != -37) {
       error("error %d in FSMakeFSSpec()", err);
@@ -367,7 +373,8 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
   SetMovieMatrix(m_movie,&aMatrix);
 #endif
 
-  track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),FixRatio(m_srcRect.bottom, 1),kNoVolume);
+  track = NewMovieTrack(m_movie,FixRatio(m_srcRect.right, 1),
+                        FixRatio(m_srcRect.bottom, 1),kNoVolume);
 
   media = NewTrackMedia(track,VideoMediaType,600,NULL,0);
 
@@ -395,7 +402,8 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
     }
 
     //open a new component from scratch
-    stdComponent = OpenDefaultComponent(StandardCompressionType,StandardCompressionSubType);
+    stdComponent = OpenDefaultComponent(StandardCompressionType,
+                                        StandardCompressionSubType);
 
     if (stdComponent == NULL) {
       error("failed to open compressor component");
@@ -409,7 +417,8 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
       error("SCRequestSequenceSettings failed with error %d",compErr);
     }
 
-    compErr = SCGetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
+    compErr = SCGetInfo(stdComponent, scTemporalSettingsType,
+                        &TemporalSettings);
     compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 
     if (compErr != noErr) {
@@ -421,13 +430,18 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
     m_spatialQuality = SpatialSettings.spatialQuality;
     m_codec = SpatialSettings.codec;
 
-    post("Dialog returned SpatialSettings.codecType %d",SpatialSettings.codecType);
+    post("Dialog returned SpatialSettings.codecType %d",
+         SpatialSettings.codecType);
     post("Dialog returned SpatialSettings.codec %d",SpatialSettings.codec);
     post("Dialog returned SpatialSettings.depth %d",SpatialSettings.depth);
-    post("Dialog returned SpatialSettings.spatialQuality %d",SpatialSettings.spatialQuality);
-    post("Dialog returned TemporalSettings.temporalQualitye %d",TemporalSettings.temporalQuality);
-    post("Dialog returned TemporalSettings.frameRate %d",TemporalSettings.frameRate);
-    post("Dialog returned TemporalSettings.keyFrameRate %d",TemporalSettings.keyFrameRate);
+    post("Dialog returned SpatialSettings.spatialQuality %d",
+         SpatialSettings.spatialQuality);
+    post("Dialog returned TemporalSettings.temporalQualitye %d",
+         TemporalSettings.temporalQuality);
+    post("Dialog returned TemporalSettings.frameRate %d",
+         TemporalSettings.frameRate);
+    post("Dialog returned TemporalSettings.keyFrameRate %d",
+         TemporalSettings.keyFrameRate);
 
     m_dialog = false; //don't keep doing it again
 
@@ -475,7 +489,8 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
 
   datarate.frameDuration = 33;
 
-  compErr = SCSetInfo(stdComponent, scTemporalSettingsType, &TemporalSettings);
+  compErr = SCSetInfo(stdComponent, scTemporalSettingsType,
+                      &TemporalSettings);
   compErr = SCSetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
   compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 
@@ -485,9 +500,11 @@ void pix_recordQT :: setupQT() //this only needs to be done when codec info chan
   }
 
 #ifdef __APPLE__
-  compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),&m_srcRect,&hImageDesc);
+  compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),
+                                    &m_srcRect,&hImageDesc);
 #else
-  compErr = SCCompressSequenceBegin(stdComponent,m_srcGWorld->portPixMap,&m_srcRect,&hImageDesc);
+  compErr = SCCompressSequenceBegin(stdComponent,m_srcGWorld->portPixMap,
+                                    &m_srcRect,&hImageDesc);
 #endif
   if (compErr != noErr)
   {
@@ -581,7 +598,8 @@ void pix_recordQT :: compressFrame()
 {
   OSErr                                   err;
 
-  Handle                                  compressedData; //data to put in QT mov
+  Handle
+  compressedData; //data to put in QT mov
 
   ComponentResult                 compErr = noErr;
 
@@ -629,8 +647,10 @@ void pix_recordQT :: compressFrame()
   } else {
 
     QueryPerformanceCounter(&endTime);
-    float fps = 1000 / (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1000.f);
-    seconds = (static_cast<float>(endTime.QuadPart - startTime.QuadPart)/countFreq * 1.f);
+    float fps = 1000 / (static_cast<float>(endTime.QuadPart -
+                                           startTime.QuadPart)/countFreq * 1000.f);
+    seconds = (static_cast<float>(endTime.QuadPart -
+                                  startTime.QuadPart)/countFreq * 1.f);
 // post("freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",freq, countFreq,(int)startTime.QuadPart,(int)endTime.QuadPart,fps,seconds);
 
     m_ticks = static_cast<int>(600 * seconds);
@@ -748,7 +768,8 @@ void pix_recordQT :: render(GemState *state)
           //      post("grabbing frame");
 
         } else {
-          post("movie dimensions changed prev %dx%d now %dx%d stopping recording",m_prevWidth,m_prevHeight,m_width,m_height);
+          post("movie dimensions changed prev %dx%d now %dx%d stopping recording",
+               m_prevWidth,m_prevHeight,m_width,m_height);
           m_recordStop = 1;
           m_prevWidth = m_width;
           m_prevHeight = m_height; //go ahead and change dimensions
@@ -827,7 +848,8 @@ void pix_recordQT :: getCodecList()
   }
   for (i = 0; i < count; i++) {
     codecName = codecList->list[i];
-    post("codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,codecName.codec);
+    post("codec %i %s %i ctype %d",i,codecName.typeName, codecName.cType,
+         codecName.codec);
     codecContainer[i].position = i;
     codecContainer[i].ctype = codecName.cType;
 
@@ -945,30 +967,42 @@ void pix_recordQT :: cleanImage()
 /////////////////////////////////////////////////////////
 void pix_recordQT :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_recordQT,gensym("pix_record"),A_DEFSYM,A_NULL));
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::fileMessCallback),
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_recordQT,
+                   gensym("pix_record"),A_DEFSYM,A_NULL));
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::fileMessCallback),
                   gensym("file"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::autoMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::autoMessCallback),
                   gensym("auto"), A_FLOAT, A_NULL);
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_recordQT::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_recordQT::bangMessCallback));
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::sizeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::sizeMessCallback),
                   gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::posMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::posMessCallback),
                   gensym("vert_pos"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::recordMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::recordMessCallback),
                   gensym("record"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::dialogMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::dialogMessCallback),
                   gensym("dialog"),  A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::codeclistMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::codeclistMessCallback),
                   gensym("codeclist"),  A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::codecMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::codecMessCallback),
                   gensym("codec"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_recordQT::colorspaceCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_recordQT::colorspaceCallback),
                   gensym("colorspace"), A_SYMBOL, A_NULL);
 }
 
-void pix_recordQT :: fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_recordQT :: fileMessCallback(void *data, t_symbol *s, int argc,
+                                      t_atom *argv)
 {
   GetMyClass(data)->fileMess(argc, argv);
 }
@@ -981,9 +1015,11 @@ void pix_recordQT :: bangMessCallback(void *data)
   GetMyClass(data)->m_banged=true;
 }
 
-void pix_recordQT :: sizeMessCallback(void *data, t_float width, t_float height)
+void pix_recordQT :: sizeMessCallback(void *data, t_float width,
+                                      t_float height)
 {
-  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
+  GetMyClass(data)->sizeMess(static_cast<int>(width),
+                             static_cast<int>(height));
 }
 void pix_recordQT :: posMessCallback(void *data, t_float x, t_float y)
 {
@@ -1013,7 +1049,8 @@ void pix_recordQT :: codeclistMessCallback(void *data)
   GetMyClass(data)->getCodecList();
 }
 
-void pix_recordQT :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_recordQT :: codecMessCallback(void *data, t_symbol *s, int argc,
+                                       t_atom *argv)
 {
   GetMyClass(data)->codecMess(argc, argv);
 // if (s->s_name == kJPEGCodecType) post("photo-jpeg codec"); else post("not photo-jpeg");

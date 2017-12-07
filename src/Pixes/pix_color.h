@@ -59,7 +59,8 @@ protected:
 
   //////////
   // Set the new color
-  void            vecGainMess(float red, float green, float blue, float alpha=1.0);
+  void            vecGainMess(float red, float green, float blue,
+                              float alpha=1.0);
 
   //////////
   // The new color

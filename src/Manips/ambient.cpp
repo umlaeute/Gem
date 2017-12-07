@@ -29,9 +29,11 @@ CPPEXTERN_NEW_WITH_GIMME(ambient);
 /////////////////////////////////////////////////////////
 ambient :: ambient(int argc, t_atom *argv)
 {
-  if (argc == 4) ambientMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  if (argc == 4) ambientMess(atom_getfloat(&argv[0]),
+                               atom_getfloat(&argv[1]),
                                atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-  else if (argc == 3) ambientMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  else if (argc == 3) ambientMess(atom_getfloat(&argv[0]),
+                                    atom_getfloat(&argv[1]),
                                     atom_getfloat(&argv[2]), 1.f);
   else if (argc == 0) {
     ambientMess(0.2f, 0.2f, 0.2f, 1.f);
@@ -73,7 +75,8 @@ void ambient :: render(GemState *)
 // ambientMess
 //
 /////////////////////////////////////////////////////////
-void ambient :: ambientMess(float red, float green, float blue, float alpha)
+void ambient :: ambientMess(float red, float green, float blue,
+                            float alpha)
 {
   m_ambient[0] = red;
   m_ambient[1] = green;
@@ -88,15 +91,18 @@ void ambient :: ambientMess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void ambient :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&ambient::ambientMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&ambient::ambientMessCallback),
                   gensym("ambient"), A_GIMME, A_NULL);
 }
-void ambient :: ambientMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void ambient :: ambientMessCallback(void *data, t_symbol *, int argc,
+                                    t_atom *argv)
 {
   float alpha = 1.0;
   if (argc == 4) {
     alpha = atom_getfloat(&argv[3]);
   }
-  GetMyClass(data)->ambientMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  GetMyClass(data)->ambientMess(atom_getfloat(&argv[0]),
+                                atom_getfloat(&argv[1]),
                                 atom_getfloat(&argv[2]), alpha);
 }

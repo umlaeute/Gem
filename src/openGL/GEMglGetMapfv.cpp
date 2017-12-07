@@ -14,7 +14,8 @@
 
 #include "GEMglGetMapfv.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglGetMapfv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglGetMapfv, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,8 +28,10 @@ GEMglGetMapfv :: GEMglGetMapfv  (t_floatarg arg0, t_floatarg arg1)
 {
   targetMess(arg0);
   queryMess(arg1);
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("query"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("target"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("query"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -56,7 +59,8 @@ bool GEMglGetMapfv :: isRunnable(void)
 void GEMglGetMapfv :: render(GemState *state)
 {
   glGetMapfv (target, query, v);
-  post("not really implemented:: got data @ %X, what should i do with it", v);
+  post("not really implemented:: got data @ %X, what should i do with it",
+       v);
 }
 
 
@@ -80,8 +84,12 @@ void GEMglGetMapfv :: queryMess (t_float arg0)          // FUN
 
 void GEMglGetMapfv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapfv::targetMessCallback), gensym("target"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetMapfv::queryMessCallback), gensym("query"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetMapfv::targetMessCallback),
+                  gensym("target"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetMapfv::queryMessCallback),
+                  gensym("query"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglGetMapfv :: targetMessCallback (void* data, t_float arg0)

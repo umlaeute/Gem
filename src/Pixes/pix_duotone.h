@@ -79,9 +79,12 @@ private:
 
   //////////
   // Static member functions
-  static void     color1MessCallback(void *data, t_float value1, t_float value2, t_float value3);
-  static void     color2MessCallback(void *data, t_float value1, t_float value2, t_float value3);
-  static void     threshMessCallback(void *data, t_float value1, t_float value2, t_float value3);
+  static void     color1MessCallback(void *data, t_float value1,
+                                     t_float value2, t_float value3);
+  static void     color2MessCallback(void *data, t_float value1,
+                                     t_float value2, t_float value3);
+  static void     threshMessCallback(void *data, t_float value1,
+                                     t_float value2, t_float value3);
 };
 
 #endif  // for header file

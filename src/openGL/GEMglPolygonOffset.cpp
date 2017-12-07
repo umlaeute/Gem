@@ -14,7 +14,8 @@
 
 #include "GEMglPolygonOffset.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPolygonOffset, t_floatarg, A_DEFFLOAT, t_floa
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPolygonOffset :: GEMglPolygonOffset        (t_floatarg arg0, t_floatarg arg1) :
+GEMglPolygonOffset :: GEMglPolygonOffset        (t_floatarg arg0,
+    t_floatarg arg1) :
   factor(static_cast<GLfloat>(arg0)),
   units(static_cast<GLfloat>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("factor"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("units"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("factor"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("units"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +73,12 @@ void GEMglPolygonOffset :: unitsMess (t_float arg1)     // FUN
 
 void GEMglPolygonOffset :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonOffset::factorMessCallback),         gensym("factor"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPolygonOffset::unitsMessCallback),          gensym("units"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPolygonOffset::factorMessCallback),
+                  gensym("factor"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPolygonOffset::unitsMessCallback),
+                  gensym("units"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglPolygonOffset :: factorMessCallback (void* data, t_float arg0)

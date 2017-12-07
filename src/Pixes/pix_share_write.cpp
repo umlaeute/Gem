@@ -172,9 +172,11 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     CloseHandle( m_MapFile );
   }
   if(A_FLOAT==argv->a_type) {
-    snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%g", atom_getfloat(argv));
+    snprintf(m_fileMappingName, MAXPDSTRING-1,
+             "gem_pix_share-FileMappingObject_%g", atom_getfloat(argv));
   } else if (A_SYMBOL==argv->a_type) {
-    snprintf(m_fileMappingName, MAXPDSTRING-1, "gem_pix_share-FileMappingObject_%s", atom_getsymbol(argv)->s_name);
+    snprintf(m_fileMappingName, MAXPDSTRING-1,
+             "gem_pix_share-FileMappingObject_%s", atom_getsymbol(argv)->s_name);
   }
 
 #else
@@ -284,26 +286,31 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
                 INVALID_HANDLE_VALUE,    // use paging file
                 NULL,                    // default security
                 PAGE_READWRITE,          // read/write access
-                (segmentSize & 0xFFFFFFFF00000000) >> 32,         // maximum object size (high-order DWORD)
+                (segmentSize & 0xFFFFFFFF00000000) >>
+                32,         // maximum object size (high-order DWORD)
                 segmentSize & 0xFFFFFFFF,         // maximum object size (low-order DWORD)
                 m_fileMappingName);      // name of mapping object
 
   if (m_MapFile == NULL) {
-    error("Could not create file mapping object %s - error %ld.",m_fileMappingName, GetLastError());
+    error("Could not create file mapping object %s - error %ld.",
+          m_fileMappingName, GetLastError());
     return -1;
   }
 
-  shm_addr = (unsigned char*) MapViewOfFile(m_MapFile,   // handle to map object
-             FILE_MAP_ALL_ACCESS, // read/write permission
-             0,
-             0,
-             segmentSize);
+  shm_addr = (unsigned char*) MapViewOfFile(
+               m_MapFile,   // handle to map object
+               FILE_MAP_ALL_ACCESS, // read/write permission
+               0,
+               0,
+               segmentSize);
 
   if ( !shm_addr ) {
-    error("Could not get a view of file %s - error %ld",m_fileMappingName, GetLastError());
+    error("Could not get a view of file %s - error %ld",m_fileMappingName,
+          GetLastError());
     return -1;
   } else {
-    verbose(0,"File mapping object %s successfully created.",m_fileMappingName);
+    verbose(0,"File mapping object %s successfully created.",
+            m_fileMappingName);
   }
 
 #else
@@ -413,11 +420,13 @@ void pix_share_write :: render(GemState *state)
 
 void pix_share_write :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_share_write::setMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_share_write::setMessCallback),
                   gensym("set"), A_GIMME, A_NULL);
 }
 
-void pix_share_write :: setMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_share_write :: setMessCallback(void *data, t_symbol *s, int argc,
+                                        t_atom *argv)
 {
   if(argc) {
     int err  = 0;

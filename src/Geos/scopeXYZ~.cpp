@@ -205,17 +205,20 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "linewidth", linewidthMess, float);
   CPPEXTERN_MSG1(classPtr, "length", lengthMess, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
                   gensym("dsp"), A_NULL);
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {
   GetMyClass(data)->doLengthMess(sp[1]->s_n);
-  dsp_add(perform, 5, data, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[1]->s_n);
+  dsp_add(perform, 5, data, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec,
+          sp[1]->s_n);
 }
 
-void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
+void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y,
+                         t_sample*Z)
 {
   int position=m_position;
 

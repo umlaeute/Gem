@@ -26,7 +26,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglDepthMask, t_floatarg, A_DEFFLOAT);
 GEMglDepthMask :: GEMglDepthMask        (t_floatarg arg0) :
   flag(static_cast<GLboolean>(arg0))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("flag"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("flag"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -60,7 +61,9 @@ void GEMglDepthMask :: flagMess (t_float arg1)          // FUN
 
 void GEMglDepthMask :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDepthMask::flagMessCallback),       gensym("flag"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglDepthMask::flagMessCallback),
+                  gensym("flag"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglDepthMask :: flagMessCallback (void* data, t_float arg0)

@@ -152,7 +152,8 @@ GEM_EXTERN extern imageStruct *image2mem(const char *filename);
 // This can write TIFF, JPG and other images (depending on which backends are available
 // legacy: type=0 -> TIFF; type>0 -> JPEG and (quality:=type)
 //
-GEM_EXTERN extern int mem2image(imageStruct *image, const char *filename, const int type);
+GEM_EXTERN extern int mem2image(imageStruct *image, const char *filename,
+                                const int type);
 
 
 #endif

@@ -116,12 +116,14 @@ private:
   std::vector<std::string>m_ids;
   std::vector<gem::plugins::record*>m_handles;
   std::vector<gem::plugins::record*>m_allhandles;
-  virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
+  virtual bool addHandle(std::vector<std::string>available_ids,
+                         std::string id=std::string(""));
   //////////
   // static member functions
   void  autoMess(bool on);
   void  bangMess();
-  static void   codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  static void   codecMessCallback(void *data, t_symbol *s, int argc,
+                                  t_atom *argv);
 
   static void   minMessCallback(void *data, t_float min);
   static void   maxMessCallback(void *data, t_float max);

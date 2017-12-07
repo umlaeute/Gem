@@ -82,7 +82,8 @@ static void addProperties(gem::Properties&props, int argc, t_atom*argv)
 //
 /////////////////////////////////////////////////////////
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 // Constructor
@@ -140,7 +141,8 @@ pix_buffer :: ~pix_buffer( void )
 //   allocate memory for m_numframes images of size x*y (with pixelsize=c)
 //
 /////////////////////////////////////////////////////////
-void pix_buffer :: allocateMess(unsigned int x, unsigned int y, unsigned int c)
+void pix_buffer :: allocateMess(unsigned int x, unsigned int y,
+                                unsigned int c)
 {
   int i = m_numframes;
   int format=0;

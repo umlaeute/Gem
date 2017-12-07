@@ -33,7 +33,8 @@ GEMglLogicOp :: GEMglLogicOp    (int argc, t_atom*argv) :
   } else if(argc) {
     throw(GemException("invalid number of arguments"));
   }
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("opcode"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("opcode"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -67,10 +68,13 @@ void GEMglLogicOp :: opcodeMess (t_atom arg)    // FUN
 
 void GEMglLogicOp :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglLogicOp::opcodeMessCallback),       gensym("opcode"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglLogicOp::opcodeMessCallback),
+                  gensym("opcode"), A_GIMME, A_NULL);
 };
 
-void GEMglLogicOp :: opcodeMessCallback (void* data, t_symbol*,int argc, t_atom*argv)
+void GEMglLogicOp :: opcodeMessCallback (void* data, t_symbol*,int argc,
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->opcodeMess ( argv[0]);

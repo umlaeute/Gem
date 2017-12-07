@@ -104,9 +104,12 @@ CVector3 CVector3::normalize() const
   CVector3 vNormal;
   float InvMagnitude = 1.f / abs();  // Get the magnitude
 
-  vNormal.x = x*InvMagnitude;              // Divide the vector's X by the magnitude
-  vNormal.y = y*InvMagnitude;              // Divide the vector's Y by the magnitude
-  vNormal.z = z*InvMagnitude;              // Divide the vector's Z by the magnitude
+  vNormal.x =
+    x*InvMagnitude;              // Divide the vector's X by the magnitude
+  vNormal.y =
+    y*InvMagnitude;              // Divide the vector's Y by the magnitude
+  vNormal.z =
+    z*InvMagnitude;              // Divide the vector's Z by the magnitude
 
   return vNormal;                         // Return the normal
 }

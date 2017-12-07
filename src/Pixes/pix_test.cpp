@@ -50,7 +50,8 @@ static volatile unsigned char getRandom(void)
   return (random_nextseed % 0xFF);
 }
 
-static void makeSMPTE_RGBA(unsigned int rows, unsigned int cols, unsigned char*DATA, float scale)
+static void makeSMPTE_RGBA(unsigned int rows, unsigned int cols,
+                           unsigned char*DATA, float scale)
 {
   unsigned char*data=DATA;
   unsigned int r,c;
@@ -103,7 +104,8 @@ static void makeSMPTE_RGBA(unsigned int rows, unsigned int cols, unsigned char*D
     data+=4;
   }
 }
-void makeSMPTE_YUV(unsigned int rows, unsigned int cols, unsigned char*DATA, float scale)
+void makeSMPTE_YUV(unsigned int rows, unsigned int cols,
+                   unsigned char*DATA, float scale)
 {
   unsigned char*data=DATA;
   unsigned int r,c;
@@ -154,7 +156,8 @@ void makeSMPTE_YUV(unsigned int rows, unsigned int cols, unsigned char*DATA, flo
     data+=2;
   }
 }
-void makeSMPTE_Grey(unsigned int rows, unsigned int cols, unsigned char*data, float scale)
+void makeSMPTE_Grey(unsigned int rows, unsigned int cols,
+                    unsigned char*data, float scale)
 {
   unsigned int r,c;
   unsigned int row0, row1;
@@ -223,13 +226,16 @@ void pix_test :: render(GemState*state)
   unsigned char* data=m_pix.image.data;
   switch (m_pix.image.format) {
   case GL_RGBA_GEM:
-    makeSMPTE_RGBA(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data, scale);
+    makeSMPTE_RGBA(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
+                   scale);
     break;
   case GL_YUV422_GEM:
-    makeSMPTE_YUV(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data, scale);
+    makeSMPTE_YUV(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
+                  scale);
     break;
   case GL_LUMINANCE:
-    makeSMPTE_Grey(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data, scale);
+    makeSMPTE_Grey(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
+                   scale);
     break;
   }
   //post("image=%d\tfilm=%d", m_pix.newimage,m_pix.newfilm);
@@ -264,7 +270,8 @@ void pix_test :: csMess(std::string cs)
     fmt=GL_LUMINANCE;
     break;
   default:
-    error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'", cs.c_str());
+    error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'",
+          cs.c_str());
     return;
   }
   m_pix.image.setCsizeByFormat(fmt);

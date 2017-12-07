@@ -18,7 +18,8 @@
 #include "pix_resize.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -58,7 +59,8 @@ void pix_resize :: processImage(imageStruct &image)
     m_image.ysize=hN;
     m_image.setCsizeByFormat(image.format);
     m_image.reallocate();
-    m_image.reallocate(wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
+    m_image.reallocate(
+      wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
 
     gluError = gluScaleImage(image.format,
                              image.xsize, image.ysize,
@@ -103,7 +105,8 @@ void pix_resize :: dimenMess(int width, int height)
 /////////////////////////////////////////////////////////
 void pix_resize :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_resize::dimenMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_resize::dimenMessCallback),
                   gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
 }
 

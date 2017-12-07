@@ -14,7 +14,8 @@
 
 #include "GEMglColor3ubv.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ubv, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ubv, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,10 +24,12 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglColor3ubv, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglColor3ubv :: GEMglColor3ubv        (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2)
+GEMglColor3ubv :: GEMglColor3ubv        (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2)
 {
   vMess(arg0, arg1, arg2);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -47,7 +50,8 @@ void GEMglColor3ubv :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglColor3ubv :: vMess (t_float arg0, t_float arg1, t_float arg2)         // FUN
+void GEMglColor3ubv :: vMess (t_float arg0, t_float arg1,
+                              t_float arg2)         // FUN
 {
   v[0]=static_cast<GLubyte>(arg0);
   v[1]=static_cast<GLubyte>(arg1);
@@ -61,10 +65,13 @@ void GEMglColor3ubv :: vMess (t_float arg0, t_float arg1, t_float arg2)         
 
 void GEMglColor3ubv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglColor3ubv::vMessCallback),          gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglColor3ubv::vMessCallback),
+                  gensym("v"), A_DEFFLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 }
 
-void GEMglColor3ubv :: vMessCallback (void* data, t_float arg0, t_float arg1, t_float arg2)
+void GEMglColor3ubv :: vMessCallback (void* data, t_float arg0,
+                                      t_float arg1, t_float arg2)
 {
   GetMyClass(data)->vMess ( arg0, arg1, arg2);
 }

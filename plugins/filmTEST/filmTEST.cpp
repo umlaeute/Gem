@@ -48,7 +48,8 @@ filmTEST :: filmTEST(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmTEST :: open(const std::string&filename, const gem::Properties&wantProps)
+bool filmTEST :: open(const std::string&filename,
+                      const gem::Properties&wantProps)
 {
   m_numFrames=100;
   m_fps=20;
@@ -98,7 +99,8 @@ pixBlock* filmTEST :: getFrame()
 film::errCode filmTEST :: changeImage(int imgNum, int trackNum)
 {
   unsigned char*data=m_image.image.data;
-  unsigned int size=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
+  unsigned int size=
+    m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
 
   unsigned char value=(unsigned char)imgNum;
 
@@ -113,7 +115,8 @@ film::errCode filmTEST :: changeImage(int imgNum, int trackNum)
 }
 
 
-bool filmTEST::enumProperties(gem::Properties&readprops, gem::Properties&writeprops)
+bool filmTEST::enumProperties(gem::Properties&readprops,
+                              gem::Properties&writeprops)
 {
   readprops.clear();
   writeprops.clear();

@@ -30,7 +30,8 @@ spline_path :: ~spline_path()
 // floatMess
 //
 /////////////////////////////////////////////////////////
-void spline_path :: lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts)
+void spline_path :: lookupFunc(t_float x, t_float *ret, int numDimen,
+                               int npnts, t_float *pnts)
 {
   splineFunc(x, ret, numDimen, npnts, pnts);
 }

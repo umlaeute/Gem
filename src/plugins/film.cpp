@@ -25,7 +25,8 @@
 
 gem::plugins::film :: ~film(void) {}
 /* initialize the film factory */
-static gem::PluginFactoryRegistrar::dummy<gem::plugins::film> fac_filmdummy;
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::film>
+fac_filmdummy;
 
 namespace gem
 {
@@ -49,7 +50,8 @@ public:
   {
     delete m_handle;
   }
-  virtual bool open(const std::string&name, const gem::Properties&requestprops)
+  virtual bool open(const std::string&name,
+                    const gem::Properties&requestprops)
   {
     gem::Properties props=requestprops;
     m_image.newfilm=true;
@@ -122,7 +124,8 @@ private:
   // set to TRUE if we can use the current handle in another thread
   bool m_canThread;
 
-  bool addPlugin( std::vector<std::string>available, std::string ID=std::string(""))
+  bool addPlugin( std::vector<std::string>available,
+                  std::string ID=std::string(""))
   {
     int count=0;
 
@@ -160,7 +163,8 @@ private:
         m_ids.push_back(key);
         m_handles.push_back(handle);
         count++;
-        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1), key.c_str());
+        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1),
+                key.c_str());
       }
     }
     return (count>0);
@@ -172,7 +176,8 @@ public:
     m_canThread(true)
   {
     gem::PluginFactory<gem::plugins::film>::loadPlugins("film");
-    std::vector<std::string>ids=gem::PluginFactory<gem::plugins::film>::getIDs();
+    std::vector<std::string>ids=
+      gem::PluginFactory<gem::plugins::film>::getIDs();
 
     if(!addPlugin(ids, "DirectShow")) {
       addPlugin(ids, "AVI");
@@ -213,7 +218,8 @@ public:
     }
   }
 
-  virtual bool open(const std::string&name, const gem::Properties&requestprops)
+  virtual bool open(const std::string&name,
+                    const gem::Properties&requestprops)
   {
     if(m_handle) {
       close();
@@ -232,7 +238,8 @@ public:
         std::string id=backends[j];
         for(i=0; i<m_handles.size(); i++) {
           /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
-          if(id==m_ids[i] && (tried=true) && m_handles[i]->open(name, requestprops)) {
+          if(id==m_ids[i] && (tried=true)
+              && m_handles[i]->open(name, requestprops)) {
             m_handle=m_handles[i];
             break;
           }

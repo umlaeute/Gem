@@ -86,7 +86,8 @@ videoDarwin :: ~videoDarwin()
   }
   if (m_sg) {
     if (::CloseComponent(m_sg)) {
-      verbose(0, "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
+      verbose(0,
+              "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
     }
     m_sg = NULL;
     if (m_srcGWorld) {
@@ -203,7 +204,8 @@ bool videoDarwin :: initSeqGrabber()
 
   anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not make new SG channnel error %d",anErr);
+    verbose(0, "[GEM:videoDarwin] could not make new SG channnel error %d",
+            anErr);
     return false;
   }
 
@@ -221,7 +223,8 @@ bool videoDarwin :: initSeqGrabber()
     m_inputDevice=m_devicenum;
   } else if (!m_devicename.empty()) {
     int i;
-    const int maxcount=(deviceCount<m_devices.size()?deviceCount:m_devices.size());
+    const int maxcount=(deviceCount<m_devices.size()?deviceCount:
+                        m_devices.size());
     for(i=0; i<maxcount; i++) {
       if(m_devicename==m_devices[i]) {
         m_inputDevice=i;
@@ -231,9 +234,11 @@ bool videoDarwin :: initSeqGrabber()
   }
 
   //this call sets the input device
-  if (m_inputDevice >= 0 && m_inputDevice < deviceCount) {//check that the device is not out of bounds
+  if (m_inputDevice >= 0
+      && m_inputDevice < deviceCount) {//check that the device is not out of bounds
     std::string devname=pascal2str((*devices)->entry[m_inputDevice].name);
-    verbose(1, "[GEM:videoDarwin] SGSetChannelDevice trying[%d] %s", m_inputDevice, devname.c_str());
+    verbose(1, "[GEM:videoDarwin] SGSetChannelDevice trying[%d] %s",
+            m_inputDevice, devname.c_str());
   }
   anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
   if(anErr!=noErr) {
@@ -242,24 +247,31 @@ bool videoDarwin :: initSeqGrabber()
 
   anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] SGSetChannelDeviceInput returned error %d",anErr);
+    verbose(0, "[GEM:videoDarwin] SGSetChannelDeviceInput returned error %d",
+            anErr);
   }
 
   //grab the VDIG info from the SGChannel
   m_vdig = SGGetVideoDigitizerComponent(m_vc);
-  VideoDigitizerError vdigErr = VDGetDigitizerInfo(m_vdig,&m_vdigInfo); //not sure if this is useful
+  VideoDigitizerError vdigErr = VDGetDigitizerInfo(m_vdig,
+                                &m_vdigInfo); //not sure if this is useful
 
   Str255    vdigName;
   memset(vdigName,0,255);
   vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
-  verbose(1, "[GEM:videoDarwin] vdigName is %s",pascal2str(vdigName).c_str());
+  verbose(1, "[GEM:videoDarwin] vdigName is %s",
+          pascal2str(vdigName).c_str());
 
   Rect vdRect;
   vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
-  verbose(1, "[GEM:videoDarwin] digitizer rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+  verbose(1,
+          "[GEM:videoDarwin] digitizer rect is top %d bottom %d left %d right %d",
+          vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
 
   vdigErr = VDGetActiveSrcRect(m_vdig,0,&vdRect);
-  verbose(1, "[GEM:videoDarwin] active src rect is top %d bottom %d left %d right %d",vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
+  verbose(1,
+          "[GEM:videoDarwin] active src rect is top %d bottom %d left %d right %d",
+          vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
 
   anErr = SGSetChannelBounds(m_vc, &srcRect);
   if(anErr!=noErr) {
@@ -335,7 +347,8 @@ void videoDarwin :: destroySeqGrabber()
   }
   if (m_sg) {
     if (::CloseComponent(m_sg)) {
-      verbose(0, "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
+      verbose(0,
+              "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
     }
     m_sg = NULL;
     if (m_srcGWorld) {
@@ -688,18 +701,22 @@ std::vector<std::string> videoDarwin::enumerate()
     short deviceCount = (*devices)->count;
     short deviceIndex = (*devices)->selectedIndex;
     short inputIndex;
-    verbose(1, "[GEM:videoDarwin] SG channnel Device List count %d index %d",deviceCount,deviceIndex);
+    verbose(1, "[GEM:videoDarwin] SG channnel Device List count %d index %d",
+            deviceCount,deviceIndex);
     int i;
     m_devices.clear();
     for (i = 0; i < deviceCount; i++) {
       m_devices.push_back(pascal2str((*devices)->entry[i].name));
-      verbose(1, "[GEM:videoDarwin] SG channnel Device List[%d]  %s", i, m_devices[i].c_str());
+      verbose(1, "[GEM:videoDarwin] SG channnel Device List[%d]  %s", i,
+              m_devices[i].c_str());
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
 
-    bool showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) & sgDeviceNameFlagShowInputsAsDevices;
+    bool showInputsAsDevices = ((*devices)->entry[deviceIndex].flags) &
+                               sgDeviceNameFlagShowInputsAsDevices;
 
-    SGDeviceInputList theSGInputList = ((SGDeviceName *)(&((*devices)->entry[deviceIndex])))->inputs; //fugly
+    SGDeviceInputList theSGInputList = ((SGDeviceName *)(&((
+                                          *devices)->entry[deviceIndex])))->inputs; //fugly
 
     //we should have device names in big ass undocumented structs
     //walk through the list

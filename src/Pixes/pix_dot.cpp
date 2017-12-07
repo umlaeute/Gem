@@ -53,7 +53,8 @@ pix_dot :: pix_dot() :
   DOTDEPTH = 5;
   DOTMAX = (1<<DOTDEPTH);
   yuv_init();
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("scale"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("scale"));
 }
 
 /////////////////////////////////////////////////////////
@@ -105,7 +106,8 @@ void pix_dot :: makePattern(int format)
   case GL_LUMINANCE: {
     for (int i=0; i<DOTMAX; i++) {
       /* Generated pattern is a quadrant of a disk. */
-      unsigned char *pat = (reinterpret_cast<unsigned char*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
+      unsigned char *pat = (reinterpret_cast<unsigned char*>(pattern)) +
+                           (i+1) * dot_hsize * dot_hsize - 1;
       double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
       r = r*r;
       for(int y=0; y<dot_hsize; y++) {
@@ -134,7 +136,8 @@ void pix_dot :: makePattern(int format)
 
     for (int i=0; i<DOTMAX; i++) {
       /* Generated pattern is a quadrant of a disk. */
-      U16 *pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
+      U16 *pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize *
+                 dot_hsize - 1;
       double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
       r = r*r;
       for(int y=0; y<dot_hsize; y++) {
@@ -234,7 +237,8 @@ void pix_dot :: drawDotYUV(int xx, int yy, unsigned char c, U16 *dest)
   }
 }
 
-void pix_dot :: drawDotGray(int xx, int yy, unsigned char c, unsigned char *dest)
+void pix_dot :: drawDotGray(int xx, int yy, unsigned char c,
+                            unsigned char *dest)
 {
   unsigned char *pat;
 
@@ -610,16 +614,19 @@ unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 /////////////////////////////////////////////////////////
 void pix_dot :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
                   gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
                   gensym("scale"), A_FLOAT, A_NULL);
 }
 
 
 void pix_dot :: sizeMessCallback(void *data, t_float width, t_float height)
 {
-  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
+  GetMyClass(data)->sizeMess(static_cast<int>(width),
+                             static_cast<int>(height));
 }
 
 void pix_dot :: scaleMessCallback(void *data, t_float state)

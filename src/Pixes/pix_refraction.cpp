@@ -101,7 +101,8 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
     //const U32* pOutputLineStart=pCurrentOutput;
     const U32* pOutputLineEnd=pCurrentOutput+nWidth;
 
-    const int nYCentre=(((nY+(GetSign(nY)*nHalfCellHeight))/nCellHeight)*nCellHeight)+nHalfCellHeight;
+    const int nYCentre=(((nY+(GetSign(nY)*nHalfCellHeight))/nCellHeight)
+                        *nCellHeight)+nHalfCellHeight;
     const int nYDist=(nY-nYCentre);
     int nSourceY=((nYDist*nRefraction)>>8)+nYCentre+nHalfHeight;
     nSourceY=clampFunc(nSourceY,0,(nHeight-1));
@@ -111,7 +112,8 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
     int nX=-nHalfWidth+nHalfCellWidth;
     while (pCurrentOutput!=pOutputLineEnd) {
 
-      const int nXCentre=(((nX+(GetSign(nX)*nHalfCellWidth))/nCellWidth)*nCellWidth)+nHalfCellWidth;
+      const int nXCentre=(((nX+(GetSign(nX)*nHalfCellWidth))/nCellWidth)
+                          *nCellWidth)+nHalfCellWidth;
       const int nXDist=(nX-nXCentre);
       int nSourceX=((nXDist*nRefraction)>>8)+nXCentre+nHalfWidth;
       nSourceX=clampFunc(nSourceX,0,(nWidth-1));
@@ -186,7 +188,8 @@ void pix_refraction :: processYUVImage(imageStruct &image)
     //const U32* pOutputLineStart=pCurrentOutput;
     const U32* pOutputLineEnd=pCurrentOutput+nWidth;
 
-    const int nYCentre=(((nY+(GetSign(nY)*nHalfCellHeight))/nCellHeight)*nCellHeight)+nHalfCellHeight;
+    const int nYCentre=(((nY+(GetSign(nY)*nHalfCellHeight))/nCellHeight)
+                        *nCellHeight)+nHalfCellHeight;
     const int nYDist=(nY-nYCentre);
     int nSourceY=((nYDist*nRefraction)>>8)+nYCentre+nHalfHeight;
     nSourceY=clampFunc(nSourceY,0,(nHeight-1));
@@ -196,7 +199,8 @@ void pix_refraction :: processYUVImage(imageStruct &image)
     int nX=-nHalfWidth+nHalfCellWidth;
     while (pCurrentOutput!=pOutputLineEnd) {
 
-      const int nXCentre=(((nX+(GetSign(nX)*nHalfCellWidth))/nCellWidth)*nCellWidth)+nHalfCellWidth;
+      const int nXCentre=(((nX+(GetSign(nX)*nHalfCellWidth))/nCellWidth)
+                          *nCellWidth)+nHalfCellWidth;
       const int nXDist=(nX-nXCentre);
       int nSourceX=((nXDist*nRefraction)>>8)+nXCentre+nHalfWidth;
       nSourceX=clampFunc(nSourceX,0,(nWidth-1));
@@ -222,13 +226,17 @@ void pix_refraction :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_refraction :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::refractCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_refraction::refractCallback),
                   gensym("refract"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::widthCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_refraction::widthCallback),
                   gensym("width"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::heightCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_refraction::heightCallback),
                   gensym("height"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_refraction::magCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_refraction::magCallback),
                   gensym("mag"), A_DEFFLOAT, A_NULL);
 }
 void pix_refraction :: refractCallback(void *data, t_float m_Refraction)
@@ -248,7 +256,8 @@ void pix_refraction :: heightCallback(void *data, t_float m_CellHeight)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_refraction :: magCallback(void *data, t_float m_DoAllowMagnification)
+void pix_refraction :: magCallback(void *data,
+                                   t_float m_DoAllowMagnification)
 {
   GetMyClass(data)->m_DoAllowMagnification=(m_DoAllowMagnification);
   GetMyClass(data)->setPixModified();

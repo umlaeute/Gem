@@ -26,7 +26,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1dv, t_floatarg, A_DEFFLOAT);
 GEMglEvalCoord1dv :: GEMglEvalCoord1dv  (t_floatarg arg0)
 {
   vMess(arg0);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("v"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("v"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -68,7 +69,9 @@ void GEMglEvalCoord1dv :: vMess (t_float arg0)          // FUN
 
 void GEMglEvalCoord1dv :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglEvalCoord1dv::vMessCallback),       gensym("v"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglEvalCoord1dv::vMessCallback),
+                  gensym("v"), A_DEFFLOAT, A_NULL);
 }
 
 void GEMglEvalCoord1dv :: vMessCallback (void* data, t_float arg0)

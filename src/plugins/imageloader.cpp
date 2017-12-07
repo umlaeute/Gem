@@ -22,7 +22,8 @@
 
 gem::plugins::imageloader :: ~imageloader(void) {}
 
-static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader> fac_imageloaderdummy;
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::imageloader>
+fac_imageloaderdummy;
 
 namespace gem
 {
@@ -39,7 +40,8 @@ public:
   imageloaderMeta(void) : m_canThread(true)
   {
     gem::PluginFactory<gem::plugins::imageloader>::loadPlugins("image");
-    std::vector<std::string>available_ids=gem::PluginFactory<gem::plugins::imageloader>::getIDs();
+    std::vector<std::string>available_ids=
+      gem::PluginFactory<gem::plugins::imageloader>::getIDs();
 
     addLoader(available_ids, "magick");
     addLoader(available_ids);
@@ -64,7 +66,8 @@ public:
       }
     }
   }
-  bool addLoader( std::vector<std::string>available, std::string ID=std::string(""))
+  bool addLoader( std::vector<std::string>available,
+                  std::string ID=std::string(""))
   {
     int count=0;
 
@@ -94,7 +97,8 @@ public:
           loader=gem::PluginFactory<gem::plugins::imageloader>::getInstance(key);
         } catch(GemException&x) {
           loader=NULL;
-          verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());
+          verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(),
+                  x.what());
         }
         if(NULL==loader) {
           continue;
@@ -102,7 +106,8 @@ public:
         m_ids.push_back(key);
         m_loaders.push_back(loader);
         count++;
-        verbose(2, "added backend#%d '%s' @ %p", (int)(m_loaders.size()-1), key.c_str(), loader);
+        verbose(2, "added backend#%d '%s' @ %p", (int)(m_loaders.size()-1),
+                key.c_str(), loader);
       }
     }
     return (count>0);
@@ -118,7 +123,8 @@ public:
     }
   }
 
-  virtual bool load(std::string filename, imageStruct&result, gem::Properties&props)
+  virtual bool load(std::string filename, imageStruct&result,
+                    gem::Properties&props)
   {
     unsigned int i;
     for(i=0; i<m_loaders.size(); i++) {

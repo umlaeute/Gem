@@ -77,8 +77,10 @@ private:
   // Static member functions
   static void directionCallback       (void *data, t_float state);
   static void modeCallback       (void *data, t_float state);
-  static void rangeCallback       (void *data, t_float Yval, t_float Uval,t_float Vval);
-  static void valueCallback       (void *data, t_float Yval, t_float Uval,t_float Vval);
+  static void rangeCallback       (void *data, t_float Yval, t_float Uval,
+                                   t_float Vval);
+  static void valueCallback       (void *data, t_float Yval, t_float Uval,
+                                   t_float Vval);
 
 };
 

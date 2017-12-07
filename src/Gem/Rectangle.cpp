@@ -27,7 +27,8 @@ Rectangle :: Rectangle(void) :
 }
 
 #define CLAMP01(x) if(x<0.)x=0.;else if(x>1.)x=1.;
-Rectangle Rectangle :: createNormalized(float x1, float y1, float x2, float y2)
+Rectangle Rectangle :: createNormalized(float x1, float y1, float x2,
+                                        float y2)
 {
   Rectangle result;
 

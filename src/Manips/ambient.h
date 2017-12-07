@@ -64,13 +64,15 @@ protected:
 
   //////////
   // ambient changed
-  void            ambientMess(float red, float green, float blue, float alpha);
+  void            ambientMess(float red, float green, float blue,
+                              float alpha);
 
 private:
 
   //////////
   // static member functions
-  static void     ambientMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     ambientMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv);
 };
 
 #endif  // for header file

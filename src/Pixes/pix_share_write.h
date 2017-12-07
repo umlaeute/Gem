@@ -36,7 +36,8 @@ protected:
 #endif
   size_t m_size;
   t_outlet *m_outlet;
-  static void   setMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  static void   setMessCallback(void *data, t_symbol *s, int argc,
+                                t_atom *argv);
 
 };
 

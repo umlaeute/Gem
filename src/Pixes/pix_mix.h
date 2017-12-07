@@ -60,7 +60,8 @@ protected:
   virtual void    processYUV_MMX(imageStruct &image, imageStruct &right);
 #endif
 #ifdef __VEC__
-  virtual void    processYUV_Altivec (imageStruct &image, imageStruct &right);
+  virtual void    processYUV_Altivec (imageStruct &image,
+                                      imageStruct &right);
 #endif
 
   virtual void    gainMess (float X, float Y);

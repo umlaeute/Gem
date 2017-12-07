@@ -23,7 +23,8 @@
 
 gem::plugins::imagesaver :: ~imagesaver(void) {}
 
-static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver> fac_imagesaverdummy;
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::imagesaver>
+fac_imagesaverdummy;
 
 namespace gem
 {
@@ -157,7 +158,8 @@ class imagesaverMeta : public imagesaver
       build_extension2mime();
     }
     if(s_extension2mime) {
-      std::map<std::string, std::string>::iterator it=s_extension2mime->find(gem::files::getExtension(filename, true));
+      std::map<std::string, std::string>::iterator it=s_extension2mime->find(
+            gem::files::getExtension(filename, true));
       if(s_extension2mime->end() != it) {
         return it->second;
       }
@@ -174,7 +176,8 @@ public:
     m_threadable(true)
   {
     gem::PluginFactory<imagesaver>::loadPlugins("image");
-    std::vector<std::string>available_ids=gem::PluginFactory<imagesaver>::getIDs();
+    std::vector<std::string>available_ids=
+      gem::PluginFactory<imagesaver>::getIDs();
     addSaver(available_ids);
 
     static bool firsttime=true;
@@ -197,7 +200,8 @@ public:
       }
     }
   }
-  bool addSaver( std::vector<std::string>available, std::string ID=std::string(""))
+  bool addSaver( std::vector<std::string>available,
+                 std::string ID=std::string(""))
   {
     int count=0;
 
@@ -227,7 +231,8 @@ public:
           saver=gem::PluginFactory<imagesaver>::getInstance(key);
         } catch(GemException&x) {
           saver=NULL;
-          verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(), x.what());
+          verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(),
+                  x.what());
         }
         if(NULL==saver) {
           continue;
@@ -235,7 +240,8 @@ public:
         m_ids.push_back(key);
         m_savers.push_back(saver);
         count++;
-        verbose(2, "added backend#%d '%s' @ %p", (int)(m_savers.size()-1), key.c_str(), saver);
+        verbose(2, "added backend#%d '%s' @ %p", (int)(m_savers.size()-1),
+                key.c_str(), saver);
       }
     }
     return (count>0);
@@ -250,13 +256,15 @@ public:
     }
   }
 
-  virtual bool save(const imageStruct&img, const std::string&filename, const std::string&mimetype_c, const gem::Properties&props)
+  virtual bool save(const imageStruct&img, const std::string&filename,
+                    const std::string&mimetype_c, const gem::Properties&props)
   {
     std::multimap<float, int>priorities;
     std::multimap<float,int>::reverse_iterator rit;
     unsigned int i;
 
-    std::string mimetype=(mimetype_c.empty())?imgName2Mime(filename):mimetype_c;
+    std::string mimetype=(mimetype_c.empty())?imgName2Mime(
+                           filename):mimetype_c;
 
     for(i=0; i<m_savers.size(); i++) {
       float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);
@@ -275,11 +283,14 @@ public:
     return false;
   }
 
-  virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props)
+  virtual float estimateSave(const imageStruct&img,
+                             const std::string&filename, const std::string&mimetype,
+                             const gem::Properties&props)
   {
     return 1.;
   }
-  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props)
+  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                    gem::Properties&props)
   {
     mimetypes.clear();
     props.clear();
@@ -294,7 +305,8 @@ public:
 
       for(j=0; j<mimetypes_.size(); j++) {
         const std::string&mimetype=mimetypes_[j];
-        if(std::find(mimetypes.begin(), mimetypes.end(), mimetype)==mimetypes.end()) {
+        if(std::find(mimetypes.begin(), mimetypes.end(),
+                     mimetype)==mimetypes.end()) {
           mimetypes.push_back(mimetypes_[j]);
         }
       }
@@ -316,4 +328,5 @@ gem::plugins::imagesaver*gem::plugins::imagesaver::getInstance(void)
 {
   return (new gem::plugins::imagesaverMeta());
 }
-std::map<std::string, std::string>*gem::plugins::imagesaverMeta::s_extension2mime=NULL;
+std::map<std::string, std::string>*gem::plugins::imagesaverMeta::s_extension2mime
+  =NULL;

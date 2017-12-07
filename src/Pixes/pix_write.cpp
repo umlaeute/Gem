@@ -68,8 +68,10 @@ pix_write :: pix_write(int argc, t_atom *argv)
     m_width = m_height = 128;
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_size"));
 
   m_automatic = false;
   m_autocount = 0;
@@ -147,7 +149,8 @@ void pix_write :: doWrite(void)
   /* Enable AGP storage hints */
   glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
   glTextureRangeAPPLE(...);
-  glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+  glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE,
+                  GL_STORAGE_SHARED_APPLE );
 
   /* Copy from Frame Buffer */
   glCopyTexSubImage2d(...);
@@ -180,7 +183,8 @@ void pix_write :: render(GemState *state)
       extension=(char*)"jpg";
     }
 
-    snprintf(m_filename, (size_t)(MAXPDSTRING), "%s%05d.%s", m_pathname.c_str(), m_autocount, extension);
+    snprintf(m_filename, (size_t)(MAXPDSTRING), "%s%05d.%s",
+             m_pathname.c_str(), m_autocount, extension);
     m_filename[MAXPDSTRING-1]=0;
 
     m_autocount++;

@@ -67,13 +67,15 @@ protected:
 
   //////////
   // Do the rendering
-  virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
+  virtual void    vertexProcess(int lsize, float*larray, int rsize,
+                                float*rarray);
   virtual void    render(GemState *state);
   virtual void    postrender(GemState *state);
   virtual void    rightRender(GemState *state);
 
   //private:
-  static void     gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
+  static void     gem_rightMessCallback(void *x, t_symbol *s, int argc,
+                                        t_atom *argv);
   static void     typeMessCallback(void *data, t_symbol*s,int, t_atom*);
 };
 

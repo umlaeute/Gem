@@ -14,7 +14,8 @@
 
 #include "GEMglScalef.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglScalef, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglScalef, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,14 +24,18 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglScalef, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglScalef :: GEMglScalef      (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglScalef :: GEMglScalef      (t_floatarg arg0, t_floatarg arg1,
+                                 t_floatarg arg2) :
   x(static_cast<GLfloat>(arg0)),
   y(static_cast<GLfloat>(arg1)),
   z(static_cast<GLfloat>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("y"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("z"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("x"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("y"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("z"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -78,9 +83,15 @@ void GEMglScalef :: zMess (t_float arg1)        // FUN
 
 void GEMglScalef :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglScalef::xMessCallback),     gensym("x"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglScalef::yMessCallback),     gensym("y"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglScalef::zMessCallback),     gensym("z"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglScalef::xMessCallback),     gensym("x"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglScalef::yMessCallback),     gensym("y"),
+                  A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglScalef::zMessCallback),     gensym("z"),
+                  A_DEFFLOAT, A_NULL);
 };
 
 void GEMglScalef :: xMessCallback (void* data, t_float arg0)

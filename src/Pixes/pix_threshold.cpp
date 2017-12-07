@@ -30,9 +30,12 @@ CPPEXTERN_NEW(pix_threshold);
 pix_threshold :: pix_threshold() :
   m_Y(0)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vec_thresh"));
-  m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_thresh[chAlpha] = 0;
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vec_thresh"));
+  m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_thresh[chAlpha]
+                                        = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -191,7 +194,8 @@ void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void pix_threshold :: floatThreshMess(float thresh)
 {
-  m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_Y = CLAMP(thresh * 255);
+  m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_Y = CLAMP(
+                                          thresh * 255);
   // assumption that the alpha threshold should be zero
   m_thresh[chAlpha] = 0;
   setPixModified();
@@ -203,12 +207,15 @@ void pix_threshold :: floatThreshMess(float thresh)
 /////////////////////////////////////////////////////////
 void pix_threshold :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_threshold::vecThreshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_threshold::vecThreshMessCallback),
                   gensym("vec_thresh"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_threshold::floatThreshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_threshold::floatThreshMessCallback),
                   gensym("ft1"), A_FLOAT, A_NULL);
 }
-void pix_threshold :: vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_threshold :: vecThreshMessCallback(void *data, t_symbol *,
+    int argc, t_atom *argv)
 {
   GetMyClass(data)->vecThreshMess(argc, argv);
 }

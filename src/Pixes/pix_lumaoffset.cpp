@@ -30,10 +30,13 @@ pix_lumaoffset :: pix_lumaoffset() :
   m_OffsetScale(12.0f),
   m_LineGap(1.2f),
   m_DoFilledLines(false), m_DoSmoothFill(false),
-  hPreviousLineHeights(NULL), hPreviousLineHeights2(NULL), hPreviousLineHeights_size(0)
+  hPreviousLineHeights(NULL), hPreviousLineHeights2(NULL),
+  hPreviousLineHeights_size(0)
 {
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("offset"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("gap"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("offset"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("gap"));
 }
 
 /////////////////////////////////////////////////////////
@@ -102,12 +105,14 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
       pCurrentOutput+=(nWidth*nLineGap);
     }
   } else {
-    if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ) {
+    if (hPreviousLineHeights==NULL
+        || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ) {
       free(hPreviousLineHeights);
       hPreviousLineHeights_size=nWidth*sizeof(U32*);
       hPreviousLineHeights=malloc(hPreviousLineHeights_size);
     }
-    U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights));
+    U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(
+                                  hPreviousLineHeights));
     if (ppPreviousLineHeights==NULL) {
       return;
     }
@@ -305,12 +310,14 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
       pCurrentOutput+=(nWidth*nLineGap);
     }
   } else {
-    if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U8*)) ) {
+    if (hPreviousLineHeights==NULL
+        || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U8*)) ) {
       free(hPreviousLineHeights);
       hPreviousLineHeights_size=nWidth*sizeof(U8*);
       hPreviousLineHeights=malloc(hPreviousLineHeights_size);
     }
-    U8** ppPreviousLineHeights=static_cast<U8**>(Pete_LockHandle(hPreviousLineHeights));
+    U8** ppPreviousLineHeights=static_cast<U8**>(Pete_LockHandle(
+                                 hPreviousLineHeights));
     if (ppPreviousLineHeights==NULL) {
       return;
     }
@@ -475,7 +482,8 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 
         U32* pOffsetOutput1=(pCurrentOutput+(nOffset1*nWidth));
 
-        if ((pOffsetOutput1<pOutputEnd) && static_cast<int>(pOffsetOutput1>=pOutput)) {
+        if ((pOffsetOutput1<pOutputEnd)
+            && static_cast<int>(pOffsetOutput1>=pOutput)) {
           if (!(abs(nOffset1)>>1)) {
             *pOffsetOutput1  = *pOffsetOutput1 & 0x000000ff;
             *pOffsetOutput1 |= SourceColour & 0xffffff00;
@@ -487,7 +495,8 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 
         U32* pOffsetOutput2=(pCurrentOutput)+(nOffset2*nWidth);
 
-        if ((pOffsetOutput2<pOutputEnd) && static_cast<int>(pOffsetOutput2>=pOutput)) {
+        if ((pOffsetOutput2<pOutputEnd)
+            && static_cast<int>(pOffsetOutput2>=pOutput)) {
           if (!(abs(nOffset2)>>1)) {
             *pOffsetOutput2  = *pOffsetOutput2 & 0x00ff0000;
             *pOffsetOutput2 |= SourceColour & 0xff00ffff;
@@ -504,24 +513,28 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
       pCurrentOutput+=(nWidth*nLineGap);
     }
   } else {
-    if (hPreviousLineHeights==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ) {
+    if (hPreviousLineHeights==NULL
+        || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ) {
       free(hPreviousLineHeights);
       hPreviousLineHeights_size=nWidth*sizeof(U32*);
       hPreviousLineHeights=malloc(hPreviousLineHeights_size);
     }
-    U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights));
+    U32** ppPreviousLineHeights=static_cast<U32**>(Pete_LockHandle(
+                                  hPreviousLineHeights));
     if (ppPreviousLineHeights==NULL) {
       return;
     }
 
     Pete_ZeroMemory(ppPreviousLineHeights,(nWidth*sizeof(U32*)));
 
-    if (hPreviousLineHeights2 ==NULL || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ) {
+    if (hPreviousLineHeights2 ==NULL
+        || hPreviousLineHeights_size<static_cast<int>(nWidth*sizeof(U32*)) ) {
       free(hPreviousLineHeights2);
       hPreviousLineHeights_size=nWidth*sizeof(U32*);
       hPreviousLineHeights2=malloc(hPreviousLineHeights_size);
     }
-    U32** ppPreviousLineHeights2=static_cast<U32**>(Pete_LockHandle(hPreviousLineHeights2));
+    U32** ppPreviousLineHeights2=static_cast<U32**>(Pete_LockHandle(
+                                   hPreviousLineHeights2));
     if (ppPreviousLineHeights2 ==NULL) {
       return;
     }
@@ -635,7 +648,8 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
         while (pCurrentSource!=pSourceLineEnd) {
           const U32 SourceColour=*pCurrentSource;
           nSourceY1 = ((SourceColour&(0xff<<16))>>16)<<8;
-          nSourceY1 -= 32640;                                                             // 128*255
+          nSourceY1 -=
+            32640;                                                             // 128*255
           nSourceY2 = ((SourceColour&(0xff<<0))>>0)<<8;
           nSourceY2 -= 32640;
 
@@ -710,13 +724,17 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_lumaoffset :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::offsetCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_lumaoffset::offsetCallback),
                   gensym("offset"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::gapCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_lumaoffset::gapCallback),
                   gensym("gap"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::fillCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_lumaoffset::fillCallback),
                   gensym("fill"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_lumaoffset::smoothCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_lumaoffset::smoothCallback),
                   gensym("smooth"), A_DEFFLOAT, A_NULL);
 }
 void pix_lumaoffset :: offsetCallback(void *data, t_float m_OffsetScale)

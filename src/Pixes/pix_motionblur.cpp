@@ -53,7 +53,8 @@ void pix_motionblur :: processRGBAImage(imageStruct &image)
 {
   int h,w,height,width;
   long src=0;
-  register int R,R1,G,G1,B,B1; //too many for x86?  i really don't know or care
+  register int R,R1,G,G1,B,
+           B1; //too many for x86?  i really don't know or care
   int rightGain,imageGain;
   unsigned char *pixels=image.data;
   unsigned char *saved = m_savedImage.data;
@@ -354,7 +355,8 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
     vector      unsigned int v;
   } bitBuffer;
 
-  register vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;
+  register vector signed short gainAdd, hiImage, loImage,hiRight,loRight,
+           YImage, UVImage;
   // register vector signed short loadhiImage, loadloImage,loadhiRight,loadloRight;
   register vector unsigned char loadImage, loadRight;
   register vector unsigned char zero = vec_splat_u8(0);
@@ -398,7 +400,8 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
   gainAdd = (vector signed short)vec_splat((vector signed short)gainAdd,0);
 
 # ifndef PPC970
-  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  UInt32                        prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
   vec_dst( inData, prefetchSize, 0 );
   vec_dst( rightData, prefetchSize, 1 );
   vec_dst( inData+32, prefetchSize, 2 );

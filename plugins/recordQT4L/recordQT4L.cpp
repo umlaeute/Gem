@@ -118,7 +118,8 @@ static lqt_file_type_t guess_qtformat(const std::string&filename)
   unsigned int i=0;
 
   if(!extension) {
-    verbose(0, "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
+    verbose(0,
+            "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
     return LQT_FILE_QT;
   }
 
@@ -130,7 +131,8 @@ static lqt_file_type_t guess_qtformat(const std::string&filename)
     }
   }
 
-  verbose(0, "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
+  verbose(0,
+          "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
   return LQT_FILE_QT; /* should be save for now */
 }
 
@@ -142,7 +144,8 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 
   m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL) {
-    error("[GEM:recordQT4L] starting to record to %s failed", filename.c_str());
+    error("[GEM:recordQT4L] starting to record to %s failed",
+          filename.c_str());
     return false;
   }
 
@@ -157,7 +160,8 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 //
 /////////////////////////////////////////////////////////
 
-static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
+static void applyProperties(quicktime_t*file, int track,
+                            lqt_codec_info_t*codec,
                             gem::Properties&props)
 {
 
@@ -169,11 +173,13 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
   std::map<std::string, lqt_parameter_type_t>proptypes;
   int i=0;
   for(i=0; i<codec->num_encoding_parameters; i++) {
-    proptypes[codec->encoding_parameters[i].name]=codec->encoding_parameters[i].type;
+    proptypes[codec->encoding_parameters[i].name]=
+      codec->encoding_parameters[i].type;
   }
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    std::map<std::string,lqt_parameter_type_t>::iterator it = proptypes.find(key);
+    std::map<std::string,lqt_parameter_type_t>::iterator it = proptypes.find(
+          key);
     if(it!=proptypes.end()) {
       void*value=NULL;
       int v_i=0;
@@ -307,7 +313,8 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
      so we just grab a multiple of what we actually want...
   */
   /* but isn't this a memleak? it sure crashes if i try to lqt_rows_free() the qtbuffer */
-  m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel, &rowspan, &rowspan_uv);
+  m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel,
+                              &rowspan, &rowspan_uv);
 
   m_width =img->xsize;
   m_height=img->ysize;
@@ -413,7 +420,8 @@ std::vector<std::string>recordQT4L::getCodecs(void)
   return result;
 }
 
-const std::string recordQT4L::getCodecDescription(const std::string&codecname)
+const std::string recordQT4L::getCodecDescription(const
+    std::string&codecname)
 {
   return m_codecdescriptions[codecname];
 }

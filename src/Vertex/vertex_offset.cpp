@@ -28,7 +28,8 @@ CPPEXTERN_NEW_WITH_GIMME(vertex_offset);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-vertex_offset :: vertex_offset(int argc, t_atom*argv) : vertex_scale(argc, argv),
+vertex_offset :: vertex_offset(int argc, t_atom*argv) : vertex_scale(argc,
+      argv),
   m_x(0.f), m_y(0.f), m_z(0.f), m_w(0.f)
 {}
 
@@ -108,8 +109,10 @@ void vertex_offset :: vertexProcess(int size, GLfloat*array)
 /////////////////////////////////////////////////////////
 void vertex_offset :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_offset::paramMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_offset::paramMessCallback),
                   gensym("offset"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&vertex_offset::paramMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&vertex_offset::paramMessCallback),
                   gensym("param"), A_GIMME, A_NULL);
 }

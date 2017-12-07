@@ -16,7 +16,8 @@
 #include "Gem/Image.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglBitmap, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglBitmap, t_floatarg, A_DEFFLOAT,
+                               t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -25,17 +26,22 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS ( GEMglBitmap, t_floatarg, A_DEFFLOAT, t_floatarg, 
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglBitmap :: GEMglBitmap      (t_float arg0, t_float arg1, t_float arg2, t_float arg3) :
+GEMglBitmap :: GEMglBitmap      (t_float arg0, t_float arg1, t_float arg2,
+                                 t_float arg3) :
   xorig(static_cast<GLfloat>(arg0)),
   yorig(static_cast<GLfloat>(arg1)),
   xmove(static_cast<GLfloat>(arg2)),
   ymove(static_cast<GLfloat>(arg3))
 {
   // img info: width, height, bitmap
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xorig"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yorig"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xmove"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ymove"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("xorig"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("yorig"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("xmove"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("ymove"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -101,10 +107,18 @@ void GEMglBitmap :: ymoveMess (t_float arg1)    // FUN
 
 void GEMglBitmap :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::xorigMessCallback),         gensym("xorig"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::yorigMessCallback),         gensym("yorig"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::xmoveMessCallback),         gensym("xmove"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglBitmap::ymoveMessCallback),         gensym("ymove"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglBitmap::xorigMessCallback),
+                  gensym("xorig"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglBitmap::yorigMessCallback),
+                  gensym("yorig"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglBitmap::xmoveMessCallback),
+                  gensym("xmove"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglBitmap::ymoveMessCallback),
+                  gensym("ymove"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglBitmap :: xorigMessCallback (void* data, t_float arg0)

@@ -14,7 +14,8 @@
 
 #include "GEMglDrawElements.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawElements, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawElements, t_floatarg, A_DEFFLOAT,
+                                t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,15 +24,20 @@ CPPEXTERN_NEW_WITH_THREE_ARGS ( GEMglDrawElements, t_floatarg, A_DEFFLOAT, t_flo
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglDrawElements :: GEMglDrawElements  (t_floatarg arg0, t_floatarg arg1, t_floatarg arg2) :
+GEMglDrawElements :: GEMglDrawElements  (t_floatarg arg0, t_floatarg arg1,
+    t_floatarg arg2) :
   mode(static_cast<GLenum>(arg0)), // ub, us, ui
   count(static_cast<GLsizei>(arg1)),
   type(static_cast<GLenum>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mode"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("count"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("type"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("indices"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("mode"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("count"));
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("type"));
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+                         gensym("indices"));
 
   len=(count>0)?count:16;
 
@@ -134,10 +140,18 @@ void GEMglDrawElements :: indicesMess (int argc, t_atom*argv)   // FUN
 
 void GEMglDrawElements :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::modeMessCallback),    gensym("mode"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::countMessCallback),   gensym("count"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::typeMessCallback),    gensym("type"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglDrawElements::indicesMessCallback),         gensym("indices"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglDrawElements::modeMessCallback),
+                  gensym("mode"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglDrawElements::countMessCallback),
+                  gensym("count"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglDrawElements::typeMessCallback),
+                  gensym("type"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglDrawElements::indicesMessCallback),
+                  gensym("indices"), A_GIMME, A_NULL);
 }
 
 void GEMglDrawElements :: modeMessCallback (void* data, t_float arg0)
@@ -152,7 +166,8 @@ void GEMglDrawElements :: typeMessCallback (void* data, t_float arg0)
 {
   GetMyClass(data)->typeMess (arg0);
 }
-void GEMglDrawElements :: indicesMessCallback (void* data, t_symbol*, int argc, t_atom*argv)
+void GEMglDrawElements :: indicesMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
 {
   GetMyClass(data)->indicesMess ( argc, argv );
 }

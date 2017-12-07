@@ -32,10 +32,12 @@ part_color :: part_color()
   color2Mess(1.f, 1.f, 1.f, 1.f);
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("color1"));
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("color2"));
 }
 
 /////////////////////////////////////////////////////////
@@ -61,7 +63,8 @@ void part_color :: renderParticles(GemState *state)
 // color1Mess
 //
 /////////////////////////////////////////////////////////
-void part_color :: color1Mess(float red, float green, float blue, float alpha)
+void part_color :: color1Mess(float red, float green, float blue,
+                              float alpha)
 {
   m_color1[0] = red;
   m_color1[1] = green;
@@ -74,7 +77,8 @@ void part_color :: color1Mess(float red, float green, float blue, float alpha)
 // color2Mess
 //
 /////////////////////////////////////////////////////////
-void part_color :: color2Mess(float red, float green, float blue, float alpha)
+void part_color :: color2Mess(float red, float green, float blue,
+                              float alpha)
 {
   m_color2[0] = red;
   m_color2[1] = green;
@@ -89,12 +93,15 @@ void part_color :: color2Mess(float red, float green, float blue, float alpha)
 /////////////////////////////////////////////////////////
 void part_color :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_color::color1MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&part_color::color1MessCallback),
                   gensym("color1"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&part_color::color2MessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&part_color::color2MessCallback),
                   gensym("color2"), A_GIMME, A_NULL);
 }
-void part_color :: color1MessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+void part_color :: color1MessCallback(void *data, t_symbol*s, int argc,
+                                      t_atom*argv)
 {
   if (argc==3 || argc==4)
     GetMyClass(data)->color1Mess(atom_getfloat(argv+0),
@@ -105,7 +112,8 @@ void part_color :: color1MessCallback(void *data, t_symbol*s, int argc, t_atom*a
     GetMyClass(data)->error("only 3 or 4 arguments are accepted as colours");
   }
 }
-void part_color :: color2MessCallback(void *data, t_symbol*s, int argc, t_atom*argv)
+void part_color :: color2MessCallback(void *data, t_symbol*s, int argc,
+                                      t_atom*argv)
 {
   if (argc==3 || argc==4)
     GetMyClass(data)->color2Mess(atom_getfloat(argv+0),

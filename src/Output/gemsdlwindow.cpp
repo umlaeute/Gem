@@ -44,7 +44,8 @@ static void pre_init()
 {
   void* cocoa_lib;
 
-  cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa", RTLD_LAZY );
+  cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa",
+                      RTLD_LAZY );
   if(!cocoa_lib) {
     return;
   }
@@ -410,7 +411,9 @@ void gemsdlwindow :: dispatch()
     break;
     case SDL_KEYUP:
     case SDL_KEYDOWN:
-      key(event.key.which, key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
+      key(event.key.which, key2symbol(event.key.keysym.sym,
+                                      event.key.keysym.unicode), event.key.keysym.scancode,
+          event.key.state==SDL_PRESSED);
       break;
     case SDL_MOUSEMOTION:
       motion(event.motion.which, event.motion.x, event.motion.y);
@@ -418,7 +421,8 @@ void gemsdlwindow :: dispatch()
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
       motion(event.button.which, event.button.x, event.button.y);
-      button(event.button.which, event.button.button-SDL_BUTTON_LEFT, event.button.state==SDL_PRESSED);
+      button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
+             event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);
@@ -469,7 +473,8 @@ void gemsdlwindow :: titleMess(const std::string&s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemsdlwindow :: dimensionsMess(unsigned int width, unsigned int height)
+void gemsdlwindow :: dimensionsMess(unsigned int width,
+                                    unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");

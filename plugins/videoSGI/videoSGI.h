@@ -70,7 +70,8 @@ public:
 
   //////////
   // Set the video dimensions
-  virtual bool                setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+  virtual bool                setDimen(int x, int y, int leftmargin,
+                                       int rightmargin, int topmargin, int bottommargin);
 
 
 protected:

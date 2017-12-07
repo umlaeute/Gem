@@ -14,7 +14,8 @@
 
 #include "GEMglPixelStorei.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelStorei, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelStorei, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,12 +24,15 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglPixelStorei, t_floatarg, A_DEFFLOAT, t_floata
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglPixelStorei :: GEMglPixelStorei    (t_floatarg arg0, t_floatarg arg1) :
+GEMglPixelStorei :: GEMglPixelStorei    (t_floatarg arg0,
+    t_floatarg arg1) :
   pname(static_cast<GLenum>(arg0)),
   param(static_cast<GLint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("param"));
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("pname"));
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                         gensym("param"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -69,8 +73,12 @@ void GEMglPixelStorei :: paramMess (t_float arg1)       // FUN
 
 void GEMglPixelStorei :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelStorei::pnameMessCallback),    gensym("pname"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglPixelStorei::paramMessCallback),    gensym("param"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPixelStorei::pnameMessCallback),
+                  gensym("pname"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglPixelStorei::paramMessCallback),
+                  gensym("param"), A_DEFFLOAT, A_NULL);
 };
 
 void GEMglPixelStorei :: pnameMessCallback (void* data, t_float arg0)

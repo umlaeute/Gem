@@ -34,7 +34,8 @@ namespace gem
 {
 namespace plugins
 {
-class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugins::imagesaver
+class GEM_EXPORT imageSGI : public gem::plugins::imageloader,
+  public gem::plugins::imagesaver
 {
 public:
 
@@ -45,13 +46,18 @@ public:
 
   //////////
   // read an image
-  virtual bool load(std::string filename, imageStruct&result, gem::Properties&props);
+  virtual bool load(std::string filename, imageStruct&result,
+                    gem::Properties&props);
   //////////
   // write an image
-  virtual bool          save(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+  virtual bool          save(const imageStruct&img,
+                             const std::string&filename, const std::string&mimetype,
+                             const gem::Properties&props);
   //////////
   // estimate, how well we could save this image
-  virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+  virtual float estimateSave(const imageStruct&img,
+                             const std::string&filename, const std::string&mimetype,
+                             const gem::Properties&props);
 
 
   // this is always threadable
@@ -59,7 +65,8 @@ public:
   {
     return true;
   }
-  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
+  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                    gem::Properties&props);
 
 
 };

@@ -95,7 +95,8 @@ public:
   }
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 

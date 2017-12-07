@@ -87,7 +87,8 @@ bool videoSGI :: openDevice()
   m_path = vlCreatePath(m_svr, VL_ANY, m_src, m_drn);
 
   // Set up the hardware for and define the usage of the path
-  if ( (vlSetupPaths(m_svr, (VLPathList)&m_path, 1, VL_SHARE, VL_SHARE)) < 0 ) {
+  if ( (vlSetupPaths(m_svr, (VLPathList)&m_path, 1, VL_SHARE,
+                     VL_SHARE)) < 0 ) {
     verbose(0, "[GEM:videoSGI] Unable to setup video path");
     goto cleanup;
   }
@@ -120,7 +121,8 @@ bool videoSGI :: openDevice()
     if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
       vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
 
-      verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
+      verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width,
+              m_height, value.xyVal.x, value.xyVal.y);
       m_width =value.xyVal.x;
       m_height=value.xyVal.y;
     }
@@ -176,7 +178,8 @@ pixBlock *videoSGI::getFrame(void)
     }
 
     // Get a pointer to the frame
-    unsigned char *dataPtr = (unsigned char *)(vlGetActiveRegion(m_svr, m_buffer, info));
+    unsigned char *dataPtr = (unsigned char *)(vlGetActiveRegion(m_svr,
+                             m_buffer, info));
     m_pixBlock.image.fromABGR(dataPtr);
 
     // free the frame
@@ -347,7 +350,8 @@ pixBlock *videoSGI::getFrame(void)
     }
     VLControlValue value;
     value.intVal = val;
-    if ( vlSetControl(m_svr, m_path, m_src, VL_VINO_INDYCAM_SATURATION, &value) ) {
+    if ( vlSetControl(m_svr, m_path, m_src, VL_VINO_INDYCAM_SATURATION,
+                      &value) ) {
       error("[GEM:videoSGI] problem setting saturation");
     }
   }
@@ -358,7 +362,8 @@ pixBlock *videoSGI::getFrame(void)
 // dimenMess
 //
 ////////////////////////////////////////////////////////
-  bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin) {
+  bool videoSGI :: setDimen(int x, int y, int leftmargin, int rightmargin,
+                            int topmargin, int bottommargin) {
     {
       bool result=true;
       m_width=x;
@@ -379,7 +384,8 @@ pixBlock *videoSGI::getFrame(void)
       if ( vlSetControl(m_svr, m_path, m_drn, VL_SIZE, &value) ) {
         vlGetControl(m_svr, m_path, m_drn, VL_SIZE, &value);
 
-        verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width, m_height, value.xyVal.x, value.xyVal.y);
+        verbose(1, "[GEM:videoSGI] dimen error: wanted %dx%d got %dx%d", m_width,
+                m_height, value.xyVal.x, value.xyVal.y);
         m_width =value.xyVal.x;
         m_height=value.xyVal.y;
         result=false;

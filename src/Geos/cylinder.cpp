@@ -17,7 +17,8 @@
 #include "cylinder.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 #define normal3f glNormal3f
 
@@ -97,7 +98,8 @@ void cylinder :: render(GemState *state)
   da = 2.0 * M_PI / slices;
   dr = (topRadius - baseRadius) / stacks;
   dz = height / stacks;
-  nz = (baseRadius - topRadius) / height;       /* Z component of normal vectors */
+  nz = (baseRadius - topRadius) /
+       height;       /* Z component of normal vectors */
 
   if (m_drawType == GL_POINT) {
     glBegin(GL_POINTS);

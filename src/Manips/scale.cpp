@@ -32,10 +32,12 @@ scale :: scale(int argc, t_atom *argv)
   m_distance  = 0.0f;
   if (argc == 4) {
     m_distance = atom_getfloat(&argv[0]);
-    vectorMess(atom_getfloat(&argv[1]), atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+    vectorMess(atom_getfloat(&argv[1]), atom_getfloat(&argv[2]),
+               atom_getfloat(&argv[3]));
   } else if (argc == 3) {
     m_distance = 1.f;
-    vectorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]), atom_getfloat(&argv[2]));
+    vectorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+               atom_getfloat(&argv[2]));
   } else if (argc == 1) {
     m_distance = atom_getfloat(&argv[0]);
     vectorMess(1.f, 1.f, 1.f);
@@ -63,7 +65,8 @@ scale :: ~scale()
 /////////////////////////////////////////////////////////
 void scale :: render(GemState *)
 {
-  glScalef(m_vector[0] * m_distance, m_vector[1] * m_distance, m_vector[2] * m_distance);
+  glScalef(m_vector[0] * m_distance, m_vector[1] * m_distance,
+           m_vector[2] * m_distance);
 }
 
 /////////////////////////////////////////////////////////

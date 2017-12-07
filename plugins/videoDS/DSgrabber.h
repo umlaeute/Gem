@@ -31,7 +31,8 @@ typedef HRESULT (*SAMPLECALLBACK) (
 
 
 DEFINE_GUID(IID_IGrabberSample,
-            0x6b652fff, 0x11fe, 0x4fce, 0x92, 0xad, 0x02, 0x66, 0xb5, 0xd7, 0xc7, 0x8f);
+            0x6b652fff, 0x11fe, 0x4fce, 0x92, 0xad, 0x02, 0x66, 0xb5, 0xd7, 0xc7,
+            0x8f);
 
 
 // we define the interface the app can use to program us
@@ -132,7 +133,8 @@ protected:
 public:
 
   CSampleGrabberInPin( CTransInPlaceFilter * pFilter, HRESULT * pHr )
-    : CTransInPlaceInputPin( TEXT("SampleGrabberInputPin"), pFilter, pHr, L"Input" )
+    : CTransInPlaceInputPin( TEXT("SampleGrabberInputPin"), pFilter, pHr,
+                             L"Input" )
     , m_pPrivateAllocator( NULL )
     , m_pBuffer( NULL )
     , m_bMediaTypeChanged( FALSE )

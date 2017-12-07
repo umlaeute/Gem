@@ -84,7 +84,8 @@ private:
 
   //////////
   // Static member functions
-  static void     coordsMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void     coordsMessCallback(void *data, t_symbol *, int argc,
+                                     t_atom *argv);
 };
 
 #endif  // for header file

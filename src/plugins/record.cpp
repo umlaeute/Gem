@@ -24,7 +24,8 @@
 
 gem::plugins::record :: ~record(void) {}
 
-static gem::PluginFactoryRegistrar::dummy<gem::plugins::record> fac_recorddummy;
+static gem::PluginFactoryRegistrar::dummy<gem::plugins::record>
+fac_recorddummy;
 
 
 namespace gem
@@ -42,7 +43,8 @@ private:
   std::string m_codec; // currently selected codec
 
   struct codechandle {
-    codechandle(gem::plugins::record*h, const std::string&c):handle(h), codec(c) {}
+    codechandle(gem::plugins::record*h, const std::string&c):handle(h),
+      codec(c) {}
 
     gem::plugins::record*handle;
     std::string codec;
@@ -74,7 +76,8 @@ public:
     m_canThread(false)
   {
     gem::PluginFactory<gem::plugins::record>::loadPlugins("record");
-    std::vector<std::string>ids=gem::PluginFactory<gem::plugins::record>::getIDs();
+    std::vector<std::string>ids=
+      gem::PluginFactory<gem::plugins::record>::getIDs();
 
     addPlugin(ids, "QT");
     addPlugin(ids, "QT4L");
@@ -94,7 +97,8 @@ public:
     }
 #endif
   }
-  bool addPlugin( std::vector<std::string>available, std::string ID=std::string(""))
+  bool addPlugin( std::vector<std::string>available,
+                  std::string ID=std::string(""))
   {
     int count=0;
 
@@ -132,7 +136,8 @@ public:
         m_ids.push_back(key);
         m_allHandles.push_back(handle);
         count++;
-        verbose(2, "added backend#%d '%s'", (int)(m_allHandles.size()-1), key.c_str());
+        verbose(2, "added backend#%d '%s'", (int)(m_allHandles.size()-1),
+                key.c_str());
       }
     }
     return (count>0);
