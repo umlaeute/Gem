@@ -31,11 +31,11 @@ doinstall() {
   ## and install pd
   PDVERSION="0.48-0"
   if [ "x${ARCH}" = "xi386" ]; then
-    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
+    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.mac.tar.gz
     tar -xf pd-${PDVERSION}-i386.mac.tar.gz
     PDDIR=$(pwd)/Pd-${PDVERSION}-i386.app/Contents/Resources/
   else
-    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}-64bit.mac.tar.gz
+    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
     tar -xf pd-${PDVERSION}.mac.tar.gz
     PDDIR=$(pwd)/Pd-${PDVERSION}.app/Contents/Resources/
   fi
