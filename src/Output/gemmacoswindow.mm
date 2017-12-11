@@ -12,7 +12,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "Gem/GemGL.h"
-#include "gemcocoawindow.h"
+#include "gemmacoswindow.h"
 
 #include <vector>
 #include <iostream>
@@ -42,7 +42,7 @@ static NSDate *distantFuture, *distantPast;
 
 @interface GemCocoaView : NSOpenGLView
 {
-@public gemcocoawindow*parent;
+@public gemmacoswindow*parent;
 }
 @end
 
@@ -93,7 +93,7 @@ typedef long int oglc_setvalue_t;
 
 @end
 
-struct gemcocoawindow :: PIMPL {
+struct gemmacoswindow :: PIMPL {
   GemCocoaView*view;
   NSWindow*window;
   //  WindowResponder*delegate;
@@ -134,18 +134,18 @@ struct gemcocoawindow :: PIMPL {
 };
 
 
-CPPEXTERN_NEW(gemcocoawindow)
+CPPEXTERN_NEW(gemmacoswindow)
 
 /////////////////////////////////////////////////////////
 //
-// gemcocoawindow
+// gemmacoswindow
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
 static NSAutoreleasePool*arp=NULL;
-gemcocoawindow :: gemcocoawindow(void) :
+gemmacoswindow :: gemmacoswindow(void) :
   m_pimpl(new PIMPL())
 {
 }
@@ -154,27 +154,27 @@ gemcocoawindow :: gemcocoawindow(void) :
 // Destructor
 //
 /////////////////////////////////////////////////////////
-gemcocoawindow :: ~gemcocoawindow()
+gemmacoswindow :: ~gemmacoswindow()
 {
   destroyMess();
   delete m_pimpl;
   m_pimpl=NULL;
 }
 
-bool gemcocoawindow :: makeCurrent(){
+bool gemmacoswindow :: makeCurrent(){
   if(!m_pimpl->view)return false;
   [[m_pimpl->view openGLContext] makeCurrentContext];
   return(true);
 }
-void gemcocoawindow :: swapBuffers() {
+void gemmacoswindow :: swapBuffers() {
   [[ m_pimpl->view openGLContext ] flushBuffer ];
 }
-void gemcocoawindow :: renderMess() {
+void gemmacoswindow :: renderMess() {
   bang();
   swapBuffers();
 };
 
-void gemcocoawindow :: render() {
+void gemmacoswindow :: render() {
 #if 1
   GemWindow::render();
 #else
@@ -184,7 +184,7 @@ void gemcocoawindow :: render() {
 #endif
 }
 
-void gemcocoawindow :: dispatch() {
+void gemmacoswindow :: dispatch() {
   NSEvent *e = NULL;
   if(!m_pimpl->window)return;
   while (( e = [NSApp nextEventMatchingMask: NSEventMaskAny
@@ -238,7 +238,7 @@ static std::string key2name(NSString*s, unsigned short keycode) {
   return keysym;
 }
 
-void gemcocoawindow :: dispatchEvent(NSEvent*e) {
+void gemmacoswindow :: dispatchEvent(NSEvent*e) {
   if(!e)return;
   NSEventType type = [e type];
   int devID=0;
@@ -336,7 +336,7 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
 // createMess
 //
 /////////////////////////////////////////////////////////
-bool gemcocoawindow :: create(void)
+bool gemmacoswindow :: create(void)
 {
   NSRect screenRect = [[NSScreen mainScreen] frame];
 
@@ -405,7 +405,7 @@ bool gemcocoawindow :: create(void)
   bool cgw=  createGemWindow(); 
   return cgw;
 }
-void gemcocoawindow :: createMess(const std::string&s) {
+void gemmacoswindow :: createMess(const std::string&s) {
   if(m_pimpl->view) {
     error("window already made!");
     return;
@@ -419,25 +419,25 @@ void gemcocoawindow :: createMess(const std::string&s) {
 // destroy window
 //
 /////////////////////////////////////////////////////////
-void gemcocoawindow :: destroy(void)
+void gemmacoswindow :: destroy(void)
 {
   m_pimpl->cleanup();
   destroyGemWindow();
 }
-void gemcocoawindow :: destroyMess(void)
+void gemmacoswindow :: destroyMess(void)
 {
   destroy();
 }
 
 /////////////////////////////////////////////////////////
 // messages
-void gemcocoawindow :: titleMess(const std::string&s) {
+void gemmacoswindow :: titleMess(const std::string&s) {
   m_title = s;
   if(m_pimpl->window) {
     [m_pimpl->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];
   }
 }
-void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
+void gemmacoswindow :: dimensionsMess(unsigned int width, unsigned int height) {
   if (width <= 0) {
     error("width must be greater than 0");
     return;
@@ -451,7 +451,7 @@ void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
   m_height = height;
   move();
 }
-void gemcocoawindow :: move(void) {
+void gemmacoswindow :: move(void) {
   if(m_pimpl->window) {
     NSRect  screenRect = [[NSScreen mainScreen] frame];
     // NSWindow is bottom/left, but our offset is top/left
@@ -461,7 +461,7 @@ void gemcocoawindow :: move(void) {
     [m_pimpl->window setFrame: frame display: YES];
   }
 }
-void gemcocoawindow :: moved(void) {
+void gemmacoswindow :: moved(void) {
   if(!m_pimpl->window) return;
 
   NSRect  screenRect = [[NSScreen mainScreen] frame];
@@ -484,12 +484,12 @@ void gemcocoawindow :: moved(void) {
   if(doDimen)dimension(m_width, m_height);
   if(doOffset)position(m_xoffset, m_yoffset);
 }
-void gemcocoawindow :: offsetMess(int x, int y) {
+void gemmacoswindow :: offsetMess(int x, int y) {
   m_xoffset = x;
   m_yoffset = y;
   move();
 }
-void gemcocoawindow :: fullscreenMess(int on) {
+void gemmacoswindow :: fullscreenMess(int on) {
 #warning fullscreen
   m_fullscreen = on;
   if(m_pimpl->view) {
@@ -502,7 +502,7 @@ void gemcocoawindow :: fullscreenMess(int on) {
     }
   }
 }
-void gemcocoawindow :: cursorMess(bool setting) {
+void gemmacoswindow :: cursorMess(bool setting) {
   m_cursor=setting;
   if(m_cursor) {
     [NSCursor unhide];
@@ -510,7 +510,7 @@ void gemcocoawindow :: cursorMess(bool setting) {
     [NSCursor hide];
   }
 }
-void gemcocoawindow :: menubarMess(int state) {
+void gemmacoswindow :: menubarMess(int state) {
 #if 0
   // seems to not work anymore on recent OSX
   if (state == 0)
@@ -536,7 +536,7 @@ void gemcocoawindow :: menubarMess(int state) {
 // static member function
 //
 /////////////////////////////////////////////////////////
-void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
+void gemmacoswindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
   

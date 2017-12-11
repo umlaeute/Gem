@@ -10,23 +10,23 @@
 
   -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEM_OUTPUT_GEMCOCOAWINDOW_H_
-#define _INCLUDE__GEM_OUTPUT_GEMCOCOAWINDOW_H_
+#ifndef _INCLUDE__GEM_OUTPUT_GEMMACOSWINDOW_H_
+#define _INCLUDE__GEM_OUTPUT_GEMMACOSWINDOW_H_
 
 #import <Cocoa/Cocoa.h>
 #include "Base/GemWindow.h"
 
 
-class GEM_EXTERN gemcocoawindow : public GemWindow
+class GEM_EXTERN gemmacoswindow : public GemWindow
 {
-  CPPEXTERN_HEADER(gemcocoawindow, GemWindow);
+  CPPEXTERN_HEADER(gemmacoswindow, GemWindow);
 
 public:
 
   //////////
   // Constructor
-  gemcocoawindow(void);
-  virtual ~gemcocoawindow(void);
+  gemmacoswindow(void);
+  virtual ~gemmacoswindow(void);
 
   virtual bool create(void);
   virtual void destroy(void);
