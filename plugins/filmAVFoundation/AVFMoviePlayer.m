@@ -235,7 +235,7 @@
   // https://developer.apple.com/reference/avfoundation/avassetreadertrackoutput?language=objc
   // kCVPixelFormatType_422YpCbCr8 or kCVPixelFormatType_32BGRA
   NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithInt:self.desiredPixelFormat]};
-  AVAssetTrack *videoTrack = [[self.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+  AVAssetTrack *videoTrack = [[self.asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
   self.videoTrackOutput = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:videoTrack outputSettings:settings];
   if(self.videoTrackOutput != nil) {
     self.videoTrackOutput.alwaysCopiesSampleData = NO;
