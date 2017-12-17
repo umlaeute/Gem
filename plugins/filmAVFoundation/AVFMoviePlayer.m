@@ -171,10 +171,10 @@
   double t = self.duration * position;
   CMTime time = CMTimeMakeWithSeconds(t, NSEC_PER_SEC);
 
-  self.assetReader = nil;
-  if(self.videoTrackOutput) {
-    self.videoTrackOutput = nil;
-  }
+  // self.assetReader = nil;
+  // if(self.videoTrackOutput) {
+  //   self.videoTrackOutput = nil;
+  // }
   
   // create asset reader at specific time, restrict time within 0-duration
   time = CMTimeMaximum(time, kCMTimeZero);
@@ -188,18 +188,19 @@
 /////////////////////////////////////////////////////////
 - (CVImageBufferRef)getFrame {
   if(self.videoTrackOutput != nil && self.assetReader.status == AVAssetReaderStatusReading) {
-    CMSampleBufferRef videoSampleBufferTemp;
+    CMSampleBufferRef newVideoSampleBuffer = nil;
     @try {
-      videoSampleBufferTemp = [self.videoTrackOutput copyNextSampleBuffer];
+      newVideoSampleBuffer = [self.videoTrackOutput copyNextSampleBuffer];
     } @catch(NSException *e) {
       NSLog(@"AVFMoviePlayer: error copying video sample buffer: %@", e);
     }
-    if(videoSampleBufferTemp) {
+    if(newVideoSampleBuffer) {
       if(videoSampleBuffer) { // release old buffer
         CFRelease(videoSampleBuffer);
         videoSampleBuffer = nil;
       }
-      videoSampleBuffer = videoSampleBufferTemp; // save reference to new buffer.
+      videoSampleBuffer = newVideoSampleBuffer; // save reference to new buffer
+      newVideoSampleBuffer = nil;
       //videoSampleTime = CMSampleBufferGetPresentationTimeStamp(videoSampleBuffer);
     }
     //else {
